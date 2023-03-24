@@ -2,96 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3316C74EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 02:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8EE6C74F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 02:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjCXBPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 21:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
+        id S231135AbjCXBQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 21:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbjCXBPQ (ORCPT
+        with ESMTP id S229830AbjCXBQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 21:15:16 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8AA2A994;
-        Thu, 23 Mar 2023 18:15:07 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so171706pjz.1;
-        Thu, 23 Mar 2023 18:15:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679620507;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SUAl32IOA1pEsu/DH/HlVmB3L66au2MbVzmZzu5KUw4=;
-        b=pY/MW5lVKclIKzJ6YMnqpT7r9ozHKPfWYlqBnmdH5PwxztVWPcy7wuj5YU7fJ32vqm
-         TVkgGzHO3ynQvfpLAlHC53HKxOthk6n42cgKsObyMaUNxIAXK8U5X8TSM/lFJOAKxcTb
-         8Y3dw6H1eiQ1CVK20D4v6NEYE6s9N2LjPTiuddaXSpJnx67A8rEYnL43LDtpePLoHb24
-         EvhiAqG79mTk6zkewU3qaFtg9l50mR6XuPrASLJWzKw/eEmEszVmIS5vH5REoov1ovLd
-         VVx+GkG17z2zNXCbTJxycExJG52OiA2NDgJifmg5OKkYAqIyUt1kRB+C49mr34LquPgq
-         eW7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679620507;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SUAl32IOA1pEsu/DH/HlVmB3L66au2MbVzmZzu5KUw4=;
-        b=LX3OGm1tGpFoOZsjuB9/j7vpx7o/eEv6aOvfB9XP4Bu7TuDMQ0YlAdboWXAmXfBR0S
-         sBV5fm0KpzPIV0DbYOJ5WSPBS7WG2+OM+q1hehLJ0Yfvo8W/IEukuC7w4IEI4TrzZGB0
-         ZuHwNqGLvTGj27fQANeNK7RJQO8csPkMBepa/Q7wCBp8Dp9g8G28x7vCm+dgDnPCMIBu
-         KFY0ZmT3cq6SloHoIGqhKmv9AJORNEZ941ZLGf6CuzVASK6zkjhHOBpKjb9XTxPfShwP
-         gfhcdBFEyWgGtJLJlqawjkZ9gkcDMXNb4dlafMkz1MT2BTqNajDWoJ0YWpuoYs7yfvBV
-         ERrA==
-X-Gm-Message-State: AAQBX9cFm/0ZTdsZIJ64RO5pl8YARzQchtXNH4T7GCGI0+uJcAwCr6HN
-        5lM4f9jExAYh+maZwFBEyYA=
-X-Google-Smtp-Source: AKy350Y7GhIu81K+SiI3U8EpJENiPefP4VCfxfAVWfNnAQx/Jj8g+E5y/AhgZLz7Cv3x7rz37lpBRg==
-X-Received: by 2002:a17:90a:1a07:b0:23d:4625:40d6 with SMTP id 7-20020a17090a1a0700b0023d462540d6mr999651pjk.14.1679620506411;
-        Thu, 23 Mar 2023 18:15:06 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:f5e9:5a97:54ee:6f66])
-        by smtp.gmail.com with ESMTPSA id w15-20020a17090a460f00b0023b2bc8ebc4sm1887496pjg.9.2023.03.23.18.15.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 18:15:05 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 18:15:02 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Werner Sembach <wse@tuxedocomputers.com>
-Cc:     hdegoede@redhat.com, mkorpershoek@baylibre.com,
-        chenhuacai@kernel.org, tiwai@suse.de,
-        wsa+renesas@sang-engineering.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] Input: i8042 - add TUXEDO devices to i8042 quirk
- tables for partial fix
-Message-ID: <ZBz5ljlHM3v+EAJU@google.com>
-References: <20230321191619.647911-1-wse@tuxedocomputers.com>
+        Thu, 23 Mar 2023 21:16:57 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353E512051;
+        Thu, 23 Mar 2023 18:16:56 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679620613;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AI8etHPrIx3jNkAoUDUVMeNijSPSKzEAm2IfFhSlIbE=;
+        b=fIFHx9yH4O/aC/t1AkkNkpjVHdQIt60hJsQu8ylHND7K0tq1kfKoXAcVqd++UX0SRSZXjt
+        5xp37iwlL4Qi4FHMXWo4q7EJzHCuLlG9Nio8MBsxIPNAWUOggysRRF5XqPMZ+nLScHLHal
+        W051YPgip373z9q9fD6MTjdn2lzswQPRf3eDQxZNLuka8CR3azfUyYR2IxCE8HKTV0ZoPA
+        +2mX0nL/+nOkBNBOlQNrbreMxezl7yp7qu3fTb6yVsLyloakmyCHosIpUvjC5LcAjSqQ0E
+        2l9CpLq2HlfV1/1PkQAed2Rpqf/sZARg8NN/9V+Kth8CdWux4e+TspKDO0UCIg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679620613;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AI8etHPrIx3jNkAoUDUVMeNijSPSKzEAm2IfFhSlIbE=;
+        b=F6o/tiXXGWoGBRzOeewpITW3gHudiy7QzOC1tZDoe5XNrho6enQKB5rjHXJtfQmSmlhgeF
+        lWyDJKJ6ZpLtq7BA==
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com,
+        brgerst@gmail.com
+Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        gpiccoli@igalia.com
+Subject: Re: [PATCH v16 3/8] cpu/hotplug: Add dynamic parallel bringup
+ states before CPUHP_BRINGUP_CPU
+In-Reply-To: <8dff6ae5ffaebfbcc55a01c04420fd478070b830.camel@infradead.org>
+References: <20230321194008.785922-1-usama.arif@bytedance.com>
+ <20230321194008.785922-4-usama.arif@bytedance.com> <874jqb8588.ffs@tglx>
+ <871qlf83wj.ffs@tglx>
+ <8dff6ae5ffaebfbcc55a01c04420fd478070b830.camel@infradead.org>
+Date:   Fri, 24 Mar 2023 02:16:53 +0100
+Message-ID: <87v8ir6j96.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321191619.647911-1-wse@tuxedocomputers.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 08:16:19PM +0100, Werner Sembach wrote:
-> A lot of modern Clevo barebones have touchpad and/or keyboard issues after
-> suspend fixable with nomux + reset + noloop + nopnp. Luckily, none of them
-> have an external PS/2 port so this can safely be set for all of them.
-> 
-> I'm not entirely sure if every device listed really needs all four quirks,
-> but after testing and production use. No negative effects could be
-> observed when setting all four.
-> 
-> Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS on the Clevo N150CU
-> and the Clevo NHxxRZQ makes the keyboard very laggy for ~5 seconds after
-> boot and sometimes also after resume. However both are required for the
-> keyboard to not fail completely sometimes after boot or resume.
-> 
-> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-> Cc: stable@vger.kernel.org
+On Thu, Mar 23 2023 at 23:12, David Woodhouse wrote:
+> On Fri, 2023-03-24 at 00:05 +0100, Thomas Gleixner wrote:
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (re=
+t && can_rollback_cpu(st))
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0WARN_ON(cpuhp_invoke_callback_ran=
+ge(false, cpu, st, CPUHP_OFFLINE));
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0}
+>
+> And I'll take doing this bit unconditionally (it's basically a no-op if
+> they already got rolled all the way back to CPUHP_OFFLINE, right?).
+>
+> But the additional complexity of having multiple steps is fairly
+> minimal, and I'm already planning to *use* another one even in x86, as
+> discussed.
 
-Applied, thank you.
+It's not about the "complexity". That's a general design question and
+I'm not agreeing with your approach of putting AP specifics into the BP
+state space.
 
--- 
-Dmitry
+The BP only phase ends at the point where the AP is woken up via
+SIPI/INIT/whatever. Period.
+
+And no, we are not making this special just because it's the easiest way
+to get it done. I have _zero_ interest in this kind of hackery which
+just slaps stuff into the code where its conveniant without even
+thinking about proper separations
+
+We went a great length to separate things clearly and it takes more than
+"oh let's reserve a few special states" to keep this separation
+intact. That's a matter of correctness, maintainability and taste.
+
+That microcode thing on X86 has absolutely no business in the pre
+bringup DYN states. It's an AP problem and it can be solved completely
+without BP interaction.
+
+And before you start drooling over further great parallelism, can you
+please take a step back and come up with a sensible design for the
+actual real world requirments?
+
+The point is that after an AP comes out of lala land and starts
+executing there are mandatory synchronization points which need to be
+handled by design. The number of synchronization points is architecture
+and platform specific and might be 0, but thats a detail.
+
+So the proper thing is to split CPUHP_BRINGUP_CPU, which is the bridging
+state between AP and BP today, into a set of synchronization points
+between BP and AP.
+
+But that's non-trivial because if you look at bringup_cpu() then you'll
+notice that this state has an implicit protection against interrupt
+allocation/free and quite some architectures rely on this for their
+early bringup code and possibly their STARTING state callbacks.
+
+That aside. Let's just look at x86 as of today from the BP side:
+
+    1) Wakeup AP
+    2) Wait until there is sign of life
+    3) Let AP proceed
+    5) Wait until AP is done with init
+    6) TSC synchronization
+    7) Wait until it is online
+
+and on the AP side:
+
+    1) Do low level init
+    2) Report life
+    3) Wait until BP allows to proceed
+    4) Do init
+    5) Report done
+    6) TSC synchronization
+    7) Report online
+
+So surely you could claim that up to #6 (TSC sync) nothing needs to
+synchronize.
+
+But that's simply not true because topology information is implicitely
+serialized by CPU hotplug and your attempt to serialize that in patch
+7/8 is not cutting it at all because AP #4 (STARTING) callbacks rely
+implicitely on the immutability of the topology information and so do
+some of the later (threaded) AP callbacks too.
+
+As I said before 5 out of 10 callbacks I looked at are not ready for
+this.
+
+Just because it did not explode in your face yet, does not make any of
+your wet dreams more correct.
+
+Again: I'm not interested in this kind of "works for me" nonsense at
+all. I wasted enough time already to make CPU hotplug reliable and
+understandable. I have no intention to waste more time on it just
+because.
+
+Thanks,
+
+        tglx
