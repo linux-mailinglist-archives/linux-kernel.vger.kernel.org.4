@@ -2,155 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46A16C7D64
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106A36C7D68
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbjCXLnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 07:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
+        id S231666AbjCXLoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 07:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjCXLnP (ORCPT
+        with ESMTP id S229753AbjCXLoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 07:43:15 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAB81EBC1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:43:14 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id i9so1501136wrp.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:43:14 -0700 (PDT)
+        Fri, 24 Mar 2023 07:44:22 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579EF1EBC1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:44:20 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id ew6so6796895edb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:44:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1679658193;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cEeRHO/zUWvbMymxotAYrIHIcsBog8Q80jrMbSXh8GA=;
-        b=jtZSsoPSziKeFSqWmKe4UJGQbP8HAsz9FRaV1wjqLkOnMX2Bz2PLVjuVjktfcNUGwN
-         fwU4JI0qlVBfYSZhRQ4MQ3gPyLkRZGdkbNVjusrWaMjCVF43pIhKWsDehBtXBIwttP/n
-         32zHASDiLjykr08A1+lYeoNOTxpAOoJr3o+9BQKPD1bCt+0jvWgFQUYFv6pMFPp4ARkT
-         mqsV8739AmY9NbU8op9dpy7xI9/TU02s06hGEd4hAX0YD25XElzFn9AeQiWYyupNXcGH
-         H+oz74SEcLjgaKBupVWzFd3TMO+mekIbPTW/YF4ufYRoWsU91uz5vupyKZiZLrhY0D/0
-         4fvQ==
+        d=linaro.org; s=google; t=1679658259;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PV2+Kw1a03u71xTK7xlUl8ktkm/tkiAy9Sd4SYFg1Rk=;
+        b=cNztfJT4Q0pg5oSGiUiysyzduJeJzDrxx40EM08fZ8w3PTJ6s7P2TaHId5+BlvZLuM
+         6vR2Jrkh7CllN1Adk+KasNy88E5xwQ+I6KdtPnIx7KfjbRW5vA1PembcnnKIQHnF5A9P
+         rTfs/EC0ai7aVjK+1rf3BrLMe/KbBOAfMeJNZCb4oWQsPw3BPwVQsEOd+Jp2Lhn2Zey9
+         uHMeGOkWrQtZ8zX2V6ftMX8YEMPH2t3YyqsdgyRDYifrRHNYLmlpv6sU9SJC6J4xfsm6
+         LVr0/Z6EbBF2kaodNVbmJzG/Ii2/WiIiC2ep45ho5SfcJUFbPiPXFUfWksKnH0A3qiBd
+         O4CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679658193;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cEeRHO/zUWvbMymxotAYrIHIcsBog8Q80jrMbSXh8GA=;
-        b=7ky9C8SyF6eFW9sxZQyC93ZmVCxwsW2aXA1/trsuBjnycVm8nBtcS7URV9td39QLc1
-         9u2DdWYFYp3J8Gxv/IFo21gVsScITHKjZoJ2Lq1U2+TX8GjlPq3nFMN/CvuhupDkMwdY
-         tdnNUcW0YSuvWNdH8Q4INX8IDuRqCX0UGig9dFbt+8LMTo0avqAvT04fYmo5mktZOmqw
-         fehgMhzQUz56FA+kWYFoNVvkfpkLWg/HplTdmtvDCRjao9CKQ7qwMKDXZA8GKkUFlQ75
-         vsjYRigVuOanvOWV6OrNPVcI5YwURJI3bcbujVWDL4j9/Y8Q0e4SKuKk3/kRxKtArGNW
-         JOvw==
-X-Gm-Message-State: AAQBX9fDF+Q7gVZJvW0aFDgBybFxsLvG0asKzE/lFu89EyqVz+lC22pT
-        uLKhK6Y4dkVly3k+uIwFFyO6dg==
-X-Google-Smtp-Source: AKy350Z/UCo3kmjL9dhSC1YdmHdx2KJPkpn9W8DAu/g/ULXFouz75vnHb+P2zmaIxhPKxzu5o8zeLQ==
-X-Received: by 2002:a5d:6986:0:b0:2cf:ef5b:49d4 with SMTP id g6-20020a5d6986000000b002cfef5b49d4mr1766130wru.48.1679658193019;
-        Fri, 24 Mar 2023 04:43:13 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id a3-20020adffb83000000b002c561805a4csm18190041wrr.45.2023.03.24.04.43.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 04:43:12 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 12:43:11 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     palmer@dabbelt.com, conor@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/2] RISC-V: Fixes for
- riscv_has_extension[un]likely()'s alternative dependency
-Message-ID: <20230324114311.qjz62iofsrhgdlnz@orel>
-References: <20230324100538.3514663-1-conor.dooley@microchip.com>
- <20230324113107.djp4ejnlpzn3qzrb@orel>
- <e7a93223-54e4-4c97-b121-5d1be3af0d65@spud>
+        d=1e100.net; s=20210112; t=1679658259;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PV2+Kw1a03u71xTK7xlUl8ktkm/tkiAy9Sd4SYFg1Rk=;
+        b=3Ycrwrd3NIaCmXUfdHQT/CX0xAY5XdbhX9IEJbPC4Gdp22FhWBx6h6HDTVb0Cou3ez
+         zwjLzBHAuWj20a2CUr7Wlj8MTcNAlEdp3vtl7mkgB6PPXxufjfpjE7Vro7Reqy6MOku4
+         KnHHL+dSTIzj1AgwHu3HM4IqC9awKf1Xcpd2pmnVJUbUdMnhksZ6mzMfwA2JoeboEsPG
+         vdP+ctXbCkPgdne6JoLbSH6dH9Tf0QXlIGdU7F+PkNuCtFOu6x2v1YyCyahx29Le7CWA
+         aeUsDcH1+6KozdMwnT8aLPevTmtavEdIeMJWqN6/SmbHCuHOnMXudTo88Fecq7FbgERL
+         f5Ag==
+X-Gm-Message-State: AAQBX9ff+O+irC+Sic0MlYAM6eUhFOB94hRFiuIn3RVbzNpWF6kheCIS
+        v2idIc27kp/04f0zCSrNw6MJ0A==
+X-Google-Smtp-Source: AKy350buKiFs3pb8Ta8k+M1vUQPFJiD0NRH4RsXr+sOiOetVRFPCrydIpT3mNuyijixEkO/rO25gAA==
+X-Received: by 2002:a05:6402:151:b0:4fc:5d56:f91d with SMTP id s17-20020a056402015100b004fc5d56f91dmr2316227edu.18.1679658258902;
+        Fri, 24 Mar 2023 04:44:18 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:3027:fb0b:ae08:588? ([2a02:810d:15c0:828:3027:fb0b:ae08:588])
+        by smtp.gmail.com with ESMTPSA id i28-20020a50871c000000b004fd204d180dsm10516512edb.64.2023.03.24.04.44.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 04:44:18 -0700 (PDT)
+Message-ID: <d646d109-d0a6-aedb-a8b2-ac954336e628@linaro.org>
+Date:   Fri, 24 Mar 2023 12:44:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e7a93223-54e4-4c97-b121-5d1be3af0d65@spud>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: mmc: arasan,sdci: Add Xilinx Versal Net
+ compatible
+Content-Language: en-US
+To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        git@amd.com, saikrishna12468@gmail.com
+References: <20230324073630.3194724-1-sai.krishna.potthuri@amd.com>
+ <20230324073630.3194724-2-sai.krishna.potthuri@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230324073630.3194724-2-sai.krishna.potthuri@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 11:37:05AM +0000, Conor Dooley wrote:
-> On Fri, Mar 24, 2023 at 12:31:07PM +0100, Andrew Jones wrote:
-> > On Fri, Mar 24, 2023 at 10:05:37AM +0000, Conor Dooley wrote:
-> > > Here's my attempt at fixing both the use of an FPU on XIP kernels and
-> > > the issue that Jason ran into where CONFIG_FPU, which needs the
-> > > alternatives frame work for has_fpu() checks, could be enabled without
-> > > the alternatives actually being present.
-> > > 
-> > > For the former, a "slow" fallback that does not use alternatives is
-> > > added to riscv_has_extension_[un]likely() that can be used with XIP.
-> > > Obviously, we want to make use of Jisheng's alternatives based approach
-> > > where possible, so any users of riscv_has_extension_[un]likely() will
-> > > want to make sure that they select RISCV_ALTERNATIVE.
-> > > If they don't however, they'll hit the fallback path which (should,
-> > > sparing a silly mistake from me!) behave in the same way, thus
-> > > succeeding silently. Sounds like a
-> > > 
-> > > To prevent "depends on !XIP_KERNEL; select RISCV_ALTERNATIVE" spreading
-> > > like the plague through the various places that want to check for the
-> > > presence of extensions, and sidestep the potential silent "success"
-> > > mentioned above, all users RISCV_ALTERNATIVE are converted from selects
-> > > to dependencies, with the option being selected for all !XIP_KERNEL
-> > > builds.
-> > > 
-> > > I know that the VDSO was a key place that Jisheng wanted to use the new
-> > > helper rather than static branches, and I think the fallback path
-> > > should not cause issues there.
-> > > 
-> > > See the thread at [1] for the prior discussion.
-> > > 
-> > > Cheers,
-> > > Conor.
-> > > 
-> > > 1 - https://lore.kernel.org/linux-riscv/20230128172856.3814-1-jszhang@kernel.org/T/#m21390d570997145d31dd8bb95002fd61f99c6573
-> > > 
-> > > CC: Paul Walmsley <paul.walmsley@sifive.com>
-> > > CC: Palmer Dabbelt <palmer@dabbelt.com>
-> > > CC: Conor Dooley <conor.dooley@microchip.com>
-> > > CC: Heiko Stuebner <heiko.stuebner@vrull.eu>
-> > > CC: Andrew Jones <ajones@ventanamicro.com>
-> > > CC: Anup Patel <apatel@ventanamicro.com>
-> > > CC: Jisheng Zhang <jszhang@kernel.org>
-> > > CC: Andrew Jones <ajones@ventanamicro.com>
-> > > CC: Jason A. Donenfeld <Jason@zx2c4.com>
-> > > CC: linux-riscv@lists.infradead.org
-> > > CC: linux-kernel@vger.kernel.org
-> > > 
-> > > Conor Dooley (2):
-> > >   RISC-V: add non-alternative fallback for
-> > >     riscv_has_extension_[un]likely()
-> > >   RISC-V: always select RISCV_ALTERNATIVE for non-xip kernels
-> > > 
-> > >  arch/riscv/Kconfig             | 12 ++++----
-> > >  arch/riscv/Kconfig.erratas     |  6 ++--
-> > >  arch/riscv/include/asm/hwcap.h | 50 ++++++++++++++++++++--------------
-> > >  3 files changed, 38 insertions(+), 30 deletions(-)
-> > > 
-> > > -- 
-> > > 2.39.2
-> > >
-> > 
-> > LGTM, but if it was based on for-next then it could also immediately be
-> > applied to zicboz. For the series,
+On 24/03/2023 08:36, Sai Krishna Potthuri wrote:
+> Add Xilinx Versal Net compatible to support eMMC 5.1 PHY.
 > 
-> Hmm, I did it on top of fixes since this needs to go into v6.3.
+> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> ---
+>  Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+> index 8296c34cfa00..cf44a4b988a7 100644
+> --- a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+> @@ -27,6 +27,7 @@ allOf:
+>              enum:
+>                - xlnx,zynqmp-8.9a
+>                - xlnx,versal-8.9a
+> +              - xlnx,versal-net-5.1-emmc
 
-Ah, sure.
+v5.1 is eMMC standard or Versal block version? If the first, it's not
+suitable for compatibles.
 
-> Perhaps I can create a standalone patch for Zicboz and Palmer could merge
-> these two into both fixes & for-next, with the standalone applied on
-> top?
+Also, what's the difference from xlnx,versal-8.9a?
 
-Sounds good.
+>      then:
+>        properties:
+>          clock-output-names:
+> @@ -62,6 +63,11 @@ properties:
+>          description:
+>            For this device it is strongly suggested to include
+>            clock-output-names and '#clock-cells'.
+> +      - items:
+> +          - const: xlnx,versal-net-5.1-emmc     # Versal Net eMMC PHY
+> +        description:
 
-Thanks,
-drew
+Best regards,
+Krzysztof
+
