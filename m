@@ -2,56 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9CE6C7763
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 06:32:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455766C7767
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 06:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjCXFcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 01:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
+        id S229794AbjCXFcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 01:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjCXFcC (ORCPT
+        with ESMTP id S230040AbjCXFcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 01:32:02 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E01DDF;
-        Thu, 23 Mar 2023 22:32:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1BmTo3I8QkfWboWz9yBcSlQ5saXqUc+9dJqdWN9G/vU=; b=AfM5t8sCUNWR8N6YGgoFczZsvS
-        fFFet8zV//rwbX+LCjJZVLEGh2ryAto1FOB9Mt9aDndLMi1O6gCTwGsZ8U/ZYwtPTtyjXbxQkCQvw
-        4lko75Guk0XFB7N0VMUMq2CQCyShHKE5Jm7LtngaCV11rBjjzFS+Pk8c3vEgp3vF/GdYrHCYFJdKh
-        qb6JsVf3Q2Xo0KiKUU8svLDa/TNPjWx5UhZ6UA/unNSgDUcuAjgtQsxOee/QIvyGvetM6eQjTlz+0
-        sEkC+VdWrliorsh+Ttbwz+/Ogd9P6Efn+NOFJiIwDEX7vHf5wgE8MTO7Jc1BtSDInewrBNaksrpEf
-        eNJLscTw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pfa1s-004bzx-0b; Fri, 24 Mar 2023 05:31:56 +0000
-Date:   Fri, 24 Mar 2023 05:31:55 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
- and vmap_block->lock
-Message-ID: <ZB01yw3MpOswyL1e@casper.infradead.org>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
- <ZBkDuLKLhsOHNUeG@destitution>
- <ZBsAG5cpOFhFZZG6@pc636>
- <ZB00U2S4g+VqzDPL@destitution>
+        Fri, 24 Mar 2023 01:32:15 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 368E11980;
+        Thu, 23 Mar 2023 22:32:10 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 32O5W5q8025977;
+        Fri, 24 Mar 2023 06:32:05 +0100
+Date:   Fri, 24 Mar 2023 06:32:05 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 8/8] tools/nolibc: x86_64: add stackprotector support
+Message-ID: <ZB011VbRSD9ojttc@1wt.eu>
+References: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
+ <20230223-nolibc-stackprotector-v2-8-4c938e098d67@weissschuh.net>
+ <ZBy0ZNYcHFlZWN32@1wt.eu>
+ <fc50ed30-4152-4806-9eed-09a8b164afe6@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZB00U2S4g+VqzDPL@destitution>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fc50ed30-4152-4806-9eed-09a8b164afe6@t-8ch.de>
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,19 +42,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 04:25:39PM +1100, Dave Chinner wrote:
-> Did you read the comment above this function? I mean, it's all about
-> how poorly kvmalloc() works for the highly concurrent, fail-fast
-> context that occurs in the journal commit fast path, and how we open
-> code it with kmalloc and vmalloc to work "ok" in this path.
+On Thu, Mar 23, 2023 at 11:44:15PM +0000, Thomas Weißschuh wrote:
+> Hi Willy,
 > 
-> Then if you go look at the commits related to it, you might find
-> that XFS developers tend to write properly useful changelogs to
-> document things like "it's better, but vmalloc will soon have lock
-> contention problems if we hit it any harder"....
+> On Thu, Mar 23, 2023 at 09:19:48PM +0100, Willy Tarreau wrote:
+> > On Mon, Mar 20, 2023 at 03:41:08PM +0000, Thomas Weißschuh wrote:
+> > > Enable the new stackprotector support for x86_64.
+> > (...)
+> > > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> > > index 8f069ebdd124..543555f4cbdc 100644
+> > > --- a/tools/testing/selftests/nolibc/Makefile
+> > > +++ b/tools/testing/selftests/nolibc/Makefile
+> > > @@ -80,6 +80,8 @@ CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
+> > >  			$(call cc-option,-mstack-protector-guard=global) \
+> > >  			$(call cc-option,-fstack-protector-all)
+> > >  CFLAGS_i386 = $(CFLAGS_STACKPROTECTOR)
+> > > +CFLAGS_x86_64 = $(CFLAGS_STACKPROTECTOR)
+> > > +CFLAGS_x86 = $(CFLAGS_STACKPROTECTOR)
+> > >  CFLAGS_s390 = -m64
+> > >  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables \
+> > >  		$(call cc-option,-fno-stack-protector) \
+> > 
+> > This change is making it almost impossible for me to pass external CFLAGS
+> > without forcefully disabling the automatic detection of stackprot. I need
+> > to do it for some archs (e.g. "-march=armv5t -mthumb") or even to change
+> > optimization levels.
+> > 
+> > I figured that the simplest way to recover that functionality for me
+> > consists in using a dedicated variable to assign stack protector per
+> > supported architecure and concatenating it to the per-arch CFLAGS like
+> > this:
+> > 
+> >   diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> >   index 543555f4cbdc..bbce57420465 100644
+> >   --- a/tools/testing/selftests/nolibc/Makefile
+> >   +++ b/tools/testing/selftests/nolibc/Makefile
+> >   @@ -79,13 +79,13 @@ endif
+> >    CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
+> >                           $(call cc-option,-mstack-protector-guard=global) \
+> >                           $(call cc-option,-fstack-protector-all)
+> >   -CFLAGS_i386 = $(CFLAGS_STACKPROTECTOR)
+> >   -CFLAGS_x86_64 = $(CFLAGS_STACKPROTECTOR)
+> >   -CFLAGS_x86 = $(CFLAGS_STACKPROTECTOR)
+> >   +CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
+> >   +CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
+> >   +CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
+> >    CFLAGS_s390 = -m64
+> >    CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables \
+> >                   $(call cc-option,-fno-stack-protector) \
+> >   -               $(CFLAGS_$(ARCH))
+> >   +               $(CFLAGS_STKP_$(ARCH)) $(CFLAGS_$(ARCH))
+> >    LDFLAGS := -s
+> >    
+> >    help:
+> > 
+> > And now with this it works again for me on all archs, with all of them
+> > showing "SKIPPED" for the -fstackprotector line except i386/x86_64 which
+> > show "OK".
+> > 
+> > Are you OK with this approach ? And if so, do you want to respin it or
+> > do you want me to retrofit it into your 3 patches that introduce this
+> > change (it's easy enough so I really don't care) ?
+> 
+> Looks good to me.
+> 
+> If nothing else needs to be changed feel free to fix it up on your side.
 
-The problem with writing whinges like this is that mm developers don't
-read XFS changelogs.  I certainly had no idea this was a problem, and
-I doubt anybody else who could make a start at fixing this problem had
-any idea either.  Why go to all this effort instead of sending an email
-to linux-mm?
+Perfect, will do it then. Thanks!
+Willy
