@@ -2,77 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8F46C87EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 23:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7866C87FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 23:04:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232326AbjCXWBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 18:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
+        id S232367AbjCXWEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 18:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbjCXWBl (ORCPT
+        with ESMTP id S232343AbjCXWD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 18:01:41 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693A9144A9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:01:40 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id w4so3094222plg.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:01:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1679695300;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DMXLcRgH9sF4l1frJ5KDFBQahch+t+Pfs7sWVinOqQk=;
-        b=6nJasBQh6rMddp7eC89uymnike8qVmoMiN2sIBJbxj0BZypslz19zGYsgGIhibGbvG
-         GjMMEgveFN8UBfak5uPmhKuaZCqd2teqFPDckoriQcTnJetHjjt5wvdu5ZvLSGKnHmUd
-         qRcUqPV+5H3fJDJb5rzyd3KqRJuNThK7Hq4duKja3cofNAeJP6DDmFkJcbGFoK1rq3Ch
-         qxPMs4MKhQVwBLEn+CkuDT7+gFlWSqN9Vv6M8YOULOwBqGutxublUl5r7x9pcLe+lbzu
-         R7Ed8b9P0owRxWZBm2ULleoLzWPe6d0+LbNBPh9ewu6ecrFtvCtueSFd4vzdaSXHzOA5
-         JHIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679695300;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DMXLcRgH9sF4l1frJ5KDFBQahch+t+Pfs7sWVinOqQk=;
-        b=V6jGU8k8RkxVR1QcObygH3vm6LDr5F25pK0aO27uvCjhbx3UEVeyw9Jdl2Y2Qs+6gu
-         LgwlCgyirsXONnPB3NzsemrkKhJwys/OBQr0x3qP8mHLVq3hPF3hQnN3zVzJUiw8nEqC
-         9Jk7vmJPFfnqwlCnuffnxkZhtyq4WAApeULBdvMxDruquIH8+KeeCRMsnnhvacyFKXhw
-         tmBOTJwPd+OZ36WmjBwnTss4DdjbcIU4uMyxQtoERoba2ZT+y6ytLuoou1L7P2f+kP2f
-         ltdjVjuHFG78vW/glcSo/8x+TC+rmUCBbiwFmnxUZnLOv8xlLc77w+5nKtJT1Mc22lsC
-         qpEg==
-X-Gm-Message-State: AAQBX9enetYmXUfwwdfLgFEh0Si1FlmBrNp1LBrEGnAcRrrBIzsH19iU
-        FF4mEp2nxGO5lYmg47td+vBGqg==
-X-Google-Smtp-Source: AKy350bpY6oEPwkdkkjYRycrJC7DL1aXlQymZN36kbTCUbwz4pCxJaS9/0ZF59cn59bKg1/yP3Hd7g==
-X-Received: by 2002:a17:903:6c4:b0:19c:fc41:2dfd with SMTP id kj4-20020a17090306c400b0019cfc412dfdmr3283889plb.29.1679695299906;
-        Fri, 24 Mar 2023 15:01:39 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id u7-20020a170902bf4700b0019a60b7cc0esm14649540pls.248.2023.03.24.15.01.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 15:01:39 -0700 (PDT)
-In-Reply-To: <20230222033021.983168-1-guoren@kernel.org>
-References: <20230222033021.983168-1-guoren@kernel.org>
-Subject: Re: (subset) [PATCH -next V17 0/7] riscv: Add GENERIC_ENTRY
- support
-Message-Id: <167969528245.13232.1422776002762146191.b4-ty@rivosinc.com>
-Date:   Fri, 24 Mar 2023 15:01:22 -0700
+        Fri, 24 Mar 2023 18:03:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC396158AE
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679695397;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=f/2G11KJFqst5d0bJfvoyxlJJbCveF6oy1nM45piEHQ=;
+        b=YoJzf46DPdIYK/+ew3hn+nVWxZFaeCy1LmPRMZ6FZjDYdjob7KopPGBl6GTtRvP5CBxJCJ
+        Uwd6Ab1xlkq74jDO8jYPk/U0h2H6hExyb19qM09bofCfx3BCp7/BCL/4XakVT4SOBDY8zx
+        45YpXvgzgQE/VT83d4j4+ay0a8XlLsI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-271-ohBBA4yBMMOTDFpifs_eKA-1; Fri, 24 Mar 2023 18:03:13 -0400
+X-MC-Unique: ohBBA4yBMMOTDFpifs_eKA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFE103814971;
+        Fri, 24 Mar 2023 22:03:12 +0000 (UTC)
+Received: from localhost (unknown [10.22.32.138])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0E45440C83AC;
+        Fri, 24 Mar 2023 22:03:11 +0000 (UTC)
+Date:   Fri, 24 Mar 2023 19:03:11 -0300
+From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt <stable-rt@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: [ANNOUNCE] 4.14.311-rt146
+Message-ID: <ZB4eH4mppRWw2RSl@uudg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-901c5
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Arnd Bergmann <arnd@arndb.de>, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, Mark Rutland <mark.rutland@arm.com>,
-        ben@decadent.org.uk, bjorn@kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>, guoren@kernel.org
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,35 +66,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello RT-list!
 
-On Tue, 21 Feb 2023 22:30:14 -0500, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> The patches convert riscv to use the generic entry infrastructure from
-> kernel/entry/*. Some optimization for entry.S with new .macro and merge
-> ret_from_kernel_thread into ret_from_fork.
-> 
-> The 1,2 are the preparation of generic entry. 3~7 are the main part
-> of generic entry.
-> 
-> [...]
+I'm pleased to announce the 4.14.311-rt146 stable release.
 
-Applied, thanks!
+This release is just an update to the new stable 4.14.311
+version and no RT specific changes have been made.
 
-[2/7] riscv: ptrace: Remove duplicate operation
-      https://git.kernel.org/palmer/c/8574bf8d0ddd
-[3/7] riscv: entry: Add noinstr to prevent instrumentation inserted
-      https://git.kernel.org/palmer/c/d0db02c62879
-[4/7] riscv: entry: Convert to generic entry
-      https://git.kernel.org/palmer/c/f0bddf50586d
-[5/7] riscv: entry: Remove extra level wrappers of trace_hardirqs_{on,off}
-      https://git.kernel.org/palmer/c/0bf298ad2b61
-[6/7] riscv: entry: Consolidate ret_from_kernel_thread into ret_from_fork
-      https://git.kernel.org/palmer/c/ab9164dae273
-[7/7] riscv: entry: Consolidate general regs saving/restoring
-      https://git.kernel.org/palmer/c/45b32b946a97
+You can get this release via the git tree at:
 
-Best regards,
--- 
-Palmer Dabbelt <palmer@rivosinc.com>
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+
+  branch: v4.14-rt
+  Head SHA1: 9e9c618b61b6649710dc7187d8ebec7469222eb9
+
+Or to build 4.14.311-rt146 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.14.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.14.311.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/4.14/older/patch-4.14.311-rt146.patch.xz
+
+Signing key fingerprint:
+
+  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
+
+All keys used for the above files and repositories can be found on the
+following git repository:
+
+   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
+
+Enjoy!
+Luis
 
