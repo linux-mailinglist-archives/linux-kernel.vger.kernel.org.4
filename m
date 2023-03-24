@@ -2,111 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6796C7A01
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A376C7A06
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjCXIjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 04:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
+        id S230471AbjCXIlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 04:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbjCXIjt (ORCPT
+        with ESMTP id S230071AbjCXIld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 04:39:49 -0400
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCEF25E39
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:39:47 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 08:39:35 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1679647185; x=1679906385;
-        bh=I8/f3JO/VA5KWyLN4wKp4hGSRAS0uOmn5BtDka1Qfpo=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=e1OidOwma+seobgitoxy4TukCO+qj4IBs36t91OuEhT4JbWavof1KoVj/j28ytLU0
-         hIbvgvfRf4lbyL0lFIEnuMFSUeNAwvnZWCwHO/QBPBFsX+/8wedn4Cz5slKHxVWbfY
-         rMuc26kQSIHXkdpt4PFYJuY/1+5PyfTNqyEmsqVZUV5A8tO40LQRHUoMvrPIj9ZBpD
-         wxF0758GJJ5aUXpoqqQKpN+23XTPyQg8X5qqPxFZPVQmk4Y4vATeuv2Zj/sKK47viF
-         bgadAFbZJXBRolAEpj33dG0zFGtEed+pV2bPLmMXJ2YrJmg3tvthIaRYwBIh4zWfw3
-         //uFrPn/NLtew==
-To:     Boqun Feng <boqun.feng@gmail.com>
-From:   Benno Lossin <y86-dev@protonmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH v2 3/5] rust: add pin-init API
-Message-ID: <15f01078-4756-8f87-fe3c-ab9f433ebe7a@protonmail.com>
-In-Reply-To: <ZBvyCwPcpTnk2R7h@Boquns-Mac-mini.local>
-References: <20230321194934.908891-1-y86-dev@protonmail.com> <20230321194934.908891-4-y86-dev@protonmail.com> <ZBvyCwPcpTnk2R7h@Boquns-Mac-mini.local>
-Feedback-ID: 40624463:user:proton
+        Fri, 24 Mar 2023 04:41:33 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7886825972
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:41:31 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id b20so4961320edd.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:41:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679647290;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qKxYNXZ9eHTtJMVzM82IFy1ZfYeyHo24UX4/jj8J0vg=;
+        b=kk5HtABnn5CNziEd/v+xSZlemVkOLRPoG6I2hvVCXKOXwnkXJPXcUb0Ve7gBTCcfRJ
+         7xrAPksf0pAY1yRhsrtiq589Lf8myv2QtpFWIytfC8j1nmsQsCh9pT4f6PjVs1C547nx
+         GO/tL4XEzbeWHEj1NmtSTPEW13+croi5sgRokLh3/evQnhhD6KbqOH9mM9SJoKHymp0v
+         GhWh6CKtzqT/tQjLDQerKcrznVZzvwQR9XtJPL6H/FyK6GwMKt8imm5MCrrRSZehTwK+
+         MSi/hsYRjiBULZhNJ8rm52md2WJawZPgfEQAG89XJIYRITGj2sGDTbau/tkAwE5Uddj1
+         DFUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679647290;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qKxYNXZ9eHTtJMVzM82IFy1ZfYeyHo24UX4/jj8J0vg=;
+        b=ahuFZDzSjh2T2jnpuC0rcm8zlWJzGfpdJQ2gFTwtRnMBLKfMz6EoTVh9GzInuQfXA0
+         xDivgOuYsQfPLBEB4dk8d7l/X46KqRQPJItm9QA2EAvdutXcp46qi3OnAOvyWfvd40vG
+         RKbJs4eRFcGitBo1XEiVETaET7JllLl3XtYZtOuLGjlrBtqJfRYHggtDWnUPfEAqlO7E
+         2GPSbG9dVTC5D7R+IIqCAdhh5z7ffMqT2LIaFyPfcGalSiLkECBr7WN2eLe2vKDGrTaX
+         o93aIC8KbzMl2Z/gZR39JbuL0hEI2+8iDLtGUHLDvIbNCRe7OmMnKsQsRXn66ZrglBt4
+         zdjw==
+X-Gm-Message-State: AAQBX9d7dtO7zvv9e1RvMMVF5wci1kGtaj1ZG9mw9jSOzO+BnAUqi7wE
+        ybi7ZCa4iXLG7ZBmGY8pLrQoRw==
+X-Google-Smtp-Source: AKy350ai1hGJUdWv5AuStbzO8s918lkqS+DUjEbLx6cM/VEYzEvuynYhgcBLqUsfPvWFwGGEarki4Q==
+X-Received: by 2002:a17:907:3fa3:b0:93d:425a:b935 with SMTP id hr35-20020a1709073fa300b0093d425ab935mr2493419ejc.25.1679647289984;
+        Fri, 24 Mar 2023 01:41:29 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:ce50:243f:54cc:5373])
+        by smtp.gmail.com with ESMTPSA id o12-20020a170906358c00b0093b6d1db84asm3552002ejb.120.2023.03.24.01.41.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 01:41:29 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: pinctrl: qcom,sm8550-lpass-lpi: allow input-enabled and bias-bus-hold
+Date:   Fri, 24 Mar 2023 09:41:27 +0100
+Message-Id: <20230324084127.29362-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.03.23 07:30, Boqun Feng wrote:
-> On Tue, Mar 21, 2023 at 07:50:00PM +0000, Benno Lossin wrote:
-> [...]
->> +/// # Syntax
->> +///
->> +/// As already mentioned in the examples above, inside of `pin_init!` a=
- `struct` initializer with
->> +/// the following modifications is expected:
->> +/// - Fields that you want to initialize in-place have to use `<-` inst=
-ead of `:`.
->> +/// - In front of the initializer you can write `&this in` to have acce=
-ss to a [`NonNull<Self>`]
->> +///   pointer named `this` inside of the initializer.
->> +///
->> +/// For instance:
->> +///
->> +/// ```rust
->> +/// # use kernel::pin_init;
->> +/// # use macros::pin_data;
->> +/// # use core::{ptr::addr_of_mut, marker::PhantomPinned};
->> +/// #[pin_data]
->> +/// struct Buf {
->> +///     ptr: *mut u8,
->> +///     buf: [u8; 64],
->
-> Say we have an extra field,
->
->             a: u8,
->
->> +///     #[pin]
->> +///     pin: PhantomPinned,
->> +/// }
->> +/// pin_init!(&this in Buf {
->> +///     buf: [0; 64],
->> +///     ptr: unsafe { addr_of_mut!((*this.as_ptr()).buf).cast() },
->
-> And I think we want to disallow:
->
->             a: unsafe { (*addr_of!(*this.as_ptr().buf))[0] }
->
-> , right? Because we don't want `pin_init!` to provide any initialization
-> order guarantee? If so, maybe add one or two sentences to call it out.
->
-> If not sure, I think we can leave it as it is, until someone really uses
-> this pattern ;-)
+Add missing common pin configuration properties: input-enabled and
+bias-bus-hold.
 
-The `pin_init!` macro initializes everything in the order specified, so
-if `a` is the last field you initialize, the code above is fine. I think
-we could guarantee this. I will add a comment.
+Fixes: 268e97ccc311 ("dt-bindings: pinctrl: qcom,sm8550-lpass-lpi-pinctrl: add SM8550 LPASS")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
---
-Cheers,
-Benno
+---
 
+Linus, please take it directly.
+---
+ .../bindings/pinctrl/qcom,sm8550-lpass-lpi-pinctrl.yaml         | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm8550-lpass-lpi-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm8550-lpass-lpi-pinctrl.yaml
+index 691bf60abb8c..ef9743246849 100644
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,sm8550-lpass-lpi-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm8550-lpass-lpi-pinctrl.yaml
+@@ -96,9 +96,11 @@ $defs:
+           2: Lower Slew rate (slower edges)
+           3: Reserved (No adjustments)
+ 
++      bias-bus-hold: true
+       bias-pull-down: true
+       bias-pull-up: true
+       bias-disable: true
++      input-enable: true
+       output-high: true
+       output-low: true
+ 
+-- 
+2.34.1
 
