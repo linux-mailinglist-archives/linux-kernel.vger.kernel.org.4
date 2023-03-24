@@ -2,89 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B549E6C86CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFABD6C86C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbjCXU0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 16:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
+        id S232049AbjCXUXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 16:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjCXU0a (ORCPT
+        with ESMTP id S231913AbjCXUW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:26:30 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AF51BAD2;
-        Fri, 24 Mar 2023 13:26:29 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id r16so2062345oij.5;
-        Fri, 24 Mar 2023 13:26:29 -0700 (PDT)
+        Fri, 24 Mar 2023 16:22:59 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3B91A95E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:22:57 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id r11so12442635edd.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:22:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679689376;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uJ58NLKGdjyEg1idH07WspcmgphBh7cEwpUwdYjFqb4=;
+        b=EUP4E8V7yULpCihAlLTSDscxdmFlB825g1RlJOV7h7mv36Da6M8XxrBe7MRr11+3pf
+         ErWnowJuecbAnvGvzVN4Bfvhi5QIaNc2SwmXX5rOGZFOlwk3O0uiWodk/cw6XV3kpqhi
+         vfggOeqqRy3TAKSsRjMZm8wnudgwFE0YO2WyjCbW6aJ5xiqRFOlRqoRUE/FrJQNUrui8
+         hFJTj31AfrRXuuDlmi9qk+MwYOKWE/QnvcldWa8Qrik4CAeS8NYDexsmnqzPFliqnpAp
+         nmIhrnuAx9JyXqkUKkQ8uRiSLPYj+P88XIiD1Q1FVplRxN3PHd/5tBfLhyPTSlgmbUW2
+         3bPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679689589;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2ARTWLAnE/R5/Yn3e8IzR5CYG/awWCo/Ki7MKRLqJWs=;
-        b=b3akyZZSO0zm17UMJoPNErRfhBnAdIBg1i9mdR0zQLs4bhFtsYZu/9g643xr6DwIH2
-         pSxOSplQEQb4Ab5asD3gr1XQ8BQLkOjyL+xa6auQ0eRHFXvWIWNHbhdaZlbVL1N5Bxj8
-         lW6LSJUxgonx28IL7F9gc8tqonYgdyj/h8zttjlZPlwT8Zg61V4/Qb7GN8tIaStYgMgL
-         MNKu2nHIELEzu+z+gKQEjUfnTH+lh/TGNXAvPdySB3FQx3hRMPAx1lYDZRYsmzYROc12
-         nABEF43XTSElZwoGdrIBli4qY6qrI6u6+5L6MuFr2DmzuHM32juir0dm5ELmVIt6Lg+a
-         pN9Q==
-X-Gm-Message-State: AO0yUKXHiuDZ/QoVlNSMI0RpW22n37UYlEotAD+aFUT1HYr+JBMOpFh2
-        CohcbUHElsyiUBLgC32blq1hK5YWFg==
-X-Google-Smtp-Source: AK7set/v1YbeRweTPhFlmin/sC3QdECy0j/Wx51PrqueLQ6Jc/SuW1sAaCfWv2xWkuMsrDtBqGlKyQ==
-X-Received: by 2002:a05:6808:6c4:b0:387:2f8e:fd56 with SMTP id m4-20020a05680806c400b003872f8efd56mr1612807oih.33.1679689588707;
-        Fri, 24 Mar 2023 13:26:28 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o15-20020a05680803cf00b003875e29808esm2089833oie.0.2023.03.24.13.26.28
+        d=1e100.net; s=20210112; t=1679689376;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uJ58NLKGdjyEg1idH07WspcmgphBh7cEwpUwdYjFqb4=;
+        b=GzHZH0+fg1w9tjXFbyDJsKSsPIX66g7A4CjHxUIpSe450VvKqvZqWK9hnUwneM8BDJ
+         xMJUS+HxvY70fHpPJVr9m37+tMFdPJoeqxfEfhTXLHP2CtbmenkknqN2mxzt81C1Ve7a
+         dfHsJLlI7FX+hFZuUZ1FSJ/Srhad7f8RrOmPt8WVSyDWP1RxGOISvym+0EOKrwRNJE92
+         VyAZp0PmCBgyK7rhyWqycwGnNkbZH8X13+eDbG0HrFtMA8nlHGKN0SQHn30Rrf1zzLIR
+         og5rVyy/d/LWLjTZ0U/ZSMwAYCHzlzV370s+4e494KQliyatySecmaOk47KaXKibNfsd
+         kjDw==
+X-Gm-Message-State: AAQBX9cm3j8csaO4dWcL1v3nyUP8xvqWOOBfed/eEqWyR/jTjSL9mPJz
+        epm0Dr2pSc3a7kw9J5rp8DpHAQ==
+X-Google-Smtp-Source: AKy350b0yN2FLUQGE5tyvKFB7qt19vkMWgAwhwZxzC6DbRNnUGwvCyDcmm4LOFUz5UPKjdfGlTnpXw==
+X-Received: by 2002:a17:906:8601:b0:7c4:fa17:7203 with SMTP id o1-20020a170906860100b007c4fa177203mr4025437ejx.63.1679689376316;
+        Fri, 24 Mar 2023 13:22:56 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:3027:fb0b:ae08:588])
+        by smtp.gmail.com with ESMTPSA id rh26-20020a17090720fa00b00930ba362216sm10900041ejb.176.2023.03.24.13.22.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 13:26:28 -0700 (PDT)
-Received: (nullmailer pid 2448124 invoked by uid 1000);
-        Fri, 24 Mar 2023 20:26:27 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: yamllint: Enable quoted string check
-Date:   Fri, 24 Mar 2023 15:22:43 -0500
-Message-Id: <20230324202243.2442956-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 24 Mar 2023 13:22:56 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 4/5] arm64: dts: qcom: msm8996-xiaomi: drop simple-bus from clocks
+Date:   Fri, 24 Mar 2023 21:22:43 +0100
+Message-Id: <20230324202244.744271-4-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230324202244.744271-1-krzysztof.kozlowski@linaro.org>
+References: <20230324202244.744271-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-yamllint has a quoted string check. Enable the check aligned with the
-DT schema style which is only using quotes when necessary with the
-exception of regex patterns. There's also the frequent occurrence of '/'
-which we allow rather than fixing.
+'clocks' node is not a bus, but just a placeholder for clocks:
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+  msm8996-xiaomi-gemini.dtb: clocks: $nodename:0: 'clocks' does not match '^([a-z][a-z0-9\\-]+-bus|bus|localbus|soc|axi|ahb|apb)(@.+)?$'
+    From schema: dtschema/schemas/simple-bus.yaml
+  msm8996-xiaomi-gemini.dtb: clocks: xo-board: {'compatible': ['fixed-clock'], '#clock-cells': [[0]], ...
+    From schema: dtschema/schemas/simple-bus.yaml
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/.yamllint | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/.yamllint b/Documentation/devicetree/bindings/.yamllint
-index 4abe9f0a1d46..fea5231e1320 100644
---- a/Documentation/devicetree/bindings/.yamllint
-+++ b/Documentation/devicetree/bindings/.yamllint
-@@ -1,6 +1,11 @@
- extends: relaxed
+diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
+index 446b1d23dec0..1ce5df0a3405 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
+@@ -12,8 +12,6 @@
  
- rules:
-+  quoted-strings:
-+    required: only-when-needed
-+    extra-allowed:
-+      - '[$^,[]'
-+      - '^/$'
-   line-length:
-     # 80 chars should be enough, but don't fail if a line is longer
-     max: 110
+ / {
+ 	clocks {
+-		compatible = "simple-bus";
+-
+ 		divclk1_cdc: divclk1 {
+ 			compatible = "gpio-gate-clock";
+ 			clocks = <&rpmcc RPM_SMD_DIV_CLK1>;
 -- 
-2.39.2
+2.34.1
 
