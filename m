@@ -2,122 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DCA6C8874
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 23:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0364E6C887B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 23:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbjCXWf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 18:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
+        id S232222AbjCXWhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 18:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbjCXWfv (ORCPT
+        with ESMTP id S231966AbjCXWhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 18:35:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E665E158BC
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:35:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A72962CD2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 22:35:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 913FCC433EF;
-        Fri, 24 Mar 2023 22:35:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679697339;
-        bh=AJznxyTi+9ibmvUCVoVEBVdGmWNhBJpPN1aUusOcKhE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Un9oAj7v3GoOgoCYcr+DInFeiwUaIWhhZ20bttbZyDcjizFSNiYFo5zrIevyN5s4K
-         TebBv3TENCsBTLBwEn2yeGlGNWEUtCMXMIxtx+WZCah8knZQq0nRLXTyituF5nIaV1
-         5LxdNu/ubLWVAq/5ipslfYQxR9NsWmJf996q/2uv92rnQa8t2km0eAWZ963yxcHAKh
-         HLeX9+f5Cq6iG/45KSFZWOLZ7k51lw8gJ7eI3fFagmgVWMyvZue7H7iu2H4jMYenBm
-         BnaC52X7M+4f16Hxm2QCWg/u9QN3caQfI7MYFSg5izEssCttzDDzUD7At4TMWM7JHN
-         R3UHyYEsjBjUQ==
-Date:   Fri, 24 Mar 2023 23:35:35 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <fweisbecker@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Leonardo Bras <leobras@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org
-Subject: Re: [PATCH 1/2] sched/isolation: Add cpu_is_isolated() API
-Message-ID: <ZB4lt3IaPWVmn41n@localhost.localdomain>
-References: <20230317134448.11082-1-mhocko@kernel.org>
- <20230317134448.11082-2-mhocko@kernel.org>
- <ZBSyaVk919Fi07Wv@tpad>
- <ZBSy2QZYZRtCNBd8@tpad>
- <ZBVwlv+Mi+GfR1E3@dhcp22.suse.cz>
+        Fri, 24 Mar 2023 18:37:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26170D52F
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:36:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679697417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=245sQ3Egn4hz+1e4Tmo/BWRmLOSVsP8k+1a6ph+rjmI=;
+        b=Fbpy43WPM9ZOL9WKdaP0uGyqUfXecWiNgm8FlKzO9OhBRG6BnvBYygfaLhYp36rQrNyVUY
+        xVjYUqnKwdJDKU1k8Lvxy167NDRQm52TbV5hX8FPKBoRYADzAbpHwUjVRZ8Yt4cmb8wMAt
+        lNz5RLPcv4cyCAe1x62DY4Z5NQanWjc=
+Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
+ [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-597-rHAHyOuRMIeIX_07LJD6tw-1; Fri, 24 Mar 2023 18:36:56 -0400
+X-MC-Unique: rHAHyOuRMIeIX_07LJD6tw-1
+Received: by mail-yb1-f198.google.com with SMTP id f66-20020a255145000000b00b714602d43fso3150344ybb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:36:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679697415;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=245sQ3Egn4hz+1e4Tmo/BWRmLOSVsP8k+1a6ph+rjmI=;
+        b=HYMqR5u3sGkrY12SQsJlKT1wr096DuvaNwNeqtvYqpbKR0tdAYqFCp1r4jyI3fKUUS
+         4tkJk1sWC8+z1FK9BMIIyGDhXG7ZEL6MEzXehO2Es6vmvjUGTR3uyG9y0RKPTJVg0qrF
+         n051QK7Q4CuzTdxfvWC9PijvQiqdIb3JNqLMAjRAKLcVt3v/Sc4Tv0A93ToJE5qNk1xv
+         E88tpXDayeoSbq4R96U3gcWT2W4U6WG8a9mFn/xOjiYc0YZkSAQi/OWBgOXPDbhSTXsH
+         ++I0GiazSTH9c4nvBF05abHSfKFKnPaQNj09Kgmo6cKQnHER4vvSDHO6gdGII2CwCDWh
+         2ZoA==
+X-Gm-Message-State: AAQBX9edwzGBJmgFah5DVOtBwuOt6/T+hTwRlAX/mDbC/XxWWnpa15CE
+        Bo7JWzYHYMBumM46fiIev2eFpWJoRKyH7e1CByOEzs0t9wbWh68BDA5sNmlh31mlSTOIdNwHaCM
+        Em5EgnJoybo+FKixe0RarVeLY
+X-Received: by 2002:a0d:dfd1:0:b0:541:64e4:2094 with SMTP id i200-20020a0ddfd1000000b0054164e42094mr4013390ywe.24.1679697415399;
+        Fri, 24 Mar 2023 15:36:55 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bbwDMlwcxIQGcKee8Lw++uBBz1BazzuQGpq2PjaQ8HDMN/bfcPjM7kEylxlrs5ohlMI/tbdg==
+X-Received: by 2002:a0d:dfd1:0:b0:541:64e4:2094 with SMTP id i200-20020a0ddfd1000000b0054164e42094mr4013371ywe.24.1679697415091;
+        Fri, 24 Mar 2023 15:36:55 -0700 (PDT)
+Received: from [100.69.142.128] ([206.173.106.22])
+        by smtp.gmail.com with ESMTPSA id q9-20020a814309000000b00545a08184f4sm664550ywa.132.2023.03.24.15.36.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 15:36:54 -0700 (PDT)
+Message-ID: <8a06be33-1b44-b992-f80a-8764810ebf3f@redhat.com>
+Date:   Fri, 24 Mar 2023 23:36:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZBVwlv+Mi+GfR1E3@dhcp22.suse.cz>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3] mm/hugetlb: Fix uffd wr-protection for CoW
+ optimization path
+Content-Language: en-US
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        linux-stable <stable@vger.kernel.org>
+References: <20230324142620.2344140-1-peterx@redhat.com>
+ <20230324222707.GA3046@monkey>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230324222707.GA3046@monkey>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Sat, Mar 18, 2023 at 09:04:38AM +0100, Michal Hocko a écrit :
-> On Fri 17-03-23 15:35:05, Marcelo Tosatti wrote:
-> > On Fri, Mar 17, 2023 at 03:33:13PM -0300, Marcelo Tosatti wrote:
-> > > On Fri, Mar 17, 2023 at 02:44:47PM +0100, Michal Hocko wrote:
-> > > > From: Frederic Weisbecker <frederic@kernel.org>
-> > > > 
-> > > > Provide this new API to check if a CPU has been isolated either through
-> > > > isolcpus= or nohz_full= kernel parameter.
-> > > > 
-> > > > It aims at avoiding kernel load deemed to be safely spared on CPUs
-> > > > running sensitive workload that can't bear any disturbance, such as
-> > > > pcp cache draining.
-> > > 
-> > > Hi Michal,
-> > > 
-> > > This makes no sense to me.
-> > > 
-> > > HK_TYPE_DOMAIN is set when isolcpus=domain is configured.
-> > > HK_TYPE_TICK is set when nohz_full= is configured.
-> > > 
-> > > The use-cases i am aware of use either:
-> > > 
-> > > isolcpus=managed_irq,... nohz_full=
-> > > OR
-> > > isolcpus=domain,managed_irq,... nohz_full=
-> > > 
-> > > So what is the point of this function again?
-> > > 
-> > > Perhaps it made sense along with, but now does not make sense
-> > > anymore:
-> > > 
-> > > Subject: [PATCH 1/2] sched/isolation: Merge individual nohz_full features into a common housekeeping flag
-> > > 
-> > > The individual isolation features turned on by nohz_full were initially
-> > > split in order for each of them to be tunable through cpusets. However
-> > > plans have changed in favour of an interface (be it cpusets or sysctl)
-> > > grouping all these features to be turned on/off altogether. Then should
-> > > the need ever arise, the interface can still be expanded to handle the
-> > > individual isolation features.
-> > > 
-> > > But Michal can just use housekeeping_test_cpu(cpu, HK_TYPE_TICK) and
-> > > the convertion of nohz_full features into a common housekeeping flag
-> > > can convert that to something else later?
-> > 
-> > Actually introducing cpu_is_isolated() seems fine, but it can call
-> > housekeeping_test_cpu(cpu, HK_TYPE_TICK) AFAICS.
->  
-> This is not really my area. Frederic, could you have a look please?
+On 24.03.23 23:27, Mike Kravetz wrote:
+> On 03/24/23 10:26, Peter Xu wrote:
+>> This patch fixes an issue that a hugetlb uffd-wr-protected mapping can be
+>> writable even with uffd-wp bit set.  It only happens with hugetlb private
+>> mappings, when someone firstly wr-protects a missing pte (which will
+>> install a pte marker), then a write to the same page without any prior
+>> access to the page.
+>>
+>> Userfaultfd-wp trap for hugetlb was implemented in hugetlb_fault() before
+>> reaching hugetlb_wp() to avoid taking more locks that userfault won't need.
+>> However there's one CoW optimization path that can trigger hugetlb_wp()
+>> inside hugetlb_no_page(), which will bypass the trap.
+>>
+>> This patch skips hugetlb_wp() for CoW and retries the fault if uffd-wp bit
+>> is detected.  The new path will only trigger in the CoW optimization path
+>> because generic hugetlb_fault() (e.g. when a present pte was wr-protected)
+>> will resolve the uffd-wp bit already.  Also make sure anonymous UNSHARE
+>> won't be affected and can still be resolved, IOW only skip CoW not CoR.
+>>
+>> This patch will be needed for v5.19+ hence copy stable.
+>>
+>> Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> Cc: linux-stable <stable@vger.kernel.org>
+>> Fixes: 166f3ecc0daf ("mm/hugetlb: hook page faults for uffd write protection")
+>> Signed-off-by: Peter Xu <peterx@redhat.com>
+>> ---
+>>
+>> Notes:
+>>
+>> v2 is not on the list but in an attachment in the reply; this v3 is mostly
+>> to make sure it's not the same as the patch used to be attached.  Sorry
+>> Andrew, we need to drop the queued one as I rewrote the commit message.
+> 
+> My appologies!  I saw the code path missed in v2 and assumed you did not
+> think it applied.  So, I said nothing.  My bad!
+> 
+>> Muhammad, I didn't attach your T-b because of the slight functional change.
+>> Please feel free to re-attach if it still works for you (which I believe
+>> should).
+>>
+>> thanks,
+>> ---
+>>   mm/hugetlb.c | 14 ++++++++++++--
+>>   1 file changed, 12 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>> index 8bfd07f4c143..a58b3739ed4b 100644
+>> --- a/mm/hugetlb.c
+>> +++ b/mm/hugetlb.c
+>> @@ -5478,7 +5478,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>>   		       struct folio *pagecache_folio, spinlock_t *ptl)
+>>   {
+>>   	const bool unshare = flags & FAULT_FLAG_UNSHARE;
+>> -	pte_t pte;
+>> +	pte_t pte = huge_ptep_get(ptep);
+>>   	struct hstate *h = hstate_vma(vma);
+>>   	struct page *old_page;
+>>   	struct folio *new_folio;
+>> @@ -5487,6 +5487,17 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>>   	unsigned long haddr = address & huge_page_mask(h);
+>>   	struct mmu_notifier_range range;
+>>   
+>> +	/*
+>> +	 * Never handle CoW for uffd-wp protected pages.  It should be only
+>> +	 * handled when the uffd-wp protection is removed.
+>> +	 *
+>> +	 * Note that only the CoW optimization path (in hugetlb_no_page())
+>> +	 * can trigger this, because hugetlb_fault() will always resolve
+>> +	 * uffd-wp bit first.
+>> +	 */
+>> +	if (!unshare && huge_pte_uffd_wp(pte))
+>> +		return 0;
+> 
+> This looks correct.  However, since the previous version looked correct I must
+> ask.  Can we have unshare set and huge_pte_uffd_wp true?  If so, then it seems
+> we would need to possibly propogate that uffd_wp to the new pte as in v2
 
-The point is to have a function that tells if either nohz_full= or
-isolcpus=[domain] has been passed for the given CPU.
+We can. A reproducer would share an anon hugetlb page because parent and 
+child. In the parent, we would uffd-wp that page. We could trigger 
+unsharing by R/O-pinning that page.
 
-Because I assumed that both would be interested in avoiding that flush
-noise, wouldn't it be the case?
+-- 
+Thanks,
+
+David / dhildenb
+
