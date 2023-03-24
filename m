@@ -2,59 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD1D6C779B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3904E6C77A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbjCXGJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 02:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
+        id S231659AbjCXGLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 02:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbjCXGJC (ORCPT
+        with ESMTP id S231357AbjCXGLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:09:02 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8713123C4E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:09:01 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.153])
-        by gateway (Coremail) with SMTP id _____8AxJAx8Ph1kWpwQAA--.24949S3;
-        Fri, 24 Mar 2023 14:09:00 +0800 (CST)
-Received: from loongson-pc.loongson.cn (unknown [10.20.42.153])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axmr12Ph1kY_QKAA--.2874S7;
-        Fri, 24 Mar 2023 14:08:59 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH V1 5/5] irqchip/loongson-pch-pic: Fix registration of syscore_ops
-Date:   Fri, 24 Mar 2023 14:08:54 +0800
-Message-Id: <20230324060854.29375-6-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230324060854.29375-1-lvjianmin@loongson.cn>
-References: <20230324060854.29375-1-lvjianmin@loongson.cn>
+        Fri, 24 Mar 2023 02:11:11 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8534028D0F;
+        Thu, 23 Mar 2023 23:11:08 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=mx_xiang@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 32O69qcD019681-32O69qcE019681
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 24 Mar 2023 14:10:05 +0800
+From:   Mingxuan Xiang <mx_xiang@hust.edu.cn>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Mingxuan Xiang <mx_xiang@hust.edu.cn>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] usb: dwc3: host: remove dead code in dwc3_host_get_irq()
+Date:   Fri, 24 Mar 2023 14:09:34 +0800
+Message-Id: <20230324060934.1686859-1-mx_xiang@hust.edu.cn>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axmr12Ph1kY_QKAA--.2874S7
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7Xr43Xr4UCFyUAryDuFy8Zrb_yoWkCrcEgr
-        yIqFnrAr1xZr1Uu3y3Zr15XF1ayF4UW3ZY9FZaqFy3J3yFq34fJrnFyr9xCw47Ga48Ary3
-        C395Wwn7CryxCjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        C7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
-        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Wrv_ZF1lYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
-        kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW7
-        JVWDJwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07j6rWOUUUUU=
+X-FEAS-AUTH-USER: mx_xiang@hust.edu.cn
 X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,32 +42,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When support suspend/resume for loongson-pch-pic, the syscore_ops is
-registered twice in dual-bridges machines where there are two pch-pic IRQ
-domains. Repeated registration of an same syscore_ops broke syscore_ops_list,
-so the patch will corret it.
+According to the description of platform_get_irq()
+ * Return: non-zero IRQ number on success, 
+ 			negative error number on failure.
+and the code, platform_get_irq() will return -EINVAL
+instead of IRQ0.
 
-Change-Id: Ib08e102931f1b90082d8eaa752287f60147bf777
-Fixes: 1ed008a2c331 ("irqchip/loongson-pch-pic: Add suspend/resume support")
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+So platform_get_irq() no longer returns 0, there is no
+need to check whether the return value is 0.
+
+Found by Smatch:
+drivers/usb/dwc3/host.c:60 dwc3_host_get_irq() 
+	warn: platform_get_irq() does not return zero
+
+Signed-off-by: Mingxuan Xiang <mx_xiang@hust.edu.cn>
 ---
- drivers/irqchip/irq-loongson-pch-pic.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+v2->v3: remove curly braces
+v1->v2: remove redundant goto
+Only compile tested.
+---
+ drivers/usb/dwc3/host.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
-index e3c698ca11e9..e5fe4d50be05 100644
---- a/drivers/irqchip/irq-loongson-pch-pic.c
-+++ b/drivers/irqchip/irq-loongson-pch-pic.c
-@@ -311,7 +311,8 @@ static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
- 	pch_pic_handle[nr_pics] = domain_handle;
- 	pch_pic_priv[nr_pics++] = priv;
+diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+index f6f13e7f1ba1..61f57fe5bb78 100644
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -52,13 +52,8 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
+ 		goto out;
  
--	register_syscore_ops(&pch_pic_syscore_ops);
-+	if (nr_pics == 1)
-+		register_syscore_ops(&pch_pic_syscore_ops);
+ 	irq = platform_get_irq(dwc3_pdev, 0);
+-	if (irq > 0) {
++	if (irq > 0)
+ 		dwc3_host_fill_xhci_irq_res(dwc, irq, NULL);
+-		goto out;
+-	}
+-
+-	if (!irq)
+-		irq = -EINVAL;
  
- 	return 0;
- 
+ out:
+ 	return irq;
 -- 
-2.31.1
+2.39.2
 
