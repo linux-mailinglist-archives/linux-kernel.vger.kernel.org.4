@@ -2,277 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB5D6C868D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD216C8691
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbjCXUI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 16:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S231477AbjCXULv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 16:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjCXUIZ (ORCPT
+        with ESMTP id S230088AbjCXULu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:08:25 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537281514E
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:08:23 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id eh3so12200707edb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:08:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679688502;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/nXQwSluZLeTH688ZepgBtPa+FZFYWScgxaIXsWUlLM=;
-        b=zOa1jp5Kvn7C2FtxHhAfS1DGISKaM696BDoCyWCS/u3zYWs4ZnRxOYsqzLNtOP0mxh
-         kHlqSsolgSqOIXOAhjPuQGkdlmKSS4G9C18z9FzEQx3fNzQJc06SPOcB8H3EMif96tNi
-         Fs2b1Nb1viDFUrZYhqv0ky6pvdmhbcBpz0K46Dp2ichIslDrpzCmouZqr9pDEv00Z95m
-         Ejdgv7c4559vpsfHTPzE12co69RTynBbriIfXneNQCgz/dyeHlyxLNqIi6F6VTbbD2vr
-         zG3Yl612KB/7W1DCHdOQaSAJIbDfVup50nwFv2p5Ap6C7U9lMXP+kbdqzMvnlq3vBn+h
-         IvNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679688502;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/nXQwSluZLeTH688ZepgBtPa+FZFYWScgxaIXsWUlLM=;
-        b=bUQuIR9y7JVGzslZQhHeCJVgKCx4oOz8PJdgWe5nyUoz518mSdNpqWZYPFoLCZH0Qf
-         pKMd/I43hA8MPJw1CGmw/cFdFwi7ZnJk8YCj2bdKqoqbzv6s4jRBDiFHblpzGt4Ngd49
-         e0Hq3K5OjzIvsLQQ9AkXdVAwXPlV4MHp1vvbOg/k96Q0rjndvPGzy1v5UfHt+H/3es3M
-         1fRqZb2sXjkfekHi+lpP6cGhtfOPZioTsXUPi0TbQ65KDX6ehhnSsRb1K2/vJqgiapip
-         QbnpCMSmtYRdYL8qx+LeaURdeBDvtskqEELLOSm6bDdpHsPdizR93gS69N3UwZ1DKn+4
-         3r6w==
-X-Gm-Message-State: AAQBX9cdqwP3OEgJd8HRQl9H2ufKFchujb1t07BY3D3qbktjhRgZzl1G
-        2kCdhEmhuRWBuCHRQpeUxus5EA==
-X-Google-Smtp-Source: AKy350bsPiDq70VpGF5giZ4OEl4HSHYv8y8CbagTWXFgUPS4Fk/C88VwfsR35Monb/9vE1j+xAiGFQ==
-X-Received: by 2002:a17:906:3611:b0:930:d30a:6c20 with SMTP id q17-20020a170906361100b00930d30a6c20mr3928509ejb.17.1679688501764;
-        Fri, 24 Mar 2023 13:08:21 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id a20-20020a17090680d400b008def483cf79sm10594355ejx.168.2023.03.24.13.08.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 13:08:21 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 22:08:19 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH v3 4/7] soc: qcom: Make the Qualcomm UFS/SDCC ICE a
- dedicated driver
-Message-ID: <ZB4DMw5ZbD4zG1EK@linaro.org>
-References: <20230313115202.3960700-1-abel.vesa@linaro.org>
- <20230313115202.3960700-5-abel.vesa@linaro.org>
- <ZA9vFcjLMoifqcsE@sol.localdomain>
+        Fri, 24 Mar 2023 16:11:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0564119F09;
+        Fri, 24 Mar 2023 13:11:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9378762A8F;
+        Fri, 24 Mar 2023 20:11:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02180C4339B;
+        Fri, 24 Mar 2023 20:11:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679688708;
+        bh=Z9O1Xe6HkQKAw5ev9wIdwP/xTfEqbUEE0sOvnPGZgEQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=KrcEFyQVXjF7lxKTaZ8nPH8utZKoxFQStNQcu7lhB2VHNeJSmlb0DrRoxsStbpe32
+         a7H6HqSkfAMOSLkhQSMgzQw6WXeK3vsWuCBxKH7i6xCzGzBES90nu/pW8pHqRIVlIt
+         CQ5bimZFp/RWCjMLatVVAsoyIxZhnUEIPxaAUc9Fcoty9C+CjxF+WNHS8KrXLqw3sb
+         n2KuGM5qW/sQ3/8fiJ45IrmcGfm1I6uLPUjuGArltRnaGrYCK/jPRHwAmlRoph09WX
+         rWXxwXOiEiYlxDS33VnSeDvWl8OCueBnsAE80nBUqRauHYyuqAvoz8kNXYZq8tUyG2
+         S2klZIOWG/GDA==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 8FC101540432; Fri, 24 Mar 2023 13:11:47 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 13:11:47 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org, hch@lst.de,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Subject: Re: [PATCH RFC rcu 03/19] srcu: Begin offloading srcu_struct fields
+ to srcu_update
+Message-ID: <a0a2f6a7-b623-454c-ac65-69043a9f9f4d@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <3db82572-f156-4a5d-b711-841aa28bd996@paulmck-laptop>
+ <20230324001938.3443499-3-paulmck@kernel.org>
+ <80166ee7-4ee3-bb2d-c715-a8180dddee31@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZA9vFcjLMoifqcsE@sol.localdomain>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <80166ee7-4ee3-bb2d-c715-a8180dddee31@intel.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_FILL_THIS_FORM_SHORT autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-03-13 11:44:37, Eric Biggers wrote:
-> On Mon, Mar 13, 2023 at 01:51:59PM +0200, Abel Vesa wrote:
-> > diff --git a/drivers/soc/qcom/ice.c b/drivers/soc/qcom/ice.c
-> > new file mode 100644
-> > index 000000000000..d664dd598791
-> > --- /dev/null
-> > +++ b/drivers/soc/qcom/ice.c
-> > @@ -0,0 +1,347 @@
-> > +// SPDX-License-Identifier: GPL-2.0
+On Fri, Mar 24, 2023 at 08:10:31PM +0100, Wysocki, Rafael J wrote:
+> On 3/24/2023 1:19 AM, Paul E. McKenney wrote:
+> > The current srcu_struct structure is on the order of 200 bytes in size
+> > (depending on architecture and .config), which is much better than the
+> > old-style 26K bytes, but still all too inconvenient when one is trying
+> > to achieve good cache locality on a fastpath involving SRCU readers.
+> > 
+> > However, only a few fields in srcu_struct are used by SRCU readers.
+> > The remaining fields could be offloaded to a new srcu_update
+> > structure, thus shrinking the srcu_struct structure down to a few
+> > tens of bytes.  This commit begins this noble quest, a quest that is
+> > complicated by open-coded initialization of the srcu_struct within the
+> > srcu_notifier_head structure.  This complication is addressed by updating
+> > the srcu_notifier_head structure's open coding, given that there does
+> > not appear to be a straightforward way of abstracting that initialization.
+> > 
+> > This commit moves only the ->node pointer to srcu_update.  Later commits
+> > will move additional fields.
+> > 
+> > [ paulmck: Fold in qiang1.zhang@intel.com's memory-leak fix. ]
+> > 
+> > Link: https://lore.kernel.org/all/20230320055751.4120251-1-qiang1.zhang@intel.com/
+> > Suggested-by: Christoph Hellwig <hch@lst.de>
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> > Cc: "Michał Mirosław" <mirq-linux@rere.qmqm.pl>
+> > Cc: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> 
+> Fine with me.
+> 
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+Thank you!  I will add this on my next rebase.
+
+It is possible that this will be v6.5 rather than v6.4 material.
+
+							Thanx, Paul
+
+> > ---
+> >   include/linux/notifier.h |  5 ++++-
+> >   include/linux/srcutiny.h |  6 +++---
+> >   include/linux/srcutree.h | 27 ++++++++++++++++++---------
+> >   kernel/rcu/rcu.h         |  6 ++++--
+> >   kernel/rcu/srcutree.c    | 28 +++++++++++++++++++---------
+> >   5 files changed, 48 insertions(+), 24 deletions(-)
+> > 
+> > diff --git a/include/linux/notifier.h b/include/linux/notifier.h
+> > index aef88c2d1173..2aba75145144 100644
+> > --- a/include/linux/notifier.h
+> > +++ b/include/linux/notifier.h
+> > @@ -73,6 +73,9 @@ struct raw_notifier_head {
+> >   struct srcu_notifier_head {
+> >   	struct mutex mutex;
+> > +#ifdef CONFIG_TREE_SRCU
+> > +	struct srcu_usage srcuu;
+> > +#endif
+> >   	struct srcu_struct srcu;
+> >   	struct notifier_block __rcu *head;
+> >   };
+> > @@ -107,7 +110,7 @@ extern void srcu_init_notifier_head(struct srcu_notifier_head *nh);
+> >   	{							\
+> >   		.mutex = __MUTEX_INITIALIZER(name.mutex),	\
+> >   		.head = NULL,					\
+> > -		.srcu = __SRCU_STRUCT_INIT(name.srcu, pcpu),	\
+> > +		.srcu = __SRCU_STRUCT_INIT(name.srcu, name.srcuu, pcpu), \
+> >   	}
+> >   #define ATOMIC_NOTIFIER_HEAD(name)				\
+> > diff --git a/include/linux/srcutiny.h b/include/linux/srcutiny.h
+> > index 5aa5e0faf6a1..ebd72491af99 100644
+> > --- a/include/linux/srcutiny.h
+> > +++ b/include/linux/srcutiny.h
+> > @@ -31,7 +31,7 @@ struct srcu_struct {
+> >   void srcu_drive_gp(struct work_struct *wp);
+> > -#define __SRCU_STRUCT_INIT(name, __ignored)				\
+> > +#define __SRCU_STRUCT_INIT(name, __ignored, ___ignored)			\
+> >   {									\
+> >   	.srcu_wq = __SWAIT_QUEUE_HEAD_INITIALIZER(name.srcu_wq),	\
+> >   	.srcu_cb_tail = &name.srcu_cb_head,				\
+> > @@ -44,9 +44,9 @@ void srcu_drive_gp(struct work_struct *wp);
+> >    * Tree SRCU, which needs some per-CPU data.
+> >    */
+> >   #define DEFINE_SRCU(name) \
+> > -	struct srcu_struct name = __SRCU_STRUCT_INIT(name, name)
+> > +	struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name)
+> >   #define DEFINE_STATIC_SRCU(name) \
+> > -	static struct srcu_struct name = __SRCU_STRUCT_INIT(name, name)
+> > +	static struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name)
+> >   void synchronize_srcu(struct srcu_struct *ssp);
+> > diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+> > index 428480152375..2689e64024bb 100644
+> > --- a/include/linux/srcutree.h
+> > +++ b/include/linux/srcutree.h
+> > @@ -57,11 +57,17 @@ struct srcu_node {
+> >   	int grphi;				/* Biggest CPU for node. */
+> >   };
 > > +/*
-> > + * Qualcomm ICE (Inline Crypto Engine) support.
-> > + *
-> > + * Copyright (c) 2013-2019, The Linux Foundation. All rights reserved.
-> > + * Copyright (c) 2019, Google LLC
-> > + * Copyright (c) 2023, Linaro Limited
+> > + * Per-SRCU-domain structure, update-side data linked from srcu_struct.
 > > + */
+> > +struct srcu_usage {
+> > +	struct srcu_node *node;			/* Combining tree. */
+> > +};
 > > +
-> > +#include <linux/bitfield.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/delay.h>
-> > +#include <linux/iopoll.h>
-> > +#include <linux/of_platform.h>
-> > +
-> > +#include <linux/firmware/qcom/qcom_scm.h>
-> > +
-> > +#include <soc/qcom/ice.h>
-> > +
-> > +#define AES_256_XTS_KEY_SIZE			64
-> > +
-> > +/* QCOM ICE registers */
-> > +#define QCOM_ICE_REG_VERSION			0x0008
-> > +#define QCOM_ICE_REG_FUSE_SETTING		0x0010
-> > +
-> > +/* QCOM ICE v2.X only */
-> > +
-> > +#define QCOM_ICE_REG_BIST_STATUS		0x0070
-> > +#define QCOM_ICE_REG_ADVANCED_CONTROL		0x1000
-> 
-> The "/* QCOM ICE v2.X only */" comment should be removed, as it's misleading.
-> This driver only supports v3.  I think this comment also originally described
-> registers that have now been removed from the file.
-> 
-> > +/* BIST ("built-in self-test"?) status flags */
-> > +#define QCOM_ICE_BIST_STATUS_MASK		GENMASK(31, 28)
-> 
-> I think we're confident enough in what "BIST" stands for now that the question
-> mark can be removed.
-> 
-> > +/* Only one ICE instance is currently supported by HW */
-> > +static bool qcom_ice_check_supported(struct qcom_ice *ice)
-> 
-> I don't see how the comment relates to the function it documents.
-> 
-> > +static int __qcom_ice_enable(struct qcom_ice *ice, bool enable)
-> > +{
-> > +	struct device *dev = ice->dev;
-> > +	int err;
-> > +
-> > +	err = clk_prepare_enable(ice->core_clk);
-> > +	if (err) {
-> > +		dev_err(dev, "failed to enable core clock (%d)\n",
-> > +			err);
-> > +		return err;
+> >   /*
+> >    * Per-SRCU-domain structure, similar in function to rcu_state.
+> >    */
+> >   struct srcu_struct {
+> > -	struct srcu_node *node;			/* Combining tree. */
+> >   	struct srcu_node *level[RCU_NUM_LVLS + 1];
+> >   						/* First node at each level. */
+> >   	int srcu_size_state;			/* Small-to-big transition state. */
+> > @@ -90,6 +96,7 @@ struct srcu_struct {
+> >   	unsigned long reschedule_count;
+> >   	struct delayed_work work;
+> >   	struct lockdep_map dep_map;
+> > +	struct srcu_usage *srcu_sup;		/* Update-side data. */
+> >   };
+> >   // Values for size state variable (->srcu_size_state).  Once the state
+> > @@ -121,24 +128,24 @@ struct srcu_struct {
+> >   #define SRCU_STATE_SCAN1	1
+> >   #define SRCU_STATE_SCAN2	2
+> > -#define __SRCU_STRUCT_INIT_COMMON(name)								\
+> > +#define __SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
+> >   	.lock = __SPIN_LOCK_UNLOCKED(name.lock),						\
+> >   	.srcu_gp_seq_needed = -1UL,								\
+> >   	.work = __DELAYED_WORK_INITIALIZER(name.work, NULL, 0),					\
+> > +	.srcu_sup = &usage_name,								\
+> >   	__SRCU_DEP_MAP_INIT(name)
+> > -#define __SRCU_STRUCT_INIT_MODULE(name)								\
+> > +#define __SRCU_STRUCT_INIT_MODULE(name, usage_name)						\
+> >   {												\
+> > -	__SRCU_STRUCT_INIT_COMMON(name)								\
+> > +	__SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
+> >   }
+> > -#define __SRCU_STRUCT_INIT(name, pcpu_name)							\
+> > +#define __SRCU_STRUCT_INIT(name, usage_name, pcpu_name)						\
+> >   {												\
+> >   	.sda = &pcpu_name,									\
+> > -	__SRCU_STRUCT_INIT_COMMON(name)								\
+> > +	__SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
+> >   }
+> > -
+> >   /*
+> >    * Define and initialize a srcu struct at build time.
+> >    * Do -not- call init_srcu_struct() nor cleanup_srcu_struct() on it.
+> > @@ -160,15 +167,17 @@ struct srcu_struct {
+> >    */
+> >   #ifdef MODULE
+> >   # define __DEFINE_SRCU(name, is_static)								\
+> > -	is_static struct srcu_struct name = __SRCU_STRUCT_INIT_MODULE(name);			\
+> > +	static struct srcu_usage name##_srcu_usage;						\
+> > +	is_static struct srcu_struct name = __SRCU_STRUCT_INIT_MODULE(name, name##_srcu_usage);	\
+> >   	extern struct srcu_struct * const __srcu_struct_##name;					\
+> >   	struct srcu_struct * const __srcu_struct_##name						\
+> >   		__section("___srcu_struct_ptrs") = &name
+> >   #else
+> >   # define __DEFINE_SRCU(name, is_static)								\
+> >   	static DEFINE_PER_CPU(struct srcu_data, name##_srcu_data);				\
+> > +	static struct srcu_usage name##_srcu_usage;						\
+> >   	is_static struct srcu_struct name =							\
+> > -		__SRCU_STRUCT_INIT(name, name##_srcu_data)
+> > +		__SRCU_STRUCT_INIT(name, name##_srcu_usage, name##_srcu_data)
+> >   #endif
+> >   #define DEFINE_SRCU(name)		__DEFINE_SRCU(name, /* not static */)
+> >   #define DEFINE_STATIC_SRCU(name)	__DEFINE_SRCU(name, static)
+> > diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+> > index a3adcf9a9919..4a1b9622598b 100644
+> > --- a/kernel/rcu/rcu.h
+> > +++ b/kernel/rcu/rcu.h
+> > @@ -378,11 +378,13 @@ extern void rcu_init_geometry(void);
+> >    * specified state structure (for SRCU) or the only rcu_state structure
+> >    * (for RCU).
+> >    */
+> > -#define srcu_for_each_node_breadth_first(sp, rnp) \
+> > +#define _rcu_for_each_node_breadth_first(sp, rnp) \
+> >   	for ((rnp) = &(sp)->node[0]; \
+> >   	     (rnp) < &(sp)->node[rcu_num_nodes]; (rnp)++)
+> >   #define rcu_for_each_node_breadth_first(rnp) \
+> > -	srcu_for_each_node_breadth_first(&rcu_state, rnp)
+> > +	_rcu_for_each_node_breadth_first(&rcu_state, rnp)
+> > +#define srcu_for_each_node_breadth_first(ssp, rnp) \
+> > +	_rcu_for_each_node_breadth_first(ssp->srcu_sup, rnp)
+> >   /*
+> >    * Scan the leaves of the rcu_node hierarchy for the rcu_state structure.
+> > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> > index 7a6d9452a5d0..ad1d5ca42a99 100644
+> > --- a/kernel/rcu/srcutree.c
+> > +++ b/kernel/rcu/srcutree.c
+> > @@ -173,12 +173,12 @@ static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_flags)
+> >   	/* Initialize geometry if it has not already been initialized. */
+> >   	rcu_init_geometry();
+> > -	ssp->node = kcalloc(rcu_num_nodes, sizeof(*ssp->node), gfp_flags);
+> > -	if (!ssp->node)
+> > +	ssp->srcu_sup->node = kcalloc(rcu_num_nodes, sizeof(*ssp->srcu_sup->node), gfp_flags);
+> > +	if (!ssp->srcu_sup->node)
+> >   		return false;
+> >   	/* Work out the overall tree geometry. */
+> > -	ssp->level[0] = &ssp->node[0];
+> > +	ssp->level[0] = &ssp->srcu_sup->node[0];
+> >   	for (i = 1; i < rcu_num_lvls; i++)
+> >   		ssp->level[i] = ssp->level[i - 1] + num_rcu_lvl[i - 1];
+> >   	rcu_init_levelspread(levelspread, num_rcu_lvl);
+> > @@ -195,7 +195,7 @@ static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_flags)
+> >   		snp->srcu_gp_seq_needed_exp = SRCU_SNP_INIT_SEQ;
+> >   		snp->grplo = -1;
+> >   		snp->grphi = -1;
+> > -		if (snp == &ssp->node[0]) {
+> > +		if (snp == &ssp->srcu_sup->node[0]) {
+> >   			/* Root node, special case. */
+> >   			snp->srcu_parent = NULL;
+> >   			continue;
+> > @@ -236,8 +236,12 @@ static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_flags)
+> >    */
+> >   static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
+> >   {
+> > +	if (!is_static)
+> > +		ssp->srcu_sup = kzalloc(sizeof(*ssp->srcu_sup), GFP_KERNEL);
+> > +	if (!ssp->srcu_sup)
+> > +		return -ENOMEM;
+> >   	ssp->srcu_size_state = SRCU_SIZE_SMALL;
+> > -	ssp->node = NULL;
+> > +	ssp->srcu_sup->node = NULL;
+> >   	mutex_init(&ssp->srcu_cb_mutex);
+> >   	mutex_init(&ssp->srcu_gp_mutex);
+> >   	ssp->srcu_idx = 0;
+> > @@ -249,8 +253,11 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
+> >   	ssp->sda_is_static = is_static;
+> >   	if (!is_static)
+> >   		ssp->sda = alloc_percpu(struct srcu_data);
+> > -	if (!ssp->sda)
+> > +	if (!ssp->sda) {
+> > +		if (!is_static)
+> > +			kfree(ssp->srcu_sup);
+> >   		return -ENOMEM;
 > > +	}
-> > +
-> > +	if (enable) {
-> > +		qcom_ice_low_power_mode_enable(ice);
-> > +		qcom_ice_optimization_enable(ice);
-> > +	}
-> > +
-> > +	err = qcom_ice_wait_bist_status(ice);
-> > +	if (err) {
-> > +		dev_err(dev, "BIST status error (%d)\n", err);
-> > +		return err;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> 
-> The 'enable' parameter is confusing.  Maybe call it 'enable_optimizations'?
-> 
-> > +
-> > +int qcom_ice_program_key(struct qcom_ice *ice, u8 crypto_cap_idx,
-> > +			 u8 algorithm_id, u8 key_size,
-> > +			 const u8 crypto_key[], u8 data_unit_size,
-> > +			 int slot)
-> > +{
-> > +	struct device *dev;
-> > +	union {
-> > +		u8 bytes[AES_256_XTS_KEY_SIZE];
-> > +		u32 words[AES_256_XTS_KEY_SIZE / sizeof(u32)];
-> > +	} key;
-> > +	int i;
-> > +	int err;
-> > +
-> > +	dev = ice->dev;
-> 
-> Nit: declare and initialize 'dev' on the same line.
-> 
-> > +static struct qcom_ice *qcom_ice_create(struct platform_device *pdev, void __iomem *base)
-> > +{
-> > +	struct device *dev = &pdev->dev;
-> > +	struct device_node *np = dev->of_node;
-> > +	struct qcom_ice *engine;
-> > +
-> > +	if (!qcom_scm_is_available())
-> > +		return ERR_PTR(-EPROBE_DEFER);
-> > +
-> > +	if (!qcom_scm_ice_available()) {
-> > +		dev_warn(dev, "ICE SCM interface not found\n");
-> > +		return NULL;
-> > +	}
-> > +
-> > +	engine = devm_kzalloc(dev, sizeof(*engine), GFP_KERNEL);
-> > +	if (!engine)
-> > +		return ERR_PTR(-ENOMEM);
-> > +
-> > +	engine->dev = &pdev->dev;
-> > +	engine->np = np;
-> > +	engine->base = base;
-> > +
-> > +	engine->core_clk = devm_clk_get(dev, NULL);
-> > +	if (IS_ERR(engine->core_clk))
-> > +		return ERR_CAST(engine->core_clk);
-> > +
-> > +	if (!qcom_ice_check_supported(engine))
-> > +		return ERR_PTR(-EOPNOTSUPP);
-> > +
-> > +	dev_info(dev, "Registered Qualcomm Inline Crypto Engine\n");
-> > +
-> > +	return engine;
-> 
-> Shouldn't the !qcom_scm_is_available() and !qcom_ice_check_supported() cases
-> have the same return value?  Both mean not supported, right?
-> 
-
-Actually, the scm might've not probed yet, so we need to defer.
-
-> And shouldn't it be NULL, not ERR_PTR(-EOPNOTSUPP), so that the caller doesn't
-> fail to probe the host controller just because ICE is not supported?
-
-The host controller needs to deal with a not-supported error actually.
-We want the ICE instance creation to fail if the driver doesn't support
-the HW version.
-
-> 
-> > diff --git a/include/soc/qcom/ice.h b/include/soc/qcom/ice.h
-> > new file mode 100644
-> > index 000000000000..d4644c9f1bcd
-> > --- /dev/null
-> > +++ b/include/soc/qcom/ice.h
-> > @@ -0,0 +1,39 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (c) 2023, Linaro Limited
-> > + */
-> > +
-> > +#ifndef __QCOM_ICE_H__
-> > +#define __QCOM_ICE_H__
-> > +
-> > +#include <linux/err.h>
-> 
-> <linux/types.h> would be more appropriate here, I think.
-> 
-> > +
-> > +#if IS_ENABLED(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)
-> 
-> This #if does not appear to be necessary.
-> 
-> > +int qcom_ice_enable(struct qcom_ice *ice);
-> > +int qcom_ice_resume(struct qcom_ice *ice);
-> > +int qcom_ice_suspend(struct qcom_ice *ice);
-> > +struct qcom_ice *of_qcom_ice_get(struct device *dev);
-> > +int qcom_ice_program_key(struct qcom_ice *ice, u8 crypto_cap_idx,
-> > +			 u8 algorithm_id, u8 key_size,
-> > +			 const u8 crypto_key[], u8 data_unit_size,
-> > +			 int slot);
-> 
-> The crypto_cap_idx parameter is unused and should be removed.
-> 
-> > +int qcom_ice_evict_key(struct qcom_ice *ice, int slot);
-> 
-> Nit: these declarations are in a slightly different order from the definitions
-> in the .c file.
-> 
-> - Eric
+> >   	init_srcu_struct_data(ssp);
+> >   	ssp->srcu_gp_seq_needed_exp = 0;
+> >   	ssp->srcu_last_gp_end = ktime_get_mono_fast_ns();
+> > @@ -259,6 +266,7 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
+> >   			if (!ssp->sda_is_static) {
+> >   				free_percpu(ssp->sda);
+> >   				ssp->sda = NULL;
+> > +				kfree(ssp->srcu_sup);
+> >   				return -ENOMEM;
+> >   			}
+> >   		} else {
+> > @@ -656,13 +664,15 @@ void cleanup_srcu_struct(struct srcu_struct *ssp)
+> >   			rcu_seq_current(&ssp->srcu_gp_seq), ssp->srcu_gp_seq_needed);
+> >   		return; /* Caller forgot to stop doing call_srcu()? */
+> >   	}
+> > +	kfree(ssp->srcu_sup->node);
+> > +	ssp->srcu_sup->node = NULL;
+> > +	ssp->srcu_size_state = SRCU_SIZE_SMALL;
+> >   	if (!ssp->sda_is_static) {
+> >   		free_percpu(ssp->sda);
+> >   		ssp->sda = NULL;
+> > +		kfree(ssp->srcu_sup);
+> > +		ssp->srcu_sup = NULL;
+> >   	}
+> > -	kfree(ssp->node);
+> > -	ssp->node = NULL;
+> > -	ssp->srcu_size_state = SRCU_SIZE_SMALL;
+> >   }
+> >   EXPORT_SYMBOL_GPL(cleanup_srcu_struct);
