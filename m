@@ -2,135 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B26A6C7B0B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 636636C7BAD
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbjCXJUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 05:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
+        id S231866AbjCXJk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 05:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbjCXJUL (ORCPT
+        with ESMTP id S231868AbjCXJkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 05:20:11 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3257A7EE6;
-        Fri, 24 Mar 2023 02:20:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679649609; x=1711185609;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=vsNBrnwY/qFfdSufiaxoySiGuysdLC+OL9fxRmgKucY=;
-  b=OQ3Oq38sLlGjmFk8Oapo3a5jEsDEbXy9CKNfB6iZ5oYmRlkN90WujeJi
-   SA25MA2HRt9S82gsrtjbKuSWNuF1NL0ZtbrsZyR/1ept037Q09GUyrxAz
-   3i4nHdB7vsrP9h+BBlMwDmWvrwYkUsKVKHzJatZsY+f1Sivt8jB9p+l56
-   Hw/+dlmAqO8G4QdkQp4gQlkjczOZKzcxtYktY7WvUEa0Dwt33yzY5RsSj
-   snobdRaXZnEWy1NEP02cFSBvCM/FXZfo0IGez3hU0cdSqo40fe9dgY1ay
-   /3rUuAHyTOTma08Er4AqsygxOt0JU9UpmuXdyoV3TUyR/j9+Ow4a9Awq/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="404652760"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="404652760"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 02:20:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="1012189014"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="1012189014"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Mar 2023 02:19:57 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pfdaS-007qVe-2O;
-        Fri, 24 Mar 2023 11:19:52 +0200
-Date:   Fri, 24 Mar 2023 11:19:52 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anatolij Gustschin <agust@denx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Fri, 24 Mar 2023 05:40:10 -0400
+X-Greylist: delayed 1133 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Mar 2023 02:39:37 PDT
+Received: from mail-m3169.qiye.163.com (mail-m3169.qiye.163.com [103.74.31.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B15241E0;
+        Fri, 24 Mar 2023 02:39:36 -0700 (PDT)
+Received: from localhost.localdomain (unknown [106.75.220.2])
+        by mail-m3169.qiye.163.com (Hmail) with ESMTPA id 220C37A0293;
+        Fri, 24 Mar 2023 17:20:38 +0800 (CST)
+From:   Faicker Mo <faicker.mo@ucloud.cn>
+To:     faicker.mo@ucloud.cn
+Cc:     Sridhar Samudrala <sridhar.samudrala@intel.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [PATCH v7 4/6] EISA: Convert to use less arguments in
- pci_bus_for_each_resource()
-Message-ID: <ZB1rOHt8pG+9Ti2V@smile.fi.intel.com>
-References: <20230323173610.60442-1-andriy.shevchenko@linux.intel.com>
- <20230323173610.60442-5-andriy.shevchenko@linux.intel.com>
- <43e7ef6d-6248-4ee5-7144-70809e5c93e0@linaro.org>
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kees Cook <keescook@chromium.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2] net/net_failover: fix txq exceeding warning
+Date:   Fri, 24 Mar 2023 17:19:54 +0800
+Message-Id: <20230324091954.1890561-1-faicker.mo@ucloud.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <43e7ef6d-6248-4ee5-7144-70809e5c93e0@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFJQjdXWS1ZQUlXWQ8JGhUIEh9ZQVlCGEsdVk9OTUlDGExKTUMfT1UZERMWGhIXJBQOD1
+        lXWRgSC1lBWUpLTVVMTlVJSUtVSVlXWRYaDxIVHRRZQVlPS0hVSkpLSE5IVUpLS1VLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MjY6Tzo*NzJKNBMBDk8ZKAsh
+        EREKCjdVSlVKTUxCTU9CTUhDQkJJVTMWGhIXVR0aEhgQHglVFhQ7DhgXFA4fVRgVRVlXWRILWUFZ
+        SktNVUxOVUlJS1VJWVdZCAFZQU9PSUw3Bg++
+X-HM-Tid: 0a8712eb882c00a9kurm220c37a0293
+X-HM-MType: 1
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 10:02:15AM +0100, Philippe Mathieu-Daudé wrote:
-> On 23/3/23 18:36, Andy Shevchenko wrote:
-> > The pci_bus_for_each_resource() can hide the iterator loop since
-> > it may be not used otherwise. With this, we may drop that iterator
-> > variable definition.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
-> > ---
-> >   drivers/eisa/pci_eisa.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/eisa/pci_eisa.c b/drivers/eisa/pci_eisa.c
-> 
-> Since this is *PCI* EISA, could be squashed into previous patch.
+The failover txq is inited as 16 queues.
+when a packet is transmitted from the failover device firstly,
+the failover device will select the queue which is returned from
+the primary device if the primary device is UP and running.
+If the primary device txq is bigger than the default 16,
+it can lead to the following warning:
+eth0 selects TX queue 18, but real number of TX queues is 16
 
-I believe it would be better to have them separated.
-But if maintainers want to squash, I can do that.
+The warning backtrace is:
+[   32.146376] CPU: 18 PID: 9134 Comm: chronyd Tainted: G            E      6.2.8-1.el7.centos.x86_64 #1
+[   32.147175] Hardware name: Red Hat KVM, BIOS 1.10.2-3.el7_4.1 04/01/2014
+[   32.147730] Call Trace:
+[   32.147971]  <TASK>
+[   32.148183]  dump_stack_lvl+0x48/0x70
+[   32.148514]  dump_stack+0x10/0x20
+[   32.148820]  netdev_core_pick_tx+0xb1/0xe0
+[   32.149180]  __dev_queue_xmit+0x529/0xcf0
+[   32.149533]  ? __check_object_size.part.0+0x21c/0x2c0
+[   32.149967]  ip_finish_output2+0x278/0x560
+[   32.150327]  __ip_finish_output+0x1fe/0x2f0
+[   32.150690]  ip_finish_output+0x2a/0xd0
+[   32.151032]  ip_output+0x7a/0x110
+[   32.151337]  ? __pfx_ip_finish_output+0x10/0x10
+[   32.151733]  ip_local_out+0x5e/0x70
+[   32.152054]  ip_send_skb+0x19/0x50
+[   32.152366]  udp_send_skb.isra.0+0x163/0x3a0
+[   32.152736]  udp_sendmsg+0xba8/0xec0
+[   32.153060]  ? __folio_memcg_unlock+0x25/0x60
+[   32.153445]  ? __pfx_ip_generic_getfrag+0x10/0x10
+[   32.153854]  ? sock_has_perm+0x85/0xa0
+[   32.154190]  inet_sendmsg+0x6d/0x80
+[   32.154508]  ? inet_sendmsg+0x6d/0x80
+[   32.154838]  sock_sendmsg+0x62/0x70
+[   32.155152]  ____sys_sendmsg+0x134/0x290
+[   32.155499]  ___sys_sendmsg+0x81/0xc0
+[   32.155828]  ? _get_random_bytes.part.0+0x79/0x1a0
+[   32.156240]  ? ip4_datagram_release_cb+0x5f/0x1e0
+[   32.156649]  ? get_random_u16+0x69/0xf0
+[   32.156989]  ? __fget_light+0xcf/0x110
+[   32.157326]  __sys_sendmmsg+0xc4/0x210
+[   32.157657]  ? __sys_connect+0xb7/0xe0
+[   32.157995]  ? __audit_syscall_entry+0xce/0x140
+[   32.158388]  ? syscall_trace_enter.isra.0+0x12c/0x1a0
+[   32.158820]  __x64_sys_sendmmsg+0x24/0x30
+[   32.159171]  do_syscall_64+0x38/0x90
+[   32.159493]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
 
-> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Fix that by reducing txq number as the non-existent primary-dev does.
 
-Thank you!
+Fixes: cfc80d9a1163 ("net: Introduce net_failover driver")
+Signed-off-by: Faicker Mo <faicker.mo@ucloud.cn>
+---
+ drivers/net/net_failover.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-
+diff --git a/drivers/net/net_failover.c b/drivers/net/net_failover.c
+index 7a28e082436e..d0c916a53d7c 100644
+--- a/drivers/net/net_failover.c
++++ b/drivers/net/net_failover.c
+@@ -130,14 +130,10 @@ static u16 net_failover_select_queue(struct net_device *dev,
+ 			txq = ops->ndo_select_queue(primary_dev, skb, sb_dev);
+ 		else
+ 			txq = netdev_pick_tx(primary_dev, skb, NULL);
+-
+-		qdisc_skb_cb(skb)->slave_dev_queue_mapping = skb->queue_mapping;
+-
+-		return txq;
++	} else {
++		txq = skb_rx_queue_recorded(skb) ? skb_get_rx_queue(skb) : 0;
+ 	}
+ 
+-	txq = skb_rx_queue_recorded(skb) ? skb_get_rx_queue(skb) : 0;
+-
+ 	/* Save the original txq to restore before passing to the driver */
+ 	qdisc_skb_cb(skb)->slave_dev_queue_mapping = skb->queue_mapping;
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.39.1
 
