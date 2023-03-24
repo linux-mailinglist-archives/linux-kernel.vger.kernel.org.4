@@ -2,210 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CED6C7EDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA79B6C7EDE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbjCXNeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        id S231854AbjCXNdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbjCXNeH (ORCPT
+        with ESMTP id S231773AbjCXNdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:34:07 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1637219C59
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:33:58 -0700 (PDT)
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+        Fri, 24 Mar 2023 09:33:51 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0112139;
+        Fri, 24 Mar 2023 06:33:47 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 7f6f03f90c81f149; Fri, 24 Mar 2023 14:33:44 +0100
+Received: from kreacher.localnet (unknown [213.134.163.171])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6DEC54188A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:33:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1679664835;
-        bh=baRLhktlWOxcXvwHFNv0QgrA5IgUVwTfkSsdMkEu4+4=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=b34nfFRc1TfAcYkAdvQbNUvYd2zY0XJmbIxm4YuEEqwbARIb3CoHSAAKNtgykJZDg
-         Sa3aBSNsXcgs36j1XG5VwnqCqmlvblPCKgNanTRh2QclfcW6rq7/MKz+5kUDI9rTq3
-         1YPXCASO/60wnY45RTVq3LFngmVKm3P1btuNk69+1sgkUOoWna6yXMF2w0+xvfOT3a
-         xGaAhqDf99yYwYAB1nBrTlpqs6+YWYx5nfpZMq3QUWlBzooWVwhZCAag0xz9NJpDWj
-         tiTc/F4JUEyWNnywsRt3MMmI4m3VNlCYxusYyVUMjePX81+VrxnlVapQRywAnF0bPK
-         CydrXFrzReHFA==
-Received: by mail-qt1-f199.google.com with SMTP id p19-20020ac87413000000b003d2753047cbso1021552qtq.19
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:33:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679664834;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=baRLhktlWOxcXvwHFNv0QgrA5IgUVwTfkSsdMkEu4+4=;
-        b=A9CWeFczfDBIM0d4iFLSsvoelSxx8+YCBED7wmz5Vsf3xU892FnbTS5954cq92ou7v
-         6QsKMepsfxXY0S6os3BdzxpjAt546dOvh/xsn2joXrEI+5mj+2qYQhF68FhoM1bjvSAR
-         8kC4dV1kGkJqC1BYGoWfAWRoXvgMTHm5lVM21t+XsBblJKRGbgwbfDkRiHd0vlE8z4gi
-         aQBR3hhLRPdrFl4H0PO1OI8wGpXvQyxLq1qKutS7sgN07+DA27+iirdrDFfQwU0eDjJK
-         +0f0e5eyh/dTvat+BcQ00Mg5syZQ69awAgo2b8j7J+1vDZ4wKIBhvDFW/mmOiEvL09M4
-         vlBw==
-X-Gm-Message-State: AO0yUKWOc+ZQgHAe9/QzN89+pj/uCln4z+Wygo0RUUmspezSME+UhhJy
-        VANFjwUmTnCWvIBMEejzS4g8a/TEq5RtfUHGuLXWTut/GhG4+8bwVPoQbJLc4MZa1HrEMhGIsYW
-        6LELI8jxVzc70sVLbFuoKe2br7BZOPjYrpMVoYEIXWgWO684ItV07kCtgrw==
-X-Received: by 2002:a05:620a:a18:b0:746:7f12:f2f3 with SMTP id i24-20020a05620a0a1800b007467f12f2f3mr651797qka.13.1679664834420;
-        Fri, 24 Mar 2023 06:33:54 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+PMWroXLuUn1KxCXS1+t1n+7MwGF6fo/rG+E0PHsQotj4U0S9r3aNHlQweDVOeiRzH2jNJj64BuscgHlEEvaU=
-X-Received: by 2002:a05:620a:a18:b0:746:7f12:f2f3 with SMTP id
- i24-20020a05620a0a1800b007467f12f2f3mr651787qka.13.1679664834154; Fri, 24 Mar
- 2023 06:33:54 -0700 (PDT)
+        by v370.home.net.pl (Postfix) with ESMTPSA id ED3F522A0B14;
+        Fri, 24 Mar 2023 14:33:42 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        Pierre Asselin <pa@panix.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Subject: [PATCH v1] ACPI: bus: Rework system-level device notification handling
+Date:   Fri, 24 Mar 2023 14:33:42 +0100
+Message-ID: <5687037.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-References: <20230322094820.24738-1-walker.chen@starfivetech.com> <20230322094820.24738-3-walker.chen@starfivetech.com>
-In-Reply-To: <20230322094820.24738-3-walker.chen@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Fri, 24 Mar 2023 14:33:38 +0100
-Message-ID: <CAJM55Z9VfY76ZxTxX-o56MNppALKbYuYvx6+fXvx=3LAg6gKDw@mail.gmail.com>
-Subject: Re: [PATCH v6 2/4] dmaengine: dw-axi-dmac: Add support for StarFive
- JH7110 DMA
-To:     Walker Chen <walker.chen@starfivetech.com>
-Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-CLIENT-IP: 213.134.163.171
+X-CLIENT-HOSTNAME: 213.134.163.171
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegiedgheefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudeifedrudejudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddujedupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgrsehprghnihigrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuhdrkhhlvghinhgvqdhkohgvnhhighesphgvnhhg
+ uhhtrhhonhhigidruggvpdhrtghpthhtoheprhgvghhrvghsshhiohhnsheslhgvvghmhhhuihhsrdhinhhfoh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Mar 2023 at 10:48, Walker Chen <walker.chen@starfivetech.com> wrote:
->
-> Add DMA reset operation in device probe and use different configuration
-> on CH_CFG registers according to match data. Update all uses of
-> of_device_is_compatible with of_device_get_match_data.
->
-> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Thanks!
-Reviewed-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+For ACPI drivers that provide a ->notify() callback and set
+ACPI_DRIVER_ALL_NOTIFY_EVENTS in their flags, that callback can be
+invoked while either the ->add() or the ->remove() callback is running
+without any synchronization at the bus type level which is counter to
+the common-sense expectation that notification handling should only be
+enabled when the driver is actually bound to the device.  As a result,
+if the driver is not careful enough, it's ->notify() callback may crash
+when it is invoked too early or too late [1].
 
-> ---
->  .../dma/dw-axi-dmac/dw-axi-dmac-platform.c    | 38 ++++++++++++++++---
->  drivers/dma/dw-axi-dmac/dw-axi-dmac.h         |  1 +
->  2 files changed, 34 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-> index 4169e1d7d5ca..6cfcb541d8c3 100644
-> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-> @@ -21,10 +21,12 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/of_device.h>
->  #include <linux/of_dma.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/property.h>
-> +#include <linux/reset.h>
->  #include <linux/slab.h>
->  #include <linux/types.h>
->
-> @@ -46,6 +48,10 @@
->         DMA_SLAVE_BUSWIDTH_32_BYTES     | \
->         DMA_SLAVE_BUSWIDTH_64_BYTES)
->
-> +#define AXI_DMA_FLAG_HAS_APB_REGS      BIT(0)
-> +#define AXI_DMA_FLAG_HAS_RESETS                BIT(1)
-> +#define AXI_DMA_FLAG_USE_CFG2          BIT(2)
-> +
->  static inline void
->  axi_dma_iowrite32(struct axi_dma_chip *chip, u32 reg, u32 val)
->  {
-> @@ -86,7 +92,8 @@ static inline void axi_chan_config_write(struct axi_dma_chan *chan,
->
->         cfg_lo = (config->dst_multblk_type << CH_CFG_L_DST_MULTBLK_TYPE_POS |
->                   config->src_multblk_type << CH_CFG_L_SRC_MULTBLK_TYPE_POS);
-> -       if (chan->chip->dw->hdata->reg_map_8_channels) {
-> +       if (chan->chip->dw->hdata->reg_map_8_channels &&
-> +           !chan->chip->dw->hdata->use_cfg2) {
->                 cfg_hi = config->tt_fc << CH_CFG_H_TT_FC_POS |
->                          config->hs_sel_src << CH_CFG_H_HS_SEL_SRC_POS |
->                          config->hs_sel_dst << CH_CFG_H_HS_SEL_DST_POS |
-> @@ -1367,10 +1374,11 @@ static int parse_device_properties(struct axi_dma_chip *chip)
->
->  static int dw_probe(struct platform_device *pdev)
->  {
-> -       struct device_node *node = pdev->dev.of_node;
->         struct axi_dma_chip *chip;
->         struct dw_axi_dma *dw;
->         struct dw_axi_dma_hcfg *hdata;
-> +       struct reset_control *resets;
-> +       unsigned int flags;
->         u32 i;
->         int ret;
->
-> @@ -1398,12 +1406,25 @@ static int dw_probe(struct platform_device *pdev)
->         if (IS_ERR(chip->regs))
->                 return PTR_ERR(chip->regs);
->
-> -       if (of_device_is_compatible(node, "intel,kmb-axi-dma")) {
-> +       flags = (uintptr_t)of_device_get_match_data(&pdev->dev);
-> +       if (flags & AXI_DMA_FLAG_HAS_APB_REGS) {
->                 chip->apb_regs = devm_platform_ioremap_resource(pdev, 1);
->                 if (IS_ERR(chip->apb_regs))
->                         return PTR_ERR(chip->apb_regs);
->         }
->
-> +       if (flags & AXI_DMA_FLAG_HAS_RESETS) {
-> +               resets = devm_reset_control_array_get_exclusive(&pdev->dev);
-> +               if (IS_ERR(resets))
-> +                       return PTR_ERR(resets);
-> +
-> +               ret = reset_control_deassert(resets);
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
-> +       chip->dw->hdata->use_cfg2 = !!(flags & AXI_DMA_FLAG_USE_CFG2);
-> +
->         chip->core_clk = devm_clk_get(chip->dev, "core-clk");
->         if (IS_ERR(chip->core_clk))
->                 return PTR_ERR(chip->core_clk);
-> @@ -1554,8 +1575,15 @@ static const struct dev_pm_ops dw_axi_dma_pm_ops = {
->  };
->
->  static const struct of_device_id dw_dma_of_id_table[] = {
-> -       { .compatible = "snps,axi-dma-1.01a" },
-> -       { .compatible = "intel,kmb-axi-dma" },
-> +       {
-> +               .compatible = "snps,axi-dma-1.01a"
-> +       }, {
-> +               .compatible = "intel,kmb-axi-dma",
-> +               .data = (void *)AXI_DMA_FLAG_HAS_APB_REGS,
-> +       }, {
-> +               .compatible = "starfive,jh7110-axi-dma",
-> +               .data = (void *)(AXI_DMA_FLAG_HAS_RESETS | AXI_DMA_FLAG_USE_CFG2),
-> +       },
->         {}
->  };
->  MODULE_DEVICE_TABLE(of, dw_dma_of_id_table);
-> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac.h b/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
-> index e9d5eb0fd594..eb267cb24f67 100644
-> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
-> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
-> @@ -33,6 +33,7 @@ struct dw_axi_dma_hcfg {
->         /* Register map for DMAX_NUM_CHANNELS <= 8 */
->         bool    reg_map_8_channels;
->         bool    restrict_axi_burst_len;
-> +       bool    use_cfg2;
->  };
->
->  struct axi_dma_chan {
-> --
-> 2.17.1
->
+This issue has been amplified by commit d6fb6ee1820c ("ACPI: bus: Drop
+driver member of struct acpi_device") that made acpi_bus_notify() check
+for the presence of the driver and its ->notify() callback directly
+instead of using an extra driver pointer that was only set and cleared
+by the bus type code, but it was present before that commit although
+it was harder to reproduce then.
+
+It can be addressed by using the observation that
+acpi_device_install_notify_handler() can be modified to install the
+handler for all types of events when ACPI_DRIVER_ALL_NOTIFY_EVENTS is
+set in the driver flags, in which case acpi_bus_notify() will not need
+to invoke the driver's ->notify() callback any more and that callback
+will only be invoked after acpi_device_install_notify_handler() has run
+and before acpi_device_remove_notify_handler() runs, which implies the
+correct ordering with respect to the other ACPI driver callbacks.
+
+Modify the code accordingly and while at it, drop two redundant local
+variables from acpi_bus_notify() and turn its description comment into
+a proper kerneldoc one.
+
+Fixes: d6fb6ee1820c ("ACPI: bus: Drop driver member of struct acpi_device")
+Link: https://lore.kernel.org/linux-acpi/9f6cba7a8a57e5a687c934e8e406e28c.squirrel@mail.panix.com # [1]
+Reported-by: Pierre Asselin <pa@panix.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+Pierre, testing this would be much appreciated!
+
+---
+ drivers/acpi/bus.c |   83 +++++++++++++++++++++++------------------------------
+ 1 file changed, 37 insertions(+), 46 deletions(-)
+
+Index: linux-pm/drivers/acpi/bus.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/bus.c
++++ linux-pm/drivers/acpi/bus.c
+@@ -459,85 +459,67 @@ out_free:
+                              Notification Handling
+    -------------------------------------------------------------------------- */
+ 
+-/*
+- * acpi_bus_notify
+- * ---------------
+- * Callback for all 'system-level' device notifications (values 0x00-0x7F).
++/**
++ * acpi_bus_notify - Global system-level (0x00-0x7F) notifications handler
++ * @handle: Target ACPI object.
++ * @type: Notification type.
++ * @data: Ignored.
++ *
++ * This only handles notifications related to device hotplug.
+  */
+ static void acpi_bus_notify(acpi_handle handle, u32 type, void *data)
+ {
+ 	struct acpi_device *adev;
+-	u32 ost_code = ACPI_OST_SC_NON_SPECIFIC_FAILURE;
+-	bool hotplug_event = false;
+ 
+ 	switch (type) {
+ 	case ACPI_NOTIFY_BUS_CHECK:
+ 		acpi_handle_debug(handle, "ACPI_NOTIFY_BUS_CHECK event\n");
+-		hotplug_event = true;
+ 		break;
+ 
+ 	case ACPI_NOTIFY_DEVICE_CHECK:
+ 		acpi_handle_debug(handle, "ACPI_NOTIFY_DEVICE_CHECK event\n");
+-		hotplug_event = true;
+ 		break;
+ 
+ 	case ACPI_NOTIFY_DEVICE_WAKE:
+ 		acpi_handle_debug(handle, "ACPI_NOTIFY_DEVICE_WAKE event\n");
+-		break;
++		return;
+ 
+ 	case ACPI_NOTIFY_EJECT_REQUEST:
+ 		acpi_handle_debug(handle, "ACPI_NOTIFY_EJECT_REQUEST event\n");
+-		hotplug_event = true;
+ 		break;
+ 
+ 	case ACPI_NOTIFY_DEVICE_CHECK_LIGHT:
+ 		acpi_handle_debug(handle, "ACPI_NOTIFY_DEVICE_CHECK_LIGHT event\n");
+ 		/* TBD: Exactly what does 'light' mean? */
+-		break;
++		return;
+ 
+ 	case ACPI_NOTIFY_FREQUENCY_MISMATCH:
+ 		acpi_handle_err(handle, "Device cannot be configured due "
+ 				"to a frequency mismatch\n");
+-		break;
++		return;
+ 
+ 	case ACPI_NOTIFY_BUS_MODE_MISMATCH:
+ 		acpi_handle_err(handle, "Device cannot be configured due "
+ 				"to a bus mode mismatch\n");
+-		break;
++		return;
+ 
+ 	case ACPI_NOTIFY_POWER_FAULT:
+ 		acpi_handle_err(handle, "Device has suffered a power fault\n");
+-		break;
++		return;
+ 
+ 	default:
+ 		acpi_handle_debug(handle, "Unknown event type 0x%x\n", type);
+-		break;
++		return;
+ 	}
+ 
+ 	adev = acpi_get_acpi_dev(handle);
+-	if (!adev)
+-		goto err;
+-
+-	if (adev->dev.driver) {
+-		struct acpi_driver *driver = to_acpi_driver(adev->dev.driver);
+-
+-		if (driver && driver->ops.notify &&
+-		    (driver->flags & ACPI_DRIVER_ALL_NOTIFY_EVENTS))
+-			driver->ops.notify(adev, type);
+-	}
+-
+-	if (!hotplug_event) {
+-		acpi_put_acpi_dev(adev);
+-		return;
+-	}
+ 
+-	if (ACPI_SUCCESS(acpi_hotplug_schedule(adev, type)))
++	if (adev && ACPI_SUCCESS(acpi_hotplug_schedule(adev, type)))
+ 		return;
+ 
+ 	acpi_put_acpi_dev(adev);
+ 
+- err:
+-	acpi_evaluate_ost(handle, type, ost_code, NULL);
++	acpi_evaluate_ost(handle, type, ACPI_OST_SC_NON_SPECIFIC_FAILURE, NULL);
+ }
+ 
+ static void acpi_notify_device(acpi_handle handle, u32 event, void *data)
+@@ -562,42 +544,51 @@ static u32 acpi_device_fixed_event(void
+ 	return ACPI_INTERRUPT_HANDLED;
+ }
+ 
+-static int acpi_device_install_notify_handler(struct acpi_device *device)
++static int acpi_device_install_notify_handler(struct acpi_device *device,
++					      struct acpi_driver *acpi_drv)
+ {
+ 	acpi_status status;
+ 
+-	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON)
++	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
+ 		status =
+ 		    acpi_install_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
+ 						     acpi_device_fixed_event,
+ 						     device);
+-	else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON)
++	} else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
+ 		status =
+ 		    acpi_install_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
+ 						     acpi_device_fixed_event,
+ 						     device);
+-	else
+-		status = acpi_install_notify_handler(device->handle,
+-						     ACPI_DEVICE_NOTIFY,
++	} else {
++		u32 type = acpi_drv->flags & ACPI_DRIVER_ALL_NOTIFY_EVENTS ?
++				ACPI_ALL_NOTIFY : ACPI_DEVICE_NOTIFY;
++
++		status = acpi_install_notify_handler(device->handle, type,
+ 						     acpi_notify_device,
+ 						     device);
++	}
+ 
+ 	if (ACPI_FAILURE(status))
+ 		return -EINVAL;
+ 	return 0;
+ }
+ 
+-static void acpi_device_remove_notify_handler(struct acpi_device *device)
++static void acpi_device_remove_notify_handler(struct acpi_device *device,
++					      struct acpi_driver *acpi_drv)
+ {
+-	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON)
++	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
+ 		acpi_remove_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
+ 						acpi_device_fixed_event);
+-	else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON)
++	} else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
+ 		acpi_remove_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
+ 						acpi_device_fixed_event);
+-	else
+-		acpi_remove_notify_handler(device->handle, ACPI_DEVICE_NOTIFY,
++	} else {
++		u32 type = acpi_drv->flags & ACPI_DRIVER_ALL_NOTIFY_EVENTS ?
++				ACPI_ALL_NOTIFY : ACPI_DEVICE_NOTIFY;
++
++		acpi_remove_notify_handler(device->handle, type,
+ 					   acpi_notify_device);
++	}
+ }
+ 
+ /* Handle events targeting \_SB device (at present only graceful shutdown) */
+@@ -1039,7 +1030,7 @@ static int acpi_device_probe(struct devi
+ 		 acpi_drv->name, acpi_dev->pnp.bus_id);
+ 
+ 	if (acpi_drv->ops.notify) {
+-		ret = acpi_device_install_notify_handler(acpi_dev);
++		ret = acpi_device_install_notify_handler(acpi_dev, acpi_drv);
+ 		if (ret) {
+ 			if (acpi_drv->ops.remove)
+ 				acpi_drv->ops.remove(acpi_dev);
+@@ -1062,7 +1053,7 @@ static void acpi_device_remove(struct de
+ 	struct acpi_driver *acpi_drv = to_acpi_driver(dev->driver);
+ 
+ 	if (acpi_drv->ops.notify)
+-		acpi_device_remove_notify_handler(acpi_dev);
++		acpi_device_remove_notify_handler(acpi_dev, acpi_drv);
+ 
+ 	if (acpi_drv->ops.remove)
+ 		acpi_drv->ops.remove(acpi_dev);
+
+
+
