@@ -2,130 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093726C7869
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF45F6C7871
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjCXHHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
+        id S231150AbjCXHIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 03:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCXHHB (ORCPT
+        with ESMTP id S230079AbjCXHIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:07:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6925F133;
-        Fri, 24 Mar 2023 00:07:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FE6CB822B5;
-        Fri, 24 Mar 2023 07:06:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58D20C433D2;
-        Fri, 24 Mar 2023 07:06:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679641617;
-        bh=xa2eNmFWlrxdCJd6KG+ulsuJ2CTY7BiQa67Rp7lKcOA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EycP0j3JUOQqoZQId36jbba/Z+4akkSb9XDx2Tl+FApgCDLJOzFYTOZrZybNylXKK
-         OjOkHaptusdf88v7abQJU560fbORqLrgzpLs4srecB0Q1c9M+LqeXOvNj3dnGHiqTJ
-         hoFQATO3yUKzx73tlRCxDIrbOuOSQfrxjqlINsrl5b0yQkF1cCp9za7DIt3bD1Ngks
-         AV4y8zs+xyLByqiiN8y9YaptvjpX7JCcPsCFbHN3CqyfvepQfUYUVH+u8wpTc0jZby
-         Poj2mH/9Tsr54HoVmmaHuX1u1arD1zUM6+Kiz5xc9OSCpZgaIA12QzVB2dlvs2UHO3
-         K3DtAsEo59FqA==
-Date:   Fri, 24 Mar 2023 08:06:48 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c-for-6.3-rc4
-Message-ID: <ZB1MCGRYs+W1cwG8@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+        Fri, 24 Mar 2023 03:08:17 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A684270B;
+        Fri, 24 Mar 2023 00:08:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679641696; x=1711177696;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1QwNjA/703mfJcIj5DSMOgyWQ/j+uRh45wv8E+wMysE=;
+  b=WTsqof7QB+w8HsQPQScXcuo8Fw4ijRo5+OJt7cRp/JmkxlF++//1FRAg
+   dLdYVwBn8jVOCr6le+X0/Bdh2MjkgYyqZSxYhzl4SX7S1AvNcjK9+Q47p
+   vYFuxCR7il+hxsl8mKRHMyz5iAGn9sK3Du0S8ktcCa7a6qPrC8qM8VnPV
+   b5L0Tm3u8sCjrmqAp3SFZ2vr8agLUpT6+w2A/se/U4wT0XlLcuz8yROsU
+   QYZ2Mqw5mgH6b8PkVNX4QczPVjqn7a/U6uYOVPJ9+128OiLzuqUs/GiuQ
+   pmRtLSGVs5h2IpnVOFEJUBj3omup+OitRjZh8dZu19KfIHbQ9IcJPkpRc
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="402296711"
+X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
+   d="scan'208";a="402296711"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 00:08:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="747046047"
+X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
+   d="scan'208";a="747046047"
+Received: from fli4-mobl1.ccr.corp.intel.com (HELO rzhang1-DESK.intel.com) ([10.255.28.30])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 00:08:14 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/5] thermal/core: Update cooling device during thermal zone unregistration
+Date:   Fri, 24 Mar 2023 15:08:03 +0800
+Message-Id: <20230324070807.6342-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UhYuCbGSzcaRCueC"
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When unregistering a thermal zone device, update all cooling devices
+bound to the thermal zone device.
 
---UhYuCbGSzcaRCueC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This fixes a problem that the frequency of ACPI processors are still
+limited after unloading ACPI thermal driver while ACPI passive cooling
+is activated.
 
-The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+Cc: stable@vger.kernel.org
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+v1 -> v2
+	Changelog update.
+	Rearrange the code to elimiate an "iterator used outside loop"
+warning.
+---
+ drivers/thermal/thermal_core.c | 27 ++++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
 
-  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index cfd4c1afeae7..30ff39154598 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1497,9 +1497,24 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+ 
+ 	/* Unbind all cdevs associated with 'this' thermal zone */
+ 	list_for_each_entry(cdev, &thermal_cdev_list, node) {
++		struct thermal_instance *ti;
++
++		mutex_lock(&tz->lock);
++		list_for_each_entry(ti, &tz->thermal_instances, tz_node) {
++			if (ti->cdev == cdev) {
++				mutex_unlock(&tz->lock);
++				goto unbind;
++			}
++		}
++
++		/* The cooling device is not bound to current thermal zone */
++		mutex_unlock(&tz->lock);
++		continue;
++
++unbind:
+ 		if (tz->ops->unbind) {
+ 			tz->ops->unbind(tz, cdev);
+-			continue;
++			goto deactivate;
+ 		}
+ 
+ 		if (!tzp || !tzp->tbp)
+@@ -1511,6 +1526,16 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+ 				tzp->tbp[i].cdev = NULL;
+ 			}
+ 		}
++
++deactivate:
++		/*
++		 * The thermal instances for current thermal zone has been
++		 * removed. Update the cooling device in case it is activated
++		 * by current thermal zone device.
++		 */
++		mutex_lock(&cdev->lock);
++		__thermal_cdev_update(cdev);
++		mutex_unlock(&cdev->lock);
+ 	}
+ 
+ 	mutex_unlock(&thermal_list_lock);
+-- 
+2.25.1
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.3-rc4
-
-for you to fetch changes up to 92fbb6d1296f81f41f65effd7f5f8c0f74943d15:
-
-  i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer() (2023-03-16 21:15:43 +0100)
-
-----------------------------------------------------------------
-A set of regular driver fixes
-
-----------------------------------------------------------------
-Alexander Stein (2):
-      i2c: imx-lpi2c: clean rx/tx buffers upon new message
-      i2c: imx-lpi2c: check only for enabled interrupt flags
-
-Matthias Schiffer (1):
-      i2c: mxs: ensure that DMA buffers are safe for DMA
-
-Wei Chen (1):
-      i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer()
-
-Yicong Yang (2):
-      i2c: hisi: Avoid redundant interrupts
-      i2c: hisi: Only use the completion interrupt to finish the transfer
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Andi Shyti (1):
-      (Rev.) i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer()
-
-Emanuele Ghidoli (2):
-      (Test) i2c: imx-lpi2c: check only for enabled interrupt flags
-      (Test) i2c: imx-lpi2c: clean rx/tx buffers upon new message
-
- drivers/i2c/busses/i2c-hisi.c          | 13 ++++++++++++-
- drivers/i2c/busses/i2c-imx-lpi2c.c     |  6 ++++++
- drivers/i2c/busses/i2c-mxs.c           | 18 +++++++++++++-----
- drivers/i2c/busses/i2c-xgene-slimpro.c |  3 +++
- 4 files changed, 34 insertions(+), 6 deletions(-)
-
---UhYuCbGSzcaRCueC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQdTAgACgkQFA3kzBSg
-KbZsyQ//R3FvRapjAT3CSJbgsRoQFr+TEusUI9DenVgmvzBykQQdgs+mjHK67xVp
-8ycjOhlHYNZN1adDAJjFnlFFGIW1dICxJLkV1A6MOLxbdERVHUuA4ajio3Pxvbcp
-b5oELGkw27JF5WpiHprj/70tcq2AuA/rG/ECvoRx5Xsjpk09P2dA+nEEOpxU58Ff
-Sg2o77fDbtO9OqA2VKSTw6qG08ud2BBw7K7nW2alX7NcfSs4+l1u1Tyipdr5+8Ki
-a+06HSI/dforBhWU9m551wK+OrYBdLlIFb8QnS3pxT9rrZ6Br3qQhPSJfIhgWfhf
-inhCmRzIaYR9k+hQTzpnSzeIQZ76hp98cs8EsU4eRYAGOiMcNOQ3oOO1Qf5mgLdY
-dt2GWKm2eESVvPXa0pi6nA11f1dWh67mEWhVSLSsCLiLyIM0aJCo7+k5FE1rJhnC
-so+WGZHJW3ul6a0gCdPCBXM8892PcDswogTwaj2YCRbtGDmdqL1Bfk47JIU3zOBl
-jvUfuwmsE0kRTugIvT1a14eyBWV5L2RXM9SYuCCeJQcI0ZB4f1csObfOyVIhnuS/
-aQ1wcle3upMGhypb9k476jbDj8IfO7zUgdcWsk1bqLGo+eTXSj4onzFfa9Per+sd
-JDxAS7+sKvPLasKcl6YjKzQspe0iRn43Y97SaTe86kDUOnZXUnE=
-=Ofkh
------END PGP SIGNATURE-----
-
---UhYuCbGSzcaRCueC--
