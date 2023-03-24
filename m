@@ -2,98 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 902436C8029
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A786C802C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbjCXOpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
+        id S232120AbjCXOp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232118AbjCXOo7 (ORCPT
+        with ESMTP id S231508AbjCXOpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:44:59 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A757C19137
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:44:57 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so5268399pjp.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:44:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1679669097;
-        h=message-id:to:from:cc:subject:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7ZXUPhMi1ETDwZe5lY9GB/SQK/ctMF989jSe1q7ilEo=;
-        b=VT0WWYHZM0c6swX/cYjunSRPofSmuS3/hHpt0Y8bB4EeHbgzKWTreQKbGb+hHOADKs
-         q/T480zMx+/n00LaEj8chlCkZzzf874vpzKDHOIQVB+EXB8BUG24LsaJHl1tA1dI14W3
-         jN9NxWfE86v9zmFicFXHS2Ae2Ozq0PYaFnrgjKccYoTCpbkcSbw++X9/PvZnfSnRxq4T
-         INRSp01LOTdb/3xl9gRdOAgequdCxNBoXvgGC4rlwy1xh3zz3AWfl8a92JObpJb6yWVj
-         EmVGZqUfIEi6db/IznuHwTgW7TAkVo1sjKcMCHPMqZp5S9D5TK7nOZbCzlfF94c8IP1g
-         O+/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679669097;
-        h=message-id:to:from:cc:subject:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7ZXUPhMi1ETDwZe5lY9GB/SQK/ctMF989jSe1q7ilEo=;
-        b=IeZ7N+qtS4uNvkxQDNiNuvlWfHj1EqP/KjwPt2NIh2rNv7K/LvRQJjzwBYswjyOuBw
-         uTgfy75HOwz6DLE1E1I+rBfk5+ewLxgkocOxNgk9izhtFoAc6q9+AHLe0GBAAFBijAJa
-         il5EfY7gkeAI7PQSeGZTTet7iU6PsO1ougFwecyWh7huU4DKULlF9jTmuV+emAaisvYx
-         D7vn8WolNoaQAWoE2WrFnV+H09RW5ENjGG+pmx7zy/0jXx3DD4bbjjDGxPn+5IrV8G5P
-         LldLHf0nZuHqFgqj14n58+9d6a1LBLCjnXVnp6+8FP3sU47RZEjxDhU18EZqvuhTqvRe
-         34Fg==
-X-Gm-Message-State: AAQBX9eF/529TaRTyOOEkE1K9Uuly3lpVLQmzUyAU1baoI8hIoYZWNol
-        SqzXpRFtTU0PUqSmfOpaxwVnLXiw8h+rPx1B/V4=
-X-Google-Smtp-Source: AKy350bt+TteTHm7dnhroYzhJ0u8eIFGFhXPPksXeIxCNwVC689tSlL6Daby7LAaHZbHN3BNz6Pmpw==
-X-Received: by 2002:a17:903:1103:b0:19f:67b1:67e with SMTP id n3-20020a170903110300b0019f67b1067emr3734746plh.49.1679669097085;
-        Fri, 24 Mar 2023 07:44:57 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id w5-20020a1709029a8500b001a064cff3c5sm14260697plp.43.2023.03.24.07.44.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 07:44:56 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 07:44:56 -0700 (PDT)
-X-Google-Original-Date: Fri, 24 Mar 2023 07:44:36 PDT (-0700)
-Subject: [GIT PULL] RISC-V Fixes for 6.3-rc4
-CC:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <mhng-4d782094-e4c0-4626-a038-78e17e33b19e@palmer-ri-x1c9>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 24 Mar 2023 10:45:23 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23F4523112;
+        Fri, 24 Mar 2023 07:45:13 -0700 (PDT)
+Received: from localhost.localdomain (77-166-152-30.fixed.kpn.net [77.166.152.30])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E308820FC442;
+        Fri, 24 Mar 2023 07:45:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E308820FC442
+From:   Jeremi Piotrowski <jpiotrowski@microsoft.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Tianyu Lan <ltykernel@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Sean Christopherson <seanjc@google.com>, stable@vger.kernel.org
+Subject: [PATCH v2] KVM: SVM: Flush Hyper-V TLB when required
+Date:   Fri, 24 Mar 2023 15:45:00 +0100
+Message-Id: <20230324144500.4216-1-jpiotrowski@microsoft.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 47dd902aaee9b9341808a3a994793199e7eddb88:
+From: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
 
-  RISC-V: mm: Support huge page in vmalloc_fault() (2023-03-14 19:15:34 -0700)
+The Hyper-V "EnlightenedNptTlb" enlightenment is always enabled when KVM
+is running on top of Hyper-V and Hyper-V exposes support for it (which
+is always). On AMD CPUs this enlightenment results in ASID invalidations
+not flushing TLB entries derived from the NPT. To force the underlying
+(L0) hypervisor to rebuild its shadow page tables, an explicit hypercall
+is needed.
 
-are available in the Git repository at:
+The original KVM implementation of Hyper-V's "EnlightenedNptTlb" on SVM
+only added remote TLB flush hooks. This worked out fine for a while, as
+sufficient remote TLB flushes where being issued in KVM to mask the
+problem. Since v5.17, changes in the TDP code reduced the number of
+flushes and the out-of-sync TLB prevents guests from booting
+successfully.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.3-rc4
+Split svm_flush_tlb_current() into separate callbacks for the 3 cases
+(guest/all/current), and issue the required Hyper-V hypercall when a
+Hyper-V TLB flush is needed. The most important case where the TLB flush
+was missing is when loading a new PGD, which is followed by what is now
+svm_flush_tlb_current().
 
-for you to fetch changes up to e89c2e815e76471cb507bd95728bf26da7976430:
+Cc: stable@vger.kernel.org # v5.17+
+Fixes: 1e0c7d40758b ("KVM: SVM: hyper-v: Remote TLB flush for SVM")
+Link: https://lore.kernel.org/lkml/43980946-7bbf-dcef-7e40-af904c456250@linux.microsoft.com/
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+---
+Changes since v1:
+- lookup enlightened_npt_tlb in vmcb to determine whether to do the
+  flush
+- when KVM wants a hyperv_flush_guest_mapping() call, don't try to
+  optimize it out
+- don't hide hyperv flush behind helper, make it visible in
+  svm.c
 
-  riscv: Handle zicsr/zifencei issues between clang and binutils (2023-03-23 12:52:49 -0700)
+ arch/x86/kvm/kvm_onhyperv.h     |  5 +++++
+ arch/x86/kvm/svm/svm.c          | 37 ++++++++++++++++++++++++++++++---
+ arch/x86/kvm/svm/svm_onhyperv.h | 15 +++++++++++++
+ 3 files changed, 54 insertions(+), 3 deletions(-)
 
-----------------------------------------------------------------
-RISC-V Fixes for 6.3-rc4
+diff --git a/arch/x86/kvm/kvm_onhyperv.h b/arch/x86/kvm/kvm_onhyperv.h
+index 287e98ef9df3..67b53057e41c 100644
+--- a/arch/x86/kvm/kvm_onhyperv.h
++++ b/arch/x86/kvm/kvm_onhyperv.h
+@@ -12,6 +12,11 @@ int hv_remote_flush_tlb_with_range(struct kvm *kvm,
+ int hv_remote_flush_tlb(struct kvm *kvm);
+ void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp);
+ #else /* !CONFIG_HYPERV */
++static inline int hv_remote_flush_tlb(struct kvm *kvm)
++{
++	return -1;
++}
++
+ static inline void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp)
+ {
+ }
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 252e7f37e4e2..f25bc3cbb250 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -3729,7 +3729,7 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
+ 	svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
+ }
+ 
+-static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
++static void svm_flush_tlb_asid(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+ 
+@@ -3753,6 +3753,37 @@ static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
+ 		svm->current_vmcb->asid_generation--;
+ }
+ 
++static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
++{
++	hpa_t root_tdp = vcpu->arch.mmu->root.hpa;
++
++	/*
++	 * When running on Hyper-V with EnlightenedNptTlb enabled, explicitly
++	 * flush the NPT mappings via hypercall as flushing the ASID only
++	 * affects virtual to physical mappings, it does not invalidate guest
++	 * physical to host physical mappings.
++	 */
++	if (svm_hv_is_enlightened_tlb_enabled(vcpu) && VALID_PAGE(root_tdp))
++		hyperv_flush_guest_mapping(root_tdp);
++
++	svm_flush_tlb_asid(vcpu);
++}
++
++static void svm_flush_tlb_all(struct kvm_vcpu *vcpu)
++{
++	/*
++	 * When running on Hyper-V with EnlightenedNptTlb enabled, remote TLB
++	 * flushes should be routed to hv_remote_flush_tlb() without requesting
++	 * a "regular" remote flush.  Reaching this point means either there's
++	 * a KVM bug or a prior hv_remote_flush_tlb() call failed, both of
++	 * which might be fatal to the guest.  Yell, but try to recover.
++	 */
++	if (WARN_ON_ONCE(svm_hv_is_enlightened_tlb_enabled(vcpu)))
++		hv_remote_flush_tlb(vcpu->kvm);
++
++	svm_flush_tlb_asid(vcpu);
++}
++
+ static void svm_flush_tlb_gva(struct kvm_vcpu *vcpu, gva_t gva)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+@@ -4745,10 +4776,10 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+ 	.set_rflags = svm_set_rflags,
+ 	.get_if_flag = svm_get_if_flag,
+ 
+-	.flush_tlb_all = svm_flush_tlb_current,
++	.flush_tlb_all = svm_flush_tlb_all,
+ 	.flush_tlb_current = svm_flush_tlb_current,
+ 	.flush_tlb_gva = svm_flush_tlb_gva,
+-	.flush_tlb_guest = svm_flush_tlb_current,
++	.flush_tlb_guest = svm_flush_tlb_asid,
+ 
+ 	.vcpu_pre_run = svm_vcpu_pre_run,
+ 	.vcpu_run = svm_vcpu_run,
+diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
+index cff838f15db5..786d46d73a8e 100644
+--- a/arch/x86/kvm/svm/svm_onhyperv.h
++++ b/arch/x86/kvm/svm/svm_onhyperv.h
+@@ -6,6 +6,8 @@
+ #ifndef __ARCH_X86_KVM_SVM_ONHYPERV_H__
+ #define __ARCH_X86_KVM_SVM_ONHYPERV_H__
+ 
++#include <asm/mshyperv.h>
++
+ #if IS_ENABLED(CONFIG_HYPERV)
+ 
+ #include "kvm_onhyperv.h"
+@@ -15,6 +17,14 @@ static struct kvm_x86_ops svm_x86_ops;
+ 
+ int svm_hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu);
+ 
++static inline bool svm_hv_is_enlightened_tlb_enabled(struct kvm_vcpu *vcpu)
++{
++	struct hv_vmcb_enlightenments *hve = &to_svm(vcpu)->vmcb->control.hv_enlightenments;
++
++	return ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB &&
++	       !!hve->hv_enlightenments_control.enlightened_npt_tlb;
++}
++
+ static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
+ {
+ 	struct hv_vmcb_enlightenments *hve = &vmcb->control.hv_enlightenments;
+@@ -80,6 +90,11 @@ static inline void svm_hv_update_vp_id(struct vmcb *vmcb, struct kvm_vcpu *vcpu)
+ }
+ #else
+ 
++static inline bool svm_hv_is_enlightened_tlb_enabled(struct kvm_vcpu *vcpu)
++{
++	return false;
++}
++
+ static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
+ {
+ }
+-- 
+2.37.2
 
-* A fix to match the CSR ASID masking rules when passing ASIDs to
-  firmware.
-* Force GCC to use ISA 2.2, to avoid a host of compatibily issues
-  between toolchains.
-
-----------------------------------------------------------------
-Dylan Jhong (1):
-      riscv: mm: Fix incorrect ASID argument when flushing TLB
-
-Nathan Chancellor (1):
-      riscv: Handle zicsr/zifencei issues between clang and binutils
-
- arch/riscv/Kconfig                | 22 ++++++++++++++++++++++
- arch/riscv/Makefile               | 10 ++++++----
- arch/riscv/include/asm/tlbflush.h |  2 ++
- arch/riscv/mm/context.c           |  2 +-
- arch/riscv/mm/tlbflush.c          |  2 +-
- 5 files changed, 32 insertions(+), 6 deletions(-)
