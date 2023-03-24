@@ -2,255 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE24C6C888E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 23:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7BEE6C8897
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 23:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbjCXWqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 18:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S232186AbjCXWuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 18:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbjCXWqp (ORCPT
+        with ESMTP id S231623AbjCXWut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 18:46:45 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BDB12BE9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:46:43 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id nu18-20020a17090b1b1200b0023fbe01dc06so2829257pjb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:46:43 -0700 (PDT)
+        Fri, 24 Mar 2023 18:50:49 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7EB10402
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:50:48 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id w9so13593578edc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:50:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679698003;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y38J5Q0T0ljikOd/ueM85GePmC9PC1NOb8RKF0XdDh4=;
-        b=p+a4ya4UwilyU/e2NJKPKG2kW31JLZNQXk8MJBmAe50q7dojOAtor4Hu6v3/V4KmQg
-         rFjBa5XQNPSaZd8avNjgaagSsrKSJSV/hXP34YzQRU3al/ezRL4x/Plw8rjfCsaDyJia
-         vf6eVYs8tmyf+BKnJri84kaekQ5hFK5zL+d4TcbEJYobgAuyBV+QXFEGeXl2CqSVQt/w
-         SYCCP1ggIH2uGioIiBRZQi6vaUuWNaB8tBgNRk/+u5NfoNKlXmD0wQy+246gJXnwiQ77
-         HQRcusOnjhDgiZ6gLHzPE2KVKn3RXx8tuVgoq9+rzFQnJ0nRd3qJ8XDjnmxdmk2HTC56
-         z36A==
+        d=google.com; s=20210112; t=1679698247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k4C4+ig9qii8cFMiMH7UB83VKoFh5dhcH5qAN4vMsyQ=;
+        b=PNZilH1Gjf6oog3t5h9HCkdzcH1etVK5NHRvqEGz0tzMA6UkvV8oibBMlnELMdCsTx
+         ESv3g4RuIOXbzQrTC6JLpovuuTr2leIRJnt5pu6Ur8taswzMfoVb3b76ogYPK9rIUKoz
+         ZroJcsC87UZfJJ2+P4nODPSm6IGXHRapFkl2XStb5f6xPFrqB4NCxRgBRY328FFsfaDb
+         t6M4EYsSyH+txGLv4+tb4mRYPL29/PWW8y0ndgEQEPnNflpkS9g0D0g6ILZ3+M7P/deo
+         ZMVQpgzWN70olFlt/oeGeYGAsjRYrdlraZNnRwlFQ+LQ65cNhoGA3o8yS9sSslR5pm/L
+         5tjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679698003;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y38J5Q0T0ljikOd/ueM85GePmC9PC1NOb8RKF0XdDh4=;
-        b=SpJU33Z9HlhPRqbBOaud9KGJ+t2ZStPwu8Y58e4XtfFDp5GfPQuCBSZoNBN85lEAoF
-         NP/XinUiPOyWofI5GcDIVGxhanbsU4KSttdgKYyFbxk30dQcguy5840n70+YemdFbJBG
-         1KNifQRJ/qcHp9dqsY4yafJOFLxuaqAQ5v+MgftEaOOyysjpB9929jI1hwf8YZ4uEKam
-         hlshP8N2cBamlhedH93FhBaDvPDgjLEBqsGrboWP3VT9Vo708Rw9qAvUPs9W4cB+F1Ll
-         XKiIzIuI7lUNv/d0c2WfFb8HDu2m2gxZHdVjs2B8HUFA8n6BHgl0cMvpMu3MYRSN55tB
-         YYLg==
-X-Gm-Message-State: AAQBX9eDOvRs29bE4D3jv9/Jz4xxJikvpJS+C6/SP+vYW8MYpVv1qWsw
-        p0lNLrsF6HCVJHZVv/dVxm9gf2PMF5w=
-X-Google-Smtp-Source: AKy350YxndtGDU88dvgE/yq9EHp2rISF2og6hi4IiYNjONjbDDxsPLpJU13oIO0RfP6uz7lkNxNjJ14abgY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:760f:b0:23f:b876:cef1 with SMTP id
- s15-20020a17090a760f00b0023fb876cef1mr1333524pjk.5.1679698003324; Fri, 24 Mar
- 2023 15:46:43 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 15:46:42 -0700
-In-Reply-To: <20230321112742.25255-1-likexu@tencent.com>
-Mime-Version: 1.0
-References: <20230321112742.25255-1-likexu@tencent.com>
-Message-ID: <ZB4oUhmIKPF2lAzN@google.com>
-Subject: Re: [PATCH] KVM: x86/pmu: Add Intel PMU supported fixed counters bit mask
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1679698247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k4C4+ig9qii8cFMiMH7UB83VKoFh5dhcH5qAN4vMsyQ=;
+        b=4QNvZ+kfZp0LRenBiqLmUN4PRd2L59E/cv18WTJvk/At5AfIS5zhRg5Z9p5RKjiMbr
+         9VBMc0foidNDIr6EDBlMmN4oFnpoHzSZoOxJbPIZEJNye/4JHh6IRyjR7Myigu0s1r4x
+         MiqSt+defkaBwL80PckQo1p9VxS0gJG1FXAEjGi5FHkjzfiXQytvIl0HaDn2U4YEK7HI
+         pcdepOlCm6y3EWJ9eQihtKjZ5WTZHmo1lCqyhS8+AR3pbrD88JN7JcBYy6UZrOg3b3JV
+         EXYWy/fdgiYfRBftp0vdlqEas3pC3u4xobyBTQOzJP7vKgin9Lz5+X7k/OhPRngBe9hG
+         CO2A==
+X-Gm-Message-State: AAQBX9d+wZXJqVidzDI9Y4KQiOF66WlAmNEPALgXBaf5xi+Fj9NajFPI
+        sbpxyjgUuC95Vl+vwUlL1GRXgEI+uQPlM7aE1oxjXQ==
+X-Google-Smtp-Source: AKy350as1fjLqRzEXcj4LkTEmL/GZJV50WUfZRkDVfUJxjhMe3gHdgiiXSgPCONXQe0PAnrHWJ2DjRG+gGSUM+zjV0U=
+X-Received: by 2002:a50:a6d7:0:b0:4fa:71a2:982b with SMTP id
+ f23-20020a50a6d7000000b004fa71a2982bmr2076902edc.0.1679698246555; Fri, 24 Mar
+ 2023 15:50:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-2-yosryahmed@google.com> <ZBz/V5a7/6PZeM7S@slm.duckdns.org>
+ <CAJD7tkYNZeEytm_Px9_73Y-AYJfHAxaoTmmnO71HW5hd1B5tPg@mail.gmail.com> <53582a07-81c6-35eb-10bf-7920b27483be@redhat.com>
+In-Reply-To: <53582a07-81c6-35eb-10bf-7920b27483be@redhat.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 24 Mar 2023 15:50:10 -0700
+Message-ID: <CAJD7tkZA-LxAVA5SWRzMeQ17T26qGBApPqErqT_SpCbrtCJQkA@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
+ percpu lock
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> Per Intel SDM, fixed-function performance counter 'i' is supported if:
-> 
-> 	FxCtr[i]_is_supported := ECX[i] || (EDX[4:0] > i);
-> 
-> which means that the KVM user space can use EDX to limit the number of
-> fixed counters and at the same time, using ECX to enable part of other
-> KVM supported fixed counters.
-> 
-> Add a bitmap (instead of always checking the vcpu's CPUIDs) to keep track
-> of the guest available fixed counters and perform the semantic checks.
-> 
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |  2 ++
->  arch/x86/kvm/pmu.h              |  8 +++++
->  arch/x86/kvm/vmx/pmu_intel.c    | 53 +++++++++++++++++++++------------
->  3 files changed, 44 insertions(+), 19 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index a45de1118a42..14689e583127 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -565,6 +565,8 @@ struct kvm_pmu {
->  	 */
->  	bool need_cleanup;
->  
-> +	DECLARE_BITMAP(supported_fixed_pmc_idx, KVM_PMC_MAX_FIXED);
+On Fri, Mar 24, 2023 at 7:12=E2=80=AFAM Waiman Long <longman@redhat.com> wr=
+ote:
+>
+> On 3/24/23 03:22, Yosry Ahmed wrote:
+> > On Thu, Mar 23, 2023 at 6:39=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote=
+:
+> >> Hello,
+> >>
+> >> On Thu, Mar 23, 2023 at 04:00:31AM +0000, Yosry Ahmed wrote:
+> >>> Currently, when sleeping is not allowed during rstat flushing, we hol=
+d
+> >>> the global rstat lock with interrupts disabled throughout the entire
+> >>> flush operation. Flushing in an O(# cgroups * # cpus) operation, and
+> >>> having interrupts disabled throughout is dangerous.
+> >>>
+> >>> For some contexts, we may not want to sleep, but can be interrupted
+> >>> (e.g. while holding a spinlock or RCU read lock). As such, do not
+> >>> disable interrupts throughout rstat flushing, only when holding the
+> >>> percpu lock. This breaks down the O(# cgroups * # cpus) duration with
+> >>> interrupts disabled to a series of O(# cgroups) durations.
+> >>>
+> >>> Furthermore, if a cpu spinning waiting for the global rstat lock, it
+> >>> doesn't need to spin with interrupts disabled anymore.
+> >> I'm generally not a fan of big spin locks w/o irq protection. They too=
+ often
+> >> become a source of unpredictable latency spikes. As you said, the glob=
+al
+> >> rstat lock can be held for quite a while. Removing _irq makes irq late=
+ncy
+> >> better on the CPU but on the other hand it makes a lot more likely tha=
+t the
+> >> lock is gonna be held even longer, possibly significantly so depending=
+ on
+> >> the configuration and workload which will in turn stall other CPUs wai=
+ting
+> >> for the lock. Sure, irqs are being serviced quicker but if the cost is=
+ more
+> >> and longer !irq context multi-cpu stalls, what's the point?
+> >>
+> >> I don't think there's anything which requires the global lock to be he=
+ld
+> >> throughout the entire flushing sequence and irq needs to be disabled w=
+hen
+> >> grabbing the percpu lock anyway, so why not just release the global lo=
+ck on
+> >> CPU boundaries instead? We don't really lose anything significant that=
+ way.
+> >> The durations of irq disabled sections are still about the same as in =
+the
+> >> currently proposed solution at O(# cgroups) and we avoid the risk of h=
+olding
+> >> the global lock for too long unexpectedly from getting hit repeatedly =
+by
+> >> irqs while holding the global lock.
+> > Thanks for taking a look!
+> >
+> > I think a problem with this approach is that we risk having to contend
+> > for the global lock at every CPU boundary in atomic contexts. Right
+> Isn't it the plan to just do a trylock in atomic contexts so that it
+> won't get stuck spinning for the lock for an indeterminate amount of time=
+?
 
-Why add a new bitmap?  all_valid_pmc_idx is a strict superset, no?
+Not exactly. On the memory controller side, we currently only allow
+one flusher at a time and force all flushers to flush the full
+hierarchy, such that concurrent flushers can skip. This is done for
+both atomic and non-atomic contexts.
 
-> +static inline bool fixed_ctr_is_supported(struct kvm_pmu *pmu, unsigned int idx)
-> +{
-> +	return test_bit(idx, pmu->supported_fixed_pmc_idx);
-> +}
-> +
->  /* returns fixed PMC with the specified MSR */
->  static inline struct kvm_pmc *get_fixed_pmc(struct kvm_pmu *pmu, u32 msr)
->  {
-> @@ -120,6 +125,9 @@ static inline struct kvm_pmc *get_fixed_pmc(struct kvm_pmu *pmu, u32 msr)
->  		u32 index = array_index_nospec(msr - base,
->  					       pmu->nr_arch_fixed_counters);
->  
-> +		if (!fixed_ctr_is_supported(pmu, index))
-> +			return NULL;
-> +
->  		return &pmu->fixed_counters[index];
->  	}
->  
-> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-> index e8a3be0b9df9..12f4b2fe7756 100644
-> --- a/arch/x86/kvm/vmx/pmu_intel.c
-> +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> @@ -43,13 +43,16 @@ static int fixed_pmc_events[] = {1, 0, 7};
->  static void reprogram_fixed_counters(struct kvm_pmu *pmu, u64 data)
->  {
->  	struct kvm_pmc *pmc;
-> -	u8 old_fixed_ctr_ctrl = pmu->fixed_ctr_ctrl;
-> +	u8 new_ctrl, old_ctrl, old_fixed_ctr_ctrl = pmu->fixed_ctr_ctrl;
->  	int i;
->  
->  	pmu->fixed_ctr_ctrl = data;
->  	for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
-> -		u8 new_ctrl = fixed_ctrl_field(data, i);
-> -		u8 old_ctrl = fixed_ctrl_field(old_fixed_ctr_ctrl, i);
+For flushers outside the memory controller, they can still contend the
+lock among themselves or with flushers in the memory controller. In
+this case, instead of contending the lock once, they contend it at
+each CPU boundary.
 
-Please keep the variable declarations in the loop (I've had to eat my words about
-variable shadowing), e.g. to prevent accessing new_ctrl or old_ctrl after the loop.
+> > now we contend for the global lock once, and once we have it we go
+> > through all CPUs to flush, only having to contend with updates taking
+> > the percpu locks at this point. If we unconditionally release &
+> > reacquire the global lock at every CPU boundary then we may contend
+> > for it much more frequently with concurrent flushers.
+>
+> Note that with the use of qspinlock in all the major arches, the impact
+> of thundering herds of lockers are much less serious than before. There
+> are certainly some overhead in doing multiple lock acquires and
+> releases, but that shouldn't been too excessive.
 
-> +		if (!fixed_ctr_is_supported(pmu, i))
-> +			continue;
-> +
-> +		new_ctrl = fixed_ctrl_field(data, i);
-> +		old_ctrl = fixed_ctrl_field(old_fixed_ctr_ctrl, i);
->  
->  		if (old_ctrl == new_ctrl)
->  			continue;
-> @@ -125,6 +128,9 @@ static bool intel_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
->  
->  	idx &= ~(3u << 30);
->  
-> +	if (fixed && !fixed_ctr_is_supported(pmu, idx))
-> +		return false;
-> +
->  	return fixed ? idx < pmu->nr_arch_fixed_counters
->  		     : idx < pmu->nr_arch_gp_counters;
->  }
-> @@ -145,7 +151,7 @@ static struct kvm_pmc *intel_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
->  		counters = pmu->gp_counters;
->  		num_counters = pmu->nr_arch_gp_counters;
->  	}
-> -	if (idx >= num_counters)
-> +	if (idx >= num_counters || (fixed && !fixed_ctr_is_supported(pmu, idx)))
->  		return NULL;
->  	*mask &= pmu->counter_bitmask[fixed ? KVM_PMC_FIXED : KVM_PMC_GP];
->  	return &counters[array_index_nospec(idx, num_counters)];
-> @@ -500,6 +506,9 @@ static void setup_fixed_pmc_eventsel(struct kvm_pmu *pmu)
->  	int i;
->  
->  	for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
-> +		if (!fixed_ctr_is_supported(pmu, i))
-> +			continue;
-> +
->  		pmc = &pmu->fixed_counters[i];
->  		event = fixed_pmc_events[array_index_nospec(i, size)];
->  		pmc->eventsel = (intel_arch_events[event].unit_mask << 8) |
-> @@ -520,6 +529,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->  
->  	pmu->nr_arch_gp_counters = 0;
->  	pmu->nr_arch_fixed_counters = 0;
-> +	bitmap_zero(pmu->supported_fixed_pmc_idx, KVM_PMC_MAX_FIXED);
+I ran some tests to measure this. Since I am using a cgroup v1
+hierarchy, I cannot reproduce contention between memory controller
+flushers and non-memory controller flushers, so I removed the "one
+memory flusher only" restriction to have concurrent memory flushers
+compete for the global rstat lock to measure the impact:
 
-Side topic, isn't KVM missing a bitmap_zero() on all_valid_pmc_idx?
+Before (only one flusher allowed to compete for the global rstat lock):
+            ---cgroup_rstat_flush
+               |
+                --1.27%--cgroup_rstat_flush_locked
+                          |
+                           --0.94%--mem_cgroup_css_rstat_flush
 
->  	pmu->counter_bitmask[KVM_PMC_GP] = 0;
->  	pmu->counter_bitmask[KVM_PMC_FIXED] = 0;
->  	pmu->version = 0;
+After (concurrent flushers allowed to compete for the global rstat lock):
+            ---cgroup_rstat_flush
+               |
+               |--4.94%--_raw_spin_lock
+               |          |
+               |           --4.94%--queued_spin_lock_slowpath
+               |
+                --0.92%--cgroup_rstat_flush_locked
+                          |
+                           --0.56%--mem_cgroup_css_rstat_flush
 
-...
+This was run with 20 processes trying to flush concurrently, so it may
+be excessive, but it seems like in this case lock contention makes a
+significant difference.
 
-> +	if (pmu->version > 1) {
->  		pmu->nr_arch_fixed_counters =
-> -			min3(ARRAY_SIZE(fixed_pmc_events),
-> -			     (size_t) edx.split.num_counters_fixed,
-> -			     (size_t)kvm_pmu_cap.num_counters_fixed);
-> +			min_t(int, ARRAY_SIZE(fixed_pmc_events),
-> +			      kvm_pmu_cap.num_counters_fixed);
+Again, this is not a regression for non-atomic flushers, as they
+already compete for the lock at every CPU boundary, but for atomic
+flushers that don't give up the lock at all today, it would be a
+regression to start competing for the lock at every CPU boundary. This
+patch series aims to minimize the number of atomic flushers (brings
+them down to two, one of which is not common), so this may be fine.
 
-Leaving nr_arch_fixed_counters set to kvm_pmu_cap.num_counters_fixed seems odd.
-E.g. if userspace reduces the number of counters to 1, shouldn't that be reflected
-in the PMU metadata?
+My main concern is that for some flushers that this series converts
+from atomic to non-atomic, we may notice a regression later and revert
+it (e.g. refault path), which is why I have them in separate patches.
+If we regress the atomic flushing path, it would be a larger surgery
+to restore the performance for these paths -- which is why I would
+rather keep the atomic path without excessive lock contention.
 
-Ah, you did that so the iteration works.  That's super confusing.  And silly,
-because in the end, pmu->nr_arch_fixed_counters is just kvm_pmu_cap.num_counters_fixed.
+Thoughts?
 
-THis holds true:
-
-	BUILD_BUG_ON(ARRAY_SIZE(fixed_pmc_events) != KVM_PMC_MAX_FIXED);
-
-and KVM does this
-
-	kvm_pmu_cap.num_counters_fixed = min(kvm_pmu_cap.num_counters_fixed,
-					     KVM_PMC_MAX_FIXED);
-
-ergo the above min_t() is a nop.
-
-One option would be to just use kvm_pmu_cap.num_counters_fixed, but I think it
-makes more sense to use for_each_set_bit(), or perhaps for_each_set_bitrange_from()
-if all_valid_pmc_idx is used.
-
-And then end up with something like so:
-
-static bool intel_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
-{
-	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-	bool fixed = idx & (1u << 30);
-
-	idx &= ~(3u << 30);
-
-	return fixed ? fixed_ctr_is_supported(pmu, idx)
-		     : idx < pmu->nr_arch_gp_counters;
-}
-
-static struct kvm_pmc *intel_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
-					    unsigned int idx, u64 *mask)
-{
-	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-	bool fixed = idx & (1u << 30);
-	struct kvm_pmc *counters;
-	unsigned int num_counters;
-
-	if (!intel_is_valid_rdpmc_ecx(vcpu, idx))
-		return NULL;
-
-	idx &= ~(3u << 30);
-	if (fixed) {
-		counters = pmu->fixed_counters;
-		num_counters = kvm_pmu_cap.num_counters_fixed;
-	} else {
-		counters = pmu->gp_counters;
-		num_counters = pmu->nr_arch_gp_counters;
-	}
-	*mask &= pmu->counter_bitmask[fixed ? KVM_PMC_FIXED : KVM_PMC_GP];
-	return &counters[array_index_nospec(idx, num_counters)];
-}
+>
+> I am all in for reducing lock hold time as much as possible as it will
+> improve the response time.
+>
+> Cheers,
+> Longman
+>
