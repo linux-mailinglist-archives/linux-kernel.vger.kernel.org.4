@@ -2,139 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044896C7FA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B24FB6C7FA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:14:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjCXOOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
+        id S230025AbjCXOOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbjCXOOO (ORCPT
+        with ESMTP id S230079AbjCXOOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:14:14 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1164312F27
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:14:06 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5416b0ab0ecso35193807b3.6
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:14:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679667244;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8Eck/bb+D3Wo7CqwBsejFq9JyEtd/ZokuSoWl55rfhk=;
-        b=J19GZxr6HfIlsNMymj0Dh0QebxGKp/9XJgwS8o+6YwGHsBWA6Prhd/2XIgnJ78agYT
-         lzoi2yU/ywMCpJU4G1MuiCqna7+xKwHl67yAfjtg2uPpjsI3ekpa+J2qqppvD0LreX/K
-         wnuEtx/asLZz4bvorfwisAvCX1JeAXZPyE1ME=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679667244;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8Eck/bb+D3Wo7CqwBsejFq9JyEtd/ZokuSoWl55rfhk=;
-        b=Dc9EBLkFudJDWuhJicE8Z/A+7MT3eFvA1ps5QD+6GED+Bv6jpJ0K0iy8QUTqX3vxw+
-         lWb1nfsQmyRC5NO+tWWelSmwjyk/tazu/KkHD1rOab/z83XSqd+zHrGKfb5aIKNScEgu
-         MB1RVK/dZzxTsfaEh541pdns+cwJgGhLC7QhaRTOu/1X1qP+JptFC9OrOPkCTSKGfigq
-         jSPEnOCTrO9R8onvxj8hvHDLtk96xsfiEevQnl0UIb/YFOVp4sQYcGSDunLIEBil+kQ2
-         TyUi18HZZ5Yq5OzrIdEepIX+CrbU16wKsb80LWmkfS+IBuse0Oexa5U9TVUd8LZtO711
-         G0uA==
-X-Gm-Message-State: AAQBX9cV3Qay0wP6AKpHgs5i0ZNHcSZkj198yvFOp0VtjGzrXWQPnypg
-        trSXeQF+fppXcM/PtPm9JjkuK76BQ3/MTBEptIU=
-X-Google-Smtp-Source: AKy350b2wYRBE8bmnmdygzIQnL7eO2TOj0BBBQb7WTBbfZ6V5DyFr1MxDqSvux8w0WwDOTQ3tjhLYg==
-X-Received: by 2002:a0d:e8d7:0:b0:52e:c9f7:e3c0 with SMTP id r206-20020a0de8d7000000b0052ec9f7e3c0mr2617517ywe.42.1679667244508;
-        Fri, 24 Mar 2023 07:14:04 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id 137-20020a81128f000000b00545a081848bsm423811yws.27.2023.03.24.07.14.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 07:14:03 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-536af432ee5so36080997b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:14:03 -0700 (PDT)
-X-Received: by 2002:a81:b620:0:b0:541:8ce6:b9ad with SMTP id
- u32-20020a81b620000000b005418ce6b9admr1146200ywh.2.1679667243445; Fri, 24 Mar
- 2023 07:14:03 -0700 (PDT)
+        Fri, 24 Mar 2023 10:14:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFADE3A5;
+        Fri, 24 Mar 2023 07:14:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4AF9B82468;
+        Fri, 24 Mar 2023 14:14:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6209BC433A1;
+        Fri, 24 Mar 2023 14:14:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679667274;
+        bh=1LI/70a8Wdzks6bphAAWWIPjcQjTsKtdN1DkUgKWRyI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ijFDYpG/KmgbsY4vdmpD0gMdOmVDjHJbSSOCZWf2UoedbgA14V4lzmDCJusk/OSBS
+         i+UIAIrDliH36R7XxBg4b1aaHtEfoFxqYdCbf6vGPEx5CDBtCA3SKXKJwVD2p4Ew4x
+         Pa5BUUlEjKOg+lE9kljAXCMIv+RYJdtMmLFreE7dfzlH9IYH/CKkTB09BltAgiXbQX
+         yV1NxMXsvaQjziDncb8LJMLRNcn209UuO/BuNWX/SkIIYfmMP+Q9CgnH3/UrGzg5Pc
+         1l1qnuakm1XiQ6Y3Z05VaUgZrPQvwVNHyoxwJj5BMGQqfrY11JuL694Of7xOHGL82/
+         9uZGKLjOhe2Bw==
+Received: by mail-yb1-f173.google.com with SMTP id j7so2324958ybg.4;
+        Fri, 24 Mar 2023 07:14:34 -0700 (PDT)
+X-Gm-Message-State: AAQBX9cKsI5jFEa4A9G4b1o2X6YFc2oSnVMdBgfJGmNdtxfqwWLGOLIW
+        i7VfevEpptHqjaAXcv2HxNxGv6320j/5l3bE+w==
+X-Google-Smtp-Source: AKy350aU8U/xa35sgqgoBviTpehPqsQok15zfHRwXey3E4rFa90TzAVVGYDvgFYgAnWPoMyJRecbZNcnHpK5DszUhfo=
+X-Received: by 2002:a05:6902:1586:b0:b68:7b14:186b with SMTP id
+ k6-20020a056902158600b00b687b14186bmr1090776ybu.1.1679667273310; Fri, 24 Mar
+ 2023 07:14:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20230323220529eucas1p12e5e1bbe2a31fe775cd9e6244f9282ce@eucas1p1.samsung.com>
- <20230323220518.3247530-1-m.szyprowski@samsung.com> <CAD=FV=WfREMuL6Z-aseAWPKXqpkutPofrWGy4ySH-WgbTHC-fg@mail.gmail.com>
- <a45c4b18-0fbe-1e75-9b47-6c26217c97e3@samsung.com> <20230324141200.he2rpj4x6tdtre27@halaney-x13s>
-In-Reply-To: <20230324141200.he2rpj4x6tdtre27@halaney-x13s>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 24 Mar 2023 07:13:51 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WW01k0XQHT=L_Fvg-bT=k83bw=AqKMmQjxgTPFtoA-Wg@mail.gmail.com>
-Message-ID: <CAD=FV=WW01k0XQHT=L_Fvg-bT=k83bw=AqKMmQjxgTPFtoA-Wg@mail.gmail.com>
-Subject: Re: [PATCH] regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <1674183732-5157-1-git-send-email-lizhi.hou@amd.com>
+ <1674183732-5157-2-git-send-email-lizhi.hou@amd.com> <CAL_Jsq+FM9P0n7BQZBY1AGJRtjAWw9F6h5DYmLkdPeXZaiYJwA@mail.gmail.com>
+ <a13ba751-9350-47ee-1c4d-77bbfbb8ed72@amd.com>
+In-Reply-To: <a13ba751-9350-47ee-1c4d-77bbfbb8ed72@amd.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 24 Mar 2023 09:14:22 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+5LtUcLTRnywdf7XB3HNtO6j2J=qykVeDN1MYZEEx1Cg@mail.gmail.com>
+Message-ID: <CAL_Jsq+5LtUcLTRnywdf7XB3HNtO6j2J=qykVeDN1MYZEEx1Cg@mail.gmail.com>
+Subject: Re: [PATCH V7 1/3] of: dynamic: Add interfaces for creating device
+ node dynamically
+To:     Lizhi Hou <lizhi.hou@amd.com>
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, frowand.list@gmail.com,
+        helgaas@kernel.org, clement.leger@bootlin.com, max.zhen@amd.com,
+        sonal.santan@amd.com, larry.liu@amd.com, brian.xu@amd.com,
+        stefano.stabellini@xilinx.com, trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, Mar 24, 2023 at 7:12=E2=80=AFAM Andrew Halaney <ahalaney@redhat.com=
-> wrote:
+On Thu, Mar 23, 2023 at 9:12=E2=80=AFPM Lizhi Hou <lizhi.hou@amd.com> wrote=
+:
 >
-> On Fri, Mar 24, 2023 at 12:18:53PM +0100, Marek Szyprowski wrote:
-> > Hi,
-> >
-> > On 23.03.2023 23:08, Doug Anderson wrote:
-> > > On Thu, Mar 23, 2023 at 3:05=E2=80=AFPM Marek Szyprowski
-> > > <m.szyprowski@samsung.com> wrote:
-> > >> Restore synchronous probing for 'qcom,pm8150-rpmh-regulators' becaus=
-e
-> > >> otherwise the UFSHC device is not properly initialized on QRB5165-RB=
-5
-> > >> board.
-> > >>
-> > >> Fixes: ed6962cc3e05 ("regulator: Set PROBE_PREFER_ASYNCHRONOUS for d=
-rivers between 4.14 and 4.19")
-> > >> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > >> ---
-> > >>   drivers/regulator/qcom-rpmh-regulator.c | 2 +-
-> > >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > I don't object to this patch landing temporarily, but can you provide
-> > > any more details, please? On Qualcomm Chromebooks I'm not seeing any
-> > > issues with RPMH regulators probing asynchronously, so I can only
-> > > assume that there's a bug in the UFSHC driver that's being tickled.
-> >
-> > You are right. I've analyzed this case further and it turned out that i=
-t
-> > was my fault. In short - 'rootwait' kernel cmdline parameter was missin=
-g
-> > and root was specified as '/dev/sda7'.
-> >
-> > UFSHC driver properly retried probing after it cannot get its
-> > regulators, but it happened at the same time when kernel tried to mount
-> > rootfs. I was confused that this is really a regulator issue, because
-> > the mentioned /dev/sda* devices were properly reported as available in
-> > the system in the root mounting failure message, but adding the
-> > 'rootwait' cmdline parameter fixed this problem. It would be safe to
-> > revert this change. I'm really sorry for the false report and the noise=
-.
-> >
 >
-> It looks like this got applied, but reading your above message makes it
-> seem like this patch is not necessary. Did I understand that correctly?
+> On 3/23/23 15:40, Rob Herring wrote:
+> > On Thu, Jan 19, 2023 at 9:02=E2=80=AFPM Lizhi Hou <lizhi.hou@amd.com> w=
+rote:
+> >> of_create_node() creates device node dynamically. The parent device no=
+de
+> >> and full name are required for creating the node. It optionally create=
+s
+> >> an OF changeset and attaches the newly created node to the changeset. =
+The
+> >> device node pointer and the changeset pointer can be used to add
+> >> properties to the device node and apply the node to the base tree.
+> >>
+> >> of_destroy_node() frees the device node created by of_create_node(). I=
+f
+> >> an OF changeset was also created for this node, it will destroy the
+> >> changeset before freeing the device node.
+> >>
+> >> Expand of_changeset APIs to handle specific types of properties.
+> >>      of_changeset_add_prop_string()
+> >>      of_changeset_add_prop_string_array()
+> >>      of_changeset_add_prop_u32_array()
+> >>
+> >> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+> > Your Sob should be last because you sent this patch. The order of Sob
+> > is roughly the order of possession of the patch.
+> Got it.
+> >
+> >> Signed-off-by: Sonal Santan <sonal.santan@amd.com>
+> >> Signed-off-by: Max Zhen <max.zhen@amd.com>
+> > So Sonal and Max modified this patch?
+> They did not directly modify the code. And we discussed the design
+> together.  They also reviewed the patch before I sent it out. Please let
+> me know if other keyword should be used in this case.
+
+Reviewed-by or nothing. Some feel that only reviews on public lists
+should get that tag and internal, private reviews don't matter.
+
+> >
+> >> Reviewed-by: Brian Xu <brian.xu@amd.com>
+> >> Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
+> > Why does this have Cl=C3=A9ment's Sob?
+> I referenced Cl=C3=A9ment 's code and used one portion in my first patch
+> series. And I re-implemented it later to address the code review
+> comments/requests.
+
+Then it goes first or you can use the 'Co-developed-by' tag.
+
+> >
+> >> ---
+> >>   drivers/of/dynamic.c | 197 +++++++++++++++++++++++++++++++++++++++++=
+++
+> >>   include/linux/of.h   |  24 ++++++
+> >>   2 files changed, 221 insertions(+)
+> >>
+> >> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> >> index cd3821a6444f..4e211a1d039f 100644
+> >> --- a/drivers/of/dynamic.c
+> >> +++ b/drivers/of/dynamic.c
+> >> @@ -461,6 +461,71 @@ struct device_node *__of_node_dup(const struct de=
+vice_node *np,
+> >>          return NULL;
+> >>   }
+> >>
+> >> +/**
+> >> + * of_create_node - Dynamically create a device node
+> > For consistency, I think this should be of_changeset_create_node().
+> Sure.
+> >
+> >> + *
+> >> + * @parent: Pointer to parent device node
+> >> + * @full_name: Node full name
+> >> + * @cset: Pointer to returning changeset
+> >> + *
+> >> + * Return: Pointer to the created device node or NULL in case of an e=
+rror.
+> >> + */
+> >> +struct device_node *of_create_node(struct device_node *parent,
+> >> +                                  const char *full_name,
+> >> +                                  struct of_changeset **cset)
+> >> +{
+> >> +       struct of_changeset *ocs;
+> >> +       struct device_node *np;
+> >> +       int ret;
+> >> +
+> >> +       np =3D __of_node_dup(NULL, full_name);
+> >> +       if (!np)
+> >> +               return NULL;
+> >> +       np->parent =3D parent;
+> >> +
+> >> +       if (!cset)
+> >> +               return np;
+> >> +
+> >> +       ocs =3D kmalloc(sizeof(*ocs), GFP_KERNEL);
+> >> +       if (!ocs) {
+> >> +               of_node_put(np);
+> >> +               return NULL;
+> >> +       }
+> >> +
+> >> +       of_changeset_init(ocs);
+> >> +       ret =3D of_changeset_attach_node(ocs, np);
+> >> +       if (ret) {
+> >> +               of_changeset_destroy(ocs);
+> >> +               of_node_put(np);
+> >> +               kfree(ocs);
+> >> +               return NULL;
+> >> +       }
+> >> +
+> >> +       np->data =3D ocs;
+> >> +       *cset =3D ocs;
+> >> +
+> >> +       return np;
+> >> +}
+> >> +EXPORT_SYMBOL(of_create_node);
+> >> +
+> >> +/**
+> >> + * of_destroy_node - Destroy a dynamically created device node
+> >> + *
+> >> + * @np: Pointer to dynamically created device node
+> >> + *
+> >> + */
+> >> +void of_destroy_node(struct device_node *np)
+> >> +{
+> >> +       struct of_changeset *ocs;
+> >> +
+> >> +       if (np->data) {
+> >> +               ocs =3D (struct of_changeset *)np->data;
+> >> +               of_changeset_destroy(ocs);
+> >> +       }
+> >> +       of_node_put(np);
+> > A sequence like this would be broken:
+> >
+> > np  =3D of_create_node()
+> > of_node_get(np)
+> > of_destroy_node(np)
+> >
+> > The put here won't free the node because it still has a ref, but we
+> > just freed the changeset. For this to work correctly, we would need
+> > the release function to handle np->data instead. However, all users of
+> > data aren't a changeset.
+> >
+> > I'm failing to remember why we're storing the changeset in 'data', but
+> > there doesn't seem to be a reason now so I think that can just be
+> > dropped. Then if you want to free the node, you'd just do an
+> > of_node_put(). (And maybe after the node is attached you do a put too,
+> > because the attach does a get. Not completely sure.)
 >
-> If so we should see if Mark can drop / revert it?
+> The question is how to save changeset and free it later. I used global
+> link list to track the changeset been created.
+>
+> Storing the changeset in 'data' can avoid using the global link list.
+>
+> To use of_node_put() to free both node and changeset, I think we can
+>
+>    1) add a new flag, then in of_node_release() we can know np->data is
+> changeset by checking the flag.
+>
+>    2) When creating node, allocate extra memory for changeset and set
+> np->data to a global function of_free_dynamic_node().
+>
+>        In of_node_release(), check if np->data =3D=3D of_free_dynamic_nod=
+e,
+> call of_free_dynamic_node(np).
+>
+>        in of_free_dynamic_node(), free changeset by
+> of_changeset_destroy(np+1)
+>
+> Does this make sense to you? If yes, 1) or 2) sounds better?
 
-Ah, sorry. I didn't reply with breadcrumbs. The revert is at:
+Neither works. Changesets and nodes are not 1:1 in general though they
+are in your use. So you can use the data ptr, but the caller has to
+decide that, not the DT core code.
 
-https://lore.kernel.org/r/20230324063357.1.Ifdf3625a3c5c9467bd87bfcdf726c88=
-4ad220a35@changeid
-
--Doug
+Rob
