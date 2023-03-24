@@ -2,108 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEFE6C7EEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8596C7E65
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbjCXNhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
+        id S231477AbjCXNDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjCXNhL (ORCPT
+        with ESMTP id S229734AbjCXNDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:37:11 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852671EBD2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:37:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679665030; x=1711201030;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hrxu6Dq+/7P2nTvs2nQdBfPtx5S00hxfReedkevyPEg=;
-  b=Bu7ImfsXerUdToKURaZGCEVwzUygamyA+mHjX9SYfuW4+zxA3HeJ3fdw
-   e/i4hK23p4q+tXtE6EzkdLM+0MCiyReVRq8/C+3rOn2xNEmeXCmc6t8Yj
-   RVNBb4NWmJZa7jaWWEbufdctEFm01O+DkVev0YS3v6TkqIFwuf/NsAuo5
-   mbnWMXEfJ5Gm6dSNdp993/xdn4jda+dMxiOa8I2jQ/Qruzq5FZp3jjvHw
-   I3M6viDToAftyb4KnE0HCl2jgnCI4MuUsbr8Hefla+Tes/NLbWlzfYH9Q
-   p8QXeQetJqP1W8ifRzqkKnFBY+NCHtsK1qZdZ07OZHTNXsff9z1G/4diL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="339803892"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="339803892"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 06:37:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="685168715"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="685168715"
-Received: from kvnguye3-mobl1.amr.corp.intel.com (HELO [10.212.145.31]) ([10.212.145.31])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 06:37:09 -0700
-Message-ID: <9440fa8f-f50b-716f-7c9f-d7d9d7d183f5@linux.intel.com>
-Date:   Fri, 24 Mar 2023 07:56:50 -0500
+        Fri, 24 Mar 2023 09:03:36 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA15EC651
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:03:34 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id ix20so1759154plb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679663014;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=emrmxMtoMVVno/g63jGPflCdBnxzHhl5cMb4H3cHM2w=;
+        b=JXGTUVqzjPSHsFlThpUxwK/Ih0v4ZTKOShw//J8J3dAwB+pjiJbjfEndJFjN+TbI0l
+         HIn3myHtgl/xyx2Ld8/ABN8pf2DfH6JnrzX6xX7B/6xsVIa2sTmTmYgM13cLWmr0oMF2
+         vvB5LZXyWToaRliO3e0ruD3gNJkYyFPJIMF5r86XKLD2JkTdr5u4oSH2gIvu3xwI74RZ
+         ck9qxSOTf1PrMWfLviRQiUQXVns/ocKi+W0AXTxcfVbpTQ0HV8AAk+xYg67kQ7vtnIY6
+         h9xrsA8mDe3eW/dNccG9jx04G6ZFy/y88cj3mNnlQ3xBZatpHg8zUCc0Bo4zYZyWd31X
+         vLnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679663014;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=emrmxMtoMVVno/g63jGPflCdBnxzHhl5cMb4H3cHM2w=;
+        b=Nj0q8chCzLa9PmNrhtedF5LLHsCCRmDY/7y4qeP/AV/dAcmSNedKOHWUBklMkLUXiF
+         44eDgySZAnsp9NUQCw/vq5beFWzq0M17BEFlTnIrZtmDl4bZxtHqkB4oVW3gsrIYDYxL
+         FuJhsKI78PDcqsBc9xv/uRW3OxUfMnBZ56Dmxa/OMCqNAGG8ML49NnmgS7LSzHFJoP8m
+         XdrgcKOmBSkQN/WpbbFsXu+WndAcGVox36zCz+ePDAWVXOOfFrDO5fpBBkBdfPuiQEzW
+         65zXhDj+ffywp0IWqOLxjfY4l9CdwWdakmmCf+X3hoJJy+k4tEEsXZcqjE250y+ddnlM
+         J3xg==
+X-Gm-Message-State: AAQBX9dIOBzuLf2nd6H1Qig54z9MjLVMReTqyL6zHN1ipfLxoS1gyYFn
+        JGosXi3057WNyZsPuV2N3E1dIEzrJxM=
+X-Google-Smtp-Source: AKy350YY/SPP1LClkfMG2QLhM3Vl1h/nN2AdwkSTjrLjOuDkSMWN0N/HGdtgKDNDc8c1Zz6JHVpP7Q==
+X-Received: by 2002:a17:903:4303:b0:19e:b2ed:6fee with SMTP id jz3-20020a170903430300b0019eb2ed6feemr2253790plb.58.1679663013998;
+        Fri, 24 Mar 2023 06:03:33 -0700 (PDT)
+Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id y3-20020a170902700300b001a19438336esm14173990plk.67.2023.03.24.06.03.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 06:03:33 -0700 (PDT)
+Message-ID: <609742f5-c280-53fc-3b7d-84a5abf3459e@gmail.com>
+Date:   Fri, 24 Mar 2023 06:03:34 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [RESEND PATCH] ASoC: soc-compress: Inherit atomicity from DAI
- link for Compress FE
-To:     Daniel Baluta <daniel.baluta@oss.nxp.com>, broonie@kernel.org,
-        alsa-devel@alsa-project.org
-Cc:     linux-kernel@vger.kernel.org, ranjani.sridharan@linux.intel.com,
-        kai.vehmanen@linux.intel.com, lgirdwood@gmail.com,
-        vkoul@kernel.org, daniel.baluta@gmail.com
-References: <20230324124019.30826-1-daniel.baluta@oss.nxp.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/3] scripts/gdb: timerlist: fix rb_node access and python
+ errors
 Content-Language: en-US
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230324124019.30826-1-daniel.baluta@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        jan.kiszka@siemens.com
+Cc:     linux-kernel@vger.kernel.org, narmstrong@baylibre.com,
+        kbingham@kernel.org
+References: <20220727141443.133094-1-aouledameur@baylibre.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220727141443.133094-1-aouledameur@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Amjad, Jan,
 
+On 7/27/2022 7:14 AM, Amjad Ouled-Ameur wrote:
+> This patchset fixes use of lx-timerlist with kgdb.
+> 
+> It has been tested on Amlogic libretech-cc s905X and works fine [0]
+> 
+> [0]: https://pastebin.com/RAhQYh6L
 
-On 3/24/23 07:40, Daniel Baluta wrote:
-> From: Daniel Baluta <daniel.baluta@nxp.com>
-> 
-> After commit bbf7d3b1c4f40 ("ASoC: soc-pcm: align BE 'atomicity' with
-> that of the FE") BE and FE atomicity must match.
-> 
-> In the case of Compress PCM there is a mismatch in atomicity between FE
-> and BE and we get errors like this:
-> 
-> [   36.434566]  sai1-wm8960-hifi: dpcm_be_connect: FE is atomic but BE
-> is nonatomic, invalid configuration
-> [   36.444278]  PCM Deep Buffer: ASoC: can't connect SAI1.OUT
-> 
-> In order to fix this we must inherit the atomicity from DAI link
-> associated with current PCM Compress FE.
-> 
-> Fixes: bbf7d3b1c4f4 ("ASoC: soc-pcm: align BE 'atomicity' with that of the FE")
-> Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
+Was right about to submit similar fixes. The whole series is:
 
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 
-> ---
->  sound/soc/soc-compress.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/sound/soc/soc-compress.c b/sound/soc/soc-compress.c
-> index e7aa6f360cab..d649b0cf4744 100644
-> --- a/sound/soc/soc-compress.c
-> +++ b/sound/soc/soc-compress.c
-> @@ -622,6 +622,9 @@ int snd_soc_new_compress(struct snd_soc_pcm_runtime *rtd, int num)
->  			return ret;
->  		}
->  
-> +		/* inherit atomicity from DAI link */
-> +		be_pcm->nonatomic = rtd->dai_link->nonatomic;
-> +
->  		rtd->pcm = be_pcm;
->  		rtd->fe_compr = 1;
->  		if (rtd->dai_link->dpcm_playback)
+Jan, it would appear there were earlier attempts at fixing timerlist.py, 
+however as of 6.3-rc3, none of those patches have been merged, can you 
+take them? Thanks!
+-- 
+Florian
