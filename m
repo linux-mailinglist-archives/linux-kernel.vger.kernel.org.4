@@ -2,149 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A3C6C7AD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5576C7AE2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:11:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbjCXJJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 05:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
+        id S232076AbjCXJKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 05:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232058AbjCXJI5 (ORCPT
+        with ESMTP id S232005AbjCXJKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 05:08:57 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAA811673
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 02:08:45 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id s13so670235wmr.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 02:08:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679648924;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Tl24kxujrDRhD/Pw1VxqIQuGTyFCOtjGuHoJAXogeUQ=;
-        b=KF7vhgGUy9iSCVz/2JMV95cnXXiwuET9tU7Rc7Ha4nCWlEtjrRR52AkRL3JFzV31N8
-         FvBvjTemrQpnvLLevT/7WRHrnq6vQTjJaal/zyxaU9lnhkPgeE4ZxxrwnrSeYP5XXpBc
-         4V7jndgKaulVRlh2NX+8aC2vQ132DHHauBUvo9d076iWPZ097+573LyCG57UyqnF/weQ
-         Wl0cANOGoKc/C+uNjEJ93bVBXPTZ7IkGYmTVHGwGkHxXXK4MlPEb6KAWoXYRQNmd8+4H
-         wQFnUqtZsqyWz/Sra/sxWYXnULQ6q5z/LE5eyV19WnrETSaXYW26jzEB3xzi7XfnA3JF
-         5cvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679648924;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tl24kxujrDRhD/Pw1VxqIQuGTyFCOtjGuHoJAXogeUQ=;
-        b=tv8Fi8asZd99iK138q+RmUOBjXuqea7e+H9xxpXwtSiuyis2J5O1LTxq1bnJtK3TS4
-         DJBz2K8ouUhu266OrpRKSZHEYtIjY2WE47tdY5o+f3Ahq+mITCu38z/uc3ByGRL0kuYj
-         1imGsx6uEfA2yL0X3zQbk+nGysJvnYLL7q2xylQGQaYczt9PNZ0uOxOYLdrzd9dFX9BX
-         JexFSbn4xmXiZpjq1VVKdJ17lzhH8t8gJz5nhxndxb4avVVfVV6U2NZDFIhQ7PJCPws9
-         oDIqHHfDnJnwW3wMyoR0aXDjsfgdiXwhOTVQQXBz6FKqBT3IeWINwOaMr5qnbnHMArme
-         xY+g==
-X-Gm-Message-State: AO0yUKWK1efPAd44X1QEpLtbIetBsMFTBqQbjx8Vvj+2x902igS6MRZM
-        NNiYd0ldAl5XTWtv88e9Pv9cug==
-X-Google-Smtp-Source: AK7set/vvjAUaOTR5nW6O5SRtNoHqTNaeTjKsckBwHxq1C38GOKprexc3eF5NaIoYwtOC0bG/ZduEw==
-X-Received: by 2002:a05:600c:c4:b0:3ed:b048:73f4 with SMTP id u4-20020a05600c00c400b003edb04873f4mr1903820wmm.5.1679648924434;
-        Fri, 24 Mar 2023 02:08:44 -0700 (PDT)
-Received: from [192.168.69.115] ([176.176.152.149])
-        by smtp.gmail.com with ESMTPSA id z5-20020a7bc7c5000000b003ee1b2ab9a0sm4306039wmk.11.2023.03.24.02.08.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 02:08:43 -0700 (PDT)
-Message-ID: <1722e75c-bc06-4a34-5e12-fa3622ed86a3@linaro.org>
-Date:   Fri, 24 Mar 2023 10:08:39 +0100
+        Fri, 24 Mar 2023 05:10:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A081E1C7;
+        Fri, 24 Mar 2023 02:10:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8BA19B8231C;
+        Fri, 24 Mar 2023 09:10:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2C2ADC4339E;
+        Fri, 24 Mar 2023 09:10:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679649020;
+        bh=JhJR75w7EoOgr7niWhHvEz5xFKwr9R9uOGMJpARv/Uk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=s9bZxTPmMf5HMs6EMA1WfJPbnj54SOsjfkQsHkg5yNqnlsE0raF+LVh6RtrYOk/S7
+         rZb9gxE+CvTKUXrI0LqN/m/G1k/pWcCh2rUFEWQBbbEefzNYiYeljQVe3heFS+0wBt
+         sT3ZJzK8Q+Pe7vElXFZVVspLefyznmGW+2fisCpu0uUsYGaZNwoh2hPbQoEM0JmgW5
+         7W/O2Z+0o3VrUqYEjvEHLyRvs8mHc0iK+4L6Dac0Uci+5owXEde6GwnyCyKOfnyt4d
+         TnaEUPyTgvxN3RZmC/iBfsgVZVqbQXxqLsAdwTOn5uHV9q4Je4k245tgwhVcvCjXJy
+         U7SUfZwUExnPw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 114BFC41612;
+        Fri, 24 Mar 2023 09:10:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v7 6/6] PCI: Make use of pci_resource_n()
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anatolij Gustschin <agust@denx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-References: <20230323173610.60442-1-andriy.shevchenko@linux.intel.com>
- <20230323173610.60442-7-andriy.shevchenko@linux.intel.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230323173610.60442-7-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH] fix typos in net/sched/* files
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167964902006.16080.5424181528625121123.git-patchwork-notify@kernel.org>
+Date:   Fri, 24 Mar 2023 09:10:20 +0000
+References: <20230323052713.858987-1-awkrail01@gmail.com>
+In-Reply-To: <20230323052713.858987-1-awkrail01@gmail.com>
+To:     Taichi Nishimura <awkrail01@gmail.com>
+Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shuah@kernel.org
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/3/23 18:36, Andy Shevchenko wrote:
-> Replace open-coded implementations of pci_resource_n() in pci.h.
+Hello:
+
+This patch was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 23 Mar 2023 14:27:13 +0900 you wrote:
+> This patch fixes typos in net/sched/* files.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
 > ---
->   include/linux/pci.h | 14 ++++++--------
->   1 file changed, 6 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 70a4684d5f26..9539cf63fe5e 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -2006,14 +2006,12 @@ int pci_iobar_pfn(struct pci_dev *pdev, int bar, struct vm_area_struct *vma);
->    * for accessing popular PCI BAR info
->    */
->   #define pci_resource_n(dev, bar)	(&(dev)->resource[(bar)])
-> -#define pci_resource_start(dev, bar)	((dev)->resource[(bar)].start)
-> -#define pci_resource_end(dev, bar)	((dev)->resource[(bar)].end)
-> -#define pci_resource_flags(dev, bar)	((dev)->resource[(bar)].flags)
-> -#define pci_resource_len(dev,bar) \
-> -	((pci_resource_end((dev), (bar)) == 0) ? 0 :	\
-> -							\
-> -	 (pci_resource_end((dev), (bar)) -		\
-> -	  pci_resource_start((dev), (bar)) + 1))
-> +#define pci_resource_start(dev, bar)	(pci_resource_n(dev, bar)->start)
-> +#define pci_resource_end(dev, bar)	(pci_resource_n(dev, bar)->end)
-> +#define pci_resource_flags(dev, bar)	(pci_resource_n(dev, bar)->flags)
-> +#define pci_resource_len(dev,bar)					\
-> +	(pci_resource_end((dev), (bar)) ? 				\
-> +	 resource_size(pci_resource_n((dev), (bar))) : 0)
+>  net/sched/cls_flower.c | 2 +-
+>  net/sched/em_meta.c    | 2 +-
+>  net/sched/sch_pie.c    | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
-Seems (to me) more logical to have this patch as "PCI: Introduce 
-pci_resource_n()" ordered before your patch #2 "PCI: Introduce 
-pci_dev_for_each_resource()".
+Here is the summary with links:
+  - fix typos in net/sched/* files
+    https://git.kernel.org/netdev/net-next/c/4170f0ef582c
 
-Here as #6 or as #2:
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
