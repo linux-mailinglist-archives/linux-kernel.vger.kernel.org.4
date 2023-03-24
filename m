@@ -2,138 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1246C74C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C31C6C74C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbjCXAwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 20:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
+        id S230350AbjCXAz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 20:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjCXAwo (ORCPT
+        with ESMTP id S230213AbjCXAz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 20:52:44 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C7B2B2BF
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 17:52:42 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id l8-20020a056e02066800b003247f2ba648so280762ilt.5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 17:52:41 -0700 (PDT)
+        Thu, 23 Mar 2023 20:55:26 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F5B1E1D0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 17:55:25 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id 31so766321qvc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 17:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1679619325;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YDY+2CW4sBIspOPEpoK+fZpOPf1g82OxeCMdEPnBe+A=;
+        b=a7J5KpS1MQOIUu4gejufifAwol+bk6nl+956Wt243cG4K6NwaxbbQL/8+vqN2wNsXP
+         f989xOD1Xa9GRvnHuz28XmZIcJ7523nNpDSDQlGqA2c2oYn75Wk5CVmO1WWr6urFEM9S
+         5iLvG+SItqTiH6ergP3fm8nm8ZlJG2nAONWZ8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679619161;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/hAShd89GEZikhKuBQycIJOs6lEcmAdTPXt/QcfCjj4=;
-        b=nrueFwseSo3I3vzdI0FPZ0ffJ0Ivbld9Tr43UPVsKHZ5eBdF6Isa0o6cGRmvEBmd7n
-         5GDtC6YfbZoGYvQQ4LhhGzN6nhrhoOqQTsGEPPVJaUyyOA7hM7Q70fyG8fiy+yKOY5HU
-         kp4M38LpDQjFM/RUMnlGliwsSlCTrotny23qcclDcUWKMTQj70rBY7dT7FggwGO+O6s5
-         PvQMw00hGdvv+rYurP2W31Iao2LQplH+9etufKRUCGmXMfFlXMG5LCYYzqt+qPNlQ291
-         zZdcFYhKg7Q5P6lcdlhipNOPHa4LqYzM/+uey/NLg0xg7jJLEzQbJEW1F9yJyn8xlQXW
-         HmHw==
-X-Gm-Message-State: AO0yUKVWYb9ofEeUDIQgCvj4lWnAf2NRAPVv7C1SyjBVTtHvMJcgXjku
-        jfAi8JSrYd+wP0WMndx596LzUHESZFpNsYWNngWE3hIgLv/Q
-X-Google-Smtp-Source: AK7set9JoYvBiZIzf069gVgf2T3f5ztOyf0ealGZ04ZbUzxgosLYIW3AWoXihW5BiWGofNOFxd0YFakzzgrumIVpEFwOp320Kt+2
+        d=1e100.net; s=20210112; t=1679619325;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YDY+2CW4sBIspOPEpoK+fZpOPf1g82OxeCMdEPnBe+A=;
+        b=xbFsXaeU0D35MsDpSZNNhblZM7XpAgnuKpPgnXJNsMDuvL7yqn4D2ytE/yD+9POtP0
+         YT5LGcfIb40r8Fa2NtrIIsYh6/qo+ulWnZRWbEUCPTNfGEvkykoVjvgoK6tea7Rx0HVi
+         VkwkwxAeMnmbQsrnWXM4EFQPlOHuqKFmwCX6TZ3zEPN76lws/Nckz3hWmHpXZNRJ52Sn
+         0w1QlYn0n3wBRdtQmHeBNQmqXK1VflF8F3skst5j6mTT3NpTDnIHFP4MnmwtyitNoqtI
+         7ViIqAsSJunUIafNFFpiy0xxqExPjKQCG9esfCALfeBNXTjLgGWjlS92H6ST7EqAzb2z
+         rwzQ==
+X-Gm-Message-State: AAQBX9eQDjgRup3yUnlcV7hobgdOMpKQjDEyrxVcDzlz9oxCYBkLAlIL
+        Nd7jFTRtzknfj5f6YL9CbYVzgQ==
+X-Google-Smtp-Source: AKy350boFSb8FiUVQAIlI5wFoPToHJakI2u/qXHDifYjzgY175DAwwQpSrZGqByUdZGjRg4yINHb+w==
+X-Received: by 2002:a05:6214:2607:b0:56a:b623:9b09 with SMTP id gu7-20020a056214260700b0056ab6239b09mr1917518qvb.14.1679619324636;
+        Thu, 23 Mar 2023 17:55:24 -0700 (PDT)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id f28-20020ad4559c000000b005dd8b9345f8sm280757qvx.144.2023.03.23.17.55.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 17:55:24 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 00:55:23 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH 1/4] rcu/nocb: Protect lazy shrinker against concurrent
+ (de-)offloading
+Message-ID: <20230324005523.GB723582@google.com>
+References: <20230322194456.2331527-1-frederic@kernel.org>
+ <20230322194456.2331527-2-frederic@kernel.org>
+ <c614c542-f2b5-4b39-bbc4-ae5f0a125c81@paulmck-laptop>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:500e:0:b0:751:96ce:ed7d with SMTP id
- e14-20020a6b500e000000b0075196ceed7dmr4426762iob.1.1679619161175; Thu, 23 Mar
- 2023 17:52:41 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 17:52:41 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000075bebb05f79acfde@google.com>
-Subject: [syzbot] [net?] [virt?] [io-uring?] [kvm?] BUG: soft lockup in vsock_connect
-From:   syzbot <syzbot+0bc015ebddc291a97116@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, davem@davemloft.net, edumazet@google.com,
-        io-uring@vger.kernel.org, kuba@kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, sgarzare@redhat.com, stefanha@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c614c542-f2b5-4b39-bbc4-ae5f0a125c81@paulmck-laptop>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Mar 22, 2023 at 04:18:24PM -0700, Paul E. McKenney wrote:
+> On Wed, Mar 22, 2023 at 08:44:53PM +0100, Frederic Weisbecker wrote:
+> > The shrinker may run concurrently with callbacks (de-)offloading. As
+> > such, calling rcu_nocb_lock() is very dangerous because it does a
+> > conditional locking. The worst outcome is that rcu_nocb_lock() doesn't
+> > lock but rcu_nocb_unlock() eventually unlocks, or the reverse, creating
+> > an imbalance.
+> > 
+> > Fix this with protecting against (de-)offloading using the barrier mutex.
+> > 
+> > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> 
+> Good catch!!!  A few questions, comments, and speculations below.
 
-syzbot found the following issue on:
+Added a few more. ;)
 
-HEAD commit:    fe15c26ee26e Linux 6.3-rc1
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1577c97ec80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7573cbcd881a88c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=0bc015ebddc291a97116
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1077c996c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17e38929c80000
+> > ---
+> >  kernel/rcu/tree_nocb.h | 17 ++++++++++++++++-
+> >  1 file changed, 16 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> > index f2280616f9d5..dd9b655ae533 100644
+> > --- a/kernel/rcu/tree_nocb.h
+> > +++ b/kernel/rcu/tree_nocb.h
+> > @@ -1336,13 +1336,25 @@ lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+> >  	unsigned long flags;
+> >  	unsigned long count = 0;
+> >  
+> > +	/*
+> > +	 * Protect against concurrent (de-)offloading. Otherwise nocb locking
+> > +	 * may be ignored or imbalanced.
+> > +	 */
+> > +	mutex_lock(&rcu_state.barrier_mutex);
+> 
+> I was worried about this possibly leading to out-of-memory deadlock,
+> but if I recall correctly, the (de-)offloading process never allocates
+> memory, so this should be OK?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/89d41abd07bd/disk-fe15c26e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fa75f5030ade/vmlinux-fe15c26e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/590d0f5903ee/Image-fe15c26e.gz.xz
+Maybe trylock is better then? If we can't make progress, may be better to let
+kswapd free memory by other means than blocking on the mutex.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0bc015ebddc291a97116@syzkaller.appspotmail.com
+ISTR, from my Android days that there are weird lockdep issues that happen
+when locking in a shrinker (due to the 'fake lock' dependency added during
+reclaim).
 
-watchdog: BUG: soft lockup - CPU#0 stuck for 27s! [syz-executor244:6747]
-Modules linked in:
-irq event stamp: 6033
-hardirqs last  enabled at (6032): [<ffff8000124604ac>] __exit_to_kernel_mode arch/arm64/kernel/entry-common.c:84 [inline]
-hardirqs last  enabled at (6032): [<ffff8000124604ac>] exit_to_kernel_mode+0xe8/0x118 arch/arm64/kernel/entry-common.c:94
-hardirqs last disabled at (6033): [<ffff80001245e188>] __el1_irq arch/arm64/kernel/entry-common.c:468 [inline]
-hardirqs last disabled at (6033): [<ffff80001245e188>] el1_interrupt+0x24/0x68 arch/arm64/kernel/entry-common.c:486
-softirqs last  enabled at (616): [<ffff80001066ca80>] spin_unlock_bh include/linux/spinlock.h:395 [inline]
-softirqs last  enabled at (616): [<ffff80001066ca80>] lock_sock_nested+0xe8/0x138 net/core/sock.c:3480
-softirqs last disabled at (618): [<ffff8000122dbcfc>] spin_lock_bh include/linux/spinlock.h:355 [inline]
-softirqs last disabled at (618): [<ffff8000122dbcfc>] virtio_transport_purge_skbs+0x11c/0x500 net/vmw_vsock/virtio_transport_common.c:1372
-CPU: 0 PID: 6747 Comm: syz-executor244 Not tainted 6.3.0-rc1-syzkaller-gfe15c26ee26e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __sanitizer_cov_trace_pc+0xc/0x8c kernel/kcov.c:203
-lr : virtio_transport_purge_skbs+0x19c/0x500 net/vmw_vsock/virtio_transport_common.c:1374
-sp : ffff80001e787890
-x29: ffff80001e7879e0 x28: 1ffff00003cf0f2a x27: ffff80001a487a60
-x26: ffff80001e787950 x25: ffff0000ce2d3b80 x24: ffff80001a487a78
-x23: 1ffff00003490f4c x22: ffff80001a29c1a8 x21: dfff800000000000
-x20: ffff80001a487a60 x19: ffff80001e787940 x18: 1fffe000368951b6
-x17: ffff800015cdd000 x16: ffff8000085110b0 x15: 0000000000000000
-x14: 1ffff00002b9c0b2 x13: dfff800000000000 x12: ffff700003cf0efc
-x11: ff808000122dbee8 x10: 0000000000000000 x9 : ffff8000122dbee8
-x8 : ffff0000ce511b40 x7 : ffff8000122dbcfc x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff80000832d758
-x2 : 0000000000000001 x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- get_current arch/arm64/include/asm/current.h:19 [inline]
- __sanitizer_cov_trace_pc+0xc/0x8c kernel/kcov.c:206
- vsock_loopback_cancel_pkt+0x28/0x3c net/vmw_vsock/vsock_loopback.c:48
- vsock_transport_cancel_pkt net/vmw_vsock/af_vsock.c:1284 [inline]
- vsock_connect+0x6b8/0xaec net/vmw_vsock/af_vsock.c:1426
- __sys_connect_file net/socket.c:2004 [inline]
- __sys_connect+0x268/0x290 net/socket.c:2021
- __do_sys_connect net/socket.c:2031 [inline]
- __se_sys_connect net/socket.c:2028 [inline]
- __arm64_sys_connect+0x7c/0x94 net/socket.c:2028
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+> The other concern was that the (de-)offloading operation might take a
+> long time, but the usual cause for that is huge numbers of callbacks,
+> in which case letting them free their memory is not necessarily a bad
+> strategy.
+> 
+> > +
+> >  	/* Snapshot count of all CPUs */
+> >  	for_each_possible_cpu(cpu) {
+> >  		struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+> > -		int _count = READ_ONCE(rdp->lazy_len);
+> > +		int _count;
+> > +
+> > +		if (!rcu_rdp_is_offloaded(rdp))
+> > +			continue;
+> 
+> If the CPU is offloaded, isn't ->lazy_len guaranteed to be zero?
+
+Did you mean de-offloaded? If it is offloaded, that means nocb is active so
+there could be lazy CBs queued. Or did I miss something?
+
+thanks,
+
+ - Joel
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> Or can it contain garbage after a de-offloading operation?
+> 
+> > +		_count = READ_ONCE(rdp->lazy_len);
+> >  
+> >  		if (_count == 0)
+> >  			continue;
+> > +
+> >  		rcu_nocb_lock_irqsave(rdp, flags);
+> >  		WRITE_ONCE(rdp->lazy_len, 0);
+> >  		rcu_nocb_unlock_irqrestore(rdp, flags);
+> > @@ -1352,6 +1364,9 @@ lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+> >  		if (sc->nr_to_scan <= 0)
+> >  			break;
+> >  	}
+> > +
+> > +	mutex_unlock(&rcu_state.barrier_mutex);
+> > +
+> >  	return count ? count : SHRINK_STOP;
+> >  }
+> >  
+> > -- 
+> > 2.34.1
+> > 
