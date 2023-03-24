@@ -2,264 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9402B6C7D20
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FDA6C7D25
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjCXLUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 07:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
+        id S231709AbjCXLV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 07:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjCXLUK (ORCPT
+        with ESMTP id S231706AbjCXLVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 07:20:10 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9218225972;
-        Fri, 24 Mar 2023 04:20:08 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 02E8758211D;
-        Fri, 24 Mar 2023 07:20:06 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Fri, 24 Mar 2023 07:20:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1679656805; x=1679664005; bh=jn
-        hC/DvfTlyZcOnZuUe9LuHIarcRp2uTbbPObwOvLtk=; b=RINbDJrDavr91qApxS
-        4BIapnsTSMpJsQcMuiekOJ4buZfgO1V5bxZUX92x96X+70RG5pM597H6X6A8ze2Q
-        J3K3HTIk9bh/ZbHNJcL4cY9CXoNlp9BFd+TTAQzaGhbL4Q/xS5FNx1TElQW6xvG7
-        0pWgXxxHWJn2xo8oKO6WZBtJ8/apSTxWaFgzT4XANpTX/yFywGqPfreFSFA+SxYy
-        DVWfFOmgiUFFAwcBCuUS5l1GOHRlbwP6IKA226oMHwgNZfpxX+vE/kqqplzGKxN6
-        3CA6w8YfKEc956VkNbvyMcVk4fjXMyE6jZ/K83ddG+CzpHvsr07jRCCCdY737Omz
-        uzeA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679656805; x=1679664005; bh=jnhC/DvfTlyZc
-        OnZuUe9LuHIarcRp2uTbbPObwOvLtk=; b=G4KWdAq5u3yOdbhwSK/77/yGH7IQB
-        2xysJ+4DHASMDHD4DpUNSh0qiUQ7PoZ0HeB31FPCqa3ypIcHnjDyiqx4+OASl4vt
-        YII+0RiTBeUGCTuHiRp/2zrlkY7JsRYyob4hyT9jfvFspEvX+TWDxi6HeqVtkkkI
-        EIEz+43mJMF3TccMFqhY9/s2d2q0Bnzb5506eHVsiiRibRjc0JM/OyGd5+joNcoL
-        b2y+9ja4sW5wabUkTzlsQiAxcTUWRGjZRPmuIIWmJFWEdsTq0+X56oaR8GkrkVqB
-        dX4i5J533jmuMxkiG1iqzEHijtLWz0ghQXTKvlKaafFgHLlEw3jiDRZ4g==
-X-ME-Sender: <xms:YocdZJLt50SkjajEyhHxYSSrkPY2nLRG7oaF9-PbUsC11O7ePH7evw>
-    <xme:YocdZFJvv5yKSgbbCu2PjUCjA3iwB3zBFKv-CakFAJTI01X8NjMVPj3knfOKgALZS
-    iMcO2SYsLNKDxAxjx0>
-X-ME-Received: <xmr:YocdZBtqfm5ufo2nxuPX_n4UUydUMdQkmyrCYSBkP5S6uLxOjnGe7GgKlZv5k0gAuEdnyA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegiedgvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:YocdZKbb7h5XVzEGX4iPtxOkH5TmcsjFZOlhmJTWiCjxSzGBF3gLdQ>
-    <xmx:YocdZAZuVnKbOWnxm7JK_ixmWayh3DAJUGZTPl_6A4AyOaeCS8MgPA>
-    <xmx:YocdZODYFHhXEhG6sanelWXub-LDcHvfMUzvrDzXEPo_cfiaikGjCA>
-    <xmx:ZYcdZJnXIuUKCYqWP9MzEN0pWHGV9cxtt8SL0wrI9YqOxIudpLjjYg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 24 Mar 2023 07:20:01 -0400 (EDT)
-Date:   Fri, 24 Mar 2023 12:19:59 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 56/65] clk: ingenic: cgu: Switch to determine_rate
-Message-ID: <20230324111959.frjf4neopbs67ugd@houat>
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-56-f6736dec138e@cerno.tech>
- <80VTKR.CE8RVN8M3ZYK3@crapouillou.net>
- <20221104145946.orsyrhiqvypisl5j@houat>
- <cp7Yh29ndlOOi1yW8KwCcpzoLPLxm1vR@localhost>
- <20221107085417.xrsh6xy3ouwdkp4z@houat>
- <ucJ6KSBqdPTxfxUQqLUr9C9RGiQRnY1I@localhost>
- <20221109110045.j24vwkaq3s4yzoy3@houat>
- <06a293adc75990ed3e297b076fc38d8a.sboyd@kernel.org>
- <xpKMzGb1sOsucWMTlJIMzrT5KjLlZ7JP@localhost>
+        Fri, 24 Mar 2023 07:21:25 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B173325B90;
+        Fri, 24 Mar 2023 04:21:23 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id e65so1664654ybh.10;
+        Fri, 24 Mar 2023 04:21:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679656883;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lzzuuSV8TU4gXbg0fS4shS/O6UJkvfjdScq38tWCVsc=;
+        b=f0Q8y7NnKZjFQjeQ5E8//xFRKFOj8QE84E/iygoxivW2yL3KkPKc01EFL37PMdUbU8
+         5m27kT8rzvsY8QT6DhaT+P0rzX7zypBmsrXVOjc5l7PHxXP3tzj7dd0aBI2XdiipvRwE
+         BpAWW9IWE5efcXWwpE1y8kSzJYWNB5jMGn2NJAbRBvrnNYjFHfVaKp/xVRJcHguVnbqU
+         E0ZchFA4cO4JE1C1PL49FjnF7XCYtDilZM9/IbuulnwLW+SdIyZsSOfmgcYYgXgueufB
+         1PkT/+ezJbceDjAa5LCm4OgbY12OBbaagL9uFcTJuiJAA1W8QNb+LUNM4uhThaicRh8M
+         C4zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679656883;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lzzuuSV8TU4gXbg0fS4shS/O6UJkvfjdScq38tWCVsc=;
+        b=QQbQvhxVMLYl2ZDcQvULgdvt9o9WU5A+QJeAOid/ydSyxm6qtfb919d2Q3ke6QJbY9
+         e4Ll/8s5KPvAL06xR223lnHRfGfZeRYQmSJbhdoAozmfkgk/q62+L6Xzr42kXBHg0WY0
+         4rQEhThrEdnKcD35jiT6PY22Yym8WBF/QjJrOKAO4w8xV0S63Ti+w1CqAcGQQvAPFH1H
+         LXiRFLpx7ndQx4wVpbOQAR2uMJAP6fqIzW0UZCeUviNei6bEr9Z4YJb3Q4WlvYQAA+17
+         skb8QJr4YgURYkrq1WuAdB336Q6MXFZHM6Xuf3eao+SErA72+yFzC4A+LhpbZ1BaEa25
+         MTCQ==
+X-Gm-Message-State: AAQBX9fWfoDqVMYNSUtyahELXFQ7TsTQjuu61IL4mjFI61gNKDhY8Uni
+        DT9lEcjaci6YknwU+pEe9sVjjWyholQ1cxyF17k=
+X-Google-Smtp-Source: AKy350ZdYUk3LRlSE05bWW+bZ37IGyJKG7JJmZ+R7fSDXkOe6HFeEf8ws+eM2XfUuq0s6uyxUxARN0nuIPEZlqcxkws=
+X-Received: by 2002:a05:6902:1108:b0:b6d:fc53:c5c0 with SMTP id
+ o8-20020a056902110800b00b6dfc53c5c0mr1957446ybu.1.1679656882752; Fri, 24 Mar
+ 2023 04:21:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ygvujwxxgbycerm7"
-Content-Disposition: inline
-In-Reply-To: <xpKMzGb1sOsucWMTlJIMzrT5KjLlZ7JP@localhost>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230323124510.2484808-1-noltari@gmail.com> <20230323124510.2484808-2-noltari@gmail.com>
+ <20230324104020.54754079@xps-13> <CAKR-sGcbRRjqt3raXHcvfCfKFDfFWsuu+C7XW3qFckawMsqe4w@mail.gmail.com>
+ <20230324114911.19e00ae1@xps-13>
+In-Reply-To: <20230324114911.19e00ae1@xps-13>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Fri, 24 Mar 2023 12:21:11 +0100
+Message-ID: <CAKR-sGc3R_k_+-hzv5DOOeRO-5rHL1k_dq7mpZLcv=FgZ1Moug@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: mtd: nand: Macronix: document new binding
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     richard@nod.at, vigneshr@ti.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, masonccyang@mxic.com.tw,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---ygvujwxxgbycerm7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Thu, Mar 23, 2023 at 03:35:30PM +0000, Aidan MacDonald wrote:
->=20
-> Stephen Boyd <sboyd@kernel.org> writes:
->=20
-> > Quoting Maxime Ripard (2022-11-09 03:00:45)
-> >> On Mon, Nov 07, 2022 at 08:57:22PM +0000, Aidan MacDonald wrote:
-> >> >
-> >> > Maxime Ripard <maxime@cerno.tech> writes:
-> >> >
-> >> > > Hi,
-> >> > >
-> >> > > On Fri, Nov 04, 2022 at 05:35:29PM +0000, Aidan MacDonald wrote:
-> >> >
-> >> > Assigning the parent clock in the DT works once, at boot, but going =
-off
-> >> > what you wrote in the commit message, if the clock driver has a
-> >> > .determine_rate() implementation that *can* reparent clocks then it
-> >> > probably *will* reparent them, and the DT assignment will be lost.
-> >>
-> >> Yes, indeed, but assigned-clock-parents never provided any sort of
-> >> guarantee on whether or not the clock was allowed to reparent or not.
-> >> It's just a one-off thing, right before probe, and a clk_set_parent()
-> >> call at probe will override that just fine.
-> >>
-> >> Just like assigned-clock-rates isn't permanent.
-> >>
-> >> > What I'm suggesting is a runtime constraint that the clock subsystem
-> >> > would enforce, and actively prevent drivers from changing the parent.
-> >> > Either explicitly with clk_set_parent() or due to .determine_rate().
-> >> >
-> >> > That way you could write a .determine_rate() implementation that *ca=
-n*
-> >> > select a better parent, but if the DT applies a constraint to fix the
-> >> > clock to a particular parent, the clock subsystem will force that pa=
-rent
-> >> > to be used so you can be sure the clock is never reparented by accid=
-ent.
-> >>
-> >> Yeah, that sounds like a good idea, and CLK_SET_RATE_NO_REPARENT isn't
-> >> too far off from this, it's just ignored by clk_set_parent() for now. I
-> >> guess we could rename CLK_SET_RATE_NO_REPARENT to CLK_NO_REPARENT, make
-> >> clk_set_parent handle it, and set that flag whenever
-> >> assigned-clock-parents is set on a clock.
-> >>
-> >> It's out of scope for this series though, and I certainly don't want to
-> >> deal with all the regressions it might create :)
-> >>
+El vie, 24 mar 2023 a las 11:49, Miquel Raynal
+(<miquel.raynal@bootlin.com>) escribi=C3=B3:
+>
+> Hi =C3=81lvaro,
+>
+> noltari@gmail.com wrote on Fri, 24 Mar 2023 11:31:17 +0100:
+>
+> > Hi Miqu=C3=A8l,
 > >
-> > This sounds like a new dt binding that says the assigned parent should
-> > never change. It sounds sort of like gpio hogs. A clock-hogs binding?
->=20
-> Ideally we want the clock driver to be able to reparent clocks freely
-> to get the best rate. But we also need some control over that to stop
-> consumers from being reparented in undesired ways. Eg. you might want
-> to make sure the GPU gets its own PLL so it can be reclocked easily,
-> and putting another device on the GPU's PLL could prevent that.
->=20
-> The only way to achieve this today is (1) never do any reparenting in
-> the clock driver; and (2) use assigned-clock-parents in the DT to set
-> up the entire clock tree manually.
->=20
-> Maxime said that (2) is basically wrong -- if assigned-clock-parents
-> provides no guarantee on what the OS does "after boot" then the OS is
-> pretty much free to ignore it.
+> > El vie, 24 mar 2023 a las 10:40, Miquel Raynal
+> > (<miquel.raynal@bootlin.com>) escribi=C3=B3:
+> > >
+> > > Hi =C3=81lvaro,
+> > >
+> > > noltari@gmail.com wrote on Thu, 23 Mar 2023 13:45:09 +0100:
+> > >
+> > > > Add new "mxic,disable-block-protection" binding documentation.
+> > > > This binding allows disabling block protection support for those de=
+vices not
+> > > > supporting it.
+> > > >
+> > > > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/mtd/nand-macronix.txt | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/mtd/nand-macronix.tx=
+t b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+> > > > index ffab28a2c4d1..03f65ca32cd3 100644
+> > > > --- a/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+> > > > +++ b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+> > > > @@ -16,6 +16,9 @@ in children nodes.
+> > > >  Required NAND chip properties in children mode:
+> > > >  - randomizer enable: should be "mxic,enable-randomizer-otp"
+> > > >
+> > > > +Optional NAND chip properties in children mode:
+> > > > +- block protection disable: should be "mxic,disable-block-protecti=
+on"
+> > > > +
+> > >
+> > > Besides the fact that nowadays we prefer to see binding conversions t=
+o
+> > > yaml before adding anything, I don't think this will fly.
+> > >
+> > > I'm not sure exactly what "disable block protection" means, we
+> > > already have similar properties like "lock" and "secure-regions", not
+> > > sure they will fit but I think it's worth checking.
+> >
+> > As explained in 2/2, commit 03a539c7a118 introduced a regression on
+> > Sercomm H500-s (BCM63268) OpenWrt devices with Macronix MX30LF1G18AC
+> > which hangs the device.
+> >
+> > This is the log with block protection disabled:
+> > [    0.495831] bcm6368_nand 10000200.nand: there is not valid maps for
+> > state default
+> > [    0.504995] nand: device found, Manufacturer ID: 0xc2, Chip ID: 0xf1
+> > [    0.511526] nand: Macronix MX30LF1G18AC
+> > [    0.515586] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
+> > 2048, OOB size: 64
+> > [    0.523516] bcm6368_nand 10000200.nand: detected 128MiB total,
+> > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+> > [    0.535912] Bad block table found at page 65472, version 0x01
+> > [    0.544268] Bad block table found at page 65408, version 0x01
+> > [    0.954329] 9 fixed-partitions partitions found on MTD device brcmna=
+nd.0
+> > ...
+> >
+> > This is the log with block protection enabled:
+> > [    0.495095] bcm6368_nand 10000200.nand: there is not valid maps for
+> > state default
+> > [    0.504249] nand: device found, Manufacturer ID: 0xc2, Chip ID: 0xf1
+> > [    0.510772] nand: Macronix MX30LF1G18AC
+> > [    0.514874] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
+> > 2048, OOB size: 64
+> > [    0.522780] bcm6368_nand 10000200.nand: detected 128MiB total,
+> > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+> > [    0.539687] Bad block table not found for chip 0
+> > [    0.550153] Bad block table not found for chip 0
+> > [    0.555069] Scanning device for bad blocks
+> > [    0.601213] CPU 1 Unable to handle kernel paging request at virtual
+> > address 10277f00, epc =3D=3D 8039ce70, ra =3D=3D 8016ad50
+> > *** Device hangs ***
+> >
+> > Enabling macronix_nand_block_protection_support() makes the device
+> > unable to detect the bad block table and hangs it when trying to scan
+> > for bad blocks.
+>
+> Please trace nand_macronix.c and look:
+> - are the get_features and set_features really supported by the
+>   controller driver?
 
-I didn't really say it's wrong, just that it never provided the
-guarantee you expect it to provide. I can't really say whether it's an
-issue or not on your platform.
+This is what I could find by debugging:
+[    0.494993] bcm6368_nand 10000200.nand: there is not valid maps for
+state default
+[    0.505375] nand: device found, Manufacturer ID: 0xc2, Chip ID: 0xf1
+[    0.512077] nand: Macronix MX30LF1G18AC
+[    0.515994] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
+2048, OOB size: 64
+[    0.523928] bcm6368_nand 10000200.nand: detected 128MiB total,
+128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+[    0.534415] bcm6368_nand 10000200.nand: ll_op cmd 0xa00ee
+[    0.539988] bcm6368_nand 10000200.nand: ll_op cmd 0x600a0
+[    0.545659] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+[    0.551214] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0x00
+[    0.557843] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+[    0.563475] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0x00
+[    0.569998] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+[    0.575653] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0x00
+[    0.582246] bcm6368_nand 10000200.nand: ll_op cmd 0x80010000
+[    0.588067] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0x00
+[    0.594657] nand: nand_get_features: addr=3Da0 subfeature_param=3D[00
+00 00 00] -> 0
+[    0.602341] macronix_nand_block_protection_support:
+ONFI_FEATURE_ADDR_MXIC_PROTECTION=3D0
+[    0.610548] macronix_nand_block_protection_support: !=3D
+MXIC_BLOCK_PROTECTION_ALL_LOCK
+[    0.624760] Bad block table not found for chip 0
+[    0.635542] Bad block table not found for chip 0
+[    0.640270] Scanning device for bad blocks
 
-It's mostly unrelated to this series though, none of these patches
-affect that behavior in one way or the other.
+I don't know how to tell if get_features / set_features is really supported=
+...
 
-> My suggestion: add a per-clock bitmap to keep track of which parents
-> are allowed. Any operation that would select a parent clock not on the
-> whitelist should fail. Automatic reparenting should only select from
-> clocks on the whitelist. And we need new DT bindings for controlling
-> the whitelist, for example:
->=20
->     clock-parents-0 =3D <&clk1>, <&pll_c>;
->     clock-parents-1 =3D <&clk2>, <&pll_a>, <&pll_b>;
->=20
-> This means that clk1 can only have pll_c as a parent, while clk2 can
-> have pll_a or pll_b as parents. By default every clock will be able
-> to use any parent, so a list is only needed if the machine needs a
-> more restrictive policy.
->=20
-> assigned-clock-parents should disable automatic reparenting, but allow
-> explicit clk_set_parent(). This will allow clock drivers to start doing
-> reparenting without breaking old DTs.
+> - what is the state of the locking configuration in the chip when you
+>   boot?
 
-I'm generally not a fan of putting all these policies in the device
-tree. Do you have an example where it wouldn't be possible to do exactly
-this from the driver itself?
+Unlocked, I guess...
+How can I check that?
 
-Maxime
+> - is there anything that locks the device by calling mxic_nand_lock() ?
+> - finding no bbt is one thing, hanging is another, where is it hanging
+>   exactly? (offset in nand/ and line in the code)
 
---ygvujwxxgbycerm7
-Content-Type: application/pgp-signature; name="signature.asc"
+I've got no idea...
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZB2HXwAKCRDj7w1vZxhR
-xSbnAQCJvmVlpJgunPtELVTvf4BU6vbdciJ5jecqJV2UslBqNAEA3GtvUaTD5e0p
-e0nSvm2EbCQGLtQFj+xVrIWIaKTMYAc=
-=GgBk
------END PGP SIGNATURE-----
-
---ygvujwxxgbycerm7--
+>
+> >
+> > >
+> > > Otherwise, why would you disable the block protection? What does it
+> > > mean exactly? I'm not in favor of a Macronix-specific property here.
+> > >
+> > > Thanks,
+> > > Miqu=C3=A8l
+> >
+> > --
+> > =C3=81lvaro
+>
+>
+> Thanks,
+> Miqu=C3=A8l
