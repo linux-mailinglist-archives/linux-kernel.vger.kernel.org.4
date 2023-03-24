@@ -2,166 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8202A6C762C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 04:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA366C762E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 04:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjCXDNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 23:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        id S231278AbjCXDPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 23:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjCXDNS (ORCPT
+        with ESMTP id S229948AbjCXDPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 23:13:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AD14C05;
-        Thu, 23 Mar 2023 20:13:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01D686293D;
-        Fri, 24 Mar 2023 03:13:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B330C4339B;
-        Fri, 24 Mar 2023 03:13:13 +0000 (UTC)
-Date:   Thu, 23 Mar 2023 23:13:11 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Wenchao Hao <haowenchao2@huawei.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <linfeilong@huawei.com>,
-        <louhongxiang@huawei.com>
-Subject: Re: [PATCH] trace:cma: remove unnecessary event class
- cma_alloc_class
-Message-ID: <20230323231311.4a11c7f7@rorschach.local.home>
-In-Reply-To: <20230323114136.177677-1-haowenchao2@huawei.com>
-References: <20230323114136.177677-1-haowenchao2@huawei.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 23 Mar 2023 23:15:18 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE57AF3B;
+        Thu, 23 Mar 2023 20:15:17 -0700 (PDT)
+Received: from pride-PowerEdge-R740.. ([172.16.0.254])
+        (user=u201912584@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 32O3E84U023389-32O3E84V023389
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 24 Mar 2023 11:14:14 +0800
+From:   SongJingyi <u201912584@hust.edu.cn>
+To:     Yangbo Lu <yangbo.lu@nxp.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        SongJingyi <u201912584@hust.edu.cn>,
+        Dan Carpenter <error27@gmail.com>,
+        Dongliang Mu <dzm91@hust.edu.cn>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ptp_qoriq: fix memory leak in probe()
+Date:   Fri, 24 Mar 2023 11:14:06 +0800
+Message-Id: <20230324031406.1895159-1-u201912584@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: u201912584@hust.edu.cn
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Mar 2023 19:41:36 +0800
-Wenchao Hao <haowenchao2@huawei.com> wrote:
+Smatch complains that:
+drivers/ptp/ptp_qoriq.c ptp_qoriq_probe()
+warn: 'base' from ioremap() not released.
 
-> After commit cb6c33d4dc09 ("cma: tracing: print alloc result in
-> trace_cma_alloc_finish"), cma_alloc_class has only one event which is
-> cma_alloc_busy_retry. So we can remove the cma_alloc_class.
-> 
+Fix this by revising the parameter from 'ptp_qoriq->base' to 'base'.
+This is only a bug if ptp_qoriq_init() returns on the
+first -ENODEV error path.
+For other error paths ptp_qoriq->base and base are the same.
+And this change makes the code more readable.
 
-This is fine for an aesthetic view, but it has no functional change.
-TRACE_EVENT() is simply defined as:
+Fixes: 7f4399ba405b ("ptp_qoriq: fix NULL access if ptp dt node missing")
+Signed-off-by: SongJingyi <u201912584@hust.edu.cn>
+Reviewed-by: Dan Carpenter <error27@gmail.com>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+ drivers/ptp/ptp_qoriq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-#define TRACE_EVENT(name, proto, args, tstruct, assign, print) \
-	DECLARE_EVENT_CLASS(name,			       \
-			     PARAMS(proto),		       \
-			     PARAMS(args),		       \
-			     PARAMS(tstruct),		       \
-			     PARAMS(assign),		       \
-			     PARAMS(print));		       \
-	DEFINE_EVENT(name, name, PARAMS(proto), PARAMS(args));
-
- https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/trace/trace_events.h#n29
-
-This patch simply un-open-codes it.
-
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-Cheers,
-
--- Steve
-
-
-> Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
-> ---
->  include/trace/events/cma.h | 58 ++++++++++++++++----------------------
->  1 file changed, 25 insertions(+), 33 deletions(-)
-> 
-> diff --git a/include/trace/events/cma.h b/include/trace/events/cma.h
-> index ef75ea606ab2..25103e67737c 100644
-> --- a/include/trace/events/cma.h
-> +++ b/include/trace/events/cma.h
-> @@ -8,37 +8,6 @@
->  #include <linux/types.h>
->  #include <linux/tracepoint.h>
->  
-> -DECLARE_EVENT_CLASS(cma_alloc_class,
-> -
-> -	TP_PROTO(const char *name, unsigned long pfn, const struct page *page,
-> -		 unsigned long count, unsigned int align),
-> -
-> -	TP_ARGS(name, pfn, page, count, align),
-> -
-> -	TP_STRUCT__entry(
-> -		__string(name, name)
-> -		__field(unsigned long, pfn)
-> -		__field(const struct page *, page)
-> -		__field(unsigned long, count)
-> -		__field(unsigned int, align)
-> -	),
-> -
-> -	TP_fast_assign(
-> -		__assign_str(name, name);
-> -		__entry->pfn = pfn;
-> -		__entry->page = page;
-> -		__entry->count = count;
-> -		__entry->align = align;
-> -	),
-> -
-> -	TP_printk("name=%s pfn=0x%lx page=%p count=%lu align=%u",
-> -		  __get_str(name),
-> -		  __entry->pfn,
-> -		  __entry->page,
-> -		  __entry->count,
-> -		  __entry->align)
-> -);
-> -
->  TRACE_EVENT(cma_release,
->  
->  	TP_PROTO(const char *name, unsigned long pfn, const struct page *page,
-> @@ -125,12 +94,35 @@ TRACE_EVENT(cma_alloc_finish,
->  		  __entry->errorno)
->  );
->  
-> -DEFINE_EVENT(cma_alloc_class, cma_alloc_busy_retry,
-> +TRACE_EVENT(cma_alloc_busy_retry,
->  
->  	TP_PROTO(const char *name, unsigned long pfn, const struct page *page,
->  		 unsigned long count, unsigned int align),
->  
-> -	TP_ARGS(name, pfn, page, count, align)
-> +	TP_ARGS(name, pfn, page, count, align),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(name, name)
-> +		__field(unsigned long, pfn)
-> +		__field(const struct page *, page)
-> +		__field(unsigned long, count)
-> +		__field(unsigned int, align)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(name, name);
-> +		__entry->pfn = pfn;
-> +		__entry->page = page;
-> +		__entry->count = count;
-> +		__entry->align = align;
-> +	),
-> +
-> +	TP_printk("name=%s pfn=0x%lx page=%p count=%lu align=%u",
-> +		  __get_str(name),
-> +		  __entry->pfn,
-> +		  __entry->page,
-> +		  __entry->count,
-> +		  __entry->align)
->  );
->  
->  #endif /* _TRACE_CMA_H */
+diff --git a/drivers/ptp/ptp_qoriq.c b/drivers/ptp/ptp_qoriq.c
+index 61530167efe4..350154e4c2b5 100644
+--- a/drivers/ptp/ptp_qoriq.c
++++ b/drivers/ptp/ptp_qoriq.c
+@@ -637,7 +637,7 @@ static int ptp_qoriq_probe(struct platform_device *dev)
+ 	return 0;
+ 
+ no_clock:
+-	iounmap(ptp_qoriq->base);
++	iounmap(base);
+ no_ioremap:
+ 	release_resource(ptp_qoriq->rsrc);
+ no_resource:
+-- 
+2.34.1
 
