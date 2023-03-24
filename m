@@ -2,105 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBF66C7E2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0466C7E2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbjCXMjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 08:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
+        id S231976AbjCXMkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 08:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbjCXMju (ORCPT
+        with ESMTP id S231974AbjCXMkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 08:39:50 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506A91499A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 05:39:12 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6F3065C0061;
-        Fri, 24 Mar 2023 08:38:55 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Fri, 24 Mar 2023 08:38:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1679661535; x=1679747935; bh=91G2ItCs97Qpy8gY4/qyjWYaoAD0IfoIyzN
-        jG0XLjQc=; b=MRJjzFP3cVZSc48Mh5ScjWFLeam2DKJM4gLRW4G9F+IMPl6zya5
-        K3coHJbLu6GnswsR5dyO5zhXZ+9v3TgRMr0rVwQyaLHCTsipSBnVaVM9tJpINgfT
-        qbBZk2KUvNSbrGwRNoHAvdCnGqSapa3y+ZV2qdkuSmmFtK1Zb3tQgcasngLBrC3R
-        tNcMYczW9mllnYj0i81F4GSq4y1ZWN9TvdgyGa65g0FXFy2RBD7I7Pzlx8xZoT9C
-        C3Wi9LcqloxYUpB0PNr4Tc7NSzCOC1v53bvO3IPMUHOI8bMyvflGC56o2ZJYqXGy
-        lWgtYQR1xstLbWSYKrg0IzrDxhUZUcfhySQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1679661535; x=1679747935; bh=91G2ItCs97Qpy8gY4/qyjWYaoAD0IfoIyzN
-        jG0XLjQc=; b=Bj1mHbw5gLqeoC4q3z64Q8Qcy4ziahYlbGZKElfACo6sbnoXDoX
-        oV0/KhI7VefM1hjjAefhs4OaxjEsI1p5/FK0PTjvnXyUi7YDYiMtg/7qvclSyLBp
-        d1G7sxRHjx3Y5yiOGrBnkUYrh10o2uBKS6wKbyKeVyx3XXr/oKbWCF7a6HnH01zh
-        cuLEgfcFky772osA99HEsUFsKuvp5vri8mYxkmOdHfmAa7/kY2SDiFxVs4TCyVx7
-        Q3BSnq8mbyhROHf6+Y0LO7d1bpptuUXJDaGY3bt+PIUzjQR1IsaAVCssFzwacX5b
-        yxAam3022X+u1sADWlxGqwmMDCwEVsB8hgQ==
-X-ME-Sender: <xms:35kdZDYa7Ysr3SaVr9MAdXSo8LYbC4c7Ys16qjb6YyrSBVieAS2a_A>
-    <xme:35kdZCbJPt8IiLjFX4H_QMytpa-AEk49iKlmvsBDo4hgjF_Ku9o2EXRyCu36IUAmf
-    PelyFFhW4I-cg>
-X-ME-Received: <xmr:35kdZF8h3NCZjHH9B0Qryi1nW-_FeKWiqXFF63zfRH3C7oIOC77CNExmt7u8FjremjHbd-jKQOrwXKlkyvmHJ3u4eK0yaBjJHLl50w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegiedggeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpedfghhr
-    vghgsehkrhhorghhrdgtohhmfdcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrf
-    grthhtvghrnhephedvieegvdfguddvveetveejkeeluefhudekhfelhfdvteegjeethfff
-    jeetjeeknecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:35kdZJr7LB4BKRnUXVMIeIEwIulbxRbwYlFOTZurlwsz4npQBmLiEQ>
-    <xmx:35kdZOpAb_1qIczY1bqQm_sG8Ds0DEcz-eZjUlFz4AbwNbJKE_J3_A>
-    <xmx:35kdZPR7TyGRZtLbH_q9E4gjRFlbZ_po5JkHWG4rNhzZhjlXzxWKFw>
-    <xmx:35kdZPd4TS3r3BvM17OVIu76LFulnJgWLfSmo61BtC3O380apLBUJQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 24 Mar 2023 08:38:54 -0400 (EDT)
-Date:   Fri, 24 Mar 2023 13:38:52 +0100
-From:   "greg@kroah.com" <greg@kroah.com>
-To:     Gary Rookard <garyrookard@linuxmail.org>
-Cc:     Ian Abbott <abbotti@mev.co.uk>,
-        "hsweeten@visionengravers.com" <hsweeten@visionengravers.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: comedi
-Message-ID: <ZB2Z3Ip+9bbhx0Pr@kroah.com>
-References: <f3e94902-3e0c-5857-bf44-0e2c42de30a6@mev.co.uk>
- <2417949F-CC2C-49A8-8001-BACC1E8D27C2@getmailspring.com>
+        Fri, 24 Mar 2023 08:40:02 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D40C1ADC5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 05:39:32 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id t15so1666565wrz.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 05:39:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1679661567;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2vDjOO3u5NrLuNTfiEX5xpBBmNaynKtTiPAN1r+oGQA=;
+        b=SlEaAlQdUiCY9rRw+Jpcudsuh4bqM00Umv1wD3ZyEY3C8mY5/gcTxF/dK1XO7rbp9L
+         QYWASLIfIa8trRlXG+RD8ahU+LtJxjn2Chy21ejcYjqG10O0bfyQdeVpnMBu0yWLGRfk
+         9ygaXal4Ek75ASiZlSeljLCnJGHReo9qNxQyXUuU22aPRa3zPXK523GTV15rDrAoCfor
+         rbxb1cHHMIehP1NKcqSLcMyqp3kMZ2ehArDtbD81zFFOrgvOT9ekHm8McYXQoCVpbM5f
+         sm8WMNevDFmM4Ns5nmXzhfEgBoTssRveQnCAuiCXrBHEkQFtHO6eySgcMHA49qBIefmK
+         FgRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679661567;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2vDjOO3u5NrLuNTfiEX5xpBBmNaynKtTiPAN1r+oGQA=;
+        b=zI1kykKW7XXH9lmCfZEslfY9Q1S3x3uYilBn7XibSHCKu5uTK2dU4JAawxF6NvvYrj
+         iOqIAmqm13/Obfy2H/EvyDgXe2IodZCqtEv8cgBHnMNCVaju76oyLp27k0xUUzSM2N30
+         qCTJ5WvkATCKGBkwPfjYLal6ARl1Db1bPcLAuXvSxtVDCBviR+LPWTb/SDpT+dtLQd60
+         UrvV7p9swf+ogZr4aBrSm0EdMT2ES/UTp1nwYuEq7pRix6yFu7a8ukPTOjNO+HHszuxn
+         XnjM4faX8pxIdoxNAsB5neQBVICSk7zo1dRO/OYclDjFJy24UEYKPTLVaJJmES7CVwzn
+         SD0Q==
+X-Gm-Message-State: AAQBX9cGYHcFpOWO8DpJiCO12qqoHeYgN+VoM9Kdhe29I3BvuFLfa1pL
+        KXNy/cmx54sDwGuJ8UJ1CkPoNfIvlibkqpmejY4=
+X-Google-Smtp-Source: AKy350bEOg0BRw1mif/aUXNxqiGlaUM9IfAMPTpKin+hA349t7znDFrZd5iEERPDJ4/Fx8Mi7EnT3w==
+X-Received: by 2002:adf:ef85:0:b0:2c7:bb13:e23f with SMTP id d5-20020adfef85000000b002c7bb13e23fmr2013765wro.24.1679661567156;
+        Fri, 24 Mar 2023 05:39:27 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id e13-20020a5d4e8d000000b002ceacff44c7sm18456350wru.83.2023.03.24.05.39.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 05:39:26 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 13:39:25 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     palmer@dabbelt.com, conor@kernel.org, Jason@zx2c4.com,
+        apatel@ventanamicro.com, heiko.stuebner@vrull.eu,
+        jszhang@kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, paul.walmsley@sifive.com
+Subject: Re: [PATCH v1] RISC-V: convert new selectors of RISCV_ALTERNATIVE to
+ dependencies
+Message-ID: <20230324123925.4snctouu2zyvizot@orel>
+References: <20230324121240.3594777-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2417949F-CC2C-49A8-8001-BACC1E8D27C2@getmailspring.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230324121240.3594777-1-conor.dooley@microchip.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please don't use html email (the mailing lists reject it) and don't
-top-post (makes having technical discussions impossible.)
+On Fri, Mar 24, 2023 at 12:12:41PM +0000, Conor Dooley wrote:
+> for-next contains two additional extensions that select
+> RISCV_ALTERNATIVE. RISCV_ALTERNATIVE no longer needs to be selected by
+> individual config options as it is now selected for !XIP_KERNEL builds
+> by the top level RISCV option.
+> These extensions rely on the alternative framework, so convert the
+> "select"s to "depends on"s instead.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> Applies on top of my series doing the aforementioned conversion:
+> https://lore.kernel.org/all/20230324100538.3514663-3-conor.dooley@microchip.com/
+> 
+> This patch is sent on its own, because I expect the others to be applied
+> to fixes, as it fixes a v6.3 regression.
+> For this patch, I applied my other series to v6.3-rc1 and merged that
+> into for-next, and created this patch on top of the result.
+> ---
+>  arch/riscv/Kconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index d2acd69d6e3e..a48d1ee677ec 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -402,8 +402,8 @@ config RISCV_ISA_C
+>  config RISCV_ISA_SVNAPOT
+>  	bool "SVNAPOT extension support"
+>  	depends on 64BIT && MMU
+> +	depends on RISCV_ALTERNATIVE
+>  	default y
+> -	select RISCV_ALTERNATIVE
+>  	help
+>  	  Allow kernel to detect the SVNAPOT ISA-extension dynamically at boot
+>  	  time and enable its usage.
+> @@ -478,8 +478,8 @@ config RISCV_ISA_ZICBOM
+>  
+>  config RISCV_ISA_ZICBOZ
+>  	bool "Zicboz extension support for faster zeroing of memory"
+> -	depends on !XIP_KERNEL && MMU
+> -	select RISCV_ALTERNATIVE
+> +	depends on MMU
+> +	depends on RISCV_ALTERNATIVE
+>  	default y
+>  	help
+>  	   Enable the use of the ZICBOZ extension (cbo.zero instruction)
+> -- 
+> 2.39.2
+>
 
-On Fri, Mar 24, 2023 at 08:25:38AM -0400, Gary Rookard wrote:
-> Okay, somehow git cloned an old staging kernel version on me need to figure it out why
-> so it doesn't happen again.
-> Download date: Wed 22 Mar 2023 08∶59∶26 PM EDT
-> Git source: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-> File in question still had check patch warnings.
-
-You are looking at the wrong branch, ignore the `master` branch in
-there, use staging-next please.
-
-thanks,
-
-greg k-h
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
