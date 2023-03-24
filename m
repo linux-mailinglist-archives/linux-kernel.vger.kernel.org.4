@@ -2,147 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74BC76C753D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 02:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D346C7540
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 02:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjCXBy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 21:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S229773AbjCXB4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 21:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjCXByz (ORCPT
+        with ESMTP id S229499AbjCXB4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 21:54:55 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7807818AAD
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 18:54:54 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id j7so570627ybg.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 18:54:54 -0700 (PDT)
+        Thu, 23 Mar 2023 21:56:05 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940D223A77;
+        Thu, 23 Mar 2023 18:56:04 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id bc12so609071plb.0;
+        Thu, 23 Mar 2023 18:56:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679622893;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=sjw9hF1VqdmoHrY7ec4dOnY8KEiWEpFK1tLrgDIDPDw=;
-        b=ngpfi2XkevumsTXUHa6RpEijF7Tf9/a3e9CTq8xX5lhOlGN8SrKQw8xSUfFRxVDIGM
-         a4lOBNLZoPKRCZUw1KgwODkyX6VrrjDqbJLwYxFb4jh904zeU66MoJ8Ze1GbJABvDSrz
-         1AwFmJwMgcIeLhY6nkDS3oI/7AkPmHgHdPDMWLG9FXojyu6qljVdmqobrJQlFypVJ5ht
-         2lzkZB6cX7tIWrXf8srF434FY9ZQTKqNc6GCIQFrm3cqhl1XzYailbXLE7Cvg0D2U+T1
-         qo8HJKxnW0ydEqRtm8aVWuDGJbqycDUN4YZQcqhbSYe/ywoJ2KLpNgGu5ZWl2ywZUcuC
-         bsog==
+        d=gmail.com; s=20210112; t=1679622964;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sZYiqLSuCenJlaKXqVI0jmyYBL2WMrO5mS6Gb1s2FKE=;
+        b=IT1GpuPh7NaGwzTdbMNriSlXmhpjj4qZcnvT7sWXbNI9b+Qx3IkXEBWJqKrcxM0nRX
+         N/EYRJk8ghSmr3Km0lvLpaaVAMUZscklPbJ/1s6/8OamEnj8UhBndmqimw4Oe9IpMprr
+         OtLhVYG2inOQuUZDQ/WVHCIUasHFhg0XIOqtRPqmV1luFnix+EPGgNfLRFWEnmLBrGlC
+         riVJraXgZxBHxBdRcLWQBLm8rljjsI/5zUCiDu78iLtNAl6PTq999M/V56EEAUlfhD4Q
+         vE3iJnSP9djKIN0OygaTO7Txyt28gqvtZCvVoqsjEBEuQk8bgsZ/wIIi4m82GC9EJQKD
+         8/Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679622893;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sjw9hF1VqdmoHrY7ec4dOnY8KEiWEpFK1tLrgDIDPDw=;
-        b=jcAw5PhM16hJ5MykI8F6/oFrwZr1lMFUmEa1pOyih9QMTU6mFvHjpBlhSdAsLO42pN
-         mAeMBrsUacULVpsnlmLwEvDoBwxjc/h8eCm7Uuu0ZUuub4Ek7xJsUQrkMDdGqQHtuhwK
-         XOvDWG82nPAEaCwl/ckAqWo9RVEFoidu+aeH8fI2BrX7YMpjhh6jGGFjNUhUrqX6vkMw
-         TW1K41g54uhcz0Srp1viwnrxbhJjp0PGYoGX4aNoXbnY+6eAzBSvFEUSswh+MHIDxdZY
-         mM4KJhJcYtAnNBMsdZB62vj7Ok8BAP1W4pz8eMpwF6otSj6DjSCjZPNnaZuk6Oda9FXB
-         5X7Q==
-X-Gm-Message-State: AAQBX9fJXLpAgatJy3CU6fXQCN9u0lXzBCqAMh5Bbs8cKPUkZ9ytDP4v
-        165Zm14/bIzqc6ubAUdyYwExZ3qbpf3tT1oZf2+ZFZvRRSu20ggl
-X-Google-Smtp-Source: AKy350Ydyuz+4Fe/nk2NQpBJ8nMQgVF3kz9s37elFvOGqH1xZln2OSjULGSmp6b8rFccUS18mE9s9Csi7GtQ7aCOQUI=
-X-Received: by 2002:a05:6902:1009:b0:b6b:e967:920d with SMTP id
- w9-20020a056902100900b00b6be967920dmr288549ybt.13.1679622893642; Thu, 23 Mar
- 2023 18:54:53 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679622964;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sZYiqLSuCenJlaKXqVI0jmyYBL2WMrO5mS6Gb1s2FKE=;
+        b=gJaodZTEorTtONdmbxkDrm+jU5PclVBPkWK/yp2jOEsgfJdqkuxBw8YmUN60NRaFYH
+         tHYlBj4/afRYC5KUBNYE+zT5r20qkXvxyPQetXT53b+nCVNzgxxHYavLe0730iCa2sQl
+         PLKZ8m14UgBNsiQ0xyao3KxUxJNZZkhw0l7NDKVsmuOqk/2zMTnRhEGbT32gr1BMsgaR
+         RDwjadfKvyvwKu7DPMrZtpMcUZnM34FaDCL7WbTOseoRRRTr82M0actBXoHW3QHDSSUi
+         Rh5fz9oQ16kc8vvLsXWPMsRmPN+7FYvodD+Zb8829XSkluzmU+3iFyLMg5bmaGH9Rceh
+         DHRw==
+X-Gm-Message-State: AAQBX9dGuroyy5WFAmYc/wmPPLZ1j1S7g87m4YqU5gJ0YqUCQQZUZqIS
+        QRsKe3Ihi6X3+scOKNa8FxUKFfnrC/Q=
+X-Google-Smtp-Source: AKy350YoxEypB2cUHdYZySglgUGHruR1SH5C6jGK93IEqr6GH8+C/vjONsmv5ECFGw85WJpPmQZA4g==
+X-Received: by 2002:a17:903:32d1:b0:1a1:80ea:4352 with SMTP id i17-20020a17090332d100b001a180ea4352mr1231589plr.0.1679622963713;
+        Thu, 23 Mar 2023 18:56:03 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id k9-20020a170902ba8900b001a19b6ccdd4sm12953132pls.84.2023.03.23.18.56.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 18:56:03 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 23 Mar 2023 15:56:02 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jungseung Lee <js07.lee@samsung.com>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        bw365.lee@samsung.com, yw85.kim@samsung.com,
+        huijin.park@samsung.com
+Subject: Re: [PATCH v2] workqueue: Introduce show_freezable_workqueues
+Message-ID: <ZB0DMoY/+mmk+5NU@slm.duckdns.org>
+References: <CGME20230320034829epcas1p2a88958d53a51693906020bb5c2b8bc28@epcas1p2.samsung.com>
+ <1679282945-37120-1-git-send-email-js07.lee@samsung.com>
 MIME-Version: 1.0
-From:   Zhu Ning <zhuning0077@gmail.com>
-Date:   Fri, 24 Mar 2023 09:54:41 +0800
-Message-ID: <CANPLYpBv82p-Fve-JgM=WDwUFp-VnKfG2yFvcGv8AT2roPEifw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] ASoC: amd: acp: Add machine driver that enables sound
- for systems with a ES8336 codec
-To:     broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, perex@perex.cz, posteuca@mutex.one,
-        tiwai@suse.com, yangxiaohua <yangxiaohua@everest-semi.com>,
-        Ning Zhu <zhuning0077@gmail.com>,
-        Zhu Ning <zhuning@everest-semi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1679282945-37120-1-git-send-email-js07.lee@samsung.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > The GPIO thing on Huawei Intel platform is too complicated, they use two GPIOs
-> > for headphone and speaker, and the headphone GPIO is inverted, which means low
-> > means on and high means off. Luckily there should be only one hardware config
-> > for the AMD acp3x platform GPIO and you may just choose the correct one.
->
-> There being two different GPIOs sounds like it just allows the headphone
-> and speaker to be controlled separately - that seems more flexible, not
-> a problem?
+On Mon, Mar 20, 2023 at 12:29:05PM +0900, Jungseung Lee wrote:
+> Currently show_all_workqueue is called if freeze fails at the time of
+> freeze the workqueues, which shows the status of all workqueues and of
+> all worker pools. In this cases we may only need to dump state of only
+> workqueues that are freezable and busy.
+> 
+> This patch defines show_freezable_workqueues, which uses 
+> show_one_workqueue, a granular function that shows the state of individual 
+> workqueues, so that dump only the state of freezable workqueues 
+> at that time.
+> 
+> Signed-off-by: Jungseung Lee <js07.lee@samsung.com>
 
-Yes it's called multi stream in Windows. However, extra GPIO causes
-more confusion
-in the driver.
+Applied to wq/for-6.4 w/ minor message adjustment.
 
-> > There is no such situation, and the system doesn't produce sound from speaker
-> > when headphones are plugged in. The user may manually open speaker using
-> > amixer sset 'Speaker' on or pavucontrol.
->
-> Again, you're describing a specific configuration - someone might want
-> to do something different.
+Thanks.
 
-Hi Marian Postevca you may want to separate the GPIO control by adding Headphone
-Power SND_SOC_DAPM_SUPPLY. You may also want to change the gpio
-handling function
-in the acp3x_es83xx_jack_events function.
-
-static const struct snd_soc_dapm_widget acp3x_es83xx_widgets[] = {
-        SND_SOC_DAPM_SPK("Speaker", NULL),
-        SND_SOC_DAPM_HP("Headphone", NULL),
-        SND_SOC_DAPM_MIC("Headset Mic", NULL),
-        SND_SOC_DAPM_MIC("Internal Mic", NULL),
-
-+       SND_SOC_DAPM_SUPPLY("Headphone Power", SND_SOC_NOPM, 0, 0,
-+                           acp3x_es83xx_headphone_power_event,
-+                           SND_SOC_DAPM_PRE_PMD | SND_SOC_DAPM_POST_PMU),
-        SND_SOC_DAPM_SUPPLY("Speaker Power", SND_SOC_NOPM, 0, 0,
-                            acp3x_es83xx_speaker_power_event,
-                            SND_SOC_DAPM_PRE_PMD | SND_SOC_DAPM_POST_PMU),
-};
-
-static const struct snd_soc_dapm_route acp3x_es83xx_audio_map[] = {
-        {"Headphone", NULL, "HPOL"},
-        {"Headphone", NULL, "HPOR"},
-+       {"Headphone", NULL, "Headphone Power"},
-
-        {"Speaker", NULL, "HPOL"},
-        {"Speaker", NULL, "HPOR"},
-        {"Speaker", NULL, "Speaker Power"},
-};
-
-+static int acp3x_es83xx_headphone_power_event(struct snd_soc_dapm_widget *w,
-+                                           struct snd_kcontrol
-*kcontrol, int event)
-+{
-+       struct acp3x_es83xx_private *priv = get_mach_priv(w->dapm->card);
-+
-+       dev_dbg(priv->codec_dev, "speaker power event: %d\n", event);
-+       if (SND_SOC_DAPM_EVENT_ON(event))
-+               gpiod_set_value_cansleep(priv->gpio_headphone, true);
-+       else
-+               gpiod_set_value_cansleep(priv->gpio_headphone, false);
-+
-+       return 0;
-+}
-+
-+static int acp3x_es83xx_speaker_power_event(struct snd_soc_dapm_widget *w,
-+                                           struct snd_kcontrol
-*kcontrol, int event)
-+{
-+       struct acp3x_es83xx_private *priv = get_mach_priv(w->dapm->card);
-+
-+       dev_dbg(priv->codec_dev, "speaker power event: %d\n", event);
-+       if (SND_SOC_DAPM_EVENT_ON(event))
-+               gpiod_set_value_cansleep(priv->gpio_speakers, true);
-+       else
-+               gpiod_set_value_cansleep(priv->gpio_speakers, false);
-+
-+       return 0;
-+}
+-- 
+tejun
