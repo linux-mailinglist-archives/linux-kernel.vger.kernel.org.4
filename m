@@ -2,71 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B43F6C801F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3D46C8023
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjCXOnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
+        id S232107AbjCXOnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbjCXOnC (ORCPT
+        with ESMTP id S229900AbjCXOnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:43:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B2019A6
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:42:17 -0700 (PDT)
+        Fri, 24 Mar 2023 10:43:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81AD61BC
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:43:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679668936;
+        s=mimecast20190719; t=1679668987;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=To5ecTC/X7saxKtjRIArD6KqaoPoVn1lZB9f4SzUO/k=;
-        b=OUnxcqNNQgYxv7lMDaODf4sPA3LiEoZd6rJ0xW/8n2LWwuNegb4AfpWkGevadb7q6TLyM7
-        T2NvztScRg/Ub1lrllBMsWje1ptcgkthMPOD2QdVoSfGN7habMw/YcCsLE+iSPYlb/mRSz
-        2IdpgrEWyxAzNFWGHuLib9FtDewdCKE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556-XODxuWeWN7ad9yu4e0v4Dw-1; Fri, 24 Mar 2023 10:42:10 -0400
-X-MC-Unique: XODxuWeWN7ad9yu4e0v4Dw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD3CC802314;
-        Fri, 24 Mar 2023 14:42:09 +0000 (UTC)
-Received: from [10.22.33.184] (unknown [10.22.33.184])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 360CD140EBF4;
-        Fri, 24 Mar 2023 14:42:09 +0000 (UTC)
-Message-ID: <c07afcbf-8473-b4e3-704e-c73695db95b6@redhat.com>
-Date:   Fri, 24 Mar 2023 10:42:09 -0400
+        bh=RTM4M2SNjA5FZsosnRIZjHnCRJF879F1P/kiqHZ5HjY=;
+        b=Ze91IsQgJKaNp+kL1luaQJqcPGY+/dK0dY6oxqY+WP6o134kalcihoyoBLle5DjU+t6VLQ
+        hc+Ii6GvC/Srx4H1iAu67XHQNmXgzXQE/PwRe+/BAwoiXWuVxdOhP7xHJfzF+563wVhIJC
+        cpDoPKmcRz8J7LRVfHqk+6Cw+KxzzpQ=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-37-4jqAfZmhM3KGB94CsLNlCg-1; Fri, 24 Mar 2023 10:43:06 -0400
+X-MC-Unique: 4jqAfZmhM3KGB94CsLNlCg-1
+Received: by mail-ed1-f72.google.com with SMTP id k30-20020a50ce5e000000b00500544ebfb1so3508240edj.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:43:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679668985;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RTM4M2SNjA5FZsosnRIZjHnCRJF879F1P/kiqHZ5HjY=;
+        b=xlAJGjb0BOpt/lEo73iO3+uTc/Xq8ZDnmFj24x0TC7uBqKz9VuOqiPozVHf4cWCPMj
+         beGrLRyd78Vj4Bx7eOvaGlhtRneJVNdEZ0WlAZOG2MSTGJ6RS1TmalQ16ge+6gbD0anK
+         phJ8AvG7Zi60pnQTO3B5HbjNNKRQ8SyUMzoV2fO/9dt34IaskJtdOuYmLLoRYlFIRDVO
+         Rw4+u3NteTWXWnJnGNScsRiQYk5Qjz3BUE9RZ5gWcrENo3gC8Msh5DtiVCCTJf9fDjV3
+         N+xuRfSKrjRhWHqKufTXEG65y7tvedus00APmHuAyNmhxIMB7T956cyUXjIiKUTtqCYP
+         BKcQ==
+X-Gm-Message-State: AAQBX9chgQiDXoXAMCXfzIzn3AV3AAARcGjQzboYO92vj0/fA7MfI4zV
+        os7oHf07DcUkdIV9UY1xy2oMG4DOWRiEqGXtHb3kewCSeF5MmNFrbx09uRJDr5ohgxzo7HyTRHv
+        IortQvHZJ6OBXGrNFauM+sPa5
+X-Received: by 2002:a17:906:74f:b0:933:3b2e:6016 with SMTP id z15-20020a170906074f00b009333b2e6016mr2817361ejb.7.1679668985385;
+        Fri, 24 Mar 2023 07:43:05 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bH91Eohsmveeezt2qh6UzwwaDwrZKpjhh9RUKdgHpoMPxgzsZ/fiNdaDbea2Uje8vSwhq7VA==
+X-Received: by 2002:a17:906:74f:b0:933:3b2e:6016 with SMTP id z15-20020a170906074f00b009333b2e6016mr2817346ejb.7.1679668985134;
+        Fri, 24 Mar 2023 07:43:05 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-53-134-98.retail.telecomitalia.it. [82.53.134.98])
+        by smtp.gmail.com with ESMTPSA id t7-20020a1709064f0700b008cda6560404sm10314573eju.193.2023.03.24.07.43.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 07:43:04 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 15:43:02 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        stefanha@redhat.com, linux-kernel@vger.kernel.org,
+        eperezma@redhat.com, "Michael S. Tsirkin" <mst@redhat.com>,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v3 8/8] vdpa_sim: add support for user VA
+Message-ID: <j6d2b5zqbb7rlrem76wopsabyy344wwnkbutvacebcig5fupnu@a2xkhywajwta>
+References: <20230321154804.184577-1-sgarzare@redhat.com>
+ <20230321154804.184577-4-sgarzare@redhat.com>
+ <CACGkMEtbrt3zuqy9YdhNyE90HHUT1R=HF-YRAQ6b4KnW_SdZ-w@mail.gmail.com>
+ <20230323095006.jvbbdjvkdvhzcehz@sgarzare-redhat>
+ <CACGkMEveMGEzX7bCPuQuqm=9q7Ut-k=MLrRYM3Bq6cMpaw9fVQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 3/5] cgroup/cpuset: Find another usable CPU if none found
- in current cpuset
-Content-Language: en-US
-To:     Will Deacon <will@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230306200849.376804-1-longman@redhat.com>
- <20230306200849.376804-4-longman@redhat.com>
- <20230314181749.5b4k6selbgdhl3up@blackpad>
- <58a1a878-fa0b-285d-3e43-2b5103d3c770@redhat.com>
- <20230317122708.ax3m2d4zijkfdzjq@blackpad>
- <ca664da8-0f47-06b2-a94c-82b2f9a1c3aa@redhat.com>
- <20230324143247.GA27199@willie-the-truck>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230324143247.GA27199@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+In-Reply-To: <CACGkMEveMGEzX7bCPuQuqm=9q7Ut-k=MLrRYM3Bq6cMpaw9fVQ@mail.gmail.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,48 +86,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/23 10:32, Will Deacon wrote:
-> On Fri, Mar 17, 2023 at 10:59:26AM -0400, Waiman Long wrote:
->> On 3/17/23 08:27, Michal Koutný wrote:
->>> On Tue, Mar 14, 2023 at 04:22:06PM -0400, Waiman Long <longman@redhat.com> wrote:
->>>> Some arm64 systems can have asymmetric CPUs where certain tasks are only
->>>> runnable on a selected subset of CPUs.
->>> Ah, I'm catching up.
->>>
->>>> This information is not captured in the cpuset. As a result,
->>>> task_cpu_possible_mask() may return a mask that have no overlap with
->>>> effective_cpus causing new_cpus to become empty.
->>> I can see that historically, there was an approach of terminating
->>> unaccomodable tasks:
->>>      94f9c00f6460 ("arm64: Remove logic to kill 32-bit tasks on 64-bit-only cores")
->>> the removal of killing had been made possible with
->>>      df950811f4a8 ("arm64: Prevent offlining first CPU with 32-bit EL0 on mismatched system").
->>>
->>> That gives two other alternatives to affinity modification:
->>> 2) kill such tasks (not unlike OOM upon memory.max reduction),
->>> 3) reject cpuset reduction (violates cgroup v2 delegation).
->>>
->>> What do you think about 2)?
->> Yes, killing it is one possible solution.
+On Fri, Mar 24, 2023 at 10:54:39AM +0800, Jason Wang wrote:
+>On Thu, Mar 23, 2023 at 5:50 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
 >>
->> (3) doesn't work if the affinity change is due to hot cpu removal. So that
->> leaves this patch or (2) as the only alternative. I would like to hear what
->> Will and Tejun thinks about it.
-> The main constraint from the Android side (the lucky ecosystem where these
-> SoCs tend to show up) is that existing userspace (including 32-bit binaries)
-> continues to function without modification. So approaches such as killing
-> tasks or rejecting system calls tend not to work as well, since you
-> inevitably get divergent behaviour leading to functional breakage rather
-> than e.g. performance anomalies.
+>> On Thu, Mar 23, 2023 at 11:42:07AM +0800, Jason Wang wrote:
+>> >On Tue, Mar 21, 2023 at 11:48 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+>> >>
+>> >> The new "use_va" module parameter (default: true) is used in
+>> >> vdpa_alloc_device() to inform the vDPA framework that the device
+>> >> supports VA.
+>> >>
+>> >> vringh is initialized to use VA only when "use_va" is true and the
+>> >> user's mm has been bound. So, only when the bus supports user VA
+>> >> (e.g. vhost-vdpa).
+>> >>
+>> >> vdpasim_mm_work_fn work is used to serialize the binding to a new
+>> >> address space when the .bind_mm callback is invoked, and unbinding
+>> >> when the .unbind_mm callback is invoked.
+>> >>
+>> >> Call mmget_not_zero()/kthread_use_mm() inside the worker function
+>> >> to pin the address space only as long as needed, following the
+>> >> documentation of mmget() in include/linux/sched/mm.h:
+>> >>
+>> >>   * Never use this function to pin this address space for an
+>> >>   * unbounded/indefinite amount of time.
+>> >
+>> >I wonder if everything would be simplified if we just allow the parent
+>> >to advertise whether or not it requires the address space.
+>> >
+>> >Then when vhost-vDPA probes the device it can simply advertise
+>> >use_work as true so vhost core can use get_task_mm() in this case?
+>>
+>> IIUC set user_worker to true, it also creates the kthread in the vhost
+>> core (but we can add another variable to avoid this).
+>>
+>> My biggest concern is the comment in include/linux/sched/mm.h.
+>> get_task_mm() uses mmget(), but in the documentation they advise against
+>> pinning the address space indefinitely, so I preferred in keeping
+>> mmgrab() in the vhost core, then call mmget_not_zero() in the worker
+>> only when it is running.
 >
-> Having said that, the behaviour we currently have in mainline seems to
-> be alright, so please don't go out of your way to accomodate these SoCs.
-> I'm mainly just concerned about introducing any regressions, which is why
-> I ran my tests on this series
+>Ok.
+>
+>>
+>> In the future maybe mm will be used differently from parent if somehow
+>> it is supported by iommu, so I would leave it to the parent to handle
+>> this.
+>
+>This should be possible, I was told by Intel that their IOMMU can
+>access the process page table for shared virtual memory.
 
-I agree that killing it may be too draconian. I am withholding this 
-patch for now.
+Cool, we should investigate this. Do you have any pointers to their
+documentation?
 
 Thanks,
-Longman
+Stefano
 
