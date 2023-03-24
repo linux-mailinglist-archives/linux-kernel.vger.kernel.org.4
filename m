@@ -2,68 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070FF6C7D7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 878CE6C7D7F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjCXLuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 07:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
+        id S231289AbjCXLwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 07:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjCXLuN (ORCPT
+        with ESMTP id S229945AbjCXLwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 07:50:13 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8592D1FFC;
-        Fri, 24 Mar 2023 04:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679658612; x=1711194612;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Mld7Mo3TD47F918MtnNcdmlripEaM7/E08D75qy8iz4=;
-  b=XSm/k5v+tVJD7us6j2Z8MJTLRFofDD+hZC5olx4oh2chtKFFTk8xPaHv
-   h+n7VDiKJO8TpAvk+TH7nny7EBC0V/oM8Ato87rhbdeMpbW41DVIMXdZ9
-   YjuesbEzawfxD01rREqpe/crOKz27gHHi+VRUfAHZzdRGD06JYsuvG966
-   ynUyj+RHKZjOAHR4Yum90S0OGKYClxtKJLdMHFgjlyzzLG3IZM1hBapQB
-   EMU3XCFTqIVsjY+9pbhjn89LW643TPhho+G5p6QSCxEV8JVLY8oAhDzSZ
-   VToDcHmTwUaPsf5hCfWTcwd8OO5CcHo0tilfU2+dDfdGMiDcZUTiFVRDx
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="404676595"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="404676595"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 04:50:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="856843520"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="856843520"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 24 Mar 2023 04:50:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pffvr-007t2N-1h;
-        Fri, 24 Mar 2023 13:50:07 +0200
-Date:   Fri, 24 Mar 2023 13:50:07 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     linux-iio@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] counter: 104-quad-8: Refactor to buffer states
- for CMR, IOR, and IDR
-Message-ID: <ZB2Ob9VGe3GoEVko@smile.fi.intel.com>
-References: <cover.1679605919.git.william.gray@linaro.org>
- <c5adb13b4b0887beb1df40b34d2ef03d63a2860d.1679605919.git.william.gray@linaro.org>
- <ZB2OG4zZXsqqyN8v@smile.fi.intel.com>
+        Fri, 24 Mar 2023 07:52:09 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7776B22A1E;
+        Fri, 24 Mar 2023 04:52:08 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id o14so674376ioa.3;
+        Fri, 24 Mar 2023 04:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679658728;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iWww7KIOZBCmIAHeZv67n8Ky5bkkqCoK79aVsIAZNBI=;
+        b=TZIv8T/N6JJPGZzyhEafVekIQ23TQTiv0q+86h2sLILA6iYzEfF+u25kxtdHp0VNRq
+         oxZ78xFZORp0fy9rKmZZbV739hSARgPOxdeaHK8u5HVOOZ+XoTsb4e+8OIlwjfdD+Ql7
+         zhqN1Parx4H/ypNye6pC5LYEcdA2aVqEf5Pj85VQJCszYYHd3qwp7Z6vgH8A4g2J4iDq
+         Jvyj/nX9Kxxs1RNcEyCI4VxU8gCULSV9V72g3/PWK4V27yBgt7JRix0tewp8vbtVw3wM
+         S62jCU5Rp3Pf1rHR89/Ps52hFSuInfYfA0/v6QVaVOAAszzLLvwm1fE5xWI5yg91LgDW
+         n8Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679658728;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iWww7KIOZBCmIAHeZv67n8Ky5bkkqCoK79aVsIAZNBI=;
+        b=K1KOHApxjnV3NaWp+LomxoU+QAfwLSQUTgqzW2SD3iwqQEpCg13gElLdprOGPJhCA/
+         sCdzMarjTJ3+D91U9JYQIfkYn2zjigY1AOWW4uV5InCsiJGCDFQayGJXC+MHM5sO87in
+         bJ37sfKgzKqme2zFyJMUBwjz5rw7nWDZVFEEwaut4DqFhv2uh4vwq+LbYHEbphR2LcCL
+         ox1MMpJ3nivSUzxoAbfO6R2zpk0w8DYbp48ZEG+uL6j5632zMaCX6PDZb0OpDuRyVDE1
+         r5vhhppe8XYydPt7aj8m6Ne82e0/VrfKu58YQ+hpRU5ZeWRcaTYfVxK6s+G+FL+zffeE
+         7K1w==
+X-Gm-Message-State: AO0yUKU5b2Xz8YYjUSTTDM3W99bnMvervQVCvk6jBWPwzc1HCjFlod6o
+        REyecNVAAt9LUsX/JJumY+iJ5FhbBEtnVy10kvu28wmhtAs=
+X-Google-Smtp-Source: AK7set8+H6cwLxu738lkTCKCs6nwLDvrDpz/EBmL2ZmHT3i13MKkp+14knPu99WuRsmhLBPnfRJcdLzJTAFzgFo9qX0=
+X-Received: by 2002:a05:6638:22a1:b0:3ae:e73b:ff26 with SMTP id
+ z1-20020a05663822a100b003aee73bff26mr831353jas.1.1679658727838; Fri, 24 Mar
+ 2023 04:52:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZB2OG4zZXsqqyN8v@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+References: <20230323185112.13855-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdVKRS1N5s-cvxrgSj9ev-Hh+gxfa-Hp2+z1zt+r7fEUWg@mail.gmail.com>
+In-Reply-To: <CAMuHMdVKRS1N5s-cvxrgSj9ev-Hh+gxfa-Hp2+z1zt+r7fEUWg@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 24 Mar 2023 11:51:41 +0000
+Message-ID: <CA+V-a8u5ttTsG9fn4ePKi-0=2NXzhk1seBwnzBn_X6VQDwWKpw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: timer: renesas: ostm: Document RZ/Five SoC
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,28 +80,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 01:48:43PM +0200, Andy Shevchenko wrote:
-> On Thu, Mar 23, 2023 at 05:25:28PM -0400, William Breathitt Gray wrote:
+Hi Geert,
 
-...
+Thank you for the review.
 
-> > +static void quad8_control_register_update(struct quad8 *const priv, u8 *const buf,
-> > +					  const size_t channel, const u8 val, const u8 field)
-> > +{
-> > +	u8p_replace_bits(&buf[channel], val, field);
-> > +	iowrite8(buf[channel], &priv->reg->channel[channel].control);
-> > +}
-> 
-> How did you compile this?
-> Due to nature of *_replace_bits() this may only be a macro.
-> 
-> That's what LKP is telling about I think.
+On Fri, Mar 24, 2023 at 9:35=E2=80=AFAM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> Thanks for your patch!
+>
+> On Thu, Mar 23, 2023 at 7:56=E2=80=AFPM Prabhakar <prabhakar.csengg@gmail=
+.com> wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > The OSTM block on the RZ/Five SoC is identical to one found on the RZ/G=
+2UL
+> > SoC. "renesas,r9a07g043-ostm" compatible string will be used on the
+> > RZ/Five SoC so to make this clear, update the comment to include RZ/Fiv=
+e
+> > SoC.
+> >
+> > No driver changes are required as generic compatible string
+> > "renesas,ostm" will be used as a fallback on RZ/Five SoC.
+>
+> While this paragraph is true, it doesn't really matter, as you're not
+> adding a new SoC-specific compatible value.
+>
+Agreed, I will keep that in mind for future patches.
 
-Ah, no, that's because the last parameter is not constant in the last patch in
-the series.
+Cheers,
+Prabhakar
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> > --- a/Documentation/devicetree/bindings/timer/renesas,ostm.yaml
+> > +++ b/Documentation/devicetree/bindings/timer/renesas,ostm.yaml
+> > @@ -23,7 +23,7 @@ properties:
+> >        - enum:
+> >            - renesas,r7s72100-ostm  # RZ/A1H
+> >            - renesas,r7s9210-ostm   # RZ/A2M
+> > -          - renesas,r9a07g043-ostm # RZ/G2UL
+> > +          - renesas,r9a07g043-ostm # RZ/G2UL and RZ/Five
+> >            - renesas,r9a07g044-ostm # RZ/G2{L,LC}
+> >            - renesas,r9a07g054-ostm # RZ/V2L
+> >        - const: renesas,ostm        # Generic
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                 -- Linus Torvalds
