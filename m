@@ -2,184 +2,627 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B249E6C89B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 01:44:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BDC6C88FB
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 00:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbjCYAow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 20:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S231810AbjCXXFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 19:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCYAot (ORCPT
+        with ESMTP id S229522AbjCXXFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 20:44:49 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93D312B;
-        Fri, 24 Mar 2023 17:44:48 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so3189159pjt.5;
-        Fri, 24 Mar 2023 17:44:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679705088;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gGri5zgrpwBNQccX2+WkAia7t3Mp6NEARVbrGgzBR38=;
-        b=qvjtVlA1JomFexRyZAphQnfjJBoWJXtxI2qUFCU/BSgLRCCotn6ZPGvyUQOH/CqsmS
-         g7bZHhqDPvTr1VYUzmMojTvQCtwbh0aFbJMGofl79xcvos7cARW6Ay7dNVBAYDUZPdli
-         9CRbjXVmN1YKuv229yEdQ8cmG9x/aIkLJEXmFFrbGD3+B8KKfr3id8fIafBhscyvzYM6
-         Qfz1HdPhRdT35NBkpOuJ1uipaJ72Puc3943GhebYINHoVBxfVPR8XkSVZJyty42p1rhM
-         +G4hgMhQI+dL3kQ3F7Fbl3fVA6ngL3G0PfTk/BVWHNiHWZnv/e6Q7Gkh6Mxk7S889c9W
-         qimw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679705088;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gGri5zgrpwBNQccX2+WkAia7t3Mp6NEARVbrGgzBR38=;
-        b=oDcva3BfQEEaatSrIihJW9chRSyMI8eOT32tvbaGlxVmqzpVdSlEfY3/NVi9/c+ijd
-         fF+ev/zelMNNhtuJKZd4ofHDTvKM31+HWu4stSs690/ewIvg94rQzZp3WjfnZFK+G5Dm
-         oUWNbTMmOCI1id/rpX/oKpqLEj12H8nPfBv9qJJ3BLuDMBZ2i4Bx5zkHibBqEnK3/Zp8
-         SDf53ybSNqssXLN1mtnT7XM5bbwgCb0bei6lGh3d98n6QZAKNDPxuh851+lwiJnwZcPt
-         snOinQPDrDRW6ka4eI2emiWT/gvGGTw5M37uqC3WD239n7XjMw2MPUWhkcPDtUQ6Xw/p
-         GXrQ==
-X-Gm-Message-State: AAQBX9cwelrmiVaZ4fIA4MI4qFtbXi8RTSyiHethdqfmGrv+uamhfPuj
-        kOEz+QKD4lI7PNyATXJ4cb2JX9hBxtfLM06u
-X-Google-Smtp-Source: AKy350YWt+yEd85LHuiaoONJDjSIB5/4b2nw6M9WRVg4rD9lE3/1YSyYOvYWxAy33c/kgH1GlMu7Yg==
-X-Received: by 2002:a17:902:e30b:b0:1a1:7c2b:4aea with SMTP id q11-20020a170902e30b00b001a17c2b4aeamr3593928plc.0.1679705088042;
-        Fri, 24 Mar 2023 17:44:48 -0700 (PDT)
-Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
-        by smtp.gmail.com with ESMTPSA id m6-20020a1709026bc600b001a049441fc8sm3584749plt.193.2023.03.24.17.44.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 17:44:47 -0700 (PDT)
-Date:   Sat, 18 Mar 2023 00:32:39 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        syzbot <syzbot+0bc015ebddc291a97116@syzkaller.appspotmail.com>,
-        axboe@kernel.dk, davem@davemloft.net, edumazet@google.com,
-        io-uring@vger.kernel.org, kuba@kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, stefanha@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>
-Subject: Re: [syzbot] [net?] [virt?] [io-uring?] [kvm?] BUG: soft lockup in
- vsock_connect
-Message-ID: <ZBUGp5bvNuE3sK5g@bullseye>
-References: <00000000000075bebb05f79acfde@google.com>
- <CAGxU2F4jxdzK8Y-jaoKRaX_bDhoMtomOT6TyMek+un-Bp8RX3g@mail.gmail.com>
+        Fri, 24 Mar 2023 19:05:48 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54113144A2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:05:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679699145; x=1711235145;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mjuZ5Z6nrEyR/rT5pe8lgCWtmKcz5KNl/7wphOBynHM=;
+  b=n8jhk2Ce2b4E+uckChLZKKrTa8zFKxzVUGa2Ddh5cUcHzF26REzgCZil
+   IqFQuh7J6NRsMTHwjPCCZ966LsyH0YhGro6o4yeAqJDJNmhYq2bwWAzcD
+   69h6qtikvCgElNFby4H4BmNMFSW+s/ueEKYO6i9zaWVEN5Qejf8F2DuBR
+   PsDZtbOOgaIjJzJAW+1CtqkmXa20ErsrKPN7B31+MWWn7Xb14YvtwKxPm
+   q88e3DY2i62ArqDsWp+pnQ6FcswXvkz4xl8M5j7tsZaAdYsRE/ghW+cmI
+   289b5tApiDlWGv5ypQCVPphBYMLg5gm6PKDwAs9qY2IiXyY//Z9p0q7cq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="404829489"
+X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
+   d="scan'208";a="404829489"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 16:05:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="752051124"
+X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
+   d="scan'208";a="752051124"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 24 Mar 2023 16:05:42 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfqTY-000Fjh-2c;
+        Fri, 24 Mar 2023 23:05:36 +0000
+Date:   Sat, 25 Mar 2023 07:05:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/fsfa3 17/17] include/asm-generic/rwonce.h:44:26:
+ warning: array subscript 0 is outside array bounds of 'const volatile
+ int[0]'
+Message-ID: <202303250644.7mtCknON-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGxU2F4jxdzK8Y-jaoKRaX_bDhoMtomOT6TyMek+un-Bp8RX3g@mail.gmail.com>
-X-Spam-Status: No, score=1.9 required=5.0 tests=DATE_IN_PAST_96_XX,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 09:38:38AM +0100, Stefano Garzarella wrote:
-> Hi Bobby,
-> FYI we have also this one, but it seems related to
-> syzbot+befff0a9536049e7902e@syzkaller.appspotmail.com
-> 
-> Thanks,
-> Stefano
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fsfa3
+head:   2226ddb6a576f7f89a8a06a3f89b68f5109ded53
+commit: 2226ddb6a576f7f89a8a06a3f89b68f5109ded53 [17/17] Makefile: Enable -Wstringop-overflow and -Warray-bounds
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20230325/202303250644.7mtCknON-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=2226ddb6a576f7f89a8a06a3f89b68f5109ded53
+        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+        git fetch --no-tags gustavoars testing/fsfa3
+        git checkout 2226ddb6a576f7f89a8a06a3f89b68f5109ded53
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/kernel/ fs/autofs/ fs/cifs/ kernel/
 
-Got it, I'll look into it.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303250644.7mtCknON-lkp@intel.com/
 
-Best,
-Bobby
+All warnings (new ones prefixed by >>):
 
-> 
-> On Fri, Mar 24, 2023 at 1:52 AM syzbot
-> <syzbot+0bc015ebddc291a97116@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    fe15c26ee26e Linux 6.3-rc1
-> > git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=1577c97ec80000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=7573cbcd881a88c9
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=0bc015ebddc291a97116
-> > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> > userspace arch: arm64
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1077c996c80000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17e38929c80000
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/89d41abd07bd/disk-fe15c26e.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/fa75f5030ade/vmlinux-fe15c26e.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/590d0f5903ee/Image-fe15c26e.gz.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+0bc015ebddc291a97116@syzkaller.appspotmail.com
-> >
-> > watchdog: BUG: soft lockup - CPU#0 stuck for 27s! [syz-executor244:6747]
-> > Modules linked in:
-> > irq event stamp: 6033
-> > hardirqs last  enabled at (6032): [<ffff8000124604ac>] __exit_to_kernel_mode arch/arm64/kernel/entry-common.c:84 [inline]
-> > hardirqs last  enabled at (6032): [<ffff8000124604ac>] exit_to_kernel_mode+0xe8/0x118 arch/arm64/kernel/entry-common.c:94
-> > hardirqs last disabled at (6033): [<ffff80001245e188>] __el1_irq arch/arm64/kernel/entry-common.c:468 [inline]
-> > hardirqs last disabled at (6033): [<ffff80001245e188>] el1_interrupt+0x24/0x68 arch/arm64/kernel/entry-common.c:486
-> > softirqs last  enabled at (616): [<ffff80001066ca80>] spin_unlock_bh include/linux/spinlock.h:395 [inline]
-> > softirqs last  enabled at (616): [<ffff80001066ca80>] lock_sock_nested+0xe8/0x138 net/core/sock.c:3480
-> > softirqs last disabled at (618): [<ffff8000122dbcfc>] spin_lock_bh include/linux/spinlock.h:355 [inline]
-> > softirqs last disabled at (618): [<ffff8000122dbcfc>] virtio_transport_purge_skbs+0x11c/0x500 net/vmw_vsock/virtio_transport_common.c:1372
-> > CPU: 0 PID: 6747 Comm: syz-executor244 Not tainted 6.3.0-rc1-syzkaller-gfe15c26ee26e #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-> > pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > pc : __sanitizer_cov_trace_pc+0xc/0x8c kernel/kcov.c:203
-> > lr : virtio_transport_purge_skbs+0x19c/0x500 net/vmw_vsock/virtio_transport_common.c:1374
-> > sp : ffff80001e787890
-> > x29: ffff80001e7879e0 x28: 1ffff00003cf0f2a x27: ffff80001a487a60
-> > x26: ffff80001e787950 x25: ffff0000ce2d3b80 x24: ffff80001a487a78
-> > x23: 1ffff00003490f4c x22: ffff80001a29c1a8 x21: dfff800000000000
-> > x20: ffff80001a487a60 x19: ffff80001e787940 x18: 1fffe000368951b6
-> > x17: ffff800015cdd000 x16: ffff8000085110b0 x15: 0000000000000000
-> > x14: 1ffff00002b9c0b2 x13: dfff800000000000 x12: ffff700003cf0efc
-> > x11: ff808000122dbee8 x10: 0000000000000000 x9 : ffff8000122dbee8
-> > x8 : ffff0000ce511b40 x7 : ffff8000122dbcfc x6 : 0000000000000000
-> > x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff80000832d758
-> > x2 : 0000000000000001 x1 : 0000000000000000 x0 : 0000000000000000
-> > Call trace:
-> >  get_current arch/arm64/include/asm/current.h:19 [inline]
-> >  __sanitizer_cov_trace_pc+0xc/0x8c kernel/kcov.c:206
-> >  vsock_loopback_cancel_pkt+0x28/0x3c net/vmw_vsock/vsock_loopback.c:48
-> >  vsock_transport_cancel_pkt net/vmw_vsock/af_vsock.c:1284 [inline]
-> >  vsock_connect+0x6b8/0xaec net/vmw_vsock/af_vsock.c:1426
-> >  __sys_connect_file net/socket.c:2004 [inline]
-> >  __sys_connect+0x268/0x290 net/socket.c:2021
-> >  __do_sys_connect net/socket.c:2031 [inline]
-> >  __se_sys_connect net/socket.c:2028 [inline]
-> >  __arm64_sys_connect+0x7c/0x94 net/socket.c:2028
-> >  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-> >  invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
-> >  el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
-> >  do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
-> >  el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
-> >  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-> >  el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-> >
-> >
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > syzbot can test patches for this issue, for details see:
-> > https://goo.gl/tpsmEJ#testing-patches
-> >
-> 
+   kernel/exit.c:1915:32: warning: no previous prototype for 'abort' [-Wmissing-prototypes]
+    1915 | __weak __function_aligned void abort(void)
+         |                                ^~~~~
+   In file included from arch/s390/include/asm/rwonce.h:29,
+                    from include/linux/compiler.h:247,
+                    from arch/s390/include/asm/bug.h:5,
+                    from include/linux/bug.h:5,
+                    from include/linux/mmdebug.h:5,
+                    from include/linux/mm.h:6,
+                    from kernel/exit.c:8:
+   In function 'preempt_count',
+       inlined from 'make_task_dead' at kernel/exit.c:938:6:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from 'make_task_dead' at kernel/exit.c:938:6:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from 'make_task_dead' at kernel/exit.c:938:6:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from 'make_task_dead' at kernel/exit.c:948:6:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from 'make_task_dead' at kernel/exit.c:949:3:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count_set',
+       inlined from 'make_task_dead' at kernel/exit.c:952:3:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:25:23: note: in expansion of macro 'READ_ONCE'
+      25 |                 old = READ_ONCE(S390_lowcore.preempt_count);
+         |                       ^~~~~~~~~
+   In file included from arch/s390/include/asm/bitops.h:39,
+                    from include/linux/bitops.h:68,
+                    from include/linux/thread_info.h:27,
+                    from arch/s390/include/asm/preempt.h:6,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:56,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:7,
+                    from include/linux/mm.h:7:
+   In function '__atomic_cmpxchg',
+       inlined from 'preempt_count_set' at arch/s390/include/asm/preempt.h:28:11,
+       inlined from 'make_task_dead' at kernel/exit.c:952:3:
+   arch/s390/include/asm/atomic_ops.h:159:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+     159 |         asm volatile(
+         |         ^~~
+   arch/s390/include/asm/atomic_ops.h:159:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+--
+   In file included from arch/s390/include/asm/rwonce.h:29,
+                    from include/linux/compiler.h:247,
+                    from include/linux/build_bug.h:5,
+                    from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/smp.h:12,
+                    from include/linux/kernel_stat.h:5,
+                    from kernel/softirq.c:13:
+   In function 'preempt_count',
+       inlined from 'tasklet_kill' at kernel/softirq.c:878:6:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from 'tasklet_kill' at kernel/softirq.c:878:6:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from 'tasklet_kill' at kernel/softirq.c:878:6:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from '_local_bh_enable' at kernel/softirq.c:368:2:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from '__local_bh_enable' at kernel/softirq.c:353:6,
+       inlined from '_local_bh_enable' at kernel/softirq.c:369:2:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from '__local_bh_enable' at kernel/softirq.c:356:6,
+       inlined from '_local_bh_enable' at kernel/softirq.c:369:2:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In file included from arch/s390/include/asm/bitops.h:39,
+                    from include/linux/bitops.h:68,
+                    from include/linux/kernel.h:22,
+                    from include/linux/cpumask.h:10,
+                    from include/linux/smp.h:13:
+   In function '__atomic_add',
+       inlined from '__preempt_count_add' at arch/s390/include/asm/preempt.h:59:2,
+       inlined from '__preempt_count_sub' at arch/s390/include/asm/preempt.h:64:2,
+       inlined from '__local_bh_enable' at kernel/softirq.c:359:2,
+       inlined from '_local_bh_enable' at kernel/softirq.c:369:2:
+   arch/s390/include/asm/atomic_ops.h:52:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+      52 |         asm volatile(                                                   \
+         |         ^~~
+   arch/s390/include/asm/atomic_ops.h:61:9: note: in expansion of macro '__ATOMIC_OP'
+      61 |         __ATOMIC_OP(op_name, op_type, op_string, "\n")                  \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:64:1: note: in expansion of macro '__ATOMIC_OPS'
+      64 | __ATOMIC_OPS(__atomic_add, int, "laa")
+         | ^~~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:52:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+      52 |         asm volatile(                                                   \
+         |         ^~~
+   arch/s390/include/asm/atomic_ops.h:61:9: note: in expansion of macro '__ATOMIC_OP'
+      61 |         __ATOMIC_OP(op_name, op_type, op_string, "\n")                  \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:64:1: note: in expansion of macro '__ATOMIC_OPS'
+      64 | __ATOMIC_OPS(__atomic_add, int, "laa")
+         | ^~~~~~~~~~~~
+   In function '__atomic_add',
+       inlined from '__preempt_count_add' at arch/s390/include/asm/preempt.h:59:2,
+       inlined from '__local_bh_disable_ip' at include/linux/bottom_half.h:13:2,
+       inlined from 'softirq_handle_begin' at kernel/softirq.c:409:2,
+       inlined from '__do_softirq' at kernel/softirq.c:547:2:
+   arch/s390/include/asm/atomic_ops.h:52:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+      52 |         asm volatile(                                                   \
+         |         ^~~
+   arch/s390/include/asm/atomic_ops.h:61:9: note: in expansion of macro '__ATOMIC_OP'
+      61 |         __ATOMIC_OP(op_name, op_type, op_string, "\n")                  \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:64:1: note: in expansion of macro '__ATOMIC_OPS'
+      64 | __ATOMIC_OPS(__atomic_add, int, "laa")
+         | ^~~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:52:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+      52 |         asm volatile(                                                   \
+         |         ^~~
+   arch/s390/include/asm/atomic_ops.h:61:9: note: in expansion of macro '__ATOMIC_OP'
+      61 |         __ATOMIC_OP(op_name, op_type, op_string, "\n")                  \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:64:1: note: in expansion of macro '__ATOMIC_OPS'
+      64 | __ATOMIC_OPS(__atomic_add, int, "laa")
+         | ^~~~~~~~~~~~
+   In function 'preempt_count',
+       inlined from '__do_softirq' at kernel/softirq.c:566:16:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from '__do_softirq' at kernel/softirq.c:573:7:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from '__do_softirq' at kernel/softirq.c:574:4:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count_set',
+       inlined from '__do_softirq' at kernel/softirq.c:577:4:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:25:23: note: in expansion of macro 'READ_ONCE'
+      25 |                 old = READ_ONCE(S390_lowcore.preempt_count);
+         |                       ^~~~~~~~~
+   In function '__atomic_cmpxchg',
+       inlined from 'preempt_count_set' at arch/s390/include/asm/preempt.h:28:11,
+       inlined from '__do_softirq' at kernel/softirq.c:577:4:
+   arch/s390/include/asm/atomic_ops.h:159:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+     159 |         asm volatile(
+         |         ^~~
+   arch/s390/include/asm/atomic_ops.h:159:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+   In function 'preempt_count',
+       inlined from '__local_bh_enable' at kernel/softirq.c:353:6,
+       inlined from 'softirq_handle_end' at kernel/softirq.c:414:2,
+       inlined from '__do_softirq' at kernel/softirq.c:600:2:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from '__local_bh_enable' at kernel/softirq.c:356:6,
+       inlined from 'softirq_handle_end' at kernel/softirq.c:414:2,
+       inlined from '__do_softirq' at kernel/softirq.c:600:2:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function '__atomic_add',
+       inlined from '__preempt_count_add' at arch/s390/include/asm/preempt.h:59:2,
+       inlined from '__preempt_count_sub' at arch/s390/include/asm/preempt.h:64:2,
+       inlined from '__local_bh_enable' at kernel/softirq.c:359:2,
+       inlined from 'softirq_handle_end' at kernel/softirq.c:414:2,
+       inlined from '__do_softirq' at kernel/softirq.c:600:2:
+   arch/s390/include/asm/atomic_ops.h:52:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+      52 |         asm volatile(                                                   \
+         |         ^~~
+   arch/s390/include/asm/atomic_ops.h:61:9: note: in expansion of macro '__ATOMIC_OP'
+      61 |         __ATOMIC_OP(op_name, op_type, op_string, "\n")                  \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:64:1: note: in expansion of macro '__ATOMIC_OPS'
+      64 | __ATOMIC_OPS(__atomic_add, int, "laa")
+         | ^~~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:52:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+      52 |         asm volatile(                                                   \
+         |         ^~~
+   arch/s390/include/asm/atomic_ops.h:61:9: note: in expansion of macro '__ATOMIC_OP'
+      61 |         __ATOMIC_OP(op_name, op_type, op_string, "\n")                  \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:64:1: note: in expansion of macro '__ATOMIC_OPS'
+      64 | __ATOMIC_OPS(__atomic_add, int, "laa")
+         | ^~~~~~~~~~~~
+   In function 'preempt_count',
+       inlined from 'softirq_handle_end' at kernel/softirq.c:415:2,
+       inlined from '__do_softirq' at kernel/softirq.c:600:2:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from 'softirq_handle_end' at kernel/softirq.c:415:2,
+       inlined from '__do_softirq' at kernel/softirq.c:600:2:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from 'softirq_handle_end' at kernel/softirq.c:415:2,
+       inlined from '__do_softirq' at kernel/softirq.c:600:2:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from 'do_softirq' at kernel/softirq.c:464:6:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from 'do_softirq' at kernel/softirq.c:464:6:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from 'do_softirq' at kernel/softirq.c:464:6:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from '__local_bh_enable_ip' at kernel/softirq.c:375:2:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from '__local_bh_enable_ip' at kernel/softirq.c:383:6:
+>> include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function '__atomic_add',
+       inlined from '__preempt_count_add' at arch/s390/include/asm/preempt.h:59:2,
+       inlined from '__preempt_count_sub' at arch/s390/include/asm/preempt.h:64:2,
+       inlined from '__local_bh_enable_ip' at kernel/softirq.c:389:2:
+   arch/s390/include/asm/atomic_ops.h:52:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+      52 |         asm volatile(                                                   \
+         |         ^~~
+   arch/s390/include/asm/atomic_ops.h:61:9: note: in expansion of macro '__ATOMIC_OP'
+      61 |         __ATOMIC_OP(op_name, op_type, op_string, "\n")                  \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:64:1: note: in expansion of macro '__ATOMIC_OPS'
+      64 | __ATOMIC_OPS(__atomic_add, int, "laa")
+         | ^~~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:52:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+      52 |         asm volatile(                                                   \
+         |         ^~~
+   arch/s390/include/asm/atomic_ops.h:61:9: note: in expansion of macro '__ATOMIC_OP'
+      61 |         __ATOMIC_OP(op_name, op_type, op_string, "\n")                  \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:64:1: note: in expansion of macro '__ATOMIC_OPS'
+      64 | __ATOMIC_OPS(__atomic_add, int, "laa")
+         | ^~~~~~~~~~~~
+   In function 'preempt_count',
+       inlined from '__local_bh_enable_ip' at kernel/softirq.c:391:6:
+   include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from '__local_bh_enable_ip' at kernel/softirq.c:391:6:
+   include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from '__local_bh_enable_ip' at kernel/softirq.c:391:6:
+   include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function '__atomic_add_const',
+       inlined from '__preempt_count_add' at arch/s390/include/asm/preempt.h:55:4,
+       inlined from '__preempt_count_sub' at arch/s390/include/asm/preempt.h:64:2,
+       inlined from '__local_bh_enable_ip' at kernel/softirq.c:399:2:
+   arch/s390/include/asm/atomic_ops.h:80:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+      80 |         asm volatile(                                                   \
+         |         ^~~
+   arch/s390/include/asm/atomic_ops.h:87:9: note: in expansion of macro '__ATOMIC_CONST_OP'
+      87 |         __ATOMIC_CONST_OP(op_name, op_type, op_string, "\n")            \
+         |         ^~~~~~~~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:90:1: note: in expansion of macro '__ATOMIC_CONST_OPS'
+      90 | __ATOMIC_CONST_OPS(__atomic_add_const, int, "asi")
+         | ^~~~~~~~~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:80:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+      80 |         asm volatile(                                                   \
+         |         ^~~
+   arch/s390/include/asm/atomic_ops.h:87:9: note: in expansion of macro '__ATOMIC_CONST_OP'
+      87 |         __ATOMIC_CONST_OP(op_name, op_type, op_string, "\n")            \
+         |         ^~~~~~~~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:90:1: note: in expansion of macro '__ATOMIC_CONST_OPS'
+      90 | __ATOMIC_CONST_OPS(__atomic_add_const, int, "asi")
+         | ^~~~~~~~~~~~~~~~~~
+   In function '__atomic_add',
+       inlined from '__preempt_count_add' at arch/s390/include/asm/preempt.h:59:2,
+       inlined from 'irq_enter_rcu' at kernel/softirq.c:609:2:
+   arch/s390/include/asm/atomic_ops.h:52:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+      52 |         asm volatile(                                                   \
+         |         ^~~
+   arch/s390/include/asm/atomic_ops.h:61:9: note: in expansion of macro '__ATOMIC_OP'
+      61 |         __ATOMIC_OP(op_name, op_type, op_string, "\n")                  \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:64:1: note: in expansion of macro '__ATOMIC_OPS'
+      64 | __ATOMIC_OPS(__atomic_add, int, "laa")
+         | ^~~~~~~~~~~~
+   arch/s390/include/asm/atomic_ops.h:52:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds]
+      52 |         asm volatile(                                                   \
+         |         ^~~
+..
+
+
+vim +44 include/asm-generic/rwonce.h
+
+e506ea451254ab Will Deacon 2019-10-15  28  
+e506ea451254ab Will Deacon 2019-10-15  29  /*
+e506ea451254ab Will Deacon 2019-10-15  30   * Yes, this permits 64-bit accesses on 32-bit architectures. These will
+e506ea451254ab Will Deacon 2019-10-15  31   * actually be atomic in some cases (namely Armv7 + LPAE), but for others we
+e506ea451254ab Will Deacon 2019-10-15  32   * rely on the access being split into 2x32-bit accesses for a 32-bit quantity
+e506ea451254ab Will Deacon 2019-10-15  33   * (e.g. a virtual address) and a strong prevailing wind.
+e506ea451254ab Will Deacon 2019-10-15  34   */
+e506ea451254ab Will Deacon 2019-10-15  35  #define compiletime_assert_rwonce_type(t)					\
+e506ea451254ab Will Deacon 2019-10-15  36  	compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),	\
+e506ea451254ab Will Deacon 2019-10-15  37  		"Unsupported access size for {READ,WRITE}_ONCE().")
+e506ea451254ab Will Deacon 2019-10-15  38  
+e506ea451254ab Will Deacon 2019-10-15  39  /*
+e506ea451254ab Will Deacon 2019-10-15  40   * Use __READ_ONCE() instead of READ_ONCE() if you do not require any
+3c9184109e78ea Will Deacon 2019-10-30  41   * atomicity. Note that this may result in tears!
+e506ea451254ab Will Deacon 2019-10-15  42   */
+b78b331a3f5c07 Will Deacon 2019-10-15  43  #ifndef __READ_ONCE
+e506ea451254ab Will Deacon 2019-10-15 @44  #define __READ_ONCE(x)	(*(const volatile __unqual_scalar_typeof(x) *)&(x))
+b78b331a3f5c07 Will Deacon 2019-10-15  45  #endif
+e506ea451254ab Will Deacon 2019-10-15  46  
+
+:::::: The code at line 44 was first introduced by commit
+:::::: e506ea451254ab17e0bf918ca36232fec2a9b10c compiler.h: Split {READ,WRITE}_ONCE definitions out into rwonce.h
+
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
