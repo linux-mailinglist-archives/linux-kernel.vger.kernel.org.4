@@ -2,60 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E0C6C8546
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D880A6C854E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjCXSnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 14:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
+        id S231150AbjCXSpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 14:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjCXSnI (ORCPT
+        with ESMTP id S229943AbjCXSpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 14:43:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A083EF1;
-        Fri, 24 Mar 2023 11:43:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99CFCB822D8;
-        Fri, 24 Mar 2023 18:43:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B77FBC433D2;
-        Fri, 24 Mar 2023 18:43:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679683383;
-        bh=XOze5xfEaeXG7tl2QVLNj58QJByNYir7fp37aPWzP6Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cKA5L+BzmVtm/e+7vqfWHta8ZjFCEMHcmGkC42MkbV+22fxCEICjEWp2dIthTnWUo
-         t5srVhlVEUMDUrOsa+CM3OpOZ9sX48M62UvRsvp/14Aj54FeEnVLiHak83Qt1i+xZ6
-         qm4bpfjbe99zbuqkLwt6/lmJeSYJRFTFqeWBlTJyp4+StCX3AUFQMV+DUOnEehm/Kg
-         YUTYaDOkuJ3n0HdJrzSbfQlC2hpsot3drg39g3nClWDiPT0NOGeqPle4Djr5hgYtoG
-         FBOMF6irBQz0hcTG3fTJ4YUYCP3nfCIcCvHFfIpudylVKVovxO9LYJKCaY81K0TL4h
-         s7oSEK3agLRxw==
-Date:   Fri, 24 Mar 2023 18:42:59 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v14 1/2] pwm: add microchip soft ip corePWM driver
-Message-ID: <142f0d8d-5814-4747-bfac-2479fcee92d3@spud>
-References: <20230306094858.1614819-1-conor.dooley@microchip.com>
- <20230306094858.1614819-2-conor.dooley@microchip.com>
- <20230322105536.kgt3ffowefqlg6eu@pengutronix.de>
- <48c7dbdc-04a2-42de-964f-fd86cf070797@spud>
- <20230323091409.rdi4bqrcsfvxnht5@pengutronix.de>
+        Fri, 24 Mar 2023 14:45:22 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180FD10F;
+        Fri, 24 Mar 2023 11:45:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679683521; x=1711219521;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=83Lc9CrAWs2RQDU4wewaehgjBTQlOty5Dvxf+sSKZFY=;
+  b=hwz6iwgBQs08LcrSv0SmMU5AnCy9ogtluYgWXGjR/Eoc9YFuh+6EQXkj
+   DIcGEtHLl9d6YK+pK3IhNwlk9he+kcsk+sUXh5b/einLLNr2JSEbVldqH
+   9iyvwUAVv7ZRYrsGy3nbRlj4Pa/EF8fWi0JbW3xtmLN+2zk29ynJlsOjU
+   eRXOcFIMwDMtY0fRDSxJxmsaVCtidapVgm2fUpfR6eRqsRsevWvMz8GMV
+   /QzBqsFIrVK3zgPgbWlvnZPkQk+JabLYk8QcKxeTfNt4VwUmR9qRjmg+j
+   LNSi2YX+by6c4en0yuisjNKccCKVJ9co7koIrezhNG9CORoeaYxCNzkma
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="323738080"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="323738080"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 11:45:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="771986377"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="771986377"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Mar 2023 11:45:20 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 24 Mar 2023 11:45:19 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Fri, 24 Mar 2023 11:45:19 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.176)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Fri, 24 Mar 2023 11:45:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HL2THX/jf5gEfwHy63eO4rXy9dYjcD165HDiuG2tCoGCAjHVWCm1kUwGsAngpW5AwQ6UfO5yPfRWk4o/XAS1fcAsU2NKmaXm0hkbVpUKhhboVSeLmC1n+YnLDqpNc/DSdSt3iJWho4G7CZhjzfjj5jUpLL/ho1sjeuUJ2nRgmYiJ1WVRPWXjPZo5GgzUUzhE/mW4nvHBL/EVB1PluK8z8AXgFMlkMgz1aw4W47BqCJW1P01aLT2DtAtkAQO3D35ElIAJu7JKc9/hWiaub7s6d4h3D+ryF0BuMmsDPbskbZewv0YFf5GnSSlmPSCrhkQ1wUYa4S3I5txkrv/bwu+kgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Iji4LtQdzdkI7kp+3oRGWMGjYb2vJfifCRWDFZh4pAE=;
+ b=mZkl1dSXIb7XhWdm+6h2g5MNMfA38XevFbIa6SaGd9o0AGzXxH1L/JXW8lM0RYsiC8Z937fSSgoCDJPlejZ2WU3V7b7wGDgBU9osVQ+kbMhQymkf6aXaLDnswUgFBsLnuz3PqYpqVSJoH19LBwGRu4wdK6rrKx4/mMiCja+AJr9k85p+oPKxv4uLJKAnLlQUEMKDpEjL3QgAdQPklg/c6brmkf6ppuWGw6991f4GaIwwvWf3jwcLq3/HaDNjC+AHRVrFIW1CGIVn+oWcX357gFDIQjprnLd+gIsJ5kacsRJX0tgIXqFzttBjo/R2e6nvtDBYXLwlpiU1w+hMZqowng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com (2603:10b6:303:192::22)
+ by DS7PR11MB7952.namprd11.prod.outlook.com (2603:10b6:8:eb::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.38; Fri, 24 Mar 2023 18:45:17 +0000
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::9121:8fa8:e7d9:8e46]) by MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::9121:8fa8:e7d9:8e46%8]) with mapi id 15.20.6178.038; Fri, 24 Mar 2023
+ 18:45:17 +0000
+Message-ID: <04bef83e-8679-d8f9-1f11-e55a2e5f5b58@intel.com>
+Date:   Fri, 24 Mar 2023 19:45:07 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 26/38] pnp: add HAS_IOPORT dependencies
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Arnd Bergmann <arnd@arndb.de>, Jaroslav Kysela <perex@perex.cz>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, Arnd Bergmann <arnd@kernel.org>,
+        <linux-acpi@vger.kernel.org>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+ <20230314121216.413434-27-schnelle@linux.ibm.com>
+ <CAJZ5v0gYGkbUk4uFXgidMaRBniwiXpizZWwMGixeNNejeZjPzg@mail.gmail.com>
+ <CAJZ5v0gHFA_BgLuCx=Eb3J5D7f7j8kV3Pthqy3jAfpavY6UMuQ@mail.gmail.com>
+ <2bcabfceab658ae62bf854e5fdaf5bc916481359.camel@linux.ibm.com>
+Content-Language: en-US
+From:   "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
+In-Reply-To: <2bcabfceab658ae62bf854e5fdaf5bc916481359.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P302CA0009.GBRP302.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c2::17) To MW5PR11MB5810.namprd11.prod.outlook.com
+ (2603:10b6:303:192::22)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="8cibvK/RgMebX5pn"
-Content-Disposition: inline
-In-Reply-To: <20230323091409.rdi4bqrcsfvxnht5@pengutronix.de>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW5PR11MB5810:EE_|DS7PR11MB7952:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3fbf6668-874a-4d96-00f7-08db2c97e967
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XK/HuChKqYVzvhPcjwX+AFRlrZQxLoiZdDjSQrtzdKIxp3WVIvJRbMWy9ULxt3Q2wBRBsQHyXpdHFEDcRvpxCJzPkkPsNmM8NmlyRigTsiIEAYiPZMieplKsFiRzXOXwAcJTLTMcGLGRJCurJW6G7De8xLXhZn4FedFYoQvKcte5ThP9UQd78Z8EiApAegT/7riJW8WNy5Wxsz0/wlyqYc20EP1mFKvT5az8Qs/F3y40mhVx4nTMUGfqCk89aMQ5kuD+JIhH1vXkrL8RKCXyk1EtzWU3N8agrHWQFqXTvpyUEEYGqGGz61F7j3zqX/vpLEwM8uWZFEbFHXCDZJEvACTl2F3pa/HE2cNIvmKfYwtH5I5mEcf21eDZddOsK/01xjT1EkcMMglMv/tyPGPDgnO845jFMpcm3V2tFR5a05HjG/oqjq1X8vDWRA7K7c0yx4hQ6zz755CcnNjt4Lv7JFStA8fzOCG79idymo8eFuCdPTY+SLdxrEYdKge00v+wVztsz9UxcVtazmBWXoFwBDlj8jtFU525Szi6VhidrOzo7y8GdVXt2p8Tum4T9cmOuStmPbiPPbK0ioYDACp5pVAaenglEKazvw9vMcBl/Q49OzC5I9q9fFfbbYF6eKcYa2KRu05bBc8XNgz3KKulHhDxrMNbzuqUyDOZTQ8HiwPrdsZraht1Fg+XnwWYA49k0ns9dKngCgaE59UCRfv6/oZsj7bapn/G5Y262XqNg+Y=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5810.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(396003)(346002)(366004)(376002)(451199021)(6486002)(36756003)(8676002)(966005)(38100700002)(31686004)(66556008)(54906003)(2906002)(66946007)(41300700001)(5660300002)(7416002)(82960400001)(316002)(6666004)(110136005)(26005)(6512007)(6506007)(8936002)(2616005)(83380400001)(53546011)(4326008)(31696002)(86362001)(66476007)(478600001)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ck1KUjNHcUhacVkzTFJpY2hMZ3pQUUlJc2YrYlQrK1pmRnhDYUNlVlJWWUtp?=
+ =?utf-8?B?WnkxQVpSRHgzUlN2R0plWEpqTjk3SHJTdkRZZmh1TnhYenU3RmR4NUw0dURz?=
+ =?utf-8?B?cEVhVGZnQTBkZUFuQlRULy8wTUpDNTlzTGlHVXJwMG5sVnJQV29sNW5QcElR?=
+ =?utf-8?B?UzRYaUVWbWQ3b1NBNVE4R0psZDNTaGpvbVNyUWl1RVpQQ3owMVEvNGt1Y0oz?=
+ =?utf-8?B?dzN2ZWpUZkpmcFkyL0MrN2pjN1lJQ1dNN2M5WFNjWlA4ekVHZzBOWHZYd1ox?=
+ =?utf-8?B?SGRRczN3TjVnZythdUQ0TjdDK2l3a21ucmcxWVJicDRIRmxjNzJZek5aZXU3?=
+ =?utf-8?B?Mzg1OUxuNFZpdE0wWkx4VExrNU1keDRmcGIzRk5mcWYvSWNvQ2szb0krQlhJ?=
+ =?utf-8?B?dSsyN0diRmo1Vmp3bjdXaXVjMCtiK0RrRzM4cXpBMmtsRlV5Tk9MMWxUVHMw?=
+ =?utf-8?B?bktwcnk0VlNZajdGdmFBbHlwUXJQVEV4RzA0OGRnZks3R0o3bjNHSnByVnRP?=
+ =?utf-8?B?aVJGanAwT0V3Yit0NUU4eXIyZkJGYmVZUXhjZ2t4N3YrMDZyVi9WOW8wd2Zt?=
+ =?utf-8?B?SU9TZWR1c3FRVTh2emhwb2lJYmRicHY4R1BkdjZXaXNpcDNyaTI0Nmo2c2lK?=
+ =?utf-8?B?T1B0RHJFWEF4NGdJSTl6M012TWZyTS80eFBUWnJScmo0MzBaZG95U0N3UTFh?=
+ =?utf-8?B?bGJRODlxcEhxOS96RnNvT3BhVXcxMm9TL1Vzbno3ZkFNRmhQOE85SWVvNGV3?=
+ =?utf-8?B?VExsN0drOUJDcERNVVFJUUNKVldWRDBxdU54M2FXeUo5R1RZb1FkME4xS1R4?=
+ =?utf-8?B?SzB6ODRKaEJoYUJYeHJHWGpBdUFsNnB2cnhZK04yN3MvQUJGVXFFZkFubVMr?=
+ =?utf-8?B?OUJxdmVpUmZRMkNFeXVuS3BwY1pQTk00aFQ4amRvcGZ3RTVnWmFzTU1KZzZj?=
+ =?utf-8?B?Z1V3WTVmTXVCUm15T0hzcGwwUVozWCtKczZCTzRkR0k1Vm9wT3o1MkNKSlNX?=
+ =?utf-8?B?TDlpeTVzMGw5eEpTYk4xbTBwUGk2VEdyaHdUSFNMMnVTejRud3NFRjJMRHFx?=
+ =?utf-8?B?SUhLMDNOQ294RXJrY1dPUWVkOTBYbm0ya3E4Nytzc2gwdlErQ3ViTUpYaVpZ?=
+ =?utf-8?B?VjJ4cEVKbkc1TXlsbFBRWGdaSy9VQVFUTmFmOVB4UlVHNzNTeVVNMUY0OHF3?=
+ =?utf-8?B?cVpnbk54OFVUdVVKUU45elhHbENlU09iSm8zaUI2Y0pBLzh5RFVOWlN6c01U?=
+ =?utf-8?B?ZjRic0FxSWdIVWpGNDZ1ZVZTVUFnMVYzejRKTmxMRjlBc280NlUzSENtTXFs?=
+ =?utf-8?B?MU1WZTFEcU1xU0U0aUJZYllXSCttN1ZVd0V6aDh3RTZpL2VIUXFqeld1c090?=
+ =?utf-8?B?SGxVNCsrOXNjWktrMjFPalBVbWxsQUhuZjNES2wweXhDVlF2UEZFOWtMNnIx?=
+ =?utf-8?B?ZTdJN2RQclZ4alByREFlbjg0TFNva3U3bGEyQU5nOWZlaDMwOWUxbW52eTkz?=
+ =?utf-8?B?UU9TS2xaY1BhTSswSWtGVGdtYS8wOC81SWgyY0xYWDlQSHVvSGZyYitmYnhE?=
+ =?utf-8?B?Rjh1MzYwbW44SUlpYlp3Uk40OG9JSHZ6N1F1Qkd0am5zUXIzVmJoeTFnTnJy?=
+ =?utf-8?B?dFhubzdYVnZGSHJ0a2VFOHNyUUUxWlBaNUhnRDRIMDRtb3JKYkVwaFMyeUgr?=
+ =?utf-8?B?Y3hCY1JtUkZZWUplOFdpRXBzSlhSMllaRDBGaldkenNiM2pFc2YvMmIxTEtF?=
+ =?utf-8?B?a0NXYlo4RWJSdVFIeHAvVlZMZzFiZlVJT3ptVTFuclpDVTNkTldnWjZIdWVL?=
+ =?utf-8?B?cEdJNU1SZk1la3kzcEpJQWdCYlhUb2JrYkNUNWdsOTErcEM3SmR0b2JVREht?=
+ =?utf-8?B?b3lKOHhYOWJmMmpqb0RZaVZCVVVhWVhCOTZKaWsrbUZ4Tys3aHBGVTNJK2Jx?=
+ =?utf-8?B?VVVSMFk3TW1vQUR0N2lSTmFvQURVNWF0SXc1Nmh5d3NPZjhNRUFkeDBrQmsz?=
+ =?utf-8?B?UCtuSG9mT1R4aEdwSEVEeUJsdHI4NDJPbkZXWllFYUhaUXdtSWF1TjNVaWNa?=
+ =?utf-8?B?Z3liclJkQjNvclBvc3pZV25MSjFnRUNHQ0ZwYWlrV1d0Q1VRTnJpNDQySUpI?=
+ =?utf-8?B?NE16QjJKUk9zVDNFVE0vMDRjK3ZodThRS0w2WFM2bVlFZUw0ZWNHaGtIa0dP?=
+ =?utf-8?B?aHc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fbf6668-874a-4d96-00f7-08db2c97e967
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5810.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 18:45:17.4488
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JCyzffHJXhxL5kLf3eyBtA84lyR8t6I0/YJe3ZnqcCVn7Dv+fI8YUfZOju73dGmDeOWiQby7p9LDKyBQSyg1z5v9y46nj1IKpW/8sxLqegE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7952
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,274 +172,54 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---8cibvK/RgMebX5pn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 3/23/2023 1:55 PM, Niklas Schnelle wrote:
+> On Tue, 2023-03-21 at 14:56 +0100, Rafael J. Wysocki wrote:
+>> On Mon, Mar 20, 2023 at 6:37 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>> On Tue, Mar 14, 2023 at 1:13 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+>>>> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+>>>> not being declared. We thus need to depend on HAS_IOPORT even when
+>>>> compile testing only.
+>>>>
+>>>> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+>>>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+>>>> ---
+>>>>   drivers/pnp/isapnp/Kconfig | 2 +-
+>>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/pnp/isapnp/Kconfig b/drivers/pnp/isapnp/Kconfig
+>>>> index d0479a563123..79bd48f1dd94 100644
+>>>> --- a/drivers/pnp/isapnp/Kconfig
+>>>> +++ b/drivers/pnp/isapnp/Kconfig
+>>>> @@ -4,7 +4,7 @@
+>>>>   #
+>>>>   config ISAPNP
+>>>>          bool "ISA Plug and Play support"
+>>>> -       depends on ISA || COMPILE_TEST
+>>>> +       depends on ISA || (HAS_IOPORT && COMPILE_TEST)
+>> This breaks code selecting ISAPNP and not depending on it.  See
+>> https://lore.kernel.org/linux-acpi/202303211932.5gtCVHCz-lkp@intel.com/T/#u
+>> for example.
+>>
+>> I'm dropping the patch now, please fix and resend.
+>>
+> Sorry if this wasn't super clear but all patches in this series depend
+> on patch 1 which introduces the HAS_IOPORT Kconfig option. There's
+> really two options, either the whole series goes via e.g. Arnd's tree
+> at once or we first only merge patch 1 and then add the rest per
+> subsystem until finally the last patch can remove inb()/outb() when
+> HAS_IOPORT is unset.
 
-On Thu, Mar 23, 2023 at 10:14:09AM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> On Wed, Mar 22, 2023 at 10:49:40PM +0000, Conor Dooley wrote:
-> > On Wed, Mar 22, 2023 at 11:55:36AM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> > > On Mon, Mar 06, 2023 at 09:48:58AM +0000, Conor Dooley wrote:
-> > > > Add a driver that supports the Microchip FPGA "soft" PWM IP core.
+Well, it looks like you need to decide on the approach then and tell 
+people what it is.
 
-> > > > +static void mchp_core_pwm_calc_period(const struct pwm_state *stat=
-e, unsigned long clk_rate,
-> > > > +				      u16 *prescale, u16 *period_steps)
-> > > > +{
-> > > > +	u64 tmp;
-> > > > +
-> > > > +	/*
-> > > > +	 * Calculate the period cycles and prescale values.
-> > > > +	 * The registers are each 8 bits wide & multiplied to compute the=
- period
-> > > > +	 * using the formula:
-> > > > +	 *           (prescale + 1) * (period_steps + 1)
-> > > > +	 * period =3D -------------------------------------
-> > > > +	 *                      clk_rate
-> > > > +	 * so the maximum period that can be generated is 0x10000 times t=
-he
-> > > > +	 * period of the input clock.
-> > > > +	 * However, due to the design of the "hardware", it is not possib=
-le to
-> > > > +	 * attain a 100% duty cycle if the full range of period_steps is =
-used.
-> > > > +	 * Therefore period_steps is restricted to 0xFE and the maximum m=
-ultiple
-> > > > +	 * of the clock period attainable is 0xFF00.
-> > > > +	 */
-> > > > +	tmp =3D mul_u64_u64_div_u64(state->period, clk_rate, NSEC_PER_SEC=
-);
-> > > > +
-> > > > +	/*
-> > > > +	 * The hardware adds one to the register value, so decrement by o=
-ne to
-> > > > +	 * account for the offset
-> > > > +	 */
-> > > > +	if (tmp >=3D MCHPCOREPWM_PERIOD_MAX) {
-> > > > +		*prescale =3D MCHPCOREPWM_PRESCALE_MAX - 1;
-> > > > +		*period_steps =3D MCHPCOREPWM_PERIOD_STEPS_MAX - 1;
-> > > > +
-> > > > +		return;
-> > > > +	}
-> > > > +
-> > > > +	/*
-> > > > +	 * The optimal value for prescale can be calculated using the max=
-imum
-> > > > +	 * permitted value of period_steps, 0xff.
-> > >=20
-> > > I had to think about that one for a while. The maximal value for
-> > > (period_steps + 1) is 0xff with the reasoning above?! That's also what
-> > > the code uses.
-> >=20
-> > I've become really disenfranchised with these register/variable names.
-> > I feel like just changing them to disconnect the variables used for
-> > calculation from the register names a little, so that the "is there a +1
-> > needed here or not" stuff becomes a little clearer.
->=20
-> Full ack, I considered asking for that, but after some time I was in the
-> "I reviewed the patch today"-mode (which is quite similar to the mode
-> you described :-) and forgot. (Even in that mode the PREG_TO_VAL macro
-> annoyed me a bit.)
->=20
-> > It always makes sense to be when I am in an "I respun the patch today"
-> > mode, but by the time we're in the review stage I get muddled.
-> > God forbid I have to look at this in 10 years time.
-> >=20
-> > That said, there is a bit of a mistake here. The comment two above says
-> > "Therefore period_steps is restricted to 0xFE" when I'm capping things
-> > off. Some inaccuracies have probably snuck in during the various
-> > respins, and I think the comment above is "correct" but misleading, as
-> > it muddies the waters about variable versus register names.
->=20
-> I think it's sensible to only talk about either the register values or
-> the factors. I tend to think that talking about the register values is
-> easier at the end and recommend not to hide the +1 (or -1) in a macro.
-
-Yeah, I think the macro had value about 14 versions ago, but the number
-of users has dropped over the revisions.
-I think what I am going to to do for the next version is drop that
-macro, and only ever hold the registers values in variables.
-That had the advantage of making the maths in get_state() better match
-the comments that are now quite prevalent in the driver, as the +1s done
-there are more obvious.
-I'm loathe to link a git tree but, without changes to the period
-calculation logic, this is what it looks like w/ a consistent approach
-to what period_steps and prescale mean:
-https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/tree/driver=
-s/pwm/pwm-microchip-core.c?h=3Dpwm-dev-v15
-[I blindly pushed that before leaving work & without even building it, so
-there's probably some silly mistake in it, but that's besides the point
-of displaying variable/comment changes]
-
-=46rom the chopped out bits of the previous email:
-> Consider
->=20
-> 	clk_rate =3D 1000000
-> 	period =3D 64009000
->=20
-> then your code gives:
->=20
->               period * clk_rate
-> 	tmp =3D ----------------- =3D 64009
->                 NSEC_PER_SEC
->=20
-> and so *prescale =3D 251 and *period_steps =3D 253.=20
->=20
-> Wasn't the intention to pick *prescale =3D 250 and then
-> *period_steps =3D 255?
->=20
-> Depending on your semantics of "optimal", either (252, 252) or (250,
-> 255) is better than (251, 253). I think that means you shouldn't ignore
-> the -1?
-
-So, putting this one aside because it merits more thinking about.
-I went through and checked some arbitrary values of tmp, rather than
-dealing with "real" ones computed from frequencies I know are easily
-available for me to use in the FPGA bitstream I use to test this stuff.
-
-I think my "integer maths" truncation approach is not actually valid.
-Consider tmp =3D 255... *prescale gets computed as 255/(254 + 1) =3D 1, per=
- my
-algorithm. Then, *period_steps is 255/(1 + 1) - 1 =3D 127.
-The period is (1 + 1)(127 + 1), which is not 255.
-
-Or take tmp =3D 510. prescale is 510/(254 + 1) =3D 2. period_steps is then
-510/(2 + 1) - 1 =3D 169. period is (2 + 1)(169 + 1), which is 510. The
-calculated period is right, but that is not the "optimal" value!
-
-I think you're right in that I do actually need to consider the -1, and
-do a ceiling operation, when calculating prescale, IOW:
-	*prescale =3D ceil(div_u64(tmp, MCHPCOREPWM_PERIOD_STEPS_MAX + 1)) - 1;
-	*period_steps =3D div_u64(tmp, *prescale + 1) - 1;
-	[I know I can't actually call ceil()]
-
-That'd do the same thing as the truncation where
-div_u64(tmp, MCHPCOREPWM_PERIOD_STEPS_MAX + 1) is not a round number,
-but it improves the round number case, eg tmp =3D 510:
-prescale =3D 510/(254 + 1) - 1 =3D 1, period_steps =3D 510/(1 + 1) - 1 =3D =
-254
-period =3D (1 + 1)(254 + 1) =3D 510
-
-It does mean a zero period would need to be special cased, but I don't
-mind that.
-
-> One thing I think is strange is that with clk_rate =3D 1000001 and your
-> algorithm we get:
->=20
-> requested period =3D 1274998 ns -> real period =3D 1269998.73000127  (pre=
-scale =3D 4, period_steps =3D 253)
-> requested period =3D 1274999 ns -> real period =3D 1271998.728001272 (pre=
-scale =3D 5, period_steps =3D 211)
-
-This second one here, where tmp =3D 1275, is a good example of the above.
-With the ceil() change, this would be prescale =3D 4, period_steps =3D 254
-which I think makes more sense.
->=20
-> while 1271998.728001272 would be a better match for a request with
-> period =3D 1274998 than 1269998.73000127.
->=20
-> I spend too much time to think about that now. I'm unsure if this is
-> because the -1 is missing, or if there is a bug in the idea to pick a
-> small prescale to allow a big period_steps value (in combination with
-> the request to pick the biggest possible period).
-
-With the inconsistency fixed, I think getting the slightly less accurate
-period is a byproduct of prioritising the finegrainedness of the duty
-cycle.
-
-> Hmm, maybe you understand that better than me? I'll have to think about
-> it.
-
-[end of snip from the last mail]
-
->=20
-> Having said that here are my results of thinking a bit about how to
-> choose register values:
->=20
-> Let r(p) denote the period that is actually configured if p is
-> requested.
->=20
-> The nice properties we want (i.e. those a consumer might expect?) are:
->=20
->  a) =E2=88=80p: r(p) =E2=89=A4 p
->     i.e. never configure a bigger period than requested
->     (This is a bit arbitrary, but nice to get a consistent behaviour for
->     all drivers and easier to handle than requesting the nearest
->     possible period.)
->=20
->  b) =E2=88=80p, q: p =E2=89=A4 q =E2=9F=B9 r(p) =E2=89=A4 r(q)
->     i.e. monotonicity
->=20
->  c) =E2=88=80p: r(roundup(r(p))) =3D r(p)
->     i.e. idempotency
->=20
->  d) =E2=88=80p, q: r(p) =E2=89=A4 q =E2=9F=B9 r(p) =E2=89=A4 r(q)
->     i.e. pick the biggest possible period
->=20
-> (Sidenote: d) and a) imply b) and c))
->=20
-> If you always set period_steps to 0xfe
-> (in Python syntax:
->=20
-> 	tmp =3D p * clkrate // NSPS
-> 	period_steps =3D 0xfe
-> 	prescale =3D tmp // (period_steps + 1) - 1
->=20
-> ) you get this consistent behaviour.
->=20
-> This has the upside of being easy to implement and cheap to run.
-> Downside is that it's coarse and fails to implement periods that would
-> require e.g prescale =3D 0 and period_steps < 0xfe. As period_steps is
-> big, the domain to chose the duty cycle from is good.
-
-I want to maintain support for prescale =3D 0, so I'm not really
-interested in a computation that forsakes that.
-
-> If you pick period_steps and prescale such that
-> 	(period_steps + 1) * (prescale + 1)
-> is the maximal value that makes r(p) =E2=89=A4 p you have an increased ru=
-ntime
-> because you have to test multiple values for period_steps. I don't think
-> there is an algorithm without a loop to determine an optimal pair?!
-> Usually this gives a better match that the easy algorithm above for the
-> period, but the domain for duty_cycle is (usually) smaller.
-> I think we have a) and d) here, so that's good.
->=20
-> I think for most consumers a big domain for duty_cycle is more important
-> that a good match for the requested period. So I tend to recommend the
-> easy algorithm, but I'm not religious about that and open for other
-> opinion and reasoning.
-
-I'll be honest and say that I am getting a bit fatigued with the way
-that issues w/ the calculations keep cropping up. I'll put a bit of time
-into trying to figure out how to fix the tmp =3D 6400900 case that you
-mentioned above, but if it comes out in the wash that that is a facet of
-the way this stuff is computed, then I might be inclined to forge ahead
-without resolving it... I'd certainly want to explain in a comment
-somewhere (limitations section?) the point at which it starts getting
-less accurate though. I'll write a script to iterate through the values
-of tmp & see if the reason is obvious.
-
-I would like to keep (something resembling) the current simple
-implementation of the period calculation, as simplicity is a significant
-advantage! I do also like the strategy of trying to maximise the number
-of available duty cycle steps, I think it makes perfect sense to make
-that the goal.
-
-Thanks again for spending time on this Uwe,
-Conor.
+If I see an individual patch without context, this is quite hard to 
+figure out.
 
 
---8cibvK/RgMebX5pn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZB3vMwAKCRB4tDGHoIJi
-0v5sAP9F52YEeYkCvuFFznLdZBSOAXFAZRJDNY5M+nI84VWhlQD9E9b4qGV8WyM2
-DHiICd/Jbb+eNHoN2y6iteQpkxrW8QE=
-=tdFS
------END PGP SIGNATURE-----
-
---8cibvK/RgMebX5pn--
+> That said I'm a little unsure about the linked error if that is just
+> due to missing HAS_IOPORT or something else. I'll still have to try
+> with the instructions in that mail and will report back if it is
+> something else.
+>
+> Thanks,
+> Niklas
