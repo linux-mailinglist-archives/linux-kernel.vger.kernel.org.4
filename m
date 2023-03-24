@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB976C82A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284216C82A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:52:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbjCXQvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
+        id S231631AbjCXQwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCXQvB (ORCPT
+        with ESMTP id S229441AbjCXQwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:51:01 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530C1136EA
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:51:00 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id l9so1183826iln.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:51:00 -0700 (PDT)
+        Fri, 24 Mar 2023 12:52:42 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A2720A04
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:52:41 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id u10so2352842plz.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:52:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1679676659; x=1682268659;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R6W/+xSIy2LrHW9iOt6nruh+Qj6F+h5sXjXOMzQkKqc=;
-        b=TkwDD8j3zxa46H6s0Y2Cd+cqCjtL8QZFEo4pvrG3FhSyny7CcZlhoKAIPQdbaOhGxw
-         eQ1KcRtb/SlQnuljuraLGX38yLSYr67CiNWalVaUK7IPAyd3tUYuUM/JVdvdFrRFLGvr
-         pnofxGZMEjNxR5cU0YGOKaWS+LC59OL3ka7Ok=
+        d=gmail.com; s=20210112; t=1679676760;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=edUBi+/JtE98vJJHN+QtdymSXrKLk8rsnuO8TT7A9Xo=;
+        b=n/HedZIpgOGlYHaborhr0HDRe9i6moZN3AGrzUx9fh+SU0olus+VN2YFUOIP4P035U
+         txGvFG/sxNSkymNdZkW9x6Jlmnvehpd8RZA9puuB833+6nI1D2+J7XHI/wQJBuwDoO+y
+         laiqC+5tjC1ussIxuCX0uDqN8Jx1dcrG/HQRD8m0aFKe6y+ZTEO+gAtis8/gIfqcjoZ0
+         fN+dVkguTtZeqFHQEXsq9UxffNcGUpFmr66w+kwNHEbgC1cOWiGt8dLD829zZIF3ZJvS
+         /qTUtXJ9jCYAOF4Wy7d4DuKfKVinHznVR86GQz4LmrQixmFmi1lt08v/Yc/8Y6Ywf1sn
+         BLzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679676659; x=1682268659;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R6W/+xSIy2LrHW9iOt6nruh+Qj6F+h5sXjXOMzQkKqc=;
-        b=SuArW2h7yppaa/BNlzauzbdHeTsIFs0ihHUS7uSuOspRSTR58BU9r1WhAJ6ayjhvN2
-         AiQbol3bB5oXmAu16RIfuR3K5+CAnxTDEDD1lBti1eBpjmSLDcw0+ZKsc7x08rSY3yo/
-         9DaQvAsMiiOttJmCR1EDJwyA6PESQUImodVnZ6a3BS282fXiBANPrKXryYcXoi9BKmMI
-         dm2bXHgykR8sMnpRQKXa3Gaz+dFtYqIJxaVPm+ZZDYPilrDs3mUlhhL13kDy4jdsuXLv
-         /fTjJYvx2+0bQJ38JOaUG+FB8O4eUQR2FFvyOtDN4Z30MAdU4AVFrZ9JQQqqDJrPqEG3
-         zQMw==
-X-Gm-Message-State: AAQBX9fFJTbjUMmj2bH2zNv6luesq08sJ5KOIHJyn/5cQU9/1pRbA+qp
-        FRZZIRbtz/gaBNlehjA2/bnG9w==
-X-Google-Smtp-Source: AKy350bWEnOhZA+41gMK0JwGaYDc47+uvmcqhyuuFaYWlslXE1inLEwmiIOYesAeOcifs1QRRAy0nw==
-X-Received: by 2002:a05:6e02:12a8:b0:316:67be:1b99 with SMTP id f8-20020a056e0212a800b0031667be1b99mr1211674ilr.0.1679676659602;
-        Fri, 24 Mar 2023 09:50:59 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id g4-20020a05663810e400b003c2b67fac92sm6908450jae.81.2023.03.24.09.50.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 09:50:59 -0700 (PDT)
-Message-ID: <bfa092ee-43c8-c32e-b7f1-7813698861e3@linuxfoundation.org>
-Date:   Fri, 24 Mar 2023 10:50:58 -0600
+        d=1e100.net; s=20210112; t=1679676760;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=edUBi+/JtE98vJJHN+QtdymSXrKLk8rsnuO8TT7A9Xo=;
+        b=qQqpjk8tn/2oV5orr/ccn8Sxglt4rWe9GS79x/fDrOtL2/5SQIshBk304E1Pr8lLEp
+         oFvgyiQMzp32ds9PjtEvTRw9iqCnLXrNHhNZFBMRBdlpEon9LRzI5XS9NEXu1n2IHNB+
+         iQug7nXvmmbRhrCgJhxfqlD86xyjaNTuE4/xGT95bsVoz3VE/tM/7ImPhcWykiHcHd6L
+         nT8CrhSqQeyERIy4rtbkajX5uIoqYPfNAazYbIsQ6qN6E5Q4cCbmFGIXrUKJpjIhlfVU
+         iMqjr3mk0+YUVmfMO+3zc716LaUYRteyxKV8lBO7AoFMrV+gMd1qyMXVpb6KkX7mU3cu
+         KVdw==
+X-Gm-Message-State: AO0yUKXxQqyUOAwO+VAy9vV3OS/P65r5LOZutx2m3QzLwuL6giZ7fqOF
+        ZNMhVn1zfypzLLJbgOq3HW2xa1v6Yh8=
+X-Google-Smtp-Source: AK7set9lB40pXTIpZ6/Jvv0U77G3bOXc4jE6LS+FEKk4dc8LgJek0Th1YFTyrPm7/axnF1ywBFT1YA==
+X-Received: by 2002:a05:6a20:65b:b0:da:bb5f:41ed with SMTP id 27-20020a056a20065b00b000dabb5f41edmr3117806pzm.61.1679676760160;
+        Fri, 24 Mar 2023 09:52:40 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id a5-20020aa780c5000000b0062b5a55835dsm1420289pfn.213.2023.03.24.09.52.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 09:52:39 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
+        ARM ARCHITECTURE)
+Subject: [PATCH 0/3] memory: brcmstb_memc: Report more DDR information
+Date:   Fri, 24 Mar 2023 09:52:28 -0700
+Message-Id: <20230324165231.3468069-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] docs: add system-state document to admin-guide
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     kstewart@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230322152049.12723-1-skhan@linuxfoundation.org>
- <877cv7cpyj.fsf@meer.lwn.net>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <877cv7cpyj.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,22 +73,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/23 11:55, Jonathan Corbet wrote:
-> Shuah Khan <skhan@linuxfoundation.org> writes:
-> 
->> Add a new system state document to the admin-guide. This document is
->> intended to be used as a guide on how to gather higher level information
->> about a system and its run-time activity.
->>
->> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
->> ---
->> Changes since v1:
->> -- Addressed review comments
->>
+This patch series adds support for reporting the DDR size, type, width,
+total width and single/dual rank attributes. This is useful for system
+inventory and debugging.
 
-Thank you for the review and agree with all your comments. I will
-send v3 shortly.
+Florian Fainelli (3):
+  memory: brcmstb_memc: Cache configuration register value
+  Documentation: sysfs: brcmstb-memc: Document new attributes
+  memory: brcmstb_memc: Add new DDR attributes
 
-thanks,
--- Shuah
+ .../ABI/testing/sysfs-platform-brcmstb-memc   | 39 ++++++++
+ drivers/memory/brcmstb_memc.c                 | 92 +++++++++++++++++--
+ 2 files changed, 124 insertions(+), 7 deletions(-)
+
+-- 
+2.34.1
 
