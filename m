@@ -2,178 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826D16C7C17
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F5E6C7C18
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjCXKAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 06:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S231402AbjCXKA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 06:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjCXKAQ (ORCPT
+        with ESMTP id S229919AbjCXKA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 06:00:16 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6374D18160;
-        Fri, 24 Mar 2023 03:00:12 -0700 (PDT)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1881FE000B;
-        Fri, 24 Mar 2023 09:59:57 +0000 (UTC)
-Message-ID: <d0087922-4721-ccf1-80bf-9f74099d0948@ghiti.fr>
-Date:   Fri, 24 Mar 2023 10:59:57 +0100
+        Fri, 24 Mar 2023 06:00:56 -0400
+Received: from out-47.mta0.migadu.com (out-47.mta0.migadu.com [IPv6:2001:41d0:1004:224b::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3459A199DB
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:00:55 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1679652053;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bSc0WWKCrF67Pi/HwlNZVSesODSTBfnuSU6f64Y3d4A=;
+        b=eZe+OG47+3TlSHWJlYF8pqZJwWOkYm4wcvj+d/U76tHtu84GBZq+4nEYKUT9dYfTrKuoYD
+        ApeYh3GxTNz+v52A0863zXehU83OexBfz7xAOy/hCTPvsBtAjKYa+T5e/+jXbQhsvVbw5S
+        yKKmUb9jbuA9qR/mP/n0vuPfhdtNCZM=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     rafael@kernel.org, viresh.kumar@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH] cpufreq: schedutil: Combine two loops into one in sugov_start()
+Date:   Fri, 24 Mar 2023 18:00:23 +0800
+Message-Id: <20230324100023.900616-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v8 0/4] riscv: Use PUD/P4D/PGD pages for the linear
- mapping
-Content-Language: en-US
-To:     Anup Patel <apatel@ventanamicro.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230316131711.1284451-1-alexghiti@rivosinc.com>
- <CAK9=C2XJtSG2d_nsyDv7kU1v7Jj0chdevqrMc0MpJswukcEABA@mail.gmail.com>
- <CAHVXubhhxpzHDM-n91V_rceY5t_VqLvrwZj3RP_tNL2=F9mqjQ@mail.gmail.com>
- <CAK9=C2WVOpSqtt8r1U4hnzSZ=cc1PocpukgQjNyahP2XuPhozw@mail.gmail.com>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <CAK9=C2WVOpSqtt8r1U4hnzSZ=cc1PocpukgQjNyahP2XuPhozw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/23 15:55, Anup Patel wrote:
-> On Thu, Mar 23, 2023 at 6:24 PM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
->> Hi Anup,
->>
->> On Thu, Mar 23, 2023 at 1:18 PM Anup Patel <apatel@ventanamicro.com> wrote:
->>> Hi Alex,
->>>
->>> On Thu, Mar 16, 2023 at 6:48 PM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
->>>> This patchset intends to improve tlb utilization by using hugepages for
->>>> the linear mapping.
->>>>
->>>> As reported by Anup in v6, when STRICT_KERNEL_RWX is enabled, we must
->>>> take care of isolating the kernel text and rodata so that they are not
->>>> mapped with a PUD mapping which would then assign wrong permissions to
->>>> the whole region: it is achieved by introducing a new memblock API.
->>>>
->>>> Another patch makes use of this new API in arm64 which used some sort of
->>>> hack to solve this issue: it was built/boot tested successfully.
->>>>
->>>> base-commit-tag: v6.3-rc1
->>>>
->>>> v8:
->>>> - Fix rv32, as reported by Anup
->>>> - Do not modify memblock_isolate_range and fixes comment, as suggested by Mike
->>>> - Use the new memblock API for crash kernel too in arm64, as suggested by Andrew
->>>> - Fix arm64 double mapping (which to me did not work in v7), but ends up not
->>>>    being pretty at all, will wait for comments from arm64 reviewers, but
->>>>    this patch can easily be dropped if they do not want it.
->>>>
->>>> v7:
->>>> - Fix Anup bug report by introducing memblock_isolate_memory which
->>>>    allows us to split the memblock mappings and then avoid to map the
->>>>    the PUD which contains the kernel as read only
->>>> - Add a patch to arm64 to use this newly introduced API
->>>>
->>>> v6:
->>>> - quiet LLVM warning by casting phys_ram_base into an unsigned long
->>>>
->>>> v5:
->>>> - Fix nommu builds by getting rid of riscv_pfn_base in patch 1, thanks
->>>>    Conor
->>>> - Add RB from Andrew
->>>>
->>>> v4:
->>>> - Rebase on top of v6.2-rc3, as noted by Conor
->>>> - Add Acked-by Rob
->>>>
->>>> v3:
->>>> - Change the comment about initrd_start VA conversion so that it fits
->>>>    ARM64 and RISCV64 (and others in the future if needed), as suggested
->>>>    by Rob
->>>>
->>>> v2:
->>>> - Add a comment on why RISCV64 does not need to set initrd_start/end that
->>>>    early in the boot process, as asked by Rob
->>>>
->>>> Alexandre Ghiti (4):
->>>>    riscv: Get rid of riscv_pfn_base variable
->>>>    mm: Introduce memblock_isolate_memory
->>>>    arm64: Make use of memblock_isolate_memory for the linear mapping
->>>>    riscv: Use PUD/P4D/PGD pages for the linear mapping
->>> Kernel boot fine on RV64 but there is a failure which is still not
->>> addressed. You can see this failure as following message in
->>> kernel boot log:
->>>      0.000000] Failed to add a System RAM resource at 80200000
->> Hmmm I don't get that in any of my test configs, would you mind
->> sharing yours and your qemu command line?
-> Try alexghiti_test branch at
-> https://github.com/avpatel/linux.git
->
-> I am building the kernel using defconfig and my rootfs is
-> based on busybox.
->
-> My QEMU command is:
-> qemu-system-riscv64 -M virt -m 512M -nographic -bios
-> opensbi/build/platform/generic/firmware/fw_dynamic.bin -kernel
-> ./build-riscv64/arch/riscv/boot/Image -append "root=/dev/ram rw
-> console=ttyS0 earlycon" -initrd ./rootfs_riscv64.img -smp 4
+The sugov_start() function currently contains two for loops that
+traverse the CPU list and perform some initialization tasks. The first
+loop initializes each sugov_cpu struct and assigns the CPU number and
+sugov_policy pointer. The second loop sets up the update_util hook for
+each CPU based on the policy type.
 
+Since both loops operate on the same CPU list, it is possible to combine
+them into a single for loop. This simplifies the code and reduces the
+number of times the CPU list needs to be traversed, which can improve
+performance.
 
-So splitting memblock.memory is the culprit, it "confuses" the resources 
-addition and I can only find hacky ways to fix that...
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+---
+ kernel/sched/cpufreq_schedutil.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-So given that the arm64 patch with the new API is not pretty and that 
-the simplest solution is to re-merge the memblock regions afterwards 
-(which is done by memblock_clear_nomap), I'll drop the new API and the 
-arm64 patch to use the nomap API like arm64: I'll take advantage of that 
-to clean setup_vm_final which I have wanted to do for a long time.
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index e3211455b203..9a28ebbb9c1e 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -766,14 +766,6 @@ static int sugov_start(struct cpufreq_policy *policy)
+ 
+ 	sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
+ 
+-	for_each_cpu(cpu, policy->cpus) {
+-		struct sugov_cpu *sg_cpu = &per_cpu(sugov_cpu, cpu);
+-
+-		memset(sg_cpu, 0, sizeof(*sg_cpu));
+-		sg_cpu->cpu			= cpu;
+-		sg_cpu->sg_policy		= sg_policy;
+-	}
+-
+ 	if (policy_is_shared(policy))
+ 		uu = sugov_update_shared;
+ 	else if (policy->fast_switch_enabled && cpufreq_driver_has_adjust_perf())
+@@ -784,6 +776,10 @@ static int sugov_start(struct cpufreq_policy *policy)
+ 	for_each_cpu(cpu, policy->cpus) {
+ 		struct sugov_cpu *sg_cpu = &per_cpu(sugov_cpu, cpu);
+ 
++		memset(sg_cpu, 0, sizeof(*sg_cpu));
++		sg_cpu->cpu			= cpu;
++		sg_cpu->sg_policy		= sg_policy;
++
+ 		cpufreq_add_update_util_hook(cpu, &sg_cpu->update_util, uu);
+ 	}
+ 	return 0;
+-- 
+2.25.1
 
-@Mike Thanks for you reviews!
-
-@Anup Thanks for all your bug reports on this patchset, I have to 
-improve my test flow (it is in the work :)).
-
-
-> Regards,
-> Anup
->
->> Thanks
->>
->>> Regards,
->>> Anup
->>>
->>>>   arch/arm64/mm/mmu.c           | 25 +++++++++++------
->>>>   arch/riscv/include/asm/page.h | 19 +++++++++++--
->>>>   arch/riscv/mm/init.c          | 53 ++++++++++++++++++++++++++++-------
->>>>   arch/riscv/mm/physaddr.c      | 16 +++++++++++
->>>>   drivers/of/fdt.c              | 11 ++++----
->>>>   include/linux/memblock.h      |  1 +
->>>>   mm/memblock.c                 | 20 +++++++++++++
->>>>   7 files changed, 119 insertions(+), 26 deletions(-)
->>>>
->>>> --
->>>> 2.37.2
->>>>
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
