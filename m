@@ -2,310 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8726C6C878F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAE96C8793
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbjCXVji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 17:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44248 "EHLO
+        id S231904AbjCXVnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 17:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbjCXVje (ORCPT
+        with ESMTP id S229441AbjCXVnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 17:39:34 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796B72736
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 14:39:30 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5447d217bc6so56941317b3.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 14:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1679693969;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VKamTvnj+GL3ffTUBrTph5LM8KntsQaWHlQekMeTL9k=;
-        b=f2sVjRn30AUSzqj/0co6DjfsWFab0eiB0J81pqIG/Z714o6YMlzvv+6uMym/AhN1ck
-         wa6uyFjQ1JUpDkwFCgUFRmtPMbfu35NKnp7YVKuZraGD96RHphHISVGtr/onjWrChI+d
-         05XyOJMH8yfPjpOQ5rThMNLHfZZsOS4+y80UBOvKL1WwjrBb4YGYrgEYwcowRv0Hh45v
-         77tGQnrq/rB3/DUsAMvz7JZW11BdxhPzJdpQW+H2dfeCDYjWGAneYq5gM3m1gMXjmuDD
-         IZkvSEfWpro3PS55S87WA1tvgEqmSU2aBAlZb5HiomonxnwigG+ROSnYzhOcmB5VxSlt
-         fu0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679693969;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VKamTvnj+GL3ffTUBrTph5LM8KntsQaWHlQekMeTL9k=;
-        b=ShOL9txw/sQ5TTYZdcMRnOjDDcKT7x372lk861ML1fHI/LYgXXva7gE3r3eak6gSKv
-         hnrErp2uTHGJIyNdCmGKGKDFstGBGlKaQpTei+m1GPt7pbuozhrNcU1rvQ0HK4+fTkbb
-         X0Ui+9K0KboAL6r1spZ/dStKe/O4uaVR7X5tWLCjk2VOIaVcjSrAhRH4ls4hK8+Ju1tQ
-         rJ9d+b+QMdprjp3Rpcv2LAmrPR2TmJodmjWwyjXeSXN9i6z13BfPUb1/z3fmDHsDNVqs
-         GpjH2hzszagxNtfYKlEcOqUhSX2e0vDESlAKcwQT6QdJeHTnVG3p7wstXG6mtvZCb+SF
-         RJXQ==
-X-Gm-Message-State: AAQBX9dstyaujmWyKaW0YKCfoVNkAMQtPu6Hd6xWZI59pt5FusIpDV5B
-        zgPtxZizMAKciBFz/0aOcQhX7djWh37Tbs73iLQS
-X-Google-Smtp-Source: AKy350bsRKBP7uMR4F9gyjDuDEVJX4b81kaP6g857n9d964/HtlKQpjkiWIs0G73sRgUkkDNXxLVvj5qN6ETjoWdJDk=
-X-Received: by 2002:a81:af18:0:b0:541:7f7b:a2ff with SMTP id
- n24-20020a81af18000000b005417f7ba2ffmr1741459ywh.8.1679693969542; Fri, 24 Mar
- 2023 14:39:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230314081720.4158676-1-roberto.sassu@huaweicloud.com>
- <20230314081720.4158676-5-roberto.sassu@huaweicloud.com> <CAHC9VhTD3EyDiJs9+NQrgp84JcUs_sx8WONtRk2YYH4m1C8nVw@mail.gmail.com>
- <939e6c88662ad90b963993c4cc1b702083e74a7a.camel@huaweicloud.com> <ffc86b3907f7b87d3c568ae62bea3cdb3275be4e.camel@huaweicloud.com>
-In-Reply-To: <ffc86b3907f7b87d3c568ae62bea3cdb3275be4e.camel@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 24 Mar 2023 17:39:18 -0400
-Message-ID: <CAHC9VhRNjvjMOF5KLM6BoGfk=QpEBs_ur_CgRdGL5R1bA-JAwg@mail.gmail.com>
-Subject: Re: [PATCH v8 4/6] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 24 Mar 2023 17:43:08 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EE5A266
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 14:43:06 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 81FFA3200952;
+        Fri, 24 Mar 2023 17:43:02 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 24 Mar 2023 17:43:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1679694182; x=1679780582; bh=okSJCCN1OzLHGs5rzBuQ7AzMs
+        ikHX0VfQuuARxIDmsY=; b=TVz9cka1c/Dq5lAf8g68n3rWNBcQk8vMkf+z7W+//
+        cFoan7lrR/lvS5kx/kju2ORCOuRjkLQD3dJBQ6fLyZxzewt1LGI7gWo7qKqRYTDY
+        twcF3OAZCMmFLkAziRkjs34y1YJCcExK4KWtBIN/Gu7cV7aZg8VDDQ3EakwUyzyb
+        JceIms6duTd0+bi/Lis4DL9wsRfQTPoieFGKmrq5NhzmyTWLRdYgrRJDje4SvrCI
+        HjQhThiNlMLBf6pvdGVYJBbHXaU3g7NAiKEyEiPv2VmhwrdZPsMnryL7xW4siNFJ
+        OOqqD6pLsrAzBGwFewwmQNDOqk+LAlQ7taCjVy6zAJzqQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1679694182; x=1679780582; bh=okSJCCN1OzLHGs5rzBuQ7AzMsikHX0VfQuu
+        ARxIDmsY=; b=BzN7wawEimg6hSAnlS3t/gGVQ4n07jUSOBCChmN9fk2xIqiQDUo
+        aM4soniJarXSmoJb5uBY2xQQtVLujVxlfvuwx15EvSQVveqY73JO/n+vkDHKnbQx
+        lNpDjRbsxwMz/5Xv1A7z/kLI+iUxTAXJxRWGRTbYbxFI8H/foaVlQPxmoAFfIiZ9
+        qK4OG8IrwWSf6irZl0pw6zwxir7xa6MGJoiv2x8srg3vEEOX3BgjuOK8ZRCIMU+b
+        BEM01WzUG1h8N2B5ujn2rORxktHS6yfHqjTJK6aTpf0LYRtOTANk/2vjZU/+kl4p
+        YIUKlBxzDIYPP7l7tE+LGbsfEnyPA1y2ebw==
+X-ME-Sender: <xms:ZRkeZN5WKiZuXe--QTxmQNoDbWI-15PgSkEZSWNKTaxj1K5GbMpysQ>
+    <xme:ZRkeZK6MsCotH9YGwqgTBMJFq4Yt4f4ArVQwpFgD-xfNgQIhcYpocFUTlVLnL4K4t
+    9umYX8eVK5fAwWZNVk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegiedgudehfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpedtlefhkedvvdethfeuteekheettddvveeltdffhfejudffheelieelheevjeej
+    keenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhlihhnrghrohdrohhrghenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghr
+    nhgusgdruggv
+X-ME-Proxy: <xmx:ZRkeZEeSWFdKUBS7ZyTs_xdKAYmMMJx1JC5rN-h2kK5kWUfL5g5ljw>
+    <xmx:ZRkeZGJ-eXQJdt_YCQa7K21Db-f9z_Xr3omCPvIs7WMTNVzLFqUtEQ>
+    <xmx:ZRkeZBKg4nlwPExLtqOybhhkaUDH37lPTqf_f86DsxvG-KymI8-H3A>
+    <xmx:ZhkeZPgzqbYjanYY6xX-sG-1h029Y5Fvn8LncyGrM1yOB5OoYWJcqQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id CFE99B60086; Fri, 24 Mar 2023 17:43:01 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-236-g06c0f70e43-fm-20230313.001-g06c0f70e
+Mime-Version: 1.0
+Message-Id: <e6a9ec59-7227-48e1-8636-e020f3489788@app.fastmail.com>
+Date:   Fri, 24 Mar 2023 22:40:06 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] ARM: SoC fixes for 6.3, part 2
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 9:26=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> On Fri, 2023-03-24 at 11:18 +0100, Roberto Sassu wrote:
-> > On Thu, 2023-03-23 at 20:09 -0400, Paul Moore wrote:
-> > > On Tue, Mar 14, 2023 at 4:19=E2=80=AFAM Roberto Sassu
-> > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > >
-> > > > Currently, security_inode_init_security() supports only one LSM pro=
-viding
-> > > > an xattr and EVM calculating the HMAC on that xattr, plus other ino=
-de
-> > > > metadata.
-> > > >
-> > > > Allow all LSMs to provide one or multiple xattrs, by extending the =
-security
-> > > > blob reservation mechanism. Introduce the new lbs_xattr field of th=
-e
-> > > > lsm_blob_sizes structure, so that each LSM can specify how many xat=
-trs it
-> > > > needs, and the LSM infrastructure knows how many xattr slots it sho=
-uld
-> > > > allocate.
-> > > >
-> > > > Dynamically allocate the xattrs array to be populated by LSMs with =
-the
-> > > > inode_init_security hook, and pass it to the latter instead of the
-> > > > name/value/len triple. Update the documentation accordingly, and fi=
-x the
-> > > > description of the xattr name, as it is not allocated anymore.
-> > > >
-> > > > Since the LSM infrastructure, at initialization time, updates the n=
-umber of
-> > > > the requested xattrs provided by each LSM with a corresponding offs=
-et in
-> > > > the security blob (in this case the xattr array), it makes straight=
-forward
-> > > > for an LSM to access the right position in the xattr array.
-> > > >
-> > > > There is still the issue that an LSM might not fill the xattr, even=
- if it
-> > > > requests it (legitimate case, for example it might have been loaded=
- but not
-> > > > initialized with a policy). Since users of the xattr array (e.g. th=
-e
-> > > > initxattrs() callbacks) detect the end of the xattr array by checki=
-ng if
-> > > > the xattr name is NULL, not filling an xattr would cause those user=
-s to
-> > > > stop scanning xattrs prematurely.
-> > > >
-> > > > Solve that issue by introducing security_check_compact_filled_xattr=
-s(),
-> > > > which does a basic check of the xattr array (if the xattr name is f=
-illed,
-> > > > the xattr value should be too, and viceversa), and compacts the xat=
-tr array
-> > > > by removing the holes.
-> > > >
-> > > > An alternative solution would be to let users of the xattr array kn=
-ow the
-> > > > number of elements of that array, so that they don't have to check =
-the
-> > > > termination. However, this seems more invasive, compared to a simpl=
-e move
-> > > > of few array elements.
-> > > >
-> > > > security_check_compact_filled_xattrs() also determines how many xat=
-trs in
-> > > > the xattr array have been filled. If there is none, skip
-> > > > evm_inode_init_security() and initxattrs(). Skipping the former als=
-o avoids
-> > > > EVM to crash the kernel, as it is expecting a filled xattr.
-> > > >
-> > > > Finally, adapt both SELinux and Smack to use the new definition of =
-the
-> > > > inode_init_security hook, and to correctly fill the designated slot=
-s in the
-> > > > xattr array. For Smack, reserve space for the other defined xattrs =
-although
-> > > > they are not set yet in smack_inode_init_security().
-> > > >
-> > > > Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org> (EVM=
- crash)
-> > > > Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@arch=
-linux/
-> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-> > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > > ---
-> > > >  include/linux/lsm_hook_defs.h |   3 +-
-> > > >  include/linux/lsm_hooks.h     |   1 +
-> > > >  security/security.c           | 119 +++++++++++++++++++++++++++++-=
-----
-> > > >  security/selinux/hooks.c      |  19 ++++--
-> > > >  security/smack/smack_lsm.c    |  33 ++++++----
-> > > >  5 files changed, 137 insertions(+), 38 deletions(-)
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-...
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-> > > > @@ -1604,33 +1654,66 @@ int security_inode_init_security(struct ino=
-de *inode, struct inode *dir,
-> > > >                                  const struct qstr *qstr,
-> > > >                                  const initxattrs initxattrs, void =
-*fs_data)
-> > > >  {
-> > > > -       struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
-> > > > -       struct xattr *lsm_xattr, *evm_xattr, *xattr;
-> > > > -       int ret;
-> > > > +       struct security_hook_list *P;
-> > > > +       struct xattr *new_xattrs;
-> > > > +       struct xattr *xattr;
-> > > > +       int ret =3D -EOPNOTSUPP, num_filled_xattrs =3D 0;
-> > > >
-> > > >         if (unlikely(IS_PRIVATE(inode)))
-> > > >                 return 0;
-> > > >
-> > > > +       if (!blob_sizes.lbs_xattr)
-> > > > +               return 0;
-> > > > +
-> > > >         if (!initxattrs)
-> > > >                 return call_int_hook(inode_init_security, -EOPNOTSU=
-PP, inode,
-> > > > -                                    dir, qstr, NULL, NULL, NULL);
-> > > > -       memset(new_xattrs, 0, sizeof(new_xattrs));
-> > > > -       lsm_xattr =3D new_xattrs;
-> > > > -       ret =3D call_int_hook(inode_init_security, -EOPNOTSUPP, ino=
-de, dir, qstr,
-> > > > -                           &lsm_xattr->name,
-> > > > -                           &lsm_xattr->value,
-> > > > -                           &lsm_xattr->value_len);
-> > > > -       if (ret)
-> > > > +                                   dir, qstr, NULL);
-> > > > +       /* Allocate +1 for EVM and +1 as terminator. */
-> > > > +       new_xattrs =3D kcalloc(blob_sizes.lbs_xattr + 2, sizeof(*ne=
-w_xattrs),
-> > > > +                            GFP_NOFS);
-> > > > +       if (!new_xattrs)
-> > > > +               return -ENOMEM;
-> > > > +
-> > > > +       hlist_for_each_entry(P, &security_hook_heads.inode_init_sec=
-urity,
-> > > > +                            list) {
-> > > > +               ret =3D P->hook.inode_init_security(inode, dir, qst=
-r, new_xattrs);
-> > > > +               if (ret && ret !=3D -EOPNOTSUPP)
-> > > > +                       goto out;
-> > > > +               /*
-> > > > +                * As documented in lsm_hooks.h, -EOPNOTSUPP in thi=
-s context
-> > > > +                * means that the LSM is not willing to provide an =
-xattr, not
-> > > > +                * that it wants to signal an error. Thus, continue=
- to invoke
-> > > > +                * the remaining LSMs.
-> > > > +                */
-> > > > +               if (ret =3D=3D -EOPNOTSUPP)
-> > > > +                       continue;
-> > > > +               /*
-> > > > +                * As the number of xattrs reserved by LSMs is not =
-directly
-> > > > +                * available, directly use the total number blob_si=
-zes.lbs_xattr
-> > > > +                * to keep the code simple, while being not the mos=
-t efficient
-> > > > +                * way.
-> > > > +                */
-> > >
-> > > Is there a good reason why the LSM can't return the number of xattrs
-> > > it is adding to the xattr array?  It seems like it should be fairly
-> > > trivial for the individual LSMs to determine and it could save a lot
-> > > of work.  However, given we're at v8 on this patchset I'm sure I'm
-> > > missing something obvious, can you help me understand why the idea
-> > > above is crazy stupid? ;)
->
-> Much simple answer. Yes, LSMs could return the number of xattrs set,
-> but security_check_compact_filled_xattrs() also needs to know from
-> which offset (the lbs_xattr of each LSM) it should start compacting.
->
-> Example: suppose that you have three LSMs with:
->
-> LSM#1: lbs_xattr 1
-> LSM#2: lbs_xattr 2 (disabled)
-> LSM#3: lbs_xattr 1
->
-> The current compaction interval is: already compacted xattrs - end of
-> new_xattr array.
->
-> When the security_inode_init_security() loop calls LSM#3, the
-> compaction interval is: 1 - 2 (LSM#2 returns 0), which clearly isn't
-> right. The correct compaction interval should be: 3 - 4.
->
-> Going to the end of new_xattrs is an approximation, but it ensures
-> that security_check_compact_filled_xattrs() reaches the xattr set by
-> LSM#3.
->
-> The alternative I was mentioning of passing num_filled_xattrs to LSMs
-> goes again in the direction of doing on-the-fly compaction, while LSMs
-> are more familiar with using the lbs_* fields.
+are available in the Git repository at:
 
-I guess I was thinking of the case where the LSM layer, i.e.
-security_inode_init_security(), allocates an xattr array like it does
-now based on the maximum number of xattrs possible using the
-lsm_blob_sizes values and passes a pointer to the individual LSMs
-which is incremented based on how many xattrs are created by the
-individual LSMs.  Here is some *very* rough pseudo code:
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.3-2
 
-int security_inode_init_security(...)
-{
+for you to fetch changes up to ec7d8bd7d40f14b03da2d9cc3c6c8c845d62fb0f:
 
-  /* allocate an xattr array */
-  xattrs =3D kcalloc(blob_sizes, sizeof(*xattrs), GFP_BLAH);
+  Merge tag 'qcom-driver-fixes-for-6.3' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into soc/fixes (2023-03-24 18:06:29 +0100)
 
-  /* loop on the lsms */
-  xa_cnt =3D 0;
-  while (lsm_hooks) {
-    rc =3D call_hook(lsm_hook, &xattrs[xa_cnt]);
-    if (rc > 0)
-      xa_cnt +=3D rc;
-  }
+----------------------------------------------------------------
+ARM: SoC fixes for 6.3, part 2
 
-  /* evm magic */
-  evm_inode_init_security(...)
-}
+As usual, most of the bug fixes address issues in the devicetree files,
+and out of these, most are for the Qualcomm and NXP platforms, including:
 
-Does that work?  Am I missing something?
+ - A missing "reserved-memory" property on LG G Watch R that
+   is needed to prevent clashing with firmware
 
---=20
-paul-moore.com
+ - Annotations for cache coherency on multiple machines
+
+ - Corrections for pinctrl, regulator, clock, iommu and power domain
+   properties for i.MX and Qualcomm to correctly reflect the
+   hardware settings
+
+ - Firmware file names on multiple machines
+   SA8540P Ride board
+
+ - An incompatible change to the qcom vadc driver requires adding
+   individual labels
+
+ - Fix EQoS PHY reset GPIO by dropping the deprecated/wrong property
+   and switch to the new bindings.
+
+ - A fix for PCI bus address translation Tegra194 and Tegra234.
+
+There are also a couple of device driver fixes, addressing
+
+ - A race condition in the amdtee driver
+
+ - A performance regression in the Qualcomm 'llcc' driver
+
+ - An unitialized variable use NXP i.MX "weim" driver
+
+ - Error handling issues in Qualcomm "rmtfs", and "scm"
+   drivers and the Arm scmi firmware driver
+
+----------------------------------------------------------------
+Abel Vesa (2):
+      arm64: dts: qcom: sm8550: Add bias pull up value to tlmm i2c data clk states
+      soc: qcom: llcc: Fix slice configuration values for SC8280XP
+
+Alexander Stein (3):
+      arm64: dts: freescale: imx8-ss-lsio: Fix flexspi clock order
+      arm64: dts: imx93: Fix eqos properties
+      arm64: dts: imx93: add missing #address-cells and #size-cells to i2c nodes
+
+Andrew Halaney (1):
+      arm64: dts: imx8dxl-evk: Fix eqos phy reset gpio
+
+Arnd Bergmann (7):
+      Merge tag 'amdtee-fix-for-v6.3' of https://git.linaro.org/people/jens.wiklander/linux-tee into soc-fixes
+      Merge tag 'tegra-for-6.3-arm64-dt-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into soc-fixes
+      Merge tag 'imx-fixes-6.3' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into soc-fixes
+      Merge tag 'scmi-fixes-6.3' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into soc/fixes
+      Merge tag 'qcom-arm64-fixes-for-6.3' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into soc/fixes
+      Merge tag 'qcom-dts-fixes-for-6.3' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into soc/fixes
+      Merge tag 'qcom-driver-fixes-for-6.3' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into soc/fixes
+
+Brian Masney (1):
+      arm64: dts: qcom: sa8540p-ride: correct name of remoteproc_nsp0 firmware
+
+Christophe JAILLET (1):
+      firmware: arm_scmi: Use the bitmap API to allocate bitmaps
+
+Cristian Marussi (2):
+      firmware: arm_scmi: Fix raw coexistence mode behaviour on failure path
+      firmware: arm_scmi: Fix device node validation for mailbox transport
+
+Dan Carpenter (2):
+      firmware: arm_scmi: Clean up a return statement in scmi_probe
+      firmware: arm_scmi: Return a literal instead of a variable
+
+Ivan Bornyakov (1):
+      bus: imx-weim: fix branch condition evaluates to a garbage value
+
+Jianhua Lu (1):
+      arm64: dts: qcom: sm8250-xiaomi-elish: Correct venus firmware path
+
+Johan Hovold (5):
+      firmware: qcom: scm: fix bogus irq error at probe
+      arm64: dts: qcom: sc8280xp-x13s: mark s11b regulator as always-on
+      arm64: dts: qcom: sc8280xp-x13s: mark s10b regulator as always-on
+      arm64: dts: qcom: sc8280xp-x13s: mark s12b regulator as always-on
+      arm64: dts: qcom: sc8280xp-x13s: mark bob regulator as always-on
+
+Konrad Dybcio (3):
+      arm64: dts: qcom: sm6115: Un-enable SPI5 by default
+      arm64: dts: qcom: sm6375: Add missing power-domain-named to CDSP
+      arm64: dts: qcom: sm8550: Use correct CPU compatibles
+
+Krishna chaitanya chundru (1):
+      arm64: dts: qcom: sc7280: Mark PCIe controller as cache coherent
+
+Krzysztof Kozlowski (3):
+      arm64: dts: qcom: sm8450: correct WSA2 assigned clocks
+      arm64: dts: qcom: sm8550: fix LPASS pinctrl slew base address
+      arm64: dts: imx8mm-nitrogen-r2: fix WM8960 clock name
+
+Luca Weiss (3):
+      soc: qcom: rmtfs: fix error handling reading qcom,vmid
+      soc: qcom: rmtfs: handle optional qcom,vmid correctly
+      ARM: dts: qcom: apq8026-lg-lenok: add missing reserved memory
+
+Manivannan Sadhasivam (5):
+      arm64: dts: qcom: sm8150: Fix the iommu mask used for PCIe controllers
+      arm64: dts: qcom: sc8280xp: Add label property to vadc channel nodes
+      arm64: dts: qcom: sm8350: Mark UFS controller as cache coherent
+      arm64: dts: qcom: sm8450: Mark UFS controller as cache coherent
+      arm64: dts: qcom: sm8550: Mark UFS controller as cache coherent
+
+Marek Vasut (2):
+      arm64: dts: imx8mp: Fix LCDIF2 node clock order
+      arm64: dts: imx8mn: specify #sound-dai-cells for SAI nodes
+
+Michael Walle (1):
+      Revert "arm64: dts: ls1028a: sl28: get MAC addresses from VPD"
+
+Peng Fan (3):
+      ARM: dts: imx6sll: e70k02: fix usbotg1 pinctrl
+      ARM: dts: imx6sll: e60k02: fix usbotg1 pinctrl
+      ARM: dts: imx6sl: tolino-shine2hd: fix usbotg1 pinctrl
+
+Rijo Thomas (1):
+      tee: amdtee: fix race condition in amdtee_open_session
+
+Srinivas Kandagatla (4):
+      arm64: dts: qcom: sc8280xp: fix rx frame shapping info
+      arm64: dts: qcom: sc8280xp: fix lpass tx macro clocks
+      arm64: dts: qcom: sc8280xp-x13s: fix dmic sample rate
+      arm64: dts: qcom: sc8280xp-x13s: fix va dmic dai links and routing
+
+Thierry Reding (1):
+      arm64: tegra: Bump CBB ranges property on Tegra194 and Tegra234
+
+Yang Xiwen (1):
+      arm64: dts: qcom: msm8916-ufi: Fix sim card selection pinctrl
+
+Ye Xingchen (1):
+      firmware: arm_scmi: Remove duplicate include header inclusion
+
+ arch/arm/boot/dts/e60k02.dtsi                      |  1 +
+ arch/arm/boot/dts/e70k02.dtsi                      |  1 +
+ arch/arm/boot/dts/imx6sl-tolino-shine2hd.dts       |  1 +
+ arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts        | 10 +++++
+ .../fsl-ls1028a-kontron-kbox-a-230-ls.dts          | 12 ------
+ .../freescale/fsl-ls1028a-kontron-sl28-var1.dts    |  2 -
+ .../freescale/fsl-ls1028a-kontron-sl28-var2.dts    |  8 ----
+ .../freescale/fsl-ls1028a-kontron-sl28-var4.dts    |  2 -
+ .../dts/freescale/fsl-ls1028a-kontron-sl28.dts     | 17 --------
+ arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi    |  2 +-
+ arch/arm64/boot/dts/freescale/imx8dxl-evk.dts      |  5 ++-
+ .../boot/dts/freescale/imx8mm-nitrogen-r2.dts      |  2 +-
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi          |  5 +++
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi          |  4 +-
+ arch/arm64/boot/dts/freescale/imx93.dtsi           | 24 +++++++++--
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi           |  2 +-
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi           |  2 +-
+ arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts    |  4 --
+ arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts  | 28 ++++++++++++-
+ arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi          | 10 -----
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts          |  2 +-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  2 +
+ .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     | 27 +++++++++---
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi             | 18 ++++----
+ arch/arm64/boot/dts/qcom/sm6115.dtsi               |  1 +
+ arch/arm64/boot/dts/qcom/sm6375.dtsi               |  1 +
+ arch/arm64/boot/dts/qcom/sm8150.dtsi               |  4 +-
+ arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts   |  2 +-
+ arch/arm64/boot/dts/qcom/sm8350.dtsi               |  1 +
+ arch/arm64/boot/dts/qcom/sm8450.dtsi               |  5 ++-
+ arch/arm64/boot/dts/qcom/sm8550.dtsi               | 49 +++++++++++-----------
+ drivers/bus/imx-weim.c                             |  2 +-
+ drivers/firmware/arm_scmi/bus.c                    |  3 +-
+ drivers/firmware/arm_scmi/driver.c                 | 14 +++----
+ drivers/firmware/arm_scmi/mailbox.c                | 37 ++++++++++++++++
+ drivers/firmware/qcom_scm.c                        |  2 +-
+ drivers/soc/qcom/llcc-qcom.c                       |  6 +--
+ drivers/soc/qcom/rmtfs_mem.c                       | 10 +++--
+ drivers/tee/amdtee/core.c                          | 29 +++++++------
+ 39 files changed, 212 insertions(+), 145 deletions(-)
