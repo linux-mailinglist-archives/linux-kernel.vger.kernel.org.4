@@ -2,178 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559C66C7498
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C69886C74A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbjCXA2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 20:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
+        id S230404AbjCXAf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 20:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjCXA2R (ORCPT
+        with ESMTP id S229681AbjCXAf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 20:28:17 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D9AE39C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 17:28:15 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id s8so146981lfr.8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 17:28:15 -0700 (PDT)
+        Thu, 23 Mar 2023 20:35:26 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E519C1B320;
+        Thu, 23 Mar 2023 17:35:25 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id fb38so294008pfb.7;
+        Thu, 23 Mar 2023 17:35:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679617693;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+J8p8pl2Pt3GUIvBHOdUa3bfVDVXJiWCxeGSW1F0PEY=;
-        b=lKika/aCnauE2ihkPyFGtIb/y9pWowhjIWcrfDDPysDBKukzCQ6zu5BDpQC1wxIO4e
-         l9GfD8VVlgXMeXqJgX+JMD0H/d+CP0ppW9nqZYASLFplzfnTNV7SvNzv4T/dcgRXUlNT
-         E1beeT2cZtcuf40h3pttpH3DHYYampYbrznPZvxTcB6UVwPPfXpbdcBFq7Yyc1r0EhQJ
-         5uVSINLkmxvQWNdDZ/Dj3g5I2yvZHRUIoow3CsIHV7yPTRRmX2Ieb8fl3F4QeWbLO5MM
-         MT5C+k8BRT3iqKpGcc71rLsdzlrCr5pjhWu/6lyche1Nppbfd9Pf37s/DRl5feLSQBR0
-         YdgA==
+        d=gmail.com; s=20210112; t=1679618125;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wmof/czDiZPAMVKVcZuACGS2ZwREuoODzaXC73kpCeg=;
+        b=iiDJl9/TSEUGbEhxvuYtVLJTxYPR26FAC6pJLRz0TZmXt20Uw9+grV7dSd96+mKsvP
+         zjVA2eab2ux2HBV5gjGezNnbCFXJFXZkY6ed+8VhvgjZ8Igo22VfpppJYkc2i+kbGYJS
+         einPZNisfA72vK/A4m8KtP61yD4Z1gTReTao6TpBUiyE0hBQrOYWavF2mGT4eP6meHpz
+         bim1MizaS88bHY0yeOwuuH/BUVjuZ57CgqtAPsf4KtrEMgupf7qvGz+30SOoIUMehzKZ
+         JmUvZPdZybG+7NNj5LgG0fPpSkWVhppBAjHpj/9rq+aLNNset8kIk//YbEDwDeosto6T
+         k6bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679617693;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+J8p8pl2Pt3GUIvBHOdUa3bfVDVXJiWCxeGSW1F0PEY=;
-        b=zwG8G3zG3fJazoqWXGQY25DRF5QdX0lLXLH3gENHbuDGVlxIa4U0Ij83AV6AfLrZPW
-         xFw3YqF4IrRazue19J418Q4CZBV7JuYFL6G0aMmeYefLM8Gk0n0V8Ng1jKipXPcy1YgC
-         vNAuT3j9eyJBb32BHdgd2zMOSEk+1Q2bZN6nhsFQEiqWgeVSI4vSxQVqBce+UbxYtEXc
-         IrI2Qj4s1o3/QpZvJJ4/I1BShHQuBSMzXw5EAAkZZSMC378j06AEkXFNUHc3a+SuoUYU
-         +mC+jk5mBb14OsqZGzTxG9QXJYsvxmY5qUHZ2Ldyk8zHqz9LW4ToYVyElCuEf6Vavvdx
-         E9jw==
-X-Gm-Message-State: AAQBX9dn3mbXprc4vpoS2Qm14BVofRsm8MSSoM8C1DMyZGPsWTCvDPNQ
-        YmK3iH0hQ8iah5P4ZFHXCLOLYQ==
-X-Google-Smtp-Source: AKy350YqrKe7OxTHs4gi2Wx39qKPpxkvAYrkEs/iJWYImYxIZEgJe9m465IkFy36hfOtg1arBTnzcw==
-X-Received: by 2002:ac2:410d:0:b0:4e9:b165:cdc with SMTP id b13-20020ac2410d000000b004e9b1650cdcmr165985lfi.17.1679617693436;
-        Thu, 23 Mar 2023 17:28:13 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id r8-20020a19ac48000000b004e8b90e14a8sm3138916lfc.25.2023.03.23.17.28.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 17:28:13 -0700 (PDT)
-Message-ID: <cbedb905-1888-5a41-047d-c8ce02c435a1@linaro.org>
-Date:   Fri, 24 Mar 2023 01:28:11 +0100
+        d=1e100.net; s=20210112; t=1679618125;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wmof/czDiZPAMVKVcZuACGS2ZwREuoODzaXC73kpCeg=;
+        b=xmQRVzr9AR5/R6tsDpEynpYqyMUuXC4zKodOvRy9VnyO789gq4TDE0mZDHbL2P+mkV
+         fxkPTn2vAY/dzbJ1OXLlgl+Aeka3Biq82qn5BdHlDByavtwLjKA7eLJkFfq6fh/SXHwB
+         cX2nWfouszi4tzbk/5NokBWfO+84ep375oC2eLuyjZexTB1SJTOfcLPFoGRS6ptM067s
+         8HUwD64HuMXIlhVipQ7BMiiLGUgygDG7jpYYUf0f9FQRpx1mmcJ/ux1FmbxAU/BeKhR8
+         pVHVu6VvedUAg2kYXIcylFs0an8zzHNXLMRxL9X+278vGZ4ORKrC6iqt/QbkdMaIegI6
+         p1Gw==
+X-Gm-Message-State: AAQBX9dojwaTYLkWZ/mtAYKlwZXLEIXZElwdNT0v/tgAiEVxQjTLaRMX
+        QRTfSuqGiwjE/IAH8q48nZZky65Wh5zWswtxzRc=
+X-Google-Smtp-Source: AKy350ZqJS40tTQ6KRlG0RyxlPiAVUDSJC7QOQ8yVDKWjE+ryc06E3chvR7YC9kCUrnoprQWV8qSrDyDAs+bNpP6Z1s=
+X-Received: by 2002:a63:66c1:0:b0:4fc:2a22:898a with SMTP id
+ a184-20020a6366c1000000b004fc2a22898amr95461pgc.3.1679618125440; Thu, 23 Mar
+ 2023 17:35:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] cpufreq: qcom-cpufreq-hw: Revert adding cpufreq qos
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Xuewen Yan <xuewen.yan@unisoc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20230323223343.587210-1-quic_bjorande@quicinc.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230323223343.587210-1-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230323221948.352154-1-corbet@lwn.net> <20230323221948.352154-3-corbet@lwn.net>
+In-Reply-To: <20230323221948.352154-3-corbet@lwn.net>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Thu, 23 Mar 2023 17:35:14 -0700
+Message-ID: <CAMo8BfKg+Gx6i6icZCBg=EqvXtwze0+ToG7x8kA2z=fwOoDxYQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] docs: move xtensa documentation under Documentation/arch/
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Chris Zankel <chris@zankel.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,
+        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 23.03.2023 23:33, Bjorn Andersson wrote:
-> The OSM/EPSS hardware controls the frequency of each CPU cluster based
-> on requests from the OS and various throttling events in the system.
-> While throttling is in effect the related dcvs interrupt will be kept
-> high. The purpose of the code handling this interrupt is to
-> continuously report the thermal pressure based on the throttled
-> frequency.
-> 
-> The reasoning for adding QoS control to this mechanism is not entirely
-> clear, but the introduction of commit 'c4c0efb06f17 ("cpufreq:
-> qcom-cpufreq-hw: Add cpufreq qos for LMh")' causes the
-> scaling_max_frequncy to be set to the throttled frequency. On the next
-> iteration of polling, the throttled frequency is above or equal to the
-> newly requested frequency, so the polling is stopped.
-Oh wow.. That must have been fun to debug..
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
-> 
-> With cpufreq limiting the max frequency, the hardware no longer report a
-> throttling state and no further updates to thermal pressure or qos
-> state are made.
-> 
-> The result of this is that scaling_max_frequency can only go down, and
-> the system becomes slower and slower every time a thermal throttling
-> event is reported by the hardware.
-> 
-> Even if the logic could be improved, there is no reason for software to
-> limit the max freqency in response to the hardware limiting the max
-> frequency. At best software will follow the reported hardware state, but
-> typically it will cause slower backoff of the throttling.
-> 
-> This reverts commit c4c0efb06f17fa4a37ad99e7752b18a5405c76dc.
-> 
-> Fixes: c4c0efb06f17 ("cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh")
-> Cc: stable@vger.kernel.org
-> Reported-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+On Thu, Mar 23, 2023 at 3:20=E2=80=AFPM Jonathan Corbet <corbet@lwn.net> wr=
+ote:
+>
+> Architecture-specific documentation is being moved into Documentation/arc=
+h/
+> as a way of cleaning up the top-level documentation directory and making
+> the docs hierarchy more closely match the source hierarchy.  Move
+> Documentation/xtensa into arch/ and fix all in-tree references.
+>
+> Cc: Chris Zankel <chris@zankel.net>
+> Cc: Max Filippov <jcmvbkbc@gmail.com>
+> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 > ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 14 --------------
->  1 file changed, 14 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index 575a4461c25a..1503d315fa7e 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -14,7 +14,6 @@
->  #include <linux/of_address.h>
->  #include <linux/of_platform.h>
->  #include <linux/pm_opp.h>
-> -#include <linux/pm_qos.h>
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
->  #include <linux/units.h>
-> @@ -60,8 +59,6 @@ struct qcom_cpufreq_data {
->  	struct clk_hw cpu_clk;
->  
->  	bool per_core_dcvs;
-> -
-> -	struct freq_qos_request throttle_freq_req;
->  };
->  
->  static struct {
-> @@ -351,8 +348,6 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
->  
->  	throttled_freq = freq_hz / HZ_PER_KHZ;
->  
-> -	freq_qos_update_request(&data->throttle_freq_req, throttled_freq);
-> -
->  	/* Update thermal pressure (the boost frequencies are accepted) */
->  	arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
->  
-> @@ -445,14 +440,6 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
->  	if (data->throttle_irq < 0)
->  		return data->throttle_irq;
->  
-> -	ret = freq_qos_add_request(&policy->constraints,
-> -				   &data->throttle_freq_req, FREQ_QOS_MAX,
-> -				   FREQ_QOS_MAX_DEFAULT_VALUE);
-> -	if (ret < 0) {
-> -		dev_err(&pdev->dev, "Failed to add freq constraint (%d)\n", ret);
-> -		return ret;
-> -	}
-> -
->  	data->cancel_throttle = false;
->  	data->policy = policy;
->  
-> @@ -519,7 +506,6 @@ static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
->  	if (data->throttle_irq <= 0)
->  		return;
->  
-> -	freq_qos_remove_request(&data->throttle_freq_req);
->  	free_irq(data->throttle_irq, data);
->  }
->  
+>  Documentation/arch/index.rst                 | 2 +-
+>  Documentation/{ =3D> arch}/xtensa/atomctl.rst  | 0
+>  Documentation/{ =3D> arch}/xtensa/booting.rst  | 0
+>  Documentation/{ =3D> arch}/xtensa/features.rst | 0
+>  Documentation/{ =3D> arch}/xtensa/index.rst    | 0
+>  Documentation/{ =3D> arch}/xtensa/mmu.rst      | 0
+>  arch/xtensa/include/asm/initialize_mmu.h     | 2 +-
+>  7 files changed, 2 insertions(+), 2 deletions(-)
+>  rename Documentation/{ =3D> arch}/xtensa/atomctl.rst (100%)
+>  rename Documentation/{ =3D> arch}/xtensa/booting.rst (100%)
+>  rename Documentation/{ =3D> arch}/xtensa/features.rst (100%)
+>  rename Documentation/{ =3D> arch}/xtensa/index.rst (100%)
+>  rename Documentation/{ =3D> arch}/xtensa/mmu.rst (100%)
+
+Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
+
+--=20
+Thanks.
+-- Max
