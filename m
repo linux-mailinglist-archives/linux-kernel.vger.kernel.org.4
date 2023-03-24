@@ -2,109 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA60A6C7FEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9416C7FED
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbjCXOdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
+        id S231725AbjCXOdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjCXOdC (ORCPT
+        with ESMTP id S229551AbjCXOdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:33:02 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE1814235;
-        Fri, 24 Mar 2023 07:33:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 24 Mar 2023 10:33:47 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4B310EB;
+        Fri, 24 Mar 2023 07:33:46 -0700 (PDT)
+Received: from [192.168.10.39] (unknown [119.155.2.20])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0C17BCE2401;
-        Fri, 24 Mar 2023 14:32:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45F8AC433EF;
-        Fri, 24 Mar 2023 14:32:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679668377;
-        bh=yxz8D2Zg0ZMCZt9HGM8J7hviWBLk56ggtJ1KZ+DkDGY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TW4X/v31+XvxigTPEeFIQrSpqf1C0wg34BEJL4Ewk0hehRrW2ZKZsQjnGXXStCEQp
-         5VkteDkPv+sdJn+wnCp00Q7ts0BXFvbvpUPoz/O9ozOkHdjO4LnSzaJvy2Lfehdi0r
-         o0bbmMBhVD3QDLkFyY4APnSyWtyO3ymDaEdHiB8QpljXQXoAKlvYNlSVeZg+pwPPZe
-         sPryW8AHtsYhf36NHIPB0QmnPAT7HBQXA41oQKclKF0ESgsa5b9KAsNfg7nYmJrsRX
-         ucNevYIcTADp3ZgDhRMyA4mplhSlroJWECB9XeRhBSBgNHFndzP4dipMvgK5XNtnz6
-         OfNZPsFUIN1Wg==
-Date:   Fri, 24 Mar 2023 14:32:50 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 3/5] cgroup/cpuset: Find another usable CPU if none found
- in current cpuset
-Message-ID: <20230324143247.GA27199@willie-the-truck>
-References: <20230306200849.376804-1-longman@redhat.com>
- <20230306200849.376804-4-longman@redhat.com>
- <20230314181749.5b4k6selbgdhl3up@blackpad>
- <58a1a878-fa0b-285d-3e43-2b5103d3c770@redhat.com>
- <20230317122708.ax3m2d4zijkfdzjq@blackpad>
- <ca664da8-0f47-06b2-a94c-82b2f9a1c3aa@redhat.com>
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D14B8660311C;
+        Fri, 24 Mar 2023 14:33:42 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679668425;
+        bh=FkSmg20lGxtuqjYpseIX/FjQ1FIGEcqzgaU/zd2MrUo=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=kYLya2ajCmE2jdUIJt8TOHQreOItjwPJs1N5zpwL9g7lu3tdG+3bAw7bJVi/U7d5J
+         N7gS+hwXqcwT1ieshp7bS/h/UaQl8iimcMMIxqVdOZN0HdIPe8nSTAxZ+ipZIzqzRV
+         HsnysM6pQ7XBr4NFnZLNKZuSSm/s44kOiKkMj9AYX5zzspEOemZY82AAz2QRLb4zf3
+         d+2eJ7+NmSSAMoWzqUhLA+pFP8GvqewE+UygnnyxoDXFa2iM4VHNyF6POgWKezuYl/
+         blyo9msPI9bBZh9Kyt6KQFNkjNrZTsazOP1uBsBKd0czT4TAY34Vu/H/9mp639Fd9l
+         cB3lQUt6toEDA==
+Message-ID: <b8bd4fd8-8066-f921-0bec-a5e7c684db77@collabora.com>
+Date:   Fri, 24 Mar 2023 19:33:38 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        linux-stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] mm/hugetlb: Fix uffd wr-protection for CoW
+ optimization path
+To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230324142620.2344140-1-peterx@redhat.com>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20230324142620.2344140-1-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ca664da8-0f47-06b2-a94c-82b2f9a1c3aa@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 10:59:26AM -0400, Waiman Long wrote:
-> On 3/17/23 08:27, Michal Koutný wrote:
-> > On Tue, Mar 14, 2023 at 04:22:06PM -0400, Waiman Long <longman@redhat.com> wrote:
-> > > Some arm64 systems can have asymmetric CPUs where certain tasks are only
-> > > runnable on a selected subset of CPUs.
-> > Ah, I'm catching up.
-> > 
-> > > This information is not captured in the cpuset. As a result,
-> > > task_cpu_possible_mask() may return a mask that have no overlap with
-> > > effective_cpus causing new_cpus to become empty.
-> > I can see that historically, there was an approach of terminating
-> > unaccomodable tasks:
-> >     94f9c00f6460 ("arm64: Remove logic to kill 32-bit tasks on 64-bit-only cores")
-> > the removal of killing had been made possible with
-> >     df950811f4a8 ("arm64: Prevent offlining first CPU with 32-bit EL0 on mismatched system").
-> > 
-> > That gives two other alternatives to affinity modification:
-> > 2) kill such tasks (not unlike OOM upon memory.max reduction),
-> > 3) reject cpuset reduction (violates cgroup v2 delegation).
-> > 
-> > What do you think about 2)?
+On 3/24/23 7:26â€¯PM, Peter Xu wrote:
+> This patch fixes an issue that a hugetlb uffd-wr-protected mapping can be
+> writable even with uffd-wp bit set.  It only happens with hugetlb private
+> mappings, when someone firstly wr-protects a missing pte (which will
+> install a pte marker), then a write to the same page without any prior
+> access to the page.
 > 
-> Yes, killing it is one possible solution.
+> Userfaultfd-wp trap for hugetlb was implemented in hugetlb_fault() before
+> reaching hugetlb_wp() to avoid taking more locks that userfault won't need.
+> However there's one CoW optimization path that can trigger hugetlb_wp()
+> inside hugetlb_no_page(), which will bypass the trap.
 > 
-> (3) doesn't work if the affinity change is due to hot cpu removal. So that
-> leaves this patch or (2) as the only alternative. I would like to hear what
-> Will and Tejun thinks about it.
+> This patch skips hugetlb_wp() for CoW and retries the fault if uffd-wp bit
+> is detected.  The new path will only trigger in the CoW optimization path
+> because generic hugetlb_fault() (e.g. when a present pte was wr-protected)
+> will resolve the uffd-wp bit already.  Also make sure anonymous UNSHARE
+> won't be affected and can still be resolved, IOW only skip CoW not CoR.
+> 
+> This patch will be needed for v5.19+ hence copy stable.
+> 
+> Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Cc: linux-stable <stable@vger.kernel.org>
+> Fixes: 166f3ecc0daf ("mm/hugetlb: hook page faults for uffd write protection")
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-The main constraint from the Android side (the lucky ecosystem where these
-SoCs tend to show up) is that existing userspace (including 32-bit binaries)
-continues to function without modification. So approaches such as killing
-tasks or rejecting system calls tend not to work as well, since you
-inevitably get divergent behaviour leading to functional breakage rather
-than e.g. performance anomalies.
+> ---
+> 
+> Notes:
+> 
+> v2 is not on the list but in an attachment in the reply; this v3 is mostly
+> to make sure it's not the same as the patch used to be attached.  Sorry
+> Andrew, we need to drop the queued one as I rewrote the commit message.
+> 
+> Muhammad, I didn't attach your T-b because of the slight functional change.
+> Please feel free to re-attach if it still works for you (which I believe
+> should).
+Thank you for the fix.
 
-Having said that, the behaviour we currently have in mainline seems to
-be alright, so please don't go out of your way to accomodate these SoCs.
-I'm mainly just concerned about introducing any regressions, which is why
-I ran my tests on this series
+> 
+> thanks,
+> ---
+>  mm/hugetlb.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 8bfd07f4c143..a58b3739ed4b 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -5478,7 +5478,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>  		       struct folio *pagecache_folio, spinlock_t *ptl)
+>  {
+>  	const bool unshare = flags & FAULT_FLAG_UNSHARE;
+> -	pte_t pte;
+> +	pte_t pte = huge_ptep_get(ptep);
+>  	struct hstate *h = hstate_vma(vma);
+>  	struct page *old_page;
+>  	struct folio *new_folio;
+> @@ -5487,6 +5487,17 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>  	unsigned long haddr = address & huge_page_mask(h);
+>  	struct mmu_notifier_range range;
+>  
+> +	/*
+> +	 * Never handle CoW for uffd-wp protected pages.  It should be only
+> +	 * handled when the uffd-wp protection is removed.
+> +	 *
+> +	 * Note that only the CoW optimization path (in hugetlb_no_page())
+> +	 * can trigger this, because hugetlb_fault() will always resolve
+> +	 * uffd-wp bit first.
+> +	 */
+> +	if (!unshare && huge_pte_uffd_wp(pte))
+> +		return 0;
+> +
+>  	/*
+>  	 * hugetlb does not support FOLL_FORCE-style write faults that keep the
+>  	 * PTE mapped R/O such as maybe_mkwrite() would do.
+> @@ -5500,7 +5511,6 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>  		return 0;
+>  	}
+>  
+> -	pte = huge_ptep_get(ptep);
+>  	old_page = pte_page(pte);
+>  
+>  	delayacct_wpcopy_start();
 
-Cheers,
-
-Will
+-- 
+BR,
+Muhammad Usama Anjum
