@@ -2,101 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCF26C79BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B4A6C79C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbjCXI1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 04:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
+        id S231693AbjCXI2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 04:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231583AbjCXI1A (ORCPT
+        with ESMTP id S231307AbjCXI2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 04:27:00 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7DB2595D
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:26:59 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id b20so4840787edd.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:26:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679646418;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rMK8N+uW1xIMv8pFUrJlsRKDsRw1dlAiL2CT5NysWvI=;
-        b=VkJGjoZeet6GdGAtiIVqYDaZ+dGx2Kqi6tYlzgnCQaQFYRs7+4tgq90DqJCBithiUJ
-         GPWdhr+tFy+EkOV79dgC4rFZTHMQYrrkgxqgoTLir0xXGN/pvAvHFKrgSymkQKsujIfW
-         BczTBFzM6HWnWrEYDpXOrDr9f4fSdlTegq9rt7NUGAKD0jXXOFkRYRqcWgoblSO640g/
-         +vRo0K5BRjfMQVRnzileyjBc6McOSFlABMWkurFgEqZXb0MKCYfc12IsAaR5N2qn7bX/
-         i9RdDRPFTX5xW7tvz9CNR7bxr2vQmYrmCjl9XbC3yavvdGBW3aiyKxvzz0X8+0ClFvwo
-         aS3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679646418;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rMK8N+uW1xIMv8pFUrJlsRKDsRw1dlAiL2CT5NysWvI=;
-        b=bANOEOJItDtZO8YOfwtrscKx7wE+JQ51gvd5DFh0NkBUamxnJJq3lYEBqHKVX1FU+G
-         7+rsjZ4fEJbjJ8aTeXuF0fa1dZnY8lUzgPnZN78KGdESsArEYOuJWdmuvOUKb8y9rvJ5
-         0Vx8tTcX6tQi0CzQ9KLNsILNZFQ+POdVUdiLEQOEYhhQngcDPgJN4XxtoPtEmg/SQ2Uy
-         yO+XNZYIQBGEXz1rq4dDlOf+YNBApWjDL5pByli2sKQcj4UWHtiPliuFkqcPjZ68vsd9
-         sNDwMp/3O2bUitUHQCpiixVkkHyFPYPi6u6xOjOz1+PG5UIFUpgo3naujBGmE4F/sFf5
-         E1qA==
-X-Gm-Message-State: AAQBX9eq24q2dkAO+yFLI123y9tDRtrvT2RikVjID03E8Xh79QIaVm4D
-        YzWnY6bKTNAAU1IgonI6Eb6cb2QlvDsL9ganlQY=
-X-Google-Smtp-Source: AKy350aoXQWcPH+E3C+mxIDLEpYt9lK6TGHWgh3btJpBgFoZJKlnDgQa4HY94LxHDQITBl8eZGjdIA==
-X-Received: by 2002:a17:906:2484:b0:930:8a26:eed8 with SMTP id e4-20020a170906248400b009308a26eed8mr1798359ejb.71.1679646417983;
-        Fri, 24 Mar 2023 01:26:57 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ce50:243f:54cc:5373? ([2a02:810d:15c0:828:ce50:243f:54cc:5373])
-        by smtp.gmail.com with ESMTPSA id v14-20020a1709063bce00b0093344ef3764sm8028317ejf.57.2023.03.24.01.26.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 01:26:57 -0700 (PDT)
-Message-ID: <eb05ac50-fda2-8324-1fd9-fda8579dfd8c@linaro.org>
-Date:   Fri, 24 Mar 2023 09:26:56 +0100
+        Fri, 24 Mar 2023 04:28:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365521166F
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:28:09 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C07DB6603103;
+        Fri, 24 Mar 2023 08:28:07 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679646488;
+        bh=OSwLd13ABDNH1gGaWUK5KSnyz988zi7C1RttukscA54=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ou2NdNkkb7pLdAkRWSCBxGmVGnfSDgJCLQm4JCEeXffSRjOSweFQHdCYcUlQdBsni
+         ufpIFuXAaTQ1EU1ccvxC/7RPqNcwFxS8+6iGpyPot/PH3LmeUSdpOT2zO/9+Nxm6TU
+         ipgBjTYph2G+1cA+KDTLieTuwU1bulKNnHrnS3CdP/PIs+/kvBF45e6P4EbMMcKMVR
+         bJYP7NQ/fcGRc+2XwW2ppKesuVz14Mp8ztTalJi4jOLH9UlicJaIgYvoigHnJDWIqx
+         nXh7KjJ24Ywt4l20BhvWxv0xyVvrqa3tX/rhLrFABqNk2a3a4uetV+Fz6Eqg5lzYdR
+         hoY1cRNr1YZfQ==
+Message-ID: <4f9d243c-0029-fee6-5caa-a4463dfe2b77@collabora.com>
+Date:   Fri, 24 Mar 2023 09:28:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] MAINTAINERS: remove the linux-nfc@lists.01.org list
+Subject: Re: [PATCH] soc: mediatek: mutex: Use dev_err_probe()
+To:     ye.xingchen@zte.com.cn, matthias.bgg@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <202303241017290414354@zte.com.cn>
 Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org
-Cc:     Bongsu Jeon <bongsu.jeon@samsung.com>,
-        Mark Greer <mgreer@animalcreek.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230324081613.32000-1-lukas.bulwahn@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230324081613.32000-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <202303241017290414354@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/03/2023 09:16, Lukas Bulwahn wrote:
-> Some MAINTAINERS sections mention to mail patches to the list
-> linux-nfc@lists.01.org. Probably due to changes on Intel's 01.org website
-> and servers, the list server lists.01.org/ml01.01.org is simply gone.
+Il 24/03/23 03:17, ye.xingchen@zte.com.cn ha scritto:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
 > 
-> Considering emails recorded on lore.kernel.org, only a handful of emails
-> where sent to the linux-nfc@lists.01.org list, and they are usually also
-> sent to the netdev mailing list as well, where they are then picked up.
-> So, there is no big benefit in restoring the linux-nfc elsewhere.
+> Replace the open-code with dev_err_probe() to simplify the code.
 > 
-> Remove all occurrences of the linux-nfc@lists.01.org list in MAINTAINERS.
-> 
-> Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Link: https://lore.kernel.org/all/CAKXUXMzggxQ43DUZZRkPMGdo5WkzgA=i14ySJUFw4kZfE5ZaZA@mail.gmail.com/
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
 
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
 
