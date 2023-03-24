@@ -2,173 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 914FD6C7F97
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 065566C7FA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbjCXONV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
+        id S232131AbjCXONy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbjCXONT (ORCPT
+        with ESMTP id S231823AbjCXONt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:13:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EEC930E4;
-        Fri, 24 Mar 2023 07:13:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A1AF11FB;
-        Fri, 24 Mar 2023 07:14:02 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.55.116])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 367B43F71E;
-        Fri, 24 Mar 2023 07:13:16 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 14:13:13 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH 01/10] locking/atomic: Add missing cast to try_cmpxchg()
- fallbacks
-Message-ID: <ZB2v+avNt52ac/+w@FVFF77S0Q05N>
-References: <20230305205628.27385-1-ubizjak@gmail.com>
- <20230305205628.27385-2-ubizjak@gmail.com>
+        Fri, 24 Mar 2023 10:13:49 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC61D515;
+        Fri, 24 Mar 2023 07:13:43 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 881A55FD34;
+        Fri, 24 Mar 2023 17:13:41 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679667221;
+        bh=B7CmNMAJdYjHdEvEWYvmv46K1UaDZlTyHHFzSrMmmy8=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=fcTCQhToIJaeKCoTNwHH9E+n1GtpHIciXhbS0m6Toks9D2HKRlseuyhdMo9QAnics
+         MgQfEZ7+knMATbnanZL17d9guEpYBJL+RZeMhh+5gBpMFarNcy9ElwmBIEKSWbuUdA
+         O7cveLmtgjNhT85Bwk9PHS/LrVc7oyuvU3cjdCo/UoHSaY8FcVT+Lr4m1qqfqhnihe
+         AJ36EV+qN8dLgCp3qcyQy5QDwWSgCuYInaeAPin6Ip90/Oa3ChoKi4+qAdCQWAImPN
+         uEmYjB1YA1fky7DcPYKwkUB+Ec3LyNWreyrnHPuh3OW38R4ZOt9adu33R9FTq9NaGk
+         YvHE+/R6MiT4w==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 24 Mar 2023 17:13:41 +0300 (MSK)
+Date:   Fri, 24 Mar 2023 17:13:40 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>
+CC:     <krzysztof.kozlowski@linaro.org>, <robh@kernel.org>,
+        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>, <jianxin.pan@amlogic.com>,
+        <kernel@sberdevices.ru>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <rockosov@gmail.com>
+Subject: Re: [PATCH v2] firmware: meson_sm: populate platform devices from sm
+ device tree data
+Message-ID: <20230324141340.5dkuqip5zbuwjv3x@CAB-WSD-L081021>
+References: <20230324140141.6743-1-ddrokosov@sberdevices.ru>
+ <f1088121-02c7-86da-d603-7c2015030b0e@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230305205628.27385-2-ubizjak@gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <f1088121-02c7-86da-d603-7c2015030b0e@linaro.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/24 06:52:00 #21002836
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 05, 2023 at 09:56:19PM +0100, Uros Bizjak wrote:
-> Cast _oldp to the type of _ptr to avoid incompatible-pointer-types warning.
-
-Can you give an example of where we are passing an incompatible pointer?
-
-That sounds indicative of a bug in the caller, but maybe I'm missing some
-reason this is necessary due to some indirection.
-
-> Fixes: 29f006fdefe6 ("asm-generic/atomic: Add try_cmpxchg() fallbacks")
-
-I'm not sure that this needs a fixes tag. Does anything go wrong today, or only
-later in this series?
-
-Thanks,
-Mark.
-
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> ---
->  include/linux/atomic/atomic-arch-fallback.h | 18 +++++++++---------
->  scripts/atomic/gen-atomic-fallback.sh       |  2 +-
->  2 files changed, 10 insertions(+), 10 deletions(-)
+On Fri, Mar 24, 2023 at 03:05:53PM +0100, neil.armstrong@linaro.org wrote:
+> On 24/03/2023 15:01, Dmitry Rokosov wrote:
+> > In some meson boards, secure monitor device has children, for example,
+> > power secure controller. By default, secure monitor isn't the bus in terms
+> > of device tree subsystem, so the of_platform initialization code doesn't
+> > populate its device tree data. As a result, secure monitor's children
+> > aren't probed at all.
+> > 
+> > Run the 'of_platform_populate()' routine manually to resolve such issues.
+> > 
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > ---
+> >   drivers/firmware/meson/meson_sm.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/firmware/meson/meson_sm.c b/drivers/firmware/meson/meson_sm.c
+> > index 77aa5c6398aa..b79d0e316cb1 100644
+> > --- a/drivers/firmware/meson/meson_sm.c
+> > +++ b/drivers/firmware/meson/meson_sm.c
+> > @@ -316,7 +316,7 @@ static int __init meson_sm_probe(struct platform_device *pdev)
+> >   	if (sysfs_create_group(&pdev->dev.kobj, &meson_sm_sysfs_attr_group))
+> >   		goto out_in_base;
+> > -	return 0;
+> > +	return devm_of_platform_populate(dev);
 > 
-> diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
-> index 77bc5522e61c..19debd501ee7 100644
-> --- a/include/linux/atomic/atomic-arch-fallback.h
-> +++ b/include/linux/atomic/atomic-arch-fallback.h
-> @@ -87,7 +87,7 @@
->  #ifndef arch_try_cmpxchg
->  #define arch_try_cmpxchg(_ptr, _oldp, _new) \
->  ({ \
-> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
->  	___r = arch_cmpxchg((_ptr), ___o, (_new)); \
->  	if (unlikely(___r != ___o)) \
->  		*___op = ___r; \
-> @@ -98,7 +98,7 @@
->  #ifndef arch_try_cmpxchg_acquire
->  #define arch_try_cmpxchg_acquire(_ptr, _oldp, _new) \
->  ({ \
-> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
->  	___r = arch_cmpxchg_acquire((_ptr), ___o, (_new)); \
->  	if (unlikely(___r != ___o)) \
->  		*___op = ___r; \
-> @@ -109,7 +109,7 @@
->  #ifndef arch_try_cmpxchg_release
->  #define arch_try_cmpxchg_release(_ptr, _oldp, _new) \
->  ({ \
-> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
->  	___r = arch_cmpxchg_release((_ptr), ___o, (_new)); \
->  	if (unlikely(___r != ___o)) \
->  		*___op = ___r; \
-> @@ -120,7 +120,7 @@
->  #ifndef arch_try_cmpxchg_relaxed
->  #define arch_try_cmpxchg_relaxed(_ptr, _oldp, _new) \
->  ({ \
-> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
->  	___r = arch_cmpxchg_relaxed((_ptr), ___o, (_new)); \
->  	if (unlikely(___r != ___o)) \
->  		*___op = ___r; \
-> @@ -157,7 +157,7 @@
->  #ifndef arch_try_cmpxchg64
->  #define arch_try_cmpxchg64(_ptr, _oldp, _new) \
->  ({ \
-> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
->  	___r = arch_cmpxchg64((_ptr), ___o, (_new)); \
->  	if (unlikely(___r != ___o)) \
->  		*___op = ___r; \
-> @@ -168,7 +168,7 @@
->  #ifndef arch_try_cmpxchg64_acquire
->  #define arch_try_cmpxchg64_acquire(_ptr, _oldp, _new) \
->  ({ \
-> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
->  	___r = arch_cmpxchg64_acquire((_ptr), ___o, (_new)); \
->  	if (unlikely(___r != ___o)) \
->  		*___op = ___r; \
-> @@ -179,7 +179,7 @@
->  #ifndef arch_try_cmpxchg64_release
->  #define arch_try_cmpxchg64_release(_ptr, _oldp, _new) \
->  ({ \
-> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
->  	___r = arch_cmpxchg64_release((_ptr), ___o, (_new)); \
->  	if (unlikely(___r != ___o)) \
->  		*___op = ___r; \
-> @@ -190,7 +190,7 @@
->  #ifndef arch_try_cmpxchg64_relaxed
->  #define arch_try_cmpxchg64_relaxed(_ptr, _oldp, _new) \
->  ({ \
-> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
->  	___r = arch_cmpxchg64_relaxed((_ptr), ___o, (_new)); \
->  	if (unlikely(___r != ___o)) \
->  		*___op = ___r; \
-> @@ -2456,4 +2456,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
->  #endif
->  
->  #endif /* _LINUX_ATOMIC_FALLBACK_H */
-> -// b5e87bdd5ede61470c29f7a7e4de781af3770f09
-> +// 1b4d4c82ae653389cd1538d5b07170267d9b3837
-> diff --git a/scripts/atomic/gen-atomic-fallback.sh b/scripts/atomic/gen-atomic-fallback.sh
-> index 3a07695e3c89..39f447161108 100755
-> --- a/scripts/atomic/gen-atomic-fallback.sh
-> +++ b/scripts/atomic/gen-atomic-fallback.sh
-> @@ -171,7 +171,7 @@ cat <<EOF
->  #ifndef arch_try_${cmpxchg}${order}
->  #define arch_try_${cmpxchg}${order}(_ptr, _oldp, _new) \\
->  ({ \\
-> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \\
-> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \\
->  	___r = arch_${cmpxchg}${order}((_ptr), ___o, (_new)); \\
->  	if (unlikely(___r != ___o)) \\
->  		*___op = ___r; \\
-> -- 
-> 2.39.2
+> You should check return and jump to out_in_base on error instead.
 > 
+> Neil
+> 
+
+Ah, exactly. There is one direct non-devm ioremap above. I hurried up,
+sorry.
+
+> >   out_in_base:
+> >   	iounmap(fw->sm_shmem_in_base);
+> 
+
+-- 
+Thank you,
+Dmitry
