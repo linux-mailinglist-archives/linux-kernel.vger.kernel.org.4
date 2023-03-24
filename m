@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EDF6C7B36
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5506C7B2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbjCXJXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 05:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        id S232009AbjCXJWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 05:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbjCXJXV (ORCPT
+        with ESMTP id S232078AbjCXJWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 05:23:21 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E77E3AB;
-        Fri, 24 Mar 2023 02:23:20 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id eh3so5139865edb.11;
-        Fri, 24 Mar 2023 02:23:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679649799;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OBqIhqgnT5Tx44NknDnNp6UNXSDtAsauUjSMoRmswK8=;
-        b=W59iSxYIe8739Z+MVxjPiOJyMysvhM6mCxLCZEZPgS5tLy2mHQ4ENMuEXdYmvme4HM
-         t0zcEp8R+7jIeqdj+MIQogX/H+ca9+O3Hmh5PHZz++0BgnE4Sy3L9hWCoA1Mt3kmWWPx
-         nfcBfIwz+QIIx2jqSoTxWd9hxQtoCYN1J8CIL/gmDRPk6iy+BU4AJXsTodnBkVsQYjPF
-         DvAUePueMiHtiyP6yGqpornczGHMVsfmnZPhYEXrTRfCL33+GbMfx+kOywLBek5CEOl1
-         yrZj7pvnU8WAAcPLysNxb/+qA58n7Cwoed1ICpTCwOoYOKnm6jwPJscdK3YbDnxFQ8ib
-         laLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679649799;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OBqIhqgnT5Tx44NknDnNp6UNXSDtAsauUjSMoRmswK8=;
-        b=QxZ58+pnwdvXVjVrNuYNyF/1683FROAXLGWZNd2JpgadA/esAFyNHcomIo8WhLsYJF
-         bGbVwzYBXao4+jKP71Xr1LHGec0mZJ2nMD0zbZFz0R9y5JFbFk4M4y8zV18sAmmIl0a/
-         I8YuvGo4wjE08hPRdZLlk3yPPCbwr87MrdgIsLBT8pLUvW43U3voG+DwuwgqVMybiBHj
-         vQjcp9RgJBq45lRkAAmOLb3jPUjKQI+b0pN3AHaI4ZwGZKAfmuw8o1BH2wfr5YvLCmjR
-         tmz148AkEd8PZTbrzWYVt4j5v4KVOgxdLjHC59v4v8wvvoBVRPsC/ZGUDlg2XgsPXUa3
-         rcrw==
-X-Gm-Message-State: AAQBX9cJA/kmv2yf5vW/KicoWZBbtJ/JkBNc3qJNi5M3AFG4ghIv500u
-        ArSR2LMD0FZ+o1yOqCer3yvbiUUL7/dEcw==
-X-Google-Smtp-Source: AKy350bBiN60fBswq8Aaxq4PFkLiuZpubGTDMBCSbbUCkQIG8ZYVMOR/wnXl3nfX7edIwMVmTxIxzA==
-X-Received: by 2002:a17:906:ad98:b0:930:6d59:d1f8 with SMTP id la24-20020a170906ad9800b009306d59d1f8mr1874861ejb.10.1679649798777;
-        Fri, 24 Mar 2023 02:23:18 -0700 (PDT)
-Received: from felia.fritz.box (ipbcc1d920.dynamic.kabel-deutschland.de. [188.193.217.32])
-        by smtp.gmail.com with ESMTPSA id i13-20020a170906114d00b008e0bb004976sm9948654eja.134.2023.03.24.02.23.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 02:23:18 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH v2] selinux: clean up dead code after removing runtime disable
-Date:   Fri, 24 Mar 2023 10:21:14 +0100
-Message-Id: <20230324092114.13907-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 24 Mar 2023 05:22:13 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FC3233C6;
+        Fri, 24 Mar 2023 02:21:51 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32O737JW001266;
+        Fri, 24 Mar 2023 04:21:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=PjojhDR+j8OZSSeQ3YV5sggRek06OGFFYeqFFzU5slg=;
+ b=KT9Ed3WONEmFg0DvcMihUxIoW8cXUx9QddLgqk1QveYSM+I94fkw2kYmzzAM0ZqsInrC
+ Y6eisyyALiteRfRLls2TpDAcQDb1Px+r0T8N6e4s3K/bHg1EfCXJUzwk3rKVSUfxN/nm
+ EZtX+ppSZq7Ib082ZXsYinc9le0WWTNjhLNX7+jKH+jf+FpG20mw/wTjX7YP4d4h3HgS
+ 3Ms9HkBOFRWbIinxgmUfB5qwYGumSEMfiLXwa9+WNxK0ZUds+b2Ln7zP8pg9iSl4lSvp
+ YNRwSR/0oSK/EIvRPlwZRxv/BSjKU95S9ribeQ+oQyn8HSUMKFMweBogNiLd3Uj2IGrz OA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pgy7drqyk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 04:21:43 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Fri, 24 Mar
+ 2023 04:21:41 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Fri, 24 Mar 2023 04:21:41 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id BC8C545;
+        Fri, 24 Mar 2023 09:21:41 +0000 (UTC)
+Date:   Fri, 24 Mar 2023 09:21:41 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Doug Anderson <dianders@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH] regulator: wm8994: Use PROBE_FORCE_SYNCHRONOUS
+Message-ID: <20230324092141.GN68926@ediswmail.ad.cirrus.com>
+References: <CGME20230323083330eucas1p1f7e3f9beb5ba168c6b13374d74c158f0@eucas1p1.samsung.com>
+ <20230323083312.199189-1-m.szyprowski@samsung.com>
+ <20230323114035.GL68926@ediswmail.ad.cirrus.com>
+ <CAD=FV=UYO1KaoAZ7o5cA83SC1VHRomvJfaXVWyYPKrEZHyNNjg@mail.gmail.com>
+ <20230323174531.GM68926@ediswmail.ad.cirrus.com>
+ <beeef631-943a-40db-af09-753c96b5b140@sirena.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <beeef631-943a-40db-af09-753c96b5b140@sirena.org.uk>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: 3-rM4yn8D5wWzFtoApgRb1-j2A2GC718
+X-Proofpoint-GUID: 3-rM4yn8D5wWzFtoApgRb1-j2A2GC718
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit f22f9aaf6c3d ("selinux: remove the runtime disable functionality")
-removes the config SECURITY_SELINUX_DISABLE. This results in some dead code
-in lsm_hooks.h.
+On Thu, Mar 23, 2023 at 05:49:28PM +0000, Mark Brown wrote:
+> On Thu, Mar 23, 2023 at 05:45:31PM +0000, Charles Keepax wrote:
+> 
+> > I think really the best place to look at this would be at the
+> > regulator level. It is fine if mfd_add_devices passes, the problem
+> > really is that the regulator core doesn't realise the regulator is
+> > going to be arriving, and thus returns a dummy regulator, rather
+> > than returning EPROBE_DEFER. If it did the MFD driver would probe
+> > defer at the point of requesting the regulator, which would all
+> > make sense.
+> 
+> You need the MFD to tell the regulator subsystem that there's a
+> regulator bound there, or to force all the users to explicitly do the
+> mapping of the regulator in their firmwares (which isn't really a
+> viable approach).
 
-Remove this dead code.
+Yeah changing the firmware situation is definitely not a goer. I
+need to just clarify in my head exactly what is missing, with
+respect to the know the regulator exists.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- include/linux/lsm_hooks.h | 23 -----------------------
- 1 file changed, 23 deletions(-)
-
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 2b04f94a31bd..ab2b2fafa4a4 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -117,29 +117,6 @@ extern struct lsm_info __start_early_lsm_info[], __end_early_lsm_info[];
- 		__used __section(".early_lsm_info.init")		\
- 		__aligned(sizeof(unsigned long))
- 
--#ifdef CONFIG_SECURITY_SELINUX_DISABLE
--/*
-- * Assuring the safety of deleting a security module is up to
-- * the security module involved. This may entail ordering the
-- * module's hook list in a particular way, refusing to disable
-- * the module once a policy is loaded or any number of other
-- * actions better imagined than described.
-- *
-- * The name of the configuration option reflects the only module
-- * that currently uses the mechanism. Any developer who thinks
-- * disabling their module is a good idea needs to be at least as
-- * careful as the SELinux team.
-- */
--static inline void security_delete_hooks(struct security_hook_list *hooks,
--						int count)
--{
--	int i;
--
--	for (i = 0; i < count; i++)
--		hlist_del_rcu(&hooks[i].list);
--}
--#endif /* CONFIG_SECURITY_SELINUX_DISABLE */
--
- extern int lsm_inode_alloc(struct inode *inode);
- 
- #endif /* ! __LINUX_LSM_HOOKS_H */
--- 
-2.17.1
-
+Thanks,
+Charles
