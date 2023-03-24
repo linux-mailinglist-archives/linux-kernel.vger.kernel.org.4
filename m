@@ -2,308 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 354566C7649
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 04:34:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 981DB6C764A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 04:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbjCXDe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 23:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
+        id S230021AbjCXDhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 23:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbjCXDeL (ORCPT
+        with ESMTP id S229589AbjCXDhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 23:34:11 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA38329141;
-        Thu, 23 Mar 2023 20:34:07 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id kq3so677911plb.13;
-        Thu, 23 Mar 2023 20:34:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679628847;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h3q26JSTHb9HYIOZ2NkxVcC/C3mDBZ5uwCCl/dONZmQ=;
-        b=cuRpWV5cKp07vKKkNf/V5y1lMpltfHXdtPyPSyVUxRT0PvblGr1GZBBms70dHT4LIV
-         4cLikAHxv86L3624SAn+yQv8m/7Q+PJFHAENozudSc0ikV7ecbWW36MP2pOzt23itJvY
-         dbVRAoWVf3OJa4qOKWTdeOlWRiyOa2L70DhV9CMJZobBE11PlCXVklMjCb0sJK3eVbFw
-         eR5nBayIzej1NuAyunK9R7zvHnt5HYCHSuboai5o0UxNT9uzxkzpyv3ofyaWUJKj/+p7
-         ztdQee2/V/Vb1Pt1hERh6wRx00yqrHdXNkmUQIAqcN5MX/ChRJ7TY5PdqaUrD/Wol4ia
-         hXKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679628847;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h3q26JSTHb9HYIOZ2NkxVcC/C3mDBZ5uwCCl/dONZmQ=;
-        b=KML3Kmsn5UXpsJfJgTmNCP9p+gPObp9XMsFtbC0a6sdOHlVQ4RLoUxxYLw5QCApLXo
-         nSDO7fHJH7jWbB0w8Q2egdfL2TKRY0IqunboTlb8YldgtaayC6NvOjQAJxMMXAnXcsYO
-         OJMGma3GCd+3q50QJ1UPdEnAShQEY1XI6PxMzXsFpT0s0Xox3edhBPp1yrVXuwT/u9ud
-         5EzjpHymeWvU7Mfy0pOYV3m46rmgUAF2lH8tn2OuJn1FXLc0IUL+9D4Swv8CSTOOUDr8
-         0Cue52Q3IjFFhF5Kcf0ZC03TfPI/gla0lo+bHdsyw+MiBItX2z7sVXdmzI+LOu6QJpZc
-         91sQ==
-X-Gm-Message-State: AAQBX9f+Fm18yAXa03AL0bTM/SscQkFjdsVOCDnVySVwiN1ApGx8PbpT
-        GsKzE3UfmkkRvGsT1WDcB4A=
-X-Google-Smtp-Source: AKy350Zhb8seJM1p6xL9hPA76B1b6gt2oZuXkKR09k+XlG3QkiYRvOdukNAY2H7Ug32Uuo+Eu2O8ZQ==
-X-Received: by 2002:a17:903:41cf:b0:1a1:a800:96a7 with SMTP id u15-20020a17090341cf00b001a1a80096a7mr1388838ple.8.1679628847167;
-        Thu, 23 Mar 2023 20:34:07 -0700 (PDT)
-Received: from localhost.localdomain ([221.226.144.218])
-        by smtp.gmail.com with ESMTPSA id h13-20020a170902f7cd00b0019d1f42b00csm13014101plw.17.2023.03.23.20.34.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 20:34:06 -0700 (PDT)
-From:   Song Shuai <suagrfillet@gmail.com>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, rostedt@goodmis.org, mhiramat@kernel.org,
-        mark.rutland@arm.com, guoren@kernel.org, e.shatokhin@yadro.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        Song Shuai <suagrfillet@gmail.com>
-Subject: [PATCH V8 4/4] samples: ftrace: Add riscv support for SAMPLE_FTRACE_DIRECT[_MULTI]
-Date:   Fri, 24 Mar 2023 11:33:42 +0800
-Message-Id: <20230324033342.3177979-5-suagrfillet@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230324033342.3177979-1-suagrfillet@gmail.com>
-References: <20230324033342.3177979-1-suagrfillet@gmail.com>
+        Thu, 23 Mar 2023 23:37:32 -0400
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6452D12D
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 20:37:30 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=cruzzhao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VeWDNUT_1679629046;
+Received: from 30.97.48.251(mailfrom:cruzzhao@linux.alibaba.com fp:SMTPD_---0VeWDNUT_1679629046)
+          by smtp.aliyun-inc.com;
+          Fri, 24 Mar 2023 11:37:27 +0800
+Message-ID: <ab6e95da-2e17-5b17-9e3c-ba71aa951da0@linux.alibaba.com>
+Date:   Fri, 24 Mar 2023 11:37:26 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH] sched: push force idled core_pick task to another cpu
+From:   cruzzhao <cruzzhao@linux.alibaba.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+References: <1678106502-58189-1-git-send-email-CruzZhao@linux.alibaba.com>
+Content-Language: en-US
+In-Reply-To: <1678106502-58189-1-git-send-email-CruzZhao@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-select HAVE_SAMPLE_FTRACE_DIRECT and HAVE_SAMPLE_FTRACE_DIRECT_MULTI
-for ARCH_RV64I in arch/riscv/Kconfig. And add riscv asm code for
-the ftrace-direct*.c files in samples/ftrace/.
+ping...
+As core pick task is the max priority task, if it's forced
+idle, it's better to find a suitable and idle cpu to run
+rather than waiting for other cpus to steal. BTW, there's
+no chance for uncookie'd tasks to be stolen.
 
-Link: https://lore.kernel.org/linux-riscv/c68bac83-5c88-80b1-bac9-e1fd4ea8f07e@yadro.com/T/#ma13012560331c66b051b580b3ab4a04ba44455ec
-Tested-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
-Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-Tested-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- arch/riscv/Kconfig                          |  2 ++
- samples/ftrace/ftrace-direct-modify.c       | 33 +++++++++++++++++
- samples/ftrace/ftrace-direct-multi-modify.c | 39 +++++++++++++++++++++
- samples/ftrace/ftrace-direct-multi.c        | 23 ++++++++++++
- samples/ftrace/ftrace-direct-too.c          | 26 ++++++++++++++
- samples/ftrace/ftrace-direct.c              | 22 ++++++++++++
- 6 files changed, 145 insertions(+)
+Consider the following scenario:
+Task A is cookie'd a, task B1 and B2 are cookie'd b.
+A and B1 are running on core1, and B2 is running on core2
+with sibling idle.
+There's no chance for B1 to migrate to ht1 of B2 immidiately,
+and will cause a lot of force idle.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 17052b2dc83c..5b35496ac644 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -115,6 +115,8 @@ config RISCV
- 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RSEQ
-+	select HAVE_SAMPLE_FTRACE_DIRECT
-+	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select IRQ_DOMAIN
-diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
-index d93abbcb1f4c..32f973e7bab1 100644
---- a/samples/ftrace/ftrace-direct-modify.c
-+++ b/samples/ftrace/ftrace-direct-modify.c
-@@ -22,6 +22,39 @@ extern void my_tramp2(void *);
- 
- static unsigned long my_ip = (unsigned long)schedule;
- 
-+#ifdef CONFIG_RISCV
-+
-+asm ("	.pushsection    .text, \"ax\", @progbits\n"
-+"	.type		my_tramp1, @function\n"
-+"	.globl		my_tramp1\n"
-+"   my_tramp1:\n"
-+"	addi sp,sp,-16\n"
-+"	sd   t0,0(sp)\n"
-+"	sd   ra,8(sp)\n"
-+"	call my_direct_func1\n"
-+"	ld   t0,0(sp)\n"
-+"	ld   ra,8(sp)\n"
-+"	addi sp,sp,16\n"
-+"	jr t0\n"
-+"	.size		my_tramp1, .-my_tramp1\n"
-+
-+"	.type		my_tramp2, @function\n"
-+"	.globl		my_tramp2\n"
-+"   my_tramp2:\n"
-+"	addi sp,sp,-16\n"
-+"	sd   t0,0(sp)\n"
-+"	sd   ra,8(sp)\n"
-+"	call my_direct_func2\n"
-+"	ld   t0,0(sp)\n"
-+"	ld   ra,8(sp)\n"
-+"	addi sp,sp,16\n"
-+"	jr t0\n"
-+"	.size		my_tramp2, .-my_tramp2\n"
-+"	.popsection\n"
-+);
-+
-+#endif /* CONFIG_RISCV */
-+
- #ifdef CONFIG_X86_64
- 
- #include <asm/ibt.h>
-diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
-index b58c594efb51..045a4af041ce 100644
---- a/samples/ftrace/ftrace-direct-multi-modify.c
-+++ b/samples/ftrace/ftrace-direct-multi-modify.c
-@@ -20,6 +20,45 @@ void my_direct_func2(unsigned long ip)
- extern void my_tramp1(void *);
- extern void my_tramp2(void *);
- 
-+#ifdef CONFIG_RISCV
-+
-+asm ("	.pushsection    .text, \"ax\", @progbits\n"
-+"	.type		my_tramp1, @function\n"
-+"	.globl		my_tramp1\n"
-+"   my_tramp1:\n"
-+"       addi sp,sp,-24\n"
-+"       sd   a0,0(sp)\n"
-+"       sd   t0,8(sp)\n"
-+"       sd   ra,16(sp)\n"
-+"       mv   a0,t0\n"
-+"       call my_direct_func1\n"
-+"       ld   a0,0(sp)\n"
-+"       ld   t0,8(sp)\n"
-+"       ld   ra,16(sp)\n"
-+"       addi sp,sp,24\n"
-+"	jr t0\n"
-+"	.size		my_tramp1, .-my_tramp1\n"
-+
-+"	.type		my_tramp2, @function\n"
-+"	.globl		my_tramp2\n"
-+"   my_tramp2:\n"
-+"       addi sp,sp,-24\n"
-+"       sd   a0,0(sp)\n"
-+"       sd   t0,8(sp)\n"
-+"       sd   ra,16(sp)\n"
-+"       mv   a0,t0\n"
-+"       call my_direct_func2\n"
-+"       ld   a0,0(sp)\n"
-+"       ld   t0,8(sp)\n"
-+"       ld   ra,16(sp)\n"
-+"       addi sp,sp,24\n"
-+"	jr t0\n"
-+"	.size		my_tramp2, .-my_tramp2\n"
-+"	.popsection\n"
-+);
-+
-+#endif /* CONFIG_RISCV */
-+
- #ifdef CONFIG_X86_64
- 
- #include <asm/ibt.h>
-diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
-index c27cf130c319..918cf325d3a3 100644
---- a/samples/ftrace/ftrace-direct-multi.c
-+++ b/samples/ftrace/ftrace-direct-multi.c
-@@ -15,6 +15,29 @@ void my_direct_func(unsigned long ip)
- 
- extern void my_tramp(void *);
- 
-+#ifdef CONFIG_RISCV
-+
-+asm ("       .pushsection    .text, \"ax\", @progbits\n"
-+"       .type           my_tramp, @function\n"
-+"       .globl          my_tramp\n"
-+"   my_tramp:\n"
-+"       addi sp,sp,-24\n"
-+"       sd   a0,0(sp)\n"
-+"       sd   t0,8(sp)\n"
-+"       sd   ra,16(sp)\n"
-+"       mv   a0,t0\n"
-+"       call my_direct_func\n"
-+"       ld   a0,0(sp)\n"
-+"       ld   t0,8(sp)\n"
-+"       ld   ra,16(sp)\n"
-+"       addi sp,sp,24\n"
-+"       jr t0\n"
-+"       .size           my_tramp, .-my_tramp\n"
-+"       .popsection\n"
-+);
-+
-+#endif /* CONFIG_RISCV */
-+
- #ifdef CONFIG_X86_64
- 
- #include <asm/ibt.h>
-diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
-index 8139dce2a31c..5a552b710d8c 100644
---- a/samples/ftrace/ftrace-direct-too.c
-+++ b/samples/ftrace/ftrace-direct-too.c
-@@ -17,6 +17,32 @@ void my_direct_func(struct vm_area_struct *vma,
- 
- extern void my_tramp(void *);
- 
-+#ifdef CONFIG_RISCV
-+
-+asm ("       .pushsection    .text, \"ax\", @progbits\n"
-+"       .type           my_tramp, @function\n"
-+"       .globl          my_tramp\n"
-+"   my_tramp:\n"
-+"       addi sp,sp,-40\n"
-+"       sd   a0,0(sp)\n"
-+"       sd   a1,8(sp)\n"
-+"       sd   a2,16(sp)\n"
-+"       sd   t0,24(sp)\n"
-+"       sd   ra,32(sp)\n"
-+"       call my_direct_func\n"
-+"       ld   a0,0(sp)\n"
-+"       ld   a1,8(sp)\n"
-+"       ld   a2,16(sp)\n"
-+"       ld   t0,24(sp)\n"
-+"       ld   ra,32(sp)\n"
-+"       addi sp,sp,40\n"
-+"       jr t0\n"
-+"       .size           my_tramp, .-my_tramp\n"
-+"       .popsection\n"
-+);
-+
-+#endif /* CONFIG_RISCV */
-+
- #ifdef CONFIG_X86_64
- 
- #include <asm/ibt.h>
-diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
-index 1d3d307ca33d..33e7bde013aa 100644
---- a/samples/ftrace/ftrace-direct.c
-+++ b/samples/ftrace/ftrace-direct.c
-@@ -14,6 +14,28 @@ void my_direct_func(struct task_struct *p)
- 
- extern void my_tramp(void *);
- 
-+#ifdef CONFIG_RISCV
-+
-+asm ("       .pushsection    .text, \"ax\", @progbits\n"
-+"       .type           my_tramp, @function\n"
-+"       .globl          my_tramp\n"
-+"   my_tramp:\n"
-+"       addi sp,sp,-24\n"
-+"       sd   a0,0(sp)\n"
-+"       sd   t0,8(sp)\n"
-+"       sd   ra,16(sp)\n"
-+"       call my_direct_func\n"
-+"       ld   a0,0(sp)\n"
-+"       ld   t0,8(sp)\n"
-+"       ld   ra,16(sp)\n"
-+"       addi sp,sp,24\n"
-+"       jr t0\n"
-+"       .size           my_tramp, .-my_tramp\n"
-+"       .popsection\n"
-+);
-+
-+#endif /* CONFIG_RISCV */
-+
- #ifdef CONFIG_X86_64
- 
- #include <asm/ibt.h>
--- 
-2.20.1
+	core1				core2
+ht0		ht1		ht0		ht1
+A		force idle	B2		real idle
+force idle	B1		B2		real idle
+A		force idle	B2		real idle
+force idle	B1		B2		real idle
 
+After applying this patch, B1 will be pushed immidiately, and
+force idle will decrase.
+
+在 2023/3/6 下午8:41, Cruz Zhao 写道:
+> When a task with the max priority of its rq is force
+> idled because of unmatched cookie, we'd better to find
+> a suitable cpu for it to run as soon as possible, which
+> is idle and cookie matched. In order to achieve this
+> goal, we push the task in sched_core_balance(), after
+> steal_cookie_task().
+> 
+> Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
+> ---
+>  kernel/sched/core.c  | 73 ++++++++++++++++++++++++++++++++++++++++++++++++++--
+>  kernel/sched/sched.h |  1 +
+>  2 files changed, 72 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index a3f5147..2a2005a 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -246,6 +246,8 @@ void sched_core_dequeue(struct rq *rq, struct task_struct *p, int flags)
+>  {
+>  	rq->core->core_task_seq++;
+>  
+> +	if (p == rq->force_idled_core_pick)
+> +		rq->force_idled_core_pick = NULL;
+>  	if (sched_core_enqueued(p)) {
+>  		rb_erase(&p->core_node, &rq->core_tree);
+>  		RB_CLEAR_NODE(&p->core_node);
+> @@ -346,9 +348,10 @@ static void __sched_core_flip(bool enabled)
+>  
+>  		sched_core_lock(cpu, &flags);
+>  
+> -		for_each_cpu(t, smt_mask)
+> +		for_each_cpu(t, smt_mask) {
+>  			cpu_rq(t)->core_enabled = enabled;
+> -
+> +			cpu_rq(t)->force_idled_core_pick = NULL;
+> +		}
+>  		cpu_rq(cpu)->core->core_forceidle_start = 0;
+>  
+>  		sched_core_unlock(cpu, &flags);
+> @@ -6085,6 +6088,7 @@ static inline struct task_struct *pick_task(struct rq *rq)
+>  		next = pick_task(rq);
+>  		if (!next->core_cookie) {
+>  			rq->core_pick = NULL;
+> +			rq->force_idled_core_pick = NULL;
+>  			/*
+>  			 * For robustness, update the min_vruntime_fi for
+>  			 * unconstrained picks as well.
+> @@ -6135,6 +6139,8 @@ static inline struct task_struct *pick_task(struct rq *rq)
+>  				p = idle_sched_class.pick_task(rq_i);
+>  		}
+>  
+> +		if (p != rq_i->core_pick)
+> +			rq_i->force_idled_core_pick = rq_i->core_pick;
+>  		rq_i->core_pick = p;
+>  
+>  		if (p == rq_i->idle) {
+> @@ -6288,10 +6294,61 @@ static bool steal_cookie_task(int cpu, struct sched_domain *sd)
+>  	return false;
+>  }
+>  
+> +static bool try_push_unmatch_task(struct task_struct *p, int this, int that)
+> +{
+> +	struct rq *src = cpu_rq(this), *dst = cpu_rq(that);
+> +	bool success = false;
+> +
+> +	local_irq_disable();
+> +	double_rq_lock(src, dst);
+> +	if (!available_idle_cpu(that))
+> +		goto unlock;
+> +	if (!cpumask_test_cpu(that, &p->cpus_mask))
+> +		goto unlock;
+> +	if (!sched_cpu_cookie_match(dst, p))
+> +		goto unlock;
+> +	if (p->core_occupation > dst->idle->core_occupation)
+> +		goto unlock;
+> +
+> +	deactivate_task(src, p, 0);
+> +	set_task_cpu(p, that);
+> +	src->force_idled_core_pick = NULL;
+> +	activate_task(dst, p, 0);
+> +
+> +	resched_curr(dst);
+> +
+> +	success = true;
+> +unlock:
+> +	double_rq_unlock(src, dst);
+> +	local_irq_enable();
+> +
+> +	return success;
+> +}
+> +
+> +static bool push_unmatch_task(struct task_struct *p, int cpu, struct sched_domain *sd)
+> +{
+> +	int i;
+> +	struct cpumask mask;
+> +
+> +	cpumask_and(&mask, sched_domain_span(sd), &p->cpus_mask);
+> +	for_each_cpu_wrap(i, &mask, cpu) {
+> +		if (i == cpu)
+> +			continue;
+> +
+> +		if (need_resched())
+> +			break;
+> +
+> +		if (try_push_unmatch_task(p, cpu, i))
+> +			return true;
+> +	}
+> +	return false;
+> +}
+> +
+>  static void sched_core_balance(struct rq *rq)
+>  {
+>  	struct sched_domain *sd;
+>  	int cpu = cpu_of(rq);
+> +	struct task_struct *p;
+>  
+>  	preempt_disable();
+>  	rcu_read_lock();
+> @@ -6303,6 +6360,18 @@ static void sched_core_balance(struct rq *rq)
+>  		if (steal_cookie_task(cpu, sd))
+>  			break;
+>  	}
+> +
+> +	p = rq->force_idled_core_pick;	
+> +	if (!p || p == rq->idle)
+> +		goto unlock;
+> +	for_each_domain(cpu, sd) {
+> +		if (need_resched())
+> +			break;
+> +
+> +		if (push_unmatch_task(p, cpu, sd))
+> +			break;
+> +	}
+> +unlock:
+>  	raw_spin_rq_lock_irq(rq);
+>  	rcu_read_unlock();
+>  	preempt_enable();
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 3e8df6d..f9e7988 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -1140,6 +1140,7 @@ struct rq {
+>  	/* per rq */
+>  	struct rq		*core;
+>  	struct task_struct	*core_pick;
+> +	struct task_struct	*force_idled_core_pick;
+>  	unsigned int		core_enabled;
+>  	unsigned int		core_sched_seq;
+>  	struct rb_root		core_tree;
