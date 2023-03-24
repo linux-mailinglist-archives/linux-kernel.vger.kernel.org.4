@@ -2,218 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA30D6C79A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 935A86C79AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjCXIX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 04:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41468 "EHLO
+        id S231438AbjCXIZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 04:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbjCXIXy (ORCPT
+        with ESMTP id S229752AbjCXIZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 04:23:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9272E1BD;
-        Fri, 24 Mar 2023 01:23:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EFD76297C;
-        Fri, 24 Mar 2023 08:23:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DF33C433A0;
-        Fri, 24 Mar 2023 08:23:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679646231;
-        bh=ibjEq9zqgHBGwxseo0ipHccN0gJTj7wmmV6WDAZxWRc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=BiolOJ7sWQjfWCLjYjtr/Qd8dOye4kx1Ad4WjivteFm2rOb7waiDPze6/iigtM+OT
-         LoWYUH9KTXdAwOVheQxYjUcS9dcdZR2U7hV22FgnGvFakiJR/nyhbHEyhiF1ctZYqr
-         QX5otE2XHyfS+TzOzNzpE485KwNNL+ed0EtwiVwtZJHMP1Rh/vqfki+pU2A1oz9RhA
-         mj2CVtFGmhBQzrt68t+94a+TDtgBO30qio9oDlAhv6HQEjhIXG1SrODAgYLmzfdsbM
-         49oJ8pioYgixNN5c1/28VPvgOj20Rd5dht3DgzaVfXGmHm1hOEqsgsBCxLXGpIjHdF
-         FkRDydFRFpHAA==
-Date:   Fri, 24 Mar 2023 09:23:44 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     aloktiagi <aloktiagi@gmail.com>
-Cc:     viro@zeniv.linux.org.uk, willy@infradead.org,
-        David.Laight@ACULAB.COM, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        hch@infradead.org, Tycho Andersen <tycho@tycho.pizza>
-Subject: Re: [RFC v4 2/2] file, epoll: Implement do_replace() and
- eventpoll_replace()
-Message-ID: <20230324082344.xgze2vu3ds2kubcz@wittgenstein>
+        Fri, 24 Mar 2023 04:25:42 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B7525291;
+        Fri, 24 Mar 2023 01:25:41 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32O21nl6009116;
+        Fri, 24 Mar 2023 08:25:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=fVpCNVtZFfH87DRlptURT/buGO6SxHnjLASX+7OFy/Q=;
+ b=WDijNTEuW0pag+a5E3ZvjUCjiWuBK7sJrMOsl16JMuifBv0nThwIJ5XLKlpuRfGcv7zg
+ d50qf5VoKySi+i0JqGlEezsbv0KvXj6KwDK1BC4Y66iCy/rdDb+s9Nxq9sivjZ36yTjT
+ aFBB8ZcPKJzSXUsxwkHbjsvS/iTN6656ErxfvxpHC4+/aYS+kC/GdwD0eiWgq2hOoNdE
+ RXQx6RTpyHpN7Lt1vQ2y5Q4ThU/pM8HttHXMK2ZCT2F0Ck43Bq5EhIoyLEptzp26TDzO
+ Y/U+Zb7sowFm14ch4+2MFzcJKsfXugIW3rL6XvyRUEKNRGow1B1Bq9j9iI8IuqqE208X VA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pgxr899d7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 08:25:24 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32O8PNxr031524
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 08:25:23 GMT
+Received: from [10.239.133.211] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 24 Mar
+ 2023 01:25:19 -0700
+Message-ID: <d4c133c1-38c7-93e3-deaf-b55161057409@quicinc.com>
+Date:   Fri, 24 Mar 2023 16:25:16 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230324063422.1031181-2-aloktiagi@gmail.com>
- <ZBzRfDnHaEycE72s@ip-172-31-38-16.us-west-2.compute.internal>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 01/11] dt-bindings: arm: Add support for DSB element
+ size
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
+ <1679551448-19160-2-git-send-email-quic_taozha@quicinc.com>
+ <e6ad7301-09ea-93e0-929e-86e0eb0a02e7@arm.com>
+Content-Language: en-US
+From:   Tao Zhang <quic_taozha@quicinc.com>
+In-Reply-To: <e6ad7301-09ea-93e0-929e-86e0eb0a02e7@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: smh7XMFPpWpEVOyQGTYe-rnu54zoYy_Z
+X-Proofpoint-GUID: smh7XMFPpWpEVOyQGTYe-rnu54zoYy_Z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_04,2023-03-23_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ adultscore=0 impostorscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
+ phishscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
+ mlxlogscore=984 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303240068
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 10:23:56PM +0000, Alok Tiagi wrote:
-> On Mon, Mar 20, 2023 at 03:51:03PM +0100, Christian Brauner wrote:
-> > On Sat, Mar 18, 2023 at 06:02:48AM +0000, aloktiagi wrote:
-> > > Introduce a mechanism to replace a file linked in the epoll interface or a file
-> > > that has been dup'ed by a file received via the replace_fd() interface.
-> > > 
-> > > eventpoll_replace() is called from do_replace() and finds all instances of the
-> > > file to be replaced and replaces them with the new file.
-> > > 
-> > > do_replace() also replaces the file in the file descriptor table for all fd
-> > > numbers referencing it with the new file.
-> > > 
-> > > We have a use case where multiple IPv6 only network namespaces can use a single
-> > > IPv4 network namespace for IPv4 only egress connectivity by switching their
-> > > sockets from IPv6 to IPv4 network namespace. This allows for migration of
-> > > systems to IPv6 only while keeping their connectivity to IPv4 only destinations
-> > > intact.
-> > > 
-> > > Today, we achieve this by setting up seccomp filter to intercept network system
-> > > calls like connect() from a container in a container manager which runs in an
-> > > IPv4 only network namespace. The container manager creates a new IPv4 connection
-> > > and injects the new file descriptor through SECCOMP_NOTIFY_IOCTL_ADDFD replacing
-> > > the original file descriptor from the connect() call. This does not work for
-> > > cases where the original file descriptor is handed off to a system like epoll
-> > > before the connect() call. After a new file descriptor is injected the original
-> > > file descriptor being referenced by the epoll fd is not longer valid leading to
-> > > failures. As a workaround the container manager when intercepting connect()
-> > > loops through all open socket file descriptors to check if they are referencing
-> > > the socket attempting the connect() and replace the reference with the to be
-> > > injected file descriptor. This workaround is cumbersome and makes the solution
-> > > prone to similar yet to be discovered issues.
-> > > 
-> > > The above change will enable us remove the workaround in the container manager
-> > > and let the kernel handle the replacement correctly.
-> > > 
-> > > Signed-off-by: aloktiagi <aloktiagi@gmail.com>
-> > > ---
-> > >  fs/eventpoll.c                                | 38 ++++++++
-> > >  fs/file.c                                     | 54 +++++++++++
-> > >  include/linux/eventpoll.h                     | 18 ++++
-> > >  include/linux/file.h                          |  1 +
-> > >  tools/testing/selftests/seccomp/seccomp_bpf.c | 97 +++++++++++++++++++
-> > >  5 files changed, 208 insertions(+)
-> > > 
-> > > diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-> > > index 64659b110973..958ad995fd45 100644
-> > > --- a/fs/eventpoll.c
-> > > +++ b/fs/eventpoll.c
-> > > @@ -935,6 +935,44 @@ void eventpoll_release_file(struct file *file)
-> > >  	mutex_unlock(&epmutex);
-> > >  }
-> > >  
-> > > +static int ep_insert(struct eventpoll *ep, const struct epoll_event *event,
-> > > +			struct file *tfile, int fd, int full_check);
-> > > +
-> > > +/*
-> > > + * This is called from eventpoll_replace() to replace a linked file in the epoll
-> > > + * interface with a new file received from another process. This is useful in
-> > > + * cases where a process is trying to install a new file for an existing one
-> > > + * that is linked in the epoll interface
-> > > + */
-> > > +void eventpoll_replace_file(struct file *toreplace, struct file *file)
-> > > +{
-> > > +	int fd;
-> > > +	struct eventpoll *ep;
-> > > +	struct epitem *epi;
-> > > +	struct hlist_node *next;
-> > > +	struct epoll_event event;
-> > > +
-> > > +	if (!file_can_poll(file))
-> > > +		return;
-> > > +
-> > > +	mutex_lock(&epmutex);
-> > > +	if (unlikely(!toreplace->f_ep)) {
-> > > +		mutex_unlock(&epmutex);
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	hlist_for_each_entry_safe(epi, next, toreplace->f_ep, fllink) {
-> > > +		ep = epi->ep;
-> > > +		mutex_lock(&ep->mtx);
-> > > +		fd = epi->ffd.fd;
-> > > +		event = epi->event;
-> > > +		ep_remove(ep, epi);
-> > > +		ep_insert(ep, &event, file, fd, 1);
-> > 
-> > So, ep_remove() can't fail but ep_insert() can. Maybe that doesn't
-> > matter...
-> > 
-> > > +		mutex_unlock(&ep->mtx);
-> > > +	}
-> > > +	mutex_unlock(&epmutex);
-> > > +}
-> > 
-> > Andrew carries a patchset that may impact the locking here:
-> > 
-> > https://lore.kernel.org/linux-fsdevel/323de732635cc3513c1837c6cbb98f012174f994.1678312201.git.pabeni@redhat.com
-> > 
-> > I have to say that this whole thing has a very unpleasant taste to it.
-> > Replacing a single fd from seccomp is fine, wading through the fdtable
-> > to replace all fds referencing the same file is pretty nasty. Especially
-> > with the global epoll mutex involved in all of this.
-> > 
-> > And what limits this to epoll. I'm seriously asking aren't there
-> > potentially issues for fds somehow referenced in io_uring instances as
-> > well?
-> > 
-> > I'm not convinced this belongs here yet...
-> 
-> Thank you for reviewing and proving a link to Andrew's patch.
-> 
-> I think just replacing a single fd from seccomp leaves this feature in an
-> incomplete state. As a user of this feature, it means I need to figure out what
-> all file descriptors are referencing this file eg. epoll, dup'ed fds etc. This
-> patch is an attempt to complete this seccomp feature and also move the logic of
-> figuring out the references to the kernel.
+Hi Suzuki,
 
-I'm still not convinced.
+在 3/23/2023 7:18 PM, Suzuki K Poulose 写道:
+> On 23/03/2023 06:03, Tao Zhang wrote:
+>> Add property "qcom,dsb-elem-size" to support DSB(Discrete Single
+>> Bit) element for TPDM. The associated aggregator will read this
+>> size before it is enabled. DSB element size currently only
+>> supports 32-bit and 64-bit.
+>>
+>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>> ---
+>>   .../devicetree/bindings/arm/qcom,coresight-tpdm.yaml | 11 +++++++++++
+>>   1 file changed, 11 insertions(+)
+>>
+>> diff --git 
+>> a/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml 
+>> b/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+>> index 5c08342..d9b6b613 100644
+>> --- a/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+>> @@ -44,6 +44,15 @@ properties:
+>>       minItems: 1
+>>       maxItems: 2
+>
+>
+>>   +  qcom,dsb-element-size:
+>> +    description:
+>> +      Specifies the DSB(Discrete Single Bit) element size supported by
+>> +      the monitor. The associated aggregator will read this size 
+>> before it
+>> +      is enabled. DSB element size currently only supports 32-bit 
+>> and 64-bit.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    minimum: 32
+>> +    maximum: 64
+>
+> Shouldn't this be something like oneOf ? It is not a range, but one of
+> those two specific values ?
 
-You're changing the semantics of the replace file feature in seccomp
-drastically. Whereas now it means replace the file a single fd refers to
-you're now letting it replace multiple fds.
+Yes, "qcom,dsb-element-size" should be an optional option required in TPDM
 
-If a the caller has 10 fds open and some of them in epoll instance and
-all reference the same file: What if the caller wants 5 of them to refer
-to the old file and only 5 of them to be updated? The kernel can't now this.
+devicetree. Other properties like "qcom,cmb-element-size", 
+"qcom,tc-element-size"
 
-Callers that now rely on a single fd being replaced and want the other
-fds to be left alone will suddenly see all of the references change.
+and etc. will be added in a later patch series.
 
-> 
-> The epmutex is taken when the file is replaced in the epoll interface. This is
-> similar to what would happen when eventpoll_release would be called for this
-> same file when it is ultimately released from __fput().
-> 
-> This is indeed not limited to epoll and the file descriptor table, but this
-> current patch addresses is limited to these interfaces. We can create a separate
-> one for io_uring.
+I will update this doc according to your advice in the next version of 
+the patch.
 
-The criteria for when it's sensible to update an fd to refer to the new
-file and when not are murky here and tailored to this very specific
-use-case. We shouldn't be involved in decisions like that. Userspace is
-in a much better position to know when it's sensible to replace an fd.
+Tao
 
-The fdtable is no place to get involved in a game of "if the fd is in a
-epoll instance, update the epoll instance, if it's in an io_uring
-instance, update the io_uring instance, ...". That's a complete
-layerying violation imho.
-
-And even if you'd need to get sign off on this from epoll and io_uring
-folks as well before we can just reach into other subsytems from the
-fdtable.
-
-There's other worries: what if someone registers the file in another
-notification mechanism that doesn't keep a reference to the fd and then
-we can't update it from replace_fd() so you'll need yet another
-mechanism to update it.
-
-I'm sorry but this all sounds messy. You can do this just fine in
-userspace, so please do it in userspace. This all sound very NAKable
-right now.
+>
+> Suzuki
+>
+>
