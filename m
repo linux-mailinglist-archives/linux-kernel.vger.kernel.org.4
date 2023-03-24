@@ -2,227 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC7C6C7F0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA0C6C7F0E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbjCXNqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
+        id S229870AbjCXNsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjCXNqI (ORCPT
+        with ESMTP id S229729AbjCXNsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:46:08 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92ED612843;
-        Fri, 24 Mar 2023 06:46:05 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6F58FE0005;
-        Fri, 24 Mar 2023 13:46:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1679665563;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=34EHV6yollIvtUQQHjHl3WbSvLpP4jDXad2HndnLaQI=;
-        b=luRx3aU5x+/1bv2+BhNgi/i4sPT2ssKTAlA4HANghGBAFSmIHjOtzp5APTSmk1wMKs6HhL
-        RjZM6w0TzgEQCcFqXhzrwqY+bj2gBWSsfjcECEcZGPw6VJ/sUZXVzW5i/xTbaXmiSQcBmK
-        5FnjR2+41p2bYJv2489qvS7eTXF9+K0eEq3R5sxcMG5R9aNRZI6wEFFJQJ4KKtPYfF/Bvh
-        Ar/T8hqZBD7qHeY7PlRDxUamooX0Ysdivo2OXhx9rJsOnUwT1ypkiR6xOurYgkXL+3VO7g
-        fnr7cCCf4NaRo+4M725KFw150gj/ktlYbuMhnv9xfGDbQ8MYJcDSHh3HuovWWQ==
-Date:   Fri, 24 Mar 2023 14:45:59 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6?= Rojas <noltari@gmail.com>
-Cc:     richard@nod.at, vigneshr@ti.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, masonccyang@mxic.com.tw,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: mtd: nand: Macronix: document new
- binding
-Message-ID: <20230324144559.3473c537@xps-13>
-In-Reply-To: <CAKR-sGc3R_k_+-hzv5DOOeRO-5rHL1k_dq7mpZLcv=FgZ1Moug@mail.gmail.com>
-References: <20230323124510.2484808-1-noltari@gmail.com>
-        <20230323124510.2484808-2-noltari@gmail.com>
-        <20230324104020.54754079@xps-13>
-        <CAKR-sGcbRRjqt3raXHcvfCfKFDfFWsuu+C7XW3qFckawMsqe4w@mail.gmail.com>
-        <20230324114911.19e00ae1@xps-13>
-        <CAKR-sGc3R_k_+-hzv5DOOeRO-5rHL1k_dq7mpZLcv=FgZ1Moug@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 24 Mar 2023 09:48:19 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C459E5FC5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:48:17 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id b18so2220315ybp.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:48:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1679665697;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tlxb7IQ6LLDgiORswv/qEWs9yBORD5ICbT5uFlhAdGc=;
+        b=x0oemtBhzoiFQ9zWda8YdE4IseDam7CaY18ctp1AXcP7ra3LrMO9tKKr6KhxKPJd3l
+         Cd4Z0SmWjI/+wnilZq7SchK5j4Geff5pvWrC1M9EzgYU4o+rTapdmUI4Rdg0R3lVd1AB
+         Bn8dcgzZzsCVo1yd+pk9fPJEcPkXRPe/qqqjI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679665697;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tlxb7IQ6LLDgiORswv/qEWs9yBORD5ICbT5uFlhAdGc=;
+        b=BuiB+xXp70LoFeD1Nks02j4YhupEuEB0J0tMUwyPWgIpisPq+vHJk7xn6KM3cTYmJU
+         SomMYzwFrrGUsNlOkRR10S5mkfSWM5FzMKh9JHH7+5y3t8g8B3wSpjwgpKgadhWAXvuP
+         aeBL6atRTrQp0G5WzHC//UY6vsLpYVMMUwvn+S3fcjhn8fTPWuYHicCUoidyWFL0R6j7
+         XwpOAMdx5d5xMWBmX7ARZ+YFioh0X0Qz+OvfOpmiDCsHK6AGkOVPTsukg8RJowshSP3Z
+         vRgb23r/6ksr4fPMZHEy8GpgIBpR7hWGFljbsYumGxr8rvilq1Orec2sK7jo4P4rtdVm
+         EfQw==
+X-Gm-Message-State: AAQBX9dnXDbBl37liXMYxO0Q8VKMldyNpbO2UdAiWFpYt7/o/uRCgeea
+        uQNOq+/zRpiyI98jPVChdNybe8MxtoX/Hj1QJwBygQ==
+X-Google-Smtp-Source: AKy350Y0Y+FOxa8FFx0ofJUqnL7e/TUq2l89UkZwjYNXRAkKDtrTBjVg9R6nGI2v46q4NjZOHtHAq+zXAL1AkTFMdCA=
+X-Received: by 2002:a25:680e:0:b0:b78:3a15:e6fe with SMTP id
+ d14-20020a25680e000000b00b783a15e6femr343682ybc.2.1679665696958; Fri, 24 Mar
+ 2023 06:48:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <ZB2GTBD/LWTrkOiO@dhcp22.suse.cz> <20230324130530.xsmqcxapy4j2aaik@box.shutemov.name>
+ <CAEXW_YQj_Wg0Xx2cHT9hTrDjEtrAV-bRjgL79=76d=D5f8GnEA@mail.gmail.com>
+In-Reply-To: <CAEXW_YQj_Wg0Xx2cHT9hTrDjEtrAV-bRjgL79=76d=D5f8GnEA@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 24 Mar 2023 09:48:05 -0400
+Message-ID: <CAEXW_YQuzSPm6wwfKuU-7riOsXyoCJK8+pwCmGdvWsJoaiT3mg@mail.gmail.com>
+Subject: Re: WARN_ON in move_normal_pmd
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi =C3=81lvaro,
-
-noltari@gmail.com wrote on Fri, 24 Mar 2023 12:21:11 +0100:
-
-> El vie, 24 mar 2023 a las 11:49, Miquel Raynal
-> (<miquel.raynal@bootlin.com>) escribi=C3=B3:
+On Fri, Mar 24, 2023 at 9:43=E2=80=AFAM Joel Fernandes <joel@joelfernandes.=
+org> wrote:
+>
+> On Fri, Mar 24, 2023 at 9:05=E2=80=AFAM Kirill A. Shutemov <kirill@shutem=
+ov.name> wrote:
 > >
-> > Hi =C3=81lvaro,
+> > On Fri, Mar 24, 2023 at 12:15:24PM +0100, Michal Hocko wrote:
+> > > Hi,
+> > > our QA is regularly hitting
+> > > [  544.198822][T20518] WARNING: CPU: 1 PID: 20518 at ../mm/mremap.c:2=
+55 move_pgt_entry+0x4c6/0x510
+> > > triggered by thp01 LTP test. This has been brought up in the past and
+> > > resulted in f81fdd0c4ab7 ("mm: document warning in move_normal_pmd() =
+and
+> > > make it warn only once"). While it is good that the underlying proble=
+m
+> > > is understood, it doesn't seem there is enough interest to fix it
+> > > properly. Which is fair but I am wondering whether the WARN_ON gives
+> > > us anything here.
+> > >
+> > > Our QA process collects all unexpected side effects of tests and a WA=
+RN*
+> > > in the log is certainly one of those. This trigger bugs which are mos=
+tly
+> > > ignored as there is no upstream fix for them. This alone is nothing
+> > > really critical but there are workloads which do run with panic on wa=
+rn
+> > > configured and this issue would put the system down which is unnecess=
+ary
+> > > IMHO. Would it be sufficient to replace the WARN_ON_ONCE by
+> > > pr_warn_once?
 > >
-> > noltari@gmail.com wrote on Fri, 24 Mar 2023 11:31:17 +0100:
-> > =20
-> > > Hi Miqu=C3=A8l,
-> > >
-> > > El vie, 24 mar 2023 a las 10:40, Miquel Raynal
-> > > (<miquel.raynal@bootlin.com>) escribi=C3=B3: =20
-> > > >
-> > > > Hi =C3=81lvaro,
-> > > >
-> > > > noltari@gmail.com wrote on Thu, 23 Mar 2023 13:45:09 +0100:
-> > > > =20
-> > > > > Add new "mxic,disable-block-protection" binding documentation.
-> > > > > This binding allows disabling block protection support for those =
-devices not
-> > > > > supporting it.
-> > > > >
-> > > > > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.co=
-m>
-> > > > > ---
-> > > > >  Documentation/devicetree/bindings/mtd/nand-macronix.txt | 3 +++
-> > > > >  1 file changed, 3 insertions(+)
-> > > > >
-> > > > > diff --git a/Documentation/devicetree/bindings/mtd/nand-macronix.=
-txt b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
-> > > > > index ffab28a2c4d1..03f65ca32cd3 100644
-> > > > > --- a/Documentation/devicetree/bindings/mtd/nand-macronix.txt
-> > > > > +++ b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
-> > > > > @@ -16,6 +16,9 @@ in children nodes.
-> > > > >  Required NAND chip properties in children mode:
-> > > > >  - randomizer enable: should be "mxic,enable-randomizer-otp"
-> > > > >
-> > > > > +Optional NAND chip properties in children mode:
-> > > > > +- block protection disable: should be "mxic,disable-block-protec=
-tion"
-> > > > > + =20
-> > > >
-> > > > Besides the fact that nowadays we prefer to see binding conversions=
- to
-> > > > yaml before adding anything, I don't think this will fly.
-> > > >
-> > > > I'm not sure exactly what "disable block protection" means, we
-> > > > already have similar properties like "lock" and "secure-regions", n=
-ot
-> > > > sure they will fit but I think it's worth checking. =20
-> > >
-> > > As explained in 2/2, commit 03a539c7a118 introduced a regression on
-> > > Sercomm H500-s (BCM63268) OpenWrt devices with Macronix MX30LF1G18AC
-> > > which hangs the device.
-> > >
-> > > This is the log with block protection disabled:
-> > > [    0.495831] bcm6368_nand 10000200.nand: there is not valid maps for
-> > > state default
-> > > [    0.504995] nand: device found, Manufacturer ID: 0xc2, Chip ID: 0x=
-f1
-> > > [    0.511526] nand: Macronix MX30LF1G18AC
-> > > [    0.515586] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
-> > > 2048, OOB size: 64
-> > > [    0.523516] bcm6368_nand 10000200.nand: detected 128MiB total,
-> > > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
-> > > [    0.535912] Bad block table found at page 65472, version 0x01
-> > > [    0.544268] Bad block table found at page 65408, version 0x01
-> > > [    0.954329] 9 fixed-partitions partitions found on MTD device brcm=
-nand.0
-> > > ...
-> > >
-> > > This is the log with block protection enabled:
-> > > [    0.495095] bcm6368_nand 10000200.nand: there is not valid maps for
-> > > state default
-> > > [    0.504249] nand: device found, Manufacturer ID: 0xc2, Chip ID: 0x=
-f1
-> > > [    0.510772] nand: Macronix MX30LF1G18AC
-> > > [    0.514874] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
-> > > 2048, OOB size: 64
-> > > [    0.522780] bcm6368_nand 10000200.nand: detected 128MiB total,
-> > > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
-> > > [    0.539687] Bad block table not found for chip 0
-> > > [    0.550153] Bad block table not found for chip 0
-> > > [    0.555069] Scanning device for bad blocks
-> > > [    0.601213] CPU 1 Unable to handle kernel paging request at virtual
-> > > address 10277f00, epc =3D=3D 8039ce70, ra =3D=3D 8016ad50
-> > > *** Device hangs ***
-> > >
-> > > Enabling macronix_nand_block_protection_support() makes the device
-> > > unable to detect the bad block table and hangs it when trying to scan
-> > > for bad blocks. =20
+> > What about relaxing the check to exclude temporary stack from the WARN
+> > condition:
 > >
-> > Please trace nand_macronix.c and look:
-> > - are the get_features and set_features really supported by the
-> >   controller driver? =20
->=20
-> This is what I could find by debugging:
-> [    0.494993] bcm6368_nand 10000200.nand: there is not valid maps for
-> state default
-> [    0.505375] nand: device found, Manufacturer ID: 0xc2, Chip ID: 0xf1
-> [    0.512077] nand: Macronix MX30LF1G18AC
-> [    0.515994] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
-> 2048, OOB size: 64
-> [    0.523928] bcm6368_nand 10000200.nand: detected 128MiB total,
-> 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
-> [    0.534415] bcm6368_nand 10000200.nand: ll_op cmd 0xa00ee
-> [    0.539988] bcm6368_nand 10000200.nand: ll_op cmd 0x600a0
-> [    0.545659] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
-> [    0.551214] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0x00
-> [    0.557843] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
-> [    0.563475] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0x00
-> [    0.569998] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
-> [    0.575653] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0x00
-> [    0.582246] bcm6368_nand 10000200.nand: ll_op cmd 0x80010000
-> [    0.588067] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0x00
-> [    0.594657] nand: nand_get_features: addr=3Da0 subfeature_param=3D[00
-> 00 00 00] -> 0
-> [    0.602341] macronix_nand_block_protection_support:
-> ONFI_FEATURE_ADDR_MXIC_PROTECTION=3D0
-> [    0.610548] macronix_nand_block_protection_support: !=3D
-> MXIC_BLOCK_PROTECTION_ALL_LOCK
-> [    0.624760] Bad block table not found for chip 0
-> [    0.635542] Bad block table not found for chip 0
-> [    0.640270] Scanning device for bad blocks
->=20
-> I don't know how to tell if get_features / set_features is really support=
-ed...
+> > diff --git a/mm/mremap.c b/mm/mremap.c
+> > index 411a85682b58..eb0778b9d645 100644
+> > --- a/mm/mremap.c
+> > +++ b/mm/mremap.c
+> > @@ -247,15 +247,12 @@ static bool move_normal_pmd(struct vm_area_struct=
+ *vma, unsigned long old_addr,
+> >          * of any 4kB pages, but still there) PMD in the page table
+> >          * tree.
+> >          *
+> > -        * Warn on it once - because we really should try to figure
+> > -        * out how to do this better - but then say "I won't move
+> > -        * this pmd".
+> > -        *
+> > -        * One alternative might be to just unmap the target pmd at
+> > -        * this point, and verify that it really is empty. We'll see.
+> > +        * Warn on it once unless it is initial (temporary) stack.
+> >          */
+> > -       if (WARN_ON_ONCE(!pmd_none(*new_pmd)))
+> > +       if (!pmd_none(*new_pmd)) {
+> > +               WARN_ON_ONCE(!vma_is_temporary_stack(vma));
+> >                 return false;
+> > +       }
+>
+> Wouldn't it be better to instead fix it from the caller side? Like
+> making it non-overlapping.
+>
+> Reading some old threads, I had tried to fix it [1] along these lines
+> but Linus was rightfully concerned about that fix [2]. Maybe we can
+> revisit and fix it properly this time.
+>
+> Personally I feel the safest thing to do is to not do a
+> non-overlapping mremap and get rid of the warning. Or is there a [..]
 
-Looks like your driver does not support exec_op but the core provides a
-get/set_feature implementation.
+Aargh, I meant "not do an overlapping mremap", instead of "not do a
+non-overlapping mremap". :-)
 
->=20
-> > - what is the state of the locking configuration in the chip when you
-> >   boot? =20
->=20
-> Unlocked, I guess...
-> How can I check that?
-
-It's in your dump, the chip returns 0, meaning it's all unlocked,
-apparently.
-
-> > - is there anything that locks the device by calling mxic_nand_lock() ?
-
-So nobody locks the device I guess? Did you add traces there?
-
-> > - finding no bbt is one thing, hanging is another, where is it hanging
-> >   exactly? (offset in nand/ and line in the code) =20
->=20
-> I've got no idea...
-
-You can use ftrace or just add printks a bit everywhere and try to get
-closer and closer.
-
-I looked at the patch, I don't see anything strange. Besides, I have a
-close enough datasheet and I don't see what could confuse the device.
-
-Are you really sure this patch is the problem? Is the WP pin wired on
-your design?
-
-Thanks,
-Miqu=C3=A8l
+Thanks.
