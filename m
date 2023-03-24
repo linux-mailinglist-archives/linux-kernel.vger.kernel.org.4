@@ -2,48 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6429C6C8238
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:14:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 979426C8240
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbjCXQOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
+        id S230079AbjCXQT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbjCXQOd (ORCPT
+        with ESMTP id S231783AbjCXQTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:14:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA0EE196AF;
-        Fri, 24 Mar 2023 09:14:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85CBC113E;
-        Fri, 24 Mar 2023 09:15:14 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.55.116])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F2B83F6C4;
-        Fri, 24 Mar 2023 09:14:28 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 16:14:22 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH 01/10] locking/atomic: Add missing cast to try_cmpxchg()
- fallbacks
-Message-ID: <ZB3MR8lGbnea9ui6@FVFF77S0Q05N>
-References: <20230305205628.27385-1-ubizjak@gmail.com>
- <20230305205628.27385-2-ubizjak@gmail.com>
- <ZB2v+avNt52ac/+w@FVFF77S0Q05N>
- <CAFULd4ZCgxDYnyy--qdgKoAo_y7MbNSaQdbdBFefnFuMoM2OYw@mail.gmail.com>
+        Fri, 24 Mar 2023 12:19:53 -0400
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51535AD06
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:19:52 -0700 (PDT)
+Received: from daria.iliad.local (unknown [IPv6:2a01:e0a:0:2290:ea94:f6ff:fe08:63f8])
+        by smtp1-g21.free.fr (Postfix) with ESMTP id BDE84B00563;
+        Fri, 24 Mar 2023 17:19:39 +0100 (CET)
+From:   Nicolas Schichan <nschichan@freebox.fr>
+To:     chengzhihao1@huawei.com
+Cc:     george.kennedy@oracle.com, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, miquel.raynal@bootlin.com,
+        richard@nod.at, s.hauer@pengutronix.de, yi.zhang@huawei.com,
+        Nicolas Schichan <nschichan@freebox.fr>
+Subject: [PATCH -next v3] ubi: Fix failure attaching when vid_hdr offset equals to (sub)page size
+Date:   Fri, 24 Mar 2023 17:19:24 +0100
+Message-Id: <20230324161923.1456371-1-nschichan@freebox.fr>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230306013308.3884777-1-chengzhihao1@huawei.com>
+References: <20230306013308.3884777-1-chengzhihao1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFULd4ZCgxDYnyy--qdgKoAo_y7MbNSaQdbdBFefnFuMoM2OYw@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=1.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,78 +41,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 04:43:32PM +0100, Uros Bizjak wrote:
-> On Fri, Mar 24, 2023 at 3:13 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > On Sun, Mar 05, 2023 at 09:56:19PM +0100, Uros Bizjak wrote:
-> > > Cast _oldp to the type of _ptr to avoid incompatible-pointer-types warning.
-> >
-> > Can you give an example of where we are passing an incompatible pointer?
-> 
-> An example is patch 10/10 from the series, which will fail without
-> this fix when fallback code is used. We have:
-> 
-> -       } while (local_cmpxchg(&rb->head, offset, head) != offset);
-> +       } while (!local_try_cmpxchg(&rb->head, &offset, head));
-> 
-> where rb->head is defined as:
-> 
-> typedef struct {
->    atomic_long_t a;
-> } local_t;
-> 
-> while offset is defined as 'unsigned long'.
 
-Ok, but that's because we're doing the wrong thing to start with.
+> Following process will make ubi attaching failed since commit
+> 1b42b1a36fc946 ("ubi: ensure that VID header offset ... size"):
+>
+> ID="0xec,0xa1,0x00,0x15" # 128M 128KB 2KB
+> modprobe nandsim id_bytes=$ID
+> flash_eraseall /dev/mtd0
+> modprobe ubi mtd="0,2048"  # set vid_hdr offset as 2048 (one page)
+> (dmesg):
+>   ubi0 error: ubi_attach_mtd_dev [ubi]: VID header offset 2048 too large.
+>   UBI error: cannot attach mtd0
+>   UBI error: cannot initialize UBI, error -22
+>
+> Rework original solution, the key point is making sure
+> 'vid_hdr_shift + UBI_VID_HDR_SIZE < ubi->vid_hdr_alsize',
+> so we should check vid_hdr_shift rather not vid_hdr_offset.
+> Then, ubi still support (sub)page aligined VID header offset.
+>
+> Fixes: 1b42b1a36fc946 ("ubi: ensure that VID header offset ... size")
+> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+> ---
+>  v2->v3: Use printing format '%zu' for UBI_VID_HDR_SIZE.
+>  drivers/mtd/ubi/build.c | 21 +++++++++++++++------
+>  1 file changed, 15 insertions(+), 6 deletions(-)
 
-Since local_t is defined in terms of atomic_long_t, we should define the
-generic local_try_cmpxchg() in terms of atomic_long_try_cmpxchg(). We'll still
-have a mismatch between 'long *' and 'unsigned long *', but then we can fix
-that in the callsite:
+[...]
 
-	while (!local_try_cmpxchg(&rb->head, &(long *)offset, head))
+Hello,
 
-... which then won't silently mask issues elsewhere, and will be consistent
-with all the other atomic APIs.
+Having had the problem, and found this patch as a fix, feel free to
+add my:
 
-Thanks,
-Mark.
+Tested-by: Nicolas Schichan <nschichan@freebox.fr>
 
-> 
-> The assignment in existing try_cmpxchg template:
-> 
-> typeof(*(_ptr)) *___op = (_oldp)
-> 
-> will trigger an initialization from an incompatible pointer type error.
-> 
-> Please note that x86 avoids this issue by a cast in its
-> target-dependent definition:
-> 
-> #define __raw_try_cmpxchg(_ptr, _pold, _new, size, lock)                \
-> ({                                                                      \
->        bool success;                                                   \
->        __typeof__(_ptr) _old = (__typeof__(_ptr))(_pold);              \
->        __typeof__(*(_ptr)) __old = *_old;                              \
->        __typeof__(*(_ptr)) __new = (_new);                             \
-> 
-> so, the warning/error will trigger only in the fallback code.
-> 
-> > That sounds indicative of a bug in the caller, but maybe I'm missing some
-> > reason this is necessary due to some indirection.
-> >
-> > > Fixes: 29f006fdefe6 ("asm-generic/atomic: Add try_cmpxchg() fallbacks")
-> >
-> > I'm not sure that this needs a fixes tag. Does anything go wrong today, or only
-> > later in this series?
-> 
-> The patch at [1] triggered a build error in posix_acl.c/__get.acl due
-> to the same problem. The compilation for x86 target was OK, because
-> x86 defines target-specific arch_try_cmpxchg, but the compilation
-> broke for targets that revert to generic support. Please note that
-> this specific problem was recently fixed in a different way [2], but
-> the issue with the fallback remains.
-> 
-> [1] https://lore.kernel.org/lkml/20220714173819.13312-1-ubizjak@gmail.com/
-> [2] https://lore.kernel.org/lkml/20221201160103.76012-1-ubizjak@gmail.com/
-> 
-> Uros.
+-- 
+Nicolas Schichan
+
