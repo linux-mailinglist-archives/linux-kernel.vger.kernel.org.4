@@ -2,176 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 430C06C7E22
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E996C7E28
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbjCXMgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 08:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
+        id S231948AbjCXMiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 08:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbjCXMgi (ORCPT
+        with ESMTP id S231501AbjCXMiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 08:36:38 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C41312F39;
-        Fri, 24 Mar 2023 05:36:37 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id CC28532004ED;
-        Fri, 24 Mar 2023 08:36:34 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 24 Mar 2023 08:36:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1679661394; x=1679747794; bh=af
-        dOnuzoGC2hJ2+nQwyk48eOOUaDI/2Z1f/itKfGaWo=; b=Zj2H+tK7F7eO6I+zvE
-        0xVguDgmSQp+fo9etx0v3GaZgfiH85nQGr5z9g1OMrOdDnexZMyNHzMxKhLLKsDm
-        ifGwXC026mGH0O9cm+BLsavrgA103pCTDR9B59UcQHDyxM7CPiA6CJWZCCzPBmNy
-        VpLMxiJ1aBhVCEI7y4Cmvczv8YFwAO4xNfjIotkxJd2btMBz5SgXsNJY1e69ZOzO
-        deyZTnsB28JQrnCXAnRDmlMms5ABY00nCAovD35rRtUVanlo4kPHcEFwvPuQ78Sm
-        vh9seDcht1PdF95NXi0k4/GmSLWNIfEx4V0G8IaV7Jaj1CPHSHNEENfizOh1rFbN
-        8kBw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679661394; x=1679747794; bh=afdOnuzoGC2hJ
-        2+nQwyk48eOOUaDI/2Z1f/itKfGaWo=; b=TsViZBBdp8szx3UJ/rk9bbUqlm5MJ
-        x0JO7cr6ESljPUGRp8wrccdDHrfGqVHZXIgdC0ZLv2wl4/tUJCziAL24ZsTjaLqY
-        Z9cJ8GkNCpcPh92wbacV5ViUVifhQsgyzX2eVAvZW9SP91NWJcFUrE4CW4yQfqzE
-        t9SD/X+js0QABLUl5gdF6BANZOqkE8zk+g99DKTQmD/L+KJn4t1dvrN8+d59LKVo
-        U98r83luTqlpisBI9O4LkWpXcWpRPo/indLfZQkM3cLVSdzqU4S2VP8ZGQK93nYm
-        t4wAsOleXFQ15zlHelsf9s3CzfJRmVkHeyOctHHvHQgbi7drYWL3MxRwQ==
-X-ME-Sender: <xms:UpkdZJXC2rJfLBhpT85JkFzMtrMLT20Y5jdvpVc6HCAvQw0wMLxK_Q>
-    <xme:UpkdZJnTSJEL_ZnfSnoFpELQUX2tuCks1cf2616C_Ry988YWGjAB-Iiu0eVD-l_9c
-    gdFHr4iy9Go_RGjMpY>
-X-ME-Received: <xmr:UpkdZFbmiQBtDjWoLOncaSoCizF_2mZq1MrRoMSOHbutz6EgAm41MEyrBD3K0nRoo4FfQw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegiedggedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
-    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:UpkdZMXC00_mVk2yAUhFbKAUaV7x4_hW1MbTNPt0BTw_IN90Cy5sjg>
-    <xmx:UpkdZDmwBt6adSMoYyrg-qjcK3iMCK6Q3Yk9vICUD1l_1pQJT1vIgA>
-    <xmx:UpkdZJfanu4cKae9JEbV1cB2suSQwtNzgCdmslux-L0VZS1EkIpeRg>
-    <xmx:UpkdZG6kVxdOTyzXkL-wmNF-1owK03Qk2mVDToq5rvfMoVtYBGxkOg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 24 Mar 2023 08:36:33 -0400 (EDT)
-Date:   Fri, 24 Mar 2023 13:36:32 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-Message-ID: <20230324123632.rtb52jh6zeopjwht@houat>
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
- <ZBrvhfX/NNrJefgt@kroah.com>
- <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
- <ZBtPhoelZo4U5jwC@kroah.com>
- <20230323101216.w56kz3rudlj23vab@houat>
- <ZBwoRgc2ICBJX/Lq@kroah.com>
+        Fri, 24 Mar 2023 08:38:05 -0400
+Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEED3C2F;
+        Fri, 24 Mar 2023 05:38:02 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [117.133.56.22])
+        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 193D0580A50;
+        Fri, 24 Mar 2023 20:37:35 +0800 (CST)
+From:   Donglin Peng <pengdonglin@sangfor.com.cn>
+To:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
+        mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        chenhuacai@kernel.org, zhangqing@loongson.cn, kernel@xen0n.name,
+        mingo@redhat.com, peterz@infradead.org, xiehuan09@gmail.com,
+        dinghui@sangfor.com.cn, huangcun@sangfor.com.cn,
+        dolinux.peng@gmail.com
+Cc:     linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Donglin Peng <pengdonglin@sangfor.com.cn>
+Subject: [PATCH v7 0/8] function_graph: Support recording and printing the return value of function
+Date:   Fri, 24 Mar 2023 05:37:23 -0700
+Message-Id: <20230324123731.3801920-1-pengdonglin@sangfor.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ixhyyonac24t3jtj"
-Content-Disposition: inline
-In-Reply-To: <ZBwoRgc2ICBJX/Lq@kroah.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaSx8aVhpPGB8dQkxLT08ZTFUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpISkJIT1VKS0tVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OTo6CCo*TD0NFw84Gk4fESIz
+        Tx4aFDdVSlVKTUxCTU1KT05NQ0lJVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
+        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFDTUNLNwY+
+X-HM-Tid: 0a87139fdbe02eb7kusn193d0580a50
+X-HM-MType: 1
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When using the function_graph tracer to analyze system call failures,
+it can be time-consuming to analyze the trace logs and locate the kernel
+function that first returns an error. This change aims to simplify the
+process by recording the function return value to the 'retval' member of
+'ftrace_graph_ent' and printing it when outputing the trace log.
 
---ixhyyonac24t3jtj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Note that even if a function's return type is void, a return value will
+still be printed, so it should be ignored. If you care about this, the
+BTF file can be used to obtain the details of function return type. We
+can implement a tool to process the trace log and display the return
+value based on its actual type.
 
-On Thu, Mar 23, 2023 at 11:21:58AM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Mar 23, 2023 at 11:12:16AM +0100, Maxime Ripard wrote:
-> > On Wed, Mar 22, 2023 at 07:57:10PM +0100, Greg Kroah-Hartman wrote:
-> > > > > > +/**
-> > > > > > + * test_kunit_helper_alloc_device - Allocate a mock device for=
- a KUnit test
-> > > > > > + * @test: The test context object
-> > > > > > + *
-> > > > > > + * This allocates a fake struct &device to create a mock for a=
- KUnit
-> > > > > > + * test. The device will also be bound to a fake driver. It wi=
-ll thus be
-> > > > > > + * able to leverage the usual infrastructure and most notably =
-the
-> > > > > > + * device-managed resources just like a "real" device.
-> > > > >=20
-> > > > > What specific "usual infrastructure" are you wanting to access he=
-re?
-> > > > >=20
-> > > > > And again, if you want a fake device, make a virtual one, by just
-> > > > > calling device_create().
-> > > > >=20
-> > > > > Or are you wanting to do "more" with that device pointer than
-> > > > > device_create() can give you?
-> > > >=20
-> > > > Personally, I was (am) only interested in devm_ unwinding. I guess =
-the
-> > > > device_create(), device_add(), device_remove()... (didn't study this
-> > > > sequence in details so sorry if there is errors) could've been suff=
-icient
-> > > > for me. I haven't looked how much of the code that there is for 'pl=
-atform
-> > > > devices' should be duplicated to support that sequence for testabil=
-ity
-> > > > purposes.
-> > >=20
-> > > Any device can access devm_ code, there's no need for it to be a
-> > > platform device at all.
-> >=20
-> > Sure but the resources are only released if the device is part of a bus,
-> > so it can't be a root_device (or bare device) either
->=20
-> The resources are not cleaned up when the device is freed no matter if
-> it's on a bus or not?  If so, then that's a bug that needs to be fixed,
-> and tested :)
+Here is an example:
 
-Please have a look at:
-https://lore.kernel.org/linux-kselftest/20230324123157.bbwvfq4gsxnlnfwb@hou=
-at/
+...
 
-I couldn't get an answer on whether it was considered a bug or not last
-time, but as you can see there's a clear difference between a root
-device and a platform device that has probed when it comes to resource
-cleanup.
+ 1)               |  cgroup_attach_task() {
+ 1)               |    cgroup_migrate_add_src() {
+ 1)   1.403 us    |      cset_cgroup_from_root(); /* = 0xffff93fc86f58010 */
+ 1)   2.154 us    |    } /* cgroup_migrate_add_src = 0xffffb286c1297d00 */
+ 1) ! 386.538 us  |    cgroup_migrate_prepare_dst(); /* = 0x0 */
+ 1)               |    cgroup_migrate() {
+ 1)   0.651 us    |      cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
+ 1)               |      cgroup_migrate_execute() {
+ 1)               |        cpu_cgroup_can_attach() {
+ 1)               |          cgroup_taskset_first() {
+ 1)   0.732 us    |            cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
+ 1)   1.232 us    |          } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
+ 1)   0.380 us    |          sched_rt_can_attach(); /* = 0x0 */
+ 1)   2.335 us    |        } /* cpu_cgroup_can_attach = -22 */
+ 1)   4.369 us    |      } /* cgroup_migrate_execute = -22 */
+ 1)   7.143 us    |    } /* cgroup_migrate = -22 */
+ 1)               |    cgroup_migrate_finish() {
+ 1)   0.411 us    |      put_css_set_locked(); /* = 0x8 */
+ 1) + 62.397 us   |      put_css_set_locked(); /* = 0x80000001 */
+ 1) + 64.742 us   |    } /* cgroup_migrate_finish = 0x80000000 */
+ 1) ! 465.605 us  |  } /* cgroup_attach_task = -22 */
 
-Maxime
+...
 
---ixhyyonac24t3jtj
-Content-Type: application/pgp-signature; name="signature.asc"
+After processing the above trace logs using BTF information:
 
------BEGIN PGP SIGNATURE-----
+...
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZB2ZUAAKCRDj7w1vZxhR
-xTziAQDzlNBv8r3FNR5xvsqs6kFN7cJ9NsebxwnXFMkkCLheBQEA5tvTfjjuyRCb
-JuPrsPFwK6lStlKQEqRnhY5AgTCOxgM=
-=Neh7
------END PGP SIGNATURE-----
+ 1)               |  cgroup_attach_task() {
+ 1)               |    cgroup_migrate_add_src() {
+ 1)   1.403 us    |      cset_cgroup_from_root(); /* = 0xffff93fc86f58010 */
+ 1)   2.154 us    |    } /* cgroup_migrate_add_src */
+ 1) ! 386.538 us  |    cgroup_migrate_prepare_dst(); /* = 0 */
+ 1)               |    cgroup_migrate() {
+ 1)   0.651 us    |      cgroup_migrate_add_task();
+ 1)               |      cgroup_migrate_execute() {
+ 1)               |        cpu_cgroup_can_attach() {
+ 1)               |          cgroup_taskset_first() {
+ 1)   0.732 us    |            cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
+ 1)   1.232 us    |          } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
+ 1)   0.380 us    |          sched_rt_can_attach(); /* = 0 */
+ 1)   2.335 us    |        } /* cpu_cgroup_can_attach = -22 */
+ 1)   4.369 us    |      } /* cgroup_migrate_execute = -22 */
+ 1)   7.143 us    |    } /* cgroup_migrate = -22 */
+ 1)               |    cgroup_migrate_finish() {
+ 1)   0.411 us    |      put_css_set_locked();
+ 1) + 62.397 us   |      put_css_set_locked();
+ 1) + 64.742 us   |    } /* cgroup_migrate_finish */
+ 1) ! 465.605 us  |  } /* cgroup_attach_task = -22 */
 
---ixhyyonac24t3jtj--
+...
+
+---
+v7:
+ - Rename trace option 'graph_retval_hex' to 'funcgraph-retval-hex'
+ - Introduce a new structure fgraph_ret_regs for each architecture to
+   hold return registers
+ - Separate each architecture modification info individual patches
+ - Add a test case for funcgraph-retval
+ - Update documentation description
+ - Support LoongArch
+
+v6:
+ - Remove the conversion code for short and char types, because these
+   two types are rarely used to store an error code.
+ - Modify the limitations for funcgraph-retval
+ - Optimize the English expression
+
+v5:
+ - Pass both the return values to ftrace_return_to_handler
+ - Modify the parameter sequence of ftrace_return_to_handler to
+   decrease the modification of assembly code, thanks to Russell King
+ - Wrap __ftrace_return_to_handler with ftrace_return_to_handler
+   for compatible
+ - Describe the limitations of funcgraph-retval
+
+v4:
+ - Modify commit message
+ - Introduce new option graph_retval_hex to control display format
+ - Introduce macro CONFIG_FUNCTION_GRAPH_RETVAL and
+   CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
+ - Add related arch maintainers to review
+
+v3:
+ - Modify the commit message: add trace logs processed with the btf tool
+
+v2:
+ - Modify the commit message: use BTF to get the return type of function
+
+Donglin Peng (8):
+  function_graph: Support recording and printing the return value of
+    function
+  tracing: Add documentation for funcgraph-retval and
+    funcgraph-retval-hex
+  ARM: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+  arm64: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+  riscv: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+  x86/ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+  LoongArch: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+  selftests/ftrace: Add funcgraph-retval test case
+
+ Documentation/trace/ftrace.rst                | 74 +++++++++++++++
+ arch/arm/Kconfig                              |  1 +
+ arch/arm/include/asm/ftrace.h                 | 22 +++++
+ arch/arm/kernel/entry-ftrace.S                |  6 +-
+ arch/arm64/Kconfig                            |  1 +
+ arch/arm64/include/asm/ftrace.h               | 23 +++++
+ arch/arm64/kernel/entry-ftrace.S              |  9 +-
+ arch/loongarch/Kconfig                        |  1 +
+ arch/loongarch/include/asm/ftrace.h           | 22 +++++
+ arch/loongarch/kernel/mcount.S                |  6 +-
+ arch/loongarch/kernel/mcount_dyn.S            |  7 +-
+ arch/riscv/Kconfig                            |  1 +
+ arch/riscv/include/asm/ftrace.h               | 23 +++++
+ arch/riscv/kernel/mcount.S                    |  7 +-
+ arch/x86/Kconfig                              |  1 +
+ arch/x86/include/asm/ftrace.h                 | 22 +++++
+ arch/x86/kernel/ftrace_32.S                   |  8 +-
+ arch/x86/kernel/ftrace_64.S                   |  7 +-
+ include/linux/ftrace.h                        |  3 +
+ kernel/trace/Kconfig                          |  8 ++
+ kernel/trace/fgraph.c                         | 21 ++++-
+ kernel/trace/trace.h                          |  2 +
+ kernel/trace/trace_entries.h                  | 26 ++++++
+ kernel/trace/trace_functions_graph.c          | 93 +++++++++++++++++--
+ .../ftrace/test.d/ftrace/fgraph-retval.tc     | 43 +++++++++
+ 25 files changed, 404 insertions(+), 33 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc
+
+-- 
+2.25.1
+
