@@ -2,181 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849C16C7C50
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B54046C7C52
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjCXKPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 06:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
+        id S231626AbjCXKQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 06:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjCXKPQ (ORCPT
+        with ESMTP id S229921AbjCXKQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 06:15:16 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2A5C673;
-        Fri, 24 Mar 2023 03:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679652915; x=1711188915;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lhhFN5Vd1W/aAgP72ZDMZOV8VUt3XUbMuQBIwOPdm1s=;
-  b=QZyvH+XkK0eFlj3F42EMPORE6anTUosYeD7fuO6AWfmIvgiwpYm7h8Nk
-   cJSUXaMC/rkc36LfxTl/48E9B/ziG7gCurvwOSH7Vg1Lv/JQp1qi918Ui
-   0oo5tWYX6LdRI50/AoS3MRpFtKRDDMnuTfbhZhRLOmES2EKbD+zlFDMcD
-   4p1T6px6mBMj0z5Pp+4kd6VYsNgsqlPR3O5O8RXsHfuW8DOc9+CQcYQYN
-   mg/Jlf57LNtwdjCyAo3wjBU4j3hcFbnzdlUvOHsnWITXf49wAr3PWiRNg
-   axaaHoCE0GLSTWAB2eYuse2f0v3tGnhZbZYrT0YkJRZmhJTdReDZgr+tr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="338467217"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="338467217"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 03:15:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="715179880"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="715179880"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 24 Mar 2023 03:15:11 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfeRy-000FCm-2w;
-        Fri, 24 Mar 2023 10:15:10 +0000
-Date:   Fri, 24 Mar 2023 18:15:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: Re: [PATCH v3 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-Message-ID: <202303241811.OXj9KxAr-lkp@intel.com>
-References: <20230324063317.14664-3-zhuyinbo@loongson.cn>
+        Fri, 24 Mar 2023 06:16:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5ECADDBEB;
+        Fri, 24 Mar 2023 03:15:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2EC4011FB;
+        Fri, 24 Mar 2023 03:16:42 -0700 (PDT)
+Received: from [192.168.0.110] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 600463F6C4;
+        Fri, 24 Mar 2023 03:15:55 -0700 (PDT)
+Message-ID: <9a2fc29b-ab4c-b13a-0ac3-772a47039750@arm.com>
+Date:   Fri, 24 Mar 2023 15:45:52 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230324063317.14664-3-zhuyinbo@loongson.cn>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/5] selftests/mm: Implement support for arm64 on va
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Chaitanya S Prakash <chaitanyas.prakash@arm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+References: <20230323105243.2807166-1-chaitanyas.prakash@arm.com>
+ <20230323144910.b07df164acc1d85bc76dc933@linux-foundation.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20230323144910.b07df164acc1d85bc76dc933@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yinbo,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on broonie-spi/for-next]
-[also build test ERROR on robh/for-next krzk-dt/for-next linus/master v6.3-rc3 next-20230324]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230324-143432
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20230324063317.14664-3-zhuyinbo%40loongson.cn
-patch subject: [PATCH v3 2/2] spi: loongson: add bus driver for the loongson spi controller
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230324/202303241811.OXj9KxAr-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3742622c455d25c4a110d2caf2f5b2ceefe88f91
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230324-143432
-        git checkout 3742622c455d25c4a110d2caf2f5b2ceefe88f91
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303241811.OXj9KxAr-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   drivers/spi/spi-loongson-core.c: In function 'loongson_spi_init_master':
->> drivers/spi/spi-loongson-core.c:229:21: error: implicit declaration of function 'devm_ioremap'; did you mean 'of_ioremap'? [-Werror=implicit-function-declaration]
-     229 |         spi->base = devm_ioremap(dev, res->start, resource_size(res));
-         |                     ^~~~~~~~~~~~
-         |                     of_ioremap
->> drivers/spi/spi-loongson-core.c:229:19: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     229 |         spi->base = devm_ioremap(dev, res->start, resource_size(res));
-         |                   ^
-   cc1: some warnings being treated as errors
 
 
-vim +229 drivers/spi/spi-loongson-core.c
-
-   201	
-   202	int loongson_spi_init_master(struct device *dev, struct resource *res)
-   203	{
-   204		struct spi_master *master;
-   205		struct loongson_spi *spi;
-   206		struct clk *clk;
-   207		int ret;
-   208	
-   209		master = spi_alloc_master(dev, sizeof(struct loongson_spi));
-   210		if (master == NULL) {
-   211			dev_dbg(dev, "master allocation failed\n");
-   212			return -ENOMEM;
-   213		}
-   214	
-   215		master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
-   216		master->setup = loongson_spi_setup;
-   217		master->prepare_message = loongson_spi_prepare_message;
-   218		master->transfer_one = loongson_spi_transfer_one;
-   219		master->unprepare_message = loongson_spi_unprepare_message;
-   220		master->set_cs = loongson_spi_set_cs;
-   221		master->num_chipselect = 4;
-   222		master->dev.of_node = of_node_get(dev->of_node);
-   223		dev_set_drvdata(dev, master);
-   224	
-   225		spi = spi_master_get_devdata(master);
-   226	
-   227		spi->master = master;
-   228	
- > 229		spi->base = devm_ioremap(dev, res->start, resource_size(res));
-   230		if (spi->base == NULL) {
-   231			dev_err(dev, "cannot map io\n");
-   232			ret = -ENXIO;
-   233			goto free_master;
-   234		}
-   235	
-   236		clk = devm_clk_get(dev, NULL);
-   237		if (!IS_ERR(clk))
-   238			spi->clk_rate = clk_get_rate(clk);
-   239	
-   240		loongson_spi_reginit(spi);
-   241	
-   242		spi->mode = 0;
-   243		if (of_get_property(dev->of_node, "spi-nocs", NULL))
-   244			spi->mode |= SPI_NO_CS;
-   245	
-   246		ret = spi_register_master(master);
-   247		if (ret < 0)
-   248			goto free_master;
-   249	
-   250		return ret;
-   251	
-   252	free_master:
-   253		kfree(master);
-   254		spi_master_put(master);
-   255	
-   256		return ret;
-   257	}
-   258	EXPORT_SYMBOL_GPL(loongson_spi_init_master);
-   259	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+On 3/24/23 03:19, Andrew Morton wrote:
+> On Thu, 23 Mar 2023 16:22:38 +0530 Chaitanya S Prakash <chaitanyas.prakash@arm.com> wrote:
+> 
+>> The va_128TBswitch selftest is designed and implemented for PowerPC and
+>> x86 architectures which support a 128TB switch, up to 256TB of virtual
+>> address space and hugepage sizes of 16MB and 2MB respectively. Arm64
+>> platforms on the other hand support a 256Tb switch, up to 4PB of virtual
+>> address space and a default hugepage size of 512MB when 64k pagesize is
+>> enabled.
+>>
+>> These architectural differences require introducing support for arm64
+>> platforms, after which a more generic naming convention is suggested.
+>> The in code comments are amended to provide a more platform independent
+>> explanation of the working of the code and nr_hugepages are configured
+>> as required. Finally, the file running the testcase is modified in order
+>> to prevent skipping of hugetlb testcases of va_high_addr_switch.
+>>
+>> This series has been tested on 6.3.0-rc3 kernel, both on arm64 and x86
+>> platforms.
+> 
+> Would it make sense to get this series into the ARM tree, so it sees
+> more testing on ARM
+Rather, it will be better for this series to go via the mm tree instead
+(via linux-next first) for better coverage on all platforms, this being
+a common test.
