@@ -2,157 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883406C80B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 307C36C80B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbjCXPGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 11:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52642 "EHLO
+        id S231806AbjCXPIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 11:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232340AbjCXPGf (ORCPT
+        with ESMTP id S231725AbjCXPIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 11:06:35 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1455A12CC8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:06:31 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5418d54d77bso37535207b3.12
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:06:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679670388;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pO9JO1Nl3vWVaBBZbGNy96ElA1aYviPDI6HLdepDIuA=;
-        b=Sdr1nZK4AmDw66Jdr6BgRFNzOYYahTtPW1new4Fjey+FIqkxE2y5N5oy0ZLnd+fYsX
-         wVB1BDCHD93TFQBsQdAExKCsn/91GVJ7Astm7SK/ysY0r+KX/6ZjxCo2YnAdvbxcZxvj
-         Om3Bby0CSDarLB1G30I/b6LUqzEIJItkt8IyY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679670388;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pO9JO1Nl3vWVaBBZbGNy96ElA1aYviPDI6HLdepDIuA=;
-        b=4AbD95HYY7CsxdBgF/+Iwq5cFO5VlB+srjhCUEdA2jf+kSrOzjEjVhuue9/qSUqs7Z
-         gde1j9ENNWUifl67IlSGYEBl3aTStmyERZ0DNoEpnvl0pscAxv7reJjLR8j6N1cdA8N/
-         t7QvztEnkqUL9pN8yEbCL/k4cL4fLcW20gSREXBvnEHjiyY/Qst4c1pIp9q4tzZTsp/9
-         qSjT5T4tr7mhOA/QodqD80+dDySpvEbh0aTE/1SLLQH0G5MX1jFX/P0kTOZWQEy6f1Ml
-         /wdyrvMc1R7uQPGvFlrE2NZNgai2bs5GEC0yt+tc+Qz0Cy38+eUTAoztiDorQY8ebDw3
-         jQ9g==
-X-Gm-Message-State: AAQBX9eeR3JQibfMEtqn6shSzGVV/eFOsOq3+Hm53TZdzSKi2FUrJRWa
-        0tX2gAcvCGqs2yfGWK6Lqfk+CRKyKx0ID+MCf6o=
-X-Google-Smtp-Source: AKy350bgW93sDYbpgChmJ31g1XuOyNIKCb8vGPTIc4rh4rUIkFPRhKqbKTeH++4hOrcrIAjInAW7Xg==
-X-Received: by 2002:a81:1692:0:b0:52e:d421:2414 with SMTP id 140-20020a811692000000b0052ed4212414mr6581956yww.25.1679670388513;
-        Fri, 24 Mar 2023 08:06:28 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id da12-20020a05690c0d8c00b00545a08184efsm456024ywb.127.2023.03.24.08.06.27
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 08:06:27 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id p15so2506576ybl.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:06:27 -0700 (PDT)
-X-Received: by 2002:a05:6902:1881:b0:b69:83b2:5124 with SMTP id
- cj1-20020a056902188100b00b6983b25124mr1212852ybb.0.1679670387329; Fri, 24 Mar
- 2023 08:06:27 -0700 (PDT)
+        Fri, 24 Mar 2023 11:08:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EA9B476
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:08:08 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 999D21FEF6;
+        Fri, 24 Mar 2023 15:08:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679670487; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xTv6SvvIvX7fxYYTYVatFyDn7CcVQUadTYgQv2mfSeA=;
+        b=ZNMilDFDL4C2KoKEeR6kB/NBrBYU9VUdZMlyJflXssyrKJSCGlV+rxyrXLoKHn1F5xh0Hs
+        YfxPNGHPYyuJsRQihP/L0hoj66uAZykFKyXFwi+zEixIKRvlMTQ2Rs2h4nuQZyCrholvgK
+        aIqHknVLeynznYiV+qBtpx8Tmb2snjo=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 037972C141;
+        Fri, 24 Mar 2023 15:08:06 +0000 (UTC)
+Date:   Fri, 24 Mar 2023 16:08:04 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guillermo Rodriguez Garcia <guille.rodriguez@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Alejandro Vazquez <avazquez.dev@gmail.com>,
+        sergey.senozhatsky@gmail.com, rostedt@goodmis.org,
+        shreyasjoshi15@gmail.com, Guenter Roeck <linux@roeck-us.net>
+Subject: Re: Change of behaviour when console=null and ttynull driver is used
+Message-ID: <ZB281JxlZtKSkJoJ@alley>
+References: <CABDcavZWz=YOvZnW8pkQmuTVjTDxPPoa0zOiC7A_0HAEg_Vi3w@mail.gmail.com>
+ <ZBRiRu7hlwxSKHBg@alley>
+ <CABDcavYLQ63V81z5JiOxZ6hXMj=M+PQpfDLPk6AQynLGwuYTKQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <CGME20230323083330eucas1p1f7e3f9beb5ba168c6b13374d74c158f0@eucas1p1.samsung.com>
- <20230323083312.199189-1-m.szyprowski@samsung.com> <20230323114035.GL68926@ediswmail.ad.cirrus.com>
- <CAD=FV=UYO1KaoAZ7o5cA83SC1VHRomvJfaXVWyYPKrEZHyNNjg@mail.gmail.com>
- <20230323174531.GM68926@ediswmail.ad.cirrus.com> <CAD=FV=X0SAEk_iUGQ=J-PWk_MzVc7ZikBM3N8rrnhGFzcdBNpw@mail.gmail.com>
- <20230324092353.GO68926@ediswmail.ad.cirrus.com>
-In-Reply-To: <20230324092353.GO68926@ediswmail.ad.cirrus.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 24 Mar 2023 08:06:15 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WUCqhq-wCoiir-1sNQpTNJfr-c2vAYvyJc6hKi8U4u_w@mail.gmail.com>
-Message-ID: <CAD=FV=WUCqhq-wCoiir-1sNQpTNJfr-c2vAYvyJc6hKi8U4u_w@mail.gmail.com>
-Subject: Re: [PATCH] regulator: wm8994: Use PROBE_FORCE_SYNCHRONOUS
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABDcavYLQ63V81z5JiOxZ6hXMj=M+PQpfDLPk6AQynLGwuYTKQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Linus,
 
-On Fri, Mar 24, 2023 at 2:23=E2=80=AFAM Charles Keepax
-<ckeepax@opensource.cirrus.com> wrote:
->
-> On Thu, Mar 23, 2023 at 11:00:32AM -0700, Doug Anderson wrote:
-> > Hi,
+I need an advice whether to revert the commit 3cffa06aeef7ece30f
+("printk/console: Allow to disable console output by using
+console="" or console=null").
+
+On Wed 2023-03-22 09:33:32, Guillermo Rodriguez Garcia wrote:
+> Hi Petr,
+> 
+> El vie, 17 mar 2023 a las 13:51, Petr Mladek (<pmladek@suse.com>) escribió:
 > >
-> > On Thu, Mar 23, 2023 at 10:45=E2=80=AFAM Charles Keepax
-> > <ckeepax@opensource.cirrus.com> wrote:
+> > On Thu 2023-03-16 11:29:26, Guillermo Rodriguez Garcia wrote:
+> > > Hi all,
 > > >
-> > > I think really the best place to look at this would be at the
-> > > regulator level. It is fine if mfd_add_devices passes, the problem
-> > > really is that the regulator core doesn't realise the regulator is
-> > > going to be arriving, and thus returns a dummy regulator, rather
-> > > than returning EPROBE_DEFER. If it did the MFD driver would probe
-> > > defer at the point of requesting the regulator, which would all
-> > > make sense.
+> > > We have several embedded systems where pass console= or console=null
+> > > in production to disable the console.
+> > >
+> > > Later we check for this in user space: in our inittab we check if fd0
+> > > is "associated with a terminal" (test -t 0); if so, we are in
+> > > development mode and we open a debug shell; otherwise (console
+> > > disabled) we just start the application.
+> > >
+> > > Recently [1] this behaviour has changed and now if we pass console= or
+> > > console=null, the new ttynull driver is used. This breaks the check we
+> > > were doing (test -t 0 always true now).
+> > >
+> > > [1]: https://lore.kernel.org/lkml/X%2FcDG%2FxCCzSWW2cd@alley/t/
 > >
-> > I think something like your suggestion could be made to work for the
-> > "microphone" supply in the arizona MFD, but not for the others looked
-> > at here.
+> > This is actually exactly the problem that the change tried to solve.
+> > Some systems failed to boot when there was no console and they tried
+> > to write something at stdout.
+> 
+> Well, I did not have any problem before this change.
+> 
+> I understand that some systems had a problem (many others didn't, and
+> setting console= or console=null has been standard practice for a long
+> time). Since this change in behaviour could (and did) break things in
+> user space, perhaps it should have been made opt-in...
+
+Historically, a single and invalid console=<name> kernel parameter
+might cause that no console gets registered. As a result, there
+is no stdin/stdout/stderr for the init process.
+
+From the code perspective, the <name> is considered a preferred
+console. No console is registered by default because there is
+the preferred console. But an invalid <name> never matches.
+
+The non-existing stdin/stdout/stderr caused Oopses reported during boot, see
+https://lore.kernel.org/all/20200309052915.858-1-shreyas.joshi@biamp.com/
+https://lore.kernel.org/all/20201006065907.GA528@jagdpanzerIV.localdomain/
+
+It would have been great to debug the root of the Oopses.
+But it was not trivial. And it looked like the fallback
+to ttynull made sense even if the kernel did not crash:
+
+1. The init process might expect a working stdin/stderr/stdout.
+   The POSIX standard says:
+
+    At program start-up, three streams are predefined and need not be
+    opened explicitly: standard input (for reading conventional input),
+    standard output (for writing conventional output), and standard error
+    (for writing diagnostic output). When opened, the standard error
+    stream is not fully buffered; the standard input and standard output
+    streams are fully buffered if and only if the stream can be determined
+    not to refer to an interactive device.
+
+2. Also the comment in init/main.c is rather clear:
+
+    /* Open /dev/console, for stdin/stdout/stderr, this should never fail */
+   void __init console_on_rootfs(void)
+
+
+This is why we implemented the fallback to ttynull. But it causes
+regressions on Chromebooks. They use:
+
+   + console="" to disable consoles on production systems.
+     (better performance, nobody reads the console anyway).
+
+   + "test -f 0" to detect whether the Chromebook is in
+     debugging mode.
+
+The regression is:
+
+   + "test -f 0" does not longer work.
+
+   + ttynull delays reboot on busybox by 20-25sec from unknown
+     reasons
+
+From this POV, the commit breaks userspace and should be reverted.
+
+On the other hand, I think that having stdin/stdout/stderr
+might be required by POSIX.
+
+Also note that the commit was accepted in v5.11-rc1. So the regression
+is 2 years old. The revert might be seen as a regression as well.
+
+
+My opinion:
+
+I would prefer to keep the commit because it goes in the right
+direction. And the revert would cause regression for the original
+reporter.
+
+The regression did not reach normal users. Chromebook developers
+reverted it in their tree, see
+https://lore.kernel.org/all/055bbf1a-8eb7-7f77-5ea8-31d2ecaf1d4b@roeck-us.net/
+So, we could find a better solution for them.
+
+What is your opinion, please?
+
+
+> > > Is there a way to get the previous behaviour? If not, is there an easy
+> > > way for userspace to detect whether the console device is a "real" tty
+> > > or ttynull (other than trying to parse the kernel boot args, which
+> > > would be a bit fragile).
 > >
-> > The problem is that if the MFD driver gets -EPROBE_DEFER then it will
-> > go through its error handling path and call mfd_remove_devices().
-> > That'll remove the sub-device providing the regulator. If you try
-> > again, you'll just do the same. :-)
+> > A solution would be to check that /proc/consoles has ttynull as the
+> > only registred console, for example:
 > >
-> > Specifically in wm8994 after we've populated the regulator sub-devices
-> > then we turn them on and start talking to the device.
+> > grep -q ttynull /proc/consoles && test `cat /proc/consoles | wc -l` -eq 1
 > >
-> > I think the two options I have could both work for wm8994's case:
-> > either add some type of "my children have done probing" to MFD and
-> > move the turning on of regulators / talking to devices there, or add
-> > another stub-device and add it there. ;-)
->
-> Is this true if we keep the regulator as sync though? Yes it will
-> remove the children but when it re-adds them the reason that the
-> regulator probe deferred in the first place will hopefully be
-> removed. So it will now fully probe in path.
+> > Would this work for you, please?
+> 
+> I was trying to avoid something like this as it feels like userspace
+> now needs to have too much knowledge of what the kernel is doing
+> internally, however I guess this is the best option.
 
-Ah, I see. So you keep it as synchronous _and_ make it so that it
-won't get a dummy. Yeah, I was trying to brainstorm ways we could fix
-it if we kept the regulator async. If we keep it as sync and fix the
-dummy problem then, indeed, it should work as you say.
+Fair enough. It is true the "ttynull" is an implementation detail.
 
-I've spent a whole lot of time dealing with similar issues, though,
-and I think there is actually another related concern with that design
-(where the regulator is synchronous). ;-) If the child device ends up
-depending on a resource that _never_ shows up then you can get into an
-infinite probe deferral loop at bootup. If it works the way it did
-last time I analyzed similar code:
+I wonder if the console is the only detail that might be used
+to detect if the system is in debug mode.
 
-1. Your MFD starts to probe and kicks off probing of its children
-(including the regulator).
+> The suggested check seems to work but now I am seeing a different
+> (related?) issue: when I try to reboot from the console (using
+> busybox's reboot command), the system reboots normally if I am using a
+> "normal" console (e.g. console=ttyXXX), however when using
+> console=ttynull, the command takes 20-25 seconds to complete. I am not
+> sure why this would happen; if I understand correctly, for userspace
+> ttynull is just like a regular tty driver, so why would there be a
+> difference?
 
-2. Your regulator tries to probe and tries to get a resource that will
-never exist, maybe because of a bug in dts or maybe because it won't
-show up until userspace loads a module. It returns -EPROBE_DEFER.
+This looks like a timeout. It is hard to say who is waiting on what.
+Anyway, the ttynull driver is super trivial, see
+drivers/tty/ttynull.c.
 
-3. The MFD realizes that the regulator didn't come up and it also
-returns -EPROBE_DEFER after removing all its children.
-
-4. That fact that we added/removed devices in the above means that the
-kernel thinks it should retry probes of previously deferred devices
-because, maybe, the device showed up that everyone was waiting for.
-Thus, we go back to step #1.
-
-...the system can actually loop forever in steps #1 - #4 and we ended
-up in that situation several times during development with similar
-architected systems.
-
-
--Doug
+Best Regards,
+Petr
