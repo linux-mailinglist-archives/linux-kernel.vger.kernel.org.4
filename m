@@ -2,119 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46156C7F7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F323E6C7F7F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbjCXOGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
+        id S231190AbjCXOGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232022AbjCXOGO (ORCPT
+        with ESMTP id S232167AbjCXOGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:06:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B8E1735
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:05:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCDF362B05
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 14:05:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 492E0C433A4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 14:05:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679666734;
-        bh=y4Farhu4V41tPk7JQCGgZn32PPH4qculJxU45vIj0EA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oXYPBUg1nrZIdTIcXAT6GL490fkUmTs72+6cEq3KJMtP+pppE2G7XwO1hIJTwRRwF
-         1V3zAWBFdXCM8WXwu3wGGcOlUckEV+a43aIHc846S9tqo2szGwPpcNzel2NE+qZ70k
-         xTRXNSjNQYu4S9P+VQGcPF+42ZC94Bc/IJbz2zh+/Ih9lUqM4D+QYS4kgT3QCy4g54
-         OmdeVJQUEGopghqcqlzxN0tC9U0D/zSCRUx+mS5rJLG3rGd0cDTefE9T/iufnWzKhP
-         V1ka4oBgW4Tu4zT1jyrYO+VFck+ez/ncN5wBiSdwPqpB7FCDrmXU6pZdOr7ZHorMk6
-         fOZUc8f/MspNg==
-Received: by mail-pj1-f44.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso5129790pjb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:05:34 -0700 (PDT)
-X-Gm-Message-State: AAQBX9edozrXOkV1ba+Urpjk8MgOzA/LZJMSsKs59mN2PB9cl2M2Apwy
-        5vHjfF/oT/CN5q/hWC31Ak8dd/bd/yXuiHMFjzH+Ug==
-X-Google-Smtp-Source: AKy350Zt1S+2egsukDJYhSyZ+wRndmhs9uQGH1FbNc61cHTfeNcEamJuN1YaNwXiYwlu+nqVPKNVWcDWZPbCjzsWbBM=
-X-Received: by 2002:a17:903:7c8:b0:19f:39f8:88c4 with SMTP id
- ko8-20020a17090307c800b0019f39f888c4mr3613623plb.2.1679666733789; Fri, 24 Mar
- 2023 07:05:33 -0700 (PDT)
+        Fri, 24 Mar 2023 10:06:31 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD2A1BAC8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:05:56 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so3230755wmq.4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:05:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679666755;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=WG6gphWl27lAGqIb66Yn+gMHDN2FKDd0CjkaAmh1aqs=;
+        b=hx9HF8DLfkyh4bxrj1FkrTEKV2pEkXm+b+DeeofWFl8I9fo5obHKFa5TXVoKr8v22O
+         uBz4NaeiaOu/3+CruH2yfScKi8TZV5HEezj4T2Y0zyVH3Lq5I/Cf0T8YMcmEVbrk5rYr
+         kvJDgFJ59O7Fh0dWR/Ac38WfqYsSrZ5lJ3pEy/gWaP5ukPJPFGX+OngIdtOcKa53GJa3
+         sPVP8Enc0e7eqvC5asKWtqxIGBcX/v0Zpkfize9JzmAKkZBUSsurHejXZQcmVHfDEHu9
+         FtvnHisaIIKk+7kt1jOF5DpPs9WDmUqfMH0q9saOqr766l/7gu82aQqJ2f1P4H4YJqNP
+         Jacw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679666755;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WG6gphWl27lAGqIb66Yn+gMHDN2FKDd0CjkaAmh1aqs=;
+        b=eA/gFdTqi+PYNKvJDUJ2NlcD0OhnI4jrBBlLmjIs2Duwsi3peJQXO6cMOTs8x55ISk
+         RgadInEUphU6TFunGPnnce6xjrVXjc9F1K/K8s78f7tvr7CIEONsPPQTC0iId6ClWHSN
+         TY3vC/ZlTHlKojivhZpWcfyJQBC4o7/lyvVRBKp78y5A+bMM57E7raU4qUnJEQoRZ8YR
+         V4mFqTQYDX+Fes40MAds6GY18RdI/qPT+S+5S5lF0WqsljMuq9BM6TPRu8EToKPDoevw
+         NV3F7eJ20KmHYx+I7t9oZongFE5ikfMTDMiqudJGJ8UEUZD5cuGlEC6xzOFJAobbkj2X
+         gnfQ==
+X-Gm-Message-State: AO0yUKWGS9Q8BJ5+or3YwKXfZcr3UyvUFcTCzxRo8DPhYjx3fbqkko96
+        YL+PZMtSvMfRyWI5iTkcLGDTSg==
+X-Google-Smtp-Source: AK7set/uKpNVbtBBd4lUVSBuF+3iaCY52KMHAaXgmlQVPGEuXOp9zixUhtUEm4rvwQ9j3FbsKvcREg==
+X-Received: by 2002:a05:600c:209:b0:3ee:282d:1016 with SMTP id 9-20020a05600c020900b003ee282d1016mr2422277wmi.25.1679666755220;
+        Fri, 24 Mar 2023 07:05:55 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:213f:a579:70af:e4a0? ([2a01:e0a:982:cbb0:213f:a579:70af:e4a0])
+        by smtp.gmail.com with ESMTPSA id h20-20020a05600c351400b003eddf20ed5bsm5195872wmq.18.2023.03.24.07.05.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 07:05:54 -0700 (PDT)
+Message-ID: <f1088121-02c7-86da-d603-7c2015030b0e@linaro.org>
+Date:   Fri, 24 Mar 2023 15:05:53 +0100
 MIME-Version: 1.0
-References: <20230324035909.1727356-1-treapking@chromium.org>
-In-Reply-To: <20230324035909.1727356-1-treapking@chromium.org>
-From:   Robert Foss <rfoss@kernel.org>
-Date:   Fri, 24 Mar 2023 15:05:22 +0100
-X-Gmail-Original-Message-ID: <CAN6tsi7M26ijWT0hVOAoSFE6fhy-0TS-c7+5LUJpo-NJAG21Mw@mail.gmail.com>
-Message-ID: <CAN6tsi7M26ijWT0hVOAoSFE6fhy-0TS-c7+5LUJpo-NJAG21Mw@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: ps8640: Return NULL immediately when EDID
- read fail
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2] firmware: meson_sm: populate platform devices from sm
+ device tree data
+Content-Language: en-US
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        krzysztof.kozlowski@linaro.org, robh@kernel.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com, jianxin.pan@amlogic.com
+Cc:     kernel@sberdevices.ru, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
+        rockosov@gmail.com
+References: <20230324140141.6743-1-ddrokosov@sberdevices.ru>
+Organization: Linaro Developer Services
+In-Reply-To: <20230324140141.6743-1-ddrokosov@sberdevices.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 4:59=E2=80=AFAM Pin-yen Lin <treapking@chromium.org=
-> wrote:
->
-> drm_edid_read returns NULL on error, so feeding it directly into
-> drm_edid_duplicate may lead to NULL pointer dereference. Add a check to
-> guard this.
->
-> Fixes: 6a17b4d1b52f ("drm/bridge: ps8640: Add a cache for EDID")
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+On 24/03/2023 15:01, Dmitry Rokosov wrote:
+> In some meson boards, secure monitor device has children, for example,
+> power secure controller. By default, secure monitor isn't the bus in terms
+> of device tree subsystem, so the of_platform initialization code doesn't
+> populate its device tree data. As a result, secure monitor's children
+> aren't probed at all.
+> 
+> Run the 'of_platform_populate()' routine manually to resolve such issues.
+> 
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 > ---
->
->  drivers/gpu/drm/bridge/parade-ps8640.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bri=
-dge/parade-ps8640.c
-> index cddbfe91f75e..b823e55650b1 100644
-> --- a/drivers/gpu/drm/bridge/parade-ps8640.c
-> +++ b/drivers/gpu/drm/bridge/parade-ps8640.c
-> @@ -543,6 +543,7 @@ static struct edid *ps8640_bridge_get_edid(struct drm=
-_bridge *bridge,
->                                            struct drm_connector *connecto=
-r)
->  {
->         struct ps8640 *ps_bridge =3D bridge_to_ps8640(bridge);
-> +       struct device *dev =3D &ps_bridge->page[PAGE0_DP_CNTL]->dev;
->         bool poweroff =3D !ps_bridge->pre_enabled;
->
->         if (!ps_bridge->edid) {
-> @@ -574,6 +575,11 @@ static struct edid *ps8640_bridge_get_edid(struct dr=
-m_bridge *bridge,
->                                                              connector->s=
-tate->state);
->         }
->
-> +       if (!ps_bridge->edid) {
-> +               dev_err(dev, "Failed to get EDID\n");
-> +               return NULL;
-> +       }
-> +
->         return drm_edid_duplicate(ps_bridge->edid);
->  }
->
-> --
-> 2.40.0.348.gf938b09366-goog
->
+>   drivers/firmware/meson/meson_sm.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/firmware/meson/meson_sm.c b/drivers/firmware/meson/meson_sm.c
+> index 77aa5c6398aa..b79d0e316cb1 100644
+> --- a/drivers/firmware/meson/meson_sm.c
+> +++ b/drivers/firmware/meson/meson_sm.c
+> @@ -316,7 +316,7 @@ static int __init meson_sm_probe(struct platform_device *pdev)
+>   	if (sysfs_create_group(&pdev->dev.kobj, &meson_sm_sysfs_attr_group))
+>   		goto out_in_base;
+>   
+> -	return 0;
+> +	return devm_of_platform_populate(dev);
 
-Reviewed-by: Robert Foss <rfoss@kernel.org>
+You should check return and jump to out_in_base on error instead.
+
+Neil
+
+>   
+>   out_in_base:
+>   	iounmap(fw->sm_shmem_in_base);
+
