@@ -2,127 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9626C822E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 157D16C8230
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjCXQNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
+        id S231395AbjCXQNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjCXQNX (ORCPT
+        with ESMTP id S229441AbjCXQNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:13:23 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4F565BA;
-        Fri, 24 Mar 2023 09:13:21 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OFsSFf020593;
-        Fri, 24 Mar 2023 16:13:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=Dak5fQL83ddtMorWQzb+nyjRnP7QPKmm1aK9TibiOds=;
- b=B79NgJrmP6IchXQB3CSVuhlltoGY8v1G6pcTXyyxat5LILL9lw0cXq3sReTwsOkzCnqL
- BdgN82qZSciUyeoly/Sbp9/GFQg7ok5LBsscZcX7/xX3lwhgqa8i6DRpYKVeXy5pVX7k
- xde+AkdltuotkHw4epq2Q73hnyGgg4xTs+rElRyhYw+FgK5cboA3BxPjRnI7brNnURbF
- 3lcJQl4xpkpoT9SThcVj28gBiQ+zOGOAd0p8q1XeP1A7iGu4xDm1aAHEplpelcm0d8W8
- WeO8gnuyW9f2beZmt5fu7sFQvTkMnvDRm/JbjDAPBGzysOrhF+M3iq6nNSNhUn5o613H SA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3phev481wb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 16:13:17 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32OGDGVl031843
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 16:13:16 GMT
-Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Fri, 24 Mar 2023 09:13:16 -0700
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-To:     <mani@kernel.org>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2] bus: mhi: host: Range check CHDBOFF and ERDBOFF
-Date:   Fri, 24 Mar 2023 10:13:04 -0600
-Message-ID: <1679674384-27209-1-git-send-email-quic_jhugo@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 24 Mar 2023 12:13:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98711AD37
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:13:45 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pfk2j-0006RS-R7; Fri, 24 Mar 2023 17:13:29 +0100
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 6AD9119BA18;
+        Fri, 24 Mar 2023 16:13:21 +0000 (UTC)
+Date:   Fri, 24 Mar 2023 17:13:20 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>,
+        wg@grandegger.com, michal.swiatkowski@linux.intel.com,
+        Steen.Hegelund@microchip.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        frank.jungclaus@esd.eu, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        hpeter+linux_kernel@gmail.com
+Subject: Re: [PATCH V2] can: usb: f81604: add Fintek F81604 support
+Message-ID: <20230324161320.jutuyor7jrbqu37p@pengutronix.de>
+References: <20230321081152.26510-1-peter_hong@fintek.com.tw>
+ <CAMZ6RqJWg1H6Yo3nhsa-Kk-WdU=ZH39ecWaE6wiuKRJe1gLMkQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ZjDPMGJx0U0YDY6wT8kJ7ZeYuhhFlbs3
-X-Proofpoint-GUID: ZjDPMGJx0U0YDY6wT8kJ7ZeYuhhFlbs3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_10,2023-03-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- phishscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0
- impostorscore=0 lowpriorityscore=0 mlxscore=0 adultscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303240128
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ul6oruy6cmrmas5h"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqJWg1H6Yo3nhsa-Kk-WdU=ZH39ecWaE6wiuKRJe1gLMkQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the value read from the CHDBOFF and ERDBOFF registers is outside the
-range of the MHI register space then an invalid address might be computed
-which later causes a kernel panic.  Range check the read value to prevent
-a crash due to bad data from the device.
 
-Fixes: 6cd330ae76ff ("bus: mhi: core: Add support for ringing channel/event ring doorbells")
-Cc: stable@vger.kernel.org
-Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Reviewed-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
----
+--ul6oruy6cmrmas5h
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-v2:
--CC stable
--Use ERANGE for the error code
+On 22.03.2023 00:50:20, Vincent MAILHOL wrote:
+> Hi Peter,
+>=20
+> Welcome to the linux-can mailing list.
+> This is my first review, I will wait for the next version to give a
+> more thorough look.
+>=20
+> On Tue. 21 Mar 2023 at 17:14, Ji-Ze Hong (Peter Hong)
+> <peter_hong@fintek.com.tw> wrote:
+>=20
+> From your email header:
+> > Content-Type: text/plain; charset=3D"y"
+>=20
+> It gives me below error when applying:
+>=20
+>   $ wget -o f81604.patch
+> https://lore.kernel.org/linux-can/20230321081152.26510-1-peter_hong@finte=
+k.com.tw/raw
+>   $ git am f81604.patch
+>   error : cannot convert from y to UTF-8
+>   fatal : could not parse patch
 
- drivers/bus/mhi/host/init.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+I'm using b4 [1] for this:
 
-diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
-index 3d779ee..b46a082 100644
---- a/drivers/bus/mhi/host/init.c
-+++ b/drivers/bus/mhi/host/init.c
-@@ -516,6 +516,12 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
- 		return -EIO;
- 	}
- 
-+	if (val >= mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB)) {
-+		dev_err(dev, "CHDB offset: 0x%x is out of range: 0x%zx\n",
-+			val, mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB));
-+		return -ERANGE;
-+	}
-+
- 	/* Setup wake db */
- 	mhi_cntrl->wake_db = base + val + (8 * MHI_DEV_WAKE_DB);
- 	mhi_cntrl->wake_set = false;
-@@ -532,6 +538,12 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
- 		return -EIO;
- 	}
- 
-+	if (val >= mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings)) {
-+		dev_err(dev, "ERDB offset: 0x%x is out of range: 0x%zx\n",
-+			val, mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings));
-+		return -ERANGE;
-+	}
-+
- 	/* Setup event db address for each ev_ring */
- 	mhi_event = mhi_cntrl->mhi_event;
- 	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, val += 8, mhi_event++) {
--- 
-2.7.4
+$ b4 shazam -l -s 20230321081152.26510-1-peter_hong@fintek.com.tw
 
+and it works.
+
+Marc
+
+[1] https://github.com/mricon/b4
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ul6oruy6cmrmas5h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQdzB0ACgkQvlAcSiqK
+BOhOLwf+IA/6cxPWXp0P3mZ8oxuZk5hBKe0zEC4xRcOqLECtcb98HHwDN8aSPO/h
+KwTSer7luMLSI1XOp7Z5xzI4unZIFcoJs+8ARJ1qSZU8BpxJk3wWkgNQKs4Uof1b
+whX5N+0pl+dgZE5KujUiC01shK7kJs52a/JvEIZVgL2KHVYv8jiHbrhcpM1gD/FO
+06jhufbklHOMDVBoNsi2CqWU915diRGYtT4DRJVQgm0yuNfcNbdUXf/H/grwtmoU
+bHcFlLs1sMiJo/SnuTPFa8YmK0T0v1XUwtCM/fYRaGiulC6BjggaU7Ck9extZiZt
+d3kIeCl5NjpTgYGhOkrhT1V+b+/dIA==
+=kfUO
+-----END PGP SIGNATURE-----
+
+--ul6oruy6cmrmas5h--
