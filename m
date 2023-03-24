@@ -2,140 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19926C79D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BD26C79ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjCXIbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 04:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
+        id S231572AbjCXIgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 04:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbjCXIbr (ORCPT
+        with ESMTP id S230029AbjCXIgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 04:31:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E5B1499C;
-        Fri, 24 Mar 2023 01:31:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD52DB822DC;
-        Fri, 24 Mar 2023 08:31:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 069FAC433D2;
-        Fri, 24 Mar 2023 08:31:36 +0000 (UTC)
-Message-ID: <b0018f7b-0556-0ac1-d2fa-89787a27fba1@xs4all.nl>
-Date:   Fri, 24 Mar 2023 09:31:35 +0100
+        Fri, 24 Mar 2023 04:36:12 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A37925B96
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:36:11 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pfcu5-0003BF-6n; Fri, 24 Mar 2023 09:36:05 +0100
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pfcu3-0004LI-Op; Fri, 24 Mar 2023 09:36:03 +0100
+Date:   Fri, 24 Mar 2023 09:36:03 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: Re: [PATCH] usb: dwc3: gadget: lower informal user notifaction
+ dequeue operation
+Message-ID: <20230324083603.vkbnyygx645fcfxl@pengutronix.de>
+References: <20230323171931.4085496-1-m.felsch@pengutronix.de>
+ <20230323234103.mx7f3pzvbrrguzqe@synopsys.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic
- allocated
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Dan Carpenter <error27@gmail.com>, oe-kbuild@lists.linux.dev,
-        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
-        bin.liu@mediatek.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
-        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
-        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        daniel.almeida@collabora.com, laurent.pinchart@ideasonboard.com
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-References: <4e2cb832-de83-4ba6-bd8a-119a19038cfe@kili.mountain>
- <a88b93cc-a81f-6186-09fc-02223867e677@collabora.com>
-Content-Language: en-US
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <a88b93cc-a81f-6186-09fc-02223867e677@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323234103.mx7f3pzvbrrguzqe@synopsys.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/03/2023 09:11, Benjamin Gaignard wrote:
-> 
-> Le 24/03/2023 à 06:01, Dan Carpenter a écrit :
->> Hi Benjamin,
->>
->> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>
->> url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230321-183154
->> base:   git://linuxtv.org/media_tree.git master
->> patch link:    https://lore.kernel.org/r/20230321102855.346732-3-benjamin.gaignard%40collabora.com
->> patch subject: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic allocated
->> config: arm64-randconfig-m041-20230319 (https://download.01.org/0day-ci/archive/20230324/202303240148.lKRnUqW9-lkp@intel.com/config)
->> compiler: aarch64-linux-gcc (GCC) 12.1.0
->>
->> If you fix the issue, kindly add following tag where applicable
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Reported-by: Dan Carpenter <error27@gmail.com>
->> | Link: https://lore.kernel.org/r/202303240148.lKRnUqW9-lkp@intel.com/
->>
->> smatch warnings:
->> include/media/videobuf2-core.h:1272 vb2_queue_add_buffer() warn: sleeping in atomic context
->> drivers/media/common/videobuf2/videobuf2-core.c:2456 vb2_core_queue_init() warn: Please consider using kcalloc instead of kmalloc_array
->>
->> vim +1272 include/media/videobuf2-core.h
->>
->> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1263  static inline bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
->> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1264  {
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1265      bool ret = false;
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1266
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1267      spin_lock(&q->bufs_lock);
->>                                                          ^^^^^^^^^^^^^^^^^^^^^^^
->> Holding a spin lock.
->>
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1268
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1269      if (vb->index >= q->max_num_bufs) {
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1270          struct vb2_buffer **tmp;
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1271
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21 @1272          tmp = krealloc_array(q->bufs, q->max_num_bufs * 2, sizeof(*q->bufs), GFP_KERNEL);
->>                                                                                                                                       ^^^^^^^^^^
->> Sleeping allocation.  GFP_ATOMIC?  Or is there a way to move the
->> allocation outside the lock?
-> 
-> I will add GFP_ATOMIC flag in next version.
+Hi,
 
-No need. Instead, don't use realloc here, just allocate a new array, copy over all
-the data from the old, and then switch q->bufs with the spinlock held. Then you
-can free the old one.
+On 23-03-23, Thinh Nguyen wrote:
+> Hi,
+> 
+> On Thu, Mar 23, 2023, Marco Felsch wrote:
+> > Printing an error message during usb_ep_dequeue() is more confusing than
+> > helpful since the usb_ep_dequeue() could be call during unbind() just
+> > in case that everything is canceld before unbinding the driver. Lower
+> > the dev_err() message to dev_dbg() to keep the message for developers.
+> > 
+> > Fixes: fcd2def66392 ("usb: dwc3: gadget: Refactor dwc3_gadget_ep_dequeue")
+> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > ---
+> >  drivers/usb/dwc3/gadget.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index 89dcfac01235f..6699db26cc7b5 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -2106,7 +2106,7 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+> >  		}
+> >  	}
+> >  
+> > -	dev_err(dwc->dev, "request %pK was not queued to %s\n",
+> > +	dev_dbg(dwc->dev, "request %pK was not queued to %s\n",
+> >  		request, ep->name);
+> >  	ret = -EINVAL;
+> >  out:
+> > -- 
+> > 2.30.2
+> > 
+> 
+> How were you able to reproduce this error message?
 
-It's only when you update q->bufs that you need the lock.
+We use the driver within barebox where we do have support for fastboot.
+During the driver unbind usb_ep_dequeue() is called which throw this
+error.
+
+> During unbind(), the function driver would typically call to
+> usb_ep_disable(). Before the call usb_ep_disable() completes, all queued
+> and incompleted requests are expected to be returned with -ESHUTDOWN.
+
+So the unbind() function driver should use usb_ep_disable() instead of
+usb_ep_dequeue()?
+
+> For you to see this error, this means that the function driver issued
+> usb_ep_dequeue() to an already disabled endpoint, and the request was
+> probably already given back.
+
+The unbind() just calls usb_ep_dequeue() which isn't forbidden according
+the API doc. We just want to ensure that the request is cancled if any.
+
+> Even though this error message is not critical and shouldn't affect the
+> driver's behavior, it's better to fix the function driver to handle this
+> race.
+
+As you have pointed out: 'it is not criticial' and therefore we shouldn't
+use dev_err() for non crictical information since this can cause
+user-space confusion.
 
 Regards,
-
-	Hans
+  Marco
 
 > 
-> Thanks for your help,
-> Benjamin
-> 
->>
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1273          if (!tmp)
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1274              goto realloc_failed;
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1275
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1276          q->max_num_bufs *= 2;
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1277          q->bufs = tmp;
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1278      }
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1279
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1280      if (vb->index < q->max_num_bufs) {
->> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1281          q->bufs[vb->index] = vb;
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1282          ret = true;
->> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1283      }
->> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1284
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1285  realloc_failed:
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1286      spin_unlock(&q->bufs_lock);
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1287
->> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1288      return ret;
->> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1289  }
->>
-
+> Thanks,
+> Thinh
