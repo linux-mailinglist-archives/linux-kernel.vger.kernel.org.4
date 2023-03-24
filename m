@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3AD6C772F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 06:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDB76C7734
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 06:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbjCXFZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 01:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S231655AbjCXFZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 01:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbjCXFYT (ORCPT
+        with ESMTP id S230456AbjCXFYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 01:24:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BF11C581;
-        Thu, 23 Mar 2023 22:23:50 -0700 (PDT)
+        Fri, 24 Mar 2023 01:24:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AB11A678;
+        Thu, 23 Mar 2023 22:23:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5570362955;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A34E76295E;
+        Fri, 24 Mar 2023 05:23:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BFCFC4339C;
         Fri, 24 Mar 2023 05:23:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B5DC4339B;
-        Fri, 24 Mar 2023 05:23:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679635429;
-        bh=1TQi32EW4sMhSHFZM1vNQKjc7vRrEzXRk2muGQZIa7A=;
+        s=k20201202; t=1679635437;
+        bh=UVsispKOXrBQIEvWETypgEvjsfcHzjlmC/4ErOkgTNY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bXkqlfALVhBouegCaSp8/0Lh0ebMNMQK+EN3+kSWo+/ioLU0Xhq68MKOmn3+u6eMn
-         xwmJtEaTVqFDLZ79xkFPhNTEd1CChjidO7lxM9kiCA9ZNNahfo643VGNz1FawDVKvf
-         CsX/uKLfLXq0kdOcQBYeFKHX3YNJvb5SG9p9M4SJ7TY4FHoP73Am3kVVaEpGj0kqYq
-         5IrJaV9xspjTKX6qcUgkMKb8ssBuSyzK3JKC6zYMoskHDivZL7igAow2ZMNQpYZRcc
-         O+0GTQ9spmrkyZu82oQixOU4G0fmOBMVRpzyorDvoe1Jn7DwTrTEitolX6vwLAz2Ur
-         4hgZBRH6M0UBA==
+        b=fqCbMYSMHRA8KSzswP21kxD34OBvPg5Oroes5iFhMPJ9Jc9lUvLPdfZusBSVzxRjD
+         ZlU6JqXwo7gqufTHgsi7V2KYkqvPdhXWJniY546kA+HW//VjjbzDJ5M21/A8oWT0Lc
+         cETKEhPNKLa2fOzp+XVPD0qVEl0P7kiVmNLagl9k1laXXohAb6JbmnGiNxTwWDsuS0
+         h8cxMHFbqttSNXkLPI/vicrjWlcEAN1g8TI7yesPlErb1aBdTV3L7Hi1bMNc6+Bt0l
+         23BSyQJZuTuaAN09/B8wSFzbZ3vkeBkT2OBZEGsqb1Gwi8JLs1MyWMHpy7vS3iIw6J
+         HLZTIgog+NgUA==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -55,16 +55,16 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-mm@kvack.org, linux-sh@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
         sparclinux@vger.kernel.org
-Subject: [PATCH v2 08/14] nios2: drop ranges for definition of ARCH_FORCE_MAX_ORDER
-Date:   Fri, 24 Mar 2023 08:22:27 +0300
-Message-Id: <20230324052233.2654090-9-rppt@kernel.org>
+Subject: [PATCH v2 09/14] powerpc: reword ARCH_FORCE_MAX_ORDER prompt and help text
+Date:   Fri, 24 Mar 2023 08:22:28 +0300
+Message-Id: <20230324052233.2654090-10-rppt@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230324052233.2654090-1-rppt@kernel.org>
 References: <20230324052233.2654090-1-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,34 +74,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-nios2 defines range for ARCH_FORCE_MAX_ORDER allowing MAX_ORDER
-up to 19, which implies maximal contiguous allocation size of 2^19
-pages or 2GiB.
+The prompt and help text of ARCH_FORCE_MAX_ORDER are not even close to
+describe this configuration option.
 
-Drop bogus definition of ranges for ARCH_FORCE_MAX_ORDER and leave it a
-simple integer with sensible default.
-
-Users that *really* need to change the value of ARCH_FORCE_MAX_ORDER
-will be able to do so but they won't be mislead by the bogus ranges.
+Update both to actually describe what this option does.
 
 Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/nios2/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+ arch/powerpc/Kconfig | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
-index fcaa6bbda3fc..e5936417d3cd 100644
---- a/arch/nios2/Kconfig
-+++ b/arch/nios2/Kconfig
-@@ -46,7 +46,6 @@ source "kernel/Kconfig.hz"
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 24d56536b269..c0095bf795ca 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -896,7 +896,7 @@ config DATA_SHIFT
+ 	  8M pages will be pinned.
  
  config ARCH_FORCE_MAX_ORDER
- 	int "Order of maximal physically contiguous allocations"
--	range 8 19
+-	int "Maximum zone order"
++	int "Order of maximal physically contiguous allocations"
+ 	range 7 8 if PPC64 && PPC_64K_PAGES
+ 	default "8" if PPC64 && PPC_64K_PAGES
+ 	range 12 12 if PPC64 && !PPC_64K_PAGES
+@@ -910,17 +910,19 @@ config ARCH_FORCE_MAX_ORDER
+ 	range 10 63
  	default "10"
  	help
- 	  The kernel page allocator limits the size of maximal physically
+-	  The kernel memory allocator divides physically contiguous memory
+-	  blocks into "zones", where each zone is a power of two number of
+-	  pages.  This option selects the largest power of two that the kernel
+-	  keeps in the memory allocator.  If you need to allocate very large
+-	  blocks of physically contiguous memory, then you may need to
+-	  increase this value.
++	  The kernel page allocator limits the size of maximal physically
++	  contiguous allocations. The limit is called MAX_ORDER and it
++	  defines the maximal power of two of number of pages that can be
++	  allocated as a single contiguous block. This option allows
++	  overriding the default setting when ability to allocate very
++	  large blocks of physically contiguous memory is required.
+ 
+ 	  The page size is not necessarily 4KB.  For example, on 64-bit
+ 	  systems, 64KB pages can be enabled via CONFIG_PPC_64K_PAGES.  Keep
+ 	  this in mind when choosing a value for this option.
+ 
++	  Don't change if unsure.
++
+ config PPC_SUBPAGE_PROT
+ 	bool "Support setting protections for 4k subpages (subpage_prot syscall)"
+ 	default n
 -- 
 2.35.1
 
