@@ -2,171 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BBC6C824E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 156566C8251
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbjCXQYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
+        id S231719AbjCXQZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjCXQYH (ORCPT
+        with ESMTP id S229623AbjCXQZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:24:07 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4A7C16AEA
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:24:02 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 1E21220FC3DB; Fri, 24 Mar 2023 09:24:02 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1E21220FC3DB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1679675042;
-        bh=yqbHHscSbo1oBlvpxvO5FHULkS3Egh7mMvYUC8+o2Zc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pzu0gpVjITShGg6wI518TWtDrvIpG+eOG+yx6QDuvG27xs99Xjokx6mfd0cq/byoE
-         m9Z1YrWu+AbFEn7xWAuTIvUQk2Oh20RTxexuX8NAWTE31UH/7AwNPkAzJcNySoKVL4
-         Bh7x+Cn9m7ksKOCgzEbElHDB++KN2HTZDkm6CWvg=
-Date:   Fri, 24 Mar 2023 09:24:02 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "johan+linaro@kernel.org" <johan+linaro@kernel.org>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rahul.tanwar@linux.intel.com" <rahul.tanwar@linux.intel.com>,
-        "andriy.shevchenko@intel.com" <andriy.shevchenko@intel.com>
-Subject: Re: [EXTERNAL] Re: [PATCH] x86/ioapic: Don't return 0 as valid virq
-Message-ID: <20230324162402.GA14597@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1677785686-2152-1-git-send-email-ssengar@linux.microsoft.com>
- <20230312204019.GBZA44s28AOAfAcRuy@fat_crate.local>
- <PUZP153MB074987B356FCB28933B87CCBBEB99@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
- <20230313111425.GDZA8Fkar9Z9BzSImD@fat_crate.local>
- <PUZP153MB0749FE8554CACEAD2E43C5E2BEBE9@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
- <87fs9u6twk.ffs@tglx>
+        Fri, 24 Mar 2023 12:25:33 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B72DC170
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:25:32 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E9A0624000B;
+        Fri, 24 Mar 2023 16:25:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1679675131;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mLzWeLxSuEsnoumPpXxnCEwUl43WWezW7vONFSan/CU=;
+        b=MrA2p34aD+1+1n6ZmzwtodiD1bIwrXlGZBz9KJaD1qOBCd1d1xkbl0kVYrWvRK9mVQCpta
+        zyh7TfW7RdjXZKiWiAdLx8v+IK6xId+N0lj5hTypSvsjc22EIiTTG2SU3BPODUGSGTty9b
+        VXJLnAn7KDPf/Emr3zr9PyRm+7M/YGMBU0VQkl6uikJOuESb13jVZQOaHWBkHg5Sf7yc3v
+        YnJRzamlfX/aSt8+Huv7/vRwDrWsphlvmIm36yx29XKNbWn6oX4MQxSHPOEarqgDVmG6kY
+        G/GPKZEUFLXoyVbwzKGHyZSxbz3dBdUcw9Wp3II+fKCFBpclrvFldgJcAxLxQg==
+Date:   Fri, 24 Mar 2023 17:25:28 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Christophe Kerello <christophe.kerello@foss.st.com>
+Cc:     <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: Re: [PATCH] mtd: rawnand: stm32_fmc2: do not support EDO mode
+Message-ID: <20230324172528.4d3ccd4b@xps-13>
+In-Reply-To: <20230324160918.826452-1-christophe.kerello@foss.st.com>
+References: <20230324160918.826452-1-christophe.kerello@foss.st.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87fs9u6twk.ffs@tglx>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 04:39:07PM +0100, Thomas Gleixner wrote:
-> On Tue, Mar 14 2023 at 10:23, Saurabh Singh Sengar wrote:
-> >> This should be added to your commit message: what guest VM is that and
-> >> why should the kernel support it.
-> >
-> > Guest VM is a linux VM running as child partition on Hyper-V. Hyper-v Linux
-> > documentation is in Documentation/virt/hyperv/.
-> >
-> > In commit I wanted to mention that any system which is not registering
-> > IO-APIC will have this issue. But I am fine to mention specifically
-> > about the issue I am facing.  As part of your next comment, I have
-> > explained the issue in detail if that is good, I can put that as
-> > commit message.
-> >> 
-> >> Why doesn't it need an IO-APIC and why does the current code need to be
-> >> changed just for your guest VM?
-> >
-> > For Hyper-V Virtual Machines, few platforms don't have any devices to be
-> > hooked to IO-APIC. Although it has Hyper-V based MSI over VMBus which
-> > assigns interrupts to PCIe devices. In such platforms IO-APIC is not
-> > registered which causes gsi_top value to remain at 0 and not get properly
-> > assigned. Moreover, due to the inability to disable CONFIG_X86_IO_APIC
-> > flag, the io-apic code still gets compiled. Thus, arch_dynirq_lower_bound
-> > function in io_apic.c decides the lower bound of irq numbers based on gsi_top.
-> >
-> > Later when PCIe-MSI attempts to allocate interrupts, it gets 0 as the first
-> > virq number because gsi_top is still 0. 0 being invalid virq is ignored by
-> > MSI irq domain and results allocation of the same PCIe MSI twice.
-> >
-> > 		CPU0		CPU1
-> > 0:		2			0		Hyper-V PCIe MSI 1073741824-edge
-> > 1:		69			0		Hyper-V PCIe MSI 1073741824-edge      nvme0q0
-> >
-> > To avoid this issue, if IO-APIC and gsi_top are not initialized, return the
-> > hint value passed as 'from' value to arch_dynirq_lower_bound instead of 0.
-> > This will also be identical to the behaviour of weak arch_dynirq_lower_bound
-> > function defined in kernel/softirq.c.
-> 
-> I find this mightly confusing. Something like this perhaps:
-> 
->   Subject: x86/ioapic: Don't return 0 from arch_dynirq_lower_bound()
-> 
->   arch_dynirq_lower_bound() is invoked by the core interrupt code to
->   retrieve the lowest possible Linux interrupt number for dynamically
->   allocated interrupts like MSI.
-> 
->   The x86 implementation uses this to exclude the IO/APIC GSI space.
->   This works correctly as long as there is an IO/APIC registered, but
->   returns 0 if not. This has been observed in VMs where the BIOS does
->   not advertise an IO/APIC.  
-> 
->   0 is an invalid interrupt number except for the legacy timer interrupt
->   on x86. The return value is unchecked in the core code, so it ends up
->   to allocate interrupt number 0 which is subsequently considered to be
->   invalid by the caller, e.g. the MSI allocation code.
-> 
->   The function has already a check for 0 in the case that an IO/APIC is
->   registered, but ioapic_dynirq_base is 0 in case of device tree setups.
-> 
->   Consolidate this and zero check for both ioapic_dynirq_base and gsi_top,
->   which is used in the case that no IO/APIC is registered.
-> 
-> And then make the code to look like the below, which makes it very
-> clear what this is about.
-> 
-> Thanks,
-> 
->         tglx
+Hi Christophe,
+
+christophe.kerello@foss.st.com wrote on Fri, 24 Mar 2023 17:09:18 +0100:
+
+> FMC2 controller does not support EDO mode (timings mode 4 and 5).
+>=20
+> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+> Fixes: 2cd457f328c1 ("mtd: rawnand: stm32_fmc2: add STM32 FMC2 NAND flash=
+ controller driver")
 > ---
-> --- a/arch/x86/kernel/apic/io_apic.c
-> +++ b/arch/x86/kernel/apic/io_apic.c
-> @@ -2477,17 +2477,22 @@ static int io_apic_get_redir_entries(int
->  
->  unsigned int arch_dynirq_lower_bound(unsigned int from)
->  {
-> +	unsigned int ret;
-> +
->  	/*
->  	 * dmar_alloc_hwirq() may be called before setup_IO_APIC(), so use
->  	 * gsi_top if ioapic_dynirq_base hasn't been initialized yet.
->  	 */
-> -	if (!ioapic_initialized)
-> -		return gsi_top;
-> +	ret = ioapic_dynirq_base ? : gsi_top;
-> +
->  	/*
-> -	 * For DT enabled machines ioapic_dynirq_base is irrelevant and not
-> -	 * updated. So simply return @from if ioapic_dynirq_base == 0.
-> +	 * For DT enabled machines ioapic_dynirq_base is irrelevant and
-> +	 * always 0. gsi_top can be 0 if there is no IO/APIC registered.
-> +	 *
-> +	 * 0 is an invalid interrupt number for dynamic allocations. Return
-> +	 * @from instead.
->  	 */
-> -	return ioapic_dynirq_base ? : from;
-> +	return ret ? : from;
->  }
->  
->  #ifdef CONFIG_X86_32
->
+>  drivers/mtd/nand/raw/stm32_fmc2_nand.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/drivers/mtd/nand/raw/stm32_fmc2_nand.c b/drivers/mtd/nand/ra=
+w/stm32_fmc2_nand.c
+> index 5d627048c420..3abb63d00a0b 100644
+> --- a/drivers/mtd/nand/raw/stm32_fmc2_nand.c
+> +++ b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
+> @@ -1531,6 +1531,9 @@ static int stm32_fmc2_nfc_setup_interface(struct na=
+nd_chip *chip, int chipnr,
+>  	if (IS_ERR(sdrt))
+>  		return PTR_ERR(sdrt);
+> =20
+> +	if (sdrt->tRC_min < 30000)
 
-Thanks you for your valuable suggestions. Commit message and code looks
-much better now. I will send the V2 with your "Co-Developed-by" tag, I
-hope its fine with you.
+When introducing NV-DDR support we as well added a timings.mode field,
+perhaps you could use it?
 
-Regards,
-Saurabh
- 
+> +		return -EOPNOTSUPP;
+> +
+>  	if (chipnr =3D=3D NAND_DATA_IFACE_CHECK_ONLY)
+>  		return 0;
+> =20
+
+
+Thanks,
+Miqu=C3=A8l
