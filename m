@@ -2,107 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CCC6C8318
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6856C831D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232228AbjCXROp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 13:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+        id S232202AbjCXRPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 13:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbjCXROe (ORCPT
+        with ESMTP id S231272AbjCXRPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 13:14:34 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06C95B9D;
-        Fri, 24 Mar 2023 10:14:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3DCFA1FF94;
-        Fri, 24 Mar 2023 17:14:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679678053; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=porIllnFw2p86E2ijRdzEbR8T3FBX2CIBdas6/Gd6LM=;
-        b=jNC/qpMiWtn8ZgQtU4A5VS7jMHFB68+eObtzqVIN51ypAMW/Ky4K3757kbkbewPI+S4o0/
-        9wP6YVvSr/W/oORA3ewkTTignhMg2px7JA36e5FimP8QjD85IoHibcNR2Z7Ztuxr5A9Dyc
-        CB5+QL8FBM5fxNh5CZY/p5MsWHl3hYg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EEF14138ED;
-        Fri, 24 Mar 2023 17:14:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id u2xkOWTaHWSDJQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Fri, 24 Mar 2023 17:14:12 +0000
-Date:   Fri, 24 Mar 2023 18:14:11 +0100
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Cai Xinchen <caixinchen1@huawei.com>
-Cc:     songmuchun@bytedance.com, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, longman@redhat.com, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        cgroups@vger.kernel.org, duanxiongchun@bytedance.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        yosryahmed@google.com, mpenttil@redhat.com
-Subject: Re: [PATCH 0/1] Fix vmstat_percpu incorrect subtraction after
- reparent
-Message-ID: <20230324171411.t2romq3ydphoonu2@blackpad>
-References: <20230320030648.50663-1-caixinchen1@huawei.com>
+        Fri, 24 Mar 2023 13:15:33 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C8BCC15
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 10:15:02 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so3607081wmb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 10:15:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1679678097;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RegTj6ZIebUQPA8rcD0vl5uPS+26g2Sm5QVA1mqn3kI=;
+        b=AsEFpNhIC31p7EY+r3N6BmQ0k/tTWIhol6uk5hJCrx+qN5EgWZx2jMqSPeYt3/KOZM
+         rKXSmLCp4ikMxij1pQzXGiuBNjpcpSvMp54tsTBEXtiqeUmYUMfjjWn148rAVlmS/FlO
+         hdWMzBIAiLcYSSKeFfP64Qq4eGQ0iOwiSLD+s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679678097;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RegTj6ZIebUQPA8rcD0vl5uPS+26g2Sm5QVA1mqn3kI=;
+        b=2jACtLezCUcgqqfxjqx/hy6tRxEAAFxSfj27qfcJsr2/GT6Dh158+nABJtuKV5gP9L
+         /kCndkKVnfWdrJjcpEDn0mpb82AVN7gkTCX0BroZxdMlftNUlOa96nBg0q14vrPzAQzD
+         r30JkK//ka8wf8K+2KVciYvfTD0Z52i3V5YPpYmfJiuHZkizZY8m4PyY3LCkKiw1gQJf
+         BYytYKIVkVqwtiYPUjmr1l/U+tC5eLavTmWiocsLrjBqZBXDt3Nlz79dapEvQgOGrg70
+         a7+tX9WyKW5V/j9DMKpXZYLyAVJj0otcyNKmU+PZUG71AvH64GBQDVipHPDgjL9b6l3x
+         g/wg==
+X-Gm-Message-State: AO0yUKXJMkcGive8jJjLPiYt0FnKps6gm9Z71XPVoD0EguVSrfxkRzZL
+        gwNgPgreBw4B/nUo3SqZwAIunw==
+X-Google-Smtp-Source: AK7set+RzbeIy+ik1zAtmcE5ClYFAskZBrekDO+igxhK9XPkVFmRtsLXkpwpOngDkYj0K19uCjvm3A==
+X-Received: by 2002:a05:600c:218d:b0:3ed:5a12:5641 with SMTP id e13-20020a05600c218d00b003ed5a125641mr3325142wme.36.1679678097171;
+        Fri, 24 Mar 2023 10:14:57 -0700 (PDT)
+Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:ffb1:35ba:1031:ba71])
+        by smtp.gmail.com with ESMTPSA id 26-20020a05600c231a00b003dc522dd25esm5385107wmo.30.2023.03.24.10.14.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 10:14:56 -0700 (PDT)
+From:   Florent Revest <revest@chromium.org>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, mark.rutland@arm.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org,
+        jolsa@kernel.org, xukuohai@huaweicloud.com, lihuafei1@huawei.com,
+        Florent Revest <revest@chromium.org>
+Subject: [PATCH v3 0/4] Add ftrace direct call for arm64
+Date:   Fri, 24 Mar 2023 18:14:47 +0100
+Message-Id: <20230324171451.2752302-1-revest@chromium.org>
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7ps5la3sopyo7hm5"
-Content-Disposition: inline
-In-Reply-To: <20230320030648.50663-1-caixinchen1@huawei.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series adds ftrace direct call support to arm64.
+This makes BPF tracing programs (fentry/fexit/fmod_ret/lsm) work on arm64.
 
---7ps5la3sopyo7hm5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It is meant to be taken by the arm64 tree but it depends on the
+trace-direct-v6.3-rc3 tag of the linux-trace tree:
+  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+That tag was created by Steven Rostedt so the arm64 tree can pull the prior work
+this depends on. [1]
 
-On Mon, Mar 20, 2023 at 03:06:47AM +0000, Cai Xinchen <caixinchen1@huawei.c=
-om> wrote:
-> There are two problems left:
->=20
->      root
->      /  \
->     A    B
->    / \    \
->   C   E    D
->=20
-> 1. In some case of reparent, some page cache may be used by other memcg
-> D but it charges to the parent memcg A of dying memcg E. D is getting
-> away with using the page for free while A is taxed.
+Thanks to the ftrace refactoring under that tag, an ftrace_ops backing a ftrace
+direct call will only ever point to *one* direct call. This means we can look up
+the direct called trampoline address stored in the ops from the ftrace_caller
+trampoline in the case when the destination would be out of reach of a BL
+instruction at the ftrace callsite. This fixes limitations of previous attempts
+such as [2].
 
-Note that A is (effectively) taxed even before E is removed due to
-hierarchical nature of charging. Then what you describe transforms into
-"well-known" problem of shared charging (with not well-known solution
-:-/).
+This series has been tested on arm64 with:
+1- CONFIG_FTRACE_SELFTEST
+2- samples/ftrace/*.ko (cf: patch 3)
+3- tools/testing/selftests/bpf/test_progs (cf: patch 4)
 
-HTH,
-Michal
+Changes since v2 [3]:
+- Dropped the first 6 patches which got merged separately in the tracing tree
+- Minor rebase changes when switching to v6.3-rc3
+- Fixed a typo in a comment (trmapoline -> trampoline)
 
---7ps5la3sopyo7hm5
-Content-Type: application/pgp-signature; name="signature.asc"
+1: https://lore.kernel.org/all/ZB2Nl7fzpHoq5V20@FVFF77S0Q05N/
+2: https://lore.kernel.org/all/20220913162732.163631-1-xukuohai@huaweicloud.com/
+3: https://lore.kernel.org/all/20230207182135.2671106-1-revest@chromium.org/
 
------BEGIN PGP SIGNATURE-----
+Florent Revest (4):
+  arm64: ftrace: Add direct call support
+  arm64: ftrace: Simplify get_ftrace_plt
+  arm64: ftrace: Add direct call trampoline samples support
+  selftests/bpf: Update the tests deny list on aarch64
 
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZB3aYQAKCRAkDQmsBEOq
-uULUAQCHRvKpQPSDHUkOEFl2uZo3E7GeJT8AUOQoAsdb9Scv3wEA6jAYPC9q+nvp
-FbwIeniHgYs6j4F0z5/Y/u/CsVBLuQw=
-=CvmU
------END PGP SIGNATURE-----
+ arch/arm64/Kconfig                           |  6 ++
+ arch/arm64/include/asm/ftrace.h              | 22 +++++
+ arch/arm64/kernel/asm-offsets.c              |  6 ++
+ arch/arm64/kernel/entry-ftrace.S             | 90 ++++++++++++++++----
+ arch/arm64/kernel/ftrace.c                   | 46 +++++++---
+ samples/ftrace/ftrace-direct-modify.c        | 32 +++++++
+ samples/ftrace/ftrace-direct-multi-modify.c  | 36 ++++++++
+ samples/ftrace/ftrace-direct-multi.c         | 22 +++++
+ samples/ftrace/ftrace-direct-too.c           | 25 ++++++
+ samples/ftrace/ftrace-direct.c               | 23 +++++
+ tools/testing/selftests/bpf/DENYLIST.aarch64 | 82 ++----------------
+ 11 files changed, 288 insertions(+), 102 deletions(-)
 
---7ps5la3sopyo7hm5--
+-- 
+2.40.0.348.gf938b09366-goog
+
