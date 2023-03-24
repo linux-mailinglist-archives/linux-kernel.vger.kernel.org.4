@@ -2,117 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425E36C826C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:34:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 442206C8273
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjCXQe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S231402AbjCXQfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCXQeY (ORCPT
+        with ESMTP id S230131AbjCXQfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:34:24 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD2AE3AB
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:34:23 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32ODBKRW011039;
-        Fri, 24 Mar 2023 17:34:16 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=SboRCbcyRuV05Ygpi/rKpxPTf5aTWPczlwFRg2CMDRo=;
- b=T1+qXB3/c6jdtvoAkUgyEpBxAGzqwuBFCsWuiyKbxIETREUwr3A76lTJOo0vBuZAkNTy
- VO0l4l7EVVtHUdnZZ3eEBAxShGVOxviBwXQq3yHB7Ov0nom1tKaaNk+rvVNH4PSDsOwH
- Xhn3tCgGE7FhwD6BTqIbLU2FYxUu7XEBw07cKlsqF3r+W2i6u0FrfqkbGr9x/NL2ctgi
- 3r1uqqtHemjlgCwEJ9cPCAFQEuz79w6yBOgSiZs7eAT6/qYvoaiOx51qKFUexd2mQj1O
- HdgCQXQqejL4okcP6ITmGvn+/pK3Hghd6XeTjJV5SljswAZOxNp5Ob+UdTIPDvbOg3AX hg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pgxjwe1x7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 17:34:16 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 713F210002A;
-        Fri, 24 Mar 2023 17:34:15 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6C90921ADAE;
-        Fri, 24 Mar 2023 17:34:15 +0100 (CET)
-Received: from [10.48.0.175] (10.48.0.175) by SHFDAG1NODE3.st.com
- (10.75.129.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 24 Mar
- 2023 17:34:15 +0100
-Message-ID: <f4c32aa5-e5b1-6465-7708-ef0281baf0af@foss.st.com>
-Date:   Fri, 24 Mar 2023 17:34:14 +0100
+        Fri, 24 Mar 2023 12:35:20 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697E713D6C;
+        Fri, 24 Mar 2023 09:35:19 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id x17so2997514lfu.5;
+        Fri, 24 Mar 2023 09:35:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679675717;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0oXkSV2sebAxHCIwL9LdQNQi2AqSegdoeaxnV09FF74=;
+        b=kogiHFla6HqWUaWP00m/N4yDPNgETR/TJ5Gn2K7xfXBAQZK+Ds9zJRTfbWijnoIqAD
+         s5PJ5tR7r8hVhWn2SnC8R4bgXjYQZEyCHOOUg67kuhV3GRn5IlWE24rmJRZoAjbx/e3f
+         47kQcvaxW7xslYdM8k9KI3Ktg2+ASua7JBqI/ndexYPtFSvt8vCqeqvjyKHiDkZEJ5dP
+         sYrPMGcNMfn5+9oN2CWXaeEZbIy0zAqRmMRBFS9olgl0prKwhvn+02JqtnBqnH9K79XH
+         LC2AJRomYk5HAHiwaT7nPVK0PGjiEMXEb1iXkGqOFG9k4ovbV8vZNMnzPIQd+DikHmVg
+         dPlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679675717;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0oXkSV2sebAxHCIwL9LdQNQi2AqSegdoeaxnV09FF74=;
+        b=qOCyXyEJkPZ9OqxIrF8Hj/uZuP+MOEQzv1DiGzq35GeQaQZYDHRu4hS3yekfdCe4Xa
+         +PxujdVXj4mCQiKZSX2QDl0F8JmrteBWve+JYJ2vimRAjROs9aHkKjy2GfKVlMq/IOwT
+         5bCZ5hk6YyTaL/rE4yufDvkfpB/10D1vxSlL4dUMqYuobvL2eKrqubQeLI3NNmRZlbxt
+         S4Q4JnFejHRvM+SurX9VCevA7ikZbZlvnNxkMB/bcAKjndkSxvCAvOabOqRd7MRzcMi4
+         f9E6/E2YjrUSwkki3yBJHxUtBytgSqDzUsM6M8Jf4pkkqbtAd2mCE3us2FPmkJk5tjDm
+         viHQ==
+X-Gm-Message-State: AAQBX9fs4PhynUSWX5QvQxxGFsjeYDPhJaKctvG+6fByNtmKKzp6aJr4
+        Hng3icMfItNT+JmCBUkQ6lPkUl3Z2sp2M6VWzuiNSS27x9a4quZZ
+X-Google-Smtp-Source: AKy350ZhMWyqnv3VWYo6wNSTJOCpj4B0nCXZQeOZl/ujitUH1P+TUXrU+I8Wk8LSzhm7wlQMd3Z6toMSqh/ptQ4fISE=
+X-Received: by 2002:ac2:519c:0:b0:4e0:822f:9500 with SMTP id
+ u28-20020ac2519c000000b004e0822f9500mr903777lfi.12.1679675716968; Fri, 24 Mar
+ 2023 09:35:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] mtd: rawnand: stm32_fmc2: do not support EDO mode
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20230324160918.826452-1-christophe.kerello@foss.st.com>
- <20230324172528.4d3ccd4b@xps-13>
-From:   Christophe Kerello <christophe.kerello@foss.st.com>
-In-Reply-To: <20230324172528.4d3ccd4b@xps-13>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.48.0.175]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_10,2023-03-24_01,2023-02-09_01
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Aleksey Shumnik <ashumnik9@gmail.com>
+Date:   Fri, 24 Mar 2023 19:35:06 +0300
+Message-ID: <CAJGXZLhL-LLjiA-ge8O5A5NDoZ5JABqZHqix0y-8ThcJjBSe=A@mail.gmail.com>
+Subject: [BUG] gre interface incorrectly generates link-local addresses
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        pabeni@redhat.com, edumazet@google.com,
+        Jakub Kicinski <kuba@kernel.org>, a@unstable.cc,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Miquel,
+Dear Maintainers,
 
-On 3/24/23 17:25, Miquel Raynal wrote:
-> Hi Christophe,
-> 
-> christophe.kerello@foss.st.com wrote on Fri, 24 Mar 2023 17:09:18 +0100:
-> 
->> FMC2 controller does not support EDO mode (timings mode 4 and 5).
->>
->> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
->> Fixes: 2cd457f328c1 ("mtd: rawnand: stm32_fmc2: add STM32 FMC2 NAND flash controller driver")
->> ---
->>   drivers/mtd/nand/raw/stm32_fmc2_nand.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/mtd/nand/raw/stm32_fmc2_nand.c b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
->> index 5d627048c420..3abb63d00a0b 100644
->> --- a/drivers/mtd/nand/raw/stm32_fmc2_nand.c
->> +++ b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
->> @@ -1531,6 +1531,9 @@ static int stm32_fmc2_nfc_setup_interface(struct nand_chip *chip, int chipnr,
->>   	if (IS_ERR(sdrt))
->>   		return PTR_ERR(sdrt);
->>   
->> +	if (sdrt->tRC_min < 30000)
-> 
-> When introducing NV-DDR support we as well added a timings.mode field,
-> perhaps you could use it?
+I found that GRE arbitrarily hangs IP addresses from other interfaces
+described in /etc/network/interfaces above itself (from bottom to
+top). Moreover, this error occurs on both ip4gre and ip6gre.
 
-Yes, I can use it. It will be done in V2.
+Example of mgre interface:
 
-Regards,
-Christophe Kerello.
+13: mgre1@NONE: <MULTICAST,NOARP,UP,LOWER_UP> mtu 1400 qdisc noqueue
+state UNKNOWN group default qlen 1000
+    link/gre 0.0.0.0 brd 0.0.0.0
+    inet 10.10.10.100/8 brd 10.255.255.255 scope global mgre1
+       valid_lft forever preferred_lft forever
+    inet6 fe80::a0a:a64/64 scope link
+       valid_lft forever preferred_lft forever
+    inet6 fe80::7f00:1/64 scope host
+       valid_lft forever preferred_lft forever
+    inet6 fe80::a0:6842/64 scope host
+       valid_lft forever preferred_lft forever
+    inet6 fe80::c0a8:1264/64 scope host
+       valid_lft forever preferred_lft forever
 
-> 
->> +		return -EOPNOTSUPP;
->> +
->>   	if (chipnr == NAND_DATA_IFACE_CHECK_ONLY)
->>   		return 0;
->>   
-> 
-> 
-> Thanks,
-> Miquèl
+It seems that after the corrections in the following commits
+https://github.com/torvalds/linux/commit/e5dd729460ca8d2da02028dbf264b65be8cd4b5f
+https://github.com/torvalds/linux/commit/30e2291f61f93f7132c060190f8360df52644ec1
+https://github.com/torvalds/linux/commit/23ca0c2c93406bdb1150659e720bda1cec1fad04
+
+in function add_v4_addrs() instead of stopping after this check:
+
+if (addr.s6_addr32[3]) {
+                add_addr(idev, &addr, plen, scope, IFAPROT_UNSPEC);
+                addrconf_prefix_route(&addr, plen, 0, idev->dev, 0, pflags,
+                                                                GFP_KERNEL);
+                 return;
+}
+
+it goes further and in this cycle hangs addresses from all interfaces on the gre
+
+for_each_netdev(net, dev) {
+      struct in_device *in_dev = __in_dev_get_rtnl(dev);
+      if (in_dev && (dev->flags & IFF_UP)) {
+      struct in_ifaddr *ifa;
+      int flag = scope;
+      in_dev_for_each_ifa_rtnl(ifa, in_dev) {
+            addr.s6_addr32[3] = ifa->ifa_local;
+            if (ifa->ifa_scope == RT_SCOPE_LINK)
+                     continue;
+            if (ifa->ifa_scope >= RT_SCOPE_HOST) {
+                     if (idev->dev->flags&IFF_POINTOPOINT)
+                              continue;
+                     flag |= IFA_HOST;
+            }
+            add_addr(idev, &addr, plen, flag,
+                                    IFAPROT_UNSPEC);
+            addrconf_prefix_route(&addr, plen, 0, idev->dev,
+                                     0, pflags, GFP_KERNEL);
+            }
+}
+
+Moreover, before switching to Debian 12 kernel version 6.1.15, I used
+Debian 11 on 5.10.140, and there was no error described in the commit
+https://github.com/torvalds/linux/commit/e5dd729460ca8d2da02028dbf264b65be8cd4b5f.
+One link-local address was always generated on the gre interface,
+regardless of whether the destination or the local address of the
+tunnel was specified.
+
+Which linux distribution did you use when you found an error with the
+lack of link-local address generation on the gre interface?
+After fixing the error, only one link-local address is generated?
+I think this is a bug and most likely the problem is in generating
+dev->dev_addr, since link-local is formed from it.
+
+I suggest solving this problem or roll back the code changes made in
+the comments above.
