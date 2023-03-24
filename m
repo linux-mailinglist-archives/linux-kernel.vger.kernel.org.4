@@ -2,109 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887B76C754C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083506C7550
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjCXCDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 22:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
+        id S231252AbjCXCK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 22:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCXCDm (ORCPT
+        with ESMTP id S229734AbjCXCKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 22:03:42 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F62E5BBA;
-        Thu, 23 Mar 2023 19:03:39 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so273002pjb.0;
-        Thu, 23 Mar 2023 19:03:39 -0700 (PDT)
+        Thu, 23 Mar 2023 22:10:24 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7351011666;
+        Thu, 23 Mar 2023 19:10:23 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id ix20so596612plb.3;
+        Thu, 23 Mar 2023 19:10:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679623419;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PY/nCrDiW8SdcBN3F88jY3M7fLY4heof/m4P0yCEwhw=;
-        b=HL6A8izR0CkeHjxLTeXacguhkCInW7j8vtFgwkEVI+52gmedURua9uXjCQYd1au7M4
-         J3wKLc5Aaxr4n8OrTW1aboOPukXGln1bEfbkxmfXkRn6g27aVMLkRw5UTMCDUUiMzrLu
-         gA2qhSRF0DeHSKKS0Lfj2/OFgFLPQj+/W3uFZOJ8HKZ7Ef709sX3NmbybV0tVgYjcqo9
-         LNtgR9a6IG8ul2Ht2ssRrjooLeqB4noIZg0Q/C4ZOaho+LB9gK7sfrhgZK+tSwqccjaS
-         rxmjuwkEYAujP00mwv527Ch8lZwee8c/QiAm7yaggQs3brArDtQ01NmWgzttubBCX+Rj
-         nd7A==
+        d=gmail.com; s=20210112; t=1679623823;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YA5tqeQZN5rIb5Yd0dxP1FKIh8+sCL54B5X5FV19fyM=;
+        b=c3o/PCDZb//e5yCMPbg0H4OGUUxBNKrow2cHhqJcU3DYUcWx1Bi6tZLnqPrYnW31lf
+         PMbz0ki8dNKUf9kCUwBypzFp2zT3ZUJCiV4Zs43voDGHXfG2yJHSmdP7JuDpaerFv2mi
+         GaxtnHRbj7IbYIedQurXC8CUZSUlKi3Ir1IAqTBD8+c+O5mLpWqUpWpbpa03PsFSAcgW
+         MltkyvEcjxHv9athA3QhTSxjqpExCAfQZfTr9HcHkstpzz7sydq1/AhRRSv3LwWHGcjR
+         s0JiYqFdpjmB6O1O9qNJDWroNhT7gkTR7QvQkiGrjfYVy/Fit8UmLErr2iJxS8mvsPeU
+         ACnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679623419;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PY/nCrDiW8SdcBN3F88jY3M7fLY4heof/m4P0yCEwhw=;
-        b=dvBp75ORt/Olu0HfTL2fG/INKpCxjzPWW4j7KwxH5+xCAU+SiFbOlWuSkdN3S+eOuM
-         MLbVK54zdmF9mHqcCuc33kauy3cGFSyDHmq2Z39QaBsCza8lYuqfUPvsnHWBfhff8Elf
-         dURF4yF5kRoRp1VLG5ucOdcOuoTdtq3R2Vx1Yie2/caQdoP0CWlBSsCEJE+5stRsAww0
-         gWbGIzWbMHWn9z6zzVZ5qZoDkXyQaBuysnHkR9t2KRSzjIJms9y22MbzPgBDf5QGPRTm
-         6bEmUMeJFZ5IZex8gfyyjnYQ7dEitCnMKs8wdd1tjtfMR8+LbABZXZfDg8wEODlyBxvT
-         9+vw==
-X-Gm-Message-State: AAQBX9daTbRA9T3eyTkDuh44oVTbfZVUcvAmkS4piduIkswXhnV4pxPf
-        KlMlkEokFIQNCKwX4QJLKVrxE2AOiBc=
-X-Google-Smtp-Source: AKy350ZD0neSEhm9l4wbQl8oOrRyXw/6xPTWV3RJomuHrjMjhShTzuTfX1vJE/M1K2wU8G/JnpV8sw==
-X-Received: by 2002:a17:902:ec86:b0:1a0:7425:4b73 with SMTP id x6-20020a170902ec8600b001a074254b73mr1258132plg.4.1679623418972;
-        Thu, 23 Mar 2023 19:03:38 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id p6-20020a1709028a8600b00194c2f78581sm12941481plo.199.2023.03.23.19.03.38
+        d=1e100.net; s=20210112; t=1679623823;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YA5tqeQZN5rIb5Yd0dxP1FKIh8+sCL54B5X5FV19fyM=;
+        b=eoxBwys8j62aUpOTDRT2uRZCXq7xhpixylFniq6NQiAZvJzvty2Qrx81rd7ffhElzv
+         W0hAljeWASH2pmd/pKN+X/2QrBjRiFtQEIky242ejOuWWqjgW9pK8En6CBna60PQTOlk
+         zhsQ/driypoMowWYLUNsx1+MaG3iavA812ZZ+I57bzSCKemp0Pyt0pBSTR3gHJy012Yb
+         XoPgcgURZiUceVHFcGEVHqG+CLY17WTAvLq60dRJRZepsHpn0KAgSD3lGqFiBSxSL0q+
+         ytAQUYEaM40A5Bj7whLusiRpoMyvrsy+LLbFaK8jC4eIPr07pbT2AxzWV3bZ07F71ElL
+         jCJQ==
+X-Gm-Message-State: AO0yUKUHEcuogJ6w3hrdGgjDtOF7C504Sw3vkqH4g0usCPNDF2+a32IN
+        9qAHTdNgveFvMUmv9t+BusI=
+X-Google-Smtp-Source: AK7set9+wWE9thrh633jxSz+/O/KwuXWj8/LPIynCW0lsCkj6BVegWZeilrQwim0ydyZRAG3gN5Ecw==
+X-Received: by 2002:a05:6a21:3286:b0:da:cde6:ad75 with SMTP id yt6-20020a056a21328600b000dacde6ad75mr4881944pzb.22.1679623822829;
+        Thu, 23 Mar 2023 19:10:22 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id h11-20020a62b40b000000b005da23d8cbffsm12545772pfn.158.2023.03.23.19.10.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 19:03:38 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 23 Mar 2023 16:03:36 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Haifeng Xu <haifeng.xu@shopee.com>, lizefan.x@bytedance.com,
-        hannes@cmpxchg.org, akpm@linux-foundation.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpuset: Clean up cpuset_node_allowed
-Message-ID: <ZB0E+C2nao2mKlbJ@slm.duckdns.org>
-References: <9953284e-05da-56b0-047d-ecf18aa53892@redhat.com>
- <20230228083537.102665-1-haifeng.xu@shopee.com>
- <299c9c34-0c07-ae52-61d7-6332f35c6245@redhat.com>
- <2e71c2bf-9ee3-4ada-e9d9-acb6e422e9af@redhat.com>
+        Thu, 23 Mar 2023 19:10:22 -0700 (PDT)
+From:   Genjian <zhanggenjian123@gmail.com>
+X-Google-Original-From: Genjian <zhanggenjian@kylinos.cn>
+To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH] btrfs: fix uninitialized variable warning
+Date:   Fri, 24 Mar 2023 10:08:38 +0800
+Message-Id: <20230324020838.67149-1-zhanggenjian@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e71c2bf-9ee3-4ada-e9d9-acb6e422e9af@redhat.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 05:30:46PM -0400, Waiman Long wrote:
-> On 3/17/23 21:35, Waiman Long wrote:
-> > On 2/28/23 03:35, Haifeng Xu wrote:
-> > > Commit 002f290627c2 ("cpuset: use static key better and convert to
-> > > new API")
-> > > has used __cpuset_node_allowed() instead of cpuset_node_allowed() to
-> > > check
-> > > whether we can allocate on a memory node. Now this function isn't
-> > > used by
-> > > anyone, so we can do the follow things to clean up it.
-> > > 
-> > > 1. remove unused codes
-> > > 2. rename __cpuset_node_allowed() to cpuset_node_allowed()
-> > > 3. update comments in mm/page_alloc.c
-> > > 
-> > > Suggested-by: Waiman Long <longman@redhat.com>
-> > > Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
-...
-> It turns out that cpuset_node_allowed() isn't used anywhere except in
-> cpuset.h. So it should be OK to remove the alternate cpuset_node_allowed()
-> function.
-> 
-> Acked-by: Waiman Long <longman@redhat.com>
+From: Genjian Zhang <zhanggenjian@kylinos.cn>
 
-Applied to cgroup/for-6.4.
+compiler warning:
 
-Thanks.
+../fs/btrfs/volumes.c: In function ‘btrfs_init_new_device’:
+../fs/btrfs/volumes.c:2703:3: error: ‘seed_devices’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
+ 2703 |   btrfs_setup_sprout(fs_info, seed_devices);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+../fs/btrfs/send.c: In function ‘get_cur_inode_state’:
+../include/linux/compiler.h:70:32: error: ‘right_gen’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
+   70 |   (__if_trace.miss_hit[1]++,1) :  \
+      |                                ^
+../fs/btrfs/send.c:1878:6: note: ‘right_gen’ was declared here
+ 1878 |  u64 right_gen;
+      |      ^~~~~~~~~
+
+Initialize the uninitialized variables.
+
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+---
+ fs/btrfs/send.c    | 2 +-
+ fs/btrfs/volumes.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+index e5c963bb873d..af2e153543a5 100644
+--- a/fs/btrfs/send.c
++++ b/fs/btrfs/send.c
+@@ -1875,7 +1875,7 @@ static int get_cur_inode_state(struct send_ctx *sctx, u64 ino, u64 gen,
+ 	int left_ret;
+ 	int right_ret;
+ 	u64 left_gen;
+-	u64 right_gen;
++	u64 right_gen = 0;
+ 	struct btrfs_inode_info info;
+ 
+ 	ret = get_inode_info(sctx->send_root, ino, &info);
+diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+index 7823168c08a6..7163c98e47be 100644
+--- a/fs/btrfs/volumes.c
++++ b/fs/btrfs/volumes.c
+@@ -2609,7 +2609,7 @@ int btrfs_init_new_device(struct btrfs_fs_info *fs_info, const char *device_path
+ 	struct block_device *bdev;
+ 	struct super_block *sb = fs_info->sb;
+ 	struct btrfs_fs_devices *fs_devices = fs_info->fs_devices;
+-	struct btrfs_fs_devices *seed_devices;
++	struct btrfs_fs_devices *seed_devices = NULL;
+ 	u64 orig_super_total_bytes;
+ 	u64 orig_super_num_devices;
+ 	int ret = 0;
 -- 
-tejun
+2.25.1
+
