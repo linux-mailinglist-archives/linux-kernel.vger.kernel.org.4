@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F926C84B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:19:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20B26C84E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjCXSTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 14:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        id S231277AbjCXSV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 14:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjCXSTk (ORCPT
+        with ESMTP id S229522AbjCXSV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 14:19:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF08F1F5FD;
-        Fri, 24 Mar 2023 11:19:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7D76133B68;
-        Fri, 24 Mar 2023 18:19:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679681978; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GsXEmpX7jt/HfXlKrWUvTT6ogyq2n9SaBj4U2OfhPHc=;
-        b=CBx76FguKcCbaNh++Rix2ar8jnobmAuieXUZZS19lXDeHSnKBM6hwUD7+5a9uveK9ryyEf
-        cEjIxxsPM7+BmtmM34Of1N6aOCJDguL2vO59qwvH6JFhwoXcNxefhwQ3UGdqCSYq5lQvwt
-        IPytjsmPLopWx/Ekf7gZ/Rn4Z/z8its=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3A370133E5;
-        Fri, 24 Mar 2023 18:19:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ek3SDLrpHWSORAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Fri, 24 Mar 2023 18:19:38 +0000
-Date:   Fri, 24 Mar 2023 19:19:36 +0100
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 3/5] cgroup/cpuset: Find another usable CPU if none found
- in current cpuset
-Message-ID: <20230324181936.5sf6xjc5a4vacuku@blackpad>
-References: <20230306200849.376804-1-longman@redhat.com>
- <20230306200849.376804-4-longman@redhat.com>
- <20230314181749.5b4k6selbgdhl3up@blackpad>
- <58a1a878-fa0b-285d-3e43-2b5103d3c770@redhat.com>
- <20230317122708.ax3m2d4zijkfdzjq@blackpad>
- <ca664da8-0f47-06b2-a94c-82b2f9a1c3aa@redhat.com>
- <20230324143247.GA27199@willie-the-truck>
+        Fri, 24 Mar 2023 14:21:56 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C251F92C;
+        Fri, 24 Mar 2023 11:21:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679682115; x=1711218115;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2n+dCeg7wtjmU4qgYht1y0lqTlyInii8rzz/qlD/AGw=;
+  b=c1/A3OmsfBKaXRCq1nsO2b/FtQ3Zpxr2zuqXuG70nysBIh8JA1nMuSOy
+   vmj/S0x+BxaRuLsyJ8CIa8qH1mSNYhhY3kcoCFnQ6GF6Mdhlte0N8IYRx
+   gtU/h72Fe4/Iee2+eK5teGK7Id8R+VBS2/uRaKoOpy+gih2VZ0HYWYcHt
+   YtsvcYTlOz3i0MY9fCCxgkmeDbh48nmq+tKfA1jgkFexhxuG8Hnr59gp9
+   BSsj/I7qHL35AydeufL+RxwAt82fYMnYHiYjFCMSF926ZsAnFhVHDX11P
+   fEtO3zn0V9KCIv+V+fMyn0pVgq/QuiI1jwgYPhLEaaWcgdAI7Dy7Zinb1
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="342243792"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="342243792"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 11:21:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="928746432"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="928746432"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 11:21:48 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id CA33B1207CD;
+        Fri, 24 Mar 2023 20:21:43 +0200 (EET)
+Date:   Fri, 24 Mar 2023 20:21:43 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>
+Subject: Re: [PATCH v1 1/1] device property: Constify a few fwnode APIs
+Message-ID: <ZB3qNy6ts8ry+spb@kekkonen.localdomain>
+References: <20230324112720.71315-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bnv5nqjb4an3p6ze"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230324143247.GA27199@willie-the-truck>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20230324112720.71315-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,37 +67,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 24, 2023 at 01:27:20PM +0200, Andy Shevchenko wrote:
+> The fwnode parameter is not altered in the following APIs:
+> 
+> - fwnode_get_next_parent_dev()
+> - fwnode_is_ancestor_of()
+> - fwnode_graph_get_endpoint_count()
+> 
+> so constify them.
+> 
+> Reported-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
---bnv5nqjb4an3p6ze
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks, Andy!
 
-On Fri, Mar 24, 2023 at 02:32:50PM +0000, Will Deacon <will@kernel.org> wrote:
-> So approaches such as killing tasks or rejecting system calls tend not
-> to work as well, since you inevitably get divergent behaviour leading
-> to functional breakage rather than e.g. performance anomalies.
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-What about temporary performance drop from 100% to 0% aka freezing the
-tasks for the duration of the mismatching affinity config?
-
-
-> Having said that, the behaviour we currently have in mainline seems to
-> be alright, so please don't go out of your way to accomodate these SoCs.
-
-I see. (Just wondering what you think about the fourth option above.)
-
-Thanks,
-Michal
-
---bnv5nqjb4an3p6ze
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZB3ptgAKCRAkDQmsBEOq
-uVhEAQC7JaLVG3zxtIHj/KOXOqyJ40tnjVLvv86k89k+Kuk2HAEAuSkfis+4/XkR
-nNuhu2FzjdRnT33UwUPZMqfuKUBGeQA=
-=Ns6p
------END PGP SIGNATURE-----
-
---bnv5nqjb4an3p6ze--
+-- 
+Sakari Ailus
