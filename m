@@ -2,175 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763246C7C37
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117096C7C41
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjCXKGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 06:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35504 "EHLO
+        id S231596AbjCXKLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 06:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbjCXKGj (ORCPT
+        with ESMTP id S231444AbjCXKLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 06:06:39 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA08B1ABEB
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:06:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1679652398; x=1711188398;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Bexdfvthgmxm24yne5iPZQH4IuiGSYCds0iNgWbzBLw=;
-  b=W/Xogp3z7vKexdDOLXplHZaHbV3Gf0K3GDCSGTxLRGbEl7fZll8J6zZy
-   +8ngBHgrI2JrZ/1gAWBpotJoess5fAnxhk9qTEzLrNnZHzE614LJVA66H
-   oACB/fQxYDsbO/F87pf9DyDA4fj/C3VHWHX15x5DwP5iuykRJxbjdJwaX
-   ReUP6kNzV4xzMgnosCA7XFA43sBL20X+yKQRZ9fdwvs30MdkieuVgCxtt
-   jYB5nMSkIGe+WQCGVFEd4yM0yAEQc12IN5TBWdWH3JeymzHAUkAjvBEem
-   2EfxLbnIu9uUqFsWH4b4hzwZdF6dfi4svg+sIxAV5klN9A4bMsaStNl0v
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,287,1673938800"; 
-   d="scan'208";a="206553567"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Mar 2023 03:06:36 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 24 Mar 2023 03:06:35 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Fri, 24 Mar 2023 03:06:33 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <palmer@dabbelt.com>
-CC:     <conor@kernel.org>, <conor.dooley@microchip.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        "Andrew Jones" <ajones@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 2/2] RISC-V: always select RISCV_ALTERNATIVE for non-xip kernels
-Date:   Fri, 24 Mar 2023 10:05:39 +0000
-Message-ID: <20230324100538.3514663-3-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230324100538.3514663-1-conor.dooley@microchip.com>
-References: <20230324100538.3514663-1-conor.dooley@microchip.com>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3921; i=conor.dooley@microchip.com; h=from:subject; bh=Bexdfvthgmxm24yne5iPZQH4IuiGSYCds0iNgWbzBLw=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCmypS/iNOXXBArcsThyz3Zxon3V/LmPYr5tiWxWLFBfp3cj 7N3NjlIWBjEOBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAEzk6BuGv9I9bwPFNSy7XGNb5z5rPL EmVvxn3fSU9Uevzv8+93OEhw3DfzdB5T+T92V8Mr2ga9ituLvixiTpLZ+0dOTcj3yaW/PrIxsA
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 24 Mar 2023 06:11:03 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C03726C2F;
+        Fri, 24 Mar 2023 03:11:02 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id w9so5821824edc.3;
+        Fri, 24 Mar 2023 03:11:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679652660;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=evdlK2TGBDUZwBoMd27PncFntPqf8dN29Q/MhkQ6Vbw=;
+        b=dznHZO7lkSFUK+s8WndyI4DcgrTjLCpfT275eZ9bhSwMycl8lbNnKvNh9mLJk9Yk/c
+         cUdP6wFYQJzpe9lFAWcn7NpZD9VUsF5AAWkkX9CpeTk9qQ8Jb+ujNW9Y5XeR18PGbJdI
+         wogjwWk8T7mSjyiFZXuS3iP8i/3d74PAFRbUhxt5oBG8Qy5xMfd2e7N4RX12NvYhb4Wx
+         q0gqGXBKo8JyInrtcryQ/yt2sCgb8qepY+8OSX6R3BQlTi7hSE0yu1u+c558mj4gBfDR
+         I6lK8LeiT38pLnzTemwlcqzrQ6uziBwV9DnnwuJ2rloSB94rW6iX/9F7do4fDeCFvqoV
+         xkyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679652660;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=evdlK2TGBDUZwBoMd27PncFntPqf8dN29Q/MhkQ6Vbw=;
+        b=L8yQFQtkNP7JK3jeR3zSWkNRiLajpz92n57uzgb3lDm0/7KgK61Bc29xIt1LplanyQ
+         YXjhKTpUP/DFF23NNtM/oAZu9ud7VZpSzzwJgpcZcePdtpnXsOfPJHHjpBQEJei8QAGL
+         lUmXXoUmIJPN3vlHLajc+MtxK5XSCaHPmR9BEAfiKXmr/Ap5EMr+k4CIsWwOT5joUz+Q
+         rhWaLZ4tPqepRAV+tFbJbVemsZiu+71IL+HBcvXHeXN/IvOfvegztPn/Z1eahAEh+i0D
+         U7vcC6jQytPaVUvLmcs+u30w4pUrHCc8rJ1gYp7aCtexj4bf0DA6vR1R9qSFyYxy3R3t
+         PbrQ==
+X-Gm-Message-State: AAQBX9e4NnqmaM8iWt2Mtf5SFSsWN9o6/uQky/nS6TLZXRJZDnMG7zUh
+        wJJX5S/+e/Uuo9Wnz56+Sn4=
+X-Google-Smtp-Source: AKy350bSSu9MVW+4h7wFp+T2skX/v4XOI6/R0Pczs/23rI98NSiFTL7j4g1U1znI9HPwZfhgyOK5GA==
+X-Received: by 2002:aa7:d7d3:0:b0:501:d542:4d0c with SMTP id e19-20020aa7d7d3000000b00501d5424d0cmr2432392eds.22.1679652660688;
+        Fri, 24 Mar 2023 03:11:00 -0700 (PDT)
+Received: from felia.fritz.box (ipbcc1d920.dynamic.kabel-deutschland.de. [188.193.217.32])
+        by smtp.gmail.com with ESMTPSA id u20-20020a50c054000000b004aeeb476c5bsm10351126edd.24.2023.03.24.03.11.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 03:11:00 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] mips: Remove obsolete configs IRQ_MSP_CIC and IRQ_MSP_SLP
+Date:   Fri, 24 Mar 2023 11:08:48 +0100
+Message-Id: <20230324100848.13127-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When moving switch_to's has_fpu() over to using
-riscv_has_extension_likely() rather than static branches, the FPU code
-gained a dependency on the alternatives framework.
-That dependency has now been removed, as riscv_has_extension_ikely() now
-contains a fallback path, using __riscv_isa_extension_available(), but
-if CONFIG_RISCV_ALTERNATIVE isn't selected when CONFIG_FPU is, has_fpu()
-checks will not benefit from the "fast path" that the alternatives
-framework provides.
+Commit 1b00767fd8e1 ("MIPS: Remove PMC MSP71xx platform") removes all uses
+of the config IRQ_MSP_CIC and IRQ_MSP_SLP.
 
-We want to ensure that alternatives are available whenever
-riscv_has_extension_[un]likely() is used, rather than silently falling
-back to the slow path, but rather than rely on selecting
-RISCV_ALTERNATIVE in the myriad of locations that may use
-riscv_has_extension_[un]likely(), select it (almost) always instead by
-adding it to the main RISCV config entry.
-xip kernels cannot make use of the alternatives framework, so it is not
-enabled for those configurations, although this is the status quo.
+Remove these two obsolete configs IRQ_MSP_CIC and IRQ_MSP_SLP.
 
-All current sites that select RISCV_ALTERNATIVE are converted to
-dependencies on the option instead. The explicit dependencies on
-!XIP_KERNEL can be dropped, as RISCV_ALTERNATIVE is not user selectable.
-
-Fixes: 702e64550b12 ("riscv: fpu: switch has_fpu() to riscv_has_extension_likely()")
-Link: https://lore.kernel.org/all/ZBruFRwt3rUVngPu@zx2c4.com/
-Reported-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- arch/riscv/Kconfig         | 12 ++++++------
- arch/riscv/Kconfig.erratas |  6 ++----
- 2 files changed, 8 insertions(+), 10 deletions(-)
+ arch/mips/Kconfig | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index c5e42cc37604..2f6976418d0a 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -126,6 +126,7 @@ config RISCV
- 	select OF_IRQ
- 	select PCI_DOMAINS_GENERIC if PCI
- 	select PCI_MSI if PCI
-+	select RISCV_ALTERNATIVE if !XIP_KERNEL
- 	select RISCV_INTC
- 	select RISCV_TIMER if RISCV_SBI
- 	select SIFIVE_PLIC
-@@ -401,9 +402,8 @@ config RISCV_ISA_C
- config RISCV_ISA_SVPBMT
- 	bool "SVPBMT extension support"
- 	depends on 64BIT && MMU
--	depends on !XIP_KERNEL
-+	depends on RISCV_ALTERNATIVE
- 	default y
--	select RISCV_ALTERNATIVE
- 	help
- 	   Adds support to dynamically detect the presence of the SVPBMT
- 	   ISA-extension (Supervisor-mode: page-based memory types) and
-@@ -428,8 +428,8 @@ config TOOLCHAIN_HAS_ZBB
- config RISCV_ISA_ZBB
- 	bool "Zbb extension support for bit manipulation instructions"
- 	depends on TOOLCHAIN_HAS_ZBB
--	depends on !XIP_KERNEL && MMU
--	select RISCV_ALTERNATIVE
-+	depends on MMU
-+	depends on RISCV_ALTERNATIVE
- 	default y
- 	help
- 	   Adds support to dynamically detect the presence of the ZBB
-@@ -443,9 +443,9 @@ config RISCV_ISA_ZBB
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index f1dfc2fe2acb..26d254d125b6 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -1179,12 +1179,6 @@ config SYS_SUPPORTS_LITTLE_ENDIAN
+ config MIPS_HUGE_TLB_SUPPORT
+ 	def_bool HUGETLB_PAGE || TRANSPARENT_HUGEPAGE
  
- config RISCV_ISA_ZICBOM
- 	bool "Zicbom extension support for non-coherent DMA operation"
--	depends on !XIP_KERNEL && MMU
-+	depends on MMU
-+	depends on RISCV_ALTERNATIVE
- 	default y
--	select RISCV_ALTERNATIVE
- 	select RISCV_DMA_NONCOHERENT
- 	help
- 	   Adds support to dynamically detect the presence of the ZICBOM
-diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
-index 69621ae6d647..0c8f4652cd82 100644
---- a/arch/riscv/Kconfig.erratas
-+++ b/arch/riscv/Kconfig.erratas
-@@ -2,8 +2,7 @@ menu "CPU errata selection"
+-config IRQ_MSP_SLP
+-	bool
+-
+-config IRQ_MSP_CIC
+-	bool
+-
+ config IRQ_TXX9
+ 	bool
  
- config ERRATA_SIFIVE
- 	bool "SiFive errata"
--	depends on !XIP_KERNEL
--	select RISCV_ALTERNATIVE
-+	depends on RISCV_ALTERNATIVE
- 	help
- 	  All SiFive errata Kconfig depend on this Kconfig. Disabling
- 	  this Kconfig will disable all SiFive errata. Please say "Y"
-@@ -35,8 +34,7 @@ config ERRATA_SIFIVE_CIP_1200
- 
- config ERRATA_THEAD
- 	bool "T-HEAD errata"
--	depends on !XIP_KERNEL
--	select RISCV_ALTERNATIVE
-+	depends on RISCV_ALTERNATIVE
- 	help
- 	  All T-HEAD errata Kconfig depend on this Kconfig. Disabling
- 	  this Kconfig will disable all T-HEAD errata. Please say "Y"
 -- 
-2.39.2
+2.17.1
 
