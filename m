@@ -2,77 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398786C7580
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B22A6C7553
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbjCXCSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 22:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
+        id S231267AbjCXCML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 22:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjCXCSS (ORCPT
+        with ESMTP id S229734AbjCXCMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 22:18:18 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBBF3C03;
-        Thu, 23 Mar 2023 19:18:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679624296; x=1711160296;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=M4FQzDrjs+QeI9XLnd+NfZpr2fRqKi1DscOllLq4wCk=;
-  b=O5J5yxn+c8Ta89rb3pUkoeWY+46g0XRjZ03kQFZPf6iup6EbzEHqfb0J
-   F7zZFa1gH8Ht/kZFyKV3y3FqVZ8q8yI7U7O6qz2jRIc+W/FEvqkKZxL3f
-   FQVm1/rny7bH+iu1mfyHGGxIu+qRJamAWDt+UHEsGWjP5vJT62VU5CWNB
-   pJ/pGMo4c9fb6391lBDXpAC3+X8T5zO5Kk7tAr2mtZDDGfUcm+Gfk9yo3
-   0NPlPVZcW2eNuUHbP6/uS24jZzoD2XGubDM71sMUkfDDexncdUVzDuizc
-   dWec/VdPUBqz0NJyt0mdDqAWnbrgWzwVf2KHvrQb8dFexm/0TzbYSvXFu
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="338400943"
-X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="338400943"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 19:18:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="659886402"
-X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="659886402"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
-  by orsmga006.jf.intel.com with ESMTP; 23 Mar 2023 19:18:04 -0700
-Date:   Fri, 24 Mar 2023 10:10:29 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Ackerley Tng <ackerleytng@google.com>, seanjc@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        pbonzini@redhat.com, corbet@lwn.net, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, arnd@arndb.de,
-        naoya.horiguchi@nec.com, linmiaohe@huawei.com, x86@kernel.org,
-        hpa@zytor.com, hughd@google.com, jlayton@kernel.org,
-        bfields@fieldses.org, akpm@linux-foundation.org, shuah@kernel.org,
-        rppt@kernel.org, steven.price@arm.com, mail@maciej.szmigiero.name,
-        vbabka@suse.cz, vannapurve@google.com, yu.c.zhang@linux.intel.com,
-        kirill.shutemov@linux.intel.com, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
-        michael.roth@amd.com, mhocko@suse.com, wei.w.wang@intel.com
-Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
-Message-ID: <20230324021029.GA2774613@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20230128140030.GB700688@chaop.bj.intel.com>
- <diqz5ybc3xsr.fsf@ackerleytng-cloudtop.c.googlers.com>
- <20230308074026.GA2183207@chaop.bj.intel.com>
- <20230323004131.GA214881@ls.amr.corp.intel.com>
+        Thu, 23 Mar 2023 22:12:09 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2069.outbound.protection.outlook.com [40.107.244.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA1511666;
+        Thu, 23 Mar 2023 19:12:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LZqzX7xP+B9zUSj2z7FLju9Z8KvUhN2giULvnFF6IhSoVeGwrA7k0M3WvW7hwxA2HkvlINVVcCmX1Kii1XmC+JuOlhirrhZbHRr0PCUEeN6Y3hdl2Piv4nv+zXRwWb9kjz7fvPdISe59OGhlIM78i6DFTTXH4SM308z8gswWqOcnXDPfeGptDQZXo3nK5KqLj3aWP9W5wkeQWbC2qtIrbX+NXWC5v6PV0hmoQyHJC+R7QzOybFyqPVS4hjpmqdaqyntcMUOT12ABkGSF1rWLW0slL3zGB4d68eHdDmPcTyEc/0DuwgkEUcV1jsFBtsFWjJkqNu2Y7jMAI5rqJX4j+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=upk9ZAYTUYBR9vxtcufMi4dLhP0z4n6+uILbC9r2aY4=;
+ b=oJIEhLghN9934wTe5w3snkJAk1gDNMBYQtdRf9mGX2Aqgy6+IFg8LrHRBKR3/bOIs3B1SRTSWMfLlpoLoQo1tSS3p8z6JSfZQPf60nY5bDgxrHcYZIHxF6NC0fUGjdLpCtrhkf0Y6+4SQYCYx60rdc/I3XhI1gY0Lh6Cmg85t6f2hqcJ1/PgF7M0N617w8GVsZkReI53qYVkW0vk5hN4ElWZr8YUnu9kh1YgMhC3Bhfe+kP5E81T+Q8hS3l0Y523Ca15dFdaDU19Fpmu6AlxU/Rr0XYCGQG0Yr2rXkti86KAOOxIi8v/Kp8Quk9f/clsrjqG6tRnsFqOtm6RPg4mwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=upk9ZAYTUYBR9vxtcufMi4dLhP0z4n6+uILbC9r2aY4=;
+ b=1xXO+81Lq4crcW05sxFDYFDbstRaqVGbKubammxjiNeCsdxE1rkXCzACw1JknzFm8JvM22wKj5k/DqX1l76KuY7FodcXC6Nzp/y9TYxep5d4hJ+cUYu/exWcsLZlNqMSmdV9n/TAxJ/rSopKRgPN7gDqXbx1+SWoCCi4RZ7+Mfk=
+Received: from BN1PR13CA0023.namprd13.prod.outlook.com (2603:10b6:408:e2::28)
+ by DS0PR12MB8480.namprd12.prod.outlook.com (2603:10b6:8:159::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Fri, 24 Mar
+ 2023 02:12:05 +0000
+Received: from BN8NAM11FT095.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e2:cafe::d7) by BN1PR13CA0023.outlook.office365.com
+ (2603:10b6:408:e2::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.7 via Frontend
+ Transport; Fri, 24 Mar 2023 02:12:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT095.mail.protection.outlook.com (10.13.176.206) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6222.22 via Frontend Transport; Fri, 24 Mar 2023 02:12:04 +0000
+Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 23 Mar
+ 2023 21:12:04 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
+ (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 23 Mar
+ 2023 19:12:04 -0700
+Received: from [172.19.74.144] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Thu, 23 Mar 2023 21:12:03 -0500
+Message-ID: <a13ba751-9350-47ee-1c4d-77bbfbb8ed72@amd.com>
+Date:   Thu, 23 Mar 2023 19:11:57 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323004131.GA214881@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V7 1/3] of: dynamic: Add interfaces for creating device
+ node dynamically
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <frowand.list@gmail.com>,
+        <helgaas@kernel.org>, <clement.leger@bootlin.com>,
+        <max.zhen@amd.com>, <sonal.santan@amd.com>, <larry.liu@amd.com>,
+        <brian.xu@amd.com>, <stefano.stabellini@xilinx.com>,
+        <trix@redhat.com>
+References: <1674183732-5157-1-git-send-email-lizhi.hou@amd.com>
+ <1674183732-5157-2-git-send-email-lizhi.hou@amd.com>
+ <CAL_Jsq+FM9P0n7BQZBY1AGJRtjAWw9F6h5DYmLkdPeXZaiYJwA@mail.gmail.com>
+From:   Lizhi Hou <lizhi.hou@amd.com>
+In-Reply-To: <CAL_Jsq+FM9P0n7BQZBY1AGJRtjAWw9F6h5DYmLkdPeXZaiYJwA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT095:EE_|DS0PR12MB8480:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6ca8e76f-5d7f-492e-8b7e-08db2c0d29b6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: crOVI8uSO2FmxYeUckSMrC+KaHs+jOUdrfdxz0EMlvU/sRc8nCOZPxDer30W7n9MORGMqna38Hhg854FAVRFIiXB2eBUDMDB1ftGzeBwr43lIs/JBMGEurUi+2UMUN8jwvOy66GRlqWN4Dhw2s+0VF1s056f6Yp56OjgCiSLtTNAXloIA5iIwGDE5aKSrP5TuV1imDFQTjVH7bMmDijyyxdcsvkoPvcGS2MvKlYqrBr1JSW/ZY1zZVp/6xO/A5Gpun1PYBq8LfXVK9aD85rfrr6HbL7nHq6KJ+qAFs2UjVwSpbWX2hzNMvEmKXRwDdVAn8U8K3x7tfCa5+VKkEeiHB1xzs+kp/p2PwHUq29E803aRQIQ/zinbduqw4NkDrlLrqTTIRsebqpRBG9CzvXZJcbBeJrnHY9jqBtAOYx/n5X2nmVWx0+EZxzvnFUT0eu530stlaU//0+twm9kbfvfBSNmnDhltsXRsVga7eJfEYVaoNOBw9+3eLVY7Lt+iMf7tbRgtplW2DF4o2afx5etiaVXRxM4BgLnmNWnynze2Bjo8lx3Avck0+1cagXtJsodJLQ2XNwENlPhA0vByDhjd6XeLiPAf6P6PXM0H9ZSP0bojwJcmtQJqfnRyufLWrTVuJPoAajBjBAQ7Fx19mMdlU8zrS2/4ForCKBIO1Fcf5jUfTNoVxwrpN74j7NyGb/sFYOrS2ZSggWixyrhqoVFUQ4FfXTQKyv/9bFBwEY4X38PsF5uQx3KmppAL13ZhwoUbw4vPaFt2Dh4EPFWneTerg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(396003)(39860400002)(376002)(451199018)(36840700001)(40470700004)(46966006)(31686004)(356005)(40480700001)(2906002)(40460700003)(86362001)(83380400001)(336012)(2616005)(186003)(66574015)(36756003)(31696002)(82310400005)(478600001)(54906003)(70586007)(36860700001)(4326008)(8676002)(6916009)(70206006)(47076005)(26005)(8936002)(16576012)(53546011)(316002)(426003)(6666004)(81166007)(44832011)(82740400003)(41300700001)(5660300002)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 02:12:04.8614
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ca8e76f-5d7f-492e-8b7e-08db2c0d29b6
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT095.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8480
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,163 +112,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 05:41:31PM -0700, Isaku Yamahata wrote:
-> On Wed, Mar 08, 2023 at 03:40:26PM +0800,
-> Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> 
-> > On Wed, Mar 08, 2023 at 12:13:24AM +0000, Ackerley Tng wrote:
-> > > Chao Peng <chao.p.peng@linux.intel.com> writes:
-> > > 
-> > > > On Sat, Jan 14, 2023 at 12:01:01AM +0000, Sean Christopherson wrote:
-> > > > > On Fri, Dec 02, 2022, Chao Peng wrote:
-> > > > ...
-> > > > > Strongly prefer to use similar logic to existing code that detects wraps:
-> > > 
-> > > > > 		mem->restricted_offset + mem->memory_size < mem->restricted_offset
-> > > 
-> > > > > This is also where I'd like to add the "gfn is aligned to offset"
-> > > > > check, though
-> > > > > my brain is too fried to figure that out right now.
-> > > 
-> > > > Used count_trailing_zeros() for this TODO, unsure we have other better
-> > > > approach.
-> > > 
-> > > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > > > index afc8c26fa652..fd34c5f7cd2f 100644
-> > > > --- a/virt/kvm/kvm_main.c
-> > > > +++ b/virt/kvm/kvm_main.c
-> > > > @@ -56,6 +56,7 @@
-> > > >   #include <asm/processor.h>
-> > > >   #include <asm/ioctl.h>
-> > > >   #include <linux/uaccess.h>
-> > > > +#include <linux/count_zeros.h>
-> > > 
-> > > >   #include "coalesced_mmio.h"
-> > > >   #include "async_pf.h"
-> > > > @@ -2087,6 +2088,19 @@ static bool kvm_check_memslot_overlap(struct
-> > > > kvm_memslots *slots, int id,
-> > > >   	return false;
-> > > >   }
-> > > 
-> > > > +/*
-> > > > + * Return true when ALIGNMENT(offset) >= ALIGNMENT(gpa).
-> > > > + */
-> > > > +static bool kvm_check_rmem_offset_alignment(u64 offset, u64 gpa)
-> > > > +{
-> > > > +	if (!offset)
-> > > > +		return true;
-> > > > +	if (!gpa)
-> > > > +		return false;
-> > > > +
-> > > > +	return !!(count_trailing_zeros(offset) >= count_trailing_zeros(gpa));
-> 
-> This check doesn't work expected. For example, offset = 2GB, gpa=4GB
-> this check fails.
 
-This case is expected to fail as Sean initially suggested[*]:
-  I would rather reject memslot if the gfn has lesser alignment than
-  the offset. I'm totally ok with this approach _if_ there's a use case.
-  Until such a use case presents itself, I would rather be conservative
-  from a uAPI perspective.
+On 3/23/23 15:40, Rob Herring wrote:
+> On Thu, Jan 19, 2023 at 9:02 PM Lizhi Hou <lizhi.hou@amd.com> wrote:
+>> of_create_node() creates device node dynamically. The parent device node
+>> and full name are required for creating the node. It optionally creates
+>> an OF changeset and attaches the newly created node to the changeset. The
+>> device node pointer and the changeset pointer can be used to add
+>> properties to the device node and apply the node to the base tree.
+>>
+>> of_destroy_node() frees the device node created by of_create_node(). If
+>> an OF changeset was also created for this node, it will destroy the
+>> changeset before freeing the device node.
+>>
+>> Expand of_changeset APIs to handle specific types of properties.
+>>      of_changeset_add_prop_string()
+>>      of_changeset_add_prop_string_array()
+>>      of_changeset_add_prop_u32_array()
+>>
+>> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+> Your Sob should be last because you sent this patch. The order of Sob
+> is roughly the order of possession of the patch.
+Got it.
+>
+>> Signed-off-by: Sonal Santan <sonal.santan@amd.com>
+>> Signed-off-by: Max Zhen <max.zhen@amd.com>
+> So Sonal and Max modified this patch?
+They did not directly modify the code. And we discussed the design 
+together.  They also reviewed the patch before I sent it out. Please let 
+me know if other keyword should be used in this case.
+>
+>> Reviewed-by: Brian Xu <brian.xu@amd.com>
+>> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> Why does this have Clément's Sob?
+I referenced Clément 's code and used one portion in my first patch 
+series. And I re-implemented it later to address the code review 
+comments/requests.
+>
+>> ---
+>>   drivers/of/dynamic.c | 197 +++++++++++++++++++++++++++++++++++++++++++
+>>   include/linux/of.h   |  24 ++++++
+>>   2 files changed, 221 insertions(+)
+>>
+>> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+>> index cd3821a6444f..4e211a1d039f 100644
+>> --- a/drivers/of/dynamic.c
+>> +++ b/drivers/of/dynamic.c
+>> @@ -461,6 +461,71 @@ struct device_node *__of_node_dup(const struct device_node *np,
+>>          return NULL;
+>>   }
+>>
+>> +/**
+>> + * of_create_node - Dynamically create a device node
+> For consistency, I think this should be of_changeset_create_node().
+Sure.
+>
+>> + *
+>> + * @parent: Pointer to parent device node
+>> + * @full_name: Node full name
+>> + * @cset: Pointer to returning changeset
+>> + *
+>> + * Return: Pointer to the created device node or NULL in case of an error.
+>> + */
+>> +struct device_node *of_create_node(struct device_node *parent,
+>> +                                  const char *full_name,
+>> +                                  struct of_changeset **cset)
+>> +{
+>> +       struct of_changeset *ocs;
+>> +       struct device_node *np;
+>> +       int ret;
+>> +
+>> +       np = __of_node_dup(NULL, full_name);
+>> +       if (!np)
+>> +               return NULL;
+>> +       np->parent = parent;
+>> +
+>> +       if (!cset)
+>> +               return np;
+>> +
+>> +       ocs = kmalloc(sizeof(*ocs), GFP_KERNEL);
+>> +       if (!ocs) {
+>> +               of_node_put(np);
+>> +               return NULL;
+>> +       }
+>> +
+>> +       of_changeset_init(ocs);
+>> +       ret = of_changeset_attach_node(ocs, np);
+>> +       if (ret) {
+>> +               of_changeset_destroy(ocs);
+>> +               of_node_put(np);
+>> +               kfree(ocs);
+>> +               return NULL;
+>> +       }
+>> +
+>> +       np->data = ocs;
+>> +       *cset = ocs;
+>> +
+>> +       return np;
+>> +}
+>> +EXPORT_SYMBOL(of_create_node);
+>> +
+>> +/**
+>> + * of_destroy_node - Destroy a dynamically created device node
+>> + *
+>> + * @np: Pointer to dynamically created device node
+>> + *
+>> + */
+>> +void of_destroy_node(struct device_node *np)
+>> +{
+>> +       struct of_changeset *ocs;
+>> +
+>> +       if (np->data) {
+>> +               ocs = (struct of_changeset *)np->data;
+>> +               of_changeset_destroy(ocs);
+>> +       }
+>> +       of_node_put(np);
+> A sequence like this would be broken:
+>
+> np  = of_create_node()
+> of_node_get(np)
+> of_destroy_node(np)
+>
+> The put here won't free the node because it still has a ref, but we
+> just freed the changeset. For this to work correctly, we would need
+> the release function to handle np->data instead. However, all users of
+> data aren't a changeset.
+>
+> I'm failing to remember why we're storing the changeset in 'data', but
+> there doesn't seem to be a reason now so I think that can just be
+> dropped. Then if you want to free the node, you'd just do an
+> of_node_put(). (And maybe after the node is attached you do a put too,
+> because the attach does a get. Not completely sure.)
 
-I understand that we put tighter restriction on this but if you see such
-restriction is really a big issue for real usage, instead of a
-theoretical problem, then we can loosen the check here. But at that time
-below code is kind of x86 specific and may need improve.
+The question is how to save changeset and free it later. I used global 
+link list to track the changeset been created.
 
-BTW, in latest code, I replaced count_trailing_zeros() with fls64():
-  return !!(fls64(offset) >= fls64(gpa));
+Storing the changeset in 'data' can avoid using the global link list.
 
-[*] https://lore.kernel.org/all/Y8HldeHBrw+OOZVm@google.com/
+To use of_node_put() to free both node and changeset, I think we can
 
-Chao
-> I come up with the following.
-> 
-> >From ec87e25082f0497431b732702fae82c6a05071bf Mon Sep 17 00:00:00 2001
-> Message-Id: <ec87e25082f0497431b732702fae82c6a05071bf.1679531995.git.isaku.yamahata@intel.com>
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
-> Date: Wed, 22 Mar 2023 15:32:56 -0700
-> Subject: [PATCH] KVM: Relax alignment check for restricted mem
-> 
-> kvm_check_rmem_offset_alignment() only checks based on offset alignment
-> and GPA alignment.  However, the actual alignment for offset depends
-> on architecture.  For x86 case, it can be 1G, 2M or 4K.  So even if
-> GPA is aligned for 1G+, only 1G-alignment is required for offset.
-> 
-> Without this patch, gpa=4G, offset=2G results in failure of memory slot
-> creation.
-> 
-> Fixes: edc8814b2c77 ("KVM: Require gfn be aligned with restricted offset")
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/include/asm/kvm_host.h | 15 +++++++++++++++
->  virt/kvm/kvm_main.c             |  9 ++++++++-
->  2 files changed, 23 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 88e11dd3afde..03af44650f24 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -16,6 +16,7 @@
->  #include <linux/irq_work.h>
->  #include <linux/irq.h>
->  #include <linux/workqueue.h>
-> +#include <linux/count_zeros.h>
->  
->  #include <linux/kvm.h>
->  #include <linux/kvm_para.h>
-> @@ -143,6 +144,20 @@
->  #define KVM_HPAGE_MASK(x)	(~(KVM_HPAGE_SIZE(x) - 1))
->  #define KVM_PAGES_PER_HPAGE(x)	(KVM_HPAGE_SIZE(x) / PAGE_SIZE)
->  
-> +#define kvm_arch_required_alignment	kvm_arch_required_alignment
-> +static inline int kvm_arch_required_alignment(u64 gpa)
-> +{
-> +	int zeros = count_trailing_zeros(gpa);
-> +
-> +	WARN_ON_ONCE(!PAGE_ALIGNED(gpa));
-> +	if (zeros >= KVM_HPAGE_SHIFT(PG_LEVEL_1G))
-> +		return KVM_HPAGE_SHIFT(PG_LEVEL_1G);
-> +	else if (zeros >= KVM_HPAGE_SHIFT(PG_LEVEL_2M))
-> +		return KVM_HPAGE_SHIFT(PG_LEVEL_2M);
-> +
-> +	return PAGE_SHIFT;
-> +}
-> +
->  #define KVM_MEMSLOT_PAGES_TO_MMU_PAGES_RATIO 50
->  #define KVM_MIN_ALLOC_MMU_PAGES 64UL
->  #define KVM_MMU_HASH_SHIFT 12
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index c9c4eef457b0..f4ff96171d24 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -2113,6 +2113,13 @@ static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
->  	return false;
->  }
->  
-> +#ifndef kvm_arch_required_alignment
-> +__weak int kvm_arch_required_alignment(u64 gpa)
-> +{
-> +	return PAGE_SHIFT
-> +}
-> +#endif
-> +
->  /*
->   * Return true when ALIGNMENT(offset) >= ALIGNMENT(gpa).
->   */
-> @@ -2123,7 +2130,7 @@ static bool kvm_check_rmem_offset_alignment(u64 offset, u64 gpa)
->  	if (!gpa)
->  		return false;
->  
-> -	return !!(count_trailing_zeros(offset) >= count_trailing_zeros(gpa));
-> +	return !!(count_trailing_zeros(offset) >= kvm_arch_required_alignment(gpa));
->  }
->  
->  /*
-> -- 
-> 2.25.1
-> 
-> 
-> 
-> -- 
-> Isaku Yamahata <isaku.yamahata@gmail.com>
+   1) add a new flag, then in of_node_release() we can know np->data is 
+changeset by checking the flag.
+
+   2) When creating node, allocate extra memory for changeset and set 
+np->data to a global function of_free_dynamic_node().
+
+       In of_node_release(), check if np->data == of_free_dynamic_node, 
+call of_free_dynamic_node(np).
+
+       in of_free_dynamic_node(), free changeset by 
+of_changeset_destroy(np+1)
+
+Does this make sense to you? If yes, 1) or 2) sounds better?
+
+>
+> A unittest for all these functions would be helpful.
+
+Ok, I will create unittest for the new added functions.
+
+
+Thanks,
+
+Lizhi
+
+>
+> Rob
