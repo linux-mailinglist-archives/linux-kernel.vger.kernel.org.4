@@ -2,75 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB10D6C825D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 457A26C8263
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbjCXQbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S231898AbjCXQbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbjCXQbJ (ORCPT
+        with ESMTP id S231668AbjCXQbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:31:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8F3469C;
-        Fri, 24 Mar 2023 09:31:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05BDB62BD4;
-        Fri, 24 Mar 2023 16:31:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6A9F9C433EF;
-        Fri, 24 Mar 2023 16:31:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679675467;
-        bh=FrqcRhfq8Ns4v7PkuzfuLpnvv8DbtBSesc4kWRkQcpM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=XU8DGjvkTHtANmBsg1h4bA4hyAru2QEQqSDnFswpAbLA5bCkW0dOmwn/RSuuuWsuw
-         Q3LaeeEFUS6YF9P4Oy2J77hG61qtHZ3Kvy+j2oqbf+UvdfBgWBQpW210hs8bd6ykJc
-         SB26w2aBgk9jzvv+nqlL0usaT4gwlwfQ3Q/OHa5e3sdJyRwFe1hZvBvqLeGJXJtD0j
-         1npz7Gpt871xVSVNuWdIzn4dK1ISBZflxDd6e6rCRjRM3uY5E5gRX8V/VOJeva23tG
-         7BygyJrrAm/YSSbBsrEnssS4fpkPimLOKuauU/+OLmlInbUbKOoRH9r1OYUChp9KrA
-         UyLuuuZ231fdg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 59655E2A039;
-        Fri, 24 Mar 2023 16:31:07 +0000 (UTC)
-Subject: Re: [GIT PULL] SCSI fixes for 6.3-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <f2515dfb43cd4dd334ea2bda00f8576f69a40178.camel@HansenPartnership.com>
-References: <f2515dfb43cd4dd334ea2bda00f8576f69a40178.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <f2515dfb43cd4dd334ea2bda00f8576f69a40178.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: a13faca032acbf2699293587085293bdfaafc8ae
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6dd74c51b48567e6ec56276aa35c8d25f6472f6f
-Message-Id: <167967546735.8924.4856686892293566084.pr-tracker-bot@kernel.org>
-Date:   Fri, 24 Mar 2023 16:31:07 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 24 Mar 2023 12:31:21 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113C01F5DE;
+        Fri, 24 Mar 2023 09:31:19 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id ek18so10165708edb.6;
+        Fri, 24 Mar 2023 09:31:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679675478;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RK97WHvnbSxeF31vPM+iWGsfGGAagPtgVuDMTujX4W8=;
+        b=uEDzyF6n4IVDWKksAD0DCtv/kVd3EmnDFrMAV7uyMUkB5Hd5RQg2KbtCpJY7NImEqh
+         j5FRQ61ph5xlyO1zWZMEEvGVORGV5LHQom+rM3B8Yuk5ruR+nJ+Nom0aa4Yv6eJVbQsm
+         EbeEl2wQixD1+/s+kAZUJfUYL+PRcMfhO+Oel6Xe1IQU/dW0sLJ0dl5qo6/BpD/aruYR
+         xrIJ4Y/V4qbsknIPPSSOwGRHc4Q8ZcMsUSwHNU4ooVkW3UboSyMWM5gmUeqfZuzdy/OS
+         N6RS7Dl5G2lB4S1xTSDAJcSxO+nX0pi9i6ZgNkolpzIsQJ0bY/X47ICFzE3LPHkx5nSj
+         gL4w==
+X-Gm-Message-State: AAQBX9eFpvAFE634ano9ce5/U3SKnL4OQHL+upwUbeNr9KrF6CwA6O9x
+        GJhU4DUWWd6Q1Qdp0xo5vKkRB3lFRXDXy6yy/OOtjfSq8fY=
+X-Google-Smtp-Source: AKy350ZbkphKyXdA397q1rltyqMH2ly45EQFFhEEWmOtxkpsRskS2kMgaGRycE1AmZFe8ADEYTWWqB+AXSVubQt8Od4=
+X-Received: by 2002:a17:907:d687:b0:93d:a14f:c9b4 with SMTP id
+ wf7-20020a170907d68700b0093da14fc9b4mr1749567ejc.2.1679675478193; Fri, 24 Mar
+ 2023 09:31:18 -0700 (PDT)
+MIME-Version: 1.0
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 24 Mar 2023 17:31:07 +0100
+Message-ID: <CAJZ5v0i6K644j=JzU+uDcreEzv6KxFHav_MHw1TZvQNzvyoU1w@mail.gmail.com>
+Subject: [GIT PULL] ACPI fixes for v6.3-rc4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 23 Mar 2023 19:36:37 -0400:
+Hi Linus,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+Please pull from the tag
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6dd74c51b48567e6ec56276aa35c8d25f6472f6f
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-6.3-rc4
 
-Thank you!
+with top-most commit 8dbfa057b3f8e8402f639c0bf5fcbc4e43a8b3da
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+ Merge branch 'acpi-video'
+
+on top of commit e8d018dd0257f744ca50a729e3d042cf2ec9da65
+
+ Linux 6.3-rc3
+
+to receive ACPI fixes for 6.3-rc4.
+
+These add new ACPI IRQ override and backlight detection quirks.
+
+Specifics:
+
+ - Add backlight=native DMI quirk for Acer Aspire 3830TG to the ACPI
+   backlight driver (Hans de Goede).
+
+ - Add an ACPI IRQ override quirk for Medion S17413 (Aymeric Wibo).
+
+Thanks!
+
+
+---------------
+
+Hans de Goede (1):
+      ACPI: video: Add backlight=native DMI quirk for Acer Aspire 3830TG
+
+Aymeric Wibo (1):
+      ACPI: resource: Add Medion S17413 to IRQ override quirk
+
+---------------
+
+ drivers/acpi/resource.c     | 7 +++++++
+ drivers/acpi/video_detect.c | 8 ++++++++
+ 2 files changed, 15 insertions(+)
