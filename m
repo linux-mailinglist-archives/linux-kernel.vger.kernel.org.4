@@ -2,79 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F6E6C7C27
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDF56C7C30
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbjCXKCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 06:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
+        id S231508AbjCXKFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 06:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbjCXKCr (ORCPT
+        with ESMTP id S231579AbjCXKFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 06:02:47 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9EA2367E
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:02:42 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id j11so1449724lfg.13
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:02:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fr24.com; s=google; t=1679652161;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hqniG2RTuzYc41TgGVo3CFmOEDPj8x/ry7qdxr2ig3U=;
-        b=WdI66PJPmXPEQ9JwFdMZEGzbWsV7VQNXtqHY0IP5KW3ugIT1HddLLFCZGJiW+0fXBb
-         acjfwE58oDPoFP7rSLsBqLYWet8dEnJR4hojFRxQSooIUzKmz4r5C9IPF2+YdVyfqzas
-         6q99o1Fh4jZ8c0agitV0Og+EynCvHsrEpn0Gh5nMyQUIsFkNumPNWlNkYWL4nit46dJa
-         RKpVlISZwv1/YbooAg7Rfz8nR8W7MyR46ZDSvEL6PtuKDXtHvjKDJ6ErB9Rvdee/gqET
-         GfS6FtV8SXIGlSKQ+0c0q4BVxM3LttghMmcZXwRrCNeg8juuGHOZFIVzxAl8ZKVCOL//
-         SdwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679652161;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hqniG2RTuzYc41TgGVo3CFmOEDPj8x/ry7qdxr2ig3U=;
-        b=hsCeiTupodOzzmzXCrUtn0+VUEOHx0s5MgQEQrfH4ZtsvJXJ3dyBlHwegvAUtR+Hxm
-         zhDoaxxho+XjrVQgao4XbDvZzudQIvUs/fpTow28sTkXjzapAmi5nMjZNRz0hKE4xoas
-         J3vuRcAHREbw8r7dQX8A4adRVa8/gExrBvExIqxCtq7yVRZOv+4MU7e2Yuk8V/jKNCRF
-         GDGSJtCHL7ce0b0fSlcHTbPs/MRuiUH5fIiNiUKU3fU16lbQOaYGL7J6zCow2xPJAMh8
-         SJbUzPrx/3/UI2bhyoHYQ1BnnMMKo119cu9xp6oa+szJ9va808ohDPRaYb7Yx4D0bklZ
-         Wypg==
-X-Gm-Message-State: AAQBX9fTlTwuEM6VQF2RA1he0XURIttjWWcP5jCwnrGPMl1+4s4Y3zT6
-        j4psVquIJO/wLKugqzLJqyrTww==
-X-Google-Smtp-Source: AKy350afxW/MzPpBo1E2U1b5voWjHTIIgFJ0cAMVXcl7lU1aJbGr3gBYCSMuQrZgHHbXj2qJBotQ7w==
-X-Received: by 2002:a19:ae02:0:b0:4ea:129c:528 with SMTP id f2-20020a19ae02000000b004ea129c0528mr653408lfc.56.1679652161179;
-        Fri, 24 Mar 2023 03:02:41 -0700 (PDT)
-Received: from localhost.localdomain (bl20-118-143.dsl.telepac.pt. [2.81.118.143])
-        by smtp.googlemail.com with ESMTPSA id q23-20020a19a417000000b004d865c781eesm3282268lfc.24.2023.03.24.03.02.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 03:02:40 -0700 (PDT)
-From:   =?UTF-8?q?Nuno=20Gon=C3=A7alves?= <nunog@fr24.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     =?UTF-8?q?Nuno=20Gon=C3=A7alves?= <nunog@fr24.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next V4] xsk: allow remap of fill and/or completion rings
-Date:   Fri, 24 Mar 2023 10:02:22 +0000
-Message-Id: <20230324100222.13434-1-nunog@fr24.com>
-X-Mailer: git-send-email 2.40.0
+        Fri, 24 Mar 2023 06:05:02 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15621A971
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:04:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=02Fbij+mFcM+MFW3bfEpmKnkkNMy+M5sba/5SlYbdMg=; b=YnLoloOieQcL3Hc0oYzwAiF7dH
+        /XiZflmC1Gk3xtABSej9FpmbkPec/g4nCVFPcBozR20tvVjWbBu6Mn/VkN4VsYkIiQufXdIEtNcZM
+        0ZzKyZjiulyqNYuzFZ5W49c0PwxGOpDpImwQAt3dLS44+CIr4cvhUEMlASX79Gl8qVBj9LltVfD+q
+        C8DEIITgP35pSN77hptu+mXvvBVM7ab/5HLxGkekudA3rgfzAkXsy6aXMqvqgooJoMlVxxXWBuX9+
+        TLIsokBcANEa2GX2yBOK/EMY77LouQaBp7j/dquIPmaCYt+hHe7OJnLaah0b/O9rHIrhFqGf+kCWf
+        XItMQ0Qw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pfeHK-004nhZ-1l; Fri, 24 Mar 2023 10:04:11 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D56F93002C0;
+        Fri, 24 Mar 2023 11:03:52 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B05D3235E61E0; Fri, 24 Mar 2023 11:03:52 +0100 (CET)
+Date:   Fri, 24 Mar 2023 11:03:52 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
+        timj@gnu.org, kprateek.nayak@amd.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org
+Subject: Re: [PATCH 06/10] sched/fair: Add avg_vruntime
+Message-ID: <20230324100352.GA2787125@hirez.programming.kicks-ass.net>
+References: <20230306132521.968182689@infradead.org>
+ <20230306141502.569748782@infradead.org>
+ <ZBm39VNJCwioq+V4@chenyu5-mobl1>
+ <20230321160458.GB2273492@hirez.programming.kicks-ass.net>
+ <ZB1NU1Yc8DSi4zrW@chenyu5-mobl1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZB1NU1Yc8DSi4zrW@chenyu5-mobl1>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,57 +68,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The remap of fill and completion rings was frowned upon as they
-control the usage of UMEM which does not support concurrent use.
-At the same time this would disallow the remap of these rings
-into another process.
+On Fri, Mar 24, 2023 at 03:12:19PM +0800, Chen Yu wrote:
 
-A possible use case is that the user wants to transfer the socket/
-UMEM ownership to another process (via SYS_pidfd_getfd) and so
-would need to also remap these rings.
+> > Or worse, SCHED_IDLE, where weight is 2 (IIRC) or cgroups, then vtime
+> > advances at 512 times realtime. Now, the tick puts a limit on how long
+> > we'll overshoot these super low weight entities, for HZ=1000 we still
+> > only get 0.5s of vtime for weight=2.
+> >
+> > That would be only 30 bits used, except we use double FIXEDPOINT_SHIFT
+> > on 64bit, so we'll end up at 40-ish.
+> > 
+> > That should give us enough room to carry an average of deltas around
+> > min_vruntime.
+> > 
+> I'm trying to digest how ticks could prevent the overflow.
 
-This will have no impact on current usages and just relaxes the
-remap limitation.
+They don't prevent overflow per se, but they do limit on how far
+vruntime can advance ahead of the pack.
 
-Signed-off-by: Nuno Gonçalves <nunog@fr24.com>
----
-V3 -> V4: Remove undesired format changes
-V2 -> V3: Call READ_ONCE for each variable and not for the ternary operator
-V1 -> V2: Format and comment changes
+> In update_curr() -> update_min_vruntime(cfs_rq), the cfs_rq->min_vruntime
+> is set to
+> max (cfs_rq->min_vruntime, min(curr->vruntime, leftmost(se->vruntime)))
+> so, although curr->vruntime increase by 0.5 seconds in each tick,
+> the leftmost(se->vruntime) could still be very small and unchanged,
+> thus the delta between v_i and cfs_rq->min_vruntime is still large.
 
- net/xdp/xsk.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+Well, since the basic task selection rule is: pick leftmost, the idea is
+that leftmost and hence min_vruntime advances. The only problem is that
+placement can place new entities left of min_vruntime and then it stalls
+for a bit. But then rightmost tasks shouldn't get more runtime and the
+whole situation should be 'stable'-ish.
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 2ac58b282b5eb..cc1e7f15fa731 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -1301,9 +1301,10 @@ static int xsk_mmap(struct file *file, struct socket *sock,
- 	loff_t offset = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
- 	unsigned long size = vma->vm_end - vma->vm_start;
- 	struct xdp_sock *xs = xdp_sk(sock->sk);
-+	int state = READ_ONCE(xs->state);
- 	struct xsk_queue *q = NULL;
+> Instead sysctl_sched_latency could decide how far it is between the
+> se.vruntime and the cfs_rq.min_vruntime, by calculating the vruntime
+> delta between task1 and task2:
+> 
+>     sched_vslice(task1) = (NICE0_LOAD/se1.weight)  * (w1/Sum wi * sysctl_sched_latency)
+>     sched_vslice(task2) = (NICE0_LOAD/se2.weight)  * (w2/Sum wi * sysctl_sched_latency)
 
--	if (READ_ONCE(xs->state) != XSK_READY)
-+	if (state != XSK_READY && state != XSK_BOUND)
- 		return -EBUSY;
+Yes, vslice is obviously involved, but low weight tasks are the ones
+that tend to shoot away and are tick limited.
 
- 	if (offset == XDP_PGOFF_RX_RING) {
-@@ -1314,9 +1315,11 @@ static int xsk_mmap(struct file *file, struct socket *sock,
- 		/* Matches the smp_wmb() in XDP_UMEM_REG */
- 		smp_rmb();
- 		if (offset == XDP_UMEM_PGOFF_FILL_RING)
--			q = READ_ONCE(xs->fq_tmp);
-+			q = state == XSK_READY ? READ_ONCE(xs->fq_tmp) :
-+						 READ_ONCE(xs->pool->fq);
- 		else if (offset == XDP_UMEM_PGOFF_COMPLETION_RING)
--			q = READ_ONCE(xs->cq_tmp);
-+			q = state == XSK_READY ? READ_ONCE(xs->cq_tmp) :
-+						 READ_ONCE(xs->pool->cq);
- 	}
+> Besides in patch 10, entity_eligible() checks
+> \Sum (v_i - v)*w_i >= (v_i - v)*(\Sum w_i)
+> and the \Sum w_i could become large if there are many runnable tasks and
+> bring overflow?
 
- 	if (!q)
---
-2.40.0
+Indeed; I'll check there too. I think I'll make it do the division on
+32bit and use 64x64->128 on 64bit.
 
+Let me have a play..
