@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835AF6C78BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B9C6C78BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbjCXHXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45226 "EHLO
+        id S231572AbjCXHXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 03:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbjCXHXF (ORCPT
+        with ESMTP id S231545AbjCXHXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:23:05 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76D512CD8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:22:52 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5446a91c40cso10368017b3.18
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:22:52 -0700 (PDT)
+        Fri, 24 Mar 2023 03:23:11 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DB92684E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:23:01 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id e129-20020a251e87000000b00b56598237f5so1067903ybe.16
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:23:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679642572;
+        d=google.com; s=20210112; t=1679642580;
         h=content-transfer-encoding:cc:to:from:subject:references
          :mime-version:message-id:in-reply-to:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dpUbyagLHfyugt4xjgObF98IlMw5uCwm74nv9CwNkFI=;
-        b=dYwLufXJC6dPgj5Tza2minbcDYPumsvnan5N7n9QFeZ8H3I+QzMvQCoswZG/QpKPT2
-         RKR4r2ZMf8GcO7kCoP4iwbojhiQJDeZahT8BFfbNPGiHF4Z8OtaoX9XWOg2RC1wQ3/xo
-         RxQwyv3xc+ZDj1aw61FY+E7oe1wOaR/t6v66pWNUCtNSX9hVhAeAqZoxgPU5RLnjhXQa
-         ejUGHWs7mVsmnsJcMZU2aFc2IHM5aefr7MJrQ2puIeMq4wdJ2aT9Q2GW25C3rDFO9cU2
-         O1EZK/axZPcQ/oem7d3BHVgihrlTLszonQnSqMe4XHBnZiS3VbaeQqB5rI+kODRhPgzJ
-         U7cw==
+        bh=htXY5sGJDItXY75tNu49iHBFf3vGbWbJLizWWx2z1Vo=;
+        b=G75cuWLpBQVqkqeORpmF1gl1bLJSr+LjHw4taR632UiEvTHsCN2x30sTNHVFu5oq/c
+         0t1sTrhgRQ3pouTPMjArJTEYptORSopUz4esvhIfWcH9i2IAX52c2dmun4KFE4dkoatj
+         JtraQHCCHaCLYO45ctAaJVzt7xPiTqTrLkW0FYxnDEHCdP3RSt23QuLfT7LmAXQjA3zr
+         wlz3XcFu8Vi+j34IjMtgfhCOMdt+Pj8XMtHXKw0t/Gvw5DcbG0fl/CcNijswqHgt37ZM
+         DQcsSBq7iPbplIzGE3SNIUviDN3yDVEVp406EwK14KR7CTZMX7deye9l3cp+ftYihXyF
+         Un5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679642572;
+        d=1e100.net; s=20210112; t=1679642580;
         h=content-transfer-encoding:cc:to:from:subject:references
          :mime-version:message-id:in-reply-to:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=dpUbyagLHfyugt4xjgObF98IlMw5uCwm74nv9CwNkFI=;
-        b=b2LbcAjqGhkvQeCRslkM58eI6jkUKCnv8OrI2bYCTud2ckPtxXi/psdGplaYdpnnTh
-         ktvGEVrEWY7g3udocGkq0bTb+DY3umW/vedKgv5kt274TUF8wVic5KAEg9qY/P9UwLpT
-         zuePlypVgYhAeW86gsXUhq2n35uYChO3D1a5DNM2loX/aDdMMpOENJa4uRuLyeY1G564
-         QdnxU86U9pa7C5JlfbQySgPQ4P4u//e0brbeIHchuWJLwDKqtVlWNkb28pM9eqcyUQVA
-         8PpzVmQ3zeJVXfvKOyi8RfpZG8GYpUXbclivlzhO2RccvGJdSnOlOb3+q2Od6RQMcV4x
-         Ic5Q==
-X-Gm-Message-State: AAQBX9c84SF0GXexi5yXkocPgDIH4dNUaqHCAhobgqI1+OxjVpk7dww0
-        qSR+pGbvDDU4acvQBOX3xIIp7lh3U4uS
-X-Google-Smtp-Source: AKy350aktgT/mssmV6/QlRW8fmxeaWnqpiAExDis1SFN2hPOCxKsjuZgCWPMbqV5bCE3t8qBhkCSrU9KgKJV
+        bh=htXY5sGJDItXY75tNu49iHBFf3vGbWbJLizWWx2z1Vo=;
+        b=eOCD1i4+vSktySUpCCWi2qm0GgfwTgBbjjpg6slVmOeTCeFK27LPis1Le1cb/iNxBP
+         l58zTqCdIkKL9eRupI8aXtjgEdasyZcOoISNAi0oice6qxlSv3w256MuL9HMH1iUR2aj
+         qdKWHK5r5ik9kpTQyMJFrwUSDjFNZpIaoIge2qo75UiUgLfnwC+GXchARUetLfC47JsY
+         timZK7YDVwBDqwuB4iLmcZTdKAClb6gqIbLowbbPeCf1xDzXbyw175vvAN9fpHCksSJZ
+         Wb3QDOGKnj/sPafnarN7L/1WK+u4ufvhyWIkkuU/Y/In5Yn4FjPl3DpBdCzWHOzK8+Pu
+         r8Fw==
+X-Gm-Message-State: AAQBX9feWMh3ssSJ1KqA+ncDWWcMnC8vfIGjzDw76Us0x4qaaTBUcGZg
+        WJpe5Lw4p0Tlkjuf90wvtzl+CK+yNnnX
+X-Google-Smtp-Source: AKy350ZTu+izpRI2TndhaB1k3Td/CooOIsmIhnMH2evhrd+WzhxckiB6NXoCKoYUyAnbCHWtFkJ5KTpGd6G1
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:e705:3a3d:46e5:fb50])
- (user=irogers job=sendgmr) by 2002:a25:6544:0:b0:a8f:a6cc:9657 with SMTP id
- z65-20020a256544000000b00a8fa6cc9657mr629947ybb.7.1679642571955; Fri, 24 Mar
- 2023 00:22:51 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 00:22:11 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6902:140e:b0:b76:126b:5aa4 with SMTP
+ id z14-20020a056902140e00b00b76126b5aa4mr779610ybu.9.1679642580364; Fri, 24
+ Mar 2023 00:23:00 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 00:22:12 -0700
 In-Reply-To: <20230324072218.181880-1-irogers@google.com>
-Message-Id: <20230324072218.181880-3-irogers@google.com>
+Message-Id: <20230324072218.181880-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20230324072218.181880-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v3 2/9] perf vendor events: Broadwellde v9 events
+Subject: [PATCH v3 3/9] perf vendor events: Broadwellx v20 events
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -87,23 +87,22 @@ Updates descriptions and encodings. Adds BR_MISP_EXEC.INDIRECT events.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../arch/x86/broadwellde/cache.json           | 105 +++----
- .../arch/x86/broadwellde/floating-point.json  |  45 +--
- .../arch/x86/broadwellde/frontend.json        |  18 +-
- .../arch/x86/broadwellde/memory.json          |  64 +++--
- .../arch/x86/broadwellde/pipeline.json        |  79 +++---
- .../arch/x86/broadwellde/uncore-cache.json    |  72 ++---
- .../arch/x86/broadwellde/uncore-memory.json   | 256 +++++++++++++++++-
- .../arch/x86/broadwellde/uncore-other.json    |  27 +-
- .../arch/x86/broadwellde/uncore-power.json    |  10 +-
+ .../pmu-events/arch/x86/broadwellx/cache.json |  16 +-
+ .../arch/x86/broadwellx/frontend.json         |  18 +-
+ .../arch/x86/broadwellx/pipeline.json         |  20 +-
+ .../arch/x86/broadwellx/uncore-cache.json     | 156 ++----
+ .../x86/broadwellx/uncore-interconnect.json   |  84 +--
+ .../arch/x86/broadwellx/uncore-memory.json    | 522 +++++++++---------
+ .../arch/x86/broadwellx/uncore-other.json     |  44 +-
+ .../arch/x86/broadwellx/uncore-power.json     |  10 +-
  tools/perf/pmu-events/arch/x86/mapfile.csv    |   2 +-
- 10 files changed, 495 insertions(+), 183 deletions(-)
+ 9 files changed, 403 insertions(+), 469 deletions(-)
 
-diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/cache.json b/tools/=
-perf/pmu-events/arch/x86/broadwellde/cache.json
-index fcc99fd22b0a..6784331ac1cb 100644
---- a/tools/perf/pmu-events/arch/x86/broadwellde/cache.json
-+++ b/tools/perf/pmu-events/arch/x86/broadwellde/cache.json
+diff --git a/tools/perf/pmu-events/arch/x86/broadwellx/cache.json b/tools/p=
+erf/pmu-events/arch/x86/broadwellx/cache.json
+index 6a134928b3f0..781e7c64e71f 100644
+--- a/tools/perf/pmu-events/arch/x86/broadwellx/cache.json
++++ b/tools/perf/pmu-events/arch/x86/broadwellx/cache.json
 @@ -8,7 +8,7 @@
          "UMask": "0x1"
      },
@@ -133,459 +132,46 @@ it is allocated by hardware or software prefetch.\nNote: In the L1D, a Dema=
 nd Read contains cacheable or noncacheable demand loads, including ones cau=
 sing cache-line splits and reads due to page walks resulted from any reques=
 t type.",
-@@ -139,7 +139,7 @@
-         "EventCode": "0x24",
-         "EventName": "L2_RQSTS.CODE_RD_HIT",
-         "SampleAfterValue": "200003",
--        "UMask": "0x44"
-+        "UMask": "0xc4"
-     },
-     {
-         "BriefDescription": "L2 cache misses when fetching instructions.",
-@@ -152,9 +152,9 @@
-         "BriefDescription": "Demand Data Read requests that hit L2 cache",
-         "EventCode": "0x24",
-         "EventName": "L2_RQSTS.DEMAND_DATA_RD_HIT",
--        "PublicDescription": "This event counts the number of demand Data =
-Read requests that hit L2 cache. Only not rejected loads are counted.",
-+        "PublicDescription": "Counts the number of demand Data Read reques=
-ts, initiated by load instructions, that hit L2 cache.",
-         "SampleAfterValue": "200003",
--        "UMask": "0x41"
-+        "UMask": "0xc1"
-     },
-     {
-         "BriefDescription": "Demand Data Read miss L2, no rejects",
-@@ -170,7 +170,7 @@
-         "EventName": "L2_RQSTS.L2_PF_HIT",
-         "PublicDescription": "This event counts the number of requests fro=
-m the L2 hardware prefetchers that hit L2 cache. L3 prefetch new types.",
-         "SampleAfterValue": "200003",
--        "UMask": "0x50"
-+        "UMask": "0xd0"
-     },
-     {
-         "BriefDescription": "L2 prefetch requests that miss L2 cache",
-@@ -199,7 +199,7 @@
-         "EventCode": "0x24",
-         "EventName": "L2_RQSTS.RFO_HIT",
-         "SampleAfterValue": "200003",
--        "UMask": "0x42"
-+        "UMask": "0xc2"
-     },
-     {
-         "BriefDescription": "RFO requests that miss L2 cache.",
-@@ -297,61 +297,62 @@
-         "UMask": "0x4f"
-     },
-     {
--        "BriefDescription": "Retired load uops which data sources were L3 =
-and cross-core snoop hits in on-pkg core cache. (Precise Event - PEBS)",
-+        "BriefDescription": "Retired load uops which data sources were L3 =
-and cross-core snoop hits in on-pkg core cache.",
-         "Data_LA": "1",
-         "Errata": "BDM100",
-         "EventCode": "0xD2",
-         "EventName": "MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HIT",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts retired load uops which data sources were L3 hi=
-t and a cross-core snoop hit in the on-pkg core cache.",
-+        "PublicDescription": "This event counts retired load uops which da=
-ta sources were L3 hit and a cross-core snoop hit in the on-pkg core cache.=
-",
-         "SampleAfterValue": "20011",
-         "UMask": "0x2"
-     },
-     {
--        "BriefDescription": "Retired load uops which data sources were Hit=
-M responses from shared L3. (Precise Event - PEBS)",
-+        "BriefDescription": "Retired load uops which data sources were Hit=
-M responses from shared L3.",
-         "Data_LA": "1",
-         "Errata": "BDM100",
-         "EventCode": "0xD2",
-         "EventName": "MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HITM",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts retired load uops which data sources were HitM =
-responses from a core on same socket (shared L3).",
-+        "PublicDescription": "This event counts retired load uops which da=
-ta sources were HitM responses from a core on same socket (shared L3).",
-         "SampleAfterValue": "20011",
-         "UMask": "0x4"
-     },
-     {
--        "BriefDescription": "Retired load uops which data sources were L3 =
-hit and cross-core snoop missed in on-pkg core cache. (Precise Event - PEBS=
-)",
-+        "BriefDescription": "Retired load uops which data sources were L3 =
-hit and cross-core snoop missed in on-pkg core cache.",
-         "Data_LA": "1",
-         "Errata": "BDM100",
-         "EventCode": "0xD2",
-         "EventName": "MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_MISS",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts retired load uops which data sources were L3 Hi=
-t and a cross-core snoop missed in the on-pkg core cache.",
-+        "PublicDescription": "This event counts retired load uops which da=
-ta sources were L3 Hit and a cross-core snoop missed in the on-pkg core cac=
-he.",
-         "SampleAfterValue": "20011",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Retired load uops which data sources were hit=
-s in L3 without snoops required. (Precise Event - PEBS)",
-+        "BriefDescription": "Retired load uops which data sources were hit=
-s in L3 without snoops required.",
-         "Data_LA": "1",
-         "Errata": "BDM100",
-         "EventCode": "0xD2",
-         "EventName": "MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_NONE",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts retired load uops which data sources were hits =
-in the last-level (L3) cache without snoops required.",
-+        "PublicDescription": "This event counts retired load uops which da=
-ta sources were hits in the last-level (L3) cache without snoops required."=
-,
-         "SampleAfterValue": "100003",
-         "UMask": "0x8"
-     },
-     {
-+        "BriefDescription": "Data from local DRAM either Snoop not needed =
-or Snoop Miss (RspI)",
-         "Data_LA": "1",
-         "Errata": "BDE70, BDM100",
-         "EventCode": "0xD3",
-         "EventName": "MEM_LOAD_UOPS_L3_MISS_RETIRED.LOCAL_DRAM",
-         "PEBS": "1",
--        "PublicDescription": "This event counts retired load uops where th=
-e data came from local DRAM. This does not include hardware prefetches. Thi=
-s is a precise event.",
-+        "PublicDescription": "Retired load uop whose Data Source was: loca=
-l DRAM either Snoop not needed or Snoop Miss (RspI).",
-         "SampleAfterValue": "100007",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Retired load uop whose Data Source was: remot=
-e DRAM either Snoop not needed or Snoop Miss (RspI) (Precise Event)",
-+        "BriefDescription": "Retired load uop whose Data Source was: remot=
-e DRAM either Snoop not needed or Snoop Miss (RspI)",
-         "Data_LA": "1",
-         "Errata": "BDE70",
-         "EventCode": "0xD3",
-@@ -361,7 +362,7 @@
-         "UMask": "0x4"
-     },
-     {
--        "BriefDescription": "Retired load uop whose Data Source was: forwa=
-rded from remote cache (Precise Event)",
-+        "BriefDescription": "Retired load uop whose Data Source was: forwa=
-rded from remote cache",
-         "Data_LA": "1",
-         "Errata": "BDE70",
-         "EventCode": "0xD3",
-@@ -371,7 +372,7 @@
+@@ -454,22 +454,22 @@
          "UMask": "0x20"
      },
      {
--        "BriefDescription": "Retired load uop whose Data Source was: Remot=
-e cache HITM (Precise Event)",
-+        "BriefDescription": "Retired load uop whose Data Source was: Remot=
-e cache HITM",
-         "Data_LA": "1",
-         "Errata": "BDE70",
-         "EventCode": "0xD3",
-@@ -381,69 +382,69 @@
-         "UMask": "0x10"
-     },
-     {
--        "BriefDescription": "Retired load uops which data sources were loa=
-d uops missed L1 but hit FB due to preceding miss to the same cache line wi=
-th data not ready. (Precise Event - PEBS)",
-+        "BriefDescription": "Retired load uops which data sources were loa=
-d uops missed L1 but hit FB due to preceding miss to the same cache line wi=
-th data not ready.",
-         "Data_LA": "1",
-         "EventCode": "0xD1",
-         "EventName": "MEM_LOAD_UOPS_RETIRED.HIT_LFB",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts retired load uops which data sources were load =
-uops missed L1 but hit a fill buffer due to a preceding miss to the same ca=
-che line with the data not ready.\nNote: Only two data-sources of L1/FB are=
- applicable for AVX-256bit  even though the corresponding AVX load could be=
- serviced by a deeper level in the memory hierarchy. Data source is reporte=
-d for the Low-half load.",
-+        "PublicDescription": "This event counts retired load uops which da=
-ta sources were load uops missed L1 but hit a fill buffer due to a precedin=
-g miss to the same cache line with the data not ready.\nNote: Only two data=
--sources of L1/FB are applicable for AVX-256bit  even though the correspond=
-ing AVX load could be serviced by a deeper level in the memory hierarchy. D=
-ata source is reported for the Low-half load.",
-         "SampleAfterValue": "100003",
-         "UMask": "0x40"
-     },
-     {
--        "BriefDescription": "Retired load uops with L1 cache hits as data =
-sources. (Precise Event - PEBS)",
-+        "BriefDescription": "Retired load uops with L1 cache hits as data =
-sources.",
-         "Data_LA": "1",
-         "EventCode": "0xD1",
-         "EventName": "MEM_LOAD_UOPS_RETIRED.L1_HIT",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts retired load uops which data source were hits i=
-n the nearest-level (L1) cache.\nNote: Only two data-sources of L1/FB are a=
-pplicable for AVX-256bit  even though the corresponding AVX load could be s=
-erviced by a deeper level in the memory hierarchy. Data source is reported =
-for the Low-half load. This event also counts SW prefetches independent of =
-the actual data source.",
-+        "PublicDescription": "This event counts retired load uops which da=
-ta sources were hits in the nearest-level (L1) cache.\nNote: Only two data-=
-sources of L1/FB are applicable for AVX-256bit  even though the correspondi=
-ng AVX load could be serviced by a deeper level in the memory hierarchy. Da=
-ta source is reported for the Low-half load. This event also counts SW pref=
-etches independent of the actual data source.",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Retired load uops misses in L1 cache as data =
-sources. Uses PEBS.",
-+        "BriefDescription": "Retired load uops misses in L1 cache as data =
-sources.",
-         "Data_LA": "1",
-         "EventCode": "0xD1",
-         "EventName": "MEM_LOAD_UOPS_RETIRED.L1_MISS",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts retired load uops which data sources were misse=
-s in the nearest-level (L1) cache. Counting excludes unknown and UC data so=
-urce.",
-+        "PublicDescription": "This event counts retired load uops which da=
-ta sources were misses in the nearest-level (L1) cache. Counting excludes u=
-nknown and UC data source.",
-         "SampleAfterValue": "100003",
-         "UMask": "0x8"
-     },
-     {
--        "BriefDescription": "Retired load uops with L2 cache hits as data =
-sources. (Precise Event - PEBS)",
-+        "BriefDescription": "Retired load uops with L2 cache hits as data =
-sources.",
-         "Data_LA": "1",
-         "Errata": "BDM35",
-         "EventCode": "0xD1",
-         "EventName": "MEM_LOAD_UOPS_RETIRED.L2_HIT",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts retired load uops which data sources were hits =
-in the mid-level (L2) cache.",
-+        "PublicDescription": "This event counts retired load uops which da=
-ta sources were hits in the mid-level (L2) cache.",
-         "SampleAfterValue": "100003",
-         "UMask": "0x2"
-     },
-     {
--        "BriefDescription": "Retired load uops with L2 cache misses as dat=
-a sources. Uses PEBS.",
-+        "BriefDescription": "Miss in mid-level (L2) cache. Excludes Unknow=
-n data-source.",
-         "Data_LA": "1",
-         "EventCode": "0xD1",
-         "EventName": "MEM_LOAD_UOPS_RETIRED.L2_MISS",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts retired load uops which data sources were misse=
-s in the mid-level (L2) cache. Counting excludes unknown and UC data source=
-.",
-+        "PublicDescription": "This event counts retired load uops which da=
-ta sources were misses in the mid-level (L2) cache. Counting excludes unkno=
-wn and UC data source.",
-         "SampleAfterValue": "50021",
-         "UMask": "0x10"
-     },
-     {
--        "BriefDescription": "Hit in last-level (L3) cache. Excludes Unknow=
-n data-source. (Precise Event - PEBS)",
-+        "BriefDescription": "Retired load uops which data sources were dat=
-a hits in L3 without snoops required.",
-         "Data_LA": "1",
-         "Errata": "BDM100",
-         "EventCode": "0xD1",
-         "EventName": "MEM_LOAD_UOPS_RETIRED.L3_HIT",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts retired load uops which data sources were data =
-hits in the last-level (L3) cache without snoops required.",
-+        "PublicDescription": "This event counts retired load uops which da=
-ta sources were data hits in the last-level (L3) cache without snoops requi=
-red.",
-         "SampleAfterValue": "50021",
-         "UMask": "0x4"
-     },
-     {
--        "BriefDescription": "Miss in last-level (L3) cache. Excludes Unkno=
-wn data-source. (Precise Event - PEBS).",
-+        "BriefDescription": "Miss in last-level (L3) cache. Excludes Unkno=
-wn data-source.",
-         "Data_LA": "1",
-         "Errata": "BDM100, BDE70",
-         "EventCode": "0xD1",
-@@ -453,73 +454,73 @@
-         "UMask": "0x20"
-     },
-     {
--        "BriefDescription": "All retired load uops. (Precise Event - PEBS)=
-",
+-        "BriefDescription": "All retired load uops.",
 +        "BriefDescription": "Retired load uops.",
          "Data_LA": "1",
          "EventCode": "0xD0",
          "EventName": "MEM_UOPS_RETIRED.ALL_LOADS",
          "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts load uops retired to the architected path with =
-a filter on bits 0 and 1 applied.\nNote: This event ?ounts AVX-256bit load/=
-store double-pump memory uops as a single uop at retirement. This event als=
-o counts SW prefetches.",
+-        "PublicDescription": "This event counts load uops retired to the a=
+rchitected path with a filter on bits 0 and 1 applied.\nNote: This event co=
+unts AVX-256bit load/store double-pump memory uops as a single uop at retir=
+ement. This event also counts SW prefetches.",
 +        "PublicDescription": "Counts all retired load uops. This event acc=
 ounts for SW prefetch uops of PREFETCHNTA or PREFETCHT0/1/2 or PREFETCHW.",
          "SampleAfterValue": "2000003",
          "UMask": "0x81"
      },
      {
--        "BriefDescription": "Retired store uops that split across a cachel=
-ine boundary. (Precise Event - PEBS)",
+-        "BriefDescription": "All retired store uops.",
 +        "BriefDescription": "Retired store uops.",
          "Data_LA": "1",
          "EventCode": "0xD0",
          "EventName": "MEM_UOPS_RETIRED.ALL_STORES",
          "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts store uops retired to the architected path with=
- a filter on bits 0 and 1 applied.\nNote: This event ?ounts AVX-256bit load=
-/store double-pump memory uops as a single uop at retirement.",
+-        "PublicDescription": "This event counts store uops retired to the =
+architected path with a filter on bits 0 and 1 applied.\nNote: This event c=
+ounts AVX-256bit load/store double-pump memory uops as a single uop at reti=
+rement.",
 +        "PublicDescription": "Counts all retired store uops.",
          "SampleAfterValue": "2000003",
          "UMask": "0x82"
      },
-     {
--        "BriefDescription": "Retired load uops with locked access. (Precis=
-e Event - PEBS)",
-+        "BriefDescription": "Retired load uops with locked access.",
-         "Data_LA": "1",
-         "Errata": "BDM35",
-         "EventCode": "0xD0",
-         "EventName": "MEM_UOPS_RETIRED.LOCK_LOADS",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts load uops with locked access retired to the arc=
-hitected path.",
-+        "PublicDescription": "This event counts load uops with locked acce=
-ss retired to the architected path.",
-         "SampleAfterValue": "100007",
-         "UMask": "0x21"
-     },
-     {
--        "BriefDescription": "Retired load uops that split across a cacheli=
-ne boundary.(Precise Event - PEBS)",
-+        "BriefDescription": "Retired load uops that split across a cacheli=
-ne boundary.",
-         "Data_LA": "1",
-         "EventCode": "0xD0",
-         "EventName": "MEM_UOPS_RETIRED.SPLIT_LOADS",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts line-splitted load uops retired to the architec=
-ted path. A line split is across 64B cache-line which includes a page split=
- (4K).",
-+        "PublicDescription": "This event counts line-splitted load uops re=
-tired to the architected path. A line split is across 64B cache-line which =
-includes a page split (4K).",
-         "SampleAfterValue": "100003",
-         "UMask": "0x41"
-     },
-     {
--        "BriefDescription": "Retired store uops that split across a cachel=
-ine boundary. (Precise Event - PEBS)",
-+        "BriefDescription": "Retired store uops that split across a cachel=
-ine boundary.",
-         "Data_LA": "1",
-         "EventCode": "0xD0",
-         "EventName": "MEM_UOPS_RETIRED.SPLIT_STORES",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts line-splitted store uops retired to the archite=
-cted path. A line split is across 64B cache-line which includes a page spli=
-t (4K).",
-+        "PublicDescription": "This event counts line-splitted store uops r=
-etired to the architected path. A line split is across 64B cache-line which=
- includes a page split (4K).",
-         "SampleAfterValue": "100003",
-         "UMask": "0x42"
-     },
-     {
--        "BriefDescription": "Retired load uops that miss the STLB. (Precis=
-e Event - PEBS)",
-+        "BriefDescription": "Retired load uops that miss the STLB.",
-         "Data_LA": "1",
-         "EventCode": "0xD0",
-         "EventName": "MEM_UOPS_RETIRED.STLB_MISS_LOADS",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts load uops with true STLB miss retired to the ar=
-chitected path. True STLB miss is an uop triggering page walk that gets com=
-pleted without blocks, and later gets retired. This page walk can end up wi=
-th or without a fault.",
-+        "PublicDescription": "This event counts load uops with true STLB m=
-iss retired to the architected path. True STLB miss is an uop triggering pa=
-ge walk that gets completed without blocks, and later gets retired. This pa=
-ge walk can end up with or without a fault.",
-         "SampleAfterValue": "100003",
-         "UMask": "0x11"
-     },
-     {
--        "BriefDescription": "Retired store uops that miss the STLB. (Preci=
-se Event - PEBS)",
-+        "BriefDescription": "Retired store uops that miss the STLB.",
-         "Data_LA": "1",
-         "EventCode": "0xD0",
-         "EventName": "MEM_UOPS_RETIRED.STLB_MISS_STORES",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts store uops true STLB miss retired to the archit=
-ected path. True STLB miss is an uop triggering page walk that gets complet=
-ed without blocks, and later gets retired. This page walk can end up with o=
-r without a fault.",
-+        "PublicDescription": "This event counts store uops with true STLB =
-miss retired to the architected path. True STLB miss is an uop triggering p=
-age walk that gets completed without blocks, and later gets retired. This p=
-age walk can end up with or without a fault.",
-         "SampleAfterValue": "100003",
-         "UMask": "0x12"
-     },
-@@ -532,10 +533,18 @@
-         "UMask": "0x8"
+@@ -541,10 +541,10 @@
+         "UMask": "0x80"
      },
      {
 -        "BriefDescription": "Cacheable and noncachaeble code read requests=
 ",
-+        "BriefDescription": "Any memory transaction that reached the SQ.",
-+        "EventCode": "0xb0",
-+        "EventName": "OFFCORE_REQUESTS.ALL_REQUESTS",
-+        "PublicDescription": "This event counts memory transactions reache=
-d the super queue including requests initiated by the core, all L3 prefetch=
-es, page walks, and so on.",
-+        "SampleAfterValue": "100003",
-+        "UMask": "0x80"
-+    },
-+    {
 +        "BriefDescription": "Cacheable and non-cacheable code read request=
 s",
          "EventCode": "0xB0",
@@ -597,259 +183,11 @@ heable code read requests.",
          "SampleAfterValue": "100003",
          "UMask": "0x2"
      },
-diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/floating-point.json=
- b/tools/perf/pmu-events/arch/x86/broadwellde/floating-point.json
-index 0b3f026158e2..e4826dc7f797 100644
---- a/tools/perf/pmu-events/arch/x86/broadwellde/floating-point.json
-+++ b/tools/perf/pmu-events/arch/x86/broadwellde/floating-point.json
-@@ -1,70 +1,77 @@
- [
-     {
--        "BriefDescription": "Number of SSE/AVX computational 128-bit packe=
-d double precision floating-point instructions retired.  Each count represe=
-nts 2 computations. Applies to SSE* and AVX* packed double precision floati=
-ng-point instructions: ADD SUB MUL DIV MIN MAX SQRT DPP FM(N)ADD/SUB.  DPP =
-and FM(N)ADD/SUB instructions count twice as they perform multiple calculat=
-ions per element.",
--        "EventCode": "0xC7",
-+        "BriefDescription": "Number of SSE/AVX computational 128-bit packe=
-d double precision floating-point instructions retired; some instructions w=
-ill count twice as noted below.  Each count represents 2 computation operat=
-ions, one for each element.  Applies to SSE* and AVX* packed double precisi=
-on floating-point instructions: ADD SUB HADD HSUB SUBADD MUL DIV MIN MAX SQ=
-RT DPP FM(N)ADD/SUB.  DPP and FM(N)ADD/SUB instructions count twice as they=
- perform 2 calculations per element.",
-+        "EventCode": "0xc7",
-         "EventName": "FP_ARITH_INST_RETIRED.128B_PACKED_DOUBLE",
-+        "PublicDescription": "Number of SSE/AVX computational 128-bit pack=
-ed double precision floating-point instructions retired; some instructions =
-will count twice as noted below.  Each count represents 2 computation opera=
-tions, one for each element.  Applies to SSE* and AVX* packed double precis=
-ion floating-point instructions: ADD SUB HADD HSUB SUBADD MUL DIV MIN MAX S=
-QRT DPP FM(N)ADD/SUB.  DPP and FM(N)ADD/SUB instructions count twice as the=
-y perform 2 calculations per element. The DAZ and FTZ flags in the MXCSR re=
-gister need to be set when using these events.",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x4"
-     },
-     {
--        "BriefDescription": "Number of SSE/AVX computational 128-bit packe=
-d single precision floating-point instructions retired.  Each count represe=
-nts 4 computations. Applies to SSE* and AVX* packed single precision floati=
-ng-point instructions: ADD SUB MUL DIV MIN MAX RCP RSQRT SQRT DPP FM(N)ADD/=
-SUB.  DPP and FM(N)ADD/SUB instructions count twice as they perform multipl=
-e calculations per element.",
--        "EventCode": "0xC7",
-+        "BriefDescription": "Number of SSE/AVX computational 128-bit packe=
-d single precision floating-point instructions retired; some instructions w=
-ill count twice as noted below.  Each count represents 4 computation operat=
-ions, one for each element.  Applies to SSE* and AVX* packed single precisi=
-on floating-point instructions: ADD SUB HADD HSUB SUBADD MUL DIV MIN MAX SQ=
-RT RSQRT RCP DPP FM(N)ADD/SUB.  DPP and FM(N)ADD/SUB instructions count twi=
-ce as they perform 4 calculations per element.",
-+        "EventCode": "0xc7",
-         "EventName": "FP_ARITH_INST_RETIRED.128B_PACKED_SINGLE",
-+        "PublicDescription": "Number of SSE/AVX computational 128-bit pack=
-ed single precision floating-point instructions retired; some instructions =
-will count twice as noted below.  Each count represents 4 computation opera=
-tions, one for each element.  Applies to SSE* and AVX* packed single precis=
-ion floating-point instructions: ADD SUB HADD HSUB SUBADD MUL DIV MIN MAX S=
-QRT RSQRT RCP DPP FM(N)ADD/SUB.  DPP and FM(N)ADD/SUB instructions count tw=
-ice as they perform 2 calculations per element. The DAZ and FTZ flags in th=
-e MXCSR register need to be set when using these events.",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x8"
-     },
-     {
--        "BriefDescription": "Number of SSE/AVX computational 256-bit packe=
-d double precision floating-point instructions retired.  Each count represe=
-nts 4 computations. Applies to SSE* and AVX* packed double precision floati=
-ng-point instructions: ADD SUB MUL DIV MIN MAX SQRT DPP FM(N)ADD/SUB.  DPP =
-and FM(N)ADD/SUB instructions count twice as they perform multiple calculat=
-ions per element.",
--        "EventCode": "0xC7",
-+        "BriefDescription": "Number of SSE/AVX computational 256-bit packe=
-d double precision floating-point instructions retired; some instructions w=
-ill count twice as noted below.  Each count represents 4 computation operat=
-ions, one for each element.  Applies to SSE* and AVX* packed double precisi=
-on floating-point instructions: ADD SUB HADD HSUB SUBADD MUL DIV MIN MAX SQ=
-RT FM(N)ADD/SUB.  FM(N)ADD/SUB instructions count twice as they perform 4 c=
-alculations per element.",
-+        "EventCode": "0xc7",
-         "EventName": "FP_ARITH_INST_RETIRED.256B_PACKED_DOUBLE",
-+        "PublicDescription": "Number of SSE/AVX computational 256-bit pack=
-ed double precision floating-point instructions retired; some instructions =
-will count twice as noted below.  Each count represents 4 computation opera=
-tions, one for each element.  Applies to SSE* and AVX* packed double precis=
-ion floating-point instructions: ADD SUB HADD HSUB SUBADD MUL DIV MIN MAX S=
-QRT FM(N)ADD/SUB.  FM(N)ADD/SUB instructions count twice as they perform 2 =
-calculations per element. The DAZ and FTZ flags in the MXCSR register need =
-to be set when using these events.",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x10"
-     },
-     {
--        "BriefDescription": "Number of SSE/AVX computational 256-bit packe=
-d single precision floating-point instructions retired.  Each count represe=
-nts 8 computations. Applies to SSE* and AVX* packed single precision floati=
-ng-point instructions: ADD SUB MUL DIV MIN MAX RCP RSQRT SQRT DPP FM(N)ADD/=
-SUB.  DPP and FM(N)ADD/SUB instructions count twice as they perform multipl=
-e calculations per element.",
-+        "BriefDescription": "Number of SSE/AVX computational 256-bit packe=
-d single precision floating-point instructions retired; some instructions w=
-ill count twice as noted below.  Each count represents 8 computation operat=
-ions, one for each element.  Applies to SSE* and AVX* packed single precisi=
-on floating-point instructions: ADD SUB HADD HSUB SUBADD MUL DIV MIN MAX SQ=
-RT RSQRT RCP DPP FM(N)ADD/SUB.  DPP and FM(N)ADD/SUB instructions count twi=
-ce as they perform 8 calculations per element.",
-         "EventCode": "0xc7",
-         "EventName": "FP_ARITH_INST_RETIRED.256B_PACKED_SINGLE",
-+        "PublicDescription": "Number of SSE/AVX computational 256-bit pack=
-ed single precision floating-point instructions retired; some instructions =
-will count twice as noted below.  Each count represents 8 computation opera=
-tions, one for each element.  Applies to SSE* and AVX* packed single precis=
-ion floating-point instructions: ADD SUB HADD HSUB SUBADD MUL DIV MIN MAX S=
-QRT RSQRT RCP DPP FM(N)ADD/SUB.  DPP and FM(N)ADD/SUB instructions count tw=
-ice as they perform 2 calculations per element. The DAZ and FTZ flags in th=
-e MXCSR register need to be set when using these events.",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x20"
-     },
-     {
--        "BriefDescription": "Number of SSE/AVX computational double precis=
-ion floating-point instructions retired. Applies to SSE* and AVX*scalar, do=
-uble and single precision floating-point: ADD SUB MUL DIV MIN MAX SQRT DPP =
-FM(N)ADD/SUB.  DPP and FM(N)ADD/SUB instructions count twice as they perfor=
-m multiple calculations per element.  ?.",
--        "EventCode": "0xC7",
-+        "BriefDescription": "Number of SSE/AVX computational double precis=
-ion floating-point instructions retired; some instructions will count twice=
- as noted below. Applies to SSE* and AVX* scalar and packed double precisio=
-n floating-point instructions: ADD SUB HADD HSUB SUBADD MUL DIV MIN MAX SQR=
-T DPP FM(N)ADD/SUB.  DPP and FM(N)ADD/SUB instructions count twice as they =
-perform multiple calculations per element.",
-+        "EventCode": "0xc7",
-         "EventName": "FP_ARITH_INST_RETIRED.DOUBLE",
-         "SampleAfterValue": "2000006",
-         "UMask": "0x15"
-     },
-     {
--        "BriefDescription": "Number of SSE/AVX computational packed floati=
-ng-point instructions retired. Applies to SSE* and AVX*, packed, double and=
- single precision floating-point: ADD SUB MUL DIV MIN MAX RSQRT RCP SQRT DP=
-P FM(N)ADD/SUB.  DPP and FM(N)ADD/SUB instructions count twice as they perf=
-orm multiple calculations per element.",
--        "EventCode": "0xC7",
-+        "BriefDescription": "Number of SSE/AVX computational packed floati=
-ng-point instructions retired; some instructions will count twice as noted =
-below. Applies to SSE* and AVX* packed double and single precision floating=
--point instructions: ADD SUB HADD HSUB SUBADD MUL DIV MIN MAX SQRT RSQRT RC=
-P DPP FM(N)ADD/SUB.  DPP and FM(N)ADD/SUB instructions count twice as they =
-perform multiple calculations per element.",
-+        "EventCode": "0xc7",
-         "EventName": "FP_ARITH_INST_RETIRED.PACKED",
-         "SampleAfterValue": "2000004",
-         "UMask": "0x3c"
-     },
-     {
--        "BriefDescription": "Number of SSE/AVX computational scalar floati=
-ng-point instructions retired. Applies to SSE* and AVX* scalar, double and =
-single precision floating-point: ADD SUB MUL DIV MIN MAX RSQRT RCP SQRT FM(=
-N)ADD/SUB. FM(N)ADD/SUB instructions count twice as they perform multiple c=
-alculations per element.",
--        "EventCode": "0xC7",
-+        "BriefDescription": "Number of SSE/AVX computational scalar floati=
-ng-point instructions retired; some instructions will count twice as noted =
-below. Each count represents 1 computation operation.   Applies to SSE* and=
- AVX* scalar double and single precision floating-point instructions: ADD S=
-UB MUL DIV MIN MAX SQRT RSQRT RCP FM(N)ADD/SUB. FM(N)ADD/SUB instructions c=
-ount twice as they perform multiple calculations per element.",
-+        "EventCode": "0xc7",
-         "EventName": "FP_ARITH_INST_RETIRED.SCALAR",
-+        "PublicDescription": "Number of SSE/AVX computational scalar singl=
-e precision and double precision floating-point instructions retired; some =
-instructions will count twice as noted below.  Each count represents 1 comp=
-utational operation. Applies to SSE* and AVX* scalar single precision float=
-ing-point instructions: ADD SUB MUL DIV MIN MAX SQRT RSQRT RCP FM(N)ADD/SUB=
-.  FM(N)ADD/SUB instructions count twice as they perform 2 calculations per=
- element. The DAZ and FTZ flags in the MXCSR register need to be set when u=
-sing these events.",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x3"
-     },
-     {
--        "BriefDescription": "Number of SSE/AVX computational scalar double=
- precision floating-point instructions retired.  Each count represents 1 co=
-mputation. Applies to SSE* and AVX* scalar double precision floating-point =
-instructions: ADD SUB MUL DIV MIN MAX SQRT FM(N)ADD/SUB.  FM(N)ADD/SUB inst=
-ructions count twice as they perform multiple calculations per element.",
--        "EventCode": "0xC7",
-+        "BriefDescription": "Number of SSE/AVX computational scalar double=
- precision floating-point instructions retired; some instructions will coun=
-t twice as noted below.  Each count represents 1 computational operation. A=
-pplies to SSE* and AVX* scalar double precision floating-point instructions=
-: ADD SUB MUL DIV MIN MAX SQRT FM(N)ADD/SUB.  FM(N)ADD/SUB instructions cou=
-nt twice as they perform multiple calculations per element.",
-+        "EventCode": "0xc7",
-         "EventName": "FP_ARITH_INST_RETIRED.SCALAR_DOUBLE",
-+        "PublicDescription": "Number of SSE/AVX computational scalar doubl=
-e precision floating-point instructions retired; some instructions will cou=
-nt twice as noted below.  Each count represents 1 computational operation. =
-Applies to SSE* and AVX* scalar double precision floating-point instruction=
-s: ADD SUB MUL DIV MIN MAX SQRT FM(N)ADD/SUB.  FM(N)ADD/SUB instructions co=
-unt twice as they perform 2 calculations per element. The DAZ and FTZ flags=
- in the MXCSR register need to be set when using these events.",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Number of SSE/AVX computational scalar single=
- precision floating-point instructions retired.  Each count represents 1 co=
-mputation. Applies to SSE* and AVX* scalar single precision floating-point =
-instructions: ADD SUB MUL DIV MIN MAX RCP RSQRT SQRT FM(N)ADD/SUB.  FM(N)AD=
-D/SUB instructions count twice as they perform multiple calculations per el=
-ement.",
--        "EventCode": "0xC7",
-+        "BriefDescription": "Number of SSE/AVX computational scalar single=
- precision floating-point instructions retired; some instructions will coun=
-t twice as noted below.  Each count represents 1 computational operation. A=
-pplies to SSE* and AVX* scalar single precision floating-point instructions=
-: ADD SUB MUL DIV MIN MAX SQRT RSQRT RCP FM(N)ADD/SUB.  FM(N)ADD/SUB instru=
-ctions count twice as they perform multiple calculations per element.",
-+        "EventCode": "0xc7",
-         "EventName": "FP_ARITH_INST_RETIRED.SCALAR_SINGLE",
-+        "PublicDescription": "Number of SSE/AVX computational scalar singl=
-e precision floating-point instructions retired; some instructions will cou=
-nt twice as noted below.  Each count represents 1 computational operation. =
-Applies to SSE* and AVX* scalar single precision floating-point instruction=
-s: ADD SUB MUL DIV MIN MAX SQRT RSQRT RCP FM(N)ADD/SUB.  FM(N)ADD/SUB instr=
-uctions count twice as they perform 2 calculations per element. The DAZ and=
- FTZ flags in the MXCSR register need to be set when using these events.",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x2"
-     },
-     {
--        "BriefDescription": "Number of SSE/AVX computational single precis=
-ion floating-point instructions retired. Applies to SSE* and AVX*scalar, do=
-uble and single precision floating-point: ADD SUB MUL DIV MIN MAX RCP RSQRT=
- SQRT DPP FM(N)ADD/SUB.  DPP and FM(N)ADD/SUB instructions count twice as t=
-hey perform multiple calculations per element. ?.",
--        "EventCode": "0xC7",
-+        "BriefDescription": "Number of SSE/AVX computational single precis=
-ion floating-point instructions retired; some instructions will count twice=
- as noted below. Applies to SSE* and AVX* scalar and packed single precisio=
-n floating-point instructions: ADD SUB HADD HSUB SUBADD MUL DIV MIN MAX SQR=
-T RSQRT RCP SQRT DPP FM(N)ADD/SUB.  DPP and FM(N)ADD/SUB instructions count=
- twice as they perform multiple calculations per element.",
-+        "EventCode": "0xc7",
-         "EventName": "FP_ARITH_INST_RETIRED.SINGLE",
-         "SampleAfterValue": "2000005",
-         "UMask": "0x2a"
-diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/frontend.json b/too=
-ls/perf/pmu-events/arch/x86/broadwellde/frontend.json
+diff --git a/tools/perf/pmu-events/arch/x86/broadwellx/frontend.json b/tool=
+s/perf/pmu-events/arch/x86/broadwellx/frontend.json
 index d0f6678609ae..bd5da39564e1 100644
---- a/tools/perf/pmu-events/arch/x86/broadwellde/frontend.json
-+++ b/tools/perf/pmu-events/arch/x86/broadwellde/frontend.json
+--- a/tools/perf/pmu-events/arch/x86/broadwellx/frontend.json
++++ b/tools/perf/pmu-events/arch/x86/broadwellx/frontend.json
 @@ -125,16 +125,16 @@
          "UMask": "0x4"
      },
@@ -953,282 +291,11 @@ iated by Decode Stream Buffer (DSB) or MITE.",
          "SampleAfterValue": "2000003",
          "UMask": "0x30"
      },
-diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/memory.json b/tools=
-/perf/pmu-events/arch/x86/broadwellde/memory.json
-index 12cc384d7f18..041b6ff4062e 100644
---- a/tools/perf/pmu-events/arch/x86/broadwellde/memory.json
-+++ b/tools/perf/pmu-events/arch/x86/broadwellde/memory.json
-@@ -1,10 +1,10 @@
- [
-     {
--        "BriefDescription": "Number of times HLE abort was triggered (PEBS=
-)",
-+        "BriefDescription": "Number of times HLE abort was triggered",
-         "EventCode": "0xc8",
-         "EventName": "HLE_RETIRED.ABORTED",
-         "PEBS": "1",
--        "PublicDescription": "Number of times HLE abort was triggered (PEB=
-S).",
-+        "PublicDescription": "Number of times HLE abort was triggered.",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x4"
-     },
-@@ -73,98 +73,106 @@
-         "UMask": "0x2"
-     },
-     {
--        "BriefDescription": "Loads with latency value being above 128",
-+        "BriefDescription": "Randomly selected loads with latency value be=
-ing above 128",
-+        "Data_LA": "1",
-         "Errata": "BDM100, BDM35",
--        "EventCode": "0xCD",
-+        "EventCode": "0xcd",
-         "EventName": "MEM_TRANS_RETIRED.LOAD_LATENCY_GT_128",
-         "MSRIndex": "0x3F6",
-         "MSRValue": "0x80",
-         "PEBS": "2",
--        "PublicDescription": "This event counts loads with latency value b=
-eing above 128.",
-+        "PublicDescription": "Counts randomly selected loads with latency =
-value being above 128.",
-         "SampleAfterValue": "1009",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Loads with latency value being above 16",
-+        "BriefDescription": "Randomly selected loads with latency value be=
-ing above 16",
-+        "Data_LA": "1",
-         "Errata": "BDM100, BDM35",
--        "EventCode": "0xCD",
-+        "EventCode": "0xcd",
-         "EventName": "MEM_TRANS_RETIRED.LOAD_LATENCY_GT_16",
-         "MSRIndex": "0x3F6",
-         "MSRValue": "0x10",
-         "PEBS": "2",
--        "PublicDescription": "This event counts loads with latency value b=
-eing above 16.",
-+        "PublicDescription": "Counts randomly selected loads with latency =
-value being above 16.",
-         "SampleAfterValue": "20011",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Loads with latency value being above 256",
-+        "BriefDescription": "Randomly selected loads with latency value be=
-ing above 256",
-+        "Data_LA": "1",
-         "Errata": "BDM100, BDM35",
--        "EventCode": "0xCD",
-+        "EventCode": "0xcd",
-         "EventName": "MEM_TRANS_RETIRED.LOAD_LATENCY_GT_256",
-         "MSRIndex": "0x3F6",
-         "MSRValue": "0x100",
-         "PEBS": "2",
--        "PublicDescription": "This event counts loads with latency value b=
-eing above 256.",
-+        "PublicDescription": "Counts randomly selected loads with latency =
-value being above 256.",
-         "SampleAfterValue": "503",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Loads with latency value being above 32",
-+        "BriefDescription": "Randomly selected loads with latency value be=
-ing above 32",
-+        "Data_LA": "1",
-         "Errata": "BDM100, BDM35",
--        "EventCode": "0xCD",
-+        "EventCode": "0xcd",
-         "EventName": "MEM_TRANS_RETIRED.LOAD_LATENCY_GT_32",
-         "MSRIndex": "0x3F6",
-         "MSRValue": "0x20",
-         "PEBS": "2",
--        "PublicDescription": "This event counts loads with latency value b=
-eing above 32.",
-+        "PublicDescription": "Counts randomly selected loads with latency =
-value being above 32.",
-         "SampleAfterValue": "100007",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Loads with latency value being above 4",
-+        "BriefDescription": "Randomly selected loads with latency value be=
-ing above 4",
-+        "Data_LA": "1",
-         "Errata": "BDM100, BDM35",
--        "EventCode": "0xCD",
-+        "EventCode": "0xcd",
-         "EventName": "MEM_TRANS_RETIRED.LOAD_LATENCY_GT_4",
-         "MSRIndex": "0x3F6",
-         "MSRValue": "0x4",
-         "PEBS": "2",
--        "PublicDescription": "This event counts loads with latency value b=
-eing above four.",
-+        "PublicDescription": "Counts randomly selected loads with latency =
-value being above four.",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Loads with latency value being above 512",
-+        "BriefDescription": "Randomly selected loads with latency value be=
-ing above 512",
-+        "Data_LA": "1",
-         "Errata": "BDM100, BDM35",
--        "EventCode": "0xCD",
-+        "EventCode": "0xcd",
-         "EventName": "MEM_TRANS_RETIRED.LOAD_LATENCY_GT_512",
-         "MSRIndex": "0x3F6",
-         "MSRValue": "0x200",
-         "PEBS": "2",
--        "PublicDescription": "This event counts loads with latency value b=
-eing above 512.",
-+        "PublicDescription": "Counts randomly selected loads with latency =
-value being above 512.",
-         "SampleAfterValue": "101",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Loads with latency value being above 64",
-+        "BriefDescription": "Randomly selected loads with latency value be=
-ing above 64",
-+        "Data_LA": "1",
-         "Errata": "BDM100, BDM35",
--        "EventCode": "0xCD",
-+        "EventCode": "0xcd",
-         "EventName": "MEM_TRANS_RETIRED.LOAD_LATENCY_GT_64",
-         "MSRIndex": "0x3F6",
-         "MSRValue": "0x40",
-         "PEBS": "2",
--        "PublicDescription": "This event counts loads with latency value b=
-eing above 64.",
-+        "PublicDescription": "Counts randomly selected loads with latency =
-value being above 64.",
-         "SampleAfterValue": "2003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Loads with latency value being above 8",
-+        "BriefDescription": "Randomly selected loads with latency value be=
-ing above 8",
-+        "Data_LA": "1",
-         "Errata": "BDM100, BDM35",
--        "EventCode": "0xCD",
-+        "EventCode": "0xcd",
-         "EventName": "MEM_TRANS_RETIRED.LOAD_LATENCY_GT_8",
-         "MSRIndex": "0x3F6",
-         "MSRValue": "0x8",
-         "PEBS": "2",
--        "PublicDescription": "This event counts loads with latency value b=
-eing above eight.",
-+        "PublicDescription": "Counts randomly selected loads with latency =
-value being above eight.",
-         "SampleAfterValue": "50021",
-         "UMask": "0x1"
-     },
-@@ -185,11 +193,11 @@
-         "UMask": "0x2"
-     },
-     {
--        "BriefDescription": "Number of times RTM abort was triggered (PEBS=
-)",
-+        "BriefDescription": "Number of times RTM abort was triggered",
-         "EventCode": "0xc9",
-         "EventName": "RTM_RETIRED.ABORTED",
-         "PEBS": "1",
--        "PublicDescription": "Number of times RTM abort was triggered (PEB=
-S).",
-+        "PublicDescription": "Number of times RTM abort was triggered .",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x4"
-     },
-diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/pipeline.json b/too=
-ls/perf/pmu-events/arch/x86/broadwellde/pipeline.json
-index 9e7d66b07f01..9a902d2160e6 100644
---- a/tools/perf/pmu-events/arch/x86/broadwellde/pipeline.json
-+++ b/tools/perf/pmu-events/arch/x86/broadwellde/pipeline.json
-@@ -129,11 +129,11 @@
-         "UMask": "0x4"
-     },
-     {
--        "BriefDescription": "Conditional branch instructions retired. (Pre=
-cise Event - PEBS)",
-+        "BriefDescription": "Conditional branch instructions retired.",
-         "EventCode": "0xC4",
-         "EventName": "BR_INST_RETIRED.CONDITIONAL",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts conditional branch instructions retired.",
-+        "PublicDescription": "This event counts conditional branch instruc=
-tions retired.",
-         "SampleAfterValue": "400009",
-         "UMask": "0x1"
-     },
-@@ -147,38 +147,38 @@
-         "UMask": "0x40"
-     },
-     {
--        "BriefDescription": "Direct and indirect near call instructions re=
-tired. (Precise Event - PEBS)",
-+        "BriefDescription": "Direct and indirect near call instructions re=
-tired.",
-         "EventCode": "0xC4",
-         "EventName": "BR_INST_RETIRED.NEAR_CALL",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts both direct and indirect near call instructions=
- retired.",
-+        "PublicDescription": "This event counts both direct and indirect n=
-ear call instructions retired.",
-         "SampleAfterValue": "100007",
-         "UMask": "0x2"
-     },
-     {
--        "BriefDescription": "Direct and indirect macro near call instructi=
-ons retired (captured in ring 3). (Precise Event - PEBS)",
-+        "BriefDescription": "Direct and indirect macro near call instructi=
-ons retired (captured in ring 3).",
-         "EventCode": "0xC4",
-         "EventName": "BR_INST_RETIRED.NEAR_CALL_R3",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts both direct and indirect macro near call instru=
-ctions retired (captured in ring 3).",
-+        "PublicDescription": "This event counts both direct and indirect m=
-acro near call instructions retired (captured in ring 3).",
-         "SampleAfterValue": "100007",
-         "UMask": "0x2"
-     },
-     {
--        "BriefDescription": "Return instructions retired. (Precise Event -=
- PEBS)",
-+        "BriefDescription": "Return instructions retired.",
-         "EventCode": "0xC4",
-         "EventName": "BR_INST_RETIRED.NEAR_RETURN",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts return instructions retired.",
-+        "PublicDescription": "This event counts return instructions retire=
-d.",
-         "SampleAfterValue": "100007",
-         "UMask": "0x8"
-     },
-     {
--        "BriefDescription": "Taken branch instructions retired. (Precise E=
-vent - PEBS)",
-+        "BriefDescription": "Taken branch instructions retired.",
-         "EventCode": "0xC4",
-         "EventName": "BR_INST_RETIRED.NEAR_TAKEN",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts taken branch instructions retired.",
-+        "PublicDescription": "This event counts taken branch instructions =
-retired.",
-         "SampleAfterValue": "400009",
-         "UMask": "0x20"
-     },
+diff --git a/tools/perf/pmu-events/arch/x86/broadwellx/pipeline.json b/tool=
+s/perf/pmu-events/arch/x86/broadwellx/pipeline.json
+index 75233316640b..9a902d2160e6 100644
+--- a/tools/perf/pmu-events/arch/x86/broadwellx/pipeline.json
++++ b/tools/perf/pmu-events/arch/x86/broadwellx/pipeline.json
 @@ -214,6 +214,14 @@
          "SampleAfterValue": "200003",
          "UMask": "0xc4"
@@ -1247,114 +314,6 @@ ons (RET excluded).",
          "BriefDescription": "Not taken speculative and retired mispredicte=
 d macro conditional branches",
          "EventCode": "0x89",
-@@ -270,29 +278,29 @@
-         "UMask": "0x4"
-     },
-     {
--        "BriefDescription": "Mispredicted conditional branch instructions =
-retired. (Precise Event - PEBS)",
-+        "BriefDescription": "Mispredicted conditional branch instructions =
-retired.",
-         "EventCode": "0xC5",
-         "EventName": "BR_MISP_RETIRED.CONDITIONAL",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts mispredicted conditional branch instructions re=
-tired.",
-+        "PublicDescription": "This event counts mispredicted conditional b=
-ranch instructions retired.",
-         "SampleAfterValue": "400009",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "number of near branch instructions retired th=
-at were mispredicted and taken. (Precise Event - PEBS).",
-+        "BriefDescription": "number of near branch instructions retired th=
-at were mispredicted and taken.",
-         "EventCode": "0xC5",
-         "EventName": "BR_MISP_RETIRED.NEAR_TAKEN",
-         "PEBS": "1",
--        "PublicDescription": "Number of near branch instructions retired t=
-hat were mispredicted and taken. (Precise Event - PEBS).",
-+        "PublicDescription": "Number of near branch instructions retired t=
-hat were mispredicted and taken.",
-         "SampleAfterValue": "400009",
-         "UMask": "0x20"
-     },
-     {
--        "BriefDescription": "This event counts the number of mispredicted =
-ret instructions retired.(Precise Event)",
-+        "BriefDescription": "This event counts the number of mispredicted =
-ret instructions retired. Non PEBS",
-         "EventCode": "0xC5",
-         "EventName": "BR_MISP_RETIRED.RET",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts mispredicted return instructions retired.",
-+        "PublicDescription": "This event counts mispredicted return instru=
-ctions retired.",
-         "SampleAfterValue": "100007",
-         "UMask": "0x8"
-     },
-@@ -300,7 +308,7 @@
-         "BriefDescription": "Count XClk pulses when this thread is unhalte=
-d and the other thread is halted.",
-         "EventCode": "0x3c",
-         "EventName": "CPU_CLK_THREAD_UNHALTED.ONE_THREAD_ACTIVE",
--        "SampleAfterValue": "2000003",
-+        "SampleAfterValue": "100003",
-         "UMask": "0x2"
-     },
-     {
-@@ -308,7 +316,7 @@
-         "EventCode": "0x3C",
-         "EventName": "CPU_CLK_THREAD_UNHALTED.REF_XCLK",
-         "PublicDescription": "This is a fixed-frequency event programmed t=
-o general counters. It counts when the core is unhalted at 100 Mhz.",
--        "SampleAfterValue": "2000003",
-+        "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
-@@ -316,14 +324,14 @@
-         "BriefDescription": "Reference cycles when the at least one thread=
- on the physical core is unhalted (counts at 100 MHz rate).",
-         "EventCode": "0x3C",
-         "EventName": "CPU_CLK_THREAD_UNHALTED.REF_XCLK_ANY",
--        "SampleAfterValue": "2000003",
-+        "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
-         "BriefDescription": "Count XClk pulses when this thread is unhalte=
-d and the other thread is halted.",
-         "EventCode": "0x3C",
-         "EventName": "CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE",
--        "SampleAfterValue": "2000003",
-+        "SampleAfterValue": "100003",
-         "UMask": "0x2"
-     },
-     {
-@@ -338,7 +346,7 @@
-         "EventCode": "0x3C",
-         "EventName": "CPU_CLK_UNHALTED.REF_XCLK",
-         "PublicDescription": "Reference cycles when the thread is unhalted=
- (counts at 100 MHz rate).",
--        "SampleAfterValue": "2000003",
-+        "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
-@@ -346,7 +354,7 @@
-         "BriefDescription": "Reference cycles when the at least one thread=
- on the physical core is unhalted (counts at 100 MHz rate).",
-         "EventCode": "0x3C",
-         "EventName": "CPU_CLK_UNHALTED.REF_XCLK_ANY",
--        "SampleAfterValue": "2000003",
-+        "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
 @@ -500,7 +508,7 @@
          "BriefDescription": "Stalls caused by changing prefix length of th=
 e instruction.",
@@ -1370,25 +329,6 @@ nging prefix length (66, 67 or REX.W when they change the length of the dec=
 oded instruction). Occurrences counting is proportional to the number of pr=
 efixes in a 16B-line. This may result in the following penalties: three-cyc=
 le penalty for each LCP in a 16-byte chunk.",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x1"
-     },
-@@ -681,9 +689,9 @@
-     },
-     {
-         "BriefDescription": "Resource-related stall cycles",
--        "EventCode": "0xA2",
-+        "EventCode": "0xa2",
-         "EventName": "RESOURCE_STALLS.ANY",
--        "PublicDescription": "This event counts resource-related stall cyc=
-les. Reasons for stalls can be as follows:\n - *any* u-arch structure got f=
-ull (LB, SB, RS, ROB, BOB, LM, Physical Register Reclaim Table (PRRT), or P=
-hysical History Table (PHT) slots)\n - *any* u-arch structure got empty (li=
-ke INT/SIMD FreeLists)\n - FPU control word (FPCW), MXCSR\nand others. This=
- counts cycles that the pipeline backend blocked uop delivery from the fron=
-t end.",
-+        "PublicDescription": "This event counts resource-related stall cyc=
-les.",
          "SampleAfterValue": "2000003",
          "UMask": "0x1"
      },
@@ -1447,57 +387,395 @@ t 6.",
          "EventCode": "0xA1",
          "EventName": "UOPS_EXECUTED_PORT.PORT_6_CORE",
          "SampleAfterValue": "2000003",
-@@ -1068,21 +1076,20 @@
-         "UMask": "0x1"
+diff --git a/tools/perf/pmu-events/arch/x86/broadwellx/uncore-cache.json b/=
+tools/perf/pmu-events/arch/x86/broadwellx/uncore-cache.json
+index 746954775437..f794d2992323 100644
+--- a/tools/perf/pmu-events/arch/x86/broadwellx/uncore-cache.json
++++ b/tools/perf/pmu-events/arch/x86/broadwellx/uncore-cache.json
+@@ -5,7 +5,7 @@
+         "EventName": "LLC_MISSES.CODE_LLC_PREFETCH",
+         "Filter": "filter_opc=3D0x191",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions inserte=
+d into the TOR that match an opcode.",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions insert=
+ed into the TOR that match an opcode.",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x3",
+         "Unit": "CBO"
+@@ -16,7 +16,7 @@
+         "EventName": "LLC_MISSES.DATA_LLC_PREFETCH",
+         "Filter": "filter_opc=3D0x192",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions inserte=
+d into the TOR that match an opcode.",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions insert=
+ed into the TOR that match an opcode.",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x3",
+         "Unit": "CBO"
+@@ -27,7 +27,7 @@
+         "EventName": "LLC_MISSES.DATA_READ",
+         "Filter": "filter_opc=3D0x182",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions inserte=
+d into the TOR that match an opcode.",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions insert=
+ed into the TOR that match an opcode.",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x3",
+         "Unit": "CBO"
+@@ -38,7 +38,7 @@
+         "EventName": "LLC_MISSES.MMIO_READ",
+         "Filter": "filter_opc=3D0x187,filter_nc=3D1",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions inserte=
+d into the TOR that match an opcode.",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions insert=
+ed into the TOR that match an opcode.",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x3",
+         "Unit": "CBO"
+@@ -49,7 +49,7 @@
+         "EventName": "LLC_MISSES.MMIO_WRITE",
+         "Filter": "filter_opc=3D0x18f,filter_nc=3D1",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions inserte=
+d into the TOR that match an opcode.",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions insert=
+ed into the TOR that match an opcode.",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x3",
+         "Unit": "CBO"
+@@ -60,7 +60,7 @@
+         "EventName": "LLC_MISSES.PCIE_NON_SNOOP_WRITE",
+         "Filter": "filter_opc=3D0x1c8,filter_tid=3D0x3e",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions inserte=
+d into the TOR that match an opcode.",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions insert=
+ed into the TOR that match an opcode.",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x3",
+         "Unit": "CBO"
+@@ -71,7 +71,7 @@
+         "EventName": "LLC_MISSES.PCIE_READ",
+         "Filter": "filter_opc=3D0x19e",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions inserte=
+d into the TOR that match an opcode.",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions insert=
+ed into the TOR that match an opcode.",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x3",
+         "Unit": "CBO"
+@@ -82,7 +82,7 @@
+         "EventName": "LLC_MISSES.PCIE_WRITE",
+         "Filter": "filter_opc=3D0x1c8",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions inserte=
+d into the TOR that match an opcode.",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions insert=
+ed into the TOR that match an opcode.",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x3",
+         "Unit": "CBO"
+@@ -93,7 +93,7 @@
+         "EventName": "LLC_MISSES.RFO_LLC_PREFETCH",
+         "Filter": "filter_opc=3D0x190",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions inserte=
+d into the TOR that match an opcode.",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions insert=
+ed into the TOR that match an opcode.",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x3",
+         "Unit": "CBO"
+@@ -104,7 +104,7 @@
+         "EventName": "LLC_MISSES.UNCACHEABLE",
+         "Filter": "filter_opc=3D0x187",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions inserte=
+d into the TOR that match an opcode.",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions insert=
+ed into the TOR that match an opcode.",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x3",
+         "Unit": "CBO"
+@@ -115,7 +115,7 @@
+         "EventName": "LLC_REFERENCES.CODE_LLC_PREFETCH",
+         "Filter": "filter_opc=3D0x181",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted int=
+o the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted in=
+to the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x1",
+         "Unit": "CBO"
+@@ -126,7 +126,7 @@
+         "EventName": "LLC_REFERENCES.PCIE_NS_PARTIAL_WRITE",
+         "Filter": "filter_opc=3D0x180,filter_tid=3D0x3e",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted int=
+o the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted in=
+to the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
+         "UMask": "0x1",
+         "Unit": "CBO"
+     },
+@@ -136,7 +136,7 @@
+         "EventName": "LLC_REFERENCES.PCIE_READ",
+         "Filter": "filter_opc=3D0x19e",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted int=
+o the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted in=
+to the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x1",
+         "Unit": "CBO"
+@@ -147,7 +147,7 @@
+         "EventName": "LLC_REFERENCES.PCIE_WRITE",
+         "Filter": "filter_opc=3D0x1c8,filter_tid=3D0x3e",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted int=
+o the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted in=
+to the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x1",
+         "Unit": "CBO"
+@@ -158,7 +158,7 @@
+         "EventName": "LLC_REFERENCES.STREAMING_FULL",
+         "Filter": "filter_opc=3D0x18c",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted int=
+o the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted in=
+to the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x1",
+         "Unit": "CBO"
+@@ -169,7 +169,7 @@
+         "EventName": "LLC_REFERENCES.STREAMING_PARTIAL",
+         "Filter": "filter_opc=3D0x18d",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of entries successfuly ins=
+erted into the TOR that match  qualifications specified by the subevent.  T=
+here are a number of subevent 'filters' but only a subset of the subevent c=
+ombinations are valid.  Subevents that require an opcode or NID match requi=
+re the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example,=
+ one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and=
+ set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted int=
+o the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
++        "PublicDescription": "Counts the number of entries successfully in=
+serted into the TOR that match  qualifications specified by the subevent.  =
+There are a number of subevent 'filters' but only a subset of the subevent =
+combinations are valid.  Subevents that require an opcode or NID match requ=
+ire the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example=
+, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH an=
+d set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted in=
+to the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
+         "ScaleUnit": "64Bytes",
+         "UMask": "0x1",
+         "Unit": "CBO"
+@@ -179,14 +179,12 @@
+         "EventCode": "0xA",
+         "EventName": "UNC_C_BOUNCE_CONTROL",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_BOUNCE_CONTROL",
+         "Unit": "CBO"
      },
      {
--        "BriefDescription": "Actually retired uops. (Precise Event - PEBS)=
-",
--        "Data_LA": "1",
-+        "BriefDescription": "Actually retired uops.",
-         "EventCode": "0xC2",
-         "EventName": "UOPS_RETIRED.ALL",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts all actually retired uops. Counting increments =
-by two for micro-fused uops, and by one for macro-fused and other uops. Max=
-imal increment value for one cycle is eight.",
-+        "PublicDescription": "This event counts all actually retired uops.=
- Counting increments by two for micro-fused uops, and by one for macro-fuse=
-d and other uops. Maximal increment value for one cycle is eight.",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x1"
+         "BriefDescription": "Uncore Clocks",
+         "EventName": "UNC_C_CLOCKTICKS",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_CLOCKTICKS",
+         "Unit": "CBO"
      },
      {
--        "BriefDescription": "Retirement slots used. (Precise Event - PEBS)=
-",
-+        "BriefDescription": "Retirement slots used.",
-         "EventCode": "0xC2",
-         "EventName": "UOPS_RETIRED.RETIRE_SLOTS",
-         "PEBS": "1",
--        "PublicDescription": "This is a precise version (that is, uses PEB=
-S) of the event that counts the number of retirement slots used.",
-+        "PublicDescription": "This event counts the number of retirement s=
-lots used.",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x2"
-     },
-@@ -1098,7 +1105,7 @@
-     },
-     {
-         "BriefDescription": "Cycles with less than 10 actually retired uop=
-s.",
--        "CounterMask": "10",
-+        "CounterMask": "16",
-         "EventCode": "0xC2",
-         "EventName": "UOPS_RETIRED.TOTAL_CYCLES",
-         "Invert": "1",
-diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-cache.json b=
-/tools/perf/pmu-events/arch/x86/broadwellde/uncore-cache.json
-index b8c9845308b2..2bf23ef7bfac 100644
---- a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-cache.json
-+++ b/tools/perf/pmu-events/arch/x86/broadwellde/uncore-cache.json
-@@ -78,7 +78,7 @@
+@@ -257,7 +255,7 @@
          "EventCode": "0x34",
          "EventName": "UNC_C_LLC_LOOKUP.WRITE",
          "PerPkg": "1",
@@ -1520,7 +798,79 @@ states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:1=
          "UMask": "0x5",
          "Unit": "CBO"
      },
-@@ -968,7 +968,7 @@
+@@ -618,7 +616,6 @@
+         "EventCode": "0x5",
+         "EventName": "UNC_C_RING_BOUNCES.AD",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_RING_BOUNCES.AD",
+         "UMask": "0x1",
+         "Unit": "CBO"
+     },
+@@ -627,7 +624,6 @@
+         "EventCode": "0x5",
+         "EventName": "UNC_C_RING_BOUNCES.AK",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_RING_BOUNCES.AK",
+         "UMask": "0x2",
+         "Unit": "CBO"
+     },
+@@ -636,7 +632,6 @@
+         "EventCode": "0x5",
+         "EventName": "UNC_C_RING_BOUNCES.BL",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_RING_BOUNCES.BL",
+         "UMask": "0x4",
+         "Unit": "CBO"
+     },
+@@ -645,7 +640,6 @@
+         "EventCode": "0x5",
+         "EventName": "UNC_C_RING_BOUNCES.IV",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_RING_BOUNCES.IV",
+         "UMask": "0x10",
+         "Unit": "CBO"
+     },
+@@ -690,7 +684,6 @@
+         "EventCode": "0x6",
+         "EventName": "UNC_C_RING_SINK_STARVED.AD",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_RING_SINK_STARVED.AD",
+         "UMask": "0x1",
+         "Unit": "CBO"
+     },
+@@ -699,7 +692,6 @@
+         "EventCode": "0x6",
+         "EventName": "UNC_C_RING_SINK_STARVED.AK",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_RING_SINK_STARVED.AK",
+         "UMask": "0x2",
+         "Unit": "CBO"
+     },
+@@ -708,7 +700,6 @@
+         "EventCode": "0x6",
+         "EventName": "UNC_C_RING_SINK_STARVED.BL",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_RING_SINK_STARVED.BL",
+         "UMask": "0x4",
+         "Unit": "CBO"
+     },
+@@ -717,7 +708,6 @@
+         "EventCode": "0x6",
+         "EventName": "UNC_C_RING_SINK_STARVED.IV",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_RING_SINK_STARVED.IV",
+         "UMask": "0x8",
+         "Unit": "CBO"
+     },
+@@ -726,7 +716,6 @@
+         "EventCode": "0x7",
+         "EventName": "UNC_C_RING_SRC_THRTL",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_RING_SRC_THRTL",
+         "Unit": "CBO"
+     },
+     {
+@@ -1157,7 +1146,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.ALL",
          "PerPkg": "1",
@@ -1559,7 +909,7 @@ here are no available TOR slots.",
          "UMask": "0x8",
          "Unit": "CBO"
      },
-@@ -977,7 +977,7 @@
+@@ -1166,7 +1155,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.EVICTION",
          "PerPkg": "1",
@@ -1590,7 +940,7 @@ mory).",
          "UMask": "0x4",
          "Unit": "CBO"
      },
-@@ -986,7 +986,7 @@
+@@ -1175,7 +1164,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.LOCAL",
          "PerPkg": "1",
@@ -1613,7 +963,7 @@ d into the TOR that are satisfied by locally HOMed memory.",
          "UMask": "0x28",
          "Unit": "CBO"
      },
-@@ -995,7 +995,7 @@
+@@ -1184,7 +1173,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.LOCAL_OPCODE",
          "PerPkg": "1",
@@ -1638,7 +988,7 @@ d memory.",
          "UMask": "0x21",
          "Unit": "CBO"
      },
-@@ -1004,7 +1004,7 @@
+@@ -1193,7 +1182,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.MISS_LOCAL",
          "PerPkg": "1",
@@ -1661,7 +1011,7 @@ ed into the TOR that are satisfied by locally HOMed memory.",
          "UMask": "0x2a",
          "Unit": "CBO"
      },
-@@ -1013,7 +1013,7 @@
+@@ -1202,7 +1191,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.MISS_LOCAL_OPCODE",
          "PerPkg": "1",
@@ -1686,7 +1036,7 @@ d memory.",
          "UMask": "0x23",
          "Unit": "CBO"
      },
-@@ -1022,7 +1022,7 @@
+@@ -1211,7 +1200,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.MISS_OPCODE",
          "PerPkg": "1",
@@ -1709,7 +1059,7 @@ ed into the TOR that match an opcode.",
          "UMask": "0x3",
          "Unit": "CBO"
      },
-@@ -1031,7 +1031,7 @@
+@@ -1220,7 +1209,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.MISS_REMOTE",
          "PerPkg": "1",
@@ -1732,7 +1082,7 @@ ed into the TOR that are satisfied by remote caches or remote memory.",
          "UMask": "0x8a",
          "Unit": "CBO"
      },
-@@ -1040,7 +1040,7 @@
+@@ -1229,7 +1218,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.MISS_REMOTE_OPCODE",
          "PerPkg": "1",
@@ -1757,7 +1107,7 @@ es or remote memory.",
          "UMask": "0x83",
          "Unit": "CBO"
      },
-@@ -1049,7 +1049,7 @@
+@@ -1238,7 +1227,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.NID_ALL",
          "PerPkg": "1",
@@ -1784,7 +1134,7 @@ s possible to monitor misses to specific NIDs in the system.",
          "UMask": "0x48",
          "Unit": "CBO"
      },
-@@ -1058,7 +1058,7 @@
+@@ -1247,7 +1236,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.NID_EVICTION",
          "PerPkg": "1",
@@ -1807,7 +1157,7 @@ nsactions inserted into the TOR.",
          "UMask": "0x44",
          "Unit": "CBO"
      },
-@@ -1067,7 +1067,7 @@
+@@ -1256,7 +1245,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.NID_MISS_ALL",
          "PerPkg": "1",
@@ -1830,7 +1180,7 @@ uests that were inserted into the TOR.",
          "UMask": "0x4a",
          "Unit": "CBO"
      },
-@@ -1076,7 +1076,7 @@
+@@ -1265,7 +1254,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.NID_MISS_OPCODE",
          "PerPkg": "1",
@@ -1853,7 +1203,7 @@ ed into the TOR that match a NID and an opcode.",
          "UMask": "0x43",
          "Unit": "CBO"
      },
-@@ -1085,7 +1085,7 @@
+@@ -1274,7 +1263,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.NID_OPCODE",
          "PerPkg": "1",
@@ -1876,7 +1226,7 @@ to the TOR that match a NID and an opcode.",
          "UMask": "0x41",
          "Unit": "CBO"
      },
-@@ -1094,7 +1094,7 @@
+@@ -1283,7 +1272,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.NID_WB",
          "PerPkg": "1",
@@ -1899,7 +1249,7 @@ ctions inserted into the TOR.",
          "UMask": "0x50",
          "Unit": "CBO"
      },
-@@ -1103,7 +1103,7 @@
+@@ -1292,7 +1281,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.OPCODE",
          "PerPkg": "1",
@@ -1922,7 +1272,7 @@ to the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
          "UMask": "0x1",
          "Unit": "CBO"
      },
-@@ -1112,7 +1112,7 @@
+@@ -1301,7 +1290,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.REMOTE",
          "PerPkg": "1",
@@ -1945,7 +1295,7 @@ d into the TOR that are satisfied by remote caches or remote memory.",
          "UMask": "0x88",
          "Unit": "CBO"
      },
-@@ -1121,7 +1121,7 @@
+@@ -1310,7 +1299,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.REMOTE_OPCODE",
          "PerPkg": "1",
@@ -1970,7 +1320,7 @@ s or remote memory.",
          "UMask": "0x81",
          "Unit": "CBO"
      },
-@@ -1130,7 +1130,7 @@
+@@ -1319,7 +1308,7 @@
          "EventCode": "0x35",
          "EventName": "UNC_C_TOR_INSERTS.WB",
          "PerPkg": "1",
@@ -1995,7 +1345,7 @@ ontain data being sent from the core.",
          "UMask": "0x10",
          "Unit": "CBO"
      },
-@@ -1166,7 +1166,7 @@
+@@ -1365,7 +1354,7 @@
          "EventCode": "0x36",
          "EventName": "UNC_C_TOR_OCCUPANCY.LOCAL_OPCODE",
          "PerPkg": "1",
@@ -2020,7 +1370,7 @@ fied by locally HOMed memory.",
          "UMask": "0x21",
          "Unit": "CBO"
      },
-@@ -1193,7 +1193,7 @@
+@@ -1392,7 +1381,7 @@
          "EventCode": "0x36",
          "EventName": "UNC_C_TOR_OCCUPANCY.MISS_LOCAL_OPCODE",
          "PerPkg": "1",
@@ -2045,7 +1395,7 @@ tisfied by locally HOMed memory.",
          "UMask": "0x23",
          "Unit": "CBO"
      },
-@@ -1220,7 +1220,7 @@
+@@ -1419,7 +1408,7 @@
          "EventCode": "0x36",
          "EventName": "UNC_C_TOR_OCCUPANCY.MISS_REMOTE_OPCODE",
          "PerPkg": "1",
@@ -2070,7 +1420,7 @@ tisfied by remote caches or remote memory.",
          "UMask": "0x83",
          "Unit": "CBO"
      },
-@@ -1301,7 +1301,7 @@
+@@ -1500,7 +1489,7 @@
          "EventCode": "0x36",
          "EventName": "UNC_C_TOR_OCCUPANCY.REMOTE_OPCODE",
          "PerPkg": "1",
@@ -2095,7 +1445,31 @@ fied by remote caches or remote memory.",
          "UMask": "0x81",
          "Unit": "CBO"
      },
-@@ -1388,7 +1388,7 @@
+@@ -1518,7 +1507,6 @@
+         "EventCode": "0x4",
+         "EventName": "UNC_C_TxR_ADS_USED.AD",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_TxR_ADS_USED.AD",
+         "UMask": "0x1",
+         "Unit": "CBO"
+     },
+@@ -1527,7 +1515,6 @@
+         "EventCode": "0x4",
+         "EventName": "UNC_C_TxR_ADS_USED.AK",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_TxR_ADS_USED.AK",
+         "UMask": "0x2",
+         "Unit": "CBO"
+     },
+@@ -1536,7 +1523,6 @@
+         "EventCode": "0x4",
+         "EventName": "UNC_C_TxR_ADS_USED.BL",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_C_TxR_ADS_USED.BL",
+         "UMask": "0x4",
+         "Unit": "CBO"
+     },
+@@ -1590,7 +1576,7 @@
          "EventCode": "0x2",
          "EventName": "UNC_C_TxR_INSERTS.BL_CORE",
          "PerPkg": "1",
@@ -2110,7 +1484,7 @@ ctions from the Corebo destined for the BL ring.  This is commonly used for=
          "UMask": "0x40",
          "Unit": "CBO"
      },
-@@ -1535,7 +1535,7 @@
+@@ -1737,7 +1723,7 @@
          "EventCode": "0x41",
          "EventName": "UNC_H_DIRECTORY_LAT_OPT",
          "PerPkg": "1",
@@ -2125,7 +1499,312 @@ onditions are met (credits, free pipeline, etc).",
          "Unit": "HA"
      },
      {
-@@ -2647,7 +2647,7 @@
+@@ -1790,7 +1776,6 @@
+         "EventCode": "0x71",
+         "EventName": "UNC_H_HITME_HIT.ACKCNFLTWBI",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT.ACKCNFLTWBI",
+         "UMask": "0x4",
+         "Unit": "HA"
+     },
+@@ -1799,7 +1784,6 @@
+         "EventCode": "0x71",
+         "EventName": "UNC_H_HITME_HIT.ALL",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT.ALL",
+         "UMask": "0xff",
+         "Unit": "HA"
+     },
+@@ -1808,7 +1792,6 @@
+         "EventCode": "0x71",
+         "EventName": "UNC_H_HITME_HIT.ALLOCS",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT.ALLOCS",
+         "UMask": "0x70",
+         "Unit": "HA"
+     },
+@@ -1817,7 +1800,6 @@
+         "EventCode": "0x71",
+         "EventName": "UNC_H_HITME_HIT.EVICTS",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT.EVICTS",
+         "UMask": "0x42",
+         "Unit": "HA"
+     },
+@@ -1826,7 +1808,6 @@
+         "EventCode": "0x71",
+         "EventName": "UNC_H_HITME_HIT.HOM",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT.HOM",
+         "UMask": "0xf",
+         "Unit": "HA"
+     },
+@@ -1835,7 +1816,6 @@
+         "EventCode": "0x71",
+         "EventName": "UNC_H_HITME_HIT.INVALS",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT.INVALS",
+         "UMask": "0x26",
+         "Unit": "HA"
+     },
+@@ -1844,7 +1824,6 @@
+         "EventCode": "0x71",
+         "EventName": "UNC_H_HITME_HIT.READ_OR_INVITOE",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT.READ_OR_INVITOE",
+         "UMask": "0x1",
+         "Unit": "HA"
+     },
+@@ -1853,7 +1832,6 @@
+         "EventCode": "0x71",
+         "EventName": "UNC_H_HITME_HIT.RSP",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT.RSP",
+         "UMask": "0x80",
+         "Unit": "HA"
+     },
+@@ -1862,7 +1840,6 @@
+         "EventCode": "0x71",
+         "EventName": "UNC_H_HITME_HIT.RSPFWDI_LOCAL",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT.RSPFWDI_LOCAL",
+         "UMask": "0x20",
+         "Unit": "HA"
+     },
+@@ -1871,7 +1848,6 @@
+         "EventCode": "0x71",
+         "EventName": "UNC_H_HITME_HIT.RSPFWDI_REMOTE",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT.RSPFWDI_REMOTE",
+         "UMask": "0x10",
+         "Unit": "HA"
+     },
+@@ -1880,7 +1856,6 @@
+         "EventCode": "0x71",
+         "EventName": "UNC_H_HITME_HIT.RSPFWDS",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT.RSPFWDS",
+         "UMask": "0x40",
+         "Unit": "HA"
+     },
+@@ -1889,7 +1864,6 @@
+         "EventCode": "0x71",
+         "EventName": "UNC_H_HITME_HIT.WBMTOE_OR_S",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT.WBMTOE_OR_S",
+         "UMask": "0x8",
+         "Unit": "HA"
+     },
+@@ -1898,7 +1872,6 @@
+         "EventCode": "0x71",
+         "EventName": "UNC_H_HITME_HIT.WBMTOI",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT.WBMTOI",
+         "UMask": "0x2",
+         "Unit": "HA"
+     },
+@@ -1907,7 +1880,6 @@
+         "EventCode": "0x72",
+         "EventName": "UNC_H_HITME_HIT_PV_BITS_SET.ACKCNFLTWBI",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT_PV_BITS_SET.ACKCNFLTWBI",
+         "UMask": "0x4",
+         "Unit": "HA"
+     },
+@@ -1916,7 +1888,6 @@
+         "EventCode": "0x72",
+         "EventName": "UNC_H_HITME_HIT_PV_BITS_SET.ALL",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT_PV_BITS_SET.ALL",
+         "UMask": "0xff",
+         "Unit": "HA"
+     },
+@@ -1925,7 +1896,6 @@
+         "EventCode": "0x72",
+         "EventName": "UNC_H_HITME_HIT_PV_BITS_SET.HOM",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT_PV_BITS_SET.HOM",
+         "UMask": "0xf",
+         "Unit": "HA"
+     },
+@@ -1934,7 +1904,6 @@
+         "EventCode": "0x72",
+         "EventName": "UNC_H_HITME_HIT_PV_BITS_SET.READ_OR_INVITOE",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT_PV_BITS_SET.READ_OR_INVITOE"=
+,
+         "UMask": "0x1",
+         "Unit": "HA"
+     },
+@@ -1943,7 +1912,6 @@
+         "EventCode": "0x72",
+         "EventName": "UNC_H_HITME_HIT_PV_BITS_SET.RSP",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT_PV_BITS_SET.RSP",
+         "UMask": "0x80",
+         "Unit": "HA"
+     },
+@@ -1952,7 +1920,6 @@
+         "EventCode": "0x72",
+         "EventName": "UNC_H_HITME_HIT_PV_BITS_SET.RSPFWDI_LOCAL",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT_PV_BITS_SET.RSPFWDI_LOCAL",
+         "UMask": "0x20",
+         "Unit": "HA"
+     },
+@@ -1961,7 +1928,6 @@
+         "EventCode": "0x72",
+         "EventName": "UNC_H_HITME_HIT_PV_BITS_SET.RSPFWDI_REMOTE",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT_PV_BITS_SET.RSPFWDI_REMOTE",
+         "UMask": "0x10",
+         "Unit": "HA"
+     },
+@@ -1970,7 +1936,6 @@
+         "EventCode": "0x72",
+         "EventName": "UNC_H_HITME_HIT_PV_BITS_SET.RSPFWDS",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT_PV_BITS_SET.RSPFWDS",
+         "UMask": "0x40",
+         "Unit": "HA"
+     },
+@@ -1979,7 +1944,6 @@
+         "EventCode": "0x72",
+         "EventName": "UNC_H_HITME_HIT_PV_BITS_SET.WBMTOE_OR_S",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT_PV_BITS_SET.WBMTOE_OR_S",
+         "UMask": "0x8",
+         "Unit": "HA"
+     },
+@@ -1988,7 +1952,6 @@
+         "EventCode": "0x72",
+         "EventName": "UNC_H_HITME_HIT_PV_BITS_SET.WBMTOI",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_HIT_PV_BITS_SET.WBMTOI",
+         "UMask": "0x2",
+         "Unit": "HA"
+     },
+@@ -1997,7 +1960,6 @@
+         "EventCode": "0x70",
+         "EventName": "UNC_H_HITME_LOOKUP.ACKCNFLTWBI",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_LOOKUP.ACKCNFLTWBI",
+         "UMask": "0x4",
+         "Unit": "HA"
+     },
+@@ -2006,7 +1968,6 @@
+         "EventCode": "0x70",
+         "EventName": "UNC_H_HITME_LOOKUP.ALL",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_LOOKUP.ALL",
+         "UMask": "0xff",
+         "Unit": "HA"
+     },
+@@ -2015,7 +1976,6 @@
+         "EventCode": "0x70",
+         "EventName": "UNC_H_HITME_LOOKUP.ALLOCS",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_LOOKUP.ALLOCS",
+         "UMask": "0x70",
+         "Unit": "HA"
+     },
+@@ -2024,7 +1984,6 @@
+         "EventCode": "0x70",
+         "EventName": "UNC_H_HITME_LOOKUP.HOM",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_LOOKUP.HOM",
+         "UMask": "0xf",
+         "Unit": "HA"
+     },
+@@ -2033,7 +1992,6 @@
+         "EventCode": "0x70",
+         "EventName": "UNC_H_HITME_LOOKUP.INVALS",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_LOOKUP.INVALS",
+         "UMask": "0x26",
+         "Unit": "HA"
+     },
+@@ -2042,7 +2000,6 @@
+         "EventCode": "0x70",
+         "EventName": "UNC_H_HITME_LOOKUP.READ_OR_INVITOE",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_LOOKUP.READ_OR_INVITOE",
+         "UMask": "0x1",
+         "Unit": "HA"
+     },
+@@ -2051,7 +2008,6 @@
+         "EventCode": "0x70",
+         "EventName": "UNC_H_HITME_LOOKUP.RSP",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_LOOKUP.RSP",
+         "UMask": "0x80",
+         "Unit": "HA"
+     },
+@@ -2060,7 +2016,6 @@
+         "EventCode": "0x70",
+         "EventName": "UNC_H_HITME_LOOKUP.RSPFWDI_LOCAL",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_LOOKUP.RSPFWDI_LOCAL",
+         "UMask": "0x20",
+         "Unit": "HA"
+     },
+@@ -2069,7 +2024,6 @@
+         "EventCode": "0x70",
+         "EventName": "UNC_H_HITME_LOOKUP.RSPFWDI_REMOTE",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_LOOKUP.RSPFWDI_REMOTE",
+         "UMask": "0x10",
+         "Unit": "HA"
+     },
+@@ -2078,7 +2032,6 @@
+         "EventCode": "0x70",
+         "EventName": "UNC_H_HITME_LOOKUP.RSPFWDS",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_LOOKUP.RSPFWDS",
+         "UMask": "0x40",
+         "Unit": "HA"
+     },
+@@ -2087,7 +2040,6 @@
+         "EventCode": "0x70",
+         "EventName": "UNC_H_HITME_LOOKUP.WBMTOE_OR_S",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_LOOKUP.WBMTOE_OR_S",
+         "UMask": "0x8",
+         "Unit": "HA"
+     },
+@@ -2096,7 +2048,6 @@
+         "EventCode": "0x70",
+         "EventName": "UNC_H_HITME_LOOKUP.WBMTOI",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_HITME_LOOKUP.WBMTOI",
+         "UMask": "0x2",
+         "Unit": "HA"
+     },
+@@ -2168,7 +2119,6 @@
+         "EventCode": "0x1E",
+         "EventName": "UNC_H_IMC_RETRY",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_IMC_RETRY",
+         "Unit": "HA"
+     },
+     {
+@@ -2221,7 +2171,6 @@
+         "EventCode": "0x61",
+         "EventName": "UNC_H_IOT_BACKPRESSURE.HUB",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_IOT_BACKPRESSURE.HUB",
+         "UMask": "0x2",
+         "Unit": "HA"
+     },
+@@ -2230,7 +2179,6 @@
+         "EventCode": "0x61",
+         "EventName": "UNC_H_IOT_BACKPRESSURE.SAT",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_H_IOT_BACKPRESSURE.SAT",
+         "UMask": "0x1",
+         "Unit": "HA"
+     },
+@@ -2889,7 +2837,7 @@
          "EventCode": "0x21",
          "EventName": "UNC_H_SNOOP_RESP.RSPSFWD",
          "PerPkg": "1",
@@ -2147,10 +1826,10 @@ that are received.  For example, if 3 snoops were issued and returned RspI,=
 lters for a snoop response of RspSFwd.  This is returned when a remote cach=
 ing agent forwards data but holds on to its current copy.  This is common f=
 or data and code reads that hit in a remote socket in E or F state.",
+         "ScaleUnit": "64Bytes",
          "UMask": "0x8",
          "Unit": "HA"
-     },
-@@ -2719,7 +2719,7 @@
+@@ -2963,7 +2911,7 @@
          "EventCode": "0x60",
          "EventName": "UNC_H_SNP_RESP_RECV_LOCAL.RSPSFWD",
          "PerPkg": "1",
@@ -2167,7 +1846,7 @@ his is common for data and code reads that hit in a remote socket in E or F=
          "UMask": "0x8",
          "Unit": "HA"
      },
-@@ -2931,7 +2931,7 @@
+@@ -3175,7 +3123,7 @@
          "Unit": "HA"
      },
      {
@@ -2178,7 +1857,7 @@ Requests",
          "EventCode": "0x4",
          "EventName": "UNC_H_TRACKER_OCCUPANCY.INVITOE_LOCAL",
          "PerPkg": "1",
-@@ -2940,7 +2940,7 @@
+@@ -3184,7 +3132,7 @@
          "Unit": "HA"
      },
      {
@@ -2189,7 +1868,7 @@ Requests",
          "EventCode": "0x4",
          "EventName": "UNC_H_TRACKER_OCCUPANCY.INVITOE_REMOTE",
          "PerPkg": "1",
-@@ -2949,7 +2949,7 @@
+@@ -3193,7 +3141,7 @@
          "Unit": "HA"
      },
      {
@@ -2200,7 +1879,7 @@ uests",
          "EventCode": "0x4",
          "EventName": "UNC_H_TRACKER_OCCUPANCY.READS_LOCAL",
          "PerPkg": "1",
-@@ -2958,7 +2958,7 @@
+@@ -3202,7 +3150,7 @@
          "Unit": "HA"
      },
      {
@@ -2211,7 +1890,7 @@ quests",
          "EventCode": "0x4",
          "EventName": "UNC_H_TRACKER_OCCUPANCY.READS_REMOTE",
          "PerPkg": "1",
-@@ -2967,7 +2967,7 @@
+@@ -3211,7 +3159,7 @@
          "Unit": "HA"
      },
      {
@@ -2222,7 +1901,7 @@ quests",
          "EventCode": "0x4",
          "EventName": "UNC_H_TRACKER_OCCUPANCY.WRITES_LOCAL",
          "PerPkg": "1",
-@@ -2976,7 +2976,7 @@
+@@ -3220,7 +3168,7 @@
          "Unit": "HA"
      },
      {
@@ -2233,7 +1912,7 @@ equests",
          "EventCode": "0x4",
          "EventName": "UNC_H_TRACKER_OCCUPANCY.WRITES_REMOTE",
          "PerPkg": "1",
-@@ -2985,7 +2985,7 @@
+@@ -3229,7 +3177,7 @@
          "Unit": "HA"
      },
      {
@@ -2244,7 +1923,7 @@ uests",
          "EventCode": "0x5",
          "EventName": "UNC_H_TRACKER_PENDING_OCCUPANCY.LOCAL",
          "PerPkg": "1",
-@@ -2994,7 +2994,7 @@
+@@ -3238,7 +3186,7 @@
          "Unit": "HA"
      },
      {
@@ -2255,12 +1934,1642 @@ quests",
          "EventCode": "0x5",
          "EventName": "UNC_H_TRACKER_PENDING_OCCUPANCY.REMOTE",
          "PerPkg": "1",
-diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-memory.json =
-b/tools/perf/pmu-events/arch/x86/broadwellde/uncore-memory.json
-index c3f2f6c2ac74..a764234a3584 100644
---- a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-memory.json
-+++ b/tools/perf/pmu-events/arch/x86/broadwellde/uncore-memory.json
-@@ -166,7 +166,7 @@
+diff --git a/tools/perf/pmu-events/arch/x86/broadwellx/uncore-interconnect.=
+json b/tools/perf/pmu-events/arch/x86/broadwellx/uncore-interconnect.json
+index 489a3673323d..2819c6621089 100644
+--- a/tools/perf/pmu-events/arch/x86/broadwellx/uncore-interconnect.json
++++ b/tools/perf/pmu-events/arch/x86/broadwellx/uncore-interconnect.json
+@@ -3,7 +3,7 @@
+         "BriefDescription": "Number of non data (control) flits transmitte=
+d . Derived from unc_q_txl_flits_g0.non_data",
+         "EventName": "QPI_CTL_BANDWIDTH_TX",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  It includes filters for Idle, protocol, and Data Flits.  E=
+ach flit is made up of 80 bits of information (in addition to some ECC data=
+).  In full-width (L0) mode, flits are made up of four fits, each of which =
+contains 20 bits of data (along with some additional ECC data).   In half-w=
+idth (L0p) mode, the fits are only 10 bits, and therefore it takes twice as=
+ many fits to transmit a flit.  When one talks about QPI speed (for example=
+, 8.0 GT/s), the transfers here refer to fits.  Therefore, in L0, the syste=
+m will transfer 1 flit at the rate of 1/4th the QPI speed.  One can calcula=
+te the bandwidth of the link by taking: flits*80b/time.  Note that this is =
+not the same as data bandwidth.  For example, when we are transfering a 64B=
+ cacheline across QPI, we will break it into 9 flits -- 1 with header infor=
+mation and 8 with 64 bits of actual data and an additional 16 bits of other=
+ information.  To calculate data bandwidth, one should therefore do: data f=
+lits * 8B / time (for L0) or 4B instead of 8B for L0p.; Number of non-NULL =
+non-data flits transmitted across QPI.  This basically tracks the protocol =
+overhead on the QPI link.  One can get a good picture of the QPI-link chara=
+cteristics by evaluating the protocol flits, data flits, and idle/null flit=
+s.  This includes the header flits for data packets.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  It includes filters for Idle, protocol, and Data Flits.  E=
+ach flit is made up of 80 bits of information (in addition to some ECC data=
+).  In full-width (L0) mode, flits are made up of four fits, each of which =
+contains 20 bits of data (along with some additional ECC data).   In half-w=
+idth (L0p) mode, the fits are only 10 bits, and therefore it takes twice as=
+ many fits to transmit a flit.  When one talks about QPI speed (for example=
+, 8.0 GT/s), the transfers here refer to fits.  Therefore, in L0, the syste=
+m will transfer 1 flit at the rate of 1/4th the QPI speed.  One can calcula=
+te the bandwidth of the link by taking: flits*80b/time.  Note that this is =
+not the same as data bandwidth.  For example, when we are transferring a 64=
+B cacheline across QPI, we will break it into 9 flits -- 1 with header info=
+rmation and 8 with 64 bits of actual data and an additional 16 bits of othe=
+r information.  To calculate data bandwidth, one should therefore do: data =
+flits * 8B / time (for L0) or 4B instead of 8B for L0p.; Number of non-NULL=
+ non-data flits transmitted across QPI.  This basically tracks the protocol=
+ overhead on the QPI link.  One can get a good picture of the QPI-link char=
+acteristics by evaluating the protocol flits, data flits, and idle/null fli=
+ts.  This includes the header flits for data packets.",
+         "ScaleUnit": "8Bytes",
+         "UMask": "0x4",
+         "Unit": "QPI LL"
+@@ -12,7 +12,7 @@
+         "BriefDescription": "Number of data flits transmitted . Derived fr=
+om unc_q_txl_flits_g0.data",
+         "EventName": "QPI_DATA_BANDWIDTH_TX",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  It includes filters for Idle, protocol, and Data Flits.  E=
+ach flit is made up of 80 bits of information (in addition to some ECC data=
+).  In full-width (L0) mode, flits are made up of four fits, each of which =
+contains 20 bits of data (along with some additional ECC data).   In half-w=
+idth (L0p) mode, the fits are only 10 bits, and therefore it takes twice as=
+ many fits to transmit a flit.  When one talks about QPI speed (for example=
+, 8.0 GT/s), the transfers here refer to fits.  Therefore, in L0, the syste=
+m will transfer 1 flit at the rate of 1/4th the QPI speed.  One can calcula=
+te the bandwidth of the link by taking: flits*80b/time.  Note that this is =
+not the same as data bandwidth.  For example, when we are transfering a 64B=
+ cacheline across QPI, we will break it into 9 flits -- 1 with header infor=
+mation and 8 with 64 bits of actual data and an additional 16 bits of other=
+ information.  To calculate data bandwidth, one should therefore do: data f=
+lits * 8B / time (for L0) or 4B instead of 8B for L0p.; Number of data flit=
+s transmitted over QPI.  Each flit contains 64b of data.  This includes bot=
+h DRS and NCB data flits (coherent and non-coherent).  This can be used to =
+calculate the data bandwidth of the QPI link.  One can get a good picture o=
+f the QPI-link characteristics by evaluating the protocol flits, data flits=
+, and idle/null flits.  This does not include the header flits that go in d=
+ata packets.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  It includes filters for Idle, protocol, and Data Flits.  E=
+ach flit is made up of 80 bits of information (in addition to some ECC data=
+).  In full-width (L0) mode, flits are made up of four fits, each of which =
+contains 20 bits of data (along with some additional ECC data).   In half-w=
+idth (L0p) mode, the fits are only 10 bits, and therefore it takes twice as=
+ many fits to transmit a flit.  When one talks about QPI speed (for example=
+, 8.0 GT/s), the transfers here refer to fits.  Therefore, in L0, the syste=
+m will transfer 1 flit at the rate of 1/4th the QPI speed.  One can calcula=
+te the bandwidth of the link by taking: flits*80b/time.  Note that this is =
+not the same as data bandwidth.  For example, when we are transferring a 64=
+B cacheline across QPI, we will break it into 9 flits -- 1 with header info=
+rmation and 8 with 64 bits of actual data and an additional 16 bits of othe=
+r information.  To calculate data bandwidth, one should therefore do: data =
+flits * 8B / time (for L0) or 4B instead of 8B for L0p.; Number of data fli=
+ts transmitted over QPI.  Each flit contains 64b of data.  This includes bo=
+th DRS and NCB data flits (coherent and non-coherent).  This can be used to=
+ calculate the data bandwidth of the QPI link.  One can get a good picture =
+of the QPI-link characteristics by evaluating the protocol flits, data flit=
+s, and idle/null flits.  This does not include the header flits that go in =
+data packets.",
+         "ScaleUnit": "8Bytes",
+         "UMask": "0x2",
+         "Unit": "QPI LL"
+@@ -38,7 +38,7 @@
+         "EventCode": "0x13",
+         "EventName": "UNC_Q_DIRECT2CORE.FAILURE_CREDITS",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exlusive filters.  Filte=
+r [0] can be used to get successful spawns, while [1:3] provide the differe=
+nt failure cases.  Note that this does not count packets that are not candi=
+dates for Direct2Core.  The only candidates for Direct2Core are DRS packets=
+ destined for Cbos.; The spawn failed because there were not enough Egress =
+credits.  Had there been enough credits, the spawn would have worked as the=
+ RBT bit was set and the RBT tag matched.",
++        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exclusive filters.  Filt=
+er [0] can be used to get successful spawns, while [1:3] provide the differ=
+ent failure cases.  Note that this does not count packets that are not cand=
+idates for Direct2Core.  The only candidates for Direct2Core are DRS packet=
+s destined for Cbos.; The spawn failed because there were not enough Egress=
+ credits.  Had there been enough credits, the spawn would have worked as th=
+e RBT bit was set and the RBT tag matched.",
+         "UMask": "0x2",
+         "Unit": "QPI LL"
+     },
+@@ -47,7 +47,7 @@
+         "EventCode": "0x13",
+         "EventName": "UNC_Q_DIRECT2CORE.FAILURE_CREDITS_MISS",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exlusive filters.  Filte=
+r [0] can be used to get successful spawns, while [1:3] provide the differe=
+nt failure cases.  Note that this does not count packets that are not candi=
+dates for Direct2Core.  The only candidates for Direct2Core are DRS packets=
+ destined for Cbos.; The spawn failed because the RBT tag did not match and=
+ there weren't enough Egress credits.   The valid bit was set.",
++        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exclusive filters.  Filt=
+er [0] can be used to get successful spawns, while [1:3] provide the differ=
+ent failure cases.  Note that this does not count packets that are not cand=
+idates for Direct2Core.  The only candidates for Direct2Core are DRS packet=
+s destined for Cbos.; The spawn failed because the RBT tag did not match an=
+d there weren't enough Egress credits.   The valid bit was set.",
+         "UMask": "0x20",
+         "Unit": "QPI LL"
+     },
+@@ -56,7 +56,7 @@
+         "EventCode": "0x13",
+         "EventName": "UNC_Q_DIRECT2CORE.FAILURE_CREDITS_RBT",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exlusive filters.  Filte=
+r [0] can be used to get successful spawns, while [1:3] provide the differe=
+nt failure cases.  Note that this does not count packets that are not candi=
+dates for Direct2Core.  The only candidates for Direct2Core are DRS packets=
+ destined for Cbos.; The spawn failed because there were not enough Egress =
+credits AND the RBT bit was not set, but the RBT tag matched.",
++        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exclusive filters.  Filt=
+er [0] can be used to get successful spawns, while [1:3] provide the differ=
+ent failure cases.  Note that this does not count packets that are not cand=
+idates for Direct2Core.  The only candidates for Direct2Core are DRS packet=
+s destined for Cbos.; The spawn failed because there were not enough Egress=
+ credits AND the RBT bit was not set, but the RBT tag matched.",
+         "UMask": "0x8",
+         "Unit": "QPI LL"
+     },
+@@ -65,7 +65,7 @@
+         "EventCode": "0x13",
+         "EventName": "UNC_Q_DIRECT2CORE.FAILURE_CREDITS_RBT_MISS",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exlusive filters.  Filte=
+r [0] can be used to get successful spawns, while [1:3] provide the differe=
+nt failure cases.  Note that this does not count packets that are not candi=
+dates for Direct2Core.  The only candidates for Direct2Core are DRS packets=
+ destined for Cbos.; The spawn failed because the RBT tag did not match, th=
+e valid bit was not set and there weren't enough Egress credits.",
++        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exclusive filters.  Filt=
+er [0] can be used to get successful spawns, while [1:3] provide the differ=
+ent failure cases.  Note that this does not count packets that are not cand=
+idates for Direct2Core.  The only candidates for Direct2Core are DRS packet=
+s destined for Cbos.; The spawn failed because the RBT tag did not match, t=
+he valid bit was not set and there weren't enough Egress credits.",
+         "UMask": "0x80",
+         "Unit": "QPI LL"
+     },
+@@ -74,7 +74,7 @@
+         "EventCode": "0x13",
+         "EventName": "UNC_Q_DIRECT2CORE.FAILURE_MISS",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exlusive filters.  Filte=
+r [0] can be used to get successful spawns, while [1:3] provide the differe=
+nt failure cases.  Note that this does not count packets that are not candi=
+dates for Direct2Core.  The only candidates for Direct2Core are DRS packets=
+ destined for Cbos.; The spawn failed because the RBT tag did not match alt=
+hough the valid bit was set and there were enough Egress credits.",
++        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exclusive filters.  Filt=
+er [0] can be used to get successful spawns, while [1:3] provide the differ=
+ent failure cases.  Note that this does not count packets that are not cand=
+idates for Direct2Core.  The only candidates for Direct2Core are DRS packet=
+s destined for Cbos.; The spawn failed because the RBT tag did not match al=
+though the valid bit was set and there were enough Egress credits.",
+         "UMask": "0x10",
+         "Unit": "QPI LL"
+     },
+@@ -83,7 +83,7 @@
+         "EventCode": "0x13",
+         "EventName": "UNC_Q_DIRECT2CORE.FAILURE_RBT_HIT",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exlusive filters.  Filte=
+r [0] can be used to get successful spawns, while [1:3] provide the differe=
+nt failure cases.  Note that this does not count packets that are not candi=
+dates for Direct2Core.  The only candidates for Direct2Core are DRS packets=
+ destined for Cbos.; The spawn failed because the route-back table (RBT) sp=
+ecified that the transaction should not trigger a direct2core tranaction.  =
+This is common for IO transactions.  There were enough Egress credits and t=
+he RBT tag matched but the valid bit was not set.",
++        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exclusive filters.  Filt=
+er [0] can be used to get successful spawns, while [1:3] provide the differ=
+ent failure cases.  Note that this does not count packets that are not cand=
+idates for Direct2Core.  The only candidates for Direct2Core are DRS packet=
+s destined for Cbos.; The spawn failed because the route-back table (RBT) s=
+pecified that the transaction should not trigger a direct2core transaction.=
+  This is common for IO transactions.  There were enough Egress credits and=
+ the RBT tag matched but the valid bit was not set.",
+         "UMask": "0x4",
+         "Unit": "QPI LL"
+     },
+@@ -92,7 +92,7 @@
+         "EventCode": "0x13",
+         "EventName": "UNC_Q_DIRECT2CORE.FAILURE_RBT_MISS",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exlusive filters.  Filte=
+r [0] can be used to get successful spawns, while [1:3] provide the differe=
+nt failure cases.  Note that this does not count packets that are not candi=
+dates for Direct2Core.  The only candidates for Direct2Core are DRS packets=
+ destined for Cbos.; The spawn failed because the RBT tag did not match and=
+ the valid bit was not set although there were enough Egress credits.",
++        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exclusive filters.  Filt=
+er [0] can be used to get successful spawns, while [1:3] provide the differ=
+ent failure cases.  Note that this does not count packets that are not cand=
+idates for Direct2Core.  The only candidates for Direct2Core are DRS packet=
+s destined for Cbos.; The spawn failed because the RBT tag did not match an=
+d the valid bit was not set although there were enough Egress credits.",
+         "UMask": "0x40",
+         "Unit": "QPI LL"
+     },
+@@ -101,7 +101,7 @@
+         "EventCode": "0x13",
+         "EventName": "UNC_Q_DIRECT2CORE.SUCCESS_RBT_HIT",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exlusive filters.  Filte=
+r [0] can be used to get successful spawns, while [1:3] provide the differe=
+nt failure cases.  Note that this does not count packets that are not candi=
+dates for Direct2Core.  The only candidates for Direct2Core are DRS packets=
+ destined for Cbos.; The spawn was successful.  There were sufficient credi=
+ts, the RBT valid bit was set and there was an RBT tag match.  The message =
+was marked to spawn direct2core.",
++        "PublicDescription": "Counts the number of DRS packets that we att=
+empted to do direct2core on.  There are 4 mutually exclusive filters.  Filt=
+er [0] can be used to get successful spawns, while [1:3] provide the differ=
+ent failure cases.  Note that this does not count packets that are not cand=
+idates for Direct2Core.  The only candidates for Direct2Core are DRS packet=
+s destined for Cbos.; The spawn was successful.  There were sufficient cred=
+its, the RBT valid bit was set and there was an RBT tag match.  The message=
+ was marked to spawn direct2core.",
+         "UMask": "0x1",
+         "Unit": "QPI LL"
+     },
+@@ -134,7 +134,7 @@
+         "EventCode": "0x9",
+         "EventName": "UNC_Q_RxL_BYPASSED",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times that an incoming =
+flit was able to bypass the flit buffer and pass directly across the BGF an=
+d into the Egress.  This is a latency optimization, and should generally be=
+ the common case.  If this value is less than the number of flits transfere=
+d, it implies that there was queueing getting onto the ring, and thus the t=
+ransactions saw higher latency.",
++        "PublicDescription": "Counts the number of times that an incoming =
+flit was able to bypass the flit buffer and pass directly across the BGF an=
+d into the Egress.  This is a latency optimization, and should generally be=
+ the common case.  If this value is less than the number of flits transferr=
+ed, it implies that there was queueing getting onto the ring, and thus the =
+transactions saw higher latency.",
+         "Unit": "QPI LL"
+     },
+     {
+@@ -391,7 +391,7 @@
+         "EventCode": "0x1",
+         "EventName": "UNC_Q_RxL_FLITS_G0.IDLE",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  It includes filters for Idle, protocol, and Data Flits.  Each f=
+lit is made up of 80 bits of information (in addition to some ECC data).  I=
+n full-width (L0) mode, flits are made up of four fits, each of which conta=
+ins 20 bits of data (along with some additional ECC data).   In half-width =
+(L0p) mode, the fits are only 10 bits, and therefore it takes twice as many=
+ fits to transmit a flit.  When one talks about QPI speed (for example, 8.0=
+ GT/s), the transfers here refer to fits.  Therefore, in L0, the system wil=
+l transfer 1 flit at the rate of 1/4th the QPI speed.  One can calculate th=
+e bandwidth of the link by taking: flits*80b/time.  Note that this is not t=
+he same as data bandwidth.  For example, when we are transfering a 64B cach=
+eline across QPI, we will break it into 9 flits -- 1 with header informatio=
+n and 8 with 64 bits of actual data and an additional 16 bits of other info=
+rmation.  To calculate data bandwidth, one should therefore do: data flits =
+* 8B / time (for L0) or 4B instead of 8B for L0p.; Number of flits received=
+ over QPI that do not hold protocol payload.  When QPI is not in a power sa=
+ving state, it continuously transmits flits across the link.  When there ar=
+e no protocol flits to send, it will send IDLE and NULL flits  across.  The=
+se flits sometimes do carry a payload, such as credit returns, but are gene=
+rall not considered part of the QPI bandwidth.",
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  It includes filters for Idle, protocol, and Data Flits.  Each f=
+lit is made up of 80 bits of information (in addition to some ECC data).  I=
+n full-width (L0) mode, flits are made up of four fits, each of which conta=
+ins 20 bits of data (along with some additional ECC data).   In half-width =
+(L0p) mode, the fits are only 10 bits, and therefore it takes twice as many=
+ fits to transmit a flit.  When one talks about QPI speed (for example, 8.0=
+ GT/s), the transfers here refer to fits.  Therefore, in L0, the system wil=
+l transfer 1 flit at the rate of 1/4th the QPI speed.  One can calculate th=
+e bandwidth of the link by taking: flits*80b/time.  Note that this is not t=
+he same as data bandwidth.  For example, when we are transferring a 64B cac=
+heline across QPI, we will break it into 9 flits -- 1 with header informati=
+on and 8 with 64 bits of actual data and an additional 16 bits of other inf=
+ormation.  To calculate data bandwidth, one should therefore do: data flits=
+ * 8B / time (for L0) or 4B instead of 8B for L0p.; Number of flits receive=
+d over QPI that do not hold protocol payload.  When QPI is not in a power s=
+aving state, it continuously transmits flits across the link.  When there a=
+re no protocol flits to send, it will send IDLE and NULL flits  across.  Th=
+ese flits sometimes do carry a payload, such as credit returns, but are gen=
+erally not considered part of the QPI bandwidth.",
+         "UMask": "0x1",
+         "Unit": "QPI LL"
+     },
+@@ -400,7 +400,7 @@
+         "EventCode": "0x2",
+         "EventName": "UNC_Q_RxL_FLITS_G1.DRS",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transfering a 64B cacheline across =
+QPI, we will break it into 9 flits -- 1 with header information and 8 with =
+64 bits of actual data and an additional 16 bits of other information.  To =
+calculate data bandwidth, one should therefore do: data flits * 8B / time.;=
+ Counts the total number of flits received over QPI on the DRS (Data Respon=
+se) channel.  DRS flits are used to transmit data with coherency.  This doe=
+s not count data flits received over the NCB channel which transmits non-co=
+herent data.",
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transferring a 64B cacheline across=
+ QPI, we will break it into 9 flits -- 1 with header information and 8 with=
+ 64 bits of actual data and an additional 16 bits of other information.  To=
+ calculate data bandwidth, one should therefore do: data flits * 8B / time.=
+; Counts the total number of flits received over QPI on the DRS (Data Respo=
+nse) channel.  DRS flits are used to transmit data with coherency.  This do=
+es not count data flits received over the NCB channel which transmits non-c=
+oherent data.",
+         "UMask": "0x18",
+         "Unit": "QPI LL"
+     },
+@@ -409,7 +409,7 @@
+         "EventCode": "0x2",
+         "EventName": "UNC_Q_RxL_FLITS_G1.DRS_DATA",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transfering a 64B cacheline across =
+QPI, we will break it into 9 flits -- 1 with header information and 8 with =
+64 bits of actual data and an additional 16 bits of other information.  To =
+calculate data bandwidth, one should therefore do: data flits * 8B / time.;=
+ Counts the total number of data flits received over QPI on the DRS (Data R=
+esponse) channel.  DRS flits are used to transmit data with coherency.  Thi=
+s does not count data flits received over the NCB channel which transmits n=
+on-coherent data.  This includes only the data flits (not the header).",
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transferring a 64B cacheline across=
+ QPI, we will break it into 9 flits -- 1 with header information and 8 with=
+ 64 bits of actual data and an additional 16 bits of other information.  To=
+ calculate data bandwidth, one should therefore do: data flits * 8B / time.=
+; Counts the total number of data flits received over QPI on the DRS (Data =
+Response) channel.  DRS flits are used to transmit data with coherency.  Th=
+is does not count data flits received over the NCB channel which transmits =
+non-coherent data.  This includes only the data flits (not the header).",
+         "UMask": "0x8",
+         "Unit": "QPI LL"
+     },
+@@ -418,7 +418,7 @@
+         "EventCode": "0x2",
+         "EventName": "UNC_Q_RxL_FLITS_G1.DRS_NONDATA",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transfering a 64B cacheline across =
+QPI, we will break it into 9 flits -- 1 with header information and 8 with =
+64 bits of actual data and an additional 16 bits of other information.  To =
+calculate data bandwidth, one should therefore do: data flits * 8B / time.;=
+ Counts the total number of protocol flits received over QPI on the DRS (Da=
+ta Response) channel.  DRS flits are used to transmit data with coherency. =
+ This does not count data flits received over the NCB channel which transmi=
+ts non-coherent data.  This includes only the header flits (not the data). =
+ This includes extended headers.",
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transferring a 64B cacheline across=
+ QPI, we will break it into 9 flits -- 1 with header information and 8 with=
+ 64 bits of actual data and an additional 16 bits of other information.  To=
+ calculate data bandwidth, one should therefore do: data flits * 8B / time.=
+; Counts the total number of protocol flits received over QPI on the DRS (D=
+ata Response) channel.  DRS flits are used to transmit data with coherency.=
+  This does not count data flits received over the NCB channel which transm=
+its non-coherent data.  This includes only the header flits (not the data).=
+  This includes extended headers.",
+         "UMask": "0x10",
+         "Unit": "QPI LL"
+     },
+@@ -427,7 +427,7 @@
+         "EventCode": "0x2",
+         "EventName": "UNC_Q_RxL_FLITS_G1.HOM",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transfering a 64B cacheline across =
+QPI, we will break it into 9 flits -- 1 with header information and 8 with =
+64 bits of actual data and an additional 16 bits of other information.  To =
+calculate data bandwidth, one should therefore do: data flits * 8B / time.;=
+ Counts the number of flits received over QPI on the home channel.",
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transferring a 64B cacheline across=
+ QPI, we will break it into 9 flits -- 1 with header information and 8 with=
+ 64 bits of actual data and an additional 16 bits of other information.  To=
+ calculate data bandwidth, one should therefore do: data flits * 8B / time.=
+; Counts the number of flits received over QPI on the home channel.",
+         "UMask": "0x6",
+         "Unit": "QPI LL"
+     },
+@@ -436,7 +436,7 @@
+         "EventCode": "0x2",
+         "EventName": "UNC_Q_RxL_FLITS_G1.HOM_NONREQ",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transfering a 64B cacheline across =
+QPI, we will break it into 9 flits -- 1 with header information and 8 with =
+64 bits of actual data and an additional 16 bits of other information.  To =
+calculate data bandwidth, one should therefore do: data flits * 8B / time.;=
+ Counts the number of non-request flits received over QPI on the home chann=
+el.  These are most commonly snoop responses, and this event can be used as=
+ a proxy for that.",
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transferring a 64B cacheline across=
+ QPI, we will break it into 9 flits -- 1 with header information and 8 with=
+ 64 bits of actual data and an additional 16 bits of other information.  To=
+ calculate data bandwidth, one should therefore do: data flits * 8B / time.=
+; Counts the number of non-request flits received over QPI on the home chan=
+nel.  These are most commonly snoop responses, and this event can be used a=
+s a proxy for that.",
+         "UMask": "0x4",
+         "Unit": "QPI LL"
+     },
+@@ -445,7 +445,7 @@
+         "EventCode": "0x2",
+         "EventName": "UNC_Q_RxL_FLITS_G1.HOM_REQ",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transfering a 64B cacheline across =
+QPI, we will break it into 9 flits -- 1 with header information and 8 with =
+64 bits of actual data and an additional 16 bits of other information.  To =
+calculate data bandwidth, one should therefore do: data flits * 8B / time.;=
+ Counts the number of data request received over QPI on the home channel.  =
+This basically counts the number of remote memory requests received over QP=
+I.  In conjunction with the local read count in the Home Agent, one can cal=
+culate the number of LLC Misses.",
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transferring a 64B cacheline across=
+ QPI, we will break it into 9 flits -- 1 with header information and 8 with=
+ 64 bits of actual data and an additional 16 bits of other information.  To=
+ calculate data bandwidth, one should therefore do: data flits * 8B / time.=
+; Counts the number of data request received over QPI on the home channel. =
+ This basically counts the number of remote memory requests received over Q=
+PI.  In conjunction with the local read count in the Home Agent, one can ca=
+lculate the number of LLC Misses.",
+         "UMask": "0x2",
+         "Unit": "QPI LL"
+     },
+@@ -454,7 +454,7 @@
+         "EventCode": "0x2",
+         "EventName": "UNC_Q_RxL_FLITS_G1.SNP",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transfering a 64B cacheline across =
+QPI, we will break it into 9 flits -- 1 with header information and 8 with =
+64 bits of actual data and an additional 16 bits of other information.  To =
+calculate data bandwidth, one should therefore do: data flits * 8B / time.;=
+ Counts the number of snoop request flits received over QPI.  These request=
+s are contained in the snoop channel.  This does not include snoop response=
+s, which are received on the home channel.",
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for SNP, HOM, and DRS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transferring a 64B cacheline across=
+ QPI, we will break it into 9 flits -- 1 with header information and 8 with=
+ 64 bits of actual data and an additional 16 bits of other information.  To=
+ calculate data bandwidth, one should therefore do: data flits * 8B / time.=
+; Counts the number of snoop request flits received over QPI.  These reques=
+ts are contained in the snoop channel.  This does not include snoop respons=
+es, which are received on the home channel.",
+         "UMask": "0x1",
+         "Unit": "QPI LL"
+     },
+@@ -463,7 +463,7 @@
+         "EventCode": "0x3",
+         "EventName": "UNC_Q_RxL_FLITS_G2.NCB",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for NDR, NCB, and NCS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transfering a 64B cacheline across =
+QPI, we will break it into 9 flits -- 1 with header information and 8 with =
+64 bits of actual data and an additional 16 bits of other information.  To =
+calculate data bandwidth, one should therefore do: data flits * 8B / time.;=
+ Number of Non-Coherent Bypass flits.  These packets are generally used to =
+transmit non-coherent data across QPI.",
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for NDR, NCB, and NCS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transferring a 64B cacheline across=
+ QPI, we will break it into 9 flits -- 1 with header information and 8 with=
+ 64 bits of actual data and an additional 16 bits of other information.  To=
+ calculate data bandwidth, one should therefore do: data flits * 8B / time.=
+; Number of Non-Coherent Bypass flits.  These packets are generally used to=
+ transmit non-coherent data across QPI.",
+         "UMask": "0xc",
+         "Unit": "QPI LL"
+     },
+@@ -472,7 +472,7 @@
+         "EventCode": "0x3",
+         "EventName": "UNC_Q_RxL_FLITS_G2.NCB_DATA",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for NDR, NCB, and NCS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transfering a 64B cacheline across =
+QPI, we will break it into 9 flits -- 1 with header information and 8 with =
+64 bits of actual data and an additional 16 bits of other information.  To =
+calculate data bandwidth, one should therefore do: data flits * 8B / time.;=
+ Number of Non-Coherent Bypass data flits.  These flits are generally used =
+to transmit non-coherent data across QPI.  This does not include a count of=
+ the DRS (coherent) data flits.  This only counts the data flits, not the N=
+CB headers.",
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for NDR, NCB, and NCS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transferring a 64B cacheline across=
+ QPI, we will break it into 9 flits -- 1 with header information and 8 with=
+ 64 bits of actual data and an additional 16 bits of other information.  To=
+ calculate data bandwidth, one should therefore do: data flits * 8B / time.=
+; Number of Non-Coherent Bypass data flits.  These flits are generally used=
+ to transmit non-coherent data across QPI.  This does not include a count o=
+f the DRS (coherent) data flits.  This only counts the data flits, not the =
+NCB headers.",
+         "UMask": "0x4",
+         "Unit": "QPI LL"
+     },
+@@ -481,7 +481,7 @@
+         "EventCode": "0x3",
+         "EventName": "UNC_Q_RxL_FLITS_G2.NCB_NONDATA",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for NDR, NCB, and NCS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transfering a 64B cacheline across =
+QPI, we will break it into 9 flits -- 1 with header information and 8 with =
+64 bits of actual data and an additional 16 bits of other information.  To =
+calculate data bandwidth, one should therefore do: data flits * 8B / time.;=
+ Number of Non-Coherent Bypass non-data flits.  These packets are generally=
+ used to transmit non-coherent data across QPI, and the flits counted here =
+are for headers and other non-data flits.  This includes extended headers."=
+,
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for NDR, NCB, and NCS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transferring a 64B cacheline across=
+ QPI, we will break it into 9 flits -- 1 with header information and 8 with=
+ 64 bits of actual data and an additional 16 bits of other information.  To=
+ calculate data bandwidth, one should therefore do: data flits * 8B / time.=
+; Number of Non-Coherent Bypass non-data flits.  These packets are generall=
+y used to transmit non-coherent data across QPI, and the flits counted here=
+ are for headers and other non-data flits.  This includes extended headers.=
+",
+         "UMask": "0x8",
+         "Unit": "QPI LL"
+     },
+@@ -490,7 +490,7 @@
+         "EventCode": "0x3",
+         "EventName": "UNC_Q_RxL_FLITS_G2.NCS",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for NDR, NCB, and NCS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transfering a 64B cacheline across =
+QPI, we will break it into 9 flits -- 1 with header information and 8 with =
+64 bits of actual data and an additional 16 bits of other information.  To =
+calculate data bandwidth, one should therefore do: data flits * 8B / time.;=
+ Number of NCS (non-coherent standard) flits received over QPI.    This inc=
+ludes extended headers.",
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for NDR, NCB, and NCS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transferring a 64B cacheline across=
+ QPI, we will break it into 9 flits -- 1 with header information and 8 with=
+ 64 bits of actual data and an additional 16 bits of other information.  To=
+ calculate data bandwidth, one should therefore do: data flits * 8B / time.=
+; Number of NCS (non-coherent standard) flits received over QPI.    This in=
+cludes extended headers.",
+         "UMask": "0x10",
+         "Unit": "QPI LL"
+     },
+@@ -499,7 +499,7 @@
+         "EventCode": "0x3",
+         "EventName": "UNC_Q_RxL_FLITS_G2.NDR_AD",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for NDR, NCB, and NCS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transfering a 64B cacheline across =
+QPI, we will break it into 9 flits -- 1 with header information and 8 with =
+64 bits of actual data and an additional 16 bits of other information.  To =
+calculate data bandwidth, one should therefore do: data flits * 8B / time.;=
+ Counts the total number of flits received over the NDR (Non-Data Response)=
+ channel.  This channel is used to send a variety of protocol flits includi=
+ng grants and completions.  This is only for NDR packets to the local socke=
+t which use the AK ring.",
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for NDR, NCB, and NCS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transferring a 64B cacheline across=
+ QPI, we will break it into 9 flits -- 1 with header information and 8 with=
+ 64 bits of actual data and an additional 16 bits of other information.  To=
+ calculate data bandwidth, one should therefore do: data flits * 8B / time.=
+; Counts the total number of flits received over the NDR (Non-Data Response=
+) channel.  This channel is used to send a variety of protocol flits includ=
+ing grants and completions.  This is only for NDR packets to the local sock=
+et which use the AK ring.",
+         "UMask": "0x1",
+         "Unit": "QPI LL"
+     },
+@@ -508,7 +508,7 @@
+         "EventCode": "0x3",
+         "EventName": "UNC_Q_RxL_FLITS_G2.NDR_AK",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for NDR, NCB, and NCS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transfering a 64B cacheline across =
+QPI, we will break it into 9 flits -- 1 with header information and 8 with =
+64 bits of actual data and an additional 16 bits of other information.  To =
+calculate data bandwidth, one should therefore do: data flits * 8B / time.;=
+ Counts the total number of flits received over the NDR (Non-Data Response)=
+ channel.  This channel is used to send a variety of protocol flits includi=
+ng grants and completions.  This is only for NDR packets destined for Route=
+-thru to a remote socket.",
++        "PublicDescription": "Counts the number of flits received from the=
+ QPI Link.  This is one of three groups that allow us to track flits.  It i=
+ncludes filters for NDR, NCB, and NCS message classes.  Each flit is made u=
+p of 80 bits of information (in addition to some ECC data).  In full-width =
+(L0) mode, flits are made up of four fits, each of which contains 20 bits o=
+f data (along with some additional ECC data).   In half-width (L0p) mode, t=
+he fits are only 10 bits, and therefore it takes twice as many fits to tran=
+smit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), the t=
+ransfers here refer to fits.  Therefore, in L0, the system will transfer 1 =
+flit at the rate of 1/4th the QPI speed.  One can calculate the bandwidth o=
+f the link by taking: flits*80b/time.  Note that this is not the same as da=
+ta bandwidth.  For example, when we are transferring a 64B cacheline across=
+ QPI, we will break it into 9 flits -- 1 with header information and 8 with=
+ 64 bits of actual data and an additional 16 bits of other information.  To=
+ calculate data bandwidth, one should therefore do: data flits * 8B / time.=
+; Counts the total number of flits received over the NDR (Non-Data Response=
+) channel.  This channel is used to send a variety of protocol flits includ=
+ing grants and completions.  This is only for NDR packets destined for Rout=
+e-thru to a remote socket.",
+         "UMask": "0x2",
+         "Unit": "QPI LL"
+     },
+@@ -924,7 +924,7 @@
+         "BriefDescription": "Flits Transferred - Group 0; Data Tx Flits",
+         "EventName": "UNC_Q_TxL_FLITS_G0.DATA",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  It includes filters for Idle, protocol, and Data Flits.  E=
+ach flit is made up of 80 bits of information (in addition to some ECC data=
+).  In full-width (L0) mode, flits are made up of four fits, each of which =
+contains 20 bits of data (along with some additional ECC data).   In half-w=
+idth (L0p) mode, the fits are only 10 bits, and therefore it takes twice as=
+ many fits to transmit a flit.  When one talks about QPI speed (for example=
+, 8.0 GT/s), the transfers here refer to fits.  Therefore, in L0, the syste=
+m will transfer 1 flit at the rate of 1/4th the QPI speed.  One can calcula=
+te the bandwidth of the link by taking: flits*80b/time.  Note that this is =
+not the same as data bandwidth.  For example, when we are transfering a 64B=
+ cacheline across QPI, we will break it into 9 flits -- 1 with header infor=
+mation and 8 with 64 bits of actual data and an additional 16 bits of other=
+ information.  To calculate data bandwidth, one should therefore do: data f=
+lits * 8B / time (for L0) or 4B instead of 8B for L0p.; Number of data flit=
+s transmitted over QPI.  Each flit contains 64b of data.  This includes bot=
+h DRS and NCB data flits (coherent and non-coherent).  This can be used to =
+calculate the data bandwidth of the QPI link.  One can get a good picture o=
+f the QPI-link characteristics by evaluating the protocol flits, data flits=
+, and idle/null flits.  This does not include the header flits that go in d=
+ata packets.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  It includes filters for Idle, protocol, and Data Flits.  E=
+ach flit is made up of 80 bits of information (in addition to some ECC data=
+).  In full-width (L0) mode, flits are made up of four fits, each of which =
+contains 20 bits of data (along with some additional ECC data).   In half-w=
+idth (L0p) mode, the fits are only 10 bits, and therefore it takes twice as=
+ many fits to transmit a flit.  When one talks about QPI speed (for example=
+, 8.0 GT/s), the transfers here refer to fits.  Therefore, in L0, the syste=
+m will transfer 1 flit at the rate of 1/4th the QPI speed.  One can calcula=
+te the bandwidth of the link by taking: flits*80b/time.  Note that this is =
+not the same as data bandwidth.  For example, when we are transferring a 64=
+B cacheline across QPI, we will break it into 9 flits -- 1 with header info=
+rmation and 8 with 64 bits of actual data and an additional 16 bits of othe=
+r information.  To calculate data bandwidth, one should therefore do: data =
+flits * 8B / time (for L0) or 4B instead of 8B for L0p.; Number of data fli=
+ts transmitted over QPI.  Each flit contains 64b of data.  This includes bo=
+th DRS and NCB data flits (coherent and non-coherent).  This can be used to=
+ calculate the data bandwidth of the QPI link.  One can get a good picture =
+of the QPI-link characteristics by evaluating the protocol flits, data flit=
+s, and idle/null flits.  This does not include the header flits that go in =
+data packets.",
+         "UMask": "0x2",
+         "Unit": "QPI LL"
+     },
+@@ -932,7 +932,7 @@
+         "BriefDescription": "Flits Transferred - Group 0; Non-Data protoco=
+l Tx Flits",
+         "EventName": "UNC_Q_TxL_FLITS_G0.NON_DATA",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  It includes filters for Idle, protocol, and Data Flits.  E=
+ach flit is made up of 80 bits of information (in addition to some ECC data=
+).  In full-width (L0) mode, flits are made up of four fits, each of which =
+contains 20 bits of data (along with some additional ECC data).   In half-w=
+idth (L0p) mode, the fits are only 10 bits, and therefore it takes twice as=
+ many fits to transmit a flit.  When one talks about QPI speed (for example=
+, 8.0 GT/s), the transfers here refer to fits.  Therefore, in L0, the syste=
+m will transfer 1 flit at the rate of 1/4th the QPI speed.  One can calcula=
+te the bandwidth of the link by taking: flits*80b/time.  Note that this is =
+not the same as data bandwidth.  For example, when we are transfering a 64B=
+ cacheline across QPI, we will break it into 9 flits -- 1 with header infor=
+mation and 8 with 64 bits of actual data and an additional 16 bits of other=
+ information.  To calculate data bandwidth, one should therefore do: data f=
+lits * 8B / time (for L0) or 4B instead of 8B for L0p.; Number of non-NULL =
+non-data flits transmitted across QPI.  This basically tracks the protocol =
+overhead on the QPI link.  One can get a good picture of the QPI-link chara=
+cteristics by evaluating the protocol flits, data flits, and idle/null flit=
+s.  This includes the header flits for data packets.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  It includes filters for Idle, protocol, and Data Flits.  E=
+ach flit is made up of 80 bits of information (in addition to some ECC data=
+).  In full-width (L0) mode, flits are made up of four fits, each of which =
+contains 20 bits of data (along with some additional ECC data).   In half-w=
+idth (L0p) mode, the fits are only 10 bits, and therefore it takes twice as=
+ many fits to transmit a flit.  When one talks about QPI speed (for example=
+, 8.0 GT/s), the transfers here refer to fits.  Therefore, in L0, the syste=
+m will transfer 1 flit at the rate of 1/4th the QPI speed.  One can calcula=
+te the bandwidth of the link by taking: flits*80b/time.  Note that this is =
+not the same as data bandwidth.  For example, when we are transferring a 64=
+B cacheline across QPI, we will break it into 9 flits -- 1 with header info=
+rmation and 8 with 64 bits of actual data and an additional 16 bits of othe=
+r information.  To calculate data bandwidth, one should therefore do: data =
+flits * 8B / time (for L0) or 4B instead of 8B for L0p.; Number of non-NULL=
+ non-data flits transmitted across QPI.  This basically tracks the protocol=
+ overhead on the QPI link.  One can get a good picture of the QPI-link char=
+acteristics by evaluating the protocol flits, data flits, and idle/null fli=
+ts.  This includes the header flits for data packets.",
+         "UMask": "0x4",
+         "Unit": "QPI LL"
+     },
+@@ -940,7 +940,7 @@
+         "BriefDescription": "Flits Transferred - Group 1; DRS Flits (both =
+Header and Data)",
+         "EventName": "UNC_Q_TxL_FLITS_G1.DRS",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits trasmitted across=
+ the QPI Link.  This is one of three groups that allow us to track flits.  =
+It includes filters for SNP, HOM, and DRS message classes.  Each flit is ma=
+de up of 80 bits of information (in addition to some ECC data).  In full-wi=
+dth (L0) mode, flits are made up of four fits, each of which contains 20 bi=
+ts of data (along with some additional ECC data).   In half-width (L0p) mod=
+e, the fits are only 10 bits, and therefore it takes twice as many fits to =
+transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), t=
+he transfers here refer to fits.  Therefore, in L0, the system will transfe=
+r 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwid=
+th of the link by taking: flits*80b/time.  Note that this is not the same a=
+s data bandwidth.  For example, when we are transfering a 64B cacheline acr=
+oss QPI, we will break it into 9 flits -- 1 with header information and 8 w=
+ith 64 bits of actual data and an additional 16 bits of other information. =
+ To calculate data bandwidth, one should therefore do: data flits * 8B / ti=
+me.; Counts the total number of flits transmitted over QPI on the DRS (Data=
+ Response) channel.  DRS flits are used to transmit data with coherency.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  This is one of three groups that allow us to track flits. =
+ It includes filters for SNP, HOM, and DRS message classes.  Each flit is m=
+ade up of 80 bits of information (in addition to some ECC data).  In full-w=
+idth (L0) mode, flits are made up of four fits, each of which contains 20 b=
+its of data (along with some additional ECC data).   In half-width (L0p) mo=
+de, the fits are only 10 bits, and therefore it takes twice as many fits to=
+ transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), =
+the transfers here refer to fits.  Therefore, in L0, the system will transf=
+er 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwi=
+dth of the link by taking: flits*80b/time.  Note that this is not the same =
+as data bandwidth.  For example, when we are transferring a 64B cacheline a=
+cross QPI, we will break it into 9 flits -- 1 with header information and 8=
+ with 64 bits of actual data and an additional 16 bits of other information=
+.  To calculate data bandwidth, one should therefore do: data flits * 8B / =
+time.; Counts the total number of flits transmitted over QPI on the DRS (Da=
+ta Response) channel.  DRS flits are used to transmit data with coherency."=
+,
+         "UMask": "0x18",
+         "Unit": "QPI LL"
+     },
+@@ -948,7 +948,7 @@
+         "BriefDescription": "Flits Transferred - Group 1; DRS Data Flits",
+         "EventName": "UNC_Q_TxL_FLITS_G1.DRS_DATA",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits trasmitted across=
+ the QPI Link.  This is one of three groups that allow us to track flits.  =
+It includes filters for SNP, HOM, and DRS message classes.  Each flit is ma=
+de up of 80 bits of information (in addition to some ECC data).  In full-wi=
+dth (L0) mode, flits are made up of four fits, each of which contains 20 bi=
+ts of data (along with some additional ECC data).   In half-width (L0p) mod=
+e, the fits are only 10 bits, and therefore it takes twice as many fits to =
+transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), t=
+he transfers here refer to fits.  Therefore, in L0, the system will transfe=
+r 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwid=
+th of the link by taking: flits*80b/time.  Note that this is not the same a=
+s data bandwidth.  For example, when we are transfering a 64B cacheline acr=
+oss QPI, we will break it into 9 flits -- 1 with header information and 8 w=
+ith 64 bits of actual data and an additional 16 bits of other information. =
+ To calculate data bandwidth, one should therefore do: data flits * 8B / ti=
+me.; Counts the total number of data flits transmitted over QPI on the DRS =
+(Data Response) channel.  DRS flits are used to transmit data with coherenc=
+y.  This does not count data flits transmitted over the NCB channel which t=
+ransmits non-coherent data.  This includes only the data flits (not the hea=
+der).",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  This is one of three groups that allow us to track flits. =
+ It includes filters for SNP, HOM, and DRS message classes.  Each flit is m=
+ade up of 80 bits of information (in addition to some ECC data).  In full-w=
+idth (L0) mode, flits are made up of four fits, each of which contains 20 b=
+its of data (along with some additional ECC data).   In half-width (L0p) mo=
+de, the fits are only 10 bits, and therefore it takes twice as many fits to=
+ transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), =
+the transfers here refer to fits.  Therefore, in L0, the system will transf=
+er 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwi=
+dth of the link by taking: flits*80b/time.  Note that this is not the same =
+as data bandwidth.  For example, when we are transferring a 64B cacheline a=
+cross QPI, we will break it into 9 flits -- 1 with header information and 8=
+ with 64 bits of actual data and an additional 16 bits of other information=
+.  To calculate data bandwidth, one should therefore do: data flits * 8B / =
+time.; Counts the total number of data flits transmitted over QPI on the DR=
+S (Data Response) channel.  DRS flits are used to transmit data with cohere=
+ncy.  This does not count data flits transmitted over the NCB channel which=
+ transmits non-coherent data.  This includes only the data flits (not the h=
+eader).",
+         "UMask": "0x8",
+         "Unit": "QPI LL"
+     },
+@@ -956,7 +956,7 @@
+         "BriefDescription": "Flits Transferred - Group 1; DRS Header Flits=
+",
+         "EventName": "UNC_Q_TxL_FLITS_G1.DRS_NONDATA",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits trasmitted across=
+ the QPI Link.  This is one of three groups that allow us to track flits.  =
+It includes filters for SNP, HOM, and DRS message classes.  Each flit is ma=
+de up of 80 bits of information (in addition to some ECC data).  In full-wi=
+dth (L0) mode, flits are made up of four fits, each of which contains 20 bi=
+ts of data (along with some additional ECC data).   In half-width (L0p) mod=
+e, the fits are only 10 bits, and therefore it takes twice as many fits to =
+transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), t=
+he transfers here refer to fits.  Therefore, in L0, the system will transfe=
+r 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwid=
+th of the link by taking: flits*80b/time.  Note that this is not the same a=
+s data bandwidth.  For example, when we are transfering a 64B cacheline acr=
+oss QPI, we will break it into 9 flits -- 1 with header information and 8 w=
+ith 64 bits of actual data and an additional 16 bits of other information. =
+ To calculate data bandwidth, one should therefore do: data flits * 8B / ti=
+me.; Counts the total number of protocol flits transmitted over QPI on the =
+DRS (Data Response) channel.  DRS flits are used to transmit data with cohe=
+rency.  This does not count data flits transmitted over the NCB channel whi=
+ch transmits non-coherent data.  This includes only the header flits (not t=
+he data).  This includes extended headers.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  This is one of three groups that allow us to track flits. =
+ It includes filters for SNP, HOM, and DRS message classes.  Each flit is m=
+ade up of 80 bits of information (in addition to some ECC data).  In full-w=
+idth (L0) mode, flits are made up of four fits, each of which contains 20 b=
+its of data (along with some additional ECC data).   In half-width (L0p) mo=
+de, the fits are only 10 bits, and therefore it takes twice as many fits to=
+ transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), =
+the transfers here refer to fits.  Therefore, in L0, the system will transf=
+er 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwi=
+dth of the link by taking: flits*80b/time.  Note that this is not the same =
+as data bandwidth.  For example, when we are transferring a 64B cacheline a=
+cross QPI, we will break it into 9 flits -- 1 with header information and 8=
+ with 64 bits of actual data and an additional 16 bits of other information=
+.  To calculate data bandwidth, one should therefore do: data flits * 8B / =
+time.; Counts the total number of protocol flits transmitted over QPI on th=
+e DRS (Data Response) channel.  DRS flits are used to transmit data with co=
+herency.  This does not count data flits transmitted over the NCB channel w=
+hich transmits non-coherent data.  This includes only the header flits (not=
+ the data).  This includes extended headers.",
+         "UMask": "0x10",
+         "Unit": "QPI LL"
+     },
+@@ -964,7 +964,7 @@
+         "BriefDescription": "Flits Transferred - Group 1; HOM Flits",
+         "EventName": "UNC_Q_TxL_FLITS_G1.HOM",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits trasmitted across=
+ the QPI Link.  This is one of three groups that allow us to track flits.  =
+It includes filters for SNP, HOM, and DRS message classes.  Each flit is ma=
+de up of 80 bits of information (in addition to some ECC data).  In full-wi=
+dth (L0) mode, flits are made up of four fits, each of which contains 20 bi=
+ts of data (along with some additional ECC data).   In half-width (L0p) mod=
+e, the fits are only 10 bits, and therefore it takes twice as many fits to =
+transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), t=
+he transfers here refer to fits.  Therefore, in L0, the system will transfe=
+r 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwid=
+th of the link by taking: flits*80b/time.  Note that this is not the same a=
+s data bandwidth.  For example, when we are transfering a 64B cacheline acr=
+oss QPI, we will break it into 9 flits -- 1 with header information and 8 w=
+ith 64 bits of actual data and an additional 16 bits of other information. =
+ To calculate data bandwidth, one should therefore do: data flits * 8B / ti=
+me.; Counts the number of flits transmitted over QPI on the home channel.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  This is one of three groups that allow us to track flits. =
+ It includes filters for SNP, HOM, and DRS message classes.  Each flit is m=
+ade up of 80 bits of information (in addition to some ECC data).  In full-w=
+idth (L0) mode, flits are made up of four fits, each of which contains 20 b=
+its of data (along with some additional ECC data).   In half-width (L0p) mo=
+de, the fits are only 10 bits, and therefore it takes twice as many fits to=
+ transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), =
+the transfers here refer to fits.  Therefore, in L0, the system will transf=
+er 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwi=
+dth of the link by taking: flits*80b/time.  Note that this is not the same =
+as data bandwidth.  For example, when we are transferring a 64B cacheline a=
+cross QPI, we will break it into 9 flits -- 1 with header information and 8=
+ with 64 bits of actual data and an additional 16 bits of other information=
+.  To calculate data bandwidth, one should therefore do: data flits * 8B / =
+time.; Counts the number of flits transmitted over QPI on the home channel.=
+",
+         "UMask": "0x6",
+         "Unit": "QPI LL"
+     },
+@@ -972,7 +972,7 @@
+         "BriefDescription": "Flits Transferred - Group 1; HOM Non-Request =
+Flits",
+         "EventName": "UNC_Q_TxL_FLITS_G1.HOM_NONREQ",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits trasmitted across=
+ the QPI Link.  This is one of three groups that allow us to track flits.  =
+It includes filters for SNP, HOM, and DRS message classes.  Each flit is ma=
+de up of 80 bits of information (in addition to some ECC data).  In full-wi=
+dth (L0) mode, flits are made up of four fits, each of which contains 20 bi=
+ts of data (along with some additional ECC data).   In half-width (L0p) mod=
+e, the fits are only 10 bits, and therefore it takes twice as many fits to =
+transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), t=
+he transfers here refer to fits.  Therefore, in L0, the system will transfe=
+r 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwid=
+th of the link by taking: flits*80b/time.  Note that this is not the same a=
+s data bandwidth.  For example, when we are transfering a 64B cacheline acr=
+oss QPI, we will break it into 9 flits -- 1 with header information and 8 w=
+ith 64 bits of actual data and an additional 16 bits of other information. =
+ To calculate data bandwidth, one should therefore do: data flits * 8B / ti=
+me.; Counts the number of non-request flits transmitted over QPI on the hom=
+e channel.  These are most commonly snoop responses, and this event can be =
+used as a proxy for that.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  This is one of three groups that allow us to track flits. =
+ It includes filters for SNP, HOM, and DRS message classes.  Each flit is m=
+ade up of 80 bits of information (in addition to some ECC data).  In full-w=
+idth (L0) mode, flits are made up of four fits, each of which contains 20 b=
+its of data (along with some additional ECC data).   In half-width (L0p) mo=
+de, the fits are only 10 bits, and therefore it takes twice as many fits to=
+ transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), =
+the transfers here refer to fits.  Therefore, in L0, the system will transf=
+er 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwi=
+dth of the link by taking: flits*80b/time.  Note that this is not the same =
+as data bandwidth.  For example, when we are transferring a 64B cacheline a=
+cross QPI, we will break it into 9 flits -- 1 with header information and 8=
+ with 64 bits of actual data and an additional 16 bits of other information=
+.  To calculate data bandwidth, one should therefore do: data flits * 8B / =
+time.; Counts the number of non-request flits transmitted over QPI on the h=
+ome channel.  These are most commonly snoop responses, and this event can b=
+e used as a proxy for that.",
+         "UMask": "0x4",
+         "Unit": "QPI LL"
+     },
+@@ -980,7 +980,7 @@
+         "BriefDescription": "Flits Transferred - Group 1; HOM Request Flit=
+s",
+         "EventName": "UNC_Q_TxL_FLITS_G1.HOM_REQ",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits trasmitted across=
+ the QPI Link.  This is one of three groups that allow us to track flits.  =
+It includes filters for SNP, HOM, and DRS message classes.  Each flit is ma=
+de up of 80 bits of information (in addition to some ECC data).  In full-wi=
+dth (L0) mode, flits are made up of four fits, each of which contains 20 bi=
+ts of data (along with some additional ECC data).   In half-width (L0p) mod=
+e, the fits are only 10 bits, and therefore it takes twice as many fits to =
+transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), t=
+he transfers here refer to fits.  Therefore, in L0, the system will transfe=
+r 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwid=
+th of the link by taking: flits*80b/time.  Note that this is not the same a=
+s data bandwidth.  For example, when we are transfering a 64B cacheline acr=
+oss QPI, we will break it into 9 flits -- 1 with header information and 8 w=
+ith 64 bits of actual data and an additional 16 bits of other information. =
+ To calculate data bandwidth, one should therefore do: data flits * 8B / ti=
+me.; Counts the number of data request transmitted over QPI on the home cha=
+nnel.  This basically counts the number of remote memory requests transmitt=
+ed over QPI.  In conjunction with the local read count in the Home Agent, o=
+ne can calculate the number of LLC Misses.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  This is one of three groups that allow us to track flits. =
+ It includes filters for SNP, HOM, and DRS message classes.  Each flit is m=
+ade up of 80 bits of information (in addition to some ECC data).  In full-w=
+idth (L0) mode, flits are made up of four fits, each of which contains 20 b=
+its of data (along with some additional ECC data).   In half-width (L0p) mo=
+de, the fits are only 10 bits, and therefore it takes twice as many fits to=
+ transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), =
+the transfers here refer to fits.  Therefore, in L0, the system will transf=
+er 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwi=
+dth of the link by taking: flits*80b/time.  Note that this is not the same =
+as data bandwidth.  For example, when we are transferring a 64B cacheline a=
+cross QPI, we will break it into 9 flits -- 1 with header information and 8=
+ with 64 bits of actual data and an additional 16 bits of other information=
+.  To calculate data bandwidth, one should therefore do: data flits * 8B / =
+time.; Counts the number of data request transmitted over QPI on the home c=
+hannel.  This basically counts the number of remote memory requests transmi=
+tted over QPI.  In conjunction with the local read count in the Home Agent,=
+ one can calculate the number of LLC Misses.",
+         "UMask": "0x2",
+         "Unit": "QPI LL"
+     },
+@@ -988,7 +988,7 @@
+         "BriefDescription": "Flits Transferred - Group 1; SNP Flits",
+         "EventName": "UNC_Q_TxL_FLITS_G1.SNP",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits trasmitted across=
+ the QPI Link.  This is one of three groups that allow us to track flits.  =
+It includes filters for SNP, HOM, and DRS message classes.  Each flit is ma=
+de up of 80 bits of information (in addition to some ECC data).  In full-wi=
+dth (L0) mode, flits are made up of four fits, each of which contains 20 bi=
+ts of data (along with some additional ECC data).   In half-width (L0p) mod=
+e, the fits are only 10 bits, and therefore it takes twice as many fits to =
+transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), t=
+he transfers here refer to fits.  Therefore, in L0, the system will transfe=
+r 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwid=
+th of the link by taking: flits*80b/time.  Note that this is not the same a=
+s data bandwidth.  For example, when we are transfering a 64B cacheline acr=
+oss QPI, we will break it into 9 flits -- 1 with header information and 8 w=
+ith 64 bits of actual data and an additional 16 bits of other information. =
+ To calculate data bandwidth, one should therefore do: data flits * 8B / ti=
+me.; Counts the number of snoop request flits transmitted over QPI.  These =
+requests are contained in the snoop channel.  This does not include snoop r=
+esponses, which are transmitted on the home channel.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  This is one of three groups that allow us to track flits. =
+ It includes filters for SNP, HOM, and DRS message classes.  Each flit is m=
+ade up of 80 bits of information (in addition to some ECC data).  In full-w=
+idth (L0) mode, flits are made up of four fits, each of which contains 20 b=
+its of data (along with some additional ECC data).   In half-width (L0p) mo=
+de, the fits are only 10 bits, and therefore it takes twice as many fits to=
+ transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), =
+the transfers here refer to fits.  Therefore, in L0, the system will transf=
+er 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwi=
+dth of the link by taking: flits*80b/time.  Note that this is not the same =
+as data bandwidth.  For example, when we are transferring a 64B cacheline a=
+cross QPI, we will break it into 9 flits -- 1 with header information and 8=
+ with 64 bits of actual data and an additional 16 bits of other information=
+.  To calculate data bandwidth, one should therefore do: data flits * 8B / =
+time.; Counts the number of snoop request flits transmitted over QPI.  Thes=
+e requests are contained in the snoop channel.  This does not include snoop=
+ responses, which are transmitted on the home channel.",
+         "UMask": "0x1",
+         "Unit": "QPI LL"
+     },
+@@ -997,7 +997,7 @@
+         "EventCode": "0x1",
+         "EventName": "UNC_Q_TxL_FLITS_G2.NCB",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits trasmitted across=
+ the QPI Link.  This is one of three groups that allow us to track flits.  =
+It includes filters for NDR, NCB, and NCS message classes.  Each flit is ma=
+de up of 80 bits of information (in addition to some ECC data).  In full-wi=
+dth (L0) mode, flits are made up of four fits, each of which contains 20 bi=
+ts of data (along with some additional ECC data).   In half-width (L0p) mod=
+e, the fits are only 10 bits, and therefore it takes twice as many fits to =
+transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), t=
+he transfers here refer to fits.  Therefore, in L0, the system will transfe=
+r 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwid=
+th of the link by taking: flits*80b/time.  Note that this is not the same a=
+s data bandwidth.  For example, when we are transfering a 64B cacheline acr=
+oss QPI, we will break it into 9 flits -- 1 with header information and 8 w=
+ith 64 bits of actual data and an additional 16 bits of other information. =
+ To calculate data bandwidth, one should therefore do: data flits * 8B / ti=
+me.; Number of Non-Coherent Bypass flits.  These packets are generally used=
+ to transmit non-coherent data across QPI.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  This is one of three groups that allow us to track flits. =
+ It includes filters for NDR, NCB, and NCS message classes.  Each flit is m=
+ade up of 80 bits of information (in addition to some ECC data).  In full-w=
+idth (L0) mode, flits are made up of four fits, each of which contains 20 b=
+its of data (along with some additional ECC data).   In half-width (L0p) mo=
+de, the fits are only 10 bits, and therefore it takes twice as many fits to=
+ transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), =
+the transfers here refer to fits.  Therefore, in L0, the system will transf=
+er 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwi=
+dth of the link by taking: flits*80b/time.  Note that this is not the same =
+as data bandwidth.  For example, when we are transferring a 64B cacheline a=
+cross QPI, we will break it into 9 flits -- 1 with header information and 8=
+ with 64 bits of actual data and an additional 16 bits of other information=
+.  To calculate data bandwidth, one should therefore do: data flits * 8B / =
+time.; Number of Non-Coherent Bypass flits.  These packets are generally us=
+ed to transmit non-coherent data across QPI.",
+         "UMask": "0xc",
+         "Unit": "QPI LL"
+     },
+@@ -1006,7 +1006,7 @@
+         "EventCode": "0x1",
+         "EventName": "UNC_Q_TxL_FLITS_G2.NCB_DATA",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits trasmitted across=
+ the QPI Link.  This is one of three groups that allow us to track flits.  =
+It includes filters for NDR, NCB, and NCS message classes.  Each flit is ma=
+de up of 80 bits of information (in addition to some ECC data).  In full-wi=
+dth (L0) mode, flits are made up of four fits, each of which contains 20 bi=
+ts of data (along with some additional ECC data).   In half-width (L0p) mod=
+e, the fits are only 10 bits, and therefore it takes twice as many fits to =
+transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), t=
+he transfers here refer to fits.  Therefore, in L0, the system will transfe=
+r 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwid=
+th of the link by taking: flits*80b/time.  Note that this is not the same a=
+s data bandwidth.  For example, when we are transfering a 64B cacheline acr=
+oss QPI, we will break it into 9 flits -- 1 with header information and 8 w=
+ith 64 bits of actual data and an additional 16 bits of other information. =
+ To calculate data bandwidth, one should therefore do: data flits * 8B / ti=
+me.; Number of Non-Coherent Bypass data flits.  These flits are generally u=
+sed to transmit non-coherent data across QPI.  This does not include a coun=
+t of the DRS (coherent) data flits.  This only counts the data flits, not t=
+e NCB headers.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  This is one of three groups that allow us to track flits. =
+ It includes filters for NDR, NCB, and NCS message classes.  Each flit is m=
+ade up of 80 bits of information (in addition to some ECC data).  In full-w=
+idth (L0) mode, flits are made up of four fits, each of which contains 20 b=
+its of data (along with some additional ECC data).   In half-width (L0p) mo=
+de, the fits are only 10 bits, and therefore it takes twice as many fits to=
+ transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), =
+the transfers here refer to fits.  Therefore, in L0, the system will transf=
+er 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwi=
+dth of the link by taking: flits*80b/time.  Note that this is not the same =
+as data bandwidth.  For example, when we are transferring a 64B cacheline a=
+cross QPI, we will break it into 9 flits -- 1 with header information and 8=
+ with 64 bits of actual data and an additional 16 bits of other information=
+.  To calculate data bandwidth, one should therefore do: data flits * 8B / =
+time.; Number of Non-Coherent Bypass data flits.  These flits are generally=
+ used to transmit non-coherent data across QPI.  This does not include a co=
+unt of the DRS (coherent) data flits.  This only counts the data flits, not=
+ the NCB headers.",
+         "UMask": "0x4",
+         "Unit": "QPI LL"
+     },
+@@ -1015,7 +1015,7 @@
+         "EventCode": "0x1",
+         "EventName": "UNC_Q_TxL_FLITS_G2.NCB_NONDATA",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits trasmitted across=
+ the QPI Link.  This is one of three groups that allow us to track flits.  =
+It includes filters for NDR, NCB, and NCS message classes.  Each flit is ma=
+de up of 80 bits of information (in addition to some ECC data).  In full-wi=
+dth (L0) mode, flits are made up of four fits, each of which contains 20 bi=
+ts of data (along with some additional ECC data).   In half-width (L0p) mod=
+e, the fits are only 10 bits, and therefore it takes twice as many fits to =
+transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), t=
+he transfers here refer to fits.  Therefore, in L0, the system will transfe=
+r 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwid=
+th of the link by taking: flits*80b/time.  Note that this is not the same a=
+s data bandwidth.  For example, when we are transfering a 64B cacheline acr=
+oss QPI, we will break it into 9 flits -- 1 with header information and 8 w=
+ith 64 bits of actual data and an additional 16 bits of other information. =
+ To calculate data bandwidth, one should therefore do: data flits * 8B / ti=
+me.; Number of Non-Coherent Bypass non-data flits.  These packets are gener=
+ally used to transmit non-coherent data across QPI, and the flits counted h=
+ere are for headers and other non-data flits.  This includes extended heade=
+rs.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  This is one of three groups that allow us to track flits. =
+ It includes filters for NDR, NCB, and NCS message classes.  Each flit is m=
+ade up of 80 bits of information (in addition to some ECC data).  In full-w=
+idth (L0) mode, flits are made up of four fits, each of which contains 20 b=
+its of data (along with some additional ECC data).   In half-width (L0p) mo=
+de, the fits are only 10 bits, and therefore it takes twice as many fits to=
+ transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), =
+the transfers here refer to fits.  Therefore, in L0, the system will transf=
+er 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwi=
+dth of the link by taking: flits*80b/time.  Note that this is not the same =
+as data bandwidth.  For example, when we are transferring a 64B cacheline a=
+cross QPI, we will break it into 9 flits -- 1 with header information and 8=
+ with 64 bits of actual data and an additional 16 bits of other information=
+.  To calculate data bandwidth, one should therefore do: data flits * 8B / =
+time.; Number of Non-Coherent Bypass non-data flits.  These packets are gen=
+erally used to transmit non-coherent data across QPI, and the flits counted=
+ here are for headers and other non-data flits.  This includes extended hea=
+ders.",
+         "UMask": "0x8",
+         "Unit": "QPI LL"
+     },
+@@ -1024,7 +1024,7 @@
+         "EventCode": "0x1",
+         "EventName": "UNC_Q_TxL_FLITS_G2.NCS",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits trasmitted across=
+ the QPI Link.  This is one of three groups that allow us to track flits.  =
+It includes filters for NDR, NCB, and NCS message classes.  Each flit is ma=
+de up of 80 bits of information (in addition to some ECC data).  In full-wi=
+dth (L0) mode, flits are made up of four fits, each of which contains 20 bi=
+ts of data (along with some additional ECC data).   In half-width (L0p) mod=
+e, the fits are only 10 bits, and therefore it takes twice as many fits to =
+transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), t=
+he transfers here refer to fits.  Therefore, in L0, the system will transfe=
+r 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwid=
+th of the link by taking: flits*80b/time.  Note that this is not the same a=
+s data bandwidth.  For example, when we are transfering a 64B cacheline acr=
+oss QPI, we will break it into 9 flits -- 1 with header information and 8 w=
+ith 64 bits of actual data and an additional 16 bits of other information. =
+ To calculate data bandwidth, one should therefore do: data flits * 8B / ti=
+me.; Number of NCS (non-coherent standard) flits transmitted over QPI.    T=
+his includes extended headers.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  This is one of three groups that allow us to track flits. =
+ It includes filters for NDR, NCB, and NCS message classes.  Each flit is m=
+ade up of 80 bits of information (in addition to some ECC data).  In full-w=
+idth (L0) mode, flits are made up of four fits, each of which contains 20 b=
+its of data (along with some additional ECC data).   In half-width (L0p) mo=
+de, the fits are only 10 bits, and therefore it takes twice as many fits to=
+ transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), =
+the transfers here refer to fits.  Therefore, in L0, the system will transf=
+er 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwi=
+dth of the link by taking: flits*80b/time.  Note that this is not the same =
+as data bandwidth.  For example, when we are transferring a 64B cacheline a=
+cross QPI, we will break it into 9 flits -- 1 with header information and 8=
+ with 64 bits of actual data and an additional 16 bits of other information=
+.  To calculate data bandwidth, one should therefore do: data flits * 8B / =
+time.; Number of NCS (non-coherent standard) flits transmitted over QPI.   =
+ This includes extended headers.",
+         "UMask": "0x10",
+         "Unit": "QPI LL"
+     },
+@@ -1033,7 +1033,7 @@
+         "EventCode": "0x1",
+         "EventName": "UNC_Q_TxL_FLITS_G2.NDR_AD",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits trasmitted across=
+ the QPI Link.  This is one of three groups that allow us to track flits.  =
+It includes filters for NDR, NCB, and NCS message classes.  Each flit is ma=
+de up of 80 bits of information (in addition to some ECC data).  In full-wi=
+dth (L0) mode, flits are made up of four fits, each of which contains 20 bi=
+ts of data (along with some additional ECC data).   In half-width (L0p) mod=
+e, the fits are only 10 bits, and therefore it takes twice as many fits to =
+transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), t=
+he transfers here refer to fits.  Therefore, in L0, the system will transfe=
+r 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwid=
+th of the link by taking: flits*80b/time.  Note that this is not the same a=
+s data bandwidth.  For example, when we are transfering a 64B cacheline acr=
+oss QPI, we will break it into 9 flits -- 1 with header information and 8 w=
+ith 64 bits of actual data and an additional 16 bits of other information. =
+ To calculate data bandwidth, one should therefore do: data flits * 8B / ti=
+me.; Counts the total number of flits transmitted over the NDR (Non-Data Re=
+sponse) channel.  This channel is used to send a variety of protocol flits =
+including grants and completions.  This is only for NDR packets to the loca=
+l socket which use the AK ring.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  This is one of three groups that allow us to track flits. =
+ It includes filters for NDR, NCB, and NCS message classes.  Each flit is m=
+ade up of 80 bits of information (in addition to some ECC data).  In full-w=
+idth (L0) mode, flits are made up of four fits, each of which contains 20 b=
+its of data (along with some additional ECC data).   In half-width (L0p) mo=
+de, the fits are only 10 bits, and therefore it takes twice as many fits to=
+ transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), =
+the transfers here refer to fits.  Therefore, in L0, the system will transf=
+er 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwi=
+dth of the link by taking: flits*80b/time.  Note that this is not the same =
+as data bandwidth.  For example, when we are transferring a 64B cacheline a=
+cross QPI, we will break it into 9 flits -- 1 with header information and 8=
+ with 64 bits of actual data and an additional 16 bits of other information=
+.  To calculate data bandwidth, one should therefore do: data flits * 8B / =
+time.; Counts the total number of flits transmitted over the NDR (Non-Data =
+Response) channel.  This channel is used to send a variety of protocol flit=
+s including grants and completions.  This is only for NDR packets to the lo=
+cal socket which use the AK ring.",
+         "UMask": "0x1",
+         "Unit": "QPI LL"
+     },
+@@ -1042,7 +1042,7 @@
+         "EventCode": "0x1",
+         "EventName": "UNC_Q_TxL_FLITS_G2.NDR_AK",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts the number of flits trasmitted across=
+ the QPI Link.  This is one of three groups that allow us to track flits.  =
+It includes filters for NDR, NCB, and NCS message classes.  Each flit is ma=
+de up of 80 bits of information (in addition to some ECC data).  In full-wi=
+dth (L0) mode, flits are made up of four fits, each of which contains 20 bi=
+ts of data (along with some additional ECC data).   In half-width (L0p) mod=
+e, the fits are only 10 bits, and therefore it takes twice as many fits to =
+transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), t=
+he transfers here refer to fits.  Therefore, in L0, the system will transfe=
+r 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwid=
+th of the link by taking: flits*80b/time.  Note that this is not the same a=
+s data bandwidth.  For example, when we are transfering a 64B cacheline acr=
+oss QPI, we will break it into 9 flits -- 1 with header information and 8 w=
+ith 64 bits of actual data and an additional 16 bits of other information. =
+ To calculate data bandwidth, one should therefore do: data flits * 8B / ti=
+me.; Counts the total number of flits transmitted over the NDR (Non-Data Re=
+sponse) channel.  This channel is used to send a variety of protocol flits =
+including grants and completions.  This is only for NDR packets destined fo=
+r Route-thru to a remote socket.",
++        "PublicDescription": "Counts the number of flits transmitted acros=
+s the QPI Link.  This is one of three groups that allow us to track flits. =
+ It includes filters for NDR, NCB, and NCS message classes.  Each flit is m=
+ade up of 80 bits of information (in addition to some ECC data).  In full-w=
+idth (L0) mode, flits are made up of four fits, each of which contains 20 b=
+its of data (along with some additional ECC data).   In half-width (L0p) mo=
+de, the fits are only 10 bits, and therefore it takes twice as many fits to=
+ transmit a flit.  When one talks about QPI speed (for example, 8.0 GT/s), =
+the transfers here refer to fits.  Therefore, in L0, the system will transf=
+er 1 flit at the rate of 1/4th the QPI speed.  One can calculate the bandwi=
+dth of the link by taking: flits*80b/time.  Note that this is not the same =
+as data bandwidth.  For example, when we are transferring a 64B cacheline a=
+cross QPI, we will break it into 9 flits -- 1 with header information and 8=
+ with 64 bits of actual data and an additional 16 bits of other information=
+.  To calculate data bandwidth, one should therefore do: data flits * 8B / =
+time.; Counts the total number of flits transmitted over the NDR (Non-Data =
+Response) channel.  This channel is used to send a variety of protocol flit=
+s including grants and completions.  This is only for NDR packets destined =
+for Route-thru to a remote socket.",
+         "UMask": "0x2",
+         "Unit": "QPI LL"
+     },
+@@ -1157,7 +1157,7 @@
+         "EventCode": "0x23",
+         "EventName": "UNC_Q_TxR_AD_SNP_CREDIT_OCCUPANCY.VN0",
+         "PerPkg": "1",
+-        "PublicDescription": "Occupancy event that tracks the number of li=
+nk layer credits into the R3 (for transactions across the BGF) available in=
+ each cycle.  Flow Control FIFO fro Snoop messages on AD.",
++        "PublicDescription": "Occupancy event that tracks the number of li=
+nk layer credits into the R3 (for transactions across the BGF) available in=
+ each cycle.  Flow Control FIFO for Snoop messages on AD.",
+         "UMask": "0x1",
+         "Unit": "QPI LL"
+     },
+@@ -1166,7 +1166,7 @@
+         "EventCode": "0x23",
+         "EventName": "UNC_Q_TxR_AD_SNP_CREDIT_OCCUPANCY.VN1",
+         "PerPkg": "1",
+-        "PublicDescription": "Occupancy event that tracks the number of li=
+nk layer credits into the R3 (for transactions across the BGF) available in=
+ each cycle.  Flow Control FIFO fro Snoop messages on AD.",
++        "PublicDescription": "Occupancy event that tracks the number of li=
+nk layer credits into the R3 (for transactions across the BGF) available in=
+ each cycle.  Flow Control FIFO for Snoop messages on AD.",
+         "UMask": "0x2",
+         "Unit": "QPI LL"
+     },
+diff --git a/tools/perf/pmu-events/arch/x86/broadwellx/uncore-memory.json b=
+/tools/perf/pmu-events/arch/x86/broadwellx/uncore-memory.json
+index 34dfc3cf22ef..b5a33e7a68c6 100644
+--- a/tools/perf/pmu-events/arch/x86/broadwellx/uncore-memory.json
++++ b/tools/perf/pmu-events/arch/x86/broadwellx/uncore-memory.json
+@@ -51,7 +51,6 @@
+         "EventCode": "0xA1",
+         "EventName": "UNC_M_BYP_CMDS.ACT",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_M_BYP_CMDS.ACT",
+         "UMask": "0x1",
+         "Unit": "iMC"
+     },
+@@ -60,7 +59,6 @@
+         "EventCode": "0xA1",
+         "EventName": "UNC_M_BYP_CMDS.CAS",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_M_BYP_CMDS.CAS",
+         "UMask": "0x2",
+         "Unit": "iMC"
+     },
+@@ -69,7 +67,6 @@
+         "EventCode": "0xA1",
+         "EventName": "UNC_M_BYP_CMDS.PRE",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_M_BYP_CMDS.PRE",
+         "UMask": "0x4",
+         "Unit": "iMC"
+     },
+@@ -202,7 +199,7 @@
          "EventCode": "0x9",
          "EventName": "UNC_M_ECC_CORRECTABLE_ERRORS",
          "PerPkg": "1",
@@ -2277,2267 +3586,2567 @@ rrors in independent channel mode and 8 bit errors in lockstep mode.",
          "Unit": "iMC"
      },
      {
-@@ -302,6 +302,7 @@
+@@ -492,7 +489,6 @@
+         "EventCode": "0xA0",
+         "EventName": "UNC_M_RD_CAS_PRIO.HIGH",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_PRIO.HIGH",
+         "UMask": "0x4",
          "Unit": "iMC"
      },
-     {
-+        "BriefDescription": "UNC_M_POWER_PCU_THROTTLING",
-         "EventCode": "0x42",
-         "EventName": "UNC_M_POWER_PCU_THROTTLING",
+@@ -501,7 +497,6 @@
+         "EventCode": "0xA0",
+         "EventName": "UNC_M_RD_CAS_PRIO.LOW",
          "PerPkg": "1",
-@@ -487,6 +488,7 @@
+-        "PublicDescription": "UNC_M_RD_CAS_PRIO.LOW",
+         "UMask": "0x1",
+         "Unit": "iMC"
+     },
+@@ -510,7 +505,6 @@
+         "EventCode": "0xA0",
+         "EventName": "UNC_M_RD_CAS_PRIO.MED",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_PRIO.MED",
+         "UMask": "0x2",
+         "Unit": "iMC"
+     },
+@@ -519,7 +513,6 @@
+         "EventCode": "0xA0",
+         "EventName": "UNC_M_RD_CAS_PRIO.PANIC",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_PRIO.PANIC",
+         "UMask": "0x8",
+         "Unit": "iMC"
+     },
+@@ -528,7 +521,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.ALLBANKS",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.ALLBANKS",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : All Banks",
          "UMask": "0x10",
          "Unit": "iMC"
      },
-@@ -495,6 +497,7 @@
+@@ -537,7 +530,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK0",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 0",
          "Unit": "iMC"
      },
      {
-@@ -502,6 +505,7 @@
+@@ -545,7 +538,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK1",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 1",
          "UMask": "0x1",
          "Unit": "iMC"
      },
-@@ -510,6 +514,7 @@
+@@ -554,7 +547,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK10",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK10",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 10",
          "UMask": "0xa",
          "Unit": "iMC"
      },
-@@ -518,6 +523,7 @@
+@@ -563,7 +556,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK11",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK11",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 11",
          "UMask": "0xb",
          "Unit": "iMC"
      },
-@@ -526,6 +532,7 @@
+@@ -572,7 +565,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK12",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK12",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 12",
          "UMask": "0xc",
          "Unit": "iMC"
      },
-@@ -534,6 +541,7 @@
+@@ -581,7 +574,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK13",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK13",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 13",
          "UMask": "0xd",
          "Unit": "iMC"
      },
-@@ -542,6 +550,7 @@
+@@ -590,7 +583,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK14",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK14",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 14",
          "UMask": "0xe",
          "Unit": "iMC"
      },
-@@ -550,6 +559,7 @@
+@@ -599,7 +592,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK15",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK15",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 15",
          "UMask": "0xf",
          "Unit": "iMC"
      },
-@@ -558,6 +568,7 @@
+@@ -608,7 +601,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK2",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 2",
          "UMask": "0x2",
          "Unit": "iMC"
      },
-@@ -566,6 +577,7 @@
+@@ -617,7 +610,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK3",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 3",
          "UMask": "0x3",
          "Unit": "iMC"
      },
-@@ -574,6 +586,7 @@
+@@ -626,7 +619,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK4",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK4",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 4",
          "UMask": "0x4",
          "Unit": "iMC"
      },
-@@ -582,6 +595,7 @@
+@@ -635,7 +628,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK5",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK5",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 5",
          "UMask": "0x5",
          "Unit": "iMC"
      },
-@@ -590,6 +604,7 @@
+@@ -644,7 +637,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK6",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK6",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 6",
          "UMask": "0x6",
          "Unit": "iMC"
      },
-@@ -598,6 +613,7 @@
+@@ -653,7 +646,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK7",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK7",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 7",
          "UMask": "0x7",
          "Unit": "iMC"
      },
-@@ -606,6 +622,7 @@
+@@ -662,7 +655,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK8",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK8",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 8",
          "UMask": "0x8",
          "Unit": "iMC"
      },
-@@ -614,6 +631,7 @@
+@@ -671,7 +664,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANK9",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANK9",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 9",
          "UMask": "0x9",
          "Unit": "iMC"
      },
-@@ -622,6 +640,7 @@
+@@ -680,7 +673,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANKG0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANKG0",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 0 (Bank=
 s 0-3)",
          "UMask": "0x11",
          "Unit": "iMC"
      },
-@@ -630,6 +649,7 @@
+@@ -689,7 +682,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANKG1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANKG1",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 1 (Bank=
 s 4-7)",
          "UMask": "0x12",
          "Unit": "iMC"
      },
-@@ -638,6 +658,7 @@
+@@ -698,7 +691,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANKG2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANKG2",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 2 (Bank=
 s 8-11)",
          "UMask": "0x13",
          "Unit": "iMC"
      },
-@@ -646,6 +667,7 @@
+@@ -707,7 +700,7 @@
          "EventCode": "0xB0",
          "EventName": "UNC_M_RD_CAS_RANK0.BANKG3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK0.BANKG3",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 3 (Bank=
 s 12-15)",
          "UMask": "0x14",
          "Unit": "iMC"
      },
-@@ -654,6 +676,7 @@
+@@ -716,7 +709,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.ALLBANKS",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.ALLBANKS",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : All Banks",
          "UMask": "0x10",
          "Unit": "iMC"
      },
-@@ -662,6 +685,7 @@
+@@ -725,7 +718,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK0",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 0",
          "Unit": "iMC"
      },
      {
-@@ -669,6 +693,7 @@
+@@ -733,7 +726,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK1",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 1",
          "UMask": "0x1",
          "Unit": "iMC"
      },
-@@ -677,6 +702,7 @@
+@@ -742,7 +735,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK10",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK10",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 10",
          "UMask": "0xa",
          "Unit": "iMC"
      },
-@@ -685,6 +711,7 @@
+@@ -751,7 +744,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK11",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK11",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 11",
          "UMask": "0xb",
          "Unit": "iMC"
      },
-@@ -693,6 +720,7 @@
+@@ -760,7 +753,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK12",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK12",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 12",
          "UMask": "0xc",
          "Unit": "iMC"
      },
-@@ -701,6 +729,7 @@
+@@ -769,7 +762,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK13",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK13",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 13",
          "UMask": "0xd",
          "Unit": "iMC"
      },
-@@ -709,6 +738,7 @@
+@@ -778,7 +771,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK14",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK14",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 14",
          "UMask": "0xe",
          "Unit": "iMC"
      },
-@@ -717,6 +747,7 @@
+@@ -787,7 +780,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK15",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK15",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 15",
          "UMask": "0xf",
          "Unit": "iMC"
      },
-@@ -725,6 +756,7 @@
+@@ -796,7 +789,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK2",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 2",
          "UMask": "0x2",
          "Unit": "iMC"
      },
-@@ -733,6 +765,7 @@
+@@ -805,7 +798,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK3",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 3",
          "UMask": "0x3",
          "Unit": "iMC"
      },
-@@ -741,6 +774,7 @@
+@@ -814,7 +807,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK4",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK4",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 4",
          "UMask": "0x4",
          "Unit": "iMC"
      },
-@@ -749,6 +783,7 @@
+@@ -823,7 +816,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK5",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK5",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 5",
          "UMask": "0x5",
          "Unit": "iMC"
      },
-@@ -757,6 +792,7 @@
+@@ -832,7 +825,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK6",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK6",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 6",
          "UMask": "0x6",
          "Unit": "iMC"
      },
-@@ -765,6 +801,7 @@
+@@ -841,7 +834,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK7",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK7",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 7",
          "UMask": "0x7",
          "Unit": "iMC"
      },
-@@ -773,6 +810,7 @@
+@@ -850,7 +843,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK8",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK8",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 8",
          "UMask": "0x8",
          "Unit": "iMC"
      },
-@@ -781,6 +819,7 @@
+@@ -859,7 +852,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANK9",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANK9",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 9",
          "UMask": "0x9",
          "Unit": "iMC"
      },
-@@ -789,6 +828,7 @@
+@@ -868,7 +861,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANKG0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANKG0",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 0 (Bank=
 s 0-3)",
          "UMask": "0x11",
          "Unit": "iMC"
      },
-@@ -797,6 +837,7 @@
+@@ -877,7 +870,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANKG1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANKG1",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 1 (Bank=
 s 4-7)",
          "UMask": "0x12",
          "Unit": "iMC"
      },
-@@ -805,6 +846,7 @@
+@@ -886,7 +879,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANKG2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANKG2",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 2 (Bank=
 s 8-11)",
          "UMask": "0x13",
          "Unit": "iMC"
      },
-@@ -813,6 +855,7 @@
+@@ -895,7 +888,7 @@
          "EventCode": "0xB1",
          "EventName": "UNC_M_RD_CAS_RANK1.BANKG3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK1.BANKG3",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 3 (Bank=
 s 12-15)",
          "UMask": "0x14",
          "Unit": "iMC"
      },
-@@ -821,6 +864,7 @@
+@@ -904,7 +897,7 @@
          "EventCode": "0xB2",
          "EventName": "UNC_M_RD_CAS_RANK2.BANK0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK2.BANK0",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 0",
          "Unit": "iMC"
      },
      {
-@@ -828,6 +872,7 @@
+@@ -912,7 +905,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.ALLBANKS",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.ALLBANKS",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : All Banks",
          "UMask": "0x10",
          "Unit": "iMC"
      },
-@@ -836,6 +881,7 @@
+@@ -921,7 +914,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK0",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 0",
          "Unit": "iMC"
      },
      {
-@@ -843,6 +889,7 @@
+@@ -929,7 +922,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK1",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 1",
          "UMask": "0x1",
          "Unit": "iMC"
      },
-@@ -851,6 +898,7 @@
+@@ -938,7 +931,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK10",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK10",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 10",
          "UMask": "0xa",
          "Unit": "iMC"
      },
-@@ -859,6 +907,7 @@
+@@ -947,7 +940,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK11",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK11",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 11",
          "UMask": "0xb",
          "Unit": "iMC"
      },
-@@ -867,6 +916,7 @@
+@@ -956,7 +949,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK12",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK12",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 12",
          "UMask": "0xc",
          "Unit": "iMC"
      },
-@@ -875,6 +925,7 @@
+@@ -965,7 +958,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK13",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK13",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 13",
          "UMask": "0xd",
          "Unit": "iMC"
      },
-@@ -883,6 +934,7 @@
+@@ -974,7 +967,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK14",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK14",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 14",
          "UMask": "0xe",
          "Unit": "iMC"
      },
-@@ -891,6 +943,7 @@
+@@ -983,7 +976,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK15",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK15",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 15",
          "UMask": "0xf",
          "Unit": "iMC"
      },
-@@ -899,6 +952,7 @@
+@@ -992,7 +985,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK2",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 2",
          "UMask": "0x2",
          "Unit": "iMC"
      },
-@@ -907,6 +961,7 @@
+@@ -1001,7 +994,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK3",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 3",
          "UMask": "0x3",
          "Unit": "iMC"
      },
-@@ -915,6 +970,7 @@
+@@ -1010,7 +1003,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK4",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK4",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 4",
          "UMask": "0x4",
          "Unit": "iMC"
      },
-@@ -923,6 +979,7 @@
+@@ -1019,7 +1012,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK5",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK5",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 5",
          "UMask": "0x5",
          "Unit": "iMC"
      },
-@@ -931,6 +988,7 @@
+@@ -1028,7 +1021,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK6",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK6",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 6",
          "UMask": "0x6",
          "Unit": "iMC"
      },
-@@ -939,6 +997,7 @@
+@@ -1037,7 +1030,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK7",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK7",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 7",
          "UMask": "0x7",
          "Unit": "iMC"
      },
-@@ -947,6 +1006,7 @@
+@@ -1046,7 +1039,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK8",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK8",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 8",
          "UMask": "0x8",
          "Unit": "iMC"
      },
-@@ -955,6 +1015,7 @@
+@@ -1055,7 +1048,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANK9",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANK9",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 9",
          "UMask": "0x9",
          "Unit": "iMC"
      },
-@@ -963,6 +1024,7 @@
+@@ -1064,7 +1057,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANKG0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANKG0",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 0 (Bank=
 s 0-3)",
          "UMask": "0x11",
          "Unit": "iMC"
      },
-@@ -971,6 +1033,7 @@
+@@ -1073,7 +1066,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANKG1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANKG1",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 1 (Bank=
 s 4-7)",
          "UMask": "0x12",
          "Unit": "iMC"
      },
-@@ -979,6 +1042,7 @@
+@@ -1082,7 +1075,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANKG2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANKG2",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 2 (Bank=
 s 8-11)",
          "UMask": "0x13",
          "Unit": "iMC"
      },
-@@ -987,6 +1051,7 @@
+@@ -1091,7 +1084,7 @@
          "EventCode": "0xB4",
          "EventName": "UNC_M_RD_CAS_RANK4.BANKG3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK4.BANKG3",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 3 (Bank=
 s 12-15)",
          "UMask": "0x14",
          "Unit": "iMC"
      },
-@@ -995,6 +1060,7 @@
+@@ -1100,7 +1093,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.ALLBANKS",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.ALLBANKS",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : All Banks",
          "UMask": "0x10",
          "Unit": "iMC"
      },
-@@ -1003,6 +1069,7 @@
+@@ -1109,7 +1102,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK0",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 0",
          "Unit": "iMC"
      },
      {
-@@ -1010,6 +1077,7 @@
+@@ -1117,7 +1110,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK1",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 1",
          "UMask": "0x1",
          "Unit": "iMC"
      },
-@@ -1018,6 +1086,7 @@
+@@ -1126,7 +1119,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK10",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK10",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 10",
          "UMask": "0xa",
          "Unit": "iMC"
      },
-@@ -1026,6 +1095,7 @@
+@@ -1135,7 +1128,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK11",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK11",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 11",
          "UMask": "0xb",
          "Unit": "iMC"
      },
-@@ -1034,6 +1104,7 @@
+@@ -1144,7 +1137,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK12",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK12",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 12",
          "UMask": "0xc",
          "Unit": "iMC"
      },
-@@ -1042,6 +1113,7 @@
+@@ -1153,7 +1146,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK13",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK13",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 13",
          "UMask": "0xd",
          "Unit": "iMC"
      },
-@@ -1050,6 +1122,7 @@
+@@ -1162,7 +1155,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK14",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK14",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 14",
          "UMask": "0xe",
          "Unit": "iMC"
      },
-@@ -1058,6 +1131,7 @@
+@@ -1171,7 +1164,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK15",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK15",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 15",
          "UMask": "0xf",
          "Unit": "iMC"
      },
-@@ -1066,6 +1140,7 @@
+@@ -1180,7 +1173,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK2",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 2",
          "UMask": "0x2",
          "Unit": "iMC"
      },
-@@ -1074,6 +1149,7 @@
+@@ -1189,7 +1182,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK3",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 3",
          "UMask": "0x3",
          "Unit": "iMC"
      },
-@@ -1082,6 +1158,7 @@
+@@ -1198,7 +1191,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK4",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK4",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 4",
          "UMask": "0x4",
          "Unit": "iMC"
      },
-@@ -1090,6 +1167,7 @@
+@@ -1207,7 +1200,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK5",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK5",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 5",
          "UMask": "0x5",
          "Unit": "iMC"
      },
-@@ -1098,6 +1176,7 @@
+@@ -1216,7 +1209,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK6",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK6",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 6",
          "UMask": "0x6",
          "Unit": "iMC"
      },
-@@ -1106,6 +1185,7 @@
+@@ -1225,7 +1218,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK7",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK7",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 7",
          "UMask": "0x7",
          "Unit": "iMC"
      },
-@@ -1114,6 +1194,7 @@
+@@ -1234,7 +1227,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK8",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK8",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 8",
          "UMask": "0x8",
          "Unit": "iMC"
      },
-@@ -1122,6 +1203,7 @@
+@@ -1243,7 +1236,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANK9",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANK9",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 9",
          "UMask": "0x9",
          "Unit": "iMC"
      },
-@@ -1130,6 +1212,7 @@
+@@ -1252,7 +1245,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANKG0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANKG0",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 0 (Bank=
 s 0-3)",
          "UMask": "0x11",
          "Unit": "iMC"
      },
-@@ -1138,6 +1221,7 @@
+@@ -1261,7 +1254,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANKG1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANKG1",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 1 (Bank=
 s 4-7)",
          "UMask": "0x12",
          "Unit": "iMC"
      },
-@@ -1146,6 +1230,7 @@
+@@ -1270,7 +1263,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANKG2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANKG2",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 2 (Bank=
 s 8-11)",
          "UMask": "0x13",
          "Unit": "iMC"
      },
-@@ -1154,6 +1239,7 @@
+@@ -1279,7 +1272,7 @@
          "EventCode": "0xB5",
          "EventName": "UNC_M_RD_CAS_RANK5.BANKG3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK5.BANKG3",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 3 (Bank=
 s 12-15)",
          "UMask": "0x14",
          "Unit": "iMC"
      },
-@@ -1162,6 +1248,7 @@
+@@ -1288,7 +1281,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.ALLBANKS",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.ALLBANKS",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : All Banks",
          "UMask": "0x10",
          "Unit": "iMC"
      },
-@@ -1170,6 +1257,7 @@
+@@ -1297,7 +1290,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK0",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 0",
          "Unit": "iMC"
      },
      {
-@@ -1177,6 +1265,7 @@
+@@ -1305,7 +1298,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK1",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 1",
          "UMask": "0x1",
          "Unit": "iMC"
      },
-@@ -1185,6 +1274,7 @@
+@@ -1314,7 +1307,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK10",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK10",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 10",
          "UMask": "0xa",
          "Unit": "iMC"
      },
-@@ -1193,6 +1283,7 @@
+@@ -1323,7 +1316,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK11",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK11",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 11",
          "UMask": "0xb",
          "Unit": "iMC"
      },
-@@ -1201,6 +1292,7 @@
+@@ -1332,7 +1325,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK12",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK12",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 12",
          "UMask": "0xc",
          "Unit": "iMC"
      },
-@@ -1209,6 +1301,7 @@
+@@ -1341,7 +1334,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK13",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK13",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 13",
          "UMask": "0xd",
          "Unit": "iMC"
      },
-@@ -1217,6 +1310,7 @@
+@@ -1350,7 +1343,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK14",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK14",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 14",
          "UMask": "0xe",
          "Unit": "iMC"
      },
-@@ -1225,6 +1319,7 @@
+@@ -1359,7 +1352,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK15",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK15",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 15",
          "UMask": "0xf",
          "Unit": "iMC"
      },
-@@ -1233,6 +1328,7 @@
+@@ -1368,7 +1361,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK2",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 2",
          "UMask": "0x2",
          "Unit": "iMC"
      },
-@@ -1241,6 +1337,7 @@
+@@ -1377,7 +1370,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK3",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 3",
          "UMask": "0x3",
          "Unit": "iMC"
      },
-@@ -1249,6 +1346,7 @@
+@@ -1386,7 +1379,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK4",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK4",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 4",
          "UMask": "0x4",
          "Unit": "iMC"
      },
-@@ -1257,6 +1355,7 @@
+@@ -1395,7 +1388,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK5",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK5",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 5",
          "UMask": "0x5",
          "Unit": "iMC"
      },
-@@ -1265,6 +1364,7 @@
+@@ -1404,7 +1397,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK6",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK6",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 6",
          "UMask": "0x6",
          "Unit": "iMC"
      },
-@@ -1273,6 +1373,7 @@
+@@ -1413,7 +1406,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK7",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK7",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 7",
          "UMask": "0x7",
          "Unit": "iMC"
      },
-@@ -1281,6 +1382,7 @@
+@@ -1422,7 +1415,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK8",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK8",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 8",
          "UMask": "0x8",
          "Unit": "iMC"
      },
-@@ -1289,6 +1391,7 @@
+@@ -1431,7 +1424,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANK9",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANK9",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 9",
          "UMask": "0x9",
          "Unit": "iMC"
      },
-@@ -1297,6 +1400,7 @@
+@@ -1440,7 +1433,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANKG0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANKG0",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 0 (Bank=
 s 0-3)",
          "UMask": "0x11",
          "Unit": "iMC"
      },
-@@ -1305,6 +1409,7 @@
+@@ -1449,7 +1442,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANKG1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANKG1",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 1 (Bank=
 s 4-7)",
          "UMask": "0x12",
          "Unit": "iMC"
      },
-@@ -1313,6 +1418,7 @@
+@@ -1458,7 +1451,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANKG2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANKG2",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 2 (Bank=
 s 8-11)",
          "UMask": "0x13",
          "Unit": "iMC"
      },
-@@ -1321,6 +1427,7 @@
+@@ -1467,7 +1460,7 @@
          "EventCode": "0xB6",
          "EventName": "UNC_M_RD_CAS_RANK6.BANKG3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK6.BANKG3",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 3 (Bank=
 s 12-15)",
          "UMask": "0x14",
          "Unit": "iMC"
      },
-@@ -1329,6 +1436,7 @@
+@@ -1476,7 +1469,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.ALLBANKS",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.ALLBANKS",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : All Banks",
          "UMask": "0x10",
          "Unit": "iMC"
      },
-@@ -1337,6 +1445,7 @@
+@@ -1485,7 +1478,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK0",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 0",
          "Unit": "iMC"
      },
      {
-@@ -1344,6 +1453,7 @@
+@@ -1493,7 +1486,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK1",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 1",
          "UMask": "0x1",
          "Unit": "iMC"
      },
-@@ -1352,6 +1462,7 @@
+@@ -1502,7 +1495,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK10",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK10",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 10",
          "UMask": "0xa",
          "Unit": "iMC"
      },
-@@ -1360,6 +1471,7 @@
+@@ -1511,7 +1504,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK11",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK11",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 11",
          "UMask": "0xb",
          "Unit": "iMC"
      },
-@@ -1368,6 +1480,7 @@
+@@ -1520,7 +1513,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK12",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK12",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 12",
          "UMask": "0xc",
          "Unit": "iMC"
      },
-@@ -1376,6 +1489,7 @@
+@@ -1529,7 +1522,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK13",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK13",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 13",
          "UMask": "0xd",
          "Unit": "iMC"
      },
-@@ -1384,6 +1498,7 @@
+@@ -1538,7 +1531,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK14",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK14",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 14",
          "UMask": "0xe",
          "Unit": "iMC"
      },
-@@ -1392,6 +1507,7 @@
+@@ -1547,7 +1540,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK15",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK15",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 15",
          "UMask": "0xf",
          "Unit": "iMC"
      },
-@@ -1400,6 +1516,7 @@
+@@ -1556,7 +1549,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK2",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 2",
          "UMask": "0x2",
          "Unit": "iMC"
      },
-@@ -1408,6 +1525,7 @@
+@@ -1565,7 +1558,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK3",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 3",
          "UMask": "0x3",
          "Unit": "iMC"
      },
-@@ -1416,6 +1534,7 @@
+@@ -1574,7 +1567,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK4",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK4",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 4",
          "UMask": "0x4",
          "Unit": "iMC"
      },
-@@ -1424,6 +1543,7 @@
+@@ -1583,7 +1576,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK5",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK5",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 5",
          "UMask": "0x5",
          "Unit": "iMC"
      },
-@@ -1432,6 +1552,7 @@
+@@ -1592,7 +1585,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK6",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK6",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 6",
          "UMask": "0x6",
          "Unit": "iMC"
      },
-@@ -1440,6 +1561,7 @@
+@@ -1601,7 +1594,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK7",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK7",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 7",
          "UMask": "0x7",
          "Unit": "iMC"
      },
-@@ -1448,6 +1570,7 @@
+@@ -1610,7 +1603,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK8",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK8",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 8",
          "UMask": "0x8",
          "Unit": "iMC"
      },
-@@ -1456,6 +1579,7 @@
+@@ -1619,7 +1612,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANK9",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANK9",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank 9",
          "UMask": "0x9",
          "Unit": "iMC"
      },
-@@ -1464,6 +1588,7 @@
+@@ -1628,7 +1621,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANKG0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANKG0",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 0 (Bank=
 s 0-3)",
          "UMask": "0x11",
          "Unit": "iMC"
      },
-@@ -1472,6 +1597,7 @@
+@@ -1637,7 +1630,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANKG1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANKG1",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 1 (Bank=
 s 4-7)",
          "UMask": "0x12",
          "Unit": "iMC"
      },
-@@ -1480,6 +1606,7 @@
+@@ -1646,7 +1639,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANKG2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANKG2",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 2 (Bank=
 s 8-11)",
          "UMask": "0x13",
          "Unit": "iMC"
      },
-@@ -1488,6 +1615,7 @@
+@@ -1655,7 +1648,7 @@
          "EventCode": "0xB7",
          "EventName": "UNC_M_RD_CAS_RANK7.BANKG3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_RD_CAS_RANK7.BANKG3",
 +        "PublicDescription": "RD_CAS Access to Rank 0 : Bank Group 3 (Bank=
 s 12-15)",
          "UMask": "0x14",
          "Unit": "iMC"
      },
-@@ -1598,6 +1726,7 @@
+@@ -1680,7 +1673,6 @@
+         "EventCode": "0x91",
+         "EventName": "UNC_M_VMSE_MXB_WR_OCCUPANCY",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_M_VMSE_MXB_WR_OCCUPANCY",
+         "Unit": "iMC"
+     },
+     {
+@@ -1688,7 +1680,6 @@
+         "EventCode": "0x90",
+         "EventName": "UNC_M_VMSE_WR_PUSH.RMM",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_M_VMSE_WR_PUSH.RMM",
+         "UMask": "0x2",
+         "Unit": "iMC"
+     },
+@@ -1697,7 +1688,6 @@
+         "EventCode": "0x90",
+         "EventName": "UNC_M_VMSE_WR_PUSH.WMM",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_M_VMSE_WR_PUSH.WMM",
+         "UMask": "0x1",
+         "Unit": "iMC"
+     },
+@@ -1706,7 +1696,6 @@
+         "EventCode": "0xC0",
+         "EventName": "UNC_M_WMM_TO_RMM.LOW_THRESH",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WMM_TO_RMM.LOW_THRESH",
+         "UMask": "0x1",
+         "Unit": "iMC"
+     },
+@@ -1715,7 +1704,6 @@
+         "EventCode": "0xC0",
+         "EventName": "UNC_M_WMM_TO_RMM.STARVE",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WMM_TO_RMM.STARVE",
+         "UMask": "0x2",
+         "Unit": "iMC"
+     },
+@@ -1724,7 +1712,6 @@
+         "EventCode": "0xC0",
+         "EventName": "UNC_M_WMM_TO_RMM.VMSE_RETRY",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WMM_TO_RMM.VMSE_RETRY",
+         "UMask": "0x4",
+         "Unit": "iMC"
+     },
+@@ -1765,7 +1752,6 @@
+         "EventCode": "0xC1",
+         "EventName": "UNC_M_WRONG_MM",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WRONG_MM",
+         "Unit": "iMC"
+     },
+     {
+@@ -1773,7 +1759,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.ALLBANKS",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.ALLBANKS",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : All Banks",
          "UMask": "0x10",
          "Unit": "iMC"
      },
-@@ -1606,6 +1735,7 @@
+@@ -1782,7 +1768,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK0",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 0",
          "Unit": "iMC"
      },
      {
-@@ -1613,6 +1743,7 @@
+@@ -1790,7 +1776,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK1",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 1",
          "UMask": "0x1",
          "Unit": "iMC"
      },
-@@ -1621,6 +1752,7 @@
+@@ -1799,7 +1785,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK10",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK10",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 10",
          "UMask": "0xa",
          "Unit": "iMC"
      },
-@@ -1629,6 +1761,7 @@
+@@ -1808,7 +1794,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK11",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK11",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 11",
          "UMask": "0xb",
          "Unit": "iMC"
      },
-@@ -1637,6 +1770,7 @@
+@@ -1817,7 +1803,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK12",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK12",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 12",
          "UMask": "0xc",
          "Unit": "iMC"
      },
-@@ -1645,6 +1779,7 @@
+@@ -1826,7 +1812,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK13",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK13",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 13",
          "UMask": "0xd",
          "Unit": "iMC"
      },
-@@ -1653,6 +1788,7 @@
+@@ -1835,7 +1821,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK14",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK14",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 14",
          "UMask": "0xe",
          "Unit": "iMC"
      },
-@@ -1661,6 +1797,7 @@
+@@ -1844,7 +1830,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK15",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK15",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 15",
          "UMask": "0xf",
          "Unit": "iMC"
      },
-@@ -1669,6 +1806,7 @@
+@@ -1853,7 +1839,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK2",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 2",
          "UMask": "0x2",
          "Unit": "iMC"
      },
-@@ -1677,6 +1815,7 @@
+@@ -1862,7 +1848,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK3",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 3",
          "UMask": "0x3",
          "Unit": "iMC"
      },
-@@ -1685,6 +1824,7 @@
+@@ -1871,7 +1857,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK4",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK4",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 4",
          "UMask": "0x4",
          "Unit": "iMC"
      },
-@@ -1693,6 +1833,7 @@
+@@ -1880,7 +1866,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK5",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK5",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 5",
          "UMask": "0x5",
          "Unit": "iMC"
      },
-@@ -1701,6 +1842,7 @@
+@@ -1889,7 +1875,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK6",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK6",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 6",
          "UMask": "0x6",
          "Unit": "iMC"
      },
-@@ -1709,6 +1851,7 @@
+@@ -1898,7 +1884,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK7",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK7",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 7",
          "UMask": "0x7",
          "Unit": "iMC"
      },
-@@ -1717,6 +1860,7 @@
+@@ -1907,7 +1893,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK8",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK8",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 8",
          "UMask": "0x8",
          "Unit": "iMC"
      },
-@@ -1725,6 +1869,7 @@
+@@ -1916,7 +1902,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANK9",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANK9",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 9",
          "UMask": "0x9",
          "Unit": "iMC"
      },
-@@ -1733,6 +1878,7 @@
+@@ -1925,7 +1911,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANKG0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANKG0",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 0 (Bank=
 s 0-3)",
          "UMask": "0x11",
          "Unit": "iMC"
      },
-@@ -1741,6 +1887,7 @@
+@@ -1934,7 +1920,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANKG1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANKG1",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 1 (Bank=
 s 4-7)",
          "UMask": "0x12",
          "Unit": "iMC"
      },
-@@ -1749,6 +1896,7 @@
+@@ -1943,7 +1929,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANKG2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANKG2",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 2 (Bank=
 s 8-11)",
          "UMask": "0x13",
          "Unit": "iMC"
      },
-@@ -1757,6 +1905,7 @@
+@@ -1952,7 +1938,7 @@
          "EventCode": "0xB8",
          "EventName": "UNC_M_WR_CAS_RANK0.BANKG3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK0.BANKG3",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 3 (Bank=
 s 12-15)",
          "UMask": "0x14",
          "Unit": "iMC"
      },
-@@ -1765,6 +1914,7 @@
+@@ -1961,7 +1947,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.ALLBANKS",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.ALLBANKS",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : All Banks",
          "UMask": "0x10",
          "Unit": "iMC"
      },
-@@ -1773,6 +1923,7 @@
+@@ -1970,7 +1956,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK0",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 0",
          "Unit": "iMC"
      },
      {
-@@ -1780,6 +1931,7 @@
+@@ -1978,7 +1964,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK1",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 1",
          "UMask": "0x1",
          "Unit": "iMC"
      },
-@@ -1788,6 +1940,7 @@
+@@ -1987,7 +1973,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK10",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK10",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 10",
          "UMask": "0xa",
          "Unit": "iMC"
      },
-@@ -1796,6 +1949,7 @@
+@@ -1996,7 +1982,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK11",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK11",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 11",
          "UMask": "0xb",
          "Unit": "iMC"
      },
-@@ -1804,6 +1958,7 @@
+@@ -2005,7 +1991,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK12",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK12",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 12",
          "UMask": "0xc",
          "Unit": "iMC"
      },
-@@ -1812,6 +1967,7 @@
+@@ -2014,7 +2000,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK13",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK13",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 13",
          "UMask": "0xd",
          "Unit": "iMC"
      },
-@@ -1820,6 +1976,7 @@
+@@ -2023,7 +2009,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK14",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK14",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 14",
          "UMask": "0xe",
          "Unit": "iMC"
      },
-@@ -1828,6 +1985,7 @@
+@@ -2032,7 +2018,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK15",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK15",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 15",
          "UMask": "0xf",
          "Unit": "iMC"
      },
-@@ -1836,6 +1994,7 @@
+@@ -2041,7 +2027,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK2",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 2",
          "UMask": "0x2",
          "Unit": "iMC"
      },
-@@ -1844,6 +2003,7 @@
+@@ -2050,7 +2036,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK3",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 3",
          "UMask": "0x3",
          "Unit": "iMC"
      },
-@@ -1852,6 +2012,7 @@
+@@ -2059,7 +2045,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK4",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK4",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 4",
          "UMask": "0x4",
          "Unit": "iMC"
      },
-@@ -1860,6 +2021,7 @@
+@@ -2068,7 +2054,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK5",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK5",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 5",
          "UMask": "0x5",
          "Unit": "iMC"
      },
-@@ -1868,6 +2030,7 @@
+@@ -2077,7 +2063,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK6",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK6",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 6",
          "UMask": "0x6",
          "Unit": "iMC"
      },
-@@ -1876,6 +2039,7 @@
+@@ -2086,7 +2072,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK7",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK7",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 7",
          "UMask": "0x7",
          "Unit": "iMC"
      },
-@@ -1884,6 +2048,7 @@
+@@ -2095,7 +2081,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK8",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK8",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 8",
          "UMask": "0x8",
          "Unit": "iMC"
      },
-@@ -1892,6 +2057,7 @@
+@@ -2104,7 +2090,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANK9",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANK9",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 9",
          "UMask": "0x9",
          "Unit": "iMC"
      },
-@@ -1900,6 +2066,7 @@
+@@ -2113,7 +2099,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANKG0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANKG0",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 0 (Bank=
 s 0-3)",
          "UMask": "0x11",
          "Unit": "iMC"
      },
-@@ -1908,6 +2075,7 @@
+@@ -2122,7 +2108,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANKG1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANKG1",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 1 (Bank=
 s 4-7)",
          "UMask": "0x12",
          "Unit": "iMC"
      },
-@@ -1916,6 +2084,7 @@
+@@ -2131,7 +2117,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANKG2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANKG2",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 2 (Bank=
 s 8-11)",
          "UMask": "0x13",
          "Unit": "iMC"
      },
-@@ -1924,6 +2093,7 @@
+@@ -2140,7 +2126,7 @@
          "EventCode": "0xB9",
          "EventName": "UNC_M_WR_CAS_RANK1.BANKG3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK1.BANKG3",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 3 (Bank=
 s 12-15)",
          "UMask": "0x14",
          "Unit": "iMC"
      },
-@@ -1932,6 +2102,7 @@
+@@ -2149,7 +2135,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.ALLBANKS",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.ALLBANKS",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : All Banks",
          "UMask": "0x10",
          "Unit": "iMC"
      },
-@@ -1940,6 +2111,7 @@
+@@ -2158,7 +2144,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK0",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 0",
          "Unit": "iMC"
      },
      {
-@@ -1947,6 +2119,7 @@
+@@ -2166,7 +2152,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK1",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 1",
          "UMask": "0x1",
          "Unit": "iMC"
      },
-@@ -1955,6 +2128,7 @@
+@@ -2175,7 +2161,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK10",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK10",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 10",
          "UMask": "0xa",
          "Unit": "iMC"
      },
-@@ -1963,6 +2137,7 @@
+@@ -2184,7 +2170,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK11",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK11",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 11",
          "UMask": "0xb",
          "Unit": "iMC"
      },
-@@ -1971,6 +2146,7 @@
+@@ -2193,7 +2179,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK12",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK12",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 12",
          "UMask": "0xc",
          "Unit": "iMC"
      },
-@@ -1979,6 +2155,7 @@
+@@ -2202,7 +2188,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK13",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK13",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 13",
          "UMask": "0xd",
          "Unit": "iMC"
      },
-@@ -1987,6 +2164,7 @@
+@@ -2211,7 +2197,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK14",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK14",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 14",
          "UMask": "0xe",
          "Unit": "iMC"
      },
-@@ -1995,6 +2173,7 @@
+@@ -2220,7 +2206,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK15",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK15",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 15",
          "UMask": "0xf",
          "Unit": "iMC"
      },
-@@ -2003,6 +2182,7 @@
+@@ -2229,7 +2215,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK2",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 2",
          "UMask": "0x2",
          "Unit": "iMC"
      },
-@@ -2011,6 +2191,7 @@
+@@ -2238,7 +2224,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK3",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 3",
          "UMask": "0x3",
          "Unit": "iMC"
      },
-@@ -2019,6 +2200,7 @@
+@@ -2247,7 +2233,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK4",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK4",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 4",
          "UMask": "0x4",
          "Unit": "iMC"
      },
-@@ -2027,6 +2209,7 @@
+@@ -2256,7 +2242,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK5",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK5",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 5",
          "UMask": "0x5",
          "Unit": "iMC"
      },
-@@ -2035,6 +2218,7 @@
+@@ -2265,7 +2251,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK6",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK6",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 6",
          "UMask": "0x6",
          "Unit": "iMC"
      },
-@@ -2043,6 +2227,7 @@
+@@ -2274,7 +2260,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK7",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK7",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 7",
          "UMask": "0x7",
          "Unit": "iMC"
      },
-@@ -2051,6 +2236,7 @@
+@@ -2283,7 +2269,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK8",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK8",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 8",
          "UMask": "0x8",
          "Unit": "iMC"
      },
-@@ -2059,6 +2245,7 @@
+@@ -2292,7 +2278,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANK9",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANK9",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 9",
          "UMask": "0x9",
          "Unit": "iMC"
      },
-@@ -2067,6 +2254,7 @@
+@@ -2301,7 +2287,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANKG0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANKG0",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 0 (Bank=
 s 0-3)",
          "UMask": "0x11",
          "Unit": "iMC"
      },
-@@ -2075,6 +2263,7 @@
+@@ -2310,7 +2296,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANKG1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANKG1",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 1 (Bank=
 s 4-7)",
          "UMask": "0x12",
          "Unit": "iMC"
      },
-@@ -2083,6 +2272,7 @@
+@@ -2319,7 +2305,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANKG2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANKG2",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 2 (Bank=
 s 8-11)",
          "UMask": "0x13",
          "Unit": "iMC"
      },
-@@ -2091,6 +2281,7 @@
+@@ -2328,7 +2314,7 @@
          "EventCode": "0xBC",
          "EventName": "UNC_M_WR_CAS_RANK4.BANKG3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK4.BANKG3",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 3 (Bank=
 s 12-15)",
          "UMask": "0x14",
          "Unit": "iMC"
      },
-@@ -2099,6 +2290,7 @@
+@@ -2337,7 +2323,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.ALLBANKS",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.ALLBANKS",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : All Banks",
          "UMask": "0x10",
          "Unit": "iMC"
      },
-@@ -2107,6 +2299,7 @@
+@@ -2346,7 +2332,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK0",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 0",
          "Unit": "iMC"
      },
      {
-@@ -2114,6 +2307,7 @@
+@@ -2354,7 +2340,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK1",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 1",
          "UMask": "0x1",
          "Unit": "iMC"
      },
-@@ -2122,6 +2316,7 @@
+@@ -2363,7 +2349,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK10",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK10",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 10",
          "UMask": "0xa",
          "Unit": "iMC"
      },
-@@ -2130,6 +2325,7 @@
+@@ -2372,7 +2358,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK11",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK11",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 11",
          "UMask": "0xb",
          "Unit": "iMC"
      },
-@@ -2138,6 +2334,7 @@
+@@ -2381,7 +2367,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK12",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK12",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 12",
          "UMask": "0xc",
          "Unit": "iMC"
      },
-@@ -2146,6 +2343,7 @@
+@@ -2390,7 +2376,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK13",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK13",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 13",
          "UMask": "0xd",
          "Unit": "iMC"
      },
-@@ -2154,6 +2352,7 @@
+@@ -2399,7 +2385,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK14",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK14",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 14",
          "UMask": "0xe",
          "Unit": "iMC"
      },
-@@ -2162,6 +2361,7 @@
+@@ -2408,7 +2394,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK15",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK15",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 15",
          "UMask": "0xf",
          "Unit": "iMC"
      },
-@@ -2170,6 +2370,7 @@
+@@ -2417,7 +2403,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK2",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 2",
          "UMask": "0x2",
          "Unit": "iMC"
      },
-@@ -2178,6 +2379,7 @@
+@@ -2426,7 +2412,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK3",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 3",
          "UMask": "0x3",
          "Unit": "iMC"
      },
-@@ -2186,6 +2388,7 @@
+@@ -2435,7 +2421,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK4",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK4",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 4",
          "UMask": "0x4",
          "Unit": "iMC"
      },
-@@ -2194,6 +2397,7 @@
+@@ -2444,7 +2430,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK5",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK5",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 5",
          "UMask": "0x5",
          "Unit": "iMC"
      },
-@@ -2202,6 +2406,7 @@
+@@ -2453,7 +2439,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK6",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK6",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 6",
          "UMask": "0x6",
          "Unit": "iMC"
      },
-@@ -2210,6 +2415,7 @@
+@@ -2462,7 +2448,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK7",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK7",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 7",
          "UMask": "0x7",
          "Unit": "iMC"
      },
-@@ -2218,6 +2424,7 @@
+@@ -2471,7 +2457,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK8",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK8",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 8",
          "UMask": "0x8",
          "Unit": "iMC"
      },
-@@ -2226,6 +2433,7 @@
+@@ -2480,7 +2466,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANK9",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANK9",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 9",
          "UMask": "0x9",
          "Unit": "iMC"
      },
-@@ -2234,6 +2442,7 @@
+@@ -2489,7 +2475,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANKG0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANKG0",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 0 (Bank=
 s 0-3)",
          "UMask": "0x11",
          "Unit": "iMC"
      },
-@@ -2242,6 +2451,7 @@
+@@ -2498,7 +2484,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANKG1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANKG1",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 1 (Bank=
 s 4-7)",
          "UMask": "0x12",
          "Unit": "iMC"
      },
-@@ -2250,6 +2460,7 @@
+@@ -2507,7 +2493,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANKG2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANKG2",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 2 (Bank=
 s 8-11)",
          "UMask": "0x13",
          "Unit": "iMC"
      },
-@@ -2258,6 +2469,7 @@
+@@ -2516,7 +2502,7 @@
          "EventCode": "0xBD",
          "EventName": "UNC_M_WR_CAS_RANK5.BANKG3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK5.BANKG3",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 3 (Bank=
 s 12-15)",
          "UMask": "0x14",
          "Unit": "iMC"
      },
-@@ -2266,6 +2478,7 @@
+@@ -2525,7 +2511,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.ALLBANKS",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.ALLBANKS",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : All Banks",
          "UMask": "0x10",
          "Unit": "iMC"
      },
-@@ -2274,6 +2487,7 @@
+@@ -2534,7 +2520,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK0",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 0",
          "Unit": "iMC"
      },
      {
-@@ -2281,6 +2495,7 @@
+@@ -2542,7 +2528,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK1",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 1",
          "UMask": "0x1",
          "Unit": "iMC"
      },
-@@ -2289,6 +2504,7 @@
+@@ -2551,7 +2537,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK10",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK10",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 10",
          "UMask": "0xa",
          "Unit": "iMC"
      },
-@@ -2297,6 +2513,7 @@
+@@ -2560,7 +2546,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK11",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK11",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 11",
          "UMask": "0xb",
          "Unit": "iMC"
      },
-@@ -2305,6 +2522,7 @@
+@@ -2569,7 +2555,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK12",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK12",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 12",
          "UMask": "0xc",
          "Unit": "iMC"
      },
-@@ -2313,6 +2531,7 @@
+@@ -2578,7 +2564,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK13",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK13",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 13",
          "UMask": "0xd",
          "Unit": "iMC"
      },
-@@ -2321,6 +2540,7 @@
+@@ -2587,7 +2573,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK14",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK14",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 14",
          "UMask": "0xe",
          "Unit": "iMC"
      },
-@@ -2329,6 +2549,7 @@
+@@ -2596,7 +2582,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK15",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK15",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 15",
          "UMask": "0xf",
          "Unit": "iMC"
      },
-@@ -2337,6 +2558,7 @@
+@@ -2605,7 +2591,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK2",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 2",
          "UMask": "0x2",
          "Unit": "iMC"
      },
-@@ -2345,6 +2567,7 @@
+@@ -2614,7 +2600,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK3",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 3",
          "UMask": "0x3",
          "Unit": "iMC"
      },
-@@ -2353,6 +2576,7 @@
+@@ -2623,7 +2609,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK4",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK4",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 4",
          "UMask": "0x4",
          "Unit": "iMC"
      },
-@@ -2361,6 +2585,7 @@
+@@ -2632,7 +2618,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK5",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK5",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 5",
          "UMask": "0x5",
          "Unit": "iMC"
      },
-@@ -2369,6 +2594,7 @@
+@@ -2641,7 +2627,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK6",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK6",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 6",
          "UMask": "0x6",
          "Unit": "iMC"
      },
-@@ -2377,6 +2603,7 @@
+@@ -2650,7 +2636,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK7",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK7",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 7",
          "UMask": "0x7",
          "Unit": "iMC"
      },
-@@ -2385,6 +2612,7 @@
+@@ -2659,7 +2645,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK8",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK8",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 8",
          "UMask": "0x8",
          "Unit": "iMC"
      },
-@@ -2393,6 +2621,7 @@
+@@ -2668,7 +2654,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANK9",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANK9",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 9",
          "UMask": "0x9",
          "Unit": "iMC"
      },
-@@ -2401,6 +2630,7 @@
+@@ -2677,7 +2663,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANKG0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANKG0",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 0 (Bank=
 s 0-3)",
          "UMask": "0x11",
          "Unit": "iMC"
      },
-@@ -2409,6 +2639,7 @@
+@@ -2686,7 +2672,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANKG1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANKG1",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 1 (Bank=
 s 4-7)",
          "UMask": "0x12",
          "Unit": "iMC"
      },
-@@ -2417,6 +2648,7 @@
+@@ -2695,7 +2681,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANKG2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANKG2",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 2 (Bank=
 s 8-11)",
          "UMask": "0x13",
          "Unit": "iMC"
      },
-@@ -2425,6 +2657,7 @@
+@@ -2704,7 +2690,7 @@
          "EventCode": "0xBE",
          "EventName": "UNC_M_WR_CAS_RANK6.BANKG3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK6.BANKG3",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 3 (Bank=
 s 12-15)",
          "UMask": "0x14",
          "Unit": "iMC"
      },
-@@ -2433,6 +2666,7 @@
+@@ -2713,7 +2699,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.ALLBANKS",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.ALLBANKS",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : All Banks",
          "UMask": "0x10",
          "Unit": "iMC"
      },
-@@ -2441,6 +2675,7 @@
+@@ -2722,7 +2708,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK0",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 0",
          "Unit": "iMC"
      },
      {
-@@ -2448,6 +2683,7 @@
+@@ -2730,7 +2716,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK1",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 1",
          "UMask": "0x1",
          "Unit": "iMC"
      },
-@@ -2456,6 +2692,7 @@
+@@ -2739,7 +2725,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK10",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK10",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 10",
          "UMask": "0xa",
          "Unit": "iMC"
      },
-@@ -2464,6 +2701,7 @@
+@@ -2748,7 +2734,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK11",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK11",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 11",
          "UMask": "0xb",
          "Unit": "iMC"
      },
-@@ -2472,6 +2710,7 @@
+@@ -2757,7 +2743,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK12",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK12",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 12",
          "UMask": "0xc",
          "Unit": "iMC"
      },
-@@ -2480,6 +2719,7 @@
+@@ -2766,7 +2752,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK13",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK13",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 13",
          "UMask": "0xd",
          "Unit": "iMC"
      },
-@@ -2488,6 +2728,7 @@
+@@ -2775,7 +2761,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK14",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK14",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 14",
          "UMask": "0xe",
          "Unit": "iMC"
      },
-@@ -2496,6 +2737,7 @@
+@@ -2784,7 +2770,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK15",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK15",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 15",
          "UMask": "0xf",
          "Unit": "iMC"
      },
-@@ -2504,6 +2746,7 @@
+@@ -2793,7 +2779,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK2",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 2",
          "UMask": "0x2",
          "Unit": "iMC"
      },
-@@ -2512,6 +2755,7 @@
+@@ -2802,7 +2788,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK3",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 3",
          "UMask": "0x3",
          "Unit": "iMC"
      },
-@@ -2520,6 +2764,7 @@
+@@ -2811,7 +2797,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK4",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK4",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 4",
          "UMask": "0x4",
          "Unit": "iMC"
      },
-@@ -2528,6 +2773,7 @@
+@@ -2820,7 +2806,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK5",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK5",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 5",
          "UMask": "0x5",
          "Unit": "iMC"
      },
-@@ -2536,6 +2782,7 @@
+@@ -2829,7 +2815,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK6",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK6",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 6",
          "UMask": "0x6",
          "Unit": "iMC"
      },
-@@ -2544,6 +2791,7 @@
+@@ -2838,7 +2824,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK7",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK7",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 7",
          "UMask": "0x7",
          "Unit": "iMC"
      },
-@@ -2552,6 +2800,7 @@
+@@ -2847,7 +2833,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK8",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK8",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 8",
          "UMask": "0x8",
          "Unit": "iMC"
      },
-@@ -2560,6 +2809,7 @@
+@@ -2856,7 +2842,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANK9",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANK9",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank 9",
          "UMask": "0x9",
          "Unit": "iMC"
      },
-@@ -2568,6 +2818,7 @@
+@@ -2865,7 +2851,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANKG0",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANKG0",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 0 (Bank=
 s 0-3)",
          "UMask": "0x11",
          "Unit": "iMC"
      },
-@@ -2576,6 +2827,7 @@
+@@ -2874,7 +2860,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANKG1",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANKG1",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 1 (Bank=
 s 4-7)",
          "UMask": "0x12",
          "Unit": "iMC"
      },
-@@ -2584,6 +2836,7 @@
+@@ -2883,7 +2869,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANKG2",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANKG2",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 2 (Bank=
 s 8-11)",
          "UMask": "0x13",
          "Unit": "iMC"
      },
-@@ -2592,6 +2845,7 @@
+@@ -2892,7 +2878,7 @@
          "EventCode": "0xBF",
          "EventName": "UNC_M_WR_CAS_RANK7.BANKG3",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_M_WR_CAS_RANK7.BANKG3",
 +        "PublicDescription": "WR_CAS Access to Rank 0 : Bank Group 3 (Bank=
 s 12-15)",
          "UMask": "0x14",
          "Unit": "iMC"
      }
-diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-other.json b=
-/tools/perf/pmu-events/arch/x86/broadwellde/uncore-other.json
-index 753b381b77fe..fea3dea67f38 100644
---- a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-other.json
-+++ b/tools/perf/pmu-events/arch/x86/broadwellde/uncore-other.json
-@@ -101,6 +101,7 @@
+diff --git a/tools/perf/pmu-events/arch/x86/broadwellx/uncore-other.json b/=
+tools/perf/pmu-events/arch/x86/broadwellx/uncore-other.json
+index a80d931dc3d5..43def2582617 100644
+--- a/tools/perf/pmu-events/arch/x86/broadwellx/uncore-other.json
++++ b/tools/perf/pmu-events/arch/x86/broadwellx/uncore-other.json
+@@ -101,7 +101,7 @@
          "EventCode": "0x14",
          "EventName": "UNC_I_MISC0.2ND_ATOMIC_INSERT",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_MISC0.2ND_ATOMIC_INSERT",
 +        "PublicDescription": "Counts Timeouts - Set 0 : Cache Inserts of A=
 tomic Transactions as Secondary",
          "UMask": "0x10",
          "Unit": "IRP"
      },
-@@ -109,6 +110,7 @@
+@@ -110,7 +110,7 @@
          "EventCode": "0x14",
          "EventName": "UNC_I_MISC0.2ND_RD_INSERT",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_MISC0.2ND_RD_INSERT",
 +        "PublicDescription": "Counts Timeouts - Set 0 : Cache Inserts of R=
 ead Transactions as Secondary",
          "UMask": "0x4",
          "Unit": "IRP"
      },
-@@ -117,6 +119,7 @@
+@@ -119,7 +119,7 @@
          "EventCode": "0x14",
          "EventName": "UNC_I_MISC0.2ND_WR_INSERT",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_MISC0.2ND_WR_INSERT",
 +        "PublicDescription": "Counts Timeouts - Set 0 : Cache Inserts of W=
 rite Transactions as Secondary",
          "UMask": "0x8",
          "Unit": "IRP"
      },
-@@ -125,6 +128,7 @@
+@@ -128,7 +128,7 @@
          "EventCode": "0x14",
          "EventName": "UNC_I_MISC0.FAST_REJ",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_MISC0.FAST_REJ",
 +        "PublicDescription": "Counts Timeouts - Set 0 : Fastpath Rejects",
          "UMask": "0x2",
          "Unit": "IRP"
      },
-@@ -133,6 +137,7 @@
+@@ -137,7 +137,7 @@
          "EventCode": "0x14",
          "EventName": "UNC_I_MISC0.FAST_REQ",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_MISC0.FAST_REQ",
 +        "PublicDescription": "Counts Timeouts - Set 0 : Fastpath Requests"=
 ,
          "UMask": "0x1",
          "Unit": "IRP"
      },
-@@ -141,6 +146,7 @@
+@@ -146,7 +146,7 @@
          "EventCode": "0x14",
          "EventName": "UNC_I_MISC0.FAST_XFER",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_MISC0.FAST_XFER",
 +        "PublicDescription": "Counts Timeouts - Set 0 : Fastpath Transfers=
  From Primary to Secondary",
          "UMask": "0x20",
          "Unit": "IRP"
      },
-@@ -149,6 +155,7 @@
+@@ -155,7 +155,7 @@
          "EventCode": "0x14",
          "EventName": "UNC_I_MISC0.PF_ACK_HINT",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_MISC0.PF_ACK_HINT",
 +        "PublicDescription": "Counts Timeouts - Set 0 : Prefetch Ack Hints=
  From Primary to Secondary",
          "UMask": "0x40",
          "Unit": "IRP"
      },
-@@ -175,6 +182,7 @@
+@@ -182,7 +182,7 @@
          "EventCode": "0x15",
          "EventName": "UNC_I_MISC1.LOST_FWD",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_MISC1.LOST_FWD",
 +        "PublicDescription": "Misc Events - Set 1 : Lost Forward : Snoop p=
 ulled away ownership before a write was committed",
          "UMask": "0x10",
          "Unit": "IRP"
      },
-@@ -241,6 +249,7 @@
-         "Unit": "IRP"
-     },
-     {
-+        "BriefDescription": "UNC_I_RxR_BL_DRS_CYCLES_FULL",
-         "EventCode": "0x4",
-         "EventName": "UNC_I_RxR_BL_DRS_CYCLES_FULL",
-         "PerPkg": "1",
-@@ -256,6 +265,7 @@
-         "Unit": "IRP"
-     },
-     {
-+        "BriefDescription": "UNC_I_RxR_BL_DRS_OCCUPANCY",
-         "EventCode": "0x7",
-         "EventName": "UNC_I_RxR_BL_DRS_OCCUPANCY",
-         "PerPkg": "1",
-@@ -263,6 +273,7 @@
-         "Unit": "IRP"
-     },
-     {
-+        "BriefDescription": "UNC_I_RxR_BL_NCB_CYCLES_FULL",
-         "EventCode": "0x5",
-         "EventName": "UNC_I_RxR_BL_NCB_CYCLES_FULL",
-         "PerPkg": "1",
-@@ -278,6 +289,7 @@
-         "Unit": "IRP"
-     },
-     {
-+        "BriefDescription": "UNC_I_RxR_BL_NCB_OCCUPANCY",
-         "EventCode": "0x8",
-         "EventName": "UNC_I_RxR_BL_NCB_OCCUPANCY",
-         "PerPkg": "1",
-@@ -285,6 +297,7 @@
-         "Unit": "IRP"
-     },
-     {
-+        "BriefDescription": "UNC_I_RxR_BL_NCS_CYCLES_FULL",
-         "EventCode": "0x6",
-         "EventName": "UNC_I_RxR_BL_NCS_CYCLES_FULL",
-         "PerPkg": "1",
-@@ -300,6 +313,7 @@
-         "Unit": "IRP"
-     },
-     {
-+        "BriefDescription": "UNC_I_RxR_BL_NCS_OCCUPANCY",
-         "EventCode": "0x9",
-         "EventName": "UNC_I_RxR_BL_NCS_OCCUPANCY",
-         "PerPkg": "1",
-@@ -311,6 +325,7 @@
+@@ -325,7 +325,7 @@
          "EventCode": "0x17",
          "EventName": "UNC_I_SNOOP_RESP.HIT_ES",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_SNOOP_RESP.HIT_ES",
 +        "PublicDescription": "Snoop Responses : Hit E or S",
          "UMask": "0x4",
          "Unit": "IRP"
      },
-@@ -319,6 +334,7 @@
+@@ -334,7 +334,7 @@
          "EventCode": "0x17",
          "EventName": "UNC_I_SNOOP_RESP.HIT_I",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_SNOOP_RESP.HIT_I",
 +        "PublicDescription": "Snoop Responses : Hit I",
          "UMask": "0x2",
          "Unit": "IRP"
      },
-@@ -327,6 +343,7 @@
+@@ -343,7 +343,7 @@
          "EventCode": "0x17",
          "EventName": "UNC_I_SNOOP_RESP.HIT_M",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_SNOOP_RESP.HIT_M",
 +        "PublicDescription": "Snoop Responses : Hit M",
          "UMask": "0x8",
          "Unit": "IRP"
      },
-@@ -335,6 +352,7 @@
+@@ -352,7 +352,7 @@
          "EventCode": "0x17",
          "EventName": "UNC_I_SNOOP_RESP.MISS",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_SNOOP_RESP.MISS",
 +        "PublicDescription": "Snoop Responses : Miss",
          "UMask": "0x1",
          "Unit": "IRP"
      },
-@@ -343,6 +361,7 @@
+@@ -361,7 +361,7 @@
          "EventCode": "0x17",
          "EventName": "UNC_I_SNOOP_RESP.SNPCODE",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_SNOOP_RESP.SNPCODE",
 +        "PublicDescription": "Snoop Responses : SnpCode",
          "UMask": "0x10",
          "Unit": "IRP"
      },
-@@ -351,6 +370,7 @@
+@@ -370,7 +370,7 @@
          "EventCode": "0x17",
          "EventName": "UNC_I_SNOOP_RESP.SNPDATA",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_SNOOP_RESP.SNPDATA",
 +        "PublicDescription": "Snoop Responses : SnpData",
          "UMask": "0x20",
          "Unit": "IRP"
      },
-@@ -359,6 +379,7 @@
+@@ -379,7 +379,7 @@
          "EventCode": "0x17",
          "EventName": "UNC_I_SNOOP_RESP.SNPINV",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_I_SNOOP_RESP.SNPINV",
 +        "PublicDescription": "Snoop Responses : SnpInv",
          "UMask": "0x40",
          "Unit": "IRP"
      },
-@@ -453,7 +474,7 @@
+@@ -474,7 +474,7 @@
          "EventCode": "0xD",
          "EventName": "UNC_I_TxR_REQUEST_OCCUPANCY",
          "PerPkg": "1",
@@ -4552,43 +6161,136 @@ e latency of outbound requests.",
          "Unit": "IRP"
      },
      {
-@@ -465,6 +486,7 @@
-         "Unit": "R2PCIe"
+@@ -1223,7 +1223,6 @@
+         "EventCode": "0xB",
+         "EventName": "UNC_R3_IOT_BACKPRESSURE.HUB",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_R3_IOT_BACKPRESSURE.HUB",
+         "UMask": "0x2",
+         "Unit": "R3QPI"
+     },
+@@ -1232,7 +1231,6 @@
+         "EventCode": "0xB",
+         "EventName": "UNC_R3_IOT_BACKPRESSURE.SAT",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_R3_IOT_BACKPRESSURE.SAT",
+         "UMask": "0x1",
+         "Unit": "R3QPI"
+     },
+@@ -2312,7 +2310,7 @@
+         "EventCode": "0x33",
+         "EventName": "UNC_R3_VNA_CREDITS_ACQUIRED.AD",
+         "PerPkg": "1",
+-        "PublicDescription": "Number of QPI VNA Credit acquisitions.  This=
+ event can be used in conjunction with the VNA In-Use Accumulator to calcul=
+ate the average lifetime of a credit holder.  VNA credits are used by all m=
+essage classes in order to communicate across QPI.  If a packet is unable t=
+o acquire credits, it will then attempt to use credts from the VN0 pool.  N=
+ote that a single packet may require multiple flit buffers (i.e. when data =
+is being transfered).  Therefore, this event will increment by the number o=
+f credits acquired in each cycle.  Filtering based on message class is not =
+provided.  One can count the number of packets transfered in a given messag=
+e class using an qfclk event.; Filter for the Home (HOM) message class.  HO=
+M is generally used to send requests, request responses, and snoop response=
+s.",
++        "PublicDescription": "Number of QPI VNA Credit acquisitions.  This=
+ event can be used in conjunction with the VNA In-Use Accumulator to calcul=
+ate the average lifetime of a credit holder.  VNA credits are used by all m=
+essage classes in order to communicate across QPI.  If a packet is unable t=
+o acquire credits, it will then attempt to use credits from the VN0 pool.  =
+Note that a single packet may require multiple flit buffers (i.e. when data=
+ is being transferred).  Therefore, this event will increment by the number=
+ of credits acquired in each cycle.  Filtering based on message class is no=
+t provided.  One can count the number of packets transferred in a given mes=
+sage class using an qfclk event.; Filter for the Home (HOM) message class. =
+ HOM is generally used to send requests, request responses, and snoop respo=
+nses.",
+         "UMask": "0x1",
+         "Unit": "R3QPI"
+     },
+@@ -2321,7 +2319,7 @@
+         "EventCode": "0x33",
+         "EventName": "UNC_R3_VNA_CREDITS_ACQUIRED.BL",
+         "PerPkg": "1",
+-        "PublicDescription": "Number of QPI VNA Credit acquisitions.  This=
+ event can be used in conjunction with the VNA In-Use Accumulator to calcul=
+ate the average lifetime of a credit holder.  VNA credits are used by all m=
+essage classes in order to communicate across QPI.  If a packet is unable t=
+o acquire credits, it will then attempt to use credts from the VN0 pool.  N=
+ote that a single packet may require multiple flit buffers (i.e. when data =
+is being transfered).  Therefore, this event will increment by the number o=
+f credits acquired in each cycle.  Filtering based on message class is not =
+provided.  One can count the number of packets transfered in a given messag=
+e class using an qfclk event.; Filter for the Home (HOM) message class.  HO=
+M is generally used to send requests, request responses, and snoop response=
+s.",
++        "PublicDescription": "Number of QPI VNA Credit acquisitions.  This=
+ event can be used in conjunction with the VNA In-Use Accumulator to calcul=
+ate the average lifetime of a credit holder.  VNA credits are used by all m=
+essage classes in order to communicate across QPI.  If a packet is unable t=
+o acquire credits, it will then attempt to use credits from the VN0 pool.  =
+Note that a single packet may require multiple flit buffers (i.e. when data=
+ is being transferred).  Therefore, this event will increment by the number=
+ of credits acquired in each cycle.  Filtering based on message class is no=
+t provided.  One can count the number of packets transferred in a given mes=
+sage class using an qfclk event.; Filter for the Home (HOM) message class. =
+ HOM is generally used to send requests, request responses, and snoop respo=
+nses.",
+         "UMask": "0x4",
+         "Unit": "R3QPI"
+     },
+@@ -2384,14 +2382,12 @@
+         "EventCode": "0xA",
+         "EventName": "UNC_S_BOUNCE_CONTROL",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_S_BOUNCE_CONTROL",
+         "Unit": "SBO"
      },
      {
-+        "BriefDescription": "UNC_R2_IIO_CREDIT.ISOCH_QPI0",
-         "EventCode": "0x2D",
-         "EventName": "UNC_R2_IIO_CREDIT.ISOCH_QPI0",
+         "BriefDescription": "Uncore Clocks",
+         "EventName": "UNC_S_CLOCKTICKS",
          "PerPkg": "1",
-@@ -472,6 +494,7 @@
-         "Unit": "R2PCIe"
+-        "PublicDescription": "UNC_S_CLOCKTICKS",
+         "Unit": "SBO"
      },
      {
-+        "BriefDescription": "UNC_R2_IIO_CREDIT.ISOCH_QPI1",
-         "EventCode": "0x2D",
-         "EventName": "UNC_R2_IIO_CREDIT.ISOCH_QPI1",
+@@ -2596,7 +2592,6 @@
+         "EventCode": "0x5",
+         "EventName": "UNC_S_RING_BOUNCES.AD_CACHE",
          "PerPkg": "1",
-@@ -479,6 +502,7 @@
-         "Unit": "R2PCIe"
+-        "PublicDescription": "UNC_S_RING_BOUNCES.AD_CACHE",
+         "UMask": "0x1",
+         "Unit": "SBO"
      },
-     {
-+        "BriefDescription": "UNC_R2_IIO_CREDIT.PRQ_QPI0",
-         "EventCode": "0x2D",
-         "EventName": "UNC_R2_IIO_CREDIT.PRQ_QPI0",
+@@ -2605,7 +2600,6 @@
+         "EventCode": "0x5",
+         "EventName": "UNC_S_RING_BOUNCES.AK_CORE",
          "PerPkg": "1",
-@@ -486,6 +510,7 @@
-         "Unit": "R2PCIe"
+-        "PublicDescription": "UNC_S_RING_BOUNCES.AK_CORE",
+         "UMask": "0x2",
+         "Unit": "SBO"
      },
-     {
-+        "BriefDescription": "UNC_R2_IIO_CREDIT.PRQ_QPI1",
-         "EventCode": "0x2D",
-         "EventName": "UNC_R2_IIO_CREDIT.PRQ_QPI1",
+@@ -2614,7 +2608,6 @@
+         "EventCode": "0x5",
+         "EventName": "UNC_S_RING_BOUNCES.BL_CORE",
          "PerPkg": "1",
-diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-power.json b=
-/tools/perf/pmu-events/arch/x86/broadwellde/uncore-power.json
-index 124b3fe2e0e1..83d20130c217 100644
---- a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-power.json
-+++ b/tools/perf/pmu-events/arch/x86/broadwellde/uncore-power.json
+-        "PublicDescription": "UNC_S_RING_BOUNCES.BL_CORE",
+         "UMask": "0x4",
+         "Unit": "SBO"
+     },
+@@ -2623,7 +2616,6 @@
+         "EventCode": "0x5",
+         "EventName": "UNC_S_RING_BOUNCES.IV_CORE",
+         "PerPkg": "1",
+-        "PublicDescription": "UNC_S_RING_BOUNCES.IV_CORE",
+         "UMask": "0x8",
+         "Unit": "SBO"
+     },
+diff --git a/tools/perf/pmu-events/arch/x86/broadwellx/uncore-power.json b/=
+tools/perf/pmu-events/arch/x86/broadwellx/uncore-power.json
+index e682eedf644a..83d20130c217 100644
+--- a/tools/perf/pmu-events/arch/x86/broadwellx/uncore-power.json
++++ b/tools/perf/pmu-events/arch/x86/broadwellx/uncore-power.json
 @@ -395,7 +395,7 @@
          "EventCode": "0x80",
          "EventName": "UNC_P_POWER_STATE_OCCUPANCY.CORES_C0",
@@ -4653,18 +6355,11 @@ rmines that we are too hot and must throttle to avoid damaging the chip.",
          "Unit": "PCU"
      },
      {
-@@ -439,6 +439,7 @@
-         "Unit": "PCU"
-     },
-     {
-+        "BriefDescription": "UNC_P_UFS_TRANSITIONS_RING_GV",
-         "EventCode": "0x79",
-         "EventName": "UNC_P_UFS_TRANSITIONS_RING_GV",
-         "PerPkg": "1",
-@@ -450,6 +451,7 @@
+@@ -451,7 +451,7 @@
          "EventCode": "0x42",
          "EventName": "UNC_P_VR_HOT_CYCLES",
          "PerPkg": "1",
+-        "PublicDescription": "UNC_P_VR_HOT_CYCLES",
 +        "PublicDescription": "VR Hot : Number of cycles that a CPU SVID VR=
  is hot.  Does not cover DRAM VRs",
          "Unit": "PCU"
@@ -4672,18 +6367,18 @@ rmines that we are too hot and must throttle to avoid damaging the chip.",
  ]
 diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-ev=
 ents/arch/x86/mapfile.csv
-index 70be860bcb53..4fa827c7f719 100644
+index 4fa827c7f719..dfed265c95ab 100644
 --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
 +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-@@ -3,7 +3,7 @@ GenuineIntel-6-(97|9A|B7|BA|BF),v1.19,alderlake,core
- GenuineIntel-6-BE,v1.19,alderlaken,core
+@@ -4,7 +4,7 @@ GenuineIntel-6-BE,v1.19,alderlaken,core
  GenuineIntel-6-(1C|26|27|35|36),v4,bonnell,core
  GenuineIntel-6-(3D|47),v27,broadwell,core
--GenuineIntel-6-56,v7,broadwellde,core
-+GenuineIntel-6-56,v9,broadwellde,core
- GenuineIntel-6-4F,v19,broadwellx,core
+ GenuineIntel-6-56,v9,broadwellde,core
+-GenuineIntel-6-4F,v19,broadwellx,core
++GenuineIntel-6-4F,v20,broadwellx,core
  GenuineIntel-6-55-[56789ABCDEF],v1.17,cascadelakex,core
  GenuineIntel-6-9[6C],v1.03,elkhartlake,core
+ GenuineIntel-6-5[CF],v13,goldmont,core
 --=20
 2.40.0.348.gf938b09366-goog
 
