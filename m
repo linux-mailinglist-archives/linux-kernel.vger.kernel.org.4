@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18896C86BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA606C86C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbjCXUW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 16:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
+        id S232011AbjCXUXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 16:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjCXUW5 (ORCPT
+        with ESMTP id S231817AbjCXUW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:22:57 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5F21A979
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:22:54 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id eg48so12303091edb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:22:54 -0700 (PDT)
+        Fri, 24 Mar 2023 16:22:58 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C27128
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:22:55 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id eh3so12320085edb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:22:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679689373;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=f/8nQNR94y6t/5VtqhjM0ZF/6A0ua7j5oOvHfSU7/lw=;
-        b=dOc9jhY4N8YUGBiv3x4wPxr0n0Ngf+V+/Ic6NC5TVhIqdInrjGYBYDga1mDDCSZwFj
-         hSdUfR7+thm6BAERhP/nq/tNpTMWsqJt79ZiC3mpj58YFzAf8AwPn+0Fuyq1YHbBKoHj
-         dLVSj5l8fMovmDjp3L73aqAase+rr8xgW81Oq29MJ6EqKVp8TTmw0nZgJ2aHIalgtFLk
-         vj9gTsEV9p0GqHfrJ4ZGSznCXnzipkeBuMHMwhKv7NWc2cnAgOfjsUMsRlg+FzNXxbow
-         53zGQMBXZ4uVUUg8Hm5LLjGdnq3RWsPWSW+PtRGZ9+lVvZNQfloZehtiRW21i20t61C1
-         5r6Q==
+        d=linaro.org; s=google; t=1679689374;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=es+HvkHe0F3GCsxEWp3ux6VZSAP82WMs4eTXPrG/qLs=;
+        b=w3edZX2pdX8rRHpqalOELCRLN8gKCBYtNb8YNtJRMrGm0cgp17tl2c6c36k3LrmWMN
+         sZxYkPvuGXF+b0jVGPrRHD5+RGo8XI0IuL14G0G2GJPHMVv2RB7KcohHfF2uLLiTGcBJ
+         EUCqQ0Xbp+0zIap9KibqvUjqoeMSujbt9jEEdbXU7IwPsxvX7rPpkYSWNwlXhSZKEgdv
+         ym2cQdH0hcYbVVGAqDTtlaeBrnrghuD8JAXkUwAs/90kX8AdN6GZjzKdxmROe9UqzIqr
+         Tkye1KcG2KRTME+AIs++gHRg+Yv3TCHuiStl9BKusyb94+YK3slXNvsaLZIgwulty51w
+         fChw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679689373;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f/8nQNR94y6t/5VtqhjM0ZF/6A0ua7j5oOvHfSU7/lw=;
-        b=zivUxE5zIG9IWoZBnI4jl36h6xgfTqhn0ALMY3BSJFN9HacAXGzfUm6dBd/Zc+OV2V
-         CGkjr7c9psiv1sGKL2gyuWY+aGyjGt5SY3FQ8ksRWU1ok1Szk53zvUZTrKIu81uiP5P5
-         ME15U2YOfp4D3YOx0294/UriQCpemZDXY3C2mQdx2F/0BaKw9SAE8dHfyah8mEMiGp+G
-         48JVtUwfxLjAvoFgqAtyWVWq2kPVFEJlH9tv5EqLlf8wdCpGmDsmiwmJFWOE4SI1cfn+
-         I+TPXVaXKBlmk3aBDUUY3f7YOiaKthbpakMziuMk+ac/y7nqsPlniTmnDNHxtN3rCIpi
-         CyRQ==
-X-Gm-Message-State: AAQBX9cgXYyHKvAP2ODf0WPS5cAc52pn/HCxJOOWrBmQmoJBYR8VFZVW
-        TUB4ytrd8KTJXO25LyEMhEIegw==
-X-Google-Smtp-Source: AKy350YH+zPRg8shFxXaRMmprKSP+i3s/64H9neodx8jC3NYIjHU0yXtyu2ZX+el3QRtfd6e/X9HJA==
-X-Received: by 2002:a17:906:5299:b0:933:4dc8:972d with SMTP id c25-20020a170906529900b009334dc8972dmr3907248ejm.20.1679689373313;
-        Fri, 24 Mar 2023 13:22:53 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679689374;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=es+HvkHe0F3GCsxEWp3ux6VZSAP82WMs4eTXPrG/qLs=;
+        b=sVS7sXlHbuDcFxl3RU0I0gtj8bcCVqIYUDodJkTmnc80dHmEhhEHJ0dBY4uvS40ECM
+         m6bXGx39Mi4ENyAQ8VMFh0BPAxm2zTSJ0DGD/I7BmZwpqjocV+wLx5TSYCW+xEGaZzAv
+         7FpY4XEVvgS4a0z+kGshXF3uHa8dCBv3sFdjLi8xUMQL4uhORgfzpEXJGnqMFquYyRMx
+         7kVdlNzJkydZ3CYAXz6yNfkAWElGQdPIXdtF4y1MoXXBpnkqC6q9HhQbZnY3hBsBK/n/
+         nuRW2QP2n5jYvH4wnkvOrJKXt8xbSEgA1v+lhuUdnaFmzwRM08z9F0+LuftiCGkKfMIv
+         BA7g==
+X-Gm-Message-State: AAQBX9eHK/Q9gns0rpVwrXzwkHNESu7jUVtgz/WgIg1q5op4DpDhDGyd
+        9ePbUaVFbWqNjeojm/9CPOWk3g==
+X-Google-Smtp-Source: AKy350ZqG9qUaOyLxyUcK4EVRu670bb4FV3YOfRgoKPvP4ChaTR+jipizk6p70bxtJaezkVI1TiYpg==
+X-Received: by 2002:a17:906:5785:b0:93d:1c2b:bd23 with SMTP id k5-20020a170906578500b0093d1c2bbd23mr4926818ejq.39.1679689374260;
+        Fri, 24 Mar 2023 13:22:54 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:3027:fb0b:ae08:588])
-        by smtp.gmail.com with ESMTPSA id rh26-20020a17090720fa00b00930ba362216sm10900041ejb.176.2023.03.24.13.22.52
+        by smtp.gmail.com with ESMTPSA id rh26-20020a17090720fa00b00930ba362216sm10900041ejb.176.2023.03.24.13.22.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 24 Mar 2023 13:22:53 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
@@ -58,10 +59,12 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/5] arm64: dts: qcom: msm8916-thwc-ufi001c: add function to pin config
-Date:   Fri, 24 Mar 2023 21:22:40 +0100
-Message-Id: <20230324202244.744271-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/5] arm64: dts: qcom: apq8096-db820c: drop simple-bus from clocks
+Date:   Fri, 24 Mar 2023 21:22:41 +0100
+Message-Id: <20230324202244.744271-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230324202244.744271-1-krzysztof.kozlowski@linaro.org>
+References: <20230324202244.744271-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -73,43 +76,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bindings require pin configuration nodes to have the function, even if
-it is GPIO:
+'clocks' node is not a bus, but just a placeholder for clocks:
 
-  msm8916-thwc-ufi001c.dtb: pinctrl@1000000: sim-ctrl-default-state: 'oneOf' conditional failed, one must be fixed:
-    'esim-sel-pins', 'sim-en-pins', 'sim-sel-pins' do not match any of the regexes: 'pinctrl-[0-9]+'
+  apq8096-db820c.dtb: clocks: $nodename:0: 'clocks' does not match '^([a-z][a-z0-9\\-]+-bus|bus|localbus|soc|axi|ahb|apb)(@.+)?$'
+    From schema: dtschema/schemas/simple-bus.yaml
+  apq8096-db820c.dtb: clocks: xo-board: {'compatible': ['fixed-clock'], '#clock-cells': [[0]],  ...
+    From schema: dtschema/schemas/simple-bus.yaml
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm64/boot/dts/qcom/apq8096-db820c.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts b/arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
-index 8433c9710b1c..978f0abcdf8f 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
-@@ -44,18 +44,21 @@ &msmgpio {
- 	sim_ctrl_default: sim-ctrl-default-state {
- 		esim-sel-pins {
- 			pins = "gpio0", "gpio3";
-+			function = "gpio";
- 			bias-disable;
- 			output-low;
- 		};
+diff --git a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
+index 4476e2e22816..b599909c4463 100644
+--- a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
++++ b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
+@@ -63,7 +63,6 @@ chosen {
+ 	};
  
- 		sim-en-pins {
- 			pins = "gpio1";
-+			function = "gpio";
- 			bias-disable;
- 			output-low;
- 		};
- 
- 		sim-sel-pins {
- 			pins = "gpio2";
-+			function = "gpio";
- 			bias-disable;
- 			output-high;
- 		};
+ 	clocks {
+-		compatible = "simple-bus";
+ 		divclk4: divclk4 {
+ 			compatible = "fixed-clock";
+ 			#clock-cells = <0>;
 -- 
 2.34.1
 
