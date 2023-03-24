@@ -2,95 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D936C867D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:03:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1716C867B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbjCXUDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 16:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
+        id S232022AbjCXUCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 16:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbjCXUDV (ORCPT
+        with ESMTP id S232002AbjCXUCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:03:21 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDF65FDC;
-        Fri, 24 Mar 2023 13:03:20 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id dw14so1990512pfb.6;
-        Fri, 24 Mar 2023 13:03:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679688200;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k0zyKJqyp2y1lBt0CEJpnXXir3hiSl95FjcrusJ4FJo=;
-        b=jdo2UNjWHXf+WaFn7+HpYKqoUyXzC3SUgTio2/Y7sy4RDl3YeM8e62X7aoYuKv7X5s
-         QU28EsGLHL47/0tl6EbqR9CKmQHBPlgfhLhm/dcH7cQ3kaDKjJfos68N+ADUNIs6poWe
-         9Dgxnx5U8XsuCupYX4tniXuNU48hHUvEHeFQXkvGDAkec4yJR24dPPqIiC/7gJWQCTrp
-         tCdEaAobeanFbP/w3ilqIMi9mVEnWiyZL6UvZ0kuu4PZcVL2ZnlY5QgJdNwbQc4aQYFY
-         HUy07vIw1exftgNIibxlTdWCyyIe0mrQA2/Kz/H8Xy+B0EYx0OahH2iJfLOlzmuH2RZV
-         rIcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679688200;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k0zyKJqyp2y1lBt0CEJpnXXir3hiSl95FjcrusJ4FJo=;
-        b=6H3VwkukIWjCQBIgK4+HDKMLUkkI5ZrJms+6m2Ves+JwA9Lxr2FR+PjmxXFFloTiYf
-         SN/XgksRW4BmdgZ/tc+wh2skfWaIoUF2YYQN2bBovNJ1KlPw96DLshFhJ8iXsqC53Tlg
-         qAEAf8W0YEy2V7xzqX23wPAJW842X820tkDgBrTGVYMq6RMTvn4gPoUjx1GOwPeidFc/
-         UXicQ/jUk1zSSXMQvbVOtTUlZLJgQa0O6MfgEYGUVJhBq5JNYWCA+kMw3ga4GObmrLY/
-         MXxIPeVW+7PpKS+se9iY3HvhXhZIe9nEsee6Zhkx+gpnJEcs/Sg+RWRIpx3XznmKsgc3
-         A6UQ==
-X-Gm-Message-State: AO0yUKVPtn06nszk8JNWywPmdP24FMtJnIj/947GxS3htYNwZEHkJpWj
-        dkeMWaieIqlsQGxtxU9Qez0ypf+1g4g=
-X-Google-Smtp-Source: AKy350YXw6kZ61/uTa+XbH4rSQJAV91yWnUqZCIZ84aaVCwqLRDcvRmIpfkjybQE5rHmf6ChnAuLAw==
-X-Received: by 2002:aa7:9a5c:0:b0:628:1347:a619 with SMTP id x28-20020aa79a5c000000b006281347a619mr4324845pfj.10.1679688199613;
-        Fri, 24 Mar 2023 13:03:19 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id a21-20020a62bd15000000b005895f9657ebsm14221903pff.70.2023.03.24.13.02.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 13:03:18 -0700 (PDT)
-Message-ID: <37969f4c-21fe-0d06-f5c1-f110a2eccb0f@gmail.com>
-Date:   Fri, 24 Mar 2023 13:02:41 -0700
+        Fri, 24 Mar 2023 16:02:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A7F1BDA;
+        Fri, 24 Mar 2023 13:02:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D47B862AD3;
+        Fri, 24 Mar 2023 20:02:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1285FC433AC;
+        Fri, 24 Mar 2023 20:02:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679688165;
+        bh=o9LNgpUkQU5GtCzGEcr91MhmkAC63XUJuAMUwjp/kp8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RybertnxI51al/qFxNaY1jGjocQVObF4Abyb2mNrbas/YXOmzZEW5l8Nt0yZgDBPl
+         zjZZ0TUmPJhUG7wxu6zol09zNPXtig4p69kCFoH2hO5Cez90O2/ry2AL8wOdPrA9nL
+         F6Q7Z407WfOK+up8cwCQATBn4m3w8zc2f/X28dMRt1JZsAuLLlNirZncC9GhUcECRO
+         MCMM/vsc+HbGgyL4GgbZXl3eUGCzHrflv2Z/i67DVg3r68e+9Y3yQSEYt8yggLu7jy
+         +gmj0LoLwu3SXISKeGMlZY47pM5c+e5Gj9UYoneUt/wXKN4u/0fWk4d9UUeOBOiuOC
+         Ijhk0oWSFt88Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 904F04052D; Fri, 24 Mar 2023 17:02:42 -0300 (-03)
+Date:   Fri, 24 Mar 2023 17:02:42 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Edward Baker <edward.baker@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        perry.taylor@intel.com, caleb.biggers@intel.com,
+        samantha.alt@intel.com, weilin.wang@intel.com
+Subject: Re: [PATCH v3 0/9] Update Intel events and make nvdimm events dynamic
+Message-ID: <ZB4B4kD5t77T/E5T@kernel.org>
+References: <20230324072218.181880-1-irogers@google.com>
+ <acb7dcae-6365-b2cb-6147-589376116df0@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH net v2] mailmap: Add an entry for Leonard Crestez
-Content-Language: en-US
-To:     netdev@vger.kernel.org
-Cc:     cdleonard@gmail.com, Andrew Morton <akpm@linux-foundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Qais Yousef <qyousef@layalina.io>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Kirill Tkhai <tkhai@ya.ru>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230324172659.3495258-1-f.fainelli@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230324172659.3495258-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acb7dcae-6365-b2cb-6147-589376116df0@linux.intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/23 10:26, Florian Fainelli wrote:
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Em Fri, Mar 24, 2023 at 08:11:44AM -0400, Liang, Kan escreveu:
+> 
+> 
+> On 2023-03-24 3:22 a.m., Ian Rogers wrote:
+> > Update events from:
+> > https://github.com/intel/perfmon/pull/62
+> > 
+> > Add new #has_pmem literal to allow memory metrics to be dynamic in how
+> > nvdimm events are enabled. Update CLX, ICX and SPR for this using this
+> > PR:
+> > https://github.com/intel/perfmon/pull/63
+> > 
+> > v3. Change has_optane to has_pmem as suggested by Kan Liang and Dan Williams.
+> > 
+> > Ian Rogers (9):
+> >   perf vendor events: Broadwell v27 events
+> >   perf vendor events: Broadwellde v9 events
+> >   perf vendor events: Broadwellx v20 events
+> >   perf vendor events: Haswell v33 events
+> >   perf vendor events: Haswellx v27 events
+> >   perf vendor events: Jaketown v23 events
+> >   perf vendor events: Sandybridge v19 events
+> >   perf metrics: Add has_pmem literal
+> >   perf vendor events: Update metrics to detect pmem at runtime
+> > 
+> 
+> 
+> Thanks Ian. The patch series looks good to me.
+> 
+> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 
-Andrew applied v1 directly:
+Thanks, applied.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mailmap-add-an-entry-for-leonard-crestez.patch
+- Arnaldo
 
-You can drop this v2.
+> 
+> Thanks,
+> Kan
+> 
+> >  .../pmu-events/arch/x86/broadwell/cache.json  | 296 +++++-----
+> >  .../arch/x86/broadwell/floating-point.json    |   7 +
+> >  .../arch/x86/broadwell/frontend.json          |  18 +-
+> >  .../pmu-events/arch/x86/broadwell/memory.json | 248 ++++-----
+> >  .../arch/x86/broadwell/pipeline.json          |  22 +-
+> >  .../arch/x86/broadwell/uncore-other.json      |   2 +-
+> >  .../arch/x86/broadwellde/cache.json           | 105 ++--
+> >  .../arch/x86/broadwellde/floating-point.json  |  45 +-
+> >  .../arch/x86/broadwellde/frontend.json        |  18 +-
+> >  .../arch/x86/broadwellde/memory.json          |  64 ++-
+> >  .../arch/x86/broadwellde/pipeline.json        |  79 +--
+> >  .../arch/x86/broadwellde/uncore-cache.json    |  72 +--
+> >  .../arch/x86/broadwellde/uncore-memory.json   | 256 ++++++++-
+> >  .../arch/x86/broadwellde/uncore-other.json    |  27 +-
+> >  .../arch/x86/broadwellde/uncore-power.json    |  10 +-
+> >  .../pmu-events/arch/x86/broadwellx/cache.json |  16 +-
+> >  .../arch/x86/broadwellx/frontend.json         |  18 +-
+> >  .../arch/x86/broadwellx/pipeline.json         |  20 +-
+> >  .../arch/x86/broadwellx/uncore-cache.json     | 156 ++----
+> >  .../x86/broadwellx/uncore-interconnect.json   |  84 +--
+> >  .../arch/x86/broadwellx/uncore-memory.json    | 522 +++++++++---------
+> >  .../arch/x86/broadwellx/uncore-other.json     |  44 +-
+> >  .../arch/x86/broadwellx/uncore-power.json     |  10 +-
+> >  .../arch/x86/cascadelakex/clx-metrics.json    |  10 +-
+> >  .../pmu-events/arch/x86/haswell/cache.json    |  38 +-
+> >  .../pmu-events/arch/x86/haswell/memory.json   |  38 +-
+> >  .../pmu-events/arch/x86/haswell/pipeline.json |   8 +
+> >  .../pmu-events/arch/x86/haswellx/cache.json   |   2 +-
+> >  .../arch/x86/haswellx/pipeline.json           |   8 +
+> >  .../arch/x86/haswellx/uncore-cache.json       |  16 +-
+> >  .../arch/x86/haswellx/uncore-other.json       |   6 +-
+> >  .../arch/x86/icelakex/icx-metrics.json        |  10 +-
+> >  .../arch/x86/jaketown/pipeline.json           |   8 +
+> >  tools/perf/pmu-events/arch/x86/mapfile.csv    |  14 +-
+> >  .../arch/x86/sandybridge/pipeline.json        |   8 +
+> >  .../arch/x86/sapphirerapids/spr-metrics.json  |  10 +-
+> >  tools/perf/util/expr.c                        |  19 +
+> >  37 files changed, 1323 insertions(+), 1011 deletions(-)
+> > 
+
 -- 
-Florian
 
+- Arnaldo
