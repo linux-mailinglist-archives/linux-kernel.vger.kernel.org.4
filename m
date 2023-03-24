@@ -2,60 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6D06C763B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 04:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2F76C763E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 04:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbjCXDb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 23:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
+        id S231215AbjCXDcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 23:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCXDb0 (ORCPT
+        with ESMTP id S229484AbjCXDca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 23:31:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D763218AB9;
-        Thu, 23 Mar 2023 20:31:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6222F6293D;
-        Fri, 24 Mar 2023 03:31:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7E4DC433EF;
-        Fri, 24 Mar 2023 03:31:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679628683;
-        bh=k2odxTgxbb9CVjSqPJg3BbtEgJGXZK8uJr/AreuURZQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=lrrDsYEYPxSlXd20s+yAqua7o2BwXZMWKqlTa0x7A+HRO4HQV8gEZEqqZAGjOsa5P
-         o7y3BMQxGIH+Slyq84s8j4DIk6LjVIjVcGHri+eoWWRptGSLyJXm5ihiuFFMi8s/KN
-         sKX/dUHdU5Rh5MPdPedkJl1/jwE5f4CXeMEYHzn8dzZ1BLS8IqhqZ2LHdLAUanqVhM
-         /Qq/y8vAkkPAl2P6XTjTEi8Gq2YKJ85dqIwn9AshqrZ5w9IaVAjr2n8SsPEG/l0dQK
-         bVl1iTbKwCkqNGv6owajsBhki8J43obHkUUqFYqNl5TTZigXpKNsh21iBWbAbNNYVT
-         Z492XlqsJeIWA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 6B7BE1540379; Thu, 23 Mar 2023 20:31:23 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 20:31:23 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "qiang.zhang1211@gmail.com" <qiang.zhang1211@gmail.com>
-Subject: Re: [PATCH v2] srcu: Fix flush srcu structure's->sup work warning in
- cleanup_srcu_struct()
-Message-ID: <baf071c3-142c-4886-aea5-6b6ef2ff3ade@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230323134621.336832-1-qiang1.zhang@intel.com>
- <f18cad71-38f0-411d-9dc7-bda52d1d5a3a@paulmck-laptop>
- <PH0PR11MB58803F01B73914E1D7A052F5DA849@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Thu, 23 Mar 2023 23:32:30 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE03318AB9;
+        Thu, 23 Mar 2023 20:32:28 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Dxj83LGR1k3ZMQAA--.25223S3;
+        Fri, 24 Mar 2023 11:32:27 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxLL7KGR1kFtwKAA--.4497S3;
+        Fri, 24 Mar 2023 11:32:26 +0800 (CST)
+Subject: Re: [PATCH v2 2/2] spi: loongson: add bus driver for the loongson spi
+ controller
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230317082950.12738-1-zhuyinbo@loongson.cn>
+ <20230317082950.12738-3-zhuyinbo@loongson.cn>
+ <68b6034f-8305-4854-a4c9-962be988ade7@sirena.org.uk>
+ <9b7aff76-eff4-3b82-d7af-a723fbf21a32@loongson.cn>
+ <9917d619-1104-4040-bb6f-c564fcf72806@sirena.org.uk>
+ <5c281b1a-b6a7-c62e-6247-5d82ebd5e0d6@loongson.cn>
+ <f7811b40-80a3-4985-b92d-1df3e28a0935@sirena.org.uk>
+ <2337f45f-c513-1b10-ccfc-766363c5fd02@loongson.cn>
+ <75a40be0-8eaa-4c9b-87dc-382c2a2af439@sirena.org.uk>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <3a0417f2-9e2d-7464-64fe-31d10b168f21@loongson.cn>
+Date:   Fri, 24 Mar 2023 11:32:26 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <75a40be0-8eaa-4c9b-87dc-382c2a2af439@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <PH0PR11MB58803F01B73914E1D7A052F5DA849@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8BxLL7KGR1kFtwKAA--.4497S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7JFyDuFyftw1fZr45GrWkCrg_yoW3Zrb_Cw
+        4vqr1rZrWUJw4UJw1DGw1UZrnrJrWUKa4UAF45Ar40qw15XFn5Jrn8Gws3JFy7Cr4Iyr98
+        Jr4rW3yfArW7JjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        27CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l
+        57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+        vE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+        r2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF04k20xvE74
+        AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
+        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMI
+        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF
+        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
+        Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07Uio7NUUUUU=
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,108 +75,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 02:20:18AM +0000, Zhang, Qiang1 wrote:
-> Cc:  my personal email qiang.zhang1211@gmail.com
-> 
-> > When unloading rcutorture kmod will trigger the following callstack:
-> > 
-> > insmod rcutorture.ko
-> > rmmod rcutorture.ko
-> > 
-> > [  209.437327] WARNING: CPU: 0 PID: 508 at kernel/workqueue.c:3167 __flush_work+0x50a/0x540
-> > [  209.437346] Modules linked in: rcutorture(-) torture [last unloaded: rcutorture]
-> > [  209.437382] CPU: 0 PID: 508 Comm: rmmod Tainted: G  W  6.3.0-rc1-yocto-standard+
-> > [  209.437406] RIP: 0010:__flush_work+0x50a/0x540
-> > .....
-> > [  209.437758]  flush_delayed_work+0x36/0x90
-> > [  209.437776]  cleanup_srcu_struct+0x68/0x2e0
-> > [  209.437817]  srcu_module_notify+0x71/0x140
-> > [  209.437854]  blocking_notifier_call_chain+0x9d/0xd0
-> > [  209.437880]  __x64_sys_delete_module+0x223/0x2e0
-> > [  209.438046]  do_syscall_64+0x43/0x90
-> > [  209.438062]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> > 
-> > flush_delayed_work()
-> > ->__flush_work()
-> >    ->if (WARN_ON(!work->func))
-> >         return false;
-> > 
-> > For srcu objects defined with DEFINE_SRCU() or DEFINE_STATIC_SRCU(),
-> > when compiling and loading as modules, the srcu_module_coming() is
-> > invoked, allocate memory for srcu structure's->sda and initialize
-> > sda structure, due to not fully initialize srcu structure's->sup,
-> > so at this time the sup structure's->work.work.func is null, if not
-> > invoke init_srcu_struct_fields() before unloading modules, the
-> > __flush_work() be invoked in srcu_module_going() and find work->func
-> > is empty, will raise the warning above.
-> > 
-> > This commit add the check of srcu_sup structure's->srcu_gp_seq_needed
-> > to determine whether the check_init_srcu_struct() has been invoked to
-> > initialize srcu objects in srcu_module_going(), if not initialize, there
-> > are no pending or running works, so there is no need to flush, only invoke
-> > free_percpu() to release srcu structure's->sda.
-> > 
-> > Co-developed-by: Paul E. McKenney <paulmck@kernel.org>
-> >
-> >Thank you for the testing, bug-finding, and problem-solving!
-> >
-> >In theory, you would need a Signed-off-by here from me as well, but
-> >in practice bisectability means that this must be folded into this:
-> >
-> >e7c778489040 ("srcu: Use static init for statically allocated in-module srcu_struct")
-> >	
-> >This will of course be with attribution.
-> >
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> >
-> >But this is still a bit more complex than needed.  How about something
-> >like this?
-> 
-> Agree,  from a logical point of view, this is more rigorous😊.
 
-And I finally got around to doing some modprobe/rmmod testing myself,
-and it passes eleven cycles.
+在 2023/3/23 下午9:59, Mark Brown 写道:
+> On Thu, Mar 23, 2023 at 08:46:19PM +0800, zhuyinbo wrote:
+>
+>> I think add following change and that issue what you said will can be
+>> fixed,   in addition, the spin_lock
+>> was also not needed.   Do you think so?
+>> @@ -101,8 +101,10 @@ static int loongson_spi_setup(struct spi_device *spi)
+>>          if (spi->chip_select >= spi->master->num_chipselect)
+>>                  return -EINVAL;
+>>
+>> +       loongson_spi->hz = 0;
+>> +       loongson_spi->mode &= SPI_NO_CS;
+>> +
+>>          spin_lock(&loongson_spi->lock);
+>> -       loongson_spi_update_state(loongson_spi, spi, NULL);
+> Looks plausible, yes - I'd need to see the full thing to verify.
 
-May I add your Tested-by to the series?
+okay, I will send v3.
 
-							Thanx, Paul
-
-> Thanks
-> Zqiang
-> 
-> >
-> >							Thanx, Paul
-> >
-> >------------------------------------------------------------------------
-> >
-> >/* Initialize any global-scope srcu_struct structures used by this module. */
-> >static int srcu_module_coming(struct module *mod)
-> >{
-> >	int i;
-> >	struct srcu_struct *ssp;
-> >	struct srcu_struct **sspp = mod->srcu_struct_ptrs;
-> >
-> >	for (i = 0; i < mod->num_srcu_structs; i++) {
-> >		ssp = *(sspp++);
-> >		ssp->sda = alloc_percpu(struct srcu_data);
-> >		if (WARN_ON_ONCE(!ssp->sda))
-> >			return -ENOMEM;
-> >	}
-> >	return 0;
-> >}
-> >
-> >/* Clean up any global-scope srcu_struct structures used by this module. */
-> >static void srcu_module_going(struct module *mod)
-> >{
-> >	int i;
-> >	struct srcu_struct *ssp;
-> >	struct srcu_struct **sspp = mod->srcu_struct_ptrs;
-> >
-> >	for (i = 0; i < mod->num_srcu_structs; i++) {
-> >		ssp = *(sspp++);
-> >		if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-> >		    !WARN_ON_ONCE(!ssp->srcu_sup->sda_is_static))
-> >				cleanup_srcu_struct(ssp);
-> >		free_percpu(ssp->sda);
-> >	}
-> >}
