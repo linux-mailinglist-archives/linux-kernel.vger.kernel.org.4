@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588786C7817
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B58476C7818
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjCXGnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 02:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        id S231281AbjCXGoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 02:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjCXGnp (ORCPT
+        with ESMTP id S230100AbjCXGoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:43:45 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8154EC6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:43:43 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id cn12so3936646edb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:43:43 -0700 (PDT)
+        Fri, 24 Mar 2023 02:44:44 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAB955BA
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:44:43 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id w9so3969181edc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:44:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679640222;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1679640282;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xgbEes8ceG/tgVaAXlVTgP+CsmCv+C77+gH5pG0psKU=;
-        b=IVLY4ihYnrndXdYOkJDh+BcgYmhsm8NV81lXqqFK+2D/qIjD5oSO8COFkDO9Rp2NET
-         NxrQe0JWjOWFPByQZyryFugPTiR4WfnkaNb5+ttulTNUah5C6TCRUCH2FgdtQLi3ITyV
-         N6YrR9CDjxNZeQ5Upg5GRGMxUJetIzygEWo96dQuZRhO60P9ZyfGK16JI4gxclMn4SUZ
-         8fByWAWY7OaLJ9yT8krVUlNIezGuPzdr1JyDSLzizOwfrW8VpV/ovNo9so1mvBw+qvU8
-         6D6kjOZkGxZ+TWn4+501ubpVbYtzhby9PweeDFgS466GU5yIF4pmls7aBJROCyRqzRAU
-         4CDg==
+        bh=sCX/SFYH/vwWzfLjx0NaL7F5JK5dcabJ3U2Bkjqieto=;
+        b=VQcF+cyCC1f8OrBQq8fWy7c7wZ0CwMWosRl6X3GKeEVMv53aLT1LLpK07Fb8P3k7hE
+         xJsfaDi9M2z0/td6Y+9/+rwp+o9FnmkyrnjzRcv/8ynsw8yup8oAw09c0DUuxzYAPR2b
+         kUvVhTjHfSrZyBea4+snXIQyDgSxdkW4mgD5um0xvRCdy+haLAazQ7t46fZpL+nGDuk1
+         rYAUX65wCYgY8Gvq8jLaGnifR+p4OFc6jEbM4o0Y94kkTM5PXm8aFW8TwXMkoQWzD+X1
+         Vs7VY2XUQqGxqhSWBurxz73sgunhDVX2ki1m6AB4iWTCdWJ/tvr02vkLgnwRwlJPMvd6
+         uRaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679640222;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1679640282;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xgbEes8ceG/tgVaAXlVTgP+CsmCv+C77+gH5pG0psKU=;
-        b=UWy60C8Unr0V6JHEoS1vTLiyTx1nRakJkE2hjH7dhdY2djbMi/ECLCXzakWi03genH
-         PArpud46JXEGP7u98hVj+v6KXk7YB2cX66XDZpGphtu/LuF9qGAy/5cfEGEB53u3ENPs
-         X1LBB3GtGfq1qrL8T179iI7Rek9swH9cvjhw1+02TYpDvdgu84FiWlsQ6TC6CEmIK4Dc
-         EpEbo+dmXP9tATlasjWQdA1AihdmDmfS0oQFu4j9Xd1655JqtPoUK/ajSBxcFR3tqLQ/
-         4oQQNGrqdqkHdwBZts6wqiXcDDZ3f/B5I4CWNjM45JbwI2a8VWk91GwNpO9gPEwtymW7
-         YO4A==
-X-Gm-Message-State: AAQBX9eohgQEO8nzTyQfH1beu8IHtHC4tNZswjLWHvD1CJbIT0Rg1cX2
-        4EybXazQOB5zWEWhhSHnnz/ebQ==
-X-Google-Smtp-Source: AKy350bupkWhK9wHoFfP9guobvfEexGlu6Qt6let3DJABjnFlfznwyic3HUOKnPkz25A7qQOzT8sEg==
-X-Received: by 2002:a17:906:507:b0:907:9bda:93b9 with SMTP id j7-20020a170906050700b009079bda93b9mr1549066eja.17.1679640222055;
-        Thu, 23 Mar 2023 23:43:42 -0700 (PDT)
+        bh=sCX/SFYH/vwWzfLjx0NaL7F5JK5dcabJ3U2Bkjqieto=;
+        b=NBgTGdrCL2mJaQGOGeOEY1itdm/rVBAZ23TUhSLrcp66h4UcWhjHr0oMQ9m5YDGVHl
+         FRvCih3fenjuPVrXM2pEo+vQFvGUXt1XvOEhI0s8dX2dp1vqpgx6gNpOSXqteDYnzz20
+         RF+cRkg0lJmB9t1BPhxp9K9eLNzGqctmZ/BqWBQn8vbePDQischgJQmELUngjx83tX+m
+         FbNEVo4GVTI7Bp194038zhNhIMA53J5/SNzLHqXzdycEslM6rSUuU08PlvYgeypxggzp
+         VUC1OuWnmAF28iOSST8XJ71VPKQYx3zXOxPKBPBcs1KSOviyKoYvi8X1yvg1RemTNS0a
+         vzUQ==
+X-Gm-Message-State: AAQBX9fzpEdv/v90GtJS8R87Sn9WJWw/98lP6Wz/UPE3C5C5VbVKrgst
+        SzmaqxdqRzIMAnt1jjS1TK4R0g==
+X-Google-Smtp-Source: AKy350aHpVcS7kolMKTfZDwzBvwwMj2QB/Cak9w9IiM0iWmf6V+KHjzNTHdojkbwziWSVqs47kZtrg==
+X-Received: by 2002:aa7:cd9a:0:b0:4ac:b687:f57e with SMTP id x26-20020aa7cd9a000000b004acb687f57emr1798860edv.1.1679640282078;
+        Thu, 23 Mar 2023 23:44:42 -0700 (PDT)
 Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id bu6-20020a170906a14600b00933c52c2a0esm7236006ejb.173.2023.03.23.23.43.40
+        by smtp.googlemail.com with ESMTPSA id e22-20020a50a696000000b005021c7f08absm872205edc.29.2023.03.23.23.44.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 23:43:41 -0700 (PDT)
-Message-ID: <4b448582-fe11-7f24-36ac-16fd8a22c139@linaro.org>
-Date:   Fri, 24 Mar 2023 06:43:40 +0000
+        Thu, 23 Mar 2023 23:44:41 -0700 (PDT)
+Message-ID: <2a0aabf5-41a3-cc07-3203-9b0bca6b71aa@linaro.org>
+Date:   Fri, 24 Mar 2023 06:44:40 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
 Subject: Re: [PATCH 3/4] ASoC: codecs: wsa883x: mute/unmute PA in correct
  sequence
-To:     Mark Brown <broonie@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     tiwai@suse.com, lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, johan+linaro@kernel.org,
-        steev@kali.org, dmitry.baryshkov@linaro.org
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        johan+linaro@kernel.org, steev@kali.org,
+        dmitry.baryshkov@linaro.org
 References: <20230323164403.6654-1-srinivas.kandagatla@linaro.org>
  <20230323164403.6654-4-srinivas.kandagatla@linaro.org>
  <ff3eb88a-6941-4303-a4ba-17cad3842b88@sirena.org.uk>
- <5dc11c47-bae6-2f4e-4ffd-58c4f462fd68@linux.intel.com>
- <101cfc2d-59d7-4f37-9dd1-e83d1b803bc5@sirena.org.uk>
-Content-Language: en-US
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <101cfc2d-59d7-4f37-9dd1-e83d1b803bc5@sirena.org.uk>
+In-Reply-To: <ff3eb88a-6941-4303-a4ba-17cad3842b88@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -84,23 +82,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 24/03/2023 00:14, Mark Brown wrote:
-> On Thu, Mar 23, 2023 at 01:11:11PM -0500, Pierre-Louis Bossart wrote:
+On 23/03/2023 17:07, Mark Brown wrote:
+> On Thu, Mar 23, 2023 at 04:44:02PM +0000, Srinivas Kandagatla wrote:
+>> In the current setup the PA is left unmuted even when the
+>> Soundwire ports are not started streaming. This can lead to click
+>> and pop sounds during start.
+>> There is a same issue in the reverse order where in the PA is
+>> left unmute even after the data stream is stopped, the time
+>> between data stream stopping and port closing is long enough
+>> to accumulate DC on the line resulting in Click/Pop noise
+>> during end of stream.
 > 
->>> The trigger is run in atomic context, can you really write safely to a
->>> SoundWire device there?
+> Wow, that hardware sounds *super* fragile.
 > 
->> Mark, I've seen that comment from you several times, and I wonder if I
->> am missing something: the triggers for SoundWire managers and dailinks
->> are typically nonatomic - at least for the Cadence-based solution the
->> trigger is based on a bank switch that may happen with a delay and with
->> a wait_for_completion(). Sending a command over the SoundWire channel is
->> also typically not atomic, there's usually a wait_for_completion() as well.
+>> Moving the mute/unmute to trigger stop/start respectively seems to
+>> help a lot with this Click/Pop issues reported on this Codec.
 > 
-> Ah, you're setting the nonatomic flag on your links to disable the
-> locking.  The default for trigger operations is to run them with local
-> interrupts disabled.  It looks like at least some of the Qualcomm stuff
-> does that too.
-Yes, by default dailinks are marked as nonatomic in Qualcomm case aswell.
+>> +static int wsa883x_trigger(struct snd_pcm_substream *s, int cmd,
+>> +			   struct snd_soc_dai *dai)
+>> +{
+>> +	switch (cmd) {
+>> +	case SNDRV_PCM_TRIGGER_START:
+>> +	case SNDRV_PCM_TRIGGER_RESUME:
+>> +	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+>> +		wsa883x_digital_mute(dai, false, 0);
+>> +		break;
+> 
+>>   static const struct snd_soc_dai_ops wsa883x_dai_ops = {
+>> +	.startup = wsa883x_startup,
+>>   	.hw_params = wsa883x_hw_params,
+>>   	.hw_free = wsa883x_hw_free,
+>> -	.mute_stream = wsa883x_digital_mute,
+>> +	.trigger = wsa883x_trigger,
+> 
+> The trigger is run in atomic context, can you really write safely to a
+> SoundWire device there?
+> 
+> This feels like we should be doing it at the framework level, either
+> tightening up where the mute happens in general or having some option
+> that devices can select if they really need it.
+That makes more sense, I can give that a try.
 
 --srini
