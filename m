@@ -2,174 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1860E6C7D44
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AED756C7D46
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjCXLgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 07:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
+        id S230471AbjCXLhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 07:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjCXLgx (ORCPT
+        with ESMTP id S229729AbjCXLhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 07:36:53 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C731D90B
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:36:51 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id t10so6648240edd.12
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:36:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679657810;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vlkMAwkSL6A+6l6qhyo9+I+btfsSVV+jS0eHZv1Cz/4=;
-        b=hmJq3ncfz9zmAyQlRRCODWQq2YRZTe4STlK+rTkj4KcWTlJJXIMOdQUmKLUfJGSvBY
-         95//pT1vXhXjch/H4B2NfkMcZMwjhBHPY1hnC5sSJtwgEOl9YHV1EcLoZlUxLYjfxY2q
-         /Rw23+XrtJZIRGCYUcuoi7r9xMHOb6hRZ+DWfTvwZBRm6btkbfLHOOVtFjtQdnjWmdNv
-         iKGTrF2iOdWhZgXzBHMok4rKqvsszdLusl05KRAwx9gyQ5FA5nHZ8QYDI/gg7WH+n6br
-         6TFjnIWR+3TpXQNRjQv9gMQsq4jQf5Sys/ZYEDJ31obzKBmaj+CuZsWdZ3lk7Nyrv9Vi
-         fsBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679657810;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vlkMAwkSL6A+6l6qhyo9+I+btfsSVV+jS0eHZv1Cz/4=;
-        b=oQVnweOjiw+f3g2oyLwp9DLbkvb4JOSk0FlzfK1K7+B8SgAQCyT0G5L3koVIfq8Zho
-         Afa3FUHAUcKz8tF/AJwxtKpNFIMCA6PJKjDSulowsvJJCr1PAyd6nekdZ3rqrQfOgAws
-         uKXlGGjaI85nW4UYW+xhToTmFBXiWvWXJWExog4YcGfZ6u37C5QLC/mRVoj7jSq3wJLa
-         XFG+I5Ja91L4ivP0Tu1Bdxzo5z3Et1J92CPyRMzRhz1jO0bY165H9eIoMZzLzHFzOLwW
-         Nxl5OnwaRhdjXXa20JH16hIQN9W+TJhy2BCNiwDcLpgAiUQ1ylPMpxRS4YLNxM7eOPpY
-         P9cA==
-X-Gm-Message-State: AO0yUKUWCjheLeAuAF2klf0LER4ttK7lsEROFRpcOSaTWrQaq1+Z2xF9
-        UjorG2Bi25M96RVIOnd8ksitIQ==
-X-Google-Smtp-Source: AK7set8JifsJoxUHo/xqsd+naerD1nr5pkzdEbY1ebVhB0Uat3D1Hfe+F+ZknhKDRxIvYIT5MrNL/A==
-X-Received: by 2002:a05:6402:1748:b0:4fb:223a:76e7 with SMTP id v8-20020a056402174800b004fb223a76e7mr8892025edx.18.1679657810234;
-        Fri, 24 Mar 2023 04:36:50 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:3027:fb0b:ae08:588? ([2a02:810d:15c0:828:3027:fb0b:ae08:588])
-        by smtp.gmail.com with ESMTPSA id m10-20020a50998a000000b004e48f8df7e2sm10688391edb.72.2023.03.24.04.36.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 04:36:49 -0700 (PDT)
-Message-ID: <cbfbbfeb-8ce9-3908-9a61-58b7daa4e7d9@linaro.org>
-Date:   Fri, 24 Mar 2023 12:36:48 +0100
+        Fri, 24 Mar 2023 07:37:32 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1AF1CF7E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1679657851; x=1711193851;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IYX2yiBdi+H5GU+DmapKpR5UJVC8Y6HTCJ/8rFnvS8Q=;
+  b=db5Fntd9kzIyeWl+7qRBo4BeFRhME72hEX9NRSzMK/kLoc3BjFg2bQp0
+   e2fJG2IrDHK0Csfc6q1EXzqVQZV6wa4VwPYRSVgur3AV3/5sgbjPANIDb
+   nKGPu8NNNVzxJKs1MOhg/7XoU4k6uvSGWb/AhJFRIVt/wqllN0gqGvOvN
+   hl1JVe+rfHaCoPn5Mxrutdh6IvWW8KuceT7ZO1WeodVu/UPij3tu/J1zF
+   IfucBajRTo1lMBdH5hPqKa6DSa/8aYgF78jGdwY7Yhj8JM0fGwwE/gFRF
+   UE98MRL7ZaT9RaASj7j6VruMG7Iyrw5WaYL5HdebFg3G1cvHcX+tDBFXS
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,287,1673938800"; 
+   d="asc'?scan'208";a="143714944"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Mar 2023 04:37:30 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 24 Mar 2023 04:37:26 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 24 Mar 2023 04:37:24 -0700
+Date:   Fri, 24 Mar 2023 11:37:05 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     <palmer@dabbelt.com>, <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 0/2] RISC-V: Fixes for
+ riscv_has_extension[un]likely()'s alternative dependency
+Message-ID: <e7a93223-54e4-4c97-b121-5d1be3af0d65@spud>
+References: <20230324100538.3514663-1-conor.dooley@microchip.com>
+ <20230324113107.djp4ejnlpzn3qzrb@orel>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V3 2/2] ASoC: dt-bindings: max98363: add soundwire
- amplifier
-Content-Language: en-US
-To:     =?UTF-8?B?4oCcUnlhbg==?= <ryan.lee.analog@gmail.com>,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, rf@opensource.cirrus.com,
-        ckeepax@opensource.cirrus.com,
-        pierre-louis.bossart@linux.intel.com, herve.codina@bootlin.com,
-        wangweidong.a@awinic.com, james.schulman@cirrus.com,
-        ajye_huang@compal.corp-partner.google.com, shumingf@realtek.com,
-        povik+lin@cutebit.org, flatmax@flatmax.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        ryans.lee@analog.com
-References: <20230323175256.2606939-1-ryan.lee.analog@gmail.com>
- <20230323175256.2606939-2-ryan.lee.analog@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230323175256.2606939-2-ryan.lee.analog@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ny1hFZsdzoiIlIxz"
+Content-Disposition: inline
+In-Reply-To: <20230324113107.djp4ejnlpzn3qzrb@orel>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 18:52, “Ryan wrote:
-> From: Ryan Lee <ryans.lee@analog.com>
-> 
-> This patch adds dt-bindings information for Analog Devices MAX98363
-> SoundWire Amplifier.
+--ny1hFZsdzoiIlIxz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-No improvements here. So reminding:
+On Fri, Mar 24, 2023 at 12:31:07PM +0100, Andrew Jones wrote:
+> On Fri, Mar 24, 2023 at 10:05:37AM +0000, Conor Dooley wrote:
+> > Here's my attempt at fixing both the use of an FPU on XIP kernels and
+> > the issue that Jason ran into where CONFIG_FPU, which needs the
+> > alternatives frame work for has_fpu() checks, could be enabled without
+> > the alternatives actually being present.
+> >=20
+> > For the former, a "slow" fallback that does not use alternatives is
+> > added to riscv_has_extension_[un]likely() that can be used with XIP.
+> > Obviously, we want to make use of Jisheng's alternatives based approach
+> > where possible, so any users of riscv_has_extension_[un]likely() will
+> > want to make sure that they select RISCV_ALTERNATIVE.
+> > If they don't however, they'll hit the fallback path which (should,
+> > sparing a silly mistake from me!) behave in the same way, thus
+> > succeeding silently. Sounds like a
+> >=20
+> > To prevent "depends on !XIP_KERNEL; select RISCV_ALTERNATIVE" spreading
+> > like the plague through the various places that want to check for the
+> > presence of extensions, and sidestep the potential silent "success"
+> > mentioned above, all users RISCV_ALTERNATIVE are converted from selects
+> > to dependencies, with the option being selected for all !XIP_KERNEL
+> > builds.
+> >=20
+> > I know that the VDSO was a key place that Jisheng wanted to use the new
+> > helper rather than static branches, and I think the fallback path
+> > should not cause issues there.
+> >=20
+> > See the thread at [1] for the prior discussion.
+> >=20
+> > Cheers,
+> > Conor.
+> >=20
+> > 1 - https://lore.kernel.org/linux-riscv/20230128172856.3814-1-jszhang@k=
+ernel.org/T/#m21390d570997145d31dd8bb95002fd61f99c6573
+> >=20
+> > CC: Paul Walmsley <paul.walmsley@sifive.com>
+> > CC: Palmer Dabbelt <palmer@dabbelt.com>
+> > CC: Conor Dooley <conor.dooley@microchip.com>
+> > CC: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> > CC: Andrew Jones <ajones@ventanamicro.com>
+> > CC: Anup Patel <apatel@ventanamicro.com>
+> > CC: Jisheng Zhang <jszhang@kernel.org>
+> > CC: Andrew Jones <ajones@ventanamicro.com>
+> > CC: Jason A. Donenfeld <Jason@zx2c4.com>
+> > CC: linux-riscv@lists.infradead.org
+> > CC: linux-kernel@vger.kernel.org
+> >=20
+> > Conor Dooley (2):
+> >   RISC-V: add non-alternative fallback for
+> >     riscv_has_extension_[un]likely()
+> >   RISC-V: always select RISCV_ALTERNATIVE for non-xip kernels
+> >=20
+> >  arch/riscv/Kconfig             | 12 ++++----
+> >  arch/riscv/Kconfig.erratas     |  6 ++--
+> >  arch/riscv/include/asm/hwcap.h | 50 ++++++++++++++++++++--------------
+> >  3 files changed, 38 insertions(+), 30 deletions(-)
+> >=20
+> > --=20
+> > 2.39.2
+> >
+>=20
+> LGTM, but if it was based on for-next then it could also immediately be
+> applied to zicboz. For the series,
 
-Do not use "This commit/patch", but imperative mood. See:
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+Hmm, I did it on top of fixes since this needs to go into v6.3.
+Perhaps I can create a standalone patch for Zicboz and Palmer could merge
+these two into both fixes & for-next, with the standalone applied on
+top?
 
-> 
-> Signed-off-by: Ryan Lee <ryans.lee@analog.com>
-> ---
-> Changes from v1:
->   Fixed a syntax error for the 'dt_binding_check' build.
->   Removed unnecessary properties.
->   Added description about SoundWire device ID of MAX98363
-> Changes from v2:
->   Removed the legacy from i2c/i2s driver and added SoundWire device ID info.
->   Added missing information about DAI.
-> 
->  .../bindings/sound/adi,max98363.yaml          | 62 +++++++++++++++++++
->  1 file changed, 62 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/adi,max98363.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/adi,max98363.yaml b/Documentation/devicetree/bindings/sound/adi,max98363.yaml
-> new file mode 100644
-> index 000000000000..92352a23e1cb
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/adi,max98363.yaml
-> @@ -0,0 +1,62 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/adi,max98363.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices MAX98363 SoundWire Amplifier
-> +
-> +maintainers:
-> +  - Ryan Lee <ryans.lee@analog.com>
-> +
-> +description:
-> +  The MAX98363 is a SoundWire input Class D mono amplifier that
-> +  supports MIPI SoundWire v1.2-compatible digital interface for
-> +  audio and control data.
-> +  SoundWire peripheral device ID of MAX98363 is 0x3X019F836300
 
-lowercase hex
 
-> +  where X is the peripheral device unique ID decoded from pin.
-> +  It supports up to 10 peripheral devices(0x0 to 0x9).
-> +
-> +allOf:
-> +  - $ref: dai-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: sdw3019F836300
+--ny1hFZsdzoiIlIxz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-lowercase hex (also in example)
+-----BEGIN PGP SIGNATURE-----
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#sound-dai-cells':
-> +    const: 0
-> +
-> +  sound-name-prefix: true
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZB2LYQAKCRB4tDGHoIJi
+0lyGAP41T7BFcI8gpNw9Enx+WARRH/LnHpRTEIp5DD90xctutwEA/0H/s+TCAH2W
+54dRVB1P9vR5Fb4nrt/k06p8ZHDa3wg=
+=4buk
+-----END PGP SIGNATURE-----
 
-Drop this.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#sound-dai-cells"
-> +
-> +additionalProperties: false
-
-Instead:
-unevaluatedProperties: false
-
-Best regards,
-Krzysztof
-
+--ny1hFZsdzoiIlIxz--
