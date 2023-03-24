@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEFF6C852B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 803366C8530
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjCXSdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 14:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S231902AbjCXSeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 14:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbjCXSdk (ORCPT
+        with ESMTP id S231897AbjCXSdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 14:33:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57981633B
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 11:33:06 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pfmDk-0000Jh-3A; Fri, 24 Mar 2023 19:33:00 +0100
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C68F919BB99;
-        Fri, 24 Mar 2023 18:32:58 +0000 (UTC)
-Date:   Fri, 24 Mar 2023 19:32:57 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Simon Horman <simon.horman@corigine.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/16] can: m_can: Optimizations for m_can/tcan part 2
-Message-ID: <20230324183257.qpis4cip5cp4gebu@pengutronix.de>
-References: <20230315110546.2518305-1-msp@baylibre.com>
+        Fri, 24 Mar 2023 14:33:54 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A00021974;
+        Fri, 24 Mar 2023 11:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=02cnyqnaBRGJYxnh7ZSFXvWj6btW47f9AiZCeVuZ/Rk=; b=R26mIW3QoIbL53bM2/5dxMFu6y
+        j2NgQUpK0QcAJPYCSRVn97Ez9pu5YnSwUPZK/Npk0aFiAl8Fr/nbymDIEFPH0sHf2VrRGy6bmzOiE
+        CXrWCJo2psL1IwTIPymLY4huLxYTzS9ZerytelYcgx3cUux/QteJoOn0F3ToD2llHMiyuCVgpFL1H
+        EiDggCINc77IwZKqxN6r5d4C16KhT62J3Pdqc3qRfYCLTiYRsW6HDCoOumWeUttxAMbFm9M9FGzbe
+        ZUmvzNzJJrfHg6l4Bax54yCfm+t0w0T/87p9nzUzLOfZZKR+djBSpN8AvS6ZVzW9ccxapBQb4Bquy
+        2AhLNENg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pfmEC-005KSB-2H;
+        Fri, 24 Mar 2023 18:33:28 +0000
+Date:   Fri, 24 Mar 2023 11:33:28 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     christophe.leroy@csgroup.eu, song@kernel.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, david@redhat.com, prarit@redhat.com
+Subject: Re: [PATCH 04/12] module: move early sanity checks into a helper
+Message-ID: <ZB3s+Hn2j6HMIe+m@bombadil.infradead.org>
+References: <20230319212746.1783033-1-mcgrof@kernel.org>
+ <20230319212746.1783033-5-mcgrof@kernel.org>
+ <71176c99-cacb-9a7a-0b4a-9e2c5cb1c3b5@suse.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="maei3lwmc22rxdz5"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230315110546.2518305-1-msp@baylibre.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+In-Reply-To: <71176c99-cacb-9a7a-0b4a-9e2c5cb1c3b5@suse.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,47 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 24, 2023 at 02:02:06PM +0100, Petr Pavlu wrote:
+> On 3/19/23 22:27, Luis Chamberlain wrote:
+> > Move early sanity checkers for the module into a helper.
+> > This let's us make it clear when we are working with the
+> > local copy of the module prior to allocation.
+> > 
+> > This produces no functional changes, it just makes subsequent
+> > changes easier to read.
+> > 
+> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> > ---
+> >  kernel/module/main.c | 43 ++++++++++++++++++++++++++-----------------
+> >  1 file changed, 26 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index 427284ab31f1..933cef72ae13 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -2668,6 +2668,31 @@ static int unknown_module_param_cb(char *param, char *val, const char *modname,
+> >  	return 0;
+> >  }
+> >  
+> > +/* Module within temporary copy, this doesn't do any allocation  */
+> > +static int early_mod_check(struct load_info *info, int flags)
+> > +{
+> > +	int err;
+> > +
+> > +	/*
+> > +	 * Now that we know we have the correct module name, check
+> > +	 * if it's blacklisted.
+> > +	 */
+> > +	if (blacklisted(info->name)) {
+> > +		pr_err("Module %s is blacklisted\n", info->name);
+> > +		return -EPERM;
+> > +	}
+> > +
+> > +	err = rewrite_section_headers(info, flags);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	/* Check module struct version now, before we try to use module. */
+> > +	if (!check_modstruct_version(info, info->mod))
+> > +		return ENOEXEC;
+> 
+> The error value when check_modstruct_version() fails is changed in this patch
+> from -ENOEXEC to ENOEXEC and updated back again in the next patch. It would be
+> good to avoid introducing this temporary problem and keep the value throughout
+> as -ENOEXEC.
 
---maei3lwmc22rxdz5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixed, thanks.
 
-On 15.03.2023 12:05:30, Markus Schneider-Pargmann wrote:
-> Hi Marc and everyone,
->=20
-> third version part 2, functionally I had to move from spin_lock to
-> spin_lock_irqsave because of an interrupt that was calling start_xmit,
-> see attached stack. This is tested on tcan455x but I don't have the
-> integrated hardware myself so any testing is appreciated.
->=20
-> The series implements many small and bigger throughput improvements and
-> adds rx/tx coalescing at the end.
-
-I've applied patches 1...5 to can-next.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---maei3lwmc22rxdz5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQd7NcACgkQvlAcSiqK
-BOho7Af/W+9fuaKIaN99W/mZF0Xe48ZngWQMU7/COYFSUIWFiX6RcLORYZRRPrxK
-zMp/1uFYmTK9VBxQPd/dyHA7IA1Fa1Yf7xaRRw+XdmIxzQgfGSpQDg0gnyRc/fty
-7tBr5RElXS9E2pFyuza48H+lkejkwFO9W5w+KhUjfF9FX9WkeUhMOMBbVzC6XLMT
-tQTbmpD4pN53ov8JpeQYFjSGGmsPrp8e6HP2yRJxXEOX15ac+tGypBjOh52769k0
-eERaA3LMXAQmYZezfDsvZkFHjD+Xe4EChmcUjQ0iqOReDxYoHjzTNjrcaPVyckYy
-JhIyZVKbGp0cHEnAA915bVBI7cxscA==
-=YQla
------END PGP SIGNATURE-----
-
---maei3lwmc22rxdz5--
+  Luis
