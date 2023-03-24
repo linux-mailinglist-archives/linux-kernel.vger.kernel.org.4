@@ -2,156 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5D16C8486
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:09:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1F56C8489
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbjCXSJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 14:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        id S231655AbjCXSLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 14:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbjCXSJN (ORCPT
+        with ESMTP id S231307AbjCXSLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 14:09:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A422210E2;
-        Fri, 24 Mar 2023 11:09:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 530A5B82548;
-        Fri, 24 Mar 2023 18:09:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D4F5C433EF;
-        Fri, 24 Mar 2023 18:09:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679681350;
-        bh=kWAglP/3M/YpfurCGt08xf8SdrOMxcAlvmBWofnH+50=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g7qKyXjwRyQ/7rfhwb+FcWl+TNUjHuR/K37ZoWIxgSdzD5KdAQ1zxecVVv8DaIp95
-         /O7OW+YssvLHLD/Vx7J7f5iWDJRtptE2oVGtFB4m9vzK9ZyniX31i7u9q7BQs9cweI
-         tsauNVu2HhXXBo8zC6R1dhMCXwtjyGvbmkgaftxPHrQCgSzR4b/bfmR+yTsI+SnqfQ
-         nV5yNLepx4kBuluss3Do9BcBeNZVTh6C9bkz0qb1Y/PPDrbzU1s7Jw4unb6p788AlL
-         A5S7kdVbKT9cjV7ZmRYCSB+rKEoYpxcalZyja1y7g1Y3B0KNfT1RlFyYj4v836V087
-         Lhj+Rc8JELitQ==
-Date:   Fri, 24 Mar 2023 18:09:05 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     "Bouska, Zdenek" <zdenek.bouska@siemens.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Kiszka, Jan" <jan.kiszka@siemens.com>,
-        "linux-rt-users@vger.kernel.org" <linux-rt-users@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>, Puranjay Mohan <p-mohan@ti.com>
-Subject: Re: Unfair qspinlocks on ARM64 without LSE atomics => 3ms delay in
- interrupt handling
-Message-ID: <20230324180904.GA28266@willie-the-truck>
-References: <AS1PR10MB56750EFD7BEA779D033A68CBEB849@AS1PR10MB5675.EURPRD10.PROD.OUTLOOK.COM>
- <ZB3XaNtVqGtYHHBw@arm.com>
+        Fri, 24 Mar 2023 14:11:44 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B0C15C81;
+        Fri, 24 Mar 2023 11:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gnerbpCPsPLVCcKOjYr9IDYevUX0qSWzWV6ueg4TeJI=; b=I6qos94qsOkjPfh25S2EXs0EEw
+        kAriqRKGUCL+rq7FwvkPTaOKDGAkyKTXMpp464X8uHCrl7zZXsAY9j3bdYdAmGO3OSXDWqnq8Npy4
+        8b2SN2yLnvFkxzB4LAIfEIWwb+i/GrFapFYGHyoHkjPSfocGhxM8IvUeEIupFbk1WfK3Ne+OpBibY
+        5A23eQcv8T96dzpYb2V96rWPc8+IHxSnHL2au6i3WuJxsn1pPdC0Air3yC042qxp+pHRjzdai1q1r
+        It0Li1iOkF7qcMRScRPQlnrzPGwABos/hCnvCfjgFKiz9riaUq8u0bmGqXt1VU3bzY5yl2WJEu2/3
+        NDw/DdpQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pflt0-005GES-1Z;
+        Fri, 24 Mar 2023 18:11:34 +0000
+Date:   Fri, 24 Mar 2023 11:11:34 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     ye xingchen <yexingchen116@gmail.com>
+Cc:     akpm@linux-foundation.org, chi.minghao@zte.com.cn,
+        hch@infradead.org, keescook@chromium.org, linmiaohe@huawei.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, vbabka@suse.cz, willy@infradead.org,
+        ye.xingchen@zte.com.cn, yzaikin@google.com
+Subject: Re: [PATCH V5 1/2] mm: compaction: move compaction sysctl to its own
+ file
+Message-ID: <ZB3n1pJZsOK+E/Zk@bombadil.infradead.org>
+References: <ZByq/TcnxYbeReJZ@bombadil.infradead.org>
+ <20230324062408.49217-1-ye.xingchen@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZB3XaNtVqGtYHHBw@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230324062408.49217-1-ye.xingchen@zte.com.cn>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 05:01:28PM +0000, Catalin Marinas wrote:
-> On Fri, Mar 24, 2023 at 08:43:38AM +0000, Bouska, Zdenek wrote:
-> > I have seen ~3 ms delay in interrupt handling on ARM64.
-> > 
-> > I have traced it down to raw_spin_lock() call in handle_irq_event() in
-> > kernel/irq/handle.c:
-> > 
-> > irqreturn_t handle_irq_event(struct irq_desc *desc)
-> > {
-> >     irqreturn_t ret;
-> > 
-> >     desc->istate &= ~IRQS_PENDING;
-> >     irqd_set(&desc->irq_data, IRQD_IRQ_INPROGRESS);
-> >     raw_spin_unlock(&desc->lock);
-> > 
-> >     ret = handle_irq_event_percpu(desc);
-> > 
-> > --> raw_spin_lock(&desc->lock);
-> >     irqd_clear(&desc->irq_data, IRQD_IRQ_INPROGRESS);
-> >     return ret;
-> > }
-> > 
-> > It took ~3 ms for this raw_spin_lock() to lock.
+On Fri, Mar 24, 2023 at 06:24:08AM +0000, ye xingchen wrote:
+> >$ ./scripts/bloat-o-meter vmlinux.old vmlinux
+> >add/remove: 1/0 grow/shrink: 1/2 up/down: 346/-350 (-4)
+> >Function                                     old     new   delta
+> >vm_compaction                                  -     320    +320
+> >kcompactd_init                               167     193     +26
+> >proc_dointvec_minmax_warn_RT_change          104      10     -94
+> >vm_table                                    2112    1856    -256
+> >Total: Before=19287558, After=19287554, chg -0.00%
+> >
+> >So I don't think we need to pause this move or others where are have savings.
+> >
+> >Minghao, can you fix the commit log, and explain how you are also saving
+> >4 bytes as per the above bloat-o-meter results?
 > 
-> That's quite a large indeed.
+> $ ./scripts/bloat-o-meter vmlinux vmlinux.new
+> add/remove: 1/0 grow/shrink: 1/1 up/down: 350/-256 (94)
+> Function                                     old     new   delta
+> vm_compaction                                  -     320    +320
+> kcompactd_init                               180     210     +30
+> vm_table                                    2112    1856    -256
+> Total: Before=21104198, After=21104292, chg +0.00%
 > 
-> > During this time irq_finalize_oneshot() from kernel/irq/manage.c locks and
-> > unlocks the same raw spin lock more than 1000 times:
-> > 
-> > static void irq_finalize_oneshot(struct irq_desc *desc,
-> >                  struct irqaction *action)
-> > {
-> >     if (!(desc->istate & IRQS_ONESHOT) ||
-> >         action->handler == irq_forced_secondary_handler)
-> >         return;
-> > again:
-> >     chip_bus_lock(desc);
-> > --> raw_spin_lock_irq(&desc->lock);
-> > 
-> >     /*
-> >      * Implausible though it may be we need to protect us against
-> >      * the following scenario:
-> >      *
-> >      * The thread is faster done than the hard interrupt handler
-> >      * on the other CPU. If we unmask the irq line then the
-> >      * interrupt can come in again and masks the line, leaves due
-> >      * to IRQS_INPROGRESS and the irq line is masked forever.
-> >      *
-> >      * This also serializes the state of shared oneshot handlers
-> >      * versus "desc->threads_oneshot |= action->thread_mask;" in
-> >      * irq_wake_thread(). See the comment there which explains the
-> >      * serialization.
-> >      */
-> >     if (unlikely(irqd_irq_inprogress(&desc->irq_data))) {
-> > -->     raw_spin_unlock_irq(&desc->lock);
-> >         chip_bus_sync_unlock(desc);
-> >         cpu_relax();
-> >         goto again;
-> >     }
-> 
-> So this path is hammering the desc->lock location and another CPU cannot
-> change it. As you found, the problem is not the spinlock algorithm but
-> the atomic primitives. The LDXR/STXR constructs on arm64 are known to
-> have this issue with STXR failing indefinitely. raw_spin_unlock() simply
-> does an STLR and this clears the exclusive monitor that the other CPU
-> may have set with LDXR but before the STXR. The queued spinlock only
-> provides fairness if the CPU manages to get in the queue.
-> 
-> > So I confirmed that atomic operations from
-> > arch/arm64/include/asm/atomic_ll_sc.h can be quite slow when they are
-> > contested from second CPU.
-> > 
-> > Do you think that it is possible to create fair qspinlock implementation
-> > on top of atomic instructions supported by ARM64 version 8 (no LSE atomic
-> > instructions) without compromising performance in the uncontested case?
-> > For example ARM64 could have custom queued_fetch_set_pending_acquire
-> > implementation same as x86 has in arch/x86/include/asm/qspinlock.h. Is the
-> > retry loop in irq_finalize_oneshot() ok together with the current ARM64
-> > cpu_relax() implementation for processor with no LSE atomic instructions?
-> 
-> So is the queued_fetch_set_pending_acquire() where it gets stuck or the
-> earlier atomic_try_cmpxchg_acquire() before entering on the slow path? I
-> guess both can fail in a similar way.
-> 
-> A longer cpu_relax() here would improve things (on arm64 this function
-> is a no-op) but maybe Thomas or Will have a better idea.
+> In my environment, kcompactd_init increases by 30 instead of 26.
+> And proc_dointvec_minmax_warn_RT_change No expansion.
 
-I had a pretty gross cpu_relax() implementation using wfe somewhere on
-LKML, so you could try that if you can dig it up.
+How about a defconfig + compaction enabled? Provide that information
+and let Vlastimal ACK/NACK the patch.
 
-Generally though, LDXR/STXR and realtime don't mix super well.
-
-Will
+  Luis
