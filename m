@@ -2,147 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD55A6C76C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 06:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833EB6C76CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 06:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjCXFBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 01:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S230259AbjCXFC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 01:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCXFBQ (ORCPT
+        with ESMTP id S229499AbjCXFC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 01:01:16 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB7322790;
-        Thu, 23 Mar 2023 22:01:15 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id ek18so3287197edb.6;
-        Thu, 23 Mar 2023 22:01:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679634074;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qjRWCU/VLQErX2z0uvL/aL2jDlqWYNpnjGy6qbEOGGE=;
-        b=AV4afuHsts3hAqNjn+9LdAhIgZ+Zdmq1EJCCmlG/TdZACcSB8wehdUwVsHhv/Dopjp
-         RTph8NS7MUsrtZ+Ev++hdhIOfeWehOCfOIUWSVtYW+uK0vaIPqUYPxuffx6LMoIXSNOz
-         5SaDg2awjB3Bdo2P0vjaJHPPrMIRZIaUZnRD1Vfpb69yaq96zT/2rXIpk2EvucvO+aNV
-         HBT40USzBCx+QgLCahLeo9aFpJ+igenZMfPloCpeBZK3bUsAfR+2LFmLSJ/EuHxaBLDk
-         bGbsEr6dFrTrDeMWRxE69GUfgXTX4AJXn6YIuA7BWne11xTaWAPULAXH/wzrufLxu+i0
-         dxgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679634074;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qjRWCU/VLQErX2z0uvL/aL2jDlqWYNpnjGy6qbEOGGE=;
-        b=0nsRnMePvc7bP9DrlNeIoiJIiQMPFXJzUxAvMZ3/ZyqIy9BOPY3As5lQW3gUuDkqpL
-         6LrF97UTlrQ4mHKPbcLURA3xsgg8XPb5Il+TxLl4qakPKfn0om7G3bd83C5lz0R06GM8
-         988daSRnkSQEoisYTlghYWvHNB9jBev4N77JkrmrnqqqEfNMDwnkTxQW1FS17UAJmqG4
-         C4b2yAjaPsjx5o9Eeu6o0XK/NPO7mtUMx0l9mmCYSO5FWv35YDjG/QNMQvO7mJ2MRAch
-         SEKCkiw9utTPLLtDUA9RRXpmcRXI8x5mThud/1MQG5aXD8MQpFrxSK+YyIYcl+WTb1eo
-         HFag==
-X-Gm-Message-State: AAQBX9dbHDv+gkOnmYtedonxEc/hz/i58asQ/BwlMERhCwsnLW2l0UNl
-        t5OdQUiUcNDPSdtxM2DCk4tMfHFy0mwIIw==
-X-Google-Smtp-Source: AKy350Z6AhniQxuCsI+BdYd/geEC5/fUia7TructKG3W3ffPTO5hgdA9jsSFB3KZs+E/YxUvVP/DzA==
-X-Received: by 2002:a05:6402:1503:b0:4fd:2b0e:ce87 with SMTP id f3-20020a056402150300b004fd2b0ece87mr1438213edw.24.1679634073874;
-        Thu, 23 Mar 2023 22:01:13 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id c24-20020a50d658000000b00501d5432f2fsm5249889edj.60.2023.03.23.22.01.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 22:01:13 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 08:01:09 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
-        bin.liu@mediatek.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
-        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
-        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        daniel.almeida@collabora.com, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, jernel@kernel.org
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic
- allocated
-Message-ID: <4e2cb832-de83-4ba6-bd8a-119a19038cfe@kili.mountain>
+        Fri, 24 Mar 2023 01:02:27 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1599A19F16;
+        Thu, 23 Mar 2023 22:02:26 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PjVSb4gRYz4xDj;
+        Fri, 24 Mar 2023 16:02:23 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679634144;
+        bh=PPfs8v6BX3Euce8+Frl/C+tcADBo/J6lT1zaD8YLChc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cf5OqFu6jsazGMxwBSE5Su9pYu1F+RNLaXRr1Ughwr2B8kdvtu7t6VoF4cq6NGXRa
+         JPiXtmrFukDZ67HBqO7BoihrS4YRlwkbtB6BTKFvS1SN+/WKTnRcfY2eIw63ksM1Y/
+         V9Z/qvme8hWLvUdKZJ6bslai2+g0dBl0xv0Jlrs3XC6OBY9PYj8C64Zq80FmR+hClS
+         itTv/rnr9yj0tHy/wNGAg4fy0v5xxKwputgohBVZyFATLM03DtiXCzDQszYdbXhqtt
+         zdH63Xg9uT48i57JcOZDVklN58x1jKzkIGemG7It5jZP6WbwbS0/LsohqxCDTOsCiZ
+         QtICkot0Wp7dA==
+Date:   Fri, 24 Mar 2023 16:02:22 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: error fetching the arm-soc-fixes tree
+Message-ID: <20230324160222.000aad9a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321102855.346732-3-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/7JAzX_LlO/czboev9+s1RDS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+--Sig_/7JAzX_LlO/czboev9+s1RDS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hi all,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230321-183154
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230321102855.346732-3-benjamin.gaignard%40collabora.com
-patch subject: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic allocated
-config: arm64-randconfig-m041-20230319 (https://download.01.org/0day-ci/archive/20230324/202303240148.lKRnUqW9-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
+Fetching the arm-soc-fixes tree produces the following error:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202303240148.lKRnUqW9-lkp@intel.com/
+fatal: couldn't find remote ref refs/heads/arm/fixes
 
-smatch warnings:
-include/media/videobuf2-core.h:1272 vb2_queue_add_buffer() warn: sleeping in atomic context
-drivers/media/common/videobuf2/videobuf2-core.c:2456 vb2_core_queue_init() warn: Please consider using kcalloc instead of kmalloc_array
+This has been happening for the past few days.
 
-vim +1272 include/media/videobuf2-core.h
+--=20
+Cheers,
+Stephen Rothwell
 
-625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1263  static inline bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
-625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1264  {
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1265  	bool ret = false;
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1266  
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1267  	spin_lock(&q->bufs_lock);
-                                                        ^^^^^^^^^^^^^^^^^^^^^^^
-Holding a spin lock.
+--Sig_/7JAzX_LlO/czboev9+s1RDS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1268  
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1269  	if (vb->index >= q->max_num_bufs) {
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1270  		struct vb2_buffer **tmp;
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1271  
-487d3f14d12ecf Benjamin Gaignard 2023-03-21 @1272  		tmp = krealloc_array(q->bufs, q->max_num_bufs * 2, sizeof(*q->bufs), GFP_KERNEL);
-                                                                                                                                     ^^^^^^^^^^
-Sleeping allocation.  GFP_ATOMIC?  Or is there a way to move the
-allocation outside the lock?
+-----BEGIN PGP SIGNATURE-----
 
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1273  		if (!tmp)
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1274  			goto realloc_failed;
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1275  
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1276  		q->max_num_bufs *= 2;
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1277  		q->bufs = tmp;
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1278  	}
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1279  
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1280  	if (vb->index < q->max_num_bufs) {
-625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1281  		q->bufs[vb->index] = vb;
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1282  		ret = true;
-625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1283  	}
-625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1284  
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1285  realloc_failed:
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1286  	spin_unlock(&q->bufs_lock);
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1287  
-487d3f14d12ecf Benjamin Gaignard 2023-03-21  1288  	return ret;
-625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1289  }
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQdLt4ACgkQAVBC80lX
+0GyiPgf9FR+qJNH+3QECAFAJIX37UEFcJTMnpGBbhNqHdsd2WB4SfI2R3QAa6CV1
+Jd9gRN0daEUiSQicSNKBuY+gaIZur1qotYWVhLvQQdb8E9aG+LAg9HHuIHmHDmBj
+UVkfMaBIC8IX13pgn6ka21MgcbhWuE7OYkden5IozAiWIL+XXfkSYHf+nXFjAMp+
+9hLAVYQzM5XpKSx02MRBE6D53XTP7RliCmpWMrgENXz9mKVf163184hbcmch3orj
+sTY6ge5sN0CM8mzpeh37IlzVW5M9gGA0JeexlPFGrDuuJhKEFBJWcK0eUl5hphTA
+qPdqm72UrWsyP3vFDfPI90xEBWSGvw==
+=kZmm
+-----END PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
-
+--Sig_/7JAzX_LlO/czboev9+s1RDS--
