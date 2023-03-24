@@ -2,116 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7556C7DAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B65C6C7DB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbjCXMDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 08:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
+        id S231801AbjCXMGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 08:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbjCXMCv (ORCPT
+        with ESMTP id S231655AbjCXMGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 08:02:51 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A205265B8;
-        Fri, 24 Mar 2023 05:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679659361; x=1711195361;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=M/Jk/NyOL6YOkh9WpMFp/FMLnkzRYwNbBzLyoNFzzAU=;
-  b=Tp5a5DlI92vpGpnCNmXRTLEMyGYXWHELMjRzcubt+IXqopxokZmzqfSW
-   KVSN/K4KyaboIXyMOiehaL3XB5f6R1ZWMjduEBj56Sv/oZXVUYU2goAvK
-   5VbV+QrGuVMk4L6DHat3uMMRt2WcZF2ZUdb0TLcB4k+AxCRd8QucJSKys
-   89HQLLUybgG+nAwV4980m3FlgoSsJcBkHx0+kbrPL2hWtRBdAYUFeKtkf
-   kQzvBdqY6XWAu2splMDWXmziMo4J5r/lzKq+O0+b3GvVF5j4tqjQkSkLO
-   9dgZMZzQ+W1F1XjNd3hPwzDnhrb28DP2wakcng75YVM0MXbDF7p1Fwe8o
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="323634194"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="323634194"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 05:02:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="682674914"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="682674914"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga002.jf.intel.com with ESMTP; 24 Mar 2023 05:02:38 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     iommu@lists.linux.dev, dmaengine@vger.kernel.org
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v3 6/6] iommu/vt-d: Remove unnecessary checks in iopf disabling path
-Date:   Fri, 24 Mar 2023 20:02:34 +0800
-Message-Id: <20230324120234.313643-7-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230324120234.313643-1-baolu.lu@linux.intel.com>
-References: <20230324120234.313643-1-baolu.lu@linux.intel.com>
+        Fri, 24 Mar 2023 08:06:22 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B501F4BA;
+        Fri, 24 Mar 2023 05:06:17 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id CA5C05FD6A;
+        Fri, 24 Mar 2023 15:06:14 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679659574;
+        bh=k3sf6EC4sogl093QAM9hkykETNle5E2MS3s+d/HgAfM=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=IVzxfUcoCuX0vmnekzmfm3f7vnBzYB+tqMrgR7lL+BoEJt+qzQ2tgj4rwSgZ21isJ
+         IxoLErTYPXcQgQjBzi5LiDxdwZWYOQmJVzHBzqpPJRcIVLXAlSlBFU60HynmDMzeP7
+         PFzz3vdXD7Xy9SCMxXUhwQtMmC52L1EB/BDsR3ZasVKKUI8Ga6zNGLyWbvKwhAeHLc
+         Sf3AfTMq68u8k9mTdtEakKqMbjGOFypMcYq6x4HbpnM5hIj3oCqunOPhnFUtsOaxyJ
+         x/kAHL10YLn1UplLktZu1xlV+B9u7ptgEt9jsNMZl7mlY2EslVRpVKY72xoMoy8pK7
+         aDPMPYJKGlWMA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 24 Mar 2023 15:06:13 +0300 (MSK)
+Date:   Fri, 24 Mar 2023 15:06:12 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>
+CC:     <krzysztof.kozlowski@linaro.org>, <robh@kernel.org>,
+        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>, <jianxin.pan@amlogic.com>,
+        <kernel@sberdevices.ru>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <rockosov@gmail.com>
+Subject: Re: [PATCH v1] arm64: dts: meson: a1: place pwrc and secure-monitor
+ under /firmware
+Message-ID: <20230324120612.tpb3uga56ilz7yqx@CAB-WSD-L081021>
+References: <20230323185548.13731-1-ddrokosov@sberdevices.ru>
+ <d180c7d5-7db9-a961-e519-cca5ccf6f013@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <d180c7d5-7db9-a961-e519-cca5ccf6f013@linaro.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/24 06:52:00 #21002836
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-iommu_unregister_device_fault_handler() and iopf_queue_remove_device()
-are called after device has stopped issuing new page falut requests and
-all outstanding page requests have been drained. They should never fail.
-Trigger a warning if it happens unfortunately.
+Hello Neil,
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
----
- drivers/iommu/intel/iommu.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+On Fri, Mar 24, 2023 at 11:11:02AM +0100, neil.armstrong@linaro.org wrote:
+> Hi,
+> 
+> On 23/03/2023 19:55, Dmitry Rokosov wrote:
+> > Before, meson power secure controller was a child of secure monitor node.
+> > But secure monitor isn't the bus in terms of device tree subsystem, so
+> > of_platform initialization code doesn't populate its children
+> > (of_platform_default_populate() API).
+> > 
+> > Therefore in the current device tree meson power secure controller isn't
+> > probed at all.
+> > 
+> > If we place meson power secure controller and secure monitor nodes under
+> > '/firmware', they will be populated automatically from of_platform
+> > initialization.
+> > 
+> > Fixes: 04dd0b6584cd ("arm64: dts: meson: a1: add secure power domain controller")
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > ---
+> >   arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 6 ++++--
+> >   1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > index 77023a29b6e7..44c651254dc5 100644
+> > --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > @@ -72,8 +72,10 @@ linux,cma {
+> >   		};
+> >   	};
+> > -	sm: secure-monitor {
+> > -		compatible = "amlogic,meson-gxbb-sm";
+> > +	firmware {
+> > +		sm: secure-monitor {
+> > +			compatible = "amlogic,meson-gxbb-sm";
+> > +		};
+> >   		pwrc: power-controller {
+> >   			compatible = "amlogic,meson-a1-pwrc";
+> 
+> The amlogic,meson-gxbb-sm bindings says the power-controller node should be
+> a subnode of secure-monitor, so instead please fix the sm driver by calling:
+> 
+> of_platform_populate(dev->of_node, NULL, NULL, dev);
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index cd3a3c4b5e64..c771233d6f2a 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -4707,7 +4707,6 @@ static int intel_iommu_disable_iopf(struct device *dev)
- {
- 	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	struct intel_iommu *iommu = info->iommu;
--	int ret;
- 
- 	if (!info->pri_enabled)
- 		return -EINVAL;
-@@ -4723,15 +4722,15 @@ static int intel_iommu_disable_iopf(struct device *dev)
- 	pci_disable_pri(to_pci_dev(dev));
- 	info->pri_enabled = 0;
- 
--	ret = iommu_unregister_device_fault_handler(dev);
--	if (ret)
--		return ret;
--
--	ret = iopf_queue_remove_device(iommu->iopf_queue, dev);
--	if (ret)
--		iommu_register_device_fault_handler(dev, iommu_queue_iopf, dev);
-+	/*
-+	 * With PRI disabled and outstanding PRQs drained, unregistering
-+	 * fault handler and removing device from iopf queue should never
-+	 * fail.
-+	 */
-+	WARN_ON(iommu_unregister_device_fault_handler(dev));
-+	WARN_ON(iopf_queue_remove_device(iommu->iopf_queue, dev));
- 
--	return ret;
-+	return 0;
- }
- 
- static int
+This is second option which I was thinking of. I supposing this API is
+used from SoC platform drivers and bus drivers only.
+But if this approach is okay, I will rework the patch to
+of_platform_populate().
+
+Thank you for pointing out it.
+
 -- 
-2.34.1
-
+Thank you,
+Dmitry
