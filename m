@@ -2,164 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296846C7C2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CB66C7C2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjCXKE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 06:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
+        id S231433AbjCXKFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 06:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbjCXKEX (ORCPT
+        with ESMTP id S231589AbjCXKFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 06:04:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BF11A4BF;
-        Fri, 24 Mar 2023 03:04:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DDCDB82357;
-        Fri, 24 Mar 2023 10:04:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73DCEC433D2;
-        Fri, 24 Mar 2023 10:04:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679652260;
-        bh=8+n/g8D7fA39riz19Ut1Cr74s9l1rB4rM9KIMmbszOQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cJuAyXXkH9p46rBWBlX4YTit8Ot5+QQH4LlLtMVOsjdpjRUnWTDc+EFM9xJL1OhKe
-         FkJe+v48Vr9XCKvaMg6YoUXF/3dwgQXkzH3Ff7JCEur9AI+fG/acjEXEpkwE5QW939
-         8vR/Ezsbq2/nGAD2ttYxhpgp4T3cxaDe+uAigtlhJ2EMNdRmI2Dz1Ayzt+cGDP2T0c
-         QSc4oYp4aO9OnMMKPnRR8jyTNQjTQeLUt5fhA8KyZUOP1SF1aMzvdCXQc3eEgRmuX8
-         JfZL4keo0VvY02LHg36MUqA8x4qy7PNcloF0vBHVkrvZ0qv9DqJ8q16HpAmGvR5L+p
-         W/M8uO6d2BQ8g==
-Date:   Fri, 24 Mar 2023 15:34:07 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: qcom-cpufreq-hw: fix double IO unmap and
- resource release on exit
-Message-ID: <20230324100407.GA4259@thinkpad>
-References: <20230323174026.950622-1-krzysztof.kozlowski@linaro.org>
+        Fri, 24 Mar 2023 06:05:02 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A003C1D904
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:04:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AF3E11FB;
+        Fri, 24 Mar 2023 03:05:39 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.56.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B8BC33F6C4;
+        Fri, 24 Mar 2023 03:04:53 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 10:04:47 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [RFC PATCH] tracepoint: Fix CFI failures with tp_sub_func (v2)
+Message-ID: <ZB11vw+U39WMA+Cr@FVFF77S0Q05N>
+References: <20230323212832.5691-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230323174026.950622-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230323212832.5691-1-mathieu.desnoyers@efficios.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 06:40:26PM +0100, Krzysztof Kozlowski wrote:
-> Commit 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data
-> during probe") moved getting memory resource and iomap from
-> qcom_cpufreq_hw_cpu_init() to the probe function, however it left
-> untouched cleanup in qcom_cpufreq_hw_cpu_exit().
-> 
-> During device unbind this will lead to doule release of resource and
-> double iounmap(), first by qcom_cpufreq_hw_cpu_exit() and second via
-> managed resources:
-> 
->   resource: Trying to free nonexistent resource <0x0000000018593000-0x0000000018593fff>
->   Trying to vunmap() nonexistent vm area (0000000088a7d4dc)
->   ...
->   vunmap (mm/vmalloc.c:2771 (discriminator 1))
->   iounmap (mm/ioremap.c:60)
->   devm_ioremap_release (lib/devres.c:19)
->   devres_release_all (drivers/base/devres.c:506 drivers/base/devres.c:535)
->   device_unbind_cleanup (drivers/base/dd.c:523)
->   device_release_driver_internal (drivers/base/dd.c:1248 drivers/base/dd.c:1263)
->   device_driver_detach (drivers/base/dd.c:1300)
->   unbind_store (drivers/base/bus.c:243)
->   drv_attr_store (drivers/base/bus.c:127)
->   sysfs_kf_write (fs/sysfs/file.c:137)
->   kernfs_fop_write_iter (fs/kernfs/file.c:334)
->   vfs_write (include/linux/fs.h:1851 fs/read_write.c:491 fs/read_write.c:584)
->   ksys_write (fs/read_write.c:637)
->   __arm64_sys_write (fs/read_write.c:646)
->   invoke_syscall (arch/arm64/include/asm/current.h:19 arch/arm64/kernel/syscall.c:57)
->   el0_svc_common.constprop.0 (arch/arm64/include/asm/daifflags.h:28 arch/arm64/kernel/syscall.c:150)
->   do_el0_svc (arch/arm64/kernel/syscall.c:194)
->   el0_svc (arch/arm64/include/asm/daifflags.h:28 arch/arm64/kernel/entry-common.c:133 arch/arm64/kernel/entry-common.c:142 arch/arm64/kernel/entry-common.c:638)
->   el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:656)
->   el0t_64_sync (arch/arm64/kernel/entry.S:591)
-> 
-> Fixes: 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe")
-> Cc: <stable@vger.kernel.org>
-> Cc: Manivannan Sadhasivam <mani@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Thu, Mar 23, 2023 at 05:28:32PM -0400, Mathieu Desnoyers wrote:
+> When CLANG_CFI is in use, using tracing will occasionally result in
+> CFI failures, e.g.
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> Avoid this by comparing the tracepoint function pointer to the value 1
+> before calling each function.
+
+> Reported-by: Mark Rutland <mark.rutland@arm.com>
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Jose E. Marchesi <jose.marchesi@oracle.com>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+
+Thanks for this!
+
+This looks good to me, and in testing it solves the CFI failure, so FWIW:
+
+Tested-by: Mark Rutland <mark.rutlnand@arm.com>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
 Thanks,
-Mani
+Mark.
 
 > ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
+>  include/linux/tracepoint.h | 14 ++++++++++++--
+>  kernel/tracepoint.c        | 20 +++++++-------------
+>  2 files changed, 19 insertions(+), 15 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index 2f581d2d617d..b2d2907200a9 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -43,7 +43,6 @@ struct qcom_cpufreq_soc_data {
+> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+> index 4b33b95eb8be..0aeac249d412 100644
+> --- a/include/linux/tracepoint.h
+> +++ b/include/linux/tracepoint.h
+> @@ -33,6 +33,9 @@ struct trace_eval_map {
 >  
->  struct qcom_cpufreq_data {
->  	void __iomem *base;
-> -	struct resource *res;
+>  #define TRACEPOINT_DEFAULT_PRIO	10
 >  
->  	/*
->  	 * Mutex to synchronize between de-init sequence and re-starting LMh
-> @@ -590,16 +589,12 @@ static int qcom_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
+> +/* Reserved value for tracepoint callback. */
+> +#define TRACEPOINT_FUNC_SKIP	((void *) 0x1)
+> +
+>  extern struct srcu_struct tracepoint_srcu;
+>  
+>  extern int
+> @@ -314,11 +317,18 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+>  		it_func_ptr =						\
+>  			rcu_dereference_raw((&__tracepoint_##_name)->funcs); \
+>  		if (it_func_ptr) {					\
+> -			do {						\
+> +			for (;;) {					\
+>  				it_func = READ_ONCE((it_func_ptr)->func); \
+> +				if ((uintptr_t) it_func <= (uintptr_t) TRACEPOINT_FUNC_SKIP) { \
+> +					if (it_func == TRACEPOINT_FUNC_SKIP) \
+> +						continue;		\
+> +					else				\
+> +						break;			\
+> +				}					\
+>  				__data = (it_func_ptr)->data;		\
+>  				((void(*)(void *, proto))(it_func))(__data, args); \
+> -			} while ((++it_func_ptr)->func);		\
+> +				it_func_ptr++;				\
+> +			}						\
+>  		}							\
+>  		return 0;						\
+>  	}								\
+> diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
+> index f23144af5743..2fa108ddbbc2 100644
+> --- a/kernel/tracepoint.c
+> +++ b/kernel/tracepoint.c
+> @@ -98,12 +98,6 @@ struct tp_probes {
+>  	struct tracepoint_func probes[];
+>  };
+>  
+> -/* Called in removal of a func but failed to allocate a new tp_funcs */
+> -static void tp_stub_func(void)
+> -{
+> -	return;
+> -}
+> -
+>  static inline void *allocate_probes(int count)
 >  {
->  	struct device *cpu_dev = get_cpu_device(policy->cpu);
->  	struct qcom_cpufreq_data *data = policy->driver_data;
-> -	struct resource *res = data->res;
-> -	void __iomem *base = data->base;
->  
->  	dev_pm_opp_remove_all_dynamic(cpu_dev);
->  	dev_pm_opp_of_cpumask_remove_table(policy->related_cpus);
->  	qcom_cpufreq_hw_lmh_exit(data);
->  	kfree(policy->freq_table);
->  	kfree(data);
-> -	iounmap(base);
-> -	release_mem_region(res->start, resource_size(res));
->  
->  	return 0;
->  }
-> @@ -718,17 +713,15 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
->  	for (i = 0; i < num_domains; i++) {
->  		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
->  		struct clk_init_data clk_init = {};
-> -		struct resource *res;
->  		void __iomem *base;
->  
-> -		base = devm_platform_get_and_ioremap_resource(pdev, i, &res);
-> +		base = devm_platform_ioremap_resource(pdev, i);
->  		if (IS_ERR(base)) {
-> -			dev_err(dev, "Failed to map resource %pR\n", res);
-> +			dev_err(dev, "Failed to map resource index %d\n", i);
->  			return PTR_ERR(base);
+>  	struct tp_probes *p  = kmalloc(struct_size(p, probes, count),
+> @@ -193,8 +187,8 @@ func_add(struct tracepoint_func **funcs, struct tracepoint_func *tp_func,
+>  	if (old) {
+>  		/* (N -> N+1), (N != 0, 1) probes */
+>  		for (iter_probes = 0; old[iter_probes].func; iter_probes++) {
+> -			if (old[iter_probes].func == tp_stub_func)
+> -				continue;	/* Skip stub functions. */
+> +			if (old[iter_probes].func == TRACEPOINT_FUNC_SKIP)
+> +				continue;
+>  			if (old[iter_probes].func == tp_func->func &&
+>  			    old[iter_probes].data == tp_func->data)
+>  				return ERR_PTR(-EEXIST);
+> @@ -208,7 +202,7 @@ func_add(struct tracepoint_func **funcs, struct tracepoint_func *tp_func,
+>  	if (old) {
+>  		nr_probes = 0;
+>  		for (iter_probes = 0; old[iter_probes].func; iter_probes++) {
+> -			if (old[iter_probes].func == tp_stub_func)
+> +			if (old[iter_probes].func == TRACEPOINT_FUNC_SKIP)
+>  				continue;
+>  			/* Insert before probes of lower priority */
+>  			if (pos < 0 && old[iter_probes].prio < prio)
+> @@ -246,7 +240,7 @@ static void *func_remove(struct tracepoint_func **funcs,
+>  		for (nr_probes = 0; old[nr_probes].func; nr_probes++) {
+>  			if ((old[nr_probes].func == tp_func->func &&
+>  			     old[nr_probes].data == tp_func->data) ||
+> -			    old[nr_probes].func == tp_stub_func)
+> +			    old[nr_probes].func == TRACEPOINT_FUNC_SKIP)
+>  				nr_del++;
 >  		}
->  
->  		data->base = base;
-> -		data->res = res;
->  
->  		/* Register CPU clock for each frequency domain */
->  		clk_init.name = kasprintf(GFP_KERNEL, "qcom_cpufreq%d", i);
+>  	}
+> @@ -269,7 +263,7 @@ static void *func_remove(struct tracepoint_func **funcs,
+>  			for (i = 0; old[i].func; i++) {
+>  				if ((old[i].func != tp_func->func ||
+>  				     old[i].data != tp_func->data) &&
+> -				    old[i].func != tp_stub_func)
+> +				    old[i].func != TRACEPOINT_FUNC_SKIP)
+>  					new[j++] = old[i];
+>  			}
+>  			new[nr_probes - nr_del].func = NULL;
+> @@ -277,12 +271,12 @@ static void *func_remove(struct tracepoint_func **funcs,
+>  		} else {
+>  			/*
+>  			 * Failed to allocate, replace the old function
+> -			 * with calls to tp_stub_func.
+> +			 * with TRACEPOINT_FUNC_SKIP.
+>  			 */
+>  			for (i = 0; old[i].func; i++) {
+>  				if (old[i].func == tp_func->func &&
+>  				    old[i].data == tp_func->data)
+> -					WRITE_ONCE(old[i].func, tp_stub_func);
+> +					WRITE_ONCE(old[i].func, TRACEPOINT_FUNC_SKIP);
+>  			}
+>  			*funcs = old;
+>  		}
 > -- 
-> 2.34.1
+> 2.25.1
 > 
-
--- 
-மணிவண்ணன் சதாசிவம்
