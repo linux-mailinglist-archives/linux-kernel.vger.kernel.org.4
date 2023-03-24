@@ -2,113 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BCB26C7A1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 670AB6C7A1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjCXInm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 04:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
+        id S231758AbjCXIoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 04:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbjCXInk (ORCPT
+        with ESMTP id S231477AbjCXInv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 04:43:40 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99AA26C1E;
-        Fri, 24 Mar 2023 01:43:36 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id w4so1202013plg.9;
-        Fri, 24 Mar 2023 01:43:36 -0700 (PDT)
+        Fri, 24 Mar 2023 04:43:51 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32DE17CF3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:43:46 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id y4so4961450edo.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:43:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679647416;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=63+c13PqLyD3QusfTBu8qhhFxvCe/K+kMt3rghnQ/7g=;
-        b=LQxMHrd8au/vgIoe+cXhnOggiTzfubW9yupHlfxAHzjz5FUEfth5IkmdB9rUJ2+HxL
-         TkGIkDyEwhfdG3ChBfsSVkk6K/w9dupZ/4bSujWFigqqwQVm66EvorOcuL1t9QVnxucN
-         ipoSzWxeQF9uSUiZ6FQN1SilCOwTjpl2fi2zIrAZAz/wNzkUeIjlCqt2UQKeWLL8TIYN
-         cChwHpaviTMKAQWGa8AcwaByZa/anP65UMciyloeSRrkP4v0fUK7fP7Dh9r4E1f6ovfn
-         91x7kJ7f7lrKWmH/DtbMlJKZosNEZwR15dTJLxidmhc/utwtHWeqqE+sYcs7z1JqhHpt
-         F+KQ==
+        d=gmail.com; s=20210112; t=1679647425;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hoF1dEts5ZEjp1FZMKp6l1BB4iGLDqqZHFHPN/cDT+w=;
+        b=Q2VJ6600mh7wJmjZ84lQ+DLwBgjP/ZkP4WG27uAKbRDfk1tllcRibWV7wshgCtm7oo
+         Su11VKIashAdjwci+IPkcdpp1rAp8VJ8Wc65gIEFwMzqQRIeDYOEnZrgyze3dbnj0AUw
+         ATs0FmLx3rBffOTbS1qsxi+DUOsnHG5I69RLu7papZ+9u9iSOeP+YlsSoGVpBtLrhIfR
+         hV6yhGiKenwGfzaEiAem4TT7Px47IlWhh3m6O7S9ueqYzblYlSDYFjCdy5QuRnuqjrmC
+         b4b36nDqPnPQtOdzgdcxo7Gug6Gk1KFoBi4FLl4snqZ/jYw+2BlcEh37deY8TBPu5a/U
+         REpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679647416;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=63+c13PqLyD3QusfTBu8qhhFxvCe/K+kMt3rghnQ/7g=;
-        b=ES1yhrf/XsdZH/hRiSsY0ow6bWYEMK7w91cdunU38MI+lR6Cl5Gb5DwazORHMMPYYy
-         huKFpmGrJEhR1diutgPeZFzKh0bs+Dftbcw14jxnPrix9tnZRgoCXjUfc8u5WuWcSZ34
-         qj9Um7Ig2rWRl/2srwgRtWwSUJP+Kc4T4ILf51pHuR1YUw9dNpgl/x/D1Eoaolzevdwe
-         uGVB4vMLeG6ZOLCm0QsPSH7BFEmtTa31y03stTahjdweOQjX1PFlZWKjIX22ANx/nlxM
-         K1X6TrSIayhajXT2kc6DgOv0cyYpjfJyISbQteM+hZUxIaZYxptCBjifRHqUuim9tvEY
-         M7gg==
-X-Gm-Message-State: AO0yUKVx7HODE5C7u3WFqAvqd4PnG9R5zbJWzqzX4+K+PyrZtgSlkfPR
-        pUMDr4cDx6AipVFB4ERSJGY=
-X-Google-Smtp-Source: AK7set+brpr+11TXhM8d9D//7dEUDCeAYcDvVBgnzWfCcR30Icrz/TOyh4NjbP8fBoe3iC6L+8zpJQ==
-X-Received: by 2002:a05:6a20:1d57:b0:d6:c9e2:17c5 with SMTP id cs23-20020a056a201d5700b000d6c9e217c5mr1915374pzb.23.1679647416131;
-        Fri, 24 Mar 2023 01:43:36 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-7.three.co.id. [116.206.28.7])
-        by smtp.gmail.com with ESMTPSA id y6-20020aa78046000000b005941ff79428sm13682882pfm.90.2023.03.24.01.43.34
+        d=1e100.net; s=20210112; t=1679647425;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hoF1dEts5ZEjp1FZMKp6l1BB4iGLDqqZHFHPN/cDT+w=;
+        b=exe2ec2ZRTJQSJDuoBsAk1a0wIE560DlITHnTbMbuwZUR3sTpQ7W3avoUloh5MkcUu
+         NnGBU+SMZWlajJ0YJ5OV7Wlq8bVc3XgnFRIKFNOrvGOeo1gnD4LktLHWpMAV6jqVyo08
+         +JM9IXKhoSXY//3sBGCLIeXuutM9i82Lf5TeFNoUP0l3pV9zLhYJYr8eubHSyU5Mu3jf
+         yGGXQGF8QyHOuYpgZ3IE2AMjP/MTDLYL++rIMO4Z0Bb3kkWc0BH6dGBcVq/ABesrbY3b
+         mu01jI5pg48t6yIBngn0QcsIOiUVIBJx+o1I8i0y0JbaenJdSTZpH4NfEFR+tHNKDOiV
+         fzPQ==
+X-Gm-Message-State: AAQBX9c1Wply8kFea/NVtQYWaJcO/Pw5CEMUgJatrMv/9f+cHBNZ3vMj
+        lWjDb3a//Wg2NeW3ukCm+yk=
+X-Google-Smtp-Source: AKy350ZW6xqQvOqO/VfaeFxStYTGjKxp2uX44My6oX33yfrkeNHAhpBEVBsgERp49fRxigRk1ts9gQ==
+X-Received: by 2002:a17:906:4e0a:b0:931:829c:9d58 with SMTP id z10-20020a1709064e0a00b00931829c9d58mr1792963eju.23.1679647424996;
+        Fri, 24 Mar 2023 01:43:44 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abbaa.dynamic.kabel-deutschland.de. [95.90.187.170])
+        by smtp.gmail.com with ESMTPSA id m2-20020a50d7c2000000b00501fc87352fsm3541841edj.13.2023.03.24.01.43.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 01:43:34 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 55A67106665; Fri, 24 Mar 2023 15:43:30 +0700 (WIB)
-Date:   Fri, 24 Mar 2023 15:43:30 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: error fetching the arm-soc-fixes tree
-Message-ID: <ZB1ish+j4oDkbduT@debian.me>
-References: <20230324160222.000aad9a@canb.auug.org.au>
+        Fri, 24 Mar 2023 01:43:44 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     hdegoede@redhat.com, Larry.Finger@lwfinger.net,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH] staging: rtl8723bs: remove hal_btcoex_SetChipType()
+Date:   Fri, 24 Mar 2023 09:43:34 +0100
+Message-Id: <20230324084334.12183-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LClHAwlSDfdiRxet"
-Content-Disposition: inline
-In-Reply-To: <20230324160222.000aad9a@canb.auug.org.au>
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Remove the function hal_btcoex_SetChipType() as it does nothing and
+produces the following gcc warning when compiling with W=1.
 
---LClHAwlSDfdiRxet
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+drivers/staging/rtl8723bs/hal/hal_btcoex.c:1182:30: warning: variable 'pHalData' set but not used [-Wunused-but-set-variable]
+ 1182 |         struct hal_com_data *pHalData;
+      |                              ^~~~~~~~
 
-On Fri, Mar 24, 2023 at 04:02:22PM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Fetching the arm-soc-fixes tree produces the following error:
->=20
-> fatal: couldn't find remote ref refs/heads/arm/fixes
->=20
-> This has been happening for the past few days.
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
+---
+ drivers/staging/rtl8723bs/hal/hal_btcoex.c        | 8 --------
+ drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c | 1 -
+ drivers/staging/rtl8723bs/include/hal_btcoex.h    | 1 -
+ 3 files changed, 10 deletions(-)
 
-I guess the tree should have been
-git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git soc/fixes .
+diff --git a/drivers/staging/rtl8723bs/hal/hal_btcoex.c b/drivers/staging/rtl8723bs/hal/hal_btcoex.c
+index e36f8c369a04..e26b789b9cdd 100644
+--- a/drivers/staging/rtl8723bs/hal/hal_btcoex.c
++++ b/drivers/staging/rtl8723bs/hal/hal_btcoex.c
+@@ -1177,14 +1177,6 @@ bool hal_btcoex_IsBtDisabled(struct adapter *padapter)
+ 		return false;
+ }
+ 
+-void hal_btcoex_SetChipType(struct adapter *padapter, u8 chipType)
+-{
+-	struct hal_com_data *pHalData;
+-
+-
+-	pHalData = GET_HAL_DATA(padapter);
+-}
+-
+ void hal_btcoex_SetPgAntNum(struct adapter *padapter, u8 antNum)
+ {
+ 	struct hal_com_data *pHalData;
+diff --git a/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c b/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c
+index 0fcae6871108..c3c1b49674d3 100644
+--- a/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c
++++ b/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c
+@@ -2304,7 +2304,6 @@ void Hal_EfuseParseBTCoexistInfo_8723B(
+ 	}
+ 
+ 	hal_btcoex_SetBTCoexist(padapter, pHalData->EEPROMBluetoothCoexist);
+-	hal_btcoex_SetChipType(padapter, pHalData->EEPROMBluetoothType);
+ 	hal_btcoex_SetPgAntNum(padapter, pHalData->EEPROMBluetoothAntNum == Ant_x2 ? 2 : 1);
+ 	if (pHalData->EEPROMBluetoothAntNum == Ant_x1)
+ 		hal_btcoex_SetSingleAntPath(padapter, pHalData->ant_path);
+diff --git a/drivers/staging/rtl8723bs/include/hal_btcoex.h b/drivers/staging/rtl8723bs/include/hal_btcoex.h
+index fb167642da01..525cce3574fe 100644
+--- a/drivers/staging/rtl8723bs/include/hal_btcoex.h
++++ b/drivers/staging/rtl8723bs/include/hal_btcoex.h
+@@ -23,7 +23,6 @@ struct bt_coexist {
+ void hal_btcoex_SetBTCoexist(struct adapter *padapter, u8 bBtExist);
+ bool hal_btcoex_IsBtExist(struct adapter *padapter);
+ bool hal_btcoex_IsBtDisabled(struct adapter *);
+-void hal_btcoex_SetChipType(struct adapter *padapter, u8 chipType);
+ void hal_btcoex_SetPgAntNum(struct adapter *padapter, u8 antNum);
+ void hal_btcoex_SetSingleAntPath(struct adapter *padapter, u8 singleAntPath);
+ 
+-- 
+2.40.0
 
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---LClHAwlSDfdiRxet
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZB1irgAKCRD2uYlJVVFO
-o14JAP4tMiTw0n3rqF1DmUCI27GK400jXEVC9CGNw+neaNG25gD/dRIBKtYgH6nu
-0OaTFCwy1X8VQO5VAVgwei245Q2NbwY=
-=S/dE
------END PGP SIGNATURE-----
-
---LClHAwlSDfdiRxet--
