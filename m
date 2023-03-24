@@ -2,163 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105AC6C8236
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6429C6C8238
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbjCXQOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
+        id S231682AbjCXQOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbjCXQOc (ORCPT
+        with ESMTP id S231473AbjCXQOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:14:32 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B011A65E;
-        Fri, 24 Mar 2023 09:14:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679674467; x=1711210467;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Hvr/IAw6GwHmF6Ka+HdBXFuG4UC3HNZI/3j9kHSlW6I=;
-  b=fbXdpj4DdGlcGcLDnLH8gQtCfpBG6Ng/JwpeUz+yBWgM/s2idgK9soIm
-   XSX5wlbvpvZwAIUZt+dcoYpA/jdCZzwDOeiJcW5s1Y4C5CRdMwxRzUYrr
-   M0KmBxr2jIamGlQ0mOitdlTaT65awe4fwOCX4XW1+DogON9lc0kJHFHO5
-   qPCQvSZoJhJmG6D/knRHCI6oXu64x5jkQJyF20MtVKxN13D5rdFfbzjK7
-   qZeOlhqqQcy4PHQ3QYk/GfT5Dqwb6+un37mfnybSsxYgCT1mjeQb1Wd1g
-   wJsvxc5XqPgAyrazJxC7YClpfGqvCQqiiFmlZ4C79KF6be3ambO3Ou0ou
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="328239375"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="328239375"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 09:14:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="676199945"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="676199945"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2023 09:14:23 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfk3a-000FS4-1E;
-        Fri, 24 Mar 2023 16:14:22 +0000
-Date:   Sat, 25 Mar 2023 00:14:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     ChiaEn Wu <chiaen_wu@richtek.com>, jic23@kernel.org,
-        lars@metafoo.de, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, peterwu.pub@gmail.com,
-        cy_huang@richtek.com, ChiaEn Wu <chiaen_wu@richtek.com>
-Subject: Re: [PATCH] iio: adc: mt6370: Fix ibus and ibat scaling value of
- some specific vendor ID chips
-Message-ID: <202303250050.V7JLIADZ-lkp@intel.com>
-References: <1679667167-16261-1-git-send-email-chiaen_wu@richtek.com>
+        Fri, 24 Mar 2023 12:14:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA0EE196AF;
+        Fri, 24 Mar 2023 09:14:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85CBC113E;
+        Fri, 24 Mar 2023 09:15:14 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.55.116])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F2B83F6C4;
+        Fri, 24 Mar 2023 09:14:28 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 16:14:22 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH 01/10] locking/atomic: Add missing cast to try_cmpxchg()
+ fallbacks
+Message-ID: <ZB3MR8lGbnea9ui6@FVFF77S0Q05N>
+References: <20230305205628.27385-1-ubizjak@gmail.com>
+ <20230305205628.27385-2-ubizjak@gmail.com>
+ <ZB2v+avNt52ac/+w@FVFF77S0Q05N>
+ <CAFULd4ZCgxDYnyy--qdgKoAo_y7MbNSaQdbdBFefnFuMoM2OYw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1679667167-16261-1-git-send-email-chiaen_wu@richtek.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFULd4ZCgxDYnyy--qdgKoAo_y7MbNSaQdbdBFefnFuMoM2OYw@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi ChiaEn,
+On Fri, Mar 24, 2023 at 04:43:32PM +0100, Uros Bizjak wrote:
+> On Fri, Mar 24, 2023 at 3:13 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > On Sun, Mar 05, 2023 at 09:56:19PM +0100, Uros Bizjak wrote:
+> > > Cast _oldp to the type of _ptr to avoid incompatible-pointer-types warning.
+> >
+> > Can you give an example of where we are passing an incompatible pointer?
+> 
+> An example is patch 10/10 from the series, which will fail without
+> this fix when fallback code is used. We have:
+> 
+> -       } while (local_cmpxchg(&rb->head, offset, head) != offset);
+> +       } while (!local_try_cmpxchg(&rb->head, &offset, head));
+> 
+> where rb->head is defined as:
+> 
+> typedef struct {
+>    atomic_long_t a;
+> } local_t;
+> 
+> while offset is defined as 'unsigned long'.
 
-Thank you for the patch! Perhaps something to improve:
+Ok, but that's because we're doing the wrong thing to start with.
 
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on linus/master v6.3-rc3 next-20230324]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Since local_t is defined in terms of atomic_long_t, we should define the
+generic local_try_cmpxchg() in terms of atomic_long_try_cmpxchg(). We'll still
+have a mismatch between 'long *' and 'unsigned long *', but then we can fix
+that in the callsite:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ChiaEn-Wu/iio-adc-mt6370-Fix-ibus-and-ibat-scaling-value-of-some-specific-vendor-ID-chips/20230324-221545
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/1679667167-16261-1-git-send-email-chiaen_wu%40richtek.com
-patch subject: [PATCH] iio: adc: mt6370: Fix ibus and ibat scaling value of some specific vendor ID chips
-config: riscv-randconfig-r034-20230324 (https://download.01.org/0day-ci/archive/20230325/202303250050.V7JLIADZ-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/9822359d5de2dba531d882cfee6949864a2d6170
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review ChiaEn-Wu/iio-adc-mt6370-Fix-ibus-and-ibat-scaling-value-of-some-specific-vendor-ID-chips/20230324-221545
-        git checkout 9822359d5de2dba531d882cfee6949864a2d6170
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/iio/adc/
+	while (!local_try_cmpxchg(&rb->head, &(long *)offset, head))
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303250050.V7JLIADZ-lkp@intel.com/
+... which then won't silently mask issues elsewhere, and will be consistent
+with all the other atomic APIs.
 
-All warnings (new ones prefixed by >>):
+Thanks,
+Mark.
 
->> drivers/iio/adc/mt6370-adc.c:306:31: warning: variable 'priv' is uninitialized when used here [-Wuninitialized]
-           ret = mt6370_get_vendor_info(priv);
-                                        ^~~~
-   drivers/iio/adc/mt6370-adc.c:297:30: note: initialize the variable 'priv' to silence this warning
-           struct mt6370_adc_data *priv;
-                                       ^
-                                        = NULL
-   1 warning generated.
-
-
-vim +/priv +306 drivers/iio/adc/mt6370-adc.c
-
-   293	
-   294	static int mt6370_adc_probe(struct platform_device *pdev)
-   295	{
-   296		struct device *dev = &pdev->dev;
-   297		struct mt6370_adc_data *priv;
-   298		struct iio_dev *indio_dev;
-   299		struct regmap *regmap;
-   300		int ret;
-   301	
-   302		regmap = dev_get_regmap(pdev->dev.parent, NULL);
-   303		if (!regmap)
-   304			return dev_err_probe(dev, -ENODEV, "Failed to get regmap\n");
-   305	
- > 306		ret = mt6370_get_vendor_info(priv);
-   307		if (ret)
-   308			return dev_err_probe(dev, ret, "Failed to get vid\n");
-   309	
-   310		indio_dev = devm_iio_device_alloc(dev, sizeof(*priv));
-   311		if (!indio_dev)
-   312			return -ENOMEM;
-   313	
-   314		priv = iio_priv(indio_dev);
-   315		priv->dev = dev;
-   316		priv->regmap = regmap;
-   317		mutex_init(&priv->adc_lock);
-   318	
-   319		ret = regmap_write(priv->regmap, MT6370_REG_CHG_ADC, 0);
-   320		if (ret)
-   321			return dev_err_probe(dev, ret, "Failed to reset ADC\n");
-   322	
-   323		indio_dev->name = "mt6370-adc";
-   324		indio_dev->info = &mt6370_adc_iio_info;
-   325		indio_dev->modes = INDIO_DIRECT_MODE;
-   326		indio_dev->channels = mt6370_adc_channels;
-   327		indio_dev->num_channels = ARRAY_SIZE(mt6370_adc_channels);
-   328	
-   329		return devm_iio_device_register(dev, indio_dev);
-   330	}
-   331	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+> The assignment in existing try_cmpxchg template:
+> 
+> typeof(*(_ptr)) *___op = (_oldp)
+> 
+> will trigger an initialization from an incompatible pointer type error.
+> 
+> Please note that x86 avoids this issue by a cast in its
+> target-dependent definition:
+> 
+> #define __raw_try_cmpxchg(_ptr, _pold, _new, size, lock)                \
+> ({                                                                      \
+>        bool success;                                                   \
+>        __typeof__(_ptr) _old = (__typeof__(_ptr))(_pold);              \
+>        __typeof__(*(_ptr)) __old = *_old;                              \
+>        __typeof__(*(_ptr)) __new = (_new);                             \
+> 
+> so, the warning/error will trigger only in the fallback code.
+> 
+> > That sounds indicative of a bug in the caller, but maybe I'm missing some
+> > reason this is necessary due to some indirection.
+> >
+> > > Fixes: 29f006fdefe6 ("asm-generic/atomic: Add try_cmpxchg() fallbacks")
+> >
+> > I'm not sure that this needs a fixes tag. Does anything go wrong today, or only
+> > later in this series?
+> 
+> The patch at [1] triggered a build error in posix_acl.c/__get.acl due
+> to the same problem. The compilation for x86 target was OK, because
+> x86 defines target-specific arch_try_cmpxchg, but the compilation
+> broke for targets that revert to generic support. Please note that
+> this specific problem was recently fixed in a different way [2], but
+> the issue with the fallback remains.
+> 
+> [1] https://lore.kernel.org/lkml/20220714173819.13312-1-ubizjak@gmail.com/
+> [2] https://lore.kernel.org/lkml/20221201160103.76012-1-ubizjak@gmail.com/
+> 
+> Uros.
