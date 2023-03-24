@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0118F6C79F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA126C79F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbjCXIhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 04:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
+        id S231720AbjCXIiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 04:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjCXIhf (ORCPT
+        with ESMTP id S230029AbjCXIiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 04:37:35 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E0C5B81
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:37:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 24 Mar 2023 04:38:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BD51166F;
+        Fri, 24 Mar 2023 01:38:01 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B099533777;
-        Fri, 24 Mar 2023 08:37:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679647052; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6FnsbtwY1B8sPVCZAmhHvqVWvJAbJzIFlXms6iNspUI=;
-        b=FWO7t6jnASnlueUDIY+7y4XybdZ8cLn/U4DqkHTvKGbbpzg+VOwfRKt7tDXyssJPPEEyCF
-        28WGaEwlGzq97yMRRbwhX8UJmt+UD8g2c403LOBH0dc3sjHEaiYb91zb4BEqU+UvJ9UbY8
-        /ePG54a8aEvSe/Ekyd6VIHX+QUSRS+o=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 91DA0133E5;
-        Fri, 24 Mar 2023 08:37:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id T+VUIUxhHWTkAgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 24 Mar 2023 08:37:32 +0000
-Date:   Fri, 24 Mar 2023 09:37:31 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Song Liu <song@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
-Message-ID: <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
-References: <20230308094106.227365-1-rppt@kernel.org>
- <20230308094106.227365-2-rppt@kernel.org>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AF9CC66030AA;
+        Fri, 24 Mar 2023 08:37:59 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679647080;
+        bh=leUkIfYHsV7YSnV9uYcacAILh9PlFS9yw7oLnYyzBZk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YM36CPg3tx9GWc9j6w8ZllGxCQEngD+c15etZO4mZbNg0VZBSL+0UGXta0bloiDL+
+         OONOa/97wu2hlYB93PA6FPDUnij7iz1cZkVjgmyBj1ee8yBBuyHbxUpBiG69bulGin
+         9dd6v5nDtiOyzjs5szA+3AbzTZJb5pSVsdWSql0sxNHw+qeyQnUlelkhSXeWDHYKAd
+         BXTT8hDlLF9gsqYiVzChYl4RnhKfrdY07RCUdE4yrqIKLx/XYsPRmxPtJmD/434GvE
+         2yOw6yZYQ1IW/lvT/Bi2E49UdnfR9WNU+IX4nEpDiBGVUZnbiV1Sjplm7hmUmIgiLf
+         2ljUSwxxqBguw==
+Message-ID: <97a5f383-38f5-e8ea-e1d8-489b690e4521@collabora.com>
+Date:   Fri, 24 Mar 2023 09:37:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308094106.227365-2-rppt@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v30 0/7] Add MediaTek SoC DRM (vdosys1) support for mt8195
+Content-Language: en-US
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     "Nancy.Lin" <nancy.lin@mediatek.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        krzysztof.kozlowski+dt@linaro.org, Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        CK Hu <ck.hu@mediatek.com>, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        clang-built-linux@googlegroups.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        singo.chang@mediatek.com
+References: <20230321121859.2355-1-nancy.lin@mediatek.com>
+ <17831605-5c9d-9c92-d190-04f91060ace4@collabora.com>
+ <CAAOTY_8ZAxVSLnJ1u5snsRgkszV7ixwhjUS2nDimE_Lpj=cUCA@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAAOTY_8ZAxVSLnJ1u5snsRgkszV7ixwhjUS2nDimE_Lpj=cUCA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,27 +70,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 08-03-23 11:41:02, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Il 24/03/23 00:25, Chun-Kuang Hu ha scritto:
+> Hi, Angelo:
 > 
-> When set_memory or set_direct_map APIs used to change attribute or
-> permissions for chunks of several pages, the large PMD that maps these
-> pages in the direct map must be split. Fragmenting the direct map in such
-> manner causes TLB pressure and, eventually, performance degradation.
+> AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> 於
+> 2023年3月23日 週四 下午4:58寫道：
+>>
+>> Il 21/03/23 13:18, Nancy.Lin ha scritto:
+>>> The hardware path of vdosys1 with DPTx output need to go through by several modules, such as, OVL_ADAPTOR and MERGE.
+>>>
+>>> Add DRM and these modules support by the patches below:
+>>>
+>>
+>> I've tested v30 again on MT8173, MT8192 and MT8195 based Chromebooks.
+>> Green light from me.
 > 
-> To avoid excessive direct map fragmentation, add ability to allocate
-> "unmapped" pages with __GFP_UNMAPPED flag that will cause removal of the
-> allocated pages from the direct map and use a cache of the unmapped pages.
+> I'm curious about how you build code and test on Chromebooks. Do you
+> build in cros environment or pure linux
+> (https://archlinuxarm.org/platforms/armv8/mediatek/acer-chromebook-r13).
+> I've a MT8183 based Chromebook (HP 11a) and I've tried to run a
+> upstream kernel on it. cros is too heavy for me and I doubt I could
+> use it. I've tried the pure linux and could boot up with console, but
+> display does not work. If you use the pure linux environment, could
+> you share how it works?
 > 
-> This cache is replenished with higher order pages with preference for
-> PMD_SIZE pages when possible so that there will be fewer splits of large
-> pages in the direct map.
-> 
-> The cache is implemented as a buddy allocator, so it can serve high order
-> allocations of unmapped pages.
 
-Why do we need a dedicated gfp flag for all this when a dedicated
-allocator is used anyway. What prevents users to call unmapped_pages_{alloc,free}?
--- 
-Michal Hocko
-SUSE Labs
+I haven't tested MT8183 (I don't actually have any 8183 machine in my hands)... but
+yes, I can share my test environment.
+
+I have one MicroSD that I use either in the MicroSD slot of the target machine, or
+in a USB reader; this *single* system is what I boot on *all* Chromebooks that I
+have: one kernel, multiple devicetrees, same Debian-based userspace.
+
+What we have to prepare this bootable media can be found at [1], but beware that
+it currently uses an outdated kernel, so, what I have locally is a symlink to my
+kernel tree.
+You can change/add/remove the devicetree blobs that will get added to the image
+by modifying `chromebook-setup.sh`; before tampering with kernel tree symlink,
+please run that script for the first time, as it will download a cross-compiler,
+a kernel tree (that you will replace for sure) and the (very old) Debian rootfs
+that you can update with `apt-get dist-upgrade` after booting the Chromebook.
+
+If you want to check about possible kernel configuration differences, what I use
+is at [2], so that you can compare.
+
+[1]: https://gitlab.collabora.com/google/chromebooks/-/tree/mtk-av1
+[2]: 
+https://gitlab.collabora.com/google/chromeos-kernel/-/blob/mt8195-tracking-master-rolling/arch/arm64/configs/defconfig
+
+Regards,
+Angelo
