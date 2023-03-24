@@ -2,36 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4602E6C789F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D816C78A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbjCXHQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34924 "EHLO
+        id S231274AbjCXHRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 03:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjCXHQU (ORCPT
+        with ESMTP id S229997AbjCXHRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:16:20 -0400
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFCF12860
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:16:18 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VeWmWNS_1679642175;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VeWmWNS_1679642175)
-          by smtp.aliyun-inc.com;
-          Fri, 24 Mar 2023 15:16:16 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     srinivas.kandagatla@linaro.org
-Cc:     vz@mleia.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH -next] nvmem: lpc18xx_otp: Use devm_platform_ioremap_resource()
-Date:   Fri, 24 Mar 2023 15:16:14 +0800
-Message-Id: <20230324071614.26535-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Fri, 24 Mar 2023 03:17:40 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9D110248;
+        Fri, 24 Mar 2023 00:17:38 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id e11so721473lji.8;
+        Fri, 24 Mar 2023 00:17:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679642257;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RVnaw2hgp9FboCDJT5LeK6jax5DS42qierHOwTuDhEo=;
+        b=Ul5Adt9vV73KOAtCJAPoRUkFbMKviWxP75y69ETtv/S51sJstcOJ19GDH1v5GgaIH5
+         ie8SUq/GF1InOqbSL8l3BsX++GWMFjPZ0V9Oo7I836RPMn5UGxyxaMI31jNDPH0+0a/y
+         SlVa5EM9CbnZf2Es5Q80uxeLOcteFd+Hdq1D//th/TAy7qJivRv51ltLC8SrRvYdUOWx
+         TEH9NG6rL5Za5dZO2h0gd6XBpFFduEgtsCmS5iLJZmeMFweBY/w1sGSUA7ma0Be8M86E
+         YR9UsxCjtvoQK02am7a1rSdRgHD7uJoVha30Hiq2CND/s3xIGgOPGUfxJhK4o70ML+FD
+         3/lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679642257;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RVnaw2hgp9FboCDJT5LeK6jax5DS42qierHOwTuDhEo=;
+        b=tOrWtr+0tyer04gF7yABjc5G0/1YE1kJjX8zUNs0+k7v9YyLLOcAVP6P7MdgtwGiRQ
+         akfCexWHdNMMxCXl6PvFzAyqt2Q1sz/qgBAn5pcu/UPDwnjYO77Df0V9bkIZCp/kaddZ
+         WePCvgP8dSum87rLJb7MHXqkJcfPbmZaV+WMoMFvXvZ1ra9RZeTq8k6KflCbyfQaJ/Q8
+         MY3Qal0qIDHF1QwawSoWHu6Rs6+lrH8KIyVz/IWZUQaUGrYvdBJFlq+fsnsUjEGaO7th
+         gWmVtFrKXDksmYGcbNdU4GZoGIOE8dSnz8Xtp6hf3Ysm6eCYkAzXVhbBnB5Z+S6C85L5
+         WdpA==
+X-Gm-Message-State: AAQBX9fQBUqXEdg8YqEzF+nfsl/QIvmdeJmjh+S16keyTH4/OECH2W6Z
+        YrCP6RJNxtmEFTZJUtQepkDMvSk6u6+AUtcjjCQ=
+X-Google-Smtp-Source: AKy350arIb/k/z4ZK/W5u7TFlWu9j/tTPVd9U0ey6zviqDiriCkTXQIxOjJaYRkvPgrom/IIrbeqvU+tvox/p4/gnlw=
+X-Received: by 2002:a2e:240b:0:b0:29c:9226:33f7 with SMTP id
+ k11-20020a2e240b000000b0029c922633f7mr555322ljk.1.1679642256759; Fri, 24 Mar
+ 2023 00:17:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+References: <20230323221948.352154-1-corbet@lwn.net> <20230323221948.352154-2-corbet@lwn.net>
+In-Reply-To: <20230323221948.352154-2-corbet@lwn.net>
+From:   Alex Shi <seakeel@gmail.com>
+Date:   Fri, 24 Mar 2023 15:16:59 +0800
+Message-ID: <CAJy-Am=B6ELff_oQ01HVhoe1wLXw0m89=xzJjouNJwhvAVRozA@mail.gmail.com>
+Subject: Re: [PATCH 1/6] docs: zh_CN: create the architecture-specific
+ top-level directory
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,37 +71,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to commit 7945f929f1a7 ("drivers: provide
-devm_platform_ioremap_resource()"), convert platform_get_resource(),
-devm_ioremap_resource() to a single call to use
-devm_platform_ioremap_resource(), as this is exactly what this function
-does.
+On Fri, Mar 24, 2023 at 6:20=E2=80=AFAM Jonathan Corbet <corbet@lwn.net> wr=
+ote:
+>
+> This mirrors commit 4f1bb0386dfc ("docs: create a top-level arch/
+> directory"), creating a top-level directory to hold architecture-specific
+> documentation.
+>
+> Cc: Alex Shi <alexs@kernel.org>
+> Cc: Yanteng Si <siyanteng@loongson.cn>
+> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/nvmem/lpc18xx_otp.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Thanks alot for take core!
 
-diff --git a/drivers/nvmem/lpc18xx_otp.c b/drivers/nvmem/lpc18xx_otp.c
-index 16c92ea85d49..8faed05e3cbe 100644
---- a/drivers/nvmem/lpc18xx_otp.c
-+++ b/drivers/nvmem/lpc18xx_otp.c
-@@ -68,14 +68,12 @@ static int lpc18xx_otp_probe(struct platform_device *pdev)
- {
- 	struct nvmem_device *nvmem;
- 	struct lpc18xx_otp *otp;
--	struct resource *res;
- 
- 	otp = devm_kzalloc(&pdev->dev, sizeof(*otp), GFP_KERNEL);
- 	if (!otp)
- 		return -ENOMEM;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	otp->base = devm_ioremap_resource(&pdev->dev, res);
-+	otp->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(otp->base))
- 		return PTR_ERR(otp->base);
- 
--- 
-2.20.1.7.g153144c
+Acked-by: Alex Shi <alexs@kernel.org>
 
+> ---
+>  .../translations/zh_CN/{arch.rst =3D> arch/index.rst}  | 12 ++++++------
+>  Documentation/translations/zh_CN/index.rst           |  2 +-
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+>  rename Documentation/translations/zh_CN/{arch.rst =3D> arch/index.rst} (=
+72%)
+>
+> diff --git a/Documentation/translations/zh_CN/arch.rst b/Documentation/tr=
+anslations/zh_CN/arch/index.rst
+> similarity index 72%
+> rename from Documentation/translations/zh_CN/arch.rst
+> rename to Documentation/translations/zh_CN/arch/index.rst
+> index 690e173d8b2a..aa53dcff268e 100644
+> --- a/Documentation/translations/zh_CN/arch.rst
+> +++ b/Documentation/translations/zh_CN/arch/index.rst
+> @@ -8,12 +8,12 @@
+>  .. toctree::
+>     :maxdepth: 2
+>
+> -   mips/index
+> -   arm64/index
+> -   riscv/index
+> -   openrisc/index
+> -   parisc/index
+> -   loongarch/index
+> +   ../mips/index
+> +   ../arm64/index
+> +   ../riscv/index
+> +   ../openrisc/index
+> +   ../parisc/index
+> +   ../loongarch/index
+>
+>  TODOList:
+>
+> diff --git a/Documentation/translations/zh_CN/index.rst b/Documentation/t=
+ranslations/zh_CN/index.rst
+> index 7c3216845b71..299704c0818d 100644
+> --- a/Documentation/translations/zh_CN/index.rst
+> +++ b/Documentation/translations/zh_CN/index.rst
+> @@ -120,7 +120,7 @@ TODOList:
+>  .. toctree::
+>     :maxdepth: 2
+>
+> -   arch
+> +   arch/index
+>
+>  =E5=85=B6=E4=BB=96=E6=96=87=E6=A1=A3
+>  --------
+> --
+> 2.39.2
+>
