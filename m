@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7A86C825F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 177506C8264
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231890AbjCXQbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
+        id S231892AbjCXQcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231858AbjCXQbL (ORCPT
+        with ESMTP id S231819AbjCXQca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:31:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8BD2D55
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:31:10 -0700 (PDT)
+        Fri, 24 Mar 2023 12:32:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FA11CF55
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:32:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D0E2B82568
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 386BBC433A0;
-        Fri, 24 Mar 2023 16:31:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24D9562BE1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:32:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C7FC433EF;
+        Fri, 24 Mar 2023 16:32:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679675468;
-        bh=nYwqoSdM0p+YBcfrNrawjeOYMaLErwUJzT1sCp1/ZTA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=iNbRP8EJuf6+8G60QkRm3QsGAm59HaKM2l098wVGTgIiiJ9rEPXGLboyBM1XSp6HI
-         5zcmxgUCg9ADoMhB2u3qbuHoi2g3Wxr32DvfZsSwignYIIKbsd91kkf3ZaFN86syET
-         T/k/LzCvcZXxoCeOXIPxf0FOcLj8rGicvpG0QN/L+jytF6gzQCCuvNXS5wanzjmOJy
-         1JKzhQjNUuXgdoCqKNS+p1jHHv06JT6a4ocLfCvmn27TKOoqk0jL4zWorRwE/GwRXd
-         4yGiPuvcj9/C46W7984gwlWbWbHHlfpXnwf+1//belmNwBOtWnhesCXFpvZi5/gnGM
-         LBQ9/fEcKivdQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 24600E2A039;
-        Fri, 24 Mar 2023 16:31:08 +0000 (UTC)
-Subject: Re: [GIT PULL] chrome-platform fixes for v6.3-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZB0bphQcL7KLRuV6@google.com>
-References: <ZB0bphQcL7KLRuV6@google.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZB0bphQcL7KLRuV6@google.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git tags/tag-chrome-platform-fixes-for-v6.3-rc4
-X-PR-Tracked-Commit-Id: b20cf3f89c56b5f6a38b7f76a8128bf9f291bbd3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4bae0ad148f41904dd4e5857bdc2e3e31b950b3d
-Message-Id: <167967546814.8924.11093683484440209193.pr-tracker-bot@kernel.org>
-Date:   Fri, 24 Mar 2023 16:31:08 +0000
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     torvalds@linux-foundation.org, pmalani@chromium.org,
-        bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
-        linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+        s=k20201202; t=1679675527;
+        bh=3PNX/74+gO354UCpwGADQlXhZg6ETuvttetxAJdAwJM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=P0WpNtnpJMAZoEKPRE9qYxgAzboyL6KYBJl/kiLSZfdRyb5QKxMQaHd1+6nbqsaro
+         6lGu7JnxcTAU+F45eMpy4xfUzde82hmH3iun38YGfNOjfyxPxCgIg8YIcvYzVZEYKe
+         G9H3Em5GY2TqMoSAt3rpACK693gKLpxLu0kmpDt8LsXGNVi4wJd174EYtU0SjG6GbP
+         TmttDpoLg8ltbXfM2wUa54mJW13RN1PiOrtvy7HQZQeAyhes4/xDrVMgayULUAZ0BS
+         dgSHP+YxXzVjdP3kS1+l3rjXEpvs6msE5XTcAR3Fe9GgoYKdJvYPfzNijbX7VrQSr2
+         0OqXK8pBNdVrA==
+From:   SeongJae Park <sj@kernel.org>
+To:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/damon/sysfs: make more kobj_type structures constant
+Date:   Fri, 24 Mar 2023 16:32:02 +0000
+Message-Id: <20230324163202.47254-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230324-b4-kobj_type-damon2-v1-1-48ddbf1c8fcf@weissschuh.net>
+References: 
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -61,15 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 24 Mar 2023 11:40:22 +0800:
+Hi Thomas,
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git tags/tag-chrome-platform-fixes-for-v6.3-rc4
+On Fri, 24 Mar 2023 15:35:27 +0000 "Thomas Weißschuh" <linux@weissschuh.net> wrote:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4bae0ad148f41904dd4e5857bdc2e3e31b950b3d
+> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> the driver core allows the usage of const struct kobj_type.
+> 
+> Take advantage of this to constify the structure definition to prevent
+> modification at runtime.
+> 
+> These structures were not constified in
+> commit e56397e8c40d ("mm/damon/sysfs: make kobj_type structures constant")
+> as they didn't exist when that patch was written.
 
-Thank you!
+Thank you for catching this!
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> 
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+
+Thanks,
+SJ
+
+> ---
+>  mm/damon/sysfs-schemes.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/damon/sysfs-schemes.c b/mm/damon/sysfs-schemes.c
+> index 3cdad5a7f936..50cf89dcd898 100644
+> --- a/mm/damon/sysfs-schemes.c
+> +++ b/mm/damon/sysfs-schemes.c
+> @@ -384,7 +384,7 @@ static struct attribute *damon_sysfs_scheme_filter_attrs[] = {
+>  };
+>  ATTRIBUTE_GROUPS(damon_sysfs_scheme_filter);
+>  
+> -static struct kobj_type damon_sysfs_scheme_filter_ktype = {
+> +static const struct kobj_type damon_sysfs_scheme_filter_ktype = {
+>  	.release = damon_sysfs_scheme_filter_release,
+>  	.sysfs_ops = &kobj_sysfs_ops,
+>  	.default_groups = damon_sysfs_scheme_filter_groups,
+> @@ -503,7 +503,7 @@ static struct attribute *damon_sysfs_scheme_filters_attrs[] = {
+>  };
+>  ATTRIBUTE_GROUPS(damon_sysfs_scheme_filters);
+>  
+> -static struct kobj_type damon_sysfs_scheme_filters_ktype = {
+> +static const struct kobj_type damon_sysfs_scheme_filters_ktype = {
+>  	.release = damon_sysfs_scheme_filters_release,
+>  	.sysfs_ops = &kobj_sysfs_ops,
+>  	.default_groups = damon_sysfs_scheme_filters_groups,
+> 
+> ---
+> base-commit: 1e760fa3596e8c7f08412712c168288b79670d78
+> change-id: 20230324-b4-kobj_type-damon2-0238ee9e8d8c
+> 
+> Best regards,
+> -- 
+> Thomas Weißschuh <linux@weissschuh.net>
