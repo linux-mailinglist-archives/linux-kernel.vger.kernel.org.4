@@ -2,115 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C836C7B3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:24:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5736C7B46
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbjCXJYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 05:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56906 "EHLO
+        id S232101AbjCXJ0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 05:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjCXJYI (ORCPT
+        with ESMTP id S231452AbjCXJZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 05:24:08 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C11C23A78;
-        Fri, 24 Mar 2023 02:24:07 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32O7kB4s028357;
-        Fri, 24 Mar 2023 04:23:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=PODMain02222019;
- bh=YX4W9MdvoAZtuc1bquhjvBcfk8W3dvwqaQOVgNc1aDo=;
- b=ppylE8CQ3XqKGunHvLvpvRjEbAFMLkgCrNeD39vUqxVDAE4R+NFvLzuY0Ipitr6QMwFU
- 1RhzlkXRFlan9+kPHLkweDOtELcLT5AnHfBe2oZeYxGKpSYlJUxF9RLAWYfcVRK8sHZY
- zzQNvwHzUt8OclEwG4ukkLZZeCQ58qiGGwAj611YCiz6qpt6iViBgdzYxAt41DfVlEgZ
- DoD9iDfPgDLXSLGzL1REvyHwg8FaJxzazwONNb9Wk2Kj7ew1X6G/w1SW+h0xt0ze+drq
- iu83eQTTQ9qVagMxOQ8xLpRCXlUfh8OI/h4MO9YfKQbSRv/FAAsJnFOsFPoFM8GsoUd8 vQ== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3pgy30gn2g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 04:23:55 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Fri, 24 Mar
- 2023 04:23:53 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Fri, 24 Mar 2023 04:23:53 -0500
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0A34DB06;
-        Fri, 24 Mar 2023 09:23:53 +0000 (UTC)
-Date:   Fri, 24 Mar 2023 09:23:53 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Doug Anderson <dianders@chromium.org>
-CC:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        <patches@opensource.cirrus.com>
-Subject: Re: [PATCH] regulator: wm8994: Use PROBE_FORCE_SYNCHRONOUS
-Message-ID: <20230324092353.GO68926@ediswmail.ad.cirrus.com>
-References: <CGME20230323083330eucas1p1f7e3f9beb5ba168c6b13374d74c158f0@eucas1p1.samsung.com>
- <20230323083312.199189-1-m.szyprowski@samsung.com>
- <20230323114035.GL68926@ediswmail.ad.cirrus.com>
- <CAD=FV=UYO1KaoAZ7o5cA83SC1VHRomvJfaXVWyYPKrEZHyNNjg@mail.gmail.com>
- <20230323174531.GM68926@ediswmail.ad.cirrus.com>
- <CAD=FV=X0SAEk_iUGQ=J-PWk_MzVc7ZikBM3N8rrnhGFzcdBNpw@mail.gmail.com>
+        Fri, 24 Mar 2023 05:25:58 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E63233D1;
+        Fri, 24 Mar 2023 02:25:56 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id cn12so5287013edb.4;
+        Fri, 24 Mar 2023 02:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679649955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QcCl5sc+j3IMfbUjl4CDmD357jwtZ469Lo5ySWTEjOU=;
+        b=LzVzu8f/aM6P108G/bMabhIJ01zrRiiqgdW1OWDw11RAIhCW1zh4s1G4SP1oG/2zn+
+         QfatooAsH+lgIhEPjDca0dB5aGn6WDG9z4KfN9viYmiJEdnp+aRf6+JClgILAV25xjDQ
+         ZAwkF2ed/eokvZIHP5LltaTHlB4kLsptLaVxASS1jVOqN77tPkVoVcTKm3mBGmmCA0Aw
+         VOxLPhaEe9ANpOJrj0E9pCO2DsuoIBiUPazwEJ+bUT4FDCwM9Waq+bvi1ngt2mW9IhpR
+         To1fY2C+mUJ8sNOOl5Et1wgOli9Isn/EtOhvee9T8RWkX8RoP34RlTotuJjk4pZGreJh
+         qqLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679649955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QcCl5sc+j3IMfbUjl4CDmD357jwtZ469Lo5ySWTEjOU=;
+        b=ybXDSN9k8CssqKo3CDBPoPnPRjvPsbRL/HSWA1An7BhfebH9CZ/eHaaOGrT8iD/RRF
+         OqI8qUcWeapwP49zOhzl7n6WF8X7QeznXZtIM380kpXCHD9ufA+Ao5VxNceE0a39bYFx
+         7xFWOZQqgEvy0tQ/KCxDcuPoykog5udc90PBTFioo4G5ovZacb0yRaDLgtAcentnX4KS
+         Cql2KwPOR33Ah+vzhqPaWysH49tM1ZEq5EmfAZuXGbS2QbWKTwYdwWqToKbeduyRGojh
+         E8+oMxSlqQqrWkQhLO33Q4wiUQdJyntFAzXwfMdPoxpKNA05W+Oclc6psXnF4F+6AdVp
+         4CAQ==
+X-Gm-Message-State: AO0yUKVsPDjFn+KxvUGJD05zISuVV6LMf5EQqw5yeZKAroBJq0pc4mio
+        MVS53px05gzEDSsJgWM+N+y5eVdu3th66rLMZBA=
+X-Google-Smtp-Source: AK7set/Yxupl4tVMQ7EWq+XrpLRbHsLGaTSlG2NHJPepGUqS2rL9HaCERXA8RoBXevKlEzCMBusGL5WrghCzQMyxXmw=
+X-Received: by 2002:a05:6402:3510:b0:4af:62ad:6099 with SMTP id
+ b16-20020a056402351000b004af62ad6099mr6653339edd.2.1679649955024; Fri, 24 Mar
+ 2023 02:25:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=X0SAEk_iUGQ=J-PWk_MzVc7ZikBM3N8rrnhGFzcdBNpw@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: YOwIOATtHdJfrMHP7esprxLpyJ1QleCJ
-X-Proofpoint-ORIG-GUID: YOwIOATtHdJfrMHP7esprxLpyJ1QleCJ
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230323051241.24841-1-lukas.bulwahn@gmail.com> <CAHC9VhQ7O-qSb18HeG3wjeYC97sQNd1dSYHqTncAcZK3mSPGrQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhQ7O-qSb18HeG3wjeYC97sQNd1dSYHqTncAcZK3mSPGrQ@mail.gmail.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Fri, 24 Mar 2023 10:25:43 +0100
+Message-ID: <CAKXUXMyj0kHj=5ifgrajy1bcZzTLk3iVsnRxLA_VEnjpu5WOpQ@mail.gmail.com>
+Subject: Re: [PATCH] selinux: clean up dead code after removing runtime disable
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 11:00:32AM -0700, Doug Anderson wrote:
-> Hi,
-> 
-> On Thu, Mar 23, 2023 at 10:45 AM Charles Keepax
-> <ckeepax@opensource.cirrus.com> wrote:
+On Thu, Mar 23, 2023 at 3:55=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+>
+> On Thu, Mar 23, 2023 at 1:12=E2=80=AFAM Lukas Bulwahn <lukas.bulwahn@gmai=
+l.com> wrote:
 > >
-> > I think really the best place to look at this would be at the
-> > regulator level. It is fine if mfd_add_devices passes, the problem
-> > really is that the regulator core doesn't realise the regulator is
-> > going to be arriving, and thus returns a dummy regulator, rather
-> > than returning EPROBE_DEFER. If it did the MFD driver would probe
-> > defer at the point of requesting the regulator, which would all
-> > make sense.
-> 
-> I think something like your suggestion could be made to work for the
-> "microphone" supply in the arizona MFD, but not for the others looked
-> at here.
-> 
-> The problem is that if the MFD driver gets -EPROBE_DEFER then it will
-> go through its error handling path and call mfd_remove_devices().
-> That'll remove the sub-device providing the regulator. If you try
-> again, you'll just do the same. :-)
-> 
-> Specifically in wm8994 after we've populated the regulator sub-devices
-> then we turn them on and start talking to the device.
-> 
-> I think the two options I have could both work for wm8994's case:
-> either add some type of "my children have done probing" to MFD and
-> move the turning on of regulators / talking to devices there, or add
-> another stub-device and add it there. ;-)
+> > Commit f22f9aaf6c3d ("selinux: remove the runtime disable functionality=
+")
+> > removes the config SECURITY_SELINUX_DISABLE. This results in some dead =
+code
+> > in lsm_hooks.h and a reference in the ABI documentation leading nowhere=
+ as
+> > the help text is simply gone.
+> >
+> > Remove the dead code and dead reference.
+> >
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > ---
+> > Paul, please pick this minor cleanup patch on top of your commit above.
+>
+> Hi Lukas, thanks for catching this and sending a patch!  For future
+> reference, you don't need to add a note asking me to pick up this
+> patch, as long as you send it to the right mailing list - you did -
+> I'll see it and you'll either get a quick reply when I merge it or a
+> longer reply with comments/feedback.
+>
+> One comment below ...
+>
+> > diff --git a/Documentation/ABI/removed/sysfs-selinux-disable b/Document=
+ation/ABI/removed/sysfs-selinux-disable
+> > index cb783c64cab3..1ae9587231e1 100644
+> > --- a/Documentation/ABI/removed/sysfs-selinux-disable
+> > +++ b/Documentation/ABI/removed/sysfs-selinux-disable
+> > @@ -24,6 +24,3 @@ Description:
+> >         SELinux at runtime.  Fedora is in the process of removing the
+> >         selinuxfs "disable" node and once that is complete we will star=
+t the
+> >         slow process of removing this code from the kernel.
+> > -
+> > -       More information on /sys/fs/selinux/disable can be found under =
+the
+> > -       CONFIG_SECURITY_SELINUX_DISABLE Kconfig option.
+>
+> When I moved the deprecation notice from the "obsolete" to the
+> "removed" directory I added a note at the top which read:
+>
+>   "REMOVAL UPDATE: The SELinux checkreqprot functionality was
+>    removed in March 2023, the original deprecation notice is
+>    shown below."
+>
+> My goal was to preserve the original notice as much as possible,
+> including the references to the now defunct Kconfig option, to help
+> people who are trying to understand how things worked prior to the
+> removal.
+>
+> If you can remove this part of your patch and resubmit I'll happily
+> merge it into the selinux/next tree.
+>
 
-Is this true if we keep the regulator as sync though? Yes it will
-remove the children but when it re-adds them the reason that the
-regulator probe deferred in the first place will hopefully be
-removed. So it will now fully probe in path.
+Okay, I reworked the patch as requested and sent out a PATCH v2:
+
+https://lore.kernel.org/all/20230324092114.13907-1-lukas.bulwahn@gmail.com/=
+T/#u
 
 Thanks,
-Charles
+
+Lukas
