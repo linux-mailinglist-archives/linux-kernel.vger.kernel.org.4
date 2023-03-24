@@ -2,163 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77E16C835F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AE66C8363
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbjCXRaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 13:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
+        id S231737AbjCXRbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 13:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjCXRaG (ORCPT
+        with ESMTP id S231491AbjCXRbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 13:30:06 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54A0B77E;
-        Fri, 24 Mar 2023 10:30:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3C84B33B63;
-        Fri, 24 Mar 2023 17:30:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679679003; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+eiBbPs2SGpkrGMAzRmJfw7VfJ2mVEesg1+9LMIwCTE=;
-        b=O46wtOse/KmGUQx3zAOgmnpK5rrOILvob0lQT3LYNVP7LUFw5YuoY//8OHIp6KT0MNxCHo
-        MYZwqgBqXt6vRaC6aEhRCHHQiHaZza4Y/0Kuf9ukEoN5OYPwHVFcTlGU2ggU02D0FPqGB9
-        3gLQ6K+0fi+cQMMx4ZZwx0oQ4qFbSO4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679679003;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+eiBbPs2SGpkrGMAzRmJfw7VfJ2mVEesg1+9LMIwCTE=;
-        b=kZxNL7ERELRnFYwUZ1ebrmvqaNDYDiayXb27qqSoFZGsuJnXQvUdyMeOAvHr1aae7uMsCB
-        guhevfdq+HG2fzAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 171F5138ED;
-        Fri, 24 Mar 2023 17:30:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BiLnBBveHWQ8LQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 24 Mar 2023 17:30:03 +0000
-Message-ID: <22a1ec75-155a-2392-ce39-4bca3fc081eb@suse.cz>
-Date:   Fri, 24 Mar 2023 18:30:02 +0100
+        Fri, 24 Mar 2023 13:31:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD49CC64C
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 10:31:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679679062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=yS3LsgviE014HnSKQD34+joeCRTUmhUGUupA/8MRjOw=;
+        b=E4x5iGoo/KntDPrYUlzrlzNK305b9mYa2IKGfs2zNaxn4XahlEBdhAdeoKOIJ7zfp+UHYJ
+        5GUy3h9PZMNzRxSO2iAxqAvFS6w5vI54GsvB1LmwaWOfRRfUggWzzKyThww7rPXhEtf9Em
+        utSkh7Bw95vNlpYNL4NDmzlqYpxNipM=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-481-Aw7GHbIKO-idgDId2AtX8g-1; Fri, 24 Mar 2023 13:31:00 -0400
+X-MC-Unique: Aw7GHbIKO-idgDId2AtX8g-1
+Received: by mail-qt1-f198.google.com with SMTP id t22-20020ac86a16000000b003bd1c0f74cfso1413983qtr.20
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 10:31:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679679060;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yS3LsgviE014HnSKQD34+joeCRTUmhUGUupA/8MRjOw=;
+        b=cC/px86s+1Zf/k2bJ3JoDq5/d7mYw9kpgx0c3sPqhJOoe2ObPX3r07Pq3hHDw7nlZO
+         5j1pjBMOsw9NR8/mznphXU7N5MS/Ka07xnTw6Dd1l/CZkDVRPHCOmrMT3IFXm1dYUEMm
+         cvrihsN9Hnn5Tma0M7hcjKiboKV2Zp3xFK7REyu8zX8cbOhwNWODTzi1+ZcJCzKSKc4g
+         uvIQqARoapokqyRdvgoJCN0sGebQn7jrwxTcrWoS8KuVbig0boACsbJTNlCN22YFY+am
+         ZNhQjZNm0LrJ42F5Ua0tjzke7AC5zCLT7SLdJWo4t2XqnwvHeMrtuQpaTK5q38mSTuwe
+         OGxQ==
+X-Gm-Message-State: AAQBX9c8Gght+EyfBh5HRixH+x19NTKBDXi2DeMZtFs/2B3696r5oeGu
+        E81u+557DoKhAxUlFQD2drUPOods+Zf34VImsL14K1i9pPooDzG3a4FzcRMOwfqbRikT4klRpCP
+        5w92QmOK/YjcrDXJtNVvE5NzI
+X-Received: by 2002:ad4:5ce4:0:b0:5cd:3326:792 with SMTP id iv4-20020ad45ce4000000b005cd33260792mr6578283qvb.38.1679679059811;
+        Fri, 24 Mar 2023 10:30:59 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bL4q0XGxOQvO9LMmJSyYvbSuls1/y5BcXjsOOA+UHzr4CWRhukcoArhUedrPOnlcO+cjsmPw==
+X-Received: by 2002:ad4:5ce4:0:b0:5cd:3326:792 with SMTP id iv4-20020ad45ce4000000b005cd33260792mr6578253qvb.38.1679679059593;
+        Fri, 24 Mar 2023 10:30:59 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id cw2-20020ad44dc2000000b005dd8b9345aesm829312qvb.70.2023.03.24.10.30.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 10:30:59 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     linkinjeon@kernel.org, sfrench@samba.org, senozhatsky@chromium.org,
+        tom@talpey.com, nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] ksmbd: remove unused is_char_allowed function
+Date:   Fri, 24 Mar 2023 13:30:56 -0400
+Message-Id: <20230324173056.2652725-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] mm/mempolicy: Fix exception handling in
- shared_policy_replace()
-Content-Language: en-US
-To:     Markus Elfring <Markus.Elfring@web.de>,
-        kernel-janitors@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kosaki Motohiro <kosaki.motohiro@jp.fujitsu.com>,
-        Mel Gorman <mgorman@suse.de>
-Cc:     cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <6e9ca062-939b-af96-c8ff-56ad485d6e79@web.de>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <6e9ca062-939b-af96-c8ff-56ad485d6e79@web.de>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=2.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,TVD_SUBJ_WIPE_DEBT
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Your patch doesn't apply, seems like it uses spaces instead of tabs. Also I
-can't use 'b4' to download it as there are multiple different patches using
-the same message-id:
+clang with W=1 reports
+fs/ksmbd/unicode.c:122:19: error: unused function
+  'is_char_allowed' [-Werror,-Wunused-function]
+static inline int is_char_allowed(char *ch)
+                  ^
+This function is not used so remove it.
 
-https://lore.kernel.org/all/6e9ca062-939b-af96-c8ff-56ad485d6e79@web.de/
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ fs/ksmbd/unicode.c | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
-Re: subject, I don't see a bug that this would fix. You could say it's
-"cleanup" and this function could use one, but for a cleanup it's not
-improving the situation much.
-
-On 3/23/23 18:30, Markus Elfring wrote:
-> Date: Thu, 23 Mar 2023 18:18:59 +0100
-> 
-> The label “err_out” was used to jump to another pointer check despite of
-> the detail in the implementation of the function “shared_policy_replace”
-> that it was determined already that a corresponding variable contained a
-> null pointer because of a failed call of the function “kmem_cache_alloc”.
-> 
-> 1. Use more appropriate labels instead.
-> 
-> 2. The implementation of the function “mpol_put” contains a pointer check
->    for its single input parameter.
->    Thus delete a redundant check in the caller.
-> 
-> 
-> This issue was detected by using the Coccinelle software.
-> 
-> Fixes: 42288fe366c4f1ce7522bc9f27d0bc2a81c55264 ("mm: mempolicy: Convert shared_policy mutex to spinlock")
-
-Again this is not a fix.
-
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
->  mm/mempolicy.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
-> 
-> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> index a256a241fd1d..fb0485688dcb 100644
-> --- a/mm/mempolicy.c
-> +++ b/mm/mempolicy.c
-> @@ -2736,13 +2736,12 @@ static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
->          sp_insert(sp, new);
->      write_unlock(&sp->lock);
->      ret = 0;
-> +put_mpol:
-> +    mpol_put(mpol_new);
->  
-> -err_out:
-> -    if (mpol_new)
-> -        mpol_put(mpol_new);
->      if (n_new)
->          kmem_cache_free(sn_cache, n_new);
-> -
-> +exit:
->      return ret;
->  
->  alloc_new:
-> @@ -2750,10 +2749,10 @@ static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
->      ret = -ENOMEM;
->      n_new = kmem_cache_alloc(sn_cache, GFP_KERNEL);
->      if (!n_new)
-> -        goto err_out;
-> +        goto exit;
-
-Just "return ret" and no need for exit label?
-
->      mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
->      if (!mpol_new)
-> -        goto err_out;
-> +        goto put_mpol;
-
-We are doing this because mpol_new == NULL, so we know there's no reason to
-do mpol_put(), we could jump to the freeing of n_new.
-
->      atomic_set(&mpol_new->refcnt, 1);
->      goto restart;
->  }
-> --
-> 2.40.0
-> 
-> 
-> 
+diff --git a/fs/ksmbd/unicode.c b/fs/ksmbd/unicode.c
+index a0db699ddafd..9ae676906ed3 100644
+--- a/fs/ksmbd/unicode.c
++++ b/fs/ksmbd/unicode.c
+@@ -113,24 +113,6 @@ cifs_mapchar(char *target, const __u16 src_char, const struct nls_table *cp,
+ 	goto out;
+ }
+ 
+-/*
+- * is_char_allowed() - check for valid character
+- * @ch:		input character to be checked
+- *
+- * Return:	1 if char is allowed, otherwise 0
+- */
+-static inline int is_char_allowed(char *ch)
+-{
+-	/* check for control chars, wildcards etc. */
+-	if (!(*ch & 0x80) &&
+-	    (*ch <= 0x1f ||
+-	     *ch == '?' || *ch == '"' || *ch == '<' ||
+-	     *ch == '>' || *ch == '|'))
+-		return 0;
+-
+-	return 1;
+-}
+-
+ /*
+  * smb_from_utf16() - convert utf16le string to local charset
+  * @to:		destination buffer
+-- 
+2.27.0
 
