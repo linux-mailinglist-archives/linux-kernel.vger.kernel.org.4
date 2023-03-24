@@ -2,52 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A040D6C8214
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 405FD6C8228
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbjCXQD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
+        id S231387AbjCXQJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbjCXQD2 (ORCPT
+        with ESMTP id S231395AbjCXQJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:03:28 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A72946B3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:03:25 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id F3B29FF80B;
-        Fri, 24 Mar 2023 16:03:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1679673804;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e/Ot0XeBt4bh9S+cBPdCZ8iwvY0dcGmED6USv22SRnM=;
-        b=BN22IGMZfMTPJUAD9JudirnCVZS8EtGHY8K8BBURZujAXY/BvR54yys/qrYZIVCxyYflSP
-        AikEEJ4YmqmlZbNOMemXEdao26esr6xDfEmVdFz+KufTp8PQoHKUVNBYvdzzHU/hadKb1n
-        rJzyQwdn75aimiV0tljZA6qnou0wBE06O3hApQj6gYT1QRn+MAmFrNbqHW8Bs/MvUaLBNi
-        7MO4Hzpik1h27xB8Q1Ugzn/kyTe44hWlD+zhz1y2ARNpqq76PBoYJ0jZNg2XJ0HHHAHzla
-        SsEwmYFrxf+m345laNq4FEbaPEJM0oO8DGAl1Ii8K7HvoaqDetBZ1lJRYYf39w==
-Date:   Fri, 24 Mar 2023 17:03:20 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Christophe Kerello <christophe.kerello@foss.st.com>
-Cc:     <richard@nod.at>, <vigneshr@ti.com>,
-        <krzysztof.kozlowski@linaro.org>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: Re: [PATCH 0/2] depends on ARCH_STM32 instead of MACH_STM32MP157
-Message-ID: <20230324170320.5087c223@xps-13>
-In-Reply-To: <20230324155105.826063-1-christophe.kerello@foss.st.com>
-References: <20230324155105.826063-1-christophe.kerello@foss.st.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 24 Mar 2023 12:09:48 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64ED519F0A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:09:44 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32ODf4MG027124;
+        Fri, 24 Mar 2023 17:09:27 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=WYV7EBAofXJyjzZBSfwpOR5v4z00FX931Kh4b0ja95g=;
+ b=ouywm90fgp4EGgxeJehtG2Dg+r7UyC/vqM0ZumAEMaf/m1ZYnVM+2WIa8SAISi7j2Oxl
+ ihTIGYZOJHZv1//u93ylVxRIjQ71XvXKP2CwUvAcQKdmjijgDakPRalkCbaO9ZErKJTt
+ I8Wo7O3m772HxZG9DuIaBDqkIKrzM3D8JXBnKFAwtlttSOVHvURzr+goQIBzZ9TAQ2ik
+ CCPbQJ4u96Lf4+8rbBte4b5ALIUlPEkI+moqNIGHLjVANvFiteZXp5uiGI5z2AUttwcB
+ X5tlR7QqLtTtpLSn1fuEHU+0zsyWsF3ZgOSU11DLsmZ5WHwht8CHj9UKO6TuhNDHbu60 XQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pgxhx5wdt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 17:09:27 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0C599100034;
+        Fri, 24 Mar 2023 17:09:27 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0697321A20B;
+        Fri, 24 Mar 2023 17:09:27 +0100 (CET)
+Received: from localhost (10.48.0.175) by SHFDAG1NODE3.st.com (10.75.129.71)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 24 Mar
+ 2023 17:09:26 +0100
+From:   Christophe Kerello <christophe.kerello@foss.st.com>
+To:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>
+Subject: [PATCH] mtd: rawnand: stm32_fmc2: do not support EDO mode
+Date:   Fri, 24 Mar 2023 17:09:18 +0100
+Message-ID: <20230324160918.826452-1-christophe.kerello@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.48.0.175]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE3.st.com
+ (10.75.129.71)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_10,2023-03-24_01,2023-02-09_01
+X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,29 +68,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+FMC2 controller does not support EDO mode (timings mode 4 and 5).
 
-christophe.kerello@foss.st.com wrote on Fri, 24 Mar 2023 16:51:03 +0100:
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Fixes: 2cd457f328c1 ("mtd: rawnand: stm32_fmc2: add STM32 FMC2 NAND flash controller driver")
+---
+ drivers/mtd/nand/raw/stm32_fmc2_nand.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> To be able to compile the driver on all STM32MP SOCs, we move the
-> "depends on" on ARCH_STM32.
->=20
-> Christophe Kerello (2):
->   memory: stm32-fmc2-ebi: depends on ARCH_STM32 instead of
->     MACH_STM32MP157
->   mtd: rawnand: stm32_fmc2: depends on ARCH_STM32 instead of
->     MACH_STM32MP157
+diff --git a/drivers/mtd/nand/raw/stm32_fmc2_nand.c b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
+index 5d627048c420..3abb63d00a0b 100644
+--- a/drivers/mtd/nand/raw/stm32_fmc2_nand.c
++++ b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
+@@ -1531,6 +1531,9 @@ static int stm32_fmc2_nfc_setup_interface(struct nand_chip *chip, int chipnr,
+ 	if (IS_ERR(sdrt))
+ 		return PTR_ERR(sdrt);
+ 
++	if (sdrt->tRC_min < 30000)
++		return -EOPNOTSUPP;
++
+ 	if (chipnr == NAND_DATA_IFACE_CHECK_ONLY)
+ 		return 0;
+ 
+-- 
+2.25.1
 
-I don't see issue with taking these two patches in independent trees so
-if nobody disagrees I will take the second one through the mtd tree and
-let Krzysztof take the first one through mem-ctrl.
-
->=20
->  drivers/memory/Kconfig       | 2 +-
->  drivers/mtd/nand/raw/Kconfig | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-
-
-Thanks,
-Miqu=C3=A8l
