@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B387E6C86A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0876E6C86A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbjCXURu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 16:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
+        id S231872AbjCXURq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 16:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbjCXURo (ORCPT
+        with ESMTP id S231572AbjCXURn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:17:44 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AE61A492;
-        Fri, 24 Mar 2023 13:17:44 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-17ac5ee3f9cso2874473fac.12;
-        Fri, 24 Mar 2023 13:17:44 -0700 (PDT)
+        Fri, 24 Mar 2023 16:17:43 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7E11A486;
+        Fri, 24 Mar 2023 13:17:43 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id b19so2125817oib.7;
+        Fri, 24 Mar 2023 13:17:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679689063;
+        d=1e100.net; s=20210112; t=1679689062;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=rD9ciGos0y1USWhzdKNkN2kvhX/eHHj65sd31Nex8kI=;
-        b=vjVtEG1/Z/IU8witbXJTpxHih4P8MTg2EenDJPRwMe6K/d1zYTa4sRuYQoNyoHgeHk
-         /euFTybBUIZzf2R+qIXeA1NUcaru4kDFg+50zxSR/YrJq8WXrmq1fjDG6RNU4BEPyFZh
-         PdIfogsCOMmo+hBuSzyd+fktQeWKCQJ2slco9uDdlB8yQbEV9bGkgEZWsh9IuVCqqyxI
-         ohgOtIu9FmpuwjoAOZ+1PULrTfepdVxisNvYdX+6L3FaxtJNLMtfLeOwd387Q/mLbxW9
-         UnfGC5HlHtJ5L9wHedSa9GuqyvRpbA+YpDBRry5purtDQCN5ieENswQmuFyoqKL6UWCx
-         dhcA==
-X-Gm-Message-State: AO0yUKWl3pOIL8RxLEXhA47PiKmALxofnTVSTvgUb2tLQUPRQQ+jmGSX
-        eAD5sXzus1+JE7MHVnM60A==
-X-Google-Smtp-Source: AKy350YRjeIimHIYr90YlV9pYo+xOiJ1OCn0DJBrYzmXor5TZIEr43uhwVrUpYoFvJ1/d8kL7Etyzg==
-X-Received: by 2002:a05:6870:c589:b0:17e:456:aa58 with SMTP id ba9-20020a056870c58900b0017e0456aa58mr2780756oab.56.1679689063607;
-        Fri, 24 Mar 2023 13:17:43 -0700 (PDT)
+        bh=hjo6T06AhgrOxDlWz+2G2Zgc5NeJaNtNcNVYDLu3Z6E=;
+        b=2JWRXrSz7YYmceDbTOfUwUqzTSmkWF55UTopg3rQRL50jhD2xcveMSu7kOvHRDKtar
+         e1rn2uE0pyQscjP1tqk/II2gWeqFjDF3pPYPeKvmR10EG/z2TDaPd1nWhWFznKLd9O1p
+         ZMxOz+A3TAAfu3o3vHlVB9Ixi03atqUoNXwmn/dF/KFi/Aov9DiOkCbWtj2M9eeM6L72
+         UGE5ebt58v38VggFdeAJ8gOd+QlpZNEeo5rY+cUasHu5B4wLhnwZocpZk+YGjdmJX+LT
+         vkg8N8ij04/CtGxxz5LI9tebEbEnIm34eSl10WXoUz0SetfQQO2o3detFmC5Xi262UwR
+         4v5A==
+X-Gm-Message-State: AO0yUKXLtl9yKbkWItMm6zvyywfwtJIw7d8NebVkvQ5v1t2ZoE3HJ/1I
+        YgvinMYKkrYyhtnpxIgqXP7Wyxc2pg==
+X-Google-Smtp-Source: AK7set83s82uaUJRj3dzo4SvDlSjN2K84Zt++hVAUhsWxmrL3xduYCYWVxI9pwtd5f8gJw4OKYZ90g==
+X-Received: by 2002:aca:a913:0:b0:386:a30c:f16a with SMTP id s19-20020acaa913000000b00386a30cf16amr1668100oie.50.1679689062413;
+        Fri, 24 Mar 2023 13:17:42 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p186-20020acad8c3000000b0038694b7dc09sm8585406oig.55.2023.03.24.13.17.42
+        by smtp.gmail.com with ESMTPSA id l4-20020acabb04000000b00387852ef095sm918996oif.25.2023.03.24.13.17.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 13:17:43 -0700 (PDT)
-Received: (nullmailer pid 2436318 invoked by uid 1000);
+        Fri, 24 Mar 2023 13:17:42 -0700 (PDT)
+Received: (nullmailer pid 2436315 invoked by uid 1000);
         Fri, 24 Mar 2023 20:17:41 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-media@vger.kernel.org, Sean Young <sean@mess.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Ravi Kumar V <kumarrav@codeaurora.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Matthew Lear <matthew.lear@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20230324170214.3470675-2-f.fainelli@gmail.com>
-References: <20230324170214.3470675-1-f.fainelli@gmail.com>
- <20230324170214.3470675-2-f.fainelli@gmail.com>
-Message-Id: <167968860307.2423872.12655275819676074243.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: media: gpio-ir-receiver: Document
- wakeup-souce property
+To:     Bharat Bhushan <bbhushan2@marvell.com>
+Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        linux@roeck-us.net, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        wim@linux-watchdog.org
+In-Reply-To: <20230324145652.19221-1-bbhushan2@marvell.com>
+References: <20230324145652.19221-1-bbhushan2@marvell.com>
+Message-Id: <167968860240.2423272.17528725519300805146.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: marvell octeonTX2 GTI
+ watchdog driver
 Date:   Fri, 24 Mar 2023 15:17:41 -0500
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,27 +66,30 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Fri, 24 Mar 2023 10:02:13 -0700, Florian Fainelli wrote:
-> The GPIO IR receiver can be used as a wake-up source for the system,
-> document that.
+On Fri, 24 Mar 2023 20:26:51 +0530, Bharat Bhushan wrote:
+> Add binding documentation for the Marvell octeonTX2
+> GTI watchdog driver.
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
 > ---
->  Documentation/devicetree/bindings/media/gpio-ir-receiver.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+>  .../watchdog/marvel-octeontx2-wdt.yaml        | 43 +++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/media/gpio-ir-receiver.yaml:27:6: [warning] wrong indentation: expected 4 but found 5 (indentation)
+./Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml:28:2: [warning] wrong indentation: expected 2 but found 1 (indentation)
 
 dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.example.dtb: watch-dog@802000040000: $nodename:0: 'watch-dog@802000040000' does not match '^(timer|watchdog)(@.*|-[0-9a-f])?$'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230324170214.3470675-2-f.fainelli@gmail.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230324145652.19221-1-bbhushan2@marvell.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
