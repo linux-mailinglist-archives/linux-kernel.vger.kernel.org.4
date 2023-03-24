@@ -2,125 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCC56C875B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF726C875F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbjCXVPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 17:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
+        id S231196AbjCXVTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 17:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjCXVPh (ORCPT
+        with ESMTP id S229674AbjCXVTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 17:15:37 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2680912CDE
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 14:15:36 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5425c04765dso30747577b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 14:15:36 -0700 (PDT)
+        Fri, 24 Mar 2023 17:19:19 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B6D17178
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 14:19:16 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id z83so3899570ybb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 14:19:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679692535;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ByUzQAF933YiOtYjNYUueHaxFJKNZHOc8pGZC9WsDYk=;
-        b=kAMLWMRCUtITj+oL6Ekknn8/AbLf0fLJJcRLw0VIjVRkknHGr0IIIEC4rFGbphoYZi
-         8sXwdxJCukT0K6uYujXw4qCkHsty7YbgkGIf8XXp0ATZHW0XPLdvhuvgnsJU/Jde6Gid
-         eR5jEzGhKFihtGTBHRycX5Bo1j3EXZ/3sxLRdSbH3TgrmAfwuYFDPHIm8CUdggpprbar
-         OA5Rm32BLQEvATEIWh1GCP1vAIf+k7cK03jgbgk95r2BFyg/431s5836cHd8lcUK6/SH
-         Exw0tCcE3TUpcTpvuEN6hflyKq6EpyM9sQGLrRC3Rdi1f5/9NwdeHl2VAltB3NPjw+Vm
-         7hwA==
+        d=paul-moore.com; s=google; t=1679692756;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7pfGfMNBNNsLVUe+iEhmIwYw21/gtsvLqBolqL2cAyY=;
+        b=CaEKWRFHReRcMgo31GuglrlmPKa9GYTDdwrQFAlOl0CNjmEJuA/bkmFRzX37Ct+YxJ
+         0Dv7+jB6M544jtvOMs0tFZXUOLcgwVIvinby/FcdipnRFhJh4xZoq7hVtmI//lOvaoJ5
+         MhcHkK8fUj6y6va8T/lCKFQlzYtI/qJ4XuuoS1TB1xfeYncp2ilf/loYmJlzg50IUL+O
+         1Cr/GsuEdTJbNHDmaMSU73mU5WIbPvA0syoXqQE/t9Z8ZB2c9gEXAanBHcbZK7pg+x7l
+         SzEOrRl4Wq66Sen2tt8rT7wUZyJCZC9u0KDNFl6w7846cP2gaLeOXeLhdih/7hjX6yUg
+         6jbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679692535;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ByUzQAF933YiOtYjNYUueHaxFJKNZHOc8pGZC9WsDYk=;
-        b=Lqw4Az3d1hnMISlKqQVGKNRM4oeHAWzCsz1YzU7VT0Izkdy+zwhmSv88M4sdnK6l9l
-         QDyCzL8sfyiMojT22lQ8/uPwVV8QPwpCl22q+sAJSti4eho5BkmNTGQJvLUvovAh9iXw
-         MEX7a7o0NpjwzEGs6dxovI1FQldLs1UzNpcuROd/TofD6/ifxkMdS9xEKIQqKVHfGOdu
-         8vfLhMmRXdaOkJKPfuRBUeGdgEeMEFowWO8owqzaJcIW0mK1QvZTRUcG6w75nC+yGu9b
-         wZQYEeI57ZPetcBCiqcRLMBw6cfAWWMaR0mJAYXcda0cv+aqHf65ZUeDjF8eo9L6eqqG
-         fOZg==
-X-Gm-Message-State: AAQBX9dM7VXs79wF/DjKIFAZow/fGQrC4ieUGR/MkV7UbYtC0WKQPC4C
-        P7GufyZHR0nZMSay7CqCD2A8XlN5Qow=
-X-Google-Smtp-Source: AKy350bdF1WVlgJLX2SDiFswwikGhtMGGjqTXIC6huvd0diFGe6fa0Oatun3zdXA8QV0XLUf7NuEb9JviMQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:1083:b0:b67:d295:d614 with SMTP id
- v3-20020a056902108300b00b67d295d614mr1800465ybu.12.1679692535386; Fri, 24 Mar
- 2023 14:15:35 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 21:15:33 +0000
-In-Reply-To: <20230301185838.21659-2-itazur@amazon.com>
-Mime-Version: 1.0
-References: <20230301185838.21659-1-itazur@amazon.com> <20230301185838.21659-2-itazur@amazon.com>
-Message-ID: <ZB4S9eP0tGbGUTSC@google.com>
-Subject: Re: [PATCH v2 1/1] KVM: x86: Propagate AMD-specific IBRS bits to guests
-From:   Sean Christopherson <seanjc@google.com>
-To:     Takahiro Itazuri <itazur@amazon.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, Takahiro Itazuri <zulinx86@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1679692756;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7pfGfMNBNNsLVUe+iEhmIwYw21/gtsvLqBolqL2cAyY=;
+        b=qOXozfEYVwqA/nArYJOABg74elLBCcAhdP/wrDoWQK//PqbSC87swe0R9r8JkI2K04
+         HZGGxefTbDDNU/+jZXxV5UQPvxJsthDjX8HgRx2TVWngCL90AxyvAOqfXId8/j8nfz79
+         G0bvx9Oy2Ep5ElMlyYqCgIr3tb5ZjMViHcdiEwn02Yp4LFD/5HDWSEAb5qhU459WPGAT
+         i06zmLClZhxH9pZtsSq3ULiIRIGP0Vtz8PewmlPB59bYhhLpZbVxtkVNJunIhEsuR40P
+         Q4+ZVflb95Ntjkh/WTZ72FNkl1FG3Mz86IEUktMuju5zCb3YV2o4fqawiPo3DmDb7BVE
+         GAHA==
+X-Gm-Message-State: AAQBX9ftxXz2IFQHm0a/1aCZxaEBJLz1GxIB/LVuaaaHnBhnwS5mhzEZ
+        bpUBrnutXj35Ew2LXRDOAKCh+OlryGV1sIrMvGJBk+6ch8XvmPM=
+X-Google-Smtp-Source: AKy350ZdpVT/6244kA+n509C+bZutGl+4rbLtWTPVt0gqlwA/VXZ235IROlMZnmvXpCo3yd2nJvrVuSjH49dkBB5LPA=
+X-Received: by 2002:a05:6902:18c7:b0:b72:fff0:2f7f with SMTP id
+ ck7-20020a05690218c700b00b72fff02f7fmr3344565ybb.4.1679692755843; Fri, 24 Mar
+ 2023 14:19:15 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230314081720.4158676-1-roberto.sassu@huaweicloud.com>
+ <20230314081720.4158676-5-roberto.sassu@huaweicloud.com> <CAHC9VhTD3EyDiJs9+NQrgp84JcUs_sx8WONtRk2YYH4m1C8nVw@mail.gmail.com>
+ <939e6c88662ad90b963993c4cc1b702083e74a7a.camel@huaweicloud.com>
+In-Reply-To: <939e6c88662ad90b963993c4cc1b702083e74a7a.camel@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 24 Mar 2023 17:19:04 -0400
+Message-ID: <CAHC9VhQuKYundB6rSTi57hxYzE7+QYzHd75M9m-TgyOddPj5Kg@mail.gmail.com>
+Subject: Re: [PATCH v8 4/6] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023, Takahiro Itazuri wrote:
-> VMMs retrieve supported CPUID features via KVM_GET_SUPPORTED_CPUID to
-> construct CPUID information to be passed to KVM_SET_CPUID2. Most CPUID
-> feature bits related to speculative attacks are propagated from host
-> CPUID. AMD processors have AMD-specific IBRS related bits in CPUID
-> Fn8000_0008_EBX (ref: AMD64 Architecture Programmer's Manual Volume 3:
-> General-Purpose and System Instructions) and some bits are not
-> propagated to guests.
-> 
-> Enable propagation of these bits to guests, so that guests can see the
-> same security information as the host without VMM action.
+On Fri, Mar 24, 2023 at 6:18=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> On Thu, 2023-03-23 at 20:09 -0400, Paul Moore wrote:
+> > On Tue, Mar 14, 2023 at 4:19=E2=80=AFAM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > >
+> > > Currently, security_inode_init_security() supports only one LSM provi=
+ding
+> > > an xattr and EVM calculating the HMAC on that xattr, plus other inode
+> > > metadata.
+> > >
+> > > Allow all LSMs to provide one or multiple xattrs, by extending the se=
+curity
+> > > blob reservation mechanism. Introduce the new lbs_xattr field of the
+> > > lsm_blob_sizes structure, so that each LSM can specify how many xattr=
+s it
+> > > needs, and the LSM infrastructure knows how many xattr slots it shoul=
+d
+> > > allocate.
+> > >
+> > > Dynamically allocate the xattrs array to be populated by LSMs with th=
+e
+> > > inode_init_security hook, and pass it to the latter instead of the
+> > > name/value/len triple. Update the documentation accordingly, and fix =
+the
+> > > description of the xattr name, as it is not allocated anymore.
+> > >
+> > > Since the LSM infrastructure, at initialization time, updates the num=
+ber of
+> > > the requested xattrs provided by each LSM with a corresponding offset=
+ in
+> > > the security blob (in this case the xattr array), it makes straightfo=
+rward
+> > > for an LSM to access the right position in the xattr array.
+> > >
+> > > There is still the issue that an LSM might not fill the xattr, even i=
+f it
+> > > requests it (legitimate case, for example it might have been loaded b=
+ut not
+> > > initialized with a policy). Since users of the xattr array (e.g. the
+> > > initxattrs() callbacks) detect the end of the xattr array by checking=
+ if
+> > > the xattr name is NULL, not filling an xattr would cause those users =
+to
+> > > stop scanning xattrs prematurely.
+> > >
+> > > Solve that issue by introducing security_check_compact_filled_xattrs(=
+),
+> > > which does a basic check of the xattr array (if the xattr name is fil=
+led,
+> > > the xattr value should be too, and viceversa), and compacts the xattr=
+ array
+> > > by removing the holes.
+> > >
+> > > An alternative solution would be to let users of the xattr array know=
+ the
+> > > number of elements of that array, so that they don't have to check th=
+e
+> > > termination. However, this seems more invasive, compared to a simple =
+move
+> > > of few array elements.
+> > >
+> > > security_check_compact_filled_xattrs() also determines how many xattr=
+s in
+> > > the xattr array have been filled. If there is none, skip
+> > > evm_inode_init_security() and initxattrs(). Skipping the former also =
+avoids
+> > > EVM to crash the kernel, as it is expecting a filled xattr.
+> > >
+> > > Finally, adapt both SELinux and Smack to use the new definition of th=
+e
+> > > inode_init_security hook, and to correctly fill the designated slots =
+in the
+> > > xattr array. For Smack, reserve space for the other defined xattrs al=
+though
+> > > they are not set yet in smack_inode_init_security().
+> > >
+> > > Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org> (EVM c=
+rash)
+> > > Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archli=
+nux/
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > ---
+> > >  include/linux/lsm_hook_defs.h |   3 +-
+> > >  include/linux/lsm_hooks.h     |   1 +
+> > >  security/security.c           | 119 +++++++++++++++++++++++++++++---=
+--
+> > >  security/selinux/hooks.c      |  19 ++++--
+> > >  security/smack/smack_lsm.c    |  33 ++++++----
+> > >  5 files changed, 137 insertions(+), 38 deletions(-)
 
-Please provide some description on what these bits do, and more importantly why
-no action is required to virtualize them in KVM, even if it seems obvious.  We've
-had a few goofs with respect to mitigations across guest domains, I just want to
-be extra paranoid that we document upfront why it's ok (recommended?) to advertise
-this information to the guest.
+...
 
-> Signed-off-by: Takahiro Itazuri <itazur@amazon.com>
-> ---
->  arch/x86/kvm/cpuid.c         | 5 +++--
->  arch/x86/kvm/reverse_cpuid.h | 5 +++++
->  2 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 596061c1610e..c297064208dd 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -704,8 +704,9 @@ void kvm_set_cpu_caps(void)
->  	kvm_cpu_cap_mask(CPUID_8000_0008_EBX,
->  		F(CLZERO) | F(XSAVEERPTR) |
->  		F(WBNOINVD) | F(AMD_IBPB) | F(AMD_IBRS) | F(AMD_SSBD) | F(VIRT_SSBD) |
-> -		F(AMD_SSB_NO) | F(AMD_STIBP) | F(AMD_STIBP_ALWAYS_ON) |
-> -		__feature_bit(KVM_X86_FEATURE_AMD_PSFD)
-> +		F(AMD_SSB_NO) | F(AMD_STIBP) | F(AMD_IBRS_ALWAYS_ON) |
-> +		F(AMD_STIBP_ALWAYS_ON) | F(AMD_IBRS_PREFERRED) |
-> +		F(AMD_IBRS_SAME_MODE) | __feature_bit(KVM_X86_FEATURE_AMD_PSFD)
->  	);
->  
->  	/*
-> diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-> index 042d0aca3c92..1e538e29b117 100644
-> --- a/arch/x86/kvm/reverse_cpuid.h
-> +++ b/arch/x86/kvm/reverse_cpuid.h
-> @@ -43,6 +43,11 @@ enum kvm_only_cpuid_leafs {
->  #define X86_FEATURE_AVX_NE_CONVERT      KVM_X86_FEATURE(CPUID_7_1_EDX, 5)
->  #define X86_FEATURE_PREFETCHITI         KVM_X86_FEATURE(CPUID_7_1_EDX, 14)
->  
-> +/* AMD-specific IBRS hint bits, CPUID level 0x80000008 (EBX) */
-> +#define X86_FEATURE_AMD_IBRS_ALWAYS_ON	KVM_X86_FEATURE(CPUID_8000_0008_EBX, 16)
-> +#define X86_FEATURE_AMD_IBRS_PREFERRED	KVM_X86_FEATURE(CPUID_8000_0008_EBX, 18)
-> +#define X86_FEATURE_AMD_IBRS_SAME_MODE	KVM_X86_FEATURE(CPUID_8000_0008_EBX, 19)
+> > > @@ -1604,33 +1654,66 @@ int security_inode_init_security(struct inode=
+ *inode, struct inode *dir,
+> > >                                  const struct qstr *qstr,
+> > >                                  const initxattrs initxattrs, void *f=
+s_data)
+> > >  {
+> > > -       struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
+> > > -       struct xattr *lsm_xattr, *evm_xattr, *xattr;
+> > > -       int ret;
+> > > +       struct security_hook_list *P;
+> > > +       struct xattr *new_xattrs;
+> > > +       struct xattr *xattr;
+> > > +       int ret =3D -EOPNOTSUPP, num_filled_xattrs =3D 0;
+> > >
+> > >         if (unlikely(IS_PRIVATE(inode)))
+> > >                 return 0;
+> > >
+> > > +       if (!blob_sizes.lbs_xattr)
+> > > +               return 0;
+> > > +
+> > >         if (!initxattrs)
+> > >                 return call_int_hook(inode_init_security, -EOPNOTSUPP=
+, inode,
+> > > -                                    dir, qstr, NULL, NULL, NULL);
+> > > -       memset(new_xattrs, 0, sizeof(new_xattrs));
+> > > -       lsm_xattr =3D new_xattrs;
+> > > -       ret =3D call_int_hook(inode_init_security, -EOPNOTSUPP, inode=
+, dir, qstr,
+> > > -                           &lsm_xattr->name,
+> > > -                           &lsm_xattr->value,
+> > > -                           &lsm_xattr->value_len);
+> > > -       if (ret)
+> > > +                                   dir, qstr, NULL);
+> > > +       /* Allocate +1 for EVM and +1 as terminator. */
+> > > +       new_xattrs =3D kcalloc(blob_sizes.lbs_xattr + 2, sizeof(*new_=
+xattrs),
+> > > +                            GFP_NOFS);
+> > > +       if (!new_xattrs)
+> > > +               return -ENOMEM;
+> > > +
+> > > +       hlist_for_each_entry(P, &security_hook_heads.inode_init_secur=
+ity,
+> > > +                            list) {
+> > > +               ret =3D P->hook.inode_init_security(inode, dir, qstr,=
+ new_xattrs);
+> > > +               if (ret && ret !=3D -EOPNOTSUPP)
+> > > +                       goto out;
+> > > +               /*
+> > > +                * As documented in lsm_hooks.h, -EOPNOTSUPP in this =
+context
+> > > +                * means that the LSM is not willing to provide an xa=
+ttr, not
+> > > +                * that it wants to signal an error. Thus, continue t=
+o invoke
+> > > +                * the remaining LSMs.
+> > > +                */
+> > > +               if (ret =3D=3D -EOPNOTSUPP)
+> > > +                       continue;
+> > > +               /*
+> > > +                * As the number of xattrs reserved by LSMs is not di=
+rectly
+> > > +                * available, directly use the total number blob_size=
+s.lbs_xattr
+> > > +                * to keep the code simple, while being not the most =
+efficient
+> > > +                * way.
+> > > +                */
+> >
+> > Is there a good reason why the LSM can't return the number of xattrs
+> > it is adding to the xattr array?  It seems like it should be fairly
+> > trivial for the individual LSMs to determine and it could save a lot
+> > of work.  However, given we're at v8 on this patchset I'm sure I'm
+> > missing something obvious, can you help me understand why the idea
+> > above is crazy stupid? ;)
+>
+> Ok, I looked back at what I did for v3.
+>
+> Moving from v3 to v4, I decided to put less burden on LSMs, and to make
+> all the processing from the LSM infrastructure side.
 
-These belong in cpufeatures.h, see the rest of the discussion in v1[*].  Sorry for
-the runaround :-(
+As a general rule I think it's a good goal to keep the LSM layer as
+small as possible; I believe it allows us to be more flexible with the
+LSMs and it keeps the LSM as simple as possible.  I mean less code,
+less bugs, amirite? ... ;)
 
-[*] https://lore.kernel.org/all/e5bf7da5-df29-31c6-6d33-81bbecb849ba@redhat.com
+> v3 had some safeguards to prevent some programming mistakes by LSMs,
+> which maybe made the code less understandable.
+>
+> However, if we say we keep things as simple as possible and assume that
+> LSMs implement this correctly, we can just pass num_filled_xattrs to
+> them and they simply increment it.
+>
+> The EVM bug should not arise (accessing xattr->name =3D NULL), even if
+> BPF LSM alone returns zero, due to the check of num_filled_xattrs
+> before calling evm_inode_init_security().
+>
+> Patch 6 (at the end) will prevent the bug from arising when EVM is
+> moved to the LSM infrastructure (no num_filled_xattrs check anymore).
+> There is a loop that stops if xattr->name is NULL, so
+> evm_protected_xattr() will not be called.
+>
+> Or, like you suggested, we just return a positive value from LSMs and
+> we keep num_filled_xattrs in security_inode_init_security().
+
+I like the idea of individual LSMs simply reporting the number of
+xattrs they've generated instead of incrementing the num_filled_xattrs
+variable.
+
+It seems like returning the xattr count as a positive return value
+should work just fine, leaving negative values for errors, but if you
+run into problems you can always pass the value back in a new
+parameter pointer if needed.
+
+> > > @@ -2868,11 +2870,11 @@ static int selinux_dentry_create_files_as(str=
+uct dentry *dentry, int mode,
+> > >
+> > >  static int selinux_inode_init_security(struct inode *inode, struct i=
+node *dir,
+> > >                                        const struct qstr *qstr,
+> > > -                                      const char **name,
+> > > -                                      void **value, size_t *len)
+> > > +                                      struct xattr *xattrs)
+> > >  {
+> > >         const struct task_security_struct *tsec =3D selinux_cred(curr=
+ent_cred());
+> > >         struct superblock_security_struct *sbsec;
+> > > +       struct xattr *xattr =3D NULL;
+> > >         u32 newsid, clen;
+> > >         int rc;
+> > >         char *context;
+> > > @@ -2899,16 +2901,18 @@ static int selinux_inode_init_security(struct=
+ inode *inode, struct inode *dir,
+> > >             !(sbsec->flags & SBLABEL_MNT))
+> > >                 return -EOPNOTSUPP;
+> > >
+> > > -       if (name)
+> > > -               *name =3D XATTR_SELINUX_SUFFIX;
+> > > +       if (xattrs)
+> > > +               xattr =3D xattrs + selinux_blob_sizes.lbs_xattr;
+> >
+> > Please abstract that away to an inline function similar to
+> > selinux_cred(), selinux_file(), selinux_inode(), etc.
+>
+> Ok.
+>
+> > > +       if (xattr) {
+> > > +               xattr->name =3D XATTR_SELINUX_SUFFIX;
+> >
+> > I'm guessing the xattr->name assignment is always done, regardless of
+> > if security_sid_to_context_force() is successful, due to the -EINVAL
+> > check in security_check_compact_filled_xattrs()?  If yes, it would be
+> > good to make note of that here in the code.  If not, it would be nice
+> > to move this down the function to go with the other xattr->XXX
+> > assignments, unless there is another reason for its placement that I'm
+> > missing.
+>
+> Uhm, if an LSM returns an error, security_inode_init_security() stops
+> and does the cleanup. It should not matter if xattr->name was set.
+
+Okay, I thought I might be missing something during the review.  Since
+there is no special reason for putting the xattr->name assignment up
+there, please move it down below with the other xattr->XXX
+assignments.
+
+Thanks.
+
+--=20
+paul-moore.com
