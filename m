@@ -2,153 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABDA16C8758
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:14:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCC56C875B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjCXVOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 17:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
+        id S229472AbjCXVPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 17:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbjCXVOT (ORCPT
+        with ESMTP id S230038AbjCXVPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 17:14:19 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E71CDDA;
-        Fri, 24 Mar 2023 14:14:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=UqmSnaARsVlunnEmxrrJ9WDls/RPk2SXuv1lTe4E1dw=; b=uhM3XUaVQ+S23qekRBBOLWrA+j
-        dNC0QsDIew21OU/LKUx/LzASKD30+9j0q7dyI4o9n6px/5HyeK9lw3a8//U/aQNRbLC+t7D8f3jKs
-        2s4rSJAkR5Ez6XNUZaayOEkiQLEhNf6A3yM3Ts4N6bzzdPKIXLusJ41XEsal9VPBwSLFE+uF7yGpi
-        J20/atqKBNbRpY5kNskg7TBnSJ7V32NzJVRiSKT4CNQlYT++yc5momtkiV1Am/xMbAAjD0gUCRDue
-        FerXlrrIMsLcHIi0coq7sPxgRaKhEbAPo9qHa7M2LQNoYRG5VPFI2rPRksbWxvSTcogbZCCrWfuAI
-        H3bKglow==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pfojj-005cuz-2k;
-        Fri, 24 Mar 2023 21:14:11 +0000
-Date:   Fri, 24 Mar 2023 14:14:11 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
-        christophe.leroy@csgroup.eu, song@kernel.org, dave@stgolabs.net,
-        fan.ni@samsung.com, vincent.fu@samsung.com,
-        a.manzanares@samsung.com, colin.i.king@gmail.com
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
- allocations
-Message-ID: <ZB4SoxgM6vydrxrj@bombadil.infradead.org>
-References: <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
- <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
- <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
- <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
- <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com>
- <582aa586-e69c-99bb-caf8-eda468c332b6@redhat.com>
- <ZB3j3x4F2ozYX8UI@bombadil.infradead.org>
- <CAHk-=wij=z-C6puGv+E5gGKgFMam-ucCjyji0-vP1wd=aUpFvQ@mail.gmail.com>
- <ZB4BP0ZgxNirBNOJ@bombadil.infradead.org>
- <CAHk-=whkj6=wyi201JXkw9iT_eTUTsSx+Yb9d4OgmZFjDJA18g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=whkj6=wyi201JXkw9iT_eTUTsSx+Yb9d4OgmZFjDJA18g@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 24 Mar 2023 17:15:37 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2680912CDE
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 14:15:36 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5425c04765dso30747577b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 14:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679692535;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ByUzQAF933YiOtYjNYUueHaxFJKNZHOc8pGZC9WsDYk=;
+        b=kAMLWMRCUtITj+oL6Ekknn8/AbLf0fLJJcRLw0VIjVRkknHGr0IIIEC4rFGbphoYZi
+         8sXwdxJCukT0K6uYujXw4qCkHsty7YbgkGIf8XXp0ATZHW0XPLdvhuvgnsJU/Jde6Gid
+         eR5jEzGhKFihtGTBHRycX5Bo1j3EXZ/3sxLRdSbH3TgrmAfwuYFDPHIm8CUdggpprbar
+         OA5Rm32BLQEvATEIWh1GCP1vAIf+k7cK03jgbgk95r2BFyg/431s5836cHd8lcUK6/SH
+         Exw0tCcE3TUpcTpvuEN6hflyKq6EpyM9sQGLrRC3Rdi1f5/9NwdeHl2VAltB3NPjw+Vm
+         7hwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679692535;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ByUzQAF933YiOtYjNYUueHaxFJKNZHOc8pGZC9WsDYk=;
+        b=Lqw4Az3d1hnMISlKqQVGKNRM4oeHAWzCsz1YzU7VT0Izkdy+zwhmSv88M4sdnK6l9l
+         QDyCzL8sfyiMojT22lQ8/uPwVV8QPwpCl22q+sAJSti4eho5BkmNTGQJvLUvovAh9iXw
+         MEX7a7o0NpjwzEGs6dxovI1FQldLs1UzNpcuROd/TofD6/ifxkMdS9xEKIQqKVHfGOdu
+         8vfLhMmRXdaOkJKPfuRBUeGdgEeMEFowWO8owqzaJcIW0mK1QvZTRUcG6w75nC+yGu9b
+         wZQYEeI57ZPetcBCiqcRLMBw6cfAWWMaR0mJAYXcda0cv+aqHf65ZUeDjF8eo9L6eqqG
+         fOZg==
+X-Gm-Message-State: AAQBX9dM7VXs79wF/DjKIFAZow/fGQrC4ieUGR/MkV7UbYtC0WKQPC4C
+        P7GufyZHR0nZMSay7CqCD2A8XlN5Qow=
+X-Google-Smtp-Source: AKy350bdF1WVlgJLX2SDiFswwikGhtMGGjqTXIC6huvd0diFGe6fa0Oatun3zdXA8QV0XLUf7NuEb9JviMQ=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1083:b0:b67:d295:d614 with SMTP id
+ v3-20020a056902108300b00b67d295d614mr1800465ybu.12.1679692535386; Fri, 24 Mar
+ 2023 14:15:35 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 21:15:33 +0000
+In-Reply-To: <20230301185838.21659-2-itazur@amazon.com>
+Mime-Version: 1.0
+References: <20230301185838.21659-1-itazur@amazon.com> <20230301185838.21659-2-itazur@amazon.com>
+Message-ID: <ZB4S9eP0tGbGUTSC@google.com>
+Subject: Re: [PATCH v2 1/1] KVM: x86: Propagate AMD-specific IBRS bits to guests
+From:   Sean Christopherson <seanjc@google.com>
+To:     Takahiro Itazuri <itazur@amazon.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, Takahiro Itazuri <zulinx86@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 01:28:51PM -0700, Linus Torvalds wrote:
-> On Fri, Mar 24, 2023 at 1:00 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On the modules side of things we can be super defensive on the second
-> > vmalloc allocation defensive [0] but other than this the initial kread
-> > also needs care too.
+On Wed, Mar 01, 2023, Takahiro Itazuri wrote:
+> VMMs retrieve supported CPUID features via KVM_GET_SUPPORTED_CPUID to
+> construct CPUID information to be passed to KVM_SET_CPUID2. Most CPUID
+> feature bits related to speculative attacks are propagated from host
+> CPUID. AMD processors have AMD-specific IBRS related bits in CPUID
+> Fn8000_0008_EBX (ref: AMD64 Architecture Programmer's Manual Volume 3:
+> General-Purpose and System Instructions) and some bits are not
+> propagated to guests.
 > 
-> Please don't re-implement semaphores. They are a *classic* concurrency limiter.
+> Enable propagation of these bits to guests, so that guests can see the
+> same security information as the host without VMM action.
+
+Please provide some description on what these bits do, and more importantly why
+no action is required to virtualize them in KVM, even if it seems obvious.  We've
+had a few goofs with respect to mitigations across guest domains, I just want to
+be extra paranoid that we document upfront why it's ok (recommended?) to advertise
+this information to the guest.
+
+> Signed-off-by: Takahiro Itazuri <itazur@amazon.com>
+> ---
+>  arch/x86/kvm/cpuid.c         | 5 +++--
+>  arch/x86/kvm/reverse_cpuid.h | 5 +++++
+>  2 files changed, 8 insertions(+), 2 deletions(-)
 > 
-> In fact, probably *THE* classic one.
-> 
-> So just do something like this instead:
-> 
->    --- a/kernel/module/main.c
->    +++ b/kernel/module/main.c
->    @@ -2937,6 +2937,11 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
->         return load_module(&info, uargs, 0);
->     }
-> 
->    +#define CONCURRENCY_LIMITER(name, n) \
->    +    struct semaphore name = __SEMAPHORE_INITIALIZER(name, n)
->    +
->    +static CONCURRENCY_LIMITER(module_loading_concurrency, 50);
->    +
->     SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs,
-> int, flags)
->     {
->         struct load_info info = { };
->    @@ -2955,8 +2960,12 @@ SYSCALL_DEFINE3(finit_module, int, fd, const
-> char __user *, uargs, int, flags)
->                       |MODULE_INIT_COMPRESSED_FILE))
->                 return -EINVAL;
-> 
->    +    err = down_killable(&module_loading_concurrency);
->    +    if (err)
->    +            return err;
->         len = kernel_read_file_from_fd(fd, 0, &buf, INT_MAX, NULL,
->                                        READING_MODULE);
->    +    up(&module_loading_concurrency);
->         if (len < 0)
->                 return len;
-> 
-> NOTE! Entirely untested. Surprise surprise.
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 596061c1610e..c297064208dd 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -704,8 +704,9 @@ void kvm_set_cpu_caps(void)
+>  	kvm_cpu_cap_mask(CPUID_8000_0008_EBX,
+>  		F(CLZERO) | F(XSAVEERPTR) |
+>  		F(WBNOINVD) | F(AMD_IBPB) | F(AMD_IBRS) | F(AMD_SSBD) | F(VIRT_SSBD) |
+> -		F(AMD_SSB_NO) | F(AMD_STIBP) | F(AMD_STIBP_ALWAYS_ON) |
+> -		__feature_bit(KVM_X86_FEATURE_AMD_PSFD)
+> +		F(AMD_SSB_NO) | F(AMD_STIBP) | F(AMD_IBRS_ALWAYS_ON) |
+> +		F(AMD_STIBP_ALWAYS_ON) | F(AMD_IBRS_PREFERRED) |
+> +		F(AMD_IBRS_SAME_MODE) | __feature_bit(KVM_X86_FEATURE_AMD_PSFD)
+>  	);
+>  
+>  	/*
+> diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
+> index 042d0aca3c92..1e538e29b117 100644
+> --- a/arch/x86/kvm/reverse_cpuid.h
+> +++ b/arch/x86/kvm/reverse_cpuid.h
+> @@ -43,6 +43,11 @@ enum kvm_only_cpuid_leafs {
+>  #define X86_FEATURE_AVX_NE_CONVERT      KVM_X86_FEATURE(CPUID_7_1_EDX, 5)
+>  #define X86_FEATURE_PREFETCHITI         KVM_X86_FEATURE(CPUID_7_1_EDX, 14)
+>  
+> +/* AMD-specific IBRS hint bits, CPUID level 0x80000008 (EBX) */
+> +#define X86_FEATURE_AMD_IBRS_ALWAYS_ON	KVM_X86_FEATURE(CPUID_8000_0008_EBX, 16)
+> +#define X86_FEATURE_AMD_IBRS_PREFERRED	KVM_X86_FEATURE(CPUID_8000_0008_EBX, 18)
+> +#define X86_FEATURE_AMD_IBRS_SAME_MODE	KVM_X86_FEATURE(CPUID_8000_0008_EBX, 19)
 
-I'll give it a good wack thanks.
+These belong in cpufeatures.h, see the rest of the discussion in v1[*].  Sorry for
+the runaround :-(
 
-But it still begs the question if *other* vmalloc user-interfacing
-places need similar practices. It's not just system calls that use it
-willy nilly but anything that could in the end use it. Surely a lot of
-"issues" could only happen in an insane pathological use case, but it's
-a generic thing to keep in mind in the end.
-
-> I'm a tiny bit worried about deadlocks here, so somebody needs to make
-> sure that the kernel_read_file_from_fd() case cannot possibly in turn
-> cause a "request_module()" recursion.
-
-Automount on a path where the module lies in a path for a modue not
-loaded yet triggering a kernel module autoload is the only thing
-I can think of that could cause that, but that just calls userspace
-modprobe. And I think that'd be an insane setup.
-
-> We most definitely have had module recursion before, but I *think*
-> it's always just in the module init function (ie one module requests
-> another when ithe mod->init() function is called).
-
-Since you up() right after the kernel_read_file_from_fd() we would not
-be racing module inits with this. If however we place the up() after
-the load_module() then that does incur that recurssion possibilty.
-
-> I think by the time we have opened the module file descriptors and are
-> just reading the data, we should be ok and the above would never
-> deadlock, but I want people to at least think about it.
-> 
-> Of course, with that "max 50 concurrent loaders" limit, maybe it's
-> never an issue anyway. Even if you get a recursion a few deep, at most
-> you just wait for somebody else to get out of their loaders. Unless
-> *everybody* ends up waiting on some progress.
-
-Yeah, these certainly are pathalogical corner cases. I'm more interested
-in solving doing something sane for 1000 CPUs or 2000 CPUs for now, even
-if the issue was the kernel (not userspace) to blame (and even if those
-use cases are being fixed now like the queued up linux-next ACPI
-CPU frequency modules per CPU).
-
-  Luis
+[*] https://lore.kernel.org/all/e5bf7da5-df29-31c6-6d33-81bbecb849ba@redhat.com
