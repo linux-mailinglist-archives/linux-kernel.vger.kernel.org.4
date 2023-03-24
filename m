@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10DB6C7F92
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5554B6C7F99
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232069AbjCXOM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        id S232117AbjCXONe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbjCXOMx (ORCPT
+        with ESMTP id S231823AbjCXONb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:12:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C0C1B578
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:12:06 -0700 (PDT)
+        Fri, 24 Mar 2023 10:13:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03F51CAE9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:12:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679667125;
+        s=mimecast20190719; t=1679667168;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7x5FMYKL/oVJz3tQGcZN2b2gCBkkTlGcuo/IBwXiCnI=;
-        b=MuFpyd8EnJGfijTFkvgxU/40MtU34YmSWeVcu6H9SRn9cZyHhYarJphnPnnKdLKBKcP4I7
-        L1oTChwfhJnTYTooHd6P89VbFQbDkb2vFDSr9SoGbiXQdYzvmiS64Mi/MOdeGRji9z4fkp
-        ge87A59qrczWKWLn033KcCfPdLDpATM=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-351-UMZN7qJBMP6nAQWnzLWX8g-1; Fri, 24 Mar 2023 10:12:03 -0400
-X-MC-Unique: UMZN7qJBMP6nAQWnzLWX8g-1
-Received: by mail-yb1-f198.google.com with SMTP id x15-20020a25accf000000b00b3b4535c48dso1900496ybd.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:12:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679667123;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7x5FMYKL/oVJz3tQGcZN2b2gCBkkTlGcuo/IBwXiCnI=;
-        b=CkxNjw8x6zdg/WgvlY6tTP/7fClvZL5rhhyueRaBG/lDKXHVSnXbiiLSvY/DPCD3p0
-         NkmcLAz4b5973m9JuKDAPpUtb2b/GkY5t3+kjV2WUTIVr42gp5VWKNOP1oFXTgCrupiw
-         s/t7VvPWfcn05MgrCtjjMjcOj3N2IUZnYgIdiwqayykpQqulsPCeAmWSJ2nwWVMMFbs9
-         6xUP5h0Wvch+etoDdQrS9Cn4DFEul0fs+cwb05ovHkKlQTrVGwZ+bGpHO84AVKQ8J7C/
-         GIPVPquxw4hWqGgJMIKTGfV1eXzH/s7iTteUF7ZW+Fws/PQJ8K9UEo93F5JOcVhbx1N0
-         q0Uw==
-X-Gm-Message-State: AAQBX9d/7LaBA7MArX9JXwdMLRhiz9X+Z56v5P0e5Afdug3mOxpOKCq9
-        /5cbUJYb3AjltGvSaMJ+m4PlD0Fz0tA9ph/rS3wRAHYSOl1OfedZ4gaCjTbryqoTbwzV8hO8rcn
-        KEnGHACjYL50GUxVqgUgOzlel
-X-Received: by 2002:a0d:fd07:0:b0:545:91ae:f5a0 with SMTP id n7-20020a0dfd07000000b0054591aef5a0mr2126571ywf.51.1679667122939;
-        Fri, 24 Mar 2023 07:12:02 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZFISBweozfrJLRN2PDUoOSUv4156/1ipJP+0MX48z7EDbluxllafDZdgbK5QXw4zG3brhe3w==
-X-Received: by 2002:a0d:fd07:0:b0:545:91ae:f5a0 with SMTP id n7-20020a0dfd07000000b0054591aef5a0mr2126537ywf.51.1679667122553;
-        Fri, 24 Mar 2023 07:12:02 -0700 (PDT)
-Received: from halaney-x13s (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id a67-20020a811a46000000b00545a0818482sm421695ywa.18.2023.03.24.07.12.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 07:12:02 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 09:12:00 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS
-Message-ID: <20230324141200.he2rpj4x6tdtre27@halaney-x13s>
-References: <CGME20230323220529eucas1p12e5e1bbe2a31fe775cd9e6244f9282ce@eucas1p1.samsung.com>
- <20230323220518.3247530-1-m.szyprowski@samsung.com>
- <CAD=FV=WfREMuL6Z-aseAWPKXqpkutPofrWGy4ySH-WgbTHC-fg@mail.gmail.com>
- <a45c4b18-0fbe-1e75-9b47-6c26217c97e3@samsung.com>
+        bh=ADiIDdAPnjqVAbV/udpxZCAiMLd8rfZn004mVe2ENYg=;
+        b=ToO3WvzOcpNA6POY7Rl5QDYxTX0ssWQb+5juObBFhHeheNcIRs8cQR1kjq0J5aPP6DX88N
+        1x4gBg/w9uLq7OQNd2WQMA4tAyn/ChUwGIAL/UAypMn22eSvNJdu0734FGu7yARjKq0iOI
+        4W/m+hYVeGL+x22Jm9VxxJZyHJ3NH60=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-638-1m-g8VaUM1S0ZM79i3uKWA-1; Fri, 24 Mar 2023 10:12:45 -0400
+X-MC-Unique: 1m-g8VaUM1S0ZM79i3uKWA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7BAE29AA3B5;
+        Fri, 24 Mar 2023 14:12:43 +0000 (UTC)
+Received: from [10.22.33.184] (unknown [10.22.33.184])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E174D140EBF4;
+        Fri, 24 Mar 2023 14:12:42 +0000 (UTC)
+Message-ID: <53582a07-81c6-35eb-10bf-7920b27483be@redhat.com>
+Date:   Fri, 24 Mar 2023 10:12:42 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
+ percpu lock
+Content-Language: en-US
+To:     Yosry Ahmed <yosryahmed@google.com>, Tejun Heo <tj@kernel.org>
+Cc:     Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-2-yosryahmed@google.com>
+ <ZBz/V5a7/6PZeM7S@slm.duckdns.org>
+ <CAJD7tkYNZeEytm_Px9_73Y-AYJfHAxaoTmmnO71HW5hd1B5tPg@mail.gmail.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <CAJD7tkYNZeEytm_Px9_73Y-AYJfHAxaoTmmnO71HW5hd1B5tPg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a45c4b18-0fbe-1e75-9b47-6c26217c97e3@samsung.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,44 +78,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 12:18:53PM +0100, Marek Szyprowski wrote:
-> Hi,
-> 
-> On 23.03.2023 23:08, Doug Anderson wrote:
-> > On Thu, Mar 23, 2023 at 3:05 PM Marek Szyprowski
-> > <m.szyprowski@samsung.com> wrote:
-> >> Restore synchronous probing for 'qcom,pm8150-rpmh-regulators' because
-> >> otherwise the UFSHC device is not properly initialized on QRB5165-RB5
-> >> board.
-> >>
-> >> Fixes: ed6962cc3e05 ("regulator: Set PROBE_PREFER_ASYNCHRONOUS for drivers between 4.14 and 4.19")
-> >> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> >> ---
-> >>   drivers/regulator/qcom-rpmh-regulator.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> > I don't object to this patch landing temporarily, but can you provide
-> > any more details, please? On Qualcomm Chromebooks I'm not seeing any
-> > issues with RPMH regulators probing asynchronously, so I can only
-> > assume that there's a bug in the UFSHC driver that's being tickled.
-> 
-> You are right. I've analyzed this case further and it turned out that it 
-> was my fault. In short - 'rootwait' kernel cmdline parameter was missing 
-> and root was specified as '/dev/sda7'.
-> 
-> UFSHC driver properly retried probing after it cannot get its 
-> regulators, but it happened at the same time when kernel tried to mount 
-> rootfs. I was confused that this is really a regulator issue, because 
-> the mentioned /dev/sda* devices were properly reported as available in 
-> the system in the root mounting failure message, but adding the 
-> 'rootwait' cmdline parameter fixed this problem. It would be safe to 
-> revert this change. I'm really sorry for the false report and the noise.
-> 
+On 3/24/23 03:22, Yosry Ahmed wrote:
+> On Thu, Mar 23, 2023 at 6:39 PM Tejun Heo <tj@kernel.org> wrote:
+>> Hello,
+>>
+>> On Thu, Mar 23, 2023 at 04:00:31AM +0000, Yosry Ahmed wrote:
+>>> Currently, when sleeping is not allowed during rstat flushing, we hold
+>>> the global rstat lock with interrupts disabled throughout the entire
+>>> flush operation. Flushing in an O(# cgroups * # cpus) operation, and
+>>> having interrupts disabled throughout is dangerous.
+>>>
+>>> For some contexts, we may not want to sleep, but can be interrupted
+>>> (e.g. while holding a spinlock or RCU read lock). As such, do not
+>>> disable interrupts throughout rstat flushing, only when holding the
+>>> percpu lock. This breaks down the O(# cgroups * # cpus) duration with
+>>> interrupts disabled to a series of O(# cgroups) durations.
+>>>
+>>> Furthermore, if a cpu spinning waiting for the global rstat lock, it
+>>> doesn't need to spin with interrupts disabled anymore.
+>> I'm generally not a fan of big spin locks w/o irq protection. They too often
+>> become a source of unpredictable latency spikes. As you said, the global
+>> rstat lock can be held for quite a while. Removing _irq makes irq latency
+>> better on the CPU but on the other hand it makes a lot more likely that the
+>> lock is gonna be held even longer, possibly significantly so depending on
+>> the configuration and workload which will in turn stall other CPUs waiting
+>> for the lock. Sure, irqs are being serviced quicker but if the cost is more
+>> and longer !irq context multi-cpu stalls, what's the point?
+>>
+>> I don't think there's anything which requires the global lock to be held
+>> throughout the entire flushing sequence and irq needs to be disabled when
+>> grabbing the percpu lock anyway, so why not just release the global lock on
+>> CPU boundaries instead? We don't really lose anything significant that way.
+>> The durations of irq disabled sections are still about the same as in the
+>> currently proposed solution at O(# cgroups) and we avoid the risk of holding
+>> the global lock for too long unexpectedly from getting hit repeatedly by
+>> irqs while holding the global lock.
+> Thanks for taking a look!
+>
+> I think a problem with this approach is that we risk having to contend
+> for the global lock at every CPU boundary in atomic contexts. Right
+Isn't it the plan to just do a trylock in atomic contexts so that it 
+won't get stuck spinning for the lock for an indeterminate amount of time?
+> now we contend for the global lock once, and once we have it we go
+> through all CPUs to flush, only having to contend with updates taking
+> the percpu locks at this point. If we unconditionally release &
+> reacquire the global lock at every CPU boundary then we may contend
+> for it much more frequently with concurrent flushers.
 
-It looks like this got applied, but reading your above message makes it
-seem like this patch is not necessary. Did I understand that correctly?
+Note that with the use of qspinlock in all the major arches, the impact 
+of thundering herds of lockers are much less serious than before. There 
+are certainly some overhead in doing multiple lock acquires and 
+releases, but that shouldn't been too excessive.
 
-If so we should see if Mark can drop / revert it?
+I am all in for reducing lock hold time as much as possible as it will 
+improve the response time.
 
-Thanks,
-Andrew
+Cheers,
+Longman
 
