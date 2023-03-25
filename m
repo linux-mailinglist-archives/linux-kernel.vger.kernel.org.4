@@ -2,327 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6856C785E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F136C777F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 06:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCXHBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
+        id S231311AbjCXFsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 01:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjCXHBF (ORCPT
+        with ESMTP id S230111AbjCXFsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:01:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373B324BC8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:00:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679641214;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GQ7MkMIkN7lvSOZvIITGhL1ZHsdpsx64jjjlRFP63dg=;
-        b=NgzGk64eE8FbF1Wlrf4+WF0SvGTPYe8PCAX6hYJUPCxQljdVjFBNoyuLqnEHAnPDzisVb8
-        BSGW4WrGSFcjop3nCeYwZvrV75J3xxQ3gq/aIWNk1g9koo0tppM6sWRYNDKYFfKfpsmVT/
-        oiHp91lm7IsQHvRvgV7DHrApa2g9U8s=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-423-GBONZXsePByYykXQ_UtT4A-1; Fri, 24 Mar 2023 03:00:12 -0400
-X-MC-Unique: GBONZXsePByYykXQ_UtT4A-1
-Received: by mail-wm1-f69.google.com with SMTP id o37-20020a05600c512500b003edd119ec9eso593751wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:00:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679641212;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GQ7MkMIkN7lvSOZvIITGhL1ZHsdpsx64jjjlRFP63dg=;
-        b=Baq4/mDr0iKnxcswIOvugOG+9y5Y7d4Y9b+Tj+ghO/xw5d0nY2y8NCBW8qoYV2z5p+
-         M9oVdG4OGkDEGypw/uiKgSgVV1UTxVtkGipqmIL55P1Cgd4kmCgbkynmMQj9+oTiwbfp
-         mREu/qPzPpciKn5TyWScuFmmeQFGwACC9U8wfEOxcVzBQ5if4nPrhVI3Y6MVHSHpyS+B
-         0fkMTG1IF52o5my1OT9/9Brf+d49r/ocD+qAXKsdNxmYuSRnn169VRp4DwiAbV6nOPt2
-         Lh5R1iqqfN+nj9bI51Ycldiy+H608DTKuEK8rmFQ77IyQxxBHGH4ZbCSnAH/M/c3ey+/
-         2p3Q==
-X-Gm-Message-State: AO0yUKUwuuqgSq4DZf6f1gsKcxSNqEhYp/DbYDv8Zktd485tOAZgBu+i
-        EBdNNfp0IQpnS4l+h5UkGlz7GuzIukdVC7WXes1PuAgwZlbg0gwpoY9HC423jphznzCVlMVeBzD
-        e0p4fbqOf9wyF22bptz06lwZg
-X-Received: by 2002:a05:600c:2199:b0:3ee:a492:e973 with SMTP id e25-20020a05600c219900b003eea492e973mr1486270wme.28.1679641211758;
-        Fri, 24 Mar 2023 00:00:11 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/mI/NUtiMUPXa+mgpTIj6mdgN3HWgUHp61BEAIPTu6Q5CnRSCyOru4C0wdkqtFngQMi8oGZQ==
-X-Received: by 2002:a05:600c:2199:b0:3ee:a492:e973 with SMTP id e25-20020a05600c219900b003eea492e973mr1486251wme.28.1679641211353;
-        Fri, 24 Mar 2023 00:00:11 -0700 (PDT)
-Received: from redhat.com ([2.52.12.190])
-        by smtp.gmail.com with ESMTPSA id w13-20020a1cf60d000000b003ed4f6c6234sm3985904wmc.23.2023.03.24.00.00.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 00:00:10 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 03:00:08 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     =?utf-8?B?6buE5p2w?= <huangjie.albert@bytedance.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [External] Re: [PATCH] virtio_ring: Suppress tx interrupt when
- napi_tx disable
-Message-ID: <20230324025937-mutt-send-email-mst@kernel.org>
-References: <20230321085953.24949-1-huangjie.albert@bytedance.com>
- <CACGkMEvx_-3XbnBk1PakqODhL+C0Oy-BVORm=FsMxvzVcBbrnA@mail.gmail.com>
- <CABKxMyNSp1-pJW11B3YuDm39mg=eT48JspDsrEePjKFrHNK8NQ@mail.gmail.com>
- <CACGkMEsG3_+GmfoO-y_dMxSeMn_Ry5L0PVgLSKSAJzRbym4j8A@mail.gmail.com>
- <20230324013805-mutt-send-email-mst@kernel.org>
- <CACGkMEvAvOCCuB4QRQa1goAhWEyXfTiJahTT7NQ+HT3J0GUNyw@mail.gmail.com>
- <20230324024155-mutt-send-email-mst@kernel.org>
- <CACGkMEtBYVUrKFaMJYJrkrF3y2eu7r6ige6z+uRbHY_jotq80Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEtBYVUrKFaMJYJrkrF3y2eu7r6ige6z+uRbHY_jotq80Q@mail.gmail.com>
-X-Spam-Status: No, score=1.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLACK autolearn=no
+        Fri, 24 Mar 2023 01:48:19 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F396AC65B;
+        Thu, 23 Mar 2023 22:48:17 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id BD26B1A00993;
+        Fri, 24 Mar 2023 13:48:21 +0800 (CST)
+X-Virus-Scanned: amavisd-new at nfschina.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 0jiyeAf8B0HH; Fri, 24 Mar 2023 13:48:21 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: zeming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id B64651A00931;
+        Fri, 24 Mar 2023 13:48:20 +0800 (CST)
+From:   Li zeming <zeming@nfschina.com>
+To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Li zeming <zeming@nfschina.com>
+Subject: [PATCH] base: power: main: remove unnecessary (void*) conversions
+Date:   Sun, 26 Mar 2023 06:19:35 +0800
+Message-Id: <20230325221935.3943-1-zeming@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=3.8 required=5.0 tests=DATE_IN_FUTURE_24_48,
+        RCVD_IN_VALIDITY_RPBL,RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 02:47:02PM +0800, Jason Wang wrote:
-> On Fri, Mar 24, 2023 at 2:42 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Fri, Mar 24, 2023 at 02:32:40PM +0800, Jason Wang wrote:
-> > > On Fri, Mar 24, 2023 at 1:59 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Fri, Mar 24, 2023 at 11:41:12AM +0800, Jason Wang wrote:
-> > > > > On Thu, Mar 23, 2023 at 4:01 PM 黄杰 <huangjie.albert@bytedance.com> wrote:
-> > > > > >
-> > > > > > Jason Wang <jasowang@redhat.com> 于2023年3月22日周三 10:37写道：
-> > > > > > >
-> > > > > > > On Tue, Mar 21, 2023 at 5:00 PM Albert Huang
-> > > > > > > <huangjie.albert@bytedance.com> wrote:
-> > > > > > > >
-> > > > > > > > From: "huangjie.albert" <huangjie.albert@bytedance.com>
-> > > > > > > >
-> > > > > > > > fix commit 8d622d21d248 ("virtio: fix up virtio_disable_cb")
-> > > > > > > >
-> > > > > > > > if we disable the napi_tx. when we triger a tx interrupt, the
-> > > > > > >
-> > > > > > > typo should be "trigger"
-> > > > > > >
-> > > > > >
-> > > > > > OK, thanks for this. I will correct it in the next version
-> > > > > >
-> > > > > > > > vq->event_triggered will be set to true. It will no longer be
-> > > > > > > > set to false. Unless we explicitly call virtqueue_enable_cb_delayed
-> > > > > > > > or virtqueue_enable_cb_prepare
-> > > > > > > >
-> > > > > > > > if we disable the napi_tx, It will only be called when the tx ring
-> > > > > > > > buffer is relatively small:
-> > > > > > > > virtio_net->start_xmit:
-> > > > > > > >         if (sq->vq->num_free < 2+MAX_SKB_FRAGS) {
-> > > > > > > >                 netif_stop_subqueue(dev, qnum);
-> > > > > > > >                 if (!use_napi &&
-> > > > > > > >                     unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
-> > > > > > > >                         /* More just got used, free them then recheck. */
-> > > > > > > >                         free_old_xmit_skbs(sq, false);
-> > > > > > > >                         if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
-> > > > > > > >                                 netif_start_subqueue(dev, qnum);
-> > > > > > > >                                 virtqueue_disable_cb(sq->vq);
-> > > > > > > >                         }
-> > > > > > >
-> > > > > > > The code example here is out of date, make sure your tree has this:
-> > > > > >
-> > > > > > also, I will correct it in the next version，this is from kernel 5.15.
-> > > > > >
-> > > > > > >
-> > > > > > > commit d71ebe8114b4bf622804b810f5e274069060a174
-> > > > > > > Author: Jason Wang <jasowang@redhat.com>
-> > > > > > > Date:   Tue Jan 17 11:47:07 2023 +0800
-> > > > > > >
-> > > > > > >     virtio-net: correctly enable callback during start_xmit
-> > > > > > >
-> > > > > > > >                 }
-> > > > > > > >         }
-> > > > > > > > Because event_triggered is true.Therefore, VRING_AVAIL_F_NO_INTERRUPT or
-> > > > > > > > VRING_PACKED_EVENT_FLAG_DISABLE will not be set.So we update
-> > > > > > > > vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
-> > > > > > > > every time we call virtqueue_get_buf_ctx.This will bring more interruptions.
-> > > > > > >
-> > > > > > > Can you please post how to test with the performance numbers?
-> > > > > > >
-> > > > > >
-> > > > > > iperf3 tcp stream:
-> > > > > > vm1 -----------------> vm2
-> > > > > > vm2 just receive tcp data stream from vm1, and send the ack to vm1,
-> > > > > > there are so
-> > > > > > many tx interruptions  in vm2.
-> > > > > >
-> > > > > > but without event_triggered there are just a few tx interruptions.
-> > > > > >
-> > > > > > > >
-> > > > > > > > if event_triggered is set to true, do not update vring_used_event(&vq->split.vring)
-> > > > > > > > or vq->packed.vring.driver->off_wrap
-> > > > > > > >
-> > > > > > > > Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
-> > > > > > > > ---
-> > > > > > > >  drivers/virtio/virtio_ring.c | 6 ++++--
-> > > > > > > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > > > > > > > index 307e139cb11d..f486cccadbeb 100644
-> > > > > > > > --- a/drivers/virtio/virtio_ring.c
-> > > > > > > > +++ b/drivers/virtio/virtio_ring.c
-> > > > > > > > @@ -795,7 +795,8 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
-> > > > > > > >         /* If we expect an interrupt for the next entry, tell host
-> > > > > > > >          * by writing event index and flush out the write before
-> > > > > > > >          * the read in the next get_buf call. */
-> > > > > > > > -       if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT))
-> > > > > > > > +       if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT)
-> > > > > > > > +                       && (vq->event_triggered == false))
-> > > > > > >
-> > > > > > > I'm not sure this can work, when event_triggered is true it means
-> > > > > > > we've got an interrupt, in this case if we want another interrupt for
-> > > > > > > the next entry, we should update used_event otherwise we will lose
-> > > > > > > that interrupt?
-> > > > > > >
-> > > > > > > Thanks
-> > > > > >
-> > > > > > Normally, if we receive an interrupt, we should disable the interrupt
-> > > > > > in the interrupt callback handler.
-> > > > >
-> > > > > So the problem is:
-> > > > >
-> > > > > 1) event_triggered was set to true in vring_interrupt()
-> > > > >
-> > > > > 2) after this nothing will happen for virtqueue_disable_cb() so
-> > > > > VRING_AVAIL_F_NO_INTERRUPT is not set in avail_flags_shadow
-> > > > > 3) virtqueue_get_buf_ctx_split() will still think the cb is enabled
-> > > > > then it tries to publish new event
-> > > >
-> > > > Oh. Good point! I think when I wrote up
-> > > > 8d622d21d248 ("virtio: fix up virtio_disable_cb")
-> > > > I missed this corner case.
-> > > >
-> > > >
-> > > >
-> > > > > This makes me think about whether or not we really need
-> > > > > event_triggered. The assumption in the virtqueue_disable_cb() seems
-> > > > > wrong:
-> > > > >
-> > > > > /* If device triggered an event already it won't trigger one again:
-> > > > >  * no need to disable.
-> > > > >  */
-> > > > > if (vq->event_triggered)
-> > > > >                 return;
-> > > > >
-> > > > > This is wrong if there's no event index support.
-> > > >
-> > > >
-> > > > I don't get it.  how does this get triggered?
-> > > >
-> > > > You are talking about device without event index?
-> > > > Here's code from vring_interrupt():
-> > > >
-> > > >         /* Just a hint for performance: so it's ok that this can be racy! */
-> > > >         if (vq->event)
-> > > >                 vq->event_triggered = true;
-> > >
-> > > But we have the following in virtqueue_disable_cb():
-> > >
-> > >         /* If device triggered an event already it won't trigger one again:
-> > >          * no need to disable.
-> > >          */
-> > >         if (vq->event_triggered)
-> > >                 return;
-> > >
-> > >         if (vq->packed_ring)
-> > >                 virtqueue_disable_cb_packed(_vq);
-> > >         else
-> > >                 virtqueue_disable_cb_split(_vq);
-> > >
-> > > This means, without an event index, we don't set avail flags. So the
-> > > interrupt is not disabled actually in this case.
-> > >
-> > > Thanks
-> >
-> > Only if event_triggered is true, which without event index it never is.
-> 
-> I'm not sure I will get here. I meant for example the commit
-> suppresses the effort of skb_xmit_done():
-> 
-> static void skb_xmit_done(struct virtqueue *vq)
-> {
->         struct virtnet_info *vi = vq->vdev->priv;
->         struct napi_struct *napi = &vi->sq[vq2txq(vq)].napi;
-> 
->         /* Suppress further interrupts. */
->         virtqueue_disable_cb(vq);
-> 
-> The virtqueue_disable_cb() doesn't disable further interrupts when the
-> event index is not there.
-> 
-> Thanks
+Pointer variables of void * type do not require type cast.
 
-Check what can set event_triggered, you will see.
+Signed-off-by: Li zeming <zeming@nfschina.com>
+---
+ drivers/base/power/main.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-
-
-> >
-> > > >
-> > > >
-> > > >
-> > > >
-> > > > > And the
-> > > > > event_triggered is somehow duplicated with the
-> > > > > VRING_AVAIL_F_NO_INTERRUPT in the case of event index. The correct fix
-> > > > > might be:
-> > > > >
-> > > > > 1) remove event_triggered
-> > > > > 2) set VRING_AVAIL_F_NO_INTERRUPT in avail_flags_shadow in
-> > > > > vring_interrrupt if event index is supported
-> > > > >
-> > > > > ?
-> > > > >
-> > > > > Thanks
-> > > >
-> > > > I am not sure all this is right and I'd rather we focused
-> > > > performance/correctness and cleanups separately.
-> > > >
-> > > >
-> > > >
-> > > >
-> > > > >
-> > > > > > But because of the introduction of event_triggered, here,
-> > > > > > virtqueue_get_buf_ctx_split  cannot be recognized
-> > > > > > that the interrupt has been turned off.
-> > > > > >
-> > > > > > if we want  another interrupt for the next entry, We should probably
-> > > > > > call virtqueue_enable_cb？
-> > > > > >
-> > > > > > Thanks
-> > > > > >
-> > > > > > >
-> > > > > > > >                 virtio_store_mb(vq->weak_barriers,
-> > > > > > > >                                 &vring_used_event(&vq->split.vring),
-> > > > > > > >                                 cpu_to_virtio16(_vq->vdev, vq->last_used_idx));
-> > > > > > > > @@ -1529,7 +1530,8 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
-> > > > > > > >          * by writing event index and flush out the write before
-> > > > > > > >          * the read in the next get_buf call.
-> > > > > > > >          */
-> > > > > > > > -       if (vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC)
-> > > > > > > > +       if (vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC
-> > > > > > > > +                       && (vq->event_triggered == false))
-> > > > > > > >                 virtio_store_mb(vq->weak_barriers,
-> > > > > > > >                                 &vq->packed.vring.driver->off_wrap,
-> > > > > > > >                                 cpu_to_le16(vq->last_used_idx));
-> > > > > > > > --
-> > > > > > > > 2.31.1
-> > > > > > > >
-> > > > > > >
-> > > > > >
-> > > >
-> >
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index c50139207794..f85f3515c258 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -679,7 +679,7 @@ static bool dpm_async_fn(struct device *dev, async_func_t func)
+ 
+ static void async_resume_noirq(void *data, async_cookie_t cookie)
+ {
+-	struct device *dev = (struct device *)data;
++	struct device *dev = data;
+ 	int error;
+ 
+ 	error = device_resume_noirq(dev, pm_transition, true);
+@@ -816,7 +816,7 @@ static int device_resume_early(struct device *dev, pm_message_t state, bool asyn
+ 
+ static void async_resume_early(void *data, async_cookie_t cookie)
+ {
+-	struct device *dev = (struct device *)data;
++	struct device *dev = data;
+ 	int error;
+ 
+ 	error = device_resume_early(dev, pm_transition, true);
+@@ -980,7 +980,7 @@ static int device_resume(struct device *dev, pm_message_t state, bool async)
+ 
+ static void async_resume(void *data, async_cookie_t cookie)
+ {
+-	struct device *dev = (struct device *)data;
++	struct device *dev = data;
+ 	int error;
+ 
+ 	error = device_resume(dev, pm_transition, true);
+@@ -1269,7 +1269,7 @@ static int __device_suspend_noirq(struct device *dev, pm_message_t state, bool a
+ 
+ static void async_suspend_noirq(void *data, async_cookie_t cookie)
+ {
+-	struct device *dev = (struct device *)data;
++	struct device *dev = data;
+ 	int error;
+ 
+ 	error = __device_suspend_noirq(dev, pm_transition, true);
+@@ -1450,7 +1450,7 @@ static int __device_suspend_late(struct device *dev, pm_message_t state, bool as
+ 
+ static void async_suspend_late(void *data, async_cookie_t cookie)
+ {
+-	struct device *dev = (struct device *)data;
++	struct device *dev = data;
+ 	int error;
+ 
+ 	error = __device_suspend_late(dev, pm_transition, true);
+@@ -1727,7 +1727,7 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
+ 
+ static void async_suspend(void *data, async_cookie_t cookie)
+ {
+-	struct device *dev = (struct device *)data;
++	struct device *dev = data;
+ 	int error;
+ 
+ 	error = __device_suspend(dev, pm_transition, true);
+-- 
+2.18.2
 
