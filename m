@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5676C8FD4
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 18:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C50736C8FD5
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 18:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232105AbjCYRej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 13:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
+        id S231980AbjCYReo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 13:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbjCYReL (ORCPT
+        with ESMTP id S230383AbjCYReO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 13:34:11 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D62AEF81
+        Sat, 25 Mar 2023 13:34:14 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC35FEF90
         for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 10:34:06 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id a5so4504568qto.6
+Received: by mail-qt1-x833.google.com with SMTP id r5so4507289qtp.4
         for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 10:34:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1679765645;
+        d=joelfernandes.org; s=google; t=1679765646;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kDgsb2d+hZmc+VQbS7ffR7EbpJzTOYghTZrLGYmTtWc=;
-        b=jhaF7jMZ0YB7rLiRDFZrRklRXt1OS7zPKXAlOrC6Ofk00510pCD4FnDFVqfLxhpUjD
-         BgjbV9/qa/zMtSEVZ9i8O8NwPGlXueA5d8pnRbjRaOifUjtUqVzrrbg4wXpX7QQON0Ga
-         h2cXsbZfUrcDoLDyKLO+AqiHanYO7hZFWtMyw=
+        bh=8qmbLy4FeD1wXnpI5jFiDQ+/P/XNzoLaPeANuPc2CnI=;
+        b=EMuepLXHAx1qWBBkKwrBLaXDPtiy7wo5Nx6Gbt+/79BQ1l1YhLOKw+DvIsAKNacCVV
+         XLEvZQXEJVNl4Wt9PIGjTLoHgIxkQUfoyMmJqKf0/PvCUQ5q//7G/zQHgcKYkDUfFB7s
+         C8yPwfoLXSJEB9JPxc1hkYf/Gi+q1qB5Gu24U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679765645;
+        d=1e100.net; s=20210112; t=1679765646;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kDgsb2d+hZmc+VQbS7ffR7EbpJzTOYghTZrLGYmTtWc=;
-        b=8H2J6UvxKzQ93HcuDsCJtDMntn6PBbTMp8qWY4bX/oaGi4lL208vf4CtGWEtp41GWl
-         PnUielnDXc0VYC8R9aUFkKqndj/YrT/vSDxfnPjgChXCflNsl0Y7d7cfk9MRRWMFCx7S
-         63xmFMk44HIy1a6BQTH7DTDf13feru2YTepJDmlrK+cZWTKH9obqf/APRgyu3HnIs3Zj
-         PQLAhs521cQ5fkdcEJhEbf+Vtmy+i+whWbMTcOCqjPuL7f7+4rP2oXr3hGM4XcratE/I
-         zWR+/x1G5Di3JBk6qMuQPJfMGgQm55VzVdR+G6P5BMwnPhj4i9ZJ5X5QIftC25ruV1nA
-         ZbzQ==
-X-Gm-Message-State: AO0yUKVDpcNbnsiUWYZPpwJ0Ns+sV5sxtivEl1tKVBDcvtXe5eXq1Bkp
-        r5q1f05TFYV96z65xUXusjzv/UYY8PgS1/vaHfM=
-X-Google-Smtp-Source: AKy350ZKIT2t3gxR4Zylf8zYlF3puKJt9xTfHezSW7rx/lBHNOBE+j7Z/Q9dY0lrU51bFaQa0S0IRA==
-X-Received: by 2002:ac8:5755:0:b0:3e1:7465:91f5 with SMTP id 21-20020ac85755000000b003e1746591f5mr12423604qtx.10.1679765644872;
-        Sat, 25 Mar 2023 10:34:04 -0700 (PDT)
+        bh=8qmbLy4FeD1wXnpI5jFiDQ+/P/XNzoLaPeANuPc2CnI=;
+        b=hhfoVD1Qqsfw9ZFL37ZzRlLjfRgK7Kqh3p2wlhY2GSEVEi/lrFNf2J3uT5mzDyejjf
+         WjzAzbMk3cgIwYnP5uUYoX0C0b2nGFN//j56qn8rqou7oru5oOwUJlAgOfb51HlV63rU
+         EbC5EgoPDM4zyEpghRFXLweke63Ochrhz7hmQCk2cxLLY7WhWcjfRloq9I5myv18qpIJ
+         CHQgtT34v2Ie/32jTiuPkvq00hreCtFtb8c01cWGxMGYRURC11yp1YccGdoaERL6z5+p
+         Up/1gad80B7fn3VR4476pndJYoi9ZpKBnVXUggCAJ5VwEP7aacuY+3VmF+26LUeHNJUz
+         e7gQ==
+X-Gm-Message-State: AO0yUKXiJ2Mk9Wf9+LOzB7v18ey5sA7iEvBFhGJlgMkbyQAer+vDcQb+
+        nF1/MQBSQ2uJCDW8IqfZ137XPphfczcPXh86upQ=
+X-Google-Smtp-Source: AK7set8gLQCta4FYIlst2AUFh/hE7rHGLWZ46fe8EwGZn7VJz0oJc9ujYIdovRFZpYujEKW41/8PTg==
+X-Received: by 2002:a05:622a:88:b0:3dd:a703:f7df with SMTP id o8-20020a05622a008800b003dda703f7dfmr12570788qtw.2.1679765646066;
+        Sat, 25 Mar 2023 10:34:06 -0700 (PDT)
 Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id m4-20020ac84444000000b003e37ee54b5dsm6762764qtn.90.2023.03.25.10.34.04
+        by smtp.gmail.com with ESMTPSA id m4-20020ac84444000000b003e37ee54b5dsm6762764qtn.90.2023.03.25.10.34.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 10:34:04 -0700 (PDT)
+        Sat, 25 Mar 2023 10:34:05 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org,
         "Paul E. McKenney" <paulmck@kernel.org>,
@@ -58,11 +58,14 @@ To:     linux-kernel@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>,
-        Zqiang <qiang1.zhang@intel.com>
-Cc:     Mark Brown <broonie@kernel.org>, rcu@vger.kernel.org
-Subject: [PATCH v2 11/13] rcu-tasks: Report stalls during synchronize_srcu() in rcu_tasks_postscan()
-Date:   Sat, 25 Mar 2023 17:33:14 +0000
-Message-Id: <20230325173316.3118674-12-joel@joelfernandes.org>
+        Zqiang <qiang1.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     Zheng Yejian <zhengyejian1@huawei.com>, stable@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: [PATCH v2 12/13] rcu: Avoid stack overflow due to __rcu_irq_enter_check_tick() being kprobe-ed
+Date:   Sat, 25 Mar 2023 17:33:15 +0000
+Message-Id: <20230325173316.3118674-13-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 In-Reply-To: <20230325173316.3118674-1-joel@joelfernandes.org>
 References: <20230325173316.3118674-1-joel@joelfernandes.org>
@@ -77,88 +80,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+From: Zheng Yejian <zhengyejian1@huawei.com>
 
-The call to synchronize_srcu() from rcu_tasks_postscan() can be stalled
-by a task getting stuck in do_exit() between that function's calls to
-exit_tasks_rcu_start() and exit_tasks_rcu_finish().   To ease diagnosis
-of this situation, print a stall warning message every rcu_task_stall_info
-period when rcu_tasks_postscan() is stalled.
+Registering a kprobe on __rcu_irq_enter_check_tick() can cause kernel
+stack overflow as shown below. This issue can be reproduced by enabling
+CONFIG_NO_HZ_FULL and booting the kernel with argument "nohz_full=",
+and then giving the following commands at the shell prompt:
 
-[ paulmck: Adjust to handle CONFIG_SMP=n. ]
+  # cd /sys/kernel/tracing/
+  # echo 'p:mp1 __rcu_irq_enter_check_tick' >> kprobe_events
+  # echo 1 > events/kprobes/enable
 
-Reported-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/rcu/20230111212736.GA1062057@paulmck-ThinkPad-P17-Gen-1/
-Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+This commit therefore adds __rcu_irq_enter_check_tick() to the kprobes
+blacklist using NOKPROBE_SYMBOL().
+
+Insufficient stack space to handle exception!
+ESR: 0x00000000f2000004 -- BRK (AArch64)
+FAR: 0x0000ffffccf3e510
+Task stack:     [0xffff80000ad30000..0xffff80000ad38000]
+IRQ stack:      [0xffff800008050000..0xffff800008058000]
+Overflow stack: [0xffff089c36f9f310..0xffff089c36fa0310]
+CPU: 5 PID: 190 Comm: bash Not tainted 6.2.0-rc2-00320-g1f5abbd77e2c #19
+Hardware name: linux,dummy-virt (DT)
+pstate: 400003c5 (nZcv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __rcu_irq_enter_check_tick+0x0/0x1b8
+lr : ct_nmi_enter+0x11c/0x138
+sp : ffff80000ad30080
+x29: ffff80000ad30080 x28: ffff089c82e20000 x27: 0000000000000000
+x26: 0000000000000000 x25: ffff089c02a8d100 x24: 0000000000000000
+x23: 00000000400003c5 x22: 0000ffffccf3e510 x21: ffff089c36fae148
+x20: ffff80000ad30120 x19: ffffa8da8fcce148 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000 x15: ffffa8da8e44ea6c
+x14: ffffa8da8e44e968 x13: ffffa8da8e03136c x12: 1fffe113804d6809
+x11: ffff6113804d6809 x10: 0000000000000a60 x9 : dfff800000000000
+x8 : ffff089c026b404f x7 : 00009eec7fb297f7 x6 : 0000000000000001
+x5 : ffff80000ad30120 x4 : dfff800000000000 x3 : ffffa8da8e3016f4
+x2 : 0000000000000003 x1 : 0000000000000000 x0 : 0000000000000000
+Kernel panic - not syncing: kernel stack overflow
+CPU: 5 PID: 190 Comm: bash Not tainted 6.2.0-rc2-00320-g1f5abbd77e2c #19
+Hardware name: linux,dummy-virt (DT)
+Call trace:
+ dump_backtrace+0xf8/0x108
+ show_stack+0x20/0x30
+ dump_stack_lvl+0x68/0x84
+ dump_stack+0x1c/0x38
+ panic+0x214/0x404
+ add_taint+0x0/0xf8
+ panic_bad_stack+0x144/0x160
+ handle_bad_stack+0x38/0x58
+ __bad_stack+0x78/0x7c
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ [...]
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ el1_interrupt+0x28/0x60
+ el1h_64_irq_handler+0x18/0x28
+ el1h_64_irq+0x64/0x68
+ __ftrace_set_clr_event_nolock+0x98/0x198
+ __ftrace_set_clr_event+0x58/0x80
+ system_enable_write+0x144/0x178
+ vfs_write+0x174/0x738
+ ksys_write+0xd0/0x188
+ __arm64_sys_write+0x4c/0x60
+ invoke_syscall+0x64/0x180
+ el0_svc_common.constprop.0+0x84/0x160
+ do_el0_svc+0x48/0xe8
+ el0_svc+0x34/0xd0
+ el0t_64_sync_handler+0xb8/0xc0
+ el0t_64_sync+0x190/0x194
+SMP: stopping secondary CPUs
+Kernel Offset: 0x28da86000000 from 0xffff800008000000
+PHYS_OFFSET: 0xfffff76600000000
+CPU features: 0x00000,01a00100,0000421b
+Memory Limit: none
+
+Link: https://lore.kernel.org/all/20221119040049.795065-1-zhengyejian1@huawei.com/
+Fixes: aaf2bc50df1f ("rcu: Abstract out rcu_irq_enter_check_tick() from rcu_nmi_enter()")
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- kernel/rcu/tasks.h | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ kernel/rcu/tree.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index bfb5e1549f2b..baf7ec178155 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -139,6 +139,12 @@ static struct rcu_tasks rt_name =							\
- /* Track exiting tasks in order to allow them to be waited for. */
- DEFINE_STATIC_SRCU(tasks_rcu_exit_srcu);
- 
-+#ifdef CONFIG_TASKS_RCU
-+/* Report delay in synchronize_srcu() completion in rcu_tasks_postscan(). */
-+static void tasks_rcu_exit_srcu_stall(struct timer_list *unused);
-+static DEFINE_TIMER(tasks_rcu_exit_srcu_stall_timer, tasks_rcu_exit_srcu_stall);
-+#endif
-+
- /* Avoid IPIing CPUs early in the grace period. */
- #define RCU_TASK_IPI_DELAY (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB) ? HZ / 2 : 0)
- static int rcu_task_ipi_delay __read_mostly = RCU_TASK_IPI_DELAY;
-@@ -830,6 +836,13 @@ static void rcu_tasks_pertask(struct task_struct *t, struct list_head *hop)
- /* Processing between scanning taskslist and draining the holdout list. */
- static void rcu_tasks_postscan(struct list_head *hop)
- {
-+	int rtsi = READ_ONCE(rcu_task_stall_info);
-+
-+	if (!IS_ENABLED(CONFIG_TINY_RCU)) {
-+		tasks_rcu_exit_srcu_stall_timer.expires = jiffies + rtsi;
-+		add_timer(&tasks_rcu_exit_srcu_stall_timer);
-+	}
-+
- 	/*
- 	 * Exiting tasks may escape the tasklist scan. Those are vulnerable
- 	 * until their final schedule() with TASK_DEAD state. To cope with
-@@ -848,6 +861,9 @@ static void rcu_tasks_postscan(struct list_head *hop)
- 	 * call to synchronize_rcu().
- 	 */
- 	synchronize_srcu(&tasks_rcu_exit_srcu);
-+
-+	if (!IS_ENABLED(CONFIG_TINY_RCU))
-+		del_timer_sync(&tasks_rcu_exit_srcu_stall_timer);
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 90d54571126a..ee27a03d7576 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -640,6 +640,7 @@ void __rcu_irq_enter_check_tick(void)
+ 	}
+ 	raw_spin_unlock_rcu_node(rdp->mynode);
  }
++NOKPROBE_SYMBOL(__rcu_irq_enter_check_tick);
+ #endif /* CONFIG_NO_HZ_FULL */
  
- /* See if tasks are still holding out, complain if so. */
-@@ -923,6 +939,21 @@ static void rcu_tasks_postgp(struct rcu_tasks *rtp)
- void call_rcu_tasks(struct rcu_head *rhp, rcu_callback_t func);
- DEFINE_RCU_TASKS(rcu_tasks, rcu_tasks_wait_gp, call_rcu_tasks, "RCU Tasks");
- 
-+static void tasks_rcu_exit_srcu_stall(struct timer_list *unused)
-+{
-+#ifndef CONFIG_TINY_RCU
-+	int rtsi;
-+
-+	rtsi = READ_ONCE(rcu_task_stall_info);
-+	pr_info("%s: %s grace period number %lu (since boot) gp_state: %s is %lu jiffies old.\n",
-+		__func__, rcu_tasks.kname, rcu_tasks.tasks_gp_seq,
-+		tasks_gp_state_getname(&rcu_tasks), jiffies - rcu_tasks.gp_jiffies);
-+	pr_info("Please check any exiting tasks stuck between calls to exit_tasks_rcu_start() and exit_tasks_rcu_finish()\n");
-+	tasks_rcu_exit_srcu_stall_timer.expires = jiffies + rtsi;
-+	add_timer(&tasks_rcu_exit_srcu_stall_timer);
-+#endif // #ifndef CONFIG_TINY_RCU
-+}
-+
- /**
-  * call_rcu_tasks() - Queue an RCU for invocation task-based grace period
-  * @rhp: structure to be used for queueing the RCU updates.
+ /*
 -- 
 2.40.0.348.gf938b09366-goog
 
