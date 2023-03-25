@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B8E6C8A4A
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 03:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 756056C8A4C
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 03:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbjCYCqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 22:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
+        id S232235AbjCYCqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 22:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjCYCqk (ORCPT
+        with ESMTP id S232225AbjCYCqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 22:46:40 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD7F1514A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 19:46:39 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso3348881pjb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 19:46:39 -0700 (PDT)
+        Fri, 24 Mar 2023 22:46:44 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D9A1514A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 19:46:42 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id d13so3073985pjh.0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 19:46:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679712399;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FsdVQp4WpBtkmg9p3gV+BN8yPUL2KVe2K+u+tVikQvc=;
-        b=UX1rxJ0PXz3zf2c58svwhK5paSZbNoObBWd4JF/GmxH7t7xn/NSCmn+okhYpt2gNRE
-         IE+VWUEePZJ/d4Letz7sVIBoancul2YBPJ2ypW4UhZ3qoM3WbejJRg39HickhPpGOPMB
-         SdI3BeEjH1q79QCS8rW6ZfIrwULCf0QlF/a4g=
+        d=chromium.org; s=google; t=1679712402;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V+zNaeNa8KtipVHVqtQfpLkM1H8wS2BsGCSalhkfXh8=;
+        b=A8FdMTE07F5SnwsmbzYWFDR7oYEBL7TZazUB5qLiXZ8BDlxW/vO5b9+Wj61sPlHCli
+         yNRJRvZI3cH0EjjT9Fy1yl7oacLQC5SF1qjR+XHCzwiVXmntQFoZIcGeWhi7RdMaxDlI
+         p62XvxpHzPhdzprKSTp2Tp/btyRwfxHjXhXYo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679712399;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FsdVQp4WpBtkmg9p3gV+BN8yPUL2KVe2K+u+tVikQvc=;
-        b=7kiRyVbAlEEHLdPr8VZCEDLb5jOAae+fn7JjBATN37AAVpNEa/7FrxPVwsjwd8ghQp
-         eTX4jpOfSBqs5HzxZklHzKqDVP4zGac1ZxaltOw7o6q8K2TEsMb4XQQ9l+I3ikHuWT/M
-         MRklpMXO0xHs0Sut95Xw0xykA3bTEm+71zpSWUf/ib6CPtGbB2WEJJvmq+FgQD9Mczzf
-         rgxshpv7664FsQHl7GO+WGubXpN2hC3Vhu0PA2YK/8dYDT8w+MpVNZB0UxwTzCTZmQfP
-         KkidyRaBJmKSRCuGq6o01QHlT9PzraZN/F611hHEPUvZz7RlP5di6PBn8DpGqM557gKw
-         cG2Q==
-X-Gm-Message-State: AAQBX9dIcafaJAJ44pNeRIc8iTaqFGHE/8CMqYgZV+wScI1wfISNeKfr
-        yW9lTfitRtokMCAvxCScW+MsKKFKjVqt0223eyHqzg==
-X-Google-Smtp-Source: AKy350YOeYqK21CIdUsyUTx827J7MaCXU3vKIUsL4kiQmKkjsp+rzw64Zlpya6PE/5YmaolNEGV//w==
-X-Received: by 2002:a17:90a:18e:b0:237:24eb:99d8 with SMTP id 14-20020a17090a018e00b0023724eb99d8mr5228100pjc.19.1679712399130;
-        Fri, 24 Mar 2023 19:46:39 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679712402;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V+zNaeNa8KtipVHVqtQfpLkM1H8wS2BsGCSalhkfXh8=;
+        b=Njsa90M5lC6XULBpDFE5QHmj6ULCfqYgf6bJ7durysQwMWB11nNBKD8zQSK5TsEORs
+         2QTVcDpeEwm6sEZrvEvtTHm11GgQW8KMXDCmLxph7ZSLVClGL4PXbKJjJo8i1/MDFadr
+         Ddm58z18zS/drFjWlKrGDHMSHfmqP5ICt64Iz13gIpi4d7woD8S2zkEmbqq3qljiNb01
+         6qI9qCVlWrh78+T5uGMWedbENkHm68hWYCol/dHqwZUwxt096xZrajx0akHAT0sL8WLR
+         X2EcKSP79OjNx+e6ZbmL+IWiZrDlyydN10+AcbLiyTC5Gh3JcckK3oUx3aa4y6FaVftU
+         C6vg==
+X-Gm-Message-State: AAQBX9cP0f7b5W47bAvYFgZQg3pJXqhUoo1/Fmx8RmfyKRzksIWvGJ0M
+        TuOETWpf9gpSTLcUB4ZfjReQiQ==
+X-Google-Smtp-Source: AKy350ZGxSZcXhGHIsJudw4E5aRTrARQF3WaLn/VwVERC6WqgkH08UieO+iF/njX/UCfvqt8O2i3ng==
+X-Received: by 2002:a17:90b:1647:b0:236:73d5:82cf with SMTP id il7-20020a17090b164700b0023673d582cfmr5198035pjb.9.1679712401876;
+        Fri, 24 Mar 2023 19:46:41 -0700 (PDT)
 Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:6179:9cb5:be4d:f76b])
-        by smtp.gmail.com with ESMTPSA id hv19-20020a17090ae41300b0023b4d33bedbsm3675840pjb.21.2023.03.24.19.46.37
+        by smtp.gmail.com with ESMTPSA id hv19-20020a17090ae41300b0023b4d33bedbsm3675840pjb.21.2023.03.24.19.46.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 19:46:38 -0700 (PDT)
+        Fri, 24 Mar 2023 19:46:41 -0700 (PDT)
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Minchan Kim <minchan@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCH 0/2] zsmalloc: minor documentation updates
-Date:   Sat, 25 Mar 2023 11:46:29 +0900
-Message-Id: <20230325024631.2817153-1-senozhatsky@chromium.org>
+Subject: [PATCH 1/2] zsmalloc: document new fullness grouping
+Date:   Sat, 25 Mar 2023 11:46:30 +0900
+Message-Id: <20230325024631.2817153-2-senozhatsky@chromium.org>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+In-Reply-To: <20230325024631.2817153-1-senozhatsky@chromium.org>
+References: <20230325024631.2817153-1-senozhatsky@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
@@ -67,17 +70,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	Hi,
+Update documentation and reflect new zspages fullness grouping
+(we don't use almost_empty and almost_full anymore).
 
-	Two minor patches that bring zsmalloc documentation up to date.
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ Documentation/mm/zsmalloc.rst | 133 +++++++++++++++++++---------------
+ 1 file changed, 74 insertions(+), 59 deletions(-)
 
-Sergey Senozhatsky (2):
-  zsmalloc: document new fullness grouping
-  zsmalloc: document freeable stats
-
- Documentation/mm/zsmalloc.rst | 135 +++++++++++++++++++---------------
- 1 file changed, 76 insertions(+), 59 deletions(-)
-
+diff --git a/Documentation/mm/zsmalloc.rst b/Documentation/mm/zsmalloc.rst
+index 64d127bfc221..3c6bf639887f 100644
+--- a/Documentation/mm/zsmalloc.rst
++++ b/Documentation/mm/zsmalloc.rst
+@@ -39,13 +39,12 @@ With CONFIG_ZSMALLOC_STAT, we could see zsmalloc internal information via
+ 
+  # cat /sys/kernel/debug/zsmalloc/zram0/classes
+ 
+- class  size almost_full almost_empty obj_allocated   obj_used pages_used pages_per_zspage
++ class  size       10%       20%       30%       40%       50%       60%       70%       80%       90%       99%      100% obj_allocated   obj_used pages_used pages_per_zspage freeable
+     ...
+     ...
+-     9   176           0            1           186        129          8                4
+-    10   192           1            0          2880       2872        135                3
+-    11   208           0            1           819        795         42                2
+-    12   224           0            1           219        159         12                4
++    30   512         0        12         4         1         0         1         0         0         1         0       414          3464       3346        433                1       14
++    31   528         2         7         2         2         1         0         1         0         0         2       117          4154       3793        536                4       44
++    32   544         6         3         4         1         2         1         0         0         0         1       260          4170       3965        556                2       26
+     ...
+     ...
+ 
+@@ -54,10 +53,28 @@ class
+ 	index
+ size
+ 	object size zspage stores
+-almost_empty
+-	the number of ZS_ALMOST_EMPTY zspages(see below)
+-almost_full
+-	the number of ZS_ALMOST_FULL zspages(see below)
++10%
++	the number of zspages with usage ratio less than 10% (see below)
++20%
++	the number of zspages with usage ratio between 10% and 20%
++30%
++	the number of zspages with usage ratio between 20% and 30%
++40%
++	the number of zspages with usage ratio between 30% and 40%
++50%
++	the number of zspages with usage ratio between 40% and 50%
++60%
++	the number of zspages with usage ratio between 50% and 60%
++70%
++	the number of zspages with usage ratio between 60% and 70%
++80%
++	the number of zspages with usage ratio between 70% and 80%
++90%
++	the number of zspages with usage ratio between 80% and 90%
++99%
++	the number of zspages with usage ratio between 90% and 99%
++100%
++	the number of zspages with usage ratio 100%
+ obj_allocated
+ 	the number of objects allocated
+ obj_used
+@@ -67,18 +84,11 @@ pages_used
+ pages_per_zspage
+ 	the number of 0-order pages to make a zspage
+ 
+-We assign a zspage to ZS_ALMOST_EMPTY fullness group when n <= N / f, where
+-
+-* n = number of allocated objects
+-* N = total number of objects zspage can store
+-* f = fullness_threshold_frac(ie, 4 at the moment)
+-
+-Similarly, we assign zspage to:
+-
+-* ZS_ALMOST_FULL  when n > N / f
+-* ZS_EMPTY        when n == 0
+-* ZS_FULL         when n == N
+-
++Each zspage maintains inuse counter which keeps track of the number of
++objects stored in the zspage.  The inuse counter determines the zspage's
++"fullness group" which is calculated as the ratio of the "inuse" objects to
++the total number of objects the zspage can hold (objs_per_zspage). The
++closer the inuse counter is to objs_per_zspage, the better.
+ 
+ Internals
+ =========
+@@ -94,10 +104,10 @@ of objects that each zspage can store.
+ 
+ For instance, consider the following size classes:::
+ 
+-  class  size almost_full almost_empty obj_allocated   obj_used pages_used pages_per_zspage freeable
++  class  size       10%   ....    100% obj_allocated   obj_used pages_used pages_per_zspage freeable
+   ...
+-     94  1536           0            0             0          0          0                3        0
+-    100  1632           0            0             0          0          0                2        0
++     94  1536        0    ....       0             0          0          0                3        0
++    100  1632        0    ....       0             0          0          0                2        0
+   ...
+ 
+ 
+@@ -134,10 +144,11 @@ reduces memory wastage.
+ 
+ Let's take a closer look at the bottom of `/sys/kernel/debug/zsmalloc/zramX/classes`:::
+ 
+-  class  size almost_full almost_empty obj_allocated   obj_used pages_used pages_per_zspage freeable
++  class  size       10%   ....    100% obj_allocated   obj_used pages_used pages_per_zspage freeable
++
+   ...
+-    202  3264           0            0             0          0          0                4        0
+-    254  4096           0            0             0          0          0                1        0
++    202  3264         0   ..         0             0          0          0                4        0
++    254  4096         0   ..         0             0          0          0                1        0
+   ...
+ 
+ Size class #202 stores objects of size 3264 bytes and has a maximum of 4 pages
+@@ -151,40 +162,42 @@ efficient storage of large objects.
+ 
+ For zspage chain size of 8, huge class watermark becomes 3632 bytes:::
+ 
+-  class  size almost_full almost_empty obj_allocated   obj_used pages_used pages_per_zspage freeable
++  class  size       10%   ....    100% obj_allocated   obj_used pages_used pages_per_zspage freeable
++
+   ...
+-    202  3264           0            0             0          0          0                4        0
+-    211  3408           0            0             0          0          0                5        0
+-    217  3504           0            0             0          0          0                6        0
+-    222  3584           0            0             0          0          0                7        0
+-    225  3632           0            0             0          0          0                8        0
+-    254  4096           0            0             0          0          0                1        0
++    202  3264         0   ..         0             0          0          0                4        0
++    211  3408         0   ..         0             0          0          0                5        0
++    217  3504         0   ..         0             0          0          0                6        0
++    222  3584         0   ..         0             0          0          0                7        0
++    225  3632         0   ..         0             0          0          0                8        0
++    254  4096         0   ..         0             0          0          0                1        0
+   ...
+ 
+ For zspage chain size of 16, huge class watermark becomes 3840 bytes:::
+ 
+-  class  size almost_full almost_empty obj_allocated   obj_used pages_used pages_per_zspage freeable
++  class  size       10%   ....    100% obj_allocated   obj_used pages_used pages_per_zspage freeable
++
+   ...
+-    202  3264           0            0             0          0          0                4        0
+-    206  3328           0            0             0          0          0               13        0
+-    207  3344           0            0             0          0          0                9        0
+-    208  3360           0            0             0          0          0               14        0
+-    211  3408           0            0             0          0          0                5        0
+-    212  3424           0            0             0          0          0               16        0
+-    214  3456           0            0             0          0          0               11        0
+-    217  3504           0            0             0          0          0                6        0
+-    219  3536           0            0             0          0          0               13        0
+-    222  3584           0            0             0          0          0                7        0
+-    223  3600           0            0             0          0          0               15        0
+-    225  3632           0            0             0          0          0                8        0
+-    228  3680           0            0             0          0          0                9        0
+-    230  3712           0            0             0          0          0               10        0
+-    232  3744           0            0             0          0          0               11        0
+-    234  3776           0            0             0          0          0               12        0
+-    235  3792           0            0             0          0          0               13        0
+-    236  3808           0            0             0          0          0               14        0
+-    238  3840           0            0             0          0          0               15        0
+-    254  4096           0            0             0          0          0                1        0
++    202  3264         0   ..         0             0          0          0                4        0
++    206  3328         0   ..         0             0          0          0               13        0
++    207  3344         0   ..         0             0          0          0                9        0
++    208  3360         0   ..         0             0          0          0               14        0
++    211  3408         0   ..         0             0          0          0                5        0
++    212  3424         0   ..         0             0          0          0               16        0
++    214  3456         0   ..         0             0          0          0               11        0
++    217  3504         0   ..         0             0          0          0                6        0
++    219  3536         0   ..         0             0          0          0               13        0
++    222  3584         0   ..         0             0          0          0                7        0
++    223  3600         0   ..         0             0          0          0               15        0
++    225  3632         0   ..         0             0          0          0                8        0
++    228  3680         0   ..         0             0          0          0                9        0
++    230  3712         0   ..         0             0          0          0               10        0
++    232  3744         0   ..         0             0          0          0               11        0
++    234  3776         0   ..         0             0          0          0               12        0
++    235  3792         0   ..         0             0          0          0               13        0
++    236  3808         0   ..         0             0          0          0               14        0
++    238  3840         0   ..         0             0          0          0               15        0
++    254  4096         0   ..         0             0          0          0                1        0
+   ...
+ 
+ Overall the combined zspage chain size effect on zsmalloc pool configuration:::
+@@ -214,9 +227,10 @@ zram as a build artifacts storage (Linux kernel compilation).
+ 
+   zsmalloc classes stats:::
+ 
+-    class  size almost_full almost_empty obj_allocated   obj_used pages_used pages_per_zspage freeable
++    class  size       10%   ....    100% obj_allocated   obj_used pages_used pages_per_zspage freeable
++
+     ...
+-    Total                13           51        413836     412973     159955                         3
++    Total              13   ..        51        413836     412973     159955                         3
+ 
+   zram mm_stat:::
+ 
+@@ -227,9 +241,10 @@ zram as a build artifacts storage (Linux kernel compilation).
+ 
+   zsmalloc classes stats:::
+ 
+-    class  size almost_full almost_empty obj_allocated   obj_used pages_used pages_per_zspage freeable
++    class  size       10%   ....    100% obj_allocated   obj_used pages_used pages_per_zspage freeable
++
+     ...
+-    Total                18           87        414852     412978     156666                         0
++    Total              18   ..        87        414852     412978     156666                         0
+ 
+   zram mm_stat:::
+ 
 -- 
 2.40.0.348.gf938b09366-goog
 
