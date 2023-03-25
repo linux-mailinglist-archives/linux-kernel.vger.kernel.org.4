@@ -2,698 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E7D6C8EFB
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 16:18:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA266C8EFD
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 16:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjCYPSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 11:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
+        id S230133AbjCYP0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 11:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjCYPS3 (ORCPT
+        with ESMTP id S229460AbjCYP0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 11:18:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8607FEC64;
-        Sat, 25 Mar 2023 08:18:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BD6B60C61;
-        Sat, 25 Mar 2023 15:18:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B93CC433D2;
-        Sat, 25 Mar 2023 15:18:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679757506;
-        bh=AskvAMkTh+EjFF8t4nxyKf0j06zonlQ6BxVR7L0hYoU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FBIumgan2CkwUd+7BSNElfUBVcn/rYKIlT8Rmt3lkqzPbi8qOzqSqXXdvufxyOLkE
-         +GQHshCDugfIHdOtGWip1WRJEg+BjRZHbJ/RiZFOdM/anJpUk9W8pmvtzQKfFcOlM5
-         gJEADmHgbvvZ/CgL1R/l5EDcL+Fyk/PNMbRuAXqgVoHsV9idiS5YOh8OiicRjSiLuw
-         eYPEwQqit5lvUVMVj4HmKnR3/4T3BIAcpKg4un/n54XVblk+YejzT6LNKCXroCfxnX
-         TlnJHY2aVNVnDL7XQ/sePVCSeqMZeaYtHiIM2efxVrQOGiiSgORO2M+2WGz9YIYFeU
-         r7fA1/J08WCyg==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 3/3] kconfig: menuconfig: reorder functions to remove forward declarations
-Date:   Sun, 26 Mar 2023 00:18:17 +0900
-Message-Id: <20230325151817.2651544-3-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230325151817.2651544-1-masahiroy@kernel.org>
-References: <20230325151817.2651544-1-masahiroy@kernel.org>
+        Sat, 25 Mar 2023 11:26:06 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2747D500;
+        Sat, 25 Mar 2023 08:26:05 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so4332417pjb.0;
+        Sat, 25 Mar 2023 08:26:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679757965;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=niKFnY0t+4MX3R2lOhT5fCEyXxOfUgTVhDHjO9rpeS8=;
+        b=Xa07t1IpvMdvYSqRRh11jFCR38BL5ga6Yq7Df88By3VZeMYJd7qoZIVkP6F7dOCQr4
+         IDnEP4uo+iZ/zJe/CZLjQMx3vplTGf5LNfTG1fVdD+Ft8efSVOxoTA4nIXje4MCoxei4
+         I+cGdOYUe+wd2o6gye6P+OmMFi91cEIRdeyWKajPV7f4IKujitg+24ZTEvzD15BX63rW
+         auFzqVeLwfn9C8KCfgJvnhsobGQgq9H0dhvoWTsm+7AvPvzBgqjWQ1XML8if3p5vmmZL
+         cl5QGrlQs9ZNx2jD9Prc6m6fH9WUWzfBcFSJ1XZeUbJwYUC2HZpqB8fctkOhq4cXH78z
+         DKaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679757965;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=niKFnY0t+4MX3R2lOhT5fCEyXxOfUgTVhDHjO9rpeS8=;
+        b=VWw1EQarHN43Zs+Trv1gx68PZo4qaYEnr3CwtUop3S6UdJc3H6zQHjzJjGDs169ltP
+         ChC/0kbRct0zaSvmZMi9C3fddsNeDIRxJK9yZwHDoZ81stMj2xeU8qygZUwmBMsdCT6Q
+         pedrvA5ZcyMbUKK/OLJWCmsP3h9yXdWZPESqo+GQIadCXsgcz0Lwvod2yHxlSDH2G7C7
+         fpL8nzXnpRrvd+gG22/i4RwqGDicZBvh3TdzKEcXQyq/CpBlLYvrY4JsHxl7Q/aw4vKi
+         lKNSJmC18fVPc/TaqhZKwG9s2LuBZ5oEfPFbOoQW4Qu9WsW/khy7ruIy/eVSJrljMqvF
+         xl7Q==
+X-Gm-Message-State: AAQBX9dW4QwR+pqnb86qakZyXE2ELwKGMKDmebRlW6af9sqhFNewoRE6
+        fkWxsOKdpMJ7mXKNbTeT8J4=
+X-Google-Smtp-Source: AKy350bbvJ5ikaNnx5L5X2/soimE96kyq9dxgQaClL4ZqqekduyNybDgmn8U0DjGNoJ9WkbP+8Ig6g==
+X-Received: by 2002:a17:903:64e:b0:1a1:b3c0:4228 with SMTP id kh14-20020a170903064e00b001a1b3c04228mr5154310plb.19.1679757965044;
+        Sat, 25 Mar 2023 08:26:05 -0700 (PDT)
+Received: from KERNELXING-MB0.tencent.com ([114.253.37.157])
+        by smtp.gmail.com with ESMTPSA id d16-20020a63f250000000b004ff6b744248sm15249470pgk.48.2023.03.25.08.26.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Mar 2023 08:26:04 -0700 (PDT)
+From:   Jason Xing <kerneljasonxing@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, therbert@google.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kerneljasonxing@gmail.com, Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH net] net: fix raising a softirq on the current cpu with rps enabled
+Date:   Sat, 25 Mar 2023 23:24:17 +0800
+Message-Id: <20230325152417.5403-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define helper functions before the callers so that forward
-declarations can go away.
+From: Jason Xing <kernelxing@tencent.com>
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Since we decide to put the skb into a backlog queue of another
+cpu, we should not raise the softirq for the current cpu. When
+to raise a softirq is based on whether we have more data left to
+process later. As to the current cpu, there is no indication of
+more data enqueued, so we do not need this action. After enqueuing
+to another cpu, net_rx_action() function will call ipi and then
+another cpu will raise the softirq as expected.
+
+Also, raising more softirqs which set the corresponding bit field
+can make the IRQ mechanism think we probably need to start ksoftirqd
+on the current cpu. Actually it shouldn't happen.
+
+Fixes: 0a9627f2649a ("rps: Receive Packet Steering")
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
 ---
+ net/core/dev.c | 2 --
+ 1 file changed, 2 deletions(-)
 
- scripts/kconfig/lxdialog/textbox.c | 258 ++++++++++++------------
- scripts/kconfig/mconf.c            | 314 ++++++++++++++---------------
- 2 files changed, 277 insertions(+), 295 deletions(-)
-
-diff --git a/scripts/kconfig/lxdialog/textbox.c b/scripts/kconfig/lxdialog/textbox.c
-index 4a6ff9de45b9..bc4d4fb1dc75 100644
---- a/scripts/kconfig/lxdialog/textbox.c
-+++ b/scripts/kconfig/lxdialog/textbox.c
-@@ -8,18 +8,136 @@
- 
- #include "dialog.h"
- 
--static void back_lines(int n);
--static void print_page(WINDOW *win, int height, int width, update_text_fn
--		       update_text, void *data);
--static void print_line(WINDOW *win, int row, int width);
--static char *get_line(void);
--static void print_position(WINDOW * win);
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 1518a366783b..bfaaa652f50c 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4594,8 +4594,6 @@ static int napi_schedule_rps(struct softnet_data *sd)
+ 	if (sd != mysd) {
+ 		sd->rps_ipi_next = mysd->rps_ipi_list;
+ 		mysd->rps_ipi_list = sd;
 -
- static int hscroll;
- static int begin_reached, end_reached, page_length;
- static char *buf;
- static char *page;
- 
-+/*
-+ * Go back 'n' lines in text. Called by dialog_textbox().
-+ * 'page' will be updated to point to the desired line in 'buf'.
-+ */
-+static void back_lines(int n)
-+{
-+	int i;
-+
-+	begin_reached = 0;
-+	/* Go back 'n' lines */
-+	for (i = 0; i < n; i++) {
-+		if (*page == '\0') {
-+			if (end_reached) {
-+				end_reached = 0;
-+				continue;
-+			}
-+		}
-+		if (page == buf) {
-+			begin_reached = 1;
-+			return;
-+		}
-+		page--;
-+		do {
-+			if (page == buf) {
-+				begin_reached = 1;
-+				return;
-+			}
-+			page--;
-+		} while (*page != '\n');
-+		page++;
-+	}
-+}
-+
-+/*
-+ * Return current line of text. Called by dialog_textbox() and print_line().
-+ * 'page' should point to start of current line before calling, and will be
-+ * updated to point to start of next line.
-+ */
-+static char *get_line(void)
-+{
-+	int i = 0;
-+	static char line[MAX_LEN + 1];
-+
-+	end_reached = 0;
-+	while (*page != '\n') {
-+		if (*page == '\0') {
-+			end_reached = 1;
-+			break;
-+		} else if (i < MAX_LEN)
-+			line[i++] = *(page++);
-+		else {
-+			/* Truncate lines longer than MAX_LEN characters */
-+			if (i == MAX_LEN)
-+				line[i++] = '\0';
-+			page++;
-+		}
-+	}
-+	if (i <= MAX_LEN)
-+		line[i] = '\0';
-+	if (!end_reached)
-+		page++;		/* move past '\n' */
-+
-+	return line;
-+}
-+
-+/*
-+ * Print a new line of text.
-+ */
-+static void print_line(WINDOW *win, int row, int width)
-+{
-+	char *line;
-+
-+	line = get_line();
-+	line += MIN(strlen(line), hscroll);	/* Scroll horizontally */
-+	wmove(win, row, 0);	/* move cursor to correct line */
-+	waddch(win, ' ');
-+	waddnstr(win, line, MIN(strlen(line), width - 2));
-+
-+	/* Clear 'residue' of previous line */
-+	wclrtoeol(win);
-+}
-+
-+/*
-+ * Print a new page of text.
-+ */
-+static void print_page(WINDOW *win, int height, int width, update_text_fn
-+		       update_text, void *data)
-+{
-+	int i, passed_end = 0;
-+
-+	if (update_text) {
-+		char *end;
-+
-+		for (i = 0; i < height; i++)
-+			get_line();
-+		end = page;
-+		back_lines(height);
-+		update_text(buf, page - buf, end - buf, data);
-+	}
-+
-+	page_length = 0;
-+	for (i = 0; i < height; i++) {
-+		print_line(win, i, width);
-+		if (!passed_end)
-+			page_length++;
-+		if (end_reached && !passed_end)
-+			passed_end = 1;
-+	}
-+	wnoutrefresh(win);
-+}
-+
-+/*
-+ * Print current position
-+ */
-+static void print_position(WINDOW *win)
-+{
-+	int percent;
-+
-+	wattrset(win, dlg.position_indicator.atr);
-+	wbkgdset(win, dlg.position_indicator.atr & A_COLOR);
-+	percent = (page - buf) * 100 / strlen(buf);
-+	wmove(win, getmaxy(win) - 3, getmaxx(win) - 9);
-+	wprintw(win, "(%3d%%)", percent);
-+}
-+
- /*
-  * refresh window content
-  */
-@@ -33,7 +151,6 @@ static void refresh_text_box(WINDOW *dialog, WINDOW *box, int boxh, int boxw,
- 	wrefresh(dialog);
- }
- 
--
- /*
-  * Display text from a file in a dialog box.
-  *
-@@ -259,128 +376,3 @@ int dialog_textbox(const char *title, char *tbuf, int initial_height,
- 		*_hscroll = hscroll;
- 	return key;
- }
--
--/*
-- * Go back 'n' lines in text. Called by dialog_textbox().
-- * 'page' will be updated to point to the desired line in 'buf'.
-- */
--static void back_lines(int n)
--{
--	int i;
--
--	begin_reached = 0;
--	/* Go back 'n' lines */
--	for (i = 0; i < n; i++) {
--		if (*page == '\0') {
--			if (end_reached) {
--				end_reached = 0;
--				continue;
--			}
--		}
--		if (page == buf) {
--			begin_reached = 1;
--			return;
--		}
--		page--;
--		do {
--			if (page == buf) {
--				begin_reached = 1;
--				return;
--			}
--			page--;
--		} while (*page != '\n');
--		page++;
--	}
--}
--
--/*
-- * Print a new page of text.
-- */
--static void print_page(WINDOW *win, int height, int width, update_text_fn
--		       update_text, void *data)
--{
--	int i, passed_end = 0;
--
--	if (update_text) {
--		char *end;
--
--		for (i = 0; i < height; i++)
--			get_line();
--		end = page;
--		back_lines(height);
--		update_text(buf, page - buf, end - buf, data);
--	}
--
--	page_length = 0;
--	for (i = 0; i < height; i++) {
--		print_line(win, i, width);
--		if (!passed_end)
--			page_length++;
--		if (end_reached && !passed_end)
--			passed_end = 1;
--	}
--	wnoutrefresh(win);
--}
--
--/*
-- * Print a new line of text.
-- */
--static void print_line(WINDOW * win, int row, int width)
--{
--	char *line;
--
--	line = get_line();
--	line += MIN(strlen(line), hscroll);	/* Scroll horizontally */
--	wmove(win, row, 0);	/* move cursor to correct line */
--	waddch(win, ' ');
--	waddnstr(win, line, MIN(strlen(line), width - 2));
--
--	/* Clear 'residue' of previous line */
--	wclrtoeol(win);
--}
--
--/*
-- * Return current line of text. Called by dialog_textbox() and print_line().
-- * 'page' should point to start of current line before calling, and will be
-- * updated to point to start of next line.
-- */
--static char *get_line(void)
--{
--	int i = 0;
--	static char line[MAX_LEN + 1];
--
--	end_reached = 0;
--	while (*page != '\n') {
--		if (*page == '\0') {
--			end_reached = 1;
--			break;
--		} else if (i < MAX_LEN)
--			line[i++] = *(page++);
--		else {
--			/* Truncate lines longer than MAX_LEN characters */
--			if (i == MAX_LEN)
--				line[i++] = '\0';
--			page++;
--		}
--	}
--	if (i <= MAX_LEN)
--		line[i] = '\0';
--	if (!end_reached)
--		page++;		/* move past '\n' */
--
--	return line;
--}
--
--/*
-- * Print current position
-- */
--static void print_position(WINDOW * win)
--{
--	int percent;
--
--	wattrset(win, dlg.position_indicator.atr);
--	wbkgdset(win, dlg.position_indicator.atr & A_COLOR);
--	percent = (page - buf) * 100 / strlen(buf);
--	wmove(win, getmaxy(win) - 3, getmaxx(win) - 9);
--	wprintw(win, "(%3d%%)", percent);
--}
-diff --git a/scripts/kconfig/mconf.c b/scripts/kconfig/mconf.c
-index e67e0db50b2e..53d8834d12fe 100644
---- a/scripts/kconfig/mconf.c
-+++ b/scripts/kconfig/mconf.c
-@@ -290,16 +290,6 @@ static int save_and_exit;
- static int silent;
- 
- static void conf(struct menu *menu, struct menu *active_menu);
--static void conf_choice(struct menu *menu);
--static void conf_string(struct menu *menu);
--static void conf_load(void);
--static void conf_save(void);
--static int show_textbox_ext(const char *title, char *text, int r, int c,
--			    int *keys, int *vscroll, int *hscroll,
--			    update_text_fn update_text, void *data);
--static void show_textbox(const char *title, const char *text, int r, int c);
--static void show_helptext(const char *title, const char *text);
--static void show_help(struct menu *menu);
- 
- static char filename[PATH_MAX+1];
- static void set_config_filename(const char *config_filename)
-@@ -358,6 +348,37 @@ static void reset_subtitle(void)
- 	set_dialog_subtitles(subtitles);
- }
- 
-+static int show_textbox_ext(const char *title, char *text, int r, int c, int
-+			    *keys, int *vscroll, int *hscroll, update_text_fn
-+			    update_text, void *data)
-+{
-+	dialog_clear();
-+	return dialog_textbox(title, text, r, c, keys, vscroll, hscroll,
-+			      update_text, data);
-+}
-+
-+static void show_textbox(const char *title, const char *text, int r, int c)
-+{
-+	show_textbox_ext(title, (char *) text, r, c, (int []) {0}, NULL, NULL,
-+			 NULL, NULL);
-+}
-+
-+static void show_helptext(const char *title, const char *text)
-+{
-+	show_textbox(title, text, 0, 0);
-+}
-+
-+static void show_help(struct menu *menu)
-+{
-+	struct gstr help = str_new();
-+
-+	help.max_width = getmaxx(stdscr) - 10;
-+	menu_get_ext_help(menu, &help);
-+
-+	show_helptext(menu_get_prompt(menu), str_get(&help));
-+	str_free(&help);
-+}
-+
- struct search_data {
- 	struct list_head *head;
- 	struct menu **targets;
-@@ -643,158 +664,6 @@ static void build_conf(struct menu *menu)
- 	indent -= doint;
- }
- 
--static void conf(struct menu *menu, struct menu *active_menu)
--{
--	struct menu *submenu;
--	const char *prompt = menu_get_prompt(menu);
--	struct subtitle_part stpart;
--	struct symbol *sym;
--	int res;
--	int s_scroll = 0;
--
--	if (menu != &rootmenu)
--		stpart.text = menu_get_prompt(menu);
--	else
--		stpart.text = NULL;
--	list_add_tail(&stpart.entries, &trail);
--
--	while (1) {
--		item_reset();
--		current_menu = menu;
--		build_conf(menu);
--		if (!child_count)
--			break;
--		set_subtitle();
--		dialog_clear();
--		res = dialog_menu(prompt ? prompt : "Main Menu",
--				  menu_instructions,
--				  active_menu, &s_scroll);
--		if (res == 1 || res == KEY_ESC || res == -ERRDISPLAYTOOSMALL)
--			break;
--		if (item_count() != 0) {
--			if (!item_activate_selected())
--				continue;
--			if (!item_tag())
--				continue;
--		}
--		submenu = item_data();
--		active_menu = item_data();
--		if (submenu)
--			sym = submenu->sym;
--		else
--			sym = NULL;
--
--		switch (res) {
--		case 0:
--			switch (item_tag()) {
--			case 'm':
--				if (single_menu_mode)
--					submenu->data = (void *) (long) !submenu->data;
--				else
--					conf(submenu, NULL);
--				break;
--			case 't':
--				if (sym_is_choice(sym) && sym_get_tristate_value(sym) == yes)
--					conf_choice(submenu);
--				else if (submenu->prompt->type == P_MENU)
--					conf(submenu, NULL);
--				break;
--			case 's':
--				conf_string(submenu);
--				break;
--			}
--			break;
--		case 2:
--			if (sym)
--				show_help(submenu);
--			else {
--				reset_subtitle();
--				show_helptext("README", mconf_readme);
--			}
--			break;
--		case 3:
--			reset_subtitle();
--			conf_save();
--			break;
--		case 4:
--			reset_subtitle();
--			conf_load();
--			break;
--		case 5:
--			if (item_is_tag('t')) {
--				if (sym_set_tristate_value(sym, yes))
--					break;
--				if (sym_set_tristate_value(sym, mod))
--					show_textbox(NULL, setmod_text, 6, 74);
--			}
--			break;
--		case 6:
--			if (item_is_tag('t'))
--				sym_set_tristate_value(sym, no);
--			break;
--		case 7:
--			if (item_is_tag('t'))
--				sym_set_tristate_value(sym, mod);
--			break;
--		case 8:
--			if (item_is_tag('t'))
--				sym_toggle_tristate_value(sym);
--			else if (item_is_tag('m'))
--				conf(submenu, NULL);
--			break;
--		case 9:
--			search_conf();
--			break;
--		case 10:
--			show_all_options = !show_all_options;
--			break;
--		}
--	}
--
--	list_del(trail.prev);
--}
--
--static int show_textbox_ext(const char *title, char *text, int r, int c, int
--			    *keys, int *vscroll, int *hscroll, update_text_fn
--			    update_text, void *data)
--{
--	dialog_clear();
--	return dialog_textbox(title, text, r, c, keys, vscroll, hscroll,
--			      update_text, data);
--}
--
--static void show_textbox(const char *title, const char *text, int r, int c)
--{
--	show_textbox_ext(title, (char *) text, r, c, (int []) {0}, NULL, NULL,
--			 NULL, NULL);
--}
--
--static void show_helptext(const char *title, const char *text)
--{
--	show_textbox(title, text, 0, 0);
--}
--
--static void conf_message_callback(const char *s)
--{
--	if (save_and_exit) {
--		if (!silent)
--			printf("%s", s);
--	} else {
--		show_textbox(NULL, s, 6, 60);
--	}
--}
--
--static void show_help(struct menu *menu)
--{
--	struct gstr help = str_new();
--
--	help.max_width = getmaxx(stdscr) - 10;
--	menu_get_ext_help(menu, &help);
--
--	show_helptext(menu_get_prompt(menu), str_get(&help));
--	str_free(&help);
--}
--
- static void conf_choice(struct menu *menu)
- {
- 	const char *prompt = menu_get_prompt(menu);
-@@ -950,6 +819,127 @@ static void conf_save(void)
+-		__raise_softirq_irqoff(NET_RX_SOFTIRQ);
+ 		return 1;
  	}
- }
- 
-+static void conf(struct menu *menu, struct menu *active_menu)
-+{
-+	struct menu *submenu;
-+	const char *prompt = menu_get_prompt(menu);
-+	struct subtitle_part stpart;
-+	struct symbol *sym;
-+	int res;
-+	int s_scroll = 0;
-+
-+	if (menu != &rootmenu)
-+		stpart.text = menu_get_prompt(menu);
-+	else
-+		stpart.text = NULL;
-+	list_add_tail(&stpart.entries, &trail);
-+
-+	while (1) {
-+		item_reset();
-+		current_menu = menu;
-+		build_conf(menu);
-+		if (!child_count)
-+			break;
-+		set_subtitle();
-+		dialog_clear();
-+		res = dialog_menu(prompt ? prompt : "Main Menu",
-+				  menu_instructions,
-+				  active_menu, &s_scroll);
-+		if (res == 1 || res == KEY_ESC || res == -ERRDISPLAYTOOSMALL)
-+			break;
-+		if (item_count() != 0) {
-+			if (!item_activate_selected())
-+				continue;
-+			if (!item_tag())
-+				continue;
-+		}
-+		submenu = item_data();
-+		active_menu = item_data();
-+		if (submenu)
-+			sym = submenu->sym;
-+		else
-+			sym = NULL;
-+
-+		switch (res) {
-+		case 0:
-+			switch (item_tag()) {
-+			case 'm':
-+				if (single_menu_mode)
-+					submenu->data = (void *) (long) !submenu->data;
-+				else
-+					conf(submenu, NULL);
-+				break;
-+			case 't':
-+				if (sym_is_choice(sym) && sym_get_tristate_value(sym) == yes)
-+					conf_choice(submenu);
-+				else if (submenu->prompt->type == P_MENU)
-+					conf(submenu, NULL);
-+				break;
-+			case 's':
-+				conf_string(submenu);
-+				break;
-+			}
-+			break;
-+		case 2:
-+			if (sym)
-+				show_help(submenu);
-+			else {
-+				reset_subtitle();
-+				show_helptext("README", mconf_readme);
-+			}
-+			break;
-+		case 3:
-+			reset_subtitle();
-+			conf_save();
-+			break;
-+		case 4:
-+			reset_subtitle();
-+			conf_load();
-+			break;
-+		case 5:
-+			if (item_is_tag('t')) {
-+				if (sym_set_tristate_value(sym, yes))
-+					break;
-+				if (sym_set_tristate_value(sym, mod))
-+					show_textbox(NULL, setmod_text, 6, 74);
-+			}
-+			break;
-+		case 6:
-+			if (item_is_tag('t'))
-+				sym_set_tristate_value(sym, no);
-+			break;
-+		case 7:
-+			if (item_is_tag('t'))
-+				sym_set_tristate_value(sym, mod);
-+			break;
-+		case 8:
-+			if (item_is_tag('t'))
-+				sym_toggle_tristate_value(sym);
-+			else if (item_is_tag('m'))
-+				conf(submenu, NULL);
-+			break;
-+		case 9:
-+			search_conf();
-+			break;
-+		case 10:
-+			show_all_options = !show_all_options;
-+			break;
-+		}
-+	}
-+
-+	list_del(trail.prev);
-+}
-+
-+static void conf_message_callback(const char *s)
-+{
-+	if (save_and_exit) {
-+		if (!silent)
-+			printf("%s", s);
-+	} else {
-+		show_textbox(NULL, s, 6, 60);
-+	}
-+}
-+
- static int handle_exit(void)
- {
- 	int res;
+ #endif /* CONFIG_RPS */
 -- 
-2.34.1
+2.37.3
 
