@@ -2,154 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15356C90F7
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 22:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BEB46C90FA
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 22:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjCYV3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 17:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
+        id S229988AbjCYVcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 17:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjCYV3t (ORCPT
+        with ESMTP id S229528AbjCYVb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 17:29:49 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A25BCA36;
-        Sat, 25 Mar 2023 14:29:48 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5500A8BE;
-        Sat, 25 Mar 2023 22:29:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1679779786;
-        bh=Jpj+akEfg2jGUqXOXG5JWaUslPt6fAU0Vc613gWhvT0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iRjNIJ5FwvxoAj4MESIMf+5qXpJxHj/nxIU/EQ+GUL3Yd8VLhtwda9uFVFgBprHsw
-         97fp1wiGJlIPH/xaoZ7pwHofdeKrrDd/SVtAOd02nZ0pphEmJyhTc/OhWwPQhmsCsQ
-         VDrEA1pyLEdi4cub86kR9/LLr2/Ylso5qyPQ86jY=
-Date:   Sat, 25 Mar 2023 23:29:53 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Adam Pigg <adam@piggz.co.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 6/9] media: sun6i-csi: capture: Implement MC I/O with
- extended enum_fmt
-Message-ID: <20230325212953.GD22214@pendragon.ideasonboard.com>
-References: <20230324151228.2778112-1-paul.kocialkowski@bootlin.com>
- <20230324151228.2778112-7-paul.kocialkowski@bootlin.com>
+        Sat, 25 Mar 2023 17:31:59 -0400
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752EECA36;
+        Sat, 25 Mar 2023 14:31:58 -0700 (PDT)
+Received: by mail-qv1-f41.google.com with SMTP id q88so4267114qvq.13;
+        Sat, 25 Mar 2023 14:31:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679779917;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vRFrO9F3wTk5qVcAfLh7TGZaJB83Lq1s27Ng3v/fD6M=;
+        b=CR3uxLyvOzP7bD+UGH/YPh89pQf/kFXa6Bj+cC3C72jFiNaNkVi1F0niC93e5NJyxf
+         Yrmlljx5OmBwk415G2ZnHGJcs2b2a9WdolkypL0shYGQsd5hHEgz0DMoFnQYPF3yj7sn
+         2fwtj2iRyAYdXMLMFMzrVTrLJtN9S5T/x3BA6xMQKwCDeeTBqT/EvhPpXT/gB0GHUunr
+         13tQyK+e3ggCaZXkyIKI5pCr7YwCN4l/j3Ta7nA23zyYyO61qdIWtvv/10IehRzZuYhx
+         PW3LY8esrVr0DJg4gK/es/eCEIeuzpquax+Z6Oz+1zJZhjus4IbcUVyLiwJPu1rDPURk
+         In/g==
+X-Gm-Message-State: AAQBX9cq8MRdlREamckdIlXUA+jzuhc4yOB7vwzngbbW04T4BQ8UgHu4
+        feSN6nkgXZFAZuWvamEXdpJq3gzRZARxgdnNiz4=
+X-Google-Smtp-Source: AKy350Z4rsbspqdtHn6mMZvZl2fWM1a6/dKRst37eiUxDNR1azSetvpPStNXsUrQHrimYlPCPY/ctw==
+X-Received: by 2002:ad4:5745:0:b0:5ca:83ed:12be with SMTP id q5-20020ad45745000000b005ca83ed12bemr14218917qvx.21.1679779917048;
+        Sat, 25 Mar 2023 14:31:57 -0700 (PDT)
+Received: from localhost ([24.1.27.177])
+        by smtp.gmail.com with ESMTPSA id r6-20020a0cf806000000b005dd8b93457asm1747932qvn.18.2023.03.25.14.31.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Mar 2023 14:31:56 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com
+Subject: [PATCH bpf-next 0/3] Don't invoke KPTR_REF destructor on NULL xchg
+Date:   Sat, 25 Mar 2023 16:31:41 -0500
+Message-Id: <20230325213144.486885-1-void@manifault.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230324151228.2778112-7-paul.kocialkowski@bootlin.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+When a map value is being freed, we loop over all of the fields of the
+corresponding BPF object and issue the appropriate cleanup calls
+corresponding to the field's type. If the field is a referenced kptr, we
+atomically xchg the value out of the map, and invoke the kptr's
+destructor on whatever was there before.
 
-Thank you for the patch.
+Currently, we always invoke the destructor (or bpf_obj_drop() for a
+local kptr) on any kptr, including if no value was xchg'd out of the
+map. This means that any function serving as the kptr's KF_RELEASE
+destructor must always treat the argument as possibly NULL, and we
+invoke unnecessary (and seemingly unsafe) cleanup logic for the local
+kptr path as well.
 
-On Fri, Mar 24, 2023 at 04:12:25PM +0100, Paul Kocialkowski wrote:
-> This driver needs the media-controller API to operate and should not be
-> considered as a video-device-centric implementation.
-> 
-> Properly report the IO_MC device cap and extend the enum_fmt
-> implementation to support enumeration with an explicit mbus_code.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> ---
->  .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 36 ++++++++++++++++---
->  1 file changed, 32 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> index 6ce7f1d3ed57..9627030ff060 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> @@ -777,13 +777,40 @@ static int sun6i_csi_capture_enum_fmt(struct file *file, void *private,
->  				      struct v4l2_fmtdesc *fmtdesc)
->  {
->  	u32 index = fmtdesc->index;
-> +	u32 mbus_code = fmtdesc->mbus_code;
-> +	unsigned int index_valid = 0;
-> +	unsigned int i;
-> +
-> +	if (!mbus_code) {
-> +		if (index >= ARRAY_SIZE(sun6i_csi_capture_formats))
-> +			return -EINVAL;
-> +
-> +		fmtdesc->pixelformat =
-> +			sun6i_csi_capture_formats[index].pixelformat;
-> +
-> +		return 0;
-> +	}
-> +
-> +	/* Check capture pixel format matching with mbus code. */
->  
-> -	if (index >= ARRAY_SIZE(sun6i_csi_capture_formats))
-> +	if (!sun6i_csi_bridge_format_find(mbus_code))
->  		return -EINVAL;
->  
-> -	fmtdesc->pixelformat = sun6i_csi_capture_formats[index].pixelformat;
-> +	for (i = 0; i < ARRAY_SIZE(sun6i_csi_capture_formats); i++) {
-> +		u32 pixelformat = sun6i_csi_capture_formats[i].pixelformat;
->  
-> -	return 0;
-> +		if (!sun6i_csi_capture_format_check(pixelformat, mbus_code))
-> +			continue;
+This is an odd requirement -- KF_RELEASE kfuncs that are invoked by BPF
+programs do not have this restriction, and the verifier will fail to
+load the program if the register containing the to-be-released type has
+any untrusted modifiers (e.g. PTR_UNTRUSTED or PTR_MAYBE_NULL). So as to
+simplify the expectations required for a KF_RELEASE kfunc, this patch
+set updates the KPTR_REF destructor logic to only be invoked when a
+non-NULL value is xchg'd out of the map.
 
-I would probably have added compatible media bus codes to the
-sun6i_csi_capture_format structure. This should work though, even if it
-is more CPU-intensive. I'm OK with either option.
+Additionally, the patch removes now-unnecessary KF_RELEASE calls from
+several kfuncs, and finally, updates the verifier to have KF_RELEASE
+automatically imply KF_TRUSTED_ARGS. This restriction was already
+implicitly happening because of the aforementioned logic in the verifier
+to reject any regs with untrusted modifiers, and to enforce that
+KF_RELEASE args are passed with a 0 offset. This change just updates the
+behavior to match that of other trusted args. This patch is left to the
+end of the series in case it happens to be controversial, as it arguably
+is slightly orthogonal to the purpose of the rest of the series.
 
-> +
-> +		if (index == index_valid) {
+David Vernet (3):
+  bpf: Only invoke kptr dtor following non-NULL xchg
+  bpf: Remove now-unnecessary NULL checks for KF_RELEASE kfuncs
+  bpf: Treat KF_RELEASE kfuncs as KF_TRUSTED_ARGS
 
-You can replace this with
-
-		if (index == 0) {
-
-and
-
-		index_valid++;
-
-with
-
-		index--;
-
-below, and drop the index_valid variable.
-
-> +			fmtdesc->pixelformat = pixelformat;
-> +			return 0;
-> +		}
-> +
-> +		index_valid++;
-> +	}
-> +
-> +	return -EINVAL;
->  }
->  
->  static int sun6i_csi_capture_g_fmt(struct file *file, void *private,
-> @@ -1039,7 +1066,8 @@ int sun6i_csi_capture_setup(struct sun6i_csi_device *csi_dev)
->  
->  	strscpy(video_dev->name, SUN6I_CSI_CAPTURE_NAME,
->  		sizeof(video_dev->name));
-> -	video_dev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-> +	video_dev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING |
-> +				 V4L2_CAP_IO_MC;
->  	video_dev->vfl_dir = VFL_DIR_RX;
->  	video_dev->release = video_device_release_empty;
+ Documentation/bpf/kfuncs.rst                           | 7 ++++---
+ kernel/bpf/cpumask.c                                   | 5 +----
+ kernel/bpf/helpers.c                                   | 6 ------
+ kernel/bpf/syscall.c                                   | 2 +-
+ kernel/bpf/verifier.c                                  | 2 +-
+ net/bpf/test_run.c                                     | 3 ---
+ net/netfilter/nf_conntrack_bpf.c                       | 2 --
+ tools/testing/selftests/bpf/progs/cgrp_kfunc_failure.c | 4 ++--
+ tools/testing/selftests/bpf/progs/task_kfunc_failure.c | 6 +++---
+ 9 files changed, 12 insertions(+), 25 deletions(-)
 
 -- 
-Regards,
+2.39.0
 
-Laurent Pinchart
