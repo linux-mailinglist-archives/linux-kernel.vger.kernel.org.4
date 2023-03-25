@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E8A6C8A17
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 02:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E546C8A1A
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 03:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbjCYB5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 21:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S231861AbjCYCFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 22:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjCYB5r (ORCPT
+        with ESMTP id S229505AbjCYCFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 21:57:47 -0400
+        Fri, 24 Mar 2023 22:05:32 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCB61BAC8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 18:57:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554C35BBE
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 19:05:30 -0700 (PDT)
 Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Pk2F13LTtzSp2s;
-        Sat, 25 Mar 2023 09:54:13 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Pk2RJ4mFczKtNX;
+        Sat, 25 Mar 2023 10:03:08 +0800 (CST)
 Received: from [10.174.178.55] (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 25 Mar 2023 09:57:40 +0800
-Subject: Re: [PATCH 2/3] arm64: kdump: do not map crashkernel region
- specifically
+ 15.1.2507.21; Sat, 25 Mar 2023 10:04:34 +0800
+Subject: Re: [PATCH 3/3] arm64: kdump: defer the crashkernel reservation for
+ platforms with no DMA memory zones
 To:     Baoquan He <bhe@redhat.com>, <linux-kernel@vger.kernel.org>
 CC:     <catalin.marinas@arm.com>, <horms@kernel.org>,
         <John.p.donnelly@oracle.com>, <will@kernel.org>,
         <kexec@lists.infradead.org>, <ardb@kernel.org>, <rppt@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>
 References: <20230324131838.409996-1-bhe@redhat.com>
- <20230324131838.409996-3-bhe@redhat.com>
+ <20230324131838.409996-4-bhe@redhat.com>
 From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <36566d76-2e15-75c2-6c3b-2784aa8d2332@huawei.com>
-Date:   Sat, 25 Mar 2023 09:57:40 +0800
+Message-ID: <3653555d-3302-fc40-c917-963b029fc839@huawei.com>
+Date:   Sat, 25 Mar 2023 10:04:33 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20230324131838.409996-3-bhe@redhat.com>
+In-Reply-To: <20230324131838.409996-4-bhe@redhat.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  dggpemm500006.china.huawei.com (7.185.36.236)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
@@ -57,90 +57,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 2023/3/24 21:18, Baoquan He wrote:
-> After taking off the protection functions on crashkernel memory region,
-> there's no need to map crashkernel region with page granularity during
-> linear mapping.
+> In commit 031495635b46 ("arm64: Do not defer reserve_crashkernel() for
+> platforms with no DMA memory zones"), reserve_crashkernel() is called
+> much earlier in arm64_memblock_init() to avoid causing base apge
+> mapping on platforms with no DMA meomry zones.
 > 
-> With this change, the system can make use of block or section mapping
-> on linear region to largely improve perforcemence during system bootup
-> and running.
+> With taking off protection on crashkernel memory region, no need to call
+> reserve_crashkernel() specially in advance. The deferred invocation of
+> reserve_crashkernel() in bootmem_init() can cover all cases.
 > 
 > Signed-off-by: Baoquan He <bhe@redhat.com>
 > ---
->  arch/arm64/mm/mmu.c | 43 -------------------------------------------
->  1 file changed, 43 deletions(-)
+>  arch/arm64/include/asm/memory.h | 5 -----
+>  arch/arm64/mm/init.c            | 6 +-----
+>  2 files changed, 1 insertion(+), 10 deletions(-)
 > 
-> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> index 6f9d8898a025..7556020a27b7 100644
-> --- a/arch/arm64/mm/mmu.c
-> +++ b/arch/arm64/mm/mmu.c
-> @@ -510,21 +510,6 @@ void __init mark_linear_text_alias_ro(void)
->  			    PAGE_KERNEL_RO);
->  }
+> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+> index 78e5163836a0..efcd68154a3a 100644
+> --- a/arch/arm64/include/asm/memory.h
+> +++ b/arch/arm64/include/asm/memory.h
+> @@ -374,11 +374,6 @@ static inline void *phys_to_virt(phys_addr_t x)
+>  })
 >  
-> -static bool crash_mem_map __initdata;
+>  void dump_mem_limit(void);
 > -
-> -static int __init enable_crash_mem_map(char *arg)
+> -static inline bool defer_reserve_crashkernel(void)
 > -{
-> -	/*
-> -	 * Proper parameter parsing is done by reserve_crashkernel(). We only
-> -	 * need to know if the linear map has to avoid block mappings so that
-> -	 * the crashkernel reservations can be unmapped later.
-> -	 */
-> -	crash_mem_map = true;
-> -
-> -	return 0;
+> -	return IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32);
 > -}
-> -early_param("crashkernel", enable_crash_mem_map);
-> -
->  static void __init map_mem(pgd_t *pgdp)
->  {
->  	static const u64 direct_map_end = _PAGE_END(VA_BITS_MIN);
-> @@ -554,16 +539,6 @@ static void __init map_mem(pgd_t *pgdp)
->  	 */
->  	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+>  #endif /* !ASSEMBLY */
 >  
-> -#ifdef CONFIG_KEXEC_CORE
-> -	if (crash_mem_map) {
-> -		if (defer_reserve_crashkernel())
-> -			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
-> -		else if (crashk_res.end)
-> -			memblock_mark_nomap(crashk_res.start,
-> -			    resource_size(&crashk_res));
-> -	}
-> -#endif
+>  /*
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index 58a0bb2c17f1..b888de59e0b7 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -408,9 +408,6 @@ void __init arm64_memblock_init(void)
+>  
+>  	early_init_fdt_scan_reserved_mem();
+>  
+> -	if (!defer_reserve_crashkernel())
+> -		reserve_crashkernel();
 > -
->  	/* map all the memory banks */
->  	for_each_mem_range(i, &start, &end) {
->  		if (start >= end)
-> @@ -590,24 +565,6 @@ static void __init map_mem(pgd_t *pgdp)
->  	__map_memblock(pgdp, kernel_start, kernel_end,
->  		       PAGE_KERNEL, NO_CONT_MAPPINGS);
->  	memblock_clear_nomap(kernel_start, kernel_end - kernel_start);
-> -
-> -	/*
-> -	 * Use page-level mappings here so that we can shrink the region
-> -	 * in page granularity and put back unused memory to buddy system
-> -	 * through /sys/kernel/kexec_crash_size interface.
-> -	 */
-> -#ifdef CONFIG_KEXEC_CORE
-> -	if (crash_mem_map && !defer_reserve_crashkernel()) {
-> -		if (crashk_res.end) {
-> -			__map_memblock(pgdp, crashk_res.start,
-> -				       crashk_res.end + 1,
-> -				       PAGE_KERNEL,
-> -				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
-> -			memblock_clear_nomap(crashk_res.start,
-> -					     resource_size(&crashk_res));
-> -		}
-> -	}
-> -#endif
+>  	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
 >  }
 >  
->  void mark_rodata_ro(void)
-> 
+> @@ -457,8 +454,7 @@ void __init bootmem_init(void)
+>  	 * request_standard_resources() depends on crashkernel's memory being
+>  	 * reserved, so do it here.
+>  	 */
+> -	if (defer_reserve_crashkernel())
+> -		reserve_crashkernel();
+> +	reserve_crashkernel();
+>  
+>  	memblock_dump_all();
+>  }
 
-Reviewed-by: Zhen Lei <thunder.leizhen@huawei.com>
+Some comments also need to be deleted, above the definition of arm64_dma_phys_limit
+in arch/arm64/mm/init.c
+
+> 
 
 -- 
 Regards,
