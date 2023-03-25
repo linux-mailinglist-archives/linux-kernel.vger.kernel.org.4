@@ -2,90 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7BA6C8E31
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 13:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D656C8E33
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 13:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjCYMcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 08:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S230522AbjCYMcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 08:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjCYMcH (ORCPT
+        with ESMTP id S229674AbjCYMcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 08:32:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960F611171;
-        Sat, 25 Mar 2023 05:32:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50B07B8075B;
-        Sat, 25 Mar 2023 12:32:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF05C433D2;
-        Sat, 25 Mar 2023 12:32:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679747523;
-        bh=juilGb7bs/wbisWQoWXEvsQcaNpcQtaSUuekDXjow7A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Gr7DmWAPrns6fda+dhtZllEohQxfiEX2Fdy3/koM9lROVtsxbbcBK5vyMVmoJSVNL
-         fF+n0ZJ2oBbEBSrkXWEHg7kRkkO3U2dJUcZY2Aq3VqkzcUZqRXsqj8vWfF4JBIdkyl
-         08NbRlMwx5XIiEllhI+1jJDsmuQ9Pk667m+iQRNQb1Ij79DIQaF5/MMH4ZMmUjK2S9
-         Ckk6OerqfK9pOHqwohchAeS/Isra16Xcy7YAVytouDRzGwP3ePKJF7ndr5/DM2JUC7
-         20Mc9AnaKk+fqIBphCGDD67GNQ8GNGiHVlWzdLQUSDVuh7uqXanRm2iEkuHzStbHHp
-         nnfmC3iI3jGlA==
-Date:   Sat, 25 Mar 2023 12:32:00 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] regmap: Add some basic kunit tests
-Message-ID: <ZB7pwKh8A2lZc1sU@sirena.org.uk>
-References: <20230324-regmap-kunit-v1-0-62ef9cfa9b89@kernel.org>
- <20230324-regmap-kunit-v1-2-62ef9cfa9b89@kernel.org>
- <CABVgOSmFkFihwT_AN0foqu+_=MQ_rJMPi7MKgj0Y8Dk0d_L2zA@mail.gmail.com>
+        Sat, 25 Mar 2023 08:32:51 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B6710AA8
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 05:32:50 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id f22so65490plr.0
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 05:32:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679747569;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rch3xYeG6DW9krPGWOTHk/HlZRTT0Lo7FDRCIHvxzBM=;
+        b=iA6Dbjd9N731A7vonAEnSIfWCUqbLY9wEJDMC+7U/sB4Rwz6WAsT04sEvBo38q+YuH
+         xWOYYPDCLYcCso4jv3/7BCVFkzzJmwjA55ixMMU9rdz99xpveX8aX9aeLXSL/wiifBu3
+         JE7keyQkrz8wjiUBtbq0AXWbAQJLkg6XvqkGwPmg50x4vhAaeJlZbKeB4LZfvT5hO7BG
+         EExy5W4ThSYz9b1kGtwlfto7GDSSK1u0LYs+SFx0O4PRNUMzWBSu5IUQ81xDTIF7FWI3
+         CJZvWX2TrMtVzumxtiuI7C/DUz//HPaxxj04+xLd//2YIyBOqf8TX3VoeYlD6ekI53JS
+         0hLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679747569;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rch3xYeG6DW9krPGWOTHk/HlZRTT0Lo7FDRCIHvxzBM=;
+        b=yAZLsiY5iWQRVSpR2tqtIxftGfICPYfpd2syKw/ObM5pDvpykMVC6fMdKUbZ2ZkK8A
+         hJQdV/B/73pYfBBiB5LHcyXjLb3MYh1H3PEOpGm5QY7ZNEyoHyuZI6jgiKbYagVXfsqU
+         oZqdryHtgoFUuSpNckhCU+r9KY2YjdcKmsMer23xiaoNXF2r81BG6A5yxDg4DglnsPB5
+         B3NQyO/jT/23U5oSFBDTt5R2XTevCNDW/CS13uBqYxAea+mIC65ztJY+8m/JSbkrVXu9
+         /GdPxKhsfk9IvifH2mALEhrE27mDsuRUwCVjkda5oyUQUaibKEhRE/ldY5T3Bg/U13s4
+         s9Dg==
+X-Gm-Message-State: AAQBX9eJtENEEoukicEdPZM06XliQ4OyVjqi08+ivIEemOFcNoirQsFV
+        5CpWMqA7oUxCAk4KmTcAvCo/s2y9B4w=
+X-Google-Smtp-Source: AKy350ZnRk0irYtRxvgTqRS9Bhou8b3jvF/ZcJZgoLfDeil+OxYjWvaFMsIMsZZD1rYvA+GOD+UwtA==
+X-Received: by 2002:a17:902:ba88:b0:19e:25b4:7740 with SMTP id k8-20020a170902ba8800b0019e25b47740mr5173078pls.28.1679747569394;
+        Sat, 25 Mar 2023 05:32:49 -0700 (PDT)
+Received: from Dommie-Laptop.. (111-248-124-24.dynamic-ip.hinet.net. [111.248.124.24])
+        by smtp.gmail.com with ESMTPSA id l18-20020a170902d35200b0019468fe44d3sm15807134plk.25.2023.03.25.05.32.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Mar 2023 05:32:49 -0700 (PDT)
+From:   Yan-Jie Wang <yanjiewtw@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Yan-Jie Wang <yanjiewtw@gmail.com>
+Subject: [PATCH v3] lib/list_sort: reduce if-statements
+Date:   Sat, 25 Mar 2023 20:32:16 +0800
+Message-Id: <20230325123216.226120-1-yanjiewtw@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230325091654.106040-1-yanjiewtw@gmail.com>
+References: <20230325091654.106040-1-yanjiewtw@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rRd4vd+XwEmqkyDu"
-Content-Disposition: inline
-In-Reply-To: <CABVgOSmFkFihwT_AN0foqu+_=MQ_rJMPi7MKgj0Y8Dk0d_L2zA@mail.gmail.com>
-X-Cookie: Single tasking: Just Say No.
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Reduce if-statements in merge and merge_final functions by using
+indirect pointers and bitwise operations.
 
---rRd4vd+XwEmqkyDu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This will make the code more elegant and reduce the number of branch
+instructions in compiled code.
 
-On Sat, Mar 25, 2023 at 02:30:17PM +0800, David Gow wrote:
+Signed-off-by: Yan-Jie Wang <yanjiewtw@gmail.com>
+---
+Changes since v2:
+ * Remove unnecessory assignments to the variable, node.
 
-> It looks like regmap.basic_ranges is broken here (um, i386, arm64):
+Changes since v1:
+ * Use do-while instead of for-loop to avoid an unnecessory check at
+   the beginning of the loop.
+ * After moving *node to the next node, just check whether *node is
+   NULL or not instead of checking both a && b to determine whether to
+   continue.
+ * Above changes further reduces the compiled code size and branch
+   instructions.
 
-> Am I missing a prerequisite?
+ lib/list_sort.c       | 55 ++++++++++++-------------------------------
+ tools/lib/list_sort.c | 55 ++++++++++++-------------------------------
+ 2 files changed, 30 insertions(+), 80 deletions(-)
 
-Yes, there's a missing feature there which means that ranges
-don't do anything with the specific interface regmap-ram uses - I
-already posted a patch for it, should appear in -next next week.
+diff --git a/lib/list_sort.c b/lib/list_sort.c
+index 0fb59e92ca2d..9a2745a1a44b 100644
+--- a/lib/list_sort.c
++++ b/lib/list_sort.c
+@@ -16,28 +16,15 @@ __attribute__((nonnull(2,3,4)))
+ static struct list_head *merge(void *priv, list_cmp_func_t cmp,
+ 				struct list_head *a, struct list_head *b)
+ {
+-	struct list_head *head, **tail = &head;
++	struct list_head *head, **tail = &head, **node;
+ 
+-	for (;;) {
++	do {
+ 		/* if equal, take 'a' -- important for sort stability */
+-		if (cmp(priv, a, b) <= 0) {
+-			*tail = a;
+-			tail = &a->next;
+-			a = a->next;
+-			if (!a) {
+-				*tail = b;
+-				break;
+-			}
+-		} else {
+-			*tail = b;
+-			tail = &b->next;
+-			b = b->next;
+-			if (!b) {
+-				*tail = a;
+-				break;
+-			}
+-		}
+-	}
++		node = cmp(priv, a, b) <= 0 ? &a : &b;
++		*tail = *node;
++		tail = &(*node)->next;
++	} while ((*node = (*node)->next));
++	*tail = (struct list_head *) ((uintptr_t) a | (uintptr_t) b);
+ 	return head;
+ }
+ 
+@@ -52,29 +39,17 @@ __attribute__((nonnull(2,3,4,5)))
+ static void merge_final(void *priv, list_cmp_func_t cmp, struct list_head *head,
+ 			struct list_head *a, struct list_head *b)
+ {
+-	struct list_head *tail = head;
++	struct list_head *tail = head, **node;
+ 	u8 count = 0;
+ 
+-	for (;;) {
++	do {
+ 		/* if equal, take 'a' -- important for sort stability */
+-		if (cmp(priv, a, b) <= 0) {
+-			tail->next = a;
+-			a->prev = tail;
+-			tail = a;
+-			a = a->next;
+-			if (!a)
+-				break;
+-		} else {
+-			tail->next = b;
+-			b->prev = tail;
+-			tail = b;
+-			b = b->next;
+-			if (!b) {
+-				b = a;
+-				break;
+-			}
+-		}
+-	}
++		node = cmp(priv, a, b) <= 0 ? &a : &b;
++		tail->next = *node;
++		(*node)->prev = tail;
++		tail = *node;
++	} while ((*node = (*node)->next));
++	b = (struct list_head *) ((uintptr_t) a | (uintptr_t) b);
+ 
+ 	/* Finish linking remainder of list b on to tail */
+ 	tail->next = b;
+diff --git a/tools/lib/list_sort.c b/tools/lib/list_sort.c
+index 10c067e3a8d2..5054b2196981 100644
+--- a/tools/lib/list_sort.c
++++ b/tools/lib/list_sort.c
+@@ -15,28 +15,15 @@ __attribute__((nonnull(2,3,4)))
+ static struct list_head *merge(void *priv, list_cmp_func_t cmp,
+ 				struct list_head *a, struct list_head *b)
+ {
+-	struct list_head *head, **tail = &head;
++	struct list_head *head, **tail = &head, **node;
+ 
+-	for (;;) {
++	do {
+ 		/* if equal, take 'a' -- important for sort stability */
+-		if (cmp(priv, a, b) <= 0) {
+-			*tail = a;
+-			tail = &a->next;
+-			a = a->next;
+-			if (!a) {
+-				*tail = b;
+-				break;
+-			}
+-		} else {
+-			*tail = b;
+-			tail = &b->next;
+-			b = b->next;
+-			if (!b) {
+-				*tail = a;
+-				break;
+-			}
+-		}
+-	}
++		node = cmp(priv, a, b) <= 0 ? &a : &b;
++		*tail = *node;
++		tail = &(*node)->next;
++	} while ((*node = (*node)->next));
++	*tail = (struct list_head *) ((uintptr_t) a | (uintptr_t) b);
+ 	return head;
+ }
+ 
+@@ -51,29 +38,17 @@ __attribute__((nonnull(2,3,4,5)))
+ static void merge_final(void *priv, list_cmp_func_t cmp, struct list_head *head,
+ 			struct list_head *a, struct list_head *b)
+ {
+-	struct list_head *tail = head;
++	struct list_head *tail = head, **node;
+ 	u8 count = 0;
+ 
+-	for (;;) {
++	do {
+ 		/* if equal, take 'a' -- important for sort stability */
+-		if (cmp(priv, a, b) <= 0) {
+-			tail->next = a;
+-			a->prev = tail;
+-			tail = a;
+-			a = a->next;
+-			if (!a)
+-				break;
+-		} else {
+-			tail->next = b;
+-			b->prev = tail;
+-			tail = b;
+-			b = b->next;
+-			if (!b) {
+-				b = a;
+-				break;
+-			}
+-		}
+-	}
++		node = cmp(priv, a, b) <= 0 ? &a : &b;
++		tail->next = *node;
++		(*node)->prev = tail;
++		tail = *node;
++	} while ((*node = (*node)->next));
++	b = (struct list_head *) ((uintptr_t) a | (uintptr_t) b);
+ 
+ 	/* Finish linking remainder of list b on to tail */
+ 	tail->next = b;
 
---rRd4vd+XwEmqkyDu
-Content-Type: application/pgp-signature; name="signature.asc"
+base-commit: 65aca32efdcb0965502d3db2f1fa33838c070952
+-- 
+2.34.1
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQe6bsACgkQJNaLcl1U
-h9B1/Af7BcRxbgIGOIl103TYUvJEpFuj408vW+Y9GyNi+6E4H5h6zjxZtu8+cOGd
-CC7URdVmAIuu2pKkdTrDmiWVGsOYjwQ81W7agQvJI/pBtXvK0D7v0OYMIu78ozK4
-1Byxdar+2pp2h9/tika1ST0EQ8grphAPcTyLiYWpRxhVuhrA8B2SrI4iPbicS1Q9
-ZBJyZ1DnKmHCq9R6vZVNluTgIkDz280hCavLxMdgBiqFSvL6qwKrRqkJe6z6IxTW
-c7jydFHJtC2MGk+UQjjAjUg0RRNyIkzTSxQbwQw7qGdnIIokIhLRGO4XC6Qlb0yA
-BAMgmQkV5P3+hYaD5XctyqDMq/hhlA==
-=i4UP
------END PGP SIGNATURE-----
-
---rRd4vd+XwEmqkyDu--
