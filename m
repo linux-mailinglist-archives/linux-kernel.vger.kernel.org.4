@@ -2,219 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02EAD6C8A4E
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 03:48:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BD76C8A58
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 03:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbjCYCsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 22:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
+        id S231681AbjCYCyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 22:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjCYCse (ORCPT
+        with ESMTP id S229505AbjCYCym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 22:48:34 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856C4193F4;
-        Fri, 24 Mar 2023 19:48:32 -0700 (PDT)
-Received: from dggpeml500019.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Pk3N01Rcgz17Ncy;
-        Sat, 25 Mar 2023 10:45:20 +0800 (CST)
-Received: from [10.67.101.98] (10.67.101.98) by dggpeml500019.china.huawei.com
- (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Sat, 25 Mar
- 2023 10:48:29 +0800
-Message-ID: <26103329-9d00-226f-6b85-386766814618@hisilicon.com>
-Date:   Sat, 25 Mar 2023 10:48:29 +0800
+        Fri, 24 Mar 2023 22:54:42 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4F215170;
+        Fri, 24 Mar 2023 19:54:40 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id i5so15103146eda.0;
+        Fri, 24 Mar 2023 19:54:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679712879;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sRLA3AVBBHEbXMLoaXv9UfX4+UgIZrAq1UG9X24q8oA=;
+        b=UYqqbQxrYcFlwyWfoAsiljg848pmpCwLH0hEVNA96BfXUEEAOxU2eOOeNeK4626oeI
+         Y39dn/yp8caxqBtGxdPRJFKnOdGW+OzuxKmglhwUraMBrRCFwkTw6idY1MEhcvvBTSQd
+         3/O17kP84zwpOg+BRpmtkRCJOAmUZqKOMk1QlYh4LUGCwCKljFh/7EpDeUJfvLTb5lWG
+         5AM3kIHP0cZX/fHnw7epNnOtRiT22bb13M7azFm1qJWohtDdGQw+PdTNelTPGd37OGrF
+         fooNiMSl/HBfPzLi80EwGpxNINV0XiwaXSgj+Jk4uIFOQhW44T44yX018u+GoDkdQLga
+         NWMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679712879;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sRLA3AVBBHEbXMLoaXv9UfX4+UgIZrAq1UG9X24q8oA=;
+        b=kmlxxQG24eoIC9Sq0VqzRXViaf/5K5L17fhwKVx7C5Ev5faTDEs47witWM4cMo1qJz
+         oAJZfKsHb0kR+8w9e0DCPvbqUZVtFatQwQXeZiiuyRQLE1JaPAlbZ9bPHwGxXy6npgvF
+         7L9SMm6mrgnTSugNVVP4a5OECxg2MJrQKfom+6Q6Pa+xH7IIGJjtIwa4YCJIdoFO4p7C
+         ZWMVGW+aqSulLaO2yyVemqqLBTaTxTVbp6EnhsPlWrtJGlHRSePBssTpaOY3I2JZwyMH
+         o0ITlB9D+m5yT/Hnsqmt99H9N8edQwhCjw2BQ44/Ite3DtfrYEin7F+dDHHeeU1yt71q
+         d3NA==
+X-Gm-Message-State: AAQBX9ecWZF2oIfkG7tcNxgBU+7XCkqX4U+Nc7uWdlbQXGO9lXl8gUFA
+        j9N1gSLaAy/R9jkhwrfescsYEjbhsOxWDezBPFQ=
+X-Google-Smtp-Source: AKy350YyKqLq37BwTMQL1st81LQynw0UYRKshOWcpI4mo10TRiJUhC3HDWyxCxV5Du1xaOZi/rg54yF2qdwnUCxTPq0=
+X-Received: by 2002:a17:907:da8:b0:877:747d:4a85 with SMTP id
+ go40-20020a1709070da800b00877747d4a85mr2582166ejc.3.1679712878695; Fri, 24
+ Mar 2023 19:54:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [RFC PATCH v1 1/4] docs: perf: Add documentation for HiSilicon
- PMCU
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-CC:     <will@kernel.org>, <mark.rutland@arm.com>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <john.g.garry@oracle.com>, <james.clark@arm.com>,
-        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <corbet@lwn.net>, <shenyang39@huawei.com>, <hejunhao3@huawei.com>,
-        <yangyicong@hisilicon.com>, <prime.zeng@huawei.com>,
-        <suntao25@huawei.com>, <jiazhao4@hisilicon.com>,
-        <linuxarm@huawei.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-perf-users@vger.kernel.org>
-References: <20230206065146.645505-1-zhanjie9@hisilicon.com>
- <20230206065146.645505-2-zhanjie9@hisilicon.com>
- <20230317133710.00007d48@Huawei.com>
- <2d366bef-a891-6ee7-28bf-2091e0b78dbc@hisilicon.com>
- <20230324121431.000034c4@Huawei.com>
-From:   Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <20230324121431.000034c4@Huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.101.98]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500019.china.huawei.com (7.185.36.137)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
+ <CAADnVQLKONwKwkJMopRq-dzcV2ZejrjGzyuzW_5QX=0BY=Z4jw@mail.gmail.com>
+ <b5c80613c696818ce89b92dac54e98878ec3ccd0.camel@huaweicloud.com>
+ <CAADnVQJC0h7rtuntt0tqS5BbxWsmyWs3ZSbboZMmUKetMG2VhA@mail.gmail.com> <e0b828d994a8427ad48b7b514f75d751ea791b47.camel@huaweicloud.com>
+In-Reply-To: <e0b828d994a8427ad48b7b514f75d751ea791b47.camel@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 24 Mar 2023 19:54:27 -0700
+Message-ID: <CAADnVQJv0qWaxRD2_tmXeR9Wf=zdnvk8SwztOAorGaer0dFv3w@mail.gmail.com>
+Subject: Re: [PATCH 0/5] usermode_driver: Add management library and API
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 24/03/2023 20:14, Jonathan Cameron wrote:
-> On Fri, 24 Mar 2023 17:32:15 +0800
-> Jie Zhan <zhanjie9@hisilicon.com> wrote:
+On Thu, Mar 23, 2023 at 6:37=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
 >
->> On 17/03/2023 21:37, Jonathan Cameron wrote:
->>> On Mon, 6 Feb 2023 14:51:43 +0800
->>> Jie Zhan <zhanjie9@hisilicon.com> wrote:
->>>   
->>>> Document the overview and usage of HiSilicon PMCU.
->>>>
->>>> HiSilicon Performance Monitor Control Unit (PMCU) is a device that offloads
->>>> PMU accesses from CPUs, handling the configuration, event switching, and
->>>> counter reading of core PMUs on Kunpeng SoC. It facilitates fine-grained
->>>> and multi-PMU-event CPU profiling, in which scenario the current 'perf'
->>>> scheme may lose events or drop sampling frequency. With PMCU, users can
->>>> reliably obtain the data of up to 240 PMU events with the sample interval
->>>> of events down to 1ms, while the software overhead of accessing PMUs, as
->>>> well as its impact on target workloads, is reduced.
->>>>
->>>> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
->>> Nice documentation. I've read this a few times before, but on this read
->>> through wondered if we could say anything about the skew between capture
->>> of the counters.  Not that important though so I'm happy to add
->>>
->>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->>>
->>> though this may of course need updating significantly as the interface
->>> is refined (the RFC question you raised for example in the cover letter).
->>>
->>> Thanks
->>>
->>> Jonathan
->>>   
->>>> ---
->>>>    Documentation/admin-guide/perf/hisi-pmcu.rst | 183 +++++++++++++++++++
->>>>    Documentation/admin-guide/perf/index.rst     |   1 +
->>>>    2 files changed, 184 insertions(+)
->>>>    create mode 100644 Documentation/admin-guide/perf/hisi-pmcu.rst
->>>>
->>>> diff --git a/Documentation/admin-guide/perf/hisi-pmcu.rst b/Documentation/admin-guide/perf/hisi-pmcu.rst
->>>> new file mode 100644
->>>> index 000000000000..50d17cbd0049
->>>> --- /dev/null
->>>> +++ b/Documentation/admin-guide/perf/hisi-pmcu.rst
->>>> @@ -0,0 +1,183 @@
->>>> +.. SPDX-License-Identifier: GPL-2.0
->>>> +
->>>> +==========================================
->>>> +HiSilicon Performance Monitor Control Unit
->>>> +==========================================
->>>> +
->>>> +Introduction
->>>> +============
->>>> +
->>>> +HiSilicon Performance Monitor Control Unit (PMCU) is a device that offloads
->>>> +PMU accesses from CPUs, handling the configuration, event switching, and
->>>> +counter reading of core PMUs on Kunpeng SoC. It facilitates fine-grained
->>>> +and multi-PMU-event CPU profiling, in which scenario the current ``perf``
->>>> +scheme may lose events or drop sampling frequency. With PMCU, users can
->>>> +reliably obtain the data of up to 240 PMU events with the sample interval
->>>> +of events down to 1ms, while the software overhead of accessing PMUs, as
->>>> +well as its impact on target workloads, is reduced.
->>>> +
->>>> +Each CPU die is equipped with a PMCU device. The PMCU driver registers it as a
->>>> +PMU device, named as ``hisi_pmcu_sccl<N>``, where ``<N>`` is the corresponding
->>>> +CPU die ID. When triggered, PMCU reads event IDs and pass them to PMUs in all
->>>> +CPUs on the CPU die it is on. PMCU then starts the counters for counting
->>>> +events, waits for a time interval, and stops them. The PMU counter readings are
->>>> +dumped from hardware to memory, i.e. perf AUX buffers, and further copied to
->>>> +the ``perf.data`` file in the user space. PMCU automatically switches events
->>>> +(when there are more events than available PMU counters) and completes multiple
->>>> +rounds of PMU event counting in one trigger.
->>>> +
->>>> +Hardware overview
->>>> +=================
->>>> +
->>>> +On Kunpeng SoC, each CPU die is equipped with a PMCU device. PMCU acts like an
->>>> +assistant to access the core PMUs on its die and move the counter readings to
->>>> +memory. An overview of PMCU's hardware organization is shown below::
->>>> +
->>>> +                                +--------------------+
->>>> +                                |       Memory       |
->>>> +                                | +------+ +-------+ |
->>>> +                   +--------+   | |Events| |Samples| |
->>>> +                   |  PMCU  |   | +------+ +-------+ |
->>>> +                   +---|----+   +---------|----------+
->>>> +                       |                  |
->>>> +        =======================================================  Bus
->>>> +                   |                         |               |
->>>> +        +----------|----------+   +----------|----------+    |
->>>> +        | +------+ | +------+ |   | +------+ | +------+ |    |
->>>> +        | |Core 0| | |Core 1| |   | |Core 0| | |Core 1| |    |
->>>> +        | +--|---+ | +--|---+ |   | +--|---+ | +--|---+ |  (More
->>>> +        |    +-----+----+     |   |    +-----+----+     |  clusters
->>>> +        | +--|---+   +--|---+ |   | +--|---+   +--|---+ |  ...)
->>>> +        | |Core 2|   |Core 3| |   | |Core 2|   |Core 3| |
->>>> +        | +------+   +------+ |   | +------+   +------+ |
->>>> +        |    CPU Cluster 0    |   |    CPU Cluster 1    |
->>>> +        +---------------------+   +---------------------+
->>>> +
->>>> +On Kunpeng SoC, a CPU die is formed of several CPU clusters and several
->>>> +CPUs per cluster. PMCU is able to access the core PMUs in these CPUs.
->>>> +The main job of PMCU is to fetch PMU event IDs from memory, make PMUs count the
->>>> +events for a while, and move the counter readings back to memory.
->>>> +
->>>> +Once triggered, PMCU performs a number of loops and processes a number of
->>>> +events in each loop. It fetches ``nr_pmu`` events from memory at a time, where
->>>> +``nr_pmu`` denotes the number of PMU counters to be used in each CPU. The
->>>> +``nr_pmu`` events are passed to the PMU counters of all CPUs on the CPU die
->>>> +where PMCU resides. Then, PMCU starts all the counters, waits for a period,
->>>> +stops all the counters, and moves the counter readings to memory, before
->>>> +handling the next ``nr_pmu`` events if there are more events to process in this
->>>> +loop. The number of loops and ``nr_pmu`` are determined by the driver, whereas
->>>> +the number of events to process depends on user inputs. The counters are
->>>> +stopped when PMCU reads counters and switches events, so there is a tiny time
->>>> +window during which the events are not counted.
->>> I'm not clear from this description whether there is 'skew' between the counters
->>> (beyond the normal issues from uarch).  Does the PMCU stop all counters
->>> then read them all (minimizing skew) or does it stop each CPUs set of counters
->>> and read those, or stop each individual counter before reading?
->>>
->>> My impression is that this feature is meant to be left running over timescales
->>> much longer than the sampling period so it may not be necessary to align the
->>> different lines on the resulting graphs perfectly.  Hence maybe this doesn't matter.
->>>   
->> Thanks for pointing this out.
->>
->> The PMCU stops all the counters before reading any counters (i.e. the
->> first case you said).
->>
->> The basic procedure is:
->>       start counters -> wait -> stop counters -> read and reset counters
->> -> switch events -> start counters -> ...
->> where each step applys to all CPUs and counters.
-> Great. So this is across all cores on a die so skew should be minimized
-> (at a cost of missing more events than a skew heavy approach).
+> On Wed, 2023-03-22 at 15:27 -0700, Alexei Starovoitov wrote:
+> > On Wed, Mar 22, 2023 at 5:08=E2=80=AFAM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > On Tue, 2023-03-21 at 19:23 -0700, Alexei Starovoitov wrote:
+> > > > On Fri, Mar 17, 2023 at 7:53=E2=80=AFAM Roberto Sassu
+> > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > >
+> > > > > A User Mode Driver (UMD) is a specialization of a User Mode Helpe=
+r (UMH),
+> > > > > which runs a user space process from a binary blob, and creates a
+> > > > > bidirectional pipe, so that the kernel can make a request to that=
+ process,
+> > > > > and the latter provides its response. It is currently used by bpf=
+ilter,
+> > > > > although it does not seem to do any useful work.
+> > > >
+> > > > FYI the new home for bpfilter is here:
+> > > > https://github.com/facebook/bpfilter
+> > >
+> > > Thanks. I just ensured that it worked, by doing:
+> > >
+> > > getsockopt(fd, SOL_IP, IPT_SO_GET_INFO, &info, &optlen);
+> > >
+> > > and accepting IPT_SO_GET_INFO in main.c.
+> > >
+> > > > > The problem is, if other users would like to implement a UMD simi=
+lar to
+> > > > > bpfilter, they would have to duplicate the code. Instead, make an=
+ UMD
+> > > > > management library and API from the existing bpfilter and sockopt=
+ code,
+> > > > > and move it to common kernel code.
+> > > > >
+> > > > > Also, define the software architecture and the main components of=
+ the
+> > > > > library: the UMD Manager, running in the kernel, acting as the fr=
+ontend
+> > > > > interface to any user or kernel-originated request; the UMD Loade=
+r, also
+> > > > > running in the kernel, responsible to load the UMD Handler; the U=
+MD
+> > > > > Handler, running in user space, responsible to handle requests fr=
+om the UMD
+> > > > > Manager and to send to it the response.
+> > > >
+> > > > That doesn't look like a generic interface for UMD.
+> > >
+> > > What would make it more generic? I made the API message format-
+> > > independent. It has the capability of starting the user space process
+> > > as required, when there is a communication.
+> > >
+> > > > It was a quick hack to get bpfilter off the ground, but certainly
+> > > > not a generic one.
+> > >
+> > > True, it is not generic in the sense that it can accomodate any
+> > > possible use case. The main goal is to move something that was runnin=
+g
+> > > in the kernel to user space, with the same isolation guarantees as if
+> > > the code was executed in the kernel.
+> >
+> > They are not the same guarantees.
+> > UMD is exactly equivalent to root process running in user space.
+> > Meaning it can be killed, ptraced, priority inverted, etc
 >
->> The counters don't count during the tiny stop-start window.
->> I guess a small improvement would be: reset -> read -> switch -> reset
->> -> ..., while the counters keep running,
->> but we still lose some event counts between read and reset, and thus, no
->> fundamental differrence.
-> Lots of ways to reduce both skew and missed counts, but I think you are
-> right in that none of them matter for the intended long term monitoring
-> usecase.
+> That is the starting point.
 >
-> Jonathan
-Yeah it focuses more on general workload characteristics than 
-time-senstive and
-precise program analysis.
+> I suppose you can remove any privilege from the UMD process, it just
+> needs to read/write from/to a pipe (and in my case to use socket() with
+> AF_ALG to interact with the Crypto API).
+>
+> Also, as I mentioned, you can enforce a very strict seccomp profile,
+> which forces the UMD process to use a very limited number of system
+> calls.
+>
+> For the interactions of the rest of the system to the UMD process, you
+> could deny with an LSM all the operations that you mentioned. The rest
+> of the system would not be affected, only operations which have the UMD
+> process as target are denied.
+>
+> > > > > I have two use cases, but for sake of brevity I will propose one.
+> > > > >
+> > > > > I would like to add support for PGP keys and signatures in the ke=
+rnel, so
+> > > > > that I can extend secure boot to applications, and allow/deny cod=
+e
+> > > > > execution based on the signed file digests included in RPM header=
+s.
+> > > > >
+> > > > > While I proposed a patch set a while ago (based on a previous wor=
+k of David
+> > > > > Howells), the main objection was that the PGP packet parser shoul=
+d not run
+> > > > > in the kernel.
+> > > > >
+> > > > > That makes a perfect example for using a UMD. If the PGP parser i=
+s moved to
+> > > > > user space (UMD Handler), and the kernel (UMD Manager) just insta=
+ntiates
+> > > > > the key and verifies the signature on already parsed data, this w=
+ould
+> > > > > address the concern.
+> > > >
+> > > > I don't think PGP parser belongs to UMD either.
+> > > > Please do it as a normal user space process and define a proper
+> > > > protocol for communication between kernel and user space.
+> > >
+> > > UMD is better in the sense that it establishes a bidirectional pipe
+> > > between the kernel and the user space process. With that, there is no
+> > > need to further restrict the access to a sysfs file, for example.
+> >
+> > If a simple pipe is good enough then you can have a kernel module
+> > that creates it and interacts with the user space process.
+>
+> Few points I forgot to mention.
+>
+> With the UMD approach, the binary blob is embedded in the kernel
+> module, which means that no external dependencies are needed for
+> integrity verification. The binary is statically compiled, and the
+> kernel write-protects it at run-time.
+>
+> Second, since DIGLIM would check the integrity of any executable,
+> including init, the PGP signature verification needs to occur before.
+> So, the PGP UMD should be already started by then. That is not going to
+> be a problem, since the binary is copied to a private tmpfs mount.
+>
+> > Out-of-tree bpftiler can do that, so can you.
+>
+> As far as I can see, the out-of-tree bpfilter works exactly in the same
+> way as the in-tree counterpart. The binary blob is embedded in the
+> kernel module.
+>
+> > PGP is not suitable for kernel git repo either as kernel code or as UMD=
+.
+>
+> Well, the asymmetric key type can be extended with new parsers, so this
+> possibility was already taken into account. The objection that the PGP
+> parser should not run in kernel space is fair, but I think the UMD
+> approach fully addresses that.
+>
+> Also, I agree with you that we should not just take any code and
+> pretend that it is part of the kernel. However, in this particular
+> case, the purpose of the PGP UMD would be simply to extract very few
+> information from the PGP packets. The asymmetric key type and the
+> signature verification infrastructure already take care of the rest.
+>
+> PGP keys and signatures would act as an additional system trust anchor
+> for verifying critical system data (for DIGLIM, which executables are
+> allowed to run), similarly to how X.509 certificates are used for
+> verifying kernel modules. RPM headers, executables digests are taken
+> from, are signed with PGP, so there is no other way than adding this
+> functionality.
+>
+> And unfortunately, especially for features impacting the entire system,
+> out-of-tree drivers are not really an option:
 
-Jie
+I think you have to start out of tree and prove that the PGP thing
+is worth considering at all.
+Only then we can talk about merits of UMD and generalization
+of pipe interface if it's applicable.
+
+DIGLIM and everything else you mentioned above doesn't add weight
+to the decision. PGP work should be acceptable on its own.
+Out-of-tree is a method to prove that it works and later argue
+for inclusion as in-tree either as kernel module or UMD.
+Generalization of current bpfilter is out of scope here.
