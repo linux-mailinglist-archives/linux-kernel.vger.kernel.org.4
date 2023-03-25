@@ -2,125 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7039A6C9072
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 20:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA88A6C9073
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 20:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbjCYTYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 15:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
+        id S231508AbjCYTZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 15:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjCYTYy (ORCPT
+        with ESMTP id S229460AbjCYTZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 15:24:54 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD2330C0;
-        Sat, 25 Mar 2023 12:24:52 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1CE7789F;
-        Sat, 25 Mar 2023 20:24:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1679772290;
-        bh=tG8wxnDoKhE6wm3AvyjW+76dHK/YLCiCysUyipc/yhU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AWjPw8uONxngtUjdrdiW6BYpT8VyfZWnbPubrTVOw9IaNipY+6kwvaZQdi6cA3m3L
-         N+t3QDVjYdSwNg9ghdL9KU3VJWMY1bVV0wkl/yDaKc49CyXXfuKdPb+dXhC7QYjWsF
-         Gth9J41F+BXyOopFAiqzTFz4mLlwj+piAmrgzCTA=
-Date:   Sat, 25 Mar 2023 21:24:56 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc:     Dafna Hirschfeld <dafna@fastmail.com>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] media: rkisp1: Make local immutable array
- variables static const
-Message-ID: <20230325192456.GE9876@pendragon.ideasonboard.com>
-References: <20221117084217.3892680-1-paul.elder@ideasonboard.com>
- <20221117084217.3892680-3-paul.elder@ideasonboard.com>
- <Y3lYcRySWnrLKpWe@pendragon.ideasonboard.com>
- <Y9MMhSVrWujmfgCR@pendragon.ideasonboard.com>
- <20230324103744.ww67j3di73xg4ois@uno.localdomain>
+        Sat, 25 Mar 2023 15:25:32 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B715430C0
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 12:25:31 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 401EC5C0054;
+        Sat, 25 Mar 2023 15:25:29 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Sat, 25 Mar 2023 15:25:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679772329; x=
+        1679858729; bh=F20hN5cmoUb7ZMiQCIUcAf557ZHjOrjpfezAUz/+nzY=; b=C
+        Gmc+c3g2DEkoY4krwTCYYXVNEm+SGdPUafJ/YisY5tj9vOW/nG8lJeb8ujJmXhgt
+        WaFn1p3ENyvGzc7a+Agl7amh4dxpKoh9fXmL9QgMxiwL0XdWlGh1PHZnInZVzYrV
+        k7h6ZuY9q8KVdN+0aZUbUSGs7JacG1oqxuUDpoDaUcY5YmBovRT4GrWeaW+k3KJN
+        Kys82rcorrTbJb4KWv2elly7uN4w/JQzuycfp3H4YfWJeBQnq63qXtVZbvNgAYmk
+        mx16ervjNfDHp0Kv/Jzsyrm5WAEjPwd8iezXDVVbswidLnooTW2NiNa3QM0pg0cW
+        q/ylnuCpIXoc0b2znYjRA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679772329; x=1679858729; bh=F20hN5cmoUb7Z
+        MiQCIUcAf557ZHjOrjpfezAUz/+nzY=; b=EeoXI1YzVWVTVkWRPBhlqMVKiYj1m
+        OEO7NioGTasn/v6KcdceRJfqBWBs8iSQTYgCxKTfYDDn4FHh+HsENI/nqSBc0aqA
+        kNMYWigMUqg//mXOHhOY4QcHMCbg36mNpw9yQFHRz696PZP5pTqqkFxg1JwCindz
+        ohCO+8650NTj22LgHZCujr1+NT5Ua/HQPw/TpBVCtqQuwvEkP8O3W0nvNhLOb+Ib
+        d8UVHgMLiq9wbAJ+pSiu8YdF9m3Mib9uyIioFqB+LDjHLiWzdUwoxto0MtP+jp1A
+        Y0sZouOYrXSFNITmxhVdlQVeydyU0w9lN+8BnH0fQn7OhQxWLhCwVQD6w==
+X-ME-Sender: <xms:qEofZFbj3ZwkojFP_FtkKRlkASPhBaZjbTNCCDyGrJDax7PtziRn8Q>
+    <xme:qEofZMYr95OvaMveRgxrWiMVPiuJzPZK4df54sxZr1hnGl7I1DfTUZj872gvLHBUj
+    _CRoJroVF80ZFfI_Dg>
+X-ME-Received: <xmr:qEofZH_feRcMb5omIRCp7IS3Jpzc4r8J3dEtrLJWuRdHSCMDcbvxw6SzlWwWoe4kPDcNcA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegkedguddvjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpedfmfhi
+    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
+    hnrghmvgeqnecuggftrfgrthhtvghrnhepkedvvdejffehteegtddvgfeijeeivdegjeei
+    teejheeiheevffeukeefheffvdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:qEofZDqvp-0wO6OYQc43RDh8s_Jcxaj87GPSdKgh6GCNDkYZ26Q9Qg>
+    <xmx:qEofZAp8j-mVWsJh15v_keUQ3eYUmOaKKJ2EpMeYo0lwB-2Kp5bdhw>
+    <xmx:qEofZJRop-GA93lYkhH5yI5dzfDoqqlKyYq1GFUqt9-7xPgQpIFJnQ>
+    <xmx:qUofZMel6wZsOl35SUCqFcc5Nqu553awLhZgPgpSeFtGFKmywS3uMQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 25 Mar 2023 15:25:27 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 3965210A607; Sat, 25 Mar 2023 22:25:24 +0300 (+03)
+Date:   Sat, 25 Mar 2023 22:25:24 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86: Disable kexec for TDX guests
+Message-ID: <20230325192524.wetlbycbcsxc4plk@box>
+References: <20230325160128.21857-1-kirill.shutemov@linux.intel.com>
+ <ebead33b-0594-73df-56ae-f40473ac0ffc@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230324103744.ww67j3di73xg4ois@uno.localdomain>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ebead33b-0594-73df-56ae-f40473ac0ffc@intel.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacopo,
-
-On Fri, Mar 24, 2023 at 11:37:44AM +0100, Jacopo Mondi wrote:
-> Hello
->    the change seems trivial, do we need an explicit ack from Dafna ?
-
-An alternative patch has been merged in commit 4ee8191c7c9f ("media:
-rkisp1: make a few const arrays static").
-
-> Dafna are you comfortable being listed as maintainer of this driver or
-> do you think you won't be able to dedicate time to it and need help ?
+On Sat, Mar 25, 2023 at 09:25:36AM -0700, Dave Hansen wrote:
+> On 3/25/23 09:01, Kirill A. Shutemov wrote:
+> > The last item is tricky. TDX guests use ACPI MADT MPWK to bring up
+> > secondary CPUs. The mechanism doesn't allow to put a CPU back offline if
+> > it has woken up.
+> ...
+> > +int arch_kexec_load(void)
+> > +{
+> > +	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
+> > +		pr_warn_once("Disable kexec: not yet supported in TDX guest\n");
+> > +		return -EOPNOTSUPP;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
 > 
-> Thanks
->    j
+> So, let's put all this together:
 > 
-> On Fri, Jan 27, 2023 at 01:28:05AM +0200, Laurent Pinchart wrote:
-> > On Sun, Nov 20, 2022 at 12:28:01AM +0200, Laurent Pinchart wrote:
-> > > Hi Dafna,
-> > >
-> > > Are you fine with this patch, can I include it in my next pull request
-> > > along with the other ones from the series ?
-> >
-> > Ping.
-> >
-> > > On Thu, Nov 17, 2022 at 05:42:16PM +0900, Paul Elder wrote:
-> > > > From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > >
-> > > > The max_widths and max_heights variables in rkisp1_try_fmt() are
-> > > > immutable and don't need to be allocated on the stack every time the
-> > > > function is called. Make them static.
-> > > >
-> > > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > > Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
-> > > > ---
-> > > >  .../media/platform/rockchip/rkisp1/rkisp1-capture.c  | 12 ++++++++----
-> > > >  1 file changed, 8 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-> > > > index 7695ef134908..91e685fdbbe9 100644
-> > > > --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-> > > > +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-> > > > @@ -1150,13 +1150,17 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
-> > > >  			   const struct rkisp1_capture_fmt_cfg **fmt_cfg,
-> > > >  			   const struct v4l2_format_info **fmt_info)
-> > > >  {
-> > > > +	static const unsigned int max_widths[] = {
-> > > > +		RKISP1_RSZ_MP_SRC_MAX_WIDTH,
-> > > > +		RKISP1_RSZ_SP_SRC_MAX_WIDTH,
-> > > > +	};
-> > > > +	static const unsigned int max_heights[] = {
-> > > > +		RKISP1_RSZ_MP_SRC_MAX_HEIGHT,
-> > > > +		RKISP1_RSZ_SP_SRC_MAX_HEIGHT,
-> > > > +	};
-> > > >  	const struct rkisp1_capture_config *config = cap->config;
-> > > >  	const struct rkisp1_capture_fmt_cfg *fmt;
-> > > >  	const struct v4l2_format_info *info;
-> > > > -	const unsigned int max_widths[] = { RKISP1_RSZ_MP_SRC_MAX_WIDTH,
-> > > > -					    RKISP1_RSZ_SP_SRC_MAX_WIDTH };
-> > > > -	const unsigned int max_heights[] = { RKISP1_RSZ_MP_SRC_MAX_HEIGHT,
-> > > > -					     RKISP1_RSZ_SP_SRC_MAX_HEIGHT};
-> > > >
-> > > >  	fmt = rkisp1_find_fmt_cfg(cap, pixm->pixelformat);
-> > > >  	if (!fmt) {
+> 1. TDX implementations use MADT for wakeup exclusively right now (but
+>    are not necessarily _required_ to do so forever)
+> 2. MADT doesn't support CPU offlining
+> 3. kexec() requires offlining
+> 
+> Thus, current TDX implementations can't support TDX guests.  This
+> *doesn't* say that TDX will always use the MADT for wakeups.
+> 
+> Yet, the check you have here is for TDX and *not* for the MADT.
+
+As I described in the commit message there are more than MADT that is
+required to get kexec in TDX guest.
+
+> That seems wrong.
+> 
+> Let's say SEV or arm64 comes along and uses the MADT for their guests.
+> They'll add another arch_kexec_load(), with a check for *their* feature.
+> 
+> This all seems like you should be disabling kexec() the moment the MADT
+> CPU wakeup is used instead of making it based on TDX.
+
+I guess we can go this path if you are fine with taking CR4.MCE and shared
+memory reverting patches (they require some rework, but I can get them
+into shape quickly). After that we can forbid kexec on machines with MADT
+if nr_cpus > 1.
+
+Sounds good?
 
 -- 
-Regards,
-
-Laurent Pinchart
+  Kiryl Shutsemau / Kirill A. Shutemov
