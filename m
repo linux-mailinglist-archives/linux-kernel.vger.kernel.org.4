@@ -2,59 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA846C8E59
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 14:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF236C8E5E
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 14:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbjCYND6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 09:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
+        id S231706AbjCYNHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 09:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjCYND4 (ORCPT
+        with ESMTP id S229588AbjCYNHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 09:03:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18294231;
-        Sat, 25 Mar 2023 06:03:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CB8860C4F;
-        Sat, 25 Mar 2023 13:03:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 021D7C433EF;
-        Sat, 25 Mar 2023 13:03:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679749433;
-        bh=SdU9kHEoxW2j7sZXsy+1t2VVON6O+/GheN3KRNLgs1E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lODoXwMzbTBrWzv4nDvHf9nn7KL/E7kjb22atsRTMAfthkBVqZOoHTNKCNBxvZGkY
-         fNjc8eP5VZ8JDHfLEyYaReVfSYoJx9a4Spl4Ndw5K19r7uyZ0g+/njV0/T4vpymnL+
-         Oq1uKEdQwEJi6UHPKTj58iCdB5sn9RiUNiUWSZlxFsf0JXIZJEWrAovXN95Hv7EZnd
-         BzEyvLugFp6TihFwMV4fYlQbv1/npZYKtaDhVN6a3JdWLejC+9fKplxXl2IWXEFo1U
-         Dtzy8gxUgrcqikmDA9Xq16aTjbXRAG25sJ+xU3hnDmJY/zwkv5GC5e2wjgUv7Hapzr
-         n3A/hHaCfTSlQ==
-Message-ID: <88c7d438-28ad-cc17-6abe-d8e1853260e9@kernel.org>
-Date:   Sat, 25 Mar 2023 15:03:49 +0200
+        Sat, 25 Mar 2023 09:07:04 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA3114230
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 06:07:03 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id a16so3706158pjs.4
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 06:07:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679749623;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YJ3KuuBrlAYLFmifpQ6wlXBvIVtyyao45NhdlqvQcls=;
+        b=ecBU0UrkGa9a8NOl1CQc2ckAIECR+hQ+UQbkVHCcAEAyx9ibQta/z3i5DyskVxkYr+
+         rlRq4QFuixO0Eyzjmgg3M49fJverSG8S/8eDz/wl5oCU88vD7rIq/IZmHFDP5wLJCoOY
+         cYqW1ayF5OCmWghTeD4GyOA2uw+x1anLZz9WDrDdG+EeZHKL1F8b+tEClajZazXOJfmO
+         ta8iImqmAo2W7RSRowc34F65Qv0P5sLdu9vdlb6P0QdCRKFMwZ609rKs8sGbjee7kBhV
+         p/O1vTEeUrUuJwSzH3gi8ukmlGJ7LRQda5k1xKF977f2rsssWI4+jLTtQoCQ7OZrKVsw
+         ur5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679749623;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YJ3KuuBrlAYLFmifpQ6wlXBvIVtyyao45NhdlqvQcls=;
+        b=OxM0sHq9vWA+8zHjDcH3mOWZ5hFApfZi8kOz6xcNTJdwlXHNhJIvhrGkHEA0021AM3
+         egxdAHBPGXwqBbn0jd5dJFDY0EIzjoVbOWHJjvx8fRpTJPkXX1tdkQMcCgayNQ35Rvzh
+         oXBmAzy1Wl/UV86DLBT3TSzIvzxJ2NvPZLDxGDbNTPwu33K3eEorRytEtzjnvW0fmZhk
+         B+nbxpxOxgEfGx6uH3x2N+s9MgkHD3VXRHUxk4cBwM6GA9x1/NYTHNsS9ydymhiJnj4L
+         0fQMMlujYBGC7opv45AQ5PqAdvhBXsSCWFMgxsYetdN20t3lxrRGWaXq0DtJ+8L7m+Nw
+         r1dw==
+X-Gm-Message-State: AAQBX9d6NBUqx0OTcpN2imXQGUji9699HO1MdGRAi38zjmXPOds+Bz+X
+        IEEptaljMspU8kfh69y5J6oyuxA9SyLgkw==
+X-Google-Smtp-Source: AKy350bIpAKaJBKjTWM619QL/G0tmjuC66mx+W6lrHD2PvMLvzgY1CyZpB4uPClvh6xpUW/uW9F6rQ==
+X-Received: by 2002:a17:902:f693:b0:19e:6bc5:8769 with SMTP id l19-20020a170902f69300b0019e6bc58769mr5871771plg.69.1679749623404;
+        Sat, 25 Mar 2023 06:07:03 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-4.three.co.id. [180.214.232.4])
+        by smtp.gmail.com with ESMTPSA id x8-20020a170902820800b0019a7ef5e9a8sm15970481pln.82.2023.03.25.06.07.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Mar 2023 06:07:02 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 997521066E1; Sat, 25 Mar 2023 20:06:59 +0700 (WIB)
+Date:   Sat, 25 Mar 2023 20:06:58 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Jingyu Wang <jingyuwang_vip@163.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/gup.c: fix typo in comments
+Message-ID: <ZB7x8mr8Lf27PP6Q@debian.me>
+References: <20230309104813.170309-1-jingyuwang_vip@163.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] arm64: dts: ti: k3-am625-sk: Enable Type-C port for
- USB0
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>
-Cc:     vigneshr@ti.com, kristo@kernel.org, srk@ti.com,
-        r-gunasekaran@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230324133150.43224-1-rogerq@kernel.org>
- <20230324133150.43224-3-rogerq@kernel.org>
- <20230324181542.luvmpvjx2uclic52@reemerge>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230324181542.luvmpvjx2uclic52@reemerge>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iePgKU5MYRLJXR3w"
+Content-Disposition: inline
+In-Reply-To: <20230309104813.170309-1-jingyuwang_vip@163.com>
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -62,91 +75,34 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--iePgKU5MYRLJXR3w
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 24/03/2023 20:15, Nishanth Menon wrote:
-> On 15:31-20230324, Roger Quadros wrote:
->> USB0 is a Type-C port with dual data role and power sink.
->>
->> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->> ---
->>  arch/arm64/boot/dts/ti/k3-am625-sk.dts | 40 ++++++++++++++++++++++++--
->>  1 file changed, 38 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
->> index be027fad5f61..c80b12943881 100644
->> --- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
->> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
->> @@ -315,6 +315,33 @@ &main_i2c0 {
->>  	pinctrl-names = "default";
->>  	pinctrl-0 = <&main_i2c0_pins_default>;
->>  	clock-frequency = <400000>;
->> +
->> +	tps6598x@3f {
->> +		compatible = "ti,tps6598x";
->> +		reg = <0x3f>;
->> +		interrupt-parent = <&exp1>;
->> +		interrupts = <17 IRQ_TYPE_EDGE_FALLING>;
->> +		interrupt-names = "irq";
->> +
->> +		connector {
->> +			compatible = "usb-c-connector";
->> +			label = "USB-C";
->> +			self-powered;
->> +			data-role = "dual";
->> +			power-role = "sink";
->> +			ports {
->> +				#address-cells = <1>;
->> +				#size-cells = <0>;
->> +
->> +				port@0 {
->> +					reg = <0>;
->> +					usb_con_hs: endpoint {
->> +						remote-endpoint = <&usb0_hs_ep>;
->> +					};
->> +				};
->> +			};
->> +		};
->> +	};
->>  };
->>  
->>  &main_i2c1 {
->> @@ -336,7 +363,7 @@ exp1: gpio@22 {
->>  				   "UART1_FET_BUF_EN", "WL_LT_EN",
->>  				   "GPIO_HDMI_RSTn", "CSI_GPIO1",
->>  				   "CSI_GPIO2", "PRU_3V3_EN",
->> -				   "HDMI_INTn", "TEST_GPIO2",
->> +				   "HDMI_INTn", "PD_I2C_IRQ",
->>  				   "MCASP1_FET_EN", "MCASP1_BUF_BT_EN",
->>  				   "MCASP1_FET_SEL", "UART1_FET_SEL",
->>  				   "TSINT#", "IO_EXP_TEST_LED";
->> @@ -486,7 +513,16 @@ &usbss1 {
->>  };
->>  
->>  &usb0 {
->> -	dr_mode = "peripheral";
->> +	#address-cells = <1>;
->> +	#size-cells = <0>;
->> +	usb-role-switch;
->> +
->> +	port@0 {
->> +		reg = <0>;
->> +		usb0_hs_ep: endpoint {
->> +			remote-endpoint = <&usb_con_hs>;
->> +		};
->> +	};
->>  };
->>  
->>  &usb1 {
->> -- 
->> 2.34.1
->>
-> 
-> Please see thread: 
-> https://lore.kernel.org/all/20230321-am62-lp-sk-v2-0-0a56e1694804@ti.com/
-> you might need to rebase off that.
-> 
+On Thu, Mar 09, 2023 at 06:48:13PM +0800, Jingyu Wang wrote:
+> Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
 
-OK.
+What? No description, really? And Fixes: what?
 
-cheers,
--roger
+> - * and subsequently re faulted). However it does guarantee that the page
+> + * and subsequently re-faulted). However it does guarantee that the page
+Or refaulted?
+
+I'm kinda confused...
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--iePgKU5MYRLJXR3w
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZB7x7gAKCRD2uYlJVVFO
+ox5zAQCRviowdVIPV/Ldx5oH4chwY4PalCQyaRTr0D/PzDxrAwD/T7P2W67KeRX+
+aJcs0rJhFFTCHKeFrHrRyI+BJwBxNAY=
+=e/lJ
+-----END PGP SIGNATURE-----
+
+--iePgKU5MYRLJXR3w--
