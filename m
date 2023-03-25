@@ -2,81 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235B76C8F6D
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCC26C8F6E
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbjCYQUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 12:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
+        id S229956AbjCYQZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 12:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbjCYQUO (ORCPT
+        with ESMTP id S229446AbjCYQZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 12:20:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8353EF97F;
-        Sat, 25 Mar 2023 09:20:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E307E60C82;
-        Sat, 25 Mar 2023 16:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA234C433EF;
-        Sat, 25 Mar 2023 16:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679761212;
-        bh=RgI9q5WzQBkRWeNGghQLt89IvUaWcS8RWnyJkhSvJi4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LL4+uqFV4y7Qqie7uM1+j08QWkZCzZye5kNta06r3PzK/adhocna4hPcbdNfuGfGj
-         //Wss/eotWxBgVN5M18iRCjemSQLOuB437D0+101miMlzB3jVgwOIIHdU3//YDHuKv
-         Re/GmLEP2qaxnDFjybDC+a1gxPqydrWJDCv8U0Jk=
-Date:   Sat, 25 Mar 2023 17:20:09 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ye Xiang <xiang.ye@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v7 1/6] usb: Add support for Intel LJCA device
-Message-ID: <ZB8fOTpD/uuexaV1@kroah.com>
-References: <20230325154711.2419569-1-xiang.ye@intel.com>
- <20230325154711.2419569-2-xiang.ye@intel.com>
+        Sat, 25 Mar 2023 12:25:38 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D641114D
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 09:25:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679761538; x=1711297538;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jwQo2o3j71BDLtr4OFKx+Otx015kQ5o0XvirVcMommY=;
+  b=jwca3rED7VEUibfZs9SH19atUQqTo/o17Rxw0Tvp98QJganlPWcOiCRA
+   lh/AzlYRMLLExf5hCYFEYWdxNpvb/Q3zMSL+ITfeyE+hSmU3R+rthEGbY
+   JPq12IX5/frqLCi8FVaUht3rWxrzqQ4/vhezmmkZCcSxdFuQTnP+R1m11
+   7kvPeg4mK4R9Aw2c2yNdOfTG+NwIzeVsUr7PcG41l3+mA5cPHF7XTxIKH
+   AD6ql9ZDmpdZhtMjbBEs+IdYfjQ2lDQHi1mUZxV3zo4wPwU0cINcGPtAD
+   cew2v3mm1yMDdkWGDyAYLY2p94jMyzyzGOCViptJUQxiUWzuqCK5ralsW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="367725484"
+X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
+   d="scan'208";a="367725484"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 09:25:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="660402602"
+X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
+   d="scan'208";a="660402602"
+Received: from jsgross-mobl2.amr.corp.intel.com (HELO [10.209.122.137]) ([10.209.122.137])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 09:25:37 -0700
+Message-ID: <ebead33b-0594-73df-56ae-f40473ac0ffc@intel.com>
+Date:   Sat, 25 Mar 2023 09:25:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230325154711.2419569-2-xiang.ye@intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] x86: Disable kexec for TDX guests
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230325160128.21857-1-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230325160128.21857-1-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 11:47:06PM +0800, Ye Xiang wrote:
-> This patch implements the USB part of Intel USB-I2C/GPIO/SPI adapter
-> device named "La Jolla Cove Adapter" (LJCA).
-> 
-> The communication between the various LJCA module drivers and the
-> hardware will be muxed/demuxed by this driver. Three modules (
-> I2C, GPIO, and SPI) are supported currently.
-> 
-> Each sub-module of LJCA device is identified by type field within
-> the LJCA message header.
-> 
-> The minimum code in ASL that covers this board is
+On 3/25/23 09:01, Kirill A. Shutemov wrote:
+> The last item is tricky. TDX guests use ACPI MADT MPWK to bring up
+> secondary CPUs. The mechanism doesn't allow to put a CPU back offline if
+> it has woken up.
+...
+> +int arch_kexec_load(void)
+> +{
+> +	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
+> +		pr_warn_once("Disable kexec: not yet supported in TDX guest\n");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return 0;
+> +}
 
-As this requires ACPI, why are you not saying so in your Kconfig entry?
-What good would this driver be without ACPI enabled?
+So, let's put all this together:
 
-thanks,
+1. TDX implementations use MADT for wakeup exclusively right now (but
+   are not necessarily _required_ to do so forever)
+2. MADT doesn't support CPU offlining
+3. kexec() requires offlining
 
-greg k-h
+Thus, current TDX implementations can't support TDX guests.  This
+*doesn't* say that TDX will always use the MADT for wakeups.
+
+Yet, the check you have here is for TDX and *not* for the MADT.
+
+That seems wrong.
+
+Let's say SEV or arm64 comes along and uses the MADT for their guests.
+They'll add another arch_kexec_load(), with a check for *their* feature.
+
+This all seems like you should be disabling kexec() the moment the MADT
+CPU wakeup is used instead of making it based on TDX.
