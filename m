@@ -2,146 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90ADF6C90D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 21:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 954C06C90D8
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 21:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjCYU4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 16:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S229650AbjCYU7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 16:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjCYU4U (ORCPT
+        with ESMTP id S229564AbjCYU7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 16:56:20 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B60A5CB;
-        Sat, 25 Mar 2023 13:56:18 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.79.104) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 25 Mar
- 2023 23:56:10 +0300
-Subject: Re: [PATCH net-next] sh_eth: remove open coded netif_running()
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        <netdev@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <linux-kernel@vger.kernel.org>
-References: <20230321065826.2044-1-wsa+renesas@sang-engineering.com>
- <79d945a4-e105-4bc4-3e73-64971731660e@omp.ru>
- <CAMuHMdUt_kTH3tnrdF=oKBLyjrstei8PLsyr+dFXVoPEyxTLAA@mail.gmail.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <346b2451-6862-011e-9842-284a43fcf337@omp.ru>
-Date:   Sat, 25 Mar 2023 23:56:09 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sat, 25 Mar 2023 16:59:12 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD242689;
+        Sat, 25 Mar 2023 13:59:10 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id x3so21044793edb.10;
+        Sat, 25 Mar 2023 13:59:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679777949; x=1682369949;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pOkHB3mU6jZljf9gVbxLDgI3yP0VZBhBZesGbxbybZw=;
+        b=SQGA7KYVH3D2WTBeR8641cnQbpEsmSL/lzoPf0KMRBYaAcJbrWB6Y/Usa7btzUu89e
+         r6tcqtxJ0izxXzc/jWvX4kZgcePeScoLdAMg7aRtKKBQq132h7VXZhkaGzmg9o6cWKTk
+         9jjqyJZQr4tkjzn1kxaSmvm/EnIQmzDGoo9pjJ2/5QKr/GfEFeM6yMh6yZMx67tCX999
+         2PdlVRcD3adR5A8GvIUpgVzb/UQWBx/+Ro5zHWcCULKGSfs3B+cqPegOpSKdYohGg6sQ
+         5gPlRhmDyXfNhmlOvtsHcD2rCsdc9XE+7VjkzGnHCEGB2rGfE9RDOyGUIkemZh2RErqF
+         Nn8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679777949; x=1682369949;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pOkHB3mU6jZljf9gVbxLDgI3yP0VZBhBZesGbxbybZw=;
+        b=ONdS15/E7gEdZjm0RYd5gg64Ral3RMUFwv+KDKhq7l4AbieS+vpePfnArn/704gq3T
+         5Hfwy3q5dvO+CJ2QONiDBParO82R4cvJViuITa9UOJZzcsJqcbZ2z7r84NhQgoUA8ZBR
+         zGemJ9Xjv6bA0GsOYCbx0d6oLc6JjQsF1wLNSuxSXbq7XFAHZZBY8R2MeBOdpKFUkhNw
+         ed/wXZ+okCc4Et1tuX93vfWQNKW2xtBU5IdKCww6963iN99YagtU4mezsDx5lhjnbfce
+         0zhtvR7sn0l5Apa/ZsOzQEUnUrepnn6pvJIMD0c4DmV6yP1nuAmXAWaVuWuESX0An42F
+         28Cg==
+X-Gm-Message-State: AAQBX9dYsYsI6gp/Xq80F0LcPgdjgcJVU+vAmMUeOKFeEQjLChhAE055
+        wyQLJDPWZBdY6D8v5QWPhFQ=
+X-Google-Smtp-Source: AKy350Zf2xFKvcZ0tlVEUyhkALBh5Oi4WhTX1RmzmttS5oNlDzIhNHIiTko+UnihFhZxSlPsUTonrg==
+X-Received: by 2002:a05:6402:268e:b0:502:1f7b:f0a6 with SMTP id w14-20020a056402268e00b005021f7bf0a6mr6842871edd.0.1679777948929;
+        Sat, 25 Mar 2023 13:59:08 -0700 (PDT)
+Received: from ivan-HLYL-WXX9.. ([37.252.81.68])
+        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004af62273b66sm12597440edj.18.2023.03.25.13.59.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Mar 2023 13:59:08 -0700 (PDT)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     shuah@kernel.org, colin.i.king@gmail.com
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        himadrispandya@gmail.com
+Subject: [PATCH v2] selftests: prctl: Add new prctl test for PR_SET_VMA action
+Date:   Sun, 26 Mar 2023 00:59:02 +0400
+Message-Id: <20230325205903.5550-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdUt_kTH3tnrdF=oKBLyjrstei8PLsyr+dFXVoPEyxTLAA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.79.104]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 03/25/2023 20:40:46
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 176289 [Mar 24 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 507 507 08d345461d9bcca7095738422a5279ab257bb65a
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.104 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;178.176.79.104:7.4.1,7.7.3;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: {iprep_blacklist}
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.79.104
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 03/25/2023 20:43:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 3/25/2023 6:14:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+This patch will add the new test, which covers the prctl call with
+PR_SET_VMA command. The test tries to give a name to the anonymous
+VMA within the process memory map, and then checks the result of
+the operation by parsing 'maps' virtual file.
 
-On 3/23/23 11:32 AM, Geert Uytterhoeven wrote:
-[...]
->>> It had a purpose back in the days, but today we have a handy helper.
->>
->>    Well, the is_opened flag doesn't get set/cleared at the same time as
->> __LINK_STATE_START. I'm not sure they are interchangeable...
->>
->>> Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
->>> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> 
->>> --- a/drivers/net/ethernet/renesas/sh_eth.c
->>> +++ b/drivers/net/ethernet/renesas/sh_eth.c
->>> @@ -2441,8 +2441,6 @@ static int sh_eth_open(struct net_device *ndev)
->>>
->>>       netif_start_queue(ndev);
->>>
->>> -     mdp->is_opened = 1;
->>> -
->>
->>    __LINK_STATE_START gets set before the ndo_open() method call, so
->> before the RPM call that enbales the clocks...
->>
->>>       return ret;
->>>
->>>  out_free_irq:
->>> @@ -2565,7 +2563,7 @@ static struct net_device_stats *sh_eth_get_stats(struct net_device *ndev)
->>>       if (mdp->cd->no_tx_cntrs)
->>>               return &ndev->stats;
->>>
->>> -     if (!mdp->is_opened)
->>> +     if (!netif_running(ndev))
->>>               return &ndev->stats;
->>
->>    I guess mdp->is_opened is checked here to avoid reading the counter
->> regs when RPM hasn't been called yet to enable the clocks...
-> 
-> Exactly, cfr. commit 7fa2955ff70ce453 ("sh_eth: Fix sleeping function
-> called from invalid context").
+Additionally, the test tries to call the prctl PR_SET_VMA command
+with invalid arguments, and checks the error codes for correctness.
 
-   Yeah, pm_runtime_get_sync() couldn't be called in this case as
-netstat_show() invoked read_lock() that ensued calling preempt_disable()...
+At the moment anonymous VMA naming through prctl call functionality
+is not covered with any tests, so I think implementing it makes sense.
 
-> So you mean sh_eth_get_stats() can now be called after setting
-> __LINK_STATE_START, but before RPM has enabled the clocks?
+In version 2 of this patch I consider the selftest Makefile rule about
+TARGETS entries order - I moved the 'prctl' entry in the Makefile to
+follow the lexicographic order. In version 1 it was placed at the
+end of the list.
 
-   Yes, probably...
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/prctl/.gitignore      |   1 +
+ tools/testing/selftests/prctl/Makefile        |   2 +-
+ tools/testing/selftests/prctl/config          |   1 +
+ .../selftests/prctl/set-anon-vma-name-test.c  | 104 ++++++++++++++++++
+ 5 files changed, 108 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/prctl/config
+ create mode 100644 tools/testing/selftests/prctl/set-anon-vma-name-test.c
 
-> Is there some protection against parallel execution of ndo_open()
-> and get_stats()?
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 13a6837a0c6b..97dcdaa656f6 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -58,6 +58,7 @@ TARGETS += nsfs
+ TARGETS += pidfd
+ TARGETS += pid_namespace
+ TARGETS += powerpc
++TARGETS += prctl
+ TARGETS += proc
+ TARGETS += pstore
+ TARGETS += ptrace
+diff --git a/tools/testing/selftests/prctl/.gitignore b/tools/testing/selftests/prctl/.gitignore
+index 91af2b631bc9..7a657b25f686 100644
+--- a/tools/testing/selftests/prctl/.gitignore
++++ b/tools/testing/selftests/prctl/.gitignore
+@@ -2,3 +2,4 @@
+ disable-tsc-ctxt-sw-stress-test
+ disable-tsc-on-off-stress-test
+ disable-tsc-test
++set-anon-vma-name-test
+diff --git a/tools/testing/selftests/prctl/Makefile b/tools/testing/selftests/prctl/Makefile
+index c7923b205222..c058b81eeb41 100644
+--- a/tools/testing/selftests/prctl/Makefile
++++ b/tools/testing/selftests/prctl/Makefile
+@@ -5,7 +5,7 @@ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+ 
+ ifeq ($(ARCH),x86)
+ TEST_PROGS := disable-tsc-ctxt-sw-stress-test disable-tsc-on-off-stress-test \
+-		disable-tsc-test
++		disable-tsc-test set-anon-vma-name-test
+ all: $(TEST_PROGS)
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/prctl/config b/tools/testing/selftests/prctl/config
+new file mode 100644
+index 000000000000..c6ed03c544e5
+--- /dev/null
++++ b/tools/testing/selftests/prctl/config
+@@ -0,0 +1 @@
++CONFIG_ANON_VMA_NAME=y
+diff --git a/tools/testing/selftests/prctl/set-anon-vma-name-test.c b/tools/testing/selftests/prctl/set-anon-vma-name-test.c
+new file mode 100644
+index 000000000000..26d853c5a0c1
+--- /dev/null
++++ b/tools/testing/selftests/prctl/set-anon-vma-name-test.c
+@@ -0,0 +1,104 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This test covers the anonymous VMA naming functionality through prctl calls
++ */
++
++#include <errno.h>
++#include <sys/prctl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/mman.h>
++#include <string.h>
++
++#include "../kselftest_harness.h"
++
++#define AREA_SIZE 1024
++
++#define GOOD_NAME "goodname"
++#define BAD_NAME "badname\1"
++
++#ifndef PR_SET_VMA
++#define PR_SET_VMA 0x53564d41
++#define PR_SET_VMA_ANON_NAME 0
++#endif
++
++
++int rename_vma(unsigned long addr, unsigned long size, char *name)
++{
++	int res;
++
++	res = prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, addr, size, name);
++	if (res < 0)
++		return -errno;
++	return res;
++}
++
++int was_renaming_successful(char *target_name, unsigned long ptr)
++{
++	FILE *maps_file;
++
++	char line_buf[512], name[128], mode[8];
++	unsigned long start_addr, end_addr, offset;
++	unsigned int major_id, minor_id, node_id;
++
++	char target_buf[128];
++	int res = 0, sscanf_res;
++
++	// The entry name in maps will be in format [anon:<target_name>]
++	sprintf(target_buf, "[anon:%s]", target_name);
++	maps_file = fopen("/proc/self/maps", "r");
++	if (!maps_file) {
++		printf("## /proc/self/maps file opening error\n");
++		return 0;
++	}
++
++	// Parse the maps file to find the entry we renamed
++	while (fgets(line_buf, sizeof(line_buf), maps_file)) {
++		sscanf_res = sscanf(line_buf, "%lx-%lx %7s %lx %u:%u %u %s", &start_addr,
++					&end_addr, mode, &offset, &major_id,
++					&minor_id, &node_id, name);
++		if (sscanf_res == EOF) {
++			res = 0;
++			printf("## EOF while parsing the maps file\n");
++			break;
++		}
++		if (!strcmp(name, target_buf) && start_addr == ptr) {
++			res = 1;
++			break;
++		}
++	}
++	fclose(maps_file);
++	return res;
++}
++
++FIXTURE(vma) {
++	void *ptr_anon, *ptr_not_anon;
++};
++
++FIXTURE_SETUP(vma) {
++	self->ptr_anon = mmap(NULL, AREA_SIZE, PROT_READ | PROT_WRITE,
++					MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
++	ASSERT_NE(self->ptr_anon, NULL);
++	self->ptr_not_anon = mmap(NULL, AREA_SIZE, PROT_READ | PROT_WRITE,
++					MAP_PRIVATE, 0, 0);
++	ASSERT_NE(self->ptr_not_anon, NULL);
++}
++
++FIXTURE_TEARDOWN(vma) {
++	munmap(self->ptr_anon, AREA_SIZE);
++	munmap(self->ptr_not_anon, AREA_SIZE);
++}
++
++TEST_F(vma, renaming) {
++	TH_LOG("Try to rename the VMA with correct parameters");
++	EXPECT_GE(rename_vma((unsigned long)self->ptr_anon, AREA_SIZE, GOOD_NAME), 0);
++	EXPECT_TRUE(was_renaming_successful(GOOD_NAME, (unsigned long)self->ptr_anon));
++
++	TH_LOG("Try to pass invalid name (with non-printable character \\1) to rename the VMA");
++	EXPECT_EQ(rename_vma((unsigned long)self->ptr_anon, AREA_SIZE, BAD_NAME), -EINVAL);
++
++	TH_LOG("Try to rename non-anonynous VMA");
++	EXPECT_EQ(rename_vma((unsigned long) self->ptr_not_anon, AREA_SIZE, GOOD_NAME), -EINVAL);
++}
++
++TEST_HARNESS_MAIN
+-- 
+2.34.1
 
-   Haven't seen it (yet?)...
-
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-
-MBR, Sergey
