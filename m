@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582236C8CB6
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 870B46C8CB7
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbjCYIiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 04:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
+        id S232312AbjCYIiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 04:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232241AbjCYIhW (ORCPT
+        with ESMTP id S232307AbjCYIh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 04:37:22 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910A819103
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:37:05 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-93075ee221bso14108066b.0
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:37:05 -0700 (PDT)
+        Sat, 25 Mar 2023 04:37:27 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FB018ABB
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:37:13 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id er18so5300455edb.9
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:37:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679733424;
+        d=gmail.com; s=20210112; t=1679733432;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xenSdzUtugeb0/CqvxP79YZC3E7VL9ki06QF+SB8Qys=;
-        b=Ius8gLpxU5pD8x0/GazMtCB5q0CKLg0MZ7i75GOUkkNagH+fBhqR+TACAHnRUmsK/F
-         iNVLNgyNtTt+1j7Izciy9FaeFRQ9rIPBXWkBRxrE6Tj+7d0kEfJwCf3thyDY1Jwn3kAq
-         Lg1uy4yU5PGZPUjARM49UkUOPaxWNH6ZI73wln1orZXvbsIoQ7rMQro9LilLy58wzhcZ
-         0s5/3Eyd0rGRUADt5ijACRAv8pvDJgmfspSJDmB4wc8g/w7CPuVpx2PVJ+1PS7bOa3wW
-         E66OL4vDKGDTr69qnYcFZjXBpgMXQa4lwL05+/SmkCF4UqkfLwObjjWJe7qQUxrotp02
-         AOFQ==
+        bh=ovOf0VQJbLs8pFVaHE8+gPaOdY/j18U17OR+um3GAwM=;
+        b=dtQWgKIFC5MVE5WHj/tkEOoErziyY01JN1J46VXEddJz7PS+S2DBEEJSsOJ/CaTaIW
+         sY19/NJH1J6atOsJs00RnHMIbUPAQlV4QpY+Fr3RkbZTyk9bu+Bz1I/NHmSr6stiiAdX
+         sZRfkZIMnBMkYFz+WRi44hPFbO5NybGwdxBfVi1OzgF6QgiC/xbAF5Wg6/saDleU/J1T
+         ZCrMnbBRtrlS3n6sTjbZlRTfHt5s4xanHNvHzo4InganGRiifmbbkthFv12NAC3rH1NF
+         0476n8el5jTVEroOMAF4sG/bkTSYGk04kmjY/cvCRRRUTTIF3e6hKKANUKwRmFYT/BHL
+         6p0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679733424;
+        d=1e100.net; s=20210112; t=1679733432;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xenSdzUtugeb0/CqvxP79YZC3E7VL9ki06QF+SB8Qys=;
-        b=KtRYSQEBC6ahceBo+Xtm05iF6hMrbjWt5KSZuanJGR8u2QT0Zha7QVa9JXIJuNGbhw
-         3U1McyXWMTHBYu/jM99B7759bac9zMMKFTxCQB/6iqO7tInlQhTvbeK63zBdVupqk7Wo
-         UGSqFkx0F1Dth3k3lBXkEvXXelUiehEO5iTrp9EU5d6SSzySNRSJlTg+YyrW1TNI5HNI
-         MoHAow735D9qj+etQDHl4g8hNoOeobeT8NyX1K02ZbjymwKqqjQ+Pgyrt+3z8ozAp4U8
-         c7x76UNETVkJxiUeO6e5DXo6PvKdsvW9THF/MrQ9JiUOIuTAlK3e3hVJri4E7KdT31oa
-         j7wg==
-X-Gm-Message-State: AAQBX9dcqoKCimsn/PwWRrKAK0EpDxdlV8bL9asRxp/bGxdJ606AlZ1p
-        ADZgmCAm/MO4Ln1+DJUv52Q=
-X-Google-Smtp-Source: AKy350ZNYezsWUfDKJfhwp03UyPDeI0FJ4MnyrevIjAc9ybsNWwRCArAjcUnF6EMsvwpUTDqs+NT/w==
-X-Received: by 2002:a17:906:51c9:b0:92f:27c2:13c0 with SMTP id v9-20020a17090651c900b0092f27c213c0mr4213970ejk.6.1679733424236;
-        Sat, 25 Mar 2023 01:37:04 -0700 (PDT)
+        bh=ovOf0VQJbLs8pFVaHE8+gPaOdY/j18U17OR+um3GAwM=;
+        b=0tcqyOUKr8KgyQw2cYxTRLYHNKKzmeTonubc/hrEmiTUxAS9vqHQmEwYplTnAMPfDB
+         FusnT3cXSp33yaQ7dLU+mCiAj45xO1vyDzEazLC4yeEunJQHB6jFhZiFGqIXnVxI0Vai
+         6hUJP1X2lo5ygd7fYaTKlpvlDSQ/UMsv6kTl5gSVbNUXYtNl6+o4Ule8ARv9PLzN3B4z
+         dKqmsUuWtGxtpknerTyL/RSKdZc95HpdLbtlHc7Tos1cgHhllXMM9xGFliomPk7SpYmQ
+         XX8dadvujo/vfXhsvpcPs3Kemdr9hRRdJmLmMcsmf0XHAXKML3SgDFMs6kInJb1AocFP
+         l4Ug==
+X-Gm-Message-State: AAQBX9dAS5TJstl2foM+d3890qjYVUokYM8TB/UAwXCIjSG9y014ekOA
+        Umt15BJTalIC/0whflVQBo8=
+X-Google-Smtp-Source: AKy350bxZ93adCN4Rqg7W6VP99P4KcZ0CUV7dovWEAdh+r/CLokTDRThtGLzPtDbZ1Wcl+JFZqg6Ww==
+X-Received: by 2002:a05:6402:2811:b0:502:92d:4f51 with SMTP id h17-20020a056402281100b00502092d4f51mr6903412ede.1.1679733432752;
+        Sat, 25 Mar 2023 01:37:12 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id f23-20020a1709064dd700b00931536d461fsm11431573ejw.20.2023.03.25.01.37.03
+        by smtp.gmail.com with ESMTPSA id ha25-20020a170906a89900b00934212e973esm8623229ejb.198.2023.03.25.01.37.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 01:37:03 -0700 (PDT)
-Date:   Sat, 25 Mar 2023 09:37:02 +0100
+        Sat, 25 Mar 2023 01:37:12 -0700 (PDT)
+Date:   Sat, 25 Mar 2023 09:37:10 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 10/11] staging: rtl8192e: Remove priv->rf_chip in
- _rtl92e_get_channel_map
-Message-ID: <b8c5a719c6f8930adb87a4ad9bd5d368ba5f348b.1679732276.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 11/11] staging: rtl8192e: Remove priv->rf_chip
+Message-ID: <2ce85c1a159ae376d82c19c61e694924f07d1093.1679732276.git.philipp.g.hortmann@gmail.com>
 References: <cover.1679732276.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,32 +70,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-priv->rf_chip is initialized to RF_8256 and never changed. Remove
-condition in function _rtl92e_get_channel_map as it is dead code.
+priv->rf_chip is initialized to RF_8256 and not used. Remove
+initialization, variable and enum as it is dead code.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c |  2 --
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h   | 10 ----------
+ 2 files changed, 12 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 8e4e939d7617..ecc3f0c6c267 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -895,13 +895,6 @@ static short _rtl92e_get_channel_map(struct net_device *dev)
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+index 1e7be321721b..a67927f0c5e3 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+@@ -432,8 +432,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
  
- 	struct r8192_priv *priv = rtllib_priv(dev);
+ 	rtl92e_init_adaptive_rate(dev);
  
--	if ((priv->rf_chip != RF_8225) && (priv->rf_chip != RF_8256) &&
--						(priv->rf_chip != RF_6052)) {
--		netdev_err(dev, "%s: unknown rf chip, can't set channel map\n",
--			   __func__);
--		return -1;
--	}
+-	priv->rf_chip = RF_8256;
 -
- 	if (priv->chnl_plan >= COUNTRY_CODE_MAX) {
- 		netdev_info(dev,
- 			    "rtl819x_init:Error channel plan! Set to default.\n");
+ 	if (priv->reg_chnl_plan == 0xf)
+ 		priv->chnl_plan = priv->eeprom_chnl_plan;
+ 	else
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+index c8816c44ca51..68ec0aeb2dd9 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+@@ -129,15 +129,6 @@ enum dcmg_txcmd_op {
+ 	TXCMD_XXXX_CTRL,
+ };
+ 
+-enum rt_rf_type_819xu {
+-	RF_TYPE_MIN = 0,
+-	RF_8225,
+-	RF_8256,
+-	RF_8258,
+-	RF_6052 = 4,
+-	RF_PSEUDO_11N = 5,
+-};
+-
+ enum rt_customer_id {
+ 	RT_CID_DEFAULT	  = 0,
+ 	RT_CID_819x_CAMEO       = 6,
+@@ -221,7 +212,6 @@ struct r8192_priv {
+ 
+ 	enum rt_customer_id customer_id;
+ 
+-	enum rt_rf_type_819xu rf_chip;
+ 	enum ht_channel_width current_chnl_bw;
+ 	struct bb_reg_definition phy_reg_def[4];
+ 	struct rate_adaptive rate_adaptive;
 -- 
 2.39.2
 
