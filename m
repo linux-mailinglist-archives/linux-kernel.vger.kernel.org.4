@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152D16C8CE7
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 10:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9556C8CE8
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 10:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbjCYJRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 05:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
+        id S232208AbjCYJUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 05:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjCYJRP (ORCPT
+        with ESMTP id S231753AbjCYJUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 05:17:15 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98664EC5B
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 02:17:14 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id w4so3933096plg.9
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 02:17:14 -0700 (PDT)
+        Sat, 25 Mar 2023 05:20:31 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCE66E91
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 02:20:30 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id d13so3486670pjh.0
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 02:20:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679735834;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LJpIXu9tlf2Gu4D95jY9X2YoHbkoJ6/PZq6kehT2lyI=;
-        b=X5/UuRHfQcNqxm8pRv93hP3LY/wEcu/s/2KLDeXgpChaPWdVC6mtl6TNoGhXOfOHRI
-         uL4/xxoaFT8dYHMld05dV2hcxyVHi5k6yOEDd3o15KzIvSBKtH921w4pjdQhomTp1Uoa
-         6J+VQvduvFX0vIlvxFYsj1dtb8+ggOWKDtUc5JZQCzzVOhRO+XxVyQoN2rim6c2hVkBC
-         V35xCAeceVQqJ17cRoyDHH1XHd8lpekEPKXX8jy+MqdgU4xUDJOkoAYWWW7AfG/bkLub
-         W4v98Z3hwNK290OLO4eHDKuheJA9e93nimomwC1WpBPx1qOOhm3lL0Irhf61f8XXqEDj
-         4v9g==
+        d=gmail.com; s=20210112; t=1679736030;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jjW9k3rHH7SuTNAYZSMyYgzp462JYdnAFz1yHZvP0Co=;
+        b=PPP45abKqEmPYtRod+0A2i32VjWmfsJbpjN0gPmIgS36aURG6BPYrY5BpowoTTsvKe
+         1bYUVAr7JAofwE6ara4wsHqUD4dmTce1AvGIkw3foX8nIATNtFUbEZmgwdx5lVql45mL
+         DG3ixN8AoC2h9Ct651727MsUUuwYQZ7/kie5kREW+mpy2jtRCOOLE8UHY6hGXBUk/n7V
+         u4lDpMhad4y+qt7vaoSR/NrCfTtOxoUo714ZFuvPfWyyC02lsVE3zhUaVyaNvAIoKfqh
+         FF9jbj31Y2VEN8Tuf45f/NVnUQEF4CmLw6gB3gi+FtACABb2JdpmVvf2JRoTv6q9/yor
+         FMmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679735834;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LJpIXu9tlf2Gu4D95jY9X2YoHbkoJ6/PZq6kehT2lyI=;
-        b=q9eEl9Mj56i3f1eDtsT4bLEiIbGzJm6uq82KQr9gWUPlpctuIJdISAfgqBs+oaUBw1
-         bzNFL2ZwP0+z8OguTxHG2aqLPxVBIl1atxPW+s7IZLo7uZElIMfZBOfh8itaeUyX4QOB
-         rmmeTtvjHvhx6WLlWzPhLgP6d2iQ1P6hTICdQ5kILdOL0PfLTgAbEo5PgvzAC7LyKIGA
-         ZJoZRSdLs04y7siZb3CsBe1OmXiNthswVJP43I96E+JSODqr8oluH6lUr7cfJytgN3eH
-         5jFSMiaYgpMDq0IIEQM5yuerMq/C2m6NQWpD3HOpk7AYffJoYV1hnMmX/gu6oioUgYXJ
-         Nbgg==
-X-Gm-Message-State: AAQBX9d1ZC3hmgB9FZBFcSt1u/Rkt5w9VDtw6je1w2Shi+UyLxVv3HKP
-        LmDKuzZ+k2wl1+F6oqKqayykmcytGbg=
-X-Google-Smtp-Source: AKy350YSY+yLrMXngrhU4OppEO85gGV+mQ3qhd9YLeT2ePtMLuAy4aTQwH4X/InP1Gm8KjCbAJdvJQ==
-X-Received: by 2002:a17:90b:1647:b0:237:50b6:7835 with SMTP id il7-20020a17090b164700b0023750b67835mr5913828pjb.20.1679735833700;
-        Sat, 25 Mar 2023 02:17:13 -0700 (PDT)
-Received: from Dommie-Laptop.. ([180.217.16.141])
-        by smtp.gmail.com with ESMTPSA id a8-20020a170902900800b0019a88c1cf63sm15495670plp.180.2023.03.25.02.17.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 02:17:12 -0700 (PDT)
-From:   Yan-Jie Wang <yanjiewtw@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Yan-Jie Wang <yanjiewtw@gmail.com>
-Subject: [PATCH] lib/list_sort: reduce if-statements
-Date:   Sat, 25 Mar 2023 17:16:54 +0800
-Message-Id: <20230325091654.106040-1-yanjiewtw@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20210112; t=1679736030;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jjW9k3rHH7SuTNAYZSMyYgzp462JYdnAFz1yHZvP0Co=;
+        b=58tNHjbI1rwBTmn6PoCa8mOcZzCC+B30ZqBSPQ8mCkbPByokDv2hOylxzXqefefDTJ
+         zbWe2W3LVbZjcKUXAQmd3hKaB7SVbJOpED6oFfN9y0rSVUw2nkKuq3QEXJF/W8wUk7K9
+         Uti4+Sd1jDAaIwaMXQk3EhuItcmMu2qfE7skHp5mDezHCHGaXHPexKZZgiGZR248BUQc
+         R6ac0WR5gtgg0McfMGXagakH39K3z7JVrrTO38uuq10SF/tBhG8Tg6W7cFnxi/wSxEUf
+         TVfGbcsxK2RJDPPyy923SyPxvXwNhoYESYw4ZBEsdhu8O18EOyIDL0wA5MMcHBX/Y37K
+         eyVw==
+X-Gm-Message-State: AAQBX9fFc31AnMwkRWLsucqPNyOUtooVQFolHSybwokg/Cf53ThgxEag
+        XbUJs4O7y7Gg0AmAqy3t4ikCsMHqkSGSXP3zG9s=
+X-Google-Smtp-Source: AKy350bF03Kry9/ivvmHAPgtU8YpmYLYbkoZ6D7Mu532hB/4crd/zIulLjtTwoiTQQeDA3xBzIno/pPgDqvdAK+OaIg=
+X-Received: by 2002:a17:902:ef94:b0:1a1:c109:3700 with SMTP id
+ iz20-20020a170902ef9400b001a1c1093700mr1876965plb.7.1679736030155; Sat, 25
+ Mar 2023 02:20:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230320092652.16649-1-zbestahu@gmail.com> <ZB0Dwxs6xen7D/qh@slm.duckdns.org>
+In-Reply-To: <ZB0Dwxs6xen7D/qh@slm.duckdns.org>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Sat, 25 Mar 2023 17:20:14 +0800
+Message-ID: <CAJhGHyAvzjK5r5yfB_wcLPnq=Y=wwsxh=M=EA3x5EsNacRKMVQ@mail.gmail.com>
+Subject: Re: [PATCH] workqueue: Drop the NOT_RUNNING check to flags in worker_{set,clr}_flags
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Yue Hu <zbestahu@gmail.com>, linux-kernel@vger.kernel.org,
+        huyue2@coolpad.com, zhangwen@coolpad.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -68,172 +69,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reduce if-statements in merge and merge_final functions by using
-indirect pointers and bitwise operations.
+On Fri, Mar 24, 2023 at 9:58=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
+>
+> On Mon, Mar 20, 2023 at 05:26:52PM +0800, Yue Hu wrote:
+> > From: Yue Hu <huyue2@coolpad.com>
+> >
+> > We know whether the worker flags are belong to WORKER_NOT_RUNNING or no=
+t
+> > when we are setting and clearing them.  So check the flags not running
+> > related is unnecessary for both the cases.
+> >
+> > Currently, worker_{set,clr}_flags() are all used for WORKER_NOT_RUNNING
+> > except for clearing WORKER_IDLE.  Let's change to directly clear it
+> > instead.  Also, update the comment a little in worker_clr_flags().
+>
+> I'm not sure this is better. Semantically, the existing code seems cleare=
+r
+> and less error-prone to me and this isn't gonna make any meaningful perf
+> difference. Lai, what do you think?
 
-This will make the code more elegant and reduce the number of branch
-instructions in compiled code.
+objdump -DSr kernel/workqueue.o | less
 
-Signed-off-by: Yan-Jie Wang <yanjiewtw@gmail.com>
----
- lib/list_sort.c       | 51 +++++++++++--------------------------------
- tools/lib/list_sort.c | 51 +++++++++++--------------------------------
- 2 files changed, 26 insertions(+), 76 deletions(-)
+    3275:       00 00
+                        3273: R_X86_64_32S      current_task
+        WARN_ON_ONCE(worker->task !=3D current);
+    3277:       48 39 43 40             cmp    %rax,0x40(%rbx)
+    327b:       0f 85 91 00 00 00       jne    3312 <process_one_work+0x3a2=
+>
+            !(worker->flags & WORKER_NOT_RUNNING)) {
+    3281:       8b 43 68                mov    0x68(%rbx),%eax
+        if ((flags & WORKER_NOT_RUNNING) &&
+    3284:       a9 c8 01 00 00          test   $0x1c8,%eax
+    3289:       75 0b                   jne    3296 <process_one_work+0x326=
+>
+        struct worker_pool *pool =3D worker->pool;
+    328b:       48 8b 43 48             mov    0x48(%rbx),%rax
+                pool->nr_running--;
+    328f:       83 68 20 01             subl   $0x1,0x20(%rax)
+    3293:       8b 43 68                mov    0x68(%rbx),%eax
+        worker->flags |=3D flags;
+    3296:       83 c8 40                or     $0x40,%eax
+    3299:       89 43 68                mov    %eax,0x68(%rbx)
 
-diff --git a/lib/list_sort.c b/lib/list_sort.c
-index 0fb59e92ca2d..393fcb9948c5 100644
---- a/lib/list_sort.c
-+++ b/lib/list_sort.c
-@@ -16,28 +16,15 @@ __attribute__((nonnull(2,3,4)))
- static struct list_head *merge(void *priv, list_cmp_func_t cmp,
- 				struct list_head *a, struct list_head *b)
- {
--	struct list_head *head, **tail = &head;
-+	struct list_head *head, **tail = &head, **node;
- 
--	for (;;) {
-+	for (node = NULL; a && b; *node = (*node)->next) {
- 		/* if equal, take 'a' -- important for sort stability */
--		if (cmp(priv, a, b) <= 0) {
--			*tail = a;
--			tail = &a->next;
--			a = a->next;
--			if (!a) {
--				*tail = b;
--				break;
--			}
--		} else {
--			*tail = b;
--			tail = &b->next;
--			b = b->next;
--			if (!b) {
--				*tail = a;
--				break;
--			}
--		}
-+		node = cmp(priv, a, b) <= 0 ? &a : &b;
-+		*tail = *node;
-+		tail = &(*node)->next;
- 	}
-+	*tail = (struct list_head *) ((uintptr_t) a | (uintptr_t) b);
- 	return head;
- }
- 
-@@ -52,29 +39,17 @@ __attribute__((nonnull(2,3,4,5)))
- static void merge_final(void *priv, list_cmp_func_t cmp, struct list_head *head,
- 			struct list_head *a, struct list_head *b)
- {
--	struct list_head *tail = head;
-+	struct list_head *tail = head, **node;
- 	u8 count = 0;
- 
--	for (;;) {
-+	for (node = NULL; a && b; *node = (*node)->next) {
- 		/* if equal, take 'a' -- important for sort stability */
--		if (cmp(priv, a, b) <= 0) {
--			tail->next = a;
--			a->prev = tail;
--			tail = a;
--			a = a->next;
--			if (!a)
--				break;
--		} else {
--			tail->next = b;
--			b->prev = tail;
--			tail = b;
--			b = b->next;
--			if (!b) {
--				b = a;
--				break;
--			}
--		}
-+		node = cmp(priv, a, b) <= 0 ? &a : &b;
-+		tail->next = *node;
-+		(*node)->prev = tail;
-+		tail = *node;
- 	}
-+	b = (struct list_head *) ((uintptr_t) a | (uintptr_t) b);
- 
- 	/* Finish linking remainder of list b on to tail */
- 	tail->next = b;
-diff --git a/tools/lib/list_sort.c b/tools/lib/list_sort.c
-index 10c067e3a8d2..5b1baa6a67d9 100644
---- a/tools/lib/list_sort.c
-+++ b/tools/lib/list_sort.c
-@@ -15,28 +15,15 @@ __attribute__((nonnull(2,3,4)))
- static struct list_head *merge(void *priv, list_cmp_func_t cmp,
- 				struct list_head *a, struct list_head *b)
- {
--	struct list_head *head, **tail = &head;
-+	struct list_head *head, **tail = &head, **node;
- 
--	for (;;) {
-+	for (node = NULL; a && b; *node = (*node)->next) {
- 		/* if equal, take 'a' -- important for sort stability */
--		if (cmp(priv, a, b) <= 0) {
--			*tail = a;
--			tail = &a->next;
--			a = a->next;
--			if (!a) {
--				*tail = b;
--				break;
--			}
--		} else {
--			*tail = b;
--			tail = &b->next;
--			b = b->next;
--			if (!b) {
--				*tail = a;
--				break;
--			}
--		}
-+		node = cmp(priv, a, b) <= 0 ? &a : &b;
-+		*tail = *node;
-+		tail = &(*node)->next;
- 	}
-+	*tail = (struct list_head *) ((uintptr_t) a | (uintptr_t) b);
- 	return head;
- }
- 
-@@ -51,29 +38,17 @@ __attribute__((nonnull(2,3,4,5)))
- static void merge_final(void *priv, list_cmp_func_t cmp, struct list_head *head,
- 			struct list_head *a, struct list_head *b)
- {
--	struct list_head *tail = head;
-+	struct list_head *tail = head, **node;
- 	u8 count = 0;
- 
--	for (;;) {
-+	for (node = NULL; a && b; *node = (*node)->next) {
- 		/* if equal, take 'a' -- important for sort stability */
--		if (cmp(priv, a, b) <= 0) {
--			tail->next = a;
--			a->prev = tail;
--			tail = a;
--			a = a->next;
--			if (!a)
--				break;
--		} else {
--			tail->next = b;
--			b->prev = tail;
--			tail = b;
--			b = b->next;
--			if (!b) {
--				b = a;
--				break;
--			}
--		}
-+		node = cmp(priv, a, b) <= 0 ? &a : &b;
-+		tail->next = *node;
-+		(*node)->prev = tail;
-+		tail = *node;
- 	}
-+	b = (struct list_head *) ((uintptr_t) a | (uintptr_t) b);
- 
- 	/* Finish linking remainder of list b on to tail */
- 	tail->next = b;
+It seems the compiler will do the trick. The clearer existing code
+seems better.
 
-base-commit: 65aca32efdcb0965502d3db2f1fa33838c070952
--- 
-2.34.1
+Thanks
+Lai
 
+>
+> Thanks.
+>
+> --
+> tejun
