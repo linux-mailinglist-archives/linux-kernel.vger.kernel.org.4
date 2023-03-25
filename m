@@ -2,80 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FAD76C8E63
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 14:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A0F6C8E6B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 14:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbjCYNJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 09:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
+        id S231370AbjCYNVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 09:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjCYNJq (ORCPT
+        with ESMTP id S229460AbjCYNVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 09:09:46 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761FC126F8;
-        Sat, 25 Mar 2023 06:09:45 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id eh3so18053503edb.11;
-        Sat, 25 Mar 2023 06:09:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1679749784;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BivoLDf3VVsPCNHpqkq3yz6m8MDZznemKX2EBNEZN08=;
-        b=JzRDixDW3uR/Ix337Eclo3haZk+PznJW8nHzW5WJUNXRm6KRixGO7jKbBqVbqlGFhj
-         bEbIw2DuKtOWxwf0oL+iRtWdKqApXAeeF1YwfOkKgtJHu/9WTTL74Vfa24X7LCSirV+A
-         VBm8LtvCwAGIa2zZt9g89FvJfGJ87no4ryc8eHxzDPZ/vNqaB8BiotjZMR/dWJa5fkC+
-         CEcmo+4ukDpxB3HbcuwDzpn4qStoDLqmetmYLQL1mLdKTHzu9JKHOr4HzygXLtHDl4xR
-         Vs6rIGvjlZGE29L1dShqw0opIjvPcbuaQ5+WR/DFyIVkjeMXbQ41mCoTA/2SuDswJRxO
-         OWIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679749784;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BivoLDf3VVsPCNHpqkq3yz6m8MDZznemKX2EBNEZN08=;
-        b=EbEOTfoZWip1qZxCY68dagffYFAxw2TAtGahlyqpZLgEriH3vSdF5qiheoi6N9QuiY
-         rht+QWXdv56tvIJqY4J7DFu+CvWgG5dDiJ6VhPdYdzGzZhUXlIX2xVNTXijHXqcqRsRC
-         8P42vOg1w6oRHnh+b9pZxLs+VS9XtB7xmMI0aulpqop6PJL0Sdzkpx/UZojV2/jJr5pk
-         mW67ngXjJAkAyYT5l/BvLykt11STAhne4cmPSFxT7LE6Y7o3ayImTYcvGYdRqRAxdEkv
-         xBKXVdXunmWYz553QY8/x+779B21XYKl1mbHWrXiM+VwqomU0239YhAOSia1j2xSaLun
-         r9SQ==
-X-Gm-Message-State: AAQBX9eFOIebR86M/d5aoz+HERZo9Snv8DlIAsAMYsTHbnbQSkKWoUS+
-        3gHK7ELzvNSUOGBqEd/DAB89zgouOJEWhKfUF3I=
-X-Google-Smtp-Source: AKy350b73vFj+pZqqUFZhR/pREKA9FiHjczT2L2Xv6G8L8igOFUG8aqx2VJ1hJgYhHMVBooRxexmFVqke1rOYDNcQow=
-X-Received: by 2002:a50:8acf:0:b0:502:3a4b:1f1a with SMTP id
- k15-20020a508acf000000b005023a4b1f1amr423545edk.4.1679749783823; Sat, 25 Mar
- 2023 06:09:43 -0700 (PDT)
+        Sat, 25 Mar 2023 09:21:48 -0400
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61390BDED;
+        Sat, 25 Mar 2023 06:21:46 -0700 (PDT)
+Received: from smtp102.mailbox.org (unknown [10.196.197.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4PkKVC6hKTz9sx2;
+        Sat, 25 Mar 2023 14:21:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
+        s=MBO0001; t=1679750499;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rQ4rmDiN74N93ke3ZfdLAVNzGoB4ib6CMk1ag8Q3NV0=;
+        b=tMw+jM5JSj9ECmfpovTCPePydYS+RsWoGnpX7iudp/qiKaZzrnqr72z2eKizb8i2lNT0OG
+        +dY9IvoFN9ukFT9s2N+peVdsszgw/ibXwpWnaFuEpYl1DhGaXavAJiTGZDrKgShAEHY8E7
+        P23kJ0FvqpZxWaDdcvKALNHMgCvbVQzoDH2fGxgY02wr+tudiVjUQK54Pn9lrSXVO1N7B4
+        t+xcrVhMUdJVkAOW3ubSroyudyRsXqfU+l3p0CYp6APSiFIYXwdk8O1u+weR+WArQ3U4o3
+        m5Bs9txPxNtH05VY7dcl/+F2NiHaxdg/NSNqR2yqRQYfOslV9qzk2irGu9Qpqw==
+From:   Dylan Van Assche <me@dylanvanassche.be>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Dylan Van Assche <me@dylanvanassche.be>
+Subject: [PATCH 0/2] Qualcomm SDM845 SLPI DSP driver support
+Date:   Sat, 25 Mar 2023 14:21:15 +0100
+Message-Id: <20230325132117.19733-1-me@dylanvanassche.be>
 MIME-Version: 1.0
-References: <202303241020110014476@zte.com.cn>
-In-Reply-To: <202303241020110014476@zte.com.cn>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 25 Mar 2023 14:09:33 +0100
-Message-ID: <CAFBinCBCdW5Nt+cm_1E-6gG1UNv7mnnDYxQRGae_UtCigt0+uA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: amlogic: Use dev_err_probe()
-To:     ye.xingchen@zte.com.cn
-Cc:     glaroque@baylibre.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 3:20=E2=80=AFAM <ye.xingchen@zte.com.cn> wrote:
->
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
->
-> Replace the open-code with dev_err_probe() to simplify the code.
->
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+The Qualcomm SDM845 SoC has a separate SLPI (Sensor Low Power Island)
+DSP for sensors connected to the SoC which is responsible for exposing
+sensors to userspace, power saving, and other features. 
+While sensors are connected to GPIOs of the SoC, they cannot be used
+because the hypervisor blocks direct access to the sensors, thus the 
+DSP must be used to access any sensor on this SoC. The SLPI DSP uses a
+GLink edge (dsps) to communicate with the host and has a FastRPC interface
+to load files from the host filesystem such as sensor configuration files.
+The FastRPC interface does not use regular FastRPC Compute Banks
+but instead uses an allocated CMA region through which communication happens.
+
+This set of patches adds support to drivers for the SLPI DSP:
+1. Configure the permissions of assigned DSP memory through the hypervisor.
+2. Allocate a remote heap when the FastRPC session ID is 0 instead of using 
+a Compute Bank directly.
+3. Add the SLPI remoteproc resource to the q6v5_pas driver to enable support
+for it in the driver.
+over QRTR.
+
+DTS changes to enable the SLPI DSP in the SDM845 DTS and hardware
+e.g. Oneplus 6 and SHIFTPHONES SHIFT6mq will be send once the driver changes
+are applied.
+
+Kind regards,
+Dylan Van Assche
+
+Dylan Van Assche (2):
+  dt-bindings: remoteproc: qcom: adsp: add qcom,sdm845-slpi-pas
+    compatible
+  remoteproc: qcom: pas: add SDM845 SLPI resource
+
+ .../bindings/remoteproc/qcom,adsp.yaml          |  3 +++
+ drivers/remoteproc/qcom_q6v5_pas.c              | 17 +++++++++++++++++
+ 2 files changed, 20 insertions(+)
+
+-- 
+2.39.2
+
