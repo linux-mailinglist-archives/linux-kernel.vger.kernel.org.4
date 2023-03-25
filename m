@@ -2,88 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17926C8A29
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 03:14:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B216C8A30
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 03:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbjCYCOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 22:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
+        id S231954AbjCYCSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 22:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbjCYCOb (ORCPT
+        with ESMTP id S231277AbjCYCSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 22:14:31 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96CB166ED
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 19:14:30 -0700 (PDT)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Pk2cM4kqpzSp0c;
-        Sat, 25 Mar 2023 10:10:59 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 25 Mar 2023 10:14:28 +0800
-Subject: Re: [PATCH 0/3] arm64: kdump : take off the protection on crashkernel
- memory region
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Baoquan He <bhe@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <horms@kernel.org>,
-        <John.p.donnelly@oracle.com>, <will@kernel.org>,
-        <kexec@lists.infradead.org>, <ardb@kernel.org>, <rppt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230324131838.409996-1-bhe@redhat.com>
- <ZB3Zx85Ajnhzq3Pt@arm.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <9ca6f729-989d-654a-83e6-c89d8f65c69d@huawei.com>
-Date:   Sat, 25 Mar 2023 10:14:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Fri, 24 Mar 2023 22:18:34 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC3C212E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 19:18:32 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id eh3so14628634edb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 19:18:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679710711;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uw0vvRX6fB45yziv3c2fRfTS3bTqjYau48XTnRaZKUQ=;
+        b=O7Jst4Abb03/2SPXMx5C68RHpw3r3kFMKH7fZnFXh0aJIp2ZBgoM9SwaZL0lI/9pGh
+         nOnlLtm4EcFl3i8d0j46aVqMGUTdlYBqj5yZXFsOZY9Wt0HiaQAMqbcFmRL6lcVCWdbx
+         TnkXpXZS53IaAukR3UsCxNyfv1DwvSSVUN2GtB8yMaLijLAA2wiQ4TtPwRaAWmO3RNMB
+         ssGwMxA6FnWB+KLIdXXQrz42GNgvAWzmC9y1auxEEhX5ynPFv8qM/jW7VouPr1t8bz9W
+         o/YBrB3nWIDIOZaWdVAxep7Nkgx0jPcDgraTEVMPnZzXibYcCq16TyKvx4l4lRaML3zU
+         Wd7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679710711;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Uw0vvRX6fB45yziv3c2fRfTS3bTqjYau48XTnRaZKUQ=;
+        b=Fw9mEWdzdtMq0r+0wL7ZRpg6kqXJVR1b8Ht6zjuANUqiLtzWNHLWbGoThnkYkOxaAf
+         tp5H55EAvEbXC6JXCFtgnxN4AfvQy1M+rHtGWHjo8WvjfFYZjBQam5d/l6EE9ZWSJOCC
+         MRum/UFugicjNlPJw5lu/xCnidlgsPZ0FOVmIpi+bv8Jxybq8BOSpBO2p49Qfbk+skB1
+         Zg9hFgqULq5JppUlY3u0lAY6ZXw2u0qPQ2J25sSwgTy3iJc7c+rUlhM//KO9/qjtP6K9
+         193S/vSoeYrfpb+O2O0uh/HxjsbMQDgWGMFrLnf5UBxEn4JnEMZ4ZSAuZyWh6+NSW0kA
+         35DQ==
+X-Gm-Message-State: AAQBX9ePLdvskP+FPh95a0qrOSnW/tRReYMWAYIH7LrRw0cRFUEKlw2d
+        Jql8sx4C5opUtxTn7ERm/CoanJblQz4ZczAuF/Io+Q==
+X-Google-Smtp-Source: AKy350a0I79S1SUmVIQ6HRmx0m1CdZp1+LfkjYwoFLdgBR60G/VLIqAXQszZ4lDVKDYUrsvufqHj6nn/nq6hxnyegx8=
+X-Received: by 2002:a17:906:eec7:b0:93e:186f:ea0d with SMTP id
+ wu7-20020a170906eec700b0093e186fea0dmr2057027ejb.15.1679710710778; Fri, 24
+ Mar 2023 19:18:30 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <ZB3Zx85Ajnhzq3Pt@arm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-2-yosryahmed@google.com> <ZBz/V5a7/6PZeM7S@slm.duckdns.org>
+ <CAJD7tkYNZeEytm_Px9_73Y-AYJfHAxaoTmmnO71HW5hd1B5tPg@mail.gmail.com> <ZB5UalkjGngcBDEJ@slm.duckdns.org>
+In-Reply-To: <ZB5UalkjGngcBDEJ@slm.duckdns.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 24 Mar 2023 19:17:54 -0700
+Message-ID: <CAJD7tkYhyMkD8SFf8b8L1W9QUrLOdw-HJ2NUbENjw5dgFnH3Aw@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
+ percpu lock
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 24, 2023 at 6:54=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
+>
+> On Fri, Mar 24, 2023 at 12:22:09AM -0700, Yosry Ahmed wrote:
+> > I think a problem with this approach is that we risk having to contend
+> > for the global lock at every CPU boundary in atomic contexts. Right
+> > now we contend for the global lock once, and once we have it we go
+> > through all CPUs to flush, only having to contend with updates taking
+> > the percpu locks at this point. If we unconditionally release &
+> > reacquire the global lock at every CPU boundary then we may contend
+> > for it much more frequently with concurrent flushers.
+> >
+> > On the memory controller side, concurrent flushers are already held
+> > back to avoid a thundering herd problem on the global rstat lock, but
+> > flushers from outside the memory controller can still compete together
+> > or with a flusher from the memory controller. In this case, we risk
+> > contending the global lock more and concurrent flushers taking a
+> > longer period of time, which may end up causing multi-CPU stalls
+> > anyway, right? Also, if we keep _irq when spinning for the lock, then
+> > concurrent flushers still need to spin with irq disabled -- another
+> > problem that this series tries to fix.
+> >
+> > This is particularly a problem for flushers in atomic contexts. There
+> > is a flusher in mem_cgroup_wb_stats() that flushes while holding
+> > another spinlock, and a flusher in mem_cgroup_usage() that flushes
+> > with irqs disabled. If flushing takes a longer period of time due to
+> > repeated lock contention, it affects such atomic context negatively.
+> >
+> > I am not sure how all of this matters in practice, it depends heavily
+> > on the workloads and the configuration like you mentioned. I am just
+> > pointing out the potential disadvantages of reacquiring the lock at
+> > every CPU boundary in atomic contexts.
+>
+> So, I'm not too convinced by the arguments for a couple reasons:
+>
+> * It's not very difficult to create conditions where a contented non-irq
+>   protected spinlock is held unnecessarily long due to heavy IRQ irq load=
+ on
+>   the holding CPU. This can easily extend the amount of time the lock is
+>   held by multiple times if not orders of magnitude. That is likely a
+>   significantly worse problem than the contention on the lock cacheline
+>   which will lead to a lot more gradual degradation.
 
+I agree that can be a problem, it depends on the specific workload and
+configuration. The continuous lock contention at each CPU boundary
+causes a regression (see my reply to Waiman), but I am not sure if
+it's worse than the scenario you are describing.
 
-On 2023/3/25 1:11, Catalin Marinas wrote:
-> On Fri, Mar 24, 2023 at 09:18:35PM +0800, Baoquan He wrote:
->> Baoquan He (3):
->>   arm64: kdump : take off the protection on crashkernel memory region
->>   arm64: kdump: do not map crashkernel region specifically
->>   arm64: kdump: defer the crashkernel reservation for platforms with no
->>     DMA memory zones
->>
->>  arch/arm64/include/asm/kexec.h    |  6 -----
->>  arch/arm64/include/asm/memory.h   |  5 ----
->>  arch/arm64/kernel/machine_kexec.c | 20 --------------
->>  arch/arm64/mm/init.c              |  6 +----
->>  arch/arm64/mm/mmu.c               | 43 -------------------------------
->>  5 files changed, 1 insertion(+), 79 deletions(-)
-> 
-> This series works for me and it has a negative diffstat as well (though
-> I'm sure people will try to bring it back ;)).
+>
+> * If concurrent flushing is an actual problem, we need and can implement =
+a
+>   better solution. There's quite a bit of maneuvering room here given tha=
+t
+>   the flushing operations are mostly idempotent in close time proximity a=
+nd
+>   there's no real atomicity requirement across different segments of
+>   flushing operations.
 
-After the write protection is removed, it is recommended that crc32 check
-be added. However, it can be added later.
+Concurrent flushing can be a problem for some workloads, especially in
+the MM code we flush in the reclaim and refault paths. This is
+currently mitigated by only allowing one flusher at a time from the
+memcg side, but contention can still happen with flushing when a
+cgroup is being freed or other flushers in other subsystems.
 
-> 
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> 
-> .
-> 
+I tried allowing concurrent flushing by completely removing the global
+rstat lock, and only depending on the percpu locks for
+synchronization. For this to be correct the global stat counters need
+to be atomic, this introduced a slow down for flushing in general. I
+also noticed heavier lock contention on the percpu locks, since all
+flushers try to acquire all locks in the same order. I even tried
+implementing a simple retry scheme where we try to acquire the percpu
+lock, and if we fail we queue the current cpu and move to the next
+one. This ended up causing a little bit of slowness as well. Together
+with the slowness introduced by atomic operations it seemed like a
+significant regression in the simple flushing path.
 
--- 
-Regards,
-  Zhen Lei
+Don't get me wrong, I am all for modifying the current approach, I
+just want to make sure we are making the correct decision for *most*
+workloads. Keep in mind that this series aims to minimize the number
+of flushers from atomic contexts as well, and for non-atomic flushers
+we allow giving up the lock at CPU boundaries anyway. The current
+approach only keeps the lock held throughout for atomic flushers.
+
+Any ideas here are welcome!
+
+>
+> Thanks.
+>
+> --
+> tejun
