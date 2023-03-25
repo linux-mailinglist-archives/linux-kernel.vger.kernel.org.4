@@ -2,87 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675536C8C4D
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 08:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D903E6C8C55
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbjCYHqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 03:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38966 "EHLO
+        id S230380AbjCYIME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 04:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjCYHqm (ORCPT
+        with ESMTP id S229446AbjCYIMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 03:46:42 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B0221353B
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 00:46:40 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:33334.1902543559
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id BAD471001EF;
-        Sat, 25 Mar 2023 15:46:36 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 5e01f141a15042c193eaa3c38bd182e1 for maarten.lankhorst@linux.intel.com;
-        Sat, 25 Mar 2023 15:46:38 CST
-X-Transaction-ID: 5e01f141a15042c193eaa3c38bd182e1
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-From:   Sui Jingfeng <15330273260@189.cn>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        suijingfeng <suijingfeng@loongson.cn>, liyi <liyi@loongson.cn>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/fbdev-generic: optimize out a redundant assignment clause
-Date:   Sat, 25 Mar 2023 15:46:36 +0800
-Message-Id: <20230325074636.136833-1-15330273260@189.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Sat, 25 Mar 2023 04:12:02 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E45712841;
+        Sat, 25 Mar 2023 01:12:01 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 20so3951665lju.0;
+        Sat, 25 Mar 2023 01:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679731918;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+NlJ/oPig1GP7X1e2c7GDto79ZOIHWgulBZ822qNni0=;
+        b=MAds8lO/SQafNzkzu9ERbPN00+9EVMg0nVXQHSKzx5xVWQRzNxVtddouKOyGkU5kpo
+         ahAUApjRyB4tG4GifLdRUnQ6xNGdrZAkkTG9TU8AEfXRnjKq/7+1Np0T7F+UKpoYg8vl
+         Hl7f97ZfuWXxy7ro+uE17qnhYq8vxvbCEnTwLlbX9P3EDE/bbvjrkGAF/Ax7ze77Yi68
+         NiwV7EHhDwW/oJvfN5RJ0xZwInUZAPA2au5kQIxP4BrXZmxjun9GCm9vq2Ta75em70iC
+         s0Hda8iINwzZ7a2G8zetIGAqfiUQsA69Ebc3nE/Z4AvxM8uUzX8TWWsqfo21WVIHUlWq
+         NHWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679731918;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+NlJ/oPig1GP7X1e2c7GDto79ZOIHWgulBZ822qNni0=;
+        b=TZvF/CrNls1GmYuBa4VpNwgtIG5+GgpFq5QE1oyA3R96blMpVxUW4DlOTjuQimbTV5
+         8jvCsIjVQURPhtc0jiEdsCO7iL7fmFlKkOFfi+xPD/D2OxhcJ+nuK5JfHLZHLIKGD/ST
+         1k7LU5nhpjjZtrsC40woyT9MX/Bg9ufIlu4uiwQP9O0BGgDCT3EUYRa8scb+ltrY9czh
+         cuetMGex+Tn/UrvemDOphKM9zGV3taL2tWJBwBKgG0WayiyRzZOtjaw1i68b6NuRnG4A
+         YvaObax67Etjse3O/hUblEQCsj+2jS1nV5TJ2HzQBFrpz8DJTw1c/jvp/+z41J7llh7b
+         9INw==
+X-Gm-Message-State: AAQBX9fY3hYFDxPWfK3Yxjua7G49HRTdM/z5Qmq4z2jXQSNGnwB6n90G
+        CCxy/7spzyIXZJs9t+slNRo=
+X-Google-Smtp-Source: AKy350bznPlxqT/a26p+A5M3mnHqnoezsghoLnhAEYwchx0tAr4G/87IgOsFxXs0YJA3U6iXy8jEYg==
+X-Received: by 2002:a2e:86d5:0:b0:29f:e144:6c6a with SMTP id n21-20020a2e86d5000000b0029fe1446c6amr1490057ljj.23.1679731918514;
+        Sat, 25 Mar 2023 01:11:58 -0700 (PDT)
+Received: from localhost ([188.119.65.94])
+        by smtp.gmail.com with ESMTPSA id m18-20020a195212000000b004e95f53adc7sm3720859lfb.27.2023.03.25.01.11.57
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 25 Mar 2023 01:11:57 -0700 (PDT)
+From:   Dan Li <ashimida.1990@gmail.com>
+To:     gcc-patches@gcc.gnu.org,
+        Richard Sandiford <richard.sandiford@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Dan Li <ashimida.1990@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Song Liu <song@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Juergen Gross <jgross@suse.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Yuntao Wang <ytcoode@gmail.com>,
+        Changbin Du <changbin.du@intel.com>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: [RFC/RFT,V2 0/3] Add compiler support for Kernel Control Flow Integrity
+Date:   Sat, 25 Mar 2023 01:11:14 -0700
+Message-Id: <20230325081117.93245-1-ashimida.1990@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221219055431.22596-1-ashimida.1990@gmail.com>
+References: <20221219055431.22596-1-ashimida.1990@gmail.com>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- The assignment already done in drm_client_buffer_vmap(),
- just trival clean, no functional change.
+This series of patches is mainly used to support the control flow
+integrity protection of the linux kernel [1], which is similar to
+-fsanitize=kcfi in clang 16.0 [2,3].
 
-Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+Any suggestion please let me know :).
+
+Thanks, Dan.
+
+[1] https://lore.kernel.org/all/20220908215504.3686827-1-samitolvanen@google.com/
+[2] https://clang.llvm.org/docs/ControlFlowIntegrity.html
+[3] https://reviews.llvm.org/D119296
+
+Signed-off-by: Dan Li <ashimida.1990@gmail.com>
+
 ---
- drivers/gpu/drm/drm_fbdev_generic.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Dan Li (3):
+  [PR102768] flag-types.h (enum sanitize_code): Extend sanitize_code to
+    64 bits to support more features
+  [PR102768] Support CFI: Add basic support for Kernel Control Flow
+    Integrity
+  [PR102768] aarch64: Add support for Kernel Control Flow Integrity
 
-diff --git a/drivers/gpu/drm/drm_fbdev_generic.c b/drivers/gpu/drm/drm_fbdev_generic.c
-index 4d6325e91565..1da48e71c7f1 100644
---- a/drivers/gpu/drm/drm_fbdev_generic.c
-+++ b/drivers/gpu/drm/drm_fbdev_generic.c
-@@ -282,7 +282,7 @@ static int drm_fbdev_damage_blit(struct drm_fb_helper *fb_helper,
- 				 struct drm_clip_rect *clip)
- {
- 	struct drm_client_buffer *buffer = fb_helper->buffer;
--	struct iosys_map map, dst;
-+	struct iosys_map map;
- 	int ret;
- 
- 	/*
-@@ -302,8 +302,7 @@ static int drm_fbdev_damage_blit(struct drm_fb_helper *fb_helper,
- 	if (ret)
- 		goto out;
- 
--	dst = map;
--	drm_fbdev_damage_blit_real(fb_helper, clip, &dst);
-+	drm_fbdev_damage_blit_real(fb_helper, clip, &map);
- 
- 	drm_client_buffer_vunmap(buffer);
- 
+ gcc/asan.h                    |   4 +-
+ gcc/c-family/c-attribs.cc     |  10 +-
+ gcc/c-family/c-common.h       |   2 +-
+ gcc/c/c-parser.cc             |   4 +-
+ gcc/cfgexpand.cc              |  26 ++++++
+ gcc/cgraphunit.cc             |  34 +++++++
+ gcc/combine.cc                |   1 +
+ gcc/common.opt                |   4 +-
+ gcc/config/aarch64/aarch64.cc | 166 ++++++++++++++++++++++++++++++++++
+ gcc/cp/typeck.cc              |   2 +-
+ gcc/doc/invoke.texi           |  36 ++++++++
+ gcc/doc/tm.texi               |  27 ++++++
+ gcc/doc/tm.texi.in            |   8 ++
+ gcc/dwarf2asm.cc              |   2 +-
+ gcc/emit-rtl.cc               |   1 +
+ gcc/emit-rtl.h                |   4 +
+ gcc/final.cc                  |  24 ++++-
+ gcc/flag-types.h              |  67 +++++++-------
+ gcc/gimple.cc                 |  11 +++
+ gcc/gimple.h                  |   5 +-
+ gcc/opt-suggestions.cc        |   2 +-
+ gcc/opts.cc                   |  26 +++---
+ gcc/opts.h                    |   8 +-
+ gcc/output.h                  |   3 +
+ gcc/reg-notes.def             |   1 +
+ gcc/target.def                |  38 ++++++++
+ gcc/toplev.cc                 |   4 +
+ gcc/tree-cfg.cc               |   2 +-
+ gcc/tree.cc                   | 144 +++++++++++++++++++++++++++++
+ gcc/tree.h                    |   1 +
+ gcc/varasm.cc                 |  26 ++++++
+ 31 files changed, 627 insertions(+), 66 deletions(-)
+
 -- 
-2.25.1
+2.17.1
 
