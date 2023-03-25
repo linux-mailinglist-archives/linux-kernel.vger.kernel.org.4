@@ -2,61 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF6E6C8F46
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 608756C8F4C
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbjCYQBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 12:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
+        id S231959AbjCYQGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 12:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjCYQBm (ORCPT
+        with ESMTP id S229446AbjCYQGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 12:01:42 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DEDEF8C
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 09:01:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679760101; x=1711296101;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5dVs+q2gLQVLDGkLHXJqHU1Gk6hiIVR86jEv5ozZ6/4=;
-  b=Ogh81MVKGClQ82/ijh50Ztg/rED/UAk7jjR0u+U+6BXFS6+9WfDZRMWD
-   5Us6o4B2lu8q7DIAdL70FYj+9bb+zesvAw9ZCwlmQWkbh/DEqZx00mRSQ
-   OIbQbJnU5gR4/x2xqcffy+xcJImOY3LxHQlZ9TZ40ybSN62C1P0Ib3HyZ
-   JUJCW0As+G3BlS/Ki95S6uqb3viqk/KZ7ECOAVOeyezFjMEcvUyBA2g0l
-   4K6J+KZlPCiihEjA8PoigehxywWEXisrC6X+KClDBk8nFDUxa792zplUI
-   hOrlWCjQLh2xzBqgcApzzgAz3VBXzLPxHP9m2SZ4h1Bj/hsdCsGODsVg9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="342385473"
-X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="342385473"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 09:01:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="747506632"
-X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="747506632"
-Received: from benfis1x-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.47.35])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 09:01:37 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id D62E510A607; Sat, 25 Mar 2023 19:01:34 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH] x86: Disable kexec for TDX guests
-Date:   Sat, 25 Mar 2023 19:01:28 +0300
-Message-Id: <20230325160128.21857-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
+        Sat, 25 Mar 2023 12:06:02 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2107.outbound.protection.outlook.com [40.107.243.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27321F976;
+        Sat, 25 Mar 2023 09:06:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZmPMurnMl5+1Ze+tbOLbgSvPiUK8mOODn1fNT0gtQCKxi7HD+hK72A7HFwVEHr0Z5mqQjQuh75DnbBiYLTM3reRch5HBQOSvbK6Dcwr3om1aTYjLSmMTY4mh1R+Efl0TFXifbC94CytVTCllSBZSs3ycZetGhETgIvCbVcpXvheaXAOBG/o1XiO4eZBpEyYuzXuz1wOjcmktkTIzPUZnHH7fRKqJ5LA4ljl8bbiD95UbucZhr4ljO4L9u9aZzTJ0ztEEvaod/dVc9J8JJUUIzsu8PkCTlKZIsT//JZ7f5aTimraY0wMz3yDCwGBkLdVzB+UCZfvskgHy1oCgUsJAfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vHXs6V5BOg2hz5VFm6j0ahftt7saNf2gQRMibBii2xA=;
+ b=kJqp3sAeReWk/2GiODbXbO9P5aAsWNg0+Tq7ZNBsXM/5VgDuyOejThbTwzswAcFB+bE9oePBm1JjG2Ehq4YBSphGxwaQaBxwY9X4fUaaA18tQPsvAkEZUkj9SSk/FulGOdtN1IMAhLItvTsCEazUsgZ7tTq55ZM0LN8PcuhJ7tMzzg4e+v54W/g/1QUrzUag4mftGnoaDAF1Gmt6HHmY/auFSpus2qEF/2u97fb/hw2KDaUc5fKwuWySwERbmGyubdfuShdnkkFz1Il586Vurp6bMlfRbIDAnwvXqZDg3miSP+bREWPDf6WcoBWbZYWjy95ZjRRO6e1Ibsa451kjAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vHXs6V5BOg2hz5VFm6j0ahftt7saNf2gQRMibBii2xA=;
+ b=JlRX7vv7mOm5Kojf+f+OZH4z1Z5UsgF/AmARkPYTqb8jqD5fYWEEwjpv41hVe09ZguQ+tjCHlrmI6XlG3/HsbEJmBy60zfXh4oom6JERKuj/2yhNPNVJwd1B5zoscx+mbeiqvbbNFY2t8ZuMHQold33ptWSOQzO6+7SPSLvexIY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DS7PR13MB4621.namprd13.prod.outlook.com (2603:10b6:5:3b0::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Sat, 25 Mar
+ 2023 16:05:59 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.041; Sat, 25 Mar 2023
+ 16:05:59 +0000
+Date:   Sat, 25 Mar 2023 17:05:52 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     johannes@sipsolutions.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        nathan@kernel.org, ndesaulniers@google.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] mac80211: minstrel_ht: remove unused n_supported variable
+Message-ID: <ZB8b4CWiSENo49Kz@corigine.com>
+References: <20230325132610.1334820-1-trix@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230325132610.1334820-1-trix@redhat.com>
+X-ClientProxiedBy: AS4P195CA0001.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5e2::8) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DS7PR13MB4621:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54924172-8f76-4596-14ae-08db2d4ad296
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aN0oKYccGwKLXTih7qkQ3XuDv7NJZo6ol6/n1noUvd6ZZBx/zV5lMOfBUnnT6CSNQHc7rYK6x70qex7yshYZA9fFLl2C1kkukQH7KqhQ9gjkHCUqHEvrnPTr2Wt5am+E/KosLKP2cR8VxR3/O4lx6FLs9NWheJZ6Yl+hKbsNrNzgUmabzdBQKu1l5uwnPaeqdlvz60eJxvAElcHo1fH1pmEMDNc+QcYtWL7Ecve0BXg8Mp5NnySxcbh90PwKaFBo/OmBhBsqfIKhxm7tjLWIJ8zi1RKAA/wOypDdQniRmPiDzbRzeryVjo/UIOa0Gvut1D06Mw6YJvZOslKPsxnPd52tgi1eqdF1P2kPr28f+Zmui5Xllffd3AFTM+XkNMC6Njn8JSQ+QQf/rT8JdqbAUzEtewIJdKyknomexn/SiU1lUg9C5/lUryxtTrH8ufo7DMaGRpM1b5vROkOne6AD3s2DWogaz0/IIKKGZLvJ36voaxqUUoyObj5TSxJafEGtyu2nQqjs8AvVUcleUp5ZC7oAzHHhSt3oSulvd2oiFK2LCEzZn1Oh9//eA5sA4Cfb/uKZ54zKL6uJFpLS/y+SH4I84DPh5mScSs6FwcFyZwc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(396003)(136003)(39830400003)(451199021)(38100700002)(4744005)(44832011)(2906002)(6486002)(5660300002)(41300700001)(7416002)(66556008)(66476007)(8936002)(66946007)(6916009)(4326008)(8676002)(478600001)(316002)(86362001)(6666004)(36756003)(6506007)(6512007)(2616005)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Q3rvu4I9dMkYE34o1q1w6fSVougpZl6Knn5N9IcItVkuuEXACdoB4RMyn0em?=
+ =?us-ascii?Q?xrsXc5ooTzL6n27D5NqF7j/ssrMRIh3RMRz9Y6G0cekv5rQ0tC93z9Xdqyy+?=
+ =?us-ascii?Q?T7eAWU998BeNci3ypfEacIGtTy8D99Xi32A0Mz+SY8X1ikAHhDBeS07lBp13?=
+ =?us-ascii?Q?8ymQhWITNaM5RiVtbQRgjUNRWNm6bZ2LxM/Qbo3xXVHMBtKJ2oAitpyy7MiG?=
+ =?us-ascii?Q?efhvGOkchxZ7otOacmYuTdLgQvZRssDsLLbqRDjmHzNxfjPuSd0GLHYp7WM9?=
+ =?us-ascii?Q?ReWQjgXdNXhHfSfZxj8OxhSqF4n+UXv8paANYX2XGMkbXy1X7/sNX0myj8G9?=
+ =?us-ascii?Q?conoHFvTbOhrYdsPTWEpdYP3hsyzXZQRu/SJ3spXmKC75bUv9mZCFHhT8o1r?=
+ =?us-ascii?Q?qCrdykAcJRcfadPPjuMfqYzatkJGzFj+ZWQob4NJrWJHUnqEyJUfkociF9FT?=
+ =?us-ascii?Q?nLDBeX9U0xfQCiPVmUowrY4zrB0MnfMZ/PXukjM04BgiVdJgxPULPL8pzw0U?=
+ =?us-ascii?Q?Q/p0/Ak+FQFOMBHl9H7XGqn7vpps4oSpmc5NKIFTOVuBYw1LiG63gfe13JrR?=
+ =?us-ascii?Q?JjEw+E5bjfl9vNAdID5IkgkNkWLEhv0EdYyQzrXMShBYux5OT5Ak4c6Oa/Ip?=
+ =?us-ascii?Q?JMuw+GpBmS2hbDPFAubaIXihiEpCsypGMpLs4lbsDZjFHN6BFOINJXkKU9XP?=
+ =?us-ascii?Q?+Y4f9cw5EV6XHLe18jMlzYH1tDygClXSdhBUdfqyrPZVVA8JNnu6MeypjD57?=
+ =?us-ascii?Q?R4enn3GIvP9rRS51SJIbP1e2Y8oVlYqBPBIR638P5dI0VP3U0JR9wMY06LJJ?=
+ =?us-ascii?Q?jzRMhXlwbS1T2tKqSZ5Au0JCFXTLB06YUaN/fovrjf6FHqIiUxHVie35GUqS?=
+ =?us-ascii?Q?N0JOO+oBw1odvoIzIzhixVQVR1u3FGf66HCohdDR4I5Xj9fBJ8/6a13vZRSY?=
+ =?us-ascii?Q?ojv1oCrq00/IVIFaLbOhIQCOibfyo3zJYcjmZGbjeErrjWPDeWRMlRF2BXO+?=
+ =?us-ascii?Q?6Wkp8EovBk6865UaUvYbX5cXiO6k4DXqAD7SOsrSJ5L1YJgTEtm2AOXJm3Hm?=
+ =?us-ascii?Q?PUR5E3tU31qeMtqs5Jrv9kWxhIcAHJnWkCIvewbDe2Z5JUTYRTXF1AjpUong?=
+ =?us-ascii?Q?ZXLsNVCaGE3B2OU7/uHG2qLqu9HdcoihvIT0U4e09cz+RNEzJqx28nUX+XRo?=
+ =?us-ascii?Q?VCUVnBdOycrjh9t0cibsMqSGHe9CuZQthw/UjEtH1xozRtcgJ9lUP0REQ9aQ?=
+ =?us-ascii?Q?cowyz8BG2QgErKLi6cglIcg81roVMLdofQxLAvcygXiRQWbcRnfD5FUXthE3?=
+ =?us-ascii?Q?M5LQursUIBWVfR0JdA0ndKXxTcNEuVKyYICN8dphx+NCak9H0gEuYkuCVoJ2?=
+ =?us-ascii?Q?CWmXqPrTJr8xDfWmds+C4BzrW9AfFzMYVbHVOP/G9LPx6+RhXkqPixG/4quS?=
+ =?us-ascii?Q?9Wtwqd+MCFs84xfy/dXenr3W/iFgMbIQwxpx6fGv7YYQJZqwGyKDAZehM00d?=
+ =?us-ascii?Q?1Lv43hNNvaABR+UDahxbzjkkZH/5lwmkwpFcZOWG3bZZNv5gu84bCavRVIDs?=
+ =?us-ascii?Q?mT4oFQsD1dwCRtl0IOcsnVxBef26R3jq4n79PMl+U3tfnX6GfakKp8BSxJZ5?=
+ =?us-ascii?Q?BTDw8oyj9WBkTkMyTAB02NFDxXhu6ZFMEzQ1vDRx3PqS9Bp5vrzIig5P5O+M?=
+ =?us-ascii?Q?TWDn8A=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54924172-8f76-4596-14ae-08db2d4ad296
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2023 16:05:58.8656
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9Hw6XyKazaZzyXo8uCUC6Y/MJmGa1mi6+N+Efxa3fu8kNF3VKtLZw9P9vOa6XxoWCy9iPUmP5I4GFCKge05GfEPQ4iMJ1nDGzzFF7f7SE64=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR13MB4621
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,121 +117,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kexec enabling inside TDX guest requires addressing several issues:
+On Sat, Mar 25, 2023 at 09:26:10AM -0400, Tom Rix wrote:
+> clang with W=1 reports
+> net/mac80211/rc80211_minstrel_ht.c:1711:6: error: variable
+>   'n_supported' set but not used [-Werror,-Wunused-but-set-variable]
+>         int n_supported = 0;
+>             ^
+> This variable is not used so remove it.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
- - Avoid clearing CR4.MCE during kexec;
-
- - Convert all shared memory back to private on kexec, so the next
-   kernel could start normally;
-
- - Add support for offlining secondary CPUs, so the new kernel could
-   bring them up again.
-
-The first two items are relatively straight-forward. The initial attempt
-to implement them can be found here - [1].
-
-The last item is tricky. TDX guests use ACPI MADT MPWK to bring up
-secondary CPUs. The mechanism doesn't allow to put a CPU back offline if
-it has woken up.
-
-It is clearly missing functionality from the ACPI mechanism and it has
-to be changed to allow offlining. The work in this direction has
-started, but it takes time.
-
-For now, disable kexec for TDX guests. It will fail kexec instead of
-crashing on attempt.
-
-[1] https://lore.kernel.org/all/20230213234836.3683-1-kirill.shutemov@linux.intel.com
-
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- arch/x86/include/asm/kexec.h       |  3 +++
- arch/x86/kernel/machine_kexec_64.c | 10 ++++++++++
- include/linux/kexec.h              |  7 +++++++
- kernel/kexec.c                     |  4 ++++
- kernel/kexec_file.c                |  4 ++++
- 5 files changed, 28 insertions(+)
-
-diff --git a/arch/x86/include/asm/kexec.h b/arch/x86/include/asm/kexec.h
-index a3760ca796aa..89693684a7d1 100644
---- a/arch/x86/include/asm/kexec.h
-+++ b/arch/x86/include/asm/kexec.h
-@@ -189,6 +189,9 @@ extern void arch_kexec_pre_free_pages(void *vaddr, unsigned int pages);
- void arch_kexec_protect_crashkres(void);
- #define arch_kexec_protect_crashkres arch_kexec_protect_crashkres
- 
-+int arch_kexec_load(void);
-+#define arch_kexec_load arch_kexec_load
-+
- void arch_kexec_unprotect_crashkres(void);
- #define arch_kexec_unprotect_crashkres arch_kexec_unprotect_crashkres
- 
-diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
-index 0611fd83858e..9a0ded12df70 100644
---- a/arch/x86/kernel/machine_kexec_64.c
-+++ b/arch/x86/kernel/machine_kexec_64.c
-@@ -600,3 +600,13 @@ void arch_kexec_pre_free_pages(void *vaddr, unsigned int pages)
- 	 */
- 	set_memory_encrypted((unsigned long)vaddr, pages);
- }
-+
-+int arch_kexec_load(void)
-+{
-+	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
-+		pr_warn_once("Disable kexec: not yet supported in TDX guest\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-index 6883c5922701..9fa88c191605 100644
---- a/include/linux/kexec.h
-+++ b/include/linux/kexec.h
-@@ -442,6 +442,13 @@ static inline void arch_kexec_protect_crashkres(void) { }
- static inline void arch_kexec_unprotect_crashkres(void) { }
- #endif
- 
-+#ifndef arch_kexec_load
-+static inline int arch_kexec_load(void)
-+{
-+	return 0;
-+}
-+#endif
-+
- #ifndef page_to_boot_pfn
- static inline unsigned long page_to_boot_pfn(struct page *page)
- {
-diff --git a/kernel/kexec.c b/kernel/kexec.c
-index 92d301f98776..70e4923c135d 100644
---- a/kernel/kexec.c
-+++ b/kernel/kexec.c
-@@ -194,6 +194,10 @@ static inline int kexec_load_check(unsigned long nr_segments,
- 			 KEXEC_TYPE_CRASH : KEXEC_TYPE_DEFAULT;
- 	int result;
- 
-+	result = arch_kexec_load();
-+	if (result)
-+		return result;
-+
- 	/* We only trust the superuser with rebooting the system. */
- 	if (!kexec_load_permitted(image_type))
- 		return -EPERM;
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index f1a0e4e3fb5c..d02b7eb0f6e6 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -331,6 +331,10 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
- 	struct kimage **dest_image, *image;
- 	int ret = 0, i;
- 
-+	ret = arch_kexec_load();
-+	if (ret)
-+		return ret;
-+
- 	/* We only trust the superuser with rebooting the system. */
- 	if (!kexec_load_permitted(image_type))
- 		return -EPERM;
--- 
-2.39.2
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
