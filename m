@@ -2,109 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21606CB533
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 05:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C856CB662
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 07:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbjC1Dzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 23:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
+        id S232071AbjC1Fxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 01:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232487AbjC1Dz0 (ORCPT
+        with ESMTP id S229452AbjC1Fxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 23:55:26 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E016199A;
-        Mon, 27 Mar 2023 20:55:20 -0700 (PDT)
-Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Plwmp43LRzKpkX;
-        Tue, 28 Mar 2023 11:54:50 +0800 (CST)
-Received: from huawei.com (10.67.174.205) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 28 Mar
- 2023 11:55:18 +0800
-From:   Chen Jiahao <chenjiahao16@huawei.com>
-To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <conor.dooley@microchip.com>, <guoren@kernel.org>,
-        <heiko@sntech.de>, <bjorn@rivosinc.com>, <alex@ghiti.fr>,
-        <akpm@linux-foundation.org>, <atishp@rivosinc.com>,
-        <bhe@redhat.com>, <thunder.leizhen@huawei.com>, <horms@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <kexec@lists.infradead.org>, <linux-doc@vger.kernel.org>
-Subject: [PATCH -next v2 2/2] docs: kdump: Update the crashkernel description for riscv
-Date:   Tue, 28 Mar 2023 19:51:50 +0800
-Message-ID: <20230328115150.2700016-3-chenjiahao16@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230328115150.2700016-1-chenjiahao16@huawei.com>
-References: <20230328115150.2700016-1-chenjiahao16@huawei.com>
+        Tue, 28 Mar 2023 01:53:38 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456151BFE
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 22:53:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679982818; x=1711518818;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FF+DUqCGHy8oPyFBqiYg8s10DunJo6T+TgdcwHN7O5g=;
+  b=ESv2E2dNjMHASUtegF+EayvwPAK6RCh8Soc3l07IZvHlYJm5mDlJD45g
+   DvpqBqTHk+wuAzcn5YthmLIxbIqcOjE4ItYnxcjP32hiZWrCFY07x0TJq
+   1OeSdNkdN2lCcw3Ob8HbEVWCGmZA4+aZ7zwveGWDt78lmjgkXtl6LGtyX
+   SdeXQt48wPG2DlHU71isKS2rDDTgMF5m2/ehPZth+KG1gyEkxGM9BIMmq
+   BSkQ6I5p2N+axBu48UcN/hY5MmpK5mDRoWnWvKr+8n7UyLeMdhoIHiwJd
+   ytU+dkGSedaTOaN9WgbEn8bq92R3psFqHZrFMwgGYE9cEIukaSCDvPza0
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="403088288"
+X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
+   d="scan'208";a="403088288"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 22:53:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="752987372"
+X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
+   d="scan'208";a="752987372"
+Received: from skunchit-mobl.amr.corp.intel.com (HELO [10.209.35.30]) ([10.209.35.30])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 22:53:36 -0700
+Message-ID: <dfd8466a-9693-e469-31be-3d9158f19263@intel.com>
+Date:   Sat, 25 Mar 2023 09:20:47 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.205]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=DATE_IN_FUTURE_06_12,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] x86: Disable kexec for TDX guests
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230325160128.21857-1-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230325160128.21857-1-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now "crashkernel=" parameter on riscv has been updated to support
-crashkernel=X,[high,low]. Through which we can reserve memory region
-above/within 32bit addressible DMA zone.
+On 3/25/23 09:01, Kirill A. Shutemov wrote:
+> The last item is tricky. TDX guests use ACPI MADT MPWK to bring up
+> secondary CPUs. The mechanism doesn't allow to put a CPU back offline if
+> it has woken up.
 
-Here update the parameter description accordingly.
+I'm not sure I like this approach.
 
-Signed-off-by: Chen Jiahao <chenjiahao16@huawei.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+TDX uses the MADT exclusively.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 9bc3813bce8f..a947d3d7c85c 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -866,7 +866,7 @@
- 			memory region [offset, offset + size] for that kernel
- 			image. If '@offset' is omitted, then a suitable offset
- 			is selected automatically.
--			[KNL, X86-64, ARM64] Select a region under 4G first, and
-+			[KNL, X86-64, ARM64, RISCV] Select a region under 4G first, and
- 			fall back to reserve region above 4G when '@offset'
- 			hasn't been specified.
- 			See Documentation/admin-guide/kdump/kdump.rst for further details.
-@@ -879,14 +879,14 @@
- 			Documentation/admin-guide/kdump/kdump.rst for an example.
- 
- 	crashkernel=size[KMG],high
--			[KNL, X86-64, ARM64] range could be above 4G. Allow kernel
--			to allocate physical memory region from top, so could
--			be above 4G if system have more than 4G ram installed.
--			Otherwise memory region will be allocated below 4G, if
--			available.
-+			[KNL, X86-64, ARM64, RISCV] range could be above 4G.
-+			Allow kernel to allocate physical memory region from top,
-+			so could be above 4G if system have more than 4G ram
-+			installed. Otherwise memory region will be allocated
-+			below 4G, if available.
- 			It will be ignored if crashkernel=X is specified.
- 	crashkernel=size[KMG],low
--			[KNL, X86-64, ARM64] range under 4G. When crashkernel=X,high
-+			[KNL, X86-64, ARM64, RISCV] range under 4G. When crashkernel=X,high
- 			is passed, kernel could allocate physical memory region
- 			above 4G, that cause second kernel crash on system
- 			that require some amount of low memory, e.g. swiotlb
-@@ -897,6 +897,7 @@
- 			size is	platform dependent.
- 			  --> x86: max(swiotlb_size_or_default() + 8MiB, 256MiB)
- 			  --> arm64: 128MiB
-+			  --> riscv: 128MiB
- 			This one lets the user specify own low range under 4G
- 			for second kernel instead.
- 			0: to disable low allocation.
--- 
-2.31.1
+MADT-based systems can't offline CPUs.
 
+kexec() requires
