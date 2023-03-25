@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBF86C8B7E
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 07:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E946C8B83
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 07:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbjCYGLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 02:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        id S232120AbjCYGLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 02:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232283AbjCYGKc (ORCPT
+        with ESMTP id S232081AbjCYGKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 02:10:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FB21A95B;
-        Fri, 24 Mar 2023 23:09:59 -0700 (PDT)
+        Sat, 25 Mar 2023 02:10:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B4F19F03;
+        Fri, 24 Mar 2023 23:10:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EC8DB82639;
-        Sat, 25 Mar 2023 06:09:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB2DCC433AC;
-        Sat, 25 Mar 2023 06:09:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B1696092A;
+        Sat, 25 Mar 2023 06:10:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D45A0C433A7;
+        Sat, 25 Mar 2023 06:09:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679724597;
-        bh=o3v/f0seGdAieP7M24caD3rUrneRSNKMDfhKZvhr+c4=;
+        s=k20201202; t=1679724604;
+        bh=Q4kzp7hmJKAwhCDFhRPUCQkNxwXkbNHUiNCRyHZVRo4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dlZIqcoyznkL1BKobFMvbQv37dL3Y5n/pYQmixa6V5wHpLEZoZh7mKIP/w+WaDln3
-         7F9U/KGc4cypsnTvMy9oSSfrgGALo8ZRsy0CCO2wxsn95KZUH66WMSYPrH+A1vRo8P
-         m5DIfRaoJFsfaXsZDqqnvVk3vN8n6JycwxsVP5EnCJ1i3wogM96inqe6yhZ2OVDVv9
-         F03Fni6dt1PZR+WBmmBLf0bzz/xS7McoVuWqshVPeq2wPkPrNFx8Ge1eAY26HJlYt7
-         OejyqoLf5fINt0J1L8kMmt6aLbRSB4HCcXQtM1HnqsNGL1FZ8n1jBcAfRC50m+1miH
-         orub55FmXGAyA==
+        b=NhWIQf/4CSlIfbVurDZyUb06nGU3J/0m5t5Q7paTe2sA4FJ4ExnWqS7+owSCidLIV
+         xjF4Hui1ktMhyFjKRdWZz+zzit5NFzt5X9svx3qCkHz3yuhUcxQd5J6Fi51KTKe6YY
+         W6Ta+3a0kjpl86l7bSQWaOgVIQHX1l0ORB2R6wDGkRpUKWhtIdavVLu6WUsuuThUFC
+         CYGII+/RR+PTXKmCiR/N2d6kJjrSeDNgNhjt4nOPpvRZeMqm/m3+tm+/bwVjoQa5/z
+         CjIVu9EE6qYeTXhqF5BEwB5udvuVW0dYoEUnybQbj1jeBPq+5I1Kvx4hb/eGW4YrmY
+         mvsljINWlR8TA==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -55,9 +55,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-mm@kvack.org, linux-sh@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
         sparclinux@vger.kernel.org
-Subject: [PATCH v3 10/14] powerpc: drop ranges for definition of ARCH_FORCE_MAX_ORDER
-Date:   Sat, 25 Mar 2023 09:08:24 +0300
-Message-Id: <20230325060828.2662773-11-rppt@kernel.org>
+Subject: [PATCH v3 11/14] sh: reword ARCH_FORCE_MAX_ORDER prompt and help text
+Date:   Sat, 25 Mar 2023 09:08:25 +0300
+Message-Id: <20230325060828.2662773-12-rppt@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230325060828.2662773-1-rppt@kernel.org>
 References: <20230325060828.2662773-1-rppt@kernel.org>
@@ -74,45 +74,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-PowerPC defines ranges for ARCH_FORCE_MAX_ORDER some of which are
-insanely allowing MAX_ORDER up to 63, which implies maximal contiguous
-allocation size of 2^63 pages.
+The prompt and help text of ARCH_FORCE_MAX_ORDER are not even close to
+describe this configuration option.
 
-Drop bogus definitions of ranges for ARCH_FORCE_MAX_ORDER and leave it a
-simple integer with sensible defaults.
-
-Users that *really* need to change the value of ARCH_FORCE_MAX_ORDER
-will be able to do so but they won't be mislead by the bogus ranges.
+Update both to actually describe what this option does.
 
 Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Reviewed-by: Zi Yan <ziy@nvidia.com>
 Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 ---
- arch/powerpc/Kconfig | 6 ------
- 1 file changed, 6 deletions(-)
+ arch/sh/mm/Kconfig | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index c0095bf795ca..419be4a71004 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -897,17 +897,11 @@ config DATA_SHIFT
+diff --git a/arch/sh/mm/Kconfig b/arch/sh/mm/Kconfig
+index 40271090bd7d..238b2772751e 100644
+--- a/arch/sh/mm/Kconfig
++++ b/arch/sh/mm/Kconfig
+@@ -19,7 +19,7 @@ config PAGE_OFFSET
+ 	default "0x00000000"
  
  config ARCH_FORCE_MAX_ORDER
- 	int "Order of maximal physically contiguous allocations"
--	range 7 8 if PPC64 && PPC_64K_PAGES
- 	default "8" if PPC64 && PPC_64K_PAGES
--	range 12 12 if PPC64 && !PPC_64K_PAGES
- 	default "12" if PPC64 && !PPC_64K_PAGES
--	range 8 63 if PPC32 && PPC_16K_PAGES
- 	default "8" if PPC32 && PPC_16K_PAGES
--	range 6 63 if PPC32 && PPC_64K_PAGES
- 	default "6" if PPC32 && PPC_64K_PAGES
--	range 4 63 if PPC32 && PPC_256K_PAGES
- 	default "4" if PPC32 && PPC_256K_PAGES
--	range 10 63
+-	int "Maximum zone order"
++	int "Order of maximal physically contiguous allocations"
+ 	range 8 63 if PAGE_SIZE_16KB
+ 	default "8" if PAGE_SIZE_16KB
+ 	range 6 63 if PAGE_SIZE_64KB
+@@ -28,16 +28,18 @@ config ARCH_FORCE_MAX_ORDER
+ 	default "13" if !MMU
  	default "10"
  	help
- 	  The kernel page allocator limits the size of maximal physically
+-	  The kernel memory allocator divides physically contiguous memory
+-	  blocks into "zones", where each zone is a power of two number of
+-	  pages.  This option selects the largest power of two that the kernel
+-	  keeps in the memory allocator.  If you need to allocate very large
+-	  blocks of physically contiguous memory, then you may need to
+-	  increase this value.
++	  The kernel page allocator limits the size of maximal physically
++	  contiguous allocations. The limit is called MAX_ORDER and it
++	  defines the maximal power of two of number of pages that can be
++	  allocated as a single contiguous block. This option allows
++	  overriding the default setting when ability to allocate very
++	  large blocks of physically contiguous memory is required.
+ 
+ 	  The page size is not necessarily 4KB. Keep this in mind when
+ 	  choosing a value for this option.
+ 
++	  Don't change if unsure.
++
+ config MEMORY_START
+ 	hex "Physical memory start address"
+ 	default "0x08000000"
 -- 
 2.35.1
 
