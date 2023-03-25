@@ -2,143 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7606C8C3B
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 08:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215CC6C8C33
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 08:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjCYHjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 03:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
+        id S232118AbjCYH2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 03:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCYHjH (ORCPT
+        with ESMTP id S229486AbjCYH16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 03:39:07 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C5B5267;
-        Sat, 25 Mar 2023 00:39:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679729947; x=1711265947;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sLY1UXi97/Z2gETqW3BWym0tYdxaqZiwmVgNL8H67WA=;
-  b=UDNCYjV4Njgyl4CqVpKA3AuJ336+KDpvwZL7LswKYM2XTc52SvbT1FEA
-   aRFf/QFUK9zs98b3kVrHiwvfo5WpU1lcAZWKK0qAsdq79ubNr4sHsXoj5
-   NwSm3jauQhS1R9MCkPEdkeG35lEdO/FypOgPVsDhUW6/u98lBFM3WUJSR
-   HLIbOZICY1BIniOVuoym0BUnHZg4UxYHGV6O1fckkypcPQE10UpiypLZX
-   wPZB8QOMgpPQue8EuP+AQY985EvV4Lz9ovDSey9GKfCDtAkgEK9hN8OqD
-   ogFQZdt27GF0K1nEJzio8ytz8heUQ73xQnFwnbXHpwvVN4muytQbFzk5o
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="341520944"
-X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="341520944"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 00:39:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="715503495"
-X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="715503495"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga001.jf.intel.com with ESMTP; 25 Mar 2023 00:39:04 -0700
-Date:   Sat, 25 Mar 2023 15:27:36 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Marco Pagani <marpagan@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [RFC PATCH v2 2/4] fpga: add fake FPGA bridge
-Message-ID: <ZB6iaKEVnVfV3Atl@yilunxu-OptiPlex-7050>
-References: <20230310170412.708363-1-marpagan@redhat.com>
- <20230310170412.708363-3-marpagan@redhat.com>
- <ZBQlnUQWZHJ+ZBu5@yilunxu-OptiPlex-7050>
- <988e8e8e-d514-4c69-a384-7d0a70c514c4@redhat.com>
+        Sat, 25 Mar 2023 03:27:58 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3E41166A
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 00:27:57 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id ew6so16118536edb.7
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 00:27:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679729276;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rl1PuHlEkrI0wqx6ZTM2HfHVZPCcP/xvjlX781kpYaw=;
+        b=g6jl5PILobZbrpLZeaCrQQYPWhMUNkxCGxE2uRQTxMSJlrAFnk8eJju+aFCM/bC1p9
+         smzFx7ox8xobLoNIb9bE45odI56shl4P4BZAb//4EviF9kfqsNB/Yuu6Xdy5G2HpRfX1
+         Xz89MZJXHVu4f18kGfIgoFol5h00byvDhfunGQhXPVspihmwH8udlXO3ksXhIgYHBz1n
+         ji6AIrGPk4B5ZRwhndvSaJjSHqUBgM1XJDIRButWorFaj3AmupsU387YKo+OEyEQaxrF
+         nnEy/rkGkZndoo8emE3kAGnl9Vcxuot5Apovd+I4mj47nBm8TGfDtWXCfeihu4sEreIJ
+         gC2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679729276;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rl1PuHlEkrI0wqx6ZTM2HfHVZPCcP/xvjlX781kpYaw=;
+        b=DTnRhjdAw+I5FRN6Ir2cXazhMeXIjcfwSw5QEN8CL3JvUDRQtP8i+mSoS7418574fU
+         TfA13T9Sgk1XiPQCH6yLF3b64rTNlEguXnykdofagBsPofcT3T/5qI7Y0s5j8ZWR9Xd6
+         nRvPyl03Sb7BELA/XMyd5XuAcQgkHPoZ9J8zezlyOiB3b9+GDR+sGO8WPYKrMSirpq7D
+         FxtlQe0pAijd3pmXPH6bhbluIMVk2lxEjEA+Xuc38neGU764jTmvX2Qb0wCXHtzEpAOR
+         RpD9tG+izb4oVPRPU60XDL08KphDmSgxJVx61FEaK3g/3U+SGJ+ok+E1p5NZdN4BHrYR
+         LyEQ==
+X-Gm-Message-State: AAQBX9c2gNJZt0rRl4G1QqEzbyYYSY/wMcueMLmWBdarrwwuXahiZ7S4
+        JtT9+64WJBqLhTR+CDqzjBw=
+X-Google-Smtp-Source: AKy350azekAWDgK8X/LXuBdtAzvVG5JhxS2oIcG2tqcQbqiJbRlqdIlfLiNl2TzKIPuHGQHzGakiRg==
+X-Received: by 2002:a17:907:a64a:b0:92e:e9c2:7b9c with SMTP id vu10-20020a170907a64a00b0092ee9c27b9cmr6299333ejc.77.1679729275893;
+        Sat, 25 Mar 2023 00:27:55 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id hy16-20020a1709068a7000b00931d3509af1sm11296338ejc.222.2023.03.25.00.27.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Mar 2023 00:27:55 -0700 (PDT)
+Date:   Sat, 25 Mar 2023 10:27:52 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH]: staging: wlan-ng: Remove unnecessary Parentheses
+Message-ID: <addce339-7653-405b-8d1d-ef29da74a8f3@kili.mountain>
+References: <20230325002225.GA109622@koolguy>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <988e8e8e-d514-4c69-a384-7d0a70c514c4@redhat.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230325002225.GA109622@koolguy>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-21 at 18:33:05 +0100, Marco Pagani wrote:
-> 
-> 
-> On 2023-03-17 09:32, Xu Yilun wrote:
-> > On 2023-03-10 at 18:04:10 +0100, Marco Pagani wrote:
-> >> Add fake FPGA bridge driver with support functions. The driver includes
-> >> a counter for the number of switching cycles. This module is part of
-> >> the KUnit tests for the FPGA subsystem.
-> >>
-> >> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> >> ---
-> >>  drivers/fpga/tests/fake-fpga-bridge.c | 228 ++++++++++++++++++++++++++
-> >>  drivers/fpga/tests/fake-fpga-bridge.h |  36 ++++
-> >>  2 files changed, 264 insertions(+)
-> >>  create mode 100644 drivers/fpga/tests/fake-fpga-bridge.c
-> >>  create mode 100644 drivers/fpga/tests/fake-fpga-bridge.h
-> >>
-> >> diff --git a/drivers/fpga/tests/fake-fpga-bridge.c b/drivers/fpga/tests/fake-fpga-bridge.c
-> >> new file mode 100644
-> >> index 000000000000..8a2f64fc1bbb
-> >> --- /dev/null
-> >> +++ b/drivers/fpga/tests/fake-fpga-bridge.c
-> >> @@ -0,0 +1,228 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/*
-> >> + * Driver for the fake FPGA bridge
-> >> + *
-> >> + * Copyright (C) 2023 Red Hat, Inc.
-> >> + *
-> >> + * Author: Marco Pagani <marpagan@redhat.com>
-> >> + */
-> >> +
-> >> +#include <linux/types.h>
-> >> +#include <linux/device.h>
-> >> +#include <linux/platform_device.h>
-> >> +#include <linux/fpga/fpga-bridge.h>
-> >> +#include <kunit/test.h>
-> >> +
-> >> +#include "fake-fpga-bridge.h"
-> >> +
-> >> +#define FAKE_FPGA_BRIDGE_DEV_NAME	"fake_fpga_bridge"
-> >> +
-> >> +struct fake_bridge_priv {
-> >> +	int id;
-> >> +	bool enable;
-> >> +	int cycles_count;
-> >> +	struct kunit *test;
-> >> +};
-> >> +
-> >> +struct fake_bridge_data {
-> >> +	struct kunit *test;
-> >> +};
-> >> +
-> >> +static int op_enable_show(struct fpga_bridge *bridge)
-> >> +{
-> >> +	struct fake_bridge_priv *priv;
-> >> +
-> >> +	priv = bridge->priv;
-> >> +
-> >> +	if (priv->test)
-> >> +		kunit_info(priv->test, "Fake FPGA bridge %d: enable_show\n",
-> >> +			   priv->id);
-> > 
-> > Why check the kunit pointer every time? I remember you mentioned that
-> > the fake fpga modules are expected to be used out of Kunit test, so the
-> > priv->test may be NULL? I suggest you work on these usecases in separate
-> > patchsets. For now just check priv->test on probe is fine.
-> > 
-> 
-> The idea was to provide additional info messages, tied with the test, if the
-> fake bridge is registered with a test instance. If you believe these prints
-> are unnecessary, I can remove them or replace them with generic dev_info().
+The subject has an extra : after the "[PATCH]:".
 
-OK, on second thought, it's good to me.
+On Sat, Mar 25, 2023 at 01:22:25AM +0100, Dalvin-Ehinoma Noah Aiguobas wrote:
+> Clean up Checkpatch issues by removing unnecessary Parentheses.
+> 
 
-Thanks,
-Yilun
+Just ignore checkpatch on this.  Greg likes parentheses.
+
+> @@ -478,7 +478,7 @@ static int prism2_connect(struct wiphy *wiphy, struct net_device *dev,
+>  
+>  			result = prism2_domibset_uint32(wlandev,
+>  							DIDMIB_DOT11SMT_PRIVACYTABLE_WEPDEFAULTKEYID,
+> -				sme->key_idx);
+> +							sme->key_idx);
+
+Don't mix unrelated changes into the patch.
+
+regards,
+dan carpenter
+
