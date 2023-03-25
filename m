@@ -2,109 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171926C8EBB
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 15:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 142996C8EC0
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 15:06:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjCYOEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 10:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
+        id S230399AbjCYOG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 10:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjCYOEh (ORCPT
+        with ESMTP id S229446AbjCYOGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 10:04:37 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA7F113C4
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 07:04:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=GCBvLJhQ3scmdinTnVG7pueTv7IZRFGDspF7uPw2vAA=;
-  b=cWpInD9UfkZPBpiBUFI3wrug7JbuUGCsvPTnQ9gIStk2BVsjQfKn+2ry
-   reos19IJxIJjlyLx6msWidJEMgdkk6RDsycFUSW6+ELkkwFHLDQLWippB
-   NpvUpj3DHVDlJw2sV6wGx+M9qA/O33xZexfFs27ZHdupLJYVIDOFkQLWi
-   k=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,290,1673910000"; 
-   d="scan'208";a="99065710"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 15:04:33 +0100
-Date:   Sat, 25 Mar 2023 15:04:32 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Greg KH <gregkh@linuxfoundation.org>
-cc:     Khadija Kamran <kamrankhadijadj@gmail.com>,
-        outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] staging: rtl8192u: remove change history from
- comments
-In-Reply-To: <ZB7n23tzWxGmBPe4@kroah.com>
-Message-ID: <alpine.DEB.2.22.394.2303251503280.2860@hadrien>
-References: <cover.1679744684.git.kamrankhadijadj@gmail.com> <c4ec9246e2d103c15e451fe3d6ed42692c93d39f.1679744684.git.kamrankhadijadj@gmail.com> <ZB7n23tzWxGmBPe4@kroah.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sat, 25 Mar 2023 10:06:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DEF113C4
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 07:06:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679753165;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1lbJBPwhH6Cq9r2UgzRHc6kwTuKIZL2sdzIekbj7z0w=;
+        b=M0WjYVY4Endfd3wsBcY0gooZu3PfbSv4Mq5rOxb63ir4HHaxcDNcTxGdClYxFkeEtf/2PS
+        5SLNfDg5Z3mkmjpE/K9afWza4Az/0VvBuVaFhDiRnKEV/S4Tir40u3ISZsQoYeZDMoCjIA
+        LBCVdtUL/lpCgT6FPFVsBr7vs9T34pk=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-281-aZnmkOPAMke1eYy9SLoXzw-1; Sat, 25 Mar 2023 10:06:03 -0400
+X-MC-Unique: aZnmkOPAMke1eYy9SLoXzw-1
+Received: by mail-qv1-f70.google.com with SMTP id px9-20020a056214050900b005d510cdfc41so2110219qvb.7
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 07:06:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679753163;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1lbJBPwhH6Cq9r2UgzRHc6kwTuKIZL2sdzIekbj7z0w=;
+        b=MwWHw7ZL/0+thiEi2CTGQZoieIKhd8xIBmRVB+q4zIdwFx9YOPgQh4dlJsmAtro/GY
+         0uQMHwY0e4s7WZ4XK4BAG8KzFMesyDu5P9G1ntnSMgyjUNh+UDI2sAA6jJpt+/0oGiKi
+         UbgnrObNYNNQI2S+xMAIKryPQZMJPfzF+BilM0A4yff6EmYSQ0I2qU2OLCWiD9uxsmC+
+         sqkbOp53t9dPtqn5GyXJ7Ji9VYCgT1i2BFyWgT4NY/WUnjHkRYbiKWCxP3W8hSTalnAZ
+         VLpUxDjBgxTPE3ZhfhEmD4Lejt0K8gaapSSa0AocfDfOpPDYHWSh7aV3YAOTvBlj2bLI
+         R0Kg==
+X-Gm-Message-State: AAQBX9cXwZduFW0QJ9woIFG6S+kZxkP5fVKmHKLygzlQNjyTtLe8a3yJ
+        jWS86LYh5B5HFvVZMw0lwqG9tQUFooThH4WKbNOYG1xrpy+TuG5NmCBj3F8N1QsXPnie3d5zBjQ
+        vS4qYdR/KiVx9aODuYBD4B/Gl
+X-Received: by 2002:a05:6214:cc1:b0:5d9:cb0b:3de4 with SMTP id 1-20020a0562140cc100b005d9cb0b3de4mr12296845qvx.45.1679753163300;
+        Sat, 25 Mar 2023 07:06:03 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Z/EL6Tkp3U6JqLt4Li2rJy95cscsYC+qqgT2enwwScQiVROP52ZEJU7J0WILTQqrJ+SkA3kQ==
+X-Received: by 2002:a05:6214:cc1:b0:5d9:cb0b:3de4 with SMTP id 1-20020a0562140cc100b005d9cb0b3de4mr12296776qvx.45.1679753162854;
+        Sat, 25 Mar 2023 07:06:02 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id oj9-20020a056214440900b005dd8b9345bbsm1478977qvb.83.2023.03.25.07.06.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Mar 2023 07:06:02 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     selvin.xavier@broadcom.com, jgg@ziepe.ca, leon@kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] RDMA/bnxt_re: remove unused num_srqne_processed and num_cqne_processed variables
+Date:   Sat, 25 Mar 2023 10:05:59 -0400
+Message-Id: <20230325140559.1336056-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+clang with W=1 reports
+drivers/infiniband/hw/bnxt_re/qplib_fp.c:303:6: error: variable
+  'num_srqne_processed' set but not used [-Werror,-Wunused-but-set-variable]
+        int num_srqne_processed = 0;
+            ^
+drivers/infiniband/hw/bnxt_re/qplib_fp.c:304:6: error: variable
+  'num_cqne_processed' set but not used [-Werror,-Wunused-but-set-variable]
+        int num_cqne_processed = 0;
+            ^
+These variables are not used so remove them.
 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/infiniband/hw/bnxt_re/qplib_fp.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-On Sat, 25 Mar 2023, Greg KH wrote:
+diff --git a/drivers/infiniband/hw/bnxt_re/qplib_fp.c b/drivers/infiniband/hw/bnxt_re/qplib_fp.c
+index 96e581ced50e..0ba14087dfcd 100644
+--- a/drivers/infiniband/hw/bnxt_re/qplib_fp.c
++++ b/drivers/infiniband/hw/bnxt_re/qplib_fp.c
+@@ -300,8 +300,6 @@ static void bnxt_qplib_service_nq(struct tasklet_struct *t)
+ {
+ 	struct bnxt_qplib_nq *nq = from_tasklet(nq, t, nq_tasklet);
+ 	struct bnxt_qplib_hwq *hwq = &nq->hwq;
+-	int num_srqne_processed = 0;
+-	int num_cqne_processed = 0;
+ 	struct bnxt_qplib_cq *cq;
+ 	int budget = nq->budget;
+ 	u32 sw_cons, raw_cons;
+@@ -340,9 +338,7 @@ static void bnxt_qplib_service_nq(struct tasklet_struct *t)
+ 					    DBC_DBC_TYPE_CQ_ARMENA);
+ 			spin_lock_bh(&cq->compl_lock);
+ 			atomic_set(&cq->arm_state, 0);
+-			if (!nq->cqn_handler(nq, (cq)))
+-				num_cqne_processed++;
+-			else
++			if (nq->cqn_handler(nq, (cq)))
+ 				dev_warn(&nq->pdev->dev,
+ 					 "cqn - type 0x%x not handled\n", type);
+ 			cq->cnq_events++;
+@@ -361,11 +357,9 @@ static void bnxt_qplib_service_nq(struct tasklet_struct *t)
+ 			srq = (struct bnxt_qplib_srq *)q_handle;
+ 			bnxt_qplib_armen_db(&srq->dbinfo,
+ 					    DBC_DBC_TYPE_SRQ_ARMENA);
+-			if (!nq->srqn_handler(nq,
+-					      (struct bnxt_qplib_srq *)q_handle,
+-					      nqsrqe->event))
+-				num_srqne_processed++;
+-			else
++			if (nq->srqn_handler(nq,
++					     (struct bnxt_qplib_srq *)q_handle,
++					     nqsrqe->event))
+ 				dev_warn(&nq->pdev->dev,
+ 					 "SRQ event 0x%x not handled\n",
+ 					 nqsrqe->event);
+-- 
+2.27.0
 
-> On Sat, Mar 25, 2023 at 05:13:17PM +0500, Khadija Kamran wrote:
-> > Developers use git to browse the file history so revision history is not
-> > required in the comments.
-> > Remove the change history information from the comments.
-
-I'm not sure to follow the argument.  The file was integrated into the
-Linux kernel in 2009.  So there is no record of the 2008 date in the git
-history of the Linux kernel.  Maybe it's not interesting, but at least the
-explanation doesn't seem right.
-
-julia
-
-> >
-> > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-> > ---
-> >  drivers/staging/rtl8192u/r8192U_dm.c | 36 ----------------------------
-> >  1 file changed, 36 deletions(-)
-> >
-> > diff --git a/drivers/staging/rtl8192u/r8192U_dm.c b/drivers/staging/rtl8192u/r8192U_dm.c
-> > index a88686be3523..885c5966342f 100644
-> > --- a/drivers/staging/rtl8192u/r8192U_dm.c
-> > +++ b/drivers/staging/rtl8192u/r8192U_dm.c
-> > @@ -8,11 +8,6 @@
-> >   * Abstract:
-> >   *	HW dynamic mechanism.
-> >   *
-> > - * Major Change History:
-> > - *	When		Who				What
-> > - *	----------	--------------- -------------------------------
-> > - *	2008-05-14	amy                     create version 0 porting from windows code.
-> > - *
-> >   *--
-> >   */
-> >  #include "r8192U.h"
-> > @@ -276,10 +271,6 @@ void init_rate_adaptive(struct net_device *dev)
-> >   *
-> >   * Return:		NONE
-> >   *
-> > - * Revised History:
-> > - *	When		Who		Remark
-> > - *	05/26/08	amy	Create version 0 porting from windows code.
-> > - *
-> >   *---------------------------------------------------------------------------
->
-> You can remove the extra blank comment line as well.
->
-> thanks,
->
-> greg k-h
->
->
