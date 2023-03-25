@@ -2,140 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0104D6C8D16
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 11:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13506C8D20
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 11:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbjCYKWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 06:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53164 "EHLO
+        id S231717AbjCYKhY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 25 Mar 2023 06:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjCYKWE (ORCPT
+        with ESMTP id S229505AbjCYKhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 06:22:04 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071E486AA;
-        Sat, 25 Mar 2023 03:22:01 -0700 (PDT)
-Received: from dggpeml500019.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PkFVQ576QzKncx;
-        Sat, 25 Mar 2023 18:21:34 +0800 (CST)
-Received: from [10.67.101.98] (10.67.101.98) by dggpeml500019.china.huawei.com
- (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Sat, 25 Mar
- 2023 18:21:59 +0800
-Message-ID: <cf1f8c1f-90cb-9319-91e0-a8f4339547e6@hisilicon.com>
-Date:   Sat, 25 Mar 2023 18:21:59 +0800
+        Sat, 25 Mar 2023 06:37:22 -0400
+Received: from smtprelay01.ispgateway.de (smtprelay01.ispgateway.de [80.67.18.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D7A769C;
+        Sat, 25 Mar 2023 03:37:20 -0700 (PDT)
+Received: from [92.206.161.29] (helo=note-book.lan)
+        by smtprelay01.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <git@apitzsch.eu>)
+        id 1pg1Gt-00019P-Bl; Sat, 25 Mar 2023 11:37:15 +0100
+Message-ID: <f91b463f52a3ce3002212b429350f592a0131042.camel@apitzsch.eu>
+Subject: Re: [PATCH 1/2] dt-bindings: input: atmel,maxtouch: add
+ linux,keycodes
+From:   =?ISO-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
+To:     Nick Dyer <nick@shmanahar.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Date:   Sat, 25 Mar 2023 11:37:13 +0100
+In-Reply-To: <20230227205035.18551-1-git@apitzsch.eu>
+References: <20230227205035.18551-1-git@apitzsch.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [RFC PATCH v1 2/4] drivers/perf: hisi: Add driver support for
- HiSilicon PMCU
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-CC:     <will@kernel.org>, <mark.rutland@arm.com>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <john.g.garry@oracle.com>, <james.clark@arm.com>,
-        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <corbet@lwn.net>, <zhangshaokun@hisilicon.com>,
-        <shenyang39@huawei.com>, <hejunhao3@huawei.com>,
-        <yangyicong@hisilicon.com>, <prime.zeng@huawei.com>,
-        <suntao25@huawei.com>, <jiazhao4@hisilicon.com>,
-        <linuxarm@huawei.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-perf-users@vger.kernel.org>
-References: <20230206065146.645505-1-zhanjie9@hisilicon.com>
- <20230206065146.645505-3-zhanjie9@hisilicon.com>
- <20230317145232.00001c38@Huawei.com>
-From:   Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <20230317145232.00001c38@Huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.101.98]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500019.china.huawei.com (7.185.36.137)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Df-Sender: YW5kcmVAYXBpdHpzY2guZXU=
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am Montag, dem 27.02.2023 um 21:50 +0100 schrieb André Apitzsch:
+> In some configurations the touch controller can support the touch keys.
+> Document the linux,keycodes property that enables those keys and
+> specifies the keycodes that should be used to report the key events.
+> 
+> Signed-off-by: André Apitzsch <git@apitzsch.eu>
+> ---
+>  .../devicetree/bindings/input/atmel,maxtouch.yaml          | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/input/atmel,maxtouch.yaml b/Documentation/devicetree/bindings/input/atmel,maxtouch.yaml
+> index 3ec579d63570..c40799355ed7 100644
+> --- a/Documentation/devicetree/bindings/input/atmel,maxtouch.yaml
+> +++ b/Documentation/devicetree/bindings/input/atmel,maxtouch.yaml
+> @@ -14,6 +14,9 @@ description: |
+>    Atmel maXTouch touchscreen or touchpads such as the mXT244
+>    and similar devices.
+>  
+> +allOf:
+> +  - $ref: input.yaml#
+> +
+>  properties:
+>    compatible:
+>      const: atmel,maxtouch
+> @@ -60,6 +63,10 @@ properties:
+>        or experiment to determine which bit corresponds to which input. Use
+>        KEY_RESERVED for unused padding values.
+>  
+> +  linux,keycodes:
+> +    minItems: 1
+> +    maxItems: 8
+> +
+>    atmel,wakeup-method:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description: |
+> 
+> base-commit: 982818426a0ffaf93b0621826ed39a84be3d7d62
 
+Hi Nick, hi Dmitry,
 
-On 17/03/2023 22:52, Jonathan Cameron wrote:
-> On Mon, 6 Feb 2023 14:51:44 +0800
-> Jie Zhan <zhanjie9@hisilicon.com> wrote:
->
->> HiSilicon Performance Monitor Control Unit (PMCU) is a device that offloads
->> PMU accesses from CPUs, handling the configuration, event switching, and
->> counter reading of core PMUs on Kunpeng SoC. It facilitates fine-grained
->> and multi-PMU-event CPU profiling, in which scenario the current 'perf'
->> scheme may lose events or drop sampling frequency. With PMCU, users can
->> reliably obtain the data of up to 240 PMU events with the sample interval
->> of events down to 1ms, while the software overhead of accessing PMUs, as
->> well as its impact on target workloads, is reduced.
->>
->> This driver enables the usage of PMCU through the perf_event framework.
->> PMCU is registered as a PMU device and utilises the AUX buffer to dump data
->> directly. Users can start PMCU sampling through 'perf-record'. Event
->> numbers are passed by a sysfs interface.
->>
->> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
-> Hi Jie,
->
-> A few minor comments inline.
-> Whilst I looked at this internally, that was a while back so I've
-> found a few new things to point out in what I think is a pretty good/clean driver.
-> The main thing here is the RFC questions you've raised in the cover letter
-> of course - particularly the one around mediating who has the counters between
-> this and the normal PMU driver.
->
-> Thanks,
->
-> Jonathan
-Hi Jonathan,
+Friendly ping.
 
-Many thanks for the review again.
+What is missing to get this up-streamed?
 
-Happy to accept all the comments. I have updated the driver based on them.
-
-One reply below.
-
-Jie
-
-
-...
->> +static const struct attribute_group hisi_pmcu_format_attr_group = {
->> +	.name = "format",
->> +	.attrs = hisi_pmcu_format_attrs,
->> +};
->> +
->> +static ssize_t monitored_cpus_show(struct device *dev,
->> +				   struct device_attribute *attr, char *buf)
->> +{
->> +	struct hisi_pmcu *hisi_pmcu = to_hisi_pmcu(dev_get_drvdata(dev));
->> +
->> +	return sysfs_emit(buf, "%d-%d\n",
->> +			  cpumask_first(&hisi_pmcu->cpus),
->> +			  cpumask_last(&hisi_pmcu->cpus));
-> What does this do about offline CPUs?
-> Should it include them or not?
-PMCU takes care of offline CPUs as well, and the event counts from 
-offline CPUs
-should show as zeroes in the output.
-
-hisi_pmcu->cpus contains only the online CPUs monitored by the PMCU,
-so something should be improved with the "monitored_cpus" interface here.
-
-"monitored_cpus" should actually show alll the online/offline CPUs 
-monitored,
-or, if it is meant to show only online CPUs, it show be a comma 
-separated list
-representing the hisi_pmcu->cpus mask rather than a range that may ignore
-some offline CPUs in the middle.
-
-Will fix this in V2.
-
+Best regards,
+André
