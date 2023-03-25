@@ -2,147 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA52D6C8AA7
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 04:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE816C8AB1
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 04:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbjCYD3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 23:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
+        id S231880AbjCYDiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 23:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjCYD3H (ORCPT
+        with ESMTP id S229926AbjCYDiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 23:29:07 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA6A212E;
-        Fri, 24 Mar 2023 20:29:06 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Pk4KC3wvxzrWd5;
-        Sat, 25 Mar 2023 11:27:59 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+        Fri, 24 Mar 2023 23:38:10 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D951BF1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 20:38:07 -0700 (PDT)
+Received: from kwepemm600017.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Pk4T80DcSz17PFx;
+        Sat, 25 Mar 2023 11:34:52 +0800 (CST)
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 25 Mar 2023 11:29:02 +0800
-Subject: Re: [PATCH] perf ftrace: Make system wide the default target for
- latency subcommand
-To:     Namhyung Kim <namhyung@kernel.org>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230324032702.109964-1-yangjihong1@huawei.com>
- <CAM9d7ciGy2Mycm6etHDrt6tu331i-7DphHgBzde0_1=w67mvHg@mail.gmail.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <b17b5edf-44bb-4734-c42a-8a498372ac8a@huawei.com>
-Date:   Sat, 25 Mar 2023 11:29:02 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+ 15.1.2507.21; Sat, 25 Mar 2023 11:38:00 +0800
+Message-ID: <0353570f-38bb-ebff-8152-c0d1cfec26f3@huawei.com>
+Date:   Sat, 25 Mar 2023 11:38:00 +0800
 MIME-Version: 1.0
-In-Reply-To: <CAM9d7ciGy2Mycm6etHDrt6tu331i-7DphHgBzde0_1=w67mvHg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next v8 0/4]arm64: add machine check safe support
+To:     Mark Rutland <mark.rutland@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>, Xie XiuQi <xiexiuqi@huawei.com>
+References: <20221219120008.3818828-1-tongtiangen@huawei.com>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <20221219120008.3818828-1-tongtiangen@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600003.china.huawei.com (7.193.23.202)
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi all maintainer,
 
-On 2023/3/25 9:39, Namhyung Kim wrote:
-> Hello,
-> 
-> On Thu, Mar 23, 2023 at 8:29 PM Yang Jihong <yangjihong1@huawei.com> wrote:
->>
->> If no target is specified for 'latency' subcommand, the execution fails
->> because - 1 (invalid value) is written to set_ftrace_pid tracefs file.
->> Make system wide the default target, which is the same as the default
->> behavior of 'trace' subcommand.
-> 
-> I followed the convention to use -a for system-wide profiling.
-> Not sure if it's ok to make it default, but I don't object. :)
-> 
-Thanks for the reply.
+With the increase of memory capacity and density, the memory error
+increases，memory errors is the main factor causing server system
+downtime, a statistics from intel [1].
 
-Yes, "perf ftrace latency" supports -a for system wide profiles.
-Because "perf ftrace trace" defaults to system wide when no target is 
-specified. Therefore, I sent the patch to check whether "latency" is 
-consistent with the behavior of the "trace". :)
+For ARM64 server, it is more serious without mc safe copy feature,
+feedback from our products, that is why we want to support it on arm64.
 
-Thanks,
-Yang.
+Also some new kind of low-reliable memory like HBM（high bandwidth but
+low reliability）was introduced，this becomes more of a problem.
 
-> Thanks,
-> Namhyung
+We hope the patch set could be incorporated into the community, can you
+give me some follow-up suggestions?
+
+[1] 
+https://www.intel.com.tw/content/www/tw/zh/software/intel-memory-failure-prediction-jd-cloud.html
+
+Thanks.
+Tong.
+
+在 2022/12/19 20:00, Tong Tiangen 写道:
+> With the increase of memory capacity and density, the probability of
+> memory error increases. The increasing size and density of server RAM
+> in the data center and cloud have shown increased uncorrectable memory
+> errors.
 > 
->>
->> Before the fix:
->>
->>    # perf ftrace latency -T schedule
->>    failed to set ftrace pid
->>
->> After the fix:
->>
->>    # perf ftrace latency -T schedule
->>    ^C#   DURATION     |      COUNT | GRAPH                                          |
->>         0 - 1    us |          0 |                                                |
->>         1 - 2    us |          0 |                                                |
->>         2 - 4    us |          0 |                                                |
->>         4 - 8    us |       2828 | ####                                           |
->>         8 - 16   us |      23953 | ########################################       |
->>        16 - 32   us |        408 |                                                |
->>        32 - 64   us |        318 |                                                |
->>        64 - 128  us |          4 |                                                |
->>       128 - 256  us |          3 |                                                |
->>       256 - 512  us |          0 |                                                |
->>       512 - 1024 us |          1 |                                                |
->>         1 - 2    ms |          4 |                                                |
->>         2 - 4    ms |          0 |                                                |
->>         4 - 8    ms |          0 |                                                |
->>         8 - 16   ms |          0 |                                                |
->>        16 - 32   ms |          0 |                                                |
->>        32 - 64   ms |          0 |                                                |
->>        64 - 128  ms |          0 |                                                |
->>       128 - 256  ms |          4 |                                                |
->>       256 - 512  ms |          2 |                                                |
->>       512 - 1024 ms |          0 |                                                |
->>         1 - ...   s |          0 |                                                |
->>
->> Fixes: 53be50282269 ("perf ftrace: Add 'latency' subcommand")
->> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->> ---
->>   tools/perf/builtin-ftrace.c | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/perf/builtin-ftrace.c b/tools/perf/builtin-ftrace.c
->> index d7fe00f66b83..fb1b66ef2e16 100644
->> --- a/tools/perf/builtin-ftrace.c
->> +++ b/tools/perf/builtin-ftrace.c
->> @@ -1228,10 +1228,12 @@ int cmd_ftrace(int argc, const char **argv)
->>                  goto out_delete_filters;
->>          }
->>
->> +       /* Make system wide (-a) the default target. */
->> +       if (!argc && target__none(&ftrace.target))
->> +               ftrace.target.system_wide = true;
->> +
->>          switch (subcmd) {
->>          case PERF_FTRACE_TRACE:
->> -               if (!argc && target__none(&ftrace.target))
->> -                       ftrace.target.system_wide = true;
->>                  cmd_func = __cmd_ftrace;
->>                  break;
->>          case PERF_FTRACE_LATENCY:
->> --
->> 2.30.GIT
->>
-> .
+> Currently, the kernel has a mechanism to recover from hardware memory
+> errors. This patchset provides an new recovery mechanism.
+> 
+> For arm64, the hardware memory error handling is do_sea() which divided
+> into two cases:
+>   1. The user state consumed the memory errors, the solution is kill the
+>      user process and isolate the error page.
+>   2. The kernel state consumed the memory errors, the solution is panic.
+> 
+> For case 2, Undifferentiated panic maybe not the optimal choice, it can
+> be handled better, in some scenarios, we can avoid panic, such as
+> uaccess, if the uaccess fails due to memory error, only the user
+> process will be affected, kill the user process and isolate the user
+> page with hardware memory errors is a better choice.
+> 
+> Since V7:
+>   Currently, there are patches supporting recover from poison
+>   consumption for the cow scenario[1]. Therefore, Supporting cow
+>   scenario under the arm64 architecture only needs to modify the relevant
+>   code under the arch/.
+>   [1]https://lore.kernel.org/lkml/20221031201029.102123-1-tony.luck@intel.com/
+> 
+> Since V6:
+>   Resend patches that are not merged into the mainline in V6.
+> 
+> Since V5:
+>   1. Add patch2/3 to add uaccess assembly helpers.
+>   2. Optimize the implementation logic of arm64_do_kernel_sea() in patch8.
+>   3. Remove kernel access fixup in patch9.
+>   All suggestion are from Mark.
+> 
+> Since V4:
+>   1. According Michael's suggestion, add patch5.
+>   2. According Mark's suggestiog, do some restructuring to arm64
+>   extable, then a new adaptation of machine check safe support is made based
+>   on this.
+>   3. According Mark's suggestion, support machine check safe in do_mte() in
+>   cow scene.
+>   4. In V4, two patches have been merged into -next, so V5 not send these
+>   two patches.
+> 
+> Since V3:
+>   1. According to Robin's suggestion, direct modify user_ldst and
+>   user_ldp in asm-uaccess.h and modify mte.S.
+>   2. Add new macro USER_MC in asm-uaccess.h, used in copy_from_user.S
+>   and copy_to_user.S.
+>   3. According to Robin's suggestion, using micro in copy_page_mc.S to
+>   simplify code.
+>   4. According to KeFeng's suggestion, modify powerpc code in patch1.
+>   5. According to KeFeng's suggestion, modify mm/extable.c and some code
+>   optimization.
+> 
+> Since V2:
+>   1. According to Mark's suggestion, all uaccess can be recovered due to
+>      memory error.
+>   2. Scenario pagecache reading is also supported as part of uaccess
+>      (copy_to_user()) and duplication code problem is also solved.
+>      Thanks for Robin's suggestion.
+>   3. According Mark's suggestion, update commit message of patch 2/5.
+>   4. According Borisllav's suggestion, update commit message of patch 1/5.
+> 
+> Since V1:
+>   1.Consistent with PPC/x86, Using CONFIG_ARCH_HAS_COPY_MC instead of
+>     ARM64_UCE_KERNEL_RECOVERY.
+>   2.Add two new scenes, cow and pagecache reading.
+>   3.Fix two small bug(the first two patch).
+> 
+> V1 in here:
+> https://lore.kernel.org/lkml/20220323033705.3966643-1-tongtiangen@huawei.com/
+> 
+> Tong Tiangen (4):
+>    uaccess: add generic fallback version of copy_mc_to_user()
+>    arm64: add support for machine check error safe
+>    arm64: add uaccess to machine check safe
+>    arm64: add cow to machine check safe
+> 
+>   arch/arm64/Kconfig                   |  1 +
+>   arch/arm64/include/asm/asm-extable.h |  5 ++
+>   arch/arm64/include/asm/assembler.h   |  4 ++
+>   arch/arm64/include/asm/extable.h     |  1 +
+>   arch/arm64/include/asm/mte.h         |  4 ++
+>   arch/arm64/include/asm/page.h        | 10 ++++
+>   arch/arm64/lib/Makefile              |  2 +
+>   arch/arm64/lib/copy_mc_page.S        | 82 ++++++++++++++++++++++++++++
+>   arch/arm64/lib/mte.S                 | 19 +++++++
+>   arch/arm64/mm/copypage.c             | 42 ++++++++++++--
+>   arch/arm64/mm/extable.c              | 25 +++++++++
+>   arch/arm64/mm/fault.c                | 29 +++++++++-
+>   arch/powerpc/include/asm/uaccess.h   |  1 +
+>   arch/x86/include/asm/uaccess.h       |  1 +
+>   include/linux/highmem.h              |  2 +
+>   include/linux/uaccess.h              |  9 +++
+>   16 files changed, 230 insertions(+), 7 deletions(-)
+>   create mode 100644 arch/arm64/lib/copy_mc_page.S
 > 
