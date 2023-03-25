@@ -2,92 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414AD6C8EEA
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 15:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC246C8EF0
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 16:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbjCYOrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 10:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
+        id S230062AbjCYO6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 10:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjCYOrG (ORCPT
+        with ESMTP id S229460AbjCYO6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 10:47:06 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD3355AD;
-        Sat, 25 Mar 2023 07:47:05 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32PCDAmQ029532;
-        Sat, 25 Mar 2023 14:47:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=m5PvLsGj91oRQXg1jgyCTaRS+AaLTijSUGZ9SdvlRXk=;
- b=l+qa+CP2L4HYvzYmGe6jzbM+QiFABXaSLtFovr1HCNV02vbA3lc6bEdY2ybb6IddSP11
- rp3ypdx4+ormUv9Db9RrcuXZ028CazCc4zPq9FxPJnLsjdfpJE7oCAMkD8EaHm19zmNF
- XCNMwVjxkTbjAvLqxEDmAIZMXuU2nJv3BgNwUWFnSHDzI7tnSWSZsa/faxwwdG9rNonR
- NnTGSEWUKBM1Ipa+GawsaLaRKP/1aJaJtCHmfvzXQa4NNRDqs3eovyIfXF+T+8RtfJJR
- s+1/xLYdoVzysOKKyyV9qa3twcY4plYZ5sBL5W9sO3zlqfxVYQ6qEQYcnODehKvZETQ2 ew== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3phtwnptaw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 25 Mar 2023 14:47:01 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32PEjFLS011164;
-        Sat, 25 Mar 2023 14:47:00 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3phtwnptan-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 25 Mar 2023 14:47:00 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32P2sjNu023354;
-        Sat, 25 Mar 2023 14:46:59 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3phrk6rfuy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 25 Mar 2023 14:46:58 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32PEkuj325493978
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 25 Mar 2023 14:46:56 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4DF6A20040;
-        Sat, 25 Mar 2023 14:46:56 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7171F20043;
-        Sat, 25 Mar 2023 14:46:54 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.64.140])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Sat, 25 Mar 2023 14:46:54 +0000 (GMT)
-Date:   Sat, 25 Mar 2023 20:16:51 +0530
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [RFC 11/11] ext4: Add allocation criteria 1.5 (CR1_5)
-Message-ID: <ZB8JW78PzPLc68hW@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-References: <cover.1674822311.git.ojaswin@linux.ibm.com>
- <08173ee255f70cdc8de9ac3aa2e851f9d74acb12.1674822312.git.ojaswin@linux.ibm.com>
- <20230309150649.5pnhqsf2khvffl6l@quack3>
- <ZBRQ8W/RL/Tjju68@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <20230323110532.n2pxx3ouoffhl2u6@quack3>
+        Sat, 25 Mar 2023 10:58:49 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC24E3A1
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 07:58:48 -0700 (PDT)
+Received: from [192.168.2.204] (109-252-120-116.nat.spd-mgts.ru [109.252.120.116])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0455F6603103;
+        Sat, 25 Mar 2023 14:58:43 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679756326;
+        bh=dU1D86JTqo/yGLLA5mJPUROTMQUYgMAFWoNb6lY2hgc=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=bUQ9ZL5vbpwKPXHcT8taJDSRfEanqwsD9J953DywnuIp0FSwWHV/2wSRf9J5xU5zx
+         XW/mdsIIfoghLBKjfQPkeYiqvdZ4f2JwUM/BltUQ+07OYxCfHr7IVeuimMghXooJ7l
+         j6BGYFM/wSBHC7XY04Yf3fRtkEBUjO/65qTpM6NqPcXZ0jLYq9eS+/7yTQXAkaMOHF
+         4RADMreTDjWabykjnZ8jDzKDl3FAfokQR1jscEGg2MIisWZodEGMeVeKlDDh+9cWdS
+         Jrvvad0aDK1RldZWLJsqSmE4u14RvF1KiHvjxBpA7tYCfxUCovyjj5ySAkoIobWdxZ
+         CEdgGP1UzPc9Q==
+Message-ID: <20c88807-8513-a816-aed9-5cd67eb5c1ed@collabora.com>
+Date:   Sat, 25 Mar 2023 17:58:41 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323110532.n2pxx3ouoffhl2u6@quack3>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xGh6RJ5YlLf9b8ep_z4llGK-kGb4LOTv
-X-Proofpoint-GUID: o7xJ34_KRYlTw6mpyW6hISQ_7E9GLd4y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 mlxlogscore=999 clxscore=1015 bulkscore=0 phishscore=0
- mlxscore=0 priorityscore=1501 spamscore=0 adultscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303250120
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v13 01/10] drm/shmem-helper: Switch to reservation lock
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        intel-gfx@lists.freedesktop.org, David Airlie <airlied@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>
+References: <20230314022659.1816246-1-dmitry.osipenko@collabora.com>
+ <20230314022659.1816246-2-dmitry.osipenko@collabora.com>
+ <6b5644cf-6229-f99b-d429-a45d724493ee@collabora.com>
+Content-Language: en-US
+In-Reply-To: <6b5644cf-6229-f99b-d429-a45d724493ee@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,75 +74,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 12:05:32PM +0100, Jan Kara wrote:
-> On Fri 17-03-23 17:07:21, Ojaswin Mujoo wrote:
-> > On Thu, Mar 09, 2023 at 04:06:49PM +0100, Jan Kara wrote:
-> > > On Fri 27-01-23 18:07:38, Ojaswin Mujoo wrote:
-> > > > +/*
-> > > > + * We couldn't find a group in CR1 so try to find the highest free fragment
-> > > > + * order we have and proactively trim the goal request length to that order to
-> > > > + * find a suitable group faster.
-> > > > + *
-> > > > + * This optimizes allocation speed at the cost of slightly reduced
-> > > > + * preallocations. However, we make sure that we don't trim the request too
-> > > > + * much and fall to CR2 in that case.
-> > > > + */
-> > > > +static void ext4_mb_choose_next_group_cr1_5(struct ext4_allocation_context *ac,
-> > > > +		enum criteria *new_cr, ext4_group_t *group, ext4_group_t ngroups)
-> > > > +{
-> > > > +	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
-> > > > +	struct ext4_group_info *grp = NULL;
-> > > > +	int i, order, min_order;
-> > > > +
-> > > > +	if (unlikely(ac->ac_flags & EXT4_MB_CR1_5_OPTIMIZED)) {
-> > > > +		if (sbi->s_mb_stats)
-> > > > +			atomic_inc(&sbi->s_bal_cr1_5_bad_suggestions);
-> > > > +	}
-> > > > +
-> > > > +	/*
-> > > > +	 * mb_avg_fragment_size_order() returns order in a way that makes
-> > > > +	 * retrieving back the length using (1 << order) inaccurate. Hence, use
-> > > > +	 * fls() instead since we need to know the actual length while modifying
-> > > > +	 * goal length.
-> > > > +	 */
-> > > > +	order = fls(ac->ac_g_ex.fe_len);
-> > > > +	min_order = order - sbi->s_mb_cr1_5_max_trim_order;
-> > > 
-> > > Given we still require the allocation contains at least originally
-> > > requested blocks, is it ever the case that goal size would be 8 times
-> > > larger than original alloc size? Otherwise the
-> > > sbi->s_mb_cr1_5_max_trim_order logic seems a bit pointless...
-> > 
-> > Yes that is possible. In ext4_mb_normalize_request, for orignal request len <
-> > 8MB we actually determine the goal length based on the length of the
-> > file (i_size) rather than the length of the original request. For eg:
-> > 
-> > 	if (size <= 16 * 1024) {
-> > 		size = 16 * 1024;
-> > 	} else if (size <= 32 * 1024) {
-> > 		size = 32 * 1024;
-> > 	} else if (size <= 64 * 1024) {
-> > 		size = 64 * 1024;
-> > 
-> > and this goes all the way upto size = 8MB. So for a case where the file
-> > is >8MB, even if the original len is of 1 block(4KB), the goal len would
-> > be of 2048 blocks(8MB). That's why we decided to add a tunable depending
-> > on the user's preference.
+On 3/15/23 16:46, Dmitry Osipenko wrote:
+> On 3/14/23 05:26, Dmitry Osipenko wrote:
+>> @@ -633,7 +605,10 @@ int drm_gem_shmem_mmap(struct drm_gem_shmem_object *shmem, struct vm_area_struct
+>>  		return ret;
+>>  	}
+>>  
+>> +	dma_resv_lock(shmem->base.resv, NULL);
+>>  	ret = drm_gem_shmem_get_pages(shmem);
+>> +	dma_resv_unlock(shmem->base.resv);
 > 
-> Ah, I see. The problem with these tunables is that nobody knows to which
-> value tune them :). But yeah, the default value looks sane so I don't
-> object.
+> Intel CI reported locking problem [1] here. It actually was also
+> reported for v12, but I missed that report because of the other noisy
+> reports.
 > 
-Right, so in our workloads we were kinda seeing good improvement at this
-value. 
+> [1]
+> https://intel-gfx-ci.01.org/tree/drm-tip/Patchwork_114671v2/shard-snb5/igt@prime_vgem@sync@rcs0.html
+> 
+> The test does the following:
+> 
+> 1. creates vgem
+> 2. export it do dmabuf
+> 3. mmaps dmabuf
+> 
+> There is an obvious deadlock there. The DRM code assumes that mmap() is
+> unlocked, while for dma-buf it's locked. I'll see how to fix it for v14.
+> 
 
-But I think it really depends on how fragmented the FS is, we picked
-trim order 3 as a safe value so we don't end up trimming too much when
-CR2 could go and find something better.
+Christian, there is a deadlock problem in drm_gem_shmem_mmap() once we
+move drm-shmem to use resv lock. The current dma-buf locking policy
+claims that importer holds the lock for mmap(), but DRM code assumes
+that obj->mmap() handles the locking itself and then the same
+obj->mmap() code path is used by both dma-buf DRM and a usual DRM object
+paths. Hence importer -> dma_buf_mmap_internal()[takes the lock] ->
+exporter -> drm_gem_shmem_mmap()[takes the lock] deadlocks.
 
-Regards,
-ojaswin
-> 								Honza
-> -- 
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
+I was looking at how to fix it and to me the best option is to change
+the dma-buf locking policy, making exporter responsible for handling the
+resv lock. Changing DRM code mmap lockings might be possible too [moving
+locking to drm_gem_mmap_obj()], but will be very messy and doesn't feel
+intuitive.
+
+Want to get yours thoughts on this before sending out the dma-buf mmap()
+policy-change patch. Does the new mmap() locking policy sound good to
+you? Thanks!
+
+-- 
+Best regards,
+Dmitry
+
