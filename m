@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA266C8EFD
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 16:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6C96C8F0D
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 16:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbjCYP0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 11:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
+        id S230290AbjCYPpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 11:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjCYP0G (ORCPT
+        with ESMTP id S229925AbjCYPpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 11:26:06 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2747D500;
-        Sat, 25 Mar 2023 08:26:05 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so4332417pjb.0;
-        Sat, 25 Mar 2023 08:26:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679757965;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=niKFnY0t+4MX3R2lOhT5fCEyXxOfUgTVhDHjO9rpeS8=;
-        b=Xa07t1IpvMdvYSqRRh11jFCR38BL5ga6Yq7Df88By3VZeMYJd7qoZIVkP6F7dOCQr4
-         IDnEP4uo+iZ/zJe/CZLjQMx3vplTGf5LNfTG1fVdD+Ft8efSVOxoTA4nIXje4MCoxei4
-         I+cGdOYUe+wd2o6gye6P+OmMFi91cEIRdeyWKajPV7f4IKujitg+24ZTEvzD15BX63rW
-         auFzqVeLwfn9C8KCfgJvnhsobGQgq9H0dhvoWTsm+7AvPvzBgqjWQ1XML8if3p5vmmZL
-         cl5QGrlQs9ZNx2jD9Prc6m6fH9WUWzfBcFSJ1XZeUbJwYUC2HZpqB8fctkOhq4cXH78z
-         DKaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679757965;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=niKFnY0t+4MX3R2lOhT5fCEyXxOfUgTVhDHjO9rpeS8=;
-        b=VWw1EQarHN43Zs+Trv1gx68PZo4qaYEnr3CwtUop3S6UdJc3H6zQHjzJjGDs169ltP
-         ChC/0kbRct0zaSvmZMi9C3fddsNeDIRxJK9yZwHDoZ81stMj2xeU8qygZUwmBMsdCT6Q
-         pedrvA5ZcyMbUKK/OLJWCmsP3h9yXdWZPESqo+GQIadCXsgcz0Lwvod2yHxlSDH2G7C7
-         fpL8nzXnpRrvd+gG22/i4RwqGDicZBvh3TdzKEcXQyq/CpBlLYvrY4JsHxl7Q/aw4vKi
-         lKNSJmC18fVPc/TaqhZKwG9s2LuBZ5oEfPFbOoQW4Qu9WsW/khy7ruIy/eVSJrljMqvF
-         xl7Q==
-X-Gm-Message-State: AAQBX9dW4QwR+pqnb86qakZyXE2ELwKGMKDmebRlW6af9sqhFNewoRE6
-        fkWxsOKdpMJ7mXKNbTeT8J4=
-X-Google-Smtp-Source: AKy350bbvJ5ikaNnx5L5X2/soimE96kyq9dxgQaClL4ZqqekduyNybDgmn8U0DjGNoJ9WkbP+8Ig6g==
-X-Received: by 2002:a17:903:64e:b0:1a1:b3c0:4228 with SMTP id kh14-20020a170903064e00b001a1b3c04228mr5154310plb.19.1679757965044;
-        Sat, 25 Mar 2023 08:26:05 -0700 (PDT)
-Received: from KERNELXING-MB0.tencent.com ([114.253.37.157])
-        by smtp.gmail.com with ESMTPSA id d16-20020a63f250000000b004ff6b744248sm15249470pgk.48.2023.03.25.08.26.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 08:26:04 -0700 (PDT)
-From:   Jason Xing <kerneljasonxing@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, therbert@google.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kerneljasonxing@gmail.com, Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH net] net: fix raising a softirq on the current cpu with rps enabled
-Date:   Sat, 25 Mar 2023 23:24:17 +0800
-Message-Id: <20230325152417.5403-1-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        Sat, 25 Mar 2023 11:45:41 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 360816194
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 08:45:39 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 32PFjQ7c008045;
+        Sat, 25 Mar 2023 16:45:26 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux@weissschuh.net, linux-kernel@vger.kernel.org,
+        Willy Tarreau <w@1wt.eu>
+Subject: [PATCH 0/8] tools/nolibc: add support for stack protector
+Date:   Sat, 25 Mar 2023 16:45:08 +0100
+Message-Id: <20230325154516.7995-1-w@1wt.eu>
+X-Mailer: git-send-email 2.17.5
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Xing <kernelxing@tencent.com>
+Hello Paul,
 
-Since we decide to put the skb into a backlog queue of another
-cpu, we should not raise the softirq for the current cpu. When
-to raise a softirq is based on whether we have more data left to
-process later. As to the current cpu, there is no indication of
-more data enqueued, so we do not need this action. After enqueuing
-to another cpu, net_rx_action() function will call ipi and then
-another cpu will raise the softirq as expected.
+This is essentially Thomas' work so instead of paraphrasing his work,
+I'm pasting his description below. I've tested his changes on all
+supported archs, applied a tiny modification with his permission
+to continue to support passing CFLAGS, and for me this is all fine.
+In a short summary this adds support for stack protector to i386 and
+x86_64 in nolibc, and the accompanying test to the selftest program.
 
-Also, raising more softirqs which set the corresponding bit field
-can make the IRQ mechanism think we probably need to start ksoftirqd
-on the current cpu. Actually it shouldn't happen.
+A new test category was added, "protection", which currently has a
+single test. Archs that support it will report "OK" there and those
+that do not will report "SKIPPED", as is already the case for tests
+that cannot be run.
 
-Fixes: 0a9627f2649a ("rps: Receive Packet Steering")
-Signed-off-by: Jason Xing <kernelxing@tencent.com>
----
- net/core/dev.c | 2 --
- 1 file changed, 2 deletions(-)
+This was applied on top of your dev.2023.03.20a branch. I'm reasonably
+confident with the nature of the changes, so if your queue for 6.4 is
+not closed yet, it can be a good target, otherwise 6.5 will be fine as
+well.
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 1518a366783b..bfaaa652f50c 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4594,8 +4594,6 @@ static int napi_schedule_rps(struct softnet_data *sd)
- 	if (sd != mysd) {
- 		sd->rps_ipi_next = mysd->rps_ipi_list;
- 		mysd->rps_ipi_list = sd;
--
--		__raise_softirq_irqoff(NET_RX_SOFTIRQ);
- 		return 1;
- 	}
- #endif /* CONFIG_RPS */
+Thanks in advance!
+Willy
+
+Thomas' description below:
+
+This is useful when using nolibc for security-critical tools.
+Using nolibc has the advantage that the code is easily auditable and
+sandboxable with seccomp as no unexpected syscalls are used.
+Using compiler-assistent stack protection provides another security
+mechanism.
+
+For this to work the compiler and libc have to collaborate.
+
+This patch adds the following parts to nolibc that are required by the
+compiler:
+
+* __stack_chk_guard: random sentinel value
+* __stack_chk_fail: handler for detected stack smashes
+
+In addition an initialization function is added that randomizes the
+sentinel value.
+
+Only support for global guards is implemented.
+Register guards are useful in multi-threaded context which nolibc does
+not provide support for.
+
+Link: https://lwn.net/Articles/584225/
+
+
+Thomas Weißschuh (8):
+  tools/nolibc: add definitions for standard fds
+  tools/nolibc: add helpers for wait() signal exits
+  tools/nolibc: tests: constify test_names
+  tools/nolibc: add support for stack protector
+  tools/nolibc: tests: fold in no-stack-protector cflags
+  tools/nolibc: tests: add test for -fstack-protector
+  tools/nolibc: i386: add stackprotector support
+  tools/nolibc: x86_64: add stackprotector support
+
+ tools/include/nolibc/Makefile                |  4 +-
+ tools/include/nolibc/arch-i386.h             |  7 ++-
+ tools/include/nolibc/arch-x86_64.h           |  5 ++
+ tools/include/nolibc/nolibc.h                |  1 +
+ tools/include/nolibc/stackprotector.h        | 53 ++++++++++++++++
+ tools/include/nolibc/types.h                 |  2 +
+ tools/include/nolibc/unistd.h                |  5 ++
+ tools/testing/selftests/nolibc/Makefile      | 11 +++-
+ tools/testing/selftests/nolibc/nolibc-test.c | 64 +++++++++++++++++++-
+ 9 files changed, 144 insertions(+), 8 deletions(-)
+ create mode 100644 tools/include/nolibc/stackprotector.h
+
 -- 
-2.37.3
+2.17.5
 
