@@ -2,210 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D856C8AA4
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 04:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA52D6C8AA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 04:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjCYDXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 23:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
+        id S231855AbjCYD3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 23:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbjCYDXv (ORCPT
+        with ESMTP id S229578AbjCYD3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 23:23:51 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FFC1498F;
-        Fri, 24 Mar 2023 20:23:49 -0700 (PDT)
-Received: from kwepemm600012.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Pk48j5wpfz17Ngh;
-        Sat, 25 Mar 2023 11:20:37 +0800 (CST)
-Received: from [10.174.178.220] (10.174.178.220) by
- kwepemm600012.china.huawei.com (7.193.23.74) with Microsoft SMTP Server
+        Fri, 24 Mar 2023 23:29:07 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA6A212E;
+        Fri, 24 Mar 2023 20:29:06 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Pk4KC3wvxzrWd5;
+        Sat, 25 Mar 2023 11:27:59 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 25 Mar 2023 11:23:47 +0800
-Message-ID: <a189829b-2ae4-8a62-1d0d-43c50217ce84@huawei.com>
-Date:   Sat, 25 Mar 2023 11:23:46 +0800
+ 15.1.2507.21; Sat, 25 Mar 2023 11:29:02 +0800
+Subject: Re: [PATCH] perf ftrace: Make system wide the default target for
+ latency subcommand
+To:     Namhyung Kim <namhyung@kernel.org>
+CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <irogers@google.com>,
+        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230324032702.109964-1-yangjihong1@huawei.com>
+ <CAM9d7ciGy2Mycm6etHDrt6tu331i-7DphHgBzde0_1=w67mvHg@mail.gmail.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <b17b5edf-44bb-4734-c42a-8a498372ac8a@huawei.com>
+Date:   Sat, 25 Mar 2023 11:29:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 0/5]scsi:scsi_debug: Add error injection for single device
+In-Reply-To: <CAM9d7ciGy2Mycm6etHDrt6tu331i-7DphHgBzde0_1=w67mvHg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     <dgilbert@interlog.com>, John Garry <john.g.garry@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <linfeilong@huawei.com>, <louhongxiang@huawei.com>
-References: <20230323115601.178494-1-haowenchao2@huawei.com>
- <b5f8240e-f46a-b83b-ed16-66c2d8c5571f@oracle.com>
- <c9d213e2-5ab4-0db2-f87a-247519debbbb@huawei.com>
- <750a4b24-6122-6faa-fed4-25e3167ea376@oracle.com>
- <fd810b7f-5520-1054-735f-8434a237c6e4@interlog.com>
- <164655df-0db3-0ec5-fb84-ff52204577e9@huawei.com>
- <5763743e-1923-d06e-04b7-19dfa0e8e2f4@interlog.com>
-From:   "haowenchao (C)" <haowenchao2@huawei.com>
-In-Reply-To: <5763743e-1923-d06e-04b7-19dfa0e8e2f4@interlog.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.220]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600012.china.huawei.com (7.193.23.74)
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/25 1:31, Douglas Gilbert wrote:
-> On 2023-03-23 23:42, haowenchao (C) wrote:
->> On 2023/3/24 1:24, Douglas Gilbert wrote:
->>> On 2023-03-23 12:25, John Garry wrote:
->>>> On 23/03/2023 13:13, haowenchao (C) wrote:
->>>>> On 2023/3/23 20:40, John Garry wrote:
->>>>>> On 23/03/2023 11:55, Wenchao Hao wrote:
->>>>>>> The original error injection mechanism was based on scsi_host which
->>>>>>> could not inject fault for a single SCSI device.
->>>>>>>
->>>>>>> This patchset provides the ability to inject errors for a single
->>>>>>> SCSI device. Now we supports inject timeout errors, queuecommand
->>>>>>> errors, and hostbyte, driverbyte, statusbyte, and sense data for
->>>>>>> specific SCSI Command.
->>>>>>
->>>>>> There is already a basic mechanism to generate errors - like timeouts - on "nth" command. Can you say why you want this new interface? What special scenarios are you trying to test/validate (which could not be achieved based on the current mechanism)?
->>>>>>
->>>>>
->>>>> I am testing a new error handle policy which is based on single scsi_device
->>>>> without set host to RECOVERY. So I need a method to generate errors for
->>>>> single SCSI devices.
->>>>>
->>>>> While we can not generate errors for single device with current mechanism
->>>>> because it is designed for host-wide error generation.
->>>>>
->>>>>> With this series we would have 2x methods to inject errors, which is less than ideal, and they seem to possibly conflict as well, e.g. I set timeout for nth command via current interface and then use the new interface to set timeout for some other cadence. What behavior to expect ...?
->>>>>
->>>>> I did not take this issue in consideration. I now assume the users would
->>>>> not use these 2 methods at same time.
->>>>>
->>>>> What's more, I don not know where to write the usage of this newly added
->>>>> interface, maybe we can explain these in doc?
->>>>
->>>> sysfs entries are described in Documentation/ABI, but please don't add elaborate programming interfaces in sysfs files (like in these patches) - a sysfs file should be just for reading or writing a single value
->>>
->>> Hi,
->>> Maybe this link might help for scsi_debug documentation:
->>>      https://doug-gilbert.github.io/scsi_debug.html
->>>
->>> And rather than sysfs for complicated, per (pseudo_ device
->>> settings, perhaps we could think about a SCSI mechanism like
->>> the "Unit Attention" mode page [0x0] which is vendor specific
->>> and used by Seagate and WDC for this sort of thing.
->>> A framework is already in the scsi_debug driver to change
->>> some mode page settings:
->>>
->>> # sdparm /dev/sg0
->>>      /dev/sg0: Linux     scsi_debug        0191
->>> Read write error recovery mode page:
->>>    AWRE          1  [cha: n, def:  1]
->>>    ARRE          1  [cha: n, def:  1]
->>>    PER           0  [cha: n, def:  0]
->>> Caching (SBC) mode page:
->>>    WCE           1  [cha: y, def:  1]
->>>    RCD           0  [cha: n, def:  0]
->>> Control mode page:
->>>    SWP           0  [cha: n, def:  0]
->>> Informational exceptions control mode page:
->>>    EWASC         0  [cha: n, def:  0]
->>>    DEXCPT        1  [cha: n, def:  1]
->>>    MRIE          0  [cha: y, def:  0]
->>>
->>> As can be seen WCE and MRIE are changeable, so
->>>
->>> # sdparm --clear=WCE /dev/sg0
->>> # sdparm --get=WCE /dev/sg0
->>>      /dev/sg0: Linux     scsi_debug        0191
->>> WCE           0  [cha: y, def:  1]
->>>
->>>
->>> Doug Gilbert
->>>
->>>
->>
->> Do you mean define scsi_debug's own format of mode page0(Vendor specific)
->> which contains these error injection info, and set/get these parameters
->> via sdparm?
->> If so, do we need to modify the sdparm code for these changes?
-> 
-> Not a problem.
-> 
->> I want to add more injections in scsi_debug to test the SCSI middle layer,
->> for example, control return SUCCESS in scsi_debug_abort() or
->> scsi_debug_device_reset().
->>
->> These injections are more oriented to developers to trigger and observe
->> the error handler of SCSI middle layer.
->>
->> We can extend other error injections conveniently via my interface,
->> for example, add a new error code to add a new injection to control the
->> return value of scsi_debug_abort().
->>
->> If it's not recommended to add this interface in sysfs, what about proc? Like
->> /proc/scsi/scsi, we can write "scsi remove-single-device h:c:t:l" to manage
->> device.
-> 
-> In the past, procfs has been used for this sort of thing
-> but the powers that be want to phase that usage out.
-> 
-> debugfs, even though it is usually mounted under sysfs at
-> /sys/kernel/debug , does not seem to have the "one value
-> per variable" restriction. So debugfs or configfs
-> ( /sys/kernel/config ) might be better candidates.
-> See 'df -ahT' .
-> 
+Hello,
 
-Define scsi_debug's own format of mode page0 seems too complex and we have to
-change the sdparm code. In order to make a better scalability, I prefer to add
-these interface via debugfs. Actually, I design the format of the "error interface"
-described in patch1 by referring to interfaces of ftrace.
-
-The new interfaces based on debugfs would look like following:
-/sys/kernel/debug/scsi_debug
-	|
-	+-- 0:0:0:1
-	|	|
-	|	\-- error
-	|
-	\-- 0:0:0:2
-		|
-		\-- error
-
->>>>>> I'm not saying that I am a huge fan of the current inject mechanism, but at the very least you need to provide more justification for this series.
->>>>>>>>
->>>>>>> The first patch add an sysfs interface to add and inquiry single
->>>>>>> device's error injection info; the second patch defined how to remove
->>>>>>> an injection which has been added. The following 3 patches use the
->>>>>>> injection info and generate the related error type.
->>>>>>>
->>>>>>> Wenchao Hao (5):
->>>>>>>    scsi:scsi_debug: Add sysfs interface to manage scsi devices' error
->>>>>>>      injection
->>>>>>>    scsi:scsi_debug: Define grammar to remove added error injection
->>>>>>>    scsi:scsi_debug: timeout command if the error is injected
->>>>>>>    scsi:scsi_debug: Return failed value if the error is injected
->>>>>>>    scsi:scsi_debug: set command's result and sense data if the error is
->>>>>>>      injected
->>>>>>>
->>>>>>>   drivers/scsi/scsi_debug.c | 296 ++++++++++++++++++++++++++++++++++++++
->>>>>>>   1 file changed, 296 insertions(+)
->>>>>>>
->>>>>>
->>>>>>
->>>>>
->>>>
->>>
->>>
+On 2023/3/25 9:39, Namhyung Kim wrote:
+> Hello,
+> 
+> On Thu, Mar 23, 2023 at 8:29 PM Yang Jihong <yangjihong1@huawei.com> wrote:
 >>
+>> If no target is specified for 'latency' subcommand, the execution fails
+>> because - 1 (invalid value) is written to set_ftrace_pid tracefs file.
+>> Make system wide the default target, which is the same as the default
+>> behavior of 'trace' subcommand.
 > 
+> I followed the convention to use -a for system-wide profiling.
+> Not sure if it's ok to make it default, but I don't object. :)
 > 
+Thanks for the reply.
 
+Yes, "perf ftrace latency" supports -a for system wide profiles.
+Because "perf ftrace trace" defaults to system wide when no target is 
+specified. Therefore, I sent the patch to check whether "latency" is 
+consistent with the behavior of the "trace". :)
+
+Thanks,
+Yang.
+
+> Thanks,
+> Namhyung
+> 
+>>
+>> Before the fix:
+>>
+>>    # perf ftrace latency -T schedule
+>>    failed to set ftrace pid
+>>
+>> After the fix:
+>>
+>>    # perf ftrace latency -T schedule
+>>    ^C#   DURATION     |      COUNT | GRAPH                                          |
+>>         0 - 1    us |          0 |                                                |
+>>         1 - 2    us |          0 |                                                |
+>>         2 - 4    us |          0 |                                                |
+>>         4 - 8    us |       2828 | ####                                           |
+>>         8 - 16   us |      23953 | ########################################       |
+>>        16 - 32   us |        408 |                                                |
+>>        32 - 64   us |        318 |                                                |
+>>        64 - 128  us |          4 |                                                |
+>>       128 - 256  us |          3 |                                                |
+>>       256 - 512  us |          0 |                                                |
+>>       512 - 1024 us |          1 |                                                |
+>>         1 - 2    ms |          4 |                                                |
+>>         2 - 4    ms |          0 |                                                |
+>>         4 - 8    ms |          0 |                                                |
+>>         8 - 16   ms |          0 |                                                |
+>>        16 - 32   ms |          0 |                                                |
+>>        32 - 64   ms |          0 |                                                |
+>>        64 - 128  ms |          0 |                                                |
+>>       128 - 256  ms |          4 |                                                |
+>>       256 - 512  ms |          2 |                                                |
+>>       512 - 1024 ms |          0 |                                                |
+>>         1 - ...   s |          0 |                                                |
+>>
+>> Fixes: 53be50282269 ("perf ftrace: Add 'latency' subcommand")
+>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>> ---
+>>   tools/perf/builtin-ftrace.c | 6 ++++--
+>>   1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/perf/builtin-ftrace.c b/tools/perf/builtin-ftrace.c
+>> index d7fe00f66b83..fb1b66ef2e16 100644
+>> --- a/tools/perf/builtin-ftrace.c
+>> +++ b/tools/perf/builtin-ftrace.c
+>> @@ -1228,10 +1228,12 @@ int cmd_ftrace(int argc, const char **argv)
+>>                  goto out_delete_filters;
+>>          }
+>>
+>> +       /* Make system wide (-a) the default target. */
+>> +       if (!argc && target__none(&ftrace.target))
+>> +               ftrace.target.system_wide = true;
+>> +
+>>          switch (subcmd) {
+>>          case PERF_FTRACE_TRACE:
+>> -               if (!argc && target__none(&ftrace.target))
+>> -                       ftrace.target.system_wide = true;
+>>                  cmd_func = __cmd_ftrace;
+>>                  break;
+>>          case PERF_FTRACE_LATENCY:
+>> --
+>> 2.30.GIT
+>>
+> .
+> 
