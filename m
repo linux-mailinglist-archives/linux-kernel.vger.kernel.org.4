@@ -2,163 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4AE6C8A13
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 02:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9616C8A16
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 02:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbjCYB4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 21:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        id S231681AbjCYB5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 21:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjCYB4q (ORCPT
+        with ESMTP id S229505AbjCYB5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 21:56:46 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19459EFE
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 18:56:44 -0700 (PDT)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Pk2FB6ZRYzKtMk;
-        Sat, 25 Mar 2023 09:54:22 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 25 Mar 2023 09:56:19 +0800
-Subject: Re: [PATCH 1/3] arm64: kdump : take off the protection on crashkernel
- memory region
-To:     Baoquan He <bhe@redhat.com>, <linux-kernel@vger.kernel.org>
-CC:     <catalin.marinas@arm.com>, <horms@kernel.org>,
-        <John.p.donnelly@oracle.com>, <will@kernel.org>,
-        <kexec@lists.infradead.org>, <ardb@kernel.org>, <rppt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230324131838.409996-1-bhe@redhat.com>
- <20230324131838.409996-2-bhe@redhat.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <550d6152-492c-7f00-4680-9164db04b8fc@huawei.com>
-Date:   Sat, 25 Mar 2023 09:56:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Fri, 24 Mar 2023 21:57:38 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FEFA27B;
+        Fri, 24 Mar 2023 18:57:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Pk2Jp4lMkz4f3jXr;
+        Sat, 25 Mar 2023 09:57:30 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+        by APP4 (Coremail) with SMTP id gCh0CgCnWa0LVR5k8bYQGA--.31219S2;
+        Sat, 25 Mar 2023 09:57:32 +0800 (CST)
+Message-ID: <253dd595-c850-c09f-2057-641487024fb7@huaweicloud.com>
+Date:   Sat, 25 Mar 2023 09:57:31 +0800
 MIME-Version: 1.0
-In-Reply-To: <20230324131838.409996-2-bhe@redhat.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: add bound tracking for BPF_MOD
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+References: <20230324045842.729719-1-xukuohai@huaweicloud.com>
+ <20230324045842.729719-2-xukuohai@huaweicloud.com>
+ <CAADnVQLKxssX1K_CSpbkcOPep2NNnoTRt2bMFzKhCo5AaUzwWA@mail.gmail.com>
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <CAADnVQLKxssX1K_CSpbkcOPep2NNnoTRt2bMFzKhCo5AaUzwWA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCnWa0LVR5k8bYQGA--.31219S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtr1ktF4DJF48GFyDJr4xWFg_yoWktrXEk3
+        s2ywn5uwnxGwn7Can3A3WqqryDCa1DGry5GrWaqr12qFyxAr9YkFn5Crn2yr98GFWfJ3yD
+        Jrnavay7Zw1SqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbIxYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU13rcDUUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/24/2023 1:16 AM, Alexei Starovoitov wrote:
+> On Thu, Mar 23, 2023 at 8:59 AM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
+>>
+>> From: Xu Kuohai <xukuohai@huawei.com>
+>>
+>> dst_reg is marked as unknown when BPF_MOD instruction is verified, causing
+>> the following bpf prog to be incorrectly rejected.
+>>
+>> 0: r0 = 0
+>> 1: r0 %= 1   // r0 is marked as unknown
+>> 2: r1 = 0
+>> 3: r1 += 1
+>> 4: if r1 < r0 goto pc-2 // verifier treats the loop as unbounded
+>> 5: exit
+>>
+>> To teach verifier to accept the above prog, this patch adds bound tracking
+>> for BPF_MOD.
+>>
+>> The approach is based on the following rules:
+>>
+>> 1. BPF_MOD is unsigned;
+>>
+>> 2. For an unsigned constant divisor x:
+>>
+>>   a. when x != 0, the resulted dst_reg bits are in the range [0, x - 1],
+>>      and if no wrapping occurs, the result can be further narrowed down
+>>      to [umin mod x, umax mod x];
+>>
+>>   b. when x == 0, dst_reg is truncated to 32 bits by mod32 or remains
+>>      unchanged by mod64.
+>>
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> 
+> Same Nack as before.
 
+Sorry, I did not receive Nack for this patch before.
 
-On 2023/3/24 21:18, Baoquan He wrote:
-> Problem:
-> =======
-> On arm64, block and section mapping is supported to build page tables.
-> However, currently it enforces to take base page mapping for the whole
-> linear mapping if CONFIG_ZONE_DMA or CONFIG_ZONE_DMA32 is enabled and
-> crashkernel kernel parameter is set. This will cause longer time of the
-> linear mapping process during bootup and severe performance degradation
-> during running time.
-> 
-> Root cause:
-> ==========
-> On arm64, crashkernel reservation relies on knowing the upper limit of
-> low memory zone because it needs to reserve memory in the zone so that
-> devices' DMA addressing in kdump kernel can be satisfied. However, the
-> upper limit of low memory on arm64 is variant. And the upper limit can
-> only be decided late till bootmem_init() is called [1].
-> 
-> And we need to map the crashkernel region with base page granularity when
-> doing linear mapping, because kdump needs to protect the crashkernel region
-> via set_memory_valid(,0) after kdump kernel loading. However, arm64 doesn't
-> support well on splitting the built block or section mapping due to some
-> cpu reststriction [2]. And unfortunately, the linear mapping is done before
-> bootmem_init().
-> 
-> To resolve the above conflict on arm64, the compromise is enforcing to
-> take base page mapping for the entire linear mapping if crashkernel is
-> set, and CONFIG_ZONE_DMA or CONFIG_ZONE_DMA32 is enabed. Hence
-> performance is sacrificed.
-> 
-> Solution:
-> =========
-> Comparing with the base page mapping for the whole linear region, it's
-> better to take off the protection on crashkernel memory region for the
-> time being because the anticipated stamping on crashkernel memory region
-> could only happen in a chance in one million, while the base page mapping
-> for the whole linear region is mitigating arm64 systems with crashkernel
-> set always.
-> 
-> [1]
-> https://lore.kernel.org/all/YrIIJkhKWSuAqkCx@arm.com/T/#u
-> 
-> [2]
-> https://lore.kernel.org/linux-arm-kernel/20190911182546.17094-1-nsaenzjulienne@suse.de/T/
-> 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> ---
->  arch/arm64/include/asm/kexec.h    |  6 ------
->  arch/arm64/kernel/machine_kexec.c | 20 --------------------
->  2 files changed, 26 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/kexec.h b/arch/arm64/include/asm/kexec.h
-> index 559bfae26715..9ac9572a3bbe 100644
-> --- a/arch/arm64/include/asm/kexec.h
-> +++ b/arch/arm64/include/asm/kexec.h
-> @@ -102,12 +102,6 @@ void cpu_soft_restart(unsigned long el2_switch, unsigned long entry,
->  
->  int machine_kexec_post_load(struct kimage *image);
->  #define machine_kexec_post_load machine_kexec_post_load
-> -
-> -void arch_kexec_protect_crashkres(void);
-> -#define arch_kexec_protect_crashkres arch_kexec_protect_crashkres
-> -
-> -void arch_kexec_unprotect_crashkres(void);
-> -#define arch_kexec_unprotect_crashkres arch_kexec_unprotect_crashkres
->  #endif
->  
->  #define ARCH_HAS_KIMAGE_ARCH
-> diff --git a/arch/arm64/kernel/machine_kexec.c b/arch/arm64/kernel/machine_kexec.c
-> index ce3d40120f72..22da7fc1ff50 100644
-> --- a/arch/arm64/kernel/machine_kexec.c
-> +++ b/arch/arm64/kernel/machine_kexec.c
-> @@ -268,26 +268,6 @@ void machine_crash_shutdown(struct pt_regs *regs)
->  	pr_info("Starting crashdump kernel...\n");
->  }
->  
-> -void arch_kexec_protect_crashkres(void)
-> -{
-> -	int i;
-> -
-> -	for (i = 0; i < kexec_crash_image->nr_segments; i++)
-> -		set_memory_valid(
-> -			__phys_to_virt(kexec_crash_image->segment[i].mem),
-> -			kexec_crash_image->segment[i].memsz >> PAGE_SHIFT, 0);
-> -}
-> -
-> -void arch_kexec_unprotect_crashkres(void)
-> -{
-> -	int i;
-> -
-> -	for (i = 0; i < kexec_crash_image->nr_segments; i++)
-> -		set_memory_valid(
-> -			__phys_to_virt(kexec_crash_image->segment[i].mem),
-> -			kexec_crash_image->segment[i].memsz >> PAGE_SHIFT, 1);
-> -}
-> -
->  #ifdef CONFIG_HIBERNATION
->  /*
->   * To preserve the crash dump kernel image, the relevant memory segments
-> 
+> You haven't answered _why_ anyone needs it.
 
-Reviewed-by: Zhen Lei <thunder.leizhen@huawei.com>
+No idea, I simply believe it's good to have a closer estimate of the result.
 
--- 
-Regards,
-  Zhen Lei
