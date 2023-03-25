@@ -2,161 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5596C8D0C
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 11:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0104D6C8D16
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 11:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbjCYKQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 06:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
+        id S231501AbjCYKWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 06:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCYKQi (ORCPT
+        with ESMTP id S229591AbjCYKWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 06:16:38 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27AF13506;
-        Sat, 25 Mar 2023 03:16:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 350031FDFB;
-        Sat, 25 Mar 2023 10:16:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1679739396; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q0TxJ1pRGTbTsu2gMHP7OY33CZJmyGasc/4h21839kk=;
-        b=LEcYYHW6zsPd6nz/2OXegYqToyKvrmZD82afuhsdw0mzv82YSJc0EOqu5GjfEjWk2j1j9F
-        +yIqSjaw6hRaEcLN/HFTYDLRG76kb8/Ocx/adDm7UiKApijr+f8NHq7dyNvslZqgvEQBss
-        oQHMc+2IY2Q5omX0aO3Kg8aD4D2a7ns=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1679739396;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q0TxJ1pRGTbTsu2gMHP7OY33CZJmyGasc/4h21839kk=;
-        b=I6iO9Xt+uecv4BMfJBLDRqpsnOkKPOhj3DQRdMIF3lRoDwKmjrilDgWMHQ/ij/1+Y2LNxc
-        Ujghp93DxeIX+ZDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9AC9B13463;
-        Sat, 25 Mar 2023 10:16:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Mvf4GQLKHmQyQgAAMHmgww
-        (envelope-from <colyli@suse.de>); Sat, 25 Mar 2023 10:16:34 +0000
-Message-ID: <157b8db9-82f7-85e7-3bbd-7ef3a1797892@suse.de>
-Date:   Sat, 25 Mar 2023 18:16:04 +0800
+        Sat, 25 Mar 2023 06:22:04 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071E486AA;
+        Sat, 25 Mar 2023 03:22:01 -0700 (PDT)
+Received: from dggpeml500019.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PkFVQ576QzKncx;
+        Sat, 25 Mar 2023 18:21:34 +0800 (CST)
+Received: from [10.67.101.98] (10.67.101.98) by dggpeml500019.china.huawei.com
+ (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Sat, 25 Mar
+ 2023 18:21:59 +0800
+Message-ID: <cf1f8c1f-90cb-9319-91e0-a8f4339547e6@hisilicon.com>
+Date:   Sat, 25 Mar 2023 18:21:59 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH resent] bcache: Fix exception handling in mca_alloc()
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     cocci@inria.fr, kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-bcache@vger.kernel.org
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <e33f264a-7ee9-4ebc-d58e-bbb7fd567198@web.de>
- <d0381c8e-7302-b0ed-cf69-cbc8c3618106@web.de>
-Content-Language: en-US
-From:   Coly Li <colyli@suse.de>
-In-Reply-To: <d0381c8e-7302-b0ed-cf69-cbc8c3618106@web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [RFC PATCH v1 2/4] drivers/perf: hisi: Add driver support for
+ HiSilicon PMCU
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+CC:     <will@kernel.org>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <john.g.garry@oracle.com>, <james.clark@arm.com>,
+        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <corbet@lwn.net>, <zhangshaokun@hisilicon.com>,
+        <shenyang39@huawei.com>, <hejunhao3@huawei.com>,
+        <yangyicong@hisilicon.com>, <prime.zeng@huawei.com>,
+        <suntao25@huawei.com>, <jiazhao4@hisilicon.com>,
+        <linuxarm@huawei.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-perf-users@vger.kernel.org>
+References: <20230206065146.645505-1-zhanjie9@hisilicon.com>
+ <20230206065146.645505-3-zhanjie9@hisilicon.com>
+ <20230317145232.00001c38@Huawei.com>
+From:   Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <20230317145232.00001c38@Huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.101.98]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500019.china.huawei.com (7.185.36.137)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/25/23 5:31 PM, Markus Elfring wrote:
-> Date: Mon, 20 Mar 2023 13:13:37 +0100
+
+
+On 17/03/2023 22:52, Jonathan Cameron wrote:
+> On Mon, 6 Feb 2023 14:51:44 +0800
+> Jie Zhan <zhanjie9@hisilicon.com> wrote:
 >
-> The label “err” was used to jump to another pointer check despite of
-> the detail in the implementation of the function “mca_alloc”
-> that it was determined already that a corresponding variable contained
-> a null pointer because of a failed function call “mca_bucket_alloc”.
-
-
-Hmm, I don't get the exact point from the above long sentence. Could you 
-please describe a bit more specific where the problem is at exact line 
-number of the code?
-
-> * Thus use a more appropriate label instead.
-
-So far I am not convinced the modified label is more appropriate.
-
+>> HiSilicon Performance Monitor Control Unit (PMCU) is a device that offloads
+>> PMU accesses from CPUs, handling the configuration, event switching, and
+>> counter reading of core PMUs on Kunpeng SoC. It facilitates fine-grained
+>> and multi-PMU-event CPU profiling, in which scenario the current 'perf'
+>> scheme may lose events or drop sampling frequency. With PMCU, users can
+>> reliably obtain the data of up to 240 PMU events with the sample interval
+>> of events down to 1ms, while the software overhead of accessing PMUs, as
+>> well as its impact on target workloads, is reduced.
+>>
+>> This driver enables the usage of PMCU through the perf_event framework.
+>> PMCU is registered as a PMU device and utilises the AUX buffer to dump data
+>> directly. Users can start PMCU sampling through 'perf-record'. Event
+>> numbers are passed by a sysfs interface.
+>>
+>> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+> Hi Jie,
 >
-> * Delete a redundant check.
-
-Where is the location of the redundant check?
-
-
+> A few minor comments inline.
+> Whilst I looked at this internally, that was a while back so I've
+> found a few new things to point out in what I think is a pretty good/clean driver.
+> The main thing here is the RFC questions you've raised in the cover letter
+> of course - particularly the one around mediating who has the counters between
+> this and the normal PMU driver.
 >
+> Thanks,
 >
-> This issue was detected by using the Coccinelle software.
+> Jonathan
+Hi Jonathan,
 
-Just curious, what is the warning reported by the mentioned software ?
+Many thanks for the review again.
 
+Happy to accept all the comments. I have updated the driver based on them.
 
->
-> Fixes: cafe563591446cf80bfbc2fe3bc72a2e36cf1060 ("bcache: A block layer cache")
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
->   drivers/md/bcache/btree.c | 11 +++++------
->   1 file changed, 5 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
-> index 147c493a989a..166afd7ec499 100644
-> --- a/drivers/md/bcache/btree.c
-> +++ b/drivers/md/bcache/btree.c
-> @@ -921,18 +921,18 @@ static struct btree *mca_alloc(struct cache_set *c, struct btree_op *op,
->   		if (!mca_reap(b, 0, false)) {
->   			mca_data_alloc(b, k, __GFP_NOWARN|GFP_NOIO);
->   			if (!b->keys.set[0].data)
-> -				goto err;
-> +				goto unlock;
->   			else
->   				goto out;
->   		}
->
->   	b = mca_bucket_alloc(c, k, __GFP_NOWARN|GFP_NOIO);
->   	if (!b)
-> -		goto err;
-> +		goto unlock;
->
->   	BUG_ON(!down_write_trylock(&b->lock));
->   	if (!b->keys.set->data)
-> -		goto err;
-> +		goto unlock;
->   out:
->   	BUG_ON(b->io_mutex.count != 1);
->
-> @@ -955,9 +955,8 @@ static struct btree *mca_alloc(struct cache_set *c, struct btree_op *op,
->   				    &b->c->expensive_debug_checks);
->
->   	return b;
-> -err:
-> -	if (b)
-> -		rw_unlock(true, b);
-> +unlock:
-> +	rw_unlock(true, b);
+One reply below.
 
-If b is NULL, is it a bit fishing to send the NULL pointer into 
-rw_unlock() ?
+Jie
 
 
-Thanks in advance for more information.
+...
+>> +static const struct attribute_group hisi_pmcu_format_attr_group = {
+>> +	.name = "format",
+>> +	.attrs = hisi_pmcu_format_attrs,
+>> +};
+>> +
+>> +static ssize_t monitored_cpus_show(struct device *dev,
+>> +				   struct device_attribute *attr, char *buf)
+>> +{
+>> +	struct hisi_pmcu *hisi_pmcu = to_hisi_pmcu(dev_get_drvdata(dev));
+>> +
+>> +	return sysfs_emit(buf, "%d-%d\n",
+>> +			  cpumask_first(&hisi_pmcu->cpus),
+>> +			  cpumask_last(&hisi_pmcu->cpus));
+> What does this do about offline CPUs?
+> Should it include them or not?
+PMCU takes care of offline CPUs as well, and the event counts from 
+offline CPUs
+should show as zeroes in the output.
 
+hisi_pmcu->cpus contains only the online CPUs monitored by the PMCU,
+so something should be improved with the "monitored_cpus" interface here.
 
-Coly Li
+"monitored_cpus" should actually show alll the online/offline CPUs 
+monitored,
+or, if it is meant to show only online CPUs, it show be a comma 
+separated list
+representing the hisi_pmcu->cpus mask rather than a range that may ignore
+some offline CPUs in the middle.
+
+Will fix this in V2.
 
