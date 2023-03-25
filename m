@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B68C6C8E73
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 14:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7742A6C8E76
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 14:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbjCYNWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 09:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S231770AbjCYNX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 09:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjCYNWS (ORCPT
+        with ESMTP id S230223AbjCYNX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 09:22:18 -0400
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903CA1420A;
-        Sat, 25 Mar 2023 06:22:11 -0700 (PDT)
-Received: from smtp102.mailbox.org (unknown [10.196.197.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4PkKVm1dnlz9sZ5;
-        Sat, 25 Mar 2023 14:22:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
-        s=MBO0001; t=1679750528;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UYNhSu+2Wobyn2s4WHdqzJN3u63ahHSl1LNIJlpGGUg=;
-        b=Rzyx7cnsEbFP7SlNzw6ukZzDPuRQjOTuxz6t1f+ECAfdkGaNtEOXRhCcXrYQXoawGFvRZC
-        j5GpOa+AsbCZISbEkIZS57Qg61czKXJr4bwMb29xU9glOMe6S98m/HXyZP/FVuzaWlsY+8
-        tzVEsoinrw8dHYIjexNZjVXXRTOqsAVQXFcZHBCBetQiyO1Btu/WTbsTkTmlaPh3NzS/Z8
-        Pwi9v44yKJDAN4NTLm0hBdLKf7jq1CqUvhMGqGqHllly9uYAVAAGjk8s/WOFCwPwhXSdTE
-        /n7OZv6jQ/S/iXOdyGel7xn7lpPUb4eapTHgESUSUV8AqvXa+t3sAiV2faOM8Q==
-From:   Dylan Van Assche <me@dylanvanassche.be>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Dylan Van Assche <me@dylanvanassche.be>
-Subject: [PATCH 2/2] remoteproc: qcom: pas: add SDM845 SLPI resource
-Date:   Sat, 25 Mar 2023 14:21:17 +0100
-Message-Id: <20230325132117.19733-3-me@dylanvanassche.be>
-In-Reply-To: <20230325132117.19733-1-me@dylanvanassche.be>
-References: <20230325132117.19733-1-me@dylanvanassche.be>
+        Sat, 25 Mar 2023 09:23:27 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D13255AD;
+        Sat, 25 Mar 2023 06:23:26 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pg3rZ-0001gO-FN; Sat, 25 Mar 2023 14:23:17 +0100
+Message-ID: <dbb0d402-ac95-6355-03aa-42c2671727d7@leemhuis.info>
+Date:   Sat, 25 Mar 2023 14:23:16 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Subject: Bug 217245 - mt7921e tries to load unnecessary firmware
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1679750606;45cfbc79;
+X-HE-SMSGID: 1pg3rZ-0001gO-FN
+X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SLPI resources for the SDM845 Qualcomm SoC to the Qualcomm
-remoteproc q6v5_pas driver to define the default firmware name
-and GLink edge name.
+Hi, Thorsten here, the Linux kernel's regression tracker.
 
-Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
----
- drivers/remoteproc/qcom_q6v5_pas.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developers don't keep an eye on it, I decided to forward it by
+mail. Note, the reporter can be reached though bugzilla, as I sadly can
+not CCed them to mails like this[1].
 
-diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index c99a20542685..d82b6f4bced4 100644
---- a/drivers/remoteproc/qcom_q6v5_pas.c
-+++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -1028,6 +1028,22 @@ static const struct adsp_data slpi_resource_init = {
- 		.ssctl_id = 0x16,
- };
- 
-+static const struct adsp_data sdm845_slpi_resource = {
-+		.crash_reason_smem = 424,
-+		.firmware_name = "slpi.mdt",
-+		.pas_id = 12,
-+		.auto_boot = true,
-+		.proxy_pd_names = (char*[]){
-+			"lcx",
-+			"lmx",
-+			NULL
-+		},
-+		.load_state = "slpi",
-+		.ssr_name = "dsps",
-+		.sysmon_name = "slpi",
-+		.ssctl_id = 0x16,
-+};
-+
- static const struct adsp_data sm8150_slpi_resource = {
- 		.crash_reason_smem = 424,
- 		.firmware_name = "slpi.mdt",
-@@ -1201,6 +1217,7 @@ static const struct of_device_id adsp_of_match[] = {
- 	{ .compatible = "qcom,sdm660-adsp-pas", .data = &adsp_resource_init},
- 	{ .compatible = "qcom,sdm845-adsp-pas", .data = &sdm845_adsp_resource_init},
- 	{ .compatible = "qcom,sdm845-cdsp-pas", .data = &sdm845_cdsp_resource_init},
-+	{ .compatible = "qcom,sdm845-slpi-pas", .data = &sdm845_slpi_resource},
- 	{ .compatible = "qcom,sdx55-mpss-pas", .data = &sdx55_mpss_resource},
- 	{ .compatible = "qcom,sm6115-adsp-pas", .data = &adsp_resource_init},
- 	{ .compatible = "qcom,sm6115-cdsp-pas", .data = &cdsp_resource_init},
--- 
-2.39.2
+Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217245 :
 
+> kitestramuort@autistici.org 2023-03-24 21:53:01 UTC
+> 
+> I compile mt7921e statically into the kernel, along with the firmware
+> binaries needed for my MT7922 chip:
+> WIFI_MT7922_patch_mcu_1_1_hdr.bin, WIFI_MT7922_patch_mcu_1_1_hdr.bin
+> and BT_RAM_CODE_MT7922_1_1_hdr.bin
+> 
+> Since 6.2, mt7921e also tries to load WIFI_RAM_CODE_MT7961_1.bin and
+> fails with
+> 
+> mt7921e 0000:02:00.0: Direct firmware load for
+> mediatek/WIFI_RAM_CODE_MT7961_1.bin failed with error -2
+> 
+> The card seems to work normally without that binary, so I guess it is
+> not needed and it shouldn't be requested. The error doesn't happen
+> with the 6.1 kernel
+
+See the ticket for more details.
+
+
+[TLDR for the rest of this mail: I'm adding this report to the list of
+tracked Linux kernel regressions; the text you find below is based on a
+few templates paragraphs you might have encountered already in similar
+form.]
+
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
+
+#regzbot introduced: v6.1..v6.2
+https://bugzilla.kernel.org/show_bug.cgi?id=217245
+#regzbot title: net: wireless: mt7921e when build in now requires a new
+firmware file
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+this thread sees some discussion). See page linked in footer for details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+[1] because bugzilla.kernel.org tells users upon registration their
+"email address will never be displayed to logged out users"
