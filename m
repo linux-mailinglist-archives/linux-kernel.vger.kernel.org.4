@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243CD6C8FD3
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5676C8FD4
 	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 18:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbjCYReh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 13:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
+        id S232105AbjCYRej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 13:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbjCYReK (ORCPT
+        with ESMTP id S231853AbjCYReL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 13:34:10 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E71DBE6
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 10:34:04 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id hf2so4509967qtb.3
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 10:34:04 -0700 (PDT)
+        Sat, 25 Mar 2023 13:34:11 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D62AEF81
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 10:34:06 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id a5so4504568qto.6
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 10:34:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1679765643;
+        d=joelfernandes.org; s=google; t=1679765645;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q6C53sn27NuA32AX3ykr9qVTka3YNyXyLo2FHjcHAPk=;
-        b=yhQE5JitzdBNkzY0TYfTzuvOS/VKmMwn5KP2dPiUdYcgdHLPrmvZZ6Np/lG32lNBAd
-         lt9VxOLDD0Yxnj/P9thYO1M/R2JLG12ggb55LdZcQNrb8ZOv8E4OD9ybmGmBVQE7U7t4
-         vwfVjwDCDMeJ7G6L/7UIbp5+MZFMuw6ebBtYE=
+        bh=kDgsb2d+hZmc+VQbS7ffR7EbpJzTOYghTZrLGYmTtWc=;
+        b=jhaF7jMZ0YB7rLiRDFZrRklRXt1OS7zPKXAlOrC6Ofk00510pCD4FnDFVqfLxhpUjD
+         BgjbV9/qa/zMtSEVZ9i8O8NwPGlXueA5d8pnRbjRaOifUjtUqVzrrbg4wXpX7QQON0Ga
+         h2cXsbZfUrcDoLDyKLO+AqiHanYO7hZFWtMyw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679765643;
+        d=1e100.net; s=20210112; t=1679765645;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q6C53sn27NuA32AX3ykr9qVTka3YNyXyLo2FHjcHAPk=;
-        b=7WwpDyrLFOfMLgWrQAQlGTo1rw2TUDwi38VlDwa518KblppmfGfe89W7ADL0VrRlfn
-         InKrXwjINnjLNfaIiujwGVu76Ghg9JREVZjKZL7kDnyVPPPs4evSLVTS2VW0PIpRu7YD
-         DaiiKSe+7LAmYluh8PGehrpyonJ72bJz6uXRpfZlL5R5YSYic++RKZ682LKGqQzngoVp
-         eVtH94aFfgqwFHLi3fABlvF4bTygDk5/hLVr2V/kmAovPGFqey/CO/uzfm5cAcK9c3gv
-         EH0WLE/71ZUlPEZ0d5wctPQzE/7nCPENEsYNHkpqmZM07pg6y0T1IYKdi5E/zDuDBApA
-         t03Q==
-X-Gm-Message-State: AO0yUKUh42FFaj0pHOuF7KpBk2cUED/zde7f5MVvmFnJV/0xglbhhIR/
-        mTyUKinMilASvDZQ/TXjuEiw9g/DtltplRi9TlI=
-X-Google-Smtp-Source: AK7set/kBRoccFhabLv3Raii1q34w76PXtiC0I5XZu7Br5sHC8TyaR8GiL2D8zsuukPc+azN0dL7kw==
-X-Received: by 2002:ac8:5787:0:b0:3e3:98af:5de9 with SMTP id v7-20020ac85787000000b003e398af5de9mr12140109qta.63.1679765643455;
-        Sat, 25 Mar 2023 10:34:03 -0700 (PDT)
+        bh=kDgsb2d+hZmc+VQbS7ffR7EbpJzTOYghTZrLGYmTtWc=;
+        b=8H2J6UvxKzQ93HcuDsCJtDMntn6PBbTMp8qWY4bX/oaGi4lL208vf4CtGWEtp41GWl
+         PnUielnDXc0VYC8R9aUFkKqndj/YrT/vSDxfnPjgChXCflNsl0Y7d7cfk9MRRWMFCx7S
+         63xmFMk44HIy1a6BQTH7DTDf13feru2YTepJDmlrK+cZWTKH9obqf/APRgyu3HnIs3Zj
+         PQLAhs521cQ5fkdcEJhEbf+Vtmy+i+whWbMTcOCqjPuL7f7+4rP2oXr3hGM4XcratE/I
+         zWR+/x1G5Di3JBk6qMuQPJfMGgQm55VzVdR+G6P5BMwnPhj4i9ZJ5X5QIftC25ruV1nA
+         ZbzQ==
+X-Gm-Message-State: AO0yUKVDpcNbnsiUWYZPpwJ0Ns+sV5sxtivEl1tKVBDcvtXe5eXq1Bkp
+        r5q1f05TFYV96z65xUXusjzv/UYY8PgS1/vaHfM=
+X-Google-Smtp-Source: AKy350ZKIT2t3gxR4Zylf8zYlF3puKJt9xTfHezSW7rx/lBHNOBE+j7Z/Q9dY0lrU51bFaQa0S0IRA==
+X-Received: by 2002:ac8:5755:0:b0:3e1:7465:91f5 with SMTP id 21-20020ac85755000000b003e1746591f5mr12423604qtx.10.1679765644872;
+        Sat, 25 Mar 2023 10:34:04 -0700 (PDT)
 Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id m4-20020ac84444000000b003e37ee54b5dsm6762764qtn.90.2023.03.25.10.34.02
+        by smtp.gmail.com with ESMTPSA id m4-20020ac84444000000b003e37ee54b5dsm6762764qtn.90.2023.03.25.10.34.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 10:34:03 -0700 (PDT)
+        Sat, 25 Mar 2023 10:34:04 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org,
         "Paul E. McKenney" <paulmck@kernel.org>,
@@ -59,10 +59,10 @@ To:     linux-kernel@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>,
         Zqiang <qiang1.zhang@intel.com>
-Cc:     rcu@vger.kernel.org
-Subject: [PATCH v2 10/13] rcu: Permit start_poll_synchronize_rcu_expedited() to be invoked early
-Date:   Sat, 25 Mar 2023 17:33:13 +0000
-Message-Id: <20230325173316.3118674-11-joel@joelfernandes.org>
+Cc:     Mark Brown <broonie@kernel.org>, rcu@vger.kernel.org
+Subject: [PATCH v2 11/13] rcu-tasks: Report stalls during synchronize_srcu() in rcu_tasks_postscan()
+Date:   Sat, 25 Mar 2023 17:33:14 +0000
+Message-Id: <20230325173316.3118674-12-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 In-Reply-To: <20230325173316.3118674-1-joel@joelfernandes.org>
 References: <20230325173316.3118674-1-joel@joelfernandes.org>
@@ -77,66 +77,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zqiang <qiang1.zhang@intel.com>
+From: Neeraj Upadhyay <quic_neeraju@quicinc.com>
 
-According to the commit log of the patch that added it to the kernel,
-start_poll_synchronize_rcu_expedited() can be invoked very early, as
-in long before rcu_init() has been invoked.  But before rcu_init(),
-the rcu_data structure's ->mynode field has not yet been initialized.
-This means that the start_poll_synchronize_rcu_expedited() function's
-attempt to set the CPU's leaf rcu_node structure's ->exp_seq_poll_rq
-field will result in a segmentation fault.
+The call to synchronize_srcu() from rcu_tasks_postscan() can be stalled
+by a task getting stuck in do_exit() between that function's calls to
+exit_tasks_rcu_start() and exit_tasks_rcu_finish().   To ease diagnosis
+of this situation, print a stall warning message every rcu_task_stall_info
+period when rcu_tasks_postscan() is stalled.
 
-This commit therefore causes start_poll_synchronize_rcu_expedited() to
-set ->exp_seq_poll_rq only after rcu_init() has initialized all CPUs'
-rcu_data structures' ->mynode fields.  It also removes the check from
-the rcu_init() function so that start_poll_synchronize_rcu_expedited(
-is unconditionally invoked.  Yes, this might result in an unnecessary
-boot-time grace period, but this is down in the noise.
+[ paulmck: Adjust to handle CONFIG_SMP=n. ]
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Reported-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/rcu/20230111212736.GA1062057@paulmck-ThinkPad-P17-Gen-1/
+Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- kernel/rcu/tree.c     | 5 ++---
- kernel/rcu/tree_exp.h | 5 +++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ kernel/rcu/tasks.h | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index e80e8f128c57..90d54571126a 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -4942,9 +4942,8 @@ void __init rcu_init(void)
- 	else
- 		qovld_calc = qovld;
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index bfb5e1549f2b..baf7ec178155 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -139,6 +139,12 @@ static struct rcu_tasks rt_name =							\
+ /* Track exiting tasks in order to allow them to be waited for. */
+ DEFINE_STATIC_SRCU(tasks_rcu_exit_srcu);
  
--	// Kick-start any polled grace periods that started early.
--	if (!(per_cpu_ptr(&rcu_data, cpu)->mynode->exp_seq_poll_rq & 0x1))
--		(void)start_poll_synchronize_rcu_expedited();
-+	// Kick-start in case any polled grace periods started early.
-+	(void)start_poll_synchronize_rcu_expedited();
- 
- 	rcu_test_sync_prims();
++#ifdef CONFIG_TASKS_RCU
++/* Report delay in synchronize_srcu() completion in rcu_tasks_postscan(). */
++static void tasks_rcu_exit_srcu_stall(struct timer_list *unused);
++static DEFINE_TIMER(tasks_rcu_exit_srcu_stall_timer, tasks_rcu_exit_srcu_stall);
++#endif
++
+ /* Avoid IPIing CPUs early in the grace period. */
+ #define RCU_TASK_IPI_DELAY (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB) ? HZ / 2 : 0)
+ static int rcu_task_ipi_delay __read_mostly = RCU_TASK_IPI_DELAY;
+@@ -830,6 +836,13 @@ static void rcu_tasks_pertask(struct task_struct *t, struct list_head *hop)
+ /* Processing between scanning taskslist and draining the holdout list. */
+ static void rcu_tasks_postscan(struct list_head *hop)
+ {
++	int rtsi = READ_ONCE(rcu_task_stall_info);
++
++	if (!IS_ENABLED(CONFIG_TINY_RCU)) {
++		tasks_rcu_exit_srcu_stall_timer.expires = jiffies + rtsi;
++		add_timer(&tasks_rcu_exit_srcu_stall_timer);
++	}
++
+ 	/*
+ 	 * Exiting tasks may escape the tasklist scan. Those are vulnerable
+ 	 * until their final schedule() with TASK_DEAD state. To cope with
+@@ -848,6 +861,9 @@ static void rcu_tasks_postscan(struct list_head *hop)
+ 	 * call to synchronize_rcu().
+ 	 */
+ 	synchronize_srcu(&tasks_rcu_exit_srcu);
++
++	if (!IS_ENABLED(CONFIG_TINY_RCU))
++		del_timer_sync(&tasks_rcu_exit_srcu_stall_timer);
  }
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index 7cc4856da081..5343f32e7d67 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -1066,9 +1066,10 @@ unsigned long start_poll_synchronize_rcu_expedited(void)
- 	if (rcu_init_invoked())
- 		raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
- 	if (!poll_state_synchronize_rcu(s)) {
--		rnp->exp_seq_poll_rq = s;
--		if (rcu_init_invoked())
-+		if (rcu_init_invoked()) {
-+			rnp->exp_seq_poll_rq = s;
- 			queue_work(rcu_gp_wq, &rnp->exp_poll_wq);
-+		}
- 	}
- 	if (rcu_init_invoked())
- 		raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
+ 
+ /* See if tasks are still holding out, complain if so. */
+@@ -923,6 +939,21 @@ static void rcu_tasks_postgp(struct rcu_tasks *rtp)
+ void call_rcu_tasks(struct rcu_head *rhp, rcu_callback_t func);
+ DEFINE_RCU_TASKS(rcu_tasks, rcu_tasks_wait_gp, call_rcu_tasks, "RCU Tasks");
+ 
++static void tasks_rcu_exit_srcu_stall(struct timer_list *unused)
++{
++#ifndef CONFIG_TINY_RCU
++	int rtsi;
++
++	rtsi = READ_ONCE(rcu_task_stall_info);
++	pr_info("%s: %s grace period number %lu (since boot) gp_state: %s is %lu jiffies old.\n",
++		__func__, rcu_tasks.kname, rcu_tasks.tasks_gp_seq,
++		tasks_gp_state_getname(&rcu_tasks), jiffies - rcu_tasks.gp_jiffies);
++	pr_info("Please check any exiting tasks stuck between calls to exit_tasks_rcu_start() and exit_tasks_rcu_finish()\n");
++	tasks_rcu_exit_srcu_stall_timer.expires = jiffies + rtsi;
++	add_timer(&tasks_rcu_exit_srcu_stall_timer);
++#endif // #ifndef CONFIG_TINY_RCU
++}
++
+ /**
+  * call_rcu_tasks() - Queue an RCU for invocation task-based grace period
+  * @rhp: structure to be used for queueing the RCU updates.
 -- 
 2.40.0.348.gf938b09366-goog
 
