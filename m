@@ -2,141 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA88A6C9073
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 20:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9796C9060
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 20:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbjCYTZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 15:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
+        id S230286AbjCYTLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 15:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjCYTZc (ORCPT
+        with ESMTP id S229659AbjCYTLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 15:25:32 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B715430C0
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 12:25:31 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 401EC5C0054;
-        Sat, 25 Mar 2023 15:25:29 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sat, 25 Mar 2023 15:25:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679772329; x=
-        1679858729; bh=F20hN5cmoUb7ZMiQCIUcAf557ZHjOrjpfezAUz/+nzY=; b=C
-        Gmc+c3g2DEkoY4krwTCYYXVNEm+SGdPUafJ/YisY5tj9vOW/nG8lJeb8ujJmXhgt
-        WaFn1p3ENyvGzc7a+Agl7amh4dxpKoh9fXmL9QgMxiwL0XdWlGh1PHZnInZVzYrV
-        k7h6ZuY9q8KVdN+0aZUbUSGs7JacG1oqxuUDpoDaUcY5YmBovRT4GrWeaW+k3KJN
-        Kys82rcorrTbJb4KWv2elly7uN4w/JQzuycfp3H4YfWJeBQnq63qXtVZbvNgAYmk
-        mx16ervjNfDHp0Kv/Jzsyrm5WAEjPwd8iezXDVVbswidLnooTW2NiNa3QM0pg0cW
-        q/ylnuCpIXoc0b2znYjRA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679772329; x=1679858729; bh=F20hN5cmoUb7Z
-        MiQCIUcAf557ZHjOrjpfezAUz/+nzY=; b=EeoXI1YzVWVTVkWRPBhlqMVKiYj1m
-        OEO7NioGTasn/v6KcdceRJfqBWBs8iSQTYgCxKTfYDDn4FHh+HsENI/nqSBc0aqA
-        kNMYWigMUqg//mXOHhOY4QcHMCbg36mNpw9yQFHRz696PZP5pTqqkFxg1JwCindz
-        ohCO+8650NTj22LgHZCujr1+NT5Ua/HQPw/TpBVCtqQuwvEkP8O3W0nvNhLOb+Ib
-        d8UVHgMLiq9wbAJ+pSiu8YdF9m3Mib9uyIioFqB+LDjHLiWzdUwoxto0MtP+jp1A
-        Y0sZouOYrXSFNITmxhVdlQVeydyU0w9lN+8BnH0fQn7OhQxWLhCwVQD6w==
-X-ME-Sender: <xms:qEofZFbj3ZwkojFP_FtkKRlkASPhBaZjbTNCCDyGrJDax7PtziRn8Q>
-    <xme:qEofZMYr95OvaMveRgxrWiMVPiuJzPZK4df54sxZr1hnGl7I1DfTUZj872gvLHBUj
-    _CRoJroVF80ZFfI_Dg>
-X-ME-Received: <xmr:qEofZH_feRcMb5omIRCp7IS3Jpzc4r8J3dEtrLJWuRdHSCMDcbvxw6SzlWwWoe4kPDcNcA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegkedguddvjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpedfmfhi
-    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
-    hnrghmvgeqnecuggftrfgrthhtvghrnhepkedvvdejffehteegtddvgfeijeeivdegjeei
-    teejheeiheevffeukeefheffvdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:qEofZDqvp-0wO6OYQc43RDh8s_Jcxaj87GPSdKgh6GCNDkYZ26Q9Qg>
-    <xmx:qEofZAp8j-mVWsJh15v_keUQ3eYUmOaKKJ2EpMeYo0lwB-2Kp5bdhw>
-    <xmx:qEofZJRop-GA93lYkhH5yI5dzfDoqqlKyYq1GFUqt9-7xPgQpIFJnQ>
-    <xmx:qUofZMel6wZsOl35SUCqFcc5Nqu553awLhZgPgpSeFtGFKmywS3uMQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 25 Mar 2023 15:25:27 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 3965210A607; Sat, 25 Mar 2023 22:25:24 +0300 (+03)
-Date:   Sat, 25 Mar 2023 22:25:24 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86: Disable kexec for TDX guests
-Message-ID: <20230325192524.wetlbycbcsxc4plk@box>
-References: <20230325160128.21857-1-kirill.shutemov@linux.intel.com>
- <ebead33b-0594-73df-56ae-f40473ac0ffc@intel.com>
+        Sat, 25 Mar 2023 15:11:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00B9E050;
+        Sat, 25 Mar 2023 12:11:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3967C60C95;
+        Sat, 25 Mar 2023 19:11:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48324C433EF;
+        Sat, 25 Mar 2023 19:11:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679771470;
+        bh=Sr64iYwMmramkuXW283DFJe6tl6JGpQNQCfz+yCLHNA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pb5D9leq9LNy7YwchEndf1oiHONuZCSi5f5AZ6U2h4syr9r6dv2n0AAmIDpsmBO3m
+         9TMsqBmCQkZrv96JKeaaHSk8/3yzYnIUyG9gvTuhGYS9F+koiH/n7Hrf7Ce9pRDKeW
+         oblb/Rox2Ce6YV/JNZ5/9+P3DqbKHWCyg1TeQrSHhV1XFW4SmuV9RvDs5C3gPgeSwr
+         okG//XxruFTD7STSVn93gBd6Hwhdfimjtw41ecPCAe6fihRmJwRXYjc0jKKIKLqzO/
+         85y4cm7AlFohxJa1r1fHR58QbJu4tF1qq2tIMGwVTYUpSbo8Kk5p4KHkofunxLmFID
+         p9Zip7+HmQh5Q==
+Date:   Sat, 25 Mar 2023 19:26:12 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH 1/2] iio: max597x: Add support for max597x
+Message-ID: <20230325192612.6181b07e@jic23-huawei>
+In-Reply-To: <34756312-8a25-5a10-4ea5-59aeeb9e199b@9elements.com>
+References: <20230322124316.2147143-1-Naresh.Solanki@9elements.com>
+        <826f5de9-3aeb-6f7a-59e6-0504f8e92180@metafoo.de>
+        <34756312-8a25-5a10-4ea5-59aeeb9e199b@9elements.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ebead33b-0594-73df-56ae-f40473ac0ffc@intel.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 09:25:36AM -0700, Dave Hansen wrote:
-> On 3/25/23 09:01, Kirill A. Shutemov wrote:
-> > The last item is tricky. TDX guests use ACPI MADT MPWK to bring up
-> > secondary CPUs. The mechanism doesn't allow to put a CPU back offline if
-> > it has woken up.
-> ...
-> > +int arch_kexec_load(void)
-> > +{
-> > +	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
-> > +		pr_warn_once("Disable kexec: not yet supported in TDX guest\n");
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> 
-> So, let's put all this together:
-> 
-> 1. TDX implementations use MADT for wakeup exclusively right now (but
->    are not necessarily _required_ to do so forever)
-> 2. MADT doesn't support CPU offlining
-> 3. kexec() requires offlining
-> 
-> Thus, current TDX implementations can't support TDX guests.  This
-> *doesn't* say that TDX will always use the MADT for wakeups.
-> 
-> Yet, the check you have here is for TDX and *not* for the MADT.
+On Thu, 23 Mar 2023 17:31:18 +0530
+Naresh Solanki <naresh.solanki@9elements.com> wrote:
 
-As I described in the commit message there are more than MADT that is
-required to get kexec in TDX guest.
+> Hi,
+>=20
+> On 22-03-2023 09:28 pm, Lars-Peter Clausen wrote:
+> > Hi,
+> >=20
+> > This looks really good. A few minor comments inline.
+> >=20
+> > On 3/22/23 05:43, Naresh Solanki wrote: =20
+> >> [...]
+> >> +static int max597x_iio_read_raw(struct iio_dev *iio_dev,
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 struct iio_chan_spec const *chan,
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 int *val, int *val2, long info)
+> >> +{
+> >> +=C2=A0=C2=A0=C2=A0 int ret;
+> >> +=C2=A0=C2=A0=C2=A0 struct max597x_iio *data =3D iio_priv(iio_dev);
+> >> +=C2=A0=C2=A0=C2=A0 unsigned int reg_l, reg_h;
+> >> +
+> >> +=C2=A0=C2=A0=C2=A0 switch (info) {
+> >> +=C2=A0=C2=A0=C2=A0 case IIO_CHAN_INFO_RAW:
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D regmap_read(data->=
+regmap, chan->address, &reg_l);
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret < 0)
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 re=
+turn ret;
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D regmap_read(data->=
+regmap, chan->address - 1, &reg_h);
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret < 0)
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 re=
+turn ret; =20
+> > Is there any chance of a race condition of getting inconsistent data=20
+> > when splitting this over two reads? I.e. registers being updated with=20
+> > new values in between the two reads. =20
+> yes, reg_l holds lower 2 bits. due to latency in reads, value may differ.
 
-> That seems wrong.
-> 
-> Let's say SEV or arm64 comes along and uses the MADT for their guests.
-> They'll add another arch_kexec_load(), with a check for *their* feature.
-> 
-> This all seems like you should be disabling kexec() the moment the MADT
-> CPU wakeup is used instead of making it based on TDX.
+Normally there is a way to avoid the tearing via a bulk read of some type.
+Is that not possible here?  If not, there are various tricks such as
+repeated reads until stable that can be used.
 
-I guess we can go this path if you are fine with taking CR4.MCE and shared
-memory reverting patches (they require some rework, but I can get them
-into shape quickly). After that we can forbid kexec on machines with MADT
-if nr_cpus > 1.
 
-Sounds good?
+Looks like the device has a block read format that might work.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
