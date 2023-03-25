@@ -2,103 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20796C9054
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 19:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A6D6C9058
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 20:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbjCYS7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 14:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
+        id S229977AbjCYTFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 15:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCYS7a (ORCPT
+        with ESMTP id S229564AbjCYTFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 14:59:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46ACF5276;
-        Sat, 25 Mar 2023 11:59:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3FEDB80782;
-        Sat, 25 Mar 2023 18:59:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD1DAC433EF;
-        Sat, 25 Mar 2023 18:59:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679770766;
-        bh=cvkDQ5VUSugi/Mx0cXn8GHD+HIhy+RhvFVUaPPEbIaA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uQRaY0SdvHsMw3Qz1+oQ2OU67uhbpMc7NB4AyXGTJ/vep30XWbPOqxbW3fg1+ojV7
-         u34Y4IGvGvMqEtc+iLwpwoTEuXWcGUAMUFnV4umx8fuJI/ian4Ct+25DM5Hw7wsZD1
-         YCqfBlyPp/njAWIl8h2dhWigJZxZqHb1TOpTn3rGnreTCcepKTiFfZpaYBRj8SdtW3
-         7CpscxCm13XMUTxOgl7D5w3IG+8/oWhQl6wla27yb3TaNTBgy6GM1kvwNftE35OWZ7
-         ZGnP2ZtMyFSJiS4krHyoeBCpP7ehAbQarDoYa/F5JY5S3eGZ/zsYlUVhDwT3HI2G86
-         jkBrUKeIdDG5Q==
-Date:   Sat, 25 Mar 2023 19:14:26 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        michal.simek@amd.com, Jonathan.Cameron@huawei.com,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] serial: qcom_geni: Comment use of devm_krealloc
- rather than devm_krealloc_array
-Message-ID: <20230325191426.5810b644@jic23-huawei>
-In-Reply-To: <20230320145710.1120469-5-james.clark@arm.com>
-References: <20230320145710.1120469-1-james.clark@arm.com>
-        <20230320145710.1120469-5-james.clark@arm.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 25 Mar 2023 15:05:41 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280ECDBEE
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 12:05:40 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id h17so4833730wrt.8
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 12:05:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679771138;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fVG1/vTeUPSv0lVRqc/slNoTE0wnNu/kVSAojkvVCso=;
+        b=n5CMAAmNFnxhBVPxChS/6p5Xk9rlp/lQAqdjDsqoI1LS0BfevW5kxRRo/gDmsyPxr8
+         V+atEXwHAKb3t/D0SKVghwelhUXwz0ZV4pToYDXLof5STCSM8X1Kk2tpy561F+/i5zOr
+         eD36tMtaTU1LNqo/if9tNxQSQ0pyETTmlMJ4mTe5MqXZUdqsbag9R3Pu5q3/mKW6+XBm
+         cCzPE9gvHUk7dqAdlSIAHwey2CC9yTkHotopqOc8cf43xZrndwDGskupJN4Juo8/lkT9
+         Z7taFvKqESFKMafZSAATqWRaSLWrma38AgV72RHyeRmmNC5axgT34Fc63Uk2eNBDLQYu
+         vQ5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679771138;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fVG1/vTeUPSv0lVRqc/slNoTE0wnNu/kVSAojkvVCso=;
+        b=6o32+4WXq5zo9XX0R0naGjQ4Dx9uekHePFs388+a2jKs11Xdh8L45QxEcIh4N6lVSM
+         m7/DxIG8OLB52kW3B+IIcupzVSS9D0jm8dIK2DBtNmsnZAn12N8bnz6SARDgYso6DDiv
+         VbkGzNinFcM0VP1QASJ0wdwsuCNBxeVbeaoLxCQk/GecumA8S4255hm7eyAIBwTB5Q+w
+         UsBpnqtRLHmhPf6sVTtFUJG24YZCrcQiiLyo1hUJSP5E9QFBJ6WNXTnP3PN/gKOl4+rx
+         HhU3kW9HFV13byRNBABRMigtNc4pfZIP8zq4s8W6ICWHjTke8+JG7XCcBWXFNN/HcGpK
+         FFyw==
+X-Gm-Message-State: AAQBX9esjQH7QKi6C7w6CsoqNcP0rzYsSrN0N6c052VHmNsNkjSiM0CL
+        2Oj1oV6ikeaInfEqRbKeCvU=
+X-Google-Smtp-Source: AKy350aNp6hJbEUjWrapJV7T2v1a06DH3rhtArXO2rI85tSpZZK3Ric7a9iwL49VouIFnwXoowLxDQ==
+X-Received: by 2002:adf:e552:0:b0:2d3:1c7d:a3a3 with SMTP id z18-20020adfe552000000b002d31c7da3a3mr4294560wrm.7.1679771138530;
+        Sat, 25 Mar 2023 12:05:38 -0700 (PDT)
+Received: from [192.168.0.102] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id h6-20020adfe986000000b002d09cba6beasm21357336wrm.72.2023.03.25.12.05.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Mar 2023 12:05:37 -0700 (PDT)
+Message-ID: <f9ea8f1b-1b16-c780-a08e-476437331b2c@gmail.com>
+Date:   Sat, 25 Mar 2023 20:05:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/4] staging: rtl8192e: remove rf_type from r8192_priv
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230325132823.22872-1-straube.linux@gmail.com>
+Content-Language: en-US
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20230325132823.22872-1-straube.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 14:57:09 +0000
-James Clark <james.clark@arm.com> wrote:
-
-> Now that devm_krealloc_array is available, add a comment justifying not
-> changing this occurrence to avoid any future auto fixups.
+On 3/25/23 14:28, Michael Straube wrote:
+> This series removes the rf_type field from the r8192_priv structure.
+> RF type is always RF_1T2R, so we do not need to store it in an extra
+> variable.
 > 
-> Link: https://lore.kernel.org/all/20230318173402.20a4f60d@jic23-huawei/
-> Signed-off-by: James Clark <james.clark@arm.com>
-LGTM
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-> ---
->  drivers/tty/serial/qcom_geni_serial.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> I don't have any hardware to test this, so compile-tested only.
 > 
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index 28fbc927a546..8ae1fb7c2636 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -1055,6 +1055,11 @@ static int setup_fifos(struct qcom_geni_serial_port *port)
->  		(port->tx_fifo_depth * port->tx_fifo_width) / BITS_PER_BYTE;
->  
->  	if (port->rx_buf && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
-> +		/*
-> +		 * Use krealloc rather than krealloc_array because rx_buf is
-> +		 * accessed as 1 byte entries as well as 4 byte entries so it's
-> +		 * not necessarily an array.
-> +		 */
->  		port->rx_buf = devm_krealloc(uport->dev, port->rx_buf,
->  					     port->rx_fifo_depth * sizeof(u32),
->  					     GFP_KERNEL);
-
+> Michael Straube (4):
+>    staging: rtl8192e: remove RTL819X_DEFAULT_RF_TYPE
+>    staging: rtl8192e: remove redundant setting of rf_type
+>    staging: rtl8192e: priv->rf_type is always RF_1T2R
+>    staging: rtl8192e: remove rf_type from struct r8192_priv
+> 
+>   .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 19 +++-----------
+>   .../staging/rtl8192e/rtl8192e/r8192E_phy.c    |  7 ++----
+>   drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  3 ---
+>   drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    | 25 +++++++------------
+>   4 files changed, 15 insertions(+), 39 deletions(-)
+> 
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
