@@ -2,150 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4E46C8E88
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 14:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7FC6C8E92
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 14:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbjCYNbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 09:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
+        id S231359AbjCYNlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 09:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231659AbjCYNbR (ORCPT
+        with ESMTP id S229805AbjCYNlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 09:31:17 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325A526BD;
-        Sat, 25 Mar 2023 06:31:16 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pg3zB-0002xM-BH; Sat, 25 Mar 2023 14:31:09 +0100
-Message-ID: <57a944b3-6255-38bf-e53e-6a838e1f8ddf@leemhuis.info>
-Date:   Sat, 25 Mar 2023 14:31:08 +0100
+        Sat, 25 Mar 2023 09:41:52 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD89FF3C
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 06:41:51 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id l8-20020a056e02066800b003247f2ba648so2883465ilt.5
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 06:41:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679751710;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ixifmir7ualllnwN46FhGK6UkJX1AD6Gkf3lIcbzhSQ=;
+        b=nJlZHyirQfFrBRPsUMBDTo6DH1t7/ZZtYbjF0z1JK2gF1sfwK4QTLw6qHvVs6mRmd/
+         JmfK9EOKyxu+Z6ok56ExOeT2CgeB1O7RAX9juwlqSYiKSa+CcyppK7cNVkZYHxT1oGje
+         Ia7WFf+0yfYsOFLPb3osn9HSTYKjmbLuIVIgLDU8efFGcyFBTsrQmKY/1hcfzt9cWAnE
+         e6t0ZEuFGYW/rQ/ZR3ef+W4Qx6b3RUe1kaIhEbxs5LCyWafz8nZ4SUJMJicD0kAJdOPn
+         pXpqA8lPFFZycP1rX8xHaHAyXYa7VEfgWDFFY3xUb7gnJNgrfc3Q3GHKji9QNJKsLwLg
+         1I3w==
+X-Gm-Message-State: AO0yUKWCIpp+d5vIEdIQcR7UgpLFord2BjUMnfyxlcV3eKwxOOTscOJF
+        3rn5wrSkEpeNg92V1jikt0xqdznUj3ciaaf/kox6QFo1GmAd
+X-Google-Smtp-Source: AK7set80ynXrN1yvTOZK3lcRrM71sUr1hmFzudml79RxjjkBoqaEKJjHFC0FcyzvbvhRO20HngARnfv4jIyxANdNzEjDj4GeBukD
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [regression] Bug 217069 - Wake on Lan is broken on r8169 since
- 6.2
-Content-Language: en-US, de-DE
-To:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bob Moore <robert.moore@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        acpica-devel@lists.linuxfoundation.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-References: <e6aaddb9-afec-e77d-be33-570f9f10a9c2@leemhuis.info>
- <53e8b4db-e8dd-4dfa-f873-7dcbeac09149@leemhuis.info>
- <3089214d-292b-885d-9bc1-c81d0101d5f0@leemhuis.info>
- <CAAhV-H5j29CnCN+F8Oz0qh1UCqp+CmL=aQXCSjqgX8CZ5sXTtg@mail.gmail.com>
- <b39064e3-4f8b-f607-b270-1e0c8539d391@loongson.cn>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <b39064e3-4f8b-f607-b270-1e0c8539d391@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1679751076;c41704be;
-X-HE-SMSGID: 1pg3zB-0002xM-BH
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a5e:9901:0:b0:753:cd5:abde with SMTP id
+ t1-20020a5e9901000000b007530cd5abdemr2508825ioj.4.1679751710442; Sat, 25 Mar
+ 2023 06:41:50 -0700 (PDT)
+Date:   Sat, 25 Mar 2023 06:41:50 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000030b7e05f7b9ac32@google.com>
+Subject: [syzbot] [ntfs3?] WARNING in attr_data_get_block (2)
+From:   syzbot <syzbot+a98f21ebda0a437b04d7@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.03.23 11:09, Jianmin Lv wrote:
-> Please try the following patch:
-> https://github.com/acpica/acpica/pull/784/commits/0e66e6aae972dac3833bdcbd223aa6a8b1733176
+Hello,
 
-To interact with the reporters, please comment here:
-https://bugzilla.kernel.org/show_bug.cgi?id=217069
+syzbot found the following issue on:
 
-Sorry, I wish it was different, but I can't CC the reporters here
-without their permission, because bugzilla.kernel.org tells users upon
-registration their "email address will never be displayed to logged out
-users".
+HEAD commit:    17214b70a159 Merge tag 'fsverity-for-linus' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17331931c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d40f6d44826f6cf7
+dashboard link: https://syzkaller.appspot.com/bug?extid=a98f21ebda0a437b04d7
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-FWIW, I forwarded your request yesterday and one reporter commented that
-it didn't help. But having me as a man-in-the-middle is not a good idea.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d166fda7fbbd/disk-17214b70.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/0c16461022b9/vmlinux-17214b70.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/53e9e40da8bb/bzImage-17214b70.xz
 
-> On 2023/3/24 下午5:50, Huacai Chen wrote:
->> Hi, Thorsten,
->>
->> I'm sorry I ignored this email, and Jianmin, could you please
->> investigate this problem? Thank you.
->>
->> Huacai
->>
->> On Fri, Mar 24, 2023 at 5:46 PM Thorsten Leemhuis
->> <regressions@leemhuis.info> wrote:
->>>
->>> On 19.03.23 08:20, Linux regression tracking (Thorsten Leemhuis) wrote:
->>>> Hi, Thorsten here, the Linux kernel's regression tracker.
->>>>
->>>> On 22.02.23 08:57, Thorsten Leemhuis wrote:
->>>>>
->>>>> I noticed a regression report in bugzilla.kernel.org. As many (most?)
->>>>> kernel developer don't keep an eye on it, I decided to forward it by
->>>>> mail. Quoting from
->>>>> https://bugzilla.kernel.org/show_bug.cgi?id=217069 :
->>>>
->>>> An issue that looked like a network bug was now bisected and it turns
->>>> out it's cause by 5c62d5aab875 ("ACPICA: Events: Support fixed PCIe
->>>> wake
->>>> event") which Huacai Chen provided. Could you take a look at the ticket
->>>> linked above?
->>>
->>> Huacai Chen, did you look into this? Would be good to have this
->>> regression fixed rather sooner than later, as it seems to annoy quite a
->>> few people.
->>>
->>> Should we maybe simply revert the problematic change for now and reapply
->>> it later once the root-issue was found and fixed?
->>>
->>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->>> -- 
->>> Everything you wanna know about Linux kernel regression tracking:
->>> https://linux-regtracking.leemhuis.info/about/#tldr
->>> If I did something stupid, please tell me, as explained on that page.
->>>
->>> #regzbot poke
->>>
->>>> FWIW, the whole story started like this:
->>>>
->>>>>> Ivan Ivanich 2023-02-22 00:51:52 UTC
->>>>>>
->>>>>> After upgrade to 6.2 having issues with wake on lan on 2 systems: -
->>>>>> first is an old lenovo laptop from 2012(Ivy Bridge) with realtek
->>>>>> network adapter - second is a PC(Haswell refresh) with PCIE realtek
->>>>>> network adapter
->>>>>>
->>>>>> Both uses r8169 driver for network.
->>>>>>
->>>>>> On laptop it's not possible to wake on lan after poweroff On PC it's
->>>>>> not possible to wake on lan up after hibernate but works after
->>>>>> poweroff
->>>>>>
->>>>>> In both cases downgrade to 6.1.x kernel fixes the issue.
->>>>
->>>> Meanwhile a few others that ran into the same problem with NICs from
->>>> different vendors joined the ticket
->>>>
->>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker'
->>>> hat)
->>>> -- 
->>>> Everything you wanna know about Linux kernel regression tracking:
->>>> https://linux-regtracking.leemhuis.info/about/#tldr
->>>> If I did something stupid, please tell me, as explained on that page.
-> 
-> 
-> 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a98f21ebda0a437b04d7@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 24195 at fs/ntfs3/attrib.c:1060 attr_data_get_block+0x1926/0x2da0
+Modules linked in:
+CPU: 0 PID: 24195 Comm: syz-executor.2 Not tainted 6.3.0-rc3-syzkaller-00012-g17214b70a159 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+RIP: 0010:attr_data_get_block+0x1926/0x2da0 fs/ntfs3/attrib.c:1060
+Code: 80 e1 07 80 c1 03 38 c1 0f 8c 48 ff ff ff 48 8d bc 24 e0 01 00 00 e8 19 5b 1b ff 48 8b 54 24 58 e9 31 ff ff ff e8 9a a9 c5 fe <0f> 0b bb ea ff ff ff e9 11 fa ff ff e8 89 a9 c5 fe e9 0f f9 ff ff
+RSP: 0018:ffffc9002245fac0 EFLAGS: 00010293
+RAX: ffffffff82c4c386 RBX: 00000000ffffffff RCX: ffff88801f029d40
+RDX: 0000000000000000 RSI: 00000000ffffffff RDI: 00000000ffffffff
+RBP: ffffc9002245fd28 R08: ffffffff82c4be5f R09: fffffbfff205c062
+R10: 0000000000000000 R11: dffffc0000000001 R12: 1ffff9200448bf78
+R13: 0000000000000032 R14: ffff88803fd81760 R15: dffffc0000000000
+FS:  00007f61ad5ea700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4db29fe800 CR3: 000000002fb69000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ntfs_fallocate+0xca4/0x1190 fs/ntfs3/file.c:614
+ vfs_fallocate+0x54b/0x6b0 fs/open.c:324
+ ksys_fallocate fs/open.c:347 [inline]
+ __do_sys_fallocate fs/open.c:355 [inline]
+ __se_sys_fallocate fs/open.c:353 [inline]
+ __x64_sys_fallocate+0xbd/0x100 fs/open.c:353
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f61ac88c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f61ad5ea168 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
+RAX: ffffffffffffffda RBX: 00007f61ac9ac120 RCX: 00007f61ac88c0f9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000008
+RBP: 00007f61ac8e7b39 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000ff8000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc8413a04f R14: 00007f61ad5ea300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
