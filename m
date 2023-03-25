@@ -2,232 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3376D6C8C80
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBF66C8C83
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbjCYIRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 04:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
+        id S231946AbjCYISZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 04:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232043AbjCYIQu (ORCPT
+        with ESMTP id S231950AbjCYISO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 04:16:50 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620B2166E9
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:16:18 -0700 (PDT)
+        Sat, 25 Mar 2023 04:18:14 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BAD2D66
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:17:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679732178; x=1711268178;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Ad7qylK7Qbyp20xOgBKBjg5toHpi65MgkiUuGcEy0yI=;
-  b=hClbE3R3ccRgTCcP2MLefYrerVPuKQFnC7a0QlPLIU3ikXpFtjf38pX2
-   2WJgVLkupHUAoSazyvOAP2OFc4YHtlQ2vZSNh6MN44B/NUXURvOROlp86
-   zbPTzMTkYTdVm9MHG0YRgekx8XS/EnBS+9NwfUOdHogumUo9/2M7nzI7E
-   3zskr2UvSOhPEYnYnTkxNPQv0olOi5rkWNH4ouv+X/hyQW104Eoj2Y7CR
-   T7InKJo1WTUiOpp04VO5wW9AeLB4Gz6ol1zxDcUb71UiQVYtwGQz0Qlnh
-   f+DAor3rhB9UrU+QseBKGBSoFSzSd588V/wBTpR6mfeDus9SfKEf/7Fk2
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="323835681"
+  t=1679732278; x=1711268278;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vkGsebY+bi2zt68dIYP5n+JMfaG3q4r/7n81x+5v2jE=;
+  b=j/Hj80ehPHYyugKDNO5zy4EUKGr5xvpyzmVxN9F7Oyb+nw7ZaiMGlJ3S
+   CX1as+wkccUIeChcchj+FFqRQd2zQsg5tj99pJT9LQxQDVOiCqtLQonpU
+   7cwWoq3qta1judqNjDelpS6i1qZZvwqM7lCGQBNd846HV1dkNvSu4qozH
+   lokNP8NL9pi4ykSulSV28Ga2vpw3vHjcIIJIy8eUHPD5IxGBouZD8Poel
+   NfxIQUm8rRFI6+bpqTH/fmsjbSWHhvwIsUzEScD+jiE3ngJkvCmWAnFbt
+   ovPtypJq9UQADRj/IDqpG7Kfn6lNxBaWZf5lbw3ACHOrlftfzvLOLo88M
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="319603154"
 X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="323835681"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 01:15:56 -0700
+   d="scan'208";a="319603154"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 01:17:58 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="713312163"
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="1012535901"
 X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="713312163"
+   d="scan'208";a="1012535901"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Mar 2023 01:15:54 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 25 Mar 2023 01:17:54 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pfz46-000G6F-0I;
-        Sat, 25 Mar 2023 08:15:54 +0000
-Date:   Sat, 25 Mar 2023 16:14:56 +0800
+        id 1pfz62-000G6N-0Q;
+        Sat, 25 Mar 2023 08:17:54 +0000
+Date:   Sat, 25 Mar 2023 16:16:58 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:for-next/kspp] BUILD SUCCESS
- 7109385144a3e2dc831211d27ce48b6ccc614777
-Message-ID: <641ead80.KA4wBR1J5YNi7/hl%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+To:     Shenghao Ding <13916275206@139.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, perex@perex.cz,
+        pierre-louis.bossart@linux.intel.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        kevin-lu@ti.com, shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
+        navada@ti.com, Shenghao Ding <13916275206@139.com>
+Subject: Re: [PATCH v6] ASoC: tas2781: Add tas2781 driver
+Message-ID: <202303251653.7HZjyxTf-lkp@intel.com>
+References: <20230324110755.27652-1-13916275206@139.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20230324110755.27652-1-13916275206@139.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/kspp
-branch HEAD: 7109385144a3e2dc831211d27ce48b6ccc614777  uapi: target: Replace fake flex-array with flexible-array member
+Hi Shenghao,
 
-elapsed time: 731m
+Thank you for the patch! Perhaps something to improve:
 
-configs tested: 153
-configs skipped: 10
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on linus/master v6.3-rc3 next-20230323]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+url:    https://github.com/intel-lab-lkp/linux/commits/Shenghao-Ding/ASoC-tas2781-Add-tas2781-driver/20230324-190955
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230324110755.27652-1-13916275206%40139.com
+patch subject: [PATCH v6] ASoC: tas2781: Add tas2781 driver
+config: arm-randconfig-r021-20230322 (https://download.01.org/0day-ci/archive/20230325/202303251653.7HZjyxTf-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/ae727fb08bb90265d16859aa62c7c956e46841ee
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shenghao-Ding/ASoC-tas2781-Add-tas2781-driver/20230324-190955
+        git checkout ae727fb08bb90265d16859aa62c7c956e46841ee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/codecs/
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r021-20230322   gcc  
-alpha                randconfig-r026-20230322   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                         haps_hs_defconfig   gcc  
-arc                  randconfig-r001-20230322   gcc  
-arc                  randconfig-r001-20230323   gcc  
-arc                  randconfig-r002-20230322   gcc  
-arc                  randconfig-r034-20230322   gcc  
-arc                  randconfig-r035-20230322   gcc  
-arc                  randconfig-r043-20230322   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                       aspeed_g4_defconfig   clang
-arm          buildonly-randconfig-r003-20230324   clang
-arm                                 defconfig   gcc  
-arm                          moxart_defconfig   clang
-arm                       omap2plus_defconfig   gcc  
-arm                  randconfig-r014-20230322   clang
-arm                  randconfig-r021-20230322   clang
-arm                  randconfig-r025-20230322   clang
-arm                  randconfig-r046-20230322   clang
-arm                  randconfig-r046-20230324   clang
-arm                           stm32_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r022-20230322   gcc  
-arm64                randconfig-r025-20230322   gcc  
-arm64                randconfig-r031-20230322   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r011-20230322   gcc  
-csky                 randconfig-r012-20230322   gcc  
-csky                 randconfig-r016-20230322   gcc  
-hexagon                          alldefconfig   clang
-hexagon      buildonly-randconfig-r006-20230323   clang
-hexagon              randconfig-r031-20230322   clang
-hexagon              randconfig-r035-20230322   clang
-hexagon              randconfig-r041-20230322   clang
-hexagon              randconfig-r041-20230324   clang
-hexagon              randconfig-r045-20230322   clang
-hexagon              randconfig-r045-20230324   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a016   gcc  
-i386                          randconfig-c001   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r005-20230322   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r003-20230323   gcc  
-ia64                 randconfig-r011-20230322   gcc  
-ia64                 randconfig-r015-20230322   gcc  
-ia64                 randconfig-r031-20230322   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r003-20230322   gcc  
-loongarch            randconfig-r006-20230322   gcc  
-loongarch            randconfig-r021-20230322   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r012-20230322   gcc  
-m68k                 randconfig-r023-20230322   gcc  
-microblaze           randconfig-r015-20230322   gcc  
-microblaze           randconfig-r036-20230322   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r004-20230322   gcc  
-mips                 randconfig-r004-20230322   gcc  
-mips                 randconfig-r005-20230322   gcc  
-mips                 randconfig-r023-20230322   clang
-mips                 randconfig-r036-20230322   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r016-20230322   gcc  
-nios2                randconfig-r034-20230322   gcc  
-openrisc             randconfig-r015-20230322   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r002-20230323   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                   lite5200b_defconfig   clang
-powerpc                 mpc832x_mds_defconfig   clang
-powerpc                 mpc837x_mds_defconfig   gcc  
-powerpc              randconfig-c003-20230322   gcc  
-powerpc              randconfig-r004-20230323   gcc  
-powerpc              randconfig-r013-20230322   gcc  
-powerpc              randconfig-r025-20230322   gcc  
-powerpc              randconfig-r035-20230322   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                    nommu_k210_defconfig   gcc  
-riscv                randconfig-r004-20230322   clang
-riscv                randconfig-r024-20230322   gcc  
-riscv                randconfig-r042-20230322   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r005-20230323   clang
-s390                                defconfig   gcc  
-s390                 randconfig-r014-20230322   gcc  
-s390                 randconfig-r016-20230322   gcc  
-s390                 randconfig-r031-20230322   clang
-s390                 randconfig-r035-20230322   clang
-s390                 randconfig-r044-20230322   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r001-20230322   gcc  
-sh                   randconfig-r013-20230322   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r003-20230322   gcc  
-sparc                randconfig-r006-20230323   gcc  
-sparc                randconfig-r011-20230322   gcc  
-sparc64                             defconfig   gcc  
-sparc64              randconfig-r024-20230322   gcc  
-sparc64              randconfig-r033-20230322   gcc  
-sparc64              randconfig-r035-20230322   gcc  
-um                               alldefconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                        randconfig-k001   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                generic_kc705_defconfig   gcc  
-xtensa               randconfig-r013-20230322   gcc  
-xtensa               randconfig-r014-20230322   gcc  
-xtensa               randconfig-r022-20230322   gcc  
-xtensa               randconfig-r032-20230322   gcc  
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303251653.7HZjyxTf-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/codecs/tas2781-dsp.c:1357:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (in) {
+               ^~
+   sound/soc/codecs/tas2781-dsp.c:1378:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   sound/soc/codecs/tas2781-dsp.c:1357:2: note: remove the 'if' if its condition is always true
+           if (in) {
+           ^~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:1343:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   sound/soc/codecs/tas2781-dsp.c:1407:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (in) {
+               ^~
+   sound/soc/codecs/tas2781-dsp.c:1444:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   sound/soc/codecs/tas2781-dsp.c:1407:2: note: remove the 'if' if its condition is always true
+           if (in) {
+           ^~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:1388:9: note: initialize the variable 'ret' to silence this warning
+           int ret, i;
+                  ^
+                   = 0
+   2 warnings generated.
+
+
+vim +1357 sound/soc/codecs/tas2781-dsp.c
+
+  1336	
+  1337	static int do_singlereg_checksum(struct tasdevice_priv *tasdevice,
+  1338		enum channel chl, unsigned char book, unsigned char page,
+  1339		unsigned char reg, unsigned char val)
+  1340	{
+  1341		struct tas_crc crc_data;
+  1342		unsigned int nData1;
+  1343		int ret;
+  1344		bool in;
+  1345	
+  1346		if ((book == TASDEVICE_BOOK_ID(TAS2781_SA_COEFF_SWAP_REG))
+  1347			&& (page == TASDEVICE_PAGE_ID(TAS2781_SA_COEFF_SWAP_REG))
+  1348			&& (reg >= TASDEVICE_PAGE_REG(TAS2781_SA_COEFF_SWAP_REG))
+  1349			&& (reg <= (TASDEVICE_PAGE_REG(
+  1350			TAS2781_SA_COEFF_SWAP_REG) + 4))) {
+  1351			/*DSP swap command, pass */
+  1352			ret = 0;
+  1353			goto end;
+  1354		}
+  1355	
+  1356		in = check_yram(&crc_data, book, page, reg, 1);
+> 1357		if (in) {
+  1358			ret = tasdevice_dev_read(tasdevice, chl,
+  1359				TASDEVICE_REG(book, page, reg), &nData1);
+  1360			if (ret < 0)
+  1361				goto end;
+  1362	
+  1363			if (nData1 != val) {
+  1364				dev_err(tasdevice->dev,
+  1365					"B[0x%x]P[0x%x]R[0x%x] W[0x%x], R[0x%x]\n",
+  1366					book, page, reg,
+  1367					val, nData1);
+  1368				tasdevice->tasdevice[chl].err_code |=
+  1369					ERROR_YRAM_CRCCHK;
+  1370				ret = -EAGAIN;
+  1371				goto end;
+  1372			}
+  1373	
+  1374			ret = crc8(tasdevice->crc8_lkp_tbl, &val, 1, 0);
+  1375		}
+  1376	
+  1377	end:
+  1378		return ret;
+  1379	}
+  1380	
 
 -- 
 0-DAY CI Kernel Test Service
