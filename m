@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6D46C8FD1
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 18:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E8C6C8FD2
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 18:34:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbjCYRe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 13:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        id S231856AbjCYRec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 13:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbjCYReH (ORCPT
+        with ESMTP id S231771AbjCYReH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 25 Mar 2023 13:34:07 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAE4C677
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EA3CA37
         for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 10:34:02 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id ga7so4521000qtb.2
+Received: by mail-qt1-x82b.google.com with SMTP id a5so4504496qto.6
         for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 10:34:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1679765641;
+        d=joelfernandes.org; s=google; t=1679765642;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QyrXPYue4+kcgnuVhPQbl4hTj4jaTNBfGwV5VXHSeY8=;
-        b=wY7sjFYpq8YfHJuBRa5ndpAjxilKOxdXrz02f1B0SQldgeClltUK0+9Vtv54p+zDPm
-         dRF+8T5ZRft8VqUNlEvzSiiq2rG7I7wFmObEc8Dm9u9xHEzCF0D2P+oJfF8dJ3lmlyql
-         fjeWspj+q+fR+IxsTM6N1CXB47IUmZZ28GsLs=
+        bh=QibGVAzBv0gTWQqE5TFgxflup7tk3PummO3A7I5nlFU=;
+        b=Bitiwir0A9IEj0P20k33ypH0Yu5zV4sW3y+VbbmcQ3jA6Nw5b2VS13k98mZrzbC630
+         re3JkfEMsrpKvdzMDtvWdQOgOvAHYSdj4qWTk+3WFFSEZJYUii/o8lbJ/uIyU9P+yTcs
+         eil2loMErO49vAu9dR/zDfZq5DfkTdczeMp8c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679765641;
+        d=1e100.net; s=20210112; t=1679765642;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QyrXPYue4+kcgnuVhPQbl4hTj4jaTNBfGwV5VXHSeY8=;
-        b=uns0RzxwYOOSLvPOkMdBv2ur2/arKPuhAnSygHNBECxdsXzZlbiSuXiR+nPVfNY4V3
-         RJwKNudOBmp+glxoojTwwqKyLQp/t840iPsgnb4MS1CPVPU0w9a6Fd0whdgf2OQyd5K7
-         BKmZwSfwsZKC6ZIRHcxd85HZCB3Hajod+XEbOqfxqB7krEXfzztTeLVb2BTzNTx2gpu5
-         9oZfiKXtMOYjlbxxPw9gy9GqfPBu+59HGkSVcpvToeRpS9xhU2oQoswNywHGekPrV7J4
-         z4K5c4LYfklt5WVXNLIi/zp7kX4zrFEgix54hLdrupQuICZG3ajwCJgNJnKgmuX1QOIs
-         kXWw==
-X-Gm-Message-State: AO0yUKW7Qn2O8Yb/vjWUHJW5z/3Lg3msjDMatWnCVrwoQNTaBsPHCXs3
-        rvDHJoZfh3e7g+59lHKFihTsF/W4GwIXMQWt7r0=
-X-Google-Smtp-Source: AK7set9Jlw5IeClQNc9dTI42kGK/qMIDrAXw7kkLsJ9JP3829DzmHHgq2Y4Qu45ppUcd1z+iFWox1w==
-X-Received: by 2002:a05:622a:1749:b0:3e3:a298:7928 with SMTP id l9-20020a05622a174900b003e3a2987928mr12730734qtk.9.1679765640939;
-        Sat, 25 Mar 2023 10:34:00 -0700 (PDT)
+        bh=QibGVAzBv0gTWQqE5TFgxflup7tk3PummO3A7I5nlFU=;
+        b=fhJPHnbP5J3nhg0Wl2qNoAAsmoLgeqGzojhPuU0gnF1UsPbBCqwZ7QarlCXyZNdq6x
+         PeGxkscdx7MWlst1QNgQaKuHm8LEIjnUOsy0Ry+1GwT73x59odJFhEnFEadZ5nms4TVf
+         JxBxZiKC2tlKQagMnwoAhg4VdQGdm9ovCt8gBrzdm5bImd4x11ZCOQmyioim1aXqdTB5
+         DM8z5upX3+eDJ/yn7rrJM0PMWeyE8M/wB5XcqC0TBbr8GFDeGm7eDi4191gktwbuE4eY
+         5t4jicTnbDetC1q2IMREZFVbJb9sPQpkmfQbc0hva+y8nZ5IA/sX3lZarhfbMqIM99NY
+         tSOg==
+X-Gm-Message-State: AAQBX9el5uGthstIYTyFAWYnycyOignSU/G63aXqrsI73Uw0MamFfs/W
+        g4t6vf5vQ5akz6PEAGh0XD7c/NqPpeDtbbmKgww=
+X-Google-Smtp-Source: AK7set/c+utZD7KsGUN+joNbxXwpbhjNKkljJ/zT/1BqFUiu6jbDVCKWmia3xO9V96K6lYkSph7hzA==
+X-Received: by 2002:ac8:7c48:0:b0:3e3:8bcd:23cb with SMTP id o8-20020ac87c48000000b003e38bcd23cbmr10851438qtv.29.1679765642081;
+        Sat, 25 Mar 2023 10:34:02 -0700 (PDT)
 Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id m4-20020ac84444000000b003e37ee54b5dsm6762764qtn.90.2023.03.25.10.34.00
+        by smtp.gmail.com with ESMTPSA id m4-20020ac84444000000b003e37ee54b5dsm6762764qtn.90.2023.03.25.10.34.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 10:34:00 -0700 (PDT)
+        Sat, 25 Mar 2023 10:34:01 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org,
         "Paul E. McKenney" <paulmck@kernel.org>,
@@ -60,9 +60,9 @@ To:     linux-kernel@vger.kernel.org,
         Lai Jiangshan <jiangshanlai@gmail.com>,
         Zqiang <qiang1.zhang@intel.com>
 Cc:     rcu@vger.kernel.org
-Subject: [PATCH v2 08/13] rcu: Register rcu-lazy shrinker only for CONFIG_RCU_LAZY=y kernels
-Date:   Sat, 25 Mar 2023 17:33:11 +0000
-Message-Id: <20230325173316.3118674-9-joel@joelfernandes.org>
+Subject: [PATCH v2 09/13] rcu: Remove never-set needwake assignment from rcu_report_qs_rdp()
+Date:   Sat, 25 Mar 2023 17:33:12 +0000
+Message-Id: <20230325173316.3118674-10-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 In-Reply-To: <20230325173316.3118674-1-joel@joelfernandes.org>
 References: <20230325173316.3118674-1-joel@joelfernandes.org>
@@ -79,54 +79,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zqiang <qiang1.zhang@intel.com>
 
-The lazy_rcu_shrink_count() shrinker function is registered even in
-kernels built with CONFIG_RCU_LAZY=n, in which case this function
-uselessly consumes cycles learning that no CPU has any lazy callbacks
-queued.
+The rcu_accelerate_cbs() function is invoked by rcu_report_qs_rdp()
+only if there is a grace period in progress that is still blocked
+by at least one CPU on this rcu_node structure.  This means that
+rcu_accelerate_cbs() should never return the value true, and thus that
+this function should never set the needwake variable and in turn never
+invoke rcu_gp_kthread_wake().
 
-This commit therefore registers this shrinker function only in the kernels
-built with CONFIG_RCU_LAZY=y, where it might actually do something useful.
+This commit therefore removes the needwake variable and the invocation
+of rcu_gp_kthread_wake() in favor of a WARN_ON_ONCE() on the call to
+rcu_accelerate_cbs().  The purpose of this new WARN_ON_ONCE() is to
+detect situations where the system's opinion differs from ours.
 
 Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- kernel/rcu/tree_nocb.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ kernel/rcu/tree.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index 9e1c8caec5ce..f2280616f9d5 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -1312,6 +1312,7 @@ int rcu_nocb_cpu_offload(int cpu)
- }
- EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
- 
-+#ifdef CONFIG_RCU_LAZY
- static unsigned long
- lazy_rcu_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 8e880c09ab59..e80e8f128c57 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -1955,7 +1955,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
  {
-@@ -1360,6 +1361,7 @@ static struct shrinker lazy_rcu_shrinker = {
- 	.batch = 0,
- 	.seeks = DEFAULT_SEEKS,
- };
-+#endif // #ifdef CONFIG_RCU_LAZY
+ 	unsigned long flags;
+ 	unsigned long mask;
+-	bool needwake = false;
+ 	bool needacc = false;
+ 	struct rcu_node *rnp;
  
- void __init rcu_init_nohz(void)
- {
-@@ -1391,8 +1393,10 @@ void __init rcu_init_nohz(void)
- 	if (!rcu_state.nocb_is_setup)
- 		return;
+@@ -1987,7 +1986,12 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+ 		 * NOCB kthreads have their own way to deal with that...
+ 		 */
+ 		if (!rcu_rdp_is_offloaded(rdp)) {
+-			needwake = rcu_accelerate_cbs(rnp, rdp);
++			/*
++			 * The current GP has not yet ended, so it
++			 * should not be possible for rcu_accelerate_cbs()
++			 * to return true.  So complain, but don't awaken.
++			 */
++			WARN_ON_ONCE(rcu_accelerate_cbs(rnp, rdp));
+ 		} else if (!rcu_segcblist_completely_offloaded(&rdp->cblist)) {
+ 			/*
+ 			 * ...but NOCB kthreads may miss or delay callbacks acceleration
+@@ -1999,8 +2003,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+ 		rcu_disable_urgency_upon_qs(rdp);
+ 		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+ 		/* ^^^ Released rnp->lock */
+-		if (needwake)
+-			rcu_gp_kthread_wake();
  
-+#ifdef CONFIG_RCU_LAZY
- 	if (register_shrinker(&lazy_rcu_shrinker, "rcu-lazy"))
- 		pr_err("Failed to register lazy_rcu shrinker!\n");
-+#endif // #ifdef CONFIG_RCU_LAZY
- 
- 	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
- 		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
+ 		if (needacc) {
+ 			rcu_nocb_lock_irqsave(rdp, flags);
 -- 
 2.40.0.348.gf938b09366-goog
 
