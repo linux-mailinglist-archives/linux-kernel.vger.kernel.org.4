@@ -2,67 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870B46C8CB7
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3FB6C8CB9
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbjCYIiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 04:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
+        id S232348AbjCYIj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 04:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232307AbjCYIh1 (ORCPT
+        with ESMTP id S232206AbjCYIjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 04:37:27 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FB018ABB
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:37:13 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id er18so5300455edb.9
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:37:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679733432;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ovOf0VQJbLs8pFVaHE8+gPaOdY/j18U17OR+um3GAwM=;
-        b=dtQWgKIFC5MVE5WHj/tkEOoErziyY01JN1J46VXEddJz7PS+S2DBEEJSsOJ/CaTaIW
-         sY19/NJH1J6atOsJs00RnHMIbUPAQlV4QpY+Fr3RkbZTyk9bu+Bz1I/NHmSr6stiiAdX
-         sZRfkZIMnBMkYFz+WRi44hPFbO5NybGwdxBfVi1OzgF6QgiC/xbAF5Wg6/saDleU/J1T
-         ZCrMnbBRtrlS3n6sTjbZlRTfHt5s4xanHNvHzo4InganGRiifmbbkthFv12NAC3rH1NF
-         0476n8el5jTVEroOMAF4sG/bkTSYGk04kmjY/cvCRRRUTTIF3e6hKKANUKwRmFYT/BHL
-         6p0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679733432;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ovOf0VQJbLs8pFVaHE8+gPaOdY/j18U17OR+um3GAwM=;
-        b=0tcqyOUKr8KgyQw2cYxTRLYHNKKzmeTonubc/hrEmiTUxAS9vqHQmEwYplTnAMPfDB
-         FusnT3cXSp33yaQ7dLU+mCiAj45xO1vyDzEazLC4yeEunJQHB6jFhZiFGqIXnVxI0Vai
-         6hUJP1X2lo5ygd7fYaTKlpvlDSQ/UMsv6kTl5gSVbNUXYtNl6+o4Ule8ARv9PLzN3B4z
-         dKqmsUuWtGxtpknerTyL/RSKdZc95HpdLbtlHc7Tos1cgHhllXMM9xGFliomPk7SpYmQ
-         XX8dadvujo/vfXhsvpcPs3Kemdr9hRRdJmLmMcsmf0XHAXKML3SgDFMs6kInJb1AocFP
-         l4Ug==
-X-Gm-Message-State: AAQBX9dAS5TJstl2foM+d3890qjYVUokYM8TB/UAwXCIjSG9y014ekOA
-        Umt15BJTalIC/0whflVQBo8=
-X-Google-Smtp-Source: AKy350bxZ93adCN4Rqg7W6VP99P4KcZ0CUV7dovWEAdh+r/CLokTDRThtGLzPtDbZ1Wcl+JFZqg6Ww==
-X-Received: by 2002:a05:6402:2811:b0:502:92d:4f51 with SMTP id h17-20020a056402281100b00502092d4f51mr6903412ede.1.1679733432752;
-        Sat, 25 Mar 2023 01:37:12 -0700 (PDT)
-Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id ha25-20020a170906a89900b00934212e973esm8623229ejb.198.2023.03.25.01.37.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 01:37:12 -0700 (PDT)
-Date:   Sat, 25 Mar 2023 09:37:10 +0100
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 11/11] staging: rtl8192e: Remove priv->rf_chip
-Message-ID: <2ce85c1a159ae376d82c19c61e694924f07d1093.1679732276.git.philipp.g.hortmann@gmail.com>
-References: <cover.1679732276.git.philipp.g.hortmann@gmail.com>
+        Sat, 25 Mar 2023 04:39:04 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4326214989
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:37:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679733479; x=1711269479;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/vEruDkudEVBFOAQGWYHztaqUg5m75SWSqz1gK8JLN0=;
+  b=EmUZP1pWWy6Le5v1lhO4nQa8LavFI8tY/fibzs0Q2KFiT02OiyqStzbF
+   RWjkxMp+GTdOaqbeMJQrLSdZlBtD3L+aUTjxwm/PkpvT6K0mJK80aRp7m
+   g8jpPbT+k5oHUgbnnTbINpdL/8W+y4wdIVa6fmICs9dj1BxmPf6mkN7oM
+   Y7VEx3VWEQAJK+1K7LWywL8k14ul9La4ggagn2y15SYhpWbK7kAubg80c
+   FxfEAcNM7pmOFfQqNrr6MovVJFZgqbVCDC2HtfsqF0vf0kY0Ou5+NWq4Q
+   KITVJ3vhGox2MduTsdvUh0EdBiL5FotXVkI8z1KusqUBUDgjPuZHxfiUC
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="402550862"
+X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
+   d="scan'208";a="402550862"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 01:37:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="806940287"
+X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
+   d="scan'208";a="806940287"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 25 Mar 2023 01:37:55 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfzPO-000G71-1g;
+        Sat, 25 Mar 2023 08:37:54 +0000
+Date:   Sat, 25 Mar 2023 16:37:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/fsfa3 17/17] include/asm-generic/rwonce.h:44:26:
+ error: array subscript 0 is outside array bounds of 'const volatile int[0]'
+Message-ID: <202303251631.oyjkxqNQ-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1679732276.git.philipp.g.hortmann@gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,56 +64,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-priv->rf_chip is initialized to RF_8256 and not used. Remove
-initialization, variable and enum as it is dead code.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fsfa3
+head:   2226ddb6a576f7f89a8a06a3f89b68f5109ded53
+commit: 2226ddb6a576f7f89a8a06a3f89b68f5109ded53 [17/17] Makefile: Enable -Wstringop-overflow and -Warray-bounds
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20230325/202303251631.oyjkxqNQ-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=2226ddb6a576f7f89a8a06a3f89b68f5109ded53
+        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+        git fetch --no-tags gustavoars testing/fsfa3
+        git checkout 2226ddb6a576f7f89a8a06a3f89b68f5109ded53
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
- drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c |  2 --
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h   | 10 ----------
- 2 files changed, 12 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303251631.oyjkxqNQ-lkp@intel.com/
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-index 1e7be321721b..a67927f0c5e3 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-@@ -432,8 +432,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 
- 	rtl92e_init_adaptive_rate(dev);
- 
--	priv->rf_chip = RF_8256;
--
- 	if (priv->reg_chnl_plan == 0xf)
- 		priv->chnl_plan = priv->eeprom_chnl_plan;
- 	else
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index c8816c44ca51..68ec0aeb2dd9 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -129,15 +129,6 @@ enum dcmg_txcmd_op {
- 	TXCMD_XXXX_CTRL,
- };
- 
--enum rt_rf_type_819xu {
--	RF_TYPE_MIN = 0,
--	RF_8225,
--	RF_8256,
--	RF_8258,
--	RF_6052 = 4,
--	RF_PSEUDO_11N = 5,
--};
--
- enum rt_customer_id {
- 	RT_CID_DEFAULT	  = 0,
- 	RT_CID_819x_CAMEO       = 6,
-@@ -221,7 +212,6 @@ struct r8192_priv {
- 
- 	enum rt_customer_id customer_id;
- 
--	enum rt_rf_type_819xu rf_chip;
- 	enum ht_channel_width current_chnl_bw;
- 	struct bb_reg_definition phy_reg_def[4];
- 	struct rate_adaptive rate_adaptive;
+All errors (new ones prefixed by >>):
+
+   In file included from arch/s390/include/asm/rwonce.h:29,
+                    from include/linux/compiler.h:247,
+                    from include/linux/build_bug.h:5,
+                    from include/linux/bits.h:21,
+                    from drivers/net/wwan/t7xx/t7xx_state_monitor.c:17:
+   In function 'preempt_count',
+       inlined from 't7xx_fsm_append_event' at drivers/net/wwan/t7xx/t7xx_state_monitor.c:439:43:
+>> include/asm-generic/rwonce.h:44:26: error: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Werror=array-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from 't7xx_fsm_append_event' at drivers/net/wwan/t7xx/t7xx_state_monitor.c:439:43:
+>> include/asm-generic/rwonce.h:44:26: error: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Werror=array-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   In function 'preempt_count',
+       inlined from 't7xx_fsm_append_event' at drivers/net/wwan/t7xx/t7xx_state_monitor.c:439:43:
+>> include/asm-generic/rwonce.h:44:26: error: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Werror=array-bounds]
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^~~~~~~~~~~
+   arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro 'READ_ONCE'
+      17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHED;
+         |                ^~~~~~~~~
+   cc1: all warnings being treated as errors
+
+
+vim +44 include/asm-generic/rwonce.h
+
+e506ea451254ab1 Will Deacon 2019-10-15  28  
+e506ea451254ab1 Will Deacon 2019-10-15  29  /*
+e506ea451254ab1 Will Deacon 2019-10-15  30   * Yes, this permits 64-bit accesses on 32-bit architectures. These will
+e506ea451254ab1 Will Deacon 2019-10-15  31   * actually be atomic in some cases (namely Armv7 + LPAE), but for others we
+e506ea451254ab1 Will Deacon 2019-10-15  32   * rely on the access being split into 2x32-bit accesses for a 32-bit quantity
+e506ea451254ab1 Will Deacon 2019-10-15  33   * (e.g. a virtual address) and a strong prevailing wind.
+e506ea451254ab1 Will Deacon 2019-10-15  34   */
+e506ea451254ab1 Will Deacon 2019-10-15  35  #define compiletime_assert_rwonce_type(t)					\
+e506ea451254ab1 Will Deacon 2019-10-15  36  	compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),	\
+e506ea451254ab1 Will Deacon 2019-10-15  37  		"Unsupported access size for {READ,WRITE}_ONCE().")
+e506ea451254ab1 Will Deacon 2019-10-15  38  
+e506ea451254ab1 Will Deacon 2019-10-15  39  /*
+e506ea451254ab1 Will Deacon 2019-10-15  40   * Use __READ_ONCE() instead of READ_ONCE() if you do not require any
+3c9184109e78ea2 Will Deacon 2019-10-30  41   * atomicity. Note that this may result in tears!
+e506ea451254ab1 Will Deacon 2019-10-15  42   */
+b78b331a3f5c077 Will Deacon 2019-10-15  43  #ifndef __READ_ONCE
+e506ea451254ab1 Will Deacon 2019-10-15 @44  #define __READ_ONCE(x)	(*(const volatile __unqual_scalar_typeof(x) *)&(x))
+b78b331a3f5c077 Will Deacon 2019-10-15  45  #endif
+e506ea451254ab1 Will Deacon 2019-10-15  46  
+
+:::::: The code at line 44 was first introduced by commit
+:::::: e506ea451254ab17e0bf918ca36232fec2a9b10c compiler.h: Split {READ,WRITE}_ONCE definitions out into rwonce.h
+
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
