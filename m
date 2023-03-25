@@ -2,111 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD8B6C8C7C
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:16:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3376D6C8C80
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbjCYIQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 04:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
+        id S231949AbjCYIRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 04:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbjCYIPz (ORCPT
+        with ESMTP id S232043AbjCYIQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 04:15:55 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462EF19F07;
-        Sat, 25 Mar 2023 01:14:51 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id f17so2910078oiw.10;
-        Sat, 25 Mar 2023 01:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679732089;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UNEJO+btUHDVv8kAHfbox96db3jjTTQ4tn8tm1TepCE=;
-        b=l3/Bc6LbfBxhPAE6W9T1hqH74mCbAYSIPSk+g4PM+ZC5xxtxwhuPzMctI1TOFnSncJ
-         gfV3iaeMHghACeP3fPbu35I5/rRznJbEGDA7LAVy4KbYak3nBlPrczln18PhiOJc6lwi
-         v4iM7KXLz5AH3tpHtS+ZVe87UO5J/8F3vVM+l2HzoRlx73R+YTofdcqow6MEBLNNl+nG
-         Jzv+/c8YT74szh5uXFMKSPmuwdD6Gfh1mGBv5CVuKqatpGIvvEJRLBWR5qX7GU00W3Gc
-         hDbH6SwTXQ5orTVX+vQZzZ908FmxYZpq80AcSBPUHd7enfkKujSNgruIys8CHUGvIau4
-         heKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679732089;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UNEJO+btUHDVv8kAHfbox96db3jjTTQ4tn8tm1TepCE=;
-        b=gW7PLi7mH58wgolGaWnFCazBI0SdzEMxkST7d0wztIzAcZ+g+IrySI968vqE1NkOS0
-         6YoF+W4j9ia8s2LZlAkoL02NRCDhpoU7UVSI8QEAEyoVEeOKZKUPMSu4aNl38dgbb5nA
-         rmbPv+k3f5jWS6BMM1LYlBcJfooEY/wn0XKr/o3eSPKPe0xw8CQQS07gMByEYd9uBpJA
-         +OiHJMmoZtvQurr5LGvAixzbE7EC88zn1c3WkYrH9DEc+xxTu39PSE0jqqOMpM0pPAcf
-         rF+dIYBRSGCvsDtKLr60EOiZNvpdbP13cUMymP87JtpzD/jk1bA/E0C63brhiVjyPNbi
-         n5Gg==
-X-Gm-Message-State: AO0yUKXCyvg//R+f/Q5/zcBT/S6syrFXxH+D5rpvOF78qYNgE9jPHdlR
-        GxG3eLmVxwtni2gUSJGTYJY=
-X-Google-Smtp-Source: AK7set8Nm1tQ9MdjKOZ7l1fhSklIp1/yLsjpfGTiaNvbBY5NzHhhKdDwS3+cfJOC/YO87bB6sWlhVA==
-X-Received: by 2002:a05:6808:118c:b0:386:fb78:a4cb with SMTP id j12-20020a056808118c00b00386fb78a4cbmr3099127oil.43.1679732089398;
-        Sat, 25 Mar 2023 01:14:49 -0700 (PDT)
-Received: from chcpu13.cse.ust.hk (191host119.mobilenet.cse.ust.hk. [143.89.191.119])
-        by smtp.gmail.com with ESMTPSA id x81-20020acae054000000b0038779c9e6a1sm1935469oig.41.2023.03.25.01.14.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 01:14:49 -0700 (PDT)
-From:   Wei Chen <harperchen1110@gmail.com>
-To:     pkshih@realtek.com
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Chen <harperchen1110@gmail.com>
-Subject: [PATCH] wireless: rtlwifi: fix incorrect error codes in rtl_debugfs_set_write_reg()
-Date:   Sat, 25 Mar 2023 08:14:29 +0000
-Message-Id: <20230325081429.3567671-1-harperchen1110@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 25 Mar 2023 04:16:50 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620B2166E9
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:16:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679732178; x=1711268178;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ad7qylK7Qbyp20xOgBKBjg5toHpi65MgkiUuGcEy0yI=;
+  b=hClbE3R3ccRgTCcP2MLefYrerVPuKQFnC7a0QlPLIU3ikXpFtjf38pX2
+   2WJgVLkupHUAoSazyvOAP2OFc4YHtlQ2vZSNh6MN44B/NUXURvOROlp86
+   zbPTzMTkYTdVm9MHG0YRgekx8XS/EnBS+9NwfUOdHogumUo9/2M7nzI7E
+   3zskr2UvSOhPEYnYnTkxNPQv0olOi5rkWNH4ouv+X/hyQW104Eoj2Y7CR
+   T7InKJo1WTUiOpp04VO5wW9AeLB4Gz6ol1zxDcUb71UiQVYtwGQz0Qlnh
+   f+DAor3rhB9UrU+QseBKGBSoFSzSd588V/wBTpR6mfeDus9SfKEf/7Fk2
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="323835681"
+X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
+   d="scan'208";a="323835681"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 01:15:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="713312163"
+X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
+   d="scan'208";a="713312163"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 25 Mar 2023 01:15:54 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfz46-000G6F-0I;
+        Sat, 25 Mar 2023 08:15:54 +0000
+Date:   Sat, 25 Mar 2023 16:14:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:for-next/kspp] BUILD SUCCESS
+ 7109385144a3e2dc831211d27ce48b6ccc614777
+Message-ID: <641ead80.KA4wBR1J5YNi7/hl%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there is a failure during copy_from_user or user-provided data buffer 
-is invalid, rtl_debugfs_set_write_reg should return negative error code 
-instead of a positive value count.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/kspp
+branch HEAD: 7109385144a3e2dc831211d27ce48b6ccc614777  uapi: target: Replace fake flex-array with flexible-array member
 
-Fix this bug by returning correct error code. Moreover, the check of buffer
-against null is removed since it will be handled by copy_from_user.
+elapsed time: 731m
 
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
----
- drivers/net/wireless/realtek/rtlwifi/debug.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+configs tested: 153
+configs skipped: 10
 
-diff --git a/drivers/net/wireless/realtek/rtlwifi/debug.c b/drivers/net/wireless/realtek/rtlwifi/debug.c
-index 0b1bc04cb6ad..3e7f9b4f1f19 100644
---- a/drivers/net/wireless/realtek/rtlwifi/debug.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/debug.c
-@@ -278,8 +278,8 @@ static ssize_t rtl_debugfs_set_write_reg(struct file *filp,
- 
- 	tmp_len = (count > sizeof(tmp) - 1 ? sizeof(tmp) - 1 : count);
- 
--	if (!buffer || copy_from_user(tmp, buffer, tmp_len))
--		return count;
-+	if (copy_from_user(tmp, buffer, tmp_len))
-+		return -EFAULT;
- 
- 	tmp[tmp_len] = '\0';
- 
-@@ -287,7 +287,7 @@ static ssize_t rtl_debugfs_set_write_reg(struct file *filp,
- 	num = sscanf(tmp, "%x %x %x", &addr, &val, &len);
- 
- 	if (num !=  3)
--		return count;
-+		return -EINVAL;
- 
- 	switch (len) {
- 	case 1:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r021-20230322   gcc  
+alpha                randconfig-r026-20230322   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                         haps_hs_defconfig   gcc  
+arc                  randconfig-r001-20230322   gcc  
+arc                  randconfig-r001-20230323   gcc  
+arc                  randconfig-r002-20230322   gcc  
+arc                  randconfig-r034-20230322   gcc  
+arc                  randconfig-r035-20230322   gcc  
+arc                  randconfig-r043-20230322   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                       aspeed_g4_defconfig   clang
+arm          buildonly-randconfig-r003-20230324   clang
+arm                                 defconfig   gcc  
+arm                          moxart_defconfig   clang
+arm                       omap2plus_defconfig   gcc  
+arm                  randconfig-r014-20230322   clang
+arm                  randconfig-r021-20230322   clang
+arm                  randconfig-r025-20230322   clang
+arm                  randconfig-r046-20230322   clang
+arm                  randconfig-r046-20230324   clang
+arm                           stm32_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r022-20230322   gcc  
+arm64                randconfig-r025-20230322   gcc  
+arm64                randconfig-r031-20230322   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r011-20230322   gcc  
+csky                 randconfig-r012-20230322   gcc  
+csky                 randconfig-r016-20230322   gcc  
+hexagon                          alldefconfig   clang
+hexagon      buildonly-randconfig-r006-20230323   clang
+hexagon              randconfig-r031-20230322   clang
+hexagon              randconfig-r035-20230322   clang
+hexagon              randconfig-r041-20230322   clang
+hexagon              randconfig-r041-20230324   clang
+hexagon              randconfig-r045-20230322   clang
+hexagon              randconfig-r045-20230324   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a016   gcc  
+i386                          randconfig-c001   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r005-20230322   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r003-20230323   gcc  
+ia64                 randconfig-r011-20230322   gcc  
+ia64                 randconfig-r015-20230322   gcc  
+ia64                 randconfig-r031-20230322   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r003-20230322   gcc  
+loongarch            randconfig-r006-20230322   gcc  
+loongarch            randconfig-r021-20230322   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r012-20230322   gcc  
+m68k                 randconfig-r023-20230322   gcc  
+microblaze           randconfig-r015-20230322   gcc  
+microblaze           randconfig-r036-20230322   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r004-20230322   gcc  
+mips                 randconfig-r004-20230322   gcc  
+mips                 randconfig-r005-20230322   gcc  
+mips                 randconfig-r023-20230322   clang
+mips                 randconfig-r036-20230322   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r016-20230322   gcc  
+nios2                randconfig-r034-20230322   gcc  
+openrisc             randconfig-r015-20230322   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r002-20230323   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                   lite5200b_defconfig   clang
+powerpc                 mpc832x_mds_defconfig   clang
+powerpc                 mpc837x_mds_defconfig   gcc  
+powerpc              randconfig-c003-20230322   gcc  
+powerpc              randconfig-r004-20230323   gcc  
+powerpc              randconfig-r013-20230322   gcc  
+powerpc              randconfig-r025-20230322   gcc  
+powerpc              randconfig-r035-20230322   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                    nommu_k210_defconfig   gcc  
+riscv                randconfig-r004-20230322   clang
+riscv                randconfig-r024-20230322   gcc  
+riscv                randconfig-r042-20230322   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390         buildonly-randconfig-r005-20230323   clang
+s390                                defconfig   gcc  
+s390                 randconfig-r014-20230322   gcc  
+s390                 randconfig-r016-20230322   gcc  
+s390                 randconfig-r031-20230322   clang
+s390                 randconfig-r035-20230322   clang
+s390                 randconfig-r044-20230322   gcc  
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r001-20230322   gcc  
+sh                   randconfig-r013-20230322   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r003-20230322   gcc  
+sparc                randconfig-r006-20230323   gcc  
+sparc                randconfig-r011-20230322   gcc  
+sparc64                             defconfig   gcc  
+sparc64              randconfig-r024-20230322   gcc  
+sparc64              randconfig-r033-20230322   gcc  
+sparc64              randconfig-r035-20230322   gcc  
+um                               alldefconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                        randconfig-k001   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                generic_kc705_defconfig   gcc  
+xtensa               randconfig-r013-20230322   gcc  
+xtensa               randconfig-r014-20230322   gcc  
+xtensa               randconfig-r022-20230322   gcc  
+xtensa               randconfig-r032-20230322   gcc  
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
