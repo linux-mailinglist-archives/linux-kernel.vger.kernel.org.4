@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A501F6C8C90
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E2B6C8C91
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbjCYIUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 04:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
+        id S231954AbjCYIUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 04:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbjCYIUc (ORCPT
+        with ESMTP id S231776AbjCYIUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 04:20:32 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BC616AD9;
-        Sat, 25 Mar 2023 01:20:30 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id j24so3889274wrd.0;
+        Sat, 25 Mar 2023 04:20:33 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1442F10416;
+        Sat, 25 Mar 2023 01:20:31 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id v1so3869432wrv.1;
         Sat, 25 Mar 2023 01:20:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679732428;
+        d=gmail.com; s=20210112; t=1679732429;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qdYPgJ9kVAY+FX7JFEaDiM/XsHcLyA9JSPLKQoGwx+A=;
-        b=nyPcGAyWU/F0iZBJn9zXNBSilQ86Zh80RQERfz9WnwWkTnpdKVgBkQtKAJGhkt7Qtb
-         oMYeY+jlESJdDeRgAx97s44vd+EWMsewp4dZTPjopalYergNhC6jsCpnB6zvjz6G4vum
-         c7P6d4GIkhytu4BzYQXFC62iRu5OcUKCYe3p1b3Y87LfRZPcvIjtVISNbs4BWNtuGDO+
-         YUhmWfdHaGI3lrO/A54tLrI1XEdVnLc6WvbM5etK6NB4ahtoOx4CrWEUg14z9rYyYYmk
-         K2HHeQPxJb2UD6o8Sk+h+LOSrmG43gYJg9397cxy2ncLgdY8zUDj6GAQBPYfk8lmXfTR
-         Uzlg==
+        bh=3af7AQ9wLc3osxXyvBrW7r37wpKHewq77ohhLjiNp5I=;
+        b=GZ1zj3fLUmYGbFKegO6Z/96BsbgaT0xaE5+gckU7HaFQbDxJMIFSkRHSnrB9mx2wBK
+         4g1bCh6Tzyj1t7Ret28ok7awRe8vNxNBNpgBdzRtey0nyujnXvAi47uFUf0xo4UiYyjv
+         2T56JemorZ2bwiOpMwP24BfCKwWpbjug6NZC64K4QbP+cjhO/BJ8TYituLAtrrgBJovq
+         cpJLSXZXb0KpLo4seOeAi7vCPqV4PFy+6oIeOWoTYkZ5lZmiXCKYFPu2B7RppBT/qfxH
+         HKq2FxkrkUo9MQHTtJwEc9sSK1AIytvPi7V7kR9Ei52lYCCJWCtx6T+GYV2SfC80+MEf
+         93IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679732428;
+        d=1e100.net; s=20210112; t=1679732429;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qdYPgJ9kVAY+FX7JFEaDiM/XsHcLyA9JSPLKQoGwx+A=;
-        b=j8UpZOPZZXRO6ZhQ/t6TPDjJEapT4VHaUDBGjywJrTtiNxccq7m73OYJbgsdCPqwSn
-         6jOPO2uITfNtIvaK1j4DVpEB2tINx6RiN3dJY4dIc2HgmKBCDeW78j1Tk93pCjg5Wp7l
-         YFZ26WYz5issd16ZLQ3l4MeoYs/OL7GRe1FZhfV/Vg/lNhmBMyShofdVien2bsw4EggJ
-         8K5kZQUbkKF4Ftp0JXir+q/la5Xo0/YysGqRN45Ams7WsagLI8GUOl67ELHc/qywwXXC
-         i8JPDdNBJsi6FHtTyh4y4qnt18NXfbjVWweR0kraAi2gYdUAjfKLAsDMPNOqz8Kxu9NH
-         HeIw==
-X-Gm-Message-State: AAQBX9fogADnF7CY/ePQR786uWxdt1GnlmzuyflvIFwHeNJqWOym//Es
-        3qoYB20gQdOwFVs7QBHDpCC0I+2Eh/Y=
-X-Google-Smtp-Source: AKy350a1dcuMNQ/PP4gN43DZzZiGjXgHUpe9apKQ0L+hd4vMV2y/K5DuveJ1FGo2WvRikjZjR0+CFw==
-X-Received: by 2002:adf:e7c2:0:b0:2d3:1c7d:a396 with SMTP id e2-20020adfe7c2000000b002d31c7da396mr4345114wrn.68.1679732428688;
-        Sat, 25 Mar 2023 01:20:28 -0700 (PDT)
+        bh=3af7AQ9wLc3osxXyvBrW7r37wpKHewq77ohhLjiNp5I=;
+        b=PysBXID0z7mZvQsxOjhUN5jfZE8YytYU1lUBYMAj3pAhpPTXfSeJoRBSDbKUYJqglG
+         vTVSQB7MwG+LutLDh614WcDWW0QGjBj4ZaK1ZAEsuj+dtJtXs+Nk0Bjb7iaXpXEqAUC2
+         /WbeNStNj7QepVQewpfmJQXtA2lLAzn46AkkrI23d6ez8ffiY9mFzggWVdHk7Cgi9cKc
+         mEIhfgQ6xfX5Oq2y1l875TEukSBi5XtntpFQEbL4EiNkAvR1BxijMALDmK1a2CTV2/n+
+         8WsK5EDsDCHQEJj+/ZK0hvMQkCtsNhq66VSTHIfzc6NZO3OR9CKDueTQ8czZx+H1/xgX
+         2PVA==
+X-Gm-Message-State: AAQBX9dy7AIG8zDf3a6fesSBC9MpIIM9/DTyEk2If635q9pye0hLmzBM
+        oLQTPCAA2eoZ0/++kE3Fe/U=
+X-Google-Smtp-Source: AKy350bLGJPGmjTfdtazrsPWVO0wWlxVunsld/1YbgyXqFusaQ02JFkJPR+WAO2w05EfTfvNjI051w==
+X-Received: by 2002:adf:e44f:0:b0:2cf:eb86:bd90 with SMTP id t15-20020adfe44f000000b002cfeb86bd90mr4484604wrm.63.1679732429524;
+        Sat, 25 Mar 2023 01:20:29 -0700 (PDT)
 Received: from xeon.. ([188.163.112.76])
-        by smtp.gmail.com with ESMTPSA id n12-20020a5d484c000000b002c59f18674asm20175918wrs.22.2023.03.25.01.20.27
+        by smtp.gmail.com with ESMTPSA id n12-20020a5d484c000000b002c59f18674asm20175918wrs.22.2023.03.25.01.20.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 01:20:28 -0700 (PDT)
+        Sat, 25 Mar 2023 01:20:29 -0700 (PDT)
 From:   Svyatoslav Ryhel <clamor95@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -60,9 +60,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Dmitry Osipenko <digetx@gmail.com>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: [PATCH v3 1/2] ARM: tegra: transformers: update sound nodes
-Date:   Sat, 25 Mar 2023 10:20:10 +0200
-Message-Id: <20230325082011.6985-2-clamor95@gmail.com>
+Subject: [PATCH v3 2/2] ARM: tegra: transformers: bind RT5631 sound nodes
+Date:   Sat, 25 Mar 2023 10:20:11 +0200
+Message-Id: <20230325082011.6985-3-clamor95@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230325082011.6985-1-clamor95@gmail.com>
 References: <20230325082011.6985-1-clamor95@gmail.com>
@@ -78,119 +78,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- fix headset detection in common device tree;
-- use GPIO mic detection on wm8903 devices;
+TF201, TF300TG and TF700T support RT5631 codec.
 
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 ---
- arch/arm/boot/dts/tegra20-asus-tf101.dts            | 13 +++++++------
- arch/arm/boot/dts/tegra30-asus-tf300t.dts           |  8 +++-----
- .../boot/dts/tegra30-asus-transformer-common.dtsi   |  9 +++++----
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ arch/arm/boot/dts/tegra30-asus-tf201.dts   | 17 +++++++++++++++++
+ arch/arm/boot/dts/tegra30-asus-tf300tg.dts | 17 +++++++++++++++++
+ arch/arm/boot/dts/tegra30-asus-tf700t.dts  | 17 +++++++++++++++++
+ 3 files changed, 51 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra20-asus-tf101.dts b/arch/arm/boot/dts/tegra20-asus-tf101.dts
-index 7b2969656ec9..420481077685 100644
---- a/arch/arm/boot/dts/tegra20-asus-tf101.dts
-+++ b/arch/arm/boot/dts/tegra20-asus-tf101.dts
-@@ -520,10 +520,10 @@ wm8903: audio-codec@1a {
- 			micdet-delay = <100>;
- 
- 			gpio-cfg = <
--				0xffffffff /* don't touch */
--				0xffffffff /* don't touch */
-+				0x00000600 /* DMIC_LR, output */
-+				0x00000680 /* DMIC_DAT, input */
- 				0x00000000 /* Speaker-enable GPIO, output, low */
--				0x00000400 /* Mic bias current detect */
-+				0xffffffff /* don't touch */
- 				0xffffffff /* don't touch */
- 			>;
- 
-@@ -1184,15 +1184,16 @@ sound {
- 			"Int Spk", "RON",
- 			"Int Spk", "LOP",
- 			"Int Spk", "LON",
--			"Mic Jack", "MICBIAS",
--			"IN1L", "Mic Jack";
-+			"IN2L", "Mic Jack",
-+			"DMIC", "Int Mic";
- 
- 		nvidia,i2s-controller = <&tegra_i2s1>;
- 		nvidia,audio-codec = <&wm8903>;
- 
- 		nvidia,spkr-en-gpios = <&wm8903 2 GPIO_ACTIVE_HIGH>;
- 		nvidia,hp-det-gpios = <&gpio TEGRA_GPIO(W, 2) GPIO_ACTIVE_LOW>;
--		nvidia,headset;
-+		nvidia,mic-det-gpios = <&gpio TEGRA_GPIO(X, 1) GPIO_ACTIVE_LOW>;
-+		nvidia,coupled-mic-hp-det;
- 
- 		clocks = <&tegra_car TEGRA20_CLK_PLL_A>,
- 			 <&tegra_car TEGRA20_CLK_PLL_A_OUT0>,
-diff --git a/arch/arm/boot/dts/tegra30-asus-tf300t.dts b/arch/arm/boot/dts/tegra30-asus-tf300t.dts
-index 506ae3626731..3ef670ca0edb 100644
---- a/arch/arm/boot/dts/tegra30-asus-tf300t.dts
-+++ b/arch/arm/boot/dts/tegra30-asus-tf300t.dts
-@@ -128,8 +128,8 @@ wm8903: audio-codec@1a {
- 			micdet-delay = <100>;
- 
- 			gpio-cfg = <
--				0xffffffff /* don't touch */
--				0xffffffff /* don't touch */
-+				0x00000600 /* DMIC_LR, output */
-+				0x00000680 /* DMIC_DAT, input */
- 				0x00000000 /* Speaker-enable GPIO, output, low */
- 				0xffffffff /* don't touch */
- 				0xffffffff /* don't touch */
-@@ -1023,12 +1023,10 @@ sound {
- 			"Int Spk", "RON",
- 			"Int Spk", "LOP",
- 			"Int Spk", "LON",
--			"IN1L", "Mic Jack",
- 			"IN2L", "Mic Jack",
--			"DMICDAT", "Int Mic";
-+			"DMIC", "Int Mic";
- 
- 		nvidia,audio-codec = <&wm8903>;
- 		nvidia,spkr-en-gpios = <&wm8903 2 GPIO_ACTIVE_HIGH>;
--		nvidia,headset;
+diff --git a/arch/arm/boot/dts/tegra30-asus-tf201.dts b/arch/arm/boot/dts/tegra30-asus-tf201.dts
+index 3c2b9e93e028..0406c5a69c12 100644
+--- a/arch/arm/boot/dts/tegra30-asus-tf201.dts
++++ b/arch/arm/boot/dts/tegra30-asus-tf201.dts
+@@ -624,4 +624,21 @@ opp-table-emc {
+ 		/delete-node/ opp-800000000-1300;
+ 		/delete-node/ opp-900000000-1350;
  	};
++
++	sound {
++		compatible = "asus,tegra-audio-rt5631-tf201",
++			     "nvidia,tegra-audio-rt5631";
++		nvidia,model = "Asus Transformer Prime TF201 RT5631";
++
++		nvidia,audio-routing =
++			"Headphone Jack", "HPOL",
++			"Headphone Jack", "HPOR",
++			"Int Spk", "SPOL",
++			"Int Spk", "SPOR",
++			"MIC1", "MIC Bias1",
++			"MIC Bias1", "Mic Jack",
++			"DMIC", "Int Mic";
++
++		nvidia,audio-codec = <&rt5631>;
++	};
  };
-diff --git a/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi b/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
-index 1861b2de2dc3..bdb898ad6262 100644
---- a/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
-+++ b/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
-@@ -558,7 +558,7 @@ spi1_mosi_px4 {
- 				nvidia,enable-input = <TEGRA_PIN_ENABLE>;
- 			};
- 
--			spi2_cs1_n_pw2 {
-+			hp_detect {
- 				nvidia,pins = "spi2_cs1_n_pw2";
- 				nvidia,function = "spi2";
- 				nvidia,pull = <TEGRA_PIN_PULL_UP>;
-@@ -566,10 +566,10 @@ spi2_cs1_n_pw2 {
- 				nvidia,enable-input = <TEGRA_PIN_ENABLE>;
- 			};
- 
--			spi2_sck_px2 {
-+			mic_detect {
- 				nvidia,pins = "spi2_sck_px2";
- 				nvidia,function = "spi2";
--				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
-+				nvidia,pull = <TEGRA_PIN_PULL_UP>;
- 				nvidia,tristate = <TEGRA_PIN_DISABLE>;
- 				nvidia,enable-input = <TEGRA_PIN_ENABLE>;
- 			};
-@@ -1674,7 +1674,8 @@ sound {
- 		nvidia,i2s-controller = <&tegra_i2s1>;
- 
- 		nvidia,hp-det-gpios = <&gpio TEGRA_GPIO(W, 2) GPIO_ACTIVE_LOW>;
--		nvidia,hp-mute-gpios = <&gpio TEGRA_GPIO(X, 2) GPIO_ACTIVE_LOW>;
-+		nvidia,mic-det-gpios = <&gpio TEGRA_GPIO(X, 2) GPIO_ACTIVE_LOW>;
-+		nvidia,coupled-mic-hp-det;
- 
- 		clocks = <&tegra_car TEGRA30_CLK_PLL_A>,
- 			 <&tegra_car TEGRA30_CLK_PLL_A_OUT0>,
+diff --git a/arch/arm/boot/dts/tegra30-asus-tf300tg.dts b/arch/arm/boot/dts/tegra30-asus-tf300tg.dts
+index 573deeafb7ba..4861db8e1e59 100644
+--- a/arch/arm/boot/dts/tegra30-asus-tf300tg.dts
++++ b/arch/arm/boot/dts/tegra30-asus-tf300tg.dts
+@@ -1084,4 +1084,21 @@ opp-table-actmon {
+ 		/delete-node/ opp-800000000;
+ 		/delete-node/ opp-900000000;
+ 	};
++
++	sound {
++		compatible = "asus,tegra-audio-rt5631-tf300tg",
++			     "nvidia,tegra-audio-rt5631";
++		nvidia,model = "Asus Transformer Pad TF300TG RT5631";
++
++		nvidia,audio-routing =
++			"Headphone Jack", "HPOL",
++			"Headphone Jack", "HPOR",
++			"Int Spk", "SPOL",
++			"Int Spk", "SPOR",
++			"MIC1", "MIC Bias1",
++			"MIC Bias1", "Mic Jack",
++			"DMIC", "Int Mic";
++
++		nvidia,audio-codec = <&rt5631>;
++	};
+ };
+diff --git a/arch/arm/boot/dts/tegra30-asus-tf700t.dts b/arch/arm/boot/dts/tegra30-asus-tf700t.dts
+index e7fe8c7a7435..efde7dad718a 100644
+--- a/arch/arm/boot/dts/tegra30-asus-tf700t.dts
++++ b/arch/arm/boot/dts/tegra30-asus-tf700t.dts
+@@ -820,4 +820,21 @@ vdd_1v2_mipi: regulator-mipi {
+ 		enable-active-high;
+ 		vin-supply = <&vdd_3v3_sys>;
+ 	};
++
++	sound {
++		compatible = "asus,tegra-audio-rt5631-tf700t",
++			     "nvidia,tegra-audio-rt5631";
++		nvidia,model = "Asus Transformer Infinity TF700T RT5631";
++
++		nvidia,audio-routing =
++			"Headphone Jack", "HPOL",
++			"Headphone Jack", "HPOR",
++			"Int Spk", "SPOL",
++			"Int Spk", "SPOR",
++			"MIC1", "MIC Bias1",
++			"MIC Bias1", "Mic Jack",
++			"DMIC", "Int Mic";
++
++		nvidia,audio-codec = <&rt5631>;
++	};
+ };
 -- 
 2.37.2
 
