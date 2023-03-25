@@ -2,124 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC246C8EF0
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 16:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 147496C8EFA
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 16:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjCYO6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 10:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
+        id S230292AbjCYPSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 11:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjCYO6t (ORCPT
+        with ESMTP id S229446AbjCYPS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 10:58:49 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC24E3A1
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 07:58:48 -0700 (PDT)
-Received: from [192.168.2.204] (109-252-120-116.nat.spd-mgts.ru [109.252.120.116])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sat, 25 Mar 2023 11:18:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D21EC53;
+        Sat, 25 Mar 2023 08:18:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0455F6603103;
-        Sat, 25 Mar 2023 14:58:43 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679756326;
-        bh=dU1D86JTqo/yGLLA5mJPUROTMQUYgMAFWoNb6lY2hgc=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=bUQ9ZL5vbpwKPXHcT8taJDSRfEanqwsD9J953DywnuIp0FSwWHV/2wSRf9J5xU5zx
-         XW/mdsIIfoghLBKjfQPkeYiqvdZ4f2JwUM/BltUQ+07OYxCfHr7IVeuimMghXooJ7l
-         j6BGYFM/wSBHC7XY04Yf3fRtkEBUjO/65qTpM6NqPcXZ0jLYq9eS+/7yTQXAkaMOHF
-         4RADMreTDjWabykjnZ8jDzKDl3FAfokQR1jscEGg2MIisWZodEGMeVeKlDDh+9cWdS
-         Jrvvad0aDK1RldZWLJsqSmE4u14RvF1KiHvjxBpA7tYCfxUCovyjj5ySAkoIobWdxZ
-         CEdgGP1UzPc9Q==
-Message-ID: <20c88807-8513-a816-aed9-5cd67eb5c1ed@collabora.com>
-Date:   Sat, 25 Mar 2023 17:58:41 +0300
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B75BB80522;
+        Sat, 25 Mar 2023 15:18:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9732C433D2;
+        Sat, 25 Mar 2023 15:18:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679757503;
+        bh=oo6E+Xz8WFT652hkrNiEygyhzHj1OHj9IRZztciFppk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=onmPrt8ec/AGWTGDj9ryBF+U6FpJsvIcOREfG46slzOQOFZtIMETjQcG/SDa2q+dC
+         MIyU1RhJ6yBtFUAe3dq4TvKIOj8lNuYq3BnG31smGU9IcmqwhzTApgwZ0sEsIaMq/s
+         vQUcBRI3Cek6rzhdUsXNJZApWz5dg1T2gAC9RhrA9aNvmp7wex7aVD+/6VwS9KzCT1
+         WydeXFSqa8VwlonS3CCPyzkgi/knIXYq5HN812MkIj1JgypxXGokc+/YpjeVu3dWXV
+         Wb4LdkuHo/PpWLTPfYQmQ3E4rFCJ7vaf/XccIS61GmGl6Ov+VZC2vSIMIqaI4t1q1B
+         OzSC1FgonV0qg==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH 1/3] kconfig: menuconfig: remove OLD_NCURSES macro
+Date:   Sun, 26 Mar 2023 00:18:15 +0900
+Message-Id: <20230325151817.2651544-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v13 01/10] drm/shmem-helper: Switch to reservation lock
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        intel-gfx@lists.freedesktop.org, David Airlie <airlied@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Herring <robh@kernel.org>
-References: <20230314022659.1816246-1-dmitry.osipenko@collabora.com>
- <20230314022659.1816246-2-dmitry.osipenko@collabora.com>
- <6b5644cf-6229-f99b-d429-a45d724493ee@collabora.com>
-Content-Language: en-US
-In-Reply-To: <6b5644cf-6229-f99b-d429-a45d724493ee@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 16:46, Dmitry Osipenko wrote:
-> On 3/14/23 05:26, Dmitry Osipenko wrote:
->> @@ -633,7 +605,10 @@ int drm_gem_shmem_mmap(struct drm_gem_shmem_object *shmem, struct vm_area_struct
->>  		return ret;
->>  	}
->>  
->> +	dma_resv_lock(shmem->base.resv, NULL);
->>  	ret = drm_gem_shmem_get_pages(shmem);
->> +	dma_resv_unlock(shmem->base.resv);
-> 
-> Intel CI reported locking problem [1] here. It actually was also
-> reported for v12, but I missed that report because of the other noisy
-> reports.
-> 
-> [1]
-> https://intel-gfx-ci.01.org/tree/drm-tip/Patchwork_114671v2/shard-snb5/igt@prime_vgem@sync@rcs0.html
-> 
-> The test does the following:
-> 
-> 1. creates vgem
-> 2. export it do dmabuf
-> 3. mmaps dmabuf
-> 
-> There is an obvious deadlock there. The DRM code assumes that mmap() is
-> unlocked, while for dma-buf it's locked. I'll see how to fix it for v14.
-> 
+This code has been here for more than 20 years. The bug in the old days
+no longer matters.
 
-Christian, there is a deadlock problem in drm_gem_shmem_mmap() once we
-move drm-shmem to use resv lock. The current dma-buf locking policy
-claims that importer holds the lock for mmap(), but DRM code assumes
-that obj->mmap() handles the locking itself and then the same
-obj->mmap() code path is used by both dma-buf DRM and a usual DRM object
-paths. Hence importer -> dma_buf_mmap_internal()[takes the lock] ->
-exporter -> drm_gem_shmem_mmap()[takes the lock] deadlocks.
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-I was looking at how to fix it and to me the best option is to change
-the dma-buf locking policy, making exporter responsible for handling the
-resv lock. Changing DRM code mmap lockings might be possible too [moving
-locking to drm_gem_mmap_obj()], but will be very messy and doesn't feel
-intuitive.
+ scripts/kconfig/lxdialog/dialog.h  | 16 ----------------
+ scripts/kconfig/lxdialog/menubox.c |  8 --------
+ scripts/kconfig/lxdialog/textbox.c |  9 ---------
+ 3 files changed, 33 deletions(-)
 
-Want to get yours thoughts on this before sending out the dma-buf mmap()
-policy-change patch. Does the new mmap() locking policy sound good to
-you? Thanks!
-
+diff --git a/scripts/kconfig/lxdialog/dialog.h b/scripts/kconfig/lxdialog/dialog.h
+index 68b565e3c495..bd2da3a928a7 100644
+--- a/scripts/kconfig/lxdialog/dialog.h
++++ b/scripts/kconfig/lxdialog/dialog.h
+@@ -18,22 +18,6 @@
+ #endif
+ #include <ncurses.h>
+ 
+-/*
+- * Colors in ncurses 1.9.9e do not work properly since foreground and
+- * background colors are OR'd rather than separately masked.  This version
+- * of dialog was hacked to work with ncurses 1.9.9e, making it incompatible
+- * with standard curses.  The simplest fix (to make this work with standard
+- * curses) uses the wbkgdset() function, not used in the original hack.
+- * Turn it off if we're building with 1.9.9e, since it just confuses things.
+- */
+-#if defined(NCURSES_VERSION) && defined(_NEED_WRAP) && !defined(GCC_PRINTFLIKE)
+-#define OLD_NCURSES 1
+-#undef  wbkgdset
+-#define wbkgdset(w,p)		/*nothing */
+-#else
+-#define OLD_NCURSES 0
+-#endif
+-
+ #define TR(params) _tracef params
+ 
+ #define KEY_ESC 27
+diff --git a/scripts/kconfig/lxdialog/menubox.c b/scripts/kconfig/lxdialog/menubox.c
+index 58c2f8afe59b..0e333284e947 100644
+--- a/scripts/kconfig/lxdialog/menubox.c
++++ b/scripts/kconfig/lxdialog/menubox.c
+@@ -63,15 +63,7 @@ static void do_print_item(WINDOW * win, const char *item, int line_y,
+ 	/* Clear 'residue' of last item */
+ 	wattrset(win, dlg.menubox.atr);
+ 	wmove(win, line_y, 0);
+-#if OLD_NCURSES
+-	{
+-		int i;
+-		for (i = 0; i < menu_width; i++)
+-			waddch(win, ' ');
+-	}
+-#else
+ 	wclrtoeol(win);
+-#endif
+ 	wattrset(win, selected ? dlg.item_selected.atr : dlg.item.atr);
+ 	mvwaddstr(win, line_y, item_x, menu_item);
+ 	if (hotkey) {
+diff --git a/scripts/kconfig/lxdialog/textbox.c b/scripts/kconfig/lxdialog/textbox.c
+index 4e339b12664e..4a6ff9de45b9 100644
+--- a/scripts/kconfig/lxdialog/textbox.c
++++ b/scripts/kconfig/lxdialog/textbox.c
+@@ -336,16 +336,7 @@ static void print_line(WINDOW * win, int row, int width)
+ 	waddnstr(win, line, MIN(strlen(line), width - 2));
+ 
+ 	/* Clear 'residue' of previous line */
+-#if OLD_NCURSES
+-	{
+-		int x = getcurx(win);
+-		int i;
+-		for (i = 0; i < width - x; i++)
+-			waddch(win, ' ');
+-	}
+-#else
+ 	wclrtoeol(win);
+-#endif
+ }
+ 
+ /*
 -- 
-Best regards,
-Dmitry
+2.34.1
 
