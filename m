@@ -2,183 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5940B6C9077
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 20:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6A76C907B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 20:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbjCYT1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 15:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
+        id S231659AbjCYTbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 15:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjCYT1l (ORCPT
+        with ESMTP id S229460AbjCYTbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 15:27:41 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5A430C0;
-        Sat, 25 Mar 2023 12:27:40 -0700 (PDT)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32PJ9gpG005643;
-        Sat, 25 Mar 2023 19:27:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-type : content-id :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=Cl8AdA6LHjt6KDeAu8CDHcce868Bf4rcqVoNnpBXUc8=;
- b=OmokZVhAOpT3f9nmepsSQ3yBj2Cmh1GXNBO1kmZdorVhlpuHtraGwYo9Fd+pBuYmhJoN
- gq2j3pkm3HSgCUG0FugQfJic5mnDufOueZjKJV/OGoLI7lu8pgzXTm4XM0BOlo7S2ZKy
- BY7QU50sg1u4wgp9lzRS17bXeMiMhFSAzpGLuMnZk5R7oy9LlyAili7K96t42786/Okn
- gEqN+alJRMDhpkTxFhVGb0MvzY1Hc6x6UMTIF8sy5+1D8CnArs0x2F5MbSUHp8Jh5riB
- FdVzxo2m/XRYzc15rcYdI2e0nMH0tgiX1ckQF5m4Qq2KH5NIAJRKxWJAaoUN+IKj5CJ5 DQ== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pj6v100g4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 25 Mar 2023 19:27:30 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32PFfq1L005453;
-        Sat, 25 Mar 2023 19:27:29 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3phqd38u1u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 25 Mar 2023 19:27:29 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VwGBvHc4vtCKU9mOKFmM+2sPRg48cFh9xA1yzNGkoi38CvzSLcBVGx9oWudNF4XMmqLYTPqI4oMKVe9zxZQpgPLiwcyZtzNbgxNPuh+3weE3LkFOSjtOxKpk/EJmXBQ91363yFSVRDFtDxuLBdhvKo+NChCYa27/D9yCSadFHkqke7Hue2u32p7reg4LrUh6USbljfgT/DDRiqPfd6wLuBJrSZxQTNBZZ7JTy4/BBXGhevLq7of2mXXhh6uovVq9FD0pGGpkSVTRbIna3bfqCp30BavqAPFjn0daKoig9qkNasmg3uyhuvvMmqs40OG8hlv5OJeLkxBbK1zPpvh0ow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Cl8AdA6LHjt6KDeAu8CDHcce868Bf4rcqVoNnpBXUc8=;
- b=UH2gwDGFuf0za+JWSVVpYrJIYdzhXdaeaAMhl2Ta7Xt+zfyvkC66qjOwGqfAk4lrKc6XM9adbV1leC8k8CrAeTPBvfG5GnMYAcgrj9DOIvEMBkQdo/4C7LSGxn6n4uy+ji8lN7NdaDAoUleWBvZT+bEfwioyzOHRsL6+5d4EfTHFIJRD1ig6H7DHQ3bB1/8dDrYyFypZVrtm2YZc4+E5rwBMkrHOmS1FM6xL7GmywYwNS5DyKD/oVBHt5oZ62G4SL5IKTHDOxiBH7opu8ahaXMsQrO1nbQVLN5xAnrfWUuR+zlmFEWnxPLdJt5tuKM+5ucxEKYFBuUYNDnBj4/HO1g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Cl8AdA6LHjt6KDeAu8CDHcce868Bf4rcqVoNnpBXUc8=;
- b=g9TC/M7lY5mLuVpPeYLQEKCmJ2nIxDftRqIDtGG+YrKxe3651NLeMFPPCB0gn7CiM/jmcvrOXP0zsWrHwjRg2b4HGFCnWIMnYFTCbV4lUDFZMAuCNvOCf8jSH9SDzPQY4g0WsmWSR59mn8qxzFN22PG2QgsvOxLwwYZxQ+ctVnk=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by CH3PR10MB7561.namprd10.prod.outlook.com (2603:10b6:610:178::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.39; Sat, 25 Mar
- 2023 19:27:27 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::5c2f:5e81:b6c4:a127]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::5c2f:5e81:b6c4:a127%6]) with mapi id 15.20.6178.041; Sat, 25 Mar 2023
- 19:27:27 +0000
-From:   Chuck Lever III <chuck.lever@oracle.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jeff Layton <jlayton@kernel.org>
-Subject: [GIT PULL] nfsd fix for 6.3-rc4
-Thread-Topic: [GIT PULL] nfsd fix for 6.3-rc4
-Thread-Index: AQHZX0/VhlVAD0JVPUyUQaF4hfdpfA==
-Date:   Sat, 25 Mar 2023 19:27:26 +0000
-Message-ID: <72D3CC33-6DD5-4AC0-A33F-DF91B79AEEF6@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.2)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN0PR10MB5128:EE_|CH3PR10MB7561:EE_
-x-ms-office365-filtering-correlation-id: 5822fd69-4593-4ac5-0b0a-08db2d66f7c6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: l8pPWVFSIsebLw0DHgWkydy+pQn+OFOBB/ulH1/PvZlE5TRyW3B4UonWG1BpW0sbv2LOZaQ8sdmJawoMlLUfFwTn+zO7BSe0PwY2zxFoUXL4gSYJEiT/ECN9jIDNRSkowNxzVqMgKVIBu+dY043BS9TKFwLzfiOb6afmLmSJ07Os6wuK+VoxMbYEgSBOPcYfjetR8Py+FAsU6YAviLp5OJbivLkow4c0ZxN4ZLmvDeeyrKPYSHmtIiN8Spq+Ik4H6/Mu9pP4TR4g7WDmzB2XRnkC6fC0PFVUAriVQKufE9wUFxrQDv2pdQ7DRnzjsI322SmKOrfAyNE6Ywj+dQzjZWr2exIS+9n7YPTVD2hucI0KED8NAsC6wnZSc/+u/p9BJ9VEnZ/UP8F3G7WlYEqNTIy8oFhn/9Vigxw6iWjd+iO0c+d+DAuMZvWahm4AZ07o57FjHpVkcxa1j/znJR/VUDG17c6OdVShG6/aeEYZ/6j5ckgZITYoaIy2BpJj5v+7wEBfA8Lgt9LjS7pLb2MrFZItperYJ+IOaCL46eErwxzszef3s486C8RgK7mYStaxchO/wQrTDcBFvLEcgZitOQgerRFbzuT4pEbpwAq4RuOaWzDf41X61r5FKIex2ojR
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(136003)(376002)(39860400002)(366004)(396003)(451199021)(6512007)(83380400001)(122000001)(71200400001)(316002)(33656002)(38070700005)(6506007)(86362001)(2616005)(186003)(36756003)(6486002)(76116006)(4326008)(66556008)(91956017)(41300700001)(478600001)(8936002)(66476007)(66946007)(64756008)(6916009)(2906002)(5660300002)(4744005)(38100700002)(26005)(66446008)(966005)(8676002)(54906003)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Q55pIzZM9thUeK8lxsH98dlwYhK4lmxHL+n+OrZ5DGtjYkWeiVrS/+UYCpJm?=
- =?us-ascii?Q?ePzE2ga+BzCR2mfwZcrkJs4IK7xeDBgt4fBx/KS5s24C+vLwr32Sp2TAyN8Q?=
- =?us-ascii?Q?6BiCTRZGVzCIAXEu2tHMZgAKnng1Afc7HNEfW7wSmig3Z/nmQkeUwlMLazMK?=
- =?us-ascii?Q?h82M4DW13sB4D66tUWTzl5AcGFjfc1hC65dxGpAftJCIN9sLLXmVB0+zw1sJ?=
- =?us-ascii?Q?o3koEB3HfVV+C+T/UeSghguTtpd6Sbdevb2Z5FP2MtcvRWS+A519vOqP8U1m?=
- =?us-ascii?Q?Syu7KZR9sHXR9WUCPJuo8Ab7dsYu1bWOMxiEUNexnlLWUV4aty70k9V/9uPR?=
- =?us-ascii?Q?5WREvY/jqt1DQkL1e39vR3pEBmxKREsQbsPusE4UbxdzAResOkgc5Usp8p5t?=
- =?us-ascii?Q?3Z0PmNJYkSdp/hJlMLRIImaKglA9SDoQNRvMsNDHgVzQW3rnhZrrrYZun4z3?=
- =?us-ascii?Q?37W5G3Dmfp34c3jWgi2TLRBxdP244G8P4Aop/PTq5Ss/6akESRiN/xehxn2s?=
- =?us-ascii?Q?4NqfQeXAnDDR2Og8y8kSEfRBUlPmvFQd0xs2FEp6hmwijYdO66Z48oycTRjJ?=
- =?us-ascii?Q?3sqUs5cIhAN1BjLuQK1XaRT3/oQAJ3WEp+GPhE5BsYdDl7nTd6WzvcXgiKuG?=
- =?us-ascii?Q?mZYFxojiH4e8mQ3ecyB4Q+nfUeA0Zr6Sc4SoOSpRi+rrWl8/UAKqFU6wEz92?=
- =?us-ascii?Q?km8QL/mDc+ofZbC+wD18WvqIdumv5FUAL1Jzu/73ypstgBSykWr06rKn1AZz?=
- =?us-ascii?Q?oaZP4hnQ/9y+DMpxuEPoXuAu2FTAU5Ueb5rOQq67A06iDjqs6CbPHMW9iYTl?=
- =?us-ascii?Q?CFnHiz7HqhvlTymdBst68p1tDOzVGeytmkIuWhvtL7Deuw33pe8QXOSATwlM?=
- =?us-ascii?Q?ctyI/sdbf++EafO2VIzqC3PdIy32vsNdzgYD2pM9/OxOM7uDEybkmnCmrK5I?=
- =?us-ascii?Q?wROVXKrJY7/sNmpiVNetuGZVBN60QuH0EP8EOW7dLJywAbRV0VMcV0nVieA7?=
- =?us-ascii?Q?uZSsswAQR8lZ1A8CuRMdljImEos1vynOcYQlZkn2J9xnVHnKAedJp9iNzYXV?=
- =?us-ascii?Q?fNjT823eCr+wQ26Q3IdsfGu0Z0o4PBYn05UnAHcPh1o2cMJKufUC9LWXTI7u?=
- =?us-ascii?Q?m84J2aHLF6yjTwN4P1Qh/kSB3HnD/oCdmH5Ak2tkXT140a5DPUCNDE2gi1eL?=
- =?us-ascii?Q?Z5D3nNfXuwNxtPDX56dt/EK8evwucsMuTemTyaLFc/nK7bY+IihDMTc+UFDe?=
- =?us-ascii?Q?ExnbBx65+sVCq1M37aq2To7cn0ESemRALP6+drpUemysysQC8xEO8OqkKd3n?=
- =?us-ascii?Q?xallMPBv0Onw/fw9DHIoESmnhOu3MCXMpxyCa/aUGItzhwr3TNGasjmwokLh?=
- =?us-ascii?Q?o/c/V/zpAt/jKqiG8fxacrUEy74st/1Lrf/25qNHG7BxSqmwuE2GKKUnPK17?=
- =?us-ascii?Q?qHxehZEf+mFttB7VTlHhWX4LNqDKJzvTPdfFcvcBrdPLJ97DfTQVrYAvBSj5?=
- =?us-ascii?Q?AvC0FhF2n8xGN7aHywzbjtTILTGRXKbMIQnoTnf8zIUhLLBipz4OYhybEmPr?=
- =?us-ascii?Q?ja+frSfZR0QJyxUzBu9TKAhiZ+ONDRXbP52KEXSe9fWduMee+vqLsszvAZqk?=
- =?us-ascii?Q?sQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <99108AD2EBBDE84EB9DC106945ED9F0D@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Sat, 25 Mar 2023 15:31:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD631CC07;
+        Sat, 25 Mar 2023 12:31:20 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6CC5B1042;
+        Sat, 25 Mar 2023 12:32:04 -0700 (PDT)
+Received: from [10.57.55.150] (unknown [10.57.55.150])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 495B43F73F;
+        Sat, 25 Mar 2023 12:31:17 -0700 (PDT)
+Message-ID: <48f31b84-573f-fe1d-bcd7-e55ec7f47831@arm.com>
+Date:   Sat, 25 Mar 2023 19:31:15 +0000
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: dUSO5xwjLrFI3HTec7o14cEWJbx5PvdB2Ilu4ay7+n8qPgeoO7D3r44+Q0kMNOLGTuiq4iz9Nny5E3yKRZgc2N4CYiDaiBM2ERoFvBZFAspx65i96Cgr4ixD3U61zQOvnHs3j7q65syyO/aywofwYHNgDYjAyQyhSbbG6ClnrVCaKdP07IyQ/9VR11miO/10NTsOK9UIxbgl/RMqUqYmc3spsqvSAzUzY6+oIOxGzU1BtYrv/Bk1CMF3bqQAPh4L9FpmJSVD9sn8JfKPu5C/9mtV467DQ6OAq80KrC9HtXlQOyPlnK2L49njDZqjm8docyYJUH//ta1ag+wW0TEtELqrLfhR5N7BUJ0Z4eZeG7O34rgbZki/HMlFro3tozEX4feagSXVG8i8hBx+bihJz13zpsqhkH5gzLtDu0Go3OC3jnlJ7XCI1726R2ZOzdBCS9Nt6pyfV4Q6FWMGe6j/PL/Y2K6ywYRFrBzOY0a5AjRpaKPPsfs0olz/gkcnkSvB75HFYn9GL6ujxBqBmh6xCLlMfDvsRaJdQfEOPVWjmG5ogrTNCtILNmEfhu4lopCCy618S46XiFpNyIaDb9SSRQjsj92WrLge2BsmiQycVYB96wc6ybmD0IX/IddYZyeJSntBT62BjHnwVnOqZ2xu8lFYxz+nYF5RQm/xtc+PI28li2ClQjv4F7nVhzLrSVyp96WE80R9Ltu9mBnqcR6iEuF081unfGp2QySDMrPEiw3pLAdgE0qGxvlo7pLJLsP1lN0ZqOtv9ovWWNhIgyaqXBWx+RJeQumNMjl3SPj1cMP9IiasYr3kiBa955vsnRqhg6VB8jCUXRbp1VwJQRk7Os/8c+1RxqowYOV4pz1CHeA=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5822fd69-4593-4ac5-0b0a-08db2d66f7c6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2023 19:27:26.9296
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NQUP1+FvWXYYJfvEQZhFa6gJllaDofKL4aEBU3IBq7EbhtSPhoUB3joy1m+ms82+llQOjnvzExXl2MhOBU5nKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB7561
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- phishscore=0 suspectscore=0 malwarescore=0 spamscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303250160
-X-Proofpoint-ORIG-GUID: 29X6KEzLuXBo6KMpilQbXAMdOf8Chsey
-X-Proofpoint-GUID: 29X6KEzLuXBo6KMpilQbXAMdOf8Chsey
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v3 02/11] coresight-tpda: Add DSB dataset support
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        James Clark <james.clark@arm.com>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>
+References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
+ <1679551448-19160-3-git-send-email-quic_taozha@quicinc.com>
+ <e578790c-4794-5609-16e8-15d63082760e@arm.com>
+ <51ad3cb3-bd83-51c9-52bc-f700cd17103c@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <51ad3cb3-bd83-51c9-52bc-f700cd17103c@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus -
+On 24/03/2023 14:58, Tao Zhang wrote:
+> Hi Suzuki,
+> 
+> 在 3/23/2023 7:51 PM, Suzuki K Poulose 写道:
+>> On 23/03/2023 06:03, Tao Zhang wrote:
+>>> Read the DSB element size from the device tree. Set the register
+>>> bit that controls the DSB element size of the corresponding port.
+>>>
+>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>>> ---
+>>>   drivers/hwtracing/coresight/coresight-tpda.c | 58 
+>>> ++++++++++++++++++++++++++++
+>>>   drivers/hwtracing/coresight/coresight-tpda.h |  4 ++
+>>>   2 files changed, 62 insertions(+)
+>>>
+>>> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c 
+>>> b/drivers/hwtracing/coresight/coresight-tpda.c
+>>> index f712e11..8dcfc4a 100644
+>>> --- a/drivers/hwtracing/coresight/coresight-tpda.c
+>>> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
+>>> @@ -21,6 +21,47 @@
+>>>     DEFINE_CORESIGHT_DEVLIST(tpda_devs, "tpda");
+>>>   +/* Search and read element data size from the TPDM node in
+>>> + * the devicetree. Each input port of TPDA is connected to
+>>> + * a TPDM. Different TPDM supports different types of dataset,
+>>> + * and some may support more than one type of dataset.
+>>> + * Parameter "inport" is used to pass in the input port number
+>>> + * of TPDA, and it is set to 0 in the recursize call.
+>>> + * Parameter "parent" is used to pass in the original call.
+>>> + */
+>>
+>> I am still not clear why we need to do this recursively ?
+> 
+> Some TPDMs are not directly output connected to the TPDAs. So here I
+> 
+> use a recursive method to check from the TPDA input port until I find
+> 
+> the connected TPDM.
+> 
+> Do you have a better suggestion besides a recursive method?
+> 
+>>
+>>> +static int tpda_set_element_size(struct tpda_drvdata *drvdata,
+>>> +               struct coresight_device *csdev, int inport, bool parent)
+>>
+>> Please could we renamse csdev => tpda_dev
+> 
+> Since this is a recursively called function, this Coresight device is not
+> 
+> necessarily TPDA, it can be other Coresight device.
+> 
+>>
+>>> +{
+>>> +    static int nr_inport;
+>>> +    int i;
+>>> +    struct coresight_device *in_csdev;
+>>
+>> similarly tpdm_dev ?
+> Same as above, this variable may not necessarily be a TPDM.
+>>
+>> Could we not add a check here to see if the dsb_esize[inport] is already
+>> set and then bail out, reading this over and over ?
+>>
+> I will update this in the next patch series.
+>>> +
+>>> +    if (inport > (TPDA_MAX_INPORTS - 1))
+>>> +        return -EINVAL;
+>>> +
+>>> +    if (parent)
+>>> +        nr_inport = inport;
+>>> +
+>>> +    for (i = 0; i < csdev->pdata->nr_inconns; i++) {
+>>> +        in_csdev = csdev->pdata->in_conns[i].remote_dev;
+>>
+>> Please note, the names of the structure field might change in the
+>> next version of James' series
+> Got it. I will keep an eye out for the James' patch series.
+>>
+>>> +        if (!in_csdev)
+>>> +            break;
+>>> +
+>>> +        if (parent)
+>>> +            if (csdev->pdata->in_conns[i].port != inport)
+>>> +                continue;
+>>> +
+>>> +        if (in_csdev && strstr(dev_name(&in_csdev->dev), "tpdm")) {
+>>
+>> Isn't there a better way to distinguish a device to be TPDM ? May be we
+>> could even add a source_sub_type - SOURCE_TPDM instead of using
+>> SOURCE_OTHERS ? Do you expect other sources to be connected to TPDA?
+>> e.g., STMs ?
+> 
+> I can add "SOURCE_TPDM" as a source_sub_type, but SOURCE_OTHERS needs
+> 
+> to be kept since the other Coresight component we will upstream later may
+> 
+> need it.
+> 
+>>
+>>> + of_property_read_u32(in_csdev->dev.parent->of_node,
+>>> +                    "qcom,dsb-element-size", 
+>>> &drvdata->dsb_esize[nr_inport]);
+>>> +            break;
+>>> +        }
+>>> +        tpda_set_element_size(drvdata, in_csdev, 0, false);
+>>
+>> What is the point of this ? Is this for covering the a TPDA connected to
+>> another TPDA ?
+>>
+>> e.g., { TPDM0, TPDM1 } -> TPDA0 -> TPDA1 ?
+> 
+> A TPDM may not connect to the TPDA directly, for example,
+> 
+> TPDM0 ->FUNNEL0->FUNNEL1->TPDA0
+> 
+> And many TPDMs can connect to one TPDA, one input port on TPDA only has
+> 
+> one TPDM connected. Therefore, we use a recursive method to find the TPDM
+> 
+> corresponding to the input port of TPDA.
 
-The following changes since commit 27c934dd8832dd40fd34776f916dc201e18b319b=
-:
+How do you find out decide what to choose, if there are multiple TPDMs
+connected to FUNNEL0 or even FUNNEL1 ?
 
-  nfsd: don't replace page in rq_pages if it's a continuation of last page =
-(2023-03-17 18:18:15 -0400)
+e.g
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6=
-.3-4
-
-for you to fetch changes up to 5f24a8725fe7bc2c6adf7ce00dd3e818387d8995:
-
-  SUNRPC: Fix a crash in gss_krb5_checksum() (2023-03-22 16:58:26 -0400)
-
-----------------------------------------------------------------
-nfsd-6.3 fixes:
-- Fix a crash when using NFS with krb5p
-
-----------------------------------------------------------------
-Chuck Lever (1):
-      SUNRPC: Fix a crash in gss_krb5_checksum()
-
- net/sunrpc/auth_gss/gss_krb5_crypto.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
---
-Chuck Lever
+TPDM0->FUNNEL0->FUNNEL1->TPDA0
+                 /
+           TPDM1
+Suzuki
 
 
