@@ -2,74 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573416C8F51
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006ED6C8F54
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbjCYQHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 12:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
+        id S231986AbjCYQIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 12:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjCYQHa (ORCPT
+        with ESMTP id S229674AbjCYQI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 12:07:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EC6F976;
-        Sat, 25 Mar 2023 09:07:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 88E841F88E;
-        Sat, 25 Mar 2023 16:07:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1679760448; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Sat, 25 Mar 2023 12:08:28 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BA6FF17;
+        Sat, 25 Mar 2023 09:08:26 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 1DBCA1C0AB2; Sat, 25 Mar 2023 17:08:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1679760504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/wrcKTOyKKLl4KxzViMJuBcOP/Htody2AvtKtxGcmFE=;
-        b=zRFqn86bTnX6AKYZrJ7rBg3wTRJOuoZ9PWH0nkUPN3gyuk+BLtpZ3x8eFdOVKLDhxn4VxT
-        wCBjq7/zd+EZ4MaWcRos2poVg5sTXcuXvyBBD59Gp0AiA5OwKlNrgwEERMPOXUp8y/kiKC
-        nsrcKWBNFigH+uH7lcZ80azmf74RZzc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1679760448;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/wrcKTOyKKLl4KxzViMJuBcOP/Htody2AvtKtxGcmFE=;
-        b=XqLb0blSKlrNnXCM+Fkw7orUi0ryWbaJar0TKnH+HDJ2Cniog8HFCjeZocGXZhg5DVFHzB
-        X07C9ONzZLBPWRCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2639713413;
-        Sat, 25 Mar 2023 16:07:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HZ3ANz4cH2RwSgAAMHmgww
-        (envelope-from <colyli@suse.de>); Sat, 25 Mar 2023 16:07:26 +0000
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
-Subject: Re: [PATCH v2] bcache: Fix exception handling in mca_alloc()
-From:   Coly Li <colyli@suse.de>
-In-Reply-To: <13b4a57a-5911-16db-2b6e-588e5137c3aa@web.de>
-Date:   Sun, 26 Mar 2023 00:07:14 +0800
-Cc:     kernel-janitors@vger.kernel.org, linux-bcache@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>, cocci@inria.fr,
-        LKML <linux-kernel@vger.kernel.org>
+        bh=SEKEwD7Om+RRexV9hRNFNILZ/Gg7SAFeSqwc3blzYCY=;
+        b=EhyOiiPKGIaPrIe94NKHyhbH7z0eHrzaaLi6I8V1Q6MYqQFo8d4EqWuhEdYKUwSVoPsuIt
+        W351Bu+oVUrgOCVORWS6EwRLEyf29Fse8GsHtpN0uwLb5DYOAoG4DTlIxpWex2kqomzDyy
+        FIql+UfuPo5yQywImANnfCjx9DkQWxU=
+Date:   Sat, 25 Mar 2023 17:08:20 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Jakob Hauser <jahau@rocketmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH 00/10] Add RT5033 charger device driver
+Message-ID: <20230325160819.GA1820@bug>
+References: <cover.1677620677.git.jahau.ref@rocketmail.com>
+ <cover.1677620677.git.jahau@rocketmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <BE6CEE57-E9AF-4F17-B281-1E00C5DC2A9C@suse.de>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <e33f264a-7ee9-4ebc-d58e-bbb7fd567198@web.de>
- <d0381c8e-7302-b0ed-cf69-cbc8c3618106@web.de>
- <157b8db9-82f7-85e7-3bbd-7ef3a1797892@suse.de>
- <13b4a57a-5911-16db-2b6e-588e5137c3aa@web.de>
-To:     Markus Elfring <Markus.Elfring@web.de>
-X-Mailer: Apple Mail (2.3731.400.51.1.1)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <cover.1677620677.git.jahau@rocketmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,104 +60,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi!
 
+> Some comments on the end-of-charge behavior. The rt5033 chip offers three
+> options. In the Android driver, a forth option was implemented.
 
-> 2023=E5=B9=B43=E6=9C=8825=E6=97=A5 20:21=EF=BC=8CMarkus Elfring =
-<Markus.Elfring@web.de> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Date: Sat, 25 Mar 2023 13:08:01 +0100
->=20
-> The label =E2=80=9Cerr=E2=80=9D was used to jump to another pointer =
-check despite of
-> the detail in the implementation of the function =E2=80=9Cmca_alloc=E2=80=
-=9D
-> that it was determined already that a corresponding variable contained
-> a null pointer because of a failed function call =
-=E2=80=9Cmca_bucket_alloc=E2=80=9D.
->=20
-> 1. Thus use more appropriate labels instead.
+Hmm. I'm working on that on motorola-cpcap driver, and I guess this is going
+to be common problem for many drivers.
 
-It is not convinced to me that the new added labels are more =
-appropriate. IMHO, the change just makes the code to be more =
-complicated.
+> - By default, the rt5033 chip charges indefinitely. The current goes down=
+ but
+>   there is always a charge voltage to the battery, which might not be too=
+ good
+>   for the battery lifetime.
+> - There is the possibility to enable a fast charge timer. The timer can be
+>   set to 4, 6, 8... 16 hours. After that time has elapsed, charging stops
+>   and the battery gets discharged. This option with a timer of 4 hours was
+>   chosen by Beomho Seo in the patchset of March 2015. However, that option
+>   is confusing to the user. It doesn't initiate a re-charge cycle. So when
+>   keeping plugged in the device over night, I find it discharging on the
+>   next morning.
+> - The third option of the rt5033 chip is enabling charging termination. T=
+his
+>   also enables a re-charge cycle. When the charging current sinks below t=
+he
+>   end-of-charge current, the chip stops charging. The sysfs state changes=
+ to
+>   "not charging". When the voltage gets 0.1 V below the end-of-charge con=
+stant
+>   voltage, re-charging starts. Then again, when charging current sinks be=
+low
+>   the end-of-charge current, the chip stops charging. And so on, going up=
+ and
+>   down in re-charge cycles. In case the power consumption is high (e.g. t=
+uning
+>   on the display of the mobile device), the current goes into an equilibr=
+ium.
+>   The downside of this charging termination option: When reaching the end=
+-of-
+>   charge current, the capacity might not have reached 100 % yet. The capa=
+city
+>   to reach probably depends on power consumption and battery wear. On my =
+mobile
+>   device, capacity reaches 98 %, drops to 96 % until re-charging kicks in,
+>   climbs to 98 %, drops to 96 %, and so on. Not reaching 100 % is a bit
+>   confusing to the user, too.
 
+Is the system powered from the battery in the not-charging case?
 
->=20
-> 2. Delete a repeated check (for the variable =E2=80=9Cb=E2=80=9D)
->   which became unnecessary with this refactoring.
->=20
+Anyway, we should teach userspace that "full battery" does not neccessary m=
+ean 100%,
+as keeping battery at 4.3V wears it down quickly.
 
-To remove one line =E2=80=98if=E2=80=99 check, 13 lines are changed. =
-IMHO this is not worthy. Yes the extra =E2=80=98if=E2=80=99 check can be =
-avoided, but the code is more simple before adding labels unlock and =
-cannibalize_mca.
-
-The =E2=80=98if=E2=80=99 check is in error handling, which is not hot =
-code path. Comparing to avoid an =E2=80=98if=E2=80=99 check, I prefer =
-more for more simpler code. I am not supportive to this change.
-
-
-Thanks.
-
-Coly Li
-
-
->=20
-> This issue was detected by using the Coccinelle software.
->=20
-> Fixes: cafe563591446cf80bfbc2fe3bc72a2e36cf1060 ("bcache: A block =
-layer cache")
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
-> V2:
-> Use another label.
->=20
-> drivers/md/bcache/btree.c | 13 ++++++-------
-> 1 file changed, 6 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
-> index 147c493a989a..c6a20595302f 100644
-> --- a/drivers/md/bcache/btree.c
-> +++ b/drivers/md/bcache/btree.c
-> @@ -921,18 +921,18 @@ static struct btree *mca_alloc(struct cache_set =
-*c, struct btree_op *op,
-> if (!mca_reap(b, 0, false)) {
-> mca_data_alloc(b, k, __GFP_NOWARN|GFP_NOIO);
-> if (!b->keys.set[0].data)
-> - goto err;
-> + goto unlock;
-> else
-> goto out;
-> }
->=20
-> b =3D mca_bucket_alloc(c, k, __GFP_NOWARN|GFP_NOIO);
-> if (!b)
-> - goto err;
-> + goto cannibalize_mca;
->=20
-> BUG_ON(!down_write_trylock(&b->lock));
-> if (!b->keys.set->data)
-> - goto err;
-> + goto unlock;
-> out:
-> BUG_ON(b->io_mutex.count !=3D 1);
->=20
-> @@ -955,10 +955,9 @@ static struct btree *mca_alloc(struct cache_set =
-*c, struct btree_op *op,
->    &b->c->expensive_debug_checks);
->=20
-> return b;
-> -err:
-> - if (b)
-> - rw_unlock(true, b);
-> -
-> +unlock:
-> + rw_unlock(true, b);
-> +cannibalize_mca:
-> b =3D mca_cannibalize(c, op, k);
-> if (!IS_ERR(b))
-> goto out;
-> --
-> 2.40.0
->=20
-
+Best regards,
+									Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
