@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2A96C8DD5
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 13:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B02366C8DD8
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 13:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjCYMHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 08:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S231862AbjCYMIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 08:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjCYMHb (ORCPT
+        with ESMTP id S231840AbjCYMIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 08:07:31 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C762C9037
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 05:07:29 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id h25so5478089lfv.6
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 05:07:29 -0700 (PDT)
+        Sat, 25 Mar 2023 08:08:12 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24814113FA
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 05:08:09 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id e11so4271474lji.8
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 05:08:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679746048;
+        d=linaro.org; s=google; t=1679746087;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=p356MBtB/RizhVAGNyalP9Y93+gE/vYnHPbZyulsolM=;
-        b=QPUrZL6Z7HxUkduf+MmpG6YklZ03DspfOAGlwpYoGUxhvQ9fRMqFo5I72WDdeOsTgx
-         RiUhNbBBKgOtcS2veTzH1SZAtTFRHSgQYzfKAImCANZ2XIRS8IYBIut2FUH1ERGDgKUx
-         /OkhbfNFPhzZBEteNCmrUPUccrDCofdZJHwUU6SYNcRCvkRSN9h9ZkZscEOC0rDFyIey
-         Grgg5OqOvOPLFPggmV9eixtY7C4ZMv63O7T/Jpby9BL+Z0a20M5iDzSQU5Csic4tEk8f
-         NsreHN+jnTTWeIMnRLaKXg1Rbp9hMcrpMW3GQYoGxJOKGKcBpftnt+oyZ4k2jQ1hQQXp
-         MxiA==
+        bh=FrB9b88U0h+qwt/THj6bEYac8jJtD2V/B+CqKc3E+oc=;
+        b=oXxa1rTManxlzoFbdkuPS19JV97ZHVrIu4gKS5lWrKjZVg/oUL0XBesH3Yqa1wMGu+
+         C2/5l1dCJYyIOpU9RmuY2G5ibpem3gwt9QPgCl92TdQWzBU2sAt2j5AU0j7nPRqHRyqe
+         XP8NeVz1hQ56wpHF2AQgz56UntQkCjXmJz6wPHSFDWiQOAiqBRpaSe4p/YHy/xgZtHDN
+         lYSqHcCTPInEt4m7PshgOt9HfzKUy6her5NO30acbR2Gt2e1x7xH3VicGzFP/ZYqVSEd
+         cIufDceDalCFwvSFc6lXaK8a4Y3WzganlocKkXgHhe1CeW9hiFHUds7DcbQ/okYCTTiC
+         xS+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679746048;
+        d=1e100.net; s=20210112; t=1679746087;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p356MBtB/RizhVAGNyalP9Y93+gE/vYnHPbZyulsolM=;
-        b=Oqo3mGp3esYPJp0NUONHbW1kDSpC0eCmiF5XYWWFMf/yKbgU9JQv3htnjTKwV1ngYm
-         1PU1lYSZZg6HEAfveV/DESh/J+qodMS6MNTsftL7bh5jH5GwKAZuRGPxRW/voTVRXjeM
-         vgPesnW8dwDqzIu26pzwFIuCtdXIICjsEZG9xe6LeyIe49dP1lG/XzEutbRE0XMjg14Q
-         AOFdyeQkaMiFHCBlKguTItS3dgvCDVlfGIMpm+boEEMnjmkbRwNqyNTbwXYHdw73XSGx
-         URKXNlFsq91nv66sTF2fz+6RlMXM7AocLbsPJq9fkcZzcpOizdbbtL2FBi/lc5yKhVDY
-         JWDg==
-X-Gm-Message-State: AAQBX9eonRpi/GqmUIO5MViEwUV10RlgOOcIVlZa4OrUZVJagrGlHZh1
-        wkvC194pev7KM9uSpbdk5neouKJbGmD0HSI+xu8=
-X-Google-Smtp-Source: AK7set9ibMMcbCfR4EZgermsFvShjtwfVKIXybQNbDhOj0oM8Iiz/PvGD8Ncs1pq87s8V+JeQ9GslQ==
-X-Received: by 2002:a05:6512:4003:b0:4e7:ff1c:6030 with SMTP id br3-20020a056512400300b004e7ff1c6030mr3649143lfb.15.1679746048254;
-        Sat, 25 Mar 2023 05:07:28 -0700 (PDT)
+        bh=FrB9b88U0h+qwt/THj6bEYac8jJtD2V/B+CqKc3E+oc=;
+        b=hH7xd0IdkKLhxK8PuQZ7c3cKcxarVXZ71l2NzhzUbyY/mow3NPYnbh4nFIw3lgQNqm
+         npWivaccjzcTW+4e+ESIc48Fi61e6M5gsywitnUNK7abeC7aK4YIc1hJN/d2pD7WF+wH
+         7eaG7Px6i1U6TJTFHzDWwUgb/ovQiuvFMejuzk3yOd06LvCD93sosV2racrNJVV8vV1T
+         IqmbE45X8zwZEVtDfHKWAWmtkpf8u2BOZ1KMEfPg2x4E5TRennK263tn2mlDmKoBWHc0
+         TK7aDgqtBQiK2nrbLjfTRx2Ndu0g7/zBpAH51VmJs8aJDcIO4mKERn4XnPaCe+2LYWEx
+         jSyA==
+X-Gm-Message-State: AAQBX9cXf0NAgXUBNluLobJ17B5xIFlrXdKoVtn3oCs7JglCMngf1BtX
+        DLl5iTuWj9hbGrs2Hulc/9VlCg==
+X-Google-Smtp-Source: AKy350ZHPkspQ8jAARW91n+j92RdBtsfoXpoACwO244WO/pUiV9aIBT2RBltE88Hf4Eqn3iosTmnPA==
+X-Received: by 2002:a2e:988a:0:b0:29b:d235:2c50 with SMTP id b10-20020a2e988a000000b0029bd2352c50mr1932193ljj.25.1679746087430;
+        Sat, 25 Mar 2023 05:08:07 -0700 (PDT)
 Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id y26-20020a2e321a000000b002934febffe4sm3793705ljy.128.2023.03.25.05.07.27
+        by smtp.gmail.com with ESMTPSA id w7-20020ac24427000000b004db4f2f08f7sm3796784lfl.28.2023.03.25.05.08.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Mar 2023 05:07:27 -0700 (PDT)
-Message-ID: <445c0cf7-78bf-40f1-1803-266841955790@linaro.org>
-Date:   Sat, 25 Mar 2023 13:07:26 +0100
+        Sat, 25 Mar 2023 05:08:07 -0700 (PDT)
+Message-ID: <5123fe11-2f94-faea-073a-41f93e23b76a@linaro.org>
+Date:   Sat, 25 Mar 2023 13:08:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/4] arm64: dts: msm8953: Provide dsi_phy clocks to gcc
+Subject: Re: [PATCH 3/4] arm64: dts: msm8953: Drop unsupported dwc3 flag
 Content-Language: en-US
 To:     Adam Skladowski <a39.skl@gmail.com>
 Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
@@ -66,9 +66,9 @@ Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230325112852.18841-1-a39.skl@gmail.com>
- <20230325112852.18841-2-a39.skl@gmail.com>
+ <20230325112852.18841-3-a39.skl@gmail.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230325112852.18841-2-a39.skl@gmail.com>
+In-Reply-To: <20230325112852.18841-3-a39.skl@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -84,33 +84,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 25.03.2023 12:28, Adam Skladowski wrote:
-> Provide clocks from dsi_phy to gcc, this will make
-> sure we don't fallback to global name lookup.
+> Property phy_mode according to binding checker does not exist,
+> drop it.
 > 
 > Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 > ---
+
+grepping for it in drivers/ also returns nothing
+
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  arch/arm64/boot/dts/qcom/msm8953.dtsi | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  arch/arm64/boot/dts/qcom/msm8953.dtsi | 1 -
+>  1 file changed, 1 deletion(-)
 > 
 > diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> index 438a70eb6152..5dd10c35ee0d 100644
+> index 5dd10c35ee0d..0a1bf1058cbf 100644
 > --- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
 > +++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> @@ -640,10 +640,10 @@ gcc: clock-controller@1800000 {
->  			#power-domain-cells = <1>;
->  			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
->  				 <&sleep_clk>,
-> -				 <0>,
-> -				 <0>,
-> -				 <0>,
-> -				 <0>;
-> +				 <&dsi0_phy 1>,
-> +				 <&dsi0_phy 0>,
-> +				 <&dsi1_phy 1>,
-> +				 <&dsi1_phy 0>;
->  			clock-names = "xo",
->  				      "sleep",
->  				      "dsi0pll",
+> @@ -977,7 +977,6 @@ usb3_dwc3: usb@7000000 {
+>  				snps,hird-threshold = /bits/ 8 <0x00>;
+>  
+>  				maximum-speed = "high-speed";
+> -				phy_mode = "utmi";
+>  			};
+>  		};
+>  
