@@ -2,75 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEC06C8AE0
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 05:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C486C8AE1
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 05:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbjCYEbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 00:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
+        id S231928AbjCYEcA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 25 Mar 2023 00:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbjCYEbh (ORCPT
+        with ESMTP id S232034AbjCYEbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 00:31:37 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54981ABD6
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 21:31:24 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id x3-20020a62fb03000000b00622df3f5d0cso1911025pfm.10
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 21:31:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679718684;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2GFTGuce/jasIOoxgBhcBDFvlf80kZtNsVdpwus1c0o=;
-        b=jPiK9bzw/LfWhk/EqotDJX72pjO1JKd1BwuwlbjMi9aYrXP1DPcn8Nt4cOwDHXs9jh
-         ij4e2UNXRWtJoZtf2Z94vobgXgG4FvRXLAmxm91yhbdBFPkqrIsk0c2QmZjI9UWAQCSg
-         f4cKmyY38G7Q9bQw598jxVJkV0K3c/r2Vi+GxwcNR241OJLr0VBRpsyYJ15SmiZj4UAF
-         D3Nx5ZoSqHRxu60/MVPookyisHGGOXNKKMYjYZ9kM5A2jAaNIpmlMY1fD7eRgXTi8KSB
-         NEeXv3z1mPoeQVEWMgiyr4eDInIdZECHHG4Dmo/ttWv/PoymoNUwLRgzIq9uGIbcfl+A
-         oK+A==
+        Sat, 25 Mar 2023 00:31:46 -0400
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCED1815A;
+        Fri, 24 Mar 2023 21:31:38 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id bl9so1621648iob.8;
+        Fri, 24 Mar 2023 21:31:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679718684;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2GFTGuce/jasIOoxgBhcBDFvlf80kZtNsVdpwus1c0o=;
-        b=bIxvDmEcJTaII/rObInM2o6fSzMFcnbvdBbidmpT3MCzSliz9MIfRAlRPH/e19Jlgl
-         afLfDv/s1SWawsoPs4CdgwA4LFJDo/K7xLPVRcCgoO913l03/BoGSDodaSzYmDxhXFCq
-         0Mp6Dh0qhd8KwS0fUxBD1YKkbuuXxn32w+dgMB+UtOMBC2gGzYScWtMUk4vqOIqaT0zC
-         ROymHE48FWtA7B76S7K/0hx2qBCWIwfWJii+UZi9wk7haYsZ4FL9nwmOupaU+B5HNv01
-         oY23TbofBOBY/C/SEbs2h/W0f9WF+ZFu8tbhJGHX/O17YXZ7gON1zB3KDuyeryo4K2Im
-         zc2g==
-X-Gm-Message-State: AO0yUKX/yvwavPiUFN71j++38fxqE+MSTkm2MhLGO2zhPt+SG7xoDx3/
-        eEfj6hcrPoRm8SHZNqrXaCSl7yx5DrdScA==
-X-Google-Smtp-Source: AK7set/eA25yEQztgVWNsBWE4ael/iyts9um9spxPVS5KzosXah9xcxZqDHvH6pHUe+DNTg6pSiQEEMUh6sQRg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6a00:4510:b0:626:1710:9b7d with SMTP
- id cw16-20020a056a00451000b0062617109b7dmr5135789pfb.0.1679718684393; Fri, 24
- Mar 2023 21:31:24 -0700 (PDT)
-Date:   Sat, 25 Mar 2023 12:31:04 +0800
-In-Reply-To: <20230325043104.3761770-1-davidgow@google.com>
-Mime-Version: 1.0
-References: <20230325043104.3761770-1-davidgow@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230325043104.3761770-3-davidgow@google.com>
-Subject: [RFC PATCH 2/2] kunit: Add APIs for managing devices
-From:   David Gow <davidgow@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
+        d=1e100.net; s=20210112; t=1679718697; x=1682310697;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QshTmLJTyi9qX5SkDwCDlbE2dc7E+l9twlijdylPf7o=;
+        b=OnCYEvN1YI3GsOsk0XM62ikt1MBIBl6V8sEJQuUpvAkN7jpNiNwhxbn1TQW89y+VHh
+         /BdrE2zZWD0ZC35xgaAnVwM5PVZdYbX9gUNk0FXuym2A2NxcKwHKaIApMQdJfiR4Vf7V
+         ac+keFtxkN1lri9lDc62P5Ho1+njXsm2RPPVm6UM0lO3dOmvaRfMEOvqnrpGBqAIN5PQ
+         y2VZdPmKlDG7lGlPC+I/U6UlkwUFmIT6ase0iR0Iky4pHPpIj7E9nBmstxFa8OLrdnPH
+         wSoSFOT4pivMZ8QkM622OD7C9tOuQQROtax+HSgxGBVr6S89CYSTFSXDClvR9WDIyJH6
+         HHKw==
+X-Gm-Message-State: AO0yUKVZeFlDdQGlZqFdgYAqu5eh3seMAnIeJWNzjZf+Q6KMVmxpFrwS
+        3vcHC24U1akZLUgEYRbtxrlpb+DtWHUNgHHqnUM=
+X-Google-Smtp-Source: AK7set/a+tfEGjCk1N5v7IBtI1Fa/ix1K4irok/GjHIxTi9wNU/SfHsMc8CVp74dsAqB/u/cWAiiO2++qzfKweapa2s=
+X-Received: by 2002:a6b:6a14:0:b0:751:dcc3:3279 with SMTP id
+ x20-20020a6b6a14000000b00751dcc33279mr3448370iog.14.1679718697147; Fri, 24
+ Mar 2023 21:31:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <1679381821-22736-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1679381821-22736-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 24 Mar 2023 21:31:25 -0700
+Message-ID: <CAM9d7chTUDnrwrOnOS-CDBjNnuyLcSx05agDS4S7DgJ2Sj_9vw@mail.gmail.com>
+Subject: Re: [PATCH] perf bench syscall: Add fork syscall benchmark
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,155 +64,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tests for drivers often require a struct device to pass to other
-functions. While it's possible to create these with
-root_device_register(), or to use something like a platform device, this
-is both a misuse of those APIs, and can be difficult to clean up after,
-for example, a failed assertion.
+Hello,
 
-Add two KUnit-specific functions for registering and unregistering a
-struct device:
-- kunit_device_register()
-- kunit_device_unregister()
+On Mon, Mar 20, 2023 at 11:57 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+> This is a follow up patch for the execve bench which is actually
+> fork + execve, it makes sense to add the fork syscall benchmark
+> to compare the execve part precisely.
+>
+> Some archs have no __NR_fork definition which is used only as a
+> check condition to call test_fork(), let us just define it as -1
+> to avoid build error.
+>
+> Suggested-by: Namhyung Kim <namhyung@kernel.org>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-These behave similarly to root_device_register() and
-root_device_unregister() except:
-- They take a struct kunit pointer with a test context.
-- They do not create a root device directory in sysfs.
-- The device will automatically be unregistered when the test exits
-  (unless it has already been unregistered using
-  kunit_device_unregister())
-- The device name is set to <test-name>.<device-name>.
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-This API can be extended in the future to, for example, add these
-devices to a KUnit bus as tests begin to require that functionality.
+Thanks,
+Namhyung
 
-Signed-off-by: David Gow <davidgow@google.com>
----
- include/kunit/device.h | 25 ++++++++++++++++
- lib/kunit/Makefile     |  1 +
- lib/kunit/device.c     | 68 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 94 insertions(+)
- create mode 100644 include/kunit/device.h
- create mode 100644 lib/kunit/device.c
 
-diff --git a/include/kunit/device.h b/include/kunit/device.h
-new file mode 100644
-index 000000000000..19a35b5e4e59
---- /dev/null
-+++ b/include/kunit/device.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * KUnit basic device implementation
-+ *
-+ * Implementation of struct kunit_device helpers.
-+ *
-+ * Copyright (C) 2023, Google LLC.
-+ * Author: David Gow <davidgow@google.com>
-+ */
-+
-+#ifndef _KUNIT_DEVICE_H
-+#define _KUNIT_DEVICE_H
-+
-+#if IS_ENABLED(CONFIG_KUNIT)
-+
-+#include <kunit/test.h>
-+
-+struct kunit_device;
-+
-+struct device *kunit_device_register(struct kunit *test, const char *name);
-+void kunit_device_unregister(struct kunit *test, struct device *dev);
-+
-+#endif
-+
-+#endif
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index cb417f504996..b9bd059269ed 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -6,6 +6,7 @@ kunit-objs +=				test.o \
- 					string-stream.o \
- 					assert.o \
- 					try-catch.o \
-+					device.o \
- 					executor.o
- 
- ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
-diff --git a/lib/kunit/device.c b/lib/kunit/device.c
-new file mode 100644
-index 000000000000..ce87b7c40d9b
---- /dev/null
-+++ b/lib/kunit/device.c
-@@ -0,0 +1,68 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit basic device implementation
-+ *
-+ * Implementation of struct kunit_device helpers.
-+ *
-+ * Copyright (C) 2023, Google LLC.
-+ * Author: David Gow <davidgow@google.com>
-+ */
-+
-+#include <linux/device.h>
-+
-+#include <kunit/test.h>
-+#include <kunit/resource.h>
-+
-+/* A device owned by a KUnit test. */
-+struct kunit_device {
-+	struct device dev;
-+	struct kunit *owner;
-+};
-+
-+static inline struct kunit_device *to_kunit_device(struct device *d)
-+{
-+	return container_of(d, struct kunit_device, dev);
-+}
-+
-+static void kunit_device_release(struct device *d)
-+{
-+	kfree(to_kunit_device(d));
-+}
-+
-+struct device *kunit_device_register(struct kunit *test, const char *name)
-+{
-+	struct kunit_device *kunit_dev;
-+	int err = -ENOMEM;
-+
-+	kunit_dev = kzalloc(sizeof(struct kunit_device), GFP_KERNEL);
-+	if (!kunit_dev)
-+		return ERR_PTR(err);
-+
-+	kunit_dev->owner = test;
-+
-+	err = dev_set_name(&kunit_dev->dev, "%s.%s", test->name, name);
-+	if (err) {
-+		kfree(kunit_dev);
-+		return ERR_PTR(err);
-+	}
-+
-+	kunit_dev->dev.release = kunit_device_release;
-+
-+	err = device_register(&kunit_dev->dev);
-+	if (err) {
-+		put_device(&kunit_dev->dev);
-+		return ERR_PTR(err);
-+	}
-+
-+	kunit_defer(test, (kunit_defer_function_t)device_unregister, &kunit_dev->dev, GFP_KERNEL);
-+
-+	return &kunit_dev->dev;
-+}
-+EXPORT_SYMBOL_GPL(kunit_device_register);
-+
-+void kunit_device_unregister(struct kunit *test, struct device *dev)
-+{
-+	kunit_defer_trigger(test, (kunit_defer_function_t)device_unregister, dev);
-+}
-+EXPORT_SYMBOL_GPL(kunit_device_unregister);
-+
--- 
-2.40.0.348.gf938b09366-goog
-
+> ---
+>  tools/arch/x86/include/uapi/asm/unistd_32.h |  4 ++--
+>  tools/arch/x86/include/uapi/asm/unistd_64.h |  3 +++
+>  tools/perf/bench/bench.h                    |  1 +
+>  tools/perf/bench/syscall.c                  | 35 +++++++++++++++++++++++++++++
+>  tools/perf/builtin-bench.c                  |  1 +
+>  5 files changed, 42 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/arch/x86/include/uapi/asm/unistd_32.h b/tools/arch/x86/include/uapi/asm/unistd_32.h
+> index 2712d5e..b8ddfc4 100644
+> --- a/tools/arch/x86/include/uapi/asm/unistd_32.h
+> +++ b/tools/arch/x86/include/uapi/asm/unistd_32.h
+> @@ -1,6 +1,6 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+> -#ifndef __NR_execve
+> -#define __NR_execve 11
+> +#ifndef __NR_fork
+> +#define __NR_fork 2
+>  #endif
+>  #ifndef __NR_getppid
+>  #define __NR_getppid 64
+> diff --git a/tools/arch/x86/include/uapi/asm/unistd_64.h b/tools/arch/x86/include/uapi/asm/unistd_64.h
+> index a6f7fe8..f70d2cad 100644
+> --- a/tools/arch/x86/include/uapi/asm/unistd_64.h
+> +++ b/tools/arch/x86/include/uapi/asm/unistd_64.h
+> @@ -1,4 +1,7 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __NR_fork
+> +#define __NR_fork 57
+> +#endif
+>  #ifndef __NR_execve
+>  #define __NR_execve 59
+>  #endif
+> diff --git a/tools/perf/bench/bench.h b/tools/perf/bench/bench.h
+> index e438931..edfc257 100644
+> --- a/tools/perf/bench/bench.h
+> +++ b/tools/perf/bench/bench.h
+> @@ -23,6 +23,7 @@ int bench_sched_messaging(int argc, const char **argv);
+>  int bench_sched_pipe(int argc, const char **argv);
+>  int bench_syscall_basic(int argc, const char **argv);
+>  int bench_syscall_getpgid(int argc, const char **argv);
+> +int bench_syscall_fork(int argc, const char **argv);
+>  int bench_syscall_execve(int argc, const char **argv);
+>  int bench_mem_memcpy(int argc, const char **argv);
+>  int bench_mem_memset(int argc, const char **argv);
+> diff --git a/tools/perf/bench/syscall.c b/tools/perf/bench/syscall.c
+> index fe79f7f..ea4dfc07 100644
+> --- a/tools/perf/bench/syscall.c
+> +++ b/tools/perf/bench/syscall.c
+> @@ -18,6 +18,10 @@
+>  #include <unistd.h>
+>  #include <stdlib.h>
+>
+> +#ifndef __NR_fork
+> +#define __NR_fork -1
+> +#endif
+> +
+>  #define LOOPS_DEFAULT 10000000
+>  static int loops = LOOPS_DEFAULT;
+>
+> @@ -31,6 +35,23 @@ static const char * const bench_syscall_usage[] = {
+>         NULL
+>  };
+>
+> +static void test_fork(void)
+> +{
+> +       pid_t pid = fork();
+> +
+> +       if (pid < 0) {
+> +               fprintf(stderr, "fork failed\n");
+> +               exit(1);
+> +       } else if (pid == 0) {
+> +               exit(0);
+> +       } else {
+> +               if (waitpid(pid, NULL, 0) < 0) {
+> +                       fprintf(stderr, "waitpid failed\n");
+> +                       exit(1);
+> +               }
+> +       }
+> +}
+> +
+>  static void test_execve(void)
+>  {
+>         const char *pathname = "/bin/true";
+> @@ -71,6 +92,12 @@ static int bench_syscall_common(int argc, const char **argv, int syscall)
+>                 case __NR_getpgid:
+>                         getpgid(0);
+>                         break;
+> +               case __NR_fork:
+> +                       test_fork();
+> +                       /* Only loop 10000 times to save time */
+> +                       if (i == 10000)
+> +                               loops = 10000;
+> +                       break;
+>                 case __NR_execve:
+>                         test_execve();
+>                         /* Only loop 10000 times to save time */
+> @@ -92,6 +119,9 @@ static int bench_syscall_common(int argc, const char **argv, int syscall)
+>         case __NR_getpgid:
+>                 name = "getpgid()";
+>                 break;
+> +       case __NR_fork:
+> +               name = "fork()";
+> +               break;
+>         case __NR_execve:
+>                 name = "execve()";
+>                 break;
+> @@ -143,6 +173,11 @@ int bench_syscall_getpgid(int argc, const char **argv)
+>         return bench_syscall_common(argc, argv, __NR_getpgid);
+>  }
+>
+> +int bench_syscall_fork(int argc, const char **argv)
+> +{
+> +       return bench_syscall_common(argc, argv, __NR_fork);
+> +}
+> +
+>  int bench_syscall_execve(int argc, const char **argv)
+>  {
+>         return bench_syscall_common(argc, argv, __NR_execve);
+> diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
+> index 814e9af..d0fcc3c 100644
+> --- a/tools/perf/builtin-bench.c
+> +++ b/tools/perf/builtin-bench.c
+> @@ -53,6 +53,7 @@ static struct bench sched_benchmarks[] = {
+>  static struct bench syscall_benchmarks[] = {
+>         { "basic",      "Benchmark for basic getppid(2) calls",         bench_syscall_basic     },
+>         { "getpgid",    "Benchmark for getpgid(2) calls",               bench_syscall_getpgid   },
+> +       { "fork",       "Benchmark for fork(2) calls",                  bench_syscall_fork      },
+>         { "execve",     "Benchmark for execve(2) calls",                bench_syscall_execve    },
+>         { "all",        "Run all syscall benchmarks",                   NULL                    },
+>         { NULL,         NULL,                                           NULL                    },
+> --
+> 2.1.0
+>
