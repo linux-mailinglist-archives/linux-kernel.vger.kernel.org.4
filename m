@@ -2,128 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF656C8C9F
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:29:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FB16C8CA2
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbjCYI3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 04:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S232009AbjCYIcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 04:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbjCYI3V (ORCPT
+        with ESMTP id S229895AbjCYIcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 04:29:21 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A4A132FF;
-        Sat, 25 Mar 2023 01:29:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K6Q70zcrBh/w3YPEf2Lr0GZR9yl9HhJbHaQuQkGExFiC2LxjOSSEKtYx/indsq4wfZlijvUrSV+FrCCCP5Z3q4mU0COJT/98iEh0aafMDVIQYZ7OyyBWRTUnEE5c/x/Cwjzkbd6KvdMViKER7+eMUFyT86AiNsB137Fp6K71AYcoyeDEAZB6iLgFi8L1yOhxuek+O3BS9Orgd6R3W54b3WdPsXeUNOLOQVX0/aQ8cFVoaVfgqogkOBw2DpCvYhs1W7QViJBTjUX/NATklI5wG2ZzgmVyYaIdCDjAlTTlUfkcJjoY0aj1bottkDepEJ3W6pqt3+o8UuuMyCXjdavDvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FIEpkknAula/2tkcYtrMEFmwnuL6tdv2pxL0e3IdOIs=;
- b=hffI6Z7b+sCS6VwCxzN9mrxgGLDcmTJQz87cFBihR9CnKByHzk2k5/9fFLqXlUkf9nT48IWnNj/yg+it41dV/8k2HXlH1S8EEhdG8qkzeseuZbiNA4awsYvCc3++Wf8bBO87hJO41t7t3bFbLc80XgfoSp4Elj0z9CQQkxdGpASAAZ5t4fotu/wcMJINIE9lRoeZrjrhP9WcCQNhw+5C96iLoSXgO8n+UryleAqGpUQWBrK7vpSpwBneVup+qR6Na50jdOyI6OLB3otInGUd/XvMWqp6r29CyB7zyChJ9+60RlbCZRditrRS/30ZjZC4PFGvH8JDZdMmsqF6pFtUUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Sat, 25 Mar 2023 04:32:50 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A8B18155
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:32:48 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id dw14so2649085pfb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:32:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FIEpkknAula/2tkcYtrMEFmwnuL6tdv2pxL0e3IdOIs=;
- b=TQ34O0aY4DSOD+Fydsc1JC/iEm2+r+rb1QfVlTaRfhFLQxmCk4+s/PsFB7iL10uQM16vPugCTO7hsUgNNqMcaqSJf4IRpr/kLMALSd6fxNEVkJZ6MUHM8/4TFo/odln5zhib4PCF/O3j58n7sdMXLRu0KhG03LdyVdnopHbZYf8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DM4PR13MB5834.namprd13.prod.outlook.com (2603:10b6:8:41::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.41; Sat, 25 Mar 2023 08:29:18 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.041; Sat, 25 Mar 2023
- 08:29:18 +0000
-Date:   Sat, 25 Mar 2023 09:29:11 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Sean Anderson <seanga2@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v4 09/10] net: sunhme: Inline error returns
-Message-ID: <ZB6w14Z88yA7Hdp/@corigine.com>
-References: <20230324175136.321588-1-seanga2@gmail.com>
- <20230324175136.321588-10-seanga2@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230324175136.321588-10-seanga2@gmail.com>
-X-ClientProxiedBy: AM0PR01CA0168.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:aa::37) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20210112; t=1679733168;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rZRk78dM+sIDcTF06PFu8cSmlnVuUZmfpf5YGgQ/R64=;
+        b=HgZotS7CNv8U8GKTbwzwaX9ktzODi2OfWdl7CnvyiyiZBIvcGFPB9aZYPtM0+NxAAa
+         65o2MsIyYii9yQz7c1Y0VQw4HafGwYxCOXn3N2E1jWpfTZVOE+sc1l0Sj8Gp9ZlkHFjD
+         eeEsi1WzsA3Pnd/lId0u2m0rA3PgHJlJS5mrIe5pdUUbGLXKtRVgmdsVyAXysNf3LdbV
+         0FpEbGccM8JNzG6oz9cjdByjZikUo0673yJI4A4uvJa8PpIUbmi9LjniUCHq5x7KLqCX
+         vY3Veu32Gm/HvmjeYEeRkMpmP15EimNKRqj4SuUQaipnZRxKCASMxkQzffLByQeOf0T1
+         vwZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679733168;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rZRk78dM+sIDcTF06PFu8cSmlnVuUZmfpf5YGgQ/R64=;
+        b=E0hrECwAcZ995huvSlo6vpIJrXo9yjSSXZTcGycBFDp1XGS5pdt6WDU2Bzo1sosUfe
+         4vQ0uUctYXbfC6clax76LD7rd5TIuX3FsylGBv5sCj8I9qIoETs3+FsiWR33DSX/tqxg
+         haKwRBKSuLJDBgDEnSyAsuRopVcMd8oWidhR7L1b/AHiK5By688K4LjHQXJZkspa0ZZY
+         eI8uTVmdrKQfzQgpyZm2nNI7clR/BY52iUKtVPxvve0m3XOu5L24N31RqQYT9mOhySaL
+         NDOz7HFhjq5Zr6hbw708/lyCFeaYr27++5aHQVjA6GoY+/mCiTT3NBqo6ScTe6/9siC4
+         F/hA==
+X-Gm-Message-State: AAQBX9eIgCMrBgVZczus9VcvwM7a4sj5cTwR3jeDNV+qe86bzS/4aZQB
+        Bp5pKQqv8uVVm9zABjYz89mbhmTz2XbAL44r
+X-Google-Smtp-Source: AKy350bTu6uj1pG9dejrYD50lwhf789Tv6IN/ryzCGZ3bDUe0DQDTLTZqN5rKPJ53FnBKsaiGEkevw==
+X-Received: by 2002:a62:5e81:0:b0:627:fd49:9ab with SMTP id s123-20020a625e81000000b00627fd4909abmr5191177pfb.28.1679733168222;
+        Sat, 25 Mar 2023 01:32:48 -0700 (PDT)
+Received: from ubuntu.localdomain ([117.245.251.101])
+        by smtp.gmail.com with ESMTPSA id m33-20020a635821000000b0050927cb606asm14290224pgb.13.2023.03.25.01.32.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Mar 2023 01:32:47 -0700 (PDT)
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Subject: [PATCH v3 2/3] staging: greybus: Inline gb_audio_manager_module()
+Date:   Sat, 25 Mar 2023 01:31:06 -0700
+Message-Id: <7470bf9d9a57e8bf27e55bd5e3791c5e0ee31385.1679732179.git.sumitraartsy@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1679732179.git.sumitraartsy@gmail.com>
+References: <cover.1679732179.git.sumitraartsy@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM4PR13MB5834:EE_
-X-MS-Office365-Filtering-Correlation-Id: 282c021a-4e18-44c6-4990-08db2d0b0663
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3fDIfTl8ru3wRFTQ/n3BIZLGzQrhyBSCuk5TrOmbMJdCu3QI+4h6ymXTDu1kxsqJ2enYQWqlkw3lwLxHX0tEVjJACh56HjEBNOvPJXfIScjVu4/NoP6PytOcCKG5gpnMpdE4z9QmqPGrIDIWfMYs+pKA1d2W2KFsNDZ6PtFlqnOo7CckxZLldV9viEGqAAeGrnuRmqhTojrxPzGFW23F9JAocHwINM6DX/r0X7MKVKcZmQv22COEw07Wz+UC3bFszrtVJqzkb45c1nOyK2ldbWXyzKzmlTyizpLvr1LGZzl3IkwMo/UYVrBAHIQbobh4UNxCA/mXxY3h9Tez2s284/DrpCBmJxBpUkmeOyx00LcNAdpMvS7TEWmmDkNygOLD/6245ja56M0MhDmwmcMFNANmnwpP/K92rqeU6x3CNpqPJcIC/DNMx6sin9L8dr39KW+lqhP4pK10JmLG4B+I03/ejS5xk4T7ZWr8fTJYGABb6M56gQSBAocu1V7/h8jAa8oXoMbPSWXRALHh9JfKJQEDn+hkMdOM03A6JaxRcJNY0EbhJD29GqmpEXO4baFG
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39840400004)(376002)(136003)(346002)(396003)(451199021)(8676002)(6916009)(4326008)(2906002)(6486002)(66476007)(66556008)(44832011)(66946007)(186003)(6506007)(6512007)(5660300002)(4744005)(86362001)(316002)(41300700001)(8936002)(54906003)(6666004)(38100700002)(478600001)(36756003)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tsWDudFTvYk542Q6+pQSf5olacrk+X/TUGZ9XCsNYxPPDrAHjy4atCKh4Chu?=
- =?us-ascii?Q?9bq9cgsnHXx12z8DGzJ0SUHcyXTzRriU4y2kBeXAEeFy1vRFGICm+r7tTAAN?=
- =?us-ascii?Q?ROkozcXvVfAIXnf7QBRZiCp7vVXimw8A/5aWJy6J2pXN6DAE7s/7pkh5Hdvr?=
- =?us-ascii?Q?qfjp4mZBd37cmOBlJ/3kFJ3iOmZw0WT/oaMBwfIRy6x9jNeCjOdY743UR2yJ?=
- =?us-ascii?Q?/B/BPEq2uMhx6EJY5lkKBm43NwJ42chaSU+xLFv7YIiEgiixk0kCdL4yHRAn?=
- =?us-ascii?Q?59af7k6NNMg9jVwz4EACu2oYeV/6+PBZy/I8fjzqWA8x6B0pJTrJalCQhHGq?=
- =?us-ascii?Q?8yIf54rKtym+XNUSKNY8yx3JacTruSuFVwfUkiSUJpsdDZ0sq+DjAsyYhIpn?=
- =?us-ascii?Q?HKtV/tpYzmhAo/FkyVZu3ewXE0AuyOKywvDw+crukZotdJeNjQWeV0zoDUHM?=
- =?us-ascii?Q?KlmvDcOeav8Z/xuISLWzbE0+Um74eodCEp+bpt1klI6Uv6+ox49rHpmNsyuI?=
- =?us-ascii?Q?G0jtgUjs7kTU/EH5QNvAMkh2fFNdNZT5Y9EJN215Qu2HbwDbCoSFm+VbtV3l?=
- =?us-ascii?Q?QC+aosBUaHWqsxj+GTVyfBL4CZsBaG6SJtUE3Tjbw2SVoPp/FQNai/CFGxVT?=
- =?us-ascii?Q?Tq7VOJ7S+tf+gamVh23Sx5/cSHoFKj/Txv1ujl8HBkjPVjwsBtcD4EJoXCdU?=
- =?us-ascii?Q?X3wuR4cqkkq9siCK9MDjplyzclc3Uv6gCE0cTyl7MSQ/hxesh7ls4+Vi6N/e?=
- =?us-ascii?Q?h1h6q8fNuk1CznuPih4dHGddJXg/dKs3mGbw1+d+ZFHFDC+wZZhtqNVGZm6P?=
- =?us-ascii?Q?nYdSs0U+xqkkruLQzrQOVIDhA69i/Sj2H1BfLrR0HGT4CAO92fp7HVPKSuab?=
- =?us-ascii?Q?DKwoPdAyS7GFwQns52uqxwnayodOFpCmhqnaw7FV111wEDzVqLwgnOxdW1ZB?=
- =?us-ascii?Q?8d5lLl75oqLHIstnXzOIntyZb3LFczV+/hRBkGihuzdw6nBiBK40T9d9GX34?=
- =?us-ascii?Q?hGSrXUoBjovt1g1ojBbLF/YOmKBle5xC5BsBlYduvXnHYeI3i+fWlf4l3Twl?=
- =?us-ascii?Q?Pmpje0coy2zxPNdDiJpKo3lL2ON6pEQY20Yp9f87rY53q0NmBGBudxpPNCTa?=
- =?us-ascii?Q?F5hhYrpcCGBa7Vm+rdtnZtGMhnf8yCmve8BVeevSQcnB9K6uSF9jqKpMMdST?=
- =?us-ascii?Q?k4VQlVdNyq+yuvpiNpUtdInwRkd+u5BgzXmNHc7EGClmZvrFUlk2O5pZDddq?=
- =?us-ascii?Q?vBcO6o0qnJpyrzPUHi2wQsVtNaVEeIqPCL15hHDRiXOO80GchKFqD6m/tQXc?=
- =?us-ascii?Q?cmXLXgNA7hclhdD+EeT0TQZIRiUCGZFQbjYhoDLbD2pgwswtEgj+vmPHUUIb?=
- =?us-ascii?Q?80b/1trlucvZzWtLJQ2n5to6I3XcNvICU/mUxtK+xxdbLOfgT51o1ZVG0iw0?=
- =?us-ascii?Q?rfGZ0TehPSbzgo3I/meYPrh96XmwM06ZK4d0+Jx422rQ5tQKzw5Xi4mQMNKx?=
- =?us-ascii?Q?7IEntKvb2K3I93vEI6fGGlJiRzEVdcn4ubSH2CO0PuVsmkryYzPhWU12f9SX?=
- =?us-ascii?Q?0aaHGYlsn+sY3/v/bECrNbrCDMfT9WY5oV88RQbRLuv+QS2fUdYY/W47g2AO?=
- =?us-ascii?Q?5F8nGtQvI3b+8rfeMBDi7DrElyGwYlN4RcQsG4gn8UDs1tn+rVQCcuw5LQVc?=
- =?us-ascii?Q?vtcTdA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 282c021a-4e18-44c6-4990-08db2d0b0663
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2023 08:29:17.9523
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iOFVFxOrctv8jr/AvNWPqAC8TP3e6l2eWwyuv8yHpUw0kFcqhB8ADgsyx5QiyyXP8XwTyAzr7ssQY3K8XKJ6ABJqG/GcDDHpuDnz/ciazdw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR13MB5834
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 01:51:35PM -0400, Sean Anderson wrote:
-> The err_out label used to have cleanup. Now that it just returns, inline it
-> everywhere.
-> 
-> Signed-off-by: Sean Anderson <seanga2@gmail.com>
+Convert 'gb_audio_manager_module' from a macro to a static
+inline function, to make the relevant types apparent in the
+definition and to benefit from the type checking performed by
+the compiler at call sites.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+---
+ drivers/staging/greybus/audio_manager_module.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Sorry for the duplicate, I previously responded with
-a different email address, which wasn't what I intended.
+diff --git a/drivers/staging/greybus/audio_manager_module.c b/drivers/staging/greybus/audio_manager_module.c
+index 81b4ba607a0e..5f9dcbdbc191 100644
+--- a/drivers/staging/greybus/audio_manager_module.c
++++ b/drivers/staging/greybus/audio_manager_module.c
+@@ -12,8 +12,11 @@
+ 
+ #define to_gb_audio_module_attr(x)	\
+ 		container_of(x, struct gb_audio_manager_module_attribute, attr)
+-#define to_gb_audio_module(x)		\
+-		container_of(x, struct gb_audio_manager_module, kobj)
++
++static inline struct gb_audio_manager_module *to_gb_audio_module(struct kobject *kobj)
++{
++	return container_of(kobj, struct gb_audio_manager_module, kobj);
++}
+ 
+ struct gb_audio_manager_module_attribute {
+ 	struct attribute attr;
+-- 
+2.25.1
+
