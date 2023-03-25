@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1C76C8E56
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 14:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 185A96C8E5B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 14:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbjCYNDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 09:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
+        id S231671AbjCYNFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 09:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjCYNDQ (ORCPT
+        with ESMTP id S229588AbjCYNFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 09:03:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518C340DE;
-        Sat, 25 Mar 2023 06:03:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DB48B8075C;
-        Sat, 25 Mar 2023 13:03:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F6EC433EF;
-        Sat, 25 Mar 2023 13:03:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679749391;
-        bh=RzQArc2DTEQ6mlQA7QJSmpoVuSxWh581ekX4emLqCXM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WSDwwZQ8F1QY49fvJD1R4IRm6YWs2lPAxe15jtzXq3XWQLXJKEb8jkg2Sfsu8e1K4
-         n9oRmUlU0mzK8WUAOVpkri6TguT7u0B7pDUBG0sePnScp5RdmWhNiBabz4LqCfEvJU
-         y2P8vBwC5rAdrkdjik3t6zauGQ9Wvuvp0eMxuuLp4DeNXTjlRrJRjZCZHrY0uanGh1
-         S44GqjyA+/mzl1VRN34TLuKPCDH9HTs0+13YYmQLYEGQNKNiD7BJ9fxXzboLzcYQyo
-         JCtuTBFPzEWjbQ1P8YtCSSaFihHotl7MmNpqFIQVHUFakLkMwQSFX24n7nwD7/A6tM
-         6q5FRb6bBq4eg==
-Message-ID: <42bbac46-782b-e2ac-67f3-37489e3a2047@kernel.org>
-Date:   Sat, 25 Mar 2023 15:03:06 +0200
+        Sat, 25 Mar 2023 09:05:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9527EC6
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 06:04:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679749482;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=p5AnT4EajAj/sfPOwrH8wVcxH+vP8RQ1S3cIG2Qtejc=;
+        b=P9bkQGbDJ7GijF+LzZ6SSYmRt4Vdm2SFosiDn4T2MJr3L32lGBeG1QnCKxelGL0eniYycJ
+        i1wSe2Y1N2bNCR0KUC1ndrGZMP3X0GbS3NBt3WjjX9MV3/QDv/xft3bUBPH0KYoAZtrdEA
+        chNc78dJwsxHrAUoAMREQPHNzVuEBhU=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-237-dM7Gs86zNm-DAnIOLzpv5w-1; Sat, 25 Mar 2023 09:04:09 -0400
+X-MC-Unique: dM7Gs86zNm-DAnIOLzpv5w-1
+Received: by mail-qk1-f199.google.com with SMTP id t21-20020a37aa15000000b00746b7fae197so2113332qke.12
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 06:04:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679749448;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p5AnT4EajAj/sfPOwrH8wVcxH+vP8RQ1S3cIG2Qtejc=;
+        b=1IM2gY1XGbqgw8Ij7fJ6Nl5zimbI4JDPAvsMZug78bhsB1e2FPMxx9EaecfKc809pL
+         2yroBbvaTPW6qvNWZvyw6t2/8wuwuwoDYhzj7aKLgslAcCuU0cK+4zNj5EpGyEiwq4uM
+         7ndh7DNRvJYpPtCZxfe0eYMT3MIXUlfJWlKvNIyQ287nh3w7u2CjS0rxCN9t2+m1AEMP
+         N9JvxpT1llDQwXrHtenHT8F++ZNAax0xOvrB6xvPzxg5zeE4TLrhx9AqiLiJM50mI1Oa
+         7k6x6Jxm62V5O/NPMIwmYnzuHYFb66bOj1SLMP7PXwe5crfpzmTpw/c68YztewsqIUrq
+         CQMw==
+X-Gm-Message-State: AO0yUKUNXdsoofa9sFrG0Z66Qcymch2+M7rjuq/bZgJLMdJbJ6pJcriv
+        +qkD/6cQxfSNBlzTvPh3TliBo6BcXFI3KnQy89foaBvoEMw03FccgJVKQaGyFlxKPwDZqc8i1Ey
+        WTrmzWvk5rx6RTBkrmKdCL1di
+X-Received: by 2002:ac8:5905:0:b0:3e3:9958:5fe8 with SMTP id 5-20020ac85905000000b003e399585fe8mr10189612qty.42.1679749448566;
+        Sat, 25 Mar 2023 06:04:08 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+2OrXAM6yLwAO51Ihw4Bnlq4mAxCyDb+OhQvXEXhrgJx/Z2aC+vH71MlObmyR5Qq6wWwaDFA==
+X-Received: by 2002:ac8:5905:0:b0:3e3:9958:5fe8 with SMTP id 5-20020ac85905000000b003e399585fe8mr10189565qty.42.1679749448292;
+        Sat, 25 Mar 2023 06:04:08 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id u23-20020a37ab17000000b0071f0d0aaef7sm11776469qke.80.2023.03.25.06.04.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Mar 2023 06:04:08 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     aspriel@gmail.com, franky.lin@broadcom.com,
+        hante.meuleman@broadcom.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        nathan@kernel.org, ndesaulniers@google.com,
+        johannes.berg@intel.com, quic_srirrama@quicinc.com,
+        alexander@wetzel-home.de, shaul.triebitz@intel.com
+Cc:     linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] wifi: mac80211: remove unused has_5g variable
+Date:   Sat, 25 Mar 2023 09:03:43 -0400
+Message-Id: <20230325130343.1334209-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] arm64: dts: ti: k3-am625-sk: Add ti,vbus-divider
- property to usbss1
-To:     Nishanth Menon <nm@ti.com>
-Cc:     vigneshr@ti.com, kristo@kernel.org, srk@ti.com,
-        r-gunasekaran@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Dhruva Gole <d-gole@ti.com>
-References: <20230324133150.43224-1-rogerq@kernel.org>
- <20230324133150.43224-2-rogerq@kernel.org>
- <20230324181435.i2n2q6cvh6x4kabw@repeal>
-Content-Language: en-US
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230324181435.i2n2q6cvh6x4kabw@repeal>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+clang with W=1 reports
+drivers/net/wireless/broadcom/brcm80211/brcmsmac/mac80211_if.c:1051:6: error:
+  variable 'has_5g' set but not used [-Werror,-Wunused-but-set-variable]
+        int has_5g = 0;
+            ^
+This variable is not used so remove it.
 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/wireless/broadcom/brcm80211/brcmsmac/mac80211_if.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-On 24/03/2023 20:14, Nishanth Menon wrote:
-> On 15:31-20230324, Roger Quadros wrote:
->> From: Dhruva Gole <d-gole@ti.com>
->>
->> The property "ti,vbus-divider" is needed for both usbss0 and usbss1 as
->> both USB0 and USB1 have the same external voltage divider circuit.
->>
->> Signed-off-by: Dhruva Gole <d-gole@ti.com>
->> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->> ---
->>  arch/arm64/boot/dts/ti/k3-am625-sk.dts | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
->> index 67dc26fc23e4..be027fad5f61 100644
->> --- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
->> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
->> @@ -482,6 +482,7 @@ &usbss0 {
->>  
->>  &usbss1 {
->>  	status = "okay";
->> +	ti,vbus-divider;
->>  };
->>  
-> 
-> 1. Does'nt this need a fixes tag?
-> 2. lakml is missing in CC
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/mac80211_if.c b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/mac80211_if.c
+index a8333e6adbda..0bd4e679a359 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/mac80211_if.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/mac80211_if.c
+@@ -1048,7 +1048,6 @@ static int ieee_hw_rate_init(struct ieee80211_hw *hw)
+ 	struct brcms_info *wl = hw->priv;
+ 	struct brcms_c_info *wlc = wl->wlc;
+ 	struct ieee80211_supported_band *band;
+-	int has_5g = 0;
+ 	u16 phy_type;
+ 
+ 	hw->wiphy->bands[NL80211_BAND_2GHZ] = NULL;
+@@ -1070,7 +1069,6 @@ static int ieee_hw_rate_init(struct ieee80211_hw *hw)
+ 
+ 	/* Assume all bands use the same phy.  True for 11n devices. */
+ 	if (wl->pub->_nbands > 1) {
+-		has_5g++;
+ 		if (phy_type == PHY_TYPE_N || phy_type == PHY_TYPE_LCN) {
+ 			band = &wlc->bandstate[BAND_5G_INDEX]->band;
+ 			*band = brcms_band_5GHz_nphy_template;
+-- 
+2.27.0
 
-Will fix both issues.
-
-> 
->>  &usb0 {
->> -- 
->> 2.34.1
->>
-> 
-
-cheers,
--roger
