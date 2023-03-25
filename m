@@ -2,105 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2FC26C8F83
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 264556C8F84
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbjCYQmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 12:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
+        id S231737AbjCYQnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 12:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbjCYQmv (ORCPT
+        with ESMTP id S231659AbjCYQnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 12:42:51 -0400
-Received: from bgl-iport-3.cisco.com (bgl-iport-3.cisco.com [72.163.197.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0179EC42;
-        Sat, 25 Mar 2023 09:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=1564; q=dns/txt; s=iport;
-  t=1679762570; x=1680972170;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jXwmHBkZwD6FXbeoybFbsEbinYtApBspwJP2EDwlSEo=;
-  b=aVp2u7qsvs5HgdTt4QdXSulZ5Rnofx9xYdWzmzJMhHtMqOoks9ptGjjD
-   9HdJlK05jpe3Y3dy1/10zW8cJczaLQWCCkhpGrd1FpVMyMp/6vm7Ll7Vn
-   CMjsj1CAoyNuqtZIQKIlRLfWodeBUh+OOWGPpOPElxkWlXOFWBS2lYpP2
-   M=;
-X-IronPort-AV: E=Sophos;i="5.98,290,1673913600"; 
-   d="scan'208";a="9163683"
-Received: from vla196-nat.cisco.com (HELO bgl-core-3.cisco.com) ([72.163.197.24])
-  by bgl-iport-3.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 25 Mar 2023 16:42:46 +0000
-Received: from bgl-ads-3583.cisco.com (bgl-ads-3583.cisco.com [173.39.60.220])
-        by bgl-core-3.cisco.com (8.15.2/8.15.2) with ESMTPS id 32PGgkFr013150
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 25 Mar 2023 16:42:46 GMT
-Received: by bgl-ads-3583.cisco.com (Postfix, from userid 1784405)
-        id 618CCCC1296; Sat, 25 Mar 2023 22:12:46 +0530 (IST)
-From:   Shinu Chandran <shinucha@cisco.com>
-To:     richardcochran@gmail.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shinu Chandran <shinucha@cisco.com>
-Subject: [PATCH] ptp: ptp_clock: Fix coding style issues in ptp_clock
-Date:   Sat, 25 Mar 2023 22:12:32 +0530
-Message-Id: <20230325164232.2434190-1-shinucha@cisco.com>
-X-Mailer: git-send-email 2.35.6
+        Sat, 25 Mar 2023 12:43:18 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076CA1B8
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 09:43:13 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BF7F41EC018C;
+        Sat, 25 Mar 2023 17:43:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1679762591;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Km7Uf9I1amhFm4e5ULmshh8t10f1X4Cdt5efipAaeSM=;
+        b=IvhYQ3Y88Quj6oEqAAzps072Kbq3me85kc2MiRdVpj96wo1lGLwF0/U/g7GUvoGA26ivJY
+        G6XgDD5UfVYa+o96N/kYg9rVYKZrZEKqGkgChTlM3YXkggtYWJKG0ropKqcvnyrC5/bE45
+        V6JsMwBS9J/H6QHVPhTPO55VKnKUpGs=
+Date:   Sat, 25 Mar 2023 17:43:07 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH] x86/cpu: Add model number for Intel Arrow Lake processor
+Message-ID: <20230325164307.GAZB8kmwm6NqA+ROWi@fat_crate.local>
+References: <20230324195932.241441-1-tony.luck@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Outbound-SMTP-Client: 173.39.60.220, bgl-ads-3583.cisco.com
-X-Outbound-Node: bgl-core-3.cisco.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
-        SPF_NONE,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230324195932.241441-1-tony.luck@intel.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed coding style issues in ptp_clock.c
+On Fri, Mar 24, 2023 at 12:59:32PM -0700, Tony Luck wrote:
+> https://www.intel.com/content/www/us/en/newsroom/news/intel-technology-roadmaps-milestones.html
 
-Signed-off-by: Shinu Chandran <shinucha@cisco.com>
----
- drivers/ptp/ptp_clock.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+This URL will become stale sooner or later.
 
-diff --git a/drivers/ptp/ptp_clock.c b/drivers/ptp/ptp_clock.c
-index 62d4d29e7c05..8fe7f2ce9705 100644
---- a/drivers/ptp/ptp_clock.c
-+++ b/drivers/ptp/ptp_clock.c
-@@ -129,6 +129,7 @@ static int ptp_clock_adjtime(struct posix_clock *pc, struct __kernel_timex *tx)
- 		err = ops->adjtime(ops, delta);
- 	} else if (tx->modes & ADJ_FREQUENCY) {
- 		long ppb = scaled_ppm_to_ppb(tx->freq);
-+
- 		if (ppb > ops->max_adj || ppb < -ops->max_adj)
- 			return -ERANGE;
- 		err = ops->adjfine(ops, tx->freq);
-@@ -278,11 +279,13 @@ struct ptp_clock *ptp_clock_register(struct ptp_clock_info *info,
- 	/* Register a new PPS source. */
- 	if (info->pps) {
- 		struct pps_source_info pps;
-+
- 		memset(&pps, 0, sizeof(pps));
- 		snprintf(pps.name, PPS_MAX_NAME_LEN, "ptp%d", index);
- 		pps.mode = PTP_PPS_MODE;
- 		pps.owner = info->owner;
- 		ptp->pps_source = pps_register_source(&pps, PTP_PPS_DEFAULTS);
-+
- 		if (IS_ERR(ptp->pps_source)) {
- 			err = PTR_ERR(ptp->pps_source);
- 			pr_err("failed to register pps source\n");
-@@ -347,9 +350,8 @@ static int unregister_vclock(struct device *dev, void *data)
- 
- int ptp_clock_unregister(struct ptp_clock *ptp)
- {
--	if (ptp_vclock_in_use(ptp)) {
-+	if (ptp_vclock_in_use(ptp))
- 		device_for_each_child(&ptp->dev, NULL, unregister_vclock);
--	}
- 
- 	ptp->defunct = 1;
- 	wake_up_interruptible(&ptp->tsev_wq);
+> says this will be built on Intel 20A tiles and launch in 2024.
+
+I don't think you need a source - you are a source enough. :-)
+
 -- 
-2.35.6
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
