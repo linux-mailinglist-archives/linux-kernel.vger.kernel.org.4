@@ -2,91 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BAC6C8A25
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 03:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D91166C8A23
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 03:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbjCYCKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 22:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
+        id S230192AbjCYCJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 22:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjCYCKX (ORCPT
+        with ESMTP id S232091AbjCYCJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 22:10:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E80E15577;
-        Fri, 24 Mar 2023 19:10:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09089B82661;
-        Sat, 25 Mar 2023 02:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C0F2DC433EF;
-        Sat, 25 Mar 2023 02:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679710217;
-        bh=LuNYj1EqVPg7MtM0L5VBp1l9g/DSZFniixqdUVZdXbg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=X0WRsZBQfomA8fsx2D+pKRb+ubhfiBE1Z2bwMbQ7s9QeGsd/NfrjQhbHkjZeEkCB1
-         yv4Tb1Ne5PT7CNNkEkzX7q7StIISlp5slhwlQJCvF0VqmNwsiTb1wY+qMhEDK+URiw
-         o+RImi5mfLg2enEnlvIhqi/PCz5m1U4+cd1Oj4KZ7MQ3QCsb6DnOD0wpywGByQaM0W
-         iB/CZBsZ/P5oG6i9LF4gCvzQQCVAyQicMns7rzFLs/6UIdpQ6p2Cr50xdDzmNowFtj
-         U1mcz2l8NyU+DKAjv01lBSwMqrH+JqkrbB0vH2c35Ge4bEayj0yyBZRiMXI2j4bHrp
-         0m4GjiTVxRrsg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A23B0C41612;
-        Sat, 25 Mar 2023 02:10:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 24 Mar 2023 22:09:49 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689B31632E;
+        Fri, 24 Mar 2023 19:09:48 -0700 (PDT)
+Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Pk2ZS62mPzKnZC;
+        Sat, 25 Mar 2023 10:09:20 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Sat, 25 Mar 2023 10:09:45 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <rostedt@goodmis.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <mhiramat@kernel.org>,
+        <zhengyejian1@huawei.com>
+Subject: [PATCH v2] ring-buffer: Fix race while reader and writer are on the same page
+Date:   Sat, 25 Mar 2023 10:12:47 +0800
+Message-ID: <20230325021247.2923907-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230324152309.134f361a@gandalf.local.home>
+References: <20230324152309.134f361a@gandalf.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2] net: dsa: realtek: fix out-of-bounds access
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167971021766.17146.5805572858718496946.git-patchwork-notify@kernel.org>
-Date:   Sat, 25 Mar 2023 02:10:17 +0000
-References: <20230323103735.2331786-1-a.fatoum@pengutronix.de>
-In-Reply-To: <20230323103735.2331786-1-a.fatoum@pengutronix.de>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     linus.walleij@linaro.org, alsi@bang-olufsen.dk, andrew@lunn.ch,
-        f.fainelli@gmail.com, olteanv@gmail.com, luizluca@gmail.com,
-        davem@davemloft.net, kernel@pengutronix.de, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+When user reads file 'trace_pipe', kernel keeps printing following logs
+that warn at "cpu_buffer->reader_page->read > rb_page_size(reader)" in
+rb_get_reader_page(). It just looks like there's an infinite loop in
+tracing_read_pipe(). This problem occurs several times on arm64 platform
+when testing v5.10 and below.
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+  Call trace:
+   rb_get_reader_page+0x248/0x1300
+   rb_buffer_peek+0x34/0x160
+   ring_buffer_peek+0xbc/0x224
+   peek_next_entry+0x98/0xbc
+   __find_next_entry+0xc4/0x1c0
+   trace_find_next_entry_inc+0x30/0x94
+   tracing_read_pipe+0x198/0x304
+   vfs_read+0xb4/0x1e0
+   ksys_read+0x74/0x100
+   __arm64_sys_read+0x24/0x30
+   el0_svc_common.constprop.0+0x7c/0x1bc
+   do_el0_svc+0x2c/0x94
+   el0_svc+0x20/0x30
+   el0_sync_handler+0xb0/0xb4
+   el0_sync+0x160/0x180
 
-On Thu, 23 Mar 2023 11:37:35 +0100 you wrote:
-> The probe function sets priv->chip_data to (void *)priv + sizeof(*priv)
-> with the expectation that priv has enough trailing space.
-> 
-> However, only realtek-smi actually allocated this chip_data space.
-> Do likewise in realtek-mdio to fix out-of-bounds accesses.
-> 
-> These accesses likely went unnoticed so far, because of an (unused)
-> buf[4096] member in struct realtek_priv, which caused kmalloc to
-> round up the allocated buffer to a big enough size, so nothing of
-> value was overwritten. With a different allocator (like in the barebox
-> bootloader port of the driver) or with KASAN, the memory corruption
-> becomes quickly apparent.
-> 
-> [...]
+Then I dump the vmcore and look into the problematic per_cpu ring_buffer,
+I found that tail_page/commit_page/reader_page are on the same page while
+reader_page->read is obviously abnormal:
+  tail_page == commit_page == reader_page == {
+    .write = 0x100d20,
+    .read = 0x8f9f4805,  // Far greater than 0xd20, obviously abnormal!!!
+    .entries = 0x10004c,
+    .real_end = 0x0,
+    .page = {
+      .time_stamp = 0x857257416af0,
+      .commit = 0xd20,  // This page hasn't been full filled.
+      // .data[0...0xd20] seems normal.
+    }
+ }
 
-Here is the summary with links:
-  - [net,v2] net: dsa: realtek: fix out-of-bounds access
-    https://git.kernel.org/netdev/net/c/b93eb5648693
+The root cause is most likely the race that reader and writer are on the
+same page while reader saw an event that not fully committed by writer.
 
-You are awesome, thank you!
+To fix this, add memory barriers to make sure the reader can see the
+content of what is committed. Since commit a0fcaaed0c46 ("ring-buffer: Fix
+race between reset page and reading page") has added the read barrier in
+rb_get_reader_page(), here we just need to add the write barrier.
+
+Fixes: 77ae365eca89 ("ring-buffer: make lockless")
+Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+---
+ kernel/trace/ring_buffer.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+v1 -> v2:
+  Put smp_wmb() in right place and update comments as suggested by Steven.
+
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index c6f47b6cfd5f..76a2d91eecad 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -3098,6 +3098,10 @@ rb_set_commit_to_write(struct ring_buffer_per_cpu *cpu_buffer)
+ 		if (RB_WARN_ON(cpu_buffer,
+ 			       rb_is_reader_page(cpu_buffer->tail_page)))
+ 			return;
++		/*
++		 * No need for a memory barrier here, as the update
++		 * of the tail_page did it for this page.
++		 */
+ 		local_set(&cpu_buffer->commit_page->page->commit,
+ 			  rb_page_write(cpu_buffer->commit_page));
+ 		rb_inc_page(&cpu_buffer->commit_page);
+@@ -3107,6 +3111,8 @@ rb_set_commit_to_write(struct ring_buffer_per_cpu *cpu_buffer)
+ 	while (rb_commit_index(cpu_buffer) !=
+ 	       rb_page_write(cpu_buffer->commit_page)) {
+ 
++		/* Make sure the readers see the content of what is committed. */
++		smp_wmb();
+ 		local_set(&cpu_buffer->commit_page->page->commit,
+ 			  rb_page_write(cpu_buffer->commit_page));
+ 		RB_WARN_ON(cpu_buffer,
+@@ -4684,7 +4690,12 @@ rb_get_reader_page(struct ring_buffer_per_cpu *cpu_buffer)
+ 
+ 	/*
+ 	 * Make sure we see any padding after the write update
+-	 * (see rb_reset_tail())
++	 * (see rb_reset_tail()).
++	 *
++	 * In addition, a writer may be writing on the reader page
++	 * if the page has not been fully filled, so the read barrier
++	 * is also needed to make sure we see the content of what is
++	 * committed by the writer (see rb_set_commit_to_write()).
+ 	 */
+ 	smp_rmb();
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 
