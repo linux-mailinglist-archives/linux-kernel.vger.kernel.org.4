@@ -2,84 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DA46C8D62
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 12:18:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E25DF6C8D66
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 12:20:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbjCYLSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 07:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
+        id S231614AbjCYLUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 07:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCYLSr (ORCPT
+        with ESMTP id S231886AbjCYLUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 07:18:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0232E659D;
-        Sat, 25 Mar 2023 04:18:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FF53B802BE;
-        Sat, 25 Mar 2023 11:18:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DB7CC433EF;
-        Sat, 25 Mar 2023 11:18:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679743124;
-        bh=wxR3HOqBzxOvg0529IlVC3xYSTh7632t2Azg94CMxqs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=q4mRCtBJG9R5U1Uu7MAm4519YvotBhL0T15GxEXeJTTv42Q3H8BHhi2Zx6Bsn8A4/
-         /uzgBoHEVO3xNGCotrThDUH8bSsHzPam1MQ93L5fBfBZCq/k+rGj4d2NZpe4DdOy3Y
-         ilxIPGf40TVN2Gv7XJW7a0oK8JP8ofWdXl05/IkAvf7WzW4RghYsL//glx6+eWtGKB
-         lwxSOJQcW6/t4u2A3X7zNp4vPC49RkcB8xi8stysXGQZO1R0KiIuuM70Kn2SI+74qP
-         kyvi/qOtIum1HE49+8B7IwNj1pwIpjZlsaSnnbqUQBfCRcaLTN70Y25dA81Mm9Byzb
-         631bixTDVuTBg==
-Message-ID: <9c1e61b3-b2f6-67d2-f1e7-5343b1b7db80@kernel.org>
-Date:   Sat, 25 Mar 2023 12:18:39 +0100
+        Sat, 25 Mar 2023 07:20:04 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDF4E1BA
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 04:20:01 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id u1so2426462wmn.5
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 04:20:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679743200;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FZRXrrCyhC/asJwSLOsOxy0dUDn7uJ0nZ8VEzBDUmgw=;
+        b=RvqlL4vXdmLZ3+GPCy8kCL42diInnqg9AUUQP6do0nrsiCPWaPmT0fMChz++P5h4cN
+         IINxvVj+mJcJdhAyRvExqfoEyaiozCKDjVHywj28w2lnCO3OYJ3WJ9/DbEuX4f7RgdMM
+         OZzckvtOpzyDgeErFfEgGeXqCBPiLVkckWugNsuxwnZyuZWkejiZ/cijSymExLqiBo/4
+         NxLJOiqBQ6LEOOpIqo80ugAyiDoqJqgqlHsYLsv2jn1njWdc8/f7m2a9rfdiZpLE6aQa
+         0TpMYMz0ajt1ulzLCxb0CsXjRZZh8k1hLSdFEYbSiTC4+wrorzMMV8AugBxHGiL4Hxll
+         R2eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679743200;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FZRXrrCyhC/asJwSLOsOxy0dUDn7uJ0nZ8VEzBDUmgw=;
+        b=DR+j5pdspF1VAE0JqP/xI7YlJvIQJGWEh3pLbSBfY1iDp0VJke1Dv5Gd5EdxOJzruY
+         +jGKaMP00QJVYtWGlmcz8R/DlUHJy+f6CoqpX7jX4Gy5ln2Sko1qcgQk/nogoRqyS0we
+         xPrNMpgS8B6iwzTG8XplV3yjJ2GL5kTHuK5ZQb8icimht91fYrxixVJMmlJKUwE4Rn8o
+         +TFDiUiVo/hK+Dj3ZRJE3aZrlBq/2Zpj6WdaDziRM8ATveH4NROU5hRfw3BRHkWOzkja
+         BNuwqfjSKupNnAYqm1/wJ6+sfEceAvg8Dq78vQd1RBIUFiMnbthCJi5A0pe3S9+/+y2i
+         dNVA==
+X-Gm-Message-State: AO0yUKVUZm/F1F5rZVHRcV/2q6ZRiIL9xkGdNCxj/f2uAGQZqN0MJBnA
+        iBCZpujUXR9aWp0jeV5uwkljXuH4/+ei3qlp9Hk=
+X-Google-Smtp-Source: AK7set8eWZRwYp+qmYJp8B02G2WuY74f3KR4uf3Of/INTmx5nhiWsfQjD+bD28PcSpUvCkvSp8WFEJRaqEoU4PH8QEg=
+X-Received: by 2002:a7b:ca4a:0:b0:3ed:c669:8a15 with SMTP id
+ m10-20020a7bca4a000000b003edc6698a15mr1392897wml.1.1679743200148; Sat, 25 Mar
+ 2023 04:20:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: media: gpio-ir-receiver: Document
- wakeup-souce property
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Young <sean@mess.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Ravi Kumar V <kumarrav@codeaurora.org>,
-        "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
-        <linux-media@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Matthew Lear <matthew.lear@broadcom.com>
-References: <20230324203833.3540187-1-f.fainelli@gmail.com>
- <20230324203833.3540187-2-f.fainelli@gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230324203833.3540187-2-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Reply-To: mkwesogo@gmail.com
+Sender: simtondji@gmail.com
+Received: by 2002:a5d:4a4c:0:b0:2d8:6f46:a535 with HTTP; Sat, 25 Mar 2023
+ 04:19:59 -0700 (PDT)
+From:   "Mr. Muskwe Sanogo" <sanogokwe@gmail.com>
+Date:   Sat, 25 Mar 2023 11:19:59 +0000
+X-Google-Sender-Auth: ycbpY1NZYejUWu4cIxovoRDxGao
+Message-ID: <CAGg0eJxqqdi-mBH8JMwpVMLX9ErzkZF6LCCM-=CH3nm2n4va5g@mail.gmail.com>
+Subject: Greetings and articulate salutations.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=ADVANCE_FEE_5_NEW,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTTO_DEPT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:336 listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [sanogokwe[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 LOTTO_DEPT Claims Department
+        *  0.8 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/03/2023 21:38, Florian Fainelli wrote:
-> The GPIO IR receiver can be used as a wake-up source for the system,
-> document that.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  Documentation/devicetree/bindings/media/gpio-ir-receiver.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+I bestow upon you a serendipitous and euphoric afternoon, With due
+respect to your personality and much sincerity of this purpose, I make
+this contact with you believing that you can be of great assistance to
+me. I'm Mr. Muskwe Sanogo,  I'm the Chairman of FOREIGN PAYMENTS
+CONTRACT AWARD COMMITTEE and also I currently hold the post of
+Internal Audit Manager of our bank, Please see this as a confidential
+message and do not reveal it to another person because it=E2=80=99s a top
+secret.
 
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+It may surprise you to receive this letter from me, since there has
+been no previous correspondence between us.  I will also like to make
+it clear here that l know that the internet has been grossly abused by
+criminal minded people making it difficult for people with genuine
+intention to correspond and exchange views without skepticism.
 
-Best regards,
-Krzysztof
+We are imposition to reclaim and inherit the sum of US $(28,850,000
+Million ) without any trouble, from a dormant account which remains
+unclaimed since 10 years the owner died. This is a U.S Dollars account
+and the beneficiary died without trace of his family to claim the
+fund.
 
+Upon my personal audit investigation into the details of the account,
+I find out that the deceased is a foreigner, which makes it possible
+for you as a foreigner no matter your country to lay claim on the
+balance as the Foreign Business Partner or Extended Relative to the
+deceased, provided you are not from here.
+
+Your integrity and trustworthiness will make us succeed without any
+risk. Please if you think that the amount is too much to be
+transferred into your account, you have the right to ask our bank to
+transfer the fund into your account bit by bit after approval or you
+double the account. Once this fund is transferred into your account,
+we will share the fund accordingly. 45%, for you, 45%, for me, 5%, had
+been mapped out for the expense made in this transaction, 5% as a free
+will donation to charity and motherless babies homes in both our
+countries as sign of breakthrough and more blessings.
+
+
+If you are interested to help without disappointment or breach of
+trust, reply me, so that I will guide you on the proper banking
+guidelines to follow for the claim. After the transfer, I will fly to
+your country for sharing of funds according to our agreement.
+
+Assurance: Note that this transaction will never in any way harm or
+foiled your good post or reputation in your country, because
+everything will follow legal process.
+
+I am looking forward to hear from you soonest.
+Yours faithfully,
+Mr. Muskwe Sanogo
