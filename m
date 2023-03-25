@@ -2,114 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF376C9108
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 22:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3D16C910C
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 22:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjCYVmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 17:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S231359AbjCYVuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 17:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbjCYVmL (ORCPT
+        with ESMTP id S230149AbjCYVuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 17:42:11 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D857EDB;
-        Sat, 25 Mar 2023 14:42:07 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A02C98BE;
-        Sat, 25 Mar 2023 22:42:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1679780525;
-        bh=CAS+ru0ajwIKIWzCOM/JwX8K8QgHCTE7GYFPL5L+3xo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H2MrBCNWiVjUgxcVGkWWQZNsLizT7wYScyi3l/Y6iGkdX8yP6MEzcOX9Eh9nc+UMw
-         ohq5ygASUG6ikzJWztkAe8SVq4+U0Ljg0EXcxop0u1GDqS5POWL+I/zSB2MTnS3WQx
-         53lDQMMa1U0vCNF9Ot4nEzr/H8JmoxQ7ZsRCpSYI=
-Date:   Sat, 25 Mar 2023 23:42:12 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Adam Pigg <adam@piggz.co.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 8/9] media: sun6i-isp: capture: Implement MC I/O with
- extended enum_fmt
-Message-ID: <20230325214212.GF22214@pendragon.ideasonboard.com>
-References: <20230324151228.2778112-1-paul.kocialkowski@bootlin.com>
- <20230324151228.2778112-9-paul.kocialkowski@bootlin.com>
+        Sat, 25 Mar 2023 17:50:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A22DB76E
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 14:49:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E77AB80977
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 21:49:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79474C433D2;
+        Sat, 25 Mar 2023 21:49:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679780997;
+        bh=c5w2xQu/8wCXjsZH3FlKUmoCjisCwE0EABExkI+kokM=;
+        h=From:Date:Subject:To:Cc:From;
+        b=MJ1w+yGO1sCfU+u2xZvHX7WUy47Q+dPaiWK4tiEcNc5XVrlTmjmgYnaFKYwyWKT++
+         k/cYBeWWdA05I28e+F+A22qg5YBHAe6IGPCt8iRnPbWD48+D3trnVD5IYE9mC7zedo
+         cEvlMqJJ/2FHML3rEkr/rmFHwPcQtF4CkXKjBW9MHhvMRGzv9AkQQ4MNYI4XLbWd6e
+         UMk0XgmUKZtF8wjvclfMIUgoI+7UmedrJ/77qJbPbnEmbve/ktIt9/HB3QHKKwhFSk
+         mQyfGOY660Ku67zMc+2WptAGHZl++GfwW6dkRmneicIv4/vGLfQmUlVMxbG9C/JLOH
+         USdISGwSNBB8A==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Sat, 25 Mar 2023 21:49:49 +0000
+Subject: [PATCH] regmap: Handle sparse caches in the default sync
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230324151228.2778112-9-paul.kocialkowski@bootlin.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230325-regcache-sparse-sync-v1-1-2a890239d061@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAHxsH2QC/x2NwQrCQAxEf6Xk7ELdtcj6K+Ihm8ZuELYlAauU/
+ rupp+HN8JgNjFXY4NZtoPwWk7k5nE8dUMU2cZDRGWIfU5/iEJQnQqocbEE1j2+jMIwXyinjNZc
+ Erhb0pSg2qoe8zvo66kX5KZ//2/2x7z/4IW6ifQAAAA==
+To:     linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-2eb1a
+X-Developer-Signature: v=1; a=openpgp-sha256; l=881; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=c5w2xQu/8wCXjsZH3FlKUmoCjisCwE0EABExkI+kokM=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkH2yDfxQcy9uCTPcyJLgaGKfZgQU+LxLlQHpNKs2O
+ G+LrMg2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZB9sgwAKCRAk1otyXVSH0GiVB/
+ 9msvwvaMBn0eEGWoLxFXegmTSPd1TfyG7NnW/FfXb8pnBH5EJI1jyVApJwOpjeD5VEniY0hrisPSwW
+ AbdqSfdEWHM3bHTW6aUP5G69OhXh6omPirBHanPVF/g9kHr4u+f6tkKcGTYc8vKdRM/EHW/hsb5WNE
+ dUJCL/hvxlusO/vRivHWQk79ZBuyuAzOdDqvDy4lGgKPLsDw88PDYHmNbhMSLaKfeOa4gGTAktRLr0
+ T7e1CxOrXMLIJMxaYDbbwvd7IScwvaXkU6coif7bNzMPjNWwiTLBHZs7CuqvCLcJlta60lamxY7KXN
+ J5NIUI3wn8OuFvnzwp0OLOMuPu5y6f
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+If there is no cache entry available we will get -ENOENT from the cache
+implementation, handle this gracefully and skip rather than treating it as
+an error.
 
-Thank you for the patch.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/base/regmap/regcache.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Fri, Mar 24, 2023 at 04:12:27PM +0100, Paul Kocialkowski wrote:
-> This driver needs the media-controller API to operate and should not be
-> considered as a video-device-centric implementation.
-> 
-> Properly report the IO_MC device cap and extend the enum_fmt
-> implementation to support enumeration with an explicit mbus_code.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> ---
->  .../staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c    | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c
-> index 1595a9607775..5160b93b69ff 100644
-> --- a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c
-> +++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c
-> @@ -439,6 +439,12 @@ static int sun6i_isp_capture_enum_fmt(struct file *file, void *private,
->  				      struct v4l2_fmtdesc *fmtdesc)
->  {
->  	u32 index = fmtdesc->index;
-> +	u32 mbus_code = fmtdesc->mbus_code;
-> +
-> +	if (mbus_code && !sun6i_isp_proc_format_find(mbus_code))
-> +		return -EINVAL;
-> +
+diff --git a/drivers/base/regmap/regcache.c b/drivers/base/regmap/regcache.c
+index 362e043e26d8..c1b020c5a6a9 100644
+--- a/drivers/base/regmap/regcache.c
++++ b/drivers/base/regmap/regcache.c
+@@ -311,6 +311,8 @@ static int regcache_default_sync(struct regmap *map, unsigned int min,
+ 			continue;
+ 
+ 		ret = regcache_read(map, reg, &val);
++		if (ret == -ENOENT)
++			continue;
+ 		if (ret)
+ 			return ret;
+ 
 
-This doesn't look right. As far as I understand,
-sun6i_isp_proc_format_find() looks up media bus codes for the ISP sink
-pad. Here you enuemrate pixel formats of the ISP output, so the media
-bus code given by userspace corresponds to the ISP source pad.
+---
+base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
+change-id: 20230325-regcache-sparse-sync-5d4c939a79b3
 
-I've had a look at sun6i_isp_proc_set_fmt() to see what media bus codes
-are used on the ISP output, and couldn't figure it out as it seems
-incorrectly implemented :-) The function doesn't check format->pad.
-
-> +	/* Capture format is independent from proc format. */
->  
->  	if (index >= ARRAY_SIZE(sun6i_isp_capture_formats))
->  		return -EINVAL;
-> @@ -685,7 +691,8 @@ int sun6i_isp_capture_setup(struct sun6i_isp_device *isp_dev)
->  
->  	strscpy(video_dev->name, SUN6I_ISP_CAPTURE_NAME,
->  		sizeof(video_dev->name));
-> -	video_dev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-> +	video_dev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING |
-> +				 V4L2_CAP_IO_MC;
->  	video_dev->vfl_dir = VFL_DIR_RX;
->  	video_dev->release = video_device_release_empty;
->  	video_dev->fops = &sun6i_isp_capture_fops;
-
+Best regards,
 -- 
-Regards,
+Mark Brown <broonie@kernel.org>
 
-Laurent Pinchart
