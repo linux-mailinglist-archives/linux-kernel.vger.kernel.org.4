@@ -2,176 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10786C8BD9
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 07:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A36B46C8BDB
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 07:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjCYGmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 02:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
+        id S231575AbjCYGpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 02:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjCYGmV (ORCPT
+        with ESMTP id S229674AbjCYGo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 02:42:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DEA14EBB
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 23:42:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EBF060A51
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 06:42:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A743C433D2;
-        Sat, 25 Mar 2023 06:42:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679726539;
-        bh=ZSKNjtrK9Vf8IKEQOlIlEf2lZ5+KbHask3b4ybdxt2o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oaSo5cqgUt7L5RFDX4Q/ntp75zHOUp2cAwwCYA+CzEc4JY+oPnZjRY/mdPYrn8l6D
-         kuk33rPdK1yq7QKmO39axfUBszPjpGqmEzSwWPc4QPkl2FP6lxYY2JDaEIvcmSShRG
-         kcW8rhb6vtCSwkNxCzWOHuw2d8kKzA9nm1GQrfLBizAubSa/SDH0eW1xzAoPW4FkLx
-         yn2uGjkcajAjn611jS3J1z+NbOFjYEq9f3NgpDJYYKOpIxikx+dsADu4OU9aw+hRry
-         URdV4koMdn6B2PZiglxyt+g3G8t3zopGpQ2O/n+UIKflUCcvRe/heHjDMaZoSZlVsD
-         PDeOLbKcRp8jQ==
-Date:   Sat, 25 Mar 2023 09:42:06 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Hongbin Ji <jihongbin999@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] memblock: Make memblock memblock_dbg info handle
- overflowing range @base + @size
-Message-ID: <ZB6XvqqnGa446s5o@kernel.org>
-References: <CAGeo-3e1emyUvqoQBz-v0CQQQasytb15SyhVVhiPwdheYgN=ow@mail.gmail.com>
- <ZB6O5awTbmcmqFI5@kernel.org>
- <CAGeo-3cMGSpG413=gA3NtcDyN5oTFLuZfNf8dVdVi3xQmGSWgQ@mail.gmail.com>
+        Sat, 25 Mar 2023 02:44:58 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E125614EA0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 23:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679726697; x=1711262697;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=853iA6IXA2UNkvrdjUGW3EV63l2t4qGwxs6QL6BdF8c=;
+  b=oJAZqBqMavKi/KPnH46mSx0xnYtmbq8OX4Bblbj98al8GIABdB2OkJD6
+   uMYDMHMZR0kLPq01n0soGnc9oDPCjvXXoLO33TKDaJxl5suERFImz/DHd
+   Lh7z8W/ciTmBEQ5qu8ZLrV+ujaIous4YNimHje/Q0bf24WWLJFwt2Eoo1
+   MIlUrwaLEeinuzZ4SrivLCNnRVYBkUI0MpzPkqZqwXSubCzW8i0kC2otH
+   Szt9GbierQQxGgmBUDmJ0s+X/jK0gGvxgW1Xl4wXN9A/mHb/a+6/sU9la
+   7iP+ZtO64nPfOWwQx75qvn1uyrGyrkjfG3qv3ccUUVptIhpybF5OOgYLG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="338667193"
+X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
+   d="scan'208";a="338667193"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 23:44:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="1012523802"
+X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
+   d="scan'208";a="1012523802"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Mar 2023 23:44:56 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfxdy-000G1x-2v;
+        Sat, 25 Mar 2023 06:44:50 +0000
+Date:   Sat, 25 Mar 2023 14:44:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.03.23a] BUILD SUCCESS
+ cf6765834b843c1a8efac7797dd43b7271b6a614
+Message-ID: <641e9844.zF6YDiFPougKyB9/%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGeo-3cMGSpG413=gA3NtcDyN5oTFLuZfNf8dVdVi3xQmGSWgQ@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 02:25:58PM +0800, Hongbin Ji wrote:
-> It is just to correct the information displayed by the debugging.
-> The wrong information display is also a problem, but it is not a
-> problem that affects the function
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.03.23a
+branch HEAD: cf6765834b843c1a8efac7797dd43b7271b6a614  srcu: Check for readers at module-exit time
 
-Please don't top post.
+Unverified Warning (likely false positive, please contact us if interested):
 
-Wrong debugging info will be the least of the problems if memblock_add() or
-membloc_remove() are called with wrong parameters.
+arch/mips/kernel/process.c:46:1: warning: 'noreturn' function does return
 
-Please work on cleanups based on code inspection outside of mm/
- 
-> Mike Rapoport <rppt@kernel.org> 于2023年3月25日周六 14:04写道：
-> >
-> > On Fri, Mar 24, 2023 at 04:15:13PM +0800, 纪宏宾 wrote:
-> > > Allow memblock users to specify range where @base + @size overflows,
-> > > This will cause the address range information in the debug output to
-> > > be displayed incorrectly.
-> >
-> > Is there a real problem you are trying to solve?
-> >
-> > > For example, calling memblock_remove(1ULL << PHYS_MASK_SHIFT,
-> > > ULLONG_MAX) in arch/arm64/mm/init.c,
-> > > would be displayed as:
-> > > [ 0.000000] memblock_remove: [0x0001000000000000-0x0000fffffffffffe]
-> > > arm64_memblock_init+0x24/0x270
-> > > but we expect the output:
-> > > [ 0.000000] memblock_remove: [0x0001000000000000-0xffffffffffffffff]
-> > > arm64_memblock_init+0x24/0x270
-> > >
-> > > Signed-off-by: Hongbin Ji <jhb_ee@163.com>
-> > > ---
-> > >  mm/memblock.c | 14 +++++++-------
-> > >  1 file changed, 7 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/mm/memblock.c b/mm/memblock.c
-> > > index 25fd0626a9e7..567b99e4355d 100644
-> > > --- a/mm/memblock.c
-> > > +++ b/mm/memblock.c
-> > > @@ -700,7 +700,7 @@ static int __init_memblock
-> > > memblock_add_range(struct memblock_type *type,
-> > >  int __init_memblock memblock_add_node(phys_addr_t base, phys_addr_t size,
-> > >         int nid, enum memblock_flags flags)
-> > >  {
-> > > - phys_addr_t end = base + size - 1;
-> > > + phys_addr_t end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
-> > >
-> > >   memblock_dbg("%s: [%pa-%pa] nid=%d flags=%x %pS\n", __func__,
-> > >        &base, &end, nid, flags, (void *)_RET_IP_);
-> > > @@ -721,7 +721,7 @@ int __init_memblock memblock_add_node(phys_addr_t
-> > > base, phys_addr_t size,
-> > >   */
-> > >  int __init_memblock memblock_add(phys_addr_t base, phys_addr_t size)
-> > >  {
-> > > - phys_addr_t end = base + size - 1;
-> > > + phys_addr_t end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
-> > >
-> > >   memblock_dbg("%s: [%pa-%pa] %pS\n", __func__,
-> > >        &base, &end, (void *)_RET_IP_);
-> > > @@ -822,7 +822,7 @@ static int __init_memblock
-> > > memblock_remove_range(struct memblock_type *type,
-> > >
-> > >  int __init_memblock memblock_remove(phys_addr_t base, phys_addr_t size)
-> > >  {
-> > > - phys_addr_t end = base + size - 1;
-> > > + phys_addr_t end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
-> > >
-> > >   memblock_dbg("%s: [%pa-%pa] %pS\n", __func__,
-> > >        &base, &end, (void *)_RET_IP_);
-> > > @@ -854,7 +854,7 @@ void __init_memblock memblock_free(void *ptr, size_t size)
-> > >   */
-> > >  int __init_memblock memblock_phys_free(phys_addr_t base, phys_addr_t size)
-> > >  {
-> > > - phys_addr_t end = base + size - 1;
-> > > + phys_addr_t end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
-> > >
-> > >   memblock_dbg("%s: [%pa-%pa] %pS\n", __func__,
-> > >        &base, &end, (void *)_RET_IP_);
-> > > @@ -865,7 +865,7 @@ int __init_memblock memblock_phys_free(phys_addr_t
-> > > base, phys_addr_t size)
-> > >
-> > >  int __init_memblock memblock_reserve(phys_addr_t base, phys_addr_t size)
-> > >  {
-> > > - phys_addr_t end = base + size - 1;
-> > > + phys_addr_t end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
-> > >
-> > >   memblock_dbg("%s: [%pa-%pa] %pS\n", __func__,
-> > >        &base, &end, (void *)_RET_IP_);
-> > > @@ -876,7 +876,7 @@ int __init_memblock memblock_reserve(phys_addr_t
-> > > base, phys_addr_t size)
-> > >  #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
-> > >  int __init_memblock memblock_physmem_add(phys_addr_t base, phys_addr_t size)
-> > >  {
-> > > - phys_addr_t end = base + size - 1;
-> > > + phys_addr_t end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
-> > >
-> > >   memblock_dbg("%s: [%pa-%pa] %pS\n", __func__,
-> > >        &base, &end, (void *)_RET_IP_);
-> > > @@ -1645,7 +1645,7 @@ void __init memblock_free_late(phys_addr_t base,
-> > > phys_addr_t size)
-> > >  {
-> > >   phys_addr_t cursor, end;
-> > >
-> > > - end = base + size - 1;
-> > > + end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
-> > >   memblock_dbg("%s: [%pa-%pa] %pS\n",
-> > >        __func__, &base, &end, (void *)_RET_IP_);
-> > >   kmemleak_free_part_phys(base, size);
-> > > --
-> > > 2.34.1
-> >
-> > --
-> > Sincerely yours,
-> > Mike.
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+`-- mips-randconfig-r005-20230322
+    `-- arch-mips-kernel-process.c:warning:noreturn-function-does-return
+
+elapsed time: 729m
+
+configs tested: 116
+configs skipped: 13
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r006-20230322   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r005-20230324   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r023-20230323   gcc  
+arc                  randconfig-r043-20230322   gcc  
+arc                  randconfig-r043-20230324   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r002-20230322   gcc  
+arm                  randconfig-r023-20230322   clang
+arm                  randconfig-r025-20230322   clang
+arm                  randconfig-r036-20230324   gcc  
+arm                  randconfig-r046-20230322   clang
+arm                  randconfig-r046-20230324   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r025-20230323   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r012-20230322   gcc  
+hexagon              randconfig-r033-20230322   clang
+hexagon              randconfig-r033-20230324   clang
+hexagon              randconfig-r041-20230322   clang
+hexagon              randconfig-r041-20230324   clang
+hexagon              randconfig-r045-20230322   clang
+hexagon              randconfig-r045-20230324   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r004-20230324   gcc  
+ia64         buildonly-randconfig-r006-20230324   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r004-20230322   gcc  
+ia64                 randconfig-r005-20230322   gcc  
+ia64                 randconfig-r013-20230322   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r005-20230322   gcc  
+nios2                randconfig-r015-20230322   gcc  
+nios2                randconfig-r024-20230323   gcc  
+nios2                randconfig-r026-20230322   gcc  
+openrisc             randconfig-r016-20230322   gcc  
+openrisc             randconfig-r026-20230323   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r021-20230323   gcc  
+parisc               randconfig-r036-20230322   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r001-20230324   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r003-20230322   clang
+riscv                randconfig-r034-20230324   clang
+riscv                randconfig-r042-20230322   gcc  
+riscv                randconfig-r042-20230324   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390         buildonly-randconfig-r003-20230324   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230322   gcc  
+s390                 randconfig-r044-20230324   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r022-20230323   gcc  
+sh                   randconfig-r024-20230322   gcc  
+sh                   randconfig-r034-20230322   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r001-20230322   gcc  
+sparc64              randconfig-r002-20230322   gcc  
+sparc64              randconfig-r035-20230324   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r002-20230324   gcc  
+xtensa               randconfig-r032-20230324   gcc  
+xtensa               randconfig-r035-20230322   gcc  
 
 -- 
-Sincerely yours,
-Mike.
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
