@@ -2,111 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0CB6C9081
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 20:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB406C906B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 20:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbjCYTeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 15:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
+        id S230380AbjCYTVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 15:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjCYTeU (ORCPT
+        with ESMTP id S229460AbjCYTVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 15:34:20 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F5DCDED
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 12:34:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679772859; x=1711308859;
-  h=from:to:cc:subject:date:message-id;
-  bh=jdQMrjyXEjETIE5OO4zUf/1YC69vzcHfW315iYpfUEE=;
-  b=A7CE/q4o2BQKSKiZLc+55PheDjERaCghhGK33+ISoh5hsx99c3hrGLrr
-   Dd68zcAduJxQDq1wEeHZnlUt88HwcEvtv1gIF42RhPgF9B5QbgrCQPml5
-   wlOUJBYzX2Xdy0g3dandjho/M/IbfLPsl30Ig9yCY2ryT2Lnaond0QOY2
-   rX9Jb0mpNyi89bewr2lNPouekS8eaa5duqV3GZwvBxK2+/ytM6ArVGaDH
-   NrAWHtnIInPy6MWd27EO+isc+7+U6r4OY54uxPfTwQEKOh52g99JULZiC
-   06NS7hqrvTUQLrvKI7NoA/NcaKGAZ+x/32Dn/stuU/mefXy99DvCB+pjU
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="323891537"
-X-IronPort-AV: E=Sophos;i="5.98,291,1673942400"; 
-   d="scan'208";a="323891537"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 12:34:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="857237873"
-X-IronPort-AV: E=Sophos;i="5.98,291,1673942400"; 
-   d="scan'208";a="857237873"
-Received: from rameshp1-mobl.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.109.233])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 12:34:18 -0700
-From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
-To:     x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dan Carpenter <error27@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH] x86: Enforce only whole copies for ssp_set()
-Date:   Sat, 25 Mar 2023 12:33:49 -0700
-Message-Id: <20230325193349.31893-1-rick.p.edgecombe@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Sat, 25 Mar 2023 15:21:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD26137;
+        Sat, 25 Mar 2023 12:21:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CD6460CF7;
+        Sat, 25 Mar 2023 19:21:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58D0AC433EF;
+        Sat, 25 Mar 2023 19:21:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679772098;
+        bh=6xCaygKTpM7f2IXd1A2Yon4aW1OSBIDkSxs37Hy1ziw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aW7yWjYzOyw6MWMqTSplKgJOnqiDxMG1L2e0Ddr30DjnMS0vltB9Tg/bMRgRJNvLT
+         6KKgy5Ql1RpFFsA+XYQ+UfubLPAcdrRE4VM5iWNUHglCXyCMgiTWeajVvAYBpXBilE
+         4kXcFTWBo0Obf8KoZcvSxvJVdDEoUWAD8rE7hU/fg5VxzqhQj95eoLou+aSvzH7vHA
+         SOHxf8ODWrq3E4acFc4ymwJTxyqw8BYxLobnnvf1b3s/VfBWXw5EdNPwf1cKawhHqU
+         dn7zm7mIcSt645xVQx6n85WdDF/64hcWQVnXOMJmK9MZVtC+1ger2GOqj2exYKd9ie
+         ARXcwL90rn1Fg==
+Date:   Sat, 25 Mar 2023 19:36:40 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Lee Jones <lee@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] iio: max597x: Add support for max597x
+Message-ID: <20230325193640.3dc8b330@jic23-huawei>
+In-Reply-To: <20230323194550.1914725-1-Naresh.Solanki@9elements.com>
+References: <20230323194550.1914725-1-Naresh.Solanki@9elements.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The regset set interface takes pos and count arguments to allow for
-partial copies. No callers use a non-zero pos, but ptrace allows for the
-count to be specified. It limits count to be a multiple of regset size, so
-this still allows for a zero size to be passed to ssp_set().
+On Thu, 23 Mar 2023 20:45:48 +0100
+Naresh Solanki <naresh.solanki@9elements.com> wrote:
 
-In ssp_set(), user_regset_copyin() returns success for copying zero bytes,
-which means user_ssp can later be accessed uninitialized. So add
-enforcement for this case. The other regset's also enforce pos == 0, so do
-that as well even though there is no caller today.
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> 
+> max597x has 10bit ADC for voltage & current monitoring.
+> Use iio framework to expose the same in sysfs.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 
-In the case of partial copies, some regsets return -EINVAL and some
-return -EFAULT. -EINVAL seems more appropriate, so use that error code.
+I'm not a fan of wild cards in driver names. This doesn't
+for example support the max5974, max5971 etc
 
-Fixes: d84e6ee122e5 ("x86: Add PTRACE interface for shadow stack")
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://lore.kernel.org/all/90af27cc-6c9d-4fb9-be3b-fc4ef378766d@kili.mountain/
-Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
----
-Hi x86 maintainers,
+Much better to name it after one of the supported parts.
+Obviously can't do much about the mfd driver now, but I'd prefer
+not to carry that through to the IIO driver if possible.
 
-While debugging this I wrote a shadow stack ptrace selftest that tries
-a bunch of invalid values. I thought to save it for a future series
-with selftests enhancements, unless you'd like to see it sooner.
+One concern I have here is that from the max5978 datasheet I see
+this device supports features that are very much directed at hwmon
+type usecases.  In particular warning and critical threshold detection.
+We don't support multiple thresholds (in same direction) for a single
+channel via IIO.  If you want those features in the future you may want
+to consider using the hwmon subsystem.
 
-Thanks,
+We tend to be flexible with devices that sit near the boundary of IIO
+and hwmon because we can bridge many of the features using the iio-hwmon
+bridge driver.  That doesn't work for more complex event handling and
+I suspect some of the other features this device provides.
+  
+> ...
+> Changes in V2:
+> - Remove fallthrough
+> - Use pdev->dev instead of i2c->dev
+> - Init indio_dev->name based on device type.
+> ---
+>  drivers/iio/adc/Kconfig       |  15 ++++
+>  drivers/iio/adc/Makefile      |   1 +
+>  drivers/iio/adc/max597x-iio.c | 152 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 168 insertions(+)
+>  create mode 100644 drivers/iio/adc/max597x-iio.c
+> 
+> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+> index 45af2302be53..0d1a3dea0b7d 100644
+> --- a/drivers/iio/adc/Kconfig
+> +++ b/drivers/iio/adc/Kconfig
+> @@ -735,6 +735,21 @@ config MAX1363
+>  	  To compile this driver as a module, choose M here: the module will be
+>  	  called max1363.
+>  
+> +config MAX597X_IIO
+> +	tristate "Maxim 597x power switch and monitor"
+> +	depends on I2C && OF
+> +	select MFD_MAX597X
+> +	help
+> +	  This driver enables support for the Maxim 597x smart switch and
+> +	  voltage/current monitoring interface using the Industrial I/O (IIO)
+> +	  framework. The Maxim 597x is a power switch and monitor that can
+> +	  provide voltage and current measurements via the I2C bus. Enabling
+> +	  this driver will allow user space applications to read the voltage
+> +	  and current measurements using IIO interfaces.
 
-Rick
----
- arch/x86/kernel/fpu/regset.c | 3 +++
- 1 file changed, 3 insertions(+)
+Call out the actual part numbers supported in this help text to make it easy
+to grep for them.
 
-diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
-index f0a8eaf7c52e..6bc1eb2a21bd 100644
---- a/arch/x86/kernel/fpu/regset.c
-+++ b/arch/x86/kernel/fpu/regset.c
-@@ -223,6 +223,9 @@ int ssp_set(struct task_struct *target, const struct user_regset *regset,
- 	    !ssp_active(target, regset))
- 		return -ENODEV;
- 
-+	if (pos != 0 || count != sizeof(user_ssp))
-+		return -EINVAL;
-+
- 	r = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &user_ssp, 0, -1);
- 	if (r)
- 		return r;
+> +
+> +	  To compile this driver as a module, choose M here: the module will be
+> +	  called max597x-iio.
+> +
 
-base-commit: b642e9e5f0dc797f543b431d4ba910a3da72a074
--- 
-2.17.1
+...
+
+
+> +
+> +static int max597x_iio_read_raw(struct iio_dev *iio_dev,
+> +				struct iio_chan_spec const *chan,
+> +				int *val, int *val2, long info)
+> +{
+> +	int ret;
+> +	struct max597x_iio *data = iio_priv(iio_dev);
+> +	unsigned int reg_l, reg_h;
+> +
+> +	switch (info) {
+> +	case IIO_CHAN_INFO_RAW:
+> +		ret = regmap_read(data->regmap, chan->address, &reg_l);
+> +		if (ret < 0)
+> +			return ret;
+> +		ret = regmap_read(data->regmap, chan->address - 1, &reg_h);
+> +		if (ret < 0)
+> +			return ret;
+> +		*val = (reg_h << 2) | (reg_l & 3);
+
+I replied late to previous patch, but I'd prefer to see a bulk read if
+possible.  It might ensure a matched pair, or if not reduce the chance of
+tearing (when reg_l & 3 transitions from 3 to 0 for example and
+reg_h & 1 is going from 0 to 1)
+
+You could try a repeated read if the sampling rate is fairly low as
+simply getting same high bits on either side of the low bit read is probably
+enough to say tearing didn't happen.
+
+> +
+> +		return IIO_VAL_INT;
+> +	case IIO_CHAN_INFO_SCALE:
+> +
+> +		switch (chan->address) {
+> +		case MAX5970_REG_CURRENT_L(0):
+> +		case MAX5970_REG_CURRENT_L(1):
+> +			/* in A, convert to mA */
+> +			*val = data->irng[chan->channel] * 1000;
+> +			*val2 =
+> +			    data->shunt_micro_ohms[chan->channel] * ADC_MASK;
+Don't worry about 80 char limit when it hurts readability.  Just put that
+on one line.
+
+> +			return IIO_VAL_FRACTIONAL;
+> +
+> +		case MAX5970_REG_VOLTAGE_L(0):
+> +		case MAX5970_REG_VOLTAGE_L(1):
+> +			/* in uV, convert to mV */
+> +			*val = data->mon_rng[chan->channel];
+> +			*val2 = ADC_MASK * 1000;
+> +			return IIO_VAL_FRACTIONAL;
+> +		}
+> +
+> +		break;
+> +	}
+> +	return -EINVAL;
+> +}
+> +
+> +static const struct iio_info max597x_adc_iio_info = {
+> +	.read_raw = &max597x_iio_read_raw,
+> +};
+> +
+> +static int max597x_iio_probe(struct platform_device *pdev)
+> +{
+> +	struct max597x_data *max597x = dev_get_drvdata(pdev->dev.parent);
+> +	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +	struct iio_dev *indio_dev;
+> +	struct max597x_iio *priv;
+> +	int ret, i;
+> +
+> +	if (!regmap)
+> +		return -EPROBE_DEFER;
+> +
+> +	if (!max597x || !max597x->num_switches)
+> +		return -EPROBE_DEFER;
+> +
+> +	/* registering iio */
+
+Comment doesn't add anything is is wrong anyway as this doesn't do the
+majority of the registration. Dropt he comment.
+
+> +	indio_dev = devm_iio_device_alloc(&pdev->dev, sizeof(*priv));
+> +	if (!indio_dev)
+> +		return dev_err_probe(&pdev->dev, -ENOMEM,
+> +				     "failed to allocate iio device\n");
+
+...
 
