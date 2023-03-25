@@ -2,127 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DCD6C8D81
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 12:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6296C8DD9
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 13:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbjCYLfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 07:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
+        id S231825AbjCYMKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 08:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbjCYLfK (ORCPT
+        with ESMTP id S230292AbjCYMJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 07:35:10 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40190BDEF
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 04:35:09 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id er18so6295785edb.9
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 04:35:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679744108;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W8sbl3G2CZLODjlbB1uxWf2aT5vhXcTjxqACgV87rNU=;
-        b=cZXk7l2qJgIojf+tCHcNf4qQzd+VavmXIWepTpdQUQkUEZNWmjigthhKeQm7g4Eee6
-         QpFl6Jgp/K3DirZGIOipApaS3piHwjON6hkHMWKRxVU+roiH0hikMLSYw4AZoW7yjKmb
-         eaED5OqaeWR7OGu0+olpp7o9/E1xmiQtkIXBiYxXy5NqPNeQDsNMWHTSuctXntPATxTM
-         D8z+Is4U1BhKvPE6vVxZmoboJQAlD1/7R/TaLeK1kId96NehUzOcwLwwkG4kXhBljGYQ
-         bz+vuBOmvaK0IptpeS1YEHv0qaxDzlIyntxrRM1lxiCnMoUJE23C41iIxPcVwpqCcInc
-         xIpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679744108;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W8sbl3G2CZLODjlbB1uxWf2aT5vhXcTjxqACgV87rNU=;
-        b=mYBun1KMNP1qi5kbhK/p9TJnefHLuffF5DrHUPl0PW9RfiOpkHMwnn2IElzmOPHJTz
-         pszlC6PHIDeFzvVbIzAutxF3G+rjM6++jgGKXnk7nT5WUZ0P7Eq0KyfgnmIixUHlV2Xa
-         0tFrGPWmsP7SbeKsFmboqmBz0mlu/D9v2OlkAYYsc2V3UZ3H0NxvI0VvqzlNoTah+mWt
-         B+7EZJxAO0msgzq9KG6cDXbGMvZV8MvEj7YKiCw9m45lUEVpfA20FK6MMI5g6LlEIqtC
-         LP4kNNd/vi+gNhqVWE+c+jvEM0VTpVzMDQwW0qVigwifcaFxDWOFb4WtFSLLZdwstTwk
-         D/xw==
-X-Gm-Message-State: AAQBX9fvxtB/V6RdgC2/y5t5w874ddXVeffM8d6ePHVfD9jFwHe7oeep
-        uUQ98WqGdcYihtYuSwmeMfr8Iw==
-X-Google-Smtp-Source: AKy350ZZB2IMfnQvR9XYmhMsZzU0Qst2DCYcRIhiZknm1/aJdstBvEatRrXugUfBv8jhwoMv39amCA==
-X-Received: by 2002:aa7:da57:0:b0:4fb:80cf:89e6 with SMTP id w23-20020aa7da57000000b004fb80cf89e6mr6473413eds.8.1679744107720;
-        Sat, 25 Mar 2023 04:35:07 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d230:b2c7:d55:c9c8? ([2a02:810d:15c0:828:d230:b2c7:d55:c9c8])
-        by smtp.gmail.com with ESMTPSA id 17-20020a508751000000b004bf7905559asm12075408edv.44.2023.03.25.04.35.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Mar 2023 04:35:07 -0700 (PDT)
-Message-ID: <6da91d8c-6694-9041-2f2f-72a8e95c7df2@linaro.org>
-Date:   Sat, 25 Mar 2023 12:35:06 +0100
+        Sat, 25 Mar 2023 08:09:59 -0400
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E176DBE2
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 05:09:58 -0700 (PDT)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4PkHvP2qKjz9sW6;
+        Sat, 25 Mar 2023 13:09:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1679746193;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QalUgYTR7L02Pm/gpKnsde2aCBCLEQnrH09k5/MdlqE=;
+        b=fK8Dw61CyQMFkvLPY0C5GZzBqzfKwKLL9ub62cJXQZpF70SVtceBlF8/sJaEciLa8exyNp
+        dzf43/oEBdYAsXWhujvF3E+HE/SMU812X2riTfovbQtzke/6Q9YE9zDfVIgAe2FRRsqBW+
+        VYpIsZEJAslBFZzwj9ERjXeKehSwZSTZMCU3EpfLE9j9xuQSOkiz//Si/hG1cGoCJH5wu1
+        fM/frIuk6Rntpszv+Zw2XoMyTkHiMWdF17/2wydEtOnfLwJKKsDAen+zgC/nl19AcbZR3G
+        qrZn8jks90hm2z9b93b2CDvoJa5CYGqunGPr2HEWsEQu3cqqoCJZXsKgQ9P+qA==
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Roman Beranek <romanberanek@icloud.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
+ TCON0_DCLK_REG
+Date:   Sat, 25 Mar 2023 12:40:04 +0100
+References: <20230320161636.24411-1-romanberanek@icloud.com>
+In-reply-to: <20230320161636.24411-1-romanberanek@icloud.com>
+Message-ID: <87wn356ni4.fsf@oltmanns.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 01/11] dt-bindings: arm: Add support for DSB element
- size
-Content-Language: en-US
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
- <1679551448-19160-2-git-send-email-quic_taozha@quicinc.com>
- <e6ad7301-09ea-93e0-929e-86e0eb0a02e7@arm.com>
- <d4c133c1-38c7-93e3-deaf-b55161057409@quicinc.com>
- <fb5d55ba-8f7b-292e-e676-9423c36f4085@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <fb5d55ba-8f7b-292e-e676-9423c36f4085@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; boundary="=-=-="
+X-Rspamd-Queue-Id: 4PkHvP2qKjz9sW6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/03/2023 10:15, Tao Zhang wrote:
->>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>> +    minimum: 32
->>>> +    maximum: 64
->>>
->>> Shouldn't this be something like oneOf ? It is not a range, but one of
->>> those two specific values ?
->>
->> Yes, "qcom,dsb-element-size" should be an optional option required in 
->> TPDM
->>
->> devicetree. Other properties like "qcom,cmb-element-size", 
->> "qcom,tc-element-size"
->>
->> and etc. will be added in a later patch series.
->>
->> I will update this doc according to your advice in the next version of 
->> the patch.
->>
->> Tao
->>
-> Correct my misunderstanding in the mail above.
-> 
-> You are right, DSB element size should be 32-bit or 64-bit. I will 
-> update this in the next
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Then 'enum', not 'oneOf'.
+Hi,
 
-Best regards,
-Krzysztof
+On 2023-03-20 at 17:16:36 +0100, Roman Beranek <romanberanek@icloud.com> wr=
+ote:
+> In the case of DSI output, the value of SUN4I_TCON0_DCLK_DIV (4) does
+> not represent the actual dotclock divider, PLL_MIPI instead runs at
+> (bpp / lanes )-multiple [1] of the dotclock. [2] Setting 4 as dotclock
+> divder thus leads to reduced frame rate, specifically by 1/3 on 4-lane
+> panels, and by 2/3 on 2-lane panels respectively.
+>
+> As sun4i_dotclock driver stores its calculated divider directly in
+> the register, conditional handling of the DSI output scenario is needed.
+> Instead of reading the divider from SUN4I_TCON0_DCLK_REG, retrieve
+> the value from tcon->dclk_min_div.
+>
+> [1] bits per pixel / number of DSI lanes
+> [2] <https://github.com/BPI-SINOVOIP/BPI-M64-bsp-4.4/blob/66bef0f2f30b367=
+eb93b1cbad21ce85e0361f7ae/linux-sunxi/drivers/video/fbdev/sunxi/disp2/disp/=
+de/lowlevel_sun50iw1/disp_al.c#L322>
+>
+> Signed-off-by: Roman Beranek <romanberanek@icloud.com>
+> =E2=80=94
+>  drivers/gpu/drm/sun4i/sun4i_dotclock.c | 6 +++++-
+>  drivers/gpu/drm/sun4i/sun4i_tcon.c     | 5 +++=E2=80=93
+>  drivers/gpu/drm/sun4i/sun4i_tcon.h     | 1 +
+>  3 files changed, 9 insertions(+), 3 deletions(-)
+>
+> diff =E2=80=93git a/drivers/gpu/drm/sun4i/sun4i_dotclock.c b/drivers/gpu/=
+drm/sun4i/sun4i_dotclock.c
+> index 417ade3d2565..26fa99aff590 100644
+> =E2=80=94 a/drivers/gpu/drm/sun4i/sun4i_dotclock.c
+> +++ b/drivers/gpu/drm/sun4i/sun4i_dotclock.c
+> @@ -11,6 +11,7 @@
+>
+>  #include =E2=80=9Csun4i_tcon.h=E2=80=9D
+>  #include =E2=80=9Csun4i_dotclock.h=E2=80=9D
+> +#include =E2=80=9Csun6i_mipi_dsi.h=E2=80=9D
+>
+>  struct sun4i_dclk {
+>  	struct clk_hw  hw;
+> @@ -56,6 +57,9 @@ static unsigned long sun4i_dclk_recalc_rate(struct clk_=
+hw *hw,
+>  	struct sun4i_dclk *dclk =3D hw_to_dclk(hw);
+>  	u32 val;
+>
+> +	if (dclk->tcon->is_dsi)
+> +		return parent_rate / dclk->tcon->dclk_min_div;
+> +
+>  	regmap_read(dclk->regmap, SUN4I_TCON0_DCLK_REG, &val);
+>
+>  	val >>=3D SUN4I_TCON0_DCLK_DIV_SHIFT;
+> @@ -116,7 +120,7 @@ static int sun4i_dclk_set_rate(struct clk_hw *hw, uns=
+igned long rate,
+>  			       unsigned long parent_rate)
+>  {
+>  	struct sun4i_dclk *dclk =3D hw_to_dclk(hw);
+> -	u8 div =3D parent_rate / rate;
+> +	u8 div =3D dclk->tcon->is_dsi ? SUN6I_DSI_TCON_DIV : parent_rate / rate;
+>
+>  	return regmap_update_bits(dclk->regmap, SUN4I_TCON0_DCLK_REG,
+>  				  GENMASK(6, 0), div);
+> diff =E2=80=93git a/drivers/gpu/drm/sun4i/sun4i_tcon.c b/drivers/gpu/drm/=
+sun4i/sun4i_tcon.c
+> index 523a6d787921..7f5d3c135058 100644
+> =E2=80=94 a/drivers/gpu/drm/sun4i/sun4i_tcon.c
+> +++ b/drivers/gpu/drm/sun4i/sun4i_tcon.c
+> @@ -367,8 +367,9 @@ static void sun4i_tcon0_mode_set_cpu(struct sun4i_tco=
+n *tcon,
+>  	u32 block_space, start_delay;
+>  	u32 tcon_div;
+>
+> -	tcon->dclk_min_div =3D SUN6I_DSI_TCON_DIV;
+> -	tcon->dclk_max_div =3D SUN6I_DSI_TCON_DIV;
+> +	tcon->is_dsi =3D true;
+> +	tcon->dclk_min_div =3D bpp / lanes;
+> +	tcon->dclk_max_div =3D bpp / lanes;
 
+Claiming to set the divider to a different value (bpp / lanes) than what we=
+=E2=80=99re actually using in the end (SUN6I_DSIO_TCON_DIV) is somehow bugg=
+ing me. I feel like the proposal that I submitted is more direct:
+<https://lore.kernel.org/all/20230319160704.9858-2-frank@oltmanns.dev/>
+
+Actually, I had the following third patch prepared that adjusted the dotclo=
+ck rate so that the required PLL rate is set. But again, this seems very in=
+direct, so that=E2=80=99s why I refrained from submitting it and I submitte=
+d the linked patch above instead.
+
+Anyway, here is the third proposal:
+
+=E2=80=94 a/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
++++ b/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
+@@ -819,6 +819,34 @@ static void sun6i_dsi_encoder_disable(struct drm_encod=
+er *encoder)
+ 	regulator_disable(dsi->regulator);
+ }
+
++static bool sun6i_dsi_encoder_mode_fixup(
+=E2=81=83 struct drm_encoder *encoder,
+=E2=81=83 const struct drm_display_mode *mode,
+=E2=81=83 struct drm_display_mode *adjusted_mode)
++{
+=E2=81=83 if (encoder->encoder_type =3D=3D DRM_MODE_ENCODER_DSI) {
+=E2=81=83 /*
+=E2=81=83 * For DSI the PLL rate has to respect the bits per pixel and
+=E2=81=83 * number of lanes.
+=E2=81=83 *
+=E2=81=83 * According to the BSP code:
+=E2=81=83 * PLL rate =3D DOTCLOCK * bpp / lanes
+=E2=81=83 *
+=E2=81=83 * Therefore, the clock has to be adjusted in order to set the
+=E2=81=83 * correct PLL rate when actually setting the clock.
+=E2=81=83 */
+=E2=81=83 struct sun6i_dsi *dsi =3D encoder_to_sun6i_dsi(encoder);
+=E2=81=83 struct mipi_dsi_device *device =3D dsi->device;
+=E2=81=83 u8 bpp =3D mipi_dsi_pixel_format_to_bpp(device->format);
+=E2=81=83 u8 lanes =3D device->lanes;
+=E2=81=83=20
+
+=E2=81=83 adjusted_mode->crtc_clock =3D mode->crtc_clock
+=E2=81=83 * bpp / (lanes * SUN6I_DSI_TCON_DIV);
+=E2=81=83 }
+=E2=81=83=20
+
+=E2=81=83 return true;
++}
+=E2=81=83 static int sun6i_dsi_get_modes(struct drm_connector *connector)
+  {
+      struct sun6i_dsi *dsi =3D connector_to_sun6i_dsi(connector);
+@@ -851,6 +879,7 @@ static const struct drm_connector_funcs sun6i_dsi_conne=
+ctor_funcs =3D {
+ static const struct drm_encoder_helper_funcs sun6i_dsi_enc_helper_funcs =
+=3D {
+ 	.disable	=3D sun6i_dsi_encoder_disable,
+ 	.enable		=3D sun6i_dsi_encoder_enable,
+=E2=81=83 .mode_fixup =3D sun6i_dsi_encoder_mode_fixup,
+  };
+
+  static u32 sun6i_dsi_dcs_build_pkt_hdr(struct sun6i_dsi *dsi,
+
+
+
+Maxime, Roman, CC, what do you think? Can we achieve consensus? If I=E2=80=
+=99m not mistaken, all of the three proposal are a step in the right direct=
+ion, because they correct faulty behavior. Don=E2=80=99t you think?
+
+Thanks,
+  Frank
+
+>
+>  	sun4i_tcon0_mode_set_common(tcon, mode);
+>
+> diff =E2=80=93git a/drivers/gpu/drm/sun4i/sun4i_tcon.h b/drivers/gpu/drm/=
+sun4i/sun4i_tcon.h
+> index fa23aa23fe4a..d8150ba2f319 100644
+> =E2=80=94 a/drivers/gpu/drm/sun4i/sun4i_tcon.h
+> +++ b/drivers/gpu/drm/sun4i/sun4i_tcon.h
+> @@ -271,6 +271,7 @@ struct sun4i_tcon {
+>  	struct clk			*dclk;
+>  	u8				dclk_max_div;
+>  	u8				dclk_min_div;
+> +	bool				is_dsi;
+>
+>  	/* Reset control */
+>  	struct reset_control  *lcd_rst;
+
+--=-=-=--
