@@ -2,184 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE816C8AB1
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 04:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2586F6C8ACE
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 05:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbjCYDiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 23:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37196 "EHLO
+        id S230292AbjCYEXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 00:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjCYDiK (ORCPT
+        with ESMTP id S229441AbjCYEXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 23:38:10 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D951BF1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 20:38:07 -0700 (PDT)
-Received: from kwepemm600017.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Pk4T80DcSz17PFx;
-        Sat, 25 Mar 2023 11:34:52 +0800 (CST)
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 25 Mar 2023 11:38:00 +0800
-Message-ID: <0353570f-38bb-ebff-8152-c0d1cfec26f3@huawei.com>
-Date:   Sat, 25 Mar 2023 11:38:00 +0800
+        Sat, 25 Mar 2023 00:23:03 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E58769A;
+        Fri, 24 Mar 2023 21:23:02 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id q102so3136873pjq.3;
+        Fri, 24 Mar 2023 21:23:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679718182;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vgpYKWXzjJN2Yld0pg3hkQUZovUKmsnyiCz0x9041pc=;
+        b=BQwlA3JxKsQ/NLXvTODQe/+kSL6/LDn89Lmh56eesDRtuy+wVQTjWJlTKlwCDOOMlN
+         ZrRNOCCTpch/KSblLe/3f4byk/RvuV38W96Te2n0NtDp3M6xNg/kwzLyNsJtzqVeeqR8
+         PxXy7h8IwhIjfZ4oeopCboNZftkfOlxaXSH1TDXGd/XP2PkaJ2OuWu9omxztCMiApdvE
+         98uC3F/PTxJkXVPkr5kZze0MQ0IrJxuvPB73GdELSyCcROzgZGzlfi/mgMJtm6WED61V
+         ld/U/rRVX6eRH4YVzWOD5H8HOO1ULHzeqE1vEHvaY4dKxvUlKhcoUC4etBHguOR9X+cx
+         4VoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679718182;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vgpYKWXzjJN2Yld0pg3hkQUZovUKmsnyiCz0x9041pc=;
+        b=Ae28txzEticZketdBu796+VAbmhLgSWq/PCINeRfMJ2FfL0SENvAtvJNR2ecywsG/A
+         sX43U1CondUc057ER0woRpnHqQDgxr9PQMYty8RYiPQCluwfW1hMFtuZnRuZyxiPdGnr
+         zj+Li30iaoWF/GL7wKgQU+oNTrmW4VVzqxcl+W5f1jEUH5DlwsrvjXaBD+W9gaN05qTP
+         dqBnfmAnxuGuvIkUElLw9H9T3emfSu/GO739q2HtMSWsZp10L02BdV2Vi/pAodEK1y8C
+         Ah5uclN6qF0zNMVxMTNNsyBiBQsymM75pl3xlk8Xgw6AHOL0r1fyweFSSeBZ61L0ue4K
+         0QTA==
+X-Gm-Message-State: AAQBX9f/JlFYRKnUNv2Dj5Clnx4bRIj6LTYMOQ9/usWa6YVhwkoU9zc9
+        FN1r2xQII1IFjnS3v935XrU=
+X-Google-Smtp-Source: AKy350b7n1hQhN2FdXuCHfv3E6Y+Fsn7JSY9rneZKs9hhy/ARsctLJ+8hbMgU1asbkLh4/wW0M+fUg==
+X-Received: by 2002:a17:90b:4d81:b0:23b:3422:e78a with SMTP id oj1-20020a17090b4d8100b0023b3422e78amr5152241pjb.6.1679718181842;
+        Fri, 24 Mar 2023 21:23:01 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-18.three.co.id. [180.214.232.18])
+        by smtp.gmail.com with ESMTPSA id h7-20020a17090a2ec700b0023b5528b8d4sm3786553pjs.19.2023.03.24.21.22.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 21:23:01 -0700 (PDT)
+Message-ID: <fd643854-d687-1dda-f0ae-a6ef06432394@gmail.com>
+Date:   Sat, 25 Mar 2023 11:22:56 +0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v8 0/4]arm64: add machine check safe support
-To:     Mark Rutland <mark.rutland@arm.com>,
-        James Morse <james.morse@arm.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 1/2] docs: process: allow Closes tags with links
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>, Xie XiuQi <xiexiuqi@huawei.com>
-References: <20221219120008.3818828-1-tongtiangen@huawei.com>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <20221219120008.3818828-1-tongtiangen@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
+References: <20230314-doc-checkpatch-closes-tag-v2-0-f4a417861f6d@tessares.net>
+ <20230314-doc-checkpatch-closes-tag-v2-1-f4a417861f6d@tessares.net>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20230314-doc-checkpatch-closes-tag-v2-1-f4a417861f6d@tessares.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all maintainer,
+On 3/25/23 01:52, Matthieu Baerts wrote:
+> diff --git a/Documentation/process/5.Posting.rst b/Documentation/process/5.Posting.rst
+> index 7a670a075ab6..20f0b6b639b7 100644
+> --- a/Documentation/process/5.Posting.rst
+> +++ b/Documentation/process/5.Posting.rst
+> @@ -217,6 +217,15 @@ latest public review posting of the patch; often this is automatically done
+>  by tools like b4 or a git hook like the one described in
+>  'Documentation/maintainer/configure-git.rst'.
+>  
+> +Similarly, there is also the "Closes:" tag that can be used to close issues
+> +when the underlying public bug tracker can do this operation automatically.
+> +For example::
+> +
+> +	Closes: https://example.com/issues/1234
+> +
+> +Private bug trackers and invalid URLs are forbidden. For other public bug
+> +trackers not supporting automations, keep using the "Link:" tag instead.
+> +
+>  A third kind of tag is used to document who was involved in the development of
+>  the patch. Each of these uses this format::
+>  
+> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+> index 69ce64e03c70..759c99e34085 100644
+> --- a/Documentation/process/submitting-patches.rst
+> +++ b/Documentation/process/submitting-patches.rst
+> @@ -134,6 +134,15 @@ resources. In addition to giving a URL to a mailing list archive or bug,
+>  summarize the relevant points of the discussion that led to the
+>  patch as submitted.
+>  
+> +It might be interesting to use the 'Closes:' tag to close issues when the
+> +underlying public bug tracker can do this operation automatically. For
+> +example::
+> +
+> +	Closes: https://example.com/issues/1234
+> +
+> +Private bug trackers and invalid URLs are forbidden. For other public bug
+> +trackers not supporting automations, keep using the "Link:" tag instead.
+> +
+>  If your patch fixes a bug in a specific commit, e.g. you found an issue using
+>  ``git bisect``, please use the 'Fixes:' tag with the first 12 characters of
+>  the SHA-1 ID, and the one line summary.  Do not split the tag across multiple
+> 
 
-With the increase of memory capacity and density, the memory error
-increases，memory errors is the main factor causing server system
-downtime, a statistics from intel [1].
+The doc LGTM, thanks!
 
-For ARM64 server, it is more serious without mc safe copy feature,
-feedback from our products, that is why we want to support it on arm64.
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Also some new kind of low-reliable memory like HBM（high bandwidth but
-low reliability）was introduced，this becomes more of a problem.
+-- 
+An old man doll... just what I always wanted! - Clara
 
-We hope the patch set could be incorporated into the community, can you
-give me some follow-up suggestions?
-
-[1] 
-https://www.intel.com.tw/content/www/tw/zh/software/intel-memory-failure-prediction-jd-cloud.html
-
-Thanks.
-Tong.
-
-在 2022/12/19 20:00, Tong Tiangen 写道:
-> With the increase of memory capacity and density, the probability of
-> memory error increases. The increasing size and density of server RAM
-> in the data center and cloud have shown increased uncorrectable memory
-> errors.
-> 
-> Currently, the kernel has a mechanism to recover from hardware memory
-> errors. This patchset provides an new recovery mechanism.
-> 
-> For arm64, the hardware memory error handling is do_sea() which divided
-> into two cases:
->   1. The user state consumed the memory errors, the solution is kill the
->      user process and isolate the error page.
->   2. The kernel state consumed the memory errors, the solution is panic.
-> 
-> For case 2, Undifferentiated panic maybe not the optimal choice, it can
-> be handled better, in some scenarios, we can avoid panic, such as
-> uaccess, if the uaccess fails due to memory error, only the user
-> process will be affected, kill the user process and isolate the user
-> page with hardware memory errors is a better choice.
-> 
-> Since V7:
->   Currently, there are patches supporting recover from poison
->   consumption for the cow scenario[1]. Therefore, Supporting cow
->   scenario under the arm64 architecture only needs to modify the relevant
->   code under the arch/.
->   [1]https://lore.kernel.org/lkml/20221031201029.102123-1-tony.luck@intel.com/
-> 
-> Since V6:
->   Resend patches that are not merged into the mainline in V6.
-> 
-> Since V5:
->   1. Add patch2/3 to add uaccess assembly helpers.
->   2. Optimize the implementation logic of arm64_do_kernel_sea() in patch8.
->   3. Remove kernel access fixup in patch9.
->   All suggestion are from Mark.
-> 
-> Since V4:
->   1. According Michael's suggestion, add patch5.
->   2. According Mark's suggestiog, do some restructuring to arm64
->   extable, then a new adaptation of machine check safe support is made based
->   on this.
->   3. According Mark's suggestion, support machine check safe in do_mte() in
->   cow scene.
->   4. In V4, two patches have been merged into -next, so V5 not send these
->   two patches.
-> 
-> Since V3:
->   1. According to Robin's suggestion, direct modify user_ldst and
->   user_ldp in asm-uaccess.h and modify mte.S.
->   2. Add new macro USER_MC in asm-uaccess.h, used in copy_from_user.S
->   and copy_to_user.S.
->   3. According to Robin's suggestion, using micro in copy_page_mc.S to
->   simplify code.
->   4. According to KeFeng's suggestion, modify powerpc code in patch1.
->   5. According to KeFeng's suggestion, modify mm/extable.c and some code
->   optimization.
-> 
-> Since V2:
->   1. According to Mark's suggestion, all uaccess can be recovered due to
->      memory error.
->   2. Scenario pagecache reading is also supported as part of uaccess
->      (copy_to_user()) and duplication code problem is also solved.
->      Thanks for Robin's suggestion.
->   3. According Mark's suggestion, update commit message of patch 2/5.
->   4. According Borisllav's suggestion, update commit message of patch 1/5.
-> 
-> Since V1:
->   1.Consistent with PPC/x86, Using CONFIG_ARCH_HAS_COPY_MC instead of
->     ARM64_UCE_KERNEL_RECOVERY.
->   2.Add two new scenes, cow and pagecache reading.
->   3.Fix two small bug(the first two patch).
-> 
-> V1 in here:
-> https://lore.kernel.org/lkml/20220323033705.3966643-1-tongtiangen@huawei.com/
-> 
-> Tong Tiangen (4):
->    uaccess: add generic fallback version of copy_mc_to_user()
->    arm64: add support for machine check error safe
->    arm64: add uaccess to machine check safe
->    arm64: add cow to machine check safe
-> 
->   arch/arm64/Kconfig                   |  1 +
->   arch/arm64/include/asm/asm-extable.h |  5 ++
->   arch/arm64/include/asm/assembler.h   |  4 ++
->   arch/arm64/include/asm/extable.h     |  1 +
->   arch/arm64/include/asm/mte.h         |  4 ++
->   arch/arm64/include/asm/page.h        | 10 ++++
->   arch/arm64/lib/Makefile              |  2 +
->   arch/arm64/lib/copy_mc_page.S        | 82 ++++++++++++++++++++++++++++
->   arch/arm64/lib/mte.S                 | 19 +++++++
->   arch/arm64/mm/copypage.c             | 42 ++++++++++++--
->   arch/arm64/mm/extable.c              | 25 +++++++++
->   arch/arm64/mm/fault.c                | 29 +++++++++-
->   arch/powerpc/include/asm/uaccess.h   |  1 +
->   arch/x86/include/asm/uaccess.h       |  1 +
->   include/linux/highmem.h              |  2 +
->   include/linux/uaccess.h              |  9 +++
->   16 files changed, 230 insertions(+), 7 deletions(-)
->   create mode 100644 arch/arm64/lib/copy_mc_page.S
-> 
