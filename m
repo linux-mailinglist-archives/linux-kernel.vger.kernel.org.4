@@ -2,294 +2,496 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3385B6C9008
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 19:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A456C8FFE
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 19:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjCYS3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 14:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
+        id S231771AbjCYSOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 14:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjCYS3N (ORCPT
+        with ESMTP id S229446AbjCYSOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 14:29:13 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74FCC170;
-        Sat, 25 Mar 2023 11:29:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679768951; x=1711304951;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=RqTvlCZxs33lRXJx2qnAk7mPpEBQgnBZ9gfd6ASiioA=;
-  b=VIgymKlAlhZBLId1Rt7whkHMO4a3DR8X3DV59WVJrVMEHJMdXrjkFXMA
-   tFaJDcTqbVsXtgS6++7UxonetyUutOnD6Lzk3MEsZ8PNX7NWgpbnGCM17
-   unkpNzzWia/RwK6AQRwolYWcXKVFKv1HKLhqBs8EncWG8fmaLbZV9x70W
-   Xvy1Rh4bVSVOb4uGhWEpSxyYxWNgugs156iu3adYOqyTtkOXAHPWw7Opw
-   lQ008ajKLe41HndUo9tKtuxEq+18JfmOYISPen5kcnUQZKwzd9qdk538y
-   r7DCYvB/hlyupBM5eB+8bvH994DzwWuCcTLROjkkcCBAIPpqAP0zTDuaJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="402599453"
-X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="402599453"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 11:29:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="807028078"
-X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="807028078"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga004.jf.intel.com with ESMTP; 25 Mar 2023 11:29:10 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 25 Mar 2023 11:29:10 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Sat, 25 Mar 2023 11:29:10 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.102)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Sat, 25 Mar 2023 11:29:09 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B65XLceVOJ3E0D5h2gaykyvACFeYDILhLUmPx85PK172/h19zaXjWf3Qy4fWeU+X1GpmNzw0vNaWWEH9jAJnNsu6qHbtaMyt/k0RNB4o9D35//7sM5W82zefOCN2gqtqBSqOeiFO+63DwRAmsCfDUeSmoKAMaWwuHGHktTtTaQvneRL3wOZ5PqNZDTN7aGbilMLUgV9+LXDRd+Qmpsz5jwfDApUJmjkxnYihK707yucu2b79XhMfvjPCv1CyQTcnxg0AUtCEXYvXhYxH2SH+1J5Sm44q7b2NE3Gnl92xfj2PbAEGFRoCsDAGlJ1BdM/0oCX0SeZ4Jju7VZc9zdhj4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9zc25Fd8I2SzHQ2ais9i8r9YCAIcmMvMV6HDC7yOJkg=;
- b=Ex8kVJZOgc93FMVVe23RFBHfHf1hxdIDyoA6GiwTG54JsjpVpMrpeLGJ1EQNTg4k7hC/wdAsJIu14YEURcvcjlbtYSrRfoZYbfmknKtTTD3s+SLcrsZbItzwMiwUDQAmWv/ia2vIZD5t5ZWZoO5aEgLVg2q4/N1WVC78vERyEHvuKWtycujyB2sPSfV2v1aAgTE5ctgsfddLbL1/WoK8O+tE51qR4feIcKS2/xCL0mD6JC7lm6zRD9z3/bKf2R9AN6P1ut5P3Ty53ldv/AioMMaxo8jpkKiUUZE5MMWKNBRW1Ura59Kop6I4UP0PpkeXsKXyQxNeM+KxKpolP5vjjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MN2PR11MB4045.namprd11.prod.outlook.com (2603:10b6:208:135::27)
- by CY8PR11MB7340.namprd11.prod.outlook.com (2603:10b6:930:84::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Sat, 25 Mar
- 2023 18:29:06 +0000
-Received: from MN2PR11MB4045.namprd11.prod.outlook.com
- ([fe80::6515:e7bf:629c:e141]) by MN2PR11MB4045.namprd11.prod.outlook.com
- ([fe80::6515:e7bf:629c:e141%3]) with mapi id 15.20.6178.038; Sat, 25 Mar 2023
- 18:29:06 +0000
-From:   "Rout, ChandanX" <chandanx.rout@intel.com>
-To:     John Hickey <jjh@daedalian.us>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>
-CC:     "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "Jesper Dangaard Brouer" <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "Shujin Li" <lishujin@kuaishou.com>,
-        "Xing, Wanli" <xingwanli@kuaishou.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "Kuruvinakunnel, George" <george.kuruvinakunnel@intel.com>,
-        "Nagraj, Shravan" <shravan.nagraj@intel.com>,
-        "Nagaraju, Shwetha" <shwetha.nagaraju@intel.com>
-Subject: RE: [PATCH net v3] ixgbe: Panic during XDP_TX with > 64 CPUs
-Thread-Topic: [PATCH net v3] ixgbe: Panic during XDP_TX with > 64 CPUs
-Thread-Index: AQHZUgq6zOvPojcFKkWWWW4VXRvR9K8L6nbQ
-Date:   Sat, 25 Mar 2023 18:29:06 +0000
-Message-ID: <MN2PR11MB40453E93415576B08273306CEA859@MN2PR11MB4045.namprd11.prod.outlook.com>
-References: <20230308220756.587317-1-jjh@daedalian.us>
-In-Reply-To: <20230308220756.587317-1-jjh@daedalian.us>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN2PR11MB4045:EE_|CY8PR11MB7340:EE_
-x-ms-office365-filtering-correlation-id: 006c1561-e7d9-4933-159e-08db2d5ed11e
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DVIZwO1AxR20XuK9fNZakXMQ3haaDK4/SnGyAnw0NFSBQgAzaT4y1iAmgVYkj3w21hw6+g4har0QCnc6MCyyq2hECwDfnCDNT+sUyS30V2AXdoE75PUP7GxDX0GMjEePf4KIig7DXn9rsdXSlvbWkOUVPKyppNI0oKOS78tEZFbjewIFMt3gniNFq+weh939HIaq/HYUuOnz5iC2Ap9ACCuML0SCdKbn9vuCQH1YRk5m5t6pR/nYXOZ/D9C2OuTlFbl9diFZW/h3VzJNBVYHdEFSRhmBHuujZrhdaPAt02xGU5kL+/LFEPyCUggQOtMEtPcxnx72TShe/Bb71lzCay2uJEcVzvWEqPU+o1HF132oBbTUPoqJwYUc3SxON/LZYtB9x7abKoyxKB1cf1Y2taF/CNTb4GMND14quozZj9BJUOLjuqsgLwS4lasGcOxO7du/LMWLjRHKE/mmFvNFgJRn6jUXKc3xVnsqENOMebQpcqoZws3yu4Q5fsPmeEjTGr5ZHJeLWJdgwqldxdenk6ND5RG2GVrDfgBzC0U4VMEaHxtOtkzvoxLHSa1paYmwQ4qZxj0NR8gvVoaPuFsWjVMhuwJ+blCL4gT7g9X4cmbI1NbCEztTUCcgNEztmbt5
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR11MB4045.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(136003)(366004)(396003)(39860400002)(376002)(451199021)(41300700001)(54906003)(8936002)(71200400001)(55016003)(82960400001)(122000001)(107886003)(478600001)(52536014)(38100700002)(55236004)(26005)(5660300002)(6506007)(7416002)(8676002)(83380400001)(2906002)(9686003)(4326008)(66556008)(76116006)(186003)(66476007)(66446008)(66946007)(64756008)(86362001)(110136005)(316002)(38070700005)(33656002)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?D7s4EXaoy6OUItaszDhcYrVVmqhuVSRc3axOgN6o33/F4zAuYbJ5S061af7G?=
- =?us-ascii?Q?UTsUgA+GAboZpp615Coj3/ms8K/B2sFmaLZTjRNwQG5z2+82oS/H3iKg1tXX?=
- =?us-ascii?Q?18tcQABX+e8kvX2whaaIzyLbrBBNXq00UzZdTT2zPLJF2XnAWMyWgDq9St0B?=
- =?us-ascii?Q?152+dGPkS0xffxRAVHXzUK54MoKMW/rpmsmAgOmpBghhFYVsQaDS3mWG19gg?=
- =?us-ascii?Q?HMw6rHJC3GYD6puw6hcIn1PeEIgbHA2Qp4BG9gWxqt7x2eFkHmN+UOdgmwQ0?=
- =?us-ascii?Q?WsZyohDdTt6c20CMAMVmT/PqlXrqo/rUdctw0wlndDF8W2IsR17f/i9eP+El?=
- =?us-ascii?Q?Ausq8U4fNANipOyohAjYH5UufGcOW+yVTcl5w6Wjcbc1qPc2Te88PEPk3AYl?=
- =?us-ascii?Q?43VMWyGkiwhDtlveq0hv0vOiSWbDLsHeHDM8NSkEXs9zVQQa8rJnavCs0ptJ?=
- =?us-ascii?Q?c6vb084SOVSrPUPDUU4QZsUrPYLGZIW3jQ2ZkTbMIVugnvVpGduGsnlGDHk5?=
- =?us-ascii?Q?aFeuOQWZljol5LrbXIj7MEsecD8Qek9Yu5mQwNXTCy0K8oW+gcBvaI9RIYb+?=
- =?us-ascii?Q?7XpSIFjoofO4V/XFrgRPLwSB/RSBeGcGQICgk9xbJHSOTrVkABRbmnVE62Hk?=
- =?us-ascii?Q?GYKrUS3JYCf5E45oWlbm/hb9sY0Ox8ooHmd9WJUJchdYH5DNlSihnNvYIXdh?=
- =?us-ascii?Q?uRxQGrYssVE8asGEedUtIYwTgU6HKhuYeaGpZucrJjhtB/SCzVKA4C4X8GUA?=
- =?us-ascii?Q?jSgSnRVAAe6FjvSu6zb4+qmFQKPV1JOPRtYBPIrg7CKLDq4rg8HdwZwEL0fe?=
- =?us-ascii?Q?drVMKJo3wIGasz/0e99xjY2jqBftpxNVZdr2Vg0vm6b3B9Dt6Huf3+HN6aPv?=
- =?us-ascii?Q?Fz8gXMF2r3aVu7mb5yKhAtGKIzHQjWwdIdw6KqQvpVOcTfSo+qPdMD6VjFTm?=
- =?us-ascii?Q?He8Q+//1LX4hSIqM5C0eG0wQx4afXfIW1eG7jEUVaTOAJNw01FaC/Lr+Fp4C?=
- =?us-ascii?Q?3WI+KHSIZL8ONy7ELrBDPWOTluy6uUI/495ZVkpKSrOQAmpOSo7H4oAEgDgl?=
- =?us-ascii?Q?2RpHmNIDK57BEP95J+hhn4nCbj5JR7vytb10bl6s1W+6CbCNnnV99sWRmQDa?=
- =?us-ascii?Q?ftVCIqvwhN9rEd8aJFU8o7UInQngBW338ewOwSgKdB195N4R13Lx5SJbI015?=
- =?us-ascii?Q?UoERQI0CAeNdHfSJ+rOenW7EiFk/FNlb3xj5Dg7qskE9ZOASThFGFwcqoBOR?=
- =?us-ascii?Q?7m9mK8bO5U3SJrYJhC6EiWjbTgfXKTjCP2EaybpS2x/nFZ/cu1noNS+H8y59?=
- =?us-ascii?Q?ejmYFcBCEDvs3Ut23bCutcMNb7YeHkAHYudrFoGEdcLzWiiA4dsfjoWxhxMk?=
- =?us-ascii?Q?9fd8yjfaURjKAF4AD6VL8wOvLd/yrZdyR5EQjzMg60bBWlvc9PFBUCWx3lHO?=
- =?us-ascii?Q?baK8IyUmcO9it7yfbxbf8FG9sfLrlw8aDLi5evxJqcBVDy/aNKF/1mHdhQ43?=
- =?us-ascii?Q?DdxQ+9rKXV4qjBPI8NuVRNtiY92pIX1JHEyIBkwNDKGRWWj4mM1/mLfJGVrv?=
- =?us-ascii?Q?enCpK8yVNpzi4PJC2Oy699DSKk6oanUMc7qVM6TL?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sat, 25 Mar 2023 14:14:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A31F65AA;
+        Sat, 25 Mar 2023 11:14:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 097A860C88;
+        Sat, 25 Mar 2023 18:14:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49236C433D2;
+        Sat, 25 Mar 2023 18:14:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679768075;
+        bh=nwd8uAm6HMt5ANQfErBP2Lg7DNgTd4QirKYb/KLHLbM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AqsLntR+uOq5sRuhLBMb8fIt+PCh4pATRSpPdO5+v8aWTWy2Hgop3T8XwRbhgR+d0
+         fHP0EpVDBRAxVSQLf8dZJpbmLElx2hmWPt64LsIoW9i7un7UoJNg2Y0uf2wV11ObUc
+         dYafZJmHt7I88JdoMw1KA7utYhaXL2pm6EUxl10qEUgM8MGHIPxneREVvGwVc36yV+
+         XKO1zPzV5kuFtwENWhbwU1+LhXVKffWn7ua7yYG2N7q7tC6eJ9Z30ZptqraQARJbOm
+         t0zw9u+ODDyG0UEEWdpBt9I9MKJ+8uDTszZL8tSzC1uTpADk1b6N6YaPlqnTmi/J78
+         p9v7VJm1WgBnA==
+Date:   Sat, 25 Mar 2023 18:29:37 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v4 4/8] iio: light: Add gain-time-scale helpers
+Message-ID: <20230325182937.3bdc881e@jic23-huawei>
+In-Reply-To: <5ba4ab3d-90ab-113e-1b95-86118d3a7392@gmail.com>
+References: <cover.1679062529.git.mazziesaccount@gmail.com>
+        <e5b93a3d2424b16d842e847c98f05f1a9befb2e1.1679062529.git.mazziesaccount@gmail.com>
+        <20230319180828.452a603c@jic23-huawei>
+        <5ba4ab3d-90ab-113e-1b95-86118d3a7392@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR11MB4045.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 006c1561-e7d9-4933-159e-08db2d5ed11e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2023 18:29:06.1486
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6PySIaVncvwbnh9mfCwt428yZRGF0Cpnye6q+66jSRI592Qt3dQNhdEjzHraaIaD5azWfm1SUp1mh0kjQuS52Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7340
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 20 Mar 2023 14:01:55 +0200
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+
+> On 3/19/23 20:08, Jonathan Cameron wrote:
+> > On Fri, 17 Mar 2023 16:43:23 +0200
+> > Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+> >   
+> >> Some light sensors can adjust both the HW-gain and integration time.
+> >> There are cases where adjusting the integration time has similar impact
+> >> to the scale of the reported values as gain setting has.
+> >>
+> >> IIO users do typically expect to handle scale by a single writable 'scale'
+> >> entry. Driver should then adjust the gain/time accordingly.
+> >>
+> >> It however is difficult for a driver to know whether it should change
+> >> gain or integration time to meet the requested scale. Usually it is
+> >> preferred to have longer integration time which usually improves
+> >> accuracy, but there may be use-cases where long measurement times can be
+> >> an issue. Thus it can be preferable to allow also changing the
+> >> integration time - but mitigate the scale impact by also changing the gain
+> >> underneath. Eg, if integration time change doubles the measured values,
+> >> the driver can reduce the HW-gain to half.
+> >>
+> >> The theory of the computations of gain-time-scale is simple. However,
+> >> some people (undersigned) got that implemented wrong for more than once.
+> >>
+> >> Add some gain-time-scale helpers in order to not dublicate errors in all
+> >> drivers needing these computations.
+> >>
+> >> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>  
+> > 
+> > Whilst you use it in the tests currently I'm not convinced there is a good
+> > reason to separate iio_init_iio_gts() from devm_iio_gts_build_avail_tables()
+> > as I'd expect them to be called as a pair in all drivers that use this.  
+> 
+> I was wondering if I should only provide the:
+> 
+> [devm_]iio_init_iio_gts() and always unconditionally allocate and build 
+> the tables inside the initialization routine.
+> 
+> I don't really care so much about how the tests are done. In my opinion 
+> the testability needs should rarely be determining what the production 
+> code looks like. In this case it is a waste of time / resources for 
+> drivers which do not tell the available scales/times to user-space, or 
+> do need some special routine for this. This is why I did make 
+> build_avail_tables() optional. Still not sure what would be the best 
+> approach though.
+
+Given it should be 'easy to do' after you have this infrastructure, why would
+a driver not provide the _available tables?
+
+> 
+> > Perhaps it's worth reworking the tests to do that even if it's not strictly
+> > necessary for specific tests.
+> > 
+> > I think a bit more care is need with storage of time (unsigned) + decide
+> > whether to allow for negative gains.  
+> 
+> My approach was just pretty simple "int is big enough for the times" 
+> (2000+ seconds when using usec as time units felt like more than enough 
+> for light sensors) and "gains are always positive".
+> 
+> I have not tested the negative gains at all - but I agree this should've 
+> been documented. Currently there is no gts-helper users who need 
+> negative gain (or large times for that matter) - so I was not handling them.
+> 
+> I'll try to check what it would mean code-wise if we converted times to 
+> unsigned. Negative times make no sense but allowing negative error 
+> values is a simple way to go.
+> 
+> As for the negative gains - I have no problem of someone adding a 
+> support for those if needed, but I don't currently see much point in 
+> investing time in that...
+
+I'm fine with keeping them all signed, but you probably need some checks
+to ensure the data provided isn't negative.
+
+> 
+> > Whilst they happen I'm not that bothered
+> > if that subtlety becomes a device driver problem when calling this.  I'm not
+> > sure I've seen a sensor that does both positive and negative gains for a single
+> > channel.  
+> 
+> I agree. If driver needs negative gains, then the driver needs to deal 
+> with it. I have no objections if driver authors want to improve these 
+> helpers by adding support for negative gains, but if they don't, then 
+> they have the exactly same problem they would have without these helpers :)
+> 
+> >> ---
+> >> Currently it is only BU27034 using these in this series. I am however working
+> >> with drivers for RGB sensors BU27008 and BU27010 which have similar
+> >> [gain - integration time - scale] - relation. I hope sending those
+> >> follows soon after the BU27034 is done.
+> >>
+> >> Changes:
+> >> v3 => v4:
+> >> - doc styling
+> >> - use memset to zero the helper struct at init
+> >> - drop unnecessary min calculation at iio_find_closest_gain_low()
+> >> - use namespace to all exports
+> >> - many minor stylings
+> >> - make available outside iio/light (move code to drivers/iio and move the
+> >>    header under include
+> >> - rename to look like other files under drivers/iio (s/iio/industrialio)  
+> > 
+> > Ah. I've always regretted not using iio_ for the prefix on those so I'm fine
+> > if you would prefer to stick to iio_  
+> 
+> I do like iio better. However, I think we should have common prefix for 
+> these files. Having both iio- and industrialio- will be confusing for 
+> newcomers. If I saw just one iio- prefixed file I would have assumed it 
+> is for a specific use, not for common use as the other "IIO-core" files.
+> 
+> One option would be converting all these industrialio-*.c files to 
+> iio_*.c - but I am not sure if it is worth the hassle.
+
+It gets messy because then you have to fix up the module names. People get
+annoyed if those change.
 
 
->-----Original Message-----
->From: John Hickey <jjh@daedalian.us>
->Sent: 09 March 2023 03:38
->To: Nguyen, Anthony L <anthony.l.nguyen@intel.com>
->Cc: John Hickey <jjh@daedalian.us>; Brandeburg, Jesse
-><jesse.brandeburg@intel.com>; David S. Miller <davem@davemloft.net>;
->Eric Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>;
->Paolo Abeni <pabeni@redhat.com>; Alexei Starovoitov <ast@kernel.org>;
->Daniel Borkmann <daniel@iogearbox.net>; Jesper Dangaard Brouer
-><hawk@kernel.org>; John Fastabend <john.fastabend@gmail.com>; Shujin Li
-><lishujin@kuaishou.com>; Xing, Wanli <xingwanli@kuaishou.com>; intel-
->wired-lan@lists.osuosl.org; netdev@vger.kernel.org; linux-
->kernel@vger.kernel.org; bpf@vger.kernel.org
->Subject: [PATCH net v3] ixgbe: Panic during XDP_TX with > 64 CPUs
->
->In commit 'ixgbe: let the xdpdrv work with more than 64 cpus'
->(4fe815850bdc), support was added to allow XDP programs to run on systems
->with more than 64 CPUs by locking the XDP TX rings and indexing them using
->cpu % 64 (IXGBE_MAX_XDP_QS).
->
->Upon trying this out patch via the Intel 5.18.6 out of tree driver on a sy=
-stem
->with more than 64 cores, the kernel paniced with an array-index-out-of-
->bounds at the return in ixgbe_determine_xdp_ring in ixgbe.h, which means
->ixgbe_determine_xdp_q_idx was just returning the cpu instead of cpu %
->IXGBE_MAX_XDP_QS.  An example splat:
->
->
->=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> UBSAN: array-index-out-of-bounds in
-> /var/lib/dkms/ixgbe/5.18.6+focal-1/build/src/ixgbe.h:1147:26
-> index 65 is out of range for type 'ixgbe_ring *[64]'
->
->=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> BUG: kernel NULL pointer dereference, address: 0000000000000058
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page  PGD 0 P4D 0
-> Oops: 0000 [#1] SMP NOPTI
-> CPU: 65 PID: 408 Comm: ksoftirqd/65
-> Tainted: G          IOE     5.15.0-48-generic #54~20.04.1-Ubuntu
-> Hardware name: Dell Inc. PowerEdge R640/0W23H8, BIOS 2.5.4 01/13/2020
-> RIP: 0010:ixgbe_xmit_xdp_ring+0x1b/0x1c0 [ixgbe]
-> Code: 3b 52 d4 cf e9 42 f2 ff ff 66 0f 1f 44 00 00 0f 1f 44 00 00 55 b9
-> 00 00 00 00 48 89 e5 41 57 41 56 41 55 41 54 53 48 83 ec 08 <44> 0f b7
-> 47 58 0f b7 47 5a 0f b7 57 54 44 0f b7 76 08 66 41 39 c0
-> RSP: 0018:ffffbc3fcd88fcb0 EFLAGS: 00010282
-> RAX: ffff92a253260980 RBX: ffffbc3fe68b00a0 RCX: 0000000000000000
-> RDX: ffff928b5f659000 RSI: ffff928b5f659000 RDI: 0000000000000000
-> RBP: ffffbc3fcd88fce0 R08: ffff92b9dfc20580 R09: 0000000000000001
-> R10: 3d3d3d3d3d3d3d3d R11: 3d3d3d3d3d3d3d3d R12: 0000000000000000
-> R13: ffff928b2f0fa8c0 R14: ffff928b9be20050 R15: 000000000000003c
-> FS:  0000000000000000(0000) GS:ffff92b9dfc00000(0000)
-> knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000058 CR3: 000000011dd6a002 CR4: 00000000007706e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> PKRU: 55555554
-> Call Trace:
->  <TASK>
->  ixgbe_poll+0x103e/0x1280 [ixgbe]
->  ? sched_clock_cpu+0x12/0xe0
->  __napi_poll+0x30/0x160
->  net_rx_action+0x11c/0x270
->  __do_softirq+0xda/0x2ee
->  run_ksoftirqd+0x2f/0x50
->  smpboot_thread_fn+0xb7/0x150
->  ? sort_range+0x30/0x30
->  kthread+0x127/0x150
->  ? set_kthread_struct+0x50/0x50
->  ret_from_fork+0x1f/0x30
->  </TASK>
->
->I think this is how it happens:
->
->Upon loading the first XDP program on a system with more than 64 CPUs,
->ixgbe_xdp_locking_key is incremented in ixgbe_xdp_setup.  However,
->immediately after this, the rings are reconfigured by ixgbe_setup_tc.
->ixgbe_setup_tc calls ixgbe_clear_interrupt_scheme which calls
->ixgbe_free_q_vectors which calls ixgbe_free_q_vector in a loop.
->ixgbe_free_q_vector decrements ixgbe_xdp_locking_key once per call if it i=
-s
->non-zero.  Commenting out the decrement in ixgbe_free_q_vector stopped
->my system from panicing.
->
->I suspect to make the original patch work, I would need to load an XDP
->program and then replace it in order to get ixgbe_xdp_locking_key back
->above 0 since ixgbe_setup_tc is only called when transitioning between XDP
->and non-XDP ring configurations, while ixgbe_xdp_locking_key is
->incremented every time ixgbe_xdp_setup is called.
->
->Also, ixgbe_setup_tc can be called via ethtool --set-channels, so this bec=
-omes
->another path to decrement ixgbe_xdp_locking_key to 0 on systems with
->greater than 64 CPUs.
->
->For this patch, I have changed static_branch_inc to static_branch_enable i=
-n
->ixgbe_setup_xdp.  We weren't counting references.  The
->ixgbe_xdp_locking_key only protects code in the XDP_TX path, which is not
->run when an XDP program is loaded.  The other condition for setting it on =
-is
->the number of CPUs, which I assume is static.
->
->Fixes: 4fe815850bdc ("ixgbe: let the xdpdrv work with more than 64 cpus")
->Signed-off-by: John Hickey <jjh@daedalian.us>
->---
->v1 -> v2:
->	Added Fixes and net tag.  No code changes.
->v2 -> v3:
->	Added splat.  Slight clarification as to why ixgbe_xdp_locking_key
->	is not turned off.  Based on feedback from Maciej Fijalkowski.
->---
-> drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c  | 3 ---
->drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 2 +-
-> 2 files changed, 1 insertion(+), 4 deletions(-)
->
+...
 
-Tested-by: Chandan Kumar Rout <chandanx.rout@intel.com> (A Contingent Worke=
-r at Intel)
+> >   
+> >> +/**
+> >> + * iio_gts_purge_avail_scale_table - free-up the available scale tables
+> >> + * @gts:	Gain time scale descriptor
+> >> + *
+> >> + * Free the space reserved by iio_gts_build_avail_scale_table(). Please note
+> >> + * that the helpers for getting available scales like the
+> >> + * iio_gts_all_avail_scales() are not usable after this call. Thus, this should
+> >> + * be only called after these helpers can no longer be called (Eg. after
+> >> + * the iio-device has been deregistered).  
+> > 
+> > Whilst I'm not that keen on the comment in general, if you really really want to
+> > have it we need to figure out one place to put it rather than lots of duplicates.  
+> 
+> I have seen way too many bugs with the unwinding errors. Usually with 
+> the IRQs but also when user-space has access to driver stuff. I placed 
+> this comment here hoping it would prevent at least one such bug as those 
+> tend to be really nasty to debug. If we avoid one, it is well worth of 
+> few lines of comment (IMO).
+
+I'd argue this particular code doesn't have the subtleties that irqs and stuff
+directly accessed from userspace has (where such comments would sometimes be
+helpful!).  Meh I don't care that much.
+
+
+> >> +
+> >> +/**
+> >> + * iio_gts_build_avail_scale_table - create tables of available scales
+> >> + * @gts:	Gain time scale descriptor
+> >> + *
+> >> + * Build the tables which can represent the available scales based on the
+> >> + * originally given gain and time tables. When both time and gain tables are
+> >> + * given this results:
+> >> + * 1. A set of tables representing available scales for each supported
+> >> + *    integration time.
+> >> + * 2. A single table listing all the unique scales that any combination of
+> >> + *    supported gains and times can provide.
+> >> + *
+> >> + * NOTE: Space allocated for the tables must be freed using
+> >> + * iio_gts_purge_avail_scale_table() when the tables are no longer needed.
+> >> + *
+> >> + * Return: 0 on success.
+> >> + */
+> >> +static int iio_gts_build_avail_scale_table(struct iio_gts *gts)
+> >> +{
+> >> +	int **per_time_gains, **per_time_scales, i, j, ret = -ENOMEM;
+> >> +
+> >> +	per_time_gains = kcalloc(gts->num_itime, sizeof(int *), GFP_KERNEL);  
+> > 
+> > As per other thread, I much prefer reviewing code with sizeof(*per_time_gains)
+> > as it requires fewer brain cells.  
+> 
+> Hm. I think it depends on whether one wants to understand how many bytes 
+> the sizeof() is actually referring. Well, again, I guess I have no 
+> choice here.
+
+Why would one care?  You care about the number of objects, for a kcalloc call
+but the size is rarely useful to have immediately visible.
+
+
+> >> +
+> >> +/**
+> >> + * iio_gts_build_avail_time_table - build table of available integration times
+> >> + * @gts:	Gain time scale descriptor
+> >> + *
+> >> + * Build the table which can represent the available times to be returned
+> >> + * to users using the read_avail-callback.
+> >> + *
+> >> + * NOTE: Space allocated for the tables must be freed using
+> >> + * iio_gts_purge_avail_time_table() when the tables are no longer needed.
+> >> + *
+> >> + * Return: 0 on success.
+> >> + */
+> >> +static int iio_gts_build_avail_time_table(struct iio_gts *gts)
+> >> +{
+> >> +	int *times, i, j, idx = 0;
+> >> +
+> >> +	if (!gts->num_itime)
+> >> +		return 0;
+> >> +
+> >> +	times = kcalloc(gts->num_itime, sizeof(int), GFP_KERNEL);
+> >> +	if (!times)
+> >> +		return -ENOMEM;
+> >> +
+> >> +	for (i = gts->num_itime - 1; i >= 0; i--) {
+> >> +		int new = gts->itime_table[i].time_us;
+> >> +  
+> > 
+> > This looks like a sort routine.  Don't we have something generic that will work?  
+> 
+> I think this is "combine and sort many tables into one while dropping 
+> duplicates". I must admit I don't know what sort routines we have 
+> in-kernel. If we have one which removes duplicates, then we could 
+> probably copy all the tables into one array and run such sort on it.
+> 
+> Or then we can leave this as is and add a comment about telling is going 
+> on here :)
+
+Perfect.
+
+> 
+> >   
+> >> +		if (times[idx] < new) {
+> >> +			times[idx++] = new;
+> >> +			continue;
+> >> +		}
+> >> +
+> >> +		for (j = 0; j <= idx; j++) {
+> >> +			if (times[j] > new) {
+> >> +				memmove(&times[j + 1], &times[j],
+> >> +					(idx - j) * sizeof(int));
+> >> +				times[j] = new;
+> >> +				idx++;
+> >> +			}
+> >> +		}
+> >> +	}
+> >> +	gts->avail_time_tables = times;
+> >> +	/*
+> >> +	 * This is just to survive a unlikely corner-case where times in the
+> >> +	 * given time table were not unique. Else we could just trust the
+> >> +	 * gts->num_itime.  
+> > 
+> > If integration times aren't unique I'd count it as driver bug and error out
+> > /scream.  Papering over things like this just make code harder to review
+> > to deal with what is probably a driver bug.  
+> 
+> I am not entirely sure. I don't know the sensor ICs in details, but I've 
+> seen plenty of other ICs where we may have different register values 
+> that mean same physical measure. One such example is almost all ROHM 
+> PMICs, where we often see voltage selection registers like:
+
+> 
+> register val 0 to <foo>:
+>   - 1.0V + (val * 10 mV)
+> register val <A> to <MAX>:
+>   - 3.3 V
+> 
+> If we have similar registers for the time, then it may be good idea to 
+> accept selectors A...MAX to have the same time. This allows the 
+> gts-helpers to be used to convert the register values to times also for 
+> such devices. If we don't allow same times to be in the tables, then 
+> there may be unknown but valid register values read from the IC.
+
+That I agree with.  Should the driver support more that one such option.
+No it shouldn't.   Snarky comments about repeated values are fine ;)
+I'd argue the driver has a bug if it hasn't hammered the device into a
+known state (typically via a documented reset value).   We always have
+fun corners where devices will accept reserved values and driver very
+rarely handle reading them back right - because we arrange that they are
+definitely not set by resetting the device.
+
+
+
+> >> +
+> >> +int iio_gts_find_gain_by_sel(struct iio_gts *gts, int sel)
+> >> +{
+> >> +	int i;
+> >> +
+> >> +	for (i = 0; i < gts->num_hwgain; i++)
+> >> +		if (gts->hwgain_table[i].sel == sel)
+> >> +			return gts->hwgain_table[i].gain;
+> >> +
+> >> +	return -EINVAL;
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(iio_gts_find_gain_by_sel);
+> >> +
+> >> +int iio_gts_get_min_gain(struct iio_gts *gts)  
+> > 
+> > Could just use min = INT_MAX;
+> > (indirectly from linux/limits.h, it's actually in vdso/limits.h
+> > but should not include that directly I think)
+> > then I don't hink you need the special casing for the
+> > first entry.  
+> 
+> Hmm. I guess you think we don't need to handle case num_hwgain == 0 here 
+> as it should be checked in the initialization routine. Not sure what to 
+> think about it.
+
+Yup. Using this code without having multiple hardware gains would be odd.
+Even if you did I still feel that num_hwgain == 1 would be correct setting.
+
+
+....
+
+> > 
+> > Currently can be negative.  Even when you stop that being the case
+> > by makign time unsigned, you need to be careful with ranges here.
+> > You may be better off separating the error handling from the values
+> > to avoid any issues even though that makes it a little harder to use.  
+> 
+> Yes. As I wrote above, I thought that the driver author needs to ensure 
+> the valid times would always be positive. I was guessing usec is going 
+> to be used as unit for most cases and 2000+ seconds is probably 
+> sufficient. But yes, I guess I should have documented this.
+
+Why not just check this at init?  Otherwise this will be a tricky bug
+to track down. Documentation is good, but code that tells you no is even
+better.
+
+> 
+> Hmm. Do you think we should support times larger than can be represented 
+> by signed int? I'd rather not support that if it is not needed as it 
+> will make this quite a bit more complex.
+
+Probably not - if needed by someone else they can add it.
+
+> 
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(iio_gts_find_int_time_by_sel);
+> >> +
+> >> +int iio_gts_find_sel_by_int_time(struct iio_gts *gts, int time)
+> >> +{
+> >> +	const struct iio_itime_sel_mul *itime;
+> >> +
+> >> +	itime = iio_gts_find_itime_by_time(gts, time);
+> >> +	if (!itime)
+> >> +		return -EINVAL;
+> >> +
+> >> +	return itime->sel;  
+> > 
+> > itime->sel can be negative.  I wonder if you should just make that
+> > u16 so that you can always return it as a positive integer but
+> > having it as unsigned in the structure.  
+> 
+> Here I did the same assumption of sel sizes. I don't expect we to see 32 
+> bit selectors. To tell the truth, I just followed the linear_ranges 
+> logic which is heavily used in the regulator drivers.
+> 
+> > Otherwise you need to add some docs on those limits and probably
+> > sanity check them during the _init()  
+> 
+> I am almost certain the sanity check is going to be an overkill, but it 
+> sure is doable. The onlu corner case I can think of is if register 
+> really accepts the time itself as a "selector" - but even then having 
+> such large values they would use the whole 32bits would be unlikely.
+
+I'd be fine with clear documentation of the limits, but it it's trivial
+to check they are being obeyed, that makes for an easier to use bit
+of code.
+
+> 
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(iio_gts_find_sel_by_int_time);
+> >> +
+> >> +static int iio_gts_get_total_gain(struct iio_gts *gts, int gain, int time)
+> >> +{
+> >> +	const struct iio_itime_sel_mul *itime;
+> >> +
+> >> +	if (!iio_gts_valid_gain(gts, gain))
+> >> +		return -EINVAL;
+> >> +
+> >> +	if (!gts->num_itime)
+> >> +		return gain;
+> >> +
+> >> +	itime = iio_gts_find_itime_by_time(gts, time);
+> >> +	if (!itime)
+> >> +		return -EINVAL;
+> >> +
+> >> +	return gain * itime->mul;  
+> > 
+> > Check for overflow perhaps?  
+> 
+> I think that if we want to add the overflow checks, we should do that 
+> already in init. That way we can check all the combinations before they 
+> are used - so that the driver authors get the errors even if they did 
+> not test all the times/gains their HW is supporting. I am not really 
+> convinced it's worth though.
+
+Gains can get very very large, so in this one case I'd check it. Fine
+to do it at init though.  Note the large gains sometimes come about because
+SI units sometimes mean the obvious base unit is very small or very big.
+
+
+
+> 
+> > If you can make the units explicit in the parameter that's even better.  
+> 
+> My very initial idea was that the driver should know the units and that 
+> these helpers would do no unit conversions. I am unsure what road to 
+> take here now. I kind of like fixing the units - but on the other hand, 
+> allowing driver authors to decide the units makes this more flexible (as 
+> units can be chosen so that times won't overflow).
+> 
+> OTOH, now that there is the iio_gts_avail_times() - helper, it would be 
+> good to have the returned times in correct units. I guess we have same 
+> integration-time unit specified for all types of sensors? If yes, then 
+> it would be cleanest to require units in this format, especially if it 
+> is not likely to cause problems with the overflows.
+> 
+> > I will note that negative times seem unlikely so maybe that should always
+> > be unsigned?  gain probably can be negative even if that's unusual.
+> > That may lead to problems though as lin_scale is in turn unsigned.  
+> 
+> Yes. I plan to support only positive gains. At least for now.
+> 
+> >   
+> >> +
+> >> +/**
+> >> + * iio_gts_find_new_gain_sel_by_old_gain_time - compensate time change  
+> > 
+> > compensate for time change  
+> 
+> thanks :)
+> 
+> Oh, and by the way - I appreciate the review and suggestions even when I 
+> do not always agree with them. So, thanks again for all the effort!
+
+No problem
+
+J
+> 
+> Yours,
+> 	-- Matti
+> 
 
