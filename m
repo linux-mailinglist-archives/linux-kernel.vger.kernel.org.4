@@ -2,112 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6760C6C89B9
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 01:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76EBD6C89BE
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 01:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbjCYArj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 20:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42928 "EHLO
+        id S231228AbjCYAwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 20:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCYArh (ORCPT
+        with ESMTP id S229508AbjCYAwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 20:47:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B9FC17C
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 17:47:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F01C8B826AA
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 00:47:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 945F4C433EF;
-        Sat, 25 Mar 2023 00:47:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679705253;
-        bh=32m0h5HreH9HP53eNp/CC/r0tIXZbo4QjcqJUxvANw8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=WokIKGTnf1AmMrskPjm3U6/roQA0Nfjfls3TR69XlJxwYaa0hxdm5zyju3TwMm+iV
-         KZCxq8jm+vcJMoT9TaFP1l5aPGbmXpvu4fI7UdyW2mGrKNCHmquhiVjaWjsTTCVFcQ
-         KAoRsnmZD/qNHOJ0x0XsXuL/NZjcFiJJktRxGLfivgoSsqxjmU1zRzIy/a572GDiRV
-         YD7dAjHQVu1ECdN0l77hU5k/X33fjogiqo/ksTftA10/M+tzDbn4HgdkirdVav9VCz
-         NANEoobgcAX13Q8tym0RO2OWUBgdvMo/UbibFobPuTiuMD2Ymh/rTjtZyl9+uP6pwC
-         Lu9cSXFwc0N+w==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 282A51540432; Fri, 24 Mar 2023 17:47:33 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 17:47:33 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: A couple of TSC questions
-Message-ID: <acda3fb5-373a-48b1-b78e-eea18da4ccb0@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <b2f07f18-b60b-403b-90ff-937ea32963ee@paulmck-laptop>
- <ZBqOyLByOgvdAve3@feng-clx>
+        Fri, 24 Mar 2023 20:52:05 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B21B15C8C;
+        Fri, 24 Mar 2023 17:52:04 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id AA04D5C00AB;
+        Fri, 24 Mar 2023 20:52:01 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 24 Mar 2023 20:52:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679705521; x=
+        1679791921; bh=263d8X9NDnlXPj9Gft3I5NwFp7vjifRWFXPErnNXYcg=; b=S
+        Vyu3+WT1SQ/rpL2qc2AVcRZtC1GHV0VANuJwsnb7O6eD3ujY53Zq2C3RNp2VhjD9
+        kSJ1EJ+Zw8yt4dt4g3tdsF1epmgk+Y6dQqQgcvUGi2Qm+ja16GcM4FbDwObo6gtI
+        pi04vLMwFg2BUmjNBkoYk22EYsqJa2AQac4Lu5WU+AHgsM+9gV29MBa4Zfq11uKe
+        Cy80Bewh3fXKQ8hOB5sa9akOYIKgrGYGEpYbUpQDYkJfyKigqbDZuGUUy4PRV3H7
+        g9yEbctH5adS87bZ9xOH2G4HXbXRGkaPvNmwBaRyqIDV/UFqqbPhQNcpOq9xBlCi
+        foSWP7R2Wwlzk7OJDskSg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679705521; x=1679791921; bh=263d8X9NDnlXP
+        j9Gft3I5NwFp7vjifRWFXPErnNXYcg=; b=Kwa9zywoQPN5tt82AYZ+Wg9Z9klHk
+        7RvusbiekcY51nEhKGK2jcIRMl+Rozu+uM2p5mQEVNXqvrqtsb7ApH7sJyLF7233
+        ZwYOmAPZS0IKtWacHr4094ha8LJn4jQOAu5avofXNR9tl0ewf7J/aZzYgGIXaj1R
+        9UXuVNSMj3xQxAGEAj8lBhd5dYv4CDUFe8xJ+uYDYqZzGUYpnmDz1r5AV26g7BYF
+        IkQozErZ0/l8GfKLgFN/xYXIXSFqiFQO2xAKLcu8EmUpuHK1ssxJ2jiIy2X+eQrR
+        pV1qTU4O1HdJBgP7IwY/9mSxS/LZc8mhtVU/btMEdix83nf6OgAJFqmjw==
+X-ME-Sender: <xms:sEUeZGvItccVD1Qq2oLUDYoR6gIcVER-qXwkLHPowAW8TSWn6XWAUA>
+    <xme:sEUeZLeTEC8HccwXT42QqAny5pR7oxlbFKm8pL72GitCU6GTPbSR1jcnr9y49n2Xy
+    EReWcS6podMPNNwLa0>
+X-ME-Received: <xmr:sEUeZByn2cSPGV14wq43GHsuqardoj3r93lVhd8GpO0CELe6FXgNY0nT5YCgrGlKZ2eG_Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegjedgvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeelgffhfeetlefhveffleevfffgtefffeelfedu
+    udfhjeduteeggfeiheefteehjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhl
+    sehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:sEUeZBO7gvcY9fDy9xCIf_SlQrpdKoZ1F6E45UV-KQ5zGrIT6P4r5Q>
+    <xmx:sEUeZG99hAKAavKAOXXgIoXHpqYDgAk_iSFV0ZjsMSRReZSAMpzFKA>
+    <xmx:sEUeZJW-VYDBbwny3b_XzXVpsLcsBwrMpbXhuTbBKJTkM4W52Doo-g>
+    <xmx:sUUeZLKphPcSWDVtDKrrobSajDCpcz6BVOo8ebcIaUsh46zDTtFpmQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 24 Mar 2023 20:52:00 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 0EE5310A607; Sat, 25 Mar 2023 03:51:57 +0300 (+03)
+Date:   Sat, 25 Mar 2023 03:51:57 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv8 06/14] efi/x86: Implement support for unaccepted memory
+Message-ID: <20230325005157.37b4alnuf6p6mh66@box.shutemov.name>
+References: <20221207014933.8435-1-kirill.shutemov@linux.intel.com>
+ <20221207014933.8435-7-kirill.shutemov@linux.intel.com>
+ <Y7Q5x7qV/Cmc/p8s@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZBqOyLByOgvdAve3@feng-clx>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <Y7Q5x7qV/Cmc/p8s@zn.tnic>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 01:14:48PM +0800, Feng Tang wrote:
-> Hi, Paul
+On Tue, Jan 03, 2023 at 03:20:55PM +0100, Borislav Petkov wrote:
+> > diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
+> > index 6787ed8dfacf..8aa8adf0bcb5 100644
+> > --- a/drivers/firmware/efi/Kconfig
+> > +++ b/drivers/firmware/efi/Kconfig
+> > @@ -314,6 +314,20 @@ config EFI_COCO_SECRET
+> >  	  virt/coco/efi_secret module to access the secrets, which in turn
+> >  	  allows userspace programs to access the injected secrets.
+> >  
+> > +config UNACCEPTED_MEMORY
+> > +	bool
+> > +	depends on EFI_STUB
 > 
-> On Tue, Mar 21, 2023 at 04:23:28PM -0700, Paul E. McKenney wrote:
-> > Hello, Feng!
-> > 
-> > I hope that things are going well for you and yours!
+> This still doesn't make a whole lotta sense. If I do "make menuconfig" I don't
+> see the help text because that bool doesn't have a string prompt. So who is that
+> help text for?
+
+It is a form of documentation for a developer. The same happens for other
+options. For instance, BOOT_VESA_SUPPORT or ARCH_HAS_CURRENT_STACK_POINTER.
+
+Yes, it is not visible user, but I still think it is helpful for a
+developer to understand what the option does.
+
+> Then, in the last patch you have
 > 
-> Thanks!
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -888,6 +888,8 @@ config INTEL_TDX_GUEST
+>         select ARCH_HAS_CC_PLATFORM
+>         select X86_MEM_ENCRYPT
+>         select X86_MCE
+> +       select UNACCEPTED_MEMORY
+> +       select EFI_STUB
 > 
-> > First, given that the kernel can now kick out HPET instea of TSC in
-> > response to clock skew, does it make sense to permit recalibration of
-> > the still used TSC against the marked-unstable HPET?
+> I guess you want to select UNACCEPTED_MEMORY only.
+
+I had to rework it as
+
+config INTEL_TDX_GUEST
+	...
+	depends on EFI_STUB
+	select UNACCEPTED_MEMORY
+
+Naked select UNACCEPTED_MEMORY doesn't work if EFI and EFI_STUB is
+disabled:
+
+WARNING: unmet direct dependencies detected for UNACCEPTED_MEMORY
+  Depends on [n]: EFI [=n] && EFI_STUB [=n]
+  Selected by [y]:
+  - INTEL_TDX_GUEST [=y] && HYPERVISOR_GUEST [=y] && X86_64 [=y] && CPU_SUP_INTEL [=y] && X86_X2APIC [=y]
+
+IIUC, the alternative is to have selects all the way down the option tree.
+
 > 
-> Yes, it makes sense to me. I don't know the detail of the case, if
-> the TSC frequency comes from CPUID info, a recalibration against a
-> third party HW timer like ACPI_PM should help here. 
+> And I've already mentioned this whole mess:
 > 
-> A further thought is if there are really quite some case that the
-> CPUID-provided TSC frequency info is not accurate, then we may need
-> to enable the recalibration by default, and give a warning message
-> when detecting any mismatch. 
-
-Now that you mention it, it is quite hard to choose correctly within
-the kernel.  To do it right seems to require that NTP information be
-pushed into the kernel.
-
-> > Second, we are very occasionally running into console messages like this:
-> > 
-> > Measured 2 cycles TSC warp between CPUs, turning off TSC clock.
-> > 
-> > This comes from check_tsc_sync_source() and indicates that one CPU's
-> > TSC read produced a later time than a later read from some other CPU.
-> > I am beginning to suspect that these can be caused by unscheduled delays
-> > in the TSC synchronization code, but figured I should ask you if you have
-> > ever seen these.  And of course, if so, what the usual causes might be.
+> https://lore.kernel.org/r/Yt%2BnOeLMqRxjObbx@zn.tnic
 > 
-> I haven't seen this error myself or got similar reports. Usually it
-> should be easy to detect once happened, as falling back to HPET
-> will trigger obvious performance degradation.
+> Please incorporate all review comments before sending a new version of
+> your patch.
+> 
+> Ignoring review feedback is a very unfriendly thing to do:
+> 
+> - if you agree with the feedback, you work it in in the next revision
+> 
+> - if you don't agree, you *say* *why* you don't
 
-And that is exactly what happened.  ;-)
+Sorry, it was not my intention. I misread your comment and focused on
+build issues around the option.
 
-> Could you give more detail about when and how it happens, and the
-> HW info like how many sockets the platform has. 
-
-We are in early days, so I am checking for other experiences.
-
-> CC Thomas, Waiman, as they discussed simliar case here:
-> https://lore.kernel.org/lkml/87h76ew3sb.ffs@tglx/T/#md4d0a88fb708391654e78312ffa75b481690699f
-
-Fun!  ;-)
-
-							Thanx, Paul
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
