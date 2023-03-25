@@ -2,152 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E29C96C8F74
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:33:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F0B6C8F76
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbjCYQdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 12:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
+        id S231347AbjCYQdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 12:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjCYQdI (ORCPT
+        with ESMTP id S231404AbjCYQdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 12:33:08 -0400
-X-Greylist: delayed 65 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 25 Mar 2023 09:33:05 PDT
-Received: from bgl-iport-4.cisco.com (bgl-iport-4.cisco.com [72.163.197.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691971999;
-        Sat, 25 Mar 2023 09:33:04 -0700 (PDT)
-X-IPAS-Result: =?us-ascii?q?A0BDAADxIB9klxjFo0haHAECAgEHARQBBAQBgXwHAQwBg?=
- =?us-ascii?q?3gsEhgujHFfiRKCNYhFA4c6ij+CDQEBAQ0BAUQEAQE+AYoCJjQJDgECBAEBA?=
- =?us-ascii?q?QEDAgMBAQEBAQEDAQEFAQEBAgEHBBQBAQECAjgFDjeFdYcDCwEpHSZcAgk8C?=
- =?us-ascii?q?IJ+gigBAzEDsh8WBQIWgQGEcpkoChkoDWgDgWSBQQGENyOCaYQrhw44T4EVg?=
- =?us-ascii?q?TyCLIFTTYJxhXIEgiSWUwEDAgIDAgIDBgQCAgIFBAIBAwQCDgQOAwEBAgIBA?=
- =?us-ascii?q?QIECAICAwMCCA8TAwcCAQYFAQMBAgYEAgQBCwIFAgoBAgQBAgICAQUJAQMBA?=
- =?us-ascii?q?wELAgIHAgMFBgQCAw0CAQEDAgICDQMCAwIEAQUFAQEQAgYEBwEGAwsCBAEEA?=
- =?us-ascii?q?wECBQcDBgMCAgICCAQSAgMCAgQFAgICAQIEBQIHBgIBAgICBAIBAwIEAgIEA?=
- =?us-ascii?q?gIEAxEKAgMFAw4CAgICAQkLAgMHBAIDAwEHAgIMAQMYAwICAgICAgEDBwoEC?=
- =?us-ascii?q?wIFAQIBBAsBBQENBAICAgICAwIBAQMGCAYDCgIFBAMDBgkPDwgFAwEEAwIDA?=
- =?us-ascii?q?gEICwIDAgIECAIDAQICAQYCAwECAgECAgELAQECAwUCAhEBAgICAgIBAQIDA?=
- =?us-ascii?q?gMBBwECAhwGBAUDAwQCAgEEAQICBAQFCwIEAwEBAQICAgIDAgsDBQMBBgMDC?=
- =?us-ascii?q?gcEAQgCBgMEAgUEAwQEBgICAgICAQQBBAoDAgQEAwMGAwkCAgwCFAISBgEEC?=
- =?us-ascii?q?wsEAQICAg0DBAYCAwMCBQgEAgICAgIDBgIHBAICAwMCAgMDBwMBAgICAwEEB?=
- =?us-ascii?q?QYDAgQCAQMCBAICBAMEAQcCAgICAwECAgMDAQIBBgMCAgUCAgEIAgMCAgICA?=
- =?us-ascii?q?wMOAQEBAgoCAwEBAQUEAgIEBAQEAQICAgICDAMCAgIDAgQDAgIDEgMCBQIED?=
- =?us-ascii?q?AECBAICBwICAgICAgICAQICAgIDBQQCAQIDAwIEBQMDAgIDAgIFAQMEAQcEA?=
- =?us-ascii?q?gIGAwIFBgICBQEDBAECAhIDAwMCAgIBAgEBAgMHCQYCCQQBBhIDAwIEAgcDA?=
- =?us-ascii?q?gIEAgIBAgoCAgMCAgICAgQCCAIFBQIoAwMCIAMJAwcFSQIJAyMPAwsJCAcMA?=
- =?us-ascii?q?RYoBgwHDCgENAEUEgcHBioOBgIGAwQBCgsFBAUIAQIBAQYCBAIHCQwCAQYBB?=
- =?us-ascii?q?QICAwIBAwICAQYDAQICAgIFCgMEBQMKCQMBAQQDAgECAQIDAgMHAwIEAgMBA?=
- =?us-ascii?q?gMEBgYBCQQGBQ0DBAICAQIBAQMEBAQCAgECAgMBBAICAQEDAwMCAgIDBAIDA?=
- =?us-ascii?q?wsECgcEAgEFCwQCAwIBAQMHCQQCAgYBAgQCAgICAgIDAQEDCQQCAQMCAgQDB?=
- =?us-ascii?q?gIBAgEJBQIBCQMBAgEDBAEDCQECAgQJAgQHBQoCAgICCAICDgMDAgEBBAICB?=
- =?us-ascii?q?AUJAQIHAgUBAQMFBwICAQICAQQDAQkEAQIDAgEBAxIDAwEEAgUDAw0JBgICA?=
- =?us-ascii?q?QMCAQ0DAQIBAgMBBQUXAwgHFAMFAgIEBAEHAgIDAwMCAQIJBgEDAQUCDgMCA?=
- =?us-ascii?q?gQGAQIBAQIDEAUBAQEBFwEDBAIDAQQDAQECAQIDDwQBBAUMAxAMAgQBBgIIA?=
- =?us-ascii?q?gIDAwECAwUBAgMEAgEICgICAgIJAgoDAgMBAwUBAwIJAwEFAQIHAgYBAQECA?=
- =?us-ascii?q?ggCCAIDCwEDBQYCAgEFAgECAgUDBQICAgIEDQIFAgICBQECBwQCAgIDAQICB?=
- =?us-ascii?q?gUBAgcHAgUCAgIDAwoEBAcEAQICAQEFAQIBAwMBBAECAQIFAwYCAgICAQICA?=
- =?us-ascii?q?QEBCAICAgICAgMEAgiaWgIBgmeBDk53lAmDI4tTgheBM51TZQpkgyCaf4VtG?=
- =?us-ascii?q?jKpPgEulzyRPpIHhCwCBAYFAhY1gS46gVtNI4EBgjZSGQ+OLBaTUTk0OwIHC?=
- =?us-ascii?q?wEBAwmLQwEB?=
-IronPort-Data: A9a23:0EAvwqrkq0o1/4gnT+6fdO79NNdeBmIFZRIvgKrLsJaIsI4StFCzt
- garIBnXOPmMYDPxfN52a4qy8UwAuJLTy9RnTgJpqX03F3sS8OPIVI+TRqvS04x+DSFioGZPt
- Zh2hgzodZhsJpPkjk7xdOCn9xGQ7InQLlbGILas1htZGEk1GE/NtTo5w7Ri2tUy3IDga++wk
- YqaT/P3aQfNNwFcagr424rbwP+4lK2v0N+wlgVWicFj5DcypVFMZH4sDf3Zw0/Df2VhNrXSq
- 9AvY12O1jixEx8FUrtJm1tgG6EAaua60QOm0hK6V0U+6/RPjnRa70o1CBYTQXwUth+wlu1z8
- sgOuLXrbTYvF4TdyM1IBnG0EwkmVUFH0LXIJT20ttaeiheAeHr3yPIoB0YzVWEa0rktRzgQr
- rpBeW9LNEzra+GemNpXTsF3hsUlMcLrNasUu2prynfSCvNOrZXrEvyUu4UIhl/cgOhcH/nva
- O0/dgBgdRSdU0IUK0UHM6MHybLAan7XKm0E9w39SbAMy27e0AB8zpDzP9fPPN+HX8NYmgCfv
- G2u12D4BAwKcd+S0zyI9lqyieLV2yD2QoQfEPu/7PECqEbP3XELBQcLTlahifa8g0+6HdlYL
- iQ84CslraEo+EesRdnnVhuQr3uNvxpaUN1Ve9DW8ymTzqONsljcAGEYCDVAc9ch8sQxQFTGy
- 2NlgfvSRgFFibSoS0iAtbq99heDPwE8PD8rMHpsoRQ+3/Hvp4Q6jxTqR9llEbKogtCdJQwc0
- wxmvwBl2+1O0ZJjO7GTuAme02jw+sChohsdv12PBgqYAhVFiJlJjmBEBF6y0BqtBJidRwDQ4
- j0CktTY5+EVBpbLnyuIKAnsIF1Lz6reWNE/qQc+d3XEy9hK0yT5Fb28GBkkeC9U3j8sIFcFm
- nP7twJL/4N0N3C3d6JxaI/ZI510kvm+RY66DaGPMIYmjn1NmOmvoX8Giam4gj6FraTQufpX1
- WqzKJz1Vi9KVcyLMhLmHbx1PUAXKtAWnDOPGs+TI+WP2ruFb3ndUqYeLFaLdYgEAFCs/m3oH
- yJkH5LSkX13CbSmCgGOqNJ7ELz/BSVibXwAg5cMLbDrz8sPMDxJNsI9Npt7JdE5xP4LyrqgE
- 7PUchYw9WcTTEbvcW2iAk2Popu2NXqjhRrX5RARAGs=
-IronPort-HdrOrdr: A9a23:ho18GKltddupuPIrcXtebZNEJtLpDfIn3DAbv31ZSRFFG/FwWf
- rAoB19726QtN9/YhAdcLy7VZVoIkmsl6Kdn7NwAV7KZmCP0wGVxepZg7cKrQeNJ8SHzJ8/6U
- +lGJIOb+EZyjNB/KLH3DU=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="5.98,290,1673913600"; 
-   d="scan'208";a="9166282"
-Received: from vla196-nat.cisco.com (HELO bgl-core-2.cisco.com) ([72.163.197.24])
-  by bgl-iport-4.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 25 Mar 2023 16:31:57 +0000
-Received: from bgl-ads-3583.cisco.com (bgl-ads-3583.cisco.com [173.39.60.220])
-        by bgl-core-2.cisco.com (8.15.2/8.15.2) with ESMTPS id 32PGVv3Z003744
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 25 Mar 2023 16:31:57 GMT
-Received: by bgl-ads-3583.cisco.com (Postfix, from userid 1784405)
-        id 002E5CC1296; Sat, 25 Mar 2023 22:01:56 +0530 (IST)
-From:   Shinu Chandran <s4superuser@gmail.com>
-To:     richardcochran@gmail.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shinu Chandran <s4superuser@gmail.com>
-Subject: [PATCH] ptp: ptp_clock: Fix coding style issues
-Date:   Sat, 25 Mar 2023 22:01:35 +0530
-Message-Id: <20230325163135.2431367-1-s4superuser@gmail.com>
-X-Mailer: git-send-email 2.35.6
+        Sat, 25 Mar 2023 12:33:37 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6387D26B7
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 09:33:25 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id o44so3737738qvo.4
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 09:33:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1679762004;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=L+IGcq5whZ5cIGpFrj3EMqmDdJU1miHHxTnqhKHWiYM=;
+        b=LmxnjU8yJBNlf2YBqtna34dmEJA0ILPFrF6R6g4031+0eswNuQ2DJ3Xy2kXJTfJ339
+         JIODLbtiSEyzOf+Zn+RcdIpdPahLRSzGK5IEwDIXKS4ooUZC2zPhUcIUaQNORZJYhHfK
+         SpaUoJ7VV6nrkXRyu8VMcGmqPfiy9YSjG8upg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679762004;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L+IGcq5whZ5cIGpFrj3EMqmDdJU1miHHxTnqhKHWiYM=;
+        b=EXJVxwWWi2RjPFfRmHBUUp4xzt2xhPMSrq2/vnUpIQii1jY2XSkN1k8jF0hgWDUloS
+         BRidfxAoGha+km9qDvh4E7DKNWFislbCyuasrvGb7dQo9M8s7wbDYSMx9RtnFzz+g1ZG
+         DnMfVLO9nCzctDVBCpVS1onCLfmRC1hVAaqgRKdWDym0bTRGzDPECuhQa9diu8tWmbPj
+         +csKotrWgV6Pd22G/4cVXZFQ1kChLT6SJWJQ/MxVYTExCyeoVybFzWrZg2VzbYdAxocf
+         tyXw5t54DfM5H2RrC43JBWbiGzPKpB8l/ZRwLRCiL7qdkBysiLD9JejStIanPv0Dm60c
+         S9Yw==
+X-Gm-Message-State: AAQBX9fZQhLwKtgbuOJ6AxvdCEdsvPflRdWncKH02g9ybeMXclS8TeiQ
+        AJoKauZFcqe2rvudhuLtLv7U4A==
+X-Google-Smtp-Source: AKy350bgIokcJSqtEpxPRvLjwT5rK/qhjYoPwIA2RTUAyMR6SXuHmSeZThiEHWx3c5UnGOVNVYB5nQ==
+X-Received: by 2002:a05:6214:d84:b0:5a6:9028:7b89 with SMTP id e4-20020a0562140d8400b005a690287b89mr10319487qve.35.1679762004470;
+        Sat, 25 Mar 2023 09:33:24 -0700 (PDT)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id eh13-20020a056214186d00b005dd8b9345fasm1551290qvb.146.2023.03.25.09.33.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Mar 2023 09:33:23 -0700 (PDT)
+Date:   Sat, 25 Mar 2023 16:33:23 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Michal Hocko <mhocko@suse.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: WARN_ON in move_normal_pmd
+Message-ID: <20230325163323.GA3088525@google.com>
+References: <ZB2GTBD/LWTrkOiO@dhcp22.suse.cz>
+ <20230324130530.xsmqcxapy4j2aaik@box.shutemov.name>
+ <CAEXW_YQj_Wg0Xx2cHT9hTrDjEtrAV-bRjgL79=76d=D5f8GnEA@mail.gmail.com>
+ <CAHk-=whuXx+cyGhFKjU0qjzvgna8iDA8YcqDDyH3cQywixuMgA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Outbound-SMTP-Client: 173.39.60.220, bgl-ads-3583.cisco.com
-X-Outbound-Node: bgl-core-2.cisco.com
-X-Spam-Status: No, score=2.7 required=5.0 tests=DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_PASS,
-        SPF_NONE,SPOOFED_FREEMAIL,SPOOF_GMAIL_MID autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+In-Reply-To: <CAHk-=whuXx+cyGhFKjU0qjzvgna8iDA8YcqDDyH3cQywixuMgA@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed coding style issues
+Hi Linus,
 
-Signed-off-by: Shinu Chandran <s4superuser@gmail.com>
----
- drivers/ptp/ptp_clock.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On Fri, Mar 24, 2023 at 04:38:03PM -0700, Linus Torvalds wrote:
+> On Fri, Mar 24, 2023 at 6:43 AM Joel Fernandes <joel@joelfernandes.org> wrote:
+> >
+> > Wouldn't it be better to instead fix it from the caller side? Like
+> > making it non-overlapping.
+> 
+> I wonder if we could just do something like this in mremap() instead
+> 
+>  - if old/new are mutually PMD_ALIGNED
+> 
+>  - *and* there is no vma below new within the same PMD
+> 
+>  - then just expand the mremap to be PMD-aligned downwards
+> 
+> IOW, the problem with the exec stack moving case isn't really that
+> it's overlapping: that part is fine. We're moving downwards, and we
+> start from the bottom, so the moving part works fine.
+> 
+> No, the problem is that we *start* by moving individual pages, and
+> then by the time we've a few pages down by a whole PMD, we finish the
+> source PMD (and we've cleared all the contents of it), but it still
+> exists.
+> 
+> And at *that* point, when we go and start copying the next page, we're
+> suddenly fully PMD-aligned, and now we try to copy a whole PMD, and
+> then that code is unhappy about the fact that the old (empty) PMD is
+> there in the target.
+> 
 
-diff --git a/drivers/ptp/ptp_clock.c b/drivers/ptp/ptp_clock.c
-index 62d4d29e7c05..8fe7f2ce9705 100644
---- a/drivers/ptp/ptp_clock.c
-+++ b/drivers/ptp/ptp_clock.c
-@@ -129,6 +129,7 @@ static int ptp_clock_adjtime(struct posix_clock *pc, struct __kernel_timex *tx)
- 		err = ops->adjtime(ops, delta);
- 	} else if (tx->modes & ADJ_FREQUENCY) {
- 		long ppb = scaled_ppm_to_ppb(tx->freq);
+You are very right. I am able to also trigger the warning with a synthetic
+program that just mremaps a range and moves it in the same way that triggers
+this issue, however I had to hack the kernel to prevent mremap from erroring
+out if ranges overlap (unlike exec, mremap does some initial checks for
+that). Also had to do other hacks but I did reproduce it consistently.
+
+The issue is that even though the PMD is empty, it is allocated. So
+pmd_none() is kind of a lie in some sense, it is pointing to empty PTEs when
+the range is really empty.
+
+How about we replace the warning with something like the following?
+
++       if (unlikely(!pmd_none(*new_pmd))) {
++               // Check if any ptes in the pmd are non-empty. Doing this here
++               // is ok since this is not a fast path.
++               bool pmd_empty = true;
++               unsigned long tmp_addr = new_addr;
++               pte_t* check_pte = pte_offset_map(new_pmd, new_addr);
 +
- 		if (ppb > ops->max_adj || ppb < -ops->max_adj)
- 			return -ERANGE;
- 		err = ops->adjfine(ops, tx->freq);
-@@ -278,11 +279,13 @@ struct ptp_clock *ptp_clock_register(struct ptp_clock_info *info,
- 	/* Register a new PPS source. */
- 	if (info->pps) {
- 		struct pps_source_info pps;
++               new_ptl = pte_lockptr(mm, new_pmd);
++               spin_lock_nested(new_ptl, SINGLE_DEPTH_NESTING);
++               for (; tmp_addr < old_addr + PMD_SIZE; check_pte++, tmp_addr += PAGE_SIZE) {
++                       if (!pte_none(*check_pte)) {
++                               pmd_empty = false;
++                               break;
++                       }
++               }
+
++               WARN_ON_ONCE(!pmd_empty);
++               spin_unlock(new_ptl);
++       }
 +
- 		memset(&pps, 0, sizeof(pps));
- 		snprintf(pps.name, PPS_MAX_NAME_LEN, "ptp%d", index);
- 		pps.mode = PTP_PPS_MODE;
- 		pps.owner = info->owner;
- 		ptp->pps_source = pps_register_source(&pps, PTP_PPS_DEFAULTS);
-+
- 		if (IS_ERR(ptp->pps_source)) {
- 			err = PTR_ERR(ptp->pps_source);
- 			pr_err("failed to register pps source\n");
-@@ -347,9 +350,8 @@ static int unregister_vclock(struct device *dev, void *data)
- 
- int ptp_clock_unregister(struct ptp_clock *ptp)
- {
--	if (ptp_vclock_in_use(ptp)) {
-+	if (ptp_vclock_in_use(ptp))
- 		device_for_each_child(&ptp->dev, NULL, unregister_vclock);
--	}
- 
- 	ptp->defunct = 1;
- 	wake_up_interruptible(&ptp->tsev_wq);
--- 
-2.35.6
+
+> And for all of this to happen, we need to move things by an exact
+> multiple of PMD size, because otherwise we'd never get to that aligned
+> situation at all, and we'd always do all the movement in individual
+> pages, and everything would be just fine.
+> 
+> And more importantly, if we had just *started* with moving a whole
+> PMD, this also wouldn't have happened. But we didn't. We started
+> moving individual pages.
+> 
+> So you could see the warning not as a "this range overlaps" warning
+> (it's fine, and happens all the time, and we do individual pages that
+> way quite happily), but really as a "hey, this was very inefficient -
+> you shouldn't have done those individual pages as several small
+> independent invidual pages in the first place" warning.
+> 
+
+Exactly.
+
+> So some kind of
+> 
+>         /* Is the movement mutually PMD-aligned? */
+>         if ((old_addr ^ new_addr) & ~PMD_MASK == 0) {
+>                 .. try to extend the move_vma() down to the *aligned*
+> PMD case ..
+>         }
+> 
+
+I actually didn't follow what you meant by "mutually PMD-aligned". Could you
+provide some example address numbers to explain?
+
+AFAIK, only 2MB aligned memory addresses can be directly addressed by a PMD.
+Otherwise how will you index the bytes in the 2MB page? You need bits in the
+address for that.
+
+> logic in move_page_tables() would get rid of the warning, and would
+> make the move more efficient since you'd skip the "move individual
+> pages and allocate a new PMD" case entirely.
+> 
+> This is all fairly com,plicated, and the "try to extend the move
+> range" would also have to depend on CONFIG_HAVE_MOVE_PMD etc, so I'm
+> not saying it's trivial.
+> 
+> But it would seem to be a really nice optimization, in addition to
+> getting rid of the warning.
+> 
+> It could even help real world cases outside of this odd stack
+> remapping case if users ever end up moving vma's by multiples of
+> PMD_SIZE, and there aren't other vma's around the source/target that
+> disable the optimization.
+> 
+> Hmm? Anybody want to look into that? It looks hairy enough that I
+> think that "you could test this with mutually aligned mremap()
+> source/targets in some test program" would be a good thing. Because
+> the pure execve() case is rare enough that using *that* as a test-case
+> seems like a fool's errand.
+> 
+
+Just to mention, mremap errors out if you try to move overlapping ranges
+because this in  mremap_to():
+
+       /* Ensure the old/new locations do not overlap
+        if (addr + old_len > new_addr && new_addr + new_len > addr) {
+                pr_err("%s: (%s) (%d)", __func__, __FILE__, __LINE__);
+                goto out;
+        }
+
+Or is there an mremap trick I might be missing which actually allows
+overlapping range moves?
+
+thanks,
+
+ - Joel
+
 
