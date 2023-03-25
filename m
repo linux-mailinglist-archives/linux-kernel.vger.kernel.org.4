@@ -2,114 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5268A6C8F62
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D686C8F68
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbjCYQRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 12:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
+        id S231370AbjCYQUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 12:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCYQRM (ORCPT
+        with ESMTP id S229600AbjCYQUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 12:17:12 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDF74C01;
-        Sat, 25 Mar 2023 09:17:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679761031; x=1711297031;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Vrcn0rGVgrXIQf6tSvf4FE1wbGH838j2OtTvkbDyXDw=;
-  b=NRZ1i7NCCvQF5HJfvkUWLcqYMkEyL96Dl3LrcPbeNA/DwguAx/Canfxa
-   1Yi/aggSNNQVVUwdgVrt4C0OkQhv4lmYwP9FVufpBUrz9YHqZRlQpLySD
-   6pqS2kp1YR8azNFhMP6g37jUfwQ/bfnTcq0wCfSoZUQIL3O09C4Nxs6E3
-   0robPUd/xcZ6uLkl7OtnFXMcuNcvkaxfkuMF0voXlessMTi+nU/LBZP5O
-   8EbrdyzUyJdzZoBdRLdHp9FIEiQHIXClwlGiKvQrsYwVrIpMvqq+ihdNW
-   7oU7Pka2A+8kgJhb+w3QfoZkTF7gFRIYeGUFvmNt0VpJmer2Kr+vdUYNs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="404914160"
-X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="404914160"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 09:17:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="685520387"
-X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="685520387"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 25 Mar 2023 09:17:07 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pg6Zn-000GNO-0v;
-        Sat, 25 Mar 2023 16:17:07 +0000
-Date:   Sun, 26 Mar 2023 00:16:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dylan Van Assche <me@dylanvanassche.be>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Dylan Van Assche <me@dylanvanassche.be>
-Subject: Re: [PATCH 2/4] dts: arm64: qcom: sdm845: add SLPI FastRPC support
-Message-ID: <202303260005.DW8hkIxU-lkp@intel.com>
-References: <20230325135114.21688-3-me@dylanvanassche.be>
+        Sat, 25 Mar 2023 12:20:02 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CAE46B6;
+        Sat, 25 Mar 2023 09:20:01 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id DFCCE1C0AB2; Sat, 25 Mar 2023 17:19:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1679761199;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YRwPfaYaywOmrK6OfSfiS8RmP4MmRbWuSvlWBa58fnQ=;
+        b=jmjiScV6hbfNDIw7nnqPvflBDUvKMRJ2P54KtG57X4ZcC7qauUjo645tI568VgvxLSmfeH
+        adH6yfiTHSbNaPwcdQy6EBDmYADimIllnK+o6Q1PDASbHhLhp8nHCSupSwcJuy7ZZAs3u5
+        Kajr7eSMnto69No4DkvoumkEx5sY/xU=
+Date:   Sat, 25 Mar 2023 17:19:56 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-leds@vger.kernel.org,
+        William Zhang <william.zhang@broadcom.com>,
+        Rafa?? Mi??ecki <rafal@milecki.pl>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] leds: bcm63138: refer to ARCH_BCMBCA instead of
+ ARCH_BCM4908
+Message-ID: <20230325161955.GE1820@bug>
+References: <20230307082936.16631-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230325135114.21688-3-me@dylanvanassche.be>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230307082936.16631-1-lukas.bulwahn@gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dylan,
+On Tue 2023-03-07 09:29:36, Lukas Bulwahn wrote:
+> Commit dd5c672d7ca9 ("arm64: bcmbca: Merge ARCH_BCM4908 to ARCH_BCMBCA")
+> removes config ARCH_BCM4908 as config ARCH_BCMBCA has the same intent.
+> 
+> Probably due to concurrent development, commit a0ba692072d8 ("leds:
+> bcm63138: add support for BCM63138 controller") introduces 'LED Support
+> for Broadcom BCM63138 SoC' that depends on ARCH_BCM4908, but this use was
+> not visible during the config refactoring from the commit above. Hence,
+> these two changes create a reference to a non-existing config symbol.
+> 
+> Adjust the LEDS_BCM63138 definition to refer to ARCH_BCMBCA instead of
+> ARCH_BCM4908 to remove the reference to the non-existing config symbol
+> ARCH_BCM4908.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-Thank you for the patch! Yet something to improve:
+Do we really want this "default Y" on those architectures? I'd understand
+it for something critical but LED is not, and if it is not even present on
+all such machines...
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.3-rc3 next-20230324]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dylan-Van-Assche/dts-arm64-qcom-sdm845-add-SLPI-remoteproc/20230325-215354
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230325135114.21688-3-me%40dylanvanassche.be
-patch subject: [PATCH 2/4] dts: arm64: qcom: sdm845: add SLPI FastRPC support
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20230326/202303260005.DW8hkIxU-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/df03f51210d03566bf0d35a56633d55e3c57b5ad
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dylan-Van-Assche/dts-arm64-qcom-sdm845-add-SLPI-remoteproc/20230325-215354
-        git checkout df03f51210d03566bf0d35a56633d55e3c57b5ad
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303260005.DW8hkIxU-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> Error: arch/arm64/boot/dts/qcom/sdm845.dtsi:3360.4-5 syntax error
-   FATAL ERROR: Unable to parse input tree
+BR,
+									Pavel
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
