@@ -2,146 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25DF6C8D66
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 12:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 882D36C8D68
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 12:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbjCYLUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 07:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
+        id S231436AbjCYL1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 07:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbjCYLUE (ORCPT
+        with ESMTP id S229446AbjCYL1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 07:20:04 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDF4E1BA
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 04:20:01 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id u1so2426462wmn.5
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 04:20:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679743200;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FZRXrrCyhC/asJwSLOsOxy0dUDn7uJ0nZ8VEzBDUmgw=;
-        b=RvqlL4vXdmLZ3+GPCy8kCL42diInnqg9AUUQP6do0nrsiCPWaPmT0fMChz++P5h4cN
-         IINxvVj+mJcJdhAyRvExqfoEyaiozCKDjVHywj28w2lnCO3OYJ3WJ9/DbEuX4f7RgdMM
-         OZzckvtOpzyDgeErFfEgGeXqCBPiLVkckWugNsuxwnZyuZWkejiZ/cijSymExLqiBo/4
-         NxLJOiqBQ6LEOOpIqo80ugAyiDoqJqgqlHsYLsv2jn1njWdc8/f7m2a9rfdiZpLE6aQa
-         0TpMYMz0ajt1ulzLCxb0CsXjRZZh8k1hLSdFEYbSiTC4+wrorzMMV8AugBxHGiL4Hxll
-         R2eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679743200;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FZRXrrCyhC/asJwSLOsOxy0dUDn7uJ0nZ8VEzBDUmgw=;
-        b=DR+j5pdspF1VAE0JqP/xI7YlJvIQJGWEh3pLbSBfY1iDp0VJke1Dv5Gd5EdxOJzruY
-         +jGKaMP00QJVYtWGlmcz8R/DlUHJy+f6CoqpX7jX4Gy5ln2Sko1qcgQk/nogoRqyS0we
-         xPrNMpgS8B6iwzTG8XplV3yjJ2GL5kTHuK5ZQb8icimht91fYrxixVJMmlJKUwE4Rn8o
-         +TFDiUiVo/hK+Dj3ZRJE3aZrlBq/2Zpj6WdaDziRM8ATveH4NROU5hRfw3BRHkWOzkja
-         BNuwqfjSKupNnAYqm1/wJ6+sfEceAvg8Dq78vQd1RBIUFiMnbthCJi5A0pe3S9+/+y2i
-         dNVA==
-X-Gm-Message-State: AO0yUKVUZm/F1F5rZVHRcV/2q6ZRiIL9xkGdNCxj/f2uAGQZqN0MJBnA
-        iBCZpujUXR9aWp0jeV5uwkljXuH4/+ei3qlp9Hk=
-X-Google-Smtp-Source: AK7set8eWZRwYp+qmYJp8B02G2WuY74f3KR4uf3Of/INTmx5nhiWsfQjD+bD28PcSpUvCkvSp8WFEJRaqEoU4PH8QEg=
-X-Received: by 2002:a7b:ca4a:0:b0:3ed:c669:8a15 with SMTP id
- m10-20020a7bca4a000000b003edc6698a15mr1392897wml.1.1679743200148; Sat, 25 Mar
- 2023 04:20:00 -0700 (PDT)
+        Sat, 25 Mar 2023 07:27:18 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E63C9772;
+        Sat, 25 Mar 2023 04:27:17 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 992D2604F7;
+        Sat, 25 Mar 2023 12:27:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1679743634; bh=1AaZslzCVhH+qlBpv4Qi0DHOOHFDcLlnfNBkJ46Tn24=;
+        h=Date:To:Cc:From:Subject:From;
+        b=pSlSfCpZy8hcZlqEqO1H8prNiRjlWV2gPeRgvbDUOL+taJh/IADqXD7TwQc6+QNI7
+         YVNvyRcvrQA+PJCY3fyF+8KdN5riNZyVLCWg37L8v2mY2Jdrg+yzXUddttA+coH2sq
+         hz7mTCEY4lGu0CkdVZm8iWNnZwq6b3E5rk7+seaArPMAenN8dVUDLRwIZSIzy0onYb
+         1+9eO1fN9+MGU+cOgiOHKBIJzQhk/elmykdKFd34ela6UP+sxUUwBAen8sBNIfXC66
+         Lu6GI3hT0mArxujpL0JfCiFCzuZWynyoM6bdW5gqR7WuAGkmHCI6G4NchZz6aMKqiV
+         zxnBcfWohROFw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id GdpICizzHpnv; Sat, 25 Mar 2023 12:27:11 +0100 (CET)
+Received: from [192.168.1.3] (unknown [77.237.101.225])
+        by domac.alu.hr (Postfix) with ESMTPSA id 21A33604EF;
+        Sat, 25 Mar 2023 12:27:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1679743631; bh=1AaZslzCVhH+qlBpv4Qi0DHOOHFDcLlnfNBkJ46Tn24=;
+        h=Date:To:Cc:From:Subject:From;
+        b=U7V45fMOi1rhQDMxBthnmuiZMREVgfpFvjzK4wQKmmOjX/sjEm1dRmKQv3V6f2JvB
+         uPcnmacBqzhgaqc9vgm3NK0Bn4itcHTJ3Ytl1a0lv2bhBzXffxMl8QT9Vt5rYXO1gh
+         E6PiMOdTfck4vymLADW6+hU19owYtzxGmcMWMROO7cSUnoPUbJ+xEBnjhbP4U32naX
+         1iRrUVB7bqahz3vJ5pELJ0k70QWsvLlssOqDC9j9cwpf0TRD8NKSHPr9ri4py14Wlm
+         ff7IPUnsCN9+SRq+O0W/z5i15qOLcQ3oWFBy6QPWxHmJtm+STpTjV0v5ibkhdMrZN2
+         NfAq4yKvPdJTw==
+Message-ID: <24263902-c9b3-ce29-237b-1c3d6918f4fe@alu.unizg.hr>
+Date:   Sat, 25 Mar 2023 12:27:09 +0100
 MIME-Version: 1.0
-Reply-To: mkwesogo@gmail.com
-Sender: simtondji@gmail.com
-Received: by 2002:a5d:4a4c:0:b0:2d8:6f46:a535 with HTTP; Sat, 25 Mar 2023
- 04:19:59 -0700 (PDT)
-From:   "Mr. Muskwe Sanogo" <sanogokwe@gmail.com>
-Date:   Sat, 25 Mar 2023 11:19:59 +0000
-X-Google-Sender-Auth: ycbpY1NZYejUWu4cIxovoRDxGao
-Message-ID: <CAGg0eJxqqdi-mBH8JMwpVMLX9ErzkZF6LCCM-=CH3nm2n4va5g@mail.gmail.com>
-Subject: Greetings and articulate salutations.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=ADVANCE_FEE_5_NEW,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTTO_DEPT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, hr
+To:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Arnd Bergmann <arnd@arndb.de>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: BUG: drivers/usb/host/xhci: memleak in alloc from
+ xhci_disable_usb3_lpm_timeout()
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:336 listed in]
-        [list.dnswl.org]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [sanogokwe[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 LOTTO_DEPT Claims Department
-        *  0.8 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I bestow upon you a serendipitous and euphoric afternoon, With due
-respect to your personality and much sincerity of this purpose, I make
-this contact with you believing that you can be of great assistance to
-me. I'm Mr. Muskwe Sanogo,  I'm the Chairman of FOREIGN PAYMENTS
-CONTRACT AWARD COMMITTEE and also I currently hold the post of
-Internal Audit Manager of our bank, Please see this as a confidential
-message and do not reveal it to another person because it=E2=80=99s a top
-secret.
+Hi all!
 
-It may surprise you to receive this letter from me, since there has
-been no previous correspondence between us.  I will also like to make
-it clear here that l know that the internet has been grossly abused by
-criminal minded people making it difficult for people with genuine
-intention to correspond and exchange views without skepticism.
+Here are again the good news and the bad news:
 
-We are imposition to reclaim and inherit the sum of US $(28,850,000
-Million ) without any trouble, from a dormant account which remains
-unclaimed since 10 years the owner died. This is a U.S Dollars account
-and the beneficiary died without trace of his family to claim the
-fund.
+BAD:  another kernel memory leak detected (one more to hunt down and fix)
+GOOD: another kernel memory leak detected (one less unaccounted for)
 
-Upon my personal audit investigation into the details of the account,
-I find out that the deceased is a foreigner, which makes it possible
-for you as a foreigner no matter your country to lay claim on the
-balance as the Foreign Business Partner or Extended Relative to the
-deceased, provided you are not from here.
+I tried to make some fun, but maintainers are busy folks, so let's get down
+to business:
 
-Your integrity and trustworthiness will make us succeed without any
-risk. Please if you think that the amount is too much to be
-transferred into your account, you have the right to ask our bank to
-transfer the fund into your account bit by bit after approval or you
-double the account. Once this fund is transferred into your account,
-we will share the fund accordingly. 45%, for you, 45%, for me, 5%, had
-been mapped out for the expense made in this transaction, 5% as a free
-will donation to charity and motherless babies homes in both our
-countries as sign of breakthrough and more blessings.
+---
+Nine (9) new systemd-udevd kernel memory leaks occurred (unable to reproduce).
 
+The platform is Ubuntu 22.10 with (relatively recent) systemd 251.4-1ubuntu7.1
+on LENOVO_MT_82H8_BU_idea_FM_IdeaPad 3 15ITL6 with BIOS GGCN51WW from 11/16/2022.
 
-If you are interested to help without disappointment or breach of
-trust, reply me, so that I will guide you on the proper banking
-guidelines to follow for the claim. After the transfer, I will fly to
-your country for sharing of funds according to our agreement.
+The symptom (/sys/kernel/debug/kmemleak output):
 
-Assurance: Note that this transaction will never in any way harm or
-foiled your good post or reputation in your country, because
-everything will follow legal process.
+unreferenced object 0xffff909698ff9280 (size 64):
+  comm "systemd-udevd", pid 436, jiffies 4294893239 (age 6287.088s)
+  hex dump (first 32 bytes):
+    e0 51 bb 99 96 90 ff ff 00 00 00 00 00 00 00 00  .Q..............
+    40 5b bb 99 96 90 ff ff 00 00 00 00 00 00 00 00  @[..............
+  backtrace:
+    [<ffffffffb29de94c>] slab_post_alloc_hook+0x8c/0x320
+    [<ffffffffb29e5107>] __kmem_cache_alloc_node+0x1c7/0x2b0
+    [<ffffffffb2962f3b>] kmalloc_node_trace+0x2b/0xa0
+    [<ffffffffb31af2ec>] xhci_alloc_command+0x7c/0x1b0
+    [<ffffffffb31af451>] xhci_alloc_command_with_ctx+0x21/0x70
+    [<ffffffffb31a8a3e>] xhci_change_max_exit_latency+0x2e/0x1c0
+    [<ffffffffb31a8c5b>] xhci_disable_usb3_lpm_timeout+0x7b/0xb0
+    [<ffffffffb31457a7>] usb_disable_link_state+0x57/0xe0
+    [<ffffffffb3145f46>] usb_disable_lpm+0x86/0xc0
+    [<ffffffffb3145fc1>] usb_unlocked_disable_lpm+0x31/0x60
+    [<ffffffffb3155db6>] usb_disable_device+0x136/0x250
+    [<ffffffffb3156b23>] usb_set_configuration+0x583/0xa70
+    [<ffffffffb3164c6d>] usb_generic_driver_disconnect+0x2d/0x40
+    [<ffffffffb3158612>] usb_unbind_device+0x32/0x90
+    [<ffffffffb3022295>] device_remove+0x65/0x70
+    [<ffffffffb3023903>] device_release_driver_internal+0xc3/0x140
+unreferenced object 0xffff909699bb5b40 (size 32):
+  comm "systemd-udevd", pid 436, jiffies 4294893239 (age 6287.088s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    50 5b bb 99 96 90 ff ff 50 5b bb 99 96 90 ff ff  P[......P[......
+  backtrace:
+    [<ffffffffb29de94c>] slab_post_alloc_hook+0x8c/0x320
+    [<ffffffffb29e5107>] __kmem_cache_alloc_node+0x1c7/0x2b0
+    [<ffffffffb2962f3b>] kmalloc_node_trace+0x2b/0xa0
+    [<ffffffffb31af364>] xhci_alloc_command+0xf4/0x1b0
+    [<ffffffffb31af451>] xhci_alloc_command_with_ctx+0x21/0x70
+    [<ffffffffb31a8a3e>] xhci_change_max_exit_latency+0x2e/0x1c0
+    [<ffffffffb31a8c5b>] xhci_disable_usb3_lpm_timeout+0x7b/0xb0
+    [<ffffffffb31457a7>] usb_disable_link_state+0x57/0xe0
+    [<ffffffffb3145f46>] usb_disable_lpm+0x86/0xc0
+    [<ffffffffb3145fc1>] usb_unlocked_disable_lpm+0x31/0x60
+    [<ffffffffb3155db6>] usb_disable_device+0x136/0x250
+    [<ffffffffb3156b23>] usb_set_configuration+0x583/0xa70
+    [<ffffffffb3164c6d>] usb_generic_driver_disconnect+0x2d/0x40
+    [<ffffffffb3158612>] usb_unbind_device+0x32/0x90
+    [<ffffffffb3022295>] device_remove+0x65/0x70
+    [<ffffffffb3023903>] device_release_driver_internal+0xc3/0x140
+unreferenced object 0xffff909699bb51e0 (size 32):
+  comm "systemd-udevd", pid 436, jiffies 4294893239 (age 6287.088s)
+  hex dump (first 32 bytes):
+    02 00 00 00 20 04 00 00 00 a0 ff 98 96 90 ff ff  .... ...........
+    00 a0 ff 18 01 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffffb29de94c>] slab_post_alloc_hook+0x8c/0x320
+    [<ffffffffb29e5107>] __kmem_cache_alloc_node+0x1c7/0x2b0
+    [<ffffffffb2962f3b>] kmalloc_node_trace+0x2b/0xa0
+    [<ffffffffb31ad86e>] xhci_alloc_container_ctx+0x7e/0x140
+    [<ffffffffb31af469>] xhci_alloc_command_with_ctx+0x39/0x70
+    [<ffffffffb31a8a3e>] xhci_change_max_exit_latency+0x2e/0x1c0
+    [<ffffffffb31a8c5b>] xhci_disable_usb3_lpm_timeout+0x7b/0xb0
+    [<ffffffffb31457a7>] usb_disable_link_state+0x57/0xe0
+    [<ffffffffb3145f46>] usb_disable_lpm+0x86/0xc0
+    [<ffffffffb3145fc1>] usb_unlocked_disable_lpm+0x31/0x60
+    [<ffffffffb3155db6>] usb_disable_device+0x136/0x250
+    [<ffffffffb3156b23>] usb_set_configuration+0x583/0xa70
+    [<ffffffffb3164c6d>] usb_generic_driver_disconnect+0x2d/0x40
+    [<ffffffffb3158612>] usb_unbind_device+0x32/0x90
+    [<ffffffffb3022295>] device_remove+0x65/0x70
+    [<ffffffffb3023903>] device_release_driver_internal+0xc3/0x140
+.
+.
+.
 
-I am looking forward to hear from you soonest.
-Yours faithfully,
-Mr. Muskwe Sanogo
+Please find the config, lshw output and complete /sys/kernel/debug/kmemleak
+output here:
+
+https://domac.alu.unizg.hr/~mtodorov/linux/bugreports/systemd-udevd/kmemleak.log
+
+https://domac.alu.unizg.hr/~mtodorov/linux/bugreports/systemd-udevd/lshw.txt
+https://domac.alu.unizg.hr/~mtodorov/linux/bugreports/systemd-udevd/config-6.3.0-rc3-kobj-rlse-00317-g65aca32efdcb
+
+The systemd issue tracker said they accept issues only for the most recent 253 and
+252, 251.4 seems too old for them despite being issued on May 21, 2022
+(Source: https://github.com/systemd/systemd/releases).
+
+It is not that I want to dump this on Linux kernel developers, but I felt
+like it is a kernel memory leak problem rather than a bug in systemd-udevd.
+
+Of course, my hunch might be wrong ...
+
+As per Code of Conduct, I have checked for the developers and maintainers with
+scripts/get_maintainers.pl.
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+ 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
