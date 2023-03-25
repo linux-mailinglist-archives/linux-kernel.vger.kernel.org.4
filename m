@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E684F6C8D70
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 12:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 604336C8D73
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 12:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbjCYL3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 07:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
+        id S231940AbjCYL3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 07:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbjCYL3O (ORCPT
+        with ESMTP id S231873AbjCYL3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 07:29:14 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F9813D44;
-        Sat, 25 Mar 2023 04:29:03 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id k37so5448520lfv.0;
-        Sat, 25 Mar 2023 04:29:03 -0700 (PDT)
+        Sat, 25 Mar 2023 07:29:16 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578B112862;
+        Sat, 25 Mar 2023 04:29:04 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id y20so5418512lfj.2;
+        Sat, 25 Mar 2023 04:29:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679743741;
+        d=gmail.com; s=20210112; t=1679743742;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=x/omv0XmiZuQK7Oc5l5JxiCh3msEP6oIygvtCwqgkM8=;
-        b=p7xcQ6uCAoD3CBoBMAhx1yaM5fVT2XSS+akgG50HuFR+gyN5heLw0dwC8uN29OnE+m
-         eOO/NYERfWw9Fu3dSjX2ZH+beaAIxW/9dGah9wqmmoXO/pYQWfPjZNhmE6uxRZh9H7cm
-         fqQwQ1S+LP/EKS+wJBSzAZTDXOZ9JubwC5/+iY5AvaaaOyVVhIKOT9nFUWCpEiwSrF4k
-         iXRS/dTOHxwK8gMiCeov/QjX/4aZgPxPjJKDeOrFZneEPJzotLOn6t5Fdi/KktS87SJg
-         jekdQuQuxPHSxbd4VJxfCb1utA2E9N4iBL0obJv7El8o6/1T6VN90K6k6u1CokSP7V/a
-         HfxQ==
+        bh=ybH5MmJH8SEpMVxdPkHcz9qeJYxFxp9Si4fjLNySVz4=;
+        b=e4bhS2MNPPaxZ+gOkVSWjISSLuT9vdGBX3ASlFA9eWXEOJONvYTSJc5A1RNnz4Ucnh
+         pp++W5XGLStcH3jlGYkjMvR3h+U1330IrCbxGibQZQf+8ULAVQMhvdOzROIn0PSaDvGb
+         +hMN9gK/h5O+sTLXprnVzTF46wfUu2ZMy8DeSUCXDiAmsPSZwTWE03dzulwJv8bMP5dA
+         nrr07oGqgnL3iLqM7sQe1zHjw6NgplP0XJfvtu3qNl/pNmXxGFbrSXCRTaHSgpW5K9xS
+         ptuItdXSc9dT+uvNh7J5Ou0GY/qSfEHFdPDIOecj2OSHwG/UASABzpzUSieahnlSWibX
+         j7Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679743741;
+        d=1e100.net; s=20210112; t=1679743742;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=x/omv0XmiZuQK7Oc5l5JxiCh3msEP6oIygvtCwqgkM8=;
-        b=JlP5MKF1+xP5EfusBGCpJtO6MAJYNTfoqlRQkxcRzMhL/m2NH3x1KQKIeAP0aDEUTS
-         04GQHUv5BLYn9kIfiUlczXLEwqs2PCAhTFA1Ay+kVWBVuVkmtsjcy/RQoheINZA+Iqkx
-         WctgwVPjrFg+/3LKJf/+ApbbPwnOs/WK86dIsFMMS/GYXLAO3SroaRp4mp2A3OE5insb
-         0IbpPZ9CmtD3vbe8TlkF6lXedoZOmxx/lu7TwO/yQbBEieJG8NGry/uMcp/C742las3J
-         VztzXQgQTC16+JwzdupoCLa9EUyf1GoFsXTYIIdi/eBh8Ncng2jA4pNqqcLeuuBTmO3a
-         hthA==
-X-Gm-Message-State: AAQBX9e+q1KD0GOkeLj8oOmqjYxnOPhQQD3SobfEa5j6TFsrf6tnvFkY
-        RfAqVl4qCYi3Ocv4xe0K9TxiV6Q9H5RrIQ==
-X-Google-Smtp-Source: AKy350ZjOER9Q7QbZRS4yqQNlLQKE+EPnMFgvDdoZNzaYj2ltWfRV2oBNHrBMZa3NH4HrVpiHHsPbA==
-X-Received: by 2002:a05:6512:951:b0:4ca:98ec:7d9a with SMTP id u17-20020a056512095100b004ca98ec7d9amr1624745lft.15.1679743741616;
-        Sat, 25 Mar 2023 04:29:01 -0700 (PDT)
+        bh=ybH5MmJH8SEpMVxdPkHcz9qeJYxFxp9Si4fjLNySVz4=;
+        b=ij/YQaptxpfdBEo9gGxwO1uUjTT/Kwd39stS9wV3zHJsYh+C0gLx9o6g8JRun7onJK
+         cXSBZaKxJJGTv9OX2LOk9I1xFu5bmvoKDgX58DR6dGMsirKkdqk6Y864K5UM+Us/lXT0
+         8doUQc9Bn6Qxzy1f6FqYFFrUdvYFuZmrzVAJRThw8xZCVBMD9UXlV6BqsnKQ+KFXuFXQ
+         P8flUKX5QGlpyFNUJrTXMlGzK3H1mxV/o44vuAh2OgHaltu99XEoetmCMplUDLx6DtEi
+         KrJrDglCl43hhw79CPBWFlyPnOiKY/CPAURj1wgLM9z1Dk5c+hrfB8jsaEXg4LhuOEuO
+         XCqQ==
+X-Gm-Message-State: AAQBX9cwZjHN1SnRrnqwqG882OzFKGJD8JUsu1zhuyZO76pTX/iPTlSk
+        0+QviNYstdBch8nC3g89fJ01so9bysxCCQ==
+X-Google-Smtp-Source: AKy350ZQM7LhtZUypMbWYPj4Mbe/WHfriKtSP6gN3WlTuJclJolM9dYoT4FoGsEmaP+PgQFNCH41zQ==
+X-Received: by 2002:ac2:4c11:0:b0:4dc:65c0:c74e with SMTP id t17-20020ac24c11000000b004dc65c0c74emr1452103lfq.29.1679743742780;
+        Sat, 25 Mar 2023 04:29:02 -0700 (PDT)
 Received: from localhost.localdomain (cdb25.neoplus.adsl.tpnet.pl. [83.30.151.25])
-        by smtp.gmail.com with ESMTPSA id m30-20020ac24ade000000b004eaf55936eesm1502510lfp.233.2023.03.25.04.29.00
+        by smtp.gmail.com with ESMTPSA id m30-20020ac24ade000000b004eaf55936eesm1502510lfp.233.2023.03.25.04.29.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 04:29:01 -0700 (PDT)
+        Sat, 25 Mar 2023 04:29:02 -0700 (PDT)
 From:   Adam Skladowski <a39.skl@gmail.com>
 Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Adam Skladowski <a39.skl@gmail.com>,
@@ -60,9 +60,9 @@ Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] arm64: dts: msm8953: Provide dsi_phy clocks to gcc
-Date:   Sat, 25 Mar 2023 12:28:50 +0100
-Message-Id: <20230325112852.18841-2-a39.skl@gmail.com>
+Subject: [PATCH 3/4] arm64: dts: msm8953: Drop unsupported dwc3 flag
+Date:   Sat, 25 Mar 2023 12:28:51 +0100
+Message-Id: <20230325112852.18841-3-a39.skl@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230325112852.18841-1-a39.skl@gmail.com>
 References: <20230325112852.18841-1-a39.skl@gmail.com>
@@ -79,33 +79,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide clocks from dsi_phy to gcc, this will make
-sure we don't fallback to global name lookup.
+Property phy_mode according to binding checker does not exist,
+drop it.
 
 Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/msm8953.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/qcom/msm8953.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-index 438a70eb6152..5dd10c35ee0d 100644
+index 5dd10c35ee0d..0a1bf1058cbf 100644
 --- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
 +++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-@@ -640,10 +640,10 @@ gcc: clock-controller@1800000 {
- 			#power-domain-cells = <1>;
- 			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
- 				 <&sleep_clk>,
--				 <0>,
--				 <0>,
--				 <0>,
--				 <0>;
-+				 <&dsi0_phy 1>,
-+				 <&dsi0_phy 0>,
-+				 <&dsi1_phy 1>,
-+				 <&dsi1_phy 0>;
- 			clock-names = "xo",
- 				      "sleep",
- 				      "dsi0pll",
+@@ -977,7 +977,6 @@ usb3_dwc3: usb@7000000 {
+ 				snps,hird-threshold = /bits/ 8 <0x00>;
+ 
+ 				maximum-speed = "high-speed";
+-				phy_mode = "utmi";
+ 			};
+ 		};
+ 
 -- 
 2.25.1
 
