@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF6C6C8CB2
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D286C8CB5
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbjCYIh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 04:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
+        id S232360AbjCYIho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 04:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbjCYIg4 (ORCPT
+        with ESMTP id S232317AbjCYIhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 04:36:56 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268871816D
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:36:46 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id x3so16447337edb.10
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:36:46 -0700 (PDT)
+        Sat, 25 Mar 2023 04:37:10 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC83C19133
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:36:57 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id er18so5298990edb.9
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 01:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679733405; x=1682325405;
+        d=gmail.com; s=20210112; t=1679733416;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lK9U2QkxOq0arIBvwJf/Y9U+J4k5u5Usg6iA4O1ZSC0=;
-        b=G/Y87BKXeInyi0J58Okc4ggwBPOYlsX6hM8e43vTAhoJVoxerBpyss6UfYV9oYSyqK
-         huDJwuyRRxGXS+XQG0N15UIYtC+4nPXdFcgbJfRK+60LO0lzngBk4cMpn8PhOhoRh5z+
-         jLKkbAmv13wATgYQ5AUZ07A40MqUTVt4jVI9ThBu6RDk1z00zyMZFJAnrmK7AzzzjZc4
-         4nnqBqsshG1eVwhSy8uPVWyNSCsaIbASiaRpb53VrKOMIThCp+qBsX36N33+UCqHFxgE
-         FMy49BqKL33KkBhtJdZdYeTFpHwCtW0LiHcKm5zTgYDqP8dlmndq3oJtmrp9Wb91rWMg
-         wnCw==
+        bh=TxvwzNHlMhQxqbhDKY/vp8koWCnsLAxNykHAaCh4kRg=;
+        b=X/uzSL9Eb0S+87/KxZ9kB9/5y1GkDhCeHTfCE9i/WhoE4SiX0y0Z85UbK3XRpZeF8V
+         AH5Nrvm1dJa/yqzWOjEsdVRZaCuuRf4t4/OkNP3VVE+dn0wywLLrBIMhEXMhv8fx3Chl
+         Q/H9owBF18aJlv7SuA+dmhP31nyzj+YiaRRSDZc8QXZPWAJYO+yviUVsOQpGOHzA4f7F
+         rAlcv1dMw6b3MAD/1ILwUXif59PJ2Pw0UaIaZWwbxTTx0g0B3BjJagOxIA4LZbsXwGzj
+         aqluWNZ3HsnrqaeBm2WQ71d32zdD0LZ64R1g6NlHfndddk5VvGh3ObM+G+Z7Fko0jRds
+         cV+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679733405; x=1682325405;
+        d=1e100.net; s=20210112; t=1679733416;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lK9U2QkxOq0arIBvwJf/Y9U+J4k5u5Usg6iA4O1ZSC0=;
-        b=xf2yu6d82uTMDvm7dpocfiPI+yR9d+tEYigfOgDNTJQ9FaoH5aeRgqdD00iqO4Mo1G
-         2bJV9phkDPC1tOf+rFP9DkBwEjG3gFxHzR3OsKlD/54Xtw9N9qHTZjE/nybr4ZZJ4Ped
-         YW8Ih18Y/qgpzIIK6Z3H1nSMW3p8PNiio1j4OQB7RMOd3RKCDZUQM3jEh9a+X6Q7/V5q
-         CL09v3uyBFEo/eia27y9Kma3cUFh2oUYFQPHMf4ciWVZJahsm3pgMLwu6GJpwwcntEsB
-         B60VJmq9Irh8w+q7vCWd02cHhE5jiTD8hTAhgD8CsPetdlb9B0OnSnaVzfw0ev3jGFZ+
-         /OAQ==
-X-Gm-Message-State: AAQBX9cI96/tPrFciNUAZTBGjIJYcszCoqAc0mQ48ptHGcmDIyydU3cA
-        R45cK9+54WuGQzzcLXpRCDLcUJVBP90=
-X-Google-Smtp-Source: AKy350b9dPv/JAUc54uyUKi90ulvDyIfwFV/h1A93eUf5qb39BxndmMphfj/sUf7Owbfwa0nIbEmyg==
-X-Received: by 2002:a17:906:1001:b0:93f:e5e4:8c13 with SMTP id 1-20020a170906100100b0093fe5e48c13mr216269ejm.5.1679733405688;
-        Sat, 25 Mar 2023 01:36:45 -0700 (PDT)
+        bh=TxvwzNHlMhQxqbhDKY/vp8koWCnsLAxNykHAaCh4kRg=;
+        b=kpzoI5Ve5k5Hx5FbghQcGjl3UZoZltvmgPPYoLpaOsDs/s0j3gIqIt5Bp9fcpjOMuV
+         VWdzwy/wdxRQsLPk6yBwhHISoEhrzil4/CLsWczFzLi/r4VrDYLmLNZAITTr0GnRA68B
+         yG8hngBGnjOO/sXKRN0LNcL5gUdga2w5NMHw7KwBsydQ+22Q2m3xhSkd8nbwxvut8OU4
+         H8foKgnvhbloMTs5Ci31k6OtkBDLpGkB94vpax6B1DxPlhI2b4qsYmaaydSpdnSzSvmC
+         L2xJlKlZ3qTw7+/YhvPmU8YVZCOYpLkHJnTgLLFEl6hTvS9JR/t1AHU4hufX1bfeBEth
+         Ncfw==
+X-Gm-Message-State: AAQBX9fiqQ2MVd/U+bGj3gEBSBNBD9pJRbyDZHLSJEuzEw8p/xT/wkTo
+        6VptodjBJyXtW0ivWDIExHo=
+X-Google-Smtp-Source: AKy350ZXqwFwkJBUMScwJeLFVmcgz2yVWOKHhIkwUr6pBQnsdf+Jbr4TDPm/eqVDFoGEKNehfFH7sw==
+X-Received: by 2002:a17:906:74ca:b0:8b1:2614:dea6 with SMTP id z10-20020a17090674ca00b008b12614dea6mr5108823ejl.1.1679733416406;
+        Sat, 25 Mar 2023 01:36:56 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id h13-20020a170906110d00b009333aa81446sm9790043eja.115.2023.03.25.01.36.44
+        by smtp.gmail.com with ESMTPSA id n15-20020a170906118f00b0092421bf4927sm11642321eja.95.2023.03.25.01.36.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 01:36:45 -0700 (PDT)
-Date:   Sat, 25 Mar 2023 09:36:43 +0100
+        Sat, 25 Mar 2023 01:36:56 -0700 (PDT)
+Date:   Sat, 25 Mar 2023 09:36:54 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 08/11] staging: rtl8192e: Remove priv->rf_chip in
- _rtl92e_set_rf_power_state
-Message-ID: <a83b95c68697e6eade68bfd0bf8e22a1340c1457.1679732276.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 09/11] staging: rtl8192e: Remove rf_chip in
+ _rtl92e_get_supported_wireless_mode
+Message-ID: <e2db309dea3208560337376fec26fa5cfba93848.1679732276.git.philipp.g.hortmann@gmail.com>
 References: <cover.1679732276.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -72,224 +72,43 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 priv->rf_chip is initialized to RF_8256 and never changed. Remove
-conditions in function _rtl92e_set_rf_power_state as those are dead
-code. Removed unnecessary blank lines to shorten code.
+condition in function _rtl92e_get_supported_wireless_mode as it is dead
+code.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- .../staging/rtl8192e/rtl8192e/r8192E_phy.c    | 186 +++++++-----------
- 1 file changed, 76 insertions(+), 110 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 16 +---------------
+ 1 file changed, 1 insertion(+), 15 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-index 1f0d3654c6a0..b1c297d2ae36 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-@@ -1040,129 +1040,95 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
- 		return false;
- 	priv->set_rf_pwr_state_in_progress = true;
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index 3244aef12c05..8e4e939d7617 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -595,23 +595,9 @@ static void _rtl92e_refresh_support_rate(struct r8192_priv *priv)
+ 
+ static u8 _rtl92e_get_supported_wireless_mode(struct net_device *dev)
+ {
+-	struct r8192_priv *priv = rtllib_priv(dev);
+ 	u8 ret = 0;
  
 -	switch (priv->rf_chip) {
+-	case RF_8225:
 -	case RF_8256:
--		switch (rf_power_state) {
--		case rf_on:
--			if ((priv->rtllib->rf_power_state == rf_off) &&
--			     RT_IN_PS_LEVEL(psc, RT_RF_OFF_LEVL_HALT_NIC)) {
--				bool rtstatus;
--				u32 InitilizeCount = 3;
--
--				do {
--					InitilizeCount--;
--					rtstatus = rtl92e_enable_nic(dev);
--				} while (!rtstatus && (InitilizeCount > 0));
--
--				if (!rtstatus) {
--					netdev_err(dev,
--						   "%s(): Failed to initialize Adapter.\n",
--						   __func__);
--					priv->set_rf_pwr_state_in_progress = false;
--					return false;
--				}
--
--				RT_CLEAR_PS_LEVEL(psc,
--						  RT_RF_OFF_LEVL_HALT_NIC);
--			} else {
--				rtl92e_writeb(dev, ANAPAR, 0x37);
--				mdelay(1);
--				rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter1,
--						 0x4, 0x1);
--				priv->hw_rf_off_action = 0;
--
--				rtl92e_set_bb_reg(dev, rFPGA0_XA_RFInterfaceOE,
--						  BIT4, 0x1);
--				rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter4,
--						  0x300, 0x3);
--				rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter1,
--						  0x18, 0x3);
--				rtl92e_set_bb_reg(dev, rOFDM0_TRxPathEnable,
--						  0x3, 0x3);
--				rtl92e_set_bb_reg(dev, rOFDM1_TRxPathEnable,
--						  0x3, 0x3);
--				rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter1,
--						  0x60, 0x3);
--
-+	switch (rf_power_state) {
-+	case rf_on:
-+		if ((priv->rtllib->rf_power_state == rf_off) &&
-+		     RT_IN_PS_LEVEL(psc, RT_RF_OFF_LEVL_HALT_NIC)) {
-+			bool rtstatus;
-+			u32 InitilizeCount = 3;
-+
-+			do {
-+				InitilizeCount--;
-+				rtstatus = rtl92e_enable_nic(dev);
-+			} while (!rtstatus && (InitilizeCount > 0));
-+			if (!rtstatus) {
-+				netdev_err(dev,
-+					   "%s(): Failed to initialize Adapter.\n",
-+					   __func__);
-+				priv->set_rf_pwr_state_in_progress = false;
-+				return false;
- 			}
--
-+			RT_CLEAR_PS_LEVEL(psc,
-+					  RT_RF_OFF_LEVL_HALT_NIC);
-+		} else {
-+			rtl92e_writeb(dev, ANAPAR, 0x37);
-+			mdelay(1);
-+			rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter1,
-+					 0x4, 0x1);
-+			priv->hw_rf_off_action = 0;
-+			rtl92e_set_bb_reg(dev, rFPGA0_XA_RFInterfaceOE,
-+					  BIT4, 0x1);
-+			rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter4,
-+					  0x300, 0x3);
-+			rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter1,
-+					  0x18, 0x3);
-+			rtl92e_set_bb_reg(dev, rOFDM0_TRxPathEnable,
-+					  0x3, 0x3);
-+			rtl92e_set_bb_reg(dev, rOFDM1_TRxPathEnable,
-+					  0x3, 0x3);
-+			rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter1,
-+					  0x60, 0x3);
-+		}
-+		break;
-+	case rf_sleep:
-+		if (priv->rtllib->rf_power_state == rf_off)
- 			break;
--
--		case rf_sleep:
--			if (priv->rtllib->rf_power_state == rf_off)
-+		for (QueueID = 0, i = 0; QueueID < MAX_TX_QUEUE; ) {
-+			ring = &priv->tx_ring[QueueID];
-+			if (skb_queue_len(&ring->queue) == 0) {
-+				QueueID++;
-+				continue;
-+			} else {
-+				udelay(10);
-+				i++;
-+			}
-+			if (i >= MAX_DOZE_WAITING_TIMES_9x)
- 				break;
--
--
--			for (QueueID = 0, i = 0; QueueID < MAX_TX_QUEUE; ) {
--				ring = &priv->tx_ring[QueueID];
--
--				if (skb_queue_len(&ring->queue) == 0) {
--					QueueID++;
--					continue;
--				} else {
--					udelay(10);
--					i++;
--				}
--
--				if (i >= MAX_DOZE_WAITING_TIMES_9x)
--					break;
-+		}
-+		rtl92e_set_rf_off(dev);
-+		break;
-+	case rf_off:
-+		for (QueueID = 0, i = 0; QueueID < MAX_TX_QUEUE; ) {
-+			ring = &priv->tx_ring[QueueID];
-+			if (skb_queue_len(&ring->queue) == 0) {
-+				QueueID++;
-+				continue;
-+			} else {
-+				udelay(10);
-+				i++;
- 			}
-+			if (i >= MAX_DOZE_WAITING_TIMES_9x)
-+				break;
-+		}
-+		if (psc->RegRfPsLevel & RT_RF_OFF_LEVL_HALT_NIC &&
-+		    !RT_IN_PS_LEVEL(psc, RT_RF_OFF_LEVL_HALT_NIC)) {
-+			rtl92e_disable_nic(dev);
-+			RT_SET_PS_LEVEL(psc, RT_RF_OFF_LEVL_HALT_NIC);
-+		} else if (!(psc->RegRfPsLevel &
-+			   RT_RF_OFF_LEVL_HALT_NIC)) {
- 			rtl92e_set_rf_off(dev);
--			break;
--
--		case rf_off:
--			for (QueueID = 0, i = 0; QueueID < MAX_TX_QUEUE; ) {
--				ring = &priv->tx_ring[QueueID];
--
--				if (skb_queue_len(&ring->queue) == 0) {
--					QueueID++;
--					continue;
--				} else {
--					udelay(10);
--					i++;
--				}
--
--				if (i >= MAX_DOZE_WAITING_TIMES_9x)
--					break;
--			}
--
--			if (psc->RegRfPsLevel & RT_RF_OFF_LEVL_HALT_NIC &&
--			    !RT_IN_PS_LEVEL(psc, RT_RF_OFF_LEVL_HALT_NIC)) {
--				rtl92e_disable_nic(dev);
--				RT_SET_PS_LEVEL(psc, RT_RF_OFF_LEVL_HALT_NIC);
--			} else if (!(psc->RegRfPsLevel &
--				   RT_RF_OFF_LEVL_HALT_NIC)) {
--				rtl92e_set_rf_off(dev);
--			}
--
--			break;
--
--		default:
--			bResult = false;
--			netdev_warn(dev,
--				    "%s(): Unknown state requested: 0x%X.\n",
--				    __func__, rf_power_state);
--			break;
- 		}
--
- 		break;
--
- 	default:
--		netdev_warn(dev, "%s(): Unknown RF type\n", __func__);
-+		bResult = false;
-+		netdev_warn(dev,
-+			    "%s(): Unknown state requested: 0x%X.\n",
-+			    __func__, rf_power_state);
- 		break;
- 	}
+-	case RF_6052:
+-	case RF_PSEUDO_11N:
+-		ret = (WIRELESS_MODE_N_24G | WIRELESS_MODE_G | WIRELESS_MODE_B);
+-		break;
+-	case RF_8258:
+-		ret = (WIRELESS_MODE_A | WIRELESS_MODE_N_5G);
+-		break;
+-	default:
+-		ret = WIRELESS_MODE_B;
+-		break;
+-	}
++	ret = (WIRELESS_MODE_N_24G | WIRELESS_MODE_G | WIRELESS_MODE_B);
+ 	return ret;
+ }
  
- 	if (bResult) {
- 		priv->rtllib->rf_power_state = rf_power_state;
--
--		switch (priv->rf_chip) {
--		case RF_8256:
--			break;
--
--		default:
--			netdev_warn(dev, "%s(): Unknown RF type\n", __func__);
--			break;
--		}
- 	}
- 
- 	priv->set_rf_pwr_state_in_progress = false;
 -- 
 2.39.2
 
