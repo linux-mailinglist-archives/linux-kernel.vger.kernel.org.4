@@ -2,79 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1370A6C8AEA
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 05:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 139A76C8AEF
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 05:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbjCYEgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 00:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
+        id S231473AbjCYEht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 00:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231945AbjCYEgK (ORCPT
+        with ESMTP id S230360AbjCYEhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 00:36:10 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186E2BDFC
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 21:36:08 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id y5so4642227ybu.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 21:36:08 -0700 (PDT)
+        Sat, 25 Mar 2023 00:37:47 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DCD1422E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 21:37:46 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id cn12so15396057edb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 21:37:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679718967;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xNjwMHhNEt7mkc6GXMmNerOEFm044yMiKhT7Y4Wqv0o=;
-        b=pmpfj8dF2uwMZ3uaO+2O2/sGELbHH8EkHJz0EyBbGB+uL12ahWLVtpIpes2eqfN+4O
-         3OVmMroUh0k429XM0cCYAb6DG4b6q4ZIOwLKlgeGlj/h2lIXvq33cwwntCAozdjTxm6u
-         ORexa5PCWeATno20RGBgiPjLZLL0REor3mfUq8XaSpPojpFl9gdfgTOBrPhsfCfT+TwE
-         jCdbQ23oOma2WNpg3+IOWEPzH+cuU6OA+YNIE4+anngoH47xm60jmDcuxcaU/cBAQafp
-         cHqY3oA203hZdyZbT+ZCL/TL86ALzjdBg0A6DDXzcVksROI5jpKjAgfJgkQQPwGYqLwR
-         u/3A==
+        d=google.com; s=20210112; t=1679719064;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NMuWO+eqM4F8nQZaJRTjXyqs2/5MQPRiPwC4jEGB2Rs=;
+        b=L+/JPY/0iREVQLvI7pggvIU85qKWyZuwLse9KHVQy00x8LnQk15zEqQ2dItfbkf8Xc
+         jinjmlAjwTxba/K+cbeiot0mNiIF15Oi4eDBVwxanGDJjspzMRs/QEKZhb3nTnGG20Qk
+         VCIX3A1iKO2CtSUq+wB+uKNxtSvCDACGv/ulf6pILtz7hI/K1gI6rhNEP0DsLW0t3JSg
+         AzhYalbZFDACojW1EW0rFcfP25ejlhpDyTw+3o3AN5EoMcU49k0QrbmBymzShyxBd/Kn
+         HTBVcaYssSwFsoVs2gUZS47oZ5CUrOJQR6m1EZ/9EUrtjdiIBWvfQH4XA7Ier1JLOUtr
+         7ZBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679718967;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xNjwMHhNEt7mkc6GXMmNerOEFm044yMiKhT7Y4Wqv0o=;
-        b=Emu2NAtQFOMsl9LtWITO1iOI+jsWEazbtvmbbVjTIuxRNdN0/DBDUl5GgqLGJIypJl
-         1jReazu8PjppK4SccqvAWCXZikZ+aKFJBIvHpsLlWe6SB0WiO/v/31PcqdFjAtHZq4+J
-         w5DkxOp193wZm1JoSQaKKG05yumPZq6uQV8DIYvNgfpLuyS0yoof8X727cuHVIGSCrHs
-         2Zr4Io6ivDNhqup9tRd1hr6C324/2Cg1EhRzmDXag/VH/LNzZDuORkV2HbolOFtXXs1C
-         /k1evkYK0PiuJ6Y3SlAgEoW0rJ6kf59nDMWgHMOBS/SO6xrjKoxQE82fVr+ZVC8tvxsn
-         539Q==
-X-Gm-Message-State: AAQBX9fT1bbxVNbas6Al2xtdrZSVRHwqsVRSFBcuZbOLjpYsnm6ki9Xe
-        GAn3ReIFz+RAWSO73GUSOcUw7aNEARxHOw/2j+XdOg==
-X-Google-Smtp-Source: AKy350ZA1tsJJCczN1fZoEr1fh2uGGJzV+WPjwDldeelA3fCcGCnhFltIqPP+3hUsj0Zt6M+f4rxMpQLLxR4Zyn+6AI=
-X-Received: by 2002:a05:6902:1507:b0:b78:8bd8:6e77 with SMTP id
- q7-20020a056902150700b00b788bd86e77mr1266735ybu.8.1679718967170; Fri, 24 Mar
- 2023 21:36:07 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679719064;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NMuWO+eqM4F8nQZaJRTjXyqs2/5MQPRiPwC4jEGB2Rs=;
+        b=XnlW6hnDMx0msARpNt+zOeEvmLAJdH96zAdo/BCE3q/N+aZluBj/0kpysoHbO/Qe8H
+         /uSvLv7g1efsyTVX11PhmN6fUBBgftBxFrYaqMw/0h7dGfIXOtBZQqUTccBrlLnYelXu
+         yqSOhoSuUEo6r+JEDftShOMyGubQ9lWaHdd1NpdMidLkOYYthN185556wz4qElgb+q30
+         7o9s2OFSPnZ9LQSKL64Jqsyp4YVsgMHpnaRCXB7f6GS9GyQmKlP7CEfyCntxGAxCOXOp
+         qIGB/lKuUe6oDS90Fxdge37LdsCAv8pWSRDjUIHdug3i672uCuHD/+HAQPnSSaZEw3sm
+         iBfQ==
+X-Gm-Message-State: AAQBX9fee+HYoXn4dHckLyTe3IkNrzXZvk0AYZQ7lLlpUtRFbNu8A9yO
+        71Fo8tWvcGlWRlGkeDgrBsj0NGsYneO/D9tlsEJVaw==
+X-Google-Smtp-Source: AKy350ajeVEN1YL/A5LyBT3MNx+S9894fnEde+UlgHop0XZQuymsxOUauOZsMlfyTFFYpSAYAe/0Nmd3XOqUQC3RIck=
+X-Received: by 2002:a17:907:1c09:b0:92f:b329:cb75 with SMTP id
+ nc9-20020a1709071c0900b0092fb329cb75mr3153111ejc.5.1679719064436; Fri, 24 Mar
+ 2023 21:37:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
- <ZBrvhfX/NNrJefgt@kroah.com> <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
- <ZBtPhoelZo4U5jwC@kroah.com> <20230323101216.w56kz3rudlj23vab@houat>
- <ZBwoRgc2ICBJX/Lq@kroah.com> <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
- <20230323122925.kqdnomr7i46qnyo4@houat> <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
- <20230323163639.xtwpid2uunwnzai4@houat> <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
- <CABVgOSnMeoRzExfqsjC_zAX_=TyqpAFuiGD6NWkus7+2Rdho4A@mail.gmail.com>
- <97f60824-7067-62cc-2882-d998072886ce@gmail.com> <CABVgOSmx3A4Vwos2_8xO-XQrQAw5gvY0nc5zLpLmcJ7FtA-dTQ@mail.gmail.com>
- <f0b4d2ad-9635-9ab8-7cd7-bfadded94714@gmail.com> <a02044e7-3210-a0c2-ceda-8c19fadd237a@gmail.com>
-In-Reply-To: <a02044e7-3210-a0c2-ceda-8c19fadd237a@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 25 Mar 2023 12:35:55 +0800
-Message-ID: <CABVgOSmSEYRqxTXCEttZvpE33euxvRYE-3scZ8DrOSibeZW=bg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device creation
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000061e0e505f7b20ce6"
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-2-yosryahmed@google.com> <ZBz/V5a7/6PZeM7S@slm.duckdns.org>
+ <CAJD7tkYNZeEytm_Px9_73Y-AYJfHAxaoTmmnO71HW5hd1B5tPg@mail.gmail.com>
+ <ZB5UalkjGngcBDEJ@slm.duckdns.org> <CAJD7tkYhyMkD8SFf8b8L1W9QUrLOdw-HJ2NUbENjw5dgFnH3Aw@mail.gmail.com>
+ <CALvZod6rF0D21hcV7xnqD+oRkn=x5NLi5GOkPpyaPa859uDH+Q@mail.gmail.com>
+In-Reply-To: <CALvZod6rF0D21hcV7xnqD+oRkn=x5NLi5GOkPpyaPa859uDH+Q@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 24 Mar 2023 21:37:08 -0700
+Message-ID: <CAJD7tkY_ESpMYMw72bsATpp6tPphv8qS6VbfEUjpKZW6vUqQSQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
+ percpu lock
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
@@ -86,154 +85,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000061e0e505f7b20ce6
-Content-Type: text/plain; charset="UTF-8"
-
-On Fri, 24 Mar 2023 at 18:17, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+On Fri, Mar 24, 2023 at 9:31=E2=80=AFPM Shakeel Butt <shakeelb@google.com> =
+wrote:
 >
-> On 3/24/23 12:05, Matti Vaittinen wrote:
-> > On 3/24/23 11:52, David Gow wrote:
-> >> On Fri, 24 Mar 2023 at 14:51, Matti Vaittinen
-> >> <mazziesaccount@gmail.com> wrote:
-> >>>
-> >>> On 3/24/23 08:34, David Gow wrote:
-> >>>> On Fri, 24 Mar 2023 at 14:11, Matti Vaittinen
-> >>>> <mazziesaccount@gmail.com> wrote:
+> On Fri, Mar 24, 2023 at 7:18=E2=80=AFPM Yosry Ahmed <yosryahmed@google.co=
+m> wrote:
 > >
-> >>>> I think that sounds like a good strategy for now, and we can work on a
-> >>>> set of 'generic helpers' which have an associated bus and struct
-> >>>> kunit_device in the meantime. If we can continue to use
-> >>>> root_device_register until those are ready, that'd be very convenient.
-> >>>
-> >>> Would it be a tiny bit more acceptable if we did add a very simple:
-> >>>
-> >>> #define kunit_root_device_register(name) root_device_register(name)
-> >>> #define kunit_root_device_unregister(dev) root_device_unregister(dev)
-> >>>
-> >>> to include/kunit/device.h (or somesuch)
-> >>>
-> >>> This should help us later to at least spot the places where
-> >>> root_device_[un]register() is abused and (potentially mass-)covert them
-> >>> to use the proper helpers when they're available.
-> >>>
-> >>
-> >> Great idea.
-> >>
-> >> The code I've been playing with has the following in
-> >> include/kunit/device.h:
-> >>
-> >> /* Register a new device against a KUnit test. */
-> >> struct device *kunit_device_register(struct kunit *test, const char
-> >> *name);
-> >> /* Unregister a device created by kunit_device_register() early (i.e.,
-> >> before test cleanup). */
-> >> void kunit_device_unregister(struct kunit *test, struct device *dev);
-> >>
-> >> If we used the same names, and just forwarded them to
-> >> root_device_register() and root_device_unregister() for now
-> >> (discarding the struct kunit pointer), then I expect we could just
-> >> swap out the implementation to gain the extra functionality.
+> [...]
+> > Any ideas here are welcome!
+> >
 >
-> There's one thing though. If the goal is to do a direct replacement and
-> if automatic device deletion upon test completion / test abort is
-> planned - then it should be there also for these initial wrappers.
+> Let's move forward. It seems like we are not going to reach an
+> agreement on making cgroup_rstat_lock a non-irq lock. However there is
+> agreement on the memcg code of not flushing in irq context and the
+> cleanup Johannes has requested. Let's proceed with those for now. We
+> can come back to cgroup_rstat_lock later if we still see issues in
+> production.
+
+Even if we do not flush from irq context, we still flush from atomic
+contexts that will currently hold the lock with irqs disabled
+throughout the entire flush sequence. A primary purpose of this reason
+is to avoid that.
+
+We can either:
+(a) Proceed with the following approach of making cgroup_rstat_lock a
+non-irq lock.
+(b) Proceed with Tejun's suggestion of always releasing and
+reacquiring the lock at CPU boundaries, even for atomic flushes (if
+the spinlock needs a break ofc).
+(c) Something else.
+
+I am happy to proceed with any solution, but we need to address the
+fact that interrupts are always disabled throughout the flush. My main
+concern about Tejun's suggestion is atomic contexts having to contend
+cgroup_rstat_lock much more than they do now, but it's still better
+than what we have today.
+
 >
-
-Yeah, that's an excellent point. It's a pretty subtle change in
-behaviour to suddenly introduce that, so changing it behind the scenes
-is probably unwise.
-
-> If these wrappers don't yet include the automatic device clean-up - then
-> it probably makes more sense to just do the kunit_root_device_* defines
-> because the tests are likely to need removing the explicit device
-> clean-ups when proper APIs are finished.
->
-
-I sent out my prototype implementation of this here, which does do the
-automatic cleanup:
-https://lore.kernel.org/linux-kselftest/20230325043104.3761770-1-davidgow@google.com/T/#mf797239a8bce11630875fdf60aab9ed627add1f0
-
-It's probably overkill to squeeze into your patch series, though,
-given it also adds and uses a whole new kunit_defer() API.
-
-Cheers,
--- David
-
---00000000000061e0e505f7b20ce6
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCZ
-lBSn63TGN6G01s8BjINnNF4Sa2CA1RRE/5o+Nl4jxzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMjUwNDM2MDdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAnizs2i5DBmLkHbFHwmmO
-sMrmGHzQyfMyLwojI3vnVjRrb58CljKEJj7MZR5UonFS9xGrTrfz9rtQ8vwqxg12i425ZT+uP+FT
-ccCsQRUTXdxjppwrgoPYAGh2ipXoUBMXO322FJPFpIQG28K78TwAAXx3HdAYoXv/JLLEovFqlE+p
-2M99kIf5px3dYaCTsz6bHZQtDd5R8UT3iO5M2g+3O0zRsraUiRfqfzSzfYIMu4AtdnGz0vraqNQ9
-wSnp5lSxkj++TDiobOujxMnBDGvhKcOYRWuoyRUcoXlAgwvV0rwJ+16wn0Whw8YIsntUUpCmtmK1
-7BkxwEpE1YGk6FTaqQ==
---00000000000061e0e505f7b20ce6--
+> Tejun, do you have any concerns on adding WARN_ON_ONCE(!in_task()) in
+> the rstat flushing code?
