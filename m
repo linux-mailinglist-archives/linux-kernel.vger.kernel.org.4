@@ -2,99 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DED76C8C5B
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 713F16C8C5F
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 09:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjCYIMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 04:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S231681AbjCYIOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 04:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbjCYIMS (ORCPT
+        with ESMTP id S230118AbjCYIN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 04:12:18 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06BD19C45;
-        Sat, 25 Mar 2023 01:12:13 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id h9so3931665ljq.2;
-        Sat, 25 Mar 2023 01:12:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679731932;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=A4XgPFdc/okcXx2NbhmBkGOEY1T8HTI/lZkH2CUhYRE=;
-        b=C//SxJywjFJCBim3f6DyMsplXjZ4WAJfXUaNGINYm4lfjGjLMUse/uAxgZciltCCWG
-         7S8tbz/Pj9CzPyyRLzphy/aYo1cmxLBKEvSZNTJ3s77/GiDHzGgq36oQzc7DsNV5c8OC
-         CBFltmG8eP3gwIxGF9+ZWZligefahxMz9ar3bYi/F05sxnoRpaLFxbxRZOJIb6g14vWf
-         JD33Qp3p0ULL7MRGoDYX7Dnh/9Ccxpepq9E1jVeBH4KAtXzeJNkJIuzl1KaMo+iPJyvt
-         oR6vJYg0YYLzW2xlrQxMJ2w3MJGVhLkkCWiDUnu5LzAahvJAvpz44zYMUehRXL0AQAeZ
-         tpyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679731932;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A4XgPFdc/okcXx2NbhmBkGOEY1T8HTI/lZkH2CUhYRE=;
-        b=Sa6UsmCeVpZ7p/OvFCMFsJ+QOWbhsZJPf/t6nyO7xkemd7+GbA9m3Gf4Mu2NreqToY
-         +LiOUtiP01Rmclz8k99MPbD4k0Thdzm9xHRtZehZ6VjbPxrj5pYrw1ZsUBn48kygFz+S
-         mW60dzkY0jsZrz7VSuoH93jk4iOAyEPX06IooSFuQB3SqYkiQ072EfWiMrgxXIItjD8U
-         o42SrAtJ1Awx4m32uS5MpA3bgtupQYylFsfqCif9lHhyUIsK997lKaE50FLimRlM9jUQ
-         DAVtRkb9uY2WKznIoI/Jn040rcMglYG/sh2K6Qn8yZNhiOzjaFqidfec43ucDH7U4p9+
-         qZbw==
-X-Gm-Message-State: AAQBX9fKR4aAymFqhgqST71sC/KsTH7DyG0VW1//mC6COXe6/aomMQGf
-        XoN4dex3CVtzXi7fJXgXP/I=
-X-Google-Smtp-Source: AKy350ZSw9H6KrkYhnBYCdWvbVd4OQ5MwkUCRpmMI4PZZlLnyTuRn6CcIDCfClOBlNuS/0x5UHLXiA==
-X-Received: by 2002:a2e:8604:0:b0:290:5166:7c28 with SMTP id a4-20020a2e8604000000b0029051667c28mr2010774lji.20.1679731931733;
-        Sat, 25 Mar 2023 01:12:11 -0700 (PDT)
-Received: from localhost ([188.119.65.94])
-        by smtp.gmail.com with ESMTPSA id s24-20020a2e98d8000000b002996e0e6461sm3715162ljj.29.2023.03.25.01.12.10
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 25 Mar 2023 01:12:11 -0700 (PDT)
-From:   Dan Li <ashimida.1990@gmail.com>
-To:     gcc-patches@gcc.gnu.org,
-        Richard Sandiford <richard.sandiford@arm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Dan Li <ashimida.1990@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Song Liu <song@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Yuntao Wang <ytcoode@gmail.com>,
-        Changbin Du <changbin.du@intel.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: [RFC/RFT,V2 3/3] [PR102768] aarch64: Add support for Kernel Control Flow Integrity
-Date:   Sat, 25 Mar 2023 01:11:17 -0700
-Message-Id: <20230325081117.93245-4-ashimida.1990@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230325081117.93245-1-ashimida.1990@gmail.com>
-References: <20221219055431.22596-1-ashimida.1990@gmail.com>
- <20230325081117.93245-1-ashimida.1990@gmail.com>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        Sat, 25 Mar 2023 04:13:58 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74270F75C;
+        Sat, 25 Mar 2023 01:13:57 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32P5Htot025280;
+        Sat, 25 Mar 2023 08:13:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=iaivLyuICFeGZytvyZej1d4JXtjY+23Vlgw9SCE1DSA=;
+ b=IMxIiM0djk6husyDT/AQCgdeLvk4U1rIDXDlkLP9Zs0MznmQxID6pURtCXIhif5gv/Kd
+ Hsl9TQ238WWQ1ptg4aje28IpbkJ7lbK+5f56CuDzbxoS//9963QQGIfLGrRsjsQ4im/u
+ f6wlf/r9zLYSLw+LLGRcxN7ZjwQ1aMEynrJmFHRHkP1EaF0KgsfGgalDnCIo1q5AkueW
+ btsxtTrrjVa1BwWYmKXnkw4U+tGcGj9VSjwNOaOZRC5WfPaXqj2bFbG7PZrXWhL595ed
+ T4wPkDPR+gOhKdnHoQUZAA0HOofT+vL7kMB+m/wpXUtqrA0DLHgYtvOSgR2w8hipXL/P zQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3phtpg25n8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 25 Mar 2023 08:13:51 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32P8DpNb034563;
+        Sat, 25 Mar 2023 08:13:51 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3phtpg25mx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 25 Mar 2023 08:13:51 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32P2TNZr028880;
+        Sat, 25 Mar 2023 08:13:49 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3phr7fg8yu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 25 Mar 2023 08:13:49 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32P8Dk5g28311994
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 25 Mar 2023 08:13:46 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AE26320043;
+        Sat, 25 Mar 2023 08:13:46 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D388420040;
+        Sat, 25 Mar 2023 08:13:44 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.63.61])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Sat, 25 Mar 2023 08:13:44 +0000 (GMT)
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>
+Cc:     Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>, rookxu <brookxu.cn@gmail.com>
+Subject: [PATCH v6 0/9] ext4: Convert inode preallocation list to an rbtree
+Date:   Sat, 25 Mar 2023 13:43:33 +0530
+Message-Id: <cover.1679731817.git.ojaswin@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 12tilULreAvFTteEQu6hPVDZ_x2VBh94
+X-Proofpoint-ORIG-GUID: uuWgdB-9OjKbg5-NUM95UGnZztI0G65Z
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 adultscore=0 clxscore=1015 bulkscore=0 spamscore=0
+ suspectscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303250065
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,272 +90,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the AArch64 platform, typeid can be directly inserted in front
-of the function header (offset is patch_area_entry + 4), it should
-be assumed that patch_area_entry is the same for all functions.
+This patch series aim to improve the performance and scalability of
+inode preallocation by changing inode preallocation linked list to an
+rbtree. I've ran xfstests quick on this series and plan to run auto group
+as well to confirm we have no regressions.
 
-For all functions that will not be called indirectly, insert the
-reserved RESERVED_CFI_TYPEID (0x0) as typeid in front of them. If
-not, the attacker may use the instruction/data before the function
-as typeid to bypass CFI.
+** Shortcomings of existing implementation **
 
-All typeids ignore some bits (& AARCH64_UNALLOCATED_INSN_MASK) to
-avoid conflicts with the AArch64 instruction set (see AAPCS64 for
-details).
+Right now, we add all the inode preallocations(PAs) to a per inode linked
+list ei->i_prealloc_list. To prevent the list from growing infinitely
+during heavy sparse workloads, the length of this list was capped at 512
+and a trimming logic was added to trim the list whenever it grew over
+this threshold, in patch 27bc446e2. This was discussed in detail in the
+following lore thread [1].
 
-Signed-off-by: Dan Li <ashimida.1990@gmail.com>
+[1] https://lore.kernel.org/all/d7a98178-056b-6db5-6bce-4ead23f4a257@gmail.com/
 
-gcc/ChangeLog:
+But from our testing, we noticed that the current implementation still
+had issues with scalability as the performance degraded when the PAs
+stored in the list grew. Most of the degradation was seen in
+ext4_mb_normalize_request() and ext4_mb_use_preallocated() functions as
+they iterated the inode PA list.
 
-	* config/aarch64/aarch64.cc (RESERVED_CFI_TYPEID): Macro definition.
-	(DEFAULT_CFI_TYPEID): Likewise.
-	(AARCH64_UNALLOCATED_INSN_MASK): Likewise.
-	(aarch64_calc_func_cfi_typeid): Platform-dependent CFI function.
-	(cgraph_indirectly_callable): Determine whether a funtion may
-	be called indirectly.
-	(aarch64_output_func_kcfi_typeid): Platform-dependent CFI function.
-	(aarch64_output_icall_kcfi_check): Likewise.
-	(TARGET_HAVE_KCFI): New hook.
-	(TARGET_CALC_FUNC_CFI_TYPEID): Likewise.
-	(TARGET_ASM_OUTPUT_FUNC_KCFI_TYPEID): Likewise.
-	(TARGET_ASM_OUTPUT_ICALL_KCFI_CHECK): Likewise.
-	* doc/invoke.texi: Document -fsanitize=kcfi.
----
- gcc/config/aarch64/aarch64.cc | 166 ++++++++++++++++++++++++++++++++++
- gcc/doc/invoke.texi           |  36 ++++++++
- 2 files changed, 202 insertions(+)
+** Improvements in this patchset **
 
-diff --git a/gcc/config/aarch64/aarch64.cc b/gcc/config/aarch64/aarch64.cc
-index 5c9e7791a12..5b55541d437 100644
---- a/gcc/config/aarch64/aarch64.cc
-+++ b/gcc/config/aarch64/aarch64.cc
-@@ -5450,6 +5450,160 @@ aarch64_output_sve_addvl_addpl (rtx offset)
-   return buffer;
- }
- 
-+/* Reserved for all functions that cannot be called indirectly.  */
-+#define RESERVED_CFI_TYPEID 0x0U
-+
-+/* If the typeid of a function that can be called indirectly is equal to
-+   RESERVED_CFI_TYPEID, change it to DEFAULT_CFI_TYPEID.  */
-+#define DEFAULT_CFI_TYPEID 0x00000ADAU
-+
-+/* Mask of reserved and unallocated instructions in AArch64 platform.  */
-+#define AARCH64_UNALLOCATED_INSN_MASK 0xE7FFFFFFU
-+
-+static unsigned int
-+aarch64_calc_func_cfi_typeid (const_tree fntype)
-+{
-+  unsigned int hash;
-+
-+  /* The value of typeid has a probability of being the same as the encoding
-+     of an instruction.  If the attacker can find the same encoding as the
-+     typeid in the assembly code, then he has found a usable jump location.
-+     So here, a platform-related mask is used when generating a typeid to
-+     avoid such conflicts as much as possible.  */
-+  hash = unified_type_hash (fntype) & AARCH64_UNALLOCATED_INSN_MASK;
-+
-+  /* RESERVED_CFI_TYPEID is reserved for functions that cannot
-+     be called indirectly.  */
-+  if (hash == RESERVED_CFI_TYPEID)
-+    hash = DEFAULT_CFI_TYPEID;
-+
-+  return hash;
-+}
-+
-+static bool
-+cgraph_indirectly_callable (struct cgraph_node *node,
-+			    void *data ATTRIBUTE_UNUSED)
-+{
-+  if (node->externally_visible || node->address_taken)
-+    return true;
-+
-+  return false;
-+}
-+
-+static void
-+aarch64_output_func_kcfi_typeid (FILE * stream, tree decl)
-+{
-+  struct cgraph_node *node;
-+  unsigned int cur_func_typeid;
-+
-+  node = cgraph_node::get (decl);
-+
-+  if (!node->call_for_symbol_thunks_and_aliases (cgraph_indirectly_callable,
-+						 NULL, true))
-+    /* CFI's typeid check always considers that there is a typeid before the
-+       target function, so it is also necessary to output typeid for functions
-+       that cannot be called indirectly to prevent attackers from bypassing
-+       CFI by using instructions/data before those functions.
-+       The typeid inserted before such a function is RESERVED_CFI_TYPEID,
-+       and the calculation of the typeid must ensure that this value is always
-+       reserved.  */
-+    cur_func_typeid = RESERVED_CFI_TYPEID;
-+  else
-+    cur_func_typeid = aarch64_calc_func_cfi_typeid (TREE_TYPE (decl));
-+
-+  fprintf (stream, "__kcfi_%s:\n", get_name (decl));
-+  fprintf (stream, "\t.4byte %#010x\n", cur_func_typeid);
-+}
-+
-+/* This function outputs assembly instructions to check cfi typeid before
-+   indirect call (blr Xn), which may destroy x16, x17, x9 registers (according
-+   to the AAPCS64 specification, these registers do not need to be restored
-+   after the function call).
-+   The assembly code output by this function is as follows:
-+	ldur    w16, [x1, #-4]
-+	movk    w17, #13570
-+	movk    w17, #17309, lsl #16
-+	cmp     w16, w17
-+	b.eq	.Lkcfi8
-+	brk     #0x8221
-+.Lkcfi8:
-+	blr     x1
-+ */
-+
-+static void
-+aarch64_output_icall_kcfi_check (rtx reg, unsigned int value)
-+{
-+  unsigned int addr_reg, scratch_reg1, scratch_reg2;
-+  unsigned int esr, addr_index, type_index;
-+  char label_buf[256];
-+  const char *label_ptr;
-+  unsigned HOST_WIDE_INT patch_area_entry = crtl->patch_area_entry;
-+  rtx_code_label * tmp_label = gen_label_rtx ();
-+
-+  gcc_assert (GET_CODE (reg) == REG);
-+
-+  addr_reg = REGNO (reg);
-+
-+  /* The typeid read from the front of the callee is saved in the
-+     register specified by scratch_reg1, the default is R16_REGNUM.  */
-+  scratch_reg1 = R16_REGNUM;
-+
-+  /* The expected typeid of the caller is saved in the register
-+     specified by scratch_reg2, which defaults to R17_REGNUM.  */
-+  scratch_reg2 = R17_REGNUM;
-+
-+  gcc_assert (GP_REGNUM_P (addr_reg));
-+
-+  /* If one of the scratch registers is used for the call target,
-+     we can clobber another caller-saved temporary register instead
-+     (in this case, R9_REGNUM) as the check is immediately followed
-+     by the call instruction.  */
-+  if (addr_reg == R16_REGNUM)
-+    {
-+      scratch_reg1 = R9_REGNUM;
-+    }
-+  else if (addr_reg == R17_REGNUM)
-+    {
-+      scratch_reg2 = R9_REGNUM;
-+    }
-+
-+  gcc_assert ((scratch_reg1 != addr_reg) && (scratch_reg2 != addr_reg));
-+
-+  ASM_GENERATE_INTERNAL_LABEL (label_buf, "Lkcfi",
-+			       CODE_LABEL_NUMBER (tmp_label));
-+  label_ptr = targetm.strip_name_encoding (label_buf);
-+
-+  /* The offset of callee's typeid needs to be adjusted according to
-+     patch_area_entry.  This assumes that patch_area_entry is the
-+     same for all functions.  */
-+  fprintf (asm_out_file, "\tldur\tw%d, [x%d, #-%ld]\n",
-+	   scratch_reg1, addr_reg, patch_area_entry * 4 + 4);
-+
-+  fprintf (asm_out_file, "\tmovk\tw%d, #%d\n", scratch_reg2, value & 0xFFFF);
-+
-+  fprintf (asm_out_file, "\tmovk\tw%d, #%d, lsl #16\n",
-+	   scratch_reg2, (value >> 16) & 0xFFFF);
-+
-+  fprintf (asm_out_file, "\tcmp\tw%d, w%d\n", scratch_reg1, scratch_reg2);
-+
-+  fprintf (asm_out_file, "\tb.eq\t%s\n", label_ptr);
-+
-+  /* The base ESR for brk is 0x8000 and the register information is
-+     encoded in bits 0-9 as follows:
-+     - 0-4: n, where the register Xn contains the callee address
-+     - 5-9: m, where the register Wm contains the expected typeid
-+     Where n, m are in[0,30].
-+  */
-+  addr_index = addr_reg - R0_REGNUM;
-+  type_index = scratch_reg2 - R0_REGNUM;
-+  esr = 0x8000 | ((type_index & 31) << 5) | (addr_index & 31);
-+  fprintf (asm_out_file, "\tbrk\t#0x%x\n", esr);
-+
-+  fprintf (asm_out_file, "%s:\n", label_ptr);
-+
-+  return;
-+}
-+
- /* Return true if X is a valid immediate for an SVE vector INC or DEC
-    instruction.  If it is, store the number of elements in each vector
-    quadword in *NELTS_PER_VQ_OUT (if nonnull) and store the multiplication
-@@ -27823,6 +27977,18 @@ aarch64_libgcc_floating_mode_supported_p
- #undef TARGET_HAVE_SHADOW_CALL_STACK
- #define TARGET_HAVE_SHADOW_CALL_STACK true
- 
-+#undef TARGET_HAVE_KCFI
-+#define TARGET_HAVE_KCFI true
-+
-+#undef TARGET_CALC_FUNC_CFI_TYPEID
-+#define TARGET_CALC_FUNC_CFI_TYPEID aarch64_calc_func_cfi_typeid
-+
-+#undef TARGET_ASM_OUTPUT_FUNC_KCFI_TYPEID
-+#define TARGET_ASM_OUTPUT_FUNC_KCFI_TYPEID aarch64_output_func_kcfi_typeid
-+
-+#undef TARGET_ASM_OUTPUT_ICALL_KCFI_CHECK
-+#define TARGET_ASM_OUTPUT_ICALL_KCFI_CHECK aarch64_output_icall_kcfi_check
-+
- struct gcc_target targetm = TARGET_INITIALIZER;
- 
- #include "gt-aarch64.h"
-diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
-index ff6c338bedb..1b2ba7a0f29 100644
---- a/gcc/doc/invoke.texi
-+++ b/gcc/doc/invoke.texi
-@@ -15736,6 +15736,42 @@ to turn off exceptions.
- See @uref{https://clang.llvm.org/docs/ShadowCallStack.html} for more
- details.
- 
-+@item -fsanitize=kcfi
-+@opindex fsanitize=kcfi
-+The KCFI sanitizer, enabled with @option{-fsanitize=kcfi}, implements a
-+forward-edge control flow integrity scheme for indirect calls.  It
-+attaches a type identifier (@code{typeid}) for each function and injects
-+verification code before indirect calls.
-+
-+A @code{typeid} is a 32-bit constant, its value is mainly related to the
-+return value type and all parameter types of the function, and is invariant
-+for each compilation.  Since the value of @code{typeid} may conflict with
-+the instruction set encoding of the current platform, some bits may be
-+ignored on different platforms.
-+
-+At compile time, the compiler inserts checking code on all indirect calls,
-+and at run time, before any indirect calls occur, the code checks that
-+the @code{typeid} before the callee function matches the @code{typeid}
-+requested by the caller.  If the match fails, an exception instruction
-+will be triggered, such as a @code{brk} in aarch64.  This mechanism is
-+mainly designed for low-level codes, such as operating systems, and the
-+system needs to handle those exceptions by itself.
-+
-+If a program contains indirect calls to assembly functions, they must be
-+manually annotated with the expected type identifiers to prevent errors.
-+To make this easier, CFI generates a weak SHN_ABS
-+@code{__kcfi_typeid_<function>} symbol for each address-taken function
-+declaration, which can be used to annotate functions in assembly as long
-+as at least one C translation unit linked into the program takes the
-+function address.
-+
-+Currently this feature only supports the aarch64 platform, mainly for
-+the linux kernel.  Users who want to use this feature in other system
-+need to provide their own support for the exception handling.
-+
-+See @uref{https://clang.llvm.org/docs/ControlFlowIntegrity.html} for
-+more details.
-+
- @item -fsanitize=thread
- @opindex fsanitize=thread
- Enable ThreadSanitizer, a fast data race detector.
+To counter the above shortcomings, this patch series modifies the inode
+PA list to an rbtree, which:
+
+- improves the performance of functions discussed above due to the
+  improved lookup speed.
+  
+- improves scalability by changing lookup complexity from O(n) to
+  O(logn). We no longer need the trimming logic as well.
+
+As a result, the RCU implementation was needed to be changed since
+lockless lookups of rbtrees do have some issues like skipping
+subtrees. Hence, RCU was replaced with read write locks for inode
+PAs. More information can be found in Patch 7 (that has the core
+changes).
+
+** Performance Numbers **
+
+Performance numbers were collected with and without these patches, using an
+nvme device. Details of tests/benchmarks used are as follows:
+
+Test 1: 200,000 1KiB sparse writes using (fio)
+Test 2: Fill 5GiB w/ random writes, 1KiB burst size using (fio)
+Test 3: Test 2, but do 4 sequential writes before jumping to random
+        offset (fio)
+Test 4: Fill 8GB FS w/ 2KiB files, 64 threads in parallel (fsmark)
+
++──────────+──────────────────+────────────────+──────────────────+──────────────────+
+|          |            nodelalloc             |              delalloc               |
++──────────+──────────────────+────────────────+──────────────────+──────────────────+
+|          | Unpatched        | Patched        | Unpatched        | Patched          |
++──────────+──────────────────+────────────────+──────────────────+──────────────────+
+| Test 1   | 11.8 MB/s        | 23.3 MB/s      | 27.2 MB/s        | 63.7 MB/s        |
+| Test 2   | 1617 MB/s        | 1740 MB/s      | 2223 MB/s        | 2208 MB/s        |
+| Test 3   | 1715 MB/s        | 1823 MB/s      | 2346 MB/s        | 2364 MB/s        |
+| Test 4   | 14284 files/sec  | 14347 files/s  | 13762 files/sec  | 13882 files/sec  |
++──────────+──────────────────+────────────────+──────────────────+──────────────────+
+
+In test 1, we almost see 100 to 200% increase in performance due to the high number
+of sparse writes highlighting the bottleneck in the unpatched kernel. Further, on running
+"perf diff patched.data unpatched.data" for test 1, we see something as follows:
+
+     2.83%    +29.67%  [kernel.vmlinux]          [k] _raw_spin_lock
+												...
+               +3.33%  [ext4]                    [k] ext4_mb_normalize_request.constprop.30
+     0.25%     +2.81%  [ext4]                    [k] ext4_mb_use_preallocated
+
+Here we can see that the biggest different is in the _raw_spin_lock() function
+of unpatched kernel, that is called from `ext4_mb_normalize_request()` as seen
+here:
+
+    32.47%  fio              [kernel.vmlinux]            [k] _raw_spin_lock
+            |
+            ---_raw_spin_lock
+               |          
+                --32.22%--ext4_mb_normalize_request.constprop.30
+
+This is coming from the spin_lock(&pa->pa_lock) that is called for
+each PA that we iterate over, in ext4_mb_normalize_request(). Since in rbtrees,
+we lookup log(n) PAs rather than n PAs, this spin lock is taken less frequently,
+as evident in the perf. 
+
+Furthermore, we see some improvements in other tests however since they don't
+exercise the PA traversal path as much as test 1, the improvements are relatively
+smaller. 
+
+** Summary of patches **
+
+- Patch 1-5: Abstractions/Minor optimizations
+- Patch 6: Change bex lstart adjustment logic to avoid overflow from goal
+- Patch 7: Split common inode & locality group specific fields to a union
+- Patch 8: Core changes to move inode PA logic from list to rbtree
+- Patch 9: Remove the trim logic as it is not needed
+
+** Changes since PATCH v5 [6] **
+- Rebased on ted/dev.
+- No functional changes, just made sure
+  to add a few Suggested-by tags that I 
+  had missed earlier.
+
+** Changes since PATCH v4 [4] **
+- ./checkpatch fixes
+- Picked up RVBs by Ritesh and Jan
+- Rebased over ted/dev which includes Kemeng's mballoc cleanup v3 patches [5]
+
+** Changes since PATCH v3 [2] **
+- Patch 6 fixes a bug in current best extent adjustment logic by
+  introducing a new logic.
+- Patch 8 - ext4_mb_pa_adjust_overlap functions uses a modified logic to
+  trim the normalized range, which also takes care of presence deleted
+  PAs in the preallocation tree.
+- Ran xfstests -c all quick and everything seems good. Performance
+  numbers seem similar to previous improvements as well.
+
+Both the above changes are based on discussion here [3]
+
+** Changes since PATCH v2 [1] **
+- In patch 7, include a design change related to 
+  encountering deleted PAs in inode rbtree that overlap with to be
+  inserted PA, when adjusting overlap. More details in the patch.
+  (Removed Jan's RVB for this patch)
+
+** Changes since PATCH v1 **
+- fixed styling issue
+- merged ext4_mb_rb_insert() and ext4_mb_pa_cmp()
+
+** Changes since RFC v3 **
+- Changed while loops to for loops in patch 7
+- Fixed some data types
+- Made rbtree comparison logic more intuitive. The
+  rbtree insertion function still kept separate from
+  comparison function for reusability.
+
+** Changes since RFC v2 **
+- Added a function definition that was deleted during v2 rebase
+
+** Changes since RFC v1 **
+- Rebased over ext4 dev branch which includes Jan's patchset
+  that changed some code in mballoc.c
+
+[1] https://lore.kernel.org/linux-ext4/cover.1665776268.git.ojaswin@linux.ibm.com/
+[2] https://lore.kernel.org/all/20230116080216.249195-1-ojaswin@linux.ibm.com/
+[3]
+https://lore.kernel.org/all/20230116080216.249195-8-ojaswin@linux.ibm.com/
+[4]
+https://lore.kernel.org/all/cover.1676634592.git.ojaswin@linux.ibm.com/
+[5]
+https://lore.kernel.org/r/20230303172120.3800725-1-shikemeng@huaweicloud.com
+[6]
+https://lore.kernel.org/all/cover.1679042083.git.ojaswin@linux.ibm.com/
+
+Ojaswin Mujoo (9):
+  ext4: Stop searching if PA doesn't satisfy non-extent file
+  ext4: Refactor code related to freeing PAs
+  ext4: Refactor code in ext4_mb_normalize_request() and
+    ext4_mb_use_preallocated()
+  ext4: Move overlap assert logic into a separate function
+  ext4: Abstract out overlap fix/check logic in
+    ext4_mb_normalize_request()
+  ext4: Fix best extent lstart adjustment logic in
+    ext4_mb_new_inode_pa()
+  ext4: Convert pa->pa_inode_list and pa->pa_obj_lock into a union
+  ext4: Use rbtrees to manage PAs instead of inode i_prealloc_list
+  ext4: Remove the logic to trim inode PAs
+
+ Documentation/admin-guide/ext4.rst |   3 -
+ fs/ext4/ext4.h                     |   5 +-
+ fs/ext4/mballoc.c                  | 536 ++++++++++++++++++++---------
+ fs/ext4/mballoc.h                  |  17 +-
+ fs/ext4/super.c                    |   4 +-
+ fs/ext4/sysfs.c                    |   2 -
+ 6 files changed, 377 insertions(+), 190 deletions(-)
+
 -- 
-2.17.1
+2.31.1
 
