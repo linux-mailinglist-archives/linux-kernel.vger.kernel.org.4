@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4AA6C8C40
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 08:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB70A6C8C42
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 08:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbjCYHkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 03:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
+        id S232114AbjCYHkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 03:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231719AbjCYHk3 (ORCPT
+        with ESMTP id S229699AbjCYHka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 03:40:29 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EAA5267;
-        Sat, 25 Mar 2023 00:40:28 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id r187so4844349ybr.6;
-        Sat, 25 Mar 2023 00:40:28 -0700 (PDT)
+        Sat, 25 Mar 2023 03:40:30 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9752196B1;
+        Sat, 25 Mar 2023 00:40:29 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id cf7so4859356ybb.5;
+        Sat, 25 Mar 2023 00:40:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679730027;
+        d=gmail.com; s=20210112; t=1679730029;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=D1IG/1kt/Y9xOco97EKexl0aCGg2ZwXOiS8z/jOTAxY=;
-        b=Kz0NMsvL2drzYhlbOpIYQko84qzIPh50R3MnkyFwgpmKIZYC/qhaEfGlUvpvuo0QOa
-         ioa9An4lUFoK/TKLMjdtTEUCbUSu1tSMAPZgdIkTGzl5HjT2kjsoq8jbBqgVOIuI+r7B
-         BILKd0YJNGKZz1+Kgs8+XUg3jpdfvEHrz10nZ/5y9o5nYU1NGAN/ennW8iOxEUNEldnQ
-         8A13u5NTVHfrmElL0XlIXVGt3sY1xGC0Ne3mJUWg0wpNCkOwMORFJslOxHSrTk5TvXoR
-         rjF1W1/WCMELRu1aOglHKPLVvYawenn5psnyZcZM9mNNt0yfwofmejrpXyYxXzIOoWKX
-         Ff9g==
+        bh=eOjM89dV+f1cFPNk0j8IHVhvMB89HUV+FlvJghSUjlQ=;
+        b=gfRyBqIuHNtuwisQ4ZSxroEKvFZoJbr3nas9/f7xD74gwOPMMD6Xvf204czxNB20Xv
+         Tja2SvkYzR002rDfUvE94qoNlZHiXFXwhvWjfEq+GhEuMMGjF4F9zkWCFPK4Teyia7Z+
+         xOSa9ujsTkL0zAKj2i1lrWLeyD9Ai6nCsXHH85j3FdQXMah0lY45iFdRdSjxnyy69Jkm
+         fUN2TTiJnCLmnzIeSbGwPZHJdlbsbllJNDqH5zRL0ID4Oq690uz2L6vt/VNOB+cvvXei
+         SoM3x1UgGz8/2F7+Ju8oj1P+zfqELz43wzXZEHCUwjPsGp9cDqJM811Nx48yUNtbStrd
+         yV1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679730027;
+        d=1e100.net; s=20210112; t=1679730029;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D1IG/1kt/Y9xOco97EKexl0aCGg2ZwXOiS8z/jOTAxY=;
-        b=imkLANerMjSVgzHzhur9pYyjpbou41Mx1cjJZfEB6nY1dnd3uIY6BMnolvEMJixteD
-         GBxjg3F0X2QSFXIz+xbN2TEkkXpIauWZ04k8MeMfB9g6LbiTP22h2yQlje9kg0w0OXKG
-         vvO31FcHJbSrX3JMf0BewiygvH6IgV5hUUivqqItgebu+ONfjEfPBUSMBSTy7cWP8Bim
-         djEfm1BpFVCm4lKWDHOTyubF5eOL8LpGlpNHO7DkCqEmW2g++OGJzjgP740YMZuCHscX
-         J05YaP42k61M8zhY8bPn9lPvCSlwz3s8QrCsoHs8Q5cJTSvJJFrRT4vL5t34K99p1ldV
-         ifQg==
-X-Gm-Message-State: AAQBX9eBv5/k9kAKaI1rZIykgH4GdBAk7vsqGH9vWKN8t1yDFGwbjGib
-        ZnIGcKjpQ0OYNulwejZ7+pM=
-X-Google-Smtp-Source: AKy350YKtqc4xm5jVoKtAYVD+vHoIATs1mebKljtVf7DqcKBmtWTngWkLrUevKxUeU2bpI+I742aqQ==
-X-Received: by 2002:a25:db4b:0:b0:b6a:51c9:d7ba with SMTP id g72-20020a25db4b000000b00b6a51c9d7bamr4845123ybf.20.1679730027579;
-        Sat, 25 Mar 2023 00:40:27 -0700 (PDT)
+        bh=eOjM89dV+f1cFPNk0j8IHVhvMB89HUV+FlvJghSUjlQ=;
+        b=WqewBGeZG1ETQWbY95QQhv4u5Wln/S/gDRDSBPYJnS5lvxiRusp2G5KZ9diPFuP4o3
+         UdooDenigOFJVbyt8xp6XYpnytiH+Ej4NDA9YFOGXTz0GB8p4G1BKTn1la7Fe/z76AMf
+         3Z4cZOJjCW5LfVO89LC2Pw6pi0aoIJjAiS9oWxDOOqsn2ZViztBAEgGDGGnV2Tpo8uIx
+         VVyY3IktmFe2BIyZwMYNH2+66erF7DJ7Rpi7lC98elWy513uHSe8Vp811+RUJV2uWOmy
+         B1v0FovEfo3rXFZoRdQcpOplmOMMDZSjCRApoUiYTeFmk2cQFuqVkDMXC9BRchjLaRV2
+         gAYw==
+X-Gm-Message-State: AAQBX9cfcjHNTgESbOsYdwnSpAvCxRQxHkg/fhT1ohafq4ebB5eGppGQ
+        0niMj5OFb1dwF/8g6HaZVRo=
+X-Google-Smtp-Source: AKy350bKgQHX0o/LdQ5YecW3frRWq3nWQ5rIjUiyBiF+dynqiC4j/ODd0gT0jo7b766gNsbVe/fwHQ==
+X-Received: by 2002:a05:6902:154f:b0:b72:571d:f6cc with SMTP id r15-20020a056902154f00b00b72571df6ccmr926484ybu.4.1679730028858;
+        Sat, 25 Mar 2023 00:40:28 -0700 (PDT)
 Received: from localhost.localdomain (tunnel785484-pt.tunnel.tserv9.chi1.ipv6.he.net. [2001:470:1f10:aed::2])
-        by smtp.googlemail.com with ESMTPSA id w20-20020a25c714000000b00b7767ca7498sm969629ybe.53.2023.03.25.00.40.26
+        by smtp.googlemail.com with ESMTPSA id w20-20020a25c714000000b00b7767ca7498sm969629ybe.53.2023.03.25.00.40.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 00:40:27 -0700 (PDT)
+        Sat, 25 Mar 2023 00:40:28 -0700 (PDT)
 From:   Tianling Shen <cnsztl@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -65,9 +65,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Vincent Legoll <vincent.legoll@gmail.com>
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/4] dt-bindings: Add doc for FriendlyARM NanoPi R2C
-Date:   Sat, 25 Mar 2023 15:40:19 +0800
-Message-Id: <20230325074022.9818-2-cnsztl@gmail.com>
+Subject: [PATCH v2 2/4] arm64: dts: rockchip: Add FriendlyARM NanoPi R2C
+Date:   Sat, 25 Mar 2023 15:40:20 +0800
+Message-Id: <20230325074022.9818-3-cnsztl@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230325074022.9818-1-cnsztl@gmail.com>
 References: <20230325074022.9818-1-cnsztl@gmail.com>
@@ -83,31 +83,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add devicetree binding documentation for the FriendlyARM NanoPi R2C.
+The NanoPi R2C is a minor variant of NanoPi R2S with the on-board NIC
+chip changed from rtl8211e to yt8521s, and otherwise identical to R2S.
 
 Signed-off-by: Tianling Shen <cnsztl@gmail.com>
 ---
- Documentation/devicetree/bindings/arm/rockchip.yaml | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/rockchip/Makefile         |  1 +
+ .../boot/dts/rockchip/rk3328-nanopi-r2c.dts   | 40 +++++++++++++++++++
+ 2 files changed, 41 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2c.dts
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 6f4270f2bd9e..883c9d36e4e5 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -185,9 +185,11 @@ properties:
-           - const: firefly,rk3566-roc-pc
-           - const: rockchip,rk3566
- 
--      - description: FriendlyElec NanoPi R2S
-+      - description: FriendlyElec NanoPi R2 series boards
-         items:
--          - const: friendlyarm,nanopi-r2s
-+          - enum:
-+              - friendlyarm,nanopi-r2c
-+              - friendlyarm,nanopi-r2s
-           - const: rockchip,rk3328
- 
-       - description: FriendlyElec NanoPi4 series boards
+diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+index a315a8117b0f..0bdcddd221f8 100644
+--- a/arch/arm64/boot/dts/rockchip/Makefile
++++ b/arch/arm64/boot/dts/rockchip/Makefile
+@@ -14,6 +14,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2-v11.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go3.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-a1.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-evb.dtb
++dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2c.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2s.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-orangepi-r1-plus.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-rock64.dtb
+diff --git a/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2c.dts b/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2c.dts
+new file mode 100644
+index 000000000000..a07a26b944a0
+--- /dev/null
++++ b/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2c.dts
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright (c) 2021 FriendlyElec Computer Tech. Co., Ltd.
++ * (http://www.friendlyarm.com)
++ *
++ * Copyright (c) 2021-2023 Tianling Shen <cnsztl@gmail.com>
++ */
++
++/dts-v1/;
++#include "rk3328-nanopi-r2s.dts"
++
++/ {
++	model = "FriendlyElec NanoPi R2C";
++	compatible = "friendlyarm,nanopi-r2c", "rockchip,rk3328";
++};
++
++&gmac2io {
++	phy-handle = <&yt8521s>;
++	tx_delay = <0x22>;
++	rx_delay = <0x12>;
++
++	mdio {
++		/delete-node/ ethernet-phy@1;
++
++		yt8521s: ethernet-phy@3 {
++			compatible = "ethernet-phy-ieee802.3-c22";
++			reg = <3>;
++
++			motorcomm,clk-out-frequency-hz = <125000000>;
++			motorcomm,keep-pll-enabled;
++			motorcomm,auto-sleep-disabled;
++
++			pinctrl-0 = <&eth_phy_reset_pin>;
++			pinctrl-names = "default";
++			reset-assert-us = <10000>;
++			reset-deassert-us = <50000>;
++			reset-gpios = <&gpio1 RK_PC2 GPIO_ACTIVE_LOW>;
++		};
++	};
++};
 -- 
 2.40.0
 
