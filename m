@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4A56C8B46
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 07:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6397E6C8B4B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 07:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbjCYGJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 02:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
+        id S231473AbjCYGJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 02:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbjCYGI6 (ORCPT
+        with ESMTP id S232073AbjCYGJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 02:08:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED31D31F;
-        Fri, 24 Mar 2023 23:08:53 -0700 (PDT)
+        Sat, 25 Mar 2023 02:09:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A502B740;
+        Fri, 24 Mar 2023 23:09:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CE56608D6;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A5DEB826F8;
+        Sat, 25 Mar 2023 06:09:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F625C4339B;
         Sat, 25 Mar 2023 06:08:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57BBCC433A1;
-        Sat, 25 Mar 2023 06:08:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679724532;
-        bh=q7weBGPKvdBN57QUvQqtX5qaYPsIxnfEd8OnKmhnqdA=;
+        s=k20201202; t=1679724540;
+        bh=AZxdkgPPk5uvF+BQxbM9LjXE7h2xyoTV5CHwXU/8HBE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aYeiwpTrkkJSoEHTClUYXh4nHZxJy302IUQShQ1+6oY9htGMebu05MOB8El++8aFl
-         9kCWkyoZ/NML2PAjmMmc4A5JpN38TO8oYGUYnvDm1H6fl9IpQDJ+NIcfkLm0XwFidr
-         80fb1ox0I0Yo50ZNJuGe5yWch+qD5lyfJ2xzsL/vbY+y99KvrhTR/W9Poz/7bbebnv
-         PXunooBfRF/+I8gx0SdK9ETB18c8PAoKpngxhYzuLdXTD4xHXE6Gshk98q/uM5eTfF
-         8ncadKj3TNKIfpB9PowlEDog5VRxNH3tb+JxbTmnfv5hOhsDVZT7BkwYOua/02Zyo6
-         Mh7TJGdi+dn8w==
+        b=frI6wY/7y9Ugq/kDdNPQDTAIrUL1Ibp1tX6t7Wkvuc4peDLOUS0FLn14dUsWo/UVP
+         KtNbpypjIDQfLX5Sa2evDMHXVx61HvtQHFOB9PKZEAXW6tzkIYZ7paJcUl7b6QDkDd
+         XhemG7a6NpMMwzsAA5r8YA40P6xhw2fdg7YT8O/KlzdC1TBydkuv+gJo7kkTOrB7+s
+         enMaqi5rZNqjbwsUTqTpvzzTnA0aG8BdvkEhvLbQnSOQX291OOqIQDs7NKNHFmtArR
+         Nv401z48Zg8rkh8YIDSIShaFEhib6B5rPElKdicGjHXH6RCXcm7FcU+nr/k4vFBvHI
+         +2xif/sknb2gQ==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -55,16 +55,16 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-mm@kvack.org, linux-sh@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
         sparclinux@vger.kernel.org
-Subject: [PATCH v3 01/14] arm: reword ARCH_FORCE_MAX_ORDER prompt and help text
-Date:   Sat, 25 Mar 2023 09:08:15 +0300
-Message-Id: <20230325060828.2662773-2-rppt@kernel.org>
+Subject: [PATCH v3 02/14] arm64: drop ranges in definition of ARCH_FORCE_MAX_ORDER
+Date:   Sat, 25 Mar 2023 09:08:16 +0300
+Message-Id: <20230325060828.2662773-3-rppt@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230325060828.2662773-1-rppt@kernel.org>
 References: <20230325060828.2662773-1-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,49 +74,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-The prompt and help text of ARCH_FORCE_MAX_ORDER are not even close to
-describe this configuration option.
+It is not a good idea to change fundamental parameters of core memory
+management. Having predefined ranges suggests that the values within
+those ranges are sensible, but one has to *really* understand
+implications of changing MAX_ORDER before actually amending it and
+ranges don't help here.
 
-Update both to actually describe what this option does.
+Drop ranges in definition of ARCH_FORCE_MAX_ORDER and make its prompt
+visible only if EXPERT=y
 
 Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Reviewed-by: Zi Yan <ziy@nvidia.com>
 Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 ---
- arch/arm/Kconfig | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ arch/arm64/Kconfig | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 929e646e84b9..0b15384c62e6 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -1354,17 +1354,19 @@ config ARM_MODULE_PLTS
- 	  configurations. If unsure, say y.
- 
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index e60baf7859d1..7324032af859 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1487,11 +1487,9 @@ config XEN
+ # 16K |       27          |      14      |       13        |         11         |
+ # 64K |       29          |      16      |       13        |         13         |
  config ARCH_FORCE_MAX_ORDER
--	int "Maximum zone order"
-+	int "Order of maximal physically contiguous allocations"
- 	default "11" if SOC_AM33XX
- 	default "8" if SA1111
+-	int "Maximum zone order" if ARM64_4K_PAGES || ARM64_16K_PAGES
++	int "Maximum zone order" if EXPERT && (ARM64_4K_PAGES || ARM64_16K_PAGES)
+ 	default "13" if ARM64_64K_PAGES
+-	range 11 13 if ARM64_16K_PAGES
+ 	default "11" if ARM64_16K_PAGES
+-	range 10 15 if ARM64_4K_PAGES
  	default "10"
  	help
--	  The kernel memory allocator divides physically contiguous memory
--	  blocks into "zones", where each zone is a power of two number of
--	  pages.  This option selects the largest power of two that the kernel
--	  keeps in the memory allocator.  If you need to allocate very large
--	  blocks of physically contiguous memory, then you may need to
--	  increase this value.
-+	  The kernel page allocator limits the size of maximal physically
-+	  contiguous allocations. The limit is called MAX_ORDER and it
-+	  defines the maximal power of two of number of pages that can be
-+	  allocated as a single contiguous block. This option allows
-+	  overriding the default setting when ability to allocate very
-+	  large blocks of physically contiguous memory is required.
-+
-+	  Don't change if unsure.
- 
- config ALIGNMENT_TRAP
- 	def_bool CPU_CP15_MMU
+ 	  The kernel memory allocator divides physically contiguous memory
 -- 
 2.35.1
 
