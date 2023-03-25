@@ -2,133 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C0C6C9123
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 23:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA0F6C911E
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 23:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbjCYWK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 18:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53192 "EHLO
+        id S231717AbjCYWJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 18:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbjCYWKZ (ORCPT
+        with ESMTP id S229488AbjCYWJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 18:10:25 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DBE40E3;
-        Sat, 25 Mar 2023 15:10:24 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 3E8665FD02;
-        Sun, 26 Mar 2023 01:10:22 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679782222;
-        bh=fgF6s5R3U6VGsdB/76CfdbRQ/kHWhdlTZAEkRxHRzOU=;
-        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-        b=iTjZCzqqvkvHNC4fPC01IAwWRMJV4u+8bQHj8MNii9ziKxmjwKxbRhIt8ON1j5NZS
-         fJ6Y1/kkJfRhKSXyc3ncWGKu84OaN6OR7S3GK7XEouS7s4rG7exPqoTq5AHuv+KC/2
-         vG+6QVm6iJucexsLFx377/IkmLXxBehCtfYVC8fsxJi+/g6qRZwmPHc96fwJkQDaoE
-         tGFDxbxgZW4NVdi4/8iXBG6YqRYSorVJDk1QoEAZU1n7p+YbBylOqQSiWY0BDRvl/k
-         0TOq8FArtPx9XBsAtYgwJuz8Ieao36Cjsj0MEMhhJ2H69ymVXeOtmbttyNk3/O51WZ
-         YLqS64FKcSrbw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Sun, 26 Mar 2023 01:10:22 +0300 (MSK)
-Message-ID: <728181e9-6b35-0092-3d01-3d7aff4521b6@sberdevices.ru>
-Date:   Sun, 26 Mar 2023 01:07:05 +0300
+        Sat, 25 Mar 2023 18:09:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81FD423A
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 15:08:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679782103;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gfpzCVb7RjReIdPdxbxCD31KhV4soJYjxsJSs2syVzk=;
+        b=XkXySQxTXOCDp/KTbZtXRLpcv7diNpNAJFLi21eYNbFD+OMSoW9GD9Cq83TCp17sSxz8Yu
+        t5YAmnpwg3YrEJtK5RnZkKS6HClShX2FYf9dpwbWIyBeey1igGYRh2fWqNcZztS/mZnUPH
+        3dtUyWILdrONrCOuHvdnEHPwlAs3xJ4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-Fy9X5VztN_yL8p2Hw40nmQ-1; Sat, 25 Mar 2023 18:08:19 -0400
+X-MC-Unique: Fy9X5VztN_yL8p2Hw40nmQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5AC11811E7C;
+        Sat, 25 Mar 2023 22:08:19 +0000 (UTC)
+Received: from [10.22.32.82] (unknown [10.22.32.82])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A8BC443FBD;
+        Sat, 25 Mar 2023 22:08:18 +0000 (UTC)
+Message-ID: <17e804ea-64b5-97e1-d5fa-571157e15746@redhat.com>
+Date:   Sat, 25 Mar 2023 18:08:18 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
+Subject: Re: [PATCH 3/5] cgroup/cpuset: Find another usable CPU if none found
+ in current cpuset
 Content-Language: en-US
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <avkrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Subject: [RFC PATCH v2 0/3] fix header length on skb merging
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/25 20:38:00 #21009968
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230306200849.376804-1-longman@redhat.com>
+ <20230306200849.376804-4-longman@redhat.com>
+ <20230314181749.5b4k6selbgdhl3up@blackpad>
+ <58a1a878-fa0b-285d-3e43-2b5103d3c770@redhat.com>
+ <20230317122708.ax3m2d4zijkfdzjq@blackpad>
+ <ca664da8-0f47-06b2-a94c-82b2f9a1c3aa@redhat.com>
+ <20230324143247.GA27199@willie-the-truck>
+ <20230324181936.5sf6xjc5a4vacuku@blackpad>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230324181936.5sf6xjc5a4vacuku@blackpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-this patchset fixes appending newly arrived skbuff to the last skbuff of
-the socket's queue during rx path. Problem fires when we are trying to
-append data to skbuff which was already processed in dequeue callback
-at least once. Dequeue callback calls function 'skb_pull()' which changes
-'skb->len'. In current implementation 'skb->len' is used to update length
-in header of last skbuff after new data was copied to it. This is bug,
-because value in header is used to calculate 'rx_bytes'/'fwd_cnt' and
-thus must be constant during skbuff lifetime. Here is example, we have
-two skbuffs: skb0 with length 10 and skb1 with length 4.
+On 3/24/23 14:19, Michal Koutný wrote:
+> On Fri, Mar 24, 2023 at 02:32:50PM +0000, Will Deacon <will@kernel.org> wrote:
+>> So approaches such as killing tasks or rejecting system calls tend not
+>> to work as well, since you inevitably get divergent behaviour leading
+>> to functional breakage rather than e.g. performance anomalies.
+> What about temporary performance drop from 100% to 0% aka freezing the
+> tasks for the duration of the mismatching affinity config?
 
-1) skb0 arrives, hdr->len == skb->len == 10, rx_bytes == 10
-2) Read 3 bytes from skb0, skb->len == 7, hdr->len == 10, rx_bytes == 10
-3) skb1 arrives, hdr->len == skb->len == 4, rx_bytes == 14
-4) Append skb1 to skb0, skb0 now has skb->len == 11, hdr->len == 11.
-   But value of 11 in header is invalid.
-5) Read whole skb0, update rx_bytes by 11 from skb0's header.
-6) At this moment rx_bytes == 3, but socket's queue is empty.
+That can be a lot of extra work to freeze it. I will prefer something 
+simpler.
 
-This bug starts to fire since:
+Without this patch, I believe it will lead to a cpumask of 0 which will 
+cause the scheduler to pick a fallback cpu. It looks like the fallback 
+code may be able to pick up the right cpu or it may panic the system 
+(less likely).
 
-commit
-077706165717 ("virtio/vsock: don't use skbuff state to account credit")
+Cheers,
+Longman
+>
+>
+>> Having said that, the behaviour we currently have in mainline seems to
+>> be alright, so please don't go out of your way to accomodate these SoCs.
+> I see. (Just wondering what you think about the fourth option above.)
+>
+> Thanks,
+> Michal
 
-In fact, it presents before, but didn't triggered due to a little bit
-buggy implementation of credit calculation logic. So i'll use Fixes tag
-for it.
-
-I really forgot about this branch in rx path when implemented patch
-077706165717.
-
-This patchset contains 3 patches:
-1) Fix itself.
-2) Patch with WARN_ONCE() to catch such problems in future.
-3) Patch with test which triggers skb appending logic. It looks like
-   simple test with several 'send()' and 'recv()', but it checks, that
-   skbuff appending works ok.
-
-Link to v1:
-https://lore.kernel.org/netdev/e141e6f1-00ae-232c-b840-b146bdb10e99@sberdevices.ru/
-
-Changelog:
-
-v1 -> v2:
- - Replace 'WARN()' with 'WARN_ONCE()'.
- - Clean and refactor source code of the reproducer, now it is test for
-   vsock_test suite.
- - Commit messages update.
-
-Arseniy Krasnov (3):
-  virtio/vsock: fix header length on skb merging
-  virtio/vsock: WARN_ONCE() for invalid state of socket
-  test/vsock: new skbuff appending test
-
- net/vmw_vsock/virtio_transport_common.c |  9 ++-
- tools/testing/vsock/vsock_test.c        | 90 +++++++++++++++++++++++++
- 2 files changed, 98 insertions(+), 1 deletion(-)
-
--- 
-2.25.1
