@@ -2,128 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD596C89AC
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 01:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6760C6C89B9
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 01:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbjCYAhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 20:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
+        id S231834AbjCYArj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 20:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCYAho (ORCPT
+        with ESMTP id S229522AbjCYArh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 20:37:44 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04778EB6F
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 17:37:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679704663; x=1711240663;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EDmSn0BoNS6C36guPoIH97rCDRjlnX5uzMGFKE4QSsc=;
-  b=B58W2at5TL1J7qC6Uyr4xfSWfRliOTF3o7aKiAYDIMhBFmRTNc45ZPHB
-   aGaisdv+4qYjAxOrudHwjJorSwUKiexIOKZPPo3uP3k4UCPyrDbkSQu3S
-   9hC7FBNdtUhq05HSmOZoT+5jRO6YRhEaRFw8yi1YLodsyXnQ0nbVWBlhu
-   oKVYsP/Rr7cpCwDfsekNYpiyN16H+9qRpXbEFaOn2kWHXMVJ2r+1iNNqb
-   2n8R/yxsOe+/xcFMp/SIDTaIm0GWdVDV9owSdfuRsnZoL2xKByjfmWOSy
-   LG6zQ18D5sDNpC6knYR0+AtxeFGpt0q/zznXlSx4Szy/PxulTVA+O40Pv
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="339941400"
-X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
-   d="scan'208";a="339941400"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 17:37:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="826436446"
-X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
-   d="scan'208";a="826436446"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Mar 2023 17:37:40 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfrud-000FoJ-31;
-        Sat, 25 Mar 2023 00:37:39 +0000
-Date:   Sat, 25 Mar 2023 08:37:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: Disable EL2 traps for BRBE instructions executed
- in EL1
-Message-ID: <202303250802.KytExIHw-lkp@intel.com>
-References: <20230324055127.2228330-1-anshuman.khandual@arm.com>
+        Fri, 24 Mar 2023 20:47:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B9FC17C
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 17:47:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F01C8B826AA
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 00:47:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 945F4C433EF;
+        Sat, 25 Mar 2023 00:47:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679705253;
+        bh=32m0h5HreH9HP53eNp/CC/r0tIXZbo4QjcqJUxvANw8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=WokIKGTnf1AmMrskPjm3U6/roQA0Nfjfls3TR69XlJxwYaa0hxdm5zyju3TwMm+iV
+         KZCxq8jm+vcJMoT9TaFP1l5aPGbmXpvu4fI7UdyW2mGrKNCHmquhiVjaWjsTTCVFcQ
+         KAoRsnmZD/qNHOJ0x0XsXuL/NZjcFiJJktRxGLfivgoSsqxjmU1zRzIy/a572GDiRV
+         YD7dAjHQVu1ECdN0l77hU5k/X33fjogiqo/ksTftA10/M+tzDbn4HgdkirdVav9VCz
+         NANEoobgcAX13Q8tym0RO2OWUBgdvMo/UbibFobPuTiuMD2Ymh/rTjtZyl9+uP6pwC
+         Lu9cSXFwc0N+w==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 282A51540432; Fri, 24 Mar 2023 17:47:33 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 17:47:33 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: A couple of TSC questions
+Message-ID: <acda3fb5-373a-48b1-b78e-eea18da4ccb0@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <b2f07f18-b60b-403b-90ff-937ea32963ee@paulmck-laptop>
+ <ZBqOyLByOgvdAve3@feng-clx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230324055127.2228330-1-anshuman.khandual@arm.com>
+In-Reply-To: <ZBqOyLByOgvdAve3@feng-clx>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anshuman,
+On Wed, Mar 22, 2023 at 01:14:48PM +0800, Feng Tang wrote:
+> Hi, Paul
+> 
+> On Tue, Mar 21, 2023 at 04:23:28PM -0700, Paul E. McKenney wrote:
+> > Hello, Feng!
+> > 
+> > I hope that things are going well for you and yours!
+> 
+> Thanks!
+> 
+> > First, given that the kernel can now kick out HPET instea of TSC in
+> > response to clock skew, does it make sense to permit recalibration of
+> > the still used TSC against the marked-unstable HPET?
+> 
+> Yes, it makes sense to me. I don't know the detail of the case, if
+> the TSC frequency comes from CPUID info, a recalibration against a
+> third party HW timer like ACPI_PM should help here. 
+> 
+> A further thought is if there are really quite some case that the
+> CPUID-provided TSC frequency info is not accurate, then we may need
+> to enable the recalibration by default, and give a warning message
+> when detecting any mismatch. 
 
-Thank you for the patch! Yet something to improve:
+Now that you mention it, it is quite hard to choose correctly within
+the kernel.  To do it right seems to require that NTP information be
+pushed into the kernel.
 
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on arm/for-next arm/fixes kvmarm/next soc/for-next xilinx-xlnx/master linus/master v6.3-rc3 next-20230324]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > Second, we are very occasionally running into console messages like this:
+> > 
+> > Measured 2 cycles TSC warp between CPUs, turning off TSC clock.
+> > 
+> > This comes from check_tsc_sync_source() and indicates that one CPU's
+> > TSC read produced a later time than a later read from some other CPU.
+> > I am beginning to suspect that these can be caused by unscheduled delays
+> > in the TSC synchronization code, but figured I should ask you if you have
+> > ever seen these.  And of course, if so, what the usual causes might be.
+> 
+> I haven't seen this error myself or got similar reports. Usually it
+> should be easy to detect once happened, as falling back to HPET
+> will trigger obvious performance degradation.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/arm64-Disable-EL2-traps-for-BRBE-instructions-executed-in-EL1/20230324-135312
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20230324055127.2228330-1-anshuman.khandual%40arm.com
-patch subject: [PATCH] arm64: Disable EL2 traps for BRBE instructions executed in EL1
-config: arm64-randconfig-r001-20230322 (https://download.01.org/0day-ci/archive/20230325/202303250802.KytExIHw-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/457bbac085c7f83be1a63b54f6caf32b820503eb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Anshuman-Khandual/arm64-Disable-EL2-traps-for-BRBE-instructions-executed-in-EL1/20230324-135312
-        git checkout 457bbac085c7f83be1a63b54f6caf32b820503eb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+And that is exactly what happened.  ;-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303250802.KytExIHw-lkp@intel.com/
+> Could you give more detail about when and how it happens, and the
+> HW info like how many sockets the platform has. 
 
-All errors (new ones prefixed by >>):
+We are in early days, so I am checking for other experiences.
 
->> <instantiation>:36:14: error: expected compatible register or logical immediate
-    orr x0, x0, #HFGITR_EL2_nBRBIALL
-                ^
-   <instantiation>:10:2: note: while in macro instantiation
-    __init_el2_fgt
-    ^
-   arch/arm64/kernel/head.S:577:2: note: while in macro instantiation
-    init_el2_state
-    ^
-   <instantiation>:37:14: error: expected compatible register or logical immediate
-    orr x0, x0, #HFGITR_EL2_nBRBINJ
-                ^
-   <instantiation>:10:2: note: while in macro instantiation
-    __init_el2_fgt
-    ^
-   arch/arm64/kernel/head.S:577:2: note: while in macro instantiation
-    init_el2_state
-    ^
+> CC Thomas, Waiman, as they discussed simliar case here:
+> https://lore.kernel.org/lkml/87h76ew3sb.ffs@tglx/T/#md4d0a88fb708391654e78312ffa75b481690699f
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Fun!  ;-)
+
+							Thanx, Paul
