@@ -2,79 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D686C8F68
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 235B76C8F6D
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 17:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbjCYQUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 12:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
+        id S231842AbjCYQUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 12:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCYQUC (ORCPT
+        with ESMTP id S231561AbjCYQUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 12:20:02 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CAE46B6;
-        Sat, 25 Mar 2023 09:20:01 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id DFCCE1C0AB2; Sat, 25 Mar 2023 17:19:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1679761199;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YRwPfaYaywOmrK6OfSfiS8RmP4MmRbWuSvlWBa58fnQ=;
-        b=jmjiScV6hbfNDIw7nnqPvflBDUvKMRJ2P54KtG57X4ZcC7qauUjo645tI568VgvxLSmfeH
-        adH6yfiTHSbNaPwcdQy6EBDmYADimIllnK+o6Q1PDASbHhLhp8nHCSupSwcJuy7ZZAs3u5
-        Kajr7eSMnto69No4DkvoumkEx5sY/xU=
-Date:   Sat, 25 Mar 2023 17:19:56 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-leds@vger.kernel.org,
-        William Zhang <william.zhang@broadcom.com>,
-        Rafa?? Mi??ecki <rafal@milecki.pl>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] leds: bcm63138: refer to ARCH_BCMBCA instead of
- ARCH_BCM4908
-Message-ID: <20230325161955.GE1820@bug>
-References: <20230307082936.16631-1-lukas.bulwahn@gmail.com>
+        Sat, 25 Mar 2023 12:20:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8353EF97F;
+        Sat, 25 Mar 2023 09:20:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E307E60C82;
+        Sat, 25 Mar 2023 16:20:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA234C433EF;
+        Sat, 25 Mar 2023 16:20:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679761212;
+        bh=RgI9q5WzQBkRWeNGghQLt89IvUaWcS8RWnyJkhSvJi4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LL4+uqFV4y7Qqie7uM1+j08QWkZCzZye5kNta06r3PzK/adhocna4hPcbdNfuGfGj
+         //Wss/eotWxBgVN5M18iRCjemSQLOuB437D0+101miMlzB3jVgwOIIHdU3//YDHuKv
+         Re/GmLEP2qaxnDFjybDC+a1gxPqydrWJDCv8U0Jk=
+Date:   Sat, 25 Mar 2023 17:20:09 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ye Xiang <xiang.ye@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v7 1/6] usb: Add support for Intel LJCA device
+Message-ID: <ZB8fOTpD/uuexaV1@kroah.com>
+References: <20230325154711.2419569-1-xiang.ye@intel.com>
+ <20230325154711.2419569-2-xiang.ye@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230307082936.16631-1-lukas.bulwahn@gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230325154711.2419569-2-xiang.ye@intel.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2023-03-07 09:29:36, Lukas Bulwahn wrote:
-> Commit dd5c672d7ca9 ("arm64: bcmbca: Merge ARCH_BCM4908 to ARCH_BCMBCA")
-> removes config ARCH_BCM4908 as config ARCH_BCMBCA has the same intent.
+On Sat, Mar 25, 2023 at 11:47:06PM +0800, Ye Xiang wrote:
+> This patch implements the USB part of Intel USB-I2C/GPIO/SPI adapter
+> device named "La Jolla Cove Adapter" (LJCA).
 > 
-> Probably due to concurrent development, commit a0ba692072d8 ("leds:
-> bcm63138: add support for BCM63138 controller") introduces 'LED Support
-> for Broadcom BCM63138 SoC' that depends on ARCH_BCM4908, but this use was
-> not visible during the config refactoring from the commit above. Hence,
-> these two changes create a reference to a non-existing config symbol.
+> The communication between the various LJCA module drivers and the
+> hardware will be muxed/demuxed by this driver. Three modules (
+> I2C, GPIO, and SPI) are supported currently.
 > 
-> Adjust the LEDS_BCM63138 definition to refer to ARCH_BCMBCA instead of
-> ARCH_BCM4908 to remove the reference to the non-existing config symbol
-> ARCH_BCM4908.
+> Each sub-module of LJCA device is identified by type field within
+> the LJCA message header.
 > 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> The minimum code in ASL that covers this board is
 
-Do we really want this "default Y" on those architectures? I'd understand
-it for something critical but LED is not, and if it is not even present on
-all such machines...
+As this requires ACPI, why are you not saying so in your Kconfig entry?
+What good would this driver be without ACPI enabled?
 
-BR,
-									Pavel
+thanks,
 
--- 
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
+greg k-h
