@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1E16C8B57
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 07:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3E36C8B5D
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 07:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbjCYGJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 02:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
+        id S232148AbjCYGJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 02:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbjCYGJM (ORCPT
+        with ESMTP id S231990AbjCYGJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 02:09:12 -0400
+        Sat, 25 Mar 2023 02:09:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A7413DC1;
-        Fri, 24 Mar 2023 23:09:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6326419697;
+        Fri, 24 Mar 2023 23:09:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8274608D6;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E58656092A;
+        Sat, 25 Mar 2023 06:09:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA6EFC433A1;
         Sat, 25 Mar 2023 06:09:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 870B1C433D2;
-        Sat, 25 Mar 2023 06:09:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679724547;
-        bh=qNh6nhkYIBdXaRuLL5GYGOpZBsiUYM9+UhineGTjJPU=;
+        s=k20201202; t=1679724554;
+        bh=rsWO9Gu3cLJfEZ6HGq7Yirp+4MPMX9dfat2W6BJq/Fk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rirI1LE3IL192S0yKzg6Y9hCPNuKuJBa8/FnRMwHG+5iLbDwTy50fX949R6Y63xTF
-         UXgqPugUFhJmfiXPsf80n0rIx2hpYxXgF013LBy9/cuaPPknS52iQCHlE9I/eNqysy
-         YA5VqoQdNZbXputm2MtEunhOqdux1Kh0R1JI/PpfdvIMBpHcnD+7de9og02ue3WXm9
-         0M/AXHZ0+Vav4cfU8cZirL/pvPdBPSCqFqtvhnml0w4rkC9tX34dsfUjcp9G6nULZG
-         oBPlI/jXvQ4LSznp1Wy4B+lgG4MPAphGjzPzbxy93VbPRvoljM+BMe3yd5jHEvzR4E
-         ThQp2TwEZDftA==
+        b=VPc8dNXMBWIXJyN6sfN6LeTLRDC59T4bZLZBWq7JN53840Dl1l7ym8J18YFdxatIp
+         9DQpdhF4tu+AKAw0OjKnedcpW41C5WMuw9ucVi77g7PTxRglrMTBT3fovrTuqL36/2
+         Q3nBPLN01a2DhO70v9RrrtK15qCftbBFZGWwfhsPjuErp5vRGnR422qF2c+POTGGZo
+         YXcGQua+Kxj2QNTUxj+Ci8zoUOnJX4+qLLchS0FzJJ6eMnaOvqBEiB4VZr+a7f6noP
+         ypmyXJqvhzzN13BhkuTUs9QpJCd+dYk22bWNDDlH29JNUEDYaWLGwdmQk0iLZHu63b
+         RV9GjrGP5l0RA==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -55,9 +55,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-mm@kvack.org, linux-sh@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
         sparclinux@vger.kernel.org
-Subject: [PATCH v3 03/14] arm64: reword ARCH_FORCE_MAX_ORDER prompt and help text
-Date:   Sat, 25 Mar 2023 09:08:17 +0300
-Message-Id: <20230325060828.2662773-4-rppt@kernel.org>
+Subject: [PATCH v3 04/14] csky: drop ARCH_FORCE_MAX_ORDER
+Date:   Sat, 25 Mar 2023 09:08:18 +0300
+Message-Id: <20230325060828.2662773-5-rppt@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230325060828.2662773-1-rppt@kernel.org>
 References: <20230325060828.2662773-1-rppt@kernel.org>
@@ -74,59 +74,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-The prompt and help text of ARCH_FORCE_MAX_ORDER are not even close to
-describe this configuration option.
+The default value of ARCH_FORCE_MAX_ORDER matches the generic default
+defined in the MM code, the architecture does not support huge pages, so
+there is no need to keep ARCH_FORCE_MAX_ORDER option available.
 
-Update both to actually describe what this option does.
+Drop it.
 
 Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Reviewed-by: Zi Yan <ziy@nvidia.com>
 Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 ---
- arch/arm64/Kconfig | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ arch/csky/Kconfig | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 7324032af859..cc11cdcf5a00 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1487,24 +1487,24 @@ config XEN
- # 16K |       27          |      14      |       13        |         11         |
- # 64K |       29          |      16      |       13        |         13         |
- config ARCH_FORCE_MAX_ORDER
--	int "Maximum zone order" if EXPERT && (ARM64_4K_PAGES || ARM64_16K_PAGES)
-+	int "Order of maximal physically contiguous allocations" if EXPERT && (ARM64_4K_PAGES || ARM64_16K_PAGES)
- 	default "13" if ARM64_64K_PAGES
- 	default "11" if ARM64_16K_PAGES
- 	default "10"
- 	help
--	  The kernel memory allocator divides physically contiguous memory
--	  blocks into "zones", where each zone is a power of two number of
--	  pages.  This option selects the largest power of two that the kernel
--	  keeps in the memory allocator.  If you need to allocate very large
--	  blocks of physically contiguous memory, then you may need to
--	  increase this value.
-+	  The kernel page allocator limits the size of maximal physically
-+	  contiguous allocations. The limit is called MAX_ORDER and it
-+	  defines the maximal power of two of number of pages that can be
-+	  allocated as a single contiguous block. This option allows
-+	  overriding the default setting when ability to allocate very
-+	  large blocks of physically contiguous memory is required.
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index c694fac43bed..00379a843c37 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -332,10 +332,6 @@ config HIGHMEM
+ 	select KMAP_LOCAL
+ 	default y
  
--	  We make sure that we can allocate up to a HugePage size for each configuration.
--	  Hence we have :
--		MAX_ORDER = PMD_SHIFT - PAGE_SHIFT  => PAGE_SHIFT - 3
-+	  The maximal size of allocation cannot exceed the size of the
-+	  section, so the value of MAX_ORDER should satisfy
- 
--	  However for 4K, we choose a higher default value, 10 as opposed to 9, giving us
--	  4M allocations matching the default size used by generic code.
-+	    MAX_ORDER + PAGE_SHIFT <= SECTION_SIZE_BITS
-+
-+	  Don't change if unsure.
- 
- config UNMAP_KERNEL_AT_EL0
- 	bool "Unmap kernel when running in userspace (aka \"KAISER\")" if EXPERT
+-config ARCH_FORCE_MAX_ORDER
+-	int "Maximum zone order"
+-	default "10"
+-
+ config DRAM_BASE
+ 	hex "DRAM start addr (the same with memory-section in dts)"
+ 	default 0x0
 -- 
 2.35.1
 
