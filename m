@@ -2,97 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3D16C910C
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 22:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9AD6C9116
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 23:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjCYVuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 17:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
+        id S230309AbjCYWGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 18:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjCYVuA (ORCPT
+        with ESMTP id S229488AbjCYWGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 17:50:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A22DB76E
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 14:49:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E77AB80977
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 21:49:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79474C433D2;
-        Sat, 25 Mar 2023 21:49:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679780997;
-        bh=c5w2xQu/8wCXjsZH3FlKUmoCjisCwE0EABExkI+kokM=;
-        h=From:Date:Subject:To:Cc:From;
-        b=MJ1w+yGO1sCfU+u2xZvHX7WUy47Q+dPaiWK4tiEcNc5XVrlTmjmgYnaFKYwyWKT++
-         k/cYBeWWdA05I28e+F+A22qg5YBHAe6IGPCt8iRnPbWD48+D3trnVD5IYE9mC7zedo
-         cEvlMqJJ/2FHML3rEkr/rmFHwPcQtF4CkXKjBW9MHhvMRGzv9AkQQ4MNYI4XLbWd6e
-         UMk0XgmUKZtF8wjvclfMIUgoI+7UmedrJ/77qJbPbnEmbve/ktIt9/HB3QHKKwhFSk
-         mQyfGOY660Ku67zMc+2WptAGHZl++GfwW6dkRmneicIv4/vGLfQmUlVMxbG9C/JLOH
-         USdISGwSNBB8A==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Sat, 25 Mar 2023 21:49:49 +0000
-Subject: [PATCH] regmap: Handle sparse caches in the default sync
+        Sat, 25 Mar 2023 18:06:10 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F99555A8;
+        Sat, 25 Mar 2023 15:06:07 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 251A85FD02;
+        Sun, 26 Mar 2023 01:06:04 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679781964;
+        bh=COjmnQ0Wk0XlisNwkVt0MBAIKEpqB54cYItuwSog830=;
+        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
+        b=XttBPZvUI3OKLhyW5Whx9oC7CJnSp4iGn5v8WzQkII1U6QqxaklfugRIqfcK5qnKU
+         BZ0mrm6kcGviWYHpjb0XX45rSlOm8Bq8BzQn+PLVf+K/lEaktq98E5g+yZDJ8mVr2r
+         9GcEDNp3GltJqEXHZOLPQs3Z6+IKHZrBVjjoY0pdS1pBAkCJyhCDIfkW5+nOw+Eub3
+         ysx+JZTkcNpdjww7MvxpKPn5OwI9swUS9lc/Np7gINSE5p0isBXRAz8/fpQxtqQvX8
+         6c6zsb7ND4rF2s8PTNK6T4C3o6qGM6NV22UK7iXNEJk+4d2/Ydz9mVNYZK/FkwepzZ
+         7/D3SP9KcroRA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Sun, 26 Mar 2023 01:05:58 +0300 (MSK)
+Message-ID: <b0d15942-65ba-3a32-ba8d-fed64332d8f6@sberdevices.ru>
+Date:   Sun, 26 Mar 2023 01:02:43 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>
+CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
+        <avkrasnov@sberdevices.ru>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Subject: [PATCH net-next v5 0/2] allocate multiple skbuffs on tx
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230325-regcache-sparse-sync-v1-1-2a890239d061@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAHxsH2QC/x2NwQrCQAxEf6Xk7ELdtcj6K+Ihm8ZuELYlAauU/
- rupp+HN8JgNjFXY4NZtoPwWk7k5nE8dUMU2cZDRGWIfU5/iEJQnQqocbEE1j2+jMIwXyinjNZc
- Erhb0pSg2qoe8zvo66kX5KZ//2/2x7z/4IW6ifQAAAA==
-To:     linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-2eb1a
-X-Developer-Signature: v=1; a=openpgp-sha256; l=881; i=broonie@kernel.org;
- h=from:subject:message-id; bh=c5w2xQu/8wCXjsZH3FlKUmoCjisCwE0EABExkI+kokM=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkH2yDfxQcy9uCTPcyJLgaGKfZgQU+LxLlQHpNKs2O
- G+LrMg2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZB9sgwAKCRAk1otyXVSH0GiVB/
- 9msvwvaMBn0eEGWoLxFXegmTSPd1TfyG7NnW/FfXb8pnBH5EJI1jyVApJwOpjeD5VEniY0hrisPSwW
- AbdqSfdEWHM3bHTW6aUP5G69OhXh6omPirBHanPVF/g9kHr4u+f6tkKcGTYc8vKdRM/EHW/hsb5WNE
- dUJCL/hvxlusO/vRivHWQk79ZBuyuAzOdDqvDy4lGgKPLsDw88PDYHmNbhMSLaKfeOa4gGTAktRLr0
- T7e1CxOrXMLIJMxaYDbbwvd7IScwvaXkU6coif7bNzMPjNWwiTLBHZs7CuqvCLcJlta60lamxY7KXN
- J5NIUI3wn8OuFvnzwp0OLOMuPu5y6f
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/25 18:14:00 #21009230
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there is no cache entry available we will get -ENOENT from the cache
-implementation, handle this gracefully and skip rather than treating it as
-an error.
+This adds small optimization for tx path: instead of allocating single
+skbuff on every call to transport, allocate multiple skbuff's until
+credit space allows, thus trying to send as much as possible data without
+return to af_vsock.c.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/base/regmap/regcache.c | 2 ++
- 1 file changed, 2 insertions(+)
+Also this patchset includes second patch which adds check and return from
+'virtio_transport_get_credit()' and 'virtio_transport_put_credit()' when
+these functions are called with 0 argument. This is needed, because zero
+argument makes both functions to behave as no-effect, but both of them
+always tries to acquire spinlock. Moreover, first patch always calls
+function 'virtio_transport_put_credit()' with zero argument in case of
+successful packet transmission.
 
-diff --git a/drivers/base/regmap/regcache.c b/drivers/base/regmap/regcache.c
-index 362e043e26d8..c1b020c5a6a9 100644
---- a/drivers/base/regmap/regcache.c
-+++ b/drivers/base/regmap/regcache.c
-@@ -311,6 +311,8 @@ static int regcache_default_sync(struct regmap *map, unsigned int min,
- 			continue;
- 
- 		ret = regcache_read(map, reg, &val);
-+		if (ret == -ENOENT)
-+			continue;
- 		if (ret)
- 			return ret;
- 
+ Link to v1:
+ https://lore.kernel.org/netdev/2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru/
+ Link to v2:
+ https://lore.kernel.org/netdev/ea5725eb-6cb5-cf15-2938-34e335a442fa@sberdevices.ru/
+ Link to v3:
+ https://lore.kernel.org/netdev/f33ef593-982e-2b3f-0986-6d537a3aaf08@sberdevices.ru/
+ Link to v4:
+ https://lore.kernel.org/netdev/0e0c1421-7cdc-2582-b120-cad6f42824bb@sberdevices.ru/
+ Link to v5:
+ https://lore.kernel.org/netdev/f0b283a1-cc63-dc3d-cc0c-0da7f684d4d2@sberdevices.ru/
 
----
-base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
-change-id: 20230325-regcache-sparse-sync-5d4c939a79b3
+ Changelog:
+ v1 -> v2:
+ - If sent something, return number of bytes sent (even in
+   case of error). Return error only if failed to sent first
+   skbuff.
 
-Best regards,
+ v2 -> v3:
+ - Handle case when transport callback returns unexpected value which
+   is not equal to 'skb->len'. Break loop.
+ - Don't check for zero value of 'rest_len' before calling
+   'virtio_transport_put_credit()'. Decided to add this check directly
+   to 'virtio_transport_put_credit()' in separate patch.
+
+ v3 -> v4:
+ - Use WARN_ONCE() to handle case when transport callback returns
+   unexpected value.
+ - Remove useless 'ret = -EFAULT;' assignment for case above.
+
+ v4 -> v5:
+ - Remove extra 'ret' initialization.
+ - Remove empty extra line before 'if (ret < 0)'.
+ - Add R-b tag for the first patch.
+ - Add second patch, thus creating patchset of 2 patches.
+
+Arseniy Krasnov (2):
+  virtio/vsock: allocate multiple skbuffs on tx
+  virtio/vsock: check argument to avoid no effect call
+
+ net/vmw_vsock/virtio_transport_common.c | 63 +++++++++++++++++++------
+ 1 file changed, 49 insertions(+), 14 deletions(-)
+
 -- 
-Mark Brown <broonie@kernel.org>
-
+2.25.1
