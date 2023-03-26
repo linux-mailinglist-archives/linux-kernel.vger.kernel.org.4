@@ -2,98 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831166C923B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 05:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B02D6C9240
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 05:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbjCZDb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 23:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
+        id S229523AbjCZDjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 23:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjCZDbY (ORCPT
+        with ESMTP id S231642AbjCZDjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 23:31:24 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61129B45D;
-        Sat, 25 Mar 2023 20:31:23 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id ek18so22948096edb.6;
-        Sat, 25 Mar 2023 20:31:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679801482;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B0Kwh5fxBC4ipgA40ilFC5EKoY4YfOokMirrUUulMoM=;
-        b=nEFrUpvmBRyeYYKHuZeN2UECrBCKxeAQjaYkfU+0nu7rZdgq2zGTnwIm/ZsuernFMO
-         LprB99mIrjUYCS9r2xQikCCJQBeBHPwe7lmOtDYExf7s47IseVJLU7AfP8gA5pA47ML4
-         w5ZJvXSlEstuyahjjQ9IdzfbO7h7wB5wIuQJCZAqHudYxvLJJrmOoUB56WlhOxBpdk8t
-         jchgyiNMZQYKNNw9A8yV6gsXCu4dTSJcRzNsCnLqCjve6KWrnWUc8TJTlZwjHTQ+ydhD
-         yWCEgy6YppcvOW9MtCgh7RVFilmUMDnEJg99jwxuk5EzAge/wYE39JdBozbZdPrue7qG
-         4U7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679801482;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B0Kwh5fxBC4ipgA40ilFC5EKoY4YfOokMirrUUulMoM=;
-        b=NedoD9ou3AAx6xQTn+fQUI4bNnoT7/xfa/565dyZTV+IWaMd5vXm7i98I95Gd6CdfD
-         WCqKrUSGuLFpU+enFrscCQwGfDOO/fS8waNpF7SGVkAtIahTczZie4p5CkT3Y0b3qgOY
-         7uvVnK+wh6lT/BVM/JL+XEYmvR7IsohJVf36tNRl5Q8GEHdS9KTDLSTsL7kJ2i/zSQVw
-         rjR/becrk9VtF1a3Tqn8Lqx17WxKMN/sycDN8VT6RVcq3P9yrLgckHi+huBuhtB2Exe7
-         Jx6rvhDF/i9z14IT85IUWqxD5kJgROpf8KP/cky3pErkxKypUNazCE3xgx7edF6kO7F1
-         XAKw==
-X-Gm-Message-State: AAQBX9dh4/CmXehny8Ovvs2GtHpavxaYneC9tspwalqEaVRIEGU3VXXp
-        AENtM9afnRIfivN1QbEoHK/D+1IrFqfHT0pf6BA=
-X-Google-Smtp-Source: AKy350Yl8s63Q5AU2TKK4wYWkF1r6KBECysquHmzZMOBVSmN6I8Us3TXxiMlOAHibw3xRjzzYdFKWaSNi+nxe/FHnOE=
-X-Received: by 2002:a17:907:c78f:b0:92a:a75e:6b9 with SMTP id
- tz15-20020a170907c78f00b0092aa75e06b9mr3599238ejc.11.1679801481768; Sat, 25
- Mar 2023 20:31:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230325152417.5403-1-kerneljasonxing@gmail.com> <20230326013845.2110-1-hdanton@sina.com>
-In-Reply-To: <20230326013845.2110-1-hdanton@sina.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Sun, 26 Mar 2023 11:30:45 +0800
-Message-ID: <CAL+tcoCO47mgZeKM=h8OZWcebB-hKzyC9FiTgs2cPR25bE18UQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: fix raising a softirq on the current cpu with
- rps enabled
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     pabeni@redhat.com, Eric Dumazet <edumazet@google.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sat, 25 Mar 2023 23:39:00 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9432F6590
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 20:38:58 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id F34775C011B;
+        Sat, 25 Mar 2023 23:38:57 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Sat, 25 Mar 2023 23:38:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; t=1679801937; x=1679888337; bh=q
+        q1ZKMz/iBR+IZ3gektncVGgPKUeoeZtWWTf8ymo2A4=; b=aYO5+GLF8hzOdVT8j
+        I+Lzzd+rtO/UfggkJnMSSKmjQKWFYHaapikdJIihqD+hiNRNH7WWizVRXarP7mgg
+        YpPfxXpKgmWsh1dxdUdazR/hjSq+Kln22/XgDzVWIwVVCbF3OgjMl7RsmsdjWvwq
+        AEMSEP0r4kSrdnNgitynJplgmvoRrozqrKKBrE7d85AcTfbyWujvS92b40b5dJyN
+        bvaVrWbCy/PU+2bSb4CLao1HDM9oVVelckNe5lHmBSe5XVFcBfcPud36mbdCbkdL
+        wAOtJ5oDq8ZuSXjYtrkPR7vygADxkS52aTLH9iU/uXgJ9v5KLRBkq8IxXrZKGL+p
+        b7f5A==
+X-ME-Sender: <xms:Ub4fZG93_kVf0JXzi9ppmiK1pIb9-RVFDx6LabQs4noTaVk_qdzEqQ>
+    <xme:Ub4fZGuw8BDjJTodDzUXdap_JAC8zP86HpRjX2QK_XPsExeIZ4ZTfm19-alLPy8Um
+    8FIf4tdiS92ZUDquXY>
+X-ME-Received: <xmr:Ub4fZMCX_9iqq-dhBQMbqmr0p_G800VkH5jNSDWirGX8ejnezQzcW6eBFOdcO1rQxxHXGotAqYQLKpnQLah6odnTpPmh3KHVlug>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegledgiedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepvfevkffhufffsedttdertddttddtnecuhfhrohhmpefhihhnnhcuvfhhrghi
+    nhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtthgvrh
+    hnpeehfffggeefveegvedtiefffeevuedtgefhueehieetffejfefggeevfeeuvdduleen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfthhhrg
+    hinheslhhinhhugidqmheikehkrdhorhhg
+X-ME-Proxy: <xmx:Ub4fZOeIDbGCjNSpuD1FCedufBRoAyejSHljzFUVe1UIvJj6FwkM4g>
+    <xmx:Ub4fZLOY-k4gdSHNMKQx6uFqerhxTklliofROLIZy6Xaa2jeO5xz8w>
+    <xmx:Ub4fZIlyzkUEGxamLuft2MDQROotryKo-4nfNn9csscgvcmT_JfB5g>
+    <xmx:Ub4fZB0qgJg7i5B-0LbyZ5EwZgfHY4sOPWUZmDRzJCSeKkRxyU0dBw>
+Feedback-ID: i58a146ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 25 Mar 2023 23:38:54 -0400 (EDT)
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Brad Boyer" <flar@allandria.com>, linux-m68k@lists.linux-m68k.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <62e815b947d6d602def8294040529db80278c561.1679801822.git.fthain@linux-m68k.org>
+From:   Finn Thain <fthain@linux-m68k.org>
+Subject: [RFC PATCH v3] nubus: Don't list slot resources by default
+Date:   Sun, 26 Mar 2023 14:37:02 +1100
+X-Spam-Status: No, score=-0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 9:39=E2=80=AFAM Hillf Danton <hdanton@sina.com> wro=
-te:
->
-> On Sat, Mar 25, 2023 at 8:26=E2=80=AFAM Jason Xing <kerneljasonxing@gmail=
-.com>
-> >
-> > @@ -4594,8 +4594,6 @@ static int napi_schedule_rps(struct softnet_data =
-*sd)
-> >         if (sd !=3D3D mysd) {
-> >                 sd->rps_ipi_next =3D3D mysd->rps_ipi_list;
-> >                 mysd->rps_ipi_list =3D3D sd;
-> > -
-> > -               __raise_softirq_irqoff(NET_RX_SOFTIRQ);
-> >                 return 1;
-> >         }
->
-> Nope, ipi should be sent. But no ipi can go without irq enabled.
->
+Some Nubus card ROMs contain many slot resources. A single Radius video
+card produced well over a thousand entries under /proc/bus/nubus/.
+Populating /proc/bus/nubus/ on a slow machine with several such cards
+installed takes long enough that the user may think that the system is
+wedged. All those procfs entries also consume significant RAM though
+they are not normally needed (except by developers).
+Omit these resources from /proc/bus/nubus/ by default and add a kernel
+parameter to enable them when needed.
+On the test machine, this saved 300 kB and 10 seconds.
 
-Sorry, I didn't get it. IPI is sent in net_rx_action() and apparently
-I didn't touch this part in this patch. Here is only about whether we
-should raise an IRQ even if the skb will be enqueued into another cpu.
+Cc: Brad Boyer <flar@allandria.com>
+Tested-by: Stan Johnson <userm57@yahoo.com>
+Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+---
+ drivers/nubus/nubus.c | 12 +++++++++---
+ drivers/nubus/proc.c  |  8 ++++----
+ include/linux/nubus.h |  1 +
+ 3 files changed, 14 insertions(+), 7 deletions(-)
 
-> So feel free to work out what sense made by disabling irq at the call sit=
-e
-> then directly send ipi instead.
+diff --git a/drivers/nubus/nubus.c b/drivers/nubus/nubus.c
+index f70ba58dbc55..d2d2b580f646 100644
+--- a/drivers/nubus/nubus.c
++++ b/drivers/nubus/nubus.c
+@@ -32,6 +32,12 @@
+ 
+ /* Globals */
+ 
++/* This parameter makes slot resources available in procfs. It's deprecated and
++ * disabled by default as procfs is no longer thought to be suitable for that.
++ */
++bool populate_procfs;
++module_param(populate_procfs, bool, 0);
++
+ LIST_HEAD(nubus_func_rsrcs);
+ 
+ /* Meaning of "bytelanes":
+@@ -572,9 +578,9 @@ nubus_get_functional_resource(struct nubus_board *board, int slot,
+ 			nubus_proc_add_rsrc(dir.procdir, &ent);
+ 			break;
+ 		default:
+-			/* Local/Private resources have their own
+-			   function */
+-			nubus_get_private_resource(fres, dir.procdir, &ent);
++			if (populate_procfs)
++				nubus_get_private_resource(fres, dir.procdir,
++							   &ent);
+ 		}
+ 	}
+ 
+diff --git a/drivers/nubus/proc.c b/drivers/nubus/proc.c
+index 2c320a84fd72..1808accb8214 100644
+--- a/drivers/nubus/proc.c
++++ b/drivers/nubus/proc.c
+@@ -55,7 +55,7 @@ struct proc_dir_entry *nubus_proc_add_board(struct nubus_board *board)
+ {
+ 	char name[2];
+ 
+-	if (!proc_bus_nubus_dir)
++	if (!proc_bus_nubus_dir || !populate_procfs)
+ 		return NULL;
+ 	snprintf(name, sizeof(name), "%x", board->slot);
+ 	return proc_mkdir(name, proc_bus_nubus_dir);
+@@ -72,7 +72,7 @@ struct proc_dir_entry *nubus_proc_add_rsrc_dir(struct proc_dir_entry *procdir,
+ 	char name[9];
+ 	int lanes = board->lanes;
+ 
+-	if (!procdir)
++	if (!procdir || !populate_procfs)
+ 		return NULL;
+ 	snprintf(name, sizeof(name), "%x", ent->type);
+ 	remove_proc_subtree(name, procdir);
+@@ -157,7 +157,7 @@ void nubus_proc_add_rsrc_mem(struct proc_dir_entry *procdir,
+ 	char name[9];
+ 	struct nubus_proc_pde_data *pded;
+ 
+-	if (!procdir)
++	if (!procdir || !populate_procfs)
+ 		return;
+ 
+ 	snprintf(name, sizeof(name), "%x", ent->type);
+@@ -176,7 +176,7 @@ void nubus_proc_add_rsrc(struct proc_dir_entry *procdir,
+ 	char name[9];
+ 	unsigned char *data = (unsigned char *)ent->data;
+ 
+-	if (!procdir)
++	if (!procdir || !populate_procfs)
+ 		return;
+ 
+ 	snprintf(name, sizeof(name), "%x", ent->type);
+diff --git a/include/linux/nubus.h b/include/linux/nubus.h
+index 392fc6c53e96..50c9145808d1 100644
+--- a/include/linux/nubus.h
++++ b/include/linux/nubus.h
+@@ -93,6 +93,7 @@ extern struct bus_type nubus_bus_type;
+ 
+ /* Generic NuBus interface functions, modelled after the PCI interface */
+ #ifdef CONFIG_PROC_FS
++extern bool populate_procfs;
+ void nubus_proc_init(void);
+ struct proc_dir_entry *nubus_proc_add_board(struct nubus_board *board);
+ struct proc_dir_entry *nubus_proc_add_rsrc_dir(struct proc_dir_entry *procdir,
+-- 
+2.37.5
+
