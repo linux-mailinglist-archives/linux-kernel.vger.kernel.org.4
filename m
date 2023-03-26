@@ -2,119 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E446C923F
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 05:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263796C9241
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 05:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjCZDim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 23:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
+        id S231404AbjCZDk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 23:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjCZDik (ORCPT
+        with ESMTP id S229582AbjCZDk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 23:38:40 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BC349C4
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 20:38:37 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id kc4so5492649plb.10
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 20:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679801917;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QABbW2XBVz0RHFY7jQaR4WR5+U+GoXdriZENBnOcHlg=;
-        b=AADv8WbEYrOp9Cu0upuT29E7QKosKEdJpb9COQNqqPdx6Sz7lmsXPEuUX9buGC9oVg
-         E7iAhoDxdsC+mThvCgoVZUYRnaV+Q4Ms6qJtTsDIPuRVs2ecYNE6HfeMJ1ujexiIF3YU
-         GtNh3HTfiILV4CckpagX0XVCFKkDKetjmCjaJAULiMH8gM9tLF9iMeKvQPZKr4yLlhFM
-         dx7zXhKoHfG2fHKJq/WrFqXrej07lbUOdPGO2WL94q9CY/9BVyiL9FqHNE7qcqwrAJBa
-         XfOKylyUBYDsKcKHuMxMr1yoiQU2JFLdLIJAeVEzK41+Tz/64GgRYVrifrz7OPsLVJEG
-         cg/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679801917;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QABbW2XBVz0RHFY7jQaR4WR5+U+GoXdriZENBnOcHlg=;
-        b=5jvVc07BCUYat4z9FopfSezkE9ji2DS9+s88ffFpem4pXKUodmlL4fKng9FA7we/Z6
-         z8lgFVZtUzFDvvZZ0Y3WLy1P5jAK+/pPF4XdW8Bwmh80XPLmuRcVoBCpFAa6m2cuZTsl
-         B8bs73I5nx1Z4H9RDWIW/mThksIQ8HpKz9oEWAzuD1WD5/8O52dd0Cj/TJiUFwdAe6MC
-         pBgm28k+drxC8bwggCG3z8MYLETC44sPYNmVEbF8UVAUy5E8NVCp7JC9h1+RawTO0bjP
-         6/0elf1Uhm9bbQkzoCbC/TbDHcaJ7nEDgqE+EvSa/GtypR+mhwmOvRrIzLJz4GrZIIlL
-         4s1w==
-X-Gm-Message-State: AAQBX9czBisDg1vptSToLOjdud8rk4Jla6Mhk/HmTfwKhDqraq7XIDZ+
-        xZ5rLc93z47rEIW/HIOnK8E=
-X-Google-Smtp-Source: AKy350blIotmf+4cPBlMS8pFxbbhZuE8pRycvOMqGaQsOjyLz61lGlbugvKEWRMsU3BF8S48i0wISQ==
-X-Received: by 2002:a17:903:4306:b0:1a1:98a9:4069 with SMTP id jz6-20020a170903430600b001a198a94069mr6384255plb.9.1679801917187;
-        Sat, 25 Mar 2023 20:38:37 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-69.three.co.id. [180.214.233.69])
-        by smtp.gmail.com with ESMTPSA id jk23-20020a170903331700b001a19bde435fsm16706959plb.65.2023.03.25.20.38.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 20:38:35 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 8E625106510; Sun, 26 Mar 2023 10:38:32 +0700 (WIB)
-Date:   Sun, 26 Mar 2023 10:38:32 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Traian Teodorescu <traian.teodorescu@bluewin.ch>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: Re: Fwd: Fwd: Linux entropy
-Message-ID: <ZB++OBSuwLom3e9M@debian.me>
-References: <fbf48030-c702-8964-7614-365bbcb4faee@bluewin.ch>
- <3dc7e744-dcfd-8da3-ed73-8f222d68031c@bluewin.ch>
+        Sat, 25 Mar 2023 23:40:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E6B9EEA
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 20:40:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DED88B80B9E
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 03:40:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C683C433D2
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 03:40:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679802021;
+        bh=aNdHH/x3npE84NvqRHLCY4a1KFaMFDbk68uZH/TCbOs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mqXoKuS3szcQQU7SJQ3DWy7GX8vV7bOXRRp/wStTei8Lgx23P3zKIqvFF1dHYyoID
+         YSCoViPQiazTr4ZjHqY45aU0teM30h2tsVMJRBjnjsUr8lDlv0y4uMrclcwhrUYbVf
+         snBcGH7G1c/nrOQ8qRBzSVI1zxhOnFPaKZnbAx8wzQXXmz2rasxoWfbeHYFMtGdISo
+         G4eK4HY/idazLi0FZhwy04EX4SDKeIeiDInCYr0uKBBTxsuGM4LVaEpBwUqDCrLj8z
+         5DaDW2CsAkh9TCBrvNhTkOqfsixA1kY8jBO8G2ypBB4hC14OTOAMxjHae1Qnnn5uwD
+         r5kiKYt6u/F6Q==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-17997ccf711so5969846fac.0
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 20:40:21 -0700 (PDT)
+X-Gm-Message-State: AAQBX9eGrF3oz9pQ8lG13fEg6J842/I80tLT5FAECx7kmgErG2WTmhH6
+        9VXojCgfSd/o6thjrsMkcAAHssVEs/5C5dHXlg0=
+X-Google-Smtp-Source: AKy350a0iktmcIGh1E6nGTodhu+jOfBNrtXOtoCtrZFjAX1WRXhkOpRCPOvPOVaqQ2hqa6fBckTi4LOivah5bXdRdOM=
+X-Received: by 2002:a05:6871:e86:b0:17e:d9e2:a55c with SMTP id
+ vl6-20020a0568710e8600b0017ed9e2a55cmr2447043oab.11.1679802020793; Sat, 25
+ Mar 2023 20:40:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dkKdwnDyLpc4B4F0"
-Content-Disposition: inline
-In-Reply-To: <3dc7e744-dcfd-8da3-ed73-8f222d68031c@bluewin.ch>
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20230325143122.GA409315@mit.edu>
+In-Reply-To: <20230325143122.GA409315@mit.edu>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 26 Mar 2023 12:39:44 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARndpbtzRAW1kEiqyNBmAxdqJKiTquvY9bW08LYTTMiOg@mail.gmail.com>
+Message-ID: <CAK7LNARndpbtzRAW1kEiqyNBmAxdqJKiTquvY9bW08LYTTMiOg@mail.gmail.com>
+Subject: Re: Change in kernel debian packages between -rc2 and -rc3
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Mar 25, 2023 at 11:31=E2=80=AFPM Theodore Ts'o <tytso@mit.edu> wrot=
+e:
+>
+> Hi Masahiro,
+>
+> It appears that there is a backwards-incompatible (and, I believe,
+> incorrect) change in the package version used when generated Debian
+> packages between 6.2-rc2 and 6.2-rc3.
+>
+> I have CONFIG_LOCALVERSION set in my .config:
+>
+>    CONFIG_LOCALVERSION=3D"-xfstests"
+>
+> As a result, the uname -a of a kernel that I build contains -xfstests,
+> e.g:
+>
+> root@kvm-xfstests:~# uname -r
+> 6.3.0-rc3-xfstests-00043-g463f2e46bf7c
+>
+> Previously this would be correctly reflected in the Debian package
+> version:
+>
+> % dpkg -I /build/linux-image-6.3.0-rc2-xfstests_6.3.0-rc2-xfstests-1016_a=
+md64.deb
+> ...
+>  Package: linux-image-6.3.0-rc2-xfstests
+>  Source: linux-6.3.0-rc2-xfstests
+>  Version: 6.3.0-rc2-xfstests-1016
+> ...
+>
+> However, after -rc3, the CONFIG_LOCALVERSION is no longer present in the =
+package version:
+>
+> % dpkg -I /build/linux-image-6.3.0-rc3-xfstests-00043-g463f2e46bf7c_6.3.0=
+-rc3-00043-g463f2e46bf7c-1017_amd64.deb
+> ...
+>  Package: linux-image-6.3.0-rc3-xfstests-00043-g463f2e46bf7c
+>  Source: linux-6.3.0-rc3-xfstests-00043-g463f2e46bf7c
+>  Version: 6.3.0-rc3-00043-g463f2e46bf7c-1017
+> ...
 
---dkKdwnDyLpc4B4F0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 26, 2023 at 12:03:52AM +0100, Traian Teodorescu wrote:
-> Hello, can you please answer to my question below ? It's about the
-> "/proc/sys/kernel/random/entropy_avail" variable which doesn't show anymo=
-re
-> a credible value.
 
-Hi and welcome to LKML!
+I am afraid you are completely misunderstanding the two versions,
+the ABI version and the package version.
 
-First, when replying, use "Reply all" instead of forwarding and don't
-top-post; reply inline with appropriate context instead.
+They do not need to match. Actually, they do not match.
 
-Second, to improve the chance of getting an answer, Cc: relevant
-lists and maintainers (see MAINTAINERS).
+See real Debian (or Ubuntu) systems.
 
-Last but not least, see catb document on how to ask smart questions [1].
 
-Thanks!
+On Debian bullseye.
 
-[1]: http://www.catb.org/~esr/faqs/smart-questions.html=20
+
+$ uname -r
+5.10.0-21-amd64
+$ dpkg-deb -I linux-image-5.10.0-21-amd64_5.10.162-1_amd64.deb
+ [snip]
+ Package: linux-image-5.10.0-21-amd64
+ Source: linux-signed-amd64 (5.10.162+1)
+ Version: 5.10.162-1
+ Architecture: amd64
+
+
+
+
+`uname -r` returns '5.10.0-21-amd64'.
+This is what they call the ABI version, and
+this is contained as a part of the package name,
+'linux-image-5.10.0-21-amd64'
+
+The package version is '5.10.162-1'
+
+They are different.
+
+This means the Debian kernel team built the kernel package
+based on the stable kernel '5.10.162'.
+The suffix '-1' indicates the Debian revision.
+But, they gave a different uname '5.10.0-21-amd64'.
+
+
+
+Get back to your question.
+
+You set CONFIG_LOCALVERSION=3D"-xfstests".
+It was reflected in 'uname -r' and in the package name.
+This is correct.
+
+It was _not_ reflected in the package version.
+This is also correct since the package version
+is not meant to reflect such user configuration
+as CONFIG_LOCALVERSION.
+
+
+The upstream version part '6.3.0-rc3-00043-g463f2e46bf7c'
+represents the version of the source code.
+In other words, it is determined by the git commit hash
+(if you are using a git repository) and never affected by
+CONFIG options or local files.
+
+You can build multiple debian packages from the same git
+commit hash, changing the .config, arch, or whatever.
+In this case, the debian revision part, "-1017" is auto-incremented.
+
+If you override the package version, you can use KDEB_PKGVERSION.
+
+
+
+
+
+> Note the missing "-xfstests" in the above Version.  This also shows up
+> in the name of the .deb file which is generated, and this is breaking
+> my kernel build script[1].
+>
+> [1] https://github.com/tytso/xfstests-bld/blob/master/kernel-build/kbuild
+
+
+This is just because your tool is wrong.
+It was just working based on the wrong assumption.
+
+Please fix it.
+
+
+
+
+
+> I assume the problem is caused by one of these two commits:
+>
+> 36862e14e316 ("kbuild: deb-pkg: use dh_listpackages to know enabled packa=
+ges")
+> b611daae5efc ("kbuild: deb-pkg: split image and debug objects staging out=
+ into functions")
+>
+> As these are the two commits which touch the builddeb script.
+>
+> Could you please take a look?
+>
+> Many thanks,
+>
+>                                                 - Ted
+
+
 
 --=20
-An old man doll... just what I always wanted! - Clara
-
---dkKdwnDyLpc4B4F0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZB++NAAKCRD2uYlJVVFO
-o76LAQCNM/4Et0NXqqbzGY7oxQtlh/Ayx7R0LyxTK5V2DcLysAEAhDrsVXYRA3LU
-tX/zBGaiMqsnuHxDJcJTzAJiigJu6Q0=
-=WIO3
------END PGP SIGNATURE-----
-
---dkKdwnDyLpc4B4F0--
+Best Regards
+Masahiro Yamada
