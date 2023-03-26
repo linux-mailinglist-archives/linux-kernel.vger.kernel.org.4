@@ -2,102 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1542F6C9682
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 052946C968C
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbjCZQCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 12:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
+        id S232599AbjCZQDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 12:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbjCZQC3 (ORCPT
+        with ESMTP id S231842AbjCZQDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 12:02:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250F01708
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:02:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFD9560F0D
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 16:02:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73BC9C433EF;
-        Sun, 26 Mar 2023 16:02:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679846548;
-        bh=5GI+UWw52yzkDB1j5DJoxEVt+0WJ22Fk+zngw5zbp2U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qHDHGNkH/Bk3FiM4UUc3BsWI2eljV2UOe3Q1efpMYxYQexeDVTryU0WViuapsTxxE
-         BicCNXRtjfb/NkoeQzBD0JwbBf7z3KWpklROvxUyWyFRTjkGjB+DI10Gtqo5KEJHcB
-         nkvYuSf2lpz1wjEXxNpH519Bt8VHzcXF95vGQFlsBxchOZI1V/GVEzslNi/Xmbzlbd
-         BK+Q91Ymies/cbC01ULtEAwLGXRKT8uy0w4kK76uZZN+FUFZPYw04R+WuscwJOZa8w
-         pjLJqFFIdGq4kLNqVzeEkGrvXV+M4Mrqktf8Q7deeDpwU7zXMpLYOGiVS76wbSUVC/
-         /ThU0pG9V8crQ==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: move free_area_empty() to mm/internal.h
-Date:   Sun, 26 Mar 2023 19:02:15 +0300
-Message-Id: <20230326160215.2674531-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Sun, 26 Mar 2023 12:03:35 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0C74226
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:03:32 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id i5so26454120eda.0
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:03:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1679846611;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nHoE3dkQq12ELlvJCUdn1VIaqEl2rbzuk1PVgI3tnqM=;
+        b=TDDalfqiTuAcv8HzahDDQesWfHlQUfUQ755F+3QcTCyCtF7z3+4I+1zPaFc0hI1w7v
+         YPSf8CjUFesBGdytktyIRAqBA4ZB4r5VhtsP5sMe9uj+Lq/YGbwVfYP/BrUiIC2H8YiD
+         1v5HGxr0u5nv+EBJN1oVLJrxVMvyZEgFZOUDI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679846611;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nHoE3dkQq12ELlvJCUdn1VIaqEl2rbzuk1PVgI3tnqM=;
+        b=u0WElUuUxOWRraRPOOWarRX6anZiLod9E7QKeP9xUVTpcxDD2xlsGcR5AdAvtBG1s7
+         YWamiCwJq8+8W78fPjGnN+pQQ538FzK662JaxiclRyoTx6ADb8irgM36kxsp1whNzt4I
+         H8f+PrwwAZT08coa5NzgM4NH7qUXTDPKiDwAKkcxLEXn0ezu+tn4I2b0YUG4hQwBW5uj
+         YkIjSHfctjJGx0iac7XnKw/Fk5EnRF6RlDFEckRrwxaKvRJCd6XcQwOJ5eK9qcOeJtZ2
+         hxBZiVLCkjhNUxF4iVHzKjZIUvIz0xDcnk4DT/SPsvG+4On9lLYwUBeLjfY19sItfLFV
+         cLqA==
+X-Gm-Message-State: AAQBX9fO45zF8QVzoapGAkXPznCPmB9MX0fHZVTTNnp2aZMF5ZBmrT9R
+        MfmPdD5UehjPG81UEPcyCWK1eAuGbxCGDOPDFkBotA==
+X-Google-Smtp-Source: AKy350YIlLup9YbBQCchwqgJfsa4fHDo3JfieF6zGOfN0lMdy2ldrbSduPwzJ7QneOntJtTsX2A7Sg==
+X-Received: by 2002:aa7:c90d:0:b0:4fb:2060:4c20 with SMTP id b13-20020aa7c90d000000b004fb20604c20mr9112651edt.31.1679846610692;
+        Sun, 26 Mar 2023 09:03:30 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-87-0-102-254.retail.telecomitalia.it. [87.0.102.254])
+        by smtp.gmail.com with ESMTPSA id m2-20020a50d7c2000000b00501fc87352fsm6869333edj.13.2023.03.26.09.03.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 09:03:30 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        michael@amarulasolutions.com,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: [PATCH v8 0/5] can: bxcan: add support for ST bxCAN controller
+Date:   Sun, 26 Mar 2023 18:03:20 +0200
+Message-Id: <20230326160325.3771891-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+The series adds support for the basic extended CAN controller (bxCAN)
+found in many low- to middle-end STM32 SoCs.
 
-The free_area_empty() helper is only used inside mm/ so move it there to
-reduce noise in include/linux/mmzone.h
+The driver design (one core module and one driver module) was inspired
+by other ST drivers (e. g. drivers/iio/adc/stm32-adc.c,
+drivers/iio/adc/stm32-adc-core.c) where device instances share resources.
+The shared resources functions are implemented in the core module, the
+device driver in a separate module.
 
-Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- include/linux/mmzone.h | 5 -----
- mm/internal.h          | 5 +++++
- 2 files changed, 5 insertions(+), 5 deletions(-)
+The driver has been tested on the stm32f469i-discovery board with a
+kernel version 5.19.0-rc2 in loopback + silent mode:
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 72837e019bd1..3ccada5e8799 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -110,11 +110,6 @@ struct free_area {
- 	unsigned long		nr_free;
- };
- 
--static inline bool free_area_empty(struct free_area *area, int migratetype)
--{
--	return list_empty(&area->free_list[migratetype]);
--}
--
- struct pglist_data;
- 
- #ifdef CONFIG_NUMA
-diff --git a/mm/internal.h b/mm/internal.h
-index c05ad651b515..18cda26b8a92 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -517,6 +517,11 @@ void init_cma_reserved_pageblock(struct page *page);
- int find_suitable_fallback(struct free_area *area, unsigned int order,
- 			int migratetype, bool only_stealable, bool *can_steal);
- 
-+static inline bool free_area_empty(struct free_area *area, int migratetype)
-+{
-+	return list_empty(&area->free_list[migratetype]);
-+}
-+
- /*
-  * These three helpers classifies VMAs for virtual memory accounting.
-  */
+ip link set can0 type can bitrate 125000 loopback on listen-only on
+ip link set up can0
+candump can0 -L &
+cansend can0 300#AC.AB.AD.AE.75.49.AD.D1
 
-base-commit: 51551d71edbc998fd8c8afa7312db3d270f5998e
+For uboot and kernel compilation, as well as for rootfs creation I used
+buildroot:
+
+make stm32f469_disco_sd_defconfig
+make
+
+but I had to patch can-utils and busybox as can-utils and iproute are
+not compiled for MMU-less microcotrollers. In the case of can-utils,
+replacing the calls to fork() with vfork(), I was able to compile the
+package with working candump and cansend applications, while in the
+case of iproute, I ran into more than one problem and finally I decided
+to extend busybox's ip link command for CAN-type devices. I'm still
+wondering if it was really necessary, but this way I was able to test
+the driver.
+
+Changes in v8:
+- Do not enable the clock in probe and enable/disable it in open/close.
+- Return IRQ_NONE if no IRQ is active.
+
+Changes in v7:
+- Add Vincent Mailhol's Reviewed-by tag.
+- Remove all unused macros for reading/writing the controller registers.
+- Add CAN_ERR_CNT flag to notify availability of error counter.
+- Move the "break" before the newline in the switch/case statements.
+- Print the mnemotechnic instead of the error value in each netdev_err().
+- Remove the debug print for timings parameter.
+- Do not copy the data if CAN_RTR_FLAG is set in bxcan_start_xmit().
+- Populate ndev->ethtool_ops with the default timestamp info.
+
+Changes in v6:
+- move can1 node before gcan to keep ordering by address.
+
+Changes in v5:
+- Add Rob Herring's Acked-by tag.
+- Add Rob Herring's Reviewed-by tag.
+- Put static in front of bxcan_enable_filters() definition.
+
+Changes in v4:
+- Remove "st,stm32f4-bxcan-core" compatible. In this way the can nodes
+ (compatible "st,stm32f4-bxcan") are no longer children of a parent
+  node with compatible "st,stm32f4-bxcan-core".
+- Add the "st,gcan" property (global can memory) to can nodes which
+  references a "syscon" node containing the shared clock and memory
+  addresses.
+- Replace the node can@40006400 (compatible "st,stm32f4-bxcan-core")
+  with the gcan@40006600 node ("sysnode" compatible). The gcan node
+  contains clocks and memory addresses shared by the two can nodes
+  of which it's no longer the parent.
+- Add to can nodes the "st,gcan" property (global can memory) which
+  references the gcan@40006600 node ("sysnode compatibble).
+- Add "dt-bindings: arm: stm32: add compatible for syscon gcan node" patch.
+- Drop the core driver. Thus bxcan-drv.c has been renamed to bxcan.c and
+  moved to the drivers/net/can folder. The drivers/net/can/bxcan directory
+  has therefore been removed.
+- Use the regmap_*() functions to access the shared memory registers.
+- Use spinlock to protect bxcan_rmw().
+- Use 1 space, instead of tabs, in the macros definition.
+- Drop clock ref-counting.
+- Drop unused code.
+- Drop the _SHIFT macros and use FIELD_GET()/FIELD_PREP() directly.
+- Add BXCAN_ prefix to lec error codes.
+- Add the macro BXCAN_RX_MB_NUM.
+- Enable time triggered mode and use can_rx_offload().
+- Use readx_poll_timeout() in function with timeouts.
+- Loop from tail to head in bxcan_tx_isr().
+- Check bits of tsr register instead of pkts variable in bxcan_tx_isr().
+- Don't return from bxcan_handle_state_change() if skb/cf are NULL.
+- Enable/disable the generation of the bus error interrupt depending
+  on can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING.
+- Don't return from bxcan_handle_bus_err() if skb is NULL.
+- Drop statistics updating from bxcan_handle_bus_err().
+- Add an empty line in front of 'return IRQ_HANDLED;'
+- Rename bxcan_start() to bxcan_chip_start().
+- Rename bxcan_stop() to bxcan_chip_stop().
+- Disable all IRQs in bxcan_chip_stop().
+- Rename bxcan_close() to bxcan_ndo_stop().
+- Use writel instead of bxcan_rmw() to update the dlc register.
+
+Changes in v3:
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Add description to the parent of the two child nodes.
+- Move "patterProperties:" after "properties: in top level before "required".
+- Add "clocks" to the "required:" list of the child nodes.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Add "clocks" to can@0 node.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Remove a blank line.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Fix the documentation file path in the MAINTAINERS entry.
+- Do not increment the "stats->rx_bytes" if the frame is remote.
+- Remove pr_debug() call from bxcan_rmw().
+
+Changes in v2:
+- Change the file name into 'st,stm32-bxcan-core.yaml'.
+- Rename compatibles:
+  - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
+  - st,stm32-bxcan -> st,stm32f4-bxcan
+- Rename master property to st,can-master.
+- Remove the status property from the example.
+- Put the node child properties as required.
+- Remove a blank line.
+- Fix sparse errors.
+- Create a MAINTAINERS entry.
+- Remove the print of the registers address.
+- Remove the volatile keyword from bxcan_rmw().
+- Use tx ring algorithm to manage tx mailboxes.
+- Use can_{get|put}_echo_skb().
+- Update DT properties.
+
+Dario Binacchi (5):
+  dt-bindings: arm: stm32: add compatible for syscon gcan node
+  dt-bindings: net: can: add STM32 bxcan DT bindings
+  ARM: dts: stm32: add CAN support on stm32f429
+  ARM: dts: stm32: add pin map for CAN controller on stm32f4
+  can: bxcan: add support for ST bxCAN controller
+
+ .../bindings/arm/stm32/st,stm32-syscon.yaml   |    2 +
+ .../bindings/net/can/st,stm32-bxcan.yaml      |   83 ++
+ MAINTAINERS                                   |    7 +
+ arch/arm/boot/dts/stm32f4-pinctrl.dtsi        |   30 +
+ arch/arm/boot/dts/stm32f429.dtsi              |   29 +
+ drivers/net/can/Kconfig                       |   12 +
+ drivers/net/can/Makefile                      |    1 +
+ drivers/net/can/bxcan.c                       | 1096 +++++++++++++++++
+ 8 files changed, 1260 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+ create mode 100644 drivers/net/can/bxcan.c
+
 -- 
-2.35.1
+2.32.0
 
