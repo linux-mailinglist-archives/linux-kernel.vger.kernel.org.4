@@ -2,135 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8946C9441
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 14:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA4B6C9445
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 14:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbjCZMbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 08:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
+        id S231921AbjCZMe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 08:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjCZMbl (ORCPT
+        with ESMTP id S230354AbjCZMeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 08:31:41 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED6D76B1;
-        Sun, 26 Mar 2023 05:31:40 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id u11-20020a05600c19cb00b003edcc414997so3492993wmq.3;
-        Sun, 26 Mar 2023 05:31:40 -0700 (PDT)
+        Sun, 26 Mar 2023 08:34:25 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A4776BD
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 05:34:23 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id b18so7287160ybp.1
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 05:34:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679833899;
+        d=joelfernandes.org; s=google; t=1679834063;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uoHL+pdwMo9hK8zxjS4mzFQRPu/UQKxxXEvDJq+ttZY=;
-        b=AHKGIITCXHyXB1joXi2mO29w1R5+PifrXllUXZVc0AXlX/A9TFLc8uXPOAVrm06FnO
-         WmRtzCW+i1bEKLjrVuohAxJhvtIH1AHPV/wUO1SI2U7IAG1i7AVNubRNHraIAt4xP1I7
-         A3LLTzKsCm8/ljK9MRgyQJmJZV0VJZ3a0f69cLf52j6WBXrZ9Vm4h5CLk0X39AxoMSmJ
-         7XKNadTm5wrLsfUS/uhfdIU9rK1zUw5cGQfCLJya49etN1Kah7yLAiLVSRA+aksUytWQ
-         eanlbyUJcpstxaB7g20CYZ2Sc0ZfTKQzjY7td1KZJHZ8X+AyHs7rvSOtoYYIWkkB6Pzj
-         WmWg==
+        bh=e8OMItjxzSr7aVzbw5xpsTi4Tr0bLv1FpLf3l/TvJI4=;
+        b=wLLItr0EACFXIm0CSLoVDMaPX/5NVclZ6LQ/jK+zPVaCtRQ9G9aLXg4no3g9v/lGBw
+         nDMI6et/j1JbeCGMpAe08V7cQwrneXJVTighUxJPSGSj2nGr6xcjVGIFflhUfY7fWG4J
+         nWdPHva+d8jTDSJAiIGcLcmlPZnPd8SFgZwF0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679833899;
+        d=1e100.net; s=20210112; t=1679834063;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uoHL+pdwMo9hK8zxjS4mzFQRPu/UQKxxXEvDJq+ttZY=;
-        b=hi2icrl0agRd/e4GVA3UVWteisE9N4sTbIfaeL6dzw8B9h00kfOaJvpe0iDNFex3yr
-         5MMZQb49LyqX0rT0DMca2FAqL9Ht0Dd+LxIE82lsXRizcUxcSDgco2BaymOrztPzhBJJ
-         +ogHt+obqER0Kbflvs6zw3aOhGoxKpimLVylPb5Q6bmwTtNVFr6PVV/2N9mf20Nn+4RU
-         g9u5SoJfaWHOcllQu4f2Cbx0vlrm7LY2aEJv8NibxRIp7+SBgsUP+y/jOx//EqA/oXCD
-         PYdaW8Ajr8PoEINJVeNPJOsHovQT5elQtUp8zk41L/49UpYkNZ8tvNeHWVbqA0fQXYUu
-         cBZg==
-X-Gm-Message-State: AO0yUKVczu58OyWnmxXM6SkClLssyzQNHc6yIc+9qSTIyhx5jhv9tlbm
-        6bJZuFJHA3cwG1VDyQV+T9zkOh15gKqixGawS5E06L88ZOTx0w==
-X-Google-Smtp-Source: AK7set9bo+NQ4ZSXBRygc8+jzXxsPq5IhJ/ncMbKfrksS/ZYnL/J2wrqhLdwDQIlTm9fbmduw6PyoZGbjwnjUenIVo4=
-X-Received: by 2002:a05:600c:204:b0:3ea:8ed9:5f3e with SMTP id
- 4-20020a05600c020400b003ea8ed95f3emr1641870wmi.4.1679833899099; Sun, 26 Mar
- 2023 05:31:39 -0700 (PDT)
+        bh=e8OMItjxzSr7aVzbw5xpsTi4Tr0bLv1FpLf3l/TvJI4=;
+        b=UXW5Dk1VymoSh7FFahR4peUEmugv5DylO1RCTLQSoE9hE7IpUcSrVSBNqVF9kPBcDG
+         eLew30YH0SQOi0Ki6vuqwi6F+MfkqM6gWsJix7ZyjfvuR4HvBjzeVP3DtoQy5PA8WcL1
+         6yVZ4TZTMD41dGKuBGvhh+8hBKKJHlZWC9XSNtIKX0f2AS4YEpFAm8Al3E/HMeBlNDdi
+         yaKcc2FDqt2oEjwDupkr/Xp0mYmzo+mhRTVtpWcCkShYQm24NTwqNV3/XL6ncPA2+nZ8
+         DrrJ1YW3jqAI35pyEdVsSAiEZEUYjIDmS02D1FhGqrgMlU1Zg30NI0/LtIkm28nQRD9T
+         s9pA==
+X-Gm-Message-State: AAQBX9eZoju+hm6rK56JAj9NK34H4c+ylJLoUJHuudmNat5PCpbbGH6f
+        RORIcou4y59ZEzdQDWbxgCFIe41Bk+xoKMpYjDAGvQ==
+X-Google-Smtp-Source: AKy350aKbdM8jclc2dkRtmhSyetuz9pLI8ATNSKXzWXgQ3AZ9aBe5P/D8j12BQHlrjM/nBPPVNLcYQWbMf9ztJnpm7Y=
+X-Received: by 2002:a05:6902:1586:b0:b69:fab9:de39 with SMTP id
+ k6-20020a056902158600b00b69fab9de39mr3975809ybu.2.1679834063085; Sun, 26 Mar
+ 2023 05:34:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230326001535.149539-1-bigbeeshane@gmail.com> <a5966d2b-3e8f-3518-8f71-a4ed8de4b725@linaro.org>
-In-Reply-To: <a5966d2b-3e8f-3518-8f71-a4ed8de4b725@linaro.org>
-From:   Shane Francis <bigbeeshane@gmail.com>
-Date:   Sun, 26 Mar 2023 13:31:28 +0100
-Message-ID: <CABnpCuD4GYyTkdV1UZjMXFmkXfY77bhgvyE-F2xA6e+DW_STEg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] arm64: dts: Add basic NanoPi R6S (RK3588S) Support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230315181902.4177819-1-joel@joelfernandes.org> <20230315181902.4177819-6-joel@joelfernandes.org>
+In-Reply-To: <20230315181902.4177819-6-joel@joelfernandes.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sun, 26 Mar 2023 08:34:12 -0400
+Message-ID: <CAEXW_YQLQqB9CAzEyddzOJkKx3y268T7g-E313mDsjXVQRT0Dw@mail.gmail.com>
+Subject: Re: [PATCH v2 06/14] net/mlx5: Rename kfree_rcu() to kfree_rcu_mightsleep()
+To:     Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Boris Pismenny <borisp@nvidia.com>
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Vlad Buslov <vladbu@nvidia.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Missing bindings documentation.
+On Wed, Mar 15, 2023 at 2:19=E2=80=AFPM Joel Fernandes (Google)
+<joel@joelfernandes.org> wrote:
+>
+> From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+>
+> The kfree_rcu() and kvfree_rcu() macros' single-argument forms are
+> deprecated.  Therefore switch to the new kfree_rcu_mightsleep() and
+> kvfree_rcu_mightsleep() variants. The goal is to avoid accidental use
+> of the single-argument forms, which can introduce functionality bugs in
+> atomic contexts and latency bugs in non-atomic contexts.
 
-> Please run scripts/checkpatch.pl and fix reported warnings.
+In a world where patches anxiously await their precious Ack, could
+today be our lucky day on this one?
 
-Sorry I was missing the DTS bindings patch, will send that
-one over this evening
+We need Acks to take this in for 6.4. David? Others?
 
-On Sun, Mar 26, 2023 at 10:38=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+ - Joel
+
+
 >
-> On 26/03/2023 01:15, Shane Francis wrote:
-> > This adds basic support for the NanoPi R6S SBC
-> >
-> > Currently working :
-> >   - UART
-> >   - mmc storage (internal)
-> >   - RGMII / GMAC 1Gb ethernet
-> >   - SYS LED
-> >
-> > Signed-off-by: Shane Francis <bigbeeshane@gmail.com>
-> > ---
-> >  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
-> >  .../boot/dts/rockchip/rk3588s-nanopi-r6s.dts  | 126 ++++++++++++++++++
-> >  2 files changed, 127 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-nanopi-r6s.dts
-> >
-> > diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dt=
-s/rockchip/Makefile
-> > index 99a44c400d6a..39cad757d29d 100644
-> > --- a/arch/arm64/boot/dts/rockchip/Makefile
-> > +++ b/arch/arm64/boot/dts/rockchip/Makefile
-> > @@ -91,3 +91,4 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588-edgeble-neu6a=
--io.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588-evb1-v10.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588-rock-5b.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588s-rock-5a.dtb
-> > +dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588s-nanopi-r6s.dtb
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-nanopi-r6s.dts b/arch=
-/arm64/boot/dts/rockchip/rk3588s-nanopi-r6s.dts
-> > new file mode 100644
-> > index 000000000000..21b26539a855
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3588s-nanopi-r6s.dts
-> > @@ -0,0 +1,126 @@
-> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> > +
-> > +/dts-v1/;
-> > +
-> > +#include <dt-bindings/pinctrl/rockchip.h>
-> > +#include <dt-bindings/gpio/gpio.h>
-> > +#include "rk3588s.dtsi"
-> > +
-> > +/ {
-> > +     model =3D "NanoPi R6S - RK3588S";
-> > +     compatible =3D "friendlyelec,nanopi6", "rockchip,rk3588";
+> Cc: Ariel Levkovich <lariel@nvidia.com>
+> Cc: Saeed Mahameed <saeedm@nvidia.com>
+> Cc: Vlad Buslov <vladbu@nvidia.com>
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>  drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c  | 2 +-
+>  drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 >
-> Missing bindings documentation.
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c b/d=
+rivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c
+> index ca834bbcb44f..8afcec0c5d3c 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c
+> @@ -242,7 +242,7 @@ mlx5e_int_port_remove(struct mlx5e_tc_int_port_priv *=
+priv,
+>                 mlx5_del_flow_rules(int_port->rx_rule);
+>         mapping_remove(ctx, int_port->mapping);
+>         mlx5e_int_port_metadata_free(priv, int_port->match_metadata);
+> -       kfree_rcu(int_port);
+> +       kfree_rcu_mightsleep(int_port);
+>         priv->num_ports--;
+>  }
 >
-> Please run scripts/checkpatch.pl and fix reported warnings.
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c b/=
+drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c
+> index 08d0929e8260..b811dad7370a 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c
+> @@ -670,7 +670,7 @@ static int mlx5e_macsec_del_txsa(struct macsec_contex=
+t *ctx)
 >
-> Best regards,
-> Krzysztof
+>         mlx5e_macsec_cleanup_sa(macsec, tx_sa, true);
+>         mlx5_destroy_encryption_key(macsec->mdev, tx_sa->enc_key_id);
+> -       kfree_rcu(tx_sa);
+> +       kfree_rcu_mightsleep(tx_sa);
+>         macsec_device->tx_sa[assoc_num] =3D NULL;
+>
+>  out:
+> @@ -849,7 +849,7 @@ static void macsec_del_rxsc_ctx(struct mlx5e_macsec *=
+macsec, struct mlx5e_macsec
+>         xa_erase(&macsec->sc_xarray, rx_sc->sc_xarray_element->fs_id);
+>         metadata_dst_free(rx_sc->md_dst);
+>         kfree(rx_sc->sc_xarray_element);
+> -       kfree_rcu(rx_sc);
+> +       kfree_rcu_mightsleep(rx_sc);
+>  }
+>
+>  static int mlx5e_macsec_del_rxsc(struct macsec_context *ctx)
+> --
+> 2.40.0.rc1.284.g88254d51c5-goog
 >
