@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C84126C964B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4526C964D
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbjCZPyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 11:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
+        id S232471AbjCZPym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 11:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbjCZPyd (ORCPT
+        with ESMTP id S232452AbjCZPyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 11:54:33 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4C14220
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:54:32 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id er18so14979669edb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:54:32 -0700 (PDT)
+        Sun, 26 Mar 2023 11:54:36 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FB84239
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:54:34 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id i5so26403185eda.0
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:54:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679846071;
+        d=linaro.org; s=google; t=1679846072;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=35gnd9Aoe6xXafnL7UjQDr8l7FiduXH+e+bO3yaocVQ=;
-        b=cvQf/CMin7njufwpp/za+I8Rz68YWTJ0WXpvpJSwzMc0Ae/C7X3H6xcgseB6KgZISn
-         XtnHRWABl8Y/QVYTbfS8MjyfpXKZbwl1htuDRc8yL+wa74KTDuwjJyrUAD/R+/heMcJf
-         XuVH0nbjkc686q7IgCRJLc25Wt7FzouTHZ/bBRFl53ZcFI/Kb8ydh1EGxdaOJsG2z4I5
-         MyiTX0evsN+zBKWEGVwn+uspghSWyf3ajUrkD3KlQTiUlyuCKEvP+riuohmENzDSZ27/
-         CsnMLkBpuGrLv8sbsyYmAwroTRjJAF6ie3OxEYnMgo7bLG0l/jd+RaHEYdFzCCkac4iN
-         yUfg==
+        bh=qb6wejOAWg8Tq0/xVUihnm3zM3Ykv1bV1Wxaitw6vys=;
+        b=uFqZlpVVmx5h5YGt9V4RkhGjCgFfg/K53xRA90eWEwZ86FJdYz0lHlHfZ+UVmruME+
+         H70w1sAhHv8hXJPLeWKNvEmI391bLRf4+S+l5RYE9j7G2Tz+1rKTAQGxWcul7qCTOd2T
+         uJjnW6PX2ofmzgVmlmwGi+K4OWEELT4YTPaLmmOTM8tYs0GBVM5bgevUQpoYHZy3Xmyi
+         omLEIAcwAEwvUBI5+iNUlJI4AJhlkilix63Pt1I9jOVinOJjx1pfJ2CrHW67ATorWT81
+         Ag4uoRbQ7iiykNL5j1MkndTuoN7v/JGf7+N7YwaehYFtqFcD2B1/IfwGirP5MMpaxegB
+         WDRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679846071;
+        d=1e100.net; s=20210112; t=1679846072;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=35gnd9Aoe6xXafnL7UjQDr8l7FiduXH+e+bO3yaocVQ=;
-        b=qEn+/vnuA7E7aFSjZJL0KUxfITE5q9ZX6GggbBE6koG5P4U1tN0fXvN06afWFWMXan
-         CsrYvudNaCCdlUfd9PHw36cQrric/y/otD2+9yXhJOP50OLDbdHIJHG090RsfbxS7tL5
-         6U385pg0BxPIYsNLQzZQjnOtdtA2smf8i6cZ+USC2Mqz86L0+coOZ2CF59TqtGeCPCHd
-         CTRC6OapOBNtnue1V11ZQGAJYh/Gmtsaz6bw3aJk8hlGj1yibuevvowIS+smEIUuJMoP
-         PM0G8jqtJTCsjhx7UIc70g0syuMh/69WtjNIhQGv8SUi+loGKIdewMaaogoQlSKpjfIn
-         FOEQ==
-X-Gm-Message-State: AAQBX9dG/aBVe1MNt7z7rkiNWwioOwfy9wrpnVCo406vYQvjL42LnwoU
-        kb80diUXfgZ0qPvPdbRvk0wR6A==
-X-Google-Smtp-Source: AKy350YeMSofZ0QLOlunDhezkNrl7kEmCVRPmLyxkHTFWj/WDls9x8pkSZccXelwW71dBv6N1tZ6PQ==
-X-Received: by 2002:aa7:cc05:0:b0:4fb:8f07:edbd with SMTP id q5-20020aa7cc05000000b004fb8f07edbdmr10358380edt.10.1679846071248;
-        Sun, 26 Mar 2023 08:54:31 -0700 (PDT)
+        bh=qb6wejOAWg8Tq0/xVUihnm3zM3Ykv1bV1Wxaitw6vys=;
+        b=grCtEVDZoY4pYKNy3wYCrWIOD6lpBwvLqTVWX3i9bL+pfwzNPfR8vKkrZPmngIe4hA
+         IsVO7cR/m0hMMAEo721UttknN2YNaoTDTn8lvyxZcIM3TCCezwVZY7uzl4nY05cwkFXG
+         2gDsbD8tRlQhsCG+GjzzBId3ttIXDOdwe5OU/Pr1s//MODflanSPBlufGwT5biUoXMlo
+         V+QmjX7j+oVW3KNFu5vhfnizBc7g/tO3ILi58r4lZAZrIl03JM0jEptG2f44cOQdBPil
+         qBs7nMF3kJLdUviH8X9H4jdf71slYuTHxmhyH6vFOST9k3SPm548xaF85JA4xO30xd1V
+         ndMw==
+X-Gm-Message-State: AAQBX9f7OgtESPxM6jweBTd+zbxK+OhPEy+Y4MFwHKksVSoaKuFFwpch
+        PcURsS9IFvh9MgCQGm9ykZbttQ==
+X-Google-Smtp-Source: AKy350Zt2i4Or7nsFrCPdZGmCr9S/cL7QJFPKdglAMXRGLWGsseYfQ1oUV5m2neU6SIbvgRLUsj6Tg==
+X-Received: by 2002:a17:906:3896:b0:933:3a22:8513 with SMTP id q22-20020a170906389600b009333a228513mr10968276ejd.53.1679846072731;
+        Sun, 26 Mar 2023 08:54:32 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:eca3:3b8f:823b:2669])
-        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004af62273b66sm13506742edj.18.2023.03.26.08.54.30
+        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004af62273b66sm13506742edj.18.2023.03.26.08.54.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 08:54:30 -0700 (PDT)
+        Sun, 26 Mar 2023 08:54:32 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Neil Armstrong <neil.armstrong@linaro.org>,
         Sam Ravnborg <sam@ravnborg.org>,
@@ -65,9 +65,9 @@ To:     Neil Armstrong <neil.armstrong@linaro.org>,
         dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/6] dt-bindings: display: panel-simple-dsi: allow vddio variant
-Date:   Sun, 26 Mar 2023 17:54:22 +0200
-Message-Id: <20230326155425.91181-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 4/6] dt-bindings: display: panel-simple-dsi: document port
+Date:   Sun, 26 Mar 2023 17:54:23 +0200
+Message-Id: <20230326155425.91181-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230326155425.91181-1-krzysztof.kozlowski@linaro.org>
 References: <20230326155425.91181-1-krzysztof.kozlowski@linaro.org>
@@ -82,63 +82,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Few panels like Samsung s6e3fc2x01 and sofef00 use vddio-supply instead
-of power-supply (in DTS and Linux driver), so allow it to fix:
+Panels are supposed to have one port (coming from panel-common.yaml
+binding):
 
-  sdm845-oneplus-enchilada.dtb: panel@0: 'power-supply' is a required property
+  msm8916-samsung-a3u-eur.dtb: panel@0: 'port' does not match any of the regexes: 'pinctrl-[0-9]+'
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../display/panel/panel-simple-dsi.yaml       | 24 +++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
+ .../display/panel/samsung,s6e88a0-ams452ef01.yaml         | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple-dsi.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple-dsi.yaml
-index 2c00813f5d20..90c04cff8281 100644
---- a/Documentation/devicetree/bindings/display/panel/panel-simple-dsi.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/panel-simple-dsi.yaml
-@@ -19,9 +19,6 @@ description: |
- 
-   If the panel is more advanced a dedicated binding file is required.
- 
--allOf:
--  - $ref: panel-common.yaml#
--
- properties:
- 
+diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6e88a0-ams452ef01.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6e88a0-ams452ef01.yaml
+index 44ce98f68705..b749e9e906b7 100644
+--- a/Documentation/devicetree/bindings/display/panel/samsung,s6e88a0-ams452ef01.yaml
++++ b/Documentation/devicetree/bindings/display/panel/samsung,s6e88a0-ams452ef01.yaml
+@@ -16,6 +16,7 @@ properties:
    compatible:
-@@ -67,12 +64,31 @@ properties:
+     const: samsung,s6e88a0-ams452ef01
+   reg: true
++  port: true
    reset-gpios: true
-   port: true
-   power-supply: true
-+  vddio-supply: true
-+
-+allOf:
-+  - $ref: panel-common.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - samsung,s6e3fc2x01
-+            - samsung,sofef00
-+    then:
-+      properties:
-+        power-supply: false
-+      required:
-+        - vddio-supply
-+    else:
-+      properties:
-+        vddio-supply: false
-+      required:
-+        - power-supply
- 
- additionalProperties: false
- 
+   vdd3-supply:
+     description: core voltage supply
+@@ -25,6 +26,7 @@ properties:
  required:
    - compatible
--  - power-supply
    - reg
- 
- examples:
++  - port
+   - vdd3-supply
+   - vci-supply
+   - reset-gpios
+@@ -46,5 +48,11 @@ examples:
+                     vdd3-supply = <&pm8916_l17>;
+                     vci-supply = <&reg_vlcd_vci>;
+                     reset-gpios = <&msmgpio 25 GPIO_ACTIVE_HIGH>;
++
++                    port {
++                            panel_in: endpoint {
++                                    remote-endpoint = <&dsi0_out>;
++                            };
++                    };
+             };
+     };
 -- 
 2.34.1
 
