@@ -2,112 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928FB6C924C
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 05:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE10B6C9250
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 06:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbjCZDy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 23:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S231370AbjCZEEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 00:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbjCZDyU (ORCPT
+        with ESMTP id S229492AbjCZEEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 23:54:20 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE6FB461
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 20:54:19 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32Q3s3vZ023021
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 25 Mar 2023 23:54:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1679802845; bh=WWo2bF3fYztcOcL8hQceNWz6QQ5YZudqVE2VOlWqgwc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Kz9fEgd+mA6LU16FY2vXdTzZPJrKnDCPwVvL25XwvPcV8SF3jETqwCP7xcPZNDoRH
-         3yTeH91J1u/Bj44ae5Ipp1ebiqBnsaHLDiyUVcmJmuzammXRKqryFxuSS6uYUUTgL8
-         5qAI81lL/4ypY8I/K31ORNEN0SEjgQDnT4r0wq/GHSlYODg3go86SJcDV7EakYovw9
-         uWjpKyIDxy8tW4OVwNxOeDlksdNVWoFgqMIx8BW2oS+kHmeLP0aXmCXJgXZTVwKOvw
-         CCuFig14CMO+K+TmVYCGQnjeMc5n9k7LO3g1e9gRtTELPsONo5URXkPfbqZ254U0Bi
-         MKmV8BV5QmU0w==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id F1EBD15C46FF; Sat, 25 Mar 2023 23:54:02 -0400 (EDT)
-Date:   Sat, 25 Mar 2023 23:54:02 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>,
-        Andreas Dilger <adilger@dilger.ca>
-Subject: Re: [RFC 08/11] ext4: Don't skip prefetching BLOCK_UNINIT groups
-Message-ID: <20230326035402.GA323408@mit.edu>
-References: <cover.1674822311.git.ojaswin@linux.ibm.com>
- <4881693a4f5ba1fed367310b27c793e4e78520d3.1674822311.git.ojaswin@linux.ibm.com>
- <20230309141422.b2nbl554ngna327k@quack3>
- <ZBRHCHySeQ0KC/f7@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+        Sun, 26 Mar 2023 00:04:47 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7ECB753;
+        Sat, 25 Mar 2023 21:04:45 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id y4so23141953edo.2;
+        Sat, 25 Mar 2023 21:04:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679803484;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vrdZ1ENXUKsXYUhHxuCniJKJgXSUIk7kPQqo1dyQuWs=;
+        b=KNDd7RM/hDhy33mGV1uyS5zhoCuORpXGzSE/1oCf/10gCPYitIN2q27foOYWquYZKR
+         QtBuTMxU+XAedfYXNS23h/78kxBvH0p9y0296L2XDzzV24aCtNq9hDTiKVuWO6xVIutX
+         V59GGavPWV6engQmsOZBuNlsgsQ93qoqIIxyPoerNq3tXv+s3fo0HSE7IcvBoD3SRjQA
+         ahdyVMZr+zj1j5hp3MjqQxSIIDty+eiPIPl4WhZMpcmeHKSRm5kdWhvxWHAQaVVg8DAx
+         OtFCzjddiJYJbWdeSy7aox9J03FvjzHQXFtEsJUsywNZrsWaP6Bc/1iQ+EnTnYB4P5nM
+         X86A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679803484;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vrdZ1ENXUKsXYUhHxuCniJKJgXSUIk7kPQqo1dyQuWs=;
+        b=k55pctr5dyfsfqUbN3R7n94HpGRVeHGfPYHyALWPBmMV4Hdd1Ix6Or4iccRctnCA71
+         Fo7P7WH0FND7TaUhq9+XJlUae0bUeDxYfGJ4Yb7rezED4VNB5Zw1veeKgYi4WXq0ZE68
+         gat8HfMgajwFd3D8ThjmKd4K4HmU7Lxcy7TxwMdTkgWTdIJh6DypisdXtAi9NGZBfXp7
+         Dp8rJedIGF4xvsh/znZYRMIrWQMAD65/n7kXRsjVPS0N0VDAujuJ1cCpL+j4fCaT7JZD
+         UTK+l3PziarQxH9Uieg8v2PWkhE4gxeYRE26dHhqX348+5CCzyEWI1l6+Rqj+YXmWFlw
+         6qVQ==
+X-Gm-Message-State: AAQBX9elKmEHgWRhTaNiArNpByPc908qdD3A3fjEWwVd63hjAtFc8vPl
+        qp3J/edrdPFB4Kle0PyjOYEeWrFtpMl+ge8KrSPpNTrExj1P7g==
+X-Google-Smtp-Source: AKy350YIdykA7MmjNqh28CTHMCWFT0k0YpmYp6eHxB6PuluUMssedg3N+rY0ihwLxHsFPqP/His+2HA75oQComKzSTI=
+X-Received: by 2002:a17:906:891:b0:8b1:7569:b526 with SMTP id
+ n17-20020a170906089100b008b17569b526mr3338697eje.11.1679803483782; Sat, 25
+ Mar 2023 21:04:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBRHCHySeQ0KC/f7@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230325152417.5403-1-kerneljasonxing@gmail.com> <CANn89iJaVrObJNDC9TrnSUC3XQeo-zfmUXLVrNVcsbRDPuSNtA@mail.gmail.com>
+In-Reply-To: <CANn89iJaVrObJNDC9TrnSUC3XQeo-zfmUXLVrNVcsbRDPuSNtA@mail.gmail.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Sun, 26 Mar 2023 12:04:07 +0800
+Message-ID: <CAL+tcoDVCywXXt0Whnx+o0PcULmdms0osJf0qUb0HKvVwuE6oQ@mail.gmail.com>
+Subject: Re: [PATCH net] net: fix raising a softirq on the current cpu with
+ rps enabled
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 04:25:04PM +0530, Ojaswin Mujoo wrote:
-> > > This improves the accuracy of CR0/1 allocation as earlier, we could have
-> > > essentially empty BLOCK_UNINIT groups being ignored by CR0/1 due to their buddy
-> > > not being initialized, leading to slower CR2 allocations. With this patch CR0/1
-> > > will be able to discover these groups as well, thus improving performance.
+On Sat, Mar 25, 2023 at 11:57=E2=80=AFPM Eric Dumazet <edumazet@google.com>=
+ wrote:
+>
+> On Sat, Mar 25, 2023 at 8:26=E2=80=AFAM Jason Xing <kerneljasonxing@gmail=
+.com> wrote:
 > >
-> > The patch looks good. I just somewhat wonder - this change may result in
-> > uninitialized groups being initialized and used earlier (previously we'd
-> > rather search in other already initialized groups) which may spread
-> > allocations more. But I suppose that's fine and uninit groups are not
-> > really a feature meant to limit fragmentation and as the filesystem ages
-> > the differences should be minimal. So feel free to add:
-> 
-> Another point I wanted to discuss wrt this patch series was why were the
-> BLOCK_UNINIT groups not being prefetched earlier. One point I can think
-> of is that this might lead to memory pressure when we have too many
-> empty BGs in a very large (say terabytes) disk.
+> > From: Jason Xing <kernelxing@tencent.com>
+> >
+> > Since we decide to put the skb into a backlog queue of another
+> > cpu, we should not raise the softirq for the current cpu. When
+> > to raise a softirq is based on whether we have more data left to
+> > process later. As to the current cpu, there is no indication of
+> > more data enqueued, so we do not need this action. After enqueuing
+> > to another cpu, net_rx_action() function will call ipi and then
+> > another cpu will raise the softirq as expected.
+> >
+> > Also, raising more softirqs which set the corresponding bit field
+> > can make the IRQ mechanism think we probably need to start ksoftirqd
+> > on the current cpu. Actually it shouldn't happen.
+> >
+> > Fixes: 0a9627f2649a ("rps: Receive Packet Steering")
+> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > ---
+> >  net/core/dev.c | 2 --
+> >  1 file changed, 2 deletions(-)
+> >
+> > diff --git a/net/core/dev.c b/net/core/dev.c
+> > index 1518a366783b..bfaaa652f50c 100644
+> > --- a/net/core/dev.c
+> > +++ b/net/core/dev.c
+> > @@ -4594,8 +4594,6 @@ static int napi_schedule_rps(struct softnet_data =
+*sd)
+> >         if (sd !=3D mysd) {
+> >                 sd->rps_ipi_next =3D mysd->rps_ipi_list;
+> >                 mysd->rps_ipi_list =3D sd;
+> > -
+> > -               __raise_softirq_irqoff(NET_RX_SOFTIRQ);
+> >                 return 1;
+> >         }
+> >  #endif /* CONFIG_RPS */
+> > --
+> > 2.37.3
+> >
+>
+> This is not going to work in some cases. Please take a deeper look.
+>
+> I have to run, if you (or others) do not find the reason, I will give
+> more details when I am done traveling.
 
-Originally the prefetch logic was simply something to optimize I/O ---
-that is, normally, all of the block bitmaps for a flex_bg are
-contiguous, so why not just read them all in a single I/O which is
-issued all at once, instead of doing them as separate 4k reads.
+I'm wondering whether we could use @mysd instead of @sd like this:
 
-Skipping block groups that hadn't yet been prefetched was something
-which was added later, in order to improve performance of the
-allocator for freshly mounted file systems where the prefetch hadn't
-yet had a chance to pull in block bitmaps; the problem was that if the
-block groups hadn't been prefetch yet, then the cr0 scan would fetch
-them, and if you have a storage device where blocks with monotonically
-increasing LBA numbers aren't necessarily stored adjacently on disk
-(for example, on a dm-thin volume, but if one were to do an experiment
-on certain emulated block devices on certain hyperscalar cloud
-environments, one might find a similar performance profile), resulting
-in a cr0 scan potentially issuing a series of 16 sequential 4k I/O's,
-that could be substantially worse from a performance standpoint than
-doing a single squential 64k I/O.
+if (!__test_and_set_bit(NAPI_STATE_SCHED, &mysd->backlog.state))
+    __raise_softirq_irqoff(NET_RX_SOFTIRQ);
 
-When this change was made, the focus was on *initialized* bitmaps
-taking a long time if they were issued as individual sequential 4k
-I/O's; the fix was to skip scanning them initially, since the hope was
-that the prefetch would pull them in fairly quickly, and a few bad
-allocations when the file system was freshly mounted was an acceptable
-tradeoff.
+I traced back to some historical changes and saw some relations with
+this commit ("net: solve a NAPI race"):
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
+id=3D39e6c8208d7b6fb9d2047850fb3327db567b564b
 
-But prefetching prefetching BLOCK_UNINIT groups makes sense, that
-should fix the problem that you've identified (at least for
-BLOCK_UNINIT groups; for initialized block bitmaps, we'll still have
-less optimal allocation patterns until we've managed to prefetch those
-block groups).
-
-Cheers,
-
-					0 Ted
+Thanks,
+Jason
