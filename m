@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A366C9694
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFF16C9695
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232646AbjCZQDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 12:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
+        id S232656AbjCZQDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 12:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232604AbjCZQDi (ORCPT
+        with ESMTP id S232615AbjCZQDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 12:03:38 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27924233
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:03:36 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id x3so26184534edb.10
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:03:36 -0700 (PDT)
+        Sun, 26 Mar 2023 12:03:39 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF894230
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:03:37 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id er18so15031742edb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:03:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1679846615;
+        d=amarulasolutions.com; s=google; t=1679846616;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=90w47meUN1AAVQio6KlRg3XgdW53vJW4u/H89twTllI=;
-        b=IGpkTrSY08rQpriigTycwI/pVPZuNL3LmyjzqBtRzJdVky7fNF+s2Lu/uDzVr8KNcn
-         py8Se8tVeuwNXUJzn36teS2EI3MjrjVg1D1QEAj9s283J2z6gTmZXD0AwfKi1Rp9QaAb
-         259T4Bg8O5UZh2dVoHJQqkWmejCTLGGqecwbg=
+        bh=QV3iGa8KiUlr1LClhXl1D1BGw0maVF3hcUmABXx2qKM=;
+        b=rq5dyFnUl7RahLZHNlkhn8nQ8r1SCLpS07sZ1IVPZQJ3gVy0TCL2nFSO4YipbN3KkF
+         cqTPtfp304/6vW5DlnooqxktttCdVjUHlOTqCWhTxmLShyqTJQYFn08BEWKvPXMfEDxa
+         6QhqrddIx+rQQal8P4izUsMxr75QpKTnFYBYo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679846615;
+        d=1e100.net; s=20210112; t=1679846616;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=90w47meUN1AAVQio6KlRg3XgdW53vJW4u/H89twTllI=;
-        b=71RXUYbXEam/P+xe1iPWD5ZMnM79JGA6caBCRz+ZPMKrzn9LNATTzrA36DmfI+pY6V
-         KyjIplbLhcexHRz0+9GNxeEvf8Qki7Fpwm5DA+SYyo9/hEFkAr+l0SZSfAbB+jM2qIzc
-         CJukdjo8WdvS9J6fXB4Gx5Hh807CFkUMaJxRu0MiO06uNv8vv6csJmWVREP4Qofyy641
-         jhTRQJMcAIaNpoNaufzR4YwRY2ah7HCryMcRG8xhFEsYel2cKFB/z/r6KBlIOl0+9Uii
-         1lHp+cYznat9JJluNhMbUpFHNEwWcHSSn8S0eDLdEaK1rTIlRTGO1PONI8dLZzGxgDwg
-         Oayw==
-X-Gm-Message-State: AAQBX9epgN4b6W0SDByol1VbnkltGPhAOQUIENppe1urDWalA21CsB8e
-        hTVvRbvY+2OGiJX4TqwDRR5N9zNqXAugCm8a0ro2rg==
-X-Google-Smtp-Source: AKy350bIfwMFk2pvBaJBigXVw+T4hWlt844pXbucNzIoAEIMfanFS6jc1aUnie97VTAQDIpd5pTB2A==
-X-Received: by 2002:aa7:d14e:0:b0:500:58cb:3b05 with SMTP id r14-20020aa7d14e000000b0050058cb3b05mr8961649edo.27.1679846614987;
-        Sun, 26 Mar 2023 09:03:34 -0700 (PDT)
+        bh=QV3iGa8KiUlr1LClhXl1D1BGw0maVF3hcUmABXx2qKM=;
+        b=Czl6Oxz0danAz0qSdAytPhxZkbD6HRvIHzKxheNUlXHuLLCXYccl2Kw8hJNlfh93iG
+         bvdma71fQ7/HuDN85B1iVPrAhW+fCGYBt+C17FRmmF+i35TkED6NFQ9XijNGtt2JWLAz
+         DaYScAMZSqTgDecdWJDs5VD0L4vfDBgwqZmEP26d55aVvUrypv6eZOPk4PtPqC8d+LJp
+         YcTpRIOguG9hHT4eCkLVdroEMJkHtA+CzvtMe7AvRQ5HYw6kyF3S+V2ADNSC6fSh0oTh
+         IbthM+62MpCNgMSLh3YrfyzOmqkb9vQx7cIOTR9AGh0rDopNz13tCL9995BJ5qC3daxP
+         kOKg==
+X-Gm-Message-State: AAQBX9eSvepUE2ai+Q5Fl+zKkJMX421HCdqwUnosmDHfq8i+FHhivZUv
+        lAD8NxLV1R+c9OwHP2hzc391xR/gqbQRmSUvDNu63g==
+X-Google-Smtp-Source: AKy350aWHhGJriWVrLf6TakD+wy8UiRbEvNVXeYw5vTRA6TEpbcBjqXWsqfoa/9hQ0foQ3aDVKRFZA==
+X-Received: by 2002:a05:6402:70a:b0:4fb:9b54:ccb8 with SMTP id w10-20020a056402070a00b004fb9b54ccb8mr9305209edx.21.1679846616252;
+        Sun, 26 Mar 2023 09:03:36 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-87-0-102-254.retail.telecomitalia.it. [87.0.102.254])
-        by smtp.gmail.com with ESMTPSA id m2-20020a50d7c2000000b00501fc87352fsm6869333edj.13.2023.03.26.09.03.34
+        by smtp.gmail.com with ESMTPSA id m2-20020a50d7c2000000b00501fc87352fsm6869333edj.13.2023.03.26.09.03.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 09:03:34 -0700 (PDT)
+        Sun, 26 Mar 2023 09:03:36 -0700 (PDT)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
@@ -62,9 +62,9 @@ Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH v8 3/5] ARM: dts: stm32: add CAN support on stm32f429
-Date:   Sun, 26 Mar 2023 18:03:23 +0200
-Message-Id: <20230326160325.3771891-4-dario.binacchi@amarulasolutions.com>
+Subject: [PATCH v8 4/5] ARM: dts: stm32: add pin map for CAN controller on stm32f4
+Date:   Sun, 26 Mar 2023 18:03:24 +0200
+Message-Id: <20230326160325.3771891-5-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20230326160325.3771891-1-dario.binacchi@amarulasolutions.com>
 References: <20230326160325.3771891-1-dario.binacchi@amarulasolutions.com>
@@ -79,75 +79,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for bxcan (Basic eXtended CAN controller) to STM32F429. The
-chip contains two CAN peripherals, CAN1 the master and CAN2 the slave,
-that share some of the required logic like clock and filters. This means
-that the slave CAN can't be used without the master CAN.
+Add pin configurations for using CAN controller on stm32f469-disco
+board. They are located on the Arduino compatible connector CN5 (CAN1)
+and on the extension connector CN12 (CAN2).
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 ---
 
-(no changes since v6)
-
-Changes in v6:
-- move can1 node before gcan to keep ordering by address.
-
-Changes in v4:
-- Replace the node can@40006400 (compatible "st,stm32f4-bxcan-core")
-  with the gcan@40006600 node ("sysnode" compatible). The gcan node
-  contains clocks and memory addresses shared by the two can nodes
-  of which it's no longer the parent.
-- Add to can nodes the "st,gcan" property (global can memory) which
-  references the gcan@40006600 node ("sysnode compatibble).
+(no changes since v3)
 
 Changes in v3:
 - Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
-- Add "clocks" to can@0 node.
+- Remove a blank line.
 
- arch/arm/boot/dts/stm32f429.dtsi | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+Changes in v2:
+- Remove a blank line.
 
-diff --git a/arch/arm/boot/dts/stm32f429.dtsi b/arch/arm/boot/dts/stm32f429.dtsi
-index c31ceb821231..809b2842ded9 100644
---- a/arch/arm/boot/dts/stm32f429.dtsi
-+++ b/arch/arm/boot/dts/stm32f429.dtsi
-@@ -362,6 +362,35 @@ i2c3: i2c@40005c00 {
- 			status = "disabled";
+ arch/arm/boot/dts/stm32f4-pinctrl.dtsi | 30 ++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32f4-pinctrl.dtsi b/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
+index 4523c63475e4..3bb812d6399e 100644
+--- a/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
+@@ -447,6 +447,36 @@ pins2 {
+ 					slew-rate = <2>;
+ 				};
+ 			};
++
++			can1_pins_a: can1-0 {
++				pins1 {
++					pinmux = <STM32_PINMUX('B', 9, AF9)>; /* CAN1_TX */
++				};
++				pins2 {
++					pinmux = <STM32_PINMUX('B', 8, AF9)>; /* CAN1_RX */
++					bias-pull-up;
++				};
++			};
++
++			can2_pins_a: can2-0 {
++				pins1 {
++					pinmux = <STM32_PINMUX('B', 13, AF9)>; /* CAN2_TX */
++				};
++				pins2 {
++					pinmux = <STM32_PINMUX('B', 5, AF9)>; /* CAN2_RX */
++					bias-pull-up;
++				};
++			};
++
++			can2_pins_b: can2-1 {
++				pins1 {
++					pinmux = <STM32_PINMUX('B', 13, AF9)>; /* CAN2_TX */
++				};
++				pins2 {
++					pinmux = <STM32_PINMUX('B', 12, AF9)>; /* CAN2_RX */
++					bias-pull-up;
++				};
++			};
  		};
- 
-+		can1: can@40006400 {
-+			compatible = "st,stm32f4-bxcan";
-+			reg = <0x40006400 0x200>;
-+			interrupts = <19>, <20>, <21>, <22>;
-+			interrupt-names = "tx", "rx0", "rx1", "sce";
-+			resets = <&rcc STM32F4_APB1_RESET(CAN1)>;
-+			clocks = <&rcc 0 STM32F4_APB1_CLOCK(CAN1)>;
-+			st,can-master;
-+			st,gcan = <&gcan>;
-+			status = "disabled";
-+		};
-+
-+		gcan: gcan@40006600 {
-+			compatible = "st,stm32f4-gcan", "syscon";
-+			reg = <0x40006600 0x200>;
-+			clocks = <&rcc 0 STM32F4_APB1_CLOCK(CAN1)>;
-+		};
-+
-+		can2: can@40006800 {
-+			compatible = "st,stm32f4-bxcan";
-+			reg = <0x40006800 0x200>;
-+			interrupts = <63>, <64>, <65>, <66>;
-+			interrupt-names = "tx", "rx0", "rx1", "sce";
-+			resets = <&rcc STM32F4_APB1_RESET(CAN2)>;
-+			clocks = <&rcc 0 STM32F4_APB1_CLOCK(CAN2)>;
-+			st,gcan = <&gcan>;
-+			status = "disabled";
-+		};
-+
- 		dac: dac@40007400 {
- 			compatible = "st,stm32f4-dac-core";
- 			reg = <0x40007400 0x400>;
+ 	};
+ };
 -- 
 2.32.0
 
