@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84AA46C97D8
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 22:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BEED6C97DC
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 22:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbjCZUpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 16:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
+        id S231359AbjCZUpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 16:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjCZUpH (ORCPT
+        with ESMTP id S230134AbjCZUpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 16:45:07 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D5D6189
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 13:45:05 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id w9so28010229edc.3
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 13:45:05 -0700 (PDT)
+        Sun, 26 Mar 2023 16:45:31 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4CD5FEE
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 13:45:23 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id er18so16724276edb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 13:45:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679863504;
+        d=linaro.org; s=google; t=1679863522;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vKotHhrSArMlYMD87zRBXjHIfz20EsMTTThdF51WPwM=;
-        b=VCVLa21fd+C5o27Qx3JrI7Pw9/Bh/TOA8hFB3ta/N/0a0e1EOBnqxBaLMOB56YQBFI
-         HIVz1/jZHSW7RFSmatOhlwB6o7HbhaSjxvapcuF9smjwKE9ouFj1Ly11AOoPM0+SsfP4
-         wqEMvcTnzzq+fTcbNR/PnI+JNooz6DMS/Rvl1bwr55XdVZN4Kbs+sYrvZ9k4W0obApGI
-         btb35zFGYPLuhy09WfKThW13Dn8QsvtSsaq8qnL6PvNcyhGNN6ff5KKIxq3pv/cMleBD
-         lJ41duKO+XYEplnhtsAL4dQRtyY5KRkuV6R809WCzt6pYuMFW95d7+Q5ydXrLBr/JEk0
-         MqQA==
+        bh=zKeqvPxm46B8O4W9qzQW2dMP+9bNVOZP8XOxlGMFt78=;
+        b=e/6HJAScT4RiWqlfn8XQ3KWA+0e55h9JsVVPIYhIF6NSHAAYuUJuqqAqIgZaBJjKIY
+         jDcWTFbI34Cq08FT/AW+ngu6EivgEN5dU2Zr2Pj00tDLi5qNQlNFmJYFTR/SB3WHvjqT
+         O0kikH5paSq8UX1KK8TnNwD4bOVmyszHMO/kPW9e15vCg/ct/UHRDKw/NIT2Z8i9IQg6
+         NmM9FDONp2kW8xo01KPwUWxShJDzHdjErq0HYWq2OdGQ+pwDNIH8GrT4r0uNHuIb0vIm
+         2pAcpzz85qCnHTIJAOn+0pdH3N2QWYfB/29FpoL4sXi2MM7+oiJ4kOMb275bwd6axEnm
+         Urlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679863504;
+        d=1e100.net; s=20210112; t=1679863522;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vKotHhrSArMlYMD87zRBXjHIfz20EsMTTThdF51WPwM=;
-        b=dStsKWVTfPQROFXKIaXE3gSlj9Bi70JtgEfl3Q0FmvD2bNUcS7hwYtc2uLRAgNyHxu
-         0/7VftYPh8vGmaXGfTNBRCOS8RXakpi6xlzWnAhMMMYIjyUtljwrwf9Njrr7S4vSmpau
-         CTOwycHQWdrN7t7K+6WP9FMHnV9EDyNR5jjf7G9zbIKnq/X9AJT6SYGQpXY7X6rGnk4k
-         c4PG/TTND333oYAv6SOa3Lu7FbsTJCV2FQ0rSmy9ThDwSGXUAy7BsQ7Zv4ZnMdXmJ6Hc
-         tjKqyGWaUPp7moWttr+URhnpXW47OriFbg7v+l1XwVJZxFTSr5SzAjzBLcPUG6zd6rY/
-         NGmg==
-X-Gm-Message-State: AAQBX9eOfdpBX7HpWSEL6/JL8R56gL0JMTeWFdAO7ZkhS1YAjZ2ow7z4
-        TDftqlZ2VR2KD08vBCJ6VkWmng==
-X-Google-Smtp-Source: AKy350ZN90o6ec4Uu19ORnJ37DvU+BxCitB1JQcNCAFuy2fgpfIPY8OMwkUTtAkqqcSYz3jdLwfiVg==
-X-Received: by 2002:a05:6402:48e:b0:4ff:844a:ed4c with SMTP id k14-20020a056402048e00b004ff844aed4cmr10180632edv.0.1679863504328;
-        Sun, 26 Mar 2023 13:45:04 -0700 (PDT)
+        bh=zKeqvPxm46B8O4W9qzQW2dMP+9bNVOZP8XOxlGMFt78=;
+        b=yZEXxVOwG/28ZONp2x68jWdYDYEXPU1CuYoe0Ir2LiRXBxA8CPY0xEmJgLm920hWAb
+         Re9PS3/P8Dqq9qKQnqQjCUNEiBIEH2KrXDOL+8AAVCJ7BoM3AuibwaYDrsJLwivdd+gp
+         7CuzFgmZThN6RjAGW38d3pTrPC8O3c5ClpDaZip9DAgA0j90uf8UXvb/g/aES+KByvfc
+         axUvPjgYwq2+SwXzfiTsmJ+OXO9bmQ4fIjjAfL5bJgM2Kv+vBaIgFTWPU9Rq9GSZsu6C
+         vFB+b8n9pu6FGqmHGAFmaVcIErUfsXexIqUa5nsdFVxU48tHJS7RSh5HDpEMKqVqmjuL
+         uVzg==
+X-Gm-Message-State: AAQBX9eMuwhU6S6xkrnTnc4Nnj03yyzq+Lhy897DNNw3rZ18GRC4wAvG
+        guhBVliHQuYRLvD7QdhLX4ns1w==
+X-Google-Smtp-Source: AKy350YvH7Ps1wazgDh82qJwbf2I7lTAQe/OGi0P5E2EuabFszjUkUyN/w0BWr357mArwQ7wiKJ2Aw==
+X-Received: by 2002:a17:907:724d:b0:93f:3027:ee5f with SMTP id ds13-20020a170907724d00b0093f3027ee5fmr7636908ejc.70.1679863522281;
+        Sun, 26 Mar 2023 13:45:22 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:6b51:4748:3f3f:ffcf])
-        by smtp.gmail.com with ESMTPSA id n7-20020a509347000000b005023ddb37eesm1578418eda.8.2023.03.26.13.45.03
+        by smtp.gmail.com with ESMTPSA id ga5-20020a170906b84500b0093e23d03d72sm4090982ejb.177.2023.03.26.13.45.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 13:45:03 -0700 (PDT)
+        Sun, 26 Mar 2023 13:45:21 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: imx8mq-mnt-reform2: drop invalid simple-panel compatible
-Date:   Sun, 26 Mar 2023 22:45:02 +0200
-Message-Id: <20230326204502.80794-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/3] arm64: dts: rockchip: correct panel supplies
+Date:   Sun, 26 Mar 2023 22:45:18 +0200
+Message-Id: <20230326204520.80859-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,29 +71,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"simple-panel" compatible is not documented and nothing in Linux kernel
-binds to it:
+The Anbernic and Odroid Go have different panels and take differently
+named supplies, so move all the supplies to DTS defining actual panel to
+fix warnings like:
 
-  imx8mq-mnt-reform2.dtb: panel: compatible: ['innolux,n125hce-gn1', 'simple-panel'] is too long
+  rk3326-odroid-go3.dtb: panel@0: 'IOVCC-supply' is a required property
+  rk3326-odroid-go3.dtb: panel@0: 'iovcc-supply', 'vdd-supply' do not match any of the regexes: 'pinctrl-[0-9]+'
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts | 2 ++
+ arch/arm64/boot/dts/rockchip/rk3326-odroid-go.dtsi      | 2 --
+ arch/arm64/boot/dts/rockchip/rk3326-odroid-go2-v11.dts  | 2 ++
+ arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts      | 2 ++
+ arch/arm64/boot/dts/rockchip/rk3326-odroid-go3.dts      | 1 +
+ 5 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts b/arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
-index 200268660518..3ae3824be027 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
-@@ -26,7 +26,7 @@ backlight: backlight {
- 	};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts b/arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts
+index 61b31688b469..ce318e05f0a6 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts
+@@ -24,6 +24,8 @@ vibrator {
  
- 	panel {
--		compatible = "innolux,n125hce-gn1", "simple-panel";
-+		compatible = "innolux,n125hce-gn1";
- 		power-supply = <&reg_main_3v3>;
+ &internal_display {
+ 	compatible = "elida,kd35t133";
++	iovcc-supply = <&vcc_lcd>;
++	vdd-supply = <&vcc_lcd>;
+ };
+ 
+ &pwm0 {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go.dtsi b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go.dtsi
+index 04eba432fb0e..80fc53c807a4 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go.dtsi
+@@ -235,10 +235,8 @@ mipi_out_panel: endpoint {
+ 	internal_display: panel@0 {
+ 		reg = <0>;
  		backlight = <&backlight>;
- 		no-hpd;
+-		iovcc-supply = <&vcc_lcd>;
+ 		reset-gpios = <&gpio3 RK_PC0 GPIO_ACTIVE_LOW>;
+ 		rotation = <270>;
+-		vdd-supply = <&vcc_lcd>;
+ 
+ 		port {
+ 			mipi_in_panel: endpoint {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2-v11.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2-v11.dts
+index 139c898e590e..d94ac81eb4e6 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2-v11.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2-v11.dts
+@@ -83,6 +83,8 @@ button-sw21 {
+ 
+ &internal_display {
+ 	compatible = "elida,kd35t133";
++	iovcc-supply = <&vcc_lcd>;
++	vdd-supply = <&vcc_lcd>;
+ };
+ 
+ &rk817 {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+index 4702183b673c..aa6f5b12206b 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+@@ -59,6 +59,8 @@ battery: battery {
+ 
+ &internal_display {
+ 	compatible = "elida,kd35t133";
++	iovcc-supply = <&vcc_lcd>;
++	vdd-supply = <&vcc_lcd>;
+ };
+ 
+ &rk817_charger {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go3.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go3.dts
+index 1b9769ccfdeb..35bbaf559ca3 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go3.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go3.dts
+@@ -144,6 +144,7 @@ button-sw22 {
+ &internal_display {
+ 	compatible = "elida,kd50t048a", "sitronix,st7701";
+ 	reset-gpios = <&gpio3 RK_PC0 GPIO_ACTIVE_HIGH>;
++	IOVCC-supply = <&vcc_lcd>;
+ 	VCC-supply = <&vcc_lcd>;
+ };
+ 
 -- 
 2.34.1
 
