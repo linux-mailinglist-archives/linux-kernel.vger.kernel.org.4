@@ -2,216 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CB56C96BD
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D7D6C969E
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbjCZQRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 12:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47260 "EHLO
+        id S232658AbjCZQFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 12:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCZQRW (ORCPT
+        with ESMTP id S232615AbjCZQFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 12:17:22 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377A049CA;
-        Sun, 26 Mar 2023 09:17:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1679847437; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=HqVc5rLyGwFRIUua8+qsRzxjbw98PRJdF7LTUihsqE2MuDYaWJ4IYG2K7ybAAmXJRs
-    caaPhn4AkGat1vmR+7FWG+dHoHww5z02aF49u7d04QZ9Y4GQbWW7sPXcZEkW8jMSaAct
-    qdhQmSC7x+mRiFd1TZAhsNAplIophh7wCj45HGg9pU/FU2i5zJ9N0kQeD/151Dd3Xv1J
-    3C2oV6Spxl3jVn3XPgfh8ZC92fFAgRX/1fH72DQL9SOS8Y1LrZEk8KPdsRsJsvQpEIkY
-    gaj4X2r7kD+IliG63j1oaLHRmXpkkWA1G6ltih1sBujDh+oVJaOrTbSKGdqZ2GCR95p5
-    kBRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1679847437;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=jPn7qiKnVAHlho1+QPL3JiQ1DbaASQpXMMWBmuI+0qE=;
-    b=cfn+uEL8Ae8tsuKQR4j6ZIj9pChGvnjrNGJogq/E9GsUJ4f5fhd2wDzwZ7P9NG0qUK
-    QumDRnS5C9/i86gJgDibRfBtRl6JrTQSHf15R+UTmrMUma5oGtdCLvrsgOVvNtwKdp5Q
-    gIuZ7CBpPx4SbvDahirhAUkpLaKq4I+ekB4LOPuG7pmweENu5ibXuQ+r04cIa++I5f0M
-    RE0MAkrGNn5KRXDzV4mFGBEkTFsQqp4B7nM6rHXjfrfGKdu+oZC/OKdq1F4x4yagruWA
-    cEj+Mm5utp3wRv9hRnGLcFjvYIluzt+sNkYroRXGAdWYTP7RlPLUP28YD9NXJ9623k7U
-    OSDA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1679847437;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=jPn7qiKnVAHlho1+QPL3JiQ1DbaASQpXMMWBmuI+0qE=;
-    b=ISIlt39OAp6CmKbl33i8k4QtfiYR4bbUQgv143gZRsQRbD+RR6d+meldOihyI2/KQn
-    fAKlZYdCFpGIpussX+zGrzBsW3rYsug3JbWhjIKiRDX6z9GUfU/gnzNfcHhe50v279F0
-    OVhvJGbu/hDxhetflg+N25PPf+QO/FRace0w53DcKQ9NH80dkADPT/084iz48cCwdgr1
-    t6MkRcwDKTCWXAdz/H0e6bp0mzwBow+HeS9nb6ujAluAdZARKzzvO6tualZeLoNG8AEW
-    WlIaWs/cCD6J46WYm8eou0ACGKgUefqzdFwTGJ4BQkvcufRaygQ7xjVu0cdyihcGZIdW
-    BR9A==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
-Received: from [IPV6:2a00:6020:4a8e:5000::923]
-    by smtp.strato.de (RZmta 49.3.1 AUTH)
-    with ESMTPSA id n9397fz2QGHHSed
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 26 Mar 2023 18:17:17 +0200 (CEST)
-Message-ID: <81ebf23b-f539-5782-2abd-8db8a232bb72@hartkopp.net>
-Date:   Sun, 26 Mar 2023 18:17:17 +0200
+        Sun, 26 Mar 2023 12:05:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604C37ABD;
+        Sun, 26 Mar 2023 09:05:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1D4160F08;
+        Sun, 26 Mar 2023 16:04:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 385B8C433EF;
+        Sun, 26 Mar 2023 16:04:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679846689;
+        bh=WKccT1h5XfTtlzLxHv3J7Dgzv4Ryg5YYOKnQQmn72H0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sI+HbKR+65CNu5jrwNIFK533ioyoPaGWeIt0lGYMPBK/YHU+0S1ThbZ0qq9tu/SmY
+         0p5puTIWZQQ3/ezyHg8HycJPLgjBvFEF/+iBOuyX448qidEb/sFc8HDzkw2K2MvWvR
+         CZeFD2uk/vnKXWCBtEU5uXc8ChK9Glp5VcrexMAz2ENaJWxRDmN6DpSvyyD8Z1RBB2
+         +US660vcMMbO2tpmO0WZKFXqP7DekOxafB87lcdZMnpve6rLh2CJ8eIkMKkBqsyiTh
+         5kEnCoaG3k3PPhuxp8K2E+9Vk6ZpO/MGMPP/rB6P5ZXmvo0xKXfcdag5uP6h2t7j4m
+         PzcMtMcvNeIUw==
+Date:   Sun, 26 Mar 2023 17:19:51 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 7/8] iio: light: ROHM BU27034 Ambient Light Sensor
+Message-ID: <20230326171951.0e815ec3@jic23-huawei>
+In-Reply-To: <af8901957884c9c658be21ee89f837d5ca4ddac9.1679474247.git.mazziesaccount@gmail.com>
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+        <af8901957884c9c658be21ee89f837d5ca4ddac9.1679474247.git.mazziesaccount@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: WARNING in isotp_tx_timer_handler and WARNING in print_tainted
-Content-Language: en-US
-To:     "Dae R. Jeong" <threeearcat@gmail.com>
-Cc:     mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ZB/93xJxq/BUqAgG@dragonet>
- <31c4a218-ee1b-4b64-59b6-ba5ef6ecce3c@hartkopp.net>
- <ZCAytf0CpfAhjUSe@dragonet>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <ZCAytf0CpfAhjUSe@dragonet>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dae,
+On Wed, 22 Mar 2023 11:07:56 +0200
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-On 26.03.23 13:55, Dae R. Jeong wrote:
->> diff --git a/net/can/isotp.c b/net/can/isotp.c
->> index 9bc344851704..0b95c0df7a63 100644
->> --- a/net/can/isotp.c
->> +++ b/net/can/isotp.c
->> @@ -912,13 +912,12 @@ static enum hrtimer_restart
->> isotp_txfr_timer_handler(struct hrtimer *hrtimer)
->>   		isotp_send_cframe(so);
->>
->>   	return HRTIMER_NORESTART;
->>   }
->>
->> -static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t
->> size)
->> +static int isotp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t
->> size)
->>   {
->> -	struct sock *sk = sock->sk;
->>   	struct isotp_sock *so = isotp_sk(sk);
->>   	u32 old_state = so->tx.state;
->>   	struct sk_buff *skb;
->>   	struct net_device *dev;
->>   	struct canfd_frame *cf;
->> @@ -1091,10 +1090,22 @@ static int isotp_sendmsg(struct socket *sock, struct
->> msghdr *msg, size_t size)
->>   		wake_up_interruptible(&so->wait);
->>
->>   	return err;
->>   }
->>
->> +static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t
->> size)
->> +{
->> +	struct sock *sk = sock->sk;
->> +	int ret;
->> +
->> +	lock_sock(sk);
->> +	ret = isotp_sendmsg_locked(sk, msg, size);
->> +	release_sock(sk);
->> +
->> +	return ret;
->> +}
->> +
->>   static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t
->> size,
->>   			 int flags)
->>   {
->>   	struct sock *sk = sock->sk;
->>   	struct sk_buff *skb;
+> ROHM BU27034 is an ambient light sensor with 3 channels and 3 photo diodes
+> capable of detecting a very wide range of illuminance. Typical application
+> is adjusting LCD and backlight power of TVs and mobile phones.
 > 
-> Hi, Oliver.
+> Add initial  support for the ROHM BU27034 ambient light sensor.
 > 
-> It seems that the patch should address the scenario I was thinking
-> of. But using a lock is always scary for a newbie like me because of
-> the possibility of causing other problems, e.g., deadlock. If it does
-> not cause other problems, it looks good for me.
-
-Yes, I feel you!
-
-We use lock_sock() also in the notifier which is called when someone 
-removes the CAN interface.
-
-But the other cases for e.g. set_sockopt() and for sendmsg() seem to be 
-a common pattern to lock concurrent user space calls.
-
-> Or although I'm not sure about this, what about getting rid of
-> reverting so->tx.state to old_state?
+> NOTE:
+> 	- Driver exposes 4 channels. One IIO_LIGHT channel providing the
+> 	  calculated lux values based on measured data from diodes #0 and
+> 	  #1. In addition, 3 IIO_INTENSITY channels are emitting the raw
+> 	  register data from all diodes for more intense user-space
+> 	  computations.
+> 	- Sensor has GAIN values that can be adjusted from 1x to 4096x.
+> 	- Sensor has adjustible measurement times of 5, 55, 100, 200 and
+> 	  400 mS. Driver does not support 5 mS which has special
+> 	  limitations.
+> 	- Driver exposes standard 'scale' adjustment which is
+> 	  implemented by:
+> 		1) Trying to adjust only the GAIN
+> 		2) If GAIN adjustment alone can't provide requested
+> 		   scale, adjusting both the time and the gain is
+> 		   attempted.
+> 	- Driver exposes writable INT_TIME property that can be used
+> 	  for adjusting the measurement time. Time adjustment will also
+> 	  cause the driver to try to adjust the GAIN so that the
+> 	  overall scale is kept as close to the original as possible.
 > 
-> I think the concurrent execution of isotp_sendmsg() would be
-> problematic when reverting so->tx.state to old_state after goto'ing
-> err_out.
-Your described case in the original post indeed shows that this might 
-lead to a problem.
-
-> There are two locations of "goto err_out", and
-> iostp_sendmsg() does nothing to the socket before both of "goto
-> err_out". So after goto'ing err_out, it seems fine for me even if we
-> do not revert so->tx.state to old_state.
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 > 
-> If I think correctly, this will make cmpxchg() work, and prevent the
-> problematic concurrent execution. Could you please check the patch
-> below?
+Hi Matti,
 
-Hm, interesting idea.
+A few minor comments inline.  I'll take a closer look at the rest of the
+series when the discussions around the tests and devices to be used
+for them settle down.
 
-But in which state will so->tx.state be here:
+Thanks,
 
-/* wait for complete transmission of current pdu */
-err = wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
-if (err)
-	goto err_out;
+Jonathan
+
+> +
+> +static u64 bu27034_fixp_calc_t1(unsigned int coeff, unsigned int ch0,
+> +				unsigned int ch1, unsigned int gain0,
+> +				unsigned int gain1)
+> +{
+> +	unsigned int helper, tmp;
+> +	u64 helper64;
+> +
+> +	/*
+> +	 * Here we could overflow even the 64bit value. Hence we
+> +	 * multiply with gain0 only after the divisions - even though
+> +	 * it may result loss of accuracy
+> +	 */
+> +	helper64 = (u64)coeff * (u64)ch1 * (u64)ch1;
+> +	helper = coeff * ch1 * ch1;
+> +	tmp = helper * gain0;
+> +
+> +	if (helper == helper64 && (tmp / gain0 == helper))
+
+Similar to below.  Don't bother with the non 64 bit version.
+
+> +		return tmp / (gain1 * gain1) / ch0;
+> +
+> +	helper = gain1 * gain1;
+> +	if (helper > ch0) {
+> +		do_div(helper64, helper);
+> +
+> +		return gain_mul_div_helper(helper64, gain0, ch0);
+> +	}
+> +
+> +	do_div(helper64, ch0);
+> +
+> +	return gain_mul_div_helper(helper64, gain0, helper);
+> +}
+> +
+> +static u64 bu27034_fixp_calc_t23(unsigned int coeff, unsigned int ch,
+> +				 unsigned int gain)
+> +{
+> +	unsigned int helper;
+> +	u64 helper64;
+> +
+> +	helper64 = (u64)coeff * (u64)ch;
+> +	helper = coeff * ch;
+> +
+> +	if (helper == helper64)
+> +		return helper / gain;
+> +
+> +	do_div(helper64, gain);
+> +
+> +	return helper64;
+
+I suspect that this is a premature bit of optimization so I'd just
+do it in 64 bits always.
+
+Also, if you did want to do this, check_mul_overflow() etc would help.
+(linux/overflow.h)
 
 
-Should we better set the tx.state in the error case?
+> +}
 
-if (err) {
-	so->tx.state = ISOTP_IDLE;
-	goto err_out;
-}
+> +
+> +static int bu27034_calc_mlux(struct bu27034_data *data, __le16 *res, int *val)
+> +{
+> +	unsigned int gain0, gain1, meastime;
+> +	unsigned int d1_d0_ratio_scaled;
+> +	u16  ch0, ch1;
 
-Best regards,
-Oliver
+Stray space after the u16
 
-(..)
+> +	u64 helper64;
+> +	int ret;
+> +
+> +	/*
+> +	 * We return 0 luxes if calculation fails. This should be reasonably
 
-> 
-> diff --git a/net/can/isotp.c b/net/can/isotp.c
-> index 9bc344851704..4630fad13803 100644
-> --- a/net/can/isotp.c
-> +++ b/net/can/isotp.c
-> @@ -918,7 +918,6 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
->   {
->   	struct sock *sk = sock->sk;
->   	struct isotp_sock *so = isotp_sk(sk);
-> -	u32 old_state = so->tx.state;
->   	struct sk_buff *skb;
->   	struct net_device *dev;
->   	struct canfd_frame *cf;
-> @@ -1084,9 +1083,8 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
->   
->   err_out_drop:
->   	/* drop this PDU and unlock a potential wait queue */
-> -	old_state = ISOTP_IDLE;
-> +	so->tx.state = ISOTP_IDLE;
->   err_out:
-> -	so->tx.state = old_state;
->   	if (so->tx.state == ISOTP_IDLE)
->   		wake_up_interruptible(&so->wait);
->   
+0 lux 
+(I think)
+
+> +	 * easy to spot from the buffers especially if raw-data channels show
+> +	 * valid values
+> +	 */
