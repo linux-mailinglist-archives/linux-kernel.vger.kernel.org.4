@@ -2,113 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2E76C9640
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBDA6C9643
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjCZPtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 11:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S229771AbjCZPyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 11:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCZPtu (ORCPT
+        with ESMTP id S232377AbjCZPyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 11:49:50 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF5E6180;
-        Sun, 26 Mar 2023 08:49:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679845789; x=1711381789;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OaKvVJRvcWuHtVOvJttpA3gJz8/VcByd+7+i/AbP3iw=;
-  b=gnmcxmNCU+l6kmkRZBAFrrsgVTRUnDDhClFqYe4hIoSKRhmA0dFWhJVR
-   VlyFtukXm8xgHk1QpPZ1eVjFk1/JUHPk3uESTrQEG59P2caCebAFHSIjS
-   8K4aHlq3zHLTeJ3a1hJAL6Iirghaa8fQqaNoGfixb6ynEbdbO+Itjz8ii
-   lXjFWRey1kgUADOEtxmceudN30Z9MFMbJYrE9a7cqUzkkC7z2/OZvE0CW
-   iEKrzmqfa+NEmeO0DYtB7Z9cG9yi6iMoTqJdP0yIJIeql2m4HLNIif4U6
-   1i3s141Yt00KuPgdf/fhkGHKykgvANhM7rNQs4ilLCgZ1S/XQrDxbpkPx
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="319755938"
-X-IronPort-AV: E=Sophos;i="5.98,292,1673942400"; 
-   d="scan'208";a="319755938"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 08:49:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="807231038"
-X-IronPort-AV: E=Sophos;i="5.98,292,1673942400"; 
-   d="scan'208";a="807231038"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 26 Mar 2023 08:49:45 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pgScq-000HDn-1x;
-        Sun, 26 Mar 2023 15:49:44 +0000
-Date:   Sun, 26 Mar 2023 23:49:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 2/6] mfd: Add support for the Lantiq PEF2256 framer
-Message-ID: <202303262358.vWU2dypT-lkp@intel.com>
-References: <20230322134654.219957-3-herve.codina@bootlin.com>
+        Sun, 26 Mar 2023 11:54:32 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC1A4222
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:54:30 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id r11so26220300edd.5
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:54:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679846069;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=v4IC+z7HRU8Cc1CVtVPGm+haTyIr4zX0D35b4yR5tds=;
+        b=Ph6Y/hVqttSfYXlBGzcTialeVGkVtWDDKWN8favtE6wSfsbYgDYRVvWZGr8nPVZS7l
+         vwX7rnAwVjIYAUKC6QRsNlKuJGlSDQVzFiwFapkg5H3xpgKuVFQLZi7OpCh6lbthpIaS
+         TDZwsmT2ZbhrKY3vSjJkTams4iKKCaokAMaYYHub2/xpDuMiCffg4o3MwCkUKj/U/saz
+         s+v2EP1oxdndnbH5duBVTGyDcoN1QiS4Him4qTYabhI7h9m6GPSoChvwQtwzrt1ex/NJ
+         L3ysUgjwZezKbFNnb4lPgMUD/7Xk1PsGffs+g4mZLY2jNfNEYiAbmEi7neKx7M4mYwiM
+         S5yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679846069;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v4IC+z7HRU8Cc1CVtVPGm+haTyIr4zX0D35b4yR5tds=;
+        b=s96J/2lftOOyI6GRgyF3sROAavnaCob9qQxxmilKgEnsbe2OkjDoOjS307qfrRB/r5
+         +W0EpNNpF/jA7usLhjHmrXoEt3nE0bWCXmXqCGcuo2eBMNQudq3d4lO3RUwi/nnHTc6F
+         nAj+Z8o16Qz9rUvBhBqEHY2Q18C4mRAXqtnZVwHbgiLobCZneeHNvk21sUo9JBtOYMWR
+         zGeqBXTQJpeqUVdMiK9sMSLAWA79yirfFpV0LnNhSIunoikHFmRMxgwEZFEd9ANSzKE5
+         bpuRuzr0t3e/gn/8YTYY2GTn9xIkErXa/BFXmRH/H+E+5EQutdpSa3g5tu2EoAHpiZfK
+         sAPw==
+X-Gm-Message-State: AAQBX9esW2zBKRShTQ8IPXaRQTJE/VV3FFKTEaZW9BdvumACtZjLc2aP
+        9jS7S0Q2XlZG+CW9HpGwiOgzcG0DwWGDx+6loAs=
+X-Google-Smtp-Source: AKy350b350FJxZeh2eoZVFcQ0aCc50sB3xZPWqjZmfZflxoA8LKai5AuCdZB+dqInD4yF2PChjC40g==
+X-Received: by 2002:aa7:d806:0:b0:501:d43e:d1e6 with SMTP id v6-20020aa7d806000000b00501d43ed1e6mr9921345edq.4.1679846069161;
+        Sun, 26 Mar 2023 08:54:29 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:eca3:3b8f:823b:2669])
+        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004af62273b66sm13506742edj.18.2023.03.26.08.54.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 08:54:28 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Michael Srba <Michael.Srba@seznam.cz>,
+        Harigovindan P <harigovi@codeaurora.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/6] dt-bindings: display: panel-simple: merge Innolux p120zdg-bf1
+Date:   Sun, 26 Mar 2023 17:54:20 +0200
+Message-Id: <20230326155425.91181-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322134654.219957-3-herve.codina@bootlin.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herve,
+There is nothing special in Innolux p120zdg-bf1 panel, so just like
+other Innolux panels it can be made part of panel-simple.
 
-I love your patch! Yet something to improve:
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../display/panel/innolux,p120zdg-bf1.yaml    | 43 -------------------
+ .../bindings/display/panel/panel-simple.yaml  |  2 +
+ 2 files changed, 2 insertions(+), 43 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/panel/innolux,p120zdg-bf1.yaml
 
-[auto build test ERROR on lee-mfd/for-mfd-next]
-[also build test ERROR on broonie-sound/for-next lee-leds/for-leds-next robh/for-next linus/master v6.3-rc3 next-20230324]
-[cannot apply to lee-mfd/for-mfd-fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Herve-Codina/dt-bindings-mfd-Add-the-Lantiq-PEF2256-E1-T1-J1-framer/20230322-214827
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/20230322134654.219957-3-herve.codina%40bootlin.com
-patch subject: [PATCH v3 2/6] mfd: Add support for the Lantiq PEF2256 framer
-config: parisc-randconfig-p001-20230326 (https://download.01.org/0day-ci/archive/20230326/202303262358.vWU2dypT-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/53e683ee1cad96a898f7fed03f88a3898e8dcd15
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Herve-Codina/dt-bindings-mfd-Add-the-Lantiq-PEF2256-E1-T1-J1-framer/20230322-214827
-        git checkout 53e683ee1cad96a898f7fed03f88a3898e8dcd15
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303262358.vWU2dypT-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   hppa-linux-ld: drivers/mfd/pef2256.o: in function `.LC58':
->> pef2256.c:(.rodata.cst4+0x54): undefined reference to `pinconf_generic_dt_node_to_map'
-
+diff --git a/Documentation/devicetree/bindings/display/panel/innolux,p120zdg-bf1.yaml b/Documentation/devicetree/bindings/display/panel/innolux,p120zdg-bf1.yaml
+deleted file mode 100644
+index 243dac2416f3..000000000000
+--- a/Documentation/devicetree/bindings/display/panel/innolux,p120zdg-bf1.yaml
++++ /dev/null
+@@ -1,43 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/display/panel/innolux,p120zdg-bf1.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: Innolux P120ZDG-BF1 12.02 inch eDP 2K display panel
+-
+-maintainers:
+-  - Sandeep Panda <spanda@codeaurora.org>
+-  - Douglas Anderson <dianders@chromium.org>
+-
+-allOf:
+-  - $ref: panel-common.yaml#
+-
+-properties:
+-  compatible:
+-    const: innolux,p120zdg-bf1
+-
+-  enable-gpios: true
+-  power-supply: true
+-  backlight: true
+-  no-hpd: true
+-
+-required:
+-  - compatible
+-  - power-supply
+-
+-additionalProperties: false
+-
+-examples:
+-  - |
+-    #include <dt-bindings/gpio/gpio.h>
+-
+-    panel_edp: panel-edp {
+-        compatible = "innolux,p120zdg-bf1";
+-        enable-gpios = <&msmgpio 31 GPIO_ACTIVE_LOW>;
+-        power-supply = <&pm8916_l2>;
+-        backlight = <&backlight>;
+-        no-hpd;
+-    };
+-
+-...
+diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+index 18241f4051d2..01560fe226dd 100644
+--- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
++++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+@@ -192,6 +192,8 @@ properties:
+       - innolux,n125hce-gn1
+         # InnoLux 15.6" WXGA TFT LCD panel
+       - innolux,n156bge-l21
++        # Innolux P120ZDG-BF1 12.02 inch eDP 2K display panel
++      - innolux,p120zdg-bf1
+         # Innolux Corporation 7.0" WSVGA (1024x600) TFT LCD panel
+       - innolux,zj070na-01p
+         # King & Display KD116N21-30NV-A010 eDP TFT LCD panel
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
