@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09B86C937F
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 11:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D45576C9373
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 11:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbjCZJXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 05:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
+        id S232022AbjCZJWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 05:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbjCZJWv (ORCPT
+        with ESMTP id S231861AbjCZJWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 05:22:51 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C1EA271;
-        Sun, 26 Mar 2023 02:22:30 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id ga7so5890736qtb.2;
-        Sun, 26 Mar 2023 02:22:30 -0700 (PDT)
+        Sun, 26 Mar 2023 05:22:24 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B80C93F7
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 02:22:23 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id x3so24199381edb.10
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 02:22:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679822548;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O7x7mlObk0mq6o5G4acCq3J/Q3Teazds0AbiZGRGfrs=;
-        b=jH3+gOe0IubDUQiVblq9CC8G+sjt1vhQU+uyAo7rRHDtbXyRUrTQxeklq+IOr53MbF
-         +JYKWg1fZnDvfmrwc+gsil+GBkuqcn2x09nVlYt0LXju/gaIOUm3TRiZfMcRNEKDLmY2
-         sHZTTsTM7IQQuu7BP0hWxOYAsdg1RiD4HM8lNSWRZc2DiOY9zbVyy4viinugjDtW5OeL
-         HBXxrunxHvVUw08WRg41zi+FecGZpIJ+EJTWpWdbOYwQ06eKSTp0a7ERHLAkglIRyWBf
-         MZrumVFQ/Gt3TqWo47rtHv7aWHQZXeacEhaVZi2bRBHmgiXq+ykd/ZtjMXYCTsaTzyvz
-         vKZA==
+        d=linaro.org; s=google; t=1679822542;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5rXoV9ZT/umKedJfUsdr0K9co5AscuT4z2LTYT9lVJE=;
+        b=hYCTtRTQIwtNTBhlkzPyuFFAPazi45fgs2gh50HZ0mVZH3WeBAIUhsM3JvkTriUX0q
+         gEs+Hc+UXyBAr57Mwt+AwZ6i+yvzBLvDvMgjpyIaDswBAncOimGd8ldcdooTX3qw6spO
+         AXymcTg1sLL/T1Jc19eSPapIJIVObgxB8bNp0+yNwOJGdsCKSAvGFpY/XVeYI8SnrMSH
+         R0sb/nvRVPxrHg2OGTrG2zQ22HpPzaDqi2dMh9K10MVzLqo8UJGlqJzzp+xtVhyNI4CY
+         higkRFpYE6RvTrHWqo5f9qUEtW/HlImSaYrJAbSt8hW0r5ePGrZXl0aQCav2zEOgJuCW
+         yccw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679822548;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O7x7mlObk0mq6o5G4acCq3J/Q3Teazds0AbiZGRGfrs=;
-        b=3tSr0Pb7PiLPyRM8+r+jfKfjhskfqOO1gQjF7l55tQ4NxIyYAPsmqqjiHJ5lfEoRum
-         C5ARxjqq8PpAIixfa/P8Koh7UuADOzIUk3w3Ri7thPID4G889z8Myl/7f6Eli0f9L7xE
-         EwmFcuBL75X0hiAsH2f/xEUGIClYVhDYIYDl+29uJYJxnbsucCDuOI1Bh/BkpVAIjEJP
-         ZPVDaEoIrstcu39qAd8hZ/TffdaC/s0ikBvu8SQKRd7jzJ5vBAmUt7OytvW1AFDHBmuV
-         4VqW51gHKa1cC3UWAJSdZH8fStRT6yFykSOL8tCoin/o6vqyu9dByljSVIWlKRxAr2Z5
-         r8Ew==
-X-Gm-Message-State: AAQBX9fsiALRR3nnyX/VR6BN8BgizeZecIbj8xwaNdq5JsmQXP28Fgno
-        NBJePNfP2vLooIUNOSHNMEs=
-X-Google-Smtp-Source: AKy350ZWZWKF7vBQ3o37aJcdEl7aHQL8ZhsChADAhPyug9b+hHQnb7kOo9oRsLXo54i0B5djN2emww==
-X-Received: by 2002:a05:622a:494:b0:3e4:e5bf:a24c with SMTP id p20-20020a05622a049400b003e4e5bfa24cmr1497323qtx.62.1679822548595;
-        Sun, 26 Mar 2023 02:22:28 -0700 (PDT)
-Received: from vultr.guest ([2001:19f0:1000:1a1f:5400:4ff:fe5e:1d32])
-        by smtp.gmail.com with ESMTPSA id y5-20020ac87085000000b003e014845d9esm10257987qto.74.2023.03.26.02.22.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 02:22:28 -0700 (PDT)
-From:   Yafang Shao <laoar.shao@gmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yafang Shao <laoar.shao@gmail.com>
-Subject: [RFC PATCH bpf-next 13/13] selftests/bpf: Add selftest for bpf namespace
-Date:   Sun, 26 Mar 2023 09:22:08 +0000
-Message-Id: <20230326092208.13613-14-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230326092208.13613-1-laoar.shao@gmail.com>
-References: <20230326092208.13613-1-laoar.shao@gmail.com>
+        d=1e100.net; s=20210112; t=1679822542;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5rXoV9ZT/umKedJfUsdr0K9co5AscuT4z2LTYT9lVJE=;
+        b=BvUAzp2lG3vXk8FDa4bzje8uZ2YpF1r4Tz08rv0M3BoT+NNkTwcU2bFiSvM46NUzEx
+         KOWUEXyekvgleQOkqNjmjP7lk2pSfBK6lmzmcuzQSeUPbSwQPgu7WHyfYobZY5TOPzZ1
+         QPIqhQMDbqEuX53gZKJS7QGOmW1XDxCrecq06hKDemLLMZVrdHXPwpsLvD0OWk8j0pOc
+         EqEMXFAVvtJFapULChM2BQN9AyrU3NBpIxkcLswNxWnNRIwagDTWhfWw/mXsCKJNENZX
+         FXoHTyPRfn0bXhs5lFLUpIxZEi4pCvXeCAhrdP0awApIkru6GGc9vYtnZqlfg7IgEZxH
+         2I4A==
+X-Gm-Message-State: AAQBX9dCW71cAqeoFKnXN2+A7FN4U7OpiNTfuNiYXKi9IS9Klp8tDB8T
+        VPob03bvvwBRGPzmSIXw8UmF2Q==
+X-Google-Smtp-Source: AKy350ZEeKY6w6K1zzH/dW/xivR15vW3hQd6CLYZegluO5Sbjosmz2HaeiqG5cUr1ggyvwzbv6IOqQ==
+X-Received: by 2002:aa7:c7cf:0:b0:500:50f6:dd27 with SMTP id o15-20020aa7c7cf000000b0050050f6dd27mr7533927eds.26.1679822542121;
+        Sun, 26 Mar 2023 02:22:22 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:6cac:926d:a4f2:aa09? ([2a02:810d:15c0:828:6cac:926d:a4f2:aa09])
+        by smtp.gmail.com with ESMTPSA id xi3-20020a170906dac300b009445d6213c0sm308958ejb.75.2023.03.26.02.22.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Mar 2023 02:22:21 -0700 (PDT)
+Message-ID: <c6429b89-bdf1-a601-7cc2-a6cbb566fecd@linaro.org>
+Date:   Sun, 26 Mar 2023 11:22:20 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] arm64: dts: qcom: sdm630: move DSI opp-table out of
+ soc node
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230326091605.18908-1-krzysztof.kozlowski@linaro.org>
+ <CAA8EJpqR-QisyWEHE83oFbXt8wUcn2Ofd4W6UwFmkYzGD18N9Q@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAA8EJpqR-QisyWEHE83oFbXt8wUcn2Ofd4W6UwFmkYzGD18N9Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,118 +82,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A simple test case is added for the newly introduced bpf namespcae.
+On 26/03/2023 11:21, Dmitry Baryshkov wrote:
+> On Sun, 26 Mar 2023 at 12:16, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> The soc node is supposed to have only device nodes with MMIO addresses,
+>> so move the DSI OPP out of it (it is used also by second DSI1 on
+>> SDM660):
+> 
+> This raises a question: would it make sense to add /opps to handle all
+> opp tables?
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
----
- tools/testing/selftests/bpf/Makefile     |  3 +-
- tools/testing/selftests/bpf/test_bpfns.c | 76 ++++++++++++++++++++++++++++++++
- 2 files changed, 78 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/test_bpfns.c
+We didn't add it to any other cases like this (and we already fixed all
+other boards), so why now? We can but it is a bit late for it.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 4a8ef11..55f0aeb 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -40,7 +40,7 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
- 	test_sock test_sockmap get_cgroup_id_user \
- 	test_cgroup_storage \
- 	test_tcpnotify_user test_sysctl \
--	test_progs-no_alu32
-+	test_progs-no_alu32 test_bpfns
- 
- # Also test bpf-gcc, if present
- ifneq ($(BPF_GCC),)
-@@ -255,6 +255,7 @@ $(OUTPUT)/flow_dissector_load: $(TESTING_HELPERS)
- $(OUTPUT)/test_maps: $(TESTING_HELPERS)
- $(OUTPUT)/test_verifier: $(TESTING_HELPERS) $(CAP_HELPERS) $(UNPRIV_HELPERS)
- $(OUTPUT)/xsk.o: $(BPFOBJ)
-+$(OUTPUT)/test_bpfns: $(TESTING_HELPERS)
- 
- BPFTOOL ?= $(DEFAULT_BPFTOOL)
- $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
-diff --git a/tools/testing/selftests/bpf/test_bpfns.c b/tools/testing/selftests/bpf/test_bpfns.c
-new file mode 100644
-index 0000000..7baebe2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_bpfns.c
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#ifndef _GNU_SOURCE
-+#define _GNU_SOURCE 1
-+#endif
-+#include <unistd.h>
-+#include <errno.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <assert.h>
-+#include <sys/syscall.h>
-+#include <sys/wait.h>
-+#include <linux/sched.h>
-+
-+#include <bpf/bpf.h>
-+#include <bpf/libbpf.h>
-+
-+static int create_bpf_map(const char *name)
-+{
-+	static struct bpf_map_create_opts map_opts = {
-+		.sz = sizeof(map_opts),
-+	};
-+	unsigned int value;
-+	unsigned int key;
-+	int map_fd;
-+
-+	map_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, name, sizeof(key),
-+							sizeof(value), 1, &map_opts);
-+	if (map_fd < 0)
-+		fprintf(stderr, "%s - Failed to create map\n", strerror(errno));
-+	return map_fd;
-+}
-+
-+
-+int main(int argc, char *argv[])
-+{
-+	struct bpf_map_info info = {};
-+	__u32 info_len = sizeof(info);
-+	struct clone_args args = {
-+		.flags = 0x400000000ULL,	/* CLONE_NEWBPF */
-+		.exit_signal = SIGCHLD,
-+	};
-+	int map_fd, child_map_fd;
-+	pid_t pid;
-+
-+	/* Create a map in init bpf namespace. */
-+	map_fd = create_bpf_map("map_in_init");
-+	if (map_fd < 0)
-+		exit(EXIT_FAILURE);
-+	pid = syscall(__NR_clone3, &args, sizeof(struct clone_args));
-+	if (pid < 0) {
-+		fprintf(stderr, "%s - Failed to create new process\n", strerror(errno));
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (pid == 0) {
-+		struct bpf_map_info info = {};
-+
-+		/* In a new bpf namespace, it is the first map. */
-+		child_map_fd = create_bpf_map("map_in_bpfns");
-+		if (child_map_fd < 0)
-+			exit(EXIT_FAILURE);
-+		bpf_obj_get_info_by_fd(child_map_fd, &info, &info_len);
-+		assert(info.id == 1);
-+		exit(EXIT_SUCCESS);
-+	}
-+
-+	if (waitpid(pid, NULL, 0) != pid) {
-+		fprintf(stderr, "Failed to wait on child process\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	return 0;
-+}
--- 
-1.8.3.1
+Best regards,
+Krzysztof
 
