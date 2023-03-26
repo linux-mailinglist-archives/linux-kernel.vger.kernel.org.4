@@ -2,132 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9520C6C92FF
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 09:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E63C6C9301
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 09:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjCZHlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 03:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
+        id S230168AbjCZHrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 03:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCZHlG (ORCPT
+        with ESMTP id S229523AbjCZHrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 03:41:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E2C868F
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 00:40:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679816417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=51I4tYLSmoNnjzd854BdOPa0P0UjuvWyL9QlaGHcgJs=;
-        b=A7TBBCbKqqqe7GCgCyiVkZ54pHQ3vfGqfGLUApUBr0w889hWlTT0O8TODkY9JPyIcUdixG
-        Y0LDb0wS6W4atnG2oRnncGgAyHZN0F3GCFp5YKIIfrFmP4MP6BoVkBOItrwd2o6D9Ebbki
-        Orxs5xW3Jy4zQms9Fn+ROVrM2b4nZF4=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-654-YwJN95xtMsWytGuFSlU1Zg-1; Sun, 26 Mar 2023 03:40:16 -0400
-X-MC-Unique: YwJN95xtMsWytGuFSlU1Zg-1
-Received: by mail-qk1-f198.google.com with SMTP id r70-20020a374449000000b00746c31401f0so2576958qka.6
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 00:40:16 -0700 (PDT)
+        Sun, 26 Mar 2023 03:47:17 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8F35FF0;
+        Sun, 26 Mar 2023 00:47:15 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id j13so5096764pjd.1;
+        Sun, 26 Mar 2023 00:47:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679816835;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UgjlposdC6qH3DVEdWJ2rkdbbJFgyNplJNPG5hJZRIg=;
+        b=KMLANcw8P5giPzb0qEEgXCnmR7F6MvQ7jvGKake+EBnX3PJ8ctxFcAlCFNGXw2cmh5
+         4erJHPDs+IHJgNXcRHhBtMhYh3+QdUfdGODe9GnfyVIM38aJl8IAUs8qQCC2K5O9ZMir
+         e8WH1moC3DmCcZ1n5ZQJXR4tOhCinLLN7FdQODPPgpISH5gyu1Yy6z8leBeX/pdPWbIv
+         M44eo1EFHdzI63v46YImnyIIE+fPoQInKyxL6MSctcUkmGOXsHrDLkmaQXaSHyNmJWEj
+         nV/5UgRGRkRpJpJf4Bc8NJdt3vR57mLNmATJF+Hfm4DMefl0o88duBYmFheWyxKolY66
+         eB8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679816413;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:date
-         :cc:to:from:subject:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=51I4tYLSmoNnjzd854BdOPa0P0UjuvWyL9QlaGHcgJs=;
-        b=JSCRMb/E02vQUGb77uoODoLKDgjpEI6bWtVp8VGxe2IXeGwBsutKlvhHffzT8e7D0W
-         W7W3NVrK9dv7YK9i6gOR1DOwa1GI7bcQPkxGMOlmGy8RaLvOOLygQdtYXV/c40INnfXP
-         J402P0bZh7wCXMDycb/2f0lpjRB7XNgUxDiwUV1D5bsSm8MHOoQdt2i29VqC+/SX43iH
-         9Re0nHkpmNC/WiHYOrRyTxJn1sGnjlFbWBuLGVoAny9B3N8n8aI4Zi8fAodWFJnYV/i0
-         MM5iqUbvBrXk9e3aBQ7aj2k6H9QdNP5URVmm7orHtNDvbnObulc77mjqahAt/lKkon+D
-         SEag==
-X-Gm-Message-State: AO0yUKUZ5DXlkv1+jJ+/kUw47WolpG1HwLHmHip3E5FAeXwgBP9zkoeW
-        XslsgjzPqSbiEir9HBJDBpnxDMomjs7vwQI+J5tnkjmoEeqAvYCy1uritcbwNcMsJMxeJ68qtxo
-        yNEu/YodJ3EUDMZBR/vTl8wMV
-X-Received: by 2002:ac8:5702:0:b0:3e0:8c58:1dd with SMTP id 2-20020ac85702000000b003e08c5801ddmr14893685qtw.55.1679816413601;
-        Sun, 26 Mar 2023 00:40:13 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/Tp4HbzbNknw4GmE88t4aB2nhlJ6hhgfENJoY/McVDZZctF2I+8vP2b95SwLcpq5wNnBRwcQ==
-X-Received: by 2002:ac8:5702:0:b0:3e0:8c58:1dd with SMTP id 2-20020ac85702000000b003e08c5801ddmr14893667qtw.55.1679816413373;
-        Sun, 26 Mar 2023 00:40:13 -0700 (PDT)
-Received: from ypodemsk.tlv.csb (IGLD-84-229-251-248.inter.net.il. [84.229.251.248])
-        by smtp.gmail.com with ESMTPSA id u17-20020ac87511000000b003e38f8d564fsm581391qtq.66.2023.03.26.00.40.10
+        d=1e100.net; s=20210112; t=1679816835;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UgjlposdC6qH3DVEdWJ2rkdbbJFgyNplJNPG5hJZRIg=;
+        b=c96RWSX69zl5J3YcGo89PdOv9nOeLBeRHE4c2tnBONWsQqRjd4EP8ysLpXgI1uo/sM
+         9kKmPgJgCtNMvaOAEPDAlqc0rGZNWfNWgy3oUz+xkS2+ua/jvHY7RdWhM6Nz1uPiITDH
+         /7/JIjkv1hwi2IpxXpI8qFaE8pwn4uSlzk3Ow/GH5kzSM/vygJBBKRo5oglDdDb6BQo3
+         HzCg40Xz3ZoMNUT7OzpUDABNRMkUqQMRWMvlUs9nYkYkmJt9iXNDdKE/ejVRMmRbh4mT
+         mdw/PWOj6zWgho3LOKukvhXVcdoF+UO+A9m74qNc9eZRrOz9fLFGOBrIW3/YQIkJ3ZvG
+         NKyQ==
+X-Gm-Message-State: AAQBX9c3v8jt4KXFOVvtEkqT+Z2CSNZhCDJrDuyd0sA0vLIDyvXKngJ5
+        x0wXFgwq9L4b4CYlmexEih/hEHFjxFPsUA==
+X-Google-Smtp-Source: AKy350Y5e6L5dqe5n1R1vPcdJxRtE+02TAggx2JfyIZIvkMRyjLD2L32mHZD2go/2Sv/WS6ao1fiLQ==
+X-Received: by 2002:a17:903:1d1:b0:1a1:ad5e:bdbb with SMTP id e17-20020a17090301d100b001a1ad5ebdbbmr10386719plh.36.1679816835209;
+        Sun, 26 Mar 2023 00:47:15 -0700 (PDT)
+Received: from debian.me (subs09a-223-255-225-74.three.co.id. [223.255.225.74])
+        by smtp.gmail.com with ESMTPSA id v3-20020a170902b7c300b0019fcece6847sm16977222plz.227.2023.03.26.00.47.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 00:40:12 -0700 (PDT)
-Message-ID: <b88b37de44222a67bc5cf22798e84fb178b58725.camel@redhat.com>
-Subject: Re: [PATCH] mm/mmu_gather: send tlb_remove_table_smp_sync IPI only
- to MM CPUs
-From:   ypodemsk@redhat.com
-To:     Will Deacon <will@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, aneesh.kumar@linux.ibm.com,
-        akpm@linux-foundation.org, npiggin@gmail.com, arnd@arndb.de,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mtosatti@redhat.com,
-        ppandit@redhat.com, alougovs@redhat.com,
-        David Hildenbrand <david@redhat.com>
-Date:   Sun, 26 Mar 2023 10:40:08 +0300
-In-Reply-To: <20230324151259.GC27199@willie-the-truck>
-References: <20230312080945.14171-1-ypodemsk@redhat.com>
-         <20230320084902.GE2194297@hirez.programming.kicks-ass.net>
-         <a6ee41b39f3f516aab0f7fb327620cb2a43eeaca.camel@redhat.com>
-         <20230324151259.GC27199@willie-the-truck>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        Sun, 26 Mar 2023 00:47:14 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id B3CC3105D9C; Sun, 26 Mar 2023 14:47:11 +0700 (WIB)
+Date:   Sun, 26 Mar 2023 14:47:11 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Shinu Chandran <s4superuser@gmail.com>, richardcochran@gmail.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ptp: ptp_clock: Fix coding style issues
+Message-ID: <ZB/4f0H0y8COVR90@debian.me>
+References: <20230325163135.2431367-1-s4superuser@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="J7kkaICAQb7tt5yH"
+Content-Disposition: inline
+In-Reply-To: <20230325163135.2431367-1-s4superuser@gmail.com>
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-03-24 at 15:13 +0000, Will Deacon wrote:
-> On Wed, Mar 22, 2023 at 04:11:44PM +0200, ypodemsk@redhat.com wrote:
-> > On Mon, 2023-03-20 at 09:49 +0100, Peter Zijlstra wrote:
-> > > On Sun, Mar 12, 2023 at 10:09:45AM +0200, Yair Podemsky wrote:
-> > > > Currently the tlb_remove_table_smp_sync IPI is sent to all CPUs
-> > > > indiscriminately, this causes unnecessary work and delays
-> > > > notable
-> > > > in
-> > > > real-time use-cases and isolated cpus, this patch will limit
-> > > > this
-> > > > IPI to
-> > > > only be sent to cpus referencing the effected mm and are
-> > > > currently
-> > > > in
-> > > > kernel space.
-> > > 
-> > > Did you validate that all architectures for which this is
-> > > relevant
-> > > actually set bits in mm_cpumask() ?
-> > > 
-> > Hi Peter,
-> > Thank you for bringing this to my attention.
-> > I reviewed the architectures using the MMU_GATHER_RCU_TABLE_FREE:
-> > arm, powerpc, s390, sparc and x86 set the bit when switching
-> > process
-> > in.
-> > for arm64 removed set/clear bit in 38d96287504a ("arm64: mm: kill
-> > mm_cpumask usage")
-> > The reason given was that mm_cpumask was not used.
-> > Given that we now have a use for it, I will add a patch to revert.
-> 
-> Maintaining the mask is also not free, so I'm not keen on adding it
-> back
-> unless there's a net win.
-> 
-> Will
-> 
-How about adding a Kconfig to mark which architectures set/use the
-mm_cpumask?
-This will allow us to use the mm_cpumask on architectures that support
-it, and use acpu_online_mask on those that don't.
-Also make it clear which architectures set the bit for the future.
-Yair
 
+--J7kkaICAQb7tt5yH
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, Mar 25, 2023 at 10:01:35PM +0530, Shinu Chandran wrote:
+> diff --git a/drivers/ptp/ptp_clock.c b/drivers/ptp/ptp_clock.c
+> index 62d4d29e7c05..8fe7f2ce9705 100644
+> --- a/drivers/ptp/ptp_clock.c
+> +++ b/drivers/ptp/ptp_clock.c
+> @@ -129,6 +129,7 @@ static int ptp_clock_adjtime(struct posix_clock *pc, =
+struct __kernel_timex *tx)
+>  		err =3D ops->adjtime(ops, delta);
+>  	} else if (tx->modes & ADJ_FREQUENCY) {
+>  		long ppb =3D scaled_ppm_to_ppb(tx->freq);
+> +
+>  		if (ppb > ops->max_adj || ppb < -ops->max_adj)
+>  			return -ERANGE;
+>  		err =3D ops->adjfine(ops, tx->freq);
+> @@ -278,11 +279,13 @@ struct ptp_clock *ptp_clock_register(struct ptp_clo=
+ck_info *info,
+>  	/* Register a new PPS source. */
+>  	if (info->pps) {
+>  		struct pps_source_info pps;
+> +
+>  		memset(&pps, 0, sizeof(pps));
+>  		snprintf(pps.name, PPS_MAX_NAME_LEN, "ptp%d", index);
+>  		pps.mode =3D PTP_PPS_MODE;
+>  		pps.owner =3D info->owner;
+>  		ptp->pps_source =3D pps_register_source(&pps, PTP_PPS_DEFAULTS);
+> +
+>  		if (IS_ERR(ptp->pps_source)) {
+>  			err =3D PTR_ERR(ptp->pps_source);
+>  			pr_err("failed to register pps source\n");
+> @@ -347,9 +350,8 @@ static int unregister_vclock(struct device *dev, void=
+ *data)
+> =20
+>  int ptp_clock_unregister(struct ptp_clock *ptp)
+>  {
+> -	if (ptp_vclock_in_use(ptp)) {
+> +	if (ptp_vclock_in_use(ptp))
+>  		device_for_each_child(&ptp->dev, NULL, unregister_vclock);
+> -	}
+> =20
+>  	ptp->defunct =3D 1;
+>  	wake_up_interruptible(&ptp->tsev_wq);
+
+Two style fixes in one patch (blank lines and braces). Please split
+them into each individual patches in a series.
+
+But hey, shouldn't checkpatch complain about one-line brace block?
+
+And also, the patch subject should have been [PATCH net-next]
+(targetting next Linux release) or [PATCH net] (targetting current
+release).
+
+Thanks!
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--J7kkaICAQb7tt5yH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZB/4eAAKCRD2uYlJVVFO
+o91KAQCbj9ofMdcUyyoEeRyLASN+Rwy62tmpA5I0nI5kLUJwrQD/U7UBNxEodRtb
+hMXwkAvhYJLDj6JLH7VE4VZqhQIUMQ0=
+=dDGy
+-----END PGP SIGNATURE-----
+
+--J7kkaICAQb7tt5yH--
