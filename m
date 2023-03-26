@@ -2,161 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96F86C9360
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 11:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7C96C9367
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 11:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbjCZJVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 05:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
+        id S231915AbjCZJW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 05:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjCZJVV (ORCPT
+        with ESMTP id S229655AbjCZJWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 05:21:21 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8FD9032
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 02:21:16 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id p15so7000081ybl.9
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 02:21:16 -0700 (PDT)
+        Sun, 26 Mar 2023 05:22:20 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C2F5BB1;
+        Sun, 26 Mar 2023 02:22:19 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id t19so5854847qta.12;
+        Sun, 26 Mar 2023 02:22:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679822476;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xOnVbpgAPSDe169IIlms5nj4puE9UEWWgE32HX0VB9g=;
-        b=gGf1Fwte13QDusOygp9PbopJLNGKIKNJ0nWg5UkauwignubnXFrNW4xUuQb/gzw1jY
-         teyqJ99IvMbYWIXCSI/n57zh4PT76t1Qev7ON7KWd6V3aUSvGgs2QuHGLtI6xMfLhCCI
-         +z4NdpdtcNdeEbuSAOs9C/WYzuinPxc/ssfHIIX0/eROQEm7Y5a2wMkABvM6ozyTYeTU
-         I97dkSsbVv7P4uHCeoocI1SjfDIfhMuOa1G0mVB6lxyZOTSKtHrwd13A9MRBTFEXIOdJ
-         owZ7740yxP82b5xSZDzT4Sggl/cgY79NoX+gQNDV/2YYiJPVN/5kkLsFSJwLSeJMiLuD
-         I+pw==
+        d=gmail.com; s=20210112; t=1679822537;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4JUY0vHvLERzzHWhNq8Rp87qcHqbkDVGp191/I1Fx0o=;
+        b=hxPGVTILocq4nVaMiPMZ+SChKdyPTIUO2eHI7YCoUEHkOB5mK5TxFtSs1jCKOUPltB
+         xykIzzPNFliOyqGx5MZoG/R2wB4+OgBiBgr9CYJAKiXmBJMNC08/+X8naNgmlbkhbPgy
+         3KplZNvj6cImdSZ72dAZGR7JS/GvIFsOkBoQp5umvFqDz2VMDNUS8FU6OTfyGfahpeBf
+         UsaKolEb9DWSuloVPXcVhleg0kUaoKxAhWq78chCp7T/wEx8uZP9JoFw51eUGt00joYz
+         VGx7N7K6YHPOZjUjdiwXPwB9YkKdSmT84qQwDFechghEBJhitGcoLk2vS6ZthdODqDIA
+         Q+0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679822476;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1679822537;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xOnVbpgAPSDe169IIlms5nj4puE9UEWWgE32HX0VB9g=;
-        b=Xx5B/LaxNJP6YKA9GCOsIqE773dpfHHfuzOW1kQrD8SwzQ5WFjMRNNyefPAh7q7u/d
-         DFv02M+a4UEkR7NfzA78HEwIKeM2SoeYI08e429qec7OUbazcqZTycRn7wLxOawAHSot
-         Ny8fR4muJXZECPw5goxBBUmqFLVUxVj7tmzS8i113/JOZhiUB6iYzB3xlkq1L7Ad5ju9
-         Q57MB7cXhMCFC4i40OS0rOKdx/7gEM15OKKAiplIj0MrEFhi9yrLbKi9BjjfhXzxMXdT
-         msz6m2d7/uw06nDxzcEjFtEEx2UMP9bKvQImwBQF2cMYA9xO08ynZfq2m46NtQEljUJt
-         pDAw==
-X-Gm-Message-State: AAQBX9dunC5iUWumO3Ka+f6k3AId90xsoBiFjklbiFQZxqTpun2UQheE
-        NHxGeZAhu+NoYD+GZ+sHCYJy7QvoC2r3Z/qc6MMAkw==
-X-Google-Smtp-Source: AKy350bBDqR5rDMccCu1GiLm+5BccP/mDlcYWK8b/gPB4V0IWRo+4xd+DbgTFrmdpsHsvM8bQx7ZMoAS7Bb0JhkmlzU=
-X-Received: by 2002:a05:6902:102b:b0:b46:4a5e:3651 with SMTP id
- x11-20020a056902102b00b00b464a5e3651mr4818141ybt.9.1679822475624; Sun, 26 Mar
- 2023 02:21:15 -0700 (PDT)
+        bh=4JUY0vHvLERzzHWhNq8Rp87qcHqbkDVGp191/I1Fx0o=;
+        b=WL7xqxtTK2cmtizlZef+TCvGV2o7/PCUVOd4pOI3JuGubXxz9eiTiHFdeB+XQDNvRu
+         gwJ2nPRlk0KFo7TifJHMo/UEQCTe3LLUqNJ+zt5UFv1TOTKKG0lUZnLyA9Y1uR2D7Vhj
+         W8RImHYtp9kq/1uJbwJoSoQ9+miF7SqfpUxwJHyXa3UtYVknjnHZeG5KTZ33F9zP5YsD
+         D0Wzmry2xGZ3+D0c4ag29ZFzVk6mMKQeXBd0X5qX2SAWQ6rRYy/kIozSjq0ZYnlh/k++
+         yCDTyBy+CEATlFNfyCby1AyJxuwfE7Vrzyz2Oocmp95jsz+1TnCuKf/Vh4RqjHJDNQIf
+         od4w==
+X-Gm-Message-State: AO0yUKWNFdWMkNAN/7pC9+ZK+K2xEM9RWaREzQuCOWaKRjpU7hEh4qjT
+        mQl3qyTal7E3lznB4Ua8JbE=
+X-Google-Smtp-Source: AK7set9TQzi3X0S39HxxJgzr/e5oAq0ITGXEKrPv9HvQXPBphCrYAtfB0F+0ePye1aAQNqV3OvZOvA==
+X-Received: by 2002:a05:622a:1983:b0:3e0:3d65:19d2 with SMTP id u3-20020a05622a198300b003e03d6519d2mr14458863qtc.20.1679822537149;
+        Sun, 26 Mar 2023 02:22:17 -0700 (PDT)
+Received: from vultr.guest ([2001:19f0:1000:1a1f:5400:4ff:fe5e:1d32])
+        by smtp.gmail.com with ESMTPSA id y5-20020ac87085000000b003e014845d9esm10257987qto.74.2023.03.26.02.22.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 02:22:16 -0700 (PDT)
+From:   Yafang Shao <laoar.shao@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yafang Shao <laoar.shao@gmail.com>
+Subject: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace 
+Date:   Sun, 26 Mar 2023 09:21:55 +0000
+Message-Id: <20230326092208.13613-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230326091605.18908-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230326091605.18908-1-krzysztof.kozlowski@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sun, 26 Mar 2023 12:21:04 +0300
-Message-ID: <CAA8EJpqR-QisyWEHE83oFbXt8wUcn2Ofd4W6UwFmkYzGD18N9Q@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: qcom: sdm630: move DSI opp-table out of
- soc node
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 26 Mar 2023 at 12:16, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> The soc node is supposed to have only device nodes with MMIO addresses,
-> so move the DSI OPP out of it (it is used also by second DSI1 on
-> SDM660):
+Currently only CAP_SYS_ADMIN can iterate BPF object IDs and convert IDs
+to FDs, that's intended for BPF's security model[1]. Not only does it
+prevent non-privilidged users from getting other users' bpf program, but
+also it prevents the user from iterating his own bpf objects.
 
-This raises a question: would it make sense to add /opps to handle all
-opp tables?
+In container environment, some users want to run bpf programs in their
+containers. These users can run their bpf programs under CAP_BPF and
+some other specific CAPs, but they can't inspect their bpf programs in a
+generic way. For example, the bpftool can't be used as it requires
+CAP_SYS_ADMIN. That is very inconvenient.
 
->
->   sda660-inforce-ifc6560.dtb: soc: opp-table-dsi: {'compatible': ['operating-points-v2'], ... should not be valid under {'type': 'object'}
->     From schema: dtschema/schemas/simple-bus.yaml
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> ---
->
-> Changes since v1:
-> 1. Move the node out of soc. Don't add Konrad's review tag.
-> ---
->  arch/arm64/boot/dts/qcom/sdm630.dtsi | 38 ++++++++++++++--------------
->  1 file changed, 19 insertions(+), 19 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> index 72d9a12b5e9c..b91e423a3cfc 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> @@ -328,6 +328,25 @@ memory@80000000 {
->                 reg = <0x0 0x80000000 0x0 0x0>;
->         };
->
-> +       dsi_opp_table: opp-table-dsi {
-> +               compatible = "operating-points-v2";
-> +
-> +               opp-131250000 {
-> +                       opp-hz = /bits/ 64 <131250000>;
-> +                       required-opps = <&rpmpd_opp_svs>;
-> +               };
-> +
-> +               opp-210000000 {
-> +                       opp-hz = /bits/ 64 <210000000>;
-> +                       required-opps = <&rpmpd_opp_svs_plus>;
-> +               };
-> +
-> +               opp-262500000 {
-> +                       opp-hz = /bits/ 64 <262500000>;
-> +                       required-opps = <&rpmpd_opp_nom>;
-> +               };
-> +       };
-> +
->         pmu {
->                 compatible = "arm,armv8-pmuv3";
->                 interrupts = <GIC_PPI 6 IRQ_TYPE_LEVEL_HIGH>;
-> @@ -1450,25 +1469,6 @@ mmcc: clock-controller@c8c0000 {
->                                         <0>;
->                 };
->
-> -               dsi_opp_table: opp-table-dsi {
-> -                       compatible = "operating-points-v2";
-> -
-> -                       opp-131250000 {
-> -                               opp-hz = /bits/ 64 <131250000>;
-> -                               required-opps = <&rpmpd_opp_svs>;
-> -                       };
-> -
-> -                       opp-210000000 {
-> -                               opp-hz = /bits/ 64 <210000000>;
-> -                               required-opps = <&rpmpd_opp_svs_plus>;
-> -                       };
-> -
-> -                       opp-262500000 {
-> -                               opp-hz = /bits/ 64 <262500000>;
-> -                               required-opps = <&rpmpd_opp_nom>;
-> -                       };
-> -               };
-> -
->                 mdss: display-subsystem@c900000 {
->                         compatible = "qcom,mdss";
->                         reg = <0x0c900000 0x1000>,
-> --
-> 2.34.1
->
+Without CAP_SYS_ADMIN, the only way to get the information of a bpf object
+which is not created by the process itself is with SCM_RIGHTS, that
+requires each processes which created bpf object has to implement a unix
+domain socket to share the fd of a bpf object between different
+processes, that is really trivial and troublesome.
 
+Hence we need a better mechanism to get bpf object info without
+CAP_SYS_ADMIN. 
+
+BPF namespace is introduced in this patchset with an attempt to remove 
+the CAP_SYS_ADMIN requirement. The user can create bpf map, prog and
+link in a specific bpf namespace, then these bpf objects will not be
+visible to the users in a different bpf namespace. But these bpf
+objects are visible to its parent bpf namespace, so the sys admin can 
+still iterate and inspect them.
+
+BPF namespace is similar to PID namespace, and the bpf objects are
+similar to tasks, so BPF namespace is very easy to understand. These
+patchset only implements BPF namespace for bpf map, prog and link. In the
+future we may extend it to other bpf objects like btf, bpffs and etc.
+For example, we can allow some of the BTF objects to be used in
+non-init bpf namespace, then the container user can only trace the
+processes running in his container, but can't get the information of
+tasks running in other containers.
+
+A simple example is introduced into selftests/bpf on how to use the bpf
+namespace.
+
+Putting bpf map, prog and link into bpf namespace is the first step.
+Let's start with it.
+
+[1]. https://lore.kernel.org/bpf/20200513230355.7858-1-alexei.starovoitov@gmail.com/
+
+Yafang Shao (13):
+  fork: New clone3 flag for BPF namespace
+  proc_ns: Extend the field type in struct proc_ns_operations to long
+  bpf: Implement bpf namespace
+  bpf: No need to check if id is 0
+  bpf: Make bpf objects id have the same alloc and free pattern
+  bpf: Helpers to alloc and free object id in bpf namespace
+  bpf: Add bpf helper to get bpf object id
+  bpf: Alloc and free bpf_map id in bpf namespace
+  bpf: Alloc and free bpf_prog id in bpf namespace
+  bpf: Alloc and free bpf_link id in bpf namespace
+  bpf: Allow iterating bpf objects with CAP_BPF in bpf namespace
+  bpf: Use bpf_idr_lock array instead
+  selftests/bpf: Add selftest for bpf namespace
+
+ fs/proc/namespaces.c                      |   4 +
+ include/linux/bpf.h                       |   9 +-
+ include/linux/bpf_namespace.h             |  88 ++++++++++
+ include/linux/nsproxy.h                   |   4 +
+ include/linux/proc_ns.h                   |   3 +-
+ include/linux/user_namespace.h            |   1 +
+ include/uapi/linux/bpf.h                  |   7 +
+ include/uapi/linux/sched.h                |   1 +
+ kernel/bpf/Makefile                       |   1 +
+ kernel/bpf/bpf_namespace.c                | 283 ++++++++++++++++++++++++++++++
+ kernel/bpf/offload.c                      |  16 +-
+ kernel/bpf/syscall.c                      | 262 ++++++++++-----------------
+ kernel/bpf/task_iter.c                    |  12 ++
+ kernel/fork.c                             |   5 +-
+ kernel/nsproxy.c                          |  19 +-
+ kernel/trace/bpf_trace.c                  |   2 +
+ kernel/ucount.c                           |   1 +
+ tools/bpf/bpftool/skeleton/pid_iter.bpf.c |  13 +-
+ tools/include/uapi/linux/bpf.h            |   7 +
+ tools/testing/selftests/bpf/Makefile      |   3 +-
+ tools/testing/selftests/bpf/test_bpfns.c  |  76 ++++++++
+ 21 files changed, 637 insertions(+), 180 deletions(-)
+ create mode 100644 include/linux/bpf_namespace.h
+ create mode 100644 kernel/bpf/bpf_namespace.c
+ create mode 100644 tools/testing/selftests/bpf/test_bpfns.c
 
 -- 
-With best wishes
-Dmitry
+1.8.3.1
+
