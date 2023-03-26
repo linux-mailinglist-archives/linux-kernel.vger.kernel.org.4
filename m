@@ -2,124 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5DA6C96FB
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399876C96F2
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbjCZQyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 12:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
+        id S231279AbjCZQt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 12:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjCZQyo (ORCPT
+        with ESMTP id S229621AbjCZQty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 12:54:44 -0400
-X-Greylist: delayed 365 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 26 Mar 2023 09:54:43 PDT
-Received: from iad0.nichi.link (iad0.nichi.link [IPv6:2a01:4ff:f0:db00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D5561BC;
-        Sun, 26 Mar 2023 09:54:43 -0700 (PDT)
-Received: from [IPV6:2402:f000:2:c801:3a00:25ff:fe59:8c06] (unknown [IPv6:2402:f000:2:c801:3a00:25ff:fe59:8c06])
-        by iad0.nichi.link (Postfix) with ESMTPA id DD5A887A02;
-        Sun, 26 Mar 2023 16:48:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nichi.co; s=default;
-        t=1679849316;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VWn62rWoesr1V+Jp7k/v6C+Nt0B/JD6KJm7XDX0ZcKc=;
-        b=F4FKRJcUCMPpnaM9P5gN6jHEGLeMEv2703QQMls5hBQlIuu7B37ZLAroMiOHDz0ft2j9EG
-        7bwp10mFfNIwt6S7z15djRxHlN42VxOTUMTElNyhDiIUxqWH945MbE7oOz4ueh7zfblIco
-        lb+YloLzv045ZonQ40my3l7bIV7Lfgg=
-Message-ID: <3db66793-c647-f6c9-7c5b-d7a331c8f328@nichi.co>
-Date:   Mon, 27 Mar 2023 00:48:31 +0800
+        Sun, 26 Mar 2023 12:49:54 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A42D4EE3;
+        Sun, 26 Mar 2023 09:49:53 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id w9so26592557edc.3;
+        Sun, 26 Mar 2023 09:49:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679849391;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SOOh5ylGciS8r1LLveU70ssf4eo4Db6eqihZ0xNvHJg=;
+        b=W/cw9lVyy0aMeqCqFFfIwehE7BTu1FoS62XMLn2p4e8aY2PKc1X3eWqZzNNo/gKewP
+         APZ8kNlFiCZyWKFmA0wYXWMzVbfEVqhWb+i7M6cca+BHuD9rO8PUKvgZddPTV7v9GIMd
+         2XdJuK23yKxY0kz3F/NERPDPg8INB8JOaQspchwsoro70MPKQb4JbOAQ2a+NlN96wAqn
+         7b5rMLdikbYqWlQTcZ5I7hncR601fNVNa7mXrW5mzR8W5dGSGxvzKZVz+8tZt1uw/vMW
+         +JDXB6hCJ4oOyGsiOgNXoBB5Nnt5vSZDTWBoJSnGKPnlZZuB3TGZ0ZETSAkeWkpPM44E
+         cb4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679849391;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SOOh5ylGciS8r1LLveU70ssf4eo4Db6eqihZ0xNvHJg=;
+        b=BdSkUmQR0dI2RupsAOTxFgwoZIXwq7xhOLJGYtAF2WOJkImndsFrKaVJda4nvVI8lu
+         XcZNPnnKZVz9gQkzPQVK/D6ywleTv1ekHEH5KfqOedM4wOGnIXQeIqFUuaBy3hG+ktSC
+         eIYxi3ifZ+vQnB8ZGm66m16cTFI8V5EW389fLlXITWGPLReq4T/UxSxFsIBNKCjTs9+b
+         Wzj+orPLviXh5I5bvNL8sVlItwnUnmXGHkBm/bsa4/bBhJKBkhtcS0Kc5bDQovgLQbB+
+         j08Hnh30TTxBQ7LTfSXxfsIWUCnATuY44GgODwwPIOJTyCOklPOy5ZDdABureJHKkr7T
+         c8eA==
+X-Gm-Message-State: AAQBX9dVZt/qCHh2c8p2nT8Rj2ld8PiwJgd1obG5MVfJf79SaSRGlVO3
+        GltaUx09PyRMp8pUL/+nNdmug3vFmg==
+X-Google-Smtp-Source: AKy350Z6e0CtkGaZeWaXyTCYFN66D7725LjXhWRs8pkJY3KffSrFQUtpR3/YBoVbG+vuEGFEdwv62Q==
+X-Received: by 2002:aa7:d885:0:b0:4fd:2155:74ef with SMTP id u5-20020aa7d885000000b004fd215574efmr9437605edq.19.1679849391532;
+        Sun, 26 Mar 2023 09:49:51 -0700 (PDT)
+Received: from p183 ([46.53.253.224])
+        by smtp.gmail.com with ESMTPSA id c5-20020a170906924500b0092be625d981sm13165557ejx.91.2023.03.26.09.49.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 09:49:51 -0700 (PDT)
+Date:   Sun, 26 Mar 2023 19:49:49 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH v2] ELF: document some de-facto PT_* ABI quirks
+Message-ID: <c4233c97-306c-4db8-9667-34fc31ec4aed@p183>
+References: <2acb586c-08a9-42d9-a41e-7986cc1383ea@p183>
+ <e262ea00-a027-9073-812e-7e034d75e718@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] purgatory: fix disabling debug info
-To:     Alyssa Ross <hi@alyssa.is>, Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        stable@vger.kernel.org
-References: <20230326153412.63128-1-hi@alyssa.is>
-Content-Language: en-US
-From:   Nick Cao <nickcao@nichi.co>
-In-Reply-To: <20230326153412.63128-1-hi@alyssa.is>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e262ea00-a027-9073-812e-7e034d75e718@infradead.org>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With this patch applied on top of 
-https://github.com/NickCao/linux/tree/f258de7fdb1e69492f8962da5d34646da49685db, 
-the built kernel image no longer contains reference to the source 
-directory (which is not allowed in the Nixpkgs kernel building 
-infrastructure).
+Turns out rules about PT_INTERP, PT_GNU_STACK and PT_GNU_PROPERTY
+program headers are slightly different.
 
-Tested-by: Nick Cao <nickcao@nichi.co>
+Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+---
 
-On 3/26/23 23:34, Alyssa Ross wrote:
-> Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
-> Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
-> -Wa versions of both of those if building with Clang and GNU as.  As a
-> result, debug info was being generated for the purgatory objects, even
-> though the intention was that it not be.
-> 
-> Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
-> Signed-off-by: Alyssa Ross <hi@alyssa.is>
-> Cc: stable@vger.kernel.org
-> ---
->   arch/riscv/purgatory/Makefile | 12 ++++++------
->   arch/x86/purgatory/Makefile   |  4 ++--
->   2 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
-> index d16bf715a586..97001798fa19 100644
-> --- a/arch/riscv/purgatory/Makefile
-> +++ b/arch/riscv/purgatory/Makefile
-> @@ -84,12 +84,12 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
->   CFLAGS_REMOVE_ctype.o		+= $(PURGATORY_CFLAGS_REMOVE)
->   CFLAGS_ctype.o			+= $(PURGATORY_CFLAGS)
->   
-> -AFLAGS_REMOVE_entry.o		+= -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_memcpy.o		+= -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_memset.o		+= -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_strcmp.o		+= -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_strlen.o		+= -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_strncmp.o		+= -Wa,-gdwarf-2
-> +AFLAGS_REMOVE_entry.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_memcpy.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_memset.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_strcmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_strlen.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_strncmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
->   
->   $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
->   		$(call if_changed,ld)
-> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-> index 17f09dc26381..f1b1ef6c4cbf 100644
-> --- a/arch/x86/purgatory/Makefile
-> +++ b/arch/x86/purgatory/Makefile
-> @@ -69,8 +69,8 @@ CFLAGS_sha256.o			+= $(PURGATORY_CFLAGS)
->   CFLAGS_REMOVE_string.o		+= $(PURGATORY_CFLAGS_REMOVE)
->   CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
->   
-> -AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
-> +AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_entry64.o			+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
->   
->   $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
->   		$(call if_changed,ld)
-> 
-> base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
+	v2: integrate into documentation build system
+
+ Documentation/ELF/ELF.rst   |   32 ++++++++++++++++++++++++++++++++
+ Documentation/ELF/index.rst |   10 ++++++++++
+ Documentation/index.rst     |    1 +
+ 3 files changed, 43 insertions(+)
+
+new file mode 100644
+--- /dev/null
++++ b/Documentation/ELF/ELF.rst
+@@ -0,0 +1,32 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=================================
++Linux-specific ELF idiosyncrasies
++=================================
++
++Definitions
++===========
++
++"First" program header is the one with the smallest offset in the file:
++e_phoff. "Last" program header is the one with the biggest offset:
++e_phoff + (e_phnum - 1) * sizeof(Elf_Phdr).
++
++PT_INTERP
++=========
++
++First PT_INTERP program header is used to locate the filename of ELF
++interpreter. Other PT_INTERP headers are ignored (since Linux 2.4.11).
++
++PT_GNU_STACK
++============
++
++Last PT_GNU_STACK program header defines userspace stack executability
++(since Linux 2.6.6). Other PT_GNU_STACK headers are ignored.
++
++PT_GNU_PROPERTY
++===============
++
++ELF interpreter's last PT_GNU_PROPERTY program header is used (since
++Linux 5.8). If interpreter doesn't have one, then the last PT_GNU_PROPERTY
++program header of an executable is used. Other PT_GNU_PROPERTY headers
++are ignored.
+new file mode 100644
+--- /dev/null
++++ b/Documentation/ELF/index.rst
+@@ -0,0 +1,10 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++===
++ELF
++===
++
++.. toctree::
++   :maxdepth: 1
++
++   ELF
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@ -113,6 +113,7 @@ to ReStructured Text format, or are simply too old.
+    :maxdepth: 1
+ 
+    staging/index
++   ELF/index
+ 
+ 
+ Translations
