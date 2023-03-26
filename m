@@ -2,147 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693BA6C9774
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 20:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC0D6C9771
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 20:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbjCZSX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 14:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
+        id S231287AbjCZSWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 14:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjCZSX0 (ORCPT
+        with ESMTP id S229573AbjCZSWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 14:23:26 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136F3210E;
-        Sun, 26 Mar 2023 11:23:24 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 126F15C00D5;
-        Sun, 26 Mar 2023 14:23:20 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sun, 26 Mar 2023 14:23:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1679855000; x=1679941400; bh=M9VSG9c5T3
-        1aOotkBu3C2E0xwoGSkwmuq4Ti2Ve1tEI=; b=orWuq3xj1DQJl0roms82XWSlII
-        t1c1S/Ye9/R+L0SYSrmZs5se42zKmLvIl0BK+jt8RxsvEG5B2vwpvoyq7RHQNwRP
-        7nR8Quwq1qpKlDpjZXkSWNSwYv6KAiUKPAo9MYnUWvFl6XvwIG3kvlL5ZTj2T6Xq
-        k4Nq0Q+MOjdaQTXJ1n7qz1HSjZvTqGjqE9bfPy1szFq/i1PmJar7VLmqa/XXBBYb
-        r2gjHHXCNC3C7VvgHg7yA+1ekXC/gf6Pl+mQMoQSCcWZGqUT42/eOY3bohLxGpLE
-        L0LCb6rpLborL+uJd6ydVFYA2252LOMLluikix5FsakrlaCb+RGoAAlMgZqg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679855000; x=1679941400; bh=M9VSG9c5T31aO
-        otkBu3C2E0xwoGSkwmuq4Ti2Ve1tEI=; b=E1ySVSOLCRpuJZeZSzSlbiX1sACyt
-        MdkKZGKgEXBxMne9wvX8u1ODpNwGPkkvt/Y4qU2DMe/xndPyVVkqC33rVfhhvI4X
-        tjUyIyltAyxxhiyHfb4GEW71zYQ2W/mMR8vWlfdGXP8waIoHsEbKCuSNAAVLoNAH
-        F3PD9XXrxjUXxeK8aGuUUSvGZdCN1J2KRLNSbRVyws0MuRKkAPw/L/WIqLxD+oN9
-        dIpYqZD090Qbgzx6PrFoS9eYldGGsJECst6cmcp5ksJiZAI7i1AfSUS3/w0Z30Uj
-        bAruyuOQPVtlUsI2L231A0LbaUEiDe/fgyyiERGtQGFNOQzlbcpVQtNFg==
-X-ME-Sender: <xms:l40gZFg7B5UjJR6dNlVCQ6J8nkicnFzZjMX9eTixU38lS74SpxvRYQ>
-    <xme:l40gZKBwe0BaP1iGsOkX-IPJYpYvsdNuVoctkMObon87KSqFApnGqj4a_aQSjrZVh
-    1cPDO2UVHdDcp8f4Q>
-X-ME-Received: <xmr:l40gZFEMn-ZKQDX-4XaQUwzxAlwIqkNTigGmJYYffX6B6zd4JMvWnkUi-RcVbenoxFJh81dD_LXCRbUq4RJfOxvMDvmyCY0Kog>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehtddguddvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeetlhihshhs
-    rgcutfhoshhsuceohhhisegrlhihshhsrgdrihhsqeenucggtffrrghtthgvrhhnpeehke
-    fgtdevtedtkeduudeguefgudejheeugfelgeettdfhffduhfehudfhudeuhfenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehhihesrghlhihssh
-    grrdhish
-X-ME-Proxy: <xmx:l40gZKRwWPSWbSlLt5dhyr0CaylzZI70BVU9ivslFitOmZetZCBn9g>
-    <xmx:l40gZCwST8pEHX7K-SiTUacztM63AhI1OyKh63MIJ_2HhIooaQOCLg>
-    <xmx:l40gZA7hdJdcEQ57udqoCya1Uah6Jh2omM-ZIsFpJHjlYcFNPJMHsA>
-    <xmx:mI0gZE5TXdcl9GwN5Fi-Mbv9pqrbLjaTlBbnjaB8EeX1wjfsgvaYQQ>
-Feedback-ID: i12284293:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 26 Mar 2023 14:23:19 -0400 (EDT)
-Received: by x220.qyliss.net (Postfix, from userid 1000)
-        id 494C81FD7; Sun, 26 Mar 2023 18:23:17 +0000 (UTC)
-From:   Alyssa Ross <hi@alyssa.is>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Cao <nickcao@nichi.co>, linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alyssa Ross <hi@alyssa.is>, stable@vger.kernel.org
-Subject: [PATCH v2] purgatory: fix disabling debug info
-Date:   Sun, 26 Mar 2023 18:21:21 +0000
-Message-Id: <20230326182120.194541-1-hi@alyssa.is>
-X-Mailer: git-send-email 2.37.1
+        Sun, 26 Mar 2023 14:22:53 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A616580;
+        Sun, 26 Mar 2023 11:22:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679854972; x=1711390972;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NoAMrGG8BO82WF0/W/nj7Qdz5t8YcEaBhEumn5bnTws=;
+  b=QGe0qNLgH/yTHU45hpxizwbIa8VZo8kw6+z+KUzLCO52X8JILDEe/xXa
+   tx8+a6J/+jC54MZKtmifZE2vazHI8GxSXUbi7R6+TkjvSL2XPLTHPkurx
+   FLT8yETMsPGsvjF7LLtnWQGVjDUMtXQuskpMQCQiBSNuYAzWx7jbVZuO4
+   J3jFFDwz2/UBpc/UAkmqR9aOrgYF9xxlRNjwxyHz9U86q30V3nrLoxKvj
+   bJCGrgRB8ZW+y9keObE4gUDbxJfyDrssF4FeS0erkQsKEhtIyeCWSnGUv
+   FqfjsDKf7GwJfx8nYyskCptgP8ZxerKF+gTh+qGewV0A8+cjpuZTxO1ro
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="402714547"
+X-IronPort-AV: E=Sophos;i="5.98,292,1673942400"; 
+   d="scan'208";a="402714547"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 11:22:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="660631212"
+X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
+   d="scan'208";a="660631212"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 26 Mar 2023 11:22:48 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pgV0y-000HIT-0m;
+        Sun, 26 Mar 2023 18:22:48 +0000
+Date:   Mon, 27 Mar 2023 02:22:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Herve Codina via Alsa-devel <alsa-devel@alsa-project.org>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 2/6] mfd: Add support for the Lantiq PEF2256 framer
+Message-ID: <202303270203.QeRuuc9d-lkp@intel.com>
+References: <167949286900.26.3992817728812049195@mailman-core.alsa-project.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <167949286900.26.3992817728812049195@mailman-core.alsa-project.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
-Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
--Wa versions of both of those if building with Clang and GNU as.  As a
-result, debug info was being generated for the purgatory objects, even
-though the intention was that it not be.
+Hi Herve,
 
-Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
-Signed-off-by: Alyssa Ross <hi@alyssa.is>
-Cc: stable@vger.kernel.org
----
+Thank you for the patch! Yet something to improve:
 
-Difference from v2: replace each AFLAGS_REMOVE_* assignment with a
-single aflags-remove-y line, and use foreach to add the -Wa versions,
-as suggested by Masahiro Yamada.
+[auto build test ERROR on lee-mfd/for-mfd-next]
+[also build test ERROR on broonie-sound/for-next lee-leds/for-leds-next robh/for-next linus/master v6.3-rc3 next-20230324]
+[cannot apply to lee-mfd/for-mfd-fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- arch/riscv/purgatory/Makefile | 7 +------
- arch/x86/purgatory/Makefile   | 3 +--
- 2 files changed, 2 insertions(+), 8 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Herve-Codina-via-Alsa-devel/mfd-Add-support-for-the-Lantiq-PEF2256-framer/20230322-215208
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+patch link:    https://lore.kernel.org/r/167949286900.26.3992817728812049195%40mailman-core.alsa-project.org
+patch subject: [PATCH v3 2/6] mfd: Add support for the Lantiq PEF2256 framer
+config: m68k-randconfig-c024-20230326 (https://download.01.org/0day-ci/archive/20230327/202303270203.QeRuuc9d-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d60948895815b59306d870e7c189741b7d14d5e2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Herve-Codina-via-Alsa-devel/mfd-Add-support-for-the-Lantiq-PEF2256-framer/20230322-215208
+        git checkout d60948895815b59306d870e7c189741b7d14d5e2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
-index d16bf715a586..5730797a6b40 100644
---- a/arch/riscv/purgatory/Makefile
-+++ b/arch/riscv/purgatory/Makefile
-@@ -84,12 +84,7 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
- CFLAGS_REMOVE_ctype.o		+= $(PURGATORY_CFLAGS_REMOVE)
- CFLAGS_ctype.o			+= $(PURGATORY_CFLAGS)
- 
--AFLAGS_REMOVE_entry.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_memcpy.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_memset.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strcmp.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strlen.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strncmp.o		+= -Wa,-gdwarf-2
-+asflags-remove-y		+= $(foreach x, -g -gdwarf-4 -gdwarf-5, $(x) -Wa,$(x))
- 
- $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
- 		$(call if_changed,ld)
-diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-index 17f09dc26381..82fec66d46d2 100644
---- a/arch/x86/purgatory/Makefile
-+++ b/arch/x86/purgatory/Makefile
-@@ -69,8 +69,7 @@ CFLAGS_sha256.o			+= $(PURGATORY_CFLAGS)
- CFLAGS_REMOVE_string.o		+= $(PURGATORY_CFLAGS_REMOVE)
- CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
- 
--AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
-+asflags-remove-y		+= $(foreach x, -g -gdwarf-4 -gdwarf-5, $(x) -Wa,$(x))
- 
- $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
- 		$(call if_changed,ld)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303270203.QeRuuc9d-lkp@intel.com/
 
-base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
+All errors (new ones prefixed by >>):
+
+   m68k-linux-ld: drivers/mfd/pef2256.o: in function `pinconf_generic_dt_node_to_map_pin':
+>> pef2256.c:(.text+0x280): undefined reference to `pinconf_generic_dt_node_to_map'
+
 -- 
-2.37.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
