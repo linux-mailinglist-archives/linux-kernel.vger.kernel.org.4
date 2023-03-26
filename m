@@ -2,115 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62E06C94EF
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 16:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE416C94F3
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 16:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbjCZOCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 10:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37308 "EHLO
+        id S231681AbjCZOI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 10:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbjCZOCo (ORCPT
+        with ESMTP id S229771AbjCZOI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:02:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796CF7EF5;
-        Sun, 26 Mar 2023 07:02:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDE76B80CA1;
-        Sun, 26 Mar 2023 14:02:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41CE7C4339C;
-        Sun, 26 Mar 2023 14:02:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679839360;
-        bh=6UjvC4vhYxQxNMue1HYv9yzXbIQLEgQPzyEiOjLkqFc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TMAAwTApQMKdTwoGA0IfW9u7L4NQmFDA20ay2WvLWxp2Xu+vgVrE/M6EBlgfi8caH
-         /RXar0PujO9g0vV/xBQtmFuBtU5E3NtuR2RJFu3EdM0498npfbN/p7vVEKS4cPNx/r
-         MOBwUlw8Gj8Foub8sOYab4bi6GwBVR08YmjxR6d3759PsptwIRL69EXOyi4eg6G+ez
-         qW/KXCR3PcayRCTBc7qjVndMhxMUo2TZ7L7TgnOo3lpB3OR43eG2Uo7i71Afn4LsJX
-         MbQscsTLmTSrlIY7FstA0uUBi/I8B0O7trKB+lUMHlSxXFCuNDQs/LLcKqPj4VwFHZ
-         rC93Y4rOJq0Tg==
-Received: by pali.im (Postfix)
-        id 703A578E; Sun, 26 Mar 2023 16:02:37 +0200 (CEST)
-Date:   Sun, 26 Mar 2023 16:02:37 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-wireless@vger.kernel.org,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Chris Morgan <macroalpha82@gmail.com>,
-        Nitin Gupta <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>
-Subject: Re: [PATCH v3 6/9] mmc: sdio: add Realtek SDIO vendor ID and various
- wifi device IDs
-Message-ID: <20230326140237.mjj37si7hqbx5xds@pali>
-References: <20230320213508.2358213-1-martin.blumenstingl@googlemail.com>
- <20230320213508.2358213-7-martin.blumenstingl@googlemail.com>
+        Sun, 26 Mar 2023 10:08:28 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774FC1FE3;
+        Sun, 26 Mar 2023 07:08:27 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id m16so5026773qvi.12;
+        Sun, 26 Mar 2023 07:08:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679839706;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=haZ/N5nW5Plmc5DWgnjdDixWfP9wBSD924tPnZWCLZY=;
+        b=KucRiVZKGuHD9i5gaGDTj2xSbZILOQZV1N1mWfqtpS1NCJ+27lQ1bokAIsc0qSTeo8
+         7rX6aOdI0sIVLoK12RmCm54E3zEIbzmssCpIPNNdqhvIXfc23rzMt7cdNQi0DH1lyBly
+         iKI4Bxrc5ViufogV6StNXc/+yfdHrRxruihgsczl5vWVzxOoH+tt0KSed1/8C71hpGyt
+         Bhl4OrnRSWmsdnMxzK7F4phiRPDPzF9bl270sT5c5A2i79xpY97ZPP3oA+HJMNbGWonW
+         mFMRISxOQd7j0YDu5EO2CX8UncmMDEOOHnFbtzbXGGeEqOrNZAMU2Pe/ZBlSipo8RWG0
+         uJ6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679839706;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=haZ/N5nW5Plmc5DWgnjdDixWfP9wBSD924tPnZWCLZY=;
+        b=vyRvsUf5FkBxw9MWHcBnwH/h3JNP/V09TKbvqe4xxalIxM9wqD1FqMVl4beZQxcMQS
+         3jNW/qRmp5zL0QD+HEUrbFNsU9g3ZNO3hBLyHwXYvIimbzZEssPKYeHL7//Yi1fX8pHM
+         indG9f9UwBOsM9ZwdcqurnHIRZO366P2bH7CwE5EqORjcFNm+IDCFdRod5iT9kqArkFC
+         gw56QN/xUDbGwxSMyisiT0T0CWocUymUuZHcVNkKh9Iu9k2chAXbI2rSnWZJsEYMppyA
+         Iv5bzOQOjCDsbEVMSzi+7djv5m/0vTJM/wrv+sb9/+ZIvSqoIHTu4lJkvDdM5/MM8G/0
+         uzIA==
+X-Gm-Message-State: AAQBX9fc0sY8ucWKJnMSlj/myQy31abMV+UhxhSHd7LlGgecmSQzwrXC
+        FoCnjdsGRymMLisOiAx7IJM=
+X-Google-Smtp-Source: AKy350bsAu31m1Dw9Tw+BR6RPVUqj+HtnaIW2d12BTKz4OhkuFdQoyywrUpuMw4f4xe3sDYtwp3MVw==
+X-Received: by 2002:ad4:5b82:0:b0:5b7:9d44:8dd8 with SMTP id 2-20020ad45b82000000b005b79d448dd8mr14559105qvp.20.1679839706435;
+        Sun, 26 Mar 2023 07:08:26 -0700 (PDT)
+Received: from arinc9-PC.lan ([149.91.1.15])
+        by smtp.gmail.com with ESMTPSA id j5-20020a0ce6a5000000b005dd8b93458esm2212220qvn.38.2023.03.26.07.08.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 07:08:26 -0700 (PDT)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
+Cc:     Russell King <rmk+kernel@armlinux.org.uk>,
+        Landen Chao <landen.chao@mediatek.com>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH 0/7] net: dsa: mt7530: fix port 5 phylink, phy muxing, and port 6
+Date:   Sun, 26 Mar 2023 17:08:11 +0300
+Message-Id: <20230326140818.246575-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320213508.2358213-7-martin.blumenstingl@googlemail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 20 March 2023 22:35:05 Martin Blumenstingl wrote:
-> Add the SDIO vendor ID for Realtek and some device IDs extracted from
-> their GPL vendor driver. This will be useful in the future when the
-> rtw88 driver gains support for these chips.
-> 
-> Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
-> Changes since v2:
-> - none
-> 
-> Changes since v1:
-> - Add Ulf's Acked-by (who added: "I assume it's easier if Kalle picks
->   up this patch, along with the series")
-> 
-> 
->  include/linux/mmc/sdio_ids.h | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/include/linux/mmc/sdio_ids.h b/include/linux/mmc/sdio_ids.h
-> index 0e4ef9c5127a..d7cd39a8ad57 100644
-> --- a/include/linux/mmc/sdio_ids.h
-> +++ b/include/linux/mmc/sdio_ids.h
-> @@ -112,6 +112,15 @@
->  #define SDIO_VENDOR_ID_MICROCHIP_WILC		0x0296
->  #define SDIO_DEVICE_ID_MICROCHIP_WILC1000	0x5347
->  
-> +#define SDIO_VENDOR_ID_REALTEK			0x024c
-> +#define SDIO_DEVICE_ID_REALTEK_RTW8723BS	0xb723
-> +#define SDIO_DEVICE_ID_REALTEK_RTW8723DS	0xd723
-> +#define SDIO_DEVICE_ID_REALTEK_RTW8821BS	0xb821
-> +#define SDIO_DEVICE_ID_REALTEK_RTW8821CS	0xc821
-> +#define SDIO_DEVICE_ID_REALTEK_RTW8821DS	0xd821
-> +#define SDIO_DEVICE_ID_REALTEK_RTW8822BS	0xb822
-> +#define SDIO_DEVICE_ID_REALTEK_RTW8822CS	0xc822
+Hello!
 
-Hello! Could you sort lines by values, like it is in all other sections?
+This patch series is mainly focused on fixing the support for port 5 and
+setting up port 6.
 
-Also it would be nice to put these ids into sdioids database at:
-https://github.com/sdioutils
+The only missing piece to properly support port 5 as a CPU port is the
+fixes [0] [1] [2] from Richard.
 
-> +
->  #define SDIO_VENDOR_ID_SIANO			0x039a
->  #define SDIO_DEVICE_ID_SIANO_NOVA_B0		0x0201
->  #define SDIO_DEVICE_ID_SIANO_NICE		0x0202
-> -- 
-> 2.40.0
-> 
+Russell, looking forward to your review regarding phylink.
+
+I have very thoroughly tested the patch series with every possible mode to
+use. I'll let the name of the dtb files speak for themselves.
+
+MT7621 Unielec:
+
+only-gmac0-mt7621-unielec-u7621-06-16m.dtb
+rgmii-only-gmac0-mt7621-unielec-u7621-06-16m.dtb
+only-gmac1-mt7621-unielec-u7621-06-16m.dtb
+gmac0-and-gmac1-mt7621-unielec-u7621-06-16m.dtb
+phy0-muxing-mt7621-unielec-u7621-06-16m.dtb
+phy4-muxing-mt7621-unielec-u7621-06-16m.dtb
+port5-as-user-mt7621-unielec-u7621-06-16m.dtb
+
+tftpboot 0x80008000 mips-uzImage.bin; tftpboot 0x83000000 mips-rootfs.cpio.uboot; tftpboot 0x83f00000 $dtb; bootm 0x80008000 0x83000000 0x83f00000
+
+MT7623 Bananapi:
+
+only-gmac0-mt7623n-bananapi-bpi-r2.dtb
+rgmii-only-gmac0-mt7623n-bananapi-bpi-r2.dtb
+only-gmac1-mt7623n-bananapi-bpi-r2.dtb
+gmac0-and-gmac1-mt7623n-bananapi-bpi-r2.dtb
+phy0-muxing-mt7623n-bananapi-bpi-r2.dtb
+phy4-muxing-mt7623n-bananapi-bpi-r2.dtb
+port5-as-user-mt7623n-bananapi-bpi-r2.dtb
+
+tftpboot 0x80008000 arm-uImage; tftpboot 0x83000000 arm-rootfs.cpio.uboot; tftpboot 0x83f00000 $dtb; bootm 0x80008000 0x83000000 0x83f00000
+
+Current CPU ports setup of MT7530:
+
+mt7530_setup()
+-> mt7530_setup_port5()
+
+mt753x_phylink_mac_config()
+-> mt753x_mac_config()
+   -> mt7530_mac_config()
+      -> mt7530_setup_port5()
+-> mt753x_pad_setup()
+   -> mt7530_pad_clk_setup() sets up port 6, rename to mt7530_setup_port6()
+
+How it will be with the patch series:
+
+mt7530_setup()
+-> mt7530_setup_port5() runs if the port is not used as a CPU or user port
+
+mt753x_phylink_mac_config()
+-> mt753x_mac_config()
+   -> mt7530_mac_config()
+      -> mt7530_setup_port5()
+      -> mt7530_setup_port6()
+
+CPU ports setup of MT7531 for reference:
+
+mt7531_setup()
+-> mt753x_cpu_port_enable()
+   -> mt7531_cpu_port_config()
+      -> mt7531_mac_config()
+         -> mt7531_rgmii_setup()
+         -> mt7531_sgmii_setup_mode_an()
+         -> etc.
+
+mt753x_phylink_mac_config()
+-> mt753x_mac_config()
+   -> mt7531_mac_config()
+      -> mt7531_rgmii_setup()
+      -> mt7531_sgmii_setup_mode_an()
+      -> etc.
+
+[0] https://lore.kernel.org/netdev/20230212213949.672443-1-richard@routerhints.com/
+[1] https://lore.kernel.org/netdev/20230212215152.673221-1-richard@routerhints.com/
+[2] https://lore.kernel.org/netdev/20230212214027.672501-1-richard@routerhints.com/
+
+Arınç
+
+Arınç ÜNAL (7):
+  net: dsa: mt7530: fix comments regarding port 5 and 6 for both switches
+  net: dsa: mt7530: fix phylink for port 5 and fix port 5 modes
+  net: dsa: mt7530: do not run mt7530_setup_port5() if port 5 is disabled
+  net: dsa: mt7530: set both CPU port interfaces to PHY_INTERFACE_MODE_NA
+  net: dsa: mt7530: set up port 5 before CPU ports are enabled
+  net: dsa: mt7530: call port 6 setup from mt7530_mac_config()
+  net: dsa: mt7530: remove pad_setup function pointer
+
+ drivers/net/dsa/mt7530.c | 154 +++++++++++++++++++-----------------------
+ drivers/net/dsa/mt7530.h |   3 -
+ 2 files changed, 70 insertions(+), 87 deletions(-)
+
+
