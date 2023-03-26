@@ -2,127 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF61B6C943D
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 14:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B4C6C9449
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 14:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjCZM27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 08:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
+        id S231370AbjCZMgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 08:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjCZM25 (ORCPT
+        with ESMTP id S229901AbjCZMgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 08:28:57 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31536A6B
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 05:28:56 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5416698e889so121531557b3.2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 05:28:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1679833736;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2UziUQS8rYrYDQ0kYBZWtD5AofLFmdm6EIJr26Gpzjo=;
-        b=wxntmiTy3AlmLaf3H49KVHs1TcIiD7/q0VEZAcBx60ntDc9veWH9dJnn5BpmOkcUB1
-         LNuigN36ms8eMDa8r6RZGrk25ncPHwMkCDh1Um670lVuy4zCpHjslv0jaJfstEKNCPVx
-         xQhTYhtjgW0g/IzIi5nrYyiSQa1M6cvu4OM/U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679833736;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2UziUQS8rYrYDQ0kYBZWtD5AofLFmdm6EIJr26Gpzjo=;
-        b=7UH99dBa0dzj7jnkzQphgCFNoEOB3xaTNCjKgsl7fUOMlx3BIkLkVofkXeE/Jz0MYO
-         jbLNXGAs1m21vVnNsmVemlAaWIQXryvM4bHRQCGajYh4u9pvQU76O4Mntvvxtw58oJXC
-         mN1CJaHA3JA8ECU5SStZh7AJZnB/AAbiMtGSgXUe1XOYraOi14yj/4ojP4SR1LpaEylx
-         h19rCbgSBYZa+jjVcqh7bP/HGvexrNCDhdaRlF3D4j/e4oYhkJJWvxw35rKxlcwYXPKX
-         IdxjpdsCC33i0+TxAcJ3aGvauKR7dvvyOwTxPccZhNXYpc8dcsxTHwGJbR4ESwrpjPEm
-         FasA==
-X-Gm-Message-State: AAQBX9dajaBB3majp1En486pQtk5d+gSv1mfr3A1LLEwqcOtBM71MoEI
-        SkgQJ9ZYBjN7A1S/4cY0oq5su3vk7tFM72XYFCQVRQ==
-X-Google-Smtp-Source: AKy350aNUXd/EeDV5yvwKIbqmA6xrP8ic8IEkMWqLZMTUhiNUwR6Il/FhyVgJ2KqlNWG08pX1YNMbHkMQ0JAFjQsMP8=
-X-Received: by 2002:a81:af60:0:b0:544:b8c2:3cf4 with SMTP id
- x32-20020a81af60000000b00544b8c23cf4mr3894165ywj.1.1679833735979; Sun, 26 Mar
- 2023 05:28:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230315181902.4177819-1-joel@joelfernandes.org> <20230315181902.4177819-5-joel@joelfernandes.org>
-In-Reply-To: <20230315181902.4177819-5-joel@joelfernandes.org>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sun, 26 Mar 2023 08:28:45 -0400
-Message-ID: <CAEXW_YR7njsiRxZtGpUftBQ0hFOzfzsLGQwfrgPwanucO8wATw@mail.gmail.com>
-Subject: Re: [PATCH v2 05/14] net/sysctl: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>, netdev@vger.kernel.org,
+        Sun, 26 Mar 2023 08:36:33 -0400
+X-Greylist: delayed 398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 26 Mar 2023 05:36:31 PDT
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69A976BD
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 05:36:31 -0700 (PDT)
+Received: (wp-smtpd smtp.wp.pl 25648 invoked from network); 26 Mar 2023 14:29:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1679833786; bh=D8zDe47wM+oZAKrDRTfNyDqW3Tn+VphA2yyNh9Q+aSI=;
+          h=From:To:Subject;
+          b=OpViCiiBXRb1FXhObLrvmRfDui6uBaiq5Qm2u1zWAGLASuJZYMaB0mTJDOH9Bc43f
+           Jai5yjWDD6LtVaxTyIbzW5I7zaNI+IuItOiq739Y+nk3GDwC3jFFS9SjHoov1erEtm
+           om/XPX1ht3DSZ8Iu0BkiR5RfNf2d2PREwQiYh8us=
+Received: from 79.184.247.17.ipv4.supernova.orange.pl (HELO LAPTOP-OLEK.home) (olek2@wp.pl@[79.184.247.17])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <tsbogend@alpha.franken.de>; 26 Mar 2023 14:29:46 +0200
+From:   Aleksander Jan Bajkowski <olek2@wp.pl>
+To:     tsbogend@alpha.franken.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, olek2@wp.pl,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Subject: [PATCH] dt-bindings: mips: lantiq: Document Lantiq SoC dt bindings
+Date:   Sun, 26 Mar 2023 14:29:42 +0200
+Message-Id: <20230326122942.870990-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 63da01927b132ccbf3a9b870b64d5ead
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 000000B [EUN0]                               
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 2:19=E2=80=AFPM Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
->
-> From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
->
-> The kfree_rcu() and kvfree_rcu() macros' single-argument forms are
-> deprecated.  Therefore switch to the new kfree_rcu_mightsleep() and
-> kvfree_rcu_mightsleep() variants. The goal is to avoid accidental use
-> of the single-argument forms, which can introduce functionality bugs in
-> atomic contexts and latency bugs in non-atomic contexts.
->
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: David S. Miller <davem@davemloft.net>
+Document the legacy Lantiq device tree bindings.
+Compatible strings for xRX100 (ar9) and newer SoCs
+should be renamed and will be added later.
 
-Could anyone from the networking side Ack this patch so we can take it for =
-6.4?
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+---
+ .../devicetree/bindings/mips/lantiq/soc.yaml  | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mips/lantiq/soc.yaml
 
-Eric or David?
+diff --git a/Documentation/devicetree/bindings/mips/lantiq/soc.yaml b/Documentation/devicetree/bindings/mips/lantiq/soc.yaml
+new file mode 100644
+index 000000000000..90e8148b111b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mips/lantiq/soc.yaml
+@@ -0,0 +1,38 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mips/lantiq/soc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Lantiq SoC based Platform
++
++maintainers:
++  - Aleksander Jan Bajkowski <olek2@wp.pl>
++
++description:
++  Devices with a Lantiq CPU shall have the following properties.
++
++properties:
++  $nodename:
++    const: "/"
++  compatible:
++    oneOf:
++      - description: Boards with Lantiq Amazon-SE SoC
++        items:
++          - const: lantiq,ase
++
++      - description: Boards with Lantiq Danube SoC
++        items:
++          - const: lantiq,danube
++
++      - description: Boards with Lantiq Falcon SoC
++        items:
++          - const: lantiq,falcon
++
++      - description: Boards with Lantiq Twinpass SoC
++        items:
++          - const: lantiq,twinpass
++
++additionalProperties: true
++
++...
+-- 
+2.30.2
 
- - Joel
-
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  net/core/sysctl_net_core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
-> index 74842b453407..782273bb93c2 100644
-> --- a/net/core/sysctl_net_core.c
-> +++ b/net/core/sysctl_net_core.c
-> @@ -177,7 +177,7 @@ static int rps_sock_flow_sysctl(struct ctl_table *tab=
-le, int write,
->                         if (orig_sock_table) {
->                                 static_branch_dec(&rps_needed);
->                                 static_branch_dec(&rfs_needed);
-> -                               kvfree_rcu(orig_sock_table);
-> +                               kvfree_rcu_mightsleep(orig_sock_table);
->                         }
->                 }
->         }
-> @@ -215,7 +215,7 @@ static int flow_limit_cpu_sysctl(struct ctl_table *ta=
-ble, int write,
->                                      lockdep_is_held(&flow_limit_update_m=
-utex));
->                         if (cur && !cpumask_test_cpu(i, mask)) {
->                                 RCU_INIT_POINTER(sd->flow_limit, NULL);
-> -                               kfree_rcu(cur);
-> +                               kfree_rcu_mightsleep(cur);
->                         } else if (!cur && cpumask_test_cpu(i, mask)) {
->                                 cur =3D kzalloc_node(len, GFP_KERNEL,
->                                                    cpu_to_node(i));
-> --
-> 2.40.0.rc1.284.g88254d51c5-goog
->
