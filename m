@@ -2,148 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3CA6C962C
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F206C9631
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232547AbjCZPfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 11:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
+        id S232550AbjCZPi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 11:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCZPff (ORCPT
+        with ESMTP id S229621AbjCZPix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 11:35:35 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F493C03;
-        Sun, 26 Mar 2023 08:35:27 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id E8DA35C0097;
-        Sun, 26 Mar 2023 11:35:19 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 26 Mar 2023 11:35:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1679844919; x=1679931319; bh=yoT/5dYYqL
-        s4VW9DjOm5vJu5zkmQqNSHt74uigodyG0=; b=DcZ8FFH+ZKH5Cc/KPXyQ6095+J
-        FZRtvDPa/cwFzEybbsCEo67TJTLbJjKI32Agk+2/Ta7JP1bVMjB6H6pQuYL1YYGe
-        OM7+8hHmWdvcCNnAQE8CqEh9VcTjJ0iajDhMkDKsb5aKsAcz8m3oLevEmSfmRtJx
-        vXtw3tKwrNi+Q6upRcWR4TLDKAQ8r4OxsgC8bEfz078fMl4kBFiknFa2xqYE7Knp
-        gy2fB9SJvq78kd6bTwrw7j6kPZDc7LiFvY/UjyjfvBWu1LLwCHoiAXZNsUsYnPOP
-        vIZh+d7vcSs/KhwF7irakcBe08zzoeduyAeId4rgcs44WUYrDuvrRBKOge/A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679844919; x=1679931319; bh=yoT/5dYYqLs4V
-        W9DjOm5vJu5zkmQqNSHt74uigodyG0=; b=mhZV1XekrPJxvBxD+08qQSkVdeuHR
-        S6BLfD8jUebaNfB/6llIvVPeE+iVnyc+8i0ZrUISs9EGu3FEhDc9tXfbbiDg6/Rp
-        t7Cn82Z9jTTNrKuBE65KTl4sedDz2sbHCW2KWC7oOV4ccZ7er1pKGXX/0kZ6JuLE
-        phrZpaorSOV7tFazWTLIWhvoq4vAEwK8kE89kb1ZVvkxstNRGtqy4YUQ4g7AhDTc
-        sipaGzN+dOV63OWWAUGdRIaEgxHBe8U5Vdd8GTgt3UrVrbwgTYJX5DB4jtd0b6lT
-        c+5BPvcCm4lcd9mmTPIBApSqYbAZaLyN8GJs9/tHci8u6L/N45yQgwYzA==
-X-ME-Sender: <xms:NmYgZAM8DwGMN29GdqG2obCVpaousxTdJZa6vkygu7TjX902y_UrIQ>
-    <xme:NmYgZG9bIVhl6RlvVfKGXSiUp2XKl1W7jBH30f9LUUXKeycGjahB1tQdThnWsNNgV
-    uBmN3Tn6ETHuUZOtA>
-X-ME-Received: <xmr:NmYgZHQADgJ9KkqK31FnxV0-RBbzBDE3czPXOKHDuYSNYD5XClVJaTpJvxw3qT2VPdIa60q8kgUM_CHHhlEWHSGFbVN-yFdrIQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehtddgleduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehlhihsshgr
-    ucftohhsshcuoehhihesrghlhihsshgrrdhisheqnecuggftrfgrthhtvghrnhepheekgf
-    dtveettdekuddugeeugfdujeehuefgleegtedthfffudfhheduhfduuefhnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhephhhisegrlhihshhsrg
-    drihhs
-X-ME-Proxy: <xmx:NmYgZIvVMbyCHcHQxKTyvg8vqLI4GiwVwP7PATduFkE3bs1DW-ltag>
-    <xmx:NmYgZIeSeol3dytw8tE4J0nI_2MO4_sd3JolAgVRPukBHgA8Attc8Q>
-    <xmx:NmYgZM1JMFDh7Ug-WGuZ-l_VeLkZvoe9YaSntQwKbDxl7NnIO8HrtQ>
-    <xmx:N2YgZM1pUExcWP24azkIfCk7vwjrJZspEDwALDyH0_ShsoBlT4Foyw>
-Feedback-ID: i12284293:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 26 Mar 2023 11:35:18 -0400 (EDT)
-Received: by x220.qyliss.net (Postfix, from userid 1000)
-        id 8850F1FD0; Sun, 26 Mar 2023 15:35:16 +0000 (UTC)
-From:   Alyssa Ross <hi@alyssa.is>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Cao <nickcao@nichi.co>, linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alyssa Ross <hi@alyssa.is>, stable@vger.kernel.org
-Subject: [PATCH] purgatory: fix disabling debug info
-Date:   Sun, 26 Mar 2023 15:34:12 +0000
-Message-Id: <20230326153412.63128-1-hi@alyssa.is>
-X-Mailer: git-send-email 2.37.1
+        Sun, 26 Mar 2023 11:38:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD8710E4;
+        Sun, 26 Mar 2023 08:38:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28A7AB80C99;
+        Sun, 26 Mar 2023 15:38:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4663AC433D2;
+        Sun, 26 Mar 2023 15:38:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679845129;
+        bh=ZXRo4uvGF4gNgO4cKBiMTZRNDq7znRBgZTcFSFWfvLg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bxhix9dcjXPnhYzB/QXdFvNBUX5kybYCNWZEhI/2ntjW0pWLhxIgYuqsKs12cdUam
+         CxF6T299QsuyzU/02huAX13mzSqkwjQSGR4O2INXPZcpJeuMjtCMq1abt/x6nlfQUK
+         0Qk7bHy53AjpWiqLzbOEOdG4fPBPZK133ElDywDN0wBNlPxislzpZfEglziQ9NSxGx
+         1aP2F+1bUffMDF8ldk2Dn5ksyhiL3RqYiudf8/V/M51xyLdKx0c8/f9/oXTuMItoBG
+         dZ0Au29pkMG1fMz96E9Qc6Zg01fRPSFgb+bXusTYiyUHUSCRK04Fq8/BqkNV70cVpA
+         Ev0gwnW16RKGQ==
+Date:   Sun, 26 Mar 2023 17:38:46 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Ye Xiang <xiang.ye@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v6 5/6] i2c: Add support for Intel LJCA USB I2C driver
+Message-ID: <20230326153846.zo77mbgti2injnxl@intel.intel>
+References: <20230323172113.1231050-1-xiang.ye@intel.com>
+ <20230323172113.1231050-6-xiang.ye@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323172113.1231050-6-xiang.ye@intel.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
-Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
--Wa versions of both of those if building with Clang and GNU as.  As a
-result, debug info was being generated for the purgatory objects, even
-though the intention was that it not be.
+Hi Ye,
 
-Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
-Signed-off-by: Alyssa Ross <hi@alyssa.is>
-Cc: stable@vger.kernel.org
----
- arch/riscv/purgatory/Makefile | 12 ++++++------
- arch/x86/purgatory/Makefile   |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+looks good, just a few questions:
 
-diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
-index d16bf715a586..97001798fa19 100644
---- a/arch/riscv/purgatory/Makefile
-+++ b/arch/riscv/purgatory/Makefile
-@@ -84,12 +84,12 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
- CFLAGS_REMOVE_ctype.o		+= $(PURGATORY_CFLAGS_REMOVE)
- CFLAGS_ctype.o			+= $(PURGATORY_CFLAGS)
- 
--AFLAGS_REMOVE_entry.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_memcpy.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_memset.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strcmp.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strlen.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strncmp.o		+= -Wa,-gdwarf-2
-+AFLAGS_REMOVE_entry.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-+AFLAGS_REMOVE_memcpy.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-+AFLAGS_REMOVE_memset.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-+AFLAGS_REMOVE_strcmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-+AFLAGS_REMOVE_strlen.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-+AFLAGS_REMOVE_strncmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
- 
- $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
- 		$(call if_changed,ld)
-diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-index 17f09dc26381..f1b1ef6c4cbf 100644
---- a/arch/x86/purgatory/Makefile
-+++ b/arch/x86/purgatory/Makefile
-@@ -69,8 +69,8 @@ CFLAGS_sha256.o			+= $(PURGATORY_CFLAGS)
- CFLAGS_REMOVE_string.o		+= $(PURGATORY_CFLAGS_REMOVE)
- CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
- 
--AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
-+AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-+AFLAGS_REMOVE_entry64.o			+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
- 
- $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
- 		$(call if_changed,ld)
+On Fri, Mar 24, 2023 at 01:21:12AM +0800, Ye Xiang wrote:
+> This patch implements the I2C function of Intel USB-I2C/GPIO/SPI adapter
 
-base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
--- 
-2.37.1
+also here, please keep using the imperative form.
 
+> device named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA
+> I2c module with specific protocol through interfaces exported by LJCA USB
+> driver.
+> 
+> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+
+[...]
+
+> +enum ljca_xfer_type {
+> +	LJCA_I2C_READ_XFER_TYPE,
+> +	LJCA_I2C_WRITE_XFER_TYPE,
+> +};
+> +
+> +/* I2C r/w Flags */
+> +#define LJCA_I2C_SLAVE_TRANSFER_WRITE	(0)
+> +#define LJCA_I2C_SLAVE_TRANSFER_READ	(1)
+
+the enum above and the bits here look a bit redundant to me as
+they are the same thing.
+
+What's the point for writing something like:
+
+ if (type == LJCA_I2C_READ_XFER_TYPE)
+	addr |= LJCA_I2C_SLAVE_TRANSFER_WRITE
+
+when the two are the same. You are just adding confusion.
+
+As this is a bit field, you can just keep the defines.
+
+[...]
+
+> +static u8 ljca_i2c_format_slave_addr(u8 slave_addr, u8 type)
+> +{
+> +	return (slave_addr << 1) | (type == LJCA_I2C_READ_XFER_TYPE) ?
+> +		       LJCA_I2C_SLAVE_TRANSFER_READ :
+> +		       LJCA_I2C_SLAVE_TRANSFER_WRITE;
+> +}
+
+How about:
+
+	return (slave_addr << 1) | !!type;
+
+BTW, am I reading correctly that the address here is composed as:
+
+   7     6     5     5     3     2     1    0
+ ADDR7 ADDR6 ADDR5 ADDR4 ADDR3 ADDR2 ADDR1 R/W
+
+[...]
+
+> +static u32 ljca_i2c_func(struct i2c_adapter *adap)
+> +{
+> +	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
+
+how is the smbus supported here?
+
+Andi
