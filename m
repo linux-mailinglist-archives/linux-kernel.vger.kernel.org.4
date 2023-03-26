@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F726C9210
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 03:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C87A66C9217
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 04:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjCZBaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 21:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        id S229805AbjCZCCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 22:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjCZBaW (ORCPT
+        with ESMTP id S229446AbjCZCC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 21:30:22 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC0B7D86
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 18:30:21 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-54184571389so107048167b3.4
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 18:30:21 -0700 (PDT)
+        Sat, 25 Mar 2023 22:02:29 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB20AF00;
+        Sat, 25 Mar 2023 19:02:27 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id c29so7048869lfv.3;
+        Sat, 25 Mar 2023 19:02:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1679794221;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XvlPlmHMaB8A3PB6KqCIqOpFV/PLS3m0zl7r1kOGbL8=;
-        b=ErbSu4bDkDDG+HNZ4cGlzbnwNgu6blOh5HMH7CDJ9BTKydKpIuNbnSjI9xJAudy1TG
-         CPdn5ezR37RGLKjvQm0FN/t9wkl4HxCK8KCzfX9Egdf8lX+CxJVlM1qg0tOLyMG8Fu49
-         kpOEhfQSwByix1DxnF+NnfZkFIBEaZoi+Nvtw=
+        d=gmail.com; s=20210112; t=1679796146;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ljNHWZRnKz6ATPTwqjJD8QWbvuQUIYN0j1hqEm3CfLI=;
+        b=axu9cW3DWerrxsjDuSSmD1plby7DL7NkJ9Im4TMF7XG6gM/WFLTSkxl5MJerrMjUvU
+         D0M7xo0RKI3rJKaDcttWjYNP+HmEwjgEf0JAsbQwKUMB/92ej6o/TSZLP92yLkPvSKhV
+         EPBZU8nRbYurXRY/3cIiMYT7+s6YiEUpLTbFNdCfucOZaUdFzsvY8rAt8bgxopAZnlKv
+         Mr85LBCZBbtz1MNp9vhL0rG536YYwI3ioQV+0cOCxNmO8VO+TKeWX47pygy9ETKr6l0y
+         GMHPwNlpK9UFqwcZ9JNOXUElYNA7tPaiUXh32frGFv5Z/QFu+vPC9PKh0Cpz8KiH2z3P
+         yIJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679794221;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XvlPlmHMaB8A3PB6KqCIqOpFV/PLS3m0zl7r1kOGbL8=;
-        b=ABMrmQOrYWK5RYZZ33HTUggeK+LjMmFtTWwNir+2ZqwPiaHbx8r2qbo9aaqvi58jTH
-         5hePK0Ok2x+GpG3Civ6fxfnpgCgu8eodLdVyqz6NLovilChuJoxxwKsMPc3MOHcO9tIp
-         uYAb2oVTq49pPn3Y1aMZWBNk7W4NJezIXWVCtJ501WATsVe5z+U2U+exrsY58X25Iq3J
-         hEdpw6t6NjEROleOG2xn2I/EfiEDZ3YsqQO3IJGLDGMtvT3SKQoItJW6vJMVAwwuRHIY
-         vv3vKQ/Z4zFR4OEMV+cwG+GEwjxvJq6AvC12rWlev3wy71RAoQjApDJWyYILrh5UPpKY
-         jS0Q==
-X-Gm-Message-State: AAQBX9dXRSSdKT3fUxnt0cJWsgrc6z7GnRxPRoH/PdUbV/5TjiUP5uMv
-        ruHjD8vfSTdazGTR7kUwdSZjnSlgOvSvfAJDCjD1LQ==
-X-Google-Smtp-Source: AKy350bY64tEMTOa5w3aoxVxkpn3Sch7Bbwjq4s5D6y9snRF4v9FxRKkYoQ9sAbPUEVf62g5JCAiyIV8s8Y1jlmZr3w=
-X-Received: by 2002:a81:b149:0:b0:543:9065:b225 with SMTP id
- p70-20020a81b149000000b005439065b225mr3270686ywh.5.1679794221042; Sat, 25 Mar
- 2023 18:30:21 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679796146;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ljNHWZRnKz6ATPTwqjJD8QWbvuQUIYN0j1hqEm3CfLI=;
+        b=GcgP3VuDhhFMENRnBkUXrP+SWSA+mSQnR+6+Hwyf9VHfdWl0+IhEfidqHFDeFyLviY
+         IudA40vOcbPcyBeci55tg1axdbaaj9dcViKa8O7oek3LIA47UdQQSHdovO33H0FZAymm
+         b5BirWttEEXITwwvLchc5SXi+gqN0ELOc2sT1U9yREVQqCY2iY4/U5lxCjzDEgIXQOyo
+         /1xIrwBOs8rKus/V2gnbHNgE0+IOBE5EglekgqRyVzpwj3LvP0u7223ve/oTtFNcJ1ff
+         gSqmdsN93VI6KPlNRFkbNAVyZ2gYFrwUnVmp9VCwn5Bf/nOdhWfR/5s/xwumMN4Aq5zS
+         FCsw==
+X-Gm-Message-State: AAQBX9c0YgZlehK5gmCV0G7GkcaaO3i2rfqftKG/XZuCKADL0K1h2n7c
+        MZuiVhJxiOGis/1UJjNyV/ahxb7CLkW8jgqRaGvo+CEEI+g=
+X-Google-Smtp-Source: AKy350b4YZspahc3nPzaItpREGIh+XpvxAetPoKyvO9wZsKRJUm0cjREFLdlHJDecCEhWrPglsdbUjyjErkE9wgf0Sc=
+X-Received: by 2002:ac2:4434:0:b0:4dc:807a:d140 with SMTP id
+ w20-20020ac24434000000b004dc807ad140mr2058028lfl.10.1679796145926; Sat, 25
+ Mar 2023 19:02:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230325140559.1336056-1-trix@redhat.com>
-In-Reply-To: <20230325140559.1336056-1-trix@redhat.com>
-From:   Selvin Xavier <selvin.xavier@broadcom.com>
-Date:   Sun, 26 Mar 2023 07:00:08 +0530
-Message-ID: <CA+sbYW0hyYmB1cA_Ai0uEYiccra9eL-RGpXwgi9+9+Akj4ksEQ@mail.gmail.com>
-Subject: Re: [PATCH] RDMA/bnxt_re: remove unused num_srqne_processed and
- num_cqne_processed variables
-To:     Tom Rix <trix@redhat.com>
-Cc:     jgg@ziepe.ca, leon@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000dbf82705f7c39184"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 25 Mar 2023 21:02:14 -0500
+Message-ID: <CAH2r5ms5shbVGfACT5bXkp4Fo52GXoVHPVeNsRyRd4PAKHbaRw@mail.gmail.com>
+Subject: [GIT PULL] cifs/smb3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,107 +64,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000dbf82705f7c39184
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Please pull the following changes since commit
+38e04b3e4240a6d8fb43129ebad41608db64bc6f:
 
-On Sat, Mar 25, 2023 at 7:36=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> drivers/infiniband/hw/bnxt_re/qplib_fp.c:303:6: error: variable
->   'num_srqne_processed' set but not used [-Werror,-Wunused-but-set-variab=
-le]
->         int num_srqne_processed =3D 0;
->             ^
-> drivers/infiniband/hw/bnxt_re/qplib_fp.c:304:6: error: variable
->   'num_cqne_processed' set but not used [-Werror,-Wunused-but-set-variabl=
-e]
->         int num_cqne_processed =3D 0;
->             ^
-> These variables are not used so remove them.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
-Acked-by: Selvin Xavier <selvin.xavier@broadcom.com>
+  Merge tag '6.3-rc2-smb3-client-fixes' of
+git://git.samba.org/sfrench/cifs-2.6 (2023-03-16 15:06:16 -0700)
 
---000000000000dbf82705f7c39184
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+are available in the Git repository at:
 
-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
-FYMZp2DojLAq9f4Oi2OBetbnWxo0WGycXpmq/jC4PUx2u9mazQ79i80VLagGRshWniESXuf+SYG8
-+zBimjld9ZZnwm7itHAZdtme4YYFxx+EHa4PUxPV8t+hPHhsiIjirPa1pVXPbQIDAQABo4IB2zCC
-AdcwDgYDVR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDov
-L3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAu
-Y3J0MEEGCCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29u
-YWxzaWduMmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0
-cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBA
-MD6gPKA6hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2Ey
-MDIwLmNybDAlBgNVHREEHjAcgRpzZWx2aW4ueGF2aWVyQGJyb2FkY29tLmNvbTATBgNVHSUEDDAK
-BggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU3TaH
-dsgUhTW3LwObmZ20fj+8Xj8wDQYJKoZIhvcNAQELBQADggEBAAbt6Sptp6ZlTnhM2FDhkVXks68/
-iqvfL/e8wSPVdBxOuiP+8EXGLV3E72KfTTJXMbkcmFpK2K11poBDQJhz0xyOGTESjXNnN6Eqq+iX
-hQtF8xG2lzPq8MijKI4qXk5Vy5DYfwsVfcF0qJw5AhC32nU9uuIPJq8/mQbZfqmoanV/yadootGr
-j1Ze9ndr+YDXPpCymOsynmmw0ErHZGGW1OmMpAEt0A+613glWCURLDlP8HONi1wnINV6aDiEf0ad
-9NMGxDsp+YWiRXD3txfo2OMQbpIxM90QfhKKacX8t1J1oAAWxDrLVTJBXBNvz5tr+D1sYwuye93r
-hImmkM1unboxggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWdu
-IG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIw
-Agxy+Cu4x/7lM0zxY7cwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEII0htgrnC+Ih
-iDa2cU67+0h/Sf+ebmdqjyczMEsYgICNMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
-hvcNAQkFMQ8XDTIzMDMyNjAxMzAyMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJ
-YIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcN
-AQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAA/bwdI4RpXrdcnH05OtUw1h4sgWrz
-M57/NcfP8uGGg9H/RD4o01QirqN/OJfN+jc7qTm2EuKburAVP/cd01GKz+m4ZmUMXwTskSYNTUlS
-1lsAjwfgV3JvUICZAcDblEO5EO97bQTzDDV4m//i+h35EJjRgdBdnbNL6VLcHWqzzxpf3hJAvjP7
-wOXXCHE8lYKRroEzbUDHD/p3vD0J7yQuix/O9Q126RZrLZ3iTGIE27fklbtkvuOn6IzzoT1eyJ8R
-021SLTm7ARRuM6LdWJbBehVSGS+tv49k/mnZyQeU5Yplot/rJbA3eghkks/lurwGBXrs5tOCcqoO
-Vx+Fcqod
---000000000000dbf82705f7c39184--
+  git://git.samba.org/sfrench/cifs-2.6.git tags/smb3-client-fixes-6.3-rc3
+
+for you to fetch changes up to 491eafce1a51c457701351a4bf40733799745314:
+
+  smb3: fix unusable share after force unmount failure (2023-03-24
+14:37:12 -0500)
+
+----------------------------------------------------------------
+Twelve cifs/smb3 client fixes (most also for stable)
+- forced umount fix
+- Fix for two perf regressions
+- three reconnect fixes
+- three small debugging improvements
+- three multichannel fixes
+
+This does not include an important lease break fix which is still being tested.
+----------------------------------------------------------------
+Paulo Alcantara (2):
+      cifs: fix missing unload_nls() in smb2_reconnect()
+      cifs: fix dentry lookups in directory handle cache
+
+Shyam Prasad N (8):
+      cifs: check only tcon status on tcon related functions
+      cifs: lock chan_lock outside match_session
+      cifs: do not poll server interfaces too regularly
+      cifs: empty interface list when server doesn't support query interfaces
+      cifs: dump pending mids for all channels in DebugData
+      cifs: print session id while listing open files
+      cifs: append path to open_enter trace event
+      cifs: avoid race conditions with parallel reconnects
+
+Steve French (2):
+      smb3: lower default deferred close timeout to address perf regression
+      smb3: fix unusable share after force unmount failure
+
+ fs/cifs/cached_dir.c    | 37 +++++++++++++++++++++++--
+ fs/cifs/cifs_debug.c    | 46 ++++++++++++++++++++-----------
+ fs/cifs/cifsfs.c        |  9 ++++---
+ fs/cifs/cifssmb.c       |  6 ++---
+ fs/cifs/connect.c       | 72 ++++++++++++++++++++++++++++++++++---------------
+ fs/cifs/dfs.c           | 10 ++++---
+ fs/cifs/dfs_cache.c     |  2 +-
+ fs/cifs/file.c          |  8 +++---
+ fs/cifs/fs_context.h    |  2 +-
+ fs/cifs/link.c          |  2 ++
+ fs/cifs/smb2inode.c     |  1 +
+ fs/cifs/smb2ops.c       | 27 ++++++++++++++++++-
+ fs/cifs/smb2pdu.c       | 62 ++++++++++++++++++++++--------------------
+ fs/cifs/smb2transport.c | 17 +++++++++---
+ fs/cifs/trace.h         | 12 ++++++---
+ 15 files changed, 221 insertions(+), 92 deletions(-)
+
+
+-- 
+Thanks,
+
+Steve
