@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772E36C9670
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223F06C966D
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbjCZP6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 11:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S232594AbjCZP6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 11:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232470AbjCZP6F (ORCPT
+        with ESMTP id S232429AbjCZP6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 11:58:05 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAD04483
+        Sun, 26 Mar 2023 11:58:04 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFBB4480
         for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:58:03 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id r11so26239110edd.5
+Received: by mail-ed1-x536.google.com with SMTP id eh3so26140431edb.11
         for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:58:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679846282;
+        d=linaro.org; s=google; t=1679846283;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WtP+egedF/A51rokRfYpFarwermBFr+4ADB0wda+OkA=;
-        b=u+cmdZ0t/HMeZvbp935ooldK5u12pR+cZY1AflmegjJdp9S2+5V8dk9Id8bADBI431
-         Qsu8W17GwJ4p96UjCGMPic83XPs2vF0vM579nkzRuA7LLoUeMMzABXcv8sie0Q3ByOZy
-         ssFPu0oO/4HPnksrD1UC8wcS2fIcAKFZbM7PFuSe1qYVkAB7ylssJRsTwiq+xq4kGHle
-         ALc8sF1CRl3F4/BHpWTSf860cweu+b3rKMvl9Y8mVrAdRveAOiQguHgQJwmayHbVSlL1
-         dx+Of0wsNlX6ADVgk28zOgDL+x7ARx3pYgCq5/A7EOAuElAlw4yOSe1IZ7eYkQdlsj0Q
-         jq8g==
+        bh=LfEcJS0iedMYRq077xyra2YW9PMvnxyDxWFKvIquIQw=;
+        b=YqPJSDOOgMPQFB+4ii62JQuYGT6046lZXY9mntJlUiVurN5/THiaYMg51hQWAcVvIC
+         FuDUMd1DEoOkUZ6jr0tOPseXdE26/UMrBDvhLhTQsPYPMRKMc/OvmOzZtfs6uD7G/z7y
+         kZ84RgO9GbV9z2BJ+OvSEbF4V0NS/dPbdm8eP9Mwba4XPym+7yJPuUBdA/0nJBGs+d0j
+         MMoUh38Sru1s4Tpvnkv6hd7L09aPqQmev4dIPWVCEX9UYf3BRvMM7RBdrf2lp9dT+Aut
+         nFpP8q9+BoInourGXZhfvqKs4aztWcO4GaOhoyXSE6poMQlAk/NbkWG7q8HggNrk6GZG
+         573Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679846282;
+        d=1e100.net; s=20210112; t=1679846283;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WtP+egedF/A51rokRfYpFarwermBFr+4ADB0wda+OkA=;
-        b=xPG1KWvmvpuA/WxXgnddlfD5MZE73balhCiaVrIFIETclJEgS5Y3K44uMawch5DSV8
-         6LgavYinkP8nDe/t0ST4Ph+axpIUuE97HAsegv7jnwX2QDv1gJYkZwk/UMomYmUcf+W/
-         GglZ4XRVTX+v6lCkoOLNCKu0GDgZp/OOliFpIp6+wCqVGsX85NFi+XyZ3Og88rukRlJw
-         QSnecCFk453jFdp+juDpxJtxWUtENjRJHQhyv3qj0lT8n5c8u0c1ICPTesTbx+2QFa/h
-         p/beQUc9h1DVEFGFZYF1uXat8OGogLmWag1gtNaAqcOQYOx3VqsKNQS4KKvzBYUv5VhI
-         LwtQ==
-X-Gm-Message-State: AAQBX9daeukL/76chADyhHHsTE/gMYeQ6B1BLdoTKbrbeeEvdYX/7v67
-        reFBTKJ+Hkg9GNAf0+wUlI6UXQ==
-X-Google-Smtp-Source: AKy350YG1MKD/INCAMJkwADt+KkplVppa5cAEVlEpzc9q0ZlMQ1+lw6fnAs5DaxejS5Y9mO4f8eVxQ==
-X-Received: by 2002:a05:6402:15a:b0:4f9:deb4:b984 with SMTP id s26-20020a056402015a00b004f9deb4b984mr9867023edu.9.1679846282060;
+        bh=LfEcJS0iedMYRq077xyra2YW9PMvnxyDxWFKvIquIQw=;
+        b=SM3ximLsVDRQbameL2sjLJbOOtzWZoog4UWUEYh+QoX0vVk8krZgXuIpZ0OaqHe4ep
+         dKe7j9JtnoY8jw5wsSj0tJ8NgnVjjSKG11CKoCr32T9bM37OEQ9GWTvF6HDss7VKIXXe
+         Aad8LLfVR2ApRHsa1TKQcSKlXnaCRWBZ6l7BxPOhQJH6aTT1GJuks4X0EejMv6ZUzD0n
+         EozZ62hWhpqspRVL1FMM2ctnAO74QCgMd8HeduG6/rEFzJpfOnJtm2W/UxrNOpwfNlUi
+         nA10n+y+MQbXFMD++8AN4Al+UgJ+Ttvp9iH4n4Y3iUeLjMsFtbiUSvIWZO18HZTKI6aj
+         7oUg==
+X-Gm-Message-State: AAQBX9ffTqOXUcfc3eA+UPnMA10nAs9L4zcVmUpVZFJkldb+ai5VSiy6
+        1CnCzJYtwV7mHaRt6CTtVNvxPQ==
+X-Google-Smtp-Source: AKy350Yae1vTbRRMRvpVTfWb+4kzW/3iIKpypRI44beEMX9NNn/bQSLPntKicgw8jpzvUHXriNdKYg==
+X-Received: by 2002:aa7:d44d:0:b0:502:3ff4:4d76 with SMTP id q13-20020aa7d44d000000b005023ff44d76mr2386599edr.27.1679846282917;
         Sun, 26 Mar 2023 08:58:02 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:eca3:3b8f:823b:2669])
-        by smtp.gmail.com with ESMTPSA id q3-20020a50cc83000000b004fc86fcc4b3sm13705502edi.80.2023.03.26.08.58.00
+        by smtp.gmail.com with ESMTPSA id q3-20020a50cc83000000b004fc86fcc4b3sm13705502edi.80.2023.03.26.08.58.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 08:58:01 -0700 (PDT)
+        Sun, 26 Mar 2023 08:58:02 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 06/11] arm64: dts: qcom: sc7180-trogdor-wormdingler: use just "port" in panel
-Date:   Sun, 26 Mar 2023 17:57:48 +0200
-Message-Id: <20230326155753.92007-6-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 07/11] arm64: dts: qcom: sc7180-qcard: use just "port" in panel
+Date:   Sun, 26 Mar 2023 17:57:49 +0200
+Message-Id: <20230326155753.92007-7-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230326155753.92007-1-krzysztof.kozlowski@linaro.org>
 References: <20230326155753.92007-1-krzysztof.kozlowski@linaro.org>
@@ -79,35 +79,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The panel bindings expect to have only one port, thus they do not allow
 to use "ports" node:
 
-  sc7180-trogdor-wormdingler-rev1-boe.dtb: panel@0: 'ports' does not match any of the regexes: 'pinctrl-[0-9]+'
+  sc7280-herobrine-zombie-nvme-lte.dtb: panel: 'ports' does not match any of the regexes: 'pinctrl-[0-9]+'
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi     | 11 +++--------
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi | 11 +++--------
  1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
-index 9832e752da35..262d6691abd9 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
-@@ -124,14 +124,9 @@ panel: panel@0 {
- 		backlight = <&backlight>;
- 		rotation = <270>;
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+index 95d9e4a19d76..9137db066d9e 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+@@ -354,14 +354,9 @@ edp_panel: panel {
  
--		ports {
--			#address-cells = <1>;
--			#size-cells = <0>;
--			port@0 {
--				reg = <0>;
--				panel_in: endpoint {
--					remote-endpoint = <&dsi0_out>;
--				};
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&dsi0_out>;
+ 			backlight = <&pm8350c_pwm_backlight>;
+ 
+-			ports {
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-				port@0 {
+-					reg = <0>;
+-					edp_panel_in: endpoint {
+-						remote-endpoint = <&mdss_edp_out>;
+-					};
++			port {
++				edp_panel_in: endpoint {
++					remote-endpoint = <&mdss_edp_out>;
+ 				};
  			};
  		};
- 	};
 -- 
 2.34.1
 
