@@ -2,108 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5D46C9651
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8196F6C9633
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbjCZPyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 11:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
+        id S232378AbjCZPlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 11:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232454AbjCZPyh (ORCPT
+        with ESMTP id S229621AbjCZPlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 11:54:37 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476A04497
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:54:35 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id t10so26098409edd.12
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:54:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679846074;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2CYAkeBkiK+UhGthwoQ1EwlNXrFR2ygK1R+o0KFshok=;
-        b=iniB2T59+riVzewdPmkYZTlzSoMEMibvs1gKTUrFj/FlPUgrgbP4ZJDQNewJS/NVhn
-         1CFxpd3JcXrRLeifWK2d/aO8I8l3m6pe3ON92TN+gvOaDEJEJR1GyVkWtAoSoH495O/g
-         AWUXli4NoPQNE6/xAGw9W8gPX/OnisQIit2jCrYeRyb2+qDOYralNkm9GjOQpOqKicnu
-         6hTQQeTGxWwNEXOFRh1mGoTC2KMIfKu77IBW8XupaiP78TLYTZOu0tEsf+xr7cvLqyo2
-         kOzHJEpTrOSlNYZ88ch50BuhzvasTM99iYPMFRuWtxQ7R/xGmLlsIgxNdRQxZPLKNPhr
-         ILpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679846074;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2CYAkeBkiK+UhGthwoQ1EwlNXrFR2ygK1R+o0KFshok=;
-        b=QMBWmeohoSKEPEM3tgVvKPmYWXVVpIbGMWZE2F8Oxc5iN5Z0pWWccXOtyt9EUwh1WK
-         TMmODRIJReuHSXszALb3PXsN2BEOrmvlhKTmv4gmK5dwDJ1M3sCe9qwWM/Li1dWagO70
-         JSr6fl/rndZcnvsFKngUpSEhPZhZst4uPV3eIlhNUu1Ip6pxQqDbhZwOnqdgbh3LIHN8
-         tGzazxwjrEO5K3QxrnELYvZfBvs+7/PEXMt43xq1q+IJjzW4NEI4DgdHg8CQ91e2epzi
-         eb6mKgYC+YKKsM4MGlyzK/ANKaiGomGKzhvqRWp9F21ViYXZNDozhfz2DjgOhHfZl+XU
-         lNjA==
-X-Gm-Message-State: AAQBX9dS5MDskK2xq7oL87oWZ3RQe+7IVVDMpkcpSQZ1lRKtoO9Zd5C+
-        cLZXbzkTzw+JDT+6RZcxO+XH1A==
-X-Google-Smtp-Source: AKy350YpYs/8Vdmi3STGf5AquUGui7sbir34hOCWu9zkXPhfNRRkOuFcZ9t6H3NCocxlP0Gvgw4JwQ==
-X-Received: by 2002:aa7:c846:0:b0:4fb:8d3c:3b86 with SMTP id g6-20020aa7c846000000b004fb8d3c3b86mr9105609edt.1.1679846074821;
-        Sun, 26 Mar 2023 08:54:34 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:eca3:3b8f:823b:2669])
-        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004af62273b66sm13506742edj.18.2023.03.26.08.54.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 08:54:34 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Michael Srba <Michael.Srba@seznam.cz>,
-        Harigovindan P <harigovi@codeaurora.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 6/6] dt-bindings: display: boe,tv101wum-nl6: document rotation
-Date:   Sun, 26 Mar 2023 17:54:25 +0200
-Message-Id: <20230326155425.91181-6-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230326155425.91181-1-krzysztof.kozlowski@linaro.org>
-References: <20230326155425.91181-1-krzysztof.kozlowski@linaro.org>
+        Sun, 26 Mar 2023 11:41:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D33119BA;
+        Sun, 26 Mar 2023 08:41:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0836D60DE7;
+        Sun, 26 Mar 2023 15:41:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D533C433D2;
+        Sun, 26 Mar 2023 15:41:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679845262;
+        bh=21uEPRsfEI6Bmn4l2Yo3fQlTwIXz1UGKObvRJC3gEzY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W8UV2+C20/Ija6ZI/S572nlTDADojVrGdQ31d3VqGtzPothV7yLPpcN73LCcBY9/v
+         LBURlPry05C4uENgAOfQjGxzcLpNGk8EksOGlPsJOIRDIsFP/c2j5pbmXTi9WQO2Jm
+         Dr9hMyewDKdIwPmgw1sXDfjQo0mnTL/k7Ek1S951FQHLKAUTH/skK1DHc8hTC4GMpX
+         +jw/2Shj2oVOANbym7tOoUYtFkYMmDRF4UA/mN19HhKdlQ8Zno+Fp1fPZVmIMhLyV7
+         P3KxigVaIZ/uRjRu8+SVaAzGPnEZb6lOdqdFAWFRgXF0U6mpSFK32bj9kqB0Xn8yRu
+         Yu31MHVyBCy6g==
+Date:   Sun, 26 Mar 2023 16:56:04 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     ChiaEn Wu <chiaen_wu@richtek.com>
+Cc:     <lars@metafoo.de>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <peterwu.pub@gmail.com>,
+        <cy_huang@richtek.com>
+Subject: Re: [PATCH] iio: adc: mt6370: Fix ibus and ibat scaling value of
+ some specific vendor ID chips
+Message-ID: <20230326165604.27338cc6@jic23-huawei>
+In-Reply-To: <1679667167-16261-1-git-send-email-chiaen_wu@richtek.com>
+References: <1679667167-16261-1-git-send-email-chiaen_wu@richtek.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow 'rotation' property (coming from panel-common.yaml) already used
-in DTS:
+On Fri, 24 Mar 2023 22:12:47 +0800
+ChiaEn Wu <chiaen_wu@richtek.com> wrote:
 
-  sc7180-trogdor-quackingstick-r0.dtb: panel@0: 'rotation' does not match any of the regexes: 'pinctrl-[0-9]+'
+> The scale value of ibus and ibat on the datasheet is incorrect due to the
+> customer report after the experimentation with some specific vendor ID
+> chips.
+> 
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml      | 1 +
- 1 file changed, 1 insertion(+)
+Hi. Only significant issue here is the one the build bot found.
+A few other trivial formatting suggestions inline.
 
-diff --git a/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml b/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml
-index f98ed588c750..aed55608ebf6 100644
---- a/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml
-@@ -55,6 +55,7 @@ properties:
-     description: phandle of the backlight device attached to the panel
- 
-   port: true
-+  rotation: true
- 
- required:
-   - compatible
--- 
-2.34.1
+Thanks,
+
+Jonathan
+
+
+>  
+>  static int mt6370_adc_read_channel(struct mt6370_adc_data *priv, int chan,
+> @@ -98,6 +105,26 @@ static int mt6370_adc_read_channel(struct mt6370_adc_data *priv, int chan,
+>  	return ret;
+>  }
+>  
+> +static int mt6370_adc_get_ibus_scale(struct mt6370_adc_data *priv)
+> +{
+> +	if (priv->vid == MT6370_VID_RT5081  ||
+> +	    priv->vid == MT6370_VID_RT5081A ||
+> +	    priv->vid == MT6370_VID_MT6370)
+> +		return 3350;
+> +	else
+
+I'd drop the else.  We are special casing the matches above, so it makes sense
+for them to be out of line.  The 'normal' case doesn't need to be indented.
+
+> +		return 3875;
+> +}
+> +
+> +static int mt6370_adc_get_ibat_scale(struct mt6370_adc_data *priv)
+> +{
+> +	if (priv->vid == MT6370_VID_RT5081  ||
+> +	    priv->vid == MT6370_VID_RT5081A ||
+> +	    priv->vid == MT6370_VID_MT6370)
+> +		return 2680;
+> +	else
+> +		return 3870;
+> +}
+> +
+>  static int mt6370_adc_read_scale(struct mt6370_adc_data *priv,
+>  				 int chan, int *val1, int *val2)
+>  {
+> @@ -123,7 +150,7 @@ static int mt6370_adc_read_scale(struct mt6370_adc_data *priv,
+>  		case MT6370_AICR_250_mA:
+>  		case MT6370_AICR_300_mA:
+>  		case MT6370_AICR_350_mA:
+> -			*val1 = 3350;
+> +			*val1 = mt6370_adc_get_ibus_scale(priv);
+>  			break;
+>  		default:
+>  			*val1 = 5000;
+> @@ -150,7 +177,7 @@ static int mt6370_adc_read_scale(struct mt6370_adc_data *priv,
+>  		case MT6370_ICHG_600_mA:
+>  		case MT6370_ICHG_700_mA:
+>  		case MT6370_ICHG_800_mA:
+> -			*val1 = 2680;
+> +			*val1 = mt6370_adc_get_ibat_scale(priv);
+>  			break;
+>  		default:
+>  			*val1 = 5000;
+> @@ -251,6 +278,19 @@ static const struct iio_chan_spec mt6370_adc_channels[] = {
+>  	MT6370_ADC_CHAN(TEMP_JC, IIO_TEMP, 12, BIT(IIO_CHAN_INFO_OFFSET)),
+>  };
+>  
+> +static int mt6370_get_vendor_info(struct mt6370_adc_data *priv)
+> +{
+> +	unsigned int dev_info;
+> +	int ret;
+> +
+> +	ret = regmap_read(priv->regmap, MT6370_REG_DEV_INFO, &dev_info);
+> +	if (ret)
+> +		return ret;
+> +
+> +	priv->vid = FIELD_GET(MT6370_VENID_MASK, dev_info);
+
+Blank line preferred before a simple return like this.  Makes the code a tiny
+bit more readable.
+
+> +	return 0;
+> +}
+> +
+>  static int mt6370_adc_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -263,6 +303,10 @@ static int mt6370_adc_probe(struct platform_device *pdev)
+>  	if (!regmap)
+>  		return dev_err_probe(dev, -ENODEV, "Failed to get regmap\n");
+>  
+> +	ret = mt6370_get_vendor_info(priv);
+
+The build bot spotted this one.  Can't use priv yet as it doesn't exist
+for a few more lines.
+
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to get vid\n");
+> +
+>  	indio_dev = devm_iio_device_alloc(dev, sizeof(*priv));
+>  	if (!indio_dev)
+>  		return -ENOMEM;
 
