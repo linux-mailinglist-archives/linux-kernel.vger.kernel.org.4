@@ -2,71 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBE26C961E
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3981E6C961F
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbjCZPVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 11:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
+        id S232390AbjCZPWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 11:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCZPVt (ORCPT
+        with ESMTP id S229621AbjCZPWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 11:21:49 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FA27284;
-        Sun, 26 Mar 2023 08:21:44 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so6181080pjz.1;
-        Sun, 26 Mar 2023 08:21:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679844104;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nSW0yZ/8PqCmJ515Nk2Q6ClqvBnG6F3s+Yexzns2FiY=;
-        b=NcAEOnWfyfOYB53pnelUpofAE53NS/W77HtJB+tEii830WjdSQgP2t6NIKXtSdW0/X
-         RmE5+6l2PMRnn3bymt+uaA+QUclipcmcsMEPqUfmPzTnLwuBxeQ3OOdzWwlV2CpJL6wi
-         5ULtS+4bM/Ct58SDIg0HA/XadZu4qPGIod7T1+i9xDruhhdJQNXvJOkyeiloo3IcVMAT
-         S/b+IAOzvwqYCWS1d1WdSKmR8tn7cSGxAJewlmIjWjOmvnreoHTMfFzkJv/ybluvRlqj
-         w1ggqTxTqniXXFdYAS+h5Kkd+XxIa+fgQTZhGXPyPXnYu4/tw3vTzeykcO2opNTMQ4Hz
-         BJdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679844104;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nSW0yZ/8PqCmJ515Nk2Q6ClqvBnG6F3s+Yexzns2FiY=;
-        b=wQ9bmaz6FowGDPBjvjVQ5y45SViRe6a3xk6IH1H1mityCOHDMv6T8RO81VWCpKpGij
-         TCvE+ljQzhMtAoc9gds6TCicwmlKAVbB/rk++z40TJ1IM6Urol5qYuPtuFkUC1gZP9Qj
-         XHQF9zkcKWfp4zlci3mV1RZtBMjMJ6NqhUk52OnfGS3x7b/dJy/UMMOo7wQkTRf6Ii3j
-         14qUGF35BUJiDoHqbtOAz8Yxcxu+3u3tgOIV9OvGlTzZfC37SOqAqCkpZ1MpmR2YTate
-         jbmDavUGct6y2u4Vm5JFdixPXaK4jsg/2+buN5XYPZGmIYKYERgMjC/UPhLlZsaJ0eqY
-         FcmQ==
-X-Gm-Message-State: AO0yUKW/o3AJgfCrSsauFmap2XXPNh0gjyD4ER3dTtkHnP2y+S5bpZ4M
-        FifMS7zfsUdIhbvT0GiiQpU=
-X-Google-Smtp-Source: AK7set/DT/n1mOzyzwvLsMxr1LvnQHIG2G6jdc6yPe8aQzO63eo+7x7dumwJUFc+OanIwMPLvG3bog==
-X-Received: by 2002:a05:6a20:bca6:b0:da:949:f074 with SMTP id fx38-20020a056a20bca600b000da0949f074mr8033210pzb.43.1679844103695;
-        Sun, 26 Mar 2023 08:21:43 -0700 (PDT)
-Received: from carrot.. (i223-217-34-84.s42.a014.ap.plala.or.jp. [223.217.34.84])
-        by smtp.gmail.com with ESMTPSA id y22-20020aa78556000000b00627eac32b11sm14459450pfn.192.2023.03.26.08.21.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 08:21:42 -0700 (PDT)
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-nilfs@vger.kernel.org,
-        syzbot <syzbot+048585f3f4227bb2b49b@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org,
-        glider@google.com,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Subject: [PATCH] nilfs2: initialize "struct nilfs_binfo_dat"->bi_pad field
-Date:   Mon, 27 Mar 2023 00:21:46 +0900
-Message-Id: <20230326152146.15872-1-konishi.ryusuke@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <0000000000000d710705f63f014c@google.com>
-References: <0000000000000d710705f63f014c@google.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        Sun, 26 Mar 2023 11:22:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFE67284;
+        Sun, 26 Mar 2023 08:22:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A150E60EF9;
+        Sun, 26 Mar 2023 15:22:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75B10C433EF;
+        Sun, 26 Mar 2023 15:22:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679844169;
+        bh=jPU/1PkEjmLpuG/yzDwbE8MsDf1jHD5VOMCtE/4q5oc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=l+6tQbymSzTr6IS5BMRpGd5XX4HuYNdB8yFSqDlx1qkM8+ajHIhyB11NSAoyEi3X1
+         zsMtVyf/RD87g3xLIEcjT8Rw8oK7sksjCyLOWb4bnSyaFgi/4yJhQSD/DUqgLfYedC
+         z7l43Imtg49EboK8X4ff1pDkxeKlccKwPIlE0f1uiPBIBTY2inebpqTus/toO2LFbw
+         zt3SCtxf6O4usZlE2+E+C10tZBZNr8BQbOVL79tf1hj0APyBIMRluLfWD+KK/efO9I
+         /3KmVvu1IQ9gaPZ98NCq83j+HnBbxc0rk7/a30FRo2xO0UpstqtDjo/s5Cpmy/4Uiu
+         ZnBhbIpEKrhFQ==
+Date:   Sun, 26 Mar 2023 23:22:42 +0800
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Beau Belgrave <beaub@linux.microsoft.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        mathieu.desnoyers@efficios.com, dcook@linux.microsoft.com,
+        alanau@linux.microsoft.com, brauner@kernel.org,
+        akpm@linux-foundation.org, ebiederm@xmission.com,
+        keescook@chromium.org, tglx@linutronix.de,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v8 11/11] tracing/user_events: Limit global user_event
+ count
+Message-Id: <20230326232242.adb5ad253b3810aaf9686d2f@kernel.org>
+In-Reply-To: <20230324130659.587ecfd2@gandalf.local.home>
+References: <20230221211143.574-1-beaub@linux.microsoft.com>
+        <20230221211143.574-12-beaub@linux.microsoft.com>
+        <20230324081824.b917c2944da217e5239e1223@kernel.org>
+        <d6c83572-17e1-93d4-65a0-d480989e54fb@suse.cz>
+        <20230324164353.GA1790@kbox>
+        <20230324130659.587ecfd2@gandalf.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,51 +68,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+On Fri, 24 Mar 2023 13:06:59 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-nilfs_btree_assign_p() and nilfs_direct_assign_p() are not initializing
-"struct nilfs_binfo_dat"->bi_pad field, causing uninit-value reports
-when being passed to CRC function.
+> On Fri, 24 Mar 2023 09:43:53 -0700
+> Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> 
+> > > It was actually merged in 5.8. So sysctl should be sufficient with that.
+> > > But maybe it's weird to start adding sysctls, when the rest of tracing
+> > > tunables is AFAIK under /sys/kernel/tracing/ ?
+> > >   
+> > 
+> > During the TraceFS meetings Steven runs I was asked to add a boot
+> > parameter and sysctl for user_events to limit the max.
+> > 
+> > To me, it seems when user_events moves toward namespace awareness
+> > sysctl might be easier to use from within a namespace to turn knobs.
+> > 
+> > Happy to change to whatever, but I want to see Steven and Masami agree
+> > on the approach before doing so.
+> > 
+> > Steven, do you agree with Masami to move to just sysctl?
+> 
+> We do have some tracing related sysctls already:
+> 
+> # cd /proc/sys/kernel
+> # ls *trace*
+> ftrace_dump_on_oops  oops_all_cpu_backtrace  traceoff_on_warning
+> ftrace_enabled       stack_tracer_enabled    tracepoint_printk
+> 
+> Although I would love to deprecated ftrace_enable as that now has a
+> control in tracefs, but it's not unprecedented to have tracing tunables as
+> sysctl.
+> 
+> And if we get cmdline boot parameters for free from sysctls then all the
+> better.
 
-Reported-by: syzbot <syzbot+048585f3f4227bb2b49b@syzkaller.appspotmail.com>
-Link: https://syzkaller.appspot.com/bug?extid=048585f3f4227bb2b49b
-Reported-by: Dipanjan Das <mail.dipanjan.das@gmail.com>
-Link: https://lkml.kernel.org/r/CANX2M5bVbzRi6zH3PTcNE_31TzerstOXUa9Bay4E6y6dX23_pg@mail.gmail.com
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
----
-Andrew, please pick this up, a fix for the KMSAN report.
+Yeah, I confirmed that sysctl can be set via kernel parameter. So it is OK
+for me to add a sysctl.
 
-Ryusuke Konishi
+Thank you,
 
-fs/nilfs2/btree.c  | 1 +
- fs/nilfs2/direct.c | 1 +
- 2 files changed, 2 insertions(+)
+> 
+> -- Steve
 
-diff --git a/fs/nilfs2/btree.c b/fs/nilfs2/btree.c
-index 2681a449edc1..13592e82eaf6 100644
---- a/fs/nilfs2/btree.c
-+++ b/fs/nilfs2/btree.c
-@@ -2219,6 +2219,7 @@ static int nilfs_btree_assign_p(struct nilfs_bmap *btree,
- 	/* on-disk format */
- 	binfo->bi_dat.bi_blkoff = cpu_to_le64(key);
- 	binfo->bi_dat.bi_level = level;
-+	memset(binfo->bi_dat.bi_pad, 0, sizeof(binfo->bi_dat.bi_pad));
- 
- 	return 0;
- }
-diff --git a/fs/nilfs2/direct.c b/fs/nilfs2/direct.c
-index a35f2795b242..4c85914f2abc 100644
---- a/fs/nilfs2/direct.c
-+++ b/fs/nilfs2/direct.c
-@@ -314,6 +314,7 @@ static int nilfs_direct_assign_p(struct nilfs_bmap *direct,
- 
- 	binfo->bi_dat.bi_blkoff = cpu_to_le64(key);
- 	binfo->bi_dat.bi_level = 0;
-+	memset(binfo->bi_dat.bi_pad, 0, sizeof(binfo->bi_dat.bi_pad));
- 
- 	return 0;
- }
+
 -- 
-2.34.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
