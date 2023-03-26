@@ -2,59 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB016C97A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 21:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F806C97A7
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 21:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjCZTmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 15:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
+        id S229959AbjCZTvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 15:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjCZTmk (ORCPT
+        with ESMTP id S229458AbjCZTvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 15:42:40 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3CD04696
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 12:42:39 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 32QJgTBI011688;
-        Sun, 26 Mar 2023 21:42:29 +0200
-Date:   Sun, 26 Mar 2023 21:42:29 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/8] tools/nolibc: tests: add test for -fstack-protector
-Message-ID: <ZCCgJSEIqLQ9ZIOC@1wt.eu>
-References: <89a960c7-0c9b-43ab-9fc8-a68405f7ed6a@p183>
- <8e156377-e7d9-48ec-a7ee-292aba002201@t-8ch.de>
- <ZCCSsFGqTFWknGBL@1wt.eu>
- <f141145c-fc73-4820-8a1b-98b722f1f28a@p183>
+        Sun, 26 Mar 2023 15:51:43 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764AF46AF;
+        Sun, 26 Mar 2023 12:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=budMwMqW8tIuFTIfePqvZbV0rAEQ+HiaEFGnaM9O8SA=; b=AUYfY4kAEcGeAfh53LuHc4dHqt
+        PH1KTT9M0FEEbntpKkczLb5/r2ticvR+B4PFq4FGK8xR8OUTTxdianF/FBkQWgmeJ2S/eln4U8LP7
+        cpvvHUXS3SsXiKWaXO/ONIcu6JVtD5BK9FR4mlyBxKrePYCKHYfdGwwM1zZB+8+RTgodemMnzcnPQ
+        xQm1kBuVjoR0DE99q1GX9COPjXaCBGfu98axD+v7PyIjYuhGWuqN8p9Pv4WOdXjQsqbsBd+pc8Bmy
+        +ZfZ1Ca7A57Vx5n4OEtr0hPbXdRA4juMdufcrYKKjq34ZmfHwrvz5piLsD6LNZYMG/Cm3zPk50YJH
+        E33h3Rnw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pgWOx-00980k-2M;
+        Sun, 26 Mar 2023 19:51:39 +0000
+Message-ID: <4de7483e-2240-5a81-e3e8-af7b658695eb@infradead.org>
+Date:   Sun, 26 Mar 2023 12:51:37 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f141145c-fc73-4820-8a1b-98b722f1f28a@p183>
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] ELF: document some de-facto PT_* ABI quirks
+Content-Language: en-US
+To:     Alexey Dobriyan <adobriyan@gmail.com>, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+References: <2acb586c-08a9-42d9-a41e-7986cc1383ea@p183>
+ <e262ea00-a027-9073-812e-7e034d75e718@infradead.org>
+ <c4233c97-306c-4db8-9667-34fc31ec4aed@p183>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <c4233c97-306c-4db8-9667-34fc31ec4aed@p183>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 10:38:39PM +0300, Alexey Dobriyan wrote:
-> > I'm not seeing any issue with your approach instead, let's
-> > keep it as-is for now (also it does what the stack protector is supposed
-> > to catch anyway).
+Hi Alexey,
+
+On 3/26/23 09:49, Alexey Dobriyan wrote:
+> Turns out rules about PT_INTERP, PT_GNU_STACK and PT_GNU_PROPERTY
+> program headers are slightly different.
 > 
-> There are no guarantess about stack layout and dead writes.
-> The test doesn't corrupt stack reliably, just 99.99% reliably.
+> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+> ---
+> 
+> 	v2: integrate into documentation build system
+> 
+>  Documentation/ELF/ELF.rst   |   32 ++++++++++++++++++++++++++++++++
+>  Documentation/ELF/index.rst |   10 ++++++++++
+>  Documentation/index.rst     |    1 +
+>  3 files changed, 43 insertions(+)
 
-Sure but it's for a regtest which can easily be adjusted and its
-posrtability and ease of maintenance outweights its reliability,
-especially when in practice what the code does is what we want to
-test for. And if an extra zero needs to be added to the loop, it
-can be at a lower cost than maintaining arch-specific asm code.
+I'm not sure that ELF merits its own subdirectory or that each item here
+should be a chapter,  but this fixes all of the issues that I pointed out. Thanks.
 
-Willy
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+> new file mode 100644
+> --- /dev/null
+> +++ b/Documentation/ELF/ELF.rst
+> @@ -0,0 +1,32 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=================================
+> +Linux-specific ELF idiosyncrasies
+> +=================================
+> +
+> +Definitions
+> +===========
+> +
+> +"First" program header is the one with the smallest offset in the file:
+> +e_phoff. "Last" program header is the one with the biggest offset:
+> +e_phoff + (e_phnum - 1) * sizeof(Elf_Phdr).
+> +
+> +PT_INTERP
+> +=========
+> +
+> +First PT_INTERP program header is used to locate the filename of ELF
+> +interpreter. Other PT_INTERP headers are ignored (since Linux 2.4.11).
+> +
+> +PT_GNU_STACK
+> +============
+> +
+> +Last PT_GNU_STACK program header defines userspace stack executability
+> +(since Linux 2.6.6). Other PT_GNU_STACK headers are ignored.
+> +
+> +PT_GNU_PROPERTY
+> +===============
+> +
+> +ELF interpreter's last PT_GNU_PROPERTY program header is used (since
+> +Linux 5.8). If interpreter doesn't have one, then the last PT_GNU_PROPERTY
+> +program header of an executable is used. Other PT_GNU_PROPERTY headers
+> +are ignored.
+> new file mode 100644
+> --- /dev/null
+> +++ b/Documentation/ELF/index.rst
+> @@ -0,0 +1,10 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +===
+> +ELF
+> +===
+> +
+> +.. toctree::
+> +   :maxdepth: 1
+> +
+> +   ELF
+> --- a/Documentation/index.rst
+> +++ b/Documentation/index.rst
+> @@ -113,6 +113,7 @@ to ReStructured Text format, or are simply too old.
+>     :maxdepth: 1
+>  
+>     staging/index
+> +   ELF/index
+>  
+>  
+>  Translations
+
+-- 
+~Randy
