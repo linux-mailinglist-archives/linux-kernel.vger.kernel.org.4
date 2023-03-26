@@ -2,113 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A34546C93BE
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 12:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE396C93C9
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 12:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbjCZKWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 06:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S231820AbjCZKov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 06:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjCZKWi (ORCPT
+        with ESMTP id S229640AbjCZKot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 06:22:38 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7483B86BD
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 03:22:37 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id E006A240262
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 12:22:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1679826155; bh=gJR9k90hH+sr13a0GUurygJMhm/eT12uSIgworv0JdM=;
-        h=Subject:From:To:Cc:Date:From;
-        b=Wb7mJK0uVG6TGC9VM/KQ4ajRKSRGkS7t/laP+v9Huz2QUNvhbx38ZcWpJwrpvJjV/
-         hbPKwkC0ypaHZPMHHYq24z+Z8177adPv3HcmdMEixVvQLIPMW8W/OrlwZ9TSoqiz4M
-         FI4orJ7F7uVcNgJTxExk8WsYbel0Zh+Ic93kzUJ8sGEJzOOtdRJ0Sk8jw5DVWB0maZ
-         68vehUykM3MOgck29lZUI7H4qLVC+s9qUxSqiuTvTNFe/yde6R3Sej3RIQuczkdDjX
-         V2+4R6WLl9/3t1htPkeSPvKRmFkxxpPTeqwZqy17xDUzg/4N4diBf6m6EFkc0A1Wm9
-         s0Hd4oOGisOBA==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4PksT66nXVz9rxN;
-        Sun, 26 Mar 2023 12:22:34 +0200 (CEST)
-Message-ID: <b18c05d52b11c883371ad4a7f18ddc26bad244b8.camel@posteo.de>
-Subject: Re: [PATCH v2] media: hi846: Fix memleak in hi846_init_controls()
-From:   Martin Kepplinger <martink@posteo.de>
-To:     Wei Chen <harperchen1110@gmail.com>
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sun, 26 Mar 2023 10:22:34 +0000
-In-Reply-To: <20230326092712.139791-1-harperchen1110@gmail.com>
-References: <20230326092712.139791-1-harperchen1110@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Sun, 26 Mar 2023 06:44:49 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2CC8A6B
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 03:44:46 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id s3-20020a056602240300b007589413aea0so3801463ioa.5
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 03:44:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679827486;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MjsmqCVV/m3aVO6Qcl6MbDGG1a+UzUUaaNCJyfsGu68=;
+        b=SK+MrMyZeY2S+oLbMYn3fUhfLcu0r0vfcHArM1+Xf++ppm0kCu2F0qqqSKpvIcqic9
+         AfJt59lFfC3YZabLBhLA1oA5b6v3PsZgJpkvYavSbZMsWZuFCsKfzrR1b/itd+tUm6LC
+         LCvyjozxEQeAvYjtA4c/0VW2Mp9ySCJt8YqCeQ2wWArH93Gh3Wk3WpFf1B15WFPxJVbD
+         GPD6F8ueczXOocMqI1TzMtSmD1JzuLTu6mbaK9fhhp7oNeeQgRO2sYt33oDMstlJ49jI
+         dOejZVa6bKDRt22jujyMfrJKtXWMg8QT6eb9q0se45/09rSjZP/+E5rPgRWeXmclR78Y
+         EJ6w==
+X-Gm-Message-State: AO0yUKUd6w4nPd5j3epI7S1bIBQqb8E7jsakcF+ArDaHM/hr6bCiz1Og
+        ObxT3I90K9hLJVc7SWKgauPs42ujMH/pj6OZnYMLZWAy+xG3
+X-Google-Smtp-Source: AK7set/PPtTKbYJMtM7hC4jEsdjJUSWvGIxgXvd3pdlTVFKEU5WOPTZsyaLuaeIEy31uW12UXn7p7Kx4Z71ayNhYMDe2KavY8cOF
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a6b:4f04:0:b0:745:5dec:be5b with SMTP id
+ d4-20020a6b4f04000000b007455decbe5bmr3109088iob.0.1679827486129; Sun, 26 Mar
+ 2023 03:44:46 -0700 (PDT)
+Date:   Sun, 26 Mar 2023 03:44:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009842c105f7cb50b8@google.com>
+Subject: [syzbot] [ext4?] WARNING in ext4_da_update_reserve_space (2)
+From:   syzbot <syzbot+a1232eabd7a3d43d4fb5@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, dem 26.03.2023 um 09:27 +0000 schrieb Wei Chen:
-> hi846_init_controls doesn't clean the allocated ctrl_hdlr
-> in case there is a failure, which causes memleak. Add
-> v4l2_ctrl_handler_free to free the resource properly.
-> 
-> Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    fff5a5e7f528 Merge tag 'for-linus' of git://git.armlinux.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=106ebc66c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d40f6d44826f6cf7
+dashboard link: https://syzkaller.appspot.com/bug?extid=a1232eabd7a3d43d4fb5
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10fd867ac80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15094596c80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/8f6445f85469/disk-fff5a5e7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a04a9ef0da2b/vmlinux-fff5a5e7.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/414b78e64804/bzImage-fff5a5e7.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/0563d853a594/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a1232eabd7a3d43d4fb5@syzkaller.appspotmail.com
+
+EXT4-fs warning (device loop1): ext4_da_update_reserve_space:372: ext4_da_update_reserve_space: ino 18, used 1 with only 0 reserved data blocks
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 41 at fs/ext4/inode.c:373 ext4_da_update_reserve_space+0x419/0x730 fs/ext4/inode.c:369
+Modules linked in:
+CPU: 1 PID: 41 Comm: kworker/u4:2 Not tainted 6.3.0-rc3-syzkaller-00026-gfff5a5e7f528 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Workqueue: writeback wb_workfn (flush-7:1)
+RIP: 0010:ext4_da_update_reserve_space+0x419/0x730 fs/ext4/inode.c:373
+Code: 4c 89 ff 48 c7 c6 69 9e 82 8c ba 74 01 00 00 48 c7 c1 c0 3c fc 8a 49 c7 c0 69 9e 82 8c 41 55 41 54 e8 9b bb 0e 00 48 83 c4 10 <0f> 0b 48 bd 00 00 00 00 00 fc ff df 0f b6 04 2b 84 c0 0f 85 8f 01
+RSP: 0018:ffffc90000b26cd0 EFLAGS: 00010282
+RAX: cf4d35dbf73d9100 RBX: 1ffff1100e9b024d RCX: cf4d35dbf73d9100
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: ffff888074d80cf8 R08: ffffffff816dfe9c R09: fffffbfff205be51
+R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000001
+R13: 0000000000000000 R14: ffff888074d80cb8 R15: ffff88807db7e000
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffc7e69ab88 CR3: 00000000764a4000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ext4_map_blocks+0xb64/0x1cf0 fs/ext4/inode.c:672
+ mpage_map_one_extent fs/ext4/inode.c:2421 [inline]
+ mpage_map_and_submit_extent fs/ext4/inode.c:2474 [inline]
+ ext4_do_writepages+0x189f/0x3d20 fs/ext4/inode.c:2876
+ ext4_writepages+0x1e5/0x290 fs/ext4/inode.c:2964
+ do_writepages+0x3a6/0x670 mm/page-writeback.c:2551
+ __writeback_single_inode+0x155/0xfb0 fs/fs-writeback.c:1600
+ writeback_sb_inodes+0x8ef/0x11d0 fs/fs-writeback.c:1891
+ wb_writeback+0x458/0xc70 fs/fs-writeback.c:2065
+ wb_do_writeback fs/fs-writeback.c:2208 [inline]
+ wb_workfn+0x400/0xff0 fs/fs-writeback.c:2248
+ process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2390
+ worker_thread+0xa63/0x1210 kernel/workqueue.c:2537
+ kthread+0x270/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
 
-Reviewed-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-thanks,
-
-                        martin
-
-> ---
-> Changes in v2:
->  - move v4l2_ctrl_handler_free to error tag
->  - handle memleak in other failure positions
-> 
->  drivers/media/i2c/hi846.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/hi846.c b/drivers/media/i2c/hi846.c
-> index 7c61873b7198..f86997a261f5 100644
-> --- a/drivers/media/i2c/hi846.c
-> +++ b/drivers/media/i2c/hi846.c
-> @@ -1472,21 +1472,26 @@ static int hi846_init_controls(struct hi846
-> *hi846)
->         if (ctrl_hdlr->error) {
->                 dev_err(&client->dev, "v4l ctrl handler error: %d\n",
->                         ctrl_hdlr->error);
-> -               return ctrl_hdlr->error;
-> +               ret = ctrl_hdlr->error;
-> +               goto error;
->         }
->  
->         ret = v4l2_fwnode_device_parse(&client->dev, &props);
->         if (ret)
-> -               return ret;
-> +               goto error;
->  
->         ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr,
-> &hi846_ctrl_ops,
->                                               &props);
->         if (ret)
-> -               return ret;
-> +               goto error;
->  
->         hi846->sd.ctrl_handler = ctrl_hdlr;
-> 
->         return 0;
-> +
-> +error:
-> +       v4l2_ctrl_handler_free(ctrl_hdlr);
-> +       return ret;
->  }
->  
->  static int hi846_set_video_mode(struct hi846 *hi846, int fps)
-
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
