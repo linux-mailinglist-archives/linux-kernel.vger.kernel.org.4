@@ -2,81 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5196C9899
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 01:01:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E55606C989A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 01:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjCZXAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 19:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
+        id S229746AbjCZXBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 19:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjCZXAx (ORCPT
+        with ESMTP id S229456AbjCZXA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 19:00:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CDF55AE;
-        Sun, 26 Mar 2023 16:00:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CAC50B80D64;
-        Sun, 26 Mar 2023 23:00:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A1A0C433EF;
-        Sun, 26 Mar 2023 23:00:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679871650;
-        bh=x6Z12fR83Gq7xvHh4mr/kK1h0Pqkf36AjClyCalvXdg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SGfFZOdeUl4Q3V2nqRr8Faa166YY3OMTZvTTTKGep0HBYvNL0t8UoBVascmOqEEaf
-         nY2njkFdimiBcdxkLLFmaTBtR8e6Lcce5ytX75LGlib2rSXCCHebF0d5XGMr+27OaX
-         oYsogxgI8rkquV0yXO7jn5+4to9HCCojzktZUbihun88ds5DLsK2MpNo6x4l1P+Qfi
-         4Qk5tINCyUsUx+tYHp/2+k85iYk+G2JF5i7d+p6sSlgia8jrY19MGMURnnVWvnLYE8
-         DmYE2oztHeB5TRT/XHIEQlzHlspsh4gO6AXvCgn1o4wR5OQ3fIBRuZwhThd34wwcd8
-         oOYTYrPt1LEOA==
-From:   Conor Dooley <conor@kernel.org>
-To:     Conor Dooley <conor@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH] riscv: dts: canaan: drop invalid spi-max-frequency
-Date:   Sun, 26 Mar 2023 23:59:41 +0100
-Message-Id: <167987156176.153791.15260217411572025430.b4-ty@microchip.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230326164751.104789-1-krzysztof.kozlowski@linaro.org>
-References: <20230326164751.104789-1-krzysztof.kozlowski@linaro.org>
+        Sun, 26 Mar 2023 19:00:58 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB63859C5
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 16:00:57 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id p204so8271137ybc.12
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 16:00:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679871657;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7vL7p+yMRDcu95dPquXTN/oirNrGftivSHJLWDCU0Yo=;
+        b=WX0JkSipYIdr3rjXdP5WlI6l/bFV+UVS8L06GIYrSAQfbPJiqjlgO7kLLOenTeVJSf
+         rbfb1LROAm2F5xwWuy4Lw0T5PjyEyCtTolM7G8cfiXrvlzUtLJOowbviIMwCxfrpD9ne
+         C2u17SGV2aEbvjBOtswXIUDzzv/BPUkmA4BVFegZLLdFOXA9fWI1G6IXPrpGXi34HZx9
+         256RjoRuKajJX4LnizbIJFeqvz40poLZCnSYyFnYP4MDrr7az/F1Gx72ajmb3D6J3bsu
+         LCEkU18KWdA+W3Tz0tdSqEzKbrKzLbsxKg02UpPvBkctfMu9UC+o/RdXYgpENUpa229Q
+         /u1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679871657;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7vL7p+yMRDcu95dPquXTN/oirNrGftivSHJLWDCU0Yo=;
+        b=UsuYq9vGpH8m93N4AxiMRYo5qZ1YVKhluMgdbvUr+GoR/QGypzT757h1rK6wXZyqUP
+         vmlrg3MSqLoIZOSqIoNZydk67cjDUoljMuh2mXnchJbnqvEr5TArkiuHW8XDcBrm7/GL
+         PonoqQodvYj+AZTJhGnNFLDzMhMO7gCoBesKXgN40h+zan20oBOtwplsyMbdj2KNmhra
+         ENALoVoPirzoy3BTBeaYTMNjCZ875sFkKidsvq2gmBZ7160vNouNddmL62oZpaNMDJxL
+         DAjCSNboMCKgQseTMGaXUTaLKp0YQPC35WeQfLEDV3cznM9IVv2nLR56mBuxDtYL3cJc
+         pg1Q==
+X-Gm-Message-State: AAQBX9d9QAwhFHpN0KRisheL3u7WaP6vv50DqJKfJyOCrm58k7tFudYR
+        sgiApna45YZQAwYK6F5C8vKk3rFebh8bbwE8ymo=
+X-Google-Smtp-Source: AKy350bj2EfXcXzC8waieMmjMHiq0GCxC0eWKuRFw1Bj+WaKKtFMSH6u659Utoqb0zkW7bLUY+2cie6PtSz8Iwj6L5M=
+X-Received: by 2002:a05:6902:10c2:b0:b6e:b924:b96f with SMTP id
+ w2-20020a05690210c200b00b6eb924b96fmr7968497ybu.3.1679871656647; Sun, 26 Mar
+ 2023 16:00:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=436; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=0zFLew1NsRZR2Xph0On5u79GHzMJx5S7s4zUw+ZVKAU=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCkK5yKv3fpp3PKfge+Mu/UylUM/q/aYckkXvth7skRmT a8HU92RjlIWBjEOBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAEzEVJWRoSFMuHy3icO+syvV Wuv2/5vwVNCB//EXdw6N4+3XxV+cvsTwV8pLiztfOmpJ+w6VWZMWnDpTc2H5QuW4j1einyRwuy9 pZQQA
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Sender: gloriapauleric@gmail.com
+Received: by 2002:a25:af42:0:b0:b01:28f6:dfb2 with HTTP; Sun, 26 Mar 2023
+ 16:00:56 -0700 (PDT)
+From:   Dina Mckenna <dinamckenna9@gmail.com>
+Date:   Sun, 26 Mar 2023 23:00:56 +0000
+X-Google-Sender-Auth: 3IJqt3-kFX3d8TLh2PlPMD6-rX8
+Message-ID: <CAEwunR8qD74SmD0kAM7VwCKVCEVo+16zx4P_A6dyg5ghEytcnw@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b30 listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [gloriapauleric[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.9 URG_BIZ Contains urgent matter
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Hello My Dear.,
 
-On Sun, 26 Mar 2023 18:47:51 +0200, Krzysztof Kozlowski wrote:
-> The spi-max-frequency is a property of SPI children, not the
-> controller:
-> 
->   k210_generic.dtb: spi@50240000: Unevaluated properties are not allowed ('spi-max-frequency' was unexpected)
-> 
-> 
+ I am sending the same message to you. My names are Mrs. Dina Mckenna.
+Howley, a widow diagnosed with brain tumor disease which has gotten to
+a very bad stage, Please I want you to understand the most important
+reason why I am contacting you through this medium is because I need
+your sincerity and ability to carry out this transaction and fulfill
+my final wish in implementing the charitable investment project in
+your country as it requires absolute trust and devotion without any
+failure, which i believe that you will not expose this to anyone or
+betray this trust and confident that I am about to entrust on you for
+the mutual benefit of the orphans and the less privilege. I have some
+funds I inherited from my late husband, the sum of ($ 11,000,000.00.).
+deposited with the Bank. Having known my present health condition, I
+decided to entrust this fund to you believing that you will utilize it
+the way i am going to instruct herein..
 
-Applied to riscv-dt-fixes, thanks!
-I'll make sure to add a test for the !mmu dts in CI too.
+It will be my pleasure to compensate you as my Investment
+Manager/Partner with 35 % percent of the total money for your effort
+in handling the transaction, 5% percent for any expenses or processing
+charges fee that will involve during this process while 60% of the
+fund will be Invested into the charity project there in your country.
+Therefore I am waiting for your prompt respond, if only you are
+interested in this humanitarian project for further details of the
+transaction and execution of this charitable project for the glory and
+honor of God the merciful compassionate.. Your urgent reply will be
+appreciated.
 
-[1/1] riscv: dts: canaan: drop invalid spi-max-frequency
-      https://git.kernel.org/conor/c/8056dc043d7f
-
-Thanks,
-Conor.
+God bless you.
+Sincerely Sister in Christ
+Mrs. Dina Mckenna. Howley.
