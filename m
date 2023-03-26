@@ -2,85 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB96F6C988E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 00:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC5D6C9895
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 00:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjCZWp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 18:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
+        id S229606AbjCZWs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 18:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCZWp1 (ORCPT
+        with ESMTP id S229471AbjCZWs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 18:45:27 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831E859C9
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 15:45:26 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id a19-20020a056e0208b300b003260dffae47so116092ilt.17
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 15:45:26 -0700 (PDT)
+        Sun, 26 Mar 2023 18:48:27 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976FE4236
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 15:48:25 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id cn12so28735754edb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 15:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1679870903;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9fZkdxeeHkFCzAR8aqy81oHdx9YlDO1HnuZfhrn/TQ8=;
+        b=eSv/r4S8HeF5JxW79ORKgU8fYq/vw/bKT+NR9Y79aZYWhgWtjPO9M1jZEUmvpDyp+e
+         gBboqx3KXWTg7FNdY7YNr/4vgkMTPadAOXje14caUSXNzIe5x7ISDbWZh5W+cqe7bkpi
+         6ytZ6z0e4qmBbDyEWapGtnPeLP6pPgCYYj/wY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679870726;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9lEspjiua93c9Wx+emjhT6RG2FrOB+aKkQEh7PcYsd8=;
-        b=YwGt0hui0ctNkZ8txlIcin5YRBsOvdO3LFYTumTuCUuYHzrbcktfOcAY+Zj2VU7Y+W
-         rii8AaipHdGyL4n+8bni/KgB97Uix4X40WV4dEO9DkMvQ7hmTCauf70ryURO2YPLRhhm
-         N2AuwCl3BJRRC7Is9iMwtJOMSPx9f5OgGORob0zgjC2kJ1gJ3Qy9H5PCR6WUqSRvzYwf
-         P9cWuOgI1GgVMUYdN8p0vS7m0qWv2T4wnwsdtPDiEXWBCkTdxTEMer65rdQjN20U3Gqn
-         z6rXOevdVQ5gDXlwLyHl/537V6VpgURrvxb4wze8zjYupsb7Fc4VaG19qimuUWLb78JM
-         nQGw==
-X-Gm-Message-State: AO0yUKVCZFZg8JSRAf5Wb9rgTmGiQHxhvs/dYwpMOKRRtV9qCNb/AmPN
-        qu0zNRfmv1Q3b6GXrMyZzcqYMRH6+aVY/g3nSGisqrOojW5Q
-X-Google-Smtp-Source: AK7set96XIPJAXYQwUsGkxnwQBaDfPEB0m4BfUlp93WMIYVCACD6qwJf3nIhLrGieN+ju2bZ7Avb4F/kKUh9Msv9+YADHiF9f6nL
+        d=1e100.net; s=20210112; t=1679870903;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9fZkdxeeHkFCzAR8aqy81oHdx9YlDO1HnuZfhrn/TQ8=;
+        b=hIoe4TYsfc7rhi8qdVIJLCaz8bGoURQEDLKDnszDYF2tD1ttt/MP0taUCXncxJM+ze
+         FMX35Pr6qa8eXfDIy9KOXnSo3VcHFC8c3FJ7re976tpDuI8yecf15odqu+BDiqJn0WDO
+         cHo7xNjCILVxjLPcQGx1tED1tcCfxeiKle0jLf/s7Wahy6qMnT+J3y4uF3wUnfzAqhJn
+         DYN6aJ7Xwx9givRVABVZcPCiCk+YnfSUdg7mcDdKr4qK/ya5bMA89zqUAI93CCynodyw
+         yzBXmddKUUusbpZBJ7QA19lUrWf3KKGPIWxEmrMuFQn49FXoNmTpKWjUGHGHaY8w6VOd
+         Oc5A==
+X-Gm-Message-State: AAQBX9cP+kmEgUVicJYOYm5uq7uHaPIFvL1dXfT7PVtiFXAB69OZ+TEo
+        zgWarfLbaq5H0hqPkrYMUXbCuwQt7fFRXx9d76QsbQ==
+X-Google-Smtp-Source: AKy350Yoo55tkjwD45fh2wzOzHGS5MIBnC5sH+ptZJCr3oTX9HdCPk/AGpu3Fmq0Oc6+WuxtX3TvJw==
+X-Received: by 2002:a17:906:a04a:b0:91f:5845:4e3c with SMTP id bg10-20020a170906a04a00b0091f58454e3cmr10779637ejb.42.1679870903590;
+        Sun, 26 Mar 2023 15:48:23 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id la18-20020a170907781200b00914001c91fcsm13398242ejc.86.2023.03.26.15.48.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Mar 2023 15:48:22 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id y4so28776680edo.2
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 15:48:22 -0700 (PDT)
+X-Received: by 2002:a17:907:7b8a:b0:931:6e39:3d0b with SMTP id
+ ne10-20020a1709077b8a00b009316e393d0bmr4811641ejc.15.1679870902220; Sun, 26
+ Mar 2023 15:48:22 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:2941:0:b0:3ec:dc1f:12d8 with SMTP id
- p62-20020a022941000000b003ecdc1f12d8mr3845812jap.4.1679870725894; Sun, 26 Mar
- 2023 15:45:25 -0700 (PDT)
-Date:   Sun, 26 Mar 2023 15:45:25 -0700
-In-Reply-To: <000000000000708b1005f79acf5c@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e2bdb505f7d5612e@google.com>
-Subject: Re: [syzbot] [kvm?] [net?] [virt?] general protection fault in virtio_transport_purge_skbs
-From:   syzbot <syzbot+befff0a9536049e7902e@syzkaller.appspotmail.com>
-To:     avkrasnov@sberdevices.ru, bobby.eshleman@bytedance.com,
-        bobby.eshleman@gmail.com, bobbyeshleman@gmail.com,
-        davem@davemloft.net, deshantm@xen.org, edumazet@google.com,
-        hdanton@sina.com, kuba@kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        oxffffaa@gmail.com, pabeni@redhat.com, sgarzare@redhat.com,
-        stefanha@redhat.com, syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
+References: <ZB2GTBD/LWTrkOiO@dhcp22.suse.cz> <20230324130530.xsmqcxapy4j2aaik@box.shutemov.name>
+ <CAEXW_YQj_Wg0Xx2cHT9hTrDjEtrAV-bRjgL79=76d=D5f8GnEA@mail.gmail.com>
+ <CAHk-=whuXx+cyGhFKjU0qjzvgna8iDA8YcqDDyH3cQywixuMgA@mail.gmail.com>
+ <20230325163323.GA3088525@google.com> <CAHk-=whd7msp8reJPfeGNyt0LiySMT0egExx3TVZSX3Ok6X=9g@mail.gmail.com>
+ <20230326022658.GB3142556@google.com>
+In-Reply-To: <20230326022658.GB3142556@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 26 Mar 2023 15:48:05 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgOv7HL-qqH+ydLLG8rGZjQayP8FLnW4tpubVsPanbJhw@mail.gmail.com>
+Message-ID: <CAHk-=wgOv7HL-qqH+ydLLG8rGZjQayP8FLnW4tpubVsPanbJhw@mail.gmail.com>
+Subject: Re: WARN_ON in move_normal_pmd
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Michal Hocko <mhocko@suse.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+On Sat, Mar 25, 2023 at 7:27=E2=80=AFPM Joel Fernandes <joel@joelfernandes.=
+org> wrote:
+>
+> So for that very reason, we still have to handle the bad case where the
+> source PMD was not deleted right?
 
-commit 71dc9ec9ac7d3eee785cdc986c3daeb821381e20
-Author: Bobby Eshleman <bobby.eshleman@bytedance.com>
-Date:   Fri Jan 13 22:21:37 2023 +0000
+Well, so our rules are that if nothing is mapped in a particular page
+table directory (any level), then it must be empty.
 
-    virtio/vsock: replace virtio_vsock_pkt with sk_buff
+And that "must" is actually a hard requirement, because our exit path
+won't even spend time tearing down page tables that don't have any
+mappings in them.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12661f29c80000
-start commit:   fff5a5e7f528 Merge tag 'for-linus' of git://git.armlinux.o..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=11661f29c80000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16661f29c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aaa4b45720ca0519
-dashboard link: https://syzkaller.appspot.com/bug?extid=befff0a9536049e7902e
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14365781c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12eebc66c80000
+So if you were to have non-empty pmd entries that don't have a vma
+associated with them, there would be a memory leak, and we really
+would want to warn about that case.
 
-Reported-by: syzbot+befff0a9536049e7902e@syzkaller.appspotmail.com
-Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
+End result: it should be sufficient to do something like "if you don't
+have a mapping below you within this PMD, you can expand the movement
+down to a full PMD".
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+And same with the above case.
+
+Of course, the more I think about this, the more I wonder "is this
+even worth it". Because we have
+
+ (a) mremap() that can't trigger the problematic case currently
+(because not overlapping), and *probably* almost never would trigger
+the optimization of widening the move in practice.
+
+ (b) setup_arg_pages() will probably almost never triggers the
+problematic case in practice, since you'd have to shift the pages by
+*just* the right amount
+
+so in the end, maybe the "real fix" is to just say "none of this
+matters, let's just remove the warning".
+
+An alternative "real fix" might even be to just say "just don't shift
+the stack by exactly a PMD". It's unlikely to happen anyway, it's not
+worth optimizing for, so just make sure it doesn't happen.
+
+IOW, another alternative could be something like this:
+
+  --- a/fs/exec.c
+  +++ b/fs/exec.c
+  @@ -783,7 +783,14 @@ int setup_arg_pages(struct linux_binprm *bprm,
+            unlikely(vma->vm_end - vma->vm_start >=3D stack_top - mmap_min_=
+addr))
+                return -ENOMEM;
+
+  +     /*
+  +      * Shift the stack up, but avoid shifting by
+  +      * exactly a PMD size, which causes issues
+  +      * when mixing page-sized and pmd-sized moves.
+  +      */
+        stack_shift =3D vma->vm_end - stack_top;
+  +     if (stack_shift && !(stack_shift & ~PMD_MASK))
+  +             stack_shift -=3D PAGE_SIZE;
+
+        bprm->p -=3D stack_shift;
+        mm->arg_start =3D bprm->p;
+
+which is *really* quite ugly, and only handles the stack-grows-down
+case, and I'm not proud of it, and the above is also entirely
+untested.
+
+I will delete that patch from my system after sending out this email,
+and disavow any knowledge of that horrendously ugly hack. But if
+somebody else takes ownership of it and I won't be blamed for it, I
+would probably accept it as a solution.
+
+Shudder. That's nasty.
+
+                      Linus
