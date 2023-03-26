@@ -2,155 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65456C97B0
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 22:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC246C97B2
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 22:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbjCZUEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 16:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
+        id S231432AbjCZUEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 16:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjCZUEF (ORCPT
+        with ESMTP id S231443AbjCZUEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 16:04:05 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E26E4EFE
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 13:04:03 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 591CE604F2;
-        Sun, 26 Mar 2023 22:04:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679861040; bh=K4W3BB5anItSzCtmT/+mFDStMxjXsM9eUkxQjb4A8Tk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=zrCYzfT1IikatDAye+fwv2Jtziq/S1QRscCm7IIxMoGd4crTrs5JRpubrm5kUTP7l
-         6NFDXjumz2rXuU4WFmnzoX7SxJRuUqeSTqO01hgpNvyVz5HjPSiVV9fz8dVNaRAc5W
-         tIvpet4eFGQFm/ch4ZfKuAzWo0uvtK8t+mTk2KOwmaxSJUIQ3nFjzBXB22u/nnmJPy
-         87Ushpom5n63oFwJgmh6NTcrUiSabdUJddBwy3+Wu1gre+3BnQZeYvJoxOa9pllfsZ
-         HaimDM8Hb+WUYLW3yaWxMyjXnq3bOwU/bQOp47wGIQ5Xw3NUvUwVFZic0/5RTubZmf
-         bAOXZ70Ip+CmQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id z5UHODX3zmbV; Sun, 26 Mar 2023 22:03:58 +0200 (CEST)
-Received: from [192.168.1.3] (unknown [77.237.101.225])
-        by domac.alu.hr (Postfix) with ESMTPSA id 2FB21604EF;
-        Sun, 26 Mar 2023 22:03:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679861038; bh=K4W3BB5anItSzCtmT/+mFDStMxjXsM9eUkxQjb4A8Tk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lFc9UgqOneLEIU5/N7HCVedrLTu2sf8jMbYkx1Nzhs9S5Nv4c2YKjTB72hKoh9FG4
-         rTqCelJvhoIeL+6Ai/2R3w0oMJIUvmpDFAhbpOrO3zDQBl1CStfOjHBSscnUUGuu//
-         nDTVRo+l+pwzOId/d9okG+q5Ngt/2UqN1bJBHubzlYJFrTLQ37Lga5RN7CZalRRj20
-         y0Z7ah/tEu4J9OAC5Gnpw5489LLA5/Px0cYP9PtiIbpV0mi3HP86q9CMkWDiOzHbcK
-         ATLA4PUZuBkQXAVSfKq5XruHPUXRoPwPFRxU/L727s9bCpApjI7UeGQpIxXPetFI7B
-         mPFa9WwrfbzXg==
-Message-ID: <431b2e3d-94ea-4612-ffe4-8e071dae3280@alu.unizg.hr>
-Date:   Sun, 26 Mar 2023 22:03:56 +0200
+        Sun, 26 Mar 2023 16:04:13 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5534765A5
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 13:04:11 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id h8so27674578ede.8
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 13:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679861050;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hJ2zmqBiWF8xNxlF2DpfPiHluVhEuG/NqmcIKEjOERw=;
+        b=aA1Pja6WvB4X3aGFSLK6pweg7xRHG//dRUY2v3rdNu5Y1ZhUUSYy/RgXn22Es92AQZ
+         2q7dirvzy+f8ToVEzoojz08UmnKi4yFzH5wN14F6odYDjT+ETB3pBIcscVN7ZBkmhIdr
+         dkNjOK/KYVWX+rcZAjjQ6p1Jz1g4DNSpvBsUStPqHPXhP6BtqrM79oCJ4aLpeFtnE5Rd
+         79Xtglom4SxxEjG9X9nAsz5CvV8YfEbvZSzh2Z3sbC7qoxzojxjpHc7+wS4018IHgdL1
+         9vtiLa7PMS87L+cTAlM3z1pd+pWSlOFiO7RFQAtOHx/krweFaONZ5xYFmmBA9LS1JiQi
+         E4uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679861050;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hJ2zmqBiWF8xNxlF2DpfPiHluVhEuG/NqmcIKEjOERw=;
+        b=GDec6NrzWhviFcY5Uti/0aZ2DiF/uId+Xo/d6NJgv4I2HCThuQgawGlKsjd9nEZuL1
+         eXmHCuCJ0ywg1V9IFCV1w/Em5WTPVWge9DogmdOxkiDrbLsb6pr8o1f9DFe5LMxTktJj
+         8HogcW7B+nLDlR2JL/aZCTYPezVtIlaAlU5FKO7SdBNKdQtqff4LERYUXngKvJagNBmu
+         6FV5QCX3eZiGKbrl68F1c5a6YCc+bT4IQWUhVJcWNVhUjZaQsEy6UCisydBynYICANKF
+         eMvZ+aal5CGrD+SCY+jUjepMKiezJZ8L8yHFdkPTkMovYXDCMwf29njqtByTZ20d5HH2
+         uk7w==
+X-Gm-Message-State: AAQBX9dlCwjqVB6tTfqaXGDZ6Nl37dx0s/7e0cmXlNJzg4MFW1wS0TzE
+        csSvmZSip1U0zXE1HPgt2pZB4A==
+X-Google-Smtp-Source: AKy350Zfn2lQrBVjODwHJamrQ0D0o0vR3gzPm6WK58ij2lWqCQGKKtUZrfYQZlXrfdUA9IXOarxj8A==
+X-Received: by 2002:aa7:ce0f:0:b0:502:24a4:b0ad with SMTP id d15-20020aa7ce0f000000b0050224a4b0admr8629955edv.4.1679861049845;
+        Sun, 26 Mar 2023 13:04:09 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:6b51:4748:3f3f:ffcf? ([2a02:810d:15c0:828:6b51:4748:3f3f:ffcf])
+        by smtp.gmail.com with ESMTPSA id u22-20020a50d516000000b004ad601533a3sm13970070edi.55.2023.03.26.13.04.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Mar 2023 13:04:09 -0700 (PDT)
+Message-ID: <0711b320-6c36-6564-70d2-35fc76ac1ebc@linaro.org>
+Date:   Sun, 26 Mar 2023 22:04:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 8/8] selftests/proc: Assert clock_gettime(CLOCK_BOOTTIME)
- VS /proc/uptime monotonicity
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Wei Li <liwei391@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Yu Liao <liaoyu15@huawei.com>, Hillf Danton <hdanton@sina.com>,
-        Ingo Molnar <mingo@kernel.org>
-References: <20230222144649.624380-1-frederic@kernel.org>
- <20230222144649.624380-9-frederic@kernel.org>
- <219c5d09-0099-83e9-b21b-299fa513decd@alu.unizg.hr>
- <ZBmmtMlKXcf2+hnq@lothringen>
-Content-Language: en-US, hr
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZBmmtMlKXcf2+hnq@lothringen>
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/3] dt-bindings: clock: update rk3588 clock
+ definitions
+Content-Language: en-US
+To:     Shane Francis <bigbeeshane@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230326001535.149539-1-bigbeeshane@gmail.com>
+ <20230326184040.33008-1-bigbeeshane@gmail.com>
+ <20230326184040.33008-2-bigbeeshane@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230326184040.33008-2-bigbeeshane@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21. 03. 2023. 13:44, Frederic Weisbecker wrote:
-> On Wed, Mar 08, 2023 at 04:59:41PM +0100, Mirsad Todorovac wrote:
->> On 2/22/23 15:46, Frederic Weisbecker wrote:
->> From what I see, you round the CLOCK_BOOTIME time to 1/100ths of a second.
->>
->> A simple program that queries clock_getres() on system clocks gives this
->> result:
->>
->> clock_res [CLOCK_REALTIME] = 0.000000001s
->> clock_res [CLOCK_REALTIME_COARSE] = 0.004000000s
->> clock_res [CLOCK_MONOTONIC] = 0.000000001s
->> clock_res [CLOCK_MONOTONIC_COARSE] = 0.004000000s
->> clock_res [CLOCK_MONOTONIC_RAW] = 0.000000001s
->> clock_res [CLOCK_BOOTTIME] = 0.000000001s
->> clock_res [CLOCK_PROCESS_CPUTIME_ID] = 0.000000001s
->> clock_res [CLOCK_THREAD_CPUTIME_ID] = 0.000000001s
->>
->> A number of programs may depend i.e. on CLOCK_REALTIME or CLOCK_BOOTIME to give
->> different result each nanosecond.
->>
->> I came across this when generating nonces for HMACs according to recommendations
->> from RFC 4086 "Randomness Requirements for Security".
->>
->> If the value of CLOCK_BOOTTIME or CLOCK_REALTIME is incremented not in what
->> clock_getres() gives, but at best in 1/100th of second instead, that would seriously
->> weaken our security (for as you know, in many cryptographic uses nonces need not
->> be random, but MUST NOT ever repeat nor go backwards).
->>
->> Could we modify the test for this assumption, or is the assumption wrong?
->>
->> Here the test for CLOCK_PROCESS_CPUTIME_ID and CLOCK_THREAD_CPUTIME_ID
->> increasing monotonically with guaranteed increased value of nanoseconds
->> would also seem good.
->>
->> Maybe this is already covered in another test case, but it seems that all
->> clocks should be guaranteed to be monotonically increasing, and increased
->> at least by one nanosecond with each syscall, or many algorithms would break.
->>
->> In other words, CLOCK_BOOTTIME should be tested to increase monotonically in
->> the resolution given by clock_getres (CLOCK_BOOTTIME, &tv_res), not in 1/100ths
->> of second (IMHO).
+On 26/03/2023 20:40, Shane Francis wrote:
+> Some vendor uboot bootloaders use the target kernels DTB image to
+> determine the target clock speeds for some PLLs, currently this can cause
+> uboot to set the clock rate for gpll incorrectly on to cpll (breaking)
+> RGMII.
+
+Do not attach (thread) your patchsets to some other threads (unrelated
+or older versions). This buries them deep in the mailbox and might
+interfere with applying entire sets.
+
 > 
-> Maybe but verifying a clock against its own resolution is another testcase. Here the
-> point is to verify that CLOCK_BOOTTIME is monotonic against /proc/uptime, and
-> since /proc/uptime has an 1/100 second resolution, rounding clock_gettime(CLOCK_BOOTTIME)
-> result down to that is the best we can do.
+> This change starts the PLL clock definitions from 1 to correct this
+> miss-match
 > 
-> Thanks.
+> This could be handled by uboot bu updating mappings in that code base
+> however not all devices will have a replaceable uboot (in cases such as
+> when a secure boot chain is implemented)
+> 
+> Signed-off-by: Shane Francis <bigbeeshane@gmail.com>
+> ---
+>  .../dt-bindings/clock/rockchip,rk3588-cru.h   | 1442 ++++++++---------
+>  1 file changed, 721 insertions(+), 721 deletions(-)
+> 
+> diff --git a/include/dt-bindings/clock/rockchip,rk3588-cru.h b/include/dt-bindings/clock/rockchip,rk3588-cru.h
+> index b5616bca7b44..d63b07d054b7 100644
+> --- a/include/dt-bindings/clock/rockchip,rk3588-cru.h
+> +++ b/include/dt-bindings/clock/rockchip,rk3588-cru.h
 
-Hi Frederic,
-
-Thank you for explaining that.
-
-I've read somewhere (forgot the link) that clock_gettime(CLOCK_*) clocks should
-be guaranteed to return at least a nanosecond increased value for a PID or TID
-from call to call.
-
-Returning the same value would break some algorithms that depend on monotonous
-increase of time - for example, some naive implementations of nonce generators.
-
-I believe this is worth assuring in tests, or possibly some naive crypto
-would reveal its pre-shared secrets in consecutive calls (Please see RFC 4086,
-"Randomness Requirements for Security" for greater detail in explanation.
+We did not finish discussion yet, so sending new version 50 minutes
+after your last reply does not give me chance to respond.
 
 Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
+Krzysztof
 
