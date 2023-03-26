@@ -2,97 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FB66C931B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 10:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6355C6C931D
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 10:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjCZIX3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 26 Mar 2023 04:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
+        id S231706AbjCZI3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 04:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCZIX1 (ORCPT
+        with ESMTP id S229582AbjCZI3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 04:23:27 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D229ED1
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:23:26 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id i7so7011193ybt.0
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:23:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679819005;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RMPWm/UNWwNEh+tuXqq8buHzHEocFm7N8w/bA5pWOoE=;
-        b=SN6uMbcgDhLs2P8pNncv314RXquC01FYfnayW4zHZA1L504EXAARKwqMg1JHmcljgp
-         3FAjtUqNq6XBMC9ZUBdzw7nkr6r7oApbUIdbs7Lpz1Jh+bmuzDG3s6pMoVHyH6t+7Lu1
-         xz2TWLInOgQyJ10X76V+uD7n8BHO/s+bk3y36IzXx3M9qIwDFDf4Cp2Bwim5TkqKYv9Y
-         8jeWmf/iwufcSxNav+bYW6rNRq8OAf3kggcJ33ntfkjQBtRoeZtQGKIN4mTl/XWRGDCO
-         tlyzKN60esh3zy4ssGKNiJGsJxrM33M3zJTxiHEcEGGLM2hwc0epBt6DWuRdqMdVvTDY
-         0tAQ==
-X-Gm-Message-State: AAQBX9frObDru3RV6mruhqzF6Un0Ft7l0mYvzM9XTXdnPvmIh+r7BF2I
-        2ROGS8Ie/MkXDGTimph8s1G+YK3lzeeZi9Xo
-X-Google-Smtp-Source: AKy350ZFlovNWbXfd5Vu7MBA/S6em9zncFEgFgt8KkRto/VSrNqtKHa0x8XgNbSP3EcEvSzRxpcinQ==
-X-Received: by 2002:a25:accc:0:b0:afe:e13e:6379 with SMTP id x12-20020a25accc000000b00afee13e6379mr8872161ybd.13.1679819005676;
-        Sun, 26 Mar 2023 01:23:25 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id j19-20020a817653000000b00545a08184a2sm1379926ywk.50.2023.03.26.01.23.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Mar 2023 01:23:25 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-5416b0ab0ecso115726017b3.6
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:23:25 -0700 (PDT)
-X-Received: by 2002:a81:b65f:0:b0:544:8bc1:a179 with SMTP id
- h31-20020a81b65f000000b005448bc1a179mr3625143ywk.4.1679819004976; Sun, 26 Mar
- 2023 01:23:24 -0700 (PDT)
+        Sun, 26 Mar 2023 04:29:42 -0400
+Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15499ED7
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:29:39 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id gLkupDy9ezvWygLkupaLgV; Sun, 26 Mar 2023 10:29:37 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 26 Mar 2023 10:29:37 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Philippe Schenker <philippe.schenker@toradex.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] regulator: Handle deferred clk
+Date:   Sun, 26 Mar 2023 10:29:33 +0200
+Message-Id: <18459fae3d017a66313699c7c8456b28158b2dd0.1679819354.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <5b7c473247d66776343d82a55b9815195b1b11fb.1679551394.git.fthain@linux-m68k.org>
- <CAMuHMdUJ6kbpYGTjyY5dX+-YRv3pL0ydG3HQ-H1khyeqLOa05A@mail.gmail.com>
- <072fd894-ec50-ae5f-2be5-ebbeb0e7b39b@linux-m68k.org> <20230324085927.GA6354@allandria.com>
- <0cd7f288-ba43-7764-01a7-2e1e5c7a1640@linux-m68k.org> <CAMuHMdXi1mF=j_Qzzg971AqHF-JdgfaDd+v0HymXXusFt-WBUQ@mail.gmail.com>
- <20230326000318.GB31801@allandria.com>
-In-Reply-To: <20230326000318.GB31801@allandria.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 26 Mar 2023 10:23:13 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX4EKGngXGUuyN6CUh9ByH9sVpZY-2_LsTgCiAMddbxOQ@mail.gmail.com>
-Message-ID: <CAMuHMdX4EKGngXGUuyN6CUh9ByH9sVpZY-2_LsTgCiAMddbxOQ@mail.gmail.com>
-Subject: Re: [PATCH v2] nubus: Don't list card resources by default
-To:     Brad Boyer <flar@allandria.com>
-Cc:     Finn Thain <fthain@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Brad,
+devm_clk_get() can return -EPROBE_DEFER. So it is better to return the
+error code from devm_clk_get(), instead of a hard coded -ENOENT.
 
-On Sun, Mar 26, 2023 at 1:03 AM Brad Boyer <flar@allandria.com> wrote:
-> On Sat, Mar 25, 2023 at 01:44:43PM +0100, Geert Uytterhoeven wrote:
-> > Perhaps it would be worthwhile to move the resources out of /proc,
-> > but into a separate virtual file system?
-> > That way people who need access to the additional info can load the
-> > separate virtual file system kernel module, and mount the file system?
->
-> I could be wrong, but I believe the more recent trend has been to
-> move things like this out of /proc anyway.
+This gives more opportunities to successfully probe the driver.
 
-Correct. Use sysfs, debugfs, configfs, or your own custom file system
-where appropriate.
+Fixes: 8959e5324485 ("regulator: fixed: add possibility to enable by clock")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/regulator/fixed.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/regulator/fixed.c b/drivers/regulator/fixed.c
+index e3436f49dea4..364d1a2683b7 100644
+--- a/drivers/regulator/fixed.c
++++ b/drivers/regulator/fixed.c
+@@ -215,7 +215,7 @@ static int reg_fixed_voltage_probe(struct platform_device *pdev)
+ 		drvdata->enable_clock = devm_clk_get(dev, NULL);
+ 		if (IS_ERR(drvdata->enable_clock)) {
+ 			dev_err(dev, "Can't get enable-clock from devicetree\n");
+-			return -ENOENT;
++			return PTR_ERR(drvdata->enable_clock);
+ 		}
+ 	} else if (drvtype && drvtype->has_performance_state) {
+ 		drvdata->desc.ops = &fixed_voltage_domain_ops;
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.34.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
