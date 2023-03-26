@@ -2,157 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC5D6C9895
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 00:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5196C9899
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 01:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjCZWs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 18:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
+        id S229679AbjCZXAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 19:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCZWs1 (ORCPT
+        with ESMTP id S229456AbjCZXAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 18:48:27 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976FE4236
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 15:48:25 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id cn12so28735754edb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 15:48:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1679870903;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9fZkdxeeHkFCzAR8aqy81oHdx9YlDO1HnuZfhrn/TQ8=;
-        b=eSv/r4S8HeF5JxW79ORKgU8fYq/vw/bKT+NR9Y79aZYWhgWtjPO9M1jZEUmvpDyp+e
-         gBboqx3KXWTg7FNdY7YNr/4vgkMTPadAOXje14caUSXNzIe5x7ISDbWZh5W+cqe7bkpi
-         6ytZ6z0e4qmBbDyEWapGtnPeLP6pPgCYYj/wY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679870903;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9fZkdxeeHkFCzAR8aqy81oHdx9YlDO1HnuZfhrn/TQ8=;
-        b=hIoe4TYsfc7rhi8qdVIJLCaz8bGoURQEDLKDnszDYF2tD1ttt/MP0taUCXncxJM+ze
-         FMX35Pr6qa8eXfDIy9KOXnSo3VcHFC8c3FJ7re976tpDuI8yecf15odqu+BDiqJn0WDO
-         cHo7xNjCILVxjLPcQGx1tED1tcCfxeiKle0jLf/s7Wahy6qMnT+J3y4uF3wUnfzAqhJn
-         DYN6aJ7Xwx9givRVABVZcPCiCk+YnfSUdg7mcDdKr4qK/ya5bMA89zqUAI93CCynodyw
-         yzBXmddKUUusbpZBJ7QA19lUrWf3KKGPIWxEmrMuFQn49FXoNmTpKWjUGHGHaY8w6VOd
-         Oc5A==
-X-Gm-Message-State: AAQBX9cP+kmEgUVicJYOYm5uq7uHaPIFvL1dXfT7PVtiFXAB69OZ+TEo
-        zgWarfLbaq5H0hqPkrYMUXbCuwQt7fFRXx9d76QsbQ==
-X-Google-Smtp-Source: AKy350Yoo55tkjwD45fh2wzOzHGS5MIBnC5sH+ptZJCr3oTX9HdCPk/AGpu3Fmq0Oc6+WuxtX3TvJw==
-X-Received: by 2002:a17:906:a04a:b0:91f:5845:4e3c with SMTP id bg10-20020a170906a04a00b0091f58454e3cmr10779637ejb.42.1679870903590;
-        Sun, 26 Mar 2023 15:48:23 -0700 (PDT)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
-        by smtp.gmail.com with ESMTPSA id la18-20020a170907781200b00914001c91fcsm13398242ejc.86.2023.03.26.15.48.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Mar 2023 15:48:22 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id y4so28776680edo.2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 15:48:22 -0700 (PDT)
-X-Received: by 2002:a17:907:7b8a:b0:931:6e39:3d0b with SMTP id
- ne10-20020a1709077b8a00b009316e393d0bmr4811641ejc.15.1679870902220; Sun, 26
- Mar 2023 15:48:22 -0700 (PDT)
+        Sun, 26 Mar 2023 19:00:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CDF55AE;
+        Sun, 26 Mar 2023 16:00:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CAC50B80D64;
+        Sun, 26 Mar 2023 23:00:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A1A0C433EF;
+        Sun, 26 Mar 2023 23:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679871650;
+        bh=x6Z12fR83Gq7xvHh4mr/kK1h0Pqkf36AjClyCalvXdg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SGfFZOdeUl4Q3V2nqRr8Faa166YY3OMTZvTTTKGep0HBYvNL0t8UoBVascmOqEEaf
+         nY2njkFdimiBcdxkLLFmaTBtR8e6Lcce5ytX75LGlib2rSXCCHebF0d5XGMr+27OaX
+         oYsogxgI8rkquV0yXO7jn5+4to9HCCojzktZUbihun88ds5DLsK2MpNo6x4l1P+Qfi
+         4Qk5tINCyUsUx+tYHp/2+k85iYk+G2JF5i7d+p6sSlgia8jrY19MGMURnnVWvnLYE8
+         DmYE2oztHeB5TRT/XHIEQlzHlspsh4gO6AXvCgn1o4wR5OQ3fIBRuZwhThd34wwcd8
+         oOYTYrPt1LEOA==
+From:   Conor Dooley <conor@kernel.org>
+To:     Conor Dooley <conor@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH] riscv: dts: canaan: drop invalid spi-max-frequency
+Date:   Sun, 26 Mar 2023 23:59:41 +0100
+Message-Id: <167987156176.153791.15260217411572025430.b4-ty@microchip.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230326164751.104789-1-krzysztof.kozlowski@linaro.org>
+References: <20230326164751.104789-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <ZB2GTBD/LWTrkOiO@dhcp22.suse.cz> <20230324130530.xsmqcxapy4j2aaik@box.shutemov.name>
- <CAEXW_YQj_Wg0Xx2cHT9hTrDjEtrAV-bRjgL79=76d=D5f8GnEA@mail.gmail.com>
- <CAHk-=whuXx+cyGhFKjU0qjzvgna8iDA8YcqDDyH3cQywixuMgA@mail.gmail.com>
- <20230325163323.GA3088525@google.com> <CAHk-=whd7msp8reJPfeGNyt0LiySMT0egExx3TVZSX3Ok6X=9g@mail.gmail.com>
- <20230326022658.GB3142556@google.com>
-In-Reply-To: <20230326022658.GB3142556@google.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 26 Mar 2023 15:48:05 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgOv7HL-qqH+ydLLG8rGZjQayP8FLnW4tpubVsPanbJhw@mail.gmail.com>
-Message-ID: <CAHk-=wgOv7HL-qqH+ydLLG8rGZjQayP8FLnW4tpubVsPanbJhw@mail.gmail.com>
-Subject: Re: WARN_ON in move_normal_pmd
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=436; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=0zFLew1NsRZR2Xph0On5u79GHzMJx5S7s4zUw+ZVKAU=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCkK5yKv3fpp3PKfge+Mu/UylUM/q/aYckkXvth7skRmT a8HU92RjlIWBjEOBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAEzEVJWRoSFMuHy3icO+syvV Wuv2/5vwVNCB//EXdw6N4+3XxV+cvsTwV8pLiztfOmpJ+w6VWZMWnDpTc2H5QuW4j1einyRwuy9 pZQQA
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 7:27=E2=80=AFPM Joel Fernandes <joel@joelfernandes.=
-org> wrote:
->
-> So for that very reason, we still have to handle the bad case where the
-> source PMD was not deleted right?
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Well, so our rules are that if nothing is mapped in a particular page
-table directory (any level), then it must be empty.
+On Sun, 26 Mar 2023 18:47:51 +0200, Krzysztof Kozlowski wrote:
+> The spi-max-frequency is a property of SPI children, not the
+> controller:
+> 
+>   k210_generic.dtb: spi@50240000: Unevaluated properties are not allowed ('spi-max-frequency' was unexpected)
+> 
+> 
 
-And that "must" is actually a hard requirement, because our exit path
-won't even spend time tearing down page tables that don't have any
-mappings in them.
+Applied to riscv-dt-fixes, thanks!
+I'll make sure to add a test for the !mmu dts in CI too.
 
-So if you were to have non-empty pmd entries that don't have a vma
-associated with them, there would be a memory leak, and we really
-would want to warn about that case.
+[1/1] riscv: dts: canaan: drop invalid spi-max-frequency
+      https://git.kernel.org/conor/c/8056dc043d7f
 
-End result: it should be sufficient to do something like "if you don't
-have a mapping below you within this PMD, you can expand the movement
-down to a full PMD".
-
-And same with the above case.
-
-Of course, the more I think about this, the more I wonder "is this
-even worth it". Because we have
-
- (a) mremap() that can't trigger the problematic case currently
-(because not overlapping), and *probably* almost never would trigger
-the optimization of widening the move in practice.
-
- (b) setup_arg_pages() will probably almost never triggers the
-problematic case in practice, since you'd have to shift the pages by
-*just* the right amount
-
-so in the end, maybe the "real fix" is to just say "none of this
-matters, let's just remove the warning".
-
-An alternative "real fix" might even be to just say "just don't shift
-the stack by exactly a PMD". It's unlikely to happen anyway, it's not
-worth optimizing for, so just make sure it doesn't happen.
-
-IOW, another alternative could be something like this:
-
-  --- a/fs/exec.c
-  +++ b/fs/exec.c
-  @@ -783,7 +783,14 @@ int setup_arg_pages(struct linux_binprm *bprm,
-            unlikely(vma->vm_end - vma->vm_start >=3D stack_top - mmap_min_=
-addr))
-                return -ENOMEM;
-
-  +     /*
-  +      * Shift the stack up, but avoid shifting by
-  +      * exactly a PMD size, which causes issues
-  +      * when mixing page-sized and pmd-sized moves.
-  +      */
-        stack_shift =3D vma->vm_end - stack_top;
-  +     if (stack_shift && !(stack_shift & ~PMD_MASK))
-  +             stack_shift -=3D PAGE_SIZE;
-
-        bprm->p -=3D stack_shift;
-        mm->arg_start =3D bprm->p;
-
-which is *really* quite ugly, and only handles the stack-grows-down
-case, and I'm not proud of it, and the above is also entirely
-untested.
-
-I will delete that patch from my system after sending out this email,
-and disavow any knowledge of that horrendously ugly hack. But if
-somebody else takes ownership of it and I won't be blamed for it, I
-would probably accept it as a solution.
-
-Shudder. That's nasty.
-
-                      Linus
+Thanks,
+Conor.
