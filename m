@@ -2,99 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656766C950F
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 16:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D5C6C9512
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 16:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbjCZONZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 10:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50870 "EHLO
+        id S232192AbjCZOOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 10:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbjCZONX (ORCPT
+        with ESMTP id S232073AbjCZOOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:13:23 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2963D6594;
-        Sun, 26 Mar 2023 07:13:01 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-536af432ee5so124748477b3.0;
-        Sun, 26 Mar 2023 07:13:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679839980;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/ZRzhYebH5AuIeB7bCMisoF/7Z4hpl9JqnpdyGD997I=;
-        b=ZxMwBqJ4K91caHcs8I1GmJtIU5/4ql8PImbJO0a5VKl4O6P01XEgriE9RMYizH4LWH
-         8bJ/w8IWcYGjjvVpEk+vYXdRLvspD64kJHc1YZB16cZpKCm/+Dh0QYbjtMdDnEP1Yr+G
-         pP1dGRPz8q0UxYRLAzKMLbCgAh6CHrmxobupRVm1f0MMl6+ldXZmpScpo3P5VYiE8C1P
-         WLu3N+7OkU0MoNfptZz8FDhXrswr4Mv/XlcFJNQvwQSomAY4QxLYTImwQxZPKS9x8FJZ
-         DMSL7Z0bpIhiQYwnUVT04NLgTZNIV/tIpjJ67Vfg68uE59gUw6+Y3AjOVNPxDD+zV8UZ
-         L9kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679839980;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/ZRzhYebH5AuIeB7bCMisoF/7Z4hpl9JqnpdyGD997I=;
-        b=I0ddbN/xoowmnLyUDOPAOHsvpIx69wFwyr+qstd01qP7NN8tbBAuC0WZqcleSpitBx
-         IF94oSbYsxVcTo6gZ7dpqXTo9K4fwY8b2zSDRRiGeNCnaEMA7tnPmAxelQ93lHwztM9P
-         Goneh7ZsEwuF+jDuxcHhZI+oU5/jEp5HkMXUB2DbZRwJMTgvIlYYz6+f/euZ/28L6Kuu
-         mkyNXB7FIKnLEVxGFFx0c3xSyhkAdAEPqR6yJjLTY3Ksl0Wlm4Qr6vbayzifnpzDBrg7
-         zLp3yfeA+lxm6xuNCp6ocoyjGiH7iLctAoICr+/PoGp8crshf03L6coPe/tjheNv2VsU
-         +kBQ==
-X-Gm-Message-State: AAQBX9e4n0sWjFu+N03ubEuSztreJKOvZ5cLPI+Fere5kXJsQFJV9Dc0
-        KEo4aRdR+PswMboTXz0RgA8=
-X-Google-Smtp-Source: AKy350ZrhENhMTDQOcDtvcs6PwUpixFN3qSHh1ALf+Jr+ZdkI91IYsO59P6n6/a8qTfuUBHtvrMAVw==
-X-Received: by 2002:a81:49c1:0:b0:544:5c0b:1326 with SMTP id w184-20020a8149c1000000b005445c0b1326mr8853795ywa.18.1679839980260;
-        Sun, 26 Mar 2023 07:13:00 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k10-20020a81ed0a000000b00545a0818486sm1467096ywm.22.2023.03.26.07.12.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 07:12:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 26 Mar 2023 07:12:57 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     borisp@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        davejwatson@fb.com, aviadye@mellanox.com, ilyal@mellanox.com,
-        fw@strlen.de, sd@queasysnail.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: tls: fix possible race condition between
- do_tls_getsockopt_conf() and do_tls_setsockopt_conf()
-Message-ID: <fdfa0099-481c-48d6-8ab8-0c84b260e451@roeck-us.net>
-References: <20230228023344.9623-1-hbh25y@gmail.com>
+        Sun, 26 Mar 2023 10:14:37 -0400
+Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C871B9
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 07:14:35 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id gR8fpDUyw985CgR8fpq2Ia; Sun, 26 Mar 2023 16:14:34 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 26 Mar 2023 16:14:34 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] crypto: mxs-dcp - Use the devm_clk_get_optional_enabled() helper
+Date:   Sun, 26 Mar 2023 16:14:25 +0200
+Message-Id: <c1049046280d78d92c7d0342e354e2429ce0176a.1679840050.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228023344.9623-1-hbh25y@gmail.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Use devm_clk_get_optional_enabled() instead of hand writing it.
+This saves some loC and improves the semantic.
 
-On Tue, Feb 28, 2023 at 10:33:44AM +0800, Hangyu Hua wrote:
-> ctx->crypto_send.info is not protected by lock_sock in
-> do_tls_getsockopt_conf(). A race condition between do_tls_getsockopt_conf()
-> and do_tls_setsockopt_conf() can cause a NULL point dereference or
-> use-after-free read when memcpy.
-> 
-> Please check the following link for pre-information:
->  https://lore.kernel.org/all/Y/ht6gQL+u6fj3dG@hog/
-> 
-> Fixes: 3c4d7559159b ("tls: kernel TLS support")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+update the error handling path and the remove function accordingly.
 
-This patch has been applied to v6.1.y. Should it be applied to older kernel
-branches as well ? I know it doesn't apply cleanly, but the conflicts
-should be easy to resolve. I'll be happy to send backports to stable@ if
-needed.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/crypto/mxs-dcp.c | 21 +++++----------------
+ 1 file changed, 5 insertions(+), 16 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/crypto/mxs-dcp.c b/drivers/crypto/mxs-dcp.c
+index 1c11946a4f0b..f6b7bce0e656 100644
+--- a/drivers/crypto/mxs-dcp.c
++++ b/drivers/crypto/mxs-dcp.c
+@@ -1022,21 +1022,15 @@ static int mxs_dcp_probe(struct platform_device *pdev)
+ 	sdcp->coh = PTR_ALIGN(sdcp->coh, DCP_ALIGNMENT);
+ 
+ 	/* DCP clock is optional, only used on some SOCs */
+-	sdcp->dcp_clk = devm_clk_get(dev, "dcp");
+-	if (IS_ERR(sdcp->dcp_clk)) {
+-		if (sdcp->dcp_clk != ERR_PTR(-ENOENT))
+-			return PTR_ERR(sdcp->dcp_clk);
+-		sdcp->dcp_clk = NULL;
+-	}
+-	ret = clk_prepare_enable(sdcp->dcp_clk);
+-	if (ret)
+-		return ret;
++	sdcp->dcp_clk = devm_clk_get_optional_enabled(dev, "dcp");
++	if (IS_ERR(sdcp->dcp_clk))
++		return PTR_ERR(sdcp->dcp_clk);
+ 
+ 	/* Restart the DCP block. */
+ 	ret = stmp_reset_block(sdcp->base);
+ 	if (ret) {
+ 		dev_err(dev, "Failed reset\n");
+-		goto err_disable_unprepare_clk;
++		return ret;
+ 	}
+ 
+ 	/* Initialize control register. */
+@@ -1076,7 +1070,7 @@ static int mxs_dcp_probe(struct platform_device *pdev)
+ 	if (IS_ERR(sdcp->thread[DCP_CHAN_HASH_SHA])) {
+ 		dev_err(dev, "Error starting SHA thread!\n");
+ 		ret = PTR_ERR(sdcp->thread[DCP_CHAN_HASH_SHA]);
+-		goto err_disable_unprepare_clk;
++		return ret;
+ 	}
+ 
+ 	sdcp->thread[DCP_CHAN_CRYPTO] = kthread_run(dcp_chan_thread_aes,
+@@ -1134,9 +1128,6 @@ static int mxs_dcp_probe(struct platform_device *pdev)
+ err_destroy_sha_thread:
+ 	kthread_stop(sdcp->thread[DCP_CHAN_HASH_SHA]);
+ 
+-err_disable_unprepare_clk:
+-	clk_disable_unprepare(sdcp->dcp_clk);
+-
+ 	return ret;
+ }
+ 
+@@ -1156,8 +1147,6 @@ static int mxs_dcp_remove(struct platform_device *pdev)
+ 	kthread_stop(sdcp->thread[DCP_CHAN_HASH_SHA]);
+ 	kthread_stop(sdcp->thread[DCP_CHAN_CRYPTO]);
+ 
+-	clk_disable_unprepare(sdcp->dcp_clk);
+-
+ 	platform_set_drvdata(pdev, NULL);
+ 
+ 	global_sdcp = NULL;
+-- 
+2.34.1
+
