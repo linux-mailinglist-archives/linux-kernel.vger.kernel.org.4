@@ -2,151 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 132376C980D
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 23:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B9B6C980E
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 23:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbjCZVpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 17:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
+        id S230135AbjCZVtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 17:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjCZVpX (ORCPT
+        with ESMTP id S229546AbjCZVtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 17:45:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37714EE8;
-        Sun, 26 Mar 2023 14:45:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FFDBB80D4C;
-        Sun, 26 Mar 2023 21:45:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03B5CC433D2;
-        Sun, 26 Mar 2023 21:45:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679867119;
-        bh=sf9ZPEdBBuTt1ltFCWTCcuLC8nULn++8M8olOM9kojc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=EeFmk93+P4E/KpIpeBs9eUoNHSlOY1AIGZ5H0F2qWAAbivD06pZGonxAYEuwP1Ajz
-         3ULaNTnQnzjaErygGGx5TMNgerM4yBPQe7YL9Ey9EJLTi7zNBxLLEDQrFJ9YDcH1c3
-         88+cj1Ucq82ToX9m7xxeGRGLSRDejgHhIFsk/bav9GbdC+m17GNbL160RjaZZ/HH7i
-         AXm+DUZ1r/reWRkVZuL3jA3E4I6r9UpuyctrNNHqHVjrSJsINxpuQvb5nSAdFJgc/1
-         aRRErCxdghFHfNM6scJF+GswMK/a+Hh4tfDE/Gy4ggruWB4XwqoZ8bkUG2kroNd26Z
-         OV3FNpeouDHSA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 8750A1540474; Sun, 26 Mar 2023 14:45:18 -0700 (PDT)
-Date:   Sun, 26 Mar 2023 14:45:18 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 1/4] rcu/nocb: Protect lazy shrinker against concurrent
- (de-)offloading
-Message-ID: <dd853e13-ffcd-4579-adad-80b014e906ef@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230322194456.2331527-1-frederic@kernel.org>
- <20230322194456.2331527-2-frederic@kernel.org>
- <c614c542-f2b5-4b39-bbc4-ae5f0a125c81@paulmck-laptop>
- <ZB4fhA1BafN7h2N3@localhost.localdomain>
- <ae1cb391-aeed-4587-8d9d-50909c918fb1@paulmck-laptop>
- <ZCCknqnceazfyzvr@localhost.localdomain>
+        Sun, 26 Mar 2023 17:49:10 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9C659E2
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 14:49:08 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id q27so4266108oiw.0
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 14:49:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679867348;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8jPnc/mNq3d+a+FglCHgJpNdOZEFwd7wj5X3i1Idl2k=;
+        b=gn++6ZvnWydiyQDWYLM37Su6Y8V5AelENXkUd1zfa//HNth0qxGvJN+a89bYW+xj5L
+         bfX2CxHvmPzI2zOwDeKc1dQM5IlRAAon4lh/hb/Ol5TRreXiVsnui+aobUeYC6VqO517
+         R0C1He49n7ubWTQdzZzzP7Lo9HxJdKUSAEOXvw07XY4a8aCwNWHi/BAhEJjNQL2YPpbB
+         FbWmvqiwqBh5hvinVOXCzxhDYBLMRskPTfgw4JpblnaEZu6TvpDhjHUVz+dI+ZJbqGhW
+         ebahe6bV++hj8P476NOp7FQVOZqLIpHK5KhfvjAf7wJMUnGXywtNPmPQi9Ez5sUugn1j
+         WEqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679867348;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8jPnc/mNq3d+a+FglCHgJpNdOZEFwd7wj5X3i1Idl2k=;
+        b=ZsquQTm/6qHawf6r1dIt9AiCSlJZlc6fgJ0Auz/tReNueYJSVK2WhepcjqkOeJWhOK
+         L/Oa2BXBmPdzqdMKc7dovAbX/Sj53lpwIF9hAC6Ux0UlxyjVTb+ro+Zn9sbUcKzPkOMd
+         EZRXPo9Wjf2hrGoFy/+qDrgAjPpOumigqBQ9HJPCc577WunlpTXLDpb5IMD6JfrKnd5C
+         SDxMOMAy76ZHYZxgptJYtYOXPhHde57BXLE2XlmhMQ8CqeGxTamSH96DD4tux1i0Vn1l
+         C+zw/AIRz8Xb95PRrpiTcgtsKGqlgeaGkSEKbd3YEWhAI/BKmqhyxbk1CvI37qQ3fJxI
+         LGjQ==
+X-Gm-Message-State: AO0yUKX0amqskDLS93p4fnZ8+ChCBq40gDkN1ERl+nDQi03//5kzafs2
+        T1nQTP0gOJPownxi+AQQzTs=
+X-Google-Smtp-Source: AK7set8dH4HtvjhK+fXwyFFt+qdAPbaKRPt8t0aLV6eBrQH8ELAGqmtVsBdJ+8shFunKm/pjE/e2nw==
+X-Received: by 2002:a05:6808:6190:b0:384:23da:6e73 with SMTP id dn16-20020a056808619000b0038423da6e73mr3879432oib.47.1679867348216;
+        Sun, 26 Mar 2023 14:49:08 -0700 (PDT)
+Received: from geday ([2804:7f2:8002:df06:a135:1d39:bf0c:2898])
+        by smtp.gmail.com with ESMTPSA id bl31-20020a056808309f00b00384a45d3106sm10418910oib.58.2023.03.26.14.49.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 14:49:07 -0700 (PDT)
+Date:   Sun, 26 Mar 2023 18:49:08 -0300
+From:   Geraldo Nascimento <geraldogabriel@gmail.com>
+To:     Shenghao Ding <13916275206@139.com>
+Cc:     broonie@kernel.org, lgirdwood@gmail.com, perex@perex.cz,
+        pierre-louis.bossart@linux.intel.com, kevin-lu@ti.com,
+        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
+        navada@ti.com
+Subject: Re: [PATCH v7] ASoC: tas2781: Add tas2781 driver
+Message-ID: <ZCC91Jhv9+rlb3FM@geday>
+References: <20230326143419.11711-1-13916275206@139.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCCknqnceazfyzvr@localhost.localdomain>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230326143419.11711-1-13916275206@139.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 10:01:34PM +0200, Frederic Weisbecker wrote:
-> Le Fri, Mar 24, 2023 at 03:51:54PM -0700, Paul E. McKenney a écrit :
-> > On Fri, Mar 24, 2023 at 11:09:08PM +0100, Frederic Weisbecker wrote:
-> > > Le Wed, Mar 22, 2023 at 04:18:24PM -0700, Paul E. McKenney a écrit :
-> > > > > @@ -1336,13 +1336,25 @@ lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
-> > > > >  	unsigned long flags;
-> > > > >  	unsigned long count = 0;
-> > > > >  
-> > > > > +	/*
-> > > > > +	 * Protect against concurrent (de-)offloading. Otherwise nocb locking
-> > > > > +	 * may be ignored or imbalanced.
-> > > > > +	 */
-> > > > > +	mutex_lock(&rcu_state.barrier_mutex);
-> > > > 
-> > > > I was worried about this possibly leading to out-of-memory deadlock,
-> > > > but if I recall correctly, the (de-)offloading process never allocates
-> > > > memory, so this should be OK?
-> > > 
-> > > Good point. It _should_ be fine but like you, Joel and Hillf pointed out
-> > > it's asking for trouble.
-> > > 
-> > > We could try Joel's idea to use mutex_trylock() as a best effort, which
-> > > should be fine as it's mostly uncontended.
-> > > 
-> > > The alternative is to force nocb locking and check the offloading state
-> > > right after. So instead of:
-> > > 
-> > > 	rcu_nocb_lock_irqsave(rdp, flags);
-> > > 	//flush stuff
-> > > 	rcu_nocb_unlock_irqrestore(rdp, flags);
-> > > 
-> > > Have:
-> > > 
-> > > 	raw_spin_lock_irqsave(rdp->nocb_lock, flags);
-> > > 	if (!rcu_rdp_is_offloaded(rdp))
-> > > 		raw_spin_unlock_irqrestore(rdp->nocb_lock, flags);
-> > > 		continue;
-> > > 	}
-> > > 	//flush stuff
-> > > 	rcu_nocb_unlock_irqrestore(rdp, flags);
-> > > 
-> > > But it's not pretty and also disqualifies the last two patches as
-> > > rcu_nocb_mask can't be iterated safely anymore.
-> > > 
-> > > What do you think?
-> > 
-> > The mutex_trylock() approach does have the advantage of simplicity,
-> > and as you say should do well given low contention.
-> > 
-> > Which reminds me, what sort of test strategy did you have in mind?
-> > Memory exhaustion can have surprising effects.
-> 
-> The best I can do is to trigger the count and scan callbacks through
-> the shrinker debugfs and see if it crashes or not :-)
+Hi Shenghao,
 
-Sounds like a good start.  Maybe also a good finish?  ;-)
+On Sun, Mar 26, 2023 at 10:34:19PM +0800, Shenghao Ding wrote:
+> +config SND_SOC_TAS2781
+> +	tristate "Texas Instruments TAS2781 speaker amplifier"
+> +	depends on I2C
+> +	select REGMAP_I2C
+> +	select CRC8
+> +	help
+> +	  Enable support for Texas Instruments TAS2781 Smart Amplifier
+> +	  Digital input mono Class-D and DSP-inside audio power amplifiers.
+> +	  Note the TAS2781 driver implements a flexible and configurable
+> +	  algo coff setting, for one, two, even multiple TAS2781 chips.
 
-> > > > >  	/* Snapshot count of all CPUs */
-> > > > >  	for_each_possible_cpu(cpu) {
-> > > > >  		struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
-> > > > > -		int _count = READ_ONCE(rdp->lazy_len);
-> > > > > +		int _count;
-> > > > > +
-> > > > > +		if (!rcu_rdp_is_offloaded(rdp))
-> > > > > +			continue;
-> > > > 
-> > > > If the CPU is offloaded, isn't ->lazy_len guaranteed to be zero?
-> > > > 
-> > > > Or can it contain garbage after a de-offloading operation?
-> > > 
-> > > If it's deoffloaded, ->lazy_len is indeed (supposed to be) guaranteed to be zero.
-> > > Bypass is flushed and disabled atomically early on de-offloading and the
-> > > flush resets ->lazy_len.
-> > 
-> > Whew!  At the moment, I don't feel strongly about whether or not
-> > the following code should (1) read the value, (2) warn on non-zero,
-> > (3) assume zero without reading, or (4) some other option that is not
-> > occurring to me.  Your choice!
-> 
-> (2) looks like a good idea!
+You changed coff->coefficient below as suggested by Pierre-Louis Bossart
+but you forgot to change it here, and this will surely perplex people
+when configuring the kernel.
 
-Sounds good to me!
+> +
+>  config SND_SOC_TAS5086
+>  	tristate "Texas Instruments TAS5086 speaker amplifier"
+>  	depends on I2C
+> diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
+> index f1ca18f7946c..5559b9e9cc17 100644
+> --- a/sound/soc/codecs/Makefile
+> +++ b/sound/soc/codecs/Makefile
+> @@ -262,6 +262,7 @@ snd-soc-tas5805m-objs := tas5805m.o
+>  snd-soc-tas6424-objs := tas6424.o
+>  snd-soc-tda7419-objs := tda7419.o
+>  snd-soc-tas2770-objs := tas2770.o
+> +snd-soc-tas2781-objs :=	tas2781-i2c.o tas2781-dsp.o
+>  snd-soc-tfa9879-objs := tfa9879.o
+>  snd-soc-tfa989x-objs := tfa989x.o
+>  snd-soc-tlv320adc3xxx-objs := tlv320adc3xxx.o
+> @@ -619,6 +620,7 @@ obj-$(CONFIG_SND_SOC_TAS2552)	+= snd-soc-tas2552.o
+>  obj-$(CONFIG_SND_SOC_TAS2562)	+= snd-soc-tas2562.o
+>  obj-$(CONFIG_SND_SOC_TAS2764)	+= snd-soc-tas2764.o
+>  obj-$(CONFIG_SND_SOC_TAS2780)	+= snd-soc-tas2780.o
+> +obj-$(CONFIG_SND_SOC_TAS2781)	+= snd-soc-tas2781.o
+>  obj-$(CONFIG_SND_SOC_TAS5086)	+= snd-soc-tas5086.o
+>  obj-$(CONFIG_SND_SOC_TAS571X)	+= snd-soc-tas571x.o
+>  obj-$(CONFIG_SND_SOC_TAS5720)	+= snd-soc-tas5720.o
+> diff --git a/sound/soc/codecs/tas2781-dsp.c b/sound/soc/codecs/tas2781-dsp.c
+> new file mode 100644
+> index 000000000000..6a0e9fb5e20f
+> --- /dev/null
+> +++ b/sound/soc/codecs/tas2781-dsp.c
+> @@ -0,0 +1,2232 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// ALSA SoC Texas Instruments TAS2781 Audio Smart Amplifier
+> +//
+> +// Copyright (C) 2022 - 2023 Texas Instruments Incorporated
+> +// https://www.ti.com
+> +//
+> +// The TAS2781 driver implements a flexible and configurable
+> +// algo coefficient setting for one, two, or even multiple
+> +// TAS2781 chips.
 
-							Thanx, Paul
+Here it is OK.
+
+Thanks,
+Geraldo Nascimento
