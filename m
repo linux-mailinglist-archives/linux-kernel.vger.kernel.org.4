@@ -2,106 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4306C9455
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 14:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 762F26C9456
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 14:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjCZMq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 08:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
+        id S231839AbjCZMrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 08:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjCZMq4 (ORCPT
+        with ESMTP id S229596AbjCZMri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 08:46:56 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721197D98
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 05:46:55 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id cn12so25255707edb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 05:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679834814;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rSVPQZLvMg8MxPtgtJhR5Wq1fUwwDFt0dAXT8YpYgaU=;
-        b=iB8dEQPl+YY+fah8Jik5YmwFYZ1C76EJD+O2kEfEkm3OinnmZIBJ1N+GC97dDhRs0K
-         iA7Vj8rZVgRWrxUl+H9jwetFlxrbJUQo+KVJntA3aBgLbtGFbvAMVoDHlysV/RFlbj7Q
-         hzqvDUdZzZy3KZ6wBvgeykVDK4T7NeHKsm6KFhjA7nPc4tOWCWFUsXTbGQO2Gb5twdfx
-         PYA4MQKqwECT/J9+s3A+IBPXDXtiCn08dG4NGunzQwfjiX5BiS2555qz13T+qdUzMeTB
-         JKagAXQcLnz1XIFKSuG0caB4AZBX9c8+AM6PuQlrPllBhZx++zsjdeuybOf/UWZiwy1s
-         CAPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679834814;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rSVPQZLvMg8MxPtgtJhR5Wq1fUwwDFt0dAXT8YpYgaU=;
-        b=OjTGHlqArUxV1B4ag38yUXCWY+LFAEXHnmtiF74gslubGWMWPaAhz5cQr2++VtOU21
-         qrTpttmsDq5XRQ3FziGp1GhnsP2fhKYEIzdMySqtRRUiBqMWYbJebXotOvOMSiOud+9u
-         KgKsXlTQkZWLAqBuMPLEsHG2aNee3Gfy+hWg8c884HfHoyuhhm5LchkfkCOnUfO8qXrB
-         ObPHt6/LXqSyzXwjWQkd049iCR9qqnFLYflEMUVqiM5XPMTzUD2lL2pVR6UKbDBkll2f
-         rLsE6vtHbA+S6ObzV9iPyTiz94akspxtI6ydcEZ1P4UtREcIqUS2C/fHFe7P/AiGlgRj
-         td4A==
-X-Gm-Message-State: AAQBX9erV/ACLkoROUeXyBGtrFvFCnHnw0xh5j+/r/EgRX93reMpFPga
-        VKRDfJGzKJnrgOdfJTR8LHM=
-X-Google-Smtp-Source: AKy350b9q8sglt0xIXc0mxLMsKwZNW2bmLY3U2biBD1vzDSd9YwwZ8EPJNpAnwvcZBW8x8cqNSArrw==
-X-Received: by 2002:a17:906:fc1e:b0:92b:f3c3:7c5f with SMTP id ov30-20020a170906fc1e00b0092bf3c37c5fmr8581612ejb.53.1679834813916;
-        Sun, 26 Mar 2023 05:46:53 -0700 (PDT)
-Received: from nam-dell (ip-80-113-101-30.ip.prioritytelecom.net. [80.113.101.30])
-        by smtp.gmail.com with ESMTPSA id f23-20020a1709064dd700b00931536d461fsm12885452ejw.20.2023.03.26.05.46.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 05:46:53 -0700 (PDT)
-Date:   Sun, 26 Mar 2023 14:46:52 +0200
-From:   Nam Cao <namcaov@gmail.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     gregkh@linuxfoundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, artur.bujdoso@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] staging: rtl8723bs: remove unused pHalData variable
-Message-ID: <ZCA+vIjUFHZFUFPC@nam-dell>
-References: <20230326122321.1352337-1-trix@redhat.com>
+        Sun, 26 Mar 2023 08:47:38 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759537D9A
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 05:47:37 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 12CD71EC0681;
+        Sun, 26 Mar 2023 14:47:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1679834856;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=bWmnuzKEUGY/2w36Dgsuu7GRUOm4ynEheBLo1nH46Z8=;
+        b=jxna6RT+wIiK4Hpq9dkVMb/lyDdHj9HlM308QnZ/NEVvEV0jyOJmI+hYcFnctEQlrJI5Uy
+        dZwVkjovxI5Le7a9fQcWEdyDmRcLYqxhhi23jb6fjxEEcaF8FAEVfr2c+46S9jh2S7rrOy
+        /2QP3HHMzVB/5GNsEUTvF1OUj2lmP9c=
+Date:   Sun, 26 Mar 2023 14:47:35 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] core/urgent for v6.3-rc4
+Message-ID: <20230326124735.GBZCA+58Z/H1QD3b7W@fat_crate.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230326122321.1352337-1-trix@redhat.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 08:23:21AM -0400, Tom Rix wrote:
-> clang with W=1 reports
-> drivers/staging/rtl8723bs/hal/hal_btcoex.c:1182:23: error: variable
->   'pHalData' set but not used [-Werror,-Wunused-but-set-variable]
->         struct hal_com_data *pHalData;
->                              ^
-> This variable is not used so remove it.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/staging/rtl8723bs/hal/hal_btcoex.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8723bs/hal/hal_btcoex.c b/drivers/staging/rtl8723bs/hal/hal_btcoex.c
-> index e36f8c369a04..0cb2adcc1f78 100644
-> --- a/drivers/staging/rtl8723bs/hal/hal_btcoex.c
-> +++ b/drivers/staging/rtl8723bs/hal/hal_btcoex.c
-> @@ -1179,10 +1179,6 @@ bool hal_btcoex_IsBtDisabled(struct adapter *padapter)
->  
->  void hal_btcoex_SetChipType(struct adapter *padapter, u8 chipType)
->  {
-> -	struct hal_com_data *pHalData;
-> -
-> -
-> -	pHalData = GET_HAL_DATA(padapter);
->  }
+Hi Linus,
 
-If this function doesn't do anything, does it not make more sense to
-just remove this function entirely?
+please pull a couple of core/urgent fixes for 6.3.
 
-Best regards,
-Nam
+Thx.
+
+---
+
+The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
+
+  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/core_urgent_for_v6.3_rc4
+
+for you to fetch changes up to b416514054810cf2d2cc348ae477cea619b64da7:
+
+  entry/rcu: Check TIF_RESCHED _after_ delayed RCU wake-up (2023-03-21 15:13:15 +0100)
+
+----------------------------------------------------------------
+- Do the delayed RCU wakeup for kthreads in the proper order so that
+  former doesn't get ignored
+
+- A noinstr warning fix
+
+----------------------------------------------------------------
+Frederic Weisbecker (1):
+      entry/rcu: Check TIF_RESCHED _after_ delayed RCU wake-up
+
+Josh Poimboeuf (1):
+      entry: Fix noinstr warning in __enter_from_user_mode()
+
+ include/linux/context_tracking.h       | 1 +
+ include/linux/context_tracking_state.h | 2 ++
+ kernel/entry/common.c                  | 5 +++--
+ 3 files changed, 6 insertions(+), 2 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
