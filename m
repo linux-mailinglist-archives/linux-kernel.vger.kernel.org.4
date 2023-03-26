@@ -2,143 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111546C96EB
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDCE6C96EE
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbjCZQrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 12:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
+        id S232186AbjCZQrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 12:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjCZQrC (ORCPT
+        with ESMTP id S232073AbjCZQrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 12:47:02 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CAE54C15;
-        Sun, 26 Mar 2023 09:47:01 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id B20C320FD05D; Sun, 26 Mar 2023 09:47:00 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B20C320FD05D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1679849220;
-        bh=5g48Pkq3wb7Oxb65S5AJphPh6t8/qMGHjHIhQQVtTKk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CoZQYVwMfGqy8Y4q9OBBj20/l1g9cCj/FaB5D/lFFe67wxNu6zYhwEl75DWdLkuBF
-         6aVAF9/pKp5dh1c64P5mNrPbNBF0/XhBq3XWCSJpUBE1JZJCWs0HRA4SB/DSK5STCm
-         WnMrgQdx1DMa7QFvoF0bCTrLTTJQDE9/7gkjVq/0=
-Date:   Sun, 26 Mar 2023 09:47:00 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v3 5/5] x86/Kconfig: Add HYPERV_VTL_MODE
-Message-ID: <20230326164700.GA10074@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1679306618-31484-1-git-send-email-ssengar@linux.microsoft.com>
- <1679306618-31484-6-git-send-email-ssengar@linux.microsoft.com>
- <BYAPR21MB16885C786D5DC8381C21868AD78A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+        Sun, 26 Mar 2023 12:47:05 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6654C15
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:47:04 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id y4so26601931edo.2
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:47:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679849223;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=k9We10+aJn7ul+hCgyePSABdIzaHTrq5ihMYDVZioG4=;
+        b=BCsjrgqFL9KlSvIHJbDWc+7t9N9t7oUU7WOToekUV2EO0SQFTiQJkmaPhEo+fSPZSj
+         YzD6G0Bs8epjf8soLwdWa8IiodufrmYgfC2Y6HJKABANlO5CqqxCn1jRAt1cNqOBGPQr
+         w0ieqdPMBSuNYj7BrVImGEqks1o532QUn6V4Rrp/jg52X5FOcictKEqqkIj+Up+Wex3F
+         TNeUV9hHK5z8SNJbp9uozti78VVFRY9YXlNUR5Ky/u0EWVkU8rNvXsBbkRjVlOvYaCEi
+         IJJGXXGKUSHluZgsnf330T60ddYCUQFKqV+VZISktF+QI9KDub2OX7T4bWEEciHNWlDY
+         ziXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679849223;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k9We10+aJn7ul+hCgyePSABdIzaHTrq5ihMYDVZioG4=;
+        b=Ttq1OsknbaUZZRDxojYwz0AH5uDrqMyey6SpXj3tWYiEfEDQ9l8VBH+JlDNLDsBeqE
+         3ofqly43BmHZfB628P+ByBHMi9ccvn6nAK0d1Myn7OSvdYcBMj7/JWV0g9s2blhrpRIc
+         O4L9MNUD2KXVh3eL1JLi3jNM9IDlP9YEA91boRD4oQWbDyV1mMRH56gIixT3viOwQ19/
+         3UhK42P+n25LnYad3j0WRra8ShyyYeEyiSy8BlPjRRttpY/mUS+izVKSxdcsbLsU+qoP
+         2lvLwBb5HDBvHVZupt7GpQTdJR5zAq+ohkU7MQg6pbUT6AXqlk5KLpRVQnDyhWdA30WK
+         xQnw==
+X-Gm-Message-State: AAQBX9dojWRnYKHq/C7FF4Ls784pkjGwr5P6jj9oXqw4duY3Azw2d/uf
+        +IOV4tyj2hUUI4L/Bin7fczaGw==
+X-Google-Smtp-Source: AKy350ZaVi6CbGP1f3BlaM7CAOyL3H/tqpdjSxBn5g9IpqoBK7QlOK2q99MGJbJADsg/UvN5lWgoxQ==
+X-Received: by 2002:aa7:c90d:0:b0:4fb:2060:4c20 with SMTP id b13-20020aa7c90d000000b004fb20604c20mr9205267edt.31.1679849222778;
+        Sun, 26 Mar 2023 09:47:02 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:eca3:3b8f:823b:2669])
+        by smtp.gmail.com with ESMTPSA id v4-20020a509544000000b004fb402a2a37sm13833982eda.33.2023.03.26.09.47.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 09:47:02 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: display: sitronix,st7789v: document dc-gpios
+Date:   Sun, 26 Mar 2023 18:47:00 +0200
+Message-Id: <20230326164700.104570-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB16885C786D5DC8381C21868AD78A9@BYAPR21MB1688.namprd21.prod.outlook.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 03:16:15PM +0000, Michael Kelley (LINUX) wrote:
-> From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Monday, March 20, 2023 3:04 AM
-> > 
-> > Add HYPERV_VTL_MODE Kconfig flag for VTL mode.
-> > 
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > ---
-> >  arch/x86/Kconfig         | 24 ++++++++++++++++++++++++
-> >  arch/x86/hyperv/Makefile |  1 +
-> >  2 files changed, 25 insertions(+)
-> > 
-> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > index 453f462f6c9c..c3faaaea1e31 100644
-> > --- a/arch/x86/Kconfig
-> > +++ b/arch/x86/Kconfig
-> > @@ -782,6 +782,30 @@ menuconfig HYPERVISOR_GUEST
-> > 
-> >  if HYPERVISOR_GUEST
-> > 
-> > +config HYPERV_VTL_MODE
-> > +	bool "Enable Linux to boot in VTL context"
-> > +	depends on X86_64 && HYPERV
-> > +	default n
-> > +	help
-> > +	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
-> > +	  enlightenments offered to host and guest partitions which enables
-> > +	  the creation and management of new security boundaries within
-> > +	  operating system software.
-> > +
-> > +	  VSM achieves and maintains isolation through Virtual Trust Levels
-> > +	  (VTLs). Virtual Trust Levels are hierarchical, with higher levels
-> > +	  being more privileged than lower levels. VTL0 is the least privileged
-> > +	  level, and currently only other level supported is VTL2.
-> > +
-> > +	  Select this option to build a Linux kernel to run at a VTL other than
-> > +	  the normal VTL0, which currently is only VTL2.  This option
-> > +	  initializes the x86 platform for VTL2, and adds the ability to boot
-> > +	  secondary CPUs directly into 64-bit context as required for VTLs other
-> > +	  than 0.  A kernel built with this option must run at VTL2, and will
-> > +	  not run as a normal guest.
-> > +
-> > +	  If unsure, say N
-> > +
-> 
-> Is there a reason for putting this in arch/x86/Kconfig instead of in
-> drivers/hv/Kconfig under the "Microsoft Hyper-V guest support"
-> menu with the other Hyper-V settings?  It seems like grouping
-> this with the other Hyper-V settings would make it easier to find,
-> unless there's some reason that doesn't work.
+The device comes with DCX pin which is already used in
+canaan/sipeed_maixduino.dts (although not in Linux driver).
 
-As all the code dependent on this flag is in arch/x86/hyperv, and all
-other kernel flags used in arch/x86/hyperv/Makefile are define in
-arch/x86/Kconfig, arch/x86/Kconfig was my default choice.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../devicetree/bindings/display/panel/sitronix,st7789v.yaml   | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-But your suggestion makes perfect sense, I will move it to
-drivers/hv/Kconfig
+diff --git a/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml b/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
+index d984b59daa4a..fa6556363cca 100644
+--- a/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
++++ b/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
+@@ -26,6 +26,10 @@ properties:
+   spi-cpha: true
+   spi-cpol: true
+ 
++  dc-gpios:
++    maxItems: 1
++    description: DCX pin, Display data/command selection pin in parallel interface
++
+ required:
+   - compatible
+   - reg
+-- 
+2.34.1
 
-Regards,
-Saurabh
-
-> 
-> Michael
-> 
-> >  config PARAVIRT
-> >  	bool "Enable paravirtualization code"
-> >  	depends on HAVE_STATIC_CALL
-> > diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
-> > index 5d2de10809ae..3a1548054b48 100644
-> > --- a/arch/x86/hyperv/Makefile
-> > +++ b/arch/x86/hyperv/Makefile
-> > @@ -1,6 +1,7 @@
-> >  # SPDX-License-Identifier: GPL-2.0-only
-> >  obj-y			:= hv_init.o mmu.o nested.o irqdomain.o ivm.o
-> >  obj-$(CONFIG_X86_64)	+= hv_apic.o hv_proc.o
-> > +obj-$(CONFIG_HYPERV_VTL_MODE)	+= hv_vtl.o
-> > 
-> >  ifdef CONFIG_X86_64
-> >  obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
-> > --
-> > 2.34.1
