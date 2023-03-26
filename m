@@ -2,181 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CA06C95E6
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0529D6C95E9
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjCZPD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 11:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39026 "EHLO
+        id S232334AbjCZPEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 11:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCZPD1 (ORCPT
+        with ESMTP id S229621AbjCZPEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 11:03:27 -0400
-Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azon11020026.outbound.protection.outlook.com [52.101.56.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C043AAA;
-        Sun, 26 Mar 2023 08:03:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U5iPMstrb79wIkZTH1SdsUl2ht11SESNiUAf7Q2WXQVWLWemm0WeK+5+0zylCQMm19raNLaX3oW9UW0sd7e5zJbMG247vtl7nr00o0KMZwXEJuLG9KBNvwgXPWtB/Tq4xnwGrOfi0AcmcvVrrciiYzlqyxnxEqXSZMFTvr7c+fKuNYSsGQRUFzv3lqyJ7pxXSVVNCaEyLK5SRcymBB6zDshRPeT3MEx9cjdfYweDhVT9KpZ91qmSnijkQAR+RZQlmVF6w14HbpKAyuWOVZwXNa7JFWjK6ghhdYQkO7ZGE3APukEcuxmQ31bGrQEszicaO2WZhkRJVSBF81rAiNckrA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w7CyEEyfnYCOFZsj4wvPwjaQ9OtOH3pEVIAv+VDDaNg=;
- b=mD+PKdeyfXW17rlj87Srn6lBVRmy9fOw+jSL70yeLqxhJ/TCK4nlqGlYP8pTGCit3D24CmyXITN4iX2g27eAYWa9nZ1s6yGVuN6BG10AOBepbPFqdlTIR5sul8usmVHdY6QDeqTrT9pF1tZ/HVUcijiMJbUO1PwICOnyOcwjivTLPcPT5Yg33cJI9GYg9eibNZioceOihoOFhR8Xejaq3VtXk15g3IveNH0HkLEQWnLSkb1Bu2/hv+GwH0y6v99XWDICV95FRZPlqjP7Q/lVElD0M8A5EsdmIi5xlM3mthJwgZT4itViFrlF+7ySYUJWCoZxFJglAKrHVPn5Yr0o+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w7CyEEyfnYCOFZsj4wvPwjaQ9OtOH3pEVIAv+VDDaNg=;
- b=dLwM421AejVjVzz+byFzULG3WOhQRX2ARvUTNedUho2a6WnzkL0la24J46yIj6NEk3GaGKMwRMQtoa8oEzkKWEvok+QcjoaD/rjmb5N1kgNAv7VQPuoSXOWCCaQrSDoI/cAdS/99kZPtE1inTAhEkN+jaP+fnasQkDH+OfMi00k=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by MW4PR21MB1908.namprd21.prod.outlook.com (2603:10b6:303:7b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.16; Sun, 26 Mar
- 2023 15:03:21 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c%7]) with mapi id 15.20.6254.014; Sun, 26 Mar 2023
- 15:03:18 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [PATCH v3 1/5] x86/init: Make get/set_rtc_noop() public
-Thread-Topic: [PATCH v3 1/5] x86/init: Make get/set_rtc_noop() public
-Thread-Index: AQHZWxNDNKy/ZC/mu069j5k8UJzEUK8NMdHA
-Date:   Sun, 26 Mar 2023 15:03:17 +0000
-Message-ID: <BYAPR21MB16885E11E5112939F59FD0BFD78A9@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <1679306618-31484-1-git-send-email-ssengar@linux.microsoft.com>
- <1679306618-31484-2-git-send-email-ssengar@linux.microsoft.com>
-In-Reply-To: <1679306618-31484-2-git-send-email-ssengar@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=daf9b3e7-37d9-45fd-ab07-4fd6a3e79bed;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-03-26T15:02:29Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|MW4PR21MB1908:EE_
-x-ms-office365-filtering-correlation-id: 864cb73e-bba5-4c6e-f014-08db2e0b3b2f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HbR3Ngz6kHz39/X2FMfBm0PRXyAZaUiRjXBoEhe3LOrRZl7DpI49mq1xE6t4tS6f0BMe3kQV5xJHGFr1zycCA2Ie4JeRfePooHzdkarDj6cCnEj2fDFwDY1Imu+b1bCYAOJTc/pNx4PcdWxI7zZB+F+vHrI+HWPM6dBYH3qjnel1H6dDXrplgCh6C5o9DtVDNFXcbN6e7LpG5+sumA3BxUqBSDtsQkgVzb7zEd7wLfRb1U7tqFZXtmO6Le1jT6IE9JeshpyEYHJypasH0fVpkD0PiGiZtsZ6IrO73wV4rH70KAPjFiCC7yWCGkKOzpX8BveSSj8P8Mo0a0JYiwz79bYQXsjddBDzjBUx0ppo17UlKfBbsludFt7l315s0r3XT5CsewbwpARhJucnllpUlIvmhO8XKwfJeOHXQvu3X975wKTJIy5DbTIy9us5f2uQN5bawgnChc3Jy3IDmOZUCDsyDEMt+umdhcaeyT8TnbE7Bpnn2b09hB/rc/WGt4dWaLbzV9J6Nv8jOPfHVzN0iRZi57mJbgHaYhjOa4H3YupSCCelTSlYe1a92G24EZM+SUH1AfvaaLTIpp/Am4JNcpL5ZYSyFL4An0BAdcIrmG9C4pmz7MBBJSHGKWKpoenN4ZYyUFPjyOJo/G4+x8FXGOudjclYEat6FIe0/dLieb0WFqtcB1Xbh2timK4IwAiW
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:cs;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(346002)(366004)(136003)(396003)(451199021)(122000001)(38100700002)(82950400001)(82960400001)(55016003)(33656002)(86362001)(38070700005)(921005)(2906002)(10290500003)(186003)(26005)(478600001)(6506007)(9686003)(5660300002)(7416002)(8936002)(71200400001)(7696005)(52536014)(41300700001)(110136005)(316002)(66556008)(64756008)(66446008)(66476007)(66946007)(8990500004)(8676002)(83380400001)(76116006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vzrPsoMfDUPaFkcj7t1+zPdlwVBNZXFOJEajJlPUAKlCNoQeg49aJoM2wHaR?=
- =?us-ascii?Q?2DV8uIS979rZLLn3snMiXRT8Ny/Oe5N2K5iVP4TSObc+uylFgYIvbWO9rFso?=
- =?us-ascii?Q?GPRLZ+XLtUELK53K8oOgPEscd1GL64X7LPPEteviU79+APNod+6tgPnagQcw?=
- =?us-ascii?Q?HNKMDvBRY0opJi3C3US5a9uRHPS05mBaDPD2wSFTSdXua1xXgNJvaShXbPKE?=
- =?us-ascii?Q?kyIyyYa6+CLigzoaM1WM4wFWGxlj29jky0weDvJ7fPUiAjcKg9SnSZjxBoCj?=
- =?us-ascii?Q?Uflnz/i3qMF1h3ZKuXaNdz/g0EeDRBUstthrVWlpMcCcS4AHfz2gnrXN4h6k?=
- =?us-ascii?Q?AdA1xVFJzGpmXi3AD/vgvUUd8QHhfOyd79gyQ4+ZBIscGXWDzbq/cc7jnhCF?=
- =?us-ascii?Q?H5xBgbgpy+DcNinkLhnHCKePGSH0h8OOak+iIWTYSV5AwHoJO+bLLae1ishN?=
- =?us-ascii?Q?4jsDc2bcEeKdeUO5tpG/yGvGRMQ596KY+0ivLylgz90Duio8B07iNur2UBVF?=
- =?us-ascii?Q?mxIRblgem7S7vGzKAyfLUUHhZW3MKNLvNMOQ7shzts7XwhyH9iuR48kV6VhC?=
- =?us-ascii?Q?CHy3D2EqZzROsbnUVdJEh2fMNMnLG2Mxmn8LH/XXwn6stcQ2nwXFu2C4p2CE?=
- =?us-ascii?Q?qxuf1DplXVghvJmcB7oAQYKOUaIuSTA2Xc66MR4fwkb9wCCFiPsyH8yHnG63?=
- =?us-ascii?Q?rntlEsxRAFs+ehL8a5nrr7zRHiydVSS2guQJDfl23ZB25BlTQGBdxeembEoZ?=
- =?us-ascii?Q?bI+7Hxc8RUDxYjKcgDRIW2sn2Dj6FEGO1Am3qBfucDs+sO/aajHa8wS98Gd2?=
- =?us-ascii?Q?xaL02bxNUndD6iU1e4jL/Pbyt7FQTAnyqz5l+/yTa2tEtk0oK+evZRFhcxuP?=
- =?us-ascii?Q?v16OxpFVtrmFvoh4QfLattTyoo4q7SjFk1ZFfsC2K0dfS9oimK/rowf6z65s?=
- =?us-ascii?Q?Pp6haq6e4ZreR1ndnVupi2+0EVtXhOU/pC4c0/z2UAAEaefVwEydHimWRM9I?=
- =?us-ascii?Q?z8tUBZ//AGnup1eAm48j2TqHTCDFcgp65ZEhn2C0KBXN+0SO++FYCYgDb4wZ?=
- =?us-ascii?Q?QJERbCuMyDyiSr1X2ZYZE23j/8FqIQzuxw+6pm9PTXMWVRfWr6ct3EPCllgr?=
- =?us-ascii?Q?otvcjLrwMX7mIGqXYWf/sBV515SPFTFhsjpQalUD64sh9lSBSN2287L0hUNP?=
- =?us-ascii?Q?gwmbIhSF/BXBA7dwK7CdE2Vu9zdDlIwl8bx/F44ajB9DxBYOpGDqp14jhahn?=
- =?us-ascii?Q?M4d6DtWdATKhQDCB13sw+pswQkTkzZyy230nzEwYTOgin4ATRHjYvZB7cBj3?=
- =?us-ascii?Q?jCPMcSEWVw9o8e51hogeJhAja7OP/CIOWmlpELB4dGNc8gdQiSPwcr9iqiCE?=
- =?us-ascii?Q?bVZw6hHXe5SZ5V46ppzzIOJG48mLU1ZNdwP2s3Gd5B2NecGXD/vDs/Qcy5/d?=
- =?us-ascii?Q?8hS09DhOm8V5MHjAR7xGrsvMHfzgvFQVg5fF0ZzPGupwLBlwlmapsjd1f4My?=
- =?us-ascii?Q?kCaTYcEivrZfxjvI6pYs6hMMgN5BPW7w9duSfEkqhoyvbWA/2EN2/VpV2C7q?=
- =?us-ascii?Q?U05McqgEI74iazFrflqD6TvuKBHdPbzhHDUUt+SNz7RarMllxrSq9a6HmSdg?=
- =?us-ascii?Q?7w=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 26 Mar 2023 11:04:02 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8FE3AAA;
+        Sun, 26 Mar 2023 08:04:00 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aeddf.dynamic.kabel-deutschland.de [95.90.237.223])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 0C72B61CC457B;
+        Sun, 26 Mar 2023 17:03:57 +0200 (CEST)
+Message-ID: <ddbae662-96d6-8779-eb8a-5a375e97ec22@molgen.mpg.de>
+Date:   Sun, 26 Mar 2023 17:03:56 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 864cb73e-bba5-4c6e-f014-08db2e0b3b2f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Mar 2023 15:03:17.5062
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KXGxuBnm4jjmuL7iykP8EL0J9GeXY0bbIJlkj09epkKr68M024eI/rTtbjUJdHqxBbTX+oUTne+7oFI80uvEdESZg7AyvEhFsezRdjXaDTU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR21MB1908
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [Intel-wired-lan] [PATCH net v3] ixgbe: Panic during XDP_TX with
+ > 64 CPUs
+To:     John Hickey <jjh@daedalian.us>
+Cc:     Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Shujin Li <lishujin@kuaishou.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        intel-wired-lan@lists.osuosl.org, Jakub Kicinski <kuba@kernel.org>,
+        bpf@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Jason Xing <xingwanli@kuaishou.com>
+References: <20230308220756.587317-1-jjh@daedalian.us>
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230308220756.587317-1-jjh@daedalian.us>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Monday, March 20, =
-2023 3:04 AM
->=20
-> Make get/set_rtc_noop() to be public so that they can be used
-> in other modules as well.
->=20
-> Co-developed-by: Tianyu Lan <tiala@microsoft.com>
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> Reviewed-by: Wei Liu <wei.liu@kernel.org>
+Dear John,
+
+
+Thank you for your patch.
+
+I’d recommend, to use a statement in the git commit message/summary by 
+adding a verb (in imperative mood). Maybe:
+
+Fix panic during XDP_TX with > 64 CPUs
+
+Am 08.03.23 um 23:07 schrieb John Hickey:
+> In commit 'ixgbe: let the xdpdrv work with more than 64 cpus'
+> (4fe815850bdc), support was added to allow XDP programs to run on systems
+
+I think it’s more common to write it like:
+
+In commit 4fe815850bdc (ixgbe: let the xdpdrv work with more than 64 cpus) …
+
+Even shorter
+
+Commit 4fe815850bdc (ixgbe: let the xdpdrv work with more than 64 cpus) 
+adds support to allow XDP programs …
+
+> with more than 64 CPUs by locking the XDP TX rings and indexing them
+> using cpu % 64 (IXGBE_MAX_XDP_QS).
+> 
+> Upon trying this out patch via the Intel 5.18.6 out of tree driver
+
+Upon trying this patch out via …
+
+> on a system with more than 64 cores, the kernel paniced with an
+> array-index-out-of-bounds at the return in ixgbe_determine_xdp_ring in
+> ixgbe.h, which means ixgbe_determine_xdp_q_idx was just returning the
+> cpu instead of cpu % IXGBE_MAX_XDP_QS.  An example splat:
+
+Please add, that you have UBSAN  enabled, or does it happen without?
+
+> 
+>   ==========================================================================
+>   UBSAN: array-index-out-of-bounds in
+>   /var/lib/dkms/ixgbe/5.18.6+focal-1/build/src/ixgbe.h:1147:26
+>   index 65 is out of range for type 'ixgbe_ring *[64]'
+>   ==========================================================================
+>   BUG: kernel NULL pointer dereference, address: 0000000000000058
+>   #PF: supervisor read access in kernel mode
+>   #PF: error_code(0x0000) - not-present page
+>   PGD 0 P4D 0
+>   Oops: 0000 [#1] SMP NOPTI
+>   CPU: 65 PID: 408 Comm: ksoftirqd/65
+>   Tainted: G          IOE     5.15.0-48-generic #54~20.04.1-Ubuntu
+>   Hardware name: Dell Inc. PowerEdge R640/0W23H8, BIOS 2.5.4 01/13/2020
+>   RIP: 0010:ixgbe_xmit_xdp_ring+0x1b/0x1c0 [ixgbe]
+>   Code: 3b 52 d4 cf e9 42 f2 ff ff 66 0f 1f 44 00 00 0f 1f 44 00 00 55 b9
+>   00 00 00 00 48 89 e5 41 57 41 56 41 55 41 54 53 48 83 ec 08 <44> 0f b7
+>   47 58 0f b7 47 5a 0f b7 57 54 44 0f b7 76 08 66 41 39 c0
+
+If you do not it yet, `scripts/decode_stacktrace.sh` helps decoding 
+these traces.
+
+>   RSP: 0018:ffffbc3fcd88fcb0 EFLAGS: 00010282
+>   RAX: ffff92a253260980 RBX: ffffbc3fe68b00a0 RCX: 0000000000000000
+>   RDX: ffff928b5f659000 RSI: ffff928b5f659000 RDI: 0000000000000000
+>   RBP: ffffbc3fcd88fce0 R08: ffff92b9dfc20580 R09: 0000000000000001
+>   R10: 3d3d3d3d3d3d3d3d R11: 3d3d3d3d3d3d3d3d R12: 0000000000000000
+>   R13: ffff928b2f0fa8c0 R14: ffff928b9be20050 R15: 000000000000003c
+>   FS:  0000000000000000(0000) GS:ffff92b9dfc00000(0000)
+>   knlGS:0000000000000000
+>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>   CR2: 0000000000000058 CR3: 000000011dd6a002 CR4: 00000000007706e0
+>   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>   PKRU: 55555554
+>   Call Trace:
+>    <TASK>
+>    ixgbe_poll+0x103e/0x1280 [ixgbe]
+>    ? sched_clock_cpu+0x12/0xe0
+>    __napi_poll+0x30/0x160
+>    net_rx_action+0x11c/0x270
+>    __do_softirq+0xda/0x2ee
+>    run_ksoftirqd+0x2f/0x50
+>    smpboot_thread_fn+0xb7/0x150
+>    ? sort_range+0x30/0x30
+>    kthread+0x127/0x150
+>    ? set_kthread_struct+0x50/0x50
+>    ret_from_fork+0x1f/0x30
+>    </TASK>
+> 
+> I think this is how it happens:
+> 
+> Upon loading the first XDP program on a system with more than 64 CPUs,
+> ixgbe_xdp_locking_key is incremented in ixgbe_xdp_setup.  However,
+> immediately after this, the rings are reconfigured by ixgbe_setup_tc.
+> ixgbe_setup_tc calls ixgbe_clear_interrupt_scheme which calls
+> ixgbe_free_q_vectors which calls ixgbe_free_q_vector in a loop.
+> ixgbe_free_q_vector decrements ixgbe_xdp_locking_key once per call if
+> it is non-zero.  Commenting out the decrement in ixgbe_free_q_vector
+> stopped my system from panicing.
+> 
+> I suspect to make the original patch work, I would need to load an XDP
+> program and then replace it in order to get ixgbe_xdp_locking_key back
+> above 0 since ixgbe_setup_tc is only called when transitioning between
+> XDP and non-XDP ring configurations, while ixgbe_xdp_locking_key is
+> incremented every time ixgbe_xdp_setup is called.
+> 
+> Also, ixgbe_setup_tc can be called via ethtool --set-channels, so this
+> becomes another path to decrement ixgbe_xdp_locking_key to 0 on systems
+> with greater than 64 CPUs.
+
+… with more than 64 CPUs.
+
+> For this patch, I have changed static_branch_inc to static_branch_enable
+> in ixgbe_setup_xdp.  We weren't counting references.  The
+> ixgbe_xdp_locking_key only protects code in the XDP_TX path, which is
+> not run when an XDP program is loaded.  The other condition for setting
+> it on is the number of CPUs, which I assume is static.
+> 
+> Fixes: 4fe815850bdc ("ixgbe: let the xdpdrv work with more than 64 cpus")
+> Signed-off-by: John Hickey <jjh@daedalian.us>
 > ---
->  arch/x86/include/asm/x86_init.h | 2 ++
->  arch/x86/kernel/x86_init.c      | 4 ++--
->  2 files changed, 4 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_i=
-nit.h
-> index c1c8c581759d..d8fb3a1639e9 100644
-> --- a/arch/x86/include/asm/x86_init.h
-> +++ b/arch/x86/include/asm/x86_init.h
-> @@ -326,5 +326,7 @@ extern void x86_init_uint_noop(unsigned int unused);
->  extern bool bool_x86_init_noop(void);
->  extern void x86_op_int_noop(int cpu);
->  extern bool x86_pnpbios_disabled(void);
-> +extern int set_rtc_noop(const struct timespec64 *now);
-> +extern void get_rtc_noop(struct timespec64 *now);
->=20
->  #endif
-> diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
-> index ef80d361b463..d93aeffec19b 100644
-> --- a/arch/x86/kernel/x86_init.c
-> +++ b/arch/x86/kernel/x86_init.c
-> @@ -33,8 +33,8 @@ static int __init iommu_init_noop(void) { return 0; }
->  static void iommu_shutdown_noop(void) { }
->  bool __init bool_x86_init_noop(void) { return false; }
->  void x86_op_int_noop(int cpu) { }
-> -static __init int set_rtc_noop(const struct timespec64 *now) { return -E=
-INVAL; }
-> -static __init void get_rtc_noop(struct timespec64 *now) { }
-> +int set_rtc_noop(const struct timespec64 *now) { return -EINVAL; }
-> +void get_rtc_noop(struct timespec64 *now) { }
->=20
->  static __initconst const struct of_device_id of_cmos_match[] =3D {
->  	{ .compatible =3D "motorola,mc146818" },
-> --
-> 2.34.1
+> v1 -> v2:
+> 	Added Fixes and net tag.  No code changes.
+> v2 -> v3:
+> 	Added splat.  Slight clarification as to why ixgbe_xdp_locking_key
+> 	is not turned off.  Based on feedback from Maciej Fijalkowski.
+> ---
+>   drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c  | 3 ---
+>   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 2 +-
+>   2 files changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
+> index f8156fe4b1dc..0ee943db3dc9 100644
+> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
+> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
+> @@ -1035,9 +1035,6 @@ static void ixgbe_free_q_vector(struct ixgbe_adapter *adapter, int v_idx)
+>   	adapter->q_vector[v_idx] = NULL;
+>   	__netif_napi_del(&q_vector->napi);
+>   
+> -	if (static_key_enabled(&ixgbe_xdp_locking_key))
+> -		static_branch_dec(&ixgbe_xdp_locking_key);
+> -
+>   	/*
+>   	 * after a call to __netif_napi_del() napi may still be used and
+>   	 * ixgbe_get_stats64() might access the rings on this vector,
+> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> index ab8370c413f3..cd2fb72c67be 100644
+> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> @@ -10283,7 +10283,7 @@ static int ixgbe_xdp_setup(struct net_device *dev, struct bpf_prog *prog)
+>   	if (nr_cpu_ids > IXGBE_MAX_XDP_QS * 2)
+>   		return -ENOMEM;
+>   	else if (nr_cpu_ids > IXGBE_MAX_XDP_QS)
+> -		static_branch_inc(&ixgbe_xdp_locking_key);
+> +		static_branch_enable(&ixgbe_xdp_locking_key);
+>   
+>   	old_prog = xchg(&adapter->xdp_prog, prog);
+>   	need_reset = (!!prog != !!old_prog);
 
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 
+Kind regards,
+
+Paul
