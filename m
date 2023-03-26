@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223F06C966D
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5932B6C9674
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232594AbjCZP6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 11:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
+        id S232629AbjCZP6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 11:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232429AbjCZP6E (ORCPT
+        with ESMTP id S232541AbjCZP6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 11:58:04 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFBB4480
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:58:03 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id eh3so26140431edb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:58:03 -0700 (PDT)
+        Sun, 26 Mar 2023 11:58:07 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498961BF9
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:58:05 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id er18so14998419edb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:58:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1679846283;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LfEcJS0iedMYRq077xyra2YW9PMvnxyDxWFKvIquIQw=;
-        b=YqPJSDOOgMPQFB+4ii62JQuYGT6046lZXY9mntJlUiVurN5/THiaYMg51hQWAcVvIC
-         FuDUMd1DEoOkUZ6jr0tOPseXdE26/UMrBDvhLhTQsPYPMRKMc/OvmOzZtfs6uD7G/z7y
-         kZ84RgO9GbV9z2BJ+OvSEbF4V0NS/dPbdm8eP9Mwba4XPym+7yJPuUBdA/0nJBGs+d0j
-         MMoUh38Sru1s4Tpvnkv6hd7L09aPqQmev4dIPWVCEX9UYf3BRvMM7RBdrf2lp9dT+Aut
-         nFpP8q9+BoInourGXZhfvqKs4aztWcO4GaOhoyXSE6poMQlAk/NbkWG7q8HggNrk6GZG
-         573Q==
+        bh=lyLCht8TNRnUX7p2EYn/oBPcd6Y0aZ5KmJDvg9ZX57o=;
+        b=e8IvbxH1Rdw49bNrp4shsk/uu+3e4Ey46C/v9DnLgkj6smd/dzTkn+i+s1GeUXW/7S
+         /IAgKRbriiGrkBtwb9ZCBBQCkZ++oyNHEszxLlhkMsIXCLvG7aDMWV117BvDgOTXK/4B
+         ZoLCBQZSWjswV4a7HnuW+s9q5syfWyev3eTzDp4JeWNGhtWlMj/bXmHv3wxQcl/toTgB
+         QK/+dLVUj6aNkqOgSk35RJfH7YtTB5muJ54Fpvf3Vn3gCts21aBjiqraln6nlBA01wja
+         gl0Te2jg+hK/+jxI23/tFkapJtrQOIJorLyau4KjKvMDIX80dgc4SYqOhDUWzcaIThYL
+         m0dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1679846283;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LfEcJS0iedMYRq077xyra2YW9PMvnxyDxWFKvIquIQw=;
-        b=SM3ximLsVDRQbameL2sjLJbOOtzWZoog4UWUEYh+QoX0vVk8krZgXuIpZ0OaqHe4ep
-         dKe7j9JtnoY8jw5wsSj0tJ8NgnVjjSKG11CKoCr32T9bM37OEQ9GWTvF6HDss7VKIXXe
-         Aad8LLfVR2ApRHsa1TKQcSKlXnaCRWBZ6l7BxPOhQJH6aTT1GJuks4X0EejMv6ZUzD0n
-         EozZ62hWhpqspRVL1FMM2ctnAO74QCgMd8HeduG6/rEFzJpfOnJtm2W/UxrNOpwfNlUi
-         nA10n+y+MQbXFMD++8AN4Al+UgJ+Ttvp9iH4n4Y3iUeLjMsFtbiUSvIWZO18HZTKI6aj
-         7oUg==
-X-Gm-Message-State: AAQBX9ffTqOXUcfc3eA+UPnMA10nAs9L4zcVmUpVZFJkldb+ai5VSiy6
-        1CnCzJYtwV7mHaRt6CTtVNvxPQ==
-X-Google-Smtp-Source: AKy350Yae1vTbRRMRvpVTfWb+4kzW/3iIKpypRI44beEMX9NNn/bQSLPntKicgw8jpzvUHXriNdKYg==
-X-Received: by 2002:aa7:d44d:0:b0:502:3ff4:4d76 with SMTP id q13-20020aa7d44d000000b005023ff44d76mr2386599edr.27.1679846282917;
-        Sun, 26 Mar 2023 08:58:02 -0700 (PDT)
+        bh=lyLCht8TNRnUX7p2EYn/oBPcd6Y0aZ5KmJDvg9ZX57o=;
+        b=F8rxz3C/xOrrRAi1HOZ9NT4nMPIsKoUZVjKg1+fcrW6lxA4XGdZVtOzjMRs8DMYqsw
+         AF0ttYrf7+xvMm3wf/OL1X6zduat3mxC/E6xQFsrazINkrJkZbF8IPGsfPDvcdfGnM1j
+         V1yjGfLyMyuLtDzZMBVlfTTMC/XjpDFj9apRNpzptluS9QdxfJQJDLneDpfN/KFdqVdb
+         mDza8tFXQUbH6OXzPWuM8/79eWze1CqQG+wE0NnIGs/TasvOqcRF65vQMQm0eVM1W4Nk
+         +1wAz7z4SGKZlRPONEZgL05ZfJWonQP9VbejP3Q0VYmHdCDad4V4WXU8sJf2XDnCTpwW
+         9khg==
+X-Gm-Message-State: AAQBX9eW30hc8LzorZq2KO3/BPLLZH7+fVw98nGStclWKVqjYskohjBc
+        tHqpA5ds6ST2rIpUQEtUSQPAWA==
+X-Google-Smtp-Source: AKy350aHEEyABkXTDWn2NnrApgHJuDjGRPb4mtfN9cFn1b82zdfPUHvY32QJ1b1oobWqW2Q1DKW3dg==
+X-Received: by 2002:a17:906:eb8e:b0:885:fee4:69ee with SMTP id mh14-20020a170906eb8e00b00885fee469eemr10498992ejb.59.1679846283813;
+        Sun, 26 Mar 2023 08:58:03 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:eca3:3b8f:823b:2669])
-        by smtp.gmail.com with ESMTPSA id q3-20020a50cc83000000b004fc86fcc4b3sm13705502edi.80.2023.03.26.08.58.02
+        by smtp.gmail.com with ESMTPSA id q3-20020a50cc83000000b004fc86fcc4b3sm13705502edi.80.2023.03.26.08.58.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 08:58:02 -0700 (PDT)
+        Sun, 26 Mar 2023 08:58:03 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 07/11] arm64: dts: qcom: sc7180-qcard: use just "port" in panel
-Date:   Sun, 26 Mar 2023 17:57:49 +0200
-Message-Id: <20230326155753.92007-7-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 08/11] arm64: dts: qcom: sc7180-trogdor-lazor: correct panel compatible
+Date:   Sun, 26 Mar 2023 17:57:50 +0200
+Message-Id: <20230326155753.92007-8-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230326155753.92007-1-krzysztof.kozlowski@linaro.org>
 References: <20230326155753.92007-1-krzysztof.kozlowski@linaro.org>
@@ -76,38 +76,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The panel bindings expect to have only one port, thus they do not allow
-to use "ports" node:
+innolux,n116bca-ea1 is not exactly compatible witg innolux,n116bge, as
+they have their own driver data.  Bindings do not allow fallback:
 
-  sc7280-herobrine-zombie-nvme-lte.dtb: panel: 'ports' does not match any of the regexes: 'pinctrl-[0-9]+'
+  sc7180-trogdor-lazor-limozeen-nots-r4.dtb: panel: compatible: ['innolux,n116bca-ea1', 'innolux,n116bge'] is too long
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+ .../boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dts     | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-index 95d9e4a19d76..9137db066d9e 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-@@ -354,14 +354,9 @@ edp_panel: panel {
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dts
+index 235cda2bba5e..7f01573b5543 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dts
+@@ -23,7 +23,7 @@ / {
+ /delete-node/&ap_ts;
  
- 			backlight = <&pm8350c_pwm_backlight>;
+ &panel {
+-	compatible = "innolux,n116bca-ea1", "innolux,n116bge";
++	compatible = "innolux,n116bca-ea1";
+ };
  
--			ports {
--				#address-cells = <1>;
--				#size-cells = <0>;
--				port@0 {
--					reg = <0>;
--					edp_panel_in: endpoint {
--						remote-endpoint = <&mdss_edp_out>;
--					};
-+			port {
-+				edp_panel_in: endpoint {
-+					remote-endpoint = <&mdss_edp_out>;
- 				};
- 			};
- 		};
+ &sdhc_2 {
 -- 
 2.34.1
 
