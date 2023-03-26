@@ -2,97 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3696C9477
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 15:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2A16C947D
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 15:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbjCZNUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 09:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
+        id S231980AbjCZNYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 09:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbjCZNUX (ORCPT
+        with ESMTP id S230243AbjCZNYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 09:20:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2BB7ED9
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 06:20:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4B06B80C91
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 13:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA032C433D2;
-        Sun, 26 Mar 2023 13:20:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679836817;
-        bh=DCQOATmQzGlfzrAUPN5To5/sRencn+ujNeV4RPDtAhg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=phANgEHH2kJz0I0Oe8aMuD8w0DTDBgbn31+krj3VEfj+obWiF4VMXuS8LN4fdHaz1
-         d2TbE9vR1zTX2SF0UWh8a681jalSCXPfojgdz6W/Kx3cmlZKJiuZNWdP6340Gp7NVP
-         ReYSLIlSN1UO1BoInk6ycAq5jw2W/Mw/y4oscBsA=
-Date:   Sun, 26 Mar 2023 15:20:14 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     Nam Cao <namcaov@gmail.com>, nathan@kernel.org,
-        ndesaulniers@google.com, artur.bujdoso@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] staging: rtl8723bs: remove unused pHalData variable
-Message-ID: <ZCBGjp7bJBWWztOG@kroah.com>
-References: <20230326122321.1352337-1-trix@redhat.com>
- <ZCA+vIjUFHZFUFPC@nam-dell>
- <ZCBArurFCc7Pae+T@kroah.com>
- <8a2746a0-57e0-621b-7db9-2719554d050b@redhat.com>
+        Sun, 26 Mar 2023 09:24:02 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0037D82;
+        Sun, 26 Mar 2023 06:24:00 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id ix20so6030046plb.3;
+        Sun, 26 Mar 2023 06:24:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679837040;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pnOOlLKoWlVB67gp3RPUD05wT//LBY3yFpES74W1Vkc=;
+        b=qJ0qSreIpqg7n1M2RJjBDhJZNct/hh4eDFZw5tBFyTNWY3W/g8AYQZSPdR0vIiFA8i
+         JCA/D3T2q8BkY7jKPCRaJRH6ne7OzfhKZ18nN4jPztDcLZQASNS1YOP78h9cxdwHftKN
+         pG3dcGw8VKpbZDXsBClvssSgdr+gusQnrJLtld9M0u7ysTwWD99Ut8cT9xepT8G7cs+v
+         yyd6j85VBKXGPGe96u6zafNRWT9O3yQ9BsmY9I8KISTqEVhIVMNxxyiNjFwr6TCAuJnv
+         wArLHUpczHBiNXymvTma3ovhG+iAtWm1+dIyGCM8hpSpMy2Rvjqk27a9Ri4kw3d8PYLj
+         OWGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679837040;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pnOOlLKoWlVB67gp3RPUD05wT//LBY3yFpES74W1Vkc=;
+        b=Xi0lzizpot1LlGdsY5wkNv4NZavg+8HdAlfYuPM29xiPOptPEFSxZntGDrDS3XmcxQ
+         1mSNPrD8XV7oh0oXnOBgWfcyldJDcHwruSW63A5D0iFJWulncph9jliKHDAit9HfOFY1
+         sYjG6GdWG9pWnSDURXkcYo7mVQkgouWSSUQSxo/Eh5bYrN8frBBsfZnY4hY86+AVjuWG
+         YgoIzk4cVa6dX469p6Qn3PZCqi3OLzPrjgVIK0EmkpucgB2m0bezbMlmIheTaDoaMBrh
+         vaOlYXRHmpPiQ+Fj58bQSO3Chy/t4v4M8HQd6lNwyrCqO8Fq4ofwMUIZmpre8oC+mOWb
+         +/eA==
+X-Gm-Message-State: AO0yUKVUQejOjOOo4g8+4k8giIvp1/oKyB3Cdp4WNX2PNoqZycAKedIs
+        hBl2RIzPDo6DlF2yy5NcfmpbSrHbbb4=
+X-Google-Smtp-Source: AK7set9OzCDMKxr2gAfR4Tvv6pTg1Zs5M12Fp4wZblK+PYXBW0DBvuChv43wUrBkPscskOMgLpZZeA==
+X-Received: by 2002:a05:6a20:8b14:b0:da:fa65:cd89 with SMTP id l20-20020a056a208b1400b000dafa65cd89mr8874490pzh.9.1679837040117;
+        Sun, 26 Mar 2023 06:24:00 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-54.three.co.id. [116.206.12.54])
+        by smtp.gmail.com with ESMTPSA id b23-20020aa78117000000b005ac8a51d591sm17108200pfi.21.2023.03.26.06.23.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Mar 2023 06:23:59 -0700 (PDT)
+Message-ID: <d14fb08c-70e3-4cc7-caf9-87e73eab9194@gmail.com>
+Date:   Sun, 26 Mar 2023 20:23:53 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8a2746a0-57e0-621b-7db9-2719554d050b@redhat.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: kernel error at led trigger "phy0tpt"
+Content-Language: en-US
+To:     Tobias Dahms <dahms.tobias@web.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        angelogioacchino.delregno@collabora.com
+Cc:     stable@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-leds@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+References: <91feceb2-0df4-19b9-5ffa-d37e3d344fdf@web.de>
+ <3fcc707b-f757-e74b-2800-3b6314217868@leemhuis.info>
+ <fcecf6fc-bf18-73a0-9fc1-6850e183323a@web.de>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <fcecf6fc-bf18-73a0-9fc1-6850e183323a@web.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 06:13:16AM -0700, Tom Rix wrote:
+On 3/26/23 02:20, Tobias Dahms wrote:
+> Hello,
 > 
-> On 3/26/23 5:55 AM, Greg KH wrote:
-> > On Sun, Mar 26, 2023 at 02:46:52PM +0200, Nam Cao wrote:
-> > > On Sun, Mar 26, 2023 at 08:23:21AM -0400, Tom Rix wrote:
-> > > > clang with W=1 reports
-> > > > drivers/staging/rtl8723bs/hal/hal_btcoex.c:1182:23: error: variable
-> > > >    'pHalData' set but not used [-Werror,-Wunused-but-set-variable]
-> > > >          struct hal_com_data *pHalData;
-> > > >                               ^
-> > > > This variable is not used so remove it.
-> > > > 
-> > > > Signed-off-by: Tom Rix <trix@redhat.com>
-> > > > ---
-> > > >   drivers/staging/rtl8723bs/hal/hal_btcoex.c | 4 ----
-> > > >   1 file changed, 4 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/staging/rtl8723bs/hal/hal_btcoex.c b/drivers/staging/rtl8723bs/hal/hal_btcoex.c
-> > > > index e36f8c369a04..0cb2adcc1f78 100644
-> > > > --- a/drivers/staging/rtl8723bs/hal/hal_btcoex.c
-> > > > +++ b/drivers/staging/rtl8723bs/hal/hal_btcoex.c
-> > > > @@ -1179,10 +1179,6 @@ bool hal_btcoex_IsBtDisabled(struct adapter *padapter)
-> > > >   void hal_btcoex_SetChipType(struct adapter *padapter, u8 chipType)
-> > > >   {
-> > > > -	struct hal_com_data *pHalData;
-> > > > -
-> > > > -
-> > > > -	pHalData = GET_HAL_DATA(padapter);
-> > > >   }
-> > > If this function doesn't do anything, does it not make more sense to
-> > > just remove this function entirely?
-> > This function is already removed in linux-next, so it doesn't matter :)
+> the bisection gives following result:
+> --------------------------------------------------------------------
+> 18c7deca2b812537aa4d928900e208710f1300aa is the first bad commit
+> commit 18c7deca2b812537aa4d928900e208710f1300aa
+> Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Date:   Tue May 17 12:47:08 2022 +0200
 > 
-> My patch is against linux-next from tag next-20230324
+>     soc: mediatek: pwrap: Use readx_poll_timeout() instead of custom
+> function
+> 
+>     Function pwrap_wait_for_state() is a function that polls an address
+>     through a helper function, but this is the very same operation that
+>     the readx_poll_timeout macro means to do.
+>     Convert all instances of calling pwrap_wait_for_state() to instead
+>     use the read_poll_timeout macro.
+> 
+>     Signed-off-by: AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com>
+>     Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>     Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>     Link:
+> https://lore.kernel.org/r/20220517104712.24579-2-angelogioacchino.delregno@collabora.com
+>     Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+>  drivers/soc/mediatek/mtk-pmic-wrap.c | 60
+> ++++++++++++++++++++----------------
+>  1 file changed, 33 insertions(+), 27 deletions(-)
+> --------------------------------------------------------------------
+> 
 
-Ah, ok, well it will be gone in the next one, as this is already gone in
-my tree.
+OK, I'm updating the regression status:
 
-thanks,
+#regzbot introduced: 18c7deca2b8125
 
-greg k-h
+And for replying, don't top-post, but rather reply inline with
+appropriate context instead; hence I cut the replied context.
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
