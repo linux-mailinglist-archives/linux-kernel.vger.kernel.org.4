@@ -2,110 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23566C931A
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 10:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FB66C931B
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 10:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbjCZIVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 04:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
+        id S231539AbjCZIX3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 26 Mar 2023 04:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCZIVk (ORCPT
+        with ESMTP id S229483AbjCZIX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 04:21:40 -0400
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0956872A6
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:21:39 -0700 (PDT)
-Received: by mail-il1-f206.google.com with SMTP id c6-20020a056e020bc600b00325da077351so3871650ilu.11
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:21:39 -0700 (PDT)
+        Sun, 26 Mar 2023 04:23:27 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D229ED1
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:23:26 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id i7so7011193ybt.0
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:23:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679818898;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aqYh3CwtYwrM9HBHh1pu64sFY9zM9QBS5bc8KmXbNdI=;
-        b=ZsYo8soPzXNhv/aD415pPfSq5M96LbxW4ZuvZFJ8UqCLVLNyiqOHVHknC06DESGCZz
-         sw3v0SOb62tOyWUCvMHjNdAw164pA4ihGTRxiZxiBhqCkgstUJxGEP+cGegTLZ+H050Q
-         BD2XT+S7T2aiuBlonucXUMKRWxUyliiaLvxdX9PhV6eFQh8c3+8fcVNqXHFD0GCNoLaL
-         fgP69Vxg/0KhfzYd/v1G+zYdxMSxK35TItoRkuUTpv/BNAoJ9QHrdXakQcSO6BLSPDcX
-         dWxgNlg7yONb3jZpKBzdfU2uzpE5F5K6ew1j1FSExORFWuR8hxw134/rvs/8tXZeLgUk
-         jw1Q==
-X-Gm-Message-State: AAQBX9fM65d/F3tw7p162QR1ba+yPm51l0E4hCC1sdb0YYmJ0w0riNUG
-        6XBbdL/uIZDZBjyjUrPIM2cQ/qbJC9wjWrBB+/0dWb4tYRwY
-X-Google-Smtp-Source: AKy350ZKbrsytcpE7qpewxYCVf5WuuIzdEe03RauLhYATSNSqsw/SC7InFbnh/NA0aSUyG9II8QUdj6ThjX1CvEbkEeqUP9BYjJi
+        d=1e100.net; s=20210112; t=1679819005;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RMPWm/UNWwNEh+tuXqq8buHzHEocFm7N8w/bA5pWOoE=;
+        b=SN6uMbcgDhLs2P8pNncv314RXquC01FYfnayW4zHZA1L504EXAARKwqMg1JHmcljgp
+         3FAjtUqNq6XBMC9ZUBdzw7nkr6r7oApbUIdbs7Lpz1Jh+bmuzDG3s6pMoVHyH6t+7Lu1
+         xz2TWLInOgQyJ10X76V+uD7n8BHO/s+bk3y36IzXx3M9qIwDFDf4Cp2Bwim5TkqKYv9Y
+         8jeWmf/iwufcSxNav+bYW6rNRq8OAf3kggcJ33ntfkjQBtRoeZtQGKIN4mTl/XWRGDCO
+         tlyzKN60esh3zy4ssGKNiJGsJxrM33M3zJTxiHEcEGGLM2hwc0epBt6DWuRdqMdVvTDY
+         0tAQ==
+X-Gm-Message-State: AAQBX9frObDru3RV6mruhqzF6Un0Ft7l0mYvzM9XTXdnPvmIh+r7BF2I
+        2ROGS8Ie/MkXDGTimph8s1G+YK3lzeeZi9Xo
+X-Google-Smtp-Source: AKy350ZFlovNWbXfd5Vu7MBA/S6em9zncFEgFgt8KkRto/VSrNqtKHa0x8XgNbSP3EcEvSzRxpcinQ==
+X-Received: by 2002:a25:accc:0:b0:afe:e13e:6379 with SMTP id x12-20020a25accc000000b00afee13e6379mr8872161ybd.13.1679819005676;
+        Sun, 26 Mar 2023 01:23:25 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id j19-20020a817653000000b00545a08184a2sm1379926ywk.50.2023.03.26.01.23.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Mar 2023 01:23:25 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-5416b0ab0ecso115726017b3.6
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:23:25 -0700 (PDT)
+X-Received: by 2002:a81:b65f:0:b0:544:8bc1:a179 with SMTP id
+ h31-20020a81b65f000000b005448bc1a179mr3625143ywk.4.1679819004976; Sun, 26 Mar
+ 2023 01:23:24 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a26:b0:30f:6172:b11f with SMTP id
- g6-20020a056e021a2600b0030f6172b11fmr4383482ile.4.1679818898354; Sun, 26 Mar
- 2023 01:21:38 -0700 (PDT)
-Date:   Sun, 26 Mar 2023 01:21:38 -0700
-In-Reply-To: <000000000000c2dccb05d0cee49a@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b93a6205f7c95055@google.com>
-Subject: Re: [syzbot] [wireless?] WARNING in ieee80211_free_ack_frame (2)
-From:   syzbot <syzbot+ac648b0525be1feba506@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+References: <5b7c473247d66776343d82a55b9815195b1b11fb.1679551394.git.fthain@linux-m68k.org>
+ <CAMuHMdUJ6kbpYGTjyY5dX+-YRv3pL0ydG3HQ-H1khyeqLOa05A@mail.gmail.com>
+ <072fd894-ec50-ae5f-2be5-ebbeb0e7b39b@linux-m68k.org> <20230324085927.GA6354@allandria.com>
+ <0cd7f288-ba43-7764-01a7-2e1e5c7a1640@linux-m68k.org> <CAMuHMdXi1mF=j_Qzzg971AqHF-JdgfaDd+v0HymXXusFt-WBUQ@mail.gmail.com>
+ <20230326000318.GB31801@allandria.com>
+In-Reply-To: <20230326000318.GB31801@allandria.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 26 Mar 2023 10:23:13 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX4EKGngXGUuyN6CUh9ByH9sVpZY-2_LsTgCiAMddbxOQ@mail.gmail.com>
+Message-ID: <CAMuHMdX4EKGngXGUuyN6CUh9ByH9sVpZY-2_LsTgCiAMddbxOQ@mail.gmail.com>
+Subject: Re: [PATCH v2] nubus: Don't list card resources by default
+To:     Brad Boyer <flar@allandria.com>
+Cc:     Finn Thain <fthain@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi Brad,
 
-HEAD commit:    33189f0a94b9 r8169: fix RTL8168H and RTL8107E rx crc error
-git tree:       net
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=12857025c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ea09b0836073ee4
-dashboard link: https://syzkaller.appspot.com/bug?extid=ac648b0525be1feba506
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15346b1ec80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=162e3b89c80000
+On Sun, Mar 26, 2023 at 1:03 AM Brad Boyer <flar@allandria.com> wrote:
+> On Sat, Mar 25, 2023 at 01:44:43PM +0100, Geert Uytterhoeven wrote:
+> > Perhaps it would be worthwhile to move the resources out of /proc,
+> > but into a separate virtual file system?
+> > That way people who need access to the additional info can load the
+> > separate virtual file system kernel module, and mount the file system?
+>
+> I could be wrong, but I believe the more recent trend has been to
+> move things like this out of /proc anyway.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/62cbf0a881e9/disk-33189f0a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/57e9b6d3facf/vmlinux-33189f0a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3bd33096e2d8/bzImage-33189f0a.xz
+Correct. Use sysfs, debugfs, configfs, or your own custom file system
+where appropriate.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ac648b0525be1feba506@syzkaller.appspotmail.com
+Gr{oetje,eeting}s,
 
-WARNING: CPU: 1 PID: 75 at net/mac80211/main.c:1509 ieee80211_free_ack_frame+0x51/0x60 net/mac80211/main.c:1509
-Modules linked in:
-CPU: 1 PID: 75 Comm: kworker/u4:4 Not tainted 6.3.0-rc3-syzkaller-00156-g33189f0a94b9 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Workqueue: netns cleanup_net
-RIP: 0010:ieee80211_free_ack_frame+0x51/0x60 net/mac80211/main.c:1509
-Code: 48 89 ef be 02 00 00 00 e8 cc 42 88 fe 31 c0 5b 5d c3 e8 12 27 0b f8 48 c7 c7 80 cb 7c 8b c6 05 eb 8a ea 04 01 e8 af a0 d3 f7 <0f> 0b eb cd 66 66 2e 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 41 57 41
-RSP: 0018:ffffc900015879d8 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff888018999d40 RSI: ffffffff814b6037 RDI: 0000000000000001
-RBP: ffff88807258c280 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: dffffc0000000000
-R13: ffffffff8977bdb0 R14: 0000000000000000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000056122f357fc8 CR3: 000000001de5f000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- idr_for_each+0x117/0x230 lib/idr.c:208
- ieee80211_free_hw+0xa1/0x2f0 net/mac80211/main.c:1527
- mac80211_hwsim_del_radio drivers/net/wireless/mac80211_hwsim.c:4687 [inline]
- hwsim_exit_net+0x463/0x840 drivers/net/wireless/mac80211_hwsim.c:5470
- ops_exit_list+0xb0/0x170 net/core/net_namespace.c:169
- cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:613
- process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
