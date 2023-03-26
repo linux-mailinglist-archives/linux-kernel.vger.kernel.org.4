@@ -2,51 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89266C9868
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 00:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C916C986B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 00:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjCZWF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 18:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S231764AbjCZWGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 18:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjCZWF2 (ORCPT
+        with ESMTP id S229771AbjCZWGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 18:05:28 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FE090
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 15:05:26 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5841E1EC04CC;
-        Mon, 27 Mar 2023 00:05:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1679868325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=nl2n/LYgguJT3xmeiUQKZrBzhXeqDwkpxLV1v2se1MQ=;
-        b=GXp3RPXTUmPPP/HcHn+ndC3esryD0GFxwHq54zdelDk27glOH94+bs/R993zV29+OnP/J0
-        JDgtMRvW9FvSLHERzl58QzjfgB3Tx231LaZCqQ8JnU6UpCZAOAOpQFZ/GbZtVFaeF/EaFu
-        drY9syuDDI8+ozou5U7DJGXxJnhOX1M=
-Date:   Mon, 27 Mar 2023 00:05:20 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v4 07/12] x86/mtrr: allocate mtrr_value array dynamically
-Message-ID: <20230326220520.GJZCDBoPI+YhN5RUDg@fat_crate.local>
-References: <20230306163425.8324-1-jgross@suse.com>
- <20230306163425.8324-8-jgross@suse.com>
+        Sun, 26 Mar 2023 18:06:12 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E39D5B94
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 15:06:11 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id w133so5033868oib.1
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 15:06:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679868370;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DXiSJ7wBXq/4T1LMMz36pZlbBBVWNt83xm/Cv55ylqw=;
+        b=wXyTxdMVTS8KjcfegNn8UAkXSQgoOOYwT3LHMhxwRM7GhGPauzAltWsT4Vn1UJm01E
+         o01qVCbHpO41EJENGv/+36M7Xp+jvaXqQTTdxJki1+kzTQoMiEk8orCG5gPCKYa8cVsD
+         WRsSTHbC+n0XOcxmIV04eRMl4H29VdOE2ucGPwEZT/0hUJuBufDH5JYEGxyUNRLKnoN6
+         K390zpudbM178CGuOM0Nve9bjBzzMBE0Fo6q+z0jyP4WsDOAD2BIvKQx6jj0dW/IEoWQ
+         L0N69GT2AMHYia3B5mBNYp7xb8RtXwjaqmU5x8wKvFK1/KuwnXhVatOzjgkDmACIUTJ5
+         wEeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679868370;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DXiSJ7wBXq/4T1LMMz36pZlbBBVWNt83xm/Cv55ylqw=;
+        b=OrFpZV3RodOxbaSMy43ivJtGc+dmnN9t4hlY5RkfYDnjRweHb8VHQfvFTuNBRMlcu2
+         gWsRBoZK/7iMhmqkqqWrOa08CcfI+b9Pw58PleVcqYRZrRghV1qGWW8hM221jOxqciD4
+         9TFwnSJgzcyLkHgJARFnTLpThIhUABxB5UUgAHHzgIBAR7IsiRUBB9Sx9JbjARa1rGSt
+         RRcHbbWTNED9sY+DTPByq4F5ZpB+Pcnn4gJwt5YYpKhPyd5FhxDo04TV8gtFMcppzRzP
+         2E4UE6fDfQnqUeHkwofST+/Bz5g7GSdI8vBTxoRlZO2cJ3KdmggjpizYH+CDerKBcBfz
+         yqLQ==
+X-Gm-Message-State: AO0yUKWI3OJ86O6eJZGm71ZPku8s5ATL/9K7iedZkZxvYb1TBc4BI2pi
+        +7z9Umjd+C80jsiiT6NJezvl3w==
+X-Google-Smtp-Source: AK7set+9k6nq994o7HQfTsr3tmP7Q1dYPuV+hXUX4tpWmIV2INklxJHhM6IkWLdiaK2gHucyxng9Aw==
+X-Received: by 2002:a54:4d99:0:b0:387:1e85:d1ae with SMTP id y25-20020a544d99000000b003871e85d1aemr4011199oix.18.1679868370301;
+        Sun, 26 Mar 2023 15:06:10 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id o187-20020acaf0c4000000b0038476262f65sm10593744oih.33.2023.03.26.15.06.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 15:06:09 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH v3 0/2] Migrate STX104 to the regmap API
+Date:   Sun, 26 Mar 2023 18:05:56 -0400
+Message-Id: <cover.1679867815.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230306163425.8324-8-jgross@suse.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,46 +69,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 05:34:20PM +0100, Juergen Gross wrote:
-> The mtrr_value[] array is a static variable, which is used only in a
-> few configurations. Consuming 6kB is ridiculous for this case,
+Changes in v3:
+ - Add STX104_ prefixes to defines to avoid potential name classes
+ - Rename SAME_CHANNEL() to STX104_SINGLE_CHANNEL() to convey intention
+   better
+ - Utilize u8_encode_bits() to define STX104_SOFTWARE_TRIGGER
+ - Adjust to utilize reg_base members in regmap_config structures
+ - Fix off-by-one errors in aio_data_wr_ranges[], aio_data_rd_ranges[],
+   and aio_data_regmap_config max_register
+ - Inline gpio_config initialization to avoid zeroing it at declaration
+ - Add blank lines between register map init blocks for clarity
+ - Utilize regmap_read_poll_timeout() for ADC conversion status poll
+Changes in v2:
+ - Relocate struct stx104_iio for the sake of a clearer patch diff
+ - Replace FIELD_PREP() and FIELD_GET() with u8_encode_bits() and
+   u8_get_bits()
 
-Ah, that struct mtrr_value is of size 24 due to that first member
-mtrr_type getting padded even if it is a u8.
+The regmap API supports IO port accessors so we can take advantage of
+regmap abstractions rather than handling access to the device registers
+directly in the driver.
 
-> especially as the array doesn't need to be that large and it can easily
-> be allocated dynamically.
-> 
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-> ---
->  arch/x86/kernel/cpu/mtrr/mtrr.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-> index 0c83990501f5..50cd2287b6e1 100644
-> --- a/arch/x86/kernel/cpu/mtrr/mtrr.c
-> +++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-> @@ -581,7 +581,7 @@ struct mtrr_value {
->  	unsigned long	lsize;
->  };
->  
-> -static struct mtrr_value mtrr_value[MTRR_MAX_VAR_RANGES];
-> +static struct mtrr_value *mtrr_value;
->  
->  static int mtrr_save(void)
->  {
-> @@ -750,6 +750,7 @@ static int __init mtrr_init_finialize(void)
->  	 * TBD: is there any system with such CPU which supports
->  	 * suspend/resume? If no, we should remove the code.
->  	 */
-> +	mtrr_value = kcalloc(num_var_ranges, sizeof(*mtrr_value), GFP_KERNEL);
+A patch to utilize regmap_read_poll_timeout() for polling the ADC
+conversion status is included as follow-up to make the git history
+clearer for this change.
 
-Pls put that over the comment.
+William Breathitt Gray (2):
+  iio: addac: stx104: Migrate to the regmap API
+  iio: addac: stx104: Use regmap_read_poll_timeout() for conversion poll
 
-Also, you need to handle kcalloc() returning an error.
+ drivers/iio/addac/Kconfig  |   2 +
+ drivers/iio/addac/stx104.c | 434 +++++++++++++++++++++----------------
+ 2 files changed, 244 insertions(+), 192 deletions(-)
 
+
+base-commit: 46e33707fe95a21aa9896bded0be97285b779509
 -- 
-Regards/Gruss,
-    Boris.
+2.39.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
