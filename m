@@ -2,69 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89EC26C94E7
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 16:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E62E06C94EF
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 16:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbjCZOA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 10:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
+        id S232119AbjCZOCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 10:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbjCZOAY (ORCPT
+        with ESMTP id S231893AbjCZOCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:00:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19267ABB
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 07:00:04 -0700 (PDT)
+        Sun, 26 Mar 2023 10:02:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796CF7EF5;
+        Sun, 26 Mar 2023 07:02:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E40A60E9F
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 14:00:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4299C433EF;
-        Sun, 26 Mar 2023 14:00:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDE76B80CA1;
+        Sun, 26 Mar 2023 14:02:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41CE7C4339C;
+        Sun, 26 Mar 2023 14:02:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679839203;
-        bh=zg9Q/WlwwDcQ03sBlZkOi7LNesDtc2iN/FX8inpVUd0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dvSbUHYUSMOoCM3sBQfPNhRqE3Kum/Wj8tcTBaxh1GfH/Md0iJ3Vr+HpBIs6l2Whq
-         MLLLmTL+5uKphwWI1hn1g+9i5lH+F+q1qfTuP+q1XzNPnYbOtz3x9/zPpuNcyHCSTL
-         Cfh2Lp8HTi/s7ysteRHhfHycXkaRJSBm6Ha+3kzpUfPIr3JHQOpTk/7RT9UViOHw1s
-         05DAJ4D4VHvXxObMwXYlI60tAzvgCzwcBNIKKdCh6Oi9LEOzqqX3jRBoG3r8GdWRME
-         T7ieQuL3duWb21cQ2FJbBnKNveuktJeEwl8aqcQ3Un5Yy3Px7CWBGlEhCbAK44IRC+
-         /FLCTbW21hhGw==
-Message-ID: <b3b2a78d-ff3d-0f66-801a-b9a95c22fb70@kernel.org>
-Date:   Sun, 26 Mar 2023 22:00:01 +0800
+        s=k20201202; t=1679839360;
+        bh=6UjvC4vhYxQxNMue1HYv9yzXbIQLEgQPzyEiOjLkqFc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TMAAwTApQMKdTwoGA0IfW9u7L4NQmFDA20ay2WvLWxp2Xu+vgVrE/M6EBlgfi8caH
+         /RXar0PujO9g0vV/xBQtmFuBtU5E3NtuR2RJFu3EdM0498npfbN/p7vVEKS4cPNx/r
+         MOBwUlw8Gj8Foub8sOYab4bi6GwBVR08YmjxR6d3759PsptwIRL69EXOyi4eg6G+ez
+         qW/KXCR3PcayRCTBc7qjVndMhxMUo2TZ7L7TgnOo3lpB3OR43eG2Uo7i71Afn4LsJX
+         MbQscsTLmTSrlIY7FstA0uUBi/I8B0O7trKB+lUMHlSxXFCuNDQs/LLcKqPj4VwFHZ
+         rC93Y4rOJq0Tg==
+Received: by pali.im (Postfix)
+        id 703A578E; Sun, 26 Mar 2023 16:02:37 +0200 (CEST)
+Date:   Sun, 26 Mar 2023 16:02:37 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-wireless@vger.kernel.org,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mmc@vger.kernel.org, Chris Morgan <macroalpha82@gmail.com>,
+        Nitin Gupta <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>
+Subject: Re: [PATCH v3 6/9] mmc: sdio: add Realtek SDIO vendor ID and various
+ wifi device IDs
+Message-ID: <20230326140237.mjj37si7hqbx5xds@pali>
+References: <20230320213508.2358213-1-martin.blumenstingl@googlemail.com>
+ <20230320213508.2358213-7-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] f2fs: add compression feature check for all compress
- mount opt
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20230319075130.24962-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230319075130.24962-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320213508.2358213-7-martin.blumenstingl@googlemail.com>
+User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/19 15:51, Yangtao Li wrote:
-> Opt_compress_chksum, Opt_compress_mode and Opt_compress_cache
-> lack the necessary check to see if the image supports compression,
-> let's add it.
+On Monday 20 March 2023 22:35:05 Martin Blumenstingl wrote:
+> Add the SDIO vendor ID for Realtek and some device IDs extracted from
+> their GPL vendor driver. This will be useful in the future when the
+> rtw88 driver gains support for these chips.
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+> Changes since v2:
+> - none
+> 
+> Changes since v1:
+> - Add Ulf's Acked-by (who added: "I assume it's easier if Kalle picks
+>   up this patch, along with the series")
+> 
+> 
+>  include/linux/mmc/sdio_ids.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/include/linux/mmc/sdio_ids.h b/include/linux/mmc/sdio_ids.h
+> index 0e4ef9c5127a..d7cd39a8ad57 100644
+> --- a/include/linux/mmc/sdio_ids.h
+> +++ b/include/linux/mmc/sdio_ids.h
+> @@ -112,6 +112,15 @@
+>  #define SDIO_VENDOR_ID_MICROCHIP_WILC		0x0296
+>  #define SDIO_DEVICE_ID_MICROCHIP_WILC1000	0x5347
+>  
+> +#define SDIO_VENDOR_ID_REALTEK			0x024c
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8723BS	0xb723
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8723DS	0xd723
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8821BS	0xb821
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8821CS	0xc821
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8821DS	0xd821
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8822BS	0xb822
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8822CS	0xc822
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+Hello! Could you sort lines by values, like it is in all other sections?
 
-Thanks,
+Also it would be nice to put these ids into sdioids database at:
+https://github.com/sdioutils
+
+> +
+>  #define SDIO_VENDOR_ID_SIANO			0x039a
+>  #define SDIO_DEVICE_ID_SIANO_NOVA_B0		0x0201
+>  #define SDIO_DEVICE_ID_SIANO_NICE		0x0202
+> -- 
+> 2.40.0
+> 
