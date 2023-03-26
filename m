@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3FD6C933B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 10:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFA46C933E
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 10:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231913AbjCZI4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 04:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
+        id S231904AbjCZI5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 04:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231904AbjCZI4f (ORCPT
+        with ESMTP id S231822AbjCZI5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 04:56:35 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DC159FA
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:56:34 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id w9so24221264edc.3
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:56:34 -0700 (PDT)
+        Sun, 26 Mar 2023 04:57:06 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E915B87
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:56:59 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id h8so24133963ede.8
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679820993;
+        d=linaro.org; s=google; t=1679821018;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZSRJuPJNbdoJyj84IHhrxYPlKl+uIt4tNBO6X3LD2DI=;
-        b=xQ6x8t6UN0lTvfBbnStPW15+jZwIKm8rVcOWs7jvMIE9A94J3+n70etIA0cgKZDJTy
-         dT1Ea2HkG7tw3zLbLDdyAHSY+qvYwzNRMPy2qUQqjlNuWfcGjsZ2t1fpdtQt+aJZqTAx
-         P7pbSWZ8Izg3D8O2IC5P6gqrbOO8m4I30QeQg1J8q6J8bPWZ69NQZff/Q6gwzRsoNfMa
-         kyiWBlEnfwvJladFS8YRLUDfu97ld2NdWzNTN2nUoZ/RJQUfv8slvpq1dKlBGkcmMpcQ
-         PyeGe53k7MJXRGEc+gidiPkYbhsZ2tK9MpUsmh73ET7BVV6rh/qhEELnqNKQxJBPr4CQ
-         0Ufw==
+        bh=dluC4HDOGibpGXJ73bE6ouywRyXzDyJti+JzH9GsPB8=;
+        b=dAX+2c98gBcOgphaLBmDMcUtwqBUbMPrf7tUqDQXI9/on4bdB2o1S2qPR4BB0I8CFp
+         JEYxK6mp1T9zqWoYzm8ocoMGwcE+YHudPDWo9hq/GpUxCj+jtB81IDA7uIat6JSGLToo
+         Uw9i2QbZhrKgabm0h+cYQukBtUR+PmOgtbqjMC2qu8DMekJe4U4yQT2VFkOd0/LOr9gg
+         Fv1+SA1bF6FbMdBmEsc8sjjDG6iBam1koTXzf8cci08ShzIrjX4Q8X4fXbUzued81kGv
+         VgsBMpDsqrTLvZ3o2Oi8sDWTaNGDMzNzZeKgKBH+EMkJjmpWxyE36VHABwnGJUCeiWja
+         hBwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679820993;
+        d=1e100.net; s=20210112; t=1679821018;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZSRJuPJNbdoJyj84IHhrxYPlKl+uIt4tNBO6X3LD2DI=;
-        b=bMdCV3xC3xD+WhDs4O2MOwO7m6ulg4kbhzqdq0o1YcUcP41/pKDh9Ws9wRFLgf2a8j
-         OU11GFypfP9Fry2WEHxSuVhIZDAh9v1orPABkGZBOvJ78W0LyGZ7JT6l+e60pLduWyg4
-         ObDBNO4tRgqt/u6OTDd57rNbOgrex37/TYXnvDPz2r+xbOk2jH/zwmZ8O1O1BIkXBYPk
-         x3G6iUL6z8Rkq7b2McFEp23YpswzmwHbA3LSdBX2cjPvB31S170XwMTwqQz/GjNydJN2
-         bEKAjL+bnyWEuUYg8uVChpiRgt/27ZRbvWsff+iMUAkbogV19eQkD6ut7/wxkwzF5G5m
-         4M/A==
-X-Gm-Message-State: AAQBX9djwxmrLqf7EUN3BTdlFOxakjs79hxyKmGL3xKyp+b8DgJgqJsU
-        ZoQm0zGb00VI1R6yRx7KgT+xFw==
-X-Google-Smtp-Source: AKy350bInaaXgnMIes/Y4RoXKc3ohgRSh/e0IdcU2rk18ZRcrLYvSKRpTJJBOuQQN4EdoOhGrSDZkQ==
-X-Received: by 2002:aa7:c50b:0:b0:4fd:29e4:ccfe with SMTP id o11-20020aa7c50b000000b004fd29e4ccfemr7941750edq.18.1679820992803;
-        Sun, 26 Mar 2023 01:56:32 -0700 (PDT)
+        bh=dluC4HDOGibpGXJ73bE6ouywRyXzDyJti+JzH9GsPB8=;
+        b=IwUEc9HNCZpUDkMKaUd8m5omVYzSVUOPogHOLA1hNYjjn3KKz1iwXzgkys06Benp3f
+         1XR4PDZLvNiBy7EGdfnWYh34AzU7Q0JVghFSZMDV9NRFhZDK5ODFIUhdhvOPd0ELgpyH
+         nK9vlEl7xhU37Aj6aKxFIYeTDKL+Wlg7xqloAl6r99AZYQ3y5+jl4WWWJ0yYiA5y++Du
+         QJaHAehEniHcTH06OuJiJeAsAn+xmHuHFg8lPnTFEdhRK+PLDqn/wFt4DT/p/V6Tj10x
+         qCwHepLhmUXUka9AD9nRmxMgN8S/uudRfDSnbz//7i2sXUazUmOn8YYukqwUUhp4aSaF
+         DtSw==
+X-Gm-Message-State: AAQBX9fmF7gFMDPbaKhhO/+cvx0FLfMqtj/BLUuJXOQrqxLh8uXxmtT1
+        ah4N0uyIye49ldBOGXpbIRFJJQ==
+X-Google-Smtp-Source: AKy350Z1I9N9tKciexN2FNB0mlsriQqOFDimd2Edursh4PjdEtRe+/tqkkO9tL+uF3J+Cye7s6Jrsw==
+X-Received: by 2002:a17:906:94c2:b0:932:d2bb:4fd with SMTP id d2-20020a17090694c200b00932d2bb04fdmr8026585ejy.58.1679821018291;
+        Sun, 26 Mar 2023 01:56:58 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:6cac:926d:a4f2:aa09? ([2a02:810d:15c0:828:6cac:926d:a4f2:aa09])
-        by smtp.gmail.com with ESMTPSA id q27-20020a50aa9b000000b004af73333d6esm13160375edc.53.2023.03.26.01.56.31
+        by smtp.gmail.com with ESMTPSA id a10-20020a1709065f8a00b0092595899cfcsm12722754eju.53.2023.03.26.01.56.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Mar 2023 01:56:32 -0700 (PDT)
-Message-ID: <61881229-cd91-cfb3-be2b-51d516f8473c@linaro.org>
-Date:   Sun, 26 Mar 2023 10:56:31 +0200
+        Sun, 26 Mar 2023 01:56:57 -0700 (PDT)
+Message-ID: <f59377f9-f16d-eb36-230d-430766c93be4@linaro.org>
+Date:   Sun, 26 Mar 2023 10:56:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/4] dts: arm64: qcom: sdm845: add SLPI FastRPC support
+Subject: Re: [PATCH 3/4] dts: arm64: qcom: sdm845-oneplus: enable SLPI
 Content-Language: en-US
 To:     Dylan Van Assche <me@dylanvanassche.be>,
         Andy Gross <agross@kernel.org>,
@@ -67,9 +67,9 @@ Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
 References: <20230325135114.21688-1-me@dylanvanassche.be>
- <20230325135114.21688-3-me@dylanvanassche.be>
+ <20230325135114.21688-4-me@dylanvanassche.be>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230325135114.21688-3-me@dylanvanassche.be>
+In-Reply-To: <20230325135114.21688-4-me@dylanvanassche.be>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -83,59 +83,35 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 25/03/2023 14:51, Dylan Van Assche wrote:
-> Qualcomm SDM845 SoC features a SLPI DSP which uses FastRPC through
-> an allocated memory region to load files from the host filesystem
-> such as sensor configuration files.
-> 
-> Add a FastRPC node at /dev/fastrpc-sdsp and a DMA region, similar to
-> downstream, to allow userspace to communicate with the SLPI via the
-> FastRPC interface for initializing the sensors on the SLPI.
+> Enable the SLPI DSP on the Oneplus 6 phone with a Qualcomm SDM845 SoC.
 > 
 > Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
 > ---
->  arch/arm64/boot/dts/qcom/sdm845.dtsi | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
+>  arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 8dcfe6293762..5a6c7d00719b 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -878,6 +878,14 @@ mdata_mem: mpss-metadata {
->  			size = <0 0x4000>;
->  			no-map;
->  		};
-> +
-> +		fastrpc_mem: fastrpc {
-> +			compatible = "shared-dma-pool";
-> +			reusable;
-> +			alloc-ranges = <0 0x00000000 0 0xffffffff>;
-> +			alignment = <0 0x400000>;
-> +			size = <0 0x1000000>;
-> +		};
->  	};
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+> index b01542d79ae2..a14e6021c934 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+> @@ -450,6 +450,11 @@ &ipa {
+>  	status = "okay";
+>  };
 >  
->  	adsp_pas: remoteproc-adsp {
-> @@ -3344,6 +3352,22 @@ glink-edge {
->  				label = "dsps";
->  				qcom,remote-pid = <3>;
->  				mboxes = <&apss_shared 24>;
-> +
-> +				fastrpc {
-> +					compatible = "qcom,fastrpc";
-> +					qcom,glink-channels = "fastrpcglink-apps-dsp";
-> +					label = "sdsp";
-> +					qcom,non-secure-domain;
-> +					qcom,vmids = <0x3 0xF 0x5 0x6>;
-> +					memory-region = <&fastrpc_mem>;
-> +					qcom,assign-all-mem;
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					compute-cb {
+> +&slpi_pas {
 
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
+Judging by context it does not look like properly ordered. m is before s.
+
+> +	status = "okay";
+
+status is the last property.
+
+> +	firmware-name = "qcom/sdm845/oneplus6/slpi.mbn";
+> +};
+> +
+>  &mdss {
+>  	status = "okay";
+>  };
 
 Best regards,
 Krzysztof
