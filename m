@@ -2,153 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC6B6C935B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 11:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96F86C9360
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 11:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjCZJTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 05:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
+        id S231778AbjCZJVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 05:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjCZJTc (ORCPT
+        with ESMTP id S229596AbjCZJVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 05:19:32 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB80974D
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 02:19:30 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id i5so24461228eda.0
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 02:19:30 -0700 (PDT)
+        Sun, 26 Mar 2023 05:21:21 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8FD9032
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 02:21:16 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id p15so7000081ybl.9
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 02:21:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679822369;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iHZVFQkvBzOY5c4akiAgaCUw1iB4MGS8We/N4ruh3k8=;
-        b=gqqvpvRZ0SdoxCmQqae1KSjIEjDh2PjxWE9UOelHJdAZQNfXsfpIUmhQzlSEEoqf+o
-         mfQUctvn6msdbvoegyTomav7T+kjGRO3PRvwcyFXV0AWKAuqXbCTVILx//2bumI7cxGH
-         KBI+kaEhRIdAt97A53YpSBEBjoJNNyonkARH4XdfaqZYtZfwdnvQNSF39wUcd7my8HKj
-         m/Qtv/qshyPbwYZ1/LnrqlafjseLlHovhJs61rABrFLmZoZ/3APhoBnDgGLBifFPCQ5z
-         ezjlApqFuRBYlMEJPbb34cSN6GyqZUfrFT7g8FLDS8hztVQrLVgzQQ3W+yW5jubhPOhh
-         l8AA==
+        d=linaro.org; s=google; t=1679822476;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xOnVbpgAPSDe169IIlms5nj4puE9UEWWgE32HX0VB9g=;
+        b=gGf1Fwte13QDusOygp9PbopJLNGKIKNJ0nWg5UkauwignubnXFrNW4xUuQb/gzw1jY
+         teyqJ99IvMbYWIXCSI/n57zh4PT76t1Qev7ON7KWd6V3aUSvGgs2QuHGLtI6xMfLhCCI
+         +z4NdpdtcNdeEbuSAOs9C/WYzuinPxc/ssfHIIX0/eROQEm7Y5a2wMkABvM6ozyTYeTU
+         I97dkSsbVv7P4uHCeoocI1SjfDIfhMuOa1G0mVB6lxyZOTSKtHrwd13A9MRBTFEXIOdJ
+         owZ7740yxP82b5xSZDzT4Sggl/cgY79NoX+gQNDV/2YYiJPVN/5kkLsFSJwLSeJMiLuD
+         I+pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679822369;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iHZVFQkvBzOY5c4akiAgaCUw1iB4MGS8We/N4ruh3k8=;
-        b=stHpo2NjEocD1eLR9jC4pSJZdOaJ/PljOn5w0KqHHe49SxC0/OJOlpW2/PLu02l5gS
-         V2Iob9nDotgWwhVqiE+RQWAqychEZE7sLuCmCp3JJurep93Fr3WYZ4vEo+OMjGwu4bag
-         AeHJuMJmWLqjHe7q4Bweep6eNIdsmpBhQ1TyQd3dGPMBiWmqmU/bh4OOpHBdmCFrx/P9
-         TnZS97k7dgfrrl/MG290c0W6V1h/h8TKyar0hg+PA0ZPwM8lIpVDaHozyQejMeHj6uzK
-         uT5DZj845WdsFCH83VCjH8ONmTsnVkv+aLKeBLFtE64hZEo5SEP8HdU6MLTtkPR6mhh2
-         OyDA==
-X-Gm-Message-State: AAQBX9dqniI3zygtmhZ7aqZnlkfY1l5FyOCjM0vvHjqglEWO1xnHZF85
-        972QEGujhr+pw/bGhHr1cBs=
-X-Google-Smtp-Source: AKy350YY0uqokPOGnxU+dnpux6gC0xC75d1rTwE9/7vPu2Z8GpOMozFb6sLJdMp92bUZ13hIuhS3MA==
-X-Received: by 2002:a17:906:1514:b0:92b:ae6c:23e7 with SMTP id b20-20020a170906151400b0092bae6c23e7mr8926676ejd.56.1679822369040;
-        Sun, 26 Mar 2023 02:19:29 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1256:79a0:87fb:f6c5:5d64:ee25? ([2a02:908:1256:79a0:87fb:f6c5:5d64:ee25])
-        by smtp.gmail.com with ESMTPSA id c24-20020a50d658000000b00501d5432f2fsm8382000edj.60.2023.03.26.02.19.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Mar 2023 02:19:28 -0700 (PDT)
-Message-ID: <2631edac-a57e-638d-226c-08ea3d9b6b8d@gmail.com>
-Date:   Sun, 26 Mar 2023 11:19:26 +0200
+        d=1e100.net; s=20210112; t=1679822476;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xOnVbpgAPSDe169IIlms5nj4puE9UEWWgE32HX0VB9g=;
+        b=Xx5B/LaxNJP6YKA9GCOsIqE773dpfHHfuzOW1kQrD8SwzQ5WFjMRNNyefPAh7q7u/d
+         DFv02M+a4UEkR7NfzA78HEwIKeM2SoeYI08e429qec7OUbazcqZTycRn7wLxOawAHSot
+         Ny8fR4muJXZECPw5goxBBUmqFLVUxVj7tmzS8i113/JOZhiUB6iYzB3xlkq1L7Ad5ju9
+         Q57MB7cXhMCFC4i40OS0rOKdx/7gEM15OKKAiplIj0MrEFhi9yrLbKi9BjjfhXzxMXdT
+         msz6m2d7/uw06nDxzcEjFtEEx2UMP9bKvQImwBQF2cMYA9xO08ynZfq2m46NtQEljUJt
+         pDAw==
+X-Gm-Message-State: AAQBX9dunC5iUWumO3Ka+f6k3AId90xsoBiFjklbiFQZxqTpun2UQheE
+        NHxGeZAhu+NoYD+GZ+sHCYJy7QvoC2r3Z/qc6MMAkw==
+X-Google-Smtp-Source: AKy350bBDqR5rDMccCu1GiLm+5BccP/mDlcYWK8b/gPB4V0IWRo+4xd+DbgTFrmdpsHsvM8bQx7ZMoAS7Bb0JhkmlzU=
+X-Received: by 2002:a05:6902:102b:b0:b46:4a5e:3651 with SMTP id
+ x11-20020a056902102b00b00b464a5e3651mr4818141ybt.9.1679822475624; Sun, 26 Mar
+ 2023 02:21:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v13 01/10] drm/shmem-helper: Switch to reservation lock
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        intel-gfx@lists.freedesktop.org, David Airlie <airlied@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Herring <robh@kernel.org>
-References: <20230314022659.1816246-1-dmitry.osipenko@collabora.com>
- <20230314022659.1816246-2-dmitry.osipenko@collabora.com>
- <6b5644cf-6229-f99b-d429-a45d724493ee@collabora.com>
- <20c88807-8513-a816-aed9-5cd67eb5c1ed@collabora.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20c88807-8513-a816-aed9-5cd67eb5c1ed@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230326091605.18908-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230326091605.18908-1-krzysztof.kozlowski@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sun, 26 Mar 2023 12:21:04 +0300
+Message-ID: <CAA8EJpqR-QisyWEHE83oFbXt8wUcn2Ofd4W6UwFmkYzGD18N9Q@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: qcom: sdm630: move DSI opp-table out of
+ soc node
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 25.03.23 um 15:58 schrieb Dmitry Osipenko:
-> On 3/15/23 16:46, Dmitry Osipenko wrote:
->> On 3/14/23 05:26, Dmitry Osipenko wrote:
->>> @@ -633,7 +605,10 @@ int drm_gem_shmem_mmap(struct drm_gem_shmem_object *shmem, struct vm_area_struct
->>>   		return ret;
->>>   	}
->>>   
->>> +	dma_resv_lock(shmem->base.resv, NULL);
->>>   	ret = drm_gem_shmem_get_pages(shmem);
->>> +	dma_resv_unlock(shmem->base.resv);
->> Intel CI reported locking problem [1] here. It actually was also
->> reported for v12, but I missed that report because of the other noisy
->> reports.
->>
->> [1]
->> https://intel-gfx-ci.01.org/tree/drm-tip/Patchwork_114671v2/shard-snb5/igt@prime_vgem@sync@rcs0.html
->>
->> The test does the following:
->>
->> 1. creates vgem
->> 2. export it do dmabuf
->> 3. mmaps dmabuf
->>
->> There is an obvious deadlock there. The DRM code assumes that mmap() is
->> unlocked, while for dma-buf it's locked. I'll see how to fix it for v14.
->>
-> Christian, there is a deadlock problem in drm_gem_shmem_mmap() once we
-> move drm-shmem to use resv lock. The current dma-buf locking policy
-> claims that importer holds the lock for mmap(), but DRM code assumes
-> that obj->mmap() handles the locking itself and then the same
-> obj->mmap() code path is used by both dma-buf DRM and a usual DRM object
-> paths. Hence importer -> dma_buf_mmap_internal()[takes the lock] ->
-> exporter -> drm_gem_shmem_mmap()[takes the lock] deadlocks.
+On Sun, 26 Mar 2023 at 12:16, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> I was looking at how to fix it and to me the best option is to change
-> the dma-buf locking policy, making exporter responsible for handling the
-> resv lock. Changing DRM code mmap lockings might be possible too [moving
-> locking to drm_gem_mmap_obj()], but will be very messy and doesn't feel
-> intuitive.
+> The soc node is supposed to have only device nodes with MMIO addresses,
+> so move the DSI OPP out of it (it is used also by second DSI1 on
+> SDM660):
+
+This raises a question: would it make sense to add /opps to handle all
+opp tables?
+
 >
-> Want to get yours thoughts on this before sending out the dma-buf mmap()
-> policy-change patch. Does the new mmap() locking policy sound good to
-> you? Thanks!
+>   sda660-inforce-ifc6560.dtb: soc: opp-table-dsi: {'compatible': ['operating-points-v2'], ... should not be valid under {'type': 'object'}
+>     From schema: dtschema/schemas/simple-bus.yaml
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> ---
+>
+> Changes since v1:
+> 1. Move the node out of soc. Don't add Konrad's review tag.
+> ---
+>  arch/arm64/boot/dts/qcom/sdm630.dtsi | 38 ++++++++++++++--------------
+>  1 file changed, 19 insertions(+), 19 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+> index 72d9a12b5e9c..b91e423a3cfc 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+> @@ -328,6 +328,25 @@ memory@80000000 {
+>                 reg = <0x0 0x80000000 0x0 0x0>;
+>         };
+>
+> +       dsi_opp_table: opp-table-dsi {
+> +               compatible = "operating-points-v2";
+> +
+> +               opp-131250000 {
+> +                       opp-hz = /bits/ 64 <131250000>;
+> +                       required-opps = <&rpmpd_opp_svs>;
+> +               };
+> +
+> +               opp-210000000 {
+> +                       opp-hz = /bits/ 64 <210000000>;
+> +                       required-opps = <&rpmpd_opp_svs_plus>;
+> +               };
+> +
+> +               opp-262500000 {
+> +                       opp-hz = /bits/ 64 <262500000>;
+> +                       required-opps = <&rpmpd_opp_nom>;
+> +               };
+> +       };
+> +
+>         pmu {
+>                 compatible = "arm,armv8-pmuv3";
+>                 interrupts = <GIC_PPI 6 IRQ_TYPE_LEVEL_HIGH>;
+> @@ -1450,25 +1469,6 @@ mmcc: clock-controller@c8c0000 {
+>                                         <0>;
+>                 };
+>
+> -               dsi_opp_table: opp-table-dsi {
+> -                       compatible = "operating-points-v2";
+> -
+> -                       opp-131250000 {
+> -                               opp-hz = /bits/ 64 <131250000>;
+> -                               required-opps = <&rpmpd_opp_svs>;
+> -                       };
+> -
+> -                       opp-210000000 {
+> -                               opp-hz = /bits/ 64 <210000000>;
+> -                               required-opps = <&rpmpd_opp_svs_plus>;
+> -                       };
+> -
+> -                       opp-262500000 {
+> -                               opp-hz = /bits/ 64 <262500000>;
+> -                               required-opps = <&rpmpd_opp_nom>;
+> -                       };
+> -               };
+> -
+>                 mdss: display-subsystem@c900000 {
+>                         compatible = "qcom,mdss";
+>                         reg = <0x0c900000 0x1000>,
+> --
+> 2.34.1
+>
 
 
-IIRC we tried that before and ran into problems.
-
-dma_buf_mmap() needs to swap the backing file of the VMA and for this 
-calls fput() on the old file.
-
-This fput() in turn could (in theory) grab the resv lock as well and 
-there isn't anything we could do about that.
-
-Just information from the back of my memory, probably best if you double 
-check that.
-
-Regards,
-Christian.
+-- 
+With best wishes
+Dmitry
