@@ -2,74 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815626C9248
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 05:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928FB6C924C
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 05:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbjCZDxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 23:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
+        id S231801AbjCZDy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 23:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjCZDxF (ORCPT
+        with ESMTP id S231716AbjCZDyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 23:53:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B746B461
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 20:53:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3365C60D32
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 03:53:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E31B6C433D2;
-        Sun, 26 Mar 2023 03:53:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679802783;
-        bh=RF6N9FVB3DivyoIx0C73mEw6zoogCODNFdFMIq0xZuw=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=naIuWWlPpbSfMczMPHstX2SNjWeBSwif2zJ7NElVzl/1us2RRpROsT8kia5Plsxxa
-         /nbjvIs0l68FkbpHxzhaSnNMwYVegOlLC7lUwIppFbULi/daAJ04Dghx0Kh42KWBk8
-         z02CJZBwpYQgP5JpNC4HM67IBcBTG7uWtbCes6fLjjPo+JMCoti01cyTz3bI/K9dYS
-         THAJTu1TsFAqt2dTz9tqWD4rb7kbrCmI+gfVG8UX3vXTekX29lFPRus6OpDjED5Ifv
-         K+uCtG8fKb+s7CJ6pFiXvp/wOwktEymu3hmiHSrh/53F/kLoMXNAyhBA+loAqdCZdD
-         6/6WpP3GBgo5Q==
-Message-ID: <3b2c0df6-fedf-8941-9242-6f6571ad7372@kernel.org>
-Date:   Sun, 26 Mar 2023 11:53:01 +0800
+        Sat, 25 Mar 2023 23:54:20 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE6FB461
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 20:54:19 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32Q3s3vZ023021
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 25 Mar 2023 23:54:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1679802845; bh=WWo2bF3fYztcOcL8hQceNWz6QQ5YZudqVE2VOlWqgwc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Kz9fEgd+mA6LU16FY2vXdTzZPJrKnDCPwVvL25XwvPcV8SF3jETqwCP7xcPZNDoRH
+         3yTeH91J1u/Bj44ae5Ipp1ebiqBnsaHLDiyUVcmJmuzammXRKqryFxuSS6uYUUTgL8
+         5qAI81lL/4ypY8I/K31ORNEN0SEjgQDnT4r0wq/GHSlYODg3go86SJcDV7EakYovw9
+         uWjpKyIDxy8tW4OVwNxOeDlksdNVWoFgqMIx8BW2oS+kHmeLP0aXmCXJgXZTVwKOvw
+         CCuFig14CMO+K+TmVYCGQnjeMc5n9k7LO3g1e9gRtTELPsONo5URXkPfbqZ254U0Bi
+         MKmV8BV5QmU0w==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id F1EBD15C46FF; Sat, 25 Mar 2023 23:54:02 -0400 (EDT)
+Date:   Sat, 25 Mar 2023 23:54:02 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>,
+        Andreas Dilger <adilger@dilger.ca>
+Subject: Re: [RFC 08/11] ext4: Don't skip prefetching BLOCK_UNINIT groups
+Message-ID: <20230326035402.GA323408@mit.edu>
+References: <cover.1674822311.git.ojaswin@linux.ibm.com>
+ <4881693a4f5ba1fed367310b27c793e4e78520d3.1674822311.git.ojaswin@linux.ibm.com>
+ <20230309141422.b2nbl554ngna327k@quack3>
+ <ZBRHCHySeQ0KC/f7@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [f2fs-dev] [PATCH] f2fs: apply zone capacity to all zone type
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20230321231157.963598-1-jaegeuk@kernel.org>
- <ZBo/QcTFUiqRafLC@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <ZBo/QcTFUiqRafLC@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBRHCHySeQ0KC/f7@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/22 7:35, Jaegeuk Kim wrote:
-> On 03/21, Jaegeuk Kim wrote:
->> If we manage the zone capacity per zone type, it'll break the GC assumption.
->> And, the current logic complains valid block count mismatch.
->> Let's apply zone capacity to all zone type, if specified.
->>
+On Fri, Mar 17, 2023 at 04:25:04PM +0530, Ojaswin Mujoo wrote:
+> > > This improves the accuracy of CR0/1 allocation as earlier, we could have
+> > > essentially empty BLOCK_UNINIT groups being ignored by CR0/1 due to their buddy
+> > > not being initialized, leading to slower CR2 allocations. With this patch CR0/1
+> > > will be able to discover these groups as well, thus improving performance.
+> >
+> > The patch looks good. I just somewhat wonder - this change may result in
+> > uninitialized groups being initialized and used earlier (previously we'd
+> > rather search in other already initialized groups) which may spread
+> > allocations more. But I suppose that's fine and uninit groups are not
+> > really a feature meant to limit fragmentation and as the filesystem ages
+> > the differences should be minimal. So feel free to add:
 > 
-> Added:
-> 
-> Fixes: de881df97768 ("f2fs: support zone capacity less than zone size")
-> 
->> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> Another point I wanted to discuss wrt this patch series was why were the
+> BLOCK_UNINIT groups not being prefetched earlier. One point I can think
+> of is that this might lead to memory pressure when we have too many
+> empty BGs in a very large (say terabytes) disk.
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+Originally the prefetch logic was simply something to optimize I/O ---
+that is, normally, all of the block bitmaps for a flex_bg are
+contiguous, so why not just read them all in a single I/O which is
+issued all at once, instead of doing them as separate 4k reads.
 
-Thanks,
+Skipping block groups that hadn't yet been prefetched was something
+which was added later, in order to improve performance of the
+allocator for freshly mounted file systems where the prefetch hadn't
+yet had a chance to pull in block bitmaps; the problem was that if the
+block groups hadn't been prefetch yet, then the cr0 scan would fetch
+them, and if you have a storage device where blocks with monotonically
+increasing LBA numbers aren't necessarily stored adjacently on disk
+(for example, on a dm-thin volume, but if one were to do an experiment
+on certain emulated block devices on certain hyperscalar cloud
+environments, one might find a similar performance profile), resulting
+in a cr0 scan potentially issuing a series of 16 sequential 4k I/O's,
+that could be substantially worse from a performance standpoint than
+doing a single squential 64k I/O.
+
+When this change was made, the focus was on *initialized* bitmaps
+taking a long time if they were issued as individual sequential 4k
+I/O's; the fix was to skip scanning them initially, since the hope was
+that the prefetch would pull them in fairly quickly, and a few bad
+allocations when the file system was freshly mounted was an acceptable
+tradeoff.
+
+But prefetching prefetching BLOCK_UNINIT groups makes sense, that
+should fix the problem that you've identified (at least for
+BLOCK_UNINIT groups; for initialized block bitmaps, we'll still have
+less optimal allocation patterns until we've managed to prefetch those
+block groups).
+
+Cheers,
+
+					0 Ted
