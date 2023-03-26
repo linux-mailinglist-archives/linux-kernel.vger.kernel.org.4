@@ -2,109 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B136C96E2
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111546C96EB
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjCZQia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 12:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
+        id S232008AbjCZQrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 12:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjCZQi2 (ORCPT
+        with ESMTP id S229475AbjCZQrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 12:38:28 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6A549EC;
-        Sun, 26 Mar 2023 09:38:26 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id a16so5615756pjs.4;
-        Sun, 26 Mar 2023 09:38:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679848706;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jEKgtiO8QFe7E17SjGBY63VNUT2bmgUu7j5N6GIYXa4=;
-        b=MwoiDuyPxTS9Z8dOtvnvra6vBeLLn7oR2fH8IZjoeTcQs1z0Tl9EnBa3mwzanhMEgH
-         w6IpWAURpAS33RH3VF5owcNxISB2+Df8RfvZxjTYuPXT2dCJnOeJTMdhV3XQUvnbhC8I
-         sZo/puQWlFh9s+0/A0tq/VLZPWKAfkGsL1GTz3Dlv2ztb3BRgP0LI5W/s15gmgDPKn4o
-         eHBVv+aVfKcgDUUq4NfaEkFRmXylIitg/hvLegwLJuL+iugOB03urwMFwFmB92vYLYhk
-         /to8aTUxS0wFeOZKo1ByehL56LmT3+ePE6sh63X2xuLJMM2HMgEyCEq9gbcbj/vSZkvN
-         rEjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679848706;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jEKgtiO8QFe7E17SjGBY63VNUT2bmgUu7j5N6GIYXa4=;
-        b=u8jUKTTjGFdtiticpxyJ5EhRb3CteE+oM+DCeJF/ffa4oFbaRg5pOfIhEuIz5JHco1
-         YGXHEpbHe/wtLgLFDI/1E8NzTPEf5i0lXxYKngBaFmHmvTrxcAVrUZxKYrIVQv3WBCyP
-         ND+Ub+KvV5/yFzPrGcGawkkvGp8/Fkr6VzpBLYxjKlHh17fDxnZiFFBvJiBu7pZGaUfj
-         FH9CyyDtLaYVGARdzDIWqS7sx851kW7v9SpJOX3wqC2L0qSapZdkYCO17N3a08YtraIL
-         3eYLo08GkV0G7IR5i6Ir3CMiGZtoWjeduNek3k5WD9TrkacgjLE7IwD1VtVVZWqRKq8N
-         GGrw==
-X-Gm-Message-State: AO0yUKVyuT7tJUtkDVc7Q7DSvAJ3/EFKg4zRAzupbb7G9c0IF2HaXG4Q
-        cr7fetTHTKopJaRqo5XEwhw=
-X-Google-Smtp-Source: AK7set+b3pKwVhLF/NmGsZhRs+HpcpdkO06/1xJ22W1zOxMr7Z7de0igJ6VrMv3LMX/PVzPeQaCPUQ==
-X-Received: by 2002:a05:6a20:cc59:b0:db:9a60:a52d with SMTP id hq25-20020a056a20cc5900b000db9a60a52dmr7057696pzb.41.1679848706162;
-        Sun, 26 Mar 2023 09:38:26 -0700 (PDT)
-Received: from localhost (c-24-21-48-127.hsd1.or.comcast.net. [24.21.48.127])
-        by smtp.gmail.com with ESMTPSA id s18-20020aa78d52000000b00627f054a3cdsm337182pfe.31.2023.03.26.09.38.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 09:38:25 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Danylo Piliaiev <dpiliaiev@igalia.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm: Rename drm_msm_gem_submit_reloc::or in C++ code
-Date:   Sun, 26 Mar 2023 09:38:13 -0700
-Message-Id: <20230326163813.535762-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Sun, 26 Mar 2023 12:47:02 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CAE54C15;
+        Sun, 26 Mar 2023 09:47:01 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id B20C320FD05D; Sun, 26 Mar 2023 09:47:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B20C320FD05D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1679849220;
+        bh=5g48Pkq3wb7Oxb65S5AJphPh6t8/qMGHjHIhQQVtTKk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CoZQYVwMfGqy8Y4q9OBBj20/l1g9cCj/FaB5D/lFFe67wxNu6zYhwEl75DWdLkuBF
+         6aVAF9/pKp5dh1c64P5mNrPbNBF0/XhBq3XWCSJpUBE1JZJCWs0HRA4SB/DSK5STCm
+         WnMrgQdx1DMa7QFvoF0bCTrLTTJQDE9/7gkjVq/0=
+Date:   Sun, 26 Mar 2023 09:47:00 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v3 5/5] x86/Kconfig: Add HYPERV_VTL_MODE
+Message-ID: <20230326164700.GA10074@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1679306618-31484-1-git-send-email-ssengar@linux.microsoft.com>
+ <1679306618-31484-6-git-send-email-ssengar@linux.microsoft.com>
+ <BYAPR21MB16885C786D5DC8381C21868AD78A9@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB16885C786D5DC8381C21868AD78A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Danylo Piliaiev <dpiliaiev@igalia.com>
+On Sun, Mar 26, 2023 at 03:16:15PM +0000, Michael Kelley (LINUX) wrote:
+> From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Monday, March 20, 2023 3:04 AM
+> > 
+> > Add HYPERV_VTL_MODE Kconfig flag for VTL mode.
+> > 
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> >  arch/x86/Kconfig         | 24 ++++++++++++++++++++++++
+> >  arch/x86/hyperv/Makefile |  1 +
+> >  2 files changed, 25 insertions(+)
+> > 
+> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > index 453f462f6c9c..c3faaaea1e31 100644
+> > --- a/arch/x86/Kconfig
+> > +++ b/arch/x86/Kconfig
+> > @@ -782,6 +782,30 @@ menuconfig HYPERVISOR_GUEST
+> > 
+> >  if HYPERVISOR_GUEST
+> > 
+> > +config HYPERV_VTL_MODE
+> > +	bool "Enable Linux to boot in VTL context"
+> > +	depends on X86_64 && HYPERV
+> > +	default n
+> > +	help
+> > +	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
+> > +	  enlightenments offered to host and guest partitions which enables
+> > +	  the creation and management of new security boundaries within
+> > +	  operating system software.
+> > +
+> > +	  VSM achieves and maintains isolation through Virtual Trust Levels
+> > +	  (VTLs). Virtual Trust Levels are hierarchical, with higher levels
+> > +	  being more privileged than lower levels. VTL0 is the least privileged
+> > +	  level, and currently only other level supported is VTL2.
+> > +
+> > +	  Select this option to build a Linux kernel to run at a VTL other than
+> > +	  the normal VTL0, which currently is only VTL2.  This option
+> > +	  initializes the x86 platform for VTL2, and adds the ability to boot
+> > +	  secondary CPUs directly into 64-bit context as required for VTLs other
+> > +	  than 0.  A kernel built with this option must run at VTL2, and will
+> > +	  not run as a normal guest.
+> > +
+> > +	  If unsure, say N
+> > +
+> 
+> Is there a reason for putting this in arch/x86/Kconfig instead of in
+> drivers/hv/Kconfig under the "Microsoft Hyper-V guest support"
+> menu with the other Hyper-V settings?  It seems like grouping
+> this with the other Hyper-V settings would make it easier to find,
+> unless there's some reason that doesn't work.
 
-Clashes with C++ `or` keyword
+As all the code dependent on this flag is in arch/x86/hyperv, and all
+other kernel flags used in arch/x86/hyperv/Makefile are define in
+arch/x86/Kconfig, arch/x86/Kconfig was my default choice.
 
-Signed-off-by: Danylo Piliaiev <dpiliaiev@igalia.com>
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
-This is a port of a C++ compat fix that was made in mesa's copy of the
-drm uapi headers.
+But your suggestion makes perfect sense, I will move it to
+drivers/hv/Kconfig
 
- include/uapi/drm/msm_drm.h | 4 ++++
- 1 file changed, 4 insertions(+)
+Regards,
+Saurabh
 
-diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
-index dbf0d6f43fa9..6c34272a13fd 100644
---- a/include/uapi/drm/msm_drm.h
-+++ b/include/uapi/drm/msm_drm.h
-@@ -186,7 +186,11 @@ struct drm_msm_gem_cpu_fini {
-  */
- struct drm_msm_gem_submit_reloc {
- 	__u32 submit_offset;  /* in, offset from submit_bo */
-+#ifdef __cplusplus
-+	__u32 _or;            /* in, value OR'd with result */
-+#else
- 	__u32 or;             /* in, value OR'd with result */
-+#endif
- 	__s32 shift;          /* in, amount of left shift (can be negative) */
- 	__u32 reloc_idx;      /* in, index of reloc_bo buffer */
- 	__u64 reloc_offset;   /* in, offset from start of reloc_bo */
--- 
-2.39.2
-
+> 
+> Michael
+> 
+> >  config PARAVIRT
+> >  	bool "Enable paravirtualization code"
+> >  	depends on HAVE_STATIC_CALL
+> > diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
+> > index 5d2de10809ae..3a1548054b48 100644
+> > --- a/arch/x86/hyperv/Makefile
+> > +++ b/arch/x86/hyperv/Makefile
+> > @@ -1,6 +1,7 @@
+> >  # SPDX-License-Identifier: GPL-2.0-only
+> >  obj-y			:= hv_init.o mmu.o nested.o irqdomain.o ivm.o
+> >  obj-$(CONFIG_X86_64)	+= hv_apic.o hv_proc.o
+> > +obj-$(CONFIG_HYPERV_VTL_MODE)	+= hv_vtl.o
+> > 
+> >  ifdef CONFIG_X86_64
+> >  obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
+> > --
+> > 2.34.1
