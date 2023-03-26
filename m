@@ -2,208 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263796C9241
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 05:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451256C9245
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 05:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbjCZDk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 23:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
+        id S231575AbjCZDtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 23:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCZDk0 (ORCPT
+        with ESMTP id S229582AbjCZDto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 23:40:26 -0400
+        Sat, 25 Mar 2023 23:49:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E6B9EEA
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 20:40:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6F8B453
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 20:49:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DED88B80B9E
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 03:40:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C683C433D2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 03:40:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F1F8B80BA4
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 03:49:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90235C433EF;
+        Sun, 26 Mar 2023 03:49:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679802021;
-        bh=aNdHH/x3npE84NvqRHLCY4a1KFaMFDbk68uZH/TCbOs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mqXoKuS3szcQQU7SJQ3DWy7GX8vV7bOXRRp/wStTei8Lgx23P3zKIqvFF1dHYyoID
-         YSCoViPQiazTr4ZjHqY45aU0teM30h2tsVMJRBjnjsUr8lDlv0y4uMrclcwhrUYbVf
-         snBcGH7G1c/nrOQ8qRBzSVI1zxhOnFPaKZnbAx8wzQXXmz2rasxoWfbeHYFMtGdISo
-         G4eK4HY/idazLi0FZhwy04EX4SDKeIeiDInCYr0uKBBTxsuGM4LVaEpBwUqDCrLj8z
-         5DaDW2CsAkh9TCBrvNhTkOqfsixA1kY8jBO8G2ypBB4hC14OTOAMxjHae1Qnnn5uwD
-         r5kiKYt6u/F6Q==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-17997ccf711so5969846fac.0
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 20:40:21 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eGrF3oz9pQ8lG13fEg6J842/I80tLT5FAECx7kmgErG2WTmhH6
-        9VXojCgfSd/o6thjrsMkcAAHssVEs/5C5dHXlg0=
-X-Google-Smtp-Source: AKy350a0iktmcIGh1E6nGTodhu+jOfBNrtXOtoCtrZFjAX1WRXhkOpRCPOvPOVaqQ2hqa6fBckTi4LOivah5bXdRdOM=
-X-Received: by 2002:a05:6871:e86:b0:17e:d9e2:a55c with SMTP id
- vl6-20020a0568710e8600b0017ed9e2a55cmr2447043oab.11.1679802020793; Sat, 25
- Mar 2023 20:40:20 -0700 (PDT)
+        s=k20201202; t=1679802581;
+        bh=CHpENE+KD3eZ7/27C0sTVoLEbrGfVewpqSZfHjFOqAw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=iGqjpn0rbA7yaVq2RqFq288/7HeMnL+/LsIKYzG0ypJwuni20LfjhcMo9KorbQGV9
+         c5Fb2d0TKDWgzJUgnJBuMIrOy86wlvzRrx77A5E6O5BnWQEGeti/mkBMxH/WcirZM5
+         ob+5YY0MMiwSFUQcA4AyLmrFrtLGOGwYtIjSb82kfOg/Y1DYfzAyz0ZjauADdvDGG1
+         BX+R6MbtCnqgDXnvBG5I7XMfU3EZLoa9wJ20jfGKGXNZ5ryag+/A0+M9b8+/tqSzEz
+         SaVVMWv9mKFDl77v0e2fx4pSA+cHnKhza6SjHRF3LbiN2LDVVqCvEVFZDcvd7oC+ec
+         KfrDK7ti2nO6Q==
+Message-ID: <edaac9a2-429d-4fa8-fded-d2b67ac7b424@kernel.org>
+Date:   Sun, 26 Mar 2023 11:49:37 +0800
 MIME-Version: 1.0
-References: <20230325143122.GA409315@mit.edu>
-In-Reply-To: <20230325143122.GA409315@mit.edu>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 26 Mar 2023 12:39:44 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARndpbtzRAW1kEiqyNBmAxdqJKiTquvY9bW08LYTTMiOg@mail.gmail.com>
-Message-ID: <CAK7LNARndpbtzRAW1kEiqyNBmAxdqJKiTquvY9bW08LYTTMiOg@mail.gmail.com>
-Subject: Re: Change in kernel debian packages between -rc2 and -rc3
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1] f2fs: Fix discard bug on zoned block devices with 2MiB
+ zone size
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     yonggil.song@samsung.com,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <CGME20230313094825epcms2p71e6cb549251dc55e8d202dd64b9913a6@epcms2p7>
+ <20230313094825epcms2p71e6cb549251dc55e8d202dd64b9913a6@epcms2p7>
+ <a24d66ad-4048-fd5c-ae47-2dd17c87bcbe@kernel.org>
+ <ZBzMql6DkrUWiRKP@google.com>
+ <35dd1eea-f1b9-418e-5f97-cfd10b7ff803@kernel.org>
+ <ZB3Vz9w2ybNVSY8C@google.com>
+Content-Language: en-US
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <ZB3Vz9w2ybNVSY8C@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 11:31=E2=80=AFPM Theodore Ts'o <tytso@mit.edu> wrot=
-e:
->
-> Hi Masahiro,
->
-> It appears that there is a backwards-incompatible (and, I believe,
-> incorrect) change in the package version used when generated Debian
-> packages between 6.2-rc2 and 6.2-rc3.
->
-> I have CONFIG_LOCALVERSION set in my .config:
->
->    CONFIG_LOCALVERSION=3D"-xfstests"
->
-> As a result, the uname -a of a kernel that I build contains -xfstests,
-> e.g:
->
-> root@kvm-xfstests:~# uname -r
-> 6.3.0-rc3-xfstests-00043-g463f2e46bf7c
->
-> Previously this would be correctly reflected in the Debian package
-> version:
->
-> % dpkg -I /build/linux-image-6.3.0-rc2-xfstests_6.3.0-rc2-xfstests-1016_a=
-md64.deb
-> ...
->  Package: linux-image-6.3.0-rc2-xfstests
->  Source: linux-6.3.0-rc2-xfstests
->  Version: 6.3.0-rc2-xfstests-1016
-> ...
->
-> However, after -rc3, the CONFIG_LOCALVERSION is no longer present in the =
-package version:
->
-> % dpkg -I /build/linux-image-6.3.0-rc3-xfstests-00043-g463f2e46bf7c_6.3.0=
--rc3-00043-g463f2e46bf7c-1017_amd64.deb
-> ...
->  Package: linux-image-6.3.0-rc3-xfstests-00043-g463f2e46bf7c
->  Source: linux-6.3.0-rc3-xfstests-00043-g463f2e46bf7c
->  Version: 6.3.0-rc3-00043-g463f2e46bf7c-1017
-> ...
+On 2023/3/25 0:54, Jaegeuk Kim wrote:
+> On 03/24, Chao Yu wrote:
+>> On 2023/3/24 6:03, Jaegeuk Kim wrote:
+>>> On 03/23, Chao Yu wrote:
+>>>> On 2023/3/13 17:48, Yonggil Song wrote:
+>>>>> When using f2fs on a zoned block device with 2MiB zone size, IO errors
+>>>>> occurs because f2fs tries to write data to a zone that has not been reset.
+>>>>>
+>>>>> The cause is that f2fs tries to discard multiple zones at once. This is
+>>>>> caused by a condition in f2fs_clear_prefree_segments that does not check
+>>>>> for zoned block devices when setting the discard range. This leads to
+>>>>> invalid reset commands and write pointer mismatches.
+>>>>>
+>>>>> This patch fixes the zoned block device with 2MiB zone size to reset one
+>>>>> zone at a time.
+>>>>>
+>>>>> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
+>>>>> ---
+>>>>>     fs/f2fs/segment.c | 3 ++-
+>>>>>     1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+>>>>> index acf3d3fa4363..2b6cb6df623b 100644
+>>>>> --- a/fs/f2fs/segment.c
+>>>>> +++ b/fs/f2fs/segment.c
+>>>>> @@ -1953,7 +1953,8 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
+>>>>>     					(end - 1) <= cpc->trim_end)
+>>>>>     				continue;
+>>>>> -		if (!f2fs_lfs_mode(sbi) || !__is_large_section(sbi)) {
+>>>>> +		if (!f2fs_sb_has_blkzoned(sbi) &&
+>>>>
+>>>> Could you please add one line comment here for this change?
+>>>
+>>> This was merged in -dev a while ago. I don't think this would be critical
+>>> to rebase it again.
+>>
+>> Yes, it's not critical, fine to me.
+> 
+> Added:
+> 
+> /* Should cover 2MB zoned device for zone-based reset */
 
+Reviewed-by: Chao Yu <chao@kernel.org>
 
+Thanks,
 
-I am afraid you are completely misunderstanding the two versions,
-the ABI version and the package version.
-
-They do not need to match. Actually, they do not match.
-
-See real Debian (or Ubuntu) systems.
-
-
-On Debian bullseye.
-
-
-$ uname -r
-5.10.0-21-amd64
-$ dpkg-deb -I linux-image-5.10.0-21-amd64_5.10.162-1_amd64.deb
- [snip]
- Package: linux-image-5.10.0-21-amd64
- Source: linux-signed-amd64 (5.10.162+1)
- Version: 5.10.162-1
- Architecture: amd64
-
-
-
-
-`uname -r` returns '5.10.0-21-amd64'.
-This is what they call the ABI version, and
-this is contained as a part of the package name,
-'linux-image-5.10.0-21-amd64'
-
-The package version is '5.10.162-1'
-
-They are different.
-
-This means the Debian kernel team built the kernel package
-based on the stable kernel '5.10.162'.
-The suffix '-1' indicates the Debian revision.
-But, they gave a different uname '5.10.0-21-amd64'.
-
-
-
-Get back to your question.
-
-You set CONFIG_LOCALVERSION=3D"-xfstests".
-It was reflected in 'uname -r' and in the package name.
-This is correct.
-
-It was _not_ reflected in the package version.
-This is also correct since the package version
-is not meant to reflect such user configuration
-as CONFIG_LOCALVERSION.
-
-
-The upstream version part '6.3.0-rc3-00043-g463f2e46bf7c'
-represents the version of the source code.
-In other words, it is determined by the git commit hash
-(if you are using a git repository) and never affected by
-CONFIG options or local files.
-
-You can build multiple debian packages from the same git
-commit hash, changing the .config, arch, or whatever.
-In this case, the debian revision part, "-1017" is auto-incremented.
-
-If you override the package version, you can use KDEB_PKGVERSION.
-
-
-
-
-
-> Note the missing "-xfstests" in the above Version.  This also shows up
-> in the name of the .deb file which is generated, and this is breaking
-> my kernel build script[1].
->
-> [1] https://github.com/tytso/xfstests-bld/blob/master/kernel-build/kbuild
-
-
-This is just because your tool is wrong.
-It was just working based on the wrong assumption.
-
-Please fix it.
-
-
-
-
-
-> I assume the problem is caused by one of these two commits:
->
-> 36862e14e316 ("kbuild: deb-pkg: use dh_listpackages to know enabled packa=
-ges")
-> b611daae5efc ("kbuild: deb-pkg: split image and debug objects staging out=
- into functions")
->
-> As these are the two commits which touch the builddeb script.
->
-> Could you please take a look?
->
-> Many thanks,
->
->                                                 - Ted
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+> 
+> So lucky since I had to rebase to fix other patch. :(
+> 
+> "f2fs: factor out discard_cmd usage from general rb_tree use"
+> 
+> 
+>>
+>> Thanks,
+>>
+>>>
+>>>>
+>>>> Otherwise it looks good to me.
+>>>>
+>>>> Thanks,
+>>>>
+>>>>> +		    (!f2fs_lfs_mode(sbi) || !__is_large_section(sbi))) {
+>>>>>     			f2fs_issue_discard(sbi, START_BLOCK(sbi, start),
+>>>>>     				(end - start) << sbi->log_blocks_per_seg);
+>>>>>     			continue;
