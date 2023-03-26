@@ -2,179 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D51F6C96A9
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CB56C96BD
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232520AbjCZQIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 12:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S232403AbjCZQRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 12:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231980AbjCZQIa (ORCPT
+        with ESMTP id S229621AbjCZQRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 12:08:30 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D8D46BB
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:08:28 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id j6so3440497ilr.7
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:08:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google; t=1679846907;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hmWU3HOEJbbXWYXoBYPRgRHzG+SKRTnqVA9N2/ofI1w=;
-        b=Wg1QM8/YMpRaCJAOuR5alIpWbx1ppfnISy8H69O/NgeWor6SkELX53FXVONDqvbgaJ
-         dvyYSRVBWRpSsU4Ng3rsEBIYRgiGJQ7cTWUVhcOsqPAueVjAUmrohSU8xzErX2+h/5V3
-         BPkx7vDU8MmGMnyv6weBP7LGEQdPKDJZkR9BM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679846907;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hmWU3HOEJbbXWYXoBYPRgRHzG+SKRTnqVA9N2/ofI1w=;
-        b=zGgZlmKpZ+C/EN1ztaTWwLdzbGheShd5mVSRmXAWqfmL7MfNbG2YSwSUQMX+3gbWw6
-         TIEo2CAxxyuJuKnC67b6n0nagkS+Emtu92yemSamR8W/nc2QrIqIfXRwMihjLFg5lerX
-         3gRw0uMetnSOUNAIocKUpE3zi2vMtmWBCKD8u1mZgQOxi880Pir/Wnk4Cz57lE2o7l/h
-         eix4nQDpd1+t4Cqpy/WHassUUvl/DeHbrDX9nz0x3zafk5s1HSJsf4KtKb0MvUUhlOtm
-         GRxE4HyFGhnJuAkb4LDev23Q+40sbi87DtnRWT3Qzfak9Z+lzFIyXFGmFH7JRFM4P1z3
-         VsAA==
-X-Gm-Message-State: AAQBX9cheJ8LwzFDmn3gQeU1FT13SRDEq4S/WC6jB7oU2gidLKgRMp9Q
-        x8ZYIyIe3+k9kZgHm9YY1QGZrw==
-X-Google-Smtp-Source: AKy350aARNmNflI3UCZ68ajxhsC+vG7Qt5H0cyHaRefnTQANxcoOs7ReJ3N0PLwHez+XrcbZplDziQ==
-X-Received: by 2002:a92:dd03:0:b0:316:e6e4:570b with SMTP id n3-20020a92dd03000000b00316e6e4570bmr6771010ilm.11.1679846907463;
-        Sun, 26 Mar 2023 09:08:27 -0700 (PDT)
-Received: from [10.211.55.3] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id f15-20020a056e0212af00b00313fa733bcasm7294385ilr.25.2023.03.26.09.08.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Mar 2023 09:08:26 -0700 (PDT)
-Message-ID: <a7d15a55-131a-4edb-8ace-2e35d3488ae8@ieee.org>
-Date:   Sun, 26 Mar 2023 11:08:25 -0500
+        Sun, 26 Mar 2023 12:17:22 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377A049CA;
+        Sun, 26 Mar 2023 09:17:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1679847437; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=HqVc5rLyGwFRIUua8+qsRzxjbw98PRJdF7LTUihsqE2MuDYaWJ4IYG2K7ybAAmXJRs
+    caaPhn4AkGat1vmR+7FWG+dHoHww5z02aF49u7d04QZ9Y4GQbWW7sPXcZEkW8jMSaAct
+    qdhQmSC7x+mRiFd1TZAhsNAplIophh7wCj45HGg9pU/FU2i5zJ9N0kQeD/151Dd3Xv1J
+    3C2oV6Spxl3jVn3XPgfh8ZC92fFAgRX/1fH72DQL9SOS8Y1LrZEk8KPdsRsJsvQpEIkY
+    gaj4X2r7kD+IliG63j1oaLHRmXpkkWA1G6ltih1sBujDh+oVJaOrTbSKGdqZ2GCR95p5
+    kBRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1679847437;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=jPn7qiKnVAHlho1+QPL3JiQ1DbaASQpXMMWBmuI+0qE=;
+    b=cfn+uEL8Ae8tsuKQR4j6ZIj9pChGvnjrNGJogq/E9GsUJ4f5fhd2wDzwZ7P9NG0qUK
+    QumDRnS5C9/i86gJgDibRfBtRl6JrTQSHf15R+UTmrMUma5oGtdCLvrsgOVvNtwKdp5Q
+    gIuZ7CBpPx4SbvDahirhAUkpLaKq4I+ekB4LOPuG7pmweENu5ibXuQ+r04cIa++I5f0M
+    RE0MAkrGNn5KRXDzV4mFGBEkTFsQqp4B7nM6rHXjfrfGKdu+oZC/OKdq1F4x4yagruWA
+    cEj+Mm5utp3wRv9hRnGLcFjvYIluzt+sNkYroRXGAdWYTP7RlPLUP28YD9NXJ9623k7U
+    OSDA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1679847437;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=jPn7qiKnVAHlho1+QPL3JiQ1DbaASQpXMMWBmuI+0qE=;
+    b=ISIlt39OAp6CmKbl33i8k4QtfiYR4bbUQgv143gZRsQRbD+RR6d+meldOihyI2/KQn
+    fAKlZYdCFpGIpussX+zGrzBsW3rYsug3JbWhjIKiRDX6z9GUfU/gnzNfcHhe50v279F0
+    OVhvJGbu/hDxhetflg+N25PPf+QO/FRace0w53DcKQ9NH80dkADPT/084iz48cCwdgr1
+    t6MkRcwDKTCWXAdz/H0e6bp0mzwBow+HeS9nb6ujAluAdZARKzzvO6tualZeLoNG8AEW
+    WlIaWs/cCD6J46WYm8eou0ACGKgUefqzdFwTGJ4BQkvcufRaygQ7xjVu0cdyihcGZIdW
+    BR9A==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
+Received: from [IPV6:2a00:6020:4a8e:5000::923]
+    by smtp.strato.de (RZmta 49.3.1 AUTH)
+    with ESMTPSA id n9397fz2QGHHSed
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 26 Mar 2023 18:17:17 +0200 (CEST)
+Message-ID: <81ebf23b-f539-5782-2abd-8db8a232bb72@hartkopp.net>
+Date:   Sun, 26 Mar 2023 18:17:17 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] ARM: dts: qcom: sdx65: add IPA information
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: WARNING in isotp_tx_timer_handler and WARNING in print_tainted
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alex Elder <elder@linaro.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
-        agross@kernel.org, konrad.dybcio@linaro.org
-Cc:     quic_rohiagar@quicinc.com, caleb.connolly@linaro.org,
-        mka@chromium.org, evgreen@chromium.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230324201528.2540564-1-elder@linaro.org>
- <20230324201528.2540564-2-elder@linaro.org>
- <98fcbdd4-77b3-5b17-7102-c590f1a5a63e@kernel.org>
- <82797190-5a83-53d5-47cd-0c62b3f7c6d8@ieee.org>
- <80e9a424-1d5b-5402-4567-c489204869b6@linaro.org>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <80e9a424-1d5b-5402-4567-c489204869b6@linaro.org>
+To:     "Dae R. Jeong" <threeearcat@gmail.com>
+Cc:     mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <ZB/93xJxq/BUqAgG@dragonet>
+ <31c4a218-ee1b-4b64-59b6-ba5ef6ecce3c@hartkopp.net>
+ <ZCAytf0CpfAhjUSe@dragonet>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <ZCAytf0CpfAhjUSe@dragonet>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/26/23 11:04 AM, Krzysztof Kozlowski wrote:
-> On 26/03/2023 18:01, Alex Elder wrote:
->> On 3/25/23 6:14 AM, Krzysztof Kozlowski wrote:
->>> On 24/03/2023 21:15, Alex Elder wrote:
->>>> Add IPA-related nodes and definitions to "sdx65.dtsi".  The SMP2P
->>>> nodes (ipa_smp2p_out and ipa_smp2p_in) are already present.
->>>>
->>>> Enable IPA in "sdx65-mtp.dts"; this GSI firmware is loaded by Trust
->>>> Zone on this platform.
->>>>
->>>> Tested-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->>>> Signed-off-by: Alex Elder <elder@linaro.org>
->>>> ---
->>>>    arch/arm/boot/dts/qcom-sdx65-mtp.dts |  5 ++++
->>>>    arch/arm/boot/dts/qcom-sdx65.dtsi    | 38 ++++++++++++++++++++++++++++
->>>>    2 files changed, 43 insertions(+)
->>>>
->>>> diff --git a/arch/arm/boot/dts/qcom-sdx65-mtp.dts b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
->>>> index ed98c83c141fc..72e25de0db5fc 100644
->>>> --- a/arch/arm/boot/dts/qcom-sdx65-mtp.dts
->>>> +++ b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
->>>> @@ -245,6 +245,11 @@ &blsp1_uart3 {
->>>>    	status = "okay";
->>>>    };
->>>>    
->>>> +&ipa {
->>>> +	qcom,gsi-loader = "skip";
->>>> +	status = "okay";
->>>> +};
->>>> +
->>>>    &qpic_bam {
->>>>    	status = "okay";
->>>>    };
->>>> diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
->>>> index 192f9f94bc8b4..360d6dc144811 100644
->>>> --- a/arch/arm/boot/dts/qcom-sdx65.dtsi
->>>> +++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
->>>> @@ -11,6 +11,7 @@
->>>>    #include <dt-bindings/interrupt-controller/arm-gic.h>
->>>>    #include <dt-bindings/power/qcom-rpmpd.h>
->>>>    #include <dt-bindings/soc/qcom,rpmh-rsc.h>
->>>> +#include <dt-bindings/interconnect/qcom,sdx65.h>
->>>>    
->>>>    / {
->>>>    	#address-cells = <1>;
->>>> @@ -299,6 +300,43 @@ tcsr_mutex: hwlock@1f40000 {
->>>>    			#hwlock-cells = <1>;
->>>>    		};
->>>>    
->>>> +		ipa: ipa@3e04000 {
->>>> +			compatible = "qcom,sdx65-ipa";
->>>> +
->>>> +			iommus = <&apps_smmu 0x5e0 0x0>,
->>>> +				 <&apps_smmu 0x5e2 0x0>;
->>>> +			reg = <0x3f40000 0x10000>,
->>>> +			      <0x3f50000 0x5000>,
->>>> +			      <0x3e04000 0xfc000>;
->>>> +			reg-names = "ipa-reg",
->>>> +				    "ipa-shared",
->>>> +				    "gsi";
->>>> +
->>>> +			interrupts-extended = <&intc GIC_SPI 241 IRQ_TYPE_EDGE_RISING>,
->>>> +					      <&intc GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>,
->>>> +					      <&ipa_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
->>>> +					      <&ipa_smp2p_in 1 IRQ_TYPE_EDGE_RISING>;
->>>> +			interrupt-names = "ipa",
->>>> +					   "gsi",
->>>> +					   "ipa-clock-query",
->>>> +					   "ipa-setup-ready";
->>>
->>> These look misaligned.
+Hi Dae,
+
+On 26.03.23 13:55, Dae R. Jeong wrote:
+>> diff --git a/net/can/isotp.c b/net/can/isotp.c
+>> index 9bc344851704..0b95c0df7a63 100644
+>> --- a/net/can/isotp.c
+>> +++ b/net/can/isotp.c
+>> @@ -912,13 +912,12 @@ static enum hrtimer_restart
+>> isotp_txfr_timer_handler(struct hrtimer *hrtimer)
+>>   		isotp_send_cframe(so);
 >>
->> I believe this is the alignment convention used by all IPA nodes
->> in DTS files.  It's possible I'm not seeing something you are,
->> but...  what alignment should be used?  And if I change this,
->> should I change all others?
+>>   	return HRTIMER_NORESTART;
+>>   }
+>>
+>> -static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t
+>> size)
+>> +static int isotp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t
+>> size)
+>>   {
+>> -	struct sock *sk = sock->sk;
+>>   	struct isotp_sock *so = isotp_sk(sk);
+>>   	u32 old_state = so->tx.state;
+>>   	struct sk_buff *skb;
+>>   	struct net_device *dev;
+>>   	struct canfd_frame *cf;
+>> @@ -1091,10 +1090,22 @@ static int isotp_sendmsg(struct socket *sock, struct
+>> msghdr *msg, size_t size)
+>>   		wake_up_interruptible(&so->wait);
+>>
+>>   	return err;
+>>   }
+>>
+>> +static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t
+>> size)
+>> +{
+>> +	struct sock *sk = sock->sk;
+>> +	int ret;
+>> +
+>> +	lock_sock(sk);
+>> +	ret = isotp_sendmsg_locked(sk, msg, size);
+>> +	release_sock(sk);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>>   static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t
+>> size,
+>>   			 int flags)
+>>   {
+>>   	struct sock *sk = sock->sk;
+>>   	struct sk_buff *skb;
 > 
-> If this is aligned, then fine. The diff points it is not, but the diff
-> might be a bit tricky sometimes.
+> Hi, Oliver.
 > 
-> Alignment is till " in previous line. For example sdm845 looks fine.
+> It seems that the patch should address the scenario I was thinking
+> of. But using a lock is always scary for a newbie like me because of
+> the possibility of causing other problems, e.g., deadlock. If it does
+> not cause other problems, it looks good for me.
 
-OK thank you.  I will send v2 of this series after I hear back
-from Konrad, adding your reviewed-by, and will double-check
-the alignment as well.
+Yes, I feel you!
 
-					-Alex
+We use lock_sock() also in the notifier which is called when someone 
+removes the CAN interface.
+
+But the other cases for e.g. set_sockopt() and for sendmsg() seem to be 
+a common pattern to lock concurrent user space calls.
+
+> Or although I'm not sure about this, what about getting rid of
+> reverting so->tx.state to old_state?
+> 
+> I think the concurrent execution of isotp_sendmsg() would be
+> problematic when reverting so->tx.state to old_state after goto'ing
+> err_out.
+Your described case in the original post indeed shows that this might 
+lead to a problem.
+
+> There are two locations of "goto err_out", and
+> iostp_sendmsg() does nothing to the socket before both of "goto
+> err_out". So after goto'ing err_out, it seems fine for me even if we
+> do not revert so->tx.state to old_state.
+> 
+> If I think correctly, this will make cmpxchg() work, and prevent the
+> problematic concurrent execution. Could you please check the patch
+> below?
+
+Hm, interesting idea.
+
+But in which state will so->tx.state be here:
+
+/* wait for complete transmission of current pdu */
+err = wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
+if (err)
+	goto err_out;
+
+
+Should we better set the tx.state in the error case?
+
+if (err) {
+	so->tx.state = ISOTP_IDLE;
+	goto err_out;
+}
+
+Best regards,
+Oliver
+
+(..)
 
 > 
-> 
-> Best regards,
-> Krzysztof
-> 
-
+> diff --git a/net/can/isotp.c b/net/can/isotp.c
+> index 9bc344851704..4630fad13803 100644
+> --- a/net/can/isotp.c
+> +++ b/net/can/isotp.c
+> @@ -918,7 +918,6 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+>   {
+>   	struct sock *sk = sock->sk;
+>   	struct isotp_sock *so = isotp_sk(sk);
+> -	u32 old_state = so->tx.state;
+>   	struct sk_buff *skb;
+>   	struct net_device *dev;
+>   	struct canfd_frame *cf;
+> @@ -1084,9 +1083,8 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+>   
+>   err_out_drop:
+>   	/* drop this PDU and unlock a potential wait queue */
+> -	old_state = ISOTP_IDLE;
+> +	so->tx.state = ISOTP_IDLE;
+>   err_out:
+> -	so->tx.state = old_state;
+>   	if (so->tx.state == ISOTP_IDLE)
+>   		wake_up_interruptible(&so->wait);
+>   
