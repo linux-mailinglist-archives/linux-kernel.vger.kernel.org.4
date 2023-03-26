@@ -2,53 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E686C97E5
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 22:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263746C97E8
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 22:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbjCZUrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 16:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
+        id S230212AbjCZU6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 16:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjCZUri (ORCPT
+        with ESMTP id S229473AbjCZU6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 16:47:38 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7BA4214;
-        Sun, 26 Mar 2023 13:47:37 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pl7LH5Ymzz4wgq;
-        Mon, 27 Mar 2023 07:47:35 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679863656;
-        bh=TWO3WmlGDnVwIb5BNDwvFUNHK7qRJtMupM+7D0ys6yU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KsGfqjwx+rXB9kJB7UvNxtFW7GzUXHah5uDIqIG/excgsJsPuI3oTVRFz9w1Y2ptV
-         K1Sg3QRisfIHjE93H92Vh8NgPsVuYO77cREVBp2G7GEeN5NuVvKnaXGJ9ReUYyekZk
-         T5ua4hYbaOmT9TKDtX8FIsMFzfdQt2EFn29thLjb/ZEA0OU9Pbri27o5z4F7QiNuTz
-         tyD1L078WXmqdJJqG2eCmc6aaKU45eEWO0YtkpelXg9QguH+zZpM8aJ9ngU3y5DGr1
-         yEFVnA+QFLqQn/y+05eLWLwAkiR/s8G6wI8Qqzo8PPYT3W1cQQYnpQGPjqR1ncLFlg
-         e9k8NIZz+TYYQ==
-Date:   Mon, 27 Mar 2023 07:47:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: linux-next: duplicate patches in the bluetooth tree
-Message-ID: <20230327074734.4bd3af8e@canb.auug.org.au>
-In-Reply-To: <20230324122159.0f34ffcb@canb.auug.org.au>
-References: <20230324122159.0f34ffcb@canb.auug.org.au>
+        Sun, 26 Mar 2023 16:58:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBB53C12
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 13:57:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679864238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ufG0EzSJoZX2ZjEcM3na2tjubK9S5CNNR2tM4hGa6ao=;
+        b=imCeriiRy6xpHj6BGV5Tnqe/9IJ7Ko3qV5d3vBr00qZDDkzx+qIOAWTGy/GuU4l4/eAW6q
+        Gh+sPQyCNoptf1VRbTLYoiHkpN+NjMSg4pQTDMI8S0aEO8IaEBKrE8p8nEnk7DeLABCWK/
+        KpMA1FG2dslzx7Sde5D8Rx6ij9VO32A=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-157-neb1imPEONa0eIHZAx2xQQ-1; Sun, 26 Mar 2023 16:57:16 -0400
+X-MC-Unique: neb1imPEONa0eIHZAx2xQQ-1
+Received: by mail-qt1-f197.google.com with SMTP id h6-20020ac85846000000b003e3c23d562aso4764517qth.1
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 13:57:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679864236;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ufG0EzSJoZX2ZjEcM3na2tjubK9S5CNNR2tM4hGa6ao=;
+        b=cGuMv9n3JM3wXqmlnvtlahUGX8748k38fCJ6JZwjGJAV/5QDTN3uh9bJNfZJe233tU
+         0ej8zssJ7ffowJBnkrJknaMSOqB8+E6i8Lv/+wW9AlgSS7Ioir5Jq2/Fyl3HytEtLihI
+         V5aontkzTDiC0p6kG37kaWOmbGz2sqMClhfPNfH6Mv6VqgVKwhHneEwLVzazBddZdI43
+         oPdoF6sVmV5cMFp1VEKLlShkORTL4i30PbvaBvK1IEtkg/G0BaNbNQh8hRmFT3jDAXHw
+         es99hTa3duNCYTF0jkuSuGQv+P8n2XBHjiNDMed/zwzn+zD0rDT1SXHxcHTd9o+WhNGw
+         FZDg==
+X-Gm-Message-State: AAQBX9eXBT0MnJGfBZAJ2J3uOPguaxOmucYGDyzGCZh91utCn99YohON
+        Lklg22oQz7COyM8iKsbHjW5bZDJ0IoRHzPYKOwUXsvCeU3V0tjOraccZMu5pXJ7zfAnh8V6ETvR
+        AM3ms/QDOA3MC+rq3XxAS61tW
+X-Received: by 2002:a05:6214:27c6:b0:5cd:f9fd:f66a with SMTP id ge6-20020a05621427c600b005cdf9fdf66amr17047954qvb.0.1679864235981;
+        Sun, 26 Mar 2023 13:57:15 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bvbaW/HvmNUD1O5GI6KZgnKPbVGv3bPPwbsQ+CWQB5zxGNwM7H9VkAJkVX4CFGJxeRjvsYFQ==
+X-Received: by 2002:a05:6214:27c6:b0:5cd:f9fd:f66a with SMTP id ge6-20020a05621427c600b005cdf9fdf66amr17047944qvb.0.1679864235774;
+        Sun, 26 Mar 2023 13:57:15 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id l4-20020ad44244000000b005dd8b9345cesm2409267qvq.102.2023.03.26.13.57.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 13:57:15 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     perex@perex.cz, tiwai@suse.com, nathan@kernel.org,
+        ndesaulniers@google.com, wangjianli@cdjrlc.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] ALSA: remove unused loop_count variable
+Date:   Sun, 26 Mar 2023 16:57:12 -0400
+Message-Id: <20230326205712.1358918-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OpOVIFqSfylDXMhyWRkzinf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,61 +76,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/OpOVIFqSfylDXMhyWRkzinf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+clang with W=1 reports
+sound/pci/asihpi/hpi6000.c:1256:6: error: variable
+  'loop_count' set but not used [-Werror,-Wunused-but-set-variable]
+        u32 loop_count = 0;
+            ^
+This variable is not used so remove it.
 
-Hi all,
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ sound/pci/asihpi/hpi6000.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-On Fri, 24 Mar 2023 12:21:59 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> The following commits are also in the net tree as different commits
-> (but the same patches):
->=20
->   0b0501e48331 ("Bluetooth: Fix race condition in hci_cmd_sync_clear")
->   1446dcd9dcfc ("Bluetooth: btintel: Iterate only bluetooth device ACPI e=
-ntries")
->   23942ce75b8c ("Bluetooth: L2CAP: Fix responding with wrong PDU type")
->   363bb3fbb249 ("Bluetooth: hci_core: Detect if an ACL packet is in fact =
-an ISO packet")
->   36ecf4d48b5a ("Bluetooth: btusb: Remove detection of ISO packets over b=
-ulk")
->   3ebbba4feafd ("Bluetooth: btqcomsmd: Fix command timeout after setting =
-BD address")
->   592916198977 ("Bluetooth: ISO: fix timestamped HCI ISO data packet pars=
-ing")
->   59ba62c59bfe ("Bluetooth: HCI: Fix global-out-of-bounds")
->   6eaae76b4aed ("Bluetooth: btsdio: fix use after free bug in btsdio_remo=
-ve due to unfinished work")
->   81183a159b36 ("Bluetooth: hci_sync: Resume adv with no RPA when active =
-scan")
->   853c3e629079 ("Bluetooth: mgmt: Fix MGMT add advmon with RSSI command")
->   906d721e4897 ("Bluetooth: btinel: Check ACPI handle for NULL before acc=
-essing")
->   bfcd8f0d273d ("Bluetooth: Remove "Power-on" check from Mesh feature")
+diff --git a/sound/pci/asihpi/hpi6000.c b/sound/pci/asihpi/hpi6000.c
+index 88d902997b74..72aa135d69f8 100644
+--- a/sound/pci/asihpi/hpi6000.c
++++ b/sound/pci/asihpi/hpi6000.c
+@@ -1253,7 +1253,6 @@ static u16 hpi6000_dsp_block_read32(struct hpi_adapter_obj *pao,
+ 	int local_count = count;
+ 	int xfer_size;
+ 	u32 *pdata = dest;
+-	u32 loop_count = 0;
+ 
+ 	while (local_count) {
+ 		if (local_count > c6711_burst_size)
+@@ -1273,7 +1272,6 @@ static u16 hpi6000_dsp_block_read32(struct hpi_adapter_obj *pao,
+ 		pdata += xfer_size;
+ 		local_hpi_address += sizeof(u32) * xfer_size;
+ 		local_count -= xfer_size;
+-		loop_count++;
+ 	}
+ 
+ 	if (time_out)
+-- 
+2.27.0
 
-These commits are now in Linus' tree as different commits but the same patc=
-hes.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/OpOVIFqSfylDXMhyWRkzinf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQgr2YACgkQAVBC80lX
-0Gwo4Af/cakCzVrlXhEIauUf53JUm6c91M0ccYo+xNiF06TzOCF5r72HYD0Pqgq+
-FihOkLvAUe8Zytan+bj8fJIEUWGWCw596b4Djk3yJ0J7sxZmwTl240r7PVgsP+cd
-kQx+XYeI5qNKGXxlG6pCAaPGC/iBeM9ArO042rLYXKX4uqhoz8Hv2vueFAs+b5t0
-BzRMcmDtaOJa1l5ob6jegv6sdXv1hQUq3RvsDgUjmNFivoMVfywOCrRW6vScNYOn
-c8u9btpmBQHMvSpaGQzhlbPb+Vq1ulebTw0eTKZxWO1uwpiBLCZCfese54rJBMYE
-CkjxDhxj1F9W38jkmardXAI8OwtyqQ==
-=kM0E
------END PGP SIGNATURE-----
-
---Sig_/OpOVIFqSfylDXMhyWRkzinf--
