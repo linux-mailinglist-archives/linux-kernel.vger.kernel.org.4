@@ -2,168 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8196F6C9633
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1111D6C9659
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbjCZPlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 11:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
+        id S231659AbjCZP51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 11:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCZPlE (ORCPT
+        with ESMTP id S231671AbjCZP5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 11:41:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D33119BA;
-        Sun, 26 Mar 2023 08:41:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0836D60DE7;
-        Sun, 26 Mar 2023 15:41:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D533C433D2;
-        Sun, 26 Mar 2023 15:41:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679845262;
-        bh=21uEPRsfEI6Bmn4l2Yo3fQlTwIXz1UGKObvRJC3gEzY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=W8UV2+C20/Ija6ZI/S572nlTDADojVrGdQ31d3VqGtzPothV7yLPpcN73LCcBY9/v
-         LBURlPry05C4uENgAOfQjGxzcLpNGk8EksOGlPsJOIRDIsFP/c2j5pbmXTi9WQO2Jm
-         Dr9hMyewDKdIwPmgw1sXDfjQo0mnTL/k7Ek1S951FQHLKAUTH/skK1DHc8hTC4GMpX
-         +jw/2Shj2oVOANbym7tOoUYtFkYMmDRF4UA/mN19HhKdlQ8Zno+Fp1fPZVmIMhLyV7
-         P3KxigVaIZ/uRjRu8+SVaAzGPnEZb6lOdqdFAWFRgXF0U6mpSFK32bj9kqB0Xn8yRu
-         Yu31MHVyBCy6g==
-Date:   Sun, 26 Mar 2023 16:56:04 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     ChiaEn Wu <chiaen_wu@richtek.com>
-Cc:     <lars@metafoo.de>, <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <peterwu.pub@gmail.com>,
-        <cy_huang@richtek.com>
-Subject: Re: [PATCH] iio: adc: mt6370: Fix ibus and ibat scaling value of
- some specific vendor ID chips
-Message-ID: <20230326165604.27338cc6@jic23-huawei>
-In-Reply-To: <1679667167-16261-1-git-send-email-chiaen_wu@richtek.com>
-References: <1679667167-16261-1-git-send-email-chiaen_wu@richtek.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sun, 26 Mar 2023 11:57:25 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646904220
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:57:23 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id eg48so26107513edb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:57:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679846242;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HJiERgJjFmjq6ufszGCigy5Vlsps238BsECxW/NhOGU=;
+        b=lcRScbIkrRfWyTQ/AC4YJgKYK83Vd8/4zToYCbMDyukTlg2QUTVeaWy+dmLOdG2dyD
+         AneFjgNe41hS7/i2CP/iQ1olGipPY4ii/VqONglhchS4lCEYjJXiG8xCdf9ekarlbcQh
+         bOeMesZ8YOiGUsok86tlrATAOymLtdBiV0uniDhazyN5i9P/ttSqPyiSq2A71fUZfZe1
+         Z53++3PWgcz/qk1yFLg2keO1rsQXOu8W1ZujwJvvoxP4f+06y+TSGX1s0twEC9s4oFtt
+         E0athx/WhxGEYaw3J4wueTZz6gzq/JJRFs7WGzXkJZ4xvEk1/7OZw9fvMDWJzxicbW6T
+         Wr+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679846242;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HJiERgJjFmjq6ufszGCigy5Vlsps238BsECxW/NhOGU=;
+        b=rsPnNw8pR1Za0hblsWqKrXZmn/in+7jz6RnsZvxU/9TDGadYAyoshzS1kX7oWWjWWd
+         4gVWgmFuitEyBM0I/hubwkymYHpMgwUfoI9KrnFnFv9GSHaSNtqmN/4GOngfhaFA0DXd
+         qGmZaTpyXw0yXEu5QnI2sF/f5zws3/7RB5/LS9nYv2ex0bnl0TasaEW3bH2HIugMTdH0
+         RbGBDLFzJr4Og0YfgqX7m3JyNmsIrsMsIkqAPDV5bsH3GH+03TZp2u1BYmwxbMgNw9jO
+         57r6sw5NVCzNKQh4ZEDN0igvjCpX/DiCCbQHktABaY8HcEVyrQRgqO0v3TT4Rvv+YM4E
+         XzkQ==
+X-Gm-Message-State: AAQBX9e39a+RP8OORA1eRadwW8HGsJIKTplvCm3YfCjeG9WvJLbjIkTF
+        E+ljTvWvN7lgGD+QyIgWdWXmbA==
+X-Google-Smtp-Source: AKy350bnPao5Y9l056DV19xv4Zp+jsbHp3RjqRR6PV+UctItAqokSzyBYgZrLZK3odSc5hO9vj96Nw==
+X-Received: by 2002:a17:906:801:b0:92e:efa:b9b4 with SMTP id e1-20020a170906080100b0092e0efab9b4mr10723318ejd.22.1679846241924;
+        Sun, 26 Mar 2023 08:57:21 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:eca3:3b8f:823b:2669])
+        by smtp.gmail.com with ESMTPSA id rv17-20020a17090710d100b00932fa67b48fsm11881475ejb.183.2023.03.26.08.57.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 08:57:21 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: vendor-prefixes: document Novatek
+Date:   Sun, 26 Mar 2023 17:57:19 +0200
+Message-Id: <20230326155719.91780-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Mar 2023 22:12:47 +0800
-ChiaEn Wu <chiaen_wu@richtek.com> wrote:
+Document Novatek vendor prefix already used for Novatek nt36672a panel.
 
-> The scale value of ibus and ibat on the datasheet is incorrect due to the
-> customer report after the experimentation with some specific vendor ID
-> chips.
-> 
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Hi. Only significant issue here is the one the build bot found.
-A few other trivial formatting suggestions inline.
-
-Thanks,
-
-Jonathan
-
-
->  
->  static int mt6370_adc_read_channel(struct mt6370_adc_data *priv, int chan,
-> @@ -98,6 +105,26 @@ static int mt6370_adc_read_channel(struct mt6370_adc_data *priv, int chan,
->  	return ret;
->  }
->  
-> +static int mt6370_adc_get_ibus_scale(struct mt6370_adc_data *priv)
-> +{
-> +	if (priv->vid == MT6370_VID_RT5081  ||
-> +	    priv->vid == MT6370_VID_RT5081A ||
-> +	    priv->vid == MT6370_VID_MT6370)
-> +		return 3350;
-> +	else
-
-I'd drop the else.  We are special casing the matches above, so it makes sense
-for them to be out of line.  The 'normal' case doesn't need to be indented.
-
-> +		return 3875;
-> +}
-> +
-> +static int mt6370_adc_get_ibat_scale(struct mt6370_adc_data *priv)
-> +{
-> +	if (priv->vid == MT6370_VID_RT5081  ||
-> +	    priv->vid == MT6370_VID_RT5081A ||
-> +	    priv->vid == MT6370_VID_MT6370)
-> +		return 2680;
-> +	else
-> +		return 3870;
-> +}
-> +
->  static int mt6370_adc_read_scale(struct mt6370_adc_data *priv,
->  				 int chan, int *val1, int *val2)
->  {
-> @@ -123,7 +150,7 @@ static int mt6370_adc_read_scale(struct mt6370_adc_data *priv,
->  		case MT6370_AICR_250_mA:
->  		case MT6370_AICR_300_mA:
->  		case MT6370_AICR_350_mA:
-> -			*val1 = 3350;
-> +			*val1 = mt6370_adc_get_ibus_scale(priv);
->  			break;
->  		default:
->  			*val1 = 5000;
-> @@ -150,7 +177,7 @@ static int mt6370_adc_read_scale(struct mt6370_adc_data *priv,
->  		case MT6370_ICHG_600_mA:
->  		case MT6370_ICHG_700_mA:
->  		case MT6370_ICHG_800_mA:
-> -			*val1 = 2680;
-> +			*val1 = mt6370_adc_get_ibat_scale(priv);
->  			break;
->  		default:
->  			*val1 = 5000;
-> @@ -251,6 +278,19 @@ static const struct iio_chan_spec mt6370_adc_channels[] = {
->  	MT6370_ADC_CHAN(TEMP_JC, IIO_TEMP, 12, BIT(IIO_CHAN_INFO_OFFSET)),
->  };
->  
-> +static int mt6370_get_vendor_info(struct mt6370_adc_data *priv)
-> +{
-> +	unsigned int dev_info;
-> +	int ret;
-> +
-> +	ret = regmap_read(priv->regmap, MT6370_REG_DEV_INFO, &dev_info);
-> +	if (ret)
-> +		return ret;
-> +
-> +	priv->vid = FIELD_GET(MT6370_VENID_MASK, dev_info);
-
-Blank line preferred before a simple return like this.  Makes the code a tiny
-bit more readable.
-
-> +	return 0;
-> +}
-> +
->  static int mt6370_adc_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> @@ -263,6 +303,10 @@ static int mt6370_adc_probe(struct platform_device *pdev)
->  	if (!regmap)
->  		return dev_err_probe(dev, -ENODEV, "Failed to get regmap\n");
->  
-> +	ret = mt6370_get_vendor_info(priv);
-
-The build bot spotted this one.  Can't use priv yet as it doesn't exist
-for a few more lines.
-
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to get vid\n");
-> +
->  	indio_dev = devm_iio_device_alloc(dev, sizeof(*priv));
->  	if (!indio_dev)
->  		return -ENOMEM;
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 5b7795766eab..5b9dfc8b8680 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -937,6 +937,8 @@ patternProperties:
+     description: Nokia
+   "^nordic,.*":
+     description: Nordic Semiconductor
++  "^novatek,.*":
++    description: Novatek
+   "^novtech,.*":
+     description: NovTech, Inc.
+   "^nutsboard,.*":
+-- 
+2.34.1
 
