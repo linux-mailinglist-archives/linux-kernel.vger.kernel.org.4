@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CABE6C95D4
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 16:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D996C95D9
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 16:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbjCZOv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 10:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
+        id S232207AbjCZOyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 10:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231950AbjCZOv4 (ORCPT
+        with ESMTP id S231950AbjCZOya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:51:56 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6076A69
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 07:51:24 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id t10so25742311edd.12
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 07:51:24 -0700 (PDT)
+        Sun, 26 Mar 2023 10:54:30 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8379E4EDB
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 07:54:27 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id er18so14637614edb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 07:54:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679842282;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1679842466;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+s3tOPmxxPboBBurR7XBfM3D4IM5gZJk5nXyQfbhXWA=;
-        b=VV3VHfKT0tKRtfSuq1Rx1WDEMfmt5m3GN3pbM2oW15Tzukx2Knbj3499bEBkXsDUtQ
-         BDkXYusPEcYPXotjc9VSlPx1av9BzbaQEA75cQbM0yscfHxXEzgL6B5MBnKShiDFQUGi
-         XrqNzDv+6co7pGe8VcvBlLmCPL+Cdx47NkKoApuxP5A0xDjyc8zeSgnXlM3ghWa0XUZY
-         t6RiwIcfUUKZUjJEXmMDFTdwuStKfeql+CPO7C04H84jMcNPUibsO9v9xvk7ikdLvaHu
-         apHmzANpy5+e2gsL/C1z4af7ZA67JAPvjP4A/7g4apuPvRWxqBm/6Ay5GEeWNFaiBNR7
-         MzWQ==
+        bh=gcZ/Jo/w1kY/OWV2RcBdzgeDL9p88z4zNj+JBl78Nj4=;
+        b=qd2CRSXmTujjDgP5tZvjjFpLzHx1FxgXu5j5DjB3SyrbszKx39fL1pPdiRnjVFnccd
+         8DQ0QLRKqRBlaTJjlWICl+kdLpPjY/rECUBWD4FtGofG/zZJHmnp+VvG5PyzZiyH76vr
+         TE/aCqq4a1nPaSE42BEt524QNHmdCTJKALdPiGxY3A5kQFDDKm0543JXhUPo2rXVqazc
+         MrtyM7dPhq+OcMegRvfOcroeDB55TtZ7tNWMYG7rpqoRjNPNb6IkPDSuZSkke6QNksqZ
+         mDUIiFBGA2I5CjdfL75cDHCceQdkaUFNDLsCvQSWHSj6zouCkV6pxLiV2FKh4wKRWBXp
+         HudA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679842282;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20210112; t=1679842466;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+s3tOPmxxPboBBurR7XBfM3D4IM5gZJk5nXyQfbhXWA=;
-        b=O4HUuYlJ4Un3Um4Ep0p3lBRBK72WwzQyWqTZ03pusaTNJgbgjK8FF8LK5aJfgPLHg6
-         LOSCPc1qIMD5aTx+X6W0d26Km1ZycIWWhaqsHoYke7Ijsihvq5E61ORkJs7Ym5a90Ay9
-         0i83JiCuilFwdYbusfxpsqK83zkzraJ7eW/heI/jktfbgeelTbXDURkGBKf3LgWFtCaf
-         YlFvlvKSygavWNXPMlUAbhJFaysqYAfxFQKXO5FFuE6kuOocc2qKo4cnqBxak4Wz6YwX
-         3Rf+I5CtjPmqNUFWwWlEHrjL6KxuTx9YSescgp/1FSPNtjXvMi486j4+NF8LO7sEcBhS
-         TCuQ==
-X-Gm-Message-State: AAQBX9dlW/Evvku8AKOzQ00TbOhjZ1GvD2ek6FrOXNGfywYG282g3ROt
-        GSRR129ItNfd/wgfmNGZTjcnjw==
-X-Google-Smtp-Source: AKy350bvB8YDMFh/w+j6qkDcaEMKOOIcdpCW4jkZGkTENqR/6Jo2c1CXyvQbB5dL7I1kRbH4gI7eAA==
-X-Received: by 2002:a17:906:5010:b0:92a:77dd:f6f with SMTP id s16-20020a170906501000b0092a77dd0f6fmr9990766ejj.73.1679842282329;
-        Sun, 26 Mar 2023 07:51:22 -0700 (PDT)
+        bh=gcZ/Jo/w1kY/OWV2RcBdzgeDL9p88z4zNj+JBl78Nj4=;
+        b=ezaXHWNSgWVzQmwJxYrgVNljtNY3ttCQwPQU5JHR2C/+O4zd0bHbWzgFi6a7Wy9QUl
+         MpByuhbwynqDMebLmpClPlPiFE+CUIM8pjyOcb1iwoB/Qpn01UiAfgBA3fk8wHf70gbd
+         0EL2WIUs4C3Jz0XebBP6I0pnQYQjz3BTgzcgAEh1DpVRBp5b10SV5S+LUNo5KT90/gfu
+         q7bOZAGRar//5FZKWp8sdVnq1L11tbKThP9Pmj4noffS7jmioHe3jrbhtiQnbzeDiZKF
+         7zNv0hNbjiQsNYYg7xvOENZQphuyN82rjT821D2CRlqDGNfpn5h0UVrMPPGB04ETx5PZ
+         m15A==
+X-Gm-Message-State: AAQBX9ecrJu+oQsI6V+8I5D6LhYslBRW6DmI4hdhhyU8AnS7EukIFj9E
+        pRXANg4wNbS/1A7HyT5cNjl63Q==
+X-Google-Smtp-Source: AKy350aZpHXZKjRE9pStsIfdL5aTVGZqwvchU8LoQ8H3Kq7MUuDueL22CgyG26hwbniR0BxUcGsyHA==
+X-Received: by 2002:a17:906:2350:b0:8a9:e330:3a23 with SMTP id m16-20020a170906235000b008a9e3303a23mr8682173eja.26.1679842466027;
+        Sun, 26 Mar 2023 07:54:26 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:eca3:3b8f:823b:2669? ([2a02:810d:15c0:828:eca3:3b8f:823b:2669])
-        by smtp.gmail.com with ESMTPSA id hf8-20020a1709072c4800b0092b65c54379sm13035392ejc.104.2023.03.26.07.51.21
+        by smtp.gmail.com with ESMTPSA id be1-20020a1709070a4100b009447277c2aasm539566ejc.39.2023.03.26.07.54.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Mar 2023 07:51:21 -0700 (PDT)
-Message-ID: <1b9c8e19-10f2-824d-9b50-51e7a9287bb1@linaro.org>
-Date:   Sun, 26 Mar 2023 16:51:20 +0200
+        Sun, 26 Mar 2023 07:54:25 -0700 (PDT)
+Message-ID: <3871e958-79aa-2b4c-3300-270a2eb8f8e8@linaro.org>
+Date:   Sun, 26 Mar 2023 16:54:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] dt-bindings: clock: update rk3588 clock definitions
+Subject: Re: [PATCH] dt-bindings: mips: lantiq: Document Lantiq SoC dt
+ bindings
 Content-Language: en-US
-To:     Shane Francis <bigbeeshane@gmail.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230326001535.149539-1-bigbeeshane@gmail.com>
- <20230326001535.149539-2-bigbeeshane@gmail.com>
- <10930783-e1dd-5e75-a2cc-a09af862d949@linaro.org>
- <CABnpCuCzdbWTTp1Gc6wWPsB80J5GYw1QzKtZzzyEYU456E=1JA@mail.gmail.com>
+To:     Aleksander Jan Bajkowski <olek2@wp.pl>, tsbogend@alpha.franken.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230326122942.870990-1-olek2@wp.pl>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CABnpCuCzdbWTTp1Gc6wWPsB80J5GYw1QzKtZzzyEYU456E=1JA@mail.gmail.com>
+In-Reply-To: <20230326122942.870990-1-olek2@wp.pl>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -80,38 +77,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/03/2023 14:02, Shane Francis wrote:
->> Please wrap commit message according to > > Linux coding style /
-> submission
-> 
-> Will do, I haven't submitted patches for a while totally forgot the
-> wrapping guidelines
-> 
->> Unfortunately the reason is not good enough > for ABI break. Replace
->> vendor boot uboots with open-source one or > just correct them (it's still
->> U-Boot so even for vendor one you have the source).
-> 
-> Replacing uboot is fine for this case, however I can foresee that can cause
-> issues further down the line.
-> 
-> 
-> 1. No uboot source from the vendor, we all know no everyone respects code
-> licencing
-> 
-> 2. Secure environments (like android tables), this chipset will likely end
-> up in android tablets that have the secure boot chain enable. These will be
-> unable to replace uboot even if source is available.
+On 26/03/2023 14:29, Aleksander Jan Bajkowski wrote:
+> Document the legacy Lantiq device tree bindings.
 
-So mention this in the commit msg.
+This suggests you are documenting existing compatibles, but I do not see
+them at all. Confusing.
+
+> Compatible strings for xRX100 (ar9) and newer SoCs
+
+Please wrap commit message according to Linux coding style / submission
+process (neither too early nor over the limit):
+https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+
+> should be renamed and will be added later.
+
+Subject: drop second/last, redundant "dt bindings". The "dt-bindings"
+prefix is already stating that these are bindings.
 
 > 
-> As this SoC is new to the Linux kernel (not even useable for much it's
-> current state) would it not be better to aling on this so vendor and
-> mainline DTS "agree" now rather than possibly have to address is in the
-> future ?
+> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+> ---
+>  .../devicetree/bindings/mips/lantiq/soc.yaml  | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/lantiq/soc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mips/lantiq/soc.yaml b/Documentation/devicetree/bindings/mips/lantiq/soc.yaml
+> new file mode 100644
+> index 000000000000..90e8148b111b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mips/lantiq/soc.yaml
+> @@ -0,0 +1,38 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mips/lantiq/soc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Lantiq SoC based Platform
+> +
+> +maintainers:
+> +  - Aleksander Jan Bajkowski <olek2@wp.pl>
+> +
+> +description:
+> +  Devices with a Lantiq CPU shall have the following properties.
+> +
+> +properties:
+> +  $nodename:
+> +    const: "/"
+> +  compatible:
+> +    oneOf:
+> +      - description: Boards with Lantiq Amazon-SE SoC
+> +        items:
+> +          - const: lantiq,ase
 
-Then commit msg should also mention it.
-
+This does not look like proper board compatible. Boards have almost
+always minimum two compatibles - one for SoC and one for board. With
+commit msg this just adds to confusion...
 
 
 Best regards,
