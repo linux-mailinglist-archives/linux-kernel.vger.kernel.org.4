@@ -2,186 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6016B6C948B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 15:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC0D6C948F
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 15:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbjCZNgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 09:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
+        id S231904AbjCZNhn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 26 Mar 2023 09:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjCZNgt (ORCPT
+        with ESMTP id S230380AbjCZNhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 09:36:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8888F49EB;
-        Sun, 26 Mar 2023 06:36:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 232E260EB9;
-        Sun, 26 Mar 2023 13:36:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17C2DC433D2;
-        Sun, 26 Mar 2023 13:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679837807;
-        bh=msP+ccOnKADnG7OkJ+CMPE7w22qn6GUO8hlPzPlKGzI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Whut8GCz2OMDuEwMz0x7UqaTZgKEfZxKOVD26rt8ox2B1SrVTvpNreTLzbmiaygDu
-         8qau4GoUc4/+Scs6hVGf8h8R2iaRPmQmLinoHuqmm2FXwsPxG3k4mhHfc825BVqt32
-         ueUn1rRNc9WqFKA0tX3P0fJwHleZyINItjM0WiTg=
-Date:   Sun, 26 Mar 2023 15:36:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB / Thunderbolt driver fixes for 6.3-rc4
-Message-ID: <ZCBKbHwjnh5iyw2D@kroah.com>
+        Sun, 26 Mar 2023 09:37:42 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B597549E3
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 06:37:41 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-321-t_AconkZO9GXXT1EuNSm8g-1; Sun, 26 Mar 2023 14:37:38 +0100
+X-MC-Unique: t_AconkZO9GXXT1EuNSm8g-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 26 Mar
+ 2023 14:37:37 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sun, 26 Mar 2023 14:37:37 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: RE: [PATCH v2 3/3] kobject: Use return value of strreplace()
+Thread-Topic: [PATCH v2 3/3] kobject: Use return value of strreplace()
+Thread-Index: AQHZXYQhzqw/OapVckW+rwurhit0ga8NFE/w
+Date:   Sun, 26 Mar 2023 13:37:37 +0000
+Message-ID: <55ddb6da555a408da801f56577845a09@AcuMS.aculab.com>
+References: <20230323123704.37983-1-andriy.shevchenko@linux.intel.com>
+ <20230323123704.37983-4-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230323123704.37983-4-andriy.shevchenko@linux.intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.0 required=5.0 tests=PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+From: Andy Shevchenko
+> Sent: 23 March 2023 12:37
+>
+> Since strreplace() returns the pointer to the string itself,
+> we may use it directly in the code.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  lib/kobject.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/lib/kobject.c b/lib/kobject.c
+> index f79a434e1231..16d530f9c174 100644
+> --- a/lib/kobject.c
+> +++ b/lib/kobject.c
+> @@ -281,8 +281,7 @@ int kobject_set_name_vargs(struct kobject *kobj, const char *fmt,
+>  		kfree_const(s);
+>  		if (!t)
+>  			return -ENOMEM;
+> -		strreplace(t, '/', '!');
+> -		s = t;
+> +		s = strreplace(t, '/', '!');
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+Why do this? It just makes the code harder to read because
+you have to know another 'silly fact' about a function.
 
-are available in the Git repository at:
+Possibly useful return values might be:
+1) The address of the first changed character.
+2) The address of the last changed characher.
+3) The '\0' terminator.
+4) void.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.3-rc4
+	David
 
-for you to fetch changes up to 5021383242ada277a38bd052a4c12ed4707faccb:
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-  usb: dwc2: fix a race, don't power off/on phy for dual-role mode (2023-03-23 19:13:16 +0100)
-
-----------------------------------------------------------------
-USB/Thunderbolt driver fixes for 6.3-rc4
-
-Here are a small set of USB and Thunderbolt driver fixes for reported
-problems and a documentation update, for 6.3-rc4.
-
-Included in here are:
-  - documentation update for uvc gadget driver
-  - small thunderbolt driver fixes
-  - cdns3 driver fixes
-  - dwc3 driver fixes
-  - dwc2 driver fixes
-  - chipidea driver fixes
-  - typec driver fixes
-  - onboard_usb_hub device id updates
-  - quirk updates
-
-All of these have been in linux-next with no reported problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Alexander Stein (1):
-      usb: misc: onboard-hub: add support for Microchip USB2517 USB 2.0 hub
-
-Alvin Šipraga (1):
-      usb: gadget: u_audio: don't let userspace block driver unbind
-
-Andy Shevchenko (1):
-      usb: gadget: Use correct endianness of the wLength field for WebUSB
-
-Daniel Scally (1):
-      docs: usb: Add documentation for the UVC Gadget
-
-Fabrice Gasnier (2):
-      usb: dwc2: fix a devres leak in hw_enable upon suspend resume
-      usb: dwc2: fix a race, don't power off/on phy for dual-role mode
-
-Gil Fine (2):
-      thunderbolt: Add missing UNSET_INBOUND_SBTX for retimer access
-      thunderbolt: Limit USB3 bandwidth of certain Intel USB4 host routers
-
-Greg Kroah-Hartman (1):
-      Merge tag 'thunderbolt-for-v6.3-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
-
-Hans de Goede (3):
-      usb: ucsi: Fix NULL pointer deref in ucsi_connector_change()
-      usb: ucsi: Fix ucsi->connector race
-      usb: ucsi_acpi: Increase the command completion timeout
-
-Hongren Zheng (1):
-      MAINTAINERS: make me a reviewer of USB/IP
-
-Mario Limonciello (2):
-      thunderbolt: Use const qualifier for `ring_interrupt_index`
-      thunderbolt: Disable interrupt auto clear for rings
-
-Mika Westerberg (3):
-      thunderbolt: Fix memory leak in margining
-      thunderbolt: Call tb_check_quirks() after initializing adapters
-      thunderbolt: Use scale field when allocating USB3 bandwidth
-
-Pawel Laszczak (3):
-      usb: cdnsp: Fixes issue with redundant Status Stage
-      usb: cdns3: Fix issue with using incorrect PCI device function
-      usb: cdnsp: changes PCI Device ID to fix conflict with CNDS3 driver
-
-Sanjay R Mehta (1):
-      thunderbolt: Add quirk to disable CLx
-
-Tom Rix (1):
-      thunderbolt: Rename shadowed variables bit to interrupt_bit and auto_clear_bit
-
-Vincenzo Palazzo (1):
-      usb: dwc3: Fix a typo in field name
-
-Wesley Cheng (1):
-      usb: dwc3: gadget: Add 1ms delay after end transfer command without IOC
-
-Xu Yang (4):
-      usb: typec: tcpm: fix create duplicate source-capabilities file
-      usb: typec: tcpm: fix warning when handle discover_identity message
-      usb: chipdea: core: fix return -EINVAL if request role is the same with current role
-      usb: chipidea: core: fix possible concurrent when switch role
-
-Yaroslav Furman (1):
-      uas: Add US_FL_NO_REPORT_OPCODES for JMicron JMS583Gen 2
-
-Ziyang Huang (1):
-      usb: dwc2: drd: fix inconsistent mode if role-switch-default-mode="host"
-
- Documentation/usb/gadget_uvc.rst      | 352 ++++++++++++++++++++++++++++++++++
- Documentation/usb/index.rst           |   1 +
- MAINTAINERS                           |   1 +
- drivers/thunderbolt/debugfs.c         |  12 +-
- drivers/thunderbolt/nhi.c             |  49 +++--
- drivers/thunderbolt/nhi_regs.h        |   6 +-
- drivers/thunderbolt/quirks.c          |  44 +++++
- drivers/thunderbolt/retimer.c         |  23 ++-
- drivers/thunderbolt/sb_regs.h         |   1 +
- drivers/thunderbolt/switch.c          |   4 +-
- drivers/thunderbolt/tb.h              |  15 +-
- drivers/thunderbolt/usb4.c            |  53 ++++-
- drivers/usb/cdns3/cdns3-pci-wrap.c    |   5 +
- drivers/usb/cdns3/cdnsp-ep0.c         |  19 +-
- drivers/usb/cdns3/cdnsp-pci.c         |  27 ++-
- drivers/usb/chipidea/ci.h             |   2 +
- drivers/usb/chipidea/core.c           |  11 +-
- drivers/usb/chipidea/otg.c            |   5 +-
- drivers/usb/dwc2/drd.c                |   3 +-
- drivers/usb/dwc2/gadget.c             |   6 +-
- drivers/usb/dwc2/platform.c           |  19 +-
- drivers/usb/dwc3/core.h               |   2 +-
- drivers/usb/dwc3/gadget.c             |  14 +-
- drivers/usb/gadget/composite.c        |   7 +-
- drivers/usb/gadget/function/u_audio.c |   2 +-
- drivers/usb/misc/onboard_usb_hub.c    |   1 +
- drivers/usb/misc/onboard_usb_hub.h    |   1 +
- drivers/usb/storage/unusual_uas.h     |   7 +
- drivers/usb/typec/tcpm/tcpm.c         |  28 ++-
- drivers/usb/typec/ucsi/ucsi.c         |  33 ++--
- drivers/usb/typec/ucsi/ucsi_acpi.c    |   2 +-
- 31 files changed, 625 insertions(+), 130 deletions(-)
- create mode 100644 Documentation/usb/gadget_uvc.rst
