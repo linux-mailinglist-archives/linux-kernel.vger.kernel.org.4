@@ -2,116 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2076C9751
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 20:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9246C9758
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 20:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjCZSAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 14:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
+        id S229793AbjCZSNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 14:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCZSAd (ORCPT
+        with ESMTP id S229546AbjCZSNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 14:00:33 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB63B5B88
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 11:00:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D2570CE0EA6
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 18:00:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B35C433EF;
-        Sun, 26 Mar 2023 18:00:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679853626;
-        bh=HpEZtykGeKWR3lSUeO8IDIKb3LKCVG4yWYLo3kms3j4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=lyCB9ZYxXzBqL/CaUuGla2wgAcKXD7C14w7+3TvW37TG//z7kmiKajv/KCsSLek3o
-         gY1oj4gnaLMkFhXeAhpJTrzS7uYsQb498rm44vCOKeasKTIJkoQVuCkQkbmNj21kUn
-         HbgUvhfeV1/oSQ1+hQQluoDiO4DhltHNogcMaNp551MSu3FixlGeG1RpaEkzm16DAa
-         BWjh0v4Lxutyni5xpwSwlGH6YtTHYoHc1MTRjMLCfZvyWL9ugdJHAqPQhvRvZmCjId
-         Hi0OCqrL3GKUcPG8yYHsjtW6LimYYiq30Ny+oRiNKKTbthzLOe5EveJM9YfoLcFG0v
-         YHkS5Ki9UJViA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 799A31540474; Sun, 26 Mar 2023 11:00:26 -0700 (PDT)
-Date:   Sun, 26 Mar 2023 11:00:26 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     linux@weissschuh.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/8] tools/nolibc: add support for stack protector
-Message-ID: <8927157b-bf2c-46b7-a385-f4e230a4777d@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230325154516.7995-1-w@1wt.eu>
- <0d9bbc94-7ea2-4bc5-8523-29b100c0f1a1@paulmck-laptop>
- <a65340bb-2d11-445b-8595-9bf25a9f7a47@paulmck-laptop>
- <ZCBiDZfQW+YuiVNs@1wt.eu>
- <35a26245-0171-44b0-8072-325576768f91@paulmck-laptop>
- <ZCBkrOqWR7EVMeP/@1wt.eu>
- <d2c780bb-00ec-4966-87a2-d233f19032ab@paulmck-laptop>
- <ZCBsLQARaZBHeE4k@1wt.eu>
- <ZCBtOxqRJ9+P+G0z@1wt.eu>
- <ZCB5HZVbrjTM37Bd@1wt.eu>
+        Sun, 26 Mar 2023 14:13:13 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3431FE6;
+        Sun, 26 Mar 2023 11:13:12 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32QI02ss028508;
+        Sun, 26 Mar 2023 11:12:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=NSkQr3KT6LHG1qgjWkSVI2IIpC5wZQ1O9StkZbsL0dQ=;
+ b=hkxAVzuAiBfVCS8qDByvy/lmwNW8mnEsBDzdRnI/luIC/xpG1tnvWx33v6XDZ3AXva02
+ yHidZ+P4toRsUvqRm35rATV75gzID8ZRBH2Qq6oihrnvSqLvzXMyeviU84COrv2u1zNi
+ 2l3acDXC93S6P+eJJ/zhHVz8CDntwelLjLSupIqJnhdNNdGi9U6+5AYF58i2z/SXwXn3
+ OMkrRK/Uv5vHgSN2/Orj5rEYgeK0GhahWidwwYb8HHU/67+zkw2dB99TMIoQoka8U+4H
+ uLvCuue9ys3eSnlPIQ4M832jVeDw3Xa6OYQ38DD/D29XZ6851oW25QhTQljPMWTL0MZY 3A== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3phxas3ucs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Sun, 26 Mar 2023 11:12:53 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 26 Mar
+ 2023 11:12:52 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Sun, 26 Mar 2023 11:12:52 -0700
+Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
+        by maili.marvell.com (Postfix) with ESMTP id D70B23F7098;
+        Sun, 26 Mar 2023 11:12:46 -0700 (PDT)
+From:   Hariprasad Kelam <hkelam@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kuba@kernel.org>, <davem@davemloft.net>,
+        <willemdebruijn.kernel@gmail.com>, <andrew@lunn.ch>,
+        <sgoutham@marvell.com>, <lcherian@marvell.com>,
+        <gakula@marvell.com>, <jerinj@marvell.com>, <sbhatta@marvell.com>,
+        <hkelam@marvell.com>, <naveenm@marvel.com>, <edumazet@google.com>,
+        <pabeni@redhat.com>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <maxtram95@gmail.com>
+Subject: [net-next Patch v5 0/6] octeontx2-pf: HTB offload support
+Date:   Sun, 26 Mar 2023 23:42:39 +0530
+Message-ID: <20230326181245.29149-1-hkelam@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCB5HZVbrjTM37Bd@1wt.eu>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-GUID: kjBQ5_wo7Y42-Kk4JS1E8oUdBQnlkABd
+X-Proofpoint-ORIG-GUID: kjBQ5_wo7Y42-Kk4JS1E8oUdBQnlkABd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 06:55:57PM +0200, Willy Tarreau wrote:
-> On Sun, Mar 26, 2023 at 06:05:15PM +0200, Willy Tarreau wrote:
-> > On Sun, Mar 26, 2023 at 06:00:45PM +0200, Willy Tarreau wrote:
-> > > On Sun, Mar 26, 2023 at 08:45:55AM -0700, Paul E. McKenney wrote:
-> > > > Glad I could "help"!  Timers.  Huh.  ;-)
-> > > > 
-> > > > Checking v6.2, though the rebase is a bit messy, so I won't be all
-> > > > that confident in the results.
-> > > 
-> > > I got the same as you now. I don't know what I missed before not to
-> > > face it, maybe it's the consequence of the rebase. I've re-applied
-> > > the patches on top of 6.2.8 and am retesting now.
-> > > 
-> > > I think you don't need to waste more of your time on this for now
-> > > since we have a reproducer. Thomas and I should take over.
-> > 
-> > And it's a 6.3 regression, as 6.2.8 works fine:
-> > 
-> >   $ make run
-> >   (...)
-> >   Kernel: arch/x86/boot/bzImage is ready  (#2)
-> >   make[1]: Leaving directory '/g/public/linux/master'
-> >   126 test(s) passed.
-> >   $ tail  run.out 
-> >   Errors during this test: 0
-> >   
-> >   Running test 'protection'
-> >   0 -fstackprotector                                               [OK]
-> >   Errors during this test: 0
-> >   
-> >   Total number of errors: 0
-> >   Leaving init with final status: 0
-> >   [    3.388706] ACPI: PM: Preparing to enter system sleep state S5
-> >   [    3.389424] reboot: Power down
-> > 
-> > Now let's have fun bisecting it!
-> 
-> So I have a good news, 6.3-rc1 which dev.2023.03.20a is based on, fails,
-> while 6.3-rc3 works. I haven't got further yet and am not sure it's useful
-> to dig further given that it's an already fixed problem that is not related
-> to the patches in your branch. I don't know if you usually rebase on more
-> recent tags though.
+octeontx2 silicon and CN10K transmit interface consists of five
+transmit levels starting from MDQ, TL4 to TL1. Once packets are
+submitted to MDQ, hardware picks all active MDQs using strict
+priority, and MDQs having the same priority level are chosen using
+round robin. Each packet will traverse MDQ, TL4 to TL1 levels.
+Each level contains an array of queues to support scheduling and
+shaping.
 
-Thank you for chasing this down!
+As HTB supports classful queuing mechanism by supporting rate and
+ceil and allow the user to control the absolute bandwidth to
+particular classes of traffic the same can be achieved by
+configuring shapers and schedulers on different transmit levels.
 
-In this case, I will at the very least merge with v6.3 before testing.
-I have Joel Fernandes and Boqun Feng trying their hands at running
-the RCU pull request for v6.4, so I will probably resist the urge to
-inject confusion by rebasing onto v6.3-rc1.  ;-)
+This series of patches adds support for HTB offload,
 
-							Thanx, Paul
+Patch1: Allow strict priority parameter in HTB offload mode.
+
+Patch2: Rename existing total tx queues for better readability
+
+Patch3: defines APIs such that the driver can dynamically initialize/
+        deinitialize the send queues.
+
+Patch4: Refactors transmit alloc/free calls as preparation for QOS
+        offload code.
+
+Patch5: Adds actual HTB offload support.
+
+Patch6: Add documentation about htb offload flow in driver
+
+
+Hariprasad Kelam (3):
+  octeontx2-pf: Rename tot_tx_queues to non_qos_queues
+  octeontx2-pf: Refactor schedular queue alloc/free calls
+  docs: octeontx2: Add Documentation for QOS
+
+Naveen Mamindlapalli (2):
+  sch_htb: Allow HTB priority parameter in offload mode
+  octeontx2-pf: Add support for HTB offload
+
+Subbaraya Sundeep (1):
+  octeontx2-pf: qos send queues management
+-----
+v1 -> v2 :
+          ensure other drivers won't affect by allowing 'prio'
+          a parameter in htb offload mode.
+
+v2 -> v3 :
+          1. discard patch supporting devlink to configure TL1 round
+             robin priority
+          2. replace NL_SET_ERR_MSG with NL_SET_ERR_MSG_MOD
+          3. use max3 instead of using max couple of times and use a better
+             naming convention in send queue management code.
+
+v3 -> v4:
+	  1. fix sparse warnings.
+	  2. release mutex lock in error conditions.
+
+v4 -> v5:
+	  1. fix pahole reported issues
+          2. add documentation for htb offload flow.
+
+ .../ethernet/marvell/octeontx2.rst            |   39 +
+ .../ethernet/marvell/octeontx2/af/common.h    |    2 +-
+ .../marvell/octeontx2/af/rvu_debugfs.c        |    5 +
+ .../ethernet/marvell/octeontx2/af/rvu_nix.c   |   45 +
+ .../ethernet/marvell/octeontx2/nic/Makefile   |    2 +-
+ .../marvell/octeontx2/nic/otx2_common.c       |  120 +-
+ .../marvell/octeontx2/nic/otx2_common.h       |   40 +-
+ .../marvell/octeontx2/nic/otx2_ethtool.c      |   31 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  110 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_reg.h |   13 +
+ .../ethernet/marvell/octeontx2/nic/otx2_tc.c  |    7 +-
+ .../marvell/octeontx2/nic/otx2_txrx.c         |   24 +-
+ .../marvell/octeontx2/nic/otx2_txrx.h         |    3 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_vf.c  |   13 +-
+ .../net/ethernet/marvell/octeontx2/nic/qos.c  | 1460 +++++++++++++++++
+ .../net/ethernet/marvell/octeontx2/nic/qos.h  |   69 +
+ .../ethernet/marvell/octeontx2/nic/qos_sq.c   |  304 ++++
+ .../net/ethernet/mellanox/mlx5/core/en/qos.c  |    7 +-
+ include/net/pkt_cls.h                         |    1 +
+ net/sched/sch_htb.c                           |    7 +-
+ 20 files changed, 2197 insertions(+), 105 deletions(-)
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/qos.c
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/qos.h
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c
+
+--
+2.17.1
