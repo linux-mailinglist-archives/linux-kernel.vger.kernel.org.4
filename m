@@ -2,126 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE396C93C9
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 12:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F20F36C93CD
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 12:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjCZKov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 06:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
+        id S231808AbjCZKuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 06:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjCZKot (ORCPT
+        with ESMTP id S229640AbjCZKuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 06:44:49 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2CC8A6B
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 03:44:46 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id s3-20020a056602240300b007589413aea0so3801463ioa.5
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 03:44:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679827486;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MjsmqCVV/m3aVO6Qcl6MbDGG1a+UzUUaaNCJyfsGu68=;
-        b=SK+MrMyZeY2S+oLbMYn3fUhfLcu0r0vfcHArM1+Xf++ppm0kCu2F0qqqSKpvIcqic9
-         AfJt59lFfC3YZabLBhLA1oA5b6v3PsZgJpkvYavSbZMsWZuFCsKfzrR1b/itd+tUm6LC
-         LCvyjozxEQeAvYjtA4c/0VW2Mp9ySCJt8YqCeQ2wWArH93Gh3Wk3WpFf1B15WFPxJVbD
-         GPD6F8ueczXOocMqI1TzMtSmD1JzuLTu6mbaK9fhhp7oNeeQgRO2sYt33oDMstlJ49jI
-         dOejZVa6bKDRt22jujyMfrJKtXWMg8QT6eb9q0se45/09rSjZP/+E5rPgRWeXmclR78Y
-         EJ6w==
-X-Gm-Message-State: AO0yUKUd6w4nPd5j3epI7S1bIBQqb8E7jsakcF+ArDaHM/hr6bCiz1Og
-        ObxT3I90K9hLJVc7SWKgauPs42ujMH/pj6OZnYMLZWAy+xG3
-X-Google-Smtp-Source: AK7set/PPtTKbYJMtM7hC4jEsdjJUSWvGIxgXvd3pdlTVFKEU5WOPTZsyaLuaeIEy31uW12UXn7p7Kx4Z71ayNhYMDe2KavY8cOF
+        Sun, 26 Mar 2023 06:50:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156518A74;
+        Sun, 26 Mar 2023 03:49:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 968ED60BA0;
+        Sun, 26 Mar 2023 10:49:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D76C433D2;
+        Sun, 26 Mar 2023 10:49:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679827796;
+        bh=/zPzerCJyWN32gkIc4jdRhEwAiqgyzx8PWwuY7bpEV0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=tqHrPHv64m8uWPu1rKbDXQwubJsZxY+ecesEmgIfY761zhK7K1Q/gl/PsCN6ovSka
+         vVJL6fJl6GkRFok8o76h7d+oj5PdPjkpko+QCix9PuwYZWdw90vIb4ji8lo99oudhB
+         9pmh9swYZay5fN+es3Hn2FKj4ArQktwgc5tG25wpgTU40591QhRirIqeo16F1DWudD
+         j0JGm1HfiLrj4yLmE2LDEEMt1FEabGUN/8Hmf6uorSJqYJEJDbiZUvmf7jHh7MDJq+
+         AHsC/Lt1v/7jobOxRfqRBYoBLm9YXTAzIk39YIvzQKQTpbZ+gOA2SMxFBG8EGqNfGK
+         j9R2B2QeAFyzQ==
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id CE337A22551; Sun, 26 Mar 2023 12:49:52 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
+To:     Yafang Shao <laoar.shao@gmail.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yafang Shao <laoar.shao@gmail.com>
+Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
+In-Reply-To: <20230326092208.13613-1-laoar.shao@gmail.com>
+References: <20230326092208.13613-1-laoar.shao@gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Sun, 26 Mar 2023 12:49:52 +0200
+Message-ID: <87pm8v7pnz.fsf@toke.dk>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:4f04:0:b0:745:5dec:be5b with SMTP id
- d4-20020a6b4f04000000b007455decbe5bmr3109088iob.0.1679827486129; Sun, 26 Mar
- 2023 03:44:46 -0700 (PDT)
-Date:   Sun, 26 Mar 2023 03:44:46 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009842c105f7cb50b8@google.com>
-Subject: [syzbot] [ext4?] WARNING in ext4_da_update_reserve_space (2)
-From:   syzbot <syzbot+a1232eabd7a3d43d4fb5@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Yafang Shao <laoar.shao@gmail.com> writes:
 
-syzbot found the following issue on:
+> Currently only CAP_SYS_ADMIN can iterate BPF object IDs and convert IDs
+> to FDs, that's intended for BPF's security model[1]. Not only does it
+> prevent non-privilidged users from getting other users' bpf program, but
+> also it prevents the user from iterating his own bpf objects.
+>
+> In container environment, some users want to run bpf programs in their
+> containers. These users can run their bpf programs under CAP_BPF and
+> some other specific CAPs, but they can't inspect their bpf programs in a
+> generic way. For example, the bpftool can't be used as it requires
+> CAP_SYS_ADMIN. That is very inconvenient.
+>
+> Without CAP_SYS_ADMIN, the only way to get the information of a bpf object
+> which is not created by the process itself is with SCM_RIGHTS, that
+> requires each processes which created bpf object has to implement a unix
+> domain socket to share the fd of a bpf object between different
+> processes, that is really trivial and troublesome.
+>
+> Hence we need a better mechanism to get bpf object info without
+> CAP_SYS_ADMIN. 
+>
+> BPF namespace is introduced in this patchset with an attempt to remove 
+> the CAP_SYS_ADMIN requirement. The user can create bpf map, prog and
+> link in a specific bpf namespace, then these bpf objects will not be
+> visible to the users in a different bpf namespace. But these bpf
+> objects are visible to its parent bpf namespace, so the sys admin can 
+> still iterate and inspect them.
+>
+> BPF namespace is similar to PID namespace, and the bpf objects are
+> similar to tasks, so BPF namespace is very easy to understand. These
+> patchset only implements BPF namespace for bpf map, prog and link. In the
+> future we may extend it to other bpf objects like btf, bpffs and etc.
 
-HEAD commit:    fff5a5e7f528 Merge tag 'for-linus' of git://git.armlinux.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=106ebc66c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d40f6d44826f6cf7
-dashboard link: https://syzkaller.appspot.com/bug?extid=a1232eabd7a3d43d4fb5
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10fd867ac80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15094596c80000
+May? I think we should cover all of the existing BPF objects from the
+beginning here, or we may miss important interactions that will
+invalidate the whole idea. In particular, I'm a little worried about the
+interaction between namespaces and bpffs; what happens if you're in a
+bpf namespace and you try to read a BPF object from a bpffs that belongs
+to a different namespace? Does the operation fail? Is the object hidden
+entirely? Something else?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8f6445f85469/disk-fff5a5e7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a04a9ef0da2b/vmlinux-fff5a5e7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/414b78e64804/bzImage-fff5a5e7.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/0563d853a594/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a1232eabd7a3d43d4fb5@syzkaller.appspotmail.com
-
-EXT4-fs warning (device loop1): ext4_da_update_reserve_space:372: ext4_da_update_reserve_space: ino 18, used 1 with only 0 reserved data blocks
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 41 at fs/ext4/inode.c:373 ext4_da_update_reserve_space+0x419/0x730 fs/ext4/inode.c:369
-Modules linked in:
-CPU: 1 PID: 41 Comm: kworker/u4:2 Not tainted 6.3.0-rc3-syzkaller-00026-gfff5a5e7f528 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Workqueue: writeback wb_workfn (flush-7:1)
-RIP: 0010:ext4_da_update_reserve_space+0x419/0x730 fs/ext4/inode.c:373
-Code: 4c 89 ff 48 c7 c6 69 9e 82 8c ba 74 01 00 00 48 c7 c1 c0 3c fc 8a 49 c7 c0 69 9e 82 8c 41 55 41 54 e8 9b bb 0e 00 48 83 c4 10 <0f> 0b 48 bd 00 00 00 00 00 fc ff df 0f b6 04 2b 84 c0 0f 85 8f 01
-RSP: 0018:ffffc90000b26cd0 EFLAGS: 00010282
-RAX: cf4d35dbf73d9100 RBX: 1ffff1100e9b024d RCX: cf4d35dbf73d9100
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: ffff888074d80cf8 R08: ffffffff816dfe9c R09: fffffbfff205be51
-R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000001
-R13: 0000000000000000 R14: ffff888074d80cb8 R15: ffff88807db7e000
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffc7e69ab88 CR3: 00000000764a4000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ext4_map_blocks+0xb64/0x1cf0 fs/ext4/inode.c:672
- mpage_map_one_extent fs/ext4/inode.c:2421 [inline]
- mpage_map_and_submit_extent fs/ext4/inode.c:2474 [inline]
- ext4_do_writepages+0x189f/0x3d20 fs/ext4/inode.c:2876
- ext4_writepages+0x1e5/0x290 fs/ext4/inode.c:2964
- do_writepages+0x3a6/0x670 mm/page-writeback.c:2551
- __writeback_single_inode+0x155/0xfb0 fs/fs-writeback.c:1600
- writeback_sb_inodes+0x8ef/0x11d0 fs/fs-writeback.c:1891
- wb_writeback+0x458/0xc70 fs/fs-writeback.c:2065
- wb_do_writeback fs/fs-writeback.c:2208 [inline]
- wb_workfn+0x400/0xff0 fs/fs-writeback.c:2248
- process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2390
- worker_thread+0xa63/0x1210 kernel/workqueue.c:2537
- kthread+0x270/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-Toke
