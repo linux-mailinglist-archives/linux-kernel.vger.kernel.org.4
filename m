@@ -2,73 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF10E6C9679
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1776C967E
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbjCZP6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 11:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S232120AbjCZQBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 12:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbjCZP6L (ORCPT
+        with ESMTP id S231842AbjCZQA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 11:58:11 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD464C12
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:58:07 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id i5so26421531eda.0
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 08:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679846286;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5oFwo4L+TIJv2R5IVOvnMPXoseaXu9lKbQdTJK30VDs=;
-        b=jf++4HlYZO0T+jKocmegItNVCEHGSyEdWBgRM+aQIvt/YbIKVGP49hEFuyGyFDhbVy
-         8rjQts3n3J0O3J9njxsc/TM3VaikkggUo/HpBTRzaM06Y1p2pMPK3v0QV5jt1ZAxDJrM
-         vQonzUmxa2jaoXYBY2Qhq1v3kYJPzXrNgbGBmlpZDLM/XbfvoG9w0QbpJ2DmShUw3iNP
-         3O13JaKQL4GJf8o+0c47e2y2TIOgjtj6DLr7Od9KsOrqlTg+7hGi9XMP1RLBI0Dx3dtR
-         aqTII4x9+MWallE0lI9D9dFMPqtw9aCI9R9yuKXqC8fvV7d7f0/uOk5CdlegaNKWmb2A
-         La3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679846286;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5oFwo4L+TIJv2R5IVOvnMPXoseaXu9lKbQdTJK30VDs=;
-        b=hPNUwUdrsixASziZd1xJc1a8wXT2aI61gqJCSvlC58i29Wgd3OxL9zNQCWr/TZW1zF
-         v3/vs+WohQZJJ3MjwTdYzPAd23sYy559PDMPWFVlOER0RgJtJvNYFq82sVt61Uy/nmg3
-         Ky+mT+4Sg8K+ZLG5D6I0KV5AyZ4EuY8fJ5OugNI2OS/QK5F9OopYwjGxnWwveNTRXOz3
-         0y0JczIvXfaUnnY1uib5f1FpQoKJZ4U237gw0EjzVv3EvLqDNWjODguKVhTm4uF+5N50
-         fBIlhcokqCEU64v2geEbrpDZIsOMhIjMoozwH+ji74C2bQU6nvYtHrw2SumfhODkmIoz
-         imCg==
-X-Gm-Message-State: AAQBX9endFFG90nqTunDK8nwpkK5fisfzpSXSYYN5CAKolZomXc697qM
-        DpMSX/8aqN/7pinfGJmSGHChhQ==
-X-Google-Smtp-Source: AKy350Zcv96asGrO6i96CRg2Dngd9B7NvuEmsHZJRcgIBGA2lZt5CCVxqcfpja+L/n6mykzni0E8ag==
-X-Received: by 2002:a05:6402:204c:b0:500:2cc6:36da with SMTP id bc12-20020a056402204c00b005002cc636damr9570372edb.19.1679846286694;
-        Sun, 26 Mar 2023 08:58:06 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:eca3:3b8f:823b:2669])
-        by smtp.gmail.com with ESMTPSA id q3-20020a50cc83000000b004fc86fcc4b3sm13705502edi.80.2023.03.26.08.58.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 08:58:06 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 11/11] arm64: dts: qcom: sdm845-xiaomi-beryllium: correct compatible
-Date:   Sun, 26 Mar 2023 17:57:53 +0200
-Message-Id: <20230326155753.92007-11-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230326155753.92007-1-krzysztof.kozlowski@linaro.org>
-References: <20230326155753.92007-1-krzysztof.kozlowski@linaro.org>
+        Sun, 26 Mar 2023 12:00:58 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 566E21708
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:00:57 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 32QG0ju8010839;
+        Sun, 26 Mar 2023 18:00:45 +0200
+Date:   Sun, 26 Mar 2023 18:00:45 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux@weissschuh.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/8] tools/nolibc: add support for stack protector
+Message-ID: <ZCBsLQARaZBHeE4k@1wt.eu>
+References: <20230325154516.7995-1-w@1wt.eu>
+ <0d9bbc94-7ea2-4bc5-8523-29b100c0f1a1@paulmck-laptop>
+ <a65340bb-2d11-445b-8595-9bf25a9f7a47@paulmck-laptop>
+ <ZCBiDZfQW+YuiVNs@1wt.eu>
+ <35a26245-0171-44b0-8072-325576768f91@paulmck-laptop>
+ <ZCBkrOqWR7EVMeP/@1wt.eu>
+ <d2c780bb-00ec-4966-87a2-d233f19032ab@paulmck-laptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d2c780bb-00ec-4966-87a2-d233f19032ab@paulmck-laptop>
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,27 +43,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tianma FHD panel is supposed to be used with fallback compatible:
+On Sun, Mar 26, 2023 at 08:45:55AM -0700, Paul E. McKenney wrote:
+> Glad I could "help"!  Timers.  Huh.  ;-)
+> 
+> Checking v6.2, though the rebase is a bit messy, so I won't be all
+> that confident in the results.
 
-  sdm845-xiaomi-beryllium-tianma.dtb: panel@0: compatible: ['tianma,fhd-video'] is too short
+I got the same as you now. I don't know what I missed before not to
+face it, maybe it's the consequence of the rebase. I've re-applied
+the patches on top of 6.2.8 and am retesting now.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-tianma.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I think you don't need to waste more of your time on this for now
+since we have a reproducer. Thomas and I should take over.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-tianma.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-tianma.dts
-index 8e176111e599..e9427851ebaa 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-tianma.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-tianma.dts
-@@ -10,6 +10,6 @@ / {
- };
- 
- &display_panel {
--	compatible = "tianma,fhd-video";
-+	compatible = "tianma,fhd-video", "novatek,nt36672a";
- 	status = "okay";
- };
--- 
-2.34.1
-
+Thanks!
+Willy
