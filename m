@@ -2,56 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EB86C96CB
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89976C96DD
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbjCZQYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 12:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
+        id S232450AbjCZQew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 12:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjCZQYV (ORCPT
+        with ESMTP id S229988AbjCZQeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 12:24:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9E049D5;
-        Sun, 26 Mar 2023 09:24:20 -0700 (PDT)
+        Sun, 26 Mar 2023 12:34:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F0B2D58;
+        Sun, 26 Mar 2023 09:34:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 164D3B80D17;
-        Sun, 26 Mar 2023 16:24:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99907C433EF;
-        Sun, 26 Mar 2023 16:24:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A923B80D19;
+        Sun, 26 Mar 2023 16:34:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0FDFC433A1;
+        Sun, 26 Mar 2023 16:34:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679847857;
-        bh=IGEd5W7TwFuc13MCnmwDt/Gvu0l2lx3AZLXmSs0KZaI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ewq4zUSujBGB09GG5DHTJZAqjRatXUnzpUniRWLo99ayZFw1yySCLo2zk91eBe0Sc
-         v3dPgsrk6chXLJ6ET7r36WegTurp0GuUpIE204OcRI9CK9sC2meRX0lCJuP5WZjB80
-         tD5XiysuHatR6TotxgHkfoMpgitiOWYf/7GQMpk8mMNuBbRfuaANfvUHC+UJ9AcF40
-         SuwpYT0IBiayVfaFcJebL7haaFs9mGD/2TVivRQVFARLYAGTwicXPjfcSwniKHlBUT
-         cKuyRRq1a8JTEb3mYIGuJEOt+cwOufYy9Fe+Pk2zm7QdoQqebm5yhU2ipml982kqAk
-         8u8+NIJ7d30LA==
-Date:   Sun, 26 Mar 2023 09:27:23 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_khsieh@quicinc.com, quic_vproddut@quicinc.com,
-        quic_bjorande@quicinc.com, quic_abhinavk@quicinc.com,
-        quic_sbillaka@quicinc.com
-Subject: Re: [PATCH v14 14/14] drm/msm/dp: set self refresh aware based on
- PSR support
-Message-ID: <20230326162723.3lo6pnsfdwzsvbhj@ripper>
-References: <1677774797-31063-1-git-send-email-quic_vpolimer@quicinc.com>
- <1677774797-31063-15-git-send-email-quic_vpolimer@quicinc.com>
+        s=k20201202; t=1679848486;
+        bh=lniLhjzAVP4A7/HZzVY4+OrTbNpVJm/gYIDl+oQterE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JK3Yveqek/OJHInqxbDUOO4UWY67DeXaOjY5IknYOWk+oxY5lR1xHuR77gsb143FU
+         kvRAzHEad2ehIHdRTM/RHydR6QCWR+uuhY2J1gbT/HI6YtlqiOtUG61VBQaQ/b+xyZ
+         rwVEB5LxxQmV/hMzeKVGhmu/o9OQwsJx++9XdX8Cvp968Tr73FxM0epsJ+ujdcAI61
+         sC1IH1WNzp3+89nKTG1XA2dkn899Qjt5NeBSq8LSIpbRRiRYTCMY830+VCSPdL3GEb
+         0Kwt03VBvIyqBKN0pjk4satvfryw7CSOwgFwMqsRaIqI9J08PZ3ev/1ZxRwvSSUhu4
+         dFX7zy5UTOvAQ==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-17aceccdcf6so6905658fac.9;
+        Sun, 26 Mar 2023 09:34:46 -0700 (PDT)
+X-Gm-Message-State: AO0yUKWKYzAiH1hw2KQQJLLGXhTFdFh8VJeJ0ivM6oM8DM8av7DPPIXe
+        IwHqHAGHVk2rH1AznUTh5n9/k3PM78KoWvhYvSM=
+X-Google-Smtp-Source: AKy350ZKevNh0OIe4jwck411MTacKfhxDKD4eEX6xDTuM7GhMe3UsweBg/WHTc/a+KMwbk0nCqKHqiBgIpefvnGdVjA=
+X-Received: by 2002:a05:6870:a2a:b0:177:aff1:a393 with SMTP id
+ bf42-20020a0568700a2a00b00177aff1a393mr2203464oac.11.1679848485974; Sun, 26
+ Mar 2023 09:34:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1677774797-31063-15-git-send-email-quic_vpolimer@quicinc.com>
+References: <20230326153412.63128-1-hi@alyssa.is>
+In-Reply-To: <20230326153412.63128-1-hi@alyssa.is>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 27 Mar 2023 01:34:09 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARyn3R3BRxJ0Wdd_djTNQQR3Qh56jXAhR+gzgTsPY7Xew@mail.gmail.com>
+Message-ID: <CAK7LNARyn3R3BRxJ0Wdd_djTNQQR3Qh56jXAhR+gzgTsPY7Xew@mail.gmail.com>
+Subject: Re: [PATCH] purgatory: fix disabling debug info
+To:     Alyssa Ross <hi@alyssa.is>
+Cc:     Nick Cao <nickcao@nichi.co>, linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -61,51 +69,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 10:03:17PM +0530, Vinod Polimera wrote:
-> For the PSR to kick in, self_refresh_aware has to be set.
-> Initialize it based on the PSR support for the eDP interface.
-> 
-
-When I boot my sc8280xp devices (CRD and X13s) to console with this
-patch included I get a login prompt, and then there are no more screen
-updates.
-
-Switching virtual terminal (ctrl+alt+fN) causes the screen to redraw.
-
-Blindly login in and launching Wayland works and from then on screen
-updates works as expected.
-
-Switching from Wayland to another virtual terminal causes the problem to
-re-appear, no updates after the initial refresh, switching back go the
-Wayland-terminal crashed the machine.
-
-
-
-Reverting this single patch resolves both the issue with the console
-updating as exected and flipping between the virtual terminal with
-Wayland and the others no longer crashes my machine.
-
-Regards,
-Bjorn
-
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+On Mon, Mar 27, 2023 at 12:35=E2=80=AFAM Alyssa Ross <hi@alyssa.is> wrote:
+>
+> Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
+> Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
+> -Wa versions of both of those if building with Clang and GNU as.  As a
+> result, debug info was being generated for the purgatory objects, even
+> though the intention was that it not be.
+>
+> Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
+> Signed-off-by: Alyssa Ross <hi@alyssa.is>
+> Cc: stable@vger.kernel.org
 > ---
->  drivers/gpu/drm/msm/dp/dp_drm.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-> index 029e08c..785d766 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_drm.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-> @@ -117,6 +117,8 @@ static int edp_bridge_atomic_check(struct drm_bridge *drm_bridge,
->  	if (WARN_ON(!conn_state))
->  		return -ENODEV;
->  
-> +	conn_state->self_refresh_aware = dp->psr_supported;
-> +
->  	if (!conn_state->crtc || !crtc_state)
->  		return 0;
->  
-> -- 
-> 2.7.4
-> 
+>  arch/riscv/purgatory/Makefile | 12 ++++++------
+>  arch/x86/purgatory/Makefile   |  4 ++--
+>  2 files changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefil=
+e
+> index d16bf715a586..97001798fa19 100644
+> --- a/arch/riscv/purgatory/Makefile
+> +++ b/arch/riscv/purgatory/Makefile
+> @@ -84,12 +84,12 @@ CFLAGS_string.o                     +=3D $(PURGATORY_=
+CFLAGS)
+>  CFLAGS_REMOVE_ctype.o          +=3D $(PURGATORY_CFLAGS_REMOVE)
+>  CFLAGS_ctype.o                 +=3D $(PURGATORY_CFLAGS)
+>
+> -AFLAGS_REMOVE_entry.o          +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memcpy.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memset.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strcmp.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strlen.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strncmp.o                +=3D -Wa,-gdwarf-2
+> +AFLAGS_REMOVE_entry.o          +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
+dwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_memcpy.o         +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
+dwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_memset.o         +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
+dwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_strcmp.o         +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
+dwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_strlen.o         +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
+dwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_strncmp.o                +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-=
+g -Wa,-gdwarf4 -Wa,-gdwarf-5
+
+
+You can merge these into a single line:
+
+ asflags-remove-y +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwa=
+rf-5
+
+
+Or, a slightly shorter but tricky way is:
+
+ asflags-remove-y +=3D $(foreach x, -g -gdwarf-4 -gdwarf-5, $(x) -Wa,$(x))
+
+
+>  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>                 $(call if_changed,ld)
+> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+> index 17f09dc26381..f1b1ef6c4cbf 100644
+> --- a/arch/x86/purgatory/Makefile
+> +++ b/arch/x86/purgatory/Makefile
+> @@ -69,8 +69,8 @@ CFLAGS_sha256.o                       +=3D $(PURGATORY_=
+CFLAGS)
+>  CFLAGS_REMOVE_string.o         +=3D $(PURGATORY_CFLAGS_REMOVE)
+>  CFLAGS_string.o                        +=3D $(PURGATORY_CFLAGS)
+>
+> -AFLAGS_REMOVE_setup-x86_$(BITS).o      +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_entry64.o                        +=3D -Wa,-gdwarf-2
+> +AFLAGS_REMOVE_setup-x86_$(BITS).o      +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-=
+g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_entry64.o                        +=3D -g -gdwarf-4 -gdwarf=
+-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+
+
+Ditto.
+
+
+Thanks.
+
+
+
+>  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>                 $(call if_changed,ld)
+>
+> base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
+> --
+> 2.37.1
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
