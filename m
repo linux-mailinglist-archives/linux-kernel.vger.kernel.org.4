@@ -2,134 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD00E6C92D7
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 08:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 985E66C92D8
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 08:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbjCZGfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 02:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
+        id S229805AbjCZGi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 02:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjCZGfB (ORCPT
+        with ESMTP id S229523AbjCZGi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 02:35:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6951A5FDE;
-        Sat, 25 Mar 2023 23:35:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0162BB801C0;
-        Sun, 26 Mar 2023 06:34:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 019D8C433D2;
-        Sun, 26 Mar 2023 06:34:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679812497;
-        bh=jr13vMuf/WaHi5CBNG+X2Brpbr1MnZxbiMHYOEZyZVw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eTIMMVczZqjaFFjFea7FxGinqMwyKi5ehjeZtYZt0iztBREcv6eiTgOszrG/eZ2cE
-         n/c/vwh+0PMqajzLshr0kG/lz8zHju9wAGv+SY2TiYEcsPO3+c288/Wetnm9VoGi3s
-         /j4Me3rpKvEU6uIRun8B/CigylfUrb+ZEwjh4Fes=
-Date:   Sun, 26 Mar 2023 08:34:53 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] virt: tdx-guest: Add Quote generation support
-Message-ID: <ZB/njYsTTwgTtAeA@kroah.com>
-References: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20230326062039.341479-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Sun, 26 Mar 2023 02:38:27 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF625B9B
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 23:38:26 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id j13so5044692pjd.1
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 23:38:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679812706;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fpnznd8HIBj/YyF7nBj1pjhAkQmyxPKeuTzOkbCCpVY=;
+        b=MnBT6y2yik85UnuTYFGwPL7lzLIfWSQes5d4v/idNXpl9OmxO/y9EmQWgHOpZwmfCu
+         T9pIsU/rSwKQn3A7Xprx7EKALM8Xjo+jNcQracBGR+J1KNKzEbKkaHhRu4f9MlDWWqDK
+         af96g/Pn17A7VWds2dECE/EnQswIaksYNYFdK/wj7Pezl0RwcwNwgPS03aIA+jHfq3u9
+         fYmzFFsXBsrdVXYCzO2TKMQOcallDoftVKKwipsWtaNmQd3Ls8xeNEEudO0tUiTbzBlM
+         NcmH1N0qAncy++npDmMZfxmrX6T+iCLSChKoBRdEUb1piPDLSa++vBoL2311ELj+Sfrg
+         GEvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679812706;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fpnznd8HIBj/YyF7nBj1pjhAkQmyxPKeuTzOkbCCpVY=;
+        b=Maue3jutSjmTShN/v03p9gee6hnz4S4THbtBrqocS41b00luqZDeGejAgFMj5UCKJn
+         WhTRsKHqq040lDEDSbdadF2b7PfMgNzv7KwFIVJzaS1yaHdkNUYt1LQqQhOf1pp9JPMo
+         NBp4VwZBkHCBwlVmqYC1M21mEYF/rsrNDgRql+Mx1Cv5DcX/AzaUHVpl2DcmJKr7MnTK
+         aqraRKePscDUmoj7NXmbNmLlnrnKnXKmP5MEEPHnHGIVv+qrh1RgD5j+yES+lNbCeWzB
+         Z3m7giPOTV91oUg86XNX5xUa7iYfCyBewUZ4Ry8a4bpsaEpa0+5ixWzbYJb0QIBAHsXf
+         abDg==
+X-Gm-Message-State: AAQBX9cvmZRp4u3Qr5IfRPZ+3Fnr4maMLXzu0tZhNONVSm++arhmb9Yt
+        raE00EFSYXhtVqQ8qhfRy/moF8J80p9NdgGk
+X-Google-Smtp-Source: AKy350ZQTAKWUVqZbn1jWD7iQjFbevcIgu9cZUcwBEJCkqMtLL4syvXldrH8UlzaHVEFZdXQtqye2A==
+X-Received: by 2002:a17:903:228f:b0:1a2:185f:f199 with SMTP id b15-20020a170903228f00b001a2185ff199mr8976293plh.63.1679812705804;
+        Sat, 25 Mar 2023 23:38:25 -0700 (PDT)
+Received: from sumitra.com ([117.212.89.150])
+        by smtp.gmail.com with ESMTPSA id p6-20020a1709028a8600b00194c2f78581sm16847621plo.199.2023.03.25.23.38.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Mar 2023 23:38:25 -0700 (PDT)
+Date:   Sat, 25 Mar 2023 23:38:19 -0700
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, outreachy@lists.linux.dev,
+        johan@kernel.org, elder@kernel.org, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] staging: greybus: Inline pwm_chip_to_gb_pwm_chip()
+Message-ID: <20230326063819.GC179105@sumitra.com>
+References: <cover.1679732179.git.sumitraartsy@gmail.com>
+ <f1ef1b643840e74f211264dda0c590f8458618f6.1679732179.git.sumitraartsy@gmail.com>
+ <ZB63EVLK6/29UUi0@kroah.com>
+ <20230326052420.GA179105@sumitra.com>
+ <alpine.DEB.2.22.394.2303260751290.3294@hadrien>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230326062039.341479-3-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.DEB.2.22.394.2303260751290.3294@hadrien>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 11:20:38PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> Since GetQuote support requires usage of DMA APIs, convert TDX guest
-> driver to a platform driver.
+On Sun, Mar 26, 2023 at 07:51:50AM +0200, Julia Lawall wrote:
+> 
+> 
+> On Sat, 25 Mar 2023, Sumitra Sharma wrote:
+> 
+> > On Sat, Mar 25, 2023 at 09:55:45AM +0100, Greg KH wrote:
+> > > On Sat, Mar 25, 2023 at 01:31:10AM -0700, Sumitra Sharma wrote:
+> > > > Convert 'pwm_chip_to_gb_pwm_chip' from a macro to a static
+> > > > inline function, to make the relevant types apparent in the
+> > > > definition and to benefit from the type checking performed by
+> > > > the compiler at call sites.
+> > > >
+> > > > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> > > > ---
+> > > >  drivers/staging/greybus/pwm.c | 6 ++++--
+> > > >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
+> > > > index 3fda172239d2..88da1d796f13 100644
+> > > > --- a/drivers/staging/greybus/pwm.c
+> > > > +++ b/drivers/staging/greybus/pwm.c
+> > > > @@ -21,9 +21,11 @@ struct gb_pwm_chip {
+> > > >  	struct pwm_chip		chip;
+> > > >  	struct pwm_chip		*pwm;
+> > > >  };
+> > > > -#define pwm_chip_to_gb_pwm_chip(chip) \
+> > > > -	container_of(chip, struct gb_pwm_chip, chip)
+> > > >
+> > > > +static inline struct gb_pwm_chip *pwm_chip_to_gb_pwm_chip(struct pwm_chip *chip)
+> > > > +{
+> > > > +	return container_of(chip, struct gb_pwm_chip, chip);
+> > > > +}
+> > > >
+> > > >  static int gb_pwm_count_operation(struct gb_pwm_chip *pwmc)
+> > > >  {
+> > > > --
+> > > > 2.25.1
+> > > >
+> > > >
+> > >
+> > > This patch didn't apply due to changes made in my tree by a patch from
+> > > someone else before yours.  Can you rebase it and resend?
+> > >
+> >
+> > Hi greg,
+> >
+> > I am confused, will that be a totally new patch or a new version(v4 in
+> > this case)?
+> 
+> New version.
+>
 
-Sorry, but that's not a valid reason to use a platform device for fake
-things like this:
+Thank you julia.
 
-> +static struct platform_device *tdx_dev;
+Regards
+Sumitra
 
-Especially a single static one.
-
-> +static int tdx_guest_probe(struct platform_device *pdev)
-> +{
-> +	if (tdx_register_event_irq_cb(attestation_callback_handler, pdev))
-> +		return -EIO;
-> +
-> +	return misc_register(&tdx_misc_dev);
-> +}
-> +
-> +static int tdx_guest_remove(struct platform_device *pdev)
-> +{
-> +	tdx_unregister_event_irq_cb(attestation_callback_handler, pdev);
-> +	misc_deregister(&tdx_misc_dev);
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver tdx_guest_driver = {
-> +	.probe = tdx_guest_probe,
-> +	.remove = tdx_guest_remove,
-> +	.driver.name = KBUILD_MODNAME,
-> +};
-> +
->  static const struct x86_cpu_id tdx_guest_ids[] = {
->  	X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
->  	{}
-> @@ -84,16 +310,35 @@ MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
->  
->  static int __init tdx_guest_init(void)
->  {
-> +	int ret;
-> +
->  	if (!x86_match_cpu(tdx_guest_ids))
->  		return -ENODEV;
->  
-> -	return misc_register(&tdx_misc_dev);
-> +	ret = platform_driver_register(&tdx_guest_driver);
-> +	if (ret) {
-> +		pr_err("failed to register driver, err=%d\n", ret);
-> +		return ret;
-> +	}
-
-No, please do not create a fake platform driver.
-
-> +	tdx_dev = platform_device_register_simple(KBUILD_MODNAME,
-> +						  PLATFORM_DEVID_NONE,
-> +						  NULL, 0);
-
-And please do not create a fake platform device.
-
-As always, do not create fake platform devices for things that are NOT
-platform devices.
-
-If this device needs DMA (but why?) then make it a real device and tie
-it to the bus it belongs to (that it is obviously doing DMA on.)
-
-But as-is, this isn't ok, sorry.
-
-thanks,
-
-greg k-h
+> julia
+> 
+> >
+> > Regards,
+> >
+> > Sumitra
+> >
+> > > thanks,
+> > >
+> > > greg k-h
+> >
+> >
