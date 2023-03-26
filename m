@@ -2,119 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621196C9326
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 10:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A81776C9328
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 10:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231817AbjCZIug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 04:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
+        id S231833AbjCZIu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 04:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCZIud (ORCPT
+        with ESMTP id S231822AbjCZIuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 04:50:33 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8CF7EF9
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:50:31 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id h8so24108600ede.8
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:50:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679820629;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HelX9TaRrTL0/uXiqpcAS3IoL+rsoXCQpE6cEfXOz3Q=;
-        b=nXcN4xbgt18TOtDZK8uFwr6TCqdGFizMpBb60AEuO2T1D7SdGye5fAK2tnOgtiPdqD
-         KXW+wCu1mbIxx9N0wmgaPehuUvS9wSxPrp3IMO6+DHgJHbJhWWpA8qXAkDkn6+WKLURl
-         G2d9p1C5vukiSUC60DDr5HVzabzC6Ox6VYyRdrqJiDZ6DKENKSbzhdHUdf2LJEgVFl4g
-         Xai5ZzXgZICPwmAlUxBnuaeUNniM9TgxCQoHbyoceebfbvIzaAeai1TUioBgN94k+NfY
-         hUXpGw5h3Ax0rh1S1V3Zy1HdfUNbUkqdCoAoijqHn7TfRvUEND0m0CVbT8KpZf4/Imkc
-         o5GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679820629;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HelX9TaRrTL0/uXiqpcAS3IoL+rsoXCQpE6cEfXOz3Q=;
-        b=RWjJxgnJoe2uUSgbnWgJyZdZuMvgkzi5GsS61ttcjsjIwESaWYQLvprFkj7GTv1KEW
-         Wke8pgz8z/UB7BbFSQHuO5dEL2Jnd+oX5YKCVaiSNYt+b/5HjiQk48EHdMF+7B1+5LHU
-         d7rhSv39PPI5yM3FoJm563470wyKKhr+8WixjBaoqTdgmc9aJF+i4+6XHJq2g08yWKE4
-         pRVTppwPMdLe8B779v0ZR/G4Pk1zAE55N/T/Rw0TYh1ntNyswiW++zC5/C1BybNHYAEy
-         ylNZ2X6d9vXeG0dOjnmuqAQpOEo+Qp1pvsjFqLnNhPqKLU1iQykEFyaO+G+VOHZb3sSv
-         FN9w==
-X-Gm-Message-State: AAQBX9cJ9KFAhI3tEjYMzC2kJf0yK1gLO8X1IaQrmunn5WZ88PmQk3Vl
-        qltzvVhbmYQdbnPWhzcB8JFL4ltD4h4DgaJL7U0=
-X-Google-Smtp-Source: AKy350YURsee9IcVUspqIlMZJZ9hVHOq3HCdxcN5vA+XRdkAfAqpR6f3zs4y1LtjXTb6+g3+KaxoHw==
-X-Received: by 2002:a17:906:ce26:b0:932:dac6:3e46 with SMTP id sd6-20020a170906ce2600b00932dac63e46mr10147737ejb.7.1679820629549;
-        Sun, 26 Mar 2023 01:50:29 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:6cac:926d:a4f2:aa09])
-        by smtp.gmail.com with ESMTPSA id be8-20020a1709070a4800b0093f822321fesm1683165ejc.137.2023.03.26.01.50.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 01:50:29 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3] crypto - img-hash: Depend on OF and silence compile test warning
-Date:   Sun, 26 Mar 2023 10:50:27 +0200
-Message-Id: <20230326085027.4759-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sun, 26 Mar 2023 04:50:54 -0400
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E8C83D9
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 01:50:52 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id D2BD024011F
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 10:50:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1679820650; bh=RUgrxrDMePU7tGsaPfOz/SOu1phOc9qsDA9vA2peIfs=;
+        h=Subject:From:To:Cc:Date:From;
+        b=Cc0E7yQsg9lL/1Gp84Q3TbqSpBGrspem0P5h2foTDbmc76OPvpbySV+PNrTfoz3Yt
+         53uvsueAF7vWlC1Tvwf/ZIL302y+ZYo1nv6NPPQxugbn7a4OqXd3klkGgdDvW4uA9Y
+         aHtVFN3i8yLvjK3X7FS/4A7t4sIm/l6QQytlCkrsesAkOEUOKGGvQzkm34CAhNwa2R
+         x7QVZ4F+ZRo40vv1xuH1K6FZDQyOB4H1pmPz9qk7DCU07s149MhIs/JjtdYvYfmrQU
+         1YVPlI68tiTuF0VM2wRtPsdedUnC91rv1l5I/ZntcRAcy7oUUyexQ/wwPv0p2t/ZXe
+         uq9zQvDeQZFQA==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4PkqRG06pQz9rxD;
+        Sun, 26 Mar 2023 10:50:49 +0200 (CEST)
+Message-ID: <4dcd261e56cf54eb409b6851128b63c5f7a2efcf.camel@posteo.de>
+Subject: Re: [PATCH] media: hi846: Fix memleak in hi846_init_controls()
+From:   Martin Kepplinger <martink@posteo.de>
+To:     Wei Chen <harperchen1110@gmail.com>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 26 Mar 2023 08:50:49 +0000
+In-Reply-To: <20230324172427.3416342-1-harperchen1110@gmail.com>
+References: <20230324172427.3416342-1-harperchen1110@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver is specific to OF platforms (can match only via OF table),
-thus add dependency on CONFIG_OF.  Mark the of_device_id table as
-unused.  This also fixes W=1 warning:
+Am Freitag, dem 24.03.2023 um 17:24 +0000 schrieb Wei Chen:
+> hi846_init_controls doesn't clean the allocated ctrl_hdlr
+> in case there is a failure, which causes memleak. Add
+> v4l2_ctrl_handler_free to free the resource properly.
+> 
+> Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+> ---
+>  drivers/media/i2c/hi846.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/media/i2c/hi846.c b/drivers/media/i2c/hi846.c
+> index 7c61873b7198..c45a6511d2c1 100644
+> --- a/drivers/media/i2c/hi846.c
+> +++ b/drivers/media/i2c/hi846.c
+> @@ -1472,6 +1472,7 @@ static int hi846_init_controls(struct hi846
+> *hi846)
+>         if (ctrl_hdlr->error) {
+>                 dev_err(&client->dev, "v4l ctrl handler error: %d\n",
+>                         ctrl_hdlr->error);
+> +               v4l2_ctrl_handler_free(ctrl_hdlr);
+>                 return ctrl_hdlr->error;
+>         }
+>  
 
-  drivers/crypto/img-hash.c:930:34: error: ‘img_hash_match’ defined but not used [-Werror=unused-const-variable=]
+hi Wei, thanks for the patch. It looks like I forgot that indeed, but
+to me it looks like the subsequent error paths of
+v4l2_fwnode_device_parse() and v4l2_ctrl_new_fwnode_properties() would
+leak the same thing.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+And since we only assign it to the subdev's ctrl_handler in the success
+case later, you could simply add an error label:
 
----
 
-Changes since v2:
-1. Do not allow compile testing without OF.
-
-Changes since v1:
-1. Rework - depend on OF and add maybe_unused.
----
- drivers/crypto/Kconfig    | 1 +
- drivers/crypto/img-hash.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/crypto/Kconfig b/drivers/crypto/Kconfig
-index 3b2516d1433f..c636fbeb2144 100644
---- a/drivers/crypto/Kconfig
-+++ b/drivers/crypto/Kconfig
-@@ -647,6 +647,7 @@ source "drivers/crypto/vmx/Kconfig"
- config CRYPTO_DEV_IMGTEC_HASH
- 	tristate "Imagination Technologies hardware hash accelerator"
- 	depends on MIPS || COMPILE_TEST
-+	depends on OF
- 	select CRYPTO_MD5
- 	select CRYPTO_SHA1
- 	select CRYPTO_SHA256
-diff --git a/drivers/crypto/img-hash.c b/drivers/crypto/img-hash.c
-index fe93d19e3044..2be364d9f592 100644
---- a/drivers/crypto/img-hash.c
-+++ b/drivers/crypto/img-hash.c
-@@ -927,7 +927,7 @@ static void img_hash_done_task(unsigned long data)
- 	img_hash_finish_req(hdev->req, err);
+@@ -1663,21 +1663,26 @@ static int hi846_init_controls(struct hi846
+*hi846)
+        if (ctrl_hdlr->error) {
+                dev_err(&client->dev, "v4l ctrl handler error: %d\n",
+                        ctrl_hdlr->error);
+-               return ctrl_hdlr->error;
++               ret = ctrl_hdlr->error;
++               goto error;
+        }
+ 
+        ret = v4l2_fwnode_device_parse(&client->dev, &props);
+        if (ret)
+-               return ret;
++               goto error;
+ 
+        ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr,
+&hi846_ctrl_ops,
+                                              &props);
+        if (ret)
+-               return ret;
++               goto error;
+ 
+        hi846->sd.ctrl_handler = ctrl_hdlr;
+ 
+        return 0;
++
++error:
++       v4l2_ctrl_handler_free(ctrl_hdlr);
++       return ret;
  }
  
--static const struct of_device_id img_hash_match[] = {
-+static const struct of_device_id img_hash_match[] __maybe_unused = {
- 	{ .compatible = "img,hash-accelerator" },
- 	{}
- };
--- 
-2.34.1
+
+what do you think? thanks!
+
+                              martin
+
 
