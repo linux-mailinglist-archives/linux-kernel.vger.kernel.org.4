@@ -2,150 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA4B6C9445
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 14:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96DCB6C944C
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 14:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbjCZMe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 08:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
+        id S230203AbjCZMiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 08:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbjCZMeZ (ORCPT
+        with ESMTP id S229988AbjCZMiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 08:34:25 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A4776BD
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 05:34:23 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id b18so7287160ybp.1
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 05:34:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1679834063;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e8OMItjxzSr7aVzbw5xpsTi4Tr0bLv1FpLf3l/TvJI4=;
-        b=wLLItr0EACFXIm0CSLoVDMaPX/5NVclZ6LQ/jK+zPVaCtRQ9G9aLXg4no3g9v/lGBw
-         nDMI6et/j1JbeCGMpAe08V7cQwrneXJVTighUxJPSGSj2nGr6xcjVGIFflhUfY7fWG4J
-         nWdPHva+d8jTDSJAiIGcLcmlPZnPd8SFgZwF0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679834063;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e8OMItjxzSr7aVzbw5xpsTi4Tr0bLv1FpLf3l/TvJI4=;
-        b=UXW5Dk1VymoSh7FFahR4peUEmugv5DylO1RCTLQSoE9hE7IpUcSrVSBNqVF9kPBcDG
-         eLew30YH0SQOi0Ki6vuqwi6F+MfkqM6gWsJix7ZyjfvuR4HvBjzeVP3DtoQy5PA8WcL1
-         6yVZ4TZTMD41dGKuBGvhh+8hBKKJHlZWC9XSNtIKX0f2AS4YEpFAm8Al3E/HMeBlNDdi
-         yaKcc2FDqt2oEjwDupkr/Xp0mYmzo+mhRTVtpWcCkShYQm24NTwqNV3/XL6ncPA2+nZ8
-         DrrJ1YW3jqAI35pyEdVsSAiEZEUYjIDmS02D1FhGqrgMlU1Zg30NI0/LtIkm28nQRD9T
-         s9pA==
-X-Gm-Message-State: AAQBX9eZoju+hm6rK56JAj9NK34H4c+ylJLoUJHuudmNat5PCpbbGH6f
-        RORIcou4y59ZEzdQDWbxgCFIe41Bk+xoKMpYjDAGvQ==
-X-Google-Smtp-Source: AKy350aKbdM8jclc2dkRtmhSyetuz9pLI8ATNSKXzWXgQ3AZ9aBe5P/D8j12BQHlrjM/nBPPVNLcYQWbMf9ztJnpm7Y=
-X-Received: by 2002:a05:6902:1586:b0:b69:fab9:de39 with SMTP id
- k6-20020a056902158600b00b69fab9de39mr3975809ybu.2.1679834063085; Sun, 26 Mar
- 2023 05:34:23 -0700 (PDT)
+        Sun, 26 Mar 2023 08:38:00 -0400
+Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67C076A3
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 05:37:58 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id gPd9pANE3TpvfgPd9p9CXS; Sun, 26 Mar 2023 14:37:56 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 26 Mar 2023 14:37:56 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH] iommu/exynos: Use the devm_clk_get_optional() helper
+Date:   Sun, 26 Mar 2023 14:37:50 +0200
+Message-Id: <99c0d5ce643737ee0952df41fd60433a0bbeb447.1679834256.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230315181902.4177819-1-joel@joelfernandes.org> <20230315181902.4177819-6-joel@joelfernandes.org>
-In-Reply-To: <20230315181902.4177819-6-joel@joelfernandes.org>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sun, 26 Mar 2023 08:34:12 -0400
-Message-ID: <CAEXW_YQLQqB9CAzEyddzOJkKx3y268T7g-E313mDsjXVQRT0Dw@mail.gmail.com>
-Subject: Re: [PATCH v2 06/14] net/mlx5: Rename kfree_rcu() to kfree_rcu_mightsleep()
-To:     Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Boris Pismenny <borisp@nvidia.com>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Vlad Buslov <vladbu@nvidia.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 2:19=E2=80=AFPM Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
->
-> From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
->
-> The kfree_rcu() and kvfree_rcu() macros' single-argument forms are
-> deprecated.  Therefore switch to the new kfree_rcu_mightsleep() and
-> kvfree_rcu_mightsleep() variants. The goal is to avoid accidental use
-> of the single-argument forms, which can introduce functionality bugs in
-> atomic contexts and latency bugs in non-atomic contexts.
+Use devm_clk_get_optional() instead of hand writing it.
+This saves some loC and improves the semantic.
 
-In a world where patches anxiously await their precious Ack, could
-today be our lucky day on this one?
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/iommu/exynos-iommu.c | 24 ++++++++----------------
+ 1 file changed, 8 insertions(+), 16 deletions(-)
 
-We need Acks to take this in for 6.4. David? Others?
+diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
+index 483aaaeb6dae..867f409e0325 100644
+--- a/drivers/iommu/exynos-iommu.c
++++ b/drivers/iommu/exynos-iommu.c
+@@ -747,22 +747,16 @@ static int exynos_sysmmu_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	data->clk = devm_clk_get(dev, "sysmmu");
+-	if (PTR_ERR(data->clk) == -ENOENT)
+-		data->clk = NULL;
+-	else if (IS_ERR(data->clk))
++	data->clk = devm_clk_get_optional(dev, "sysmmu");
++	if (IS_ERR(data->clk))
+ 		return PTR_ERR(data->clk);
+ 
+-	data->aclk = devm_clk_get(dev, "aclk");
+-	if (PTR_ERR(data->aclk) == -ENOENT)
+-		data->aclk = NULL;
+-	else if (IS_ERR(data->aclk))
++	data->aclk = devm_clk_get_optional(dev, "aclk");
++	if (IS_ERR(data->aclk))
+ 		return PTR_ERR(data->aclk);
+ 
+-	data->pclk = devm_clk_get(dev, "pclk");
+-	if (PTR_ERR(data->pclk) == -ENOENT)
+-		data->pclk = NULL;
+-	else if (IS_ERR(data->pclk))
++	data->pclk = devm_clk_get_optional(dev, "pclk");
++	if (IS_ERR(data->pclk))
+ 		return PTR_ERR(data->pclk);
+ 
+ 	if (!data->clk && (!data->aclk || !data->pclk)) {
+@@ -770,10 +764,8 @@ static int exynos_sysmmu_probe(struct platform_device *pdev)
+ 		return -ENOSYS;
+ 	}
+ 
+-	data->clk_master = devm_clk_get(dev, "master");
+-	if (PTR_ERR(data->clk_master) == -ENOENT)
+-		data->clk_master = NULL;
+-	else if (IS_ERR(data->clk_master))
++	data->clk_master = devm_clk_get_optional(dev, "master");
++	if (IS_ERR(data->clk_master))
+ 		return PTR_ERR(data->clk_master);
+ 
+ 	data->sysmmu = dev;
+-- 
+2.34.1
 
- - Joel
-
-
->
-> Cc: Ariel Levkovich <lariel@nvidia.com>
-> Cc: Saeed Mahameed <saeedm@nvidia.com>
-> Cc: Vlad Buslov <vladbu@nvidia.com>
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c  | 2 +-
->  drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c b/d=
-rivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c
-> index ca834bbcb44f..8afcec0c5d3c 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c
-> @@ -242,7 +242,7 @@ mlx5e_int_port_remove(struct mlx5e_tc_int_port_priv *=
-priv,
->                 mlx5_del_flow_rules(int_port->rx_rule);
->         mapping_remove(ctx, int_port->mapping);
->         mlx5e_int_port_metadata_free(priv, int_port->match_metadata);
-> -       kfree_rcu(int_port);
-> +       kfree_rcu_mightsleep(int_port);
->         priv->num_ports--;
->  }
->
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c b/=
-drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c
-> index 08d0929e8260..b811dad7370a 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c
-> @@ -670,7 +670,7 @@ static int mlx5e_macsec_del_txsa(struct macsec_contex=
-t *ctx)
->
->         mlx5e_macsec_cleanup_sa(macsec, tx_sa, true);
->         mlx5_destroy_encryption_key(macsec->mdev, tx_sa->enc_key_id);
-> -       kfree_rcu(tx_sa);
-> +       kfree_rcu_mightsleep(tx_sa);
->         macsec_device->tx_sa[assoc_num] =3D NULL;
->
->  out:
-> @@ -849,7 +849,7 @@ static void macsec_del_rxsc_ctx(struct mlx5e_macsec *=
-macsec, struct mlx5e_macsec
->         xa_erase(&macsec->sc_xarray, rx_sc->sc_xarray_element->fs_id);
->         metadata_dst_free(rx_sc->md_dst);
->         kfree(rx_sc->sc_xarray_element);
-> -       kfree_rcu(rx_sc);
-> +       kfree_rcu_mightsleep(rx_sc);
->  }
->
->  static int mlx5e_macsec_del_rxsc(struct macsec_context *ctx)
-> --
-> 2.40.0.rc1.284.g88254d51c5-goog
->
