@@ -2,140 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 267B46C92AF
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 07:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351706C92B3
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 07:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbjCZFsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 01:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
+        id S231929AbjCZFwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 01:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjCZFs3 (ORCPT
+        with ESMTP id S230312AbjCZFwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 01:48:29 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7C75FD2;
-        Sat, 25 Mar 2023 22:48:27 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id d2so4832718vso.9;
-        Sat, 25 Mar 2023 22:48:27 -0700 (PDT)
+        Sun, 26 Mar 2023 01:52:13 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922335FD2
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 22:52:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679809707;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zc8mjbAuYE0z1ltMPEd4RTUXwSwNvXX5rOmOekUZdqE=;
-        b=GnLiGyUR6Rvay2/a/1SUmgvNdgnBKLKauRB5Zj5QuFtvFN2rwLL2HR1hU9AaSDK82S
-         mbhZFe+jD1jAes5V9VRJ66m2b6y2sdbRatL5N+4QfVhfQ+/rguMfJq4GzfQ7wJtM26UB
-         y3kwsW7s6hXlHf1VKdGJOXzhmnZpF35ih/yW0WbBJy0lWaEf/FBCRs9dxsEIy4O/Yjxo
-         ZYu0/X0PDyXyNA7ftm0SC9zCDpRqlsaOaRbIGhEt9CHFLjazghLx+k4OUsQGeFrSn5vA
-         cRJEl1dn26bUBQkwAOKZ2qBD/5ET+MBhuOsbZY2/Nkd/0qaFr8E41QopekT0Oa5+o3eV
-         +Efw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679809707;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zc8mjbAuYE0z1ltMPEd4RTUXwSwNvXX5rOmOekUZdqE=;
-        b=Q89oR6m+M+oH7o00ovWixLOUEqOB9YikHyQcai0DsDQ/nV66P1U9N+gvK0I4Cg3Pro
-         /ECFgwMKtWHW0NHy+TtorWcrT7Le8NVS8Ie2bsP1E+v35PN8PykJRy2BL6rFl0q7aGOe
-         Hg9qk7RHFrAi93B97u7lOOTh8DI+6GSud4DWQQPz0uJgE/Kt/DydEtCQwXBbDSlVtdpe
-         QoiW2vRbz2QCJmbiwE2gQZ+vAJlLfwHxDQZdlmvsigwYwptlWDz9ZiAusLuPvzyirhJU
-         O43KbL9cb7lEy9yg1OiRpXJ3Ewmo7PtpZKyJdHjrWUdhzTW/CHrfMPu/P2ywYy1PKwGF
-         O4yQ==
-X-Gm-Message-State: AAQBX9cA1plz4jrQUHszL7XaOilTVDck4Lje+Tw6i73CVaO/iykYugqj
-        S0m1gPUGzktDzRTceZc3llYGXeEFbtjfYtdN4f8=
-X-Google-Smtp-Source: AKy350ZTWb+yA0Pk18IiwfASQF2bHwbj1wQaJBnzEmcrUoLrosk1ZIFVjWLd3KkeW+dTI5pSiAcTlVPT2i0WKdnGm/o=
-X-Received: by 2002:a67:ca16:0:b0:421:eabb:cd6a with SMTP id
- z22-20020a67ca16000000b00421eabbcd6amr4074364vsk.7.1679809707027; Sat, 25 Mar
- 2023 22:48:27 -0700 (PDT)
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=1dlb05qC1Np6VuLvDRnihXwqBP9eENNSLwWKReaC1EU=;
+  b=QP12dvnzbU3TrxmksXnvsOEAUtebWmf66ldEk0EGiGuYMIBls/c7qdkc
+   MyxwtXF2H3FyY/bogDxNlUpoGDp1p1iVIUb0A0DH4XzatlidDBkgOgT5j
+   qMt43dIsvGh/r8J7akMT2AkI7CATJXq4OoMXo/JxK+c54BavMf0awjyoG
+   Q=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,292,1673910000"; 
+   d="scan'208";a="51262119"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 07:51:52 +0200
+Date:   Sun, 26 Mar 2023 07:51:50 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Sumitra Sharma <sumitraartsy@gmail.com>
+cc:     Greg KH <gregkh@linuxfoundation.org>, outreachy@lists.linux.dev,
+        johan@kernel.org, elder@kernel.org, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] staging: greybus: Inline
+ pwm_chip_to_gb_pwm_chip()
+In-Reply-To: <20230326052420.GA179105@sumitra.com>
+Message-ID: <alpine.DEB.2.22.394.2303260751290.3294@hadrien>
+References: <cover.1679732179.git.sumitraartsy@gmail.com> <f1ef1b643840e74f211264dda0c590f8458618f6.1679732179.git.sumitraartsy@gmail.com> <ZB63EVLK6/29UUi0@kroah.com> <20230326052420.GA179105@sumitra.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20230325083429.3571917-1-harperchen1110@gmail.com> <ZB7DSn3wfjU9OVgJ@corigine.com>
-In-Reply-To: <ZB7DSn3wfjU9OVgJ@corigine.com>
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Sun, 26 Mar 2023 13:47:51 +0800
-Message-ID: <CAO4mrfduRPKLruShN76VDOMAeZF=A7f84=vcamnHPCtMLGuRvA@mail.gmail.com>
-Subject: Re: [PATCH] wireless: rtlwifi: fix incorrect error codes in rtl_debugfs_set_write_rfreg()
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     pkshih@realtek.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Simon,
 
-Thanks for the advice and review. I have sent the second version of the patch.
 
-Besides, rtl_debugfs_set_write_reg also suffers from the incorrect
-error code problem. I also sent v2 of the corresponding patch. Hope
-there is no confusion between these two patches.
+On Sat, 25 Mar 2023, Sumitra Sharma wrote:
 
-Best,
-Wei
+> On Sat, Mar 25, 2023 at 09:55:45AM +0100, Greg KH wrote:
+> > On Sat, Mar 25, 2023 at 01:31:10AM -0700, Sumitra Sharma wrote:
+> > > Convert 'pwm_chip_to_gb_pwm_chip' from a macro to a static
+> > > inline function, to make the relevant types apparent in the
+> > > definition and to benefit from the type checking performed by
+> > > the compiler at call sites.
+> > >
+> > > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> > > ---
+> > >  drivers/staging/greybus/pwm.c | 6 ++++--
+> > >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
+> > > index 3fda172239d2..88da1d796f13 100644
+> > > --- a/drivers/staging/greybus/pwm.c
+> > > +++ b/drivers/staging/greybus/pwm.c
+> > > @@ -21,9 +21,11 @@ struct gb_pwm_chip {
+> > >  	struct pwm_chip		chip;
+> > >  	struct pwm_chip		*pwm;
+> > >  };
+> > > -#define pwm_chip_to_gb_pwm_chip(chip) \
+> > > -	container_of(chip, struct gb_pwm_chip, chip)
+> > >
+> > > +static inline struct gb_pwm_chip *pwm_chip_to_gb_pwm_chip(struct pwm_chip *chip)
+> > > +{
+> > > +	return container_of(chip, struct gb_pwm_chip, chip);
+> > > +}
+> > >
+> > >  static int gb_pwm_count_operation(struct gb_pwm_chip *pwmc)
+> > >  {
+> > > --
+> > > 2.25.1
+> > >
+> > >
+> >
+> > This patch didn't apply due to changes made in my tree by a patch from
+> > someone else before yours.  Can you rebase it and resend?
+> >
+>
+> Hi greg,
+>
+> I am confused, will that be a totally new patch or a new version(v4 in
+> this case)?
 
-On Sat, 25 Mar 2023 at 17:48, Simon Horman <simon.horman@corigine.com> wrote:
+New version.
+
+julia
+
 >
-> On Sat, Mar 25, 2023 at 08:34:29AM +0000, Wei Chen wrote:
-> > If there is a failure during copy_from_user or user-provided data buffer
-> > is invalid, rtl_debugfs_set_write_rfreg should return negative error code
-> > instead of a positive value count.
-> >
-> > Fix this bug by returning correct error code. Moreover, the check of buffer
-> > against null is removed since it will be handled by copy_from_user.
-> >
-> > Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+> Regards,
 >
-> Hi Wei Chen,
+> Sumitra
 >
-> * I'm not sure if a fixes tag is appropriate for this.
->   But if so, perhaps it should be:
+> > thanks,
+> >
+> > greg k-h
 >
->   Fixes: 610247f46feb ("rtlwifi: Improve debugging by using debugfs")
 >
-> * I think the preferred subject prefix may be                                     'rtlwifi: ' (without the leading 'wireless: ').
->
-> * This seems to be v2 of this patch, which would be best noted in
->   the subject '[PATCH v2]'.
->
-> The above notwithstanding, the code changes look correct to me.
->
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
->
-> > ---
-> >  drivers/net/wireless/realtek/rtlwifi/debug.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/net/wireless/realtek/rtlwifi/debug.c b/drivers/net/wireless/realtek/rtlwifi/debug.c
-> > index 3e7f9b4f1f19..9eb26dfe4ca9 100644
-> > --- a/drivers/net/wireless/realtek/rtlwifi/debug.c
-> > +++ b/drivers/net/wireless/realtek/rtlwifi/debug.c
-> > @@ -375,8 +375,8 @@ static ssize_t rtl_debugfs_set_write_rfreg(struct file *filp,
-> >
-> >       tmp_len = (count > sizeof(tmp) - 1 ? sizeof(tmp) - 1 : count);
-> >
-> > -     if (!buffer || copy_from_user(tmp, buffer, tmp_len))
-> > -             return count;
-> > +     if (copy_from_user(tmp, buffer, tmp_len))
-> > +             return -EFAULT;
-> >
-> >       tmp[tmp_len] = '\0';
-> >
-> > @@ -386,7 +386,7 @@ static ssize_t rtl_debugfs_set_write_rfreg(struct file *filp,
-> >       if (num != 4) {
-> >               rtl_dbg(rtlpriv, COMP_ERR, DBG_DMESG,
-> >                       "Format is <path> <addr> <mask> <data>\n");
-> > -             return count;
-> > +             return -EINVAL;
-> >       }
-> >
-> >       rtl_set_rfreg(hw, path, addr, bitmask, data);
-> > --
-> > 2.25.1
-> >
