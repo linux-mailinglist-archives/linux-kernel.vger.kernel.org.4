@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DD26C9738
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 19:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502B36C973B
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 19:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbjCZRff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 13:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
+        id S232065AbjCZRfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 13:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbjCZRf3 (ORCPT
+        with ESMTP id S231920AbjCZRfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 13:35:29 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD63172B1
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 10:35:28 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3-20020a250b03000000b00b5f1fab9897so6599106ybl.19
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 10:35:28 -0700 (PDT)
+        Sun, 26 Mar 2023 13:35:39 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A4E76BF
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 10:35:33 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54476ef9caeso65871407b3.6
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 10:35:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679852128;
+        d=google.com; s=20210112; t=1679852132;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sPVKlHs8rdxB8UK5BU2ADWdalnh8Q9IQfmw/DaMpLMc=;
-        b=n3l4VP3mBK1TbVo+LuBhHS5QICjfCzLhCC6pa7ew6+DG3lrLqM0jcVExkrHkPMB+R9
-         /RnmY9i2TkcdGJZHEjrEftiOmH8ad81+0GBzt+vFoJG3ujqZkELsxafZmHOdN6ihUYM6
-         mWYbIIdQO85MqMiws+BP4Gsm2WjIPMY2FafUxI/bQdMAh7py8RrdwxKUYDy72wtrnyZM
-         zVOQ5FdaZeYq5ca3iPHPyLX5M93KahY1eviix1UcBl5uaj9G3FJCen4sjV9lHkK7AwPc
-         OzvJ/TlkLhDFBlkPRiHvft3d+8kiN5qMHIXB4G9jZpm1h2lhKCB/OYFf39g7acaQYRGF
-         gHKg==
+        bh=nn4CcHQY6f+/osyumFS4D5ECgTVcbf5phTsNY5AT6p0=;
+        b=k4kHzLdN8mTqnSbEjYsbLNlAdV6ivn1Z2rwI5i0IVaunclsP2emP9cVoURmNh6CwTz
+         GbqJFm8xvGbqNJDtvIxHnkOnKU5ruOnmB1jfFOpq8/+4F/vmT/lrTo/dy4dbS9P0/I79
+         BnP0XC2Q87IqI7OkENQ0VkwDIb/zoUbLHSAv7AciRDtcTO966x1rSI07FjUYNvIDONBt
+         UTj2xf/puFEbErf4/kSHXkzMoWEJqcjJW878TQ+KmeUoF5F1rGAnivk3Jl8S5WbEnMLb
+         NiRU35HyHvx1BN9cMqWsQxz+CMDHpMLPpR8rkdt54yEgv+NuKBR/2+ZQAAatxGjrjt2J
+         BT6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679852128;
+        d=1e100.net; s=20210112; t=1679852132;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sPVKlHs8rdxB8UK5BU2ADWdalnh8Q9IQfmw/DaMpLMc=;
-        b=msr9uyf67oNRZV5j6x83t0GV/j5agemTUzUOtTRjzR7SM0wYi8zcxTaxlgVY/iakBZ
-         rjQFIqYBOUXuJgn0h4QC09UdKkdLFNpKbG1ukacwcbrqz+H9IqHVo6AJ0C++TSjyj8XK
-         qqTX11hTK5x/DfDZlJsSRbXdZqIEwWS760GUBSDE3S97qMLpIBRBhWM9m01KOismsfKe
-         KGdzhXGEkgHYRBRLW9tSc+OLYIgM+0qSyFs1bYvxViTAnvdzt67/NxB/YPrfOTXFEndL
-         t6KLUAM210CcvUBcywIPatqAioxx3iYwoyI0c1pnnrOPTB9RR+t5upvIgzhMWKXlVcIU
-         QAeQ==
-X-Gm-Message-State: AAQBX9co7k/YX+n7bGA6JR5gRoJCfo1Y1mlVGhD2oKAkQ1YyEDLg4eYY
-        9IlHF0oea0fyPucYm7FzNM0lgkjWFaZgcw==
-X-Google-Smtp-Source: AKy350ZSP6WrRql/Jvriaoj5YJN/Ndy94xPRoSF7VV0rufaPFiQH2/Gn+sK8NJf8CsfNeGvIv6OF6E7Ef28NSA==
+        bh=nn4CcHQY6f+/osyumFS4D5ECgTVcbf5phTsNY5AT6p0=;
+        b=YiSKxp3m2HjzFyO/dN+RcQw3M9BehgpA0HkdjeefQGdsAap3XxJ6OkJaGzbahLAY0u
+         rnSwZCHagrQQ6ur91O8CLqWAa/7CCVzKC2zrLplQBkyLQVlJS6CV2iEqHUWU8jX9H4e7
+         ts4tsyNAi6TZLEQBeJZI28OUaBZdimyId8P7t5r/+gAXtX/MQSXCFh3NLPfgnf+SfncX
+         3KW6FCxrFbIiFIYMhyJAmGAuSJOc3NiaWEVknW1EXReCk5pW+Vwo3q+9C69kugJzcmf7
+         Mw+HCLR+ohKPxupMIyZ0dpMAUsN6HUP1OWKDwKsCxofocy7DcVllQFVCsLygdYWG+Y9w
+         0r4w==
+X-Gm-Message-State: AAQBX9fi8kaxY1pyufzniBGiGqcwu8TUhqlBw0Qf4Hrgh0uSNvx8ZzLi
+        zE84PdtWI7HhlUBEvFjBMSwOd4NKtrcRfQ==
+X-Google-Smtp-Source: AKy350bIA6FTKaMx1Lr3Votg49I5qPynF31thJcEImjQCfaxTRC+Wx9FwvL2T2TDbzQAd6coUEPUffEYZnKb8Q==
 X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
- (user=joychakr job=sendgmr) by 2002:a05:6902:1083:b0:b6d:1483:bc0f with SMTP
- id v3-20020a056902108300b00b6d1483bc0fmr4303725ybu.9.1679852128113; Sun, 26
- Mar 2023 10:35:28 -0700 (PDT)
-Date:   Sun, 26 Mar 2023 17:35:10 +0000
+ (user=joychakr job=sendgmr) by 2002:a05:6902:10c3:b0:b77:97d9:f096 with SMTP
+ id w3-20020a05690210c300b00b7797d9f096mr5340906ybu.10.1679852132297; Sun, 26
+ Mar 2023 10:35:32 -0700 (PDT)
+Date:   Sun, 26 Mar 2023 17:35:11 +0000
 In-Reply-To: <20230326173511.710749-1-joychakr@google.com>
 Mime-Version: 1.0
 References: <20230326173511.710749-1-joychakr@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230326173511.710749-2-joychakr@google.com>
-Subject: [PATCH v3 1/2] spi: dw: Add 32 bpw support to DW DMA Controller
+Message-ID: <20230326173511.710749-3-joychakr@google.com>
+Subject: [PATCH v3 2/2] spi: dw: Add dma controller capability checks
 From:   Joy Chakraborty <joychakr@google.com>
 To:     Serge Semin <fancer.lancer@gmail.com>,
         Mark Brown <broonie@kernel.org>
@@ -70,43 +70,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Support for AxSize = 4 bytes configuration from dw dma driver if
-n_bytes i.e. number of bytes per write to fifo is 3 or 4.
-
-Number of bytes written to fifo per write is depended on the bits/word
-configuration being used which the DW core driver translates to n_bytes.
+Check capabilities of DMA controller during init to make sure it is
+capable of handling MEM2DEV for tx channel, DEV2MEM for rx channel
+and store addr_width capabilities to check per transfer to make sure the
+bits/word requirement can be met for that transfer.
 
 Signed-off-by: Joy Chakraborty <joychakr@google.com>
 ---
- drivers/spi/spi-dw-dma.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/spi/spi-dw-dma.c | 54 ++++++++++++++++++++++++++++++++--------
+ drivers/spi/spi-dw.h     |  1 +
+ 2 files changed, 44 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
-index ababb910b391..b3a88bb75907 100644
+index b3a88bb75907..5a642ec9c269 100644
 --- a/drivers/spi/spi-dw-dma.c
 +++ b/drivers/spi/spi-dw-dma.c
-@@ -208,12 +208,17 @@ static bool dw_spi_can_dma(struct spi_controller *master,
+@@ -23,6 +23,8 @@
+ #define DW_SPI_TX_BUSY		1
+ #define DW_SPI_TX_BURST_LEVEL	16
  
- static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
++static inline enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes);
++
+ static bool dw_spi_dma_chan_filter(struct dma_chan *chan, void *param)
  {
--	if (n_bytes == 1)
-+	switch (n_bytes) {
-+	case 1:
- 		return DMA_SLAVE_BUSWIDTH_1_BYTE;
--	else if (n_bytes == 2)
-+	case 2:
- 		return DMA_SLAVE_BUSWIDTH_2_BYTES;
--
--	return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-+	case 3:
-+	case 4:
-+		return DMA_SLAVE_BUSWIDTH_4_BYTES;
-+	default:
-+		return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-+	}
+ 	struct dw_dma_slave *s = param;
+@@ -72,12 +74,15 @@ static void dw_spi_dma_maxburst_init(struct dw_spi *dws)
+ 	dw_writel(dws, DW_SPI_DMATDLR, dws->txburst);
  }
  
- static int dw_spi_dma_wait(struct dw_spi *dws, unsigned int len, u32 speed)
+-static void dw_spi_dma_sg_burst_init(struct dw_spi *dws)
++static int dw_spi_dma_caps_init(struct dw_spi *dws)
+ {
++	int ret;
+ 	struct dma_slave_caps tx = {0}, rx = {0};
+ 
+-	dma_get_slave_caps(dws->txchan, &tx);
+-	dma_get_slave_caps(dws->rxchan, &rx);
++	ret = dma_get_slave_caps(dws->txchan, &tx);
++	ret |= dma_get_slave_caps(dws->rxchan, &rx);
++	if (ret)
++		return ret;
+ 
+ 	if (tx.max_sg_burst > 0 && rx.max_sg_burst > 0)
+ 		dws->dma_sg_burst = min(tx.max_sg_burst, rx.max_sg_burst);
+@@ -87,6 +92,18 @@ static void dw_spi_dma_sg_burst_init(struct dw_spi *dws)
+ 		dws->dma_sg_burst = rx.max_sg_burst;
+ 	else
+ 		dws->dma_sg_burst = 0;
++
++	/*
++	 * Assuming both channels belong to the same DMA controller hence the
++	 * address width capabilities most likely would be the same.
++	 */
++	dws->dma_addr_widths = tx.dst_addr_widths & rx.src_addr_widths;
++
++	if (!(tx.directions & BIT(DMA_MEM_TO_DEV) &&
++	      rx.directions & BIT(DMA_DEV_TO_MEM)))
++		return -ENXIO;
++
++	return 0;
+ }
+ 
+ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+@@ -95,6 +112,7 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+ 	struct dw_dma_slave dma_rx = { .src_id = 0 }, *rx = &dma_rx;
+ 	struct pci_dev *dma_dev;
+ 	dma_cap_mask_t mask;
++	int ret = -EBUSY;
+ 
+ 	/*
+ 	 * Get pci device for DMA controller, currently it could only
+@@ -124,20 +142,24 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+ 
+ 	init_completion(&dws->dma_completion);
+ 
+-	dw_spi_dma_maxburst_init(dws);
++	ret = dw_spi_dma_caps_init(dws);
++	if (ret)
++		goto free_txchan;
+ 
+-	dw_spi_dma_sg_burst_init(dws);
++	dw_spi_dma_maxburst_init(dws);
+ 
+ 	pci_dev_put(dma_dev);
+ 
+ 	return 0;
+-
++free_txchan:
++	dma_release_channel(dws->txchan);
++	dws->txchan = NULL;
+ free_rxchan:
+ 	dma_release_channel(dws->rxchan);
+ 	dws->rxchan = NULL;
+ err_exit:
+ 	pci_dev_put(dma_dev);
+-	return -EBUSY;
++	return ret;
+ }
+ 
+ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+@@ -163,12 +185,16 @@ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+ 
+ 	init_completion(&dws->dma_completion);
+ 
+-	dw_spi_dma_maxburst_init(dws);
++	ret = dw_spi_dma_caps_init(dws);
++	if (ret)
++		goto free_txchan;
+ 
+-	dw_spi_dma_sg_burst_init(dws);
++	dw_spi_dma_maxburst_init(dws);
+ 
+ 	return 0;
+-
++free_txchan:
++	dma_release_channel(dws->txchan);
++	dws->txchan = NULL;
+ free_rxchan:
+ 	dma_release_channel(dws->rxchan);
+ 	dws->rxchan = NULL;
+@@ -202,8 +228,14 @@ static bool dw_spi_can_dma(struct spi_controller *master,
+ 			   struct spi_device *spi, struct spi_transfer *xfer)
+ {
+ 	struct dw_spi *dws = spi_controller_get_devdata(master);
++	enum dma_slave_buswidth dma_bus_width;
++
++	if (xfer->len <= dws->fifo_len)
++		return false;
++
++	dma_bus_width = dw_spi_dma_convert_width(dws->n_bytes);
+ 
+-	return xfer->len > dws->fifo_len;
++	return dws->dma_addr_widths & BIT(dma_bus_width);
+ }
+ 
+ static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
+diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+index 9e8eb2b52d5c..3962e6dcf880 100644
+--- a/drivers/spi/spi-dw.h
++++ b/drivers/spi/spi-dw.h
+@@ -190,6 +190,7 @@ struct dw_spi {
+ 	struct dma_chan		*rxchan;
+ 	u32			rxburst;
+ 	u32			dma_sg_burst;
++	u32			dma_addr_widths;
+ 	unsigned long		dma_chan_busy;
+ 	dma_addr_t		dma_addr; /* phy address of the Data register */
+ 	const struct dw_spi_dma_ops *dma_ops;
 -- 
 2.40.0.348.gf938b09366-goog
 
