@@ -2,124 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B886C92EA
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 09:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9520C6C92FF
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 09:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjCZHGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 03:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
+        id S229805AbjCZHlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 03:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjCZHGv (ORCPT
+        with ESMTP id S229523AbjCZHlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 03:06:51 -0400
-Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD0049F5
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 00:06:50 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id gKSipZ5u2E500gKSmpnFFA; Sun, 26 Mar 2023 09:06:49 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 26 Mar 2023 09:06:49 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        dmaengine@vger.kernel.org
-Subject: [PATCH 2/2] dmaengine: mv_xor_v2: Use some clk_ helper functions to simplify code
-Date:   Sun, 26 Mar 2023 09:06:38 +0200
-Message-Id: <cc14e490f4e6002a17c9c7d283fe6a93179766c2.1679814350.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <201170dff832a3c496d125772e10070cd834ebf2.1679814350.git.christophe.jaillet@wanadoo.fr>
-References: <201170dff832a3c496d125772e10070cd834ebf2.1679814350.git.christophe.jaillet@wanadoo.fr>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Sun, 26 Mar 2023 03:41:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E2C868F
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 00:40:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679816417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=51I4tYLSmoNnjzd854BdOPa0P0UjuvWyL9QlaGHcgJs=;
+        b=A7TBBCbKqqqe7GCgCyiVkZ54pHQ3vfGqfGLUApUBr0w889hWlTT0O8TODkY9JPyIcUdixG
+        Y0LDb0wS6W4atnG2oRnncGgAyHZN0F3GCFp5YKIIfrFmP4MP6BoVkBOItrwd2o6D9Ebbki
+        Orxs5xW3Jy4zQms9Fn+ROVrM2b4nZF4=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-654-YwJN95xtMsWytGuFSlU1Zg-1; Sun, 26 Mar 2023 03:40:16 -0400
+X-MC-Unique: YwJN95xtMsWytGuFSlU1Zg-1
+Received: by mail-qk1-f198.google.com with SMTP id r70-20020a374449000000b00746c31401f0so2576958qka.6
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 00:40:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679816413;
+        h=content-transfer-encoding:mime-version:references:in-reply-to:date
+         :cc:to:from:subject:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=51I4tYLSmoNnjzd854BdOPa0P0UjuvWyL9QlaGHcgJs=;
+        b=JSCRMb/E02vQUGb77uoODoLKDgjpEI6bWtVp8VGxe2IXeGwBsutKlvhHffzT8e7D0W
+         W7W3NVrK9dv7YK9i6gOR1DOwa1GI7bcQPkxGMOlmGy8RaLvOOLygQdtYXV/c40INnfXP
+         J402P0bZh7wCXMDycb/2f0lpjRB7XNgUxDiwUV1D5bsSm8MHOoQdt2i29VqC+/SX43iH
+         9Re0nHkpmNC/WiHYOrRyTxJn1sGnjlFbWBuLGVoAny9B3N8n8aI4Zi8fAodWFJnYV/i0
+         MM5iqUbvBrXk9e3aBQ7aj2k6H9QdNP5URVmm7orHtNDvbnObulc77mjqahAt/lKkon+D
+         SEag==
+X-Gm-Message-State: AO0yUKUZ5DXlkv1+jJ+/kUw47WolpG1HwLHmHip3E5FAeXwgBP9zkoeW
+        XslsgjzPqSbiEir9HBJDBpnxDMomjs7vwQI+J5tnkjmoEeqAvYCy1uritcbwNcMsJMxeJ68qtxo
+        yNEu/YodJ3EUDMZBR/vTl8wMV
+X-Received: by 2002:ac8:5702:0:b0:3e0:8c58:1dd with SMTP id 2-20020ac85702000000b003e08c5801ddmr14893685qtw.55.1679816413601;
+        Sun, 26 Mar 2023 00:40:13 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/Tp4HbzbNknw4GmE88t4aB2nhlJ6hhgfENJoY/McVDZZctF2I+8vP2b95SwLcpq5wNnBRwcQ==
+X-Received: by 2002:ac8:5702:0:b0:3e0:8c58:1dd with SMTP id 2-20020ac85702000000b003e08c5801ddmr14893667qtw.55.1679816413373;
+        Sun, 26 Mar 2023 00:40:13 -0700 (PDT)
+Received: from ypodemsk.tlv.csb (IGLD-84-229-251-248.inter.net.il. [84.229.251.248])
+        by smtp.gmail.com with ESMTPSA id u17-20020ac87511000000b003e38f8d564fsm581391qtq.66.2023.03.26.00.40.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 00:40:12 -0700 (PDT)
+Message-ID: <b88b37de44222a67bc5cf22798e84fb178b58725.camel@redhat.com>
+Subject: Re: [PATCH] mm/mmu_gather: send tlb_remove_table_smp_sync IPI only
+ to MM CPUs
+From:   ypodemsk@redhat.com
+To:     Will Deacon <will@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, npiggin@gmail.com, arnd@arndb.de,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mtosatti@redhat.com,
+        ppandit@redhat.com, alougovs@redhat.com,
+        David Hildenbrand <david@redhat.com>
+Date:   Sun, 26 Mar 2023 10:40:08 +0300
+In-Reply-To: <20230324151259.GC27199@willie-the-truck>
+References: <20230312080945.14171-1-ypodemsk@redhat.com>
+         <20230320084902.GE2194297@hirez.programming.kicks-ass.net>
+         <a6ee41b39f3f516aab0f7fb327620cb2a43eeaca.camel@redhat.com>
+         <20230324151259.GC27199@willie-the-truck>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_clk_get_[optional_]enabled() instead of hand writing it.
-It saves some LoC.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Code could be simplified even further and xor_dev->reg_clk and xor_dev->clk
-could be removed as well.
----
- drivers/dma/mv_xor_v2.c | 35 +++++++----------------------------
- 1 file changed, 7 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/dma/mv_xor_v2.c b/drivers/dma/mv_xor_v2.c
-index 0991b8265829..cea8aa946f9c 100644
---- a/drivers/dma/mv_xor_v2.c
-+++ b/drivers/dma/mv_xor_v2.c
-@@ -739,32 +739,18 @@ static int mv_xor_v2_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	xor_dev->reg_clk = devm_clk_get(&pdev->dev, "reg");
--	if (PTR_ERR(xor_dev->reg_clk) != -ENOENT) {
--		if (!IS_ERR(xor_dev->reg_clk)) {
--			ret = clk_prepare_enable(xor_dev->reg_clk);
--			if (ret)
--				return ret;
--		} else {
--			return PTR_ERR(xor_dev->reg_clk);
--		}
--	}
-+	xor_dev->reg_clk = devm_clk_get_optional_enabled(&pdev->dev, "reg");
-+	if (IS_ERR(xor_dev->reg_clk))
-+		return PTR_ERR(xor_dev->reg_clk);
- 
--	xor_dev->clk = devm_clk_get(&pdev->dev, NULL);
--	if (PTR_ERR(xor_dev->clk) == -EPROBE_DEFER) {
--		ret = -EPROBE_DEFER;
--		goto disable_reg_clk;
--	}
--	if (!IS_ERR(xor_dev->clk)) {
--		ret = clk_prepare_enable(xor_dev->clk);
--		if (ret)
--			goto disable_reg_clk;
--	}
-+	xor_dev->clk = devm_clk_get_enabled(&pdev->dev, NULL);
-+	if (IS_ERR(xor_dev->clk))
-+		return PTR_ERR(xor_dev->clk);
- 
- 	ret = platform_msi_domain_alloc_irqs(&pdev->dev, 1,
- 					     mv_xor_v2_set_msi_msg);
- 	if (ret)
--		goto disable_clk;
-+		return ret;
- 
- 	xor_dev->irq = msi_get_virq(&pdev->dev, 0);
- 
-@@ -866,10 +852,6 @@ static int mv_xor_v2_probe(struct platform_device *pdev)
- 			  xor_dev->hw_desq_virt, xor_dev->hw_desq);
- free_msi_irqs:
- 	platform_msi_domain_free_irqs(&pdev->dev);
--disable_clk:
--	clk_disable_unprepare(xor_dev->clk);
--disable_reg_clk:
--	clk_disable_unprepare(xor_dev->reg_clk);
- 	return ret;
- }
- 
-@@ -889,9 +871,6 @@ static int mv_xor_v2_remove(struct platform_device *pdev)
- 
- 	tasklet_kill(&xor_dev->irq_tasklet);
- 
--	clk_disable_unprepare(xor_dev->clk);
--	clk_disable_unprepare(xor_dev->reg_clk);
--
- 	return 0;
- }
- 
--- 
-2.34.1
+On Fri, 2023-03-24 at 15:13 +0000, Will Deacon wrote:
+> On Wed, Mar 22, 2023 at 04:11:44PM +0200, ypodemsk@redhat.com wrote:
+> > On Mon, 2023-03-20 at 09:49 +0100, Peter Zijlstra wrote:
+> > > On Sun, Mar 12, 2023 at 10:09:45AM +0200, Yair Podemsky wrote:
+> > > > Currently the tlb_remove_table_smp_sync IPI is sent to all CPUs
+> > > > indiscriminately, this causes unnecessary work and delays
+> > > > notable
+> > > > in
+> > > > real-time use-cases and isolated cpus, this patch will limit
+> > > > this
+> > > > IPI to
+> > > > only be sent to cpus referencing the effected mm and are
+> > > > currently
+> > > > in
+> > > > kernel space.
+> > > 
+> > > Did you validate that all architectures for which this is
+> > > relevant
+> > > actually set bits in mm_cpumask() ?
+> > > 
+> > Hi Peter,
+> > Thank you for bringing this to my attention.
+> > I reviewed the architectures using the MMU_GATHER_RCU_TABLE_FREE:
+> > arm, powerpc, s390, sparc and x86 set the bit when switching
+> > process
+> > in.
+> > for arm64 removed set/clear bit in 38d96287504a ("arm64: mm: kill
+> > mm_cpumask usage")
+> > The reason given was that mm_cpumask was not used.
+> > Given that we now have a use for it, I will add a patch to revert.
+> 
+> Maintaining the mask is also not free, so I'm not keen on adding it
+> back
+> unless there's a net win.
+> 
+> Will
+> 
+How about adding a Kconfig to mark which architectures set/use the
+mm_cpumask?
+This will allow us to use the mm_cpumask on architectures that support
+it, and use acpu_online_mask on those that don't.
+Also make it clear which architectures set the bit for the future.
+Yair
 
