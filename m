@@ -2,150 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77936C9352
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 11:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 975176C9356
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 11:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjCZJMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 05:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37104 "EHLO
+        id S230495AbjCZJQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 05:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjCZJMK (ORCPT
+        with ESMTP id S230087AbjCZJQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 05:12:10 -0400
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B84E10C9;
-        Sun, 26 Mar 2023 02:12:06 -0700 (PDT)
-Received: by mail-ua1-x92a.google.com with SMTP id p2so4294503uap.1;
-        Sun, 26 Mar 2023 02:12:06 -0700 (PDT)
+        Sun, 26 Mar 2023 05:16:11 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B5693CE
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 02:16:09 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id ek18so24256245edb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 02:16:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679821925;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1YFcu3KqdhzqArr7G9NjmMcFFIaBTGLNEJI0GTpZLTY=;
-        b=eba+x52kblNHYG4gxjJ1ybCwfGQd5MkF8WkhE9JgjgYX24Zyqi3EM49e4sE8f+3RVa
-         LXEqkS0S4H3xTkj2YemxOJnyBr1H/pDEObYAX0z624txFGtts2G25AWf7d0ddXoqlOYJ
-         WgmrjCmavqYzWrYwoLAbNFtsEC19N82sFyU/XlGLe/EwlPY1OLFPxCo5AzjCf03H2vJr
-         g0X8EDI9D9nRjBhdWxhY7U5HGk5AWGHRw2y2sexk4bF8R1wbVjp0zs7s2VMTlBA/zAqQ
-         QfcXTurCmkNHkbplIbGgIGcm7JyrHDGlrr2o26mWc0V4NzV6+bXFD9tfdW2EKUOchU4e
-         bWkQ==
+        d=linaro.org; s=google; t=1679822168;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RVdcLdPzcznfLu5pV3m1WzbNiFmKRhHrUVaPMwriaSA=;
+        b=zobcUBWPrSp/4y+k/WK+lZBW+LnOtpPGzz007TUEr69BtXLN8ouhoLpQSFmm0NEZp2
+         prpyGUwygdKax2iOjdm/M3CicbZ3oiSHDgh2M/8I601mxLM6cB7Uo8JB494tpEGKs/Nl
+         9vIP9uXcvrH8crfzLvt5W0trcvzOkvp6IIJl1qMw2tW6BXGU95zpjXezuGfJk/tGGSNX
+         eGBG0CzYApzkloxW0mRqeQ8vNpo70VXeGwIt2cy4sDpzRDU0u8hq2T07yuAhmNU0JoXE
+         6DPUE98k3OpMzOv+o83wgndCT3+XUqSvdvHWqnWe+mtTE2V1Cc37K2iszpVwzgTS+uw7
+         CZTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679821925;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1679822168;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1YFcu3KqdhzqArr7G9NjmMcFFIaBTGLNEJI0GTpZLTY=;
-        b=Bc7rT3tG9rV8ydth+HbxUSHH8k+riDpJ500BtAErOK+JMnYxzsnebyA+VKyaPcfi7p
-         hs3zn51CS6K+5rtJjPRKPOCKpzPT+/QLXzAuKSssqaZw6/HZCV4seCKzKtU+Bcu0shKc
-         abPEVDN0RQYTFvKgLk51crhStHYc11bqm6K+fjhZ2hyULNqxjPuLDcMJb5oWjdBf2tNP
-         y9wsfgCphRc8MKF8BL9oIIUZYlSVD2PyOjk22SO/1+pAkMACwrlYfzyp3nZ9BdmumDey
-         okEeNpP2i2GlL6NekuRhsrP5t6JnsZO++qvdKLSCZ+obqbzbcNsO8mZ2gHJoXWIHycq4
-         /GFQ==
-X-Gm-Message-State: AAQBX9f95vJAwajCBex40ONLqUqfkYda67HHkUve9s1Yx7DYSBzlA92E
-        5lVMD2k2Fkv52qmzsdP4xowvJ2hiyD3EoxoXOSu+y4wJhy8=
-X-Google-Smtp-Source: AKy350b5nHber7fKY0Wvt8esTSoXb4rlG7uELmUbu91m2GEgVjRJmuJzccKwlverruWPygtBRm2XbyGqalnI7m0FD9o=
-X-Received: by 2002:a1f:2fd8:0:b0:40c:4d1:b550 with SMTP id
- v207-20020a1f2fd8000000b0040c04d1b550mr4593988vkv.0.1679821924947; Sun, 26
- Mar 2023 02:12:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230324172427.3416342-1-harperchen1110@gmail.com> <4dcd261e56cf54eb409b6851128b63c5f7a2efcf.camel@posteo.de>
-In-Reply-To: <4dcd261e56cf54eb409b6851128b63c5f7a2efcf.camel@posteo.de>
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Sun, 26 Mar 2023 17:11:29 +0800
-Message-ID: <CAO4mrfdoAcLUH5VyQyskBiZZpqNS-dKMwddwvDfwP=Csw0EgmQ@mail.gmail.com>
-Subject: Re: [PATCH] media: hi846: Fix memleak in hi846_init_controls()
-To:     Martin Kepplinger <martink@posteo.de>
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        bh=RVdcLdPzcznfLu5pV3m1WzbNiFmKRhHrUVaPMwriaSA=;
+        b=6UWP6d30yLP4NVP418pm+UI0qVXPJlUXjEexQ34MI66W+Rz2lqUwj1q+QHTwu6JpL5
+         tkWLNBATditpCEV9cmVtPCqQ8bF/FNOO0a14TnxsFA8DxNFiGGK3KgKGQmipjyk2SNsr
+         VSnHwnZmfJLmuc8jAwruoiVbb36RblY9xVA8K3XRnP9XsdOaCPsosLpe+oPu/wzdwm8I
+         QW2SpLFQm2YPAz5+hJp7aB8dzDc42GoYw49elNsXbUSSnwdMM9i0Hv2BJuWfs71dSDEw
+         jIDrqb3xM47W7lH4Q6RkBL5VLuA++B1j2p9bbVBlNfGbP+NJ6NFDaWEhm9xkIK4fk4qi
+         +itA==
+X-Gm-Message-State: AO0yUKV+4qc4yRmh7PPncJoPlgjv/dKX06tlXZBGOPN5Is/DGd1u9yXg
+        LMJI6g9ZEhGXLg24nn5VeHJEog==
+X-Google-Smtp-Source: AK7set+21ZfoJE99Nq9jkZpPELlJ6LrY+qn8O3F+7udZkpqYQMkG59FrMIxIMxGZivvwWOl0kN1TrQ==
+X-Received: by 2002:a05:6402:c17:b0:4ac:d90e:92b with SMTP id co23-20020a0564020c1700b004acd90e092bmr16023867edb.10.1679822168485;
+        Sun, 26 Mar 2023 02:16:08 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:6cac:926d:a4f2:aa09])
+        by smtp.gmail.com with ESMTPSA id x23-20020a50d617000000b004fa268da13esm13409297edi.56.2023.03.26.02.16.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 02:16:08 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] arm64: dts: qcom: sdm630: move DSI opp-table out of soc node
+Date:   Sun, 26 Mar 2023 11:16:05 +0200
+Message-Id: <20230326091605.18908-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Martin,
+The soc node is supposed to have only device nodes with MMIO addresses,
+so move the DSI OPP out of it (it is used also by second DSI1 on
+SDM660):
 
-Thanks for pointing out my mistake.
+  sda660-inforce-ifc6560.dtb: soc: opp-table-dsi: {'compatible': ['operating-points-v2'], ... should not be valid under {'type': 'object'}
+    From schema: dtschema/schemas/simple-bus.yaml
 
-I cross-checked other implementations of drivers under media/i2c. I
-agree with you. Let me send the second version of my patch.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks,
-Wei
+---
 
-On Sun, 26 Mar 2023 at 16:50, Martin Kepplinger <martink@posteo.de> wrote:
->
-> Am Freitag, dem 24.03.2023 um 17:24 +0000 schrieb Wei Chen:
-> > hi846_init_controls doesn't clean the allocated ctrl_hdlr
-> > in case there is a failure, which causes memleak. Add
-> > v4l2_ctrl_handler_free to free the resource properly.
-> >
-> > Signed-off-by: Wei Chen <harperchen1110@gmail.com>
-> > ---
-> >  drivers/media/i2c/hi846.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/media/i2c/hi846.c b/drivers/media/i2c/hi846.c
-> > index 7c61873b7198..c45a6511d2c1 100644
-> > --- a/drivers/media/i2c/hi846.c
-> > +++ b/drivers/media/i2c/hi846.c
-> > @@ -1472,6 +1472,7 @@ static int hi846_init_controls(struct hi846
-> > *hi846)
-> >         if (ctrl_hdlr->error) {
-> >                 dev_err(&client->dev, "v4l ctrl handler error: %d\n",
-> >                         ctrl_hdlr->error);
-> > +               v4l2_ctrl_handler_free(ctrl_hdlr);
-> >                 return ctrl_hdlr->error;
-> >         }
-> >
->
-> hi Wei, thanks for the patch. It looks like I forgot that indeed, but
-> to me it looks like the subsequent error paths of
-> v4l2_fwnode_device_parse() and v4l2_ctrl_new_fwnode_properties() would
-> leak the same thing.
->
-> And since we only assign it to the subdev's ctrl_handler in the success
-> case later, you could simply add an error label:
->
->
-> @@ -1663,21 +1663,26 @@ static int hi846_init_controls(struct hi846
-> *hi846)
->         if (ctrl_hdlr->error) {
->                 dev_err(&client->dev, "v4l ctrl handler error: %d\n",
->                         ctrl_hdlr->error);
-> -               return ctrl_hdlr->error;
-> +               ret = ctrl_hdlr->error;
-> +               goto error;
->         }
->
->         ret = v4l2_fwnode_device_parse(&client->dev, &props);
->         if (ret)
-> -               return ret;
-> +               goto error;
->
->         ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr,
-> &hi846_ctrl_ops,
->                                               &props);
->         if (ret)
-> -               return ret;
-> +               goto error;
->
->         hi846->sd.ctrl_handler = ctrl_hdlr;
->
->         return 0;
-> +
-> +error:
-> +       v4l2_ctrl_handler_free(ctrl_hdlr);
-> +       return ret;
->  }
->
->
-> what do you think? thanks!
->
->                               martin
->
->
+Changes since v1:
+1. Move the node out of soc. Don't add Konrad's review tag.
+---
+ arch/arm64/boot/dts/qcom/sdm630.dtsi | 38 ++++++++++++++--------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+index 72d9a12b5e9c..b91e423a3cfc 100644
+--- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+@@ -328,6 +328,25 @@ memory@80000000 {
+ 		reg = <0x0 0x80000000 0x0 0x0>;
+ 	};
+ 
++	dsi_opp_table: opp-table-dsi {
++		compatible = "operating-points-v2";
++
++		opp-131250000 {
++			opp-hz = /bits/ 64 <131250000>;
++			required-opps = <&rpmpd_opp_svs>;
++		};
++
++		opp-210000000 {
++			opp-hz = /bits/ 64 <210000000>;
++			required-opps = <&rpmpd_opp_svs_plus>;
++		};
++
++		opp-262500000 {
++			opp-hz = /bits/ 64 <262500000>;
++			required-opps = <&rpmpd_opp_nom>;
++		};
++	};
++
+ 	pmu {
+ 		compatible = "arm,armv8-pmuv3";
+ 		interrupts = <GIC_PPI 6 IRQ_TYPE_LEVEL_HIGH>;
+@@ -1450,25 +1469,6 @@ mmcc: clock-controller@c8c0000 {
+ 					<0>;
+ 		};
+ 
+-		dsi_opp_table: opp-table-dsi {
+-			compatible = "operating-points-v2";
+-
+-			opp-131250000 {
+-				opp-hz = /bits/ 64 <131250000>;
+-				required-opps = <&rpmpd_opp_svs>;
+-			};
+-
+-			opp-210000000 {
+-				opp-hz = /bits/ 64 <210000000>;
+-				required-opps = <&rpmpd_opp_svs_plus>;
+-			};
+-
+-			opp-262500000 {
+-				opp-hz = /bits/ 64 <262500000>;
+-				required-opps = <&rpmpd_opp_nom>;
+-			};
+-		};
+-
+ 		mdss: display-subsystem@c900000 {
+ 			compatible = "qcom,mdss";
+ 			reg = <0x0c900000 0x1000>,
+-- 
+2.34.1
+
