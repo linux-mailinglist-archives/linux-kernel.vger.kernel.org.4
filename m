@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441836C96D5
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D6A6C96D4
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbjCZQ03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 12:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S232384AbjCZQ0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 12:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCZQ0U (ORCPT
+        with ESMTP id S232128AbjCZQ0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 12:26:20 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3990A4C2C
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:26:17 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-536af432ee5so128426377b3.0
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:26:17 -0700 (PDT)
+        Sun, 26 Mar 2023 12:26:21 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0F749D5
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:26:18 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-545ce8e77fcso50478287b3.1
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:26:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679847976;
+        d=linaro.org; s=google; t=1679847977;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mgWR3I0udOGjeDDgggodntknwBWlzlpBQn+TexoAKB4=;
-        b=V8VaMpXH8hr6p/jXVJ/Xkhh8dokMrYs3m+/CO6B+JcSVk+WbC6UfW5GXVINyVHPtwJ
-         jVnjpfVRikQmDSuWk1drUm8i7jsxVngEags07D/LdD5EC9RD1WX0pgShmvUJSdNKUqxV
-         FnBAFo0bONfZkTtl8j2uh91glzIoOlNZxVVUJtnGjxMQjWaWV8USXejF91+8PfeX6Ky2
-         /H7bpduMur5AkwOqsq203Y5AqXODDcCEvd09Auv+lHkJlU8DLPsAqz4v88OI6dNafBmY
-         FTslRQFUNh3aGqQfzLu+QyD+P+5qkmI4bhTFvPTseX586q5nYEXlC53BTdu/vMZdORoi
-         xfOQ==
+        bh=QME+i29c7TXie8xSDczxu04dQbhAgli3lDIjdb9WxEQ=;
+        b=tSNDRjSeDcNAwiA+7QwhpIv4jS1WeXupPYVMotep2mvRI887dj6xh3k7cybo+QVjEm
+         m2ndoExVUkemp8qa6jjFL9NNJDGdBKYfSef4PWmzZm66zi8g6F8Osge22siHKlRw/Btw
+         xL+b0j/KdQDxO+SvZ+jnT1gkwg9h7pW8hsIgPYf1art38eG3Yip3nfG5I6dODMgJeiCR
+         F3pA9q84ZqdHQW90zI3xIhGHvlYF2ammwWtKB7+gmeLvrziecEi0gc/v/ai9C0fwaLzb
+         xCs34i40l5dDQbwtg4PgtWMa/xnXMMqXLHGgUYXZc6CJLG1qoXYWiB50VfJTG+cyER3p
+         K9rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679847976;
+        d=1e100.net; s=20210112; t=1679847977;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mgWR3I0udOGjeDDgggodntknwBWlzlpBQn+TexoAKB4=;
-        b=WZfclsH2dJk5g8u/7SuEn3K1JSyVq26p8WtVa9SDeB6uB7+7bAXR0jh3F06wun8/J3
-         W8ERKH0GLL3MYk6q8/ooA+tF4LVj+NrbC9BA1LN4IyCtophpjlGWDSJXbOfxPCH/eyeg
-         7rX0MsaVZNXXGdb2WmaDHzIMWOBwJdIISY2DidUCmYPBKOOgZMNUWJMJ7kbRNuYo5QsB
-         xRxRtI32dI3dzf2L4eazkCa8q/wpzxQ0N6G/9OP0vGvR/5noCwgb4xzIQfQhf1xMMsKB
-         xfj+0NY1aiygcrF4PdtxUZfr0vB9o+IEEWH7jsPUBeU1i/ZGkNNYZDUj485Lh6k6RGw8
-         StDQ==
-X-Gm-Message-State: AAQBX9dFJ8Y6QVTN/lqZqwFzub0YSOhKbxLZbDJpsBFNMcgaE3gT3p7o
-        umw6YsiXkUOKu6N8LB7ahWqtNQ==
-X-Google-Smtp-Source: AKy350bqzwiM/O52SjD+FYAs2APzmnyKGU0712L5N+9iC4E8jqr7+1i+Uw91QUKrC/n1tVsfKlupzA==
-X-Received: by 2002:a0d:ca4c:0:b0:539:52f2:95af with SMTP id m73-20020a0dca4c000000b0053952f295afmr9471937ywd.32.1679847976331;
-        Sun, 26 Mar 2023 09:26:16 -0700 (PDT)
+        bh=QME+i29c7TXie8xSDczxu04dQbhAgli3lDIjdb9WxEQ=;
+        b=CxdRzi2FN1dub6lStdJhnAkAROcWyn9QCdyFDzHCShzgyqhcCGxe2N5pZzPrBQ23D2
+         3qCdQq2zR/gFvo3LX4uS+mmzOrB/MNduN/v5BGoxhQELnPfibS7uLItu3R8peO8/JjuS
+         6dmwS+bTO7ifcFA61JbBB07KsiUL33ScF1BFlYpapP8raxSN6Dd5aEUbP5pVC2KaaCDu
+         MDotJgDC1ROr98P+hkB3ssCNK7nfmntdT+BD2mCQJ1MHQbGxrL3aMLyNx2jA9z6tNyBm
+         OBra1779gNfegAUuNM7rDi+T6Pg1nmxCcDyX0V0m4Klqi8Im7ln6qITYHz7DyF8brRWs
+         GRNQ==
+X-Gm-Message-State: AAQBX9dFHuZVPc5kj1GgJdF/+RuN6a9yNedtnG2i5KYL8lQzwraZ2Y1B
+        r5TfjRaz/Mrf8S3CNu5aYB81Dw==
+X-Google-Smtp-Source: AKy350asq64jcJrNXkTLXPUxp/UAOQk9vlcbTVMWARtguSa9iJDQzxUr4Ez09kyKBH1wbl49JqcYxA==
+X-Received: by 2002:a81:6c58:0:b0:541:728b:edbb with SMTP id h85-20020a816c58000000b00541728bedbbmr8417706ywc.26.1679847977151;
+        Sun, 26 Mar 2023 09:26:17 -0700 (PDT)
 Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id ci9-20020a05690c0a8900b00545a08184e9sm1543168ywb.121.2023.03.26.09.26.15
+        by smtp.gmail.com with ESMTPSA id ci9-20020a05690c0a8900b00545a08184e9sm1543168ywb.121.2023.03.26.09.26.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 26 Mar 2023 09:26:16 -0700 (PDT)
 From:   William Breathitt Gray <william.gray@linaro.org>
@@ -57,13 +57,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         Mark Brown <broonie@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         William Breathitt Gray <william.gray@linaro.org>,
-        Arnaud de Turckheim <quarium@gmail.com>,
-        John Hentges <jhentges@accesio.com>,
-        Jay Dolan <jay.dolan@accesio.com>,
+        techsupport@winsystems.com,
+        Paul Demetrotion <pdemetrotion@winsystems.com>,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v5 2/3] gpio: pcie-idio-24: Migrate to the regmap API
-Date:   Sun, 26 Mar 2023 12:25:58 -0400
-Message-Id: <8ae7f448360068172b06fedb6a568373b73521bc.1679845842.git.william.gray@linaro.org>
+Subject: [PATCH v5 3/3] gpio: ws16c48: Migrate to the regmap API
+Date:   Sun, 26 Mar 2023 12:25:59 -0400
+Message-Id: <58531b1b2428e4d5d2ea79e721f7ef6450665280.1679845842.git.william.gray@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1679845842.git.william.gray@linaro.org>
 References: <cover.1679845842.git.william.gray@linaro.org>
@@ -82,862 +81,747 @@ The regmap API supports IO port accessors so we can take advantage of
 regmap abstractions rather than handling access to the device registers
 directly in the driver.
 
-For the PCIe-IDIO-24 series of devices, the following BARs are
-available:
+The WinSystems WS16C48 provides the following registers:
 
-    BAR[0]: memory mapped PEX8311
-    BAR[1]: I/O mapped PEX8311
-    BAR[2]: I/O mapped card registers
+    Offset 0x0-0x5: Port 0-5 I/O
+    Offset 0x6: Int_Pending
+    Offset 0x7: Page/Lock
+    Offset 0x8-0xA (Page 1): Pol_0-Pol_2
+    Offset 0x8-0xA (Page 2): Enab_0-Enab_2
+    Offset 0x8-0xA (Page 3): Int_ID0-Int_ID2
 
-There are 24 FET Output lines, 24 Isolated Input lines, and 8 TTL/CMOS
-lines (which may be configured for either output or input). The GPIO
-lines are exposed by the following card registers:
+Port 0-5 I/O provides access to 48 lines of digital I/O across six
+registers, each bit position corresponding to the respective line.
+Writing a 1 to a respective bit position causes that output pin to sink
+current, while writing a 0 to the same bit position causes that output
+pin to go to a high-impedance state and allows it to be used an input.
+Reads on a port report the inverted state (0 = high, 1 = low) of an I/O
+pin when used in input mode. Interrupts are supported on Port 0-2.
 
-    Base +0x0-0x2 (Read/Write): FET Outputs
-    Base +0xB (Read/Write): TTL/CMOS
-    Base +0x4-0x6 (Read): Isolated Inputs
-    Base +0x7 (Read): TTL/CMOS
+Int_Pending is a read-only register that reports the combined state of
+the INT_ID0 through INT_ID2 registers; an interrupt pending is indicated
+when any of the low three bits are set.
 
-In order for the device to support interrupts, the PLX PEX8311 internal
-PCI wire interrupt and local interrupt input must first be enabled.
+The Page/Lock register provides the following bits:
 
-The following card registers for Change-Of-State may be used:
+    Bit 0-5: Port 0-5 I/O Lock
+    Bit 6-7: Page 0-3 Selection
 
-    Base +0x8-0xA (Read): COS Status Inputs
-    Base +0x8-0xA (Write): COS Clear Inputs
-    Base +0xB (Read): COS Status TTL/CMOS
-    Base +0xB (Write): COS Clear TTL/CMOS
-    Base +0xE (Read/Write): COS Enable
+For Bits 0-5, writing a 1 to a respective bit position locks the output
+state of the corresponding I/O port. Writing the page number to Bits 6-7
+selects that respective register page for use.
 
-The COS Enable register is used to enable/disable interrupts and
-configure the interrupt levels; each bit maps to a group of eight inputs
-as described below:
+Pol_0-Pol_2 are accessible when Page 1 is selected. Writing a 1 to a
+respective bit position selects the rising edge detection interrupts for
+that input line, while writing a 0 to the same bit position selects the
+falling edge detection interrupts.
 
-    Bit 0: IRQ EN Rising Edge IN0-7
-    Bit 1: IRQ EN Rising Edge IN8-15
-    Bit 2: IRQ EN Rising Edge IN16-23
-    Bit 3: IRQ EN Rising Edge TTL0-7
-    Bit 4: IRQ EN Falling Edge IN0-7
-    Bit 5: IRQ EN Falling Edge IN8-15
-    Bit 6: IRQ EN Falling Edge IN16-23
-    Bit 7: IRQ EN Falling Edge TTL0-7
+Enab_0-Enab_2 are accessible when Page 2 is selected. Writing a 1 to a
+respective bit position enables interrupts for that input line, while
+writing a 0 to that same bit position clears and disables interrupts for
+that input line.
 
-An interrupt is asserted when a change-of-state matching the interrupt
-level configuration respective for a particular group of eight inputs
-with enabled COS is detected.
+Int_ID0-Int_ID2 are accessible when Page 3 is selected. A respective bit
+when read as a 1 indicates that an edge of the polarity set in the
+corresponding polarity register was detected for the corresponding input
+line. Writing any value to this register clears all pending interrupts
+for the register.
 
-The COS Status registers may be read to determine which inputs have
-changed; if interrupts were enabled, an IRQ will be generated for the
-set bits in these registers. Writing the value read from the COS Status
-register back to the respective COS Clear register will clear just those
-interrupts.
-
-Cc: Arnaud de Turckheim <quarium@gmail.com>
-Cc: John Hentges <jhentges@accesio.com>
-Cc: Jay Dolan <jay.dolan@accesio.com>
+Cc: Paul Demetrotion <pdemetrotion@winsystems.com>
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Reviewed-by: Michael Walle <michael@walle.cc>
 Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 ---
 Changes in v5:
  - Refactor for map parameter removal from handle_mask_sync()
- - Cleanups and line wrappings to 100 characters rather than 80
- - Adjust to change mutex lock to raw_spin_lock_t
- - Remove pex8311_intcsr table configurations as superfluous
- - Adjust to set pex8311_intcsr_regmap_config reg_base to
-   PLX_PEX8311_PCI_LCS_INTCSR
-Changes in v4:
- - Allocate idio24gpio before using it in idio_24_probe()
-Changes in v3:
- - Adjust idio_24_set_type_config() for parameter list
- - Add mutex to prevent clobbering the COS_ENABLE register when masking
-   IRQ and setting their type configuration
-Changes in v2:
- - Simplify PCIe-IDIO-24 register offset defines to remove superfluous
-   arithmetic
- - Check for NULL pointer after chip->irq_drv_data allocation
- - Set gpio_regmap drvdata and use gpio_regmap_get_drvdata() to get the
-   regmap in idio_24_reg_map_xlate()
+ - Cleanups and lines to 100 characters rather than 80
+ - Rename PAGE_FIELD_PAGE_* defines to POL_PAGE, ENAB_PAGE, and
+   INT_ID_PAGE
+ - Adjust to change spinlock_t lock to raw_spin_lock
+Changes in v4: none
 
- drivers/gpio/Kconfig             |   3 +
- drivers/gpio/gpio-pcie-idio-24.c | 677 +++++++++++--------------------
- 2 files changed, 250 insertions(+), 430 deletions(-)
+ drivers/gpio/Kconfig        |   3 +
+ drivers/gpio/gpio-ws16c48.c | 552 ++++++++++++------------------------
+ 2 files changed, 188 insertions(+), 367 deletions(-)
 
 diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 68f58b0ba79f..79359f663b3d 100644
+index 79359f663b3d..2f6098034753 100644
 --- a/drivers/gpio/Kconfig
 +++ b/drivers/gpio/Kconfig
-@@ -1587,7 +1587,10 @@ config GPIO_PCI_IDIO_16
- 
- config GPIO_PCIE_IDIO_24
- 	tristate "ACCES PCIe-IDIO-24 GPIO support"
+@@ -983,7 +983,10 @@ config GPIO_WINBOND
+ config GPIO_WS16C48
+ 	tristate "WinSystems WS16C48 GPIO support"
+ 	select ISA_BUS_API
 +	select REGMAP_IRQ
 +	select REGMAP_MMIO
  	select GPIOLIB_IRQCHIP
 +	select GPIO_REGMAP
  	help
- 	  Enables GPIO support for the ACCES PCIe-IDIO-24 family (PCIe-IDIO-24,
- 	  PCIe-IDI-24, PCIe-IDO-24, PCIe-IDIO-12). An interrupt is generated
-diff --git a/drivers/gpio/gpio-pcie-idio-24.c b/drivers/gpio/gpio-pcie-idio-24.c
-index 463c0613abb9..9972a3bc3f50 100644
---- a/drivers/gpio/gpio-pcie-idio-24.c
-+++ b/drivers/gpio/gpio-pcie-idio-24.c
-@@ -6,16 +6,15 @@
-  * This driver supports the following ACCES devices: PCIe-IDIO-24,
-  * PCIe-IDI-24, PCIe-IDO-24, and PCIe-IDIO-12.
+ 	  Enables GPIO support for the WinSystems WS16C48. The base port
+ 	  addresses for the devices may be configured via the base module
+diff --git a/drivers/gpio/gpio-ws16c48.c b/drivers/gpio/gpio-ws16c48.c
+index e73885a4dc32..dc11878f397e 100644
+--- a/drivers/gpio/gpio-ws16c48.c
++++ b/drivers/gpio/gpio-ws16c48.c
+@@ -3,19 +3,18 @@
+  * GPIO driver for the WinSystems WS16C48
+  * Copyright (C) 2016 William Breathitt Gray
   */
 -#include <linux/bitmap.h>
--#include <linux/bitops.h>
++#include <linux/bitfield.h>
 +#include <linux/bits.h>
  #include <linux/device.h>
 -#include <linux/errno.h>
 -#include <linux/gpio/driver.h>
+-#include <linux/io.h>
+-#include <linux/ioport.h>
 -#include <linux/interrupt.h>
 -#include <linux/irqdesc.h>
 +#include <linux/err.h>
 +#include <linux/gpio/regmap.h>
 +#include <linux/irq.h>
+ #include <linux/isa.h>
  #include <linux/kernel.h>
  #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/regmap.h>
+ #include <linux/moduleparam.h>
  #include <linux/spinlock.h>
++#include <linux/regmap.h>
  #include <linux/types.h>
  
-@@ -59,422 +58,224 @@
- #define PLX_PEX8311_PCI_LCS_INTCSR  0x68
- #define INTCSR_INTERNAL_PCI_WIRE    BIT(8)
- #define INTCSR_LOCAL_INPUT          BIT(11)
-+#define IDIO_24_ENABLE_IRQ          (INTCSR_INTERNAL_PCI_WIRE | INTCSR_LOCAL_INPUT)
-+
-+#define IDIO_24_OUT_BASE 0x0
-+#define IDIO_24_TTLCMOS_OUT_REG 0x3
-+#define IDIO_24_IN_BASE 0x4
-+#define IDIO_24_TTLCMOS_IN_REG 0x7
-+#define IDIO_24_COS_STATUS_BASE 0x8
-+#define IDIO_24_CONTROL_REG 0xC
-+#define IDIO_24_COS_ENABLE 0xE
-+#define IDIO_24_SOFT_RESET 0xF
-+
-+#define CONTROL_REG_OUT_MODE BIT(1)
-+
-+#define COS_ENABLE_RISING BIT(1)
-+#define COS_ENABLE_FALLING BIT(4)
-+#define COS_ENABLE_BOTH (COS_ENABLE_RISING | COS_ENABLE_FALLING)
-+
-+static const struct regmap_config pex8311_intcsr_regmap_config = {
-+	.name = "pex8311_intcsr",
-+	.reg_bits = 32,
-+	.reg_stride = 1,
-+	.reg_base = PLX_PEX8311_PCI_LCS_INTCSR,
-+	.val_bits = 32,
-+	.io_port = true,
-+	.max_register = 0x0,
-+};
+ #define WS16C48_EXTENT 10
+@@ -31,371 +30,178 @@ static unsigned int num_irq;
+ module_param_hw_array(irq, uint, irq, &num_irq, 0);
+ MODULE_PARM_DESC(irq, "WinSystems WS16C48 interrupt line numbers");
  
 -/**
-- * struct idio_24_gpio_reg - GPIO device registers structure
-- * @out0_7:	Read: FET Outputs 0-7
-- *		Write: FET Outputs 0-7
-- * @out8_15:	Read: FET Outputs 8-15
-- *		Write: FET Outputs 8-15
-- * @out16_23:	Read: FET Outputs 16-23
-- *		Write: FET Outputs 16-23
-- * @ttl_out0_7:	Read: TTL/CMOS Outputs 0-7
-- *		Write: TTL/CMOS Outputs 0-7
-- * @in0_7:	Read: Isolated Inputs 0-7
-- *		Write: Reserved
-- * @in8_15:	Read: Isolated Inputs 8-15
-- *		Write: Reserved
-- * @in16_23:	Read: Isolated Inputs 16-23
-- *		Write: Reserved
-- * @ttl_in0_7:	Read: TTL/CMOS Inputs 0-7
-- *		Write: Reserved
-- * @cos0_7:	Read: COS Status Inputs 0-7
-- *		Write: COS Clear Inputs 0-7
-- * @cos8_15:	Read: COS Status Inputs 8-15
-- *		Write: COS Clear Inputs 8-15
-- * @cos16_23:	Read: COS Status Inputs 16-23
-- *		Write: COS Clear Inputs 16-23
-- * @cos_ttl0_7:	Read: COS Status TTL/CMOS 0-7
-- *		Write: COS Clear TTL/CMOS 0-7
-- * @ctl:	Read: Control Register
-- *		Write: Control Register
-- * @reserved:	Read: Reserved
-- *		Write: Reserved
-- * @cos_enable:	Read: COS Enable
-- *		Write: COS Enable
-- * @soft_reset:	Read: IRQ Output Pin Status
-- *		Write: Software Board Reset
+- * struct ws16c48_reg - device register structure
+- * @port:		Port 0 through 5 I/O
+- * @int_pending:	Interrupt Pending
+- * @page_lock:		Register page (Bits 7-6) and I/O port lock (Bits 5-0)
+- * @pol_enab_int_id:	Interrupt polarity, enable, and ID
 - */
--struct idio_24_gpio_reg {
--	u8 out0_7;
--	u8 out8_15;
--	u8 out16_23;
--	u8 ttl_out0_7;
--	u8 in0_7;
--	u8 in8_15;
--	u8 in16_23;
--	u8 ttl_in0_7;
--	u8 cos0_7;
--	u8 cos8_15;
--	u8 cos16_23;
--	u8 cos_ttl0_7;
--	u8 ctl;
--	u8 reserved;
--	u8 cos_enable;
--	u8 soft_reset;
-+static const struct regmap_range idio_24_wr_ranges[] = {
-+	regmap_reg_range(0x0, 0x3), regmap_reg_range(0x8, 0xC),
-+	regmap_reg_range(0xE, 0xF),
-+};
-+static const struct regmap_range idio_24_rd_ranges[] = {
-+	regmap_reg_range(0x0, 0xC), regmap_reg_range(0xE, 0xF),
-+};
-+static const struct regmap_range idio_24_volatile_ranges[] = {
-+	regmap_reg_range(0x4, 0xB), regmap_reg_range(0xF, 0xF),
-+};
-+static const struct regmap_access_table idio_24_wr_table = {
-+	.yes_ranges = idio_24_wr_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(idio_24_wr_ranges),
-+};
-+static const struct regmap_access_table idio_24_rd_table = {
-+	.yes_ranges = idio_24_rd_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(idio_24_rd_ranges),
-+};
-+static const struct regmap_access_table idio_24_volatile_table = {
-+	.yes_ranges = idio_24_volatile_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(idio_24_volatile_ranges),
-+};
+-struct ws16c48_reg {
+-	u8 port[6];
+-	u8 int_pending;
+-	u8 page_lock;
+-	u8 pol_enab_int_id[3];
++#define WS16C48_DAT_BASE 0x0
++#define WS16C48_PAGE_LOCK 0x7
++#define WS16C48_PAGE_BASE 0x8
++#define WS16C48_POL WS16C48_PAGE_BASE
++#define WS16C48_ENAB WS16C48_PAGE_BASE
++#define WS16C48_INT_ID WS16C48_PAGE_BASE
 +
-+static const struct regmap_config idio_24_regmap_config = {
++#define PAGE_LOCK_PAGE_FIELD GENMASK(7, 6)
++#define POL_PAGE u8_encode_bits(1, PAGE_LOCK_PAGE_FIELD)
++#define ENAB_PAGE u8_encode_bits(2, PAGE_LOCK_PAGE_FIELD)
++#define INT_ID_PAGE u8_encode_bits(3, PAGE_LOCK_PAGE_FIELD)
++
++static const struct regmap_range ws16c48_wr_ranges[] = {
++	regmap_reg_range(0x0, 0x5), regmap_reg_range(0x7, 0xA),
++};
++static const struct regmap_range ws16c48_rd_ranges[] = {
++	regmap_reg_range(0x0, 0xA),
++};
++static const struct regmap_range ws16c48_volatile_ranges[] = {
++	regmap_reg_range(0x0, 0x6), regmap_reg_range(0x8, 0xA),
++};
++static const struct regmap_access_table ws16c48_wr_table = {
++	.yes_ranges = ws16c48_wr_ranges,
++	.n_yes_ranges = ARRAY_SIZE(ws16c48_wr_ranges),
++};
++static const struct regmap_access_table ws16c48_rd_table = {
++	.yes_ranges = ws16c48_rd_ranges,
++	.n_yes_ranges = ARRAY_SIZE(ws16c48_rd_ranges),
++};
++static const struct regmap_access_table ws16c48_volatile_table = {
++	.yes_ranges = ws16c48_volatile_ranges,
++	.n_yes_ranges = ARRAY_SIZE(ws16c48_volatile_ranges),
++};
++static const struct regmap_config ws16c48_regmap_config = {
 +	.reg_bits = 8,
 +	.reg_stride = 1,
 +	.val_bits = 8,
 +	.io_port = true,
-+	.max_register = 0xF,
-+	.wr_table = &idio_24_wr_table,
-+	.rd_table = &idio_24_rd_table,
-+	.volatile_table = &idio_24_volatile_table,
++	.max_register = 0xA,
++	.wr_table = &ws16c48_wr_table,
++	.rd_table = &ws16c48_rd_table,
++	.volatile_table = &ws16c48_volatile_table,
 +	.cache_type = REGCACHE_FLAT,
 +};
 +
-+#define IDIO_24_NGPIO_PER_REG 8
-+#define IDIO_24_REGMAP_IRQ(_id)						\
-+	[24 + _id] = {							\
-+		.reg_offset = (_id) / IDIO_24_NGPIO_PER_REG,		\
-+		.mask = BIT((_id) % IDIO_24_NGPIO_PER_REG),		\
-+		.type = { .types_supported = IRQ_TYPE_EDGE_BOTH },	\
++#define WS16C48_NGPIO_PER_REG 8
++#define WS16C48_REGMAP_IRQ(_id)							\
++	[_id] = {								\
++		.reg_offset = (_id) / WS16C48_NGPIO_PER_REG,			\
++		.mask = BIT((_id) % WS16C48_NGPIO_PER_REG),			\
++		.type = {							\
++			.type_reg_offset = (_id) / WS16C48_NGPIO_PER_REG,	\
++			.types_supported = IRQ_TYPE_EDGE_BOTH,			\
++		},								\
 +	}
-+#define IDIO_24_IIN_IRQ(_id) IDIO_24_REGMAP_IRQ(_id)
-+#define IDIO_24_TTL_IRQ(_id) IDIO_24_REGMAP_IRQ(24 + _id)
 +
-+static const struct regmap_irq idio_24_regmap_irqs[] = {
-+	IDIO_24_IIN_IRQ(0), IDIO_24_IIN_IRQ(1), IDIO_24_IIN_IRQ(2), /* IIN 0-2 */
-+	IDIO_24_IIN_IRQ(3), IDIO_24_IIN_IRQ(4), IDIO_24_IIN_IRQ(5), /* IIN 3-5 */
-+	IDIO_24_IIN_IRQ(6), IDIO_24_IIN_IRQ(7), IDIO_24_IIN_IRQ(8), /* IIN 6-8 */
-+	IDIO_24_IIN_IRQ(9), IDIO_24_IIN_IRQ(10), IDIO_24_IIN_IRQ(11), /* IIN 9-11 */
-+	IDIO_24_IIN_IRQ(12), IDIO_24_IIN_IRQ(13), IDIO_24_IIN_IRQ(14), /* IIN 12-14 */
-+	IDIO_24_IIN_IRQ(15), IDIO_24_IIN_IRQ(16), IDIO_24_IIN_IRQ(17), /* IIN 15-17 */
-+	IDIO_24_IIN_IRQ(18), IDIO_24_IIN_IRQ(19), IDIO_24_IIN_IRQ(20), /* IIN 18-20 */
-+	IDIO_24_IIN_IRQ(21), IDIO_24_IIN_IRQ(22), IDIO_24_IIN_IRQ(23), /* IIN 21-23 */
-+	IDIO_24_TTL_IRQ(0), IDIO_24_TTL_IRQ(1), IDIO_24_TTL_IRQ(2), /* TTL 0-2 */
-+	IDIO_24_TTL_IRQ(3), IDIO_24_TTL_IRQ(4), IDIO_24_TTL_IRQ(5), /* TTL 3-5 */
-+	IDIO_24_TTL_IRQ(6), IDIO_24_TTL_IRQ(7), /* TTL 6-7 */
++/* Only the first 24 lines (Port 0-2) support interrupts */
++#define WS16C48_NUM_IRQS 24
++static const struct regmap_irq ws16c48_regmap_irqs[WS16C48_NUM_IRQS] = {
++	WS16C48_REGMAP_IRQ(0), WS16C48_REGMAP_IRQ(1), WS16C48_REGMAP_IRQ(2), /* 0-2 */
++	WS16C48_REGMAP_IRQ(3), WS16C48_REGMAP_IRQ(4), WS16C48_REGMAP_IRQ(5), /* 3-5 */
++	WS16C48_REGMAP_IRQ(6), WS16C48_REGMAP_IRQ(7), WS16C48_REGMAP_IRQ(8), /* 6-8 */
++	WS16C48_REGMAP_IRQ(9), WS16C48_REGMAP_IRQ(10), WS16C48_REGMAP_IRQ(11), /* 9-11 */
++	WS16C48_REGMAP_IRQ(12), WS16C48_REGMAP_IRQ(13), WS16C48_REGMAP_IRQ(14), /* 12-14 */
++	WS16C48_REGMAP_IRQ(15), WS16C48_REGMAP_IRQ(16), WS16C48_REGMAP_IRQ(17), /* 15-17 */
++	WS16C48_REGMAP_IRQ(18), WS16C48_REGMAP_IRQ(19), WS16C48_REGMAP_IRQ(20), /* 18-20 */
++	WS16C48_REGMAP_IRQ(21), WS16C48_REGMAP_IRQ(22), WS16C48_REGMAP_IRQ(23), /* 21-23 */
  };
  
  /**
-  * struct idio_24_gpio - GPIO device private data structure
+  * struct ws16c48_gpio - GPIO device private data structure
 - * @chip:	instance of the gpio_chip
+- * @io_state:	bit I/O state (whether bit is set to input or output)
+- * @out_state:	output bits state
 + * @map:	regmap for the device
   * @lock:	synchronization lock to prevent I/O race conditions
-- * @reg:	I/O address offset for the GPIO device registers
-- * @irq_mask:	I/O bits affected by interrupts
-+ * @irq_type:	type configuration for IRQs
+  * @irq_mask:	I/O bits affected by interrupts
+- * @flow_mask:	IRQ flow type mask for the respective I/O bits
+- * @reg:	I/O address offset for the device registers
   */
- struct idio_24_gpio {
+ struct ws16c48_gpio {
 -	struct gpio_chip chip;
+-	unsigned char io_state[6];
+-	unsigned char out_state[6];
 +	struct regmap *map;
  	raw_spinlock_t lock;
--	__u8 __iomem *plx;
--	struct idio_24_gpio_reg __iomem *reg;
 -	unsigned long irq_mask;
-+	u8 irq_type;
+-	unsigned long flow_mask;
+-	struct ws16c48_reg __iomem *reg;
++	u8 irq_mask[WS16C48_NUM_IRQS / WS16C48_NGPIO_PER_REG];
  };
  
--static int idio_24_gpio_get_direction(struct gpio_chip *chip,
--	unsigned int offset)
--{
--	struct idio_24_gpio *const idio24gpio = gpiochip_get_data(chip);
--	const unsigned long out_mode_mask = BIT(1);
--
--	/* FET Outputs */
--	if (offset < 24)
--		return GPIO_LINE_DIRECTION_OUT;
--
--	/* Isolated Inputs */
--	if (offset < 48)
+-static int ws16c48_gpio_get_direction(struct gpio_chip *chip, unsigned offset)
++static int ws16c48_handle_pre_irq(void *const irq_drv_data)
+ {
+-	struct ws16c48_gpio *const ws16c48gpio = gpiochip_get_data(chip);
+-	const unsigned port = offset / 8;
+-	const unsigned mask = BIT(offset % 8);
++	struct ws16c48_gpio *const ws16c48gpio = irq_drv_data;
+ 
+-	if (ws16c48gpio->io_state[port] & mask)
 -		return GPIO_LINE_DIRECTION_IN;
 -
--	/* TTL/CMOS I/O */
--	/* OUT MODE = 1 when TTL/CMOS Output Mode is set */
--	if (ioread8(&idio24gpio->reg->ctl) & out_mode_mask)
--		return GPIO_LINE_DIRECTION_OUT;
--
--	return GPIO_LINE_DIRECTION_IN;
+-	return GPIO_LINE_DIRECTION_OUT;
 -}
 -
--static int idio_24_gpio_direction_input(struct gpio_chip *chip,
--	unsigned int offset)
+-static int ws16c48_gpio_direction_input(struct gpio_chip *chip, unsigned offset)
 -{
--	struct idio_24_gpio *const idio24gpio = gpiochip_get_data(chip);
+-	struct ws16c48_gpio *const ws16c48gpio = gpiochip_get_data(chip);
+-	const unsigned port = offset / 8;
+-	const unsigned mask = BIT(offset % 8);
 -	unsigned long flags;
--	unsigned int ctl_state;
--	const unsigned long out_mode_mask = BIT(1);
 -
--	/* TTL/CMOS I/O */
--	if (offset > 47) {
--		raw_spin_lock_irqsave(&idio24gpio->lock, flags);
+-	raw_spin_lock_irqsave(&ws16c48gpio->lock, flags);
 -
--		/* Clear TTL/CMOS Output Mode */
--		ctl_state = ioread8(&idio24gpio->reg->ctl) & ~out_mode_mask;
--		iowrite8(ctl_state, &idio24gpio->reg->ctl);
+-	ws16c48gpio->io_state[port] |= mask;
+-	ws16c48gpio->out_state[port] &= ~mask;
+-	iowrite8(ws16c48gpio->out_state[port], ws16c48gpio->reg->port + port);
 -
--		raw_spin_unlock_irqrestore(&idio24gpio->lock, flags);
--	}
--
--	return 0;
--}
--
--static int idio_24_gpio_direction_output(struct gpio_chip *chip,
--	unsigned int offset, int value)
--{
--	struct idio_24_gpio *const idio24gpio = gpiochip_get_data(chip);
--	unsigned long flags;
--	unsigned int ctl_state;
--	const unsigned long out_mode_mask = BIT(1);
--
--	/* TTL/CMOS I/O */
--	if (offset > 47) {
--		raw_spin_lock_irqsave(&idio24gpio->lock, flags);
--
--		/* Set TTL/CMOS Output Mode */
--		ctl_state = ioread8(&idio24gpio->reg->ctl) | out_mode_mask;
--		iowrite8(ctl_state, &idio24gpio->reg->ctl);
--
--		raw_spin_unlock_irqrestore(&idio24gpio->lock, flags);
--	}
--
--	chip->set(chip, offset, value);
--	return 0;
--}
--
--static int idio_24_gpio_get(struct gpio_chip *chip, unsigned int offset)
-+static int idio_24_handle_mask_sync(const int index, const unsigned int mask_buf_def,
-+				    const unsigned int mask_buf, void *const irq_drv_data)
+-	raw_spin_unlock_irqrestore(&ws16c48gpio->lock, flags);
++	/* Lock to prevent Page/Lock register change while we handle IRQ */
++	raw_spin_lock(&ws16c48gpio->lock);
+ 
+ 	return 0;
+ }
+ 
+-static int ws16c48_gpio_direction_output(struct gpio_chip *chip,
+-	unsigned offset, int value)
++static int ws16c48_handle_post_irq(void *const irq_drv_data)
  {
--	struct idio_24_gpio *const idio24gpio = gpiochip_get_data(chip);
--	const unsigned long offset_mask = BIT(offset % 8);
--	const unsigned long out_mode_mask = BIT(1);
+-	struct ws16c48_gpio *const ws16c48gpio = gpiochip_get_data(chip);
+-	const unsigned port = offset / 8;
+-	const unsigned mask = BIT(offset % 8);
+-	unsigned long flags;
 -
--	/* FET Outputs */
--	if (offset < 8)
--		return !!(ioread8(&idio24gpio->reg->out0_7) & offset_mask);
-+	const unsigned int type_mask = COS_ENABLE_BOTH << index;
-+	struct idio_24_gpio *const idio24gpio = irq_drv_data;
-+	u8 type;
-+	int ret;
+-	raw_spin_lock_irqsave(&ws16c48gpio->lock, flags);
++	struct ws16c48_gpio *const ws16c48gpio = irq_drv_data;
  
--	if (offset < 16)
--		return !!(ioread8(&idio24gpio->reg->out8_15) & offset_mask);
+-	ws16c48gpio->io_state[port] &= ~mask;
+-	if (value)
+-		ws16c48gpio->out_state[port] |= mask;
+-	else
+-		ws16c48gpio->out_state[port] &= ~mask;
+-	iowrite8(ws16c48gpio->out_state[port], ws16c48gpio->reg->port + port);
 -
--	if (offset < 24)
--		return !!(ioread8(&idio24gpio->reg->out16_23) & offset_mask);
--
--	/* Isolated Inputs */
--	if (offset < 32)
--		return !!(ioread8(&idio24gpio->reg->in0_7) & offset_mask);
--
--	if (offset < 40)
--		return !!(ioread8(&idio24gpio->reg->in8_15) & offset_mask);
--
--	if (offset < 48)
--		return !!(ioread8(&idio24gpio->reg->in16_23) & offset_mask);
-+	raw_spin_lock(&idio24gpio->lock);
+-	raw_spin_unlock_irqrestore(&ws16c48gpio->lock, flags);
++	raw_spin_unlock(&ws16c48gpio->lock);
  
--	/* TTL/CMOS Outputs */
--	if (ioread8(&idio24gpio->reg->ctl) & out_mode_mask)
--		return !!(ioread8(&idio24gpio->reg->ttl_out0_7) & offset_mask);
-+	/* if all are masked, then disable interrupts, else set to type */
-+	type = (mask_buf == mask_buf_def) ? ~type_mask : idio24gpio->irq_type;
+ 	return 0;
+ }
  
--	/* TTL/CMOS Inputs */
--	return !!(ioread8(&idio24gpio->reg->ttl_in0_7) & offset_mask);
+-static int ws16c48_gpio_get(struct gpio_chip *chip, unsigned offset)
+-{
+-	struct ws16c48_gpio *const ws16c48gpio = gpiochip_get_data(chip);
+-	const unsigned port = offset / 8;
+-	const unsigned mask = BIT(offset % 8);
+-	unsigned long flags;
+-	unsigned port_state;
+-
+-	raw_spin_lock_irqsave(&ws16c48gpio->lock, flags);
+-
+-	/* ensure that GPIO is set for input */
+-	if (!(ws16c48gpio->io_state[port] & mask)) {
+-		raw_spin_unlock_irqrestore(&ws16c48gpio->lock, flags);
+-		return -EINVAL;
+-	}
+-
+-	port_state = ioread8(ws16c48gpio->reg->port + port);
+-
+-	raw_spin_unlock_irqrestore(&ws16c48gpio->lock, flags);
+-
+-	return !!(port_state & mask);
 -}
-+	ret = regmap_update_bits(idio24gpio->map, IDIO_24_COS_ENABLE, type_mask, type);
- 
--static int idio_24_gpio_get_multiple(struct gpio_chip *chip,
+-
+-static int ws16c48_gpio_get_multiple(struct gpio_chip *chip,
 -	unsigned long *mask, unsigned long *bits)
 -{
--	struct idio_24_gpio *const idio24gpio = gpiochip_get_data(chip);
+-	struct ws16c48_gpio *const ws16c48gpio = gpiochip_get_data(chip);
 -	unsigned long offset;
 -	unsigned long gpio_mask;
--	void __iomem *ports[] = {
--		&idio24gpio->reg->out0_7, &idio24gpio->reg->out8_15,
--		&idio24gpio->reg->out16_23, &idio24gpio->reg->in0_7,
--		&idio24gpio->reg->in8_15, &idio24gpio->reg->in16_23,
--	};
 -	size_t index;
+-	u8 __iomem *port_addr;
 -	unsigned long port_state;
--	const unsigned long out_mode_mask = BIT(1);
 -
 -	/* clear bits array to a clean slate */
 -	bitmap_zero(bits, chip->ngpio);
 -
--	for_each_set_clump8(offset, gpio_mask, mask, ARRAY_SIZE(ports) * 8) {
+-	for_each_set_clump8(offset, gpio_mask, mask, chip->ngpio) {
 -		index = offset / 8;
--
--		/* read bits from current gpio port (port 6 is TTL GPIO) */
--		if (index < 6)
--			port_state = ioread8(ports[index]);
--		else if (ioread8(&idio24gpio->reg->ctl) & out_mode_mask)
--			port_state = ioread8(&idio24gpio->reg->ttl_out0_7);
--		else
--			port_state = ioread8(&idio24gpio->reg->ttl_in0_7);
--
--		port_state &= gpio_mask;
+-		port_addr = ws16c48gpio->reg->port + index;
+-		port_state = ioread8(port_addr) & gpio_mask;
 -
 -		bitmap_set_value8(bits, port_state, offset);
 -	}
-+	raw_spin_unlock(&idio24gpio->lock);
- 
+-
 -	return 0;
-+	return ret;
- }
- 
--static void idio_24_gpio_set(struct gpio_chip *chip, unsigned int offset,
--	int value)
-+static int idio_24_set_type_config(unsigned int **const buf, const unsigned int type,
-+				   const struct regmap_irq *const irq_data, const int idx,
-+				   void *const irq_drv_data)
- {
--	struct idio_24_gpio *const idio24gpio = gpiochip_get_data(chip);
--	const unsigned long out_mode_mask = BIT(1);
--	void __iomem *base;
--	const unsigned int mask = BIT(offset % 8);
+-}
+-
+-static void ws16c48_gpio_set(struct gpio_chip *chip, unsigned offset, int value)
+-{
+-	struct ws16c48_gpio *const ws16c48gpio = gpiochip_get_data(chip);
+-	const unsigned port = offset / 8;
+-	const unsigned mask = BIT(offset % 8);
 -	unsigned long flags;
--	unsigned int out_state;
 -
--	/* Isolated Inputs */
--	if (offset > 23 && offset < 48)
+-	raw_spin_lock_irqsave(&ws16c48gpio->lock, flags);
+-
+-	/* ensure that GPIO is set for output */
+-	if (ws16c48gpio->io_state[port] & mask) {
+-		raw_spin_unlock_irqrestore(&ws16c48gpio->lock, flags);
 -		return;
--
--	/* TTL/CMOS Inputs */
--	if (offset > 47 && !(ioread8(&idio24gpio->reg->ctl) & out_mode_mask))
--		return;
--
--	/* TTL/CMOS Outputs */
--	if (offset > 47)
--		base = &idio24gpio->reg->ttl_out0_7;
--	/* FET Outputs */
--	else if (offset > 15)
--		base = &idio24gpio->reg->out16_23;
--	else if (offset > 7)
--		base = &idio24gpio->reg->out8_15;
--	else
--		base = &idio24gpio->reg->out0_7;
--
--	raw_spin_lock_irqsave(&idio24gpio->lock, flags);
+-	}
 -
 -	if (value)
--		out_state = ioread8(base) | mask;
+-		ws16c48gpio->out_state[port] |= mask;
 -	else
--		out_state = ioread8(base) & ~mask;
+-		ws16c48gpio->out_state[port] &= ~mask;
+-	iowrite8(ws16c48gpio->out_state[port], ws16c48gpio->reg->port + port);
 -
--	iowrite8(out_state, base);
--
--	raw_spin_unlock_irqrestore(&idio24gpio->lock, flags);
+-	raw_spin_unlock_irqrestore(&ws16c48gpio->lock, flags);
 -}
 -
--static void idio_24_gpio_set_multiple(struct gpio_chip *chip,
+-static void ws16c48_gpio_set_multiple(struct gpio_chip *chip,
 -	unsigned long *mask, unsigned long *bits)
 -{
--	struct idio_24_gpio *const idio24gpio = gpiochip_get_data(chip);
+-	struct ws16c48_gpio *const ws16c48gpio = gpiochip_get_data(chip);
 -	unsigned long offset;
 -	unsigned long gpio_mask;
--	void __iomem *ports[] = {
--		&idio24gpio->reg->out0_7, &idio24gpio->reg->out8_15,
--		&idio24gpio->reg->out16_23
--	};
 -	size_t index;
+-	u8 __iomem *port_addr;
 -	unsigned long bitmask;
 -	unsigned long flags;
--	unsigned long out_state;
--	const unsigned long out_mode_mask = BIT(1);
 -
--	for_each_set_clump8(offset, gpio_mask, mask, ARRAY_SIZE(ports) * 8) {
+-	for_each_set_clump8(offset, gpio_mask, mask, chip->ngpio) {
 -		index = offset / 8;
+-		port_addr = ws16c48gpio->reg->port + index;
 -
+-		/* mask out GPIO configured for input */
+-		gpio_mask &= ~ws16c48gpio->io_state[index];
 -		bitmask = bitmap_get_value8(bits, offset) & gpio_mask;
 -
--		raw_spin_lock_irqsave(&idio24gpio->lock, flags);
+-		raw_spin_lock_irqsave(&ws16c48gpio->lock, flags);
 -
--		/* read bits from current gpio port (port 6 is TTL GPIO) */
--		if (index < 6) {
--			out_state = ioread8(ports[index]);
--		} else if (ioread8(&idio24gpio->reg->ctl) & out_mode_mask) {
--			out_state = ioread8(&idio24gpio->reg->ttl_out0_7);
--		} else {
--			/* skip TTL GPIO if set for input */
--			raw_spin_unlock_irqrestore(&idio24gpio->lock, flags);
--			continue;
--		}
+-		/* update output state data and set device gpio register */
+-		ws16c48gpio->out_state[index] &= ~gpio_mask;
+-		ws16c48gpio->out_state[index] |= bitmask;
+-		iowrite8(ws16c48gpio->out_state[index], port_addr);
 -
--		/* set requested bit states */
--		out_state &= ~gpio_mask;
--		out_state |= bitmask;
--
--		/* write bits for current gpio port (port 6 is TTL GPIO) */
--		if (index < 6)
--			iowrite8(out_state, ports[index]);
--		else
--			iowrite8(out_state, &idio24gpio->reg->ttl_out0_7);
--
--		raw_spin_unlock_irqrestore(&idio24gpio->lock, flags);
-+	const unsigned int offset = irq_data->reg_offset;
-+	const unsigned int rising = COS_ENABLE_RISING << offset;
-+	const unsigned int falling = COS_ENABLE_FALLING << offset;
-+	const unsigned int mask = COS_ENABLE_BOTH << offset;
-+	struct idio_24_gpio *const idio24gpio = irq_drv_data;
-+	unsigned int new;
-+	unsigned int cos_enable;
-+	int ret;
-+
-+	switch (type) {
-+	case IRQ_TYPE_EDGE_RISING:
-+		new = rising;
-+		break;
-+	case IRQ_TYPE_EDGE_FALLING:
-+		new = falling;
-+		break;
-+	case IRQ_TYPE_EDGE_BOTH:
-+		new = mask;
-+		break;
-+	default:
-+		return -EINVAL;
- 	}
+-		raw_spin_unlock_irqrestore(&ws16c48gpio->lock, flags);
+-	}
 -}
 -
--static void idio_24_irq_ack(struct irq_data *data)
--{
--}
- 
--static void idio_24_irq_mask(struct irq_data *data)
--{
--	struct gpio_chip *const chip = irq_data_get_irq_chip_data(data);
--	struct idio_24_gpio *const idio24gpio = gpiochip_get_data(chip);
--	unsigned long flags;
--	const unsigned long bit_offset = irqd_to_hwirq(data) - 24;
--	unsigned char new_irq_mask;
--	const unsigned long bank_offset = bit_offset / 8;
--	unsigned char cos_enable_state;
+-static void ws16c48_irq_ack(struct irq_data *data)
++static int ws16c48_handle_mask_sync(const int index, const unsigned int mask_buf_def,
++				    const unsigned int mask_buf, void *const irq_drv_data)
+ {
+-	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
+-	struct ws16c48_gpio *const ws16c48gpio = gpiochip_get_data(chip);
+-	const unsigned long offset = irqd_to_hwirq(data);
+-	const unsigned port = offset / 8;
+-	const unsigned mask = BIT(offset % 8);
++	struct ws16c48_gpio *const ws16c48gpio = irq_drv_data;
+ 	unsigned long flags;
+-	unsigned port_state;
 -
--	raw_spin_lock_irqsave(&idio24gpio->lock, flags);
--
--	idio24gpio->irq_mask &= ~BIT(bit_offset);
--	new_irq_mask = idio24gpio->irq_mask >> bank_offset * 8;
-+	raw_spin_lock(&idio24gpio->lock);
+-	/* only the first 3 ports support interrupts */
+-	if (port > 2)
+-		return;
++	int ret = 0;
  
--	if (!new_irq_mask) {
--		cos_enable_state = ioread8(&idio24gpio->reg->cos_enable);
-+	/* replace old bitmap with new bitmap */
-+	idio24gpio->irq_type = (idio24gpio->irq_type & ~mask) | (new & mask);
+ 	raw_spin_lock_irqsave(&ws16c48gpio->lock, flags);
  
--		/* Disable Rising Edge detection */
--		cos_enable_state &= ~BIT(bank_offset);
--		/* Disable Falling Edge detection */
--		cos_enable_state &= ~BIT(bank_offset + 4);
-+	ret = regmap_read(idio24gpio->map, IDIO_24_COS_ENABLE, &cos_enable);
+-	port_state = ws16c48gpio->irq_mask >> (8*port);
++	/* exit early if no change since the last mask sync */
++	if (mask_buf == ws16c48gpio->irq_mask[index])
++		goto exit_early;
++	ws16c48gpio->irq_mask[index] = mask_buf;
+ 
+-	/* Select Register Page 2; Unlock all I/O ports */
+-	iowrite8(0x80, &ws16c48gpio->reg->page_lock);
++	ret = regmap_write(ws16c48gpio->map, WS16C48_PAGE_LOCK, ENAB_PAGE);
 +	if (ret)
 +		goto exit_early;
  
--		iowrite8(cos_enable_state, &idio24gpio->reg->cos_enable);
-+	/* if COS is currently enabled then update the edge type */
-+	if (cos_enable & mask) {
-+		ret = regmap_update_bits(idio24gpio->map, IDIO_24_COS_ENABLE, mask,
-+					 idio24gpio->irq_type);
+-	/* Clear pending interrupt */
+-	iowrite8(port_state & ~mask, ws16c48gpio->reg->pol_enab_int_id + port);
+-	iowrite8(port_state | mask, ws16c48gpio->reg->pol_enab_int_id + port);
++	/* Update ENAB register (inverted mask) */
++	ret = regmap_write(ws16c48gpio->map, WS16C48_ENAB + index, ~mask_buf);
++	if (ret)
 +		goto exit_early;
- 	}
  
--	raw_spin_unlock_irqrestore(&idio24gpio->lock, flags);
+-	/* Select Register Page 3; Unlock all I/O ports */
+-	iowrite8(0xC0, &ws16c48gpio->reg->page_lock);
++	ret = regmap_write(ws16c48gpio->map, WS16C48_PAGE_LOCK, INT_ID_PAGE);
++	if (ret)
++		goto exit_early;
+ 
 +exit_early:
-+	raw_spin_unlock(&idio24gpio->lock);
+ 	raw_spin_unlock_irqrestore(&ws16c48gpio->lock, flags);
+-}
+-
+-static void ws16c48_irq_mask(struct irq_data *data)
+-{
+-	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
+-	struct ws16c48_gpio *const ws16c48gpio = gpiochip_get_data(chip);
+-	const unsigned long offset = irqd_to_hwirq(data);
+-	const unsigned long mask = BIT(offset);
+-	const unsigned port = offset / 8;
+-	unsigned long flags;
+-	unsigned long port_state;
+-
+-	/* only the first 3 ports support interrupts */
+-	if (port > 2)
+-		return;
+-
+-	raw_spin_lock_irqsave(&ws16c48gpio->lock, flags);
  
--	gpiochip_disable_irq(chip, irqd_to_hwirq(data));
+-	ws16c48gpio->irq_mask &= ~mask;
+-	gpiochip_disable_irq(chip, offset);
+-	port_state = ws16c48gpio->irq_mask >> (8 * port);
+-
+-	/* Select Register Page 2; Unlock all I/O ports */
+-	iowrite8(0x80, &ws16c48gpio->reg->page_lock);
+-
+-	/* Disable interrupt */
+-	iowrite8(port_state, ws16c48gpio->reg->pol_enab_int_id + port);
+-
+-	/* Select Register Page 3; Unlock all I/O ports */
+-	iowrite8(0xC0, &ws16c48gpio->reg->page_lock);
+-
+-	raw_spin_unlock_irqrestore(&ws16c48gpio->lock, flags);
 +	return ret;
  }
  
--static void idio_24_irq_unmask(struct irq_data *data)
-+static int idio_24_reg_mask_xlate(struct gpio_regmap *const gpio, const unsigned int base,
-+				  const unsigned int offset, unsigned int *const reg,
-+				  unsigned int *const mask)
+-static void ws16c48_irq_unmask(struct irq_data *data)
++static int ws16c48_set_type_config(unsigned int **const buf, const unsigned int type,
++				   const struct regmap_irq *const irq_data, const int idx,
++				   void *const irq_drv_data)
  {
--	struct gpio_chip *const chip = irq_data_get_irq_chip_data(data);
--	struct idio_24_gpio *const idio24gpio = gpiochip_get_data(chip);
--	unsigned long flags;
--	unsigned char prev_irq_mask;
--	const unsigned long bit_offset = irqd_to_hwirq(data) - 24;
--	const unsigned long bank_offset = bit_offset / 8;
--	unsigned char cos_enable_state;
+-	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
+-	struct ws16c48_gpio *const ws16c48gpio = gpiochip_get_data(chip);
+-	const unsigned long offset = irqd_to_hwirq(data);
+-	const unsigned long mask = BIT(offset);
+-	const unsigned port = offset / 8;
++	struct ws16c48_gpio *const ws16c48gpio = irq_drv_data;
++	unsigned int polarity;
+ 	unsigned long flags;
+-	unsigned long port_state;
 -
--	gpiochip_enable_irq(chip, irqd_to_hwirq(data));
+-	/* only the first 3 ports support interrupts */
+-	if (port > 2)
+-		return;
 -
--	raw_spin_lock_irqsave(&idio24gpio->lock, flags);
-+	const unsigned int out_stride = offset / IDIO_24_NGPIO_PER_REG;
-+	const unsigned int in_stride = (offset - 24) / IDIO_24_NGPIO_PER_REG;
-+	struct regmap *const map = gpio_regmap_get_drvdata(gpio);
-+	int err;
-+	unsigned int ctrl_reg;
- 
--	prev_irq_mask = idio24gpio->irq_mask >> bank_offset * 8;
--	idio24gpio->irq_mask |= BIT(bit_offset);
-+	switch (base) {
-+	case IDIO_24_OUT_BASE:
-+		*mask = BIT(offset % IDIO_24_NGPIO_PER_REG);
- 
--	if (!prev_irq_mask) {
--		cos_enable_state = ioread8(&idio24gpio->reg->cos_enable);
-+		/* FET Outputs */
-+		if (offset < 24) {
-+			*reg = IDIO_24_OUT_BASE + out_stride;
-+			return 0;
-+		}
- 
--		/* Enable Rising Edge detection */
--		cos_enable_state |= BIT(bank_offset);
--		/* Enable Falling Edge detection */
--		cos_enable_state |= BIT(bank_offset + 4);
-+		/* Isolated Inputs */
-+		if (offset < 48) {
-+			*reg = IDIO_24_IN_BASE + in_stride;
-+			return 0;
-+		}
- 
--		iowrite8(cos_enable_state, &idio24gpio->reg->cos_enable);
--	}
-+		err = regmap_read(map, IDIO_24_CONTROL_REG, &ctrl_reg);
-+		if (err)
-+			return err;
- 
--	raw_spin_unlock_irqrestore(&idio24gpio->lock, flags);
+-	raw_spin_lock_irqsave(&ws16c48gpio->lock, flags);
+-
+-	gpiochip_enable_irq(chip, offset);
+-	ws16c48gpio->irq_mask |= mask;
+-	port_state = ws16c48gpio->irq_mask >> (8 * port);
+-
+-	/* Select Register Page 2; Unlock all I/O ports */
+-	iowrite8(0x80, &ws16c48gpio->reg->page_lock);
+-
+-	/* Enable interrupt */
+-	iowrite8(port_state, ws16c48gpio->reg->pol_enab_int_id + port);
+-
+-	/* Select Register Page 3; Unlock all I/O ports */
+-	iowrite8(0xC0, &ws16c48gpio->reg->page_lock);
+-
+-	raw_spin_unlock_irqrestore(&ws16c48gpio->lock, flags);
 -}
-+		/* TTL/CMOS Outputs */
-+		if (ctrl_reg & CONTROL_REG_OUT_MODE) {
-+			*reg = IDIO_24_TTLCMOS_OUT_REG;
-+			return 0;
-+		}
++	int ret;
  
--static int idio_24_irq_set_type(struct irq_data *data, unsigned int flow_type)
+-static int ws16c48_irq_set_type(struct irq_data *data, unsigned flow_type)
 -{
--	/* The only valid irq types are none and both-edges */
--	if (flow_type != IRQ_TYPE_NONE &&
--		(flow_type & IRQ_TYPE_EDGE_BOTH) != IRQ_TYPE_EDGE_BOTH)
-+		/* TTL/CMOS Inputs */
-+		*reg = IDIO_24_TTLCMOS_IN_REG;
-+		return 0;
-+	case IDIO_24_CONTROL_REG:
-+		/* We can only set direction for TTL/CMOS lines */
-+		if (offset < 48)
-+			return -EOPNOTSUPP;
-+
-+		*reg = IDIO_24_CONTROL_REG;
-+		*mask = CONTROL_REG_OUT_MODE;
-+		return 0;
-+	default:
-+		/* Should never reach this path */
- 		return -EINVAL;
+-	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
+-	struct ws16c48_gpio *const ws16c48gpio = gpiochip_get_data(chip);
+-	const unsigned long offset = irqd_to_hwirq(data);
+-	const unsigned long mask = BIT(offset);
+-	const unsigned port = offset / 8;
+-	unsigned long flags;
+-	unsigned long port_state;
 -
+-	/* only the first 3 ports support interrupts */
+-	if (port > 2)
+-		return -EINVAL;
+-
+-	raw_spin_lock_irqsave(&ws16c48gpio->lock, flags);
+-
+-	switch (flow_type) {
+-	case IRQ_TYPE_NONE:
+-		break;
++	switch (type) {
+ 	case IRQ_TYPE_EDGE_RISING:
+-		ws16c48gpio->flow_mask |= mask;
++		polarity = irq_data->mask;
+ 		break;
+ 	case IRQ_TYPE_EDGE_FALLING:
+-		ws16c48gpio->flow_mask &= ~mask;
++		polarity = 0;
+ 		break;
+ 	default:
+-		raw_spin_unlock_irqrestore(&ws16c48gpio->lock, flags);
+ 		return -EINVAL;
+ 	}
+ 
+-	port_state = ws16c48gpio->flow_mask >> (8 * port);
++	raw_spin_lock_irqsave(&ws16c48gpio->lock, flags);
+ 
+-	/* Select Register Page 1; Unlock all I/O ports */
+-	iowrite8(0x40, &ws16c48gpio->reg->page_lock);
++	ret = regmap_write(ws16c48gpio->map, WS16C48_PAGE_LOCK, POL_PAGE);
++	if (ret)
++		goto exit_early;
+ 
+ 	/* Set interrupt polarity */
+-	iowrite8(port_state, ws16c48gpio->reg->pol_enab_int_id + port);
++	ret = regmap_update_bits(ws16c48gpio->map, WS16C48_POL + idx, irq_data->mask, polarity);
++	if (ret)
++		goto exit_early;
+ 
+-	/* Select Register Page 3; Unlock all I/O ports */
+-	iowrite8(0xC0, &ws16c48gpio->reg->page_lock);
++	ret = regmap_write(ws16c48gpio->map, WS16C48_PAGE_LOCK, INT_ID_PAGE);
++	if (ret)
++		goto exit_early;
+ 
++exit_early:
+ 	raw_spin_unlock_irqrestore(&ws16c48gpio->lock, flags);
+ 
 -	return 0;
 -}
 -
--static const struct irq_chip idio_24_irqchip = {
--	.name = "pcie-idio-24",
--	.irq_ack = idio_24_irq_ack,
--	.irq_mask = idio_24_irq_mask,
--	.irq_unmask = idio_24_irq_unmask,
--	.irq_set_type = idio_24_irq_set_type,
+-static const struct irq_chip ws16c48_irqchip = {
+-	.name = "ws16c48",
+-	.irq_ack = ws16c48_irq_ack,
+-	.irq_mask = ws16c48_irq_mask,
+-	.irq_unmask = ws16c48_irq_unmask,
+-	.irq_set_type = ws16c48_irq_set_type,
 -	.flags = IRQCHIP_IMMUTABLE,
 -	GPIOCHIP_IRQ_RESOURCE_HELPERS,
 -};
 -
--static irqreturn_t idio_24_irq_handler(int irq, void *dev_id)
+-static irqreturn_t ws16c48_irq_handler(int irq, void *dev_id)
 -{
--	struct idio_24_gpio *const idio24gpio = dev_id;
--	unsigned long irq_status;
--	struct gpio_chip *const chip = &idio24gpio->chip;
--	unsigned long irq_mask;
--	int gpio;
+-	struct ws16c48_gpio *const ws16c48gpio = dev_id;
+-	struct gpio_chip *const chip = &ws16c48gpio->chip;
+-	struct ws16c48_reg __iomem *const reg = ws16c48gpio->reg;
+-	unsigned long int_pending;
+-	unsigned long port;
+-	unsigned long int_id;
+-	unsigned long gpio;
 -
--	raw_spin_lock(&idio24gpio->lock);
--
--	/* Read Change-Of-State status */
--	irq_status = ioread32(&idio24gpio->reg->cos0_7);
--
--	raw_spin_unlock(&idio24gpio->lock);
--
--	/* Make sure our device generated IRQ */
--	if (!irq_status)
+-	int_pending = ioread8(&reg->int_pending) & 0x7;
+-	if (!int_pending)
 -		return IRQ_NONE;
 -
--	/* Handle only unmasked IRQ */
--	irq_mask = idio24gpio->irq_mask & irq_status;
+-	/* loop until all pending interrupts are handled */
+-	do {
+-		for_each_set_bit(port, &int_pending, 3) {
+-			int_id = ioread8(reg->pol_enab_int_id + port);
+-			for_each_set_bit(gpio, &int_id, 8)
+-				generic_handle_domain_irq(chip->irq.domain,
+-							  gpio + 8*port);
+-		}
 -
--	for_each_set_bit(gpio, &irq_mask, chip->ngpio - 24)
--		generic_handle_domain_irq(chip->irq.domain, gpio + 24);
--
--	raw_spin_lock(&idio24gpio->lock);
--
--	/* Clear Change-Of-State status */
--	iowrite32(irq_status, &idio24gpio->reg->cos0_7);
--
--	raw_spin_unlock(&idio24gpio->lock);
+-		int_pending = ioread8(&reg->int_pending) & 0x7;
+-	} while (int_pending);
 -
 -	return IRQ_HANDLED;
-+	}
++	return ret;
  }
  
- #define IDIO_24_NGPIO 56
-@@ -496,11 +297,12 @@ static int idio_24_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	const size_t pci_plx_bar_index = 1;
- 	const size_t pci_bar_index = 2;
- 	const char *const name = pci_name(pdev);
--	struct gpio_irq_chip *girq;
+ #define WS16C48_NGPIO 48
+@@ -414,30 +220,37 @@ static const char *ws16c48_names[WS16C48_NGPIO] = {
+ 	"Port 5 Bit 4", "Port 5 Bit 5", "Port 5 Bit 6", "Port 5 Bit 7"
+ };
+ 
+-static int ws16c48_irq_init_hw(struct gpio_chip *gc)
++static int ws16c48_irq_init_hw(struct regmap *const map)
+ {
+-	struct ws16c48_gpio *const ws16c48gpio = gpiochip_get_data(gc);
++	int err;
+ 
+-	/* Select Register Page 2; Unlock all I/O ports */
+-	iowrite8(0x80, &ws16c48gpio->reg->page_lock);
++	err = regmap_write(map, WS16C48_PAGE_LOCK, ENAB_PAGE);
++	if (err)
++		return err;
+ 
+ 	/* Disable interrupts for all lines */
+-	iowrite8(0, &ws16c48gpio->reg->pol_enab_int_id[0]);
+-	iowrite8(0, &ws16c48gpio->reg->pol_enab_int_id[1]);
+-	iowrite8(0, &ws16c48gpio->reg->pol_enab_int_id[2]);
 -
--	idio24gpio = devm_kzalloc(dev, sizeof(*idio24gpio), GFP_KERNEL);
--	if (!idio24gpio)
--		return -ENOMEM;
+-	/* Select Register Page 3; Unlock all I/O ports */
+-	iowrite8(0xC0, &ws16c48gpio->reg->page_lock);
++	err = regmap_write(map, WS16C48_ENAB, 0x00);
++	if (err)
++		return err;
++	err = regmap_write(map, WS16C48_ENAB + 1, 0x00);
++	if (err)
++		return err;
++	err = regmap_write(map, WS16C48_ENAB + 2, 0x00);
++	if (err)
++		return err;
+ 
+-	return 0;
++	return regmap_write(map, WS16C48_PAGE_LOCK, INT_ID_PAGE);
+ }
+ 
+ static int ws16c48_probe(struct device *dev, unsigned int id)
+ {
+ 	struct ws16c48_gpio *ws16c48gpio;
+ 	const char *const name = dev_name(dev);
+-	struct gpio_irq_chip *girq;
+ 	int err;
 +	struct gpio_regmap_config gpio_config = {};
-+	void __iomem *pex8311_regs;
-+	void __iomem *idio_24_regs;
-+	struct regmap *intcsr_map;
++	void __iomem *regs;
 +	struct regmap_irq_chip *chip;
 +	struct regmap_irq_chip_data *chip_data;
  
- 	err = pcim_enable_device(pdev);
- 	if (err) {
-@@ -514,57 +316,72 @@ static int idio_24_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		return err;
+ 	ws16c48gpio = devm_kzalloc(dev, sizeof(*ws16c48gpio), GFP_KERNEL);
+ 	if (!ws16c48gpio)
+@@ -449,50 +262,55 @@ static int ws16c48_probe(struct device *dev, unsigned int id)
+ 		return -EBUSY;
  	}
  
--	idio24gpio->plx = pcim_iomap_table(pdev)[pci_plx_bar_index];
--	idio24gpio->reg = pcim_iomap_table(pdev)[pci_bar_index];
+-	ws16c48gpio->reg = devm_ioport_map(dev, base[id], WS16C48_EXTENT);
+-	if (!ws16c48gpio->reg)
++	regs = devm_ioport_map(dev, base[id], WS16C48_EXTENT);
++	if (!regs)
+ 		return -ENOMEM;
+ 
+-	ws16c48gpio->chip.label = name;
+-	ws16c48gpio->chip.parent = dev;
+-	ws16c48gpio->chip.owner = THIS_MODULE;
+-	ws16c48gpio->chip.base = -1;
+-	ws16c48gpio->chip.ngpio = WS16C48_NGPIO;
+-	ws16c48gpio->chip.names = ws16c48_names;
+-	ws16c48gpio->chip.get_direction = ws16c48_gpio_get_direction;
+-	ws16c48gpio->chip.direction_input = ws16c48_gpio_direction_input;
+-	ws16c48gpio->chip.direction_output = ws16c48_gpio_direction_output;
+-	ws16c48gpio->chip.get = ws16c48_gpio_get;
+-	ws16c48gpio->chip.get_multiple = ws16c48_gpio_get_multiple;
+-	ws16c48gpio->chip.set = ws16c48_gpio_set;
+-	ws16c48gpio->chip.set_multiple = ws16c48_gpio_set_multiple;
 -
--	idio24gpio->chip.label = name;
--	idio24gpio->chip.parent = dev;
--	idio24gpio->chip.owner = THIS_MODULE;
--	idio24gpio->chip.base = -1;
--	idio24gpio->chip.ngpio = IDIO_24_NGPIO;
--	idio24gpio->chip.names = idio_24_names;
--	idio24gpio->chip.get_direction = idio_24_gpio_get_direction;
--	idio24gpio->chip.direction_input = idio_24_gpio_direction_input;
--	idio24gpio->chip.direction_output = idio_24_gpio_direction_output;
--	idio24gpio->chip.get = idio_24_gpio_get;
--	idio24gpio->chip.get_multiple = idio_24_gpio_get_multiple;
--	idio24gpio->chip.set = idio_24_gpio_set;
--	idio24gpio->chip.set_multiple = idio_24_gpio_set_multiple;
--
--	girq = &idio24gpio->chip.irq;
--	gpio_irq_chip_set_chip(girq, &idio_24_irqchip);
+-	girq = &ws16c48gpio->chip.irq;
+-	gpio_irq_chip_set_chip(girq, &ws16c48_irqchip);
 -	/* This will let us handle the parent IRQ in the driver */
 -	girq->parent_handler = NULL;
 -	girq->num_parents = 0;
 -	girq->parents = NULL;
 -	girq->default_type = IRQ_TYPE_NONE;
 -	girq->handler = handle_edge_irq;
-+	pex8311_regs = pcim_iomap_table(pdev)[pci_plx_bar_index];
-+	idio_24_regs = pcim_iomap_table(pdev)[pci_bar_index];
-+
-+	intcsr_map = devm_regmap_init_mmio(dev, pex8311_regs, &pex8311_intcsr_regmap_config);
-+	if (IS_ERR(intcsr_map))
-+		return dev_err_probe(dev, PTR_ERR(intcsr_map),
-+				     "Unable to initialize PEX8311 register map\n");
-+
-+	idio24gpio = devm_kzalloc(dev, sizeof(*idio24gpio), GFP_KERNEL);
-+	if (!idio24gpio)
-+		return -ENOMEM;
-+
-+	idio24gpio->map = devm_regmap_init_mmio(dev, idio_24_regs, &idio_24_regmap_config);
-+	if (IS_ERR(idio24gpio->map))
-+		return dev_err_probe(dev, PTR_ERR(idio24gpio->map),
+-	girq->init_hw = ws16c48_irq_init_hw;
++	ws16c48gpio->map = devm_regmap_init_mmio(dev, regs, &ws16c48_regmap_config);
++	if (IS_ERR(ws16c48gpio->map))
++		return dev_err_probe(dev, PTR_ERR(ws16c48gpio->map),
 +				     "Unable to initialize register map\n");
  
- 	raw_spin_lock_init(&idio24gpio->lock);
- 
-+	/* Initialize all IRQ type configuration to IRQ_TYPE_EDGE_BOTH */
-+	idio24gpio->irq_type = GENMASK(7, 0);
-+
+-	raw_spin_lock_init(&ws16c48gpio->lock);
 +	chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
 +	if (!chip)
 +		return -ENOMEM;
-+
-+	chip->name = name;
-+	chip->status_base = IDIO_24_COS_STATUS_BASE;
-+	chip->mask_base = IDIO_24_COS_ENABLE;
-+	chip->ack_base = IDIO_24_COS_STATUS_BASE;
-+	chip->num_regs = 4;
-+	chip->irqs = idio_24_regmap_irqs;
-+	chip->num_irqs = ARRAY_SIZE(idio_24_regmap_irqs);
-+	chip->handle_mask_sync = idio_24_handle_mask_sync;
-+	chip->set_type_config = idio_24_set_type_config;
-+	chip->irq_drv_data = idio24gpio;
-+
- 	/* Software board reset */
--	iowrite8(0, &idio24gpio->reg->soft_reset);
-+	err = regmap_write(idio24gpio->map, IDIO_24_SOFT_RESET, 0);
-+	if (err)
-+		return err;
- 	/*
- 	 * enable PLX PEX8311 internal PCI wire interrupt and local interrupt
- 	 * input
- 	 */
--	iowrite8((INTCSR_INTERNAL_PCI_WIRE | INTCSR_LOCAL_INPUT) >> 8,
--		 idio24gpio->plx + PLX_PEX8311_PCI_LCS_INTCSR + 1);
--
--	err = devm_gpiochip_add_data(dev, &idio24gpio->chip, idio24gpio);
+ 
+-	err = devm_gpiochip_add_data(dev, &ws16c48gpio->chip, ws16c48gpio);
 -	if (err) {
 -		dev_err(dev, "GPIO registering failed (%d)\n", err);
-+	err = regmap_update_bits(intcsr_map, 0x0, IDIO_24_ENABLE_IRQ, IDIO_24_ENABLE_IRQ);
+-		return err;
+-	}
++	chip->name = name;
++	chip->status_base = WS16C48_INT_ID;
++	chip->mask_base = WS16C48_ENAB;
++	chip->ack_base = WS16C48_INT_ID;
++	chip->num_regs = 3;
++	chip->irqs = ws16c48_regmap_irqs;
++	chip->num_irqs = ARRAY_SIZE(ws16c48_regmap_irqs);
++	chip->handle_pre_irq = ws16c48_handle_pre_irq;
++	chip->handle_post_irq = ws16c48_handle_post_irq;
++	chip->handle_mask_sync = ws16c48_handle_mask_sync;
++	chip->set_type_config = ws16c48_set_type_config;
++	chip->irq_drv_data = ws16c48gpio;
+ 
+-	err = devm_request_irq(dev, irq[id], ws16c48_irq_handler, IRQF_SHARED,
+-		name, ws16c48gpio);
+-	if (err) {
+-		dev_err(dev, "IRQ handler registering failed (%d)\n", err);
++	raw_spin_lock_init(&ws16c48gpio->lock);
++
++	/* Initialize to prevent spurious interrupts before we're ready */
++	err = ws16c48_irq_init_hw(ws16c48gpio->map);
 +	if (err)
  		return err;
 -	}
--
--	err = devm_request_irq(dev, pdev->irq, idio_24_irq_handler, IRQF_SHARED,
--		name, idio24gpio);
--	if (err) {
--		dev_err(dev, "IRQ handler registering failed (%d)\n", err);
--		return err;
--	}
  
 -	return 0;
-+	err = devm_regmap_add_irq_chip(dev, idio24gpio->map, pdev->irq, 0, 0, chip, &chip_data);
++	err = devm_regmap_add_irq_chip(dev, ws16c48gpio->map, irq[id], 0, 0, chip, &chip_data);
 +	if (err)
 +		return dev_err_probe(dev, err, "IRQ registration failed\n");
 +
 +	gpio_config.parent = dev;
-+	gpio_config.regmap = idio24gpio->map;
-+	gpio_config.ngpio = IDIO_24_NGPIO;
-+	gpio_config.names = idio_24_names;
-+	gpio_config.reg_dat_base = GPIO_REGMAP_ADDR(IDIO_24_OUT_BASE);
-+	gpio_config.reg_set_base = GPIO_REGMAP_ADDR(IDIO_24_OUT_BASE);
-+	gpio_config.reg_dir_out_base = GPIO_REGMAP_ADDR(IDIO_24_CONTROL_REG);
-+	gpio_config.ngpio_per_reg = IDIO_24_NGPIO_PER_REG;
++	gpio_config.regmap = ws16c48gpio->map;
++	gpio_config.ngpio = WS16C48_NGPIO;
++	gpio_config.names = ws16c48_names;
++	gpio_config.reg_dat_base = GPIO_REGMAP_ADDR(WS16C48_DAT_BASE);
++	gpio_config.reg_set_base = GPIO_REGMAP_ADDR(WS16C48_DAT_BASE);
++	/* Setting a GPIO to 0 allows it to be used as an input */
++	gpio_config.reg_dir_out_base = GPIO_REGMAP_ADDR(WS16C48_DAT_BASE);
++	gpio_config.ngpio_per_reg = WS16C48_NGPIO_PER_REG;
 +	gpio_config.irq_domain = regmap_irq_get_domain(chip_data);
-+	gpio_config.reg_mask_xlate = idio_24_reg_mask_xlate;
-+	gpio_config.drvdata = idio24gpio->map;
 +
 +	return PTR_ERR_OR_ZERO(devm_gpio_regmap_register(dev, &gpio_config));
  }
  
- static const struct pci_device_id idio_24_pci_dev_id[] = {
+ static struct isa_driver ws16c48_driver = {
 -- 
 2.39.2
 
