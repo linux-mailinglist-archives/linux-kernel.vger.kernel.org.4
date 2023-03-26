@@ -2,429 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2346C963E
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E55826C9629
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 17:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbjCZPrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 11:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40140 "EHLO
+        id S232536AbjCZPeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 11:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCZPrb (ORCPT
+        with ESMTP id S229621AbjCZPeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 11:47:31 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2122.outbound.protection.outlook.com [40.107.212.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BECC7284;
-        Sun, 26 Mar 2023 08:47:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SX8XuM0atMIGouSal4Lh2psK72OIE48PRuHyrP4Dm3v7t6KQin6KgPvwvZKj/DscgWYjJvnbdmvLkvu/I2OlPXgKEisyh1jp7dsdRVyt5kKPrgrqDImvUokfIcySqoeJat5rlhS5TT68Gr05tIAm8Wea0WGs7YMN1+MROFGiQ793zybr3r518RbuH7Np4fVwtHC1UlfqIIfziM49DNIZX1hpjj16ci3rRGucuTMf8TaD2PsIho3eNWIgqV4isO/WL2zT/jKSYFeFT1gfrvYmpZGIcStxAAo3NHI/otxEOKM+2aOiQs/fJhjT6XF7N032q+oN3glD+jECcZ6doi1x8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lNUepj8OUvJkjBOvf7TT1wItwEC47CK3kkVFfrcLG3U=;
- b=X9yVasjwi7YM1/PSDpLNHgnJAKk69sHZZdtCmSwBbP6xXKyAl7/FZFykGrHTCZD2tPsPkJPMNOHD5zOhHfJAejp/cOyRjzT4qEMnPJ2g/ePDpVeSxFZiCpct2OjA+Jou8fdhs6BtMZGjUwEnMkBuQ3Tm675Eo3/hHnluM28ozer6uQbI7Bd6qXZCSZ8yI6UBDVEwC7I6UuVaI/6n6HoSwRWb30Vz8X1kcO9M5AG4iVcyNWmdjANp+X6RQEhR1H7MKgU0YiAh3yWeJM6pkyVMe8ICM6X5qjy7JDhS1lgYni2fGKNGs7uaTZxLVemMWdv453cdPfYRa73PKFJq9mnoJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lNUepj8OUvJkjBOvf7TT1wItwEC47CK3kkVFfrcLG3U=;
- b=vLpHbz6BtQBe/pgOCu0Go/SWJRF0HWFJTUZLstR4AVhBUgx7VyK5+/ak+sVUPDk2EKlji2WAQ/JBFbwjWlWZ4/bo9XiYvQonpyamNkaiOKdWq2/kVXpLPyw8aEbB4hek1AHTZpyxX72OWxYS4foOS2IX6GYaE+T8ZV9duBq6ysQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BY5PR13MB3860.namprd13.prod.outlook.com (2603:10b6:a03:22d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Sun, 26 Mar
- 2023 15:47:26 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::c506:5243:557e:82cb]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::c506:5243:557e:82cb%4]) with mapi id 15.20.6222.028; Sun, 26 Mar 2023
- 15:47:26 +0000
-Date:   Sun, 26 Mar 2023 17:47:18 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Manish Mandlik <mmandlik@google.com>
-Cc:     marcel@holtmann.org, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v8 1/4] Bluetooth: Add support for hci devcoredump
-Message-ID: <ZCBpBs3i4+RCv5SI@corigine.com>
-References: <20230323140942.v8.1.I9b4e4818bab450657b19cda3497d363c9baa616e@changeid>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323140942.v8.1.I9b4e4818bab450657b19cda3497d363c9baa616e@changeid>
-X-ClientProxiedBy: AM4P190CA0011.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:200:56::21) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Sun, 26 Mar 2023 11:34:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C893C03;
+        Sun, 26 Mar 2023 08:34:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08A4BB80C99;
+        Sun, 26 Mar 2023 15:34:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88356C433EF;
+        Sun, 26 Mar 2023 15:34:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679844857;
+        bh=6N1CM0BMct/WodBmb4TqZFcmzrXrVAJtt2Z9xJ1FlL0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WOBAbDa9p8nIH6V/vbzJJUEwAbwvRlQuayxNLOFzc8kTSjqgSNvYX4eKubdE3lDdc
+         rmIHswANTiKXn68mFVaYEzK4yU2sjjp5T3vNtgW3bNor2tdhz8phpzpuwGBxz75M1J
+         LseHEho4JL1FzpiUWohkA5Op6nqZuhdQSHjiL4Kw6lZECwUsl7Cx9gzYxe5J0215r0
+         UcG0baIOhxRcu1gTuU506qocz1gHv/iFxbfvz6eRC2v73Dc/L22s9PS21Oyb/jHE9A
+         3CZr+N44Lr0erd7skXt+lf5OqfNewpewh6oTCc5T2Hu20JCKRBBbBUjfeTTVN5YZLI
+         Fho1yzXuJyeiA==
+Date:   Sun, 26 Mar 2023 16:49:20 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2] iio: addac: stx104: Migrate to the regmap API
+Message-ID: <20230326164920.1e4575f9@jic23-huawei>
+In-Reply-To: <20230324030916.396569-1-william.gray@linaro.org>
+References: <20230324030916.396569-1-william.gray@linaro.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY5PR13MB3860:EE_
-X-MS-Office365-Filtering-Correlation-Id: c456dccb-2fbf-4bd7-aabf-08db2e11659e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9LSh2fK3pnIiELcIohXSOOd5ib0F7yjaaF69t0w4XuAtsuvk/UHnruIxDT2kvLUylojI4cR44M97DcMuDYy+ucorFIB7jUwuGcipF3Bz4sVU2CCyqCNY+ANi1kSOgGxcWkAMPYHsxPI3ldOrRRmCsG6XRh/2AYa6tL81tpYgklIogHDukmqq8DhDwG6yTXQgKdxYDON4Bw438RLYE6a/M8Z8yD8CPIVmEJSYD5VxEMp+HzuZCzvwD4mrvLMewKDO9ZU7xbitSoIdfOAoHLl/szfPTBq08MCU6A988jWRCVluE8jk0YC/GSXRfZoKT68pwb9z63AkU6n8dVy1yAB6gmKk4quImHfn8nQLTOwQiAK/NSslSgQFFSZ72nt8SIAQKVziEHP4DhuqmFAT4mgWwjEDMTvsHzifHoBBjiBPce0BkH3vwkRz06qzluiWFPDZNEeJkGQaI3aK8s40AYOsfCNfYhg6i29xpPMZpGSHQpz4Z10rssB1VabkSFkDYTPEaJqrqhQXj2y+6BNAkCYHhTSvHUYYzL7U0p90ykEUeGr0FzOq9NNLPGnrEJD0TE40ksdI4X7LMF6BSm8Flrsi5MGPGt6+H9Llx3KsyKvVCkw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(136003)(346002)(39830400003)(451199021)(2906002)(86362001)(83380400001)(186003)(2616005)(38100700002)(66556008)(8936002)(5660300002)(4326008)(6916009)(8676002)(41300700001)(66946007)(7416002)(36756003)(66476007)(44832011)(6506007)(6512007)(6486002)(316002)(6666004)(478600001)(54906003)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VqXqHNIz+azwSY/i9aZfT5bxwkY/NJkgTywg7O47Lpv6res5zrfV/bAmmtbN?=
- =?us-ascii?Q?3zFc0PH1dyFMSDOsNrVzHQAy6+a92XECxApM2s0jU1AQNoR+NbGu2t/SIDDO?=
- =?us-ascii?Q?qH9g7UZEihrI4OOEiVsuwBbI9LdNkNMOriObCo0HePudIAsRdSWbS6DL8s3j?=
- =?us-ascii?Q?3k8RDujwY+Un1F548RYGvSZ4owf70YC/PAMMBiWoafzPodJoXfZxNkH5dPzn?=
- =?us-ascii?Q?DEcUdqSFKRq8iL2LLYAeYVL3JKD8chOi7xqXBdOpp4dMwARd4e9yRbT8204b?=
- =?us-ascii?Q?O0KYlcd8ELR7ntHQc3B98xMI/aAxpuhSS3ZWh4IqewiVDKn+/X/5A5P9wwyR?=
- =?us-ascii?Q?l6Lo8d60JNS9Ql7SVQNtpGcx8UqX+wLZQ89XEz9NQPGsgr4v4PDOr8jusXKI?=
- =?us-ascii?Q?+6WveQZvIW386AX+/IqLUIAkbU42JLB4xixosPBx0WwOWc+3o/Kj/VICRHIp?=
- =?us-ascii?Q?pMa+ZWoBLTHYYTsXwNuhTkHCzmFTRk7xywqpWygdyjPW62/POeZ7BFXhY4w8?=
- =?us-ascii?Q?DGMkTJVWVCDk/kToRo/Gwlr32abbr7YBgeYplsgF/Tanf+a+KQ4XEdVX8r7I?=
- =?us-ascii?Q?p79CkYoVZgOPSBXUy/kV/2TzkQyhmhmR7ScV5aJ9n0z1IvMBB2/cEd47sd4B?=
- =?us-ascii?Q?okhkd/ckjffVRmXIqKpx9FeFY90g0jj4be9Ndk+9CHr9UHnjbMkI5fr3Www1?=
- =?us-ascii?Q?KwdR97c+kl1vmvVAEIl0J9D1fBmQibl1qdwMfuwn6NoK1OuZgthYOr/9OXic?=
- =?us-ascii?Q?hcv6SoeKtQv1BvODd+1O9zznCm510R3SWe91+Zmwv/TJfS7szcED2I//DVV6?=
- =?us-ascii?Q?W65hcfXAllUAuiVN+jplFxGkrLASkLKXPKqLsGkyJ/x0uhqmTUFi6uMCcF6k?=
- =?us-ascii?Q?6jmKyTQU5qWzCfEBy6D2kHs9DIs3lfZIBCw1pvAlnS1uEoijZM4Hz2Jlgqud?=
- =?us-ascii?Q?t+3u1Or6HjEO6Z3asdPVCPI+ioygcgL6SeIlCSZjk89t1oS6XxBEVtv94sm5?=
- =?us-ascii?Q?eklMmgPMrt/SjI5iOMPfXruWhVTd6IGeEDs9txucj45dnyujrlHw+5JDfuGn?=
- =?us-ascii?Q?4q3b4YepiboXYHsw9nCiWFiyX3Qe52GHmIiQulYshT4wjwi9p5riLruhDvG+?=
- =?us-ascii?Q?iWCvGRGma0jIYq+R+Q7wHq3Wu1PUJYnRiP+toqEQTQt/TuNY1ZZRJ5gOXA5e?=
- =?us-ascii?Q?9nI3lSBKuu3b/xtImL8C3wZQ3HjdRTXlijo4pHC5adf3YN2xDyJLUn4m5oKf?=
- =?us-ascii?Q?Xvp8su67/CcZ4eCSuWXhrUxFARHsJF42LLCnvBx2HVqVbukj+pzcKWklWo98?=
- =?us-ascii?Q?8iirCjLa9QSZHlfiq8V300beb+t3GHI655GUzw5MgT+orzTAcn6wz03Qe40i?=
- =?us-ascii?Q?u525uU4DiFgLDaqzVGJA4u5fYXRN6SNtVI83IkdjXtZvN5wGpMxgqyxPEqPq?=
- =?us-ascii?Q?9BXa1sS/qviLqxaG1470kaYlZ31nCWJOGhCZlgVJSb+LDR5X3Bk3+0usct+T?=
- =?us-ascii?Q?hjcmkiU6ph1emTA/057Sp7S9c5b0Mvi7JS+aPgqGQWG1nPWD8Zidyv1/31wK?=
- =?us-ascii?Q?8gBzgeM8p3+Nh4cIlCPqwFWpcuIycy5iUUStp9PDo4wJvS28VzI9lFX+oEqY?=
- =?us-ascii?Q?t4ueKG1y594/FbSsuJLJUGJk/XOu/rPIpgksCVdKL6zhiAwv6wlrAafNEktI?=
- =?us-ascii?Q?sN2+rA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c456dccb-2fbf-4bd7-aabf-08db2e11659e
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2023 15:47:26.0694
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Y+rwxFe2TAz8ASZVF9P7KI8kn691TopaYRYpirVIsDeBGs4emFA2mSpG/g1XIBGWU5LYyoXoBYRbXefkGJ13TERDrR0Dd2t+CXJtnEDkOKQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR13MB3860
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 02:10:15PM -0700, Manish Mandlik wrote:
-> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+On Thu, 23 Mar 2023 23:09:16 -0400
+William Breathitt Gray <william.gray@linaro.org> wrote:
+
+> The regmap API supports IO port accessors so we can take advantage of
+> regmap abstractions rather than handling access to the device registers
+> directly in the driver.
 > 
-> Add devcoredump APIs to hci core so that drivers only have to provide
-> the dump skbs instead of managing the synchronization and timeouts.
-> 
-> The devcoredump APIs should be used in the following manner:
->  - hci_devcoredump_init is called to allocate the dump.
->  - hci_devcoredump_append is called to append any skbs with dump data
->    OR hci_devcoredump_append_pattern is called to insert a pattern.
->  - hci_devcoredump_complete is called when all dump packets have been
->    sent OR hci_devcoredump_abort is called to indicate an error and
->    cancel an ongoing dump collection.
-> 
-> The high level APIs just prepare some skbs with the appropriate data and
-> queue it for the dump to process. Packets part of the crashdump can be
-> intercepted in the driver in interrupt context and forwarded directly to
-> the devcoredump APIs.
-> 
-> Internally, there are 5 states for the dump: idle, active, complete,
-> abort and timeout. A devcoredump will only be in active state after it
-> has been initialized. Once active, it accepts data to be appended,
-> patterns to be inserted (i.e. memset) and a completion event or an abort
-> event to generate a devcoredump. The timeout is initialized at the same
-> time the dump is initialized (defaulting to 10s) and will be cleared
-> either when the timeout occurs or the dump is complete or aborted.
-> 
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> Signed-off-by: Manish Mandlik <mmandlik@google.com>
-> Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+
+I would have preferred slightly if you had avoided reording the probe
+(previously gpio chip was registered before iio device and now it is after)
+but it make no real difference so I'm not that bothered.
+
+A few other minor comments. Biggest one being that the defines should be
+prefixed.
+
+Thanks,
+
+Jonathan
+
+
+>  	  integrated analog PC/104 card.
+> diff --git a/drivers/iio/addac/stx104.c b/drivers/iio/addac/stx104.c
+> index e45b70aa5bb7..6d65c163e47f 100644
+> --- a/drivers/iio/addac/stx104.c
+> +++ b/drivers/iio/addac/stx104.c
+
+> +#define AIO_BASE 0x0
+> +#define SOFTWARE_STROBE AIO_BASE
+> +#define ADC_DATA AIO_BASE
+> +#define ADC_CHANNEL (AIO_BASE + 0x2)
+> +#define DIO_REG (AIO_BASE + 0x3)
+> +#define DAC_BASE (AIO_BASE + 0x4)
+> +#define ADC_STATUS (AIO_BASE + 0x8)
+> +#define ADC_CONTROL (AIO_BASE + 0x9)
+> +#define ADC_CONFIGURATION (AIO_BASE + 0x11)
+> +
+> +#define AIO_DATA_STRIDE 2
+> +#define DAC_OFFSET(_channel) (DAC_BASE + AIO_DATA_STRIDE * (_channel))
+> +
+> +/* ADC Channel */
+> +#define FC GENMASK(3, 0)
+> +#define LC GENMASK(7, 4)
+> +#define SAME_CHANNEL(_channel) (u8_encode_bits(_channel, FC) | u8_encode_bits(_channel, LC))
+> +
+> +/* ADC Status */
+> +#define SD BIT(5)
+> +#define CNV BIT(7)
+> +#define DIFFERENTIAL 1
+> +
+> +/* ADC Control */
+> +#define ALSS GENMASK(1, 0)
+> +#define SOFTWARE_TRIGGER 0
+> +
+> +/* ADC Configuration */
+> +#define GAIN GENMASK(1, 0)
+> +#define ADBU BIT(2)
+> +#define BIPOLAR 0
+> +#define GAIN_X1 0
+> +#define GAIN_X2 1
+> +#define GAIN_X4 2
+> +#define GAIN_X8 3
+
+Better to give these an STX104_ prefix to avoid potential name clash
+problems in the future.
+
+>  static int stx104_read_raw(struct iio_dev *indio_dev,
+>  	struct iio_chan_spec const *chan, int *val, int *val2, long mask)
+>  {
 
 ...
 
-> +static int hci_devcoredump_update_hdr_state(char *buf, size_t size, int state)
-> +{
-> +	int len = 0;
-> +
-> +	if (!buf)
-> +		return 0;
-> +
-> +	len = snprintf(buf, size, "Bluetooth devcoredump\nState: %d\n", state);
+>  		/* trigger ADC sample capture by writing to the 8-bit
+>  		 * Software Strobe Register and wait for completion
+>  		 */
+> -		iowrite8(0, &reg->ssr_ad);
+> -		while (ioread8(&reg->cir_asr) & BIT(7));
+> -
+> -		*val = ioread16(&reg->ssr_ad);
+> +		err = regmap_write(priv->aio_ctl_map, SOFTWARE_STROBE, 0);
+> +		if (err)
+> +			return err;
+> +		do {
+> +			err = regmap_read(priv->aio_ctl_map, ADC_STATUS, &adc_status);
+> +			if (err)
+> +				return err;
+> +		} while (u8_get_bits(adc_status, CNV));
 
-The snprintf documentation says:
+This looks like a polled regmap read.
+It should probably have a timeout as well just in case the device is broken.
+regmap_read_poll_timeout()?
 
- * The return value is the number of characters which would be
- * generated for the given input, excluding the trailing null,
- * as per ISO C99.  If the return is greater than or equal to
- * @size, the resulting string is truncated.
+That is a functional change however, so perhaps should be a follow up patch.
+ 
+> +
+> +		err = regmap_read(priv->aio_data_map, ADC_DATA, &value);
+> +		if (err)
+> +			return err;
+> +		*val = value;
+>  		return IIO_VAL_INT;
 
-While the scnprintf documentation says:
+>  
+>  static int stx104_probe(struct device *dev, unsigned int id)
+>  {
+>  	struct iio_dev *indio_dev;
+>  	struct stx104_iio *priv;
+> -	struct stx104_gpio *stx104gpio;
+> +	struct gpio_regmap_config gpio_config = {};
 
- * The return value is the number of characters written into @buf not including
- * the trailing '\0'. If @size is == 0 the function returns 0.
+You could fill this whole thing later with
+	gpio_config = (struct gpio_regmap_config) {
+		.parent = dev,
+		... etc
+	};
+It might prove neater down there and would avoid need to
+zero the whole thing up here (though hopefully the compiler
+will figure out that is mostly not needed anyway).
 
-As the return value us used to determine how many bytes to put to
-an skb, you might want scnprintf(), or a check on the value of len here.
+> +	void __iomem *stx104_base;
+> +	struct regmap *aio_ctl_map;
+> +	struct regmap *aio_data_map;
+> +	struct regmap *dio_map;
+>  	int err;
+> +	unsigned int adc_status;
+>  
+>  	indio_dev = devm_iio_device_alloc(dev, sizeof(*priv));
+>  	if (!indio_dev)
+>  		return -ENOMEM;
+>  
+> -	stx104gpio = devm_kzalloc(dev, sizeof(*stx104gpio), GFP_KERNEL);
+> -	if (!stx104gpio)
+> -		return -ENOMEM;
+> -
+>  	if (!devm_request_region(dev, base[id], STX104_EXTENT,
+>  		dev_name(dev))) {
+>  		dev_err(dev, "Unable to lock port addresses (0x%X-0x%X)\n",
+> @@ -332,16 +365,35 @@ static int stx104_probe(struct device *dev, unsigned int id)
+>  		return -EBUSY;
+>  	}
+>  
+> -	priv = iio_priv(indio_dev);
+> -	priv->reg = devm_ioport_map(dev, base[id], STX104_EXTENT);
+> -	if (!priv->reg)
+> +	stx104_base = devm_ioport_map(dev, base[id], STX104_EXTENT);
+> +	if (!stx104_base)
+>  		return -ENOMEM;
+>  
+> +	aio_ctl_map = devm_regmap_init_mmio(dev, stx104_base + AIO_BASE, &aio_ctl_regmap_config);
+> +	if (IS_ERR(aio_ctl_map))
+> +		return dev_err_probe(dev, PTR_ERR(aio_ctl_map),
+> +				     "Unable to initialize aio_ctl register map\n");
 
-> +
-> +	return len + 1; /* snprintf adds \0 at the end upon state rewrite */
-> +}
-> +
-> +/* Call with hci_dev_lock only. */
-> +static int hci_devcoredump_update_state(struct hci_dev *hdev, int state)
-> +{
-> +	hdev->dump.state = state;
-> +
-> +	return hci_devcoredump_update_hdr_state(hdev->dump.head,
-> +						hdev->dump.alloc_size, state);
-> +}
+Blank line here would slightly help readability as it keeps each set of call and error check
+visually separated.
 
-...
+> +	aio_data_map = devm_regmap_init_mmio(dev, stx104_base + AIO_BASE, &aio_data_regmap_config);
+> +	if (IS_ERR(aio_data_map))
+> +		return dev_err_probe(dev, PTR_ERR(aio_data_map),
+> +				     "Unable to initialize aio_data register map\n");
 
-> +/* Call with hci_dev_lock only. */
-> +static int hci_devcoredump_prepare(struct hci_dev *hdev, u32 dump_size)
-> +{
-> +	struct sk_buff *skb = NULL;
-> +	int dump_hdr_size;
-> +	int err = 0;
-> +
-> +	skb = alloc_skb(MAX_DEVCOREDUMP_HDR_SIZE, GFP_ATOMIC);
-> +	if (!skb) {
-> +		bt_dev_err(hdev, "Failed to allocate devcoredump prepare");
+also here
 
-I don't think memory allocation errors need to be logged like this,
-as they are already logged by the core.
+> +	dio_map = devm_regmap_init_mmio(dev, stx104_base + DIO_REG, &dio_regmap_config);
+> +	if (IS_ERR(dio_map))
+> +		return dev_err_probe(dev, PTR_ERR(dio_map),
+> +				     "Unable to initialize dio register map\n");
+> +
+> +	priv = iio_priv(indio_dev);
+> +	priv->aio_ctl_map = aio_ctl_map;
+> +	priv->aio_data_map = aio_data_map;
 
-Please run checkpatch, which flags this.
-
-> +		return -ENOMEM;
-> +	}
-> +
-> +	dump_hdr_size = hci_devcoredump_mkheader(hdev, skb);
-> +
-> +	if (hci_devcoredump_alloc(hdev, dump_hdr_size + dump_size)) {
-> +		err = -ENOMEM;
-> +		goto hdr_free;
-> +	}
-> +
-> +	/* Insert the device header */
-> +	if (!hci_devcoredump_copy(hdev, skb->data, skb->len)) {
-> +		bt_dev_err(hdev, "Failed to insert header");
-> +		hci_devcoredump_free(hdev);
-> +
-> +		err = -ENOMEM;
-> +		goto hdr_free;
-> +	}
-> +
-> +hdr_free:
-> +	if (skb)
-
-It seems that this condition is always true.
-And in any case, kfree_skb can handle a NULL argument.
-
-> +		kfree_skb(skb);
-> +
-> +	return err;
-> +}
-
-...
-
-> +void hci_devcoredump_rx(struct work_struct *work)
-> +{
-> +	struct hci_dev *hdev = container_of(work, struct hci_dev, dump.dump_rx);
-> +	struct sk_buff *skb;
-> +	struct hci_devcoredump_skb_pattern *pattern;
-> +	u32 dump_size;
-> +	int start_state;
-> +
-> +#define DBG_UNEXPECTED_STATE() \
-> +		bt_dev_dbg(hdev, \
-> +			   "Unexpected packet (%d) for state (%d). ", \
-> +			   hci_dmp_cb(skb)->pkt_type, hdev->dump.state)
-
-nit: indentation seems excessive in above 3 lines.
-
-> +
-> +	while ((skb = skb_dequeue(&hdev->dump.dump_q))) {
-> +		hci_dev_lock(hdev);
-> +		start_state = hdev->dump.state;
-> +
-> +		switch (hci_dmp_cb(skb)->pkt_type) {
-> +		case HCI_DEVCOREDUMP_PKT_INIT:
-> +			if (hdev->dump.state != HCI_DEVCOREDUMP_IDLE) {
-> +				DBG_UNEXPECTED_STATE();
-> +				goto loop_continue;
-
-I'm probably missing something terribly obvious.
-But can the need for the loop_continue label be avoided by using 'break;' ?
-
-> +			}
-> +
-> +			if (skb->len != sizeof(dump_size)) {
-> +				bt_dev_dbg(hdev, "Invalid dump init pkt");
-> +				goto loop_continue;
-> +			}
-> +
-> +			dump_size = *((u32 *)skb->data);
-> +			if (!dump_size) {
-> +				bt_dev_err(hdev, "Zero size dump init pkt");
-> +				goto loop_continue;
-> +			}
-> +
-> +			if (hci_devcoredump_prepare(hdev, dump_size)) {
-> +				bt_dev_err(hdev, "Failed to prepare for dump");
-> +				goto loop_continue;
-> +			}
-> +
-> +			hci_devcoredump_update_state(hdev,
-> +						     HCI_DEVCOREDUMP_ACTIVE);
-> +			queue_delayed_work(hdev->workqueue,
-> +					   &hdev->dump.dump_timeout,
-> +					   DEVCOREDUMP_TIMEOUT);
-> +			break;
-> +
-> +		case HCI_DEVCOREDUMP_PKT_SKB:
-> +			if (hdev->dump.state != HCI_DEVCOREDUMP_ACTIVE) {
-> +				DBG_UNEXPECTED_STATE();
-> +				goto loop_continue;
-> +			}
-> +
-> +			if (!hci_devcoredump_copy(hdev, skb->data, skb->len))
-> +				bt_dev_dbg(hdev, "Failed to insert skb");
-> +			break;
-> +
-> +		case HCI_DEVCOREDUMP_PKT_PATTERN:
-> +			if (hdev->dump.state != HCI_DEVCOREDUMP_ACTIVE) {
-> +				DBG_UNEXPECTED_STATE();
-> +				goto loop_continue;
-> +			}
-> +
-> +			if (skb->len != sizeof(*pattern)) {
-> +				bt_dev_dbg(hdev, "Invalid pattern skb");
-> +				goto loop_continue;
-> +			}
-> +
-> +			pattern = (void *)skb->data;
-> +
-> +			if (!hci_devcoredump_memset(hdev, pattern->pattern,
-> +						    pattern->len))
-> +				bt_dev_dbg(hdev, "Failed to set pattern");
-> +			break;
-> +
-> +		case HCI_DEVCOREDUMP_PKT_COMPLETE:
-> +			if (hdev->dump.state != HCI_DEVCOREDUMP_ACTIVE) {
-> +				DBG_UNEXPECTED_STATE();
-> +				goto loop_continue;
-> +			}
-> +
-> +			hci_devcoredump_update_state(hdev,
-> +						     HCI_DEVCOREDUMP_DONE);
-> +			dump_size = hdev->dump.tail - hdev->dump.head;
-> +
-> +			bt_dev_info(hdev,
-> +				    "Devcoredump complete with size %u "
-> +				    "(expect %zu)",
-
-I think it is best practice not to split quoted strings across multiple lines.
-Although it leads to long lines (which is undesirable)
-keeping the string on one line aids searching the code (with grep).
-
-checkpatch warns about this.
-
-> +				    dump_size, hdev->dump.alloc_size);
-> +
-> +			dev_coredumpv(&hdev->dev, hdev->dump.head, dump_size,
-> +				      GFP_KERNEL);
-> +			break;
-> +
-> +		case HCI_DEVCOREDUMP_PKT_ABORT:
-> +			if (hdev->dump.state != HCI_DEVCOREDUMP_ACTIVE) {
-> +				DBG_UNEXPECTED_STATE();
-> +				goto loop_continue;
-> +			}
-> +
-> +			hci_devcoredump_update_state(hdev,
-> +						     HCI_DEVCOREDUMP_ABORT);
-> +			dump_size = hdev->dump.tail - hdev->dump.head;
-> +
-> +			bt_dev_info(hdev,
-> +				    "Devcoredump aborted with size %u "
-> +				    "(expect %zu)",
-> +				    dump_size, hdev->dump.alloc_size);
-> +
-> +			/* Emit a devcoredump with the available data */
-> +			dev_coredumpv(&hdev->dev, hdev->dump.head, dump_size,
-> +				      GFP_KERNEL);
-> +			break;
-> +
-> +		default:
-> +			bt_dev_dbg(hdev,
-> +				   "Unknown packet (%d) for state (%d). ",
-> +				   hci_dmp_cb(skb)->pkt_type, hdev->dump.state);
-> +			break;
-> +		}
-> +
-> +loop_continue:
-> +		kfree_skb(skb);
-> +		hci_dev_unlock(hdev);
-> +
-> +		if (start_state != hdev->dump.state)
-> +			hci_devcoredump_notify(hdev, hdev->dump.state);
-> +
-> +		hci_dev_lock(hdev);
-> +		if (hdev->dump.state == HCI_DEVCOREDUMP_DONE ||
-> +		    hdev->dump.state == HCI_DEVCOREDUMP_ABORT)
-> +			hci_devcoredump_reset(hdev);
-> +		hci_dev_unlock(hdev);
-> +	}
-> +}
-> +EXPORT_SYMBOL(hci_devcoredump_rx);
-
-...
-
-> +static inline bool hci_devcoredump_enabled(struct hci_dev *hdev)
-> +{
-> +	return hdev->dump.supported;
-> +}
-> +
-> +int hci_devcoredump_init(struct hci_dev *hdev, u32 dmp_size)
-> +{
-> +	struct sk_buff *skb = NULL;
-
-nit: I don't think it is necessary to initialise skb here.
-     Likewise elsewhere in this patch.
-
-> +
-> +	if (!hci_devcoredump_enabled(hdev))
-> +		return -EOPNOTSUPP;
-> +
-> +	skb = alloc_skb(sizeof(dmp_size), GFP_ATOMIC);
-> +	if (!skb) {
-> +		bt_dev_err(hdev, "Failed to allocate devcoredump init");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	hci_dmp_cb(skb)->pkt_type = HCI_DEVCOREDUMP_PKT_INIT;
-> +	skb_put_data(skb, &dmp_size, sizeof(dmp_size));
-> +
-> +	skb_queue_tail(&hdev->dump.dump_q, skb);
-> +	queue_work(hdev->workqueue, &hdev->dump.dump_rx);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(hci_devcoredump_init);
-
-...
