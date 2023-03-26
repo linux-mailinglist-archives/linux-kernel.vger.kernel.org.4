@@ -2,57 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451256C9245
+	by mail.lfdr.de (Postfix) with ESMTP id AEF5A6C9246
 	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 05:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbjCZDtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Mar 2023 23:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
+        id S231735AbjCZDuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Mar 2023 23:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCZDto (ORCPT
+        with ESMTP id S231706AbjCZDuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Mar 2023 23:49:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6F8B453
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 20:49:43 -0700 (PDT)
+        Sat, 25 Mar 2023 23:50:16 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4824B465;
+        Sat, 25 Mar 2023 20:50:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F1F8B80BA4
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 03:49:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90235C433EF;
-        Sun, 26 Mar 2023 03:49:39 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 421D1CE0DFD;
+        Sun, 26 Mar 2023 03:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61959C433EF;
+        Sun, 26 Mar 2023 03:50:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679802581;
-        bh=CHpENE+KD3eZ7/27C0sTVoLEbrGfVewpqSZfHjFOqAw=;
+        s=k20201202; t=1679802611;
+        bh=LAvyz1060gPts0GjgiePob4/2gg+XoL6lIGQJ0eqymE=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iGqjpn0rbA7yaVq2RqFq288/7HeMnL+/LsIKYzG0ypJwuni20LfjhcMo9KorbQGV9
-         c5Fb2d0TKDWgzJUgnJBuMIrOy86wlvzRrx77A5E6O5BnWQEGeti/mkBMxH/WcirZM5
-         ob+5YY0MMiwSFUQcA4AyLmrFrtLGOGwYtIjSb82kfOg/Y1DYfzAyz0ZjauADdvDGG1
-         BX+R6MbtCnqgDXnvBG5I7XMfU3EZLoa9wJ20jfGKGXNZ5ryag+/A0+M9b8+/tqSzEz
-         SaVVMWv9mKFDl77v0e2fx4pSA+cHnKhza6SjHRF3LbiN2LDVVqCvEVFZDcvd7oC+ec
-         KfrDK7ti2nO6Q==
-Message-ID: <edaac9a2-429d-4fa8-fded-d2b67ac7b424@kernel.org>
-Date:   Sun, 26 Mar 2023 11:49:37 +0800
+        b=oMdWRUCI7vyRF/7sNx7BmpUPSljpIETnIY4NiA5GAzheECGpBk25/7+7o5295RqXN
+         DblR5G3MGypfWmRuNjyyW29ieZeuOK8s4oDNEJYfnjGpn61Sg5iptF+dDdYLBF5R5W
+         ZlOfd2KgN0PjDV1hrQHIhuq89CVpyEOnVrdwQ7u5ohISUNrHYV3rJT8FWu8r/U6hwl
+         q/KVL3UcaUzN4Gz3QXU17b+Rd5QA/1c/t1cRSp9dUy0sBwIpuxcTWpwuxtz4joAXus
+         IZwYJf53Mesk3Mu75e3lP5ytIdTQItjZ1xGlCjvSqI/Z0N71cwXwkogfC18PXqhcVk
+         84vpePlJe7rUg==
+Message-ID: <c6a70066-6b23-a1a0-1762-d4b740af1283@kernel.org>
+Date:   Sun, 26 Mar 2023 11:50:08 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v1] f2fs: Fix discard bug on zoned block devices with 2MiB
- zone size
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     yonggil.song@samsung.com,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <CGME20230313094825epcms2p71e6cb549251dc55e8d202dd64b9913a6@epcms2p7>
- <20230313094825epcms2p71e6cb549251dc55e8d202dd64b9913a6@epcms2p7>
- <a24d66ad-4048-fd5c-ae47-2dd17c87bcbe@kernel.org>
- <ZBzMql6DkrUWiRKP@google.com>
- <35dd1eea-f1b9-418e-5f97-cfd10b7ff803@kernel.org>
- <ZB3Vz9w2ybNVSY8C@google.com>
+Subject: Re: [f2fs-dev] [PATCH 2/3 v2] f2fs: factor out discard_cmd usage from
+ general rb_tree use
 Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     stable@vger.kernel.org
+References: <20230313201216.924234-1-jaegeuk@kernel.org>
+ <20230313201216.924234-3-jaegeuk@kernel.org> <ZB3Wc6jdbvLiZNl5@google.com>
 From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <ZB3Vz9w2ybNVSY8C@google.com>
+In-Reply-To: <ZB3Wc6jdbvLiZNl5@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
@@ -65,68 +59,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/25 0:54, Jaegeuk Kim wrote:
-> On 03/24, Chao Yu wrote:
->> On 2023/3/24 6:03, Jaegeuk Kim wrote:
->>> On 03/23, Chao Yu wrote:
->>>> On 2023/3/13 17:48, Yonggil Song wrote:
->>>>> When using f2fs on a zoned block device with 2MiB zone size, IO errors
->>>>> occurs because f2fs tries to write data to a zone that has not been reset.
->>>>>
->>>>> The cause is that f2fs tries to discard multiple zones at once. This is
->>>>> caused by a condition in f2fs_clear_prefree_segments that does not check
->>>>> for zoned block devices when setting the discard range. This leads to
->>>>> invalid reset commands and write pointer mismatches.
->>>>>
->>>>> This patch fixes the zoned block device with 2MiB zone size to reset one
->>>>> zone at a time.
->>>>>
->>>>> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
->>>>> ---
->>>>>     fs/f2fs/segment.c | 3 ++-
->>>>>     1 file changed, 2 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
->>>>> index acf3d3fa4363..2b6cb6df623b 100644
->>>>> --- a/fs/f2fs/segment.c
->>>>> +++ b/fs/f2fs/segment.c
->>>>> @@ -1953,7 +1953,8 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
->>>>>     					(end - 1) <= cpc->trim_end)
->>>>>     				continue;
->>>>> -		if (!f2fs_lfs_mode(sbi) || !__is_large_section(sbi)) {
->>>>> +		if (!f2fs_sb_has_blkzoned(sbi) &&
->>>>
->>>> Could you please add one line comment here for this change?
->>>
->>> This was merged in -dev a while ago. I don't think this would be critical
->>> to rebase it again.
->>
->> Yes, it's not critical, fine to me.
+On 2023/3/25 0:57, Jaegeuk Kim wrote:
+> This is a second part to remove the mixed use of rb_tree in discard_cmd from
+> extent_cache.
 > 
-> Added:
+> This should also fix arm32 memory alignment issue caused by shared rb_entry.
 > 
-> /* Should cover 2MB zoned device for zone-based reset */
+> [struct discard_cmd]               [struct rb_entry]
+> [0] struct rb_node rb_node;        [0] struct rb_node rb_node;
+>    union {                              union {
+>      struct {                             struct {
+> [16]  block_t lstart;              [12]    unsigned int ofs;
+>        block_t len;                         unsigned int len;
+>                                           };
+>                                           unsigned long long key;
+>                                         } __packed;
+> 
+> Cc: <stable@vger.kernel.org>
+> Fixes: 004b68621897 ("f2fs: use rb-tree to track pending discard commands")
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 
 Reviewed-by: Chao Yu <chao@kernel.org>
 
 Thanks,
 
-> 
-> So lucky since I had to rebase to fix other patch. :(
-> 
-> "f2fs: factor out discard_cmd usage from general rb_tree use"
-> 
-> 
->>
->> Thanks,
->>
->>>
->>>>
->>>> Otherwise it looks good to me.
->>>>
->>>> Thanks,
->>>>
->>>>> +		    (!f2fs_lfs_mode(sbi) || !__is_large_section(sbi))) {
->>>>>     			f2fs_issue_discard(sbi, START_BLOCK(sbi, start),
->>>>>     				(end - start) << sbi->log_blocks_per_seg);
->>>>>     			continue;
