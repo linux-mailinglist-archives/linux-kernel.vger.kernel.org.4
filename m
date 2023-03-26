@@ -2,70 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35A56C96F0
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5DA6C96FB
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbjCZQr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 12:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
+        id S232287AbjCZQyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 12:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjCZQr4 (ORCPT
+        with ESMTP id S230418AbjCZQyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 12:47:56 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790594C28
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:47:55 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id t10so26415742edd.12
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:47:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679849274;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=d+t9quZI40H0SICIWubeZOL2PZ33/cypkKWWx+K52uk=;
-        b=JxMvIUJymY0NKfVB/F/uMVb5FWt+KL1HfEmNopAn72YDZIgund07S7NAGaL/MpgwN+
-         hKxdZmk4LlFQdYqKoFOOhdJQcZh+h4YeU2rWNsw+rQG+/rutThmyXqffqzcIyd5uuUFS
-         j3KYU4BupFN/o22ClumZc/nypMne6wG60BZhQpOS9q7pQ/vsKUMKTd5onpTWWHpeTlnq
-         M5561tYpHlNn7/Na0JR6TAdUZCRpXfoJjGfPwbXA4zfnu6OGTeKxrIYdeaQ9lj8k63eI
-         8C9xFNinlslsZ6tCAtyY5MTQ1+tD4xHrtmie2ebjX0AV9OSSZJf3d8wzqfPlV5fmoa7l
-         C73Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679849274;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d+t9quZI40H0SICIWubeZOL2PZ33/cypkKWWx+K52uk=;
-        b=HMprawzILYy3//0oLUbC+aD9iDEQTGX3+7C4CONeY4xqDMP4PXZNZF/IC6uKZ1OngW
-         R1zOItAqoa9WBAwFs29m5U1VOinwiYwiF25Nqrpat5JgO8ULHJC5/HYBAx/HivicSFLw
-         fPqPWgzSb+AOxL6FWxYvrqnZTHFf7EKUz+RWa7WPYnte5d8fyOGgCsM55Gb9tWwg9g+u
-         DR3sBhYhYljggemFZqVWeFtYU3G6C5wk5SsFdzJcMmbVwLOpmt0kC71GrC0Ke/0L2gg3
-         qhrK3nlNlkEvmqNbgA5ceOTh5Vqg5ntVA40iTYuPkiXosQUUvg/+rtfFhtwxMdpOAM6E
-         6zYA==
-X-Gm-Message-State: AAQBX9dhusPsRicytGNyWI2EOIREw0Q2gnDPALmFLDG0s7KyC2Wrgqi6
-        vIrs/zXucbmNY7EtJh1tcnluPg==
-X-Google-Smtp-Source: AKy350ZvBl+hiLf4EcOy+Xnugmi4VSxHZTjFBB5xT/Pg62Ee+OlYhDqqJRN25Uj/HQbYxzy11U4B3A==
-X-Received: by 2002:a05:6402:5146:b0:502:1cae:8b11 with SMTP id n6-20020a056402514600b005021cae8b11mr10862531edd.23.1679849273974;
-        Sun, 26 Mar 2023 09:47:53 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:eca3:3b8f:823b:2669])
-        by smtp.gmail.com with ESMTPSA id u20-20020a50c054000000b004aeeb476c5bsm13559502edd.24.2023.03.26.09.47.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 09:47:53 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Conor Dooley <conor@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] riscv: dts: canaan: drop invalid spi-max-frequency
-Date:   Sun, 26 Mar 2023 18:47:51 +0200
-Message-Id: <20230326164751.104789-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sun, 26 Mar 2023 12:54:44 -0400
+X-Greylist: delayed 365 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 26 Mar 2023 09:54:43 PDT
+Received: from iad0.nichi.link (iad0.nichi.link [IPv6:2a01:4ff:f0:db00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D5561BC;
+        Sun, 26 Mar 2023 09:54:43 -0700 (PDT)
+Received: from [IPV6:2402:f000:2:c801:3a00:25ff:fe59:8c06] (unknown [IPv6:2402:f000:2:c801:3a00:25ff:fe59:8c06])
+        by iad0.nichi.link (Postfix) with ESMTPA id DD5A887A02;
+        Sun, 26 Mar 2023 16:48:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nichi.co; s=default;
+        t=1679849316;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VWn62rWoesr1V+Jp7k/v6C+Nt0B/JD6KJm7XDX0ZcKc=;
+        b=F4FKRJcUCMPpnaM9P5gN6jHEGLeMEv2703QQMls5hBQlIuu7B37ZLAroMiOHDz0ft2j9EG
+        7bwp10mFfNIwt6S7z15djRxHlN42VxOTUMTElNyhDiIUxqWH945MbE7oOz4ueh7zfblIco
+        lb+YloLzv045ZonQ40my3l7bIV7Lfgg=
+Message-ID: <3db66793-c647-f6c9-7c5b-d7a331c8f328@nichi.co>
+Date:   Mon, 27 Mar 2023 00:48:31 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] purgatory: fix disabling debug info
+To:     Alyssa Ross <hi@alyssa.is>, Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        stable@vger.kernel.org
+References: <20230326153412.63128-1-hi@alyssa.is>
+Content-Language: en-US
+From:   Nick Cao <nickcao@nichi.co>
+In-Reply-To: <20230326153412.63128-1-hi@alyssa.is>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,28 +60,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The spi-max-frequency is a property of SPI children, not the
-controller:
+With this patch applied on top of 
+https://github.com/NickCao/linux/tree/f258de7fdb1e69492f8962da5d34646da49685db, 
+the built kernel image no longer contains reference to the source 
+directory (which is not allowed in the Nixpkgs kernel building 
+infrastructure).
 
-  k210_generic.dtb: spi@50240000: Unevaluated properties are not allowed ('spi-max-frequency' was unexpected)
+Tested-by: Nick Cao <nickcao@nichi.co>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/riscv/boot/dts/canaan/k210.dtsi | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/riscv/boot/dts/canaan/k210.dtsi b/arch/riscv/boot/dts/canaan/k210.dtsi
-index 07e2e2649604..f87c5164d9cf 100644
---- a/arch/riscv/boot/dts/canaan/k210.dtsi
-+++ b/arch/riscv/boot/dts/canaan/k210.dtsi
-@@ -259,7 +259,6 @@ spi2: spi@50240000 {
- 					 <&sysclk K210_CLK_APB0>;
- 				clock-names = "ssi_clk", "pclk";
- 				resets = <&sysrst K210_RST_SPI2>;
--				spi-max-frequency = <25000000>;
- 			};
- 
- 			i2s0: i2s@50250000 {
--- 
-2.34.1
-
+On 3/26/23 23:34, Alyssa Ross wrote:
+> Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
+> Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
+> -Wa versions of both of those if building with Clang and GNU as.  As a
+> result, debug info was being generated for the purgatory objects, even
+> though the intention was that it not be.
+> 
+> Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
+> Signed-off-by: Alyssa Ross <hi@alyssa.is>
+> Cc: stable@vger.kernel.org
+> ---
+>   arch/riscv/purgatory/Makefile | 12 ++++++------
+>   arch/x86/purgatory/Makefile   |  4 ++--
+>   2 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
+> index d16bf715a586..97001798fa19 100644
+> --- a/arch/riscv/purgatory/Makefile
+> +++ b/arch/riscv/purgatory/Makefile
+> @@ -84,12 +84,12 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+>   CFLAGS_REMOVE_ctype.o		+= $(PURGATORY_CFLAGS_REMOVE)
+>   CFLAGS_ctype.o			+= $(PURGATORY_CFLAGS)
+>   
+> -AFLAGS_REMOVE_entry.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memcpy.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memset.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strcmp.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strlen.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strncmp.o		+= -Wa,-gdwarf-2
+> +AFLAGS_REMOVE_entry.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_memcpy.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_memset.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_strcmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_strlen.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_strncmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+>   
+>   $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>   		$(call if_changed,ld)
+> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+> index 17f09dc26381..f1b1ef6c4cbf 100644
+> --- a/arch/x86/purgatory/Makefile
+> +++ b/arch/x86/purgatory/Makefile
+> @@ -69,8 +69,8 @@ CFLAGS_sha256.o			+= $(PURGATORY_CFLAGS)
+>   CFLAGS_REMOVE_string.o		+= $(PURGATORY_CFLAGS_REMOVE)
+>   CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+>   
+> -AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
+> +AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_entry64.o			+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+>   
+>   $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>   		$(call if_changed,ld)
+> 
+> base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
