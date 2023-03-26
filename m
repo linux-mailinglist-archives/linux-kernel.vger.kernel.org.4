@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2A16C947D
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 15:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BFBE6C947F
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 15:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbjCZNYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 09:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
+        id S231928AbjCZN1G convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 26 Mar 2023 09:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbjCZNYC (ORCPT
+        with ESMTP id S230237AbjCZN1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 09:24:02 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0037D82;
-        Sun, 26 Mar 2023 06:24:00 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id ix20so6030046plb.3;
-        Sun, 26 Mar 2023 06:24:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679837040;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pnOOlLKoWlVB67gp3RPUD05wT//LBY3yFpES74W1Vkc=;
-        b=qJ0qSreIpqg7n1M2RJjBDhJZNct/hh4eDFZw5tBFyTNWY3W/g8AYQZSPdR0vIiFA8i
-         JCA/D3T2q8BkY7jKPCRaJRH6ne7OzfhKZ18nN4jPztDcLZQASNS1YOP78h9cxdwHftKN
-         pG3dcGw8VKpbZDXsBClvssSgdr+gusQnrJLtld9M0u7ysTwWD99Ut8cT9xepT8G7cs+v
-         yyd6j85VBKXGPGe96u6zafNRWT9O3yQ9BsmY9I8KISTqEVhIVMNxxyiNjFwr6TCAuJnv
-         wArLHUpczHBiNXymvTma3ovhG+iAtWm1+dIyGCM8hpSpMy2Rvjqk27a9Ri4kw3d8PYLj
-         OWGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679837040;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pnOOlLKoWlVB67gp3RPUD05wT//LBY3yFpES74W1Vkc=;
-        b=Xi0lzizpot1LlGdsY5wkNv4NZavg+8HdAlfYuPM29xiPOptPEFSxZntGDrDS3XmcxQ
-         1mSNPrD8XV7oh0oXnOBgWfcyldJDcHwruSW63A5D0iFJWulncph9jliKHDAit9HfOFY1
-         sYjG6GdWG9pWnSDURXkcYo7mVQkgouWSSUQSxo/Eh5bYrN8frBBsfZnY4hY86+AVjuWG
-         YgoIzk4cVa6dX469p6Qn3PZCqi3OLzPrjgVIK0EmkpucgB2m0bezbMlmIheTaDoaMBrh
-         vaOlYXRHmpPiQ+Fj58bQSO3Chy/t4v4M8HQd6lNwyrCqO8Fq4ofwMUIZmpre8oC+mOWb
-         +/eA==
-X-Gm-Message-State: AO0yUKVUQejOjOOo4g8+4k8giIvp1/oKyB3Cdp4WNX2PNoqZycAKedIs
-        hBl2RIzPDo6DlF2yy5NcfmpbSrHbbb4=
-X-Google-Smtp-Source: AK7set9OzCDMKxr2gAfR4Tvv6pTg1Zs5M12Fp4wZblK+PYXBW0DBvuChv43wUrBkPscskOMgLpZZeA==
-X-Received: by 2002:a05:6a20:8b14:b0:da:fa65:cd89 with SMTP id l20-20020a056a208b1400b000dafa65cd89mr8874490pzh.9.1679837040117;
-        Sun, 26 Mar 2023 06:24:00 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-54.three.co.id. [116.206.12.54])
-        by smtp.gmail.com with ESMTPSA id b23-20020aa78117000000b005ac8a51d591sm17108200pfi.21.2023.03.26.06.23.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Mar 2023 06:23:59 -0700 (PDT)
-Message-ID: <d14fb08c-70e3-4cc7-caf9-87e73eab9194@gmail.com>
-Date:   Sun, 26 Mar 2023 20:23:53 +0700
+        Sun, 26 Mar 2023 09:27:05 -0400
+Received: from eu-smtp-inbound-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190457ED0
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 06:27:02 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-34-QskMV83HPiqItOif3_5aJA-1; Sun, 26 Mar 2023 14:26:59 +0100
+X-MC-Unique: QskMV83HPiqItOif3_5aJA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 26 Mar
+ 2023 14:26:57 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sun, 26 Mar 2023 14:26:57 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Baoquan He' <bhe@redhat.com>, David Hildenbrand <david@redhat.com>
+CC:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: RE: [PATCH v7 4/4] mm: vmalloc: convert vread() to vread_iter()
+Thread-Topic: [PATCH v7 4/4] mm: vmalloc: convert vread() to vread_iter()
+Thread-Index: AQHZXYvy5HgRBBUkm0qsuDBYF9y6k68ND8zA
+Date:   Sun, 26 Mar 2023 13:26:57 +0000
+Message-ID: <0cff573c3a344504b1b1b77486b4d853@AcuMS.aculab.com>
+References: <cover.1679511146.git.lstoakes@gmail.com>
+ <941f88bc5ab928e6656e1e2593b91bf0f8c81e1b.1679511146.git.lstoakes@gmail.com>
+ <ZBu+2cPCQvvFF/FY@MiWiFi-R3L-srv>
+ <ff630c2e-42ff-42ec-9abb-38922d5107ec@lucifer.local>
+ <ZBwroYh22pEqJYhv@MiWiFi-R3L-srv>
+ <7aee68e9-6e31-925f-68bc-73557c032a42@redhat.com>
+ <ZBxUvBFHcQvsl0r9@MiWiFi-R3L-srv>
+In-Reply-To: <ZBxUvBFHcQvsl0r9@MiWiFi-R3L-srv>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: kernel error at led trigger "phy0tpt"
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Tobias Dahms <dahms.tobias@web.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        angelogioacchino.delregno@collabora.com
-Cc:     stable@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-leds@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-References: <91feceb2-0df4-19b9-5ffa-d37e3d344fdf@web.de>
- <3fcc707b-f757-e74b-2800-3b6314217868@leemhuis.info>
- <fcecf6fc-bf18-73a0-9fc1-6850e183323a@web.de>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <fcecf6fc-bf18-73a0-9fc1-6850e183323a@web.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.0 required=5.0 tests=PDS_BAD_THREAD_QP_64,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,46 +70,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/26/23 02:20, Tobias Dahms wrote:
-> Hello,
+From: Baoquan He
+> Sent: 23 March 2023 13:32
+...
+> > > > If this fails, then we fault in, and try again. We loop because there could
+> > > > be some extremely unfortunate timing with a race on e.g. swapping out or
+> > > > migrating pages between faulting in and trying to write out again.
+> > > >
+> > > > This is extremely unlikely, but to avoid any chance of breaking userland we
+> > > > repeat the operation until it completes. In nearly all real-world
+> > > > situations it'll either work immediately or loop once.
+> > >
+> > > Thanks a lot for these helpful details with patience. I got it now. I was
+> > > mainly confused by the while(true) loop in KCORE_VMALLOC case of read_kcore_iter.
+> > >
+> > > Now is there any chance that the faulted in memory is swapped out or
+> > > migrated again before vread_iter()? fault_in_iov_iter_writeable() will
+> > > pin the memory? I didn't find it from code and document. Seems it only
+> > > falults in memory. If yes, there's window between faluting in and
+> > > copy_to_user_nofault().
+> > >
+> >
+> > See the documentation of fault_in_safe_writeable():
+> >
+> > "Note that we don't pin or otherwise hold the pages referenced that we fault
+> > in.  There's no guarantee that they'll stay in memory for any duration of
+> > time."
 > 
-> the bisection gives following result:
-> --------------------------------------------------------------------
-> 18c7deca2b812537aa4d928900e208710f1300aa is the first bad commit
-> commit 18c7deca2b812537aa4d928900e208710f1300aa
-> Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Date:   Tue May 17 12:47:08 2022 +0200
-> 
->     soc: mediatek: pwrap: Use readx_poll_timeout() instead of custom
-> function
-> 
->     Function pwrap_wait_for_state() is a function that polls an address
->     through a helper function, but this is the very same operation that
->     the readx_poll_timeout macro means to do.
->     Convert all instances of calling pwrap_wait_for_state() to instead
->     use the read_poll_timeout macro.
-> 
->     Signed-off-by: AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com>
->     Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->     Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->     Link:
-> https://lore.kernel.org/r/20220517104712.24579-2-angelogioacchino.delregno@collabora.com
->     Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
-> 
->  drivers/soc/mediatek/mtk-pmic-wrap.c | 60
-> ++++++++++++++++++++----------------
->  1 file changed, 33 insertions(+), 27 deletions(-)
-> --------------------------------------------------------------------
-> 
+> Thanks for the info. Then swapping out/migration could happen again, so
+> that's why while(true) loop is meaningful.
 
-OK, I'm updating the regression status:
+One of the problems is that is the system is under severe memory
+pressure and you try to fault in (say) 20 pages, the first page
+might get unmapped in order to map the last one in.
 
-#regzbot introduced: 18c7deca2b8125
+So it is quite likely better to retry 'one page at a time'.
 
-And for replying, don't top-post, but rather reply inline with
-appropriate context instead; hence I cut the replied context.
+There have also been cases where the instruction to copy data
+has faulted for reasons other than 'page fault'.
+ISTR an infinite loop being caused by misaligned accesses failing
+due to 'bad instruction choice' in the copy code.
+While this is rally a bug, an infinite retry in a file read/write
+didn't make it easy to spot.
 
--- 
-An old man doll... just what I always wanted! - Clara
+So maybe there are cases where a dropping back to a 'bounce buffer'
+may be necessary.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
