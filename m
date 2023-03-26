@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CFB6C9420
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 14:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596D26C9423
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 14:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbjCZMPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 08:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
+        id S230201AbjCZMSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 08:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjCZMP2 (ORCPT
+        with ESMTP id S229771AbjCZMSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 08:15:28 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AFA6E89;
-        Sun, 26 Mar 2023 05:15:27 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id d17so5911429wrb.11;
-        Sun, 26 Mar 2023 05:15:27 -0700 (PDT)
+        Sun, 26 Mar 2023 08:18:34 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEFF6A58
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 05:18:33 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id r29so5905775wra.13
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 05:18:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679832926;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z0X0IVqjnE4GWpoQcuqF7rO1/hOAXNdvp0AiJjukc3U=;
-        b=qVxt62xawSEhPWFgEX0PQW7ZAi7jWK9MHmWhc2MHtIrtxqXQvIojSpFrn8uDw2SbaG
-         t/lb8nXS9CAqv6a6XdUMV8xbUHt75f+t5Kx1+8iuR9az6odwTS4Bkynr1iBvEi8t2QhV
-         ejpoV5ip/bGRoANzpc2zxEgyFzAfPhCtXDwt2b78UYxgGEicMJbN4UVobm2Iehz/73iR
-         8UkusbgQGJ3fjyc9jUC8s1H9wsG0N3xpbZjNqyUw8WrzRHWdsAnEhJL+26eyYFPSSWDC
-         RqJjhejyLjwcC2mp0PPB9+7bOtitH0XBG9xE96+nMwghH5rh98yU3kTB1MFPOAnxajhn
-         zN0Q==
+        d=gmail.com; s=20210112; t=1679833112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pd4rewnz5GlJ06k4IoKBrqc8s7fRp6iu2hXRsnNCoq0=;
+        b=WZBNlXxuFMOGJNSUl8DwXisSvTn4wUNCZ1YKpnx0fzFfIe1pxgFHbTVZ2VBjY3inMw
+         dlPpqiHSbpxpUyYgx9lBYIMHUZiI7ipOLdv/KwMdtiNkV6DXkxKUd8tGeymCRslwmglh
+         JIc/qxHPQt5hJlqrQhosEylU+vHRlNQROg4Od1e5T9gW3dGpelrMAnZO7KFezxLqxIna
+         qsHFgLc91K0fGNVbCculs17si9t0XoSFcljMlJQs+T4zvPod/DFXK0MRCOQ4AIioFv7q
+         D6s4ax287nW6My/oxOMKlSyzwVjEE7GE8dqyvJH33JVQMzpOcBKzD5uFYkZvg2ATo8zC
+         MUvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679832926;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z0X0IVqjnE4GWpoQcuqF7rO1/hOAXNdvp0AiJjukc3U=;
-        b=ceHy0I/JA8LE4Xig80eH8c13u4vE62TpoY8wviNrOHZOqrS8YmovxJm8fJJdSGzVTO
-         2eN8ZB109EbOepLA9VYb3Rno0uXKogfQ6552mIaMrrQpvVpQxv37nAAjwTG/HirzUY4v
-         7n9cmU9vIYkHLhb6Tlkvfzq/5+YWJI47KW4UDKQy7a0AiTefoQ9x6eglZroiBMXKRlNf
-         0BgQ7sm+jaTnZc7hhIkpXybQ4aZlyyynl+WsKclgsn7grjIPp8GPXXUi17gFioY3mLeo
-         BtSqBf25upYkb3JDVt/074SQxCbdDiHh+QUBxFzfrOoFneGKOXXm/VrS8k9u416AZtSo
-         eqvQ==
-X-Gm-Message-State: AAQBX9eG2gbs67hJqoQjXuwXNvxyVCJOCGmpR4m8xbxfRCZ9WWD/dMkw
-        melt+ArxHeJeOf4geb4HB/fpP3qskHQNyl2qnLM=
-X-Google-Smtp-Source: AKy350ZyC1hmbCAqH2PE38tVkcOijPvTEjTrk6Bbob5z53kn/8egAoCIB4tn2r+qQLb2/2kGaO5z5XUWHXg5jmLzpuc=
-X-Received: by 2002:adf:f4c2:0:b0:2ce:ad3a:551d with SMTP id
- h2-20020adff4c2000000b002cead3a551dmr1361058wrp.2.1679832925722; Sun, 26 Mar
- 2023 05:15:25 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679833112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pd4rewnz5GlJ06k4IoKBrqc8s7fRp6iu2hXRsnNCoq0=;
+        b=BsCGyOR3kb3qG7peZtkR2XTrNqN4ZjjlV+SHUiW0fvVoEaN/KZFkqjUsrCyOGL01Ru
+         NmwxlTghYiU1Nsc7NYMhNod8Up3ysMIQbNDSHXhVN+gxxfkGOSJ1tjI/wkzVnnZYDlT6
+         HhUA5l4AqrAmE/Q/r2c3hQ4Gt7v9WyTcoonBCspax2ksPkDjITdqVYlWK3blxirlr6d3
+         mmBxaUQ+AlcviqSYEFLRpzEiNHaXvDQ3C5KHMI8ncWrG39N7RxhLATEYwileLYqtmMV3
+         CvCN+D/xaAVKZ4PbKjV5FrtiMOM93b85PAqdBQYpCq11tp1tto0dKQWHhXu7/C6pF0pO
+         gGOg==
+X-Gm-Message-State: AAQBX9cVaEqWnvOJTRcwEFrTq0Wvy6iGpxvYEFzON3+7usLaAlHnFyWQ
+        mp6Vzx1KHhDF/ZgIeygomAea0mxnDd4FQw==
+X-Google-Smtp-Source: AKy350ZQIrHSK/MQ9ecxe125E2gx6RDqu8jh6q7NAvJnvvLW/AkMqjHr/9zTp8or4nBMx75AOicjCw==
+X-Received: by 2002:a05:6000:1b01:b0:2d4:496a:5eec with SMTP id f1-20020a0560001b0100b002d4496a5eecmr6740111wrz.34.1679833111563;
+        Sun, 26 Mar 2023 05:18:31 -0700 (PDT)
+Received: from khadija-virtual-machine.localdomain ([39.41.14.14])
+        by smtp.gmail.com with ESMTPSA id d10-20020adfe88a000000b002c70e60abd4sm22740265wrm.2.2023.03.26.05.18.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 05:18:31 -0700 (PDT)
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] staging: rtl8192u: clean up comments in r8192U_dm.c
+Date:   Sun, 26 Mar 2023 17:18:24 +0500
+Message-Id: <cover.1679831899.git.kamrankhadijadj@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230326001535.149539-1-bigbeeshane@gmail.com>
- <20230326001535.149539-2-bigbeeshane@gmail.com> <10930783-e1dd-5e75-a2cc-a09af862d949@linaro.org>
-In-Reply-To: <10930783-e1dd-5e75-a2cc-a09af862d949@linaro.org>
-From:   Shane Francis <bigbeeshane@gmail.com>
-Date:   Sun, 26 Mar 2023 13:15:15 +0100
-Message-ID: <CABnpCuCh2kmvTRrmsY0cwNqjFR6nv1xwxrZPJieM4_Ph8qEGeA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: clock: update rk3588 clock definitions
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -72,77 +69,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Please wrap commit message according to Linux coding style / submission
-> process (neither too early nor over the limit):
+Clean up several comments in file r8192U_dm.c
 
-Will do, I haven't submitted patches for a while totally forgot the
-wrapping guidelines
+Changes in v2:
+ - Remove the 'commented code' and 'revision history' before
+   reformatting the block comments, as suggested by Greg. There is no use
+   in fixing comments, only to remove them in the next commits 
+ - Patch 1: Changed the description and removed extra blank lines under
+   the change history
+ - Patch 2: Changed the subject and description 
 
-> Unfortunately the reason is not good enough for ABI break. Replace
-> vendor boot uboots with open-source one or just correct them (it's still
-> U-Boot so even for vendor one you have the source).
-
-Replacing uboot is fine for this case, however I can foresee that can
-cause issues further down the line.
-
-
-1. No uboot source from the vendor, we all know no everyone respects
-code licencing
-
-2. Secure environments (like android tables), this chipset will likely
-end up in android tablets that have the secure boot chain enable.
-These will be unable to replace uboot even if source is available.
-
-As this SoC is new to the Linux kernel (not even useable for much it's
-current state) would it not be better to aling on this so vendor and
-mainline DTS "agree" now rather than possibly have to address is in
-the future ?
-
-I have also investigated setting these clock rates during kernel boot,
-but the SoC locks up.
+Reviewer feedback on an initial patch suggested additional cleanup
+comments. Link to the first patch:
+https://lore.kernel.org/outreachy/ZB2a5zwYpBZ%2F6qwU@khadija-virtual-machine/
 
 
-On Sun, Mar 26, 2023 at 10:37=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 26/03/2023 01:15, Shane Francis wrote:
-> > Some vendor uboot bootloaders use the target kernels
-> > DTB image to determine the target clock speeds for
-> > some PLLs, currently this can cause uboot to set the
-> > clock rate for gpll incorrectly on to cpll (breaking)
->
-> Please wrap commit message according to Linux coding style / submission
-> process (neither too early nor over the limit):
-> https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/s=
-ubmitting-patches.rst#L586
->
-> > RGMII.
-> >
-> > This change starts the PLL clock definitions from 1
-> > to correct this miss-match
->
-> Unfortunately the reason is not good enough for ABI break. Replace
-> vendor boot uboots with open-source one or just correct them (it's still
-> U-Boot so even for vendor one you have the source).
->
-> >
-> > Signed-off-by: Shane Francis <bigbeeshane@gmail.com>
-> > ---
-> >  .../dt-bindings/clock/rockchip,rk3588-cru.h   | 1442 ++++++++---------
-> >  1 file changed, 721 insertions(+), 721 deletions(-)
-> >
-> > diff --git a/include/dt-bindings/clock/rockchip,rk3588-cru.h b/include/=
-dt-bindings/clock/rockchip,rk3588-cru.h
-> > index b5616bca7b44..d63b07d054b7 100644
-> > --- a/include/dt-bindings/clock/rockchip,rk3588-cru.h
-> > +++ b/include/dt-bindings/clock/rockchip,rk3588-cru.h
-> > @@ -12,727 +12,727 @@
-> >
-> >  /* cru-clocks indices */
-> >
-> > -#define PLL_B0PLL                    0
->
->
-> Best regards,
-> Krzysztof
->
+Khadija Kamran (3):
+  staging: rtl8192u: remove change history from comments
+  staging: rtl8192u: remove commented out code
+  staging: rtl8192u: reformat block comments
+
+ drivers/staging/rtl8192u/r8192U_dm.c | 206 +++------------------------
+ 1 file changed, 23 insertions(+), 183 deletions(-)
+
+-- 
+2.34.1
+
