@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555D06C969C
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7218A6C96A1
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 18:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbjCZQFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 12:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        id S232680AbjCZQGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 12:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbjCZQEv (ORCPT
+        with ESMTP id S232719AbjCZQEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 12:04:51 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37FF4229
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:04:22 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id ek18so26277802edb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:04:22 -0700 (PDT)
+        Sun, 26 Mar 2023 12:04:53 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD864ED1
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:04:26 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id h7so3442806ila.5
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 09:04:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679846661;
+        d=ieee.org; s=google; t=1679846665;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qlCkeJgW3mVdh/0eT8pyaphF08RZSTIB3iRCwBVYpLw=;
-        b=G3rzxWZpyXJuLljg3vzsoZBHx+KC0mggEg9XPc0IEsVnjlCZRfV76nppFwg7LMsTFt
-         4l61aom9HRVJiYTQNGR5ZJsVdfwXRHl4pQMiOvfSxHoWimrs9HTQWq47voCv/KUVg2gE
-         leeLiGlGByE491CHvwxrPmuz9BGRpz6f9lxJm0rGN4OLpAHDMcem9byC+NQIZioZ/TkM
-         MryXd/ercqgUzCWfoKS70M+z8QsCy8pFMmbBQrk6GlLBOTRDtd9SZ69OUX7NSGxU27Sr
-         RHoujmEviOi9MakYbmJlzeshsj5QMNB9jXmq9kCdN2Z1RBq5SgfnJpSOpKc+Q3aIWuZ9
-         PDAA==
+        bh=QLUV32TFJ1PBsRP4JRwHZ1TsUoT8zxPU9gMsdTVjtMI=;
+        b=OtD/D0AhwXys72VxWf5Pa7p27bCAloMtPV/TlsO+HLfyaee80Lvpgnb4rJWR6EyxUp
+         DQMJ4cVz8I7w1VqnjH4bQijDRTy7bW4P60WkmPgdxQRm5CLbJVyBDfdawlxARm3qsw5/
+         4jA6N8V9eDWFd8DyzMTKQwU/esRetldF2ax58=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679846661;
+        d=1e100.net; s=20210112; t=1679846665;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qlCkeJgW3mVdh/0eT8pyaphF08RZSTIB3iRCwBVYpLw=;
-        b=L7MVJycR45PMKOgEQv4xO8Fby3BiiDAYXQd0OYN3uRUzawiKnB07ApkWLohVa1eN7R
-         d77aW5fHI/+AhKnH8PwsH4aLywYFPx5g4VsP7j2IMcuYBWmObCe33wO79C5g7w2b8ywb
-         FEhpA/hHxHxu1HXsM0oz8IdmtwPph0ARhkWc5omGKhOrKHE7DjGS2ke6y/WKPyKUnRS8
-         f9C8XkJODuHfOVqogBxmb+0H7SA258cF2RbMlQ2+HoG5doUJEii2chYHra30T6GYVbhe
-         79ICyo6O260gEkZryXeqsnCUDRklXKYl1LmRMp0i+FN9Z3/lwykj5nMSYtptQr1Ow4yS
-         S3qg==
-X-Gm-Message-State: AO0yUKW+u0WC9z3//KqJySAOftwK5w7EHAAtSSCQ8I8Kgzonk7TXRakm
-        5xhXDulZVkqWw/hyObFeVA6BWw==
-X-Google-Smtp-Source: AK7set9rWPLBX9fuj2+oYAYrlmSCGKLQh1+m2VEKnNQWXSSpm8ulEDCe6we5h+Xa6nQ1ObV+tRWTmA==
-X-Received: by 2002:a05:6402:944:b0:4ad:f811:e267 with SMTP id h4-20020a056402094400b004adf811e267mr15670897edz.12.1679846660905;
-        Sun, 26 Mar 2023 09:04:20 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:eca3:3b8f:823b:2669? ([2a02:810d:15c0:828:eca3:3b8f:823b:2669])
-        by smtp.gmail.com with ESMTPSA id kg6-20020a17090776e600b008b904cb2bcdsm13222129ejc.11.2023.03.26.09.04.19
+        bh=QLUV32TFJ1PBsRP4JRwHZ1TsUoT8zxPU9gMsdTVjtMI=;
+        b=WBMW/9H6lvdJncCZxb1PPMFS/CBhNvCwZ58zTYyaexQIPPDyoK/6r9RpnL4NgKJwzU
+         KuRFlcJbCe0oY1ryfTgeSU3To1N0vuxoevSiiDAvdRVKf+uLgokzUI3rmo6IjykjPdf8
+         AU9GDSqByX+YvEJT3deXjKHGsT7K/4C80+H7MI6RTZkOetfpBio4SlNyaQhqhPyiAPVo
+         iZbIfFZOmLBohpexGJ2EwlQIOjAHqXLfhi+vAA08t7QaYx3ooj7RwUxyRCdRWDxXVSmS
+         CXQyCW3FQEBWLmP9DG2TSVWZqCOKVcgDCnjtEH4uuZOG8P6/47TQp+6yTxn9/uHGx/pv
+         ibhw==
+X-Gm-Message-State: AAQBX9dT8HbZn6Gdzovb6Z/RT/PXvqIdyAaARtJ1AKfb+ZZZosAlODfe
+        v/dE0A2lBTlvHqCQfWAP1RMqBg==
+X-Google-Smtp-Source: AKy350YT5l7cjYXaNvQzx6EZReyPIuE1rGnu4arDQ3k/L9D77LZfGAtDrGEM+GG5dwc+svYj+0/6eg==
+X-Received: by 2002:a92:c688:0:b0:315:3d99:bbd3 with SMTP id o8-20020a92c688000000b003153d99bbd3mr7262477ilg.8.1679846664942;
+        Sun, 26 Mar 2023 09:04:24 -0700 (PDT)
+Received: from [10.211.55.3] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id q3-20020a5e9403000000b007594a835232sm2092375ioj.13.2023.03.26.09.04.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Mar 2023 09:04:20 -0700 (PDT)
-Message-ID: <80e9a424-1d5b-5402-4567-c489204869b6@linaro.org>
-Date:   Sun, 26 Mar 2023 18:04:19 +0200
+        Sun, 26 Mar 2023 09:04:24 -0700 (PDT)
+Message-ID: <5f825218-c583-7ccd-6845-684a4b166abe@ieee.org>
+Date:   Sun, 26 Mar 2023 11:04:23 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
 Subject: Re: [PATCH 1/2] ARM: dts: qcom: sdx65: add IPA information
 Content-Language: en-US
-To:     Alex Elder <elder@ieee.org>, Krzysztof Kozlowski <krzk@kernel.org>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Alex Elder <elder@linaro.org>, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
-        agross@kernel.org, konrad.dybcio@linaro.org
+        agross@kernel.org
 Cc:     quic_rohiagar@quicinc.com, caleb.connolly@linaro.org,
         mka@chromium.org, evgreen@chromium.org, quic_cpratapa@quicinc.com,
         quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
@@ -70,13 +68,13 @@ Cc:     quic_rohiagar@quicinc.com, caleb.connolly@linaro.org,
 References: <20230324201528.2540564-1-elder@linaro.org>
  <20230324201528.2540564-2-elder@linaro.org>
  <98fcbdd4-77b3-5b17-7102-c590f1a5a63e@kernel.org>
- <82797190-5a83-53d5-47cd-0c62b3f7c6d8@ieee.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <82797190-5a83-53d5-47cd-0c62b3f7c6d8@ieee.org>
-Content-Type: text/plain; charset=UTF-8
+ <f600869e-0fd8-ca19-1baf-d23f7a9103d6@linaro.org>
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <f600869e-0fd8-ca19-1baf-d23f7a9103d6@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,8 +83,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/03/2023 18:01, Alex Elder wrote:
-> On 3/25/23 6:14 AM, Krzysztof Kozlowski wrote:
+On 3/25/23 7:12 AM, Konrad Dybcio wrote:
+> 
+> 
+> On 25.03.2023 12:14, Krzysztof Kozlowski wrote:
 >> On 24/03/2023 21:15, Alex Elder wrote:
 >>> Add IPA-related nodes and definitions to "sdx65.dtsi".  The SMP2P
 >>> nodes (ipa_smp2p_out and ipa_smp2p_in) are already present.
@@ -155,18 +155,32 @@ On 26/03/2023 18:01, Alex Elder wrote:
 >>> +					   "ipa-setup-ready";
 >>
 >> These look misaligned.
+>>
+>> With above:
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+> With this and moving iommus below interconnect:
+
+Is there guidance somewhere that states what order should be
+used for these properties?  Why should iommus be below
+interconnects?
+
+As I said to Krzysztof, I *think* all of the IPA nodes look
+like this; should all of them be updated to follow whatever
+the preferred convention is?
+
+Thanks.
+
+					-Alex
+
+
 > 
-> I believe this is the alignment convention used by all IPA nodes
-> in DTS files.  It's possible I'm not seeing something you are,
-> but...  what alignment should be used?  And if I change this,
-> should I change all others?
-
-If this is aligned, then fine. The diff points it is not, but the diff
-might be a bit tricky sometimes.
-
-Alignment is till " in previous line. For example sdm845 looks fine.
-
-
-Best regards,
-Krzysztof
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> Konrad
+>>
+>>
+>> Best regards,
+>> Krzysztof
+>>
 
