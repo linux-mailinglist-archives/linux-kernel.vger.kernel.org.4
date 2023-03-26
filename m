@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E966C9727
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 19:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675976C9732
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 19:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbjCZRXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 13:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S231196AbjCZRc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 13:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjCZRXE (ORCPT
+        with ESMTP id S229596AbjCZRc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 13:23:04 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4E649CD
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 10:23:03 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id eh3so26638820edb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 10:23:03 -0700 (PDT)
+        Sun, 26 Mar 2023 13:32:57 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3076E49D2;
+        Sun, 26 Mar 2023 10:32:55 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id bf30so4713352oib.12;
+        Sun, 26 Mar 2023 10:32:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679851382;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c//xVZOdC41tPmentwWhVn74VlOQ2hi6ybonN1NbtRc=;
-        b=P5oihEOZTfjDDQazKlVVdjx4zRYICuik+HNXkq4KfUiIgmkyUjzcSoq0RbOFrpL2kJ
-         iRgdkV0/sORCmsUTedpMqaSxA9bVoLczQdGYO+nPWqxkVTzGXT84f5fSZEyaZEk1kZFx
-         Me+/6H7Ip+mRTV3HjXzqObHBOY+N+apq+aKDp9bSIyYOW0JGFmWpVpscbYAl8xUBxVKI
-         14yALPGawyV0I6TRVY7j/2WyIrBpgrDKxXLv3qnJBrG1Ji9Xqv5SZ3bDaitbm9h5Y9Y+
-         LzJlK15aj7VBFKzRnKexRbl8xDnBq1JzDNt1Cb1QbddBEIxbPN5RTaBUSRT2gIA7LB4i
-         66bA==
+        d=gmail.com; s=20210112; t=1679851974;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=kMIdTPrzs9W2bcOisGTJ32C4tZONe5VcnIYDts13aIw=;
+        b=nqNPvS2vEQB9efoFo76JN7ONcu10HLvy2l6zDGCpZmhWoP3oDJITiKYFyR2UA6ylZX
+         awrzoBNXSNjmAOOgckqCsw0ZF2HdzXbWe8jpW8/tJzbX6HVqLQnEU6u5J7FBZDLjksTv
+         BSGEGgpIJQG7+N3d3OrQnCJVSBRFko45xnzAtvWoxcgJWPK1mqFUtl7lmknTkOeCxsAB
+         LzpNO6MVG2bjmWGmYpC6Dx1iUbxzFZgzczeJvoy6K+V1tDUSQWBJP6nj1H9JzhgbRUDa
+         EPGh7KEUD+CouiOeFE/Xh4H+RQ2sJKFk39vU8oUzS0MC6ZEk8KJSU+ewb7N802+fSqt0
+         8uyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679851382;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c//xVZOdC41tPmentwWhVn74VlOQ2hi6ybonN1NbtRc=;
-        b=RpdrdGEdLfqmeLpcsixi+XJOhfAfSPWPOGYG65YNCNAh1yj5pdp4DNWnSvedeCpS57
-         8coyIsfQfmfiZNm5QRm6JY2fsTtVANUy9rVSWdPyYkPEjwRXRKW4chxrL6MaWaD7wc7c
-         8236Sj08qYKwCp9CTITWezEOMDaNijud/lw79aBVCEGyAJGKo1IO43B36ID7jSwcYySM
-         89h/kZOaqwl3e9XYJ5VI1wLkeRMB0jTamB+j1W2m62N8f/L1UFcOyzVtZV0fwitrYnuM
-         LJ9Nch246RtVQ+sAGVpfWkAxlyHZD2HLdcvS9VsoX+j5VCJqvwCGwZJNLZipwjUak2ne
-         RSSQ==
-X-Gm-Message-State: AAQBX9eUF8XJf/VUg7bkIActVeq2zs7rWJk2I6c3ysvzCIOI8MY+VGnt
-        /TfknpS+DY4AQvNHIcd09QCiGQ==
-X-Google-Smtp-Source: AKy350ZkwalKYzOBxeo21t+SzzcLhWq4fDH4NUP1+KX7mCHqW39g5Wrdbos4r+2xR6xaXE5O8wC5oA==
-X-Received: by 2002:aa7:ccc7:0:b0:4fc:709f:7ab0 with SMTP id y7-20020aa7ccc7000000b004fc709f7ab0mr10239236edt.0.1679851381850;
-        Sun, 26 Mar 2023 10:23:01 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:eca3:3b8f:823b:2669? ([2a02:810d:15c0:828:eca3:3b8f:823b:2669])
-        by smtp.gmail.com with ESMTPSA id e25-20020a50d4d9000000b004c10b4f9ebesm13699097edj.15.2023.03.26.10.23.01
+        d=1e100.net; s=20210112; t=1679851974;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kMIdTPrzs9W2bcOisGTJ32C4tZONe5VcnIYDts13aIw=;
+        b=toRsyzO4eFcPJmz70an2qLAnzIB2dPo3tIjY7DU9YtckfZkQyiLAMF48sWpHaMaMFd
+         aA0shaR6xsj1XiQ91kXcUkWFtiP1OWhrbvPtvng2JyZn7j6782lH2UT1qvH4XKCphcan
+         z5d3OttLyPEd+Pw0fV6aiED9UGmFFM1ZOJxc6brPzfdpAPhQaB6CTqMzY7ifkjO6Rf2n
+         fKZJAKjc6Ror4GNG+AqrPVLQfbz/nsQHketWNr9xZMrxBDLQGDU0a3XJns2K6OkwfAD1
+         MZszRGzl/ikIed+cziTob1ceM+tcPfx2wt3JR8Y/M19HbSUrHZYwmifEGEWZ7TBeYg43
+         H0nQ==
+X-Gm-Message-State: AO0yUKVNSOffS6XUnvd5E1cEmuCJ6S83Ulf687DaAR7x1XbReBsfHrWF
+        ZgcxUoGhaIEDjWmO4mxGYS8=
+X-Google-Smtp-Source: AK7set/49UtlldFI6p/rQrGSVBcq35E2L5hx8hQveh7EcQGyM0FugN5APVKlOsGtnXSC2SkRcy1vAA==
+X-Received: by 2002:a05:6808:15a7:b0:386:e073:6996 with SMTP id t39-20020a05680815a700b00386e0736996mr5472851oiw.26.1679851974518;
+        Sun, 26 Mar 2023 10:32:54 -0700 (PDT)
+Received: from [192.168.1.204] ([216.130.59.33])
+        by smtp.gmail.com with ESMTPSA id i206-20020acaead7000000b003874e6dfeefsm4607368oih.37.2023.03.26.10.32.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Mar 2023 10:23:01 -0700 (PDT)
-Message-ID: <717bfba9-1d70-ef09-9193-853a57117926@linaro.org>
-Date:   Sun, 26 Mar 2023 19:23:00 +0200
+        Sun, 26 Mar 2023 10:32:54 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <307ebdbb-1b0f-43df-04b1-a2275adcee72@lwfinger.net>
+Date:   Sun, 26 Mar 2023 12:32:52 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] dt-bindings: clock: update rk3588 clock definitions
-To:     Shane Francis <bigbeeshane@gmail.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230326001535.149539-1-bigbeeshane@gmail.com>
- <20230326001535.149539-2-bigbeeshane@gmail.com>
- <10930783-e1dd-5e75-a2cc-a09af862d949@linaro.org>
- <CABnpCuCzdbWTTp1Gc6wWPsB80J5GYw1QzKtZzzyEYU456E=1JA@mail.gmail.com>
- <1b9c8e19-10f2-824d-9b50-51e7a9287bb1@linaro.org>
- <CABnpCuAWm7jh19JKukOquPnZCwHoJispgDPGJzjYy6T_BZSnbg@mail.gmail.com>
+Subject: Re: [PATCH] wireless: rtlwifi: fix incorrect error codes in
+ rtl_debugfs_set_write_rfreg()
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CABnpCuAWm7jh19JKukOquPnZCwHoJispgDPGJzjYy6T_BZSnbg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Simon Horman <simon.horman@corigine.com>,
+        Wei Chen <harperchen1110@gmail.com>
+Cc:     pkshih@realtek.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230325083429.3571917-1-harperchen1110@gmail.com>
+ <ZB7DSn3wfjU9OVgJ@corigine.com>
+ <CAO4mrfduRPKLruShN76VDOMAeZF=A7f84=vcamnHPCtMLGuRvA@mail.gmail.com>
+ <ZB/8YDQwc6uzHbZo@corigine.com>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <ZB/8YDQwc6uzHbZo@corigine.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/03/2023 18:59, Shane Francis wrote:
-> Hi Krzysztof
+On 3/26/23 03:03, Simon Horman wrote:
+> On Sun, Mar 26, 2023 at 01:47:51PM +0800, Wei Chen wrote:
+>> Dear Simon,
+>>
+>> Thanks for the advice and review. I have sent the second version of the patch.
+>>
+>> Besides, rtl_debugfs_set_write_reg also suffers from the incorrect
+>> error code problem. I also sent v2 of the corresponding patch. Hope
+>> there is no confusion between these two patches.
 > 
-> 
->> So mention this in the commit msg.
-> 
->> Then commit msg should also mention it.
-> 
-> Sorry for not expanding on this more in the initial commit message, I will
-> expand on this in the next patch set.
-> 
-> However I think in general for most modern platforms it can be assumed
-> that replacing the bootloader is not always something that is achievable
-> for one reason or another
+> Thanks. I now see there are two similar but different patches. My bad.
 
-Bootloader also does not use mainline DTS, so where is exactly the problem?
+Avoid all such misunderstandings by making a patch set.
 
-Best regards,
-Krzysztof
+Larry
 
