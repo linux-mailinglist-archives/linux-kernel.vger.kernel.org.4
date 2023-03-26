@@ -2,132 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977DC6C97F9
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 23:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D729A6C9804
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 23:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCZVNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 17:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
+        id S229959AbjCZVZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 17:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjCZVNX (ORCPT
+        with ESMTP id S229475AbjCZVZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 17:13:23 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30D95259
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 14:13:22 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-545ce8e77fcso58894867b3.1
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 14:13:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679865201;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8F1bPVXXV4xIf8rTIiWOuXJZOQOnAzCoZb2gtyfVG1k=;
-        b=eEi4mN1ifGfJY7+0b8y3SZsLIF0xWt00MBSvDklScSp9b9wk1ykG7b++GPCC1KHF14
-         RQViyq9mhox8y2tzT/vu09qYj16Cbm1C4XOQMmUjDyaBBsKZVvHSTGvMsqYI5bRFWLyv
-         LUQcyry4IlnAITJ5J4Sc4qs0sLlAI6ztv3zcp8RDx473feeFdLQ2sIZ0jWk5hsheYKXE
-         sPU4OwgJZhkAjJ7s1ESL4crUdpKPg27aKxstqvv2/UAFifWkICu84WhqL3mAyhbpRd+g
-         pOTVvNjEOvNbnHeVj+2xZv840wJyy3Hd8dOs7AYMm5TdhK2IYDTfQMdYoAyQNQ2CU+03
-         SXZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679865201;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8F1bPVXXV4xIf8rTIiWOuXJZOQOnAzCoZb2gtyfVG1k=;
-        b=WnBTaVkgWRWOccHVU7pl56VGfxv8WbjAcqbwojsDtNFCXCl9Cn3VrTMJvl+/y5Jjd9
-         YB8yMZhjH3WEvZpA59r0XbG3fXaQlAMY9p7uz0Y0BfwT/hrLf/Qk4j2wc7z/nZ2iZqvM
-         rpTxWSqJ++7zL5EdWqcjxsOIKPRCKlGZjKtWIXi5ZbEEJRfNuqWl4hSmlYBpQyh5FRvP
-         OmF3DLFZsPR6Jbky23OWQt7m/XeQRTohiFLZaS4wCplBlETE/7q3I6TqbeRaF9UV/VKy
-         7sZkHblNt8zJTT4KNC7ZEwegFCF25ULDjh5UFrILdpMHpaE2RKTnkZfRTvJHc+Fdsy6X
-         wFkw==
-X-Gm-Message-State: AAQBX9d5bd7eCrNznVSioeojNDUGV+0ubnfb9Q2UTmDVAQtDJYRlmvO5
-        /zSjl9WqV6IXC0DlxHRILekMXg==
-X-Google-Smtp-Source: AKy350ZUklvuXpG/TVmgpH3Zi3KwYxjqvrRWLvfNvJS030p6UApvbjN5NVOirP1Z8b+o5CKWs0wq7A==
-X-Received: by 2002:a81:d348:0:b0:539:4475:ff64 with SMTP id d8-20020a81d348000000b005394475ff64mr10144773ywl.40.1679865201591;
-        Sun, 26 Mar 2023 14:13:21 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id dc8-20020a05690c0f0800b00545a08184besm1640929ywb.78.2023.03.26.14.13.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 14:13:20 -0700 (PDT)
-Date:   Sun, 26 Mar 2023 17:13:18 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2] iio: addac: stx104: Migrate to the regmap API
-Message-ID: <ZCC1bhdHymSBMQOX@fedora>
-References: <20230324030916.396569-1-william.gray@linaro.org>
- <20230326164920.1e4575f9@jic23-huawei>
+        Sun, 26 Mar 2023 17:25:56 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175861701
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 14:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679865955; x=1711401955;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=klFg1rTB6lgpLYoVDipAOSZrfAGFtIkpayfXE0udZvs=;
+  b=c5x0iV0N0Kkr8ynSmBm9G84wCl43VG4NN3x4HSsHfw+Jm++xhEzRMsvD
+   rWuEt9FBOkEY5rWE00unabwHROHG/JSNQZLN80imuSfdt8MRO0wIeJg95
+   OUxDWm35Jon8ARMjAtoWKwseMC18vBQ+E20bz8I4pxXQhGTjuXQVXHtzd
+   3AyX7X7y7IxMRUIYkZlMayO55C6oXhQJc+MBJaZkMujzjmYai5mc1UXZZ
+   Lur6HKyaf7yX21kItyJ/7nbTakELbpZlKLMIbKIW4WKrjVnqipy6JAjWe
+   MQAx4mnMS6onlMmhgt8CjN3FvUG9347QQSjZF8sGchwl2IbOOSVEI4Cqb
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="340158542"
+X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
+   d="scan'208";a="340158542"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 14:25:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="676764241"
+X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
+   d="scan'208";a="676764241"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 26 Mar 2023 14:25:52 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pgXs8-000HN5-0L;
+        Sun, 26 Mar 2023 21:25:52 +0000
+Date:   Mon, 27 Mar 2023 05:25:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: drivers/media/i2c/tc358746.c:817:13: warning: 'p_best' is used
+ uninitialized
+Message-ID: <202303270506.UifKK4hb-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1hFa8m5aSKcaoSMl"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230326164920.1e4575f9@jic23-huawei>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Marco,
 
---1hFa8m5aSKcaoSMl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+FYI, the error/warning still remains.
 
-On Sun, Mar 26, 2023 at 04:49:20PM +0100, Jonathan Cameron wrote:
-> On Thu, 23 Mar 2023 23:09:16 -0400
-> William Breathitt Gray <william.gray@linaro.org> wrote:
->=20
-> > The regmap API supports IO port accessors so we can take advantage of
-> > regmap abstractions rather than handling access to the device registers
-> > directly in the driver.
-> >=20
-> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
->=20
-> I would have preferred slightly if you had avoided reording the probe
-> (previously gpio chip was registered before iio device and now it is afte=
-r)
-> but it make no real difference so I'm not that bothered.
->=20
-> A few other minor comments. Biggest one being that the defines should be
-> prefixed.
->=20
-> Thanks,
->=20
-> Jonathan
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35
+commit: 80a21da360516fa602f3a50eb9792f9dfbfb5fdb media: tc358746: add Toshiba TC358746 Parallel to CSI-2 bridge driver
+date:   5 months ago
+config: arc-randconfig-r021-20230327 (https://download.01.org/0day-ci/archive/20230327/202303270506.UifKK4hb-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=80a21da360516fa602f3a50eb9792f9dfbfb5fdb
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 80a21da360516fa602f3a50eb9792f9dfbfb5fdb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/media/i2c/
 
-Hi Jonathan,
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303270506.UifKK4hb-lkp@intel.com/
 
-I'll be submitting a v3 soon addressing your comments as well as some
-minor fixes to v2; I'll make the regmap_read_poll_timeout() change as a
-follow-up patch as suggested.
+All warnings (new ones prefixed by >>):
 
-Regarding the GPIO code reordering in the probe, I decided to move it
-after the iio device registration so that all the IIO-related code is
-grouped together and finished before we deal with GPIO-related stuff.
-Given that all the original gpio chip code is removed anyway in this
-patch, I figure this is a minor enough cleanup to perform here. If you
-aren't too strongly opposed to this change I'll keep it in v3 as it
-avoids the hassle of creating a separate patch for such a trivial
-change.
+   drivers/media/i2c/tc358746.c: In function 'tc358746_find_pll_settings':
+>> drivers/media/i2c/tc358746.c:817:13: warning: 'p_best' is used uninitialized [-Wuninitialized]
+     817 |         u16 p_best, p;
+         |             ^~~~~~
+>> drivers/media/i2c/tc358746.c:816:13: warning: 'm_best' is used uninitialized [-Wuninitialized]
+     816 |         u16 m_best, mul;
+         |             ^~~~~~
 
-William Breathitt Gray
 
---1hFa8m5aSKcaoSMl
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +/p_best +817 drivers/media/i2c/tc358746.c
 
------BEGIN PGP SIGNATURE-----
+   805	
+   806	static unsigned long tc358746_find_pll_settings(struct tc358746 *tc358746,
+   807							unsigned long refclk,
+   808							unsigned long fout)
+   809	
+   810	{
+   811		struct device *dev = tc358746->sd.dev;
+   812		unsigned long best_freq = 0;
+   813		u32 min_delta = 0xffffffff;
+   814		u16 prediv_max = 17;
+   815		u16 prediv_min = 1;
+ > 816		u16 m_best, mul;
+ > 817		u16 p_best, p;
+   818		u8 postdiv;
+   819	
+   820		if (fout > 1000 * HZ_PER_MHZ) {
+   821			dev_err(dev, "HS-Clock above 1 Ghz are not supported\n");
+   822			return 0;
+   823		}
+   824	
+   825		if (fout >= 500 * HZ_PER_MHZ)
+   826			postdiv = 1;
+   827		else if (fout >= 250 * HZ_PER_MHZ)
+   828			postdiv = 2;
+   829		else if (fout >= 125 * HZ_PER_MHZ)
+   830			postdiv = 4;
+   831		else
+   832			postdiv = 8;
+   833	
+   834		for (p = prediv_min; p <= prediv_max; p++) {
+   835			unsigned long delta, fin;
+   836			u64 tmp;
+   837	
+   838			fin = DIV_ROUND_CLOSEST(refclk, p);
+   839			if (fin < 4 * HZ_PER_MHZ || fin > 40 * HZ_PER_MHZ)
+   840				continue;
+   841	
+   842			tmp = fout * p * postdiv;
+   843			do_div(tmp, fin);
+   844			mul = tmp;
+   845			if (mul > 511)
+   846				continue;
+   847	
+   848			tmp = mul * fin;
+   849			do_div(tmp, p * postdiv);
+   850	
+   851			delta = abs(fout - tmp);
+   852			if (delta < min_delta) {
+   853				p_best = p;
+   854				m_best = mul;
+   855				min_delta = delta;
+   856				best_freq = tmp;
+   857			};
+   858	
+   859			if (delta == 0)
+   860				break;
+   861		};
+   862	
+   863		if (!best_freq) {
+   864			dev_err(dev, "Failed find PLL frequency\n");
+   865			return 0;
+   866		}
+   867	
+   868		tc358746->pll_post_div = postdiv;
+   869		tc358746->pll_pre_div = p_best;
+   870		tc358746->pll_mul = m_best;
+   871	
+   872		if (best_freq != fout)
+   873			dev_warn(dev, "Request PLL freq:%lu, found PLL freq:%lu\n",
+   874				 fout, best_freq);
+   875	
+   876		dev_dbg(dev, "Found PLL settings: freq:%lu prediv:%u multi:%u postdiv:%u\n",
+   877			best_freq, p_best, m_best, postdiv);
+   878	
+   879		return best_freq;
+   880	}
+   881	
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZCC1bgAKCRC1SFbKvhIj
-K3gKAP4im9weEqAgUf5gXPQ5DqmrLHtP+vf1hUdjwMTWuLxulwD+Nxc7CxSgYBky
-olZG9H8YrFmtmtgBft7xrYp1AoTWWQw=
-=8rwi
------END PGP SIGNATURE-----
-
---1hFa8m5aSKcaoSMl--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
