@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBC66C9293
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 07:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBB76C9295
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 07:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbjCZFYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 01:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S231862AbjCZF2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 01:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjCZFY2 (ORCPT
+        with ESMTP id S231873AbjCZF2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 01:24:28 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC01A5B91
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 22:24:27 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id l7so4966321pjg.5
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Mar 2023 22:24:27 -0700 (PDT)
+        Sun, 26 Mar 2023 01:28:12 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC912684;
+        Sat, 25 Mar 2023 22:28:09 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id z11so3640845pfh.4;
+        Sat, 25 Mar 2023 22:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679808267;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l8eM3auEURf5Yz74B4xS+px+Zq3swgYLBvUD75GaNMk=;
-        b=TjpZI22arNu77KtHiNIoBJMxYSrvrLnM4V1z+nkoSbUOf/MobLcMMgdIWv2KOi0IDE
-         hiVzQbyC38iOh6EMT8wKVBBYIjcjXtWskrmokuAc6a3eAzlrxz1YfNGGx7xRZ8YDsXR6
-         MpJqfhrDwsYk/VBEEpOSVoQjwgwIbx6i4Oy6RVtmVZDqD/bEMHAqPSEbJGk1Bib93ALQ
-         MfcsfetV7TCRLfhxsXq5rWvAdF1uHGF8haCGG5Rb0buhFpCZJ+bJQndZdXG6sFkKfvsl
-         m/KKoKBZ8WG9YxuTYJRoK7R108iV5Dlh3E/FhSYTg1SBBXBKSN7m2soVJDAdi+sMOw6V
-         Atbg==
+        d=gmail.com; s=20210112; t=1679808489;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wlFfAJUvKczTOkYz9X2Qooa6CRtdSnd+xdhPi/7m9Ic=;
+        b=L7QPuLz52mZgbRhF8kodkVZI8KohR9u4d/6qGl3XTnyuCoiw3xafMbQqXT6VLs8P0Z
+         mo5B75+4NI68F7GeS5fhi7vgEIgzXzj5fn2laRyZ+apJr9pO1lzLghYY7aZQPAKalXAb
+         oSowzpiu6Sd5hsnhMKDlA7NJs+beMgcLtmN8jAbr4ziQ9iF+2t+kafIK32bUyzJPoVZ2
+         I7LCBqRgtwlSLYZy37IUH1zUCASMKls0ifBaPcDywQ7Y35MVW3MFwxB9IG2O18Tb9wkH
+         73JpzOZRcPWnAkz/n79aptdvoN4pNfjjWJZ/i1aQFmaGdXKrE6EnrJ+uguwD/vmZeskm
+         uP5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679808267;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l8eM3auEURf5Yz74B4xS+px+Zq3swgYLBvUD75GaNMk=;
-        b=ccT/J9dmoYuv421RKa4jtXiVKOpw5YJ1ec3awZHrLRL9KkN4262ccgMa5AVlSpYNgC
-         xJWPEUEUvPUA2ygcyGt10zo5FSws/rhn7rUIhKhuijcPZrtrwcoSrgo88htILAkIBdjx
-         7RP/cQ2XSd8JuSOG41sHD4a7jvyq5bykradqE2r71AiF+X+Z/OfsufMElZedHtrhNfYn
-         ar0ZEHpB3uLP0ITXInZNjBjc0kKsFOmW4Cwgc9fXhQsrQZfOFb5QgRsJZF0WhxtFCeR4
-         +RBVKIXKcZ7+MIj3Q/XdH2yTg2EmjX9aFgarD0pgo/Muq09qTZbFbjHG6Q8opTlN8Ben
-         yxzQ==
-X-Gm-Message-State: AAQBX9c91oTu16NwaTudPR+C/eOJnbrxcTeMoWF1D1KzaQ1akz4OJdxU
-        H+VIr2cE55GT4+NW6Vp0pAw=
-X-Google-Smtp-Source: AKy350afbQeZdtfvWlHEvJm+uzLq1lMd+sTHnS43/LWxSyyeRaiQgF8Oz/euRtOQDIkIXC1I4lZb5A==
-X-Received: by 2002:a17:902:d482:b0:19f:27fe:95c3 with SMTP id c2-20020a170902d48200b0019f27fe95c3mr8903964plg.41.1679808267235;
-        Sat, 25 Mar 2023 22:24:27 -0700 (PDT)
-Received: from sumitra.com ([117.212.89.150])
-        by smtp.gmail.com with ESMTPSA id h2-20020a170902704200b001a21cde3458sm3675111plt.90.2023.03.25.22.24.23
+        d=1e100.net; s=20210112; t=1679808489;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wlFfAJUvKczTOkYz9X2Qooa6CRtdSnd+xdhPi/7m9Ic=;
+        b=aseg7+sZooAdSFsuWtz3KbzCMp2B4jumqwuU597YVMsyxheBBl615cfMhHUg1+BOzT
+         fvR9sk4jwDBlu+IQA37uJkzS4T0mCLBrAllQekwMlOEqkqSw2474ym/GS+BgyIFAJ2rF
+         4gwmzMNf+Xi31/h52iR73Cc/10X32AqAU9FB7CRXufG5BLJ/sCA03l/LAPuA9pL28+cD
+         MT/TskX2DDT3aez6/VuSega6Baao9bm9Dcnzr2oMkZj0XOtsLIh3FCG2tzqvZKTIRgO/
+         91rHonmnNliVOhwPDZPFtuGBT2fA5W6p4kAP/rlLG/yPMgh5xL+ySbVXBKwzDtEoQn1k
+         aKCw==
+X-Gm-Message-State: AAQBX9d66LETPKd41gNwOqGix6GogTPfs09xmMX9nUlpwvV7GIdZV0qP
+        YELsundKJGzkEirCsMoWDDNpvgZvzFuRLZPv
+X-Google-Smtp-Source: AKy350bBvgrqC0e9d5NlAmPja6o7DsXjICg6612sMXhN5Eqs39M42xT8/G+33qQx6foyBlxpHwbcjg==
+X-Received: by 2002:a05:6a00:4e:b0:628:a3d:8aa7 with SMTP id i14-20020a056a00004e00b006280a3d8aa7mr8168682pfk.31.1679808488703;
+        Sat, 25 Mar 2023 22:28:08 -0700 (PDT)
+Received: from d.home.yangfl.dn42 ([104.28.213.201])
+        by smtp.gmail.com with ESMTPSA id b14-20020a63eb4e000000b004fb5f4bf585sm15966915pgk.78.2023.03.25.22.28.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 22:24:26 -0700 (PDT)
-Date:   Sat, 25 Mar 2023 22:24:20 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] staging: greybus: Inline pwm_chip_to_gb_pwm_chip()
-Message-ID: <20230326052420.GA179105@sumitra.com>
-References: <cover.1679732179.git.sumitraartsy@gmail.com>
- <f1ef1b643840e74f211264dda0c590f8458618f6.1679732179.git.sumitraartsy@gmail.com>
- <ZB63EVLK6/29UUi0@kroah.com>
+        Sat, 25 Mar 2023 22:28:08 -0700 (PDT)
+From:   David Yang <mmyangfl@gmail.com>
+To:     linux-clk@vger.kernel.org
+Cc:     David Yang <mmyangfl@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] clk: hisilicon: Migrate devm APIs
+Date:   Sun, 26 Mar 2023 13:27:46 +0800
+Message-Id: <20230326052757.297551-1-mmyangfl@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZB63EVLK6/29UUi0@kroah.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -74,54 +70,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 09:55:45AM +0100, Greg KH wrote:
-> On Sat, Mar 25, 2023 at 01:31:10AM -0700, Sumitra Sharma wrote:
-> > Convert 'pwm_chip_to_gb_pwm_chip' from a macro to a static
-> > inline function, to make the relevant types apparent in the
-> > definition and to benefit from the type checking performed by
-> > the compiler at call sites.
-> > 
-> > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-> > ---
-> >  drivers/staging/greybus/pwm.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
-> > index 3fda172239d2..88da1d796f13 100644
-> > --- a/drivers/staging/greybus/pwm.c
-> > +++ b/drivers/staging/greybus/pwm.c
-> > @@ -21,9 +21,11 @@ struct gb_pwm_chip {
-> >  	struct pwm_chip		chip;
-> >  	struct pwm_chip		*pwm;
-> >  };
-> > -#define pwm_chip_to_gb_pwm_chip(chip) \
-> > -	container_of(chip, struct gb_pwm_chip, chip)
-> >  
-> > +static inline struct gb_pwm_chip *pwm_chip_to_gb_pwm_chip(struct pwm_chip *chip)
-> > +{
-> > +	return container_of(chip, struct gb_pwm_chip, chip);
-> > +}
-> >  
-> >  static int gb_pwm_count_operation(struct gb_pwm_chip *pwmc)
-> >  {
-> > -- 
-> > 2.25.1
-> > 
-> > 
-> 
-> This patch didn't apply due to changes made in my tree by a patch from
-> someone else before yours.  Can you rebase it and resend?
->
+Migrate devm APIs for HiSilicon clock drivers and remove redundant codes.
 
-Hi greg,
+This series is a partial improvement of
+https://lore.kernel.org/r/20230322164201.2454771-1-mmyangfl@gmail.com
 
-I am confused, will that be a totally new patch or a new version(v4 in
-this case)?
+David Yang (4):
+  clk: hisilicon: Add helper functions for platform driver
+  clk: hisilicon: Use helper functions
+  clk: hisilicon: Convert to platform driver
+  clk: hisilicon: Migrate devm APIs
 
-Regards,
+ drivers/clk/hisilicon/clk-hi3519.c        | 134 +------
+ drivers/clk/hisilicon/clk-hi3559a.c       | 253 +++----------
+ drivers/clk/hisilicon/clk-hi3620.c        | 215 +++++------
+ drivers/clk/hisilicon/clk-hi3660.c        | 207 ++++-------
+ drivers/clk/hisilicon/clk-hi3670.c        | 270 +++++---------
+ drivers/clk/hisilicon/clk-hi6220-stub.c   |   9 +-
+ drivers/clk/hisilicon/clk-hi6220.c        | 230 ++++++------
+ drivers/clk/hisilicon/clk-hip04.c         |  41 ++-
+ drivers/clk/hisilicon/clk-hisi-phase.c    |  13 +-
+ drivers/clk/hisilicon/clk-hix5hd2.c       |  93 +++--
+ drivers/clk/hisilicon/clk.c               | 429 +++++++++++-----------
+ drivers/clk/hisilicon/clk.h               | 147 +++++---
+ drivers/clk/hisilicon/clkdivider-hi6220.c |  24 +-
+ drivers/clk/hisilicon/clkgate-separated.c |  26 +-
+ drivers/clk/hisilicon/crg-hi3516cv300.c   | 177 +--------
+ drivers/clk/hisilicon/crg-hi3798cv200.c   | 206 ++---------
+ drivers/clk/hisilicon/crg.h               |  11 +-
+ drivers/clk/hisilicon/reset.c             |  64 +++-
+ 18 files changed, 989 insertions(+), 1560 deletions(-)
 
-Sumitra
 
-> thanks,
-> 
-> greg k-h
+base-commit: fff5a5e7f528b2ed2c335991399a766c2cf01103
+-- 
+2.39.2
+
