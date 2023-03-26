@@ -2,102 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC0D6C948F
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 15:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A97F16C9493
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Mar 2023 15:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbjCZNhn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 26 Mar 2023 09:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
+        id S231771AbjCZNm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 09:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjCZNhm (ORCPT
+        with ESMTP id S229959AbjCZNmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 09:37:42 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B597549E3
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 06:37:41 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-321-t_AconkZO9GXXT1EuNSm8g-1; Sun, 26 Mar 2023 14:37:38 +0100
-X-MC-Unique: t_AconkZO9GXXT1EuNSm8g-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 26 Mar
- 2023 14:37:37 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Sun, 26 Mar 2023 14:37:37 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: RE: [PATCH v2 3/3] kobject: Use return value of strreplace()
-Thread-Topic: [PATCH v2 3/3] kobject: Use return value of strreplace()
-Thread-Index: AQHZXYQhzqw/OapVckW+rwurhit0ga8NFE/w
-Date:   Sun, 26 Mar 2023 13:37:37 +0000
-Message-ID: <55ddb6da555a408da801f56577845a09@AcuMS.aculab.com>
-References: <20230323123704.37983-1-andriy.shevchenko@linux.intel.com>
- <20230323123704.37983-4-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230323123704.37983-4-andriy.shevchenko@linux.intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sun, 26 Mar 2023 09:42:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62F972AA
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 06:42:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 421CD60C09
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 13:42:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91B79C433D2;
+        Sun, 26 Mar 2023 13:42:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679838168;
+        bh=x+elaEjNBGrw81mnE6F3RWtDHADRa8KpDJx2MLvF+68=;
+        h=From:Subject:Date:To:Cc:From;
+        b=eZ02xYuAFO8BHQcq5wBrsTWOROoC1psdx7Zlo1qBJVADy7vf5K7sYEsQ7Dl+Ue8xa
+         MKLLFyQ5k98pIJTv0a2dkzeLBPrKsjxaB8+7FubDbH5VIwZkQpLPWwHTzHIgn0WO10
+         pid06sLruwUrROAet5ObBbcpOd/4V5ndquDDyXUQ0ydFsCHnsFNDnMekNCGF/bNv6A
+         KO/ZXBsORenk1JDdSR4fIjVKuUiI/HmusKVoG1dqZzm/y2Mpy0TPZoyUXCeqOW+3N5
+         1oBQ1pmGthZxrS0WucIdlG6ymWvg30I9H6b9Y5Nr9CPiZBayr8E0qtngf+XczpoxVw
+         jeYx4F0NDs2PA==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/2] regmap: Add basic maple tree register cache
+Date:   Sun, 26 Mar 2023 14:42:37 +0100
+Message-Id: <20230325-regcache-maple-v2-0-799dcab3ecb1@kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.0 required=5.0 tests=PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAM1LIGQC/3WNyw6CMBAAf4X07Jo+BNST/2E4lHWhDdiSrUEN4
+ d8t3D3OJJNZRCL2lMS1WATT7JOPIYM+FAKdDT2Bf2QWWmojjS6BqUeLjuBpp5HAVCeqy7PCTqL
+ IUWsTQcs2oNuyd+Rh0xNT5z/7595kdj69In/37aw2+/cwK5CgsK4uqjLlpWtvA3Gg8Ri5F826r
+ j+fcv0FxAAAAA==
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-2eb1a
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2618; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=x+elaEjNBGrw81mnE6F3RWtDHADRa8KpDJx2MLvF+68=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkIEvUrRLjFjSATPOgbSsaPDGv7FcK/Sg2c2iZ0au8
+ 8y5yp/WJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZCBL1AAKCRAk1otyXVSH0IK1B/
+ 4wMIlkYEA7C04mN1cu+A3y5NLYTDyyBtkoN3pWcqGjgYC7pq0jM+RRY/OanBCEOZomJ3Ulwk7JmYPe
+ xC2BZI2Gi4HpQGod24jXNlbxlLlNba1wGZq7EJNVzDmsxSDlrhYpNG9Fmx4J7+6E/zKmtPrtTIhnOP
+ A2Ns0W61a6tUwnqLaXLxLdwIplVflOxVATdugvUlNBr/7YHoUX8YEM7iLeLwk7YGdOC3BrySbdXQyb
+ ctI1c5KeAzBf5lVMLLnKnWmnqfKZCP8a+LxyRICTVWC8Y6AKrSi6iclmMVfGQtYtSokFJs6y1LnXHD
+ 76szIVvDvCHf1GS3fQ3cbxWTgEmoBA
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko
-> Sent: 23 March 2023 12:37
->
-> Since strreplace() returns the pointer to the string itself,
-> we may use it directly in the code.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  lib/kobject.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/lib/kobject.c b/lib/kobject.c
-> index f79a434e1231..16d530f9c174 100644
-> --- a/lib/kobject.c
-> +++ b/lib/kobject.c
-> @@ -281,8 +281,7 @@ int kobject_set_name_vargs(struct kobject *kobj, const char *fmt,
->  		kfree_const(s);
->  		if (!t)
->  			return -ENOMEM;
-> -		strreplace(t, '/', '!');
-> -		s = t;
-> +		s = strreplace(t, '/', '!');
+The current state of the art for sparse register maps is the
+rbtree cache.  This works well for most applications but isn't
+always ideal for sparser register maps since the rbtree can get
+deep, requiring a lot of walking.  Fortunately the kernel has a
+data structure intended to address this very problem, the maple
+tree.  Provide an initial implementation of a register cache
+based on the maple tree to start taking advantage of it.
 
-Why do this? It just makes the code harder to read because
-you have to know another 'silly fact' about a function.
+The entries stored in the maple tree are arrays of register
+values, with the maple tree keys holding the register addresses.
+We store data in host native format rather than device native
+format as we do for rbtree, this will be a benefit for devices
+where we don't marshal data within regmap and simplifies the code
+but will result in additional CPU overhead when syncing the cache
+on devices where we do marshal data in regmap.
 
-Possibly useful return values might be:
-1) The address of the first changed character.
-2) The address of the last changed characher.
-3) The '\0' terminator.
-4) void.
+This should work well for a lot of devices, though there's some
+additional areas that could be looked at such as caching the
+last accessed entry like we do for rbtree and trying to minimise
+the maple tree level locking.  We should also use bulk writes
+rather than single register writes when syncing the cache where
+possible, even if we don't store in device native format, and
+there is room for improvement in how we load register defaults
+into the cache.
 
-	David
+Very small register maps may continue to to better with rbtree
+longer term, though the difference should become marginal
+especially in the context of the cost of register I/O.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Changes in v2:
+- Rework to store multiple values per maple tree node with
+  coalescing, bringing us much closer to the state of the art
+  with rbtree.
+- Add locking required for maple tree usage.
+- Use more efficent code suggested by Liam to free the register
+  map.
+- Link to v1: https://lore.kernel.org/r/20230325-regcache-maple-v1-0-1c76916359fb@kernel.org
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Mark Brown (2):
+      regmap: Factor out single value register syncing
+      regmap: Add maple tree based register cache
+
+ drivers/base/regmap/Makefile         |   2 +-
+ drivers/base/regmap/internal.h       |   2 +
+ drivers/base/regmap/regcache-maple.c | 265 +++++++++++++++++++++++++++++++++++
+ drivers/base/regmap/regcache.c       |  41 ++++--
+ drivers/base/regmap/regmap-kunit.c   |   3 +
+ include/linux/regmap.h               |   1 +
+ 6 files changed, 299 insertions(+), 15 deletions(-)
+---
+base-commit: c20bc1c03695287bd19922a32052f2bc7d4a462d
+change-id: 20230325-regcache-maple-364e7581cf0c
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
