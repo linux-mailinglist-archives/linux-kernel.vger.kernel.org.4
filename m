@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F356C9959
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 03:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980B96C995E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 03:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjC0BaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 21:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
+        id S230227AbjC0Bgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 21:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjC0BaP (ORCPT
+        with ESMTP id S229565AbjC0Bgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 21:30:15 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CD04680;
-        Sun, 26 Mar 2023 18:30:11 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 27CE024E13F;
-        Mon, 27 Mar 2023 09:29:55 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Mar
- 2023 09:29:55 +0800
-Received: from [192.168.120.42] (171.223.208.138) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Mar
- 2023 09:29:53 +0800
-Message-ID: <670108d3-d8d7-102b-75fc-52e2db8945f2@starfivetech.com>
-Date:   Mon, 27 Mar 2023 09:29:52 +0800
+        Sun, 26 Mar 2023 21:36:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBB94687
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 18:36:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679880965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IktNct0hYpmTWd/fwL1kpmhcQhHYgYPZqfJwKXiT4HI=;
+        b=YcShOyo73GhqJR0G7rn5i8pvTlxyU7/6PKZltqoYSewCrcrSfmfgU7vzK+EwAvZGQaVYD5
+        rP7tSlWMLFVKf77GWXF6UXLxj3YCrcXRAW3q0nZ5EsDxq+gYZNHjXXimc688lt7fbZddXu
+        57eEW+6fUeRC2x0mqhDWRvK5qTzNqRI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-573-ynQ_l6U9NCWBMxerBON6IA-1; Sun, 26 Mar 2023 21:36:01 -0400
+X-MC-Unique: ynQ_l6U9NCWBMxerBON6IA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 37A291C05149;
+        Mon, 27 Mar 2023 01:36:00 +0000 (UTC)
+Received: from localhost (ovpn-12-88.pek2.redhat.com [10.72.12.88])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0E5F62166B26;
+        Mon, 27 Mar 2023 01:35:58 +0000 (UTC)
+Date:   Mon, 27 Mar 2023 09:35:54 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86: Disable kexec for TDX guests
+Message-ID: <ZCDy+nsjPsi/Lllh@MiWiFi-R3L-srv>
+References: <20230325160128.21857-1-kirill.shutemov@linux.intel.com>
+ <ebead33b-0594-73df-56ae-f40473ac0ffc@intel.com>
+ <20230325192524.wetlbycbcsxc4plk@box>
+ <b16bcda0-f190-7849-cbbb-412d328c8806@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v8 6/6] net: stmmac: starfive_dmac: Add phy interface
- settings
-Content-Language: en-US
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        Tommaso Merciai <tomm.merciai@gmail.com>
-References: <20230324022819.2324-1-samin.guo@starfivetech.com>
- <20230324022819.2324-7-samin.guo@starfivetech.com>
- <CAJM55Z8_W9yOcL+yGAwB-qanD_-bbf16VjCP66P_xDFW6-c+3A@mail.gmail.com>
-From:   Guo Samin <samin.guo@starfivetech.com>
-In-Reply-To: <CAJM55Z8_W9yOcL+yGAwB-qanD_-bbf16VjCP66P_xDFW6-c+3A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b16bcda0-f190-7849-cbbb-412d328c8806@intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,128 +69,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 03/26/23 at 10:01am, Dave Hansen wrote:
+> On 3/25/23 12:25, Kirill A. Shutemov wrote:
+> > On Sat, Mar 25, 2023 at 09:25:36AM -0700, Dave Hansen wrote:
+> >> On 3/25/23 09:01, Kirill A. Shutemov wrote:
+> >>> The last item is tricky. TDX guests use ACPI MADT MPWK to bring up
+> >>> secondary CPUs. The mechanism doesn't allow to put a CPU back offline if
+> >>> it has woken up.
+> >> ...
+> >>> +int arch_kexec_load(void)
+> >>> +{
+> >>> +	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
+> >>> +		pr_warn_once("Disable kexec: not yet supported in TDX guest\n");
+> >>> +		return -EOPNOTSUPP;
+> >>> +	}
+> >>> +
+> >>> +	return 0;
+> >>> +}
+> >>
+> >> So, let's put all this together:
+> >>
+> >> 1. TDX implementations use MADT for wakeup exclusively right now (but
+> >>    are not necessarily _required_ to do so forever)
+> >> 2. MADT doesn't support CPU offlining
+> >> 3. kexec() requires offlining
+> >>
+> >> Thus, current TDX implementations can't support TDX guests.  This
+> >> *doesn't* say that TDX will always use the MADT for wakeups.
+> >>
+> >> Yet, the check you have here is for TDX and *not* for the MADT.
+> > 
+> > As I described in the commit message there are more than MADT that is
+> > required to get kexec in TDX guest.
+> 
+> I kinda think we should do both.
+> 
+> Let's make sure that all systems that depend on MADT wakeups can't
+> kexec() until the ACPI folks work out what to do there.
+> 
+> Separately, let's either fix or *mark* the kexec()-incompatible pieces
+> that *ARE* specific to TDX.
+> 
+> >> That seems wrong.
+> >>
+> >> Let's say SEV or arm64 comes along and uses the MADT for their guests.
+> >> They'll add another arch_kexec_load(), with a check for *their* feature.
+> >>
+> >> This all seems like you should be disabling kexec() the moment the MADT
+> >> CPU wakeup is used instead of making it based on TDX.
+> > 
+> > I guess we can go this path if you are fine with taking CR4.MCE and shared
+> > memory reverting patches (they require some rework, but I can get them
+> > into shape quickly). After that we can forbid kexec on machines with MADT
+> > if nr_cpus > 1.
+> 
+> This goes back to what I asked before: is anyone actually going to *use*
+> a single-processor system that wants to kexec()?  If not, let's not
+> waste the time to introduce code that is just going to bitrot.  Just
+> mark it broken and move on with life.
 
-Re: [PATCH v8 6/6] net: stmmac: starfive_dmac: Add phy interface settings
-From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
-to: Samin Guo <samin.guo@starfivetech.com>
-data: 2023/3/24
+Now we have two API for kexec: kexec_load and kexec_file_load. They can
+be used to do kexec reboot, or crash dumping. For crash dumping, we
+usually only use one cpu to do the vmcore dumping. At least on our
+Fedora/centos-stream/RHEL, we do like this with kernel parameter
+'nr_cpus=1' added by default. Unless people explicitly remove the
+'nr_cpus=1' restriction or set nr_cpus= to other number to persue
+multithread dumping in kdump kernel.
 
-> On Fri, 24 Mar 2023 at 03:30, Samin Guo <samin.guo@starfivetech.com> wrote:
->>
->> dwmac supports multiple modess. When working under rmii and rgmii,
->> you need to set different phy interfaces.
->>
->> According to the dwmac document, when working in rmii, it needs to be
->> set to 0x4, and rgmii needs to be set to 0x1.
->>
->> The phy interface needs to be set in syscon, the format is as follows:
->> starfive,syscon: <&syscon, offset, shift>
->>
->> Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
->> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
->> ---
->>  .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 47 +++++++++++++++++++
->>  1 file changed, 47 insertions(+)
->>
->> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
->> index ef5a769b1c75..84690c8f0250 100644
->> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
->> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
->> @@ -13,6 +13,10 @@
->>
->>  #include "stmmac_platform.h"
->>
->> +#define STARFIVE_DWMAC_PHY_INFT_RGMII  0x1
->> +#define STARFIVE_DWMAC_PHY_INFT_RMII   0x4
->> +#define STARFIVE_DWMAC_PHY_INFT_FIELD  0x7U
->> +
->>  struct starfive_dwmac {
->>         struct device *dev;
->>         struct clk *clk_tx;
->> @@ -44,6 +48,43 @@ static void starfive_dwmac_fix_mac_speed(void *priv, unsigned int speed)
->>                 dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
->>  }
->>
->> +static int starfive_dwmac_set_mode(struct plat_stmmacenet_data *plat_dat)
->> +{
->> +       struct starfive_dwmac *dwmac = plat_dat->bsp_priv;
->> +       struct regmap *regmap;
->> +       unsigned int args[2];
->> +       unsigned int mode;
->> +
->> +       switch (plat_dat->interface) {
->> +       case PHY_INTERFACE_MODE_RMII:
->> +               mode = STARFIVE_DWMAC_PHY_INFT_RMII;
->> +               break;
->> +
->> +       case PHY_INTERFACE_MODE_RGMII:
->> +       case PHY_INTERFACE_MODE_RGMII_ID:
->> +               mode = STARFIVE_DWMAC_PHY_INFT_RGMII;
->> +               break;
->> +
->> +       default:
->> +               dev_err(dwmac->dev, "unsupported interface %d\n",
->> +                       plat_dat->interface);
->> +               return -EINVAL;
->> +       }
->> +
->> +       regmap = syscon_regmap_lookup_by_phandle_args(dwmac->dev->of_node,
->> +                                                     "starfive,syscon",
->> +                                                     2, args);
->> +       if (IS_ERR(regmap)) {
->> +               dev_err(dwmac->dev, "syscon regmap failed.\n");
->> +               return -ENXIO;
->> +       }
->> +
->> +       /* args[0]:offset  args[1]: shift */
->> +       return regmap_update_bits(regmap, args[0],
->> +                                 STARFIVE_DWMAC_PHY_INFT_FIELD << args[1],
->> +                                 mode << args[1]);
->> +}
->> +
->>  static int starfive_dwmac_probe(struct platform_device *pdev)
->>  {
->>         struct plat_stmmacenet_data *plat_dat;
->> @@ -89,6 +130,12 @@ static int starfive_dwmac_probe(struct platform_device *pdev)
->>         plat_dat->bsp_priv = dwmac;
->>         plat_dat->dma_cfg->dche = true;
->>
->> +       err = starfive_dwmac_set_mode(plat_dat);
->> +       if (err) {
->> +               dev_err(&pdev->dev, "dwmac set mode failed.\n");
->> +               return err;
->> +       }
-> 
-> Usually it's better to keep all error messages at the same "level".
-> Like this you'll get two error messages if
-> syscon_regmap_lookup_by_phandle_args fails. So I'd suggest moving this
-> message into the starfive_dwmac_set_mode function and while you're at
-> it you can do
-> 
-> err = regmap_update_bits(...);
-> if (err)
->   return dev_err_probe(dwmac->dev, err, "error setting phy mode\n");
-> 
-> Also the file is called dwmac-starfive.c, so I'd expect the patch
-> header to be "net: stmmac: dwmac-starfive: Add phy interface
-> settings".
-> 
-> /Emil
-> 
+So I think Kirill's idea looks good. Means on TDX guest kexec reboot
+will be forbid, while crash dumping will function normally.
 
-Thanks, the next version will be optimized.
-
-Best regards,
-Samin
->>         err = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
->>         if (err) {
->>                 stmmac_remove_config_dt(pdev, plat_dat);
->> --
->> 2.17.1
->>
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Thanks
+Baoquan
 
