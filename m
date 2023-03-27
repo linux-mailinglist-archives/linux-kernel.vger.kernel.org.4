@@ -2,104 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C77D6CA117
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A646CA11C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233567AbjC0KUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 06:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S232983AbjC0KUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232983AbjC0KUI (ORCPT
+        with ESMTP id S233548AbjC0KU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:20:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A6540E0;
-        Mon, 27 Mar 2023 03:20:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CD37B81058;
-        Mon, 27 Mar 2023 10:20:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04071C433D2;
-        Mon, 27 Mar 2023 10:20:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679912405;
-        bh=xOkv83dpb4qhFn4mZHxypeMOPMtKkrIkKCWh451KMTQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AcXbauTPw+0VyaNcBBIMwTjPQPdMHPCUnzEYVlvaTYJZBzqSTUQWBlih703SyxA6t
-         ZE98somqk8SFdVpm98yPLs6lEPBpgOD/LkcgcNte6J49aB0A62FlC2nQoVwST9mASJ
-         He0gsfys17zmfcM+1QPTDWasMtJfQrIJU4oGbt+HvIv5ZmUpnSH7v0Bmzt24rEnBXU
-         mMX0wcpES8Cf22TX6MxXxzWZ4WMXGJ3w63J+4n4BeIJqvq6gDIGQbZXN6tbheQo8WV
-         b4aQm3I478xul05JKrgvf0413u9Iq4NHurSGiqIvUnD+7mfEnsxb2PVn8upvkZkiwU
-         z2DSs6QFUKAjw==
-Date:   Mon, 27 Mar 2023 15:49:52 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 06/12] scsi: ufs: dt-bindings: Add SC8180x binding
-Message-ID: <20230327101952.GB16424@thinkpad>
-References: <20230325122444.249507-1-vkoul@kernel.org>
- <20230325122444.249507-7-vkoul@kernel.org>
+        Mon, 27 Mar 2023 06:20:28 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955284C0F;
+        Mon, 27 Mar 2023 03:20:26 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id d11-20020a05600c3acb00b003ef6e6754c5so1542499wms.5;
+        Mon, 27 Mar 2023 03:20:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679912425;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kVN4bA3aMNTKiMhToGO/PROcH1X2ZJW5cID3K62e6GM=;
+        b=a4fDsZTwGNNI91uKTkqzjm+dkquVOWwnodNN7eiOn76lmDnJkT7YfvYfW0J271gkiQ
+         6wWbLEl9gP++PdhBVVWn4vOp3nHvQCOFbC0GCMy4skKcJzugaPPcSaUrLvpwfMYIlW5B
+         YBaUiiMl0Ljyp/CNS0I4KB2OkeeXs7gm8HBxyjij4Otj9R7PzOHb25AWeqxRQMqFdTrW
+         xVR3Kr7NbIB81qUIJG7pwB9X2nYFkWjlYDUnboueecvTUxT3IR4zCLA7R51yIk0Qj0QY
+         bue4JPDm9lzu7N1xgcxiii3tyuV4lGHlVjasuFOqCc//Y3IY4PS0Egv5lZ6DyjJunkXu
+         crnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679912425;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kVN4bA3aMNTKiMhToGO/PROcH1X2ZJW5cID3K62e6GM=;
+        b=aai3E8QN5J29SdWvP52m0D1Wgf3wV4JqyThpgpGfWy7HkWZohpYVKBB/EM7RezMw7D
+         jUxjZQ/TNLI+3t5zpLy/fwCQdmRqmf5Mv2NOm1ZMhyml9fvDvKXtqA8a3+KkBmX8xX2v
+         iAvjJMinfGTXoH0BChdQvl03i/QWjUkQkBN5aEzA8WFbvKGss/q9QbwpYkL5sl2gguM/
+         9uS3osXOJXImRBPVOdD/QAor8g/2lOOHWBhkp+R3GCxMrjDLTu7upHvZpm6d7Snv/mtE
+         vOagXKFCNZiXSb8Rep1n35D9Lj+VT04AtlYT6+y2xLeZkOy7E5fQDHZECoXLZ/EE72nL
+         qNHA==
+X-Gm-Message-State: AAQBX9erCYsYFLj0GIJdwhiR5a3p09SDvRRRSymvL91eCVWxYneVksOF
+        m10jK9WjvrA/jtvjsGoGK2I=
+X-Google-Smtp-Source: AKy350bQs7h8xcV9TLEaRh7IH0YWMQ3rbMxAMmlsx9SInDtkuyNK9/Z8KgJP1hVh7ALS06wFopyFrg==
+X-Received: by 2002:a1c:f216:0:b0:3ef:5e17:1ed9 with SMTP id s22-20020a1cf216000000b003ef5e171ed9mr6667246wmc.31.1679912424956;
+        Mon, 27 Mar 2023 03:20:24 -0700 (PDT)
+Received: from suse.localnet (host-87-19-99-235.retail.telecomitalia.it. [87.19.99.235])
+        by smtp.gmail.com with ESMTPSA id j6-20020a05600c190600b003ef6bc71cccsm4401373wmq.27.2023.03.27.03.20.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 03:20:24 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ira.weiny@intel.com
+Subject: Re: [git pull] common helper for kmap_local_page() users in local filesystems
+Date:   Mon, 27 Mar 2023 12:20:23 +0200
+Message-ID: <2729240.9PvXe5no7K@suse>
+In-Reply-To: <8232398.NyiUUSuA9g@suse>
+References: <20230310204431.GW3390869@ZenIV> <8232398.NyiUUSuA9g@suse>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230325122444.249507-7-vkoul@kernel.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 05:54:38PM +0530, Vinod Koul wrote:
-> Document the UFS HC for SC8180x SoC
-> 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+On sabato 11 marzo 2023 18:11:01 CEST Fabio M. De Francesco wrote:
+> On venerd=EC 10 marzo 2023 21:44:31 CET Al Viro wrote:
+> > 	kmap_local_page() conversions in local filesystems keep running into
+> >=20
+> > kunmap_local_page()+put_page() combinations; we can keep inventing names
+> > for identical inline helpers, but it's getting rather inconvenient.  I'=
+ve
+> > added a trivial helper to linux/highmem.h instead.
+>=20
+> Yeah, "put_and_unmap_page()". Nice helper :-)
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+[snip]
+
+Hi Al,=20
+
+> Why did you name it "put_and_unmap_page()" instead of=20
+"unmap_and_put_page()",
+> for we always unmap first _and_ put the page immediately the unmapping?
+>
+> It seems it want to imply that instead we put first and unmap later (which
+> would be wrong). That name sounds misleading to me and not sound (logical=
+ly
+> speaking).
+>=20
+> Am I missing some obscure convention behind your choice of that name for =
+the
+> helper?
+
+Can you please explain what I'm missing behind your motivation?
 
 Thanks,
-Mani
 
-> ---
->  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> index c5a06c048389..a3db34f35f4f 100644
-> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> @@ -26,6 +26,7 @@ properties:
->            - qcom,msm8994-ufshc
->            - qcom,msm8996-ufshc
->            - qcom,msm8998-ufshc
-> +          - qcom,sc8180x-ufshc
->            - qcom,sc8280xp-ufshc
->            - qcom,sdm845-ufshc
->            - qcom,sm6350-ufshc
-> @@ -105,6 +106,7 @@ allOf:
->            contains:
->              enum:
->                - qcom,msm8998-ufshc
-> +              - qcom,sc8280x-ufshc
->                - qcom,sc8280xp-ufshc
->                - qcom,sm8250-ufshc
->                - qcom,sm8350-ufshc
-> -- 
-> 2.39.2
-> 
+=46abio
 
--- 
-மணிவண்ணன் சதாசிவம்
+P.S.: Adding Ira to the Cc list, since he's been doing kmap() and=20
+kmap_atomic() conversions long time before I too started with them.
+
+
