@@ -2,192 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57516CAF0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4D16CAF1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjC0Tp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        id S230005AbjC0TsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 15:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjC0TpZ (ORCPT
+        with ESMTP id S229631AbjC0TsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:45:25 -0400
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6826930F7;
-        Mon, 27 Mar 2023 12:45:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1679946319; bh=oxmK92xKDmUDCfivDFeZAnn0jp1onvjYGp6dhItp8CU=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=W/QSBpIY+ehzrfFrRYhdqlYndxeQINnji9LdNotUr0jtMs1fliPLNbhbIWVRkpUcG
-         wM9E25XRsHkKjlqW2HAbGcw09mZqKYOQs+TurpuTJocOFWvyjikrFt0LFkG7GlZc9o
-         LyeLgqRw8HMLy7bUp30APaoCba98kLojrv83pDec=
-Date:   Mon, 27 Mar 2023 21:45:18 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        linux-kernel@vger.kernel.org,
-        Robert Mader <robert.mader@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Martijn Braam <martijn@brixit.nl>,
-        Kamil =?utf-8?Q?Trzci=C5=84ski?= <ayufan@ayufan.eu>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Jarrah Gosbell <kernel@undef.tools>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v2] arm64: dts: rk3399-pinephone-pro: Add internal
- display support
-Message-ID: <20230327194518.qkm5qgap6vkivpeg@core>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        linux-kernel@vger.kernel.org,
-        Robert Mader <robert.mader@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Martijn Braam <martijn@brixit.nl>,
-        Kamil =?utf-8?Q?Trzci=C5=84ski?= <ayufan@ayufan.eu>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Jarrah Gosbell <kernel@undef.tools>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20230327074136.1459212-1-javierm@redhat.com>
- <20230327130147.wgxl2qayhzsi2xak@core>
- <87wn32rynm.fsf@minerva.mail-host-address-is-not-set>
- <1924921.PYKUYFuaPT@diego>
- <87mt3yrwzo.fsf@minerva.mail-host-address-is-not-set>
- <20230327174855.xpxrdfldqcxk463r@core>
- <87jzz2rrfr.fsf@minerva.mail-host-address-is-not-set>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Mon, 27 Mar 2023 15:48:22 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7C09E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:48:21 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RJYcAU014854;
+        Mon, 27 Mar 2023 19:48:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=q2lRqeXcM02lNAi6IXfHuGF8Y5GyVfmfFiOMZ0qDulo=;
+ b=jE2icYKi8CL/hxIrRV+TDqF2AzPd9gVvrxjzop/EJIV8pOELwCjHS0TlvK6k4BNkA87N
+ /t91eKg4ewcIqkcnh4wJz8l4Q6x/Jj0ZS9UlPme9DcFeSTMzZtRR3PXr1hLKpRsLKUdI
+ AGe22uz52HarHYZ/JDIo19YdrRZLN7IiBYBVjyjmyUTE+hc2SA+rRW4gH4A9gQMiYk3T
+ da2RCCGWv1ahjjqC5AozM/FBQSHgTvy5smJH+iLyNHBGILiOhPfNIDQCXE2NqFraBybT
+ qcRSAHRQvNPzdYHHm/5kxOe0wfjwVStRORn48EiIZaNjjUiX+XwtG2EK7lp+8Wor0zK1 9Q== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pkhdsg127-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Mar 2023 19:48:08 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32RIYNpG005473;
+        Mon, 27 Mar 2023 19:48:07 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2108.outbound.protection.outlook.com [104.47.58.108])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3phqd5ehtx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Mar 2023 19:48:07 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cYYLpTOqq9vAIVaD8UaRCQmIgJIKmgzEDO6pF4eec5ha9PZ6p9X4UbhW5g0y+hp4EToJIPRBItcQPGVNNMnUlHwED7yhwK5bNTb5UIINuKtsquxs82l61dZ7iAmxRLGhNFDGdHJ6wjlvsMgWuYbYxy8XwBAxrmIsqJoMyE1qKcWA9r1xlIHjeGm/nJp78TVZCoDjOducZD3smtIIyWDWTfXhQ9hkLuNtD+lpFvDDAm8Rc55h24btxR+t1B5BIvz0EK5iPMPInpX31GrpwZYHKFaDdcqQkWvflLNa9L7TFG1uL7540rTP4U3Chpl/X/7w9kHYvlHa+vil9Z1yquW/hg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q2lRqeXcM02lNAi6IXfHuGF8Y5GyVfmfFiOMZ0qDulo=;
+ b=MW2eXrpn4K1aX+Gxg5Q/B/FLonU8pnZTqIsWvstexPXlkwQw4hTmOGIoC8o8wdWTa8sTSGlYgD6AlVoldZQtvhZMdQOocXHT8prMCGTR4qGS34nY85ViWKcIK71GcK4HpmodIYhy2clDEMcpEQCODW9LUsHu/a3xwtaLK+qmyhFmj63I792mHGKESDv4N1zQoguW04NX+QZGq7DYOU6h6mF0rjXch8trNdWyKPw5P05fLVF84O7h1OHVWI4Wao+vGjiXncy8JLhQjhzYx/ubmxpjN3Lmq4mmtDt19i92vR791By2jSCCIUm3S4p/bLiJuCku+CYPKINxeMPv60B9Tw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q2lRqeXcM02lNAi6IXfHuGF8Y5GyVfmfFiOMZ0qDulo=;
+ b=kQk4fLkPTQkGJtTDH8MpmJOlne4K7LE6loB/90rghzrXVtt4f4YZMejY4R3SBx5PyM+7SLyfjFvLi3r7bP5DPY8Pr+vQ2Y0iGYwk6PVop/byIcHpd4zYqe4BTEWMcjidzk3lJj3BW4R2TGTFb1BzstNVbF2vbgGnekhJIk+eies=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by MW4PR10MB6464.namprd10.prod.outlook.com (2603:10b6:303:222::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Mon, 27 Mar
+ 2023 19:48:03 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::9fc8:73bb:cc29:9060]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::9fc8:73bb:cc29:9060%5]) with mapi id 15.20.6222.029; Mon, 27 Mar 2023
+ 19:48:03 +0000
+Date:   Mon, 27 Mar 2023 15:48:00 -0400
+From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        maple-tree@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Suren Baghdasaryan <surenb@google.com>
+Subject: Re: [PATCH 0/8] Fix VMA tree modification under mmap read lock
+Message-ID: <20230327194800.fzqfrxfh3nfmqwgk@revolver>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        maple-tree@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Suren Baghdasaryan <surenb@google.com>
+References: <20230327185532.2354250-1-Liam.Howlett@oracle.com>
+ <20230327123515.bce6c1ea3660e9b17db50c33@linux-foundation.org>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87jzz2rrfr.fsf@minerva.mail-host-address-is-not-set>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230327123515.bce6c1ea3660e9b17db50c33@linux-foundation.org>
+User-Agent: NeoMutt/20220429
+X-ClientProxiedBy: YT4PR01CA0338.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:fc::9) To SN6PR10MB3022.namprd10.prod.outlook.com
+ (2603:10b6:805:d8::25)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|MW4PR10MB6464:EE_
+X-MS-Office365-Filtering-Correlation-Id: dc86de8b-e33d-47ae-65d5-08db2efc2d73
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MxTuoZJM/jsvgprSHfiLmXlUc1vwMk9nU2Kq8Aa7OoSIlS3RGOGJK49aHCbjYt4S3Zx2UL2smaE1gEGdGXVh6rOAAwPNdtxISBJDYLsIW7U5V0uXdom2MAQG5aILi6xaq6b9mIyBmhJLqzNGdGbci1CKvmg70XuNwDl1pWIJLUStodbmyTr1y3wQhcXPDu0CGL6Tw8UhoIuLR+/peXEspobCKUKpXZk/GZq2N+HKJV4zg61WvFFGr1NxVkVodRRqkOX0/z63S9ep1ohnuOyh2d7qBCcIJgkw9hVIGK6rhvUZbyQ5otwRcPQ3Uzej/3kqii1PDbYnqNbj2h8lhy16MAVIH0dHppB8sUBnkYFwsCv2S64Aw+kGEPEKSGYSuIV540mW3UWf8v+r4UMfQ51YbEa1oof2JGPuR2290eE8vLSjuZqq7MtMdqi+2iPHE3f4LFPH5+tEfxdF/f5C6IYfplHhP124kOsbbnbjtz0q4VAsjda5IvTt6N/K0WKwFzV0djLnYyBO0i+QoociQJQQLOyBCRzjaaO4l+5cT4RYaiRDxos8ae9T0pmRk+VQ03At
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(366004)(346002)(39860400002)(396003)(376002)(451199021)(1076003)(9686003)(6512007)(6506007)(83380400001)(26005)(8676002)(186003)(316002)(54906003)(41300700001)(66946007)(66476007)(6916009)(66556008)(4326008)(2906002)(8936002)(4744005)(38100700002)(6486002)(5660300002)(33716001)(86362001)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gWdEB8ARIE6uDLM0CJpvPzI+pVtSio2TPLvvVnJTmszZ+1uy43Vk4cRovcM+?=
+ =?us-ascii?Q?N21c/5OI5V6hla7KjgOdx7pmAa2OcV0FZURllZD4jVdUmg3e7vC77PYSsDAB?=
+ =?us-ascii?Q?A56we3+4AB8gvPRHgs/lImDUpCc7rGdgEzqt9QGARF7pKTHepoO+ZbiFKWt/?=
+ =?us-ascii?Q?rufh2ZSHN2bK6Uou+4x7hWYBAehpvHj7c7AzUj3gHM8xG3Eg/mzEFWNvDR4B?=
+ =?us-ascii?Q?vSVK4B98mYI13hgLxV0Gsh2QucJ+ZBONcsB0Ziv3UXdhrDw2WjjQaLzkksRV?=
+ =?us-ascii?Q?b6jWw64plPk3HvtQDWN9qcNln3ieHHVt/cqKf4hewl71jQ8C8EQcpBYXKiIO?=
+ =?us-ascii?Q?7ktv8OiaaXF0biZU8PFrkWB3BjmhA7qmWBlBpufVUnpPx0mA+NQDm8RzmA9o?=
+ =?us-ascii?Q?NVf0M35RYPmUhIqlHIz7IIKQ3umE4o90IgTfOLoQVennb9t7Vmp5o1HAfdvZ?=
+ =?us-ascii?Q?hESv/DN1sGDvyL1w9VZP8f2S/uIG9cgMOmammueQrJRIEh0Y2lVYKG3lLOLT?=
+ =?us-ascii?Q?NT5Mx3d7wpj8woPo6I0P4xUUUDIVlkeH/PzdfN4OwdgD2bnUTwj2MDqq7hbR?=
+ =?us-ascii?Q?Xy+8CLorIY+yTfUJ+03U0FHLcJHDNkWOkfKx4ENBpSbEIit1pDLb7lrnynU2?=
+ =?us-ascii?Q?9iCENMhTFp+xbLnRIDuf5VkwjMjQcUiLERrWTnICDn2HCXWv2SIDnyKAWcO9?=
+ =?us-ascii?Q?5VFAnC3TZQrcWDrnpjqcrLNt1dPHEBNkYU2CDdxFy5VGezfATKEzH+rKHIhj?=
+ =?us-ascii?Q?PB/BiyShiC+QVVl5l8u63GVgoaG+VIm1j4p2t4dvtjMowova5JW4N7zZctr6?=
+ =?us-ascii?Q?iDOXwIdKJNr1h4sYCq06dZYUcGuyBfb3S+vsCyz4mi8Ti+FNnT2rfcsR9IjT?=
+ =?us-ascii?Q?xeOFK5+2lytnm+4x6Fu5VOLuRvyQg4oU/BmzfTuuJTnm0tMF/cdrC+L0K4to?=
+ =?us-ascii?Q?r59tTIANFa1NjSpcvLthvi4FMxTAcd2qm9U2ffGofk4B2QU6rSjxkFfSmTNC?=
+ =?us-ascii?Q?Ko5m/cdMiSGV3YW4SbRE5tHluE88S77De5pr5tMs2uZFTceDXPDo4UBXpe7v?=
+ =?us-ascii?Q?k3lw8hENwisRk5JoXrS5QLm7H7nq1sVKLBaCSOowcGV2mFRkfruIjcRDa4KK?=
+ =?us-ascii?Q?vypu35jl0s2XwGN0Ks+KyEbvp6dsq0ID7yUoSFVPe3ZzcE2gJqCmgYBMCh3F?=
+ =?us-ascii?Q?W2mIWhvmGN9ypVWbefxAd5TeLYpV9fsr7yBRiB2AMen5ruTQ+K8LuSBqWMvf?=
+ =?us-ascii?Q?rfTEkzQSWpPPPBFNgrCvpsSZGTmGzU33yAPTObnMo24DdfYDg6aJJw02mQ2s?=
+ =?us-ascii?Q?t03SF2v9DDoheUthw6OBgulO3lFo5THSCxb/nuqZVU16771wcUOX9JxkCAs4?=
+ =?us-ascii?Q?RQOAcVVajhLxu+xCDyCTEBZr2luk7HxkamVvfsAID6qvYXjHHTTbqhMEaOsM?=
+ =?us-ascii?Q?+rI3BzA2kBT1dPveCTDh8UBGjFcpzSNYH9f96ueR42I00Nc/QMXVgaBnbkqS?=
+ =?us-ascii?Q?BLlkygykChZRAUxaDi+8Ao8rbo2C65xLOtZpHCB4NxE5CwufERh/o3UHmkue?=
+ =?us-ascii?Q?+Ko3OEwhxywF/BgI9YQPDP20DgKT7tQBOHop9t5cGpw99HLXeSaYA8vKL3Tq?=
+ =?us-ascii?Q?gQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?da3IE1nL97xYrPuYXqpD0vgg7lsytZXqkxaRzAaVe8hjGgqMfcwxBuUvOkg0?=
+ =?us-ascii?Q?J0qqQGheO2TFnsg88ot41wVCKbgXVloKCyNTMzzdvDBMo+PsC9bGQTduPJkO?=
+ =?us-ascii?Q?YkoByxUI6P6zClh2+Xon5BwJ8GmRK1EaUu2BEynL9xH1erveJmpgN9tpj/QP?=
+ =?us-ascii?Q?At7p/D3srGy027Mz9FsZGNR4YIu6lMyuLNsA2kCYYZYnxKD8odFUwdUDKuB4?=
+ =?us-ascii?Q?aeFmodlhDEVeYtcSpqnZP8Ztm3EEvL10HWwaqZ2N7H3Qsw5Bhv6MYMvBCNVN?=
+ =?us-ascii?Q?UaN2wta1Ty9jYaUvwHsy0fpU12WUikZl1Lpy02xOzfPvpLFRFW88p7eJ0Hae?=
+ =?us-ascii?Q?XM4KdOmVTDZF54RhEsndV5Qqq3C2g7WNDXQf4KqGxQLDXSPs8mKZ8Mb7QXRx?=
+ =?us-ascii?Q?3evx2mr3AUkLz1wwoHl8IrLHav2+q6yc89QHPU7AhWN8xTDK9MXAP4BlOjWk?=
+ =?us-ascii?Q?bL393CcNVodD/Q20r+Y0w1mL/A8ODd6s0aJX2Lxnee+f4BvJdP5PLwo4CI2u?=
+ =?us-ascii?Q?i6Mu7hrblkSr1JuswLmo0n1oHxw+O71F3tGtutgq/81hGdc+yc/K/vklNugy?=
+ =?us-ascii?Q?IY4seYbt/sKorMWW36MmLiJudcahfz2wNdqOFz/aZyxJjq4Hb/dBSGqznHT+?=
+ =?us-ascii?Q?fPGIbHbRcysV3y3bODmhMzDbwmIKuSJwLhBQILt4QwsJ3psoVq5LhwBaZLlf?=
+ =?us-ascii?Q?xO747is7/FMQdAKxcN7VYKiXtDjm/w9D1nCVK6xYlozdi6t/Uk0ZmxwypPyZ?=
+ =?us-ascii?Q?1RdTIvlCNczArHJGw100e+EVgEVy/eaQn2i3nHooTG0V9qbHNnBjO95vWXyJ?=
+ =?us-ascii?Q?RZPKNIETfWtWqpXOJ1u28fMc1HO2/lATcgW3697OiBra/n2MJYK0msk7pCZk?=
+ =?us-ascii?Q?kq7CaVGhW90Hl3CadTbs5eBYxip/gMIpEujfYc8Wg/Jw6BY8ArMEHPzkzEWu?=
+ =?us-ascii?Q?BeP5xOy5WVw7lNXI8N8hTg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc86de8b-e33d-47ae-65d5-08db2efc2d73
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 19:48:03.3179
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PmzEM1FnGoes2m7v6gM2YxzH648YoZcnM1PKIazBNUeWEbR252IcKlR2f0H+YPAqFT57POsIFgklGPtF/tFG8A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6464
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=743 adultscore=0
+ phishscore=0 suspectscore=0 malwarescore=0 spamscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303270161
+X-Proofpoint-ORIG-GUID: twAXGF4kunHyRYimV4jBQ9XtPMiSeutj
+X-Proofpoint-GUID: twAXGF4kunHyRYimV4jBQ9XtPMiSeutj
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 08:15:52PM +0200, Javier Martinez Canillas wrote:
-> Ondřej Jirman <megi@xff.cz> writes:
+* Andrew Morton <akpm@linux-foundation.org> [230327 15:35]:
+> On Mon, 27 Mar 2023 14:55:24 -0400 "Liam R. Howlett" <Liam.Howlett@oracle.com> wrote:
 > 
-> > On Mon, Mar 27, 2023 at 06:15:55PM +0200, Javier Martinez Canillas wrote:
+> > These patches have been in -next since next-20230301, and have received
+> > intensive testing in Android as part of the RCU page fault patchset.
+> > They were also sent as part of the "Per-VMA locks" v4 patch series.
+> > Patches 1 to 7 are bug fixes for RCU mode of the tree and patch 8 enables
+> > RCU mode for the tree.
 > 
-> [...]
+> What's happening here?  I assume you've decided that the first 8
+> patches of the "Per-VMA locks v4" series should be fast-tracked into
+> 6.3-rcX and backported?  And we retain the rest of that series for
+> 6.4-rc1?
+
+Yes, they need to be backported and fast tracked to fix the issue syzbot
+found.
+
 > 
-> >> 
-> >> It is broken though? This is what is in Ondrej downstream tree and I see
-> >> no issues on my Pinephone Pro. He mentioned some flicker when looking at
-> >> the signals with a scope and hooking a photoresistor.
-> >
-> > LED regulator is driven out of spec by a frequency that's 20x lower than
-> > recommended, if you want short version of what's broken about the DT patch.
-> >
-> >> But that's fair. I'll let Ondrej then post a v3 if he wants to address the
-> >> issues he pointed out, since is his patch after all.
-> >
-> > It's not my patch. Original author of the DT is Martijn or Kamil. I just carry
-> > their DT work in split-up patches in my tree, and I sometimes try to find solutions
-> > to bugs I find when using PPP. That's the story of these DT changes you're posting.
-> >
-> > Since you posted this DT patch for upstreaming, I wanted to help you by reviewed
-> > it more completely, so I opened the schematic and datasheets for the components
-> > that are described in this patch, and discovered these new issues I commented
-> > about. And I also tested it on top of linus/master.
-> >
-> > Just because something is in my tree doesn't mean it's mine, or that I reviewed
-> > it in detail and prepared it for upstreaming, or that I'm interested in
-> 
-> Thanks for the clarification. Because the patch had your authorship I
-> wrongly assumed that came from you. Sorry about the confusion.
+> Patch [3/8] hasn't come through to me, to linux-mm or to linux-kernel.
 
-Ever since base DT support for Pinephone Pro was merged, none of the DT patches
-in my tree are in the original form as prepared by the authors + fixes I've
-added. That's simply impossible anymore.
+Should arrive shortly, I received it from one of the ML.
 
-To look up who did what, you'd have to look at older branches, pre-merge.
-
-Patches after the merge just came from squashing everything into one patch,
-cleaning it up, and re-splitting along some vague functionality boundaries,
-while trying to keep best-effort original SoBs as faithfully as possible, so
-that I can keep maintaining the PPP support in a sane manner.
-
-Anyway, SoB's are added in chronological order. So:
-
-https://github.com/megous/linux/commit/471c5f33ba74c3d498ccc1eb69c098623b193926
-
-Means the author of the changes is Martijn + Kamil (roughly) and I may have
-a line of code in there too, since my SoB is last. For some reason, the order is
-inverted in the patch you posted, making it seem I developed these changes
-originally.
-
-> > upstreaming it. I'm just trying to help you with your upstreaming effort by
-> > testing and review since I got to know the hardware quite well over the last
-> > years and can check the schematics and datasheets quickly, and I like to think
-> > upstream code is held to higher standard. That's all.
-> >
-> 
-> Appreciate your help and I agree that upstream code should be held to a
-> high standard. But since the DTS in mainline is pretty basic anyways (you
-> can only boot to serial right now), is not really usable for other thing
-> than development and keep adding the missing support.
-
-Having wrong frequency used is not a missing support for something. Sorry it's
-too bothersome to get the review piecemeal, but sometimes people have more time to
-look at patches in-depth, and at other times they don't and you just get surface
-level or no review.
-
-One point of posting patches to the mailing list is to get review. And it's not
-that great to do in-depth review for you, up to going through schematics and
-datasheets, testing, and even proposing and testing solutions for found issues,
-just to be dismissed without technical reason.
-
-The thing is this review will most likely happen just once, and noone will go
-back, read through the entire huge DT along with a schematic, to look at whether
-this or that pullup is really necessary, whether some parameter is out of spec
-from the datasheet for each part, or things like that. That's just not
-pragmatic.
-
-Instead, people will happily attribute non-obvious issues caused by these
-omissions of manual review to shoddy or slow or power-inefficient HW. "1kHz
-+ harmonics interference in codec because high power backlight DC-DC regulator
-basically spews off 1kHz of 1-2W load + harmonics because it's driven
-incorrectly? Ah, the phone just has a shitty audio codec!"
-
-So, don't take it as some perfectionism. Upstreaming just seems like the best
-time to look at things that were overlooked in the past in more detail and get
-these little things right, because the DT additions are done piecemal and
-slowly/gradually, so it's more manageable to review and fix right away. This
-will just not happen later on for these obscure devices like Pinephone Pro,
-where the whole effort that goes into it is like one half of a fulltime
-developer time split over 4 mildly interested real persons, slowly tapering off
-over time as the device ages.
-
-regards,
-	o.
-
-> So I thought that we could do it in steps without creating that much work
-> for the people trying to post the downstream patches and having to re-spin
-> too many times.
-> 
-> -- 
-> Best regards,
-> 
-> Javier Martinez Canillas
-> Core Platforms
-> Red Hat
-> 
