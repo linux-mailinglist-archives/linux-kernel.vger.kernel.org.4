@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82E56CB291
+	by mail.lfdr.de (Postfix) with ESMTP id 462136CB28F
 	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjC0XgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 19:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S231990AbjC0XgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 19:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbjC0XgD (ORCPT
+        with ESMTP id S231927AbjC0XgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 19:36:03 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1672D70
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:35:40 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id f17so7681593oiw.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:35:40 -0700 (PDT)
+        Mon, 27 Mar 2023 19:36:17 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7D030E0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:35:50 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id w133so7710456oib.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:35:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google; t=1679960140;
+        d=usp.br; s=usp-google; t=1679960150;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1A2mIjPdUqhr5Ice4vp7gIRuK6chByRV3cyN7aavT0E=;
-        b=hBEZEu/Fg8Z7uqZ/Ekz1hHMkGIiWSFF5sR50cANSTAnWulG9QmfK+wwFoes5VSYTRh
-         htMmf303bnpibjbmVMsR9SPCc51HKUstFFhpmUbInbdSvxo7XOCdedKUFZ8ZtXeJ7/FA
-         238eQJQE4A1BarBX9h8IbgyVHKEJmOM2bfBO2yN40h1Yw8KQ3rxQ/tQW4pQ1x4wP5cwj
-         x4RDRYoVZB/R5SC67RF1rxAyAA1Nu27ewQa8soq4BzP4HWRC7hBCY2FiqLFMYboWuy++
-         x2mBeYBSEDmh/XqmaVCK4Cp6GkEDyA9YmnvG/o4ecItjja9Cz2eSbfxPBnJSBpJvtT0J
-         pvug==
+        bh=K1xhDxA3uWDRifG4IvLBAoRIIiYm0r4QC9LLNbKp2X8=;
+        b=hvoaJX2ufI+udaK8mtxiLI21DzeH7JurXG/B43jOARKu83aSms5p/jUB7lwFs6omfL
+         C3MvJEbwKrp4+zN7nS9bwwLJRstOf0GeeBnUjX0wuSPeyXQ2hqrkBQek1SQGMIiX+KCX
+         /4ZPrhOgZvJ0MEOfcTm3nKfKoZUGeUiv8O33K6TquSH+CmZVXyqzo50twDCInP4i9q9l
+         LtUwMM4WfNHC2cmc/CLIiaJJAaok/ssG3j/4jAMDz7SP/mcITFs8jlPilmDmUbIu1rpa
+         S8HtZoIjJX3ZkBhEtr41i+hLJVS4ef1KC5FtF535WpCQQdngJk+XZwGB3Wp0bFrZvPsJ
+         rcZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679960140;
+        d=1e100.net; s=20210112; t=1679960150;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1A2mIjPdUqhr5Ice4vp7gIRuK6chByRV3cyN7aavT0E=;
-        b=bDlXIHjoCp9btWNVrRCzApylWJXgFhYB1FdCaR0y4hxaF2EwwYbxpQo+1yv37j0OIH
-         b/9wl7ZtQ5raDRefJPzd/v25ljuooSMMPWFMH7uwX9KNGSK+6ISfWMq/a2qxnoQUDJTi
-         mNTOY9qqvFFuOfOK9cSWvgUdLAXGwmLGrG0UcqITISzxaa03AYOOitWPAAA3n9NjIODV
-         jjpRXWXcfvLTcNtTgdwFUuCS0ia3Zdx91b+d9HjD73alaG9Y/53bHbcZS29G+LLwmiy9
-         R3DnBygMrIfSc0oLU1D7pJSXnnDRYVjUmdvWjlH1UiUVGnti+3d5xUcT3ztxJxOfBpOE
-         Go4A==
-X-Gm-Message-State: AO0yUKXP2n92yEyVA99YFABDyb/jq6gv/6Gylkctn1gcbBoilEDx84Fq
-        7EIu44VNoJ0AoCS/0inLyoN7pw==
-X-Google-Smtp-Source: AK7set/XpIaBnrd0Il1RA6TJi7frFciWmH9SabrmY2R33L9ZbylSXEKtU1Nfc4VXuM45NiWKMhJC9Q==
-X-Received: by 2002:a05:6808:58:b0:386:f58a:2262 with SMTP id v24-20020a056808005800b00386f58a2262mr5575924oic.57.1679960139887;
-        Mon, 27 Mar 2023 16:35:39 -0700 (PDT)
+        bh=K1xhDxA3uWDRifG4IvLBAoRIIiYm0r4QC9LLNbKp2X8=;
+        b=sZaFtVDmiF1BUV78mBatW9UMhCjDQd9bO+EOTb/S9OmWxzqp+E4YfCig+8WoInXqMA
+         7J3DmjngKgzwWIFV0TTvWvqVOEcGQt0IpZLTIvMUX4V1uap/t/m9tC4E05lIYm4+NdXH
+         s5zl2omyGVXPS8MuJcN2WgtwSOVuo18q//QI8NzOtLcaDNxnbMYejGLcvsP2+SgEP4mJ
+         QQbbUbYzm1Vl7frYKGXH9ZpAlq1Emxu3Mfpyhv6PNlG3GgJXHu9CyZBSVIbUKWg+ke30
+         blZp/gANCHSKEG0nLryjjbPdC0MxQERAkCV5XFUegWcv7NlX9h+y/IhhiKVRlMTPS4ur
+         +VGw==
+X-Gm-Message-State: AO0yUKWBykkt+1dkYHfdknSEjUunW4xzu2nnbOpPubN0lvpR8o4WU6nH
+        Bond+lZP3rwuOI1X/8rhUIhGww==
+X-Google-Smtp-Source: AK7set8NiGmgJV8HERS4O1DEMBfqAEeV4IytdUJ48dLagBB0+Hq6qQQfvpgB8IkKbofF5pTimWiQAg==
+X-Received: by 2002:aca:6507:0:b0:387:3239:61fa with SMTP id m7-20020aca6507000000b00387323961famr5553985oim.30.1679960149872;
+        Mon, 27 Mar 2023 16:35:49 -0700 (PDT)
 Received: from ARCHaio.localdomain ([2804:1b3:a2c0:c911:919f:bd20:4f2a:8383])
-        by smtp.gmail.com with ESMTPSA id b186-20020aca34c3000000b00389295e8424sm1643409oia.45.2023.03.27.16.35.30
+        by smtp.gmail.com with ESMTPSA id b186-20020aca34c3000000b00389295e8424sm1643409oia.45.2023.03.27.16.35.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 16:35:39 -0700 (PDT)
+        Mon, 27 Mar 2023 16:35:49 -0700 (PDT)
 From:   Caio Novais <caionovais@usp.br>
 To:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
@@ -97,9 +97,9 @@ Cc:     Alex Deucher <alexander.deucher@amd.com>,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
         Ryan Lin <tsung-hua.lin@amd.com>,
         Hamza Mahfooz <hamza.mahfooz@amd.com>
-Subject: [PATCH 09/12] drm/amd/display: Remove two unused variables 'is_pipe_split_expected' and 'state'
-Date:   Mon, 27 Mar 2023 20:33:50 -0300
-Message-Id: <20230327233353.64081-10-caionovais@usp.br>
+Subject: [PATCH 10/12] drm/amd/display: Remove unused variable 'cursor_bpp'
+Date:   Mon, 27 Mar 2023 20:33:51 -0300
+Message-Id: <20230327233353.64081-11-caionovais@usp.br>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230327233353.64081-1-caionovais@usp.br>
 References: <20230327233353.64081-1-caionovais@usp.br>
@@ -115,57 +115,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compiling AMD GPU drivers displays two warnings:
+Compiling AMD GPU drivers displays a warning:
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_resource.c: In function ‘dcn32_acquire_post_bldn_3dlut’:
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_resource.c:1614:31: warning: variable ‘state’ set but not used [-Wunused-but-set-variable]
-and
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_resource.c: In function ‘dcn32_populate_dml_pipes_from_context’:
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_resource.c:1916:17: warning: variable ‘is_pipe_split_expected’ set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_resource_helpers.c: In function ‘dcn32_helper_calculate_mall_bytes_for_cursor’:
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_resource_helpers.c:62:18: warning: variable ‘cursor_bpp’ set but not used [-Wunused-but-set-variable]
 
-Get rid of them by removing the variables.
+Get rid of it by removing the variable.
 
 Signed-off-by: Caio Novais <caionovais@usp.br>
 ---
- drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c | 4 ----
+ drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource_helpers.c | 4 ----
  1 file changed, 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c
-index 74e50c09bb62..3435d3294e0b 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c
-@@ -1611,7 +1611,6 @@ bool dcn32_acquire_post_bldn_3dlut(
- 		struct dc_transfer_func **shaper)
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource_helpers.c b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource_helpers.c
+index 3a2d7bcc4b6d..a616cf078cf4 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource_helpers.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource_helpers.c
+@@ -59,25 +59,21 @@ uint32_t dcn32_helper_calculate_mall_bytes_for_cursor(
  {
- 	bool ret = false;
--	union dc_3dlut_state *state;
+ 	struct hubp *hubp = pipe_ctx->plane_res.hubp;
+ 	uint32_t cursor_size = hubp->curs_attr.pitch * hubp->curs_attr.height;
+-	uint32_t cursor_bpp = 4;
+ 	uint32_t cursor_mall_size_bytes = 0;
  
- 	ASSERT(*lut == NULL && *shaper == NULL);
- 	*lut = NULL;
-@@ -1620,7 +1619,6 @@ bool dcn32_acquire_post_bldn_3dlut(
- 	if (!res_ctx->is_mpc_3dlut_acquired[mpcc_id]) {
- 		*lut = pool->mpc_lut[mpcc_id];
- 		*shaper = pool->mpc_shaper[mpcc_id];
--		state = &pool->mpc_lut[mpcc_id]->state;
- 		res_ctx->is_mpc_3dlut_acquired[mpcc_id] = true;
- 		ret = true;
+ 	switch (pipe_ctx->stream->cursor_attributes.color_format) {
+ 	case CURSOR_MODE_MONO:
+ 		cursor_size /= 2;
+-		cursor_bpp = 4;
+ 		break;
+ 	case CURSOR_MODE_COLOR_1BIT_AND:
+ 	case CURSOR_MODE_COLOR_PRE_MULTIPLIED_ALPHA:
+ 	case CURSOR_MODE_COLOR_UN_PRE_MULTIPLIED_ALPHA:
+ 		cursor_size *= 4;
+-		cursor_bpp = 4;
+ 		break;
+ 
+ 	case CURSOR_MODE_COLOR_64BIT_FP_PRE_MULTIPLIED:
+ 	case CURSOR_MODE_COLOR_64BIT_FP_UN_PRE_MULTIPLIED:
+ 		cursor_size *= 8;
+-		cursor_bpp = 8;
+ 		break;
  	}
-@@ -1913,7 +1911,6 @@ int dcn32_populate_dml_pipes_from_context(
- 	struct resource_context *res_ctx = &context->res_ctx;
- 	struct pipe_ctx *pipe;
- 	bool subvp_in_use = false;
--	uint8_t is_pipe_split_expected[MAX_PIPES] = {0};
- 	struct dc_crtc_timing *timing;
  
- 	dcn20_populate_dml_pipes_from_context(dc, context, pipes, fast_validate);
-@@ -2002,7 +1999,6 @@ int dcn32_populate_dml_pipes_from_context(
- 		}
- 
- 		DC_FP_START();
--		is_pipe_split_expected[i] = dcn32_predict_pipe_split(context, &pipes[pipe_cnt]);
- 		DC_FP_END();
- 
- 		pipe_cnt++;
 -- 
 2.40.0
 
