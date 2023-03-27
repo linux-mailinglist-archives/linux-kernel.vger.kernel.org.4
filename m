@@ -2,194 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD076CAD29
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932656CAD2D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbjC0SiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 14:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
+        id S232543AbjC0Si3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 14:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjC0SiF (ORCPT
+        with ESMTP id S232526AbjC0SiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:38:05 -0400
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [IPv6:2001:67c:2050:0:465::202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6473B7;
-        Mon, 27 Mar 2023 11:37:59 -0700 (PDT)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4PlhQD1WVrz9sc1;
-        Mon, 27 Mar 2023 20:37:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
-        s=MBO0001; t=1679942276;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OpnY5Bll0e5uxT0SinClsl4A2EVcTJcY0t1lar/iMyU=;
-        b=vXkPWp3D4jR8eSe2YoJquvRM/caraZwDhConHqvV7+z26+YIet9wjbUdnXJ80c+BNtpB8x
-        QJSB3rWesiXNc/Qs9LKYO4gad8Te6cikFJLH/922jYZKNdsig0gfwkyU7s6ZcqnBEKAHMn
-        udquq0Y4XY6dMhM2EJ/wEcuMxj19hTkEwAZenJMv6yPDC6I2blpnRVcx1v8HHNQfe26GL0
-        pdl4wE+77YJPMsTrkXDKCJqT+n5vaYLQzzXpOAXP6eR+0oLmvPfIyyZFUEHfPWUXBTd/gC
-        QKfhygZ21oEgpz0eTYZyjHS4pItKvGk/o1sl5ED3Q9wXocJe15GVb8oS0FYGfg==
-From:   Dylan Van Assche <me@dylanvanassche.be>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dylan Van Assche <me@dylanvanassche.be>
-Subject: [PATCH v2 3/3] remoteproc: qcom: pas: refactor SLPI remoteproc init
-Date:   Mon, 27 Mar 2023 20:37:36 +0200
-Message-Id: <20230327183736.496170-4-me@dylanvanassche.be>
-In-Reply-To: <20230327183736.496170-1-me@dylanvanassche.be>
-References: <20230327183736.496170-1-me@dylanvanassche.be>
+        Mon, 27 Mar 2023 14:38:21 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2921469F;
+        Mon, 27 Mar 2023 11:38:13 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id ek18so40084110edb.6;
+        Mon, 27 Mar 2023 11:38:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679942292;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nLcZ+qrcIgnqBo+U06+wPoGBwMC2BfvNUbagKz8WaXA=;
+        b=Orq60UWEuwu2H2PPv3K7xkXg2YPLaPKObVj87R00l9spmhZHKTrG3jQwE4YkRwBKzx
+         I1dGyiIT5BpQctEGtKUJgfHT1uMgPZwYvWYb1e+Ow7l16f2rjae/W8sPnrAxie+N2R7C
+         q/5ybHe7f3CyuFPIdkBTmjlliBiGPCNayS1aPn1Z2/SqjJ1Hk+xa7Rg4rfMRMfZQK82o
+         I3tVNgUKtV0UHKl3yoRo3PdY8KQXQoVyO3aXKNv8xdHJyqE18gW91Z1w70eBxAJHvkdk
+         IpjdYKOwRVcTpE9PntMkhGebMGdACiCaf+a0U7JMcrPmnJb4KaRluC1BPitW2k9xf9N6
+         EVJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679942292;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nLcZ+qrcIgnqBo+U06+wPoGBwMC2BfvNUbagKz8WaXA=;
+        b=OC6BoBFQJv4UZVrVLm/Ir+FzQ345RSqDlBIdLcmKbGb3FsGPzuU5/Xf9X57y989sli
+         M1OA3ssPHxpsDtJf63azxVqiwPLgfuPXgGbY+2vxfaXoCe/tTahZmbaHPJN6cQEBypfC
+         aRAwQHTJsOuJM1f1+7zhTEJ+uAWCM+FLbIG/DzPpihsEGMrlotjtXz0tysfxqyGE5+KC
+         7nsDl+Nps5ytyfE+aK62JXPyeLsC/qBT2HhDzEffmKBI8GUp0iAIfbqyAyjOsK1PiJjY
+         nNQ8KuTa3vTJw1nHVyh1SmEY44IxTchucPt8KJ1p6ih69hdu6fBdD+fZzoyMqc0qpqtt
+         H3YA==
+X-Gm-Message-State: AAQBX9fSK3B9ZAWUzzb6oYvQN5At+si3RQR0y1UuSpJCA24WGuNBTODG
+        0XJd/ytSpkzaQTHnytRhzHk=
+X-Google-Smtp-Source: AKy350bYfp6Lxy5+de6zhDv28RxPJ+gjb6yuG1b5+tRvrdnJIvmpv2oO9r6pB2k4n0jsOJdB3Zchnw==
+X-Received: by 2002:a05:6402:48e:b0:4ad:7056:23a5 with SMTP id k14-20020a056402048e00b004ad705623a5mr12952202edv.14.1679942292011;
+        Mon, 27 Mar 2023 11:38:12 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id r12-20020a50c00c000000b00501d2f10d19sm10527273edb.20.2023.03.27.11.38.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 11:38:11 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 21:38:09 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, netdev <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thibaut <hacks@slashdirt.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Subject: Re: Move MT7530 phy muxing from DSA to PHY driver
+Message-ID: <20230327183809.vhft6rqek3kisytb@skbuf>
+References: <4a291389-105a-6288-1347-4f02171b0dd0@arinc9.com>
+ <b66fff15-3521-f889-d9bf-70f1cf689cdc@gmail.com>
+ <0e3ca573-2190-57b0-0e98-7f5b890d328e@arinc9.com>
+ <YyKQKRIYDIVeczl1@lunn.ch>
+ <dad09430-4f33-7f1d-76c7-4dbd0710e950@arinc9.com>
+ <YyXiswbZfDh8aZHN@lunn.ch>
+ <4a291389-105a-6288-1347-4f02171b0dd0@arinc9.com>
+ <b66fff15-3521-f889-d9bf-70f1cf689cdc@gmail.com>
+ <20ede15d-c5b0-bf96-4fe3-7639b4d646f8@arinc9.com>
+ <20ede15d-c5b0-bf96-4fe3-7639b4d646f8@arinc9.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4PlhQD1WVrz9sc1
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20ede15d-c5b0-bf96-4fe3-7639b4d646f8@arinc9.com>
+ <20ede15d-c5b0-bf96-4fe3-7639b4d646f8@arinc9.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SLPI remoteproc initialization is the same for SDM845, SM8150, SM8250,
-SM8350 but is duplicated for each compatible. Refactor initialization
-structs for these 4 compatibles as a single struct.
+On Sun, Mar 26, 2023 at 07:52:12PM +0300, Arınç ÜNAL wrote:
+> I'm currently working on the mt7530 driver and I think I found a way
+> that takes the least effort, won't break the ABI, and most importantly,
+> will work.
 
-Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
----
- drivers/remoteproc/qcom_q6v5_pas.c | 66 ++++--------------------------
- 1 file changed, 9 insertions(+), 57 deletions(-)
+This sounds promising....
 
-diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index d82b6f4bced4..d1c7baec4aca 100644
---- a/drivers/remoteproc/qcom_q6v5_pas.c
-+++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -1014,7 +1014,7 @@ static const struct adsp_data sc8180x_mpss_resource = {
- 	.ssctl_id = 0x12,
- };
- 
--static const struct adsp_data slpi_resource_init = {
-+static const struct adsp_data msm_slpi_resource_init = {
- 		.crash_reason_smem = 424,
- 		.firmware_name = "slpi.mdt",
- 		.pas_id = 12,
-@@ -1028,7 +1028,7 @@ static const struct adsp_data slpi_resource_init = {
- 		.ssctl_id = 0x16,
- };
- 
--static const struct adsp_data sdm845_slpi_resource = {
-+static const struct adsp_data sm_slpi_resource_init = {
- 		.crash_reason_smem = 424,
- 		.firmware_name = "slpi.mdt",
- 		.pas_id = 12,
-@@ -1044,54 +1044,6 @@ static const struct adsp_data sdm845_slpi_resource = {
- 		.ssctl_id = 0x16,
- };
- 
--static const struct adsp_data sm8150_slpi_resource = {
--		.crash_reason_smem = 424,
--		.firmware_name = "slpi.mdt",
--		.pas_id = 12,
--		.auto_boot = true,
--		.proxy_pd_names = (char*[]){
--			"lcx",
--			"lmx",
--			NULL
--		},
--		.load_state = "slpi",
--		.ssr_name = "dsps",
--		.sysmon_name = "slpi",
--		.ssctl_id = 0x16,
--};
--
--static const struct adsp_data sm8250_slpi_resource = {
--	.crash_reason_smem = 424,
--	.firmware_name = "slpi.mdt",
--	.pas_id = 12,
--	.auto_boot = true,
--	.proxy_pd_names = (char*[]){
--		"lcx",
--		"lmx",
--		NULL
--	},
--	.load_state = "slpi",
--	.ssr_name = "dsps",
--	.sysmon_name = "slpi",
--	.ssctl_id = 0x16,
--};
--
--static const struct adsp_data sm8350_slpi_resource = {
--	.crash_reason_smem = 424,
--	.firmware_name = "slpi.mdt",
--	.pas_id = 12,
--	.auto_boot = true,
--	.proxy_pd_names = (char*[]){
--		"lcx",
--		"lmx",
--		NULL
--	},
--	.load_state = "slpi",
--	.ssr_name = "dsps",
--	.sysmon_name = "slpi",
--	.ssctl_id = 0x16,
--};
--
- static const struct adsp_data wcss_resource_init = {
- 	.crash_reason_smem = 421,
- 	.firmware_name = "wcnss.mdt",
-@@ -1200,9 +1152,9 @@ static const struct of_device_id adsp_of_match[] = {
- 	{ .compatible = "qcom,msm8953-adsp-pil", .data = &msm8996_adsp_resource},
- 	{ .compatible = "qcom,msm8974-adsp-pil", .data = &adsp_resource_init},
- 	{ .compatible = "qcom,msm8996-adsp-pil", .data = &msm8996_adsp_resource},
--	{ .compatible = "qcom,msm8996-slpi-pil", .data = &slpi_resource_init},
-+	{ .compatible = "qcom,msm8996-slpi-pil", .data = &msm_slpi_resource_init},
- 	{ .compatible = "qcom,msm8998-adsp-pas", .data = &msm8996_adsp_resource},
--	{ .compatible = "qcom,msm8998-slpi-pas", .data = &slpi_resource_init},
-+	{ .compatible = "qcom,msm8998-slpi-pas", .data = &msm_slpi_resource_init},
- 	{ .compatible = "qcom,qcs404-adsp-pas", .data = &adsp_resource_init },
- 	{ .compatible = "qcom,qcs404-cdsp-pas", .data = &cdsp_resource_init },
- 	{ .compatible = "qcom,qcs404-wcss-pas", .data = &wcss_resource_init },
-@@ -1217,7 +1169,7 @@ static const struct of_device_id adsp_of_match[] = {
- 	{ .compatible = "qcom,sdm660-adsp-pas", .data = &adsp_resource_init},
- 	{ .compatible = "qcom,sdm845-adsp-pas", .data = &sdm845_adsp_resource_init},
- 	{ .compatible = "qcom,sdm845-cdsp-pas", .data = &sdm845_cdsp_resource_init},
--	{ .compatible = "qcom,sdm845-slpi-pas", .data = &sdm845_slpi_resource},
-+	{ .compatible = "qcom,sdm845-slpi-pas", .data = &sm_slpi_resource_init},
- 	{ .compatible = "qcom,sdx55-mpss-pas", .data = &sdx55_mpss_resource},
- 	{ .compatible = "qcom,sm6115-adsp-pas", .data = &adsp_resource_init},
- 	{ .compatible = "qcom,sm6115-cdsp-pas", .data = &cdsp_resource_init},
-@@ -1228,17 +1180,17 @@ static const struct of_device_id adsp_of_match[] = {
- 	{ .compatible = "qcom,sm8150-adsp-pas", .data = &sm8150_adsp_resource},
- 	{ .compatible = "qcom,sm8150-cdsp-pas", .data = &sm8150_cdsp_resource},
- 	{ .compatible = "qcom,sm8150-mpss-pas", .data = &mpss_resource_init},
--	{ .compatible = "qcom,sm8150-slpi-pas", .data = &sm8150_slpi_resource},
-+	{ .compatible = "qcom,sm8150-slpi-pas", .data = &sm_slpi_resource_init},
- 	{ .compatible = "qcom,sm8250-adsp-pas", .data = &sm8250_adsp_resource},
- 	{ .compatible = "qcom,sm8250-cdsp-pas", .data = &sm8250_cdsp_resource},
--	{ .compatible = "qcom,sm8250-slpi-pas", .data = &sm8250_slpi_resource},
-+	{ .compatible = "qcom,sm8250-slpi-pas", .data = &sm_slpi_resource_init},
- 	{ .compatible = "qcom,sm8350-adsp-pas", .data = &sm8350_adsp_resource},
- 	{ .compatible = "qcom,sm8350-cdsp-pas", .data = &sm8350_cdsp_resource},
--	{ .compatible = "qcom,sm8350-slpi-pas", .data = &sm8350_slpi_resource},
-+	{ .compatible = "qcom,sm8350-slpi-pas", .data = &sm_slpi_resource_init},
- 	{ .compatible = "qcom,sm8350-mpss-pas", .data = &mpss_resource_init},
- 	{ .compatible = "qcom,sm8450-adsp-pas", .data = &sm8350_adsp_resource},
- 	{ .compatible = "qcom,sm8450-cdsp-pas", .data = &sm8350_cdsp_resource},
--	{ .compatible = "qcom,sm8450-slpi-pas", .data = &sm8350_slpi_resource},
-+	{ .compatible = "qcom,sm8450-slpi-pas", .data = &sm_slpi_resource_init},
- 	{ .compatible = "qcom,sm8450-mpss-pas", .data = &sm8450_mpss_resource},
- 	{ .compatible = "qcom,sm8550-adsp-pas", .data = &sm8550_adsp_resource},
- 	{ .compatible = "qcom,sm8550-cdsp-pas", .data = &sm8550_cdsp_resource},
--- 
-2.39.2
+> As we acknowledged, the registers are in the switch address space. This
+> must also mean that the switch must be properly probed before doing
+> anything with the registers.
+> 
+> I'm not sure how exactly making a tiny driver would work in this case.
 
+I'm not sure how it would work, either. It sounds like the driver for
+the mdio-bus address @1f should have been a parent driver (MFD or not)
+with 2 (platform device) children, one for the switch and another for
+the HWTRAP registers and whatever else might be needed for the PHY
+multiplexing. The parent (mdio_device) driver deals with the chip-wide
+reset, resources, and manages the registers, giving them regmaps.
+The driver with the mux probably just exports a symbol representing a
+function that gets called by the "mediatek,eth-mac" driver and/or the
+switch driver.
+
+BTW, I have something vaguely similar to this in a stalled WIP branch
+for sja1105, but things like this get really complicated really quickly
+if the DSA driver's DT bindings weren't designed from day one to not
+cover the entire switch's register map.
+
+> I figured we can just run the phy muxing code before the DSA driver
+> exits because there are no (CPU) ports defined on the devicetree. Right
+> after probing is done on mt7530_probe, before dsa_register_switch() is run.
+
+Aren't there timing issues, though? When is the earliest moment that the
+"mediatek,eth-mac" driver needs the HWTRAP muxing to be changed?
+The operation of changing that from the "mediatek,mt7530" driver is
+completely asynchronous to the probing of "mediatek,eth-mac".
+What's the worst that will happen with incorrect (not yet updated) GMII
+signal muxing? "Just" some lost packets?
+
+> 
+> For proof of concept, I've moved some necessary switch probing code from
+> mt7530_setup() to mt7530_probe(). After the switch is properly reset,
+> phy4 is muxed, before dsa_register_switch() is run.
+
+This is fragile because someone eager for some optimizations could move
+the code back the way it was, and say: "the switch initialization costs
+X ms and is done X times, because dsa_register_switch() -> ... ->
+of_find_net_device_by_node() returns -EPROBE_DEFER the first X-1 times.
+If we move the switch initialization to ds->ops->setup(), it will run
+only once, after the handle to the DSA master has been obtained, and
+this gives us a boost in kernel startup time."
+
+It's even more fragile because currently (neither before nor after your change),
+mt7530_remove() does not do the mirror opposite of mt7530_probe(), and somebody
+eager from the future will notice this, and add an error handling path for
+dsa_register_switch(), which calls the opposite of regulator_enable(),
+regulator_disable(), saying "hey, there's no reason to let the regulators
+on if the switch failed to probe, it consumes power for nothing!".
+
+It's an open question whether that regulator is needed for anything after
+the HWMUX registers has been changed, or if it can indeed be turned off.
+Not knowing this, it's hard to say if the change is okay or not.
+It seems that there's a high probability it will work for a while,
+by coincidence.
+
+> 
+> [    0.650721] mt7530 mdio-bus:1f: MT7530 adapts as multi-chip module
+> [    0.660285] mt7530 mdio-bus:1f: muxing phy4 to gmac5
+> [    0.665284] mt7530 mdio-bus:1f: no ports child node found
+> [    0.670688] mt7530: probe of mdio-bus:1f failed with error -22
+> [    0.679118] mtk_soc_eth 1e100000.ethernet: generated random MAC address b6:9c:4d:eb:1f:8e
+> [    0.688922] mtk_soc_eth 1e100000.ethernet eth0: mediatek frame engine at 0xbe100000, irq 15
+> 
+> ---
+> 
+> # ifup eth0
+> [   30.674595] mtk_soc_eth 1e100000.ethernet eth0: configuring for fixed/rgmii link mode
+> [   30.683451] mtk_soc_eth 1e100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx
+> # ping 192.168.2.2
+> PING 192.168.2.2 (192.168.2.2): 56 data bytes
+> 64 bytes from 192.168.2.2: seq=0 ttl=64 time=0.688 ms
+> 64 bytes from 192.168.2.2: seq=1 ttl=64 time=0.375 ms
+> 64 bytes from 192.168.2.2: seq=2 ttl=64 time=0.357 ms
+> 64 bytes from 192.168.2.2: seq=3 ttl=64 time=0.323 ms
+> 
+> ---
+> 
+> # ip a
+> 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+>     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+>     inet 127.0.0.1/8 scope host lo
+>        valid_lft forever preferred_lft forever
+> 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+>     link/ether b6:9c:4d:eb:1f:8e brd ff:ff:ff:ff:ff:ff
+>     inet 192.168.2.1/24 scope global eth0
+>        valid_lft forever preferred_lft forever
+> 
+> There is a lot to do, such as fixing the method to read from the
+> devicetree as it relies on the mac node the CPU port is connected to but
+> when this is finalised, we should be able to use it like this:
+> 
+> mac@1 {
+> 	compatible = "mediatek,eth-mac";
+> 	reg = <1>;
+> 	phy-mode = "rgmii";
+> 	phy-handle = <&ethphy0>;
+> };
+> 
+> mdio-bus {
+> 	#address-cells = <1>;
+> 	#size-cells = <0>;
+> 
+> 	ethphy0: ethernet-phy@0 {
+> 		reg = <0>;
+> 	};
+> 
+> 	switch@1f {
+> 		compatible = "mediatek,mt7530";
+> 		reg = <0x1f>;
+> 		reset-gpios = <&pio 33 0>;
+> 		core-supply = <&mt6323_vpa_reg>;
+> 		io-supply = <&mt6323_vemc3v3_reg>;
+> 	};
+> };
+
+And this is fragile because the "mediatek,eth-mac" driver only works
+because of the side effects of a driver that began to probe, and failed.
+Someone, seeing that "mediatek,mt7530" fails to probe, and knowing that
+the switch ports are not needed/used on that board, could put a
+status = "disabled"; property under the switch@1f node.
