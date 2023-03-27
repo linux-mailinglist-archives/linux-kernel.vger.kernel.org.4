@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD806CB1C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 00:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B999F6CB1C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 00:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbjC0WZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 18:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
+        id S229852AbjC0WZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 18:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231977AbjC0WZe (ORCPT
+        with ESMTP id S231977AbjC0WZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 18:25:34 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8912C40CF;
-        Mon, 27 Mar 2023 15:25:21 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 31BF267373; Tue, 28 Mar 2023 00:25:15 +0200 (CEST)
-Date:   Tue, 28 Mar 2023 00:25:15 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH 21/21] dma-mapping: replace custom code with generic
- implementation
-Message-ID: <20230327222514.GA17904@lst.de>
-References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-22-arnd@kernel.org>
+        Mon, 27 Mar 2023 18:25:43 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD363C33;
+        Mon, 27 Mar 2023 15:25:42 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id F0398604F2;
+        Tue, 28 Mar 2023 00:25:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1679955940; bh=UmKK/K6r1XUY8Qt5LDMAYSfnL5cEN4kYyMt8GqUwSKI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=2KVW0N2DElcyDJrnOniKv2VfobU2xISaujRjwvOEBYZmsPwSFBKfvD9ZNMuW7rdEQ
+         Xu3A5AeTpuXhshkJd7SGSVv6n5ljiIVSn2c3TRDcQsPhEoIA11x9KCwFdCDNEA0VTP
+         SYHULsUYCHf9kD18mTGFIp1caKBGEO6QilsjiPuyNSrYaloQ4UnD1YniJ3gemd0vIt
+         UOik7QqWfLmDBaB3I5Rud2GNsg3aZ4zg19KAVVjAKb4IzHVZFfKco+ZiFeowmlmkFK
+         5dNJAB2pjVJyuLocwgncdmxFzMG5b/e9aDGUuhHtpEkEa92RCZqmzU1wtpsMbSWOC/
+         H2az8/h8wyN1g==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id p_zpHq6SdN4h; Tue, 28 Mar 2023 00:25:38 +0200 (CEST)
+Received: from [192.168.1.3] (unknown [77.237.101.225])
+        by domac.alu.hr (Postfix) with ESMTPSA id 698BD604EF;
+        Tue, 28 Mar 2023 00:25:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1679955938; bh=UmKK/K6r1XUY8Qt5LDMAYSfnL5cEN4kYyMt8GqUwSKI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=X196uIJTyHFVHRVCY2sTcXTPKkg5Q4VqbdYri1CUzwXxU1qaD5pngzgQTjL2tS+GR
+         wqb0EyIiTGemEwoJaO3rG1uauUo2FPJ3Z1Bv89u7wT8JhOa3ZzbVScKBqk5FCkntPY
+         7WSUCnKvn9PEta4LXdFXWn4yg+qv3cabnWybt+0ETorJnxhQo4yiKGco61BtEj92+X
+         YVKclcqqTjf2GPuxdPKd4v3DkCJ9znqbEgLG5ztU5I5L11P2hWhW/gmYNA2k6/qvxj
+         2JxgZsg0mOvFdCQS+iHD4KnNTn/GA+wHZxBM5cVRMQMZpxsaENnkzPKh6e07cEPARS
+         Ty0M7ucjo7YAg==
+Message-ID: <d84fe574-e6cc-ad77-a44c-1eb8df3f2b6b@alu.unizg.hr>
+Date:   Tue, 28 Mar 2023 00:25:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327121317.4081816-22-arnd@kernel.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] xhci: Free the command allocated for setting LPM if we
+ return early
+Content-Language: en-US, hr
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, ubuntu-devel-discuss@lists.ubuntu.com,
+        stern@rowland.harvard.edu, arnd@arndb.de, Stable@vger.kernel.org
+References: <b86fcdbd-f1c6-846f-838f-b7679ec4e2b4@linux.intel.com>
+ <20230327095019.1017159-1-mathias.nyman@linux.intel.com>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230327095019.1017159-1-mathias.nyman@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,50 +70,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
->  {
-> +	dma_cache_wback(paddr, size);
-> +}
+On 27. 03. 2023. 11:50, Mathias Nyman wrote:
+> The command allocated to set exit latency LPM values need to be freed in
+> case the command is never queued. This would be the case if there is no
+> change in exit latency values, or device is missing.
+> 
+> Fixes: 5c2a380a5aa8 ("xhci: Allocate separate command structures for each LPM command")
+> Cc: <Stable@vger.kernel.org>
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> ---
+>  drivers/usb/host/xhci.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index bdb6dd819a3b..6307bae9cddf 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -4442,6 +4442,7 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
 >  
-> +static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
-> +{
-> +	dma_cache_inv(paddr, size);
->  }
-
-> +static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
->  {
-> +	dma_cache_wback_inv(paddr, size);
-> +}
-
-There are the only calls for the three functions for each of the
-involved functions.  So I'd rather rename the low-level symbols
-(and drop the pointless exports for two of them) rather than adding
-these wrapppers.
-
-The same is probably true for many other architectures.
-
-> +static inline bool arch_sync_dma_clean_before_fromdevice(void)
-> +{
-> +	return false;
-> +}
+>  	if (!virt_dev || max_exit_latency == virt_dev->current_mel) {
+>  		spin_unlock_irqrestore(&xhci->lock, flags);
+> +		xhci_free_command(xhci, command);
+>  		return 0;
+>  	}
 >  
-> +static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-> +{
-> +	return true;
->  }
 
-Is there a way to cut down on this boilerplate code by just having
-sane default, and Kconfig options to override them if they are not
-runtime decisions?
+After more testing, I can confirm that your patch fixes the leak in the original
+environment.
 
-> +#include <linux/dma-sync.h>
+And I see that you independently already have bisected the culprit commit, so I
+have needlessly duplicated the work.
 
-I can't really say I like the #include version here despite your
-rationale in the commit log.  I can probably live with it if you
-think it is absolutely worth it, but I'm really not in favor of it.
+However, I consider myself still a learner and an absolute beginner in the Linux
+kernel world ...
 
-> +config ARCH_DMA_MARK_DCACHE_CLEAN
-> +	def_bool y
+Best regards,
+Mirsad
 
-What do we need this symbol for?  Unless I'm missing something it is
-always enable for arm32, and only used in arm32 code.
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+ 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+
+"I see something approaching fast ... Will it be friends with me?"
+
