@@ -2,183 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04D96CABF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C54F06CABFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbjC0RkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 13:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
+        id S229762AbjC0RmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 13:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjC0RkB (ORCPT
+        with ESMTP id S229452AbjC0RmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:40:01 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3359B170C
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:40:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=pZyn7jSE3myi5GOQcd/Alvk1yAzY2UEotzjk0nWF3cs=; b=KgiSjIhBCI5KS+1Jou000yQ3+R
-        RxSVbYlH3MlRUgh1iNJw0W2Uh1dT9oHUCfrPMfQGgX2D6hy701vuT4h1S3pxXTB6hdSikaCW4j05O
-        1gRAkS8YpEj5Zyel+vEsGkc+Yv2keYM0im61MeXnfzzRrzS8mlas7CvAVexqTiJXaQrRGdTdUlXDf
-        iyAZJdrDWydtpvZRUiI1ssmREs12UKyKobHaIPKH0k0WVAXl6F6rxamNXSsLBOhxdD0xPElr4Nwwt
-        IlSFhace3k2bsR1BBpGNNcEQNQ0LaDULcTsRhjFL7B8/rATvPG8do0vqeqOZZ7q1NhP2rtrxurx7S
-        HReY5T2Q==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pgqp0-00Bv81-0E;
-        Mon, 27 Mar 2023 17:39:54 +0000
-Date:   Mon, 27 Mar 2023 10:39:54 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Eric Van Hensbergen <ericvh@gmail.com>
-Cc:     Josef Bacik <josef@toxicpanda.com>,
-        Jeff Layton <jlayton@kernel.org>, lucho@ionkov.net,
-        asmadeus@codewreck.org, v9fs-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
-        Pankaj Raghav <p.raghav@samsung.com>
-Subject: Re: 9p caching with cache=loose and cache=fscache
-Message-ID: <ZCHU6k56nF5849xj@bombadil.infradead.org>
-References: <ZA0FEyOtRBvpIXbi@bombadil.infradead.org>
- <CAFkjPTmVbyuA0jEAjYhsOsg-SE99yXgehmjqUZb4_uWS_L-ZTQ@mail.gmail.com>
- <ZBSc1jjYJn6noeMl@bombadil.infradead.org>
- <CAFkjPTmc-OgMEj9kF3y04sRGeOVO_ogEv1fGG=-CfKP-0ZKC_g@mail.gmail.com>
+        Mon, 27 Mar 2023 13:42:24 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6159B10EA;
+        Mon, 27 Mar 2023 10:42:23 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RALBNT011118;
+        Mon, 27 Mar 2023 17:41:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=gd41agZAFBrdyQ2rYAAIcve8FqL8Ny9Ztm92PCMYCcc=;
+ b=A4maCPUU3qlFoV9QJps+26IR6R0KD4LANM2F+gsNUa/MxYYvM9MpvzBnXOLx+CV25mDK
+ GWkKe2LCRHwNNRmBLNeIyp6iLl6T6UVyydtADfPWJMpAaMcxJIEvGnD/7X1p7tSmrMA/
+ 67YTr8SeR95hWJjtzFk5+P8cE5ptaNaZtSJp7nDWIvv+9u4E2eenBOjMVRqchrg0NE/h
+ 7iLtgibGczsVZPKATf39luFXknaTFRoyF33u3jcwO9JHxCyUP4z2BM5RE/MLXqu+Asnx
+ NByjUpxmsHgaTF/uVA3uKc2Sf8tZGI5sYdliKqz6vL5q+Zn8JlJWOsgWlHEJ1ESt5C80 pg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pk53yhr43-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 17:41:56 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32RHftJN032624
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 17:41:55 GMT
+Received: from hu-johmoo-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Mon, 27 Mar 2023 10:41:54 -0700
+From:   John Moon <quic_johmoo@quicinc.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Nicolas Schier" <nicolas@fjasle.eu>
+CC:     John Moon <quic_johmoo@quicinc.com>,
+        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        <kernel-team@android.com>, <libabigail@sourceware.org>,
+        Jordan Crouse <jorcrous@amazon.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        "Guru Das Srinagesh" <quic_gurus@quicinc.com>
+Subject: [PATCH v4 0/2] Validating UAPI backwards compatibility
+Date:   Mon, 27 Mar 2023 10:41:38 -0700
+Message-ID: <20230327174140.8169-1-quic_johmoo@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFkjPTmc-OgMEj9kF3y04sRGeOVO_ogEv1fGG=-CfKP-0ZKC_g@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: hXteiBBLw_53QzlszTJKScp2GjLA9o9y
+X-Proofpoint-ORIG-GUID: hXteiBBLw_53QzlszTJKScp2GjLA9o9y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ spamscore=0 clxscore=1015 impostorscore=0 phishscore=0 malwarescore=0
+ adultscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303270144
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 08:05:21AM -0500, Eric Van Hensbergen wrote:
-> Sorry, took a bit to unstack from day job, but while going through the
-> patch queue I remembered I still had some questions to answer here.
-> 
-> On Fri, Mar 17, 2023 at 12:01 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Sun, Mar 12, 2023 at 01:22:34PM -0500, Eric Van Hensbergen wrote:
-> > > I was looking at kdevops the other day - cool stuff.  Was trying to
-> > > figure out how we could do v9fs CI with it.
-> >
-> > Happy to help any questions you may have about it!
-> >
-> > > Both cache=loose and cache=fscache currently don't validate via host.
-> >
-> > What does this mean exactly?
-> >
-> 
-> That's a good question - I guess the answer is "by design" they don't
-> do anything special to check that the cache is up to date with the
-> host.
+The kernel community has rigorously enforced a policy of backwards
+compatibility in its UAPI headers for a long time. This has allowed user
+applications to enjoy stability across kernel upgrades without
+recompiling. Our goal is to add tooling and documentation to help kernel
+developers maintain this stability.
 
-From a user perspective none of this is clear from any of the
-documentation I read.
+We see in the kernel documentation:
+"Kernel headers are backwards compatible, but not forwards compatible.
+This means that a program built against a C library using older kernel
+headers should run on a newer kernel (although it may not have access
+to new features), but a program built against newer kernel headers may
+not work on an older kernel."[1]
 
-> That being said, there are several places in the code where the
-> cache will be invalidated
+How does the kernel community enforce this guarantee? As we understand it,
+it's enforced with thorough code review and testing. Is there any tooling
+outside of this being used to help the process?
 
-<-- elaboration of current invalidation schemes when cache is enabled -->
-> 
-> > Right now a host with debian 6.0.0-6-amd64 certainly does not seem to push
-> > out changes to 9p clients on VMs but Josef informs me that with 6.2-rc8
-> > he did see the changes propagate.
-> 
-> I did tighten up some of the invalidation in the last round of
-> patches, however these are likely more on the overly conservative side
-> versus doing the right thing -- however, its really not at the point
-> where you can rely on it.  If consistency is something you care about,
-> I'd suggest cache=none until you can get cache=readahead.
+Also, could documentation on UAPI maintenance (from a developer's point
+of view) be expanded? Internally, we have a set of guidelines for our
+kernel developers regarding UAPI compatibility techniques. If there's
+interest in supplying a document on this topic with the kernel, we'd be
+happy to submit a draft detailing what we have so far as a jumping off
+point.
 
-Indeed that fixes things and makes things work *exactly* as one would
-expect. The simple case of just editing a file and immediately comparing
-sha1sum on the host and guest yields the exact same result.
+In terms of tooling, I've attached a shell script we've been using
+internally to validate backwards compatibility of our UAPI headers. The
+script uses libabigail's[2] tool abidiff[3] to compare a modified
+header's ABI before and after a patch is applied. If an existing UAPI is
+modified, the script exits non-zero. We use this script in our
+continuous integration system to block changes that fail the check.
 
-In comparison using the default cache of loose... things are not what
-you'd expect. The cache is completley useless even if you do a full
-kernel compilation on the host. The guest will not get any updates at
-all.
+It generates output like this when a backwards-incompatible change is made
+to a UAPI header:
 
-> > Do none of the existing 9p cache modes not support open-to-close policies
-> > at all?
-> >
-> 
-> not specifically open-to-close, loose supports file and dir caching
-> but without consistency, it might be tempting to try cache=mmap to see
-> if it gets you closer, but my frame of reference is more the current
-> patches versus the old code so not sure it would buy you anything.
+!!! ABI differences detected in include/uapi/linux/bpf.h from HEAD~1 -> HEAD !!!
 
-OK thanks, it seems we should probably help test 9p with fstests and get
-a baseline, and then check to see how many tests actually do test cache
-modes. If none exists, we should add some to test for each invalidation
-strategy possible.
+    [C] 'struct bpf_insn' changed:
+      type size hasn't changed
+      1 data member change:
+        type of '__s32 imm' changed:
+          typedef name changed from __s32 to __u32 at int-ll64.h:27:1
+          underlying type 'int' changed:
+            type name changed from 'int' to 'unsigned int'
+            type size hasn't changed
 
-We can certainly use kdevops to help test this but I suspect that
-since it relies on a client / host model it may make sense to share
-some code for automation on bringup with what NFS folks are doing
-with kdevops.
+We wanted to share this script with the community and hopefully also
+receive general feedback when it comes to tooling/policy surrounding this
+issue. Our hope is that the script will help kernel UAPI authors maintain
+good discipline and avoid breaking userspace.
 
-> > Right now the cache mode used is cache=loose as that's the default,
-> > what do you recommend for a typical kernel development environemnt?
-> 
-> As I said, if you are interactively changing things I think you'd want
-> to go for cache=none for now (as painful as it is).
+In v4, we've updated the script to operate exclusively on the trees
+generated by "make headers_install" at the two git references. This
+catches several classes of false negatives brought up in earlier
+revisions.
 
-The documentation is not so clear what the pain is in terms of
-performance.
+Thanks for the helpful reviews of previous revs! We're looking forward
+to any additional feedback you may have on v4.
 
-> I have fixed what
-> I hope to be my last bug with the new patch series so it should be
-> going into linux-next today.
+[1] Documentation/kbuild/headers_install.rst
+[2] https://sourceware.org/libabigail/manual/libabigail-overview.html
+[3] https://sourceware.org/libabigail/manual/abidiff.html
 
-Nice, thanks, since kdevops relies on a host kernel though and we strive
-to have stability for that, I personally like to recommend distro
-kernels and so they're a few kernel releases out of date. So debian-testing
-is on 6.1 as of today for example.
+P.S. While at Qualcomm, Jordan Crouse <jorcrous@amazon.com> authored the
+original version of the UAPI checker script. Thanks Jordan!<Paste>
 
-So I'll go with the following for now on kdevops for now. This seems to
-fix all the woes I had for now. Once a cache mode with proper testign
-proves to pass most tests in fstests we can switch to it on kdevops.
+John Moon (2):
+  check-uapi: Introduce check-uapi.sh
+  docs: dev-tools: Add UAPI checker documentation
 
-diff --git a/playbooks/roles/bootlinux/tasks/main.yml b/playbooks/roles/bootlinux/tasks/main.yml
-index 297a42794a09..477cacdee887 100644
---- a/playbooks/roles/bootlinux/tasks/main.yml
-+++ b/playbooks/roles/bootlinux/tasks/main.yml
-@@ -111,7 +111,7 @@
-     name: "{{ target_linux_dir_path }}"
-     src: "{{ bootlinux_9p_mount_tag }}"
-     fstype: "9p"
--    opts: "ro,trans=virtio,version=9p2000.L,posixacl,cache=loose"
-+    opts: "ro,trans=virtio,version=9p2000.L,posixacl,cache=none"
-     state: "mounted"
-   tags: [ 'data_partition' ]
-   when:
+ Documentation/dev-tools/checkuapi.rst | 479 +++++++++++++++++++++++++
+ Documentation/dev-tools/index.rst     |   1 +
+ scripts/check-uapi.sh                 | 490 ++++++++++++++++++++++++++
+ 3 files changed, 970 insertions(+)
+ create mode 100644 Documentation/dev-tools/checkuapi.rst
+ create mode 100755 scripts/check-uapi.sh
 
-BTW the qemu wiki seems to suggest cache=loose and its why I used it on
-kdevops as a default. What about the following so to avoid folks running
-into similar issues? I can go and update the wiki too.
 
-diff --git a/Documentation/filesystems/9p.rst b/Documentation/filesystems/9p.rst
-index 0e800b8f73cc..476944912312 100644
---- a/Documentation/filesystems/9p.rst
-+++ b/Documentation/filesystems/9p.rst
-@@ -56,6 +56,12 @@ seen by reading /sys/bus/virtio/drivers/9pnet_virtio/virtio<n>/mount_tag files.
- Options
- =======
- 
-+Note that a none of the currently supported cache modes validate against data
-+againgst the host, they don't do anything special to check that the cache is up
-+to date with the host. If you really need some synchronization the cache mode
-+you should use is default "none", that will ensure data is kept up to date
-+synchronously right away despite some performance overhead.
-+
-   ============= ===============================================================
-   trans=name	select an alternative transport.  Valid options are
-   		currently:
+base-commit: e76db6e50c85cce9e68c47076f8eab06189fe4db
+--
+2.17.1
+
