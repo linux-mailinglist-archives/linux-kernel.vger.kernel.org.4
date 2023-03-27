@@ -2,137 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BEC06CA574
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B58BD6CA57D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbjC0NUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59986 "EHLO
+        id S231881AbjC0NWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC0NUf (ORCPT
+        with ESMTP id S229565AbjC0NWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:20:35 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8221C1723
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:20:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1679923231;
-        bh=c+Grz+efWOu6j3gl1o9mYlEm+jxA5tz9jqbidd4oglw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NK4karULRJDDloykBkZGZOEtYQFOBTYr8xF2yVvysT2+NVp21idUDk0reUqmQSA01
-         4EmAAQbdB+uod1ob0h3GBMAUkjvSDnE/451v415ifx/lfHrHXsUuixLXBsxSeSzrRu
-         JtcX2tCQ1NY9+wKVCc9/0L+CrqMBv0PXGFNjhzEhgrTT5hD+kcZVQqi+CjO+Rrr6Br
-         9sBByXoiripP/VShaLyy9oPG5MBrlgauN3h0cBgYZbSl/n5XoBZX0ndscDcwCwa5Ah
-         Jqs549f7GCMB/6/cqLoTxb7/CrVYiWz7k4t8Zc7jMpKhF84BD2WXARuM16hmQ4E1jV
-         z/vC61dDYtk4A==
-Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PlYMz2WblzrJw;
-        Mon, 27 Mar 2023 09:20:31 -0400 (EDT)
-Message-ID: <b5e09943-36e6-c89b-4701-5af6408223e8@efficios.com>
-Date:   Mon, 27 Mar 2023 09:20:44 -0400
+        Mon, 27 Mar 2023 09:22:14 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624E51723;
+        Mon, 27 Mar 2023 06:22:12 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id C2C485FD0E;
+        Mon, 27 Mar 2023 16:22:10 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679923330;
+        bh=uWyMD5If887JpUXUAf2FQIqs4GKKl1iQKzSB5o9q4ok=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=DYabJhqEltilnGOBhjRmouVD5C4M9W0f4cyZHlPQhITMB7/HfcfuvWx6rPmxTG+gR
+         RHwsHcZHgoPaXWIB5mv5dxE2nCVNaq2x/hFEWeYYOWazPmwWfHdnUfeT5gvWMVdzTB
+         areAkdxHes7nXA/K4FeH4F2D3upvsrrNF6Q3iMYLPtdyLAmUrOUJyNfL3569322u1h
+         v59z3duYEuj7kc9R8KnfY8cjRJ2+cM6uoZLx02pe1tITThaH/nJUrbRGuwow2sNlOV
+         VPfA7w9C0MfGuQ568p1ndUl4IZSrd9NNONnTkNMxwgO0InXYyyfai+3IAmYSF2euzJ
+         AxEw7OR5o93+w==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 27 Mar 2023 16:22:10 +0300 (MSK)
+Date:   Mon, 27 Mar 2023 16:22:09 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>
+CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>,
+        <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v11 3/5] dt-bindings: clock: meson: add A1 PLL and
+ Peripherals clkcs bindings
+Message-ID: <20230327132209.c64ye4ou22cq7wm6@CAB-WSD-L081021>
+References: <20230321193014.26349-1-ddrokosov@sberdevices.ru>
+ <20230321193014.26349-4-ddrokosov@sberdevices.ru>
+ <1jmt3yo5r0.fsf@starbuckisacylon.baylibre.com>
+ <20230327105115.ury3w4xpzhcpnqjg@CAB-WSD-L081021>
+ <1jilemo1r9.fsf@starbuckisacylon.baylibre.com>
+ <ae367a80-e617-42a6-f873-73a1ecfe7c0d@linaro.org>
+ <20230327131927.k7uswfn6i3jqjrzv@CAB-WSD-L081021>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: rq lock contention due to commit af7f588d8f73
-Content-Language: en-US
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
-References: <20230327080502.GA570847@ziqianlu-desk2>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230327080502.GA570847@ziqianlu-desk2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230327131927.k7uswfn6i3jqjrzv@CAB-WSD-L081021>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/27 05:49:00 #21016052
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-27 04:05, Aaron Lu wrote:
-> Hi Mathieu,
-> 
-> I was doing some optimization work[1] for kernel scheduler using a
-> database workload: sysbench+postgres and before I submit my work, I
-> rebased my patch on top of latest v6.3-rc kernels to see if everything
-> still works expected and then I found rq's lock became very heavily
-> contended as compared to v6.2 based kernels.
-> 
-> Using the above mentioned workload, before commit af7f588d8f73("sched:
-> Introduce per-memory-map concurrency ID"), the profile looked like:
-> 
->       7.30%     0.71%  [kernel.vmlinux]            [k] __schedule
->       0.03%     0.03%  [kernel.vmlinux]            [k] native_queued_spin_lock_slowpath
-> 
-> After that commit:
-> 
->      49.01%     0.87%  [kernel.vmlinux]            [k] __schedule
->      43.20%    43.18%  [kernel.vmlinux]            [k] native_queued_spin_lock_slowpath
-> 
-> The above profile was captured with sysbench's nr_threads set to 56; if
-> I used more thread number, the contention would be more severe on that
-> 2sockets/112core/224cpu Intel Sapphire Rapids server.
-> 
-> The docker image I used to do optimization work is not available outside
-> but I managed to reproduce this problem using only publicaly available
-> stuffs, here it goes:
-> 1 docker pull postgres
-> 2 sudo docker run --rm --name postgres-instance -e POSTGRES_PASSWORD=mypass -e POSTGRES_USER=sbtest -d postgres -c shared_buffers=80MB -c max_connections=250
-> 3 go inside the container
->    sudo docker exec -it $the_just_started_container_id bash
-> 4 install sysbench inside container
->    sudo apt update and sudo apt install sysbench
-> 5 prepare
->    root@container:/# sysbench --db-driver=pgsql --pgsql-user=sbtest --pgsql_password=mypass --pgsql-db=sbtest --pgsql-port=5432 --tables=16 --table-size=10000 --threads=56 --time=60 --report-interval=2 /usr/share/sysbench/oltp_read_only.lua prepare
-> 6 run
->    root@container:/# sysbench --db-driver=pgsql --pgsql-user=sbtest --pgsql_password=mypass --pgsql-db=sbtest --pgsql-port=5432 --tables=16 --table-size=10000 --threads=56 --time=60 --report-interval=2 /usr/share/sysbench/oltp_read_only.lua run
-> 
-> Let it warm up a little bit and after 10-20s you can do profile and see
-> the increased rq lock contention. You may need a machine that has at
-> least 56 cpus to see this, I didn't try on other machines.
-> 
-> Feel free to let me know if you need any other info.
+Don't know why, but my client deleted Jerome from To:. Sorry, added him
+back.
 
-While I setup my dev machine with this reproducer, here are a few
-questions to help figure out the context:
-
-I understand that pgsql is a multi-process database. Is it strictly
-single-threaded per-process, or does each process have more than
-one thread ?
-
-I understand that your workload is scheduling between threads which
-belong to different processes. Are there more heavily active threads
-than there are scheduler runqueues (CPUs) on your machine ?
-
-When I developed the mm_cid feature, I originally implemented two additional
-optimizations:
-
-     Additional optimizations can be done if the spin locks added when
-     context switching between threads belonging to different memory maps end
-     up being a performance bottleneck. Those are left out of this patch
-     though. A performance impact would have to be clearly demonstrated to
-     justify the added complexity.
-
-I suspect that your workload demonstrates the need for at least one of those
-optimizations. I just wonder if we are in a purely single-threaded scenario
-for each process, or if each process has many threads.
-
-Thanks,
-
-Mathieu
-
-
+On Mon, Mar 27, 2023 at 02:03:25PM +0200, neil.armstrong@linaro.org wrote:
+> On 27/03/2023 13:39, Jerome Brunet wrote:
+> > 
+> > On Mon 27 Mar 2023 at 13:51, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> > 
+> > > On Mon, Mar 27, 2023 at 11:51:21AM +0200, Jerome Brunet wrote:
+> > > > 
+> > > > On Tue 21 Mar 2023 at 22:30, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> > > > 
+> > > > > Add the documentation for Amlogic A1 PLL and Amlogic A1 Peripherals
+> > > > > clock drivers.
+> > > > > Introduce Amlogic A1 PLL and Amlogic A1 Peripherals device tree
+> > > > > bindings and include them to MAINTAINERS.
+> > > > > 
+> > > > > Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+> > > > > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > > > > ---
+> > > > >   .../bindings/clock/amlogic,a1-clkc.yaml       |  73 +++++++++++
+> > > > >   .../bindings/clock/amlogic,a1-pll-clkc.yaml   |  59 +++++++++
+> > > > >   MAINTAINERS                                   |   1 +
+> > > > >   include/dt-bindings/clock/amlogic,a1-clkc.h   | 113 ++++++++++++++++++
+> > > > >   .../dt-bindings/clock/amlogic,a1-pll-clkc.h   |  21 ++++
+> > > > >   5 files changed, 267 insertions(+)
+> > > > >   create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+> > > > >   create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+> > > > 
+> > > > There is two drivers (and 2 independent patches). There should be 2
+> > > > bindings patches as well.
+> > > > 
+> > > 
+> > > Before, in previous versions I had two versions, but it wasn't bisectable
+> > > approach.
+> > 
+> > You are confusing bisectable and Rob's robot. Splitting patches is more
+> > that likely to help bisect (and patches backport) - not the other way around.
+> > 
+> > > a1-clkc schema depends on a1-pll-clkc headers and vice versa.
+> > > It means dt schemas checkers will show us failure if we split them into two
+> > > patchsets.
+> > 
+> > Only because you are patches are not upstream yet ...
+> > 
+> > > I know, that we can use raw digits instead of CLKID names, but IMO it doesn't
+> > > look like production schema and it requires one more patchset above the
+> > > series with proper CLKID definitons usage and proper header including.
+> > > 
+> > > BTW, there is an example of Rob's test bot failure found in the previous
+> > > v10 patch series due to chicken or the egg problem.
+> > > https://lore.kernel.org/all/167769997208.7087.5344356236212731922.robh@kernel.org/
+> > > 
+> > > Please advise what's the best practice to resolve that..
+> > 
+> > Don't use the header in your example would solve the problem and
+> > still be correct DT wise.
+> > 
+> > The examples are just examples, they are not required to actually
+> > matches a real HW, as far as I know.
 > 
-> [1]: https://lore.kernel.org/lkml/20230327053955.GA570404@ziqianlu-desk2/
+> Exact, you can use fake lables instead of defined:
 > 
-> Best wishes,
-> Aaron
+> <&clkc_pll CLKID_FCLK_DIV2>,
+> 
+> =>
+> remove "#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>"
+> 
+> <&clkc_pll_fclk_div2>,
+> 
+> is perfectly ok and will permit have 2 separate patches.
+> 
+> The dependency is only if you have a common yaml file for
+> both bindings files, but this is not the case here.
+
+Simple removal of "#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>"
+header doesn't work, dt_binding_check make rule is failed:
+
+Error: Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts:28.37-38 syntax error
+FATAL ERROR: Unable to parse input tree
+
+It happens, because 'dt_binding_check' generates simple dts example and
+tries to compile it:
+
+cat Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts
+===
+
+/dts-v1/;
+/plugin/; // silence any missing phandle references
+
+
+/{
+    compatible = "foo";
+    model = "foo";
+    #address-cells = <1>;
+    #size-cells = <1>;
+
+
+
+    example-0 {
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        
+
+        apb {
+            #address-cells = <2>;
+            #size-cells = <2>;
+        
+            clock-controller@800 {
+                compatible = "amlogic,a1-clkc";
+                reg = <0 0x800 0 0x104>;
+                #clock-cells = <1>;
+                clocks = <&clkc_pll CLKID_FCLK_DIV2>,
+                         <&clkc_pll CLKID_FCLK_DIV3>,
+                         <&clkc_pll CLKID_FCLK_DIV5>,
+                         <&clkc_pll CLKID_FCLK_DIV7>,
+                         <&clkc_pll CLKID_HIFI_PLL>,
+                         <&xtal>;
+                clock-names = "fclk_div2", "fclk_div3",
+                              "fclk_div5", "fclk_div7",
+                              "hifi_pll", "xtal";
+            };
+        };
+
+    };
+};
+===
+
+As you can see, header is required.
+
+But looks like, dt binding checker is happy with the fake references hack :)
+Below there is generated example dts:
+
+cat Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts
+===
+
+/dts-v1/;
+/plugin/; // silence any missing phandle references
+
+
+/{
+    compatible = "foo";
+    model = "foo";
+    #address-cells = <1>;
+    #size-cells = <1>;
+
+
+
+    example-0 {
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        
+
+        apb {
+            #address-cells = <2>;
+            #size-cells = <2>;
+        
+            clock-controller@800 {
+                compatible = "amlogic,a1-clkc";
+                reg = <0 0x800 0 0x104>;
+                #clock-cells = <1>;
+                clocks = <&clkc_pll_fclk_div2>,
+                         <&clkc_pll_fclk_div3>,
+                         <&clkc_pll_fclk_div5>,
+                         <&clkc_pll_fclk_div7>,
+                         <&clkc_pll_hifi_pll>,
+                         <&xtal>;
+                clock-names = "fclk_div2", "fclk_div3",
+                              "fclk_div5", "fclk_div7",
+                              "hifi_pll", "xtal";
+            };
+        };
+
+    };
+};
+===
+
+Yep, we are able to cheat dt checkers, but we don't help dt developers
+with such example.
+May be, it's better to prepare two patches in such hierarchy:
+
+1) A1 PLL clkc bindings with fake references without clkc headers
+2) A1 clkc bindings with real CLKID bindings + A1 PLL clkc bindings fix
+with real CLKID A1 clkc bindings + header.
+
+The such approach resolves DT checkers failures and split DT bindings
+into two patchsets.
+
+[...]
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Thank you,
+Dmitry
