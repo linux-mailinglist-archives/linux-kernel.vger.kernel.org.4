@@ -2,110 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8076CB293
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 871EF6CB296
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbjC0Xgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 19:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45214 "EHLO
+        id S230386AbjC0XlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 19:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbjC0Xgp (ORCPT
+        with ESMTP id S229493AbjC0XlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 19:36:45 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FFD2D59
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:36:13 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id y184so7699770oiy.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:36:12 -0700 (PDT)
+        Mon, 27 Mar 2023 19:41:03 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C55594
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:41:02 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id e13so4667801ioc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:41:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google; t=1679960170;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DMjKJJljMmxLa3Ljhxg1VmcGN3uGAZRfG7BjQI50ULI=;
-        b=yZcXL9yyvDZKCVJzbqsl/6xiSdbujypjw3qnCm+WCPI+oYss4rXX79NJb6EhbtXhp5
-         LYJdAEiuKIwajKd2vSdA8Vsn+SLgotaZnv312ScdaCXG6RSNfhjqzidGZ5FaTWmOddcu
-         UqsdHJyw7JByhHBlwA+ANsEOdFyhKPDFuKMOTDQZxeEmDeFBVCSDD74RXqiDfE4TlQV+
-         sTpfn15kjRl3szo+IakedBOdd3wUF6wP+o07P8dSqHEkdd5/zmw/xhwmhb9f3Jl9QUvJ
-         nKqDWBehFY5QznZ12WccPFZIrMinZI+bzFXpCrPzOj+NO8w+KAs7YglMRg0fwMJgGOPy
-         pFaA==
+        d=linaro.org; s=google; t=1679960461;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JoaFrK1DNRcSQ1ImrxF44n1yrzlCAr4sckNkLw8fzgI=;
+        b=ynLrYPNn6MrJNCQybk3kIizkcAFvpdHlUVrlKkTSEFf6vsFf0NdNb+GzmdccfMMi+v
+         p/5kub3wqmBElnCB9zoFf+tyhpFJxH8e3odsVyR7ElHioJdCKTwnELseuFLpqNZ1GXst
+         RfQwqM7KRmF6SJLzKxuUt2U71O2SiEPJgAcMKPo2s2vCSmvLcuNyseaV5JUdddVN5Wxl
+         yKqoc2ZLtUQ+jTyZuvgmGSnOm2lZlNi3EFvV4hu+erMjPY0ZBgc/+oxrOiq65jq9A4nF
+         ywPBjX1FsxgQaWaz+1NdPITcer+pRX4EGMdVBlH/jqi7CIcbFTegj1TfoWlkhHc98ZI/
+         F1GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679960170;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679960461;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DMjKJJljMmxLa3Ljhxg1VmcGN3uGAZRfG7BjQI50ULI=;
-        b=T2qjHIIxbp1vK+ZhRheFzBxk/ZLh4nIq+LH4HuP2GVMc4SSpiReubG7IKqCJLtCa/I
-         3vFcTzVmnQrhouiqutC0Rg5UzbB10Jg5F7BUwhxStzLvxQYP+dG2urklt37DHFzLkygj
-         BGRhoiePzxOZSK0VVkgP1tMUTmC+gHziC3ITRmIpV+FQac/+6psLxlUfVzCs8zAJUroa
-         ek2SuJLJV2aEsTMp4pM2V5cAZAEk+kq69Lhfdh+uq3yswC/qQZSzKCsWKzkmp8OfX2dC
-         wxXXAkOi7Yq8FNVWB5To78meRpzrWXEF1OTjiFAfpRhvnDyGuPn4o7CCz+BEW6fMQZPn
-         Xkqw==
-X-Gm-Message-State: AO0yUKXaGy3lbODCvCHiKOtZ+kgAnYK3BE/V5UWKwu3OFIytY/qqTqgf
-        aQzb9rHBTgjsiUQNTvssPHE0FgPZQhA+RbL2RFKzpA==
-X-Google-Smtp-Source: AK7set9oAz6sAJk9i+Yr1zEBONLpWWppxu2w98hCDmfDs6XKH+G2nHgnPlqdPGuqAbSZfcMHN2iseA==
-X-Received: by 2002:a05:6808:7cf:b0:383:f04d:5d41 with SMTP id f15-20020a05680807cf00b00383f04d5d41mr5941639oij.59.1679960170022;
-        Mon, 27 Mar 2023 16:36:10 -0700 (PDT)
-Received: from ARCHaio.localdomain ([2804:1b3:a2c0:c911:919f:bd20:4f2a:8383])
-        by smtp.gmail.com with ESMTPSA id b186-20020aca34c3000000b00389295e8424sm1643409oia.45.2023.03.27.16.36.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 16:36:09 -0700 (PDT)
-From:   Caio Novais <caionovais@usp.br>
-To:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        bh=JoaFrK1DNRcSQ1ImrxF44n1yrzlCAr4sckNkLw8fzgI=;
+        b=Oxjxa6tvrFO8jDH4UtyDAnJxo4sUq3/+WbvgFHsC7SCyEJzw8+Gjojwed+1a2v10tI
+         mVRi4mV8bPioFxrLz5EgQ2Sc+vjJf4K5R2c/cZPQ5e/0EFQex6IO0p/FSzvFm4hV4Hmo
+         TgmqOFTyZs+I55IozNu9+CuaigBwl6ug2yhl3GPKpbruYGbRwzT96ugLvkwO33sk4xMu
+         Qx5qmPh/JE2v58NQaTgtc7CYnXRm2360JDgR7JMJkJauFri/mOc+muUUnHsN8TwGznhb
+         0OhvKIbEiFeuVdBP2Y64L07dSgszqZXK+jTFjuZmXEE1S5ygq4G4Gg/byPuAemZ1Aao3
+         cDKg==
+X-Gm-Message-State: AO0yUKXc7+Y27fv2Pvs65EqV/6V4/luYJn/QhZ9c3c0+HtVJ31i67FnF
+        JVjTbRu8aSclln3ZVDnasWqVYA==
+X-Google-Smtp-Source: AK7set+bRCdcdl3Ae9vYyBV57C+4JF+6Noaiw/aikNo5KecpU4wjfRCVr2njCldm4zVFNaxS7XZmZQ==
+X-Received: by 2002:a6b:720b:0:b0:74c:bc14:46a1 with SMTP id n11-20020a6b720b000000b0074cbc1446a1mr10993237ioc.4.1679960461433;
+        Mon, 27 Mar 2023 16:41:01 -0700 (PDT)
+Received: from smtpclient.apple ([152.179.59.114])
+        by smtp.gmail.com with ESMTPSA id g8-20020a6b7608000000b0074c7db1470dsm8107156iom.20.2023.03.27.16.41.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 16:41:00 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Alex Elder <alex.elder@linaro.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH net] net: ipa: compute DMA pool size properly
+Date:   Mon, 27 Mar 2023 18:40:49 -0500
+Message-Id: <2E9EE299-E500-429E-9D19-CA8A55326100@linaro.org>
+References: <20230327211627.GA3248042@hu-bjorande-lv.qualcomm.com>
+Cc:     Alex Elder <elder@linaro.org>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
+        andersson@kernel.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>, Le Ma <le.ma@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Yifan Zhang <yifan1.zhang@amd.com>,
-        Mukul Joshi <mukul.joshi@amd.com>, Jun Lei <Jun.Lei@amd.com>,
-        Wenjing Liu <wenjing.liu@amd.com>,
-        Alan Liu <HaoPing.Liu@amd.com>,
-        Caio Novais <caionovais@usp.br>,
-        Joshua Ashton <joshua@froggi.es>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
-        Zhan Liu <zhan.liu@amd.com>, Wayne Lin <wayne.lin@amd.com>,
-        Charlene Liu <Charlene.Liu@amd.com>,
-        Martin Leung <Martin.Leung@amd.com>,
-        Tom Chung <chiahsuan.chung@amd.com>,
-        Alvin Lee <alvin.lee2@amd.com>,
-        George Shen <George.Shen@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Roman Li <Roman.Li@amd.com>,
-        Wesley Chalmers <Wesley.Chalmers@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Jingwen Zhu <Jingwen.Zhu@amd.com>,
-        Melissa Wen <mwen@igalia.com>,
-        Felipe Clark <felipe.clark@amd.com>,
-        Sung Joon Kim <sungjoon.kim@amd.com>,
-        Dillon Varone <Dillon.Varone@amd.com>,
-        Ethan Wellenreiter <Ethan.Wellenreiter@amd.com>,
-        Taimur Hassan <Syed.Hassan@amd.com>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        Brian Chang <Brian.Chang@amd.com>,
-        Gabe Teeger <gabe.teeger@amd.com>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        Chaitanya Dhere <chaitanya.dhere@amd.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Ryan Lin <tsung-hua.lin@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>
-Subject: [PATCH 12/12] drm/amd/display: Remove two unused variables 'result_write_min_hblank' and 'hblank_size'
-Date:   Mon, 27 Mar 2023 20:33:53 -0300
-Message-Id: <20230327233353.64081-13-caionovais@usp.br>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230327233353.64081-1-caionovais@usp.br>
-References: <20230327233353.64081-1-caionovais@usp.br>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=y
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230327211627.GA3248042@hu-bjorande-lv.qualcomm.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+X-Mailer: iPhone Mail (20D67)
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -115,47 +78,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compiling AMD GPU drivers displays a warning:
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c: In function ‘dpcd_set_source_specific_data’:
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c:1290:32: warning: variable ‘result_write_min_hblank’ set but not used [-Wunused-but-set-variable]
 
-Get rid of it by removing the variable 'result_write_min_hblank' and 'hblank_size'.
+> On Mar 27, 2023, at 4:16 PM, Bjorn Andersson <quic_bjorande@quicinc.com> w=
+rote:
+>=20
+> =EF=BB=BFOn Sun, Mar 26, 2023 at 11:52:23AM -0500, Alex Elder wrote:
+>> In gsi_trans_pool_init_dma(), the total size of a pool of memory
+>> used for DMA transactions is calculated.  However the calculation is
+>> done incorrectly.
+>>=20
+>> For 4KB pages, this total size is currently always more than one
+>> page, and as a result, the calculation produces a positive (though
+>> incorrect) total size.  The code still works in this case; we just
+>> end up with fewer DMA pool entries than we intended.
+>>=20
+>> Bjorn Andersson tested booting a kernel with 16KB pages, and hit a
+>> null pointer derereference in sg_alloc_append_table_from_pages(),
+>> descending from gsi_trans_pool_init_dma().  The cause of this was
+>> that a 16KB total size was going to be allocated, and with 16KB
+>> pages the order of that allocation is 0.  The total_size calculation
+>> yielded 0, which eventually led to the crash.
+>>=20
+>> Correcting the total_size calculation fixes the problem.
+>>=20
+>> Reported-by: <quic_bjorande@quicinc.com>
+>> Tested-by: <quic_bjorande@quicinc.com>
+>=20
+> It would be nice to add "Bjorn Andersson" to these two.
+>=20
 
-Signed-off-by: Caio Novais <caionovais@usp.br>
----
- .../drm/amd/display/dc/link/protocols/link_dp_capability.c | 7 -------
- 1 file changed, 7 deletions(-)
+Oh yeah sorry about that. I=E2=80=99ll add it.   -Alex
 
-diff --git a/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_capability.c b/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_capability.c
-index d4370856f164..7392fcf17653 100644
---- a/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_capability.c
-+++ b/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_capability.c
-@@ -1287,7 +1287,6 @@ void dc_link_overwrite_extended_receiver_cap(
- void dpcd_set_source_specific_data(struct dc_link *link)
- {
- 	if (!link->dc->vendor_signature.is_valid) {
--		enum dc_status result_write_min_hblank = DC_NOT_SUPPORTED;
- 		struct dpcd_amd_signature amd_signature = {0};
- 		struct dpcd_amd_device_id amd_device_id = {0};
- 
-@@ -1324,16 +1323,10 @@ void dpcd_set_source_specific_data(struct dc_link *link)
- 		if (link->ctx->dce_version >= DCN_VERSION_2_0 &&
- 			link->dc->caps.min_horizontal_blanking_period != 0) {
- 
--			uint8_t hblank_size = (uint8_t)link->dc->caps.min_horizontal_blanking_period;
--
--			result_write_min_hblank = core_link_write_dpcd(link,
--				DP_SOURCE_MINIMUM_HBLANK_SUPPORTED, (uint8_t *)(&hblank_size),
--				sizeof(hblank_size));
- 		}
- 		DC_TRACE_LEVEL_MESSAGE(DAL_TRACE_LEVEL_INFORMATION,
- 							WPP_BIT_FLAG_DC_DETECTION_DP_CAPS,
- 							"result=%u link_index=%u enum dce_version=%d DPCD=0x%04X min_hblank=%u branch_dev_id=0x%x branch_dev_name='%c%c%c%c%c%c'",
--							result_write_min_hblank,
- 							link->link_index,
- 							link->ctx->dce_version,
- 							DP_SOURCE_MINIMUM_HBLANK_SUPPORTED,
--- 
-2.40.0
-
+> Regards,
+> Bjorn
+>=20
+>> Fixes: 9dd441e4ed57 ("soc: qcom: ipa: GSI transactions")
+>> Signed-off-by: Alex Elder <elder@linaro.org>
+>> ---
+>> drivers/net/ipa/gsi_trans.c | 2 +-
+>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>>=20
+>> diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
+>> index 0f52c068c46d6..ee6fb00b71eb6 100644
+>> --- a/drivers/net/ipa/gsi_trans.c
+>> +++ b/drivers/net/ipa/gsi_trans.c
+>> @@ -156,7 +156,7 @@ int gsi_trans_pool_init_dma(struct device *dev, struc=
+t gsi_trans_pool *pool,
+>>     * gsi_trans_pool_exit_dma() can assume the total allocated
+>>     * size is exactly (count * size).
+>>     */
+>> -    total_size =3D get_order(total_size) << PAGE_SHIFT;
+>> +    total_size =3D PAGE_SIZE << get_order(total_size);
+>>=20
+>>    virt =3D dma_alloc_coherent(dev, total_size, &addr, GFP_KERNEL);
+>>    if (!virt)
+>> --=20
+>> 2.34.1
+>>=20
