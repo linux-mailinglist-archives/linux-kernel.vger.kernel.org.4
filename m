@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0F46C9D64
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC92F6C9D67
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbjC0IPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S233038AbjC0IPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbjC0IPE (ORCPT
+        with ESMTP id S233026AbjC0IPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:15:04 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C5F59F1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:14:52 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id er18so21099802edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:14:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679904891;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uJ9/5C697ydgp86GT24/w/0BjIB/pHOZy6FLILlmTDY=;
-        b=i5SShJbAHbYWCT6T+tG3lc2zagmYkY2ltdA7KGBy5XUyuJY4z3W6Abysgs8ztT+hoa
-         KRQYcGuafcclzD7MFjvqbtGYCUZwaD0UZoQmGdb0/OhKkY+EMqVguV+O75bi65yexlmo
-         fIlHk8cUThAzLEUDyDclLj0TmGFOdFV+lsL+r7otIRkwAtBT/QAZ9vxS1+5C+4wGl8uM
-         c83EfOvR7PClbIn4LMqEEAfXCOorl46W6kbcTctR0PqBiVuUbw7N83ytH5ri+btkGyRg
-         LiO1EYmjZlFNMVqy7gf1Mq+xA/23CJUhx/z6zwktTsuweZSbqONx8IRuSVZF+XX7RuHt
-         XMzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679904891;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uJ9/5C697ydgp86GT24/w/0BjIB/pHOZy6FLILlmTDY=;
-        b=ahH/VStMt14PSZ9wkcVNpECCVS0yd6TXFrgC9V0v2u8bacnoLOuzAchzgUYRidPTv9
-         5+VrxVH2V/gyK2Tnhg5lpwNljDd2GuoJYcCXqg98KvttlMWVn/EeI4bHTRzHPVMJYQ2O
-         TkFbOAocu/ovfCNLaObWV4/HXhOOglXPekC7N7p8eGJEzolFfdDHpzpVsI6vSGeJX89i
-         zvx2hahvqfEmmzLStRvr4eYiGzBoaObrZR1xZGet+CBk7cauM4csA9NkXmbXBm/thZhJ
-         epf+bbAFXWZIK/RW7iUXK0es3kahoIbYLxlOWMLvy2bIXY6W4eaPQ0qaE5VtwIYWKP6s
-         DDcA==
-X-Gm-Message-State: AAQBX9czumFIZEI0j8JfnbdIfFr+fB3dEubO1EAbbOxFFpxJTQFOkxGq
-        sYaIxS/ScvpRcYSLb00+0bEM8w==
-X-Google-Smtp-Source: AKy350bWKIDxQsBzXyvo0WoSSAogV1zSIUDVdW8trqKiF66ZbVGwozz65mtqAFj9fiCoOK+8Lpkt2g==
-X-Received: by 2002:a17:906:284c:b0:931:99b5:5a23 with SMTP id s12-20020a170906284c00b0093199b55a23mr10876707ejc.44.1679904891494;
-        Mon, 27 Mar 2023 01:14:51 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:198e:c1a5:309b:d678? ([2a02:810d:15c0:828:198e:c1a5:309b:d678])
-        by smtp.gmail.com with ESMTPSA id b4-20020a17090630c400b0092b5384d6desm13807165ejb.153.2023.03.27.01.14.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 01:14:51 -0700 (PDT)
-Message-ID: <030e45d8-6ba2-e9b0-4a24-3f2b7845be4b@linaro.org>
-Date:   Mon, 27 Mar 2023 10:14:50 +0200
+        Mon, 27 Mar 2023 04:15:08 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FF949E8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=dBOXurVqj/MpMeq7Dle54wgSV5Q1
+        alYox1rkTkRCkMo=; b=AWKXt0Plw+rjd7A3YnNT0Fp9WhzaT4NndoV8v4KBzk3c
+        awUQC+4QF6w/JhTh7g0AKsKOjLa1Q3+1OIcDRuHc6+kiYNHWBHJ1/q+PTGaKijVF
+        5Zbo6utek8eQ3yzr/x1foY44zomLKuV4Ctn1gEDug/4p2qG1YbRi6ymOgiBrDLg=
+Received: (qmail 3059495 invoked from network); 27 Mar 2023 10:14:58 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Mar 2023 10:14:58 +0200
+X-UD-Smtp-Session: l3s3148p1@fcW5Vt33HLQujnv6
+Date:   Mon, 27 Mar 2023 10:14:58 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] sh_eth: remove open coded netif_running()
+Message-ID: <ZCFQgiqKPaP2Ss08@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org
+References: <20230321065826.2044-1-wsa+renesas@sang-engineering.com>
+ <79d945a4-e105-4bc4-3e73-64971731660e@omp.ru>
+ <CAMuHMdUt_kTH3tnrdF=oKBLyjrstei8PLsyr+dFXVoPEyxTLAA@mail.gmail.com>
+ <20230323094034.5b021c65@kernel.org>
+ <6d2f216c-df1d-9ab5-353c-de5e5e082b57@omp.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 11/12] arm64: dts: qcom: sc8180x: Introduce Primus
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230325122444.249507-1-vkoul@kernel.org>
- <20230325122444.249507-12-vkoul@kernel.org>
- <f4fd089e-5ad4-dc35-abb5-dc3053702311@linaro.org>
-In-Reply-To: <f4fd089e-5ad4-dc35-abb5-dc3053702311@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2MGGcozzLoV/RlMr"
+Content-Disposition: inline
+In-Reply-To: <6d2f216c-df1d-9ab5-353c-de5e5e082b57@omp.ru>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2023 10:12, Krzysztof Kozlowski wrote:
->> +
->> +/ {
->> +	model = "Qualcomm SC8180x Primus";
->> +	compatible = "qcom,sc8180x-primus", "qcom,sc8180x";
-> 
-> Please run scripts/checkpatch.pl and fix reported warnings.
 
-It seems it is already documented. Confusing to document board
-compatibles in separate patchset one year before boards gets accepted...
+--2MGGcozzLoV/RlMr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
 
+> > Nope - one is under rtnl_lock, the other under just RCU, IIRC.
+> > So this patch just makes the race worse, but it was already
+> > racy before.
+>=20
+>    How about reverting it then?
+
+Agreed. Will send a revert.
+
+
+--2MGGcozzLoV/RlMr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQhUHcACgkQFA3kzBSg
+KbYxbg/+KHZbqTHMix9aCgZXPrX01VDK5eK8U6kE5L+WHoU3RBqqTO1Y3CDf86Mm
+T8FFmPGGdP1gQTtpw5uSEDli8AgetRTWvc2T81sw7YDXmR0b5e1eZDacmzxvyi6p
+UCF7F6XVnN//1iOVRNdfxeGtK6NASezdITOtgbotF9aZrmy9c0lapd2xfFTOMXUk
++AuL4TRSnxTyCLgieguHbrPdhGq3qbPfVcH88vdnyqINBf1d/Z+8L6QJtWL11qPk
+pcqTnFByZ6pU384XS4C/vVejmSujQIpuvyHx3K+okTq5EHJoAPrXRdboX6MOCxAt
+shQkOmT19YXHpYxve7AfWSEKUINj3fCU4V41YNXHN12DBbGqbcjPrgPcMN9R/7jN
+GMNVMkx7uylXaDfAWnzax6t5J+W/AqB3R2BOHDtjvXaKYikCg+Sx2MgqdI/leZt1
+OwYrndoDPzofzBQ1Tcd4Qu5hk94RimpfwngbWkehWa5mXYtLRqgoUNhYcWvkEUZI
+Dn6oO+SBKrpacqDH7QI+Q9gh6y2cDwuxLu2FIeHkj1EEzVoVfI6VEBRHd5DY/fsR
+zfQnT+WUIcNZbgstdHKI0BaIc0UOltSabcb90F4tmkoFFH3E7hSt8MVhsmiyRi7J
+NICb9J/HySL8P5FeSEt2Qw1vP9gh/aM6BfIv4JyXAFbE9aGdDkI=
+=6y40
+-----END PGP SIGNATURE-----
+
+--2MGGcozzLoV/RlMr--
