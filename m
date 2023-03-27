@@ -2,97 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3996CA7DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E2F6CA7F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbjC0OjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
+        id S232849AbjC0OmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjC0OjB (ORCPT
+        with ESMTP id S232263AbjC0OmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:39:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89277A1;
-        Mon, 27 Mar 2023 07:39:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47BA0B8159F;
-        Mon, 27 Mar 2023 14:38:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AC74C433D2;
-        Mon, 27 Mar 2023 14:38:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679927937;
-        bh=jGbljjZ6sYKW+hsa5vD5FzntKFGqn2nf7NT5nxgonnQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=jhgI7ezSTUi1ScYCNYo154omb7+Pe8JrT6VuOZ+Np5p4z7gGxcUJlw0TunGvqB2kn
-         CYQzMJZp7QTZnIULs2sUqNcTRmLk80lh+SRiJ3LVTxjL7RXo2V79denL3GuTltFgTe
-         2CgrtU5FEvIXj1gP790yNMDB3LJKYOoMDSB7KVMmqK3EC13KPwkJ7P+xWXUgLtJ2Dx
-         UrQZspoBfFlNELRz03lc2vWscyn/BiluW5Tv5R27cDbX4I2Lhe466x038cZbw+vnyX
-         5tbT818ScrWzBXy+rOP0Fn3kkznO4XBqlAvV/Zart9tWGKe/cDllSWrUYlGZ1WJCyM
-         Z2sXsBkMFlMCA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org
-In-Reply-To: <8dab942d6ce47657a9c038295959be80bb2ee09e.1679834598.git.christophe.jaillet@wanadoo.fr>
-References: <8dab942d6ce47657a9c038295959be80bb2ee09e.1679834598.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] ASoC: meson: Use the devm_clk_get_optional() helper
-Message-Id: <167992793479.3167684.14938651737373308205.b4-ty@kernel.org>
-Date:   Mon, 27 Mar 2023 15:38:54 +0100
+        Mon, 27 Mar 2023 10:42:04 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E6E26A5;
+        Mon, 27 Mar 2023 07:42:03 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RCxsJE004784;
+        Mon, 27 Mar 2023 14:42:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=k+YO6RIr8vLsB2LbHEemNhoLEt9cgon4K5DLCr9Mazk=;
+ b=jmJ9THy0R4N4NQ0W+8QZf5iKuHg/jk81iiVQASO9JINtq4oYbNrMVeZ4HD4e5E6IKeCa
+ VS0UQFxr57jalA07NmuRAYhyQ9X9y67YL7k32EvEKYeo1sfc3xstRbg40k7gJ7IrQO9l
+ d8dkVHqlkkBofef2JXK1141csiDcCYApQipW/ieHtuk6QHG2s7nQtF3E6g983PuAP739
+ ED80rmOpiZ1Ex2pYBUWBSVEwDB95JbGyDo5aUnGg4J4DwP5LbP+EIPSZJ7NKeTf6jYh4
+ tIOQN12TSGtU+Z4x7DaIkE72GUKpBbDtYIVO2EHme8l8Qwvs5xBuZ7rdZAycgQIEPslj HQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pkbmyr7gw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 14:41:59 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32REfxCB005392
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 14:41:59 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Mon, 27 Mar 2023 07:41:59 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Chris Lew <quic_clew@quicinc.com>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] rpmsg: glink: Fix + cleanup in __qcom_glink_send()
+Date:   Mon, 27 Mar 2023 07:41:51 -0700
+Message-ID: <20230327144153.3133425-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-2eb1a
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: g82ZFugGGGMMhs7GdRRSRwEeVk6LfKZb
+X-Proofpoint-GUID: g82ZFugGGGMMhs7GdRRSRwEeVk6LfKZb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 impostorscore=0 spamscore=0 adultscore=0 bulkscore=0
+ mlxlogscore=663 mlxscore=0 suspectscore=0 phishscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303270116
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 26 Mar 2023 14:43:38 +0200, Christophe JAILLET wrote:
-> Use devm_clk_get_optional() instead of hand writing it.
-> This saves some loC and improves the semantic.
-> 
-> 
+Found these two things to fix/cleanup while poking around in the glink
+code.
 
-Applied to
+Bjorn Andersson (2):
+  rpmsg: glink: Propagate TX failures in intentless mode as well
+  rpmsg: glink: Consolidate TX_DATA and TX_DATA_CONT
 
-   broonie/sound.git for-next
+ drivers/rpmsg/qcom_glink_native.c | 50 ++++++++++---------------------
+ 1 file changed, 16 insertions(+), 34 deletions(-)
 
-Thanks!
-
-[1/1] ASoC: meson: Use the devm_clk_get_optional() helper
-      commit: 65d4d7259bfec376b6b1483b4fe4058a5ba2259b
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+2.25.1
 
