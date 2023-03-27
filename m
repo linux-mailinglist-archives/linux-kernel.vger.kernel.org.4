@@ -2,334 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58726CB046
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7EF16CB04E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbjC0VCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 17:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
+        id S231871AbjC0VDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 17:03:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjC0VCa (ORCPT
+        with ESMTP id S229512AbjC0VDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 17:02:30 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC70C211B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:02:26 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id i6so12480731ybu.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:02:26 -0700 (PDT)
+        Mon, 27 Mar 2023 17:03:18 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFEB1FC7;
+        Mon, 27 Mar 2023 14:03:03 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id e65so12437821ybh.10;
+        Mon, 27 Mar 2023 14:03:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1679950946;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V8Lpq/UbJ1ygpO1HHcARIWDPnYOuUleqfSbW7Q7sAPY=;
-        b=gjjdcQ2QHVqP2JRZSDuZu17R+oXqD/Gq/eRjiCgQYnbsoNY+V6MADk1PJHUhL7Ipjr
-         pDjRs8x8lvNVu00Rf2S5UDtgRKWi5McaJtEypQvQDu2if9mCPAptSx4gtDKSCH08U2Uk
-         L9ajVhJy4VFFG7FuUDf3oqEmIvkyYi5Zf+c0y/XQCd7QcPj2Ww4674Q3QdK2JL9seFRR
-         FT2dubkTjDRG8l6IDu7peR8Aei+zaghUoMzW+zRUwbuJT0baPKfj1QxDGRFuiPZs4+NL
-         VIyAsux8Fi5rEyvP6XtyteyeRCappD/NGsZxFFYjWBOg37/ZGILREIy/zYfZUQMuU0zG
-         lEvw==
+        d=gmail.com; s=20210112; t=1679950983;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CRqBQiFx9cqbs43Z+3goCj+Xo+gx/Z2Y6ZITCbmIAXM=;
+        b=Pux1RMbo5L5WbyEIlGqDS4hdk6a3qWczTW6MClII8F52gU/+lhk3P3kfdqHzbj84v7
+         l3jKOslwLHvP29JTDxdj0DqWDnD6anyv2KKDPTCfgao2VOU1bRylEbhBylfNZIAyHMCc
+         mXsznNjWpu40qpwvdVMxtsXBFkIRMg6cUsknvTOubXM3vjg5IbBfU9LdBeUeDczOF2Qf
+         wvdkFsKl7A9nlBjqWWOnN89xXTfnO7/geg9zlGv9LJrKLBIcRKaM0/i34Jqbyxc3DndT
+         gccKo/CMlZjLoxA9N1YprmzimU84N+1vGnK4oAccBO7fBDd1SCGPtHXYcuLoHFa7ZyvW
+         a9uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679950946;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V8Lpq/UbJ1ygpO1HHcARIWDPnYOuUleqfSbW7Q7sAPY=;
-        b=j9UuXhtOrD5CiiLVYOV201V/Fm8/0v314x/dvyZjmuKIIzXX2LKsZ8LEYON72028k9
-         98y4Nnx2VoCIZdNxXWAdGZ6nmHjPpbN7WkdASa4akwqyAjlOq7SGgT0Aa+IVf0cvmpl/
-         yZBy20vMk9L4kaCS1gi8P6eK/FMzJHs9e1xohSD2nblRY2eSeQEzCLrQyBwRs2CmeI9N
-         U2bJloYU9SqAl4b0c2ATPYoHSeLGIBVmItu+tNtRXK8TJh9+k/ERyye4iZBgwbKEfZ15
-         I1UZaOXqfg2Rk4aBMgylE8v58CrAhXFO/pDTJN8+0lQzn3m1wcTzOFYJ7+MFXXjUHoVE
-         zT5Q==
-X-Gm-Message-State: AAQBX9cdn0lYlUl8yc5+VLUsAGaxEnS6BAr7ZbfyyboQJsYNty83WQry
-        qxB+pxcaNVOLidHGxPNdUoSmkIUe0TsyJ5gUDiQO
-X-Google-Smtp-Source: AKy350YdK0J3ku8LmoHbsw6+4LanRNbdqmYmR5Yex6BIDShq+qo6eRPePEu6PMnGVU4QITpQqvLgeH05fz+qZhaH6Ro=
-X-Received: by 2002:a25:db91:0:b0:b75:8ac3:d5d9 with SMTP id
- g139-20020a25db91000000b00b758ac3d5d9mr8054247ybf.3.1679950945806; Mon, 27
- Mar 2023 14:02:25 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679950983;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CRqBQiFx9cqbs43Z+3goCj+Xo+gx/Z2Y6ZITCbmIAXM=;
+        b=m/sAuIGHFcu5ZuPERQXe/UzYFcqTP8YoG7MAcawbV4nS/9uGapTDuRebN0geJYFwIk
+         mjZeOdaiqkKZI/NGkq9toEahUHw6Df+d5Z2NZoS+h+1Z+F0uY6g+VnlI+izq5tHkUNzs
+         jSTxtW4E5YMNcMl/Y+ivOQJw1cGEzb5vIpJ4TyYLaZPN2FS9pnqK/AmvNaPB+IudaGxm
+         B6UEbSFsSXwpGN/TIPuKcfAr7QAJ88uEjyB9RsExrL/Mzmz1LOgU2jLl0CxGMjNfHvKA
+         lNDc1XeXQRBIhGd16b9+GQJ57RqLgdw/cKhig9GxpCDLbMuF54qBIjK4J/ebJKsqzDHw
+         iFOA==
+X-Gm-Message-State: AAQBX9eP0QtT63VlgTUNz6UKrUlXnvjRdFOc03n2B2iTS6n4veQRO8LJ
+        lla582CkRi/qcXwG6CJHNkNWDbGECEc=
+X-Google-Smtp-Source: AKy350aBtK9Y6MHzwPrrSd5WOoRnbs0SG6DtbBTbG2Y/0LsmYQzfRF/mMmcatBRyBuBnzND3REPy7g==
+X-Received: by 2002:a25:485:0:b0:b27:4e8a:5cf4 with SMTP id 127-20020a250485000000b00b274e8a5cf4mr17677871ybe.22.1679950982893;
+        Mon, 27 Mar 2023 14:03:02 -0700 (PDT)
+Received: from localhost ([2607:fea8:529d:4d00::9f37])
+        by smtp.gmail.com with ESMTPSA id 64-20020a250643000000b00b7767ca749esm2484657ybg.59.2023.03.27.14.03.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 14:03:02 -0700 (PDT)
+From:   Richard Acayan <mailingradian@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Richard Acayan <mailingradian@gmail.com>
+Subject: [PATCH v2 0/2] misc: fastrpc: Fixes for issues in userspace
+Date:   Mon, 27 Mar 2023 17:02:16 -0400
+Message-Id: <20230327210217.60948-1-mailingradian@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230314081720.4158676-1-roberto.sassu@huaweicloud.com>
- <20230314081720.4158676-5-roberto.sassu@huaweicloud.com> <CAHC9VhTD3EyDiJs9+NQrgp84JcUs_sx8WONtRk2YYH4m1C8nVw@mail.gmail.com>
- <939e6c88662ad90b963993c4cc1b702083e74a7a.camel@huaweicloud.com>
- <ffc86b3907f7b87d3c568ae62bea3cdb3275be4e.camel@huaweicloud.com>
- <CAHC9VhRNjvjMOF5KLM6BoGfk=QpEBs_ur_CgRdGL5R1bA-JAwg@mail.gmail.com> <8b63d00d8ac3f686e51889ea4fc8d83f8ecb300d.camel@huaweicloud.com>
-In-Reply-To: <8b63d00d8ac3f686e51889ea4fc8d83f8ecb300d.camel@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 27 Mar 2023 17:02:14 -0400
-Message-ID: <CAHC9VhRaKtsM=CuNhDy0Kx0NGSUrVhG+MhwKnHiyJxfgUwx7nA@mail.gmail.com>
-Subject: Re: [PATCH v8 4/6] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 3:30=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> On Fri, 2023-03-24 at 17:39 -0400, Paul Moore wrote:
-> > On Fri, Mar 24, 2023 at 9:26=E2=80=AFAM Roberto Sassu
-> > <roberto.sassu@huaweicloud.com> wrote:
-> > > On Fri, 2023-03-24 at 11:18 +0100, Roberto Sassu wrote:
-> > > > On Thu, 2023-03-23 at 20:09 -0400, Paul Moore wrote:
-> > > > > On Tue, Mar 14, 2023 at 4:19=E2=80=AFAM Roberto Sassu
-> > > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > >
-> > > > > > Currently, security_inode_init_security() supports only one LSM=
- providing
-> > > > > > an xattr and EVM calculating the HMAC on that xattr, plus other=
- inode
-> > > > > > metadata.
-> > > > > >
-> > > > > > Allow all LSMs to provide one or multiple xattrs, by extending =
-the security
-> > > > > > blob reservation mechanism. Introduce the new lbs_xattr field o=
-f the
-> > > > > > lsm_blob_sizes structure, so that each LSM can specify how many=
- xattrs it
-> > > > > > needs, and the LSM infrastructure knows how many xattr slots it=
- should
-> > > > > > allocate.
-> > > > > >
-> > > > > > Dynamically allocate the xattrs array to be populated by LSMs w=
-ith the
-> > > > > > inode_init_security hook, and pass it to the latter instead of =
-the
-> > > > > > name/value/len triple. Update the documentation accordingly, an=
-d fix the
-> > > > > > description of the xattr name, as it is not allocated anymore.
-> > > > > >
-> > > > > > Since the LSM infrastructure, at initialization time, updates t=
-he number of
-> > > > > > the requested xattrs provided by each LSM with a corresponding =
-offset in
-> > > > > > the security blob (in this case the xattr array), it makes stra=
-ightforward
-> > > > > > for an LSM to access the right position in the xattr array.
-> > > > > >
-> > > > > > There is still the issue that an LSM might not fill the xattr, =
-even if it
-> > > > > > requests it (legitimate case, for example it might have been lo=
-aded but not
-> > > > > > initialized with a policy). Since users of the xattr array (e.g=
-. the
-> > > > > > initxattrs() callbacks) detect the end of the xattr array by ch=
-ecking if
-> > > > > > the xattr name is NULL, not filling an xattr would cause those =
-users to
-> > > > > > stop scanning xattrs prematurely.
-> > > > > >
-> > > > > > Solve that issue by introducing security_check_compact_filled_x=
-attrs(),
-> > > > > > which does a basic check of the xattr array (if the xattr name =
-is filled,
-> > > > > > the xattr value should be too, and viceversa), and compacts the=
- xattr array
-> > > > > > by removing the holes.
-> > > > > >
-> > > > > > An alternative solution would be to let users of the xattr arra=
-y know the
-> > > > > > number of elements of that array, so that they don't have to ch=
-eck the
-> > > > > > termination. However, this seems more invasive, compared to a s=
-imple move
-> > > > > > of few array elements.
-> > > > > >
-> > > > > > security_check_compact_filled_xattrs() also determines how many=
- xattrs in
-> > > > > > the xattr array have been filled. If there is none, skip
-> > > > > > evm_inode_init_security() and initxattrs(). Skipping the former=
- also avoids
-> > > > > > EVM to crash the kernel, as it is expecting a filled xattr.
-> > > > > >
-> > > > > > Finally, adapt both SELinux and Smack to use the new definition=
- of the
-> > > > > > inode_init_security hook, and to correctly fill the designated =
-slots in the
-> > > > > > xattr array. For Smack, reserve space for the other defined xat=
-trs although
-> > > > > > they are not set yet in smack_inode_init_security().
-> > > > > >
-> > > > > > Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org> =
-(EVM crash)
-> > > > > > Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@=
-archlinux/
-> > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-> > > > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > > > > ---
-> > > > > >  include/linux/lsm_hook_defs.h |   3 +-
-> > > > > >  include/linux/lsm_hooks.h     |   1 +
-> > > > > >  security/security.c           | 119 ++++++++++++++++++++++++++=
-+++-----
-> > > > > >  security/selinux/hooks.c      |  19 ++++--
-> > > > > >  security/smack/smack_lsm.c    |  33 ++++++----
-> > > > > >  5 files changed, 137 insertions(+), 38 deletions(-)
-> >
-> > ...
-> >
-> > > > > > @@ -1604,33 +1654,66 @@ int security_inode_init_security(struct=
- inode *inode, struct inode *dir,
-> > > > > >                                  const struct qstr *qstr,
-> > > > > >                                  const initxattrs initxattrs, v=
-oid *fs_data)
-> > > > > >  {
-> > > > > > -       struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
-> > > > > > -       struct xattr *lsm_xattr, *evm_xattr, *xattr;
-> > > > > > -       int ret;
-> > > > > > +       struct security_hook_list *P;
-> > > > > > +       struct xattr *new_xattrs;
-> > > > > > +       struct xattr *xattr;
-> > > > > > +       int ret =3D -EOPNOTSUPP, num_filled_xattrs =3D 0;
-> > > > > >
-> > > > > >         if (unlikely(IS_PRIVATE(inode)))
-> > > > > >                 return 0;
-> > > > > >
-> > > > > > +       if (!blob_sizes.lbs_xattr)
-> > > > > > +               return 0;
-> > > > > > +
-> > > > > >         if (!initxattrs)
-> > > > > >                 return call_int_hook(inode_init_security, -EOPN=
-OTSUPP, inode,
-> > > > > > -                                    dir, qstr, NULL, NULL, NUL=
-L);
-> > > > > > -       memset(new_xattrs, 0, sizeof(new_xattrs));
-> > > > > > -       lsm_xattr =3D new_xattrs;
-> > > > > > -       ret =3D call_int_hook(inode_init_security, -EOPNOTSUPP,=
- inode, dir, qstr,
-> > > > > > -                           &lsm_xattr->name,
-> > > > > > -                           &lsm_xattr->value,
-> > > > > > -                           &lsm_xattr->value_len);
-> > > > > > -       if (ret)
-> > > > > > +                                   dir, qstr, NULL);
-> > > > > > +       /* Allocate +1 for EVM and +1 as terminator. */
-> > > > > > +       new_xattrs =3D kcalloc(blob_sizes.lbs_xattr + 2, sizeof=
-(*new_xattrs),
-> > > > > > +                            GFP_NOFS);
-> > > > > > +       if (!new_xattrs)
-> > > > > > +               return -ENOMEM;
-> > > > > > +
-> > > > > > +       hlist_for_each_entry(P, &security_hook_heads.inode_init=
-_security,
-> > > > > > +                            list) {
-> > > > > > +               ret =3D P->hook.inode_init_security(inode, dir,=
- qstr, new_xattrs);
-> > > > > > +               if (ret && ret !=3D -EOPNOTSUPP)
-> > > > > > +                       goto out;
-> > > > > > +               /*
-> > > > > > +                * As documented in lsm_hooks.h, -EOPNOTSUPP in=
- this context
-> > > > > > +                * means that the LSM is not willing to provide=
- an xattr, not
-> > > > > > +                * that it wants to signal an error. Thus, cont=
-inue to invoke
-> > > > > > +                * the remaining LSMs.
-> > > > > > +                */
-> > > > > > +               if (ret =3D=3D -EOPNOTSUPP)
-> > > > > > +                       continue;
-> > > > > > +               /*
-> > > > > > +                * As the number of xattrs reserved by LSMs is =
-not directly
-> > > > > > +                * available, directly use the total number blo=
-b_sizes.lbs_xattr
-> > > > > > +                * to keep the code simple, while being not the=
- most efficient
-> > > > > > +                * way.
-> > > > > > +                */
-> > > > >
-> > > > > Is there a good reason why the LSM can't return the number of xat=
-trs
-> > > > > it is adding to the xattr array?  It seems like it should be fair=
-ly
-> > > > > trivial for the individual LSMs to determine and it could save a =
-lot
-> > > > > of work.  However, given we're at v8 on this patchset I'm sure I'=
-m
-> > > > > missing something obvious, can you help me understand why the ide=
-a
-> > > > > above is crazy stupid? ;)
-> > >
-> > > Much simple answer. Yes, LSMs could return the number of xattrs set,
-> > > but security_check_compact_filled_xattrs() also needs to know from
-> > > which offset (the lbs_xattr of each LSM) it should start compacting.
-> > >
-> > > Example: suppose that you have three LSMs with:
-> > >
-> > > LSM#1: lbs_xattr 1
-> > > LSM#2: lbs_xattr 2 (disabled)
-> > > LSM#3: lbs_xattr 1
-> > >
-> > > The current compaction interval is: already compacted xattrs - end of
-> > > new_xattr array.
-> > >
-> > > When the security_inode_init_security() loop calls LSM#3, the
-> > > compaction interval is: 1 - 2 (LSM#2 returns 0), which clearly isn't
-> > > right. The correct compaction interval should be: 3 - 4.
-> > >
-> > > Going to the end of new_xattrs is an approximation, but it ensures
-> > > that security_check_compact_filled_xattrs() reaches the xattr set by
-> > > LSM#3.
-> > >
-> > > The alternative I was mentioning of passing num_filled_xattrs to LSMs
-> > > goes again in the direction of doing on-the-fly compaction, while LSM=
-s
-> > > are more familiar with using the lbs_* fields.
-> >
-> > I guess I was thinking of the case where the LSM layer, i.e.
-> > security_inode_init_security(), allocates an xattr array like it does
-> > now based on the maximum number of xattrs possible using the
-> > lsm_blob_sizes values and passes a pointer to the individual LSMs
-> > which is incremented based on how many xattrs are created by the
-> > individual LSMs.  Here is some *very* rough pseudo code:
-> >
-> > int security_inode_init_security(...)
-> > {
-> >
-> >   /* allocate an xattr array */
-> >   xattrs =3D kcalloc(blob_sizes, sizeof(*xattrs), GFP_BLAH);
-> >
-> >   /* loop on the lsms */
-> >   xa_cnt =3D 0;
-> >   while (lsm_hooks) {
-> >     rc =3D call_hook(lsm_hook, &xattrs[xa_cnt]);
-> >     if (rc > 0)
-> >       xa_cnt +=3D rc;
-> >   }
-> >
-> >   /* evm magic */
-> >   evm_inode_init_security(...)
-> > }
-> >
-> > Does that work?  Am I missing something?
->
-> Oh, unfortunately not. EVM needs to see all xattrs (when it is moved to
-> the LSM infrastructure).
+Changes since v1 (20230130222716.7016-1-mailingradian@gmail.com):
+ - use /* */ for comments (2/2)
+ - exclude demonstration from final commit message (2/2)
+ - accumulate review tags (1-2/2)
 
-Okay, that's fair, but we could still pass the full xattrs array and a
-reference to the current count which could be both read and updated by
-the individual LSMs, right?
+Hi everyone,
 
-The issue is that the separate compaction stage is not something we
-want to have to do if we can avoid it.  Maybe we're stuck with it, but
-I'm not yet convinced that we can't make some minor changes to the
-LSMs to avoid the compaction step.
+I've been playing around a bit with the FastRPC ioctl interface on the
+Pixel 3a with some device tree patches. I was testing on a device tree
+that caused the ADSP to crash every 10 seconds, and the inconvenience
+caused by related bugs encouraged me to write a few fixes. A
+demonstration is provided in patch 2.
 
---=20
-paul-moore.com
+Please enjoy and review these patches for better userspace while remote
+processors crash.
+
+Richard Acayan (2):
+  misc: fastrpc: return -EPIPE to invocations on device removal
+  misc: fastrpc: reject new invocations during device removal
+
+ drivers/misc/fastrpc.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+-- 
+2.40.0
+
