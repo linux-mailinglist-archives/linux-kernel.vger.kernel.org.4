@@ -2,171 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BED6CAF74
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 522526CAF79
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbjC0UKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 16:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S229789AbjC0UMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 16:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbjC0UJ7 (ORCPT
+        with ESMTP id S229492AbjC0UMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 16:09:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3B519AF;
-        Mon, 27 Mar 2023 13:09:55 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 20:09:53 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679947793;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p/jg0IjOptV1RpO6xfMPKncUzgMu+5YqsOJB4MMvtx4=;
-        b=ERrCNWv4o0+DbOFz0yFNgU5aso5HtbpKHBmAmJyvnZq6Ip1OGJtYSzQ+9wXp+YKicAaSCL
-        fepRRwOpETnaQKwiDHN92AER7LEUxPJljPoU2jXwp6DiRo9WHeQCBbRG+A+zbzOEu/h3KL
-        ooV/wogu5Miz8p/TsZU9FIT33ydw6OUNg8i6MCYzoS4QLEe5W2bhLSQS1RX2qRlvjTCPOc
-        IOw5zB0q4S9g2cBY3FDhXsDkZqqwg4469ahq1mTBX/zLTOF/jopNLHQYRQE0j6HjBa2qGW
-        v7NA5hSPOv29DAIt6sTu9TpDa9OHoQUWTGHKmwYVqkWpPuySpnz6ePko9q19cg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679947793;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p/jg0IjOptV1RpO6xfMPKncUzgMu+5YqsOJB4MMvtx4=;
-        b=XqaeGPDrzuMiNOqaa1Evo0LWoPkCsPydph7kCP25AEfefvI99qGOZYh2cBxLhDgTxrVWWp
-        4H/nxRSOIUufn9Cg==
-From:   "tip-bot2 for Michael Kelley" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] x86/hyperv: Reorder code to facilitate future work
-Cc:     Michael Kelley <mikelley@microsoft.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <1679838727-87310-3-git-send-email-mikelley@microsoft.com>
-References: <1679838727-87310-3-git-send-email-mikelley@microsoft.com>
+        Mon, 27 Mar 2023 16:12:36 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D4098
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:12:36 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-3ddbf70d790so953901cf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679947955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g6Y5nshyHGbaUWpCASV3R81gaVvM3HOB1d9ZwUYlfVk=;
+        b=h5Z/tCZmHN19MXrT58got9fkyLxEy5dFq9liBwGY9EApe4RxZOIN045xW16k/wBxYL
+         UbhC1miy4LpLV8Y7yrW1KBqeTzy7t4a1Dm+Z24DubabF/lECZ+mFOglf+kZ7yBqe+nVQ
+         xB2IGsdAlYa2raBD9Eq8PnDtt6CiGDNu37VlW+lb++bTnpFJIxnjjg598YDYOv4QyEOo
+         9mlcHZDeIaisACIZxrkjReBkaoeDzskeWL3VCoycO+qXlzNeHbXzndz2w8JHD6WADOK2
+         a8ftkT0kCDGo8SZAck1Fv7D98T7B4uuoaZc90wHhZVHoS1GHLsKprD3fX7c+ZAHYrdsN
+         2mjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679947955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g6Y5nshyHGbaUWpCASV3R81gaVvM3HOB1d9ZwUYlfVk=;
+        b=Dw9T9Tax0FHj8YgOivbvuQWcX5g79zRB0vSEnKCoJValRTAiH6EZhW1Bqfq3ttTV9y
+         gc/piicCSN3SKfEQU8Fl9tXD85ZK+gphI8q/HX5YFO4ZNb+bIdYuVHy5xjrj9d8v5ZED
+         W6nUQ2zlVZaXGB8O7/uOhy+t1duwKHE4wgVGasvZBw+/bXTjIwO/zz8S80Jmhxg6OaNR
+         Puj8dIvE9xaUR5Qap5zBrIlrLZbyCuY/J/5EMHVbNW+NCdXx848Ff/CK7+snzY51BTEV
+         DolW2m13BTz+e6KybNz9CF8QxXY2CDEGbR6Id25xLbAxVSfWNmjO1lHIi9EW8fzJwmMs
+         SW9w==
+X-Gm-Message-State: AAQBX9fX7Nj9OnBlp1wt+6igAb11otpDjFkISyaaxmpy0Qu4x6mco+DS
+        iOPQV3gLwLpn2KywRZMGH3ajcVaCLVIM8jIqvcFWsQ==
+X-Google-Smtp-Source: AKy350awT4IZ8mzZ6W91yehHMzAJezkqfxxR4eqYhwRGlLxmgTqp0rN00p1NNMfFOJphz+C9hWjDTksdIx9pFQrJc1c=
+X-Received: by 2002:ac8:5dc6:0:b0:3d4:edfd:8b61 with SMTP id
+ e6-20020ac85dc6000000b003d4edfd8b61mr107534qtx.0.1679947955208; Mon, 27 Mar
+ 2023 13:12:35 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <167994779344.5837.1535425214409753862.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <000000000000bb028805f7dfab35@google.com> <2309ca53-a126-881f-1ffa-4f5415a32173@kernel.dk>
+ <CANp29Y66H4-+d4hat_HCJck=u8dTn9Hw5KNzm1aYifQArQNNEw@mail.gmail.com> <75a684d6-8aca-8438-d303-f900b4db865d@kernel.dk>
+In-Reply-To: <75a684d6-8aca-8438-d303-f900b4db865d@kernel.dk>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Mon, 27 Mar 2023 22:12:22 +0200
+Message-ID: <CANp29Y42=xHjyW5ZUDp8f3gaWV=_FVTb0SgtpECyX9yc8wxbbw@mail.gmail.com>
+Subject: Re: [syzbot] Monthly io-uring report
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     syzbot <syzbot+lista29bb0eabb2ddbae6f4a@syzkaller.appspotmail.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/sev branch of tip:
+On Mon, Mar 27, 2023 at 9:20=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
+>
+> > By the way, should F: fs/io-wq.c also be added to the IO_URING's
+> > record in the MAINTAINERS file?
+>
+> I think you're looking at a really old tree, none of the supported
+> stable trees even have any io_uring code in fs/ anymore. Maybe they need
+> a MAINTAINERS update though? But even 5.10-stable has io-wq included,
+> though it's pointing at the wrong path now...
 
-Commit-ID:     71290be18f2deeae013482bf79cd526df61fcfcd
-Gitweb:        https://git.kernel.org/tip/71290be18f2deeae013482bf79cd526df61fcfcd
-Author:        Michael Kelley <mikelley@microsoft.com>
-AuthorDate:    Sun, 26 Mar 2023 06:51:57 -07:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 27 Mar 2023 07:56:40 +02:00
+Ah, sorry, I was indeed looking at an old crash report.
 
-x86/hyperv: Reorder code to facilitate future work
-
-Reorder some code to facilitate future work. No functional
-change.
-
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
-Link: https://lore.kernel.org/r/1679838727-87310-3-git-send-email-mikelley@microsoft.com
----
- arch/x86/hyperv/ivm.c | 68 +++++++++++++++++++++---------------------
- 1 file changed, 34 insertions(+), 34 deletions(-)
-
-diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-index 1dbcbd9..f33c67e 100644
---- a/arch/x86/hyperv/ivm.c
-+++ b/arch/x86/hyperv/ivm.c
-@@ -235,40 +235,6 @@ void hv_ghcb_msr_read(u64 msr, u64 *value)
- EXPORT_SYMBOL_GPL(hv_ghcb_msr_read);
- #endif
- 
--enum hv_isolation_type hv_get_isolation_type(void)
--{
--	if (!(ms_hyperv.priv_high & HV_ISOLATION))
--		return HV_ISOLATION_TYPE_NONE;
--	return FIELD_GET(HV_ISOLATION_TYPE, ms_hyperv.isolation_config_b);
--}
--EXPORT_SYMBOL_GPL(hv_get_isolation_type);
--
--/*
-- * hv_is_isolation_supported - Check system runs in the Hyper-V
-- * isolation VM.
-- */
--bool hv_is_isolation_supported(void)
--{
--	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
--		return false;
--
--	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV))
--		return false;
--
--	return hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE;
--}
--
--DEFINE_STATIC_KEY_FALSE(isolation_type_snp);
--
--/*
-- * hv_isolation_type_snp - Check system runs in the AMD SEV-SNP based
-- * isolation VM.
-- */
--bool hv_isolation_type_snp(void)
--{
--	return static_branch_unlikely(&isolation_type_snp);
--}
--
- /*
-  * hv_mark_gpa_visibility - Set pages visible to host via hvcall.
-  *
-@@ -387,3 +353,37 @@ void hv_unmap_memory(void *addr)
- {
- 	vunmap(addr);
- }
-+
-+enum hv_isolation_type hv_get_isolation_type(void)
-+{
-+	if (!(ms_hyperv.priv_high & HV_ISOLATION))
-+		return HV_ISOLATION_TYPE_NONE;
-+	return FIELD_GET(HV_ISOLATION_TYPE, ms_hyperv.isolation_config_b);
-+}
-+EXPORT_SYMBOL_GPL(hv_get_isolation_type);
-+
-+/*
-+ * hv_is_isolation_supported - Check system runs in the Hyper-V
-+ * isolation VM.
-+ */
-+bool hv_is_isolation_supported(void)
-+{
-+	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
-+		return false;
-+
-+	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV))
-+		return false;
-+
-+	return hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE;
-+}
-+
-+DEFINE_STATIC_KEY_FALSE(isolation_type_snp);
-+
-+/*
-+ * hv_isolation_type_snp - Check system runs in the AMD SEV-SNP based
-+ * isolation VM.
-+ */
-+bool hv_isolation_type_snp(void)
-+{
-+	return static_branch_unlikely(&isolation_type_snp);
-+}
+>
+> --
+> Jens Axboe
+>
