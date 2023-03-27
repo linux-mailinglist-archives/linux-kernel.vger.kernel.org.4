@@ -2,102 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 176FD6CA097
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1FE6CA098
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbjC0Jzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
+        id S233244AbjC0Jzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbjC0JzZ (ORCPT
+        with ESMTP id S232307AbjC0Jzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:55:25 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11754C2E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:55:19 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id d17so8046173wrb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:55:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679910918;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oIHP0oW2lg3pGPju/AqnuKxyIsHSSY/Z0nA6zc4eppc=;
-        b=V9vLGJETFgVtCugeotELemVVEydjS4hd7yKWCs3ojx/qptfh/w3WJKNI3Wdl+ovCyJ
-         ZB+EkW2XXQtJcjAI91g+HUq+J60M7yiQe9f8yiv7da0brdVBa4gdAoPtB1RPNNJd6kIw
-         drMQ+IKURDAckY5Bo7rFc8vUq7joctFMR7l6Q8+yqPlzcBf2RULCva3334UqMJ8WXuVz
-         50FkRDLvgtYKR0sceLvSlCa2OBaQyFc0W4NB3vAe4cOM5aprom42lcjmrxSnBNsXlygB
-         bfFNfIQUEx8CMbOdjXBekWKeNOlujZDdKpm8apg0CBksa66nJJssg0h3/k/xtRS16qd+
-         dv2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679910918;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oIHP0oW2lg3pGPju/AqnuKxyIsHSSY/Z0nA6zc4eppc=;
-        b=J0uVaugrkaMRKskhvSF/R3G0vpMQsO53boRvJjwHDQ8M215gRznrLLaykr5PIkE9cV
-         ByMFJ0e/tqmmp2KPR0kDsdoxFPIQaDf+ncLP4wiYS6cO6/ggGFrfzB5sgiPpKHKzw+xp
-         Dhd7gXwjM3dzCEqvt699Y6F62zJCt9PBvC8o+yPCh8h9eCO0s1CRCqdodiaz+AF5EXhA
-         v+0vznS6T6y8t0unuiAaXfnybOH5bf21w9iNDy03VS/0OOO7FGovlx9xoPrdyPvYFI7d
-         2k389az4gkc4Dinf7EcpRJwdtSRRAjd1fxWpAcDadTMlaoO6RQ6u/7x0wb5+GTS0srMN
-         sTDQ==
-X-Gm-Message-State: AAQBX9c/7FJxOLe0ywZbJ91QlZpE41oQJzD9R5HgHmFKV4XP6LZig2b/
-        MzzT4YbOQAaFP2+QbEq3IIsbzQ==
-X-Google-Smtp-Source: AKy350bzh0+0wXuQx3da6/OOn6R3Fa9WVL4Lm3349lo5eHuojuEVC20BzSmdBT4O+sIdKypDH4aaUQ==
-X-Received: by 2002:adf:fe03:0:b0:2d7:c9d1:65eb with SMTP id n3-20020adffe03000000b002d7c9d165ebmr7756235wrr.36.1679910918510;
-        Mon, 27 Mar 2023 02:55:18 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id b13-20020adff90d000000b002c54c92e125sm24684308wrr.46.2023.03.27.02.55.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 02:55:18 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Robert Foss <rfoss@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kenneth.hung@ite.corp-partner.google.com,
-        xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
-In-Reply-To: <20230327044804.3657551-1-hsinyi@chromium.org>
-References: <20230327044804.3657551-1-hsinyi@chromium.org>
-Subject: Re: [PATCH] drm/bridge: it6505: Add range and selector_reg
-Message-Id: <167991091749.404707.7868239484319275542.b4-ty@linaro.org>
-Date:   Mon, 27 Mar 2023 11:55:17 +0200
+        Mon, 27 Mar 2023 05:55:50 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03DE4EF9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:55:47 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32R8Onm7023006;
+        Mon, 27 Mar 2023 09:55:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=YOHwegi0wpdiDLqFh6l1W+TSlyCS9wOn3odhe4w+G+Q=;
+ b=dqqcEZFoqw5VGYnwdj6+ujwwbCybPcKgadOGmpsvuUBqvn31ouN4eMHK6afd4ZowHyJ2
+ wLWwBFeumqRnXISNds5fh/L5PpNSYx8cLIiNSSr+KP2gIp+tPwiVfJ90e6oRKKIWFAWy
+ 8uuVSs/fjPZICqXp8wKGLihhSDjJIlgKdK9/M0tzkIrgttSMfdGkPz3emw+vonCUfjGD
+ vp/RGrf0JerdcVBkn1f0xcKjDCYHDzPYuwgVtgMF/kpePDIsFYvo2ykHmyM1H/MfSWX8
+ w4SX4i+bRN/yYhW5LmbGnmkNqeb32PffdbuBDcM2VTFT2XAlEiqp9qrwYrOzIItM2Z2R /g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjaqdkx2v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 09:55:31 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32R9m7bg012687;
+        Mon, 27 Mar 2023 09:55:31 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjaqdkx1d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 09:55:30 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32QHgL0s019418;
+        Mon, 27 Mar 2023 09:55:27 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3phrk6jm0s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 09:55:27 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32R9tOHe9634436
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Mar 2023 09:55:24 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 13D0B20043;
+        Mon, 27 Mar 2023 09:55:24 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 57F7F20040;
+        Mon, 27 Mar 2023 09:55:21 +0000 (GMT)
+Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.40.181])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon, 27 Mar 2023 09:55:21 +0000 (GMT)
+Date:   Mon, 27 Mar 2023 15:25:18 +0530
+From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] arch/powerpc/kvm: kvmppc_hv_entry: remove .global
+ scope
+Message-ID: <ZCFoBqReJekPd7GI@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+References: <20230316051025.1424093-1-kconsul@linux.vnet.ibm.com>
+ <20230316051025.1424093-2-kconsul@linux.vnet.ibm.com>
+ <CRH1YM72SK4L.QU56WGVQQ2GE@bobo>
+ <ZCFhnNPrMr3D5+rZ@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+ <ZCFjJ1sMuLMUkBWc@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+ <CRH2N2UNMLQW.1W51OVV9ZES7L@bobo>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CRH2N2UNMLQW.1W51OVV9ZES7L@bobo>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FOXdjVRH6UlThUfsvojV8t-LpxUxG3Wa
+X-Proofpoint-ORIG-GUID: h-__z9cZB0ZMWPR99jqpnZ2lnb4CK3ZX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ phishscore=0 malwarescore=0 suspectscore=0 adultscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303270078
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Mon, 27 Mar 2023 12:48:05 +0800, Hsin-Yi Wang wrote:
-> There are 2 banks on it6505, and when writing to different bank,
-> REG_BANK_SEL needs to be set to the targeted bank. The current code set
-> this additionally, which causes a race condition when a process is
-> writing bank 0 registers while another process set the bank to 1. Set
-> ranges in regmap config so the regmap API would handle the bank changes.
+On 2023-03-27 19:51:34, Nicholas Piggin wrote:
+> On Mon Mar 27, 2023 at 7:34 PM AEST, Kautuk Consul wrote:
+> > On 2023-03-27 14:58:03, Kautuk Consul wrote:
+> > > On 2023-03-27 19:19:37, Nicholas Piggin wrote:
+> > > > On Thu Mar 16, 2023 at 3:10 PM AEST, Kautuk Consul wrote:
+> > > > > kvmppc_hv_entry isn't called from anywhere other than
+> > > > > book3s_hv_rmhandlers.S itself. Removing .global scope for
+> > > > > this function and annotating it with SYM_INNER_LABEL.
+> > > > >
+> > > > > Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
+> > > > > ---
+> > > > >  arch/powerpc/kvm/book3s_hv_rmhandlers.S | 3 +--
+> > > > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> > > > > index acf80915f406..b81ba4ee0521 100644
+> > > > > --- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> > > > > +++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> > > > > @@ -502,8 +502,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
+> > > > >   *                                                                            *
+> > > > >   *****************************************************************************/
+> > > > >  
+> > > > > -.global kvmppc_hv_entry
+> > > > 
+> > > > I think this is okay.
+> > > > 
+> > > > > -kvmppc_hv_entry:
+> > > > > +SYM_INNER_LABEL(kvmppc_hv_entry, SYM_L_LOCAL)
+> > > > 
+> > > > The documentation for SYM_INNER_LABEL says it for labels inside a SYM
+> > > > function block, is that a problem? This is a function but doesn't have
+> > > > C calling convention, so asm annotation docs say that it should use
+> > > > SYM_CODE_START_LOCAL?
+> > > That is correct. Will create a v4 patch for this and send it.
+> > But using SYM_CODE_START_LOCAL again causes a warning in the build
+> > (which we were trying to avoid):
+> > arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x48: unannotated intra-function call
 > 
+> Are you using SYM_FUNC_END as well? Looks like you need that to
+> annotate the type properly. It should be the same as SYM_INNER_LABEL
+> in the end AFAIKS.
+
+What about SYM_CODE_START_LOCAL and SYM_CODE_END ?
+This seems to work fine for me without any build warnings from objtool.
 > 
-> [...]
-
-Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
-
-[1/1] drm/bridge: it6505: Add range and selector_reg
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=1a2dbf0303e8793444a57a2eec0c6b29523657d9
-
--- 
-Neil
-
+> > > > 
+> > > > BTW. why don't our _GLOBAL() macros use these SYM annotations? I haven't
+> > > > really looked into them.
+> > > Not sure. Was mostly just concentrating on the kvmppc_hv_entry code.
+> 
+> Looks like it's because we have a .type @function annotation in those
+> already. Not sure if we should end up converting all that over to use
+> the SYM annotations or if it's okay to leave it as is.
+> 
+> Thanks,
+> Nick
