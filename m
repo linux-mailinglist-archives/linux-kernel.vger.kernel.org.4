@@ -2,60 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2FF6CAACE
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E8B6CAAD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjC0Qla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 12:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
+        id S232432AbjC0Qlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 12:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjC0Ql2 (ORCPT
+        with ESMTP id S230288AbjC0Qln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:41:28 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A7512F;
-        Mon, 27 Mar 2023 09:41:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=yRGIuLhfmTVv+hrrCN7uKZXXgE2tRW298bQdoran36c=; b=n2YjiDehjB4ucTgQyKljKorfKF
-        gmuvQS4yitRqS/Gp1NLBDUGxWLuLRxlooTsqs3EEfjqIofDUhzDpevLYueuzYgvhfL27SZ9XXoiiD
-        O/073UOgH2UNh3cBygrrd9qPKVFwrM5uoeDLdE6nOESJbSi1EQinRknWfCjLf9l/o1Ws=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pgpuE-008Xj4-Rj; Mon, 27 Mar 2023 18:41:14 +0200
-Date:   Mon, 27 Mar 2023 18:41:14 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Amit Cohen <amcohen@nvidia.com>, Gal Pressman <gal@nvidia.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH net-next v2 1/8] net: phy: Add driver-specific
- get/set_eee support for non-standard PHYs
-Message-ID: <47e5176b-3d9a-4583-98d2-73aaf7e4903c@lunn.ch>
-References: <20230327142202.3754446-1-o.rempel@pengutronix.de>
- <20230327142202.3754446-2-o.rempel@pengutronix.de>
+        Mon, 27 Mar 2023 12:41:43 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF7B2698;
+        Mon, 27 Mar 2023 09:41:40 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RAJPq6017673;
+        Mon, 27 Mar 2023 16:41:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=v/KL0iSUouRlg6RgT5Qvg2Zi5Xz08E6+7OtUkJxKRHs=;
+ b=YbtVmWZUx8R3LbZejel+pw8KJspWkU6FVTM+AVsk9P2HcVPB7V62KsEQMbNJzNjr6FpL
+ iYIb1Z5HMoKLYy45jR7+52tJn5LyHRK1UAEt8+9MxUUWvPDjg/6DhQJLf3nSHK/GVmrq
+ 1PGuUQzeJH1QiFir2eon51o0ZD5xrFYRnteCzXP6dVyLRKksp1aZLFKfkl7yz5Pe26Q1
+ 6eksSDLxu/49oEGf2ZyO+0OhpgIh+SPNcp0G0vW0sIUmBIFuTURjoyLI1lg37x/tAL0Y
+ gnzX52jbMMxESzPs+yI4UMUCkFPp/U/S5PqUDlQHSshZANd3mnhV0YHVfTJz3XDJW0Hf MA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pht50w0jn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 16:41:37 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32RGfaMe014561
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 16:41:36 GMT
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Mon, 27 Mar 2023 09:41:34 -0700
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <linus.walleij@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [PATCH v4 0/5] Refactor to support multiple download mode
+Date:   Mon, 27 Mar 2023 22:11:16 +0530
+Message-ID: <1679935281-18445-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327142202.3754446-2-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: D0E0CndYBxcDNuNPFYJW038u7tWRBghv
+X-Proofpoint-ORIG-GUID: D0E0CndYBxcDNuNPFYJW038u7tWRBghv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ lowpriorityscore=0 suspectscore=0 priorityscore=1501 spamscore=0
+ malwarescore=0 impostorscore=0 adultscore=0 phishscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303270134
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,16 +73,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 04:21:55PM +0200, Oleksij Rempel wrote:
-> Not all PHYs are implemented fully according to the IEEE 802.3
-> specification and cannot be handled by the generic
-> phy_ethtool_get/set_eee() functions. To address this, this commit adds
-> driver-specific get/set_eee support, enabling better handling of such
-> PHYs. This is particularly important for handling PHYs with SmartEEE
-> support, which requires specialized management.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Intention of this series to support multiple download mode and
+only modify the required bits during setting tcsr register.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Other download modes are minidump, bothdump (full dump + minidump).
 
-    Andrew
+Latest minidump kernel driver patches has been sent here
+https://lore.kernel.org/lkml/1679491817-2498-1-git-send-email-quic_mojha@quicinc.com/
+
+Also, this series should be applied on
+https://lore.kernel.org/lkml/1678979666-551-1-git-send-email-quic_mojha@quicinc.com/
+
+Changes in v4:
+  - val should be shifted within the function [srinivas.kandagatla]
+    i.e new = (old & ~mask) | (val << ffs(mask) - 1);
+  - Added Acked-by [linus.walleij] on pinctrl change.
+
+Changes in v3 : https://lore.kernel.org/lkml/1679070482-8391-1-git-send-email-quic_mojha@quicinc.com/
+ - Removed [1] from the series and sent as a separate patch[2], although this series
+   should be applied on top [2].
+  [1] https://lore.kernel.org/lkml/1677664555-30191-2-git-send-email-quic_mojha@quicinc.com/
+  [2] https://lore.kernel.org/lkml/1678979666-551-1-git-send-email-quic_mojha@quicinc.com/
+ - Introduce new exported symbol on suggestion from [srinivas.kandagatla]
+ - Use the symbol from drivers/pinctrl/qcom/pinctrl-msm.c.
+ - Addressed comment given by [dmitry.baryshkov]
+ - Converted non-standard Originally-by to Signed-off-by.
+
+Changes in v2: https://lore.kernel.org/lkml/1677664555-30191-1-git-send-email-quic_mojha@quicinc.com/
+ - Addressed comment made by [bjorn]
+ - Added download mask.
+ - Passed download mode as parameter
+ - Accept human accepatable download mode string.
+ - enable = !!dload_mode
+ - Shifted module param callback to somewhere down in
+   the file so that it no longer need to know the
+   prototype of qcom_scm_set_download_mode()
+ - updated commit text.
+
+
+Mukesh Ojha (5):
+  firmware: qcom_scm: provide a read-modify-write function
+  pinctrl: qcom: Use qcom_scm_io_update_field()
+  firmware: scm: Modify only the download bits in TCSR register
+  firmware: qcom_scm: Refactor code to support multiple download mode
+  firmware: qcom_scm: Add multiple download mode support
+
+ drivers/firmware/Kconfig               | 11 -----
+ drivers/firmware/qcom_scm.c            | 89 +++++++++++++++++++++++++++++++---
+ drivers/pinctrl/qcom/pinctrl-msm.c     | 11 ++---
+ include/linux/firmware/qcom/qcom_scm.h |  2 +
+ 4 files changed, 87 insertions(+), 26 deletions(-)
+
+-- 
+2.7.4
+
