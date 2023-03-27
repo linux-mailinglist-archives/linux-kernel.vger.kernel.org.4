@@ -2,103 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D086C9DE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62AB6C9E62
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbjC0Ibw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
+        id S233451AbjC0ImI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233213AbjC0IbX (ORCPT
+        with ESMTP id S232699AbjC0Iki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:31:23 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC0146B4;
-        Mon, 27 Mar 2023 01:28:10 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32R8Qt39030043;
-        Mon, 27 Mar 2023 03:26:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679905615;
-        bh=8yfDEjBLPfAKUoGrvIcicI0FVRLc+jf9sHpjdvWg9i4=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=fYkaOBEOkCvAz2Xq1PguQFX75riaFCEyjwDBZaPiH4O2zmdm4FJiAI6Ncv7NclUdl
-         Rjkz41cKTvPNRkq2iNB1Slp6VLfJ/eto527a2gV9Afv6W95OuOnF0CN0jOpvvMx+5Y
-         5nZp/eKl+v5mZ8fH878elwhjGPD2cPHKiVjgD/YU=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32R8QtnD014041
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 27 Mar 2023 03:26:55 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 27
- Mar 2023 03:26:55 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 27 Mar 2023 03:26:55 -0500
-Received: from [10.249.132.105] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32R8QqnU024899;
-        Mon, 27 Mar 2023 03:26:53 -0500
-Message-ID: <12626f35-6b7c-bb24-606a-00d0b8e7f375@ti.com>
-Date:   Mon, 27 Mar 2023 13:56:52 +0530
+        Mon, 27 Mar 2023 04:40:38 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535D86A7B
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:37:22 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id m2so7788764wrh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679906241;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GAGQSh525G5QsNivU8boPxjITx0FQ4aR6d82jdyyf+Q=;
+        b=p3IoE5Q99hRqPzz3xpo9aJoDkl1Oq+spG67+pjb7gTlsT6HcxQockEEzpsEQn/ZWwS
+         cjq5T7SK2468KIV6K0Fde5kMg31eVKeu2A+CWVdPTrisVZ02DM2GHS1GasvHm362DVm/
+         ew+uX+IzoV7H/ZhO0GFhJ0Nh+r7DSJnHQHz9tdja1yaaetaXFtbLGgMX8qbPiHtz3qxe
+         l9UtTZNo/Q6LGUG7/+pHXJcIyPSC0BAcBBp8Ae0lveHCve67HLIPPZ4Dq1OU/9TlbqQu
+         ligvPdptIW7xVgyrhPlkQvlgtK8HBrIM/5mdtS9yXEaKfj7JGC9DXjjxuYjnBMu3m+WP
+         MVtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679906241;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GAGQSh525G5QsNivU8boPxjITx0FQ4aR6d82jdyyf+Q=;
+        b=GHq5bH7EebqlX5WVb8Lb90I1Sn4AcN1K0e6fud0G84prVa6vmivgj3U+qplyHZC+fg
+         8XfZDrKgHGXtHmD/Gh60EbSc0M9tFk8A6xnio59bDKC9+P2d6yj5bwDVgwkLZBIPGcij
+         4y6Ga9k8PpJA4gjyss6yf+1AHLJ37AVKi8iI8v9FawWDBBA/IPAlkNaU7690YyeIgpXa
+         /VEzSoxFRUfhl58oS1PUixP2s8zUygcuybX81DUkBjG70NiD3VFRk7SQkJTUEWAB4EP/
+         pepkLlt1+0g+bIUJ/U1Vr34yBxCl+WJOmXYxrmLBlQODJ/WJwI3K5CC2KvanqS6OpNLl
+         0c8w==
+X-Gm-Message-State: AAQBX9diF7m+tURH0T087n4PKjuYEiCHL9iUIgYnLjZAnLcFVC7P40L/
+        X9P6CoQugootU/yeX7e//kydB4LLXhBWI01TKE0=
+X-Google-Smtp-Source: AKy350ZiWynu63zWZTjihRtHZa5diapakFf34xk8Kw84gZt8VcyHIjhXIq/m0lGrMLR2M+1+9w8TuQ==
+X-Received: by 2002:adf:f582:0:b0:2cf:ebaa:31a0 with SMTP id f2-20020adff582000000b002cfebaa31a0mr9023916wro.54.1679905686704;
+        Mon, 27 Mar 2023 01:28:06 -0700 (PDT)
+Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.googlemail.com with ESMTPSA id p5-20020adfce05000000b002d64fcb362dsm19192398wrn.111.2023.03.27.01.28.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 01:28:06 -0700 (PDT)
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Subject: [PATCH v5 0/2] Add MediaTek MT8365 I2C support
+Date:   Mon, 27 Mar 2023 10:27:56 +0200
+Message-Id: <20221122-mt8365-i2c-support-v5-0-6e4f3b54937f@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH -next 1/3] spi: omap2-mcspi: Use
- devm_platform_get_and_ioremap_resource()
-To:     Yang Li <yang.lee@linux.alibaba.com>, <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230327055346.76625-1-yang.lee@linux.alibaba.com>
-Content-Language: en-US
-From:   Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <20230327055346.76625-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAIxTIWQC/4XNQWrDMBAF0KsErauiGUmW2lXvUboYSZNa4NhBc
+ gwh+O4duiyhXg3/w3/zUJ1b5a7eTw/VeKu9LrME/3JSeaT5m3UtkhUaRABEfVmjHbyumHW/Xa9
+ LW/U5GxcL4QBMSoaJOuvUaM6jTOfbNEk51r4u7f77aAM5n/+aG2ijHXEK2bs8hPSR6D7V1Pg1L
+ xf1JeKGxwqKwi4LAo5DhCeKPVasKFTeUgIThhLOTxR3rDhRYvRUrDVQPP1R9n3/AYK7/rqOAQA
+ A
+To:     Qii Wang <qii.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2081; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=nSXv0el9Q8eoEvhrwybYSeDmgS2My2V0mCaELMNPWdg=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkIVOVGTG8xJzvYqFA8imHTuPGZ8rE/HDlHms8uoEl
+ 3j7NhP2JAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZCFTlQAKCRArRkmdfjHURczaD/
+ sEi6Ep1k07eUJsUradvYUXA1V9p1fPlrqwqj6K0ndkmHBaBoMybGY2w5BkIHbU1eOpifrH2TeXjrqf
+ WC6jhSGEW+P6OEtROWTGnL3PBdtT7UeF2BBeFtKyl44vw9MLhaks69GfuBsCvqVXgUMBnZxUKksu/6
+ KX0LAlE1Mjy38sX0T7m9H46UN4fMvSyjn3FLiKdFD8pdsB94JZx/oLgZBJecIpIZJwj0ai1NdDhGa8
+ jNMaqbAzwg/33Dv8w/YVWfDxyGHYT1FnXRuTsnrFRbqEbMZQGs32V+JzoEy28tHvr9QFuuPge6oszP
+ ZIr660+hZHEqNDRWH4AD/iBJzdFx2YcPcthZ3Wl6k7LxZj6GzbXBF4oVHxaucnY7fDHPpUP9zeLjqY
+ 4h34++BNsS5YciBHvHZHXSFCPrPkftwhD5LVYBg9ffuq+4/BtN6nVZoySkEOhGwUdbfoPPCYsqZ0Tk
+ 8S9Ueae2dX3Nqw7S8NQY7zddsqkKdBOYRZ3Y3hpwlghfouSz4wGDetrG16/t5OoQnVY1JXhzdwSPLy
+ +H1MeB5Xu2gOmjhtuedevEy60yDzda3+SqCD23wxT75Dz0KI6RMAY/NkcBtF4zfzVVB1L+7z5y8n0T
+ 3PFrZXO2tF2FaxTl0vyeJCAOC4z7gIs1qyssJDKmJUaBKjlub77LG/+DoXkQ==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/23 11:23, Yang Li wrote:
-> According to commit 890cc39a8799 ("drivers: provide
-> devm_platform_get_and_ioremap_resource()"), convert
-> platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
->
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
-For the series,
+Hi,
+This patch series adds I2C support for MT8365-EVK board.
+The I2C-0 is enabled, it can be used through the board pin header,
+as described directly on the PCB.
 
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
+This series depends to another one which add support for
+MT8365 SoC and EVK board. Link [1]
+This dependancy has been applied by Matthias Brugger [3]
 
->  drivers/spi/spi-omap2-mcspi.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
-> index d95f0ae033ca..8331e247bf5c 100644
-> --- a/drivers/spi/spi-omap2-mcspi.c
-> +++ b/drivers/spi/spi-omap2-mcspi.c
-> @@ -1477,8 +1477,7 @@ static int omap2_mcspi_probe(struct platform_device *pdev)
->  		master->max_transfer_size = omap2_mcspi_max_xfer_size;
->  	}
->  
-> -	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	mcspi->base = devm_ioremap_resource(&pdev->dev, r);
-> +	mcspi->base = devm_platform_get_and_ioremap_resource(pdev, 0, &r);
->  	if (IS_ERR(mcspi->base)) {
->  		status = PTR_ERR(mcspi->base);
->  		goto free_master;
+One patch has been cherry-picked from [2], so I've addressed the comment
+and kept the trailer.
 
--- 
+Regards,
+Alex
+
+[1]: https://lore.kernel.org/linux-mediatek/20230101220149.3035048-1-bero@baylibre.com/
+[2]: https://lore.kernel.org/all/20220531135026.238475-2-fparent@baylibre.com/
+[3]: https://lore.kernel.org/all/ed1f9faf-cb4f-9ff1-ab6b-813035a051bd@gmail.com/
+
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+---
+Changes in v5:
+- Remove mediatek,drive-strength-adv which is a deprecated pin-control property.
+- Link to v4: https://lore.kernel.org/r/20221122-mt8365-i2c-support-v4-0-885ad3301d5a@baylibre.com
+
+Changes in v4:
+- Fix some properties order.
+- Remove the useless properties.
+- Link to v3: https://lore.kernel.org/r/20221122-mt8365-i2c-support-v3-0-ad9bb1076d7f@baylibre.com
+
+Changes in v3:
+- Rebased to v6.3-rc1.
+- Move i2c3 node to be consistent with the SoC address order.
+- Link to v2: https://lore.kernel.org/r/20221122-mt8365-i2c-support-v2-0-e4c7c514e781@baylibre.com
+
+Changes in v2:
+- Drop the patch which do useless change in i2c-mt65xx.c driver.
+- Change 2 lines compatible/reg in oneline.
+- Link to v1: https://lore.kernel.org/r/20221122-mt8365-i2c-support-v1-0-4aeb7c54c67b@baylibre.com
+
+---
+Alexandre Mergnat (2):
+      arm64: dts: mediatek: add i2c support for mt8365 SoC
+      arm64: dts: mediatek: enable i2c0 for mt8365-evk board
+
+ arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 16 ++++++++++
+ arch/arm64/boot/dts/mediatek/mt8365.dtsi    | 48 +++++++++++++++++++++++++++++
+ 2 files changed, 64 insertions(+)
+---
+base-commit: 5c6b974d24c21a6aa5d8b524067d7d9bc7fcc4f2
+change-id: 20221122-mt8365-i2c-support-fc048da261ea
+
 Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+-- 
+Alexandre Mergnat <amergnat@baylibre.com>
 
