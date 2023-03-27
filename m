@@ -2,75 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E9E6CA725
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BAB6CA6E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbjC0ONE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
+        id S232578AbjC0OLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232698AbjC0OMY (ORCPT
+        with ESMTP id S232518AbjC0OLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:12:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87E4422F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:11:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679926269;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NvwxuKB1KAG0ACmsYDpkw14eOr4deO3U9ffm3RLnhIQ=;
-        b=NMxaw98kv245bmyqI88ndHWacEao0ui4dIe+4jZMCaDoRoGQExjX4omfFf/QAAs/heVYZ7
-        LgSTzsRsPT4L+0TBERVUUIZrvswVZfbcNA+h9D11Z9zs3yF+bddYh6pTnMp7KcHY4uVE7t
-        wjSWaBYicwSADsK8hOCA3CeoDuoV9Xg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-498-j5kkvBeQMhWBAHJx14T-Gw-1; Mon, 27 Mar 2023 10:11:05 -0400
-X-MC-Unique: j5kkvBeQMhWBAHJx14T-Gw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 27 Mar 2023 10:11:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCBF2110
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:11:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 13E05884EC8;
-        Mon, 27 Mar 2023 14:11:05 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D1EB42027040;
-        Mon, 27 Mar 2023 14:11:04 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     jpiotrowski@linux.microsoft.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Tianyu Lan <ltykernel@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Sean Christopherson <seanjc@google.com>, stable@vger.kernel.org
-Subject: Re: [RESEND PATCH v2] KVM: SVM: Flush Hyper-V TLB when required
-Date:   Mon, 27 Mar 2023 10:10:40 -0400
-Message-Id: <20230327141039.3751076-1-pbonzini@redhat.com>
-In-Reply-To: <20230324145233.4585-1-jpiotrowski@linux.microsoft.com>
-References: 
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DAFBB80BEC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:11:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1A91C433D2;
+        Mon, 27 Mar 2023 14:10:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679926260;
+        bh=RRlj8SX8e59FcNYzqGReCEP8Q5Z1eD9qPrgCjM6F8jE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QUzbAp7cDBPuYbKlJ2W5QBYwjuPWjoUmmnG1/051vFdTWbjCnP6CVydyHfVwT0cm0
+         aaxcdLQ9tHvXIHg2hcRG1XErPhCTraTdDGVcmm+uOxwFLc8JhAGjMHYhLpAqVfXG/P
+         cfAraquHUKLuxpewVvx+Qon3Fk0Dg2Bn77xcn/4vacjVN+WNeX4jUYRbzMTDIf/Pqt
+         zLQPc0AJVjVPNJFQSCVdWhSx0DofQYr7YoPMJ+hloGTeYlK8ZLuOGKQYshCp1bhOAE
+         LYYX7ef0I4SFb8TGC3qMdyYVQkOtM7+53F1RJJKug48XWOkMGkVBHSsXc2VEQgr6dq
+         hbym7vuVQfCfw==
+Date:   Mon, 27 Mar 2023 15:10:55 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Jiucheng Xu <jiucheng.xu@amlogic.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Chris Healy <healych@amazon.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] perf/amlogic: Fix large number of counter issue
+Message-ID: <20230327141054.GC31752@willie-the-truck>
+References: <20230209115403.521868-1-jiucheng.xu@amlogic.com>
+ <20230209115403.521868-2-jiucheng.xu@amlogic.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230209115403.521868-2-jiucheng.xu@amlogic.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Split svm_flush_tlb_current() into separate callbacks for the 3 cases
-(guest/all/current), and issue the required Hyper-V hypercall when a
-Hyper-V TLB flush is needed. The most important case where the TLB flush
-was missing is when loading a new PGD, which is followed by what is now
-svm_flush_tlb_current().
+On Thu, Feb 09, 2023 at 07:54:02PM +0800, Jiucheng Xu wrote:
+> When use 1ms interval, very large number of counter happens
+> once in a while as below:
+> 
+> 25.968654513 281474976710655.84 MB meson_ddr_bw/chan_1_rw_bytes,arm=1/
+> 26.118657346 281474976710655.88 MB meson_ddr_bw/chan_1_rw_bytes,arm=1/
+> 26.180137180 281474976710655.66 MB meson_ddr_bw/chan_1_rw_bytes,arm=1/
+> 
+> Root cause is the race between irq handler
+> and pmu.read callback. Use spin lock to protect the sw&hw
+> counters.
+> 
+> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
+> ---
+>  drivers/perf/amlogic/meson_ddr_pmu_core.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/perf/amlogic/meson_ddr_pmu_core.c b/drivers/perf/amlogic/meson_ddr_pmu_core.c
+> index 0b24dee1ed3c..9b2e5d5c0626 100644
+> --- a/drivers/perf/amlogic/meson_ddr_pmu_core.c
+> +++ b/drivers/perf/amlogic/meson_ddr_pmu_core.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/perf_event.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/printk.h>
+> +#include <linux/spinlock.h>
+>  #include <linux/sysfs.h>
+>  #include <linux/types.h>
+>  
+> @@ -23,6 +24,7 @@ struct ddr_pmu {
+>  	struct pmu pmu;
+>  	struct dmc_info info;
+>  	struct dmc_counter counters;	/* save counters from hw */
+> +	spinlock_t lock;		/* protect hw/sw counter */
+>  	bool pmu_enabled;
+>  	struct device *dev;
+>  	char *name;
+> @@ -92,10 +94,12 @@ static void meson_ddr_perf_event_update(struct perf_event *event)
+>  	int idx;
+>  	int chann_nr = pmu->info.hw_info->chann_nr;
+>  
+> +	spin_lock(&pmu->lock);
 
-Queued, thanks.  I changed the return value to -EOPNOTSUPP.
+Why doesn't this need the _irqsave() variant if we're racing with the irq
+handler?
 
-Paolo
-
-
+Will
