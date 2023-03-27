@@ -2,182 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C464E6CA5D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2AE6CA5E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232696AbjC0N2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
+        id S232211AbjC0N3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232661AbjC0N2Z (ORCPT
+        with ESMTP id S232127AbjC0N2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:28:25 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A04D272C;
-        Mon, 27 Mar 2023 06:27:53 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id A602B5FD0E;
-        Mon, 27 Mar 2023 16:27:51 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679923671;
-        bh=0YUCwwr3FkfqiCryYd0cXJ9WkdrM/lnNsAXWs5dkDmY=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=PiIIdlWyfXI2YxfuVPMiERyUtS3e8apzsM0jw8aWpq7UM21heILNGgtUKsImAyvvL
-         fRKo6cr4JvAZ/FuUdfCeC+124LPi0DnRDf89y91DfYUrT7cJsbMhabscgA6+fd9LqU
-         DsBtoKouTA9kMPpc4atAN9fueKNM9qyPZLYSViLl7ptJpiwlrxTmy63hrYt15QEaOu
-         zScE0x+rQYGgaFGzlwJ3dthhuSWZ5r5GcMyWx13I3iLq/+pSJg3/AQMdZ72aLFQ3qO
-         076PL8UYUfdrqiljM3ocAVjeRlIfZj+zB/NkgUCOlPL38tgnIljPIgWLsJcNvrneQP
-         Gz1zhQgd+F+5A==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 27 Mar 2023 16:27:51 +0300 (MSK)
-Date:   Mon, 27 Mar 2023 16:27:50 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Jerome Brunet <jbrunet@baylibre.com>
-CC:     <neil.armstrong@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>, <jian.hu@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v11 5/5] clk: meson: a1: add Amlogic A1 Peripherals clock
- controller driver
-Message-ID: <20230327132750.pnao5t3mbm3pmzbe@CAB-WSD-L081021>
-References: <20230321193014.26349-1-ddrokosov@sberdevices.ru>
- <20230321193014.26349-6-ddrokosov@sberdevices.ru>
- <1jtty6o5so.fsf@starbuckisacylon.baylibre.com>
+        Mon, 27 Mar 2023 09:28:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 553A55260;
+        Mon, 27 Mar 2023 06:28:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 214201042;
+        Mon, 27 Mar 2023 06:29:17 -0700 (PDT)
+Received: from bogus (unknown [10.57.52.160])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F07183F663;
+        Mon, 27 Mar 2023 06:28:29 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 14:27:55 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     "lihuisong (C)" <lihuisong@huawei.com>
+Cc:     robbiek@xsightlabs.com, linux-acpi@vger.kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        rafael.j.wysocki@intel.com, wanghuiqiang@huawei.com,
+        zhangzekun11@huawei.com, wangxiongfeng2@huawei.com,
+        tanxiaofei@huawei.com, guohanjun@huawei.com, xiexiuqi@huawei.com,
+        wangkefeng.wang@huawei.com, huangdaode@huawei.com
+Subject: Re: [PATCH v2 1/2] mailbox: pcc: Add support for platform
+ notification handling
+Message-ID: <20230327132755.tzflaqxp2cwsgs63@bogus>
+References: <20221016034043.52227-1-lihuisong@huawei.com>
+ <20230314111135.16520-1-lihuisong@huawei.com>
+ <20230314111135.16520-2-lihuisong@huawei.com>
+ <20230327113057.cc2ufila5z25mgic@bogus>
+ <4bf0da8a-008a-7363-d1cd-53e4296e3436@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1jtty6o5so.fsf@starbuckisacylon.baylibre.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/27 05:49:00 #21016052
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4bf0da8a-008a-7363-d1cd-53e4296e3436@huawei.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 11:58:30AM +0200, Jerome Brunet wrote:
+On Mon, Mar 27, 2023 at 08:25:04PM +0800, lihuisong (C) wrote:
 > 
-> On Tue 21 Mar 2023 at 22:30, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> 
-> > Introduce Peripherals clock controller for Amlogic A1 SoC family.
-> >
-> > A1 SoC has four clock controllers on the board: PLL, Peripherals, CPU,
-> > and Audio.
-> > This patchset adds support for Amlogic A1 Peripherals clock driver and
-> > allows to generate clocks for all A1 SoC peripheral IPs.
-> >
-> > Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> > ---
-> >  drivers/clk/meson/Kconfig  |   10 +
-> >  drivers/clk/meson/Makefile |    1 +
-> >  drivers/clk/meson/a1.c     | 2344 ++++++++++++++++++++++++++++++++++++
-> >  drivers/clk/meson/a1.h     |   49 +
-> >  4 files changed, 2404 insertions(+)
-> >  create mode 100644 drivers/clk/meson/a1.c
-> >  create mode 100644 drivers/clk/meson/a1.h
-> >
-> 
-> [...]
-> 
-> > +static struct clk_regmap dspa_b_sel = {
-> > +	.data = &(struct clk_regmap_mux_data){
-> > +		.offset = DSPA_CLK_CTRL0,
-> > +		.mask = 0x7,
-> > +		.shift = 26,
-> > +		.table = mux_table_dsp_ab,
-> > +	},
-> > +	.hw.init = &(struct clk_init_data){
-> > +		.name = "dspa_b_sel",
-> > +		.ops = &clk_regmap_mux_ops,
-> > +		.parent_data = dsp_ab_parent_data,
-> > +		.num_parents = ARRAY_SIZE(dsp_ab_parent_data),
-> > +		/*
-> > +		 * DSPA_B clk can be inherited from more accurate RTC clock,
-> > +		 * so in some situations we may want to freeze its parent.
-> > +		 * Therefore force dsp parent setup on device tree side
-> > +		 */
-> 
-> This gets copy-pasted A LOT.
-> Please comment this once and for all ... then reference the comment if
-> you need to.
-> 
+> 在 2023/3/27 19:30, Sudeep Holla 写道:
+> > On Tue, Mar 14, 2023 at 07:11:34PM +0800, Huisong Li wrote:
+> > > Currently, PCC driver doesn't support the processing of platform
+> > > notification for type 4 PCC subspaces.
+> > > 
+> > > According to ACPI specification, if platform sends a notification
+> > > to OSPM, it must clear the command complete bit and trigger platform
+> > > interrupt. OSPM needs to check whether the command complete bit is
+> > > cleared, clear platform interrupt, process command, and then set the
+> > > command complete and ring doorbell to the Platform.
+> > > 
+> > > Let us stash the value of the pcc type and use the same while processing
+> > > the interrupt of the channel. We also need to set the command complete
+> > > bit and ring doorbell in the interrupt handler for the type 4 channel to
+> > > complete the communication flow after processing the notification from
+> > > the Platform.
+> > > 
+> > > Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> > > ---
+> > >   drivers/mailbox/pcc.c | 50 +++++++++++++++++++++++++++++++++++--------
+> > >   1 file changed, 41 insertions(+), 9 deletions(-)
+> > > 
+> > > diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
+> > > index 105d46c9801b..a0a87c480d8b 100644
+> > > --- a/drivers/mailbox/pcc.c
+> > > +++ b/drivers/mailbox/pcc.c
+> > > @@ -91,6 +91,7 @@ struct pcc_chan_reg {
+> > >    * @cmd_update: PCC register bundle for the command complete update register
+> > >    * @error: PCC register bundle for the error status register
+> > >    * @plat_irq: platform interrupt
+> > > + * @type: PCC subspace type
+> > >    */
+> > >   struct pcc_chan_info {
+> > >   	struct pcc_mbox_chan chan;
+> > > @@ -100,12 +101,15 @@ struct pcc_chan_info {
+> > >   	struct pcc_chan_reg cmd_update;
+> > >   	struct pcc_chan_reg error;
+> > >   	int plat_irq;
+> > > +	u8 type;
+> > >   };
+> > >   #define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
+> > >   static struct pcc_chan_info *chan_info;
+> > >   static int pcc_chan_count;
+> > > +static int pcc_send_data(struct mbox_chan *chan, void *data);
+> > > +
+> > >   /*
+> > >    * PCC can be used with perf critical drivers such as CPPC
+> > >    * So it makes sense to locally cache the virtual address and
+> > > @@ -221,6 +225,34 @@ static int pcc_map_interrupt(u32 interrupt, u32 flags)
+> > >   	return acpi_register_gsi(NULL, interrupt, trigger, polarity);
+> > >   }
+> > > +static bool pcc_mbox_cmd_complete_check(struct pcc_chan_info *pchan)
+> > > +{
+> > > +	u64 val;
+> > > +	int ret;
+> > > +
+> > > +	ret = pcc_chan_reg_read(&pchan->cmd_complete, &val);
+> > > +	if (ret)
+> > > +		return false;
+> > > +
+> > > +	if (!pchan->cmd_complete.gas)
+> > > +		return true;
+> > > +
+> > > +	/*
+> > > +	 * Judge if the channel respond the interrupt based on the value of
+> > > +	 * command complete.
+> > > +	 */
+> > > +	val &= pchan->cmd_complete.status_mask;
+> > [super nit] Would prefer an blank line here.
+> > 
+> Yeah, it would be better if there is an blank line here.
+> Is it necessary to send v3 for this?
 
-Agree. No problem. I'll collapse them in the next version.
-
-> > +		.flags = CLK_SET_RATE_NO_REPARENT,
-> > +	},
-> > +};
-> 
-> [...]
-> 
-> > +static struct clk_regmap cecb_32k_sel = {
-> > +	.data = &(struct clk_regmap_mux_data) {
-> > +		.offset = CECB_CLK_CTRL1,
-> > +		.mask = 0x1,
-> > +		.shift = 31,
-> > +		.flags = CLK_MUX_ROUND_CLOSEST,
-> > +	},
-> > +	.hw.init = &(struct clk_init_data){
-> > +		.name = "cecb_32k_sel",
-> > +		.ops = &clk_regmap_mux_ops,
-> > +		.parent_hws = (const struct clk_hw *[]) {
-> > +			&cecb_32k_sel_pre.hw,
-> > +			&rtc.hw,
-> > +		},
-> > +		.num_parents = 2,
-> > +		/*
-> > +		 * CECB_32K clk can be inherited from more accurate RTC clock,
-> > +		 * so in some situations we may want to freeze its parent.
-> > +		 * Therefore force cecb_32k parent setup on device tree side
-> > +		 */
-> 
-> How do you plan on doing that ?
-> 
-> You've made the parent "private" and it is not even available to be
-> referenced in DT.
-> 
-> This whole concept of public and private to seems broken to me.
-> I would much prefer you keep the existing model, with one big table and
-> possibly some IDs not exposed in the bindings.
-> 
-> This gives an hint about the clocks we think consummers should use while
-> allowing us to change things if we got it wrong, and keep the IDs stable
-> for DT. This has been working so far. I don't see the benefit of
-> changing that right now.
-> 
-
-As we disccused in the IRC, there is two approaches:
-
-1) public/private clock bindings based on splitting bindings headers
-2) public/private clock objects based on limited clock hw provider
-   registration
-
-I'll redesign the whole patch series to the 1st approach with keeping the
-following strict rules in the mind:
-"There is no option to chage public or private CLKID list numbers.
-"Never said you were allowed to change the meaning of the ID, you are just
-allowed to have them declared in the bindings (or not)"
-
-[...]
+Let us see once you have Robbie's tested-by. Depending on who picks up we can
+check with them.
 
 -- 
-Thank you,
-Dmitry
+Regards,
+Sudeep
