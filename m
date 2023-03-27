@@ -2,258 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5924C6CA2DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783DB6CA2E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbjC0Lw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 07:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
+        id S232574AbjC0Lxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 07:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232577AbjC0LwY (ORCPT
+        with ESMTP id S229804AbjC0Lxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 07:52:24 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF414693
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:52:22 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so8514055pjz.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679917941;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yie29ohMrJ3Z0GW7KYTY2gK6o38sOzg3sKUuuNau8C0=;
-        b=OQZDKtpUc7OBSFoH1VyVCKHCxN7Ne5b14OAG2MvHFVomO+Kly0QsA1BIT/ftdvm27v
-         G5lFHxcsgUQJCrEQxOPON8WVITL+k9cJjfUbfcbIyH4siFMvOYHOwp53B4VqzgzIcm7k
-         gy5XqO8SNq2c+0QdFR3sGPjK6BK2iMm7XrS+M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679917941;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yie29ohMrJ3Z0GW7KYTY2gK6o38sOzg3sKUuuNau8C0=;
-        b=YxgQPZneMB34eOpMlpALhHFFFnpUKGlVHRP97GHeT9/NpuJW+fKlQ4x7r/jd66Jv1k
-         /qkkz5b4XE7+Dqp4xt1qKZK0gslnFauV9Cz7eBCG6RaVFV/9SjycVKyF5gLlquBMKKkh
-         VCjcbHLs5kNtHnN3GLrKkJqesKy3GodHeVoM6XsHVWsRHDFg6dXJDMrpUrPQcouW6ymm
-         yplkv1aca6qbwiGdGLqAqHBMhccO6X+UMBBaXE5wYgZuE528yboZLhZTCY3spOuElUUe
-         rdHkVHwoKwYUVtiyAkIGu6c+C2jm54KH+eByYLkwxOBZVghGW4t94adZokLL1qZcAU3d
-         UO3A==
-X-Gm-Message-State: AO0yUKXVFdxlmG5CL/JfibLIsuxUxxp/2tQBM1iVs8OeNIuHh1CGPY8C
-        IWdUHbjzt/aTiZES8xUq4AAq7ev1PujW8Ed8b5g=
-X-Google-Smtp-Source: AK7set+hmgOrJdPTit0pHbJL9lNiEQWu1Ly0Z8FBLW4NiwGNt69FaV9tS/sU47mobEgHJTBwzCifdA==
-X-Received: by 2002:a05:6a20:669f:b0:d7:380b:660 with SMTP id o31-20020a056a20669f00b000d7380b0660mr10045123pzh.3.1679917941330;
-        Mon, 27 Mar 2023 04:52:21 -0700 (PDT)
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com. [209.85.215.178])
-        by smtp.gmail.com with ESMTPSA id c18-20020a62e812000000b006227c3d5e29sm19557040pfi.16.2023.03.27.04.52.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 04:52:20 -0700 (PDT)
-Received: by mail-pg1-f178.google.com with SMTP id bn14so4949591pgb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:52:20 -0700 (PDT)
-X-Received: by 2002:a65:648c:0:b0:4eb:1c07:e5d7 with SMTP id
- e12-20020a65648c000000b004eb1c07e5d7mr3048091pgv.6.1679917939815; Mon, 27 Mar
- 2023 04:52:19 -0700 (PDT)
+        Mon, 27 Mar 2023 07:53:42 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A328535AB;
+        Mon, 27 Mar 2023 04:53:41 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RApg2T022235;
+        Mon, 27 Mar 2023 11:53:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=LNNz+zzVdhuLIYvRdlW9EYmwiSQ62Gb/MeXjDKFYvgE=;
+ b=HvdZTPoPCIZapNFVMNP6egOemUkSHEznmQCt1am13Al6jJ7/NNJ/32xIu8RdvRmEKj/f
+ oMkGmi2z8mi19R7FYOnZDb29PEMmdNv2f3psOWLCxhJL6cchzNuNdPRrqU/oV4vgr3df
+ Yl9HQjP6bIVlMQHiSPgL4Y2J/c+KgvcNBZDl+ZzOfpIEPvJ1iGEsK3CT1NWSmMlCuwBD
+ fEqrn4iayoHEFLpaqoHXCf5wY8ofkYlYLOnBHkNsKNRh0rgo12rWzIVmbqksZCr0t/sa
+ VGtfeTWSXJmt8bYpnpHfNSZTH5+z7y0ZUZeKEKKO/gxNmsCg9dbXTxaEJIdHPHwbrsvS Pw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjb42pfjc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 11:53:37 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32RBVWF5018492;
+        Mon, 27 Mar 2023 11:53:37 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjb42pfhu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 11:53:37 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32R2mKX0029184;
+        Mon, 27 Mar 2023 11:53:35 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3phrk6jchf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 11:53:35 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32RBrVC017891954
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Mar 2023 11:53:32 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DC43420043;
+        Mon, 27 Mar 2023 11:53:31 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 97A782004B;
+        Mon, 27 Mar 2023 11:53:31 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Mar 2023 11:53:31 +0000 (GMT)
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, Rae Moar <rmoar@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kunit: increase KUNIT_LOG_SIZE to 2048 bytes
+Date:   Mon, 27 Mar 2023 13:53:31 +0200
+Message-Id: <20230327115331.122562-1-hca@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20230321-kexec_clang16-v3-0-5f016c8d0e87@chromium.org> <20230324165855.23084947@rotkaeppchen>
-In-Reply-To: <20230324165855.23084947@rotkaeppchen>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Mon, 27 Mar 2023 13:52:08 +0200
-X-Gmail-Original-Message-ID: <CANiDSCtu8oOn9vV9eak=S2RDVVO9yan2BO8K5ia9jALABqiwjQ@mail.gmail.com>
-Message-ID: <CANiDSCtu8oOn9vV9eak=S2RDVVO9yan2BO8K5ia9jALABqiwjQ@mail.gmail.com>
-Subject: Re: [PATCH v3] kexec: Support purgatories with .text.hot sections
-To:     Philipp Rudo <prudo@redhat.com>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        Baoquan He <bhe@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ZOKfbZRi1_50rmP3MKfg4zltBcI3xlZn
+X-Proofpoint-GUID: zIG9bVyj5sto9BdSBVGuj88hWX1YZZf3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 spamscore=0 clxscore=1011 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2303270090
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Philipp
+The s390 specific test_unwind kunit test has 39 parameterized tests. The
+results in debugfs are truncated since the full log doesn't fit into 1500
+bytes.
+Therefore increase KUNIT_LOG_SIZE to 2048 bytes in a similar way like it
+was done recently with commit "kunit: fix bug in debugfs logs of
+parameterized tests". With that the whole test result is present.
 
+Reported-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+---
+ include/kunit/test.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-On Fri, 24 Mar 2023 at 17:00, Philipp Rudo <prudo@redhat.com> wrote:
->
-> Hi Ricardo,
->
-> On Wed, 22 Mar 2023 20:09:21 +0100
-> Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> > Clang16 links the purgatory text in two sections:
-> >
-> >   [ 1] .text             PROGBITS         0000000000000000  00000040
-> >        00000000000011a1  0000000000000000  AX       0     0     16
-> >   [ 2] .rela.text        RELA             0000000000000000  00003498
-> >        0000000000000648  0000000000000018   I      24     1     8
-> >   ...
-> >   [17] .text.hot.        PROGBITS         0000000000000000  00003220
-> >        000000000000020b  0000000000000000  AX       0     0     1
-> >   [18] .rela.text.hot.   RELA             0000000000000000  00004428
-> >        0000000000000078  0000000000000018   I      24    17     8
-> >
-> > And both of them have their range [sh_addr ... sh_addr+sh_size] on the
-> > area pointed by `e_entry`.
-> >
-> > This causes that image->start is calculated twice, once for .text and
-> > another time for .text.hot. The second calculation leaves image->start
-> > in a random location.
-> >
-> > Because of this, the system crashes inmediatly after:
-> >
-> > kexec_core: Starting new kernel
->
-> Great analysis!
->
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> > kexec: Fix kexec_file_load for llvm16
-> >
-> > When upreving llvm I realised that kexec stopped working on my test
-> > platform. This patch fixes it.
-> >
-> > To: Eric Biederman <ebiederm@xmission.com>
-> > Cc: Baoquan He <bhe@redhat.com>
-> > Cc: Philipp Rudo <prudo@redhat.com>
-> > Cc: kexec@lists.infradead.org
-> > Cc: linux-kernel@vger.kernel.org
-> > ---
-> > Changes in v3:
-> > - Fix initial value. Thanks Ross!
-> > - Link to v2: https://lore.kernel.org/r/20230321-kexec_clang16-v2-0-d10e5d517869@chromium.org
-> >
-> > Changes in v2:
-> > - Fix if condition. Thanks Steven!.
-> > - Update Philipp email. Thanks Baoquan.
-> > - Link to v1: https://lore.kernel.org/r/20230321-kexec_clang16-v1-0-a768fc2c7c4d@chromium.org
-> > ---
-> >  kernel/kexec_file.c | 13 ++++++++++++-
-> >  1 file changed, 12 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> > index f1a0e4e3fb5c..25a37d8f113a 100644
-> > --- a/kernel/kexec_file.c
-> > +++ b/kernel/kexec_file.c
-> > @@ -901,10 +901,21 @@ static int kexec_purgatory_setup_sechdrs(struct purgatory_info *pi,
-> >               }
-> >
-> >               offset = ALIGN(offset, align);
-> > +
-> > +             /*
-> > +              * Check if the segment contains the entry point, if so,
-> > +              * calculate the value of image->start based on it.
-> > +              * If the compiler has produced more than one .text sections
-> > +              * (Eg: .text.hot), they are generally after the main .text
-> > +              * section, and they shall not be used to calculate
-> > +              * image->start. So do not re-calculate image->start if it
-> > +              * is not set to the initial value.
-> > +              */
-> >               if (sechdrs[i].sh_flags & SHF_EXECINSTR &&
-> >                   pi->ehdr->e_entry >= sechdrs[i].sh_addr &&
-> >                   pi->ehdr->e_entry < (sechdrs[i].sh_addr
-> > -                                      + sechdrs[i].sh_size)) {
-> > +                                      + sechdrs[i].sh_size) &&
-> > +                 kbuf->image->start == pi->ehdr->e_entry) {
->
-> I'm not entirely sure if this is the solution to go with. As you state
-> in the comment above this solution assumes that the .text section comes
-> before any other .text.* section. But this assumption isn't much
-> stronger than the assumption that there is only a single .text section,
-> which is used nowadays.
->
-> The best solution I can come up with right now is to introduce a linker
-> script for the purgatory that simply merges the .text sections into
-> one. Similar to what I did for s390 in
-> arch/s390/purgatory/purgatory.lds.S (although for a different reason).
-> But that would require every architecture to get one. An alternative
-> would be to find a way to get rid of the -r option on the LD_FLAGS,
-> which IIRC is the reason why both section overlap in the first place.
-
-
-I tried removing the -r from arch/x86/purgatory/Makefile and that resulted into:
-
-[  115.631578] BUG: unable to handle page fault for address: ffff93224d5c8e20
-[  115.631583] #PF: supervisor write access in kernel mode
-[  115.631585] #PF: error_code(0x0002) - not-present page
-[  115.631586] PGD 100000067 P4D 100000067 PUD 1001ed067 PMD 132b58067 PTE 0
-[  115.631589] Oops: 0002 [#1] PREEMPT SMP NOPTI
-[  115.631592] CPU: 0 PID: 5291 Comm: kexec-lite Tainted: G     U
-      5.15.103-17399-g852a928df601-dirty #19
-cd159e0d6a91f03e06035a0a8eb7fc984a8f3e82
-[  115.631594] Hardware name: Google Crota/Crota, BIOS
-Google_Crota.14505.288.0 11/08/2022
-[  115.631595] RIP: 0010:memcpy_erms+0x6/0x10
-[  115.631599] Code: 5d 00 eb bd eb 1e 0f 1f 00 48 89 f8 48 89 d1 48
-c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 cc cc cc cc 66 90 48 89 f8
-48 89 d1 <f3> a4 c3 cc cc cc cc 0f 1f 00 48 89 f8 48 83 fa 20 72 7e 40
-38 fe
-[  115.631601] RSP: 0018:ffff93224f65fe50 EFLAGS: 00010246
-[  115.631602] RAX: ffff93224d5c8e20 RBX: 00000000ffffffea RCX: 0000000000000100
-[  115.631603] RDX: 0000000000000100 RSI: ffff9322407bd000 RDI: ffff93224d5c8e20
-[  115.631604] RBP: ffff93224f65fe88 R08: 0000000000000000 R09: ffff92133cd3ef08
-[  115.631605] R10: ffff9322407be000 R11: ffffffffa1b4f2e0 R12: 0000000000000000
-[  115.631606] R13: ffff92133cee4c00 R14: 0000000000000100 R15: ffffffffa2b6f14f
-[  115.631607] FS:  000078e8b9dbf7c0(0000) GS:ffff921437800000(0000)
-knlGS:0000000000000000
-[  115.631609] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  115.631610] CR2: ffff93224d5c8e20 CR3: 000000015be26001 CR4: 0000000000770ef0
-[  115.631611] PKRU: 55555554
-[  115.631612] Call Trace:
-[  115.631614]  <TASK>
-[  115.631615]  kexec_purgatory_get_set_symbol+0x82/0xd3
-[  115.631619]  __se_sys_kexec_file_load+0x523/0x644
-[  115.631621]  do_syscall_64+0x58/0xa5
-[  115.631623]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
-
-
-And I did not continue in that direction.
-
-I also tried finding a flag for llvm that would avoid splitting .text,
-but was not lucky either.
-
-I will look into making a linker script for x86, we could combine it
-with something like:
-
-                if (sechdrs[i].sh_flags & SHF_EXECINSTR &&
-                    pi->ehdr->e_entry >= sechdrs[i].sh_addr &&
-                    pi->ehdr->e_entry < (sechdrs[i].sh_addr
--                                        + sechdrs[i].sh_size) &&
--                   kbuf->image->start == pi->ehdr->e_entry) {
--                       kbuf->image->start -= sechdrs[i].sh_addr;
--                       kbuf->image->start += kbuf->mem + offset;
-+                                        + sechdrs[i].sh_size)) {
-+                       if (!WARN_ON(kbuf->image->start != pi->ehdr->e_entry)) {
-+                               kbuf->image->start -= sechdrs[i].sh_addr;
-+                               kbuf->image->start += kbuf->mem + offset;
-+                       }
-                }
-
-So developers have some hints of what to look at.
-
-Thanks!
-
-
->
-> Thanks
-> Philipp
->
-> >                       kbuf->image->start -= sechdrs[i].sh_addr;
-> >                       kbuf->image->start += kbuf->mem + offset;
-> >               }
-> >
-> > ---
-> > base-commit: 17214b70a159c6547df9ae204a6275d983146f6b
-> > change-id: 20230321-kexec_clang16-4510c23d129c
-> >
-> > Best regards,
->
-
-
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 9721584027d8..57b309c6ca27 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -34,7 +34,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
+ struct kunit;
+ 
+ /* Size of log associated with test. */
+-#define KUNIT_LOG_SIZE 1500
++#define KUNIT_LOG_SIZE 2048
+ 
+ /* Maximum size of parameter description string. */
+ #define KUNIT_PARAM_DESC_SIZE 128
 -- 
-Ricardo Ribalda
+2.37.2
+
