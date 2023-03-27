@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2576C9F42
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0896C9F49
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbjC0JWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
+        id S232996AbjC0JZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbjC0JWc (ORCPT
+        with ESMTP id S230017AbjC0JZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:22:32 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB2D210D;
-        Mon, 27 Mar 2023 02:22:31 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id h17so7928629wrt.8;
-        Mon, 27 Mar 2023 02:22:31 -0700 (PDT)
+        Mon, 27 Mar 2023 05:25:04 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272703C34
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:25:02 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id x17so10467928lfu.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:25:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679908950;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uUDm94cuqNsQmZlVr5Y+d2/6iij4ZcYk5kPEnEDDj90=;
-        b=QEgDqcZaOanHmPkYcMvtQjLd25vh2Hcskbrb1/CQe9v5ULDTQAYBJ1nWHcXNv357UJ
-         LHLeu641aL/s3vrRIWsvuYjAczxPvk2gqGKYy733nRICuS1pbVaBKCqiErIu+xbeeG0L
-         VUXiOULqEDakvBJXJPGNxpYw/CpcKvnJ0bOKgdiOn6+3r01CTfdSJ+mivVXo6Ps6iqFn
-         BLGefqD+OwKBUMvotrqpQTNHqUOybagc1ohUeehXkHrEfA/FRUoNIzfuFwnut/AjMHID
-         QHgRExtE4rsO+QTPtXZwNBhdumnQ60nvHmVj+lMVRzbbJ59UOxsPS96SNH5wHUWbYGZd
-         CndQ==
+        d=linaro.org; s=google; t=1679909100;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T02EEsB+JsxIsGvfHU8GNmWoAeNpI9q8KBBhU8dmU7w=;
+        b=dhknn5eprEgoiGJpfoeIbZPZ3N9+U4ul2o9E+zM5DD6Yjs7/S1nIcK8qvZCnH47uQR
+         m/OSrjh4aldu7RVRY6OZmwbT5QMyVKgiRlzYGbQLBCaDs66dnKQUzcvjGBPfGmGQ/t4N
+         ry2rl62CaDB47euJa00hy/lhHYau+qZRsujISxMvrFqJ/rj5j3PaFBtFJ6jPB1rMVvSU
+         GG+zS+0Q2/Hd/SrPSky2TLVxKRZ2nbh1Hakuu4dMLEdvkXGNEN7gSYliYNxS+ihWM3PD
+         QIbljOlh/hQ1g7ZWAnwfupYvDJJFaAxiBine6LivbqxW5HkLk9Y2BK6Kv0x3DetU0JRO
+         WCKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679908950;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uUDm94cuqNsQmZlVr5Y+d2/6iij4ZcYk5kPEnEDDj90=;
-        b=2iHQHtUFwYNzBQoiRl2Iknowyrbl3lW/7tP9jYTmcEeHZ50vtWTfSJkW9rVwq6H3M2
-         5wPwCRcr22bLRucf4AR2HjTnzf0eWgB3CU+L9zD6G5cDqeTCbC1BBu8s/oCXsRhV3Zij
-         r9WSCRYcBrmsP0Nh/QpWAxPzL/X3pm5FtFj+u6JUefBSTV7G7x3hV0FdW8TFNxk0cNXv
-         vxms05nqK7Fw9rGGTy3PZ4bXwuKEtgeIolSEqw6OMEN+QnK0gbOfsePOKOiTiLThWnWO
-         26k7tqgzTXz228nUJK0JZeC8b+vc1BHzPKfQVo2ouEaeJO1+aXUMZctb395du/VgC2Dj
-         rvcg==
-X-Gm-Message-State: AAQBX9cVTn49zJuMlCDPNCL/hZFhVm3tY0Nw5XBCiKYziAzRa4AGKoKq
-        wy6QdXhocEagQwXsodIfOmJRwV5iuKdKq89cD7Y=
-X-Google-Smtp-Source: AKy350bTAlkSbVG8D7+r7I0dbIWroXFlbKeNyJfM2es7Xg1xOxIfCH3ajl/h50HA/pMaUlmhc0C3YmY+pHhkHde5AHE=
-X-Received: by 2002:adf:f4c2:0:b0:2ce:ad3a:551d with SMTP id
- h2-20020adff4c2000000b002cead3a551dmr1777328wrp.2.1679908949646; Mon, 27 Mar
- 2023 02:22:29 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679909100;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T02EEsB+JsxIsGvfHU8GNmWoAeNpI9q8KBBhU8dmU7w=;
+        b=VE6furuKgwpKSs9nvuKBICrvYgpC2NwiGRLCeyxrjaCdKJa8aYWWHKjH/OeyIkEaJE
+         IP37KIhbkkhYjxuSMrA8dT9L0JXKkHHSICMuz6L1mn24T7eghej2ySJPJ83yUIziXdOY
+         7IpzYl/mxT4/zOAgL6S+QD5w5mcSl6cIl3MZf2oQlu8zyHWJReGHOxYEtqm1IUPAMaux
+         l4igtoxAmDmIJo7LmwyKMTi+2vnBC2NWzWlWXidlD9Ae+F0eAgQ/OAE5MmANfAzatfL0
+         h43cmZFHf4XQENrFPzpQ7IvbIzz9XWgD0dXxfYHRIujsttafqxk8LcGqICP7XvfcJsnO
+         iutQ==
+X-Gm-Message-State: AAQBX9eJfsuDJ30PmV91/QQgUqQmYmxVwoFQlaiYUES5FLjepvjj6Dy/
+        yKuDAVZ06cbdI6wdpL7OpQBx+w==
+X-Google-Smtp-Source: AKy350bop+wpdj9i3wKW2k/44nNJUMknqVjf+xVWhqU9jOd5p4BncKHQf8G+uV2pyGqFwmtzhyC9pA==
+X-Received: by 2002:ac2:530d:0:b0:4e9:a9e6:2752 with SMTP id c13-20020ac2530d000000b004e9a9e62752mr3396168lfh.22.1679909100406;
+        Mon, 27 Mar 2023 02:25:00 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id f9-20020ac25089000000b004e9d2af99c0sm3372837lfm.71.2023.03.27.02.24.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 02:25:00 -0700 (PDT)
+Message-ID: <506a7e48-2576-0fa6-d5e9-0157539bcebf@linaro.org>
+Date:   Mon, 27 Mar 2023 11:24:58 +0200
 MIME-Version: 1.0
-References: <20230326001535.149539-1-bigbeeshane@gmail.com>
- <87cz4v2nr1.fsf@bloch.sibelius.xs4all.nl> <CABnpCuAqT-RtdmeaAqyB_CQkLa=vn8zxF_WkYRnj8FoGJLL=_Q@mail.gmail.com>
- <2874439.e9J7NaK4W3@diego>
-In-Reply-To: <2874439.e9J7NaK4W3@diego>
-From:   Shane Francis <bigbeeshane@gmail.com>
-Date:   Mon, 27 Mar 2023 10:22:18 +0100
-Message-ID: <CABnpCuBoM23msO0FikL33eDXYV2A4hNfsLkKhNiBs-DKJ5aKCA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: clock: update rk3588 clock definitions
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/5] usb: dwc3: qcom: Allow runtime PM
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
+        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
+ <cc7392c1-0ea1-29b3-fab6-19c843413724@linaro.org>
+ <20230327091733.GA14584@thinkpad>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230327091733.GA14584@thinkpad>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,168 +80,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
 
-> when secure boot is involed, I'd think the whole device will be sufficien=
-tly
-> locked down to also disallow custom kernels. Otherwise that wouldn't be
-> a secure boot. (bootloader verifying kernel image + rootfs)
 
-If you look at the Android boot chain this is the case when in "locked mode=
-",
-uboot (or whatever 2nd stage you have) validates the boot / kernel image
-either via public key or symmetric key. However in unlocked mode using
-something like the "unlock" fastboot command this check is disabled but
-the signature validation of the uboot / second stage is still enforced. AFA=
-IK
-this process is part of the Android device validation suite.
+On 27.03.2023 11:17, Manivannan Sadhasivam wrote:
+> On Mon, Mar 27, 2023 at 11:01:35AM +0200, Konrad Dybcio wrote:
+>>
+>>
+>> On 25.03.2023 17:52, Manivannan Sadhasivam wrote:
+>>> Hi,
+>>>
+>>> This series allows the dwc3-qcom driver to do runtime PM itself without
+>>> userspace intervention. Still, userspace is required to enable runtime PM
+>>> for dwc3 glue and xhci drivers as we cannot enable runtime PM for them.
+>>> But this series avoids one more additional step.
+>> What sort of 'userspace intervention' are we talking about?
+>> echo mem > /sys/power/state?
+>>
+> 
+> I forgot to add that bit:
+> 
+> echo auto > /sys/devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/power/control
+> echo auto > /sys/devices/platform/soc@0/a8f8800.usb/a800000.usb/power/control
+> 
+> You need to set "auto" for the runtime control for both xhci and dwc drivers.
+> 
+> Then if you don't connect a usb device, all 3 drivers (dwc3-qcom, dwc3, and
+> xhci) will become runtime suspended after a delay of 5s (default delay).
+> 
+> This can be confirmed by:
+> 
+> cat /sys/devices/platform/soc@0/a8f8800.usb/power/runtime_status
+> 
+> After connecting a usb device, they will all become "active".
+Thanks! And if I'm following correctly, we can't enable runtime PM
+for the DWC3 glue and XHCI drivers, as that would cause havoc on
+other, non-qc platforms. Is that correct?
 
-Yes Android is only one OS vendor, however it is probably the largest use
-case for this SoC.
-
-> So we're in a pickle here. As Peter said, _if_ we wanted to change the id=
-s
-> one more time, to allow those vendor uboot hacks, now would be the time.
->
-> But then als Mark said, the current bindings are used already in a number
-> of different places and aren't broken per se.
-
-I agree, its a bit messy, I was just raising the patch now just in case it =
-was
-something that could be changed with relative ease, if thats not the case t=
-he
-patch can be ignored
-
-Thanks In Advance
-
-On Mon, Mar 27, 2023 at 10:07=E2=80=AFAM Heiko St=C3=BCbner <heiko@sntech.d=
-e> wrote:
->
-> Am Montag, 27. M=C3=A4rz 2023, 01:40:34 CEST schrieb Shane Francis:
-> > Hi Mark
-> >
-> > > That code makes absolutely no sense.  This tries to transplant
-> > > phandles from one DTB into another DTB?  Mainline U-Boot has no code
-> > > like that.  I think this is just broken beyond repair.
-> >
-> > Yeah its a dumb bit of code, my concern when looking at the R6S is that
-> > when devices look to get mainline support that are unable to change to
-> > another uboot build (such as when secure boot is involved)
->
-> when secure boot is involed, I'd think the whole device will be sufficien=
-tly
-> locked down to also disallow custom kernels. Otherwise that wouldn't be
-> a secure boot. (bootloader verifying kernel image + rootfs)
->
->
-> > those will
-> > have a hard time as this ABI breakage ship would have departed long
-> > ago. And the RK3588 support is very new..... I thought about raising it
-> > now.
-> >
-> > The question for me is how (in the future) will devices with this SoC
-> > and cannot modify their uboot make use of the mainline kernel ?
-> >
-> > I have looked into undoing this clock configuration during early kernel
-> > boot but the SoC seems to hard lock.
-> >
-> > I apologise if raising this patch was a bad idea but like I stated to
-> > Krzysztof I am just onboarding this device as a hobby. However
-> > from an outside standpoint having a potential breakage like this
-> > because starting from 0 looked cleaner than 1 seems a bit odd to
-> > me.
->
-> In general we can't be on the "whim" of SoC vendors.
->
-> I.e. dt-bindings are supposed to be reviewed _first_ and not invented in
-> some SoC vendor's dark basement. That did work in the past with Rockchip
-> but in recent years they did loose most of their upstream momentum it
-> seems.
->
-> Because vendors often invent unpractical or even conflicting bindings on
-> their own.
->
-> So we're in a pickle here. As Peter said, _if_ we wanted to change the id=
-s
-> one more time, to allow those vendor uboot hacks, now would be the time.
->
-> But then als Mark said, the current bindings are used already in a number
-> of different places and aren't broken per se.
->
-> So I guess either decision possibility is bad ;-)
->
->
-> Heiko
->
->
-> > On Sun, Mar 26, 2023 at 10:42=E2=80=AFPM Mark Kettenis <mark.kettenis@x=
-s4all.nl> wrote:
-> > >
-> > > > Date: Sun, 26 Mar 2023 22:02:39 +0200
-> > > > From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > >
-> > > > On 26/03/2023 19:51, Shane Francis wrote:
-> > > > >> Bootloader also does not use mainline DTS, so where is exactly t=
-he problem?
-> > > > >
-> > > > > In this case uboot does load the target DTB, and it seems a commo=
-n
-> > > > > function in rockchips
-> > > > > downstream boot process, see :
-> > > > >
-> > > > > https://github.com/rockchip-linux/u-boot/blob/ef1dd650042f61915c4=
-859ecc94623a09a3529fa/arch/arm/mach-rockchip/kernel_dtb.c#L70
-> > > > >
-> > >
-> > > That code makes absolutely no sense.  This tries to transplant
-> > > phandles from one DTB into another DTB?  Mainline U-Boot has no code
-> > > like that.  I think this is just broken beyond repair.
-> > >
-> > > > U-Boot comes with its own DTB, so what does it means "loads the tar=
-get
-> > > > DTB"? From where? The one appended to the kernel zImage? No, it can=
-not...
-> > > >
-> > > > Any component which operates on mainline DTB must conform to the
-> > > > bindings (with respect to the ABI), thus your arguments here mean y=
-ou
-> > > > are not allowed to change ABI in the future. Never. This change,
-> > > > assuming original binding was broken, could be warranted.
-> > >
-> > > The current mainline binding isn't broken; 0 is a perfectly fine cloc=
-k
-> > > index.  The RK3588 clock bindings are already used by U-Boot (too lat=
-e
-> > > to fix for the 2023.4 release happening in a few days) and OpenBSD
-> > > (too late to fix for the 7.3 release that will happen a few weeks).
-> > > Changing the clock binding will just create more chaos.
-> > >
-> > > <rant>
-> > >
-> > > What is broken here is the development process.  Rockchip shouldn't b=
-e
-> > > maintaining these heavily modified forks of U-Boot and the Linux
-> > > kernel.  But at the same time mainline Linux developers should not be
-> > > asking for arbitrary changes to the device tree bindings just to
-> > > satisfy some unwritten rules.  The clock bindings were originaly
-> > > submitted with clock numbers identical to those that Rockchip uses:
-> > >
-> > >   https://lore.kernel.org/all/20220623160329.239501-2-sebastian.reich=
-el@collabora.com/
-> > >
-> > > but then changed because a reviewer wanted them to start at 0 and
-> > > didn't want any holes:
-> > >
-> > >   https://lore.kernel.org/all/0841741a-22f6-40f6-c745-6065dfdbcb1d@li=
-naro.org/
-> > >
-> > > This isn't the first example where this happened.  And it invariably
-> > > leads to confusion and breakage in projects that try to follow the
-> > > mainline Linux device tree bindings.
-> > >
-> > > </rant>
-> >
->
->
->
->
+Konrad
+> 
+> Thanks,
+> Mani
+> 
+>> Konrad
+>>>
+>>> While enabling runtime PM, I noticed that the xhci driver suspends before
+>>> catching the xhci interrupts during resume. This ended up deferring the
+>>> device enumeration for some time. So I included a patch adding autosuspend
+>>> delay of 200ms to the xhci driver. With this delay, usb enumeration happens
+>>> properly.
+>>>
+>>> This series has been tested on SC8280XP-CRD and RB5 devices.
+>>>
+>>> Thanks,
+>>> Mani
+>>>
+>>> Manivannan Sadhasivam (5):
+>>>   arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
+>>>   xhci: host: Use 200ms autosuspend delay for runtime suspend
+>>>   usb: dwc3: qcom: Fix null ptr access during runtime_suspend()
+>>>   usb: dwc3: qcom: Clear pending interrupt before enabling wake
+>>>     interrupt
+>>>   usb: dwc3: qcom: Allow runtime PM
+>>>
+>>>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
+>>>  drivers/usb/dwc3/dwc3-qcom.c           | 13 +++++++++----
+>>>  drivers/usb/host/xhci-plat.c           |  2 ++
+>>>  3 files changed, 25 insertions(+), 4 deletions(-)
+>>>
+> 
