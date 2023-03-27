@@ -2,103 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB336CAF84
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F296CAFAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjC0UNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 16:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
+        id S232487AbjC0UOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 16:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjC0UNb (ORCPT
+        with ESMTP id S232417AbjC0UO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 16:13:31 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751891FDC;
-        Mon, 27 Mar 2023 13:13:30 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id le6so9555233plb.12;
-        Mon, 27 Mar 2023 13:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679948010;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=omEl4yPfArYML/MdFjW82OoYkdDQuGLeGfrwdlfaKrg=;
-        b=QGjjwRzZJt5yGnesyULsZv/7aHlvCOSyO1UNz437t4YzKqMngupfpEIyXf7Zuofvy9
-         lpl/fIZxi/xIyjF7Pw1u+/ZCmpjaOTr66PkxvbjlKLK+clkXcosJl3F5NOW6mSL2uDv6
-         W7HjzXYlMxeJQTA5ck8o/Ov4jJq0E/0i4aMSX8Y4InePMgTpJEPCoC+k3+DAhhgwhjAT
-         PWew0ycuYdPwCV9E1f0tqBhr6DphXpFtuFqY+L2VWZz1Rkz4aaS/48OyN5K/6JLMDDK1
-         tG6T4FUku6+cHN/klrXvde1j7EOckLt6UVNjy5sbwkEDzD5LZLOQwujSKQpdhPfG+vOK
-         7rzQ==
+        Mon, 27 Mar 2023 16:14:29 -0400
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F2D1BF9;
+        Mon, 27 Mar 2023 13:14:22 -0700 (PDT)
+Received: by mail-oo1-f50.google.com with SMTP id f24-20020a4aeb18000000b0053b78077c9dso1537180ooj.12;
+        Mon, 27 Mar 2023 13:14:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679948010;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=omEl4yPfArYML/MdFjW82OoYkdDQuGLeGfrwdlfaKrg=;
-        b=1roopirG7bJGwNrekivDPHwZuDLQ+ysuPSA6ncDQpXrVN6WbXhz0+Hgi1RD1IG5xJI
-         R1dO59nmstKoSNpGPBf9I2bPZXIwdAIXabZwuUPE/n5Q1FFrp0bYxcsvlTGKZ3XYbCHo
-         uMz1FyCs5FPKcvvfZJiImiz5O55KdqnGCP6xCRYSeNUAWKRZeKCTeFUOP3qDEa8x9enE
-         LghlGjxeSI3weX8EmK/GEkwhk9QZXUnBDzTEFdtHVPgY9n5XJTM5mHCtrZg5flz9p7eS
-         pAjz+p8dD5Z39Ee2GiDtX0Y4iNPFUGPoslFggDfC80Ebo7LIgtAgni+rahL8dqqdRYSc
-         azGg==
-X-Gm-Message-State: AAQBX9dxFu1+1coQs57teaAv6HbfCJovj7YDFJ766xN57FgZunShEcXN
-        wTgPsC/JSYXVdQDN8p19J9v3oCx6RGFxxCGJbec=
-X-Google-Smtp-Source: AKy350aNiJJYg1pVi5jljr7P/uYj83cSXmoeVmyfrJMT8aKXA5hgmHOHjBThH5lOnKJr0KlUD6Xnt/ABJTsC+1ocoIg=
-X-Received: by 2002:a17:902:7d81:b0:1a0:52f1:8ea7 with SMTP id
- a1-20020a1709027d8100b001a052f18ea7mr4581982plm.12.1679948009875; Mon, 27 Mar
- 2023 13:13:29 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679948062;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FH+KWtses1ELBCX/gQ2si6h7qatJwS5KpqqqOPXEVFs=;
+        b=DDi04BWVM52dH/EVde9Da5BHVvajmJmeC1FFSLRpOXawHKst5XMOesUBodmFZekeZO
+         QL+oNZZHyJ383szMG8Hlw6gx3ACxHdONizl5Q18Gl258/5Dd9nYp+ZYIzrjKzYcSHLuh
+         R/Vd7EPwgjPoTnrAAV6BlEngPCCM8Aq4CBhRL7P65i3F+AhQcSUqAH7/sRMPxjg3jew2
+         eqK60q+Kj3q5SLxtpUxbQkBiAwsdzc0hRc2nM7Mkpc4m/hdnMJaG/4xJN4rbhc3Qkt6v
+         xG5hn1ByfAO4AMZPGWUvtQR1HKU8a+6/FAZ983NONtDy8aoEzIOCvj2cUQjcUBDDz6HJ
+         TJgw==
+X-Gm-Message-State: AO0yUKUgRyKoNHkUEaqiKadEirEay8fTl8kfuZA1K/hny1KQ/owdHGZ4
+        /mecyah1Htlg+FcRrX1ZTg==
+X-Google-Smtp-Source: AK7set+iWdMGpMmuirwcIZm+sFuxoc3KyyjdsVVWE5HtsZcnH7w2z4rjZN5L0REVu/yulBVaw49guA==
+X-Received: by 2002:a4a:370f:0:b0:53b:66a3:452a with SMTP id r15-20020a4a370f000000b0053b66a3452amr6472871oor.3.1679948062208;
+        Mon, 27 Mar 2023 13:14:22 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j41-20020a4a88ac000000b0053e3da7f810sm1565959ooa.25.2023.03.27.13.14.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 13:14:21 -0700 (PDT)
+Received: (nullmailer pid 530144 invoked by uid 1000);
+        Mon, 27 Mar 2023 20:14:21 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Dinh Nguyen <dinguyen@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Tero Kristo <kristo@kernel.org>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] EDAC: Use of_address_to_resource()
+Date:   Mon, 27 Mar 2023 15:14:11 -0500
+Message-Id: <20230327201411.529948-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230320071442.172228-1-pedro.falcato@gmail.com>
- <20230320115153.7n5cq4wl2hmcbndf@wittgenstein> <CAHk-=wjifBVf3ub0WWBXYg7JAao6V8coCdouseaButR0gi5xmg@mail.gmail.com>
- <CAKbZUD2Y2F=3+jf+0dRvenNKk=SsYPxKwLuPty_5-ppBPsoUeQ@mail.gmail.com>
- <CAHk-=wgc9qYOtuyW_Tik0AqMrQJK00n-LKWvcBifLyNFUdohDw@mail.gmail.com>
- <20230321142413.6mlowi5u6ewecodx@wittgenstein> <20230321161736.njmtnkvjf5rf7x5p@wittgenstein>
-In-Reply-To: <20230321161736.njmtnkvjf5rf7x5p@wittgenstein>
-From:   Pedro Falcato <pedro.falcato@gmail.com>
-Date:   Mon, 27 Mar 2023 21:13:18 +0100
-Message-ID: <CAKbZUD1N-jsrro_9ix12vNmjL0iUqqvicCv7MHyj19O5LJs1aQ@mail.gmail.com>
-Subject: Re: [PATCH] do_open(): Fix O_DIRECTORY | O_CREAT behavior
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aleksa Sarai <cyphar@cyphar.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 4:17=E2=80=AFPM Christian Brauner <brauner@kernel.o=
-rg> wrote:
-> It would be very nice if we had tests for the new behavior. So if @Pedro
-> would be up for it that would be highly appreciated. If not I'll put it
-> on my ToDo...
+Replace of_get_address() and of_translate_address() calls with single
+call to of_address_to_resource().
 
-Where do you want them? selftests? I have a relatively self-contained
-""testsuite"" of namei stuff that could fit in there well, after some
-cleanup.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v2:
+ - Fix compile error
+---
+ drivers/edac/altera_edac.c |  5 +++--
+ drivers/edac/ti_edac.c     | 10 +++++-----
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-> The expectation often is that this particular combination would create
-> and open a directory. This suggests users who tried to use that
-> combination would stumble upon the counterintuitive behavior no matter
-> if pre-v5.7 or post v5.7 and quickly realize neither semantics give them
-> what they want. For some examples see the code examples in [1] to [3]
-> and the discussion in [4].
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index e7e8e624a436..be33329c6f18 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -1096,6 +1096,7 @@ static int altr_s10_sdram_check_ecc_deps(struct altr_edac_device_dev *device)
+ 	struct arm_smccc_res result;
+ 	struct device_node *np;
+ 	phys_addr_t sdram_addr;
++	struct resource res;
+ 	u32 read_reg;
+ 	int ret;
+ 
+@@ -1103,8 +1104,8 @@ static int altr_s10_sdram_check_ecc_deps(struct altr_edac_device_dev *device)
+ 	if (!np)
+ 		goto sdram_err;
+ 
+-	sdram_addr = of_translate_address(np, of_get_address(np, 0,
+-							     NULL, NULL));
++	of_address_to_resource(np, 0, &res);
++	sdram_addr = res.start;
+ 	of_node_put(np);
+ 	sdram_ecc_addr = (unsigned long)sdram_addr + prv->ecc_en_ofst;
+ 	arm_smccc_smc(INTEL_SIP_SMC_REG_READ, sdram_ecc_addr,
+diff --git a/drivers/edac/ti_edac.c b/drivers/edac/ti_edac.c
+index 6971ded598de..7befcf6c6637 100644
+--- a/drivers/edac/ti_edac.c
++++ b/drivers/edac/ti_edac.c
+@@ -202,19 +202,19 @@ MODULE_DEVICE_TABLE(of, ti_edac_of_match);
+ static int _emif_get_id(struct device_node *node)
+ {
+ 	struct device_node *np;
+-	const __be32 *addrp;
++	struct resource res;
+ 	u32 addr, my_addr;
+ 	int my_id = 0;
+ 
+-	addrp = of_get_address(node, 0, NULL, NULL);
+-	my_addr = (u32)of_translate_address(node, addrp);
++	of_address_to_resource(node, 0, &res);
++	my_addr = (u32)res.start;
+ 
+ 	for_each_matching_node(np, ti_edac_of_match) {
+ 		if (np == node)
+ 			continue;
+ 
+-		addrp = of_get_address(np, 0, NULL, NULL);
+-		addr = (u32)of_translate_address(np, addrp);
++		of_address_to_resource(np, 0, &res);
++		addr = (u32)res.start;
+ 
+ 		edac_printk(KERN_INFO, EDAC_MOD_NAME,
+ 			    "addr=%x, my_addr=%x\n",
+-- 
+2.39.2
 
-Ok so, silly question: Could it not be desirable to have these
-semantics (open a dir or mkdir, atomically)?
-It does seem to be why POSIX left this edge case implementation
-defined, and if folks are asking for it, could it be the right move?
-
-And yes, I do understand (from reading the room) that no one here is
-too excited about this possibility.
-
---=20
-Pedro
