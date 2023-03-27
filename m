@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1B96CA4EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C606CA4F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbjC0MyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
+        id S232115AbjC0Myg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232617AbjC0Mxg (ORCPT
+        with ESMTP id S232661AbjC0Mxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:53:36 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24A21991
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:53:35 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id o24-20020a05600c511800b003ef59905f26so5193733wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:53:35 -0700 (PDT)
+        Mon, 27 Mar 2023 08:53:39 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2028198
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:53:36 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id s13so4985170wmr.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:53:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1679921615;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1679921616;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xUUSEO3n82oExAtWC9rzQU8vJ+6r7+eAysrgLy7HO+M=;
-        b=cOBDGUpnxpTVaMs9FZS0b2dEIizTFb5TZ7ADOSNJWYamswM5ZfCynNfkltTDxFHSLI
-         HS2oY1320LmJfHSY2kkYH/Dxj0sdlUiiij2tS9yDt0iD9lG1ktmqRZa36cxGx5vlyZvI
-         MQOmmBerwnQXnbZZOLbFqYamTfMfFa9NnWKqFWv2IFZNypjwKT9ddamLba92LVjJa1ab
-         7PLzjv1O3jRmVfBWQF7oHOWzWecru2QgO8wguwiD5a8IiJapAOpQdjo3WlYc+7HoduTZ
-         4p9TiXkhXzKWOmzvKO/V0AjrcdSmJbraUSrKKJp2A1M5rdd8Nr4SgKxfWj/3dBLUjmO2
-         XjiQ==
+        bh=pPMAUYdbY6hOjN4eQPpp7qBGkZ/ynFVOak8OmetiXdk=;
+        b=4HE6ljNJhhUfeGw3+QRq3JZPAil67DC2B30usu9+5rgo4KbvQ/MpHExRYYCNXbNAZP
+         1x98mjwls3uxyFcs5p/M0pBeSnJi2oDHLbAsutihoz77XcPAw6/mYC5jN3+0ZzpMC/xw
+         V1NJG41VpJ4R8+cdkJhJpJ/NbCyfCA7Ndbpgiqfp1d0+rMy7WqHViPGdjHi0WXXAT5gM
+         yxUom91+GA4T0gXVfaUWRjJK2jn/S0wHSPjfz9eebVrOgEM6oGpsjFBJPaVypHd/T2i5
+         SM4sgtdTTe466DcP1YiQPSO2QRkmZgt2A4y6bTfJuexlVhqReyZ69fbqb1463N3j9p+f
+         cPXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679921615;
+        d=1e100.net; s=20210112; t=1679921616;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xUUSEO3n82oExAtWC9rzQU8vJ+6r7+eAysrgLy7HO+M=;
-        b=s+IQs04O9QhpjkhKE/oUYVYxNXp6Nkzp1wwlcQd9QkhQWQno1rFBa0gH05GDhuTtBj
-         X0jJx9NBrsppbswK4uyyffOYbVKWkHPW3R1YVD0b/yZiD3eeEfpA6bR0L8Nv7U4bSLsJ
-         nGMoJUQkFcoRClTmhU7VGJkTNGQJc7o+AUARc63w+Ypa5T4j9r7TMIea5Fsc7e85XH3i
-         6k/tBNZXJHRBtrtWC+psvlCzC8BZfrUTU/QLMhbL+mYEnsX2DT3UVQ4bB92zmUwhojjA
-         3ftIeMyjxzHzn6KMLETVWx7lj31WKy8UOiAPSz8nx29rp7k2iFpzkxluBJDR+zJJTnAn
-         H5tA==
-X-Gm-Message-State: AO0yUKWeR9qVyTexRt0NKh7/WTwPrhGTmxqi5dQKyKh6aMUMTGh7tSEM
-        LE+KF1Djvn8vx7k8QBV558Z9vA==
-X-Google-Smtp-Source: AK7set9t6T82YBmAdzVga+yKTwTAAhlvYH93ek3LolfE0tf1LsE4KZO1ainSyZbbfLWa4F8VAO0vSQ==
-X-Received: by 2002:a05:600c:22cd:b0:3eb:29fe:7343 with SMTP id 13-20020a05600c22cd00b003eb29fe7343mr9145616wmg.33.1679921615302;
-        Mon, 27 Mar 2023 05:53:35 -0700 (PDT)
+        bh=pPMAUYdbY6hOjN4eQPpp7qBGkZ/ynFVOak8OmetiXdk=;
+        b=E5eMojRUnyOPDNGwgsEg6lSVsfZqcTrPjGDMMuYSbri1dBDuXKBApKKr1ELmvilS4X
+         ZqwbHDNnid8vWZL8rqH+j7lpejXUdiaeKx7CsF51VXQ14cylO2w+tYn8zStwctbxv+oo
+         q7XMQ3MC5NfNTxPvbPSuShbU5RgXkYHUFPGYl7NjvsgMqp3zyqspAxo5f1G5AbjS3+B1
+         P6/HihBUJnM4EKe8Y2Lipz5UruFiiRcyNOZjvOG3L72H5Xs+ZsIg2HtEX3rX06iP4Ip7
+         FaeItRt/zkw+yiBT1CuP3fkHs6r3zhpY1HuSe87Jfp+28KmuKV/gsFk3J4VEAM0W+xCR
+         uKcw==
+X-Gm-Message-State: AO0yUKWZf+r+kK/VEjE/J/8S7uqUHKjn9kRt4Ce4r9kZD/fkiyaclMHc
+        jiNgVeBVg/iYMML9nALnbLwzMw==
+X-Google-Smtp-Source: AK7set/klvbn1BUj8Dhyt8sU8B8H7kzu00E0FhEs0lVvo+JBZFguzUm6IgCysdnWc4zovUA8yRRU3Q==
+X-Received: by 2002:a05:600c:2254:b0:3df:e41f:8396 with SMTP id a20-20020a05600c225400b003dfe41f8396mr9115538wmm.37.1679921616262;
+        Mon, 27 Mar 2023 05:53:36 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:313d:a304:2790:a949])
-        by smtp.gmail.com with ESMTPSA id q25-20020a1ce919000000b003ee58e8c971sm13572220wmc.14.2023.03.27.05.53.34
+        by smtp.gmail.com with ESMTPSA id q25-20020a1ce919000000b003ee58e8c971sm13572220wmc.14.2023.03.27.05.53.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 05:53:34 -0700 (PDT)
+        Mon, 27 Mar 2023 05:53:35 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -58,11 +58,10 @@ To:     Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v3 17/18] regulator: qcom-rpmh: add support for pmm8654au regulators
-Date:   Mon, 27 Mar 2023 14:53:15 +0200
-Message-Id: <20230327125316.210812-18-brgl@bgdev.pl>
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v3 18/18] arm64: dts: qcom: sa8775p-ride: add PMIC regulators
+Date:   Mon, 27 Mar 2023 14:53:16 +0200
+Message-Id: <20230327125316.210812-19-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230327125316.210812-1-brgl@bgdev.pl>
 References: <20230327125316.210812-1-brgl@bgdev.pl>
@@ -79,108 +78,264 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Add the RPMH regulators exposed by the PMM8654au PMIC and its variants.
+Add PMIC regulators for sa8775p-ride.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Cc: Mark Brown <broonie@kernel.org>
 ---
- drivers/regulator/qcom-rpmh-regulator.c | 55 +++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 233 ++++++++++++++++++++++
+ 1 file changed, 233 insertions(+)
 
-diff --git a/drivers/regulator/qcom-rpmh-regulator.c b/drivers/regulator/qcom-rpmh-regulator.c
-index 4826d60e5d95..b0a58c62b1e2 100644
---- a/drivers/regulator/qcom-rpmh-regulator.c
-+++ b/drivers/regulator/qcom-rpmh-regulator.c
-@@ -694,6 +694,16 @@ static const struct rpmh_vreg_hw_data pmic5_pldo_lv = {
- 	.of_map_mode = rpmh_regulator_pmic4_ldo_of_map_mode,
+diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+index a0d2024a69df..fdd229d232d1 100644
+--- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
++++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+@@ -5,6 +5,8 @@
+ 
+ /dts-v1/;
+ 
++#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
++
+ #include "sa8775p.dtsi"
+ #include "sa8775p-pmics.dtsi"
+ 
+@@ -25,6 +27,237 @@ chosen {
+ 	};
  };
  
-+static const struct rpmh_vreg_hw_data pmic5_pldo515_mv = {
-+	.regulator_type = VRM,
-+	.ops = &rpmh_regulator_vrm_drms_ops,
-+	.voltage_range = REGULATOR_LINEAR_RANGE(1800000, 0, 187, 8000),
-+	.n_voltages = 188,
-+	.hpm_min_load_uA = 10000,
-+	.pmic_mode_map = pmic_mode_map_pmic5_ldo,
-+	.of_map_mode = rpmh_regulator_pmic4_ldo_of_map_mode,
++&apps_rsc {
++	regulators-0 {
++		compatible = "qcom,pmm8654au-rpmh-regulators";
++		qcom,pmic-id = "a";
++
++		vreg_s4a: smps4 {
++			regulator-name = "vreg_s4a";
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1816000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_s5a: smps5 {
++			regulator-name = "vreg_s5a";
++			regulator-min-microvolt = <1850000>;
++			regulator-max-microvolt = <1996000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_s9a: smps9 {
++			regulator-name = "vreg_s9a";
++			regulator-min-microvolt = <535000>;
++			regulator-max-microvolt = <1120000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l4a: ldo4 {
++			regulator-name = "vreg_l4a";
++			regulator-min-microvolt = <788000>;
++			regulator-max-microvolt = <1050000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l5a: ldo5 {
++			regulator-name = "vreg_l5a";
++			regulator-min-microvolt = <870000>;
++			regulator-max-microvolt = <950000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l6a: ldo6 {
++			regulator-name = "vreg_l6a";
++			regulator-min-microvolt = <870000>;
++			regulator-max-microvolt = <970000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l7a: ldo7 {
++			regulator-name = "vreg_l7a";
++			regulator-min-microvolt = <720000>;
++			regulator-max-microvolt = <950000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l8a: ldo8 {
++			regulator-name = "vreg_l8a";
++			regulator-min-microvolt = <2400000>;
++			regulator-max-microvolt = <3300000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l9a: ldo9 {
++			regulator-name = "vreg_l9a";
++			regulator-min-microvolt = <2970000>;
++			regulator-max-microvolt = <3544000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++	};
++
++	regulators-1 {
++		compatible = "qcom,pmm8654au-rpmh-regulators";
++		qcom,pmic-id = "c";
++
++		vreg_l1c: ldo1 {
++			regulator-name = "vreg_l1c";
++			regulator-min-microvolt = <1140000>;
++			regulator-max-microvolt = <1260000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l2c: ldo2 {
++			regulator-name = "vreg_l2c";
++			regulator-min-microvolt = <900000>;
++			regulator-max-microvolt = <1100000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l3c: ldo3 {
++			regulator-name = "vreg_l3c";
++			regulator-min-microvolt = <1100000>;
++			regulator-max-microvolt = <1300000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l4c: ldo4 {
++			regulator-name = "vreg_l4c";
++			regulator-min-microvolt = <1100000>;
++			regulator-max-microvolt = <1300000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			/*
++			 * FIXME: This should have regulator-allow-set-load but
++			 * we're getting the over-current fault from the PMIC
++			 * when switching to LPM.
++			 */
++		};
++
++		vreg_l5c: ldo5 {
++			regulator-name = "vreg_l5c";
++			regulator-min-microvolt = <1100000>;
++			regulator-max-microvolt = <1300000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l6c: ldo6 {
++			regulator-name = "vreg_l6c";
++			regulator-min-microvolt = <1620000>;
++			regulator-max-microvolt = <1980000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l7c: ldo7 {
++			regulator-name = "vreg_l7c";
++			regulator-min-microvolt = <1620000>;
++			regulator-max-microvolt = <2000000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l8c: ldo8 {
++			regulator-name = "vreg_l8c";
++			regulator-min-microvolt = <2400000>;
++			regulator-max-microvolt = <3300000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l9c: ldo9 {
++			regulator-name = "vreg_l9c";
++			regulator-min-microvolt = <1650000>;
++			regulator-max-microvolt = <2700000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++	};
++
++	regulators-2 {
++		compatible = "qcom,pmm8654au-rpmh-regulators";
++		qcom,pmic-id = "e";
++
++		vreg_s4e: smps4 {
++			regulator-name = "vreg_s4e";
++			regulator-min-microvolt = <970000>;
++			regulator-max-microvolt = <1520000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_s7e: smps7 {
++			regulator-name = "vreg_s7e";
++			regulator-min-microvolt = <1010000>;
++			regulator-max-microvolt = <1170000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_s9e: smps9 {
++			regulator-name = "vreg_s9e";
++			regulator-min-microvolt = <300000>;
++			regulator-max-microvolt = <570000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l6e: ldo6 {
++			regulator-name = "vreg_l6e";
++			regulator-min-microvolt = <1280000>;
++			regulator-max-microvolt = <1450000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l8e: ldo8 {
++			regulator-name = "vreg_l8e";
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1950000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-allow-set-load;
++			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
++						   RPMH_REGULATOR_MODE_HPM>;
++		};
++	};
 +};
 +
- static const struct rpmh_vreg_hw_data pmic5_nldo = {
- 	.regulator_type = VRM,
- 	.ops = &rpmh_regulator_vrm_drms_ops,
-@@ -704,6 +714,16 @@ static const struct rpmh_vreg_hw_data pmic5_nldo = {
- 	.of_map_mode = rpmh_regulator_pmic4_ldo_of_map_mode,
- };
- 
-+static const struct rpmh_vreg_hw_data pmic5_nldo515 = {
-+	.regulator_type = VRM,
-+	.ops = &rpmh_regulator_vrm_drms_ops,
-+	.voltage_range = REGULATOR_LINEAR_RANGE(320000, 0, 210, 8000),
-+	.n_voltages = 211,
-+	.hpm_min_load_uA = 30000,
-+	.pmic_mode_map = pmic_mode_map_pmic5_ldo,
-+	.of_map_mode = rpmh_regulator_pmic4_ldo_of_map_mode,
-+};
-+
- static const struct rpmh_vreg_hw_data pmic5_hfsmps510 = {
- 	.regulator_type = VRM,
- 	.ops = &rpmh_regulator_vrm_ops,
-@@ -749,6 +769,15 @@ static const struct rpmh_vreg_hw_data pmic5_ftsmps525_mv = {
- 	.of_map_mode = rpmh_regulator_pmic4_smps_of_map_mode,
- };
- 
-+static const struct rpmh_vreg_hw_data pmic5_ftsmps527 = {
-+	.regulator_type = VRM,
-+	.ops = &rpmh_regulator_vrm_ops,
-+	.voltage_range = REGULATOR_LINEAR_RANGE(320000, 0, 215, 8000),
-+	.n_voltages = 215,
-+	.pmic_mode_map = pmic_mode_map_pmic5_smps,
-+	.of_map_mode = rpmh_regulator_pmic4_smps_of_map_mode,
-+};
-+
- static const struct rpmh_vreg_hw_data pmic5_hfsmps515 = {
- 	.regulator_type = VRM,
- 	.ops = &rpmh_regulator_vrm_ops,
-@@ -937,6 +966,28 @@ static const struct rpmh_vreg_init_data pmm8155au_vreg_data[] = {
- 	{}
- };
- 
-+static const struct rpmh_vreg_init_data pmm8654au_vreg_data[] = {
-+	RPMH_VREG("smps1",  "smp%s1",  &pmic5_ftsmps527,  "vdd-s1"),
-+	RPMH_VREG("smps2",  "smp%s2",  &pmic5_ftsmps527,  "vdd-s2"),
-+	RPMH_VREG("smps3",  "smp%s3",  &pmic5_ftsmps527,  "vdd-s3"),
-+	RPMH_VREG("smps4",  "smp%s4",  &pmic5_ftsmps527,  "vdd-s4"),
-+	RPMH_VREG("smps5",  "smp%s5",  &pmic5_ftsmps527,  "vdd-s5"),
-+	RPMH_VREG("smps6",  "smp%s6",  &pmic5_ftsmps527,  "vdd-s6"),
-+	RPMH_VREG("smps7",  "smp%s7",  &pmic5_ftsmps527,  "vdd-s7"),
-+	RPMH_VREG("smps8",  "smp%s8",  &pmic5_ftsmps527,  "vdd-s8"),
-+	RPMH_VREG("smps9",  "smp%s9",  &pmic5_ftsmps527,  "vdd-s9"),
-+	RPMH_VREG("ldo1",   "ldo%s1",  &pmic5_nldo515,    "vdd-s9"),
-+	RPMH_VREG("ldo2",   "ldo%s2",  &pmic5_nldo515,    "vdd-l2-l3"),
-+	RPMH_VREG("ldo3",   "ldo%s3",  &pmic5_nldo515,    "vdd-l2-l3"),
-+	RPMH_VREG("ldo4",   "ldo%s4",  &pmic5_nldo515,    "vdd-s9"),
-+	RPMH_VREG("ldo5",   "ldo%s5",  &pmic5_nldo515,    "vdd-s9"),
-+	RPMH_VREG("ldo6",   "ldo%s6",  &pmic5_nldo515,    "vdd-l6-l7"),
-+	RPMH_VREG("ldo7",   "ldo%s7",  &pmic5_nldo515,    "vdd-l6-l7"),
-+	RPMH_VREG("ldo8",   "ldo%s8",  &pmic5_pldo515_mv, "vdd-l8-l9"),
-+	RPMH_VREG("ldo9",   "ldo%s9",  &pmic5_pldo,       "vdd-l8-l9"),
-+	{}
-+};
-+
- static const struct rpmh_vreg_init_data pm8350_vreg_data[] = {
- 	RPMH_VREG("smps1",  "smp%s1",  &pmic5_ftsmps510, "vdd-s1"),
- 	RPMH_VREG("smps2",  "smp%s2",  &pmic5_ftsmps510, "vdd-s2"),
-@@ -1431,6 +1482,10 @@ static const struct of_device_id __maybe_unused rpmh_regulator_match_table[] = {
- 		.compatible = "qcom,pmm8155au-rpmh-regulators",
- 		.data = pmm8155au_vreg_data,
- 	},
-+	{
-+		.compatible = "qcom,pmm8654au-rpmh-regulators",
-+		.data = pmm8654au_vreg_data,
-+	},
- 	{
- 		.compatible = "qcom,pmx55-rpmh-regulators",
- 		.data = pmx55_vreg_data,
+ &i2c18 {
+ 	clock-frequency = <400000>;
+ 	pinctrl-0 = <&qup_i2c18_default>;
 -- 
 2.37.2
 
