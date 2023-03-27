@@ -2,94 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128FA6CA916
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EA76CA920
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232853AbjC0Pc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 11:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
+        id S232916AbjC0Pfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 11:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232859AbjC0Pc5 (ORCPT
+        with ESMTP id S232572AbjC0Pfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:32:57 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9936F2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:32:55 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id w9so37929032edc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:32:55 -0700 (PDT)
+        Mon, 27 Mar 2023 11:35:34 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DD5189
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:35:32 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id m2so9238680wrh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:35:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679931174;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KIvQReY1/Tt9tUASlHa39t+YceqbsMK5EEQ4kAYFJZs=;
-        b=DI4mWd7kssc8ivjpPnIbucqvY45WV0DTghFt1CHge5gcZelxoPBi/8pMkvAakL9/mm
-         TkBfjH2khefzFWe7traYvI8KUpiC4p7WNZTzyzUEEoytU15Nh3xyTLvuHdItcXkb93wj
-         uKu5t9cybrPWZuQzEXWxARxVuXREM2d1cMWbqxNwSzihu0yxytmqeltfrbSxQ+4UDDFI
-         y+FJ8ThGjofjMhlnGtdwjs8sA8htQbUhZzh0vij/IYzncr8r7upkgWIJPqe4i5dvecfA
-         r3z6XiBtu2ho7+YE/aMnwEIuu8v+4IPoL/Y/t3ZbbJ0mjA5KryswMprKhwtLh+UNUZ1I
-         jJrg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679931331;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8N0hw4+EMSVtCyZmq7J5HduUc9xYRvfHTSgJBWJto70=;
+        b=6TAtyyrRhTgXGlXDflWGtkR6vdqzDTcQXvrMvSCFyT809wO1uDB8+q7Ol208GnrjDQ
+         jdR9pVUSe/+Bkl2YkjNcBDPStTK54dohQt4Xf8imHMBJSlA2jqnwvVBtL2Eo/XTTnTuy
+         ifjjDeRJkvJgouPPhm9PZsh7/UFkU1X3uOcQ5iNIDmHDdPKNje/IJfkfU2bPnnW+bODu
+         7y6iNXTYQeNECKahRh81jTTpbYCwKDuUrT6y58MvmJK7+SZ+jQaCJCUfID6d/PPQ7eyM
+         s+G4V92W5xzHn3korVCP9Fy9JYNJ49Kz9ckzIblaDaw1xxT2FnxHT94xmgaPtvet9k0l
+         1baA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679931174;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KIvQReY1/Tt9tUASlHa39t+YceqbsMK5EEQ4kAYFJZs=;
-        b=pzIdaYef0cRogN9DrY0pVY7CeHQPuaaxigUS2IrOKA2sH6BY2Y7AT8sDESbA1OYvqz
-         2lt+TgkjlzH1NYmA/Xlx6U4hVEI8ZfBW0F+uiDTIMYsjkPj6wRkUKnPkFmoRCv6uqnYj
-         z3tyzTjOrfYcpqtFGRVYJrybfPQ61s24NnZ1WRqu3wDlBxisZZhkerV0JvPlPyIB1Vpz
-         KqIjLvfLXjCz3rPoM0D8gJO922/sOIXRlLJdcp+oybdVBUdICRmGX2upIAsIO/8494l9
-         rFlJRjUL3tJNaYH7M2oqS9sAKGy0wY7a3hoYJ7DaJydZk0HYC4IklJZ/59Aug4QS1v1E
-         UiPQ==
-X-Gm-Message-State: AAQBX9dtSZ0JvZcZPBK9GyyCzzNiz3z+dMjp6pqPmTsgnuKtnfXpwtZl
-        wqFqQ96WE1NkT91SHPVcNQ==
-X-Google-Smtp-Source: AKy350Z8sxZPpiEiZ7hmD6Q5jafDBmvxn4y5v8GGwMb+louNVLvBvpTw/CRkT1fRa688kqC8Zx5J2w==
-X-Received: by 2002:a17:906:facb:b0:93b:752:d2a9 with SMTP id lu11-20020a170906facb00b0093b0752d2a9mr13285456ejb.31.1679931174118;
-        Mon, 27 Mar 2023 08:32:54 -0700 (PDT)
-Received: from p183 ([46.53.253.24])
-        by smtp.gmail.com with ESMTPSA id o12-20020a170906358c00b0093b6d1db84asm7773532ejb.120.2023.03.27.08.32.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 08:32:53 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 18:32:51 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
-        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/8] tools/nolibc: tests: add test for -fstack-protector
-Message-ID: <c0584807-511c-4496-b062-1263ea38f349@p183>
-References: <89a960c7-0c9b-43ab-9fc8-a68405f7ed6a@p183>
- <8e156377-e7d9-48ec-a7ee-292aba002201@t-8ch.de>
- <ZCCSsFGqTFWknGBL@1wt.eu>
- <f141145c-fc73-4820-8a1b-98b722f1f28a@p183>
- <ZCCgJSEIqLQ9ZIOC@1wt.eu>
+        d=1e100.net; s=20210112; t=1679931331;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8N0hw4+EMSVtCyZmq7J5HduUc9xYRvfHTSgJBWJto70=;
+        b=fO6PqVABH0zx2CZKy6oYqxTCJOD4LHT/+FG3AYIBtOQqJey+irHmhgONW8FPDi8Jrm
+         mBAFxetWkDx+yk+hAeJUk01olyl/oxQczLf9aI/u3HWDc0ZqXtecxvYjEKUjcI2Flkr8
+         Orls3AKi3xNJ3nXaqByYXXlLoCRsmbvB5aj1RBxf9PbuGe3SQvlGY/V7eMnI8h/D4jf3
+         WwvE1BqeZMFds+bmDzDouU2P/eaM1PdOcC43DJKGiyLtAgELy19Vs+pkFbhEPbAaXCoM
+         QPsi64iBKYX85dAdmhdAjgzzFL/4yZbt81LK0JmyNTD+p18/ZTnR1EHgG0jUNNFYSpdX
+         Zi+A==
+X-Gm-Message-State: AAQBX9cE6awXOPpRsOLvL6oK4eK/Z7JU96iapbJw63/Ll2wz3BNyEuQQ
+        8OKbWIU+WDMOuzjmvHBoXC6ZEg==
+X-Google-Smtp-Source: AKy350YJn17Drgd1PMAWXHDxj5oFw5AMn5zFS9BIUMVYNI+vwzGpQHTMb1wO4ytJZFVcUx3HPRdxQQ==
+X-Received: by 2002:a5d:4291:0:b0:2c3:db98:3e87 with SMTP id k17-20020a5d4291000000b002c3db983e87mr9522092wrq.20.1679931331232;
+        Mon, 27 Mar 2023 08:35:31 -0700 (PDT)
+Received: from [192.168.1.70] (151.31.102.84.rev.sfr.net. [84.102.31.151])
+        by smtp.gmail.com with ESMTPSA id e9-20020adffc49000000b002be5bdbe40csm25374042wrs.27.2023.03.27.08.35.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 08:35:30 -0700 (PDT)
+Message-ID: <2ea21982-485a-d052-2e25-84907e263743@baylibre.com>
+Date:   Mon, 27 Mar 2023 17:35:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZCCgJSEIqLQ9ZIOC@1wt.eu>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 2/4] mfd: tps6594: Add driver for TI TPS6594 PMIC
+Content-Language: en-US
+From:   Julien Panis <jpanis@baylibre.com>
+To:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
+        gregkh@linuxfoundation.org, derek.kiernan@xilinx.com,
+        dragan.cvetic@xilinx.com
+Cc:     eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, davem@davemloft.net,
+        christian.koenig@amd.com, contact@emersion.fr,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
+        eblanc@baylibre.com, jneanne@baylibre.com
+References: <20230321171020.74736-1-jpanis@baylibre.com>
+ <20230321171020.74736-3-jpanis@baylibre.com>
+In-Reply-To: <20230321171020.74736-3-jpanis@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 09:42:29PM +0200, Willy Tarreau wrote:
-> On Sun, Mar 26, 2023 at 10:38:39PM +0300, Alexey Dobriyan wrote:
-> > > I'm not seeing any issue with your approach instead, let's
-> > > keep it as-is for now (also it does what the stack protector is supposed
-> > > to catch anyway).
-> > 
-> > There are no guarantess about stack layout and dead writes.
-> > The test doesn't corrupt stack reliably, just 99.99% reliably.
-> 
-> Sure but it's for a regtest which can easily be adjusted and its
-> posrtability and ease of maintenance outweights its reliability,
-> especially when in practice what the code does is what we want to
-> test for. And if an extra zero needs to be added to the loop, it
-> can be at a lower cost than maintaining arch-specific asm code.
 
-For the record, I disagree. Use volatile writes at least.
+
+On 3/21/23 18:10, Julien Panis wrote:
+> This patch adds support for TPS6594 PMIC MFD core. It provides
+> communication through the I2C and SPI interfaces, and supports
+> protocols with embedded CRC data fields for safety applications.
+>
+> Signed-off-by: Julien Panis <jpanis@baylibre.com>
+> Acked-for-MFD-by: Lee Jones <lee@kernel.org>
+
+Lee, I will have to drop your ack for next version (v4).
+A bug will be fixed in tps6594-core (a couple of lines
+will be added/moved in 2 functions, it will be explained
+in the coverletter changelog so that you can easily see
+the diff).
+Sorry for the disturbance.
