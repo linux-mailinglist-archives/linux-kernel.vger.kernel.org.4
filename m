@@ -2,129 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E4C6CA619
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8BC6CA678
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbjC0Ni2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59582 "EHLO
+        id S232846AbjC0Nvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjC0NiY (ORCPT
+        with ESMTP id S230380AbjC0NvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:38:24 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8B61718;
-        Mon, 27 Mar 2023 06:38:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1679924302; x=1711460302;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dVJBi1CSJbvncILoFNPRbdwLCRiIlKW5OwVx2Vpb/Z4=;
-  b=nq5kbpR22XBChluk5yNyFVK9sx7I1OM6t7zW8H3iXxpDqywZzII55aCm
-   MaD68xRw1RcZrcgiAfkroA3YSu6NMbf4NNc0pCmCo0lXSjM6E67DOiQnF
-   sWwDx4B+wXiab89uUbgzDreeaaC7jqcU4Bj1G6qYruIH680w/ZoWa30X0
-   MHTx+Ji465+USwe+4AAHM38+KtwZnrFH0Mv5mzKh5dyTpilZ5ygvcO0QB
-   R2wQm/fCfAD3Pnp0kiw/erAwctan/Rs7Eso71KVBp5RevRg/U1/cfKKI1
-   dCgEyL/J198vQXp3Ln+YjVH41LDbFvmEWXFcWTRHzkj4glRsjncvc9ZsP
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,294,1673938800"; 
-   d="asc'?scan'208";a="203613708"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Mar 2023 06:38:21 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Mar 2023 06:38:20 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 27 Mar 2023 06:38:17 -0700
-Date:   Mon, 27 Mar 2023 14:49:34 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Guo Ren <guoren@kernel.org>
-CC:     <arnd@arndb.de>, <palmer@rivosinc.com>, <tglx@linutronix.de>,
-        <peterz@infradead.org>, <luto@kernel.org>, <heiko@sntech.de>,
-        <jszhang@kernel.org>, <lazyparser@gmail.com>, <falcon@tinylab.org>,
-        <chenhuacai@kernel.org>, <apatel@ventanamicro.com>,
-        <atishp@atishpatra.org>, <mark.rutland@arm.com>,
-        <bjorn@kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH -next V11 1/3] riscv: stack: Support
- HAVE_IRQ_EXIT_ON_IRQ_STACK
-Message-ID: <77e67121-3857-4389-897b-77a6506a3443@spud>
-References: <20230324071239.151677-1-guoren@kernel.org>
- <20230324071239.151677-2-guoren@kernel.org>
- <f170c68c-4975-4f71-ac50-979483cb5848@spud>
- <CAJF2gTSwt1XkC=kisOAf0_aHmi6E6ty-EV0eSA110E1DzvWc2Q@mail.gmail.com>
+        Mon, 27 Mar 2023 09:51:10 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183EF5BB0;
+        Mon, 27 Mar 2023 06:50:08 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 13:49:45 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1679924987;
+        bh=HuAQY9cUNYKiY456VLKupDVSaGAACUJrfQ2QV2UFyeU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BAvxBmN4NC7FS0xKdwb6lVYVEyRHLsgQ2UBd3Jt/ddKhFU8+VfxA3+vsV04OKCjVl
+         289z4qpgUFKtFc1UrC3Vo1yWy8dpeSO+dqKAYgbEP4DmOSqgsIHLuo0POlYAYAF/0K
+         LACi6zllqMK3HPhjOHdVSkX5b+gLPYRqiaX9+c7Q=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] platform/x86: gigabyte-wmi: remove allowlist
+Message-ID: <517f2742-75c6-4f1e-ad97-6a4a4328e74b@t-8ch.de>
+References: <20230325-gigabyte-wmi-unrestrict-v1-1-23771309a4d3@weissschuh.net>
+ <dc1ba9f1-549f-ef27-6a49-e288d41893d2@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="bZdHL0QuALWZLGDg"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAJF2gTSwt1XkC=kisOAf0_aHmi6E6ty-EV0eSA110E1DzvWc2Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dc1ba9f1-549f-ef27-6a49-e288d41893d2@redhat.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---bZdHL0QuALWZLGDg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2023-03-27 15:15:06+0200, Hans de Goede wrote:
+> Hi Thomas,
+> 
+> On 3/25/23 17:48, Thomas Weißschuh wrote:
+> > Having to maintain a per-system allowlist is burdensome and confusing
+> > for users, drop it.
+> > 
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > ---
+> > 
+> > I propose to keep this in -next for two cycles or so to make sure it
+> > does not break anything.
+> 
+> I think dropping this is a good idea (given the current experience with
+> the driver), but keeping the dropping of the list in -next for 2 cycles
+> is somewhat tricky. Normally once the final e.g. 6.3 is released I take
+> the pdx86/for-next branch *as-is* and use that to send a pull-req to
+> Linus, so that Linus gets send a hash which has been tested in linux-next
+> for a while before sending it to him.
+> 
+> Dropping this patch at that point would mean generating a new hash,
+> which is a bit meh. I can do that but I would prefer to just limit
+> testing to 1 full cycle.
+> 
+> Maybe you can send me a non RFC version of this patch once 6.4-rc1 is out?
+> Then I can add that to for-next right away and then we can get a full
+> cycle of -next testing that way.
+> 
+> Would that work for you?
 
-On Mon, Mar 27, 2023 at 09:32:51PM +0800, Guo Ren wrote:
-> On Mon, Mar 27, 2023 at 7:30=E2=80=AFPM Conor Dooley <conor.dooley@microc=
-hip.com> wrote:
-> >
-> > On Fri, Mar 24, 2023 at 03:12:37AM -0400, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > Add independent irq stacks for percpu to prevent kernel stack overflo=
-ws.
-> > > It is also compatible with VMAP_STACK by implementing
-> > > arch_alloc_vmap_stack.  Many architectures have supported
-> > > HAVE_IRQ_EXIT_ON_IRQ_STACK, riscv should follow up.
-> > >
-> > > Tested-by: Jisheng Zhang <jszhang@kernel.org>
-> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> >
-> > > --- a/arch/riscv/kernel/irq.c
-> > > +++ b/arch/riscv/kernel/irq.c
-> > > @@ -9,6 +9,37 @@
-> > >  #include <linux/irqchip.h>
-> > >  #include <linux/seq_file.h>
-> > >  #include <asm/smp.h>
-> > > +#include <asm/vmap_stack.h>
-> > > +
-> > > +#ifdef CONFIG_IRQ_STACKS
-> > > +DEFINE_PER_CPU(ulong *, irq_stack_ptr);
-> >
-> > btw, sparse is complaining about this variable:
-> > ../arch/riscv/kernel/irq.c:15:1: warning: symbol '__pcpu_scope_irq_stac=
-k_ptr' was not declared. Should it be static?
+Absolutely, will do.
 
-> I declared it in traps.c, maybe I should put it in the vmap_stack.h.
-
-Ahh, I was distracted by the DEFINE_PER_CPU above and didn't look at
-where the actual declaration was.. Moving it to a header sounds good to
-me, thanks.
-
---bZdHL0QuALWZLGDg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCGe7gAKCRB4tDGHoIJi
-0mLWAP4rp/MPI/P/M/C92bO7bf4f3lX+L/7fmSNZrzm/FLCMdwD6A0aWsBLYPXVt
-7GpynNcJOjN1reQhsOA4nhNcMQCVLAY=
-=KsYo
------END PGP SIGNATURE-----
-
---bZdHL0QuALWZLGDg--
+Thanks,
+Thomas
