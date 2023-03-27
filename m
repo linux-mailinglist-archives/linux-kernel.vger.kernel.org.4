@@ -2,139 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C226CA9DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4AF6CA9E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232788AbjC0QCe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 12:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60228 "EHLO
+        id S233073AbjC0QCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 12:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232546AbjC0QCG (ORCPT
+        with ESMTP id S232065AbjC0QCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:02:06 -0400
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976135FDC;
-        Mon, 27 Mar 2023 09:01:37 -0700 (PDT)
-Received: by mail-ed1-f51.google.com with SMTP id i5so38460567eda.0;
-        Mon, 27 Mar 2023 09:01:37 -0700 (PDT)
+        Mon, 27 Mar 2023 12:02:22 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E3565A6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:01:51 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id h8so38240476ede.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:01:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679932910;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Fa/r17s+alPGyyVImwqvDf9JaCdRCB5grSzax4q6pX0=;
+        b=O68t/3kzy8ci27Zq3vdVjcRffpSKeP8C6pe9wLILYXUtQS6gAAgwmJuB8Rvxldljp2
+         c0H2DY3/h9foj8UxOPpH3mLq+fvjilY1BlwBrDlAckkZsVj/eGwx7vAbJLmBgW7uZMjU
+         zmuJM4n0TnTuNY42m+XkFpj1RNToB9abb4uLvQJDafGLB9n05GJfpA8gBgo+o8RAA2W3
+         vqk6WSrbYFc1K6dSV05E3JrAVvFloS65yz22ZRsIO29ec5A16RvuEFXvJDzCX2wUil7a
+         XNPRPETed6EG9KnJrGeqYqUyLvXXngkJBfr+U5mrJzlsmtKdMNBowZ4LxooZBUS42QgS
+         T62Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679932896;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7Tc92jHKfzCM4jUDYAxaTKlNKg/5FTvfvoaAMWmN/OQ=;
-        b=mb525LNVTuNpuaGSn7Xf1LNE/4/6BXVqvA5ibcQbKG2seFxUD/+ds2nzcVTi4k7AB8
-         fGxMZ0xEm5NKf4onIaxNLdKywTDOk9yKKhVO9scNLGzEMRMETtH9YIL9BrNN42yON87e
-         S/7VKcMvN4xxv0WEwpxVCWJGML8mlAqmTtSoOcO8ZWtwwUlFHyVgFK5TomvqdT0P6FBA
-         CLQCjsT3XyLh70O0AuBjqcaqDc4i57lw4Z+22ZbGSKCua7Zr42nxOfgkquQYBiFKw3xh
-         nKNV/Xq5cm5m6Vd37cqYM3zMESa7N+UMbD7peaQglwJMeIzP/CSXRlCVkWrEilDrWjPO
-         wvLw==
-X-Gm-Message-State: AAQBX9eJlLzl6xFDWSZ5w1rBKhBpDjEZFP2JC2+VcAsKtS7M8mXgpxIF
-        GP7L65q8WeKeIGXpq3Oyl2ovPFcrJcKD+PDgbsQ=
-X-Google-Smtp-Source: AKy350YgZX9In/W9hp5TUd0tJLk0yAccI5vepKK0RbxyNnymI8UpbQqZDC5h/S6zQjHHSL3PDL7hxoHUlXqvd8nfg8k=
-X-Received: by 2002:a17:907:d02:b0:931:6921:bdbb with SMTP id
- gn2-20020a1709070d0200b009316921bdbbmr5766122ejc.2.1679932895870; Mon, 27 Mar
- 2023 09:01:35 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679932910;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fa/r17s+alPGyyVImwqvDf9JaCdRCB5grSzax4q6pX0=;
+        b=AlZ4rVFkzZzOvGe5E7wgx+2v0v4uJebx4i8GEyzvu00FrV/l3+jzk4/1c6lig9m9QT
+         1kDoFYvX84DrOTjwhCZQtJaDHr3axgFMnFjUBBgZltESk+8mDtECa+oXJW6zR6PStXny
+         6GB/L/nsKCsyEqhY9QiK6JaAcXhNiv4pAlcvv04qF/LG3sk7n5VI9fW4gsBITn28lG1w
+         Gm9gTF8RgrYaaBwjH0s3iWorX/H622yh/N3djRVzR8vRJ5Z0O04+ia5iTCmVWLRcP4d4
+         k4YoWuTYxuAVOE1d4gt6qtg2bwyuzVUoJs4vs40ALnhKV/8AtKLQ1nm/ZfLHdba6+FZH
+         55kA==
+X-Gm-Message-State: AAQBX9fKr0fOuGmacO2UJUDmBTD5lt8O0blkuvYrDtOHNkNvGHnZ88vn
+        oD1Wi3oEyvvxx4itqq4jwsNtW+ycbdSyvxazelM=
+X-Google-Smtp-Source: AKy350b0TiR+o+4SVdQcTgcYhvX6iSBeAWArFCOeTjUbnLe8SG/U05eoHqO/TVJbZlkFAnG6RhtT0A==
+X-Received: by 2002:a17:907:b60e:b0:93e:9fb9:183b with SMTP id vl14-20020a170907b60e00b0093e9fb9183bmr11190033ejc.73.1679932909984;
+        Mon, 27 Mar 2023 09:01:49 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:581e:789c:7616:5ee? ([2a02:810d:15c0:828:581e:789c:7616:5ee])
+        by smtp.gmail.com with ESMTPSA id gt6-20020a170906f20600b0092a3b199db8sm14040327ejb.186.2023.03.27.09.01.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 09:01:49 -0700 (PDT)
+Message-ID: <676afe98-c39d-47e9-8d06-3ac88bc7404f@linaro.org>
+Date:   Mon, 27 Mar 2023 18:01:48 +0200
 MIME-Version: 1.0
-References: <20230303055133.28752-1-luoxueqin@kylinos.cn>
-In-Reply-To: <20230303055133.28752-1-luoxueqin@kylinos.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 18:01:24 +0200
-Message-ID: <CAJZ5v0jdCx3PB1JOgEc8ZhDvvXNBzcfYYsSy5PB4s29PfoQ8Rg@mail.gmail.com>
-Subject: Re: [PATCH v2] PM/hibernation: set the default image size for large memory
-To:     Xueqin Luo <luoxueqin@kylinos.cn>
-Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiongxin@kylinos.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/3] Documentation: sysfs: brcmstb-memc: Document new
+ attributes
+Content-Language: en-US
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230324165231.3468069-1-f.fainelli@gmail.com>
+ <20230324165231.3468069-3-f.fainelli@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230324165231.3468069-3-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 6:51 AM Xueqin Luo <luoxueqin@kylinos.cn> wrote:
->
-> From: xueqin Luo <luoxueqin@kylinos.cn>
->
-> As computers have more and more memory, they can store larger and
-> larger images. This poses a problem. Let's take a 16GB computer as
-> an example. When the number of pre-allocated pages is greater than
-> 900,000 and smaller than image_size, the duration of S4 increases
-> with the number of saved pages. When the number of pre-allocated
-> pages reaches 1.2 million, the duration of S4 increases by 8-10s.
-
-Well, I'm not quite sure what the problem is from the description
-above.  Can you please explain?
-
-> We found that the image size is generally more than 900,000 pages,
-> so we set the default size of image_size for 16GB and above
-> computers to 1 million pages, which can reduce the running time
-> of S4 under certain conditions.
->
-> This is the test data for 5 hours after the computer is turned on:
->
-> Original kernel begin:
->
-> [2023-02-24 19:16:56] [   46.105423][ 2] [ T3075] PM: hibernation entry
-> [2023-02-24 19:16:59] [   47.632000][ 1] [ T3075] done (allocated
-> 959239 pages)
-> [2023-02-24 19:18:05] [   56.987043][ 2] [ T3075] PM: hibernation exit
->
-> Five hours later:
->
-> [2023-02-25 00:22:48] [18069.651640][ 4] [ T7590] PM: hibernation entry
-> [2023-02-25 01:23:59] [21671.194049][ 0] [ T8563] done (allocated
-> 1228878 pages)
-> [2023-02-25 00:24:06] [18080.639889][ 2] [ T7590] PM: hibernation exit
->
-> After 5h, you can see that the S4 takes 8s more time.
->
-> Five hours later, the modified kernel test data:
->
-> [2023-02-24 15:52:08] [18190.171183][ 7] [T11151] PM: hibernation entry
-> [2023-02-24 15:52:11] [18191.677021][ 7] [T11151] done (allocated
-> 792597 pages)
-> [2023-02-24 15:53:15] [18201.028488][ 2] [T11151] PM: hibernation exit
->
-> You can see that after five hours, the time has changed little compared
-> to the initial test data.
->
-> Signed-off-by: xueqin Luo <luoxueqin@kylinos.cn>
+On 24/03/2023 17:52, Florian Fainelli wrote:
+> Document the DDR rank, size, total size, width and type attributes.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
->
-> v3: modify some comments
->
-> v2: add test data
->
->  kernel/power/snapshot.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index cd8b7b35f1e8..fa3950b19849 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -136,7 +136,14 @@ unsigned long image_size;
->
->  void __init hibernate_image_size_init(void)
->  {
-> -       image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
-> +       /* The totalram pages() for a computer of 16 memory size is
-> +        * equal to 4032990 pages. And according to our observation,
-> +        * the average image size is less than 1 million pages.
-> +        */
-> +       if (totalram_pages() < 4032990)
-> +               image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
-> +       else
-> +               image_size = 1000000 * PAGE_SIZE;
->  }
->
->  /*
-> --
-> 2.25.1
->
+>  .../ABI/testing/sysfs-platform-brcmstb-memc   | 39 +++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-platform-brcmstb-memc b/Documentation/ABI/testing/sysfs-platform-brcmstb-memc
+> index 2f2b750ac2fd..bc969c02b85f 100644
+> --- a/Documentation/ABI/testing/sysfs-platform-brcmstb-memc
+> +++ b/Documentation/ABI/testing/sysfs-platform-brcmstb-memc
+> @@ -1,3 +1,42 @@
+> +What:		/sys/bus/platform/devices/*/ddr_rank
+> +Date:		March 2023
+> +KernelVersion:	6.3
+
+We are now at v6.3, so this cannot go into current cycle. Date is also
+not realistic. Target v6.4 and it's date from the crystal ball.
+
+> +Contact:	Florian Fainelli <f.fainelli@gmail.com>
+> +Description:
+> +		Displays whether the device is single or dual rank.
+> +
+> +What:		/sys/bus/platform/devices/*/ddr_size
+> +Date:		March 2023
+> +KernelVersion:	6.3
+> +Contact:	Florian Fainelli <f.fainelli@gmail.com>
+> +Description:
+> +		This field specifies the size of each DRAM device in the first
+> +		(or only) rank
+
+Why only first rank? Have in mind that one physical chip can have
+multiple ranks and the interface should be ready for it. Otherwise soon
+you will have to break it to support different sizes in different ranks.
+
+> +
+> +What:		/sys/bus/platform/devices/*/ddr_total_width
+> +Date:		March 2023
+> +KernelVersion:	6.3
+> +Contact:	Florian Fainelli <f.fainelli@gmail.com>
+> +Description:
+> +		This field specifies the total data width of all DRAM devices
+> +		(in each rank)
+
+Sorry, I do not understand. "Total" and "in each" are a bit
+contradictory. Also misses units description. Is this
+
+> +
+> +What:		/sys/bus/platform/devices/*/ddr_type
+> +Date:		March 2023
+> +KernelVersion:	6.3
+> +Contact:	Florian Fainelli <f.fainelli@gmail.com>
+> +Description:
+> +		This field specifies DRAM technology type. Possible values:
+> +		DDR2, DDR3, DDR4, GDDR5, GDDR5M, LPDDR4.
+> +
+> +What:		/sys/bus/platform/devices/*/ddr_width
+> +Date:		March 2023
+> +KernelVersion:	6.3
+> +Contact:	Florian Fainelli <f.fainelli@gmail.com>
+> +Description:
+> +		This field specifies the data width of each DRAM device.
+
+Width in which units? And width of what exactly? data-bus? Then bits and
+make it maybe "ddr_width_bits" and print 8/16/32. Is it IO width (number
+of DQ pins)? Then it could be also up to 128 in general.
+
+
+Best regards,
+Krzysztof
+
