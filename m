@@ -2,244 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDA16CB24E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9946CB26B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjC0X1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 19:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        id S230273AbjC0XeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 19:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjC0X1U (ORCPT
+        with ESMTP id S229673AbjC0XeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 19:27:20 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E3F10C7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:27:17 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id kq3so9958830plb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:27:17 -0700 (PDT)
+        Mon, 27 Mar 2023 19:34:14 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7EC186
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:34:11 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id l18so7673564oic.13
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:34:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1679959637;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N2eblIxdQ9eOajS6/9yChFGcTXWeq8mZSAJTCIeHQXY=;
-        b=mSsEZy+QoYngsMsw/2Jz0S09cAdM0iXBxtW/mBHosjtX0poiCu2kyTcaQejbYhhzgH
-         BodbMLgRYvDBdu1+a5kZbPvJga7qwB0L+RN/Te0f6a2vVvNmOWh9opkBxQTGgk9xHtoE
-         +3QlwG36rJQBRYxZy33BzakBa6Mlf7GHOxK5eXLwm1NA0zpBCw6PJobS/GevFDde1dqS
-         OIwDySPSVDzyh84P0w+XfHwjsT3IGVs6U58WcUCDfOQ257MxYPxBN5MJ9+U83uxl688r
-         w4UtfqzAFjJE6/BUVcSJpcyQZusGemeVNQMlgsiZzE5lUQxcFIU3Q2ySFotCTRvaXXMi
-         FKiw==
+        d=usp.br; s=usp-google; t=1679960051;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vbzg6klph6Te7iP3dSPIgG+vur+g/ph0Zdn9JxzzG40=;
+        b=mcQCDHjIc1z0MV59hCiOPGbf9ypVcTa63Zwj9+4vczjxJ6xemxCHmB/bdG09R3ulGk
+         wBRb0c4NRKQIeZ9AmKn4cZ2/cFiH43pbFxCU+Xwm10+2LXyU5IjgKYxYNni8iIny2BPJ
+         Uyr5muaupR7SGOpBiiBp1e6Xl+GGq0CmFO3dc10hLq2qt7VhnOQk2AJ+iHp9AXHIRwtm
+         NfAZ1fiK7syP88hnm8TuaCtSHzva6H/mfeVe+aCvNEeLItolg2ox+I9LK8+rwppC0E4X
+         9Wxs02kRtS2zhYkR/OGYEL/mZEdqfxZ29EIIZi0qzdkVJ30c88TyYqgnmei/AGim0NxW
+         27Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679959637;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N2eblIxdQ9eOajS6/9yChFGcTXWeq8mZSAJTCIeHQXY=;
-        b=nUelE46/lDuUfBMOmaANZhYeB6RW+q0iFs2TouXIXdXDQ5oo8boneLbO+de+9bqaY+
-         n1ndtFC62IhvSQDlSRgXBcQAbSNf2JpjteL0BOsDKGq8jckBZiCyMOf9HUWddrKQPLNb
-         VVsZe2R0Vhtgy6rw9wKYZyYREYyKO689OFjJU4ocJ2r/WrOfGQIFjqAtdmIPdI1IoRoP
-         mTzddCjiF+WIxobmv1tP6pDGEtrn+fCXXey5xYNYSpWllGRDTHWjX6CH3Km1M012PB8y
-         fX6nq8H+WkiQLdQPRzJQtbwO+ju4cBa1N2yRzP4deejnPl54d8DcUWBFSRhi1bR2ujnc
-         NSlw==
-X-Gm-Message-State: AAQBX9cHfykcRbjQRNHLwAn8LFs5/vOX8qh793dLmpW0kADG//tvvCfK
-        2EK3Pk2R7yTuBLpmuEC9J2S/AA==
-X-Google-Smtp-Source: AKy350ash46+zS5HPV0mseKB44rDQqXTs34uI7+J2wuTGftbjJa1uJDZ88OMdYf5up5wVKZkB5paqQ==
-X-Received: by 2002:a17:902:ce83:b0:1a1:ad5e:bdb2 with SMTP id f3-20020a170902ce8300b001a1ad5ebdb2mr16855552plg.57.1679959636953;
-        Mon, 27 Mar 2023 16:27:16 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id bj4-20020a170902850400b001a076568da9sm2638780plb.216.2023.03.27.16.27.16
+        d=1e100.net; s=20210112; t=1679960051;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vbzg6klph6Te7iP3dSPIgG+vur+g/ph0Zdn9JxzzG40=;
+        b=oyfXbPQ1FWMCAL9ux7ZsfRQYfiCzni6NkQt2D4Cxwlr9Lfb37F8egZULK3nTaCq21X
+         FOoK9mBURraK8LouPsXD4lRq8cU4E/XMuNJupxlnRXmWeU6LZFpCD/ERri0WXSD6z4HS
+         1Hc0TORD+PnN8TL8EENT2/T3F1kagf0fgtEdGZSDiuyn3OChp5lgSNn9x+n2868mz13/
+         vue7f82tkjMmom4adiMLdJHiIGKVUs3Sd+/Yr8c0ya+A3/wTzcQZUBOS7TUQxvf3XVBt
+         v/GRr06DzWdNK2TnT3+BSyXwFY5BUK563mXHtZhH1NraldJBjyCANLcoV5KRYdYmOFBa
+         Bczg==
+X-Gm-Message-State: AAQBX9dSdyQpVS2FGaCp8oEXV1zBoxZkwgnfi38S5biABf+Tov5NrxgO
+        DhIiz6kZtN3KEj3KEm1uYiM/uA==
+X-Google-Smtp-Source: AKy350aksGEh2UFglgdrglLJ3Yf7o8c/xLC1c9h/rH18JSGJMJx2XpH4So8mvyXTcj3EdZ87KQZm9Q==
+X-Received: by 2002:a05:6808:1386:b0:389:4d2f:1c23 with SMTP id c6-20020a056808138600b003894d2f1c23mr1162500oiw.29.1679960049461;
+        Mon, 27 Mar 2023 16:34:09 -0700 (PDT)
+Received: from ARCHaio.localdomain ([2804:1b3:a2c0:c911:919f:bd20:4f2a:8383])
+        by smtp.gmail.com with ESMTPSA id b186-20020aca34c3000000b00389295e8424sm1643409oia.45.2023.03.27.16.33.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 16:27:16 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 16:27:16 -0700 (PDT)
-X-Google-Original-Date: Mon, 27 Mar 2023 16:24:24 PDT (-0700)
-Subject:     Re: [PATCH -next V17 0/7] riscv: Add GENERIC_ENTRY support
-In-Reply-To: <20230222033021.983168-1-guoren@kernel.org>
-CC:     Arnd Bergmann <arnd@arndb.de>, guoren@kernel.org,
-        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, Mark Rutland <mark.rutland@arm.com>,
-        ben@decadent.org.uk, bjorn@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        guoren@linux.alibaba.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     guoren@kernel.org
-Message-ID: <mhng-edcee57b-ffdc-4073-ae4f-91bd91ff2d5c@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Mon, 27 Mar 2023 16:34:09 -0700 (PDT)
+From:   Caio Novais <caionovais@usp.br>
+To:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>, Le Ma <le.ma@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Yifan Zhang <yifan1.zhang@amd.com>,
+        Mukul Joshi <mukul.joshi@amd.com>, Jun Lei <Jun.Lei@amd.com>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        Alan Liu <HaoPing.Liu@amd.com>,
+        Caio Novais <caionovais@usp.br>,
+        Joshua Ashton <joshua@froggi.es>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
+        Zhan Liu <zhan.liu@amd.com>, Wayne Lin <wayne.lin@amd.com>,
+        Charlene Liu <Charlene.Liu@amd.com>,
+        Martin Leung <Martin.Leung@amd.com>,
+        Tom Chung <chiahsuan.chung@amd.com>,
+        Alvin Lee <alvin.lee2@amd.com>,
+        George Shen <George.Shen@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Roman Li <Roman.Li@amd.com>,
+        Wesley Chalmers <Wesley.Chalmers@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Jingwen Zhu <Jingwen.Zhu@amd.com>,
+        Melissa Wen <mwen@igalia.com>,
+        Felipe Clark <felipe.clark@amd.com>,
+        Sung Joon Kim <sungjoon.kim@amd.com>,
+        Dillon Varone <Dillon.Varone@amd.com>,
+        Ethan Wellenreiter <Ethan.Wellenreiter@amd.com>,
+        Taimur Hassan <Syed.Hassan@amd.com>,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+        Brian Chang <Brian.Chang@amd.com>,
+        Gabe Teeger <gabe.teeger@amd.com>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+        Chaitanya Dhere <chaitanya.dhere@amd.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Ryan Lin <tsung-hua.lin@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>
+Subject: [PATCH 00/12] drm/amd: Remove unused variables
+Date:   Mon, 27 Mar 2023 20:33:41 -0300
+Message-Id: <20230327233353.64081-1-caionovais@usp.br>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Feb 2023 19:30:14 PST (-0800), guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> The patches convert riscv to use the generic entry infrastructure from
-> kernel/entry/*. Some optimization for entry.S with new .macro and merge
-> ret_from_kernel_thread into ret_from_fork.
->
-> The 1,2 are the preparation of generic entry. 3~7 are the main part
-> of generic entry.
->
-> All tested with rv64, rv32, rv64 + 32rootfs, all are passed.
->
-> You can directly try it with:
-> [1] https://github.com/guoren83/linux/tree/generic_entry_v17
->
-> Any reviews and tests are helpful.
->
-> v17:
->  - Rebase on newest palmer/for-next 20230222
->  - Modify save_from_x6_to_x31/restore_from_x6_to_x31 to fit
->    ftrace size reduce patch in for-next.
->
-> v16:
-> https://lore.kernel.org/linux-riscv/20230204070213.753369-1-guoren@kernel.org/
->  - Re-order commit tags for "compiler_types.h: Add __noinstr_section()
->    for noinstr" (Thx Miguel)
->
-> v15:
-> https://lore.kernel.org/linux-riscv/20230126172516.1580058-1-guoren@kernel.org/
->  - Fixup compile error for !MMU (Thx Conor)
->  - Rebase on riscv for-next (20230127)
->
-> v14:
-> https://lore.kernel.org/linux-riscv/20230112095848.1464404-1-guoren@kernel.org/
->  - Fixup W=1 warning reported by kernel test robot <lkp@intel.com>
->
-> v13:
-> https://lore.kernel.org/linux-riscv/20230107113838.3969149-1-guoren@kernel.org/
->  - Remove noinstr for original do_page_fault
->  - Centralize all the necesarily-noinstr bits in
->    arch/riscv/kernel/traps.c
->
-> v12:
-> https://lore.kernel.org/linux-riscv/20230103033531.2011112-1-guoren@kernel.org/
->  - Rebase on newest for-next-20230103 (Linux 6.2-rc1)
->  - Add Reviewed-by: Björn Töpel
->
-> v11:
-> https://lore.kernel.org/linux-riscv/20221210171141.1120123-1-guoren@kernel.org/
->  - Rebase on newest for-next-20221211
->  - Remove stack optimization patch series
->  - Optimize comments
->  - Replace ENTRY with SYM_CODE/FUNC_START in entry.S
->
-> v10:
-> https://lore.kernel.org/linux-riscv/20221208025816.138712-1-guoren@kernel.org/
->  - Rebase on palmer/for-next branch (20221208)
->  - Remove unrelated patches from the series (Suggested-by: Bjorn)
->  - Fixup Typos.
->
-> v9:
-> https://lore.kernel.org/linux-riscv/20221130034059.826599-1-guoren@kernel.org/
->  - Fixup NR_syscalls check (by Ben Hutchings)
->  - Add Tested-by: Jisheng Zhang
->
-> v8:
-> https://lore.kernel.org/linux-riscv/20221103075047.1634923-1-guoren@kernel.org/
->  - Rebase on palmer/for-next branch (20221102)
->  - Add save/restore_from_x5_to_x31 .macro (JishengZhang)
->  - Consolidate ret_from_kernel_thread into ret_from_fork (JishengZhang)
->  - Optimize __noinstr_section comment (JiangshanLai)
->
-> v7:
-> https://lore.kernel.org/linux-riscv/20221015114702.3489989-1-guoren@kernel.org/
->  - Fixup regs_irqs_disabled with SR_PIE
->  - Optimize stackleak_erase -> stackleak_erase_on_task_stack (Thx Mark
->    Rutland)
->  - Add BUG_ON(!irqs_disabled()) in trap handlers
->  - Using regs_irqs_disabled in __do_page_fault
->  - Remove unnecessary irq disable in ret_from_exception and add comment
->
-> v6:
-> https://lore.kernel.org/linux-riscv/20221002012451.2351127-1-guoren@kernel.org/
->  - Use THEAD_SIZE_ORDER for thread size adjustment in kconfig (Thx Arnd)
->  - Move call_on_stack to inline style (Thx Peter Zijlstra)
->  - Fixup fp chain broken (Thx Chen Zhongjin)
->  - Remove common entry modification, and fixup page_fault entry (Thx
->    Peter Zijlstra)
->  - Treat some traps as nmi entry (Thx Peter Zijlstra)
->
-> v5:
-> https://lore.kernel.org/linux-riscv/20220918155246.1203293-1-guoren@kernel.org/
->  - Add riscv own stackleak patch instead of generic entry modification
->    (by Mark Rutland)
->  - Add EXPERT dependency for THREAD_SIZE (by Arnd)
->  - Add EXPERT dependency for IRQ_STACK (by Sebastian, David Laight)
->  - Corrected __trap_section (by Peter Zijlstra)
->  - Add Tested-by (Yipeng Zou)
->  - Use CONFIG_SOFTIRQ_ON_OWN_STACK replace "#ifndef CONFIG_PREEMPT_RT"
->  - Fixup systrace_enter compile error
->  - Fixup exit_to_user_mode_prepare preempt_disable warning
->
-> V4:
-> https://lore.kernel.org/linux-riscv/20220908022506.1275799-1-guoren@kernel.org/
->  - Fixup entry.S with "la" bug (by Conor.Dooley)
->  - Fixup missing noinstr bug (by Peter Zijlstra)
->
-> V3:
-> https://lore.kernel.org/linux-riscv/20220906035423.634617-1-guoren@kernel.org/
->  - Fixup CONFIG_COMPAT=n compile error
->  - Add THREAD_SIZE_ORDER config
->  - Optimize elf_kexec.c warning fixup
->  - Add static to irq_stack_ptr definition
->
-> V2:
-> https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guoren@kernel.org/
->  - Fixup compile error by include "riscv: ptrace: Remove duplicate
->    operation"
->  - Fixup compile warning
->    Reported-by: kernel test robot <lkp@intel.com>
->  - Add test repo link in cover letter
->
-> V1:
-> https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-guoren@kernel.org/
->
-> Guo Ren (3):
->   riscv: ptrace: Remove duplicate operation
->   riscv: entry: Add noinstr to prevent instrumentation inserted
->   riscv: entry: Convert to generic entry
->
-> Jisheng Zhang (3):
->   riscv: entry: Remove extra level wrappers of trace_hardirqs_{on,off}
->   riscv: entry: Consolidate ret_from_kernel_thread into ret_from_fork
->   riscv: entry: Consolidate general regs saving/restoring
->
-> Lai Jiangshan (1):
->   compiler_types.h: Add __noinstr_section() for noinstr
->
->  arch/riscv/Kconfig                      |   1 +
->  arch/riscv/include/asm/asm-prototypes.h |   2 +
->  arch/riscv/include/asm/asm.h            |  61 +++++
->  arch/riscv/include/asm/csr.h            |   1 -
->  arch/riscv/include/asm/entry-common.h   |  11 +
->  arch/riscv/include/asm/ptrace.h         |  10 +-
->  arch/riscv/include/asm/stacktrace.h     |   5 +
->  arch/riscv/include/asm/syscall.h        |  21 ++
->  arch/riscv/include/asm/thread_info.h    |  13 +-
->  arch/riscv/kernel/Makefile              |   2 -
->  arch/riscv/kernel/entry.S               | 321 +++---------------------
->  arch/riscv/kernel/head.h                |   1 -
->  arch/riscv/kernel/mcount-dyn.S          |  57 +----
->  arch/riscv/kernel/process.c             |   5 +-
->  arch/riscv/kernel/ptrace.c              |  44 ----
->  arch/riscv/kernel/signal.c              |  29 +--
->  arch/riscv/kernel/trace_irq.c           |  27 --
->  arch/riscv/kernel/trace_irq.h           |  11 -
->  arch/riscv/kernel/traps.c               | 144 +++++++++--
->  arch/riscv/mm/fault.c                   |   6 +-
->  include/linux/compiler_types.h          |  15 +-
->  21 files changed, 289 insertions(+), 498 deletions(-)
->  create mode 100644 arch/riscv/include/asm/entry-common.h
->  delete mode 100644 arch/riscv/kernel/trace_irq.c
->  delete mode 100644 arch/riscv/kernel/trace_irq.h
+This patchset cleans the code removing unused variables and one unused
+function.
 
-Thanks, this is on for-next.
+Caio Novais (12):
+  Remove unused variable 'r'
+  Remove unused variable 'value0'
+  Remove unused variable 'pixel_width'
+  Remove unused variable 'hubp'
+  Remove unused variable 'speakers'
+  Remove unused variable 'mc_vm_apt_default'
+  Remove unused variable 'optc'
+  Remove two unused variables 'speakers' and 'channels' and remove
+    unused function 'speakers_to_channels'
+  Remove two unused variables 'is_pipe_split_expected' and 'state'
+  Remove unused variable 'cursor_bpp'
+  Remove unused variable 'scl_enable'
+  Remove two unused variables 'result_write_min_hblank' and
+    'hblank_size'
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c       |  8 ----
+ .../amd/display/dc/dcn10/dcn10_link_encoder.c |  3 --
+ .../drm/amd/display/dc/dcn201/dcn201_dpp.c    |  6 ---
+ .../drm/amd/display/dc/dcn201/dcn201_hwseq.c  |  2 -
+ .../gpu/drm/amd/display/dc/dcn30/dcn30_afmt.c |  2 -
+ .../gpu/drm/amd/display/dc/dcn30/dcn30_hubp.c |  4 --
+ .../drm/amd/display/dc/dcn30/dcn30_hwseq.c    |  3 --
+ .../gpu/drm/amd/display/dc/dcn31/dcn31_apg.c  | 39 -------------------
+ .../drm/amd/display/dc/dcn32/dcn32_resource.c |  4 --
+ .../display/dc/dcn32/dcn32_resource_helpers.c |  4 --
+ .../dc/dml/dcn31/display_rq_dlg_calc_31.c     |  2 -
+ .../dc/link/protocols/link_dp_capability.c    |  7 ----
+ 12 files changed, 84 deletions(-)
+
+-- 
+2.40.0
+
