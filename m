@@ -2,120 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0516CA17C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B9E6CA184
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233771AbjC0KbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 06:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39000 "EHLO
+        id S233597AbjC0KdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233761AbjC0Ka1 (ORCPT
+        with ESMTP id S233441AbjC0KdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:30:27 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0307712C;
-        Mon, 27 Mar 2023 03:30:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679913016; x=1711449016;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6b+JZbgMIdH+86rT3ucg7q7CshE9iTeKyV7ukqf9I+k=;
-  b=LHsIrsONAvBubFxYMDZHtaDNU/hv3S1QLS21WBSsnS7V0Dpw0Xj+fBHK
-   D0wFMvaM3MOmy9r19Rrr27bCrV+K7j8ir/Tgysr6q/OZjsTthPQdE9f8r
-   St+S7z9Y9dMZFn1FUirZCI2uiBrSJF5r74rW0xD61vIoc7Ctp/RKR6/Yx
-   /bwkHpUtPmKV9sz4RnxrPaa0UD5xTFzG13cPH7iXGRoJV650996+Ry9qy
-   CCBASgrdXCCAZsYMYqmujioyPzmH3Ws042qvJtd5Ahxi4GElyOYvbwT78
-   fV83HPG0e859FND2BMND6ahjkJMos8//LC8nRXM8ZITveutAOyfsLLXnn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="341805390"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="341805390"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 03:30:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="685926196"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="685926196"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmsmga007.fm.intel.com with ESMTP; 27 Mar 2023 03:30:10 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     greg@kroah.com, sfr@canb.auug.org.au
-Cc:     josue.d.hernandez.gutierrez@intel.com,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH] xhci: only define xhci_msix_sync_irqs() when CONFIG_PM is set
-Date:   Mon, 27 Mar 2023 13:31:03 +0300
-Message-Id: <20230327103103.1060696-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZCFHsSkxXAahISuK@kroah.com>
-References: <ZCFHsSkxXAahISuK@kroah.com>
+        Mon, 27 Mar 2023 06:33:21 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FCA10FB
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:33:18 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id c9so314845lfb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:33:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679913196;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qbQRg8u+pefLM8JZR403sDG9iYkK36WkdcXFbk78A44=;
+        b=tOveTQqMtkW7Qxdkg7RL3/C83D+R944ZQgmzFReUHxnL2W9AiowpYDXv2W5TwMCSzc
+         yaxvEOl/hVUMurI5WDMExYDr+CdKHKmvMoJ9agQjExgwBrV3+d09ihM7UU3Isk9uAkou
+         C/vmObrH4Q2RwLAoLc+nJX4kMyyIs0bHF/64Y9GPu/hZ6fqx6V7oIUkwP20GD4PjBNiD
+         GkiJRXzNHJHZfQoQKwLWKPHk3VSRG/hUfqg0H5k6h2c51KMqGReylL9kFJGXCQL+fYXW
+         zp0hnp4Q6DNA2DQjfYoGHnD6HzKAbDfXk5Yu2WtwKXD9LUG9pzqvSTVLzZjy6U5y9HRU
+         Qwzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679913196;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qbQRg8u+pefLM8JZR403sDG9iYkK36WkdcXFbk78A44=;
+        b=1iKZ7UL16j5A/HVYoF5/Hg5h1CLS+JW6NM1NjGP5asQ7tfeYKROvu25xa8Q8Tu93Ik
+         9WSl15MQkYhhYJlWtg59WUL0ms8J/imjh86N9w5AXjoZowj4aWaAAIGB5HdPI7e0StKZ
+         ztfIHFnkYxpp8HIXAuGPeWH+S/ky9eN2DmgCD0ETilRE0VieTBMjzi+IICodUs35AgSD
+         hIULidatxEw/ODzFnTM2/NdG39hXFhaYB+LeL0ZFZ9xdqQeqo+t6iKGnWTzOEXKJjBD8
+         gxBUwxDrbDljd246zO08SGYAIXFl7+J/GBu1M0aDOrtwkFyfO7E1MucVRfXy0cJ390aJ
+         sbgg==
+X-Gm-Message-State: AAQBX9dnSVMvkP/3QYEO14qTUmXHfG3HENhxeoRyCzKIY+k/0Jm40MUV
+        r17rQVgxNAyoGT3hbafA39cUERuNRM1xhcFqpaE=
+X-Google-Smtp-Source: AKy350Y/GS8kFAA51xnV0A3DHRS1Ph6Ep510Hy/Za24zSl7pvyabIzMLrcIdTbcTjntcwLbnFW9bsA==
+X-Received: by 2002:ac2:51b3:0:b0:4eb:e7f:945 with SMTP id f19-20020ac251b3000000b004eb0e7f0945mr1154627lfk.41.1679913196409;
+        Mon, 27 Mar 2023 03:33:16 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id v2-20020ac25922000000b004eb09081d77sm1134519lfi.91.2023.03.27.03.33.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 03:33:16 -0700 (PDT)
+Message-ID: <21732296-107a-c9a8-9a32-723b864712d4@linaro.org>
+Date:   Mon, 27 Mar 2023 12:33:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/5] usb: dwc3: qcom: Allow runtime PM
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
+        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
+ <cc7392c1-0ea1-29b3-fab6-19c843413724@linaro.org>
+ <20230327091733.GA14584@thinkpad>
+ <506a7e48-2576-0fa6-d5e9-0157539bcebf@linaro.org>
+ <20230327101055.GA16424@thinkpad>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230327101055.GA16424@thinkpad>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xhci_msic_sync_irqs() function is only called during suspend, when
-CONFIG_PM is set, so don't define it unconditionally.
 
-Fixes: 9abe15d55dcc ("xhci: Move xhci MSI sync function to to xhci-pci")
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-pci.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index a53ecc8ff8c5..1e826a159b96 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -88,19 +88,6 @@ static const struct xhci_driver_overrides xhci_pci_overrides __initconst = {
- 	.update_hub_device = xhci_pci_update_hub_device,
- };
- 
--static void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
--{
--	struct usb_hcd *hcd = xhci_to_hcd(xhci);
--
--	if (hcd->msix_enabled) {
--		struct pci_dev *pdev = to_pci_dev(hcd->self.controller);
--		int i;
--
--		for (i = 0; i < xhci->msix_count; i++)
--			synchronize_irq(pci_irq_vector(pdev, i));
--	}
--}
--
- /* Free any IRQs and disable MSI-X */
- static void xhci_cleanup_msix(struct xhci_hcd *xhci)
- {
-@@ -729,6 +716,20 @@ static void xhci_pci_remove(struct pci_dev *dev)
- }
- 
- #ifdef CONFIG_PM
-+
-+static void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
-+{
-+	struct usb_hcd *hcd = xhci_to_hcd(xhci);
-+
-+	if (hcd->msix_enabled) {
-+		struct pci_dev *pdev = to_pci_dev(hcd->self.controller);
-+		int i;
-+
-+		for (i = 0; i < xhci->msix_count; i++)
-+			synchronize_irq(pci_irq_vector(pdev, i));
-+	}
-+}
-+
- /*
-  * In some Intel xHCI controllers, in order to get D3 working,
-  * through a vendor specific SSIC CONFIG register at offset 0x883c,
--- 
-2.25.1
+On 27.03.2023 12:10, Manivannan Sadhasivam wrote:
+> On Mon, Mar 27, 2023 at 11:24:58AM +0200, Konrad Dybcio wrote:
+>>
+>>
+>> On 27.03.2023 11:17, Manivannan Sadhasivam wrote:
+>>> On Mon, Mar 27, 2023 at 11:01:35AM +0200, Konrad Dybcio wrote:
+>>>>
+>>>>
+>>>> On 25.03.2023 17:52, Manivannan Sadhasivam wrote:
+>>>>> Hi,
+>>>>>
+>>>>> This series allows the dwc3-qcom driver to do runtime PM itself without
+>>>>> userspace intervention. Still, userspace is required to enable runtime PM
+>>>>> for dwc3 glue and xhci drivers as we cannot enable runtime PM for them.
+>>>>> But this series avoids one more additional step.
+>>>> What sort of 'userspace intervention' are we talking about?
+>>>> echo mem > /sys/power/state?
+>>>>
+>>>
+>>> I forgot to add that bit:
+>>>
+>>> echo auto > /sys/devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/power/control
+>>> echo auto > /sys/devices/platform/soc@0/a8f8800.usb/a800000.usb/power/control
+>>>
+>>> You need to set "auto" for the runtime control for both xhci and dwc drivers.
+>>>
+>>> Then if you don't connect a usb device, all 3 drivers (dwc3-qcom, dwc3, and
+>>> xhci) will become runtime suspended after a delay of 5s (default delay).
+>>>
+>>> This can be confirmed by:
+>>>
+>>> cat /sys/devices/platform/soc@0/a8f8800.usb/power/runtime_status
+>>>
+>>> After connecting a usb device, they will all become "active".
+>> Thanks! And if I'm following correctly, we can't enable runtime PM
+>> for the DWC3 glue and XHCI drivers, as that would cause havoc on
+>> other, non-qc platforms. Is that correct?
+>>
+> 
+> Kind of. Actually dwc3 glue is our qcom driver, other one is just dwc3 driver.
+> 
+> The havoc would apply to xhci driver because, once it is suspended, one of its
+> parent drivers has to resume it. And that requires runtime PM support for all
+> the parent drivers which is currently not available.
+Makes sense, thanks for the explanation!
 
+> 
+> But for dwc3 driver, I'm not sure about the consequence though. Maybe I should
+> send it as a separate patch later on and see what other platforms folks think
+> of it.
+May be worth a shot!
+
+Konrad
+
+> 
+> Thanks,
+> Mani
+> 
+>> Konrad
+>>>
+>>> Thanks,
+>>> Mani
+>>>
+>>>> Konrad
+>>>>>
+>>>>> While enabling runtime PM, I noticed that the xhci driver suspends before
+>>>>> catching the xhci interrupts during resume. This ended up deferring the
+>>>>> device enumeration for some time. So I included a patch adding autosuspend
+>>>>> delay of 200ms to the xhci driver. With this delay, usb enumeration happens
+>>>>> properly.
+>>>>>
+>>>>> This series has been tested on SC8280XP-CRD and RB5 devices.
+>>>>>
+>>>>> Thanks,
+>>>>> Mani
+>>>>>
+>>>>> Manivannan Sadhasivam (5):
+>>>>>   arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
+>>>>>   xhci: host: Use 200ms autosuspend delay for runtime suspend
+>>>>>   usb: dwc3: qcom: Fix null ptr access during runtime_suspend()
+>>>>>   usb: dwc3: qcom: Clear pending interrupt before enabling wake
+>>>>>     interrupt
+>>>>>   usb: dwc3: qcom: Allow runtime PM
+>>>>>
+>>>>>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
+>>>>>  drivers/usb/dwc3/dwc3-qcom.c           | 13 +++++++++----
+>>>>>  drivers/usb/host/xhci-plat.c           |  2 ++
+>>>>>  3 files changed, 25 insertions(+), 4 deletions(-)
+>>>>>
+>>>
+> 
