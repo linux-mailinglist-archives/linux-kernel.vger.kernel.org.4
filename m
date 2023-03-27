@@ -2,112 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A257A6C9EEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3656C9EF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232450AbjC0JHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
+        id S232513AbjC0JHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232957AbjC0JGP (ORCPT
+        with ESMTP id S233304AbjC0JHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:06:15 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DF4448B;
-        Mon, 27 Mar 2023 02:05:44 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id y2so5104692pfw.9;
-        Mon, 27 Mar 2023 02:05:44 -0700 (PDT)
+        Mon, 27 Mar 2023 05:07:08 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DA54EFD;
+        Mon, 27 Mar 2023 02:06:33 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id l7so7048117pjg.5;
+        Mon, 27 Mar 2023 02:06:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679907944; x=1682499944;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0pw+a378KlLp9ve/jIpsqEhAY2Xe1wbMC0MmJfbDCvI=;
-        b=UOL/hENh4mDKszvdrPv3RDsriIckEpihtUrFCxzSNYXRlSskki1nMTauYqkg/aI0Vp
-         /5/8GGVxnxxXj+dB08ZFUoEIFfHEjh6UEYFQNyeVTnexHHYlG48yPLiB9R/7iuBifpE6
-         pQzk7qbyM9Jqy2rOog+haSJI6v5sD2ajHu53QTiOEJUSwBWfqKBkvB1eIcKKzfcSg3FT
-         Bi541fFlT1Y5Snh7KxaQPR2rALzVu2jTPMxEPu5EvOeYVZ5ScPYPtE/BoA/pOa/mJe3O
-         bVw6PIJkYoEXMJLv6FQrZ2LZz9P6ToInW6hyKp+P8xXbWuc1EcA2/0kSunORsL7qFf83
-         3Yaw==
+        d=gmail.com; s=20210112; t=1679907993;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=O8fUt4pO+XHuFO5xT5Dt4jN0bSb0IjaRl69C7+BMdDg=;
+        b=LcgNg+6NtV1SL1HZQ41SfLf4+zxLtfV9YXrxPK7vJ5t3NhP4X/JdG0vszd1eEYhVEi
+         Lx0vA1NU1gcwAQ8PRLarirt1b17dx3ulnzdHVH3i9FyW/z845IxGIo4PEVkQAxINU0kz
+         O2BbcKQHUzwTxWoIs4Nl9/n8vmpmDFssbVjkJtANNenJpDzQQM3coQDZhgRLEqCACobQ
+         NA26ZrjjI4CcToPS5twfuS0xEWwLRWevqsCZH/kaaBMSyPDAgQYA+YrSDAEcICpyyYH/
+         KiS0tgcgHQbHeXuzAIOXjLgCE46vLsxSFJunPzgAq2e+Lc8OPBQ5cmJX9U/Y8FcU9ki2
+         CzVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679907944; x=1682499944;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0pw+a378KlLp9ve/jIpsqEhAY2Xe1wbMC0MmJfbDCvI=;
-        b=IoTpsCc/bwAcWF5tgVnQlYzm/4o2IWIFRXipmZ4vu2920Qqme1u9E1LGfFPYaYnmJ2
-         x+AKlToXoe41a+kbc6uXlhCTBtDXkqvy+Tp1QcSYnbdLsTtJ6RNQ6kBHPd0O2umw2d1T
-         C0tAlBmHLIuyR9B7fS2RNF9duzAgggBVr8/HreabNZkZDqzbv9dtx1dMenrtfGdT95z2
-         wqR7bBqRqAT/WbYUrHK9E/iZpyOIotmFdg69KP4Uo/x4otRyc1sAklBNG2Uzw0kvTaI0
-         eDGz0tyZm308L13X0lbjGbSMjTSQZGBt3eKbu+lggTcaI0PvxE0B+IQUisJSE/gK0RaU
-         ZDow==
-X-Gm-Message-State: AAQBX9ejaGeTjeKZJOpv5d44PiUOGhCahNp+Aru1rNVYrAOM/qcphm1/
-        8ZShfHeQkEESMra2puMTrks=
-X-Google-Smtp-Source: AKy350b8+nATt7p9D3LDQrEORBLlIZ1+tm5PrXNVjZU4yyLI6FVEpvQFnflzw8yg+4sZBGAqPghWKQ==
-X-Received: by 2002:aa7:8b1a:0:b0:628:630:a374 with SMTP id f26-20020aa78b1a000000b006280630a374mr9865407pfd.2.1679907943617;
-        Mon, 27 Mar 2023 02:05:43 -0700 (PDT)
-Received: from [127.0.0.1] ([103.152.220.17])
-        by smtp.gmail.com with ESMTPSA id e17-20020a62ee11000000b0062ce765b7afsm3713345pfi.162.2023.03.27.02.05.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 02:05:42 -0700 (PDT)
-Message-ID: <f3eb7ec0-99b0-0ed3-0ffc-5ea20436bd08@gmail.com>
-Date:   Mon, 27 Mar 2023 17:05:37 +0800
+        d=1e100.net; s=20210112; t=1679907993;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O8fUt4pO+XHuFO5xT5Dt4jN0bSb0IjaRl69C7+BMdDg=;
+        b=1UyTcrX+UqTns8O0csW/dsL36bsNxwbNH430svLFoKY69i807b8w6lSynSlIUFTiN+
+         3I84cX9b6b6y5fMWLAZtzxCgJ0QDVj13p7tp8f0v+8+X2tc6t8FZlnlO4dvJlj9gNnVG
+         Dl4Wu3ErUyhVLSkdWByxy8Yjd1ZbkAXa1YgeHafARJvRSTPaa3MUSaqnnMZ6cAeFF+0n
+         o9vLY1f1KNHXdJeyHJqntpi42bqoJhyfEEKPYVyMfsoTX0y5AC9Qbek2KcWJqm5jCq3G
+         tySBy/3fj/XP9BmzUs7ytdDL+2k0EvN7QAHEq6nfxijdMsWZpBFKXyM6hzwIttkWmOP4
+         jdyQ==
+X-Gm-Message-State: AAQBX9dEAFC8U4fD6vR3M4AXh56/vCNMNtydlwxHSaIC3Jj/rCdVq67f
+        klY3vMyFRFDpK6Ic2QOETP0=
+X-Google-Smtp-Source: AKy350akZsC9DAW9cAZ9dO/WH1qyoqAa+nZML0KGvlXEjleks2KmWYsZflCCbNjDE2Oyna1h5ZRy6w==
+X-Received: by 2002:a17:903:28c8:b0:1a2:19c1:a974 with SMTP id kv8-20020a17090328c800b001a219c1a974mr8678082plb.68.1679907993332;
+        Mon, 27 Mar 2023 02:06:33 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-16.three.co.id. [180.214.232.16])
+        by smtp.gmail.com with ESMTPSA id l18-20020a170902d35200b0019468fe44d3sm18629240plk.25.2023.03.27.02.06.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 02:06:32 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 6B322106758; Mon, 27 Mar 2023 16:06:29 +0700 (WIB)
+Date:   Mon, 27 Mar 2023 16:06:28 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Hao Zhang <quic_hazha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] Documentation: trace: Add documentation for
+ Coresight Dummy Trace
+Message-ID: <ZCFclDU2JZLzbVX/@debian.me>
+References: <20230324061608.33609-1-quic_hazha@quicinc.com>
+ <20230324061608.33609-4-quic_hazha@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] net: tls: fix possible race condition between
- do_tls_getsockopt_conf() and do_tls_setsockopt_conf()
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     borisp@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        davejwatson@fb.com, aviadye@mellanox.com, ilyal@mellanox.com,
-        fw@strlen.de, sd@queasysnail.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228023344.9623-1-hbh25y@gmail.com>
- <fdfa0099-481c-48d6-8ab8-0c84b260e451@roeck-us.net>
-Content-Language: en-US
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <fdfa0099-481c-48d6-8ab8-0c84b260e451@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Nhj3/4xBxIE5HRwH"
+Content-Disposition: inline
+In-Reply-To: <20230324061608.33609-4-quic_hazha@quicinc.com>
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/3/2023 22:12, Guenter Roeck wrote:
-> Hi,
-> 
-> On Tue, Feb 28, 2023 at 10:33:44AM +0800, Hangyu Hua wrote:
->> ctx->crypto_send.info is not protected by lock_sock in
->> do_tls_getsockopt_conf(). A race condition between do_tls_getsockopt_conf()
->> and do_tls_setsockopt_conf() can cause a NULL point dereference or
->> use-after-free read when memcpy.
->>
->> Please check the following link for pre-information:
->>   https://lore.kernel.org/all/Y/ht6gQL+u6fj3dG@hog/
->>
->> Fixes: 3c4d7559159b ("tls: kernel TLS support")
->> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> 
-> This patch has been applied to v6.1.y. Should it be applied to older kernel
-> branches as well ? I know it doesn't apply cleanly, but the conflicts
-> should be easy to resolve. I'll be happy to send backports to stable@ if
-> needed.
-> 
-> Thanks,
-> Guenter
 
-Look like Meena Shanmugam is doing this. Please check this:
+--Nhj3/4xBxIE5HRwH
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/all/20230323005440.518172-2-meenashanmugam@google.com/
+On Fri, Mar 24, 2023 at 02:16:08PM +0800, Hao Zhang wrote:
+> +Sysfs files and directories
+> +---------------------------
+> +
+> +Root: ``/sys/bus/coresight/devices/dummy<N>``
+> +
+> +----
+> +
+> +:File:            ``enable_source`` (RW)
+> +:Notes:
+> +    - > 0 : enable the datasets of dummy source.
+> +
+> +    - =3D 0 : disable the datasets of dummy source.
+> +
+> +:Syntax:
+> +    ``echo 1 > enable_source``
+> +
+> +----
+> +
+> +:File:            ``enable_sink`` (RW)
+> +:Notes:
+> +    - > 0 : enable the datasets of dummy sink.
+> +
+> +    - =3D 0 : disable the datasets of dummy sink.
+> +
+> +:Syntax:
+> +    ``echo 1 > enable_sink``
 
-Thanks for your attention.
+Is enable_{source,sink} integer-valued or bit (0/1)? In other words, is
+it OK to `echo 2` to both sysfs files?
 
-Thanks,
-Hangyu
+> +
+> +----
+> +
+> +Config details
+> +---------------------------
+> +
+> +There are two types of nodes, dummy sink and dummy source. The nodes
+> +should be observed at the coresight path
+> +"/sys/bus/coresight/devices".
+
+For consistency, inline this sysfs also (thus
+``/sys/bus/coresight/devices``.
+
+> +e.g.
+e.g.:: (make the shell snippet below code block)
+> +/sys/bus/coresight/devices # ls -l | grep dummy
+IMO I prefer `PS1=3D\$` (that is, omit the directory). Alternatively,
+you can write `ls -l /sys/bus/coresight/devices | grep dummy` (specify
+the directory to `ls`).
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--Nhj3/4xBxIE5HRwH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCFcjwAKCRD2uYlJVVFO
+o1gMAP9hA3XoJ+1BWv3KOewMhgRMYIwCugU1u1SLb6+ulgXKKQD8DNcMJrpatOcs
+cyouf4vyhI6HmCRIK5V0aHosRUkHrQM=
+=Bs3E
+-----END PGP SIGNATURE-----
+
+--Nhj3/4xBxIE5HRwH--
