@@ -2,118 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CA96CA695
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3C16CA6A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbjC0N6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
+        id S232825AbjC0N6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbjC0N57 (ORCPT
+        with ESMTP id S232840AbjC0N6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:57:59 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE911711;
-        Mon, 27 Mar 2023 06:57:58 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id C499E320092C;
-        Mon, 27 Mar 2023 09:57:56 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 27 Mar 2023 09:57:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1679925476; x=1680011876; bh=xGJXbEhrl91uNM1/D3zlzsQqHed5bWXL+CG
-        9EThtPTA=; b=U8nVqssP+oT54AqwEyOYS5gWpuGWPxYnrmh5eZ00saX4Vs7z4ST
-        VP0hCQWthFZr0Kfz91iBon6mUqJ8bfLXVQhiRHDrlnn2L8l0ECIQlJCUjeqLO2ea
-        XE8RRjfPjnS2HJzbb5mbMg4CNKFvfJMD+7k/Np1PFKpBAGNxNN7PsseQryKtpfAN
-        EI3XJ3NX14fS7cxuXFOmW79xuwtlPOnLKF0q/JoRIPSsRHdiuedleXp3EIyU9jI5
-        Suv9WXxMTtiH2nqzisaxSJxWhghP02Qc0eEPnCC6I0I1gvFZBT2RwrYIpBqBNefG
-        yu4m5ALvym9vjc/sLpEqeQJpA7bHdXRNpsw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1679925476; x=1680011876; bh=xGJXbEhrl91uNM1/D3zlzsQqHed5bWXL+CG
-        9EThtPTA=; b=kAh+8Dej35XHTK1kFnCco+p2tcyw65wsi9Yu9ahSbXsvIAAIHAW
-        vtV70adwEs1B418lpm8/L9Y+jMTTpeimrZdnWo+YBWPT0+2RhfhuDOeOx/CUgX2m
-        tE8act0TL4Yp88jQBfT1lG7HkpDdmzB3NY3VhTXfRDKd3ApQkSUG1kYezt9mZQ05
-        9B6/EtBCYjgeg3EZy4j6SapfncAwufTOneSmgN5CwenXqoKxuEUbms/LreFlaYvR
-        4RAJOSUS6zV28DHBXc8fr7hODI88bktVx02sPJnYu/K1XkmBiUUSwbkDWxUE15hm
-        TUi2lBvDc9IfGkm1JS7Z24j+tVHdpQ14ZXg==
-X-ME-Sender: <xms:46AhZCFdoW1blfH_RYR-zych5Rk1ITCNpKKaowCqdQwdtec6Wt-bew>
-    <xme:46AhZDVpwmcSwu1KEX_XfD4b6xGMT0KEo2wkxJ1v2KLG4wjWegLBuZPwToWHrlgiL
-    y9z4GLu8pC_jgDVLBA>
-X-ME-Received: <xmr:46AhZMLBiMKKJR-lG52l8P_Kb9MrF7pnp4kEW-NVf2nghJQ7epapYAiyCq0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehvddgjedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnheptefgleeggfegkeekgffgleduieduffejffegveevkeejudektdduueet
-    feetfefgnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:46AhZME3CtI0dCjyrJqvX6hHQUIlbrHGakrAFMnyKMvwvBoC0a5fzw>
-    <xmx:46AhZIXnoJy6hvq-0FEdl_o6mk-9zYtfhhskUc5kuMMg0o8o74RL8w>
-    <xmx:46AhZPOtBobpcnYqBe5i-f5fMsK8PPzFDxBVB-070mOmadDJXsXF6Q>
-    <xmx:5KAhZHMjwEV-Y9-dT1948Mz3chxQxHsASJrqrMGJzvxKlJCFSqLKOA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Mar 2023 09:57:55 -0400 (EDT)
-Date:   Mon, 27 Mar 2023 15:57:54 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     David Gow <davidgow@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Subject: Re: [RFC PATCH 2/2] kunit: Add APIs for managing devices
-Message-ID: <20230327135754.tadvfirhixbhatxy@penduick>
-References: <20230325043104.3761770-1-davidgow@google.com>
- <20230325043104.3761770-3-davidgow@google.com>
+        Mon, 27 Mar 2023 09:58:32 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1722240C6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:58:32 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id z19so8534939plo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679925511;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z1Gx6hpiQ6E/pjxy2KWHAjzK7MQQtrVJ/I63KQY+/Xk=;
+        b=ZbFzZrfKuMTr4Xjs+F6s/P1aqzpZRLiLKb1UFloK9qUMOGJ4j6ThaZbN9EmEt0q3Eu
+         759dpj8EfjK2LipQgCZsKVUF3eNQYWsuAILal1YdT0dt8mtFHq2PsltxUxXuVF/DpFbW
+         vre2zPxglWy/+uOrN7y3ds+dE15+RAjun8lWKudPz6DK9CROJBHo9MGZYwH4Xvko4yyv
+         B4K1TTqlsnYhaNOtO5nScDjHPIOFhAHo3XPyT/SgfJz5jMkB0/6T3aS+g+ytZ/X+tR7G
+         nvlqpiVsoe1PwxLa2pJyH26ljq0NCnyvtsp0osVqMJoLehJ/liUOp49Gf5F2VnCNm86b
+         FuiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679925511;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z1Gx6hpiQ6E/pjxy2KWHAjzK7MQQtrVJ/I63KQY+/Xk=;
+        b=KVopKgiMw+oSfb8aDIKZZkOy8/D8XhSEh9nzDCVncOsjvVPUuHMOIIJdtTE++uccB8
+         6bZJilQqzXnBROZt1lZMNcZy/RyWCaGxr2JfmO1yf3bbX89tekPg33SresTsXjmqaE8Q
+         0y4MQVQhJNW06XVqzqCLe3TJBBM42V0u8UAqu2wpc/3oeAn5Gi2cipHMVmQtQtUiOfzF
+         sldLNLjAgATFj35KaTVBnIteg2xDAEzKuYFbsPio7knJF5mqgPUJ70o1k3AHNT2tsjYK
+         jKi2OTh4qMGv5PjtTJsEdCZtG3eRBeTwJElQec3aEr3kzdpF2FhAZ7GlU5qiDKBPbODP
+         HQ1g==
+X-Gm-Message-State: AAQBX9cEtOA3mUczY44Vi/ZHOgAYE46+cLSkHFsRg3F34nupb/BHb9qE
+        27d2mYr51NrIYpBoHU+2UhM=
+X-Google-Smtp-Source: AKy350Yvp2sDiWx+7IFe+pzISfF4KIfvlsaCIXeVDiEfPo49dfQC3b8yn9ct0NUPwT6496rPOkF3Jg==
+X-Received: by 2002:a17:90b:4c8b:b0:23f:2c65:fab7 with SMTP id my11-20020a17090b4c8b00b0023f2c65fab7mr12857311pjb.42.1679925511466;
+        Mon, 27 Mar 2023 06:58:31 -0700 (PDT)
+Received: from DESKTOP-B5TBVBT.localdomain ([175.117.51.71])
+        by smtp.gmail.com with ESMTPSA id ge13-20020a17090b0e0d00b0023fcece8067sm7388246pjb.2.2023.03.27.06.58.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 06:58:31 -0700 (PDT)
+From:   Yohan Joung <jyh429@gmail.com>
+X-Google-Original-From: Yohan Joung <yohan.joung@sk.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yohan Joung <yohan.joung@sk.com>
+Subject: [PATCH] f2fs: add radix_tree_preload_end in error case
+Date:   Mon, 27 Mar 2023 22:58:00 +0900
+Message-Id: <20230327135800.524-1-yohan.joung@sk.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230325043104.3761770-3-davidgow@google.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+To prevent excessive increase in preemption count
+add radix_tree_preload_end in retry
 
-On Sat, Mar 25, 2023 at 12:31:04PM +0800, David Gow wrote:
-> Tests for drivers often require a struct device to pass to other
-> functions. While it's possible to create these with
-> root_device_register(), or to use something like a platform device, this
-> is both a misuse of those APIs, and can be difficult to clean up after,
-> for example, a failed assertion.
->=20
-> Add two KUnit-specific functions for registering and unregistering a
-> struct device:
-> - kunit_device_register()
-> - kunit_device_unregister()
+Signed-off-by: Yohan Joung <yohan.joung@sk.com>
+---
+ fs/f2fs/checkpoint.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-If kunit_device_register() registers an action to clean up after the
-test has ran, I'm not sure why do we need kunit_device_unregister()
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index 1e0164cde23d..72205a9437b5 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -508,6 +508,7 @@ static void __add_ino_entry(struct f2fs_sb_info *sbi, nid_t ino,
+ 	if (!e) {
+ 		if (!new) {
+ 			spin_unlock(&im->ino_lock);
++			radix_tree_preload_end();
+ 			goto retry;
+ 		}
+ 		e = new;
+-- 
+2.25.1
 
-I guess the typical test would just call kunit_device_register() and
-be done with it, right?
-
-Maxime
