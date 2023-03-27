@@ -2,101 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3096CB1EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 00:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FA76CB207
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 00:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbjC0Wua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 18:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
+        id S229946AbjC0W5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 18:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjC0Wu2 (ORCPT
+        with ESMTP id S229606AbjC0W5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 18:50:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CA01FF3;
-        Mon, 27 Mar 2023 15:50:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61BD1B819A9;
-        Mon, 27 Mar 2023 22:50:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93D19C433D2;
-        Mon, 27 Mar 2023 22:50:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679957424;
-        bh=G4vSpWRXFWHWcZZEwCKRH35BlIP0Tx29Xiu9ic3cC+M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RMmsuv/6IS08xb8zGe9H3FWIyEKz6OniqOjQXIT87SwSRPVrWdIwk/Kheo3XNHSwG
-         QkgPaD37hY4OZUmZ3eEXXnWVDMvs/ZP2cUQReHavAZqtSG88rKAlJiO0s5VqmgmgpA
-         cnjT6i18JHQ2Ks4w3I1R5D3jsgE1oNX9YfR2Mvp2K2ClJRdUpRz9uuxZReXhoTXBZ4
-         b+Ph66gsdGpGBnxY3P1nRhd7BrY7C9utjzOKb74fYPaC2rfVEErWeSV0arGw7582ko
-         L52jSXanh62mr+eUSOuEj+mkf/4G+LbcUWGfX0l3Nh6kB0UZnwecOpRkk8i+l11NPz
-         HDPzGsKeVgUeg==
-Date:   Mon, 27 Mar 2023 23:50:18 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 00/21] Basic clock, reset & device tree support for
- StarFive JH7110 RISC-V SoC
-Message-ID: <29ba8a8d-940d-4b49-bd86-5cd5df002c23@spud>
-References: <20230320103750.60295-1-hal.feng@starfivetech.com>
+        Mon, 27 Mar 2023 18:57:15 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB33D1FF3;
+        Mon, 27 Mar 2023 15:57:14 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id fb38so6763447pfb.7;
+        Mon, 27 Mar 2023 15:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679957834; x=1682549834;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=pZq/tE3Ime66Eff4zF6BNW0V2oykqPbi7rtW7dsDQrg=;
+        b=iuBNExzhq7IYRXi33wGistpI+OsvEZMGpg6DH2srXQHqfJMj3yR/RxiLB/YFktY27O
+         J8dWK438cz1Z6zBSHh4l1T44l3YHOoP8BXB+jaa4b/Slxw8HrmdDX8q65dAzgIcq4EeU
+         ZzBbm3uOn38iyYkwVTfsDWet3ChGkjB1Xg/oJplIkuW1rfBsIotL3OR38WxYIfRZOmr+
+         RS9epJHDoT6UAlJJ9jUmBl+9yUpGVuwQ6cyP17a75i+5QNfNqeAiIWzTHajzwSnc6n0i
+         S7ghshSVsqJnPJyJoOm3fNm+mH03blpu1QVrHniliELKA7alNGiIQsLFFcXmqnBEfwPQ
+         +oUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679957834; x=1682549834;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pZq/tE3Ime66Eff4zF6BNW0V2oykqPbi7rtW7dsDQrg=;
+        b=Vb2V4Z40U/ImII1lwCA+sYHmn01658r8c4TNr63ALPnKTPJI39TJFRtxwofWcmTTrW
+         d1HTRHExTaVeyrrkECcf67UUG5Ats2TJQpVsPZNIadvJpxKpnItqMK0LlGUT6+hmwv86
+         +hpfXrBK+8Ym9ENOBIKOumaKUKaSxIuoncV0axhM3C8QTrcJZ4q5OIx+bPAtEsZnFZBA
+         +s6SguisYVV0xzX9ixKvMVH5Xm1vBHvkw6hWszcGInYIPRfXOWVtUDJkSCcaWSIjGrLO
+         pJrk/+CFVSTN4UwKWWWbzkPed0Fi5q5pHTs1aXAbETfxKutWb0WmxyvQw9nexpAQ02Ix
+         iELA==
+X-Gm-Message-State: AAQBX9c/bsN6HzHvDesnOtzshNyZ3EZPjvPR9+77tp+Zn7UWtxOpQNm/
+        5AD/uWlHwrOuSdp9eBDORtY=
+X-Google-Smtp-Source: AKy350ZrbHX5ujApaU/q8xz8/33bP/1AJLbH4PavvuxVIHBkisc+Q/BDewsSuvoCQbVk2HVAdKJBCw==
+X-Received: by 2002:a62:1d51:0:b0:622:ece1:35d3 with SMTP id d78-20020a621d51000000b00622ece135d3mr12560546pfd.5.1679957833991;
+        Mon, 27 Mar 2023 15:57:13 -0700 (PDT)
+Received: from bangji.hsd1.ca.comcast.net ([2601:647:6780:44b0:4cdc:1028:ab64:920d])
+        by smtp.gmail.com with ESMTPSA id c11-20020aa781cb000000b0062d84986823sm2383579pfn.169.2023.03.27.15.57.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 15:57:13 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, Hao Luo <haoluo@google.com>,
+        bpf@vger.kernel.org
+Subject: [PATCH 1/2] perf lock contention: Fix debug stat if no contention
+Date:   Mon, 27 Mar 2023 15:57:10 -0700
+Message-Id: <20230327225711.245738-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="EvmgkiZ1lEXclYTa"
-Content-Disposition: inline
-In-Reply-To: <20230320103750.60295-1-hal.feng@starfivetech.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It should not divide if the total number is 0.  Otherwise it'd show
+NaN in the bad rate output.  Also add a whitespace in the "output
+for debug" message.
 
---EvmgkiZ1lEXclYTa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+  $ sudo perf lock contention -abv true
+  Looking at the vmlinux_path (8 entries long)
+  symsrc__init: cannot get elf header.
+  Using /proc/kcore for kernel data
+  Using /proc/kallsyms for symbols
+   contended   total wait     max wait     avg wait         type   caller
 
-Hey Hal,
+  === output for debug===
 
-On Mon, Mar 20, 2023 at 06:37:29PM +0800, Hal Feng wrote:
-> This patch series adds basic clock, reset & DT support for StarFive
-> JH7110 SoC.
+  bad: 0, total: 0
+  bad rate: -nan %     <-------------------------  (here)
+  histogram of events caused bad sequence
+      acquire: 0
+     acquired: 0
+    contended: 0
+      release: 0
 
-Probably obvious at this point given the number of outstanding comments
-on this version, but I'm gonna mark this series as "Changes Requested"
-on the RISC-V patchwork. I'm not sure what Stephen's cutoff for stuff is,
-but I'd like to have stuff ready to go to Arnd for -rc6, so you still
-have some time for another revision I think :)
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/builtin-lock.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Cheers,
-Conor.
+diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+index 3c8a19ebc496..82dd2dfe5692 100644
+--- a/tools/perf/builtin-lock.c
++++ b/tools/perf/builtin-lock.c
+@@ -1323,10 +1323,10 @@ static void print_bad_events(int bad, int total)
+ 	for (i = 0; i < BROKEN_MAX; i++)
+ 		broken += bad_hist[i];
+ 
+-	if (quiet || (broken == 0 && verbose <= 0))
++	if (quiet || total == 0 || (broken == 0 && verbose <= 0))
+ 		return;
+ 
+-	pr_info("\n=== output for debug===\n\n");
++	pr_info("\n=== output for debug ===\n\n");
+ 	pr_info("bad: %d, total: %d\n", bad, total);
+ 	pr_info("bad rate: %.2f %%\n", (double)bad / (double)total * 100);
+ 	pr_info("histogram of events caused bad sequence\n");
+-- 
+2.40.0.348.gf938b09366-goog
 
---EvmgkiZ1lEXclYTa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCIdqQAKCRB4tDGHoIJi
-0vYmAP4tJIxpbqPo89Mr6eQyscwzz5HyB5of8DCc+nuX/2v38gD/dP3dUrOdOFC5
-HnIQm3HIRolqC9lBVMIu9urkf6xrGwA=
-=cdfk
------END PGP SIGNATURE-----
-
---EvmgkiZ1lEXclYTa--
