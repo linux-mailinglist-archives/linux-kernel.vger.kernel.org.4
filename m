@@ -2,87 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5346CA68F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95046CA691
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbjC0Nzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
+        id S232626AbjC0N4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbjC0Nzw (ORCPT
+        with ESMTP id S232526AbjC0N4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:55:52 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A387A3C30
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:55:50 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id v1so8906938wrv.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679925349;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=9pc99uwIQzjl9n1D0bXEH2WGeSt6mESdgE+0lhZDWFo=;
-        b=o1H4g6PXxDd7WQ1XE15gbdkHOdw1Opv3CGX7K5pdr44WKxqEkFQOoRVdrWFtTw7wzV
-         KsNFJ/YLmK7BHl3h/8ZrZ1R4PEDJlYneF4dJAfrI0BxRgvoT6+wWbkNS56dy8IQijv+O
-         D7J5EJH/ZSU0scUw0SFgUEoPpihqTx2hXUonxrsvemktPLwwF6dORF6XbP2d1KbNsTPb
-         7bpIWWWzwt8+hqT1jaohTOWPXvh51B9UAHx0+paibKUlA+6kwJTcKM99l95nwANnh4i2
-         QR1n4KSazKjg1ZXnQJpI2iVySlYrxMbs86f9tuHtr76VGCjsz7PBu3Fkh6imMWR1Fd8i
-         OOdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679925349;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9pc99uwIQzjl9n1D0bXEH2WGeSt6mESdgE+0lhZDWFo=;
-        b=TfqmcTXatH0tyao6CIbVwoUdQm6FOKuWbk6qRlzJI36kAxpDFkzahI8KHNx2Wm6/DB
-         crKgj7OQm5QoJFvWe3W91oCAcyK08hpr/1/jj0WTlvr3OSCUaTzhwVnOlETmg/cz6/Uj
-         cOpwWxCtWBfZEmwu1D5so2WgLyK9syh3p7Jwns2ryjDCBhCoxL+CBAPFp7zhqbuxhw1G
-         S/+PQZ1fuawYx2jtPyB+t63daik4eI9JqiJtSOforNSYZ1kbvPJYSr+jVX/jIRI4Jr9c
-         BBpNmteZ+H+P8t9TZ2AINzEsPou9h2jc0xBL5L1lTBl2RYi7/7zTIqpZPnuudxLqjQJ4
-         azJA==
-X-Gm-Message-State: AAQBX9fcRyvI/c/5U6R9n2F0dg1r0X1hsf9CyJt5NhWAVWkFcF/4TyBE
-        TGaAU2Uw2LYJUNqp51hxjNEGNw==
-X-Google-Smtp-Source: AKy350bALDAORP5R5D5dV3jfbUXqv8xWVCw64igC3DBEjdomPNbFYGczsMKz4eo0EbdTXHlQeXe/2g==
-X-Received: by 2002:a5d:604e:0:b0:2c7:851:c0bf with SMTP id j14-20020a5d604e000000b002c70851c0bfmr9522521wrt.0.1679925349098;
-        Mon, 27 Mar 2023 06:55:49 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:ef3b:2a41:93d:75f2? ([2a01:e0a:982:cbb0:ef3b:2a41:93d:75f2])
-        by smtp.gmail.com with ESMTPSA id m23-20020a056000181700b002c5694aef92sm25072772wrh.21.2023.03.27.06.55.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 06:55:48 -0700 (PDT)
-Message-ID: <01bac126-d057-d189-ca19-37db31057e99@linaro.org>
-Date:   Mon, 27 Mar 2023 15:55:46 +0200
+        Mon, 27 Mar 2023 09:56:16 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F1E3C25;
+        Mon, 27 Mar 2023 06:56:10 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 4E58D320034E;
+        Mon, 27 Mar 2023 09:56:07 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 27 Mar 2023 09:56:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1679925366; x=1680011766; bh=HQT73unAvjM/fisNmxvsr2xKlXq84rjVLT6
+        NDbZHsog=; b=OIroo5S7CwonPlMw2XW5OLfdr/Xv3LJtwlzS+QhdDZqjC0TT1S1
+        dohG4xJhHByP4VgFIIHwlFfgnhdmtlKbvDUg2Hq7S4DiF7s+DHx+e2M1WX8dDnjV
+        ZiwJAKHcqv5FpvOxLWKC21i6PZHmL//+FLuFEvFvHUKLicFKRlp4aOnPXW0eti7q
+        LFVOHkwCnpZBFzOp6fFNfxTZ4NTAE23jq+/ExdLE5Q4yj9aDbKZAeVtbsu8iJlD7
+        fGsXi5k4NCt84Kbj4wRc3Nnl2FzByVxVxTrpONLHOHty5ITL3HV4ghvGAmdVzQu6
+        l9ZBmOOwuT/R/2+pVje41Hv5DrkEEV/qzTg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1679925366; x=1680011766; bh=HQT73unAvjM/fisNmxvsr2xKlXq84rjVLT6
+        NDbZHsog=; b=mr7mpDhP9QGafW+njvAQGQuglvXNusInBlcZTQj1HueI0gU8+3d
+        iT4us/ykq0dZPlzw/dvSGfTmuPl0k9MCyK0aYj/IkDzug+4B3PPiCTzpc76NLBTK
+        ALvmCAZOSU1zt/AHTrCy3IAD7O90kzUg++PrF4UzKnUNsFP5fJdmsq5mIKwJP8Sk
+        19jozbm4tnljLw9CxXbirSt6IKDFgqmvyPhwIN3lt2sWbn3RtbsFxSk8Xpv/apvX
+        OkPFtaKRL3zA7KN8BMAu3J6ocIB2+3FIUGPAyNo0e+/JasoEtDrOKC/e8lV93Tog
+        47GIBNZ/STP1jyAjkkvApHhsY75oygc9wHw==
+X-ME-Sender: <xms:dqAhZPMJQ9zb-hggCYEAcoIUsTX9YCErD5gF_IJRJqztDneVn_0Qkw>
+    <xme:dqAhZJ-qdTFdvqXWHSguC-RVjphf-Ok9NS_Ab6JgAg2uDFJAgUOY8U27vViddB6L_
+    U7SVsZ9ue4zAkN0poE>
+X-ME-Received: <xmr:dqAhZOTXWOqlgK85bsEOxdAVUt1-cxuQbW8yaILst0kobqjR2VlNw7v0_CQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehvddgjedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnheptefgleeggfegkeekgffgleduieduffejffegveevkeejudektdduueet
+    feetfefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:dqAhZDsw3pwh1Cf2t9_CjJj8UQIA4i2JULDcXEGqjo4-yP5LKe5PSw>
+    <xmx:dqAhZHdPl0YArw1A7PqHnYIEh6-gUJn-CKufKCDHBY1yZCvX6ERI5A>
+    <xmx:dqAhZP1bbPSF30FvcHd5ilSi-Y8VaNH64z-Fm81ptruVjFFleBR5Hw>
+    <xmx:dqAhZP1ndbW_KSyh4uUPR3UuCs09gu0w5IpDg9YMubNP0WXNAcTe4Q>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Mar 2023 09:56:05 -0400 (EDT)
+Date:   Mon, 27 Mar 2023 15:56:04 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     David Gow <davidgow@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Subject: Re: [RFC PATCH 1/2] kunit: resource: Add kunit_defer() functionality
+Message-ID: <20230327135604.rxqlt2kjvfkf2vhb@penduick>
+References: <20230325043104.3761770-1-davidgow@google.com>
+ <20230325043104.3761770-2-davidgow@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v11 3/5] dt-bindings: clock: meson: add A1 PLL and
- Peripherals clkcs bindings
-Content-Language: en-US
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com, jian.hu@amlogic.com,
-        kernel@sberdevices.ru, rockosov@gmail.com,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230321193014.26349-1-ddrokosov@sberdevices.ru>
- <20230321193014.26349-4-ddrokosov@sberdevices.ru>
- <1jmt3yo5r0.fsf@starbuckisacylon.baylibre.com>
- <20230327105115.ury3w4xpzhcpnqjg@CAB-WSD-L081021>
- <1jilemo1r9.fsf@starbuckisacylon.baylibre.com>
- <ae367a80-e617-42a6-f873-73a1ecfe7c0d@linaro.org>
- <20230327131927.k7uswfn6i3jqjrzv@CAB-WSD-L081021>
-Organization: Linaro Developer Services
-In-Reply-To: <20230327131927.k7uswfn6i3jqjrzv@CAB-WSD-L081021>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230325043104.3761770-2-davidgow@google.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,199 +96,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2023 15:19, Dmitry Rokosov wrote:
-> On Mon, Mar 27, 2023 at 02:03:25PM +0200, neil.armstrong@linaro.org wrote:
->> On 27/03/2023 13:39, Jerome Brunet wrote:
->>>
->>> On Mon 27 Mar 2023 at 13:51, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
->>>
->>>> On Mon, Mar 27, 2023 at 11:51:21AM +0200, Jerome Brunet wrote:
->>>>>
->>>>> On Tue 21 Mar 2023 at 22:30, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
->>>>>
->>>>>> Add the documentation for Amlogic A1 PLL and Amlogic A1 Peripherals
->>>>>> clock drivers.
->>>>>> Introduce Amlogic A1 PLL and Amlogic A1 Peripherals device tree
->>>>>> bindings and include them to MAINTAINERS.
->>>>>>
->>>>>> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
->>>>>> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
->>>>>> ---
->>>>>>    .../bindings/clock/amlogic,a1-clkc.yaml       |  73 +++++++++++
->>>>>>    .../bindings/clock/amlogic,a1-pll-clkc.yaml   |  59 +++++++++
->>>>>>    MAINTAINERS                                   |   1 +
->>>>>>    include/dt-bindings/clock/amlogic,a1-clkc.h   | 113 ++++++++++++++++++
->>>>>>    .../dt-bindings/clock/amlogic,a1-pll-clkc.h   |  21 ++++
->>>>>>    5 files changed, 267 insertions(+)
->>>>>>    create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
->>>>>>    create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
->>>>>
->>>>> There is two drivers (and 2 independent patches). There should be 2
->>>>> bindings patches as well.
->>>>>
->>>>
->>>> Before, in previous versions I had two versions, but it wasn't bisectable
->>>> approach.
->>>
->>> You are confusing bisectable and Rob's robot. Splitting patches is more
->>> that likely to help bisect (and patches backport) - not the other way around.
->>>
->>>> a1-clkc schema depends on a1-pll-clkc headers and vice versa.
->>>> It means dt schemas checkers will show us failure if we split them into two
->>>> patchsets.
->>>
->>> Only because you are patches are not upstream yet ...
->>>
->>>> I know, that we can use raw digits instead of CLKID names, but IMO it doesn't
->>>> look like production schema and it requires one more patchset above the
->>>> series with proper CLKID definitons usage and proper header including.
->>>>
->>>> BTW, there is an example of Rob's test bot failure found in the previous
->>>> v10 patch series due to chicken or the egg problem.
->>>> https://lore.kernel.org/all/167769997208.7087.5344356236212731922.robh@kernel.org/
->>>>
->>>> Please advise what's the best practice to resolve that..
->>>
->>> Don't use the header in your example would solve the problem and
->>> still be correct DT wise.
->>>
->>> The examples are just examples, they are not required to actually
->>> matches a real HW, as far as I know.
->>
->> Exact, you can use fake lables instead of defined:
->>
->> <&clkc_pll CLKID_FCLK_DIV2>,
->>
->> =>
->> remove "#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>"
->>
->> <&clkc_pll_fclk_div2>,
->>
->> is perfectly ok and will permit have 2 separate patches.
->>
->> The dependency is only if you have a common yaml file for
->> both bindings files, but this is not the case here.
-> 
-> Simple removal of "#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>"
-> header doesn't work, dt_binding_check make rule is failed:
+Hi David,
 
-I never wrote you to only remove the include, adding fake labels phandles was the logical next step.
+Thanks a lot for doing this
 
-Neil
+On Sat, Mar 25, 2023 at 12:31:03PM +0800, David Gow wrote:
+> Many uses of the KUnit resource system are intended to simply defer
+> calling a function until the test exits (be it due to success or
+> failure). The existing kunit_alloc_resource() function is often used for
+> this, but was awkward to use (requiring passing NULL init functions, etc),
+> and returned a resource without incrementing its reference count, which
+> -- while okay for this use-case -- could cause problems in others.
+>=20
+> Instead, introduce a simple kunit_defer() API: a simple function
+> (returning nothing, accepting a single void* argument) can be scheduled
+> to be called when the test exits. Deferred functions are called in the
+> opposite order to that which they were registered.
+>=20
+> This is implemented as a resource under the hood, so the ordering
+> between resource cleanup and deferred functions is maintained.
+>=20
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>  include/kunit/resource.h |  87 +++++++++++++++++++++++++++++++
+>  lib/kunit/resource.c     | 110 +++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 197 insertions(+)
+>=20
+> diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+> index cf6fb8f2ac1b..6c4728ca9237 100644
+> --- a/include/kunit/resource.h
+> +++ b/include/kunit/resource.h
+> @@ -387,4 +387,91 @@ static inline int kunit_destroy_named_resource(struc=
+t kunit *test,
+>   */
+>  void kunit_remove_resource(struct kunit *test, struct kunit_resource *re=
+s);
+> =20
+> +typedef void (*kunit_defer_function_t)(void *ctx);
+> +
+> +/**
+> + * kunit_defer() - Defer a function call until the test ends.
 
-> 
-> Error: Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts:28.37-38 syntax error
-> FATAL ERROR: Unable to parse input tree
-> 
-> It happens, because 'dt_binding_check' generates simple dts example and
-> tries to compile it:
-> 
-> cat Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts
-> ===
-> 
-> /dts-v1/;
-> /plugin/; // silence any missing phandle references
-> 
-> 
-> /{
->      compatible = "foo";
->      model = "foo";
->      #address-cells = <1>;
->      #size-cells = <1>;
-> 
-> 
-> 
->      example-0 {
->          #address-cells = <1>;
->          #size-cells = <1>;
-> 
->          
-> 
->          apb {
->              #address-cells = <2>;
->              #size-cells = <2>;
->          
->              clock-controller@800 {
->                  compatible = "amlogic,a1-clkc";
->                  reg = <0 0x800 0 0x104>;
->                  #clock-cells = <1>;
->                  clocks = <&clkc_pll CLKID_FCLK_DIV2>,
->                           <&clkc_pll CLKID_FCLK_DIV3>,
->                           <&clkc_pll CLKID_FCLK_DIV5>,
->                           <&clkc_pll CLKID_FCLK_DIV7>,
->                           <&clkc_pll CLKID_HIFI_PLL>,
->                           <&xtal>;
->                  clock-names = "fclk_div2", "fclk_div3",
->                                "fclk_div5", "fclk_div7",
->                                "hifi_pll", "xtal";
->              };
->          };
-> 
->      };
-> };
-> ===
-> 
-> As you can see, header is required.
-> 
-> But looks like, dt binding checker is happy with the fake references hack :)
-> Below there is generated example dts:
-> 
-> cat Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts
-> ===
-> 
-> /dts-v1/;
-> /plugin/; // silence any missing phandle references
-> 
-> 
-> /{
->      compatible = "foo";
->      model = "foo";
->      #address-cells = <1>;
->      #size-cells = <1>;
-> 
-> 
-> 
->      example-0 {
->          #address-cells = <1>;
->          #size-cells = <1>;
-> 
->          
-> 
->          apb {
->              #address-cells = <2>;
->              #size-cells = <2>;
->          
->              clock-controller@800 {
->                  compatible = "amlogic,a1-clkc";
->                  reg = <0 0x800 0 0x104>;
->                  #clock-cells = <1>;
->                  clocks = <&clkc_pll_fclk_div2>,
->                           <&clkc_pll_fclk_div3>,
->                           <&clkc_pll_fclk_div5>,
->                           <&clkc_pll_fclk_div7>,
->                           <&clkc_pll_hifi_pll>,
->                           <&xtal>;
->                  clock-names = "fclk_div2", "fclk_div3",
->                                "fclk_div5", "fclk_div7",
->                                "hifi_pll", "xtal";
->              };
->          };
-> 
->      };
-> };
-> ===
-> 
-> Yep, we are able to cheat dt checkers, but we don't help dt developers
-> with such example.
-> May be, it's better to prepare two patches in such hierarchy:
-> 
-> 1) A1 PLL clkc bindings with fake references without clkc headers
-> 2) A1 clkc bindings with real CLKID bindings + A1 PLL clkc bindings fix
-> with real CLKID A1 clkc bindings + header.
-> 
-> The such approach resolves DT checkers failures and split DT bindings
-> into two patchsets.
-> 
-> [...]
-> 
+devm (and drm resource management) uses devm_add_action for this, and
+providing consistency across resource management API would be neat.
 
+> + * @test: Test case to associate the deferred function with.
+> + * @func: The function to run on test exit
+> + * @ctx: Data passed into @func
+> + * @internal_gfp: gfp to use for internal allocations, if unsure, use GF=
+P_KERNEL
+
+Do you really expect any GFP flag other than GFP_KERNEL?
+
+> + * Defer the execution of a function until the test exits, either normal=
+ly or
+> + * due to a failure.  @ctx is passed as additional context. All functions
+> + * registered with kunit_defer() will execute in the opposite order to t=
+hat
+> + * they were registered in.
+> + *
+> + * This is useful for cleaning up allocated memory and resources.
+> + *
+> + * RETURNS:
+> + *   An opaque "cancellation token", or NULL on error. Pass this token to
+> + *   kunit_defer_cancel() in order to cancel the deferred execution of f=
+unc().
+> + */
+
+devm also gets away with this by (iirc) associating the function
+pointer and context to the device. That triplet is pretty much
+guaranteed to be unique across calls and thus you don't have to keep
+(and pass!) a token around.
+
+> +void *kunit_defer(struct kunit *test, kunit_defer_function_t func,
+> +		  void *ctx, gfp_t internal_gfp);
+> +
+> +/**
+> + * kunit_defer_cancel_token() - Cancel a deferred function call.
+> + * @test: Test case the deferred function is associated with.
+> + * @cancel_token: The cancellation token returned by kunit_defer()
+> + *
+> + * Prevent a function deferred using kunit_defer() from executing when t=
+he
+> + * test ends.
+> + *
+> + * Prefer using this to kunit_defer_cancel() where possible.
+> + */
+> +void kunit_defer_cancel_token(struct kunit *test, void *cancel_token);
+> +
+> +/**
+> + * kunit_defer_trigger_token() - Run a deferred function call immediatel=
+y.
+> + * @test: Test case the deferred function is associated with.
+> + * @cancel_token: The cancellation token returned by kunit_defer()
+> + *
+> + * Execute a deferred function call immediately, instead of waiting for =
+the
+> + * test to end.
+> + *
+> + * Prefer using this to kunit_defer_trigger() where possible.
+> + */
+> +void kunit_defer_trigger_token(struct kunit *test, void *cancel_token);
+> +
+> +/**
+> + * kunit_defer_cancel() - Cancel a matching deferred function call.
+> + * @test: Test case the deferred function is associated with.
+> + * @func: The deferred function to cancel.
+> + * @ctx: The context passed to the deferred function to trigger.
+> + *
+> + * Prevent a function deferred via kunit_defer() from executing at shutd=
+own.
+> + * Unlike kunit_defer_cancel_token(), this takes the (func, ctx) pair in=
+stead of
+> + * the cancellation token. If that function/context pair was deferred mu=
+ltiple
+> + * times, only the most recent one will be cancelled.
+> + *
+> + * Prefer using kunit_defer_cancel_token() to this where possible.
+> + */
+> +void kunit_defer_cancel(struct kunit *test,
+> +			kunit_defer_function_t func,
+> +			void *ctx);
+> +
+> +/**
+> + * kunit_defer_trigger() - Run a matching deferred function call immedia=
+tely.
+> + * @test: Test case the deferred function is associated with.
+> + * @func: The deferred function to trigger.
+> + * @ctx: The context passed to the deferred function to trigger.
+> + *
+> + * Execute a function deferred via kunit_defer() immediately, rather tha=
+n when
+> + * the test ends.
+> + * Unlike kunit_defer_trigger_token(), this takes the (func, ctx) pair i=
+nstead of
+> + * the cancellation token. If that function/context pair was deferred mu=
+ltiple
+> + * times, it will only be executed once here. The most recent deferral w=
+ill
+> + * no longer execute when the test ends.
+> + *
+> + * kunit_defer_trigger(test, func, ctx);
+> + * is equivalent to
+> + * func(ctx);
+> + * kunit_defer_cancel(test, func, ctx);
+> + *
+> + * Prefer using kunit_defer_trigger_token() to this where possible.
+> + */
+> +void kunit_defer_trigger(struct kunit *test,
+> +			 kunit_defer_function_t func,
+> +			 void *ctx);
+>  #endif /* _KUNIT_RESOURCE_H */
+
+I think I agree with Matti here, you might want some function to
+cancel an action/deferral but it's not clear to me why you would need
+all the other functions there (for now at least)
+
+Maxime
