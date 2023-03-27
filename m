@@ -2,81 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3D06CADE2
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630126CADE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjC0St7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 14:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        id S232491AbjC0SuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 14:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbjC0Stv (ORCPT
+        with ESMTP id S232557AbjC0St6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:49:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388DC3AA2;
-        Mon, 27 Mar 2023 11:49:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C79DA61474;
-        Mon, 27 Mar 2023 18:49:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93D9DC433EF;
-        Mon, 27 Mar 2023 18:49:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679942976;
-        bh=jLpV4aLEaWhnj2ZeSXlyZ4XrVCotJyZACRst+Ac2PsY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rd5hRxyfDJ/6AksAtofExgq4NRAeL1yIwf+eXcgpeStZ0wYSYQNeSv6Lz1SdNx04f
-         71t7VD8RAxgbPs6ATLN4wAQWolJcZ2UwWc2RNt2OnX2NdB8BCD/YZyhzKyetRwFL9I
-         2vN/eCphpT1Nx2q956+8o/nZkpu8cVO12JuIjRd9is4Rpg33jrmTn4xo4qJTvqDNRA
-         eaXBmZJdkWyVXTSun5xEyvRFPNVa9d4pTe0lOoj12RlY/3OblQV0rsWke7kiqb+Z3S
-         negqyzWgL9hlvX7CR8QJhcDX9IHk3F+KUtpVsPmm00OmRq75PxAjBKPCSuE+TbGCQv
-         ACN2NpvYai5kQ==
-Date:   Mon, 27 Mar 2023 11:49:33 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Iskren Chernev <me@iskren.info>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Subject: Re: [PATCH v3 1/3] dt-bindings: ufs: qcom: Add sm6115 binding
-Message-ID: <20230327184933.GD73752@sol.localdomain>
-References: <20221209-dt-binding-ufs-v3-0-499dff23a03c@fairphone.com>
- <20221209-dt-binding-ufs-v3-1-499dff23a03c@fairphone.com>
+        Mon, 27 Mar 2023 14:49:58 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527931709;
+        Mon, 27 Mar 2023 11:49:49 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id eh3so40123745edb.11;
+        Mon, 27 Mar 2023 11:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679942988;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WV8Ob0uf4bBIKDlLtZZnzrbTAhR4hy3V64r28D4o5YY=;
+        b=Gqu/bFJ31hSb6EVqByUP2G55oy+x+jxUsnrUTS9y/idimRggaf3K4hUFSzP+hG9MRI
+         sQfcvDM5RNFMd5ZDGyrznKLDx6NMzwD7SsllmCmntS4xXcKolnrK4SYXEncVSWCjcRRL
+         ncut7EiyGFCMxso6b2qPxijfjp7cdtfRPUII5fzp4l31zRGZtGd+VwfkUzSowqA3Htq3
+         wokXFQRRkH7XOQAtjUDnqjcxcfpQ4e2MyXfjc3NKEGCddkxy7hiCNDfUBbZlUa001tt9
+         qJl1aqUEQ31uhApIu1qt02Lh8KzRABWxTuZGK6rcjgkuclGDQYi++LLK5FyNx5RdjYxN
+         3YFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679942988;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WV8Ob0uf4bBIKDlLtZZnzrbTAhR4hy3V64r28D4o5YY=;
+        b=u+QRZTsPPqtqxn1vpFf3vDt3wXRwbdl8izk2rPMHvQNVqPFVmNj6umjeHoyL0KiZFn
+         bG38/BNDbnOi+kB7ekTuMPn26bipUa8OOfhlWxiugGoSgMawaW0sEo+u+J6oQ4HqKAR0
+         YBwnPDDfTOCmGxXBWHh5o31ezXfVBrVy0KKfEzRd4gXMW/KIy8oh4Ua4YjoMfAEVhJOy
+         hBMYsJO5NrytxbI2ROBuDad2nrWE5CEYBeVUx9Dr0ouDQ6R4cDGmAH76ZMszYoJgz/4l
+         G+Q0fterqVpG0rgYy6xgpJM5naIeP7SE1h46OeDQbddJByHJsV48qxaFy+kl3y4UdHx7
+         8YQA==
+X-Gm-Message-State: AAQBX9ej6CWIGn5ZJdfw6wI360tXXX5RxLrIcDynjyCBCRIfw3ICoouO
+        LXP6Uu7D952v1Q5jg7c6acQ=
+X-Google-Smtp-Source: AKy350YOQCzEGffLYub7F2SVGrQDvP3iDvPNDUkaIZbZqUsO6bIeX5ddq3lF1+dztJqbY3lmGpgvpQ==
+X-Received: by 2002:a17:907:8b88:b0:925:f788:d76d with SMTP id tb8-20020a1709078b8800b00925f788d76dmr13593874ejc.27.1679942987666;
+        Mon, 27 Mar 2023 11:49:47 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id b26-20020a170906195a00b00930a4e5b46bsm14301659eje.211.2023.03.27.11.49.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 11:49:47 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 21:49:44 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?UmVuw6k=?= van Dorst <opensource@vdorst.com>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net 2/7] net: dsa: mt7530: fix phylink for port 5 and fix
+ port 5 modes
+Message-ID: <20230327184944.oahce2iizpauw4nm@skbuf>
+References: <20230326140818.246575-1-arinc.unal@arinc9.com>
+ <20230326140818.246575-3-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221209-dt-binding-ufs-v3-1-499dff23a03c@fairphone.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230326140818.246575-3-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 08:41:28AM +0100, Luca Weiss wrote:
-> From: Iskren Chernev <me@iskren.info>
+On Sun, Mar 26, 2023 at 05:08:13PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
-> Add SM6115 UFS to DT schema.
+> There're two call paths for setting up port 5:
 > 
-> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> mt7530_setup()
+> -> mt7530_setup_port5()
+> 
+> mt753x_phylink_mac_config()
+> -> mt753x_mac_config()
+>    -> mt7530_mac_config()
+>       -> mt7530_setup_port5()
+> 
+> The first call path is supposed to run when phy muxing is being used. In
+> this case, port 5 is somewhat of a hidden port. It won't be defined on the
+> devicetree so phylink can't be used to manage the port.
+> 
+> The second call path used to call mt7530_setup_port5() directly under case
+> 5 on mt7530_phylink_mac_config() before it was moved to mt7530_mac_config()
+> with 88bdef8be9f6 ("net: dsa: mt7530: Extend device data ready for adding a
+> new hardware"). mt7530_setup_port5() will never run through this call path
+> because the current code on mt7530_setup() bypasses phylink for all cases
+> of port 5.
+> 
+> Leave it to phylink if port 5 is used as a CPU port or a user port. For the
+> cases of phy muxing or the port being disabled, call mt7530_setup_port5()
+> directly from mt7530_setup_port5() without involving phylink.
 
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+You probably don't mean "call X() from X()" (that would make it recursive),
+but maybe from mt7530_setup(). But it was already called from mt7530_setup(),
+so I don't understand what is being transmitted here...
 
-- Eric
+> 
+> Move setting the interface and P5_DISABLED mode to a more specific
+> location. They're supposed to be overwritten if phy muxing is detected.
+> 
+> Add comments which explain the process.
+> 
+> Fixes: 38f790a80560 ("net: dsa: mt7530: Add support for port 5")
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+
+Sorry, I didn't understand... so what was the problem, and how does the
+movement of the mt7530_setup_port5() call that isn't under phylink solve
+that problem?
