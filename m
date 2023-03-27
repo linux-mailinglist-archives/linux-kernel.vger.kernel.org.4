@@ -2,150 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3CB6CB025
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE046CB029
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjC0Uwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 16:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        id S229718AbjC0Uzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 16:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjC0Uwj (ORCPT
+        with ESMTP id S229456AbjC0Uzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 16:52:39 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3963ED1;
-        Mon, 27 Mar 2023 13:52:38 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-17ac5ee3f9cso10647041fac.12;
-        Mon, 27 Mar 2023 13:52:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679950357;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mCokmroWwO4VufX7A6mOYl3GgmQFzU+xi4IMBIypRNk=;
-        b=69JZJ4TqcT0ZA697HRqBOcKsTprR/jP3ATD3q5fSycl7BZmDMcRK1k4F5R83wLy5d2
-         FSJSqpgEx+YEVwJt+cOVKfSccfq7CwgvpniZxozmLCHHJcCDNkvqhlMSghQNwTV4+cj3
-         iSQVVrzpvoIbsD65mGWblb/ud/sW0EMyeGJm+G4Z6WBWW4MO2QVFHbubUORonpyNVlYL
-         wx4jRujFykS+9qHd4WMickeqald2qvWkRx2PXWqyutWhsowh74I1r6fiMxQT+Y7gPsbm
-         i4DwyuZbz0FvfHIr+HoecPQAVphaOKcZfuidZWLM056j+9jVmGQFce610UwYw2m5mD62
-         7HTQ==
-X-Gm-Message-State: AAQBX9cpKZPMWn/2BsuLo8aN7FuCGu7K4WIrW/5+5TSPnIEAVRKzy3CW
-        PlljONrqgoQZYk+S6xsWuQ==
-X-Google-Smtp-Source: AK7set+8JPEPqeE9hXVijJtbMJer5bZDZeNugXZaxtUt4ndBavVZ+nQHJVymYACFFPbFLtprz+KixQ==
-X-Received: by 2002:a05:6870:899c:b0:17b:1a4f:adfe with SMTP id f28-20020a056870899c00b0017b1a4fadfemr7706053oaq.10.1679950357540;
-        Mon, 27 Mar 2023 13:52:37 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id eh1-20020a056808274100b00383ece4c29bsm11562672oib.6.2023.03.27.13.52.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 13:52:36 -0700 (PDT)
-Received: (nullmailer pid 573623 invoked by uid 1000);
-        Mon, 27 Mar 2023 20:52:35 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ARM: sh-mobile: Use of_cpu_node_to_id() to read CPU node 'reg'
-Date:   Mon, 27 Mar 2023 15:52:28 -0500
-Message-Id: <20230327205228.573456-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Mon, 27 Mar 2023 16:55:45 -0400
+Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853C412F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:55:40 -0700 (PDT)
+Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
+        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 2EE838047110
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:55:40 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 8D8C71004B4E5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:55:39 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id gtsRp19OaNX2agtsRpgOEw; Mon, 27 Mar 2023 20:55:39 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=642202cb
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=k__wU0fu6RkA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=Tjjzyx2epAFAt2jio4cA:9
+ a=QEXdDO2ut3YA:10:nop_charset_2
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=IbG506QGMSuWow45FPISLdd8sXyJb3ywf8UWxzRGnFE=; b=ZvI7fNwj48QqgjBu3+KcmrG6BF
+        tgDZdzWy8HGhiFPJlaxYYZ5anBOzE9HMQygbU83QT1e43jkBnPAD7HcogvKoc2+b53rEKwMvOreOU
+        OOLbjebilMZkMlJvKdwRXQvHiHep3YFu1uvPsFY4o1i05lX2KZHDwU7sDB5DNuVCBe3p6zIeIuDCN
+        k8dDbSIsj18Dt1YOip9Zg7REZLJwjWp6vq5FJLkvE+6tTn/2eO2PsBke64aLVx2axv/lo6R+WpIOg
+        FnWJKmAxpxrKl2p2qnv0NEGxE+uM56OaQjbTe3rkobbGQMJMyasO+KjyONE+ed0DAP9xodyqodwG5
+        iqi7+LYA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33266 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pgtsR-003YhS-1Z
+        for linux-kernel@vger.kernel.org;
+        Mon, 27 Mar 2023 14:55:39 -0600
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Ron Economos <re@w6rz.net>
+Subject: Bug in recent changes to builddeb
+Message-ID: <54a519ec-bfe5-60f3-fc43-707a11d38d2a@w6rz.net>
+Date:   Mon, 27 Mar 2023 13:55:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pgtsR-003YhS-1Z
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:33266
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace open coded CPU nodes reading of "reg" and translation to logical
-ID with of_cpu_node_to_id().
+Looks like there's a bug in /scripts/package/builddeb. On lines 188, 197 
+and 198, the variable $version is used. However, it's not defined 
+(removed with recent changes).
 
-The original code called of_parse_phandle() CONFIG_NR_CPUS times
-regardless of the length of 'cpus'. Optimize the loop to bail out once
-of_parse_phandle() fails as the end of 'cpus' property has been reached.
+This causes the headers to be put into /usr/src/linux-headers-. When the 
+next version is attempted to be installed, the following error occurs.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-v2:
- - Optimize the number of loop iterations
----
- arch/arm/mach-shmobile/platsmp-apmu.c | 36 ++++++++++++---------------
- 1 file changed, 16 insertions(+), 20 deletions(-)
-
-diff --git a/arch/arm/mach-shmobile/platsmp-apmu.c b/arch/arm/mach-shmobile/platsmp-apmu.c
-index e771ce70e132..ec6f421c0f4d 100644
---- a/arch/arm/mach-shmobile/platsmp-apmu.c
-+++ b/arch/arm/mach-shmobile/platsmp-apmu.c
-@@ -10,6 +10,7 @@
- #include <linux/init.h>
- #include <linux/io.h>
- #include <linux/ioport.h>
-+#include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/smp.h>
- #include <linux/suspend.h>
-@@ -210,7 +211,6 @@ static void apmu_parse_dt(void (*fn)(struct resource *res, int cpu, int bit))
- 	struct device_node *np_apmu, *np_cpu;
- 	struct resource res;
- 	int bit, index;
--	u32 id;
- 
- 	for_each_matching_node(np_apmu, apmu_ids) {
- 		/* only enable the cluster that includes the boot CPU */
-@@ -218,33 +218,29 @@ static void apmu_parse_dt(void (*fn)(struct resource *res, int cpu, int bit))
- 
- 		for (bit = 0; bit < CONFIG_NR_CPUS; bit++) {
- 			np_cpu = of_parse_phandle(np_apmu, "cpus", bit);
--			if (np_cpu) {
--				if (!of_property_read_u32(np_cpu, "reg", &id)) {
--					if (id == cpu_logical_map(0)) {
--						is_allowed = true;
--						of_node_put(np_cpu);
--						break;
--					}
--
--				}
-+			if (!np_cpu)
-+				break;
-+			if (of_cpu_node_to_id(np_cpu) == 0) {
-+				is_allowed = true;
- 				of_node_put(np_cpu);
-+				break;
- 			}
-+			of_node_put(np_cpu);
- 		}
- 		if (!is_allowed)
- 			continue;
- 
- 		for (bit = 0; bit < CONFIG_NR_CPUS; bit++) {
- 			np_cpu = of_parse_phandle(np_apmu, "cpus", bit);
--			if (np_cpu) {
--				if (!of_property_read_u32(np_cpu, "reg", &id)) {
--					index = get_logical_index(id);
--					if ((index >= 0) &&
--					    !of_address_to_resource(np_apmu,
--								    0, &res))
--						fn(&res, index, bit);
--				}
--				of_node_put(np_cpu);
--			}
-+			if (!np_cpu)
-+				break;
-+
-+			index = of_cpu_node_to_id(np_cpu);
-+			if ((index >= 0) &&
-+			    !of_address_to_resource(np_apmu, 0, &res))
-+				fn(&res, index, bit);
-+
-+			of_node_put(np_cpu);
- 		}
- 	}
- }
--- 
-2.39.2
+$ sudo dpkg -i linux-headers-6.3.0-rc4_6.3.0-rc4-2_riscv64.deb
+Selecting previously unselected package linux-headers-6.3.0-rc4.
+(Reading database ... 376925 files and directories currently installed.)
+Preparing to unpack linux-headers-6.3.0-rc4_6.3.0-rc4-2_riscv64.deb ...
+Unpacking linux-headers-6.3.0-rc4 (6.3.0-rc4-2) ...
+dpkg: error processing archive 
+linux-headers-6.3.0-rc4_6.3.0-rc4-2_riscv64.deb (--install):
+  trying to overwrite '/usr/src/linux-headers-/.config', which is also 
+in package linux-headers-6.3.0-rc3 6.3.0-rc3-4
+dpkg-deb: error: paste subprocess was killed by signal (Broken pipe)
+Errors were encountered while processing:
+  linux-headers-6.3.0-rc4_6.3.0-rc4-2_riscv64.deb
 
