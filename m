@@ -2,112 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0256CAC50
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F646CAC59
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbjC0RxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 13:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
+        id S232301AbjC0RyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 13:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbjC0RxE (ORCPT
+        with ESMTP id S232282AbjC0RyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:53:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADF2170A;
-        Mon, 27 Mar 2023 10:52:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 27 Mar 2023 13:54:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6E91FE1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:53:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679939599;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Mus5kY1LYOsh4mZlEdqt0v1q9KUGRFm/L2rsuQRkD/A=;
+        b=P69RtX0t3i2jSHSwY3ReaMbARkKuyEefVqiV1FePbTkJjql3fYL3g5ponMEbfZXhw4Nlq5
+        XTXsX6X570t92BKWS16JWo3srmgQw+WnKZxz37jaDX3xljp9tICKzNfuTGq6kD2AlLDX6f
+        Un6Fz7BxpNL0LvfaiBpERZH0xBMxqs4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-346-1HLjWklUPFaS-4lA-Zq6XA-1; Mon, 27 Mar 2023 13:53:16 -0400
+X-MC-Unique: 1HLjWklUPFaS-4lA-Zq6XA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F159E61460;
-        Mon, 27 Mar 2023 17:52:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AABAC433EF;
-        Mon, 27 Mar 2023 17:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679939578;
-        bh=YUjw6HS7Ov0YlFJ936LcRdxbHpWylAOUWlXSpvo0Xus=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T1MN3jBV0gb+UwCkF0T7VQ2Ufwhk5sPD+iei9Q9lOdNqlJoDm/Jo6HfJgg4rwrgW0
-         GI1bYD1pNH+oxApvz0AbaIniEKaVLTOSgflI6HGGB2+wNb5tViDNcxVNYJGbdAazK1
-         1mgRzjxvV23vJ/1IxjAInTfWzvNPo90/vLbV+jFu0KxC+ZQ+SInWb2AwBgiVdZ3GB3
-         z0C7NOxbWq5xKDXm65qsQymYFsNwMWWtGmrHUJ0IwlHktznE5yQs33J+z9Yx+IMS6F
-         2zVBD3c6pn6GsiooTVy02KA/pWscHe3Bs1X9n0HXD753oNUjN7TQS267UNSbWk2TZN
-         F1OfRaOGTSjMQ==
-Date:   Mon, 27 Mar 2023 10:52:55 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v4 2/7] dt-bindings: mmc: sdhci-msm: Add ICE phandle
-Message-ID: <20230327175255.GB1882@sol.localdomain>
-References: <20230327134734.3256974-1-abel.vesa@linaro.org>
- <20230327134734.3256974-3-abel.vesa@linaro.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E39AD884EC4;
+        Mon, 27 Mar 2023 17:53:15 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B1628404DC4F;
+        Mon, 27 Mar 2023 17:53:15 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, maz@kernel.org,
+        oliver.upton@linux.dev, apatel@ventanamicro.com
+Subject: [GIT PULL] Non-x86 KVM fixes for Linux 6.3-rc5
+Date:   Mon, 27 Mar 2023 13:53:15 -0400
+Message-Id: <20230327175315.3763370-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327134734.3256974-3-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 04:47:29PM +0300, Abel Vesa wrote:
-> Starting with SM8550, the ICE will have its own devicetree node
-> so add the qcom,ice property to reference it.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> 
-> The v3 (RFC) is here:
-> https://lore.kernel.org/all/20230313115202.3960700-3-abel.vesa@linaro.org/
-> 
-> Changes since v3:
->  * dropped the "and drop core clock" part from subject line
-> 
-> Changes since v2:
->  * dropped all changes except the qcom,ice property
-> 
->  Documentation/devicetree/bindings/mmc/sdhci-msm.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-> index 64df6919abaf..0ad14d5b722e 100644
-> --- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-> @@ -120,6 +120,10 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      description: platform specific settings for DLL_CONFIG reg.
->  
-> +  qcom,ice:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: phandle to the Inline Crypto Engine node
-> +
+Linus,
 
-It would be helpful if the description was more detailed and explained that this
-is a replacement for the directly specified reg and clock.
+The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
 
-Otherwise, looks good to me.
+  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
 
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+are available in the Git repository at:
 
-- Eric
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+
+for you to fetch changes up to 9e347ba03029e10e6405f8c3a7a91a5597943ed9:
+
+  Merge tag 'kvm-riscv-fixes-6.3-1' of https://github.com/kvm-riscv/linux into HEAD (2023-03-27 10:04:07 -0400)
+
+There are also some pending x86 changes will come later this week.
+
+----------------------------------------------------------------
+RISC-V:
+
+* Fix VM hang in case of timer delta being zero
+
+ARM:
+
+* Fixes for the MMU:
+
+  * Read the MMU notifier seq before dropping the mmap lock to guard
+    against reading a potentially stale VMA
+
+  * Disable interrupts when walking user page tables to protect against
+    the page table being freed
+
+  * Read the MTE permissions for the VMA within the mmap lock critical
+    section, avoiding the use of a potentally stale VMA pointer
+
+* Fixes for the vPMU:
+
+  * Return the sum of the current perf event value and PMC snapshot for
+    reads from userspace
+
+  * Don't save the value of guest writes to PMCR_EL0.{C,P}, which could
+    otherwise lead to userspace erroneously resetting the vPMU during VM
+    save/restore
+
+----------------------------------------------------------------
+David Matlack (1):
+      KVM: arm64: Retry fault if vma_lookup() results become invalid
+
+Marc Zyngier (2):
+      KVM: arm64: Disable interrupts while walking userspace PTs
+      KVM: arm64: Check for kvm_vma_mte_allowed in the critical section
+
+Paolo Bonzini (2):
+      Merge tag 'kvmarm-fixes-6.3-2' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+      Merge tag 'kvm-riscv-fixes-6.3-1' of https://github.com/kvm-riscv/linux into HEAD
+
+Rajnesh Kanwal (1):
+      riscv/kvm: Fix VM hang in case of timer delta being zero.
+
+Reiji Watanabe (2):
+      KVM: arm64: PMU: Fix GET_ONE_REG for vPMC regs to return the current value
+      KVM: arm64: PMU: Don't save PMCR_EL0.{C,P} for the vCPU
+
+ arch/arm64/kvm/mmu.c        | 99 +++++++++++++++++++++++++++++----------------
+ arch/arm64/kvm/pmu-emul.c   |  3 +-
+ arch/arm64/kvm/sys_regs.c   | 21 +++++++++-
+ arch/riscv/kvm/vcpu_timer.c |  6 +--
+ 4 files changed, 87 insertions(+), 42 deletions(-)
+
