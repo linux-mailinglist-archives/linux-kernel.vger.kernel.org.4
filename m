@@ -2,169 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131F86CA3F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE016CA3F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232701AbjC0MWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
+        id S232823AbjC0MX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232713AbjC0MWc (ORCPT
+        with ESMTP id S232548AbjC0MXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:22:32 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on20623.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::623])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288B85FD5;
-        Mon, 27 Mar 2023 05:21:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nlB4pSXYTulqRP/QQKjkc/qh/t2t/KwbTTipiPWpJ40djc+tnMcJCCmm4E6ube4+0vnK0YdEyN6yT2I1jp6EMA02cflz1XYnpcn1VgNwFMehOQ6gxBNBRRLeUoEuzi/QWpAybbfKWYs1iHxcA7DK+1ZM35k+jtAwqLr9+Uf3P/4TZepi5Ke4E7mjF0WVjd3zNGglKxMSs80YnNwlCYHya1Z2RgatdQn6orG0kF1mfxyNOb8DgsU6zIRXsj7OvnIxfkKKnDEesdhfP5+SqbwHI+891i99kQtlc1RV7OtWHekzhkcAelY9CqT6uRqCFkEpiZ+TBTpDx4mQuEs85NUbMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/RvoqEsq6LK5XQhi6FAINqm3GjS0WHVVhPcBXQwK1eo=;
- b=HnC3kmbz5/53waEhdbF6EtcLtL/c6o8Jq+XERgB93Ft8H15+u47tCrAMgg9kCBXpHVCiMfmSwl41xF6XCDnq9vvMU+QK18tNcic+PP6IAWZGaIETH31XXClxNv53F7lnSm5mxPRsjVtLSNqfwyKV+NGrWq1BneKGNYPN6jPJ+sUchmk7M3RUa4xKk6D3m8iwf8SNWwvjVfqWvjP40tLfcRBdPrZZwgfpSTe12qWhKpwM396G0Bk/nsWWZ5JZTv1ThjmyWUFLXQJcBDu3DNCiBIw4uHxrAM/gaQ82PFfUtZGbl5suefkkG/fsho0DFX9Zbql+i6n8Eti176CfF4r0MQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/RvoqEsq6LK5XQhi6FAINqm3GjS0WHVVhPcBXQwK1eo=;
- b=lmXJZnC//7f1rOe5PjiSRdclSRSJxhJO2DGJPWD+FadPK5dYSQuePkTm2biYhGxmgipgERw7+VZWyU4kY+ozrjmsehvPdzOCfSdu1+GQXoVFWq3uGHzEdMB5YvutFal+EVztvDp3MvGAD1XuSX0irPz1RTSbocEgUcc/xew1eMY=
-Received: from MN2PR16CA0056.namprd16.prod.outlook.com (2603:10b6:208:234::25)
- by CY5PR12MB6347.namprd12.prod.outlook.com (2603:10b6:930:20::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 27 Mar
- 2023 12:21:02 +0000
-Received: from BL02EPF0000C404.namprd05.prod.outlook.com
- (2603:10b6:208:234:cafe::7b) by MN2PR16CA0056.outlook.office365.com
- (2603:10b6:208:234::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.43 via Frontend
- Transport; Mon, 27 Mar 2023 12:21:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0000C404.mail.protection.outlook.com (10.167.241.6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6178.30 via Frontend Transport; Mon, 27 Mar 2023 12:21:01 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 27 Mar
- 2023 07:20:59 -0500
-From:   Nava kishore Manne <nava.kishore.manne@amd.com>
-To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
-        <trix@redhat.com>, <michal.simek@xilinx.com>,
-        <linux-fpga@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] fpga: zynq: Add parse_header ops support
-Date:   Mon, 27 Mar 2023 17:50:57 +0530
-Message-ID: <20230327122057.205123-1-nava.kishore.manne@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 27 Mar 2023 08:23:08 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C102E65AB
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:22:22 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id cn12so35406192edb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:22:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679919741;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EzcyCIFG4peg2Ww15uJJ3yrB4ucDFkS9kgu5aS0qaCA=;
+        b=OeLzruwP9GLcp39m617tUG87vVomI1TznaxtZiaTiuU6a0rqWHMFmN95zDJkYYGb6r
+         AEDRoSB69YYCzQCwbgk1q3CrbkMH2S+vwUqI2g281YZf2vQ4Zjqg3QmE7SG7D5i0yzFP
+         fjCQwrxiBezH3qX7aMIK4pHtj2SLuVhRA6x6k+sjStVjwUxASkP7Mqw3pUoU6/oS5BoI
+         vAItJh0NKmgKr8RE+CritAAmsa4Hrv2T9mHT+b+IwMCYyVXmLi4Wz4FeoGkeGSDjHESA
+         q5kSUOImgCh25bpPbCZQwvCFf+SiogH3ryfGFKW+6dr+g4zmLFAGauLUTdtBC/KPFc5w
+         Vjjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679919741;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EzcyCIFG4peg2Ww15uJJ3yrB4ucDFkS9kgu5aS0qaCA=;
+        b=Zw43wrEVZJIL3m+lVN5f3LB/nyABobNxSrcQNwZhcSG1qDN7XuYMff3nioO1KSw5OG
+         sQhQEQhni0lZysUgOb3M+9Rzag4PEea1UiamXsPnKSTGZU6OcnnOevExIk4AkqFiVo9g
+         rGNID0FsigDwcUA2Mic4QJtbsJ76YdxIAJ/X8xgwYN/VpfJArheCgiuEoqULf5ZoWi0m
+         tom7usFbR2Ra3vTX9ba5rJaV3K7m97zxKSnJCqn6I6pZP4eyOHXTpMwVUJhSVuwjWyRr
+         N1uC1Kp6h0k6ihC7iyGtZT3Z448PzJD7Gtc/yYr+9i/3mATQsyzeRUOH1i5XGrWMmsFJ
+         yHDA==
+X-Gm-Message-State: AAQBX9d7BZlAu+7kL+7B4bOScR3zikmaa+wqtuhgJOaQyARpwDqjRe6o
+        MfgUlCLe8uQJ6b6lpCbT/Wiusw==
+X-Google-Smtp-Source: AKy350b5C4pJiIvUzsrA9B/KVMoGz4SHnz6GuLSmUzJvLb+RSOf6DPNrMtcyeFZKWBqPQbO5n22qeQ==
+X-Received: by 2002:a05:6402:d7:b0:501:c4e3:9914 with SMTP id i23-20020a05640200d700b00501c4e39914mr11017861edu.33.1679919741277;
+        Mon, 27 Mar 2023 05:22:21 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:581e:789c:7616:5ee? ([2a02:810d:15c0:828:581e:789c:7616:5ee])
+        by smtp.gmail.com with ESMTPSA id n7-20020a509347000000b005023ddb37eesm2312482eda.8.2023.03.27.05.22.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 05:22:20 -0700 (PDT)
+Message-ID: <44904ffc-83d4-1137-3479-737a81b31d16@linaro.org>
+Date:   Mon, 27 Mar 2023 14:22:19 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: misc: qcom,fastrpc: add
+ qcom,assign-all-memory property
+Content-Language: en-US
+To:     Dylan Van Assche <me@dylanvanassche.be>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230325134410.21092-1-me@dylanvanassche.be>
+ <20230325134410.21092-2-me@dylanvanassche.be>
+ <883c3c48-c6e5-556d-431f-e92592b9106a@linaro.org>
+ <b75b92bf64b55ba0ace0fbff65955c838a294dec.camel@dylanvanassche.be>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b75b92bf64b55ba0ace0fbff65955c838a294dec.camel@dylanvanassche.be>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000C404:EE_|CY5PR12MB6347:EE_
-X-MS-Office365-Filtering-Correlation-Id: 89e24ef1-bf6e-4935-6f48-08db2ebdba7e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: chUClJwsCGg+34cvVUJFwMdOPrGixkOOMj2TwdFLDYSkq3cFWyjhhYRiADjqnXXFTxkq6otFFBDSt/0UEGTLnfG2EvwUHhH1FhIN/2NDWgc6PXdqpZAgYJsYHl/CNSRDOxO2OaGE4puw56PxLP3VALvIfkfNElEodjTzwAPaRsHQCB1C2qAiLDlQE50v0R2Y5wvrc9HeqowTfYGuVOydu9mz8RkjMh5b5jygJ+G117WOg0XWVh32RXKmzBwiAkRgy9pUHwU15vH64FxGBTNsASJE8udBKmu3KzYZawRSWpAj3IK4rYWk7WVq2hD7FtzGTGrugZ+Be/9WRcdOZFtZJaYozor0KvzZifrXjUK5fG7Bm0qq6WN3u8NLLYHd0yIbDsabCOTf0/cZUWgdI+5Esc/Y09a7B04agzzDYHLbrAU/BsPtRsIrv7rqtNm6LusgVKkRhLWHnj8STHI3661RCQvUaa3XqOwSK+MC/otPxpjkmF7zF4CiJEw4nlTEQ9uTFJuUACs5S0L5b/9rPgqO9tlV/w6On8q8KFQ+inOeiwvqSF/hS4T6bYAwzOi09si/l9jQSMI7IytIt3lDOFfnbsLxRNzhgVM9cIA52u+t3fQiWtNAsOUeZq3U5LzLwYrwE4S3j1L6kZxcetIR7R41IBHb3IKNDDDo6zI+1sZX8mCpDPBbQ4MMkPRDVu1YAaaB1jdq0taJVPjv6n96OWH/IMQfCPOkokJlUUsvvaks4TQkF2xximdoNwj5ndN8K5Gx
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199021)(36840700001)(46966006)(40470700004)(336012)(83380400001)(82310400005)(8936002)(8676002)(426003)(478600001)(47076005)(86362001)(2906002)(26005)(103116003)(81166007)(40460700003)(186003)(16526019)(36756003)(70206006)(2616005)(82740400003)(1076003)(36860700001)(70586007)(40480700001)(356005)(5660300002)(41300700001)(110136005)(316002)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 12:21:01.5133
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89e24ef1-bf6e-4935-6f48-08db2ebdba7e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000C404.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6347
-X-Spam-Status: No, score=1.3 required=5.0 tests=AC_FROM_MANY_DOTS,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit 3cc624beba63 ("fpga: fpga-mgr: support bitstream offset in
-image buffer") added a new parse_header ops to handle the header related
-stuff in the fpga framework. So moved the header validation logic from
-write_init() to parse_header().
+On 27/03/2023 13:37, Dylan Van Assche wrote:
+> Hi Krzysztof,
+> 
+> On Sun, 2023-03-26 at 10:55 +0200, Krzysztof Kozlowski wrote:
+>> On 25/03/2023 14:44, Dylan Van Assche wrote:
+>>> Document the added qcom,assign-all-memory in devicetree bindings.
+>>>
+>>> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
+>>> ---
+>>>  Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml | 6
+>>> ++++++
+>>>  1 file changed, 6 insertions(+)
+>>>
+>>> diff --git
+>>> a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+>>> b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+>>> index 1ab9588cdd89..fa5b00534b30 100644
+>>> --- a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+>>> +++ b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+>>> @@ -57,6 +57,12 @@ properties:
+>>>        Virtual machine IDs for remote processor.
+>>>      $ref: "/schemas/types.yaml#/definitions/uint32-array"
+>>>  
+>>> +  qcom,assign-all-mem:
+>>> +    description:
+>>> +      Assign memory to all Virtual machines defined by qcom,vmids.
+>>
+>> This (neither commit msg) does not explain why this is needed and
+>> actually does not sound like hardware-related property.
+> 
+> This is made a separate property to toggle different behavior in the
+> driver if it is needed for some FastRPC nodes. 
 
-Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
----
-Changes for v2:
-              - Limit the sync pattern validation size to header_size
-                as suggested Yilun.
+Bindings are not for driver behavior.
 
-Changes for v3:
-              - zynq_fpga_has_sync () API is expecting "u8 *". So type cast
-                formal parameter "const char *" to "u8 *".
+> Downstream does guard
+> this with a property 'restrict-access' as well, see [1] for a random
+> SDM845 downstream kernel. On SDM845, this property is not present, thus
+> the IF block runs. On SDM670, this property is present, then the IF
+> block is skipped. That's why I opt for this property to have this
+> behaviour conditionally. I'm not sure how to explain it better though.
 
- drivers/fpga/zynq-fpga.c | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
+Still you described driver... Please come with something more hardware
+related.
 
-diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-index ae0da361e6c6..a6096f0c93fc 100644
---- a/drivers/fpga/zynq-fpga.c
-+++ b/drivers/fpga/zynq-fpga.c
-@@ -248,6 +248,21 @@ static bool zynq_fpga_has_sync(const u8 *buf, size_t count)
- 	return false;
- }
- 
-+static int zynq_fpga_ops_parse_header(struct fpga_manager *mgr,
-+				      struct fpga_image_info *info,
-+				      const char *buf, size_t count)
-+{
-+	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
-+		if (!zynq_fpga_has_sync((u8 *)buf, info->header_size)) {
-+			dev_err(&mgr->dev,
-+				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
-+			return -EINVAL;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
- 				    struct fpga_image_info *info,
- 				    const char *buf, size_t count)
-@@ -275,13 +290,6 @@ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
- 
- 	/* don't globally reset PL if we're doing partial reconfig */
- 	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
--		if (!zynq_fpga_has_sync(buf, count)) {
--			dev_err(&mgr->dev,
--				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
--			err = -EINVAL;
--			goto out_err;
--		}
--
- 		/* assert AXI interface resets */
- 		regmap_write(priv->slcr, SLCR_FPGA_RST_CTRL_OFFSET,
- 			     FPGA_RST_ALL_MASK);
-@@ -545,6 +553,7 @@ static enum fpga_mgr_states zynq_fpga_ops_state(struct fpga_manager *mgr)
- static const struct fpga_manager_ops zynq_fpga_ops = {
- 	.initial_header_size = 128,
- 	.state = zynq_fpga_ops_state,
-+	.parse_header = zynq_fpga_ops_parse_header,
- 	.write_init = zynq_fpga_ops_write_init,
- 	.write_sg = zynq_fpga_ops_write,
- 	.write_complete = zynq_fpga_ops_write_complete,
--- 
-2.25.1
+Best regards,
+Krzysztof
 
