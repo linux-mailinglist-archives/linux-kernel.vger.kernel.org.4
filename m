@@ -2,139 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5086C9F35
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6212E6C9F37
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233199AbjC0JRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
+        id S232529AbjC0JTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233200AbjC0JRp (ORCPT
+        with ESMTP id S231196AbjC0JTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:17:45 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9084225
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:17:41 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso11165059pjb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:17:41 -0700 (PDT)
+        Mon, 27 Mar 2023 05:19:44 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4977210D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:19:43 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id ix20so7815431plb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:19:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679908661;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8mIlFqMV9d89wi6csnHS/oc3l29TOANOLwnVmh6EklU=;
-        b=m5lY8QxQZ0em7HwJf6c7V0l86IAttwNQyyrz33Gj9g1k695EpGA05fmdEXooiLdb9V
-         r7mpONYjf+xdXc07BZjllghmFhDQN2YUi2X2WbA+dfW92OYxQKg4uu9KNCYkN9XLIX+i
-         TxkWJKFR8taGG2jL3/VMcGhjbupRMyxt/nIMii4iQQZBxwwYgHrb0avPzZvaQSVFrGWz
-         ++JH8qzyDuigY/E/S4SnhnqQkUcqRn3L3tSFURzIUDbMlKNsCbBP90ll7CbN8ek8GVYe
-         TDfAY6AX+DayqKsF0DNdaswkD2Y0SBGpsV/uf+pLNmBc2VF8WqwIkEfd/3NXwmT22Pe+
-         qgqw==
+        d=gmail.com; s=20210112; t=1679908783;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MolT2QPdAbhjDzQm/bW+5V6BH1+c0GF0g3SrhCKOHKA=;
+        b=boRoJxiiePoGdvCdmLREQ2NLCH36s3EUqVN2C4z3pHpi2IMY1rNwF3xF9j5nRnX7f5
+         X48jP+jdwaaqDx2cfgHf2l4uqfdiyS9Lkde22dpHeo4YrW1tJZ/UbEEeKO0wtx2KHOxp
+         DJgAmRZopRrJipcFLG+Fm4XzFOKm3OaxoGsbQ+JCkZOgyYFm5+4aEn2wD9Z1NWS0j95V
+         b79qk+KIyXC/3wUAb4mU66z7+ITZSbGtUUZjYAr9zYHqSb1/xCseFLUN2ENHQbS/q2uV
+         UnKOtdbaKzt7byVriYPnFaUQ12Xr8w+szmnTtx7Tomp+Z4J6m3CW/kMotsmVikxkv7kH
+         MD7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679908661;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8mIlFqMV9d89wi6csnHS/oc3l29TOANOLwnVmh6EklU=;
-        b=qYGqgVRTSa84D953WDAcd+tUE4efZOtv2estUsTyx3DkazUDswiO+S6y1IicgoXYdn
-         DTMolcqxMhkFvNZzG6TEv+fa+Di/wBFeCK2Cd9ZDDXTwB7+Ekwg816a1dPqysJB4aqtB
-         YOMQj70wfvJPbJaRwyooA30CK8I8luHeoYH41LVwG5GvpivxCSE7JeRQ9se6nn5Onm5f
-         KUsiUzo/jKokO/yioUgMNbExPlQLCgzb/e89SCpKN0MXUzfu4n0ZmbaR1GjPMU6KgRgp
-         o/YvS5qDRWtTep1jJt12cGf0rSFH7jgQYoZX2DaRp1NLLb3SYusfOtYFUiCJvJsXcpN9
-         aaAw==
-X-Gm-Message-State: AAQBX9cAErFoAE3Z/6duOMmVo63btnpcD3EB8Wy3P+jnaJ6VjOFhcL3y
-        BHQxpOAdR7Icml3+F3zjEyK/
-X-Google-Smtp-Source: AKy350ZKV1z8I1+zYZBVU06068fGT+zSUq84NLAwH3mY5YDa0HpOY6nq35oIOGrwdWbz7qEnib0TmQ==
-X-Received: by 2002:a17:90b:1c88:b0:234:28ac:ec4a with SMTP id oo8-20020a17090b1c8800b0023428acec4amr12338314pjb.2.1679908661023;
-        Mon, 27 Mar 2023 02:17:41 -0700 (PDT)
-Received: from thinkpad ([117.217.184.83])
-        by smtp.gmail.com with ESMTPSA id nm13-20020a17090b19cd00b00231227781d5sm4053560pjb.2.2023.03.27.02.17.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 02:17:40 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 14:47:33 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
-        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/5] usb: dwc3: qcom: Allow runtime PM
-Message-ID: <20230327091733.GA14584@thinkpad>
-References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
- <cc7392c1-0ea1-29b3-fab6-19c843413724@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cc7392c1-0ea1-29b3-fab6-19c843413724@linaro.org>
+        d=1e100.net; s=20210112; t=1679908783;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MolT2QPdAbhjDzQm/bW+5V6BH1+c0GF0g3SrhCKOHKA=;
+        b=iAg3GCt0yaEf+/kk8Ms+JE59MzBHX50MXj5JDLqhcBjsPTyGlw0M0GLY8F4Z7GckAu
+         EBGIEDuwg0A6E9vvRYqZI+Y/zZ7RSm7T3mXm3WRUFvwx2ko3bHvRol4Q09kqH9136i6i
+         A0AZZQ+i2Ki+JSTbSz+xirC/S8AoVTxoduWeeJIRgy8BuLxQm4kY3m3b6kEvBxovT/u/
+         FFBtd3lhiNp/qj+mG2OX4xpcEdgKLdpHeJSV7vlj8u6aCKJhg8KxYY1dzwf63/z0/h8u
+         41H3chZRybcQbLjW/myp8eUXGxFmYxm+ImtIrErjFL9KvWZJot5W1GGirEmz4nLm4FsM
+         7YVw==
+X-Gm-Message-State: AAQBX9e749gb+eIX6QjowMm7K0E4LaGnMXU0OJ+9H3jIIIm4OKKfW7lx
+        aPcd8kI0qgE+6tJCri6DQHw=
+X-Google-Smtp-Source: AKy350bpkiTIiYJBIh+3Ol7ZsDC9NV9ZozK01FgEoyh5sLZVnBmFIhW1jprtAsU+csyCO4WtXMytFQ==
+X-Received: by 2002:a17:903:41c8:b0:1a0:57df:864f with SMTP id u8-20020a17090341c800b001a057df864fmr12018706ple.16.1679908783211;
+        Mon, 27 Mar 2023 02:19:43 -0700 (PDT)
+Received: from localhost ([203.221.180.225])
+        by smtp.gmail.com with ESMTPSA id jm18-20020a17090304d200b001888cadf8f6sm18629720plb.49.2023.03.27.02.19.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 02:19:42 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 27 Mar 2023 19:19:37 +1000
+Message-Id: <CRH1YM72SK4L.QU56WGVQQ2GE@bobo>
+Cc:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] arch/powerpc/kvm: kvmppc_hv_entry: remove
+ .global scope
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Kautuk Consul" <kconsul@linux.vnet.ibm.com>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Fabiano Rosas" <farosas@linux.ibm.com>,
+        "Sathvika Vasireddy" <sv@linux.ibm.com>,
+        "Alexey Kardashevskiy" <aik@ozlabs.ru>
+X-Mailer: aerc 0.13.0
+References: <20230316051025.1424093-1-kconsul@linux.vnet.ibm.com>
+ <20230316051025.1424093-2-kconsul@linux.vnet.ibm.com>
+In-Reply-To: <20230316051025.1424093-2-kconsul@linux.vnet.ibm.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 11:01:35AM +0200, Konrad Dybcio wrote:
-> 
-> 
-> On 25.03.2023 17:52, Manivannan Sadhasivam wrote:
-> > Hi,
-> > 
-> > This series allows the dwc3-qcom driver to do runtime PM itself without
-> > userspace intervention. Still, userspace is required to enable runtime PM
-> > for dwc3 glue and xhci drivers as we cannot enable runtime PM for them.
-> > But this series avoids one more additional step.
-> What sort of 'userspace intervention' are we talking about?
-> echo mem > /sys/power/state?
-> 
+On Thu Mar 16, 2023 at 3:10 PM AEST, Kautuk Consul wrote:
+> kvmppc_hv_entry isn't called from anywhere other than
+> book3s_hv_rmhandlers.S itself. Removing .global scope for
+> this function and annotating it with SYM_INNER_LABEL.
+>
+> Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
+> ---
+>  arch/powerpc/kvm/book3s_hv_rmhandlers.S | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/b=
+ook3s_hv_rmhandlers.S
+> index acf80915f406..b81ba4ee0521 100644
+> --- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> +++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> @@ -502,8 +502,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
+>   *                                                                      =
+      *
+>   ***********************************************************************=
+******/
+> =20
+> -.global kvmppc_hv_entry
 
-I forgot to add that bit:
+I think this is okay.
 
-echo auto > /sys/devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/power/control
-echo auto > /sys/devices/platform/soc@0/a8f8800.usb/a800000.usb/power/control
+> -kvmppc_hv_entry:
+> +SYM_INNER_LABEL(kvmppc_hv_entry, SYM_L_LOCAL)
 
-You need to set "auto" for the runtime control for both xhci and dwc drivers.
+The documentation for SYM_INNER_LABEL says it for labels inside a SYM
+function block, is that a problem? This is a function but doesn't have
+C calling convention, so asm annotation docs say that it should use
+SYM_CODE_START_LOCAL?
 
-Then if you don't connect a usb device, all 3 drivers (dwc3-qcom, dwc3, and
-xhci) will become runtime suspended after a delay of 5s (default delay).
-
-This can be confirmed by:
-
-cat /sys/devices/platform/soc@0/a8f8800.usb/power/runtime_status
-
-After connecting a usb device, they will all become "active".
+BTW. why don't our _GLOBAL() macros use these SYM annotations? I haven't
+really looked into them.
 
 Thanks,
-Mani
-
-> Konrad
-> > 
-> > While enabling runtime PM, I noticed that the xhci driver suspends before
-> > catching the xhci interrupts during resume. This ended up deferring the
-> > device enumeration for some time. So I included a patch adding autosuspend
-> > delay of 200ms to the xhci driver. With this delay, usb enumeration happens
-> > properly.
-> > 
-> > This series has been tested on SC8280XP-CRD and RB5 devices.
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > Manivannan Sadhasivam (5):
-> >   arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
-> >   xhci: host: Use 200ms autosuspend delay for runtime suspend
-> >   usb: dwc3: qcom: Fix null ptr access during runtime_suspend()
-> >   usb: dwc3: qcom: Clear pending interrupt before enabling wake
-> >     interrupt
-> >   usb: dwc3: qcom: Allow runtime PM
-> > 
-> >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
-> >  drivers/usb/dwc3/dwc3-qcom.c           | 13 +++++++++----
-> >  drivers/usb/host/xhci-plat.c           |  2 ++
-> >  3 files changed, 25 insertions(+), 4 deletions(-)
-> > 
-
--- 
-மணிவண்ணன் சதாசிவம்
+Nick
