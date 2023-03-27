@@ -2,106 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275B76CAA69
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFABA6CAA68
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbjC0QTw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 12:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
+        id S232231AbjC0QTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 12:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbjC0QTZ (ORCPT
+        with ESMTP id S232477AbjC0QTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:19:25 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EEC199A
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:18:59 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id er18so27239354edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:18:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679933916;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=heYbHNQfEN7S9sOX/eUUSP2pPGVNkRdC0D6uHjeWTDU=;
-        b=o0FI8qX6QVx750uqe0WtjRk5hXXdQQHoOy4mj4KXEg+Gs/bBWGdiQBb8y7IL8RYNJn
-         BgT/5aDvnvvvx75nqOErt/A5d1q8hlrA1CgJFw1BQ8xxgF50MlS7OnG2hBIH96vwb4Qm
-         XOgxENr+rfA5Nq86+ThbnB/EE2sNpYwtdJ8UEjqTNFx2Wq7Z5ZRUIdruSz6MVn8RirEA
-         3XQLK85qHqbDndOlpVIeOw4hO2we/6sYXKKkeNZTOoN8EJD4t2rQzzUHD7QzcaFkn7rg
-         Q2sVC3HQhDV1iVsPxhCp2HeNf10MJD9T/+fLFL+lAVgjRAzWj+vRtbg0oh+sMBBKwQH+
-         CB+Q==
-X-Gm-Message-State: AAQBX9dmdQqguOxnufQeqqfaQmyqx+jmq4wCO3nMYG2P/eKxaUWLbb+h
-        OyHuW4fii1AbWMPn2f5idl5dpxFJlFZacQGFZVo=
-X-Google-Smtp-Source: AKy350akqV8OiIdtnx6tGUo9j+P2mzwsc0LofO121pXrdAYXGLjOJhjKr+Q/hPFIs28483L4N/lIBGsnc2gRhA4HzSI=
-X-Received: by 2002:a17:907:3e8b:b0:931:ce20:db6e with SMTP id
- hs11-20020a1709073e8b00b00931ce20db6emr6713871ejc.2.1679933916087; Mon, 27
- Mar 2023 09:18:36 -0700 (PDT)
+        Mon, 27 Mar 2023 12:19:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414E61998;
+        Mon, 27 Mar 2023 09:18:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A86BDB816D8;
+        Mon, 27 Mar 2023 16:18:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86974C433D2;
+        Mon, 27 Mar 2023 16:18:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679933933;
+        bh=vdqssHVignhvMODkXP8HH8VTKfr6z1MWWUoqltaO3Cc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qYTRjGZEBBXiXXfAOaZVoPNuFrTNI1Ijd/sAlIcF0ivsxiXPYqC8Jqu9JRZcqbQa/
+         8q1zUqogO4GXn5J+uYpXrtpARDsQttsg51Cyq2Am/ED+aZ2jFM95U9BAf7S2/PSd5W
+         FWv4JatvJakyZR+8hMV1gyOR9AKV6Y6gPF28KdbkekCmGiJlWJh4on8P+vBRloSmYq
+         MYQi7nRznGylJpSv2Lx3aB20I5xsrsErN8MlfzXjho3c23+Y6cbXtLtRzSiTCeQzUD
+         zB3BXHVE95K91O+jTp+bzBlp7JtbH19z/kNCW9FQooQ5banU8BuoUYEsvpgNpaFXQX
+         MEGWQsr3lD62Q==
+Date:   Mon, 27 Mar 2023 10:18:50 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Lukas Wunner <lukas@wunner.de>,
+        Aleksander Trofimowicz <alex@n90.eu>,
+        linux-pci@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [bugzilla-daemon@kernel.org: [Bug 217251] New: pciehp: nvme not
+ visible after re-insert to tbt port]
+Message-ID: <ZCHB6hXbCOxiZw+n@kbusch-mbp.dhcp.thefacebook.com>
+References: <20230327143359.GA2834753@bhelgaas>
 MIME-Version: 1.0
-References: <20230327160319.513974-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20230327160319.513974-1-gregkh@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 18:18:25 +0200
-Message-ID: <CAJZ5v0hZjCJK0JVQ431+CcnNSKebcunHFkMcgdYXVyPRSVwQ4A@mail.gmail.com>
-Subject: Re: [PATCH] driver core: move sysfs_dev_char_kobj out of class.h
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327143359.GA2834753@bhelgaas>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 6:03 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> The structure sysfs_dev_char_kobj is local only to the driver core code,
-> so move it out of the global class.h file and into the internal base.h
-> file as no one else should be touching this symbol.
+On Mon, Mar 27, 2023 at 09:33:59AM -0500, Bjorn Helgaas wrote:
+> Forwarding to NVMe folks, lists for visibility.
+> 
+> ----- Forwarded message from bugzilla-daemon@kernel.org -----
+> 
+> https://bugzilla.kernel.org/show_bug.cgi?id=217251
+> ...
+> 
+> Created attachment 304031
+>   --> https://bugzilla.kernel.org/attachment.cgi?id=304031&action=edit
+> the tracing of nvme_pci_enable() during re-insertion
+> 
+> Hi,
+> 
+> There is a JHL7540-based device that may host a NVMe device. After the first
+> insertion a nvme drive is properly discovered and handled by the relevant
+> modules. Once disconnected any further attempts are not successful. The device
+> is visible on a PCI bus, but nvme_pci_enable() ends up calling
+> pci_disable_device() every time; the runtime PM status of the device is
+> "suspended", the power status of the 04:01.0 PCI bridge is D3. Preventing the
+> device from being power managed ("on" -> /sys/devices/../power/control)
+> combined with device removal and pci rescan changes nothing. A host reboot
+> restores the initial state.
+> 
+> I would appreciate any suggestions how to debug it further.
 
-Good idea.
+Sounds the same as this report:
 
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  http://lists.infradead.org/pipermail/linux-nvme/2023-March/038259.html
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-
-> ---
->  drivers/base/base.h          | 3 +++
->  include/linux/device/class.h | 1 -
->  2 files changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/base/base.h b/drivers/base/base.h
-> index 6659cf1d3a44..6296164bb7f3 100644
-> --- a/drivers/base/base.h
-> +++ b/drivers/base/base.h
-> @@ -191,6 +191,9 @@ const char *device_get_devnode(const struct device *dev, umode_t *mode,
->  extern struct kset *devices_kset;
->  void devices_kset_move_last(struct device *dev);
->
-> +/* /sys/dev/char directory */
-> +extern struct kobject *sysfs_dev_char_kobj;
-> +
->  #if defined(CONFIG_MODULES) && defined(CONFIG_SYSFS)
->  void module_add_driver(struct module *mod, struct device_driver *drv);
->  void module_remove_driver(struct device_driver *drv);
-> diff --git a/include/linux/device/class.h b/include/linux/device/class.h
-> index af7fefc39364..f7aad64e256a 100644
-> --- a/include/linux/device/class.h
-> +++ b/include/linux/device/class.h
-> @@ -79,7 +79,6 @@ struct class_dev_iter {
->  };
->
->  extern struct kobject *sysfs_dev_block_kobj;
-> -extern struct kobject *sysfs_dev_char_kobj;
->
->  int __must_check class_register(struct class *class);
->  void class_unregister(const struct class *class);
-> --
-> 2.40.0
->
+The driver is bailing on the device because we can't read it's status register
+out of the remapped BAR. There's nothing we can do about that from the nvme
+driver level. Memory mapped IO has to work in order to proceed.
