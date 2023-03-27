@@ -2,122 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8EFD6C9F2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5086C9F35
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbjC0JQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
+        id S233199AbjC0JRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233135AbjC0JQ0 (ORCPT
+        with ESMTP id S233200AbjC0JRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:16:26 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CCD44B5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:16:24 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id bt19so5149721pfb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:16:24 -0700 (PDT)
+        Mon, 27 Mar 2023 05:17:45 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9084225
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:17:41 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso11165059pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:17:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679908584;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HgMR0rh/4y7PUWkgjC5D1ZLTIu4Xe0fvcNc/5RhdQ/Y=;
-        b=Tf3VlODMFHBHv+1/ruZ9mzU/s9xIJ5lj6UCtpOOF778BZ/hXE+m/y0NHp81l/I16wo
-         oSAK6z22iwfXLjtc9TRRJQVTiDcM6BXDptxMtOy6Ke/gCW6MxAfjBv0eShsgq3aKheLz
-         0IcqfsS5oquDJ/S5Zl2Bv2yNsNxhCMu7FKhS/TiZeEJkZXZhi18Fg0K/aX19BKYKUgcf
-         ucN3OHRwIIbMbw3Em0Zo7WY27nut/4i3Jf+oFVg4mBSNl/fpwfEvy/Bn63oSpMtC29fI
-         QEu02R6/UIVLj8wRit6d3xl3MGuI/+uxUxAJ91/OHRcIZP660R5XrQGJI95AL67XZPH/
-         St+Q==
+        d=linaro.org; s=google; t=1679908661;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8mIlFqMV9d89wi6csnHS/oc3l29TOANOLwnVmh6EklU=;
+        b=m5lY8QxQZ0em7HwJf6c7V0l86IAttwNQyyrz33Gj9g1k695EpGA05fmdEXooiLdb9V
+         r7mpONYjf+xdXc07BZjllghmFhDQN2YUi2X2WbA+dfW92OYxQKg4uu9KNCYkN9XLIX+i
+         TxkWJKFR8taGG2jL3/VMcGhjbupRMyxt/nIMii4iQQZBxwwYgHrb0avPzZvaQSVFrGWz
+         ++JH8qzyDuigY/E/S4SnhnqQkUcqRn3L3tSFURzIUDbMlKNsCbBP90ll7CbN8ek8GVYe
+         TDfAY6AX+DayqKsF0DNdaswkD2Y0SBGpsV/uf+pLNmBc2VF8WqwIkEfd/3NXwmT22Pe+
+         qgqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679908584;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        d=1e100.net; s=20210112; t=1679908661;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HgMR0rh/4y7PUWkgjC5D1ZLTIu4Xe0fvcNc/5RhdQ/Y=;
-        b=FFoxygUUHRNXMf33hKgpdN9/M4VZZUlDdJz+dF2m5Wzs3V6ehmoIWCs3mKiiO66E+a
-         +vAi6+fJdLJ5RHnCbFwzXseVzOuthZYYx3tKIcCoS+vNPoBmv3uzpnqHKVs8TJW/2pSe
-         SwwY4NB4FLC0hMPRVsA0m8NhWC59qhO1yvS2tUPrJdG6znyb0ilsg26+yaQYQZfgE8b8
-         6rk1/Ovj2FQfSQPscZ4muMhu96U8l0sTJD2DmqeZFM8DwlkynJvNVF9QzPGBfKd0lUkW
-         zjoFJwZ0lxzyX4VYi8iuzRUg0YdhlHJjbubI0CJNWKim3M/MA7vHspS5blUgSexcYhWu
-         oJ9w==
-X-Gm-Message-State: AAQBX9fAiH6s7jg8M2vTtqNIi5Ac8p9Et9VWsuCes0KapIIbrZKrK25e
-        /m40KD2Qj+e1v5WWrnawQiOHhWf2WMy4lLCMRLQ=
-X-Google-Smtp-Source: AKy350b+2BjvoaB0h1h5RqdVuPNI4IheZ03EvkSuB5OrSam0bFfwHf6zKvERWVTVaMsqRMllge4H6b00STs3LUq8pUY=
-X-Received: by 2002:a05:6a00:2d27:b0:627:e677:bc54 with SMTP id
- fa39-20020a056a002d2700b00627e677bc54mr5637021pfb.5.1679908583864; Mon, 27
- Mar 2023 02:16:23 -0700 (PDT)
+        bh=8mIlFqMV9d89wi6csnHS/oc3l29TOANOLwnVmh6EklU=;
+        b=qYGqgVRTSa84D953WDAcd+tUE4efZOtv2estUsTyx3DkazUDswiO+S6y1IicgoXYdn
+         DTMolcqxMhkFvNZzG6TEv+fa+Di/wBFeCK2Cd9ZDDXTwB7+Ekwg816a1dPqysJB4aqtB
+         YOMQj70wfvJPbJaRwyooA30CK8I8luHeoYH41LVwG5GvpivxCSE7JeRQ9se6nn5Onm5f
+         KUsiUzo/jKokO/yioUgMNbExPlQLCgzb/e89SCpKN0MXUzfu4n0ZmbaR1GjPMU6KgRgp
+         o/YvS5qDRWtTep1jJt12cGf0rSFH7jgQYoZX2DaRp1NLLb3SYusfOtYFUiCJvJsXcpN9
+         aaAw==
+X-Gm-Message-State: AAQBX9cAErFoAE3Z/6duOMmVo63btnpcD3EB8Wy3P+jnaJ6VjOFhcL3y
+        BHQxpOAdR7Icml3+F3zjEyK/
+X-Google-Smtp-Source: AKy350ZKV1z8I1+zYZBVU06068fGT+zSUq84NLAwH3mY5YDa0HpOY6nq35oIOGrwdWbz7qEnib0TmQ==
+X-Received: by 2002:a17:90b:1c88:b0:234:28ac:ec4a with SMTP id oo8-20020a17090b1c8800b0023428acec4amr12338314pjb.2.1679908661023;
+        Mon, 27 Mar 2023 02:17:41 -0700 (PDT)
+Received: from thinkpad ([117.217.184.83])
+        by smtp.gmail.com with ESMTPSA id nm13-20020a17090b19cd00b00231227781d5sm4053560pjb.2.2023.03.27.02.17.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 02:17:40 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 14:47:33 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
+        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/5] usb: dwc3: qcom: Allow runtime PM
+Message-ID: <20230327091733.GA14584@thinkpad>
+References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
+ <cc7392c1-0ea1-29b3-fab6-19c843413724@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:a05:7300:3db:b0:9f:d19a:fd79 with HTTP; Mon, 27 Mar 2023
- 02:16:23 -0700 (PDT)
-Reply-To: annamalgorzata587@gmail.com
-From:   "Leszczynska Anna Malgorzata." <mrsstewartprisca@gmail.com>
-Date:   Mon, 27 Mar 2023 02:16:23 -0700
-Message-ID: <CAFoYun0pOf7h6MXemKOxx_VJ9qat6_H9Si4pXTKnow3m+j_=JA@mail.gmail.com>
-Subject: Mrs. Leszczynska Anna Malgorzata.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_5_NEW,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:42e listed in]
-        [list.dnswl.org]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrsstewartprisca[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [annamalgorzata587[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.8 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cc7392c1-0ea1-29b3-fab6-19c843413724@linaro.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 27, 2023 at 11:01:35AM +0200, Konrad Dybcio wrote:
+> 
+> 
+> On 25.03.2023 17:52, Manivannan Sadhasivam wrote:
+> > Hi,
+> > 
+> > This series allows the dwc3-qcom driver to do runtime PM itself without
+> > userspace intervention. Still, userspace is required to enable runtime PM
+> > for dwc3 glue and xhci drivers as we cannot enable runtime PM for them.
+> > But this series avoids one more additional step.
+> What sort of 'userspace intervention' are we talking about?
+> echo mem > /sys/power/state?
+> 
+
+I forgot to add that bit:
+
+echo auto > /sys/devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/power/control
+echo auto > /sys/devices/platform/soc@0/a8f8800.usb/a800000.usb/power/control
+
+You need to set "auto" for the runtime control for both xhci and dwc drivers.
+
+Then if you don't connect a usb device, all 3 drivers (dwc3-qcom, dwc3, and
+xhci) will become runtime suspended after a delay of 5s (default delay).
+
+This can be confirmed by:
+
+cat /sys/devices/platform/soc@0/a8f8800.usb/power/runtime_status
+
+After connecting a usb device, they will all become "active".
+
+Thanks,
+Mani
+
+> Konrad
+> > 
+> > While enabling runtime PM, I noticed that the xhci driver suspends before
+> > catching the xhci interrupts during resume. This ended up deferring the
+> > device enumeration for some time. So I included a patch adding autosuspend
+> > delay of 200ms to the xhci driver. With this delay, usb enumeration happens
+> > properly.
+> > 
+> > This series has been tested on SC8280XP-CRD and RB5 devices.
+> > 
+> > Thanks,
+> > Mani
+> > 
+> > Manivannan Sadhasivam (5):
+> >   arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
+> >   xhci: host: Use 200ms autosuspend delay for runtime suspend
+> >   usb: dwc3: qcom: Fix null ptr access during runtime_suspend()
+> >   usb: dwc3: qcom: Clear pending interrupt before enabling wake
+> >     interrupt
+> >   usb: dwc3: qcom: Allow runtime PM
+> > 
+> >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
+> >  drivers/usb/dwc3/dwc3-qcom.c           | 13 +++++++++----
+> >  drivers/usb/host/xhci-plat.c           |  2 ++
+> >  3 files changed, 25 insertions(+), 4 deletions(-)
+> > 
+
 -- 
-I am Mrs. Leszczynska Anna Malgorzatafrom Germany . Presently admitted
- in one of the hospitals here in Ivory Coast.
-
-I and my late husband do not have any child that is why I am donating
-this money to you having known my condition that I will join my late
-husband soonest.
-
-I wish to donate towards education and the less privileged I ask for
-your assistance. I am suffering from colon cancer I have some few
-weeks to live according to my doctor.
-
-The money should be used for this purpose.
-Motherless babies
-Children orphaned by aids.
-Destitute children
-Widows and Widowers.
-Children who cannot afford education.
-
-My husband stressed the importance of education and the less
-privileged I feel that this is what he would have wanted me to do with
-the money that he left for charity.
-
-These services bring so much joy to the kids. Together we are
-transforming lives and building brighter futures - but without you, it
-just would not be possible.
-
-Sincerely,
-
-Mrs. Leszczynska Anna Malgorzata.
+மணிவண்ணன் சதாசிவம்
