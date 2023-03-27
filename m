@@ -2,164 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81E06CACD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BA26CACD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjC0SQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 14:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S232190AbjC0SQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 14:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbjC0SQp (ORCPT
+        with ESMTP id S232105AbjC0SQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:16:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592DF30D3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 11:15:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679940956;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UK/vUrhHuqntUFN+BgSrVc4SUZdQT7VSDoiLy/b5Axs=;
-        b=EY6uhTSueeEahosF6tSWQUoT/1qn4belNrDu3QdL7iv2G7KafOsZKWNGSxcVx6f2aXu7ud
-        9rmfijrtjLUYzXmYha7oQmHP3UHfc5R2GFcp18Uehlqt5bSxdx1x1PBX3oyvJPtuqgf+uV
-        uCg/IO9u3chECOfRNR/tVZ8VRA/MSA8=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-220-xMloD1eCN6K0v2uhBBa7XA-1; Mon, 27 Mar 2023 14:15:55 -0400
-X-MC-Unique: xMloD1eCN6K0v2uhBBa7XA-1
-Received: by mail-wm1-f69.google.com with SMTP id m7-20020a05600c4f4700b003ee7e120bdfso5114644wmq.6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 11:15:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679940954;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UK/vUrhHuqntUFN+BgSrVc4SUZdQT7VSDoiLy/b5Axs=;
-        b=wP1tYGYqeRv9xzYwbn24DGcGxkjnIPANil5PdI6ZhCO01ui3Yu2dFU7sMhjGf1U3qg
-         iwkCKnNjflNayuSJItJk/Cj3G2tYqDeMI8QuUhSDqrp05rhYJ6burcvWyVC/LLkc1rBS
-         /VBw9NWbD7KZKtBerlrh4X69tScgkfvfVQxJYLMW/8XFJLLgHcGhesMQMpYitnvXj69v
-         rndFpAhZxgp+YeAPJP49xrEUj1DrChFvMFsKxcbKkBmYJp0e+PqwhES6l6P1E89vAWxw
-         nMGwQtIibsem77NeNxjLTgv/qSparc//L/bNuQU707oZSA1DpdYrSn6oIZq51Ff05FtL
-         4P0A==
-X-Gm-Message-State: AAQBX9erB1yFbae20HAZRwHaK+HlPJwf59FNQF+ipfGmVRcSOD8wa0f7
-        pd9mwKmOwvNhU/yW+ShFYZHUC0Tc69A9ctiAa/My85HO6TQCgk4MOZkMeo39pWpQLD1zWbzmzWU
-        0qY1evv8MJhhGdkgsQHrLw1Mm
-X-Received: by 2002:adf:e98b:0:b0:2c5:4ffb:b5d4 with SMTP id h11-20020adfe98b000000b002c54ffbb5d4mr10067894wrm.19.1679940953968;
-        Mon, 27 Mar 2023 11:15:53 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZaT6ahYHthFl0PUIe9zMPk4lKHZv5UbJklHs82pkUCUN/DtNmeerfQ+58giM6OUYgp3Y5NMA==
-X-Received: by 2002:adf:e98b:0:b0:2c5:4ffb:b5d4 with SMTP id h11-20020adfe98b000000b002c54ffbb5d4mr10067876wrm.19.1679940953689;
-        Mon, 27 Mar 2023 11:15:53 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id p17-20020adfcc91000000b002c71dd1109fsm25758248wrj.47.2023.03.27.11.15.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 11:15:53 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-Cc:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        linux-kernel@vger.kernel.org,
-        Robert Mader <robert.mader@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Martijn Braam <martijn@brixit.nl>,
-        Kamil =?utf-8?Q?Trzci=C5=84ski?= <ayufan@ayufan.eu>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Jarrah Gosbell <kernel@undef.tools>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v2] arm64: dts: rk3399-pinephone-pro: Add internal
- display support
-In-Reply-To: <20230327174855.xpxrdfldqcxk463r@core>
-References: <20230327074136.1459212-1-javierm@redhat.com>
- <20230327130147.wgxl2qayhzsi2xak@core>
- <87wn32rynm.fsf@minerva.mail-host-address-is-not-set>
- <1924921.PYKUYFuaPT@diego>
- <87mt3yrwzo.fsf@minerva.mail-host-address-is-not-set>
- <20230327174855.xpxrdfldqcxk463r@core>
-Date:   Mon, 27 Mar 2023 20:15:52 +0200
-Message-ID: <87jzz2rrfr.fsf@minerva.mail-host-address-is-not-set>
+        Mon, 27 Mar 2023 14:16:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DD03A81
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 11:16:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94BC5B818AB
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:16:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ABABC4339B;
+        Mon, 27 Mar 2023 18:16:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679940971;
+        bh=zdL+k3/HodzdiDKsCUqJ/ncG7UqyOUXuharkX+zcLow=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CvlUsE/ur0tboElKU6eL5mxsD6spgitv88oe/0jq9Kj2Rus+RyRoeHzd2dY5KValB
+         YAtfBpPENsPYo6hyXSPyN9gqsNVG6x+aDoI67NJlBB5He3bP6irbz3rZcH7G72FSbF
+         MuVLp77uf+hhqMXQTYUMI9EE2Va+g/0U2Srl4gVs=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, kernel test robot <lkp@intel.com>
+Subject: [PATCH] powerpc/fsl: fix compiler warning in fsl_wakeup_sys_init()
+Date:   Mon, 27 Mar 2023 20:16:06 +0200
+Message-Id: <20230327181606.1424846-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1498; i=gregkh@linuxfoundation.org; h=from:subject; bh=zdL+k3/HodzdiDKsCUqJ/ncG7UqyOUXuharkX+zcLow=; b=owGbwMvMwCRo6H6F97bub03G02pJDCmKd1PEzCpzpPdXvExbrvBGNNHU64CndspJde0le3miT yzd8sK+I5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACYyZQbDgml9rFfN3XKLl/Bc Unw3z4TruvLSiQwLtp/fVzNN0pfz85+QPf/TlV5UnFrzBQA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ond=C5=99ej Jirman <megi@xff.cz> writes:
+Commit c93bd175414a ("powerpc/fsl: move to use bus_get_dev_root()")
+changed to use bus_get_dev_root() but didn't consider that the function
+can fail and return an uninitialized value of ret (hint, the function
+can never fail, but the compiler doesn't know that.)
 
-> On Mon, Mar 27, 2023 at 06:15:55PM +0200, Javier Martinez Canillas wrote:
+Fix this up by setting ret to -EINVAL just in case something really goes
+wrong with the call to bus_get_dev_root().
 
-[...]
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: linuxppc-dev@lists.ozlabs.org
+Fixes: c93bd175414a ("powerpc/fsl: move to use bus_get_dev_root()")
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202303280045.4oaaezcn-lkp@intel.com/
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->>=20
->> It is broken though? This is what is in Ondrej downstream tree and I see
->> no issues on my Pinephone Pro. He mentioned some flicker when looking at
->> the signals with a scope and hooking a photoresistor.
->
-> LED regulator is driven out of spec by a frequency that's 20x lower than
-> recommended, if you want short version of what's broken about the DT patc=
-h.
->
->> But that's fair. I'll let Ondrej then post a v3 if he wants to address t=
-he
->> issues he pointed out, since is his patch after all.
->
-> It's not my patch. Original author of the DT is Martijn or Kamil. I just =
-carry
-> their DT work in split-up patches in my tree, and I sometimes try to find=
- solutions
-> to bugs I find when using PPP. That's the story of these DT changes you'r=
-e posting.
->
-> Since you posted this DT patch for upstreaming, I wanted to help you by r=
-eviewed
-> it more completely, so I opened the schematic and datasheets for the comp=
-onents
-> that are described in this patch, and discovered these new issues I comme=
-nted
-> about. And I also tested it on top of linus/master.
->
-> Just because something is in my tree doesn't mean it's mine, or that I re=
-viewed
-> it in detail and prepared it for upstreaming, or that I'm interested in
-
-Thanks for the clarification. Because the patch had your authorship I
-wrongly assumed that came from you. Sorry about the confusion.
-
-> upstreaming it. I'm just trying to help you with your upstreaming effort =
-by
-> testing and review since I got to know the hardware quite well over the l=
-ast
-> years and can check the schematics and datasheets quickly, and I like to =
-think
-> upstream code is held to higher standard. That's all.
->
-
-Appreciate your help and I agree that upstream code should be held to a
-high standard. But since the DTS in mainline is pretty basic anyways (you
-can only boot to serial right now), is not really usable for other thing
-than development and keep adding the missing support.
-
-So I thought that we could do it in steps without creating that much work
-for the people trying to post the downstream patches and having to re-spin
-too many times.
-
---=20
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+diff --git a/arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c b/arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c
+index 147b5d8bb904..ce6c739c51e5 100644
+--- a/arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c
++++ b/arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c
+@@ -117,7 +117,7 @@ static struct device_attribute mpic_attributes = __ATTR(timer_wakeup, 0644,
+ static int __init fsl_wakeup_sys_init(void)
+ {
+ 	struct device *dev_root;
+-	int ret;
++	int ret = -EINVAL;
+ 
+ 	fsl_wakeup = kzalloc(sizeof(struct fsl_mpic_timer_wakeup), GFP_KERNEL);
+ 	if (!fsl_wakeup)
+-- 
+2.40.0
 
