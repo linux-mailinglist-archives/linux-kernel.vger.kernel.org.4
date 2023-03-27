@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311E06CA752
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8682B6CA753
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbjC0OSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        id S232561AbjC0OS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbjC0OSF (ORCPT
+        with ESMTP id S232724AbjC0OSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:18:05 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98626A54;
+        Mon, 27 Mar 2023 10:18:06 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A496A64;
         Mon, 27 Mar 2023 07:16:19 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id h25so11660185lfv.6;
+Received: by mail-lf1-x136.google.com with SMTP id h11so4696055lfu.8;
         Mon, 27 Mar 2023 07:16:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679926575;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hEN6CxeaZDl0mJP9ZYJ+VeHAdDWaws/ieJcjOL6ATL8=;
-        b=ChQeGRVfObIFJ2D+tCk4G38Ywu8sf5w0IKv2Z2raD4bR/mlpppD/HllSCU8DEJ8HgE
-         PbQtAseuAp3XrvKtw8Hxvl+SSyyaN/Io/i+3Zd/CEldP12j0eDrVUu6F4hntBntsn6v0
-         JdjY+2bpZR7WzY1vX5TKgaXJdsqHFMJwpvxMiEYgJmxjkZxr2VuCGp9AwoHI+XaTm69R
-         1uhQ94x6yuv3XE2+aloMAILp70ajc1tY0c9EilIbGmXH/huNB7TDGbiWifNtLnFoQ6kl
-         V6Qg3ONcMtTjGgBpJaoF5iMNa4Ylg8O6fG808zL2IqYpyhu8L2xBaFetXI5uQ0PKiXBE
-         LWoA==
+        d=gmail.com; s=20210112; t=1679926577;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QzCwekFGfxzs1CDNjeDV7r4j31xaEPMaYXmxUiOdDtk=;
+        b=jkSlOjGPwovb56Z9OU+zzP1erojmRSVnXihJEmA/6boY4vkMTFK1XwgnXyvJi8JqHj
+         /pjpPjtDhAyVMD5uJbJ1J3qeJ9tBx7vAFcFAFjgywDKPQ0L2dS0++bvVSsNbqIbWFGZH
+         BnAAEbGlNIqKKZ93KwUIa7hvj0ySvlpvdq0xZo61R4NzbrZAB7P3BmiCJ+urmHXYqNtZ
+         WFL6stshmFIY83e/+JV1BkX3hv/6ALDvocypKQzStSW47Vl4blGX6qPiFp+T8GfVuheP
+         pdZ5t5OwV6U+ypBwDjCoVd9ii2ChkAZ6lresRuyC93P6H3/iLAw3V1+0Xrm+yiuB7eIP
+         AmCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679926575;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hEN6CxeaZDl0mJP9ZYJ+VeHAdDWaws/ieJcjOL6ATL8=;
-        b=mf+PfNJ4fFC0tY5J64odo6Np4aEeSpBpqCG9gA6LuWYq2VP1i8aA1tTIMw2HTaZ+IX
-         y48LUt9dEmjCca7jRwG+WNqlkM9h0UPjWqgEHdrcR8FilIGArLjDsUWeZxnqhGcEstNL
-         6BVN+C3sh02tOI7Vt0dsq29ahn5U7ZuZBs2vJa4WgmVYGZ/iQ2SID7dbify+JXsTeZZx
-         eal8vt3wiY4yBC2wly2GASigdWdTStqVxHHw6IvsSiKrrzgIflryD/CGylF0qcgFJ4kL
-         tx5F+wt8hFSOjswGMr6rfizSu2uwdPlTtO6dEV5O/5lKWnsAJm0PUt7JktYcfbhb2iDH
-         KGFw==
-X-Gm-Message-State: AAQBX9dFECylkVK/+2H3/+MZrxi1+ZflaVpMFzz3DgCok0xDXU/Gj3dr
-        9zVlI/BzyCijZ46t/k5jnHU=
-X-Google-Smtp-Source: AKy350ZsBIo2tJ8zJ115L0WAvIXrjx5aREjkdaPZi5OhIvkTIj/WXwkslLFFcseehLD+ZMSsb+zRXA==
-X-Received: by 2002:ac2:550f:0:b0:4d7:44c9:9f4c with SMTP id j15-20020ac2550f000000b004d744c99f4cmr3329822lfk.4.1679926575279;
-        Mon, 27 Mar 2023 07:16:15 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679926577;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QzCwekFGfxzs1CDNjeDV7r4j31xaEPMaYXmxUiOdDtk=;
+        b=NCIWc39iUr/GTaJKcDGQ6Ftt9CC6zU7oGSP0I9Z/ughGcyodxo2ZLKd7F0pJdOO7uJ
+         ZBRihDi8hFWrHXGZcMfS0Wn1RbHdQK9lWCbxB4oQy4JgIm9C9pNAl9aA7lQenG5mgUc7
+         VegHIdFWSwI3T05ZQkUXjgHNIxQ0uyCp0aLwg8xHBY56PnZSSPCWBRxAQRE5BvcVt7qD
+         onWfFts/QzUggoxgVfJhp3zXEjb1M4iaZr+qmdiVpx7Z1dTzFdOsNstlU8n0nXYHaPLu
+         C4EWpYbnWGtnDe5WVPMeao26JotVU0lB8dNCLP74xUV72OMUjWK/5iIIRmJlpkXLZijb
+         9GEA==
+X-Gm-Message-State: AAQBX9cMSshd5jmt7EqOevy9YMLBYFgHB1QQYg77vkdbaDw3MUSjR6Ks
+        AlvG4/HEws0+zrR1n+GWrC4=
+X-Google-Smtp-Source: AKy350ainV6iC5gic5XaaKtVh+/1mcO1aPMsD/jqNOYyxIjzmWLxbVX6CY5FfN6Dv8HILjcVxB2pkA==
+X-Received: by 2002:ac2:484a:0:b0:4dd:a73f:aede with SMTP id 10-20020ac2484a000000b004dda73faedemr3095133lfy.10.1679926577303;
+        Mon, 27 Mar 2023 07:16:17 -0700 (PDT)
 Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id w3-20020ac24423000000b004e977970721sm4444519lfl.219.2023.03.27.07.16.13
+        by smtp.gmail.com with ESMTPSA id w3-20020ac24423000000b004e977970721sm4444519lfl.219.2023.03.27.07.16.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 07:16:14 -0700 (PDT)
+        Mon, 27 Mar 2023 07:16:16 -0700 (PDT)
 From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -58,10 +59,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V6 0/3] nvmem: add fixed cells layout
-Date:   Mon, 27 Mar 2023 16:16:08 +0200
-Message-Id: <20230327141611.25131-1-zajec5@gmail.com>
+Subject: [PATCH V6 1/3] dt-bindings: nvmem: layouts: add fixed-layout
+Date:   Mon, 27 Mar 2023 16:16:09 +0200
+Message-Id: <20230327141611.25131-2-zajec5@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230327141611.25131-1-zajec5@gmail.com>
+References: <20230327141611.25131-1-zajec5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -77,46 +80,179 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafał Miłecki <rafal@milecki.pl>
 
-NVMEM bindings received a new feature recently: layouts. They allow 
-defining NVMEM device content in a separated DT node named 
-"nvmem-layout". That improvement results in cleaner and more generic
+With the introduction of NVMEM layouts, new NVMEM content structures
+should be defined as such. We should also try to convert / migrate
+existing NVMEM content bindings to layouts.
+
+This commit handles fixed NVMEM cells. So far they had to be defined
+directly - as device subnodes. With this change it's allowed to put them
+in the DT node named "nvmem-layout".
+
+Having NVMEM cells in separated node is preferred as it draws a nice
+line between NVMEM device and its content. It results in cleaner
 bindings.
 
-New bindings & drivers should use layouts design. If possible we should
-also try converting existing bindings & drivers to layouts.
+FWIW a very similar situation has happened to MTD devices and their
+partitions: see commit 5d96ea42eb63 ("dt-bindings: mtd: Clarify all
+partition subnodes").
 
-This patchset allows defining NVMEM cells in a new way (using NVMEM
-layout feature).
-
-This deprecates support for defining NVMEM cells as direct DT device
-node subnodes but IT DOESN'T drop support for that.
-
-PLEASE understand what this patchset handles. It adds new & preferred
-way of defining NVMEM cells. This patchset does NOT meant to:
-1. Convert ALL existing bindings or drivers (it's a task for later)
-2. Add support for new extra features (like multiple layouts)
-3. Break any backward compatibility (it WON'T happen)
-
-V5:
-Support "fixed-layout" internally in NVMEM core (see PATCH 3/3)
-V6:
-Rename function & add unevaluatedProperties
-
-Rafał Miłecki (3):
-  dt-bindings: nvmem: layouts: add fixed-layout
-  dt-bindings: nvmem: convert base example to use NVMEM fixed cells
-    layout
-  nvmem: core: add support for fixed cells *layout*
-
- .../bindings/nvmem/layouts/fixed-cell.yaml    | 31 ++++++++++
- .../bindings/nvmem/layouts/fixed-layout.yaml  | 50 +++++++++++++++
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+V6: Add unevaluatedProperties: false
+---
+ .../bindings/nvmem/layouts/fixed-cell.yaml    | 31 ++++++++++++
+ .../bindings/nvmem/layouts/fixed-layout.yaml  | 50 +++++++++++++++++++
  .../bindings/nvmem/layouts/nvmem-layout.yaml  |  5 +-
- .../devicetree/bindings/nvmem/nvmem.yaml      | 61 ++++++++-----------
- drivers/nvmem/core.c                          | 32 +++++++++-
- 5 files changed, 137 insertions(+), 42 deletions(-)
+ .../devicetree/bindings/nvmem/nvmem.yaml      | 19 +------
+ 4 files changed, 84 insertions(+), 21 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
  create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
 
+diff --git a/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml b/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
+new file mode 100644
+index 000000000000..e698098450e1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
+@@ -0,0 +1,31 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/layouts/fixed-cell.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Fixed offset & size NVMEM cell
++
++maintainers:
++  - Rafał Miłecki <rafal@milecki.pl>
++  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
++
++properties:
++  reg:
++    maxItems: 1
++
++  bits:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    items:
++      - minimum: 0
++        maximum: 7
++        description:
++          Offset in bit within the address range specified by reg.
++      - minimum: 1
++        description:
++          Size in bit within the address range specified by reg.
++
++required:
++  - reg
++
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
+new file mode 100644
+index 000000000000..c271537d0714
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
+@@ -0,0 +1,50 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/layouts/fixed-layout.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NVMEM layout for fixed NVMEM cells
++
++description:
++  Many NVMEM devices have hardcoded cells layout (offset and size of defined
++  NVMEM content doesn't change).
++
++  This binding allows defining such NVMEM layout with its cells. It can be used
++  on top of any NVMEM device.
++
++maintainers:
++  - Rafał Miłecki <rafal@milecki.pl>
++
++properties:
++  compatible:
++    const: fixed-layout
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 1
++
++patternProperties:
++  "@[a-f0-9]+$":
++    type: object
++    $ref: fixed-cell.yaml
++    unevaluatedProperties: false
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    nvmem-layout {
++        compatible = "fixed-layout";
++        #address-cells = <1>;
++        #size-cells = <1>;
++
++        calibration@4000 {
++            reg = <0x4000 0x100>;
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
+index 8512ee538c4c..3b40f7880774 100644
+--- a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
++++ b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
+@@ -18,16 +18,13 @@ description: |
+   perform their parsing. The nvmem-layout container is here to describe these.
+ 
+ oneOf:
++  - $ref: fixed-layout.yaml
+   - $ref: kontron,sl28-vpd.yaml
+   - $ref: onie,tlv-layout.yaml
+ 
+ properties:
+   compatible: true
+ 
+-  '#address-cells': false
+-
+-  '#size-cells': false
+-
+ required:
+   - compatible
+ 
+diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+index 75bb93dda9df..b79f1bb795fb 100644
+--- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
++++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+@@ -49,23 +49,8 @@ properties:
+ patternProperties:
+   "@[0-9a-f]+(,[0-7])?$":
+     type: object
+-
+-    properties:
+-      reg:
+-        maxItems: 1
+-        description:
+-          Offset and size in bytes within the storage device.
+-
+-      bits:
+-        $ref: /schemas/types.yaml#/definitions/uint32-array
+-        items:
+-          - minimum: 0
+-            maximum: 7
+-            description:
+-              Offset in bit within the address range specified by reg.
+-          - minimum: 1
+-            description:
+-              Size in bit within the address range specified by reg.
++    $ref: layouts/fixed-cell.yaml
++    deprecated: true
+ 
+ additionalProperties: true
+ 
 -- 
 2.34.1
 
