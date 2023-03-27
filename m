@@ -2,84 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594A96CA454
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A606CA470
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbjC0Mor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
+        id S232458AbjC0MqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjC0Mop (ORCPT
+        with ESMTP id S232684AbjC0MqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:44:45 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4C63583
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:44:43 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id h8so35603610ede.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:44:43 -0700 (PDT)
+        Mon, 27 Mar 2023 08:46:18 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3074684;
+        Mon, 27 Mar 2023 05:46:08 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id d17so8643186wrb.11;
+        Mon, 27 Mar 2023 05:46:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1679921082;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EKW/tU35UjGEuUF9Mez4H7fZWGcAomPnT3WUqTcOwB8=;
-        b=glqgBSj0rwWYVzccQFPKfUYu5IDeMkUNFZIBmxGr8nrmFA32ZNrdBTM5DUu2qpSXLv
-         Mfo4LtPvpfhIO8obwOsqHhZlR0GD506gc5h7OGcxx5xgkduTJjVtlnkrpeagGFFgoyp2
-         d1cuQqvxMbD/Mce87L+rEUWcPATyTMuab+t9DHVvLAUdFlYlBvzEHQl1CfO6gB5HRYrf
-         1cR4RCuotDVykuEG2m/fTO/HXu5WRxL3jkji0Xf/AWOnRywfpk+o3DOWC7MZPaTGgLdo
-         dToSihjbS9ns47KyhivkdLSL9xl2cG6kBlkOEx/4lxrfyqAC/pQ40e0ifowVCDFNiNaK
-         7DrQ==
+        d=gmail.com; s=20210112; t=1679921167;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fYIGAgh3bNQtQ2hkLhWzVHkkyMwA2A5wfdDvnocQpCQ=;
+        b=OtF5U5GeGMC1joLpFhdjkzQSJl2EpNpTlz9dgob+XXltcZTyEVsyud07oqsVyyE8Ni
+         3pfq20RG85/LXrAr2IlkhLLtWEnjMXIg60PPNouvkfSP4eb29R/uqFHyO71VrX8qeZr9
+         o1X1wRpoo3JjbY5A6DeNnr5kph4BKPzJdKXRE7z0TkFqLErrcezfd5RJbQmaTDn00AzF
+         XmTBYQ5cu17kcjsKEkcHJHrhPZUo9YYeHBnz1UBvbdnqPBLvs4uCEO8XHv/ryysm+hjl
+         fOeVSFU5iq3wP/sOYdVwPp44td+VgKKMfZrQIiQhXhmi7/xz8b/KAWz1YEh2GFmu9jy2
+         gp5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679921082;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EKW/tU35UjGEuUF9Mez4H7fZWGcAomPnT3WUqTcOwB8=;
-        b=A5CuJ8IVvb4TGJXr3etquJqWo7pjgurUnIyRZKc6o+Eoy8CK5Me7DgPDGL/JxseSYF
-         uOPiQ7IZqjUn5oQoPXLmlooQ/U4UfUU7JsuHuilhHlDXK0R5GSf3juxsg+WrsTX+CeLR
-         CWf1jN+Vz8g+B0ftfLoMx4x6xwXWXGU5RwYTXjKmN+n9Mc6TLZWwfRaWbPpQsn9ga3g6
-         3//Dy13EIxwvmtvaysET1QcrV6ePzTQg0mZhA7+qh+69yNEdxYliodJawTUL99Tl7xZe
-         +VbKTNBdSZaXs2L6eBe/5odJMklHSyOuFrQT0SDKT4V8hukErQWhscbaAeOGK256aXq8
-         Aitg==
-X-Gm-Message-State: AAQBX9dzjBUvnVvEJBFhs+CpCWFdD4CPi+4Rt869tZw/KrivOiY92oAp
-        Bwc6JqIyXUxh9F/HxYGudsd4Tg==
-X-Google-Smtp-Source: AKy350bdtzCpB1RpTkMzpU+kL/HgZJs5VPsA2ZEf4q+QvtNuRCG23spbWNl2cGsoNjW3ojSIcOXorQ==
-X-Received: by 2002:a17:906:48cb:b0:932:c50e:d6b4 with SMTP id d11-20020a17090648cb00b00932c50ed6b4mr11850596ejt.9.1679921081892;
-        Mon, 27 Mar 2023 05:44:41 -0700 (PDT)
-Received: from [10.44.2.5] ([81.246.10.41])
-        by smtp.gmail.com with ESMTPSA id w17-20020a170906b19100b0093fa8c2e877sm2894122ejy.80.2023.03.27.05.44.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 05:44:41 -0700 (PDT)
-Message-ID: <03e4389e-5790-68c5-422f-f128415c2d03@tessares.net>
-Date:   Mon, 27 Mar 2023 14:44:41 +0200
+        d=1e100.net; s=20210112; t=1679921167;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fYIGAgh3bNQtQ2hkLhWzVHkkyMwA2A5wfdDvnocQpCQ=;
+        b=EgQ4aydbAYluEHRM2RwRclax1bBUYzL4jT0MB1w19xk8Kd9dpXPnEL/f/hL3HieI4d
+         LiAvzfQ/IRAEkZ2JLBwv+gNpygIpQ/lCJH6KKDxkW7/L5hQk9LPWA0SQ6Ih25V0B1sxo
+         VAbGHfe5XkP2QGXyY6aCzAdXPf04B6m6KYO6ZQFYkxXTcVkbLGdM/JT6hX0HEpIfA1fX
+         RgAmS2NSvri1TmNeGsLbeoCS9VbwD8lX6J1GUa5H0lIWtMw+B+SCU0Yo+Kif5Xor0Hml
+         o61gMhAmvWFgM3vsmUnEJEbdtO+PxH/5+ZTTaKMcnrqqtCmtfR4EOyMFHJvGlNcjC73j
+         fTSw==
+X-Gm-Message-State: AAQBX9dZf34E/wdaor3KFHMp5SW+sVTfY3TsRRZTX159uT3hn6HkY6nA
+        FLx4lW8z64/NzZUMYkQfhZkbMCWZyC4ImGLx
+X-Google-Smtp-Source: AKy350Yb6KtmVuwqs6rupocORTaQKhgvxpira9yWvAE63AxgWO2SnPEYWy1Lgar60+D+9m7kWGbbUw==
+X-Received: by 2002:adf:eace:0:b0:2cf:e3d0:2a43 with SMTP id o14-20020adfeace000000b002cfe3d02a43mr11015922wrn.4.1679921167038;
+        Mon, 27 Mar 2023 05:46:07 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.14.14])
+        by smtp.gmail.com with ESMTPSA id x4-20020a1c7c04000000b003ee0d191539sm13662716wmc.10.2023.03.27.05.46.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 05:46:06 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 17:46:04 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     outreachy@lists.linux.dev, Marc Dietrich <marvin24@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        ac100@lists.launchpad.net, linux-tegra@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: nvec: replace udelay() with usleep_range()
+Message-ID: <ZCGQDLEsCr6dY6/e@khadija-virtual-machine>
+References: <ZCGK4+zUDT1lLz6s@khadija-virtual-machine>
+ <453453f4-1496-4735-8fab-efb7e4240e05@kili.mountain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 2/2] checkpatch: allow Closes tags with links
-Content-Language: en-GB
-To:     Joe Perches <joe@perches.com>, Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
-References: <20230314-doc-checkpatch-closes-tag-v2-0-f4a417861f6d@tessares.net>
- <20230314-doc-checkpatch-closes-tag-v2-2-f4a417861f6d@tessares.net>
- <d24f2eca8f2a858b48ad0e019e58e0e5098be5c3.camel@perches.com>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <d24f2eca8f2a858b48ad0e019e58e0e5098be5c3.camel@perches.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <453453f4-1496-4735-8fab-efb7e4240e05@kili.mountain>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,65 +74,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joe,
-
-Thank you for the review!
-
-On 24/03/2023 20:13, Joe Perches wrote:
-> On Fri, 2023-03-24 at 19:52 +0100, Matthieu Baerts wrote:
->> As a follow-up of the previous patch modifying the documentation to
->> allow using the "Closes:" tag, checkpatch.pl is updated accordingly.
->>
->> checkpatch.pl now mentions the "Closes:" tag between brackets to express
->> the fact it should be used only if it makes sense.
->>
->> While at it, checkpatch.pl will not complain if the "Closes" tag is used
->> with a "long" line, similar to what is done with the "Link" tag.
->>
->> Fixes: 76f381bb77a0 ("checkpatch: warn when unknown tags are used for links")
->> Fixes: d7f1d71e5ef6 ("checkpatch: warn when Reported-by: is not followed by Link:")
->> Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/373
->> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
->> ---
->>  scripts/checkpatch.pl | 16 ++++++++--------
->>  1 file changed, 8 insertions(+), 8 deletions(-)
->>
->> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
->> index bd44d12965c9..d6376e0b68cc 100755
->> --- a/scripts/checkpatch.pl
->> +++ b/scripts/checkpatch.pl
->> @@ -3158,14 +3158,14 @@ sub process {
->>  				}
->>  			}
->>  
->> -# check if Reported-by: is followed by a Link:
->> +# check if Reported-by: is followed by a Link: (or Closes:) tag
->>  			if ($sign_off =~ /^reported(?:|-and-tested)-by:$/i) {
->>  				if (!defined $lines[$linenr]) {
->>  					WARN("BAD_REPORTED_BY_LINK",
->> -					     "Reported-by: should be immediately followed by Link: to the report\n" . $herecurr . $rawlines[$linenr] . "\n");
->> -				} elsif ($rawlines[$linenr] !~ m{^link:\s*https?://}i) {
->> +					     "Reported-by: should be immediately followed by Link: (or Closes:) to the report\n" . $herecurr . $rawlines[$linenr] . "\n");
->> +				} elsif ($rawlines[$linenr] !~ m{^(link|closes):\s*https?://}i) {
+On Mon, Mar 27, 2023 at 03:25:43PM +0300, Dan Carpenter wrote:
+> On Mon, Mar 27, 2023 at 05:24:03PM +0500, Khadija Kamran wrote:
+> > Replace 'udelay()' with 'usleep_range()' with 1000us as upper limit.
+> > This issue is reported by checkpatch.pl script.
+> > 
+> > CHECK: usleep_range is preferred over udelay; see
+> > Documentation/timers/timers-howto.rst
+> > 
+> > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> > ---
 > 
-> Please do not use an unnecessary capture group.
+> This kind of change requires you to test on the hardware and have
+> slightly in depth knowledge of the spec.
+
+Okay, thank you!
+
+Regards,
+Khadija
+
+
 > 
-> 		(?:link|closes)
-
-Good point, thank you, that will be in the v3.
-
-> And because it's somewhat likely that _more_ of these keywords
-> could be added, perhaps use some array like deprecated_apis
-
-I can but from the discussions we had on the v1, it looks unlikely to me
-that more of these keywords will be allowed (if this one already ends up
-being accepted :) ). Strangely, we might not even want to make it easy
-to add new tags.
-
-But I'm fine to change that in the v3 if you prefer to have an array here.
-
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+> regards,
+> dan carpenter
+> 
