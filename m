@@ -2,103 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5046C9DFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BDE6C9E09
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233093AbjC0Ihf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
+        id S233222AbjC0Iht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233046AbjC0IhF (ORCPT
+        with ESMTP id S232978AbjC0Ih3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:37:05 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599F67299;
-        Mon, 27 Mar 2023 01:31:45 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32R8V4Kx105347;
-        Mon, 27 Mar 2023 03:31:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679905864;
-        bh=BppbkJnUwX1hnpY0dz4TOhs1NIDT6BbXPKDS29uuRLU=;
-        h=From:To:CC:Subject:Date;
-        b=r7AaL5hGPYAJHsnlmjPD2PRUmiiTeVx/DQb53+HkCE4A1cxjCr4zBVWBxjppLWa0F
-         Ruqsl9M3QYyrJxQUvmaSbecuuLI3HeAs/B50DizYWGiSU4ikemyPgn0Z3x3hoDXnoL
-         Y6dNkAkb7lN0k4XCUlqrnrCzw09vbnIngS+PJ/7I=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32R8V4ad129553
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 27 Mar 2023 03:31:04 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 27
- Mar 2023 03:31:03 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 27 Mar 2023 03:31:03 -0500
-Received: from LT5CD112GSQZ.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32R8V0KG100230;
-        Mon, 27 Mar 2023 03:31:01 -0500
-From:   Apurva Nandan <a-nandan@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Apurva Nandan <a-nandan@ti.com>
-Subject: [PATCH] arm64: dts: ti: k3-j784s4-evm: Add eMMC mmc0 support
-Date:   Mon, 27 Mar 2023 14:01:00 +0530
-Message-ID: <20230327083100.12587-1-a-nandan@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 27 Mar 2023 04:37:29 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41B0BDE0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:32:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=YNOkyiQLi6rsjmLS4oe/+s1BKco
+        sbWSDxtO/1EqJKJs=; b=e965lDlKU7sfdRCqt6zCCT1Mm6Hkmm444GuAhEYxWRW
+        8ErrG+r95/YWnY0YsQ/RqI+IY0ZsfZNdL5G+Gu+Av4EvpxVkQRYfFzyy8mULqO64
+        1ZHsSX4lf/pDKg5o6mRiSzkogGDzhnIUdh/v1d/0iQ0RD2hTvKERHd71+jxgbj88
+        =
+Received: (qmail 3064193 invoked from network); 27 Mar 2023 10:31:40 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Mar 2023 10:31:40 +0200
+X-UD-Smtp-Session: l3s3148p1@8TNskt33wpsujnv6
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     netdev@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net v4] smsc911x: avoid PHY being resumed when interface is not up
+Date:   Mon, 27 Mar 2023 10:31:38 +0200
+Message-Id: <20230327083138.6044-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for eMMC card connected to main sdhci0 instance.
+SMSC911x doesn't need mdiobus suspend/resume, that's why it sets
+'mac_managed_pm'. However, setting it needs to be moved from init to
+probe, so mdiobus PM functions will really never be called (e.g. when
+the interface is not up yet during suspend/resume).
 
-Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+Fixes: 3ce9f2bef755 ("net: smsc911x: Stop and start PHY during suspend and resume")
+Suggested-by: Heiner Kallweit <hkallweit1@gmail.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 ---
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 9 +++++++++
- 1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-index 7480f37e89e8..1622a01a4667 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-@@ -21,6 +21,7 @@ chosen {
+Changes since v3:
+* broken out of a patch series. The other patch needs bigger rework and
+  a seperate series
+* add Simon's tag (thanks!)
+
+ drivers/net/ethernet/smsc/smsc911x.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/smsc/smsc911x.c b/drivers/net/ethernet/smsc/smsc911x.c
+index a2e511912e6a..a690d139e177 100644
+--- a/drivers/net/ethernet/smsc/smsc911x.c
++++ b/drivers/net/ethernet/smsc/smsc911x.c
+@@ -1037,8 +1037,6 @@ static int smsc911x_mii_probe(struct net_device *dev)
+ 		return ret;
+ 	}
  
- 	aliases {
- 		serial2 = &main_uart8;
-+		mmc0 = &main_sdhci0;
- 		mmc1 = &main_sdhci1;
- 		i2c0 = &main_i2c0;
- 	};
-@@ -225,6 +226,14 @@ exp2: gpio@22 {
- 	};
- };
+-	/* Indicate that the MAC is responsible for managing PHY PM */
+-	phydev->mac_managed_pm = true;
+ 	phy_attached_info(phydev);
  
-+&main_sdhci0 {
-+	/* eMMC */
-+	status = "okay";
-+	non-removable;
-+	ti,driver-strength-ohm = <50>;
-+	disable-wp;
-+};
+ 	phy_set_max_speed(phydev, SPEED_100);
+@@ -1066,6 +1064,7 @@ static int smsc911x_mii_init(struct platform_device *pdev,
+ 			     struct net_device *dev)
+ {
+ 	struct smsc911x_data *pdata = netdev_priv(dev);
++	struct phy_device *phydev;
+ 	int err = -ENXIO;
+ 
+ 	pdata->mii_bus = mdiobus_alloc();
+@@ -1108,6 +1107,10 @@ static int smsc911x_mii_init(struct platform_device *pdev,
+ 		goto err_out_free_bus_2;
+ 	}
+ 
++	phydev = phy_find_first(pdata->mii_bus);
++	if (phydev)
++		phydev->mac_managed_pm = true;
 +
- &main_sdhci1 {
- 	/* SD card */
- 	status = "okay";
+ 	return 0;
+ 
+ err_out_free_bus_2:
 -- 
-2.34.1
+2.30.2
 
