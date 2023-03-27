@@ -2,114 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45296CABEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F586CABEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbjC0Rgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 13:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
+        id S232559AbjC0Rg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 13:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231891AbjC0Rgb (ORCPT
+        with ESMTP id S232439AbjC0Rg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:36:31 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1395D194
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:36:30 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id m5so6916671uae.11
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:36:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679938589;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iEz3U669eusarpdOhYY7KYApKyeHC+XWqMsT7FRhmXs=;
-        b=X/+I64ySwrBmfuGZEe53ScuVQe0B8Ih9lH+keHrzFe3gwrkz0E83XPgyzDjUMjjiDD
-         g+bTo3+UwEwRHu81T6msOPGw/9FqE1f42194QiqP9/OqZiR1R34PhndLQMcrAMwVLC6N
-         LPfNvhr1c113OCgxM2WojAz+Q+Kez3ZKZPWa/8h/5uSFmVfw0K9GniowrUMt2OAfWXp1
-         bVALLmglOD1zHZPnG/jU7IhCa09JAxCudhOxX/pIpQ8Tq5BfTWK6uQXHczqCIVdXG2yc
-         ebR608LLiKgkkwaarNjccCwreBwrPeSPEdEZIjxeA90eqtFG/BF07eNL1/nEg7n3AuHl
-         ajhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679938589;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iEz3U669eusarpdOhYY7KYApKyeHC+XWqMsT7FRhmXs=;
-        b=LXfKHUEaR68LrX+h7En1QAh+YYKMIlyVfv2wkJ5WOxEeK44bKBQbXUbD1QdgyuvY33
-         SdkB50T1kwl31J40A5T8VXEEpOyTaQ9bp6ehT6uXT3czYWCki64S8EFWrjEnry6QatfY
-         Qdo/5BXgropjfKnuJHjhfbsvq8kxAGFSCRsRcRE0PYsUct73bAfLGdWZXoaDEbS2zb4Q
-         6Epnhu8ZyBzXq91USADsHM4GV3h48HkoWSUeg8mULrVEi7+cRZm4AYXs/KmGGECZ+bTf
-         +54/8E2zhwOL/dA5l9UM0eoNt+56CzibviZxoT+gTpl72lznUpCgOjhU+Yj8lMiMS4XC
-         VtkQ==
-X-Gm-Message-State: AAQBX9cjBjy3tpKobImCGi1cKIRz5msHYlP6/ptH1HePwJs0ov8HzTF1
-        Kw3VOaNBx6OxSgrnhScXspmILYLN8nWQzHGxR86hyw==
-X-Google-Smtp-Source: AKy350YbDMi2uGWPOd3bHOIwEjCKN7d/pdSlcBAJGKrIOUa6ARnClHJ058kfsjjEkkbOnvGFbJbs4whviQpqhVvD2WU=
-X-Received: by 2002:a1f:2dce:0:b0:436:4a89:bb11 with SMTP id
- t197-20020a1f2dce000000b004364a89bb11mr7016521vkt.0.1679938588828; Mon, 27
- Mar 2023 10:36:28 -0700 (PDT)
+        Mon, 27 Mar 2023 13:36:56 -0400
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885701FD0;
+        Mon, 27 Mar 2023 10:36:50 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Plg3d2hKyz9sQY;
+        Mon, 27 Mar 2023 19:36:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
+        s=MBO0001; t=1679938606;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=erhiX1kWslYrQnsmeLq0Eijl2/NyUjXUqiUh7SiAOL4=;
+        b=Z+NCmJiRBmaI4XZu26q+haVWgnaLtjwJk5782Ya5brwKjCkoB42NhqmmjRNoWgqglT7GEa
+        C64Y5mBG9k8MZtgJXz6TjyuawegBFtwFbCGqCBHbHN4HWQXtwI98Ve7sXhymdqkjWV/B42
+        2CklB4ntdahmFFaQvzroxdbnEsaXCyu1GxbHylA2p5ModoeqNaTEdsPsgL1mUDbOUJqtGx
+        KtxriXyIPhxp9BUlMqhS1s2w4W/l7rfAdf0JiVPzycLmOqgvyQHeYqdTxuS+wUkhB67h3S
+        9xGomaoDamqgfj6I8zTY/xDW11XitrRU2IwZae/KKyuX3Ik6rfm5LK+e93ZiJQ==
+From:   Dylan Van Assche <me@dylanvanassche.be>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Dylan Van Assche <me@dylanvanassche.be>
+Subject: [PATCH v4] sound: soc: qcom: sdm845: expose ALSA control for jack
+Date:   Mon, 27 Mar 2023 19:36:27 +0200
+Message-Id: <20230327173627.361533-1-me@dylanvanassche.be>
 MIME-Version: 1.0
-References: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-From:   Erdem Aktas <erdemaktas@google.com>
-Date:   Mon, 27 Mar 2023 10:36:17 -0700
-Message-ID: <CAAYXXYxC++kRW_Kg0jieaxuwzTC2hu-9SxRjsHH_kqZW_DTE7Q@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] TDX Guest Quote generation support
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4Plg3d2hKyz9sQY
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 11:20=E2=80=AFPM Kuppuswamy Sathyanarayanan
-<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->
-> Hi All,
->
-> In TDX guest, the attestation process is used to verify the TDX guest
-> trustworthiness to other entities before provisioning secrets to the
-> guest.
->
-> The TDX guest attestation process consists of two steps:
->
-> 1. TDREPORT generation
-> 2. Quote generation.
->
-> The First step (TDREPORT generation) involves getting the TDX guest
-> measurement data in the format of TDREPORT which is further used to
-> validate the authenticity of the TDX guest. The second step involves
-> sending the TDREPORT to a Quoting Enclave (QE) server to generate a
-> remotely verifiable Quote. TDREPORT by design can only be verified on
-> the local platform. To support remote verification of the TDREPORT,
-> TDX leverages Intel SGX Quoting Enclave to verify the TDREPORT
-> locally and convert it to a remotely verifiable Quote. Although
-> attestation software can use communication methods like TCP/IP or
-> vsock to send the TDREPORT to QE, not all platforms support these
-> communication models. So TDX GHCI specification [1] defines a method
-> for Quote generation via hypercalls. Please check the discussion from
-> Google [2] and Alibaba [3] which clarifies the need for hypercall based
-Thanks Sathyanarayanan for submitting patches again.
+Qualcomm SDM845 features a headphone jack via a Qualcomm WCD9340
+codec which has jack detection through the wcd-mbhc-v2 driver.
+Jack detection is currently fully functional via the input
+interface together with multimedia buttons, but is not exposed
+as an ALSA control. Therefore, ALSA clients such as PulseAudio [1]
+do not pick up the jack detection events as they only support
+one of the possible interface (ALSA control or input interface,
+but not both). Initialize the audio jack with snd_soc_card_jack_new_pins
+instead of snd_soc_card_jack_new to make the jack also available as
+an ALSA control.
 
-I just wanted to reiterate what I said before that having a clean
-TDVMCALL based interface to get TDX Quote without any virtio/vsock
-dependency  is critical for us to support many use cases.
+[1] https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/1377
+
+Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
+---
+
+Changes in v4:
+
+- Dropped cover letter because of a single patch.
+- Reworked as a patch to the SDM845 Machine driver as suggested
+  by Mark Brown.
+
+Changes in v3:
+
+- Improved cover letter
+- Added Tested-by from
+https://lore.kernel.org/alsa-devel/20221007155716.10594-1-me@dylanvanassche.be/
+- Properly added maintainers for sending this patch
+
+Kind regards,
+Dylan Van Assche
+
+ sound/soc/qcom/sdm845.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/qcom/sdm845.c b/sound/soc/qcom/sdm845.c
+index 02612af714a8..95888c5079a0 100644
+--- a/sound/soc/qcom/sdm845.c
++++ b/sound/soc/qcom/sdm845.c
+@@ -44,6 +44,14 @@ struct sdm845_snd_data {
+ 
+ static unsigned int tdm_slot_offset[8] = {0, 4, 8, 12, 16, 20, 24, 28};
+ 
++static struct snd_soc_jack_pin sdm845_jack_pins[] = {
++	{
++		.pin = "Headphone Jack",
++		.mask = (SND_JACK_HEADPHONE | SND_JACK_MICROPHONE | SND_JACK_HEADSET |
++			 SND_JACK_MECHANICAL)
++	},
++};
++
+ static int sdm845_slim_snd_hw_params(struct snd_pcm_substream *substream,
+ 				     struct snd_pcm_hw_params *params)
+ {
+@@ -242,12 +250,13 @@ static int sdm845_dai_init(struct snd_soc_pcm_runtime *rtd)
+ 
+ 
+ 	if (!pdata->jack_setup) {
+-		rval = snd_soc_card_jack_new(card, "Headset Jack",
++		rval = snd_soc_card_jack_new_pins(card, "Headset Jack",
+ 				SND_JACK_HEADSET |
+ 				SND_JACK_HEADPHONE |
+ 				SND_JACK_BTN_0 | SND_JACK_BTN_1 |
+ 				SND_JACK_BTN_2 | SND_JACK_BTN_3,
+-				&pdata->jack);
++				&pdata->jack, sdm845_jack_pins,
++				ARRAY_SIZE(sdm845_jack_pins));
+ 
+ 		if (rval < 0) {
+ 			dev_err(card->dev, "Unable to add Headphone Jack\n");
+-- 
+2.39.2
+
