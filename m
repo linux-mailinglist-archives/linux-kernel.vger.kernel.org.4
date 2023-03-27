@@ -2,142 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24CD26CAC93
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803F46CAD07
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbjC0SCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 14:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        id S229967AbjC0Sbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 14:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjC0SCD (ORCPT
+        with ESMTP id S229606AbjC0Sbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:02:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404CDEC;
-        Mon, 27 Mar 2023 11:02:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8547B818A4;
-        Mon, 27 Mar 2023 18:02:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E79A1C4339B;
-        Mon, 27 Mar 2023 18:01:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679940119;
-        bh=r3W3CExS6s0aynR90LW9av86zilz2l5bpPiQq8qSgxE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e5eKH37trpX6huVMm+kEvfWLbcU5tdQTr1r2ve39BDvGGqv/TSsQSO/2MEhhQqIL5
-         hudw/0svA//Q0jC0gCjlzEOaq9YWJOu9Tka09ExBUq7XZ/TatcLyACvJnOGYXkN6AK
-         LOL5uLSGXEV9OZ5EnAoCWJNiAK71AGI/TNSaDTCPB0dOgHYxIamMjE0+t6Re4WjWZ0
-         1ZrByloe1o0sg0mT6tZDdbw+tH8tg8xXcabHmnRJgmBi4QEBy80jl3Rv2rZ+5J9Sbd
-         anijbDoznXNlGRQMpfxYja5jghHDNhB0hgs+khe/fPuMZYJXkMGyU53pf4nfAUuTYR
-         /sC19gQf19C/A==
-Date:   Mon, 27 Mar 2023 11:01:57 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v4 4/7] soc: qcom: Make the Qualcomm UFS/SDCC ICE a
- dedicated driver
-Message-ID: <20230327180157.GC1882@sol.localdomain>
-References: <20230327134734.3256974-1-abel.vesa@linaro.org>
- <20230327134734.3256974-5-abel.vesa@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327134734.3256974-5-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 27 Mar 2023 14:31:46 -0400
+X-Greylist: delayed 900 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Mar 2023 11:31:45 PDT
+Received: from mx2.n90.eu (mx.n90.eu [65.21.251.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E26271D;
+        Mon, 27 Mar 2023 11:31:45 -0700 (PDT)
+Received: by mx2.n90.eu (Postfix, from userid 182)
+        id 6277A1027DB45; Mon, 27 Mar 2023 18:06:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n90.eu; s=default;
+        t=1679940370; bh=OGbOFJayhgRcXq5FMeS6bRDyUolQeucd8waNYOur4j4=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to;
+        b=nPD85CB4IjQubR+FqhGXUYhBxV7bbwiHtN9kDpUsMfvJ5VKjUsWV88RDwd2C5oy4/
+         9tlJmIwPVi3rnu2uF27A0Xua2/i08lUSZ8Yll0MXwtsw+rld4069lz2IM8kPcwxggO
+         phjBZkPfcy0QaShZxkSowFm5huqTrA2RmJl4unv3BE9WpLw5cHrd/vU7l+6slZ5l9/
+         p7m9eSvV87wcasXYp44lZW2pwDpGg8ecJrJGUayyE9ySjUesRCJHONIfC7Dbqvhl94
+         Nfe8MHZJvedo8D6w1a4cBrMOGJeF/f9TiWznHy5d8o12ZS2UBdgtiZxheA/fa2BBpK
+         PygFgKG/87wsA==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: from spica (unknown [172.20.188.202])
+        by mx2.n90.eu (Postfix) with ESMTP id CD5411025BB5A;
+        Mon, 27 Mar 2023 18:06:07 +0000 (UTC)
+References: <20230327143359.GA2834753@bhelgaas>
+ <ZCHB6hXbCOxiZw+n@kbusch-mbp.dhcp.thefacebook.com>
+User-agent: mu4e 1.8.14; emacs 30.0.50
+From:   Aleksander Trofimowicz <alex@n90.eu>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [bugzilla-daemon@kernel.org: [Bug 217251] New: pciehp: nvme not
+ visible after re-insert to tbt port]
+Date:   Mon, 27 Mar 2023 17:43:18 +0000
+In-reply-to: <ZCHB6hXbCOxiZw+n@kbusch-mbp.dhcp.thefacebook.com>
+X-Mailer: boring 1.0
+Message-ID: <871qlank6o.fsf@n90.eu>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 04:47:31PM +0300, Abel Vesa wrote:
-> +	/* For now this driver only supports ICE version 3 and 4. */
-> +	if (major != 3 && major != 4) {
-> +		dev_warn(dev, "Unsupported ICE version: v%d.%d.%d\n",
-> +			 major, minor, step);
-> +		return false;
-> +	}
 
-Version 4 support was not in the original.  This ought to be mentioned in the
-commit message.
+Keith Busch <kbusch@kernel.org> writes:
 
-> +struct qcom_ice *of_qcom_ice_get(struct device *dev)
-> +{
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct qcom_ice *ice = ERR_PTR(-EPROBE_DEFER);
-> +	struct device_node *node;
-> +	struct resource *res;
-> +	void __iomem *base;
-> +
-> +	if (!dev || !dev->of_node)
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	/* legacy has ice reg range in the consumer DT node */
-> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ice");
-> +	if (res) {
-> +		base = devm_ioremap_resource(&pdev->dev, res);
-> +		if (IS_ERR(base))
-> +			return base;
-> +
-> +		/* create ICE instance using consumer dev */
-> +		return qcom_ice_create(pdev, base);
-> +	}
-> +
-> +	node = of_parse_phandle(dev->of_node, "qcom,ice", 0);
-> +	if (!node) {
-> +		ice = NULL;
-> +		goto out;
-> +	}
+> On Mon, Mar 27, 2023 at 09:33:59AM -0500, Bjorn Helgaas wrote:
+>> Forwarding to NVMe folks, lists for visibility.
+>>
+>> ----- Forwarded message from bugzilla-daemon@kernel.org -----
+>>
+>> https://bugzilla.kernel.org/show_bug.cgi?id=217251
+>> ...
+>>
+>> Created attachment 304031
+>>   --> https://bugzilla.kernel.org/attachment.cgi?id=304031&action=edit
+>> the tracing of nvme_pci_enable() during re-insertion
+>>
+>> Hi,
+>>
+>> There is a JHL7540-based device that may host a NVMe device. After the first
+>> insertion a nvme drive is properly discovered and handled by the relevant
+>> modules. Once disconnected any further attempts are not successful. The device
+>> is visible on a PCI bus, but nvme_pci_enable() ends up calling
+>> pci_disable_device() every time; the runtime PM status of the device is
+>> "suspended", the power status of the 04:01.0 PCI bridge is D3. Preventing the
+>> device from being power managed ("on" -> /sys/devices/../power/control)
+>> combined with device removal and pci rescan changes nothing. A host reboot
+>> restores the initial state.
+>>
+>> I would appreciate any suggestions how to debug it further.
+>
+> Sounds the same as this report:
+>
+>   http://lists.infradead.org/pipermail/linux-nvme/2023-March/038259.html
+>
+> The driver is bailing on the device because we can't read it's status register
+> out of the remapped BAR. There's nothing we can do about that from the nvme
+> driver level. Memory mapped IO has to work in order to proceed.
+>
+Thanks. I can confirm it is the same problem:
 
-I think a longer comment in this code explaining the legacy implementation vs.
-the new implementation would be helpful.
+a) the platform is Intel Alderlake
+b) readl(dev->bar + NVME_REG_CSTS) in nvme_pci_enable() fails
+c) reading BAR0 via setpci gives 0x00000004
 
-> +	pdev = of_find_device_by_node(node);
-> +	if (!pdev) {
-> +		dev_err(dev, "Cannot find device node %s\n", node->name);
-> +		goto out;
-> +	}
-
-It is hard to understand the return value in this case, since
-'ice = ERR_PTR(-EPROBE_DEFER)' happens way above.  Maybe do:
-
-	if (!pdev) {
-		dev_err(dev, "Cannot find device node %s\n", node->name);
-		ice = ERR_PTR(-EPROBE_DEFER);
-		goto out;
-	}
-> +
-> +	ice = platform_get_drvdata(pdev);
-> +	if (!ice) {
-> +		dev_err(dev, "Cannot get ice\n");
-> +		put_device(&pdev->dev);
-> +		return ERR_PTR(-ENODEV);
-> +	}
-
-Can this error message be more descriptive?
-
-Otherwise this patch is looking good, thanks!
-
-- Eric
+--
+at
