@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69BD6CAF72
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7116CAF70
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbjC0UKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 16:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
+        id S232461AbjC0UKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 16:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232200AbjC0UJ6 (ORCPT
+        with ESMTP id S232156AbjC0UJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Mar 2023 16:09:58 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDFE198D;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB48172A;
         Mon, 27 Mar 2023 13:09:55 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 20:09:52 -0000
+Date:   Mon, 27 Mar 2023 20:09:53 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1679947793;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=B+c5GdlWj1yBxvFb1qVwQW6Ns/qLp2fdd2CY1LbeZ3w=;
-        b=UPB4pYqJK32LmtsStt47YBM5CDrySrZmFa05YJxi6WH/xF2894Fr1R47DJbeNiubHoplfk
-        FYvcP+iyC7OH01QT/pk9xoIT/9xEzYA1VOl/mu7uLsOa0jtKqaOEtWDJgDEkF3xrxqnyO2
-        RacJxgU1cnOeOb5gJ3eJmniHZTbfEjhTgP/9SNDz+5PJlUkdbiHyaeECnXzRn8iOkdteoA
-        ke+qTQe3rQP10Hg53nheUj3FSTxE+awlmuH2g6EmgXI2Ej9nM1eh9qelpX4fxNW1Vb7Fku
-        EmXdBHv4k3N/jDymuswibbBjMXZZWUgDaHmkFx6PZ1Xq3/hwl+tsSzbbLu74xA==
+        bh=k2jw5BA/HVG6MhvyqeHZziDkRNXCWdjJkAUwLh/XHD4=;
+        b=AfmK3AFwqSDfAWXTZsqDUaA8wViuBTcFQdRS239HONCZ+XschQxwpAr22pbiJdJsT+pGlk
+        ymMPK6GGB4ZLWHJQMNtBYqKSn283+ZNWSnzW83zPMboJhD9ZJOr9rnEV7mc8/VK0v39QSW
+        yZKa44cTTbtabthiiqTFkuf4pY8lfqBeZI8p6zre6K8TcNC5JnhhTf4Ak5ncUjug6eDEMt
+        +Jn4GewSwdrznTUHk1a2lxvK6W4LvmebP/vRBwlEw2MvdbRPZ9R9IeuP3a7ttfVQIrhnxo
+        dFrgWiG5L8wY3v++W7hVdi002nWqcQhkEt2MN2N0BIfWGG3yFNGxbUpgaIAenQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1679947793;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,23 +36,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=B+c5GdlWj1yBxvFb1qVwQW6Ns/qLp2fdd2CY1LbeZ3w=;
-        b=V2bvNWBNqq6K5bMlp+hxHd+GH0OokcOZLZxr4rQZQ0S7l4+QlQg1xbnqXtD0ICARWAyeLN
-        fOavEpzc43CGUpAw==
+        bh=k2jw5BA/HVG6MhvyqeHZziDkRNXCWdjJkAUwLh/XHD4=;
+        b=SwEaRKjwxeI8erabPwBfIIIwQ2Ap9ho6p0ulqSJzMpUqcOp7Dq4gmq8z46WHgB04iX29s3
+        r37U5S1f4iDBieBg==
 From:   "tip-bot2 for Michael Kelley" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] init: Call mem_encrypt_init() after Hyper-V hypercall
- init is done
+Subject: [tip: x86/sev] Drivers: hv: Explicitly request decrypted in vmap_pfn() calls
 Cc:     Michael Kelley <mikelley@microsoft.com>,
         "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>, x86@kernel.org,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <1678329614-3482-6-git-send-email-mikelley@microsoft.com>
-References: <1678329614-3482-6-git-send-email-mikelley@microsoft.com>
+In-Reply-To: <1679838727-87310-4-git-send-email-mikelley@microsoft.com>
+References: <1679838727-87310-4-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
-Message-ID: <167994779275.5837.4752888881557420711.tip-bot2@tip-bot2>
+Message-ID: <167994779321.5837.13303658601319169134.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,68 +67,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/sev branch of tip:
 
-Commit-ID:     e45e761b77bc0739e7e23258c4394013bbb919c7
-Gitweb:        https://git.kernel.org/tip/e45e761b77bc0739e7e23258c4394013bbb919c7
+Commit-ID:     d33ddc92db8a61416473ff3d7f1c621c50733dc0
+Gitweb:        https://git.kernel.org/tip/d33ddc92db8a61416473ff3d7f1c621c50733dc0
 Author:        Michael Kelley <mikelley@microsoft.com>
-AuthorDate:    Wed, 08 Mar 2023 18:40:06 -08:00
+AuthorDate:    Sun, 26 Mar 2023 06:51:58 -07:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 27 Mar 2023 09:24:01 +02:00
+CommitterDate: Mon, 27 Mar 2023 08:46:43 +02:00
 
-init: Call mem_encrypt_init() after Hyper-V hypercall init is done
+Drivers: hv: Explicitly request decrypted in vmap_pfn() calls
 
-Full Hyper-V initialization, including support for hypercalls, is done
-as an apic_post_init callback via late_time_init().  mem_encrypt_init()
-needs to make hypercalls when it marks swiotlb memory as decrypted.
-But mem_encrypt_init() is currently called a few lines before
-late_time_init(), so the hypercalls don't work.
-
-Fix this by moving mem_encrypt_init() after late_time_init() and
-related clock initializations. The intervening initializations don't
-do any I/O that requires the swiotlb, so moving mem_encrypt_init()
-slightly later has no impact.
+Update vmap_pfn() calls to explicitly request that the mapping
+be for decrypted access to the memory.  There's no change in
+functionality since the PFNs passed to vmap_pfn() are above the
+shared_gpa_boundary, implicitly producing a decrypted mapping.
+But explicitly requesting "decrypted" allows the code to work
+before and after changes that cause vmap_pfn() to mask the
+PFNs to being below the shared_gpa_boundary.
 
 Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
-Link: https://lore.kernel.org/r/1678329614-3482-6-git-send-email-mikelley@microsoft.com
+Reviewed-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+Link: https://lore.kernel.org/r/1679838727-87310-4-git-send-email-mikelley@microsoft.com
 ---
- init/main.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ arch/x86/hyperv/ivm.c    | 2 +-
+ drivers/hv/ring_buffer.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/init/main.c b/init/main.c
-index 4425d17..7e9c0ca 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -1088,14 +1088,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
- 	 */
- 	locking_selftest();
+diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
+index f33c67e..5648efb 100644
+--- a/arch/x86/hyperv/ivm.c
++++ b/arch/x86/hyperv/ivm.c
+@@ -343,7 +343,7 @@ void *hv_map_memory(void *addr, unsigned long size)
+ 		pfns[i] = vmalloc_to_pfn(addr + i * PAGE_SIZE) +
+ 			(ms_hyperv.shared_gpa_boundary >> PAGE_SHIFT);
  
--	/*
--	 * This needs to be called before any devices perform DMA
--	 * operations that might use the SWIOTLB bounce buffers. It will
--	 * mark the bounce buffers as decrypted so that their usage will
--	 * not cause "plain-text" data to be decrypted when accessed.
--	 */
--	mem_encrypt_init();
--
- #ifdef CONFIG_BLK_DEV_INITRD
- 	if (initrd_start && !initrd_below_start_ok &&
- 	    page_to_pfn(virt_to_page((void *)initrd_start)) < min_low_pfn) {
-@@ -1112,6 +1104,17 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
- 		late_time_init();
- 	sched_clock_init();
- 	calibrate_delay();
-+
-+	/*
-+	 * This needs to be called before any devices perform DMA
-+	 * operations that might use the SWIOTLB bounce buffers. It will
-+	 * mark the bounce buffers as decrypted so that their usage will
-+	 * not cause "plain-text" data to be decrypted when accessed. It
-+	 * must be called after late_time_init() so that Hyper-V x86/x64
-+	 * hypercalls work when the SWIOTLB bounce buffers are decrypted.
-+	 */
-+	mem_encrypt_init();
-+
- 	pid_idr_init();
- 	anon_vma_init();
- #ifdef CONFIG_X86
+-	vaddr = vmap_pfn(pfns, size / PAGE_SIZE, PAGE_KERNEL_IO);
++	vaddr = vmap_pfn(pfns, size / PAGE_SIZE, pgprot_decrypted(PAGE_KERNEL));
+ 	kfree(pfns);
+ 
+ 	return vaddr;
+diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
+index c6692fd..2111e97 100644
+--- a/drivers/hv/ring_buffer.c
++++ b/drivers/hv/ring_buffer.c
+@@ -211,7 +211,7 @@ int hv_ringbuffer_init(struct hv_ring_buffer_info *ring_info,
+ 
+ 		ring_info->ring_buffer = (struct hv_ring_buffer *)
+ 			vmap_pfn(pfns_wraparound, page_cnt * 2 - 1,
+-				 PAGE_KERNEL);
++				 pgprot_decrypted(PAGE_KERNEL));
+ 		kfree(pfns_wraparound);
+ 
+ 		if (!ring_info->ring_buffer)
