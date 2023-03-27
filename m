@@ -2,483 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA096C99B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 04:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D94A6C99B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 04:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232091AbjC0Cqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 22:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
+        id S232043AbjC0CsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 22:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbjC0Cqc (ORCPT
+        with ESMTP id S231659AbjC0CsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 22:46:32 -0400
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3835649CE;
-        Sun, 26 Mar 2023 19:46:30 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VeeqFQN_1679885186;
-Received: from srmbuffer011165236051.sqa.net(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VeeqFQN_1679885186)
-          by smtp.aliyun-inc.com;
-          Mon, 27 Mar 2023 10:46:27 +0800
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-To:     John Garry <john.g.garry@oracle.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>
-Subject: [PATCH RFC 4/4] perf vendor events: Add JSON metrics for Yitian 710 DDR
-Date:   Mon, 27 Mar 2023 10:46:12 +0800
-Message-Id: <1679885172-95021-5-git-send-email-renyu.zj@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1679885172-95021-1-git-send-email-renyu.zj@linux.alibaba.com>
-References: <1679885172-95021-1-git-send-email-renyu.zj@linux.alibaba.com>
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Sun, 26 Mar 2023 22:48:20 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC77EC
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 19:47:55 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id i10so6229724vss.5
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 19:47:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679885274;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jVYybNewVCUGIqlidPD+XnZB+0DT8ZQE8hA51H8g5lY=;
+        b=nrKyJZoSZOLvRdvdah1XBHmiBQPlhejAs6Noz0yni0AOhMTvNYiq08DZ9m+ap7x3O2
+         dY56EZKctpmqiNkTSQONXOJkoi61DrcWIU8YUpZ6XnOhakY2a/LKHWfW07Od6Xtf3+3f
+         itL6A8fliVYnbFW8vp7X7QelVrMrQAsnFZN+eamytjiuo+2QH5c0e26tSryZk8rVsJGD
+         6h85l2NvY4o6ep9w3LGHMpCAnpoAbl0VloR1B8AGEXxASkxiuegrzKvDmWz2RwEmpOPG
+         411pkCKo0e8oi2uQ9RACupqgNgNHeff+Ftg74Ot2/mZIJbNDddd3kjYNI4k9NkF8rPon
+         zbDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679885274;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jVYybNewVCUGIqlidPD+XnZB+0DT8ZQE8hA51H8g5lY=;
+        b=CwaC1bjI37CJ0WSC5zuagRK+0yOHQpQ74X9fMz9WAd6C7L7nuVv0sV91YYJ4aX9Uku
+         vcB1FuTkajgYKARYYpF8OjOweMJlvVfaacFDBzRQAV7GYWWKfbc6zV4r3N1NF3+LNP1h
+         JerxEsF7ViqhFhfXkPWh0pT2L/UTGRfxYUN7EB1stdWi8cr3CnJJizsvHg6aWC2qiGyr
+         y+/WbLjVdlJEY94zyx1LKZ809X9py7ks+GA5rQK63lWy2gzi1nDFBIOroPmiE/DpXmfC
+         b8qG8NVfn2n9V9VMc/KvsuhXZqGB68OJ5Mjbtl9Eo+AdqDvY14yJ7ovo0333FWktQwi3
+         QIZg==
+X-Gm-Message-State: AO0yUKWUFHInda62QT3q5MWyH2avy5ci0g72gGUijYWE6eFPqG8Hki06
+        G20TIrRb8+TbhDplJZA2QBJjic1b76Jpucw91+k=
+X-Google-Smtp-Source: AK7set9pttu/SbRRsNRw63OJRSZtjAbF7ctNuFQw/5evaDxrdE27zd5/N5zwTbrosIObJghyEQ2fcPMbPsKxJaOVlHQ=
+X-Received: by 2002:a05:6102:3385:b0:426:6d5:a55a with SMTP id
+ i5-20020a056102338500b0042606d5a55amr8700427vsh.1.1679885274358; Sun, 26 Mar
+ 2023 19:47:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230313075017.668204-1-chunyan.zhang@unisoc.com>
+In-Reply-To: <20230313075017.668204-1-chunyan.zhang@unisoc.com>
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+Date:   Mon, 27 Mar 2023 10:47:18 +0800
+Message-ID: <CAAfSe-tg7JwakdCcoLn3Ws_164HcsT21pWHkjjw0Qqwy8PWkhQ@mail.gmail.com>
+Subject: Re: [PATCH V3 0/2] Add reattaching support and fix memory leak issue
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     iommu@lists.linux.dev, Baolu Lu <baolu.lu@linux.intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add JSON metrics for T-HEAD Yitian 710 SoC DDR.
+Hi Joerg,
 
-Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
----
- .../arm64/freescale/yitian710/sys/ali_drw.json     | 373 +++++++++++++++++++++
- .../arm64/freescale/yitian710/sys/metrics.json     |  20 ++
- tools/perf/pmu-events/jevents.py                   |   1 +
- 3 files changed, 394 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/ali_drw.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json
+On Mon, 13 Mar 2023 at 15:51, Chunyan Zhang <chunyan.zhang@unisoc.com> wrote:
+>
+> V3:
+> * Split into two patches;
+> * Added support reattching an existing domain;
+> * Release DMA buffer only when domain freed.
+>
+> V2: https://lkml.org/lkml/2023/3/7/1717
+> * Added some comment in sprd_iommu_attach_device() for the reason
+>   of calling sprd_iommu_cleanup().
+>
+> V1: https://lkml.org/lkml/2023/2/10/198
+>
+> Chunyan Zhang (2):
+>   iommu: sprd: release dma buffer to avoid memory leak
+>   iommu: sprd: Add support for reattaching an existing domain
 
-diff --git a/tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/ali_drw.json b/tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/ali_drw.json
-new file mode 100644
-index 0000000..cb8694b
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/ali_drw.json
-@@ -0,0 +1,373 @@
-+[
-+	{
-+		"BriefDescription": "A Write or Read Op at HIF interface. 64B",
-+		"ConfigCode": "0x0",
-+		"EventName": "hif_rd_or_wr",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A Write Op at HIF interface. 64B",
-+		"ConfigCode": "0x1",
-+		"EventName": "hif_wr",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710" 
-+	},
-+	{
-+		"BriefDescription": "A Read Op at HIF interface. 64B",
-+		"ConfigCode": "0x2",
-+		"EventName": "hif_rd",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A Read-Modify-Write Op at HIF interface. 64B",
-+		"ConfigCode": "0x3",
-+		"EventName": "hif_rmw",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A high priority Read at HIF interface. 64B",
-+		"ConfigCode": "0x4",
-+		"EventName": "hif_hi_pri_rd",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A write data cycle at DFI interface (to DRAM)",
-+		"ConfigCode": "0x7",
-+		"EventName": "dfi_wr_data_cycles",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A read data cycle at DFI interface (to DRAM).",
-+		"ConfigCode": "0x8",
-+		"EventName": "dfi_rd_data_cycles",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A high priority read becomes critical.",
-+		"ConfigCode": "0x9",
-+		"EventName": "hpr_xact_when_critical",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"  
-+	},
-+	{
-+		"BriefDescription": "A low priority read becomes critical.",
-+		"ConfigCode": "0xA",
-+		"EventName": "lpr_xact_when_critical",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A write becomes critical.",
-+		"ConfigCode": "0xB",
-+		"EventName": "wr_xact_when_critical",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "An Activate (ACT) command to DRAM.",
-+		"ConfigCode": "0xC",
-+		"EventName": "op_is_activate",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A Read or Write CAS command to DRAM.",
-+		"ConfigCode": "0xD",
-+		"EventName": "op_is_rd_or_wr",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "An ACT command for read to DRAM.",
-+		"ConfigCode": "0xE",
-+		"EventName": "op_is_rd_activate",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A Read CAS command to DRAM.",
-+		"ConfigCode": "0xF",
-+		"EventName": "op_is_rd",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A Write CAS command to DRAM.",
-+		"ConfigCode": "0x10",
-+		"EventName": "op_is_wr",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A Masked Write command to DRAM.",
-+		"ConfigCode": "0x11",
-+		"EventName": "op_is_mwr",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A Precharge (PRE) command to DRAM.",
-+		"ConfigCode": "0x12",
-+		"EventName": "op_is_precharge",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A PRE required by read or write.",
-+		"ConfigCode": "0x13",
-+		"EventName": "precharge_for_rdwr",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A PRE required by other conditions.",
-+		"ConfigCode": "0x14",
-+		"EventName": "precharge_for_other",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A read-write turnaround.",
-+		"ConfigCode": "0x15",
-+		"EventName": "rdwr_transitions",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A write combine (merge) in write data buffer.",
-+		"ConfigCode": "0x16",
-+		"EventName": "write_combine",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A Write-After-Read hazard.",
-+		"ConfigCode": "0x17",
-+		"EventName": "war_hazard",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A Read-After-Write hazard.",
-+		"ConfigCode": "0x18",
-+		"EventName": "raw_hazard",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A Write-After-Write hazard.",
-+		"ConfigCode": "0x19",
-+		"EventName": "waw_hazard",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "Rank0 enters self-refresh (SRE).",
-+		"ConfigCode": "0x1A",
-+		"EventName": "op_is_enter_selfref_rk0",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "Rank1 enters self-refresh (SRE).",
-+		"ConfigCode": "0x1B",
-+		"EventName": "op_is_enter_selfref_rk1",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "Rank2 enters self-refresh (SRE).",
-+		"ConfigCode": "0x1C",
-+		"EventName": "op_is_enter_selfref_rk2",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "Rank3 enters self-refresh (SRE).",
-+		"ConfigCode": "0x1D",
-+		"EventName": "op_is_enter_selfref_rk3",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "Rank0 enters power-down (PDE).",
-+		"ConfigCode": "0x1E",
-+		"EventName": "op_is_enter_powerdown_rk0",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "Rank1 enters power-down (PDE).",
-+		"ConfigCode": "0x1F",
-+		"EventName": "op_is_enter_powerdown_rk1",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "Rank2 enters power-down (PDE).",
-+		"ConfigCode": "0x20",
-+		"EventName": "op_is_enter_powerdown_rk2",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "Rank3 enters power-down (PDE).",
-+		"ConfigCode": "0x21",
-+		"EventName": "op_is_enter_powerdown_rk3",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A cycle that Rank0 stays in self-refresh mode.",
-+		"ConfigCode": "0x26",
-+		"EventName": "selfref_mode_rk0",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A cycle that Rank1 stays in self-refresh mode.",
-+		"ConfigCode": "0x27",
-+		"EventName": "selfref_mode_rk1",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A cycle that Rank2 stays in self-refresh mode.",
-+		"ConfigCode": "0x28",
-+		"EventName": "selfref_mode_rk2",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A cycle that Rank3 stays in self-refresh mode.",
-+		"ConfigCode": "0x29",
-+		"EventName": "selfref_mode_rk3",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "An auto-refresh (REF) command to DRAM.",
-+		"ConfigCode": "0x2A",
-+		"EventName": "op_is_refresh",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A critical REF command to DRAM.",
-+		"ConfigCode": "0x2B",
-+		"EventName": "op_is_crit_ref",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "An MRR or MRW command to DRAM.",
-+		"ConfigCode": "0x2D",
-+		"EventName": "op_is_load_mode",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A ZQCal command to DRAM.",
-+		"ConfigCode": "0x2E",
-+		"EventName": "op_is_zqcl",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "At least one entry in read queue reaches the visible window limit.",
-+		"ConfigCode": "0x30",
-+		"EventName": "visible_window_limit_reached_rd",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "At least one entry in write queue reaches the visible window limit.",
-+		"ConfigCode": "0x31",
-+		"EventName": "visible_window_limit_reached_wr",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A DQS Oscillator MPC command to DRAM.",
-+		"ConfigCode": "0x34",
-+		"EventName": "op_is_dqsosc_mpc",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A DQS Oscillator MRR command to DRAM.",
-+		"ConfigCode": "0x35",
-+		"EventName": "op_is_dqsosc_mrr",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A TCR (Temperature Compensated Refresh) MRR command to DRAM.",
-+		"ConfigCode": "0x36",
-+		"EventName": "op_is_tcr_mrr",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A ZQCal Start command to DRAM.",
-+		"ConfigCode": "0x37",
-+		"EventName": "op_is_zqstart",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A ZQCal Latch command to DRAM.",
-+		"ConfigCode": "0x38",
-+		"EventName": "op_is_zqlatch",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A packet at CHI TXREQ interface (request).",
-+		"ConfigCode": "0x39",
-+		"EventName": "chi_txreq",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A packet at CHI TXDAT interface (read data).",
-+		"ConfigCode": "0x3A",
-+		"EventName": "chi_txdat",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A packet at CHI RXDAT interface (write data).",
-+		"ConfigCode": "0x3B",
-+		"EventName": "chi_rxdat",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A packet at CHI RXRSP interface.",
-+		"ConfigCode": "0x3C",
-+		"EventName": "chi_rxrsp",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "A violation detected in TZC.",
-+		"ConfigCode": "0x3D",
-+		"EventName": "tsz_vio",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"BriefDescription": "The ddr cycle.",
-+		"ConfigCode": "0x80",
-+		"EventName": "cycle",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	}
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json b/tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json
-new file mode 100644
-index 0000000..c14ecac
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json
-@@ -0,0 +1,20 @@
-+[
-+	{
-+		"MetricName": "ddr_read_bandwidth.all",
-+		"BriefDescription": "The ddr read bandwidth(MB/s).",
-+		"MetricGroup": "ddr",
-+		"MetricExpr": "hif_rd * 64 / 1e6 / duration_time",
-+		"ScaleUnit": "1MB/s",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	},
-+	{
-+		"MetricName": "ddr_write_bandwidth.all",
-+		"BriefDescription": "The ddr write bandwidth(MB/s).",
-+		"MetricGroup": "ddr",
-+		"MetricExpr": "(hif_wr + hif_rmw) * 64 / 1e6 / duration_time",
-+		"ScaleUnit": "1MB/s",
-+		"Unit": "yitian710_ddr",
-+		"Compat": "ali_drw_yitian710"
-+	}
-+]
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 20ed492..8cfb4b6 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -257,6 +257,7 @@ class JsonEvent:
-           'cpu_core': 'cpu_core',
-           'cpu_atom': 'cpu_atom',
-           'cmn700': 'cmn700',
-+          'yitian710_ddr': 'yitian710_ddr',
-       }
-       return table[unit] if unit in table else f'uncore_{unit.lower()}'
- 
--- 
-1.8.3.1
+Not sure if you received this patchset, since I received a rejection
+letter from mail.8bytes.org.
 
+If you didn't receive it, I can resend it with another email address.
+
+Otherwise, would you please pick up this series if there are no more comments.
+
+Thanks,
+Chunyan
+
+
+>
+>  drivers/iommu/sprd-iommu.c | 54 +++++++++++++++++++++++++++++---------
+>  1 file changed, 41 insertions(+), 13 deletions(-)
+>
+> --
+> 2.25.1
+>
