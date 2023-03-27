@@ -2,400 +2,449 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22C96CAF2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 312F46CAF2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbjC0Tw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
+        id S231977AbjC0Txb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 15:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjC0TwZ (ORCPT
+        with ESMTP id S229452AbjC0Tx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:52:25 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A579B10E4;
-        Mon, 27 Mar 2023 12:52:24 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-17ebba88c60so10504486fac.3;
-        Mon, 27 Mar 2023 12:52:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679946743;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uOeyvNM2ZkClu4K/AQvtGM1KseO25livn4C7WwiG+Gg=;
-        b=GaxAghCjDn88pOdICJCZR82LlswPzoRXdDZCEEPtxe9eGAcQlcsn2CAZSexfpxEtcD
-         PMdCxeNezhZaGaerz5f3kn1YltZwAgV1eFH14LvQ+IXoZHLHfXG+k8kzLZnTT/iNRkBS
-         ZT6gD+VFNY8ox2qhcKaX6QJVMPKN3mnuPOHaBV+caujCPbXNiZuk4mW6AKVYDEz0CfkV
-         T9zaEI0+tkRHwsJuroqIbb+lwkX22hYoaY2PkymcL9oTbRmzoYgcCuVwlPs+WL1anc7K
-         M28v90tri5jNi0wcE7Otj8ID3ovSd1xszA2kB96jhcW1cLYovTZzTqBULfu+e+6N3aAK
-         mJsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679946743;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uOeyvNM2ZkClu4K/AQvtGM1KseO25livn4C7WwiG+Gg=;
-        b=7iztREkxxIluVkRmzAmAsCWDAqmqXqgYihSLiPn31n80DU1PgQUcrgGEI3lgaftfCF
-         pToPlpSp2j439H4oJKiyOvJ0FIbgAZOJpoesHjHaC/8+uPxbUKFmsRcpIh9fbQvPy1T1
-         qElMotHtCv49ZTFidinx15nM6Y7I4INGC3GXR9PECqXuMaMqKfKKivLGP2By874MlRMX
-         a4bXQ08UZ2l9LBsD9UYbE4iKZEFxIo5NRrHvGfyXAVJ4gWehZqa3wt0ZRueOajmtzrd6
-         mgsGfJsw/y8YVHS92fPK3hjImK9OXs159KtCAOymbWZbCjE91R4xw2WgOVf7s/XkHSlf
-         spuA==
-X-Gm-Message-State: AO0yUKURpuKGx+AfhLQO51QOi0vbZAvQ/iqa22bkMvwH5CP/IR6GL5CT
-        jE2O80FyRAokRC8rfffOxxW+je5dgb1aNvVIiCZ+/4EX
-X-Google-Smtp-Source: AK7set+i7Sze3KZelymn6HBe2YX7OjmDImhvyS9SyCtpe/68g2KV5V63Trh+fU3XfoDkhCSikGH9ToUCxeknxDglwwk=
-X-Received: by 2002:a05:687c:198:b0:17e:3201:41b0 with SMTP id
- yo24-20020a05687c019800b0017e320141b0mr4130181oab.5.1679946742824; Mon, 27
- Mar 2023 12:52:22 -0700 (PDT)
+        Mon, 27 Mar 2023 15:53:28 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473071703
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:53:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1679946803;
+        bh=nsmc1lXzeDwzb2PFkpHMWf9ozymWoa/tBfMGyJVVxoU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aduuOPIFlxq2s9IEmNqAK/W6Q+fDWTqxcxqhFJGPVipK63sezE7Z7j8edB/tozvlP
+         IBMswmitBTmiDUA0mSvFS9WU7w/ZHagcP6V4Mgd2KRVvlTobKOVvQjPdV8oHKAD8pu
+         KbUxj1x9GlcAAqwXRBoYnPk1jvkxuCsqGPgpbHgLFzjrPVpoxKSFt/E1X3d6J1bFt5
+         nVgJP4z4Vjhvl6VF4/+7CWoD4GmsCwfbBnuAEEo+cJRcsd1mFv+7hPZWjUkyMntgaY
+         j1G3y5tjdKdMfx9dM9bO/2rFosP6cUZnOuvHzXp+NhBe3YYxCInnQxII+obTz3LTnn
+         92hAJD7QkabIA==
+Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Plk5H5HlCztBx;
+        Mon, 27 Mar 2023 15:53:23 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Aaron Lu <aaron.lu@intel.com>
+Subject: [RFC PATCH] sched: Introduce mm_cid runqueue cache
+Date:   Mon, 27 Mar 2023 15:53:18 -0400
+Message-Id: <20230327195318.137094-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230320144356.803762-1-robdclark@gmail.com> <20230320144356.803762-18-robdclark@gmail.com>
- <CAJZ5v0g0vFoZm=tVG=c2Eh_NObA6sXA10BdT4PsMnnbMidtEQA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0g0vFoZm=tVG=c2Eh_NObA6sXA10BdT4PsMnnbMidtEQA@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 27 Mar 2023 12:52:11 -0700
-Message-ID: <CAF6AEGuSCeiyHt1aF59s-6TudPZ-23HiScqFUj18HWvjVC6pdw@mail.gmail.com>
-Subject: Re: [PATCH v2 17/23] PM / QoS: Fix constraints alloc vs reclaim locking
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 10:53=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
->
-> On Mon, Mar 20, 2023 at 3:45=E2=80=AFPM Rob Clark <robdclark@gmail.com> w=
-rote:
-> >
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > In the process of adding lockdep annotation for drm GPU scheduler's
-> > job_run() to detect potential deadlock against shrinker/reclaim, I hit
-> > this lockdep splat:
-> >
-> >    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D
-> >    WARNING: possible circular locking dependency detected
-> >    6.2.0-rc8-debug+ #558 Tainted: G        W
-> >    ------------------------------------------------------
-> >    ring0/125 is trying to acquire lock:
-> >    ffffffd6d6ce0f28 (dev_pm_qos_mtx){+.+.}-{3:3}, at: dev_pm_qos_update=
-_request+0x38/0x68
-> >
-> >    but task is already holding lock:
-> >    ffffff8087239208 (&gpu->active_lock){+.+.}-{3:3}, at: msm_gpu_submit=
-+0xec/0x178
-> >
-> >    which lock already depends on the new lock.
-> >
-> >    the existing dependency chain (in reverse order) is:
-> >
-> >    -> #4 (&gpu->active_lock){+.+.}-{3:3}:
-> >           __mutex_lock+0xcc/0x3c8
-> >           mutex_lock_nested+0x30/0x44
-> >           msm_gpu_submit+0xec/0x178
-> >           msm_job_run+0x78/0x150
-> >           drm_sched_main+0x290/0x370
-> >           kthread+0xf0/0x100
-> >           ret_from_fork+0x10/0x20
-> >
-> >    -> #3 (dma_fence_map){++++}-{0:0}:
-> >           __dma_fence_might_wait+0x74/0xc0
-> >           dma_resv_lockdep+0x1f4/0x2f4
-> >           do_one_initcall+0x104/0x2bc
-> >           kernel_init_freeable+0x344/0x34c
-> >           kernel_init+0x30/0x134
-> >           ret_from_fork+0x10/0x20
-> >
-> >    -> #2 (mmu_notifier_invalidate_range_start){+.+.}-{0:0}:
-> >           fs_reclaim_acquire+0x80/0xa8
-> >           slab_pre_alloc_hook.constprop.0+0x40/0x25c
-> >           __kmem_cache_alloc_node+0x60/0x1cc
-> >           __kmalloc+0xd8/0x100
-> >           topology_parse_cpu_capacity+0x8c/0x178
-> >           get_cpu_for_node+0x88/0xc4
-> >           parse_cluster+0x1b0/0x28c
-> >           parse_cluster+0x8c/0x28c
-> >           init_cpu_topology+0x168/0x188
-> >           smp_prepare_cpus+0x24/0xf8
-> >           kernel_init_freeable+0x18c/0x34c
-> >           kernel_init+0x30/0x134
-> >           ret_from_fork+0x10/0x20
-> >
-> >    -> #1 (fs_reclaim){+.+.}-{0:0}:
-> >           __fs_reclaim_acquire+0x3c/0x48
-> >           fs_reclaim_acquire+0x54/0xa8
-> >           slab_pre_alloc_hook.constprop.0+0x40/0x25c
-> >           __kmem_cache_alloc_node+0x60/0x1cc
-> >           kmalloc_trace+0x50/0xa8
-> >           dev_pm_qos_constraints_allocate+0x38/0x100
-> >           __dev_pm_qos_add_request+0xb0/0x1e8
-> >           dev_pm_qos_add_request+0x58/0x80
-> >           dev_pm_qos_expose_latency_limit+0x60/0x13c
-> >           register_cpu+0x12c/0x130
-> >           topology_init+0xac/0xbc
-> >           do_one_initcall+0x104/0x2bc
-> >           kernel_init_freeable+0x344/0x34c
-> >           kernel_init+0x30/0x134
-> >           ret_from_fork+0x10/0x20
-> >
-> >    -> #0 (dev_pm_qos_mtx){+.+.}-{3:3}:
-> >           __lock_acquire+0xe00/0x1060
-> >           lock_acquire+0x1e0/0x2f8
-> >           __mutex_lock+0xcc/0x3c8
-> >           mutex_lock_nested+0x30/0x44
-> >           dev_pm_qos_update_request+0x38/0x68
-> >           msm_devfreq_boost+0x40/0x70
-> >           msm_devfreq_active+0xc0/0xf0
-> >           msm_gpu_submit+0x10c/0x178
-> >           msm_job_run+0x78/0x150
-> >           drm_sched_main+0x290/0x370
-> >           kthread+0xf0/0x100
-> >           ret_from_fork+0x10/0x20
-> >
-> >    other info that might help us debug this:
-> >
-> >    Chain exists of:
-> >      dev_pm_qos_mtx --> dma_fence_map --> &gpu->active_lock
-> >
-> >     Possible unsafe locking scenario:
-> >
-> >           CPU0                    CPU1
-> >           ----                    ----
-> >      lock(&gpu->active_lock);
-> >                                   lock(dma_fence_map);
-> >                                   lock(&gpu->active_lock);
-> >      lock(dev_pm_qos_mtx);
-> >
-> >     *** DEADLOCK ***
-> >
-> >    3 locks held by ring0/123:
-> >     #0: ffffff8087251170 (&gpu->lock){+.+.}-{3:3}, at: msm_job_run+0x64=
-/0x150
-> >     #1: ffffffd00b0e57e8 (dma_fence_map){++++}-{0:0}, at: msm_job_run+0=
-x68/0x150
-> >     #2: ffffff8087251208 (&gpu->active_lock){+.+.}-{3:3}, at: msm_gpu_s=
-ubmit+0xec/0x178
-> >
-> >    stack backtrace:
-> >    CPU: 6 PID: 123 Comm: ring0 Not tainted 6.2.0-rc8-debug+ #559
-> >    Hardware name: Google Lazor (rev1 - 2) with LTE (DT)
-> >    Call trace:
-> >     dump_backtrace.part.0+0xb4/0xf8
-> >     show_stack+0x20/0x38
-> >     dump_stack_lvl+0x9c/0xd0
-> >     dump_stack+0x18/0x34
-> >     print_circular_bug+0x1b4/0x1f0
-> >     check_noncircular+0x78/0xac
-> >     __lock_acquire+0xe00/0x1060
-> >     lock_acquire+0x1e0/0x2f8
-> >     __mutex_lock+0xcc/0x3c8
-> >     mutex_lock_nested+0x30/0x44
-> >     dev_pm_qos_update_request+0x38/0x68
-> >     msm_devfreq_boost+0x40/0x70
-> >     msm_devfreq_active+0xc0/0xf0
-> >     msm_gpu_submit+0x10c/0x178
-> >     msm_job_run+0x78/0x150
-> >     drm_sched_main+0x290/0x370
-> >     kthread+0xf0/0x100
-> >     ret_from_fork+0x10/0x20
-> >
-> > The issue is that dev_pm_qos_mtx is held in the runpm suspend/resume (o=
-r
-> > freq change) path, but it is also held across allocations that could
-> > recurse into shrinker.
-> >
-> > Solve this by changing dev_pm_qos_constraints_allocate() into a functio=
-n
-> > that can be called unconditionally before the device qos object is
-> > needed and before aquiring dev_pm_qos_mtx.  This way the allocations ca=
-n
-> > be done without holding the mutex.  In the case that we raced with
-> > another thread to allocate the qos object, detect this *after* acquirin=
-g
-> > the dev_pm_qos_mtx and simply free the redundant allocations.
->
-> Honestly, I don't like this approach.
->
-> In particular, dropping a lock just in order to grab it again right
-> away is really confusing (and I'm not even sure it is correct ATM).
+Introduce a per-runqueue cache containing { mm, mm_cid } entries.
+Keep track of the recently allocated mm_cid for each mm rather than
+freeing them immediately. This eliminates most atomic ops when
+context switching back and forth between threads belonging to
+different memory spaces in multi-threaded scenarios (many processes,
+each with many threads).
 
-This patch isn't actually doing that.  (And you are right, if it were,
-that would be a thing to be suspicious of)
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Aaron Lu <aaron.lu@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+---
+ kernel/sched/core.c     |  45 +++++++++----
+ kernel/sched/deadline.c |   3 +
+ kernel/sched/fair.c     |   1 +
+ kernel/sched/rt.c       |   2 +
+ kernel/sched/sched.h    | 138 ++++++++++++++++++++++++++++++++++------
+ 5 files changed, 158 insertions(+), 31 deletions(-)
 
-It is just moving the allocations ahead of the locking.
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 0d18c3969f90..e91fc3b810e1 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2329,6 +2329,7 @@ static struct rq *move_queued_task(struct rq *rq, struct rq_flags *rf,
+ 	lockdep_assert_rq_held(rq);
+ 
+ 	deactivate_task(rq, p, DEQUEUE_NOCLOCK);
++	rq_cid_cache_remove_mm_locked(rq, p->mm, false);
+ 	set_task_cpu(p, new_cpu);
+ 	rq_unlock(rq, rf);
+ 
+@@ -2516,6 +2517,7 @@ int push_cpu_stop(void *arg)
+ 	// XXX validate p is still the highest prio task
+ 	if (task_rq(p) == rq) {
+ 		deactivate_task(rq, p, 0);
++		rq_cid_cache_remove_mm_locked(rq, p->mm, false);
+ 		set_task_cpu(p, lowest_rq->cpu);
+ 		activate_task(lowest_rq, p, 0);
+ 		resched_curr(lowest_rq);
+@@ -3215,6 +3217,7 @@ static void __migrate_swap_task(struct task_struct *p, int cpu)
+ 		rq_pin_lock(dst_rq, &drf);
+ 
+ 		deactivate_task(src_rq, p, 0);
++		rq_cid_cache_remove_mm_locked(src_rq, p->mm, false);
+ 		set_task_cpu(p, cpu);
+ 		activate_task(dst_rq, p, 0);
+ 		check_preempt_curr(dst_rq, p, 0);
+@@ -3852,6 +3855,8 @@ static void __ttwu_queue_wakelist(struct task_struct *p, int cpu, int wake_flags
+ 	p->sched_remote_wakeup = !!(wake_flags & WF_MIGRATED);
+ 
+ 	WRITE_ONCE(rq->ttwu_pending, 1);
++	if (WARN_ON_ONCE(task_cpu(p) != cpu_of(rq)))
++		rq_cid_cache_remove_mm(task_rq(p), p->mm, false);
+ 	__smp_call_single_queue(cpu, &p->wake_entry.llist);
+ }
+ 
+@@ -4269,6 +4274,7 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
+ 
+ 		wake_flags |= WF_MIGRATED;
+ 		psi_ttwu_dequeue(p);
++		rq_cid_cache_remove_mm(task_rq(p), p->mm, false);
+ 		set_task_cpu(p, cpu);
+ 	}
+ #else
+@@ -5114,7 +5120,7 @@ prepare_task_switch(struct rq *rq, struct task_struct *prev,
+ 	sched_info_switch(rq, prev, next);
+ 	perf_event_task_sched_out(prev, next);
+ 	rseq_preempt(prev);
+-	switch_mm_cid(prev, next);
++	switch_mm_cid(rq, prev, next);
+ 	fire_sched_out_preempt_notifiers(prev, next);
+ 	kmap_local_sched_out();
+ 	prepare_task(next);
+@@ -6253,6 +6259,7 @@ static bool try_steal_cookie(int this, int that)
+ 			goto next;
+ 
+ 		deactivate_task(src, p, 0);
++		rq_cid_cache_remove_mm_locked(src, p->mm, false);
+ 		set_task_cpu(p, this);
+ 		activate_task(dst, p, 0);
+ 
+@@ -11386,42 +11393,54 @@ void call_trace_sched_update_nr_running(struct rq *rq, int count)
+ void sched_mm_cid_exit_signals(struct task_struct *t)
+ {
+ 	struct mm_struct *mm = t->mm;
+-	unsigned long flags;
++	struct rq_flags rf;
++	struct rq *rq;
+ 
+ 	if (!mm)
+ 		return;
+-	local_irq_save(flags);
+-	mm_cid_put(mm, t->mm_cid);
++	preempt_disable();
++	rq = this_rq();
++	rq_lock_irqsave(rq, &rf);
+ 	t->mm_cid = -1;
+ 	t->mm_cid_active = 0;
+-	local_irq_restore(flags);
++	rq_cid_cache_remove_mm_locked(rq, mm, true);
++	rq_unlock_irqrestore(rq, &rf);
++	preempt_enable();
+ }
+ 
+ void sched_mm_cid_before_execve(struct task_struct *t)
+ {
+ 	struct mm_struct *mm = t->mm;
+-	unsigned long flags;
++	struct rq_flags rf;
++	struct rq *rq;
+ 
+ 	if (!mm)
+ 		return;
+-	local_irq_save(flags);
+-	mm_cid_put(mm, t->mm_cid);
++	preempt_disable();
++	rq = this_rq();
++	rq_lock_irqsave(rq, &rf);
+ 	t->mm_cid = -1;
+ 	t->mm_cid_active = 0;
+-	local_irq_restore(flags);
++	rq_cid_cache_remove_mm_locked(rq, mm, true);
++	rq_unlock_irqrestore(rq, &rf);
++	preempt_enable();
+ }
+ 
+ void sched_mm_cid_after_execve(struct task_struct *t)
+ {
+ 	struct mm_struct *mm = t->mm;
+-	unsigned long flags;
++	struct rq_flags rf;
++	struct rq *rq;
+ 
+ 	if (!mm)
+ 		return;
+-	local_irq_save(flags);
+-	t->mm_cid = mm_cid_get(mm);
++	preempt_disable();
++	rq = this_rq();
++	rq_lock_irqsave(rq, &rf);
++	t->mm_cid = mm_cid_get(rq, mm);
+ 	t->mm_cid_active = 1;
+-	local_irq_restore(flags);
++	rq_unlock_irqrestore(rq, &rf);
++	preempt_enable();
+ 	rseq_set_notify_resume(t);
+ }
+ 
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index 71b24371a6f7..34bb47442912 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -729,6 +729,7 @@ static struct rq *dl_task_offline_migration(struct rq *rq, struct task_struct *p
+ 	__dl_add(dl_b, p->dl.dl_bw, cpumask_weight(later_rq->rd->span));
+ 	raw_spin_unlock(&dl_b->lock);
+ 
++	rq_cid_cache_remove_mm_locked(rq, p->mm, false);
+ 	set_task_cpu(p, later_rq->cpu);
+ 	double_unlock_balance(later_rq, rq);
+ 
+@@ -2357,6 +2358,7 @@ static int push_dl_task(struct rq *rq)
+ 	}
+ 
+ 	deactivate_task(rq, next_task, 0);
++	rq_cid_cache_remove_mm_locked(rq, next_task->mm, false);
+ 	set_task_cpu(next_task, later_rq->cpu);
+ 	activate_task(later_rq, next_task, 0);
+ 	ret = 1;
+@@ -2445,6 +2447,7 @@ static void pull_dl_task(struct rq *this_rq)
+ 				push_task = get_push_task(src_rq);
+ 			} else {
+ 				deactivate_task(src_rq, p, 0);
++				rq_cid_cache_remove_mm_locked(src_rq, p->mm, false);
+ 				set_task_cpu(p, this_cpu);
+ 				activate_task(this_rq, p, 0);
+ 				dmin = p->dl.deadline;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 6986ea31c984..70ed6aef87ec 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -8542,6 +8542,7 @@ static void detach_task(struct task_struct *p, struct lb_env *env)
+ 	lockdep_assert_rq_held(env->src_rq);
+ 
+ 	deactivate_task(env->src_rq, p, DEQUEUE_NOCLOCK);
++	rq_cid_cache_remove_mm_locked(env->src_rq, p->mm, false);
+ 	set_task_cpu(p, env->dst_cpu);
+ }
+ 
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 0a11f44adee5..3ad325db1db3 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -2156,6 +2156,7 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 	}
+ 
+ 	deactivate_task(rq, next_task, 0);
++	rq_cid_cache_remove_mm_locked(rq, next_task->mm, false);
+ 	set_task_cpu(next_task, lowest_rq->cpu);
+ 	activate_task(lowest_rq, next_task, 0);
+ 	resched_curr(lowest_rq);
+@@ -2429,6 +2430,7 @@ static void pull_rt_task(struct rq *this_rq)
+ 				push_task = get_push_task(src_rq);
+ 			} else {
+ 				deactivate_task(src_rq, p, 0);
++				rq_cid_cache_remove_mm_locked(src_rq, p->mm, false);
+ 				set_task_cpu(p, this_cpu);
+ 				activate_task(this_rq, p, 0);
+ 				resched = true;
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 3e8df6d31c1e..b2e12857e2c3 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -947,6 +947,19 @@ struct balance_callback {
+ 	void (*func)(struct rq *rq);
+ };
+ 
++#ifdef CONFIG_SCHED_MM_CID
++# define RQ_CID_CACHE_SIZE    8
++struct rq_cid_entry {
++	struct mm_struct *mm;   /* NULL if unset */
++	int mm_cid;
++};
++
++struct rq_cid_cache {
++	struct rq_cid_entry entry[RQ_CID_CACHE_SIZE];
++	unsigned int head;
++};
++#endif
++
+ /*
+  * This is the main, per-CPU runqueue data structure.
+  *
+@@ -1161,6 +1174,9 @@ struct rq {
+ 	call_single_data_t	cfsb_csd;
+ 	struct list_head	cfsb_csd_list;
+ #endif
++#ifdef CONFIG_SCHED_MM_CID
++	struct rq_cid_cache	cid_cache;
++#endif
+ };
+ 
+ #ifdef CONFIG_FAIR_GROUP_SCHED
+@@ -3249,6 +3265,92 @@ static inline void update_current_exec_runtime(struct task_struct *curr,
+ }
+ 
+ #ifdef CONFIG_SCHED_MM_CID
++
++static inline void mm_cid_put(struct mm_struct *mm, int cid)
++{
++	lockdep_assert_irqs_disabled();
++	if (cid < 0)
++		return;
++	raw_spin_lock(&mm->cid_lock);
++	__cpumask_clear_cpu(cid, mm_cidmask(mm));
++	raw_spin_unlock(&mm->cid_lock);
++}
++
++static inline struct rq_cid_entry *rq_cid_cache_lookup(struct rq *rq, struct mm_struct *mm)
++{
++	struct rq_cid_cache *cid_cache = &rq->cid_cache;
++	int i;
++
++	for (i = 0; i < RQ_CID_CACHE_SIZE; i++) {
++		struct rq_cid_entry *entry = &cid_cache->entry[i];
++
++		if (entry->mm == mm)
++			return entry;
++	}
++	return NULL;
++}
++
++/* Removal from cache simply leaves an unused hole. */
++static inline int rq_cid_cache_lookup_remove(struct rq *rq, struct mm_struct *mm)
++{
++	struct rq_cid_entry *entry = rq_cid_cache_lookup(rq, mm);
++
++	if (!entry)
++		return -1;
++	entry->mm = NULL;       /* Remove from cache */
++	return entry->mm_cid;
++}
++
++static inline void rq_cid_cache_remove_mm_locked(struct rq *rq, struct mm_struct *mm, bool release_mm)
++{
++	int cid;
++
++	if (!mm)
++		return;
++	/*
++	 * Do not remove the cache entry for a runqueue that runs a task which
++	 * currently uses the target mm.
++	 */
++	if (!release_mm && rq->curr->mm == mm)
++		return;
++	cid = rq_cid_cache_lookup_remove(rq, mm);
++	mm_cid_put(mm, cid);
++}
++
++static inline void rq_cid_cache_remove_mm(struct rq *rq, struct mm_struct *mm, bool release_mm)
++{
++	struct rq_flags rf;
++
++	rq_lock_irqsave(rq, &rf);
++	rq_cid_cache_remove_mm_locked(rq, mm, release_mm);
++	rq_unlock_irqrestore(rq, &rf);
++}
++
++/*
++  * Add at head, move head forward. Cheap LRU cache.
++  * Only need to clear the cid mask bit from its own mm_cidmask(mm) when we
++  * overwrite an old entry from the cache. Note that this is not needed if the
++  * overwritten entry is an unused hole. This access to the old_mm from an
++  * unrelated thread requires that cache entry for a given mm gets pruned from
++  * the cache when a task is dequeued from the runqueue.
++  */
++static inline void rq_cid_cache_add(struct rq *rq, struct mm_struct *mm, int cid)
++{
++	struct rq_cid_cache *cid_cache = &rq->cid_cache;
++	struct mm_struct *old_mm;
++	struct rq_cid_entry *entry;
++	unsigned int pos;
++
++	pos = cid_cache->head;
++	entry = &cid_cache->entry[pos];
++	old_mm = entry->mm;
++	if (old_mm)
++		mm_cid_put(old_mm, entry->mm_cid);
++	entry->mm = mm;
++	entry->mm_cid = cid;
++	cid_cache->head = (pos + 1) % RQ_CID_CACHE_SIZE;
++}
++
+ static inline int __mm_cid_get(struct mm_struct *mm)
+ {
+ 	struct cpumask *cpumask;
+@@ -3262,28 +3364,26 @@ static inline int __mm_cid_get(struct mm_struct *mm)
+ 	return cid;
+ }
+ 
+-static inline void mm_cid_put(struct mm_struct *mm, int cid)
++static inline int mm_cid_get(struct rq *rq, struct mm_struct *mm)
+ {
+-	lockdep_assert_irqs_disabled();
+-	if (cid < 0)
+-		return;
+-	raw_spin_lock(&mm->cid_lock);
+-	__cpumask_clear_cpu(cid, mm_cidmask(mm));
+-	raw_spin_unlock(&mm->cid_lock);
+-}
+-
+-static inline int mm_cid_get(struct mm_struct *mm)
+-{
+-	int ret;
++	struct rq_cid_entry *entry;
++	int cid;
+ 
+ 	lockdep_assert_irqs_disabled();
++	entry = rq_cid_cache_lookup(rq, mm);
++	if (entry) {
++		cid = entry->mm_cid;
++		goto end;
++	}
+ 	raw_spin_lock(&mm->cid_lock);
+-	ret = __mm_cid_get(mm);
++	cid = __mm_cid_get(mm);
+ 	raw_spin_unlock(&mm->cid_lock);
+-	return ret;
++	rq_cid_cache_add(rq, mm, cid);
++end:
++	return cid;
+ }
+ 
+-static inline void switch_mm_cid(struct task_struct *prev, struct task_struct *next)
++static inline void switch_mm_cid(struct rq *rq, struct task_struct *prev, struct task_struct *next)
+ {
+ 	if (prev->mm_cid_active) {
+ 		if (next->mm_cid_active && next->mm == prev->mm) {
+@@ -3295,15 +3395,17 @@ static inline void switch_mm_cid(struct task_struct *prev, struct task_struct *n
+ 			prev->mm_cid = -1;
+ 			return;
+ 		}
+-		mm_cid_put(prev->mm, prev->mm_cid);
++		/* Leave the prev mm_cid in the cid rq cache. */
+ 		prev->mm_cid = -1;
+ 	}
+ 	if (next->mm_cid_active)
+-		next->mm_cid = mm_cid_get(next->mm);
++		next->mm_cid = mm_cid_get(rq, next->mm);
+ }
+ 
+ #else
+-static inline void switch_mm_cid(struct task_struct *prev, struct task_struct *next) { }
++static inline void switch_mm_cid(struct rq *rq, struct task_struct *prev, struct task_struct *next) { }
++static inline void rq_cid_cache_remove_mm_locked(struct rq *rq, struct mm_struct *mm, bool release_mm) { }
++static inline void rq_cid_cache_remove_mm(struct rq *rq, struct mm_struct *mm, bool release_mm) { }
+ #endif
+ 
+ #endif /* _KERNEL_SCHED_SCHED_H */
+-- 
+2.25.1
 
-> Let me think about how to possibly address the issue at hand in a differe=
-nt way.
-
-Per device locking would make this easier.  But I suppose that gets
-into needing ww_mutex when you have things like device_link?
-
-BR,
--R
-
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >  drivers/base/power/qos.c | 60 +++++++++++++++++++++++++++-------------
-> >  1 file changed, 41 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
-> > index 8e93167f1783..f3e0c6b65635 100644
-> > --- a/drivers/base/power/qos.c
-> > +++ b/drivers/base/power/qos.c
-> > @@ -185,18 +185,24 @@ static int apply_constraint(struct dev_pm_qos_req=
-uest *req,
-> >  }
-> >
-> >  /*
-> > - * dev_pm_qos_constraints_allocate
-> > + * dev_pm_qos_constraints_ensure_allocated
-> >   * @dev: device to allocate data for
-> >   *
-> > - * Called at the first call to add_request, for constraint data alloca=
-tion
-> > - * Must be called with the dev_pm_qos_mtx mutex held
-> > + * Called to ensure that devices qos is allocated, before acquiring
-> > + * dev_pm_qos_mtx.
-> >   */
-> > -static int dev_pm_qos_constraints_allocate(struct device *dev)
-> > +static int dev_pm_qos_constraints_ensure_allocated(struct device *dev)
-> >  {
-> >         struct dev_pm_qos *qos;
-> >         struct pm_qos_constraints *c;
-> >         struct blocking_notifier_head *n;
-> >
-> > +       if (!dev)
-> > +               return -ENODEV;
-> > +
-> > +       if (!IS_ERR_OR_NULL(dev->power.qos))
-> > +               return 0;
-> > +
-> >         qos =3D kzalloc(sizeof(*qos), GFP_KERNEL);
-> >         if (!qos)
-> >                 return -ENOMEM;
-> > @@ -227,10 +233,26 @@ static int dev_pm_qos_constraints_allocate(struct=
- device *dev)
-> >
-> >         INIT_LIST_HEAD(&qos->flags.list);
-> >
-> > +       mutex_lock(&dev_pm_qos_mtx);
-> > +
-> > +       if (!IS_ERR_OR_NULL(dev->power.qos)) {
-> > +               /*
-> > +                * We have raced with another task to create the qos.
-> > +                * No biggie, just free the resources we've allocated
-> > +                * outside of dev_pm_qos_mtx and move on with life.
-> > +                */
-> > +               kfree(n);
-> > +               kfree(qos);
-> > +               goto unlock;
-> > +       }
-> > +
-> >         spin_lock_irq(&dev->power.lock);
-> >         dev->power.qos =3D qos;
-> >         spin_unlock_irq(&dev->power.lock);
-> >
-> > +unlock:
-> > +       mutex_unlock(&dev_pm_qos_mtx);
-> > +
-> >         return 0;
-> >  }
-> >
-> > @@ -331,17 +353,15 @@ static int __dev_pm_qos_add_request(struct device=
- *dev,
-> >  {
-> >         int ret =3D 0;
-> >
-> > -       if (!dev || !req || dev_pm_qos_invalid_req_type(dev, type))
-> > +       if (!req || dev_pm_qos_invalid_req_type(dev, type))
-> >                 return -EINVAL;
-> >
-> >         if (WARN(dev_pm_qos_request_active(req),
-> >                  "%s() called for already added request\n", __func__))
-> >                 return -EINVAL;
-> >
-> > -       if (IS_ERR(dev->power.qos))
-> > +       if (IS_ERR_OR_NULL(dev->power.qos))
-> >                 ret =3D -ENODEV;
-> > -       else if (!dev->power.qos)
-> > -               ret =3D dev_pm_qos_constraints_allocate(dev);
-> >
-> >         trace_dev_pm_qos_add_request(dev_name(dev), type, value);
-> >         if (ret)
-> > @@ -390,6 +410,10 @@ int dev_pm_qos_add_request(struct device *dev, str=
-uct dev_pm_qos_request *req,
-> >  {
-> >         int ret;
-> >
-> > +       ret =3D dev_pm_qos_constraints_ensure_allocated(dev);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> >         mutex_lock(&dev_pm_qos_mtx);
-> >         ret =3D __dev_pm_qos_add_request(dev, req, type, value);
-> >         mutex_unlock(&dev_pm_qos_mtx);
-> > @@ -537,15 +561,11 @@ int dev_pm_qos_add_notifier(struct device *dev, s=
-truct notifier_block *notifier,
-> >  {
-> >         int ret =3D 0;
-> >
-> > -       mutex_lock(&dev_pm_qos_mtx);
-> > -
-> > -       if (IS_ERR(dev->power.qos))
-> > -               ret =3D -ENODEV;
-> > -       else if (!dev->power.qos)
-> > -               ret =3D dev_pm_qos_constraints_allocate(dev);
-> > -
-> > +       ret =3D dev_pm_qos_constraints_ensure_allocated(dev);
-> >         if (ret)
-> > -               goto unlock;
-> > +               return ret;
-> > +
-> > +       mutex_lock(&dev_pm_qos_mtx);
-> >
-> >         switch (type) {
-> >         case DEV_PM_QOS_RESUME_LATENCY:
-> > @@ -565,7 +585,6 @@ int dev_pm_qos_add_notifier(struct device *dev, str=
-uct notifier_block *notifier,
-> >                 ret =3D -EINVAL;
-> >         }
-> >
-> > -unlock:
-> >         mutex_unlock(&dev_pm_qos_mtx);
-> >         return ret;
-> >  }
-> > @@ -905,10 +924,13 @@ int dev_pm_qos_update_user_latency_tolerance(stru=
-ct device *dev, s32 val)
-> >  {
-> >         int ret;
-> >
-> > +       ret =3D dev_pm_qos_constraints_ensure_allocated(dev);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> >         mutex_lock(&dev_pm_qos_mtx);
-> >
-> > -       if (IS_ERR_OR_NULL(dev->power.qos)
-> > -           || !dev->power.qos->latency_tolerance_req) {
-> > +       if (!dev->power.qos->latency_tolerance_req) {
-> >                 struct dev_pm_qos_request *req;
-> >
-> >                 if (val < 0) {
-> > --
