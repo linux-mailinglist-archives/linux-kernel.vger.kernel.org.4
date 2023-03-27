@@ -2,90 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FFFB6C9BCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA266C9BD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbjC0HQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 03:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
+        id S232443AbjC0HRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 03:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbjC0HQw (ORCPT
+        with ESMTP id S232434AbjC0HRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 03:16:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5A149CB
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 00:16:51 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1pgh5o-0006Z6-Fv; Mon, 27 Mar 2023 09:16:36 +0200
-Message-ID: <b23a44ab-3666-8a41-d2a0-0d2fbdbd9f00@pengutronix.de>
-Date:   Mon, 27 Mar 2023 09:16:33 +0200
+        Mon, 27 Mar 2023 03:17:51 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8537422F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 00:17:50 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id z19so7535166plo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 00:17:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679901470;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IWSVNJk/bfwWX8b0n0HSlnZIGIsvONb5lwc/xcHmAjM=;
+        b=G7vb0uugGhn2s4BXyI0ntWGcXcBoiLpXjRc7DJ1MSK7K4mN4Vp+UeQRl2kXpvRwSdl
+         UZtzg5zGEY3hA6SCzDlLslro1PBWXnDJcqEN80CDR0hAiuQbCHi2X/4QIaY5N64gMenT
+         fGTZUpJttKNB7EtkvGnIHQwnUarplv67pW87eJ78HZ6ywDfNz9nE5otDlmQixmenXe92
+         Uz8qjGpjev7YcE7eAcycaU/xiFd0kHmG2rXzCSGt9E5bE//oxtn762NMRq2H4x9DvUjV
+         DSvbrVCf6CUEy+zamXkbCz9tmlnndt22M1jvRWjD1BQsTc479UX2OJNhpwM601AKuYtS
+         9PaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679901470;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IWSVNJk/bfwWX8b0n0HSlnZIGIsvONb5lwc/xcHmAjM=;
+        b=0lzGSGlBbopkS47GNOIkqTkcJ85VVH+lwXeNPokpqo8adK8q1WyL9LKIQfhgHUbl2l
+         FGiGf7el3zkV2KUhssCJVENoPWnOFaMFuSNVzuiXtj5LECdg3yBBuFJ/GrQwLL8hDbF2
+         6NtP78QY9xH8D9lD8geB0jLQsIuCKKpDjWelfR0SmJeNPlq9uq7znPmPkdSdjJ1Rjp54
+         2SgGjTGeKiTeHvVuFQj615OZjFP4hlWv9FUxl3LM+io2n7N9wFi/a5aeh/ViSpTy3uYT
+         0Q+XdRBW2CsA56P+E422OqZEqHBv1Lhaf1B+XakX7mB5Sk6vg8eMDR4BaBsT0XS8Fx96
+         FV/Q==
+X-Gm-Message-State: AO0yUKVjx8p6oBcvwifTOhn0EV6NXOYWXZT+nRxIW5FG+SHoZ0zFOPNe
+        gPsOq6NqbNt4AggmbMC0D7FsI/hK38A=
+X-Google-Smtp-Source: AK7set9Fl4HRg/qPMTOkdyKC5K/9e+uJFHr5PdEOzN/l3gjLKStQUVTj9g1hmFmAsxJ3yc0KNbEbvA==
+X-Received: by 2002:a05:6a20:c511:b0:d4:e980:9f90 with SMTP id gm17-20020a056a20c51100b000d4e9809f90mr11045810pzb.44.1679901470032;
+        Mon, 27 Mar 2023 00:17:50 -0700 (PDT)
+Received: from dragonet (dragonet.kaist.ac.kr. [143.248.133.220])
+        by smtp.gmail.com with ESMTPSA id x5-20020aa784c5000000b006262520ac59sm17979318pfn.127.2023.03.27.00.17.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 00:17:49 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 16:17:46 +0900
+From:   "Dae R. Jeong" <threeearcat@gmail.com>
+To:     tglx@linutronix.de, linux-kernel@vger.kernel.org
+Subject: WARNING in do_timer_settime
+Message-ID: <ZCFDGrz5mJXLLC49@dragonet>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH V3 7/7] arm64: dts: imx8mp: add interconnect for hsio blk
- ctrl
-Content-Language: en-US
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     peng.fan@nxp.com, laurent.pinchart@ideasonboard.com,
-        krzysztof.kozlowski+dt@linaro.org, festevam@gmail.com,
-        abelvesa@kernel.org, marex@denx.de, Markus.Niebel@ew.tq-group.com,
-        paul.elder@ideasonboard.com, gerg@kernel.org, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        s.hauer@pengutronix.de, robh+dt@kernel.org, aford173@gmail.com,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        djakov@kernel.org, l.stach@pengutronix.de, shawnguo@kernel.org,
-        abailon@baylibre.com,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220703091451.1416264-8-peng.fan@oss.nxp.com>
- <20230327045037.593326-1-gerg@linux-m68k.org> <2678294.mvXUDI8C0e@steina-w>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <2678294.mvXUDI8C0e@steina-w>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+Hi,
 
-On 27.03.23 08:27, Alexander Stein wrote:
-> Am Montag, 27. März 2023, 06:50:37 CEST schrieb Greg Ungerer:
->> Any thoughts on why this breaks USB?
-> 
-> Maybe you are missing CONFIG_INTERCONNECT_IMX8MP?
+I'm looking an issue detected during fuzzing "WARNING in
+do_timer_settime". Its report is attached at the end of this email.
 
-And if that's the case, did you check /sys/kernel/debug/devices_deferred
-to see if there was any indication that this is the reason?
+I think this does not cause any serious issue, but my rough sketch of
+a scenario causing the warning is a race condition caused by two
+timer_settime() system calls for CLOCK_PROCESS_CPUTIME_ID.
 
-If you didn't find any hint there, you might want to place a
-dev_err_probe with a suitable message at the place where -EPROBE_DEFER
-was returned.
+CPU1                                       CPU2
+-----                                      -----
+do_timer_settime(CLOCK_PROCESS_CPUTIME_ID)
+  posix_cpu_timer_set()
+    arm_timer(timer, p);
 
-Cheers,
-Ahmad
+timer interrupt handler
+  run_posix_cpu_timers()
+    handle_posix_cpu_timers()
+      lock_task_sighand()
+      check_process_timers()
+        collect_posix_cpu_timers()         do_timer_settime(CLOCK_PROCESS_CPUTIME_ID)
+          ctmr->firing = 1; - (1)            posix_cpu_timer_set()
+      unlock_task_sighand() - (2)
+                                               lock_task_sighand() // can acquire the sighand
+                                                                   // lock because of (2)
+                                               if (timer->it.cpu.firing)) // true because of (1) and (3)
+                                                 ret = TIMER_RETRY;
+                                                 ..
+                                                 return tret;
+                                             timer_wait_running()
+                                               WARN_ON(!kc->timer_was_running);
+                                               // kc->timer_was_running is NULL in clock_posix_cpu
+     timer->it.cpu.firing = 0; - (3)
 
-> 
-> Best regards,
-> Alexander
-> 
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+But regardless of the scenario, I wonder if the commit ec8f954a40d
+("posix-timers: Use a callback for cancel synchronization on
+PREEMPT_RT") missed initializations to the timer_was_running field in
+clock_posix_cpu. I can see that the commit initialized the
+timer_was_running field of all other clocks but clock_posix_cpu.  So I
+think the warning does not occur if the timer_was_running field of
+clock_posix_cpu is initialized to, for example,
+common_timer_wait_running. Could you please check this?
 
+Thank you in advance.
+
+
+Best regards,
+Dae R. Jeong
+
+-----
+- Kernel version:
+  6.2.0-rc7
+
+- Report:
+WARNING: CPU: 1 PID: 13389 at kernel/time/posix-timers.c:849 do_timer_settime+0x193/0x200 kernel/time/posix-timers.c:929
+Modules linked in:
+CPU: 1 PID: 13389 Comm: syz-executor.0 Not tainted 6.2.0-rc7-32171-g7f09e8f6ebfb #5
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+<- omitting registers ->
+Call Trace:
+ <TASK>
+ __do_sys_timer_settime kernel/time/posix-timers.c:952 [inline]
+ __se_sys_timer_settime kernel/time/posix-timers.c:938 [inline]
+ __x64_sys_timer_settime+0xa3/0x110 kernel/time/posix-timers.c:938
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x4e/0xa0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x478d29
+<- omitting registers ->
+ </TASK>
+---[ end trace 0000000000000000 ]---
