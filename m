@@ -2,72 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77DAC6CA424
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F466CA42B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbjC0Mbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
+        id S232434AbjC0MdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjC0Mbm (ORCPT
+        with ESMTP id S232043AbjC0MdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:31:42 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637393AA8;
-        Mon, 27 Mar 2023 05:31:41 -0700 (PDT)
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PlXDr4T3XzKtMx;
-        Mon, 27 Mar 2023 20:29:16 +0800 (CST)
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Mar 2023 20:31:37 +0800
-Message-ID: <570a6f6d-87cb-48ca-3bbc-cd1221bfa88c@huawei.com>
-Date:   Mon, 27 Mar 2023 20:31:37 +0800
+        Mon, 27 Mar 2023 08:33:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102993C04;
+        Mon, 27 Mar 2023 05:33:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 525C1B80DA6;
+        Mon, 27 Mar 2023 12:33:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2A9EC433D2;
+        Mon, 27 Mar 2023 12:32:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679920378;
+        bh=ZNwBA2NAAA+1rgyfUbyfokfIEOLrB3/fDda0MLnXviw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lIu503uWNSm8wf3zxwSQ9IH9xcffa90LwGPDnjf7I6JcZ/aWSh64cVCiUjaM7zeU+
+         Pw97SdfmQCMqmhLqz87M7JiD2uCUyfR/a9lyyT7w6qcibV0LQWoT1Qh4rCK3Thziha
+         5VHHQrU22vDQAngOG9WOFDXRL8QpoeqaDEigvU2Re71fp0oYEE2VUcPfqpKU9DiBtq
+         ln8wFqQ74aXbSifka2Daq1wD7smuS3bhHO33ttifoABgN7uWdv8vqstTF/aGD/lbOy
+         B56YvFVplApO7SExZo8FasYbt8+sZbS5rkPGyTByZ1B0Mjog4H5GM4hjOstI83fQkM
+         5CeunoSaGfCuA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1pgm28-0001BF-4a; Mon, 27 Mar 2023 14:33:08 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] arm64: dts: qcom: sc8280xp-x13s: drop bogus 'input-enable'
+Date:   Mon, 27 Mar 2023 14:32:43 +0200
+Message-Id: <20230327123243.4527-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 0/2] mailbox: pcc: Support platform notification for
- type4 and shared interrupt
-To:     Sudeep Holla <sudeep.holla@arm.com>, <robbiek@xsightlabs.com>
-CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rafael@kernel.org>, <rafael.j.wysocki@intel.com>,
-        <wanghuiqiang@huawei.com>, <zhangzekun11@huawei.com>,
-        <wangxiongfeng2@huawei.com>, <tanxiaofei@huawei.com>,
-        <guohanjun@huawei.com>, <xiexiuqi@huawei.com>,
-        <wangkefeng.wang@huawei.com>, <huangdaode@huawei.com>
-References: <20221016034043.52227-1-lihuisong@huawei.com>
- <20230314111135.16520-1-lihuisong@huawei.com>
- <20230327113326.dgrb5ainl6mv7wr5@bogus>
-From:   "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20230327113326.dgrb5ainl6mv7wr5@bogus>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The sc8280xp pin controller does not have a way to enable or disable the
+input buffer so drop the unnecessary 'input-enable' property which is
+about to be deprecated.
 
-在 2023/3/27 19:33, Sudeep Holla 写道:
-> On Tue, Mar 14, 2023 at 07:11:33PM +0800, Huisong Li wrote:
->> PCC supports processing platform notification for slave subspaces and
->> shared interrupt for multiple subspaces.
->>
-> Other than a super minor nit in the patch 1/2, this looks good to me.
-> It would be good if we can get tested-by from
-> Robbie King <robbiek@xsightlabs.com>
->
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-Thanks for your review.😁
+Link: https://lore.kernel.org/lkml/20230323102605.6.I291ce0ba2c6ea80b341659c4f75a567a76dd7ca6@changeid
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
-@Robbie King, can you give us some feedback?
-Looking forward to you reply.
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+index d827005f1375..2591b492d5d8 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+@@ -1274,7 +1274,6 @@ edp_reg_en: edp-reg-en-state {
+ 	hall_int_n_default: hall-int-n-state {
+ 		pins = "gpio107";
+ 		function = "gpio";
+-		input-enable;
+ 		bias-disable;
+ 	};
+ 
+-- 
+2.39.2
+
