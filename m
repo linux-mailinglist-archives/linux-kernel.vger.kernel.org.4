@@ -2,140 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BFD6CA2CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82CC6CA29C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjC0Ltb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 07:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S231956AbjC0Lii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 07:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjC0Lt2 (ORCPT
+        with ESMTP id S230041AbjC0Lif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 07:49:28 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42902D47
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:49:18 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4dd9da1c068so97513e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:49:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679917757;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NSFETURvKeKlJ69zBNiZIDisEWdoIMslqYt90Emqjk4=;
-        b=n5GVJradJsYF48fo16f5GWVhvJlsEGHoexdX4ykmCZOblBK4aNRQzxFXR+DPlgSA4h
-         GihrA9TjOKQCmpBmnzMuo2sSpLHjAGO3pqNjQ3pAJ4fqdpa5Rc6q6CDNdl7r7AeI92hw
-         xd5KRzdaXCAkHLkGKAXlVeLDOQSaz4Q7UTYlI39UbPqJ/H4j3dfbxN8psY3Pb31seHaY
-         8FRy54XH4TKadFbFdhS8Rvw10XpJUCCQPHu2jjz0LxqFtWVYkxJCWCeVJzClVs2Pkj7q
-         9MQ8aphVGb5OBnnNvvRjvq2X6nEpszRkGDSMtUMfXQsEfPvEDQACuKcuLRzuvbUBk/DL
-         FSNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679917757;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NSFETURvKeKlJ69zBNiZIDisEWdoIMslqYt90Emqjk4=;
-        b=B5uN/Ud2h5ZbQDY15QEQK/4iuv/+S22KKQso/Yb0ZJk7qnsnvVByWqICyuqZrsIAw+
-         QHKux1Gl7v3MlFIs6SykK5Z7vOD4bQVDhDocnNuI4wYGMyZK5bMdED0Wsq2UK01u7pRW
-         O5D0ha5MSCWFe/Wj1Y/UW7AvER3RbVAzJHlD+4OAiQ/UnHEqfQGBnJddtLu4tQ7CGdVL
-         AUq9IGWDFYwcPb8bfCpGq+UkpTYZD5uEskwbSMatlj/KFPYYnVfFKgBOUcp68aNCRUIg
-         7gXYuVBgYrT/k+liL2SFspnaGba3OfFda2OkH5Mc5sTQBUlPV+UswZ2XVSyoDRbsYv59
-         3Keg==
-X-Gm-Message-State: AAQBX9eMpC5ZM0DqN5jiofmS3nl/rlTn3oF215ibyZeIJ9Jeym0FQWCV
-        V7P8HL2j60tzvobh9/3ClcaI6A==
-X-Google-Smtp-Source: AKy350YJXhj3arGqXXTpc2VgZV6Qr9pWR9vJmoZ6WgNyjGx7wXKME8/6rq0oTj3BTzcWTCBwndVW9A==
-X-Received: by 2002:ac2:4a66:0:b0:4e0:2e20:b663 with SMTP id q6-20020ac24a66000000b004e02e20b663mr2515470lfp.6.1679917757081;
-        Mon, 27 Mar 2023 04:49:17 -0700 (PDT)
-Received: from [192.168.1.102] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05651238d000b004e8508899basm4676361lft.86.2023.03.27.04.49.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 04:49:16 -0700 (PDT)
-Message-ID: <333081a2-6b31-3fca-1a95-4273b5a46fb7@linaro.org>
-Date:   Mon, 27 Mar 2023 14:49:15 +0300
+        Mon, 27 Mar 2023 07:38:35 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E361734
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:38:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1679917112; x=1711453112;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q2B4kA6um1AUrS22dRB1g2bdoajEizZ7FOgCaLz1DVw=;
+  b=WjARYSDWoKmASnnfQaQpcuhTJg24Pld/nFPdY4iZNiFuYFVA7PhtaPWq
+   o8ob0ruAXZJAZTXbYzjbRSkS2iiP2SDugIZpEcnb/STrFuLtIw0vFoRFf
+   votA0CWUowQW+4Tu1OBi3usglpiDP34wU/Y08ytrWTr63PZYrP/CQsmNP
+   TCA6x/QDMF0IbFTuyprbrkgEhpD4rmVp+mP/OvT597pEB95LFhCwzXz1s
+   HSfLnRiKx1/kD2o5CV4ldN70R8EoYrFMUXNOh1H96nJmSOh2nkCWLF3qA
+   V91fUBK/Gst7eTbsTCAMH2nPPomTR2x7O/uASswSCiv5RHSEoKOCbNzsR
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,294,1673938800"; 
+   d="asc'?scan'208";a="207407574"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Mar 2023 04:38:31 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 27 Mar 2023 04:38:28 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 27 Mar 2023 04:38:27 -0700
+Date:   Mon, 27 Mar 2023 12:49:44 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Song Shuai <suagrfillet@gmail.com>
+CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <bjorn@kernel.org>
+Subject: Re: [PATCH V2] riscv: export cpu/freq invariant to scheduler
+Message-ID: <b6d48638-92b6-4406-b472-90d3d53b021f@spud>
+References: <20230323123924.3032174-1-suagrfillet@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH v2 03/10] dt-bindings: qcom-qce: Fix compatibles
- combinations for SM8150 and IPQ4019 SoCs
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, konrad.dybcio@linaro.org, rfoss@kernel.org,
-        neil.armstrong@linaro.org
-References: <20230322114519.3412469-1-bhupesh.sharma@linaro.org>
- <20230322114519.3412469-4-bhupesh.sharma@linaro.org>
-From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <20230322114519.3412469-4-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Edl0/TOuOami8mTi"
+Content-Disposition: inline
+In-Reply-To: <20230323123924.3032174-1-suagrfillet@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bhupesh,
+--Edl0/TOuOami8mTi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 3/22/23 13:45, Bhupesh Sharma wrote:
-> Currently the compatible list available in 'qce' dt-bindings does not
-> support SM8150 and IPQ4019 SoCs directly, leading to following
-> 'dtbs_check' error:
-> 
->   arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-griffin.dtb:
->    crypto@1dfa000: compatible: 'oneOf' conditional failed, one must be fixed:
-> 	['qcom,sm8150-qce', 'qcom,qce'] is too long
-> 	['qcom,sm8150-qce', 'qcom,qce'] is too short
-> 
-> Fix the same.
-> 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
++CC Bjorn,
+
+On Thu, Mar 23, 2023 at 08:39:24PM +0800, Song Shuai wrote:
+> RISC-V now manages CPU topology using arch_topology which provides
+> CPU capacity and frequency related interfaces to access the cpu/freq
+> invariant in possible heterogeneous or DVFS-enabled platforms.
+>=20
+> Here adds topology.h file to export the arch_topology interfaces for
+> replacing the scheduler's constant-based cpu/freq invariant accounting.
+>=20
+> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+
+Something in CI really, really doesn't like this patch:
+https://patchwork.kernel.org/project/linux-riscv/patch/20230323123924.30321=
+74-1-suagrfillet@gmail.com/
+
+The CI stuff applies the patch, builds the tree, resets to HEAD~1,
+builds it again, goes back to the applied patch and builds a third time.
+Builds 2 and 3 are incremental.
+In theory the same stuff should change between applying and removing the
+patch, and therefore each of builds 2 and 3 should have the same coverage,
+but that doesn't seem to be happening here.
+Build 2 looks to have rebuilt almost nothing and build 3 has rebuilt the
+world.
+I'm gonna chalk that one down as a CI issue rather than your patch!
+
+That said, I was wondering if you would end up submitting this patch,
+given the discussion on your last one ;)
+
+Looks to be the same as was done for arm64, so fwiw:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
 > ---
->   Documentation/devicetree/bindings/crypto/qcom-qce.yaml | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> index e375bd981300..90ddf98a6df9 100644
-> --- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> +++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> @@ -24,6 +24,12 @@ properties:
->           deprecated: true
->           description: Kept only for ABI backward compatibility
->   
-> +      - items:
-> +          - enum:
-> +              - qcom,ipq4019-qce
-> +              - qcom,sm8150-qce
-> +          - const: qcom,qce
+> changes from V1:
+>   - fix the leading underscore and tidy the patch up=20
+> ---
+>  arch/riscv/include/asm/topology.h | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>  create mode 100644 arch/riscv/include/asm/topology.h
+>=20
+> diff --git a/arch/riscv/include/asm/topology.h b/arch/riscv/include/asm/t=
+opology.h
+> new file mode 100644
+> index 000000000000..727e8d163a3b
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/topology.h
+> @@ -0,0 +1,20 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ASM_RISCV_TOPOLOGY_H
+> +#define _ASM_RISCV_TOPOLOGY_H
 > +
+> +#include <linux/arch_topology.h>
+> +
+> +/* Replace task scheduler's default frequency-invariant accounting */
+> +#define arch_scale_freq_tick	topology_scale_freq_tick
+> +#define arch_set_freq_scale	topology_set_freq_scale
+> +#define arch_scale_freq_capacity	topology_get_freq_scale
+> +#define arch_scale_freq_invariant	topology_scale_freq_invariant
+> +
+> +/* Replace task scheduler's default cpu-invariant accounting */
+> +#define arch_scale_cpu_capacity	topology_get_cpu_scale
+> +
+> +/* Enable topology flag updates */
+> +#define arch_update_cpu_topology	topology_update_cpu_topology
+> +
+> +#include <asm-generic/topology.h>
+> +#endif /* _ASM_RISCV_TOPOLOGY_H */
+> --=20
+> 2.20.1
+>=20
+>=20
 
-thank you for the fix, the change is correct, please apply the tag:
+--Edl0/TOuOami8mTi
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Fixes: 00f3bc2db351 ("dt-bindings: qcom-qce: Add new SoC compatible strings for Qualcomm QCE IP")
+-----BEGIN PGP SIGNATURE-----
 
-But let me ask you to split the "items" into two:
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCGC2AAKCRB4tDGHoIJi
+0l+xAP0XEpkCEwAle/m9iBKU+5bYreUYM96+rKjw0G4g24GPGgEAxMrUg2z+QaPq
+gEVLcP4H1EF+3p8QDiDa+tdyUjhgyA0=
+=noGV
+-----END PGP SIGNATURE-----
 
-       - items:
-           - const: qcom,ipq4019-qce
-           - const: qcom,qce
-
-       - items:
-           - const: qcom,sm8150-qce
-           - const: qcom,qce
-
-and put each of these two new items below a list of compatible values,
-where a family compatible describes the list.
-
-Nevertheless, please also add my tag:
-
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-
---
-Best wishes,
-Vladimir
+--Edl0/TOuOami8mTi--
