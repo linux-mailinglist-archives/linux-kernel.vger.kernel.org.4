@@ -2,76 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD1D6CB16A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 00:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 988146CB16D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 00:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjC0WCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 18:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
+        id S229718AbjC0WHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 18:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjC0WCM (ORCPT
+        with ESMTP id S229476AbjC0WHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 18:02:12 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A22210D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 15:01:46 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id 31so7926343qvc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 15:01:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679954506;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VX1NBj5by138i4YAyUE/B8GjUplIoeAkADXmwDxGNDM=;
-        b=SebD/g43tpygUyk6ZM3YDldFlmJidPf7k3TynS59PcvmDEByGoo2yt47ql83Z4NzDC
-         lUASYGyyVh3QBEjcuQyduecz78g3JHHtpu8C9yVZTBXXLC2szTnZAu6RvGIr3NZvWFBI
-         6NsCyP5hcUvA7jjQtcKcd2LvodESeyCsPhnz50ZzdkLkUOmwW6B1zkKgb9KIpA6jLPxw
-         1TxuqldbXf9IBCSY2kgmmqFSjNyOMA8oz/qT2kw8ohirTCarfnFQ3Un6fIHgk76U3rX3
-         FjJ7ZLd2pMPaSYOHCA/95YLjw1XtOnykY4Ap0CIs20ORMNFdbHvg5Ad9+uNWjCslgOox
-         ICnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679954506;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VX1NBj5by138i4YAyUE/B8GjUplIoeAkADXmwDxGNDM=;
-        b=ct+Mau4GkxDDO9IUBDQcepQ44hwaoPv6EDRNENt4OHqbBgP/3K+snU8UitqKYH8Cc6
-         j4ZB9kb58+N9OAi0FHR6HMTG4Qpm3uytwmI0AFbVdFlYrq1ZbJ6BCd3rWW156wLGbq7r
-         7kd8uZe8JiqUk+UOFcWR+TNlJIXNOXqo709OjpMDgHDXdws5+LwmWXmE8wJBjs54RXBp
-         V97v8mewmhazUJ10x/QI75jCM3aSRkODtljaSsvoXwVy3WfqD7sBf5JFByd8wYAPT4/h
-         YZHjs7dCCNMHWrl0p0KOC90coq8Or1X6yviuLw9kD9yKKhv0Hrcds8z/PlFDr/7tUWlZ
-         npNQ==
-X-Gm-Message-State: AAQBX9f1fd8x65V/62HLp5hIZI0d+Ry1EUlIkCtuIrmXsdrvTTYIaL6U
-        FpX9zVPcJnyqPJEj9f2g/6fCqA==
-X-Google-Smtp-Source: AKy350bpNLMZp4nU+AcWQ1pDqSqUI6blgXq7NZf41dmUi/9aSPTJ/0lx85kRQSFA/GEy2F859PeTWQ==
-X-Received: by 2002:a05:6214:2604:b0:5ab:e259:b2a9 with SMTP id gu4-20020a056214260400b005abe259b2a9mr25452716qvb.14.1679954505774;
-        Mon, 27 Mar 2023 15:01:45 -0700 (PDT)
-Received: from [172.17.0.3] ([130.44.212.120])
-        by smtp.gmail.com with ESMTPSA id t10-20020a37aa0a000000b0074683c45f6csm12299847qke.1.2023.03.27.15.01.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 15:01:45 -0700 (PDT)
-From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
-Date:   Mon, 27 Mar 2023 22:01:05 +0000
-Subject: [PATCH net] virtio/vsock: fix leak due to missing skb owner
+        Mon, 27 Mar 2023 18:07:13 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F4919AB;
+        Mon, 27 Mar 2023 15:07:11 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A78CF1EC0529;
+        Tue, 28 Mar 2023 00:07:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1679954829;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=uTvrkvRBOkm6k6Rg1Q92jvvbdCcLR4Zco9jZIpniGC0=;
+        b=FNeUThu0H61wHvzS9RH6RzIAXY+hZZd1+8Ne/HLEXwKfr0azNvXeAloZ6Hu+cKd1LBf5+u
+        UMcnJF14EOb2HbjSsYwoPb3sNGbwvyoKnVJ+Pw+ODaX7Xkg6nf3recMrx2mD+FZ55n9TwI
+        Yi/8szHGNEdIJoWfuk7O1aEpAifW/0M=
+Date:   Tue, 28 Mar 2023 00:07:05 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     kyle-meyer <kyle.meyer@hpe.com>, dimitri.sivanich@hpe.com,
+        steve.wahl@hpe.com, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        tony.luck@intel.com, qiuxu.zhuo@intel.com,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
+Subject: Re: [PATCH] RAS/CEC: Move non-debug attributes out of debugfs
+Message-ID: <20230327220705.GFZCITiXbkfun7oh21@fat_crate.local>
+References: <20230323202158.37937-1-kyle.meyer@hpe.com>
+ <20230324004919.GHZBzzj1FzwEZclTCL@fat_crate.local>
+ <ZB4NFzrf09D1J47m@yaz-khff.amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-vsock-fix-leak-v1-1-3fede367105f@bytedance.com>
-X-B4-Tracking: v=1; b=H4sIACASImQC/0WNQQrCQAxFr1KyNtCZIhavIi4yY2rDSEYSqULp3
- Z26cfk+7/FXcDZhh3O3gvEiLlUbhEMHeSa9M8qtMcQ+Dv0QT7h4zQUn+eCDqWAKmadwHCPRCC1
- K5IzJSPO8Z3/bS8L6Vrbdehq37Xd7AeUXXLftC+VLmi+LAAAA
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cong Wang <xiyou.wangcong@gmail.com>
-X-Mailer: b4 0.12.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZB4NFzrf09D1J47m@yaz-khff.amd.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,39 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch sets the owner for the skb when being sent from a socket and
-so solves the leak caused when virtio_transport_purge_skbs() finds
-skb->sk is always NULL and therefore never matches it with the current
-socket. Setting the owner upon allocation fixes this.
+On Fri, Mar 24, 2023 at 04:50:31PM -0400, Yazen Ghannam wrote:
+> How about "/sys/ras" to collect global RAS interfaces?
 
-Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
-Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
-Reported-by: Cong Wang <xiyou.wangcong@gmail.com>
-Link: https://lore.kernel.org/all/ZCCbATwov4U+GBUv@pop-os.localdomain/
----
- net/vmw_vsock/virtio_transport_common.c | 3 +++
- 1 file changed, 3 insertions(+)
+Looking a bit at
 
-diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-index 957cdc01c8e8..2a2f0c1a9fbd 100644
---- a/net/vmw_vsock/virtio_transport_common.c
-+++ b/net/vmw_vsock/virtio_transport_common.c
-@@ -94,6 +94,9 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
- 					 info->op,
- 					 info->flags);
- 
-+	if (info->vsk)
-+		skb_set_owner_w(skb, sk_vsock(info->vsk));
-+
- 	return skb;
- 
- out:
+Documentation/admin-guide/sysfs-rules.rst
 
----
-base-commit: e5b42483ccce50d5b957f474fd332afd4ef0c27b
-change-id: 20230327-vsock-fix-leak-b1cef1582aa8
+it does sound like /sys/<subsystem> could be a good place. Might wanna
+run it by Greg, though, first.
 
-Best regards,
+> Maybe it can link to other directories like "/sys/devices/*" for
+> hardware things like MCA,
+
+Those are at
+
+/sys/devices/system/machinecheck/
+
+> and "/sys/kernel/*" for kernel things like CEC.
+
+Or /sys/drivers
+
+Remember there's also
+
+/sys/devices/system/edac/
+
+so a lot of RAS junk spread all over the place.
+
 -- 
-Bobby Eshleman <bobby.eshleman@bytedance.com>
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
