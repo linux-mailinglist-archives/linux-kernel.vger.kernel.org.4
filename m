@@ -2,140 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C11776CAADE
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31AC46CAAE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbjC0Qmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 12:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
+        id S231990AbjC0QnC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 12:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232618AbjC0QmD (ORCPT
+        with ESMTP id S232617AbjC0Qmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:42:03 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF99A3A8C;
-        Mon, 27 Mar 2023 09:41:58 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RE6Bgf019036;
-        Mon, 27 Mar 2023 16:41:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=rdW3275cbw6qbQR0iizsgq/hJswZIcUGspaRgj6jMLk=;
- b=JaS0orVPRDkP93z0JaL9efVuYSQ6NSU5xqZxMz+mdZQl+EQpdrwukzfQpHAyUvMpQ2yz
- D9ZLhbdFc7wrGazWluHXarB1v3FRij4LI5e96vJqiWd988mS4W6m5Swx1UKokVz2c2oq
- sCnTNiDLR5KZkFH+lYWY4KTEsBgLHdv8agPrSjgv3bzeQxIUqUtt14exky4a5Jy2R66J
- ckRcqjHKDinJrhexU7j4gVgufTIM7Itt5vjhPkZnlEBPWrKoQxv/7N1Fag99HarVud56
- uq/tnPtFT4ZTHQzBjrDltHHL9S8hCOrR8/fY/dqce+U8QJzgVx/+tgDxQJOJoD285VRL /A== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pkcm2rg4h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 16:41:54 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32RGfrHX022663
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 16:41:53 GMT
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 27 Mar 2023 09:41:50 -0700
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linus.walleij@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [PATCH v4 5/5] firmware: qcom_scm: Add multiple download mode support
-Date:   Mon, 27 Mar 2023 22:11:21 +0530
-Message-ID: <1679935281-18445-6-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1679935281-18445-1-git-send-email-quic_mojha@quicinc.com>
-References: <1679935281-18445-1-git-send-email-quic_mojha@quicinc.com>
+        Mon, 27 Mar 2023 12:42:45 -0400
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50DE269A;
+        Mon, 27 Mar 2023 09:42:40 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id y4so38855166edo.2;
+        Mon, 27 Mar 2023 09:42:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679935359;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tUPHgvLfynF1cW2avQZPE6tiBmDlV9HQFs1/wQ1dwVM=;
+        b=eoPMcnkC9rM06FqUv0sPMik9DZMBBtJWMDD0M1esxNmyTefZVqoxAt9uam7QYF9GjC
+         H09dU2AMlCR+n1HYObC8igf8oQgIF7lf8Byxgz6oBKnG7+1yS7+Ydasog/mr6kitcvNp
+         UYsE84Xb+ZueMC7OEWvyg4kMxLTw+4F+s6Mh2ljhgf4oQQjXlHmfYszCVZCAcwhVcw47
+         Pa+LSIGGQksXpJQQwVLbk3JQwvbT5AEap42xNO9uGEU5gXpf3DuV8bRjstQXJHmiN54g
+         pc+EGqo+vQ05R3DC4l1eJFyFO/iwTgjFd+ZQz5h2JHw8Je63KrWdu6JWPJ1D9B0apeln
+         qzyQ==
+X-Gm-Message-State: AAQBX9eVkACzBkA4gFqcpHzKA4qFGWtTKTVj3MCxPxdfd24NpIISbr/t
+        SWxDnun/qsTaO/tFD1WlSDyVwWugqJGsAN8i8xM=
+X-Google-Smtp-Source: AKy350b72okw9liyVfLi4WzanTU70F/d4X8oDQ6ArNMbl9jCRmQNvcZbkkmCL2nUxLcxWsROTyahAtKojt+G8XvFC04=
+X-Received: by 2002:a50:d54f:0:b0:502:4f7:d287 with SMTP id
+ f15-20020a50d54f000000b0050204f7d287mr6090063edj.3.1679935359304; Mon, 27 Mar
+ 2023 09:42:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: BPRsb3e66BsdNY7tW2-pp1CxjgSMXdre
-X-Proofpoint-GUID: BPRsb3e66BsdNY7tW2-pp1CxjgSMXdre
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- malwarescore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501
- suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303270134
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-15-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230207051105.11575-15-ricardo.neri-calderon@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 27 Mar 2023 18:42:28 +0200
+Message-ID: <CAJZ5v0hGKKPiK86Z5PcG-EEHU7a=3d-4S2miRqNPuwjS1tF0BQ@mail.gmail.com>
+Subject: Re: [PATCH v3 14/24] thermal: intel: hfi: Update the IPC class of the
+ current task
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, scm driver only supports full dump when download
-mode is selected. Add support to enable minidump as well both
-dump(full dump + minidump).
+On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
+>
+> Use Intel Thread Director classification to update the IPC class of a
+> task. Implement the arch_update_ipcc() interface of the scheduler.
+>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Tim C. Chen <tim.c.chen@intel.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: x86@kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+> Changes since v2:
+>  * Removed the implementation of arch_has_ipc_classes().
+>
+> Changes since v1:
+>  * Adjusted the result the classification of Intel Thread Director to start
+>    at class 1. Class 0 for the scheduler means that the task is
+>    unclassified.
+>  * Redefined union hfi_thread_feedback_char_msr to ensure all
+>    bit-fields are packed. (PeterZ)
+>  * Removed CONFIG_INTEL_THREAD_DIRECTOR. (PeterZ)
+>  * Shortened the names of the functions that implement IPC classes.
+>  * Removed argument smt_siblings_idle from intel_hfi_update_ipcc().
+>    (PeterZ)
+> ---
+>  arch/x86/include/asm/topology.h   |  6 ++++++
+>  drivers/thermal/intel/intel_hfi.c | 32 +++++++++++++++++++++++++++++++
+>  2 files changed, 38 insertions(+)
+>
+> diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
+> index 458c891a8273..ffcdac3f398f 100644
+> --- a/arch/x86/include/asm/topology.h
+> +++ b/arch/x86/include/asm/topology.h
+> @@ -227,4 +227,10 @@ void init_freq_invariance_cppc(void);
+>  #define arch_init_invariance_cppc init_freq_invariance_cppc
+>  #endif
+>
+> +#if defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL)
+> +void intel_hfi_update_ipcc(struct task_struct *curr);
+> +
+> +#define arch_update_ipcc intel_hfi_update_ipcc
+> +#endif /* defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL) */
+> +
+>  #endif /* _ASM_X86_TOPOLOGY_H */
+> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> index b06021828892..530dcf57e06e 100644
+> --- a/drivers/thermal/intel/intel_hfi.c
+> +++ b/drivers/thermal/intel/intel_hfi.c
+> @@ -72,6 +72,17 @@ union cpuid6_edx {
+>         u32 full;
+>  };
+>
+> +#ifdef CONFIG_IPC_CLASSES
+> +union hfi_thread_feedback_char_msr {
+> +       struct {
+> +               u64     classid : 8;
+> +               u64     __reserved : 55;
+> +               u64     valid : 1;
+> +       } split;
+> +       u64 full;
+> +};
+> +#endif
+> +
+>  /**
+>   * struct hfi_cpu_data - HFI capabilities per CPU
+>   * @perf_cap:          Performance capability
+> @@ -174,6 +185,27 @@ static struct workqueue_struct *hfi_updates_wq;
+>  #ifdef CONFIG_IPC_CLASSES
+>  static int __percpu *hfi_ipcc_scores;
+>
+> +void intel_hfi_update_ipcc(struct task_struct *curr)
+> +{
+> +       union hfi_thread_feedback_char_msr msr;
+> +
+> +       /* We should not be here if ITD is not supported. */
+> +       if (!cpu_feature_enabled(X86_FEATURE_ITD)) {
+> +               pr_warn_once("task classification requested but not supported!");
+> +               return;
+> +       }
+> +
+> +       rdmsrl(MSR_IA32_HW_FEEDBACK_CHAR, msr.full);
+> +       if (!msr.split.valid)
+> +               return;
+> +
+> +       /*
+> +        * 0 is a valid classification for Intel Thread Director. A scheduler
+> +        * IPCC class of 0 means that the task is unclassified. Adjust.
+> +        */
+> +       curr->ipcc = msr.split.classid + 1;
+> +}
 
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
- drivers/firmware/qcom_scm.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+Wouldn't it be better to return the adjusted value from this function
+and let the caller store it where appropriate?
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index 0c94429..19315d0 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -32,6 +32,8 @@ static u32 download_mode;
- 
- #define QCOM_DOWNLOAD_MODE_MASK 0x30
- #define QCOM_DOWNLOAD_FULLDUMP	0x1
-+#define QCOM_DOWNLOAD_MINIDUMP  0x2
-+#define QCOM_DOWNLOAD_BOTHDUMP	(QCOM_DOWNLOAD_FULLDUMP | QCOM_DOWNLOAD_MINIDUMP)
- #define QCOM_DOWNLOAD_NODUMP	0x0
- 
- struct qcom_scm {
-@@ -1421,13 +1423,16 @@ static irqreturn_t qcom_scm_irq_handler(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
--
- static int get_download_mode(char *buffer, const struct kernel_param *kp)
- {
- 	int len = 0;
- 
- 	if (download_mode == QCOM_DOWNLOAD_FULLDUMP)
- 		len = sysfs_emit(buffer, "full\n");
-+	else if (download_mode == QCOM_DOWNLOAD_MINIDUMP)
-+		len = sysfs_emit(buffer, "mini\n");
-+	else if (download_mode == QCOM_DOWNLOAD_BOTHDUMP)
-+		len = sysfs_emit(buffer, "both\n");
- 	else if (download_mode == QCOM_DOWNLOAD_NODUMP)
- 		len = sysfs_emit(buffer, "off\n");
- 
-@@ -1440,6 +1445,10 @@ static int set_download_mode(const char *val, const struct kernel_param *kp)
- 
- 	if (!strncmp(val, "full", strlen("full"))) {
- 		download_mode = QCOM_DOWNLOAD_FULLDUMP;
-+	} else if (!strncmp(val, "mini", strlen("mini"))) {
-+		download_mode = QCOM_DOWNLOAD_MINIDUMP;
-+	} else if (!strncmp(val, "both", strlen("both"))) {
-+		download_mode = QCOM_DOWNLOAD_BOTHDUMP;
- 	} else if (!strncmp(val, "off", strlen("off"))) {
- 		download_mode = QCOM_DOWNLOAD_NODUMP;
- 	} else if (kstrtouint(val, 0, &download_mode) ||
-@@ -1462,7 +1471,7 @@ static const struct kernel_param_ops download_mode_param_ops = {
- 
- module_param_cb(download_mode, &download_mode_param_ops, NULL, 0644);
- MODULE_PARM_DESC(download_mode,
--		 "Download mode: off/full or 0/1 for existing users");
-+		 "download mode: off/full/mini/both(full+mini) or 0/1 for existing users");
- 
- static int qcom_scm_probe(struct platform_device *pdev)
- {
--- 
-2.7.4
+It doesn't look like it is necessary to pass the task_struct pointer to it.
 
+> +
+>  static int alloc_hfi_ipcc_scores(void)
+>  {
+>         if (!cpu_feature_enabled(X86_FEATURE_ITD))
+> --
