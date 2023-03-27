@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5496C9FEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:36:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 244A86C9FF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233480AbjC0JgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
+        id S233121AbjC0Jjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbjC0Jf5 (ORCPT
+        with ESMTP id S232834AbjC0Jjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:35:57 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EE92108;
-        Mon, 27 Mar 2023 02:35:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 458971FD6A;
-        Mon, 27 Mar 2023 09:35:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679909754; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TW0fKPKBX7rmV6RVNJ4lsd/4xOoTdCAvbvh5iuHbCQQ=;
-        b=yG41cqsNZN/9+pXmfiH761y/x4v+MDo6ehuG3+65gNK3AUPDowTPqtBriczigQ/YmFs/Qw
-        MNGZLkDR2uR1+B/9Z7Q0nJ9yYDOQDU+qcivvp9sFPF0LtsApNj9ENEC1k6j0/q26P4yYaR
-        unNfZdMYsnzRShxwIcWabx7HjREuD5s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679909754;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TW0fKPKBX7rmV6RVNJ4lsd/4xOoTdCAvbvh5iuHbCQQ=;
-        b=zTjgNNY75KaHZMOx48/yVGdKtszWK36qyPbtDfk9uKMaSqP26vnb/PPDG2uJVJBKOzNFvr
-        mOWRVyAWpdeDndBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 38BE013482;
-        Mon, 27 Mar 2023 09:35:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id SKLPDXpjIWRWaQAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 27 Mar 2023 09:35:54 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CA1C9A071C; Mon, 27 Mar 2023 11:35:53 +0200 (CEST)
-Date:   Mon, 27 Mar 2023 11:35:53 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, yukuai3@huawei.com, stable@vger.kernel.org
-Subject: Re: [PATCH 3/3] ext4: fix race between writepages and remount
-Message-ID: <20230327093553.up7dhoyqe4ecpn7y@quack3>
-References: <20230316112832.2711783-1-libaokun1@huawei.com>
- <20230316112832.2711783-4-libaokun1@huawei.com>
- <20230323114407.xenntblzv4ewfqkk@quack3>
- <269d37fd-d3f2-d059-b71f-acaea2e7ce4b@huawei.com>
+        Mon, 27 Mar 2023 05:39:31 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957044206
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:39:29 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id w9so33394436edc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:39:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1679909968;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t1i0W/TyfpldDwaDiDa5U5Pl1vVO1LPRVT3PtKODUh4=;
+        b=QwUMOwUnpDNJjrMuF98rA6azBWTIq+L5BRUMNq7lZB1a6AxSdzr4iCvRSY/bJu26jI
+         wT797bIj4Sthn7ccYaAINxS/bzt/ewLc9j1qK98AOxHwe7hvsY0TaK3IJZuPeEpDZYQ5
+         mk5ce20LcFctiGpCuoEudQ5m5z4EuY5JXqXNTUiEAIiho36RXhZCjKskp0f0rS4Q2Rl3
+         X7oursXLostIWZcwjRcPFLm4z9bra+cItSaCHGN1Kl97mTzvVU+d//tUGM3GQkqSViIJ
+         3V9vn3Vpl1dpaThbMwvhz993qeHln5ZUEfFt272Vb3i/vjdRivbDy/xx8VsYy/QEVT4O
+         xbvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679909968;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t1i0W/TyfpldDwaDiDa5U5Pl1vVO1LPRVT3PtKODUh4=;
+        b=gFgWYuGvQ2pt/KQJCzVp1qSTflMivZsaERZtOaB8XldX44JCJgSrZwFeo5vqBcSeBe
+         EuHbs8fe7kV/fzKVwThs2dwTlNUlJ3jUPFnaxFgAAJVbpP8Rh5GLSQCLzyoS9otIe/v+
+         ts06n9/mNRokgBGGtJ9CPfEKNt2rDTrVhW8f+xQ7lOdWxqZWeZLFCn23wnW/rTXpV0Il
+         RBJIjZ9+4QfSqqwunM4LsN+cdqzyY2PE/UGrUm6bcLMmlHKAcfoX7kdlGCJWhbhIitZ6
+         Owwu0JuAoWl6bOq/RxTyAn+XdypdZO9dEhr8vFP9x3jCQ52RSqepE8ZATyGdApLd8Ovl
+         RihQ==
+X-Gm-Message-State: AAQBX9fWSx40WQcE9OFi24bbWb9lhK34q9M4KVbc3E3qrzLQmVNDFtE4
+        6/nTWAgGmlz3lmfXbYAOJIKB3w==
+X-Google-Smtp-Source: AKy350ZIdTgrUsmjPbPrH5ktZ8JEFljNgWqu8QE0sBVlRr3MQObAN9KaR9F+TGv/AjggRpFoe41eAg==
+X-Received: by 2002:a17:906:483:b0:870:d9a:9ebb with SMTP id f3-20020a170906048300b008700d9a9ebbmr12495955eja.38.1679909968042;
+        Mon, 27 Mar 2023 02:39:28 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id k10-20020a1709067aca00b009294524ac21sm13874996ejo.60.2023.03.27.02.39.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 02:39:27 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 11:39:26 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v9 3/3] riscv: Use PUD/P4D/PGD pages for the linear
+ mapping
+Message-ID: <20230327093926.x5qyb5nou7naiyyv@orel>
+References: <20230324155421.271544-1-alexghiti@rivosinc.com>
+ <20230324155421.271544-4-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <269d37fd-d3f2-d059-b71f-acaea2e7ce4b@huawei.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20230324155421.271544-4-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,96 +78,246 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 23-03-23 22:18:53, Baokun Li wrote:
-> On 2023/3/23 19:44, Jan Kara wrote:
-> > > ---
-> > >   fs/ext4/ext4.h      |  3 ++-
-> > >   fs/ext4/ext4_jbd2.h |  9 +++++----
-> > >   fs/ext4/super.c     | 14 ++++++++++++++
-> > >   3 files changed, 21 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> > > index 08b29c289da4..f60967fa648f 100644
-> > > --- a/fs/ext4/ext4.h
-> > > +++ b/fs/ext4/ext4.h
-> > > @@ -1703,7 +1703,8 @@ struct ext4_sb_info {
-> > >   	/*
-> > >   	 * Barrier between writepages ops and changing any inode's JOURNAL_DATA
-> > > -	 * or EXTENTS flag.
-> > > +	 * or EXTENTS flag or between changing SHOULD_DIOREAD_NOLOCK flag on
-> > > +	 * remount and writepages ops.
-> > >   	 */
-> > >   	struct percpu_rw_semaphore s_writepages_rwsem;
-> > >   	struct dax_device *s_daxdev;
-> > > diff --git a/fs/ext4/ext4_jbd2.h b/fs/ext4/ext4_jbd2.h
-> > > index 0c77697d5e90..d82bfcdd56e5 100644
-> > > --- a/fs/ext4/ext4_jbd2.h
-> > > +++ b/fs/ext4/ext4_jbd2.h
-> > > @@ -488,6 +488,9 @@ static inline int ext4_free_data_revoke_credits(struct inode *inode, int blocks)
-> > >   	return blocks + 2*(EXT4_SB(inode->i_sb)->s_cluster_ratio - 1);
-> > >   }
-> > > +/* delalloc is a temporary fix to prevent generic/422 test failures*/
-> > > +#define EXT4_MOUNT_SHOULD_DIOREAD_NOLOCK (EXT4_MOUNT_DIOREAD_NOLOCK | \
-> > > +					  EXT4_MOUNT_DELALLOC)
-> > >   /*
-> > >    * This function controls whether or not we should try to go down the
-> > >    * dioread_nolock code paths, which makes it safe to avoid taking
-> > > @@ -499,7 +502,8 @@ static inline int ext4_free_data_revoke_credits(struct inode *inode, int blocks)
-> > >    */
-> > >   static inline int ext4_should_dioread_nolock(struct inode *inode)
-> > >   {
-> > > -	if (!test_opt(inode->i_sb, DIOREAD_NOLOCK))
-> > > +	if (test_opt(inode->i_sb, SHOULD_DIOREAD_NOLOCK) !=
-> > > +	    EXT4_MOUNT_SHOULD_DIOREAD_NOLOCK)
-> > >   		return 0;
-> > >   	if (!S_ISREG(inode->i_mode))
-> > >   		return 0;
-> > > @@ -507,9 +511,6 @@ static inline int ext4_should_dioread_nolock(struct inode *inode)
-> > >   		return 0;
-> > >   	if (ext4_should_journal_data(inode))
-> > >   		return 0;
-> > > -	/* temporary fix to prevent generic/422 test failures */
-> > > -	if (!test_opt(inode->i_sb, DELALLOC))
-> > > -		return 0;
-> > >   	return 1;
-> > >   }
-> > Is there a need for this SHOULD_DIOREAD_NOLOCK? When called from writeback
-> > we will be protected by s_writepages_rwsem anyway. When called from other
-> > places, we either decide to do dioread_nolock or don't but the situation
-> > can change at any instant so I don't see how unifying this check would
-> > help. And the new SHOULD_DIOREAD_NOLOCK somewhat obfuscates what's going
-> > on.
-> We're thinking that the mount-related flags in
-> ext4_should_dioread_nolock() might be modified, such as DELALLOC being
-> removed because generic/422 test failures were fixed in some other way,
-> resulting in some unnecessary locking during remount, or for whatever
-> reason a mount-related flag was added to ext4_should_dioread_nolock(),
-> and we didn't make a synchronization change in __ext4_remount() that
-> would cause the problem to recur.  So we added this flag to this function
-> (instead of in ext4.h), so that when we change the mount option in
-> ext4_should_dioread_nolock(), we directly change this flag, and we don't
-> have to consider making synchronization changes in __ext4_remount().
+On Fri, Mar 24, 2023 at 04:54:21PM +0100, Alexandre Ghiti wrote:
+> During the early page table creation, we used to set the mapping for
+> PAGE_OFFSET to the kernel load address: but the kernel load address is
+> always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
+> pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
+> PAGE_OFFSET is).
 > 
-> We have checked where this function is called and there are two types of
-> calls to this function:
-> 1. One category is ext4_do_writepages() and mpage_map_one_extent(), which
-> are protected by s_writepages_rwsem, the location of the problem;
-> 2. The other type is in ext4_page_mkwrite(),
-> ext4_convert_inline_data_to_extent(), ext4_write_begin() to determine
-> whether to get the block using ext4_get_block_unwritten() or
-> ext4_get_block().
->
->     1) If we just started fetching written blocks, it looks like there is no
-> problem;
->     2) If we start getting unwritten blocks, when DIOREAD_NOLOCK is cleared
-> by remount,
->         we will convert the blocks to written in ext4_map_blocks(). The
-> data=ordered mode ensures that we don't see stale data.
+> But actually we don't have to establish this mapping (ie set va_pa_offset)
+> that early in the boot process because:
+> 
+> - first, setup_vm installs a temporary kernel mapping and among other
+>   things, discovers the system memory,
+> - then, setup_vm_final creates the final kernel mapping and takes
+>   advantage of the discovered system memory to create the linear
+>   mapping.
+> 
+> During the first phase, we don't know the start of the system memory and
+> then until the second phase is finished, we can't use the linear mapping at
+> all and phys_to_virt/virt_to_phys translations must not be used because it
+> would result in a different translation from the 'real' one once the final
+> mapping is installed.
+> 
+> So here we simply delay the initialization of va_pa_offset to after the
+> system memory discovery. But to make sure noone uses the linear mapping
+> before, we add some guard in the DEBUG_VIRTUAL config.
+> 
+> Finally we can use PUD/P4D/PGD hugepages when possible, which will result
+> in a better TLB utilization.
+> 
+> Note that:
+> - this does not apply to rv32 as the kernel mapping lies in the linear
+>   mapping.
+> - we rely on the firmware to protect itself using PMP.
+> 
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> Acked-by: Rob Herring <robh@kernel.org> # DT bits
+> ---
+>  arch/riscv/include/asm/page.h | 16 ++++++++++
+>  arch/riscv/mm/init.c          | 58 +++++++++++++++++++++++++++++++----
+>  arch/riscv/mm/physaddr.c      | 16 ++++++++++
+>  drivers/of/fdt.c              | 11 ++++---
+>  4 files changed, 90 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
+> index 8dc686f549b6..ea1a0e237211 100644
+> --- a/arch/riscv/include/asm/page.h
+> +++ b/arch/riscv/include/asm/page.h
+> @@ -90,6 +90,14 @@ typedef struct page *pgtable_t;
+>  #define PTE_FMT "%08lx"
+>  #endif
+>  
+> +#ifdef CONFIG_64BIT
+> +/*
+> + * We override this value as its generic definition uses __pa too early in
+> + * the boot process (before kernel_map.va_pa_offset is set).
+> + */
+> +#define MIN_MEMBLOCK_ADDR      0
+> +#endif
+> +
+>  #ifdef CONFIG_MMU
+>  #define ARCH_PFN_OFFSET		(PFN_DOWN((unsigned long)phys_ram_base))
+>  #else
+> @@ -121,7 +129,11 @@ extern phys_addr_t phys_ram_base;
+>  #define is_linear_mapping(x)	\
+>  	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE_OFFSET + KERN_VIRT_SIZE))
+>  
+> +#ifndef CONFIG_DEBUG_VIRTUAL
+>  #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + kernel_map.va_pa_offset))
+> +#else
+> +void *linear_mapping_pa_to_va(unsigned long x);
+> +#endif
+>  #define kernel_mapping_pa_to_va(y)	({					\
+>  	unsigned long _y = (unsigned long)(y);					\
+>  	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?			\
+> @@ -130,7 +142,11 @@ extern phys_addr_t phys_ram_base;
+>  	})
+>  #define __pa_to_va_nodebug(x)		linear_mapping_pa_to_va(x)
+>  
+> +#ifndef CONFIG_DEBUG_VIRTUAL
+>  #define linear_mapping_va_to_pa(x)	((unsigned long)(x) - kernel_map.va_pa_offset)
+> +#else
+> +phys_addr_t linear_mapping_va_to_pa(unsigned long x);
+> +#endif
+>  #define kernel_mapping_va_to_pa(y) ({						\
+>  	unsigned long _y = (unsigned long)(y);					\
+>  	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ? \
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 3b37d8606920..f803671d18b2 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -213,6 +213,14 @@ static void __init setup_bootmem(void)
+>  	phys_ram_end = memblock_end_of_DRAM();
+>  	if (!IS_ENABLED(CONFIG_XIP_KERNEL))
+>  		phys_ram_base = memblock_start_of_DRAM();
+> +
+> +	/*
+> +	 * In 64-bit, any use of __va/__pa before this point is wrong as we
+> +	 * did not know the start of DRAM before.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_64BIT))
+> +		kernel_map.va_pa_offset = PAGE_OFFSET - phys_ram_base;
+> +
+>  	/*
+>  	 * memblock allocator is not aware of the fact that last 4K bytes of
+>  	 * the addressable memory can not be mapped because of IS_ERR_VALUE
+> @@ -667,9 +675,16 @@ void __init create_pgd_mapping(pgd_t *pgdp,
+>  
+>  static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
+>  {
+> -	/* Upgrade to PMD_SIZE mappings whenever possible */
+> -	base &= PMD_SIZE - 1;
+> -	if (!base && size >= PMD_SIZE)
+> +	if (!(base & (PGDIR_SIZE - 1)) && size >= PGDIR_SIZE)
+> +		return PGDIR_SIZE;
+> +
+> +	if (!(base & (P4D_SIZE - 1)) && size >= P4D_SIZE)
+> +		return P4D_SIZE;
+> +
+> +	if (!(base & (PUD_SIZE - 1)) && size >= PUD_SIZE)
+> +		return PUD_SIZE;
+> +
+> +	if (!(base & (PMD_SIZE - 1)) && size >= PMD_SIZE)
+>  		return PMD_SIZE;
+>  
+>  	return PAGE_SIZE;
+> @@ -978,11 +993,22 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>  	set_satp_mode();
+>  #endif
+>  
+> -	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
+> +	/*
+> +	 * In 64-bit, we defer the setup of va_pa_offset to setup_bootmem,
+> +	 * where we have the system memory layout: this allows us to align
+> +	 * the physical and virtual mappings and then make use of PUD/P4D/PGD
+> +	 * for the linear mapping. This is only possible because the kernel
+> +	 * mapping lies outside the linear mapping.
+> +	 * In 32-bit however, as the kernel resides in the linear mapping,
+> +	 * setup_vm_final can not change the mapping established here,
+> +	 * otherwise the same kernel addresses would get mapped to different
+> +	 * physical addresses (if the start of dram is different from the
+> +	 * kernel physical address start).
+> +	 */
+> +	kernel_map.va_pa_offset = IS_ENABLED(CONFIG_64BIT) ?
+> +				0UL : PAGE_OFFSET - kernel_map.phys_addr;
+>  	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
+>  
+> -	phys_ram_base = kernel_map.phys_addr;
+> -
+>  	/*
+>  	 * The default maximal physical memory size is KERN_VIRT_SIZE for 32-bit
+>  	 * kernel, whereas for 64-bit kernel, the end of the virtual address
+> @@ -1106,6 +1132,17 @@ static void __init create_linear_mapping_page_table(void)
+>  	phys_addr_t start, end;
+>  	u64 i;
+>  
+> +#ifdef CONFIG_STRICT_KERNEL_RWX
+> +	phys_addr_t ktext_start = __pa_symbol(_start);
+> +	phys_addr_t ktext_size = __init_data_begin - _start;
+> +	phys_addr_t krodata_start = __pa_symbol(__start_rodata);
+> +	phys_addr_t krodata_size = _data - __start_rodata;
+> +
+> +	/* Isolate kernel text and rodata so they don't get mapped with a PUD */
+> +	memblock_mark_nomap(ktext_start,  ktext_size);
+> +	memblock_mark_nomap(krodata_start, krodata_size);
+> +#endif
+> +
+>  	/* Map all memory banks in the linear mapping */
+>  	for_each_mem_range(i, &start, &end) {
+>  		if (start >= end)
+> @@ -1118,6 +1155,15 @@ static void __init create_linear_mapping_page_table(void)
+>  
+>  		create_linear_mapping_range(start, end);
+>  	}
+> +
+> +#ifdef CONFIG_STRICT_KERNEL_RWX
+> +	create_linear_mapping_range(ktext_start, ktext_start + ktext_size);
+> +	create_linear_mapping_range(krodata_start,
+> +				    krodata_start + krodata_size);
 
-Yes. So do you agree that EXT4_MOUNT_SHOULD_DIOREAD_NOLOCK is not really
-needed?
+Just for my own education, it looks to me like the rodata is left writable
+until the end of start_kernel(), when mark_rodata_ro() is called. Is that
+correct?
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Thanks,
+drew
+
+> +
+> +	memblock_clear_nomap(ktext_start,  ktext_size);
+> +	memblock_clear_nomap(krodata_start, krodata_size);
+> +#endif
+>  }
+>  
+>  static void __init setup_vm_final(void)
+> diff --git a/arch/riscv/mm/physaddr.c b/arch/riscv/mm/physaddr.c
+> index 9b18bda74154..18706f457da7 100644
+> --- a/arch/riscv/mm/physaddr.c
+> +++ b/arch/riscv/mm/physaddr.c
+> @@ -33,3 +33,19 @@ phys_addr_t __phys_addr_symbol(unsigned long x)
+>  	return __va_to_pa_nodebug(x);
+>  }
+>  EXPORT_SYMBOL(__phys_addr_symbol);
+> +
+> +phys_addr_t linear_mapping_va_to_pa(unsigned long x)
+> +{
+> +	BUG_ON(!kernel_map.va_pa_offset);
+> +
+> +	return ((unsigned long)(x) - kernel_map.va_pa_offset);
+> +}
+> +EXPORT_SYMBOL(linear_mapping_va_to_pa);
+> +
+> +void *linear_mapping_pa_to_va(unsigned long x)
+> +{
+> +	BUG_ON(!kernel_map.va_pa_offset);
+> +
+> +	return ((void *)((unsigned long)(x) + kernel_map.va_pa_offset));
+> +}
+> +EXPORT_SYMBOL(linear_mapping_pa_to_va);
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index d1a68b6d03b3..d14735a81301 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -887,12 +887,13 @@ const void * __init of_flat_dt_match_machine(const void *default_match,
+>  static void __early_init_dt_declare_initrd(unsigned long start,
+>  					   unsigned long end)
+>  {
+> -	/* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
+> -	 * enabled since __va() is called too early. ARM64 does make use
+> -	 * of phys_initrd_start/phys_initrd_size so we can skip this
+> -	 * conversion.
+> +	/*
+> +	 * __va() is not yet available this early on some platforms. In that
+> +	 * case, the platform uses phys_initrd_start/phys_initrd_size instead
+> +	 * and does the VA conversion itself.
+>  	 */
+> -	if (!IS_ENABLED(CONFIG_ARM64)) {
+> +	if (!IS_ENABLED(CONFIG_ARM64) &&
+> +	    !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
+>  		initrd_start = (unsigned long)__va(start);
+>  		initrd_end = (unsigned long)__va(end);
+>  		initrd_below_start_ok = 1;
+> -- 
+> 2.37.2
+> 
