@@ -2,186 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E596CAAFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932926CAB02
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232384AbjC0Quc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 12:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
+        id S231359AbjC0Quu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 12:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbjC0Qu3 (ORCPT
+        with ESMTP id S231960AbjC0Qur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:50:29 -0400
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A223AAB;
-        Mon, 27 Mar 2023 09:50:26 -0700 (PDT)
-Received: by mail-ed1-f54.google.com with SMTP id h8so38838055ede.8;
-        Mon, 27 Mar 2023 09:50:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679935824;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y8idM4wCH3YT0BzRYVVGc0WBy65JTYFDuvrsPK69mhY=;
-        b=qiXfSZt+uI5shLHUSwY/q9C+mnWXd0/PAshDD5JPb5n3i7pjcTRqNQBlxGZHObSIC4
-         enc1irdm/dRQcGnF0gld4DowZy5dw8ZXEQIDlKkwLFu8MKqPLNseoU98IoJQ4DvdD53D
-         9JdZz2kJfLKewQ8xyW/G/wFHhcO6a58C3cWlMVHjDVzQGH+XTg3I2FwcHev2VTuqRq4F
-         +MmdPUl1sEW8gYIsIAZ9AhW7PV079bkdUofIoBe0qpHT4h9JuXv9u58a+CO2Z2Wh5/XP
-         fpWaPnXQ03b+za77wV57ccQjww9F3+x7QK2PrDb8FfoMTSJPyrgcuBUOYb6dumSQsWRG
-         Ujog==
-X-Gm-Message-State: AAQBX9eBCAORr/yR/FMtKmRRTcAQvdjVJQqupI0s7unkH2YV5BoBjVtg
-        LAw8btej5TGRgvZxsV1xNtfb43tukSBWFr5bTWo=
-X-Google-Smtp-Source: AKy350aFHkbyoHtdCa3rP8t+epNGq3nozupQ9YFR9UiU3aYUKhiE92L9z8iWLnk1FCR3L/IQtZwlOAnBPm3vcI3VeBo=
-X-Received: by 2002:a17:907:3e8b:b0:931:ce20:db6e with SMTP id
- hs11-20020a1709073e8b00b00931ce20db6emr6772711ejc.2.1679935824418; Mon, 27
- Mar 2023 09:50:24 -0700 (PDT)
+        Mon, 27 Mar 2023 12:50:47 -0400
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F59D40C6;
+        Mon, 27 Mar 2023 09:50:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1679935835; bh=0b6vVlYAyh5z7fdaNDqWVNg+I6CkcXsuoksujna/tzw=;
+        h=Date:From:To:Subject:X-My-GPG-KeyId:References:From;
+        b=pmarkM+/OZc5OTi6iMA5S8Y17L7nGwnIcGzPlZKDWPUUrPCpqkcOwE2lru+q14ty0
+         rnPmMWBKXaaKRQesS6Jte9hq+nfXdfQ9NGJFNmQvuyhof1Rkw3aJ8/XEXRBY62ctsx
+         YoELERSyoCzH9p6Db06LlLzgI7SNCNzLI1GLl7II=
+Date:   Mon, 27 Mar 2023 18:50:35 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Robert Mader <robert.mader@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Martijn Braam <martijn@brixit.nl>,
+        Kamil =?utf-8?Q?Trzci=C5=84ski?= <ayufan@ayufan.eu>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jarrah Gosbell <kernel@undef.tools>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v2] arm64: dts: rk3399-pinephone-pro: Add internal
+ display support
+Message-ID: <20230327165035.uc2etuxypehjnrp6@core>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Robert Mader <robert.mader@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Martijn Braam <martijn@brixit.nl>,
+        Kamil =?utf-8?Q?Trzci=C5=84ski?= <ayufan@ayufan.eu>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jarrah Gosbell <kernel@undef.tools>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <20230327074136.1459212-1-javierm@redhat.com>
+ <20230327130147.wgxl2qayhzsi2xak@core>
 MIME-Version: 1.0
-References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-16-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20230207051105.11575-16-ricardo.neri-calderon@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 18:50:13 +0200
-Message-ID: <CAJZ5v0iidC0LxqpE60J5HHQhvv8iHjMGdxM89-7p-QQE99qVEQ@mail.gmail.com>
-Subject: Re: [PATCH v3 15/24] thermal: intel: hfi: Report the IPC class score
- of a CPU
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327130147.wgxl2qayhzsi2xak@core>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
+One small note...
+
+On Mon, Mar 27, 2023 at 03:01:48PM +0200, megi xff wrote:
+> Hi Javier,
+> 
+> [...]
 >
-> Implement the arch_get_ipcc_score() interface of the scheduler. Use the
-> performance capabilities of the extended Hardware Feedback Interface table
-> as the IPC score.
->
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Tim C. Chen <tim.c.chen@intel.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: x86@kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> ---
-> Changes since v2:
->  * None
->
-> Changes since v1:
->  * Adjusted the returned HFI class (which starts at 0) to match the
->    scheduler IPCC class (which starts at 1). (PeterZ)
->  * Used the new interface names.
-> ---
->  arch/x86/include/asm/topology.h   |  2 ++
->  drivers/thermal/intel/intel_hfi.c | 27 +++++++++++++++++++++++++++
->  2 files changed, 29 insertions(+)
->
-> diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-> index ffcdac3f398f..c4fcd9c3c634 100644
-> --- a/arch/x86/include/asm/topology.h
-> +++ b/arch/x86/include/asm/topology.h
-> @@ -229,8 +229,10 @@ void init_freq_invariance_cppc(void);
->
->  #if defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL)
->  void intel_hfi_update_ipcc(struct task_struct *curr);
-> +unsigned long intel_hfi_get_ipcc_score(unsigned short ipcc, int cpu);
->
->  #define arch_update_ipcc intel_hfi_update_ipcc
-> +#define arch_get_ipcc_score intel_hfi_get_ipcc_score
->  #endif /* defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL) */
->
->  #endif /* _ASM_X86_TOPOLOGY_H */
-> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index 530dcf57e06e..fa9b4a678d92 100644
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -206,6 +206,33 @@ void intel_hfi_update_ipcc(struct task_struct *curr)
->         curr->ipcc = msr.split.classid + 1;
->  }
->
-> +unsigned long intel_hfi_get_ipcc_score(unsigned short ipcc, int cpu)
-> +{
-> +       unsigned short hfi_class;
+> This (1 kHz) seems to be outside of the range of recommended dimming frequency
+> of SY7203: https://megous.com/dl/tmp/fb79af4023a5f102.png It's too low.
+> 
+> The consequence is that there's a large ripple on the positive input of the
+> feedback comparator https://megous.com/dl/tmp/e155900fecb0323f.png which
+> will cause similar instability in backlight brightness.
+> 
+> I've hooked up a photoresistor to a scope, and the display is indeed varying the
+> brightness at 1 kHz https://megous.com/dl/tmp/09cb95c7b4b2892b.png
+> 
+> There are two variants of SY7203 which differ by ouput regulation technique.
+> One with this internal integrator, and other with direct PWM control of the
+> output. My guess is that PPP uses the integrator variant.
+> 
+> I switched PWM period to 50000 (20 kHz recommended by the datasheet and the
+> flicker is gone https://megous.com/dl/tmp/31b6bfc51badde3b.png
+> 
+> So I think higher PWM frequency will be better suited here, and this may really
+> be the LED driver variant with the integrator.
+> 
+> (Photoresistors are not that fast, but I've hooked a LED to signal generator,
+> to simulate 20kHz blinking backlight, and I was still able to catch the pattern
+> on the scope via a photoresistor, so it looks like this verifies that it
+> would still be possible to measure some flicker at 20 kHz using this technique.
+> I guess I should buy a PIN diode for the next time. :))
 
-It looks like the variable above is only used to save a subtraction or
-addition of 1 to something going forward.
+Experimentally SY7203 will only start up with duty cycle of 250ns or more.
 
-> +       int *scores;
-> +
-> +       if (cpu < 0 || cpu >= nr_cpu_ids)
-> +               return -EINVAL;
-> +
-> +       if (ipcc == IPC_CLASS_UNCLASSIFIED)
-> +               return -EINVAL;
-> +
-> +       /*
-> +        * Scheduler IPC classes start at 1. HFI classes start at 0.
-> +        * See note intel_hfi_update_ipcc().
-> +        */
-> +       hfi_class = ipcc - 1;
-> +
-> +       if (hfi_class >= hfi_features.nr_classes)
+So this means that default curve generated by the kernel will not work at 20 kHz
+at low ranges, because cie1931 -> pwm duty cycle covnersion done by the
+kernel will result in too small duty cycle at brightness < 5%, because that
+translates to duty cycle of 250ns or less. In other words, kernel will generate
+3124 brightness steps for PWM period of 50us, with bottom ~150 steps being
+unusable and behaving weirdly (sometimes some of them work sometimes not,
+depending whether the LED regulator is already running or not).
 
-Personally, I would do
+So the cie1931 curve may need a bit of a Y shift, by specifying a minimum duty
+cycle usable by the hardware.
 
-if (ipcc >= hfi_features.nr_classes + 1)
+Something like these 50 brightness levels work nicely, starting from minimum
+250ns and going up:
 
-here and ->
+	brightness-levels =
+		<0 250 360 470 580 690 810 949 1110 1294 1502
+		1737 1998 2289 2610 2964 3351 3774 4233 4731
+		5268 5847 6467 7133 7845 8604 9412 10271 11182
+		12146 13164 14239 15374 16568 17822 19140 20521
+		21969 23483 25068 26722 28447 30247 32121 34071
+		36099 38210 40400 42669 45026 47468 50000>;
+	default-brightness-level = <17>;
 
-> +               return -EINVAL;
-> +
-> +       scores = per_cpu_ptr(hfi_ipcc_scores, cpu);
-> +       if (!scores)
-> +               return -ENODEV;
-> +
+when put into backlight node.
 
--> scores[ipcc - 1]
+Or if we want 100 steps, then this curve would work, too:
 
-below.
+brightness-levels = <250 304 360 414 470 524 580 634 690 747 810 877
+	949 1027 1110 1199 1294 1395 1502 1616 1737 1864 1998 2140 2289
+	2446 2610 2783 2964 3154 3351 3559 3774 3999 4233 4477 4731 4994
+	5268 5552 5847 6152 6467 6795 7133 7483 7845 8219 8604 9002 9412
+	9835 10271 10719 11182 11656 12146 12648 13164 13695 14239 14799
+	15374 15963 16568 17186 17822 18474 19140 19822 20521 21236 21969
+	22717 23483 24267 25068 25885 26722 27575 28447 29338 30247 31173
+	32121 33087 34071 35077 36099 37145 38210 39292 40400 41523 42669
+	43839 45026 46237 47468 48722 50000>;
 
-> +       return READ_ONCE(scores[hfi_class]);
 
-And why does this need to use READ_ONCE()?
+> > +		pwm-delay-us = <10000>;
 
-> +}
-> +
->  static int alloc_hfi_ipcc_scores(void)
->  {
->         if (!cpu_feature_enabled(X86_FEATURE_ITD))
-> --
+Also this doesn't seem to be documented anywhere or used in the kernel code...
+So we should remove it.
+
+kind regards,
+	o.
+
+> > +	};
+> > +
+> >  	gpio-keys {
+> >  		compatible = "gpio-keys";
+> >  		pinctrl-names = "default";
