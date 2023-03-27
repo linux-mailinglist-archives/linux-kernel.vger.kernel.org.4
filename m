@@ -2,163 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 932926CAB02
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D08686CAB10
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjC0Quu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 12:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
+        id S232609AbjC0QwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 12:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231960AbjC0Qur (ORCPT
+        with ESMTP id S232202AbjC0QwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:50:47 -0400
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F59D40C6;
-        Mon, 27 Mar 2023 09:50:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1679935835; bh=0b6vVlYAyh5z7fdaNDqWVNg+I6CkcXsuoksujna/tzw=;
-        h=Date:From:To:Subject:X-My-GPG-KeyId:References:From;
-        b=pmarkM+/OZc5OTi6iMA5S8Y17L7nGwnIcGzPlZKDWPUUrPCpqkcOwE2lru+q14ty0
-         rnPmMWBKXaaKRQesS6Jte9hq+nfXdfQ9NGJFNmQvuyhof1Rkw3aJ8/XEXRBY62ctsx
-         YoELERSyoCzH9p6Db06LlLzgI7SNCNzLI1GLl7II=
-Date:   Mon, 27 Mar 2023 18:50:35 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Robert Mader <robert.mader@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Martijn Braam <martijn@brixit.nl>,
-        Kamil =?utf-8?Q?Trzci=C5=84ski?= <ayufan@ayufan.eu>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jarrah Gosbell <kernel@undef.tools>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v2] arm64: dts: rk3399-pinephone-pro: Add internal
- display support
-Message-ID: <20230327165035.uc2etuxypehjnrp6@core>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Robert Mader <robert.mader@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Martijn Braam <martijn@brixit.nl>,
-        Kamil =?utf-8?Q?Trzci=C5=84ski?= <ayufan@ayufan.eu>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jarrah Gosbell <kernel@undef.tools>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20230327074136.1459212-1-javierm@redhat.com>
- <20230327130147.wgxl2qayhzsi2xak@core>
+        Mon, 27 Mar 2023 12:52:08 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D7E4EFD
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:51:49 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3e392e10cc4so762851cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:51:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679935903;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G96YuHfNOixQOenDOjw+vw59nqvCVp4eZ2HJnETyrKc=;
+        b=cVGHWdwqfEkneKgtudrjbNGsEzADfbEvXHWqAAx79dx2qKsfAP/IyzzqWgWtGn2gBV
+         ILG7Eg+8PthAMvYprdbPqpKFTFEQBCu5B17F2PQ5cSnqrV6xUe+76UjbI3FbhfNKqosW
+         98dX0lM+nZ/7AXDnsjEkzSBp4MHMNhoaQ/a6Vt98XjcwYCC6EIwGxbszYQR61Hopo1wI
+         AAXXTBLhz3UndEl3VL6KZyZW06hAAx4U7B2lAcgJ25ZOY6CrVYRkv1Q5hthMyKqUHrRx
+         fSpy+YfwVicXOh6cGSZQjFdX9myoQ8GThtyHCaChkORSE+6WSJf7oRms6my6+6shLzM1
+         L34w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679935903;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G96YuHfNOixQOenDOjw+vw59nqvCVp4eZ2HJnETyrKc=;
+        b=EP53JBDekYlQwdEqM5a7jYBQlQLfOCnqaZDUTyzZNDyD1RZXoJ80ns4EshZNbOk9KV
+         hQqLoaqAMIEYtWyVa/ICiO8bM/oyahBkBsa4aqEZ7RLTdxr7jZ+mEFw1owFfTFeQFnZF
+         5I+yqv4E0i1OC6ZFa7sbwghbS4YglcnPtAkBHlLMqSmPKka0rPk2nl3y4q5pAiZcXE9c
+         7hGs+cS7q1g5vVgoDerzwkiFHI34gndgVQmiSX/UIGcOdrLfEcSO7Dg3qprX+IJwIE8F
+         WwFQgLofJbriKaOPjyuAgZWwyX1j+XnVo09m9VT8aqRkPkSyGd+IoUB+R5WYSVIF6qRf
+         8buQ==
+X-Gm-Message-State: AAQBX9f9aFCzG8ExxUyxS1gN6XkaDqrN0bgm0aiEbzUYBOIv2kfGFOs+
+        nPu9HPCeV6DEsPs3o9jl06Xi/QytNehedX+1WdTmkQ==
+X-Google-Smtp-Source: AKy350YFx7+Gb2GSAOSS4DCpVaJhpKird5zpu0naUCTffltRu3HaqJtagKWVFth5kFZsFyzmtvzoQnvwdnpqHv8ys+k=
+X-Received: by 2002:a05:622a:1820:b0:3d3:fd80:b06a with SMTP id
+ t32-20020a05622a182000b003d3fd80b06amr518172qtc.13.1679935902975; Mon, 27 Mar
+ 2023 09:51:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327130147.wgxl2qayhzsi2xak@core>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <1679885172-95021-1-git-send-email-renyu.zj@linux.alibaba.com>
+In-Reply-To: <1679885172-95021-1-git-send-email-renyu.zj@linux.alibaba.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 27 Mar 2023 09:51:31 -0700
+Message-ID: <CAP-5=fVitwxZwjkv0F98gHiYV9GBvmPq6LgcLTccQbogKmMhPA@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/4] Add JSON metrics for arm CMN and Yitian710 DDR
+To:     Jing Zhang <renyu.zj@linux.alibaba.com>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One small note...
-
-On Mon, Mar 27, 2023 at 03:01:48PM +0200, megi xff wrote:
-> Hi Javier,
-> 
-> [...]
+On Sun, Mar 26, 2023 at 7:46=E2=80=AFPM Jing Zhang <renyu.zj@linux.alibaba.=
+com> wrote:
 >
-> This (1 kHz) seems to be outside of the range of recommended dimming frequency
-> of SY7203: https://megous.com/dl/tmp/fb79af4023a5f102.png It's too low.
-> 
-> The consequence is that there's a large ripple on the positive input of the
-> feedback comparator https://megous.com/dl/tmp/e155900fecb0323f.png which
-> will cause similar instability in backlight brightness.
-> 
-> I've hooked up a photoresistor to a scope, and the display is indeed varying the
-> brightness at 1 kHz https://megous.com/dl/tmp/09cb95c7b4b2892b.png
-> 
-> There are two variants of SY7203 which differ by ouput regulation technique.
-> One with this internal integrator, and other with direct PWM control of the
-> output. My guess is that PPP uses the integrator variant.
-> 
-> I switched PWM period to 50000 (20 kHz recommended by the datasheet and the
-> flicker is gone https://megous.com/dl/tmp/31b6bfc51badde3b.png
-> 
-> So I think higher PWM frequency will be better suited here, and this may really
-> be the LED driver variant with the integrator.
-> 
-> (Photoresistors are not that fast, but I've hooked a LED to signal generator,
-> to simulate 20kHz blinking backlight, and I was still able to catch the pattern
-> on the scope via a photoresistor, so it looks like this verifies that it
-> would still be possible to measure some flicker at 20 kHz using this technique.
-> I guess I should buy a PIN diode for the next time. :))
+> Hi all,
+>
+> I add an identifier sysfs file for the yitian710 SoC DDR and arm CMN to
+> allow userspace to identify the specific implementation of the device,
+> so that the perf tool can match the corresponding uncore events and
+> metrics through the identifier. Then added several general CMN700 metrics
+> and yitian710 soc DDR metrics.
 
-Experimentally SY7203 will only start up with duty cycle of 250ns or more.
+Thanks!
 
-So this means that default curve generated by the kernel will not work at 20 kHz
-at low ranges, because cie1931 -> pwm duty cycle covnersion done by the
-kernel will result in too small duty cycle at brightness < 5%, because that
-translates to duty cycle of 250ns or less. In other words, kernel will generate
-3124 brightness steps for PWM period of 50us, with bottom ~150 steps being
-unusable and behaving weirdly (sometimes some of them work sometimes not,
-depending whether the LED regulator is already running or not).
+> Since the eventid of cmn700 events is different from other events, it
+> can't be specified by "EventCode" or "ConfigCode", so in the cmn.json
+> file of cmn700, no "EventCode" and "ConfigCode" are added for these
+> events. For example, the eventid of "arm_cmn_0/hnf_sf_hit is/":
+> cat /sys/bus/event_source/devices/arm_cmn_0/events/hnf_sf_hit
+> type=3D0x5,eventid=3D0x6
 
-So the cie1931 curve may need a bit of a Y shift, by specifying a minimum duty
-cycle usable by the hardware.
+This is done to add descriptions to the events? We can add encodings
+to jevents.py and the event parsing to handle the names eventid and
+type.
 
-Something like these 50 brightness levels work nicely, starting from minimum
-250ns and going up:
+> In addition, both cmn700 and ddr PMU can count the information in a die,
+> but the same SoC can also be configured with different numbers of dies,
+> so it is dificult to design a general expression to obtain metrics in
+> different dies. The current yitian710 ddr bandwidth metric describes the
+> sum of all dies bandwidth. I would like to ask you, is there any general
+> expression can obtain metrics for die? Add an option to specify die?
 
-	brightness-levels =
-		<0 250 360 470 580 690 810 949 1110 1294 1502
-		1737 1998 2289 2610 2964 3351 3774 4233 4731
-		5268 5847 6467 7133 7845 8604 9412 10271 11182
-		12146 13164 14239 15374 16568 17822 19140 20521
-		21969 23483 25068 26722 28447 30247 32121 34071
-		36099 38210 40400 42669 45026 47468 50000>;
-	default-brightness-level = <17>;
+So hopefully the logic for this is getting clearer in the
+perf-tools-next branch. When perf stat runs it will aggregate in a
+number of different ways, if you pass -A it will remove the
+aggregation, but you can also use --per-socket, per-die, .. The
+metrics take the individual counter values, say instructions and
+cycles and produce a metric like IPC. By default all the instruction
+counts are aggregated together, the cycles are aggregated together and
+then the metric produced on the two aggregated values. When -A or
+--per-die are passed, the appropriate amount of aggregation should be
+done then the metric computed multiple times.
 
-when put into backlight node.
+Are you asking for a way in a metric to take counts from one die and
+use them in the other's metric? For example, reads on one die are
+writes on the other? This is possible as we have all the counts in the
+tool. I've thought about this in the context of some metrics we have
+for AMD, but there is no support for this in the tool currently.
 
-Or if we want 100 steps, then this curve would work, too:
+Thanks,
+Ian
 
-brightness-levels = <250 304 360 414 470 524 580 634 690 747 810 877
-	949 1027 1110 1199 1294 1395 1502 1616 1737 1864 1998 2140 2289
-	2446 2610 2783 2964 3154 3351 3559 3774 3999 4233 4477 4731 4994
-	5268 5552 5847 6152 6467 6795 7133 7483 7845 8219 8604 9002 9412
-	9835 10271 10719 11182 11656 12146 12648 13164 13695 14239 14799
-	15374 15963 16568 17186 17822 18474 19140 19822 20521 21236 21969
-	22717 23483 24267 25068 25885 26722 27575 28447 29338 30247 31173
-	32121 33087 34071 35077 36099 37145 38210 39292 40400 41523 42669
-	43839 45026 46237 47468 48722 50000>;
-
-
-> > +		pwm-delay-us = <10000>;
-
-Also this doesn't seem to be documented anywhere or used in the kernel code...
-So we should remove it.
-
-kind regards,
-	o.
-
-> > +	};
-> > +
-> >  	gpio-keys {
-> >  		compatible = "gpio-keys";
-> >  		pinctrl-names = "default";
+> Thanks,
+> Jing
+>
+> Jing Zhang (4):
+>   driver/perf: Add identifier sysfs file for CMN
+>   perf vendor events: Add JSON metrics for cmn700
+>   driver/perf: Add identifier sysfs file for Yitian 710 DDR
+>   perf vendor events: Add JSON metrics for Yitian 710 DDR
+>
+>  drivers/perf/alibaba_uncore_drw_pmu.c              |  27 ++
+>  drivers/perf/arm-cmn.c                             |  43 +++
+>  .../pmu-events/arch/arm64/arm/cmn700/sys/cmn.json  | 188 +++++++++++
+>  .../arch/arm64/arm/cmn700/sys/metrics.json         |  74 ++++
+>  .../arm64/freescale/yitian710/sys/ali_drw.json     | 373 +++++++++++++++=
+++++++
+>  .../arm64/freescale/yitian710/sys/metrics.json     |  20 ++
+>  tools/perf/pmu-events/jevents.py                   |   2 +
+>  7 files changed, 727 insertions(+)
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cmn700/sys/cmn.j=
+son
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cmn700/sys/metri=
+cs.json
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/freescale/yitian710/=
+sys/ali_drw.json
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/freescale/yitian710/=
+sys/metrics.json
+>
+> --
+> 1.8.3.1
+>
