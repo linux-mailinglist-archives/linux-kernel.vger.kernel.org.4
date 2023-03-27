@@ -2,75 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C516C9D3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9C46C9D46
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232984AbjC0IK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
+        id S232966AbjC0IME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232968AbjC0IKW (ORCPT
+        with ESMTP id S232554AbjC0IMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:10:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A011F3A9D;
-        Mon, 27 Mar 2023 01:10:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3282CB80E9E;
-        Mon, 27 Mar 2023 08:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02A3EC433EF;
-        Mon, 27 Mar 2023 08:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679904618;
-        bh=34GlLDZs9xsU4X4y4jbYBxVIqRQaa6Vbkw23VwWqaPA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LIPL6BBKkJIYhsOUboOvRHYUY3tZtipRkEiDjhTVRxLiWsOZxj+IVkxiz7MwBLon4
-         m4FJOemnyf/A9BrbEkNzQA9MHzX4Z6sHAwH6RMWv2ZPc4ITVki0je/2iSdyzvbz9YD
-         rCGgU4oicSOBwPHk5C35kqNITu7VgO6hBmxBBU6QhklIdJsugksmi7Q9ifD05qZKJJ
-         V7i7gUZSN677Q6WDFXiEQGPrz4DP6BqyAkDgNar/pZBa3utJNzwSz22JQDap9UqVeG
-         ca+nYVu70w2MebtZEcoZ1YvuZaG7IHFN9Ae02uRte4hw3Tr4vECLcazD4RSVIkoDPX
-         uKwxurMORyxsQ==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>, viro@zeniv.linux.org.uk
-Subject: Re: [PATCH v2] fs/buffer: Remove redundant assignment to err
-Date:   Mon, 27 Mar 2023 10:10:10 +0200
-Message-Id: <167990444020.1656778.1662705570875208111.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230323023259.6924-1-jiapeng.chong@linux.alibaba.com>
-References: <20230323023259.6924-1-jiapeng.chong@linux.alibaba.com>
+        Mon, 27 Mar 2023 04:12:02 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BAD46A6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:12:01 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9C6281C0015;
+        Mon, 27 Mar 2023 08:11:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1679904719;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GhvzASfzINt429FFDENdwaX1DAN8o/J7JPa/K12PqeE=;
+        b=KtBVpLqLxvlJs8VA5ludhzfGeipr1FWpr3sHAGZ3b3nWk8iyPaq8kzNPhZGhJmjiod+8LB
+        rvro547hpD376hvjvWR5ia9QivFHApEOtdEN/7R6yW+iNlxTv/8NIHzCb4XFbPRI+udoJz
+        0KCOyrK19k/RKZ7RyyFC7yWknSlFCg6rjdMu4UX4tOFUpfPF6e8ZgRFKvUk6f3iBk5yKfA
+        D28+bEjlL3UkXOEF9j4pPpHoID2r+79ciMCxRHNYoUlGqH4gQCttfI9kjplPGiQTReJKGQ
+        56COzZAup502YD32YBhgNaW1Qk9QtcgwZqZBilBN0x2L6G21Nn9RXGdENtlR0g==
+Date:   Mon, 27 Mar 2023 10:11:56 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Christophe Kerello <christophe.kerello@foss.st.com>
+Cc:     <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: Re: [PATCH] mtd: rawnand: stm32_fmc2: do not support EDO mode
+Message-ID: <20230327101156.0ec2816a@xps-13>
+In-Reply-To: <fcb600af-88dc-55a7-917e-4cf4673c2973@foss.st.com>
+References: <20230324160918.826452-1-christophe.kerello@foss.st.com>
+        <20230324172528.4d3ccd4b@xps-13>
+        <f4c32aa5-e5b1-6465-7708-ef0281baf0af@foss.st.com>
+        <fcb600af-88dc-55a7-917e-4cf4673c2973@foss.st.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=410; i=brauner@kernel.org; h=from:subject:message-id; bh=oMDp8p5UWqaXqXrCVnyKq2CByfK3S1lZJOB7Oy9si+o=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQo+sfyyMx7L/yvdWn5QQmLYzkKsqn32G90e7d9XKTufPf9 uc1sHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABMJXsnI8DUn/86RWZzp/K7mT6T+JJ WetDsopnXXQ/oJ46nZEQ0rlzD8d/jzO7DXM/0K2+e8xHWN8nMYXz/i2nTo35GkXQ5ra8vUOQA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Christophe,
 
-On Thu, 23 Mar 2023 10:32:59 +0800, Jiapeng Chong wrote:
-> Variable 'err' set but not used.
-> 
-> fs/buffer.c:2613:2: warning: Value stored to 'err' is never read.
-> 
-> 
+christophe.kerello@foss.st.com wrote on Mon, 27 Mar 2023 10:02:13 +0200:
 
-Applied to
+> Hello Miquel,
+>=20
+> On 3/24/23 17:34, Christophe Kerello wrote:
+> > Hello Miquel,
+> >=20
+> > On 3/24/23 17:25, Miquel Raynal wrote: =20
+> >> Hi Christophe,
+> >>
+> >> christophe.kerello@foss.st.com wrote on Fri, 24 Mar 2023 17:09:18 +010=
+0:
+> >> =20
+> >>> FMC2 controller does not support EDO mode (timings mode 4 and 5).
+> >>>
+> >>> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+> >>> Fixes: 2cd457f328c1 ("mtd: rawnand: stm32_fmc2: add STM32 FMC2 NAND >=
+>> flash controller driver")
+> >>> ---
+> >>> =C2=A0 drivers/mtd/nand/raw/stm32_fmc2_nand.c | 3 +++
+> >>> =C2=A0 1 file changed, 3 insertions(+)
+> >>>
+> >>> diff --git a/drivers/mtd/nand/raw/stm32_fmc2_nand.c >>> b/drivers/mtd=
+/nand/raw/stm32_fmc2_nand.c
+> >>> index 5d627048c420..3abb63d00a0b 100644
+> >>> --- a/drivers/mtd/nand/raw/stm32_fmc2_nand.c
+> >>> +++ b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
+> >>> @@ -1531,6 +1531,9 @@ static int >>> stm32_fmc2_nfc_setup_interface(s=
+truct nand_chip *chip, int chipnr,
+> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(sdrt))
+> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return PTR_ERR=
+(sdrt);
+> >>> +=C2=A0=C2=A0=C2=A0 if (sdrt->tRC_min < 30000) =20
+> >>
+> >> When introducing NV-DDR support we as well added a timings.mode field,
+> >> perhaps you could use it? =20
+> >=20
+> > Yes, I can use it. It will be done in V2.
+> >=20
+> > Regards,
+> > Christophe Kerello.
+> >  =20
+>=20
+> I had a look at Kernel LTS, and timings.mode was introduced on Kernel LTS=
+ 5.10. As this patch has also to be applied on Kernel LTS 5.4, my proposal =
+is to send a new patch set. The first patch will be the current patch (fix =
+for all Kernel LTS) and the second patch will use timings.mode instead of c=
+hecking tRC_min timings for next Kernel delivery. Is this proposal acceptab=
+le?
 
-tree: git://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git
-branch: fs.misc
-[1/1] fs/buffer: Remove redundant assignment to err
-      commit: dc7cb2d29805fe4fa4000fc0b09740fc24c93408
+Works for me!
 
-Thanks!
-Christian
+Thanks,
+Miqu=C3=A8l
