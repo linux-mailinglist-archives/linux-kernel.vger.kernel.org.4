@@ -2,113 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E783B6CB0A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4F26CB0AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbjC0V0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 17:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S232301AbjC0V1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 17:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbjC0V0v (ORCPT
+        with ESMTP id S231978AbjC0V1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 17:26:51 -0400
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E98199C;
-        Mon, 27 Mar 2023 14:26:51 -0700 (PDT)
-Received: by mail-pj1-f47.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso253813pjf.0;
-        Mon, 27 Mar 2023 14:26:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679952410;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H+AbrE2EWJ7PQz7DWeOuqK02oPdPI27YJdpRpH9VzJQ=;
-        b=Hm0a1YclLLuaOnGC00etl+JblPRbUhPnDz/ZnNrbBGvBsHC5Lv7b2x/gOci8B2r1a5
-         FrjBTJKdTEVJ+E5qEijdrMl0pGcO3o6vdughC5LewoVCOXfT4AIqelZW5CxGlJMwoB8E
-         1FD2ntMIlhrH0FtGtbTvmyWaBl7/sRePXP18fqGp2KRNVgNNPTfKRPiwoOz1qF7QDjCZ
-         h+nqm+4U/Ov2VhrvU6D0jZF4tQbxzLoWX7xv5AadNenLzhaq2x65ssb6lPkSEdJrCs/k
-         ZAYiBctN2khv1Bpvv93VmF6zhaiqZtUXJZe2eEK6hRvD6EgJjCjmhcm5xS6nk2IA1liu
-         IQuQ==
-X-Gm-Message-State: AAQBX9ehpJh/09BuKoJbRTE7rzxw3xSZGwwP5vEGqFJBi4WoBAJG4uJE
-        OcA8JbbMUSRJWscCBEdlQCI=
-X-Google-Smtp-Source: AKy350YaUKUgKoTa0gsnLHRLizwc++xhPwRLYOpVcQtZ3RTvNBbtiihlkmuQ12r8cnXKPJ5iYIJvyQ==
-X-Received: by 2002:a17:90b:4b4e:b0:23f:7e2e:fe13 with SMTP id mi14-20020a17090b4b4e00b0023f7e2efe13mr14835810pjb.0.1679952410612;
-        Mon, 27 Mar 2023 14:26:50 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:798e:a3a0:ddc2:c946? ([2620:15c:211:201:798e:a3a0:ddc2:c946])
-        by smtp.gmail.com with ESMTPSA id mv21-20020a17090b199500b0023d16f05dd8sm8011910pjb.36.2023.03.27.14.26.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 14:26:50 -0700 (PDT)
-Message-ID: <c72dced5-fb0c-4392-b8ea-ad1ef5e1cef3@acm.org>
-Date:   Mon, 27 Mar 2023 14:26:48 -0700
+        Mon, 27 Mar 2023 17:27:40 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FE0173E;
+        Mon, 27 Mar 2023 14:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679952459; x=1711488459;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oY4+vDAxY0246pEy4b081gmn25gIUk5XxHRtZZZXKmo=;
+  b=eWcsHfqNyr3bLC4hC5A5r/QvMxVjuWKa/aYC6yPByURrBaRIdiePYa6v
+   7QZHL2NxgJAIOIydxuFyd6m1O1Ln/u2KqmK9vXjBciIUuVKWYXhAyrXxz
+   AxYp/049jrP/W8LUBd4ZTJDFNbyIBcleViHefoukbPaC5phQiOutE963u
+   DCy4okxMDboR158SjW0yREWaLBEltV7KnhJbI4ymPgkBANVy4WjbTvVKB
+   DFtSZp+MRYr9EAPLG2/ssZk8IAn9iAwbr3bVOYm77RBBGbWRELex15DSD
+   v/riTZo2DqGoFi06fqBqfTQmrRMG7h2IsKLb8vX5OPV8wpgkEiXAt/CTX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="368148896"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="368148896"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 14:27:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="1013280464"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="1013280464"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 27 Mar 2023 14:27:35 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pguNK-000I1v-2P;
+        Mon, 27 Mar 2023 21:27:34 +0000
+Date:   Tue, 28 Mar 2023 05:27:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: Re: [PATCH v4 1/5] firmware: qcom_scm: provide a read-modify-write
+ function
+Message-ID: <202303280535.acb66sQT-lkp@intel.com>
+References: <1679935281-18445-2-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/5] scsi: fix switch host state race between by sysfs and
- others
-Content-Language: en-US
-To:     Ye Bin <yebin@huaweicloud.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ye Bin <yebin10@huawei.com>
-References: <20230325011734.507453-1-yebin@huaweicloud.com>
- <20230325011734.507453-2-yebin@huaweicloud.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230325011734.507453-2-yebin@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1679935281-18445-2-git-send-email-quic_mojha@quicinc.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/23 18:17, Ye Bin wrote:
-> From: Ye Bin <yebin10@huawei.com>
-> 
-> Now, switch host state by sysfs isn't hold 'shost->host_lock' lock.
-> It may race with other process, lead to host mixed state.
-> 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> ---
->   drivers/scsi/scsi_sysfs.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-> index ee28f73af4d4..cc0ae5e3def3 100644
-> --- a/drivers/scsi/scsi_sysfs.c
-> +++ b/drivers/scsi/scsi_sysfs.c
-> @@ -202,6 +202,7 @@ store_shost_state(struct device *dev, struct device_attribute *attr,
->   	int i;
->   	struct Scsi_Host *shost = class_to_shost(dev);
->   	enum scsi_host_state state = 0;
-> +	unsigned long flags;
->   
->   	for (i = 0; i < ARRAY_SIZE(shost_states); i++) {
->   		const int len = strlen(shost_states[i].name);
-> @@ -214,8 +215,13 @@ store_shost_state(struct device *dev, struct device_attribute *attr,
->   	if (!state)
->   		return -EINVAL;
->   
-> -	if (scsi_host_set_state(shost, state))
-> +	spin_lock_irqsave(shost->host_lock, flags);
-> +	if (scsi_host_set_state(shost, state)) {
-> +		spin_unlock_irqrestore(shost->host_lock, flags);
->   		return -EINVAL;
-> +	}
-> +	spin_unlock_irqrestore(shost->host_lock, flags);
-> +
->   	return count;
->   }
+Hi Mukesh,
 
-Please make sure that there is only one spin_unlock_irqrestore() call in 
-this function.
+Thank you for the patch! Perhaps something to improve:
 
-Thanks,
+[auto build test WARNING on next-20230327]
+[also build test WARNING on v6.3-rc4]
+[cannot apply to linusw-pinctrl/devel linusw-pinctrl/for-next linus/master v6.3-rc4 v6.3-rc3 v6.3-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Bart.
+url:    https://github.com/intel-lab-lkp/linux/commits/Mukesh-Ojha/firmware-qcom_scm-provide-a-read-modify-write-function/20230328-004405
+patch link:    https://lore.kernel.org/r/1679935281-18445-2-git-send-email-quic_mojha%40quicinc.com
+patch subject: [PATCH v4 1/5] firmware: qcom_scm: provide a read-modify-write function
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20230328/202303280535.acb66sQT-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/47c3bb52fbb758e2238a7ab29c00e3188afe9754
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mukesh-Ojha/firmware-qcom_scm-provide-a-read-modify-write-function/20230328-004405
+        git checkout 47c3bb52fbb758e2238a7ab29c00e3188afe9754
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/firmware/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303280535.acb66sQT-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/firmware/qcom_scm.c: In function 'qcom_scm_io_update_field':
+>> drivers/firmware/qcom_scm.c:419:49: warning: suggest parentheses around '-' inside '<<' [-Wparentheses]
+     419 |         new = (old & ~mask) | (val << ffs(mask) - 1);
+         |                                       ~~~~~~~~~~^~~
 
 
+vim +419 drivers/firmware/qcom_scm.c
+
+   409	
+   410	int qcom_scm_io_update_field(phys_addr_t addr, unsigned int mask, unsigned int val)
+   411	{
+   412		unsigned int old, new;
+   413		int ret;
+   414	
+   415		ret = qcom_scm_io_readl(addr, &old);
+   416		if (ret)
+   417			return ret;
+   418	
+ > 419		new = (old & ~mask) | (val << ffs(mask) - 1);
+   420	
+   421		return qcom_scm_io_writel(addr, new);
+   422	}
+   423	EXPORT_SYMBOL(qcom_scm_io_update_field);
+   424	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
