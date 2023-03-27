@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E72E6CB051
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657636CB053
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjC0VD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 17:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
+        id S232071AbjC0VDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 17:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbjC0VDV (ORCPT
+        with ESMTP id S231977AbjC0VDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 17:03:21 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140B71FE3;
-        Mon, 27 Mar 2023 14:03:06 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id z83so12484922ybb.2;
-        Mon, 27 Mar 2023 14:03:06 -0700 (PDT)
+        Mon, 27 Mar 2023 17:03:25 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B96271C;
+        Mon, 27 Mar 2023 14:03:07 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id cf7so12485360ybb.5;
+        Mon, 27 Mar 2023 14:03:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679950984;
+        d=gmail.com; s=20210112; t=1679950986;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eco5b9MX5ijMYg1QKtG06cMKdPajE34qA3bf3aJ4dAA=;
-        b=NyVHe8oA3ZLVbwoWRx9rf6XjR5/Q1rU27zX+uDFgL4OG3dqLxUE9nK3EvijqfyMxOo
-         McNY49CuX52JU+gIs73d4q5uGJPhxbCx/oR/xDySVE385rETNJLJRnXpjlOSh1nwGnCL
-         z3uWLP+0qTmZJixvs+PVZLxedn4AfW2mFDpNECf/fKK3g6EEotFVKjbcH1pcZ7j7DdbT
-         VNGdW/6Q7TlGqoPl36YfsKcAo2LqN50qkQ7/5RgaAas1vaKq5oIlM5DSWREHkla9Zo90
-         5SLxTeLkDqo6DuNGjC9wgB/818vq6pbINeLm7lXF0I28Ci18FZ94pKhZfhRGoby5M8fQ
-         T8Xg==
+        bh=WSzUASJDqmk05kc24FOpZeQYr3X2iF7C+bvKtga/9zY=;
+        b=DuVyGK5jAPiKnMlo3gU6hpcJlp8HDMLAP1nJQQjmnCqbJFOW1gNNxBNc0OLl/GN71Q
+         evi/fD/5bdtx/GSM/0P1o0pMiEfjk85bs8fcCmsOeM6fbxCkKCQysa6Uy1HX8sejUyoN
+         so/PsIzzOIOTQOr+mJ+SglXLD40pJ3h5Qy4ms/eZnuorA8hHlTeTl0g+69ujzt0BgpX+
+         7vXFCuoXpj/MCa1Qh1KZSvW1XLrEy7ujo82qdjfirrpSZGlV6TEmLbseGogGAeW4atYK
+         7qIFAP7tkD8m76YoVEobhtU5PDbTNRHiwiCRCxvXTNyNtbzBOtEDq10vj5bIIU2L6Pjo
+         1ecQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679950984;
+        d=1e100.net; s=20210112; t=1679950986;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eco5b9MX5ijMYg1QKtG06cMKdPajE34qA3bf3aJ4dAA=;
-        b=ZJW+V2f61YD1Gk+ALXCoC3iLMu2ANzsINhaFjbcmL00W4roDvMCQzdhqA8Y+bZmf2w
-         ikPvSa45PerIMz/Po/90N+wBvw8Ns7biSOuNmddoUlVX/7Vfj/Q9YQHA+yBkDY8geQzl
-         Cm7APnsrxK21nlmPsYNIcJANocivpu+WIYBx0NVcYoxBEiFDTnzDL54DCio0iwzyLYda
-         yWb9Fcf52ASbd47x9ewwy7Il+gGzK+37IjIio1ZqtG9sJW6S95/BEF39+jBjvCv9Ry6I
-         dam9+KgzwaJctNaRVqzopm3SbLaLrQjiL4TKhJTQtllKMzaa4MGIW4JjqT1sh+n65L2X
-         k85g==
-X-Gm-Message-State: AAQBX9caR9mLJ0zSrfoZEhlmCHN7Amh5OoiGbPVmPICfszcX85WSBmdg
-        Iy9Pld1KPuY0BUqK4Vfk0XrUiOasNP0=
-X-Google-Smtp-Source: AKy350aNDjsGSL83wGRrChvZr/ieADtwRXeBM4lgWsian3xNGALsVEAKEy9xURewrQWRgPWF+XxE4w==
-X-Received: by 2002:a25:ada0:0:b0:af9:1ec5:4f10 with SMTP id z32-20020a25ada0000000b00af91ec54f10mr12668031ybi.59.1679950984547;
-        Mon, 27 Mar 2023 14:03:04 -0700 (PDT)
+        bh=WSzUASJDqmk05kc24FOpZeQYr3X2iF7C+bvKtga/9zY=;
+        b=h7RlxtIQCrRDtwtbAr8UyxvLE78LUNva1YU4KOKfTFjywFyp2hOu0V82ZOZBQ9VvHI
+         0M6mTAsyKtE7BmkY6wpxfpkO/Curl7ykpPzYTFj7Itqs0mvqgsaZ9Q3/wcJvVUWVuiPm
+         7ddCef+vz7XfszeTzzg6TpLTr+KKx1sKwvXrLzesBRhha+RXMizp2hULm/MMhUmTgoZP
+         BZE0TXRNqGgIWHfGaWFbRe80p/TyHLCyFQb12jdQWsSOZo0pvMVyT/Ng100d/pGWGWEu
+         X6bdR42EqxWfOY2tRgJb3O4iiQNMBSKMVyLv/G3nvElj2SLCj+YCn0xXoZYk+iBahtPC
+         cKJA==
+X-Gm-Message-State: AAQBX9esc/JCMfmZI9TZK7w5N1Lba9MKCCyObgXu3Atd1y56EADN0iEo
+        BL23F1+/SFYo/lG9PfVaqPc=
+X-Google-Smtp-Source: AKy350b6hIWzNa11aqhiXM04lQXVpTScEhhafaJJz9+qWPhPN8ftANifZPQ7/9ZhMvQBPXP3vzOTRA==
+X-Received: by 2002:a25:24a:0:b0:b48:e4e:eddd with SMTP id 71-20020a25024a000000b00b480e4eedddmr13151269ybc.25.1679950986253;
+        Mon, 27 Mar 2023 14:03:06 -0700 (PDT)
 Received: from localhost ([2607:fea8:529d:4d00::9f37])
-        by smtp.gmail.com with ESMTPSA id b125-20020a256783000000b00b7767ca748dsm2525176ybc.42.2023.03.27.14.03.04
+        by smtp.gmail.com with ESMTPSA id p8-20020a254208000000b00b7767ca7476sm2511400yba.19.2023.03.27.14.03.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 14:03:04 -0700 (PDT)
+        Mon, 27 Mar 2023 14:03:05 -0700 (PDT)
 From:   Richard Acayan <mailingradian@gmail.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Amol Maheshwari <amahesh@qti.qualcomm.com>,
@@ -57,9 +57,9 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Richard Acayan <mailingradian@gmail.com>
-Subject: [PATCH v2 1/2] misc: fastrpc: return -EPIPE to invocations on device removal
-Date:   Mon, 27 Mar 2023 17:02:17 -0400
-Message-Id: <20230327210217.60948-2-mailingradian@gmail.com>
+Subject: [PATCH v2 2/2] misc: fastrpc: reject new invocations during device removal
+Date:   Mon, 27 Mar 2023 17:02:18 -0400
+Message-Id: <20230327210217.60948-3-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230327210217.60948-1-mailingradian@gmail.com>
 References: <20230327210217.60948-1-mailingradian@gmail.com>
@@ -75,33 +75,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value is initialized as -1, or -EPERM. The completion of an
-invocation implies that the return value is set appropriately, but
-"Permission denied" does not accurately describe the outcome of the
-invocation. Set the invocation's return value to a more appropriate
-"Broken pipe", as the cleanup breaks the driver's connection with rpmsg.
+The channel's rpmsg object allows new invocations to be made. After old
+invocations are already interrupted, the driver shouldn't try to invoke
+anymore. Invalidating the rpmsg at the end of the driver removal
+function makes it easy to cause a race condition in userspace. Even
+closing a file descriptor before the driver finishes its cleanup can
+cause an invocation via fastrpc_release_current_dsp_process() and
+subsequent timeout.
+
+Invalidate the channel before the invocations are interrupted to make
+sure that no invocations can be created to hang after the device closes.
 
 Fixes: c68cfb718c8f ("misc: fastrpc: Add support for context Invoke method")
 Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/misc/fastrpc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Demonstration of the bug as performed on a Google Pixel 3a with
+devicetree patches:
+
+	#include <fcntl.h>
+	#include <misc/fastrpc.h>
+	#include <stdint.h>
+	#include <stdio.h>
+	#include <string.h>
+	#include <sys/ioctl.h>
+	#include <unistd.h>
+
+	static int remotectl_open(int fd,
+				  const char *name,
+				  uint32_t *handle)
+	{
+		struct fastrpc_invoke invoke;
+		struct fastrpc_invoke_args args[4];
+		struct {
+			uint32_t namelen;
+			uint32_t errlen;
+		} in;
+		struct {
+			uint32_t handle;
+			uint32_t err;
+		} out;
+		char errstr[256];
+		int ret;
+
+		// Remoteproc expects to receive a null terminator
+		in.namelen = strlen(name) + 1;
+		in.errlen = 256;
+
+		args[0].ptr = (__u64) &in;
+		args[0].length = sizeof(in);
+		args[0].fd = -1;
+
+		args[1].ptr = (__u64) name;
+		args[1].length = in.namelen;
+		args[1].fd = -1;
+
+		args[2].ptr = (__u64) &out;
+		args[2].length = sizeof(out);
+		args[2].fd = -1;
+
+		args[3].ptr = (__u64) errstr;
+		args[3].length = 256;
+		args[3].fd = -1;
+
+		invoke.handle = 0;
+		invoke.sc = 0x00020200;
+		invoke.args = (__u64) args;
+
+		ret = ioctl(fd, FASTRPC_IOCTL_INVOKE, (__u64) &invoke);
+
+		if (!ret)
+			*handle = out.handle;
+
+		return ret;
+	}
+
+	int main()
+	{
+		struct fastrpc_init_create_static create;
+		uint32_t handle;
+		int fd, ret;
+
+		fd = open("/dev/fastrpc-adsp", O_RDWR);
+		if (fd == -1) {
+			perror("Could not open /dev/fastrpc-adsp");
+			return 1;
+		}
+
+		ret = ioctl(fd, FASTRPC_IOCTL_INIT_ATTACH_SNS, NULL);
+		if (ret) {
+			perror("Could not attach to sensorspd");
+			goto close_dev;
+		}
+
+		/*
+		 * Under normal circumstances, the remote processor
+		 * would request a file from a different client, and
+		 * quickly find out that there is no such file. When
+		 * this other client is not running, this procedure call
+		 * conveniently waits for the ADSP to crash.
+		 */
+		ret = remotectl_open(fd, "a", &handle);
+		if (ret == -1)
+			perror("Could not open CHRE interface");
+
+	close_dev:
+		// This takes 10 seconds
+		printf("Closing file descriptor\n");
+		close(fd);
+		printf("Closed file descriptor\n");
+
+		return 0;
+	}
+---
+ drivers/misc/fastrpc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index f48466960f1b..20c035af373a 100644
+index 20c035af373a..f4116ce7805a 100644
 --- a/drivers/misc/fastrpc.c
 +++ b/drivers/misc/fastrpc.c
-@@ -2337,8 +2337,10 @@ static void fastrpc_notify_users(struct fastrpc_user *user)
- 	struct fastrpc_invoke_ctx *ctx;
+@@ -2351,7 +2351,9 @@ static void fastrpc_rpmsg_remove(struct rpmsg_device *rpdev)
+ 	struct fastrpc_user *user;
+ 	unsigned long flags;
  
- 	spin_lock(&user->lock);
--	list_for_each_entry(ctx, &user->pending, node)
-+	list_for_each_entry(ctx, &user->pending, node) {
-+		ctx->retval = -EPIPE;
- 		complete(&ctx->work);
-+	}
- 	spin_unlock(&user->lock);
++	/* No invocations past this point */
+ 	spin_lock_irqsave(&cctx->lock, flags);
++	cctx->rpdev = NULL;
+ 	list_for_each_entry(user, &cctx->users, user)
+ 		fastrpc_notify_users(user);
+ 	spin_unlock_irqrestore(&cctx->lock, flags);
+@@ -2370,7 +2372,6 @@ static void fastrpc_rpmsg_remove(struct rpmsg_device *rpdev)
+ 
+ 	of_platform_depopulate(&rpdev->dev);
+ 
+-	cctx->rpdev = NULL;
+ 	fastrpc_channel_ctx_put(cctx);
  }
  
 -- 
