@@ -2,83 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C9C6CB214
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9596CB224
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbjC0XCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 19:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
+        id S229673AbjC0XMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 19:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjC0XCE (ORCPT
+        with ESMTP id S229456AbjC0XML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 19:02:04 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5608D1FF3;
-        Mon, 27 Mar 2023 16:02:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pX5mbDI4mPib0i+fafxYiU/1Pb3MyNg+wGAHRkR1vfY=; b=wrZBwDV5pKDLzuuoVkC1O+gwaQ
-        OLlh83Ze53CQKJNqbfyLOXpUfro7/eBuk691x6bbcqd5C2J9xgBavy7Zr8HanfT8uM3W5ikJp/x5q
-        UxCnNFBTeixwr4CXYFaySZnaD0wVoR7OltZ6Plt1AINHfkoqsMf2nr/owaY+XfivpYFZHhucnua8U
-        aSnoIh9IL79691Bsgxw3wO/Q0ufduFssfD0OVtSMInWwrpAfd4E9HCvrENz7j+3lsPs9TIcNPG0I+
-        DU2KNEq82Ebf787KS8m/kwXtJjsMiISV2JUWomfQfrSIDxBNZYIh0gv5ywUeSwxzE0pD20B1CyPdA
-        ySJR2QQQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pgvqk-00Ccn0-0U;
-        Mon, 27 Mar 2023 23:02:02 +0000
-Date:   Mon, 27 Mar 2023 16:02:02 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     axboe@kernel.dk, sth@linux.ibm.com, hoeppner@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] block: annotate bdev_disk_changed() deprecation with a
- symbol namespace
-Message-ID: <ZCIgavqUnw0Z3A3t@bombadil.infradead.org>
-References: <20230327184410.2881786-1-mcgrof@kernel.org>
- <ZCIVx2UNN8VAWYAH@infradead.org>
+        Mon, 27 Mar 2023 19:12:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFC119B2;
+        Mon, 27 Mar 2023 16:12:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9C5081FD7B;
+        Mon, 27 Mar 2023 23:12:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679958728;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kVP2vG2bk7Ixsyu6QZ1iwWr3gX486d6hgLJBsvOtjAU=;
+        b=NEYRxmx3W36+UM+BYCflfxzQfkf8LAK2Y0ffLk+Q+rRiflsBtZAEGMFQnb0PSzsbcqwqv/
+        izm1C2wZcgb+3yBLDCmgiFX03nbmSsKMRNNu/XAvd6DZKmthyoo8sMi4Gmhk6BG0a9NT6k
+        o1s5oOUMnhtwb0tp5Hj7f1VaeVktoHg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679958728;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kVP2vG2bk7Ixsyu6QZ1iwWr3gX486d6hgLJBsvOtjAU=;
+        b=njWZEhcei0rIWpfIPOJJFRluwVQE/M9s9a3WKokxyFcryqU+Y/g3RBtfOn6QQtG4Eyuufx
+        X8pB6Bmyti18gLAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 644B313482;
+        Mon, 27 Mar 2023 23:12:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CJN6F8giImQdYwAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Mon, 27 Mar 2023 23:12:08 +0000
+Date:   Tue, 28 Mar 2023 01:05:53 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     xiaoshoukui <xiaoshoukui@gmail.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiaoshoukui <xiaoshoukui@ruijie.com.cn>
+Subject: Re: [PATCH] btrfs: ioctl: fix inaccurate determination of
+ exclusive_operation
+Message-ID: <20230327230553.GJ10580@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <20230324031611.98986-1-xiaoshoukui@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZCIVx2UNN8VAWYAH@infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230324031611.98986-1-xiaoshoukui@gmail.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 03:16:39PM -0700, Christoph Hellwig wrote:
-> On Mon, Mar 27, 2023 at 11:44:10AM -0700, Luis Chamberlain wrote:
-> > Instead of relying on fragile documentation which can easily let us
-> > slip, use a symbol namespace to annotate which symbols should not be
-> > used by others.
-> > 
-> > This ensures no other users pop up by mistake easily and provides
-> > us a with an easy vehicle to do the same with other routines should
-> > we need it later.
+On Thu, Mar 23, 2023 at 11:16:11PM -0400, xiaoshoukui wrote:
+> with fs_info->exclusive_operation == BTRFS_EXCLOP_DEV_ADD enter
+> btrfs_ioctl_add_dev function , exclusive_operation will be classified
+> as in paused balance operation. After return from btrfs_ioctl_add_dev,
+> exclusive_operation will be restore to BTRFS_EXCLOP_BALANCE_PAUSED which
+> is not its original state.
+
+Sorry, I don't understand what you mean. The paused balance and 'device
+add' are supposed to be compatible exclusive operations (see commit
+a174c0a2e857 ("btrfs: allow device add if balance is paused")).
+
+Have you found some bug with the above or is there other combination of
+the exclusive operations that should not work? The changes to the state
+values are the same, besides the wrong locking.
+
+> Signed-off-by: xiaoshoukui <xiaoshoukui@ruijie.com.cn>
+> ---
+>  fs/btrfs/ioctl.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> I don't think deprecated really cuts it.  For these two drivers we
-> can't really get rid of the calls as it is part of their ABI.
+> diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+> index a0ef1a1784c7..aab5fdb9445c 100644
+> --- a/fs/btrfs/ioctl.c
+> +++ b/fs/btrfs/ioctl.c
+> @@ -2629,7 +2629,7 @@ static long btrfs_ioctl_add_dev(struct btrfs_fs_info *fs_info, void __user *arg)
+>  	}
+>  
+>  	if (!btrfs_exclop_start(fs_info, BTRFS_EXCLOP_DEV_ADD)) {
+> -		if (!btrfs_exclop_start_try_lock(fs_info, BTRFS_EXCLOP_DEV_ADD))
+> +		if (fs_info->exclusive_operation != BTRFS_EXCLOP_BALANCE_PAUSED)
 
-Ah yes.
+This is removing the atomicity of the check so it's racy and could
+forcibly overwrite the exclusive operation to BTRFS_EXCLOP_DEV_ADD
+without the protecting the whole critical section.
 
-> What I'd really want is something like an
-> 
-> EXPORT_SYMBOL_FOR(bdev_disk_changed, loop, CONFIG_BLK_DEV_LOOP);
-> EXPORT_SYMBOL_FOR(bdev_disk_changed, dasd_kmod, CONFIG_DASD);
-> 
-> Which ensures that the symbol lookup only succeeds for loop.ko and
-> dasd_kmod.ko, and that the export only happens if the relevant
-> symbols are set.
+>  			return BTRFS_ERROR_DEV_EXCL_RUN_IN_PROGRESS;
+>  
+>  		/*
+> @@ -2637,8 +2637,9 @@ static long btrfs_ioctl_add_dev(struct btrfs_fs_info *fs_info, void __user *arg)
+>  		 * change the exclusive op type and remember we should bring
+>  		 * back the paused balance
+>  		 */
+> +		spin_lock(&fs_info->super_lock);
 
-I think that could be done, sure.
+What if there's another exclusive operation started before this lock is
+taken?
 
-  Luis
+>  		fs_info->exclusive_operation = BTRFS_EXCLOP_DEV_ADD;
+> -		btrfs_exclop_start_unlock(fs_info);
+> +		spin_unlock(&fs_info->super_lock);
+>  		restore_op = true;
+>  	}
