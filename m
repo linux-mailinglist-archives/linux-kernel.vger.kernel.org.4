@@ -2,93 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77AE46C9E6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE4C6C9E6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233465AbjC0InG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
+        id S233477AbjC0Inx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbjC0Imp (ORCPT
+        with ESMTP id S232888AbjC0In3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:42:45 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EB07AA9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:38:23 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id cn12so32641066edb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679906301;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qNVnc/90+f2lvbZbSH9LWWMaxMwruTlZ8I2hMPaGmeQ=;
-        b=XPdUVjSET90ZXTary0IkK8dA5qQPnBeRf1MakgnKXLw+cILHzy9A3Tr3xnaJHbj1WY
-         j3txXroOLxDJZd/pdpVR1UDVTEGJfQG2fvez/att0uu4TXVQ5V4qKCi8XhiotmELwoLM
-         Olrs3viPRrNusNbrZ0CZ/jxAr7o1h8jBHySHdEgJ28lzSH/Y3Ie0QJtj+gmiO1+kuhJ6
-         VpjxbflmdecPa3lzFT5MXybGVsA6yJMLgMPf7dueqeGSTsEvPecTJINs0s4kxyZDNQ0/
-         1PfHgSEeVNl2Kj4Il/69x2Q8T/KSObdfmdEgfx5XxNA1qxsFm9DzFUnyn4a1SCpYZgK3
-         /1Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679906301;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qNVnc/90+f2lvbZbSH9LWWMaxMwruTlZ8I2hMPaGmeQ=;
-        b=z2n6Qt4Jvg2fQhHK4Ug7Xtmn2WDDLF0+aeFwwSsVrn+CUwaxUIE/+CgB1m3kpmafIl
-         DNDkcB7EdCKLIOyKjgRkYNEIusoG/zRTErsb7Lpghb8fK+/94MVeOXcomJlzlC7br+m0
-         kVyRQQZdUd5pt8b469gjNIzIogHBYYRUpeB0UDztbxzji6qg+9LjK592UTNCkEnEFkNf
-         fB6HWzivMKo1qCOZQLu2txwS2wyFGOAOxOgv6ePl7JZzRaddyLkP5p01A6pHFd3xzTRN
-         S942WoYo4Zzk5kRcO80NXti3wEK//pTntxU5VrQh96Owp+XDJS0bD0sTEnofHNNhjQxM
-         H+KQ==
-X-Gm-Message-State: AAQBX9fKJJCmzyQNj51+Q1KeJrR7vMvefnVP8Un/6809VdgGVpMnhhIe
-        48HiZzoGobXfEXOvNQsKxjxeXgQrwB3HNA5m1ek=
-X-Google-Smtp-Source: AKy350ZBClH8vnHiHREIlIn2x+Jcdi1WCNrrLl9BaQROZUMwfE8Td5j9oXq3ybAAJTkGkBiO78SDrJ+HHZfxPS/2sgQ=
-X-Received: by 2002:a50:cdda:0:b0:4fb:dc5e:6501 with SMTP id
- h26-20020a50cdda000000b004fbdc5e6501mr5363908edj.1.1679906301632; Mon, 27 Mar
- 2023 01:38:21 -0700 (PDT)
+        Mon, 27 Mar 2023 04:43:29 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E17C27D96;
+        Mon, 27 Mar 2023 01:39:29 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8AxlF0rViFkHEYSAA--.27735S3;
+        Mon, 27 Mar 2023 16:39:07 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxeb0lViFkfgoOAA--.7292S3;
+        Mon, 27 Mar 2023 16:39:02 +0800 (CST)
+Subject: Re: [PATCH v3 1/2] dt-bindings: spi: add loongson spi
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, loongson-kernel@lists.loongnix.cn,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, zhuyinbo@loongson.cn
+References: <20230324063317.14664-1-zhuyinbo@loongson.cn>
+ <20230324063317.14664-2-zhuyinbo@loongson.cn>
+ <167966252219.1675112.1668738117284963309.robh@kernel.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <31026abc-bdb3-9d30-276f-82ff93e43d48@loongson.cn>
+Date:   Mon, 27 Mar 2023 16:39:01 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20230325083643.7575-1-clamor95@gmail.com> <20230327083316.GR68926@ediswmail.ad.cirrus.com>
-In-Reply-To: <20230327083316.GR68926@ediswmail.ad.cirrus.com>
-From:   Svyatoslav Ryhel <clamor95@gmail.com>
-Date:   Mon, 27 Mar 2023 11:38:10 +0300
-Message-ID: <CAPVz0n3F7pR8_duOd3-mq6iqNEYxDJ8-6AQL4M_8T5rDwbntoA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/1] Implement DMIC support in WM8903
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <167966252219.1675112.1668738117284963309.robh@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Cxeb0lViFkfgoOAA--.7292S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Cr4xAFyxKr18Kr4xKry8Krg_yoW8tr1fpw
+        4rCwsayFWDZF17G393t34Iqw15Xr93JFsxXFsFkry2kF98Za4Fqr4S9rWDuF47uF4fGryx
+        Z3W0k34aka40yF7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07joxRhUUUUU=
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D0=BF=D0=BD, 27 =D0=B1=D0=B5=D1=80. 2023=E2=80=AF=D1=80. =D0=BE 11:33 Char=
-les Keepax <ckeepax@opensource.cirrus.com> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On Sat, Mar 25, 2023 at 10:36:42AM +0200, Svyatoslav Ryhel wrote:
-> > According to comments in wm8903, driver lacks DMIC support.
->
-> Which comments? I am having some difficulty finding these?
->
 
-Lines 10-12
 
-* TODO:
-* - TDM mode configuration.
-* - Digital microphone support.
+在 2023/3/24 下午9:07, Rob Herring 写道:
+> 
+> On Fri, 24 Mar 2023 14:33:16 +0800, Yinbo Zhu wrote:
+>> Add the Loongson platform spi binding with DT schema format using
+>> json-schema.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>>   .../bindings/spi/loongson,ls-spi.yaml         | 43 +++++++++++++++++++
+>>   MAINTAINERS                                   |  6 +++
+>>   2 files changed, 49 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+>>
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
+> FATAL ERROR: Unable to parse input tree
+> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:1512: dt_binding_check] Error 2
+Hi Rob Herring,
 
-> Thanks,
-> Charles
+This error was still appears on 22 line, this line was 
+LOONGSON2_BOOT_CLK not refer, it need depend on 
+https://lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/ 
+then compile will be successful. and I had added this depend on 
+description in v2, v3 patch changelog, I was also send a email to remind 
+your bot for the test my patch need dpend on other clock patch.
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230324063317.14664-2-zhuyinbo@loongson.cn
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+> 
+
