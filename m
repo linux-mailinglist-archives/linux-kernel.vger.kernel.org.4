@@ -2,62 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760A06C9F63
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AB86C9F67
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbjC0Jad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
+        id S232825AbjC0Jam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbjC0Jab (ORCPT
+        with ESMTP id S233097AbjC0Jai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:30:31 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47EF3A92;
-        Mon, 27 Mar 2023 02:30:30 -0700 (PDT)
+        Mon, 27 Mar 2023 05:30:38 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7617D46AA;
+        Mon, 27 Mar 2023 02:30:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=NQ76cs9m2PfyRb1nvWbSz8Et10awSsHsXz4HNPXF8yg=; b=QZ9Vn6XQoPo/vkVnwWKgjNwNQF
-        i+T6Yl3JETlALqU5VTD5LuRKWBkxlUZfMnccx1V/R8P1y1jb2Nn5vNn7qwhEJjK8c6CJnqa+IvXYv
-        fSsK289ahjDc6UcYJ6PNuPJdYbA6zEy2NiIQ1OKZDK5Ou9RVm5ztS1GIL6bIVPQLOz4PR1pye5B0O
-        3vVEIr7XrOnjpURdrjUhayo44zsagA6WzNAlLWxZihURKdHXLk/exMEpuHu1wCA+H5uKVfWFO4jHw
-        sx55zP9IskZDpk3E1MCtVVDVaPNI846+iakQvvoZc3HFZinQFEwTulPbXBfyfpt6jwzMW6C0Vf0N7
-        kIjdICDw==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pgjAz-0007hb-0h; Mon, 27 Mar 2023 11:30:05 +0200
-Received: from [219.59.88.22] (helo=localhost.localdomain)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pgjAw-000UQh-Hd; Mon, 27 Mar 2023 11:30:03 +0200
-Subject: Re: [PATCH] loongarch/bpf: Fix bpf load failed with
- CONFIG_BPF_JIT_ALWAYS_ON, caused by jit (BPF_ST | BPF_NOSPEC) code
-To:     George Guo <guodongtai@kylinos.cn>, chenhuacai@kernel.org,
-        masahiroy@kernel.org, michal.lkml@markovi.net
-Cc:     kernel@xen0n.name, ndesaulniers@google.com, ast@kernel.org,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, bpf@vger.kernel.org
-References: <20230326044019.2139628-1-guodongtai@kylinos.cn>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <c1932d0d-cf3f-5005-958d-7e08dddf42c9@iogearbox.net>
-Date:   Mon, 27 Mar 2023 11:29:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8DqjXeO1tc2m6wXJ4uu/hd4TZQ+nIIRzc4UwCMqvjG8=; b=ju+MEMZ16NRWnIDWX78+WhqTZD
+        ikrhVB7IopcJONyDZgU+z4k71dPM9zCprIgO9Yh6YW/iq+MBarJoh/04SRlg3RmPOLuA8DaaoZY4F
+        F8Z2boePxShTaCL+vLO/ogb7T0r0qjHF6PRAE3bn18c0iH1Lc6T1XWvk+1uOQggT65mD3k1/PnYkr
+        sHSgh4bFQu3XQgTnsNGV1nzKLrse91+KjHFkGmTsYep0WiKeiiAjAvOZ1FQJU/AR7XmJ1k1xh2itY
+        Ujh0eJBNbGzJQkLenUzehssEwGgfLXN4fqfc1sxeAcUHVYt0EZ2cH5ZbRwwMCEg5BSk/1bpaWeayX
+        rtGZ0RDA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pgjBC-007HH2-81; Mon, 27 Mar 2023 09:30:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 488B73001E5;
+        Mon, 27 Mar 2023 11:30:17 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E8DF82014D86B; Mon, 27 Mar 2023 11:30:16 +0200 (CEST)
+Date:   Mon, 27 Mar 2023 11:30:16 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dan Li <ashimida.1990@gmail.com>
+Cc:     Aaron Tomlin <atomlin@redhat.com>,
+        Alexander Potapenko <glider@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
+        Brian Gerst <brgerst@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Changbin Du <changbin.du@intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        gcc-patches@gcc.gnu.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Marco Elver <elver@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Roth <michael.roth@amd.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Richard Sandiford <richard.sandiford@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Song Liu <song@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Rix <trix@redhat.com>, Uros Bizjak <ubizjak@gmail.com>,
+        Will Deacon <will@kernel.org>, x86@kernel.org,
+        Yuntao Wang <ytcoode@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-modules@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [RFC/RFT,V2] CFI: Add support for gcc CFI in aarch64
+Message-ID: <20230327093016.GB4253@hirez.programming.kicks-ass.net>
+References: <20221219061758.23321-1-ashimida.1990@gmail.com>
+ <20230325085416.95191-1-ashimida.1990@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20230326044019.2139628-1-guodongtai@kylinos.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26856/Mon Mar 27 09:24:05 2023)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230325085416.95191-1-ashimida.1990@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,68 +110,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/26/23 6:40 AM, George Guo wrote:
-> Here just skip the code(BPF_ST | BPF_NOSPEC) that has no couterpart to the loongarch.
-> 
-> To verify, use ltp testcase:
-> 
-> Without this patch:
-> $ ./bpf_prog02
-> ... ...
-> bpf_common.c:123: TBROK: Failed verification: ??? (524)
-> 
-> Summary:
-> passed   0
-> failed   0
-> broken   1
-> skipped  0
-> warnings 0
-> 
-> With this patch:
-> $ ./bpf_prog02
-> ... ...
-> Summary:
-> passed   0
-> failed   0
-> broken   0
-> skipped  0
-> warnings 0
-> 
-> Signed-off-by: George Guo <guodongtai@kylinos.cn>
-> ---
->   arch/loongarch/net/bpf_jit.c | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index 288003a9f0ca..745d344385ed 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -1046,6 +1046,11 @@ static int build_body(struct jit_ctx *ctx, bool extra_pass)
->   		if (ctx->image == NULL)
->   			ctx->offset[i] = ctx->idx;
->   
-> +		/* skip the code that has no couterpart to the host arch */
-> +		if(insn->code == (BPF_ST | BPF_NOSPEC)) {
-> +			continue;
-> +		}
+On Sat, Mar 25, 2023 at 01:54:16AM -0700, Dan Li wrote:
 
-Small nit, but could we align with other JIT implementations and place it into similar
-location for consistency? Above looks a bit out of place and it should really be part
-of build_insn.
+> In the compiler part[4], most of the content is the same as Sami's
+> implementation[3], except for some minor differences, mainly including:
+> 
+> 1. The function typeid is calculated differently and it is difficult
+> to be consistent.
 
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 288003a9f0ca..d586df48ecc6 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -1022,6 +1022,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
-                 emit_atomic(insn, ctx);
-                 break;
-
-+       /* Speculation barrier */
-+       case BPF_ST | BPF_NOSPEC:
-+               break;
-+
-         default:
-                 pr_err("bpf_jit: unknown opcode %02x\n", code);
-                 return -EINVAL;
-
+This means there is an effective ABI break between the compilers, which
+is sad :-( Is there really nothing to be done about this?
