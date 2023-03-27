@@ -2,159 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BDA6CA0D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8026CA0DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233270AbjC0KIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 06:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
+        id S233199AbjC0KIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjC0KIN (ORCPT
+        with ESMTP id S233345AbjC0KI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:08:13 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B52B46B4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:08:12 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32R8gC7S024202;
-        Mon, 27 Mar 2023 10:08:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=OUcHWzZk7/CnjV+4EJJGzetbRbCxsDJgpLoAcIBVMyQ=;
- b=KRhQpCBGfCBItnOphDTouAQflWUCpWaKfW9GRoyChRSSLs6hYo0UfYXmj69HD1JZraAU
- kxruhP8LVrv0rYmU9aAw5rVlFGponZzMOWNkPzecnWbm7eAZWQAM97X1DauK/P5C9ffW
- iR0uJSqUFElWKSxrAH5geQDnfg0sizVcGY4UwfV6jf7VzX6ul2iosdz3XRDFS+zlrBno
- Pm2mETLrI5WqjXE8Ym50jcQWwFsrTDc+Dwa8XuYoTM9+FIzy66QNTwmHInnpKqW7RJya
- JLdmY9aaTkTLFKLAGafksx0gqKr6eNlbLbAXQEO2WlwMvO8V6uBDW/UEw95tbzkSOD7U Ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjat7kyf9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 10:08:02 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32R8BWtw016209;
-        Mon, 27 Mar 2023 10:08:02 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjat7kyen-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 10:08:02 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32QGYBNp011375;
-        Mon, 27 Mar 2023 10:08:00 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3phrk6a98c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 10:08:00 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32RA7ure30081298
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Mar 2023 10:07:56 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 848712007D;
-        Mon, 27 Mar 2023 10:07:56 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 130FE20079;
-        Mon, 27 Mar 2023 10:07:53 +0000 (GMT)
-Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.40.181])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 27 Mar 2023 10:07:52 +0000 (GMT)
-Date:   Mon, 27 Mar 2023 15:37:49 +0530
-From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] arch/powerpc/kvm: kvmppc_hv_entry: remove .global
- scope
-Message-ID: <ZCFq9etrP20TbdUT@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-References: <20230316051025.1424093-1-kconsul@linux.vnet.ibm.com>
- <20230316051025.1424093-2-kconsul@linux.vnet.ibm.com>
- <CRH1YM72SK4L.QU56WGVQQ2GE@bobo>
- <ZCFhnNPrMr3D5+rZ@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <ZCFjJ1sMuLMUkBWc@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <CRH2N2UNMLQW.1W51OVV9ZES7L@bobo>
- <ZCFoBqReJekPd7GI@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+        Mon, 27 Mar 2023 06:08:26 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BF649E5;
+        Mon, 27 Mar 2023 03:08:24 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id t17-20020a05600c451100b003edc906aeeaso4664901wmo.1;
+        Mon, 27 Mar 2023 03:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679911702;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ns8gSkJtJW5rMO78ceC2Rx9q40ENuy+LObl6UHDFr0s=;
+        b=A2s+PhaodoqCLLLRJguEBx3d5jAeCOVtN7rBoBFlXu4437lLyE5qxigqlp4rG92yr1
+         95tnxTkjrJRU+2curSzfyWYGqUI9PFyA+vw8bvMSo2OLtOlgcuhmqIwSkBoQn2Z3L4Oz
+         bQH5pite9NsfEJGM1KMxUYko0n6Gf0/RfwC7sMZY+cozQICRQumh2MntgVQix2tSURR6
+         u9ZU90VaKlX+Rleu38iP/x8C3PQgyYqAhCpUICjvzUUczbgigBTGA3rdOOJaf0Gxqu42
+         +RelkfsqsxBzsuNlGOk4Df0s9hs8dQdhm5p7S2IO4XRDARLrno7uMkeQr/S8crbwaEMl
+         r59w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679911702;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ns8gSkJtJW5rMO78ceC2Rx9q40ENuy+LObl6UHDFr0s=;
+        b=VhgDudWGdKrhCwjqacLbTeAQ0b993omBtQHP/VDrFzxBBogZCq4bcnZwrJYLJqzVWG
+         +x7tQBTjNCo7pPzKEc/t+twC2zjmU8mAYs4vQQyO1d4313ooJXjAKsATs+P8yLUXEDat
+         2ghq4vMXRfTqnfMduJbr/Pj/DiJw0TMOxiRYl+uwZGWTDYOMQjpgoxJBzrzVbrwa0Nqw
+         4B0qRQ8OfQmkFVnKsROZ1qOEYQWylWOobV0JOLXMOKJuOghA3crYo9UjXZcTLTRoznta
+         To4F3QL4GWYc67uhibQE2bchJ5OQlRxD16rC8MfikeXp13v8zC1p4E63/xEwR2xTlulg
+         +gCQ==
+X-Gm-Message-State: AO0yUKXIE4+i+8mCnQUdy4KdwCfeIMqQ1Mos2LijgJYRR0603/Ga+MdW
+        GfumjrcZ8pJbklgPzM4xm60=
+X-Google-Smtp-Source: AK7set/OUvcas6A4CNBYtPhi8pDjfVzAQ9EoB/9pQmPLmbliqfY1SslWKQkt44yWgum//NbLWWwBEQ==
+X-Received: by 2002:a7b:ca4a:0:b0:3ed:af6b:7fb3 with SMTP id m10-20020a7bca4a000000b003edaf6b7fb3mr9147943wml.2.1679911702205;
+        Mon, 27 Mar 2023 03:08:22 -0700 (PDT)
+Received: from suse.localnet (host-87-19-99-235.retail.telecomitalia.it. [87.19.99.235])
+        by smtp.gmail.com with ESMTPSA id n10-20020a05600c3b8a00b003ede3f5c81fsm8404891wms.41.2023.03.27.03.08.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 03:08:21 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     Benjamin LaHaise <bcrl@kvack.org>, linux-fsdevel@vger.kernel.org,
+        linux-aio@kvack.org, linux-kernel@vger.kernel.org,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Jeff Moyer <jmoyer@redhat.com>,
+        Kent Overstreet <kent.overstreet@linux.dev>
+Subject: Re: [PATCH v3] fs/aio: Replace kmap{,_atomic}() with kmap_local_page()
+Date:   Mon, 27 Mar 2023 12:08:20 +0200
+Message-ID: <2114426.VsPgYW4pTa@suse>
+In-Reply-To: <20230119162055.20944-1-fmdefrancesco@gmail.com>
+References: <20230119162055.20944-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCFoBqReJekPd7GI@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: vs3EiCx8L3GSPd53MiBbMo95qQTi6ulJ
-X-Proofpoint-GUID: wM47j7a6jv9aIX5SUefqjPZeSB2yKj45
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 phishscore=0 suspectscore=0 mlxlogscore=999
- adultscore=0 malwarescore=0 bulkscore=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2303270078
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-27 15:25:24, Kautuk Consul wrote:
-> On 2023-03-27 19:51:34, Nicholas Piggin wrote:
-> > On Mon Mar 27, 2023 at 7:34 PM AEST, Kautuk Consul wrote:
-> > > On 2023-03-27 14:58:03, Kautuk Consul wrote:
-> > > > On 2023-03-27 19:19:37, Nicholas Piggin wrote:
-> > > > > On Thu Mar 16, 2023 at 3:10 PM AEST, Kautuk Consul wrote:
-> > > > > > kvmppc_hv_entry isn't called from anywhere other than
-> > > > > > book3s_hv_rmhandlers.S itself. Removing .global scope for
-> > > > > > this function and annotating it with SYM_INNER_LABEL.
-> > > > > >
-> > > > > > Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
-> > > > > > ---
-> > > > > >  arch/powerpc/kvm/book3s_hv_rmhandlers.S | 3 +--
-> > > > > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > > > >
-> > > > > > diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-> > > > > > index acf80915f406..b81ba4ee0521 100644
-> > > > > > --- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-> > > > > > +++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-> > > > > > @@ -502,8 +502,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
-> > > > > >   *                                                                            *
-> > > > > >   *****************************************************************************/
-> > > > > >  
-> > > > > > -.global kvmppc_hv_entry
-> > > > > 
-> > > > > I think this is okay.
-> > > > > 
-> > > > > > -kvmppc_hv_entry:
-> > > > > > +SYM_INNER_LABEL(kvmppc_hv_entry, SYM_L_LOCAL)
-> > > > > 
-> > > > > The documentation for SYM_INNER_LABEL says it for labels inside a SYM
-> > > > > function block, is that a problem? This is a function but doesn't have
-> > > > > C calling convention, so asm annotation docs say that it should use
-> > > > > SYM_CODE_START_LOCAL?
-> > > > That is correct. Will create a v4 patch for this and send it.
-> > > But using SYM_CODE_START_LOCAL again causes a warning in the build
-> > > (which we were trying to avoid):
-> > > arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x48: unannotated intra-function call
-> > 
-> > Are you using SYM_FUNC_END as well? Looks like you need that to
-> > annotate the type properly. It should be the same as SYM_INNER_LABEL
-> > in the end AFAIKS.
-> 
-> What about SYM_CODE_START_LOCAL and SYM_CODE_END ?
-> This seems to work fine for me without any build warnings from objtool.
-Sent a v4 with this fix. Thanks.
-> > 
-> > > > > 
-> > > > > BTW. why don't our _GLOBAL() macros use these SYM annotations? I haven't
-> > > > > really looked into them.
-> > > > Not sure. Was mostly just concentrating on the kvmppc_hv_entry code.
-> > 
-> > Looks like it's because we have a .type @function annotation in those
-> > already. Not sure if we should end up converting all that over to use
-> > the SYM annotations or if it's okay to leave it as is.
-> > 
-> > Thanks,
-> > Nick
+On gioved=C3=AC 19 gennaio 2023 17:20:55 CEST Fabio M. De Francesco wrote:
+> The use of kmap() and kmap_atomic() are being deprecated in favor of
+> kmap_local_page().
+>=20
+> There are two main problems with kmap(): (1) It comes with an overhead as
+> the mapping space is restricted and protected by a global lock for
+> synchronization and (2) it also requires global TLB invalidation when the
+> kmap=E2=80=99s pool wraps and it might block when the mapping space is fu=
+lly
+> utilized until a slot becomes available.
+>=20
+> With kmap_local_page() the mappings are per thread, CPU local, can take
+> page faults, and can be called from any context (including interrupts).
+> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+> the tasks can be preempted and, when they are scheduled to run again, the
+> kernel virtual addresses are restored and still valid.
+>=20
+> The use of kmap_local_page() in fs/aio.c is "safe" in the sense that the
+> code don't hands the returned kernel virtual addresses to other threads
+> and there are no nesting which should be handled with the stack based
+> (LIFO) mappings/un-mappings order. Furthermore, the code between the old
+> kmap_atomic()/kunmap_atomic() did not depend on disabling page-faults
+> and/or preemption, so that there is no need to call pagefault_disable()
+> and/or preempt_disable() before the mappings.
+>=20
+> Therefore, replace kmap() and kmap_atomic() with kmap_local_page() in
+> fs/aio.c.
+>=20
+> Tested with xfstests on a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel
+> with HIGHMEM64GB enabled.
+>
+Hi Al,
+
+I see that this patch is here since Jan 19, 2023.
+Is there anything that prevents its merging? Am I expected to do further=20
+changes? Please notice that it already had three "Reviewed-by:" tags (again=
+=20
+thanks to Ira, Jeff and Kent).=20
+
+Can you please take it in your three?
+
+Thanks,
+
+=46abio
+>=20
+> Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> Reviewed-by: Jeff Moyer <jmoyer@redhat.com>
+> Reviewed-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>=20
+> I've tested with "./check -g aio". The tests in this group fail 3/26
+> times, with and without my patch. Therefore, these changes don't introduce
+> further errors. I'm not aware of any other tests which I may run, so that
+> any suggestions would be precious and much appreciated :-)
+>=20
+> I'm resending this patch because some recipients were missing in the
+> previous submissions. In the meantime I'm also adding some more informati=
+on
+> in the commit message. There are no changes in the code.
+>=20
+> Changes from v1:
+>         Add further information in the commit message, and the
+>         "Reviewed-by" tags from Ira and Jeff (thanks!).
+>=20
+> Changes from v2:
+> 	Rewrite a block of code between mapping/un-mapping to improve
+> 	readability in aio_setup_ring() and add a missing call to
+> 	flush_dcache_page() in ioctx_add_table() (thanks to Al Viro);
+> 	Add a "Reviewed-by" tag from Kent Overstreet (thanks).
+>=20
+>  fs/aio.c | 46 +++++++++++++++++++++-------------------------
+>  1 file changed, 21 insertions(+), 25 deletions(-)
+>=20
+> diff --git a/fs/aio.c b/fs/aio.c
+> index 562916d85cba..9b39063dc7ac 100644
+> --- a/fs/aio.c
+> +++ b/fs/aio.c
+> @@ -486,7 +486,6 @@ static const struct address_space_operations=20
+aio_ctx_aops
+> =3D {
+>=20
+>  static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
+>  {
+> -	struct aio_ring *ring;
+>  	struct mm_struct *mm =3D current->mm;
+>  	unsigned long size, unused;
+>  	int nr_pages;
+> @@ -567,16 +566,12 @@ static int aio_setup_ring(struct kioctx *ctx, unsig=
+ned
+> int nr_events) ctx->user_id =3D ctx->mmap_base;
+>  	ctx->nr_events =3D nr_events; /* trusted copy */
+>=20
+> -	ring =3D kmap_atomic(ctx->ring_pages[0]);
+> -	ring->nr =3D nr_events;	/* user copy */
+> -	ring->id =3D ~0U;
+> -	ring->head =3D ring->tail =3D 0;
+> -	ring->magic =3D AIO_RING_MAGIC;
+> -	ring->compat_features =3D AIO_RING_COMPAT_FEATURES;
+> -	ring->incompat_features =3D AIO_RING_INCOMPAT_FEATURES;
+> -	ring->header_length =3D sizeof(struct aio_ring);
+> -	kunmap_atomic(ring);
+> -	flush_dcache_page(ctx->ring_pages[0]);
+> +	memcpy_to_page(ctx->ring_pages[0], 0, (const char *)&(struct=20
+aio_ring) {
+> +		       .nr =3D nr_events, .id =3D ~0U, .magic =3D=20
+AIO_RING_MAGIC,
+> +		       .compat_features =3D AIO_RING_COMPAT_FEATURES,
+> +		       .incompat_features =3D AIO_RING_INCOMPAT_FEATURES,
+> +		       .header_length =3D sizeof(struct aio_ring) },
+> +		       sizeof(struct aio_ring));
+>=20
+>  	return 0;
+>  }
+> @@ -678,9 +673,10 @@ static int ioctx_add_table(struct kioctx *ctx, struct
+> mm_struct *mm) * we are protected from page migration
+>  					 * changes ring_pages by -
+>ring_lock.
+>  					 */
+> -					ring =3D kmap_atomic(ctx-
+>ring_pages[0]);
+> +					ring =3D kmap_local_page(ctx-
+>ring_pages[0]);
+>  					ring->id =3D ctx->id;
+> -					kunmap_atomic(ring);
+> +					kunmap_local(ring);
+> +					flush_dcache_page(ctx-
+>ring_pages[0]);
+>  					return 0;
+>  				}
+>=20
+> @@ -1021,9 +1017,9 @@ static void user_refill_reqs_available(struct kioctx
+> *ctx) * against ctx->completed_events below will make sure we do the
+>  		 * safe/right thing.
+>  		 */
+> -		ring =3D kmap_atomic(ctx->ring_pages[0]);
+> +		ring =3D kmap_local_page(ctx->ring_pages[0]);
+>  		head =3D ring->head;
+> -		kunmap_atomic(ring);
+> +		kunmap_local(ring);
+>=20
+>  		refill_reqs_available(ctx, head, ctx->tail);
+>  	}
+> @@ -1129,12 +1125,12 @@ static void aio_complete(struct aio_kiocb *iocb)
+>  	if (++tail >=3D ctx->nr_events)
+>  		tail =3D 0;
+>=20
+> -	ev_page =3D kmap_atomic(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
+> +	ev_page =3D kmap_local_page(ctx->ring_pages[pos /=20
+AIO_EVENTS_PER_PAGE]);
+>  	event =3D ev_page + pos % AIO_EVENTS_PER_PAGE;
+>=20
+>  	*event =3D iocb->ki_res;
+>=20
+> -	kunmap_atomic(ev_page);
+> +	kunmap_local(ev_page);
+>  	flush_dcache_page(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
+>=20
+>  	pr_debug("%p[%u]: %p: %p %Lx %Lx %Lx\n", ctx, tail, iocb,
+> @@ -1148,10 +1144,10 @@ static void aio_complete(struct aio_kiocb *iocb)
+>=20
+>  	ctx->tail =3D tail;
+>=20
+> -	ring =3D kmap_atomic(ctx->ring_pages[0]);
+> +	ring =3D kmap_local_page(ctx->ring_pages[0]);
+>  	head =3D ring->head;
+>  	ring->tail =3D tail;
+> -	kunmap_atomic(ring);
+> +	kunmap_local(ring);
+>  	flush_dcache_page(ctx->ring_pages[0]);
+>=20
+>  	ctx->completed_events++;
+> @@ -1211,10 +1207,10 @@ static long aio_read_events_ring(struct kioctx *c=
+tx,
+>  	mutex_lock(&ctx->ring_lock);
+>=20
+>  	/* Access to ->ring_pages here is protected by ctx->ring_lock. */
+> -	ring =3D kmap_atomic(ctx->ring_pages[0]);
+> +	ring =3D kmap_local_page(ctx->ring_pages[0]);
+>  	head =3D ring->head;
+>  	tail =3D ring->tail;
+> -	kunmap_atomic(ring);
+> +	kunmap_local(ring);
+>=20
+>  	/*
+>  	 * Ensure that once we've read the current tail pointer, that
+> @@ -1246,10 +1242,10 @@ static long aio_read_events_ring(struct kioctx *c=
+tx,
+>  		avail =3D min(avail, nr - ret);
+>  		avail =3D min_t(long, avail, AIO_EVENTS_PER_PAGE - pos);
+>=20
+> -		ev =3D kmap(page);
+> +		ev =3D kmap_local_page(page);
+>  		copy_ret =3D copy_to_user(event + ret, ev + pos,
+>  					sizeof(*ev) * avail);
+> -		kunmap(page);
+> +		kunmap_local(ev);
+>=20
+>  		if (unlikely(copy_ret)) {
+>  			ret =3D -EFAULT;
+> @@ -1261,9 +1257,9 @@ static long aio_read_events_ring(struct kioctx *ctx,
+>  		head %=3D ctx->nr_events;
+>  	}
+>=20
+> -	ring =3D kmap_atomic(ctx->ring_pages[0]);
+> +	ring =3D kmap_local_page(ctx->ring_pages[0]);
+>  	ring->head =3D head;
+> -	kunmap_atomic(ring);
+> +	kunmap_local(ring);
+>  	flush_dcache_page(ctx->ring_pages[0]);
+>=20
+>  	pr_debug("%li  h%u t%u\n", ret, head, tail);
+> --
+> 2.39.0
+
+
+
+
