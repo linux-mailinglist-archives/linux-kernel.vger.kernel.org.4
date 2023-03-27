@@ -2,185 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151926CA8E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048076CA8E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbjC0P1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 11:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
+        id S232398AbjC0P2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 11:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232435AbjC0P1q (ORCPT
+        with ESMTP id S232400AbjC0P2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:27:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 505D130CF;
-        Mon, 27 Mar 2023 08:27:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 23F06C14;
-        Mon, 27 Mar 2023 08:28:27 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 83BB53F6C4;
-        Mon, 27 Mar 2023 08:27:41 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 16:27:35 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, sudeep.holla@arm.com,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
-        nicola.mazzucato@arm.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH 1/2] dt-bindings: firmware: arm,scmi: Support mailboxes
- unidirectional channels
-Message-ID: <ZCG154hlWbLMAzIi@e120937-lin>
-References: <20230327140342.222168-1-cristian.marussi@arm.com>
- <20230327140342.222168-2-cristian.marussi@arm.com>
- <dd8d1503-e2bf-7032-4d0a-16d9a5b2aa51@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dd8d1503-e2bf-7032-4d0a-16d9a5b2aa51@linaro.org>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 27 Mar 2023 11:28:18 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC44E1FF3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:28:17 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-545dd1a1e31so37769547b3.22
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:28:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679930897;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=f8JBRCY78ZSzuGLljBnUO/BHHKr3CYdvg+wmNXBil8g=;
+        b=dqcHIJaGv5oQNTDf+jYjjPGGrIVf7GBwZMp7QKzoL40Ol9sdvVPKCNKWbbq9GE7KJw
+         fTe0CyY9fv3KCh7uuvmqRddtg/Qdj1MvgfH3ZyNEhKzEzNOSYGKNPt782BB/RfXJWV0h
+         YJXLib9kYrO/dThgwZ0DbEiBsrdteZ4adqj21utoOgQJb7NLVZKoUJW0adZJi/N4hmia
+         erYe9zOl2i+p43YBOvbYEVtB4ZqgZkM/KEWnBpoH4GL6Yht+9fXQr+hIalSF/naVn7/t
+         8Zo/gVSY6HGrlNNil6YicEPptQqFj0G/BaNEChxrR62BvW2eXaTWH4xtjoB4udj0inYZ
+         TO0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679930897;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f8JBRCY78ZSzuGLljBnUO/BHHKr3CYdvg+wmNXBil8g=;
+        b=vgskFTXXwruTiDNI99J52dcRqbjPwi6c62iFEEvm6PiELWW+EwfKof3mXxuho1fmCE
+         SNByePXM9G+B3+jJbMbcSBKC9aIYsI30wik5PuoCKDesaI7UlLbAxzdv+81vZBAezStR
+         QiOel2VDuq21a0vmh2mGjsT/SfmCH+zfcy0bVWxToxeD714/Bh1tbO7yUsiFwDJYGgLb
+         RTVtFtxGBHOtu+4JKtiWako+Wfwy4Inpu1SSVORSnzZcFyMbDLldu15DPBYth5siagmJ
+         uEineBCc7PIAwKmYjMQZvAuvMKvHr1DLofyZn/5oVcdCar2F3ma0mSMaYUo+FYi2hlzy
+         QghA==
+X-Gm-Message-State: AAQBX9fLVDKfK7AYV3dgsFpJ4vd5ZdkJ++PLBDHCtsX8Q7fjKZ839O4f
+        xklRj68J8vGeWxAdxwQbNBdJPj0wLkk=
+X-Google-Smtp-Source: AKy350b83eGk6L6ND7l/neGCC3/wJiQDCcFmipF8r8V3OiF/SEkhLqe+P7zSzlOtyKX9choru9pVg685uOI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:eb02:0:b0:545:883a:544d with SMTP id
+ n2-20020a81eb02000000b00545883a544dmr5743906ywm.9.1679930897136; Mon, 27 Mar
+ 2023 08:28:17 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 08:28:15 -0700
+In-Reply-To: <151c3b04-31db-6a50-23af-c6886098c85c@redhat.com>
+Mime-Version: 1.0
+References: <20230322011440.2195485-1-seanjc@google.com> <151c3b04-31db-6a50-23af-c6886098c85c@redhat.com>
+Message-ID: <ZCG2D1PyWobdb8jk@google.com>
+Subject: Re: [PATCH 0/6] KVM: x86: Unhost the *_CMD MSR mess
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 04:42:12PM +0200, Krzysztof Kozlowski wrote:
-> On 27/03/2023 16:03, Cristian Marussi wrote:
-> > SCMI defines two kinds of communication channels between the agent and the
-> > platform: one bidirectional 'a2p' channel used by the agent to send SCMI
-> > commands and synchronously receive the related replies, and an optional
-> > 'p2a' unidirectional channel used to asynchronously receive delayed
-> > responses and notifications emitted from the platform.
+On Mon, Mar 27, 2023, Paolo Bonzini wrote:
+> On 3/22/23 02:14, Sean Christopherson wrote:
+> > Revert the FLUSH_L1D enabling, which has multiple fatal bugs, clean up
+> > the existing PRED_CMD handling, and reintroduce FLUSH_L1D virtualization
+> > without inheriting the mistakes made by PRED_CMD.
 > > 
-> > When configuring an SCMI transport based on mailboxes, the current binding
-> > supports only mailboxes providing bidirectional channels: in such a case
-> > one mailbox channel can be easily assigned to each SCMI channel as above
-> > described.
+> > The last patch hardens SVM against one of the bugs introduced in the
+> > FLUSH_L1D enabling.
 > > 
-> > In case, instead, to have to deal with mailboxes providing only distinct
-> > unidirectional channels, it becomes necessary to extend the binding in
-> > order to be able to bind 2 distinct unidirectional mailbox channels to the
-> > same SCMI 'a2p' channel.
-> > 
-> > Bidirectional and unidirectional channels support for the SCMI mailbox
-> > transport can coexist by carefully considering the effective combination
-> > of defined 'mboxes' and 'shmem' descriptors.
-> > 
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> > Cc: devicetree@vger.kernel.org
+> > I'll post KUT patches tomorrow.  I have the tests written (and they found
+> > bugs in my code, :shocked-pikachu:), just need to write the changelogs.
+> > Wanted to get this out sooner than later as I'm guessing I'm not the only
+> > one whose VMs won't boot on Intel CPUs...
 > 
-
-Hi Krzysztof,
-
-thanks for having a look.
-
-> Please drop the autogenerated scripts/get_maintainer.pl CC-entries from
-> commit msg. There is no single need to store automated output of
-> get_maintainers.pl in the git log. It can be easily re-created at any
-> given time, thus its presence in the git history is redundant and
-> obfuscates the log.
+> Hi Sean,
 > 
-> If you need it for your own patch management purposes, keep it under ---.
-> 
+> did you post them?
 
-Ok. I use to add those Cc to trigger git-sendmail to add proper CCs but
-in this case indeed I copied you on all the series anyway. I'll drop it.
-
-> 
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > ---
-> >  .../bindings/firmware/arm,scmi.yaml           | 42 +++++++++++++++++--
-> >  1 file changed, 38 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-> > index 2f7c51c75e85..9a7dc30e386f 100644
-> > --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-> > +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-> > @@ -63,10 +63,24 @@ properties:
-> >    mboxes:
-> >      description:
-> >        List of phandle and mailbox channel specifiers. It should contain
-> > -      exactly one or two mailboxes, one for transmitting messages("tx")
-> > -      and another optional for receiving the notifications("rx") if supported.
-> > +      exactly one, two or three mailboxes; the first one or two for transmitting
-> > +      messages ("tx") and another optional ("rx") for receiving notifications
-> > +      and delayed responses, if supported by the platform.
-> > +      The number of mailboxes needed for transmitting messages depends on the
-> > +      type of channels exposed by the specific underlying mailbox controller;
-> > +      one single channel descriptor is enough if such channel is bidirectional,
-> > +      while two channel descriptors are needed to represent the SCMI ("tx")
-> > +      channel if the underlying mailbox channels are of unidirectional type.
-> > +      The effective combination in numbers of mboxes and shmem descriptors let
-> > +      the SCMI subsystem determine unambiguosly which type of SCMI channels are
-> > +      made available by the underlying mailbox controller and how to use them.
-> > +       1 mbox / 1 shmem => SCMI TX over 1 mailbox bidirectional channel
-> > +       2 mbox / 2 shmem => SCMI TX and RX over 2 mailbox bidirectional channels
-> > +       2 mbox / 1 shmem => SCMI TX over 2 mailbox unidirectional channels
-> > +       3 mbox / 2 shmem => SCMI TX and RX over 3 mailbox unidirectional channels
-> > +      Any other combination of mboxes and shmem is invalid.
-> >      minItems: 1
-> > -    maxItems: 2
-> > +    maxItems: 3
-> 
-> Missing update to mbox-names.
-> 
-Ah .. missed that since mbox-names is not marked as a required property
-in this binding. I'll add in V2.
-
-> >  
-> >    shmem:
-> >      description:
-> > @@ -234,7 +248,7 @@ $defs:
-> >  
-> >        mboxes:
-> >          minItems: 1
-> > -        maxItems: 2
-> > +        maxItems: 3
-> 
-> The same. How is it supposed to work? tx rx and that's it?
-> 
-
-The logic is that SCMI transport can determine which type of channels
-(bidir vs unidir) you are using by looking at how many mboxes and how
-many shmem are defined as detailed in the description above.
-(not using mbox-names refs because was never marked as required so it
- would break backward compatibility starting to use that)
-
-I'll add a fix in V2 to fit mbox-names into this logic too.
-
-> >  
-> >        shmem:
-> >          minItems: 1
-> > @@ -393,6 +407,26 @@ examples:
-> >          };
-> >      };
-> >  
-> > +  - |
-> > +    firmware {
-> > +        scmi {
-> > +            compatible = "arm,scmi";
-> > +            mboxes = <&mhu_U_tx 0 0>, <&mhu_U_rx 0 0>;
-> > +            shmem = <&cpu_scp_lpri0>;
-> > +
-> > +            #address-cells = <1>;
-> > +            #size-cells = <0>;
-> 
-> I don't think adding one more example with difference in only one piece
-> is needed here.
-> 
-
-Mmm, I thought was sensible to add this example, given that a mailbox
-transport configuration for a mailbox exposing unidrectional channels is
-quite different from the usual bidirectional channel config already
-present in the pre-existent example.
-
-I'll add mbox-names into this example and see if I can change your
-mind...or I can then finally drop it.
-
-Thanks,
-Cristian
+No, I'll get that done today (I pinky swear this time).
