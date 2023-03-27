@@ -2,118 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282986CA13B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AEDA6CA13C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbjC0KXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 06:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
+        id S233116AbjC0KXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbjC0KXT (ORCPT
+        with ESMTP id S232540AbjC0KXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:23:19 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A26E4222;
-        Mon, 27 Mar 2023 03:23:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AAACECE12DA;
-        Mon, 27 Mar 2023 10:23:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A426CC433EF;
-        Mon, 27 Mar 2023 10:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679912589;
-        bh=cznD+cbBiom3mZdOBAF5neKKYMVd/kyzeOHaPpGn7q0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Hv7zuAqo1uTMOAoGK5/bleBXMR0ApJAVGiiL3r15iEu4vABCjfjxLfp+Wyc8alcg+
-         DzgDI/cvMlvkBPKSSIVXGYNE9+DVx3ok757cNQ3OKCl4YDw8nAKt6yOA+E0B1sJx8/
-         v3CzvwlwTCffJ08BMVtmbohIHChkqijE2kEeArCaW7m6qAXFuswJ6XjsGQccRY6qaR
-         EHl1JPR86iO8Ct0Z8QlhqlQ/+8IpvrbmHWocOLnW/cjlzzs2nYDAsKqycwmN9svEIu
-         BwHAMWa8hhZLHIyaBVYxIEPLVOykH6VoP7FPJsIAs4UbiTYUqCMvcaSQd5Nl00Lndw
-         SJDx+NYf3filg==
-Date:   Mon, 27 Mar 2023 15:52:57 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     mani@kernel.org, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] bus: mhi: host: Range check CHDBOFF and ERDBOFF
-Message-ID: <20230327102257.GC16424@thinkpad>
-References: <1679674384-27209-1-git-send-email-quic_jhugo@quicinc.com>
+        Mon, 27 Mar 2023 06:23:54 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1258BC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:23:53 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id iw3so7957942plb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:23:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=infob2bdata-com.20210112.gappssmtp.com; s=20210112; t=1679912633;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fd041Km9JR+rEbkknkSS85NuSHr4TlfBRZ9hZBTdfGI=;
+        b=CxbgeiuvFWwARtL1+qmvaGUQ3t3DVEO3MVCLWY1nsrYxpss2CwrPNw3u6gX9rNHsgo
+         Ap4qVQUuQI7CXWUlA+lcRs9QydTnDcHDQlI3+pjtYkLv+z8GNyJOHTaOjgVmS/Vujxth
+         NbbJyrbkFoiIzCq8MkGOxiRFdlnIgcB0PtPOBEmVuCL8BCLADouR7KXLOCjPT1Ld7AeH
+         yvCvZZlLhb80TgjXp3QpQgM6FE1xYJRWuOD8DRiWmL2XieyX9JdcsB4is0V1AgtmiJOd
+         uYYVgsTB0XYvwJ3jcmQsF/0dcVQsVZItGBdhz7ig2Pcp3kW3TmYipqsBqvt04pvQpvg9
+         M3/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679912633;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fd041Km9JR+rEbkknkSS85NuSHr4TlfBRZ9hZBTdfGI=;
+        b=Cc7Rwj0jehREOQwpG6C+VK3qwCRAiWqjCUGl/ynE3xhUggVm85QwXWjgXw23eoDm8A
+         pe+3Rxd0/RhYA7U1Oj2psfo3H6eQnVG7AnLCMnMi/ni6ZWOxZZUBhkXVGg4RU7T0xlyd
+         Us+3LLxKseiF2GDmp6eqakUiBnAkivlJ3UsERVos2nToICAaK47uJTynl6hgGqdgHOww
+         IvmLvb0JDT6frFEDB6xpQXx+1a2LyxWqFNbrkNMpepAqK4IDVZ40pWlJJP4bJ8qjlF9r
+         GLb0iIRW/uCjfKS7HXqNPDM9JVnDsz6QofnBctd8yej17zxS41lkfUZrQanQMKiFapPR
+         ZX2A==
+X-Gm-Message-State: AAQBX9eWYJpmCNCncSEtKQfxd+BKw/y33c4al0GaVjhdhUkZLD6CbPyk
+        zB0VGehUyr1mRoVm0WmcNsM2369Blw15ur0THSvD4Q==
+X-Google-Smtp-Source: AKy350aVtV7Gyeq0ZlPh2S/bbwFGxuWbfIGoO1kuUDGrvw4W0IXtKWqSQVJAgUpZg3PRSoSGvRMd2nAPtT5co6FAePI=
+X-Received: by 2002:a17:902:6948:b0:1a2:3436:4119 with SMTP id
+ k8-20020a170902694800b001a234364119mr2229296plt.8.1679912633215; Mon, 27 Mar
+ 2023 03:23:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1679674384-27209-1-git-send-email-quic_jhugo@quicinc.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Stella Jacob <stella@infob2bdata.com>
+Date:   Mon, 27 Mar 2023 05:23:42 -0500
+Message-ID: <CADH7MrEs0PJyG0QV+-cUfZDB+jOfrSTc1qwjxXC2WCrpY-ynNQ@mail.gmail.com>
+Subject: RE: 50k+Verified HIMSS Healthcare Email Lists-2023
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        FILL_THIS_FORM,FILL_THIS_FORM_LONG,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 10:13:04AM -0600, Jeffrey Hugo wrote:
-> If the value read from the CHDBOFF and ERDBOFF registers is outside the
-> range of the MHI register space then an invalid address might be computed
-> which later causes a kernel panic.  Range check the read value to prevent
-> a crash due to bad data from the device.
-> 
-> Fixes: 6cd330ae76ff ("bus: mhi: core: Add support for ringing channel/event ring doorbells")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Hi,
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Would you be interested in acquiring HIMSS Global Health Conference
+Attendees Email List 2023?
 
-Thanks,
-Mani
+List contains: Company Name, Contact Name, First Name, Middle Name,
+Last Name, Title, Address, Street, City, Zip code, State, Country,
+Telephone, Email address and more,
 
-> Reviewed-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
-> ---
-> 
-> v2:
-> -CC stable
-> -Use ERANGE for the error code
-> 
->  drivers/bus/mhi/host/init.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
-> index 3d779ee..b46a082 100644
-> --- a/drivers/bus/mhi/host/init.c
-> +++ b/drivers/bus/mhi/host/init.c
-> @@ -516,6 +516,12 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
->  		return -EIO;
->  	}
->  
-> +	if (val >= mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB)) {
-> +		dev_err(dev, "CHDB offset: 0x%x is out of range: 0x%zx\n",
-> +			val, mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB));
-> +		return -ERANGE;
-> +	}
-> +
->  	/* Setup wake db */
->  	mhi_cntrl->wake_db = base + val + (8 * MHI_DEV_WAKE_DB);
->  	mhi_cntrl->wake_set = false;
-> @@ -532,6 +538,12 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
->  		return -EIO;
->  	}
->  
-> +	if (val >= mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings)) {
-> +		dev_err(dev, "ERDB offset: 0x%x is out of range: 0x%zx\n",
-> +			val, mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings));
-> +		return -ERANGE;
-> +	}
-> +
->  	/* Setup event db address for each ev_ring */
->  	mhi_event = mhi_cntrl->mhi_event;
->  	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, val += 8, mhi_event++) {
-> -- 
-> 2.7.4
-> 
-> 
+No of Contacts: - 50,964
+Cost: $ 2,652
 
--- 
-மணிவண்ணன் சதாசிவம்
+ Looking forward for your response,
+
+Kind Regards,
+Stella Jacob
+Marketing Coordinator
+
+ if you don=E2=80=99t wish to receive further any email please reply us wit=
+h
+sub line =E2=80=98leave out=E2=80=99
