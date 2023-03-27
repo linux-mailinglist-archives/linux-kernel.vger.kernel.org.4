@@ -2,150 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4646CB023
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3CB6CB025
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjC0UvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 16:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        id S229718AbjC0Uwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 16:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjC0UvT (ORCPT
+        with ESMTP id S229471AbjC0Uwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 16:51:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3314ED1;
-        Mon, 27 Mar 2023 13:51:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC185B81920;
-        Mon, 27 Mar 2023 20:51:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50781C433EF;
-        Mon, 27 Mar 2023 20:51:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679950275;
-        bh=bztaAfyijMRB52sSuT0e9khxxEMPXVX9jN1n+ilSxTI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=TvE9dTPBMgdyqjAgEWechzbepM4MABGV9YeXzC9sLIvP08jHNpwZeIbZt/LA4PbHv
-         6kGRJNGfXWbklnAXzVh36wFCFKHlJb8x7XkkomnD86aoZj9kafWZVdPJ+IDm78fnaP
-         03TU0+L0Xq7YVAqv+DKZbS3+NkndeiewuymHUgzwf2/fcl0OcXl63fZ0ESFdB7O6se
-         6D0xkLRyixqfXvScDBjvkVAYe+QCZrWI+3eyJoZA7EYCSp48xMKo3qvKZ4lM2Xpjbl
-         YKyfLVBJCOxDP0JcjEs/O2jlpoXfvsfo9KiD+kX3R6ceF7l1nDOuEZR2CF3j5MFPly
-         rn+hxVGOzKn7g==
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 50560A22736; Mon, 27 Mar 2023 22:51:12 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
-In-Reply-To: <CALOAHbA-wRARTaKOrwqvf-rZF1BkNNuEGLgaysY7n6bAqmDRqg@mail.gmail.com>
-References: <CALOAHbA-wRARTaKOrwqvf-rZF1BkNNuEGLgaysY7n6bAqmDRqg@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Mon, 27 Mar 2023 22:51:12 +0200
-Message-ID: <877cv17wan.fsf@toke.dk>
+        Mon, 27 Mar 2023 16:52:39 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3963ED1;
+        Mon, 27 Mar 2023 13:52:38 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-17ac5ee3f9cso10647041fac.12;
+        Mon, 27 Mar 2023 13:52:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679950357;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mCokmroWwO4VufX7A6mOYl3GgmQFzU+xi4IMBIypRNk=;
+        b=69JZJ4TqcT0ZA697HRqBOcKsTprR/jP3ATD3q5fSycl7BZmDMcRK1k4F5R83wLy5d2
+         FSJSqpgEx+YEVwJt+cOVKfSccfq7CwgvpniZxozmLCHHJcCDNkvqhlMSghQNwTV4+cj3
+         iSQVVrzpvoIbsD65mGWblb/ud/sW0EMyeGJm+G4Z6WBWW4MO2QVFHbubUORonpyNVlYL
+         wx4jRujFykS+9qHd4WMickeqald2qvWkRx2PXWqyutWhsowh74I1r6fiMxQT+Y7gPsbm
+         i4DwyuZbz0FvfHIr+HoecPQAVphaOKcZfuidZWLM056j+9jVmGQFce610UwYw2m5mD62
+         7HTQ==
+X-Gm-Message-State: AAQBX9cpKZPMWn/2BsuLo8aN7FuCGu7K4WIrW/5+5TSPnIEAVRKzy3CW
+        PlljONrqgoQZYk+S6xsWuQ==
+X-Google-Smtp-Source: AK7set+8JPEPqeE9hXVijJtbMJer5bZDZeNugXZaxtUt4ndBavVZ+nQHJVymYACFFPbFLtprz+KixQ==
+X-Received: by 2002:a05:6870:899c:b0:17b:1a4f:adfe with SMTP id f28-20020a056870899c00b0017b1a4fadfemr7706053oaq.10.1679950357540;
+        Mon, 27 Mar 2023 13:52:37 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id eh1-20020a056808274100b00383ece4c29bsm11562672oib.6.2023.03.27.13.52.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 13:52:36 -0700 (PDT)
+Received: (nullmailer pid 573623 invoked by uid 1000);
+        Mon, 27 Mar 2023 20:52:35 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ARM: sh-mobile: Use of_cpu_node_to_id() to read CPU node 'reg'
+Date:   Mon, 27 Mar 2023 15:52:28 -0500
+Message-Id: <20230327205228.573456-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yafang Shao <laoar.shao@gmail.com> writes:
+Replace open coded CPU nodes reading of "reg" and translation to logical
+ID with of_cpu_node_to_id().
 
-> On Sun, Mar 26, 2023 at 6:49=E2=80=AFPM Toke H=C3=B8iland-J=C3=B8rgensen =
-<toke@kernel.org> wrote:
->>
->> Yafang Shao <laoar.shao@gmail.com> writes:
->>
->> > Currently only CAP_SYS_ADMIN can iterate BPF object IDs and convert IDs
->> > to FDs, that's intended for BPF's security model[1]. Not only does it
->> > prevent non-privilidged users from getting other users' bpf program, b=
-ut
->> > also it prevents the user from iterating his own bpf objects.
->> >
->> > In container environment, some users want to run bpf programs in their
->> > containers. These users can run their bpf programs under CAP_BPF and
->> > some other specific CAPs, but they can't inspect their bpf programs in=
- a
->> > generic way. For example, the bpftool can't be used as it requires
->> > CAP_SYS_ADMIN. That is very inconvenient.
->> >
->> > Without CAP_SYS_ADMIN, the only way to get the information of a bpf ob=
-ject
->> > which is not created by the process itself is with SCM_RIGHTS, that
->> > requires each processes which created bpf object has to implement a un=
-ix
->> > domain socket to share the fd of a bpf object between different
->> > processes, that is really trivial and troublesome.
->> >
->> > Hence we need a better mechanism to get bpf object info without
->> > CAP_SYS_ADMIN.
->> >
->> > BPF namespace is introduced in this patchset with an attempt to remove
->> > the CAP_SYS_ADMIN requirement. The user can create bpf map, prog and
->> > link in a specific bpf namespace, then these bpf objects will not be
->> > visible to the users in a different bpf namespace. But these bpf
->> > objects are visible to its parent bpf namespace, so the sys admin can
->> > still iterate and inspect them.
->> >
->> > BPF namespace is similar to PID namespace, and the bpf objects are
->> > similar to tasks, so BPF namespace is very easy to understand. These
->> > patchset only implements BPF namespace for bpf map, prog and link. In =
-the
->> > future we may extend it to other bpf objects like btf, bpffs and etc.
->>
->> May? I think we should cover all of the existing BPF objects from the
->> beginning here, or we may miss important interactions that will
->> invalidate the whole idea.
->
-> This patchset is intended to address iterating bpf IDs and converting
-> IDs to FDs.  To be more specific, it covers
-> BPF_{PROG,MAP,LINK}_GET_NEXT_ID and BPF_{PROG,MAP,LINK}_GET_FD_BY_ID.
-> It should also include BPF_BTF_GET_NEXT_ID and BPF_BTF_GET_FD_BY_ID,
-> but I don't implement it because I find we can do more wrt BTF, for
-> example, if we can expose a small amount of BTFs in the vmlinux to
-> non-root bpf namespace.
-> But, yes, I should implement BTF ID in this patchset.
+The original code called of_parse_phandle() CONFIG_NR_CPUS times
+regardless of the length of 'cpus'. Optimize the loop to bail out once
+of_parse_phandle() fails as the end of 'cpus' property has been reached.
 
-Right, as you can see by my comment on that patch, not including the btf
-id is a tad confusing, so yeah, better include that.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v2:
+ - Optimize the number of loop iterations
+---
+ arch/arm/mach-shmobile/platsmp-apmu.c | 36 ++++++++++++---------------
+ 1 file changed, 16 insertions(+), 20 deletions(-)
 
->> In particular, I'm a little worried about the
->> interaction between namespaces and bpffs; what happens if you're in a
->> bpf namespace and you try to read a BPF object from a bpffs that belongs
->> to a different namespace? Does the operation fail? Is the object hidden
->> entirely? Something else?
->>
->
-> bpffs is a different topic and it can be implemented in later patchsets.
-> bpffs has its own specific problem even without the bpf namespace.
-> 1. The user can always get the information of a bpf object through its
-> corresponding pinned file.
-> In our practice, different container users have different bpffs, and
-> we allow the container user to bind-mount its bpffs only, so others'
-> bpffs are invisible.
-> To make it better with the bpf namespace, I think we can fail the
-> operation if the pinned file doesn't belong to its bpf namespace. That
-> said, we will add pinned bpf files into the bpf namespace in the next
-> step.
->
-> 2. The user can always iterate bpf objects through progs.debug and maps.d=
-ebug
-> progs.debug and maps.debug are debugging purposes only. So I think we
-> can handle it later.
+diff --git a/arch/arm/mach-shmobile/platsmp-apmu.c b/arch/arm/mach-shmobile/platsmp-apmu.c
+index e771ce70e132..ec6f421c0f4d 100644
+--- a/arch/arm/mach-shmobile/platsmp-apmu.c
++++ b/arch/arm/mach-shmobile/platsmp-apmu.c
+@@ -10,6 +10,7 @@
+ #include <linux/init.h>
+ #include <linux/io.h>
+ #include <linux/ioport.h>
++#include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/smp.h>
+ #include <linux/suspend.h>
+@@ -210,7 +211,6 @@ static void apmu_parse_dt(void (*fn)(struct resource *res, int cpu, int bit))
+ 	struct device_node *np_apmu, *np_cpu;
+ 	struct resource res;
+ 	int bit, index;
+-	u32 id;
+ 
+ 	for_each_matching_node(np_apmu, apmu_ids) {
+ 		/* only enable the cluster that includes the boot CPU */
+@@ -218,33 +218,29 @@ static void apmu_parse_dt(void (*fn)(struct resource *res, int cpu, int bit))
+ 
+ 		for (bit = 0; bit < CONFIG_NR_CPUS; bit++) {
+ 			np_cpu = of_parse_phandle(np_apmu, "cpus", bit);
+-			if (np_cpu) {
+-				if (!of_property_read_u32(np_cpu, "reg", &id)) {
+-					if (id == cpu_logical_map(0)) {
+-						is_allowed = true;
+-						of_node_put(np_cpu);
+-						break;
+-					}
+-
+-				}
++			if (!np_cpu)
++				break;
++			if (of_cpu_node_to_id(np_cpu) == 0) {
++				is_allowed = true;
+ 				of_node_put(np_cpu);
++				break;
+ 			}
++			of_node_put(np_cpu);
+ 		}
+ 		if (!is_allowed)
+ 			continue;
+ 
+ 		for (bit = 0; bit < CONFIG_NR_CPUS; bit++) {
+ 			np_cpu = of_parse_phandle(np_apmu, "cpus", bit);
+-			if (np_cpu) {
+-				if (!of_property_read_u32(np_cpu, "reg", &id)) {
+-					index = get_logical_index(id);
+-					if ((index >= 0) &&
+-					    !of_address_to_resource(np_apmu,
+-								    0, &res))
+-						fn(&res, index, bit);
+-				}
+-				of_node_put(np_cpu);
+-			}
++			if (!np_cpu)
++				break;
++
++			index = of_cpu_node_to_id(np_cpu);
++			if ((index >= 0) &&
++			    !of_address_to_resource(np_apmu, 0, &res))
++				fn(&res, index, bit);
++
++			of_node_put(np_cpu);
+ 		}
+ 	}
+ }
+-- 
+2.39.2
 
-Well, I disagree. Working out these issues with bpffs is an important
-aspect to get a consistent API, and handwaving it away risks merging
-something that will turn out to not be workable further down the line at
-which point we can't change it.
-
--Toke
