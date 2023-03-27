@@ -2,107 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186C76C9EE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF036C9EE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233092AbjC0JFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
+        id S233062AbjC0JGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbjC0JFY (ORCPT
+        with ESMTP id S232820AbjC0JFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:05:24 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B1259E8;
-        Mon, 27 Mar 2023 02:04:35 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id v1so7896725wrv.1;
-        Mon, 27 Mar 2023 02:04:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679907875;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IeW3JOtl79P4h19QSrAjezOiQKqJvZ5XGjr/mFCgLF8=;
-        b=KdPgUcOUttb4VuwP3TS2j+HxDR6qoeXv8hDgEMHfF8nKVpUKGv6KLG6rxR8dexRe4x
-         bycDPB6vu67rXAgjz+Rt8/ovlklhiPBj6n4p+7iB2ERg1E/GFJsbuviHMjMAOLUR9EUf
-         5J8Sa+5MqE73EnBceXFGBfcxY5Xt/TgOD7f4vNyEhoxYn/J18O4Ssw7C9uOEQP4Z4JM8
-         IyRxsyOyr1iORBWFxDtRJf6UZeAJMz08DpzqaGK87bPVGsKq3lyzKsQ43IizJ36ERv2A
-         YRrAmNHrdXWZNBxdZVq0rsdCnhXAzQRUY2ZCPMw+VfT1K9QFr+9KMHPccvRbU/8zAQMV
-         9Q/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679907875;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IeW3JOtl79P4h19QSrAjezOiQKqJvZ5XGjr/mFCgLF8=;
-        b=31EKEV+WCymb1rFcpRKNJi/20T02dYpbBzdJOspDm4cgWVDYF5zw6Gomc8Nl5Sa3Qr
-         czsXghvscJiArh9WuUT16mXFUOEh0W1MF3nHD252lf+K6cdDRf6JFO2G+0wouk6uzLLo
-         Rbsa/s5hv2Iwcuo4MombtV+U24pdT0x03oep3oBe8ad8A2A9KqsVSGpdzs07Kee+36g3
-         Zpzdk98QqyaY62yGV2NOSeqqhTFtNbJdQU+X+++ppnToRoXo65ec5gwFwlCNN3LZj6mz
-         i9/5oDsKA7f8GqzrDIoshAV9quCaw/hN22URMlwzuclzPeJB2RRi/xoBoK3pBkvyZ/ya
-         +qnQ==
-X-Gm-Message-State: AAQBX9erZB5gmqxG51s8KixKhnu/BXjnDQRh9W0VP1ieglVUBjK3GZm6
-        keGhm8y/078tpcMuRNtHnlE5/1rYm05y4A==
-X-Google-Smtp-Source: AKy350YNxkfy6IOA56E0WFYwIMXU7I9spsD1DLtgWxU5JCd/dMGUPvsMws1K0rdvEqgYxVdDzVDW+g==
-X-Received: by 2002:adf:e484:0:b0:2ce:a938:ecc9 with SMTP id i4-20020adfe484000000b002cea938ecc9mr8877647wrm.69.1679907874447;
-        Mon, 27 Mar 2023 02:04:34 -0700 (PDT)
-Received: from [192.168.26.216] (54-240-197-230.amazon.com. [54.240.197.230])
-        by smtp.gmail.com with ESMTPSA id h13-20020a5d430d000000b002d75ef32032sm17594498wrq.68.2023.03.27.02.04.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 02:04:34 -0700 (PDT)
-From:   Paul Durrant <xadimgnik@gmail.com>
-X-Google-Original-From: Paul Durrant <paul@xen.org>
-Message-ID: <990111ae-d2ba-5bfc-457d-bacb2b6ffb43@xen.org>
-Date:   Mon, 27 Mar 2023 10:04:33 +0100
+        Mon, 27 Mar 2023 05:05:38 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049F12699;
+        Mon, 27 Mar 2023 02:05:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B5A871F8A8;
+        Mon, 27 Mar 2023 09:05:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679907906; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1m+GqVM8V9jjiHtBYZoDupeKxHqRy0t5O4/7/X/MgNA=;
+        b=pg7rxZhS2SGjJ5gfDsHVHfoqwYwfa2DicX9BYVJXv5YKGPo0PAK7T5HfShZuhMxw4mjEte
+        t0OsgyMz11NtsQyuVok8jqHpuuPo9UaKjbNYv84Kxkg8CSiyfjEvbqjp7CF7GZubdigP3L
+        DLWoMIlYL6/+5tKYhh4R/wMDZkkyacg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679907906;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1m+GqVM8V9jjiHtBYZoDupeKxHqRy0t5O4/7/X/MgNA=;
+        b=XAWTmPnQ7fhRzWMGR9UknLUXa/nz2WGywo4sbJb0IA3YIVrhaIikUxtINl9QpqloA0epP7
+        HIoU7V64K+HWA5Dg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A66E013329;
+        Mon, 27 Mar 2023 09:05:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HmWaKEJcIWSlWQAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 27 Mar 2023 09:05:06 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 344A1A071C; Mon, 27 Mar 2023 11:05:06 +0200 (CEST)
+Date:   Mon, 27 Mar 2023 11:05:06 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, yukuai3@huawei.com, stable@kernel.org
+Subject: Re: [PATCH v2 1/2] ext4: turning quotas off if mount failed after
+ enable quotas
+Message-ID: <20230327090506.a3notb7a2zgz4hue@quack3>
+References: <20230327022703.576857-1-libaokun1@huawei.com>
+ <20230327022703.576857-2-libaokun1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Reply-To: paul@xen.org
-Subject: Re: [PATCH 2/2] xen/netback: remove not needed test in
- xenvif_tx_build_gops()
-Content-Language: en-US
-To:     Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        xen-devel@lists.xenproject.org, Jan Beulich <jbeulich@suse.com>
-References: <20230327083646.18690-1-jgross@suse.com>
- <20230327083646.18690-3-jgross@suse.com>
-Organization: Xen Project
-In-Reply-To: <20230327083646.18690-3-jgross@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327022703.576857-2-libaokun1@huawei.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2023 09:36, Juergen Gross wrote:
-> The tests for the number of grant mapping or copy operations reaching
-> the array size of the operations buffer at the end of the main loop in
-> xenvif_tx_build_gops() isn't needed.
+On Mon 27-03-23 10:27:02, Baokun Li wrote:
+> Yi found during a review of the patch "ext4: don't BUG on inconsistent
+> journal feature" that when ext4_mark_recovery_complete() returns an error
+> value, the error handling path does not turn off the enabled quotas,
+> which triggers the following kmemleak:
 > 
-> The loop can handle at maximum MAX_PENDING_REQS transfer requests, as
-> XEN_RING_NR_UNCONSUMED_REQUESTS() is taking unsent responses into
-> consideration, too.
+> ================================================================
+> unreferenced object 0xffff8cf68678e7c0 (size 64):
+> comm "mount", pid 746, jiffies 4294871231 (age 11.540s)
+> hex dump (first 32 bytes):
+> 00 90 ef 82 f6 8c ff ff 00 00 00 00 41 01 00 00  ............A...
+> c7 00 00 00 bd 00 00 00 0a 00 00 00 48 00 00 00  ............H...
+> backtrace:
+> [<00000000c561ef24>] __kmem_cache_alloc_node+0x4d4/0x880
+> [<00000000d4e621d7>] kmalloc_trace+0x39/0x140
+> [<00000000837eee74>] v2_read_file_info+0x18a/0x3a0
+> [<0000000088f6c877>] dquot_load_quota_sb+0x2ed/0x770
+> [<00000000340a4782>] dquot_load_quota_inode+0xc6/0x1c0
+> [<0000000089a18bd5>] ext4_enable_quotas+0x17e/0x3a0 [ext4]
+> [<000000003a0268fa>] __ext4_fill_super+0x3448/0x3910 [ext4]
+> [<00000000b0f2a8a8>] ext4_fill_super+0x13d/0x340 [ext4]
+> [<000000004a9489c4>] get_tree_bdev+0x1dc/0x370
+> [<000000006e723bf1>] ext4_get_tree+0x1d/0x30 [ext4]
+> [<00000000c7cb663d>] vfs_get_tree+0x31/0x160
+> [<00000000320e1bed>] do_new_mount+0x1d5/0x480
+> [<00000000c074654c>] path_mount+0x22e/0xbe0
+> [<0000000003e97a8e>] do_mount+0x95/0xc0
+> [<000000002f3d3736>] __x64_sys_mount+0xc4/0x160
+> [<0000000027d2140c>] do_syscall_64+0x3f/0x90
+> ================================================================
 > 
-> Remove the tests.
+> To solve this problem, we add a "failed_mount10" tag, and call
+> ext4_quota_off_umount() in this tag to release the enabled qoutas.
 > 
-> Suggested-by: Jan Beulich <jbeulich@suse.com>
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-> ---
->   drivers/net/xen-netback/netback.c | 4 ----
->   1 file changed, 4 deletions(-)
-> 
+> Fixes: 11215630aada ("ext4: don't BUG on inconsistent journal feature")
+> Cc: stable@kernel.org
+> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-Reviewed-by: Paul Durrant <paul@xen.org>
+Looks good. Just one comment:
 
+> +failed_mount10:
+> +#ifdef CONFIG_QUOTA
+> +	ext4_quota_off_umount(sb);
+>  failed_mount9:
+> +#endif  /* CONFIG_QUOTA */
+
+How about dealing with this using __maybe_unused attribute instead. Like:
+
+failed_mount9: __maybe_unused
+
+That would be much easier to read...
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
