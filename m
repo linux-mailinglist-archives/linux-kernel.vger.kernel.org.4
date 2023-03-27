@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EF16CB04E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E72E6CB051
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbjC0VDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 17:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
+        id S229512AbjC0VD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 17:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjC0VDS (ORCPT
+        with ESMTP id S231892AbjC0VDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 17:03:18 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFEB1FC7;
-        Mon, 27 Mar 2023 14:03:03 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id e65so12437821ybh.10;
-        Mon, 27 Mar 2023 14:03:03 -0700 (PDT)
+        Mon, 27 Mar 2023 17:03:21 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140B71FE3;
+        Mon, 27 Mar 2023 14:03:06 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id z83so12484922ybb.2;
+        Mon, 27 Mar 2023 14:03:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679950983;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CRqBQiFx9cqbs43Z+3goCj+Xo+gx/Z2Y6ZITCbmIAXM=;
-        b=Pux1RMbo5L5WbyEIlGqDS4hdk6a3qWczTW6MClII8F52gU/+lhk3P3kfdqHzbj84v7
-         l3jKOslwLHvP29JTDxdj0DqWDnD6anyv2KKDPTCfgao2VOU1bRylEbhBylfNZIAyHMCc
-         mXsznNjWpu40qpwvdVMxtsXBFkIRMg6cUsknvTOubXM3vjg5IbBfU9LdBeUeDczOF2Qf
-         wvdkFsKl7A9nlBjqWWOnN89xXTfnO7/geg9zlGv9LJrKLBIcRKaM0/i34Jqbyxc3DndT
-         gccKo/CMlZjLoxA9N1YprmzimU84N+1vGnK4oAccBO7fBDd1SCGPtHXYcuLoHFa7ZyvW
-         a9uw==
+        d=gmail.com; s=20210112; t=1679950984;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eco5b9MX5ijMYg1QKtG06cMKdPajE34qA3bf3aJ4dAA=;
+        b=NyVHe8oA3ZLVbwoWRx9rf6XjR5/Q1rU27zX+uDFgL4OG3dqLxUE9nK3EvijqfyMxOo
+         McNY49CuX52JU+gIs73d4q5uGJPhxbCx/oR/xDySVE385rETNJLJRnXpjlOSh1nwGnCL
+         z3uWLP+0qTmZJixvs+PVZLxedn4AfW2mFDpNECf/fKK3g6EEotFVKjbcH1pcZ7j7DdbT
+         VNGdW/6Q7TlGqoPl36YfsKcAo2LqN50qkQ7/5RgaAas1vaKq5oIlM5DSWREHkla9Zo90
+         5SLxTeLkDqo6DuNGjC9wgB/818vq6pbINeLm7lXF0I28Ci18FZ94pKhZfhRGoby5M8fQ
+         T8Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679950983;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CRqBQiFx9cqbs43Z+3goCj+Xo+gx/Z2Y6ZITCbmIAXM=;
-        b=m/sAuIGHFcu5ZuPERQXe/UzYFcqTP8YoG7MAcawbV4nS/9uGapTDuRebN0geJYFwIk
-         mjZeOdaiqkKZI/NGkq9toEahUHw6Df+d5Z2NZoS+h+1Z+F0uY6g+VnlI+izq5tHkUNzs
-         jSTxtW4E5YMNcMl/Y+ivOQJw1cGEzb5vIpJ4TyYLaZPN2FS9pnqK/AmvNaPB+IudaGxm
-         B6UEbSFsSXwpGN/TIPuKcfAr7QAJ88uEjyB9RsExrL/Mzmz1LOgU2jLl0CxGMjNfHvKA
-         lNDc1XeXQRBIhGd16b9+GQJ57RqLgdw/cKhig9GxpCDLbMuF54qBIjK4J/ebJKsqzDHw
-         iFOA==
-X-Gm-Message-State: AAQBX9eP0QtT63VlgTUNz6UKrUlXnvjRdFOc03n2B2iTS6n4veQRO8LJ
-        lla582CkRi/qcXwG6CJHNkNWDbGECEc=
-X-Google-Smtp-Source: AKy350aBtK9Y6MHzwPrrSd5WOoRnbs0SG6DtbBTbG2Y/0LsmYQzfRF/mMmcatBRyBuBnzND3REPy7g==
-X-Received: by 2002:a25:485:0:b0:b27:4e8a:5cf4 with SMTP id 127-20020a250485000000b00b274e8a5cf4mr17677871ybe.22.1679950982893;
-        Mon, 27 Mar 2023 14:03:02 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679950984;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eco5b9MX5ijMYg1QKtG06cMKdPajE34qA3bf3aJ4dAA=;
+        b=ZJW+V2f61YD1Gk+ALXCoC3iLMu2ANzsINhaFjbcmL00W4roDvMCQzdhqA8Y+bZmf2w
+         ikPvSa45PerIMz/Po/90N+wBvw8Ns7biSOuNmddoUlVX/7Vfj/Q9YQHA+yBkDY8geQzl
+         Cm7APnsrxK21nlmPsYNIcJANocivpu+WIYBx0NVcYoxBEiFDTnzDL54DCio0iwzyLYda
+         yWb9Fcf52ASbd47x9ewwy7Il+gGzK+37IjIio1ZqtG9sJW6S95/BEF39+jBjvCv9Ry6I
+         dam9+KgzwaJctNaRVqzopm3SbLaLrQjiL4TKhJTQtllKMzaa4MGIW4JjqT1sh+n65L2X
+         k85g==
+X-Gm-Message-State: AAQBX9caR9mLJ0zSrfoZEhlmCHN7Amh5OoiGbPVmPICfszcX85WSBmdg
+        Iy9Pld1KPuY0BUqK4Vfk0XrUiOasNP0=
+X-Google-Smtp-Source: AKy350aNDjsGSL83wGRrChvZr/ieADtwRXeBM4lgWsian3xNGALsVEAKEy9xURewrQWRgPWF+XxE4w==
+X-Received: by 2002:a25:ada0:0:b0:af9:1ec5:4f10 with SMTP id z32-20020a25ada0000000b00af91ec54f10mr12668031ybi.59.1679950984547;
+        Mon, 27 Mar 2023 14:03:04 -0700 (PDT)
 Received: from localhost ([2607:fea8:529d:4d00::9f37])
-        by smtp.gmail.com with ESMTPSA id 64-20020a250643000000b00b7767ca749esm2484657ybg.59.2023.03.27.14.03.01
+        by smtp.gmail.com with ESMTPSA id b125-20020a256783000000b00b7767ca748dsm2525176ybc.42.2023.03.27.14.03.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 14:03:02 -0700 (PDT)
+        Mon, 27 Mar 2023 14:03:04 -0700 (PDT)
 From:   Richard Acayan <mailingradian@gmail.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Amol Maheshwari <amahesh@qti.qualcomm.com>,
@@ -56,45 +57,53 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Richard Acayan <mailingradian@gmail.com>
-Subject: [PATCH v2 0/2] misc: fastrpc: Fixes for issues in userspace
-Date:   Mon, 27 Mar 2023 17:02:16 -0400
-Message-Id: <20230327210217.60948-1-mailingradian@gmail.com>
+Subject: [PATCH v2 1/2] misc: fastrpc: return -EPIPE to invocations on device removal
+Date:   Mon, 27 Mar 2023 17:02:17 -0400
+Message-Id: <20230327210217.60948-2-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230327210217.60948-1-mailingradian@gmail.com>
+References: <20230327210217.60948-1-mailingradian@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes since v1 (20230130222716.7016-1-mailingradian@gmail.com):
- - use /* */ for comments (2/2)
- - exclude demonstration from final commit message (2/2)
- - accumulate review tags (1-2/2)
+The return value is initialized as -1, or -EPERM. The completion of an
+invocation implies that the return value is set appropriately, but
+"Permission denied" does not accurately describe the outcome of the
+invocation. Set the invocation's return value to a more appropriate
+"Broken pipe", as the cleanup breaks the driver's connection with rpmsg.
 
-Hi everyone,
+Fixes: c68cfb718c8f ("misc: fastrpc: Add support for context Invoke method")
+Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ drivers/misc/fastrpc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-I've been playing around a bit with the FastRPC ioctl interface on the
-Pixel 3a with some device tree patches. I was testing on a device tree
-that caused the ADSP to crash every 10 seconds, and the inconvenience
-caused by related bugs encouraged me to write a few fixes. A
-demonstration is provided in patch 2.
-
-Please enjoy and review these patches for better userspace while remote
-processors crash.
-
-Richard Acayan (2):
-  misc: fastrpc: return -EPIPE to invocations on device removal
-  misc: fastrpc: reject new invocations during device removal
-
- drivers/misc/fastrpc.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index f48466960f1b..20c035af373a 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -2337,8 +2337,10 @@ static void fastrpc_notify_users(struct fastrpc_user *user)
+ 	struct fastrpc_invoke_ctx *ctx;
+ 
+ 	spin_lock(&user->lock);
+-	list_for_each_entry(ctx, &user->pending, node)
++	list_for_each_entry(ctx, &user->pending, node) {
++		ctx->retval = -EPIPE;
+ 		complete(&ctx->work);
++	}
+ 	spin_unlock(&user->lock);
+ }
+ 
 -- 
 2.40.0
 
