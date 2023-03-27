@@ -2,117 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779586C9ED3
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9EA6C9EE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232810AbjC0JEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
+        id S232511AbjC0JFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232661AbjC0JDe (ORCPT
+        with ESMTP id S232660AbjC0JEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:03:34 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5AE423A
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:01:38 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id bi9so10345039lfb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:01:38 -0700 (PDT)
+        Mon, 27 Mar 2023 05:04:39 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FFD90;
+        Mon, 27 Mar 2023 02:04:05 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id v1so7894938wrv.1;
+        Mon, 27 Mar 2023 02:04:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679907697;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2ZF8lnTdgBo76J61R0eU74GHsCNaFYFA/VikNNvRUeY=;
-        b=kcheOvDYJ2HR8hXD96KUoD/iP+Qa6Fg8vuUImjl2l5D40VcSqI7YHjJ7CCKGk82PLX
-         kRpYtpzgpkPT2wOMj7pUT8SRG59I8bsU/zT5rhHlfI3fUNN9S//kPV6VjSM+DtPhEGB4
-         3BgxnvVO0+Pqdj3RyKeizj3VIQs74HDJRNN4qTiRQRv8dYYn4QYXNvEKe2qekRQ0DySE
-         H9fLFb2cL+ukXrl4LYM6Pou5EPYEdPkO3SKdQfFKeDMQpN/Sj5Pd3U7qbyW5hPCAWYWE
-         P/F/hhfD3Tz0T12SleC9CW6//ofl/HOsrWS2qfPZb+JTcX0I53cKhrz8UMtiOhxUq8LL
-         sKrQ==
+        d=gmail.com; s=20210112; t=1679907844;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PXHUgllCiE+YVplh4F0vC+TIMQgHYLAcdKhqqMncm+M=;
+        b=UjgOhIU/pavH2tlMiWKycQqAigQYIjgXPIu4oocRPGzCa6LiVMGOvqObrg/PRgkmVu
+         9Xnhg4WGVJjU3lOJoCVQ3UYykePZC+rJIGQhsMn5smPo/OHUQWgnk0LqVyle5s5lsPX9
+         ToiZQ+OZguuNokmfrIAl2lS9WK4Q4SvyYi+2GIqflDRN3t4HaR+m2AfzLnCmhcdjb9vl
+         p5o8JEG89pLh5h9zUx7yYvO8WMqBtMnjVx7B6Bhhv0/XcI8FcsMimYzxslgt9LrfgO6H
+         KJEquB69ob74KiHksS94yNZveY1kMYPS4TsXHra/0UD5uSQkXuOjOOe2Vh/wn+YamevJ
+         t5jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679907697;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ZF8lnTdgBo76J61R0eU74GHsCNaFYFA/VikNNvRUeY=;
-        b=jfYS40qSWxkNAhRnNzG23TJ/E6+uDK1dI35oxJV9aiEfUKm1TLfkcKuzR8UeM32qyg
-         JhIpQqb2jcRqQhwRQx8ZgLRpvqokF/p1UBJxgl4e3g+tn323+72bGlL6GHmAQWpOHpfQ
-         T5NiOMUpf+gEYCrG/Dx//cXTSEbATvLW7VTHk2+i1gqkYFiEkQA8hnu65xr6WsRl/r/Y
-         fV006oMEt5n8XIwIKslr3mSBQNIVLH2t774M44Lc+x5ZUUrUIkyc9m8A7dTwqIgakpxI
-         JPOoPrRQuLu3sw8B/3ar0vCuVnpL3RHJ9Mz/SLk4tEHk2/gnRrf6q0yvlMaRXtqSV/3L
-         z9Kg==
-X-Gm-Message-State: AAQBX9dN95F1DBGzuestOFwYZouZhkXQD/EpUkr3PLjAE7FhyEXDzlxT
-        F9ZsTUQ1l0UMZgsI91HATjmDVQ==
-X-Google-Smtp-Source: AKy350ZTclvQkj8ph6vELe+Md+QnJjIPl1t0NzSuNYltD7cNUWB4kNAbBhoPsYJsNDCYhZ1FEjA8YQ==
-X-Received: by 2002:ac2:5ec6:0:b0:4eb:20e:6aec with SMTP id d6-20020ac25ec6000000b004eb020e6aecmr3096588lfq.40.1679907696899;
-        Mon, 27 Mar 2023 02:01:36 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id j12-20020a19f50c000000b004b40c1f1c70sm4594985lfb.212.2023.03.27.02.01.35
+        d=1e100.net; s=20210112; t=1679907844;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PXHUgllCiE+YVplh4F0vC+TIMQgHYLAcdKhqqMncm+M=;
+        b=PsZq4NB9F1NcAtwodSoEAUIEO1XKL5Seg8oPIkCU3J6AYjyUz01lXHmOgUBXbtB99K
+         GHCcU2XxMxl8e28FYrIp/K1jxcw15hcVx+EjyupCDGgQfPcWDK5VW/XQZ/g4D2mi4mnr
+         fxnsK0CXE7MomOkLtGP6srbWFOFRxMBcpMKh1CRAluxQ1XPWCDF6MSENU+Uy0UlPODnc
+         vyCISz2Pi7eWAncdYmuj0JiqJDTMflLpTOEgawOZMJlcoYf6eLbL5cBMIFlJAQ+Pam9V
+         f5P1AnXTid1voqmhYPeT+GGeOhWfAPup70Bf2Nfs8Bcr0TtJZ9hB4Ddjfuy1DxdyPDvE
+         Ay+g==
+X-Gm-Message-State: AAQBX9da2c+j4h4NTyOK5jpZyWQ/fCDsR/7OJf3pgwkNPpGFIPTdMtse
+        hBMGtrBJmLX60ZA/MVIicDDNh8wmCo+otQ==
+X-Google-Smtp-Source: AKy350ZCDxEOhvB06k/8nFr/OHWO5YAaSfzuL2Y8qzIAkmCg7c3/PINVfRoQvVapYrT+OqZlGSCrbw==
+X-Received: by 2002:a5d:63cb:0:b0:2d5:2436:b584 with SMTP id c11-20020a5d63cb000000b002d52436b584mr8944362wrw.42.1679907844064;
+        Mon, 27 Mar 2023 02:04:04 -0700 (PDT)
+Received: from [192.168.26.216] (54-240-197-238.amazon.com. [54.240.197.238])
+        by smtp.gmail.com with ESMTPSA id u13-20020adfdb8d000000b002d2b117a6a6sm24567852wri.41.2023.03.27.02.04.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 02:01:36 -0700 (PDT)
-Message-ID: <cc7392c1-0ea1-29b3-fab6-19c843413724@linaro.org>
-Date:   Mon, 27 Mar 2023 11:01:35 +0200
+        Mon, 27 Mar 2023 02:04:03 -0700 (PDT)
+From:   Paul Durrant <xadimgnik@gmail.com>
+X-Google-Original-From: Paul Durrant <paul@xen.org>
+Message-ID: <04f7b88c-a7dd-6d63-4938-06e71a194aa3@xen.org>
+Date:   Mon, 27 Mar 2023 10:04:02 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 0/5] usb: dwc3: qcom: Allow runtime PM
+Reply-To: paul@xen.org
+Subject: Re: [PATCH 1/2] xen/netback: don't do grant copy across page boundary
 Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, Thinh.Nguyen@synopsys.com,
-        gregkh@linuxfoundation.org, mathias.nyman@intel.com
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        xen-devel@lists.xenproject.org, stable@vger.kernel.org
+References: <20230327083646.18690-1-jgross@suse.com>
+ <20230327083646.18690-2-jgross@suse.com>
+Organization: Xen Project
+In-Reply-To: <20230327083646.18690-2-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 27/03/2023 09:36, Juergen Gross wrote:
+> Fix xenvif_get_requests() not to do grant copy operations across local
+> page boundaries. This requires to double the maximum number of copy
+> operations per queue, as each copy could now be split into 2.
+> 
+> Make sure that struct xenvif_tx_cb doesn't grow too large.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: ad7f402ae4f4 ("xen/netback: Ensure protocol headers don't fall in the non-linear area")
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> ---
+>   drivers/net/xen-netback/common.h  |  2 +-
+>   drivers/net/xen-netback/netback.c | 25 +++++++++++++++++++++++--
+>   2 files changed, 24 insertions(+), 3 deletions(-)
+> 
 
+Reviewed-by: Paul Durrant <paul@xen.org>
 
-On 25.03.2023 17:52, Manivannan Sadhasivam wrote:
-> Hi,
-> 
-> This series allows the dwc3-qcom driver to do runtime PM itself without
-> userspace intervention. Still, userspace is required to enable runtime PM
-> for dwc3 glue and xhci drivers as we cannot enable runtime PM for them.
-> But this series avoids one more additional step.
-What sort of 'userspace intervention' are we talking about?
-echo mem > /sys/power/state?
-
-Konrad
-> 
-> While enabling runtime PM, I noticed that the xhci driver suspends before
-> catching the xhci interrupts during resume. This ended up deferring the
-> device enumeration for some time. So I included a patch adding autosuspend
-> delay of 200ms to the xhci driver. With this delay, usb enumeration happens
-> properly.
-> 
-> This series has been tested on SC8280XP-CRD and RB5 devices.
-> 
-> Thanks,
-> Mani
-> 
-> Manivannan Sadhasivam (5):
->   arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
->   xhci: host: Use 200ms autosuspend delay for runtime suspend
->   usb: dwc3: qcom: Fix null ptr access during runtime_suspend()
->   usb: dwc3: qcom: Clear pending interrupt before enabling wake
->     interrupt
->   usb: dwc3: qcom: Allow runtime PM
-> 
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
->  drivers/usb/dwc3/dwc3-qcom.c           | 13 +++++++++----
->  drivers/usb/host/xhci-plat.c           |  2 ++
->  3 files changed, 25 insertions(+), 4 deletions(-)
-> 
