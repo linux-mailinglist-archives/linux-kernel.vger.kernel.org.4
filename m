@@ -2,154 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66616CA85C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C36776CA85F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233121AbjC0O7G convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 10:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
+        id S233096AbjC0PBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 11:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233125AbjC0O7D (ORCPT
+        with ESMTP id S229887AbjC0PBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:59:03 -0400
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B877555BA;
-        Mon, 27 Mar 2023 07:58:56 -0700 (PDT)
-Received: by mail-wm1-f41.google.com with SMTP id n10-20020a05600c4f8a00b003ee93d2c914so7245868wmq.2;
-        Mon, 27 Mar 2023 07:58:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679929135; x=1682521135;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/w0DmVkKkN7hOPz99CWLwy97K2FhihScRkl+vR5X5lo=;
-        b=HDoxTVW39eaw+88ur6zRx51wHS7rb1/hwGtYAGzTQ84JWhTeLTng/pham0NoT9Txgm
-         qWaB887MGwnUG/Gs63769xfACghN9J+wknhvsF1fbQ843hb+IGAT7ovaa36zIbo4oOjl
-         xVPyprmB7Of8MCC04Pbx/Y7mGzY6qbxQZ6DrgWwiXWHLRdDujRQensYndfB9K9fsSw5l
-         D44l4TKs5pKMaRmpfS1wOo40DU9gQOsgsQNQDm7fvPtgJAMhG5vvjjOt5W2PEyunQFkd
-         MX695CCBTYHaqcTBphJaQF7/punUc1Gpr8e9s3Tg0VbBqzDx29W+9JWGG/3ql5lIxqdp
-         IZaA==
-X-Gm-Message-State: AO0yUKXjqaw9QHN7C0tOklGdR/rgOKUwkQ+7j1OGep9I8b6cj5/1o7yH
-        B9aZdT7SZz4t6F0FCbAEhAbzI+08jcv/R1a1bqM=
-X-Google-Smtp-Source: AK7set9kUIWF+oyAm9IvJDhDYyZYaMGIf8Xs+M0sh34kIaS6sHmLwXDUQfx4VVWUYtMfW1sRwDU1Dnd7rp/CNlc/SDg=
-X-Received: by 2002:a05:600c:241:b0:3ed:31cf:fe6e with SMTP id
- 1-20020a05600c024100b003ed31cffe6emr8790299wmj.41.1679929135009; Mon, 27 Mar
- 2023 07:58:55 -0700 (PDT)
+        Mon, 27 Mar 2023 11:01:10 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10D2359D;
+        Mon, 27 Mar 2023 08:01:07 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RE5RbN001033;
+        Mon, 27 Mar 2023 15:00:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=eDLb29xSf73bZBzipAr6An1DqcWspOCRIVa5y5+44Fk=;
+ b=RQJal0g/v8msy8uE0bDGf0ZM7Ly4kPeT4pQDMv5IRkMV+Z/nXQk9AKTPfDmGQ0pT/7+V
+ 1RN502PiQkQiwOZY3ZQLcxccMuZoBWi12Xu93KrKfcn0BKAB5hAfR578BXkZp/Dr7/gh
+ B/Weff4DaFd4DiI+5S0xiO6sS8lzwZ8u4vr08X0CeZ3KfKmI3OQWWFiN2v7FZP5ctIQ2
+ vFg4ecfQh2z3fZev4e9d/9xesUxsWWIysqSZQjykT2X2cmobSYSA8MQI5baPf+twLjvP
+ uSoeRM5pdSP+JHWnIbOg1cdAkaY/xg1k7/XKgiTT5zOeiuJ31BT1ZZn6CXJGbgWyD7+w VQ== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjaw33wpg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 15:00:32 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32RD4XN4019636;
+        Mon, 27 Mar 2023 15:00:31 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3phrk7en1m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 15:00:31 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32RF0UWT61735360
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Mar 2023 15:00:30 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E2D055805D;
+        Mon, 27 Mar 2023 15:00:29 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C502258061;
+        Mon, 27 Mar 2023 15:00:28 +0000 (GMT)
+Received: from [9.65.211.237] (unknown [9.65.211.237])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Mar 2023 15:00:28 +0000 (GMT)
+Message-ID: <ad59ac18-caf9-c62d-e905-f19b27f67956@linux.ibm.com>
+Date:   Mon, 27 Mar 2023 10:00:28 -0500
 MIME-Version: 1.0
-References: <20230324032702.109964-1-yangjihong1@huawei.com>
- <CAM9d7ciGy2Mycm6etHDrt6tu331i-7DphHgBzde0_1=w67mvHg@mail.gmail.com> <ZCF/Oa+dK4Wc/7r7@kernel.org>
-In-Reply-To: <ZCF/Oa+dK4Wc/7r7@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 27 Mar 2023 07:58:43 -0700
-Message-ID: <CAM9d7cgHAkWQ+5yo9WuociTM_p8vghPPDT+Gtm4HAt_LqrzzTQ@mail.gmail.com>
-Subject: Re: [PATCH] perf ftrace: Make system wide the default target for
- latency subcommand
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Yang Jihong <yangjihong1@huawei.com>, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 5/5] ARM: dts: aspeed: p10bmc: Change power supply info
+To:     Joel Stanley <joel@jms.id.au>,
+        Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+Cc:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
+        krzysztof.kozlowski+dt@linaro.org, andrew@aj.id.au,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230321190914.2266216-1-lakshmiy@us.ibm.com>
+ <20230321190914.2266216-6-lakshmiy@us.ibm.com>
+ <CACPK8Xd70HABKrSRXKM5vA57YUCckykKOZV1ECuJc1=g70k--Q@mail.gmail.com>
+Content-Language: en-US
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <CACPK8Xd70HABKrSRXKM5vA57YUCckykKOZV1ECuJc1=g70k--Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: h-dpPlb2BvOwZ741u871PVoFMVcNxWkt
+X-Proofpoint-ORIG-GUID: h-dpPlb2BvOwZ741u871PVoFMVcNxWkt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ impostorscore=0 priorityscore=1501 phishscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1011 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303270115
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 4:34 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
+
+On 3/26/23 19:47, Joel Stanley wrote:
+> On Tue, 21 Mar 2023 at 19:09, Lakshmi Yadlapati <lakshmiy@us.ibm.com> wrote:
+>> Bonnell system supports new ACBEL FSG032 power supply on
+>> I2C addresses 5A and 5B. Update the device tree with new
+>> power supply information and device addresses.
+>>
+>> Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+> Eddie, can I get you to review?
 >
-> Em Fri, Mar 24, 2023 at 06:39:25PM -0700, Namhyung Kim escreveu:
-> > Hello,
-> >
-> > On Thu, Mar 23, 2023 at 8:29 PM Yang Jihong <yangjihong1@huawei.com> wrote:
-> > >
-> > > If no target is specified for 'latency' subcommand, the execution fails
-> > > because - 1 (invalid value) is written to set_ftrace_pid tracefs file.
-> > > Make system wide the default target, which is the same as the default
-> > > behavior of 'trace' subcommand.
-> >
-> > I followed the convention to use -a for system-wide profiling.
-> > Not sure if it's ok to make it default, but I don't object. :)
+> I will take this through the aspeed tree.
+
+
+Reviewed-by: Eddie James <eajames@linux.ibm.com>
+
+
 >
-> I'll make that an Acked-by, ok?
-
-Sure.
-
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-
-Thanks,
-Namhyung
-
-
-> > >
-> > > Before the fix:
-> > >
-> > >   # perf ftrace latency -T schedule
-> > >   failed to set ftrace pid
-> > >
-> > > After the fix:
-> > >
-> > >   # perf ftrace latency -T schedule
-> > >   ^C#   DURATION     |      COUNT | GRAPH                                          |
-> > >        0 - 1    us |          0 |                                                |
-> > >        1 - 2    us |          0 |                                                |
-> > >        2 - 4    us |          0 |                                                |
-> > >        4 - 8    us |       2828 | ####                                           |
-> > >        8 - 16   us |      23953 | ########################################       |
-> > >       16 - 32   us |        408 |                                                |
-> > >       32 - 64   us |        318 |                                                |
-> > >       64 - 128  us |          4 |                                                |
-> > >      128 - 256  us |          3 |                                                |
-> > >      256 - 512  us |          0 |                                                |
-> > >      512 - 1024 us |          1 |                                                |
-> > >        1 - 2    ms |          4 |                                                |
-> > >        2 - 4    ms |          0 |                                                |
-> > >        4 - 8    ms |          0 |                                                |
-> > >        8 - 16   ms |          0 |                                                |
-> > >       16 - 32   ms |          0 |                                                |
-> > >       32 - 64   ms |          0 |                                                |
-> > >       64 - 128  ms |          0 |                                                |
-> > >      128 - 256  ms |          4 |                                                |
-> > >      256 - 512  ms |          2 |                                                |
-> > >      512 - 1024 ms |          0 |                                                |
-> > >        1 - ...   s |          0 |                                                |
-> > >
-> > > Fixes: 53be50282269 ("perf ftrace: Add 'latency' subcommand")
-> > > Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> > > ---
-> > >  tools/perf/builtin-ftrace.c | 6 ++++--
-> > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/tools/perf/builtin-ftrace.c b/tools/perf/builtin-ftrace.c
-> > > index d7fe00f66b83..fb1b66ef2e16 100644
-> > > --- a/tools/perf/builtin-ftrace.c
-> > > +++ b/tools/perf/builtin-ftrace.c
-> > > @@ -1228,10 +1228,12 @@ int cmd_ftrace(int argc, const char **argv)
-> > >                 goto out_delete_filters;
-> > >         }
-> > >
-> > > +       /* Make system wide (-a) the default target. */
-> > > +       if (!argc && target__none(&ftrace.target))
-> > > +               ftrace.target.system_wide = true;
-> > > +
-> > >         switch (subcmd) {
-> > >         case PERF_FTRACE_TRACE:
-> > > -               if (!argc && target__none(&ftrace.target))
-> > > -                       ftrace.target.system_wide = true;
-> > >                 cmd_func = __cmd_ftrace;
-> > >                 break;
-> > >         case PERF_FTRACE_LATENCY:
-> > > --
-> > > 2.30.GIT
-> > >
->
-> --
->
-> - Arnaldo
+>> ---
+>>   arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts | 12 ++++++------
+>>   1 file changed, 6 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
+>> index a5be0ee048ec..4f959a4f8b58 100644
+>> --- a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
+>> +++ b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
+>> @@ -552,14 +552,14 @@ ucd90160@64 {
+>>   &i2c3 {
+>>          status = "okay";
+>>
+>> -       power-supply@58 {
+>> -               compatible = "ibm,cffps";
+>> -               reg = <0x58>;
+>> +       power-supply@5a {
+>> +               compatible = "acbel,fsg032";
+>> +               reg = <0x5a>;
+>>          };
+>>
+>> -       power-supply@59 {
+>> -               compatible = "ibm,cffps";
+>> -               reg = <0x59>;
+>> +       power-supply@5b {
+>> +               compatible = "acbel,fsg032";
+>> +               reg = <0x5b>;
+>>          };
+>>   };
+>>
+>> --
+>> 2.37.2
+>>
