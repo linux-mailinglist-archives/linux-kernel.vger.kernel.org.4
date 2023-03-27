@@ -2,83 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897CA6CB245
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA6B6CB24D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjC0XYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 19:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
+        id S229912AbjC0X1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 19:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjC0XXx (ORCPT
+        with ESMTP id S229822AbjC0X1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 19:23:53 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228BF92
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:23:52 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id eg48so42556368edb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:23:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679959430;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2sthNEXRrhXPflNLlQaZ/R6XYUJ5sFT3zFaO3Oj8iQU=;
-        b=W+Tv96+pFUlhT5JOOrNtcy47rsqxINYX5Iydl2ZhOjD2ZICVF/srMD4pjGFArnDzTC
-         kPELiLr2qm8nbVs2H3GBDurYFGHHHR4YppJMTiQgYYWDafqzi7oz9Du7VQA6lba1jKXq
-         dwn2vZhC36MqALm/QJpx59PUuvFUdHNBjYQvAl4nTFdcu6Cb2GfBntbxfBbl6jFLwYkS
-         xFSElExlWZVdm5acLMkTXu9+vioAED99Ij0oJd6h+lwLDOoAZY3FueFbhm3i8L+Th0Ha
-         nQFF7w8Ehg6MPHtETaxtVvSE4I3f3hAepMquA1Zlg0t/TDXtMd7OTTczELyQE4Wsmo2Y
-         0q3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679959430;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2sthNEXRrhXPflNLlQaZ/R6XYUJ5sFT3zFaO3Oj8iQU=;
-        b=FIFoS01z5T8YcYyTPUDM7GqoILunk7PFdRQ1kjEuyvTmWc8FVU2QAUC6q/btIEJBeW
-         gH5LXvCM17tGct1y5FlgJrrATE7kMu8JagmtujYUcgdrNr2tHK9URjj5vPTQAyQ4PmK1
-         CT6sMAkiBsRuOE7FFhEJPlooJbo5FrlTQnfdNTCdhvaWnGzDRNnaUjln5DFrPr9lB2HB
-         DoQik2zW0OVdU5oBM6H9lS4MwtnulmmRXlXpxndjL0SDJfpveyYiw0AL0Odp5yZGyzkN
-         KjOmueMO51FkzqcBFkwOjZoKRZ28vyu31+v0fgDz547CxVNB04hHnTrP1wAlbtKreMLq
-         CU+A==
-X-Gm-Message-State: AAQBX9fJoQOJbzKUSzUyXgTakEXsbt1YEsLyYocrE+WBxUxY/RoX2bJd
-        JSeNC88ngx/8V+Z4VEyL1ltegjW1xivhBICU9lI/7A==
-X-Google-Smtp-Source: AKy350axSMcFglrC9LKGtyy/jSyGyc9yKavwwCk6Ag/35Vw5JpZJlLk5zGZNXtD+EFFmpK2mYo3yPnkogMK64CtmxC8=
-X-Received: by 2002:a50:8e0d:0:b0:4fc:473d:3308 with SMTP id
- 13-20020a508e0d000000b004fc473d3308mr6749360edw.8.1679959430371; Mon, 27 Mar
- 2023 16:23:50 -0700 (PDT)
+        Mon, 27 Mar 2023 19:27:16 -0400
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4BC1982
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1679959636; x=1711495636;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8v/j5oydGaOLEzE1iZOLYHGbB0l++zz9C6Rd3Ol5Oqs=;
+  b=V2hv7miNAMe+NhtDtWlfdav6dvJA71Aid0s2kIb2mJufbIXuILd51t+3
+   DBZ9vsgiKFyMNOO+MBG/yOc/NOPlHOwArzgWCNzbLOSq0eeoiADvPRQZJ
+   dTRpXPkYtsuLvQjmiW3tfG1WFtrouteSXEpPJJGwrAqX6S8ktqDJQel5D
+   ay/fFVz8vBBWhcHEQ88UbHJRTh5hJ8aFpBSRv8PvfxbNC9wJ2ChPi4KTx
+   PQAT1e5/MRIfOHAo6HQGpTzYXgeMr6Rq9q8VjgiTgmq2RwXghW7Ja4pz2
+   CiBgp/bJDxgTxzcRQ+jYxmtHspCg4ZykwmUTOqiMg2rjrkwUEMUFIT7AO
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,295,1673884800"; 
+   d="scan'208";a="338704327"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Mar 2023 07:27:15 +0800
+IronPort-SDR: 9peBoMhDboCfmy5txnvxs/tCeowMzk66+j+D2A9j+0yKofOVutezw2gdbsb8XoTkK6AcwfEaN+
+ NqXFoOIXTtl+0NGS8eRLAmOGqDVUtVasgoOyVxD50oPZicWXSXgOoDUOV2DRuzbcmQ0hojCp/8
+ 1EoBMNxYpPTzF7zNAw/g68c3oX+m6PG/XTSvfgt1Nja5RcX8CsoywOi9VVWX7cfBPzjsXkArGB
+ mrwmaQSDSk1HzOPs3hQPBwAHUpgYQFX0EcMIMSnDjhdkS0YZPRywFJdK6krxACejJpYAt9+anY
+ aG8=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Mar 2023 15:43:26 -0700
+IronPort-SDR: 7aXt9Hrb7w+AN+YelXfSCNXWO5ZvqnpSPVuid5YR+uTXc9zzs0kkdm1EIQB356i3TcOWnCr5hu
+ JCTR/QA/Nn54cOBt0q3hz51mOnk0uX8tGY8LY8IyVI4DPsoKVPPquz39SOUZlnsSePOt+x1Q8D
+ 15swUN9EL6hDmgkysdzZibEQoK2LVQmTOotIL2HuDKXKhMkOFZn0mMtAGZI0Ygwl6Pp+OInaMo
+ Xw5Z2c8EnLVArdYihbPSV+z5EtizpewDCjJAQQitGIOGGRTzJbB1BXcPf71mVAGoe5rKYyFJMS
+ +SY=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Mar 2023 16:27:15 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Plpr26m34z1RtVp
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:27:14 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:content-language:references:to
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1679959634; x=1682551635; bh=8v/j5oydGaOLEzE1iZOLYHGbB0l++zz9C6R
+        d3Ol5Oqs=; b=QX3rP6A9ZXTSfRgk0Wh/idvyK1hRW541DFFqqptpOyYAPq51B61
+        PFRgVGVY5U9XvMLY0bpMcY+ctYCG8aR6E+YCJa70Nky49Rupw92CEDNFglF8NBhh
+        YxpvhkXzaxvGjph83LPYDRDiuyxxZAK/XVhvgVKspCAoKEllgfVYW6rHQBdECely
+        FW7PTCxHp2nGgM/sbtNTH3UpxRMPfigypCUJv8jnUnBsXX9bWf9iDxKLiRTlblOh
+        yLBZ2eqoVI4S2mZQbTv1fOsjtkUi9C1Ge0ujbFEjITO8YfpI94p3JhQMDzqTjCFM
+        LQ5rdX/x9B8LyxYbG231DYioHRurn6RUKmA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id t5FYC-kfAEhA for <linux-kernel@vger.kernel.org>;
+        Mon, 27 Mar 2023 16:27:14 -0700 (PDT)
+Received: from [10.225.163.111] (unknown [10.225.163.111])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Plpr05zyRz1RtVm;
+        Mon, 27 Mar 2023 16:27:12 -0700 (PDT)
+Message-ID: <30066318-e9ca-0796-f671-23f4a85bb138@opensource.wdc.com>
+Date:   Tue, 28 Mar 2023 08:27:11 +0900
 MIME-Version: 1.0
-References: <20230323040037.2389095-1-yosryahmed@google.com>
- <20230323040037.2389095-2-yosryahmed@google.com> <ZBz/V5a7/6PZeM7S@slm.duckdns.org>
- <CAJD7tkYNZeEytm_Px9_73Y-AYJfHAxaoTmmnO71HW5hd1B5tPg@mail.gmail.com>
- <ZB5UalkjGngcBDEJ@slm.duckdns.org> <CAJD7tkYhyMkD8SFf8b8L1W9QUrLOdw-HJ2NUbENjw5dgFnH3Aw@mail.gmail.com>
- <CALvZod6rF0D21hcV7xnqD+oRkn=x5NLi5GOkPpyaPa859uDH+Q@mail.gmail.com>
- <CAJD7tkY_ESpMYMw72bsATpp6tPphv8qS6VbfEUjpKZW6vUqQSQ@mail.gmail.com> <CALvZod41ecuCKmuFBNtAjoKJjQgWYzoe4_B8zRK37HYk-rYDkA@mail.gmail.com>
-In-Reply-To: <CALvZod41ecuCKmuFBNtAjoKJjQgWYzoe4_B8zRK37HYk-rYDkA@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 27 Mar 2023 16:23:13 -0700
-Message-ID: <CAJD7tkZrp=4zWvjE9_010TAG1T_crCbf9P64UzJABspgcrGPKg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
- percpu lock
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] dt-bindings: ata: Drop unneeded quotes
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     linux-ide@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+References: <20230327170053.4100949-1-robh@kernel.org>
+Content-Language: en-US
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230327170053.4100949-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,81 +100,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 9:46=E2=80=AFPM Shakeel Butt <shakeelb@google.com> =
-wrote:
->
-> On Fri, Mar 24, 2023 at 9:37=E2=80=AFPM Yosry Ahmed <yosryahmed@google.co=
-m> wrote:
-> >
-> > On Fri, Mar 24, 2023 at 9:31=E2=80=AFPM Shakeel Butt <shakeelb@google.c=
-om> wrote:
-> > >
-> > > On Fri, Mar 24, 2023 at 7:18=E2=80=AFPM Yosry Ahmed <yosryahmed@googl=
-e.com> wrote:
-> > > >
-> > > [...]
-> > > > Any ideas here are welcome!
-> > > >
-> > >
-> > > Let's move forward. It seems like we are not going to reach an
-> > > agreement on making cgroup_rstat_lock a non-irq lock. However there i=
-s
-> > > agreement on the memcg code of not flushing in irq context and the
-> > > cleanup Johannes has requested. Let's proceed with those for now. We
-> > > can come back to cgroup_rstat_lock later if we still see issues in
-> > > production.
-> >
-> > Even if we do not flush from irq context, we still flush from atomic
-> > contexts that will currently hold the lock with irqs disabled
-> > throughout the entire flush sequence. A primary purpose of this reason
-> > is to avoid that.
-> >
-> > We can either:
-> > (a) Proceed with the following approach of making cgroup_rstat_lock a
-> > non-irq lock.
-> > (b) Proceed with Tejun's suggestion of always releasing and
-> > reacquiring the lock at CPU boundaries, even for atomic flushes (if
-> > the spinlock needs a break ofc).
-> > (c) Something else.
->
-> (d) keep the status quo regarding cgroup_rstat_lock
-> (e) decouple the discussion of cgroup_rstat_lock from the agreed
-> improvements. Send the patches for the agreed ones and continue
-> discussing cgroup_rstat_lock.
+On 3/28/23 02:00, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
 
-Ah, I lost sight of the fact that the rest of the patch series does
-not strictly depend on this patch. I will respin the rest of the patch
-series separately. Thanks, Shakeel.
+-- 
+Damien Le Moal
+Western Digital Research
 
-Meanwhile, it would be useful to reach an agreement here to stop
-acquiring the cgroup_rstat_lock for a long time with irq disabled in
-atomic contexts.
-
-Tejun, if having the lock be non-irq is a non-starter for you, I can
-send a patch that instead gives up the lock and reacquires it at every
-CPU boundary unconditionally -- or perhaps every N CPU boundaries to
-avoid excessively releasing and reacquiring the lock.
-
-Something like:
-
-static void cgroup_rstat_flush_locked(struct cgroup *cgrp, bool may_sleep)
-{
-    ...
-    for_each_possible_cpu(cpu) {
-        ...
-        /* Always yield the at CPU boundaries to enable irqs */
-        spin_unlock_irq(&cgroup_rstat_lock);
-
-        /* if @may_sleep, play nice and yield if necessary */
-        if (may_sleep)
-            cond_resched();
-
-        spin_lock_irq(&cgroup_rstat_lock);
-    }
-}
-
-If you have other ideas to avoid disabling irq's for the entire flush
-sequence I am also open to that.
-
-Thanks!
