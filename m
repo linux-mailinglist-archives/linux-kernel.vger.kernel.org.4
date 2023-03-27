@@ -2,383 +2,565 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBD46CAF6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAB06CAF76
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjC0UJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 16:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        id S232698AbjC0UKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 16:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjC0UJh (ORCPT
+        with ESMTP id S231960AbjC0UJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 16:09:37 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DADD98
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:09:35 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id m6-20020a05600c3b0600b003ee6e324b19so6097891wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:09:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679947774;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N+W7Q61KsfgnFflEnBoo+2raGOcEjId3AEXS7f0aNgQ=;
-        b=oqtX8DR4kwIf/Je6gNpmMdiRjoyKawZSJtRjagX/rqAmZNgWR6NA4W7tK2VYdKPJip
-         tPYTI5sYPj+LLfVqHZv40gNHhkWaLnuS7rIErgYrYJDxP5pfmNQfI/b7ce3TO84y+NRf
-         s+YVtBWFkwfmmzcWeGFcjiz8NkZYGWVg8SUj/f7KShtA7LnoEOZ1D9XPcyMur01HbIpq
-         HcoYzZQyHgJ1lUayTUeTkVAzrr2e0UMX0jqXHB8eP2V5O6u2Ldu+RPvKHmG4/NnIvTKA
-         WAd/6kDg19KiEMKJ0Qo6uxZ47yk4B5HTfxdNFrEvqQbLFwjWr9dTQnwWWqFOSrQ7zJ7U
-         MhZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679947774;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N+W7Q61KsfgnFflEnBoo+2raGOcEjId3AEXS7f0aNgQ=;
-        b=KgSQUeFvhtFuyDq0IeeAOvNV2U08bHa7hw3zrOMkBSUGqvoZU+hJYUCUFfjQkKRCYO
-         W7dUpF3+ibOPjS3xSkkFyspcWizOJen6pUp1QZ67atRSP5vCC0tNvFb68p41LxoVPSad
-         +3DgMux/1LHe/FPHovKUuzNRSwvDo/3RkqLn1yLz2C5bgbel9z8eFWynOQ6MAE0MCncq
-         C6eGEntjm1/c4fsdleOIwwNq44pkK3i0tkOzpps0OsKCJyeo5C8kxpIWNP0b1nF64Bi0
-         mwcSZai1A8wU8XO9ANWnU5HfnaAdXcUAHrWBG16jj2uQHL8nSgCKaLkGkNNNux/XKNQW
-         yRrA==
-X-Gm-Message-State: AO0yUKXd8US22p3dSo4i5X7MMSO5V2AzOftwJ0vGwBK9zdiNPmCmC2C2
-        NCWtnAKZDa4YV/DHawllpuw=
-X-Google-Smtp-Source: AK7set9x5larFjS0z5vvCmaXs5GZ0wtZtLrO1OwphzS2NGqkp9IUrFOFf/MAjrLloNJyY6YWLTq+sg==
-X-Received: by 2002:a05:600c:cb:b0:3ed:66e0:b6de with SMTP id u11-20020a05600c00cb00b003ed66e0b6demr10843806wmm.22.1679947773690;
-        Mon, 27 Mar 2023 13:09:33 -0700 (PDT)
-Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.gmail.com with ESMTPSA id q10-20020adff94a000000b002ca864b807csm25975862wrr.0.2023.03.27.13.09.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 13:09:32 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 21:09:32 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH v3 1/2] mm: vmalloc: Remove a global vmap_blocks xarray
-Message-ID: <132e2d5c-0c1f-4fff-850c-b3fb084455bb@lucifer.local>
-References: <20230327170126.406044-1-urezki@gmail.com>
+        Mon, 27 Mar 2023 16:09:59 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF29198C;
+        Mon, 27 Mar 2023 13:09:55 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 20:09:52 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679947793;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=taKDGhCu2UaG74xgu7nJs4Qb2WguRmRjPzmmokYkMPg=;
+        b=q6sItxJP0QHx/7UlvcwP0utQjdyZZW95iKAX0CSXaa3c6a0LKYHN6t66yzdGLYCX1IRw89
+        niLPYoAmFUCp5GSw2dc43KSDMXNf3RgnxJ/XYyyDH6v6mc6kPmjumyUb0MDKRfziqwDZ0l
+        VfOvFDzhrlDUtxG1q13CDNHdlsxlrtNT9hPDayvdZZ2NFGcPwyfgBOLjBQRDNVNRiiQ/oE
+        JJUqic7rzjQ5bymmrajOdwh4L17DVnxjFvDsMR89YZ8LOjaeo1/hWC7vPkQYWIfIiAbzms
+        Od2Ba0a/KqXEpYegxuxk9k1J+IyNRHX++CFTBjkkFA8uoHxVQ54qCpuVoDezMg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679947793;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=taKDGhCu2UaG74xgu7nJs4Qb2WguRmRjPzmmokYkMPg=;
+        b=NvroImoxTqgcy5if7ffCDSGTbi1ai4yqoQZMtdlxZ68WR81+6tqc2nve2a3V5ZW6VIoHT0
+        bYExH2SAg2Vr85Cw==
+From:   "tip-bot2 for Michael Kelley" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/sev] x86/hyperv: Change vTOM handling to use standard coco
+ mechanisms
+Cc:     Michael Kelley <mikelley@microsoft.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <1679838727-87310-7-git-send-email-mikelley@microsoft.com>
+References: <1679838727-87310-7-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327170126.406044-1-urezki@gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <167994779216.5837.15623526697891596227.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 07:01:25PM +0200, Uladzislau Rezki (Sony) wrote:
-> A global vmap_blocks-xarray array can be contented under
-> heavy usage of the vm_map_ram()/vm_unmap_ram() APIs. The
-> lock_stat shows that a "vmap_blocks.xa_lock" lock is a
-> second in a top-list when it comes to contentions:
->
-> <snip>
-> ----------------------------------------
-> class name con-bounces contentions ...
-> ----------------------------------------
-> vmap_area_lock:         2554079 2554276 ...
->   --------------
->   vmap_area_lock        1297948  [<00000000dd41cbaa>] alloc_vmap_area+0x1c7/0x910
->   vmap_area_lock        1256330  [<000000009d927bf3>] free_vmap_block+0x4a/0xe0
->   vmap_area_lock              1  [<00000000c95c05a7>] find_vm_area+0x16/0x70
->   --------------
->   vmap_area_lock        1738590  [<00000000dd41cbaa>] alloc_vmap_area+0x1c7/0x910
->   vmap_area_lock         815688  [<000000009d927bf3>] free_vmap_block+0x4a/0xe0
->   vmap_area_lock              1  [<00000000c1d619d7>] __get_vm_area_node+0xd2/0x170
->
-> vmap_blocks.xa_lock:    862689  862698 ...
->   -------------------
->   vmap_blocks.xa_lock   378418    [<00000000625a5626>] vm_map_ram+0x359/0x4a0
->   vmap_blocks.xa_lock   484280    [<00000000caa2ef03>] xa_erase+0xe/0x30
->   -------------------
->   vmap_blocks.xa_lock   576226    [<00000000caa2ef03>] xa_erase+0xe/0x30
->   vmap_blocks.xa_lock   286472    [<00000000625a5626>] vm_map_ram+0x359/0x4a0
-> ...
-> <snip>
->
-> that is a result of running vm_map_ram()/vm_unmap_ram() in
-> a loop. The test creates 64(on 64 CPUs system) threads and
-> each one maps/unmaps 1 page.
->
-> After this change the "xa_lock" can be considered as a noise
-> in the same test condition:
->
-> <snip>
-> ...
-> &xa->xa_lock#1:         10333 10394 ...
->   --------------
->   &xa->xa_lock#1        5349      [<00000000bbbc9751>] xa_erase+0xe/0x30
->   &xa->xa_lock#1        5045      [<0000000018def45d>] vm_map_ram+0x3a4/0x4f0
->   --------------
->   &xa->xa_lock#1        7326      [<0000000018def45d>] vm_map_ram+0x3a4/0x4f0
->   &xa->xa_lock#1        3068      [<00000000bbbc9751>] xa_erase+0xe/0x30
-> ...
-> <snip>
->
-> This patch does not fix vmap_area_lock/free_vmap_area_lock and
-> purge_vmap_area_lock bottle-necks, it is rather a separate rework.
->
-> v1 - v2:
->    - Add more comments(Andrew Morton req.)
->    - Switch to WARN_ON_ONCE(Lorenzo Stoakes req.)
->
-> v2 -> v3:
->    - Fix a kernel-doc complain(Matthew Wilcox)
->
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> ---
->  mm/vmalloc.c | 85 +++++++++++++++++++++++++++++++++++++++-------------
->  1 file changed, 64 insertions(+), 21 deletions(-)
->
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 978194dc2bb8..821256ecf81c 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -1908,9 +1908,22 @@ static struct vmap_area *find_unlink_vmap_area(unsigned long addr)
->  #define VMAP_BLOCK		0x2 /* mark out the vmap_block sub-type*/
->  #define VMAP_FLAGS_MASK		0x3
->
-> +/*
-> + * We should probably have a fallback mechanism to allocate virtual memory
-> + * out of partially filled vmap blocks. However vmap block sizing should be
-> + * fairly reasonable according to the vmalloc size, so it shouldn't be a
-> + * big problem.
-> + */
->  struct vmap_block_queue {
->  	spinlock_t lock;
->  	struct list_head free;
-> +
-> +	/*
-> +	 * An xarray requires an extra memory dynamically to
-> +	 * be allocated. If it is an issue, we can use rb-tree
-> +	 * instead.
-> +	 */
-> +	struct xarray vmap_blocks;
->  };
->
->  struct vmap_block {
-> @@ -1928,24 +1941,46 @@ struct vmap_block {
->  static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
->
->  /*
-> - * XArray of vmap blocks, indexed by address, to quickly find a vmap block
-> - * in the free path. Could get rid of this if we change the API to return a
-> - * "cookie" from alloc, to be passed to free. But no big deal yet.
-> + * In order to fast access to any "vmap_block" associated with a
-> + * specific address, we store them into a per-cpu xarray. A hash
-> + * function is addr_to_vbq() whereas a key is a vb->va->va_start
-> + * value.
-> + *
-> + * Please note, a vmap_block_queue, which is a per-cpu, is not
-> + * serialized by a raw_smp_processor_id() current CPU, instead
-> + * it is chosen based on a CPU-index it belongs to, i.e. it is
-> + * a hash-table.
-> + *
-> + * An example:
-> + *
-> + *  CPU_1  CPU_2  CPU_0
-> + *    |      |      |
-> + *    V      V      V
-> + * 0     10     20     30     40     50     60
-> + * |------|------|------|------|------|------|...<vmap address space>
-> + *   CPU0   CPU1   CPU2   CPU0   CPU1   CPU2
-> + *
-> + * - CPU_1 invokes vm_unmap_ram(6), 6 belongs to CPU0 zone, thus
-> + *   it access: CPU0/INDEX0 -> vmap_blocks -> xa_lock;
-> + *
-> + * - CPU_2 invokes vm_unmap_ram(11), 11 belongs to CPU1 zone, thus
-> + *   it access: CPU1/INDEX1 -> vmap_blocks -> xa_lock;
-> + *
-> + * - CPU_0 invokes vm_unmap_ram(20), 20 belongs to CPU2 zone, thus
-> + *   it access: CPU2/INDEX2 -> vmap_blocks -> xa_lock.
->   */
+The following commit has been merged into the x86/sev branch of tip:
 
-OK so if I understand this correctly, you're overloading the per-CPU
-vmap_block_queue array to use as a simple hash based on the address and
-relying on the xa_lock() in xa_insert() to serialise in case of contention?
+Commit-ID:     812b0597fb4043240724e4c7bed7ba1fe15c0e3f
+Gitweb:        https://git.kernel.org/tip/812b0597fb4043240724e4c7bed7ba1fe15c0e3f
+Author:        Michael Kelley <mikelley@microsoft.com>
+AuthorDate:    Sun, 26 Mar 2023 06:52:01 -07:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Mon, 27 Mar 2023 09:31:43 +02:00
 
-I like the general heft of your comment but I feel this could be spelled
-out a little more clearly, something like:-
+x86/hyperv: Change vTOM handling to use standard coco mechanisms
 
-  In order to have fast access to any vmap_block object associated with a
-  specific address, we use a hash.
+Hyper-V guests on AMD SEV-SNP hardware have the option of using the
+"virtual Top Of Memory" (vTOM) feature specified by the SEV-SNP
+architecture. With vTOM, shared vs. private memory accesses are
+controlled by splitting the guest physical address space into two
+halves.
 
-  Rather than waste space on defining a new hash table  we take advantage
-  of the fact we already have a static per-cpu array vmap_block_queue.
+vTOM is the dividing line where the uppermost bit of the physical
+address space is set; e.g., with 47 bits of guest physical address
+space, vTOM is 0x400000000000 (bit 46 is set).  Guest physical memory is
+accessible at two parallel physical addresses -- one below vTOM and one
+above vTOM.  Accesses below vTOM are private (encrypted) while accesses
+above vTOM are shared (decrypted). In this sense, vTOM is like the
+GPA.SHARED bit in Intel TDX.
 
-  This is already used for per-CPU access to the block queue, however we
-  overload this to _also_ act as a vmap_block hash. The hash function is
-  addr_to_vbq() which hashes on vb->va->va_start.
+Support for Hyper-V guests using vTOM was added to the Linux kernel in
+two patch sets[1][2]. This support treats the vTOM bit as part of
+the physical address. For accessing shared (decrypted) memory, these
+patch sets create a second kernel virtual mapping that maps to physical
+addresses above vTOM.
 
-  This then uses per_cpu() to lookup the _index_ rather than the
-  _cpu_. Each vmap_block_queue contains an xarray of vmap blocks which are
-  indexed on the same key as the hash (vb->va->va_start).
+A better approach is to treat the vTOM bit as a protection flag, not
+as part of the physical address. This new approach is like the approach
+for the GPA.SHARED bit in Intel TDX. Rather than creating a second kernel
+virtual mapping, the existing mapping is updated using recently added
+coco mechanisms.
 
-  xarray read acceses are protected by RCU lock and inserts are protected
-  by a spin lock so there is no risk of a race here.
+When memory is changed between private and shared using
+set_memory_decrypted() and set_memory_encrypted(), the PTEs for the
+existing kernel mapping are changed to add or remove the vTOM bit in the
+guest physical address, just as with TDX. The hypercalls to change the
+memory status on the host side are made using the existing callback
+mechanism. Everything just works, with a minor tweak to map the IO-APIC
+to use private accesses.
 
-  An example:
+To accomplish the switch in approach, the following must be done:
 
-  ...
+* Update Hyper-V initialization to set the cc_mask based on vTOM
+  and do other coco initialization.
 
-Feel free to cut this down as needed :) but I do feel it's important to
-_explicitly_ point out that we're overloading this as it's quite confusing
-at face value.
+* Update physical_mask so the vTOM bit is no longer treated as part
+  of the physical address
 
-> -static DEFINE_XARRAY(vmap_blocks);
-> +static struct vmap_block_queue *
-> +addr_to_vbq(unsigned long addr)
-> +{
-> +	int index = (addr / VMAP_BLOCK_SIZE) % num_possible_cpus();
->
-> -/*
-> - * We should probably have a fallback mechanism to allocate virtual memory
-> - * out of partially filled vmap blocks. However vmap block sizing should be
-> - * fairly reasonable according to the vmalloc size, so it shouldn't be a
-> - * big problem.
-> - */
-> +	return &per_cpu(vmap_block_queue, index);
-> +}
->
-> -static unsigned long addr_to_vb_idx(unsigned long addr)
-> +static unsigned long
-> +addr_to_vb_va_start(unsigned long addr)
->  {
-> -	addr -= VMALLOC_START & ~(VMAP_BLOCK_SIZE-1);
-> -	addr /= VMAP_BLOCK_SIZE;
-> -	return addr;
-> +	return rounddown(addr, VMAP_BLOCK_SIZE);
->  }
->
->  static void *vmap_block_vaddr(unsigned long va_start, unsigned long pages_off)
-> @@ -1953,7 +1988,7 @@ static void *vmap_block_vaddr(unsigned long va_start, unsigned long pages_off)
->  	unsigned long addr;
->
->  	addr = va_start + (pages_off << PAGE_SHIFT);
-> -	BUG_ON(addr_to_vb_idx(addr) != addr_to_vb_idx(va_start));
-> +	WARN_ON_ONCE(addr_to_vb_va_start(addr) != va_start);
->  	return (void *)addr;
->  }
->
-> @@ -1970,7 +2005,6 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
->  	struct vmap_block_queue *vbq;
->  	struct vmap_block *vb;
->  	struct vmap_area *va;
-> -	unsigned long vb_idx;
->  	int node, err;
->  	void *vaddr;
->
-> @@ -2003,8 +2037,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
->  	bitmap_set(vb->used_map, 0, (1UL << order));
->  	INIT_LIST_HEAD(&vb->free_list);
->
-> -	vb_idx = addr_to_vb_idx(va->va_start);
-> -	err = xa_insert(&vmap_blocks, vb_idx, vb, gfp_mask);
-> +	vbq = addr_to_vbq(va->va_start);
-> +	err = xa_insert(&vbq->vmap_blocks, va->va_start, vb, gfp_mask);
+* Remove CC_VENDOR_HYPERV and merge the associated vTOM functionality
+  under CC_VENDOR_AMD. Update cc_mkenc() and cc_mkdec() to set/clear
+  the vTOM bit as a protection flag.
 
-I might be being pedantic here, but shortly after this code you reassign vbq:-
+* Code already exists to make hypercalls to inform Hyper-V about pages
+  changing between shared and private.  Update this code to run as a
+  callback from __set_memory_enc_pgtable().
 
-	vbq = addr_to_vbq(va->va_start);
-	err = xa_insert(&vbq->vmap_blocks, va->va_start, vb, gfp_mask);
-	if (err) {
-		kfree(vb);
-		free_vmap_area(va);
-		return ERR_PTR(err);
-	}
+* Remove the Hyper-V special case from __set_memory_enc_dec()
 
-	vbq = raw_cpu_ptr(&vmap_block_queue);
+* Remove the Hyper-V specific call to swiotlb_update_mem_attributes()
+  since mem_encrypt_init() will now do it.
 
-Which is confusing at a glance, as you're using it once as a hash lookup
-and again for its 'true purpose'.
+* Add a Hyper-V specific implementation of the is_private_mmio()
+  callback that returns true for the IO-APIC and vTPM MMIO addresses
 
-I wonder whether it would be better overall, since you always follow a vbq
-lookup explicitly with an operation on vmap_blocks, to just add a helper
-that returned a pointer to the xarray? e.g. (untested code here :):-
+  [1] https://lore.kernel.org/all/20211025122116.264793-1-ltykernel@gmail.com/
+  [2] https://lore.kernel.org/all/20211213071407.314309-1-ltykernel@gmail.com/
 
-static struct xarray *get_vblock_array(unsigned long addr)
-{
-	struct vmap_block_queue *vbq;
-	int index = (addr / VMAP_BLOCK_SIZE) % num_possible_cpus();
+  [ bp: Touchups. ]
 
-	vbq = &per_cpu(vmap_block_queue, index);
-	return &vbq->vblocks;
-}
+Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/1679838727-87310-7-git-send-email-mikelley@microsoft.com
+---
+ arch/x86/coco/core.c               | 40 ++++++++++++----
+ arch/x86/hyperv/hv_init.c          | 11 +----
+ arch/x86/hyperv/ivm.c              | 72 ++++++++++++++++++++++++-----
+ arch/x86/include/asm/coco.h        |  1 +-
+ arch/x86/include/asm/mem_encrypt.h |  1 +-
+ arch/x86/include/asm/mshyperv.h    | 16 +++---
+ arch/x86/kernel/cpu/mshyperv.c     | 15 ++----
+ arch/x86/mm/pat/set_memory.c       |  3 +-
+ drivers/hv/vmbus_drv.c             |  1 +-
+ include/asm-generic/mshyperv.h     |  2 +-
+ 10 files changed, 111 insertions(+), 51 deletions(-)
 
-And replace addr_to_vbq() with this. That'd also make the mechanism of this
-hash lookup super explicit.
-
->  	if (err) {
->  		kfree(vb);
->  		free_vmap_area(va);
-> @@ -2021,9 +2055,11 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
->
->  static void free_vmap_block(struct vmap_block *vb)
->  {
-> +	struct vmap_block_queue *vbq;
->  	struct vmap_block *tmp;
->
-> -	tmp = xa_erase(&vmap_blocks, addr_to_vb_idx(vb->va->va_start));
-> +	vbq = addr_to_vbq(vb->va->va_start);
-> +	tmp = xa_erase(&vbq->vmap_blocks, vb->va->va_start);
->  	BUG_ON(tmp != vb);
->
->  	spin_lock(&vmap_area_lock);
-> @@ -2135,6 +2171,7 @@ static void vb_free(unsigned long addr, unsigned long size)
->  	unsigned long offset;
->  	unsigned int order;
->  	struct vmap_block *vb;
-> +	struct vmap_block_queue *vbq;
->
->  	BUG_ON(offset_in_page(size));
->  	BUG_ON(size > PAGE_SIZE*VMAP_MAX_ALLOC);
-> @@ -2143,7 +2180,10 @@ static void vb_free(unsigned long addr, unsigned long size)
->
->  	order = get_order(size);
->  	offset = (addr & (VMAP_BLOCK_SIZE - 1)) >> PAGE_SHIFT;
-> -	vb = xa_load(&vmap_blocks, addr_to_vb_idx(addr));
-> +
-> +	vbq = addr_to_vbq(addr);
-> +	vb = xa_load(&vbq->vmap_blocks, addr_to_vb_va_start(addr));
-> +
->  	spin_lock(&vb->lock);
->  	bitmap_clear(vb->used_map, offset, (1UL << order));
->  	spin_unlock(&vb->lock);
-> @@ -3486,6 +3526,7 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
->  {
->  	char *start;
->  	struct vmap_block *vb;
-> +	struct vmap_block_queue *vbq;
->  	unsigned long offset;
->  	unsigned int rs, re, n;
->
-> @@ -3503,7 +3544,8 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
->  	 * Area is split into regions and tracked with vmap_block, read out
->  	 * each region and zero fill the hole between regions.
->  	 */
-> -	vb = xa_load(&vmap_blocks, addr_to_vb_idx((unsigned long)addr));
-> +	vbq = addr_to_vbq((unsigned long) addr);
-> +	vb = xa_load(&vbq->vmap_blocks, addr_to_vb_va_start((unsigned long) addr));
->  	if (!vb)
->  		goto finished;
->
-> @@ -4272,6 +4314,7 @@ void __init vmalloc_init(void)
->  		p = &per_cpu(vfree_deferred, i);
->  		init_llist_head(&p->list);
->  		INIT_WORK(&p->wq, delayed_vfree_work);
-> +		xa_init(&vbq->vmap_blocks);
->  	}
->
->  	/* Import existing vmlist entries. */
-> --
-> 2.30.2
->
+diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
+index 49b44f8..f4f0625 100644
+--- a/arch/x86/coco/core.c
++++ b/arch/x86/coco/core.c
+@@ -30,6 +30,22 @@ static bool intel_cc_platform_has(enum cc_attr attr)
+ }
+ 
+ /*
++ * Handle the SEV-SNP vTOM case where sme_me_mask is zero, and
++ * the other levels of SME/SEV functionality, including C-bit
++ * based SEV-SNP, are not enabled.
++ */
++static __maybe_unused bool amd_cc_platform_vtom(enum cc_attr attr)
++{
++	switch (attr) {
++	case CC_ATTR_GUEST_MEM_ENCRYPT:
++	case CC_ATTR_MEM_ENCRYPT:
++		return true;
++	default:
++		return false;
++	}
++}
++
++/*
+  * SME and SEV are very similar but they are not the same, so there are
+  * times that the kernel will need to distinguish between SME and SEV. The
+  * cc_platform_has() function is used for this.  When a distinction isn't
+@@ -41,9 +57,14 @@ static bool intel_cc_platform_has(enum cc_attr attr)
+  * up under SME the trampoline area cannot be encrypted, whereas under SEV
+  * the trampoline area must be encrypted.
+  */
++
+ static bool amd_cc_platform_has(enum cc_attr attr)
+ {
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
++
++	if (sev_status & MSR_AMD64_SNP_VTOM)
++		return amd_cc_platform_vtom(attr);
++
+ 	switch (attr) {
+ 	case CC_ATTR_MEM_ENCRYPT:
+ 		return sme_me_mask;
+@@ -76,11 +97,6 @@ static bool amd_cc_platform_has(enum cc_attr attr)
+ #endif
+ }
+ 
+-static bool hyperv_cc_platform_has(enum cc_attr attr)
+-{
+-	return attr == CC_ATTR_GUEST_MEM_ENCRYPT;
+-}
+-
+ bool cc_platform_has(enum cc_attr attr)
+ {
+ 	switch (vendor) {
+@@ -88,8 +104,6 @@ bool cc_platform_has(enum cc_attr attr)
+ 		return amd_cc_platform_has(attr);
+ 	case CC_VENDOR_INTEL:
+ 		return intel_cc_platform_has(attr);
+-	case CC_VENDOR_HYPERV:
+-		return hyperv_cc_platform_has(attr);
+ 	default:
+ 		return false;
+ 	}
+@@ -103,11 +117,14 @@ u64 cc_mkenc(u64 val)
+ 	 * encryption status of the page.
+ 	 *
+ 	 * - for AMD, bit *set* means the page is encrypted
+-	 * - for Intel *clear* means encrypted.
++	 * - for AMD with vTOM and for Intel, *clear* means encrypted
+ 	 */
+ 	switch (vendor) {
+ 	case CC_VENDOR_AMD:
+-		return val | cc_mask;
++		if (sev_status & MSR_AMD64_SNP_VTOM)
++			return val & ~cc_mask;
++		else
++			return val | cc_mask;
+ 	case CC_VENDOR_INTEL:
+ 		return val & ~cc_mask;
+ 	default:
+@@ -120,7 +137,10 @@ u64 cc_mkdec(u64 val)
+ 	/* See comment in cc_mkenc() */
+ 	switch (vendor) {
+ 	case CC_VENDOR_AMD:
+-		return val & ~cc_mask;
++		if (sev_status & MSR_AMD64_SNP_VTOM)
++			return val | cc_mask;
++		else
++			return val & ~cc_mask;
+ 	case CC_VENDOR_INTEL:
+ 		return val | cc_mask;
+ 	default:
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index 41ef036..edbc67e 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -29,7 +29,6 @@
+ #include <linux/syscore_ops.h>
+ #include <clocksource/hyperv_timer.h>
+ #include <linux/highmem.h>
+-#include <linux/swiotlb.h>
+ 
+ int hyperv_init_cpuhp;
+ u64 hv_current_partition_id = ~0ull;
+@@ -504,16 +503,6 @@ void __init hyperv_init(void)
+ 	/* Query the VMs extended capability once, so that it can be cached. */
+ 	hv_query_ext_cap(0);
+ 
+-#ifdef CONFIG_SWIOTLB
+-	/*
+-	 * Swiotlb bounce buffer needs to be mapped in extra address
+-	 * space. Map function doesn't work in the early place and so
+-	 * call swiotlb_update_mem_attributes() here.
+-	 */
+-	if (hv_is_isolation_supported())
+-		swiotlb_update_mem_attributes();
+-#endif
+-
+ 	return;
+ 
+ clean_guest_os_id:
+diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
+index 5648efb..f6a020c 100644
+--- a/arch/x86/hyperv/ivm.c
++++ b/arch/x86/hyperv/ivm.c
+@@ -13,6 +13,8 @@
+ #include <asm/svm.h>
+ #include <asm/sev.h>
+ #include <asm/io.h>
++#include <asm/coco.h>
++#include <asm/mem_encrypt.h>
+ #include <asm/mshyperv.h>
+ #include <asm/hypervisor.h>
+ 
+@@ -233,7 +235,6 @@ void hv_ghcb_msr_read(u64 msr, u64 *value)
+ 	local_irq_restore(flags);
+ }
+ EXPORT_SYMBOL_GPL(hv_ghcb_msr_read);
+-#endif
+ 
+ /*
+  * hv_mark_gpa_visibility - Set pages visible to host via hvcall.
+@@ -286,27 +287,25 @@ static int hv_mark_gpa_visibility(u16 count, const u64 pfn[],
+ }
+ 
+ /*
+- * hv_set_mem_host_visibility - Set specified memory visible to host.
++ * hv_vtom_set_host_visibility - Set specified memory visible to host.
+  *
+  * In Isolation VM, all guest memory is encrypted from host and guest
+  * needs to set memory visible to host via hvcall before sharing memory
+  * with host. This function works as wrap of hv_mark_gpa_visibility()
+  * with memory base and size.
+  */
+-int hv_set_mem_host_visibility(unsigned long kbuffer, int pagecount, bool visible)
++static bool hv_vtom_set_host_visibility(unsigned long kbuffer, int pagecount, bool enc)
+ {
+-	enum hv_mem_host_visibility visibility = visible ?
+-			VMBUS_PAGE_VISIBLE_READ_WRITE : VMBUS_PAGE_NOT_VISIBLE;
++	enum hv_mem_host_visibility visibility = enc ?
++			VMBUS_PAGE_NOT_VISIBLE : VMBUS_PAGE_VISIBLE_READ_WRITE;
+ 	u64 *pfn_array;
+ 	int ret = 0;
++	bool result = true;
+ 	int i, pfn;
+ 
+-	if (!hv_is_isolation_supported() || !hv_hypercall_pg)
+-		return 0;
+-
+ 	pfn_array = kmalloc(HV_HYP_PAGE_SIZE, GFP_KERNEL);
+ 	if (!pfn_array)
+-		return -ENOMEM;
++		return false;
+ 
+ 	for (i = 0, pfn = 0; i < pagecount; i++) {
+ 		pfn_array[pfn] = virt_to_hvpfn((void *)kbuffer + i * HV_HYP_PAGE_SIZE);
+@@ -315,17 +314,68 @@ int hv_set_mem_host_visibility(unsigned long kbuffer, int pagecount, bool visibl
+ 		if (pfn == HV_MAX_MODIFY_GPA_REP_COUNT || i == pagecount - 1) {
+ 			ret = hv_mark_gpa_visibility(pfn, pfn_array,
+ 						     visibility);
+-			if (ret)
++			if (ret) {
++				result = false;
+ 				goto err_free_pfn_array;
++			}
+ 			pfn = 0;
+ 		}
+ 	}
+ 
+  err_free_pfn_array:
+ 	kfree(pfn_array);
+-	return ret;
++	return result;
+ }
+ 
++static bool hv_vtom_tlb_flush_required(bool private)
++{
++	return true;
++}
++
++static bool hv_vtom_cache_flush_required(void)
++{
++	return false;
++}
++
++static bool hv_is_private_mmio(u64 addr)
++{
++	/*
++	 * Hyper-V always provides a single IO-APIC in a guest VM.
++	 * When a paravisor is used, it is emulated by the paravisor
++	 * in the guest context and must be mapped private.
++	 */
++	if (addr >= HV_IOAPIC_BASE_ADDRESS &&
++	    addr < (HV_IOAPIC_BASE_ADDRESS + PAGE_SIZE))
++		return true;
++
++	/* Same with a vTPM */
++	if (addr >= VTPM_BASE_ADDRESS &&
++	    addr < (VTPM_BASE_ADDRESS + PAGE_SIZE))
++		return true;
++
++	return false;
++}
++
++void __init hv_vtom_init(void)
++{
++	/*
++	 * By design, a VM using vTOM doesn't see the SEV setting,
++	 * so SEV initialization is bypassed and sev_status isn't set.
++	 * Set it here to indicate a vTOM VM.
++	 */
++	sev_status = MSR_AMD64_SNP_VTOM;
++	cc_set_vendor(CC_VENDOR_AMD);
++	cc_set_mask(ms_hyperv.shared_gpa_boundary);
++	physical_mask &= ms_hyperv.shared_gpa_boundary - 1;
++
++	x86_platform.hyper.is_private_mmio = hv_is_private_mmio;
++	x86_platform.guest.enc_cache_flush_required = hv_vtom_cache_flush_required;
++	x86_platform.guest.enc_tlb_flush_required = hv_vtom_tlb_flush_required;
++	x86_platform.guest.enc_status_change_finish = hv_vtom_set_host_visibility;
++}
++
++#endif /* CONFIG_AMD_MEM_ENCRYPT */
++
+ /*
+  * hv_map_memory - map memory to extra space in the AMD SEV-SNP Isolation VM.
+  */
+diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
+index 3d98c3a..d2c6a2e 100644
+--- a/arch/x86/include/asm/coco.h
++++ b/arch/x86/include/asm/coco.h
+@@ -7,7 +7,6 @@
+ enum cc_vendor {
+ 	CC_VENDOR_NONE,
+ 	CC_VENDOR_AMD,
+-	CC_VENDOR_HYPERV,
+ 	CC_VENDOR_INTEL,
+ };
+ 
+diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
+index 72ca905..b712670 100644
+--- a/arch/x86/include/asm/mem_encrypt.h
++++ b/arch/x86/include/asm/mem_encrypt.h
+@@ -56,6 +56,7 @@ void __init sev_es_init_vc_handling(void);
+ #else	/* !CONFIG_AMD_MEM_ENCRYPT */
+ 
+ #define sme_me_mask	0ULL
++#define sev_status	0ULL
+ 
+ static inline void __init sme_early_encrypt(resource_size_t paddr,
+ 					    unsigned long size) { }
+diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+index 4c4c0ec..e3cef98 100644
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -11,6 +11,14 @@
+ #include <asm/paravirt.h>
+ #include <asm/mshyperv.h>
+ 
++/*
++ * Hyper-V always provides a single IO-APIC at this MMIO address.
++ * Ideally, the value should be looked up in ACPI tables, but it
++ * is needed for mapping the IO-APIC early in boot on Confidential
++ * VMs, before ACPI functions can be used.
++ */
++#define HV_IOAPIC_BASE_ADDRESS 0xfec00000
++
+ union hv_ghcb;
+ 
+ DECLARE_STATIC_KEY_FALSE(isolation_type_snp);
+@@ -206,18 +214,19 @@ struct irq_domain *hv_create_pci_msi_domain(void);
+ int hv_map_ioapic_interrupt(int ioapic_id, bool level, int vcpu, int vector,
+ 		struct hv_interrupt_entry *entry);
+ int hv_unmap_ioapic_interrupt(int ioapic_id, struct hv_interrupt_entry *entry);
+-int hv_set_mem_host_visibility(unsigned long addr, int numpages, bool visible);
+ 
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ void hv_ghcb_msr_write(u64 msr, u64 value);
+ void hv_ghcb_msr_read(u64 msr, u64 *value);
+ bool hv_ghcb_negotiate_protocol(void);
+ void hv_ghcb_terminate(unsigned int set, unsigned int reason);
++void hv_vtom_init(void);
+ #else
+ static inline void hv_ghcb_msr_write(u64 msr, u64 value) {}
+ static inline void hv_ghcb_msr_read(u64 msr, u64 *value) {}
+ static inline bool hv_ghcb_negotiate_protocol(void) { return false; }
+ static inline void hv_ghcb_terminate(unsigned int set, unsigned int reason) {}
++static inline void hv_vtom_init(void) {}
+ #endif
+ 
+ extern bool hv_isolation_type_snp(void);
+@@ -259,11 +268,6 @@ static inline void hv_set_register(unsigned int reg, u64 value) { }
+ static inline u64 hv_get_register(unsigned int reg) { return 0; }
+ static inline void hv_set_non_nested_register(unsigned int reg, u64 value) { }
+ static inline u64 hv_get_non_nested_register(unsigned int reg) { return 0; }
+-static inline int hv_set_mem_host_visibility(unsigned long addr, int numpages,
+-					     bool visible)
+-{
+-	return -1;
+-}
+ #endif /* CONFIG_HYPERV */
+ 
+ 
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index f36dc2f..ded7506 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -33,7 +33,6 @@
+ #include <asm/nmi.h>
+ #include <clocksource/hyperv_timer.h>
+ #include <asm/numa.h>
+-#include <asm/coco.h>
+ 
+ /* Is Linux running as the root partition? */
+ bool hv_root_partition;
+@@ -397,8 +396,10 @@ static void __init ms_hyperv_init_platform(void)
+ 	if (ms_hyperv.priv_high & HV_ISOLATION) {
+ 		ms_hyperv.isolation_config_a = cpuid_eax(HYPERV_CPUID_ISOLATION_CONFIG);
+ 		ms_hyperv.isolation_config_b = cpuid_ebx(HYPERV_CPUID_ISOLATION_CONFIG);
+-		ms_hyperv.shared_gpa_boundary =
+-			BIT_ULL(ms_hyperv.shared_gpa_boundary_bits);
++
++		if (ms_hyperv.shared_gpa_boundary_active)
++			ms_hyperv.shared_gpa_boundary =
++				BIT_ULL(ms_hyperv.shared_gpa_boundary_bits);
+ 
+ 		pr_info("Hyper-V: Isolation Config: Group A 0x%x, Group B 0x%x\n",
+ 			ms_hyperv.isolation_config_a, ms_hyperv.isolation_config_b);
+@@ -409,11 +410,6 @@ static void __init ms_hyperv_init_platform(void)
+ 			swiotlb_unencrypted_base = ms_hyperv.shared_gpa_boundary;
+ #endif
+ 		}
+-		/* Isolation VMs are unenlightened SEV-based VMs, thus this check: */
+-		if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
+-			if (hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE)
+-				cc_set_vendor(CC_VENDOR_HYPERV);
+-		}
+ 	}
+ 
+ 	if (hv_max_functions_eax >= HYPERV_CPUID_NESTED_FEATURES) {
+@@ -482,6 +478,9 @@ static void __init ms_hyperv_init_platform(void)
+ 	i8253_clear_counter_on_shutdown = false;
+ 
+ #if IS_ENABLED(CONFIG_HYPERV)
++	if ((hv_get_isolation_type() == HV_ISOLATION_TYPE_VBS) ||
++	    (hv_get_isolation_type() == HV_ISOLATION_TYPE_SNP))
++		hv_vtom_init();
+ 	/*
+ 	 * Setup the hook to get control post apic initialization.
+ 	 */
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index 356758b..b037954 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -2175,9 +2175,6 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
+ 
+ static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
+ {
+-	if (hv_is_isolation_supported())
+-		return hv_set_mem_host_visibility(addr, numpages, !enc);
+-
+ 	if (cc_platform_has(CC_ATTR_MEM_ENCRYPT))
+ 		return __set_memory_enc_pgtable(addr, numpages, enc);
+ 
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index d24dd65..e9e1c41 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -2156,7 +2156,6 @@ void vmbus_device_unregister(struct hv_device *device_obj)
+  * VMBUS is an acpi enumerated device. Get the information we
+  * need from DSDT.
+  */
+-#define VTPM_BASE_ADDRESS 0xfed40000
+ static acpi_status vmbus_walk_resources(struct acpi_resource *res, void *ctx)
+ {
+ 	resource_size_t start = 0;
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index 8845a2e..90d7f68 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -26,6 +26,8 @@
+ #include <asm/ptrace.h>
+ #include <asm/hyperv-tlfs.h>
+ 
++#define VTPM_BASE_ADDRESS 0xfed40000
++
+ struct ms_hyperv_info {
+ 	u32 features;
+ 	u32 priv_high;
