@@ -2,97 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA7C6C9AAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 07:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3436C9AAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 07:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbjC0FCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 01:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
+        id S229456AbjC0FD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 01:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC0FCj (ORCPT
+        with ESMTP id S229565AbjC0FDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 01:02:39 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F113A8C;
-        Sun, 26 Mar 2023 22:02:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PlLKP1vrlz4xDk;
-        Mon, 27 Mar 2023 16:02:33 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679893354;
-        bh=gxoGW8cn7vBlEWmFx0Ppf1kiasx+hNOehOeHL3jepAs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rIATjPQUN3CzO9oHem+hSL7cnUe1ixq5PasAl9+BE4X54ULrwZa4Uei0HIokcaTV1
-         gPOEMRwccz+v3mVLBMHyfkDwccGQ3pAJwy1FH+Z6FLMBLXRFUZBep787JkuLgGHwzS
-         C7QfO32Os60ViRhofQNRiR2PX4L3qx1DXLOL7/3/AFHvHkvibt9g/94JCCTM6Y0zoR
-         AtBwKFSpPsEhhlKuKnYcdPz8TelXlls5RXzBxzp7I//1+TB96FfDoAi10r0/X2jWT6
-         a2vKIqtYkOI5Aao/1oeoVewNNs9lgsiTHssc3Sf4N3qDItoJzKTnWgdBFOtXB577fC
-         0IbRBxn18FKag==
-Date:   Mon, 27 Mar 2023 16:02:32 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Josue David Hernandez Gutierrez 
-        <josue.d.hernandez.gutierrez@intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the usb tree
-Message-ID: <20230327160232.6119b93f@canb.auug.org.au>
+        Mon, 27 Mar 2023 01:03:22 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A7B4231
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 22:03:20 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id r11so7260869wrr.12
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 22:03:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679893399;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=y7YZc7+GXIQDusVUYqDOj5P6rOU9cQWWbR2WAwt/ZP8=;
+        b=Au31X4bAiYNikzyau9Yfhg61ao8BTyae3kBdmWF7+w8cKS6x5kPmT6nu82vEZ0040a
+         jvugcn6hzLwKsx3Dd1gMYUfYl38cfjFf8DbCugPyv6EMG8e/tu5l3FR29XUU3lKVHnr4
+         wMy8rWT09dTWjJMvUtZy/Ka2MleRCb7igF8l3wfhwX4YhgMw1h8sNrI0del/xnLidaY4
+         ljMQv2rRc9pX+hX4MU5kqFxEGSR2b/rSuffaK6xWXrQXlJlHgmrrtRPuxBd7Ru8vf9Jv
+         056OoNcnN38e37ZrG4olglwyhHz9iM84vIqDU3OO9tKr5JFwng+jv0OzIhNoqzIxGN9m
+         EtDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679893399;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y7YZc7+GXIQDusVUYqDOj5P6rOU9cQWWbR2WAwt/ZP8=;
+        b=QsXYdiztEawAPyvW7OcD/c+On/Lk5mvqZ6uTIuaepGPllciTd3celYIq5LigR1wdSZ
+         VevmNHzZ1Qel1qSAluK/2S8RplwMW+9HvmPqVwXbfxPho+ZQGRsQwx7wdj0DMp31W5Gm
+         06OzqQ6xMPToSsZCsB3EcPRz9xTFu5wBY9igXJ3PFBWZb4klc/SyQkiBrP8wF6Ejt0N+
+         sAlR3vJiZitP5cn02+Dp0tad68t36ggyhUk+ZXBZ08LYbn2mFGrM0bUW2kQ/auDqTiHY
+         skZ276tlDL9b48RjLjBffCPuFz1L7fXvLTZKHRmvLicJiCCUxAeZRAjSSOSixS5kwDZE
+         Gf8A==
+X-Gm-Message-State: AAQBX9eURygXMk9oq5Fvw/C/d6MnEnU3s/FIxjIHzojeZF2IyvDW14li
+        Wn1LdS3RfzdLR/KgEnrvIuE=
+X-Google-Smtp-Source: AKy350aLBQR2xPYxawU6Rc6qi8vaKa9Q3oJfOb9xD9r02p7cdkbEIZyhOWFb6S3aQUxQIGPy8D0zAQ==
+X-Received: by 2002:adf:ea09:0:b0:2d1:f705:a602 with SMTP id q9-20020adfea09000000b002d1f705a602mr7986169wrm.22.1679893398684;
+        Sun, 26 Mar 2023 22:03:18 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id n17-20020adff091000000b002c5534db60bsm24065337wro.71.2023.03.26.22.03.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 22:03:18 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 08:03:14 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>
+Cc:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] staging: rtl8192u: reformat block comments
+Message-ID: <32819686-cce9-40d2-8707-547bdb1a72f8@kili.mountain>
+References: <cover.1679831899.git.kamrankhadijadj@gmail.com>
+ <d49d15e620aa9239f3d68df1a5f8b600de77b536.1679831899.git.kamrankhadijadj@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/E/2j.JLfKbNNGp5Ql=8YJbc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d49d15e620aa9239f3d68df1a5f8b600de77b536.1679831899.git.kamrankhadijadj@gmail.com>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/E/2j.JLfKbNNGp5Ql=8YJbc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, Mar 26, 2023 at 05:18:27PM +0500, Khadija Kamran wrote:
+> Linux kernel coding style for block comments uses a column of '*' on the
+> left side and  uses '*/' on a separate line.
+> 
+> Fix block comments by adding '*' on subsequent lines and moving '*/' at
+> the end of block comments on a separate line. These issues in block
+> comments are reported by checkpatch.pl script.
+> 
+> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> ---
+>  drivers/staging/rtl8192u/r8192U_dm.c | 38 +++++++++++++++++-----------
+>  1 file changed, 23 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192u/r8192U_dm.c b/drivers/staging/rtl8192u/r8192U_dm.c
+> index e5c0bece4bb4..99c38a4cf54c 100644
+> --- a/drivers/staging/rtl8192u/r8192U_dm.c
+> +++ b/drivers/staging/rtl8192u/r8192U_dm.c
+> @@ -1,13 +1,14 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*++
+> -Copyright-c Realtek Semiconductor Corp. All rights reserved.
+> -
+> -Module Name:
+> -	r8192U_dm.c
+> -
+> -Abstract:
+> -	HW dynamic mechanism.
+> ---*/
+> + *Copyright-c Realtek Semiconductor Corp. All rights reserved.
 
-Hi all,
+You need spaces after the '*' char.
 
-After merging the usb tree, today's linux-next build (s390 allmodconfig)
-failed like this:
+/*
+ * Copyright-c Realtek Semiconductor Corp. All rights reserved.
+ *
+ * Module Name:
 
-drivers/usb/host/xhci-pci.c:91:13: error: 'xhci_msix_sync_irqs' defined but=
- not used [-Werror=3Dunused-function]
+> + *
+> + *Module Name:
+> + *	r8192U_dm.c
+> + *
+> + *Abstract:
+> + *	HW dynamic mechanism.
+> + *--
+> + */
+>  #include "r8192U.h"
+>  #include "r8192U_dm.h"
+>  #include "r8192U_hw.h"
+> @@ -243,7 +244,8 @@ void init_rate_adaptive(struct net_device *dev)
+>   * Output:		NONE
+>   *
+>   * Return:		NONE
+> - *---------------------------------------------------------------------------*/
+> + *---------------------------------------------------------------------------
+> + */
+>  static void dm_check_rate_adaptive(struct net_device *dev)
 
-(reported here: http://kisskb.ellerman.id.au/kisskb/buildresult/14902506/)
+There is a proper kernel doc format for comment formats.  The format is
+described in Documentation/doc-guide/kernel-doc.rst
 
-Caused by commit
+(Change the function comments as a separate patch from the top of the
+file changes).
 
-  9abe15d55dcc ("xhci: Move xhci MSI sync function to to xhci-pci")
+regards,
+dan carpenter
 
-The function is only called if CONFIG_PM is set, but defined
-unconditionally.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/E/2j.JLfKbNNGp5Ql=8YJbc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQhI2gACgkQAVBC80lX
-0Gwa1Qf8DBNK6PMVd9sPAn0aIWVA4jHwLeVsWEalo4SufKwWY2zzhi7QLopSyKt4
-X/mjweEYuw4XMfxeW2tK2KdWucXv5ja9C3BQlXVGsTlcrVlJdrbH2pMZRWHCwuUE
-uvzX9Sg20d1opl49NuT8fupKC6/mz/GCMZlmMyIg6nJbvaMp9emykOJeZpjdg74k
-fk+ZHwtaGvR4b2G9Qstf3lD2tDPcoyAyUzjXranqHXKQK7oDT7wDO4LZ8gclErK7
-kpvPTSLnwpA6AGVaoU6LiXU4uid+hVOFsUSgjCh/xmhDYUD3NbqxCcvHGR0eO8nX
-095NdUOxeHUcQviISmWYVRYL/NE/jw==
-=vdz+
------END PGP SIGNATURE-----
-
---Sig_/E/2j.JLfKbNNGp5Ql=8YJbc--
