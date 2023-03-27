@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF9F6CA73E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A290A6CA747
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbjC0ORI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
+        id S232442AbjC0ORZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232724AbjC0OQv (ORCPT
+        with ESMTP id S232356AbjC0OQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:16:51 -0400
+        Mon, 27 Mar 2023 10:16:54 -0400
 Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BEF5BBE
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:15:20 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id x3so36741143edb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:15:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7D37AB5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:15:23 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id y4so36916332edo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:15:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679926470;
+        d=linaro.org; s=google; t=1679926471;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ypp3NNcegTahHFAJNE8cAdEswtLOr/02h21RPqRbA94=;
-        b=OPSWVcDdoVEuWN3Zw9tIjO3jwrBx/Orrb0Pigm+CooSKbjqiVGMTC32LXGXhBmWuJx
-         quK4glIZrWL05bS2bxUQg4DEYNLVQ4ESRpi6ni3ubXCRVFFrBJp+Yu/rJNq55J4oaz5q
-         43wbF2EL/EFQGq/Q6D8EQFFZjCDehZ0DHfutCYmikHeoMOr66QUxNUsGFF/U7MwTCe5o
-         Doqxpprx0GYl31NIA2rZLzfeWfmLQ8gwQ9a5z9BnHERl6lfkNnEf+Hh7mwLNUtvcvnqo
-         fH4Fk1o6M15aPhgX87omLyz3uFZCpV/S8cJQP5W7NifvfDVIsUGV1t+7+RGG8H7sSKvy
-         72lA==
+        bh=979bDGKht4sTcPvoh4er/U+zmo9ulR4Dq1wytmjDqYM=;
+        b=oUzd/9aUKVm0GdaahbuFfy/DWKP1+FYgEMM+RyLeGyzPjXluHrME8MeMAtJyiimfX5
+         5PJgNbjghIwrjwWhfMxSjK2S/z4olHqIUVrHVJh5JDkyUD4ne5Gn0LyQ0gRH5N6KVX8f
+         wnuUL5JImmvpCzzn9rLiREBxYVAq0y5Xd4OBRWQ8T9om1NaRGnXtm5eWNXn730hs2EA9
+         ps/D+cRwlferKDpr3FJEdqcrE+dFXYSnCy6T4juqEYHxw2znkOZ5FImQ6/HoQR2hAilY
+         r0Nct8QYn/ac+r5CRdA/8MIxprxkQagW05chgX4szLAuDKkH7B+jsY+6rTTbgSSl0Ri2
+         1BeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679926470;
+        d=1e100.net; s=20210112; t=1679926471;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ypp3NNcegTahHFAJNE8cAdEswtLOr/02h21RPqRbA94=;
-        b=msxA1lh5WJ7l7q+/4nxDcSlEr+cH52SQD364BdGcsV/m3U8h4hAoZRANdXyCMzeX9B
-         8O+c5WSyfoNVfu3hjmQMlMTgJuNJYWY33oRD7v19AoettTdM6/MrW8Bfq76NhyNXUZT9
-         QDDUV0xYGxb8Hk40/9L2WI+Po2ZTphZXf8/cop4I+Esnp5DiV+tTw4OLSag1nrW/pado
-         HDTW7qM/MGcFmz7GiQRNfBTq4MK+7ghLI5seRYxEdeshdmY7XdBgDtDN6BTWi5+5x1wv
-         VDym0R3XwcmQxupNN4bDEGnGWUy8YXiVPyUmVn2z8GGT5DTJp96S9AizPmgmKoL4/BT9
-         kTzQ==
-X-Gm-Message-State: AAQBX9fLdwFDANosu7E146DqPFFJc+bV/RRi1HvTBsLn7Nchfqovvgon
-        i9Kv/FhBTb/pD1EkSqE3KTtr1Q==
-X-Google-Smtp-Source: AKy350ZWu65scU+w1dPWdRX0dJtcdEO11ugkZOZ3p+kqY0PWkPqdNleawHDU9QbpmCtWx46vAzlrvA==
-X-Received: by 2002:a17:907:1707:b0:922:ae30:3c23 with SMTP id le7-20020a170907170700b00922ae303c23mr12428458ejc.18.1679926470538;
-        Mon, 27 Mar 2023 07:14:30 -0700 (PDT)
+        bh=979bDGKht4sTcPvoh4er/U+zmo9ulR4Dq1wytmjDqYM=;
+        b=5DCQJTUThB53nue2Jr8ieI0ncaskl9qzVz6LVLwFcnR24RYSvGA9cIeHp71QsqGvpN
+         UFIQkIoVoyoFT5lTNfdS8Ig/zxKPjsFv4/vvfbsmwQBn0O3seUZ0VoB9KmgXK/iWHu5Q
+         ccVecD5ZJaGEY3kTtikbE0TvKVtytcaSRTIxyOnlilgmuITRmrOhUGGfIOFUUgih3v3a
+         9m/p+9F9x1XyoEwijSWQtfz7/rTOFJfyvlGQYCE7n3grH/4QavPbl8gZjroU+YnuKDiv
+         9ZTjP6QltUHGGhQxG6ynUVaMDLgUzSVCLDLjg596tXN0iBO4KCvqcaj9Mv2kuWLgl7ev
+         WQ3w==
+X-Gm-Message-State: AAQBX9eXtvtqptbmMIa5OyvcIAAM6+V4NQKxZYmGzmqUyk0E+iqpZc0f
+        gCGOrBVUa4/l3QGP7gASSdiNqQ==
+X-Google-Smtp-Source: AKy350bVl9nCxCIg/cC2I6S/Kr1LzGtEnS4bTindm15Jh7tvtqQmZV5ORAHb+zAA52IBp2P13iHSNA==
+X-Received: by 2002:a17:906:cb98:b0:931:73d:4cc3 with SMTP id mf24-20020a170906cb9800b00931073d4cc3mr13061245ejb.11.1679926471484;
+        Mon, 27 Mar 2023 07:14:31 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:581e:789c:7616:5ee])
-        by smtp.gmail.com with ESMTPSA id ha25-20020a170906a89900b00934212e973esm11273339ejb.198.2023.03.27.07.14.29
+        by smtp.gmail.com with ESMTPSA id ha25-20020a170906a89900b00934212e973esm11273339ejb.198.2023.03.27.07.14.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 07:14:30 -0700 (PDT)
+        Mon, 27 Mar 2023 07:14:31 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -60,9 +60,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4 2/5] mailbox: qcom-apcs-ipc: do not grow the of_device_id
-Date:   Mon, 27 Mar 2023 16:07:49 +0200
-Message-Id: <20230327140752.163009-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 3/5] arm64: dts: qcom: ipq8074: add compatible fallback to mailbox
+Date:   Mon, 27 Mar 2023 16:07:50 +0200
+Message-Id: <20230327140752.163009-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230327140752.163009-1-krzysztof.kozlowski@linaro.org>
 References: <20230327140752.163009-1-krzysztof.kozlowski@linaro.org>
@@ -77,52 +77,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Re-organize the compatible devices and add a comment to avoid unneeded
-of_device_id growth with every new SoC.  These devices have quite a lot
-of similarities and they can use only one compatible fallback for driver
-binding.
+IPQ8074 mailbox is compatible with IPQ6018.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/mailbox/qcom-apcs-ipc-mailbox.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mailbox/qcom-apcs-ipc-mailbox.c b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-index 6bbf87c6d60b..002a135ee868 100644
---- a/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-+++ b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-@@ -141,9 +141,7 @@ static int qcom_apcs_ipc_remove(struct platform_device *pdev)
+diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+index fe37dcdc52c8..84e715aa4310 100644
+--- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+@@ -686,7 +686,8 @@ watchdog: watchdog@b017000 {
+ 		};
  
- /* .data is the offset of the ipc register within the global block */
- static const struct of_device_id qcom_apcs_ipc_of_match[] = {
--	{ .compatible = "qcom,ipq5332-apcs-apps-global", .data = &ipq6018_apcs_data },
- 	{ .compatible = "qcom,ipq6018-apcs-apps-global", .data = &ipq6018_apcs_data },
--	{ .compatible = "qcom,ipq8074-apcs-apps-global", .data = &ipq6018_apcs_data },
- 	{ .compatible = "qcom,msm8916-apcs-kpss-global", .data = &msm8916_apcs_data },
- 	{ .compatible = "qcom,msm8939-apcs-kpss-global", .data = &msm8916_apcs_data },
- 	{ .compatible = "qcom,msm8953-apcs-kpss-global", .data = &msm8994_apcs_data },
-@@ -153,15 +151,18 @@ static const struct of_device_id qcom_apcs_ipc_of_match[] = {
- 	{ .compatible = "qcom,msm8998-apcs-hmss-global", .data = &msm8994_apcs_data },
- 	{ .compatible = "qcom,qcm2290-apcs-hmss-global", .data = &msm8994_apcs_data },
- 	{ .compatible = "qcom,qcs404-apcs-apps-global", .data = &msm8916_apcs_data },
--	{ .compatible = "qcom,sc7180-apss-shared", .data = &apps_shared_apcs_data },
--	{ .compatible = "qcom,sc8180x-apss-shared", .data = &apps_shared_apcs_data },
- 	{ .compatible = "qcom,sdm660-apcs-hmss-global", .data = &msm8994_apcs_data },
- 	{ .compatible = "qcom,sdm845-apss-shared", .data = &apps_shared_apcs_data },
- 	{ .compatible = "qcom,sm4250-apcs-hmss-global", .data = &msm8994_apcs_data },
- 	{ .compatible = "qcom,sm6125-apcs-hmss-global", .data = &msm8994_apcs_data },
--	{ .compatible = "qcom,sm8150-apss-shared", .data = &apps_shared_apcs_data },
- 	{ .compatible = "qcom,sm6115-apcs-hmss-global", .data = &msm8994_apcs_data },
- 	{ .compatible = "qcom,sdx55-apcs-gcc", .data = &sdx55_apcs_data },
-+	/* Do not add any more entries using existing driver data */
-+	{ .compatible = "qcom,ipq5332-apcs-apps-global", .data = &ipq6018_apcs_data },
-+	{ .compatible = "qcom,ipq8074-apcs-apps-global", .data = &ipq6018_apcs_data },
-+	{ .compatible = "qcom,sc7180-apss-shared", .data = &apps_shared_apcs_data },
-+	{ .compatible = "qcom,sc8180x-apss-shared", .data = &apps_shared_apcs_data },
-+	{ .compatible = "qcom,sm8150-apss-shared", .data = &apps_shared_apcs_data },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, qcom_apcs_ipc_of_match);
+ 		apcs_glb: mailbox@b111000 {
+-			compatible = "qcom,ipq8074-apcs-apps-global";
++			compatible = "qcom,ipq8074-apcs-apps-global",
++				     "qcom,ipq6018-apcs-apps-global";
+ 			reg = <0x0b111000 0x1000>;
+ 			clocks = <&a53pll>, <&xo>;
+ 			clock-names = "pll", "xo";
 -- 
 2.34.1
 
