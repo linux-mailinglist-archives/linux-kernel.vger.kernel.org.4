@@ -2,268 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB636CA56E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480156CA578
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjC0NTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
+        id S232115AbjC0NUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjC0NTe (ORCPT
+        with ESMTP id S231913AbjC0NUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:19:34 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03411723;
-        Mon, 27 Mar 2023 06:19:31 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id E3E965FD0E;
-        Mon, 27 Mar 2023 16:19:28 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679923168;
-        bh=r/g6+1aexCmhn5DuTBkJmHKaVN7SrHEXHCMTnOGbfJA=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=UG02xd1YhnsoOGv+yDroIOFfRc0vXcEdUtR+Wfc8JyP8Tpky/BHcm7CV7WBFbKP4Q
-         LN3mWA+KlG1ni8SHmlHSiye63+akHBCbBEEK/h+y6NeEslobTAnuKDmQFxWBYOv8Q+
-         sFZzw42jkdVFkYPP0NAJg0DRPt1uw36Tn/DwixzYLVokkTNP0ifh1IF6uaw1iEjdNw
-         Xmr7AoDkYQc1/lDxaQgUi3Qijkcaezd3b+c0qN52V+E2m7S2sMXc84PgX1xtATFtyn
-         Rvem93hXYk8d6fFJHjJ0BeqP7jx3FXj+Ybt3I3Yr96Cb1/VQu9BNbqZ8yuXlfpxJu9
-         L9fn3s23yujEQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 27 Mar 2023 16:19:28 +0300 (MSK)
-Date:   Mon, 27 Mar 2023 16:19:27 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     <neil.armstrong@linaro.org>
-CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>,
-        <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
-        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v11 3/5] dt-bindings: clock: meson: add A1 PLL and
- Peripherals clkcs bindings
-Message-ID: <20230327131927.k7uswfn6i3jqjrzv@CAB-WSD-L081021>
-References: <20230321193014.26349-1-ddrokosov@sberdevices.ru>
- <20230321193014.26349-4-ddrokosov@sberdevices.ru>
- <1jmt3yo5r0.fsf@starbuckisacylon.baylibre.com>
- <20230327105115.ury3w4xpzhcpnqjg@CAB-WSD-L081021>
- <1jilemo1r9.fsf@starbuckisacylon.baylibre.com>
- <ae367a80-e617-42a6-f873-73a1ecfe7c0d@linaro.org>
+        Mon, 27 Mar 2023 09:20:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CC6212F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:19:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679923192;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=fp97bd4egAyMlz94O+W8oRAJLsbe6t9my51Gm91T/aM=;
+        b=a6La+48uF1wwhBHmYLfNCk0mzYxOeFLRbpl738We7+ghtDeFwY4/9d0UVQb4pLDyKMxaNK
+        8bpMCVmT1CpP3huJtpgGayE+qX1iQsT+CMUK3HU6MIh8KaLzg+ZpXrc3o8xPm+jA3ZM6Uu
+        XJSBBxxiGgnBs2Hl/pIABbAmHbWEj6I=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-606-zrudTcDHN_2FC-nBTUTtRQ-1; Mon, 27 Mar 2023 09:19:51 -0400
+X-MC-Unique: zrudTcDHN_2FC-nBTUTtRQ-1
+Received: by mail-wm1-f72.google.com with SMTP id v11-20020a05600c444b00b003ef6803b3cdso2653558wmn.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:19:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679923190;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fp97bd4egAyMlz94O+W8oRAJLsbe6t9my51Gm91T/aM=;
+        b=tQDHim9QxjCcZNgpt9sbRydivTvdSsVN9pUiX/aBE7UKV3lnsI4bxKTUibY+xu+K8H
+         a+K6xFYK/0jTd1xkVn5uKQUCGJ8tScU2n2GrFng57j7prVWJpfmK6I7PRg+949kvbIQf
+         Qc8rBGPyVmOorwLEwbz67kxwtUmfU88L5CrypBOfF4UX7lXlpNNZneDFY0QvWZd6o+mt
+         bFfecIf/sk41r0hT1SQ8/7L6KEkkwmg2aumeYVysXKgWZjuAl7bNvUp7FfZlPaxmvpwD
+         wYp1Q/C900P2zPpR0xju4EaFcIyJ7czRPda0iqBVoLUKMOe/ULmzYXIXvb5Bh+3UzbpD
+         c0TQ==
+X-Gm-Message-State: AO0yUKVj8r4mX9w9rt7VazCdgiamDKxAHr33WoG3DT0JvvBQ/4V0FI6H
+        XoLvGSheaGrTF6Zu6R5M2U90k0ss5J6R4U48byQ+nd6aqxEAYqoHhqqRjj3l8J3aK4YgXHiuOhZ
+        W2MissZ2HTpi1bqDQIjBiU8Ot
+X-Received: by 2002:a1c:7c1a:0:b0:3ee:6d88:774a with SMTP id x26-20020a1c7c1a000000b003ee6d88774amr8075069wmc.14.1679923190460;
+        Mon, 27 Mar 2023 06:19:50 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+a3nlhZjRZvrUa3ZYlE0VCFu21NVVFHGZYCsteCubT34r2yrI5XsBkcW+x/td8mODOzUHdhw==
+X-Received: by 2002:a1c:7c1a:0:b0:3ee:6d88:774a with SMTP id x26-20020a1c7c1a000000b003ee6d88774amr8075048wmc.14.1679923190202;
+        Mon, 27 Mar 2023 06:19:50 -0700 (PDT)
+Received: from redhat.com ([2.52.153.142])
+        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003ef6f87118dsm2752456wmq.42.2023.03.27.06.19.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 06:19:49 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 09:19:47 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        elic@nvidia.com, mst@redhat.com
+Subject: [GIT PULL] vdpa: bugfix
+Message-ID: <20230327091947-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ae367a80-e617-42a6-f873-73a1ecfe7c0d@linaro.org>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/27 05:49:00 #21016052
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mutt-Fcc: =sent
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 02:03:25PM +0200, neil.armstrong@linaro.org wrote:
-> On 27/03/2023 13:39, Jerome Brunet wrote:
-> > 
-> > On Mon 27 Mar 2023 at 13:51, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> > 
-> > > On Mon, Mar 27, 2023 at 11:51:21AM +0200, Jerome Brunet wrote:
-> > > > 
-> > > > On Tue 21 Mar 2023 at 22:30, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> > > > 
-> > > > > Add the documentation for Amlogic A1 PLL and Amlogic A1 Peripherals
-> > > > > clock drivers.
-> > > > > Introduce Amlogic A1 PLL and Amlogic A1 Peripherals device tree
-> > > > > bindings and include them to MAINTAINERS.
-> > > > > 
-> > > > > Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> > > > > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> > > > > ---
-> > > > >   .../bindings/clock/amlogic,a1-clkc.yaml       |  73 +++++++++++
-> > > > >   .../bindings/clock/amlogic,a1-pll-clkc.yaml   |  59 +++++++++
-> > > > >   MAINTAINERS                                   |   1 +
-> > > > >   include/dt-bindings/clock/amlogic,a1-clkc.h   | 113 ++++++++++++++++++
-> > > > >   .../dt-bindings/clock/amlogic,a1-pll-clkc.h   |  21 ++++
-> > > > >   5 files changed, 267 insertions(+)
-> > > > >   create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
-> > > > >   create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
-> > > > 
-> > > > There is two drivers (and 2 independent patches). There should be 2
-> > > > bindings patches as well.
-> > > > 
-> > > 
-> > > Before, in previous versions I had two versions, but it wasn't bisectable
-> > > approach.
-> > 
-> > You are confusing bisectable and Rob's robot. Splitting patches is more
-> > that likely to help bisect (and patches backport) - not the other way around.
-> > 
-> > > a1-clkc schema depends on a1-pll-clkc headers and vice versa.
-> > > It means dt schemas checkers will show us failure if we split them into two
-> > > patchsets.
-> > 
-> > Only because you are patches are not upstream yet ...
-> > 
-> > > I know, that we can use raw digits instead of CLKID names, but IMO it doesn't
-> > > look like production schema and it requires one more patchset above the
-> > > series with proper CLKID definitons usage and proper header including.
-> > > 
-> > > BTW, there is an example of Rob's test bot failure found in the previous
-> > > v10 patch series due to chicken or the egg problem.
-> > > https://lore.kernel.org/all/167769997208.7087.5344356236212731922.robh@kernel.org/
-> > > 
-> > > Please advise what's the best practice to resolve that..
-> > 
-> > Don't use the header in your example would solve the problem and
-> > still be correct DT wise.
-> > 
-> > The examples are just examples, they are not required to actually
-> > matches a real HW, as far as I know.
-> 
-> Exact, you can use fake lables instead of defined:
-> 
-> <&clkc_pll CLKID_FCLK_DIV2>,
-> 
-> =>
-> remove "#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>"
-> 
-> <&clkc_pll_fclk_div2>,
-> 
-> is perfectly ok and will permit have 2 separate patches.
-> 
-> The dependency is only if you have a common yaml file for
-> both bindings files, but this is not the case here.
+The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
 
-Simple removal of "#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>"
-header doesn't work, dt_binding_check make rule is failed:
+  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
 
-Error: Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts:28.37-38 syntax error
-FATAL ERROR: Unable to parse input tree
+are available in the Git repository at:
 
-It happens, because 'dt_binding_check' generates simple dts example and
-tries to compile it:
+  https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
 
-cat Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts
-===
+for you to fetch changes up to 8fc9ce051f22581f60325fd87a0fd0f37a7b70c3:
 
-/dts-v1/;
-/plugin/; // silence any missing phandle references
+  vdpa/mlx5: Remove debugfs file after device unregister (2023-03-21 16:39:02 -0400)
 
+----------------------------------------------------------------
+vdpa: bugfix
 
-/{
-    compatible = "foo";
-    model = "foo";
-    #address-cells = <1>;
-    #size-cells = <1>;
+An error handling fix in mlx5.
 
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 
+----------------------------------------------------------------
+Eli Cohen (1):
+      vdpa/mlx5: Remove debugfs file after device unregister
 
-    example-0 {
-        #address-cells = <1>;
-        #size-cells = <1>;
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-        
-
-        apb {
-            #address-cells = <2>;
-            #size-cells = <2>;
-        
-            clock-controller@800 {
-                compatible = "amlogic,a1-clkc";
-                reg = <0 0x800 0 0x104>;
-                #clock-cells = <1>;
-                clocks = <&clkc_pll CLKID_FCLK_DIV2>,
-                         <&clkc_pll CLKID_FCLK_DIV3>,
-                         <&clkc_pll CLKID_FCLK_DIV5>,
-                         <&clkc_pll CLKID_FCLK_DIV7>,
-                         <&clkc_pll CLKID_HIFI_PLL>,
-                         <&xtal>;
-                clock-names = "fclk_div2", "fclk_div3",
-                              "fclk_div5", "fclk_div7",
-                              "hifi_pll", "xtal";
-            };
-        };
-
-    };
-};
-===
-
-As you can see, header is required.
-
-But looks like, dt binding checker is happy with the fake references hack :)
-Below there is generated example dts:
-
-cat Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts
-===
-
-/dts-v1/;
-/plugin/; // silence any missing phandle references
-
-
-/{
-    compatible = "foo";
-    model = "foo";
-    #address-cells = <1>;
-    #size-cells = <1>;
-
-
-
-    example-0 {
-        #address-cells = <1>;
-        #size-cells = <1>;
-
-        
-
-        apb {
-            #address-cells = <2>;
-            #size-cells = <2>;
-        
-            clock-controller@800 {
-                compatible = "amlogic,a1-clkc";
-                reg = <0 0x800 0 0x104>;
-                #clock-cells = <1>;
-                clocks = <&clkc_pll_fclk_div2>,
-                         <&clkc_pll_fclk_div3>,
-                         <&clkc_pll_fclk_div5>,
-                         <&clkc_pll_fclk_div7>,
-                         <&clkc_pll_hifi_pll>,
-                         <&xtal>;
-                clock-names = "fclk_div2", "fclk_div3",
-                              "fclk_div5", "fclk_div7",
-                              "hifi_pll", "xtal";
-            };
-        };
-
-    };
-};
-===
-
-Yep, we are able to cheat dt checkers, but we don't help dt developers
-with such example.
-May be, it's better to prepare two patches in such hierarchy:
-
-1) A1 PLL clkc bindings with fake references without clkc headers
-2) A1 clkc bindings with real CLKID bindings + A1 PLL clkc bindings fix
-with real CLKID A1 clkc bindings + header.
-
-The such approach resolves DT checkers failures and split DT bindings
-into two patchsets.
-
-[...]
-
--- 
-Thank you,
-Dmitry
