@@ -2,110 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E72C6CA0F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F3E6CA0F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233511AbjC0KMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 06:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
+        id S233355AbjC0KMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbjC0KL5 (ORCPT
+        with ESMTP id S233324AbjC0KMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:11:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDFE5BBE;
-        Mon, 27 Mar 2023 03:11:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4EDD3B81057;
-        Mon, 27 Mar 2023 10:11:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 840B3C433EF;
-        Mon, 27 Mar 2023 10:11:43 +0000 (UTC)
-Date:   Mon, 27 Mar 2023 11:11:40 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Mark Rutland' <mark.rutland@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "will@kernel.org" <will@kernel.org>
-Subject: Re: [PATCH v2 1/4] lib: test copy_{to,from}_user()
-Message-ID: <ZCFr3I36Te2D0ZuQ@arm.com>
-References: <20230321122514.1743889-1-mark.rutland@arm.com>
- <20230321122514.1743889-2-mark.rutland@arm.com>
- <ZBnk3O0QLs6+8KNN@arm.com>
- <ZBsLGTYjKoUTLrva@FVFF77S0Q05N>
- <f4d24e8024e84ec5a20ab17b6c2d7f60@AcuMS.aculab.com>
+        Mon, 27 Mar 2023 06:12:33 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82895524E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:12:31 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id c9so236151lfb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:12:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679911950;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/C2K7AVqHJsIM3703QBvpePPFt/BDGgGCogbo4S2LZk=;
+        b=WxthYPz1xddExSJCFGmMBWlKOVi7fQatkdUFNt+PD2NkE+/kLZjyCLxDkGJJ2kDHUx
+         20Nqjf2ZyjFHwiQPq0x+/W9S0PwYZL0C9hX5eE+A/snI5hmIICi/n+nslh/IkA4JJXsh
+         7GJ+k+QYGbesXFGy+avXrQ4cRA/mL5hJ45Iv5MkbHLKpo4KFPSeV9c5gGHMkuHxSr3N5
+         D+7GltAEGNSbjJvbY2CsEPfCHlyI30Dd8V6pPT9Gs/vkYac06p5BbqBSS4rogKd4JK7k
+         6V6VLyyTH7jD/YYuizij9tV1VmQdZceJjgkAjMC2BWIR8xkja0nvEkWkjJZx20d1E8zX
+         9mjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679911950;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/C2K7AVqHJsIM3703QBvpePPFt/BDGgGCogbo4S2LZk=;
+        b=dxqmcnZGk1xBWHcYuSvcZBaImYJlJKnyBSgedaVT/rbguR5Yh9NE/JmfRZCx4N+0X/
+         G0JVdbwQhjziy5QCOR99rCLm4gZY7cMWPonE0jzxRCfhX8jiZERu3VwHoNby+/veaPmV
+         tQ873e3g04gh89kjaOnU4+IS/575Zwbs9F6so4/O1RyH9NbCIZXqzdogJhkCoH3islFv
+         tsFATlsKdnNk4LddoizI1v2zQ1YBa6/oM/H9hplV2W0RXmCqcJAuVzAiqW8DezTMsyja
+         gxdpIFWWNaWqmCx1CsayiSZvivaYrFBwFn7ihuftScaJvFfFeCw/78dWij948Neb2Ai8
+         qQdA==
+X-Gm-Message-State: AAQBX9eoOMXuKljkZ8tAVNhOKp72+fXz8gjzQ4/1Xv2QEPZj4IG4CVWN
+        xMVJ7gGGCz1sILr9OUXRJuUQjg==
+X-Google-Smtp-Source: AKy350aoI3P2M/ZfMH5ucUYBuToxtgKf7V/XGxgJNrkdlksvqd3WgQLgAo/x7NDfMCfDmNlDw5zvMQ==
+X-Received: by 2002:ac2:546a:0:b0:4dd:a57e:9960 with SMTP id e10-20020ac2546a000000b004dda57e9960mr3418274lfn.5.1679911949786;
+        Mon, 27 Mar 2023 03:12:29 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id u2-20020a056512040200b004dc807b904bsm4632413lfk.120.2023.03.27.03.12.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 03:12:29 -0700 (PDT)
+Message-ID: <e580d40e-c248-40f7-54cd-693d75c613fb@linaro.org>
+Date:   Mon, 27 Mar 2023 13:12:28 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4d24e8024e84ec5a20ab17b6c2d7f60@AcuMS.aculab.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/4] arm64: dts: msm8953: Provide dsi_phy clocks to gcc
+Content-Language: en-GB
+To:     Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230325112852.18841-1-a39.skl@gmail.com>
+ <20230325112852.18841-2-a39.skl@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230325112852.18841-2-a39.skl@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 10:16:12PM +0000, David Laight wrote:
-> From: Mark Rutland
-> > Sent: 22 March 2023 14:05
-> ....
-> > > IIUC, in such tests you only vary the destination offset. Our copy
-> > > routines in general try to align the source and leave the destination
-> > > unaligned for performance. It would be interesting to add some variation
-> > > on the source offset as well to spot potential issues with that part of
-> > > the memcpy routines.
-> > 
-> > I have that on my TODO list; I had intended to drop that into the
-> > usercopy_params. The only problem is that the cross product of size,
-> > src_offset, and dst_offset gets quite large.
+On 25/03/2023 13:28, Adam Skladowski wrote:
+> Provide clocks from dsi_phy to gcc, this will make
+> sure we don't fallback to global name lookup.
 > 
-> I thought that is was better to align the writes and do misaligned reads.
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+> ---
+>   arch/arm64/boot/dts/qcom/msm8953.dtsi | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
 
-We inherited the memcpy/memset routines from the optimised cortex
-strings library (fine-tuned by the toolchain people for various Arm
-microarchitectures). For some CPUs with less aggressive prefetching it's
-probably marginally faster to align the reads instead of writes (as
-multiple unaligned writes are usually combined in the write buffer
-somewhere).
-
-Also, IIRC for some small copies (less than 16 bytes), our routines
-don't bother with any alignment at all.
-
-> Although maybe copy_to/from_user() would be best aligning the user address
-> (to avoid page faults part way through a misaligned access).
-
-In theory only copy_to_user() needs the write aligned if we want strict
-guarantees of what was written. For copy_from_user() we can work around
-by falling back to a byte read.
-
-> OTOH, on x86, is it even worth bothering at all.
-> I have measured a performance drop for misaligned reads, but it
-> was less than 1 clock per cache line in a test that was doing
-> 2 misaligned reads in at least some of the clock cycles.
-> I think the memory read path can do two AVX reads each clock.
-> So doing two misaligned 64bit reads isn't stressing it.
-
-I think that's what Mark found as well in his testing, though I'm sure
-one can build a very specific benchmark that shows a small degradation.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 -- 
-Catalin
+With best wishes
+Dmitry
+
