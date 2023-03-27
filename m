@@ -2,118 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4A86CA8B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3DC6CA8BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbjC0PNa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 11:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
+        id S231834AbjC0PPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 11:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbjC0PNQ (ORCPT
+        with ESMTP id S229498AbjC0PPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:13:16 -0400
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA48140F1;
-        Mon, 27 Mar 2023 08:13:15 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id x3so37514394edb.10;
-        Mon, 27 Mar 2023 08:13:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679929994;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=geXDdhc3YH6KJ0J3KkTFe0Op5hGruTe62W+7at+t+fc=;
-        b=3dP2/nwqmTro3qmpt/F2Gvw2RLL03nB7qQ+FLWqXkwpskSmQk475+d+QOsdMJQJIK1
-         s7IDBTg1R5HFxtdT5gFog6LRMur87Gu8LD2QAkSrKWVBaSBqetv98PEUhdv3gmNyclPr
-         G9Bq7nL5gjsdhNeh4AKnYG71fVW2fiR8Yde7NxLhNV3Gxt3V+EPEgS+lUyBCA6637zCn
-         1rqjUzwzfXSwh7ioNyM2QaEb2KcAO8elDKuOueBmF3LmfMtFVA6w60k+kuZZxCi0K4j7
-         wCMnEPvT4KxQKJlCOgl27oV8m0RH45QV5OIDAufDNp0hJAiN3QIZeNen4gbb9WGGOMRa
-         OcOQ==
-X-Gm-Message-State: AAQBX9cENcpa6Vvev0q2IG8w/5y41AdTHJ1rgfoiOi2Vk04+SCA55hOL
-        Shnxvb7oB/78+97IScOClV09xiqO7jSXViZw09kicWzA
-X-Google-Smtp-Source: AKy350aMeJLriUMyPzergybtrU94CNu/8FVjvHfwgyC7SQxOu8WV61dsG5MCg/BieBWOIS2z1ok0uxylYNJ/FDd7akc=
-X-Received: by 2002:a17:906:37c8:b0:934:b5d6:14d0 with SMTP id
- o8-20020a17090637c800b00934b5d614d0mr6227368ejc.2.1679929994290; Mon, 27 Mar
- 2023 08:13:14 -0700 (PDT)
+        Mon, 27 Mar 2023 11:15:22 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6B7122;
+        Mon, 27 Mar 2023 08:15:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ESG8YxL4RYEQX1LFkg3iiiQWrSAkB2oA83asusDbCz4=; b=NWAfI7QUlRz5+ccBJuYiIVOHkK
+        QcMvSDy6LPabwrq5DTM051didsJVlsxaLJpRqwkSJtJxeg4drvCeKgpS0iOXkwr0Mcp8Z4uDaRIgE
+        rL3DwDja41UzXNHqcjp5ES1nZVdAGAejX9PAjNqdX0quYv4jKjdz9VvwFU4GXXSSNYpa/GFmKIWgQ
+        7knDdaHckHpJBZi7ikYjLB6V4cnUq7hSBlAQZx1HPysqEdpoFcys15/XC/INGGyp8O9HPWCwFXbJG
+        tTgpiRFuCJFGAXWM1CjzfdpGG5Ol1IECAXg+C3cR6dyuWTsnYsP390rbFeRYdY4YUONI58dk3rgE3
+        vr8AwB5w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pgoYm-007VJI-Qe; Mon, 27 Mar 2023 15:15:01 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BBBA9300379;
+        Mon, 27 Mar 2023 17:14:58 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8A0F8200D8E1F; Mon, 27 Mar 2023 17:14:58 +0200 (CEST)
+Date:   Mon, 27 Mar 2023 17:14:58 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     rcu@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Shuah Khan <shuah@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        seanjc@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH rcu v2 0/7] RCU-related lockdep changes for v6.4
+Message-ID: <20230327151458.GB11425@hirez.programming.kicks-ass.net>
+References: <20230323042614.1191120-1-boqun.feng@gmail.com>
 MIME-Version: 1.0
-References: <20230324070807.6342-1-rui.zhang@intel.com> <20230324070807.6342-2-rui.zhang@intel.com>
- <CAJZ5v0gze1wBEMcuEu4Aa9343rh-3=Bu+pdSYuY3stMd8QGf0A@mail.gmail.com> <528f7e58507df4b6137856828e371bb8913b8b59.camel@intel.com>
-In-Reply-To: <528f7e58507df4b6137856828e371bb8913b8b59.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 17:13:03 +0200
-Message-ID: <CAJZ5v0gL_7VPdcgkmuTz=afYSbGsWZi5wW9vUvyAgverjxsNdw@mail.gmail.com>
-Subject: Re: [PATCH 2/5] thermal/core: Reset cooling state during cooling
- device unregistration
-To:     "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323042614.1191120-1-boqun.feng@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 4:50 PM Zhang, Rui <rui.zhang@intel.com> wrote:
->
-> On Fri, 2023-03-24 at 14:19 +0100, Rafael J. Wysocki wrote:
-> > On Fri, Mar 24, 2023 at 8:08 AM Zhang Rui <rui.zhang@intel.com>
-> > wrote:
-> > > When unregistering a cooling device, it is possible that the
-> > > cooling
-> > > device has been activated. And once the cooling device is
-> > > unregistered,
-> > > no one will deactivate it anymore.
-> > >
-> > > Reset cooling state during cooling device unregistration.
-> > >
-> > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > > ---
-> > > In theory, this problem that this patch fixes can be triggered on a
-> > > platform with ACPI Active cooling, by
-> > > 1. overheat the system to trigger ACPI active cooling
-> > > 2. unload ACPI fan driver
-> > > 3. check if the fan is still spinning
-> > > But I don't have such a system so I didn't trigger then problem and
-> > > I
-> > > only did build & boot test.
-> >
-> > So I'm not sure if this change is actually safe.
-> >
-> > In the example above, the system will still need the fan to spin
-> > after
-> > the ACPI fan driver is unloaded in order to cool down, won't it?
->
-> Then we can argue that the ACPI fan driver should not be unloaded in
-> this case.
+On Wed, Mar 22, 2023 at 09:26:07PM -0700, Boqun Feng wrote:
+> Boqun Feng (4):
+>   locking/lockdep: Introduce lock_sync()
+>   rcu: Annotate SRCU's update-side lockdep dependencies
+>   locking: Reduce the number of locks in ww_mutex stress tests
+>   locking/lockdep: Improve the deadlock scenario print for sync and read
+>     lock
+> 
+> Paul E. McKenney (3):
+>   rcutorture: Add SRCU deadlock scenarios
+>   rcutorture: Add RCU Tasks Trace and SRCU deadlock scenarios
+>   rcutorture: Add srcu_lockdep.sh
+> 
+>  include/linux/lockdep.h                       |   8 +-
+>  include/linux/srcu.h                          |  34 +++-
+>  kernel/locking/lockdep.c                      |  64 +++++-
+>  kernel/locking/test-ww_mutex.c                |   2 +-
+>  kernel/rcu/rcutorture.c                       | 185 ++++++++++++++++++
+>  kernel/rcu/srcutiny.c                         |   2 +
+>  kernel/rcu/srcutree.c                         |   2 +
+>  .../selftests/rcutorture/bin/srcu_lockdep.sh  |  78 ++++++++
+>  8 files changed, 364 insertions(+), 11 deletions(-)
+>  create mode 100755 tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
 
-I don't think that whether or not the driver is expected to be
-unloaded at a given time has any bearing on how it should behave when
-actually unloaded.
-
-Leaving the cooling device in its current state is "safe" from the
-thermal control perspective, but it may affect the general user
-experience (which may include performance too) going forward, so there
-is a tradeoff.
-
-You can argue that even if the cooling device is reset on the driver
-removal, there should be another thermal control mechanism in place
-that will take care of the overheat condition instead of it, but that
-mechanism may be an emergency system shutdown.
-
-What do the other cooling device drivers do in general when they get removed?
-
-> Actually, this is the same situation as patch 1/5.
-> Patch 1/5 fixes the problem that cooling state not restored to 0 when
-> unloading the thermal driver, and this fixes the same problem when
-> unloading the cooling device driver.
-
-Right, it is analogous.
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
