@@ -2,322 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BD26C9B7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 08:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B980F6C9B81
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 08:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbjC0Gqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 02:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
+        id S232156AbjC0Gqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 02:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232289AbjC0Gqf (ORCPT
+        with ESMTP id S232356AbjC0Gqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 02:46:35 -0400
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E62246AA;
-        Sun, 26 Mar 2023 23:46:30 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.47
-        by mg.richtek.com with MailGates ESMTP Server V5.0(26696:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>); Mon, 27 Mar 2023 14:46:13 +0800 (CST)
-Received: from ex4.rt.l (192.168.10.47) by ex4.rt.l (192.168.10.47) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Mon, 27 Mar
- 2023 14:46:13 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Mon, 27 Mar 2023 14:46:13 +0800
-From:   <cy_huang@richtek.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <lgirdwood@gmail.com>, <cy_huang@richtek.com>,
-        <jeff_chang@richtek.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH 2/2] regulator: Add Richtek RT4803 boost regulator
-Date:   Mon, 27 Mar 2023 14:46:12 +0800
-Message-ID: <1679899572-16182-2-git-send-email-cy_huang@richtek.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1679899572-16182-1-git-send-email-cy_huang@richtek.com>
-References: <1679899572-16182-1-git-send-email-cy_huang@richtek.com>
+        Mon, 27 Mar 2023 02:46:49 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C7849E6;
+        Sun, 26 Mar 2023 23:46:40 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32R5PDt4022835;
+        Mon, 27 Mar 2023 06:46:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=GmozCoh1OO4sUpHU5imMX3MSULoHp3Cr9bwCUFL8NUk=;
+ b=C5xlM8X9j7JFYxZ/bbHd9VuPccap7ruYbDRgLmPpkzmU98QbeWfsPU1Nd+bTtBW2nJof
+ LUiJrVpbrRZHc+dX9hHib3Zf5Z9fuQ4AFNfz7CJIHUDDvaQhGWK5kSUv7xL9w1wyo6si
+ ftGjggeIkgat8xPgPYyWmslBPrdcACry+kBQij0R42UAbbimIJa+8MxUQ6NzNNWFO1qz
+ UYanvmHWHphFpc823TJE2FfTtmdjToH4ByjoHFFiKHXeKdqB6ws2hlS51ZAzSKRF/07i
+ mPy3BHtU7Bju3tgPvp3MiIxtG0Sxv3LAlcz+N7b9STWf55I3EgYWq6BijwPaXcCpJFZN vA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pht50uj3r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 06:46:25 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32R6kO68021300
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 06:46:24 GMT
+Received: from [10.239.133.211] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Sun, 26 Mar
+ 2023 23:46:19 -0700
+Message-ID: <97b04ae0-7337-4bfc-9762-de5213b0fefd@quicinc.com>
+Date:   Mon, 27 Mar 2023 14:46:17 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 03/11] coresight-tpdm: Initialize DSB subunit
+ configuration
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
+ <1679551448-19160-4-git-send-email-quic_taozha@quicinc.com>
+ <65bb7624-9d57-1056-61fd-ae840728ecd6@arm.com>
+From:   Tao Zhang <quic_taozha@quicinc.com>
+In-Reply-To: <65bb7624-9d57-1056-61fd-ae840728ecd6@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: feABl6dz-X82k9ocLeaaFo-YGw1dU1qa
+X-Proofpoint-ORIG-GUID: feABl6dz-X82k9ocLeaaFo-YGw1dU1qa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ lowpriorityscore=0 suspectscore=0 priorityscore=1501 spamscore=0
+ malwarescore=0 impostorscore=0 adultscore=0 phishscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303270055
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+Hi Suzuki,
 
-RT4803 is a boost converter that integrates an internal bypass FET. It
-will automatically transform the operation mode between bypass and boost
-based on the voltage difference of the input and output voltage.
+On 3/23/2023 10:23 PM, Suzuki K Poulose wrote:
+> On 23/03/2023 06:04, Tao Zhang wrote:
+>> DSB is used for monitoring “events”. Events are something that
+>> occurs at some point in time. It could be a state decode, the
+>> act of writing/reading a particular address, a FIFO being empty,
+>> etc. This decoding of the event desired is done outside TPDM.
+>> DSB subunit need to be configured in enablement and disablement.
+>> A struct that specifics associated to dsb dataset is needed. It
+>> saves the configuration and parameters of the dsb datasets. This
+>> change is to add this struct and initialize the configuration of
+>> DSB subunit.
+>>
+>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>> ---
+>>   drivers/hwtracing/coresight/coresight-tpdm.c | 58 
+>> +++++++++++++++++++++++++---
+>>   drivers/hwtracing/coresight/coresight-tpdm.h | 17 ++++++++
+>>   2 files changed, 70 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
+>> b/drivers/hwtracing/coresight/coresight-tpdm.c
+>> index f4854af..5e1e2ba 100644
+>> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+>> @@ -20,17 +20,59 @@
+>>     DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
+>>   +static int tpdm_init_datasets(struct tpdm_drvdata *drvdata)
+>
+>
+>> +{
+>> +    if (drvdata->datasets & TPDM_PIDR0_DS_DSB) {
+>> +        if (!drvdata->dsb) {
+>> +            drvdata->dsb = devm_kzalloc(drvdata->dev,
+>> +                            sizeof(*drvdata->dsb), GFP_KERNEL);
+>> +            if (!drvdata->dsb)
+>> +                return -ENOMEM;
+>
+> Please do not club init/allocation of datasets to "resetting" the
+> datasets. Why don't we move the allocation to tpmd_datasets_setup() ?
+> And this function could simply be called :
+>
+> tpdm_reset_datasets()
+>
+> and can be called from the tpdm_datasets_setup() too.
+>
+I will update this in the next patch series.
+>
+>> +        } else
+>> +            memset(drvdata->dsb, 0, sizeof(struct dsb_dataset));
+>> +
+>> +        drvdata->dsb->trig_ts = true;
+>> +        drvdata->dsb->trig_type = false;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void set_trigger_type(struct tpdm_drvdata *drvdata, u32 *val)
+>> +{
+>> +    if (drvdata->dsb->trig_type)
+>> +        *val |= TPDM_DSB_CR_TRIG_TYPE;
+>> +    else
+>> +        *val &= ~TPDM_DSB_CR_TRIG_TYPE;
+>> +}
+>> +
+>
+> Do we really need a function for this ? How is it different from 
+> trig_ts ?
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
- drivers/regulator/Kconfig  |  10 +++
- drivers/regulator/Makefile |   1 +
- drivers/regulator/rt4803.c | 216 +++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 227 insertions(+)
- create mode 100644 drivers/regulator/rt4803.c
+"trig_type" is for setting trigger type, and "trig_ts" is for setting 
+trigger
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index aae28d0..fd9a29c 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1082,6 +1082,16 @@ config REGULATOR_RT4801
- 	  This adds support for voltage regulators in Richtek RT4801 Display Bias IC.
- 	  The device supports two regulators (DSVP/DSVN).
- 
-+config REGULATOR_RT4803
-+	tristate "Richtek RT4803 boost regualtor"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  This adds support for RT4803 boost converter that integrates the
-+	  bypass switch. If the input voltage is low than the required voltage,
-+	  RT4803 will enter boost mode. Otherwise, enable internal bypass
-+	  switch to enter bypass mode.
-+
- config REGULATOR_RT4831
- 	tristate "Richtek RT4831 DSV Regulators"
- 	depends on MFD_RT4831
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index ee383d8..163b599 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -130,6 +130,7 @@ obj-$(CONFIG_REGULATOR_RK808)   += rk808-regulator.o
- obj-$(CONFIG_REGULATOR_RN5T618) += rn5t618-regulator.o
- obj-$(CONFIG_REGULATOR_ROHM)	+= rohm-regulator.o
- obj-$(CONFIG_REGULATOR_RT4801)	+= rt4801-regulator.o
-+obj-$(CONFIG_REGULATOR_RT4803)	+= rt4803.o
- obj-$(CONFIG_REGULATOR_RT4831)	+= rt4831-regulator.o
- obj-$(CONFIG_REGULATOR_RT5033)	+= rt5033-regulator.o
- obj-$(CONFIG_REGULATOR_RT5120)	+= rt5120-regulator.o
-diff --git a/drivers/regulator/rt4803.c b/drivers/regulator/rt4803.c
-new file mode 100644
-index 00000000..c96fb02
---- /dev/null
-+++ b/drivers/regulator/rt4803.c
-@@ -0,0 +1,216 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2023 Richtek Technology Corp.
-+ *
-+ * Author: ChiYuan Huang <cy_huang@richtek.com>
-+ */
-+
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/driver.h>
-+#include <linux/regulator/of_regulator.h>
-+
-+#define RT4803_AUTO_MODE	1
-+#define RT4803_FPWM_MODE	2
-+
-+#define RT4803_REG_CONFIG	0x01
-+#define RT4803_REG_VSELL	0x02
-+#define RT4803_REG_VSELH	0x03
-+#define RT4803_REG_ILIM		0x04
-+#define RT4803_REG_STAT		0x05
-+
-+#define RT4803_MODE_MASK	GENMASK(1, 0)
-+#define RT4803_VSEL_MASK	GENMASK(4, 0)
-+#define RT4803_ILIM_MASK	GENMASK(3, 0)
-+#define RT4803_TSD_MASK		BIT(7)
-+#define RT4803_HOTDIE_MASK	BIT(6)
-+#define RT4803_FAULT_MASK	BIT(1)
-+#define RT4803_PGOOD_MASK	BIT(0)
-+
-+#define RT4803_VOUT_MINUV	2850000
-+#define RT4803_VOUT_STEPUV	50000
-+#define RT4803_VOUT_NUM		32
-+
-+static int rt4803_set_mode(struct regulator_dev *rdev, unsigned int mode)
-+{
-+	struct regmap *regmap = rdev_get_regmap(rdev);
-+	unsigned int modeval;
-+
-+	switch (mode) {
-+	case REGULATOR_MODE_NORMAL:
-+		modeval = RT4803_AUTO_MODE;
-+		break;
-+	case REGULATOR_MODE_FAST:
-+		modeval = RT4803_FPWM_MODE;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	modeval <<= ffs(RT4803_MODE_MASK) - 1;
-+
-+	return regmap_update_bits(regmap, RT4803_REG_CONFIG, RT4803_MODE_MASK, modeval);
-+}
-+
-+static unsigned int rt4803_get_mode(struct regulator_dev *rdev)
-+{
-+	struct regmap *regmap = rdev_get_regmap(rdev);
-+	unsigned int modeval;
-+	int ret;
-+
-+	ret = regmap_read(regmap, RT4803_REG_CONFIG, &modeval);
-+	if (ret)
-+		return REGULATOR_MODE_INVALID;
-+
-+	modeval >>= ffs(RT4803_MODE_MASK) - 1;
-+
-+	switch (modeval) {
-+	case RT4803_AUTO_MODE:
-+		return REGULATOR_MODE_NORMAL;
-+	case RT4803_FPWM_MODE:
-+		return REGULATOR_MODE_FAST;
-+	default:
-+		return REGULATOR_MODE_INVALID;
-+	}
-+}
-+
-+static int rt4803_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-+{
-+	struct regmap *regmap = rdev_get_regmap(rdev);
-+	unsigned int state, events = 0;
-+	int ret;
-+
-+	ret = regmap_read(regmap, RT4803_REG_STAT, &state);
-+	if (ret)
-+		return ret;
-+
-+	if (state & RT4803_PGOOD_MASK)
-+		goto out_error_flag;
-+
-+	if (state & RT4803_FAULT_MASK)
-+		events |= REGULATOR_ERROR_FAIL;
-+
-+	if (state & RT4803_HOTDIE_MASK)
-+		events |= REGULATOR_ERROR_OVER_TEMP_WARN;
-+
-+	if (state & RT4803_TSD_MASK)
-+		events |= REGULATOR_ERROR_OVER_TEMP;
-+
-+out_error_flag:
-+	*flags = events;
-+	return 0;
-+}
-+
-+static int rt4803_set_suspend_voltage(struct regulator_dev *rdev, int uV)
-+{
-+	struct regmap *regmap = rdev_get_regmap(rdev);
-+	unsigned int reg, vsel;
-+
-+	if (rdev->desc->vsel_reg == RT4803_REG_VSELL)
-+		reg = RT4803_REG_VSELH;
-+	else
-+		reg = RT4803_REG_VSELL;
-+
-+	vsel = (uV - rdev->desc->min_uV) / rdev->desc->uV_step;
-+	vsel <<= ffs(RT4803_VSEL_MASK) - 1;
-+
-+	return regmap_update_bits(regmap, reg, RT4803_VSEL_MASK, vsel);
-+}
-+
-+static const struct regulator_ops rt4803_regulator_ops = {
-+	.list_voltage = regulator_list_voltage_linear,
-+	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-+	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-+	.set_mode = rt4803_set_mode,
-+	.get_mode = rt4803_get_mode,
-+	.get_error_flags = rt4803_get_error_flags,
-+	.set_suspend_voltage = rt4803_set_suspend_voltage,
-+};
-+
-+static unsigned int rt4803_of_map_mode(unsigned int mode)
-+{
-+	switch (mode) {
-+	case RT4803_AUTO_MODE:
-+		return REGULATOR_MODE_NORMAL;
-+	case RT4803_FPWM_MODE:
-+		return REGULATOR_MODE_FAST;
-+	default:
-+		return REGULATOR_MODE_INVALID;
-+	}
-+}
-+
-+static const struct regmap_config rt4803_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = RT4803_REG_STAT,
-+};
-+
-+static int rt4803_probe(struct i2c_client *i2c)
-+{
-+	struct device *dev = &i2c->dev;
-+	struct regmap *regmap;
-+	struct regulator_desc *desc;
-+	struct regulator_config cfg = {};
-+	struct regulator_dev *rdev;
-+	bool vsel_act_high;
-+	int ret;
-+
-+	desc = devm_kzalloc(dev, sizeof(*desc), GFP_KERNEL);
-+	if (!desc)
-+		return -ENOMEM;
-+
-+	regmap = devm_regmap_init_i2c(i2c, &rt4803_regmap_config);
-+	if (IS_ERR(regmap))
-+		return dev_err_probe(dev, PTR_ERR(regmap), "Failed to init regmap\n");
-+
-+	/* Always configure the input current limit to max 5A at initial */
-+	ret = regmap_update_bits(regmap, RT4803_REG_ILIM, RT4803_ILIM_MASK, 0xff);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to config ILIM to max\n");
-+
-+	vsel_act_high = device_property_read_bool(dev, "richtek,vsel-active-high");
-+
-+	desc->name = "rt4803-regulator";
-+	desc->type = REGULATOR_VOLTAGE;
-+	desc->owner = THIS_MODULE;
-+	desc->ops = &rt4803_regulator_ops;
-+	desc->min_uV = RT4803_VOUT_MINUV;
-+	desc->uV_step = RT4803_VOUT_STEPUV;
-+	desc->n_voltages = RT4803_VOUT_NUM;
-+	desc->vsel_mask = RT4803_VSEL_MASK;
-+	desc->of_map_mode = rt4803_of_map_mode;
-+	if (vsel_act_high)
-+		desc->vsel_reg = RT4803_REG_VSELH;
-+	else
-+		desc->vsel_reg = RT4803_REG_VSELL;
-+
-+	cfg.dev = dev;
-+	cfg.of_node = dev_of_node(dev);
-+	cfg.init_data = of_get_regulator_init_data(dev, dev_of_node(dev), desc);
-+
-+	rdev = devm_regulator_register(dev, desc, &cfg);
-+	return PTR_ERR_OR_ZERO(rdev);
-+}
-+
-+static const struct of_device_id rt4803_device_match_table[] = {
-+	{ .compatible = "richtek,rt4803" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, rt4803_device_match_table);
-+
-+static struct i2c_driver rt4803_driver = {
-+	.driver = {
-+		.name = "rt4803",
-+		.of_match_table = rt4803_device_match_table,
-+	},
-+	.probe = rt4803_probe,
-+};
-+module_i2c_driver(rt4803_driver);
-+
-+MODULE_DESCRIPTION("Richtek RT4803 voltage regulator driver");
-+MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
-+MODULE_LICENSE("GPL");
--- 
-2.7.4
+timestamp. These two variables are configured in two different registers.
 
+Do you mean we don't need to wrap it as a function here?
+
+>
+>>   static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
+>>   {
+>>       u32 val;
+>>   -    /* Set the enable bit of DSB control register to 1 */
+>> +    val = readl_relaxed(drvdata->base + TPDM_DSB_TIER);
+>> +    /* Set trigger timestamp */
+>> +    if (drvdata->dsb->trig_ts)
+>> +        val |= TPDM_DSB_TIER_XTRIG_TSENAB;
+>> +    else
+>> +        val &= ~TPDM_DSB_TIER_XTRIG_TSENAB;
+>> +    writel_relaxed(val, drvdata->base + TPDM_DSB_TIER);
+>> +
+>>       val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
+>> +    /* Set trigger type */
+>> +    set_trigger_type(drvdata, &val);
+>> +    /* Set the enable bit of DSB control register to 1 */
+>>       val |= TPDM_DSB_CR_ENA;
+>>       writel_relaxed(val, drvdata->base + TPDM_DSB_CR);
+>>   }
+>>     /* TPDM enable operations */
+>> +/* The TPDM or Monitor serves as data collection component for various
+>> + * dataset types. It covers Basic Counts(BC), Tenure Counts(TC),
+>> + * Continuous Multi-Bit(CMB), Multi-lane CMB(MCMB) and Discrete Single
+>> + * Bit(DSB). This function will initialize the configuration according
+>> + * to the dataset type supported by the TPDM.
+>> + */
+>>   static void __tpdm_enable(struct tpdm_drvdata *drvdata)
+>>   {
+>>       CS_UNLOCK(drvdata->base);
+>> @@ -110,15 +152,13 @@ static const struct coresight_ops tpdm_cs_ops = {
+>>       .source_ops    = &tpdm_source_ops,
+>>   };
+>>   -static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
+>> +static void tpdm_datasets_setup(struct tpdm_drvdata *drvdata)
+>>   {
+>>       u32 pidr;
+>>   -    CS_UNLOCK(drvdata->base);
+>
+> Why is this removed ?
+We only need to read the register here, don't need to unlock the 
+registers here, right?
+>
+>>       /*  Get the datasets present on the TPDM. */
+>>       pidr = readl_relaxed(drvdata->base + CORESIGHT_PERIPHIDR0);
+>>       drvdata->datasets |= pidr & GENMASK(TPDM_DATASETS - 1, 0);
+>> -    CS_LOCK(drvdata->base);
+>>   }
+>>     /*
+>> @@ -181,6 +221,7 @@ static int tpdm_probe(struct amba_device *adev, 
+>> const struct amba_id *id)
+>>       struct coresight_platform_data *pdata;
+>>       struct tpdm_drvdata *drvdata;
+>>       struct coresight_desc desc = { 0 };
+>> +    int ret;
+>>         pdata = coresight_get_platform_data(dev);
+>>       if (IS_ERR(pdata))
+>> @@ -200,6 +241,8 @@ static int tpdm_probe(struct amba_device *adev, 
+>> const struct amba_id *id)
+>>         drvdata->base = base;
+>>   +    tpdm_datasets_setup(drvdata);
+>> +
+>>       /* Set up coresight component description */
+>>       desc.name = coresight_alloc_device_name(&tpdm_devs, dev);
+>>       if (!desc.name)
+>> @@ -216,7 +259,12 @@ static int tpdm_probe(struct amba_device *adev, 
+>> const struct amba_id *id)
+>>           return PTR_ERR(drvdata->csdev);
+>>         spin_lock_init(&drvdata->spinlock);
+>> -    tpdm_init_default_data(drvdata);
+>> +    ret = tpdm_init_datasets(drvdata);
+>
+> Couldn't this be done before the coresight_register() ? As such
+> I don't see any dependency on having a csdev ?
+
+I will update this in the next patch series.
+
+
+Tao
+
+>
+> Suzuki
