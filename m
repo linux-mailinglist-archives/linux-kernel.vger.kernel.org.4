@@ -2,176 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8036CA231
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2A66CA235
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232354AbjC0LJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 07:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
+        id S232237AbjC0LME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 07:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbjC0LJl (ORCPT
+        with ESMTP id S229662AbjC0LMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 07:09:41 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44AA46A6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:09:35 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 164BC5C00D2;
-        Mon, 27 Mar 2023 07:09:35 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 27 Mar 2023 07:09:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679915375; x=
-        1680001775; bh=zuQVwgWzdxxG6OjMCmHkNo6kbIdD+LHMQN/MYMfDnfI=; b=H
-        m8R6xPILIfJfAPKhshVfzFX/gsc6lcgoXxfJ1Sshiw7BaNEMKl0UoblsIyECaU3g
-        K/dYOV3LcZEAsCvKyt54Dech9daqJ0oj4nsY8RPxbilJrcz+UBgMB7LWq5cjS8+G
-        ghGnAy8roY4t+PmX87LqbRAm3XUUPbiu1K5BpUjkRQRYd7o1eI/WiYpPJrYBqBrb
-        Z+J751Sx09GjnGgeRELdEGS2k8T11F5jY7dMh/inBFTKjVMqLWEhnNm18pvMTJBA
-        RrIvj5dyVMyQbnxTnoghXhAfZbLVaQi8piAfpJ6UEsMesCGw7gcKMZ+9L6er5NaY
-        52jv7Y9sN0JPHVg18+GxQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679915375; x=1680001775; bh=zuQVwgWzdxxG6
-        OjMCmHkNo6kbIdD+LHMQN/MYMfDnfI=; b=l1U9RT21ubrfotWDtweeWbt9jMx/9
-        InYi7kUThBSBCuVvResq9UiqT6Z6JInNRZuF96huKKqf8xlHqxI7TjSHew/CRNhj
-        Y9SuvYcr1saIFHtQXL3027/iTNuOsrmXBwlRR90LYZxhoBRk1xgTyCAahyp2OimB
-        3sZp4Ok480/SyqQ45VC7n2aXcY9C9vhQTiryt3SvzzTWDU/HDlPVEdmf9UCZ11fw
-        1D5G8yEvUgiT/cliZYvtvTZkslTK4iqwV2JnzyhMp57DDsW/HUqa7Xy7U/DDH7Jw
-        /saHZT7Os23LSUodgF57l0KUbKoeGk3Sdf8qjVlwLRtn7aaEG+ZG4KNew==
-X-ME-Sender: <xms:bnkhZKVs2jEK_6bE7yclsW_86dv6BehI_ldYO7wMIGcOXg9VzXnq3Q>
-    <xme:bnkhZGmcrv1WcDuuthXLtAIKcqV8wNmd29HJrqaA-fSHNxCmZfxu3dLDUVuin-yAH
-    9mwXuDkMb_U_ItHm8k>
-X-ME-Received: <xmr:bnkhZOZGCxrkTaWxpKRwWnSEZ1Y0rImIleP2vKnEWafeLNytW_q34Dun0QjvJNCCNdFqwg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehvddgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:bnkhZBVAa03v1HEsfX61m3ICe2toU5t38qhRdOt1h7Yp8LZdOUxqfg>
-    <xmx:bnkhZEnr3NeEOn-bUHZNw0EPaXRgTCpbUDU2MFLyOWGSnX2QQ-8UPA>
-    <xmx:bnkhZGdgphpN-2qo-PvWein5LhsotSHpPaRSJZGVYejrYb3fZ3lnlQ>
-    <xmx:b3khZBiQVIXy8V-2pBFlBSqg5fSuIcUZRrObyHb4RIlu09BJ0SQfYg>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Mar 2023 07:09:34 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 99789109BD6; Mon, 27 Mar 2023 14:09:32 +0300 (+03)
-Date:   Mon, 27 Mar 2023 14:09:32 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86: Disable kexec for TDX guests
-Message-ID: <20230327110932.z3wjdgfuay5dd2or@box.shutemov.name>
-References: <20230325160128.21857-1-kirill.shutemov@linux.intel.com>
- <ebead33b-0594-73df-56ae-f40473ac0ffc@intel.com>
- <20230325192524.wetlbycbcsxc4plk@box>
- <b16bcda0-f190-7849-cbbb-412d328c8806@intel.com>
- <ZCDy+nsjPsi/Lllh@MiWiFi-R3L-srv>
+        Mon, 27 Mar 2023 07:12:00 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A1010D0;
+        Mon, 27 Mar 2023 04:11:58 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PlVRv3jqJz17KJF;
+        Mon, 27 Mar 2023 19:08:43 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 27 Mar 2023 19:11:55 +0800
+Message-ID: <7144edc4-b771-7c92-5ec3-ac78a123d37c@huawei.com>
+Date:   Mon, 27 Mar 2023 19:11:55 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCDy+nsjPsi/Lllh@MiWiFi-R3L-srv>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 3/3] ext4: fix race between writepages and remount
+Content-Language: en-US
+To:     Jan Kara <jack@suse.cz>
+CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
+        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
+        <stable@vger.kernel.org>, Baokun Li <libaokun1@huawei.com>
+References: <20230316112832.2711783-1-libaokun1@huawei.com>
+ <20230316112832.2711783-4-libaokun1@huawei.com>
+ <20230323114407.xenntblzv4ewfqkk@quack3>
+ <269d37fd-d3f2-d059-b71f-acaea2e7ce4b@huawei.com>
+ <20230327093553.up7dhoyqe4ecpn7y@quack3>
+From:   Baokun Li <libaokun1@huawei.com>
+In-Reply-To: <20230327093553.up7dhoyqe4ecpn7y@quack3>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 09:35:54AM +0800, Baoquan He wrote:
-> On 03/26/23 at 10:01am, Dave Hansen wrote:
-> > On 3/25/23 12:25, Kirill A. Shutemov wrote:
-> > > On Sat, Mar 25, 2023 at 09:25:36AM -0700, Dave Hansen wrote:
-> > >> On 3/25/23 09:01, Kirill A. Shutemov wrote:
-> > >>> The last item is tricky. TDX guests use ACPI MADT MPWK to bring up
-> > >>> secondary CPUs. The mechanism doesn't allow to put a CPU back offline if
-> > >>> it has woken up.
-> > >> ...
-> > >>> +int arch_kexec_load(void)
-> > >>> +{
-> > >>> +	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
-> > >>> +		pr_warn_once("Disable kexec: not yet supported in TDX guest\n");
-> > >>> +		return -EOPNOTSUPP;
-> > >>> +	}
-> > >>> +
-> > >>> +	return 0;
-> > >>> +}
-> > >>
-> > >> So, let's put all this together:
-> > >>
-> > >> 1. TDX implementations use MADT for wakeup exclusively right now (but
-> > >>    are not necessarily _required_ to do so forever)
-> > >> 2. MADT doesn't support CPU offlining
-> > >> 3. kexec() requires offlining
-> > >>
-> > >> Thus, current TDX implementations can't support TDX guests.  This
-> > >> *doesn't* say that TDX will always use the MADT for wakeups.
-> > >>
-> > >> Yet, the check you have here is for TDX and *not* for the MADT.
-> > > 
-> > > As I described in the commit message there are more than MADT that is
-> > > required to get kexec in TDX guest.
-> > 
-> > I kinda think we should do both.
-> > 
-> > Let's make sure that all systems that depend on MADT wakeups can't
-> > kexec() until the ACPI folks work out what to do there.
-> > 
-> > Separately, let's either fix or *mark* the kexec()-incompatible pieces
-> > that *ARE* specific to TDX.
-> > 
-> > >> That seems wrong.
-> > >>
-> > >> Let's say SEV or arm64 comes along and uses the MADT for their guests.
-> > >> They'll add another arch_kexec_load(), with a check for *their* feature.
-> > >>
-> > >> This all seems like you should be disabling kexec() the moment the MADT
-> > >> CPU wakeup is used instead of making it based on TDX.
-> > > 
-> > > I guess we can go this path if you are fine with taking CR4.MCE and shared
-> > > memory reverting patches (they require some rework, but I can get them
-> > > into shape quickly). After that we can forbid kexec on machines with MADT
-> > > if nr_cpus > 1.
-> > 
-> > This goes back to what I asked before: is anyone actually going to *use*
-> > a single-processor system that wants to kexec()?  If not, let's not
-> > waste the time to introduce code that is just going to bitrot.  Just
-> > mark it broken and move on with life.
-> 
-> Now we have two API for kexec: kexec_load and kexec_file_load. They can
-> be used to do kexec reboot, or crash dumping. For crash dumping, we
-> usually only use one cpu to do the vmcore dumping. At least on our
-> Fedora/centos-stream/RHEL, we do like this with kernel parameter
-> 'nr_cpus=1' added by default. Unless people explicitly remove the
-> 'nr_cpus=1' restriction or set nr_cpus= to other number to persue
-> multithread dumping in kdump kernel.
+On 2023/3/27 17:35, Jan Kara wrote:
+> On Thu 23-03-23 22:18:53, Baokun Li wrote:
+>> On 2023/3/23 19:44, Jan Kara wrote:
+>>>> ---
+>>>>    fs/ext4/ext4.h      |  3 ++-
+>>>>    fs/ext4/ext4_jbd2.h |  9 +++++----
+>>>>    fs/ext4/super.c     | 14 ++++++++++++++
+>>>>    3 files changed, 21 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+>>>> index 08b29c289da4..f60967fa648f 100644
+>>>> --- a/fs/ext4/ext4.h
+>>>> +++ b/fs/ext4/ext4.h
+>>>> @@ -1703,7 +1703,8 @@ struct ext4_sb_info {
+>>>>    	/*
+>>>>    	 * Barrier between writepages ops and changing any inode's JOURNAL_DATA
+>>>> -	 * or EXTENTS flag.
+>>>> +	 * or EXTENTS flag or between changing SHOULD_DIOREAD_NOLOCK flag on
+>>>> +	 * remount and writepages ops.
+>>>>    	 */
+>>>>    	struct percpu_rw_semaphore s_writepages_rwsem;
+>>>>    	struct dax_device *s_daxdev;
+>>>> diff --git a/fs/ext4/ext4_jbd2.h b/fs/ext4/ext4_jbd2.h
+>>>> index 0c77697d5e90..d82bfcdd56e5 100644
+>>>> --- a/fs/ext4/ext4_jbd2.h
+>>>> +++ b/fs/ext4/ext4_jbd2.h
+>>>> @@ -488,6 +488,9 @@ static inline int ext4_free_data_revoke_credits(struct inode *inode, int blocks)
+>>>>    	return blocks + 2*(EXT4_SB(inode->i_sb)->s_cluster_ratio - 1);
+>>>>    }
+>>>> +/* delalloc is a temporary fix to prevent generic/422 test failures*/
+>>>> +#define EXT4_MOUNT_SHOULD_DIOREAD_NOLOCK (EXT4_MOUNT_DIOREAD_NOLOCK | \
+>>>> +					  EXT4_MOUNT_DELALLOC)
+>>>>    /*
+>>>>     * This function controls whether or not we should try to go down the
+>>>>     * dioread_nolock code paths, which makes it safe to avoid taking
+>>>> @@ -499,7 +502,8 @@ static inline int ext4_free_data_revoke_credits(struct inode *inode, int blocks)
+>>>>     */
+>>>>    static inline int ext4_should_dioread_nolock(struct inode *inode)
+>>>>    {
+>>>> -	if (!test_opt(inode->i_sb, DIOREAD_NOLOCK))
+>>>> +	if (test_opt(inode->i_sb, SHOULD_DIOREAD_NOLOCK) !=
+>>>> +	    EXT4_MOUNT_SHOULD_DIOREAD_NOLOCK)
+>>>>    		return 0;
+>>>>    	if (!S_ISREG(inode->i_mode))
+>>>>    		return 0;
+>>>> @@ -507,9 +511,6 @@ static inline int ext4_should_dioread_nolock(struct inode *inode)
+>>>>    		return 0;
+>>>>    	if (ext4_should_journal_data(inode))
+>>>>    		return 0;
+>>>> -	/* temporary fix to prevent generic/422 test failures */
+>>>> -	if (!test_opt(inode->i_sb, DELALLOC))
+>>>> -		return 0;
+>>>>    	return 1;
+>>>>    }
+>>> Is there a need for this SHOULD_DIOREAD_NOLOCK? When called from writeback
+>>> we will be protected by s_writepages_rwsem anyway. When called from other
+>>> places, we either decide to do dioread_nolock or don't but the situation
+>>> can change at any instant so I don't see how unifying this check would
+>>> help. And the new SHOULD_DIOREAD_NOLOCK somewhat obfuscates what's going
+>>> on.
+>> We're thinking that the mount-related flags in
+>> ext4_should_dioread_nolock() might be modified, such as DELALLOC being
+>> removed because generic/422 test failures were fixed in some other way,
+>> resulting in some unnecessary locking during remount, or for whatever
+>> reason a mount-related flag was added to ext4_should_dioread_nolock(),
+>> and we didn't make a synchronization change in __ext4_remount() that
+>> would cause the problem to recur.  So we added this flag to this function
+>> (instead of in ext4.h), so that when we change the mount option in
+>> ext4_should_dioread_nolock(), we directly change this flag, and we don't
+>> have to consider making synchronization changes in __ext4_remount().
+>>
+>> We have checked where this function is called and there are two types of
+>> calls to this function:
+>> 1. One category is ext4_do_writepages() and mpage_map_one_extent(), which
+>> are protected by s_writepages_rwsem, the location of the problem;
+>> 2. The other type is in ext4_page_mkwrite(),
+>> ext4_convert_inline_data_to_extent(), ext4_write_begin() to determine
+>> whether to get the block using ext4_get_block_unwritten() or
+>> ext4_get_block().
+>>
+>>      1) If we just started fetching written blocks, it looks like there is no
+>> problem;
+>>      2) If we start getting unwritten blocks, when DIOREAD_NOLOCK is cleared
+>> by remount,
+>>          we will convert the blocks to written in ext4_map_blocks(). The
+>> data=ordered mode ensures that we don't see stale data.
+> Yes. So do you agree that EXT4_MOUNT_SHOULD_DIOREAD_NOLOCK is not really
+> needed?
+>
+> 								Honza
+Yes, I totally agree!
+If we unconditionally grabbed s_writepages_rwsem when remounting,
+there would be no mount option synchronization problem, and the flag
+would be completely unnecessary.
 
-Hm. I'm not sure how to determine if the target kernel wants to use >1
-CPU. Scanning cmdline looks fragile. And who said the target kernel is
-Linux.
-
-I guess we can park all CPUs, but CPU0 and target kernel will just fail to
-bring them up which is non-fatal issue (at least for Linux).
-
-I admit that all looks hackish.
-
+I will send a patch V2 with the changes suggested by you.
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+With Best Regards,
+Baokun Li
+.
