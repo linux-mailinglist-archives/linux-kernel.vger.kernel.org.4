@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7B46C9ED6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 779586C9ED3
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232718AbjC0JEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
+        id S232810AbjC0JEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbjC0JDg (ORCPT
+        with ESMTP id S232661AbjC0JDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:03:36 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBA93C34
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:01:51 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso8037748pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:01:51 -0700 (PDT)
+        Mon, 27 Mar 2023 05:03:34 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5AE423A
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:01:38 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id bi9so10345039lfb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:01:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mechatrax-com.20210112.gappssmtp.com; s=20210112; t=1679907711;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EqsTkBs6N6moVAGndgySpKN2a5Zh6cCjYlIjBQjIbQk=;
-        b=OAspQ+mNtEjnF5DPf+PUklx9ud9YCxl5EO9S3cilH85NbyMHB2szIRjaHvleaGgTiL
-         BxFr0jHL0xvnFXZSr9nMK7wjvlTyCa1TEs01Bt+fHyk+YXzYWTCD+QRnaPLwV9hRuy2j
-         XoURpLFbhnVuC9/u5QOHyJdz/IjunP/+wBFN55W6ds76BKzf87FK1WJFMeJ7W4wsvvKh
-         NGRVDHwf7IJvTArPUppleuFN+nJMZDPwcoyTkXiita73AkMlHzEEGY+P1b+Jx2YeGDKt
-         zmWhuwjBAPp2JJBEjloySXmnSKPIaBmIY4SzFRiViwp1dTGEu4255OGZyfZkAKnO54jl
-         zwLw==
+        d=linaro.org; s=google; t=1679907697;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2ZF8lnTdgBo76J61R0eU74GHsCNaFYFA/VikNNvRUeY=;
+        b=kcheOvDYJ2HR8hXD96KUoD/iP+Qa6Fg8vuUImjl2l5D40VcSqI7YHjJ7CCKGk82PLX
+         kRpYtpzgpkPT2wOMj7pUT8SRG59I8bsU/zT5rhHlfI3fUNN9S//kPV6VjSM+DtPhEGB4
+         3BgxnvVO0+Pqdj3RyKeizj3VIQs74HDJRNN4qTiRQRv8dYYn4QYXNvEKe2qekRQ0DySE
+         H9fLFb2cL+ukXrl4LYM6Pou5EPYEdPkO3SKdQfFKeDMQpN/Sj5Pd3U7qbyW5hPCAWYWE
+         P/F/hhfD3Tz0T12SleC9CW6//ofl/HOsrWS2qfPZb+JTcX0I53cKhrz8UMtiOhxUq8LL
+         sKrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679907711;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EqsTkBs6N6moVAGndgySpKN2a5Zh6cCjYlIjBQjIbQk=;
-        b=vplG/qebM+vdagAVanAxLA29ue+y8Ty27qheUpkAN/DkCz+EaH6KRraWb5mo3TmaGP
-         qdBHgqxnRZfyXUePQIxXILm4ExDGMTgROK9zpHGobi0ksACCWmeu19wGf5whAzj3Knqb
-         Fqz11WzIJER5fOyxvETyrQQJDaQLWXc41vA/vPMGctmMmP9tCeBez2f0FLcKmpQUJV8q
-         Y2Emn64JR3git56HubMKoZCcSivx1/lJt/F3H1neIieTtbh6XmnoGDK7Y8X7BZsUiAk0
-         AEPy6xk6n6Swn3bKjqzyCz+ID88MoHs1NXXSk9wbaDkV6xkhjzWzwnvEEaJCBzFRE1mZ
-         GmhQ==
-X-Gm-Message-State: AAQBX9du+tFyhxYUVAMU1u9E0M4/UgmHAcGGGezNzbS5znBCpV4A5y5y
-        WmnPlPqPMBjZm+q9ct6QVbMRBefI856FYBVbHtOVpg==
-X-Google-Smtp-Source: AKy350b3PrgzVh7g0IGsxImabv1+jPWAgKuzUjuvlvhyjri3TLAf0eGYOM19z3ngLKMVIHgy/1vmUEksSPGp2ltCKmE=
-X-Received: by 2002:a17:902:8f8c:b0:1a2:1ec5:e11f with SMTP id
- z12-20020a1709028f8c00b001a21ec5e11fmr3305343plo.6.1679907711300; Mon, 27 Mar
- 2023 02:01:51 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679907697;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ZF8lnTdgBo76J61R0eU74GHsCNaFYFA/VikNNvRUeY=;
+        b=jfYS40qSWxkNAhRnNzG23TJ/E6+uDK1dI35oxJV9aiEfUKm1TLfkcKuzR8UeM32qyg
+         JhIpQqb2jcRqQhwRQx8ZgLRpvqokF/p1UBJxgl4e3g+tn323+72bGlL6GHmAQWpOHpfQ
+         T5NiOMUpf+gEYCrG/Dx//cXTSEbATvLW7VTHk2+i1gqkYFiEkQA8hnu65xr6WsRl/r/Y
+         fV006oMEt5n8XIwIKslr3mSBQNIVLH2t774M44Lc+x5ZUUrUIkyc9m8A7dTwqIgakpxI
+         JPOoPrRQuLu3sw8B/3ar0vCuVnpL3RHJ9Mz/SLk4tEHk2/gnRrf6q0yvlMaRXtqSV/3L
+         z9Kg==
+X-Gm-Message-State: AAQBX9dN95F1DBGzuestOFwYZouZhkXQD/EpUkr3PLjAE7FhyEXDzlxT
+        F9ZsTUQ1l0UMZgsI91HATjmDVQ==
+X-Google-Smtp-Source: AKy350ZTclvQkj8ph6vELe+Md+QnJjIPl1t0NzSuNYltD7cNUWB4kNAbBhoPsYJsNDCYhZ1FEjA8YQ==
+X-Received: by 2002:ac2:5ec6:0:b0:4eb:20e:6aec with SMTP id d6-20020ac25ec6000000b004eb020e6aecmr3096588lfq.40.1679907696899;
+        Mon, 27 Mar 2023 02:01:36 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id j12-20020a19f50c000000b004b40c1f1c70sm4594985lfb.212.2023.03.27.02.01.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 02:01:36 -0700 (PDT)
+Message-ID: <cc7392c1-0ea1-29b3-fab6-19c843413724@linaro.org>
+Date:   Mon, 27 Mar 2023 11:01:35 +0200
 MIME-Version: 1.0
-References: <20230306044737.862-1-honda@mechatrax.com> <6e1fe1015235ae7d7eb9ef2526fd64b6d6d628d7.camel@gmail.com>
- <CA+Tz-SHQxNzx=eS8ex=3Hps0th5bTY+K1qSWrZqWC8ryv+d0RA@mail.gmail.com>
-In-Reply-To: <CA+Tz-SHQxNzx=eS8ex=3Hps0th5bTY+K1qSWrZqWC8ryv+d0RA@mail.gmail.com>
-From:   Masahiro Honda <honda@mechatrax.com>
-Date:   Mon, 27 Mar 2023 18:01:14 +0900
-Message-ID: <CA+Tz-SFbt2RAz3POMRoTHqz+tNyQOn3UsssZV9EvHUhhR+XJbQ@mail.gmail.com>
-Subject: Re: [PATCH] Fix IRQ issue by setting IRQ_DISABLE_UNLAZY flag
-To:     =?UTF-8?B?TnVubyBTw6E=?= <noname.nuno@gmail.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/5] usb: dwc3: qcom: Allow runtime PM
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org, Thinh.Nguyen@synopsys.com,
+        gregkh@linuxfoundation.org, mathias.nyman@intel.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Nuno
 
-> On Mon, Mar 6, 2023 at 10:30=E2=80=AFPM Nuno S=C3=A1 <noname.nuno@gmail.c=
-om> wrote:
-> > Another thing that came to my mind is if the data is totally
-> > garbage/wrong or is it just some outstanding sample?
 
-I'm sorry for not answering your question. The data is the same as
-the previous conversion even if the input voltage is changed. At this
-time, a logic analyzer shows that the read operation is performed
-immediately after the conversion is performed. The read operation
-returns the previous conversion result because it is performed before
-the completion of the conversion.
+On 25.03.2023 17:52, Manivannan Sadhasivam wrote:
+> Hi,
+> 
+> This series allows the dwc3-qcom driver to do runtime PM itself without
+> userspace intervention. Still, userspace is required to enable runtime PM
+> for dwc3 glue and xhci drivers as we cannot enable runtime PM for them.
+> But this series avoids one more additional step.
+What sort of 'userspace intervention' are we talking about?
+echo mem > /sys/power/state?
 
-> > Some research on this also seems to point that we should (need?) call
-> > irq_clear_status_flags(irq, IRQ_DISABLE_UNLAZY) when freeing the IRQ.
-
-I have understood that I need to call irq_clear_status_flags. However,
-I cannot find a code to free the IRQ in ad_sigma_delta.c and other
-Sigma-Delta ADC driver source files. So, I would like to implement
-only irq_set_status_flags.
+Konrad
+> 
+> While enabling runtime PM, I noticed that the xhci driver suspends before
+> catching the xhci interrupts during resume. This ended up deferring the
+> device enumeration for some time. So I included a patch adding autosuspend
+> delay of 200ms to the xhci driver. With this delay, usb enumeration happens
+> properly.
+> 
+> This series has been tested on SC8280XP-CRD and RB5 devices.
+> 
+> Thanks,
+> Mani
+> 
+> Manivannan Sadhasivam (5):
+>   arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
+>   xhci: host: Use 200ms autosuspend delay for runtime suspend
+>   usb: dwc3: qcom: Fix null ptr access during runtime_suspend()
+>   usb: dwc3: qcom: Clear pending interrupt before enabling wake
+>     interrupt
+>   usb: dwc3: qcom: Allow runtime PM
+> 
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
+>  drivers/usb/dwc3/dwc3-qcom.c           | 13 +++++++++----
+>  drivers/usb/host/xhci-plat.c           |  2 ++
+>  3 files changed, 25 insertions(+), 4 deletions(-)
+> 
