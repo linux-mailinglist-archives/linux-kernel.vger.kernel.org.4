@@ -2,123 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04766CAF42
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED316CAF4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbjC0T4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
+        id S229844AbjC0T5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 15:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232738AbjC0T41 (ORCPT
+        with ESMTP id S229452AbjC0T5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:56:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7113C12;
-        Mon, 27 Mar 2023 12:56:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 27 Mar 2023 15:57:44 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16F8198E;
+        Mon, 27 Mar 2023 12:57:42 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FDF8614C7;
-        Mon, 27 Mar 2023 19:56:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBFAEC433EF;
-        Mon, 27 Mar 2023 19:56:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679946980;
-        bh=xqRUkMbhOWtdLnpZFRSPmp+TJOFlEo++YRJIU64pglI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rVoReEiHO8Re45uxfpUX/a4uahvemrpTozq7oLpiS5XJJTjm4yOZXhtk7yUDGAybA
-         KNfqD4V8YBjK1KdljN9pg0q1qGxOeDeLnOMHtoFsBQ7+DcBXGt5OLyK/kfwuOl7okN
-         6yRveArH/5c0wSP7h24tzGjZnduspfb4t38lQVhLwpjfbI/o8i2P8s6+eE7/axRp0c
-         QF0zjRr0mOZzZ8l0mXj3MUj6tIiAJ+loWHteXy+UZMwHK1Ixc3GQLCrBevBhaYoq1g
-         XLCW0L9q9SnFs4LDNn2gKqAdncxCnsAOUtJKu8eCDPxESBdZxSZbC2toXZJq6Cmhy4
-         MvDNUJ+YwCD3A==
-Date:   Mon, 27 Mar 2023 19:56:08 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Aleksandr Nogikh <nogikh@google.com>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+lista29bb0eabb2ddbae6f4a@syzkaller.appspotmail.com>
-Subject: Re: [syzbot] Monthly io-uring report
-Message-ID: <ZCH02Fp0YAhrLnug@gmail.com>
-References: <000000000000bb028805f7dfab35@google.com>
- <20230327192158.GF73752@sol.localdomain>
- <4045f952-0756-5b04-8c60-6eed241a52fe@kernel.dk>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5E4B01EC047F;
+        Mon, 27 Mar 2023 21:57:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1679947061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l5gnOX5yVQXR2M15js5dRRfm8Zhhkb+3IthyvLKln3Y=;
+        b=UrheBNULRgx34INuvS0YaF9yD0WVcu6RyJhPmEfpyQ5T7pGP4pXXRHA0X6ln/4SSn6aet5
+        VZq7I82peWEHQu4Vv/GRB0H+pf1hpIqW6shFMsi8biyWdN3juhHuiRAg2RiUtojtq1k9P7
+        EJo3lFmRJz/StzOEJDgKW4Y5pnbZS78=
+Date:   Mon, 27 Mar 2023 21:57:37 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Eric DeVolder <eric.devolder@oracle.com>, mario.limonciello@amd.com
+Cc:     rafael@kernel.org, lenb@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvijayab@amd.com,
+        miguel.luis@oracle.com, boris.ostrovsky@oracle.com
+Subject: Re: [PATCH 1/1] x86/acpi: acpi_is_processor_usable() dropping
+ possible cpus
+Message-ID: <20230327195737.GDZCH1MWNvFQrXdY9M@fat_crate.local>
+References: <20230327191026.3454-1-eric.devolder@oracle.com>
+ <20230327191026.3454-2-eric.devolder@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4045f952-0756-5b04-8c60-6eed241a52fe@kernel.dk>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230327191026.3454-2-eric.devolder@oracle.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 01:25:14PM -0600, Jens Axboe wrote:
-> On 3/27/23 1:21?PM, Eric Biggers wrote:
-> > On Mon, Mar 27, 2023 at 04:01:54AM -0700, syzbot wrote:
-> >> Hello io-uring maintainers/developers,
-> >>
-> >> This is a 30-day syzbot report for the io-uring subsystem.
-> >> All related reports/information can be found at:
-> >> https://syzkaller.appspot.com/upstream/s/io-uring
-> >>
-> >> During the period, 5 new issues were detected and 0 were fixed.
-> >> In total, 49 issues are still open and 105 have been fixed so far.
-> >>
-> >> Some of the still happening issues:
-> >>
-> >> Crashes Repro Title
-> >> 3393    Yes   WARNING in io_ring_exit_work
-> >>               https://syzkaller.appspot.com/bug?extid=00e15cda746c5bc70e24
-> >> 3241    Yes   general protection fault in try_to_wake_up (2)
-> >>               https://syzkaller.appspot.com/bug?extid=b4a81dc8727e513f364d
-> >> 1873    Yes   WARNING in split_huge_page_to_list (2)
-> >>               https://syzkaller.appspot.com/bug?extid=07a218429c8d19b1fb25
-> >> 772     Yes   INFO: task hung in io_ring_exit_work
-> >>               https://syzkaller.appspot.com/bug?extid=93f72b3885406bb09e0d
-> >> 718     Yes   KASAN: use-after-free Read in io_poll_remove_entries
-> >>               https://syzkaller.appspot.com/bug?extid=cd301bb6523ea8cc8ca2
-> >> 443     Yes   KMSAN: uninit-value in io_req_cqe_overflow
-> >>               https://syzkaller.appspot.com/bug?extid=12dde80bf174ac8ae285
-> >> 73      Yes   INFO: task hung in io_wq_put_and_exit (3)
-> >>               https://syzkaller.appspot.com/bug?extid=adb05ed2853417be49ce
-> >> 38      Yes   KASAN: use-after-free Read in nfc_llcp_find_local
-> >>               https://syzkaller.appspot.com/bug?extid=e7ac69e6a5d806180b40
-> >>
-> >> ---
-> >> This report is generated by a bot. It may contain errors.
-> >> See https://goo.gl/tpsmEJ for more information about syzbot.
-> >> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > 
-> > Thanks for getting syzbot to classify reports by subsystem and send these
-> > reminders!  These should be very helpful over time.
-> > 
-> > One thing that is missing in these reminders is a mention of how to change the
-> > subsystem of miscategorized bugs.  Yes, it's in https://goo.gl/tpsmEJ halfway
-> > down the page, but it's not obvious.
-> > 
-> > I think adding something like "See https://goo.gl/tpsmEJ#subsystems for how to
-> > change the subsystem of miscategorized reports" would be helpful.  Probably not
-> > in all syzbot emails, but just in these remainder emails.
+On Mon, Mar 27, 2023 at 03:10:26PM -0400, Eric DeVolder wrote:
+> The logic in acpi_is_processor_usable() requires the Online Capable
+> bit be set for hotpluggable cpus.  The Online Capable bit is
+> introduced in ACPI 6.3 and MADT.revision 5.
+
+I can't find where in the spec it says that MADT.revision 5 means that
+bit is present?
+
+I'm looking at:
+
+aa06e20f1be6 ("x86/ACPI: Don't add CPUs that are not online capable")
+
+Mario?
+
+I see in the 6.3 spec it says:
+
+"1948 Adds a “Hot-plug Capable” flag to the Local APIC and x2APIC structures in MADT"
+
+and the MADT.revision is 5 and in the 6.2 spec the MADT revision is "45"
+- 4.5 maybe?
+
+But I don't see the connection between MADT.revision 5 and the presence
+of the online capable bit.
+
+Anyone got a better quote?
+
+> However, as currently coded, for MADT.revision < 5,
+> acpi_is_processor_usable() no longer allows for possible hot
+> pluggable cpus, which is a regressive change in behavior.
 > 
-> I did go poke, it is listed off the reports too. But it'd be really
-> handy if you could do this on the web page. When I see a report like
-> that that's not for me, I just archive it. And like any chatter with
-> syzbot, I have to look up what to reply to it every time. It'd be a lot
-> easy if I could just click on that page to either mark as invalid
-> (providing the info there) or move it to another subsystem.
+> This patch restores the behavior where for MADT.revision < 5, the
+
+Avoid having "This patch" or "This commit" in the commit message. It is
+tautologically useless.
+
+Also, do
+
+$ git grep 'This patch' Documentation/process
+
+for more details.
+
+> presence of the lapic/x2apic structure implies a possible hotpluggable
+> cpu.
 > 
+> Fixes: e2869bd7af60 ("x86/acpi/boot: Do not register processors that cannot be onlined for x2APIC")
+> Suggested-by: Miguel Luis <miguel.luis@oracle.com>
+> Suggested-by: Boris Ostrovsky <boris.ovstrosky@oracle.com>
+> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+> ---
+>  arch/x86/kernel/acpi/boot.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+> index 1c38174b5f01..7b5b8ed018b0 100644
+> --- a/arch/x86/kernel/acpi/boot.c
+> +++ b/arch/x86/kernel/acpi/boot.c
+> @@ -193,7 +193,13 @@ static bool __init acpi_is_processor_usable(u32 lapic_flags)
+>  	if (lapic_flags & ACPI_MADT_ENABLED)
+>  		return true;
+>  
+> -	if (acpi_support_online_capable && (lapic_flags & ACPI_MADT_ONLINE_CAPABLE))
+> +	/*
+> +	 * Prior to MADT.revision 5, the presence of the Local x2/APIC
+> +	 * structure _implicitly_ noted a possible hotpluggable cpu.
+> +	 * Starting with MADT.revision 5, the Online Capable bit
+> +	 * _explicitly_ indicates a hotpluggable cpu.
+> +	 */
 
-Well, one problem that syzbot has to deal with is that to meet the kernel
-community's needs, it can't require authentication to issue commands.
+In all your text
 
-I understand that the current email-only interface, where all commands are Cc'ed
-to the syzkaller-bug mailing list, makes that not a complete disaster currently.
+s/cpu/CPU/g
 
-I'd imagine that if anyone could just go to a web page and mess around with bug
-statuses with no authentication, that might be more problematic.
+> +	if (!acpi_support_online_capable || (lapic_flags & ACPI_MADT_ONLINE_CAPABLE))
+>  		return true;
+>  
+>  	return false;
+> -- 
 
-- Eric
+Otherwise, the change makes sense to me.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
