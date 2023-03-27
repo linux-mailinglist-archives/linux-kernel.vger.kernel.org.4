@@ -2,141 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E646C9A66
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 06:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEED6C9A65
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 06:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbjC0EEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 00:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
+        id S231979AbjC0EEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 00:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbjC0EEj (ORCPT
+        with ESMTP id S229947AbjC0EEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 00:04:39 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4944693;
-        Sun, 26 Mar 2023 21:04:35 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PlJy92pjJznwPd;
-        Mon, 27 Mar 2023 12:00:49 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Mar 2023 12:04:02 +0800
-CC:     <yangyicong@hisilicon.com>,
-        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-        "21cnbao@gmail.com" <21cnbao@gmail.com>,
-        "prime.zeng@hisilicon.com" <prime.zeng@hisilicon.com>,
-        "shenyang39@huawei.com" <shenyang39@huawei.com>,
-        "linuxarm@huawei.com" <linuxarm@huawei.com>
-Subject: Re: [PATCH] perf stat: Support per-cluster aggregation
-To:     "Chen, Tim C" <tim.c.chen@intel.com>,
-        "acme@kernel.org" <acme@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "james.clark@arm.com" <james.clark@arm.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230313085911.61359-1-yangyicong@huawei.com>
- <DM6PR11MB4107255E167D98A000DC49FBDC849@DM6PR11MB4107.namprd11.prod.outlook.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <150cb3ae-fbb3-e0e1-57af-6f5b28222fdb@huawei.com>
-Date:   Mon, 27 Mar 2023 12:03:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Mon, 27 Mar 2023 00:04:20 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C4414499
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 21:04:18 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 32R44Bl3013667;
+        Mon, 27 Mar 2023 06:04:11 +0200
+Date:   Mon, 27 Mar 2023 06:04:11 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux@weissschuh.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/8] tools/nolibc: add support for stack protector
+Message-ID: <ZCEVux2aKNKrWXQv@1wt.eu>
+References: <a65340bb-2d11-445b-8595-9bf25a9f7a47@paulmck-laptop>
+ <ZCBiDZfQW+YuiVNs@1wt.eu>
+ <35a26245-0171-44b0-8072-325576768f91@paulmck-laptop>
+ <ZCBkrOqWR7EVMeP/@1wt.eu>
+ <d2c780bb-00ec-4966-87a2-d233f19032ab@paulmck-laptop>
+ <ZCBsLQARaZBHeE4k@1wt.eu>
+ <ZCBtOxqRJ9+P+G0z@1wt.eu>
+ <ZCB5HZVbrjTM37Bd@1wt.eu>
+ <8927157b-bf2c-46b7-a385-f4e230a4777d@paulmck-laptop>
+ <d186bd6a-e8ed-4a89-875b-6a4406dd1fbc@paulmck-laptop>
 MIME-Version: 1.0
-In-Reply-To: <DM6PR11MB4107255E167D98A000DC49FBDC849@DM6PR11MB4107.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d186bd6a-e8ed-4a89-875b-6a4406dd1fbc@paulmck-laptop>
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tim,
-
-On 2023/3/25 2:05, Chen, Tim C wrote:
->>
->> From: Yicong Yang <yangyicong@hisilicon.com>
->>
->> Some platforms have 'cluster' topology and CPUs in the cluster will share
->> resources like L3 Cache Tag (for HiSilicon Kunpeng SoC) or L2 cache (for Intel
->> Jacobsville). Currently parsing and building cluster topology have been
->> supported since [1].
->>
->> perf stat has already supported aggregation for other topologies like die or
->> socket, etc. It'll be useful to aggregate per-cluster to find problems like L3T
->> bandwidth contention or imbalance.
->>
->> This patch adds support for "--per-cluster" option for per-cluster aggregation.
->> Also update the docs and related test. The output will be like:
->>
->> [root@localhost tmp]# perf stat -a -e LLC-load --per-cluster -- sleep 5
->>
->> Performance counter stats for 'system wide':
->>
->> S56-D0-CLS158    4      1,321,521,570      LLC-load
->> S56-D0-CLS594    4        794,211,453      LLC-load
->> S56-D0-CLS1030    4             41,623      LLC-load
->> S56-D0-CLS1466    4             41,646      LLC-load
->> S56-D0-CLS1902    4             16,863      LLC-load
->> S56-D0-CLS2338    4             15,721      LLC-load
->> S56-D0-CLS2774    4             22,671      LLC-load
->> [...]
+On Sun, Mar 26, 2023 at 08:41:29PM -0700, Paul E. McKenney wrote:
+> On Sun, Mar 26, 2023 at 11:00:26AM -0700, Paul E. McKenney wrote:
+> > On Sun, Mar 26, 2023 at 06:55:57PM +0200, Willy Tarreau wrote:
+> > > On Sun, Mar 26, 2023 at 06:05:15PM +0200, Willy Tarreau wrote:
+> > > > On Sun, Mar 26, 2023 at 06:00:45PM +0200, Willy Tarreau wrote:
+> > > > > On Sun, Mar 26, 2023 at 08:45:55AM -0700, Paul E. McKenney wrote:
+> > > > > > Glad I could "help"!  Timers.  Huh.  ;-)
+> > > > > > 
+> > > > > > Checking v6.2, though the rebase is a bit messy, so I won't be all
+> > > > > > that confident in the results.
+> > > > > 
+> > > > > I got the same as you now. I don't know what I missed before not to
+> > > > > face it, maybe it's the consequence of the rebase. I've re-applied
+> > > > > the patches on top of 6.2.8 and am retesting now.
+> > > > > 
+> > > > > I think you don't need to waste more of your time on this for now
+> > > > > since we have a reproducer. Thomas and I should take over.
+> > > > 
+> > > > And it's a 6.3 regression, as 6.2.8 works fine:
+> > > > 
+> > > >   $ make run
+> > > >   (...)
+> > > >   Kernel: arch/x86/boot/bzImage is ready  (#2)
+> > > >   make[1]: Leaving directory '/g/public/linux/master'
+> > > >   126 test(s) passed.
+> > > >   $ tail  run.out 
+> > > >   Errors during this test: 0
+> > > >   
+> > > >   Running test 'protection'
+> > > >   0 -fstackprotector                                               [OK]
+> > > >   Errors during this test: 0
+> > > >   
+> > > >   Total number of errors: 0
+> > > >   Leaving init with final status: 0
+> > > >   [    3.388706] ACPI: PM: Preparing to enter system sleep state S5
+> > > >   [    3.389424] reboot: Power down
+> > > > 
+> > > > Now let's have fun bisecting it!
+> > > 
+> > > So I have a good news, 6.3-rc1 which dev.2023.03.20a is based on, fails,
+> > > while 6.3-rc3 works. I haven't got further yet and am not sure it's useful
+> > > to dig further given that it's an already fixed problem that is not related
+> > > to the patches in your branch. I don't know if you usually rebase on more
+> > > recent tags though.
+> > 
+> > Thank you for chasing this down!
+> > 
+> > In this case, I will at the very least merge with v6.3 before testing.
+> > I have Joel Fernandes and Boqun Feng trying their hands at running
+> > the RCU pull request for v6.4, so I will probably resist the urge to
+> > inject confusion by rebasing onto v6.3-rc1.  ;-)
 > 
-> Overall it looks good.  You can add my reviewed-by.
+> And merging the -rcu tree's "dev" branch with v6.3-rc3 got me a successful test:
 > 
-
-thanks.
-
-> I wonder if we could enhance the help message 
-> in perf stat to tell user to refer to 
-> /sys/devices/system/cpu/cpuX/topology/*_id
-> to map relevant ids back to overall cpu topology.
+> 	Kernel: arch/x86/boot/bzImage is ready  (#5)
+> 	make[1]: Leaving directory '/home/git/linux-build'
+> 	125 test(s) passed.
 > 
-> For example the above example, cluster S56-D0-CLS158  has
-> really heavy load. It took me  a while
-> going through the code to figure out how to find
-> the info that maps cluster id to cpu.
-> 
+> So looking good.  ;-)
 
-yes, indeed. Actually this is because my bios doesn't report a valid
-ID for these topologies so the ACPI use the offset of the topology
-node in the PPTT as a fallback. Other topologies also suffers the same:
-
-On my machine:
-[root@localhost debug]# perf stat --per-socket -e cycles -a -- sleep 1
-
- Performance counter stats for 'system wide':
-
-S56      64         21,563,375      cycles
-S7182    64         32,140,641      cycles
-
-       1.008520310 seconds time elapsed
-
-On x86:
-root@ubuntu204:/home/yang/linux/tools/perf# ./perf stat -a --per-socket -e cycles -- sleep 1
-
- Performance counter stats for 'system wide':
-
-S0       40        137,205,897      cycles
-S1       40         67,720,731      cycles
-
-       1.003546720 seconds time elapsed
-
-Maybe I can try to add a separate patch for describing the source of the
-topology ids in the perf manual.
-
-Thanks,
-Yicong
-
+Perfect then! Thank you for double-checking!
+Willy
