@@ -2,183 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8276C6CA818
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1386CA825
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbjC0Oqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
+        id S232712AbjC0Orw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232712AbjC0Oqa (ORCPT
+        with ESMTP id S232479AbjC0Orq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:46:30 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5104035AA;
-        Mon, 27 Mar 2023 07:46:27 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RD0ILr006606;
-        Mon, 27 Mar 2023 14:46:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=Vkj+E/rQa+jSFrNsC1JhMXlaXuA4XMqJZFoCbosbPB4=;
- b=GhOEwdnCClJPZxpzxGygpDCM3TDmtdvmLdRyurWOEuPU0slM5RrDcHXQYawExqC7qSLj
- rjnMz5Mz0AyW/PWdocd9iLNAyR/j4ePekxLg8zsBOxswLgd83QkH/pmNhQetYRGqfwhE
- 4XOoCVGWw6HYWK6e/EhmyiAUKZWlP9XG6RufbTWOGzUWU7upPiCOa2RPBCrFM0wyevND
- 1eyJWwKEC9qoAcxGd8CcZGuT9WHQD8ydbkc44E511kAvraF429++j2BUAaDOrlhFelPU
- O803vg2mgLRB6Yzs+qxewOBQaO7iMCnmteASwYfvagjCrlN2NdXVxMqO1ppCC7IKQ2PB og== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pkbmyr80r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 14:46:24 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32REkNep031496
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 14:46:23 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 27 Mar 2023 07:46:23 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Chris Lew <quic_clew@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] rpmsg: glink: Wait for intent, not just request ack
-Date:   Mon, 27 Mar 2023 07:46:17 -0700
-Message-ID: <20230327144617.3134175-3-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230327144617.3134175-1-quic_bjorande@quicinc.com>
-References: <20230327144617.3134175-1-quic_bjorande@quicinc.com>
+        Mon, 27 Mar 2023 10:47:46 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B101D46B4;
+        Mon, 27 Mar 2023 07:47:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679928453; x=1711464453;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gvtVaHDSj8/60CnRMhLEfiEJM9T3UCmxTI4xWFAvBB0=;
+  b=OYtJu1PjDmaDIx5gBsa7dmiiSdG153fjEeqg3RtW4txrSR8wHQKwu6hU
+   AdWga1vMNK2O7SZ4tw1SkruqFpsYN6qIyLVBKVlbEVCe6WLti2hg7JYoG
+   Vc+ZMD3R7/sKJHHn/w7aqPBhVbcWkAR5KlzeO3tO/O3WXpSuqur5gNseb
+   EFC9apWOWM6pXYlK83W7K9r/ZLCtkAMc/nO5NRqjOLQbURE/8mzJzeEmM
+   eB0DTqCY0a8k/q0gDgNh/mVBUFwziQ5c4egN0cUdZ4ULB0ZrbIQE8H21t
+   DHjHDNoFHZHCfcqrYypNIbOo//f9kTXlaJTV724nh9oCt9wb5/mXhst1k
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="320682474"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="320682474"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 07:47:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="1013140887"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="1013140887"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 27 Mar 2023 07:47:15 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pgo7u-000HmV-1D;
+        Mon, 27 Mar 2023 14:47:14 +0000
+Date:   Mon, 27 Mar 2023 22:46:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yu Zhe <yuzhe@nfschina.com>, andersson@kernel.org,
+        mathieu.poirier@linaro.org,
+        angelogioacchino.delregno@collabora.com, agross@kernel.org,
+        konrad.dybcio@linaro.org, patrice.chotard@foss.st.com,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, liqiong@nfschina.com,
+        Yu Zhe <yuzhe@nfschina.com>
+Subject: Re: [PATCH v2] remoteproc: remove unnecessary (void*) conversions
+Message-ID: <202303272213.jOYrwBZu-lkp@intel.com>
+References: <20230320061157.29660-1-yuzhe@nfschina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ZOzYgBpIjOH3qPsHxAvZJVdyTp2OAb6B
-X-Proofpoint-GUID: ZOzYgBpIjOH3qPsHxAvZJVdyTp2OAb6B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 impostorscore=0 spamscore=0 adultscore=0 bulkscore=0
- mlxlogscore=999 mlxscore=0 suspectscore=0 phishscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303270117
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320061157.29660-1-yuzhe@nfschina.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some implementations of the remote firmware, an intent request
-acknowledgement is sent when it's determined if the intent allocation
-will be fulfilled, but then the intent is queued after the
-acknowledgement.
+Hi Yu,
 
-The result is that upon receving a granted allocation request, the
-search for the newly allocated intent will fail and an additional
-request will be made. This will at best waste memory, but if the second
-request is rejected the transaction will be incorrectly rejected.
+Thank you for the patch! Yet something to improve:
 
-Take the incoming intent into account in the wait to mitigate this
-problem.
+[auto build test ERROR on v6.3-rc3]
+[also build test ERROR on linus/master]
+[cannot apply to remoteproc/rproc-next next-20230327]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The above scenario can still happen, in the case that, on that same
-channel, an unrelated intent is delivered prior to the request
-acknowledgement and a separate process enters the send path and picks up
-the intent. Given that there's no relationship between the
-acknowledgement and the delivered (or to be delivered intent), there
-doesn't seem to be a solution to this problem.
+url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Zhe/remoteproc-remove-unnecessary-void-conversions/20230320-141403
+patch link:    https://lore.kernel.org/r/20230320061157.29660-1-yuzhe%40nfschina.com
+patch subject: [PATCH v2] remoteproc: remove unnecessary (void*) conversions
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20230327/202303272213.jOYrwBZu-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/38335303eda6c4de037cd00e20c9065a76f82291
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yu-Zhe/remoteproc-remove-unnecessary-void-conversions/20230320-141403
+        git checkout 38335303eda6c4de037cd00e20c9065a76f82291
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/remoteproc/
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- drivers/rpmsg/qcom_glink_native.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303272213.jOYrwBZu-lkp@intel.com/
 
-diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-index e3494de7dce8..3055e0a473e8 100644
---- a/drivers/rpmsg/qcom_glink_native.c
-+++ b/drivers/rpmsg/qcom_glink_native.c
-@@ -146,6 +146,7 @@ enum {
-  * @open_req:	completed once open-request has been received
-  * @intent_req_lock: Synchronises multiple intent requests
-  * @intent_req_result: Result of intent request
-+ * @intent_received: flag indicating that an intent has been received
-  * @intent_req_wq: wait queue for intent_req signalling
-  */
- struct glink_channel {
-@@ -177,6 +178,7 @@ struct glink_channel {
- 
- 	struct mutex intent_req_lock;
- 	int intent_req_result;
-+	bool intent_received;
- 	wait_queue_head_t intent_req_wq;
- };
- 
-@@ -420,13 +422,13 @@ static void qcom_glink_handle_intent_req_ack(struct qcom_glink *glink,
- 		return;
- 	}
- 
--	channel->intent_req_result = granted;
-+	WRITE_ONCE(channel->intent_req_result, granted);
- 	wake_up_all(&channel->intent_req_wq);
- }
- 
- static void qcom_glink_intent_req_abort(struct glink_channel *channel)
- {
--	channel->intent_req_result = 0;
-+	WRITE_ONCE(channel->intent_req_result, 0);
- 	wake_up_all(&channel->intent_req_wq);
- }
- 
-@@ -757,6 +759,11 @@ static void qcom_glink_handle_rx_done(struct qcom_glink *glink,
- 		kfree(intent);
- 	}
- 	spin_unlock_irqrestore(&channel->intent_lock, flags);
-+
-+	if (reuse) {
-+		WRITE_ONCE(channel->intent_received, true);
-+		wake_up_all(&channel->intent_req_wq);
-+	}
- }
- 
- /**
-@@ -994,6 +1001,9 @@ static void qcom_glink_handle_intent(struct qcom_glink *glink,
- 			dev_err(glink->dev, "failed to store remote intent\n");
- 	}
- 
-+	WRITE_ONCE(channel->intent_received, true);
-+	wake_up_all(&channel->intent_req_wq);
-+
- 	kfree(msg);
- 	qcom_glink_rx_advance(glink, ALIGN(msglen, 8));
- }
-@@ -1273,6 +1283,7 @@ static int qcom_glink_request_intent(struct qcom_glink *glink,
- 	mutex_lock(&channel->intent_req_lock);
- 
- 	WRITE_ONCE(channel->intent_req_result, -1);
-+	WRITE_ONCE(channel->intent_received, false);
- 
- 	cmd.id = GLINK_CMD_RX_INTENT_REQ;
- 	cmd.cid = channel->lcid;
-@@ -1283,7 +1294,8 @@ static int qcom_glink_request_intent(struct qcom_glink *glink,
- 		goto unlock;
- 
- 	ret = wait_event_timeout(channel->intent_req_wq,
--				 READ_ONCE(channel->intent_req_result) >= 0,
-+				 READ_ONCE(channel->intent_req_result) >= 0 &&
-+				 READ_ONCE(channel->intent_received),
- 				 10 * HZ);
- 	if (!ret) {
- 		dev_err(glink->dev, "intent request timed out\n");
+All errors (new ones prefixed by >>):
+
+>> drivers/remoteproc/st_remoteproc.c:361:16: error: assigning to 'struct st_rproc_config *' from 'const void *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           ddata->config = match->data;
+                         ^ ~~~~~~~~~~~
+   1 error generated.
+
+
+vim +361 drivers/remoteproc/st_remoteproc.c
+
+   337	
+   338	static int st_rproc_probe(struct platform_device *pdev)
+   339	{
+   340		struct device *dev = &pdev->dev;
+   341		const struct of_device_id *match;
+   342		struct st_rproc *ddata;
+   343		struct device_node *np = dev->of_node;
+   344		struct rproc *rproc;
+   345		struct mbox_chan *chan;
+   346		int enabled;
+   347		int ret, i;
+   348	
+   349		match = of_match_device(st_rproc_match, dev);
+   350		if (!match || !match->data) {
+   351			dev_err(dev, "No device match found\n");
+   352			return -ENODEV;
+   353		}
+   354	
+   355		rproc = rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
+   356		if (!rproc)
+   357			return -ENOMEM;
+   358	
+   359		rproc->has_iommu = false;
+   360		ddata = rproc->priv;
+ > 361		ddata->config = match->data;
+   362	
+   363		platform_set_drvdata(pdev, rproc);
+   364	
+   365		ret = st_rproc_parse_dt(pdev);
+   366		if (ret)
+   367			goto free_rproc;
+   368	
+   369		enabled = st_rproc_state(pdev);
+   370		if (enabled < 0) {
+   371			ret = enabled;
+   372			goto free_clk;
+   373		}
+   374	
+   375		if (enabled) {
+   376			atomic_inc(&rproc->power);
+   377			rproc->state = RPROC_RUNNING;
+   378		} else {
+   379			clk_set_rate(ddata->clk, ddata->clk_rate);
+   380		}
+   381	
+   382		if (of_get_property(np, "mbox-names", NULL)) {
+   383			ddata->mbox_client_vq0.dev		= dev;
+   384			ddata->mbox_client_vq0.tx_done		= NULL;
+   385			ddata->mbox_client_vq0.tx_block	= false;
+   386			ddata->mbox_client_vq0.knows_txdone	= false;
+   387			ddata->mbox_client_vq0.rx_callback	= st_rproc_mbox_callback_vq0;
+   388	
+   389			ddata->mbox_client_vq1.dev		= dev;
+   390			ddata->mbox_client_vq1.tx_done		= NULL;
+   391			ddata->mbox_client_vq1.tx_block	= false;
+   392			ddata->mbox_client_vq1.knows_txdone	= false;
+   393			ddata->mbox_client_vq1.rx_callback	= st_rproc_mbox_callback_vq1;
+   394	
+   395			/*
+   396			 * To control a co-processor without IPC mechanism.
+   397			 * This driver can be used without mbox and rpmsg.
+   398			 */
+   399			chan = mbox_request_channel_byname(&ddata->mbox_client_vq0, "vq0_rx");
+   400			if (IS_ERR(chan)) {
+   401				dev_err(&rproc->dev, "failed to request mbox chan 0\n");
+   402				ret = PTR_ERR(chan);
+   403				goto free_clk;
+   404			}
+   405			ddata->mbox_chan[ST_RPROC_VQ0 * MBOX_MAX + MBOX_RX] = chan;
+   406	
+   407			chan = mbox_request_channel_byname(&ddata->mbox_client_vq0, "vq0_tx");
+   408			if (IS_ERR(chan)) {
+   409				dev_err(&rproc->dev, "failed to request mbox chan 0\n");
+   410				ret = PTR_ERR(chan);
+   411				goto free_mbox;
+   412			}
+   413			ddata->mbox_chan[ST_RPROC_VQ0 * MBOX_MAX + MBOX_TX] = chan;
+   414	
+   415			chan = mbox_request_channel_byname(&ddata->mbox_client_vq1, "vq1_rx");
+   416			if (IS_ERR(chan)) {
+   417				dev_err(&rproc->dev, "failed to request mbox chan 1\n");
+   418				ret = PTR_ERR(chan);
+   419				goto free_mbox;
+   420			}
+   421			ddata->mbox_chan[ST_RPROC_VQ1 * MBOX_MAX + MBOX_RX] = chan;
+   422	
+   423			chan = mbox_request_channel_byname(&ddata->mbox_client_vq1, "vq1_tx");
+   424			if (IS_ERR(chan)) {
+   425				dev_err(&rproc->dev, "failed to request mbox chan 1\n");
+   426				ret = PTR_ERR(chan);
+   427				goto free_mbox;
+   428			}
+   429			ddata->mbox_chan[ST_RPROC_VQ1 * MBOX_MAX + MBOX_TX] = chan;
+   430		}
+   431	
+   432		ret = rproc_add(rproc);
+   433		if (ret)
+   434			goto free_mbox;
+   435	
+   436		return 0;
+   437	
+   438	free_mbox:
+   439		for (i = 0; i < ST_RPROC_MAX_VRING * MBOX_MAX; i++)
+   440			mbox_free_channel(ddata->mbox_chan[i]);
+   441	free_clk:
+   442		clk_unprepare(ddata->clk);
+   443	free_rproc:
+   444		rproc_free(rproc);
+   445		return ret;
+   446	}
+   447	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
