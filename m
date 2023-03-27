@@ -2,166 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1FE6CA7F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC926CA7F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbjC0OmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
+        id S233114AbjC0OmP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 10:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232636AbjC0OmF (ORCPT
+        with ESMTP id S232927AbjC0OmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:42:05 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE79CA1;
-        Mon, 27 Mar 2023 07:42:04 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RAHAT2020927;
-        Mon, 27 Mar 2023 14:42:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=ivyVZR7ouQVyFI8OG9hI0akCWrLjSGGOqUuj+y5oqjY=;
- b=OwFRaxiDv75ylbiFN9bDDjelWINLSZdb3/fOCVyqvurmd6RyF4iHhPoVjVsVYN+tnkSV
- yeUa9P1GS0ImzqIfRkWWj5EJo5wBsj10hiKlMXjK868CNgpuGDeS+McMV/3QvuAhQj+O
- OERytUqyhBjgSBxv8dc2fjaHf/X4sT4HcqnOLqcZRGMxmKssOoelPrizCDYbiXqZ364B
- cvfOHEcHg8+rktpQOc15Ss/t+cwCYy6Kkl0NUOMRbrSBg2LY5S8dYk4uJu3H+5BoEv2e
- UVWb3Vcs0uRiq/fUxumtZkIb7EbY5oflQhUWdxaJje0qWkjbjXEfeU+dGpdpoVNzW4aX LA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3phsqqmnhv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 14:42:01 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32REg0D1016900
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 14:42:00 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 27 Mar 2023 07:41:59 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Chris Lew <quic_clew@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] rpmsg: glink: Consolidate TX_DATA and TX_DATA_CONT
-Date:   Mon, 27 Mar 2023 07:41:53 -0700
-Message-ID: <20230327144153.3133425-3-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230327144153.3133425-1-quic_bjorande@quicinc.com>
-References: <20230327144153.3133425-1-quic_bjorande@quicinc.com>
+        Mon, 27 Mar 2023 10:42:09 -0400
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6A13588;
+        Mon, 27 Mar 2023 07:42:07 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id ew6so37124529edb.7;
+        Mon, 27 Mar 2023 07:42:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679928126;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5qyUn7aDL5USf6ipYjZT6BGcEOmvQqh6mMOQLhE45Pc=;
+        b=xq7KW4IRn+/a/wwNLgTwqPd7M/iKlkQwGHjsOpXyQtZOJwumxQRgMO4GL9nZJpVAn3
+         /gV0wX4rwvRUL9ie6YRgyyQYUlNDFT+24Xr6rQlRwMrbanqogagK7FlNBvS/UpdnqFf8
+         N8oEXeBmieZ7GrybYyCRLtyMwRiu9R+HPI1f8MZMGSwXvBE8Y7e2Mfg4KPtt5JF6TJ9x
+         mONFcpAkDhITg4sEd1cr5MJdmY3Q1peBGFHdUxQLLI3HlwiZe6EJ2jAODa9hBQf/7eeg
+         a1lbMshKLCWxokwyVAXd7bGBpIVUFGys8H9khx0xljNsaue0fLI3i/SaZBxvFovZ3N5q
+         rJ/A==
+X-Gm-Message-State: AAQBX9fINsCN6E9U+Rfx/L7JqGERO3elG4js+V/eWbHZ8V64BgPx116r
+        Qnx4llUoXC3AZKmFeLv7QFheuZ2W4QPwJtmqPZrR8KjFERc=
+X-Google-Smtp-Source: AKy350aEvB9afQy3KKQhuj1VPBUTsm/ADOwJ93yrIEqjbOLr2IJP7Np8TI21O6znpYNUBZ64f7bdQoO1++ZoFLM6ps8=
+X-Received: by 2002:a17:906:9f0b:b0:8b1:38d6:9853 with SMTP id
+ fy11-20020a1709069f0b00b008b138d69853mr5349619ejc.2.1679928125940; Mon, 27
+ Mar 2023 07:42:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rbb0htesICTgjRuC6CVEWGyKTHhMS7Rt
-X-Proofpoint-ORIG-GUID: rbb0htesICTgjRuC6CVEWGyKTHhMS7Rt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxlogscore=999 bulkscore=0 adultscore=0 clxscore=1015 mlxscore=0
- spamscore=0 priorityscore=1501 malwarescore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303270116
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <5687037.DvuYhMxLoT@kreacher> <11fab8f24f976112aa4d025d03f0f322.squirrel@mail.panix.com>
+ <CAJZ5v0gAyGNAT-t=pQ9wEbNAqzixEfm5dKZuRJVv-YQ=1=LbFw@mail.gmail.com> <bd57500b3900e5cce3f1a65de59959bc.squirrel@mail.panix.com>
+In-Reply-To: <bd57500b3900e5cce3f1a65de59959bc.squirrel@mail.panix.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 27 Mar 2023 16:41:54 +0200
+Message-ID: <CAJZ5v0go3E9tTo-=FY88jd-ca0XVSzuhifje8vrE7rbdtXX+uw@mail.gmail.com>
+Subject: Re: [PATCH v1] ACPI: bus: Rework system-level device notification handling
+To:     Pierre Asselin <pa@panix.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?VXdlIEtsZWluZS1Lw4PCtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>,
+        "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than duplicating most of the code for constructing the initial
-TX_DATA and subsequent TX_DATA_CONT packets, roll them into a single
-loop.
+On Mon, Mar 27, 2023 at 3:33 PM Pierre Asselin <pa@panix.com> wrote:
+>
+> > On Fri, Mar 24, 2023 at 4:54 PM Pierre Asselin <pa@panix.com> wrote:
+> >>
+> >> Rafael, the patch is good for 6.3-rc1 (boots to early userspace).
+> >> I'll try a full install now.
+> >
+> > I'm wondering if this has succeeded?
+>
+> Yes.  I've been running 6.3-rc1 + Rafael's patch for a few days now
+> and all is well.
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- drivers/rpmsg/qcom_glink_native.c | 46 +++++++++----------------------
- 1 file changed, 13 insertions(+), 33 deletions(-)
+Great!
 
-diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-index 62634d020d13..082cf7f4888e 100644
---- a/drivers/rpmsg/qcom_glink_native.c
-+++ b/drivers/rpmsg/qcom_glink_native.c
-@@ -1309,7 +1309,7 @@ static int __qcom_glink_send(struct glink_channel *channel,
- 	int ret;
- 	unsigned long flags;
- 	int chunk_size = len;
--	int left_size = 0;
-+	size_t offset = 0;
- 
- 	if (!glink->intentless) {
- 		while (!intent) {
-@@ -1343,49 +1343,29 @@ static int __qcom_glink_send(struct glink_channel *channel,
- 		iid = intent->id;
- 	}
- 
--	if (wait && chunk_size > SZ_8K) {
--		chunk_size = SZ_8K;
--		left_size = len - chunk_size;
--	}
--	req.msg.cmd = cpu_to_le16(GLINK_CMD_TX_DATA);
--	req.msg.param1 = cpu_to_le16(channel->lcid);
--	req.msg.param2 = cpu_to_le32(iid);
--	req.chunk_size = cpu_to_le32(chunk_size);
--	req.left_size = cpu_to_le32(left_size);
--
--	ret = qcom_glink_tx(glink, &req, sizeof(req), data, chunk_size, wait);
--
--	/* Mark intent available if we failed */
--	if (ret) {
--		if (intent)
--			intent->in_use = false;
--		return ret;
--	}
--
--	while (left_size > 0) {
--		data = (void *)((char *)data + chunk_size);
--		chunk_size = left_size;
--		if (chunk_size > SZ_8K)
-+	while (offset < len) {
-+		chunk_size = len - offset;
-+		if (chunk_size > SZ_8K && (wait || offset > 0))
- 			chunk_size = SZ_8K;
--		left_size -= chunk_size;
- 
--		req.msg.cmd = cpu_to_le16(GLINK_CMD_TX_DATA_CONT);
-+		req.msg.cmd = cpu_to_le16(offset == 0 ? GLINK_CMD_TX_DATA : GLINK_CMD_TX_DATA_CONT);
- 		req.msg.param1 = cpu_to_le16(channel->lcid);
- 		req.msg.param2 = cpu_to_le32(iid);
- 		req.chunk_size = cpu_to_le32(chunk_size);
--		req.left_size = cpu_to_le32(left_size);
-+		req.left_size = cpu_to_le32(len - offset - chunk_size);
- 
--		ret = qcom_glink_tx(glink, &req, sizeof(req), data,
--				    chunk_size, wait);
--
--		/* Mark intent available if we failed */
-+		ret = qcom_glink_tx(glink, &req, sizeof(req), data + offset, chunk_size, wait);
- 		if (ret) {
-+			/* Mark intent available if we failed */
- 			if (intent)
- 				intent->in_use = false;
--			break;
-+			return ret;
- 		}
-+
-+		offset += chunk_size;
- 	}
--	return ret;
-+
-+	return 0;
- }
- 
- static int qcom_glink_send(struct rpmsg_endpoint *ept, void *data, int len)
--- 
-2.25.1
+> (Okay, the simple framebuffer has psychedelic color effects but that too
+> has a workaround.  One bug at a time.)
+>
+> Are these emails getting through ?  I see them on patchwork but not
+> on linux-acpi or regressions.
 
+Yes, they are.  See
+https://lore.kernel.org/linux-acpi/bd57500b3900e5cce3f1a65de59959bc.squirrel@mail.panix.com
+for example.
+
+I'll queue up this patch as a fix for 6.3-rc5.
+
+I'll add a Tested-by: tag from you to it, unless you don't want me to
+do that, in which case please let me know.
+
+Thanks!
