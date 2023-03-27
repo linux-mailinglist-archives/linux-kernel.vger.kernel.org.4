@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D726CAACB
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2FF6CAACE
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbjC0Qi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 12:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
+        id S230407AbjC0Qla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 12:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjC0Qi5 (ORCPT
+        with ESMTP id S229462AbjC0Ql2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:38:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D2012F;
-        Mon, 27 Mar 2023 09:38:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA2846137B;
-        Mon, 27 Mar 2023 16:38:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 378EDC433EF;
-        Mon, 27 Mar 2023 16:38:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679935135;
-        bh=F060jgHqbH6lD6Iawlogyvh44iIfQh/1fPwjaXIGgow=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=HN7XlhW0sXNs2xzrjFb1y4F7wVw1z5qXURrxybRr2I488/gOB+m+l3QxFljvORllg
-         LiIlERYPWXcLpdBsYFoPc5OM+B19W8bRIN29sEjLYBSGHtDkrXPanysMUpMZAXTtG2
-         yGulzHdRm8ERG+MgVrLGtDmAloKxlt4+j6FT6uDHE/TC1DCDOwml8J64HG4b6EDJV7
-         oiHkpqktWVbwFugpZpXOKK5qg9d8fbkvOyxW0lrKWhJ61mw7FZPwOmMvZvi6wVxD0X
-         Tv6ptamlZ3Lzy2ptqUUvookWQvrAbisi1sL4ClGkiz/PoENH6DnpeQehkc3pKSS+H4
-         wjze1Yqn5Z4pg==
-Message-ID: <79723c14ff5dcd2388fa20bf8a5105b1.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Mon, 27 Mar 2023 12:41:28 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A7512F;
+        Mon, 27 Mar 2023 09:41:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=yRGIuLhfmTVv+hrrCN7uKZXXgE2tRW298bQdoran36c=; b=n2YjiDehjB4ucTgQyKljKorfKF
+        gmuvQS4yitRqS/Gp1NLBDUGxWLuLRxlooTsqs3EEfjqIofDUhzDpevLYueuzYgvhfL27SZ9XXoiiD
+        O/073UOgH2UNh3cBygrrd9qPKVFwrM5uoeDLdE6nOESJbSi1EQinRknWfCjLf9l/o1Ws=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pgpuE-008Xj4-Rj; Mon, 27 Mar 2023 18:41:14 +0200
+Date:   Mon, 27 Mar 2023 18:41:14 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Wei Fang <wei.fang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Amit Cohen <amcohen@nvidia.com>, Gal Pressman <gal@nvidia.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH net-next v2 1/8] net: phy: Add driver-specific
+ get/set_eee support for non-standard PHYs
+Message-ID: <47e5176b-3d9a-4583-98d2-73aaf7e4903c@lunn.ch>
+References: <20230327142202.3754446-1-o.rempel@pengutronix.de>
+ <20230327142202.3754446-2-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230319163217.226144-1-robh@kernel.org>
-References: <20230319163217.226144-1-robh@kernel.org>
-Subject: Re: [PATCH] clk: ti: Use of_address_to_resource()
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh@kernel.org>, Tero Kristo <kristo@kernel.org>
-Date:   Mon, 27 Mar 2023 09:38:52 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327142202.3754446-2-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Rob Herring (2023-03-19 09:32:17)
-> Replace of_get_address() and of_translate_address() calls with single
-> call to of_address_to_resource().
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+On Mon, Mar 27, 2023 at 04:21:55PM +0200, Oleksij Rempel wrote:
+> Not all PHYs are implemented fully according to the IEEE 802.3
+> specification and cannot be handled by the generic
+> phy_ethtool_get/set_eee() functions. To address this, this commit adds
+> driver-specific get/set_eee support, enabling better handling of such
+> PHYs. This is particularly important for handling PHYs with SmartEEE
+> support, which requires specialized management.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Applied to clk-next
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+
+    Andrew
