@@ -2,94 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D916C9E69
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2281D6C9E64
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbjC0Img (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
+        id S233464AbjC0ImO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233420AbjC0ImB (ORCPT
+        with ESMTP id S232954AbjC0Ikp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:42:01 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612B37A92;
-        Mon, 27 Mar 2023 01:37:59 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32R3g8bq010128;
-        Mon, 27 Mar 2023 08:37:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=RQIy2JvdoXqn0+qzm0Zw27EpIjBsbWWGLQt5SS+eSdU=;
- b=UeRV4fl/IMoaCnOSQuigTDbRUFD5xcbOHjREZ6o23GsdMWtUHSh26XhM/VE5oSiybQJW
- ABUkUNZR+C8enyoRldlnCCP6kyz/BOZovvK6raMNFHVNu7P4gKKd6ViyPC3pZBapT1yH
- AfZsYZM0l/Xas4UqX3VImQJO7WE6f4DJT2w3FB6hfjO135D/CqbS4ThhTZvKV2Fz4Mng
- e3SvPQsO+n4rktYqgzqQLzxUfaqov+LV8wyh6f7AAG3HefrQbIu07SgAnVAo+48eGte2
- LE1sQVdAkr/p7rYpGMeyRokU1SF8Zv412jP4fEBmOdWLUoUGG6tp8rfcANUoqMLdwoEF mA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3phsrauv35-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 08:37:33 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32R8bW5s010527
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 08:37:32 GMT
-Received: from [10.239.133.211] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 27 Mar
- 2023 01:37:27 -0700
-Message-ID: <4d425700-d6e6-c70b-c7f5-2f64370ecc4e@quicinc.com>
-Date:   Mon, 27 Mar 2023 16:37:24 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 09/11] coresight-tpdm: Add nodes for timestamp request
+        Mon, 27 Mar 2023 04:40:45 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2071.outbound.protection.outlook.com [40.107.113.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D566EB5;
+        Mon, 27 Mar 2023 01:37:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=exMbhNDwdRwkVcHsskDTWZlzwbDzo+WdNaI1PyGbqVeYjHHNKNdOdu+S4Q9AZLQvxjCCKmCqGny3fiZNeYvIZgZLNZtAn8K4l0UDkLcLTA01Zl9KmHamY936ewHKoxRtf2eQsfZ/u1XamXjsWA+nTu2spuU2znMe/iU8jHfIi/fhZTyjOBZg9ocnKxpkBMNTKvSa/cqkPrqSFEvSYD3iv3dL9faoRfjkpWJf8PKhndg6KYNM4N0ApG/sq75ZyvwNvaAdJvnTa70/T57OaeAJZTWBfJx7LxgmSz7U7eO3qf0fdXzZISsC7YLPOnznO+ESFSEst4ijynHFk5xBNscRKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G+tlBbhcmpdLYS+BB51ef1bAysqIOiZbeH45Frf0ctY=;
+ b=j7HXfYhbqxGNOQU5NpWPRa15eGoSjBAzeMOkPfSlDOoBp94wtCoceWZ/pSPC3RpJIH7IE2RA4yqeAgQVh91XnsusXBP3775IWmh5cyeFteOcT3f+qdZNjZM+dj7I3NkDFdfTVD3418CaIwhsY0FMYKPSGDTLqQs42m9maeOMm0LPgtfLIPvdGr4rds2j1H6X4+LenMQZx1FTXAO1xNe6n9iqA2yt90r5ie3mBiqSTtkgVdNiV3rBUEyqNDvOtUp5w1AhSlTBzaCE3VuCr+NOG/EK7rCLHmP4n5B+pmIwGeDlWmzBHC+ZMY4Ol+J1LbGpgWDgozpdTXK/f8Qxw0mGSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
+ header.d=nec.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G+tlBbhcmpdLYS+BB51ef1bAysqIOiZbeH45Frf0ctY=;
+ b=PscbkP6InfWwW1FJggI6O9uQCugZpn775+UocExnvqEEyUNfmw+RFV8qfcVo7OYAdGbTapzQVfWg/NdNvdWfAzRmkHZU79fIBj8iVSNhn2VLg8m/mvrWVSXADw+ccrZupHjyRe/sj/McINbPrkoHtaacvvnFWrLojFVh8k2snqg=
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
+ by TY3PR01MB10269.jpnprd01.prod.outlook.com (2603:1096:400:1aa::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.30; Mon, 27 Mar
+ 2023 08:37:42 +0000
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::22a3:7e89:cc26:15c8]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::22a3:7e89:cc26:15c8%7]) with mapi id 15.20.6178.041; Mon, 27 Mar 2023
+ 08:37:42 +0000
+From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
+        <naoya.horiguchi@nec.com>
+To:     Zhiquan Li <zhiquan1.li@intel.com>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "youquan.song@intel.com" <youquan.song@intel.com>
+Subject: Re: [PATCH v2] x86/mce: Set PG_hwpoison page flag to avoid the
+ capture kernel panic
+Thread-Topic: [PATCH v2] x86/mce: Set PG_hwpoison page flag to avoid the
+ capture kernel panic
+Thread-Index: AQHZYFOx/wpQ3foYuECrCxkdDKn8Ga8OTh+A
+Date:   Mon, 27 Mar 2023 08:37:41 +0000
+Message-ID: <20230327083739.GA956278@hori.linux.bs1.fc.nec.co.jp>
+References: <20230327023358.3191922-1-zhiquan1.li@intel.com>
+In-Reply-To: <20230327023358.3191922-1-zhiquan1.li@intel.com>
+Accept-Language: ja-JP, en-US
 Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
- <1679551448-19160-10-git-send-email-quic_taozha@quicinc.com>
- <859dac2a-8b6b-ba55-f30f-3ac668433a35@arm.com>
-From:   Tao Zhang <quic_taozha@quicinc.com>
-In-Reply-To: <859dac2a-8b6b-ba55-f30f-3ac668433a35@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 9tXSOAHbIkVF1u-2YcUmnbBK68S3tSwN
-X-Proofpoint-ORIG-GUID: 9tXSOAHbIkVF1u-2YcUmnbBK68S3tSwN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- malwarescore=0 priorityscore=1501 phishscore=0 suspectscore=0
- lowpriorityscore=0 mlxscore=0 bulkscore=0 clxscore=1015 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303270070
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nec.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYWPR01MB8591:EE_|TY3PR01MB10269:EE_
+x-ms-office365-filtering-correlation-id: abb390db-6c33-4fa5-0357-08db2e9e87bf
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6knoEUr73cSCqJ5vLjOYFT85NqBBGlW7lqyCHkxofV5O6eJAdSgi5VZ5U/izh0rU2OvB9xyiqmjPmfPWwwBh9xQxq5EBVZkDeebA7+jboUDMI4Zn9+NSk3Wa/WrJ1WieFyiLyV6kyU6HuZSmIQ5jAIEaYJAtrW2KSOonhbA5EVJEqUaog2RVHOaiVQ+TY4AvvVHrGsPfgqkhz9CvZd1i7OhC2BIlLLSkl1Ra11D5ktr0+etHpc4zbDucOstg3S13DC93bAaKWhpPCrqjK+Wv/lgM9C5D/om836yaVES2xACBJ5aIpL6ypauoNxfORL0EtTckVaJF/QVM/s2l19dtjd23RVPH+nDcsvhT+o+omIYL9eLT3sNGv7h07yqigme1iHEK2IJXKbAYpiIHOJp9Mhr5NfrtriiY6EQk8BRg5cEH0KgPp5rSwNGfQUN8U+JMn0y0jxC59/XUnGx/rOcPf534wsVRG4g7DeOryFOtI56hv6eoWrf56q9DZ9EYOQZdKWDdomZgtjqe/BcBU+otXnkuIeO7uBU6why4JkGWaGAERawFaUNQV+avkY2A0Hl8TFailx6A1slftXptml4C6lCEPIT+/OK5XS2KtPYc2iSIUTVCt7cvEdeL3pXUiqlg
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(366004)(39860400002)(396003)(376002)(451199021)(9686003)(6512007)(6506007)(1076003)(26005)(55236004)(41300700001)(186003)(6486002)(71200400001)(83380400001)(478600001)(54906003)(316002)(4326008)(38100700002)(2906002)(4744005)(66446008)(64756008)(6916009)(8676002)(76116006)(66476007)(66556008)(66946007)(33656002)(85182001)(38070700005)(82960400001)(86362001)(5660300002)(8936002)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cy9qRzMxYmkrN0ROMjI5VDIzUENvYlYvUGpTNlRmSEUyMkJGcXF0TS9FajlP?=
+ =?utf-8?B?OUJ4Mm9WZmVUZGQ3MGJUbS9jd1pHQU9rbXdLZ1F2eUxhMEhyQ25lUVlEMUpM?=
+ =?utf-8?B?akhPODFKNFU3bzBablFDTmllOTJaU3JMWFVrVWQ4WUtEU1ZjaCtyWUZ2N04z?=
+ =?utf-8?B?SDFBd2Nha3dIMnRyNlFuQytWY25HUVJCc3ZOSHZZUVp0ZFhjRktzMUNESjB4?=
+ =?utf-8?B?bTNOOHp3VmFiNUxGOVI5YWpvMWpTblI1UEtRYnNaQSsweSsxK0FXaEFETlFz?=
+ =?utf-8?B?TUI0eDd2OXFVdTd3UStiUWRTTFFoNVArTDN2RjB4a2VydU96OWtIeXBtVFhB?=
+ =?utf-8?B?MFBVSExNdkpURXNuZml1TzVQTzZGaXZHc2UydEIvcHBldUxmM3JObDdxekRm?=
+ =?utf-8?B?VUpOV3cwbVZ5QTluTHpFaFZUcEV5V3IzMVBzSnI4alNEOG1kTXBURGZ6Z2tD?=
+ =?utf-8?B?NithZDZLVllBcmZrTnRzSDJSRm5ZU3hlaFloOXBNYThwYmJYVVRETW93ZEYr?=
+ =?utf-8?B?c3A1UzNVRzExWnJ2b3o1d3FsMUlKdFBXcXU3SmdSbTZIdWdzYVJsR0h0K0Rx?=
+ =?utf-8?B?TFphaVZmVldYdFF1dFBaOGwxVHhrckVZbEJqS00vTUJyeVhyOEUwZVcvMlo5?=
+ =?utf-8?B?Wkp6bnN5amluZ294TFhPOWU1WEVXRVpjVkYxcXdoN3k2V2t3RUxqREtZbExP?=
+ =?utf-8?B?MFJWeW5EdnoxbE5rWTQ0cXNQdU4rVFBuL05tRW5KcVY1dVJnTjhGMzg0dStv?=
+ =?utf-8?B?YnFzb1prZHBDVk9BUTI3WEJQeEhQMUd3ZVV4dExLMkpYUk8vMkhyQTFjUXVY?=
+ =?utf-8?B?WDVNNVZkODJ3QVZrVTl2c0dUcjhCQms3Vjk1ZTAyeWREbklCOWlmZTdmV1dN?=
+ =?utf-8?B?ZUV5K3JYSlZaemtSaU5XZWhnbDJPNms4YzduR0RGbnVZVEtwY281ZFBtWDdC?=
+ =?utf-8?B?UFM5Sk1Scis0dnc0YmdRRk96MGViT1pWeTNCTStNUWdzTmJJWXlIWDgyUkhZ?=
+ =?utf-8?B?OFd5QUxiUFk1cUdLQktMa3QxVjF5SWdoNVlENGdEdHNQb2tkd3dkZW9PaGlt?=
+ =?utf-8?B?cjdRTWlBQVp3SEVqWlB5T3hXL2hIR01mcXdrR2pCa0xyY3IwTDBDQmVjVEVp?=
+ =?utf-8?B?UEw0WjlWT0RsTkJ0V0hidjdJdWlubGlCZUlOdi9UZ2RSYlUxUi95MUJueVAy?=
+ =?utf-8?B?bHgzZ2VPVTdpWlZaWDM1WTBNYzJPbk5yd0xiQ24xQ01RS0Z6V3BVMXRHTWNE?=
+ =?utf-8?B?YTRCNjRBdkl1bFJDMHNIckVOQk5jdTVqNnZYUE81b05kZ2czR0NSalIrc0hO?=
+ =?utf-8?B?WUMxQWVOZGVGb2ZYZTd2anJvc0E0STQ5bW81TU9nd1c5Z2NWZmprR1RQMWZW?=
+ =?utf-8?B?VGVEZmliSXNCaUlrZ09nZ08wSXJhbk1DR2F5RWlWUU13b3FsSnZ1Zm9RRkVT?=
+ =?utf-8?B?MVJ0cnJneEZyVm80eXJobE1hbHoxa2gveit4RUY5NUxaTUlBMytsV0ZRTitG?=
+ =?utf-8?B?VDM2elphYWVZZWs5NlNldjVoc3oxc3FMRlZrMDEvL3JDd1AzYy9TRXBiWE5K?=
+ =?utf-8?B?ajJsZ1QxOFhLYUxsOTdPNDZXeU9kVHJlK0NPL1pFWkk1Kzc3eTVjT29CQ0Jw?=
+ =?utf-8?B?eGc3Z09rL0ozUnVDbkV3UFFUd2h0aDQ4RjhWYnI5RjhuenlKdmtwWW9nY1JH?=
+ =?utf-8?B?ZFpGYWY0bGdEa2tNUm1QeWFaR0dEbzJUWWJVRWZhR1FwMmhTV012cUd6Mllz?=
+ =?utf-8?B?ZW5SUjZXRERYa3lTSSt0eFl0bGJ1eGRGUWZVcEtMSmk1d0xRVzRZeGpRNHAr?=
+ =?utf-8?B?RTZQallQTG8rTlowVytKOVF2K2toSkNsRlJpVlNoenM5amdCNlNsMDlVWDJ0?=
+ =?utf-8?B?VTg1T3B3RVJBdnMySTdOZjQ4NnJrRWhERzlSRHRYMTJrOFhSL0swc05waDVK?=
+ =?utf-8?B?WUc4dy84dUE2MHhLWnJ5WWFycWlGL1JVbytvOXUxQmpkK2IzVVNjcllPRlBH?=
+ =?utf-8?B?ZllNblRyTDRhVWtaRmVEcnBzUGsvWVA0YmwrcDlsa3RWdmJLM1NGbHV3STFG?=
+ =?utf-8?B?c2hBZ1p6eXZBSVNsWC9OclBIbEh4L0NibzlvZllCMWplRlNxRGl2QWVZdVYw?=
+ =?utf-8?B?Mko5RkZIVkVsM2Q2TmdyL0NhQytLM3ZTa2I4ekNodDRxaFdqem85MEhOTnhM?=
+ =?utf-8?B?K3c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <28CD30D68EE42A43945DF1F77BFC60C3@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nec.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: abb390db-6c33-4fa5-0357-08db2e9e87bf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Mar 2023 08:37:42.0053
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9bg/eCtyNpxlYxEuLcxnFeOQTwvP8Ue819cTySpGzusmSQpr+GjbAn5LsJkh1Ns9CsP6tUIx0AsOj01Do7hikw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB10269
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,374 +134,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suzuki,
-
-On 3/24/2023 2:41 AM, Suzuki K Poulose wrote:
-> On 23/03/2023 06:04, Tao Zhang wrote:
->> Add nodes to configure the timestamp request based on input
->> pattern match. Each TPDM that support DSB subunit has maximum of
->> n(n<7) TPR registers to configure value for timestamp request
->> based on input pattern match. Eight 32 bit registers providing
->> DSB interface timestamp request  pattern match comparison. And
->> each TPDM that support DSB subunit has maximum of m(m<7) TPMR
->> registers to configure pattern mask for timestamp request. Eight
->> 32 bit registers providing DSB interface timestamp request
->> pattern match mask generation. Add nodes to enable/disable
->> pattern timestamp and set pattern timestamp type.
->>
->> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->> ---
->>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   |  48 ++++++
->>   drivers/hwtracing/coresight/coresight-tpdm.c       | 172 
->> +++++++++++++++++++++
->>   drivers/hwtracing/coresight/coresight-tpdm.h       |  14 ++
->>   3 files changed, 234 insertions(+)
->>
->> diff --git 
->> a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm 
->> b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->> index c06374f..60ff660 100644
->> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->> @@ -95,3 +95,51 @@ Description:
->>           Accepts the following two values.
->>           value 1: Index number of XPMR register
->>           value 2: The value need to be written
->> +
->> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_patt_val
->> +Date:        March 2023
->> +KernelVersion    6.3
->> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang 
->> (QUIC) <quic_taozha@quicinc.com>
->> +Description:
->> +        (Write) Set the pattern value of DSB tpdm. Read
->> +        the pattern value of DSB tpdm.
->> +
->> +        Accepts the following two values.
->> +        value 1: Index number of TPR register
->> +        value 2: The value need to be written
->> +
->> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_patt_mask
->> +Date:        March 2023
->> +KernelVersion    6.3
->> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang 
->> (QUIC) <quic_taozha@quicinc.com>
->> +Description:
->> +        (Write) Set the pattern mask of DSB tpdm. Read
->> +        the pattern mask of DSB tpdm.
->> +
->> +        Accepts the following two values.
->> +        value 1: Index number of TPMR register
->> +        value 2: The value need to be written
->> +
->> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_patt_ts
->> +Date:        March 2023
->> +KernelVersion    6.3
->> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang 
->> (QUIC) <quic_taozha@quicinc.com>
->> +Description:
->> +        (Write) Set the pattern timestamp of DSB tpdm. Read
->> +        the pattern timestamp of DSB tpdm.
->> +
->> +        Accepts only one of the 2 values -  0 or 1.
->> +        0 : Set the DSB pattern timestamp to false
->> +        1 : Set the DSB pattern timestamp to true
->> +
->> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_patt_type
->> +Date:        March 2023
->> +KernelVersion    6.3
->> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang 
->> (QUIC) <quic_taozha@quicinc.com>
->> +Description:
->> +        (Write) Set the pattern type of DSB tpdm. Read
->> +        the pattern type of DSB tpdm.
->> +
->
-> Sounds a bit strange for "pattern type" to be bool. What does this do ?
-> Does it enable/disable something  ?
-
-I think there are two pattern types and controlled by 1 bit in the 
-register. It doesn't
-
-really make sense to use Boolean values. I will confirm this and update 
-it in the next
-
-patch series.
-
->
->> +        Accepts only one of the 2 values -  0 or 1.
->> +        0 : Set the DSB pattern type to false
->> +        1 : Set the DSB pattern type to true
->> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
->> b/drivers/hwtracing/coresight/coresight-tpdm.c
->> index d6cc6b5..c740681 100644
->> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
->> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
->> @@ -98,6 +98,13 @@ static void tpdm_enable_dsb(struct tpdm_drvdata 
->> *drvdata)
->>                  drvdata->base + TPDM_DSB_EDCMR(i));
->>         for (i = 0; i < TPDM_DSB_MAX_PATT; i++) {
->> +        writel_relaxed(drvdata->dsb->patt_val[i],
->> +                drvdata->base + TPDM_DSB_TPR(i));
->> +        writel_relaxed(drvdata->dsb->patt_mask[i],
->> +                drvdata->base + TPDM_DSB_TPMR(i));
->> +    }
->> +
->> +    for (i = 0; i < TPDM_DSB_MAX_PATT; i++) {
->
-> Why not do all the pattern related writing in one shot, instead
-> of two loops ?
-I will combine these two loops to one.
->
->> writel_relaxed(drvdata->dsb->trig_patt_val[i],
->>                   drvdata->base + TPDM_DSB_XPR(i));
->>           writel_relaxed(drvdata->dsb->trig_patt_mask[i],
->> @@ -105,6 +112,16 @@ static void tpdm_enable_dsb(struct tpdm_drvdata 
->> *drvdata)
->>       }
->>         val = readl_relaxed(drvdata->base + TPDM_DSB_TIER);
->> +    /* Set pattern timestamp type and enablement */
->> +    if (drvdata->dsb->patt_ts) {
->> +        val |= TPDM_DSB_TIER_PATT_TSENAB;
->> +        if (drvdata->dsb->patt_type)
->> +            val |= TPDM_DSB_TIER_PATT_TYPE;
->> +        else
->> +            val &= ~TPDM_DSB_TIER_PATT_TYPE;
->> +    } else {
->> +        val &= ~TPDM_DSB_TIER_PATT_TSENAB;
->> +    }
->
-> set_dsb_pattern_ts() in line with the other helper functions ?
-> Rest looks fine to me.
->
-Sure, I will update this in the next patch series.
-
-
-Tao
-
-> Suzuki
->
->
->>       /* Set trigger timestamp */
->>       if (drvdata->dsb->trig_ts)
->>           val |= TPDM_DSB_TIER_XTRIG_TSENAB;
->> @@ -455,6 +472,157 @@ static ssize_t dsb_edge_ctrl_mask_store(struct 
->> device *dev,
->>       return size;
->>   }
->>   static DEVICE_ATTR_RW(dsb_edge_ctrl_mask);
->> +
->> +static ssize_t dsb_patt_val_show(struct device *dev,
->> +                      struct device_attribute *attr,
->> +                      char *buf)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +    ssize_t size = 0;
->> +    int i = 0;
->> +
->> +    spin_lock(&drvdata->spinlock);
->> +    for (i = 0; i < TPDM_DSB_MAX_PATT; i++) {
->> +        size += sysfs_emit_at(buf, size,
->> +                  "Index: 0x%x Value: 0x%x\n", i,
->> +                  drvdata->dsb->patt_val[i]);
->> +    }
->> +    spin_unlock(&drvdata->spinlock);
->> +    return size;
->> +}
->> +
->> +/*
->> + * value 1: Index of TPR register
->> + * value 2: Value need to be written
->> + */
->> +static ssize_t dsb_patt_val_store(struct device *dev,
->> +                       struct device_attribute *attr,
->> +                       const char *buf,
->> +                       size_t size)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +    unsigned long index, val;
->> +
->> +    if (sscanf(buf, "%lx %lx", &index, &val) != 2)
->> +        return -EINVAL;
->> +    if (index >= TPDM_DSB_MAX_PATT)
->> +        return -EPERM;
->> +
->> +    spin_lock(&drvdata->spinlock);
->> +    drvdata->dsb->patt_val[index] = val;
->> +    spin_unlock(&drvdata->spinlock);
->> +    return size;
->> +}
->> +static DEVICE_ATTR_RW(dsb_patt_val);
->> +
->> +static ssize_t dsb_patt_mask_show(struct device *dev,
->> +                       struct device_attribute *attr,
->> +                       char *buf)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +    ssize_t size = 0;
->> +    int i = 0;
->> +
->> +    spin_lock(&drvdata->spinlock);
->> +    for (i = 0; i < TPDM_DSB_MAX_PATT; i++) {
->> +        size += sysfs_emit_at(buf, size,
->> +                  "Index: 0x%x Value: 0x%x\n", i,
->> +                  drvdata->dsb->patt_mask[i]);
->> +    }
->> +    spin_unlock(&drvdata->spinlock);
->> +    return size;
->> +}
->> +
->> +/*
->> + * value 1: Index of TPMR register
->> + * value 2: Value need to be written
->> + */
->> +static ssize_t dsb_patt_mask_store(struct device *dev,
->> +                    struct device_attribute *attr,
->> +                    const char *buf,
->> +                    size_t size)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +    unsigned long index, val;
->> +
->> +    if (sscanf(buf, "%lx %lx", &index, &val) != 2)
->> +        return -EINVAL;
->> +    if (index >= TPDM_DSB_MAX_PATT)
->> +        return -EPERM;
->> +
->> +    spin_lock(&drvdata->spinlock);
->> +    drvdata->dsb->patt_mask[index] = val;
->> +    spin_unlock(&drvdata->spinlock);
->> +    return size;
->> +}
->> +static DEVICE_ATTR_RW(dsb_patt_mask);
->> +
->> +static ssize_t dsb_patt_ts_show(struct device *dev,
->> +                     struct device_attribute *attr,
->> +                     char *buf)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +
->> +    return sysfs_emit(buf, "%u\n",
->> +             (unsigned int)drvdata->dsb->patt_ts);
->> +}
->> +
->> +/*
->> + * value 1: Enable/Disable DSB pattern timestamp
->> + */
->
->> +static ssize_t dsb_patt_ts_store(struct device *dev,
->> +                      struct device_attribute *attr,
->> +                      const char *buf,
->> +                      size_t size)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +    unsigned long val;
->> +
->> +    if ((kstrtoul(buf, 0, &val)) || (val & ~1UL))
->> +        return -EINVAL;
->> +
->> +    spin_lock(&drvdata->spinlock);
->> +    if (val)
->> +        drvdata->dsb->patt_ts = true;
->> +    else
->> +        drvdata->dsb->patt_ts = false;
->> +    spin_unlock(&drvdata->spinlock);
->> +    return size;
->> +}
->> +static DEVICE_ATTR_RW(dsb_patt_ts);
->> +
->> +static ssize_t dsb_patt_type_show(struct device *dev,
->> +                       struct device_attribute *attr, char *buf)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +
->> +    return sysfs_emit(buf, "%u\n",
->> +             (unsigned int)drvdata->dsb->patt_type);
->> +}
->> +
->> +/*
->> + * value 1: Set DSB pattern type
->
->
->> + */ > +static ssize_t dsb_patt_type_store(struct device *dev,
->> +                    struct device_attribute *attr,
->> +                    const char *buf, size_t size)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +    unsigned long val;
->> +
->> +    if ((kstrtoul(buf, 0, &val)) || (val & ~1UL))
->> +        return -EINVAL;
->> +
->> +    spin_lock(&drvdata->spinlock);
->> +    if (val)
->> +        drvdata->dsb->patt_type = true;
->> +    else
->> +        drvdata->dsb->patt_type = false;
->> +    spin_unlock(&drvdata->spinlock);
->> +    return size;
->> +}
->> +static DEVICE_ATTR_RW(dsb_patt_type);
->> +
->>   static ssize_t dsb_trig_patt_val_show(struct device *dev,
->>                          struct device_attribute *attr,
->>                          char *buf)
->> @@ -605,6 +773,10 @@ static struct attribute *tpdm_dsb_attrs[] = {
->>       &dev_attr_dsb_mode.attr,
->>       &dev_attr_dsb_edge_ctrl.attr,
->>       &dev_attr_dsb_edge_ctrl_mask.attr,
->> +    &dev_attr_dsb_patt_val.attr,
->> +    &dev_attr_dsb_patt_mask.attr,
->> +    &dev_attr_dsb_patt_ts.attr,
->> +    &dev_attr_dsb_patt_type.attr,
->>       &dev_attr_dsb_trig_patt_val.attr,
->>       &dev_attr_dsb_trig_patt_mask.attr,
->>       &dev_attr_dsb_trig_ts.attr,
->> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h 
->> b/drivers/hwtracing/coresight/coresight-tpdm.h
->> index 2e8020e..f9d4dd9 100644
->> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
->> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
->> @@ -12,6 +12,8 @@
->>   /* DSB Subunit Registers */
->>   #define TPDM_DSB_CR        (0x780)
->>   #define TPDM_DSB_TIER        (0x784)
->> +#define TPDM_DSB_TPR(n)        (0x788 + (n * 4))
->> +#define TPDM_DSB_TPMR(n)    (0x7A8 + (n * 4))
->>   #define TPDM_DSB_XPR(n)        (0x7C8 + (n * 4))
->>   #define TPDM_DSB_XPMR(n)    (0x7E8 + (n * 4))
->>   #define TPDM_DSB_EDCR(n)    (0x808 + (n * 4))
->> @@ -24,8 +26,12 @@
->>   /* Enable bit for DSB subunit trigger type */
->>   #define TPDM_DSB_CR_TRIG_TYPE        BIT(12)
->>   +/* Enable bit for DSB subunit pattern timestamp */
->> +#define TPDM_DSB_TIER_PATT_TSENAB        BIT(0)
->>   /* Enable bit for DSB subunit trigger timestamp */
->>   #define TPDM_DSB_TIER_XTRIG_TSENAB        BIT(1)
->> +/* Bit for DSB subunit pattern type */
->> +#define TPDM_DSB_TIER_PATT_TYPE        BIT(2)
->>     /* DSB programming modes */
->>   #define TPDM_DSB_MODE_CYCACC(val)    (val & GENMASK(2, 0))
->> @@ -76,6 +82,10 @@
->>    * @mode:             DSB programming mode
->>    * @edge_ctrl:        Save value for edge control
->>    * @edge_ctrl_mask:   Save value for edge control mask
->> + * @patt_val:         Save value for pattern
->> + * @patt_mask:        Save value for pattern mask
->> + * @patt_ts:          Enable/Disable pattern timestamp
->> + * @patt_type:        Set pattern type
->>    * @trig_patt_val:    Save value for trigger pattern
->>    * @trig_patt_mask:   Save value for trigger pattern mask
->>    * @trig_ts:          Enable/Disable trigger timestamp.
->> @@ -85,6 +95,10 @@ struct dsb_dataset {
->>       u32                mode;
->>       u32                edge_ctrl[TPDM_DSB_MAX_EDCR];
->>       u32                edge_ctrl_mask[TPDM_DSB_MAX_EDCMR];
->> +    u32                patt_val[TPDM_DSB_MAX_PATT];
->> +    u32                patt_mask[TPDM_DSB_MAX_PATT];
->> +    bool            patt_ts;
->> +    bool            patt_type;
->>       u32                trig_patt_val[TPDM_DSB_MAX_PATT];
->>       u32                trig_patt_mask[TPDM_DSB_MAX_PATT];
->>       bool            trig_ts;
->
+T24gTW9uLCBNYXIgMjcsIDIwMjMgYXQgMTA6MzM6NThBTSArMDgwMCwgWmhpcXVhbiBMaSB3cm90
+ZToNCj4gS2R1bXAgY2FuIGV4Y2x1ZGUgdGhlIEhXUG9zaW9uIHBhZ2UgdG8gYXZvaWQgdG91Y2gg
+dGhlIGVycm9yIHBhZ2UNCj4gYWdhaW4sIHRoZSBwcmVyZXF1aXNpdGUgaXMgdGhlIFBHX2h3cG9p
+c29uIHBhZ2UgZmxhZyBpcyBzZXQuDQo+IEhvd2V2ZXIsIGZvciBzb21lIE1DRSBmYXRhbCBlcnJv
+ciBjYXNlcywgdGhlcmUgaXMgbm8gb3Bwb3J0dW5pdHkNCj4gdG8gcXVldWUgYSB0YXNrIGZvciBj
+YWxsaW5nIG1lbW9yeV9mYWlsdXJlKCksIGFzIGEgcmVzdWx0LA0KPiB0aGUgY2FwdHVyZSBrZXJu
+ZWwgdG91Y2hlcyB0aGUgZXJyb3IgcGFnZSBhZ2FpbiBhbmQgcGFuaWNzLg0KPiANCj4gQWRkIGZ1
+bmN0aW9uIG1jZV9zZXRfcGFnZV9od3BvaXNvbl9ub3coKSB3aGljaCBtYXJrcyBhIHBhZ2UgYXMN
+Cj4gSFdQb2lzb24gYmVmb3JlIGtlcm5lbCBwYW5pYygpIGZvciBNQ0UgZXJyb3IsIHNvIHRoYXQg
+dGhlIGR1bXANCj4gcHJvZ3JhbSBjYW4gY2hlY2sgYW5kIHNraXAgdGhlIGVycm9yIHBhZ2UgYW5k
+IHByZXZlbnQgdGhlIGNhcHR1cmUNCj4ga2VybmVsIHBhbmljLg0KPiANCj4gW1Rvbnk6IENoYW5n
+ZWQgVGVzdFNldFBhZ2VIV1BvaXNvbigpIHRvIFNldFBhZ2VIV1BvaXNvbigpXQ0KPiANCj4gQ28t
+ZGV2ZWxvcGVkLWJ5OiBZb3VxdWFuIFNvbmcgPHlvdXF1YW4uc29uZ0BpbnRlbC5jb20+DQo+IFNp
+Z25lZC1vZmYtYnk6IFlvdXF1YW4gU29uZyA8eW91cXVhbi5zb25nQGludGVsLmNvbT4NCj4gU2ln
+bmVkLW9mZi1ieTogWmhpcXVhbiBMaSA8emhpcXVhbjEubGlAaW50ZWwuY29tPg0KPiBTaWduZWQt
+b2ZmLWJ5OiBUb255IEx1Y2sgPHRvbnkubHVja0BpbnRlbC5jb20+DQoNCkxvb2tzIGdvb2QgdG8g
+bWUsIHRoYW5rIHlvdS4NCg0KUmV2aWV3ZWQtYnk6IE5hb3lhIEhvcmlndWNoaSA8bmFveWEuaG9y
+aWd1Y2hpQG5lYy5jb20+
