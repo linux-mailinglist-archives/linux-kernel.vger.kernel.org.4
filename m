@@ -2,97 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F246CAAC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48786CAAC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjC0Qhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 12:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S232374AbjC0Qhs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 12:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjC0Qhh (ORCPT
+        with ESMTP id S232132AbjC0Qhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:37:37 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E190512F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:37:36 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id i10so8018973vss.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:37:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679935056;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6RqPYalYEAGyxUFhTZgX8zf4uHQXV7aAfyU++DqjmYg=;
-        b=T0i7/Pw4U47NGPVlD4f2M4I1qI+n7RU5fVjuxZebJ412pHJOGBkSaYpDXBd47tXuHK
-         DD0DAl7ZDqCV0aJK98cSbCo5kbQhlzT/Es2IA41kD/04bbDFrwEE6+j/8iz0H8aWvycV
-         SRCjYFS7yiVmecs6ziW2HH6h1MAZHIKXoJUf0=
+        Mon, 27 Mar 2023 12:37:46 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC0C268F;
+        Mon, 27 Mar 2023 09:37:44 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id y4so38798017edo.2;
+        Mon, 27 Mar 2023 09:37:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679935056;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6RqPYalYEAGyxUFhTZgX8zf4uHQXV7aAfyU++DqjmYg=;
-        b=3R5aY1ri3PBtPw2ua5IfMagXV0Ghy62GESynINsVpY459kbZiv8UIQBl35Q0haTLs0
-         qZz78GBtucYwE6NTPYfMAEfna2F3obpQR7xASeWmvJJ2totZ93rmnEdt1p0DrZ8pZk03
-         7aRHwPGDVHSpspa2dumFgwsRrIYSjmB9ESuKBe5e1Bt4Hzt1w5uzSeYZe2ctO7x0bAXJ
-         PsLlPqOUv0nh84jZRTSkFdXf4XTIqgGRBGrarO/CKNaI+cFgaIfthGYaGpPQPdw3Kkjr
-         o5G8fQhdqkOvzuKYBml91T8JglyM3E8WWew2c2eljD+c7LGO/6SGhNMFB5MggpEQIAu0
-         /QtA==
-X-Gm-Message-State: AAQBX9cDD3UoRqblzjpL9u44W2Y1dL/KHLJIeCWCt3ufXDFJdXidj+6b
-        nFwuu7HHkKrNwYlzU2fCA/IF4bROEGj5p26740g/2Q==
-X-Google-Smtp-Source: AKy350bY3PSG7cr8uHtY3xCvu0ziIlraUw6p3gbR4pFJBZxGDyVckODgmZX25TSaqOAiCG4xgwRn++uzv/8z2JsOfQ0=
-X-Received: by 2002:a67:e199:0:b0:416:f1ea:1001 with SMTP id
- e25-20020a67e199000000b00416f1ea1001mr6576127vsl.5.1679935056047; Mon, 27 Mar
- 2023 09:37:36 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679935063;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LCUgcNjEyWvD6sTwdUsnBUalyH9Ao6KbTN9qB87isrs=;
+        b=liZ09ojyiPa/c3FjJXr7uEle7/0fEtLJTJjVcwQh9+788V7S+MGzRhq1EwpiAQSmpV
+         QFO8HFNpEQjZIQ5yeVt5vm7DSawuphA+rHoiPsTi+CrnHNaPcXXSeJSxYcmimuSzLZnB
+         lhwZ+rv4mAD1QyVlRH57cca9PKh0cjG+tC9oIFQbytFOWMXqc/OiZIngRaShoI3YJWT3
+         bQbecOVD/O6czpSlBfNXZKNxsdSkwIUegG7kUYncQAY7kmW1TCy+IKKUqqvizDi4UFsK
+         G3W8gAv9xbxlGsQX35DV+VqbK2rjQbJBG2/uCX+KOxkUgscSOJxLVn96I4Y2HBche0EX
+         OLhw==
+X-Gm-Message-State: AAQBX9eTYWUDeiUvkmpjTZBv3eGPJL0iP36vApX7uCOVvcNPE1zWagOX
+        SJ4AR+G0orFAVvabSM4q2o2KJIIlxhsCOnPT+KU=
+X-Google-Smtp-Source: AKy350bm4a5N//wgIe5Wng8uUcDgLjI5L6PYP4mpAWWYjRulhFdv87bGt6Yikb1YiDdE1xG01SmMwN+2H3RGgLEmUqk=
+X-Received: by 2002:a17:907:d48d:b0:93e:c1ab:ae67 with SMTP id
+ vj13-20020a170907d48d00b0093ec1abae67mr5066951ejc.2.1679935063106; Mon, 27
+ Mar 2023 09:37:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230322210227.464-1-mario.limonciello@amd.com> <20230322210227.464-5-mario.limonciello@amd.com>
-In-Reply-To: <20230322210227.464-5-mario.limonciello@amd.com>
-From:   Mark Hasemeyer <markhas@chromium.org>
-Date:   Mon, 27 Mar 2023 10:37:25 -0600
-Message-ID: <CANg-bXBBP61c1kUSKz6fgg2NfjHBO0sgXmqvV=AzUWBket6UFQ@mail.gmail.com>
-Subject: Re: [PATCH v6 4/4] i2c: designware: Add doorbell support for Mendocino
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-14-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230207051105.11575-14-ricardo.neri-calderon@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 27 Mar 2023 18:37:32 +0200
+Message-ID: <CAJZ5v0hooaHtM8=KCx6XYZjPFh66kVBSbPTX4GwiMTgovxoVzg@mail.gmail.com>
+Subject: Re: [PATCH v3 13/24] thermal: intel: hfi: Store per-CPU IPCC scores
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->  static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
->  {
->         struct psp_i2c_req *req;
-> @@ -87,7 +101,7 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
->         req->type = i2c_req_type;
+On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
 >
->         start = jiffies;
-> -       ret = read_poll_timeout(psp_send_i2c_req_cezanne, status,
-> +       ret = read_poll_timeout(_psp_send_i2c_req, status,
->                                 (status != -EBUSY),
->                                 PSP_I2C_REQ_RETRY_DELAY_US,
->                                 PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY_DELAY_US,
-The timeout error handling message after this has "acquire" and
-"release" flopped.
+> The scheduler reads the IPCC scores when balancing load. These reads can
+> be quite frequent. Hardware can also update the HFI table frequently.
+> Concurrent access may cause a lot of lock contention. It gets worse as the
+> number of CPUs increases.
+>
+> Instead, create separate per-CPU IPCC scores that the scheduler can read
+> without the HFI table lock.
+>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Tim C. Chen <tim.c.chen@intel.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: x86@kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+> Changes since v2:
+>  * Only create these per-CPU variables when Intel Thread Director is
+>    supported.
+>
+> Changes since v1:
+>  * Added this patch.
+> ---
+>  drivers/thermal/intel/intel_hfi.c | 46 +++++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>
+> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> index 2527ae3836c7..b06021828892 100644
+> --- a/drivers/thermal/intel/intel_hfi.c
+> +++ b/drivers/thermal/intel/intel_hfi.c
+> @@ -29,6 +29,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/math.h>
+>  #include <linux/mutex.h>
+> +#include <linux/percpu.h>
+>  #include <linux/percpu-defs.h>
+>  #include <linux/printk.h>
+>  #include <linux/processor.h>
+> @@ -170,6 +171,43 @@ static struct workqueue_struct *hfi_updates_wq;
+>  #define HFI_UPDATE_INTERVAL            HZ
+>  #define HFI_MAX_THERM_NOTIFY_COUNT     16
+>
+> +#ifdef CONFIG_IPC_CLASSES
 
-> @@ -275,6 +291,13 @@ int i2c_dw_amdpsp_probe_lock_support(struct dw_i2c_dev *dev)
->         if (psp_i2c_dev)
->                 return -EEXIST;
+It would be good to provide a (concise) description of this variable.
+
+> +static int __percpu *hfi_ipcc_scores;
+> +
+> +static int alloc_hfi_ipcc_scores(void)
+> +{
+> +       if (!cpu_feature_enabled(X86_FEATURE_ITD))
+> +               return 0;
+> +
+> +       hfi_ipcc_scores = __alloc_percpu(sizeof(*hfi_ipcc_scores) *
+> +                                        hfi_features.nr_classes,
+> +                                        sizeof(*hfi_ipcc_scores));
+> +
+> +       return !hfi_ipcc_scores;
+
+I would do
+
+if (!hfi_ipcc_scores)
+        return -ENOMEM;
+
+return 0;
+
+Or make the function return bool.
+
+> +}
+> +
+> +static void set_hfi_ipcc_score(void *caps, int cpu)
+> +{
+> +       int i, *hfi_class;
+> +
+> +       if (!cpu_feature_enabled(X86_FEATURE_ITD))
+> +               return;
+> +
+> +       hfi_class = per_cpu_ptr(hfi_ipcc_scores, cpu);
+> +
+> +       for (i = 0;  i < hfi_features.nr_classes; i++) {
+> +               struct hfi_cpu_data *class_caps;
+> +
+> +               class_caps = caps + i * hfi_features.class_stride;
+> +               WRITE_ONCE(hfi_class[i], class_caps->perf_cap);
+
+As it stands, it is unclear why WRITE_ONCE() is needed here.
+
+> +       }
+> +}
+> +
+> +#else
+> +static int alloc_hfi_ipcc_scores(void) { return 0; }
+> +static void set_hfi_ipcc_score(void *caps, int cpu) { }
+> +#endif /* CONFIG_IPC_CLASSES */
+> +
+>  static void get_hfi_caps(struct hfi_instance *hfi_instance,
+>                          struct thermal_genl_cpu_caps *cpu_caps)
+>  {
+> @@ -192,6 +230,8 @@ static void get_hfi_caps(struct hfi_instance *hfi_instance,
+>                 cpu_caps[i].efficiency = caps->ee_cap << 2;
 >
-> +       /* Cezanne uses platform mailbox, Mendocino and later use doorbell */
-> +       rdev = pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(0, 0));
-> +       if (rdev->device == 0x1630)
-> +               _psp_send_i2c_req = psp_send_i2c_req_cezanne;
-> +       else
-> +               _psp_send_i2c_req = psp_send_i2c_req_mendocino;
-Thinking about naming again, perhaps "mendocino" should be dropped
-from the function name as the logic applies to all platforms except
-cezanne.
+>                 ++i;
+> +
+> +               set_hfi_ipcc_score(caps, cpu);
+>         }
+>         raw_spin_unlock_irq(&hfi_instance->table_lock);
+>  }
+> @@ -580,8 +620,14 @@ void __init intel_hfi_init(void)
+>         if (!hfi_updates_wq)
+>                 goto err_nomem;
+>
+> +       if (alloc_hfi_ipcc_scores())
+> +               goto err_ipcc;
+> +
+>         return;
+>
+> +err_ipcc:
+> +       destroy_workqueue(hfi_updates_wq);
+> +
+>  err_nomem:
+>         for (j = 0; j < i; ++j) {
+>                 hfi_instance = &hfi_instances[j];
+> --
