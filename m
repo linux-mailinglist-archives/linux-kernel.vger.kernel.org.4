@@ -2,71 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 630C96C998F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 04:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E726C9994
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 04:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbjC0C0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 22:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
+        id S231764AbjC0C1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 22:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjC0C0K (ORCPT
+        with ESMTP id S231287AbjC0C1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 22:26:10 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B44D49CB;
-        Sun, 26 Mar 2023 19:26:09 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id eg48so29710633edb.13;
-        Sun, 26 Mar 2023 19:26:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679883968;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KEKMQ//sgZgh2Mb71h08sVFHOl6IgD+xXmIsoUisjIE=;
-        b=U50NhQlrcsiBrL+ES0XyqT67HLtli94VrhiODol4xuPdZB6LHOV/GbbPKTsFEE+LRd
-         EOroH+0Jh03k2DGByBnhiFvUCImUz7ZqIuFCizBOmFREae5AM6fvyod+Cq0cxReveEsu
-         TguP202q2dVbPlaiy1MYlt59WNcVtCbbV5E7dzxlIlkcy79qF8puFfqAcQ+eM2xBZDoR
-         n2fIhZa9VLaqziKejQxR+WiD3fYmALN8vzm+qad4pexEm0Y51rTP1ZDYbdfC16ZBXWpZ
-         FoDOLCo+cr8hjBGLVeFePsiXmahPVYdhhdKDdz6Y7529Xf3nn5RuKl2cnccnHjP4K0c/
-         7PIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679883968;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KEKMQ//sgZgh2Mb71h08sVFHOl6IgD+xXmIsoUisjIE=;
-        b=7HpgledsbxkEYZtusXcY0bu5KE/Uz1LGGabqCh4BxSpBsAwnhvxnVBYDH4cSqwB0t6
-         il29/8gb6kly1YFE6tv3aIMm3SlA3yT2S+83jKRf/hjxjoAIP0qtgkAiN6JIhipAalHS
-         +VjM84D8FlsuIpmMhp1UVL+wJ9Jj316cYMUzskf2SQVSd+Sy5JZGVIwPJ29PvZZ5oU3H
-         0Eq+aM+osWFr9AItPjuM4v0mGWeLOm409eO1znQwcle3Du45fgev9GTtWSnZi3+Y2M0A
-         j610gRQNFDUQc+z4c+uBQu1ueR6ZLXoF/pmh5AfmDhdyevx/sBgNoacNzxmILx0hrFaT
-         +Q6g==
-X-Gm-Message-State: AAQBX9c6JIGF4BlJ5TvNK4WgLj1A9EQdKkJ0WBMLzfTKzU5rT8x5xRWS
-        E/85kJK6GLRWAeMnVyKUbpRiYP3HrXOs0C1oEiA=
-X-Google-Smtp-Source: AKy350Y5/Ok4YStrnh36ripiu493+BNv+naZFMAGv66y317rz4bigTGy+L9I4nGRvyG44tOX9jsIu4h1kFlDrS3XpiE=
-X-Received: by 2002:a17:906:891:b0:8b1:7569:b526 with SMTP id
- n17-20020a170906089100b008b17569b526mr4314015eje.11.1679883967999; Sun, 26
- Mar 2023 19:26:07 -0700 (PDT)
+        Sun, 26 Mar 2023 22:27:21 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9441746AB;
+        Sun, 26 Mar 2023 19:27:20 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PlGpB3scfzSnks;
+        Mon, 27 Mar 2023 10:23:46 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
+ (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 27 Mar
+ 2023 10:27:18 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-ext4@vger.kernel.org>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yangerkun@huawei.com>,
+        <yukuai3@huawei.com>, <libaokun1@huawei.com>
+Subject: [PATCH v2 0/2] ext4: fix quotas leak in __ext4_fill_super()
+Date:   Mon, 27 Mar 2023 10:27:01 +0800
+Message-ID: <20230327022703.576857-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20230325152417.5403-1-kerneljasonxing@gmail.com>
- <CANn89iJaVrObJNDC9TrnSUC3XQeo-zfmUXLVrNVcsbRDPuSNtA@mail.gmail.com>
- <CAL+tcoDVCywXXt0Whnx+o0PcULmdms0osJf0qUb0HKvVwuE6oQ@mail.gmail.com>
- <CAL+tcoCeyqMif1SDUq4MwfV0bBasgQ4LeYuQjPJYDKYLyof=Rw@mail.gmail.com>
- <CAL+tcoCFPKpDF+JBN1f74BxDJj9q=9ppoPntnCoT0gT6C0r=PA@mail.gmail.com> <CANn89iJLdce57j6fPbLpexp=tzTtw9yDwV7wjT5FbNF6fPkk+g@mail.gmail.com>
-In-Reply-To: <CANn89iJLdce57j6fPbLpexp=tzTtw9yDwV7wjT5FbNF6fPkk+g@mail.gmail.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Mon, 27 Mar 2023 10:25:31 +0800
-Message-ID: <CAL+tcoB+xAQWCjznDTmNRfzebJcKa_mTx7-drLWBk_wWbd=G6A@mail.gmail.com>
-Subject: Re: [PATCH net] net: fix raising a softirq on the current cpu with
- rps enabled
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,66 +48,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 1:35=E2=80=AFAM Eric Dumazet <edumazet@google.com> =
-wrote:
->
-> >
-> > Forgive me. Really I need some coffee. I made a mistake. This line
-> > above should be:
-> >
-> > +               if (!test_bit(NAPI_STATE_SCHED, &mysd->backlog.state))
-> >
-> > But the whole thing doesn't feel right. I need a few days to dig into
-> > this part until Eric can help me with more of it.
-> >
->
-> I am still traveling, and this is weekend time :/
+V1->V2:
+	Add judgment for CONFIG_QUOTA to avoid warning
+	"label 'failed_mount9' defined but not used".
+	(Reported-by: kernel test robot <lkp@intel.com>)
 
-Thanks for your time, Eric, really appreciate it.
+Baokun Li (2):
+  ext4: turning quotas off if mount failed after enable quotas
+  ext4: refactoring to use the unified helper ext4_quotas_off()
 
->
-> It should not be too hard to read net/core/dev.c and remember that not
-> _all_ drivers (or some core networking functions) use the NAPI model.
->
-> eg look at netif_rx() and ask yourself why your patch is buggy.
+ fs/ext4/super.c | 30 +++++++++++-------------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
 
-Yes, it is. In my last email I sent yesterday I encountered one issue
-which exactly happened when I started hundreds of iperf processes
-transmitting data to loopback.
-It got stuck :( So I realized it is the non-napi case that triggers
-such a problem.
+-- 
+2.31.1
 
->
-> Just look at callers of enqueue_to_backlog() and ask yourself if all
-> of them are called from net_rx_action()
->
-> [The answer is no, just in case you wonder]
->
-> In order to add your optimization, more work is needed, like adding
-> new parameters so that we do not miss critical
-> __raise_softirq_irqoff(NET_RX_SOFTIRQ) when _needed_.
-
-Thanks, I need to do more work/study on it.
-
->
-> We keep going circles around softirq deficiencies, I feel you are
-> trying to fix a second-order 'issue'.
-
-Right, going circles gives me a headache.
-
->
-> Real cause is elsewhere, look at recent patches from Jakub.
-
-After you pointed out, I searched and found there is indeed one patchset in=
- 2022
-
-The tile like this:
-
-[PATCH 0/3] softirq: uncontroversial change
-
-Thanks,
-Jason
-
-
->
-> Thanks.
