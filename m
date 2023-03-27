@@ -2,181 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFA16CA5BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDE66CA5CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbjC0NZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
+        id S232723AbjC0N2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232496AbjC0NZc (ORCPT
+        with ESMTP id S232716AbjC0N2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:25:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336BB59FD;
-        Mon, 27 Mar 2023 06:24:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 724676126E;
-        Mon, 27 Mar 2023 13:24:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90AB3C433D2;
-        Mon, 27 Mar 2023 13:23:56 +0000 (UTC)
-Message-ID: <87e68e05-8512-17fc-584c-0022ddefb8f0@linux-m68k.org>
-Date:   Mon, 27 Mar 2023 23:23:53 +1000
+        Mon, 27 Mar 2023 09:28:16 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCFC3593;
+        Mon, 27 Mar 2023 06:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679923632; x=1711459632;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eq405EaOHdHE2FSFIsfAvwBxXc9cVFwBElpq0o2L8/0=;
+  b=hBOgTTpucDrMB6s/NuiiojcZ5Qyqt0Oq9DJxjLlDGczHKCxsJkMk2qLO
+   5UgAWAZ6bgo8Zt4YJ0I/MWMJf0x+w/vXP6JR2uLcoO4SI7ZlYxQWEjm8z
+   p/Ysi3TJlYjaITzH+5VhJi6yqfnAQGxvIkWwz0vlTF0CJirhAFTnpVV6X
+   DZjNioTqPxHky+D+3YcVIOTUGmRXrt7F60g+XlL2Oo1iPiM6ax9taiw5X
+   qeZvfFnjTmeF0w4hhKm0sqJmukLH9d0+PdwnFBaaYloRqyCDjpwDJwD35
+   HOGPZ8XxsiRTU/sXTVKeBzHNtKVGWqh4c/6Jzb2xXfje2ffTsX+lpdxAT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="324142963"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="324142963"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 06:25:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="748001509"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="748001509"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 27 Mar 2023 06:25:13 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 2A01E79C; Mon, 27 Mar 2023 16:25:14 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Subject: [PATCH v2 1/1] ACPI: SPCR: Amend indentation
+Date:   Mon, 27 Mar 2023 16:25:12 +0300
+Message-Id: <20230327132512.84540-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] arm64: dts: imx8mp: add vpu pgc nodes
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     "Markus.Niebel@ew.tq-group.com" <Markus.Niebel@ew.tq-group.com>,
-        "aford173@gmail.com" <aford173@gmail.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "marex@denx.de" <marex@denx.de>,
-        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "gerg@kernel.org" <gerg@kernel.org>
-References: <20220713063653.2584488-6-peng.fan@oss.nxp.com>
- <20230327050642.593778-1-gerg@linux-m68k.org>
- <DU0PR04MB94174D60EE38B56FEB6CD5BC888B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Greg Ungerer <gerg@linux-m68k.org>
-In-Reply-To: <DU0PR04MB94174D60EE38B56FEB6CD5BC888B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+1) Remove unnecessary blank lines.
+2) Reformat one comment for consistency.
 
-On 27/3/23 20:01, Peng Fan wrote:
->> Subject: Re: [PATCH] arm64: dts: imx8mp: add vpu pgc nodes
->>
->> On 22/8/22 14:45, Peng Fan wrote:
->>> Add i.MX8MP PGC nodes for vpu, which are used to supply power for VPU.
->>>
->>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->>> Signed-off-by: Shawn Guo <shawnguo@kernel.org>
->>> ---
->>>   arch/arm64/boot/dts/freescale/imx8mp.dtsi | 27
->>> +++++++++++++++++++++++
->>>   1 file changed, 27 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
->>> b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
->>> index 0b165f98a82c..34af983b0210 100644
->>> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
->>> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
->>> @@ -598,6 +598,33 @@ pgc_ispdwp: power-domain@18 {
->>>                                                  reg =
->> <IMX8MP_POWER_DOMAIN_MEDIAMIX_ISPDWP>;
->>>                                                  clocks = <&clk IMX8MP_CLK_MEDIA_ISP_ROOT>;
->>>                                          };
->>> +
->>> +                                       pgc_vpumix: power-domain@19 {
->>> +                                               #power-domain-cells = <0>;
->>> +                                               reg = <IMX8MP_POWER_DOMAIN_VPUMIX>;
->>> +                                               clocks =<&clk IMX8MP_CLK_VPU_ROOT>;
->>> +                                       };
->>> +
->>> +                                       pgc_vpu_g1: power-domain@20 {
->>> +                                               #power-domain-cells = <0>;
->>> +                                               power-domains = <&pgc_vpumix>;
->>> +                                               reg = <IMX8MP_POWER_DOMAIN_VPU_G1>;
->>> +                                               clocks = <&clk IMX8MP_CLK_VPU_G1_ROOT>;
->>> +                                       };
->>> +
->>> +                                       pgc_vpu_g2: power-domain@21 {
->>> +                                               #power-domain-cells = <0>;
->>> +                                               power-domains = <&pgc_vpumix>;
->>> +                                               reg = <IMX8MP_POWER_DOMAIN_VPU_G2>;
->>> +                                               clocks = <&clk IMX8MP_CLK_VPU_G2_ROOT>;
->>> +                                       };
->>> +
->>> +                                       pgc_vpu_vc8000e: power-domain@22 {
->>> +                                               #power-domain-cells = <0>;
->>> +                                               power-domains = <&pgc_vpumix>;
->>> +                                               reg =
->> <IMX8MP_POWER_DOMAIN_VPU_VC8000E>;
->>> +                                               clocks = <&clk
->> IMX8MP_CLK_VPU_VC8KE_ROOT>;
->>> +                                       };
->>>                                  };
->>>                          };
->>>                  };
->>
->> This change causes new error messages to come out during boot, for
->> example:
->>
->>      ...
->>      imx-pgc imx-pgc-domain.8: failed to command PGC
->>      imx-pgc imx-pgc-domain.8: failed to command PGC
->>      imx-pgc imx-pgc-domain.8: failed to command PGC
->>      30890000.serial: ttymxc1 at MMIO 0x30890000 (irq = 197, base_baud =
->> 1500000) is a IMX
->>      ...
->>      hwmon hwmon1: temp1_input not attached to any thermal zone
->>      imx-pgc imx-pgc-domain.8: failed to command PGC
->>      imx-pgc imx-pgc-domain.8: failed to command PGC
->>      imx-pgc imx-pgc-domain.8: failed to command PGC
->>      ...
->>
->> They don't seem to cause any problems on the hardware I am using, well, at
->> least not that I have found so far.
->>
->> This first appeared for me in linux-6.1. But it is the same in todays linux 6.3-
->> rc4. Reverting this change (not completely trivial due to a couple of commits
->> after it that rely on it) fixes it - no more errors.
-> [Peng Fan]
-> 
-> The VPU BLK CTRL seems not enabled.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: avoided changind double spaces (Rafael)
+ drivers/acpi/spcr.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-How to enable it?
-I have the blk-ctrl config options enabled:
-
-     #
-     # i.MX SoC drivers
-     #
-     CONFIG_IMX_GPCV2_PM_DOMAINS=y
-     CONFIG_SOC_IMX8M=y
-     CONFIG_SOC_IMX9=y
-     CONFIG_IMX8M_BLK_CTRL=y
-     CONFIG_IMX9_BLK_CTRL=y
-     # end of i.MX SoC drivers
-
-Running with the full arm64 defconfig and using the imx8mp-evk.dtb still
-outputs these messages:
-
-     [   18.150679] imx-pgc imx-pgc-domain.8: failed to command PGC
-     [   18.159241] imx-pgc imx-pgc-domain.8: failed to command PGC
-     [   18.167822] imx-pgc imx-pgc-domain.8: failed to command PGC
-
-Or do you mean something more fundamental, like the hardware block not
-being enabled by boot loader?  (Something to keep in mind is that the
-platform I am using has no video output, only serial console).
-
-Regards
-Greg
+diff --git a/drivers/acpi/spcr.c b/drivers/acpi/spcr.c
+index 01d29ebdb9c2..cd36a97b0ea2 100644
+--- a/drivers/acpi/spcr.c
++++ b/drivers/acpi/spcr.c
+@@ -71,7 +71,6 @@ static bool xgene_8250_erratum_present(struct acpi_table_spcr *tb)
+ 
+ /**
+  * acpi_parse_spcr() - parse ACPI SPCR table and add preferred console
+- *
+  * @enable_earlycon: set up earlycon for the console specified by the table
+  * @enable_console: setup the console specified by the table.
+  *
+@@ -82,7 +81,6 @@ static bool xgene_8250_erratum_present(struct acpi_table_spcr *tb)
+  *
+  * When CONFIG_ACPI_SPCR_TABLE is defined, this function should be called
+  * from arch initialization code as soon as the DT/ACPI decision is made.
+- *
+  */
+ int __init acpi_parse_spcr(bool enable_earlycon, bool enable_console)
+ {
+@@ -97,9 +95,7 @@ int __init acpi_parse_spcr(bool enable_earlycon, bool enable_console)
+ 	if (acpi_disabled)
+ 		return -ENODEV;
+ 
+-	status = acpi_get_table(ACPI_SIG_SPCR, 0,
+-				(struct acpi_table_header **)&table);
+-
++	status = acpi_get_table(ACPI_SIG_SPCR, 0, (struct acpi_table_header **)&table);
+ 	if (ACPI_FAILURE(status))
+ 		return -ENOENT;
+ 
+@@ -202,7 +198,8 @@ int __init acpi_parse_spcr(bool enable_earlycon, bool enable_console)
+ 	if (xgene_8250_erratum_present(table)) {
+ 		iotype = "mmio32";
+ 
+-		/* for xgene v1 and v2 we don't know the clock rate of the
++		/*
++		 * For xgene v1 and v2 we don't know the clock rate of the
+ 		 * UART so don't attempt to change to the baud rate state
+ 		 * in the table because driver cannot calculate the dividers
+ 		 */
+-- 
+2.40.0.1.gaa8946217a0b
 
