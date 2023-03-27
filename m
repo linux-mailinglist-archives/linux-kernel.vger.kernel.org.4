@@ -2,67 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6352C6CB01A
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7DC6CB01C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjC0UpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 16:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
+        id S230490AbjC0Uqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 16:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjC0UpG (ORCPT
+        with ESMTP id S229878AbjC0Uqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 16:45:06 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0FF2129
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:45:04 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id t4so4865168wra.7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679949902;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XXpwyfObowKcpaJA0Vcps/lEQSlDqJgPBHnabdYA9dE=;
-        b=ZV+Wq94n+gfnQf6VM4SaSun9dqYcgE0HYiK03w4VOPgn45s6y8PCnTAzaezE08LQop
-         wu3RA5wgkjnWCH5WQKnS/LQmMePGl+bJETF7tea9KQFRLWN6WaRfz+7aqqBrxLDWwOok
-         i5wuxTVw9oCQqBSsTIybgZ6DkQqh7XZldehNDNlKshJ7cS1Ig5JvY+cPTefpbYYdF/R7
-         lFx1oS//KMVzWyCF5qHsMuUpi8g2s6wMH+4l++U3ihsqgG0N0xQubM+rN3otL5UV6Wtm
-         gctvqR22bF63D8FATQ+ImgagVcaOMebuKDTZ5Afdb5BGjp6VK38u+ykpnCgQKzbYD8iC
-         4yzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679949902;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XXpwyfObowKcpaJA0Vcps/lEQSlDqJgPBHnabdYA9dE=;
-        b=feNuyK7t2772mytXoYrsjPmUlrXE1Xj6F6ui1QVjHU+CVdEG/+py5QLHgiGik06Bw+
-         v1p40HA3sP6XJmZME17k/DGHhC4sJHF+aoupU+TPKr9Jm/2X0Czm59pLfY+RarL1VzPY
-         tGttNwJlfWGza6l68mx8aNbpPrZdY3AM0jqjcDGJeg0hcI5QFSPRxI9ttFymJtRAYwbu
-         Oe263F9LV2eT4ptdHqR6a/UmiRAIZobmXKAkouYI4BZeojfmvsoZvbUIHeY7pjF5cTVg
-         1272usdFYnGzlB7QyFmO7Gw4UWuUfWS68rjuAL/9cVJrXDteZvqQlptQfiCMhQGO+0Am
-         jOfg==
-X-Gm-Message-State: AAQBX9dDGhjg/Chh7gc0kRegTX9nY/pv7C7bLkaf3b/nVrNQuobqoTqF
-        joFsGyKeNOwvI4l6v6cwd+vZAubhLQ8XB5hsK2TEig==
-X-Google-Smtp-Source: AKy350ZMyhBvj4PkrBDJXNkoE3OUydv5XuVNMSuO6RHmSUFmrOJ+S3NmUZ+XT4/2pJxtdIxe8n41OnsHneQDVphkmpE=
-X-Received: by 2002:a05:6000:1819:b0:2d0:58f9:a69 with SMTP id
- m25-20020a056000181900b002d058f90a69mr2198643wrh.4.1679949902560; Mon, 27 Mar
- 2023 13:45:02 -0700 (PDT)
+        Mon, 27 Mar 2023 16:46:35 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3382410DD;
+        Mon, 27 Mar 2023 13:46:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679949994; x=1711485994;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UVPqjOMY1TZCKCQX+ltrwedWkt30zfNICDn1ygjTVK4=;
+  b=dcxFX14UY2o08wR54TmIJdXfTbR6U0YvqvsFJtrdMOmINYoQPZBv3Cl0
+   UGv37TDsP2Y+hplEGzILFpJQAoTup7XbUhEIbYtvdg9nwyYbox4INUFUl
+   0J8pqcWEWH6hvsVGOcTGni8RteIYAtkaKtFdRYJpZB39VOweFmh+k+btE
+   VJtMH346SzQU2iCUlg4lrmhlRv8br92zHAcZeUoGThXpMWsY3Jcbkhw82
+   7hgv9hMApLhSUA/D4+5Jyqy7zVyJbHtndtpvP0bkWNroy2ADivb1ZzfC0
+   C+njHrdpdjIsHW+C42c7owrAZiFzINYclMrRmuV38yfoLKnjDyUWEXfBm
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="328829409"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="328829409"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 13:46:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="748145264"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="748145264"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 27 Mar 2023 13:46:28 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pgtjX-000I0X-1x;
+        Mon, 27 Mar 2023 20:46:27 +0000
+Date:   Tue, 28 Mar 2023 04:45:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Wei Fang <wei.fang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Amit Cohen <amcohen@nvidia.com>, Gal Pressman <gal@nvidia.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH net-next v2 4/8] ethtool: eee: Rework get/set handler for
+ SmartEEE-capable PHYs with non-EEE MACs
+Message-ID: <202303280408.Krp7V753-lkp@intel.com>
+References: <20230327142202.3754446-5-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-References: <20230313202655.1719587-1-bhupesh.sharma@linaro.org> <3cf8f543-d439-5d9e-5b07-08bb8991e774@linaro.org>
-In-Reply-To: <3cf8f543-d439-5d9e-5b07-08bb8991e774@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Tue, 28 Mar 2023 02:14:51 +0530
-Message-ID: <CAH=2Ntz3zJjFVLtCeuEkyGWjCdN=6=hNvZtYO0ScinOm9GzhEg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: remoteproc: qcom: Fix sm6115 pas documentation
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        mani@kernel.org, mathieu.poirier@linaro.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327142202.3754446-5-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,25 +82,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023 at 14:07, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 13/03/2023 21:26, Bhupesh Sharma wrote:
-> > Fix the sm6115 pas yaml documentation to note that 'memory-region'
-> > is a required property.
-> >
-> > While at it also mark that memory-region property supports
-> > only one item.
-> >
-> > Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->
->
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi Oleksij,
 
-Thanks Krzysztof for the review,
+I love your patch! Yet something to improve:
 
-And a gentle ping to maintainers for merging this change.
+[auto build test ERROR on net-next/main]
 
-Thanks,
-Bhupesh
+url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/net-phy-Add-driver-specific-get-set_eee-support-for-non-standard-PHYs/20230327-222630
+patch link:    https://lore.kernel.org/r/20230327142202.3754446-5-o.rempel%40pengutronix.de
+patch subject: [PATCH net-next v2 4/8] ethtool: eee: Rework get/set handler for SmartEEE-capable PHYs with non-EEE MACs
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20230328/202303280408.Krp7V753-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/fcee3230c8abb824746744ba0fc39dfd626faa65
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Oleksij-Rempel/net-phy-Add-driver-specific-get-set_eee-support-for-non-standard-PHYs/20230327-222630
+        git checkout fcee3230c8abb824746744ba0fc39dfd626faa65
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303280408.Krp7V753-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   /usr/bin/ld: net/ethtool/common.o: in function `__ethtool_get_eee':
+>> net/ethtool/common.c:677: undefined reference to `phy_ethtool_get_eee'
+   /usr/bin/ld: net/ethtool/common.o: in function `__ethtool_set_eee':
+>> net/ethtool/common.c:696: undefined reference to `phy_ethtool_set_eee'
+   collect2: error: ld returned 1 exit status
+
+
+vim +677 net/ethtool/common.c
+
+   663	
+   664	int __ethtool_get_eee(struct net_device *dev, struct ethtool_eee *eee)
+   665	{
+   666		const struct ethtool_ops *ops = dev->ethtool_ops;
+   667		struct phy_device *phydev = dev->phydev;
+   668		int ret;
+   669	
+   670		if (ops->get_eee)
+   671			ret = ops->get_eee(dev, eee);
+   672		else
+   673			ret = -EOPNOTSUPP;
+   674	
+   675		if (ret == -EOPNOTSUPP) {
+   676			if (phydev && phydev->is_smart_eee_phy)
+ > 677				ret = phy_ethtool_get_eee(phydev, eee);
+   678		}
+   679	
+   680		return ret;
+   681	}
+   682	
+   683	int __ethtool_set_eee(struct net_device *dev, struct ethtool_eee *eee)
+   684	{
+   685		const struct ethtool_ops *ops = dev->ethtool_ops;
+   686		struct phy_device *phydev = dev->phydev;
+   687		int ret;
+   688	
+   689		if (ops->set_eee)
+   690			ret = ops->set_eee(dev, eee);
+   691		else
+   692			ret = -EOPNOTSUPP;
+   693	
+   694		if (ret == -EOPNOTSUPP) {
+   695			if (phydev && phydev->is_smart_eee_phy)
+ > 696				ret = phy_ethtool_set_eee(phydev, eee);
+   697		}
+   698	
+   699		return ret;
+   700	}
+   701	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
