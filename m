@@ -2,139 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA266C9BD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9346C9BDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232443AbjC0HRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 03:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48090 "EHLO
+        id S232474AbjC0HUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 03:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232434AbjC0HRv (ORCPT
+        with ESMTP id S232433AbjC0HUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 03:17:51 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8537422F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 00:17:50 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id z19so7535166plo.2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 00:17:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679901470;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IWSVNJk/bfwWX8b0n0HSlnZIGIsvONb5lwc/xcHmAjM=;
-        b=G7vb0uugGhn2s4BXyI0ntWGcXcBoiLpXjRc7DJ1MSK7K4mN4Vp+UeQRl2kXpvRwSdl
-         UZtzg5zGEY3hA6SCzDlLslro1PBWXnDJcqEN80CDR0hAiuQbCHi2X/4QIaY5N64gMenT
-         fGTZUpJttKNB7EtkvGnIHQwnUarplv67pW87eJ78HZ6ywDfNz9nE5otDlmQixmenXe92
-         Uz8qjGpjev7YcE7eAcycaU/xiFd0kHmG2rXzCSGt9E5bE//oxtn762NMRq2H4x9DvUjV
-         DSvbrVCf6CUEy+zamXkbCz9tmlnndt22M1jvRWjD1BQsTc479UX2OJNhpwM601AKuYtS
-         9PaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679901470;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IWSVNJk/bfwWX8b0n0HSlnZIGIsvONb5lwc/xcHmAjM=;
-        b=0lzGSGlBbopkS47GNOIkqTkcJ85VVH+lwXeNPokpqo8adK8q1WyL9LKIQfhgHUbl2l
-         FGiGf7el3zkV2KUhssCJVENoPWnOFaMFuSNVzuiXtj5LECdg3yBBuFJ/GrQwLL8hDbF2
-         6NtP78QY9xH8D9lD8geB0jLQsIuCKKpDjWelfR0SmJeNPlq9uq7znPmPkdSdjJ1Rjp54
-         2SgGjTGeKiTeHvVuFQj615OZjFP4hlWv9FUxl3LM+io2n7N9wFi/a5aeh/ViSpTy3uYT
-         0Q+XdRBW2CsA56P+E422OqZEqHBv1Lhaf1B+XakX7mB5Sk6vg8eMDR4BaBsT0XS8Fx96
-         FV/Q==
-X-Gm-Message-State: AO0yUKVjx8p6oBcvwifTOhn0EV6NXOYWXZT+nRxIW5FG+SHoZ0zFOPNe
-        gPsOq6NqbNt4AggmbMC0D7FsI/hK38A=
-X-Google-Smtp-Source: AK7set9Fl4HRg/qPMTOkdyKC5K/9e+uJFHr5PdEOzN/l3gjLKStQUVTj9g1hmFmAsxJ3yc0KNbEbvA==
-X-Received: by 2002:a05:6a20:c511:b0:d4:e980:9f90 with SMTP id gm17-20020a056a20c51100b000d4e9809f90mr11045810pzb.44.1679901470032;
-        Mon, 27 Mar 2023 00:17:50 -0700 (PDT)
-Received: from dragonet (dragonet.kaist.ac.kr. [143.248.133.220])
-        by smtp.gmail.com with ESMTPSA id x5-20020aa784c5000000b006262520ac59sm17979318pfn.127.2023.03.27.00.17.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 00:17:49 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 16:17:46 +0900
-From:   "Dae R. Jeong" <threeearcat@gmail.com>
-To:     tglx@linutronix.de, linux-kernel@vger.kernel.org
-Subject: WARNING in do_timer_settime
-Message-ID: <ZCFDGrz5mJXLLC49@dragonet>
+        Mon, 27 Mar 2023 03:20:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805D612D;
+        Mon, 27 Mar 2023 00:20:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1071660FF8;
+        Mon, 27 Mar 2023 07:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3BDD7C4339C;
+        Mon, 27 Mar 2023 07:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679901618;
+        bh=Fmno9IUHFL/QJZTBpdI7jH/KHqpYXwLcCK8t+LApJ4o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=l5bV+NYLBrhR08OenBels8TTFjCmkZ+e0XLLHTTqX3K6mqooCMef7QbZrvf1GzKpB
+         sHDGPBe1wBi5pAKSgS8JZHzFLeuqTbQj51NsL5BaiV1bHe+r/+xNjhBIqxD8Ez3+is
+         ++62mnLEHHHgTJTDzzji9gjnaknpomHmpqAonS09oOu9WAA36uqrIUnu3U+BQhMlOs
+         LzRNLeDn5pwwFeio3GAKUoIFWYqwPvJ2qedC/8t++u5MVBjp0Ux0C7uOxgbMl4aXcZ
+         zzLqvKzEFW1gqt3tmLDjyYtWgRodFIaMPGka4vo/Cr7Cqo4s7wrStrZDcZwmmBUp0C
+         jAM0vmiA+fs8w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C784E2A038;
+        Mon, 27 Mar 2023 07:20:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] vsock/loopback: use only sk_buff_head.lock to protect the
+ packet queue
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167990161811.4487.17278563612725612411.git-patchwork-notify@kernel.org>
+Date:   Mon, 27 Mar 2023 07:20:18 +0000
+References: <20230324115450.11268-1-sgarzare@redhat.com>
+In-Reply-To: <20230324115450.11268-1-sgarzare@redhat.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     netdev@vger.kernel.org, bobby.eshleman@bytedance.com,
+        davem@davemloft.net, pabeni@redhat.com, edumazet@google.com,
+        linux-kernel@vger.kernel.org, avkrasnov@sberdevices.ru,
+        kuba@kernel.org, virtualization@lists.linux-foundation.org,
+        syzbot+befff0a9536049e7902e@syzkaller.appspotmail.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello:
 
-I'm looking an issue detected during fuzzing "WARNING in
-do_timer_settime". Its report is attached at the end of this email.
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-I think this does not cause any serious issue, but my rough sketch of
-a scenario causing the warning is a race condition caused by two
-timer_settime() system calls for CLOCK_PROCESS_CPUTIME_ID.
+On Fri, 24 Mar 2023 12:54:50 +0100 you wrote:
+> pkt_list_lock was used before commit 71dc9ec9ac7d ("virtio/vsock:
+> replace virtio_vsock_pkt with sk_buff") to protect the packet queue.
+> After that commit we switched to sk_buff and we are using
+> sk_buff_head.lock in almost every place to protect the packet queue
+> except in vsock_loopback_work() when we call skb_queue_splice_init().
+> 
+> As reported by syzbot, this caused unlocked concurrent access to the
+> packet queue between vsock_loopback_work() and
+> vsock_loopback_cancel_pkt() since it is not holding pkt_list_lock.
+> 
+> [...]
 
-CPU1                                       CPU2
------                                      -----
-do_timer_settime(CLOCK_PROCESS_CPUTIME_ID)
-  posix_cpu_timer_set()
-    arm_timer(timer, p);
+Here is the summary with links:
+  - [net] vsock/loopback: use only sk_buff_head.lock to protect the packet queue
+    https://git.kernel.org/netdev/net/c/b465518dc27d
 
-timer interrupt handler
-  run_posix_cpu_timers()
-    handle_posix_cpu_timers()
-      lock_task_sighand()
-      check_process_timers()
-        collect_posix_cpu_timers()         do_timer_settime(CLOCK_PROCESS_CPUTIME_ID)
-          ctmr->firing = 1; - (1)            posix_cpu_timer_set()
-      unlock_task_sighand() - (2)
-                                               lock_task_sighand() // can acquire the sighand
-                                                                   // lock because of (2)
-                                               if (timer->it.cpu.firing)) // true because of (1) and (3)
-                                                 ret = TIMER_RETRY;
-                                                 ..
-                                                 return tret;
-                                             timer_wait_running()
-                                               WARN_ON(!kc->timer_was_running);
-                                               // kc->timer_was_running is NULL in clock_posix_cpu
-     timer->it.cpu.firing = 0; - (3)
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-But regardless of the scenario, I wonder if the commit ec8f954a40d
-("posix-timers: Use a callback for cancel synchronization on
-PREEMPT_RT") missed initializations to the timer_was_running field in
-clock_posix_cpu. I can see that the commit initialized the
-timer_was_running field of all other clocks but clock_posix_cpu.  So I
-think the warning does not occur if the timer_was_running field of
-clock_posix_cpu is initialized to, for example,
-common_timer_wait_running. Could you please check this?
-
-Thank you in advance.
-
-
-Best regards,
-Dae R. Jeong
-
------
-- Kernel version:
-  6.2.0-rc7
-
-- Report:
-WARNING: CPU: 1 PID: 13389 at kernel/time/posix-timers.c:849 do_timer_settime+0x193/0x200 kernel/time/posix-timers.c:929
-Modules linked in:
-CPU: 1 PID: 13389 Comm: syz-executor.0 Not tainted 6.2.0-rc7-32171-g7f09e8f6ebfb #5
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-<- omitting registers ->
-Call Trace:
- <TASK>
- __do_sys_timer_settime kernel/time/posix-timers.c:952 [inline]
- __se_sys_timer_settime kernel/time/posix-timers.c:938 [inline]
- __x64_sys_timer_settime+0xa3/0x110 kernel/time/posix-timers.c:938
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x4e/0xa0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x478d29
-<- omitting registers ->
- </TASK>
----[ end trace 0000000000000000 ]---
