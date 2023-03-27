@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268146CA583
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD476CA585
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232456AbjC0NXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
+        id S232526AbjC0NXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232183AbjC0NXA (ORCPT
+        with ESMTP id S232025AbjC0NXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:23:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF15A2D76
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:22:59 -0700 (PDT)
+        Mon, 27 Mar 2023 09:23:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5F34206
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:23:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 637AAB81588
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:22:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A62AC433A0;
-        Mon, 27 Mar 2023 13:22:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CB09B8149C
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:22:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2F3C433EF;
+        Mon, 27 Mar 2023 13:22:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679923377;
-        bh=zon8YDJaxFyfOkDSfVhpwhKl4rQzC7OFT8QlaxmYQSs=;
+        s=k20201202; t=1679923378;
+        bh=QgUVVYzJJ3uUruFy++SwT8IQrl1CAOdmbIEiShUAQqE=;
         h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=GYnR6YDFChI4Hj9dWmrOLBQzxOglQ5CV+ktVVSkh2U2s81uIJhjXhnHSgT6SNwSZe
-         BokXXr8p5Na+co0KzCKHZ8krr6dwTBkQegKYVOgFrje3cyQxXa85lADQAv1o7m5+21
-         GqnZtva203HEmv536Xjk4kdhSrREnwkkUCVT6SAsW3BdcS/olgaVn0ChiNi/QmKZvy
-         O41jMX1C4AvNrob15fJBuOsgngN+F79qYtxAThFk/BfNRqHhtNvQ70MYs8z/U3YXpk
-         ZVqUEYGUt9PozhJTKSpaf4hv3hVNYIpLVZhalCz/oLFOljOaek1fYpzg+8QEFs4zjo
-         L2NuHSXssrPDg==
+        b=GpspOCfogN8poKDJSLZftRxMT+k8HDoK2fOAfdAVeBcCDMhNb2FnqGQyp3Zb4Hz2t
+         kdU8bg/pXlEL0M5WT0fKMWQ6qhIT/ZsbfxrFfPVm+6NOubfcm6n0v6rPInymxD4NA3
+         obAMFf5BSjfOPM5XT7wClx8DM7hPka7EsVZrLgySPY8yfY+c9/E4GiR1ZnCGviHQmS
+         yxfTZkcPDwKXIaIqmOCDlg1yc7yMqpCix2DOt87JwelLKoj/ilgE1L0vy8a268dSqS
+         SwY6t3JyKlhMN/vSLzLWQJrBkKQQlarftxGD4lIIzAu2sGfpOLLbPNxV86gaSytm36
+         N4n4noi5BvyzA==
 From:   Mark Brown <broonie@kernel.org>
 To:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-In-Reply-To: <20230324-regcache-unknown-v1-1-80deecbf196b@kernel.org>
-References: <20230324-regcache-unknown-v1-1-80deecbf196b@kernel.org>
-Subject: Re: [PATCH] regmap: Clarify error for unknown cache types
-Message-Id: <167992337541.3162264.2269514649107080383.b4-ty@kernel.org>
-Date:   Mon, 27 Mar 2023 14:22:55 +0100
+In-Reply-To: <20230324-regmap-reg-read-write-page-v1-1-1fbc0dac67ae@kernel.org>
+References: <20230324-regmap-reg-read-write-page-v1-1-1fbc0dac67ae@kernel.org>
+Subject: Re: [PATCH] regmap: Support paging for buses with
+ reg_read()/reg_write()
+Message-Id: <167992337653.3162264.89513525626078905.b4-ty@kernel.org>
+Date:   Mon, 27 Mar 2023 14:22:56 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-2eb1a
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,15 +53,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Mar 2023 16:22:26 +0000, Mark Brown wrote:
-> The error message printed when we fail to locate the cache type the map
-> requested says it can't find a compress type rather than a cache type,
-> fix that. Since the compressed type is the only one currently compiled
-> conditionally it's likely to be the missing type but that might not always
-> be true and is still unclear.
+On Fri, 24 Mar 2023 22:58:42 +0000, Mark Brown wrote:
+> We don't currently support paging for regmaps where the I/O happens through
+> bus provided reg_read() and reg_write() operatons, we simply ignore the
+> range since nothing is wired up properly. Wire things up.
 > 
 > 
-> [...]
 
 Applied to
 
@@ -68,8 +66,8 @@ Applied to
 
 Thanks!
 
-[1/1] regmap: Clarify error for unknown cache types
-      commit: 2d38e8615a21e264042870f811247d5c52c27f4e
+[1/1] regmap: Support paging for buses with reg_read()/reg_write()
+      commit: f18ee501e233a2b830a0c84a2e780ab02d946c04
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
