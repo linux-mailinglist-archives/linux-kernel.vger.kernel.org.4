@@ -2,176 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D236CABC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6666CABC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232153AbjC0RUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 13:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52462 "EHLO
+        id S232439AbjC0RUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 13:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232699AbjC0RUR (ORCPT
+        with ESMTP id S232115AbjC0RUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:20:17 -0400
-Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9684035A1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:20:06 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id gqVmpRJB89ijugqVmpVmlV; Mon, 27 Mar 2023 19:20:04 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 27 Mar 2023 19:20:04 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <9567ac67-0c4c-0599-7141-9137837f79e2@wanadoo.fr>
-Date:   Mon, 27 Mar 2023 19:20:02 +0200
+        Mon, 27 Mar 2023 13:20:35 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AFB4494;
+        Mon, 27 Mar 2023 10:20:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679937629; x=1711473629;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9vfPHAhf77CU6X/CYXCEa6OblOK0wvYIlcDR/R0TO/M=;
+  b=BOb7GUKuWv+hdaTMlyak+QanQc0/tFAPCaE5XCRsStVC5kELDlSpIRQc
+   VCAreW4DrC5IKixOS1fkiPMGsZtPHnUV4anov2YVhjr/hRspiG9eMJbIU
+   LH040aKKCwfngtPjyu0G3RMjKUHbhSnCVV9LJVuv3c3gFK6C7mGa1P4n2
+   FzMvneP5iQEsXHmMei1QTHAgb0Z6lV7bdcosf6naLGYtvs5/r0OiryQET
+   qtWOXCCH/MQt6eMV7zHFRWc5qUFH7gs8+vwxylHt9ppNgMKXLEpmca7Ue
+   AqwU32NwSekBH+wOk6csa9oUal7nBCMrEB3ldz16RZoBNe3QO6UMpBPap
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="341910499"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="341910499"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 10:20:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="807569019"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="807569019"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 27 Mar 2023 10:20:26 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 533EC79C; Mon, 27 Mar 2023 20:20:27 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: [PATCH v1 1/2] thunderbolt: Get rid of redundant 'else'
+Date:   Mon, 27 Mar 2023 20:20:16 +0300
+Message-Id: <20230327172017.20078-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 2/2] leds: max597x: Add support for max597x
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
-References: <20230323194550.1914725-1-Naresh.Solanki@9elements.com>
- <20230323194550.1914725-2-Naresh.Solanki@9elements.com>
- <d6463018-ebdf-30b2-ce0e-f2b5198847f1@wanadoo.fr>
- <688423c6-ba98-002c-efe5-7b0997d6af73@9elements.com>
- <cf18bc52-af25-8ce0-3536-202ea3c6e86d@wanadoo.fr>
- <2077c7e1-cf69-8648-20ac-23793f92ad14@9elements.com>
-Content-Language: fr, en-CA
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <2077c7e1-cf69-8648-20ac-23793f92ad14@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 27/03/2023 à 17:47, Naresh Solanki a écrit :
-> Hi,
-> 
-> On 24-03-2023 09:06 pm, Christophe JAILLET wrote:
->> Le 24/03/2023 à 11:54, Naresh Solanki a écrit :
->>> Hi,
->>>
->>> On 24-03-2023 01:48 am, Christophe JAILLET wrote:
->>>> Le 23/03/2023 à 20:45, Naresh Solanki a écrit :
->>>>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>>>>
->>>>> max597x is hot swap controller with indicator LED support.
->>>>> This driver uses DT property to configure led during boot time &
->>>>> also provide the LED control in sysfs.
->>>>>
->>
->> [...]
->>
->>
->>>>> +static int max597x_led_probe(struct platform_device *pdev)
->>>>> +{
->>>>> +    struct device_node *np = dev_of_node(pdev->dev.parent);
->>>>> +    struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
->>>>> +    struct device_node *led_node;
->>>>> +    struct device_node *child;
->>>>> +    int ret = 0;
->>>>> +
->>>>> +    if (!regmap)
->>>>> +        return -EPROBE_DEFER;
->>>>> +
->>>>> +    led_node = of_get_child_by_name(np, "leds");
->>>>> +    if (!led_node)
->>>>> +        return -ENODEV;
->>>>> +
->>>>> +    for_each_available_child_of_node(led_node, child) {
->>>>> +        u32 reg;
->>>>> +
->>>>> +        if (of_property_read_u32(child, "reg", &reg))
->>>>> +            continue;
->>>>> +
->>>>> +        if (reg >= MAX597X_NUM_LEDS) {
->>>>> +            dev_err(&pdev->dev, "invalid LED (%u >= %d)\n", reg,
->>>>> +                MAX597X_NUM_LEDS);
->>>>> +            continue;
->>>>> +        }
->>>>> +
->>>>> +        ret = max597x_setup_led(&pdev->dev, regmap, child, reg);
->>>>> +        if (ret < 0)
->>>>> +            of_node_put(child);
->>>>
->>>> This of_node_put() looks odd to me.
->>> Not sure if I get this right but if led setup fails of_node_put 
->>> should be called.
->>
->> My understanding is that this of_node_put() is there in case of error, 
->> to release what would otherwise never be released by 
->> for_each_available_child_of_node() if we exit early from the loop.
->>
->> If the purpose is to release a reference taken in max597x_setup_led() 
->> in case of error:
->>     - this should be done IMHO within max597x_setup_led() directly
->>     - there should be a of_node_get() somewhere in max597x_setup_led()
->>       (after:
->>      if (of_property_read_string(nc, "label", &led->led.name))
->>          led->led.name = nc->name;
->>        + error handling path,  *or*
->>       just before the final return ret; when we know that everything 
->> is fine,
->>       if I understand correctly the code)
->>
->> Is the reference taken elsewhere?
->> Did I miss something obvious?
->>
->>
-> One of the reference is "drivers/leds/leds-sc27xx-bltc.c" line 311
-> Please do let me know if I have to do anything about it.
-By reference, I was speaking of reference taken by a of_node_get() call 
-and released by a of_node_put() call.
+In the snippets like the following
 
-Anyway, I do agree with leds-sc27xx-bltc.c.
-There is a of_node_put() because for_each_available_child_of_node() 
-won't be able to do it by itself *in case of early return* ("return err;")
+	if (...)
+		return / goto / break / continue ...;
+	else
+		...
 
-In all other paths (when the loop goes to the end), the reference taken 
-by for_each_available_child_of_node() is also released, on the next 
-iteration, by for_each_available_child_of_node().
+the 'else' is redundant. Get rid of it.
 
-In *your* case, if you don't break or return, there is no need to call 
-of_node_put() explicitly. It would lead to a double put. (yours and the 
-one that will be done by for_each_available_child_of_node()).
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/thunderbolt/acpi.c    |  2 +-
+ drivers/thunderbolt/ctl.c     |  2 +-
+ drivers/thunderbolt/nhi.c     |  3 ++-
+ drivers/thunderbolt/switch.c  |  4 ++--
+ drivers/thunderbolt/usb4.c    |  6 +++---
+ drivers/thunderbolt/xdomain.c | 24 ++++++++++--------------
+ 6 files changed, 19 insertions(+), 22 deletions(-)
 
-Have a look at for_each_available_child_of_node() and more specifically 
-at of_get_next_available_child().
-
-At the first call 'child' is NULL. A ref is taken [1]. Nothing is released.
-For following calls, a new ref is taken on a new node [1], and the 
-previous reference is released [2].
-On the last call, the 'for' loop will not be executed because there is 
-nothing to scan anymore. No new reference is taken, and the previous 
-(and last) refence is finally released [2].
-
-
-[1]: https://elixir.bootlin.com/linux/v6.3-rc3/source/drivers/of/base.c#L808
-[2]: https://elixir.bootlin.com/linux/v6.3-rc3/source/drivers/of/base.c#L811
-
-> 
->>>> "return ret;" or "break;" missing ?
->>>>
->>> Didn't add a break so that it can continue initializing remaining led 
->>> if any.
->>
->> Ok. Don't know the code enough to see if correct or not, but based on 
->> my comment above, I think that something is missing in 
->> max597x_setup_led() and that errors should be silently ignored here.
-> In my implementation, I have chosen to continue with the next LED if an 
-> error occurs, rather than aborting the 'for loop' with an error. I have 
-> seen other implementations also done in a similar way.
-> Do you have any further inputs or suggestions on this approach.
-
-No, sorry, I won't be of any help on what design is the best.
-
-CJ
+diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
+index 628225deb8fe..3514bf65b7a4 100644
+--- a/drivers/thunderbolt/acpi.c
++++ b/drivers/thunderbolt/acpi.c
+@@ -341,7 +341,7 @@ static struct acpi_device *tb_acpi_find_companion(struct device *dev)
+ 	 */
+ 	if (tb_is_switch(dev))
+ 		return tb_acpi_switch_find_companion(tb_to_switch(dev));
+-	else if (tb_is_usb4_port_device(dev))
++	if (tb_is_usb4_port_device(dev))
+ 		return acpi_find_child_by_adr(ACPI_COMPANION(dev->parent),
+ 					      tb_to_usb4_port_device(dev)->port->port);
+ 	return NULL;
+diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
+index 6e7d28e8d81a..3a213322ec7a 100644
+--- a/drivers/thunderbolt/ctl.c
++++ b/drivers/thunderbolt/ctl.c
+@@ -1033,7 +1033,7 @@ static int tb_cfg_get_error(struct tb_ctl *ctl, enum tb_cfg_space space,
+ 
+ 	if (res->tb_error == TB_CFG_ERROR_LOCK)
+ 		return -EACCES;
+-	else if (res->tb_error == TB_CFG_ERROR_PORT_NOT_CONNECTED)
++	if (res->tb_error == TB_CFG_ERROR_PORT_NOT_CONNECTED)
+ 		return -ENOTCONN;
+ 
+ 	return -EIO;
+diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+index cfebec107f3f..d76e923fbc6a 100644
+--- a/drivers/thunderbolt/nhi.c
++++ b/drivers/thunderbolt/nhi.c
+@@ -526,7 +526,8 @@ static int nhi_alloc_hop(struct tb_nhi *nhi, struct tb_ring *ring)
+ 			 ring->hop);
+ 		ret = -EBUSY;
+ 		goto err_unlock;
+-	} else if (!ring->is_tx && nhi->rx_rings[ring->hop]) {
++	}
++	if (!ring->is_tx && nhi->rx_rings[ring->hop]) {
+ 		dev_warn(&nhi->pdev->dev, "RX hop %d already allocated\n",
+ 			 ring->hop);
+ 		ret = -EBUSY;
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index da373ac38285..51e86b5171c7 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -271,9 +271,9 @@ static int nvm_authenticate(struct tb_switch *sw, bool auth_only)
+ 		}
+ 		sw->nvm->authenticating = true;
+ 		return usb4_switch_nvm_authenticate(sw);
+-	} else if (auth_only) {
+-		return -EOPNOTSUPP;
+ 	}
++	if (auth_only)
++		return -EOPNOTSUPP;
+ 
+ 	sw->nvm->authenticating = true;
+ 	if (!tb_route(sw)) {
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index a0996cb2893c..2d4b6f3e6141 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -851,7 +851,7 @@ bool usb4_switch_query_dp_resource(struct tb_switch *sw, struct tb_port *in)
+ 	 */
+ 	if (ret == -EOPNOTSUPP)
+ 		return true;
+-	else if (ret)
++	if (ret)
+ 		return false;
+ 
+ 	return !status;
+@@ -877,7 +877,7 @@ int usb4_switch_alloc_dp_resource(struct tb_switch *sw, struct tb_port *in)
+ 			     &status);
+ 	if (ret == -EOPNOTSUPP)
+ 		return 0;
+-	else if (ret)
++	if (ret)
+ 		return ret;
+ 
+ 	return status ? -EBUSY : 0;
+@@ -900,7 +900,7 @@ int usb4_switch_dealloc_dp_resource(struct tb_switch *sw, struct tb_port *in)
+ 			     &status);
+ 	if (ret == -EOPNOTSUPP)
+ 		return 0;
+-	else if (ret)
++	if (ret)
+ 		return ret;
+ 
+ 	return status ? -EIO : 0;
+diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
+index a48335c95d39..e2b54887d331 100644
+--- a/drivers/thunderbolt/xdomain.c
++++ b/drivers/thunderbolt/xdomain.c
+@@ -1178,9 +1178,8 @@ static int tb_xdomain_get_uuid(struct tb_xdomain *xd)
+ 		if (xd->state_retries-- > 0) {
+ 			dev_dbg(&xd->dev, "failed to request UUID, retrying\n");
+ 			return -EAGAIN;
+-		} else {
+-			dev_dbg(&xd->dev, "failed to read remote UUID\n");
+ 		}
++		dev_dbg(&xd->dev, "failed to read remote UUID\n");
+ 		return ret;
+ 	}
+ 
+@@ -1367,12 +1366,10 @@ static int tb_xdomain_get_properties(struct tb_xdomain *xd)
+ 			dev_dbg(&xd->dev,
+ 				"failed to request remote properties, retrying\n");
+ 			return -EAGAIN;
+-		} else {
+-			/* Give up now */
+-			dev_err(&xd->dev,
+-				"failed read XDomain properties from %pUb\n",
+-				xd->remote_uuid);
+ 		}
++		/* Give up now */
++		dev_err(&xd->dev, "failed read XDomain properties from %pUb\n",
++			xd->remote_uuid);
+ 
+ 		return ret;
+ 	}
+@@ -2179,13 +2176,12 @@ static struct tb_xdomain *switch_find_xdomain(struct tb_switch *sw,
+ 				if (xd->remote_uuid &&
+ 				    uuid_equal(xd->remote_uuid, lookup->uuid))
+ 					return xd;
+-			} else if (lookup->link &&
+-				   lookup->link == xd->link &&
+-				   lookup->depth == xd->depth) {
+-				return xd;
+-			} else if (lookup->route &&
+-				   lookup->route == xd->route) {
+-				return xd;
++			} else {
++				if (lookup->link && lookup->link == xd->link &&
++				    lookup->depth == xd->depth)
++					return xd;
++				if (lookup->route && lookup->route == xd->route)
++					return xd;
+ 			}
+ 		} else if (tb_port_has_remote(port)) {
+ 			xd = switch_find_xdomain(port->remote->sw, lookup);
+-- 
+2.40.0.1.gaa8946217a0b
 
