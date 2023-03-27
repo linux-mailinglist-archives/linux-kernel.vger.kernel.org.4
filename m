@@ -2,128 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03366CA92F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C186CA92B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232767AbjC0PiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 11:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
+        id S232925AbjC0PiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 11:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232957AbjC0PiG (ORCPT
+        with ESMTP id S232924AbjC0Ph5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:38:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF6C4680;
-        Mon, 27 Mar 2023 08:38:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 188846131B;
-        Mon, 27 Mar 2023 15:38:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AF93C433A8;
-        Mon, 27 Mar 2023 15:38:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679931481;
-        bh=3XmuKg7477g2NoJtqEb5iNb4ATj0+FqT6dHhTQ0IQGs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=h77Uyo826XxSmu3DX6sM0b4XADQ6cucMcCdMFfq7hWdB9LMN+NZbrVrVR34v9X6t2
-         myxVy3WUwLigNSHR92LJN2VS1wiVsGo0xjSDCNJ+ObeVsK688j/0l1LsLvWSGI31wQ
-         tao0pMm7Bqv3I1jm2g8t9/U29uCUIsKC6VH5qhfCl/kLDW4+3oEuahwHSWpJhdL3bq
-         Qm+yH6ZakaD3gzVKjb8Ms8dsOdev3pdfpMV+720yF88lmTd52ZTdk43rhqTtAFNEuA
-         e4zszYx9LY6unv9pvpgYNEZlvN8wiuq25Q2gWWNPEjjQDlztVbWr+iAq7yszrfWjvv
-         oyjhRwBt5B39g==
-Received: by mail-lj1-f181.google.com with SMTP id 20so9514036lju.0;
-        Mon, 27 Mar 2023 08:38:01 -0700 (PDT)
-X-Gm-Message-State: AAQBX9cXfByS76kzG3JGtDsxlFj3Th9LF/4rFE6CKtjJhe4Y4Uycw3oL
-        3xv4Bg3EpC6eH2coR3/A+pcKTlQn6TajNRfVpw==
-X-Google-Smtp-Source: AKy350a/drZtpde24N1RhyJMimhp9a0kDjKzSFBl49N+1lgOAUv7hKCRbn9292vlLz1kg5xb2w8lratj4rv3wLsalcQ=
-X-Received: by 2002:a2e:7017:0:b0:295:bb34:9c2 with SMTP id
- l23-20020a2e7017000000b00295bb3409c2mr3663347ljc.10.1679931479496; Mon, 27
- Mar 2023 08:37:59 -0700 (PDT)
+        Mon, 27 Mar 2023 11:37:57 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5722D5B;
+        Mon, 27 Mar 2023 08:37:56 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-177b78067ffso9665701fac.7;
+        Mon, 27 Mar 2023 08:37:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679931475;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ADGDzjdNZIXAPm6q2RmxWK4kknz8bMhp+eds/86H3bA=;
+        b=Bvr1uet/rFFjrHTo7TSXNcNxp6MCXhzAd2ezkSTK5+WSa54E73vRLz1wcNmdXZkWsQ
+         ndtXqKzEvZ0kMVZHx2XfyZL0Fd0napN/MNGkYKeoINvHyuBwM+H01YURcpw90zdRuEdS
+         NyltIs7lFHjs8UqeSvI8msg1uhP4S8udZCXpjwI/W3D7yg/KMKlTlp7UGyjee3bKUZd0
+         DGCjxb76uW54Q8rBSZWyBHvU1wymDz/L3v4LuAvchS1sF8Q2elzV+B51KgW8sVJz38vx
+         R7xKpuW5UVDMFufkExMIlc0qg/NzhHnsfRNyLRcSzhi9saebTowDc70lWJA48vv8Q7e+
+         noGA==
+X-Gm-Message-State: AAQBX9fOAA6ekb5ZBB9EY/HwcLeYn47fi1nLpH/Fs3QjAttYDEdzo8lU
+        ovkgwjJyex7AUDHY/8u7og==
+X-Google-Smtp-Source: AK7set9WwIq3Ounl5dKyd7+1Y3eYTkTE9XR9QCvnS3mpwSoLpDoAShIdQOml7Z1rNiZy933SfnxelQ==
+X-Received: by 2002:a05:6870:d24f:b0:176:52e9:e29c with SMTP id h15-20020a056870d24f00b0017652e9e29cmr7606143oac.30.1679931474956;
+        Mon, 27 Mar 2023 08:37:54 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j1-20020a9d7381000000b006a1287ccce6sm2321244otk.31.2023.03.27.08.37.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 08:37:54 -0700 (PDT)
+Received: (nullmailer pid 3917493 invoked by uid 1000);
+        Mon, 27 Mar 2023 15:37:54 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <20230220-display-v1-0-45cbc68e188b@baylibre.com> <20230220-display-v1-18-45cbc68e188b@baylibre.com>
-In-Reply-To: <20230220-display-v1-18-45cbc68e188b@baylibre.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 27 Mar 2023 23:37:47 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__=p3pyrX8r55iTR19PiJB3HciS1W9zHF7vR_cVxYgg+Q@mail.gmail.com>
-Message-ID: <CAAOTY__=p3pyrX8r55iTR19PiJB3HciS1W9zHF7vR_cVxYgg+Q@mail.gmail.com>
-Subject: Re: [PATCH 18/21] drm/mediatek: dsi: Improves the DSI lane setup robustness
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Xinlei Lee <xinlei.lee@mediatek.com>,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Okan Sahin <okan.sahin@analog.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20230327130010.8342-2-okan.sahin@analog.com>
+References: <20230327130010.8342-1-okan.sahin@analog.com>
+ <20230327130010.8342-2-okan.sahin@analog.com>
+Message-Id: <167993107072.3909950.17662155564943326691.robh@kernel.org>
+Subject: Re: [PATCH v1 1/2] dt-bindings: gpio: ds4520: Add ADI DS4520
+Date:   Mon, 27 Mar 2023 10:37:54 -0500
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Xinlei:
 
-Could you help to review this patch?
-
-Regards,
-Chun-Kuang.
-
-Alexandre Mergnat <amergnat@baylibre.com> =E6=96=BC 2023=E5=B9=B43=E6=9C=88=
-9=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:23=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> Currently, mtk_dsi_lane_ready (which setup the DSI lane) is triggered
-> before mtk_dsi_poweron. lanes_ready flag toggle to true during
-> mtk_dsi_lane_ready function, and the DSI module is set up during
-> mtk_dsi_poweron.
->
-> Later, during panel driver init, mtk_dsi_lane_ready is triggered but does
-> nothing because lanes are considered ready. Unfortunately, when the panel
-> driver try to communicate, the DSI returns a timeout.
->
-> The solution found here is to put lanes_ready flag to false after the DSI
-> module setup into mtk_dsi_poweron to init the DSI lanes after the power /
-> setup of the DSI module.
->
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+On Mon, 27 Mar 2023 16:00:06 +0300, Okan Sahin wrote:
+> Add ADI DS4520 devicetree document.
+> 
+> Signed-off-by: Okan Sahin <okan.sahin@analog.com>
 > ---
->  drivers/gpu/drm/mediatek/mtk_dsi.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediate=
-k/mtk_dsi.c
-> index 3b7d13028fb6..35c36cc05c04 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> @@ -667,6 +667,8 @@ static int mtk_dsi_poweron(struct mtk_dsi *dsi)
->         mtk_dsi_config_vdo_timing(dsi);
->         mtk_dsi_set_interrupt_enable(dsi);
->
-> +       dsi->lanes_ready =3D false;
-> +
->         return 0;
->  err_disable_engine_clk:
->         clk_disable_unprepare(dsi->engine_clk);
->
-> --
-> b4 0.10.1
+>  .../bindings/gpio/adi,ds4520-gpio.yaml        | 45 +++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/adi,ds4520-gpio.yaml
+> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/gpio/adi,ds4520-gpio.example.dtb: /example-0/i2c0/gpio@50: failed to match any schema with compatible: ['adi,ds4520-gpio']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230327130010.8342-2-okan.sahin@analog.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
