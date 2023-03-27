@@ -2,129 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388EE6CACF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161F66CACF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbjC0SXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 14:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
+        id S232480AbjC0SXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 14:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbjC0SXJ (ORCPT
+        with ESMTP id S232521AbjC0SXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:23:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D42840CB;
-        Mon, 27 Mar 2023 11:23:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D8AAB818BC;
-        Mon, 27 Mar 2023 18:23:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862A2C433D2;
-        Mon, 27 Mar 2023 18:23:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679941384;
-        bh=TNJCOio1Rm6H8bH6XbJFRUE6Yg7Pb43dg5K5QcL0diU=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=b0HvNd+kZXtHoSvHRENpxlIo2kjAYayuM/+3si5bBEC36OZkhZUW2/inUkkkFVCxs
-         H07NhvpfLfKGc4cK58iwpJj/IkdfExLaojRh922UIhw/6VN+sxg0Y/az7zEbam6lW4
-         C3ZA+WOAw/D7ZwSX/tpE0FM6Pr/neMD5TmPPrJBQcFpBasTxHFPbwj1TLJWzRjM5CD
-         18RaqYriL3gw6QgWHnR63hFEajKTgQPSjPMN9VkAoVKxKIC2FEhJicVJEflplJX1oK
-         b75bdavBWF5hoESSnaZSyGpiO1HwUA7JOqVc5EB9KtHK9CfVcx2sqkmDdgWTYGcxA+
-         2D0pX/PGRvruQ==
-From:   Christian Brauner <brauner@kernel.org>
-Date:   Mon, 27 Mar 2023 20:22:53 +0200
-Subject: [PATCH 3/3] fanotify: use pidfd_prepare()
+        Mon, 27 Mar 2023 14:23:38 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C17B3585
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 11:23:26 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id h7so5064115ila.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 11:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679941406; x=1682533406;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pOqrb4VJ1GMDdhFN7lvr8ImUEPXb5Iv0Fq7oS/oc+Is=;
+        b=uz15NpIrAgB/Wy4g6wTbakkr42xsmNGay8uajT52e20mmAGAhKaA8EjqzLlBo3tB0r
+         02fpGHo2+AXM+HsSSj9bueoO0sG6vThnqt54UCPwqqBLy/wuwg7UR2yzHwx06qbSCOSn
+         SxJyrvSniGMEymS0uVRlFkUKiom9XytzsK29j/cQd1vh7DN/NDWlvjdknrcPRT+jZWlE
+         LwQXG2q2gVijs4/nCHVDy/iZRKvccVdi7/6gWKBKnunxV3fem3HnQ/w+e4gMMQXoleo2
+         6BuHZqTXXO4hw/M4T6FA2L7qfNwqow9LVgdC3XE+O8yM9RSLU0BbfmuUjB5IJmSWrslc
+         MaBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679941406; x=1682533406;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pOqrb4VJ1GMDdhFN7lvr8ImUEPXb5Iv0Fq7oS/oc+Is=;
+        b=p/5TRCedWeR0TWgxLOQygZp67M5A/vJL+/55+YoVofuefqmIxKE6MtKr8MDbD+0pSz
+         mMZ91tw0xERmW3GkiJX4tOE8MLUrXLYAjpT6N4mIwxwPHhta+SaOvWAvOypzZCqXCLDA
+         3LSn0f+KFGwaM+N5wrUMVIR/hv8IpqoqEH02BmRiFYDY44f5HdWFsiTS0qYmwqVKSwOq
+         2u30J5g7iBFZcETgF47DrHFFhJ2Vl4ZV+1oIZ6o/2TPHDqoGGEt2Q9elOHGTbeuHr7F5
+         nJbVq1HnoGsestWdQUnNTxv6CIwLU+0Wh/ketS0WQ/ywW6IvdWlj0VTijtfeQBNZ63pS
+         hynQ==
+X-Gm-Message-State: AAQBX9dJKT85aLiQk5cgj9fCDNfrOjG8X4x931mHv7DCb7PobkXj5gqO
+        +68OW9dQXsjhj9Vqs7ZSO9E3zA==
+X-Google-Smtp-Source: AKy350b1lzWJq9ib6960aSgopcoJ8OXSaEADi/LjD2n1aJl9x/idILhG0k7Pi+R8KOk+4LCjgsvb8w==
+X-Received: by 2002:a05:6e02:2207:b0:313:fb1b:2f86 with SMTP id j7-20020a056e02220700b00313fb1b2f86mr8862932ilf.0.1679941406039;
+        Mon, 27 Mar 2023 11:23:26 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id co17-20020a0566383e1100b0040894c572basm4792225jab.125.2023.03.27.11.23.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 11:23:25 -0700 (PDT)
+Message-ID: <2309ca53-a126-881f-1ffa-4f5415a32173@kernel.dk>
+Date:   Mon, 27 Mar 2023 12:23:24 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [syzbot] Monthly io-uring report
+Content-Language: en-US
+To:     syzbot <syzbot+lista29bb0eabb2ddbae6f4a@syzkaller.appspotmail.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <000000000000bb028805f7dfab35@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <000000000000bb028805f7dfab35@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-pidfd-file-api-v1-3-5c0e9a3158e4@kernel.org>
-References: <20230327-pidfd-file-api-v1-0-5c0e9a3158e4@kernel.org>
-In-Reply-To: <20230327-pidfd-file-api-v1-0-5c0e9a3158e4@kernel.org>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
-        Matthew Bobrowski <repnop@google.com>,
-        linux-kernel@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>
-X-Mailer: b4 0.13-dev-00303
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2293; i=brauner@kernel.org;
- h=from:subject:message-id; bh=TNJCOio1Rm6H8bH6XbJFRUE6Yg7Pb43dg5K5QcL0diU=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQo3mf857bx57Q5Hq8DfDZp8R1W+Ny4gD9sBmt0cor7Odb7
- e2pcO0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACaS1sbwP71L+INEhnNUpHZSoX5yt8
- N754og1n8iJyqVxP+WKL9kYvinsvVwyoNzyVNUrhxat39l0d4fXPs/xas2l+SGsc890PGAHQA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We generally try to avoid installing a file descriptor into the caller's
-file descriptor table just to close it again via close_fd() in case an
-error occurs. Instead we reserve a file descriptor but don't install it
-into the caller's file descriptor table yet. If we fail for other,
-unrelated reasons we can just close the reserved file descriptor and if
-we make it past all meaningful error paths we just install it. Fanotify
-gets this right already for one fd type but not for pidfds.
+On 3/27/23 5:01?AM, syzbot wrote:
+> 1873    Yes   WARNING in split_huge_page_to_list (2)
+>               https://syzkaller.appspot.com/bug?extid=07a218429c8d19b1fb25
+> 38      Yes   KASAN: use-after-free Read in nfc_llcp_find_local
+>               https://syzkaller.appspot.com/bug?extid=e7ac69e6a5d806180b40
 
-Use the new pidfd_prepare() helper to reserve a pidfd and a pidfd file
-and switch to the more common fd allocation and installation pattern.
-
-Signed-off-by: Christian Brauner <brauner@kernel.org>
----
- fs/notify/fanotify/fanotify_user.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
-index 8f430bfad487..22fb1cf7e1fc 100644
---- a/fs/notify/fanotify/fanotify_user.c
-+++ b/fs/notify/fanotify/fanotify_user.c
-@@ -663,7 +663,7 @@ static ssize_t copy_event_to_user(struct fsnotify_group *group,
- 	struct fanotify_info *info = fanotify_event_info(event);
- 	unsigned int info_mode = FAN_GROUP_FLAG(group, FANOTIFY_INFO_MODES);
- 	unsigned int pidfd_mode = info_mode & FAN_REPORT_PIDFD;
--	struct file *f = NULL;
-+	struct file *f = NULL, *pidfd_file = NULL;
- 	int ret, pidfd = FAN_NOPIDFD, fd = FAN_NOFD;
- 
- 	pr_debug("%s: group=%p event=%p\n", __func__, group, event);
-@@ -718,7 +718,7 @@ static ssize_t copy_event_to_user(struct fsnotify_group *group,
- 		    !pid_has_task(event->pid, PIDTYPE_TGID)) {
- 			pidfd = FAN_NOPIDFD;
- 		} else {
--			pidfd = pidfd_create(event->pid, 0);
-+			pidfd = pidfd_prepare(event->pid, 0, &pidfd_file);
- 			if (pidfd < 0)
- 				pidfd = FAN_EPIDFD;
- 		}
-@@ -751,6 +751,9 @@ static ssize_t copy_event_to_user(struct fsnotify_group *group,
- 	if (f)
- 		fd_install(fd, f);
- 
-+	if (pidfd_file)
-+		fd_install(pidfd, pidfd_file);
-+
- 	return metadata.event_len;
- 
- out_close_fd:
-@@ -759,8 +762,10 @@ static ssize_t copy_event_to_user(struct fsnotify_group *group,
- 		fput(f);
- 	}
- 
--	if (pidfd >= 0)
--		close_fd(pidfd);
-+	if (pidfd >= 0) {
-+		put_unused_fd(pidfd);
-+		fput(pidfd_file);
-+	}
- 
- 	return ret;
- }
+These two are not io_uring. Particularly for the latter, I think syzbot
+has a tendency to guess it's io_uring if any kind of task_work is
+involved. That means anything off fput ends up in that bucket. Can we
+get that improved please?
 
 -- 
-2.34.1
+Jens Axboe
 
