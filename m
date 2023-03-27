@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89306CB006
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDF76CB008
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbjC0Ue0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 16:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
+        id S230049AbjC0Ujp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 16:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjC0UeX (ORCPT
+        with ESMTP id S229601AbjC0Ujn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 16:34:23 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC03D19A2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:34:21 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id o12so268140ilh.13
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:34:21 -0700 (PDT)
+        Mon, 27 Mar 2023 16:39:43 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D35135;
+        Mon, 27 Mar 2023 13:39:42 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so13047481pjb.4;
+        Mon, 27 Mar 2023 13:39:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google; t=1679949261;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SaePAyDz2w86nDPVu8ko8gEeQEmQvefWooibL8cU7/M=;
-        b=cBRSQ0NboIQu833svXwTdI1bXDAJHNRXztPlTf5B0zEaUumceNVjYyU/POtvqU7tNM
-         WOh6QqDucfo/0SPZueviKzYA2a3oh8OI16MbGkKEWehM8OFZOEkcAWRBoTNF2s4/hGtk
-         7xBpImWCWB/BQrKtV1egRT5K40J1dKhpVtEmM=
+        d=gmail.com; s=20210112; t=1679949582; x=1682541582;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ObIVazuLedmhVZJez+PSFU43TenUmtQ8TSYcPMuU/jk=;
+        b=Vcc3QbMUdQltz74zXwK4M3A/gD/97stMVMWaQSV+2Ak2Pbw0qIpiyaOo6vNPB9fA2T
+         YbFyqCYxP5WnDiT3Tql0Y+n2ZpdB36iiX8gxne/BzqT/GCUorTV+4ORYL/sH85DJrWJM
+         zJheGLpXByjCjyUPuy5X3A4KjRSu/oEOyWDztRVi/ZBozTF24fndbycuDnBMmhTPOM0k
+         FAinhpprVUfX/7JwXnvSJYSBAEIn9C45p3HdMhuMA8ZWEQBxVSsmWwebIaboKh2Li81p
+         WZGFN6G4U7eYqP2UztmtHPloBvAtUEUX+li5Ib2zV4XB51UlzDQe52vvmOXozgZpNIth
+         szCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679949261;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SaePAyDz2w86nDPVu8ko8gEeQEmQvefWooibL8cU7/M=;
-        b=d+df3sFqXF9tp+wG4xiUUBcaUbk/gwrTT2tT0zNY9bTaErGgIeCI/unQ/IgMKobl+Z
-         M8+6Lq5PXPual/rOUInvh2/oG8mwbk3K7MdpKEgJ8lABI05eUHC2ZQPlFS5ewtZkhdO5
-         h4MbsUwJFBPq522k0jv2Nvk+BIVp0Qe7L5ESzQenCpJXMO31nvmKqHR9QZagT7XghTBU
-         vXJKEugGiqARx3BmVWcSBDBr+fXF1WXVmDRNVmTduFp94mYgpRZo1PDrePp0bp3NGq8k
-         xHdn+yKNVOXyk7gIFfKs1uji+1104WidkNG4f/RzeYXlHXRkpweGD2g2e4CcrfXY2xaH
-         0xYw==
-X-Gm-Message-State: AAQBX9c/4zpTog1nL5+yN+gWJ01zEdZTu7q/ThJsJhwCqJxLN+E5X9aV
-        /x//uCXNdx23S/vrSBiMqH35JQ==
-X-Google-Smtp-Source: AKy350ZkYV9vty3O2CTGB8EoQNeAJarHBPdwy546ZGbZ39Z2XXxigHGLg+w0DT/Ndbp5TParI+FLnw==
-X-Received: by 2002:a92:c501:0:b0:317:3f4:c06c with SMTP id r1-20020a92c501000000b0031703f4c06cmr9631918ilg.20.1679949261242;
-        Mon, 27 Mar 2023 13:34:21 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id y16-20020a027310000000b004061d6abcd1sm9125305jab.162.2023.03.27.13.34.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 13:34:20 -0700 (PDT)
-Message-ID: <37dc9fe2-cdc8-ea7b-c7b4-89415c3cda8f@ieee.org>
-Date:   Mon, 27 Mar 2023 15:34:19 -0500
+        d=1e100.net; s=20210112; t=1679949582; x=1682541582;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ObIVazuLedmhVZJez+PSFU43TenUmtQ8TSYcPMuU/jk=;
+        b=moYRurV1eSk9cVugMKGMpXAc5wZ3fycEpy6kgCYN5EXIFEi8p1EdpWzTEeKcV40Pnd
+         iF6FnujxpFYBYrijB2CigKQmejmhv9epknPdYJCjCIByaiqeBvtiMnWGXE2aFDZg7jKZ
+         T2SoZLhKvHs9ZIPVkPIl+ZLypT5w78p8WP2UVwKjWBfoI6fyogm9oK6cNUrKw1oDw4dn
+         kS0/5sxnG84lA7BJPsRXhcDER8m/ZwsYzYP/eJjHDKqL4vKvdfH/CKjNjtbnmGLwjGWM
+         /hoPqEoW1c6b3a+zlgeRSlOZzv/nLgEYnAgjcR1rpRIhJmDmZIkfvog5q43m7X1kN2YH
+         dqfw==
+X-Gm-Message-State: AAQBX9dM/WfWbxvsc0ZGWLACxNO4+5S2m4Cb1UYrOrvb/YfGn77m/K3Y
+        0hFcJpqjAyi6V/QM/Fb9N6o=
+X-Google-Smtp-Source: AK7set/QzeY8WJz+u9vl8XJyFVi5CfiNP74RpD3vaKFutxcPxN/4hVtPKppeKkaI6JT3PA5UawxOSA==
+X-Received: by 2002:a17:90b:1241:b0:233:a836:15f4 with SMTP id gx1-20020a17090b124100b00233a83615f4mr10440658pjb.1.1679949582086;
+        Mon, 27 Mar 2023 13:39:42 -0700 (PDT)
+Received: from ip-172-31-38-16.us-west-2.compute.internal (ec2-52-37-71-140.us-west-2.compute.amazonaws.com. [52.37.71.140])
+        by smtp.gmail.com with ESMTPSA id s24-20020a170902b19800b0019e5fc21663sm19387378plr.218.2023.03.27.13.39.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 13:39:41 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 20:39:39 +0000
+From:   Alok Tiagi <aloktiagi@gmail.com>
+To:     Tycho Andersen <tycho@tycho.pizza>
+Cc:     Christian Brauner <brauner@kernel.org>, viro@zeniv.linux.org.uk,
+        willy@infradead.org, David.Laight@aculab.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, hch@infradead.org, aloktiagi@gmail.com
+Subject: Re: [RFC v4 2/2] file, epoll: Implement do_replace() and
+ eventpoll_replace()
+Message-ID: <ZCH/C89TwQ/aM1Rr@ip-172-31-38-16.us-west-2.compute.internal>
+References: <20230324063422.1031181-2-aloktiagi@gmail.com>
+ <ZBzRfDnHaEycE72s@ip-172-31-38-16.us-west-2.compute.internal>
+ <20230324082344.xgze2vu3ds2kubcz@wittgenstein>
+ <ZB2o8cs+VTQlz5GA@tycho.pizza>
+ <20230327090106.zylztuk77vble7ye@wittgenstein>
+ <ZCGU5JBg02+DU6JN@tycho.pizza>
+ <ZCGXNwvymHVJ7O6K@tycho.pizza>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] staging: greybus: refactor arche_platform_wd_irq()
- function
-Content-Language: en-US
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>,
-        outreachy@lists.linux.dev
-Cc:     Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <ZCH6LV5XU0FBlW7Y@khadija-virtual-machine>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <ZCH6LV5XU0FBlW7Y@khadija-virtual-machine>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCGXNwvymHVJ7O6K@tycho.pizza>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,70 +80,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/27/23 3:18 PM, Khadija Kamran wrote:
-> Refactor function by adding goto statement. This reduces the
-> indentation and fixes the issue reported by checkpatch.pl script.
+On Mon, Mar 27, 2023 at 07:16:39AM -0600, Tycho Andersen wrote:
+> On Mon, Mar 27, 2023 at 07:06:46AM -0600, Tycho Andersen wrote:
+> > On Mon, Mar 27, 2023 at 11:01:06AM +0200, Christian Brauner wrote:
+> > > On Fri, Mar 24, 2023 at 07:43:13AM -0600, Tycho Andersen wrote:
+> > > > Perhaps we could add a flag that people could set from SECCOMP_ADDFD
+> > > > asking for this extra behavior?
+> > > 
+> > >         +       if (fd > 0 && addfd->ioctl_flags & SECCOMP_ADDFD_FLAG_EPOLL) {
+> > >         +               /*
+> > >         +                * - retrieve old struct file that addfd->fd refered to if any.
+> > >         +                * - call your epoll seccomp api to update the references in the epoll instance
+> > >         +                */
+> > > 			epoll_seccomp_notify()
+> > >         +       }
+> > >         +
+> > >         +       if (fd > 0 && addfd->ioctl_flags & SECCOMP_ADDFD_FLAG_IO_URING) {
+> > >         +               /*
+> > >         +                * - call your io_uring seccomp api to update the references in the io_uring instance
+> > >         +                */
+> > > 			io_uring_seccomp_notify()
+> > >         +       }
+> > 
+> > Looks reasonable to me, thanks.
 > 
-> "CHECK: line length of 101 exceeds 100 columns"
-
-Looking at this entire function, it seems a great deal of it
-has somewhat wide lines.  Part of the problem is that it
-relies on arche_platform_set_wake_detect_state(), which is
-36 characters long all by itself.
-
-In any case, the line that is identified is the widest, of
-course, by 10 or more characters.  But changing that one
-line doesn't substantially improve things.
-
-I'm reluctant to suggest this, because I don't want a lot
-of "code churn" patches to follow based on this, but...
-
-One could rename arche_platform_set_wake_detect_state()
-to be just set_wake_detect_state().  It's private to
-its source file (arche-platform.c) and therefore the
-"arche_plaform_" prefix isn't really necessary.  And
-perhaps the result would be code that is a little more
-readable, because its lines aren't so long.
-
-I'd be happy to hear others' thoughts on this.
-
-					-Alex
-
-
-
+> One change I might suggest is only using a single flag bit -- we don't
+> need to consume all of seccomp's remaining flag bits with the various
+> subsystems. If you want to do this logic for epoll, you almost
+> certainly want it for io_uring, select, and whatever else is out
+> there.
 > 
-> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-> ---
->   drivers/staging/greybus/arche-platform.c | 11 ++++++-----
->   1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/staging/greybus/arche-platform.c b/drivers/staging/greybus/arche-platform.c
-> index fcbd5f71eff2..c7d3b6f7368f 100644
-> --- a/drivers/staging/greybus/arche-platform.c
-> +++ b/drivers/staging/greybus/arche-platform.c
-> @@ -178,11 +178,7 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
->   				 */
->   				if (arche_pdata->wake_detect_state !=
->   						WD_STATE_COLDBOOT_START) {
-> -					arche_platform_set_wake_detect_state(arche_pdata,
-> -									     WD_STATE_COLDBOOT_TRIG);
-> -					spin_unlock_irqrestore(&arche_pdata->wake_lock,
-> -							       flags);
-> -					return IRQ_WAKE_THREAD;
-> +					goto out;
->   				}
->   			}
->   		}
-> @@ -205,6 +201,11 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
->   	spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
->   
->   	return IRQ_HANDLED;
-> +
-> +out:
-> +	arche_platform_set_wake_detect_state(arche_pdata, WD_STATE_COLDBOOT_TRIG);
-> +	spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
-> +	return IRQ_WAKE_THREAD;
->   }
->   
->   /*
+> Tycho
 
+Thank you for your comment and thoughts on this Christian. The per-subsystem
+helper and calling this from seccomp add fd looks like a cleaner API. I'll
+address the changes in v5.
