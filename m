@@ -2,229 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D896CA2AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0449E6CA2B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbjC0Lnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 07:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
+        id S232187AbjC0LoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 07:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231921AbjC0Lnl (ORCPT
+        with ESMTP id S232479AbjC0LoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 07:43:41 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1845810FD
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:43:40 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C859021D12;
-        Mon, 27 Mar 2023 11:43:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679917418; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+ITToL9qlixtPnwpo2U36saKVXVZuLAiBEtIMpOiQ0Q=;
-        b=d+Ins1qjZS2C20yrn7iIIbY/r5A17RDuzrdULkjbD4/GROf4RmueFiogd0UIlN0Jf3NWir
-        Al8AnSREcuIMWUCBszHA/IIFLSUERmciOeg3cgTZBAL/slTPwlwEmUFtLpwDeTS4Pna2W6
-        TQSchYz1fGwXvfpSO7H8Y3FGukvh1NY=
-Received: from suse.cz (unknown [10.100.201.202])
+        Mon, 27 Mar 2023 07:44:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA02270E;
+        Mon, 27 Mar 2023 04:44:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3F4322C141;
-        Mon, 27 Mar 2023 11:43:38 +0000 (UTC)
-Date:   Mon, 27 Mar 2023 13:43:37 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Yuanhan Zhang <zyhtheonly@gmail.com>
-Cc:     Chen Yu <yu.c.chen@intel.com>, juri.lelli@redhat.com,
-        mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, zwp10758@gmail.com,
-        zyhtheonly@yeah.net, tiozhang@didiglobal.com
-Subject: Re: [RESEND][PATCH v2 2/2] sched: print parent comm in
- sched_show_task()
-Message-ID: <ZCGBaQIHIC8GMNtn@alley>
-References: <Y8qSjUbVhjYaRFg4@alley>
- <20230131080911.GA1601@didi-ThinkCentre-M930t-N000>
- <Y+UdoShroyR3iynv@chenyu5-mobl1>
- <CAEQmJ=igQ8J9Y+_dWE6yaaFXHC965Sw+RxywWNLD=4G=tj0_hw@mail.gmail.com>
- <CAEQmJ=iEC1G4MVRG=0XLWrCxqX_3E-6X-XbPeg8ti7oFjTBLBQ@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8A54B80B7E;
+        Mon, 27 Mar 2023 11:44:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5985C433D2;
+        Mon, 27 Mar 2023 11:44:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679917445;
+        bh=39dMlcm9dz8DHNPorL7lH7wJe0iuw2BjZ6ty9Z48GHs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T9C2RVcQrn1x/Y1E4n4IcP/nwoRpfeMXmrftTche9bo5eSdefMUJypOw/ZI5srZiO
+         kfGlv+vns8AyOG0vJBQO71KL0WHdKh6HZNZaTmYMLsdgAipBj5WhmKVEPuQr32AW38
+         I63Cf09Qa/ZxWO8jCmVO1G53QVEDqPo8pbek+GYk=
+Date:   Mon, 27 Mar 2023 13:43:57 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
+Message-ID: <ZCGBfbZztfBpgIXf@kroah.com>
+References: <ZApf0iNOsSAUbhMz@bombadil.infradead.org>
+ <ZArc0ib697JIwKou@kroah.com>
+ <ZAuGE2ay3q0MT4Yi@bombadil.infradead.org>
+ <CAMuHMdVZODAr77KSp3Yicoyjz=y8OqQB+z6zTLbxO1HMKoJMSA@mail.gmail.com>
+ <ZB1p5zRp7rlGGuCP@kroah.com>
+ <CAMuHMdVRXQupFEoU0EbSkBnS21QXGJQ4ZOYVy-Ntwjnw7er0nA@mail.gmail.com>
+ <87h6uamdzw.fsf@esperi.org.uk>
+ <ZB2zrHSzmi8FXABI@kroah.com>
+ <ZB3mw4G8GdGwSP41@bombadil.infradead.org>
+ <87tty6lbed.fsf@esperi.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEQmJ=iEC1G4MVRG=0XLWrCxqX_3E-6X-XbPeg8ti7oFjTBLBQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <87tty6lbed.fsf@esperi.org.uk>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-please, send the patch as a plain text generated by git format-patch.
-Ideally send it using git send-email.
-
-Also please use: [PATCH v3] instead of [PATCH v2 2/2].
-
-This [RESEND] was a multi-part mail with html. It is hard
-to proceed by the tools like "b4". And it was even ignored by
-https://lore.kernel.org/ so that it is not acrived.
-
-The whole thread is messy. I suggest to send sent it as a new
-mail (In-Reply-To).
-
-Also, please, add  Andrew Morton <akpm@linux-foundation.org>.
-He might take this kind of patch.
-
-Otherwise, the patch looks OK.
-
-Best Regards,
-Petr
-
-
-
-
-On Thu 2023-03-23 19:01:03, Yuanhan Zhang wrote:
-> Knowing who the parent is might be useful for debugging.
-> For example, we can sometimes resolve kernel hung tasks by stopping
-> the person who begins those hung tasks.
-> With the parent's name printed in sched_show_task(),
-> it might be helpful to let people know which "service" should be operated.
-> Also, we move the parent info to a following new line.
-> It would be better to solve the situation when the task
-> is not alive and we could not get information about the parent.
+On Mon, Mar 27, 2023 at 11:46:34AM +0100, Nick Alcock wrote:
+> On 24 Mar 2023, Luis Chamberlain spake thusly:
 > 
-> Signed-off-by: Tio Zhang <tiozhang@didiglobal.com>
-> ---
->  kernel/sched/core.c | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
+> > On Fri, Mar 24, 2023 at 03:29:00PM +0100, Greg Kroah-Hartman wrote:
+> >> Please put back the license bits that you removed, as it is not a good
+> >> idea to remove that if the file does not have a SPDX entry at the very
+> >> least.
+> >
+> > Nick, I've just dropped your series.
 > 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index cb2aa2b54c7a..d8fd35684d6c 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -8853,7 +8853,6 @@ SYSCALL_DEFINE2(sched_rr_get_interval_time32, pid_t,
-> pid,
->  void sched_show_task(struct task_struct *p)
->  {
->         unsigned long free = 0;
-> -       int ppid;
+> Thanks, that's much easier than getting all those reverts in.
+> (Presumably the bits taken by other people can all stay.)
 > 
->         if (!try_get_task_stack(p))
->                 return;
-> @@ -8865,14 +8864,19 @@ void sched_show_task(struct task_struct *p)
->  #ifdef CONFIG_DEBUG_STACK_USAGE
->         free = stack_not_used(p);
->  #endif
-> -       ppid = 0;
-> +
-> +       pr_cont(" stack:%-5lu pid:%-5d flags:0x%08lx\n",
-> +               free, task_pid_nr(p), read_task_thread_flags(p));
-> +
->         rcu_read_lock();
-> -       if (pid_alive(p))
-> -               ppid = task_pid_nr(rcu_dereference(p->real_parent));
-> +       if (pid_alive(p)) {
-> +               struct task_struct *parent =
-> rcu_dereference(p->real_parent);
-> +
-> +               pr_info("parent:%-15.15s ppid:%-6d", parent->comm,
-> task_pid_nr(parent));
-> +       } else {
-> +               pr_info("parent:unknown         ppid:<NULL>\n");
-> +       }
->         rcu_read_unlock();
-> -       pr_cont(" stack:%-5lu pid:%-5d ppid:%-6d flags:0x%08lx\n",
-> -               free, task_pid_nr(p), ppid,
-> -               read_task_thread_flags(p));
+> >                                      Please only re-submit only for
+> > files where the license is clear. The effort of clarifying licenses
+> > on files where one doesn't have an SPDX tag is welcomed but can take
+> > time and we'll need this anyway in the future to help later strive to
+> > see if we can automatically generate the MODULE_LICENSE() from the
+> > SPDX tags.
 > 
->         print_worker_info(KERN_INFO, p);
->         print_stop_info(KERN_INFO, p);
-> --
-> 2.17.1
-> 
-> Yuanhan Zhang <zyhtheonly@gmail.com> 于2023年2月16日周四 16:19写道：
-> 
-> > Knowing who the parent is might be useful for debugging.
-> > For example, we can sometimes resolve kernel hung tasks by stopping
-> > the person who begins those hung tasks.
-> > With the parent's name printed in sched_show_task(),
-> > it might be helpful to let people know which "service" should be operated.
-> > Also, we move the parent info to a following new line.
-> > It would be better to solve the situation when the task
-> > is not alive and we could not get information about the parent.
-> >
-> > Signed-off-by: Tio Zhang <tiozhang@didiglobal.com>
-> > ---
-> >  kernel/sched/core.c | 18 +++++++++++-------
-> >  1 file changed, 11 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index cb2aa2b54c7a..d8fd35684d6c 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -8853,7 +8853,6 @@ SYSCALL_DEFINE2(sched_rr_get_interval_time32, pid_t,
-> > pid,
-> >  void sched_show_task(struct task_struct *p)
-> >  {
-> >         unsigned long free = 0;
-> > -       int ppid;
-> >
-> >         if (!try_get_task_stack(p))
-> >                 return;
-> > @@ -8865,14 +8864,19 @@ void sched_show_task(struct task_struct *p)
-> >  #ifdef CONFIG_DEBUG_STACK_USAGE
-> >         free = stack_not_used(p);
-> >  #endif
-> > -       ppid = 0;
-> > +
-> > +       pr_cont(" stack:%-5lu pid:%-5d flags:0x%08lx\n",
-> > +               free, task_pid_nr(p), read_task_thread_flags(p));
-> > +
-> >         rcu_read_lock();
-> > -       if (pid_alive(p))
-> > -               ppid = task_pid_nr(rcu_dereference(p->real_parent));
-> > +       if (pid_alive(p)) {
-> > +               struct task_struct *parent =
-> > rcu_dereference(p->real_parent);
-> > +
-> > +               pr_info("parent:%-15.15s ppid:%-6d", parent->comm,
-> > task_pid_nr(parent));
-> > +       } else {
-> > +               pr_info("parent:unknown         ppid:<NULL>\n");
-> > +       }
-> >         rcu_read_unlock();
-> > -       pr_cont(" stack:%-5lu pid:%-5d ppid:%-6d flags:0x%08lx\n",
-> > -               free, task_pid_nr(p), ppid,
-> > -               read_task_thread_flags(p));
-> >
-> >         print_worker_info(KERN_INFO, p);
-> >         print_stop_info(KERN_INFO, p);
-> > --
-> > 2.17.1
-> >
-> > Chen Yu <yu.c.chen@intel.com> 于2023年2月10日周五 00:22写道：
-> >
-> >> On 2023-01-31 at 16:10:26 +0800, Tio Zhang wrote:
-> >> > Knowing who the parent is might be useful for debugging.
-> >> > For example, we can sometimes resolve kernel hung tasks by stopping
-> >> > the person who begins those hung tasks.
-> >> > With the parent's name printed in sched_show_task(),
-> >> > it might be helpful to let people know which "service" should be
-> >> operated.
-> >> > Also, we move the parent info to a following new line.
-> >> > It would better solve the situation when the task
-> >> s/would better/would be better/
-> >> > is not alive and we could not get information about the parent.
-> >> >
-> >> > Signed-off-by: Tio Zhang <tiozhang@didiglobal.com>
-> >> >
-> >> Looks ok to me,
-> >> Tested-by: Chen Yu <yu.c.chen@intel.com>
-> >>
-> >> thanks,
-> >> Chenyu
-> >>
-> >
+> For now, I have an alternative that might be acceptable. I did a bit of
+> an audit and it's all a right mess (see below), with wild divergence
+> even when SPDX is present, GPL versus -only or GPL-2.0+ apparently
+> applied almost at random and some things being completely different (in
+> some cases they were both committed simultaneously and were inconsistent
+> from the moment the module was written). So many things are inconsistent
+> that kallmodsyms would call a lot of things modules that really aren't:
+> there is enough error that there probably be noticeable mistakes in
+> quite a high percentage of kernels.
+
+As you have found out, there is a difference that matters in the SPDX
+lines vs the MODULE_LICENSE lines when it comes to GPL vs GPLv2+ stuff.
+The SPDX lines are correct for the code itself, while the MODULE_LICENSE
+lines are correct from a "this is the license of this binary" point of
+view.
+
+So don't get confused here, if you all can figure out a way to generate
+the MODULE_LICENSE() lines from SPDX, that would be great, but in my
+quick look I think it's going to be very difficult (think about how
+multiple files make up a single module binary...)
+
+good luck!
+
+> But... for our purposes, we don't actually *mind* if non-modules list
+> things like licenses inconsistently in two different places. Removing
+> MODULE_LICENSE was a means, not an end. What we're actually interested
+> in doing is removing .modinfo in things that can't possibly be modules,
+> and since a .modinfo in a guaranteed-non-module is at best entirely
+> useless I don't think anyone could reasonably be opposed to that end
+> goal (though they might reasonably be unhappy about all the churn
+> involved in getting there). They object to the removal of the visible
+> MODULE_LICENSE() argument text string, not to the useless compile-time
+> effect of a MODULE_LICENSE in a non-module.
+
+there are other things that create .modinfo lines, so I'm confused why
+you picked the license line to trigger all of this.
+
+> So how about, for the first three groups below (the groups where
+> MODULE_LICENSE and SPDX are inconsistent, or where a SPDX simply doesn't
+> exist), instead of removing the MODULE_LICENSE we replace it with an
+> identical call to a new macro named perhaps NONMODULE_LICENSE(), which
+> is defined in module.h as simply expanding to nothing, except possibly
+> emitting a compile-time error if it's ever used in a module? This more
+> clearly denotes what's going on, keeps the license string in the source
+> file on a nearly identical line (for whatever purpose it serves), drops
+> the spurious .modinfo that's causing trouble, and probably makes fewer
+> people unhappy?
+
+Again, no, why aren't you just stubbing out MODULE_LICENSE() in the
+build if it's not being built as a module like the other MODULE_*()
+macros are?  Why is the license so special here yet the device list or
+module authors not?
+
+Don't treat this macro as somehow special where authors have to remember
+to not use it (or to use it), while the other MODULE_* macros do not
+have the issue?
+
+That's my main objection here.  Don't get confused by the license stuff,
+that's secondary.
+
+thanks,
+
+greg k-h
