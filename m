@@ -2,95 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD866CA065
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C96E6CA064
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbjC0JoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
+        id S233161AbjC0Jnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232739AbjC0Jnp (ORCPT
+        with ESMTP id S232614AbjC0Jnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:43:45 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C645B46BB
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:43:36 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32R97upD003787;
-        Mon, 27 Mar 2023 09:43:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=p4h/Ki1l7XLcn/2JAO3dVKAxyLdissmypHLOZOUJ7Fs=;
- b=PT6AEDFZIIOOvUdoMbUqvCmBjO39PN1Dwu1BSGwWNjPdaYtvz7gp83fws+VfWAM5QgIE
- xtQ/stW8lJ2URLRO7Hsz1y3Em07JYQsvycIIj+4uMLIs2EayAkZEYPljX0pfmu0E00cx
- C4l4xidHnNFtbVsq0BuOVEms3nplI9vXzdzK/ynXT/o+97qSXeB23J/1tVjeYhCwk7zJ
- ty5pZFmleXyHxwUJ6n9aktMFNzq+y/ienTk+WJOLGSnfnXGR4o5cRy/utnA/nstNNbv1
- 1qZFcWjdmAS39CdBige6R6QoBfmDTQuYfRLAO580Kq0g6/qgbq1kbaN3upKXnDTfMy3Q fQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjaunb2nv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 09:43:25 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32R98WaW008346;
-        Mon, 27 Mar 2023 09:43:25 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjaunb2mt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 09:43:24 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32QGCIHY028881;
-        Mon, 27 Mar 2023 09:43:22 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3phr7fjkv2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 09:43:22 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32R9hI0t26935836
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Mar 2023 09:43:18 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C430920043;
-        Mon, 27 Mar 2023 09:43:18 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 24CCB20049;
-        Mon, 27 Mar 2023 09:43:16 +0000 (GMT)
-Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.40.181])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 27 Mar 2023 09:43:15 +0000 (GMT)
-Date:   Mon, 27 Mar 2023 15:13:12 +0530
-From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] arch/powerpc/kvm: kvmppc_hv_entry: remove .global
- scope
-Message-ID: <ZCFlMJPed3NCDP3e@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-References: <20230316051025.1424093-1-kconsul@linux.vnet.ibm.com>
- <20230316051025.1424093-2-kconsul@linux.vnet.ibm.com>
- <CRH1YM72SK4L.QU56WGVQQ2GE@bobo>
- <ZCFhnNPrMr3D5+rZ@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <ZCFjJ1sMuLMUkBWc@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+        Mon, 27 Mar 2023 05:43:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6087555AF;
+        Mon, 27 Mar 2023 02:43:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3586D4B3;
+        Mon, 27 Mar 2023 02:44:13 -0700 (PDT)
+Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F14B3F6C4;
+        Mon, 27 Mar 2023 02:43:26 -0700 (PDT)
+Message-ID: <6f8b087d-77a7-512e-6504-e4841447eda9@arm.com>
+Date:   Mon, 27 Mar 2023 10:43:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCFjJ1sMuLMUkBWc@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: YD5Mhvk575dDb1KWm7ML0xsKBZicgtXq
-X-Proofpoint-GUID: nf4yspvZbqsqqCgH13ST4jU1mVPUMG2s
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- impostorscore=0 clxscore=1015 adultscore=0 lowpriorityscore=0
- suspectscore=0 priorityscore=1501 spamscore=0 phishscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303270078
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 02/11] coresight-tpda: Add DSB dataset support
+Content-Language: en-US
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        James Clark <james.clark@arm.com>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>
+References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
+ <1679551448-19160-3-git-send-email-quic_taozha@quicinc.com>
+ <e578790c-4794-5609-16e8-15d63082760e@arm.com>
+ <51ad3cb3-bd83-51c9-52bc-f700cd17103c@quicinc.com>
+ <48f31b84-573f-fe1d-bcd7-e55ec7f47831@arm.com>
+ <595568c3-d2bc-e37e-83b3-2adfd3fa4193@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <595568c3-d2bc-e37e-83b3-2adfd3fa4193@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,49 +66,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-27 15:04:38, Kautuk Consul wrote:
-> On 2023-03-27 14:58:03, Kautuk Consul wrote:
-> > On 2023-03-27 19:19:37, Nicholas Piggin wrote:
-> > > On Thu Mar 16, 2023 at 3:10 PM AEST, Kautuk Consul wrote:
-> > > > kvmppc_hv_entry isn't called from anywhere other than
-> > > > book3s_hv_rmhandlers.S itself. Removing .global scope for
-> > > > this function and annotating it with SYM_INNER_LABEL.
-> > > >
-> > > > Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
-> > > > ---
-> > > >  arch/powerpc/kvm/book3s_hv_rmhandlers.S | 3 +--
-> > > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-> > > > index acf80915f406..b81ba4ee0521 100644
-> > > > --- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-> > > > +++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-> > > > @@ -502,8 +502,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
-> > > >   *                                                                            *
-> > > >   *****************************************************************************/
-> > > >  
-> > > > -.global kvmppc_hv_entry
-> > > 
-> > > I think this is okay.
-> > > 
-> > > > -kvmppc_hv_entry:
-> > > > +SYM_INNER_LABEL(kvmppc_hv_entry, SYM_L_LOCAL)
-> > > 
-> > > The documentation for SYM_INNER_LABEL says it for labels inside a SYM
-> > > function block, is that a problem? This is a function but doesn't have
-> > > C calling convention, so asm annotation docs say that it should use
-> > > SYM_CODE_START_LOCAL?
-> > That is correct. Will create a v4 patch for this and send it.
-> But using SYM_CODE_START_LOCAL again causes a warning in the build
-> (which we were trying to avoid):
-> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x48: unannotated intra-function call
-For that matter, even SYM_INNER_LABEL shows that warning. When I tested
-it on my setup it seemed to work fine. I'll investigate and try to come
-up with a solution.
-> > > 
-> > > BTW. why don't our _GLOBAL() macros use these SYM annotations? I haven't
-> > > really looked into them.
-> > Not sure. Was mostly just concentrating on the kvmppc_hv_entry code.
-> > > 
-> > > Thanks,
-> > > Nick
+On 27/03/2023 04:31, Tao Zhang wrote:
+> 
+> On 3/26/2023 3:31 AM, Suzuki K Poulose wrote:
+>> On 24/03/2023 14:58, Tao Zhang wrote:
+>>> Hi Suzuki,
+>>>
+>>> 在 3/23/2023 7:51 PM, Suzuki K Poulose 写道:
+>>>> On 23/03/2023 06:03, Tao Zhang wrote:
+>>>>> Read the DSB element size from the device tree. Set the register
+>>>>> bit that controls the DSB element size of the corresponding port.
+>>>>>
+>>>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>>>>> ---
+>>>>>   drivers/hwtracing/coresight/coresight-tpda.c | 58 
+>>>>> ++++++++++++++++++++++++++++
+>>>>>   drivers/hwtracing/coresight/coresight-tpda.h |  4 ++
+>>>>>   2 files changed, 62 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c 
+>>>>> b/drivers/hwtracing/coresight/coresight-tpda.c
+>>>>> index f712e11..8dcfc4a 100644
+>>>>> --- a/drivers/hwtracing/coresight/coresight-tpda.c
+>>>>> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
+>>>>> @@ -21,6 +21,47 @@
+>>>>>     DEFINE_CORESIGHT_DEVLIST(tpda_devs, "tpda");
+>>>>>   +/* Search and read element data size from the TPDM node in
+>>>>> + * the devicetree. Each input port of TPDA is connected to
+>>>>> + * a TPDM. Different TPDM supports different types of dataset,
+>>>>> + * and some may support more than one type of dataset.
+>>>>> + * Parameter "inport" is used to pass in the input port number
+>>>>> + * of TPDA, and it is set to 0 in the recursize call.
+>>>>> + * Parameter "parent" is used to pass in the original call.
+>>>>> + */
+>>>>
+>>>> I am still not clear why we need to do this recursively ?
+>>>
+>>> Some TPDMs are not directly output connected to the TPDAs. So here I
+>>>
+>>> use a recursive method to check from the TPDA input port until I find
+>>>
+>>> the connected TPDM.
+>>>
+>>> Do you have a better suggestion besides a recursive method?
+>>>
+>>>>
+>>>>> +static int tpda_set_element_size(struct tpda_drvdata *drvdata,
+>>>>> +               struct coresight_device *csdev, int inport, bool 
+>>>>> parent)
+>>>>
+>>>> Please could we renamse csdev => tpda_dev
+>>>
+>>> Since this is a recursively called function, this Coresight device is 
+>>> not
+>>>
+>>> necessarily TPDA, it can be other Coresight device.
+>>>
+>>>>
+>>>>> +{
+>>>>> +    static int nr_inport;
+>>>>> +    int i;
+>>>>> +    struct coresight_device *in_csdev;
+>>>>
+>>>> similarly tpdm_dev ?
+>>> Same as above, this variable may not necessarily be a TPDM.
+>>>>
+>>>> Could we not add a check here to see if the dsb_esize[inport] is 
+>>>> already
+>>>> set and then bail out, reading this over and over ?
+>>>>
+>>> I will update this in the next patch series.
+>>>>> +
+>>>>> +    if (inport > (TPDA_MAX_INPORTS - 1))
+>>>>> +        return -EINVAL;
+>>>>> +
+>>>>> +    if (parent)
+>>>>> +        nr_inport = inport;
+>>>>> +
+>>>>> +    for (i = 0; i < csdev->pdata->nr_inconns; i++) {
+>>>>> +        in_csdev = csdev->pdata->in_conns[i].remote_dev;
+>>>>
+>>>> Please note, the names of the structure field might change in the
+>>>> next version of James' series
+>>> Got it. I will keep an eye out for the James' patch series.
+>>>>
+>>>>> +        if (!in_csdev)
+>>>>> +            break;
+>>>>> +
+>>>>> +        if (parent)
+>>>>> +            if (csdev->pdata->in_conns[i].port != inport)
+>>>>> +                continue;
+>>>>> +
+>>>>> +        if (in_csdev && strstr(dev_name(&in_csdev->dev), "tpdm")) {
+>>>>
+>>>> Isn't there a better way to distinguish a device to be TPDM ? May be we
+>>>> could even add a source_sub_type - SOURCE_TPDM instead of using
+>>>> SOURCE_OTHERS ? Do you expect other sources to be connected to TPDA?
+>>>> e.g., STMs ?
+>>>
+>>> I can add "SOURCE_TPDM" as a source_sub_type, but SOURCE_OTHERS needs
+>>>
+>>> to be kept since the other Coresight component we will upstream later 
+>>> may
+>>>
+>>> need it.
+>>>
+>>>>
+>>>>> + of_property_read_u32(in_csdev->dev.parent->of_node,
+>>>>> +                    "qcom,dsb-element-size", 
+>>>>> &drvdata->dsb_esize[nr_inport]);
+>>>>> +            break;
+>>>>> +        }
+>>>>> +        tpda_set_element_size(drvdata, in_csdev, 0, false);
+>>>>
+>>>> What is the point of this ? Is this for covering the a TPDA 
+>>>> connected to
+>>>> another TPDA ?
+>>>>
+>>>> e.g., { TPDM0, TPDM1 } -> TPDA0 -> TPDA1 ?
+>>>
+>>> A TPDM may not connect to the TPDA directly, for example,
+>>>
+>>> TPDM0 ->FUNNEL0->FUNNEL1->TPDA0
+>>>
+>>> And many TPDMs can connect to one TPDA, one input port on TPDA only has
+>>>
+>>> one TPDM connected. Therefore, we use a recursive method to find the 
+>>> TPDM
+>>>
+>>> corresponding to the input port of TPDA.
+>>
+>> How do you find out decide what to choose, if there are multiple TPDMs
+>> connected to FUNNEL0 or even FUNNEL1 ?
+>>
+>> e.g
+>>
+>> TPDM0->FUNNEL0->FUNNEL1->TPDA0
+>>                 /
+>>           TPDM1
+> 
+> We can find out the corresponding TPDM by the input port number of TPDA.
+> 
+> Each input port is connected to a TPDM. So we have an input port number in
+> 
+> the input parameter of the recursive lookup function 
+> "tpda_set_element_size".
+
+I don't understand, how you would figure out, in the above situation.
+i.e., FUNNEL1 is connected to TPDA0, but there are two TPDMs that could
+be pumping the trace. They both arrive via FUNNEL1. So, how does that
+solve your problem ?
+
+Suzuki
+
+
+> 
+>> Suzuki
+>>
+>>
+
