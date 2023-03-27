@@ -2,130 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367516C9991
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 04:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 543576C99A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 04:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbjC0C1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 22:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
+        id S231279AbjC0CmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 22:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjC0C1T (ORCPT
+        with ESMTP id S229967AbjC0CmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 22:27:19 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A8246AB;
-        Sun, 26 Mar 2023 19:27:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679884038; x=1711420038;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lcJDjZz1f6RIh93Nz0ZXOC3R17pA5JdLExUtChIuXM8=;
-  b=lWZC2MFDNtY8K/tRzKD8Nkx5A7msh+d2va+Hk7Jz8pjvoUc19oo8f5YU
-   VCmlGEYsw+THxeSaVaTNJFXm561/EIVUAqcco87hYGthLD/wVQBe6spsv
-   MlwlYm+g8MsQO1ic9x4orGxxJ8c6Via0iXMAobU+fhfqCDtOOt6gkIvJx
-   h1bFEpoDT9YYKTpRiBX7vrPPcSv6jVNa6UZBy0mswTJehaJjC6hkGQtnR
-   1DOZEWwBxGEyKuTvs1eDGrtKjc8Nmi2En5dBwKCFXpfShS2SjccpL9q1c
-   XScmofmn8Cusu+j4U3uT6W32Mm2kswyfMh5ejd93lSr0y04nJkXtha1JP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="405086196"
-X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
-   d="scan'208";a="405086196"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 19:27:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="1012925785"
-X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
-   d="scan'208";a="1012925785"
-Received: from zhiquan-linux-dev.bj.intel.com ([10.238.155.101])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Mar 2023 19:27:15 -0700
-From:   Zhiquan Li <zhiquan1.li@intel.com>
-To:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tony.luck@intel.com, naoya.horiguchi@nec.com, bp@alien8.de
-Cc:     youquan.song@intel.com, zhiquan1.li@intel.com
-Subject: [PATCH v2] x86/mce: Set PG_hwpoison page flag to avoid the capture kernel panic
-Date:   Mon, 27 Mar 2023 10:33:58 +0800
-Message-Id: <20230327023358.3191922-1-zhiquan1.li@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 26 Mar 2023 22:42:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B5E44AF;
+        Sun, 26 Mar 2023 19:42:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE7C8B80DA2;
+        Mon, 27 Mar 2023 02:42:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1753C433A7;
+        Mon, 27 Mar 2023 02:42:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679884930;
+        bh=6VzDqX48Vl38IiLh2rkurFRzDn0V2PY1IZwfkVKLHBs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=le+wVaujnmigkIxLcC+BBlb+L/EMpxeO7Na5IaemZUVhnFs3HUxmNZHz7oPcctthu
+         xKbTOv+VAm17PPXvskg+agwZs0QJhMklxMh7wf3BOpHkVrbgbEILQgzGLzYvOqQGUv
+         e/poab9zYziebClPUO3ZyGyUhe8NMoonf9lc+0uyfnLM7t9JVXmEnuizf4bL/8xGdR
+         2OxDPf0urRfD7akRCN+pa3di3mvIwCrXCnhr3DvnDUOx004YT6uAL7fifIWYlgoKVP
+         Xj+euO8CwKwp5AMM/ca5VYm5y1nAOTrHQEQ4ZnqFpYT701MxbojYvK6BN3G8CgmxFs
+         qK3ALWFQo7jAA==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-177ca271cb8so7837463fac.2;
+        Sun, 26 Mar 2023 19:42:10 -0700 (PDT)
+X-Gm-Message-State: AAQBX9cdghUpb2+P3PSNJUQs9t+NJwzO888YX/V+doubwvO+P9pzZna5
+        SdFK6r75UYPDbJq9IqEVk+dESddmB4TO4g13rrw=
+X-Google-Smtp-Source: AKy350bMxmeywLQZtcIhcbwfTUAlICv85a5HdlyEXx820LhBAGY0y4TcQppgHU2tLzA5NynqOEARjQGH1XU2iOfJIuY=
+X-Received: by 2002:a05:6871:e86:b0:17e:d9e2:a55c with SMTP id
+ vl6-20020a0568710e8600b0017ed9e2a55cmr3302021oab.11.1679884929854; Sun, 26
+ Mar 2023 19:42:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230326182120.194541-1-hi@alyssa.is>
+In-Reply-To: <20230326182120.194541-1-hi@alyssa.is>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 27 Mar 2023 11:41:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR6W9=dOwV8E=biPQ_KGF7LXcb2-6PdSevej7H0xs7EUA@mail.gmail.com>
+Message-ID: <CAK7LNAR6W9=dOwV8E=biPQ_KGF7LXcb2-6PdSevej7H0xs7EUA@mail.gmail.com>
+Subject: Re: [PATCH v2] purgatory: fix disabling debug info
+To:     Alyssa Ross <hi@alyssa.is>
+Cc:     Nick Cao <nickcao@nichi.co>, linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kdump can exclude the HWPosion page to avoid touch the error page
-again, the prerequisite is the PG_hwpoison page flag is set.
-However, for some MCE fatal error cases, there is no opportunity
-to queue a task for calling memory_failure(), as a result,
-the capture kernel touches the error page again and panics.
+On Mon, Mar 27, 2023 at 3:23=E2=80=AFAM Alyssa Ross <hi@alyssa.is> wrote:
+>
+> Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
+> Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
+> -Wa versions of both of those if building with Clang and GNU as.  As a
+> result, debug info was being generated for the purgatory objects, even
+> though the intention was that it not be.
+>
+> Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
+> Signed-off-by: Alyssa Ross <hi@alyssa.is>
+> Cc: stable@vger.kernel.org
 
-Add function mce_set_page_hwpoison_now() which marks a page as
-HWPoison before kernel panic() for MCE error, so that the dump
-program can check and skip the error page and prevent the capture
-kernel panic.
 
-[Tony: Changed TestSetPageHWPoison() to SetPageHWPoison()]
 
-Co-developed-by: Youquan Song <youquan.song@intel.com>
-Signed-off-by: Youquan Song <youquan.song@intel.com>
-Signed-off-by: Zhiquan Li <zhiquan1.li@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
+Thanks, looks good to me.
 
----
+I can offer to pick this up to my tree later,
+but I will wait for Ack from the arch maintainers
+and other comments.
 
-Changes since V1:
-- Rebased to latest tip/ras/core (based on v6.3-rc1).
-- Revised the commit message as per Naoya's suggestion.
-- Removed 'TODO' from comment, as previously discussed, there is nothing
-  more to do at this time.
-  Link: https://lore.kernel.org/all/20230127015030.30074-1-tony.luck@intel.com/
----
- arch/x86/kernel/cpu/mce/core.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 7832a69d170e..dea393ca949b 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -156,6 +156,22 @@ void mce_unregister_decode_chain(struct notifier_block *nb)
- }
- EXPORT_SYMBOL_GPL(mce_unregister_decode_chain);
- 
-+/*
-+ * Kdump can exclude the HWPosion page to avoid touch the error page again,
-+ * the prerequisite is the PG_hwpoison page flag is set. However, for some
-+ * MCE fatal error cases, there are no opportunity to queue a task
-+ * for calling memory_failure(), as a result, the capture kernel panics.
-+ * This function marks the page as HWPoison before kernel panic() for MCE.
-+ */
-+static void mce_set_page_hwpoison_now(unsigned long pfn)
-+{
-+	struct page *p;
-+
-+	p = pfn_to_online_page(pfn);
-+	if (p)
-+		SetPageHWPoison(p);
-+}
-+
- static void __print_mce(struct mce *m)
- {
- 	pr_emerg(HW_ERR "CPU %d: Machine Check%s: %Lx Bank %d: %016Lx\n",
-@@ -286,6 +302,8 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
- 	if (!fake_panic) {
- 		if (panic_timeout == 0)
- 			panic_timeout = mca_cfg.panic_timeout;
-+		if (final && (final->status & MCI_STATUS_ADDRV))
-+			mce_set_page_hwpoison_now(final->addr >> PAGE_SHIFT);
- 		panic(msg);
- 	} else
- 		pr_emerg(HW_ERR "Fake kernel panic: %s\n", msg);
--- 
-2.25.1
 
+
+
+
+
+> ---
+>
+> Difference from v2: replace each AFLAGS_REMOVE_* assignment with a
+> single aflags-remove-y line, and use foreach to add the -Wa versions,
+> as suggested by Masahiro Yamada.
+>
+>  arch/riscv/purgatory/Makefile | 7 +------
+>  arch/x86/purgatory/Makefile   | 3 +--
+>  2 files changed, 2 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefil=
+e
+> index d16bf715a586..5730797a6b40 100644
+> --- a/arch/riscv/purgatory/Makefile
+> +++ b/arch/riscv/purgatory/Makefile
+> @@ -84,12 +84,7 @@ CFLAGS_string.o                      +=3D $(PURGATORY_=
+CFLAGS)
+>  CFLAGS_REMOVE_ctype.o          +=3D $(PURGATORY_CFLAGS_REMOVE)
+>  CFLAGS_ctype.o                 +=3D $(PURGATORY_CFLAGS)
+>
+> -AFLAGS_REMOVE_entry.o          +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memcpy.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memset.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strcmp.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strlen.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strncmp.o                +=3D -Wa,-gdwarf-2
+> +asflags-remove-y               +=3D $(foreach x, -g -gdwarf-4 -gdwarf-5,=
+ $(x) -Wa,$(x))
+>
+>  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>                 $(call if_changed,ld)
+> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+> index 17f09dc26381..82fec66d46d2 100644
+> --- a/arch/x86/purgatory/Makefile
+> +++ b/arch/x86/purgatory/Makefile
+> @@ -69,8 +69,7 @@ CFLAGS_sha256.o                       +=3D $(PURGATORY_=
+CFLAGS)
+>  CFLAGS_REMOVE_string.o         +=3D $(PURGATORY_CFLAGS_REMOVE)
+>  CFLAGS_string.o                        +=3D $(PURGATORY_CFLAGS)
+>
+> -AFLAGS_REMOVE_setup-x86_$(BITS).o      +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_entry64.o                        +=3D -Wa,-gdwarf-2
+> +asflags-remove-y               +=3D $(foreach x, -g -gdwarf-4 -gdwarf-5,=
+ $(x) -Wa,$(x))
+>
+>  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>                 $(call if_changed,ld)
+>
+> base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
+> --
+> 2.37.1
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
