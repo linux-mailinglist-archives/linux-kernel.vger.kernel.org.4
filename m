@@ -2,174 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3656C9EF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8493B6C9EF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232513AbjC0JHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
+        id S232593AbjC0JIT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 05:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233304AbjC0JHI (ORCPT
+        with ESMTP id S232339AbjC0JHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:07:08 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DA54EFD;
-        Mon, 27 Mar 2023 02:06:33 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id l7so7048117pjg.5;
-        Mon, 27 Mar 2023 02:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679907993;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=O8fUt4pO+XHuFO5xT5Dt4jN0bSb0IjaRl69C7+BMdDg=;
-        b=LcgNg+6NtV1SL1HZQ41SfLf4+zxLtfV9YXrxPK7vJ5t3NhP4X/JdG0vszd1eEYhVEi
-         Lx0vA1NU1gcwAQ8PRLarirt1b17dx3ulnzdHVH3i9FyW/z845IxGIo4PEVkQAxINU0kz
-         O2BbcKQHUzwTxWoIs4Nl9/n8vmpmDFssbVjkJtANNenJpDzQQM3coQDZhgRLEqCACobQ
-         NA26ZrjjI4CcToPS5twfuS0xEWwLRWevqsCZH/kaaBMSyPDAgQYA+YrSDAEcICpyyYH/
-         KiS0tgcgHQbHeXuzAIOXjLgCE46vLsxSFJunPzgAq2e+Lc8OPBQ5cmJX9U/Y8FcU9ki2
-         CzVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679907993;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O8fUt4pO+XHuFO5xT5Dt4jN0bSb0IjaRl69C7+BMdDg=;
-        b=1UyTcrX+UqTns8O0csW/dsL36bsNxwbNH430svLFoKY69i807b8w6lSynSlIUFTiN+
-         3I84cX9b6b6y5fMWLAZtzxCgJ0QDVj13p7tp8f0v+8+X2tc6t8FZlnlO4dvJlj9gNnVG
-         Dl4Wu3ErUyhVLSkdWByxy8Yjd1ZbkAXa1YgeHafARJvRSTPaa3MUSaqnnMZ6cAeFF+0n
-         o9vLY1f1KNHXdJeyHJqntpi42bqoJhyfEEKPYVyMfsoTX0y5AC9Qbek2KcWJqm5jCq3G
-         tySBy/3fj/XP9BmzUs7ytdDL+2k0EvN7QAHEq6nfxijdMsWZpBFKXyM6hzwIttkWmOP4
-         jdyQ==
-X-Gm-Message-State: AAQBX9dEAFC8U4fD6vR3M4AXh56/vCNMNtydlwxHSaIC3Jj/rCdVq67f
-        klY3vMyFRFDpK6Ic2QOETP0=
-X-Google-Smtp-Source: AKy350akZsC9DAW9cAZ9dO/WH1qyoqAa+nZML0KGvlXEjleks2KmWYsZflCCbNjDE2Oyna1h5ZRy6w==
-X-Received: by 2002:a17:903:28c8:b0:1a2:19c1:a974 with SMTP id kv8-20020a17090328c800b001a219c1a974mr8678082plb.68.1679907993332;
-        Mon, 27 Mar 2023 02:06:33 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-16.three.co.id. [180.214.232.16])
-        by smtp.gmail.com with ESMTPSA id l18-20020a170902d35200b0019468fe44d3sm18629240plk.25.2023.03.27.02.06.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 02:06:32 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 6B322106758; Mon, 27 Mar 2023 16:06:29 +0700 (WIB)
-Date:   Mon, 27 Mar 2023 16:06:28 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Hao Zhang <quic_hazha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] Documentation: trace: Add documentation for
- Coresight Dummy Trace
-Message-ID: <ZCFclDU2JZLzbVX/@debian.me>
-References: <20230324061608.33609-1-quic_hazha@quicinc.com>
- <20230324061608.33609-4-quic_hazha@quicinc.com>
+        Mon, 27 Mar 2023 05:07:45 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF0E199F;
+        Mon, 27 Mar 2023 02:07:34 -0700 (PDT)
+Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pgip2-0003Ci-QW; Mon, 27 Mar 2023 11:07:24 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Shane Francis <bigbeeshane@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: clock: update rk3588 clock definitions
+Date:   Mon, 27 Mar 2023 11:07:23 +0200
+Message-ID: <2874439.e9J7NaK4W3@diego>
+In-Reply-To: <CABnpCuAqT-RtdmeaAqyB_CQkLa=vn8zxF_WkYRnj8FoGJLL=_Q@mail.gmail.com>
+References: <20230326001535.149539-1-bigbeeshane@gmail.com>
+ <87cz4v2nr1.fsf@bloch.sibelius.xs4all.nl>
+ <CABnpCuAqT-RtdmeaAqyB_CQkLa=vn8zxF_WkYRnj8FoGJLL=_Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Nhj3/4xBxIE5HRwH"
-Content-Disposition: inline
-In-Reply-To: <20230324061608.33609-4-quic_hazha@quicinc.com>
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am Montag, 27. März 2023, 01:40:34 CEST schrieb Shane Francis:
+> Hi Mark
+> 
+> > That code makes absolutely no sense.  This tries to transplant
+> > phandles from one DTB into another DTB?  Mainline U-Boot has no code
+> > like that.  I think this is just broken beyond repair.
+> 
+> Yeah its a dumb bit of code, my concern when looking at the R6S is that
+> when devices look to get mainline support that are unable to change to
+> another uboot build (such as when secure boot is involved)
 
---Nhj3/4xBxIE5HRwH
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+when secure boot is involed, I'd think the whole device will be sufficiently
+locked down to also disallow custom kernels. Otherwise that wouldn't be
+a secure boot. (bootloader verifying kernel image + rootfs)
 
-On Fri, Mar 24, 2023 at 02:16:08PM +0800, Hao Zhang wrote:
-> +Sysfs files and directories
-> +---------------------------
-> +
-> +Root: ``/sys/bus/coresight/devices/dummy<N>``
-> +
-> +----
-> +
-> +:File:            ``enable_source`` (RW)
-> +:Notes:
-> +    - > 0 : enable the datasets of dummy source.
-> +
-> +    - =3D 0 : disable the datasets of dummy source.
-> +
-> +:Syntax:
-> +    ``echo 1 > enable_source``
-> +
-> +----
-> +
-> +:File:            ``enable_sink`` (RW)
-> +:Notes:
-> +    - > 0 : enable the datasets of dummy sink.
-> +
-> +    - =3D 0 : disable the datasets of dummy sink.
-> +
-> +:Syntax:
-> +    ``echo 1 > enable_sink``
 
-Is enable_{source,sink} integer-valued or bit (0/1)? In other words, is
-it OK to `echo 2` to both sysfs files?
+> those will
+> have a hard time as this ABI breakage ship would have departed long
+> ago. And the RK3588 support is very new..... I thought about raising it
+> now.
+> 
+> The question for me is how (in the future) will devices with this SoC
+> and cannot modify their uboot make use of the mainline kernel ?
+> 
+> I have looked into undoing this clock configuration during early kernel
+> boot but the SoC seems to hard lock.
+> 
+> I apologise if raising this patch was a bad idea but like I stated to
+> Krzysztof I am just onboarding this device as a hobby. However
+> from an outside standpoint having a potential breakage like this
+> because starting from 0 looked cleaner than 1 seems a bit odd to
+> me.
 
-> +
-> +----
-> +
-> +Config details
-> +---------------------------
-> +
-> +There are two types of nodes, dummy sink and dummy source. The nodes
-> +should be observed at the coresight path
-> +"/sys/bus/coresight/devices".
+In general we can't be on the "whim" of SoC vendors.
 
-For consistency, inline this sysfs also (thus
-``/sys/bus/coresight/devices``.
+I.e. dt-bindings are supposed to be reviewed _first_ and not invented in
+some SoC vendor's dark basement. That did work in the past with Rockchip
+but in recent years they did loose most of their upstream momentum it
+seems.
 
-> +e.g.
-e.g.:: (make the shell snippet below code block)
-> +/sys/bus/coresight/devices # ls -l | grep dummy
-IMO I prefer `PS1=3D\$` (that is, omit the directory). Alternatively,
-you can write `ls -l /sys/bus/coresight/devices | grep dummy` (specify
-the directory to `ls`).
+Because vendors often invent unpractical or even conflicting bindings on
+their own.
 
-Thanks.
+So we're in a pickle here. As Peter said, _if_ we wanted to change the ids
+one more time, to allow those vendor uboot hacks, now would be the time.
 
---=20
-An old man doll... just what I always wanted! - Clara
+But then als Mark said, the current bindings are used already in a number
+of different places and aren't broken per se.
 
---Nhj3/4xBxIE5HRwH
-Content-Type: application/pgp-signature; name="signature.asc"
+So I guess either decision possibility is bad ;-)
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCFcjwAKCRD2uYlJVVFO
-o1gMAP9hA3XoJ+1BWv3KOewMhgRMYIwCugU1u1SLb6+ulgXKKQD8DNcMJrpatOcs
-cyouf4vyhI6HmCRIK5V0aHosRUkHrQM=
-=Bs3E
------END PGP SIGNATURE-----
+Heiko
 
---Nhj3/4xBxIE5HRwH--
+
+> On Sun, Mar 26, 2023 at 10:42 PM Mark Kettenis <mark.kettenis@xs4all.nl> wrote:
+> >
+> > > Date: Sun, 26 Mar 2023 22:02:39 +0200
+> > > From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > >
+> > > On 26/03/2023 19:51, Shane Francis wrote:
+> > > >> Bootloader also does not use mainline DTS, so where is exactly the problem?
+> > > >
+> > > > In this case uboot does load the target DTB, and it seems a common
+> > > > function in rockchips
+> > > > downstream boot process, see :
+> > > >
+> > > > https://github.com/rockchip-linux/u-boot/blob/ef1dd650042f61915c4859ecc94623a09a3529fa/arch/arm/mach-rockchip/kernel_dtb.c#L70
+> > > >
+> >
+> > That code makes absolutely no sense.  This tries to transplant
+> > phandles from one DTB into another DTB?  Mainline U-Boot has no code
+> > like that.  I think this is just broken beyond repair.
+> >
+> > > U-Boot comes with its own DTB, so what does it means "loads the target
+> > > DTB"? From where? The one appended to the kernel zImage? No, it cannot...
+> > >
+> > > Any component which operates on mainline DTB must conform to the
+> > > bindings (with respect to the ABI), thus your arguments here mean you
+> > > are not allowed to change ABI in the future. Never. This change,
+> > > assuming original binding was broken, could be warranted.
+> >
+> > The current mainline binding isn't broken; 0 is a perfectly fine clock
+> > index.  The RK3588 clock bindings are already used by U-Boot (too late
+> > to fix for the 2023.4 release happening in a few days) and OpenBSD
+> > (too late to fix for the 7.3 release that will happen a few weeks).
+> > Changing the clock binding will just create more chaos.
+> >
+> > <rant>
+> >
+> > What is broken here is the development process.  Rockchip shouldn't be
+> > maintaining these heavily modified forks of U-Boot and the Linux
+> > kernel.  But at the same time mainline Linux developers should not be
+> > asking for arbitrary changes to the device tree bindings just to
+> > satisfy some unwritten rules.  The clock bindings were originaly
+> > submitted with clock numbers identical to those that Rockchip uses:
+> >
+> >   https://lore.kernel.org/all/20220623160329.239501-2-sebastian.reichel@collabora.com/
+> >
+> > but then changed because a reviewer wanted them to start at 0 and
+> > didn't want any holes:
+> >
+> >   https://lore.kernel.org/all/0841741a-22f6-40f6-c745-6065dfdbcb1d@linaro.org/
+> >
+> > This isn't the first example where this happened.  And it invariably
+> > leads to confusion and breakage in projects that try to follow the
+> > mainline Linux device tree bindings.
+> >
+> > </rant>
+> 
+
+
+
+
