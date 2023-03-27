@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255936CA35A
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B836CA362
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbjC0MP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
+        id S232879AbjC0MPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232766AbjC0MPC (ORCPT
+        with ESMTP id S232827AbjC0MPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:15:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAB23C33;
-        Mon, 27 Mar 2023 05:14:52 -0700 (PDT)
+        Mon, 27 Mar 2023 08:15:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE77A3A84;
+        Mon, 27 Mar 2023 05:14:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FCD1B81151;
-        Mon, 27 Mar 2023 12:14:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E9EC433EF;
-        Mon, 27 Mar 2023 12:14:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26051611B6;
+        Mon, 27 Mar 2023 12:14:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 660FDC4331E;
+        Mon, 27 Mar 2023 12:14:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679919289;
-        bh=deueI+j9QpGrVEyOG4DDYuCvj98ECBO1BAKmt0h8mOk=;
+        s=k20201202; t=1679919298;
+        bh=Y+wx0FiQgLjkqhPKxtczgrowoCTrPuzhrrVdIO/KSAA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XVuAqsjP7YxlTH/jfP4+hsuYEQziw3g24pme7hHONNL+tw53tUh634JeGsQ9qMsJb
-         QiINm6FdyBSv5TDyEB7Icm81k8m52mJn/Oxz3tHbi/ytF+O96JNQpZ/Drh8XHi5GkJ
-         DmnZaeE1/m3voIm0tXrGCkwwIwVqBzNYdHR+o9A0oJjYUFrIsmjSaMN81JqJ9bMdUz
-         ALnkbRdTQARnjKcrPQsU1ISirc/GQsLgUD4/A9nuA1lqc+8ADpy1N7lxpgLiuI99q/
-         wavZSpV769B5sIjhDLnf+Uwl5ZpVrfQbbb6B1+ZErklaPLQABWTLh2J99jHRm4BWCH
-         eD4ekbguj3pOg==
+        b=CPGniWUcV5VUAZiOWzIY5/EsUqYQgyEzxjQ8UMeF3Al20/Hh61j9pc8T9PS2mzH4N
+         RSYd/J7YHPH5Nmfk7XsUSK79nWPo+dGlRYvhxWqnqg+N+CIjbuT/Wb2iRTjyp1l0YE
+         q3AT+X8nNFF6xSpGl06sKKOZy0e/LCKNsDpUgC07vuwopI9ykgcvXa2bBFGYOjVaGl
+         X5PV9Eydwk0GTrNzStCQUtT6ovd3xxwDRfs6NRHuZY4OjKijI2Z6KdM95ztBnGcDwK
+         5HPw8DEJ4VDkMTWgdZ8nt+6QlnfKBn6oiVjPRF9H4yYTieJdfpVbSHx8IkThq5gzbA
+         lsa0aYW1Hchqw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>,
@@ -67,9 +67,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>,
         linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-xtensa@linux-xtensa.org
-Subject: [PATCH 06/21] powerpc: dma-mapping: minimize for_cpu flushing
-Date:   Mon, 27 Mar 2023 14:13:02 +0200
-Message-Id: <20230327121317.4081816-7-arnd@kernel.org>
+Subject: [PATCH 07/21] powerpc: dma-mapping: always clean cache in _for_device() op
+Date:   Mon, 27 Mar 2023 14:13:03 +0200
+Message-Id: <20230327121317.4081816-8-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230327121317.4081816-1-arnd@kernel.org>
 References: <20230327121317.4081816-1-arnd@kernel.org>
@@ -86,33 +86,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The powerpc dma_sync_*_for_cpu() variants do more flushes than on other
-architectures. Reduce it to what everyone else does:
+The powerpc implementation of arch_sync_dma_for_device() is unique in that
+it sometimes performs a full flush for the arch_sync_dma_for_device(paddr,
+size, DMA_FROM_DEVICE) operation when the address is unaligned, but
+otherwise invalidates the caches.
 
- - No flush is needed after data has been sent to a device
+Since the _for_cpu() counterpart has to invalidate the cache already
+in order to avoid stale data from prefetching, this operation only really
+needs to ensure that there are no dirty cache lines, which can be done
+using either invalidation or cleaning the cache, but not necessarily
+both.
 
- - When data has been received from a device, the cache only needs to
-   be invalidated to clear out cache lines that were speculatively
-   prefetched.
+Most architectures traditionally go for invalidation here, but as
+Will Deacon points out, this can leak old data to user space if
+a DMA is started but the device ends up not actually filling the
+entire buffer, see the link below.
 
-In particular, the second flushing of partial cache lines of bidirectional
-buffers is actively harmful -- if a single cache line is written by both
-the CPU and the device, flushing it again does not maintain coherency
-but instead overwrite the data that was just received from the device.
+The same argument applies to DMA_BIDIRECTIONAL transfers. Using
+a cache-clean operation is the safe choice here, followed by
+invalidating the cache after the DMA to get rid of stale data
+that was prefetched before the completion of the DMA.
 
+Link: https://lore.kernel.org/all/20220606152150.GA31568@willie-the-truck/
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/powerpc/mm/dma-noncoherent.c | 18 ++++--------------
- 1 file changed, 4 insertions(+), 14 deletions(-)
+ arch/powerpc/mm/dma-noncoherent.c | 21 +--------------------
+ 1 file changed, 1 insertion(+), 20 deletions(-)
 
 diff --git a/arch/powerpc/mm/dma-noncoherent.c b/arch/powerpc/mm/dma-noncoherent.c
-index f10869d27de5..e108cacf877f 100644
+index e108cacf877f..00e59a4faa2b 100644
 --- a/arch/powerpc/mm/dma-noncoherent.c
 +++ b/arch/powerpc/mm/dma-noncoherent.c
-@@ -132,21 +132,11 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
- 	switch (direction) {
- 	case DMA_NONE:
- 		BUG();
+@@ -104,26 +104,7 @@ static void __dma_phys_op(phys_addr_t paddr, size_t size, enum dma_cache_op op)
+ void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+ 		enum dma_data_direction dir)
+ {
+-	switch (direction) {
+-	case DMA_NONE:
+-		BUG();
 -	case DMA_FROM_DEVICE:
 -		/*
 -		 * invalidate only when cache-line aligned otherwise there is
@@ -125,16 +136,15 @@ index f10869d27de5..e108cacf877f 100644
 -		break;
 -	case DMA_TO_DEVICE:		/* writeback only */
 -		__dma_phys_op(start, end, DMA_CACHE_CLEAN);
-+	case DMA_TO_DEVICE:
- 		break;
+-		break;
 -	case DMA_BIDIRECTIONAL:	/* writeback and invalidate */
 -		__dma_phys_op(start, end, DMA_CACHE_FLUSH);
-+	case DMA_FROM_DEVICE:
-+	case DMA_BIDIRECTIONAL:
-+		__dma_phys_op(start, end, DMA_CACHE_INVAL);
- 		break;
- 	}
+-		break;
+-	}
++	__dma_phys_op(start, end, DMA_CACHE_CLEAN);
  }
+ 
+ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
 -- 
 2.39.2
 
