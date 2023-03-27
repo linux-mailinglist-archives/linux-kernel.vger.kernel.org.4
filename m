@@ -2,200 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFDF6CAA12
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFC96CAA18
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232893AbjC0QNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 12:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
+        id S232950AbjC0QOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 12:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbjC0QNK (ORCPT
+        with ESMTP id S231904AbjC0QOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:13:10 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647D53ABD;
-        Mon, 27 Mar 2023 09:12:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679933579; x=1711469579;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=6nDdB6nJGY9awDPV/o7SbWl0Kh2wlGZpTm2nwuANIKs=;
-  b=d9QnAYBjCVidpdFepP4eTEruYwOAsFx//icL7TSkyd2mMSqzuV3B7BxC
-   VzAOqOFSvDYLfUUCn8K6ArnhgM681C+qleQh9Z7sj2W7OE5FMnM6UnG23
-   GDWlNa5qtGuIsF6ZAvZ/gKkxuXhJ+XxqROK2WzWkCTXUBv533kEJ5/0AP
-   sRHhDV13ecS38dZnAODKNYI4FWjYV8RnMmuN5nEW+RHfJt5C0uKU8uNFY
-   /srYfnTFlrdJVgCecqR3/dvv36ABNvnPdSgew1NjGEXxo0hrMvZl5GFCK
-   LqBnnDaLtqdq2xK7bRYwXZWwaZeq6aJxpjAxDdVIZdgNmDKpa2xqodgQF
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="339033786"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="339033786"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 09:12:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="772769879"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="772769879"
-Received: from mstancu-mobl.ger.corp.intel.com (HELO localhost) ([10.252.49.51])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 09:12:05 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-toolchains@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
-        llvm@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Nathan Chancellor <nathan@kernel.org>, sedat.dilek@gmail.com
-Subject: Re: Linux 6.3-rc3
-In-Reply-To: <CAK7LNATe7Ah-ow9wYGrtL9i4z-VD=MCo=sJjbC_S0ofEoH6CFQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
- <20230320180501.GA598084@dev-arch.thelio-3990X>
- <CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
- <20230320185337.GA615556@dev-arch.thelio-3990X>
- <87pm91uf9c.fsf@kernel.org>
- <CA+icZUUYyqhV2HFzVtpi_KjBoYxjk7OB0UBVd2mX6abjmYhDjg@mail.gmail.com>
- <CAHk-=whdrvCkSWh=BRrwZwNo3=yLBXXM88NGx8VEpP1VTgmkyQ@mail.gmail.com>
- <CAK7LNATe7Ah-ow9wYGrtL9i4z-VD=MCo=sJjbC_S0ofEoH6CFQ@mail.gmail.com>
-Date:   Mon, 27 Mar 2023 19:12:02 +0300
-Message-ID: <87bkke5g31.fsf@intel.com>
+        Mon, 27 Mar 2023 12:14:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFEA1BD1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:13:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679933603;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2AxP1O7sml6Z95M//KVYu3KPUF5AM2A4gmOVSjfr8v8=;
+        b=BOeviLK8zKk4IFI/zAyIWNlNGbS3HV4iGuZrLIdnfxeMeb4lHLfdIEQZMj8rTZ06Zoxqa5
+        /PAM/SN0BD3ZyC/4eZd90hv+ecuIlQBHy/wI/GILLJwTThNbyI7sJMnJctkZFbwuZoREk+
+        wEK183nmygSk9WTtla6ZwBp/WSOStsY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-185-4Mti2eS0MwSGgsjZ8kg3LA-1; Mon, 27 Mar 2023 12:13:19 -0400
+X-MC-Unique: 4Mti2eS0MwSGgsjZ8kg3LA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5CED93C18342;
+        Mon, 27 Mar 2023 16:13:18 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.45.224.95])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6D22B140E949;
+        Mon, 27 Mar 2023 16:13:13 +0000 (UTC)
+From:   Viktor Malik <vmalik@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Viktor Malik <vmalik@redhat.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH bpf-next] kallsyms: move module-related functions under correct configs
+Date:   Mon, 27 Mar 2023 18:12:51 +0200
+Message-Id: <20230327161251.1129511-1-vmalik@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Mar 2023, Masahiro Yamada <masahiroy@kernel.org> wrote:
-> Hello Linus,
->
->
-> Thanks for giving me some more homeworks.
->
->
-> On Thu, Mar 23, 2023 at 1:56=E2=80=AFAM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->>
->> On Wed, Mar 22, 2023 at 9:40=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail.c=
-om> wrote:
->> >
->> > You have to pass `make LLVM=3D1` in any case... to `oldconfig` or when
->> > adding any MAKEFLAGS like -j${number-of-available-cpus}.
->>
->> I actually think we should look (again) at just making the compiler
->> choice (and the prefix) be a Kconfig option.
->>
->> That would simplify *so* many use cases.
->>
->> It used to be that gcc was "THE compiler" and anything else was just
->> an odd toy special case, but that's clearly not true any more.
->>
->> So it would be lovely to make the kernel choice a Kconfig choice - so
->> you'd set it only at config time, and then after that a kernel build
->> wouldn't need special flags any more, and you'd never need to play
->> games with GNUmakefile or anything like that.
->
->
-> Presumably, this is the right direction.
->
-> To achieve it, Kconfig needs to have some mechanism to evaluate
-> shell commands dynamically.
->
-> If a user switches the toolchain set between GCC and LLVM
-> while running the Kconfig, $(cc-option) in Kconfig files must
-> be re-calculated.
->
-> Currently, Kconfig cannot do it. All macros are static - they are
-> expanded in the parse stage, and become constant strings.
->
-> Ulf Magnusson and I discussed the dynamic approach a few years back,
-> but I adopted the static way since it is much simpler.
-> We need to reconsider the dynamic approach to do this correctly.
-> I do not think it is too difficult technically.
-> We just need to come up with a decent syntax.
+Functions for searching module kallsyms should have non-empty
+definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
+only CONFIG_MODULES check was used for many of these, which may have
+caused complilation errors on some configs.
 
-I acknowledge being clueless about mostly everything that requires. But
-in the mean time, how about just adding something like:
+This patch moves all relevant functions under the correct configs.
 
--include .env
+Signed-off-by: Viktor Malik <vmalik@redhat.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202303181535.RFDCnz3E-lkp@intel.com/
+---
+ include/linux/module.h | 155 ++++++++++++++++++++++-------------------
+ 1 file changed, 84 insertions(+), 71 deletions(-)
 
-near the beginning of the top Makefile?
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 41cfd3be57e5..eaad4b7a3788 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -608,16 +608,6 @@ static inline bool within_module(unsigned long addr, const struct module *mod)
+ /* Search for module by name: must be in a RCU-sched critical section. */
+ struct module *find_module(const char *name);
+ 
+-/* Returns 0 and fills in value, defined and namebuf, or -ERANGE if
+-   symnum out of range. */
+-int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+-			char *name, char *module_name, int *exported);
+-
+-/* Look for this name: can be of form module:name. */
+-unsigned long module_kallsyms_lookup_name(const char *name);
+-
+-unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
+-
+ extern void __noreturn __module_put_and_kthread_exit(struct module *mod,
+ 			long code);
+ #define module_put_and_kthread_exit(code) __module_put_and_kthread_exit(THIS_MODULE, code)
+@@ -661,20 +651,6 @@ static inline void __module_get(struct module *module)
+ 	__mod ? __mod->name : "kernel";		\
+ })
+ 
+-/* Dereference module function descriptor */
+-void *dereference_module_function_descriptor(struct module *mod, void *ptr);
+-
+-/* For kallsyms to ask for address resolution.  namebuf should be at
+- * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
+- * found, otherwise NULL. */
+-const char *module_address_lookup(unsigned long addr,
+-			    unsigned long *symbolsize,
+-			    unsigned long *offset,
+-			    char **modname, const unsigned char **modbuildid,
+-			    char *namebuf);
+-int lookup_module_symbol_name(unsigned long addr, char *symname);
+-int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name);
+-
+ int register_module_notifier(struct notifier_block *nb);
+ int unregister_module_notifier(struct notifier_block *nb);
+ 
+@@ -765,45 +741,6 @@ static inline void module_put(struct module *module)
+ 
+ #define module_name(mod) "kernel"
+ 
+-/* For kallsyms to ask for address resolution.  NULL means not found. */
+-static inline const char *module_address_lookup(unsigned long addr,
+-					  unsigned long *symbolsize,
+-					  unsigned long *offset,
+-					  char **modname,
+-					  const unsigned char **modbuildid,
+-					  char *namebuf)
+-{
+-	return NULL;
+-}
+-
+-static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
+-{
+-	return -ERANGE;
+-}
+-
+-static inline int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name)
+-{
+-	return -ERANGE;
+-}
+-
+-static inline int module_get_kallsym(unsigned int symnum, unsigned long *value,
+-					char *type, char *name,
+-					char *module_name, int *exported)
+-{
+-	return -ERANGE;
+-}
+-
+-static inline unsigned long module_kallsyms_lookup_name(const char *name)
+-{
+-	return 0;
+-}
+-
+-static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
+-						       const char *name)
+-{
+-	return 0;
+-}
+-
+ static inline int register_module_notifier(struct notifier_block *nb)
+ {
+ 	/* no events will happen anyway, so this can always succeed */
+@@ -831,13 +768,6 @@ static inline void set_module_sig_enforced(void)
+ {
+ }
+ 
+-/* Dereference module function descriptor */
+-static inline
+-void *dereference_module_function_descriptor(struct module *mod, void *ptr)
+-{
+-	return ptr;
+-}
+-
+ #endif /* CONFIG_MODULES */
+ 
+ #ifdef CONFIG_SYSFS
+@@ -899,7 +829,39 @@ int module_kallsyms_on_each_symbol(const char *modname,
+ 				   int (*fn)(void *, const char *,
+ 					     struct module *, unsigned long),
+ 				   void *data);
+-#else
++
++/* Dereference module function descriptor */
++void *dereference_module_function_descriptor(struct module *mod, void *ptr);
++
++/* For kallsyms to ask for address resolution.  namebuf should be at
++ * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
++ * found, otherwise NULL.
++ */
++const char *module_address_lookup(unsigned long addr,
++			    unsigned long *symbolsize,
++			    unsigned long *offset,
++			    char **modname, const unsigned char **modbuildid,
++			    char *namebuf);
++int lookup_module_symbol_name(unsigned long addr, char *symname);
++int lookup_module_symbol_attrs(unsigned long addr,
++			       unsigned long *size,
++			       unsigned long *offset,
++			       char *modname,
++			       char *name);
++
++/* Returns 0 and fills in value, defined and namebuf, or -ERANGE if
++ * symnum out of range.
++ */
++int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
++			char *name, char *module_name, int *exported);
++
++/* Look for this name: can be of form module:name. */
++unsigned long module_kallsyms_lookup_name(const char *name);
++
++unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
++
++#else	/* CONFIG_MODULES && CONFIG_KALLSYMS */
++
+ static inline int module_kallsyms_on_each_symbol(const char *modname,
+ 						 int (*fn)(void *, const char *,
+ 						 struct module *, unsigned long),
+@@ -907,6 +869,57 @@ static inline int module_kallsyms_on_each_symbol(const char *modname,
+ {
+ 	return -EOPNOTSUPP;
+ }
++
++/* Dereference module function descriptor */
++static inline
++void *dereference_module_function_descriptor(struct module *mod, void *ptr)
++{
++	return ptr;
++}
++
++/* For kallsyms to ask for address resolution.  NULL means not found. */
++static inline const char *module_address_lookup(unsigned long addr,
++					  unsigned long *symbolsize,
++					  unsigned long *offset,
++					  char **modname,
++					  const unsigned char **modbuildid,
++					  char *namebuf)
++{
++	return NULL;
++}
++
++static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
++{
++	return -ERANGE;
++}
++
++static inline int lookup_module_symbol_attrs(unsigned long addr,
++					     unsigned long *size,
++					     unsigned long *offset,
++					     char *modname,
++					     char *name)
++{
++	return -ERANGE;
++}
++
++static inline int module_get_kallsym(unsigned int symnum, unsigned long *value,
++					char *type, char *name,
++					char *module_name, int *exported)
++{
++	return -ERANGE;
++}
++
++static inline unsigned long module_kallsyms_lookup_name(const char *name)
++{
++	return 0;
++}
++
++static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
++						       const char *name)
++{
++	return 0;
++}
++
+ #endif  /* CONFIG_MODULES && CONFIG_KALLSYMS */
+ 
+ #endif /* _LINUX_MODULE_H */
+-- 
+2.39.2
 
-You could shove the tools or ARCH or output dir etc. there, so you don't
-have to remember to add them on the command line every time.
-
-BR,
-Jani.
-
-
-
->
->
->
->> Yes, you'd still use environment variables (or make arguments) for
->> that initial Kconfig, but that's no different from the other
->> environment variables we already have, like KCONFIG_SEED that kconfig
->> uses internally, but also things like "$(ARCH)" that we already use
->> *inside* the Kconfig files themselves.
->>
->> I really dislike how you have to set ARCH and CROSS_COMPILE etc
->> externally, and can't just have them *in* the config file.
->>
->> So when you do cross-compiles, right now you have to do something like
->>
->>     make ARCH=3Di386 allmodconfig
->>
->> to build the .config file, but then you have to *repeat* that
->> ARCH=3Di386 when you actually build things:
->>
->>     make ARCH=3Di386
->>
->> because the ARCH choice ends up being in the .config file, but the
->> makefiles themselves always take it from the environment.
->>
->> There are good historical reasons for our behavior (and probably a
->> number of extant practical reasons too), but it's a bit annoying, and
->> it would be lovely if we could start moving away from this model.
->>
->>             Linus
->
->
-> Moving ARCH into the .config file needs careful thoughts, I think.
->
-> Not all targets include the .config file.
-> For example, "make clean", "make help", etc.
->
-> It is unclear which targets require explicit ARCH=3D option.
->
-> One solution is to move "archhelp", "CLEAN_FILES" etc.
-> from arch/*/Makefile to the top Makefile.
-> We will lose per-arch splitting in several places, though.
->
->
-> U-Boot adopts this model - 'ARCH' is determined in the Kconfig time,
-> so users do not need to give ARCH=3D option from the command line.
->
-> https://github.com/u-boot/u-boot/blob/v2023.01/arch/Kconfig#L44
->
-> You may get a quick idea of what it will look like.
->
->
->
-> I will take a look at this direction (the compiler choice in Kconfig firs=
-t),
-> but it will not happen soonish due to the limited time for upstream work.
->
->
-> --
-> Best Regards
->
-> Masahiro Yamada
-
---=20
-Jani Nikula, Intel Open Source Graphics Center
