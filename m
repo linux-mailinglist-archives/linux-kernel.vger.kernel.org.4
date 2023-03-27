@@ -2,131 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 162B86CA902
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1A36CA907
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232825AbjC0Pak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 11:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
+        id S232840AbjC0Pa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 11:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbjC0Pag (ORCPT
+        with ESMTP id S232849AbjC0Par (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:30:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC433A80;
-        Mon, 27 Mar 2023 08:30:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 27 Mar 2023 11:30:47 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C613ABA;
+        Mon, 27 Mar 2023 08:30:44 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B19AD6132A;
-        Mon, 27 Mar 2023 15:30:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF6F5C433D2;
-        Mon, 27 Mar 2023 15:30:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679931035;
-        bh=JHargJmoV2rpLqiVYrLlfoessqmQMDUkG266orZF8xo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j3j9dFtzDxvAAtciOQtbBmZjKSjWKnOTy+3e4aHO6Fmezj0zAi2fcTv9TLgM8lNy2
-         qkt6NeYsF/zz5nxm1yLa+7aHfSMN9xg9tfOYl2bRP6/mtQU/oBTze8t8pDsxylTU2o
-         ibYGcJaZ5s4TCXDHu2fyK3jo/5YQZ3hMsDDplKqI1TVq4v2R2KYeNdjIP0wcekub5D
-         mG7XeAFqxJQXa3GWSC2PHfAlwHMhyoIBWGrhKtyZcA4JQ1eqvRzfPsbG3Eph2N0960
-         Iwo+afIagZqqjn7OBpArjS2WzGKaYdY901NYtIAWSFJUNRpbvY0cqgdq/b3Go0Lefa
-         wmYIq5aY82yvg==
-Date:   Mon, 27 Mar 2023 08:30:33 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, stable@vger.kernel.org,
-        willy@infradead.org
-Subject: Re: [f2fs-dev] [PATCH] f2fs: get out of a repeat loop when getting a
- locked data page
-Message-ID: <ZCG2mfviZfY1dqb4@google.com>
-References: <20230323213919.1876157-1-jaegeuk@kernel.org>
- <8aea02b0-86f9-539a-02e9-27b381e68b66@kernel.org>
+        by ms.lwn.net (Postfix) with ESMTPSA id 0607D37E;
+        Mon, 27 Mar 2023 15:30:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0607D37E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1679931043; bh=XO9ObxSwSUHuoTConErq8w3ZLhO2VmWJEPLigLiermo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=fN+vjMoRDUqEliXEHD+l6iOZR1Cg8vrNvzwlYDcpqKJijL/xI979OQZTM0WX1vFfY
+         rZIY/XEiWLiGHAjtCljofGySwqNsUG+kqOoWsVCIY+b2sJUR4uRgG0mtrqtPHjCpcW
+         NUVSH2cGNrRYVicOdxYR1oRtpIcogIXcnuMKe6Hkkp91sy1bL7GPFPeViHJdwpVXtn
+         arAjo0w1J86YrbO5C8J+YbI+vevDAShuYU3YMAJZD/8fPh7yZP1Z1fMSKzSOu7r3yC
+         Je7X2t2ioLJPQtwivKBVqchCdMyy0K+/0+JDcJikQmDLvXttP4HA4cBuZ0pyHOu7Bb
+         8kIXM93LiTfqg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Kai =?utf-8?Q?Wasserb=C3=A4ch?= <kai@dev.carbon-project.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
+Subject: Re: [PATCH v2 1/2] docs: process: allow Closes tags with links
+In-Reply-To: <073d5ee7-64e7-7ced-44cc-2f7f00a8b238@leemhuis.info>
+References: <20230314-doc-checkpatch-closes-tag-v2-0-f4a417861f6d@tessares.net>
+ <20230314-doc-checkpatch-closes-tag-v2-1-f4a417861f6d@tessares.net>
+ <29b2c9c1-f176-5e42-2606-94b4bc6d4c45@leemhuis.info>
+ <9462668e-dbaf-8df8-8ba2-86f9511294ac@tessares.net>
+ <073d5ee7-64e7-7ced-44cc-2f7f00a8b238@leemhuis.info>
+Date:   Mon, 27 Mar 2023 09:30:42 -0600
+Message-ID: <87cz4unrdp.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8aea02b0-86f9-539a-02e9-27b381e68b66@kernel.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/26, Chao Yu wrote:
-> On 2023/3/24 5:39, Jaegeuk Kim wrote:
-> > https://bugzilla.kernel.org/show_bug.cgi?id=216050
-> > 
-> > Somehow we're getting a page which has a different mapping.
-> > Let's avoid the infinite loop.
-> > 
-> > Cc: <stable@vger.kernel.org>
-> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> > ---
-> >   fs/f2fs/data.c | 8 ++------
-> >   1 file changed, 2 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-> > index bf51e6e4eb64..80702c93e885 100644
-> > --- a/fs/f2fs/data.c
-> > +++ b/fs/f2fs/data.c
-> > @@ -1329,18 +1329,14 @@ struct page *f2fs_get_lock_data_page(struct inode *inode, pgoff_t index,
-> >   {
-> >   	struct address_space *mapping = inode->i_mapping;
-> >   	struct page *page;
-> > -repeat:
-> > +
-> >   	page = f2fs_get_read_data_page(inode, index, 0, for_write, NULL);
-> >   	if (IS_ERR(page))
-> >   		return page;
-> >   	/* wait for read completion */
-> >   	lock_page(page);
-> > -	if (unlikely(page->mapping != mapping)) {
-> 
-> How about using such logic only for move_data_page() to limit affect for
-> other paths?
+Thorsten Leemhuis <linux@leemhuis.info> writes:
 
-Why move_data_page() only? If this happens, we'll fall into a loop in anywhere?
+>> If we do that, would it be blocking to have this included in v6.3?
+>
+> You mean if this still can go in for 6.3? Well, the patches afaics needs
+> to be ACKed by the right people first (Joe for checkpatch I guess, Jon
+> for docs). It likely also depends on how this discussion continues and
+> the opinion of the maintainer(s?) that picks up the patches.
 
-> 
-> Jaegeuk, any thoughts about why mapping is mismatch in between page's one and
-> inode->i_mapping?
+We're at -rc4, I wouldn't really consider this for 6.3 at this point.
+There's no reason to try to rush it.
 
-> 
-> After several times code review, I didn't get any clue about why f2fs always
-> get the different mapping in a loop.
+Thanks,
 
-I couldn't find the path to happen this. So weird. Please check the history in the
-bug.
-
-> 
-> Maybe we can loop MM guys to check whether below folio_file_page() may return
-> page which has different mapping?
-
-Matthew may have some idea on this?
-
-> 
-> struct page *pagecache_get_page(struct address_space *mapping, pgoff_t index,
-> 		int fgp_flags, gfp_t gfp)
-> {
-> 	struct folio *folio;
-> 
-> 	folio = __filemap_get_folio(mapping, index, fgp_flags, gfp);
-> 	if (IS_ERR(folio))
-> 		return NULL;
-> 	return folio_file_page(folio, index);
-> }
-> 
-> Thanks,
-> 
-> > -		f2fs_put_page(page, 1);
-> > -		goto repeat;
-> > -	}
-> > -	if (unlikely(!PageUptodate(page))) {
-> > +	if (unlikely(page->mapping != mapping || !PageUptodate(page))) {
-> >   		f2fs_put_page(page, 1);
-> >   		return ERR_PTR(-EIO);
-> >   	}
+jon
