@@ -2,110 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB496C9C5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2266C9C58
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbjC0Hiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 03:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
+        id S232540AbjC0Hid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 03:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbjC0Hiw (ORCPT
+        with ESMTP id S232623AbjC0HiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 03:38:52 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D4B4C25;
-        Mon, 27 Mar 2023 00:38:22 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id AAADA5C00A7;
-        Mon, 27 Mar 2023 03:37:24 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 27 Mar 2023 03:37:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1679902644; x=1679989044; bh=cf
-        J6Opu466RXFLkT0nJoqwLZQybPK22CsCzCVAC39sg=; b=In6JGnaaZ84XLeMVLS
-        JvmgSOMfABkgziiV5/dz4j8rSWLNKlbd93X+4SB4n9mMybrymA2rzyjhWeV77agb
-        7OMdDkmbgruvaPU4FHMBj0NIKn/bSrzsEU0/HmTMzP2Jk+gJBv4VF3PwdSGD0WS4
-        pfl0galLp1AoD7qmLdj7EHVaaTtcPtb7FSiK0xJ5bUffREsMiKpoYZK70wkn4g0B
-        POTEY5YL+U7p25V+sLupfnQ8ndnGEl2RRF3N4/0Nj+BQZa+2rwDzy6D2OAaX+Pws
-        Mj/fFwMqEBWUXz2TbonMuApHMdkOGfH9FEqVA0Svy80puEU22mvsDTfbLWS6qNT9
-        IRLQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679902644; x=1679989044; bh=cfJ6Opu466RXF
-        LkT0nJoqwLZQybPK22CsCzCVAC39sg=; b=C+ORU60y8mOdRLGIj7Kdio2MpZzhe
-        z5sUT8dvNewySiyM2yprU+6rLbDabWA2/sI15aXQTENO9eVFwrQQE63U7WhfVB9r
-        +WoMCgmCpNnPjMt75WmoB9GYGIGD8bJBqB0Yujy85zOqvz5cYRdwMZGyK2OCyX51
-        rg8vkoHgF4phN/j8+IMSzOERny9D2+GwfjgmdErLvTJc93Qul+puRcZ8GtS3rCiT
-        4unQVl5j4t5VJAlpBKpsmtKun4gCNpq0me3Vfnrf+FzuNAfUKkxA+kIOeVErc5oD
-        H1S/7oc4JeVatFy8xArBZZIy06x0J2t8519KnGiJCctdJCQj9vEgbWEtA==
-X-ME-Sender: <xms:tEchZHJgP8KDo9vMu5j2UxKZkoIvrO7BEKXoeqnUmQqkGmWX0zw--w>
-    <xme:tEchZLKYsLIm21s6IN0no1FDxfywzwPegbRKN4c8IPtscQ0wcQsG-P6tfOEivXRLr
-    nqHvKMQqmAVNg>
-X-ME-Received: <xmr:tEchZPtH2dXoBwAqT9vt44jTx8Udrg4HjJAUl6q6loi_t3rJvTZ_3jY3DN9D_fQAwfwPOyDOeFnfS71S7yqA1ZW9glNF5kioQlawMg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehuddguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdortddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeelve
-    fgieduveduveeiheduteevvdfghfdthfejlefhtddtveegteeiheelffelfeenucffohhm
-    rghinhepvghllhgvrhhmrghnrdhiugdrrghunecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:tEchZAaUdo6Mh1u9Ol7O1aowwmmVBtqIEut9e6Sf9xKOpBv6yl0efQ>
-    <xmx:tEchZOYuRhf2c7Fx-yOWsa3JigyRn_XLWl-IDLn0T32EK2WJA8E5dg>
-    <xmx:tEchZEA48yey3lpSrU6uGnL1-EMQ7hKuaZj-7113WeI3fTrJN8o5VQ>
-    <xmx:tEchZEMlJvQTWarXd1kC5H5xMPPfa8IGRe0bJocgdUhGtq34lKqw9A>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Mar 2023 03:37:23 -0400 (EDT)
-Date:   Mon, 27 Mar 2023 09:37:21 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Josue David Hernandez Gutierrez 
-        <josue.d.hernandez.gutierrez@intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the usb tree
-Message-ID: <ZCFHsSkxXAahISuK@kroah.com>
-References: <20230327160232.6119b93f@canb.auug.org.au>
+        Mon, 27 Mar 2023 03:38:20 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DAA55B5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 00:37:50 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id l15-20020a05600c4f0f00b003ef6d684102so1338235wmq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 00:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679902669;
+        h=content-transfer-encoding:in-reply-to:organization:references:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=PTyjeyB+LiPlbSLSBvv/DoCKWzMb1pZcoCNBXde7efk=;
+        b=CF2bcNKzDLgbNseAerc+0cAre9/4rDu3GzL2RRUeKhnjkWjGLkvL1wtOgmHwuoI5aJ
+         OBOgBVcpFlfTTWDWcrMGbfmo6Fb9iqGYRHvKxMZO8eGOm65sBFoskXv/As9gkvxvHrO3
+         zbjpD/bg8kg5qbfPrKIFmNEryBbdebsYUPIiJ081KTYtAFMCdnHpd2/VKPbSjPxYLYiH
+         igBUGTFq243kTaLZDyCi1OuVe78bceZu1I/+1O63RRhQWLd5DqeptIAkHIKs/L7oU7Do
+         PPFJRTyB5d9tMLvbcFDUvOOFdBMq2EEv3W+7Vya15W2kih4kuyA7l54CrWvk6mEx1AVA
+         QCyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679902669;
+        h=content-transfer-encoding:in-reply-to:organization:references:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PTyjeyB+LiPlbSLSBvv/DoCKWzMb1pZcoCNBXde7efk=;
+        b=sCI8au8EGjD3qrNm424nYsyrgqtsf8ocGdgo9gMnOLMMWzN8zgzytFuLhFUFNVNabS
+         qX1y0ifIZrYgr7weEHd12mesA8U6XXe2OJ8ffUSvx3N6dpk8V7xfmmaqsqEwGeeN0jyd
+         vmDgjecaSw3NxKcUEPu2/B2XB/gi8UseQAgLTu2AfgEfGqbWbou1rsF4WyLyLiKPzXre
+         qnDoT/ve7y0ZvWKwkI3KZXWpSgVkMccxWNNF2AlaLK11A3eZzPU3LiAudBnFZuM6TgW3
+         4l4J4SApYK2KzJQNjIdPPj8B0Iqp7APOY8Nk2wo5zY45aXyxSKCuZuSYstI5ttKe50aq
+         CizA==
+X-Gm-Message-State: AO0yUKWF0qYw76Jna88Jx8QslRVb7fv6jVMUjdRS5GuY+KxzW43nkaYD
+        q/tIiqroeHo2/MNx86m312JCuQ==
+X-Google-Smtp-Source: AK7set/gBEBLHlpaqospGTeQnkjVDZlPZ+h6+Fz/IXtUpLQgYPM75dXsSD+nbRDJh26Q5hxWuEf6fg==
+X-Received: by 2002:a05:600c:3150:b0:3ed:1fa1:73c5 with SMTP id h16-20020a05600c315000b003ed1fa173c5mr8461158wmo.27.1679902668757;
+        Mon, 27 Mar 2023 00:37:48 -0700 (PDT)
+Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id i6-20020a05600c354600b003ede6540190sm7893266wmq.0.2023.03.27.00.37.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 00:37:48 -0700 (PDT)
+Message-ID: <0296a9df-2d40-8852-efc4-955cf4f791d1@linaro.org>
+Date:   Mon, 27 Mar 2023 09:37:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327160232.6119b93f@canb.auug.org.au>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 4/6] dt-bindings: display: panel-simple-dsi: document port
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Michael Srba <Michael.Srba@seznam.cz>,
+        Harigovindan P <harigovi@codeaurora.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230326155425.91181-1-krzysztof.kozlowski@linaro.org>
+ <20230326155425.91181-4-krzysztof.kozlowski@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230326155425.91181-4-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 04:02:32PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On 26/03/2023 17:54, Krzysztof Kozlowski wrote:
+> Panels are supposed to have one port (coming from panel-common.yaml
+> binding):
 > 
-> After merging the usb tree, today's linux-next build (s390 allmodconfig)
-> failed like this:
+>    msm8916-samsung-a3u-eur.dtb: panel@0: 'port' does not match any of the regexes: 'pinctrl-[0-9]+'
 > 
-> drivers/usb/host/xhci-pci.c:91:13: error: 'xhci_msix_sync_irqs' defined but not used [-Werror=unused-function]
-> 
-> (reported here: http://kisskb.ellerman.id.au/kisskb/buildresult/14902506/)
-> 
-> Caused by commit
-> 
->   9abe15d55dcc ("xhci: Move xhci MSI sync function to to xhci-pci")
-> 
-> The function is only called if CONFIG_PM is set, but defined
-> unconditionally.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   .../display/panel/samsung,s6e88a0-ams452ef01.yaml         | 8 ++++++++
+>   1 file changed, 8 insertions(+)
 
-Ick.  Mathias, can you make up a patch for this?
+<snip>
 
-thanks,
-
-greg k-h
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
