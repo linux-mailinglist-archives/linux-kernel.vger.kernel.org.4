@@ -2,59 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457AA6CAB85
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150A16CAB86
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbjC0RIx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 13:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S232730AbjC0RI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 13:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbjC0RIa (ORCPT
+        with ESMTP id S232541AbjC0RIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:08:30 -0400
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D0D3AA2;
-        Mon, 27 Mar 2023 10:07:27 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id cn12so39095941edb.4;
-        Mon, 27 Mar 2023 10:07:27 -0700 (PDT)
+        Mon, 27 Mar 2023 13:08:31 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3CC35A9;
+        Mon, 27 Mar 2023 10:07:28 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so9592122pjt.5;
+        Mon, 27 Mar 2023 10:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679936848;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4xly0GzQvPfILGOWv1mMDVBgOAznYSMXIGKYil5doN4=;
+        b=kPECvF8v9MrjYejXS1kTs26xLMq5QuebytHoSLEu0lLafedcZeLRjO0XvDiqPNdle1
+         lspbWT4KByO1YXO7YRzn//6xQ2RgqpIC2cwzF8bixBiaIF00oIRsxoBhe0zk/6gsj1ou
+         Fz3d1iMe7CWqep+NZc88OZ+8SG43swPScXCnV3D4E0tcy7EsJ2wnyZGk2DQhDmdkK5B7
+         TvyHN9bD0R5/3QtsEyul54sIXQgnh4F+yl31jcgrCsHzGiXls/U7PzZ44k6a9omyVeRn
+         WxQwzsw868WsC5X2scMvf/kdbzIoTreQUJaWmBPVjKACN6fIDO3c40dvmwPFnraoLzfF
+         dUTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679936807;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rYJe8F65O4jssLoudktBYu87ax2vScUAeJoZjXvj+pA=;
-        b=ax4PQdLGfH2tlyGScgcrnGJt2YhZMdTh/0ASNfM6Mp4xeEZJv5ZJiE09JCkQV0rhF+
-         5vHTC9DaFXhsZprrQxeIU7k3BK7/ISjUb0oA73NOr3Bx9wc6LilVnmSdZZ3KCXyIcja2
-         6m/3Ul/fgtADHuqYhNUPuvr7QCqGAmNb/wrSaN1L3UwSRha2Pl4HmUErOWR05mQHHoIU
-         X5RB2/veKVPEINGthCz08GPk0jEhrflyHS0rce1ovpU8Ux/gNE+qHG60LAdW1k3/1sWw
-         JhgQC8ZFJesZ6kNC9VhJ/wFOKIw5VbqnHnz6h4/aFNARerPFDKuodt2TxCkvTYAAd1bS
-         Q0QQ==
-X-Gm-Message-State: AAQBX9c14DmbYDTS+jfAm0cjTgpR4h1fdWeLe1Yndrb/liNRduN2LRHB
-        8qKh6ITt0D/DJqfAWJCzZLLFX55HMpkADjVQq7EPc0oW
-X-Google-Smtp-Source: AKy350ZN8Lzz2e4S3Dkb20kL7Entt9Xr2yf9sdds1wXkXk8KUQ74xH5Ju7fHSwL2bMuBW6GWZlh0B0FEo/U6K7eyeAs=
-X-Received: by 2002:a50:9f82:0:b0:4fa:3c0b:74b with SMTP id
- c2-20020a509f82000000b004fa3c0b074bmr6398781edf.3.1679936807303; Mon, 27 Mar
- 2023 10:06:47 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679936848;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4xly0GzQvPfILGOWv1mMDVBgOAznYSMXIGKYil5doN4=;
+        b=phfY4H3GK+7lTnik8FOrvNmxLd8OLrmsw7/+N5xyIEE0JlakHJirsT/ODZIM8VwR+9
+         18iMihnwoTkoBRPKmypKWCrXSSWNN2da1kLSmJ1clbTr3QAfiHq5Vx6M8L9uO+O4i9l8
+         BLtNNB3li9zvk1a0o3ElTfc6eLvz9RCl9UCrRzOyCqmZ5YkLuALxKuX59Xzy4aSmUPqb
+         BZ1KV+1Fc6lH92MgPABmmZKkzDh5zB/lCXUt9zYgtbSu/961n2Y0+HJOHxTAouc/B8Zi
+         YBT+ZsTM8POGKLwpC5/+zyJSELa2n8vLAE0Vcz66JlRtzX9In3FQ1NGTmLaWuTGEoP7u
+         mjkw==
+X-Gm-Message-State: AAQBX9dO/QtXEYFd6+jWXTRTdEFVt5rykPqq4OCnnMdcRXEUUdyJhz/O
+        03D62QtR+wJm/RDw4YB4lJk=
+X-Google-Smtp-Source: AKy350b5i1zL+7Kc62BGEJOvl18jMSAOVQSlGlHcYfpt3b3Kh4/hMZv0Lolgjp0OESx8lwvFOgkRww==
+X-Received: by 2002:a17:902:d492:b0:1a0:57df:861c with SMTP id c18-20020a170902d49200b001a057df861cmr20430671plg.1.1679936847754;
+        Mon, 27 Mar 2023 10:07:27 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id u23-20020a170902a61700b00192fe452e17sm4979449plq.162.2023.03.27.10.07.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 10:07:25 -0700 (PDT)
+Message-ID: <cbb30ff5-d247-e545-23df-ff9d393ba57c@gmail.com>
+Date:   Mon, 27 Mar 2023 10:07:16 -0700
 MIME-Version: 1.0
-References: <20230309140724.2152712-1-cristian.marussi@arm.com> <20230309140724.2152712-2-cristian.marussi@arm.com>
-In-Reply-To: <20230309140724.2152712-2-cristian.marussi@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 19:06:36 +0200
-Message-ID: <CAJZ5v0ixFvJ6akSMZmcUsg1n_kufq_WonWhS+ef=ps1FXKqUGQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] firmware: arm_scmi: Refactor powercap get/set helpers
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
-        james.quinlan@broadcom.com, Jonathan.Cameron@huawei.com,
-        f.fainelli@gmail.com, vincent.guittot@linaro.org,
-        tarek.el-sherbiny@arm.com, nicola.mazzucato@arm.com,
-        souvik.chakravarty@arm.com, wleavitt@marvell.com,
-        wbartczak@marvell.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] dt-bindings: rng: Drop unneeded quotes
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Olivia Mackall <olivia@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20230327170153.4105594-1-robh@kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230327170153.4105594-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,126 +90,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 3:09 PM Cristian Marussi
-<cristian.marussi@arm.com> wrote:
->
-> Refactor SCMI powercap internal get/set helpers.
->
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-
-I can apply this series if I get an ACK or preferably Reviewed-by:
-from an SCMI person.
-
-However, I think that it would be more appropriate to route it through
-ARM/ARM64 anyway.
-
+On 3/27/23 10:01, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  drivers/firmware/arm_scmi/powercap.c | 65 +++++++++++++++++++---------
->  1 file changed, 45 insertions(+), 20 deletions(-)
->
-> diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
-> index 83b90bde755c..2e490492f187 100644
-> --- a/drivers/firmware/arm_scmi/powercap.c
-> +++ b/drivers/firmware/arm_scmi/powercap.c
-> @@ -313,24 +313,33 @@ static int scmi_powercap_xfer_cap_get(const struct scmi_protocol_handle *ph,
->         return ret;
->  }
->
-> -static int scmi_powercap_cap_get(const struct scmi_protocol_handle *ph,
-> -                                u32 domain_id, u32 *power_cap)
-> +static int __scmi_powercap_cap_get(const struct scmi_protocol_handle *ph,
-> +                                  const struct scmi_powercap_info *dom,
-> +                                  u32 *power_cap)
->  {
-> -       struct scmi_powercap_info *dom;
-> -       struct powercap_info *pi = ph->get_priv(ph);
-> -
-> -       if (!power_cap || domain_id >= pi->num_domains)
-> -               return -EINVAL;
-> -
-> -       dom = pi->powercaps + domain_id;
->         if (dom->fc_info && dom->fc_info[POWERCAP_FC_CAP].get_addr) {
->                 *power_cap = ioread32(dom->fc_info[POWERCAP_FC_CAP].get_addr);
->                 trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_CAP_GET,
-> -                                  domain_id, *power_cap, 0);
-> +                                  dom->id, *power_cap, 0);
->                 return 0;
->         }
->
-> -       return scmi_powercap_xfer_cap_get(ph, domain_id, power_cap);
-> +       return scmi_powercap_xfer_cap_get(ph, dom->id, power_cap);
-> +}
-> +
-> +static int scmi_powercap_cap_get(const struct scmi_protocol_handle *ph,
-> +                                u32 domain_id, u32 *power_cap)
-> +{
-> +       const struct scmi_powercap_info *dom;
-> +
-> +       if (!power_cap)
-> +               return -EINVAL;
-> +
-> +       dom = scmi_powercap_dom_info_get(ph, domain_id);
-> +       if (!dom)
-> +               return -EINVAL;
-> +
-> +       return __scmi_powercap_cap_get(ph, dom, power_cap);
->  }
->
->  static int scmi_powercap_xfer_cap_set(const struct scmi_protocol_handle *ph,
-> @@ -375,17 +384,20 @@ static int scmi_powercap_xfer_cap_set(const struct scmi_protocol_handle *ph,
->         return ret;
->  }
->
-> -static int scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
-> -                                u32 domain_id, u32 power_cap,
-> -                                bool ignore_dresp)
-> +static int __scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
-> +                                  struct powercap_info *pi, u32 domain_id,
-> +                                  u32 power_cap, bool ignore_dresp)
->  {
-> +       int ret = -EINVAL;
->         const struct scmi_powercap_info *pc;
->
->         pc = scmi_powercap_dom_info_get(ph, domain_id);
-> -       if (!pc || !pc->powercap_cap_config || !power_cap ||
-> -           power_cap < pc->min_power_cap ||
-> -           power_cap > pc->max_power_cap)
-> -               return -EINVAL;
-> +       if (!pc || !pc->powercap_cap_config)
-> +               return ret;
-> +
-> +       if (power_cap &&
-> +           (power_cap < pc->min_power_cap || power_cap > pc->max_power_cap))
-> +               return ret;
->
->         if (pc->fc_info && pc->fc_info[POWERCAP_FC_CAP].set_addr) {
->                 struct scmi_fc_info *fci = &pc->fc_info[POWERCAP_FC_CAP];
-> @@ -394,10 +406,23 @@ static int scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
->                 ph->hops->fastchannel_db_ring(fci->set_db);
->                 trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_CAP_SET,
->                                    domain_id, power_cap, 0);
-> -               return 0;
-> +               ret = 0;
-> +       } else {
-> +               ret = scmi_powercap_xfer_cap_set(ph, pc, power_cap,
-> +                                                ignore_dresp);
->         }
->
-> -       return scmi_powercap_xfer_cap_set(ph, pc, power_cap, ignore_dresp);
-> +       return ret;
-> +}
-> +
-> +static int scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
-> +                                u32 domain_id, u32 power_cap,
-> +                                bool ignore_dresp)
-> +{
-> +       struct powercap_info *pi = ph->get_priv(ph);
-> +
-> +       return __scmi_powercap_cap_set(ph, pi, domain_id,
-> +                                      power_cap, ignore_dresp);
->  }
->
->  static int scmi_powercap_xfer_pai_get(const struct scmi_protocol_handle *ph,
-> --
-> 2.34.1
->
+>   Documentation/devicetree/bindings/rng/amlogic,meson-rng.yaml | 4 ++--
+>   Documentation/devicetree/bindings/rng/brcm,iproc-rng200.yaml | 4 ++--
+
+Acked-by: Florian Fainelli <f.fainelli@gmail.com> #brcm,iproc-rng200
+-- 
+Florian
+
