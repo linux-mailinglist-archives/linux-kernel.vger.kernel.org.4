@@ -2,155 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A963A6CAB3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2C06CAB44
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjC0RBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 13:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
+        id S232579AbjC0RCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 13:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbjC0RBg (ORCPT
+        with ESMTP id S232685AbjC0RBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:01:36 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFDB3ABA
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:01:30 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id h8so38968536ede.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:01:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679936489;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=psu4ofpncoCQSYgbBGuLj7J5oQ90Aa4oswGxv8KP4JU=;
-        b=cJqF1kO/34CZQDvUzjw0nFJI3uzZdbpWLYwh/sTURwSu3Zr7QVA3YB+xmzgjIXtxNw
-         plTPyZ6Ff6nayjkPG65E5AbN6P4Br9KHA5h6J3SznKc7ceg+iApLDn78xbkIAA1tLJRM
-         0u6L7uk6uGWd5oQPkH2F3498o8rXSeu4vZLaZmUMftuHVTmZZrw35vDfC6fP/M5rBTGC
-         oEJlhMH0hQsmZAs+mnqaI+s0N0uaUMD6RtXee01BUvrp8DvII6FNEUVk3tp9ckagjAeq
-         BVTbcDwYhsqF2YJlqJcRfYfOtSlgwevlMeHevvq1dBw4qsIvUsevLMq7ibDfJK0pR+gU
-         xlTQ==
+        Mon, 27 Mar 2023 13:01:49 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294FD40F3;
+        Mon, 27 Mar 2023 10:01:44 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-17aeb49429eso9961881fac.6;
+        Mon, 27 Mar 2023 10:01:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679936489;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=psu4ofpncoCQSYgbBGuLj7J5oQ90Aa4oswGxv8KP4JU=;
-        b=v6PaB0CAU2Y6DL0zmJpZOoztqbebayyj5w47whDUCbkwyqCgdIc2LleuwI0Dme70Vr
-         HTqgIiilU1rQSi1AyHF9qSunNvl6Lye5lHWR0pvwu1F8b6EwS1KBZYWVKJSfaHv1Fuol
-         2y5oIcXQBgFzf/OYWwJTBbjfrZ3tmp8ffx26GKc4CyzdKXv0sbjNQ4/khQNOHxOGsvTy
-         5nWfgkvsKaXTnRVd+kS06Z1RFAT3BzNmRaw3hrlEGcX6S2RjfI8poscE7zGQKoGwEsgA
-         qP0pntMP1rVcck5FdZV0iJY2hfyll9wngAwSTPHjM2knZWlGPxCuu6R7jNZBPsdC1Sq8
-         jJOA==
-X-Gm-Message-State: AAQBX9c1XxfXgcV8PheQLPleqizufIHHpQ/jRLK9Z6Y2k/tN1XBHjOSL
-        etX++0EmZQXJT5U24tZiFe0=
-X-Google-Smtp-Source: AKy350b3TXjxOhtha+OJSC79RBMwaldUw1aNzY57gPVRrx9yYKI8P7dgqIT+mPM/VNQnIURkGSaMiw==
-X-Received: by 2002:aa7:cd8b:0:b0:502:3ea4:7f95 with SMTP id x11-20020aa7cd8b000000b005023ea47f95mr5894891edv.35.1679936488703;
-        Mon, 27 Mar 2023 10:01:28 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id t27-20020a50ab5b000000b004c0c5864cc5sm14936026edc.25.2023.03.27.10.01.28
+        d=1e100.net; s=20210112; t=1679936503;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vsiiS+cg9ETxQ7qmK+ws7pFEXw6XBClGT7/dY2V6YIU=;
+        b=bVZm5l7aTZvKBMXP9G98Z3wDRRJjdqKdDAITZtlzKVyXme4PC4Z4iKHDwJGpTrhByT
+         Xw/a3QUVakPT2UWf6lNGUXU3MlmMrf55AalH7XVcwObbVEAbbqGmaFLQSvoj8tYUd/2Q
+         7pTY6VERpZjqnH9oXbWHqibymarGVOfEaXIRflSZpKsJFjbFp9KxTNFVf9bkkomwSadM
+         ozE2/B/7WePreXRrva0FqWdK2y4g350rRyPPe7BoC+373uJ1giO6+fuVuFHSSlIRDD/y
+         QxT21rVYQLbT6LP8FS7xx2hozzI5CIcRFGw8lcy9KMyAzPM2X0LDm4eT+o+ziparSgjx
+         LkIw==
+X-Gm-Message-State: AAQBX9f3K1wQoTVpeX86/ix/PolQPHmot+CZDYNZXE6Yjl0GT+1VkVyo
+        KttlMa8S4qddb6Sz9L4sgg==
+X-Google-Smtp-Source: AKy350Y8FlKQ/y1NaNuo1nCVn3oPUauVYD2sc8z7OjA3kA1wH7XZPPgYFn9GWGfUSER2YH3YSr7JQg==
+X-Received: by 2002:a05:6870:9711:b0:177:b6ce:1e76 with SMTP id n17-20020a056870971100b00177b6ce1e76mr8661847oaq.55.1679936503338;
+        Mon, 27 Mar 2023 10:01:43 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id zq35-20020a0568718ea300b0017f647294f5sm503569oab.16.2023.03.27.10.01.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 10:01:28 -0700 (PDT)
-From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        Baoquan He <bhe@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: [PATCH v3 2/2] lib/test_vmalloc.c: Add vm_map_ram()/vm_unmap_ram() test case
-Date:   Mon, 27 Mar 2023 19:01:26 +0200
-Message-Id: <20230327170126.406044-2-urezki@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230327170126.406044-1-urezki@gmail.com>
-References: <20230327170126.406044-1-urezki@gmail.com>
+        Mon, 27 Mar 2023 10:01:42 -0700 (PDT)
+Received: (nullmailer pid 4104460 invoked by uid 1000);
+        Mon, 27 Mar 2023 17:01:41 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Hammer Hsieh <hammerh0314@gmail.com>
+Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH] dt-bindings: serial: Drop unneeded quotes
+Date:   Mon, 27 Mar 2023 12:01:36 -0500
+Message-Id: <20230327170137.4104272-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add vm_map_ram()/vm_unmap_ram() test case to our stress test-suite.
+Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+checking for this can be enabled in yamllint.
 
-Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- lib/test_vmalloc.c | 41 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ .../devicetree/bindings/serial/amlogic,meson-uart.yaml        | 4 ++--
+ .../devicetree/bindings/serial/qcom,serial-geni-qcom.yaml     | 4 ++--
+ Documentation/devicetree/bindings/serial/renesas,em-uart.yaml | 4 ++--
+ Documentation/devicetree/bindings/serial/renesas,hscif.yaml   | 4 ++--
+ Documentation/devicetree/bindings/serial/renesas,sci.yaml     | 4 ++--
+ Documentation/devicetree/bindings/serial/renesas,scif.yaml    | 4 ++--
+ Documentation/devicetree/bindings/serial/renesas,scifa.yaml   | 4 ++--
+ Documentation/devicetree/bindings/serial/renesas,scifb.yaml   | 4 ++--
+ Documentation/devicetree/bindings/serial/serial.yaml          | 4 ++--
+ Documentation/devicetree/bindings/serial/sprd-uart.yaml       | 4 ++--
+ .../devicetree/bindings/serial/sunplus,sp7021-uart.yaml       | 4 ++--
+ 11 files changed, 22 insertions(+), 22 deletions(-)
 
-diff --git a/lib/test_vmalloc.c b/lib/test_vmalloc.c
-index cd2bdba6d3ed..6633eda4cd4d 100644
---- a/lib/test_vmalloc.c
-+++ b/lib/test_vmalloc.c
-@@ -53,6 +53,7 @@ __param(int, run_test_mask, INT_MAX,
- 		"\t\tid: 128,  name: pcpu_alloc_test\n"
- 		"\t\tid: 256,  name: kvfree_rcu_1_arg_vmalloc_test\n"
- 		"\t\tid: 512,  name: kvfree_rcu_2_arg_vmalloc_test\n"
-+		"\t\tid: 1024, name: vm_map_ram_test\n"
- 		/* Add a new test case description here. */
- );
+diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+index 3cbdde85ed71..ad13df48a590 100644
+--- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2019 BayLibre, SAS
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/serial/amlogic,meson-uart.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/serial/amlogic,meson-uart.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
  
-@@ -358,6 +359,45 @@ kvfree_rcu_2_arg_vmalloc_test(void)
- 	return 0;
- }
+ title: Amlogic Meson SoC UART Serial Interface
  
-+static int
-+vm_map_ram_test(void)
-+{
-+	unsigned int map_nr_pages;
-+	unsigned char *v_ptr;
-+	unsigned char *p_ptr;
-+	struct page **pages;
-+	struct page *page;
-+	int i;
-+
-+	map_nr_pages = nr_pages > 0 ? nr_pages:1;
-+	pages = kmalloc(map_nr_pages * sizeof(*page), GFP_KERNEL);
-+	if (!pages)
-+		return -1;
-+
-+	for (i = 0; i < map_nr_pages; i++) {
-+		page = alloc_pages(GFP_KERNEL, 1);
-+		if (!page)
-+			return -1;
-+
-+		pages[i] = page;
-+	}
-+
-+	/* Run the test loop. */
-+	for (i = 0; i < test_loop_count; i++) {
-+		v_ptr = vm_map_ram(pages, map_nr_pages, -1);
-+		*v_ptr = 'a';
-+		vm_unmap_ram(v_ptr, map_nr_pages);
-+	}
-+
-+	for (i = 0; i < map_nr_pages; i++) {
-+		p_ptr = page_address(pages[i]);
-+		free_pages((unsigned long)p_ptr, 1);
-+	}
-+
-+	kfree(pages);
-+	return 0;
-+}
-+
- struct test_case_desc {
- 	const char *test_name;
- 	int (*test_func)(void);
-@@ -374,6 +414,7 @@ static struct test_case_desc test_case_array[] = {
- 	{ "pcpu_alloc_test", pcpu_alloc_test },
- 	{ "kvfree_rcu_1_arg_vmalloc_test", kvfree_rcu_1_arg_vmalloc_test },
- 	{ "kvfree_rcu_2_arg_vmalloc_test", kvfree_rcu_2_arg_vmalloc_test },
-+	{ "vm_map_ram_test", vm_map_ram_test },
- 	/* Add a new test case here. */
- };
+diff --git a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+index 05a6999808d1..dd33794b3534 100644
+--- a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
++++ b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/serial/qcom,serial-geni-qcom.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/serial/qcom,serial-geni-qcom.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Qualcomm Geni based QUP UART interface
+ 
+diff --git a/Documentation/devicetree/bindings/serial/renesas,em-uart.yaml b/Documentation/devicetree/bindings/serial/renesas,em-uart.yaml
+index 12d0fa34f9f9..3fc2601f1338 100644
+--- a/Documentation/devicetree/bindings/serial/renesas,em-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/renesas,em-uart.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/serial/renesas,em-uart.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/serial/renesas,em-uart.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Renesas EMMA Mobile UART Interface
+ 
+diff --git a/Documentation/devicetree/bindings/serial/renesas,hscif.yaml b/Documentation/devicetree/bindings/serial/renesas,hscif.yaml
+index afedb6edfc34..1c7f1276aed6 100644
+--- a/Documentation/devicetree/bindings/serial/renesas,hscif.yaml
++++ b/Documentation/devicetree/bindings/serial/renesas,hscif.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/serial/renesas,hscif.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/serial/renesas,hscif.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Renesas High Speed Serial Communication Interface with FIFO (HSCIF)
+ 
+diff --git a/Documentation/devicetree/bindings/serial/renesas,sci.yaml b/Documentation/devicetree/bindings/serial/renesas,sci.yaml
+index dc445b327e0b..9f7305200c47 100644
+--- a/Documentation/devicetree/bindings/serial/renesas,sci.yaml
++++ b/Documentation/devicetree/bindings/serial/renesas,sci.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/serial/renesas,sci.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/serial/renesas,sci.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Renesas Serial Communication Interface
+ 
+diff --git a/Documentation/devicetree/bindings/serial/renesas,scif.yaml b/Documentation/devicetree/bindings/serial/renesas,scif.yaml
+index 1989bd67d04e..f26bea2d7398 100644
+--- a/Documentation/devicetree/bindings/serial/renesas,scif.yaml
++++ b/Documentation/devicetree/bindings/serial/renesas,scif.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/serial/renesas,scif.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/serial/renesas,scif.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Renesas Serial Communication Interface with FIFO (SCIF)
+ 
+diff --git a/Documentation/devicetree/bindings/serial/renesas,scifa.yaml b/Documentation/devicetree/bindings/serial/renesas,scifa.yaml
+index 4c3b5e7270da..499507678cdf 100644
+--- a/Documentation/devicetree/bindings/serial/renesas,scifa.yaml
++++ b/Documentation/devicetree/bindings/serial/renesas,scifa.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/serial/renesas,scifa.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/serial/renesas,scifa.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Renesas Serial Communications Interface with FIFO A (SCIFA)
+ 
+diff --git a/Documentation/devicetree/bindings/serial/renesas,scifb.yaml b/Documentation/devicetree/bindings/serial/renesas,scifb.yaml
+index 2f7cbbb48960..810d8a991fdd 100644
+--- a/Documentation/devicetree/bindings/serial/renesas,scifb.yaml
++++ b/Documentation/devicetree/bindings/serial/renesas,scifb.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/serial/renesas,scifb.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/serial/renesas,scifb.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Renesas Serial Communications Interface with FIFO B (SCIFB)
+ 
+diff --git a/Documentation/devicetree/bindings/serial/serial.yaml b/Documentation/devicetree/bindings/serial/serial.yaml
+index c9231e501f1f..ea277560a596 100644
+--- a/Documentation/devicetree/bindings/serial/serial.yaml
++++ b/Documentation/devicetree/bindings/serial/serial.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/serial/serial.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/serial/serial.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Serial Interface Generic
+ 
+diff --git a/Documentation/devicetree/bindings/serial/sprd-uart.yaml b/Documentation/devicetree/bindings/serial/sprd-uart.yaml
+index da0e2745b5fc..28ff77aa86c8 100644
+--- a/Documentation/devicetree/bindings/serial/sprd-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/sprd-uart.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2019 Unisoc Inc.
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/serial/sprd-uart.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/serial/sprd-uart.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Spreadtrum serial UART
+ 
+diff --git a/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml b/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+index ea1e637661c7..7d0a4bcb88e9 100644
+--- a/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+@@ -2,8 +2,8 @@
+ # Copyright (C) Sunplus Co., Ltd. 2021
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/serial/sunplus,sp7021-uart.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/serial/sunplus,sp7021-uart.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Sunplus SoC SP7021 UART Controller
  
 -- 
-2.30.2
+2.39.2
 
