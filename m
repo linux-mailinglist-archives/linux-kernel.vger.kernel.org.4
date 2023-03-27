@@ -2,80 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB946CA7C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B526CA7CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbjC0OeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
+        id S233008AbjC0Ofn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232909AbjC0OeG (ORCPT
+        with ESMTP id S232199AbjC0Ofl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:34:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B7A11B;
-        Mon, 27 Mar 2023 07:34:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E443612E6;
-        Mon, 27 Mar 2023 14:34:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99578C433EF;
-        Mon, 27 Mar 2023 14:34:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679927640;
-        bh=tVniDDAOenqVrDXFcessUJ0xDBAw+ON6dKY2idpzqT0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=eMEKXd2LEibmha39DLEmVCWe4W201u3s/G5893MLKOzKvYiAoo2GLdAhoFcXM0fDx
-         XO5zz79KulDjibvm4V112I2ZprQC74ciFABr0w1s6WMsQfWuV8N710T9RCGYN1IMT0
-         WshartXEha1AV5YzF1Breu9HaPZJpBcLYOk9IRh4UuYA8BGACox8uy729LM6jB9E42
-         ybZsntMnIdxZEjmijiHw2/A1OEAAJApR32VUWR0bHVJ/34BdfV6Aky2sji3c47P9IU
-         Ns67oZvby+xpJtJxdgZ1A+jPMfYIhLeX7FJPDTj1yQeViZ9vJUouvj/ZBt8bcBOhmE
-         Gpenn2aZenpTA==
-Date:   Mon, 27 Mar 2023 09:33:59 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Lukas Wunner <lukas@wunner.de>
-Cc:     Aleksander Trofimowicz <alex@n90.eu>, linux-pci@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [bugzilla-daemon@kernel.org: [Bug 217251] New: pciehp: nvme not
- visible after re-insert to tbt port]
-Message-ID: <20230327143359.GA2834753@bhelgaas>
+        Mon, 27 Mar 2023 10:35:41 -0400
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C7A3AAC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=TQEVb06h33yxhmY3vu7gB3cHE9jPWdXlacdCPPkILAc=; b=IwhJp
+        YsIGR9unG81YdDeSnR/hdUO6PGgiMyenAT4ayTFuFiZR5n8fDLQ6iRze6QZR9WL2/eenMWYXV20le
+        V+nIYlDCY3SuwUb+qszBvqR2wLHP2/HeRUQDF28DtnChs7upds7rIoWfzoQFX9I8Eq1bzWarXRGgV
+        tBVJ5luBiyukT2IMGQOIffFfHd4qlfJzmdgHUstZlgu+/vLz4BH3W8wUzy2hDzw3dSJmCfZGaw+Nc
+        FZnJ2uTLCIMgXHpg2kLO8D9SvQgLRRoPicS5D127FQodRFfVfLfcpQojf4jp8VH8h+D2AVeyzSEyP
+        duZxbP19lR4hhQf7awKT3mZVmOHVQ==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <john@metanate.com>)
+        id 1pgnw8-00031z-WD;
+        Mon, 27 Mar 2023 15:35:06 +0100
+Date:   Mon, 27 Mar 2023 15:35:04 +0100
+From:   John Keeping <john@metanate.com>
+To:     Steven Price <steven.price@arm.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v2] iommu/rockchip: Add missing set_platform_dma_ops
+ callback
+Message-ID: <ZCGpmHUWyZVaeIIx@donbot>
+References: <20230324111127.221640-1-steven.price@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230324111127.221640-1-steven.price@arm.com>
+X-Authenticated: YES
+X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Forwarding to NVMe folks, lists for visibility.
+On Fri, Mar 24, 2023 at 11:11:27AM +0000, Steven Price wrote:
+> Similar to exynos, we need a set_platform_dma_ops() callback for proper
+> operation on ARM 32 bit after recent changes in the IOMMU framework
+> (detach ops removal). But also the use of a NULL domain is confusing.
+> 
+> Rework the code to have a singleton rk_identity_domain which is assigned
+> to domain when using an identity mapping rather than "detaching". This
+> makes the code easier to reason about.
+> 
+> Signed-off-by: Steven Price <steven.price@arm.com>
+> ---
+> Changes since v1[1]:
+> 
+>  * Reworked the code to avoid a NULL domain, instead a singleton
+>    rk_identity_domain is used instead. The 'detach' language is no
+>    longer used.
+> 
+> [1] https://lore.kernel.org/r/20230315164152.333251-1-steven.price%40arm.com
+> 
+>  drivers/iommu/rockchip-iommu.c | 50 ++++++++++++++++++++++++++--------
+>  1 file changed, 39 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
+> index f30db22ea5d7..437541004994 100644
+> --- a/drivers/iommu/rockchip-iommu.c
+> +++ b/drivers/iommu/rockchip-iommu.c
+[snip]
+> +static struct iommu_domain rk_identity_domain = {
+> +	.type = IOMMU_DOMAIN_IDENTITY,
+> +	.ops = &rk_identity_ops,
+> +};
+> +
+> +#ifdef CONFIG_ARM
 
------ Forwarded message from bugzilla-daemon@kernel.org -----
+Is this #ifdef needed?  I can't see anything ARM-specific about this
+function or .set_platform_dma_ops.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=217251
-...
+> +static void rk_iommu_set_platform_dma(struct device *dev)
+> +{
+> +	WARN_ON(rk_iommu_identity_attach(&rk_identity_domain, dev));
+>  }
+> +#endif
 
-Created attachment 304031
-  --> https://bugzilla.kernel.org/attachment.cgi?id=304031&action=edit
-the tracing of nvme_pci_enable() during re-insertion
+Not shown in the patch are the pm_runtime hooks.  Do they need to
+change like this?
 
-Hi,
-
-There is a JHL7540-based device that may host a NVMe device. After the first
-insertion a nvme drive is properly discovered and handled by the relevant
-modules. Once disconnected any further attempts are not successful. The device
-is visible on a PCI bus, but nvme_pci_enable() ends up calling
-pci_disable_device() every time; the runtime PM status of the device is
-"suspended", the power status of the 04:01.0 PCI bridge is D3. Preventing the
-device from being power managed ("on" -> /sys/devices/../power/control)
-combined with device removal and pci rescan changes nothing. A host reboot
-restores the initial state.
-
-I would appreciate any suggestions how to debug it further.
+ static int __maybe_unused rk_iommu_suspend(struct device *dev)
+ {
+ 	struct rk_iommu *iommu = dev_get_drvdata(dev);
+ 
+-	if (!iommu->domain)
++	if (iommu->domain == &rk_identity_domain)
+ 		return 0;
+ 
+ 	rk_iommu_disable(iommu);
+ 	return 0;
+ }
+ 
+ static int __maybe_unused rk_iommu_resume(struct device *dev)
+ {
+ 	struct rk_iommu *iommu = dev_get_drvdata(dev);
+ 
+-	if (!iommu->domain)
++	if (iommu->domain == &rk_identity_domain)
+ 		return 0;
+ 
+ 	return rk_iommu_enable(iommu);
+ }
