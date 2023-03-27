@@ -2,88 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E19E6CA0F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4A76CA0F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233478AbjC0KLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 06:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
+        id S233135AbjC0KLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233449AbjC0KLH (ORCPT
+        with ESMTP id S233461AbjC0KLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:11:07 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E184C3A
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:11:06 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id k2so7922438pll.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:11:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679911866;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=twtYyYoF/UoDm5Qj11L0J6nePz6i85dUG0Fo6yWWqTE=;
-        b=bdQCIspE58G9YPUxsP9y9uqVhsHZwYTBZvh4rAbqE8SOypIyj8N0eioOD3sfhurSxo
-         7LDACP2ZgZke0nlPoD/AKq11KfU0NNQViIPLnFQphxtRrMPS82r5eDFy05S1nUA0xF+M
-         FfD5OG/PzPrqQuf0V5EDV73u3ZLhIg5kgD68LQGvSOKXvwX1sIinZqXZXk8CRhKKNNRG
-         q9KstHuSQc4T+IVKkA8gkDy1ADLVTRMpuzIsGwwuBVgaA744iHiV5r3Lyc0T0XC9ylTR
-         yLA2QEebEB87GnmDalG2YoNB/NablHzPjQc/aPOKjm3eyLcZGMDobrPHKAbYwcbz7HVX
-         s5AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679911866;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=twtYyYoF/UoDm5Qj11L0J6nePz6i85dUG0Fo6yWWqTE=;
-        b=D8M5OfmGA99fiHk4P5lGOlkM1unf5xU9cbU39Q8yl9zX8b0FekIQEt5zHgkthynNs3
-         klYbRaQDnhtvlyr8F4nuamZwIPjUMRvWxjincOJUDpO1RqvvVRC46+A3G84dXOLB9HFu
-         qbDxWNU+KWD+hFDSiSGcsjva6gXnSHGTC4hbcVJ2s66molOxzvxFSickMEJniBOdBXAw
-         tsJUHpLg+W4R+ZGAQ2ExaN4oNihZph4MGs0fwvwz98B3Ki1UYGMtbhJhNQnVYEmc1KSU
-         2V4HwVUh1ANnpKIkijEBXNcwC/FwXGY6/v79rjjEaXH01Ev5h3W5tEE1CoxnXyVoR3t4
-         vrXw==
-X-Gm-Message-State: AAQBX9eBLcEo9vYp+18DKeM6o2z8HXu5StrR6lkT9h66LrsRryiI++HY
-        HfZ4pRKqmAkHqfxJnjH8jTIsdl4nprleom1BmFc=
-X-Google-Smtp-Source: AKy350ZhejNcYVfp5WFMIO22GnZjqYTTIAQAiwm1yYquX65BOUfzXeBHoRbZ75q+AEZj/mnFVY/Z2tWYx0OFRXkYXK8=
-X-Received: by 2002:a17:903:2290:b0:19f:30be:e9f6 with SMTP id
- b16-20020a170903229000b0019f30bee9f6mr4136675plh.6.1679911865764; Mon, 27 Mar
- 2023 03:11:05 -0700 (PDT)
+        Mon, 27 Mar 2023 06:11:30 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4FD49E2;
+        Mon, 27 Mar 2023 03:11:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679911886; x=1711447886;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AFVzYvVscPBltqD3h18pegQlgEPHmun/Xuta2F8qlQs=;
+  b=HyFWB70bCHkRkdLVYyl67ybl5NQNsX112NadxemVSCmN0DE6CblvtmGG
+   3b9lL8kSzl9c0Xf6WuGYuL1mUK7ZJ7nNgFPqiXF0Gu9HKMEJuH9M7t8TY
+   MP9NClOL9nS4+2c1+dIIGWJKJTosGGd3o0B7uylF0aLodgjOQgXGN65lu
+   6WHCyBHKyVP4L5+AdPv0KzmucQuIp5fwTKrTki+XZ5G5GpN55PHUMYpBD
+   nhptd+jcuMMvTNeYbxG9aYZAZ61xYyfaqV2wg25ChsOsf1YU1pY3g5giQ
+   4AMGvD0rO3ZgdvsaDKpyW8eo9pBRB1Tmv7DDVLKFR9EXSJmyX71BjJtZ+
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="367972839"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="367972839"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 03:11:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="716025223"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="716025223"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 27 Mar 2023 03:11:22 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pgjou-009Af5-2v;
+        Mon, 27 Mar 2023 13:11:20 +0300
+Date:   Mon, 27 Mar 2023 13:11:20 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] device property: Remove unused struct net_device
+ forward declaration
+Message-ID: <ZCFryP+yZ7w38Ix9@smile.fi.intel.com>
+References: <20230323151519.58479-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20230323111924.102541-1-peng.fan@oss.nxp.com> <20230327051409.GO3364759@dragon>
- <DU0PR04MB9417EDFAD943EBF9F0EB2A35888B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-In-Reply-To: <DU0PR04MB9417EDFAD943EBF9F0EB2A35888B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 27 Mar 2023 07:10:55 -0300
-Message-ID: <CAOMZO5C-x6WVd0xbKej7OaPS0BdhKXOb5QLgQmGu-MyuKNChiA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: imx8mn-evk: update i2c pinctrl to match dtschema
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323151519.58479-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+On Thu, Mar 23, 2023 at 05:15:19PM +0200, Andy Shevchenko wrote:
+> There is no users in the property.h for the struct net_device.
+> Remove the latter for good.
 
-On Mon, Mar 27, 2023 at 7:00=E2=80=AFAM Peng Fan <peng.fan@nxp.com> wrote:
+Oh, this seems unfortunate as it doesn't Cc Greg. Folks, shall we add
+the header to "DRIVER CORE, KOBJECTS, DEBUGFS AND SYSFS"?
 
-> > i2c2gpiogrp
->
-> Sorry, I not get your point, I already use i2c2gpiogrp.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  include/linux/property.h | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/include/linux/property.h b/include/linux/property.h
+> index ee9cc1710d82..1dff38e930fc 100644
+> --- a/include/linux/property.h
+> +++ b/include/linux/property.h
+> @@ -16,7 +16,6 @@
+>  #include <linux/types.h>
+>  
+>  struct device;
+> -struct net_device;
+>  
+>  enum dev_prop_type {
+>  	DEV_PROP_U8,
 
-What Shawn meant is that there was a typo in your patch.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-You wrote i2c2gpriogrp instead of i2c2gpiogrp.
+
