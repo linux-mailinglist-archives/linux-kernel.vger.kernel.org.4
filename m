@@ -2,238 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA656CB040
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5FC6CB048
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjC0VBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 17:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
+        id S230085AbjC0VCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 17:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjC0VBb (ORCPT
+        with ESMTP id S230328AbjC0VCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 17:01:31 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765F32126
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:01:30 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so13103759pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:01:30 -0700 (PDT)
+        Mon, 27 Mar 2023 17:02:31 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721ED12F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:02:30 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id eh3so41482118edb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:02:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679950890;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I47QgG80c18NHe2QXGtpe6IXSCOJbQsxdw+n6WwyTPc=;
-        b=qEMxtwtl57eh3jwNaDlneulqEJP59uEeZdGMNUBJvreTP9e94ESJcY8Jo7vY9WHvSQ
-         ahMzjIJhOtkCwnV0g5A4O/aNEWAnicKi2dfHbEnZ5lShR7llIZ49aK2KwBA45Fh44Dbj
-         5fK7WxfNzUdfG5Ci0+Y9QADuCr9zGKlPIwJVis+6X4ICttn9DcgH5dNw1Wj4LRRgaI4a
-         pPeeDS2OmegcbFJPxOHZVp7sE5P+x0vEhMGlAin26j6QA3/4vTHTHdck9n4FHyJ0WGrD
-         FTG4+dOiu8nnONYgQEOPIjtX5dFKN1NadCgxyamiPKEx5Y4eRsQpVnp5O+mKC3uPdnT4
-         I+eg==
+        d=gmail.com; s=20210112; t=1679950949; x=1682542949;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VplZUCE/F+ZasISe1VnumDQIHXY4z8OCN0riUDX9NXo=;
+        b=NR+8vW0rMBEOyRvzlwqszktNTwI919fiPJfbppGSDeUL3/V7ybiQTJWQgN1N+NUb7H
+         5y+Au3GmD2Fr+8IY79MXBt8a0FfhzbWDfKAnK2GMwj2Mbq5cdpMu7pRmjg+cB8JCqAFA
+         NJXo7pGPMdu0mhj3d+SsoybmDLl2pNWoY8zPacrj3UULF+fqF9ZublArIJsBEjXTnwDx
+         DS33E4jErwKIPXOg2fWzuppNxWEmqCXqwRjdxF5JZeSnzH7/VW/odevWAe8w6GGbTUn0
+         XFs6yGgIbeoDJ2AhBL6ggg2gGpV3hffBU7LOoK7jO16PcPOydWw+pgvMv0zcU+wVW9zY
+         +LJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679950890;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I47QgG80c18NHe2QXGtpe6IXSCOJbQsxdw+n6WwyTPc=;
-        b=XwgSgpRHc51YBfvuhROtp+AQbmC+uUU25jk5lTckS6K16we+aBUFu3K3gHKTCRxlnJ
-         DrZUiAe5uBJ+HU9kMeCAYkp+QtIekSWHtcjTsYPhY0D9aK2cCdQ9cWm6T14zMMx3DDsD
-         PEyJOWH0div+IsDC2iVqRDLgzqaZlW9g+475BeZ/8/T/Ju6AsGJDqMXCcBJF38b6/cVN
-         WT2zkASbymPHoH86MlLvTUR/4C+mD3LcT0Wszo7BWTGN+sLd20RgIeabQiqYGMfE7XQE
-         eLGTGIts+T+osVtKCnAQiY19Mqge3BdP3kLScVeWaiv+W3CXsTqH5DcFKgB8GONi75Yw
-         0ORA==
-X-Gm-Message-State: AAQBX9dGF6ZaJuSci5fq6exCs/RwmnEvhNHC2+J0or2Bt0/BXVtmnQOY
-        7DMgEmMqOyly5Oa9uks1Y4iX+w==
-X-Google-Smtp-Source: AKy350aHdL7wM6XPVYpmTCr5+ubBfWHZ0yH2Ao164vY7yTBP8KHuhKBry5rT2/49WOb0LzeOxmuENA==
-X-Received: by 2002:a17:903:32ca:b0:1a0:53f3:3761 with SMTP id i10-20020a17090332ca00b001a053f33761mr13617248plr.15.1679950889923;
-        Mon, 27 Mar 2023 14:01:29 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:ad52:968f:ad4a:52d2])
-        by smtp.gmail.com with ESMTPSA id y15-20020a1709027c8f00b001a21fceff33sm6267741pll.48.2023.03.27.14.01.28
+        d=1e100.net; s=20210112; t=1679950949; x=1682542949;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VplZUCE/F+ZasISe1VnumDQIHXY4z8OCN0riUDX9NXo=;
+        b=gBlcCIlm6c5iJwCMe1BmIGFuwhFzIgu6ZRgMOsE4aXrMJr6LLtkuT5KVkTXM9SnSCW
+         NVwsRg0pHjOiBUkgRXw84m0WZDL4y69ZLqO1yDYAdkR+SReM+L2QufDh017oOgz6kxJs
+         NBcXS9vii1lV7nWD7tdPtna/VOwzdL2f2p26qnTI41AK5Zu6v8+l08jKy7e4QClgEb7P
+         LZkKMUeT2lg+9Mdi7QUHBv8SaWkfCtL/5tvg22WGX9sFShGYj17bixrFxRoELApQwFgj
+         Vz0kwdeIjPsSBpLLQpZsVSpWTMrZ2U1/0IPEays7be+7ZdjvCAjk2S6DOSL6VRWz71Kn
+         Dvvg==
+X-Gm-Message-State: AAQBX9fTRvX7RoNUjvyjQpSoJVtZSJZKgn7RWbFNiqQ2ALLMWNqybB5d
+        5mpYvbOdDcQQOahIwa6xNWM=
+X-Google-Smtp-Source: AKy350ZV1SG1a821aOVmRUPrdv2s4yPb3AMK0fs99e8CQ0HQQIr4r0nrMyko4ChjytsuACkAAw1vGA==
+X-Received: by 2002:a17:906:214:b0:933:23c4:820b with SMTP id 20-20020a170906021400b0093323c4820bmr11951323ejd.4.1679950948706;
+        Mon, 27 Mar 2023 14:02:28 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id g4-20020a170906520400b0093a35f65a30sm9262830ejm.41.2023.03.27.14.02.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 14:01:29 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 15:01:26 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     MD Danish Anwar <danishanwar@ti.com>
-Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v5 3/5] soc: ti: pruss: Add pruss_cfg_read()/update() API
-Message-ID: <20230327210126.GC3158115@p14s>
-References: <20230323062451.2925996-1-danishanwar@ti.com>
- <20230323062451.2925996-4-danishanwar@ti.com>
+        Mon, 27 Mar 2023 14:02:21 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 23:02:08 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] staging: rtl8192e: Remove wireless modes A and N_5G
+Message-ID: <cover.1679949171.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230323062451.2925996-4-danishanwar@ti.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 11:54:49AM +0530, MD Danish Anwar wrote:
-> From: Suman Anna <s-anna@ti.com>
-> 
-> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
-> the PRUSS platform driver to read and program respectively a register
-> within the PRUSS CFG sub-module represented by a syscon driver.
-> 
-> These APIs are internal to PRUSS driver. Various useful registers
-> and macros for certain register bit-fields and their values have also
-> been added.
-> 
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-> ---
->  drivers/soc/ti/pruss.c |   1 +
->  drivers/soc/ti/pruss.h | 112 +++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 113 insertions(+)
->  create mode 100644 drivers/soc/ti/pruss.h
->
+Remove WIRELESS_MODE_N_5G and WIRELESS_MODE_A which are not supported by
+hardware to remove dead code and increase readability.
 
-This patch doesn't compile without warnings.
+Tested with rtl8192e on wireless modes: B, G, N_24G
+Transferred this patch over wlan connection of rtl8192e
 
-> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
-> index 126b672b9b30..2fa7df667592 100644
-> --- a/drivers/soc/ti/pruss.c
-> +++ b/drivers/soc/ti/pruss.c
-> @@ -21,6 +21,7 @@
->  #include <linux/regmap.h>
->  #include <linux/remoteproc.h>
->  #include <linux/slab.h>
-> +#include "pruss.h"
->  
->  /**
->   * struct pruss_private_data - PRUSS driver private data
-> diff --git a/drivers/soc/ti/pruss.h b/drivers/soc/ti/pruss.h
-> new file mode 100644
-> index 000000000000..4626d5f6b874
-> --- /dev/null
-> +++ b/drivers/soc/ti/pruss.h
-> @@ -0,0 +1,112 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * PRU-ICSS Subsystem user interfaces
-> + *
-> + * Copyright (C) 2015-2023 Texas Instruments Incorporated - http://www.ti.com
-> + *	MD Danish Anwar <danishanwar@ti.com>
-> + */
-> +
-> +#ifndef _SOC_TI_PRUSS_H_
-> +#define _SOC_TI_PRUSS_H_
-> +
-> +#include <linux/bits.h>
-> +#include <linux/regmap.h>
-> +
-> +/*
-> + * PRU_ICSS_CFG registers
-> + * SYSCFG, ISRP, ISP, IESP, IECP, SCRP applicable on AMxxxx devices only
-> + */
-> +#define PRUSS_CFG_REVID         0x00
-> +#define PRUSS_CFG_SYSCFG        0x04
-> +#define PRUSS_CFG_GPCFG(x)      (0x08 + (x) * 4)
-> +#define PRUSS_CFG_CGR           0x10
-> +#define PRUSS_CFG_ISRP          0x14
-> +#define PRUSS_CFG_ISP           0x18
-> +#define PRUSS_CFG_IESP          0x1C
-> +#define PRUSS_CFG_IECP          0x20
-> +#define PRUSS_CFG_SCRP          0x24
-> +#define PRUSS_CFG_PMAO          0x28
-> +#define PRUSS_CFG_MII_RT        0x2C
-> +#define PRUSS_CFG_IEPCLK        0x30
-> +#define PRUSS_CFG_SPP           0x34
-> +#define PRUSS_CFG_PIN_MX        0x40
-> +
-> +/* PRUSS_GPCFG register bits */
-> +#define PRUSS_GPCFG_PRU_GPO_SH_SEL              BIT(25)
-> +
-> +#define PRUSS_GPCFG_PRU_DIV1_SHIFT              20
-> +#define PRUSS_GPCFG_PRU_DIV1_MASK               GENMASK(24, 20)
-> +
-> +#define PRUSS_GPCFG_PRU_DIV0_SHIFT              15
-> +#define PRUSS_GPCFG_PRU_DIV0_MASK               GENMASK(15, 19)
-> +
-> +#define PRUSS_GPCFG_PRU_GPO_MODE                BIT(14)
-> +#define PRUSS_GPCFG_PRU_GPO_MODE_DIRECT         0
-> +#define PRUSS_GPCFG_PRU_GPO_MODE_SERIAL         BIT(14)
-> +
-> +#define PRUSS_GPCFG_PRU_GPI_SB                  BIT(13)
-> +
-> +#define PRUSS_GPCFG_PRU_GPI_DIV1_SHIFT          8
-> +#define PRUSS_GPCFG_PRU_GPI_DIV1_MASK           GENMASK(12, 8)
-> +
-> +#define PRUSS_GPCFG_PRU_GPI_DIV0_SHIFT          3
-> +#define PRUSS_GPCFG_PRU_GPI_DIV0_MASK           GENMASK(7, 3)
-> +
-> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE_POSITIVE   0
-> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE_NEGATIVE   BIT(2)
-> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE            BIT(2)
-> +
-> +#define PRUSS_GPCFG_PRU_GPI_MODE_MASK           GENMASK(1, 0)
-> +#define PRUSS_GPCFG_PRU_GPI_MODE_SHIFT          0
-> +
-> +#define PRUSS_GPCFG_PRU_MUX_SEL_SHIFT           26
-> +#define PRUSS_GPCFG_PRU_MUX_SEL_MASK            GENMASK(29, 26)
-> +
-> +/* PRUSS_MII_RT register bits */
-> +#define PRUSS_MII_RT_EVENT_EN                   BIT(0)
-> +
-> +/* PRUSS_SPP register bits */
-> +#define PRUSS_SPP_XFER_SHIFT_EN                 BIT(1)
-> +#define PRUSS_SPP_PRU1_PAD_HP_EN                BIT(0)
-> +#define PRUSS_SPP_RTU_XFR_SHIFT_EN              BIT(3)
-> +
-> +/**
-> + * pruss_cfg_read() - read a PRUSS CFG sub-module register
-> + * @pruss: the pruss instance handle
-> + * @reg: register offset within the CFG sub-module
-> + * @val: pointer to return the value in
-> + *
-> + * Reads a given register within the PRUSS CFG sub-module and
-> + * returns it through the passed-in @val pointer
-> + *
-> + * Return: 0 on success, or an error code otherwise
-> + */
-> +static int pruss_cfg_read(struct pruss *pruss, unsigned int reg, unsigned int *val)
-> +{
-> +	if (IS_ERR_OR_NULL(pruss))
-> +		return -EINVAL;
-> +
-> +	return regmap_read(pruss->cfg_regmap, reg, val);
-> +}
-> +
-> +/**
-> + * pruss_cfg_update() - configure a PRUSS CFG sub-module register
-> + * @pruss: the pruss instance handle
-> + * @reg: register offset within the CFG sub-module
-> + * @mask: bit mask to use for programming the @val
-> + * @val: value to write
-> + *
-> + * Programs a given register within the PRUSS CFG sub-module
-> + *
-> + * Return: 0 on success, or an error code otherwise
-> + */
-> +static int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
-> +			    unsigned int mask, unsigned int val)
-> +{
-> +	if (IS_ERR_OR_NULL(pruss))
-> +		return -EINVAL;
-> +
-> +	return regmap_update_bits(pruss->cfg_regmap, reg, mask, val);
-> +}
-> +
-> +#endif  /* _SOC_TI_PRUSS_H_ */
-> -- 
-> 2.25.1
-> 
+Philipp Hortmann (7):
+  staging: rtl8192e: Remove rtl92e_config_phy
+  staging: rtl8192e: Remove _rtl92e_get_supported_wireless_mode
+  staging: rtl8192e: Remove 5G wireless_mode in rtl92e_set_wireless_mode
+  staging: rtl8192e: Remove unused if clauses in
+    rtl92e_set_wireless_mode
+  staging: rtl8192e: Remove wireless modes A, N_5G from _rtl92e_hwconfig
+  staging: rtl8192e: Remove wireless modes A, N_5G from
+    rtl92e_set_channel
+  staging: rtl8192e: Remove wireless mode WIRELESS_MODE_N_5G
+
+ .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 19 +-------
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.c    | 18 --------
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.h    |  1 -
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c  | 43 ++++---------------
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    |  6 +--
+ 5 files changed, 12 insertions(+), 75 deletions(-)
+
+-- 
+2.39.2
+
