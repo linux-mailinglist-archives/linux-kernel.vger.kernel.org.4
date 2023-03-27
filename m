@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20BFC6CA5F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D1A6CA5F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232474AbjC0Nbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
+        id S232193AbjC0Nap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjC0Nbn (ORCPT
+        with ESMTP id S229751AbjC0Nao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:31:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBE455B2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:30:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679923815;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rnHz54xfyL+gglmIyJKJy5abDhVgwniJPLQmnnklQbc=;
-        b=hOFfzCu9iFd7v0hSh4b+wX75wA4m+oDpUfVqyn2TINjjM/n4p78vpbQdhK30KiHc6S4qa0
-        1USCshkucJLE0l5RlrXxE1qqjItL0oklCMpcBkH451AHN9h2GvjIPd4fgTF4NrqQFvc5BP
-        jOEHGa9SRThhcMCYGReSetEwzhzgPis=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-184-fKg8JEXBM3qU1EtW6lwNUw-1; Mon, 27 Mar 2023 09:30:14 -0400
-X-MC-Unique: fKg8JEXBM3qU1EtW6lwNUw-1
-Received: by mail-wm1-f72.google.com with SMTP id o7-20020a05600c4fc700b003edf85f6bb1so5743528wmq.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:30:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679923813;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rnHz54xfyL+gglmIyJKJy5abDhVgwniJPLQmnnklQbc=;
-        b=AXmHFcegzdajxMdmw9fq6FML2dM09i9w+h+kufQYqasnNi23lkiyKeET8PmpNPiVf3
-         fJwj9y6sFipvPzCVF+lGXbXN9rzcYYgPiz+RaeBr/ngWJEI9i0LKj3WYufC0g2SjO823
-         qi9H3Dd4awrHJgVCFRHjygRm0x2scBkqlIbVPfsbTl36IE5uGRw7iNJXtPPFEGxmjP/n
-         /OUDEwXiPjttnMIRtAgMeOcz86tuR3FD0MOVocd+8ZXPqAsLrkKQB0gypymT8GjzyCCn
-         e/oAzfMoqhNPPTGfp4P2cfVKxdl8R+D/vSjbj8rAZ26dSgTkwtHni9qoWVtiXeAzWGPC
-         8omQ==
-X-Gm-Message-State: AO0yUKUYu5M49imBgjx/Qi/68ffR0x/k+/iXz55lcU2RoPnQkgvJk+u2
-        eFJmS2PnstI1jdrOFzN3xI5TZRhINJaEk221QF1Cb9373XCsWtKAwcV0vNmZhBHKDy4H3vsXTjm
-        g2hm61G93DJtKB4Wb0PT5ircDv1AHKy/Z
-X-Received: by 2002:a05:600c:2114:b0:3ed:492f:7f37 with SMTP id u20-20020a05600c211400b003ed492f7f37mr8747292wml.10.1679923813047;
-        Mon, 27 Mar 2023 06:30:13 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9UiwP8XvEO+pMF2nbKcdfIrVKf+Fs5lq6Q+1t1gZjOUKhdS1XmGs2yy9FXpB/ck95uX2096g==
-X-Received: by 2002:a05:600c:2114:b0:3ed:492f:7f37 with SMTP id u20-20020a05600c211400b003ed492f7f37mr8747274wml.10.1679923812717;
-        Mon, 27 Mar 2023 06:30:12 -0700 (PDT)
-Received: from redhat.com ([2.52.153.142])
-        by smtp.gmail.com with ESMTPSA id g8-20020a05600c310800b003ee610d1ce9sm8981395wmo.34.2023.03.27.06.30.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 06:30:12 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 09:30:09 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        elic@nvidia.com
-Subject: Re: [GIT PULL] vdpa: bugfix
-Message-ID: <20230327092909-mutt-send-email-mst@kernel.org>
-References: <20230327091947-mutt-send-email-mst@kernel.org>
+        Mon, 27 Mar 2023 09:30:44 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373F65FF2;
+        Mon, 27 Mar 2023 06:30:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679923808; x=1711459808;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yyb51LByAX16MGbX4ZdRUMDN22yNkVuq56AERr10ryQ=;
+  b=Fw7rpaE7bZzKms5/901VW8DR1LUN7pRGMc92QqTS0rdoJOMkUOk/6hMq
+   3rn/pyOBwE7yXrv/mIeefgJmkRsXzjjt/Jx+1uaMvQLFZt4IRq13P0pUj
+   cWRmVgTNBGyZ9FN0dgITE2KypKn29QTu1zIenD2dtNmIUrIHLv4U+2h2H
+   rLeVkIqouF+h60zmUPqUYSE57agDvIrLCR6MV8BMPMWEIVh9Qg/7h9VJq
+   6a64qYttx2aU+X3ZGd37SHMSRsh6ZxqtmXBhYqjkOdZUuYxlC+ptg/lDH
+   yq3DV2MRKKg8GRnsn8Wn1Mqw3fkM1JToalcxRJB8PoIzvi6vAd5P8mky2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="405185261"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="405185261"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 06:30:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="685966791"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="685966791"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga007.fm.intel.com with ESMTP; 27 Mar 2023 06:30:00 -0700
+Message-ID: <70474413-fcb0-7527-d7a3-67c3e55d0f1b@linux.intel.com>
+Date:   Mon, 27 Mar 2023 16:31:22 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327091947-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH] xhci: Free the command allocated for setting LPM if we
+ return early
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     mirsad.todorovac@alu.unizg.hr, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ubuntu-devel-discuss@lists.ubuntu.com, stern@rowland.harvard.edu,
+        arnd@arndb.de, Stable@vger.kernel.org
+References: <b86fcdbd-f1c6-846f-838f-b7679ec4e2b4@linux.intel.com>
+ <20230327095019.1017159-1-mathias.nyman@linux.intel.com>
+ <ZCGDRrT4Bo3-UYOZ@kroah.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <ZCGDRrT4Bo3-UYOZ@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,36 +69,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks like a sent a bad pull request. Sorry!
-Please disregard.
+On 27.3.2023 14.51, Greg KH wrote:
+> On Mon, Mar 27, 2023 at 12:50:19PM +0300, Mathias Nyman wrote:
+>> The command allocated to set exit latency LPM values need to be freed in
+>> case the command is never queued. This would be the case if there is no
+>> change in exit latency values, or device is missing.
+>>
+>> Fixes: 5c2a380a5aa8 ("xhci: Allocate separate command structures for each LPM command")
+>> Cc: <Stable@vger.kernel.org>
+>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> ---
+>>   drivers/usb/host/xhci.c | 1 +
+>>   1 file changed, 1 insertion(+)
+> 
+> Do you want me to take this now, or will you be sending this to me in a
+> separate series of xhci fixes?  Either is fine with me.
 
-On Mon, Mar 27, 2023 at 09:19:50AM -0400, Michael S. Tsirkin wrote:
-> The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
-> 
->   Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-> 
-> for you to fetch changes up to 8fc9ce051f22581f60325fd87a0fd0f37a7b70c3:
-> 
->   vdpa/mlx5: Remove debugfs file after device unregister (2023-03-21 16:39:02 -0400)
-> 
-> ----------------------------------------------------------------
-> vdpa: bugfix
-> 
-> An error handling fix in mlx5.
-> 
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+I can send a separate series this week, there are some other fixes as well.
 
-
-
-
-> ----------------------------------------------------------------
-> Eli Cohen (1):
->       vdpa/mlx5: Remove debugfs file after device unregister
-> 
->  drivers/vdpa/mlx5/net/mlx5_vnet.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks
+Mathias
 
