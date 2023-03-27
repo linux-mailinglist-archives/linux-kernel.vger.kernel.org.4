@@ -2,68 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DFB6CAE4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3A06CAE51
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232844AbjC0TMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S232531AbjC0TNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 15:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232762AbjC0TMc (ORCPT
+        with ESMTP id S232646AbjC0TNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:12:32 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7674D46A8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:12:20 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-3e392e10cc4so785571cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:12:20 -0700 (PDT)
+        Mon, 27 Mar 2023 15:13:23 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13814488;
+        Mon, 27 Mar 2023 12:12:47 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id v1so9889028wrv.1;
+        Mon, 27 Mar 2023 12:12:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679944339;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hCIxMCtVwvJudjfZUgG2jT2uTyvf4xuZUEIz2rDKMFI=;
-        b=NwtDg0rPE+ibvY3zDSxy+0v5POp391qso4fB1BMcg/Ex+IctIn+nYEB6DEfvNSe1mc
-         NETxtSk8dJM4AxayzkpUzYWIA+BI02N5f7IyeTsdZ6+qW4aU8zHNbmHAn40YwFI54rXn
-         jTr8j8Qp4SdrhU9xAi4Nwkob1DaB6H7WlhcdHSm0z1mpuDOkVfPNPsljVcm+XE06Ffiy
-         P1CvL5gVyQV8TsoV06LTDIokTfOuy3EuuuwfBU9eRY2WRLagh9sBc46ow1gu2RTyNXCi
-         gZiBpL01x3x3e9E2luH9LssT/L10XPA5r4nhGnTP3SrRrM2X99csrWSimK+6iuAb3HmE
-         355Q==
+        d=gmail.com; s=20210112; t=1679944365;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=HYVINSPcX570meD+tbiju4gbaHHy2aZVdws7rdRLV/U=;
+        b=KK68TZUyb+HjYZ0CT1XzfVmxm49E3yfbXe3orrjtJTlDrkwsoLOl0N/qqEXfKQdiug
+         9ObLgEKV80TmHgjR3TkTRtmyu0L2wdEYHfTCPt3ppDJDlmPpWI2zoArUty3g6GYcCcaA
+         ve+hm8dWOolIdC/kqciF2FqMVRnImO1jO7UMqw3epBVc9vSJQncDg25FDtX3EokW8Ybs
+         zYIpH3hyjBPw6L+lLPp7VZ55p9QsX910cv+BSoDT/Sn7ZpG3O7mCZ5iUoeZIHNTQDwnV
+         gFwLhQp6tVnPpsCP1wPUznIJz+EyX5Qs6Iq/jYI/c1nRBxU8B6AZ4Z4Ph7CJt5mCu0r5
+         uRiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679944339;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hCIxMCtVwvJudjfZUgG2jT2uTyvf4xuZUEIz2rDKMFI=;
-        b=ShIB8PlwtO/2rZjqET1TRqMH+r1J9htZC2bEEODWsutB8Ssszpa/eYpMvxmWt/Fh6U
-         tnN2uWIy6y8srgVSvNrd6DFw0RDRub5E94sO/MZnh4fV3VlIM+FekV+EYXogsEDnuVsP
-         kSmHSQ++8nWQVRlnbJh/9bGX4tmzamx5yWiJLBQnLvvm1KqYagdaRZ1FjR8NX92n2Kqs
-         3PBoZCnXv5Ldrvds6rjViFoMzS+b3v+zEj1uVCCN6zT0ABb0VtBIbHO39Ha31cEHollW
-         G7KwXKbHPM+N7xbnLQeNAxh7PK0h/cDRkV3tNqAM0JM29DEqdmls4TgtIYRs6KoMhuSd
-         U2cw==
-X-Gm-Message-State: AAQBX9fYuCh4Uy48Y3bLW4x8f0lANgPMLKNw+iFY0RpQ+dzPKS9f/cQp
-        rojeemp+U2fYToQNlmeCp40PJmNWAC3cnAOb4mCK+A==
-X-Google-Smtp-Source: AKy350ZKQL/fS8u5F0Tn61irzgLpRzanEqu/twC4hgamyI8WQpdRTP9uWs0zLa93gHIPpODnhX0n3WNudWnmPAUK9vg=
-X-Received: by 2002:ac8:58cb:0:b0:3bf:b62a:508b with SMTP id
- u11-20020ac858cb000000b003bfb62a508bmr59524qta.12.1679944339546; Mon, 27 Mar
- 2023 12:12:19 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679944365;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HYVINSPcX570meD+tbiju4gbaHHy2aZVdws7rdRLV/U=;
+        b=EUIt0ku5UX63KvVShrde6WkGI/VpIfiUPl7m6wzGOa+FAtJDJ8jmypU62QtBH9i0/g
+         XES94hfTS/PCFouqbmoirPqeuUrZY9TG5DIAJvC5YIhWmoVdDHQHsTj1fAy32Jh5gH1L
+         MDRRBg7l3G+WVbWdeJeatPPfqYqLu6dnQWsvo+mWNBdHtLJft5I1cbAs4fRAbzLg3Hd4
+         2N1cnaitaXd9CVY/9+DRbsKsbv/eMa2heNIdhoY1R3Rd3/NEzPyq4+S2FcneqjZZyb6J
+         t6kwsvoAdfFPu5yqndYB2YR2Ml7j07y5V38kqT/knKsXTzDYGH08nRb6VBuQpql/hPvD
+         q+hA==
+X-Gm-Message-State: AAQBX9fRhxtMvPYLL33GtT3JfJDedykgxZ39gYglUwhUnswpYXTtCPCk
+        BqlOJL6kvDp9jVNFftO618o=
+X-Google-Smtp-Source: AKy350Y47ZUzytcAg65n77+zDkosW+9AMGn5S4UlJ/7NcuCee8SP+Hdo0fbynRibnYV+tUN/IEK8bw==
+X-Received: by 2002:a5d:526a:0:b0:2d0:58f9:a6a with SMTP id l10-20020a5d526a000000b002d058f90a6amr10553468wrc.57.1679944365660;
+        Mon, 27 Mar 2023 12:12:45 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id f6-20020a05600c154600b003ef7058ea02sm3295888wmg.29.2023.03.27.12.12.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 12:12:45 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 22:12:42 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?UmVuw6k=?= van Dorst <opensource@vdorst.com>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net 4/7] net: dsa: mt7530: set both CPU port interfaces
+ to PHY_INTERFACE_MODE_NA
+Message-ID: <20230327191242.4qabzrn3vtx3l2a7@skbuf>
+References: <20230326140818.246575-1-arinc.unal@arinc9.com>
+ <20230326140818.246575-5-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-References: <000000000000bb028805f7dfab35@google.com> <2309ca53-a126-881f-1ffa-4f5415a32173@kernel.dk>
-In-Reply-To: <2309ca53-a126-881f-1ffa-4f5415a32173@kernel.dk>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Mon, 27 Mar 2023 21:12:06 +0200
-Message-ID: <CANp29Y66H4-+d4hat_HCJck=u8dTn9Hw5KNzm1aYifQArQNNEw@mail.gmail.com>
-Subject: Re: [syzbot] Monthly io-uring report
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     syzbot <syzbot+lista29bb0eabb2ddbae6f4a@syzkaller.appspotmail.com>,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230326140818.246575-5-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,49 +95,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 8:23=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 3/27/23 5:01?AM, syzbot wrote:
-> > 1873    Yes   WARNING in split_huge_page_to_list (2)
-> >               https://syzkaller.appspot.com/bug?extid=3D07a218429c8d19b=
-1fb25
-> > 38      Yes   KASAN: use-after-free Read in nfc_llcp_find_local
-> >               https://syzkaller.appspot.com/bug?extid=3De7ac69e6a5d8061=
-80b40
->
-> These two are not io_uring. Particularly for the latter, I think syzbot
-> has a tendency to guess it's io_uring if any kind of task_work is
-> involved. That means anything off fput ends up in that bucket. Can we
-> get that improved please?
+On Sun, Mar 26, 2023 at 05:08:15PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> Set interfaces of both CPU ports to PHY_INTERFACE_MODE_NA. Either phylink
+> or mt7530_setup_port5() on mt7530_setup() will handle the rest.
+> 
+> This is already being done for port 6, do it for port 5 as well.
+> 
+> Fixes: 38f790a80560 ("net: dsa: mt7530: Add support for port 5")
 
-Sure, I'll update the rules and rerun the subsystem recognition.
+This is getting comical.. I think I'm putting too much energy in
+trying to understand the hidden meaning of this patch set.
 
-Currently syzbot sets io_uring if at least one is true
-a) The crash stack trace points to the io_uring sources (according to
-MAINTAINERS)
-b) At least one reproducer has the syz_io_uring_setup call (that's a
-helper function that's part of syzkaller).
+In include/linux/phy.h we have:
 
-In general syzbot tries to minimize the reproducer, but unfortunately
-sometimes there remain some calls, which are not necessary per se. It
-definitely tried to get rid of them, but the reproducer was just not
-working with those calls cut out. Maybe they were just somehow
-affecting the global state and in the execution log there didn't exist
-any other call candidates, which could have fulfilled the purpose just
-as well.
+typedef enum {
+	PHY_INTERFACE_MODE_NA,
 
-I can update b) to "all reproducers have syz_io_uring_setup". Then
-those two bugs won't match the criteria.
-If it doesn't suffice and there are still too many false positives, I
-can drop b) completely.
+In lack of other initializer, the first element of an enum gets the
+value 0 in C.
 
-By the way, should F: fs/io-wq.c also be added to the IO_URING's
-record in the MAINTAINERS file?
+Then, "priv" is allocated by this driver with devm_kzalloc(), which
+means that its entire memory is zero-filled. So priv->p5_interface and
+priv->p6_interface are already set to 0, or PHY_INTERFACE_MODE_NA.
 
---
-Aleksandr
+There is no code path between the devm_kzalloc() and the position in
+mt7530_setup() that would change the value of priv->p5_interface or
+priv->p6_interface from their value of 0 (PHY_INTERFACE_MODE_NA).
+For example, mt753x_phylink_mac_config() can only be called from
+phylink, after dsa_port_phylink_create() was called. But
+dsa_port_phylink_create() comes later than ds->ops->setup() - one comes
+from dsa_tree_setup_ports(), and the other from dsa_tree_setup_switches().
 
->
-> --
-> Jens Axboe
->
+The movement of the priv->p6_interface assignment with a few lines
+earlier does not change anything relative to the other call sites which
+assign different values to priv->p6_interface, so there isn't any
+functional change there, either.
+
+So this patch is putting 0 into a variable containing 0, and claiming,
+through the presence of the Fixes: tag and the submission to the "net"
+tree, that it is a bug fix which should be backported to "stable".
+
+Can it be that you are abusing the meaning of a "bug fix", and that I'm
+trying too hard to take this patch set seriously?
+
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  drivers/net/dsa/mt7530.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> index 6d33c1050458..3deebdcfeedf 100644
+> --- a/drivers/net/dsa/mt7530.c
+> +++ b/drivers/net/dsa/mt7530.c
+> @@ -2203,14 +2203,18 @@ mt7530_setup(struct dsa_switch *ds)
+>  		mt7530_rmw(priv, MT7530_TRGMII_RD(i),
+>  			   RD_TAP_MASK, RD_TAP(16));
+>  
+> +	/* Let phylink decide the interface later. If port 5 is used for phy
+> +	 * muxing, its interface will be handled without involving phylink.
+> +	 */
+> +	priv->p5_interface = PHY_INTERFACE_MODE_NA;
+> +	priv->p6_interface = PHY_INTERFACE_MODE_NA;
+> +
+>  	/* Enable port 6 */
+>  	val = mt7530_read(priv, MT7530_MHWTRAP);
+>  	val &= ~MHWTRAP_P6_DIS & ~MHWTRAP_PHY_ACCESS;
+>  	val |= MHWTRAP_MANUAL;
+>  	mt7530_write(priv, MT7530_MHWTRAP, val);
+>  
+> -	priv->p6_interface = PHY_INTERFACE_MODE_NA;
+> -
+>  	/* Enable and reset MIB counters */
+>  	mt7530_mib_reset(ds);
+>  
+> -- 
+> 2.37.2
+> 
