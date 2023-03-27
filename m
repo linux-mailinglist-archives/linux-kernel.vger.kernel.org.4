@@ -2,177 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67FD6CA789
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD9B6CA78C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbjC0OZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
+        id S232975AbjC0O1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbjC0OZ0 (ORCPT
+        with ESMTP id S230070AbjC0O13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:25:26 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2966549FF;
-        Mon, 27 Mar 2023 07:24:01 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pgnlM-00028b-GB; Mon, 27 Mar 2023 16:23:56 +0200
-Message-ID: <073d5ee7-64e7-7ced-44cc-2f7f00a8b238@leemhuis.info>
-Date:   Mon, 27 Mar 2023 16:23:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US, de-DE
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
+        Mon, 27 Mar 2023 10:27:29 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E386E72B2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679927203; x=1711463203;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=83pEQ9KTFneyFbioXCE2oteqihcip/h5EwzkIU0AfBo=;
+  b=g69vc9q2dLYw38hVZCFiJ36NoKjUJWS0fQl5uTwykUdQDf6ys0HKSg3U
+   +t9M6660vlZS24rcU0rW4MaPI1ddCkqb9LTJoT8+UEDxXXuJxtfH7RiSN
+   qAgUL/TA2f5+txWKZoCTxp2Z9JB5xCEYQNRpwKW1ugvotCgYjFTCdFVFu
+   TIp5blzQZxm8xYavcrJk4wlx6KXvZ4TtnhrPxUGlcLYJTkjyJAJoib+Fl
+   6pM5wqeU910eByF710Y9rb6NMA9SQSN0fiD7RPG/FKMUmi8tEhlvG/cVF
+   V2hhT1wDc9Duq57XKqgCvTH4n9SJYmQ9yq75+oRWy2q5RfjTKoXux61Nd
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="340305407"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="340305407"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 07:26:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="857668805"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="857668805"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 27 Mar 2023 07:26:08 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C88F579C; Mon, 27 Mar 2023 17:26:08 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
-References: <20230314-doc-checkpatch-closes-tag-v2-0-f4a417861f6d@tessares.net>
- <20230314-doc-checkpatch-closes-tag-v2-1-f4a417861f6d@tessares.net>
- <29b2c9c1-f176-5e42-2606-94b4bc6d4c45@leemhuis.info>
- <9462668e-dbaf-8df8-8ba2-86f9511294ac@tessares.net>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v2 1/2] docs: process: allow Closes tags with links
-In-Reply-To: <9462668e-dbaf-8df8-8ba2-86f9511294ac@tessares.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1679927042;42a94168;
-X-HE-SMSGID: 1pgnlM-00028b-GB
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] lib/test-string_helpers: Replace UNESCAPE_ANY by UNESCAPE_ALL_MASK
+Date:   Mon, 27 Mar 2023 17:26:04 +0300
+Message-Id: <20230327142604.48213-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.03.23 15:05, Matthieu Baerts wrote:
-> 
-> Thank you for your reply!
+When we get a random number to generate a flag in the valid range
+of UNESCAPE flags, use UNESCAPE_ALL_MASK, It's more correct and
+prevents from missed updates of the test coverage in the future
+if any.
 
-Thank you for working on this!
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ lib/test-string_helpers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> On 26/03/2023 13:28, Thorsten Leemhuis wrote:
->> On 24.03.23 19:52, Matthieu Baerts wrote:
->>> Making sure a bug tracker is up to date is not an easy task. For
->>> example, a first version of a patch fixing a tracked issue can be sent a
->>> long time after having created the issue. But also, it can take some
->>> time to have this patch accepted upstream in its final form. When it is
->>> done, someone -- probably not the person who accepted the patch -- has
->>> to remember about closing the corresponding issue.
->>>
->>> This task of closing and tracking the patch can be done automatically by
->>> bug trackers like GitLab [1], GitHub [2] and hopefully soon [3]
->>> bugzilla.kernel.org when the appropriated tag is used. The two first
->>> ones accept multiple tags but it is probably better to pick one.
->>>
->>> [...]
->>>
->>> diff --git a/Documentation/process/5.Posting.rst b/Documentation/process/5.Posting.rst
->>> index 7a670a075ab6..20f0b6b639b7 100644
->>> --- a/Documentation/process/5.Posting.rst
->>> +++ b/Documentation/process/5.Posting.rst
->>> @@ -217,6 +217,15 @@ latest public review posting of the patch; often this is automatically done
->>>  by tools like b4 or a git hook like the one described in
->>>  'Documentation/maintainer/configure-git.rst'.
->>>  
->>> +Similarly, there is also the "Closes:" tag that can be used to close issues
->>> +when the underlying public bug tracker can do this operation automatically.
->>> +For example::
->>> +
->>> +	Closes: https://example.com/issues/1234
->>> +
->>> +Private bug trackers and invalid URLs are forbidden. For other public bug
->>> +trackers not supporting automations, keep using the "Link:" tag instead.
->>> [...]
->>
->> This more and more seems half-hearted to me.
->>
->> One reason: it makes things unnecessarily complicated for developers, as
->> they'd then have to remember `is this a public bug tracker that is
->> supporting automations? Then use "Closes", otherwise "Link:"`.
->>
->> Another reason: the resulting situation ignores my regression tracking
->> bot, which (among others) tracks emailed reports. It would benefit from
->> "Closes" as well to avoid the ambiguity problem Konstantin brought up
->> (the one about "Link: might just point to a report for background
->> information in patches that don't address the problem the link points
->> to"[1]. But FWIW, I'm not sure if this ambiguity is much of a problem in
->> practice, I have a feeling that it's rare and most of the time will
->> happen after the reported problem has been addressed or in the same
->> patch-set.
-> 
-> Even if they are rare, I think it might be good to avoid false-positives
-> that can be frustrating or create confusions. Using a dedicated tag plus
-> some safeguards help then be required. (And it is not compatible with
-> existing forges.)
-Yeah, FWIW, I was all for such clear tags myself not that long ago (and
-even twice proposed some), but due to the experience with regzbot and
-Linus recent comment on Closes: I'm more in the neutral camp these days.
+diff --git a/lib/test-string_helpers.c b/lib/test-string_helpers.c
+index 41d3447bc3b4..9a68849a5d55 100644
+--- a/lib/test-string_helpers.c
++++ b/lib/test-string_helpers.c
+@@ -587,7 +587,7 @@ static int __init test_string_helpers_init(void)
+ 	for (i = 0; i < UNESCAPE_ALL_MASK + 1; i++)
+ 		test_string_unescape("unescape", i, false);
+ 	test_string_unescape("unescape inplace",
+-			     get_random_u32_below(UNESCAPE_ANY + 1), true);
++			     get_random_u32_below(UNESCAPE_ALL_MASK + 1), true);
+ 
+ 	/* Without dictionary */
+ 	for (i = 0; i < ESCAPE_ALL_MASK + 1; i++)
+-- 
+2.40.0.1.gaa8946217a0b
 
->> I thus think we should use either of these approaches:
->>
->> * just stick to "Link: <url>"
->>
->> * go "all-in" and tell developers to use "Closes: <url>"[2] all the time
->> when a patch is resolving an issue that was reported in public
->>
->> I'm not sure which of them I prefer myself. Maybe I'm slightly leaning
->> towards the latter: it avoids the ambiguity, checkpatch.pl will yell if
->> it's used with something else than a URL, it makes things easier for
->> MPTCP & DRM developers, and (maybe most importantly) is something new
->> developers are often used to already from git forges.
-> 
-> I think it makes sense not to restrict this tag to bug trackers with
-> automations as long as they are public of course. After having looked at
-> the comments from v1, I didn't feel like it would have been OK to extend
-> its usage but I can send a v3 taking this direction hoping to get more
-> feedback. After all, thanks to regzbot, we can also say that there are
-> some automations behind lore.kernel.org and other ML's :)
-
-:-D
-
-> If we do that, would it be blocking to have this included in v6.3?
-
-You mean if this still can go in for 6.3? Well, the patches afaics needs
-to be ACKed by the right people first (Joe for checkpatch I guess, Jon
-for docs). It likely also depends on how this discussion continues and
-the opinion of the maintainer(s?) that picks up the patches.
-
->> [1]
->> https://lore.kernel.org/linux-doc/20230317185637.ebxzsdxivhgzkqqw@meerkat.local/
->>
->> [2] fwiw, I still prefer "Resolves:" over "Closes". Yes, I've seen
->> Konstantin's comment on the subtle difference between the two[3], but as
->> he said, Bugbot can work with it as well. But to me "Resolves" sounds
->> way friendlier and more descriptive to me; but well, I'm not a native
->> speaker, so I don't think my option should count much here.
-> 
-> As a non-native speaker, I'm open to use either of them. But as a
-> developer, I feel like I'm more used to see the "Closes:" tag than the
-> "Resolves" one.
-> 
-> When looking at the Git history, the "Closes:" tag with a link has been
-> used ~500 times, compared to ~14 times for "Resolves:". Maybe "Closes:"
-> is more natural for developers who first want to have their assigned
-> tickets being "closed" automatically than issues being "resolved"? :)
-
-Yeah, "developers are used to it" is a good argument. I'm not so sure
-about the other argument, somehow "Resolves" feels more fitting to the
-imperative language we use. Whatever, as I said, I don't care much (and
-maybe thus shouldn't have written this paragraph :-D ).
-
-Ciao, Thorsten
