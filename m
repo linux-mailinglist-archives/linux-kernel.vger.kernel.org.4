@@ -2,118 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66C66CABDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D45296CABEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjC0Rb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 13:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
+        id S232378AbjC0Rgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 13:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjC0Rb1 (ORCPT
+        with ESMTP id S231891AbjC0Rgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:31:27 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9F92132
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:31:25 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id b20so39418899edd.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:31:25 -0700 (PDT)
+        Mon, 27 Mar 2023 13:36:31 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1395D194
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:36:30 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id m5so6916671uae.11
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:36:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google; t=1679938284;
+        d=google.com; s=20210112; t=1679938589;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BLeyoUE1XS+xc+w9+asjmtr0fCuN33xtodTQFW0/8sE=;
-        b=SfkT+OvrKMhbZPtkb5od8SE3UdkexUf58KzkH3imby5heDbtN/pMK2xBHuae9mqEDJ
-         SgnE7awV95TjIFVk3qinzSN1kMRPL7kf5xgHUZHp0ppscI8VFE3AltHWX2z6swRLWqj+
-         jKXqNyoj+XN080DhKGinPGZyQvthjIQt7BSQ0paDLBHwWNB1mgQveZFZJGp9tz0AqeU6
-         XCSPDPCpevliNmQd5MCv8IwSWD1Xstb+Ges6zqIqZQi6rli0fL1P4QJPXkxeKvp3SRE6
-         2RDz79YA/R1yQkHPkjB4RbfsI52b6tfiyFZZ7A+zhD5xjx0BnGy27OKw32ztS0F4iUlM
-         UlxQ==
+        bh=iEz3U669eusarpdOhYY7KYApKyeHC+XWqMsT7FRhmXs=;
+        b=X/+I64ySwrBmfuGZEe53ScuVQe0B8Ih9lH+keHrzFe3gwrkz0E83XPgyzDjUMjjiDD
+         g+bTo3+UwEwRHu81T6msOPGw/9FqE1f42194QiqP9/OqZiR1R34PhndLQMcrAMwVLC6N
+         LPfNvhr1c113OCgxM2WojAz+Q+Kez3ZKZPWa/8h/5uSFmVfw0K9GniowrUMt2OAfWXp1
+         bVALLmglOD1zHZPnG/jU7IhCa09JAxCudhOxX/pIpQ8Tq5BfTWK6uQXHczqCIVdXG2yc
+         ebR608LLiKgkkwaarNjccCwreBwrPeSPEdEZIjxeA90eqtFG/BF07eNL1/nEg7n3AuHl
+         ajhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679938284;
+        d=1e100.net; s=20210112; t=1679938589;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BLeyoUE1XS+xc+w9+asjmtr0fCuN33xtodTQFW0/8sE=;
-        b=LMeC01f/1FDoiDr3uU1Ji+xJCjn6NXDnnEqG3qkM3gfqwxYQLm4BiZpcHXsD7nmOOb
-         azJPgANDtuRek9xVH4hZBQWc039gPqcwYc2ybp4IzWl32APH3/1bXc7Wmd4pka8WWNIo
-         LwDC+fFZzdBO1jASJlzm7xStBtGFm1xF0BjsOcZD8A9R3KTZWDkXf17lR/PTNtGkuvFV
-         NXJMESOjqKFTe4aUgHIL6VCTrKQrnDmeQN5mOPa/Sk6XtyPnVeVA30zG4Xi7bo8ZvpjH
-         toKwTY53Kt5LKZQU70IUn2IMX7l6lL1XIUjRBWkF5gqU9kn0s6owloU2EMl3ApbfHkcp
-         PnGQ==
-X-Gm-Message-State: AAQBX9ey+QOZmXP+N/1nTYy01rEbkvGURhq+4wpsjy5NsxRkOx7VAILO
-        I6rt+hIcgMvhOg7HkeNRtwT8q/CPIOdh1jE4q7xjjw==
-X-Google-Smtp-Source: AKy350auy3pb5msPI71L1H+iHRixzM9Rw8HWMt8Kjxhog+BH+xAS604sqHx5GmiXjp20YqgBRIa+wqb0gjp4tOnyYOI=
-X-Received: by 2002:a17:906:c003:b0:932:777a:d34b with SMTP id
- e3-20020a170906c00300b00932777ad34bmr5939662ejz.14.1679938284273; Mon, 27 Mar
- 2023 10:31:24 -0700 (PDT)
+        bh=iEz3U669eusarpdOhYY7KYApKyeHC+XWqMsT7FRhmXs=;
+        b=LXfKHUEaR68LrX+h7En1QAh+YYKMIlyVfv2wkJ5WOxEeK44bKBQbXUbD1QdgyuvY33
+         SdkB50T1kwl31J40A5T8VXEEpOyTaQ9bp6ehT6uXT3czYWCki64S8EFWrjEnry6QatfY
+         Qdo/5BXgropjfKnuJHjhfbsvq8kxAGFSCRsRcRE0PYsUct73bAfLGdWZXoaDEbS2zb4Q
+         6Epnhu8ZyBzXq91USADsHM4GV3h48HkoWSUeg8mULrVEi7+cRZm4AYXs/KmGGECZ+bTf
+         +54/8E2zhwOL/dA5l9UM0eoNt+56CzibviZxoT+gTpl72lznUpCgOjhU+Yj8lMiMS4XC
+         VtkQ==
+X-Gm-Message-State: AAQBX9cjBjy3tpKobImCGi1cKIRz5msHYlP6/ptH1HePwJs0ov8HzTF1
+        Kw3VOaNBx6OxSgrnhScXspmILYLN8nWQzHGxR86hyw==
+X-Google-Smtp-Source: AKy350YbDMi2uGWPOd3bHOIwEjCKN7d/pdSlcBAJGKrIOUa6ARnClHJ058kfsjjEkkbOnvGFbJbs4whviQpqhVvD2WU=
+X-Received: by 2002:a1f:2dce:0:b0:436:4a89:bb11 with SMTP id
+ t197-20020a1f2dce000000b004364a89bb11mr7016521vkt.0.1679938588828; Mon, 27
+ Mar 2023 10:36:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230327122948.4323-1-johan+linaro@kernel.org>
-In-Reply-To: <20230327122948.4323-1-johan+linaro@kernel.org>
-From:   Steev Klimaszewski <steev@kali.org>
-Date:   Mon, 27 Mar 2023 12:31:13 -0500
-Message-ID: <CAKXuJqj59JzodbjFQNndyHXC0H0dHbG03V2w8293yaQUpjNdHQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-pmics: fix pon compatible and registers
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Erdem Aktas <erdemaktas@google.com>
+Date:   Mon, 27 Mar 2023 10:36:17 -0700
+Message-ID: <CAAYXXYxC++kRW_Kg0jieaxuwzTC2hu-9SxRjsHH_kqZW_DTE7Q@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] TDX Guest Quote generation support
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 7:30=E2=80=AFAM Johan Hovold <johan+linaro@kernel.o=
-rg> wrote:
+On Sat, Mar 25, 2023 at 11:20=E2=80=AFPM Kuppuswamy Sathyanarayanan
+<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
 >
-> The pmk8280 PMIC PON peripheral is gen3 and uses two sets of registers;
-> hlos and pbs.
+> Hi All,
 >
-> This specifically fixes the following error message during boot when the
-> pbs registers are not defined:
+> In TDX guest, the attestation process is used to verify the TDX guest
+> trustworthiness to other entities before provisioning secrets to the
+> guest.
 >
->         PON_PBS address missing, can't read HW debounce time
+> The TDX guest attestation process consists of two steps:
 >
-> Note that this also enables the spurious interrupt workaround introduced
-> by commit 0b65118e6ba3 ("Input: pm8941-pwrkey - add software key press
-> debouncing support") (which may or may not be needed).
+> 1. TDREPORT generation
+> 2. Quote generation.
 >
-> Fixes: ccd3517faf18 ("arm64: dts: qcom: sc8280xp: Add reference device")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi b/arch/arm64/bo=
-ot/dts/qcom/sc8280xp-pmics.dtsi
-> index c35e7f6bd657..a0ba535bb6c9 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
-> @@ -59,8 +59,9 @@ pmk8280: pmic@0 {
->                 #size-cells =3D <0>;
->
->                 pmk8280_pon: pon@1300 {
-> -                       compatible =3D "qcom,pm8998-pon";
-> -                       reg =3D <0x1300>;
-> +                       compatible =3D "qcom,pmk8350-pon";
-> +                       reg =3D <0x1300>, <0x800>;
-> +                       reg-names =3D "hlos", "pbs";
->
->                         pmk8280_pon_pwrkey: pwrkey {
->                                 compatible =3D "qcom,pmk8350-pwrkey";
-> --
-> 2.39.2
->
-Tested on the Thinkpad X13s
+> The First step (TDREPORT generation) involves getting the TDX guest
+> measurement data in the format of TDREPORT which is further used to
+> validate the authenticity of the TDX guest. The second step involves
+> sending the TDREPORT to a Quoting Enclave (QE) server to generate a
+> remotely verifiable Quote. TDREPORT by design can only be verified on
+> the local platform. To support remote verification of the TDREPORT,
+> TDX leverages Intel SGX Quoting Enclave to verify the TDREPORT
+> locally and convert it to a remotely verifiable Quote. Although
+> attestation software can use communication methods like TCP/IP or
+> vsock to send the TDREPORT to QE, not all platforms support these
+> communication models. So TDX GHCI specification [1] defines a method
+> for Quote generation via hypercalls. Please check the discussion from
+> Google [2] and Alibaba [3] which clarifies the need for hypercall based
+Thanks Sathyanarayanan for submitting patches again.
 
-Tested-by: Steev Klimaszewski <steev@kali.org> #Thinkpad X13s
+I just wanted to reiterate what I said before that having a clean
+TDVMCALL based interface to get TDX Quote without any virtio/vsock
+dependency  is critical for us to support many use cases.
