@@ -2,142 +2,408 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CA76CA0AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B876CA11A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233330AbjC0J6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S233575AbjC0KUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233299AbjC0J6X (ORCPT
+        with ESMTP id S233052AbjC0KUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:58:23 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2050.outbound.protection.outlook.com [40.107.7.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE58524E;
-        Mon, 27 Mar 2023 02:58:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PKz4EoLBnCVR6XaC1ROg5+42EMUavh50i4/fX+KG3ipnD1F3srs8VvPDgiQp3yBr59nBhBPCBd9r9c+ez4EwG68AsQqLRzc05Ox/y5KWsH59K7FTDP4G9oIuHdJJtwoFv8FjZ2QwgP0RaFA1UisSGVNcykFBj4bYDAyTsU5pu+suIg6BKIJXmbsCtAwz1ckduU/D7+FRjw6eZThKKmxl83h0N8auyEIdl+8wALCMsJjIo6w9kTaeJ74Wgc6gNp/pTEet+n8xQ1icV45ASooiAc/fgvb5r3vrWKgqzSmAlmPhGRRTnK1TM89NExwNHd5OcJhzhX6lrGgLN2/I5AJ8OA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wXkx66bUn/zLwdDfOtvj/jvZao7yWAZCE8H0SbFKf/0=;
- b=DrbwNtpHdxtD8FGikIgzBp4Hkg63b8/DMRikmNUcq0u/GC4htU4fESr1YUYUdHI8GfkqGjLUFmRmGxf/zCPxc5d+Ck3zpNu9KwP9s4ul37l9V/pcVFKjeFqN1vBZrgZYIXSyWJNqPsl9ndH4U/qOxKOAwWidEtzuyHWpHF+0UTKZF8AOPN+mzAMKf1VU0BC/Lb1RDjJFN0JUgK1Guvbgc4o7XRqrSNXxUFxaDlsZD8jGIjiExxVInXVRPKCogaYF53IeOdkvSZTRp5sVTDViyVYDFJSlE88TULljNmG9a9lybC25LKJk/lypBnuJklu8YA/2O2Z5C+GqTwAVodlryA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wXkx66bUn/zLwdDfOtvj/jvZao7yWAZCE8H0SbFKf/0=;
- b=QjmMdaU4qPrNIPUg1E4pN/1AUxsWKPEqigGD7od5V8/mS07VSsTsMZObH0i7TDiRpkstO2resxpPi4mEJFIholiQsHz5DwSPvt7RgtHrCmEFb3ALkzoGgNGwifXE8Cs9st8i6kCopvaF2koqaFu2sw10A9k2ONHUa4tkdNhmay4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DU2PR04MB8597.eurprd04.prod.outlook.com (2603:10a6:10:2d8::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.30; Mon, 27 Mar
- 2023 09:58:17 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::778e:19d0:cba0:5cc0]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::778e:19d0:cba0:5cc0%4]) with mapi id 15.20.6222.028; Mon, 27 Mar 2023
- 09:58:16 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH] arm64: dts: imx8mm-evk: correct pmic clock source
-Date:   Mon, 27 Mar 2023 18:03:21 +0800
-Message-Id: <20230327100321.1682333-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR06CA0007.apcprd06.prod.outlook.com
- (2603:1096:4:186::9) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Mon, 27 Mar 2023 06:20:25 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461074C3F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:20:22 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id q7-20020a05600c46c700b003ef6e809574so1579918wmo.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:20:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679912421;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=j0+1oYuXm7BJjPeE4MUkuJBSiJWTL5a+EppFIuNb5vg=;
+        b=nRUJPwIpuWJC/QeZyVPrcpgncILzPdTy+iFY8Qag96pNIrqtndXxzrv2a/fyLd9osB
+         dKnLAPPcY0YR+cG8KsAjboYGzp4vW2lv15djJ11qu8X7GZ2/nJSHyprCsV5BVjSe6w4v
+         z8N3WySseIxqE85jv/ujiEpZl0+rme5j1k1U9f++joukENIBf3Xav+neaZXpVreR6uRt
+         tzwSDQ5RHAWbtlMGXTZN/svqXxdMYyfCBkgM0bP2BW/xXbARX0SdVJA3Sh9XXjgi6jZT
+         QiOG4sxPfbXxxhUEAsJxZqAnYbpl0UTSS64wCQHZG5at1kJDmUk11plaTEFvewFZ+z4U
+         0hHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679912421;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j0+1oYuXm7BJjPeE4MUkuJBSiJWTL5a+EppFIuNb5vg=;
+        b=KX8obH2R3vck4dOUaW/MC5nDTGeh08K7WzHloWousEknDqkbhEDmZFltG2ToqYLx9n
+         Ekq4ByP1f06TD2tGMADmlbpnuWkgEhmkJww4UY6/D38izn+3aJdNWfbd3AOkytbg/SRv
+         7oiHfj/DUNKDiFvlo/DzC7eAdJGqQvvDPUZTlDtZoA1Rrk1ggbtG/6pmMu70cqHNj7u2
+         6qvsFvlBA6n7JxRa6qXKMB4QcApcxTKLIyJuTmw55XQZWCMp/5HDySBRmvnGvzdi7l6A
+         inxsKWPIF2GsOkThjqkTteQvjz0pCf+uUxp1o9HYDlUqWtkFZHLzrA/btQKxE7Ep8gSa
+         xpsA==
+X-Gm-Message-State: AO0yUKXN4/7UMlhdLk5du+X6eABmlnIJaCy3gqHuhsEAsiVQSgpNK0sO
+        Q4lrKqm4/43RCwg/E/8Ag45fpA==
+X-Google-Smtp-Source: AK7set9OVXr25yXitlIVGdLEcdaSgx7Pmgggfqqg0gs+halm3xWhSdrDrHSPfjSs9f/EeUOUciBplg==
+X-Received: by 2002:a1c:790b:0:b0:3ee:7022:5eda with SMTP id l11-20020a1c790b000000b003ee70225edamr8948305wme.7.1679912420729;
+        Mon, 27 Mar 2023 03:20:20 -0700 (PDT)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id f6-20020a05600c154600b003ef7058ea02sm1776253wmg.29.2023.03.27.03.20.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 03:20:20 -0700 (PDT)
+References: <20230321193014.26349-1-ddrokosov@sberdevices.ru>
+ <20230321193014.26349-4-ddrokosov@sberdevices.ru>
+User-agent: mu4e 1.8.13; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        neil.armstrong@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com
+Cc:     jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v11 3/5] dt-bindings: clock: meson: add A1 PLL and
+ Peripherals clkcs bindings
+Date:   Mon, 27 Mar 2023 11:51:21 +0200
+In-reply-to: <20230321193014.26349-4-ddrokosov@sberdevices.ru>
+Message-ID: <1jmt3yo5r0.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|DU2PR04MB8597:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1707504e-285e-4aaf-1ccf-08db2ea9c940
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Dgt/oC8qpoeICwGr6d6Nhiey6SzQ9HvYGCMdWqZ2CUSPR7g5uy/RpCZzpxvN4BFePhere4WaeMk/2rO1my43UBSSu1fEAO5I09VnWC8oqUjdq/h47Nxgo3Fv9EAaLjO6b4TjWF54E8Nrz2g+krSpw7onmr6JlzBr8GL4aDOe++x9d4OWmD/yGivlIJ9DJ22Y7YkPwzwCtSrIbyESSM5DdoJEjLv+CUDy/+BNo35j9HBoqH+rA6oP4sgzBXGIppBI3AOvzkEuqe8gRWrItkqkvumJmtvytnYGtpdPd+FpIxoDtYYFsHTGbq6CscuxVHnX/5SQ7Jw+GREaw/XfNUo9nuhjwbP/nn0cLHuGa0CHvIHQgJnNpnyEHCi/noYcz//3YFrVnnxjBQ/YsDvMr9OTONzvS4ZJ1gC6/InaIW6CWOMuyOD5nQQAIzI/aW10ljHsZQeAMFDB6cvSnuNqOYflf56J6P2TQZTAhzbMAEIFdBa5XI/km+p5NQQtyClIQI+ldBU9VTnp63eqmyhOGBL8yCRpEEQlrBo9mrX8hiw9nAq+4VfD1YiRzpOt7aLD3qfh5DMYrj9bI4pajxjk/+ZjuLVK80Lvx+MUJMXNddQV++fsI6gkhsaBZ/l8tTt4sn6rqc2fZSwBGDXUA9/zOt+Skg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(346002)(39860400002)(366004)(451199021)(2906002)(38350700002)(38100700002)(83380400001)(41300700001)(5660300002)(4744005)(8936002)(86362001)(2616005)(6666004)(6506007)(1076003)(6512007)(26005)(316002)(6486002)(52116002)(478600001)(186003)(4326008)(66556008)(66476007)(8676002)(66946007)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uBXRHN8DavU6jYSVcswDjWWfuwHQ5c2/2Wkh95aP/CEdCBM6KjS8jSR7kEJR?=
- =?us-ascii?Q?b9GW8zv+tA+tHjikYyyWuKJotPm8ZnM2slFX0lNqfomqK8xhKTir6nwBrKaX?=
- =?us-ascii?Q?doItTc6mOuuckpaYW9ED8Zvx6gKsMZh9bVtgQXIP7qN/H6Vg6DDM4atZBeRq?=
- =?us-ascii?Q?Deq4RYCHfQ4co2T/gz0HtovYNDLsz9jMIe9304RpFtWdO1I3xiSJakb4lzCT?=
- =?us-ascii?Q?yvlTA2ppfP8azsgiaN+el2oeCpCcdYpAHCr5gK2yTokvm+Ank+9jYZcD/W5g?=
- =?us-ascii?Q?T2l/gfP2/3gUDVcPOFvAaX0KMUPoDGD80zUMm/xqlX3RE2rVbDh3PfTuojmI?=
- =?us-ascii?Q?RE/rIZP/iADrBVlzUp/DipXnRtaoj4AmnjJ89vxjWeIv7Y4opWdrX54CU4ib?=
- =?us-ascii?Q?Mp2keE9XvXRZVOHoN6HRgVg1rlv2dPl1pNutG/9cOV1e/GbnAW0ghPysvIgb?=
- =?us-ascii?Q?7kEp6yAomYhljCIrMujV677jQ1Hn/4se+7ZHViuUqFQNY4PZ9DHdE8WmNv1y?=
- =?us-ascii?Q?rMgfZRruI69tTMwUCKYHlf6atjavrdrJ9q5m25cernR6StBM274iWn/uSmGK?=
- =?us-ascii?Q?WsfYufPQTknIHLDnZ+Aq2QYiDFNHM6qSTPiUqDi0fYl7JPU21bCg4x4jPsx9?=
- =?us-ascii?Q?+D3cGpvVB3WwY9j/xPMKRB/AaESpGBl14/nJrE6E9LeaOuvdeojyFI76jCrr?=
- =?us-ascii?Q?raNTx+8B9UZN07s+vzC1jiPvdwkaT8cole9aPeI0VzOR5sSFgWdbxv+r9F/Z?=
- =?us-ascii?Q?WqglmKIwjDNFPbHabT/AsVRlM7MYDABbrwHvS61LQFFe9H+JQJDVpgp8NDq9?=
- =?us-ascii?Q?/gfvCz45DA7NgnXhnpNcw8/r5tMcwEsv0hqUKquklDPcNy+KVykNWjGbQh22?=
- =?us-ascii?Q?j6WrrMuhKkNoPvAAuhuIixLv2ewLMfZ6qKH3M/PMjhyLZP9WSRSI/2QlzV/N?=
- =?us-ascii?Q?KDSrixBUv9vDzeDLmpDovqkffX40IAzhjUsVUQ5jIM9LmMO5l2sy47yT7lhw?=
- =?us-ascii?Q?o9FJ5/RUBbVIk+FaB3fS9y9/slsWhdvsj1/o4tI1KHQakLdhmPC8tAVBiS2V?=
- =?us-ascii?Q?Fan5bAS8ebkSBZuO3xK35mH9TfKjlrP/ydkCcaNgolumXPgOT9oMkCG/Dc3T?=
- =?us-ascii?Q?DoiyjGCto9YCc/t6pvbS5oSvmMdzoyy+ZSYmGtaaTvvOcIin1Jd4yEjgqsUx?=
- =?us-ascii?Q?jquUbhoJhzXYY/eXFQYgXUqRKIrZWoZWploHPP8dbTLCFxmSMVM4DP9n4SY+?=
- =?us-ascii?Q?qIeWyHV1jIIB8P4Y0G3oNNh9Rp/1p+deSxAcSHLHJZjbAZiBzGSXtYdgQ+Ta?=
- =?us-ascii?Q?YVAiEwNT+sv9mMkq5L9xUgSIV+A5egXKF3REJZyHeRCgE0OnVQq0GPiNCXgA?=
- =?us-ascii?Q?MPZ3n+jniwp6b4WRb60dDABoEArI9Db1AwSk9Gwv+jRl6FW8FccXukJJUnAW?=
- =?us-ascii?Q?HdAXH0MklVeHRSg+8VvT5w/RsPWF4bh1EeYD6gIzfOeH5Ed0R4UujRQiP7C4?=
- =?us-ascii?Q?yUmPNgyNNcHI3fEFSzEVB65/EeA9wtI6zxFoVfiTk1MDN8VTL4LjjXFS0cQD?=
- =?us-ascii?Q?g6YIpxoT5vEnFBQpYewH6rwc4rie5byebln46xUF?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1707504e-285e-4aaf-1ccf-08db2ea9c940
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 09:58:16.7915
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: t6Y1P9POoFmhBS6dpekxGA+d/iMFVfMti55M3G5qW2p4t/AoqP3loM0DS760ejha02drcaWl4C522+cpDsLfJg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8597
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
 
-The osc_32k supports #clock-cells as 0, using an id is wrong, drop it.
+On Tue 21 Mar 2023 at 22:30, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
 
-Fixes: a6a355ede574 ("arm64: dts: imx8mm-evk: Add 32.768 kHz clock to PMIC")
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Add the documentation for Amlogic A1 PLL and Amlogic A1 Peripherals
+> clock drivers.
+> Introduce Amlogic A1 PLL and Amlogic A1 Peripherals device tree
+> bindings and include them to MAINTAINERS.
+>
+> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  .../bindings/clock/amlogic,a1-clkc.yaml       |  73 +++++++++++
+>  .../bindings/clock/amlogic,a1-pll-clkc.yaml   |  59 +++++++++
+>  MAINTAINERS                                   |   1 +
+>  include/dt-bindings/clock/amlogic,a1-clkc.h   | 113 ++++++++++++++++++
+>  .../dt-bindings/clock/amlogic,a1-pll-clkc.h   |  21 ++++
+>  5 files changed, 267 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-index d1a6390976a9..3f9dfd4d3884 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-@@ -194,7 +194,7 @@ pmic@4b {
- 		rohm,reset-snvs-powered;
- 
- 		#clock-cells = <0>;
--		clocks = <&osc_32k 0>;
-+		clocks = <&osc_32k>;
- 		clock-output-names = "clk-32k-out";
- 
- 		regulators {
--- 
-2.37.1
+There is two drivers (and 2 independent patches). There should be 2
+bindings patches as well.
+
+>  create mode 100644 include/dt-bindings/clock/amlogic,a1-clkc.h
+>  create mode 100644 include/dt-bindings/clock/amlogic,a1-pll-clkc.h
+>
+> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+> new file mode 100644
+> index 000000000000..cb6d8f4eb959
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/amlogic,a1-clkc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic Meson A/C serials Peripheral Clock Control Unit
+> +
+> +maintainers:
+> +  - Neil Armstrong <neil.armstrong@linaro.org>
+> +  - Jerome Brunet <jbrunet@baylibre.com>
+> +  - Jian Hu <jian.hu@jian.hu.com>
+> +  - Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> +
+> +properties:
+> +  compatible:
+> +    const: amlogic,a1-clkc
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: input fixed pll div2
+> +      - description: input fixed pll div3
+> +      - description: input fixed pll div5
+> +      - description: input fixed pll div7
+> +      - description: input hifi pll
+> +      - description: input oscillator (usually at 24MHz)
+> +
+> +  clock-names:
+> +    items:
+> +      - const: fclk_div2
+> +      - const: fclk_div3
+> +      - const: fclk_div5
+> +      - const: fclk_div7
+> +      - const: hifi_pll
+> +      - const: xtal
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/amlogic,a1-pll-clkc.h>
+> +    apb {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        clock-controller@800 {
+> +            compatible = "amlogic,a1-clkc";
+> +            reg = <0 0x800 0 0x104>;
+> +            #clock-cells = <1>;
+> +            clocks = <&clkc_pll CLKID_FCLK_DIV2>,
+> +                     <&clkc_pll CLKID_FCLK_DIV3>,
+> +                     <&clkc_pll CLKID_FCLK_DIV5>,
+> +                     <&clkc_pll CLKID_FCLK_DIV7>,
+> +                     <&clkc_pll CLKID_HIFI_PLL>,
+> +                     <&xtal>;
+> +            clock-names = "fclk_div2", "fclk_div3",
+> +                          "fclk_div5", "fclk_div7",
+> +                          "hifi_pll", "xtal";
+> +        };
+> +    };
+> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+> new file mode 100644
+> index 000000000000..77a13b1f9d5a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+> @@ -0,0 +1,59 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/amlogic,a1-pll-clkc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic Meson A/C serials PLL Clock Control Unit
+> +
+> +maintainers:
+> +  - Neil Armstrong <neil.armstrong@linaro.org>
+> +  - Jerome Brunet <jbrunet@baylibre.com>
+> +  - Jian Hu <jian.hu@jian.hu.com>
+> +  - Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> +
+> +properties:
+> +  compatible:
+> +    const: amlogic,a1-pll-clkc
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: input fixpll_in
+> +      - description: input hifipll_in
+> +
+> +  clock-names:
+> +    items:
+> +      - const: fixpll_in
+> +      - const: hifipll_in
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/amlogic,a1-clkc.h>
+> +    apb {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        clock-controller@7c80 {
+> +            compatible = "amlogic,a1-pll-clkc";
+> +            reg = <0 0x7c80 0 0x18c>;
+> +            #clock-cells = <1>;
+> +            clocks = <&clkc_periphs CLKID_FIXPLL_IN>,
+> +                     <&clkc_periphs CLKID_HIFIPLL_IN>;
+> +            clock-names = "fixpll_in", "hifipll_in";
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 39ff1a717625..8438bc9bd636 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1895,6 +1895,7 @@ L:	linux-amlogic@lists.infradead.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/clock/amlogic*
+>  F:	drivers/clk/meson/
+> +F:	include/dt-bindings/clock/a1*
+>  F:	include/dt-bindings/clock/gxbb*
+>  F:	include/dt-bindings/clock/meson*
+>  
+> diff --git a/include/dt-bindings/clock/amlogic,a1-clkc.h b/include/dt-bindings/clock/amlogic,a1-clkc.h
+> new file mode 100644
+> index 000000000000..95131779982c
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/amlogic,a1-clkc.h
+> @@ -0,0 +1,113 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
+> +/*
+> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+> + * Author: Jian Hu <jian.hu@amlogic.com>
+> + *
+> + * Copyright (c) 2023, SberDevices. All Rights Reserved.
+> + * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> + */
+> +
+> +#ifndef __A1_CLKC_H
+> +#define __A1_CLKC_H
+> +
+> +#define CLKID_FIXPLL_IN		0
+> +#define CLKID_USB_PHY_IN	1
+> +#define CLKID_USB_CTRL_IN	2
+> +#define CLKID_HIFIPLL_IN	3
+> +#define CLKID_SYSPLL_IN		4
+> +#define CLKID_DDS_IN		5
+> +#define CLKID_SYS		6
+> +#define CLKID_CLKTREE		7
+> +#define CLKID_RESET_CTRL	8
+> +#define CLKID_ANALOG_CTRL	9
+> +#define CLKID_PWR_CTRL		10
+> +#define CLKID_PAD_CTRL		11
+> +#define CLKID_SYS_CTRL		12
+> +#define CLKID_TEMP_SENSOR	13
+> +#define CLKID_AM2AXI_DIV	14
+> +#define CLKID_SPICC_B		15
+> +#define CLKID_SPICC_A		16
+> +#define CLKID_MSR		17
+> +#define CLKID_AUDIO		18
+> +#define CLKID_JTAG_CTRL		19
+> +#define CLKID_SARADC_EN		20
+> +#define CLKID_PWM_EF		21
+> +#define CLKID_PWM_CD		22
+> +#define CLKID_PWM_AB		23
+> +#define CLKID_CEC		24
+> +#define CLKID_I2C_S		25
+> +#define CLKID_IR_CTRL		26
+> +#define CLKID_I2C_M_D		27
+> +#define CLKID_I2C_M_C		28
+> +#define CLKID_I2C_M_B		29
+> +#define CLKID_I2C_M_A		30
+> +#define CLKID_ACODEC		31
+> +#define CLKID_OTP		32
+> +#define CLKID_SD_EMMC_A		33
+> +#define CLKID_USB_PHY		34
+> +#define CLKID_USB_CTRL		35
+> +#define CLKID_SYS_DSPB		36
+> +#define CLKID_SYS_DSPA		37
+> +#define CLKID_DMA		38
+> +#define CLKID_IRQ_CTRL		39
+> +#define CLKID_NIC		40
+> +#define CLKID_GIC		41
+> +#define CLKID_UART_C		42
+> +#define CLKID_UART_B		43
+> +#define CLKID_UART_A		44
+> +#define CLKID_SYS_PSRAM		45
+> +#define CLKID_RSA		46
+> +#define CLKID_CORESIGHT		47
+> +#define CLKID_AM2AXI_VAD	48
+> +#define CLKID_AUDIO_VAD		49
+> +#define CLKID_AXI_DMC		50
+> +#define CLKID_AXI_PSRAM		51
+> +#define CLKID_RAMB		52
+> +#define CLKID_RAMA		53
+> +#define CLKID_AXI_SPIFC		54
+> +#define CLKID_AXI_NIC		55
+> +#define CLKID_AXI_DMA		56
+> +#define CLKID_CPU_CTRL		57
+> +#define CLKID_ROM		58
+> +#define CLKID_PROC_I2C		59
+> +#define CLKID_DSPA_EN		60
+> +#define CLKID_DSPA_EN_NIC	61
+> +#define CLKID_DSPB_EN		62
+> +#define CLKID_DSPB_EN_NIC	63
+> +#define CLKID_RTC		64
+> +#define CLKID_CECA_32K		65
+> +#define CLKID_CECB_32K		66
+> +#define CLKID_24M		67
+> +#define CLKID_12M		68
+> +#define CLKID_FCLK_DIV2_DIVN	69
+> +#define CLKID_GEN		70
+> +#define CLKID_SARADC		71
+> +#define CLKID_PWM_A		72
+> +#define CLKID_PWM_B		73
+> +#define CLKID_PWM_C		74
+> +#define CLKID_PWM_D		75
+> +#define CLKID_PWM_E		76
+> +#define CLKID_PWM_F		77
+> +#define CLKID_SPICC		78
+> +#define CLKID_TS		79
+> +#define CLKID_SPIFC		80
+> +#define CLKID_USB_BUS		81
+> +#define CLKID_SD_EMMC		82
+> +#define CLKID_PSRAM		83
+> +#define CLKID_DMC		84
+> +#define CLKID_GEN_SEL		85
+> +#define CLKID_PWM_A_SEL		86
+> +#define CLKID_PWM_B_SEL		87
+> +#define CLKID_PWM_C_SEL		88
+> +#define CLKID_PWM_D_SEL		89
+> +#define CLKID_PWM_E_SEL		90
+> +#define CLKID_PWM_F_SEL		91
+> +#define CLKID_DSPA_A_SEL	92
+> +#define CLKID_DSPA_B_SEL	93
+> +#define CLKID_DSPB_A_SEL	94
+> +#define CLKID_DSPB_B_SEL	95
+> +#define CLKID_CECA_32K_SEL	96
+> +#define CLKID_CECB_32K_SEL	97
+> +#define NR_CLKS			98
+> +
+> +#endif /* __A1_CLKC_H */
+> diff --git a/include/dt-bindings/clock/amlogic,a1-pll-clkc.h b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
+> new file mode 100644
+> index 000000000000..740fe8c4db5d
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
+> @@ -0,0 +1,21 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
+> +/*
+> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+> + * Author: Jian Hu <jian.hu@amlogic.com>
+> + *
+> + * Copyright (c) 2023, SberDevices. All Rights Reserved.
+> + * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> + */
+> +
+> +#ifndef __A1_PLL_CLKC_H
+> +#define __A1_PLL_CLKC_H
+> +
+> +#define CLKID_FIXED_PLL		0
+> +#define CLKID_FCLK_DIV2		1
+> +#define CLKID_FCLK_DIV3		2
+> +#define CLKID_FCLK_DIV5		3
+> +#define CLKID_FCLK_DIV7		4
+> +#define CLKID_HIFI_PLL		5
+> +#define NR_PLL_CLKS		6
+> +
+> +#endif /* __A1_PLL_CLKC_H */
 
