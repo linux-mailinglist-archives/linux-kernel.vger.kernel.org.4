@@ -2,145 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767646CACBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39FDB6CACB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjC0SKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 14:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52108 "EHLO
+        id S230104AbjC0SIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 14:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjC0SKt (ORCPT
+        with ESMTP id S231737AbjC0SIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:10:49 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20621.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::621])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912B295
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 11:10:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ka4czxQvRW4d5f1k/yMI2ORVTQ7qDR88OUu2L3UUJgxD6+Zy9H+L3Jsz6f3nH0jmo7t0Y16KJdtxhhoLkb3WvRbsV/7V8Gg6qr9XpfaiG5LlympgFHSh6IM5N6gGoSSf3QAM+GsTHO9j2vwXbJj3VHLct+mupc4XhE6YXJTCKNEjI9BQMBYUkcrsv6panJtrXcHLF6gHlE+NQfH8bvOJLvWDXwhkXHqlsUxArvJfhozZS2Maux3K6RH1BugP+BcVnl7EH7JFJa+mzZIVTmOSdrjI0dJB6ZKO5xM9UIksPmsUcApTIlIy0j4hhsetT7x4Nmbf3X+Ekd/PqtCScj+Xyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/5bgdELRj2yg4bRuH4yg3zhbhm65RxLkRKrWOrIYeyE=;
- b=TFyJIYiCO47E+Vc94DVQvESyd8OIvEuqPDguuG16ud+JhddOfhMbwtxe7+jJblyDnDldaMx50wGU8tAtVC2fJrt8v20OU2Ocr7KKCF1H6PIsXo/c1qG/UErlk5VhOyqSYLACmQ6AYitUUNUBfty+02vr4CuwypnxNZEI1MKVmJWrZC7R6oCGvGyT9AHcGTkZCcwBA7u1J+R3UHRsiYIqmksA7YfyWWP31g101IOwQtgOidG/Q5XPVdrX8hI7WOAC6lmPrIFDxXrv/XET/l+L5eBs1/KrdEq58+hrEQZwEY07Ak74s7RjlylWkXH3KKw9Wmq4aTdhiJsxhq+AW7cB2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=amd.com smtp.mailfrom=xilinx.com;
- dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/5bgdELRj2yg4bRuH4yg3zhbhm65RxLkRKrWOrIYeyE=;
- b=HTB9HVoGJjJdlSMWfTM2sWY+sLFaPK0bJO3A3EG6LzMicOPKAnLu8we+0uvkFCkZavALVJi2pcdb9I/qDO1ygFGnNcfprvr7tv89uLc7gRBz8zwi/ZDZoy24Tynp/SbWyiULoUSjnIoz/0JUrKKcTAbZLH0waSczWR6Ta7F0HPo=
-Received: from SA0PR13CA0012.namprd13.prod.outlook.com (2603:10b6:806:130::17)
- by DM8PR02MB7959.namprd02.prod.outlook.com (2603:10b6:8:14::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Mon, 27 Mar
- 2023 18:10:45 +0000
-Received: from SN1NAM02FT0049.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:130:cafe::c4) by SA0PR13CA0012.outlook.office365.com
- (2603:10b6:806:130::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.17 via Frontend
- Transport; Mon, 27 Mar 2023 18:10:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0049.mail.protection.outlook.com (10.97.5.28) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6254.9 via Frontend Transport; Mon, 27 Mar 2023 18:10:45 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 27 Mar 2023 11:10:42 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Mon, 27 Mar 2023 11:10:42 -0700
-Envelope-to: git@amd.com,
- radhey.shyam.pandey@amd.com,
- laurent.pinchart@ideasonboard.com,
- kishon@kernel.org,
- vkoul@kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-phy@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Received: from [172.23.64.2] (port=50154 helo=xhdvnc102.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <radhey.shyam.pandey@xilinx.com>)
-        id 1pgrFE-0003Bm-8S; Mon, 27 Mar 2023 11:07:00 -0700
-Received: by xhdvnc102.xilinx.com (Postfix, from userid 13245)
-        id 6F2641045C1; Mon, 27 Mar 2023 23:36:59 +0530 (IST)
-From:   Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-To:     <laurent.pinchart@ideasonboard.com>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <michal.simek@xilinx.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <git@amd.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: [PATCH v2] phy: xilinx: phy-zynqmp: mention SGMII as supported protocol
-Date:   Mon, 27 Mar 2023 23:36:47 +0530
-Message-ID: <1679940407-13131-1-git-send-email-radhey.shyam.pandey@amd.com>
-X-Mailer: git-send-email 2.1.1
+        Mon, 27 Mar 2023 14:08:14 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B058D2D69;
+        Mon, 27 Mar 2023 11:08:02 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RB12WI019001;
+        Mon, 27 Mar 2023 11:08:00 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=5/J+ExtaDQpQ8NP1wIMINsOViHcgzoeTRd//pn5Ikkg=;
+ b=KRixRFaBvdqmjDQzFpJ+38AyqCOUJGwYEgqWzhzCumpNJfIjAv5F+XHW9ut0fC7b2kBi
+ SMn7dzjex8rnJY+3T6mI9rIIbDDltMoogqVcnxOjXNFFB5XOaMM5I2vonG32OtlVWlr0
+ c++RFdnKj60ULbNT+gAREHPXQLdVdVrM5bksyd9NGSicJror/JTBiWQPIhir4w47MREH
+ 7cLKnX9JaMGJYa11BE3nHEbT5UDCk+s7B+QwsJgrB7xJlQ3GOa93kH3QOffnac3r/hho
+ zObxNtU125d+LYiqb1G5FpvRrslvGh82DCUAsk7T/r11liqVvGLiDfv7yqylmZFAuZlr dA== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3phxas85t8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 11:08:00 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 27 Mar
+ 2023 11:07:58 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Mon, 27 Mar 2023 11:07:58 -0700
+Received: from localhost.localdomain (unknown [10.110.150.250])
+        by maili.marvell.com (Postfix) with ESMTP id C14793F7088;
+        Mon, 27 Mar 2023 11:07:58 -0700 (PDT)
+From:   Piyush Malgujar <pmalgujar@marvell.com>
+To:     <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <jannadurai@marvell.com>, <cchavva@marvell.com>,
+        Piyush Malgujar <pmalgujar@marvell.com>
+Subject: [PATCH 0/2] spi: octeontx2: Add spi driver for OcteonTX2 SOC
+Date:   Mon, 27 Mar 2023 11:07:51 -0700
+Message-ID: <20230327180753.2279-1-pmalgujar@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1NAM02FT0049:EE_|DM8PR02MB7959:EE_
-X-MS-Office365-Filtering-Correlation-Id: eeed25a1-5c33-439c-acdf-08db2eee9616
-X-MS-Exchange-SenderADCheck: 0
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OguYnhT1MiwaRftLQMHumOsq8r6z5a+zf1RUz1+b/2CvsSqz2jqFKUcYUExwjWJd+egaPksfoIqnFnoPFCnqswjlU2MNm4ku+hU71jpVQpSB0w2UA3x86uWgM0+O6yN7Hk01ngkPC4bhR3IME7iDAmAP3hd7oqpqq3A40ukHkxAgWoVrqOeotjMyIOfXtfdrBHx8/J3L7IWJ4H3oJe/yE76QoMj1DmY8SBdrojlt1B1kXnpGM43uHW9UvTP/61gp5zzFB8oeWG5VUvTixJe0cJC/EEdEmgi0YlKsPBfZvL9A3tbh1vJPOHhIn6Xw0kx9veVMjWLQEtkFcOoULcIzoGVFU2mqtrGA49+cI6VM2BM5McgNyNJDu12HzSN9X03D9SYixkRBeS/4kK2mN9CWwba0aEjMFMMNnFCUP6OOnfXcAF1P98wBreGVAFvgEDJgfpZsVT0oBt667crVl9dS97COej6hJ92qsMppWnJMLPqdSjrEv9bLM+OAGgQQc+JD5Zh14ES3KvIS7GMN8eUCZCBKEq15wtFCwchhfzIeb4pF7cBvVfySCsjDO8Bwu8JXQhoXyCIf0Nn9C0a9Ni5xSmUmToGvqYuDPSpHg9WbLaIJF+ANxodjfNlNZ4in3Doy06mT6wNTkjeTSUGrnWPF4eCf61Duhvq0mvRftKYUTbKy6ZALlaSfzWSUY2xYeExK4L2zaemJdNgpXWaQwuPN4M8rw3M8S2TMZb5HM+N1E2s=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230028)(39860400002)(396003)(136003)(346002)(376002)(451199021)(46966006)(40470700004)(36840700001)(54906003)(110136005)(42186006)(316002)(478600001)(36756003)(2906002)(40460700003)(70206006)(40480700001)(4326008)(41300700001)(83170400001)(5660300002)(70586007)(8676002)(8936002)(356005)(82740400003)(7636003)(6266002)(186003)(2616005)(82310400005)(26005)(6666004)(36860700001)(83380400001)(336012)(42882007)(47076005)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 18:10:45.7438
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: eeed25a1-5c33-439c-acdf-08db2eee9616
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0049.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR02MB7959
-X-Spam-Status: No, score=1.8 required=5.0 tests=AC_FROM_MANY_DOTS,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Proofpoint-GUID: 7UMLWC3my9ApyPfHIM3LvA0wrjrEOxPM
+X-Proofpoint-ORIG-GUID: 7UMLWC3my9ApyPfHIM3LvA0wrjrEOxPM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGMII is validated on kria KR260 robotics starter kit. So modify the
-comment description to include it in supported controllers list.
+Add driver for spi controller on Marvell OcteonTX2 SOC. This driver
+supports 1KB data buffer and 4-bit bus width.
+It also supports ACPI and reads tx(rx)-bus-width which is used to set
+the SPI mode - DUAL, QUAD, OCTAL.
 
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
-Changes for v2:
-- In documentation remove "Other controller i.e" as now it's only PCIe.
----
- drivers/phy/xilinx/phy-zynqmp.c |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+Piyush Malgujar (1):
+  spi: octeontx2: Add ACPI support
 
-diff --git a/drivers/phy/xilinx/phy-zynqmp.c b/drivers/phy/xilinx/phy-zynqmp.c
-index 9be9535..8833680 100644
---- a/drivers/phy/xilinx/phy-zynqmp.c
-+++ b/drivers/phy/xilinx/phy-zynqmp.c
-@@ -8,9 +8,8 @@
-  * Author: Subbaraya Sundeep <sundeep.lkml@gmail.com>
-  * Author: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-  *
-- * This driver is tested for USB, SATA and Display Port currently.
-- * Other controllers PCIe and SGMII should also work but that is
-- * experimental as of now.
-+ * This driver is tested for USB, SGMII, SATA and Display Port currently.
-+ * PCIe should also work but that is experimental as of now.
-  */
- 
- #include <linux/clk.h>
+Suneel Garapati (1):
+  spi: octeontx2: Add support for octeontx2 spi controller
+
+ drivers/spi/Kconfig         |   8 +
+ drivers/spi/Makefile        |   1 +
+ drivers/spi/spi-octeontx2.c | 467 ++++++++++++++++++++++++++++++++++++
+ drivers/spi/spi-octeontx2.h | 152 ++++++++++++
+ 4 files changed, 628 insertions(+)
+ create mode 100644 drivers/spi/spi-octeontx2.c
+ create mode 100644 drivers/spi/spi-octeontx2.h
+
 -- 
-1.7.1
+2.17.1
 
