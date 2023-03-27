@@ -2,126 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F646CAC59
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE8E6CAC79
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbjC0RyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 13:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
+        id S232419AbjC0R4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 13:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232282AbjC0RyJ (ORCPT
+        with ESMTP id S232716AbjC0R4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:54:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6E91FE1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:53:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679939599;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Mus5kY1LYOsh4mZlEdqt0v1q9KUGRFm/L2rsuQRkD/A=;
-        b=P69RtX0t3i2jSHSwY3ReaMbARkKuyEefVqiV1FePbTkJjql3fYL3g5ponMEbfZXhw4Nlq5
-        XTXsX6X570t92BKWS16JWo3srmgQw+WnKZxz37jaDX3xljp9tICKzNfuTGq6kD2AlLDX6f
-        Un6Fz7BxpNL0LvfaiBpERZH0xBMxqs4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-346-1HLjWklUPFaS-4lA-Zq6XA-1; Mon, 27 Mar 2023 13:53:16 -0400
-X-MC-Unique: 1HLjWklUPFaS-4lA-Zq6XA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E39AD884EC4;
-        Mon, 27 Mar 2023 17:53:15 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B1628404DC4F;
-        Mon, 27 Mar 2023 17:53:15 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, maz@kernel.org,
-        oliver.upton@linux.dev, apatel@ventanamicro.com
-Subject: [GIT PULL] Non-x86 KVM fixes for Linux 6.3-rc5
-Date:   Mon, 27 Mar 2023 13:53:15 -0400
-Message-Id: <20230327175315.3763370-1-pbonzini@redhat.com>
+        Mon, 27 Mar 2023 13:56:25 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDB34481;
+        Mon, 27 Mar 2023 10:55:46 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id y19so5662714pgk.5;
+        Mon, 27 Mar 2023 10:55:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679939742;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hTZpI//Tzxb69PVqP+6KSGMc/N99I4Rh6kzXUg6Qf3c=;
+        b=KzJQ4Zoyh25lshRcEk9Mk4u3QKPhuPrEVuIW6/OcqBI/6jeJ6kxr+KuXjsy6ElQBo0
+         sMReFt0dNEHFIOMCmqK27UbaRXW327gZ2dar1/V1mFTk8BzQU9RHt1bRCt2KKcJW1gK7
+         qVmN28OHzRK2QsEL31t13tsKl0B11hgz8ioqV/f527m9KQMVd6EOsiCWtH3UTrGzqHRA
+         YwsSsBZ7PeW+SWilcpZ/7A+nXAQHU0DZzBQe6LxcD7+fO+sgL0D75D0gbHeAqCwJUX51
+         T0tHdj9igY/VgQP2ikyA5+uGafrY1Op2gxA6rP0rD+XA34AoHj+EVI8E0+KMeGgP/tJ8
+         nZ9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679939742;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hTZpI//Tzxb69PVqP+6KSGMc/N99I4Rh6kzXUg6Qf3c=;
+        b=EheoQudfzb2EYbdgKyfXt4LqIfqmhRDPApAv5btf0LqVN6wq3vrfBgRA2+l7kcnGNx
+         rqcBoN7liwPFKs8hy49eMKab37Vp1r2QJQZtzDlEx/rOykfoL1jx/v5h5mfjFwBHhZ+F
+         baDJZKAmyHvrvwSLhpWMNIOPMBx2f4dfas5hwHzu5qAmmNnw+B27WzGo/ahcC/3E67ck
+         p8BrZZycreLE3MDnbqVObX6VlbnH5/f7pPM78t0w8doKxEwfh/SkgelmQXvNKv0YOe5y
+         yapMCqzZpqpua4NVC6SP3jvcFmDcbDn9/iIuhdI7uGfIfRX/pvv3PQYsklDDM8mZPMFz
+         5wQg==
+X-Gm-Message-State: AAQBX9cbpsKfKwlwE+IkP3yx1g6wz+iDS2RkNaS27z2s12duwNiDR9ux
+        0jSYoPNEbvbfEfOmeYSj8jQ=
+X-Google-Smtp-Source: AKy350aeueLyYZm0lpV8z+wxw14Zvaw/JyArvQbpSEtpyZYeq4g9vBC4XC7PIRQkwQuMfQZOY8/lbg==
+X-Received: by 2002:a62:7b10:0:b0:625:c048:2f81 with SMTP id w16-20020a627b10000000b00625c0482f81mr11838977pfc.32.1679939741671;
+        Mon, 27 Mar 2023 10:55:41 -0700 (PDT)
+Received: from carrot.. (i223-217-34-84.s42.a014.ap.plala.or.jp. [223.217.34.84])
+        by smtp.gmail.com with ESMTPSA id x8-20020aa79188000000b0062622ae3648sm19214784pfa.78.2023.03.27.10.55.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 10:55:40 -0700 (PDT)
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-nilfs@vger.kernel.org,
+        syzbot <syzbot+b08ebcc22f8f3e6be43a@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH] nilfs2: fix potential UAF of struct nilfs_sc_info in nilfs_segctor_thread()
+Date:   Tue, 28 Mar 2023 02:53:18 +0900
+Message-Id: <20230327175318.8060-1-konishi.ryusuke@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <00000000000000660d05f7dfa877@google.com>
+References: <00000000000000660d05f7dfa877@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+The finalization of nilfs_segctor_thread() can race with
+nilfs_segctor_kill_thread() which terminates that thread, potentially
+causing a use-after-free BUG as KASAN detected.
 
-The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+At the end of nilfs_segctor_thread(), it assigns NULL to "sc_task" member
+of "struct nilfs_sc_info" to indicate the thread has finished, and then
+notifies nilfs_segctor_kill_thread() of this using waitqueue
+"sc_wait_task" on the struct nilfs_sc_info.
 
-  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+However, here, immediately after the NULL assignment to "sc_task",
+it is possible that nilfs_segctor_kill_thread() will detect it and return
+to continue the deallocation, freeing the nilfs_sc_info structure before
+the thread does the notification.
 
-are available in the Git repository at:
+This fixes the issue by protecting the NULL assignment to "sc_task" and
+its notification, with spinlock "sc_state_lock" of the struct
+nilfs_sc_info.  Since nilfs_segctor_kill_thread() does a final check to
+see if "sc_task" is NULL with "sc_state_lock" locked, this can eliminate
+the race.
 
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+Reported-by: syzbot+b08ebcc22f8f3e6be43a@syzkaller.appspotmail.com
+Link: https://lkml.kernel.org/r/00000000000000660d05f7dfa877@google.com
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+---
+ fs/nilfs2/segment.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-for you to fetch changes up to 9e347ba03029e10e6405f8c3a7a91a5597943ed9:
-
-  Merge tag 'kvm-riscv-fixes-6.3-1' of https://github.com/kvm-riscv/linux into HEAD (2023-03-27 10:04:07 -0400)
-
-There are also some pending x86 changes will come later this week.
-
-----------------------------------------------------------------
-RISC-V:
-
-* Fix VM hang in case of timer delta being zero
-
-ARM:
-
-* Fixes for the MMU:
-
-  * Read the MMU notifier seq before dropping the mmap lock to guard
-    against reading a potentially stale VMA
-
-  * Disable interrupts when walking user page tables to protect against
-    the page table being freed
-
-  * Read the MTE permissions for the VMA within the mmap lock critical
-    section, avoiding the use of a potentally stale VMA pointer
-
-* Fixes for the vPMU:
-
-  * Return the sum of the current perf event value and PMC snapshot for
-    reads from userspace
-
-  * Don't save the value of guest writes to PMCR_EL0.{C,P}, which could
-    otherwise lead to userspace erroneously resetting the vPMU during VM
-    save/restore
-
-----------------------------------------------------------------
-David Matlack (1):
-      KVM: arm64: Retry fault if vma_lookup() results become invalid
-
-Marc Zyngier (2):
-      KVM: arm64: Disable interrupts while walking userspace PTs
-      KVM: arm64: Check for kvm_vma_mte_allowed in the critical section
-
-Paolo Bonzini (2):
-      Merge tag 'kvmarm-fixes-6.3-2' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
-      Merge tag 'kvm-riscv-fixes-6.3-1' of https://github.com/kvm-riscv/linux into HEAD
-
-Rajnesh Kanwal (1):
-      riscv/kvm: Fix VM hang in case of timer delta being zero.
-
-Reiji Watanabe (2):
-      KVM: arm64: PMU: Fix GET_ONE_REG for vPMC regs to return the current value
-      KVM: arm64: PMU: Don't save PMCR_EL0.{C,P} for the vCPU
-
- arch/arm64/kvm/mmu.c        | 99 +++++++++++++++++++++++++++++----------------
- arch/arm64/kvm/pmu-emul.c   |  3 +-
- arch/arm64/kvm/sys_regs.c   | 21 +++++++++-
- arch/riscv/kvm/vcpu_timer.c |  6 +--
- 4 files changed, 87 insertions(+), 42 deletions(-)
+diff --git a/fs/nilfs2/segment.c b/fs/nilfs2/segment.c
+index 19446a8243d7..6ad41390fa74 100644
+--- a/fs/nilfs2/segment.c
++++ b/fs/nilfs2/segment.c
+@@ -2609,11 +2609,10 @@ static int nilfs_segctor_thread(void *arg)
+ 	goto loop;
+ 
+  end_thread:
+-	spin_unlock(&sci->sc_state_lock);
+-
+ 	/* end sync. */
+ 	sci->sc_task = NULL;
+ 	wake_up(&sci->sc_wait_task); /* for nilfs_segctor_kill_thread() */
++	spin_unlock(&sci->sc_state_lock);
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
