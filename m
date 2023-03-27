@@ -2,60 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D496CAE6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C031C6CAE70
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbjC0TTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43956 "EHLO
+        id S231139AbjC0TU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 15:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjC0TS7 (ORCPT
+        with ESMTP id S232159AbjC0TU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:18:59 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A966CF;
-        Mon, 27 Mar 2023 12:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xfwD58r7ManSAcpynfJdhPJPb96SmXfv4nKRVZMP16k=; b=xS3TkBLpKk7oxdcIdC9Bdo53Ny
-        QwB2QZZLiC+Bi6w8bc7MVztJhPo3j8elRFfzvjeFdI59SaG2OGxMhJzkjWl2X1ZzdBPcephzafTcb
-        rwBPLae2mbcT2HFnaoIgXZYwslSXnivcOEYv8K185DlnGDkiI94CMNu1ueRF+1Ri4BsBac1Ne8lSA
-        PTMbAeqpmuW06qud/FMkRU0rPZxgqh9AqptFUkaMtyG5fOLBNHk5DgSNhmnNvtfW02qPd/mBBKnEu
-        iKVZxCcnali3pFoyBWBlKYlmnLCLTomj4rJp2vmb45PDnNzQhHOTSpFLAarX3JSC4rNDUnM3N0r7F
-        pvW8uqHA==;
-Received: from p200300ccff0533001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff05:3300:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pgsMZ-00014E-IO; Mon, 27 Mar 2023 21:18:40 +0200
-Date:   Mon, 27 Mar 2023 21:18:38 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Andrew Davis <afd@ti.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?B?QmVub8OudA==?= Cousson <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [RFC 1/2] ARM: dts: omap: Drop ti,omap36xx compatible
-Message-ID: <20230327211838.580af7a9@aktux>
-In-Reply-To: <20230216153339.19987-2-afd@ti.com>
-References: <20230216153339.19987-1-afd@ti.com>
-        <20230216153339.19987-2-afd@ti.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 27 Mar 2023 15:20:56 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EB8DD
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:20:55 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-752fe6c6d5fso5702939f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:20:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679944855;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LCCYMbSy55SlwvrGQG2ZZNlIg3a22xRlxaCQn9Xlyx4=;
+        b=oaIXnvoPk7LwgHUucg2ww1TKYFdO5Sb3csY/DxK65O4ojHkknu8iu77a82RnapXc0q
+         rw62wbU+CZ5wBNmBHpQXdx5P4+OFtlaSUbZbTAtUB/3yv1K/tE80Bf1qDHdh+SopUqUV
+         DkBtvy3U3EJi2U0Mw8sJunSu2UMLMwAUdy+6LUQb4F7+iWGuEwjA5nXzdD0Y6M8WJDTm
+         1bxGu1OHW9wnjo3j9jExDJaP/UDFerOwD/+Ml/av6oV1uaLM9NtJ1WMkdg9EBGt+JQrZ
+         lo8mvlnjWShSPG+dVtFaIEeA1iwyetVqOiA2bcdDbL7AOKhjFDx/nG1GkqNjJ1IVrgBK
+         VCYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679944855;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LCCYMbSy55SlwvrGQG2ZZNlIg3a22xRlxaCQn9Xlyx4=;
+        b=nQtB+gCx3g/lOLCdlARmDmM9TMTbtKpUJD+a/efvz8LbeVN7V7LW++VqVWTtNdYxld
+         8tCvLXc7JzJ3SFoP8GAvHYmu4rGFBANG7hoCsY62ikb4Lo8v6I07wGdWidkfR9Jf8HGR
+         3EDRiYnoXinMGj3KTUXKpQgRyuFnXiKGAmCKf1vi5cHfa795iikIY7p726tZxrChCfa1
+         bpWIySQyk/dPuh7cqtbJQUppRVt8CEtyVuiPFJf2APE7kLN8hFvtXnG4om7CitIwqHUr
+         l77LRsGopewFUnIYUA9JbGNB2pnfAwitEOldNv93iYxvj5uvqoifn93g8mnOn12JLLoH
+         1G9Q==
+X-Gm-Message-State: AAQBX9eCl5XL+rUzoQVyMhqCefY77ddTHAXO8D/qVIV4nhyILbdhjqgz
+        cOBa381hkFmZqfSpxlYl9FmT+A==
+X-Google-Smtp-Source: AKy350YZi2bmBiDeI8udzp9YCII8IAnUzjNzDDmzbG+jmPPRtaFTx6qhePyXwPc3hB/RAQw/5saf3Q==
+X-Received: by 2002:a05:6e02:214a:b0:325:fab5:6e6e with SMTP id d10-20020a056e02214a00b00325fab56e6emr3971048ilv.1.1679944854893;
+        Mon, 27 Mar 2023 12:20:54 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id q12-20020a05663810cc00b003e8a17d7b1fsm9381018jad.27.2023.03.27.12.20.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 12:20:54 -0700 (PDT)
+Message-ID: <75a684d6-8aca-8438-d303-f900b4db865d@kernel.dk>
+Date:   Mon, 27 Mar 2023 13:20:53 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [syzbot] Monthly io-uring report
+Content-Language: en-US
+To:     Aleksandr Nogikh <nogikh@google.com>
+Cc:     syzbot <syzbot+lista29bb0eabb2ddbae6f4a@syzkaller.appspotmail.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <000000000000bb028805f7dfab35@google.com>
+ <2309ca53-a126-881f-1ffa-4f5415a32173@kernel.dk>
+ <CANp29Y66H4-+d4hat_HCJck=u8dTn9Hw5KNzm1aYifQArQNNEw@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CANp29Y66H4-+d4hat_HCJck=u8dTn9Hw5KNzm1aYifQArQNNEw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,45 +77,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Feb 2023 09:33:38 -0600
-Andrew Davis <afd@ti.com> wrote:
-
-> This was not matched anywhere and provides no additional information.
+On 3/27/23 1:12?PM, Aleksandr Nogikh wrote:
+> On Mon, Mar 27, 2023 at 8:23?PM Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> On 3/27/23 5:01?AM, syzbot wrote:
+>>> 1873    Yes   WARNING in split_huge_page_to_list (2)
+>>>               https://syzkaller.appspot.com/bug?extid=07a218429c8d19b1fb25
+>>> 38      Yes   KASAN: use-after-free Read in nfc_llcp_find_local
+>>>               https://syzkaller.appspot.com/bug?extid=e7ac69e6a5d806180b40
+>>
+>> These two are not io_uring. Particularly for the latter, I think syzbot
+>> has a tendency to guess it's io_uring if any kind of task_work is
+>> involved. That means anything off fput ends up in that bucket. Can we
+>> get that improved please?
 > 
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
->  arch/arm/boot/dts/omap3-beagle-xm.dts              | 2 +-
->  arch/arm/boot/dts/omap3-cm-t3730.dts               | 2 +-
->  arch/arm/boot/dts/omap3-igep0020-rev-f.dts         | 2 +-
->  arch/arm/boot/dts/omap3-igep0020.dts               | 2 +-
->  arch/arm/boot/dts/omap3-igep0030-rev-g.dts         | 2 +-
->  arch/arm/boot/dts/omap3-igep0030.dts               | 2 +-
->  arch/arm/boot/dts/omap3-lilly-dbb056.dts           | 2 +-
->  arch/arm/boot/dts/omap3-n9.dts                     | 2 +-
->  arch/arm/boot/dts/omap3-n950.dts                   | 2 +-
->  arch/arm/boot/dts/omap3-overo-storm-alto35.dts     | 2 +-
->  arch/arm/boot/dts/omap3-overo-storm-chestnut43.dts | 2 +-
->  arch/arm/boot/dts/omap3-overo-storm-gallop43.dts   | 2 +-
->  arch/arm/boot/dts/omap3-overo-storm-palo35.dts     | 2 +-
->  arch/arm/boot/dts/omap3-overo-storm-palo43.dts     | 2 +-
->  arch/arm/boot/dts/omap3-overo-storm-summit.dts     | 2 +-
->  arch/arm/boot/dts/omap3-overo-storm-tobi.dts       | 2 +-
->  arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts    | 2 +-
->  arch/arm/boot/dts/omap3-pandora-1ghz.dts           | 2 +-
->  arch/arm/boot/dts/omap3-sbc-t3730.dts              | 2 +-
->  arch/arm/boot/dts/omap3-sniper.dts                 | 2 +-
->  arch/arm/boot/dts/omap3-zoom3.dts                  | 2 +-
->  21 files changed, 21 insertions(+), 21 deletions(-)
+> Sure, I'll update the rules and rerun the subsystem recognition.
 > 
-hmm, we have
-drivers/clk/ti/dpll.c:         of_machine_is_compatible("ti,omap36xx"))
+> Currently syzbot sets io_uring if at least one is true
+> a) The crash stack trace points to the io_uring sources (according to
+> MAINTAINERS)
+> b) At least one reproducer has the syz_io_uring_setup call (that's a
+> helper function that's part of syzkaller).
+> 
+> In general syzbot tries to minimize the reproducer, but unfortunately
+> sometimes there remain some calls, which are not necessary per se. It
+> definitely tried to get rid of them, but the reproducer was just not
+> working with those calls cut out. Maybe they were just somehow
+> affecting the global state and in the execution log there didn't exist
+> any other call candidates, which could have fulfilled the purpose just
+> as well.
+> 
+> I can update b) to "all reproducers have syz_io_uring_setup". Then
+> those two bugs won't match the criteria.
+> If it doesn't suffice and there are still too many false positives, I
+> can drop b) completely.
 
-but that is more completely
-  if ((of_machine_is_compatible("ti,omap3630") ||
-             of_machine_is_compatible("ti,omap36xx")) &&
+Whatever cuts down on the noise is good with me. Not sure how 38 above
+got lumped in? Maybe someone else did syz_io_uring_setup at some point?
 
-so missing omap36xx will not harm if 3630 is there. SO this should
-be probably ok.
+> By the way, should F: fs/io-wq.c also be added to the IO_URING's
+> record in the MAINTAINERS file?
 
-Regards,
-Andreas
+I think you're looking at a really old tree, none of the supported
+stable trees even have any io_uring code in fs/ anymore. Maybe they need
+a MAINTAINERS update though? But even 5.10-stable has io-wq included,
+though it's pointing at the wrong path now...
+
+-- 
+Jens Axboe
+
