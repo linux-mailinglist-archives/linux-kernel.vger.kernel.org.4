@@ -2,153 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79016CA8C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95B66CA8CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbjC0PRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 11:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
+        id S230341AbjC0PSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 11:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbjC0PRY (ORCPT
+        with ESMTP id S229940AbjC0PSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:17:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40C6199;
-        Mon, 27 Mar 2023 08:17:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 679AEB81616;
-        Mon, 27 Mar 2023 15:17:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E7CEC4339B;
-        Mon, 27 Mar 2023 15:17:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679930240;
-        bh=WxXjXDVt250Dzp30WluOUfbIb760o1vY2QBgR+3iufI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DgSCKdzHtd3A8JummnAbCF0GnDlwtgZE6oSuVEtby2k6dFHawi07+eYzwPhFI/zPn
-         1IqdQXp31wiy/gxtYX6xIXwHsgB7dDWGbPo6yynzdtMX0Vzh+sZ7ApcD4v6Hrd7yJM
-         xTrafTzK5Qq9V8l3zkkyJ+yxFjRh4x26wz388XcMmrfyf1YhaCvtQo9lmQT6pcvAcA
-         bMYMFdx1Gz2tsb/AYwR47c26nxs8JIX5KkB8g9NdHo8PqeB5MQ2sLpGsRviMSYsdYc
-         EOg4Jv1ldxV8sUCYxJzAt8ZpOKQIeoGcrTIh8+8rqmOATAeYbhPniEhhLGy8a0zYPU
-         3q5KeUrdBoIzg==
-Received: by mail-lj1-f177.google.com with SMTP id a21so2236083ljq.10;
-        Mon, 27 Mar 2023 08:17:20 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eKZiCt8jkD65xvwQRbwQzJaPlvkKpdZCmq38zpKkFuoJIO5YKM
-        JpMFjo0tDRA5eqN6dJ+cNglT4X2mBkK/mytx/Q==
-X-Google-Smtp-Source: AKy350ZJD8lXrATp34gVJQNtWOp95oG2v0KcgMEyjZm8N9VS0wqsbCWLENkFgqU2pL5ANEjL4W1+rI8dl98MGCb+WEw=
-X-Received: by 2002:a2e:a304:0:b0:2a1:627a:70bb with SMTP id
- l4-20020a2ea304000000b002a1627a70bbmr3582823lje.10.1679930238193; Mon, 27 Mar
- 2023 08:17:18 -0700 (PDT)
+        Mon, 27 Mar 2023 11:18:33 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3393F19A1;
+        Mon, 27 Mar 2023 08:18:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679930312; x=1711466312;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=17LMq6FcckRvCjRKh2cYsU9tHbmYq+HS/t9LCbX9zWs=;
+  b=XRxKw6YDlwBjmsBEeav0LrqO3G2aKK/iojUhC19QrU4PpcmL17WaU9gR
+   ysUh9e2f/qtH+5KQ5MrBDJIQWBhbfeVixS1GEKkmct95+OczyGaCLuE4x
+   nWxhkkcQVZzh18u6YaiPHZ87N3PeuZsTQntlg0vUz3FRua9whQUxjsoZx
+   394K7rLvaEyUJ5lr/Qe/DIY6pFxXusQH0pVLRHUYh4sDJOGpr57abwFN5
+   0g+wINomQr+6l9z4h4R5/z6uYEgjPZRqiziTIrAt1xl16ZWbwhU5ghFJq
+   xGGWKQIaYCOn2ZFq3hLKm9UGD+89JvZgvc4o9VQbly1Gtb5En/nuaD19C
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="320693417"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="320693417"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 08:18:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="676999194"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="676999194"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 27 Mar 2023 08:18:16 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pgobv-000Hnx-10;
+        Mon, 27 Mar 2023 15:18:15 +0000
+Date:   Mon, 27 Mar 2023 23:17:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Maximilian Weigand <mweigand@mweigand.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Maximilian Weigand <mweigand@mweigand.net>,
+        Alistair Francis <alistair@alistair23.me>
+Subject: Re: [PATCH 2/6] Input: cyttsp5: remove unused code
+Message-ID: <202303272323.nRNi9Sso-lkp@intel.com>
+References: <20230323135205.1160879-3-mweigand@mweigand.net>
 MIME-Version: 1.0
-References: <20230321121859.2355-1-nancy.lin@mediatek.com> <17831605-5c9d-9c92-d190-04f91060ace4@collabora.com>
- <CAAOTY_8ZAxVSLnJ1u5snsRgkszV7ixwhjUS2nDimE_Lpj=cUCA@mail.gmail.com> <97a5f383-38f5-e8ea-e1d8-489b690e4521@collabora.com>
-In-Reply-To: <97a5f383-38f5-e8ea-e1d8-489b690e4521@collabora.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 27 Mar 2023 23:17:06 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_9_vn-m2jTaaHkFDV+v2-LeaAxtCLNNnOxZq5Httb-TAQ@mail.gmail.com>
-Message-ID: <CAAOTY_9_vn-m2jTaaHkFDV+v2-LeaAxtCLNNnOxZq5Httb-TAQ@mail.gmail.com>
-Subject: Re: [PATCH v30 0/7] Add MediaTek SoC DRM (vdosys1) support for mt8195
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "Nancy.Lin" <nancy.lin@mediatek.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        krzysztof.kozlowski+dt@linaro.org, Daniel Vetter <daniel@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        CK Hu <ck.hu@mediatek.com>, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        clang-built-linux@googlegroups.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        singo.chang@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323135205.1160879-3-mweigand@mweigand.net>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Angelo:
+Hi Maximilian,
 
-AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> =E6=96=
-=BC
-2023=E5=B9=B43=E6=9C=8824=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=884:3=
-8=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Il 24/03/23 00:25, Chun-Kuang Hu ha scritto:
-> > Hi, Angelo:
-> >
-> > AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> =
-=E6=96=BC
-> > 2023=E5=B9=B43=E6=9C=8823=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=
-=884:58=E5=AF=AB=E9=81=93=EF=BC=9A
-> >>
-> >> Il 21/03/23 13:18, Nancy.Lin ha scritto:
-> >>> The hardware path of vdosys1 with DPTx output need to go through by s=
-everal modules, such as, OVL_ADAPTOR and MERGE.
-> >>>
-> >>> Add DRM and these modules support by the patches below:
-> >>>
-> >>
-> >> I've tested v30 again on MT8173, MT8192 and MT8195 based Chromebooks.
-> >> Green light from me.
-> >
-> > I'm curious about how you build code and test on Chromebooks. Do you
-> > build in cros environment or pure linux
-> > (https://archlinuxarm.org/platforms/armv8/mediatek/acer-chromebook-r13)=
-.
-> > I've a MT8183 based Chromebook (HP 11a) and I've tried to run a
-> > upstream kernel on it. cros is too heavy for me and I doubt I could
-> > use it. I've tried the pure linux and could boot up with console, but
-> > display does not work. If you use the pure linux environment, could
-> > you share how it works?
-> >
->
-> I haven't tested MT8183 (I don't actually have any 8183 machine in my han=
-ds)... but
-> yes, I can share my test environment.
->
-> I have one MicroSD that I use either in the MicroSD slot of the target ma=
-chine, or
-> in a USB reader; this *single* system is what I boot on *all* Chromebooks=
- that I
-> have: one kernel, multiple devicetrees, same Debian-based userspace.
->
-> What we have to prepare this bootable media can be found at [1], but bewa=
-re that
-> it currently uses an outdated kernel, so, what I have locally is a symlin=
-k to my
-> kernel tree.
-> You can change/add/remove the devicetree blobs that will get added to the=
- image
-> by modifying `chromebook-setup.sh`; before tampering with kernel tree sym=
-link,
-> please run that script for the first time, as it will download a cross-co=
-mpiler,
-> a kernel tree (that you will replace for sure) and the (very old) Debian =
-rootfs
-> that you can update with `apt-get dist-upgrade` after booting the Chromeb=
-ook.
->
-> If you want to check about possible kernel configuration differences, wha=
-t I use
-> is at [2], so that you can compare.
+Thank you for the patch! Perhaps something to improve:
 
-Thanks for the information, I would try to compare the kernel config first.
+[auto build test WARNING on dtor-input/next]
+[also build test WARNING on dtor-input/for-linus linus/master v6.3-rc4 next-20230327]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
-> [1]: https://gitlab.collabora.com/google/chromebooks/-/tree/mtk-av1
-> [2]:
-> https://gitlab.collabora.com/google/chromeos-kernel/-/blob/mt8195-trackin=
-g-master-rolling/arch/arm64/configs/defconfig
->
-> Regards,
-> Angelo
+url:    https://github.com/intel-lab-lkp/linux/commits/Maximilian-Weigand/Input-cyttsp5-fix-array-length/20230323-215957
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+patch link:    https://lore.kernel.org/r/20230323135205.1160879-3-mweigand%40mweigand.net
+patch subject: [PATCH 2/6] Input: cyttsp5: remove unused code
+config: i386-randconfig-a011-20230327 (https://download.01.org/0day-ci/archive/20230327/202303272323.nRNi9Sso-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4358a60821eb8149dabed197c09d3c0eab63bf38
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Maximilian-Weigand/Input-cyttsp5-fix-array-length/20230323-215957
+        git checkout 4358a60821eb8149dabed197c09d3c0eab63bf38
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/input/touchscreen/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303272323.nRNi9Sso-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/input/touchscreen/cyttsp5.c:604:5: warning: unused variable 'cmd' [-Wunused-variable]
+           u8 cmd[2];
+              ^
+   1 warning generated.
+
+
+vim +/cmd +604 drivers/input/touchscreen/cyttsp5.c
+
+5b0c03e24a061f Alistair Francis 2022-10-31  598  
+5b0c03e24a061f Alistair Francis 2022-10-31  599  static int cyttsp5_get_hid_descriptor(struct cyttsp5 *ts,
+5b0c03e24a061f Alistair Francis 2022-10-31  600  				      struct cyttsp5_hid_desc *desc)
+5b0c03e24a061f Alistair Francis 2022-10-31  601  {
+5b0c03e24a061f Alistair Francis 2022-10-31  602  	struct device *dev = ts->dev;
+5b0c03e24a061f Alistair Francis 2022-10-31  603  	int rc;
+5b0c03e24a061f Alistair Francis 2022-10-31 @604  	u8 cmd[2];
+5b0c03e24a061f Alistair Francis 2022-10-31  605  
+5b0c03e24a061f Alistair Francis 2022-10-31  606  	rc = cyttsp5_write(ts, HID_DESC_REG, NULL, 0);
+5b0c03e24a061f Alistair Francis 2022-10-31  607  	if (rc) {
+5b0c03e24a061f Alistair Francis 2022-10-31  608  		dev_err(dev, "Failed to get HID descriptor, rc=%d\n", rc);
+5b0c03e24a061f Alistair Francis 2022-10-31  609  		return rc;
+5b0c03e24a061f Alistair Francis 2022-10-31  610  	}
+5b0c03e24a061f Alistair Francis 2022-10-31  611  
+5b0c03e24a061f Alistair Francis 2022-10-31  612  	rc = wait_for_completion_interruptible_timeout(&ts->cmd_done,
+5b0c03e24a061f Alistair Francis 2022-10-31  613  			msecs_to_jiffies(CY_HID_GET_HID_DESCRIPTOR_TIMEOUT_MS));
+5b0c03e24a061f Alistair Francis 2022-10-31  614  	if (rc <= 0) {
+5b0c03e24a061f Alistair Francis 2022-10-31  615  		dev_err(ts->dev, "HID get descriptor timed out\n");
+5b0c03e24a061f Alistair Francis 2022-10-31  616  		rc = -ETIMEDOUT;
+5b0c03e24a061f Alistair Francis 2022-10-31  617  		return rc;
+5b0c03e24a061f Alistair Francis 2022-10-31  618  	}
+5b0c03e24a061f Alistair Francis 2022-10-31  619  
+5b0c03e24a061f Alistair Francis 2022-10-31  620  	memcpy(desc, ts->response_buf, sizeof(*desc));
+5b0c03e24a061f Alistair Francis 2022-10-31  621  
+5b0c03e24a061f Alistair Francis 2022-10-31  622  	/* Check HID descriptor length and version */
+5b0c03e24a061f Alistair Francis 2022-10-31  623  	if (le16_to_cpu(desc->hid_desc_len) != sizeof(*desc) ||
+5b0c03e24a061f Alistair Francis 2022-10-31  624  	    le16_to_cpu(desc->bcd_version) != HID_VERSION) {
+5b0c03e24a061f Alistair Francis 2022-10-31  625  		dev_err(dev, "Unsupported HID version\n");
+5b0c03e24a061f Alistair Francis 2022-10-31  626  		return -ENODEV;
+5b0c03e24a061f Alistair Francis 2022-10-31  627  	}
+5b0c03e24a061f Alistair Francis 2022-10-31  628  
+5b0c03e24a061f Alistair Francis 2022-10-31  629  	return 0;
+5b0c03e24a061f Alistair Francis 2022-10-31  630  }
+5b0c03e24a061f Alistair Francis 2022-10-31  631  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
