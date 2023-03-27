@@ -2,54 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6FE16C9B53
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 08:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11916C9B5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 08:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjC0GVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 02:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
+        id S232141AbjC0G1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 02:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjC0GVB (ORCPT
+        with ESMTP id S229950AbjC0G1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 02:21:01 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF38FD;
-        Sun, 26 Mar 2023 23:21:00 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PlN2b5k0kzrX5n;
-        Mon, 27 Mar 2023 14:19:51 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Mar 2023 14:20:57 +0800
-CC:     <yangyicong@hisilicon.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <james.clark@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <21cnbao@gmail.com>, <tim.c.chen@intel.com>,
-        <prime.zeng@hisilicon.com>, <shenyang39@huawei.com>,
-        <linuxarm@huawei.com>
-Subject: Re: [PATCH] perf stat: Support per-cluster aggregation
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Jie Zhan <zhanjie9@hisilicon.com>
-References: <20230313085911.61359-1-yangyicong@huawei.com>
- <039a2fc2-48e2-fe3b-73c1-f7f658c7f22f@hisilicon.com>
- <20230324122422.00006a2b@Huawei.com> <20230324123031.0000013c@Huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <4c9b7281-a4d3-5327-bc27-173af69219a4@huawei.com>
-Date:   Mon, 27 Mar 2023 14:20:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Mon, 27 Mar 2023 02:27:40 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08564498;
+        Sun, 26 Mar 2023 23:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1679898458; x=1711434458;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=yUGZr001csTpDC6gvfZA1QE8lGdCVfjVc1sD6Q6zxms=;
+  b=XR+KqMAy/Ck5DFeh2uzLXk0Myfazk+/zLBdczU9XjiZWBjE/sqtSlCY/
+   YGZ60/H0qVXEbrG0lBSA7C/vvCnzFbOA2CtEJjUwJrcypibQDR1myDUH8
+   7kAnyGByEs4jLKt68fjKJ7wuGNSTxJj40v5BpbQxavgRXthL+FTqzlUZs
+   cIWgo6tYaYqg8pCLi1IEsgP/Xaz9aKcJIi69rw7cWw5aiNTQPRlbBpLSv
+   RgVQgnzLTq9zzJ2kWPvyeoqY5hHc8Lm2u6sxr1XLA2Nif6vB9jl/34tfA
+   k3dcsGc5rpqKdYbCBgjb+K7jFosVbXctpFXsd/xbjZSqgj2bng8zSvtGY
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,293,1673910000"; 
+   d="scan'208";a="29940150"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 27 Mar 2023 08:27:34 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 27 Mar 2023 08:27:34 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 27 Mar 2023 08:27:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1679898454; x=1711434454;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=yUGZr001csTpDC6gvfZA1QE8lGdCVfjVc1sD6Q6zxms=;
+  b=Fk9YqqG1VP1SBPwBqdPU0K8cjCVMcSjzO94ysOmSZ7yxfOBeon0VTf07
+   Y9Lw0EMlYu3CON7N3CVnt7IKm9aNvKGtXsLGXsFxXkS2vLstsjT8KEuFB
+   Ta8cNih7jlCeRwWqVRYn9BgXlRfBBO0iwIdvE9+KMWFbuHqPysl1Sky4P
+   i+PH224JYIhd9u33HEJmM2RMkJPqdfk5oLnYDSsZBLwPGiYeXPTCNm6Cd
+   TGQpwSqhTMsKJyyQ6lwQ11wMqXYlWHoUpaJ7ihwapKB6DtO05HmWNhWBI
+   MYYU+uzDIhyom3nL2FrEcgZx/JhunecH53SxhPmsZl3B1HVXqVE6BYm24
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,293,1673910000"; 
+   d="scan'208";a="29940149"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 27 Mar 2023 08:27:34 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 16D93280056;
+        Mon, 27 Mar 2023 08:27:34 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     peng.fan@oss.nxp.com, linux-arm-kernel@lists.infradead.org
+Cc:     Markus.Niebel@ew.tq-group.com, abailon@baylibre.com,
+        abelvesa@kernel.org, aford173@gmail.com,
+        devicetree@vger.kernel.org, djakov@kernel.org, festevam@gmail.com,
+        kernel@pengutronix.de, krzysztof.kozlowski+dt@linaro.org,
+        l.stach@pengutronix.de, laurent.pinchart@ideasonboard.com,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        marex@denx.de, paul.elder@ideasonboard.com, peng.fan@nxp.com,
+        robh+dt@kernel.org, s.hauer@pengutronix.de, shawnguo@kernel.org,
+        gerg@kernel.org, Greg Ungerer <gerg@linux-m68k.org>
+Subject: Re: [PATCH V3 7/7] arm64: dts: imx8mp: add interconnect for hsio blk ctrl
+Date:   Mon, 27 Mar 2023 08:27:31 +0200
+Message-ID: <2678294.mvXUDI8C0e@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230327045037.593326-1-gerg@linux-m68k.org>
+References: <20220703091451.1416264-8-peng.fan@oss.nxp.com> <20230327045037.593326-1-gerg@linux-m68k.org>
 MIME-Version: 1.0
-In-Reply-To: <20230324123031.0000013c@Huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,87 +89,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jie and Jonathan,
+Hi Greg,
 
-On 2023/3/24 20:30, Jonathan Cameron wrote:
-> On Fri, 24 Mar 2023 12:24:22 +0000
-> Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
-> 
->> On Fri, 24 Mar 2023 10:34:33 +0800
->> Jie Zhan <zhanjie9@hisilicon.com> wrote:
->>
->>> On 13/03/2023 16:59, Yicong Yang wrote:  
->>>> From: Yicong Yang <yangyicong@hisilicon.com>
->>>>
->>>> Some platforms have 'cluster' topology and CPUs in the cluster will
->>>> share resources like L3 Cache Tag (for HiSilicon Kunpeng SoC) or L2
->>>> cache (for Intel Jacobsville). Currently parsing and building cluster
->>>> topology have been supported since [1].
->>>>
->>>> perf stat has already supported aggregation for other topologies like
->>>> die or socket, etc. It'll be useful to aggregate per-cluster to find
->>>> problems like L3T bandwidth contention or imbalance.
->>>>
->>>> This patch adds support for "--per-cluster" option for per-cluster
->>>> aggregation. Also update the docs and related test. The output will
->>>> be like:
->>>>
->>>> [root@localhost tmp]# perf stat -a -e LLC-load --per-cluster -- sleep 5
->>>>
->>>>   Performance counter stats for 'system wide':
->>>>
->>>> S56-D0-CLS158    4      1,321,521,570      LLC-load
->>>> S56-D0-CLS594    4        794,211,453      LLC-load
->>>> S56-D0-CLS1030    4             41,623      LLC-load
->>>> S56-D0-CLS1466    4             41,646      LLC-load
->>>> S56-D0-CLS1902    4             16,863      LLC-load
->>>> S56-D0-CLS2338    4             15,721      LLC-load
->>>> S56-D0-CLS2774    4             22,671      LLC-load
->>>> [...]
->>>>
->>>> [1] commit c5e22feffdd7 ("topology: Represent clusters of CPUs within a die")
->>>>
->>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>    
->>>
->>> An end user may have to check sysfs to figure out what CPUs those 
->>> cluster IDs account for.
->>>
->>> Any better method to show the mapping between CPUs and cluster IDs?  
->>
->> The cluster code is capable of using the ACPI_PPTT_ACPI_PROCESSOR_ID field
->> if valid for the cluster level of PPTT.
->>
->> The numbers in the example above look like offsets into the PPTT table
->> so I think the PPTT table is missing that information.
->>
+Am Montag, 27. M=E4rz 2023, 06:50:37 CEST schrieb Greg Ungerer:
+> On 2/3/22 17:13, Peng Fan wrote:
+> > From: Peng Fan <peng.fan@nxp.com>
+> >=20
+> > Add interconnect property for hsio blk ctrl
+> >=20
+> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > ---
+> >=20
+>  > arch/arm64/boot/dts/freescale/imx8mp.dtsi | 5 +++++
+>  > 1 file changed, 5 insertions(+)
+> >=20
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > b/arch/arm64/boot/dts/freescale/imx8mp.dtsi index
+> > 08bd57742294..9cceeeeb26be 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > @@ -1109,6 +1109,11 @@ hsio_blk_ctrl: blk-ctrl@32f10000 {
+> >=20
+> >  						<&pgc_hsiomix>,=20
+<&pgc_pcie_phy>;
+> >  			=09
+> >  				power-domain-names =3D "bus", "usb",=20
+"usb-phy1",
+> >  			=09
+> >  						     "usb-phy2",=20
+"pcie", "pcie-phy";
+> >=20
+> > +				interconnects =3D <&noc=20
+IMX8MP_ICM_NOC_PCIE &noc IMX8MP_ICN_HSIO>,
+> > +						<&noc=20
+IMX8MP_ICM_USB1 &noc IMX8MP_ICN_HSIO>,
+> > +						<&noc=20
+IMX8MP_ICM_USB2 &noc IMX8MP_ICN_HSIO>,
+> > +						<&noc=20
+IMX8MP_ICM_PCIE &noc IMX8MP_ICN_HSIO>;
+> > +				interconnect-names =3D "noc-pcie",=20
+"usb1", "usb2", "pcie";
+> >=20
+> >  				#power-domain-cells =3D <1>;
+> >  		=09
+> >  			};
+> >  	=09
+> >  		};
+>=20
+> This change completely breaks USB for me on a new iMX8mp platform I am
+> working with. Before this change normal USB probe looks good:
+>=20
+>     xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+>     xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number=
+ 1
+>     xhci-hcd xhci-hcd.0.auto: hcc params 0x0220fe6d hci version 0x110 qui=
+rks
+> 0x0000000000010010 xhci-hcd xhci-hcd.0.auto: irq 206, io mem 0x38100000
+>     xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+>     xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number=
+ 2
+>     xhci-hcd xhci-hcd.0.auto: Host supports USB 3.0 SuperSpeed
+>     usb usb1: New USB device found, idVendor=3D1d6b, idProduct=3D0002,
+> bcdDevice=3D 6.03 usb usb1: New USB device strings: Mfr=3D3, Product=3D2,
+> SerialNumber=3D1 usb usb1: Product: xHCI Host Controller
+>     usb usb1: Manufacturer: Linux 6.3.0-rc4-dirty xhci-hcd
+>     ....
+>=20
+> But after this commit is applied, no USB probe messages at all.
+>=20
+> USB worked fine in 6.0 for me, but when I switched up to 6.1 USB was brok=
+en,
+> I bisected to this as being the offending commit. This is still broken for
+> me in todays 6.3-rc4. If I revert this change (and only this change) USB
+> works again.
+>=20
+> Any thoughts on why this breaks USB?
 
-Yes it is, the PPTT doesn't give a valid ID on my machine, for cluster and other
-topologies. It's not a problem of this patch.
+Maybe you are missing CONFIG_INTERCONNECT_IMX8MP?
 
->> Whilst not a great description anyway (it's just an index), the UUID
->> that would be in there can convey more info on which cluster this is.
->>
->>
->>>
->>> Perhaps adding a conditional cluster id (when there are clusters) in the 
->>> "--per-core" output may help.  
->>
->> That's an interesting idea.  You'd want to include the other levels
->> if doing that.  So whenever you do a --per-xxx it also provides the
->> cluster / die / node / socket etc as relevant 'above' the level of xxx
->> Fun is that node and die can flip which would make this tricky to do.
-> 
-> Ignore me on this.  I'd not looked at the patch closely when I wrote
-> this.  Clearly a lot of this information is already provided - the
-> suggestion was to consider adding cluster to that mix which makes
-> sense to me.
-> 
+Best regards,
+Alexander
 
-In the early version of this patch I added the cluster info in the "--per-core"
-output as "Sxxx-Dxxx-CLSxxx-Cxxx". But I decide to keep it as is to not break
-the existed tools/scripts using --per-core outputs. Maybe we can add it later
-if there's requirement.
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
-Thanks,
-Yicong
 
