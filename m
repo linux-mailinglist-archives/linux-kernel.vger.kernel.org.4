@@ -2,94 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F6C6CA6D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8286CA748
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbjC0OKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
+        id S232405AbjC0ORo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjC0OKA (ORCPT
+        with ESMTP id S232984AbjC0ORT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:10:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9487BD3;
-        Mon, 27 Mar 2023 07:09:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 27 Mar 2023 10:17:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBCC7686
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679926422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=Dabk0TyVO2SEMBS7O9GPkVH20RURosApNgBbJWd+KV+Wcfd8bzmwqvfFfj9DdiUDUaUITz
+        7XGZRtoHaeVsT+e9D0KVXXB3MTgI8dSQkYH6p0pvYKAHCQeq6+eZrkp9nyRrCaRA9sB2fk
+        aK/XD+ns0gg7gKKeF9YmrO5NgApPyU4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-85--YcWfJfvN5iJJkzgfBw30Q-1; Mon, 27 Mar 2023 10:13:38 -0400
+X-MC-Unique: -YcWfJfvN5iJJkzgfBw30Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59A90B80BEC;
-        Mon, 27 Mar 2023 14:09:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE99C433EF;
-        Mon, 27 Mar 2023 14:09:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679926196;
-        bh=qhleqvSXG55LxvL+uEa9mQ1uZqawiIM0nEiCIToDFzE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gyz3rDhZiVPqbbQYupLmUGWcI1BIvh3RYJcqWZuuFKl3ygJh3GXR3R1M9hWXUv9qY
-         rdl/JEvArv34V2ryq0xWC7VFi2Z3tvIwOrl6AErokW4MQfmapOtZ3hQ6AM+GvSZx0z
-         G/PEzJtXUyXAZJa8Fblso8ugrxIukM4NSndWNi7gCmlzGLqTnz3BUppmnsu5GvbMvJ
-         WGA6Re0e5drIsKBQnbX5Ve737LcMqu3SjUOakQ9F402KcbNBT5mTXTPk49dBbziPOJ
-         wuqFaaOUl+6yvAjkgskdkzv/Q8MhoD1XQ5NXjOpio67D6supKhRshqwW9nMMBUEtlg
-         EjtXMFKw+HRjQ==
-Date:   Mon, 27 Mar 2023 07:12:59 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FE82803499;
+        Mon, 27 Mar 2023 14:13:37 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C0421140E949;
+        Mon, 27 Mar 2023 14:13:36 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Dmytro Maluka <dmy@semihalf.com>
+Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
         Marc Zyngier <maz@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-phy@lists.infradead.org,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH v2 00/12] Introduce the SC8180x devices
-Message-ID: <20230327141259.bjdtyvhilxuxts62@ripper>
-References: <20230325122444.249507-1-vkoul@kernel.org>
- <6f6be544-48da-0c22-ea54-e07e35131ec9@linaro.org>
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Rong L Liu <rong.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
+        Dmitry Torokhov <dtor@google.com>, Dong@vger.kernel.org,
+        Eddie <eddie.dong@intel.com>, Dmytro Maluka <dmaluka@google.com>
+Subject: Re: [PATCH v4 0/2] KVM: x86/ioapic: Fix oneshot interrupts forwarding
+Date:   Mon, 27 Mar 2023 10:13:34 -0400
+Message-Id: <20230327141334.3751567-1-pbonzini@redhat.com>
+In-Reply-To: <20230322204344.50138-1-dmy@semihalf.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f6be544-48da-0c22-ea54-e07e35131ec9@linaro.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 09:46:31AM +0200, Krzysztof Kozlowski wrote:
-> On 25/03/2023 13:24, Vinod Koul wrote:
-> > This introduces Qualcomm SC8180x SoC which features in Lenovo Flex 5G
-> > laptop. This also adds support for Primus platform as well as Lenovo Flex 5G
-> > laptop.
-> > 
-> > I would be great if submaintainers can ack the binding patch so that
-> > everything can go thru qcom tree
-> 
-> I think Bjorn recently was rejecting taking bindings patches, so what
-> changed?
-> 
+Queued, thanks.
 
-Nothing changed. In the interest of reducing the risk for merge
-conflicts I still think it's best if bindings goes via respective
-maintainer trees; so patch 1 is for me...
+Paolo
 
-Regards,
-Bjorn
+
