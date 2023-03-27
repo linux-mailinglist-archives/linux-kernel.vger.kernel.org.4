@@ -2,85 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A2B6CA526
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49C26CA528
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjC0NFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
+        id S231258AbjC0NFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbjC0NFW (ORCPT
+        with ESMTP id S232134AbjC0NFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:05:22 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A0FA9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:05:18 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id h8so35865209ede.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:05:18 -0700 (PDT)
+        Mon, 27 Mar 2023 09:05:36 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C368710CC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:05:33 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5445009c26bso168865937b3.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:05:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1679922317;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MUedMoE14JQ28fok10enBbyDNKiAv+6x2jhiRaNAMrQ=;
-        b=q3g2IUSeGBLtR4VAoubgIg8uzHTrexKkK19JfvoK50i3hZgdovxZoLoelnLSXQonTU
-         5835oKTmd3bkY3veUkU2BaWjOTFaErD8ndQALmRjuMEQWA5JgVX25TsxgwRVFWlYbwfv
-         zsB3bp1e1RUWEttMSJvOyKS7GRv5NYLlXtjFi/XUCBYBmngWCJ/fOf2Zl3CaEmWOut6P
-         l/RFjGqHPn3fpUUw/Y3xI3jKnsFFbueEWtXrq7dRbr7t1ydqfV0pbXCnQXIV0PhEF6wa
-         ZLvQ1YS88ycDtak3To96ECqux0DDRyZiAGZc4BJp7LLmJof3VZYQXdU4twNzj7Yh1FkP
-         1fkg==
+        d=gmail.com; s=20210112; t=1679922333;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1kI4+ZML1G+b7UOhhIPy0YcoMp05rWzeHpNMkjZ5sBM=;
+        b=eGJbxFAKr99gaJCfSPpVY6tAXOC7kz1Z46129jPkjmRZI15o7BPYTsYLErf27oMdMa
+         GUEx4Rgn5/dQ3LeRfTITSn6S4uYMdJTLqtSnS79SyCvaq9ls8IPQA9fMDTQYAVVwHjp/
+         pWBmRSCoqH8ZuxqsM+EWBOBvuqrG5hXlmmh/bLryQcUo7seFk9YLrZYAL3zrNhsY7KUl
+         rJ7mXz6/dF/TQIgEAZ0ih4evyEwWOaEINft6m0VhmKRaCDqvCs0ZrTztGn/ax1nenvjn
+         btfKj1Rr6PjxEIWbe6qXRwEdnO9jN3lzWNpK9PXsdPMDIBW9xys9iXb/AMtMBSq2emOU
+         mi8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679922317;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MUedMoE14JQ28fok10enBbyDNKiAv+6x2jhiRaNAMrQ=;
-        b=ucaF1AznItqa/mG0f+FSZjmgBP3/4ftdufBvf+bWf+80XZWtP3qxE7lV66jCfdeh9x
-         3ukCiesybWrsfvGuVKV0xku0odNFoSF6uaVJcKtrbZn+Enxn9y831cKQeHvzjjNvn0cu
-         YFxuctVWzVIzB3fmcwAi/095LlgC/JlHCxhz3JUtO2GY5b0t1POg01cp0LS7Zzd1pQ5/
-         QtIGL6jU/Oikf+pKSmwRUcz6BIOyiQ9nY0ZvixC7X8FvfcOTwLb2twde61GlxL1USG1Y
-         MrtnG7Y5BdYhQH4Q3097gQ9GNcpzzvWGJlCivbfGbjr41GzT1oaIjN4SrUvL6IYa+6i3
-         Uz3w==
-X-Gm-Message-State: AAQBX9fDzSU2FwqXPQSLoKwEunq32hR/gJR9duy8dU0L0ZSlMDdHjlBK
-        rOxRFZ8+6h12Y16tvb3SuvkfMA==
-X-Google-Smtp-Source: AKy350b8SuxITm8TpdYemMwCmE2tqKvi1KpZiRhxEdvVPCZnD0RBwmihbZkQCZjH4l2/Lo8nVTxYDw==
-X-Received: by 2002:a17:906:7e4a:b0:93d:f7a6:219b with SMTP id z10-20020a1709067e4a00b0093df7a6219bmr11766956ejr.65.1679922316865;
-        Mon, 27 Mar 2023 06:05:16 -0700 (PDT)
-Received: from [10.44.2.5] ([81.246.10.41])
-        by smtp.gmail.com with ESMTPSA id sd24-20020a170906ce3800b00931024e96c5sm14247420ejb.99.2023.03.27.06.05.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 06:05:16 -0700 (PDT)
-Message-ID: <9462668e-dbaf-8df8-8ba2-86f9511294ac@tessares.net>
-Date:   Mon, 27 Mar 2023 15:05:16 +0200
+        d=1e100.net; s=20210112; t=1679922333;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1kI4+ZML1G+b7UOhhIPy0YcoMp05rWzeHpNMkjZ5sBM=;
+        b=1hP444GZV7rdLDkH98eeyShOvgiFRoXmSpPOUGDrwH50U680O4VNPMLSlJrrXljlhJ
+         s2gxlklli7Ktwg7F2hMO3EyDiXzN+kvFMRGjKCBccNngyLe62hwQN0lvUDSvkURvtO+z
+         hYmXiqUlkn8FedSZwvBT/34IpyD2Fj1utDIGwEpIVyFr5zaWozFjyTiWEDHbQzVtasRT
+         tyNh4Qd5BB4/eZVqxtLEdE8qS/xJkClc9BwyYdtO0y+ZtyfJHqoTQChIygzc25lnlcWK
+         OzE/T5Ro/74wp1y8EGOFlRMc3uN4+frTHm+Hew+VH+pzbNf+XvhKWx08q38A+mm406Sg
+         h23g==
+X-Gm-Message-State: AAQBX9cubzZZT3olrkh+qqrqDbLAS8AfrIC0xTPaMCOQCHrMcidT7fox
+        ia2xPyMDTNL9jUNknCbRZui/Wooo+pZbWkpq/e8=
+X-Google-Smtp-Source: AKy350Z4VggKyeXerp4WTMHkr70rECNj3yJhtgG+y0uIKDVAuijNVMVhTx7ee5r0HbhuJJ+bP33wjPL819meQ/JtP90=
+X-Received: by 2002:a81:ae4f:0:b0:545:ed8e:f4f6 with SMTP id
+ g15-20020a81ae4f000000b00545ed8ef4f6mr1504273ywk.5.1679922332668; Mon, 27 Mar
+ 2023 06:05:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/2] docs: process: allow Closes tags with links
-Content-Language: en-GB
-To:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
-References: <20230314-doc-checkpatch-closes-tag-v2-0-f4a417861f6d@tessares.net>
- <20230314-doc-checkpatch-closes-tag-v2-1-f4a417861f6d@tessares.net>
- <29b2c9c1-f176-5e42-2606-94b4bc6d4c45@leemhuis.info>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <29b2c9c1-f176-5e42-2606-94b4bc6d4c45@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <ZA0FEyOtRBvpIXbi@bombadil.infradead.org> <CAFkjPTmVbyuA0jEAjYhsOsg-SE99yXgehmjqUZb4_uWS_L-ZTQ@mail.gmail.com>
+ <ZBSc1jjYJn6noeMl@bombadil.infradead.org>
+In-Reply-To: <ZBSc1jjYJn6noeMl@bombadil.infradead.org>
+From:   Eric Van Hensbergen <ericvh@gmail.com>
+Date:   Mon, 27 Mar 2023 08:05:21 -0500
+Message-ID: <CAFkjPTmc-OgMEj9kF3y04sRGeOVO_ogEv1fGG=-CfKP-0ZKC_g@mail.gmail.com>
+Subject: Re: 9p caching with cache=loose and cache=fscache
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Josef Bacik <josef@toxicpanda.com>,
+        Jeff Layton <jlayton@kernel.org>, lucho@ionkov.net,
+        asmadeus@codewreck.org, v9fs-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,107 +72,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thorsten,
+Sorry, took a bit to unstack from day job, but while going through the
+patch queue I remembered I still had some questions to answer here.
 
-Thank you for your reply!
+On Fri, Mar 17, 2023 at 12:01=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.or=
+g> wrote:
+>
+> On Sun, Mar 12, 2023 at 01:22:34PM -0500, Eric Van Hensbergen wrote:
+> > I was looking at kdevops the other day - cool stuff.  Was trying to
+> > figure out how we could do v9fs CI with it.
+>
+> Happy to help any questions you may have about it!
+>
+> > Both cache=3Dloose and cache=3Dfscache currently don't validate via hos=
+t.
+>
+> What does this mean exactly?
+>
 
-On 26/03/2023 13:28, Thorsten Leemhuis wrote:
-> On 24.03.23 19:52, Matthieu Baerts wrote:
->> Making sure a bug tracker is up to date is not an easy task. For
->> example, a first version of a patch fixing a tracked issue can be sent a
->> long time after having created the issue. But also, it can take some
->> time to have this patch accepted upstream in its final form. When it is
->> done, someone -- probably not the person who accepted the patch -- has
->> to remember about closing the corresponding issue.
->>
->> This task of closing and tracking the patch can be done automatically by
->> bug trackers like GitLab [1], GitHub [2] and hopefully soon [3]
->> bugzilla.kernel.org when the appropriated tag is used. The two first
->> ones accept multiple tags but it is probably better to pick one.
->>
->> [...]
->>
->> diff --git a/Documentation/process/5.Posting.rst b/Documentation/process/5.Posting.rst
->> index 7a670a075ab6..20f0b6b639b7 100644
->> --- a/Documentation/process/5.Posting.rst
->> +++ b/Documentation/process/5.Posting.rst
->> @@ -217,6 +217,15 @@ latest public review posting of the patch; often this is automatically done
->>  by tools like b4 or a git hook like the one described in
->>  'Documentation/maintainer/configure-git.rst'.
->>  
->> +Similarly, there is also the "Closes:" tag that can be used to close issues
->> +when the underlying public bug tracker can do this operation automatically.
->> +For example::
->> +
->> +	Closes: https://example.com/issues/1234
->> +
->> +Private bug trackers and invalid URLs are forbidden. For other public bug
->> +trackers not supporting automations, keep using the "Link:" tag instead.
->> [...]
-> 
-> This more and more seems half-hearted to me.
-> 
-> One reason: it makes things unnecessarily complicated for developers, as
-> they'd then have to remember `is this a public bug tracker that is
-> supporting automations? Then use "Closes", otherwise "Link:"`.
-> 
-> Another reason: the resulting situation ignores my regression tracking
-> bot, which (among others) tracks emailed reports. It would benefit from
-> "Closes" as well to avoid the ambiguity problem Konstantin brought up
-> (the one about "Link: might just point to a report for background
-> information in patches that don't address the problem the link points
-> to"[1]. But FWIW, I'm not sure if this ambiguity is much of a problem in
-> practice, I have a feeling that it's rare and most of the time will
-> happen after the reported problem has been addressed or in the same
-> patch-set.
+That's a good question - I guess the answer is "by design" they don't
+do anything special to check that the cache is up to date with the
+host.  That being said, there are several places in the code where the
+cache will be invalidated (in some cases even if its up to date with
+the host, yes, those are likely bugs).  Many of the invalidations that
+are present are overly conservative.  The key missing one is
+v9fs_lookup_revalidate which currently fills missing inode data but
+should potentially also check to see if anything in the file changed
+and react accordingly.  The other thing is that we aren't always using
+the caches when we should, if you look at the traffic even when
+everything should be perfectly cached in fscache we are getting data
+and metadata from the wire -- those are mostly bugs in the cache
+implementation that I'm trying to go through and fix now.
 
-Even if they are rare, I think it might be good to avoid false-positives
-that can be frustrating or create confusions. Using a dedicated tag plus
-some safeguards help then be required. (And it is not compatible with
-existing forges.)
+From the 9p perspective, we should be looking at qid.version values
+returned from the host and matching them to our internal notion of
+version.  If the versions don't match we should be invalidating
+caches.  qid.versions get returned on open, lookup, and most meta-data
+operations so there's lots of opportunities there.  There are still
+some issues with this approach, namely that not all servers populate
+qid.version and right now the ones that do use a hashed timestamp
+(since qid.version is only 32-bits).  This probably covers most bases,
+but its not ideal -- so currrently thinking through whether we do a
+further extension of the protocol or use some other mechanism.
+There's a possibility of using a full getattr every so often to
+back-up qid.version validation, but if we want truly tight coherence
+(not just open to close) then we need to open up some sort of back
+channel for invalidates from the server -- but I think the qid based
+invalidation probably gets us most of what we need so going to start
+with that.
 
-> I thus think we should use either of these approaches:
-> 
-> * just stick to "Link: <url>"
-> 
-> * go "all-in" and tell developers to use "Closes: <url>"[2] all the time
-> when a patch is resolving an issue that was reported in public
-> 
-> I'm not sure which of them I prefer myself. Maybe I'm slightly leaning
-> towards the latter: it avoids the ambiguity, checkpatch.pl will yell if
-> it's used with something else than a URL, it makes things easier for
-> MPTCP & DRM developers, and (maybe most importantly) is something new
-> developers are often used to already from git forges.
+> Right now a host with debian 6.0.0-6-amd64 certainly does not seem to pus=
+h
+> out changes to 9p clients on VMs but Josef informs me that with 6.2-rc8
+> he did see the changes propagate.
 
-I think it makes sense not to restrict this tag to bug trackers with
-automations as long as they are public of course. After having looked at
-the comments from v1, I didn't feel like it would have been OK to extend
-its usage but I can send a v3 taking this direction hoping to get more
-feedback. After all, thanks to regzbot, we can also say that there are
-some automations behind lore.kernel.org and other ML's :)
+I did tighten up some of the invalidation in the last round of
+patches, however these are likely more on the overly conservative side
+versus doing the right thing -- however, its really not at the point
+where you can rely on it.  If consistency is something you care about,
+I'd suggest cache=3Dnone until you can get cache=3Dreadahead.
 
-If we do that, would it be blocking to have this included in v6.3?
+>
+> Do none of the existing 9p cache modes not support open-to-close policies
+> at all?
+>
 
-> [1]
-> https://lore.kernel.org/linux-doc/20230317185637.ebxzsdxivhgzkqqw@meerkat.local/
-> 
-> [2] fwiw, I still prefer "Resolves:" over "Closes". Yes, I've seen
-> Konstantin's comment on the subtle difference between the two[3], but as
-> he said, Bugbot can work with it as well. But to me "Resolves" sounds
-> way friendlier and more descriptive to me; but well, I'm not a native
-> speaker, so I don't think my option should count much here.
+not specifically open-to-close, loose supports file and dir caching
+but without consistency, it might be tempting to try cache=3Dmmap to see
+if it gets you closer, but my frame of reference is more the current
+patches versus the old code so not sure it would buy you anything.
 
-As a non-native speaker, I'm open to use either of them. But as a
-developer, I feel like I'm more used to see the "Closes:" tag than the
-"Resolves" one.
+>
+> Right now the cache mode used is cache=3Dloose as that's the default,
+> what do you recommend for a typical kernel development environemnt?
+>
 
-When looking at the Git history, the "Closes:" tag with a link has been
-used ~500 times, compared to ~14 times for "Resolves:". Maybe "Closes:"
-is more natural for developers who first want to have their assigned
-tickets being "closed" automatically than issues being "resolved"? :)
+As I said, if you are interactively changing things I think you'd want
+to go for cache=3Dnone for now (as painful as it is).  I have fixed what
+I hope to be my last bug with the new patch series so it should be
+going into linux-next today.
 
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+      -eric
