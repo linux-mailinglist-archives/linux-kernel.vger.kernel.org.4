@@ -2,84 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A46F66CA850
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1336CA857
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbjC0O4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
+        id S233067AbjC0O5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232717AbjC0O4m (ORCPT
+        with ESMTP id S229783AbjC0O5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:56:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8046F30F8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:56:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C8096130A
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:56:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 802D1C433EF;
-        Mon, 27 Mar 2023 14:56:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679928980;
-        bh=2QDriybfok28zgEIOBPq16NBqwdvGyH821rDD9mIx0M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=brFZTdzbRCEJKhn/gixnOI7R3/N5P9HVm/0P4E4JsRnzL4oyI4qiXPv2EJ2oH6O2k
-         xB4+Dl/nsUWxx/F1iujnEROwvQxsY8sLMrSqjtUtv94z05xfhU7nhJ5d0kQiFuK5py
-         18eGd8iJ8GH4eGv1C3qtCsG9kq0SqWnzaPWiFwzKfEmKpWVsFt5tAkmdDdaWA2hsTo
-         GH6MfXbJakVM86+TGz3xeHrYjW6ckFq8Hz84yMfDP74lPvlJ98VMs1bGhd32Ra692D
-         nXn+kMdPYq1nErt8ITK/GWk4hzrVctwoBOMmyD4r+1831iFEJfumCWj/3W+4bqTpxi
-         Znsy0YiPL4uKA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pgoGr-000537-AR; Mon, 27 Mar 2023 16:56:30 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH] ASoC: qcom: audioreach: drop stray 'get' from error message
-Date:   Mon, 27 Mar 2023 16:55:55 +0200
-Message-Id: <20230327145555.19351-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Mon, 27 Mar 2023 10:57:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 425271718;
+        Mon, 27 Mar 2023 07:57:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 247F2C14;
+        Mon, 27 Mar 2023 07:58:14 -0700 (PDT)
+Received: from [10.57.54.246] (unknown [10.57.54.246])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 006013F6C4;
+        Mon, 27 Mar 2023 07:57:26 -0700 (PDT)
+Message-ID: <8a2dc999-2bed-0f32-4210-bc3d8f223581@arm.com>
+Date:   Mon, 27 Mar 2023 15:57:25 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH] coresight: cti: Check if the CPU activated for the CPU
+ CTI
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org
+References: <1679910560-23469-1-git-send-email-quic_taozha@quicinc.com>
+ <9c7f6414-ac5c-bee2-7068-04a7ee7d94f9@arm.com>
+ <81a39cd8-745d-334d-840d-66aed47c3470@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <81a39cd8-745d-334d-840d-66aed47c3470@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop the stray 'get', which appears to be a copy-paste error, from the
-registration-failure error message.
+On 27/03/2023 15:28, Tao Zhang wrote:
+> Hi Suzuki,
+> 
+> On 3/27/2023 5:52 PM, Suzuki K Poulose wrote:
+>> On 27/03/2023 10:49, Tao Zhang wrote:
+>>> Check whether the CPU corresponding to the CPU CTI is activated.
+>>> If it is not activated, the CPU CTI node should not exist, and
+>>> an error will be returned in the initialization function.
+>>>
+>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>>> ---
+>>>   drivers/hwtracing/coresight/coresight-cti-core.c | 6 ++++--
+>>>   1 file changed, 4 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/hwtracing/coresight/coresight-cti-core.c 
+>>> b/drivers/hwtracing/coresight/coresight-cti-core.c
+>>> index 277c890..aaa83ae 100644
+>>> --- a/drivers/hwtracing/coresight/coresight-cti-core.c
+>>> +++ b/drivers/hwtracing/coresight/coresight-cti-core.c
+>>> @@ -899,10 +899,12 @@ static int cti_probe(struct amba_device *adev, 
+>>> const struct amba_id *id)
+>>>       drvdata->config.hw_powered = true;
+>>>         /* set up device name - will depend if cpu bound or otherwise */
+>>> -    if (drvdata->ctidev.cpu >= 0)
+>>> +    if (drvdata->ctidev.cpu >= 0) {
+>>> +        if (!cpu_active(drvdata->ctidev.cpu))
+>>> +            return -ENXIO;
+>>>           cti_desc.name = devm_kasprintf(dev, GFP_KERNEL, "cti_cpu%d",
+>>>                              drvdata->ctidev.cpu);
+>>
+>> But why ? As long as we do not enable or touch any CPU specific bits 
+>> in the probe, why do we need to fail this ? What are you trying to fix ?
+>>
+>> Please could you share the log if you are hitting something ? This looks
+>> like masking a problem.
+>>
+>> Suzuki
+> 
+> We found that when the CPU core is disabled, for example, CPU3 is 
+> disabled, but
+> 
+> CPU3 CTI node corresponding to CPU3 still exists. In fact, in this case, 
+> CPU3 CTI
+> 
+> has been unable to trigger CPU3 properly since CPU3 is in an inactive 
+> state. This change
+> 
+> is to avoid configuring the CPU CTI of the CPU that has been disabled in 
+> this case.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- sound/soc/qcom/qdsp6/q6apm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Who is configuring the trigger ? Shouldn't we skip "enabling" the CTI
+when the associated CPU is inactive instead ? Disabling the probe with
+an error doesn't solve the problem. What if the CPU becomes active later 
+? What makes sure that the CTI is probed then ?
 
-diff --git a/sound/soc/qcom/qdsp6/q6apm.c b/sound/soc/qcom/qdsp6/q6apm.c
-index 994c9e823a88..a7a3f973eb6d 100644
---- a/sound/soc/qcom/qdsp6/q6apm.c
-+++ b/sound/soc/qcom/qdsp6/q6apm.c
-@@ -676,7 +676,7 @@ static int apm_probe(gpr_device_t *gdev)
- 
- 	ret = devm_snd_soc_register_component(dev, &q6apm_audio_component, NULL, 0);
- 	if (ret < 0) {
--		dev_err(dev, "failed to get register q6apm: %d\n", ret);
-+		dev_err(dev, "failed to register q6apm: %d\n", ret);
- 		return ret;
- 	}
- 
--- 
-2.39.2
+Suzuki
+
+
+> 
+> Tao
+> 
+>>
+>>
+>>> -    else
+>>> +    } else
+>>>           cti_desc.name = coresight_alloc_device_name(&cti_sys_devs, 
+>>> dev);
+>>>       if (!cti_desc.name)
+>>>           return -ENOMEM;
+>>
 
