@@ -2,72 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3470A6CAE85
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7196CAE8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjC0TZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
+        id S232207AbjC0T0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 15:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjC0TZR (ORCPT
+        with ESMTP id S229822AbjC0T0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:25:17 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC38CD
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:25:16 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id r4so5173169ilt.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:25:16 -0700 (PDT)
+        Mon, 27 Mar 2023 15:26:42 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB1A1BEF
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:26:41 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id o12so164332ilh.13
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:26:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679945115; x=1682537115;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679945200; x=1682537200;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uyk2W940sqvmOOAE7vtylepXCeMfS8C/RkY9WHJ9hX0=;
-        b=ri4COfEetEUMaBpjoPzVZ1cntn00ltloaLu5i1Nq0kZsaF7msSIsOmo1RgUH/DY574
-         JEiTSFAYz/hhejg7wy5t04kLe36wkkGtZmnsYcb7fc0OOExdpWLuSaUg76lNeKXcVwGT
-         7LyoQdvQmGG4aXUkJ2HXi2OYkXwHo75qXL3LeMum+IXAaacLmcoNOmIXlzaXKFBVpDm1
-         zXS/gxyhXXgs8JagcuOy/vkmLUz20N1Xjrj4qupLHIdRrwuOvnmNNCt8iZVhAEGhlMic
-         Yq5n2RebkiFH1err/5+ssHK0dsJU9irhYlTzArT2eDdu0qw8CDfX2z/PtojZEL357uJV
-         3xkQ==
+        bh=m22IOmYO648upgKA8FIcZBXwHFb4PsyxR8+W0WlIGww=;
+        b=RiknIdyiWcZWnkIIkiOglicslJMzjPhVeGaVim1BrZZ9d94WZXBVfsGXQz9TdsbEuq
+         CxZ9Cy1ubRrPrJ9L/7y1gRC745EoV/0T9SFNum1USDjTb60fcq1bEV+4RGHHXPRImVYO
+         qt5aElyt2L35i0rsTOKSDWMsKLH9jmTyrp6xMr03bzCTXIHfayggLIzCsphA06j3Qe47
+         EteAjoDfpaiJUvCUV1WXOb04nsv4Rsmdmx9T77DQaxXJ71WBjqjejCkFlrYQwCG3xpcM
+         6VKIBuO6HMstop/bVFTJw6q/qWTYgx1H6BD6m9DKHibR3nph0YJE0vijbGP1rvHNVIpr
+         E+Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679945115; x=1682537115;
+        d=1e100.net; s=20210112; t=1679945200; x=1682537200;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uyk2W940sqvmOOAE7vtylepXCeMfS8C/RkY9WHJ9hX0=;
-        b=0eV5GTuFLtk770G+OX0cV6mNmmTOl4ITd7/S54nT5kvw3j1to1Xfjpq/dY+WPoRACH
-         Yu83EraSg4jph5Ckezhr5Y3lcHiwtvx2fxUtHa9EuyOkRrXugJGq+6PrcgA8gobrjxlS
-         177UqGgSFvKlZO9kn6D5FJ+kGL2HeRaqA3rgc5k5d0x56N9dYLMg5Gyi7MYNn6GMXOia
-         Iojupn681V48KuHEBWUHxt4f6/RdRB/EPFx2RnouoT30gh4H2/cqTkh/QUG40b02piJv
-         /Yszvtqk3oO3GFZ/JXi9Y/tH/dg6x+FgTxKtOuNla/yHQJMAPTlYOCncCXgPc6BGqxPH
-         xN2A==
-X-Gm-Message-State: AAQBX9dRKB/G7EP0hMZgcgXoONyrYVAeWNjKJP49kDxJX/366jJEhwiW
-        X8Hbo0rSdf5gMhSd6C8eTXUODQ==
-X-Google-Smtp-Source: AKy350YAvHqYDnEv/3siWCqUnn00znahiZRHe/iCPjgc4m6/7hEPNSLtWC0wMysnl5L3/GYTpYzUhA==
-X-Received: by 2002:a05:6e02:88c:b0:325:c88b:79b6 with SMTP id z12-20020a056e02088c00b00325c88b79b6mr6999792ils.2.1679945115460;
-        Mon, 27 Mar 2023 12:25:15 -0700 (PDT)
+        bh=m22IOmYO648upgKA8FIcZBXwHFb4PsyxR8+W0WlIGww=;
+        b=fHHL94MxqVWCoKFeNk+HdpQX0Mvn8NEtSZYO2J0MHOJyZNSXLuR2BuWjtLzdAVD+Dz
+         w6QUeAXQ1JiyP/zJM4CBBtGC2RtZckAiPH4NKmGxcvaJWm6CmY4WRn3A4aXJhv7TohAa
+         SacNOUxMuJLgAAj/anpfz9eo+v9Zw3mTJI5RpafQec/M0Dc1bRHOaAum4/NvFVoJN534
+         pFBwzSMFI/bqMIXQZO5lajx7/y+dASRFKK2qpxY/BJqfJTYJkMeTeRPR/PyFS+L4mdYf
+         ULx+Rz//Y/biZnkH/xM2mEzJ6W+8MwGrmBacHl9lyOOjrBAAl6PM9BLO3LCRD4i4bJyB
+         LaOg==
+X-Gm-Message-State: AAQBX9cB1LnVvU98jKlc05MJcVC8pGr5rgWu8ekRXaJAJQjJHkL2zfax
+        vGn1cOdBNN51ek55oNIZynUgbTbUNCS1wvUb3d4ZIQ==
+X-Google-Smtp-Source: AKy350bKFm46lxLr131DpMPhTEYIe8HyBOaDLSJqY/PpHTB+bEeW1OC5kYpFgf6NM+wBY+QyLHyKsQ==
+X-Received: by 2002:a05:6e02:b43:b0:317:94ad:a724 with SMTP id f3-20020a056e020b4300b0031794ada724mr7897223ilu.2.1679945200604;
+        Mon, 27 Mar 2023 12:26:40 -0700 (PDT)
 Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id p11-20020a92b30b000000b00325daf836fdsm2779865ilh.17.2023.03.27.12.25.14
+        by smtp.gmail.com with ESMTPSA id w4-20020a056e021c8400b003230864f757sm7846593ill.68.2023.03.27.12.26.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 12:25:15 -0700 (PDT)
-Message-ID: <4045f952-0756-5b04-8c60-6eed241a52fe@kernel.dk>
-Date:   Mon, 27 Mar 2023 13:25:14 -0600
+        Mon, 27 Mar 2023 12:26:40 -0700 (PDT)
+Message-ID: <e5b78f91-122a-0b0d-8d3f-922d462ba44d@kernel.dk>
+Date:   Mon, 27 Mar 2023 13:26:39 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [syzbot] Monthly io-uring report
+Subject: Re: [PATCH v2 01/14] drbd: Rename kvfree_rcu() to
+ kvfree_rcu_mightsleep()
 Content-Language: en-US
-To:     Eric Biggers <ebiggers@kernel.org>,
-        Aleksandr Nogikh <nogikh@google.com>
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+lista29bb0eabb2ddbae6f4a@syzkaller.appspotmail.com>
-References: <000000000000bb028805f7dfab35@google.com>
- <20230327192158.GF73752@sol.localdomain>
+To:     Joel Fernandes <joel@joelfernandes.org>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230315181902.4177819-1-joel@joelfernandes.org>
+ <CAEXW_YQehT7Zj0G4nBj-0b+Ndq_FTxFzxQ-WYnBGJ=87wPBHYw@mail.gmail.com>
 From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230327192158.GF73752@sol.localdomain>
+In-Reply-To: <CAEXW_YQehT7Zj0G4nBj-0b+Ndq_FTxFzxQ-WYnBGJ=87wPBHYw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -77,60 +82,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/27/23 1:21?PM, Eric Biggers wrote:
-> On Mon, Mar 27, 2023 at 04:01:54AM -0700, syzbot wrote:
->> Hello io-uring maintainers/developers,
+On 3/26/23 6:27 AM, Joel Fernandes wrote:
+> On Wed, Mar 15, 2023 at 2:19 PM Joel Fernandes (Google)
+> <joel@joelfernandes.org> wrote:
 >>
->> This is a 30-day syzbot report for the io-uring subsystem.
->> All related reports/information can be found at:
->> https://syzkaller.appspot.com/upstream/s/io-uring
+>> From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 >>
->> During the period, 5 new issues were detected and 0 were fixed.
->> In total, 49 issues are still open and 105 have been fixed so far.
+>> The kvfree_rcu() macro's single-argument form is deprecated.  Therefore
+>> switch to the new kvfree_rcu_mightsleep() variant. The goal is to
+>> avoid accidental use of the single-argument forms, which can introduce
+>> functionality bugs in atomic contexts and latency bugs in non-atomic
+>> contexts.
 >>
->> Some of the still happening issues:
->>
->> Crashes Repro Title
->> 3393    Yes   WARNING in io_ring_exit_work
->>               https://syzkaller.appspot.com/bug?extid=00e15cda746c5bc70e24
->> 3241    Yes   general protection fault in try_to_wake_up (2)
->>               https://syzkaller.appspot.com/bug?extid=b4a81dc8727e513f364d
->> 1873    Yes   WARNING in split_huge_page_to_list (2)
->>               https://syzkaller.appspot.com/bug?extid=07a218429c8d19b1fb25
->> 772     Yes   INFO: task hung in io_ring_exit_work
->>               https://syzkaller.appspot.com/bug?extid=93f72b3885406bb09e0d
->> 718     Yes   KASAN: use-after-free Read in io_poll_remove_entries
->>               https://syzkaller.appspot.com/bug?extid=cd301bb6523ea8cc8ca2
->> 443     Yes   KMSAN: uninit-value in io_req_cqe_overflow
->>               https://syzkaller.appspot.com/bug?extid=12dde80bf174ac8ae285
->> 73      Yes   INFO: task hung in io_wq_put_and_exit (3)
->>               https://syzkaller.appspot.com/bug?extid=adb05ed2853417be49ce
->> 38      Yes   KASAN: use-after-free Read in nfc_llcp_find_local
->>               https://syzkaller.appspot.com/bug?extid=e7ac69e6a5d806180b40
->>
->> ---
->> This report is generated by a bot. It may contain errors.
->> See https://goo.gl/tpsmEJ for more information about syzbot.
->> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>> Cc: Jens Axboe <axboe@kernel.dk>
+>> Cc: Philipp Reisner <philipp.reisner@linbit.com>
+>> Cc: Lars Ellenberg <lars.ellenberg@linbit.com>
 > 
-> Thanks for getting syzbot to classify reports by subsystem and send these
-> reminders!  These should be very helpful over time.
-> 
-> One thing that is missing in these reminders is a mention of how to change the
-> subsystem of miscategorized bugs.  Yes, it's in https://goo.gl/tpsmEJ halfway
-> down the page, but it's not obvious.
-> 
-> I think adding something like "See https://goo.gl/tpsmEJ#subsystems for how to
-> change the subsystem of miscategorized reports" would be helpful.  Probably not
-> in all syzbot emails, but just in these remainder emails.
+> Jens/Others, any chance for an Ack here?
 
-I did go poke, it is listed off the reports too. But it'd be really
-handy if you could do this on the web page. When I see a report like
-that that's not for me, I just archive it. And like any chatter with
-syzbot, I have to look up what to reply to it every time. It'd be a lot
-easy if I could just click on that page to either mark as invalid
-(providing the info there) or move it to another subsystem.
+Begrudgingly-acked-by: Jens Axboe <axboe@kernel.dk>
 
 -- 
 Jens Axboe
+
 
