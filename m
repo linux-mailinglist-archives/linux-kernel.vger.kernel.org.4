@@ -2,102 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362156CA0E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216226CA0E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233338AbjC0KJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 06:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
+        id S233401AbjC0KJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233473AbjC0KJO (ORCPT
+        with ESMTP id S233407AbjC0KJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:09:14 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD2649F8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:09:13 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id m6-20020a05600c3b0600b003ee6e324b19so4853807wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:09:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679911752;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hw+/RHBhs6qoBuvjwE715wDDIv45tvIt89aqUEaXIH8=;
-        b=N3Hr5w5nCaDfzUSpQRCDtPx/Qvsd4Gm+6qfGW2UtaaQSsKN9Pw4QMjzMKwhgZsTn7y
-         XhwI5vliTtQdo1E44Wo9dntl87Mv4rcyPrvjrNiZ5mDoElXrOFwYoPjUzEu1nRBQGqOv
-         sNNZusonmNapXEyqUqPiMo2jCD3FScrrSEy+7rAEsVVmrQPgj/yGYqmyNZ/RERs3fQTg
-         rv8qYaB7igo9EHXclRaHWjlr870TAu9AyDdaRaAaJ7Lh8JznpTVyenVDu5/xiVqZ2gUd
-         LU0JgrEPhleHqQkP17BRPq52yP3rRYrVS6N7xwTFrZxYQc5I1Oida6MgeEZmWGkbBlDy
-         yL+Q==
+        Mon, 27 Mar 2023 06:09:34 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA60B49E9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:09:31 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id g7-20020a056602242700b00758e7dbd0dbso5351752iob.16
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:09:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679911752;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1679911771;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hw+/RHBhs6qoBuvjwE715wDDIv45tvIt89aqUEaXIH8=;
-        b=P6rKG7U64aGiKpcVqQGJ/0tJvsZ9TjNcHPJ8NRTOOjmvKFkw0DhtuVvvJ8LOhKJ1jW
-         04KaYxDvbHyUSUhIfAZ2gVOakmy/27KGQFx1H/yJCjYBAaaZD8zgImGqSjpcJ7CUdSjN
-         RBe5b9GTj0pviUgKWnhtnUobH8EXtJ24cVredjEi6SMNmJqPxjqg+rxfNvm04oqXDspH
-         ILOiCFmZlGCcc+7Ha9XfCFrK0D2xhNFn879XPbs5sWsPFpW8d55X5544ArwH6IFIL8lG
-         lmvhJfKC6qyxQoBYc4dkYgWAh9ubfrXCXRyAtvmfjuia0pmnM8wmA6rjyBCbyMIHOZJ0
-         sk1g==
-X-Gm-Message-State: AAQBX9cAs3H9iQKFn11QfcfbbBRNHEZC/r/aoH4XEYKcNjJBxOAngom7
-        m6QxsCVmb+IR/E/VvT7CwtW1Cw==
-X-Google-Smtp-Source: AKy350bAklOYTUxUxdr7ZG0/oisXLxeuAEwoOFvEmh6uLNgFLQqBGEXCgbCn+KqQuOwgQXmm7IdKFQ==
-X-Received: by 2002:a7b:c009:0:b0:3ef:62c6:9930 with SMTP id c9-20020a7bc009000000b003ef62c69930mr5425149wmb.3.1679911752085;
-        Mon, 27 Mar 2023 03:09:12 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.91])
-        by smtp.gmail.com with ESMTPSA id h7-20020a05600c350700b003dd1bd0b915sm8402995wmq.22.2023.03.27.03.09.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 03:09:11 -0700 (PDT)
-Message-ID: <5a72f14d-636d-8328-fc56-23be11c6737c@linaro.org>
-Date:   Mon, 27 Mar 2023 11:09:10 +0100
+        bh=HHBorJxtb8OOdvReJ/cspDu7cb80E+hJP4zqgvf9eJU=;
+        b=C6orCa7BDPbaUqZGTPZseCLw/jtBNagnkqNxj+9r2/xPZFS7gPuD+1XhlUOMkiZcDe
+         0ab75P3BHnJ8YgacqnTCxgaZIL4632F7zpFbTRUNooqZ0EdbZwyaPnnl1PIxpY9/QF4m
+         rXDAoaJdgvLfd4ss5/b0o/jtbOsJlMp2fmtY3MZt5+pzXvQQgusBfFXbB451+fLjhM7o
+         7okVmckBe1B4BL6WQFLgyX4pt5kpfaImTOs2H/3wDdqIxffb8RqmHtqt/pprkhCY1vIR
+         yB9V1x6/IHeA0/UXNMLZdQ3AHbwhiv10VwmcyPuJeZZPcWtSSotCvyO126dWBwYKl6MY
+         ja5g==
+X-Gm-Message-State: AO0yUKW7asVzSNFILMv+/EicXBbdEukjoyvOt83KhJg7DOxINMSeWn+H
+        Ct6innI4DZMjT1+5djQK46mx+sTmi05w6hGRB6Hj88x6cEwR
+X-Google-Smtp-Source: AK7set94qle40IVKT8HROF2uZ0z0n5y6wUU4wDEytmeH7Pf86Jjg8zVGiG0Vhl3sG8+rZLmBNG5ULa1hyl/H7iZYcDNfryCHzKN8
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 0/2] mtd: rawnand: stm32_fmc2: do not support EDO mode
-Content-Language: en-US
-To:     Christophe Kerello <christophe.kerello@foss.st.com>,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20230327094742.38856-1-christophe.kerello@foss.st.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20230327094742.38856-1-christophe.kerello@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Received: by 2002:a5e:c810:0:b0:752:f092:3ddd with SMTP id
+ y16-20020a5ec810000000b00752f0923dddmr4052990iol.1.1679911771094; Mon, 27 Mar
+ 2023 03:09:31 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 03:09:31 -0700
+In-Reply-To: <000000000000b960c00594598949@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005ecaa405f7def0ad@google.com>
+Subject: Re: KASAN: use-after-free Read in tc_chain_fill_node
+From:   syzbot <syzbot+5f229e48cccc804062c0@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, gregkh@linuxfoundation.org, jiri@mellanox.com,
+        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        stable-commits@vger.kernel.org, stable@vger.kernel.org,
+        syzkaller-lts-bugs@googlegroups.com, vladbu@mellanox.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This bug is marked as fixed by commit:
+net: core: netlink: add helper refcount dec and lock function
+net: sched: add helper function to take reference to Qdisc
+net: sched: extend Qdisc with rcu
+net: sched: rename qdisc_destroy() to qdisc_put()
+net: sched: use Qdisc rcu API instead of relying on rtnl lock
 
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
 
-On 3/27/23 10:47, Christophe Kerello wrote:
+#syz fix: exact-commit-title
 
-Hi!
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
 
-> The first patch removes EDO mode support from FMC2 driver as the controller
-> does not support the feature and has to be applied on Kernel LTS. The second
-> patch uses timings.mode instead of checking tRC_min timing for Kernel next.
-> 
+Kernel: Linux 4.19
+Dashboard link: https://syzkaller.appspot.com/bug?extid=5f229e48cccc804062c0
 
-Would have been good if you specified that the fix is needed for v5.4+
-and that the timings.mode was introduced in v5.8, it would have spared
-readers of checking if two patches are really needed. No need to resubmit.
+---
+[1] I expect the commit to be present in:
 
-> Changes in v2:
->  - second patch added for Kernel next
-> 
-> Christophe Kerello (2):
->   mtd: rawnand: stm32_fmc2: do not support EDO mode
->   mtd: rawnand: stm32_fmc2: use timings.mode instead of checking tRC_min
-> 
->  drivers/mtd/nand/raw/stm32_fmc2_nand.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+1. linux-4.19.y branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
