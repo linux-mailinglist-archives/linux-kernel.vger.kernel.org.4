@@ -2,155 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E698A6CAB19
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9276CAB1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbjC0QxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 12:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
+        id S232542AbjC0QyZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 12:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjC0Qw5 (ORCPT
+        with ESMTP id S232712AbjC0QyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:52:57 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0FC30D0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:52:33 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id w9so38944479edc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:52:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679935951;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=psu4ofpncoCQSYgbBGuLj7J5oQ90Aa4oswGxv8KP4JU=;
-        b=oqLO6H8UszXaMp/SFz19taH9BEbDwduqf6iMDkFtdJHaO195+2htbsYsmJLvDI6+HH
-         R/m3LYGi5ke97tU6RqC52NkdYRk8mJp5an604LUc4TFpFboDPOrE3LKM99rHPd1OFw+6
-         8I294X01903WfnqY8p/F+rpHHO4e1hCf+HwQb+TqnmbODIpB4Q/v6Lxhzixp0TobaIB/
-         SUub76+dzYpeiwkECh3GSb9z340MsmyfbOYJ1V24AI4nH5id2fkFTj+0Hoqy2zXPQqXt
-         kf3NnKUoYtq9j2nlDlWO9nV3i5q1wV+xwOLUPJo47WnYdpjaebcYrJdhMGgVUO2DKYp4
-         mvYQ==
+        Mon, 27 Mar 2023 12:54:09 -0400
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8694E40CE;
+        Mon, 27 Mar 2023 09:53:53 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id w9so38960519edc.3;
+        Mon, 27 Mar 2023 09:53:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679935951;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679936032;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=psu4ofpncoCQSYgbBGuLj7J5oQ90Aa4oswGxv8KP4JU=;
-        b=NTsbS/c4dF5Y2LQntuEJrYlKXPg0WzzRuNW0qu/0ORPAP7dTbZE2/wC1rpMuZjztmg
-         4MoHyh/EeR2R7a0qyf75ot3gohS/iTSBhIQkab1m84BiDKG6mnN+8I52eVjgVKZpv2MH
-         jNXmVON/nMwzEFs2XXGQ/CLHk3FBofBJGiacQMMy7TNg31+LkWP6xwZCA9HbUhIIt/iN
-         icTJGLE7HUiAxHgpOv6iFbLhcCwr8rHyXoFto6n2fwIRcikLhXSOvQ/J2b8JWbrBMbS2
-         vPSmvoGpcnjppNo5zTlrDZ/2174606yCd1dL6/eTQR1IurnEY8L+ZSs09QGK+eYwwjv2
-         KXxw==
-X-Gm-Message-State: AAQBX9f+ScamlyLfSDPLHBN1LVZeAWnnb7mksdGe565lPars96FQ06vG
-        fU/CTC8xk1tqp5/wUpyxn40=
-X-Google-Smtp-Source: AKy350aqqGV4WSXqY4JijppBYLY54SH1M8lng+djwiThsPYVbd6JJK1pASBCkFqGbfRGWDgK7uthVw==
-X-Received: by 2002:a17:906:5608:b0:8b1:78bc:7508 with SMTP id f8-20020a170906560800b008b178bc7508mr12515293ejq.20.1679935951241;
-        Mon, 27 Mar 2023 09:52:31 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id b24-20020a170906491800b008e82cb55195sm14217282ejq.203.2023.03.27.09.52.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 09:52:31 -0700 (PDT)
-From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        Baoquan He <bhe@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: [PATCH v2 2/2] lib/test_vmalloc.c: Add vm_map_ram()/vm_unmap_ram() test case
-Date:   Mon, 27 Mar 2023 18:52:27 +0200
-Message-Id: <20230327165228.405045-2-urezki@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230327165228.405045-1-urezki@gmail.com>
-References: <20230327165228.405045-1-urezki@gmail.com>
+        bh=uN+Iaybb1iiVqV2uil6/2jZC7AiW3B44s8UTj7v5RWo=;
+        b=nNHlSN6bJ2IoNiK8RfuQD7oAT9WH9VEMm+F5Ly3zoYW/IgSsdrfb3X9Etc8U80M3LZ
+         Gx56MHxM//z7oUBGhOY6Azbcq4SHSBwrCYok6Rio00JCJNb3ggHm/NEOByqaICYKgRGY
+         /qw63QU3AJ2KkopofgXfp8gx2TatILeXeV520h0izqd7/CX0Y+1Sa9fX9KWJmC+16NBZ
+         m0O/Lpxymlhvsw7FZJyTJE/M2DKrd/9qYyw3/dCpY6Y5ODtz5AJSKPrI4LhbWoT4fqhX
+         dfBadT0BQVc0cM6Lr3gcVQjNeQXujZn68g8tyHj1VsjtpWXz50MdhC9/5fWrkDuUhoAQ
+         Dtig==
+X-Gm-Message-State: AAQBX9fFRFKpfOhqNXgXTefM/Dm+FUR3cOuAhVD7CBYHomrrlIAXQ0yU
+        OeBAnL03fikf59TrsGG0UBhXKKtoj4iLGKTt5mQ=
+X-Google-Smtp-Source: AKy350ZM+aevf5AXvKH2scrKR+I4K9ZvXkizJjuisW1Wx0im49PYK3bxOBS6CSwpSc+bzCM3U0vMMGHlEARdC86gkdA=
+X-Received: by 2002:a50:d6d6:0:b0:4fb:c8e3:1adb with SMTP id
+ l22-20020a50d6d6000000b004fbc8e31adbmr5998695edj.3.1679936031994; Mon, 27 Mar
+ 2023 09:53:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-18-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230207051105.11575-18-ricardo.neri-calderon@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 27 Mar 2023 18:53:40 +0200
+Message-ID: <CAJZ5v0jZrW0106DR7Rk2xov--dgJsw+h7g9AGzyyrg3=_znbvQ@mail.gmail.com>
+Subject: Re: [PATCH v3 17/24] thermal: intel: hfi: Enable the Intel Thread Director
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add vm_map_ram()/vm_unmap_ram() test case to our stress test-suite.
+On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
+>
+> Enable Intel Thread Director from the CPU hotplug callback: globally from
+> CPU0 and then enable the thread-classification hardware in each logical
+> processor individually.
+>
+> Also, initialize the number of classes supported.
+>
+> Let the scheduler know that it can start using IPC classes.
+>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Tim C. Chen <tim.c.chen@intel.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: x86@kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 
-Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
----
- lib/test_vmalloc.c | 41 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+For the changes in intel_hfi.c
 
-diff --git a/lib/test_vmalloc.c b/lib/test_vmalloc.c
-index cd2bdba6d3ed..6633eda4cd4d 100644
---- a/lib/test_vmalloc.c
-+++ b/lib/test_vmalloc.c
-@@ -53,6 +53,7 @@ __param(int, run_test_mask, INT_MAX,
- 		"\t\tid: 128,  name: pcpu_alloc_test\n"
- 		"\t\tid: 256,  name: kvfree_rcu_1_arg_vmalloc_test\n"
- 		"\t\tid: 512,  name: kvfree_rcu_2_arg_vmalloc_test\n"
-+		"\t\tid: 1024, name: vm_map_ram_test\n"
- 		/* Add a new test case description here. */
- );
- 
-@@ -358,6 +359,45 @@ kvfree_rcu_2_arg_vmalloc_test(void)
- 	return 0;
- }
- 
-+static int
-+vm_map_ram_test(void)
-+{
-+	unsigned int map_nr_pages;
-+	unsigned char *v_ptr;
-+	unsigned char *p_ptr;
-+	struct page **pages;
-+	struct page *page;
-+	int i;
-+
-+	map_nr_pages = nr_pages > 0 ? nr_pages:1;
-+	pages = kmalloc(map_nr_pages * sizeof(*page), GFP_KERNEL);
-+	if (!pages)
-+		return -1;
-+
-+	for (i = 0; i < map_nr_pages; i++) {
-+		page = alloc_pages(GFP_KERNEL, 1);
-+		if (!page)
-+			return -1;
-+
-+		pages[i] = page;
-+	}
-+
-+	/* Run the test loop. */
-+	for (i = 0; i < test_loop_count; i++) {
-+		v_ptr = vm_map_ram(pages, map_nr_pages, -1);
-+		*v_ptr = 'a';
-+		vm_unmap_ram(v_ptr, map_nr_pages);
-+	}
-+
-+	for (i = 0; i < map_nr_pages; i++) {
-+		p_ptr = page_address(pages[i]);
-+		free_pages((unsigned long)p_ptr, 1);
-+	}
-+
-+	kfree(pages);
-+	return 0;
-+}
-+
- struct test_case_desc {
- 	const char *test_name;
- 	int (*test_func)(void);
-@@ -374,6 +414,7 @@ static struct test_case_desc test_case_array[] = {
- 	{ "pcpu_alloc_test", pcpu_alloc_test },
- 	{ "kvfree_rcu_1_arg_vmalloc_test", kvfree_rcu_1_arg_vmalloc_test },
- 	{ "kvfree_rcu_2_arg_vmalloc_test", kvfree_rcu_2_arg_vmalloc_test },
-+	{ "vm_map_ram_test", vm_map_ram_test },
- 	/* Add a new test case here. */
- };
- 
--- 
-2.30.2
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
+> ---
+> Changes since v2:
+>  * Use the new sched_enable_ipc_classes() interface to enable the use of
+>    IPC classes in the scheduler.
+>
+> Changes since v1:
+>  * None
+> ---
+>  arch/x86/include/asm/msr-index.h  |  2 ++
+>  drivers/thermal/intel/intel_hfi.c | 40 +++++++++++++++++++++++++++++--
+>  2 files changed, 40 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> index ad35355ee43e..0ea25cc9c621 100644
+> --- a/arch/x86/include/asm/msr-index.h
+> +++ b/arch/x86/include/asm/msr-index.h
+> @@ -1106,6 +1106,8 @@
+>  /* Hardware Feedback Interface */
+>  #define MSR_IA32_HW_FEEDBACK_PTR        0x17d0
+>  #define MSR_IA32_HW_FEEDBACK_CONFIG     0x17d1
+> +#define MSR_IA32_HW_FEEDBACK_THREAD_CONFIG 0x17d4
+> +#define MSR_IA32_HW_FEEDBACK_CHAR      0x17d2
+>
+>  /* x2APIC locked status */
+>  #define MSR_IA32_XAPIC_DISABLE_STATUS  0xBD
+> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> index 7ea6acce7107..35d947f47550 100644
+> --- a/drivers/thermal/intel/intel_hfi.c
+> +++ b/drivers/thermal/intel/intel_hfi.c
+> @@ -48,6 +48,8 @@
+>  /* Hardware Feedback Interface MSR configuration bits */
+>  #define HW_FEEDBACK_PTR_VALID_BIT              BIT(0)
+>  #define HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT      BIT(0)
+> +#define HW_FEEDBACK_CONFIG_ITD_ENABLE_BIT      BIT(1)
+> +#define HW_FEEDBACK_THREAD_CONFIG_ENABLE_BIT   BIT(0)
+>
+>  /* CPUID detection and enumeration definitions for HFI */
+>
+> @@ -72,6 +74,15 @@ union cpuid6_edx {
+>         u32 full;
+>  };
+>
+> +union cpuid6_ecx {
+> +       struct {
+> +               u32     dont_care0:8;
+> +               u32     nr_classes:8;
+> +               u32     dont_care1:16;
+> +       } split;
+> +       u32 full;
+> +};
+> +
+>  #ifdef CONFIG_IPC_CLASSES
+>  union hfi_thread_feedback_char_msr {
+>         struct {
+> @@ -506,6 +517,11 @@ void intel_hfi_online(unsigned int cpu)
+>
+>         init_hfi_cpu_index(info);
+>
+> +       if (cpu_feature_enabled(X86_FEATURE_ITD)) {
+> +               msr_val = HW_FEEDBACK_THREAD_CONFIG_ENABLE_BIT;
+> +               wrmsrl(MSR_IA32_HW_FEEDBACK_THREAD_CONFIG, msr_val);
+> +       }
+> +
+>         /*
+>          * Now check if the HFI instance of the package/die of @cpu has been
+>          * initialized (by checking its header). In such case, all we have to
+> @@ -561,8 +577,22 @@ void intel_hfi_online(unsigned int cpu)
+>          */
+>         rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+>         msr_val |= HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT;
+> +
+> +       if (cpu_feature_enabled(X86_FEATURE_ITD))
+> +               msr_val |= HW_FEEDBACK_CONFIG_ITD_ENABLE_BIT;
+> +
+>         wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+>
+> +       /*
+> +        * We have all we need to support IPC classes. Task classification is
+> +        * now working.
+> +        *
+> +        * All class scores are zero until after the first HFI update. That is
+> +        * OK. The scheduler queries these scores at every load balance.
+> +        */
+> +       if (cpu_feature_enabled(X86_FEATURE_ITD))
+> +               sched_enable_ipc_classes();
+> +
+>  unlock:
+>         mutex_unlock(&hfi_instance_lock);
+>         return;
+> @@ -640,8 +670,14 @@ static __init int hfi_parse_features(void)
+>          */
+>         hfi_features.class_stride = nr_capabilities;
+>
+> -       /* For now, use only one class of the HFI table */
+> -       hfi_features.nr_classes = 1;
+> +       if (cpu_feature_enabled(X86_FEATURE_ITD)) {
+> +               union cpuid6_ecx ecx;
+> +
+> +               ecx.full = cpuid_ecx(CPUID_HFI_LEAF);
+> +               hfi_features.nr_classes = ecx.split.nr_classes;
+> +       } else {
+> +               hfi_features.nr_classes = 1;
+> +       }
+>
+>         /*
+>          * The header contains change indications for each supported feature.
+> --
+> 2.25.1
+>
