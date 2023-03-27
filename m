@@ -2,161 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB92D6CA316
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787FC6CA31A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbjC0MKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
+        id S232653AbjC0MMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbjC0MKT (ORCPT
+        with ESMTP id S232019AbjC0MMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:10:19 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339BA19BF;
-        Mon, 27 Mar 2023 05:10:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679919017; x=1711455017;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=jeepVfFfCQsHZs+6635Pz6VkoXSevOib+Apjcl9UAno=;
-  b=ZO2D4pJkE/Us1O38/CbkB9XFN0DYEDCBeBG5lzX/qXaNrR5WuZsCn0cO
-   WbxJvGTb1eejoljqDcu4wN2wBNeffo2l2ObLpQcJfkhMexLDej2rNW5qw
-   KrmeDI35PZfHYT6/Es4vQVuDGXTIMqXKtGGg3ujoyXtfIvlltsPV/pVy6
-   MjcTgPZ85aSvbAv1r9O9nsEJ654eEn9qA8mSh0vB/TF0xT9fMBxFoEgpt
-   gARkXQmwe+yqrtF4n+i6g1RyeHMHFnEc21lk2fAcQrqR1+i86dux/6Wfn
-   W6s+PagIHuPbNGHTZ11cVmcE1rk7n5MdnsjI4QresmKCbBH7EGl4qFIx1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="341821758"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="341821758"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 05:10:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="633583683"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="633583683"
-Received: from biyengar-mobl.amr.corp.intel.com ([10.213.176.16])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 05:10:16 -0700
-Message-ID: <c6b89edad5f74bf5ca82401a3d9cc5b4198baac8.camel@linux.intel.com>
-Subject: Re: [PATCH] HID: intel-ish-hid: Fix kernel panic during warm reset
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Tanu Malhotra <tanu.malhotra@intel.com>, jikos@kernel.org
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        even.xu@intel.com, Shaunak Saha <shaunak.saha@intel.com>
-Date:   Mon, 27 Mar 2023 05:10:14 -0700
-In-Reply-To: <20230327032310.2416272-1-tanu.malhotra@intel.com>
-References: <20230327032310.2416272-1-tanu.malhotra@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Mon, 27 Mar 2023 08:12:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3AE3A90
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:12:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C79BD611E1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:12:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 989DDC433EF;
+        Mon, 27 Mar 2023 12:12:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679919160;
+        bh=7QdCp6NY524MCCEFkRdbLdarMOZ/eBcsdu4Aw7O7eg0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZdElahpgOizw+0O6XFvCUaL8CAKAlDednrJD8YDDV851dHMZieMZYY0H/81nSBN+x
+         Xvq6FmkXMubNN7WNEncy49/G86BWe/Mk4aLgghkJL487qYtnd04YgElgGmhPQDnqSr
+         1ncLNsmLZBUihlycBje/OGLEE8ct3DzP0hG1RC2M0P1yMvIauaktZ/PH/6vFMRnyMM
+         WBLf7rsalxx5Id/o68bNjntDtddsTXHBTBueIMONi89zYD4Mxr1fbaPyLOKRQva5Lg
+         SkNXTvyoUltzxrtAGvoxdwsku7zlMAy24Bf5VMl3jBDtUOH0fZj7S2DL0fp44bEiOQ
+         3YgS8wiRTpMaQ==
+Date:   Mon, 27 Mar 2023 13:12:34 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Tomas Krcka <krckatom@amazon.de>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu/arm-smmu-v3: Fix event queue overflow
+ acknowledgment
+Message-ID: <20230327121234.GA31342@willie-the-truck>
+References: <20230308092048.71390-1-krckatom@amazon.de>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308092048.71390-1-krckatom@amazon.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-03-26 at 20:23 -0700, Tanu Malhotra wrote:
-
-some minor nits below.
-
-> During warm reset device->fw_client is set to NULL. If a bus driver
-> is
-> registered after this NULL setting and before new firmware clients
-> are
-> enumerated by ISHTP, kernel panic will result in the function
-> ishtp_cl_bus_match(). This is because of reference to
-> device->fw_client->props.protocol_name.
->=20
-> ISH firmware after getting successfully loaded, sends a warm reset
-> notification to remove all clients from the bus and sets
-> device->fw_client to NULL. Until kernel v5.15, all enabled ISHTP
-> kernel
-> module drivers were loaded after any of the first ISHTP device was
-> registered, regardless of whether it was a matched or an unmatched
-> device. This resulted in all drivers getting registered much before
-> the
-> warm reset notification from ISH. Starting kernel v5.16, this issue
-> got
-> exposed after the change was introduced to load only bus drivers for
-> the
-> respective matching devices.
-One paragraph break will be better.
-
->  In this scenario, cros_ec_ishtp device and
-> cros_ec_ishtp driver are registered after the warm reset
-> device_fw_client NULL setting. cros_ec_ishtp driver_register()
-> triggers
-> the callback to ishtp_cl_bus_match() to match driver to the device
-> and
-> causes kernel panic in guid_equal() when dereferencing fw_client NULL
-> pointer to get protocol_name.
->=20
-> Fixes: f155dfeaa4ee ("platform/x86: isthp_eclite: only load for
-> matching devices")
-> Fixes: facfe0a4fdce ("platform/chrome: chros_ec_ishtp: only load for
-> matching devices")
-> Fixes: 0d0cccc0fd83 ("HID: intel-ish-hid: hid-client: only load for
-> matching devices")
-> Fixes: 44e2a58cb880 ("HID: intel-ish-hid: fw-loader: only load for
-> matching devices")
->=20
-No need of blank line.
-
-> Signed-off-by: Tanu Malhotra <tanu.malhotra@intel.com>
-> Tested-by: Shaunak Saha <shaunak.saha@intel.com>
-You can also add=20
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-
-
-Also add
-Cc: <stable@vger.kernel.org> # 5.16+
-
+On Wed, Mar 08, 2023 at 09:20:47AM +0000, Tomas Krcka wrote:
+> When an overflow occurs in the event queue, the SMMU toggles overflow
+> flag OVFLG in the PROD register.
+> The evtq thread is supposed to acknowledge the overflow flag by toggling
+> flag OVACKFLG in the CONS register, otherwise the overflow condition is
+> still active (OVFLG != OVACKFLG).
+> 
+> Currently the acknowledge register is toggled after clearing the event
+> queue but is never propagated to the hardware. It would be done next
+> time when executing evtq thread.
+> 
+> The SMMU still adds elements to the queue when the overflow condition is
+> active but any subsequent overflow information after clearing the event
+> queue will be lost.
+> 
+> This change keeps the SMMU in sync as it's expected by design.
+> 
+> Signed-off-by: Tomas Krcka <krckatom@amazon.de>
+> Suggested-by: KarimAllah Ahmed <karahmed@amazon.de>
 > ---
-When you submit "PATCH v2", Add change log here. (That is below "---").
-Something like this:
-v2
-- Updated commit description
-- Added CC to stable
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> index f2425b0f0cd6..acc1ff5ff69b 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> @@ -1579,6 +1579,7 @@ static irqreturn_t arm_smmu_evtq_thread(int irq, void *dev)
+>  	/* Sync our overflow flag, as we believe we're up to speed */
+>  	llq->cons = Q_OVF(llq->prod) | Q_WRP(llq, llq->cons) |
+>  		    Q_IDX(llq, llq->cons);
+> +	queue_sync_cons_out(q);
+>  	return IRQ_HANDLED;
+>  }
 
-> =C2=A0drivers/hid/intel-ish-hid/ishtp/bus.c | 4 ++--
-> =C2=A01 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/hid/intel-ish-hid/ishtp/bus.c
-> b/drivers/hid/intel-ish-hid/ishtp/bus.c
-> index 81385ab37fa9..4f540906268f 100644
-> --- a/drivers/hid/intel-ish-hid/ishtp/bus.c
-> +++ b/drivers/hid/intel-ish-hid/ishtp/bus.c
-> @@ -241,8 +241,8 @@ static int ishtp_cl_bus_match(struct device *dev,
-> struct device_driver *drv)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct ishtp_cl_device *d=
-evice =3D to_ishtp_cl_device(dev);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct ishtp_cl_driver *d=
-river =3D to_ishtp_cl_driver(drv);
-> =C2=A0
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return guid_equal(&driver->id[=
-0].guid,
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &d=
-evice->fw_client->props.protocol_name);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return(device->fw_client ? gui=
-d_equal(&driver->id[0].guid,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &device->fw_client-
-> >props.protocol_name) : 0);
-Align the second line to char "d" after "(".
+I think I probably did mean to have something like this, but can we
+only do the actual h/w update if overflow has occurred? Otherwise I think
+we're pointlessly writing back the same value most of the time.
 
-Thanks,
-Srinivas
-
-> =C2=A0}
-> =C2=A0
-> =C2=A0/**
-
+Will
