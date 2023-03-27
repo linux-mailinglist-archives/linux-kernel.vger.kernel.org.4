@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF306CAF38
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A06EB6CAF3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbjC0T4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
+        id S232633AbjC0T4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 15:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjC0T4K (ORCPT
+        with ESMTP id S232530AbjC0T4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:56:10 -0400
+        Mon, 27 Mar 2023 15:56:12 -0400
 Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2481BD9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:56:09 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id r4so5221726ilt.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:56:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4976A30C6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:56:11 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id l9so5235654iln.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:56:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679946969;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=082OplXkEY5V39fu5CZnrzXHheCP3RjKCnYsOGM6dxc=;
-        b=eHpfn6mj4N5jaai50bRUtNR5fbUPHcPRLLz9SOpVXM4AO/UjGCoLGQPC+sYS8PuLmM
-         /3BcBsQO+HUJs+0Xi9NHLgvtJCl/UmYtSgFThHFVjE4nmcvLSE9xJBJCCm3nOGAZiHpc
-         lOdosfU+s/OAtB9DrC0aJ9Wi/qdeQC3x8uUflz3nDHPn3hEjcYIqCgKZfZBu6S+Js9ID
-         UrjA8ZWnJnnWnO4bt+quj9Ij0t6hghiWEc3k4hlhC5K4v1J00kS9WEaT81nvJV2vTkea
-         0/WavCCJRacRzf4Te7/vuxWlRmSjPnGNjGCB6RcKl9j/gf493mEZuqeyP+N2RATwUmZc
-         bn0Q==
+        d=linaro.org; s=google; t=1679946970;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GP/VsmA4BckPjvamc/Cc2ascVR6mBrF8rg+wdmACWrI=;
+        b=NPNz3TVGkvaO256UAKbq4AubVwD+LlOkMzWl/F3X1abnmdB7IWo0A3SAGTy/00pgTy
+         cMTBmDkYS14dxTWMFY2M0esWPSjbT9R7ab8eQSyHKmE8vDwTTGm99/8BLok8VPFE/y4o
+         SXB7+cxAOpscjb6W6+h7ozPEb01UfKx9veJIbeOa357LtTn1P/yO2Lc3XjvEgypoeyaT
+         adiev2b3zMuPuNkvAIEnsygXPD8ZkCLxgYnrskSt2GJacyI85hETwPEbX4HdfDuTtsxz
+         /r/pywZVaJBBmor6Xbu2qIu7Yz4uVdQV7M0qSEXXh8jSTbXIOEjJVoV/72VoOraH0Gu0
+         UBqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679946969;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=082OplXkEY5V39fu5CZnrzXHheCP3RjKCnYsOGM6dxc=;
-        b=K7p+wRuRlQAiGeTbddWdCGIer/gqoWo9Rjxf6X6PGbty/l/Smisc7BlI4eprjIR43D
-         0f/ZPcgWRorn7d4ztiChLZCBjO7pnHCygav5tzVlZRmFu/Y3bwhuSaIMU99xG7ynZXCt
-         P/AOAAxgkAR57eJ8/gA+hgQdTN0jL+WvSEj1dIqhEaUIZOWQZFOxiEs4ZLYM8CVyBhHA
-         UZdUKYN2y0HPnkxMfYJdYtEgvoB6Qvtc0g7vJmGgd/7YnS/oFFcf7faMJBpqv7g/A5s9
-         fxWyNR4RPYDXS3cjhGsZDVaQtmkOYms6JHJ1htv/u5e48DgwwPH69gwqy/bJM2pPJwEb
-         UbOg==
-X-Gm-Message-State: AAQBX9fQxmf49nUWX2ckh1M/XG7KQepyqw0f+3QwLq31Klqwv0vWGfA1
-        stADIwDiVSPCncwmCWEiQ5EZORCbDVRd/x9B3Os=
-X-Google-Smtp-Source: AKy350aDsYzj8FP8jgv3NVQu7SXbKFq2G9sdN3wHQMso5rRqBm26SKnch0AO4YG2I2vasQ5WG89sZg==
-X-Received: by 2002:a05:6e02:107:b0:315:34b8:4c6d with SMTP id t7-20020a056e02010700b0031534b84c6dmr10642592ilm.17.1679946969236;
-        Mon, 27 Mar 2023 12:56:09 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679946970;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GP/VsmA4BckPjvamc/Cc2ascVR6mBrF8rg+wdmACWrI=;
+        b=7qUToU3B9LRAJ/Qn94Pjbez7izPVbVSxBqmMjy5z/M+LhTkHvn6qPdvdO67RN/I4V/
+         3tUvfG/feGrx63u2VeT2RnsS3WSajFsTc4XW8o54zXVzwxvmH2lE14YAfv3/l2Xp0q4p
+         EQQcajYHV5SkE6STgmCAmUBgdhFDd0ceVE/8dt0aPin70HOml/fRXHBwgdMvF7lTE1to
+         6mO7ZB6WiAwZdqeNDbHPCBNMvs/VIradrGumWxQqX4uBIr/pCkSZtgB6jD3TmRaZidgW
+         hUNKLUDNGXJ8G66yToXdwS8+fTwkCq+UPKe7ku50o0ubO2wNd6zL+UAF1on6pVPw7Yzn
+         MM9g==
+X-Gm-Message-State: AAQBX9ewRYGT4oCr8q9f2RkV6Ab8Lhr8QrvS4NbKOgZkqGcMx1AaZxTL
+        pRe/Dv5S0qAuMuFvzE3xRvPnGg==
+X-Google-Smtp-Source: AKy350YwcQ7Kuco3hoH7bmd+Ta4BhXfbhheCtvvYo8i2ejIhv5KSKJPA9zIS1Xnel98M0jk2sa3Atw==
+X-Received: by 2002:a92:dc91:0:b0:325:c8ee:96e2 with SMTP id c17-20020a92dc91000000b00325c8ee96e2mr9606416iln.7.1679946970638;
+        Mon, 27 Mar 2023 12:56:10 -0700 (PDT)
 Received: from localhost.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id a18-20020a027a12000000b003e69be53404sm9011984jac.150.2023.03.27.12.56.08
+        by smtp.gmail.com with ESMTPSA id a18-20020a027a12000000b003e69be53404sm9011984jac.150.2023.03.27.12.56.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 12:56:08 -0700 (PDT)
+        Mon, 27 Mar 2023 12:56:10 -0700 (PDT)
 From:   Alex Elder <elder@linaro.org>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org
@@ -57,11 +58,13 @@ Cc:     quic_rohiagar@quicinc.com, caleb.connolly@linaro.org,
         quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
         quic_subashab@quicinc.com, elder@kernel.org,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/2] ARM: dts: qcom: sdx65: support IPA
-Date:   Mon, 27 Mar 2023 14:56:03 -0500
-Message-Id: <20230327195605.2854123-1-elder@linaro.org>
+        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH v3 1/2] ARM: dts: qcom: sdx65: add IPA information
+Date:   Mon, 27 Mar 2023 14:56:04 -0500
+Message-Id: <20230327195605.2854123-2-elder@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230327195605.2854123-1-elder@linaro.org>
+References: <20230327195605.2854123-1-elder@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -73,29 +76,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The upstream IPA driver now supports IPA v5.0 for SDX65.  Add
-IPA-related nodes and definitions to "sdx65.dtsi", and enable IPA
-in "sdx65-mtp.dts".
+Add IPA-related nodes and definitions to "sdx65.dtsi".  The SMP2P
+nodes (ipa_smp2p_out and ipa_smp2p_in) are already present.
 
-Having touched these files, Konrad advised I should update them to
-move the "status" property to the end of nodes where it is used.
+Enable IPA in "sdx65-mtp.dts"; this GSI firmware is loaded by Trust
+Zone on this platform.
 
-Version 3 of corrects an address in the first patch that caused a
-"simple-bus unit address format error" message when building dtbs.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Tested-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+Signed-off-by: Alex Elder <elder@linaro.org>
+---
+v3: - Use ipa@3f40000 rather than ipa@3e04000 for the IPA node.
+v2: - Fixed an alignment issue noticed by Krzysztof.
+    - Moved the "iommus" property as suggested by Konrad.
 
-Version 2 of this series addresses comments made by Krzysztof and
-Konrad, and adds their reviewed-by tags.
+ arch/arm/boot/dts/qcom-sdx65-mtp.dts |  5 ++++
+ arch/arm/boot/dts/qcom-sdx65.dtsi    | 39 ++++++++++++++++++++++++++++
+ 2 files changed, 44 insertions(+)
 
-					-Alex
-
-Alex Elder (2):
-  ARM: dts: qcom: sdx65: add IPA information
-  ARM: dts: qcom-sdx65: move status properties to end of nodes
-
- arch/arm/boot/dts/qcom-sdx65-mtp.dts | 11 +++++--
- arch/arm/boot/dts/qcom-sdx65.dtsi    | 47 ++++++++++++++++++++++++++--
- 2 files changed, 52 insertions(+), 6 deletions(-)
-
+diff --git a/arch/arm/boot/dts/qcom-sdx65-mtp.dts b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+index ed98c83c141fc..72e25de0db5fc 100644
+--- a/arch/arm/boot/dts/qcom-sdx65-mtp.dts
++++ b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+@@ -245,6 +245,11 @@ &blsp1_uart3 {
+ 	status = "okay";
+ };
+ 
++&ipa {
++	qcom,gsi-loader = "skip";
++	status = "okay";
++};
++
+ &qpic_bam {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
+index 192f9f94bc8b4..74671cc12c884 100644
+--- a/arch/arm/boot/dts/qcom-sdx65.dtsi
++++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
+@@ -11,6 +11,7 @@
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/power/qcom-rpmpd.h>
+ #include <dt-bindings/soc/qcom,rpmh-rsc.h>
++#include <dt-bindings/interconnect/qcom,sdx65.h>
+ 
+ / {
+ 	#address-cells = <1>;
+@@ -299,6 +300,44 @@ tcsr_mutex: hwlock@1f40000 {
+ 			#hwlock-cells = <1>;
+ 		};
+ 
++		ipa: ipa@3f40000 {
++			compatible = "qcom,sdx65-ipa";
++
++			reg = <0x03f40000 0x10000>,
++			      <0x03f50000 0x5000>,
++			      <0x03e04000 0xfc000>;
++			reg-names = "ipa-reg",
++				    "ipa-shared",
++				    "gsi";
++
++			interrupts-extended = <&intc GIC_SPI 241 IRQ_TYPE_EDGE_RISING>,
++					      <&intc GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>,
++					      <&ipa_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
++					      <&ipa_smp2p_in 1 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "ipa",
++					  "gsi",
++					  "ipa-clock-query",
++					  "ipa-setup-ready";
++
++			iommus = <&apps_smmu 0x5e0 0x0>,
++				 <&apps_smmu 0x5e2 0x0>;
++
++			clocks = <&rpmhcc RPMH_IPA_CLK>;
++			clock-names = "core";
++
++			interconnects = <&system_noc MASTER_IPA &mc_virt SLAVE_EBI1>,
++					<&mem_noc MASTER_APPSS_PROC &system_noc SLAVE_IPA_CFG>;
++			interconnect-names = "memory",
++					     "config";
++
++			qcom,smem-states = <&ipa_smp2p_out 0>,
++					   <&ipa_smp2p_out 1>;
++			qcom,smem-state-names = "ipa-clock-enabled-valid",
++						"ipa-clock-enabled";
++
++			status = "disabled";
++		};
++
+ 		remoteproc_mpss: remoteproc@4080000 {
+ 			compatible = "qcom,sdx55-mpss-pas";
+ 			reg = <0x04080000 0x4040>;
 -- 
 2.34.1
 
