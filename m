@@ -2,188 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD2F6CA548
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B916CA54C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbjC0NLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
+        id S232329AbjC0NMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjC0NLj (ORCPT
+        with ESMTP id S229950AbjC0NMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:11:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC72C1BD5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:10:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679922650;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/rJWR6N70Bb+OBzD3QtO0I9WNX7bLRShDPYahmlJY5Q=;
-        b=NgDJj6tKrL1gu9a5EfdvnKd28KUkNVdXiqMsKfk09Bv0BuNa+0ULHFnCMuBm+gm0XrEGs7
-        9bJvQA/hMjVVjrarTr81N+w8qVOx+5KQZOBP6YTVDcrJYLIuGTHtJhRC2861Rs1HLknPki
-        jXO4YnE2GssIFkAkO0vJ7QdVKN3eaR8=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-546-37mIaSWLPI-2iY2p1YlBhw-1; Mon, 27 Mar 2023 09:10:49 -0400
-X-MC-Unique: 37mIaSWLPI-2iY2p1YlBhw-1
-Received: by mail-ed1-f71.google.com with SMTP id m18-20020a50d7d2000000b00501dfd867a4so12663762edj.20
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:10:49 -0700 (PDT)
+        Mon, 27 Mar 2023 09:12:46 -0400
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C83DF;
+        Mon, 27 Mar 2023 06:12:46 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id d22-20020a9d5e16000000b0069b5252ced7so4485882oti.13;
+        Mon, 27 Mar 2023 06:12:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679922648;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rJWR6N70Bb+OBzD3QtO0I9WNX7bLRShDPYahmlJY5Q=;
-        b=3/dWDUyFolM2+gRonXURQFPJhFWRo87yFav0r5Q0lrDLTU3mrx+loRUHEFfe7JfMUM
-         XuPdhfrZkiKP4xeLLC0+6XNx938SLgv34DRHLkgqptwDgsXO9Ub4yiV5RLFNYO1yN5/z
-         N0Tlr1JOHgBVJ8jverCOLFUnvbUyscdShzE/2B7RnjOs45iOIjWbqXmhh40WcSsUjUcV
-         DxsjgPh2RTaR9yuDVrbDBvLWmPjUaJVlmUZnRONzWlwf904fX4h1AB94uf/VocGs5jlV
-         4Vb92G/MQobLlRZwshPLnCW7ehN5XiHmN1fazvIpzscPoUvpEEG+BK6/ZTm1MbXMh+9q
-         FXiw==
-X-Gm-Message-State: AAQBX9ed0wQVk9mlWmHhvEBqJxa+mBLq7GcNarZavR6jNP0qW08y7sw8
-        gNDvD6eW0Jf2wZ1qg7q34qFeLtDW2b0YrXwZSN3Y12rCR9cqC5DuRINsXgPXeVcr+Oe38350SKi
-        /rTxUvMlCebUaliQf5B90r5Igh1/3B9tZ
-X-Received: by 2002:a17:906:341a:b0:931:de76:c2e8 with SMTP id c26-20020a170906341a00b00931de76c2e8mr13349483ejb.9.1679922648047;
-        Mon, 27 Mar 2023 06:10:48 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aB29/5iaE0NAyBAJvdzJkZEbWcVqIjAphp8OhATqxxdTcyJL7WxoUABN0PaPnNFhZde5qYnQ==
-X-Received: by 2002:a17:906:341a:b0:931:de76:c2e8 with SMTP id c26-20020a170906341a00b00931de76c2e8mr13349458ejb.9.1679922647711;
-        Mon, 27 Mar 2023 06:10:47 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004af62273b66sm14534168edj.18.2023.03.27.06.10.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 06:10:46 -0700 (PDT)
-Message-ID: <49a3b712-bb17-0ec8-4598-fc40ae2ba15d@redhat.com>
-Date:   Mon, 27 Mar 2023 15:10:45 +0200
+        d=1e100.net; s=20210112; t=1679922765;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qy+LGO1hZYQteOYXAi2MTuV8EwkfENi7/3mKtvfcWcM=;
+        b=77P7Uo9xpDiHaQcNIszSm+0rbECSvGQw0dhk4l2BwIxiN49fdWK6iMkuEj8hv9C/Er
+         Ba9u0HVI8BuxOp887m3un8nYcYoegIBkKA/YpZJQ4eORcugo2nOzGElNOUfP4cM171+I
+         ki9Gjtwhv4j9DMN++1zF4YhxqT3+YWPYdBYRY87OKB1O8OHIr3sZ6IVgKmMaX7ILMHT6
+         FDGCarGC+arG652PyYsJpuK4Chjqb5GxEdpkPEMUTKRTXO/tqGt5tVE2mGZjwh02+499
+         qwWRiNq5B1bid8b0HD8K0ixFCF0dUpFM5axVuinnM5zyeHgAHCBb5tLb93n+J8Jj5qvH
+         ebDA==
+X-Gm-Message-State: AO0yUKXt1bwYzSaOcMW+8Ew+ZUoL3it9qibiYv6IOJIYBUsjVzgd2MKD
+        38Xuxtm5iMz5kYlX0I5OPh1/FSu0ug==
+X-Google-Smtp-Source: AK7set+my+8Ru1KWMv/XxGqRnLq6lS4KUJdHjR1C70GN6oF7hoORRk1bGIe0330UCVf/M435x7q+3A==
+X-Received: by 2002:a05:6830:1606:b0:69f:9d13:5692 with SMTP id g6-20020a056830160600b0069f9d135692mr5844838otr.23.1679922765239;
+        Mon, 27 Mar 2023 06:12:45 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b12-20020a9d6b8c000000b0069fa7b738b3sm5419345otq.27.2023.03.27.06.12.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 06:12:44 -0700 (PDT)
+Received: (nullmailer pid 3279071 invoked by uid 1000);
+        Mon, 27 Mar 2023 13:12:43 -0000
+Date:   Mon, 27 Mar 2023 08:12:43 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     devicetree@vger.kernel.org, festevam@gmail.com,
+        imx@lists.linux.dev, kernel@pengutronix.de,
+        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, s.hauer@pengutronix.de,
+        shawnguo@kernel.org
+Subject: Re: [PATCH v4 1/3] dt-bindings: usb: cdns-imx8qm: add imx8qm cdns3
+ glue layer
+Message-ID: <20230327131243.GA3238130-robh@kernel.org>
+References: <20230323163116.2921999-1-Frank.Li@nxp.com>
+ <20230323163116.2921999-2-Frank.Li@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 0/9] Add Array BIST test support to IFS
-Content-Language: en-US
-To:     Jithu Joseph <jithu.joseph@intel.com>, markgross@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        gregkh@linuxfoundation.org, rostedt@goodmis.org,
-        ashok.raj@intel.com, tony.luck@intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, ravi.v.shankar@intel.com,
-        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
-        sohil.mehta@intel.com
-References: <20230301015942.462799-1-jithu.joseph@intel.com>
- <20230322003359.213046-1-jithu.joseph@intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230322003359.213046-1-jithu.joseph@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323163116.2921999-2-Frank.Li@nxp.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Mar 23, 2023 at 12:31:14PM -0400, Frank Li wrote:
+> NXP imx8qm integrates 1 cdns3 IP. This is glue layer device bindings.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+> Change from v3 to v4
+> - Drop all clock-assign
+> 
+> Change from v2 to v3
+> - Drop two fixed frequency clocks, it is system reset value, no need set now.
+> If need, futher work/discuss on driver or dts change. It will not block this
+> basic enablement work.
+> - Drop lable
+> - Drop some descriptions
+> - Reg as second property.
+> 
+> Change from v1 to v2.
+> - new add binding doc
+> 
+>  .../bindings/usb/fsl,imx8qm-cdns3.yaml        | 104 ++++++++++++++++++
+>  1 file changed, 104 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/fsl,imx8qm-cdns3.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/fsl,imx8qm-cdns3.yaml b/Documentation/devicetree/bindings/usb/fsl,imx8qm-cdns3.yaml
+> new file mode 100644
+> index 000000000000..654d8704aa6f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/fsl,imx8qm-cdns3.yaml
+> @@ -0,0 +1,104 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (c) 2020 NXP
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/fsl,imx8qm-cdns3.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP iMX8QM Soc USB Controller
+> +
+> +maintainers:
+> +  - Frank Li <Frank.Li@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: fsl,imx8qm-usb3
+> +
+> +  reg:
+> +    items:
+> +      - description: Register set for iMX USB3 Platform Control
+> +
+> +  "#address-cells":
+> +    enum: [ 1, 2 ]
+> +
+> +  "#size-cells":
+> +    enum: [ 1, 2 ]
+> +
+> +  ranges: true
+> +
+> +  clocks:
+> +    items:
+> +      - description: Standby clock. Used during ultra low power states.
+> +      - description: USB bus clock for usb3 controller.
+> +      - description: AXI clock for AXI interface.
+> +      - description: ipg clock for register access.
+> +      - description: Core clock for usb3 controller.
+> +
+> +  clock-names:
+> +    items:
+> +      - const: usb3_lpm_clk
+> +      - const: usb3_bus_clk
+> +      - const: usb3_aclk
+> +      - const: usb3_ipg_clk
+> +      - const: usb3_core_pclk
 
-On 3/22/23 01:33, Jithu Joseph wrote:
-> Changes in v4
->  - Hans de Goede
->      - Separate patch 1/9 (Separate ifs_pkg_auth) from reorganize
->         driver data patch
->      - Rework patch 2/9 (Reorganize driver data) to define const
->        ifs_test_caps struct and associate its pointer to miscdevice
->        and to remove dynamic allocation for ifs_data as was done in v3
->      - Move load check from run_test_store to do_core_test()
->      - Expand ABI doc to qualify which devices support which attribrutes
->        and the device instance to test mapping
-> 
-> V3 submission:
-> Link: https://lore.kernel.org/lkml/20230301015942.462799-1-jithu.joseph@intel.com/
-> 
-> Changes in v3
->  - GregKH 
->     -  Separating read-only fields from rw fields in
->        struct ifs_device (patch 1/8)
->     -  Remove the subdirectory intel_ifs/<n> for devicenode (patch 2/8)
->     -  Replaced an enum with #define (patch 4/8)
->  - Dave Hansen
->     - Remove tracing patch
->     - ifs_array_test_core() (patch 6/8)
->         - fix an initialization bug
->         - other suggested changes
->     - Use basic types in ifs_array for first two fields. (kept
->       the union to avoid type castings)
-> 
-> v2 submission:
-> Link: https://lore.kernel.org/lkml/20230214234426.344960-1-jithu.joseph@intel.com/
-> 
-> Changes in v2
->  - remove duplicate initializations from ifs_array_test_core()
->    (Dave Hansen, patch 4/7)
->  - remove bit parsing from tracing fast path to tracing 
->    output (Steven Rostedt, patch 5/7)
->  - move "ATTRIBUTE_GROUPS(plat_ifs_array)" to core.c and remove
->    exporting function ifs_get_array_groups() (Greg KH, patch 3/7)
->  - Generalized doc and ABI doc (Greg KH, patches 6/7 and 7/7)
-> 
-> v1 submission:
-> Link: https://lore.kernel.org/lkml/20230131234302.3997223-1-jithu.joseph@intel.com/
-> 
-> Array BIST is a new type of core test introduced under the Intel Infield
-> Scan (IFS) suite of tests.
-> 
-> Emerald Rapids (EMR) is the first CPU to support Array BIST.
-> Array BIST performs tests on some portions of the core logic such as
-> caches and register files. These are different portions of the silicon
-> compared to the parts tested by Scan at Field (SAF).
-> 
-> Unlike SAF, Array BIST doesn't require any test content to be loaded.
+lpm, bus, aclk, ipg, core (or core_pclk) are sufficient.
 
-Thank you for your patch-series, I've applied the series to my
-review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
-
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +# Required child node:
+> +
+> +patternProperties:
+> +  "^usb@[0-9a-f]+$":
+> +    $ref: cdns,usb3.yaml#
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - ranges
+> +  - clocks
+> +  - clock-names
+> +  - power-domains
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx8-lpcg.h>
+> +    #include <dt-bindings/firmware/imx/rsrc.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    usb@5b110000 {
+> +      compatible = "fsl,imx8qm-usb3";
+> +      reg = <0x5b110000 0x10000>;
+> +      ranges;
+> +      clocks = <&usb3_lpcg IMX_LPCG_CLK_1>,
+> +               <&usb3_lpcg IMX_LPCG_CLK_0>,
+> +               <&usb3_lpcg IMX_LPCG_CLK_7>,
+> +               <&usb3_lpcg IMX_LPCG_CLK_4>,
+> +               <&usb3_lpcg IMX_LPCG_CLK_5>;
+> +      clock-names = "usb3_lpm_clk", "usb3_bus_clk", "usb3_aclk",
+> +                    "usb3_ipg_clk", "usb3_core_pclk";
+> +      assigned-clocks = <&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_MST_BUS>;
+> +      assigned-clock-rates = <250000000>;
+> +      power-domains = <&pd IMX_SC_R_USB_2>;
+> +      #address-cells = <1>;
+> +      #size-cells = <1>;
+> +
+> +      usb@5b120000 {
+> +        compatible = "cdns,usb3";
+> +        reg = <0x5b120000 0x10000>,   /* memory area for OTG/DRD registers */
+> +              <0x5b130000 0x10000>,   /* memory area for HOST registers */
+> +              <0x5b140000 0x10000>;   /* memory area for DEVICE registers */
+> +        reg-names = "otg", "xhci", "dev";
+> +        interrupt-parent = <&gic>;
+> +        interrupts = <GIC_SPI 271 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 271 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 271 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 271 IRQ_TYPE_LEVEL_HIGH>;
+> +        interrupt-names = "host", "peripheral", "otg", "wakeup";
+> +        phys = <&usb3_phy>;
+> +        phy-names = "cdns3,usb3-phy";
+> +      };
+> +    };
+> -- 
+> 2.34.1
 > 
-> Jithu Joseph (9):
->   platform/x86/intel/ifs: Separate ifs_pkg_auth from ifs_data
->   platform/x86/intel/ifs: Reorganize driver data
->   platform/x86/intel/ifs: IFS cleanup
->   x86/include/asm/msr-index.h: Add IFS Array test bits
->   platform/x86/intel/ifs: Introduce Array Scan test to IFS
->   platform/x86/intel/ifs: Sysfs interface for Array BIST
->   platform/x86/intel/ifs: Implement Array BIST test
->   platform/x86/intel/ifs: Update IFS doc
->   Documentation/ABI: Update IFS ABI doc
-> 
->  arch/x86/include/asm/msr-index.h              |  2 +
->  drivers/platform/x86/intel/ifs/ifs.h          | 68 ++++++++++----
->  drivers/platform/x86/intel/ifs/core.c         | 81 +++++++++++-----
->  drivers/platform/x86/intel/ifs/load.c         |  9 +-
->  drivers/platform/x86/intel/ifs/runtest.c      | 94 ++++++++++++++++++-
->  drivers/platform/x86/intel/ifs/sysfs.c        | 21 ++---
->  .../ABI/testing/sysfs-platform-intel-ifs      | 17 +++-
->  7 files changed, 229 insertions(+), 63 deletions(-)
-> 
-> 
-> base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
-
