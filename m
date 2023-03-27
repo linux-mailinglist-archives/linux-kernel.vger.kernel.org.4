@@ -2,135 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2AE6CA5E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BFC6CA5F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbjC0N3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46424 "EHLO
+        id S232474AbjC0Nbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbjC0N2e (ORCPT
+        with ESMTP id S229498AbjC0Nbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:28:34 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 553A55260;
-        Mon, 27 Mar 2023 06:28:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 214201042;
-        Mon, 27 Mar 2023 06:29:17 -0700 (PDT)
-Received: from bogus (unknown [10.57.52.160])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F07183F663;
-        Mon, 27 Mar 2023 06:28:29 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 14:27:55 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "lihuisong (C)" <lihuisong@huawei.com>
-Cc:     robbiek@xsightlabs.com, linux-acpi@vger.kernel.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        rafael.j.wysocki@intel.com, wanghuiqiang@huawei.com,
-        zhangzekun11@huawei.com, wangxiongfeng2@huawei.com,
-        tanxiaofei@huawei.com, guohanjun@huawei.com, xiexiuqi@huawei.com,
-        wangkefeng.wang@huawei.com, huangdaode@huawei.com
-Subject: Re: [PATCH v2 1/2] mailbox: pcc: Add support for platform
- notification handling
-Message-ID: <20230327132755.tzflaqxp2cwsgs63@bogus>
-References: <20221016034043.52227-1-lihuisong@huawei.com>
- <20230314111135.16520-1-lihuisong@huawei.com>
- <20230314111135.16520-2-lihuisong@huawei.com>
- <20230327113057.cc2ufila5z25mgic@bogus>
- <4bf0da8a-008a-7363-d1cd-53e4296e3436@huawei.com>
+        Mon, 27 Mar 2023 09:31:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBE455B2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679923815;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rnHz54xfyL+gglmIyJKJy5abDhVgwniJPLQmnnklQbc=;
+        b=hOFfzCu9iFd7v0hSh4b+wX75wA4m+oDpUfVqyn2TINjjM/n4p78vpbQdhK30KiHc6S4qa0
+        1USCshkucJLE0l5RlrXxE1qqjItL0oklCMpcBkH451AHN9h2GvjIPd4fgTF4NrqQFvc5BP
+        jOEHGa9SRThhcMCYGReSetEwzhzgPis=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-184-fKg8JEXBM3qU1EtW6lwNUw-1; Mon, 27 Mar 2023 09:30:14 -0400
+X-MC-Unique: fKg8JEXBM3qU1EtW6lwNUw-1
+Received: by mail-wm1-f72.google.com with SMTP id o7-20020a05600c4fc700b003edf85f6bb1so5743528wmq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:30:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679923813;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rnHz54xfyL+gglmIyJKJy5abDhVgwniJPLQmnnklQbc=;
+        b=AXmHFcegzdajxMdmw9fq6FML2dM09i9w+h+kufQYqasnNi23lkiyKeET8PmpNPiVf3
+         fJwj9y6sFipvPzCVF+lGXbXN9rzcYYgPiz+RaeBr/ngWJEI9i0LKj3WYufC0g2SjO823
+         qi9H3Dd4awrHJgVCFRHjygRm0x2scBkqlIbVPfsbTl36IE5uGRw7iNJXtPPFEGxmjP/n
+         /OUDEwXiPjttnMIRtAgMeOcz86tuR3FD0MOVocd+8ZXPqAsLrkKQB0gypymT8GjzyCCn
+         e/oAzfMoqhNPPTGfp4P2cfVKxdl8R+D/vSjbj8rAZ26dSgTkwtHni9qoWVtiXeAzWGPC
+         8omQ==
+X-Gm-Message-State: AO0yUKUYu5M49imBgjx/Qi/68ffR0x/k+/iXz55lcU2RoPnQkgvJk+u2
+        eFJmS2PnstI1jdrOFzN3xI5TZRhINJaEk221QF1Cb9373XCsWtKAwcV0vNmZhBHKDy4H3vsXTjm
+        g2hm61G93DJtKB4Wb0PT5ircDv1AHKy/Z
+X-Received: by 2002:a05:600c:2114:b0:3ed:492f:7f37 with SMTP id u20-20020a05600c211400b003ed492f7f37mr8747292wml.10.1679923813047;
+        Mon, 27 Mar 2023 06:30:13 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9UiwP8XvEO+pMF2nbKcdfIrVKf+Fs5lq6Q+1t1gZjOUKhdS1XmGs2yy9FXpB/ck95uX2096g==
+X-Received: by 2002:a05:600c:2114:b0:3ed:492f:7f37 with SMTP id u20-20020a05600c211400b003ed492f7f37mr8747274wml.10.1679923812717;
+        Mon, 27 Mar 2023 06:30:12 -0700 (PDT)
+Received: from redhat.com ([2.52.153.142])
+        by smtp.gmail.com with ESMTPSA id g8-20020a05600c310800b003ee610d1ce9sm8981395wmo.34.2023.03.27.06.30.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 06:30:12 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 09:30:09 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        elic@nvidia.com
+Subject: Re: [GIT PULL] vdpa: bugfix
+Message-ID: <20230327092909-mutt-send-email-mst@kernel.org>
+References: <20230327091947-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4bf0da8a-008a-7363-d1cd-53e4296e3436@huawei.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230327091947-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 08:25:04PM +0800, lihuisong (C) wrote:
+Looks like a sent a bad pull request. Sorry!
+Please disregard.
+
+On Mon, Mar 27, 2023 at 09:19:50AM -0400, Michael S. Tsirkin wrote:
+> The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
 > 
-> 在 2023/3/27 19:30, Sudeep Holla 写道:
-> > On Tue, Mar 14, 2023 at 07:11:34PM +0800, Huisong Li wrote:
-> > > Currently, PCC driver doesn't support the processing of platform
-> > > notification for type 4 PCC subspaces.
-> > > 
-> > > According to ACPI specification, if platform sends a notification
-> > > to OSPM, it must clear the command complete bit and trigger platform
-> > > interrupt. OSPM needs to check whether the command complete bit is
-> > > cleared, clear platform interrupt, process command, and then set the
-> > > command complete and ring doorbell to the Platform.
-> > > 
-> > > Let us stash the value of the pcc type and use the same while processing
-> > > the interrupt of the channel. We also need to set the command complete
-> > > bit and ring doorbell in the interrupt handler for the type 4 channel to
-> > > complete the communication flow after processing the notification from
-> > > the Platform.
-> > > 
-> > > Signed-off-by: Huisong Li <lihuisong@huawei.com>
-> > > ---
-> > >   drivers/mailbox/pcc.c | 50 +++++++++++++++++++++++++++++++++++--------
-> > >   1 file changed, 41 insertions(+), 9 deletions(-)
-> > > 
-> > > diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-> > > index 105d46c9801b..a0a87c480d8b 100644
-> > > --- a/drivers/mailbox/pcc.c
-> > > +++ b/drivers/mailbox/pcc.c
-> > > @@ -91,6 +91,7 @@ struct pcc_chan_reg {
-> > >    * @cmd_update: PCC register bundle for the command complete update register
-> > >    * @error: PCC register bundle for the error status register
-> > >    * @plat_irq: platform interrupt
-> > > + * @type: PCC subspace type
-> > >    */
-> > >   struct pcc_chan_info {
-> > >   	struct pcc_mbox_chan chan;
-> > > @@ -100,12 +101,15 @@ struct pcc_chan_info {
-> > >   	struct pcc_chan_reg cmd_update;
-> > >   	struct pcc_chan_reg error;
-> > >   	int plat_irq;
-> > > +	u8 type;
-> > >   };
-> > >   #define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
-> > >   static struct pcc_chan_info *chan_info;
-> > >   static int pcc_chan_count;
-> > > +static int pcc_send_data(struct mbox_chan *chan, void *data);
-> > > +
-> > >   /*
-> > >    * PCC can be used with perf critical drivers such as CPPC
-> > >    * So it makes sense to locally cache the virtual address and
-> > > @@ -221,6 +225,34 @@ static int pcc_map_interrupt(u32 interrupt, u32 flags)
-> > >   	return acpi_register_gsi(NULL, interrupt, trigger, polarity);
-> > >   }
-> > > +static bool pcc_mbox_cmd_complete_check(struct pcc_chan_info *pchan)
-> > > +{
-> > > +	u64 val;
-> > > +	int ret;
-> > > +
-> > > +	ret = pcc_chan_reg_read(&pchan->cmd_complete, &val);
-> > > +	if (ret)
-> > > +		return false;
-> > > +
-> > > +	if (!pchan->cmd_complete.gas)
-> > > +		return true;
-> > > +
-> > > +	/*
-> > > +	 * Judge if the channel respond the interrupt based on the value of
-> > > +	 * command complete.
-> > > +	 */
-> > > +	val &= pchan->cmd_complete.status_mask;
-> > [super nit] Would prefer an blank line here.
-> > 
-> Yeah, it would be better if there is an blank line here.
-> Is it necessary to send v3 for this?
+>   Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+> 
+> for you to fetch changes up to 8fc9ce051f22581f60325fd87a0fd0f37a7b70c3:
+> 
+>   vdpa/mlx5: Remove debugfs file after device unregister (2023-03-21 16:39:02 -0400)
+> 
+> ----------------------------------------------------------------
+> vdpa: bugfix
+> 
+> An error handling fix in mlx5.
+> 
+> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 
-Let us see once you have Robbie's tested-by. Depending on who picks up we can
-check with them.
 
--- 
-Regards,
-Sudeep
+
+
+> ----------------------------------------------------------------
+> Eli Cohen (1):
+>       vdpa/mlx5: Remove debugfs file after device unregister
+> 
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+
