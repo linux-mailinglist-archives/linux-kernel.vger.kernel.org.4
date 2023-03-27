@@ -2,210 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 238B46CB0FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5DE6CB108
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjC0VtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 17:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S229844AbjC0Vwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 17:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjC0Vsu (ORCPT
+        with ESMTP id S229505AbjC0Vwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 17:48:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7859D9;
-        Mon, 27 Mar 2023 14:48:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 543CE6151F;
-        Mon, 27 Mar 2023 21:48:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86892C4339B;
-        Mon, 27 Mar 2023 21:48:46 +0000 (UTC)
-Date:   Mon, 27 Mar 2023 17:48:44 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        RCU <rcu@vger.kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH 1/1] Reduce synchronize_rcu() waiting time
-Message-ID: <20230327174844.15305988@gandalf.local.home>
-In-Reply-To: <ZBnKKZsSpI8aAk9W@pc636>
-References: <20230321102748.127923-1-urezki@gmail.com>
-        <IA1PR11MB617169A10E6DDE3C1168605D89819@IA1PR11MB6171.namprd11.prod.outlook.com>
-        <ZBnKKZsSpI8aAk9W@pc636>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 27 Mar 2023 17:52:40 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C3E2D66;
+        Mon, 27 Mar 2023 14:52:37 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 0E9AE1884564;
+        Mon, 27 Mar 2023 21:52:35 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 02FC225042EC;
+        Mon, 27 Mar 2023 21:52:35 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id ED01F9B403E2; Mon, 27 Mar 2023 21:52:34 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 38ACD91201E3;
+        Mon, 27 Mar 2023 21:52:34 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
+ drivers
+In-Reply-To: <20230327160009.bdswnalizdv2u77z@skbuf>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-3-netdev@kapio-technology.com>
+ <20230327115206.jk5q5l753aoelwus@skbuf>
+ <87355qb48h.fsf@kapio-technology.com>
+ <20230327160009.bdswnalizdv2u77z@skbuf>
+Date:   Mon, 27 Mar 2023 23:49:58 +0200
+Message-ID: <87pm8tooe1.fsf@kapio-technology.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Mar 2023 16:15:53 +0100
-Uladzislau Rezki <urezki@gmail.com> wrote:
+On Mon, Mar 27, 2023 at 19:00, Vladimir Oltean <olteanv@gmail.com> wrote:
+> A reasonable question you could ask yourself is: why do my BR_FDB_OFFLOADED
+> entries have this flag in the software bridge in the first place?
+> Did I add code for it? Is it because there is some difference between
+> mv88e6xxx and ocelot/felix, or is it because dsa_fdb_offload_notify()
+> gets called in both cases from generic code just the same?
+>
+> And if dsa_fdb_offload_notify() gets called in both cases just the same,
+> but no other driver except for mv88e6xxx emits the SWITCHDEV_FDB_DEL_TO_BRIDGE
+> which you've patched the bridge to expect in this series, then what exactly
+> is surprising in the fact that offloaded and dynamic FDB entries now become
+> stale, but are not removed from the software bridge as they were before?
 
-> Collect traces as much as you want: XQ-DQ54:/sys/kernel/tracing # echo 1 > tracing_on; sleep 10; echo 0 > tracing_on
-> Next problem is how to parse it. Of course you will not be able to parse
-> megabytes of traces. For that purpose i use a special C trace parser.
-> If you need an example please let me know i can show here.
+Yes, I see I have missed that the dsa layer already adds the offloaded
+flag in dsa_slave_switchdev_event_work() in slave.c.
 
-Not sure if you are familiar with trace-cmd, but the above could have been:
+My first approach was to use the SWITCHDEV_FDB_ADD_TO_BRIDGE event
+and not the SWITCHDEV_FDB_OFFLOADED event as the first would set the
+external learned flag which is not aged out by the bridge.
+I have at some point earlier asked why there would be two quite
+equivalent flags and what the difference between them are, but I didn't
+get a response.
 
- # trace-cmd record -e rcu sleep 10
+Now I see the difference and that I cannot use the offloaded flag
+without changing the behaviour of the system as I actually change the
+behaviour of the offloaded flag in this version of the patch-set.
 
-and then you get the trace.dat file, which reports as:
-
- # trace-cmd report
-
-If you need special parsing, there's a libtracecmd library that lets you do
-all that!
-
-  https://www.trace-cmd.org/Documentation/libtracecmd/
-
-And for parsing events:
-
-  https://www.trace-cmd.org/Documentation/libtraceevent/
-
-
-Basically have:
-
-struct my_info {
-	/* store state info here */
-};
-
-int main(...) {
-	struct tracecmd_input *handle;
-	struct my_info info;
-	char *file = argv[1];
-
-	handle = tracecmd_open(file);
-
-	tracecmd_follow_event(handle, "rcu", "rcu_batch_start",
-			batch_start, &info);
-
-	tracecmd_follow_event(handle, "rcu", "rcu_batch_end",
-			batch_end, &info);
-
-	tracecmd_follow_event(handle, "rcu", "rcu_invoke_callback",
-			invoke_callback, &info);
-
-	tracecmd_iterate_events(handle, NULL, 0, NULL, NULL);
-
-	tracecmd_close(handle);
-}
-
-Where it will iterate the "trace.dat" file passed it, and every time it
-hits an event registered by follow_event it will call that function:
-
-static int batch_start(struct tracecmd_input *handle, struct tep_event *event,
-		struct tep_record *record, int cpu, void *data)
-{
-	struct my_info *info = data;
-
-	info->start_timestamp = record->ts;
-
-	return 0;
-}
-
-static int batch_end(struct tracecmd_input *handle, struct tep_event *event,
-		struct tep_record *record, int cpu, void *data)
-{
-	struct my_info *info = data;
-
-
-	printf("time = %lld -> %lld\n", info->start_timestapm,
-				record->ts);
-	return 0;
-}
-
-static int invoke_callback(struct tracecmd_input *handle, struct tep_event *event,
-		struct tep_record *record, int cpu, void *data)
-{
-	struct my_info *info = data;
-	struct tep_handle *tep = tracecmd_get_tep(handle);
-	static struct tep_format_field *ip_field;
-	unsigned long long ip;
-	const char *func;
-	int pid;
-
-	if (!ip_field)
-		ip_field = tep_find_field(event, "func");
-
-	tep_read_number_field(ip_field, record->data, &ip);
-	func = tep_find_function(tep, ip);
-
-	pid = tep_data_pid(tep, record);
-
-	if (func)
-		printf("Processing function %s for pid %d\n", func, pid);
-	else
-		printf("Processing address 0x%llx for pid %d\n", ip, pid);
-
-	return 0;
-}
-
-
-And much more ;-)
-
-Oh, and if you just want to read the live trace without recording, you
-could always use libtracefs:
-
- https://www.trace-cmd.org/Documentation/libtracefs/
-
-And instead of using tracecmd_follow_event() with
-tracecmd_iterate_events(), you can use:
-
-	const char *systems = { "rcu" };
-
-	tep = tracefs_local_events_systems(NULL, systems);
-
-	tracefs_follow_event(tep, NULL, "rcu", "rcu_invoke_callback",
-			invoke_callback, &info);
-
-and iterate the live events with:
-
-	tracefs_iterate_raw_events(tep, NULL, NULL, 0, NULL, NULL);
-
-
-With the callback for this being (very similar):
-
-static int invoke_callback(struct tep_event *event,
-		struct tep_record *record, int cpu, void *data)
-{
-	struct my_info *info = data;
-	struct tep_handle *tep = event->tep;
-	static struct tep_format_field *ip_field;
-	unsigned long long ip;
-	const char *func;
-	int pid;
-
-	if (!ip_field)
-		ip_field = tep_find_field(event, "func");
-
-	tep_read_number_field(ip_field, record->data, &ip);
-	func = tep_find_function(tep, ip);
-
-	pid = tep_data_pid(tep, record);
-
-	if (func)
-		printf("Processing function %s for pid %d\n", func, pid);
-	else
-		printf("Processing address 0x%llx for pid %d\n", ip, pid);
-
-	return 0;
-}
-
-
--- Steve
+So if the idea of a 'synthetically' learned fdb entry from the driver
+using the SWITCHDEV_FDB_ADD_TO_BRIDGE event from the driver towards the
+bridge instead is accepted, I can go with that?
+(thus removing all the changes in the patch-set regarding the offloaded
+flag ofcourse)
