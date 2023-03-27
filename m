@@ -2,216 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458DA6CAB79
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9456CAB7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232880AbjC0RFV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 13:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54436 "EHLO
+        id S232667AbjC0RFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 13:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbjC0RFC (ORCPT
+        with ESMTP id S232011AbjC0RFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:05:02 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFE2659E;
-        Mon, 27 Mar 2023 10:03:40 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id b20so39094090edd.1;
-        Mon, 27 Mar 2023 10:03:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679936599;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NrDYYOMYb+x8U/wfL/PFhG97cTznz+G4jcEke1v/IHU=;
-        b=EwbSTXreQsrMaHpCFAoZ4myc0v9x3hDILiBAVzvBtLhWJ4a7be3+nyBi2cA3OT8kb1
-         gH3KlFfbu3NF99r9i1AKa3V8qoow7ZygUs4bcSjJ47PEy39Mc41wwJHJkvNai7DY1lsx
-         2xt5ulPeQ2GV7lleDox46L27PwzX2L5zRjPnZk9KV31JqOwdme1ktBHQZokb/W2NtoOf
-         O9u/rr6QS8k0/jmuUXOPbe3I+JYb/3JMFEAuLm/ERpXqsvUws/el34GpYDcsdl0aQn8X
-         1Gb/Dm4dpgOLbTsBxm2NMiC0MKTjagkPcnAJNSU/ojTRWocPpq/F7QwrbRRH2QXum19k
-         lQ2Q==
-X-Gm-Message-State: AAQBX9c7NddHwgEXVqwzScSUudcA8GGfxHOJGe9iSWRRXDXi13MFtoRJ
-        jSV0Wxna18KutGb4FNYQuc7RuwKSTCcbO8Mw3ghrZ6NG
-X-Google-Smtp-Source: AKy350YxZ9UwICWr6Z8iBfwYyXlNdUeDwwOy0xuisjczUTXuz9epYy1WkEmilorXcZnLu0BVS6UEYLiCBrH7r6ZgGGM=
-X-Received: by 2002:a50:d54f:0:b0:502:4f7:d287 with SMTP id
- f15-20020a50d54f000000b0050204f7d287mr6124726edj.3.1679936599286; Mon, 27 Mar
- 2023 10:03:19 -0700 (PDT)
+        Mon, 27 Mar 2023 13:05:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C5A3ABA;
+        Mon, 27 Mar 2023 10:03:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6392DB81077;
+        Mon, 27 Mar 2023 17:03:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3048CC433EF;
+        Mon, 27 Mar 2023 17:03:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679936619;
+        bh=DNwoMAHx/naFTub4e3g7Qvz60taxpwVzggpquY2OoJ0=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=TSLfZXWk/AS39G+IOvNDv9h+VS8ZG2iJMprsb7TBdpu6+HHfhygzsE3nS5ukHZHZA
+         mlUnFW15tHVhp63v8Xt2oYuSba24MD9o/kZseGNC31rGFcPS6EOnEeuzGsmUT0jZEA
+         vfdggh4rwIWFCb89PQfUFRNjaYdyTg1oR6RULq/EmdG3vvIMn0yoU5yN0CIoLMl+N9
+         8qtem2gVxTMYj6On1AEhtyNujuMUiH2ffnkPH0WF7DiuSzK/vuq+Gz51oO/HDKyK20
+         Ihn1oY+vXxjZ891UVLWughgZ21iJqVy72yrvAPEsgyF72ooO6IRQHPCPe3JS5Rr1QQ
+         AyNhC+IwqnPjQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-toolchains@vger.kernel.org, llvm@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Nathan Chancellor <nathan@kernel.org>, sedat.dilek@gmail.com
+Subject: Re: Linux 6.3-rc3
+References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
+        <20230320180501.GA598084@dev-arch.thelio-3990X>
+        <CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
+        <20230320185337.GA615556@dev-arch.thelio-3990X>
+        <87pm91uf9c.fsf@kernel.org>
+        <CA+icZUUYyqhV2HFzVtpi_KjBoYxjk7OB0UBVd2mX6abjmYhDjg@mail.gmail.com>
+        <CAHk-=whdrvCkSWh=BRrwZwNo3=yLBXXM88NGx8VEpP1VTgmkyQ@mail.gmail.com>
+        <CAK7LNATe7Ah-ow9wYGrtL9i4z-VD=MCo=sJjbC_S0ofEoH6CFQ@mail.gmail.com>
+        <87bkke5g31.fsf@intel.com>
+Date:   Mon, 27 Mar 2023 20:03:34 +0300
+In-Reply-To: <87bkke5g31.fsf@intel.com> (Jani Nikula's message of "Mon, 27 Mar
+        2023 19:12:02 +0300")
+Message-ID: <87jzz2cejd.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-22-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20230207051105.11575-22-ricardo.neri-calderon@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 19:03:08 +0200
-Message-ID: <CAJZ5v0hxKg_u4GKMkdGEp-JbvnymEtxSZT7fB2kbhWoQFSK1fw@mail.gmail.com>
-Subject: Re: [PATCH v3 21/24] thermal: intel: hfi: Implement model-specific
- checks for task classification
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
->
-> In Alder Lake and Raptor Lake, the result of thread classification is more
-> accurate when only one SMT sibling is busy. Classification results for
-> class 2 and 3 are always reliable.
->
-> To avoid unnecessary migrations, only update the class of a task if it has
-> been the same during 4 consecutive user ticks.
->
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Tim C. Chen <tim.c.chen@intel.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: x86@kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> ---
-> Changes since v2:
->  * None
->
-> Changes since v1:
->  * Adjusted the result the classification of Intel Thread Director to start
->    at class 1. Class 0 for the scheduler means that the task is
->    unclassified.
->  * Used the new names of the IPC classes members in task_struct.
->  * Reworked helper functions to use sched_smt_siblings_idle() to query
->    the idle state of the SMT siblings of a CPU.
-> ---
->  drivers/thermal/intel/intel_hfi.c | 60 ++++++++++++++++++++++++++++++-
->  1 file changed, 59 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index 35d947f47550..fdb53e4cabc1 100644
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -40,6 +40,7 @@
->  #include <linux/workqueue.h>
->
->  #include <asm/msr.h>
-> +#include <asm/intel-family.h>
->
->  #include "../thermal_core.h"
->  #include "intel_hfi.h"
-> @@ -209,9 +210,64 @@ static int __percpu *hfi_ipcc_scores;
->   */
->  #define HFI_UNCLASSIFIED_DEFAULT 1
->
-> +#define CLASS_DEBOUNCER_SKIPS 4
-> +
-> +/**
-> + * debounce_and_update_class() - Process and update a task's classification
-> + *
-> + * @p:         The task of which the classification will be updated
-> + * @new_ipcc:  The new IPC classification
-> + *
-> + * Update the classification of @p with the new value that hardware provides.
-> + * Only update the classification of @p if it has been the same during
-> + * CLASS_DEBOUNCER_SKIPS consecutive ticks.
-> + */
-> +static void debounce_and_update_class(struct task_struct *p, u8 new_ipcc)
-> +{
-> +       u16 debounce_skip;
-> +
-> +       /* The class of @p changed. Only restart the debounce counter. */
-> +       if (p->ipcc_tmp != new_ipcc) {
-> +               p->ipcc_cntr = 1;
-> +               goto out;
-> +       }
-> +
-> +       /*
-> +        * The class of @p did not change. Update it if it has been the same
-> +        * for CLASS_DEBOUNCER_SKIPS user ticks.
-> +        */
-> +       debounce_skip = p->ipcc_cntr + 1;
-> +       if (debounce_skip < CLASS_DEBOUNCER_SKIPS)
-> +               p->ipcc_cntr++;
-> +       else
-> +               p->ipcc = new_ipcc;
-> +
-> +out:
-> +       p->ipcc_tmp = new_ipcc;
-> +}
+Jani Nikula <jani.nikula@linux.intel.com> writes:
 
-Why does the code above belong to the Intel HFI driver?  It doesn't
-look like there is anything driver-specific in it.
-
-> +
-> +static bool classification_is_accurate(u8 hfi_class, bool smt_siblings_idle)
-> +{
-> +       switch (boot_cpu_data.x86_model) {
-> +       case INTEL_FAM6_ALDERLAKE:
-> +       case INTEL_FAM6_ALDERLAKE_L:
-> +       case INTEL_FAM6_RAPTORLAKE:
-> +       case INTEL_FAM6_RAPTORLAKE_P:
-> +       case INTEL_FAM6_RAPTORLAKE_S:
-> +               if (hfi_class == 3 || hfi_class == 2 || smt_siblings_idle)
-> +                       return true;
-> +
-> +               return false;
-> +
-> +       default:
-> +               return true;
-> +       }
-> +}
-> +
->  void intel_hfi_update_ipcc(struct task_struct *curr)
->  {
->         union hfi_thread_feedback_char_msr msr;
-> +       bool idle;
+> On Sat, 25 Mar 2023, Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
->         /* We should not be here if ITD is not supported. */
->         if (!cpu_feature_enabled(X86_FEATURE_ITD)) {
-> @@ -227,7 +283,9 @@ void intel_hfi_update_ipcc(struct task_struct *curr)
->          * 0 is a valid classification for Intel Thread Director. A scheduler
->          * IPCC class of 0 means that the task is unclassified. Adjust.
->          */
-> -       curr->ipcc = msr.split.classid + 1;
-> +       idle = sched_smt_siblings_idle(task_cpu(curr));
-> +       if (classification_is_accurate(msr.split.classid, idle))
-> +               debounce_and_update_class(curr, msr.split.classid + 1);
->  }
-
-I still think that this function should just return a number, possibly
-including a special "no IPCC" value.  It may be passed a bool argument
-indicating whether or not the SMT siblings are idle.
-
+>> On Thu, Mar 23, 2023 at 1:56=E2=80=AFAM Linus Torvalds
+>> <torvalds@linux-foundation.org> wrote:
+>>>
+>>> On Wed, Mar 22, 2023 at 9:40=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail.=
+com> wrote:
+>>> >
+>>> > You have to pass `make LLVM=3D1` in any case... to `oldconfig` or when
+>>> > adding any MAKEFLAGS like -j${number-of-available-cpus}.
+>>>
+>>> I actually think we should look (again) at just making the compiler
+>>> choice (and the prefix) be a Kconfig option.
+>>>
+>>> That would simplify *so* many use cases.
+>>>
+>>> It used to be that gcc was "THE compiler" and anything else was just
+>>> an odd toy special case, but that's clearly not true any more.
+>>>
+>>> So it would be lovely to make the kernel choice a Kconfig choice - so
+>>> you'd set it only at config time, and then after that a kernel build
+>>> wouldn't need special flags any more, and you'd never need to play
+>>> games with GNUmakefile or anything like that.
+>>
+>>
+>> Presumably, this is the right direction.
+>>
+>> To achieve it, Kconfig needs to have some mechanism to evaluate
+>> shell commands dynamically.
+>>
+>> If a user switches the toolchain set between GCC and LLVM
+>> while running the Kconfig, $(cc-option) in Kconfig files must
+>> be re-calculated.
+>>
+>> Currently, Kconfig cannot do it. All macros are static - they are
+>> expanded in the parse stage, and become constant strings.
+>>
+>> Ulf Magnusson and I discussed the dynamic approach a few years back,
+>> but I adopted the static way since it is much simpler.
+>> We need to reconsider the dynamic approach to do this correctly.
+>> I do not think it is too difficult technically.
+>> We just need to come up with a decent syntax.
 >
->  unsigned long intel_hfi_get_ipcc_score(unsigned short ipcc, int cpu)
-> --
+> I acknowledge being clueless about mostly everything that requires. But
+> in the mean time, how about just adding something like:
+>
+> -include .env
+>
+> near the beginning of the top Makefile?
+>
+> You could shove the tools or ARCH or output dir etc. there, so you don't
+> have to remember to add them on the command line every time.
+
+Yes, please! Something like this, but officially supported, would be
+just perfect for a lazy person like me.
+
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes
