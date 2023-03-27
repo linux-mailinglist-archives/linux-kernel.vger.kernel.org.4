@@ -2,88 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2596CAA96
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35486CAA93
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbjC0QaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 12:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
+        id S232225AbjC0QaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 12:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232252AbjC0QaG (ORCPT
+        with ESMTP id S229498AbjC0QaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:30:06 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0916E1BF8;
-        Mon, 27 Mar 2023 09:30:04 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679934603;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VyqB3wrZqFlFld9RbfDWTT11IJPITUDR5qvT0cnykYs=;
-        b=TP9hM5Rk04UufjUfoZTutu+arAapZmjAu5FmP7S5tErBzE2R6ghjfdGCwS106VMbgtD9q9
-        K8OnmvTRcvJm1Q/0wbHo+sIQYNDxsFB4biyYlrUqYG2LWMnPltOcoKC3ynSj8GhWLAv9yx
-        DtLbiqGmciTywf29Gb1+ovA2itjVYXS9ot7IHsJ3njmsF9XHu0UP4h5FRHT1TadZxfFxpQ
-        YlPlKXLRc/3EmlElSgQju6f+L1sCBryw6KEaEug7UQFFHhFuo4IZJK6L2P8iDOUNmK+XfP
-        IDp8z+qF7s0/GEQx4z2Fya+mNZGXLEOYfiMuMAlzzeMs30R1a/mJTkAE5aPoQA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679934603;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VyqB3wrZqFlFld9RbfDWTT11IJPITUDR5qvT0cnykYs=;
-        b=jh1h+9aAhlNU4Vxf2LDuHH7K9fGCUAw/ulJdS5CkSIir690atArOJjnvmb6LIhThfQ1xty
-        FJtuVdcOX8+AlNCQ==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        Mon, 27 Mar 2023 12:30:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9B31BF8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:30:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A521361345
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:30:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E01C433EF;
+        Mon, 27 Mar 2023 16:29:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679934601;
+        bh=z8Axy2jhFhvVh2ZiGMT1gqklNpyGzWm7cQGzH79T/pU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=N37FXh2bg8zB5q2/YscYnl0ciPlS+M31qRFBW2Bed7S5crJMhAPZdRcpHFaFXxQvF
+         EurYSxT/i5zJwLxjWK0ubb9/SCBBJF3nsX3mvRJFuS5S8JzRJUtKNENud6OpToEjjz
+         tr/KDT50zcawFxqemU1PHFEbzLFWTNAnq/L5b71/5w58UHTw3FjjJhVhm0163wtRA5
+         tIIoTYXNDdJkE1Gp1jsnzuTvs0BOjT+8ld4xRhZTY0a5jmd+Ffvz2JnEmwM3x853Qp
+         0lWuw76mTn3laFa4nHOvjXywXRRtsuhyu96BA7CpLMAH7dqy7b03nw7iqHrByv+g8s
+         srrBxqIrnlRQA==
+From:   Will Deacon <will@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Ingo Molnar <mingo@redhat.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: union: was: Re: [PATCH printk v1 05/18] printk: Add non-BKL
- console basic infrastructure
-In-Reply-To: <ZBnVkarywpyWlDWW@alley>
-References: <20230302195618.156940-1-john.ogness@linutronix.de>
- <20230302195618.156940-6-john.ogness@linutronix.de>
- <ZBnVkarywpyWlDWW@alley>
-Date:   Mon, 27 Mar 2023 18:34:22 +0206
-Message-ID: <87y1nip3a1.fsf@jogness.linutronix.de>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Ira Weiny <ira.weiny@intel.com>
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH 0/3] COVER: Remove memcpy_page_flushcache()
+Date:   Mon, 27 Mar 2023 17:29:52 +0100
+Message-Id: <167993078034.2286694.14271528066937024301.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20221230-kmap-x86-v1-0-15f1ecccab50@intel.com>
+References: <20221230-kmap-x86-v1-0-15f1ecccab50@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-21, Petr Mladek <pmladek@suse.com> wrote:
-> It is not completely clear that that this struct is stored
-> as atomic_long_t atomic_state[2] in struct console.
->
-> What about adding?
->
-> 		atomic_long_t atomic;
+On Wed, 15 Mar 2023 16:20:53 -0700, Ira Weiny wrote:
+> Commit 21b56c847753 ("iov_iter: get rid of separate bvec and xarray
+> callbacks") removed the calls to memcpy_page_flushcache().
+> 
+> kmap_atomic() is deprecated and used in the x86 version of
+> memcpy_page_flushcache().
+> 
+> Remove the unnecessary memcpy_page_flushcache() call from all arch's.
+> 
+> [...]
 
-The struct is used to simplify interpretting and creating values to be
-stored in the atomic state variable. I do not think it makes sense that
-the atomic variable type itself is part of it.
+Applied arm64 patch to arm64 (for-next/mm), thanks!
 
-> Anyway, we should at least add a comment into struct console
-> about that atomic_state[2] is used to store and access
-> struct cons_state an atomic way. Also add a compilation
-> check that the size is the same.
+[3/3] arm: uaccess: Remove memcpy_page_flushcache()
+      https://git.kernel.org/arm64/c/7cae569e6209
 
-A compilation check would be nice. Is that possible?
+Cheers,
+-- 
+Will
 
-I am renaming the struct to nbcon_state. Also the variable will be
-called nbcon_state. With the description updated, I think it makes it
-clearer that "struct nbcon_state" is used to interpret/create values of
-console->nbcon_state.
-
-John Ogness
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
