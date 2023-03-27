@@ -2,63 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F716C9D39
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C516C9D3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbjC0IKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
+        id S232984AbjC0IK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232957AbjC0IKI (ORCPT
+        with ESMTP id S232968AbjC0IKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:10:08 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4747749DD;
-        Mon, 27 Mar 2023 01:10:07 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id AFF918108;
-        Mon, 27 Mar 2023 08:10:06 +0000 (UTC)
-Date:   Mon, 27 Mar 2023 11:10:05 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Andrew Davis <afd@ti.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 0/3] AM57x EVM Device Tree Overlays
-Message-ID: <20230327081005.GD7501@atomide.com>
-References: <20230307161715.15209-1-afd@ti.com>
+        Mon, 27 Mar 2023 04:10:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A011F3A9D;
+        Mon, 27 Mar 2023 01:10:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3282CB80E9E;
+        Mon, 27 Mar 2023 08:10:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02A3EC433EF;
+        Mon, 27 Mar 2023 08:10:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679904618;
+        bh=34GlLDZs9xsU4X4y4jbYBxVIqRQaa6Vbkw23VwWqaPA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LIPL6BBKkJIYhsOUboOvRHYUY3tZtipRkEiDjhTVRxLiWsOZxj+IVkxiz7MwBLon4
+         m4FJOemnyf/A9BrbEkNzQA9MHzX4Z6sHAwH6RMWv2ZPc4ITVki0je/2iSdyzvbz9YD
+         rCGgU4oicSOBwPHk5C35kqNITu7VgO6hBmxBBU6QhklIdJsugksmi7Q9ifD05qZKJJ
+         V7i7gUZSN677Q6WDFXiEQGPrz4DP6BqyAkDgNar/pZBa3utJNzwSz22JQDap9UqVeG
+         ca+nYVu70w2MebtZEcoZ1YvuZaG7IHFN9Ae02uRte4hw3Tr4vECLcazD4RSVIkoDPX
+         uKwxurMORyxsQ==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>, viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v2] fs/buffer: Remove redundant assignment to err
+Date:   Mon, 27 Mar 2023 10:10:10 +0200
+Message-Id: <167990444020.1656778.1662705570875208111.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230323023259.6924-1-jiapeng.chong@linux.alibaba.com>
+References: <20230323023259.6924-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307161715.15209-1-afd@ti.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=410; i=brauner@kernel.org; h=from:subject:message-id; bh=oMDp8p5UWqaXqXrCVnyKq2CByfK3S1lZJOB7Oy9si+o=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQo+sfyyMx7L/yvdWn5QQmLYzkKsqn32G90e7d9XKTufPf9 uc1sHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABMJXsnI8DUn/86RWZzp/K7mT6T+JJ WetDsopnXXQ/oJ46nZEQ0rlzD8d/jzO7DXM/0K2+e8xHWN8nMYXz/i2nTo35GkXQ5ra8vUOQA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andrew Davis <afd@ti.com> [230307 18:17]:
-> Hello all,
+
+On Thu, 23 Mar 2023 10:32:59 +0800, Jiapeng Chong wrote:
+> Variable 'err' set but not used.
 > 
-> These are a set of uncontroversial (hopefully) DT Overlays to support the
-> TI AM57x EVM and displays for AM57x IDKs. More complex cases are staged
-> and ready to follow, but wanted to test the water with these first.
+> fs/buffer.c:2613:2: warning: Value stored to 'err' is never read.
+> 
+> 
 
-Applying these into omap-for-v6.4/dt-overlays thanks.
+Applied to
 
-> For some reason dtbs_check does not get run on overlays, this
-> will need further investigation to fix in kbuild. For now I ran
-> it through manually but am not 100% sure it actually checked it,
-> so double checks here very welcome.
+tree: git://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git
+branch: fs.misc
+[1/1] fs/buffer: Remove redundant assignment to err
+      commit: dc7cb2d29805fe4fa4000fc0b09740fc24c93408
 
-Seems like that's a separate patch from this series.
-
-Regards,
-
-Tony
+Thanks!
+Christian
