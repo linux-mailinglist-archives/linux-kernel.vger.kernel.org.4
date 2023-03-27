@@ -2,447 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C726C9C48
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C72A6C9C4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbjC0HhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 03:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
+        id S232624AbjC0HhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 03:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232242AbjC0HhF (ORCPT
+        with ESMTP id S232577AbjC0HhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 03:37:05 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEB4558E;
+        Mon, 27 Mar 2023 03:37:06 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2065.outbound.protection.outlook.com [40.107.244.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EAB40D6;
         Mon, 27 Mar 2023 00:36:39 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32R3aoIC006538;
-        Mon, 27 Mar 2023 07:36:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=KDoDOP1Jwy9IgsQQbZALPFVLJTLCRZXS1w5gzGJsXnE=;
- b=W/iKyYqvO19L3G9Ipm85rlvzlkFmJmNPaRaFCO+B1wsCB5i494kCN64Rieyc/uaVz4Bk
- fl8SH9H57BpK5Xr8Xl/x4FtBYAL1L9WC7WGuGnJRsjS7yFbI/Gc+x18TXS5WoA+XpXIG
- a8n/tEDCeNRTi38Qn2lnE1jdeCxooEZqYfT2pXMvraBKiu5ZVhThz5YuT7uHaR8cShQn
- I/xesC5VhILM06UU+KvBkTcAP8rWHyKmQU2Hb99wqYuiVbNrlrSKOe8exNXmYyaqCalq
- DJFr8styTPerOe31pfJqR1Pdq7Nz9K/HmvlxGuMyPHLFGex3IKnxZNQXhMDLHhe5Io3v LQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pht50un2h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 07:36:16 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32R7aEqU011794
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 07:36:14 GMT
-Received: from [10.239.133.211] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 27 Mar
- 2023 00:36:10 -0700
-Message-ID: <e4e36906-405e-f69c-02c2-1962efc7474c@quicinc.com>
-Date:   Mon, 27 Mar 2023 15:36:07 +0800
-MIME-Version: 1.0
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TMw7h9bzEgn1mZJmjoCmEl4kaIU9uCnXJsRLF1fiYQ7q8krdWceMCBSoNWmM8sPbYm2eApfNM3589yRUftLJYnW0kuYO5JLERCFBw5o/MXHPPIjtn4RRLpPF8aY/wJlFvvvgSHNFVm1nN2uOpQvXGgllhr4Em24d0S4l0rXQ+GyDjiKDJab8+HYs9tDMr0qj5B8sqoEQuUnCUVbo46glG251Q8xPdrfZAbAa4ookbT7E/CdGzUWTNkPHKFO63CuEW7T5ktozqzsJBUsd5O3z4xCYDyCpoVL9PQqWSUGeq/mki+ErunoQX8hM2dUo815mfTlvbxO5/sbA21wxP1bBpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wgX7KVvpqyx2YC1iKHneFn3hC5K/2tDyHTzC6v41qC0=;
+ b=eDExwPjjJVa4S4X0ChWj56tXLeQAGcy08fDcBNhTjytf6nLYlC8d4PEimDXvTHOwTJVsFsqA6wjapf9g4/2LBjwvitXx8jvI2w/3u1cn+xNmLOBxzuSM5EqWjo2vrLtNPvWsHsFvDEc44pCSbQzTVENZa9mH5cM3GCKHMCgSduhw5lBvUsZVJhHQ1xQkJvkzhM6sFKE15U2HmhyjHbjtttpQuIpd24ZCZllqym7I6TdxnLZzlE7hGb4zunfTCV0VSImMiSJARQY3T6W+2tFlN7Vkh6i/vzcvEronTryIxG5zcPkjm9gyduDodRf+JNBy+XTok+403fEmxAQImEhG5Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wgX7KVvpqyx2YC1iKHneFn3hC5K/2tDyHTzC6v41qC0=;
+ b=iPPw3rW+H7zHWYXYu3du3S94uyX1baO5KGNVOJBx3GNziQ+JGCwoAF8O6VrDlsBTMJeAYTESNFmgkd/q5t/oNbkTdzu5+ZQjWKt4Of7w6lBXuw9qt3FAKO/QYmdC8UnFdiS1CKy5RKm3tJug/DHGo4W2iDsUZRXAwMxWO8tW9uhKqi9jljmt/4ROCTyGv18Rb4Sr2Mr1TKOrsWE1YmkBHwQAzKB4XE7X16kenRWFwdVKKK4VvAi4eRrG6papnpRxLooexWWultlfuzH0yLKmbRGlXZBQL2QsqmFaeF2PPlRxtXxMDbEMz3ows/jiNWbFkHEBuoZE65YkOnJ1L2b0og==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN9PR12MB5258.namprd12.prod.outlook.com (2603:10b6:408:11f::20)
+ by DS7PR12MB6168.namprd12.prod.outlook.com (2603:10b6:8:97::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.41; Mon, 27 Mar 2023 07:36:19 +0000
+Received: from BN9PR12MB5258.namprd12.prod.outlook.com
+ ([fe80::dd0c:ecea:440e:e1a]) by BN9PR12MB5258.namprd12.prod.outlook.com
+ ([fe80::dd0c:ecea:440e:e1a%6]) with mapi id 15.20.6178.041; Mon, 27 Mar 2023
+ 07:36:19 +0000
+Message-ID: <e5620a5a-6fdf-8254-7c42-e816e8977c1e@nvidia.com>
+Date:   Mon, 27 Mar 2023 10:36:12 +0300
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 07/11] coresight-tpdm: Add nodes for dsb edge control
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net] net: ipa: compute DMA pool size properly
 Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
- <1679551448-19160-8-git-send-email-quic_taozha@quicinc.com>
- <0d6faa00-c630-c739-6a0a-c5cf858a04fa@arm.com>
-From:   Tao Zhang <quic_taozha@quicinc.com>
-In-Reply-To: <0d6faa00-c630-c739-6a0a-c5cf858a04fa@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8lnScwMrl5b5EsxGRGOY6xhb3i3W26Bs
-X-Proofpoint-ORIG-GUID: 8lnScwMrl5b5EsxGRGOY6xhb3i3W26Bs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- lowpriorityscore=0 suspectscore=0 priorityscore=1501 spamscore=0
- malwarescore=0 impostorscore=0 adultscore=0 phishscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303270061
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Alex Elder <elder@linaro.org>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     quic_bjorande@quicinc.com, caleb.connolly@linaro.org,
+        mka@chromium.org, evgreen@chromium.org, andersson@kernel.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230326165223.2707557-1-elder@linaro.org>
+From:   Mark Bloch <mbloch@nvidia.com>
+In-Reply-To: <20230326165223.2707557-1-elder@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0176.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9f::14) To BN9PR12MB5258.namprd12.prod.outlook.com
+ (2603:10b6:408:11f::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5258:EE_|DS7PR12MB6168:EE_
+X-MS-Office365-Filtering-Correlation-Id: d0f05236-42b2-40b9-669b-08db2e95f438
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: h+LfFeMiB4orYi/zEsaK8cakG0hJeiV5QpoI0NwFHyVSjXN63x4Jwy3U0ikJmwHDJx/C/vcjL3zuARIJrWboP44GrfkCRsbDbbdV3+P4MlgYYv7W+Iz5+PiiGBXXY/t8YJVSq1D17Ow+dokN6MVtd3rPf3BcqoFGbuaU6Z70fNruohC2pzqX7FS6Ef9cguKOTZi2mi2gjuCMQUK94IB2BXZ3Sb8d7AagFxLs0VakvgxXUixIQByZFHW3xfzt42DcCc2O4RFy9Vxw4LUGoY0BHMAywLSMyU2/Orfbu8xnJ3/XzVbZeYWwtwtyHtiLj+fkJO15+X0YkcP1M7kPab8gKWKPUnTEa9kNlHAlQh/HdvgfobsGV8ymUgnKe6y4zrB6VwQ9GpuZWzsztLbzBaDTa+jDWxLyCoHlViLkbYa2nuGfBHjWl/BrKeEIgNvmEQuMVAy8udATioiteljNJmqnebqRXrG58UDWZcE6JDIsWTawsUdVyLpiHvYKVLQvxVkV8owOjN/yp4QAzb1kKBNqLSmWFz65WXKxGgWevb24vYulKHTPZZPoJWDa4iAg48VjC6RGhX2tv8HehtGRMzgXvzt+0grCE8QOfy7++ekCq8ED2Z9HRNrpOmUQYxxAgT0NFyruaSRDz4UZ58I1spG29w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5258.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(376002)(396003)(366004)(451199021)(31686004)(83380400001)(31696002)(86362001)(2906002)(26005)(6506007)(6512007)(6486002)(316002)(6666004)(478600001)(66556008)(186003)(38100700002)(2616005)(4326008)(8676002)(5660300002)(7416002)(36756003)(66476007)(41300700001)(66946007)(8936002)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dmR4Y0RIZ0RXZEZhN2tmV0FaTXFnNnFSTk5uV3BkanFvSDJZTmY0NU5wc0Na?=
+ =?utf-8?B?ejltQzRBYys4M1NqNHRyVU8vbUFOSDc2ZWZwVDZXQ2k3aTQ1YThWWHBUaWJT?=
+ =?utf-8?B?NDhxcHZSUmdOa2p5TDhTQ241NHVxVWUremF0SGF3TlBrR21wK29WQ1hpWG1M?=
+ =?utf-8?B?enBaV1ppMTBzQURSbHk1Vmh4T2ZkcUg3ak45V2lCZ2h2bkpwK3VTaHZrb054?=
+ =?utf-8?B?ejVoaVFOczRDMGhwQ3pObDR1MkdyR0pFRmd0SnE3STg4b3BybWRzM0VxVlB3?=
+ =?utf-8?B?UVBGRndZSDV2YnFyenN4ZCtNK1o2WjZZMFpDajljU0tNYS9lRjBTOWxqYVI4?=
+ =?utf-8?B?ZnRnRDJuVTQ0MW9WZ1ZSbFpNZlltcXBoWEp4VzVYZTZrWDVyZHFZb1k0YzQ0?=
+ =?utf-8?B?NklNcVhURUhzZGNPTTFGRWhEcmllZUoxbkhTV1dOQ1puTFpVZVBXWUY4T0hN?=
+ =?utf-8?B?T094UVZ4OVJJeEg5MENLS1dCdGFxaEVWZUdmUklTRkZJNDFIZ0ozbVF5Umsx?=
+ =?utf-8?B?am10SWRIL3UzY3pyZ0dsUUFURC9SckRXNVB3YWlhRVgyN2lpVHdWR0hBbC9F?=
+ =?utf-8?B?YjRqZ0dZTURicyt0QzFtVHNqLzFOZ0pVeG1wNi9OUGJiQk54ZWhwQ3IvVmpp?=
+ =?utf-8?B?N1VWRXJLNEF4ZTRIaHdXQm9oRHRZdmZQaFhtYmtFcllzbGxZZnN5NHhQV3pa?=
+ =?utf-8?B?NTRJMEdTRTBubTBxOUt1d3N3Z1BpaFEvRk5YT01SQVJsVUdHdklhVFpEMXVX?=
+ =?utf-8?B?OFBad1ZvenBQOC9nclZScnB6Q1dmL3lXSEFGNUl4NFl2Y1JnVDUzOHBtRXFU?=
+ =?utf-8?B?R1lDYnJpYitlUnloKzhRQkpGaVoxTTJpNVZQZkFRaVVkWWhBdTBZc2c3ZWZB?=
+ =?utf-8?B?NU1Za2ZlZU9PVkVlUHZ5WnpacVlHYTJSMzE3WTV5WmdDR3ZSdkxUZTFITUE4?=
+ =?utf-8?B?bDQzQ1oyWTR4dU1reUQ5UWpzWnNCczJpbmZnaUs3dnpWZW5uOW53cG1ra2Ir?=
+ =?utf-8?B?bUV5cVNtZU0rK1lCZnoyTmUzQ0R5ZnVhdDUrOEw1V1c4aWxCOTRQbXB5T2JL?=
+ =?utf-8?B?QmtnbEk2MGM5NGxKYmVZQkNIMjFKU0hKaUd4enBkNmdZQWJuOXJaRlprV0VO?=
+ =?utf-8?B?NmZZSFh2Y3lLZXM2dmNPaCs3RzBKVXVHN0ZqTXRzYkRsSWkzeG83K1VPcTRI?=
+ =?utf-8?B?Rm8yVnd6UmxjOGJyYnQ2Njh1TDFxMXJOMk9DaEhIT3BjSjl0YUVCTUlBVmZz?=
+ =?utf-8?B?NnVESDB0NFMva0JYZW1qUG0wTjMzM290Q1RxQlZHMEE5Ui9mOW05ajlCbldU?=
+ =?utf-8?B?ZjlpMkkzd0UwZHZ2Q0ZGa1VZbktxc0hFMGQzZ25pY3BjOWI2TGs4ZjZibm54?=
+ =?utf-8?B?WHNOQVZ0L01FRmd4Q1E4c0swUFBmOXNuYzJqbWtDUnp0UG1oTjAyd05nZkZy?=
+ =?utf-8?B?RmlOb0lUOUFRN25xaGtiTVhiVzZMZ0JUZGNFcy8xRlN0b0RHZUFWMGhVY0Rp?=
+ =?utf-8?B?VFNWVlg4ZStQZGdtMkhHVzFuQ3c1WEVmZ1pMUnliN0N1bWozTEx5TlptSTl5?=
+ =?utf-8?B?RG1UWFg1bGJYVnNQUWhVbjBaODNVWmUzYzZlQzZpcWZlUVA2NXU5dEtDWFls?=
+ =?utf-8?B?ZmgxMHlWZFpxMGVPVjhqT09ubmFrQndpMXNXOVZES1ZOT2JHczBhVEZIMEJP?=
+ =?utf-8?B?UiswZUU3Ui9mK0I0bUxMQk13Q0JZUk5EVWtoNEp5UCtCdzAvV211dlEyZ1p1?=
+ =?utf-8?B?dzFtaDRrSHh5YnYrQTZrbWFLNjZobzlQZkF3UGt0OTZhN0pUNXVVc1hGdXBY?=
+ =?utf-8?B?bUVQeHB6Y0Z4cjlLSTZlNE82NDByY0s4bFM1UFl1RGVlRG12YXAyd2MwZXJR?=
+ =?utf-8?B?KzdkY3dXMWNka2swSktMSzFobmJjWTZadE53cEpKNUtnalFrK0dMbVpjVU9j?=
+ =?utf-8?B?UDk4enJCaldZZmJkd0Y3R2JuelQ5OGtyYytvOCtCZTdHdHYreVBqK2ZzZE5M?=
+ =?utf-8?B?RldFa3Z4TUJNS2lVaG80aVpvdTFRaEdtU1VBWmkwZjFhSHFqdGlIVFROYXNN?=
+ =?utf-8?B?ZFllTTM3bFRQdkJmUGxSSk9WdmdjMnVIQ3NpazJiTGRQOXM5VHJIR3crNUdG?=
+ =?utf-8?Q?1Br9vUUWWSFUuA6I6hcYiXR2U?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0f05236-42b2-40b9-669b-08db2e95f438
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5258.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 07:36:18.8836
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ts0/N8gofOfaWb45qUInNFp7MkU+AVHVQngacij3UAjZaR0l/b6PS9a0VmljPMty/QEU0vYZObpeY3woo4NulQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6168
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suzuki,
-
-On 3/24/2023 1:04 AM, Suzuki K Poulose wrote:
-> On 23/03/2023 06:04, Tao Zhang wrote:
->> Add the nodes to set value for DSB edge control and DSB edge
->> control mask. Each DSB subunit TPDM has maximum of n(n<16) EDCR
->> resgisters to configure edge control. DSB edge detection control
->> 00: Rising edge detection
->> 01: Falling edge detection
->> 10: Rising and falling edge detection (toggle detection) > And each 
->> DSB subunit TPDM has maximum of m(m<8) ECDMR registers to
->> configure mask. Eight 32 bit registers providing DSB interface
->> edge detection mask control.
->>
->> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->> ---
->>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   |  26 ++++
->>   drivers/hwtracing/coresight/coresight-tpdm.c       | 142 
->> ++++++++++++++++++++-
->>   drivers/hwtracing/coresight/coresight-tpdm.h       |  14 ++
->>   3 files changed, 181 insertions(+), 1 deletion(-)
->>
->> diff --git 
->> a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm 
->> b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->> index f13e282..094d624 100644
->> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->> @@ -45,3 +45,29 @@ Description:
->>           tpdm.
->>             Accepts the value needs to be greater than 0.
->> +
->> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl
->> +Date:        March 2023
->> +KernelVersion    6.3
->> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang 
->> (QUIC) <quic_taozha@quicinc.com>
->> +Description:
->> +        (Write) Set the edge control of DSB tpdm. Read the
->> +        edge control of DSB tpdm.
->
-> Could we not say :
->     Read / Write a set of the edge control registers of the DSB in
->         TPDM
-I will update this in the next patch series.
->> +
->> +        Accepts the following three values.
->
-> This is a bit confusing, at least to me. This could either mean,
-> a single write of values 1-3 are accepted.
-
-Got it. The following three values are required.
-
->> +        value 1: Start EDCR register number
->> +        value 2: End EDCR register number
->> +        value 3: The value need to be written
->
-> But you really mean to say, the writes must be of the following format
->     <integer1> <integer2> <integer3>
->
-> where :
->         <integer1> : Start EDCR ...
->         ....
->
-I will update this in the next patch series.
->> +
->> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl_mask
->> +Date:        March 2023
->> +KernelVersion    6.3
->> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang 
->> (QUIC) <quic_taozha@quicinc.com>
->> +Description:
->> +        (Write) Set the edge control mask of DSB tpdm. Read
->> +        the edge control mask of DSB tpdm.
->> +
->> +        Accepts the following three values.
->> +        value 1: Start EDCMR register number
->> +        value 2: End EDCMR register number
->> +        value 3: The value need to be written
->
-> Similarly here.
-I will update this in the next patch series.
->
->> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
->> b/drivers/hwtracing/coresight/coresight-tpdm.c
->> index 8cd822f..2a0b36c 100644
->> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
->> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
->> @@ -88,7 +88,14 @@ static void set_trigger_type(struct tpdm_drvdata 
->> *drvdata, u32 *val)
->>     static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
->>   {
->> -    u32 val;
->> +    u32 val, i;
->> +
->> +    for (i = 0; i < TPDM_DSB_MAX_EDCR; i++)
->> +        writel_relaxed(drvdata->dsb->edge_ctrl[i],
->> +               drvdata->base + TPDM_DSB_EDCR(i));
->> +    for (i = 0; i < TPDM_DSB_MAX_EDCMR; i++)
->> +        writel_relaxed(drvdata->dsb->edge_ctrl_mask[i],
->> +               drvdata->base + TPDM_DSB_EDCMR(i));
->>         val = readl_relaxed(drvdata->base + TPDM_DSB_TIER);
->>       /* Set trigger timestamp */
->> @@ -311,6 +318,137 @@ static ssize_t dsb_mode_store(struct device *dev,
->>   }
->>   static DEVICE_ATTR_RW(dsb_mode);
->>   +static ssize_t dsb_edge_ctrl_show(struct device *dev,
->> +                       struct device_attribute *attr,
->> +                       char *buf)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +    ssize_t size = 0;
->> +    int i;
->> +
->> +    spin_lock(&drvdata->spinlock);
->> +    for (i = 0; i < TPDM_DSB_MAX_EDCR; i++) {
->> +        size += sysfs_emit_at(buf, size,
->> +                  "Index:0x%x Val:0x%x\n", i,
->> +                  drvdata->dsb->edge_ctrl[i]);
->> +    }
->> +    spin_unlock(&drvdata->spinlock);
->> +    return size;
->> +}
->> +
->> +/*
->> + * value 1: Start EDCR register number
->> + * value 2: End EDCR register number
->> + * value 3: The value need to be written
->> + * The EDCR registers can include up to 16 32-bit registers, and each
->> + * one can be configured to control up to 16 edge detections(2 bits
->> + * control one edge detection). So a total 256 edge detections can be
->> + * configured. So the starting number(value 1) and ending 
->> number(value 2)
->> + * cannot be greater than 256, and value 1 should be less than value 2.
->> + * The following values are the rage of value 3.
->> + * 0 - Rising edge detection
->> + * 1 - Falling edge detection
->> + * 2 - Rising and falling edge detection (toggle detection)
->> + */
->> +static ssize_t dsb_edge_ctrl_store(struct device *dev,
->> +                    struct device_attribute *attr,
->> +                    const char *buf,
->> +                    size_t size)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +    unsigned long start, end, edge_ctrl;
->> +    uint32_t val;
->> +    int i, index, bit, reg;
->> +
->> +    if (sscanf(buf, "%lx %lx %lx", &start, &end, &edge_ctrl) != 3)
->> +        return -EINVAL;
->> +    if ((start >= TPDM_DSB_MAX_LINES) || (end >= TPDM_DSB_MAX_LINES) ||
->> +        edge_ctrl > 0x2)
->> +        return -EPERM;
->
->     Isn't it an error to provide start > end ?
-I will add this check in the next patch series.
->
->> +
->> +    spin_lock(&drvdata->spinlock);
->> +    for (i = start; i <= end; i++) {
->> +        /*
->> +         * The 32-bit register has 32 bits(NUM_OF_BITS).
->> +         * Each one register can be configured to control 16
->> +         * (NUM_OF_BITS / 2) edge detectioins.
->> +         */
->
->         /*
->          * Each DSB Edge control line requires 2bits.
->          * Thus we have 16 lines in a 32bit word.
->          */
->
-> Could we please define something like:
->
-> #define EDCRS_PER_WORD            16
-> #define EDCR_TO_WORD_IDX(r)        ((r) / EDCRS_PER_WORD)
-> #define EDCR_TO_WORD_SHIFT(r)        ((r) % EDCRS_PER_WORD)
-> #define EDCR_TO_WORD_MASK(r)        (0x3 << EDCR_TO_WORD_SHIFT((r)))
->
-Sure, I will update this in the next patch series.
->> +        reg = i / (NUM_OF_BITS / 2);
->> +        index = i % (NUM_OF_BITS / 2);
->> +        bit = index * 2;
->> +
->
->     reg = EDCR_TO_WORD_IDX(i);
->     mask = EDCR_TO_WORD_MASK(i);
->
->     val &= ~mask;
->     val |= FIELD_PREP(mask, edge_ctrl);
-Got it.
->
->> +        val = drvdata->dsb->edge_ctrl[reg];
->> +        val &= ~GENMASK((bit + 1), bit);
->> +        val |= (edge_ctrl << bit);
->
->
->> + drvdata->dsb->edge_ctrl[reg] = val;
->> +    }
->> +    spin_unlock(&drvdata->spinlock);
->> +
->> +    return size;
->> +}
->> +static DEVICE_ATTR_RW(dsb_edge_ctrl);
->> +
->> +static ssize_t dsb_edge_ctrl_mask_show(struct device *dev,
->> +                        struct device_attribute *attr,
->> +                        char *buf)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +    ssize_t size = 0;
->> +    int i;
->> +
->> +    spin_lock(&drvdata->spinlock);
->> +    for (i = 0; i < TPDM_DSB_MAX_EDCR / 2; i++) {
->
-> Why is this not `i < TPDM_DSB_MAX_EDCMR` ?
-I will update this in the next patch series.
->
->> +        size += sysfs_emit_at(buf, size,
->> +                  "Index:0x%x Val:0x%x\n", i,
->> +                  drvdata->dsb->edge_ctrl_mask[i]);
->> +    }
->> +    spin_unlock(&drvdata->spinlock);
->> +    return size;
->> +}
->> +
->> +/*
->> + * value 1: Start EDCMR register number
->> + * value 2: End EDCMR register number
->> + * value 3: The value need to be written
->> + */
->> +static ssize_t dsb_edge_ctrl_mask_store(struct device *dev,
->> +                         struct device_attribute *attr,
->> +                         const char *buf,
->> +                         size_t size)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +    unsigned long start, end, val;
->> +    u32 set;
->> +    int i, index, reg;
->> +
->> +    if (sscanf(buf, "%lx %lx %lx", &start, &end, &val) != 3)
->> +        return -EINVAL;
->> +    if ((start >= TPDM_DSB_MAX_LINES) || (end >= TPDM_DSB_MAX_LINES)
->> +        || (val & ~1UL))
->> +        return -EPERM;
->> +
->> +    spin_lock(&drvdata->spinlock);
->> +    for (i = start; i <= end; i++) {
->> +        /*
->> +         * The 32-bit register has 32 bits(NUM_OF_BITS).
->> +         * Each one register can be configured to control 32
->> +         * (NUM_OF_BITS) edge detectioin masks.
->
-> minor nit: detection.
->
-> You could simply say:
->         /*
->          * There is 1 bit per DSB Edge Control line.
->          * Thus we have 32 lines in a 32bit word.
->          */
->          reg = i / 32;
-I will update this in the next patch series.
->
->> +        reg = i / NUM_OF_BITS;
->> +        index = (i % NUM_OF_BITS);
->> +
->> +        set = drvdata->dsb->edge_ctrl_mask[reg];
->> +        if (val)
->> +            set |= BIT(index);
->> +        else
->> +            set &= ~BIT(index);
->> +        drvdata->dsb->edge_ctrl_mask[reg] = set;
->> +    }
->> +    spin_unlock(&drvdata->spinlock);
->> +    return size;
->> +}
->> +static DEVICE_ATTR_RW(dsb_edge_ctrl_mask);
->> +
->>   static ssize_t dsb_trig_type_show(struct device *dev,
->>                        struct device_attribute *attr,
->>                        char *buf)
->> @@ -383,6 +521,8 @@ static DEVICE_ATTR_RW(dsb_trig_ts);
->>     static struct attribute *tpdm_dsb_attrs[] = {
->>       &dev_attr_dsb_mode.attr,
->> +    &dev_attr_dsb_edge_ctrl.attr,
->> +    &dev_attr_dsb_edge_ctrl_mask.attr,
->>       &dev_attr_dsb_trig_ts.attr,
->>       &dev_attr_dsb_trig_type.attr,
->>       NULL,
->> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h 
->> b/drivers/hwtracing/coresight/coresight-tpdm.h
->> index 8fee562..342ef23 100644
->> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
->> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
->> @@ -12,6 +12,8 @@
->>   /* DSB Subunit Registers */
->>   #define TPDM_DSB_CR        (0x780)
->>   #define TPDM_DSB_TIER        (0x784)
->> +#define TPDM_DSB_EDCR(n)    (0x808 + (n * 4))
->> +#define TPDM_DSB_EDCMR(n)    (0x848 + (n * 4))
->>     /* Enable bit for DSB subunit */
->>   #define TPDM_DSB_CR_ENA        BIT(0)
->> @@ -31,6 +33,8 @@
->>   #define TPDM_DSB_TEST_MODE        GENMASK(11, 9)
->>   #define TPDM_DSB_HPSEL        GENMASK(6, 2)
->>   +#define NUM_OF_BITS        32
->
-> Please don't use such generic names. Instead define TPDM specific
-> helper definitions. See above.
->
-I will update this in the next patch series.
 
 
-Tao
+On 26/03/2023 19:52, Alex Elder wrote:
+> In gsi_trans_pool_init_dma(), the total size of a pool of memory
+> used for DMA transactions is calculated.  However the calculation is
+> done incorrectly.
+> 
+> For 4KB pages, this total size is currently always more than one
+> page, and as a result, the calculation produces a positive (though
+> incorrect) total size.  The code still works in this case; we just
+> end up with fewer DMA pool entries than we intended.
+> 
+> Bjorn Andersson tested booting a kernel with 16KB pages, and hit a
+> null pointer derereference in sg_alloc_append_table_from_pages(),
+> descending from gsi_trans_pool_init_dma().  The cause of this was
+> that a 16KB total size was going to be allocated, and with 16KB
+> pages the order of that allocation is 0.  The total_size calculation
+> yielded 0, which eventually led to the crash.
+> 
+> Correcting the total_size calculation fixes the problem.
+> 
+> Reported-by: <quic_bjorande@quicinc.com>
+> Tested-by: <quic_bjorande@quicinc.com>
+> Fixes: 9dd441e4ed57 ("soc: qcom: ipa: GSI transactions")
+> Signed-off-by: Alex Elder <elder@linaro.org>
+> ---
+>  drivers/net/ipa/gsi_trans.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
+> index 0f52c068c46d6..ee6fb00b71eb6 100644
+> --- a/drivers/net/ipa/gsi_trans.c
+> +++ b/drivers/net/ipa/gsi_trans.c
+> @@ -156,7 +156,7 @@ int gsi_trans_pool_init_dma(struct device *dev, struct gsi_trans_pool *pool,
+>  	 * gsi_trans_pool_exit_dma() can assume the total allocated
+>  	 * size is exactly (count * size).
+>  	 */
+> -	total_size = get_order(total_size) << PAGE_SHIFT;
+> +	total_size = PAGE_SIZE << get_order(total_size);
+>  
+>  	virt = dma_alloc_coherent(dev, total_size, &addr, GFP_KERNEL);
+>  	if (!virt)
 
->
-> Suzuki
->
->
->> +
->>   /* TPDM integration test registers */
->>   #define TPDM_ITATBCNTRL        (0xEF0)
->>   #define TPDM_ITCNTRL        (0xF00)
->> @@ -57,14 +61,24 @@
->>   #define TPDM_PIDR0_DS_IMPDEF    BIT(0)
->>   #define TPDM_PIDR0_DS_DSB    BIT(1)
->>   +#define TPDM_DSB_MAX_LINES    256
->> +/* MAX number of EDCR registers */
->> +#define TPDM_DSB_MAX_EDCR    16 > +/* MAX number of EDCMR registers */
->> +#define TPDM_DSB_MAX_EDCMR    8
->> +
->>   /**
->>    * struct dsb_dataset - specifics associated to dsb dataset
->>    * @mode:             DSB programming mode
->> + * @edge_ctrl:        Save value for edge control
->> + * @edge_ctrl_mask:   Save value for edge control mask
->>    * @trig_ts:          Enable/Disable trigger timestamp.
->>    * @trig_type:        Enable/Disable trigger type.
->>    */
->>   struct dsb_dataset {
->>       u32                mode;
->> +    u32                edge_ctrl[TPDM_DSB_MAX_EDCR];
->> +    u32                edge_ctrl_mask[TPDM_DSB_MAX_EDCMR];
->>       bool            trig_ts;
->>       bool            trig_type;
->>   };
->
+Thanks,
+Reviewed-by: Mark Bloch <mbloch@nvidia.com>
