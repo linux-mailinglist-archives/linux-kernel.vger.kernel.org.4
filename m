@@ -2,78 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985086CA07F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75AD6CA081
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbjC0Jvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
+        id S232753AbjC0Jvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbjC0Jvl (ORCPT
+        with ESMTP id S232604AbjC0Jvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:51:41 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68701272C
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:51:40 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id k2so7872231pll.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:51:40 -0700 (PDT)
+        Mon, 27 Mar 2023 05:51:42 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FB44206
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:51:41 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id m6-20020a05600c3b0600b003ee6e324b19so4806747wms.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:51:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679910700;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RwVHUErF6NBSyCtvSa/omuwEN4SL1/DY9fX2CVuT0Nw=;
-        b=oDfAm4pEY67NP4M9cZcT/HBEDRoggyD4pTTB3OdeogAR0MYqUItOgSVqA4qry+p7Y2
-         Maw3WkuU29O27qg1MA8hjBP4FLx5rqIuKahSFa2cSYCFAlDskSGh30XQx+2NjzY26Ejz
-         +q3cQB0tuifvO0meeaa6Pp+r2YiQRUKKwcfOnJV0Zm0hTi53g+CvAPhapNv92uoAn1ZS
-         P1mezE7aYTmlvbYW6CoR92vozjaVvVL/bCDN0v78zCBRYg9x1KChJtKVSb6XZJnqp/Rv
-         syVZ7ddN/UAw9ZjNExJWsphfo/FvBZB7nv8ZITfvW5wNuqbM7A8msW/94ZIkVb15xzgb
-         4EeQ==
+        d=linaro.org; s=google; t=1679910699;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=dw1LG5rTwzXDNL719AXv6z2juGi0Us5LowRhvnwewB0=;
+        b=kBrMSQqq20FQ8JmCbP6Cyj+53eKtSRwcXx7Etlok1GpZOMIY3IE58Une9sS2qzEa9j
+         O4ZwXFGVniMDt35DmuHTKZmLrcUpyD0eUHCCROsY7Nn15E8kQ4KwojUMpDZ89JLiW62z
+         o/s7mG/7JnnOdQfuu30EIv/op/KuXdOAvOt8T1PgEGE0P+QlOUbOCuq9GCGkNKVQ6OdI
+         qyiSyu43O0lIoF5EjkzFUx5YpYPyvCjS+6ERcVBSdxMR0T00t9TRdLqc9WpGO83Y11/y
+         EPH6eNpfDBaQcQDAH5vcoBxe61L9237RHoBOMT5lkbT54ZcrFkFuhC2EERYHPqcRsHir
+         Dubw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679910700;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RwVHUErF6NBSyCtvSa/omuwEN4SL1/DY9fX2CVuT0Nw=;
-        b=UObzbNpsSKXpaaZ4zDFC9jNZBxrUYYTlG8esZdW4DhUWYt584/UoWMR2aOLsu52BkD
-         EC0JZULib9/nJ1IjHEVUBgF9RKIMFWPwGZZhmKoie4ExyG0IC8rt86mjHY4SNPrEFZ0I
-         nRm0BmrXMAidFbkFlrn1GYYFHJUusxF5ZbM3t6e2aUemLTb0NEWhvnZfK600LI/f2Wq+
-         kOLe6orujEaslwkVzV1ebDkLu0BG7xqYck34wfpef2KMQorH99dC26KUPQwhzCwGxumm
-         FXKw1shyTl8wAG4WZLH1hFhsOLK3wlusout8FIyT52wFyHEvfK1vC2d8Mu+KN51fsAzt
-         5mAw==
-X-Gm-Message-State: AAQBX9fslI45yZ552UiRqm7qJYK0+bpLYyU0x7RxXEDRzimnG0YP33PE
-        XGAkkdvwstYiDztx/OjdYJA=
-X-Google-Smtp-Source: AKy350YXGIXyJID7gUD4IjW8G4q44qArdiHnyamBHZ+Gownt1/tzz2XxWktxSWtByoVC6jx/s+2kXA==
-X-Received: by 2002:a17:903:1c7:b0:19d:323:e68 with SMTP id e7-20020a17090301c700b0019d03230e68mr13783654plh.1.1679910699879;
+        d=1e100.net; s=20210112; t=1679910699;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dw1LG5rTwzXDNL719AXv6z2juGi0Us5LowRhvnwewB0=;
+        b=Ro7TBmKMwOJ/S4nY6LIP+Zt/9GEnMKaYeLrvOfGSo6Ks/T60YUKomt6VOIvw0vRe0q
+         p0oNiY46rMI1okAJFM4fiWck9D6U4e6M2/7vOp4Dk7oyI/8FY4mbjxx18TcLEVB1DJll
+         SrNNFbpuDIA7iu6B5x6hxMXuib5qMhEUWa5FGWjXPidwrHPdb5AFYcsQ2uzInW1S7dDs
+         GjEyUb+6O4ZMo/3x5j2RoWXhOHsTn4azbJ8km6JL+dj8u2gAT75K6Q7xI69kyR/qxtip
+         neAwzeA8AFgktla51cXoEZ+Hq4ESwT8XgDc37p12BRmh64XUhzk2MgDsB2PI5831rMsW
+         EVcg==
+X-Gm-Message-State: AO0yUKWgFuJJFZZJqVqJDCjAn7AmmUsl4uhp6SnHalBv+ZKKQZlsX5Oa
+        CgDs27LwcEqnolNCUE8EWKf1WQ==
+X-Google-Smtp-Source: AK7set9PTgYDLsWSJMNeDj7o6fKvEl3jbnzCS+KtCELb+XLUymSkPmbCAVdFg+d634ftJfVGiIgmFw==
+X-Received: by 2002:a7b:c008:0:b0:3eb:f59f:6daf with SMTP id c8-20020a7bc008000000b003ebf59f6dafmr8835221wmb.34.1679910699586;
         Mon, 27 Mar 2023 02:51:39 -0700 (PDT)
-Received: from localhost ([203.221.180.225])
-        by smtp.gmail.com with ESMTPSA id t7-20020a170902a5c700b001a207906418sm7470582plq.23.2023.03.27.02.51.36
+Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id r12-20020a05600c458c00b003ee1acdaf95sm8327789wmo.36.2023.03.27.02.51.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Mon, 27 Mar 2023 02:51:39 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 27 Mar 2023 19:51:34 +1000
-Message-Id: <CRH2N2UNMLQW.1W51OVV9ZES7L@bobo>
-To:     "Kautuk Consul" <kconsul@linux.vnet.ibm.com>
-Cc:     "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Fabiano Rosas" <farosas@linux.ibm.com>,
-        "Sathvika Vasireddy" <sv@linux.ibm.com>,
-        "Alexey Kardashevskiy" <aik@ozlabs.ru>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/2] arch/powerpc/kvm: kvmppc_hv_entry: remove
- .global scope
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-X-Mailer: aerc 0.13.0
-References: <20230316051025.1424093-1-kconsul@linux.vnet.ibm.com>
- <20230316051025.1424093-2-kconsul@linux.vnet.ibm.com>
- <CRH1YM72SK4L.QU56WGVQQ2GE@bobo>
- <ZCFhnNPrMr3D5+rZ@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <ZCFjJ1sMuLMUkBWc@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-In-Reply-To: <ZCFjJ1sMuLMUkBWc@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+Message-ID: <9fb414cc-fa4d-417e-7cad-111921595ef6@linaro.org>
+Date:   Mon, 27 Mar 2023 11:51:38 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] drm/bridge: it6505: Add range and selector_reg
+Content-Language: en-US
+To:     Hsin-Yi Wang <hsinyi@chromium.org>, Robert Foss <rfoss@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kenneth.hung@ite.corp-partner.google.com,
+        xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
+References: <20230327044804.3657551-1-hsinyi@chromium.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230327044804.3657551-1-hsinyi@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,61 +86,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon Mar 27, 2023 at 7:34 PM AEST, Kautuk Consul wrote:
-> On 2023-03-27 14:58:03, Kautuk Consul wrote:
-> > On 2023-03-27 19:19:37, Nicholas Piggin wrote:
-> > > On Thu Mar 16, 2023 at 3:10 PM AEST, Kautuk Consul wrote:
-> > > > kvmppc_hv_entry isn't called from anywhere other than
-> > > > book3s_hv_rmhandlers.S itself. Removing .global scope for
-> > > > this function and annotating it with SYM_INNER_LABEL.
-> > > >
-> > > > Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
-> > > > ---
-> > > >  arch/powerpc/kvm/book3s_hv_rmhandlers.S | 3 +--
-> > > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc=
-/kvm/book3s_hv_rmhandlers.S
-> > > > index acf80915f406..b81ba4ee0521 100644
-> > > > --- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-> > > > +++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-> > > > @@ -502,8 +502,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
-> > > >   *                                                                =
-            *
-> > > >   *****************************************************************=
-************/
-> > > > =20
-> > > > -.global kvmppc_hv_entry
-> > >=20
-> > > I think this is okay.
-> > >=20
-> > > > -kvmppc_hv_entry:
-> > > > +SYM_INNER_LABEL(kvmppc_hv_entry, SYM_L_LOCAL)
-> > >=20
-> > > The documentation for SYM_INNER_LABEL says it for labels inside a SYM
-> > > function block, is that a problem? This is a function but doesn't hav=
-e
-> > > C calling convention, so asm annotation docs say that it should use
-> > > SYM_CODE_START_LOCAL?
-> > That is correct. Will create a v4 patch for this and send it.
-> But using SYM_CODE_START_LOCAL again causes a warning in the build
-> (which we were trying to avoid):
-> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x48: un=
-annotated intra-function call
+On 27/03/2023 06:48, Hsin-Yi Wang wrote:
+> There are 2 banks on it6505, and when writing to different bank,
+> REG_BANK_SEL needs to be set to the targeted bank. The current code set
+> this additionally, which causes a race condition when a process is
+> writing bank 0 registers while another process set the bank to 1. Set
+> ranges in regmap config so the regmap API would handle the bank changes.
+> 
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
 
-Are you using SYM_FUNC_END as well? Looks like you need that to
-annotate the type properly. It should be the same as SYM_INNER_LABEL
-in the end AFAIKS.
+It's aligned on how we did on it66121
 
-> > >=20
-> > > BTW. why don't our _GLOBAL() macros use these SYM annotations? I have=
-n't
-> > > really looked into them.
-> > Not sure. Was mostly just concentrating on the kvmppc_hv_entry code.
 
-Looks like it's because we have a .type @function annotation in those
-already. Not sure if we should end up converting all that over to use
-the SYM annotations or if it's okay to leave it as is.
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-Thanks,
-Nick
+> ---
+>   drivers/gpu/drm/bridge/ite-it6505.c | 34 +++++++++++++++++++----------
+>   1 file changed, 23 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
+> index bc451b2a77c28..abaf6e23775eb 100644
+> --- a/drivers/gpu/drm/bridge/ite-it6505.c
+> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
+> @@ -258,12 +258,12 @@
+>   #define REG_AUD_INFOFRAM_SUM 0xFB
+>   
+>   /* the following six registers are in bank1 */
+> -#define REG_DRV_0_DB_800_MV 0x7E
+> -#define REG_PRE_0_DB_800_MV 0x7F
+> -#define REG_PRE_3P5_DB_800_MV 0x81
+> -#define REG_SSC_CTRL0 0x88
+> -#define REG_SSC_CTRL1 0x89
+> -#define REG_SSC_CTRL2 0x8A
+> +#define REG_DRV_0_DB_800_MV 0x17E
+> +#define REG_PRE_0_DB_800_MV 0x17F
+> +#define REG_PRE_3P5_DB_800_MV 0x181
+> +#define REG_SSC_CTRL0 0x188
+> +#define REG_SSC_CTRL1 0x189
+> +#define REG_SSC_CTRL2 0x18A
+>   
+>   #define RBR DP_LINK_BW_1_62
+>   #define HBR DP_LINK_BW_2_7
+> @@ -489,7 +489,7 @@ static const struct it6505_audio_sample_rate_map audio_sample_rate_map[] = {
+>   };
+>   
+>   static const struct regmap_range it6505_bridge_volatile_ranges[] = {
+> -	{ .range_min = 0, .range_max = 0xFF },
+> +	{ .range_min = 0, .range_max = 0x1FF },
+>   };
+>   
+>   static const struct regmap_access_table it6505_bridge_volatile_table = {
+> @@ -497,11 +497,27 @@ static const struct regmap_access_table it6505_bridge_volatile_table = {
+>   	.n_yes_ranges = ARRAY_SIZE(it6505_bridge_volatile_ranges),
+>   };
+>   
+> +static const struct regmap_range_cfg it6505_regmap_banks[] = {
+> +	{
+> +		.name = "it6505",
+> +		.range_min = 0x00,
+> +		.range_max = 0x1FF,
+> +		.selector_reg = REG_BANK_SEL,
+> +		.selector_mask = 0x1,
+> +		.selector_shift = 0,
+> +		.window_start = 0x00,
+> +		.window_len = 0x100,
+> +	},
+> +};
+> +
+>   static const struct regmap_config it6505_regmap_config = {
+>   	.reg_bits = 8,
+>   	.val_bits = 8,
+>   	.volatile_table = &it6505_bridge_volatile_table,
+>   	.cache_type = REGCACHE_NONE,
+> +	.ranges = it6505_regmap_banks,
+> +	.num_ranges = ARRAY_SIZE(it6505_regmap_banks),
+> +	.max_register = 0x1FF,
+>   };
+>   
+>   static int it6505_read(struct it6505 *it6505, unsigned int reg_addr)
+> @@ -1267,7 +1283,6 @@ static void it6505_init(struct it6505 *it6505)
+>   	it6505_write(it6505, REG_TIME_STMP_CTRL,
+>   		     EN_SSC_GAT | EN_ENHANCE_VID_STMP | EN_ENHANCE_AUD_STMP);
+>   	it6505_write(it6505, REG_INFOFRAME_CTRL, 0x00);
+> -	it6505_write(it6505, REG_BANK_SEL, 0x01);
+>   	it6505_write(it6505, REG_DRV_0_DB_800_MV,
+>   		     afe_setting_table[it6505->afe_setting][0]);
+>   	it6505_write(it6505, REG_PRE_0_DB_800_MV,
+> @@ -1277,7 +1292,6 @@ static void it6505_init(struct it6505 *it6505)
+>   	it6505_write(it6505, REG_SSC_CTRL0, 0x9E);
+>   	it6505_write(it6505, REG_SSC_CTRL1, 0x1C);
+>   	it6505_write(it6505, REG_SSC_CTRL2, 0x42);
+> -	it6505_write(it6505, REG_BANK_SEL, 0x00);
+>   }
+>   
+>   static void it6505_video_disable(struct it6505 *it6505)
+> @@ -1506,11 +1520,9 @@ static void it6505_setup_ssc(struct it6505 *it6505)
+>   	it6505_set_bits(it6505, REG_TRAIN_CTRL0, SPREAD_AMP_5,
+>   			it6505->enable_ssc ? SPREAD_AMP_5 : 0x00);
+>   	if (it6505->enable_ssc) {
+> -		it6505_write(it6505, REG_BANK_SEL, 0x01);
+>   		it6505_write(it6505, REG_SSC_CTRL0, 0x9E);
+>   		it6505_write(it6505, REG_SSC_CTRL1, 0x1C);
+>   		it6505_write(it6505, REG_SSC_CTRL2, 0x42);
+> -		it6505_write(it6505, REG_BANK_SEL, 0x00);
+>   		it6505_write(it6505, REG_SP_CTRL0, 0x07);
+>   		it6505_write(it6505, REG_IP_CTRL1, 0x29);
+>   		it6505_write(it6505, REG_IP_CTRL2, 0x03);
+
