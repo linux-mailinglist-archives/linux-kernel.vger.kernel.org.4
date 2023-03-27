@@ -2,124 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC0B6CA444
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48446CA44B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbjC0MlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37308 "EHLO
+        id S231968AbjC0MoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjC0MlD (ORCPT
+        with ESMTP id S229577AbjC0MoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:41:03 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0964E9B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:41:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AE2D821A9F;
-        Mon, 27 Mar 2023 12:41:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679920860; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 27 Mar 2023 08:44:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993A43583
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679921013;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Wm7sbcWSD2yiNeln6cRgOiH3J+C/JXbDg+4BGV1aKg4=;
-        b=dxlpuYwwBnlJDYXkxL642L6oZ5IIA34dfrJgowMeuqPiyqS77/3YXtYOv+xkAklyGp9yeE
-        Ef3g+byC6bbFpE71r3ND6J0mSXtSsPmhsfaPy3Rrz/a4O4OoE5IoxzRKZSkT84JWg1IdLc
-        TC2wMsLKdV5QcEhOie8L+tT/ssLWGsM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679920860;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wm7sbcWSD2yiNeln6cRgOiH3J+C/JXbDg+4BGV1aKg4=;
-        b=i7FtOIoDqVbdb3Y22Thn2JIvVIWpPwMKzUWmCGiRwRk7PVUVFx0jE1qcJWgcno4N5IXQT4
-        OO27IZuSaVOjaBDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9844113329;
-        Mon, 27 Mar 2023 12:41:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ifWYJNyOIWR1VAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 27 Mar 2023 12:41:00 +0000
-Message-ID: <022e1c15-7988-9975-acbc-e661e989ca4a@suse.cz>
-Date:   Mon, 27 Mar 2023 14:41:00 +0200
+        bh=okew6DGjoVJwf2XramfWu6hiLwNPjgMAsie77LgA37k=;
+        b=G8phJLBKC2DZq9v/hM8HFFkXodiEz4v9bWzTJ/ftNjFKmvXN2qPElUWpIFyQ0MrptenbON
+        qFO7xarvxVLEJ2lNvkogPkm1OQFGRLQNJzHkEeR7w3GzoCORnL8Iz4QkhVdzSbTBUzG++B
+        hafhTDD+rQQ1B6yAXtLOYjYjj5LC6s0=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-655-I3xFbgGEOk6GEH1XNHi1ZA-1; Mon, 27 Mar 2023 08:43:32 -0400
+X-MC-Unique: I3xFbgGEOk6GEH1XNHi1ZA-1
+Received: by mail-wr1-f71.google.com with SMTP id s28-20020adfa29c000000b002d92bb99383so743407wra.23
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:43:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679921011;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=okew6DGjoVJwf2XramfWu6hiLwNPjgMAsie77LgA37k=;
+        b=LLMwSslAfkJb3QPpD+1BtENEQ7sVw279EWdlegdE9ERJCAnftP0MTnXXH5aYb6w/F4
+         8/HetcEVK4n7WJtH/XkOZkUHI+Ph5bqbXU7hRmogpx0vPjcHWGQhl2/RPlihrwe85EDD
+         wP1+m5ZeIFOCLaEGPVTgFiGyCZIE1Tcei78rbVqK7YWbqaO1H9dJ/ebv37kYQPKl9IOj
+         rj4mG5QfIr2kmzV0gJbykWnTA2qJSuS62XFh7Qle2183qAV4lJivc2U1V57dIAuhQNWe
+         X6lHC0/6Wko+c8UTi+LQ0N/AES5MQLQNGJVbAaC8LkzS5LC6QvIChUGOICcADkkoyQLA
+         WtBQ==
+X-Gm-Message-State: AAQBX9dUtQURp/DWBfuSwdPi3crdpFJQGTBix/Ay7N7q16m+5u5+PxPG
+        ZgH78YULlZGz33kSw1fvywjBRgx2D8fJlkmaRMFVzyKRJ9cx2ZuUeapH6wWZloLgPKKBEcZM53N
+        eCVMdQ8lyY36d3Nd3NU4vwgkE
+X-Received: by 2002:a7b:c045:0:b0:3ef:6fee:8057 with SMTP id u5-20020a7bc045000000b003ef6fee8057mr1516951wmc.25.1679921011575;
+        Mon, 27 Mar 2023 05:43:31 -0700 (PDT)
+X-Google-Smtp-Source: AKy350b8/SyqswJ4jRTerw8oSEMPhEZEW1SwIMQQ5198eUS5XRuV+yjc/mQikzsTZrLWNyeSaRuqQQ==
+X-Received: by 2002:a7b:c045:0:b0:3ef:6fee:8057 with SMTP id u5-20020a7bc045000000b003ef6fee8057mr1516940wmc.25.1679921011227;
+        Mon, 27 Mar 2023 05:43:31 -0700 (PDT)
+Received: from redhat.com ([2.52.153.142])
+        by smtp.gmail.com with ESMTPSA id s11-20020a05600c384b00b003edf2ae2432sm8703889wmr.7.2023.03.27.05.43.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 05:43:30 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 08:43:27 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Albert Huang <huangjie.albert@bytedance.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] virtio_ring: don't update event idx on get_buf
+Message-ID: <20230327084248-mutt-send-email-mst@kernel.org>
+References: <20230325105633.58592-1-huangjie.albert@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: What size anonymous folios should we allocate?
-To:     Matthew Wilcox <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Ryan Roberts <ryan.roberts@arm.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <Y/U8bQd15aUO97vS@casper.infradead.org>
- <CAHbLzkrkZmbVMkh-Y-bDxgy0T0ZRRd+T+o5y5-wKmjKmhN0NmA@mail.gmail.com>
- <Y/WRlX+MkmxelNbg@casper.infradead.org>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Y/WRlX+MkmxelNbg@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230325105633.58592-1-huangjie.albert@bytedance.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/23 04:52, Matthew Wilcox wrote:
-> On Tue, Feb 21, 2023 at 03:05:33PM -0800, Yang Shi wrote:
-> 
->> > C. We add a new wrinkle to the LRU handling code.  When our scan of the
->> >    active list examines a folio, we look to see how many of the PTEs
->> >    mapping the folio have been accessed.  If it is fewer than half, and
->> >    those half are all in either the first or last half of the folio, we
->> >    split it.  The active half stays on the active list and the inactive
->> >    half is moved to the inactive list.
->> 
->> With contiguous PTE, every PTE still maintains its own access bit (but
->> it is implementation defined, some implementations may just set access
->> bit once for one PTE in the contiguous region per arm arm IIUC). But
->> anyway this is definitely feasible.
-> 
-> If a CPU doesn't have separate access bits for PTEs, then we should just
-> not use the contiguous bits.  Knowing which parts of the folio are
-> unused is more important than using the larger TLB entries.
+is the below same as what I posted or different? how?
 
-Hm but AFAIK the AMD aggregation is transparent, there are no bits. And IIUC
-the "Hardware Page Aggregation (HPA)" Ryan was talking about elsewhere in
-the thread, that sounds similar. So I IIUC there will be a larger TLB entry
-transparently, and then I don't expect the CPU to update individual bits as
-that would defeat the purpose. So I'd expect it will either set them all to
-active when forming the larger TLB entry, or set them on a single subpage
-and leave the rest at whatever state they were. Hm I wonder if the exact
-behavior is defined anywhere.
+On Sat, Mar 25, 2023 at 06:56:33PM +0800, Albert Huang wrote:
+> in virtio_net, if we disable the napi_tx, when we triger a tx interrupt,
+> the vq->event_triggered will be set to true. It will no longer be set to
+> false. Unless we explicitly call virtqueue_enable_cb_delayed or
+> virtqueue_enable_cb_prepare.
+> 
+> If we disable the napi_tx, it will only be called when the tx ring
+> buffer is relatively small.
+> 
+> Because event_triggered is true. Therefore, VRING_AVAIL_F_NO_INTERRUPT or
+> VRING_PACKED_EVENT_FLAG_DISABLE will not be set. So we update
+> vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
+> every time we call virtqueue_get_buf_ctx. This will bring more interruptions.
+> 
+> To summarize:
+> 1) event_triggered was set to true in vring_interrupt()
+> 2) after this nothing will happen for virtqueue_disable_cb() so
+>    VRING_AVAIL_F_NO_INTERRUPT is not set in avail_flags_shadow
+> 3) virtqueue_get_buf_ctx_split() will still think the cb is enabled
+>    then it tries to publish new event
+> 
+> To fix, if event_triggered is set to true, do not update
+> vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
+> 
+> Tested with iperf:
+> iperf3 tcp stream:
+> vm1 -----------------> vm2
+> vm2 just receives tcp data stream from vm1, and sends the ack to vm1,
+> there are many tx interrupts in vm2.
+> but without event_triggered there are just a few tx interrupts.
+> 
+> Fixes: 8d622d21d248 ("virtio: fix up virtio_disable_cb")
+> Signed-off-by: Albert Huang <huangjie.albert@bytedance.com>
+> Message-Id: <20230321085953.24949-1-huangjie.albert@bytedance.com>
 
->> > For the third case, in contrast, the parent had already established
->> > an appropriate size folio to use for this VMA before calling fork().
->> > Whether it is the parent or the child causing the COW, it should probably
->> > inherit that choice and we should default to the same size folio that
->> > was already found.
->> 
->> Actually this is not what THP does now. The current THP behavior is to
->> split the PMD then fallback to order-0 page fault. For smaller orders,
->> we may consider allocating a large folio.
+what is this exactly?
+
+> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> ---
+>  drivers/virtio/virtio_ring.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> I know it's not what THP does now.  I think that's because the gap
-> between PMD and PAGE size is too large and we end up wasting too much
-> memory.  We also have very crude mechanisms for determining when to
-> use THPs.  With the adaptive mechanism I described above, I think it's
-> time to change that.
-> 
-> 
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index cbeeea1b0439..1c36fa477966 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -914,7 +914,8 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
+>  	/* If we expect an interrupt for the next entry, tell host
+>  	 * by writing event index and flush out the write before
+>  	 * the read in the next get_buf call. */
+> -	if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT))
+> +	if (unlikely(!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT) &&
+> +		     !vq->event_triggered))
+>  		virtio_store_mb(vq->weak_barriers,
+>  				&vring_used_event(&vq->split.vring),
+>  				cpu_to_virtio16(_vq->vdev, vq->last_used_idx));
+> @@ -1744,7 +1745,8 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+>  	 * by writing event index and flush out the write before
+>  	 * the read in the next get_buf call.
+>  	 */
+> -	if (vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC)
+> +	if (unlikely(vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC &&
+> +		     !vq->event_triggered))
+>  		virtio_store_mb(vq->weak_barriers,
+>  				&vq->packed.vring.driver->off_wrap,
+>  				cpu_to_le16(vq->last_used_idx));
+> -- 
+> 2.37.0 (Apple Git-136)
 
