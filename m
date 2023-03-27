@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23C66CB003
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C89306CB006
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231913AbjC0UcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 16:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
+        id S232169AbjC0Ue0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 16:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbjC0UcD (ORCPT
+        with ESMTP id S229744AbjC0UeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 16:32:03 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDA31FD6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:32:01 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3e392e10cc4so802561cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:32:01 -0700 (PDT)
+        Mon, 27 Mar 2023 16:34:23 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC03D19A2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:34:21 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id o12so268140ilh.13
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:34:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679949120;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V8buFQZRwGFYWuvgXw7mTs6dL6p4jwzsNfT9CCqkkZA=;
-        b=XQ+WGNLz3dJeMw66PPqfzOvsE2XAhks+3i8XyV2k43cBtb7EdczGg64gF39vCO6tg2
-         N0FKgvlJSIa6iY9815LbySCwLB93QMseqUMarU4VqpG0EsbOQus3yedenTauDQ1s38Wp
-         osPBUnfiloCadZNqVaxFRRhfEfH19L5/YqknYY3596IPRsCsUDsUXcqtbmKtED59FmKU
-         0GAbtgqVMKFKIky9FuPzBfAJQ/Oiiggsp81ctaCkyOxQFDQ2F79hmGWY39Vba96CqEeu
-         VfTUKp8WPgHDLYljPTftYHtNB7NP90OMrwcxMjkwVs9kvUUY7XkTWfnRSfur01wqwxki
-         0HpA==
+        d=ieee.org; s=google; t=1679949261;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SaePAyDz2w86nDPVu8ko8gEeQEmQvefWooibL8cU7/M=;
+        b=cBRSQ0NboIQu833svXwTdI1bXDAJHNRXztPlTf5B0zEaUumceNVjYyU/POtvqU7tNM
+         WOh6QqDucfo/0SPZueviKzYA2a3oh8OI16MbGkKEWehM8OFZOEkcAWRBoTNF2s4/hGtk
+         7xBpImWCWB/BQrKtV1egRT5K40J1dKhpVtEmM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679949120;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V8buFQZRwGFYWuvgXw7mTs6dL6p4jwzsNfT9CCqkkZA=;
-        b=OFdarC+rVfu0nXYoZIQW6adS9CdAHrWL1qT1fiXJecyvxTGIMtrFeoZjIriRzMI4LE
-         vLWc4yCIN6kazNurWKY9qAvreljle9E3LJVC4eTjOTv91+WSEx/aKYPvVxVbZBZTUjN6
-         +pSYfDMC5rNzlwleSTrOJIjX8OM99Zt58aoliW+3CHNsQ47fxTMz7dZO7RNmCSRMtUhs
-         bKiizwk7u0cDUlQXNky7DnuwWg1BFCcwaKvTJzwdjrnbc0E2cWbBJR/tyyuJc0UZFCpo
-         sxeaQsQKi1waLfzZmCXQk7Fz/RnFPbvot3YI75og/vCL2CHGDLhTsMctUecDv7IbCV9q
-         bNRQ==
-X-Gm-Message-State: AAQBX9c8mthGSLfQadsHL7KAXKhnJfe78qQbdQISe4Xt6m1AHt7o2FTD
-        EC+YoBA77Mxkl6pOo/N98Gfb1MZnPjkd1AbR3O4vVw==
-X-Google-Smtp-Source: AKy350YZO8lsOPSUs+lk54v79nIqLBR/D8f0TspIw1KHdh/9jUq0GjTwwuRjEz1NHyU9Pz7L+CfuNdmxNQPnCoi1kBE=
-X-Received: by 2002:ac8:7fc3:0:b0:3e2:3de:3732 with SMTP id
- b3-20020ac87fc3000000b003e203de3732mr70271qtk.7.1679949119939; Mon, 27 Mar
- 2023 13:31:59 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679949261;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SaePAyDz2w86nDPVu8ko8gEeQEmQvefWooibL8cU7/M=;
+        b=d+df3sFqXF9tp+wG4xiUUBcaUbk/gwrTT2tT0zNY9bTaErGgIeCI/unQ/IgMKobl+Z
+         M8+6Lq5PXPual/rOUInvh2/oG8mwbk3K7MdpKEgJ8lABI05eUHC2ZQPlFS5ewtZkhdO5
+         h4MbsUwJFBPq522k0jv2Nvk+BIVp0Qe7L5ESzQenCpJXMO31nvmKqHR9QZagT7XghTBU
+         vXJKEugGiqARx3BmVWcSBDBr+fXF1WXVmDRNVmTduFp94mYgpRZo1PDrePp0bp3NGq8k
+         xHdn+yKNVOXyk7gIFfKs1uji+1104WidkNG4f/RzeYXlHXRkpweGD2g2e4CcrfXY2xaH
+         0xYw==
+X-Gm-Message-State: AAQBX9c/4zpTog1nL5+yN+gWJ01zEdZTu7q/ThJsJhwCqJxLN+E5X9aV
+        /x//uCXNdx23S/vrSBiMqH35JQ==
+X-Google-Smtp-Source: AKy350ZkYV9vty3O2CTGB8EoQNeAJarHBPdwy546ZGbZ39Z2XXxigHGLg+w0DT/Ndbp5TParI+FLnw==
+X-Received: by 2002:a92:c501:0:b0:317:3f4:c06c with SMTP id r1-20020a92c501000000b0031703f4c06cmr9631918ilg.20.1679949261242;
+        Mon, 27 Mar 2023 13:34:21 -0700 (PDT)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id y16-20020a027310000000b004061d6abcd1sm9125305jab.162.2023.03.27.13.34.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 13:34:20 -0700 (PDT)
+Message-ID: <37dc9fe2-cdc8-ea7b-c7b4-89415c3cda8f@ieee.org>
+Date:   Mon, 27 Mar 2023 15:34:19 -0500
 MIME-Version: 1.0
-References: <20230317095025.49aa34f9@canb.auug.org.au> <20230322083956.5c051777@canb.auug.org.au>
- <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
- <20230323095437.1ecccec1@canb.auug.org.au> <ZBxTyLqkIaoVhIXU@kernel.org>
-In-Reply-To: <ZBxTyLqkIaoVhIXU@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 27 Mar 2023 13:31:48 -0700
-Message-ID: <CAP-5=fXx=xRfmQFk-MbkdO9SYd3ZgCDfUscO2srfAQU0aThk_A@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the perf tree
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        namhyung@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] staging: greybus: refactor arche_platform_wd_irq()
+ function
+Content-Language: en-US
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>,
+        outreachy@lists.linux.dev
+Cc:     Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <ZCH6LV5XU0FBlW7Y@khadija-virtual-machine>
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <ZCH6LV5XU0FBlW7Y@khadija-virtual-machine>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,195 +77,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 6:27=E2=80=AFAM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Thu, Mar 23, 2023 at 09:54:37AM +1100, Stephen Rothwell escreveu:
-> > Hi Ian,
-> >
-> > On Wed, 22 Mar 2023 11:37:31 -0700 Ian Rogers <irogers@google.com> wrot=
-e:
-> > >
-> > > On Tue, Mar 21, 2023 at 2:40=E2=80=AFPM Stephen Rothwell <sfr@canb.au=
-ug.org.au> wrote:
-> > > >
-> > > > Hi all,
-> > > >
-> > > > On Fri, 17 Mar 2023 09:50:25 +1100 Stephen Rothwell <sfr@canb.auug.=
-org.au> wrote:
-> > > > >
-> > > > > After merging the perf tree, today's linux-next build (native per=
-f)
-> > > > > failed like this:
-> > > > >
-> > > > > Auto-detecting system features:
-> > > > > ...                         clang-bpf-co-re: [  [32mon [m  ]
-> > > > > ...                                    llvm: [  [31mOFF [m ]
-> > > > > ...                                  libcap: [  [32mon [m  ]
-> > > > > ...                                  libbfd: [  [32mon [m  ]
-> > > > >
-> > > > > make[1]: *** Deleting file '/home/sfr/next/perf/util/bpf_skel/vml=
-inux.h'
-> > > > > libbpf: failed to find '.BTF' ELF section in /boot/vmlinux-6.0.0-=
-5-powerpc64le
-> > > > > Error: failed to load BTF from /boot/vmlinux-6.0.0-5-powerpc64le:=
- No data available
-> > > > > make[1]: *** [Makefile.perf:1075: /home/sfr/next/perf/util/bpf_sk=
-el/vmlinux.h] Error 195
-> > > > > make[1]: *** Waiting for unfinished jobs....
-> > > > > make: *** [Makefile.perf:236: sub-make] Error 2
-> > > > > Command exited with non-zero status 2
-> > > > >
-> > > > > To be clear this is a native build of perf on a PPC64le host usin=
-g this
-> > > > > command line:
-> > > > >
-> > > > > make -C tools/perf -f Makefile.perf -s -O -j60 O=3D../perf EXTRA_=
-CFLAGS=3D-Wno-psabi
-> > > > >
-> > > > > (I could probably remove the EXTRA_CLFAGS now that I am building =
-with
-> > > > > gcc 12.2)
-> > > > >
-> > > > > I don't know which commit caused this.
-> > > > >
-> > > > > I have used the perf tree from next-20230316 for today.
-> > > >
-> > > > I am still getting this build failure.
->
-> > > The build failure is intentional as not having BPF skeleton support i=
-n
-> > > the perf tool will remove features. I've just sent:
-> > > https://lore.kernel.org/lkml/20230322183108.1380882-1-irogers@google.=
-com/
-> > > Which will recommend adding NO_BPF_SKEL=3D1 to your build options whe=
-n
-> > > this failure occurs. I didn't think a features test was appropriate
-> > > for this as the feature test would basically replicate the vmlinux.h
-> > > generation and I didn't want to move that support through the build
-> > > system.
->
-> > I was trying to understand why this step fails, but from the error
-> > messages, it seems to require something to be present in the distro
-> > supplied kernel image?  Is there something missing from the ppc
-> > build process?  Or toolchain?  Why is it looking at the installed
-> > kernel and not the built kernel?  Does the perf build now depend on the
-> > kernel being built first?
-> >
-> > I will add NO_BPF_SKEL=3D1 to my build from tomorrow, but surely that
-> > means that we miss some perf build testing :-(
->
-> Before this BUILD_BPF_SKEL wasn't on by default, so you're back testing
-> as much as before.
->
-> Having said that, we need to improve the warning and I processed a patch
-> from Ian to that extent:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=
-=3Dtmp.perf-tools-next&id=3D12a83df53444165d39d3e09fcd9627e7bec7828e
->
->  $(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
->  ifeq ($(VMLINUX_H),)
-> -       $(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@
-> +       $(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@ || \
-> +       (echo "Failure to generate vmlinux.h needed for the recommended B=
-PF skeleton support." && \
-> +       echo "To disable this use the build option NO_BPF_SKEL=3D1." && \
-> +       echo "Alternatively point at a pre-generated vmlinux.h with VMLIN=
-UX_H=3D<path>." && \
-> +       false)
->  else
->         $(Q)cp "$(VMLINUX_H)" $@
->  endif
->
->  Which improves a bit the situation.
->
-> We could check if bpftool is available and if not, suggest installing
-> it.
->
-> If it is available, we could check if /sys/kernel/bpf/ is available, if
-> not suggest using a kernel with CONFIG_DEBUG_INFO_BTF=3Dy, as most distro=
-s
-> have by now.
->
-> As to the features this enables:
->
-> =E2=AC=A2[acme@toolbox perf-tools-next]$ ls -la tools/perf/util/bpf_skel/=
-*.c
-> -rw-r--r--. 1 acme acme 5581 Oct 17 09:07 tools/perf/util/bpf_skel/bperf_=
-cgroup.bpf.c
-> -rw-r--r--. 1 acme acme 1764 May  5  2022 tools/perf/util/bpf_skel/bperf_=
-follower.bpf.c
-> -rw-r--r--. 1 acme acme 1438 May  5  2022 tools/perf/util/bpf_skel/bperf_=
-leader.bpf.c
-> -rw-r--r--. 1 acme acme 2290 May  5  2022 tools/perf/util/bpf_skel/bpf_pr=
-og_profiler.bpf.c
-> -rw-r--r--. 1 acme acme 2164 May  5  2022 tools/perf/util/bpf_skel/func_l=
-atency.bpf.c
-> -rw-r--r--. 1 acme acme 9017 Aug 26  2022 tools/perf/util/bpf_skel/kwork_=
-trace.bpf.c
-> -rw-r--r--. 1 acme acme 9251 Mar 14 08:33 tools/perf/util/bpf_skel/lock_c=
-ontention.bpf.c
-> -rw-r--r--. 1 acme acme 6109 Feb 27 17:47 tools/perf/util/bpf_skel/off_cp=
-u.bpf.c
-> -rw-r--r--. 1 acme acme 4310 Mar 15 11:08 tools/perf/util/bpf_skel/sample=
-_filter.bpf.c
-> =E2=AC=A2[acme@toolbox perf-tools-next]$
->
-> For instance, take a look at these csets:
->
-> =E2=AC=A2[acme@toolbox perf-tools-next]$ git log --oneline tools/perf/uti=
-l/bpf_skel/lock_contention.bpf.c
-> d24c0144b1dde00f perf lock contention: Show per-cpu rq_lock with address
-> 1811e82767dcc6eb perf lock contention: Track and show siglock with addres=
-s
-> 3ace2435bb93445e perf lock contention: Track and show mmap_lock with addr=
-ess
-> 17535a33a9c1e4fb perf lock contention: Fix compiler builtin detection
-> 1bece1351c653c3d perf lock contention: Support old rw_semaphore type
-> 3477f079fe70b3c9 perf lock contention: Add -o/--lock-owner option
-> ebab291641bed48f perf lock contention: Support filters for different aggr=
-egation
-> 5e3febe7b7b99f94 perf lock contention: Support lock addr/name filtering f=
-or BPF
-> 529772c4df286159 perf lock contention: Support lock type filtering for BP=
-F
-> 688d2e8de231c54e perf lock contention: Add -l/--lock-addr option
-> eca949b2b4addd94 perf lock contention: Implement -t/--threads option for =
-BPF
-> fd507d3e359c7e06 perf lock contention: Add lock_data.h for common data
-> c66a36af7ba3a628 perf lock contention: Do not use BPF task local storage
-> 433b31fa00797a2a perf lock contention: Fix a build error on 32-bit
-> c1da8dd5c11dabd5 perf lock contention: Skip stack trace from BPF
-> 6d499a6b3d90277d perf lock: Print the number of lost entries for BPF
-> 6fda2405f414b24a perf lock: Implement cpu and task filters for BPF
-> 407b36f69efbdccf perf lock: Use BPF for lock contention analysis
-> =E2=AC=A2[acme@toolbox perf-tools-next]$
->
->
-> or:
->
-> =E2=AC=A2[acme@toolbox perf-tools-next]$ git log --oneline tools/perf/uti=
-l/bpf_skel/kwork_trace.bpf.c
-> acfb65fe1d11a97f perf kwork: Add workqueue trace BPF support
-> 5a81927a407c050a perf kwork: Add softirq trace BPF support
-> 420298aefe94840f perf kwork: Add IRQ trace BPF support
-> daf07d220710a3c8 perf kwork: Implement BPF trace
-> =E2=AC=A2[acme@toolbox perf-tools-next]$
->
-> So we need to fine tune this detection of needed components to build
-> these features, in time for the v6.4 merge window, that is why we
-> decided  to make this opt-out to hammer out problems.
->
-> Other arches probably will hit some of these problems, lets try to
-> encourage others to try what is in linux-next.
+On 3/27/23 3:18 PM, Khadija Kamran wrote:
+> Refactor function by adding goto statement. This reduces the
+> indentation and fixes the issue reported by checkpatch.pl script.
+> 
+> "CHECK: line length of 101 exceeds 100 columns"
 
-Just to throw out, perhaps we could ship a vmlinux.h in the perf
-source tree. We could also validate it with something similar to the
-header file checking. This would remove the bpftool and properly built
-kernel issues. It may make a package maintainer's life easier.
+Looking at this entire function, it seems a great deal of it
+has somewhat wide lines.  Part of the problem is that it
+relies on arche_platform_set_wake_detect_state(), which is
+36 characters long all by itself.
 
-Thanks,
-Ian
+In any case, the line that is identified is the widest, of
+course, by 10 or more characters.  But changing that one
+line doesn't substantially improve things.
 
-> - Arnaldo
+I'm reluctant to suggest this, because I don't want a lot
+of "code churn" patches to follow based on this, but...
+
+One could rename arche_platform_set_wake_detect_state()
+to be just set_wake_detect_state().  It's private to
+its source file (arche-platform.c) and therefore the
+"arche_plaform_" prefix isn't really necessary.  And
+perhaps the result would be code that is a little more
+readable, because its lines aren't so long.
+
+I'd be happy to hear others' thoughts on this.
+
+					-Alex
+
+
+
+> 
+> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> ---
+>   drivers/staging/greybus/arche-platform.c | 11 ++++++-----
+>   1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/staging/greybus/arche-platform.c b/drivers/staging/greybus/arche-platform.c
+> index fcbd5f71eff2..c7d3b6f7368f 100644
+> --- a/drivers/staging/greybus/arche-platform.c
+> +++ b/drivers/staging/greybus/arche-platform.c
+> @@ -178,11 +178,7 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
+>   				 */
+>   				if (arche_pdata->wake_detect_state !=
+>   						WD_STATE_COLDBOOT_START) {
+> -					arche_platform_set_wake_detect_state(arche_pdata,
+> -									     WD_STATE_COLDBOOT_TRIG);
+> -					spin_unlock_irqrestore(&arche_pdata->wake_lock,
+> -							       flags);
+> -					return IRQ_WAKE_THREAD;
+> +					goto out;
+>   				}
+>   			}
+>   		}
+> @@ -205,6 +201,11 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
+>   	spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
+>   
+>   	return IRQ_HANDLED;
+> +
+> +out:
+> +	arche_platform_set_wake_detect_state(arche_pdata, WD_STATE_COLDBOOT_TRIG);
+> +	spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
+> +	return IRQ_WAKE_THREAD;
+>   }
+>   
+>   /*
+
