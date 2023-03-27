@@ -2,83 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D526CAC1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9596F6CAC25
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjC0Rrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 13:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
+        id S229631AbjC0RsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 13:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjC0Rrg (ORCPT
+        with ESMTP id S231820AbjC0Rr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:47:36 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC40D170C;
-        Mon, 27 Mar 2023 10:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fmENmbS6YfOGCbil7lKj3DcV2u8EJhaYQuM6f42l51Y=; b=nhWgKJZdcJr3P9s6ucypYywMfE
-        4Kt1OJhrAyyN06VLI/MFIvlrlLN5hdFHHyyzncvo1caPmR725nd9bjgxoeaVDvbiF3rm4UzIqVCXa
-        u6khJw9B9dTbNUQAfusDEdSipEZu3L/qxKmW91j4BLoqCKktu/sXGMdK5+CF7Jd9NvsOgh6tGzNG0
-        2BeoQSw8+lmEkihHVIgidX7dCg2701aOMxqhixXsH89OSoZ65PHjG/ftQ/qtu6TlBoUGBoEoIIF5V
-        BPDheF5+Q07wxCQqH5WoPUnGg6+kwxYCDmchHEqek6K4ybBcjRGxXtXsdwaAi3t00QIiGtoH23jWS
-        g3SySQJw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pgqwQ-00BwSV-0n;
-        Mon, 27 Mar 2023 17:47:34 +0000
-Date:   Mon, 27 Mar 2023 10:47:34 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Viktor Malik <vmalik@redhat.com>
-Cc:     bpf@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH bpf-next] kallsyms: move module-related functions under
- correct configs
-Message-ID: <ZCHWtptOwPPtUe+u@bombadil.infradead.org>
-References: <20230327161251.1129511-1-vmalik@redhat.com>
+        Mon, 27 Mar 2023 13:47:57 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A061998;
+        Mon, 27 Mar 2023 10:47:54 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BDDD41EC0529;
+        Mon, 27 Mar 2023 19:47:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1679939272;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=PHYrWpJG1Eo5CYWlM+Samk6UV4vi/6VkdcGtjWhhz3E=;
+        b=LZDmm7cVkLs74Dbe0DlzjSdfqAT+3TtQyaFNdMA9us8RBVGTPJxp7kGYP2nSIqFdZmO3IM
+        w0iesHwUQJ63xT/yaLzE24dVC1hIvYleoyD1KsNXozhyootNzO7SsmvB+B8Pkbtna1ALRl
+        9cvTub7Xj+bhQZHfg5y4hrUDIh6Hbtc=
+Date:   Mon, 27 Mar 2023 19:47:46 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brian Gerst <brgerst@gmail.com>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Usama Arif <usama.arif@bytedance.com>, tglx@linutronix.de,
+        kim.phillips@amd.com, piotrgorski@cachyos.org,
+        oleksandr@natalenko.name, arjan@linux.intel.com, mingo@redhat.com,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        gpiccoli@igalia.com, Sabin Rapan <sabrapan@amazon.com>
+Subject: Re: [PATCH v16 8/8] x86/smpboot: Allow parallel bringup for SEV-ES
+Message-ID: <20230327174746.GBZCHWwqIa4+nj1/qR@fat_crate.local>
+References: <20230321194008.785922-1-usama.arif@bytedance.com>
+ <20230321194008.785922-9-usama.arif@bytedance.com>
+ <20230322224735.GAZBuFh9ld6FuYEyoH@fat_crate.local>
+ <70628793e6777d07f27f43152df497e780925d18.camel@infradead.org>
+ <20230323085138.GAZBwTGly7iOlvxrD4@fat_crate.local>
+ <4dbdd277c4b26ae4b971a910209a3279f79f6837.camel@infradead.org>
+ <CAMzpN2guz4HTQ8uir9Q=xrUpCYyBfuG2zGSJsakaqY7_OvxCPQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230327161251.1129511-1-vmalik@redhat.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAMzpN2guz4HTQ8uir9Q=xrUpCYyBfuG2zGSJsakaqY7_OvxCPQ@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 06:12:51PM +0200, Viktor Malik wrote:
-> Functions for searching module kallsyms should have non-empty
-> definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
-> only CONFIG_MODULES check was used for many of these, which may have
-> caused complilation errors on some configs.
-> 
-> This patch moves all relevant functions under the correct configs.
-> 
-> Signed-off-by: Viktor Malik <vmalik@redhat.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202303181535.RFDCnz3E-lkp@intel.com/
+On Thu, Mar 23, 2023 at 10:23:02AM -0400, Brian Gerst wrote:
+> Making sure that the stack protector is either disabled or properly
+> set up, and disabling any instrumentation/profiling/debug crap that
+> isn't initialized yet.
 
-Thanks Viktor!  Does this fix something from an existing commit? If so
-which one?  The commit log should mention it.
+Lemme dump brain of what Tom and I were talking about today so that it
+is documented somewhere.
 
-  LUis
+* re: stack protector: I was thinking to mark this function
+
+ __attribute__((no_stack_protector))
+
+but gcc added the function attribute way later:
+
+~/src/gcc/gcc.git> git tag --contains 346b302d09c1e6db56d9fe69048acb32fbb97845
+basepoints/gcc-12
+basepoints/gcc-13
+releases/gcc-11.1.0
+releases/gcc-11.2.0
+releases/gcc-11.3.0
+releases/gcc-12.1.0
+releases/gcc-12.2.0
+
+which means, that function would have to live somewhere in a file which
+has stack protector disabled. One possible place would be
+arch/x86/mm/mem_encrypt_identity.c which is kinda related.
+
+* re: stack: in order to be able to call a C function that early, we'd
+have to put the VA of the initial stack back into %rsp as we switch
+pagetables a bit earlier in there (thx Tom).
+
+So by then, doing all that cargo-cult just in order to not have a bunch
+of lines in asm doesn't sound all that great anymore.
+
+* The __head per-function attribute is easily solved by lifting the
+__head define into a common header.
+
+So meh, dunno. I guess we can do the asm thing for now, until a cleaner
+solution without too many warts presents itself.
+
+As to exporting cc_vendor:
+
+https://lore.kernel.org/r/20230318115634.9392-1-bp@alien8.de
+
+I'll redo those and the SEV-ES patch won't have to add cc_get_vendor().
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
