@@ -2,51 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599A96CAE73
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6186CAE76
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232698AbjC0TWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
+        id S232697AbjC0TWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 15:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjC0TWE (ORCPT
+        with ESMTP id S229584AbjC0TWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:22:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E62FCF;
-        Mon, 27 Mar 2023 12:22:03 -0700 (PDT)
+        Mon, 27 Mar 2023 15:22:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4596FE9;
+        Mon, 27 Mar 2023 12:22:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2030B818BD;
-        Mon, 27 Mar 2023 19:22:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C22C433D2;
-        Mon, 27 Mar 2023 19:22:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5189614A6;
+        Mon, 27 Mar 2023 19:22:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3770FC433D2;
+        Mon, 27 Mar 2023 19:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679944920;
-        bh=5txLZLS7lEzUmvrtr7G0TEFgxwoe2rQqP4rHKN7d4oE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Kenfb2GofUxFdQ+mM3p6sx7Rfgc8EdhYqBuUb0V1r83go2K7m0lMJdesOH/m4IKqc
-         jZkLUhxPhovOb7qck7ExfaScHlxiyjEHuOywiSegrf4ZpvR1yLMJ8uIm8Jv/XFNDtx
-         Wul3ySdhUauuhWGL0p5l8ZgzIFBapEgNXOB09KhB/NJVOWpT8zE/979lxBdrx8f3Qu
-         CRaluffRnsR8PRc5mmbwWG/q0rTQ23RTOkQH+CAZDqyTp7UEBkiL7JF2kZfMk/5ixe
-         l0l4DtaI3CqVkw3Nx8oTb8mEVp1GbvtDqqKxl+1yonD+ap+iFj5QFA7R6Jl9HKQGhi
-         B7//2384KWSZw==
-Date:   Mon, 27 Mar 2023 12:21:58 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+lista29bb0eabb2ddbae6f4a@syzkaller.appspotmail.com>
-Subject: Re: [syzbot] Monthly io-uring report
-Message-ID: <20230327192158.GF73752@sol.localdomain>
-References: <000000000000bb028805f7dfab35@google.com>
+        s=k20201202; t=1679944960;
+        bh=yjMqxNQU7lUX4uC4Mct8A5dMe4z3ieteuQwS+cdRzig=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=QWrREjCbOoW2ZSnTjrPP2I5fhtqXP7KkXUCjsZ0kJe6j71P4ox2lAm2uKLtzb8vTQ
+         nFjMVKh3B3Qc9N2cXbp67T6OHTSbEAFgwtoUMARR02d+Lh2FrOhK18VAhAekjbl0gV
+         OT9I1IIAwDRXzUknj3OUtIN4Zj5/gN5LtDcJk6xA8vuu0zN1qHvxrCd8mLsBM1954i
+         wgjVhzzjdwBB9zYz5bsz+56Bn16llbtWhWREABWUXbX4IPfuDUG8MA56HlSqHez+ZS
+         YXKQdOC/gFK8liW7LDPBbYPOquDVjVe5HHAktSjAus3McW/EdmJrNi1AOs/6Db9nLt
+         dP71SjwgfG/BQ==
+Message-ID: <749fc5bfd507b2316fc95c77eff41e03.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000bb028805f7dfab35@google.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230323025229.2971-1-zhuyinbo@loongson.cn>
+References: <20230323025229.2971-1-zhuyinbo@loongson.cn>
+Subject: Re: [PATCH v16 1/2] dt-bindings: clock: add loongson-2 boot clock index
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 27 Mar 2023 12:22:37 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,50 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 04:01:54AM -0700, syzbot wrote:
-> Hello io-uring maintainers/developers,
-> 
-> This is a 30-day syzbot report for the io-uring subsystem.
-> All related reports/information can be found at:
-> https://syzkaller.appspot.com/upstream/s/io-uring
-> 
-> During the period, 5 new issues were detected and 0 were fixed.
-> In total, 49 issues are still open and 105 have been fixed so far.
-> 
-> Some of the still happening issues:
-> 
-> Crashes Repro Title
-> 3393    Yes   WARNING in io_ring_exit_work
->               https://syzkaller.appspot.com/bug?extid=00e15cda746c5bc70e24
-> 3241    Yes   general protection fault in try_to_wake_up (2)
->               https://syzkaller.appspot.com/bug?extid=b4a81dc8727e513f364d
-> 1873    Yes   WARNING in split_huge_page_to_list (2)
->               https://syzkaller.appspot.com/bug?extid=07a218429c8d19b1fb25
-> 772     Yes   INFO: task hung in io_ring_exit_work
->               https://syzkaller.appspot.com/bug?extid=93f72b3885406bb09e0d
-> 718     Yes   KASAN: use-after-free Read in io_poll_remove_entries
->               https://syzkaller.appspot.com/bug?extid=cd301bb6523ea8cc8ca2
-> 443     Yes   KMSAN: uninit-value in io_req_cqe_overflow
->               https://syzkaller.appspot.com/bug?extid=12dde80bf174ac8ae285
-> 73      Yes   INFO: task hung in io_wq_put_and_exit (3)
->               https://syzkaller.appspot.com/bug?extid=adb05ed2853417be49ce
-> 38      Yes   KASAN: use-after-free Read in nfc_llcp_find_local
->               https://syzkaller.appspot.com/bug?extid=e7ac69e6a5d806180b40
-> 
+Quoting Yinbo Zhu (2023-03-22 19:52:28)
+> The Loongson-2 boot clock was used to spi and lio peripheral and
+> this patch was to add boot clock index number.
+>=20
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Thanks for getting syzbot to classify reports by subsystem and send these
-reminders!  These should be very helpful over time.
-
-One thing that is missing in these reminders is a mention of how to change the
-subsystem of miscategorized bugs.  Yes, it's in https://goo.gl/tpsmEJ halfway
-down the page, but it's not obvious.
-
-I think adding something like "See https://goo.gl/tpsmEJ#subsystems for how to
-change the subsystem of miscategorized reports" would be helpful.  Probably not
-in all syzbot emails, but just in these remainder emails.
-
-- Eric
+Applied to clk-next
