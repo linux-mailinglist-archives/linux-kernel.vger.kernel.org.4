@@ -2,256 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC19E6C99A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 04:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9D66C99AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 04:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjC0Cl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 22:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        id S230024AbjC0Coy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 22:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjC0Cly (ORCPT
+        with ESMTP id S229793AbjC0Cov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 22:41:54 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FCD44AF;
-        Sun, 26 Mar 2023 19:41:53 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id x8-20020a9d3788000000b0069f922cd5ceso3808752otb.12;
-        Sun, 26 Mar 2023 19:41:53 -0700 (PDT)
+        Sun, 26 Mar 2023 22:44:51 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83AF46BD;
+        Sun, 26 Mar 2023 19:44:48 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id n14so7237388qta.10;
+        Sun, 26 Mar 2023 19:44:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679884912;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FRauHu1FOjU1xQL/oXl2UNdyYQgBLhmS7p7OrBntk+k=;
-        b=JHmkY7tdYZSVVlBNau7p68ncdc1TURD1w8HYA/zw9iLP/+s6VluqD0EtQilHMCpgye
-         xjTRtJACHjnjcTq1Ukie0WmG5xgwqEtYBEh/qG3aWgzPmDVv86GpeXu0QWijd3zrrIwl
-         o2Psye6PONkyD1QZx3lMTz1njjravMGJqE0b2voJaIsErCDIVbexYINIrSBSIylVMr/t
-         bj9CZJJUeFbgXcbcu+XYtc4jWbLrghNXzbrnxsX1JsiXGE7W6p2aT/ovvvj2uWFGNpi5
-         M47mUo2tvWVknswz7dRd8xBr9+CR6pkRsyGLZxE4d+gSw+7UcUXjtNC8AUn2XM0ly2gM
-         xZUg==
+        d=gmail.com; s=20210112; t=1679885088;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CjPRw7a8pMHELQ53oymZFeBvbCGiVm/Rg9umw+16D4A=;
+        b=R2EoaN+p6+koB5S3sZg0C8WmMZ1DNFr+GTnOprbfL1XkZnwG/V69NyBkMuUaNPx1V3
+         TW6G0ueC6Vu4cQLsZfY2cCYdT88jioE9o8SWhGgNH5Rp7LCiNOnzNdMyPvs5WmmLWw2/
+         iXPN+WoIk+rDF04qQTRmhUnS+FLZ1vH7XGhsMjyxrAykIBuQKkQvhPDJ5Qd/mAeCA4Ck
+         ztzQA3qiPyAKfICjPw1MxfKYpQcUX13DCEl3jePOtycKyaVL8f4G9YhovyXd2Y3B5cpr
+         /giI9cOvp1xDNx9Q25YcAStpxEHpmSCJMjvVgj9xaIsU54NzXjYRBCdns9Mn78kqIeY7
+         54UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679884912;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FRauHu1FOjU1xQL/oXl2UNdyYQgBLhmS7p7OrBntk+k=;
-        b=XgJPc6fWCrdJyXYlzsZUS2PwGthag9My3AJXRO8r860kHc5QdXWJF6cuP3+Bb/vByq
-         GvxvfkqQjn5yNu5JHRilLATSdMTC5YFcF6BRZlcWAzbfsbQ1yBpt504fsrk54qj5s3Bv
-         jZBzdLLG4E9eI0LP5J2ovPXIWl78CdQ4dwQVP9kz02DWVe8WGpqOkWE1Y/HtnS8ZDojd
-         RHfoyFEmbfxU6hVu2DoYOINbUa4jldf+eQUVS4kDNkmjEqWmfXv4AzC4lEJ8q8BEY7y7
-         mvnvCMCmVXkaAU6n+nEfAj+IqSAK5eVsaM5xo8BNXgXjB205sBgS0MMBRL8xprtuwcUf
-         n5tw==
-X-Gm-Message-State: AAQBX9edJjFC97QV6T3Oic9efZX1YoG+wWA8xaVxJwL28s0mfCZdDUt3
-        3FcF/LquykIe7LA/Qi4vLhc=
-X-Google-Smtp-Source: AKy350YaOvV4wgho3Y8Gqb2SQntKfrIJyqMdE2stCjweiVzT1ZH0s/MJG/fZbfLR/J/4VXW7Nj8goQ==
-X-Received: by 2002:a05:6830:1457:b0:6a1:37f1:9863 with SMTP id w23-20020a056830145700b006a137f19863mr1291505otp.11.1679884912460;
-        Sun, 26 Mar 2023 19:41:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:988b:7dda:764e:c744? ([2600:1700:2442:6db0:988b:7dda:764e:c744])
-        by smtp.gmail.com with ESMTPSA id r25-20020a9d7519000000b006a11af03732sm2773600otk.67.2023.03.26.19.41.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Mar 2023 19:41:51 -0700 (PDT)
-Message-ID: <197889b6-5773-094c-8699-26843c6519fd@gmail.com>
-Date:   Sun, 26 Mar 2023 21:41:50 -0500
+        d=1e100.net; s=20210112; t=1679885088;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CjPRw7a8pMHELQ53oymZFeBvbCGiVm/Rg9umw+16D4A=;
+        b=79skYBIDCmDb98R+rEBOsfFczwWyLl5BRP20q4IDeUB4XFf8c8L/DgKJHOexJqiuAi
+         e1x9LbEvLKakNOnvkYbV1bB5WPjNg6HufxWOqcaipsQhGrtJus0NJAwxLCZFPWh3nP1a
+         2BnEyzFN0sUt/mnw46w2lX8UMX0r11h2AyqSv5YYjZq5BGJ5Maoegx9DRIrPS/xx8gbv
+         NBH4ti01Mr7QZJQyepCTDItOcLOdF2Yo5H9fjcgl54LMIbf/YaPYQrL0b/QCmNeOi6vX
+         5IsY+DBYzlfbzvpYRLCDRQ+Rbg3WmeUqW4xaqJ2hUE99eOZdbL6ku5pBy7Nbn1Eaeb5a
+         dHxw==
+X-Gm-Message-State: AO0yUKVg/PL5WjI8IRbKSMDx7LY199t3tFuPuRjPmTcae45KOcx+AHRD
+        VxLpeK9cvYBNOQggtNtpo9Mox3+pCCCy8DzJs10=
+X-Google-Smtp-Source: AKy350aOzVpb4lrDmXf1MemVwOUyXJP4Tz2Fl8Psq7HOSU1iRGITSzt6y4unqzOZD/SuOyKBAVXq/fhksYoE9v/9Vt0=
+X-Received: by 2002:a05:622a:199f:b0:3c0:2b0b:84c with SMTP id
+ u31-20020a05622a199f00b003c02b0b084cmr3971968qtc.6.1679885088035; Sun, 26 Mar
+ 2023 19:44:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [KTAP V2 PATCH] ktap_v2: add recognized test name line
-Content-Language: en-US
-To:     Rae Moar <rmoar@google.com>, davidgow@google.com,
-        skhan@linuxfoundation.org, keescook@chromium.org,
-        Tim.Bird@sony.com, brendanhiggins@google.com
-Cc:     corbet@lwn.net, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@lists.linux.dev,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230316225915.494688-1-rmoar@google.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <20230316225915.494688-1-rmoar@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TRACKER_ID
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230326092208.13613-1-laoar.shao@gmail.com> <20230326092208.13613-9-laoar.shao@gmail.com>
+ <87mt3z7pm5.fsf@toke.dk>
+In-Reply-To: <87mt3z7pm5.fsf@toke.dk>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Mon, 27 Mar 2023 10:44:12 +0800
+Message-ID: <CALOAHbBd5Bx0Tnzv1MW_NV9mOJrqdk5oySYWQr-XXURAM5xndw@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 08/13] bpf: Alloc and free bpf_map id in bpf namespace
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@kernel.org>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/23 17:59, Rae Moar wrote:
-> Add recognition of the test name line ("# Subtest: <name>") to the KTAP v2
-> spec.
-> 
-> The purpose of this line is to declare the name of a test before its
-> results. This functionality is especially useful when trying to parse test
-> results incrementally and when interpretting results after a crash.
-> 
-> This line is already compliant with KTAP v1 as it is interpretted as a
-> diagnostic line by parsers. Additionally, the line is currently used by
-> KUnit tests and was derived from the TAP 14 spec:
-> https://testanything.org/tap-version-14-specification.html.
+On Sun, Mar 26, 2023 at 6:51=E2=80=AFPM Toke H=C3=B8iland-J=C3=B8rgensen <t=
+oke@kernel.org> wrote:
+>
+> Yafang Shao <laoar.shao@gmail.com> writes:
+>
+> > We only expose the bpf map id under current bpf namespace to user. The
+> > map->id is still the id in the init bpf namespace.
+> >
+> > The result as follows,
+> >
+> > Run bpftool in a new bpf namespace
+> > $ bpftool map show
+> > 4: array  name kprobe_b.rodata  flags 0x80
+> >         key 4B  value 37B  max_entries 1  memlock 360B
+> >         btf_id 159  frozen
+>
+> The btf_id is identical for all the different objects in this example
+> output; surely that can't be right? Copy-paste error? Same thing in the
+> other patches...
+>
 
-It is convenient that "# Subtest: <name>" is compatible with v1, but I think
-that there is a negative that overrides the convenience.
+The bpf progs {"kretprobe_run","kprobe_run"} and the bpf maps
+{"kprobe_b.rodata","kprobe_b.data"} belong to the same bpf program. So
+the btf_id of them are always the same. For example, below is the
+result when I rerun it on my test server,
+$ bpftool btf show
+...
+943: name <anon>  size 1086B  prog_ids 48824,48822  map_ids 43712,43711
+        pids kprobe(3599801)
+...
 
-The "# Subtest: <name>" syntax means that we need to restrict the format of
-diagnostic lines, such that "#Subtest:" is an illegal diagnostic, at least
-for the line immediately following the Version line.
+$ bpftool map show
+43711: array  name kprobe_b.rodata  flags 0x80
+        key 4B  value 37B  max_entries 1  memlock 360B
+        btf_id 943  frozen
+        pids kprobe(3599801)
+43712: array  name kprobe_b.data  flags 0x400
+        key 4B  value 4B  max_entries 1  memlock 8192B
+        btf_id 943
+        pids kprobe(3599801)
 
-I think it would be cleaner to modify the Version line syntax to be:
+$ bpftool prog show
+48822: kprobe  name kretprobe_run  tag 0de47cc241a2b1b3  gpl
+        loaded_at 2023-03-27T10:35:01+0800  uid 0
+        xlated 112B  jited 78B  memlock 4096B  map_ids 43711
+        btf_id 943
+        pids kprobe(3599801)
+48824: kprobe  name kprobe_run  tag bf163b23cd3b174d  gpl
+        loaded_at 2023-03-27T10:35:01+0800  uid 0
+        xlated 104B  jited 75B  memlock 4096B  map_ids 43711
+        btf_id 943
+        pids kprobe(3599801)
 
-  KTAP version 2 [# <subtest_name>]
+The btf_id hasn't been added into the bpf namespace, so the btf id in
+init bpf namespace and child bpf namespace are the same value.
 
-I notice that the KTAP Specification version 1 fails to specify the
-Version line syntax.  So the Specification would be updated from:
-
-  All KTAP-formatted results begin with a "version line" which specifies which
-  version of the (K)TAP standard the result is compliant with.
-
-  For example:
-  - "KTAP version 1"
-  - "TAP version 13"
-  - "TAP version 14"
-
-to:
-
-  The Version line is required and must have the format:
-
-  .. code-block:: none
-
-        KTAP version 2 [# <subtest_name>]
-
-  All KTAP-formatted results begin with a "version line" which specifies which
-  version of the (K)TAP standard the result is compliant with.
-
-  For example:
-  - "KTAP version 2"
-  - "TAP version 13"
-  - "TAP version 14"
-
-> 
-> Recognition of this line would create an accepted way for different test
-> frameworks to declare the name of a test before its results.
-> 
-> The proposed location for this line is between the version line and the
-> test plan line. This location ensures that the line would not be
-> accidentally parsed as a subtest's diagnostic lines. Note this proposed
-> location would be a slight differentiation from KTAP v1.
-> 
-> Example of test name line:
-> 
->  KTAP version 2
->  # Subtest: main_test
->  1..1
->    KTAP version 2
->    # Subtest: sub_test
->    1..2
->    ok 1 test_1
->    ok 2 test_2
->  ok 1 sub_test
-> 
-> Here is a link to a version of the KUnit parser that is able to parse the
-> test name line for KTAP version 2. Note this includes a test name line for
-> the main level of KTAP.
-> 
-> Link: https://kunit-review.googlesource.com/c/linux/+/5709
-> 
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> ---
-> 
-> This is a RFC. I would like to know what people think and use this as a
-> platform for discussion on KTAP v2.
-> 
-> Note: this patch is based on Frank's ktap_spec_version_2 branch.
-> 
->  Documentation/dev-tools/ktap.rst | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-> index ff77f4aaa6ef..9c7ed66d9f77 100644
-> --- a/Documentation/dev-tools/ktap.rst
-> +++ b/Documentation/dev-tools/ktap.rst
-> @@ -28,8 +28,7 @@ KTAP output is built from four different types of lines:
->  In general, valid KTAP output should also form valid TAP output, but some
->  information, in particular nested test results, may be lost. Also note that
->  there is a stagnant draft specification for TAP14, KTAP diverges from this in
-> -a couple of places (notably the "Subtest" header), which are described where
-> -relevant later in this document.
-> +a couple of places, which are described where relevant later in this document.
->  
->  Version lines
->  -------------
-> @@ -44,8 +43,8 @@ For example:
->  - "TAP version 14"
->  
->  Note that, in KTAP, subtests also begin with a version line, which denotes the
-
-> -start of the nested test results. This differs from TAP14, which uses a
-> -separate "Subtest" line.
-
-^^^^ This is an error in the KTAP Specification version 1.  TAP14 allows the case
-of "Bare Subtests", which would be the equivalent of the KTAP v1 method.
-
-> +start of the nested test results. This differs from TAP14, which uses only a
-> +"Subtest" line.
->  
->  While, going forward, "KTAP version 2" should be used by compliant tests, it
->  is expected that most parsers and other tooling will accept the other versions
-> @@ -166,6 +165,12 @@ even if they do not start with a "#": this is to capture any other useful
->  kernel output which may help debug the test. It is nevertheless recommended
->  that tests always prefix any diagnostic output they have with a "#" character.
->  
-> +One recognized diagnostic line is the "# Subtest: <name>" line. This line
-> +is used to declare the name of a test before subtest results are printed. This
-> +is helpful for parsing and for providing context during crashes. As a rule,
-> +this line is placed after the version line and before the plan line. Note
-> +this line can be used for the main test, as well as subtests.
-> +
->  Unknown lines
->  -------------
->  
-> @@ -206,6 +211,7 @@ An example of a test with two nested subtests:
->  	KTAP version 2
->  	1..1
->  	  KTAP version 2
-> +	  # Subtest: example
->  	  1..2
->  	  ok 1 test_1
->  	  not ok 2 test_2
-> @@ -219,6 +225,7 @@ An example format with multiple levels of nested testing:
->  	KTAP version 2
->  	1..2
->  	  KTAP version 2
-> +	  # Subtest: example_test_1
->  	  1..2
->  	    KTAP version 2
->  	    1..2
-> @@ -245,7 +252,7 @@ allows an arbitrary number of tests to be nested     no         yes
->  
->  The TAP14 specification does permit nested tests, but instead of using another
->  nested version line, uses a line of the form
-> -"Subtest: <name>" where <name> is the name of the parent test.
-> +"Subtest: <name>" where <name> is the name of the parent test as discussed above.
->  
->  Example KTAP output
->  --------------------
-> @@ -254,6 +261,7 @@ Example KTAP output
->  	KTAP version 2
->  	1..1
->  	  KTAP version 2
-> +	  # Subtest: main_test
->  	  1..3
->  	    KTAP version 2
->  	    1..1
-> @@ -266,6 +274,7 @@ Example KTAP output
->  	    ok 2 test_2
->  	  ok 2 example_test_2
->  	    KTAP version 2
-> +		# Subtest: example_test_3
->  	    1..3
->  	    ok 1 test_1
->  	    # test_2: FAIL
-> 
-> base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
-
+--=20
+Regards
+Yafang
