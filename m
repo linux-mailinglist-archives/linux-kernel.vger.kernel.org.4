@@ -2,95 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C9F6CA80C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64656CA80B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232856AbjC0Opd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 10:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
+        id S232519AbjC0Opa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232755AbjC0Op1 (ORCPT
+        with ESMTP id S231834AbjC0Op1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Mar 2023 10:45:27 -0400
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7C130F6;
-        Mon, 27 Mar 2023 07:45:26 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id x3so37142063edb.10;
-        Mon, 27 Mar 2023 07:45:26 -0700 (PDT)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9D14239
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:45:25 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id r11so37243401edd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679928324;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ouLLhRGSc37ctiW42nuOQEAfoH5XSsW+Yy1/AaAURCo=;
+        b=Y230m/yQEmB3+efvyiaUegMpdKugAsQUwCe9outGsIqBW7gY0CHQCSMgXZsJdMjomO
+         sUjCr1rzdCU4Bi3UY6uAqg9qcaQroU2bMGDmRBA6NsbqMs/vQogG0HUIPDSVPYgvhpf6
+         epf+bp/dlBwmrIxqXPXKufmYkEVaarOxY5YTZUmr5xrAvwglkxlaPAfxvcOewjkO6aBy
+         q2+qyzEAE4D70myY7Vnw4L/TufwzlHuC9DGIIseeZkKTsEy7hCM2ByhiOR76nhfeRffK
+         FPOHkVm1ORW8bDTP1wTToCipXyu50751JAOIjId2ySlJ2johS+NvZk2cfC09+t0Jo/43
+         Qj2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679928325;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xqx7BG6DbrJV5wVYNqu1sizTrODp1YIAvlx1rxv/dHw=;
-        b=Xdc8Z3heKdPTdf1g/dMXyUPRJG187y8yVAlRlh35zKhLhlwDuPVjBrld71Z+4wyyPa
-         IW/W5joYsn0QFpTyUO7qEDXJC3RjJQ/OW4coYHaRE67MDFpRoJ9KI0pUz0Skkdve0AUp
-         ObruFi4P+lewh1AMTpAFpNgSB6Zpb14XE+3/inkRFRC/mypAvzaAJE+J5P/KfkZdm2HY
-         4jFEn1KQBAvkjLj0oia1hJA2PoLZnSSgVkfTS28kUZb0RYv11XuBV3OFkXV6LEKQ+L9B
-         +q6OO3h3fS0/1KUsi4xSYoMcvio7BVxhxxE6qIoFBvv/Wv6L16/oBvt2McUVFi8XWSC6
-         +gCA==
-X-Gm-Message-State: AAQBX9eQI5/yM6fdL3Klw25MiVoK3UjljrhZB7vaN+sMBiBNyNy9DXvs
-        +gVuPrOre1QoHqC7V8r/5IyITkvubLVvkSeuXIg=
-X-Google-Smtp-Source: AKy350ZuKxgSHHk6NQd8hY3qoPJQjzqVVe6ZP3MC4ic80UsNRvDg38SM04k6AzTGcFnW3UxmshoSo0AHdTW7K+E9pG0=
-X-Received: by 2002:a50:d6d6:0:b0:4fb:c8e3:1adb with SMTP id
- l22-20020a50d6d6000000b004fbc8e31adbmr5776908edj.3.1679928324869; Mon, 27 Mar
- 2023 07:45:24 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679928324;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ouLLhRGSc37ctiW42nuOQEAfoH5XSsW+Yy1/AaAURCo=;
+        b=P0D0mkHeMSWkPPmSLlUlrZtoWFKOapRbyInCM6WOAyVybq4Q9qQXwacvOuk4Dt+vRl
+         cIRmcfIUxf0g2x6NwD97aK6tf0PET5HpR1hHez883zlB6xW5EtH3BNDzT7rPAeFIzuuo
+         m6g525mKDtFzNV9+dCtrlztCKM70MPLXpjRn6Xs4/eah/jXPjSo9yfWfGcldN/svJL1s
+         zYTfSJj91iZg3lfjLLwL6OC7XVVc4augIWZQAz6Q1Lop7oYppPsrTJbBqsMeWbiKWwFW
+         O9PgfrItqEkeO2o/YCGQXPweK6oOyWYWOFt5sbGWN6MnX0Fc8lK0dyWCv1u5LMKeOJMJ
+         KBJw==
+X-Gm-Message-State: AAQBX9dOyvWNsLdxbDLpXriRccdt3+D0H4O6E2FwqJZbyDYstWCzuMaV
+        4MG3+dYFZUyOwYNF4OHXTOldvg==
+X-Google-Smtp-Source: AKy350aAutV9mY4m3so3zlzmSeCW61dhmnhh2Px85UoWBO3vKsRJo8Y2J3+Hf/UMW7o0gT42z3ifig==
+X-Received: by 2002:a05:6402:5163:b0:502:2440:577e with SMTP id d3-20020a056402516300b005022440577emr10573323ede.16.1679928323799;
+        Mon, 27 Mar 2023 07:45:23 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:581e:789c:7616:5ee? ([2a02:810d:15c0:828:581e:789c:7616:5ee])
+        by smtp.gmail.com with ESMTPSA id h5-20020a50c385000000b004f9e6495f94sm14886080edf.50.2023.03.27.07.45.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 07:45:23 -0700 (PDT)
+Message-ID: <aaaaf2be-15dd-02d8-b815-905ba4585478@linaro.org>
+Date:   Mon, 27 Mar 2023 16:45:22 +0200
 MIME-Version: 1.0
-References: <20230327130150.84114-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230327130150.84114-1-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 16:45:13 +0200
-Message-ID: <CAJZ5v0jodw=LME60q39V4+6NVStNjmmTF80VyQMGo+iwWngDLw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] device property: Add headers to the Driver Core
- entry in MAINTAINERS
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 3/7] dt-bindings: ufs: qcom: Add ICE phandle
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+References: <20230327134734.3256974-1-abel.vesa@linaro.org>
+ <20230327134734.3256974-4-abel.vesa@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230327134734.3256974-4-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 3:02 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> The header files (fwnode.h and property.h) are part of the device
-> property API, which in its turn is part of driver core. Add the
-> missed headers to the corresponding record in the MAINTAINERS database.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On 27/03/2023 15:47, Abel Vesa wrote:
+> Starting with SM8550, the ICE will have its own devicetree node
+> so add the qcom,ice property to reference it.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
-> v2: new patch
->  MAINTAINERS | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 93fb4e5a2814..aa61d9ede78b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6316,7 +6316,9 @@ F:        drivers/base/
->  F:     fs/debugfs/
->  F:     fs/sysfs/
->  F:     include/linux/debugfs.h
-> +F:     include/linux/fwnode.h
->  F:     include/linux/kobj*
-> +F:     include/linux/property.h
->  F:     lib/kobj*
+> 
+> The v3 (RFC) is here:
+> https://lore.kernel.org/all/20230313115202.3960700-4-abel.vesa@linaro.org/
+> 
+> Changes since v3:
+>  * dropped the "and drop core clock" part from subject line
+> 
+> Changes since v2:
+>  * dropped all changes except the qcom,ice property
+> 
+>  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> index c5a06c048389..7384300c421d 100644
+> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> @@ -70,6 +70,10 @@ properties:
+>    power-domains:
+>      maxItems: 1
+>  
+> +  qcom,ice:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to the Inline Crypto Engine node
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Didn't we discuss to disallow the ICE IO space if this is provided? Same
+for previous patch actually...
 
->  DRIVERS FOR OMAP ADAPTIVE VOLTAGE SCALING (AVS)
-> --
-> 2.40.0.1.gaa8946217a0b
->
+Best regards,
+Krzysztof
+
