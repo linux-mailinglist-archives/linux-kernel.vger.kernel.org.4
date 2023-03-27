@@ -2,80 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362236CA602
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D756CA607
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbjC0Ndx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
+        id S232562AbjC0Nfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjC0Ndv (ORCPT
+        with ESMTP id S229619AbjC0Nfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:33:51 -0400
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF7840F6;
-        Mon, 27 Mar 2023 06:33:39 -0700 (PDT)
-Received: from mail.panix.com (localhost [127.0.0.1])
-        by mailbackend.panix.com (Postfix) with ESMTPA id 4PlYg55F43z3ylY;
-        Mon, 27 Mar 2023 09:33:37 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-        t=1679924018; bh=XICY4RRKygbQi2CVdXFQeV33XyQxJ7V0bluLpAxLDNA=;
-        h=In-Reply-To:References:Date:Subject:From:To:Cc;
-        b=NMHCBGphWj2m+reulHlyOnuQ0TJi9yFvpAQr/VqpFST6E+oZWJ9CeyLhJXcFL9Vmk
-         aUaL6pjGuJowrbRV5sjVQVHH8QM+rzR1tG5u1BSkSgCOMud6t14/XawsfH9wXkryft
-         x0YZqb83+QO4rewtqMDlz+rLwi/Tj41jzfyrxPSc=
-X-Panix-Received: from 166.84.1.3
-        (SquirrelMail authenticated user pa@panix.com)
-        by mail.panix.com with HTTP;
-        Mon, 27 Mar 2023 09:33:37 -0400
-Message-ID: <bd57500b3900e5cce3f1a65de59959bc.squirrel@mail.panix.com>
-In-Reply-To: <CAJZ5v0gAyGNAT-t=pQ9wEbNAqzixEfm5dKZuRJVv-YQ=1=LbFw@mail.gmail.com>
-References: <5687037.DvuYhMxLoT@kreacher>
-    <11fab8f24f976112aa4d025d03f0f322.squirrel@mail.panix.com>
-    <CAJZ5v0gAyGNAT-t=pQ9wEbNAqzixEfm5dKZuRJVv-YQ=1=LbFw@mail.gmail.com>
-Date:   Mon, 27 Mar 2023 09:33:37 -0400
-Subject: Re: [PATCH v1] ACPI: bus: Rework system-level device notification
- handling
-From:   "Pierre Asselin" <pa@panix.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Pierre Asselin" <pa@panix.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Linux ACPI" <linux-acpi@vger.kernel.org>,
-        "LKML" <linux-kernel@vger.kernel.org>,
-        =?iso-8859-1?Q?=22Uwe_Kleine-K=C3=B6nig=22?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-User-Agent: SquirrelMail/1.4.23-p1
+        Mon, 27 Mar 2023 09:35:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD9D1BC6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:35:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 932C0B81331
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:35:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 403E2C433D2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:35:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679924146;
+        bh=gzV/IOboiINO+ahaLwg9RG4yRo9jQY8BuzwKNjCQczo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=uPTXaKRtpwj5dVUHImxmOc2AwgOEQqRwpi5VXqsY8smX9N4YcCtOopNVqC4+p4+mn
+         //xkKTcDesbSgHSD0KS66rgC3W6psDFQPrlVPPjWD03ND3QEhUkUCLipQ8FxiytLY/
+         3o/3mv3EX90zKzHJENYob57NkC/X2GSnCkPp5R5O6ys1RdY88YsCEaSGwf4ZEj8aWv
+         scVAoSvs1TUePfBlPOa1UEgNXuAcOi0P1U493mNHg2jItBbQCmjIC8J6u5mi6QXeiH
+         TfoOo1inBS8OjRiVRyIaiKHpNKGUWErE1B+yNlFUOOLmP6O73IrJ8nztYH8v+DX1E4
+         0GwVCFPpaCERw==
+Received: by mail-ot1-f50.google.com with SMTP id r17-20020a05683002f100b006a131458abfso1963073ote.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:35:46 -0700 (PDT)
+X-Gm-Message-State: AO0yUKUtsLRBEMBQ1tGwm5CiJB4mqomS25lng+szMHoYFQYJzsdevtiH
+        11VpHUtkEx9T5krhiGz4v9cEMF/ynCxo95/DFf0=
+X-Google-Smtp-Source: AK7set+SOLD7Vu7kzeBp74eXLcPCvfJEIma5UKjMFLxlHmYQpEMS3rpIx8m9bL2CCzoMNJrM7S6qd69AXrl87GsG+FI=
+X-Received: by 2002:a9d:6385:0:b0:69f:7470:604f with SMTP id
+ w5-20020a9d6385000000b0069f7470604fmr3955827otk.1.1679924145489; Mon, 27 Mar
+ 2023 06:35:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;charset=iso-8859-1
-Content-Transfer-Encoding: 8bit
-X-Priority: 3 (Normal)
-Importance: Normal
-X-Spam-Status: No, score=0.2 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230325143122.GA409315@mit.edu> <CAK7LNARndpbtzRAW1kEiqyNBmAxdqJKiTquvY9bW08LYTTMiOg@mail.gmail.com>
+ <20230326121118.GB323408@mit.edu>
+In-Reply-To: <20230326121118.GB323408@mit.edu>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 27 Mar 2023 22:35:09 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARcUSsjzi7UV+rHHaQU1X-XJ0jN0sLAw2m=SypTQTCHKA@mail.gmail.com>
+Message-ID: <CAK7LNARcUSsjzi7UV+rHHaQU1X-XJ0jN0sLAw2m=SypTQTCHKA@mail.gmail.com>
+Subject: Re: Change in kernel debian packages between -rc2 and -rc3
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Fri, Mar 24, 2023 at 4:54 PM Pierre Asselin <pa@panix.com> wrote:
->>
->> Rafael, the patch is good for 6.3-rc1 (boots to early userspace).
->> I'll try a full install now.
+On Sun, Mar 26, 2023 at 9:11=E2=80=AFPM Theodore Ts'o <tytso@mit.edu> wrote=
+:
 >
-> I'm wondering if this has succeeded?
+> On Sun, Mar 26, 2023 at 12:39:44PM +0900, Masahiro Yamada wrote:
+> >
+> > I am afraid you are completely misunderstanding the two versions,
+> > the ABI version and the package version.
+> >
+> > They do not need to match. Actually, they do not match.
+> >
+> > See real Debian (or Ubuntu) systems.
+> >
+> > `uname -r` returns '5.10.0-21-amd64'.
+> > This is what they call the ABI version, and
+> > this is contained as a part of the package name,
+> > 'linux-image-5.10.0-21-amd64'
+>
+> That may be a convention that Debian uses, but I'll point out that
+> trying to use this as an ABI version when people are using different
+> .config's is not going to end well.  That's because many different
+> Kernel configurations will end up making incompatible changes to the
+> ABI.  and only works if you are ***super*** careful about not making
+> any kind of changes (e.g., the number of CPU's, adding or changing
+> various cgroup controllers, all of which will make incompatible kernel
+> ABI changes.)
+>
+> This is "Stable ABI nonsense" is well, nonsense.
 
-Yes.  I've been running 6.3-rc1 + Rafael's patch for a few days now
-and all is well.
+Well, that is just the _name_.
 
-(Okay, the simple framebuffer has psychedelic color effects but that too
-has a workaround.  One bug at a time.)
+The actual effect is whether you can install
+multiple kernel packages at the same time or not
+because the ABI version is a part of the package name.
+The ABI is nothing more than that for upstream kernel packages.
 
-Are these emails getting through ?  I see them on patchwork but not
-on linux-acpi or regressions.
 
---PA
 
+>
+> > It was _not_ reflected in the package version.
+> > This is also correct since the package version
+> > is not meant to reflect such user configuration
+> > as CONFIG_LOCALVERSION.
+>
+> Citation, please?  Does the Debian system work in that particular way?
+
+
+The Debian policy [1] says that the version consists of:
+
+    <upstream_version>-<debian_revision>
+
+For clarification, I omitted <epoch>.
+
+
+[1] http://www.fifi.org/doc/debian-policy/policy.html/ch-versions.html
+
+
+See what the Debian source package looks like.
+
+<upstream_version> determines the basename of *.orig.tar.gz.
+
+*.orig.tar.gz is generated by 'git archive'.
+Obviously, the output of 'git archive' is the same
+as long as you work on the same git commit hash.
+
+Think about doing 'make deb-pkg' multiple times on
+commit 463f2e46bf7c.
+(for example one for CONFIG_LOCALVERSION=3D"-foo"
+the other for CONFIG_LOCALVERSION=3D"-bar")
+
+
+First run:
+linux-upstream_6.3.0-rc3-00043-g463f2e46bf7c.orig.tar.gz  [1]
+linux-upstream_6.3.0-rc3-00043-g463f2e46bf7c-1.dsc
+linux-upstream_6.3.0-rc3-00043-g463f2e46bf7c-1.debian.tar.xz
+
+Second run:
+linux-upstream_6.3.0-rc3-00043-g463f2e46bf7c.orig.tar.gz  [2]
+linux-upstream_6.3.0-rc3-00043-g463f2e46bf7c-2.dsc
+linux-upstream_6.3.0-rc3-00043-g463f2e46bf7c-2.debian.tar.xz
+
+
+[1] and [2] are the same
+(since it is the output of "git archive 463f2e46bf7c").
+Hence, it is shared by multiple packages, no matter how many
+you generate from commit 463f2e46bf7c.
+
+
+You are requiring the file name to contain "-xfstests", "-foo", or "-bar"
+depending on the CONFIG options.
+There is no room for CONFIG options to affect <upstream_version>.
+
+So, the rule is quite simple.
+If the contents are exactly the same, they have the same version.
+If they are different, they have different versions.
+
+
+
+> In any case, it's an incompatible regression made during rc2 and rc3,
+> which I think is at the very least, unfortunate.
+
+
+Your tool was working on a wrong assumption, which nobody promised.
+
+Kbuild already provides various hooks.
+You can use CONFIG options and KERNELRELEASE to override uname,
+and use KDEB_PKGVERSION to override the package version.
+
+They are enough to continue your broken workflow.
+
+
+
+
+
+>
+>                                     - Ted
+--
+Best Regards
+Masahiro Yamada
