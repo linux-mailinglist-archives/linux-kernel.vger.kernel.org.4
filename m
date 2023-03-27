@@ -2,164 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020B56CAF48
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8306CAF51
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjC0T5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
+        id S229879AbjC0UAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 16:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjC0T5c (ORCPT
+        with ESMTP id S229547AbjC0UAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:57:32 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1037D198E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:57:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1679947050;
-        bh=BaGjAaVCS3iEGrlGd2K5iHfogsCfLHCF2A4wd4Kmi10=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ejLLFgmyz7q4AlzwqSMlJhtpVpo3KuS9o3N7QEEHKIQF9gTKx4GNmrQlzLITpTroB
-         43bBhXhXS2NZaioTgRImTmtfcTBbVvgU1xqlWNtR63GjNuzjoJQIp9pcLmYdycEbib
-         59S8S1//qO6zGjJsPwmX1slsh5Dtb6qKm95iWP6blcRGCBMq0fGRknLx+k7cu/RjKr
-         5gakRb17smEn9rFBrtkXOleUxuMPWDbp5y71RrCHOwzJV5M6hpyhO9nl9GncHTEILz
-         OxGsSur8vjCQ5UXduG+dFppXNAGzbbIM0W/DF29O7S7aECGef/08Rlcvy0M1dueVzX
-         21YBysISG+nzA==
-Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PlkB212yYzt8V;
-        Mon, 27 Mar 2023 15:57:30 -0400 (EDT)
-Message-ID: <fc66a0a9-aeb3-cc80-83fb-a5c02ee898ca@efficios.com>
-Date:   Mon, 27 Mar 2023 15:57:43 -0400
+        Mon, 27 Mar 2023 16:00:33 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D87100
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:00:31 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id z1so4397492iot.11
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679947231;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=11bvFWDugzPlA3+YQ9yGap9EgCbK+PilbMpBkuMW1F8=;
+        b=RaEJYMgGGqoa0yxbnuRNhs/oDZAitr2nbSNm8IqTBeAQ9sLkiu1ijzvpT1lNBMkhR4
+         1g9fgT54xMkBSi+0kv5FITBclhL79ELUWYQS1G4D33K3bojkQJ9yGbMkkGzUpKfFsV7R
+         SGbvWivaEu7lebv000QEouQYum+fWajV5xHmhMgTT/mY6i9mFH3xR6qhS7SRu48QcFUQ
+         NMhZE8FSkdV8k47GtWsG7gykKfsdoJiv46agI9pWSKSyX7L5ajzMcBqbt3Vax833lbSB
+         A34eKp+5yddghrGUsQeEshSFvgumZoa5V9hUXmKJsHCfWtwu+QU/4EmxfSZXgxsw9js9
+         42Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679947231;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=11bvFWDugzPlA3+YQ9yGap9EgCbK+PilbMpBkuMW1F8=;
+        b=iDNdda7/0r1rmObkgLsiayle8ors1vgzEg0V2fLRe6RerFNyrCdpVvloqq6Sn1tIvM
+         /DGo6OkXgrY2mWPaM9iANGfHaHp/UEmIWg/34rl0x+ru1hf+dXsVRqX0V+/Os/wMvzQN
+         ta/qzO0WxQT5IBc5v6PXMcIqQJJ7vqi2sj78AZ4ScyPqjy/hccre3UnJakx5hL327CGa
+         VkRgi6EvLO3yrciQ1Iv/KYSSAFIkgYVKpeDR4ZUNWWHod7RDzZ3z89YmDL49iiHYztAP
+         bFg5UQQTac05YXZ4zTD/c7ufMP/KL1XPRkQbzt+K21J+Voxnq2GvHTYggnlShu0xfDYa
+         8mxw==
+X-Gm-Message-State: AO0yUKW+DQdSsXbNS7QAbUkQr8rmbDF0k5QUzeLNriMUu0Fds3elQ9MB
+        HEYuAXERPWM7+2ErdsSDeyDZ9g==
+X-Google-Smtp-Source: AK7set/B5PMW4tALmwUQyWGfTT8NjPzW4MsBaJpS0tp7v/YuWVcv5sKRSQO9Gbqtozcd8Y4kJfC+3w==
+X-Received: by 2002:a05:6602:395:b0:758:5653:353a with SMTP id f21-20020a056602039500b007585653353amr7735614iov.0.1679947230770;
+        Mon, 27 Mar 2023 13:00:30 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id n4-20020a056638110400b00400d715c57dsm9322718jal.29.2023.03.27.13.00.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 13:00:30 -0700 (PDT)
+Message-ID: <11ccf63c-2822-1e1e-6f4b-833136d46628@kernel.dk>
+Date:   Mon, 27 Mar 2023 14:00:29 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: rq lock contention due to commit af7f588d8f73
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [syzbot] Monthly io-uring report
 Content-Language: en-US
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
-References: <20230327080502.GA570847@ziqianlu-desk2>
- <b5e09943-36e6-c89b-4701-5af6408223e8@efficios.com>
- <20230327140425.GA1090@ziqianlu-desk2>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230327140425.GA1090@ziqianlu-desk2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Aleksandr Nogikh <nogikh@google.com>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+lista29bb0eabb2ddbae6f4a@syzkaller.appspotmail.com>
+References: <000000000000bb028805f7dfab35@google.com>
+ <20230327192158.GF73752@sol.localdomain>
+ <4045f952-0756-5b04-8c60-6eed241a52fe@kernel.dk> <ZCH02Fp0YAhrLnug@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ZCH02Fp0YAhrLnug@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-27 10:04, Aaron Lu wrote:
-> On Mon, Mar 27, 2023 at 09:20:44AM -0400, Mathieu Desnoyers wrote:
->> On 2023-03-27 04:05, Aaron Lu wrote:
->>> Hi Mathieu,
+On 3/27/23 1:56 PM, Eric Biggers wrote:
+> On Mon, Mar 27, 2023 at 01:25:14PM -0600, Jens Axboe wrote:
+>> On 3/27/23 1:21?PM, Eric Biggers wrote:
+>>> On Mon, Mar 27, 2023 at 04:01:54AM -0700, syzbot wrote:
+>>>> Hello io-uring maintainers/developers,
+>>>>
+>>>> This is a 30-day syzbot report for the io-uring subsystem.
+>>>> All related reports/information can be found at:
+>>>> https://syzkaller.appspot.com/upstream/s/io-uring
+>>>>
+>>>> During the period, 5 new issues were detected and 0 were fixed.
+>>>> In total, 49 issues are still open and 105 have been fixed so far.
+>>>>
+>>>> Some of the still happening issues:
+>>>>
+>>>> Crashes Repro Title
+>>>> 3393    Yes   WARNING in io_ring_exit_work
+>>>>               https://syzkaller.appspot.com/bug?extid=00e15cda746c5bc70e24
+>>>> 3241    Yes   general protection fault in try_to_wake_up (2)
+>>>>               https://syzkaller.appspot.com/bug?extid=b4a81dc8727e513f364d
+>>>> 1873    Yes   WARNING in split_huge_page_to_list (2)
+>>>>               https://syzkaller.appspot.com/bug?extid=07a218429c8d19b1fb25
+>>>> 772     Yes   INFO: task hung in io_ring_exit_work
+>>>>               https://syzkaller.appspot.com/bug?extid=93f72b3885406bb09e0d
+>>>> 718     Yes   KASAN: use-after-free Read in io_poll_remove_entries
+>>>>               https://syzkaller.appspot.com/bug?extid=cd301bb6523ea8cc8ca2
+>>>> 443     Yes   KMSAN: uninit-value in io_req_cqe_overflow
+>>>>               https://syzkaller.appspot.com/bug?extid=12dde80bf174ac8ae285
+>>>> 73      Yes   INFO: task hung in io_wq_put_and_exit (3)
+>>>>               https://syzkaller.appspot.com/bug?extid=adb05ed2853417be49ce
+>>>> 38      Yes   KASAN: use-after-free Read in nfc_llcp_find_local
+>>>>               https://syzkaller.appspot.com/bug?extid=e7ac69e6a5d806180b40
+>>>>
+>>>> ---
+>>>> This report is generated by a bot. It may contain errors.
+>>>> See https://goo.gl/tpsmEJ for more information about syzbot.
+>>>> syzbot engineers can be reached at syzkaller@googlegroups.com.
 >>>
->>> I was doing some optimization work[1] for kernel scheduler using a
->>> database workload: sysbench+postgres and before I submit my work, I
->>> rebased my patch on top of latest v6.3-rc kernels to see if everything
->>> still works expected and then I found rq's lock became very heavily
->>> contended as compared to v6.2 based kernels.
+>>> Thanks for getting syzbot to classify reports by subsystem and send these
+>>> reminders!  These should be very helpful over time.
 >>>
->>> Using the above mentioned workload, before commit af7f588d8f73("sched:
->>> Introduce per-memory-map concurrency ID"), the profile looked like:
+>>> One thing that is missing in these reminders is a mention of how to change the
+>>> subsystem of miscategorized bugs.  Yes, it's in https://goo.gl/tpsmEJ halfway
+>>> down the page, but it's not obvious.
 >>>
->>>        7.30%     0.71%  [kernel.vmlinux]            [k] __schedule
->>>        0.03%     0.03%  [kernel.vmlinux]            [k] native_queued_spin_lock_slowpath
->>>
->>> After that commit:
->>>
->>>       49.01%     0.87%  [kernel.vmlinux]            [k] __schedule
->>>       43.20%    43.18%  [kernel.vmlinux]            [k] native_queued_spin_lock_slowpath
->>>
->>> The above profile was captured with sysbench's nr_threads set to 56; if
->>> I used more thread number, the contention would be more severe on that
->>> 2sockets/112core/224cpu Intel Sapphire Rapids server.
->>>
->>> The docker image I used to do optimization work is not available outside
->>> but I managed to reproduce this problem using only publicaly available
->>> stuffs, here it goes:
->>> 1 docker pull postgres
->>> 2 sudo docker run --rm --name postgres-instance -e POSTGRES_PASSWORD=mypass -e POSTGRES_USER=sbtest -d postgres -c shared_buffers=80MB -c max_connections=250
->>> 3 go inside the container
->>>     sudo docker exec -it $the_just_started_container_id bash
->>> 4 install sysbench inside container
->>>     sudo apt update and sudo apt install sysbench
->>> 5 prepare
->>>     root@container:/# sysbench --db-driver=pgsql --pgsql-user=sbtest --pgsql_password=mypass --pgsql-db=sbtest --pgsql-port=5432 --tables=16 --table-size=10000 --threads=56 --time=60 --report-interval=2 /usr/share/sysbench/oltp_read_only.lua prepare
->>> 6 run
->>>     root@container:/# sysbench --db-driver=pgsql --pgsql-user=sbtest --pgsql_password=mypass --pgsql-db=sbtest --pgsql-port=5432 --tables=16 --table-size=10000 --threads=56 --time=60 --report-interval=2 /usr/share/sysbench/oltp_read_only.lua run
->>>
->>> Let it warm up a little bit and after 10-20s you can do profile and see
->>> the increased rq lock contention. You may need a machine that has at
->>> least 56 cpus to see this, I didn't try on other machines.
->>>
->>> Feel free to let me know if you need any other info.
+>>> I think adding something like "See https://goo.gl/tpsmEJ#subsystems for how to
+>>> change the subsystem of miscategorized reports" would be helpful.  Probably not
+>>> in all syzbot emails, but just in these remainder emails.
 >>
->> While I setup my dev machine with this reproducer, here are a few
->> questions to help figure out the context:
+>> I did go poke, it is listed off the reports too. But it'd be really
+>> handy if you could do this on the web page. When I see a report like
+>> that that's not for me, I just archive it. And like any chatter with
+>> syzbot, I have to look up what to reply to it every time. It'd be a lot
+>> easy if I could just click on that page to either mark as invalid
+>> (providing the info there) or move it to another subsystem.
 >>
->> I understand that pgsql is a multi-process database. Is it strictly
->> single-threaded per-process, or does each process have more than
->> one thread ?
 > 
-> I do not know the details of Postgres, according to this:
-> https://wiki.postgresql.org/wiki/FAQ#How_does_PostgreSQL_use_CPU_resources.3F
-> I think it is single-threaded per-process.
+> Well, one problem that syzbot has to deal with is that to meet the kernel
+> community's needs, it can't require authentication to issue commands.
 > 
-> The client, sysbench, is single process multi-threaded IIUC.
+> I understand that the current email-only interface, where all commands are Cc'ed
+> to the syzkaller-bug mailing list, makes that not a complete disaster currently.
 > 
->>
->> I understand that your workload is scheduling between threads which
->> belong to different processes. Are there more heavily active threads
->> than there are scheduler runqueues (CPUs) on your machine ?
-> 
-> In the reproducer I described above, 56 threads are started on the
-> client side and if each client thread is served by a server process,
-> there would be about 112 tasks. I don't think the client thread and
-> the server process are active at the same time but even if they are,
-> 112 is still smaller than the machine's CPU number: 224.
-> 
->>
->> When I developed the mm_cid feature, I originally implemented two additional
->> optimizations:
->>
->>      Additional optimizations can be done if the spin locks added when
->>      context switching between threads belonging to different memory maps end
->>      up being a performance bottleneck. Those are left out of this patch
->>      though. A performance impact would have to be clearly demonstrated to
->>      justify the added complexity.
->>
->> I suspect that your workload demonstrates the need for at least one of those
->> optimizations. I just wonder if we are in a purely single-threaded scenario
->> for each process, or if each process has many threads.
-> 
-> My understanding is: the server side is single threaded and the client
-> side is multi threaded.
+> I'd imagine that if anyone could just go to a web page and mess around with bug
+> statuses with no authentication, that might be more problematic.
 
-OK.
+What prevents anyone from just sending an email to the syzbot issue email
+and modifying it?
 
-I've just resuscitated my per-runqueue concurrency ID cache patch from an older
-patchset, and posted it as RFC. So far it passed one round of rseq selftests. Can
-you test it in your environment to see if I'm on the right track ?
-
-https://lore.kernel.org/lkml/20230327195318.137094-1-mathieu.desnoyers@efficios.com/
-
-Thanks!
-
-Mathieu
-
-
-> 
-> Thanks,
-> Aaron
+I love using email as it's easier when you're replying anyway, but the
+problem is that I can never remember the magic incantations that I need
+to send it. So I invariably click the link ANYWAY to find out what to
+reply, and now it's more hassle using email. Maybe we can solve this by
+making the email footer actually contain the common responses? Then
+I would not have to click, switch desktops, scroll to find, copy part
+of it, switch desktops, paste into email, open terminal to generate
+the rest, switch back to email, paste in, click send. It really isn't
+a very pleasurable experience.
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Jens Axboe
+
 
