@@ -2,71 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE0E6CB16F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 00:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5874A6CB172
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 00:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbjC0WHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 18:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44354 "EHLO
+        id S230206AbjC0WJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 18:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjC0WHr (ORCPT
+        with ESMTP id S229501AbjC0WJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 18:07:47 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4896930F6;
-        Mon, 27 Mar 2023 15:07:43 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 4CADA604F2;
-        Tue, 28 Mar 2023 00:07:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679954861; bh=0s/d/USegEOfMNZixrmaI9bdcodvzQhQGCIicwZZdp4=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=zIXIXfocUSvmt3crdRX6cbNbaO0NXBJ00pdXBC2o1RrC5eR92lWEJCryVnYB+MKSg
-         xtvpQufIdPHWVAH4wBEyVJD0A+LwpIJn/UDotEWibtLPBF7sViHiq7yhul+fDR8Ds3
-         fMr67/DSXjJJsCbeeMLcWgkE8KDwBWFFnNnARi6SfjuJr+vNUgUDzbWnzABQwGk8k1
-         c9qUKt5hUAqJVCRCkzss7w5n1b1p9n7xSFSA6A6tXMNh5hmDsLM6M51zlXTgAYIm7q
-         Qc5kmFbl04Aug5AcRvaI/TA93V95s1WzGBQQsFFmIHheLp655eCLLhZopmHzQN1MP5
-         gGxdscyRFg2xw==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id D0VMoCKh5xgq; Tue, 28 Mar 2023 00:07:38 +0200 (CEST)
-Received: from [192.168.1.3] (unknown [77.237.101.225])
-        by domac.alu.hr (Postfix) with ESMTPSA id BBD06604EF;
-        Tue, 28 Mar 2023 00:07:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679954858; bh=0s/d/USegEOfMNZixrmaI9bdcodvzQhQGCIicwZZdp4=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=IrG7h6orpedl7Gnu9qW7PHi6eHpp8yFaq/7RrOQN0JTAm8+4zkLQEacjJ77tFzpKK
-         lDL958d6cDIr/XBXJeKrTAKYTPeerT/O+CeDX/yA5TxxO3SG5FlykQTc+Ve0Gs9DQw
-         aSdOC0PIsFf+negy1ELdMQ8ebJ2704+ouj0cy2OaQqRw4JXXJ25U4Lev3S9XWtb4AR
-         zjaBZuK88z/UqXMTadYPsE7NIYJrUDG5imWYOuBVUlxD4L8Qsg650opwhhQUr0hZH9
-         lfxgQ/lVBWNwhNgDNAcAKCgVrGFvrvBoyziYkEPHKTl5SSwisHF/vFZWjdfycA8Awg
-         BVmvrzI2j4M6g==
-Message-ID: <eccc0aff-b963-5594-0874-4ab8889e0b80@alu.unizg.hr>
-Date:   Tue, 28 Mar 2023 00:07:36 +0200
+        Mon, 27 Mar 2023 18:09:07 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3300F92
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 15:09:06 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id p204so12647422ybc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 15:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1679954945;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q1TlEx9QcMlZ3oxOM4oU1Tjm4fqebLyU8FiZyh0BXvM=;
+        b=dzZ5GnLfxajxluUn1Wgqto69XQEs0T5twz6tH0cdJgbBZA18HmrgoGc2ZFBdNysrXl
+         CVLhhQyoi+aP7DZLK85nej99NJcgbHf/IVD1NtpajWTfOzScvF8uIn9tgUAQCs1lJTpH
+         dAsemve+hswahlWABBR1/Y64GHOugX7L0RzkGmtm7a4+L+vXAA06FZYIhiqRSdcvOMlF
+         fb3l/g5zzVqJsntJ5hlUZ3Flp0PBRz/WCR38IlB4MqkhNx0MeCHb0cnAa0pH+tblYQao
+         saebexvbkiMxAZOYjWK4pgYXAe4SRaMB6jFzHA0OBVwuzmLFaiOL9Gck/6KqOqNZjCul
+         /Z1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679954945;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q1TlEx9QcMlZ3oxOM4oU1Tjm4fqebLyU8FiZyh0BXvM=;
+        b=5Elc3Tcl+/smaAButh9W096aD1fGPFlQP+biXMiutb8UUAkW0HsHRPrku0ST/Vyrme
+         He9ohS132VS9I97XX2NeD2zRzBMHFrMX+1Z4vEZue6osCZa0luAcMtSK4vLYDQh5RIKf
+         2zThJ0XNNVk9GnXF5ocwsD0D3uE34dbr5HL0cqalqHgLTLWRtxmHnYI9mvP9MpKzVtz5
+         Bl+S1mxb/0JT6Rk/bnKCwLBhueJXn5FU0mRuNsvDI0HWkyP5HSLk94GxM5mzVphbKJgH
+         Y0bmxfm0GiEdY10zNSCnwcS2dCEPKdzMnMsVwhQg88U+ISO911Dt7XALT1m4G7lRhNW6
+         fdLg==
+X-Gm-Message-State: AAQBX9fgPVGK1h3o3NxhUqeBU/UE+Cd4rCbIqdxCCle2ZuerhaJqWFw4
+        C+dn+u43Stll2iAtio+Lalp2QXxSFZnsNE7wqqrq
+X-Google-Smtp-Source: AKy350bMvVWZnkoZOYCDPEgJHRPmMhgknNlVozqs7cmjsw9ew8biTuseHCkzRf8XygI+S3Uet4jaQ4Q85e3m+A8qbO0=
+X-Received: by 2002:a05:6902:1586:b0:b76:ceb2:661b with SMTP id
+ k6-20020a056902158600b00b76ceb2661bmr8278162ybu.3.1679954945367; Mon, 27 Mar
+ 2023 15:09:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: Re: BUG: BISECTED: drivers/usb/host/xhci: memleak in alloc from
- xhci_disable_usb3_lpm_timeout()
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <24263902-c9b3-ce29-237b-1c3d6918f4fe@alu.unizg.hr>
- <651c0500-2b84-d938-fdc2-45e92b322b38@alu.unizg.hr>
- <b86fcdbd-f1c6-846f-838f-b7679ec4e2b4@linux.intel.com>
-Content-Language: en-US, hr
-In-Reply-To: <b86fcdbd-f1c6-846f-838f-b7679ec4e2b4@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de> <83763b78-453d-de21-9b48-1c226afa13a0@web.de>
+ <57a97109-7a67-245b-8072-54aec3b5021d@web.de> <CAHC9VhR=yK72JXW3hJR+gUQtGCNpF0Bzk5RDzPZR0MunC84AUQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhR=yK72JXW3hJR+gUQtGCNpF0Bzk5RDzPZR0MunC84AUQ@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 27 Mar 2023 18:08:54 -0400
+Message-ID: <CAHC9VhREfdgiCji=uEeCrc4w1kPGfnWGKnJuUYKXwTApdneSjQ@mail.gmail.com>
+Subject: Re: [PATCH v2] selinux: Adjust implementation of security_get_bools()
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     kernel-janitors@vger.kernel.org, selinux@vger.kernel.org,
+        =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Michal Orzel <michalorzel.eng@gmail.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Ruiqi Gong <gongruiqi1@huawei.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>, cocci@inria.fr,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ruiqi Gong <ruiqi.gong@qq.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,103 +77,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27. 03. 2023. 11:41, Mathias Nyman wrote:
-> On 25.3.2023 13.33, Mirsad Goran Todorovac wrote:
->> On 25. 03. 2023. 12:27, Mirsad Goran Todorovac wrote:
->>> Hi all!
->>>
->>> Here are again the good news and the bad news:
->>>
->>> BAD:  another kernel memory leak detected (one more to hunt down and fix)
->>> GOOD: another kernel memory leak detected (one less unaccounted for)
->>>
->>> I tried to make some fun, but maintainers are busy folks, so let's get down
->>> to business:
->>>
->>> ---
->>> Nine (9) new systemd-udevd kernel memory leaks occurred (unable to reproduce).
->>>
->>> The platform is Ubuntu 22.10 with (relatively recent) systemd 251.4-1ubuntu7.1
->>> on LENOVO_MT_82H8_BU_idea_FM_IdeaPad 3 15ITL6 with BIOS GGCN51WW from 11/16/2022.
->>>
->>> The symptom (/sys/kernel/debug/kmemleak output):
->>>
->>> unreferenced object 0xffff909698ff9280 (size 64):
->>>    comm "systemd-udevd", pid 436, jiffies 4294893239 (age 6287.088s)
->>>    hex dump (first 32 bytes):
->>>      e0 51 bb 99 96 90 ff ff 00 00 00 00 00 00 00 00  .Q..............
->>>      40 5b bb 99 96 90 ff ff 00 00 00 00 00 00 00 00  @[..............
->>>    backtrace:
->>>      [<ffffffffb29de94c>] slab_post_alloc_hook+0x8c/0x320
->>>      [<ffffffffb29e5107>] __kmem_cache_alloc_node+0x1c7/0x2b0
->>>      [<ffffffffb2962f3b>] kmalloc_node_trace+0x2b/0xa0
->>>      [<ffffffffb31af2ec>] xhci_alloc_command+0x7c/0x1b0
->>>      [<ffffffffb31af451>] xhci_alloc_command_with_ctx+0x21/0x70
->>>      [<ffffffffb31a8a3e>] xhci_change_max_exit_latency+0x2e/0x1c0>>      [<ffffffffb31a8c5b>] xhci_disable_usb3_lpm_timeout+0x7b/0xb0
->>>      [<ffffffffb31457a7>] usb_disable_link_state+0x57/0xe0
-> 
-> Thanks for the report.
-> 
-> I think I found the leak, and wrote a patch for it.
-> Any chance you could test it with the same setup?
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=for-usb-linus&id=8bacee588602ed74cc22aaf4c56b796300e5a943
+On Mon, Mar 27, 2023 at 5:37=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+> On Mon, Mar 27, 2023 at 3:00=E2=80=AFAM Markus Elfring <Markus.Elfring@we=
+b.de> wrote:
+> > Date: Mon, 27 Mar 2023 08:50:56 +0200
+> >
+> > The label =E2=80=9Cerr=E2=80=9D was used to jump to another pointer che=
+ck despite of
+> > the detail in the implementation of the function =E2=80=9Csecurity_get_=
+bools=E2=80=9D
+> > that it was determined already that a corresponding variable contained
+> > a null pointer because of a failed memory allocation.
+> >
+> > Thus perform the following adjustments:
+> >
+> > 1. Convert the statement =E2=80=9Cpolicydb =3D &policy->policydb;=E2=80=
+=9D into
+> >    a variable initialisation.
+> >
+> > 2. Replace the statement =E2=80=9Cgoto out;=E2=80=9D by =E2=80=9Creturn=
+ -ENOMEM;=E2=80=9D.
+> >
+> > 3. Return zero directly at two places.
+> >
+> > 4. Omit the variable =E2=80=9Crc=E2=80=9D.
+> >
+> > 5. Use more appropriate labels instead.
+> >
+> > 6. Reorder the assignment targets for two kcalloc() calls.
+> >
+> > 7. Reorder jump targets at the end.
+> >
+> > 8. Assign a value element only after a name assignment succeeded.
+> >
+> > 9. Delete an extra pointer check which became unnecessary
+> >    with this refactoring.
+> >
+> >
+> > This issue was detected by using the Coccinelle software.
+> >
+> > Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+> > ---
+> >  security/selinux/ss/services.c | 52 ++++++++++++++--------------------
+> >  1 file changed, 22 insertions(+), 30 deletions(-)
+>
+> Hmm, for some odd reason I don't see this patch in the SELinux mailing
+> list archive or the patchwork; replying here without comment (that
+> will come later) to make sure this hits the SELinux list.
 
-As I have already been half-through bisect, I took the liberty to finish it.
+For some reason the generated diff below is pretty messy, so I'm just
+going to put some of my comments here:
 
-# good: [5ce036b98dd3301fc43bb06a6383ef07b6c776bc] xhci: dbc: create and remove dbc structure in dbgtty driver.
-git bisect good 5ce036b98dd3301fc43bb06a6383ef07b6c776bc
-# bad: [d016cbe4d7acf5100df83ecf4d02db4e9f607c1d] usb: typec: Support the WUSB3801 port controller
-git bisect bad d016cbe4d7acf5100df83ecf4d02db4e9f607c1d
-# bad: [cd36facf104afbde7e8fa25cd6f5b6dd9fa97bb2] usb: remove Link Powermanagement (LPM) disable before port reset.
-git bisect bad cd36facf104afbde7e8fa25cd6f5b6dd9fa97bb2
-# good: [6aec50009d52f28ef8b512cba0f5078b3928064d] xhci: dbc: Don't call dbc_tty_init() on every dbc tty probe
-git bisect good 6aec50009d52f28ef8b512cba0f5078b3928064d
-# bad: [5c2a380a5aa8c15985359904b6d47466528d2993] xhci: Allocate separate command structures for each LPM command
-git bisect bad 5c2a380a5aa8c15985359904b6d47466528d2993
-# good: [e1ec140f273e1e30cea7e6d5f50934d877232121] xhci: dbgtty: use IDR to support several dbc instances.
-git bisect good e1ec140f273e1e30cea7e6d5f50934d877232121
-# first bad commit: [5c2a380a5aa8c15985359904b6d47466528d2993] xhci: Allocate separate command structures for each LPM command
+Given the fairly extensive refactoring here, and the frequency with
+which @len, @names, and @values are used in the function, I might
+simply create local variables for each and only assign them to the
+parameter pointers at the end when everything completes successfully
+(you could still reset @len at the start if you wanted).  If nothing
+else it will make the function easier to read, and I think it will
+simplify the code a bit too.
 
-Interesting enough, Mr. Greg predicted this is an xhci problem already in November [1],
-but I did not embolden myself to bisect until this weekend, seeing that it was
-still leaking.
+I would probably also keep the combined @names/@values cleanup under
+one jump label; this function isn't complicated enough to warrant that
+many jump labels for error conditions.
 
-But then I was brand new to the CONFIG_DEBUG_KMEMLEAK feature.
+> > diff --git a/security/selinux/ss/services.c b/security/selinux/ss/servi=
+ces.c
+> > index f14d1ffe54c5..702282954bf9 100644
+> > --- a/security/selinux/ss/services.c
+> > +++ b/security/selinux/ss/services.c
+> > @@ -2964,53 +2964,45 @@ int security_fs_use(struct super_block *sb)
+> >  int security_get_bools(struct selinux_policy *policy,
+> >                        u32 *len, char ***names, int **values)
+> >  {
+> > -       struct policydb *policydb;
+> > +       struct policydb *policydb =3D &policy->policydb;
+> >         u32 i;
+> > -       int rc;
+> > -
+> > -       policydb =3D &policy->policydb;
+> >
+> >         *names =3D NULL;
+> >         *values =3D NULL;
+> > -
+> > -       rc =3D 0;
+> >         *len =3D policydb->p_bools.nprim;
+> >         if (!*len)
+> > -               goto out;
+> > -
+> > -       rc =3D -ENOMEM;
+> > -       *names =3D kcalloc(*len, sizeof(char *), GFP_ATOMIC);
+> > -       if (!*names)
+> > -               goto err;
+> > +               return 0;
+> >
+> > -       rc =3D -ENOMEM;
+> >         *values =3D kcalloc(*len, sizeof(int), GFP_ATOMIC);
+> >         if (!*values)
+> > -               goto err;
+> > +               goto reset_len;
+> >
+> > -       for (i =3D 0; i < *len; i++) {
+> > -               (*values)[i] =3D policydb->bool_val_to_struct[i]->state=
+;
+> > +       *names =3D kcalloc(*len, sizeof(char *), GFP_ATOMIC);
+> > +       if (!*names)
+> > +               goto free_values;
+> >
+> > -               rc =3D -ENOMEM;
+> > +       for (i =3D 0; i < *len; i++) {
+> >                 (*names)[i] =3D kstrdup(sym_name(policydb, SYM_BOOLS, i=
+),
+> >                                       GFP_ATOMIC);
+> >                 if (!(*names)[i])
+> > -                       goto err;
+> > -       }
+> > -       rc =3D 0;
+> > -out:
+> > -       return rc;
+> > -err:
+> > -       if (*names) {
+> > -               for (i =3D 0; i < *len; i++)
+> > -                       kfree((*names)[i]);
+> > -               kfree(*names);
+> > +                       goto free_names;
+> > +
+> > +               (*values)[i] =3D policydb->bool_val_to_struct[i]->state=
+;
+> >         }
+> > -       kfree(*values);
+> > -       *len =3D 0;
+> > +       return 0;
+> > +
+> > +free_names:
+> > +       for (i =3D 0; i < *len; i++)
+> > +               kfree((*names)[i]);
+> > +
+> > +       kfree(*names);
+> >         *names =3D NULL;
+> > +free_values:
+> > +       kfree(*values);
+> >         *values =3D NULL;
+> > -       goto out;
+> > +reset_len:
+> > +       *len =3D 0;
+> > +       return -ENOMEM;
+> >  }
+> >
+> >
+> > --
+> > 2.40.0
+>
+> --
+> paul-moore.com
 
-[1] https://lore.kernel.org/lkml/Y2zCYwNNvQWppLWZ@kroah.com/
 
-I think the culprit patch is otherwise awesome, reducing latency and locking, especially
-welcome in multimedia use.
 
-So far, I was unable to exploit this leak as non-superuser or automate it like gpio-sim
-to exhaust the kernel's limited memory, but this doesn't prove that smarter hackers
-couldn't devise some means to do that exploit.
-
-BTW: Full designation of the patch is 5.17.0-rc4-kmemlk-xhci-00071-g5c2a380a5aa8, so all
-kernels 5.17-rc4+ appear affected by the issue.
-
-Thank you and if you will need any more testing, I am available in my off hours.
-
-Really nice working to assist your dynamic team.
-
-To compare, another developer from another project was desperate about a software giant
-being unwilling to abandon deprecated MODP 1024 DH renegotiation for its native VPN,
-now for a couple of years ...
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
-"I see something approaching fast ... Will it be friends with me?"
-
+--=20
+paul-moore.com
