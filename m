@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57916CA200
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBFC6CA1FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbjC0LDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 07:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
+        id S232144AbjC0LDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 07:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232252AbjC0LDp (ORCPT
+        with ESMTP id S232102AbjC0LDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Mar 2023 07:03:45 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D85D4218
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:03:44 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id i2-20020a5d9e42000000b0074cfcc4ed07so5446626ioi.22
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:03:44 -0700 (PDT)
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA23D40CD
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:03:43 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id i17-20020a056e020d9100b00325a80f683cso5739697ilj.22
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:03:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1679915023;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DYYeZ6q74P1EC6zduiIqaHw2RbP3mCxfZ8UiARotK1k=;
-        b=FOa+ok3cZ1OKQhqT7OrSYCzGhfxXmy/rBRl07+WCmu/4eih8qYo3OoS1VReeRcv4eA
-         UsKHDmUcCl652x52rPKFO6u0NEvK21YycQKlIwS99AGXuxsHreo+Z6RIRL/j+XBsHni8
-         wfcam5Q4tVLTKa+pXDCfh6YONtRffdm8U5vSequYtVs5q3NQYgVz5pFQm5KsrIp9pLbY
-         7l817Kg8+nVXfDIndpTODxZ4JirQLjDvnpw6C1JrzRKvJk0oK+XnTIbAIiau2BMpxDVS
-         vSYlgelsA9ZiQ60+q4FVkngg1sq1CFXfx5GGWnzzdlmV+kDPaYvwNtU7UMJ8fM9akdSI
-         2Evw==
-X-Gm-Message-State: AO0yUKU84mf9uC2Vq8MDTmIJfgWkMuVpX/F9hfTMJnIM/KN8K1ZO2w4w
-        GHGuZDbsAMjHUu9w4aNSv7g8gm8p4xN28astBGfdZ6SVmLr0
-X-Google-Smtp-Source: AK7set/XcoJchD1aCq3fOiCDw2F7VdfwOOgdFWvdSPCPFB48nIER7QboA+QblG5wC7F891sXF3UvUAlaLvlNbhHIjt2x7thVO1jq
+        bh=YyhK+BtLiyEB31FwYNSc62BTerEF/wzBlZyPMAiY0dA=;
+        b=edhOzYht8VVRr3u/1H+DhJbyioWtateabI6zEEBOBjq4C0PfsW0Hqf7jlJ4cYeUcug
+         7E+kf6m8ewdEe2FzTA6bhhx4rA6U659ft9tDxddHcMxvHVLUdDmfH11Ew0GzwBGpP/5/
+         JdtuGAbVGBwjYlYEFpHOa75lgKlwuVik0vJfB/N4Jw84XJox1minGPEVSFLZ5tEOC3Y8
+         lsFl+nzW1TL5QcfJ9JpqeF9KYv+UHDCYPokJyGwsoBwrEmsK47w+RATFH36umXvvvbXO
+         h7VpD+ZfdtZUNPqREYIqRmmF7waHbVpCtZni969ZNdUpgTua8xsActCtKojgsjnuZXdx
+         cKUw==
+X-Gm-Message-State: AAQBX9fVWP3i24zmHvPgxr3GR2eQMks5T9ptKPuYTQmjnSrxyrH3c8Tl
+        MVbBageDO6FtZwP0FFYTMNQP9bQfL5kwndCLOXUy/jouRZ4D
+X-Google-Smtp-Source: AKy350ZEOEJnwF7hjKeyDYaOKx9n4l8S/2r788Ijl00bYfSf9WaAr8s9czGNCRjI7x9Ctl9lyBrYHZN9j11ULRJsSVA9fNV/nwj4
 MIME-Version: 1.0
-X-Received: by 2002:a02:8547:0:b0:3c2:b9ba:72f9 with SMTP id
- g65-20020a028547000000b003c2b9ba72f9mr4533372jai.5.1679915023586; Mon, 27 Mar
+X-Received: by 2002:a05:6e02:b46:b0:316:fa49:3705 with SMTP id
+ f6-20020a056e020b4600b00316fa493705mr5941337ilu.1.1679915023298; Mon, 27 Mar
  2023 04:03:43 -0700 (PDT)
 Date:   Mon, 27 Mar 2023 04:03:43 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003bdd5d05f7dfb243@google.com>
-Subject: [syzbot] Monthly reiserfs report
-From:   syzbot <syzbot+list4a0f973260c9d6cd4fb2@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <00000000000037783a05f7dfb2c8@google.com>
+Subject: [syzbot] Monthly nilfs report
+From:   syzbot <syzbot+list91fd19ac4f0e1b0d9d06@syzkaller.appspotmail.com>
+To:     konishi.ryusuke@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -53,38 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello reiserfs maintainers/developers,
+Hello nilfs maintainers/developers,
 
-This is a 30-day syzbot report for the reiserfs subsystem.
+This is a 30-day syzbot report for the nilfs subsystem.
 All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/reiserfs
+https://syzkaller.appspot.com/upstream/s/nilfs
 
-During the period, 4 new issues were detected and 0 were fixed.
-In total, 78 issues are still open and 16 have been fixed so far.
+During the period, 6 new issues were detected and 1 were fixed.
+In total, 20 issues are still open and 16 have been fixed so far.
 
 Some of the still happening issues:
 
 Crashes Repro Title
-1220    No    KASAN: slab-out-of-bounds Read in search_by_key (2)
-              https://syzkaller.appspot.com/bug?extid=b3b14fb9f8a14c5d0267
-1096    Yes   WARNING in reiserfs_lookup
-              https://syzkaller.appspot.com/bug?extid=392ac209604cc18792e5
-1069    Yes   kernel BUG at fs/reiserfs/journal.c:LINE!
-              https://syzkaller.appspot.com/bug?extid=6820505ae5978f4f8f2f
-853     Yes   INFO: task hung in iterate_supers
-              https://syzkaller.appspot.com/bug?extid=2349f5067b1772c1d8a5
-565     No    KMSAN: uninit-value in reiserfs_new_inode (2)
-              https://syzkaller.appspot.com/bug?extid=6450929faa7a97cd42d1
-331     Yes   possible deadlock in mnt_want_write_file
-              https://syzkaller.appspot.com/bug?extid=1047e42179f502f2b0a2
-168     Yes   possible deadlock in reiserfs_ioctl
-              https://syzkaller.appspot.com/bug?extid=79c303ad05f4041e0dad
-122     Yes   WARNING in reiserfs_readdir_inode
-              https://syzkaller.appspot.com/bug?extid=798ffe5fe3e88235db59
-54      Yes   possible deadlock in path_openat (2)
-              https://syzkaller.appspot.com/bug?extid=a844a888fbc0ba4829ce
-45      Yes   BUG: unable to handle kernel paging request in path_openat
-              https://syzkaller.appspot.com/bug?extid=59a66cac604a6b49ecce
+1236    Yes   INFO: task hung in lock_mount
+              https://syzkaller.appspot.com/bug?extid=221d75710bde87fa0e97
+901     Yes   WARNING in mark_buffer_dirty (4)
+              https://syzkaller.appspot.com/bug?extid=2af3bc9585be7f23f290
+821     No    KMSAN: uninit-value in nilfs_add_checksums_on_logs
+              https://syzkaller.appspot.com/bug?extid=048585f3f4227bb2b49b
+404     Yes   WARNING in nilfs_btree_assign
+              https://syzkaller.appspot.com/bug?extid=31837fe952932efc8fb9
+316     Yes   WARNING in nilfs_sufile_set_segment_usage
+              https://syzkaller.appspot.com/bug?extid=14e9f834f6ddecece094
+169     No    INFO: task hung in path_openat (7)
+              https://syzkaller.appspot.com/bug?extid=950a0cdaa2fdd14f5bdc
+44      Yes   INFO: task hung in nilfs_detach_log_writer
+              https://syzkaller.appspot.com/bug?extid=e3973c409251e136fdd0
+13      No    KASAN: slab-out-of-bounds Read in nilfs_iget_test
+              https://syzkaller.appspot.com/bug?extid=cac676135771fc8f1eb2
+5       No    possible deadlock in nilfs_evict_inode
+              https://syzkaller.appspot.com/bug?extid=5b7d542076d9bddc3c6a
 
 ---
 This report is generated by a bot. It may contain errors.
