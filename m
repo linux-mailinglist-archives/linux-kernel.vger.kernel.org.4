@@ -2,84 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392AF6CA675
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263126CA630
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbjC0Nud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S232177AbjC0Nnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232225AbjC0NuL (ORCPT
+        with ESMTP id S229546AbjC0Nna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:50:11 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2A6729B;
-        Mon, 27 Mar 2023 06:48:49 -0700 (PDT)
+        Mon, 27 Mar 2023 09:43:30 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A403AB6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:43:29 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B5E6F21EFF;
-        Mon, 27 Mar 2023 13:48:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679924927;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 830551FD72;
+        Mon, 27 Mar 2023 13:43:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679924608; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=lLZ1tOH+2IQe9KNBkCOduf46JwkVP7E5NFMbAeK+g0c=;
-        b=wCrUqDGGkVY91bPwyB4sKnxEuP4mikf5NEyxFiPcU35xaIOlDqLcyokCLFiG+JNPJSHvn3
-        ZAeRqlVqf461/gWCnsRQuZw1feCMUo14Yd9SCu1bLurzSX9WzzqBkwnSa3XfoaIkYOxR7P
-        0rXNnaAotneuHk9dOnMW+xq2BLEb3wA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679924927;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lLZ1tOH+2IQe9KNBkCOduf46JwkVP7E5NFMbAeK+g0c=;
-        b=U+TejpDKl5C4Rt5qFxt4ivAQLJBhX5lzpC9S5ByUqJ5CQETauQ9p0GqWEeKWL4pH/c5Gs8
-        qbRyffZS2aUMENBg==
+        bh=8roPEj8EC7N26IRrzr+bd955hd7RnrTWNtsdCvtyS6s=;
+        b=soLiZeMaIxj/bgarNhrTFIq8Pw6Vxeq6Jh5s7kTHsfs3GgeDeYFC6V2u5rlEqjbWeaD8Yg
+        9EnZsaBANMRQZJeQ0h3gDFWDSoA7VS+pRuLiNmoEXKpkgrkd+kRj/Ka8EDza+60HAGCA+q
+        HR7ABBaSn+yWkc2nHv44l2S4+U8Doqw=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7FBE313482;
-        Mon, 27 Mar 2023 13:48:47 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6166C13329;
+        Mon, 27 Mar 2023 13:43:28 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5j8wHr+eIWQAfAAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Mon, 27 Mar 2023 13:48:47 +0000
-Date:   Mon, 27 Mar 2023 15:42:34 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     syzbot <syzbot+list32e5d8c30adcfd4f0ca2@syzkaller.appspotmail.com>
-Cc:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [btrfs] Monthly Report
-Message-ID: <20230327134234.GE10580@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <000000000000b4315105f7a7d014@google.com>
+        id mZd1FYCdIWTpeAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 27 Mar 2023 13:43:28 +0000
+Date:   Mon, 27 Mar 2023 15:43:27 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Song Liu <song@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
+Message-ID: <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
+References: <20230308094106.227365-1-rppt@kernel.org>
+ <20230308094106.227365-2-rppt@kernel.org>
+ <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
+ <ZB6W1C88TU6CcjJH@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000000000000b4315105f7a7d014@google.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZB6W1C88TU6CcjJH@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 09:23:36AM -0700, syzbot wrote:
-> Hello btrfs maintainers/developers,
+On Sat 25-03-23 09:38:12, Mike Rapoport wrote:
+> On Fri, Mar 24, 2023 at 09:37:31AM +0100, Michal Hocko wrote:
+> > On Wed 08-03-23 11:41:02, Mike Rapoport wrote:
+> > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > > 
+> > > When set_memory or set_direct_map APIs used to change attribute or
+> > > permissions for chunks of several pages, the large PMD that maps these
+> > > pages in the direct map must be split. Fragmenting the direct map in such
+> > > manner causes TLB pressure and, eventually, performance degradation.
+> > > 
+> > > To avoid excessive direct map fragmentation, add ability to allocate
+> > > "unmapped" pages with __GFP_UNMAPPED flag that will cause removal of the
+> > > allocated pages from the direct map and use a cache of the unmapped pages.
+> > > 
+> > > This cache is replenished with higher order pages with preference for
+> > > PMD_SIZE pages when possible so that there will be fewer splits of large
+> > > pages in the direct map.
+> > > 
+> > > The cache is implemented as a buddy allocator, so it can serve high order
+> > > allocations of unmapped pages.
+> > 
+> > Why do we need a dedicated gfp flag for all this when a dedicated
+> > allocator is used anyway. What prevents users to call unmapped_pages_{alloc,free}?
 > 
-> This is a 30-day syzbot report for btrfs subsystem.
-> All related reports/information can be found at:
-> https://syzkaller.appspot.com/upstream/s/btrfs
-> 
-> During the period, 3 new issues were detected and 0 were fixed.
-> In total, 53 issues are still open and 29 have been fixed so far.
+> Using unmapped_pages_{alloc,free} adds complexity to the users which IMO
+> outweighs the cost of a dedicated gfp flag.
 
-The overview is convenient and monthly frequency is reasonable, thanks.
+Aren't those users rare and very special anyway?
+
+> For modules we'd have to make x86::module_{alloc,free}() take care of
+> mapping and unmapping the allocated pages in the modules virtual address
+> range. This also might become relevant for another architectures in future
+> and than we'll have several complex module_alloc()s. 
+
+The module_alloc use is lacking any justification. More context would be
+more than useful. Also vmalloc support for the proposed __GFP_UNMAPPED
+likely needs more explanation as well.
+
+> And for secretmem while using unmapped_pages_alloc() is easy, the free path
+> becomes really complex because actual page freeing for fd-based memory is
+> deeply buried in the page cache code.
+
+Why is that a problem? You already hook into the page freeing path and
+special case unmapped memory.
+
+> My gut feeling is that for PKS using a gfp flag would save a lot of hassle
+> as well.
+
+Well, my take on this is that this is not a generic page allocator
+functionality. It is clearly an allocator on top of the page allocator.
+In general gfp flags are scarce and convenience argument usually fires
+back later on in hard to predict ways. So I've learned to be careful
+here. I am not saying this is a no-go but right now I do not see any
+acutal advantage. The vmalloc usecase could be interesting in that
+regards but it is not really clear to me whether this is a good idea in
+the first place.
+
+-- 
+Michal Hocko
+SUSE Labs
