@@ -2,130 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A956CAD68
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8276CAD8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232787AbjC0Snn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 14:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
+        id S229718AbjC0So5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 14:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232715AbjC0Sn3 (ORCPT
+        with ESMTP id S232419AbjC0Soi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:43:29 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB564233;
-        Mon, 27 Mar 2023 11:43:23 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id bk5so7113435oib.6;
-        Mon, 27 Mar 2023 11:43:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679942603;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pE6BrZSZEIfHJZnlEnBPUpJidRJVROMBg6S+6nxssKs=;
-        b=ZACpH1ZMacEp/TxE9cfU6Laq6ZIhQrEM923Er/7LuS2OO8lj84a0fDCFzAvl+H3INl
-         dl0LdhLJcdymjCJbAILUAU01b0i+6Sc+MFI6Zb/smco1l4O8NbvVXLLI45dK7JQ8jMAD
-         Dt61h3hZT+WrP6a3DR23FRwWZRbh6lEUN9mmRJk6Qd/6Yz3MIfL5BHK6LBlAmnVR16Ic
-         IWPO0VAOyX52S1k/M58Nc4pBu45z1khk2dE6dHzzNF5/nhiVpzkKh0aVxw43gFCtlguL
-         h+0AY9hfNlwddx1LBDpi2+pJPL7DZFNU7bdnzcT6PqK/XcBRIeWCB13ltFNjuoUXoN3w
-         1ovw==
-X-Gm-Message-State: AAQBX9dauqxDY5yHUM+6pUiEF6Svg6BD/7uVzSj0kj9UvuTB7/4YcNUo
-        Zv3/r/yOhODKEBx1DrXvwQ==
-X-Google-Smtp-Source: AKy350Yoe4hgpUKbCUxvQlP6BHpmdYrkR/97D44BpHvO6gg9kj9r4j/ALflcwvzpNOeozVL7I6D0Jw==
-X-Received: by 2002:aca:919:0:b0:388:f3b6:edb0 with SMTP id 25-20020aca0919000000b00388f3b6edb0mr3671558oij.51.1679942602755;
-        Mon, 27 Mar 2023 11:43:22 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q204-20020a4a33d5000000b0053853156b5csm11154922ooq.8.2023.03.27.11.43.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 11:43:22 -0700 (PDT)
-Received: (nullmailer pid 250781 invoked by uid 1000);
-        Mon, 27 Mar 2023 18:43:19 -0000
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 27 Mar 2023 13:43:20 -0500
-Subject: [PATCH 3/3] clk: mvebu: Iterate over possible CPUs instead of DT
- CPU nodes
+        Mon, 27 Mar 2023 14:44:38 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3963549FD;
+        Mon, 27 Mar 2023 11:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=5CScXy6gm0WpuGrf5zNEgp8T/jt1ism2S0gifdGwUFM=; b=mY4Rzbp51m2Fms0zWkLvPm9w1V
+        1WxVviR1vQ6Hkxip9Wb+34EEhy2eYbuFh7RU5y9fZVi1uDoXNP2q7hd8JIttYBlmzIfacHrPVeRhC
+        m1YQH384r1urB2EraN5JV1I3xrPm0rIJR8P8Pyy/eUbClrZh5RF7ricRRgWLMc4f2iCaLt3xTSbPo
+        BvcGtyvH+A98jnm7lXLfmriC+ujN/dtPkAc1D2lNID4J7TRjbq/Sn+gWKp3/PrpEoJ/4hJjhDQZZL
+        W0kEtdoeQLv7QZVceFpqWC7VhLJ79kWuClRCSTMsRZzUv7OBaHysYEm+W8Z43flw41P+9J3V2SaYf
+        0GMqUBmg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pgrpF-00C5i4-0s;
+        Mon, 27 Mar 2023 18:44:13 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     axboe@kernel.dk, sth@linux.ibm.com, hoeppner@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH] block: annotate bdev_disk_changed() deprecation with a symbol namespace
+Date:   Mon, 27 Mar 2023 11:44:10 -0700
+Message-Id: <20230327184410.2881786-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-mvebu-clk-fixes-v1-3-438de1026efd@kernel.org>
-References: <20230327-mvebu-clk-fixes-v1-0-438de1026efd@kernel.org>
-In-Reply-To: <20230327-mvebu-clk-fixes-v1-0-438de1026efd@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org
-X-Mailer: b4 0.13-dev
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rework iterating over DT CPU nodes to iterate over possible CPUs
-instead. There's no need to walk the DT CPU nodes again. Possible CPUs
-is equal to the number of CPUs defined in the DT. Using the "reg" value
-for an array index is fragile as it assumes "reg" is 0-N which often is
-not the case.
+Instead of relying on fragile documentation which can easily let us
+slip, use a symbol namespace to annotate which symbols should not be
+used by others.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+This ensures no other users pop up by mistake easily and provides
+us a with an easy vehicle to do the same with other routines should
+we need it later.
+
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- drivers/clk/mvebu/clk-cpu.c | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+ block/partitions/core.c         | 6 +-----
+ drivers/block/loop.c            | 2 ++
+ drivers/s390/block/dasd_genhd.c | 2 ++
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/mvebu/clk-cpu.c b/drivers/clk/mvebu/clk-cpu.c
-index c2af3395cf13..db2b38c21304 100644
---- a/drivers/clk/mvebu/clk-cpu.c
-+++ b/drivers/clk/mvebu/clk-cpu.c
-@@ -168,8 +168,8 @@ static void __init of_cpu_clk_setup(struct device_node *node)
- 	struct cpu_clk *cpuclk;
- 	void __iomem *clock_complex_base = of_iomap(node, 0);
- 	void __iomem *pmu_dfs_base = of_iomap(node, 1);
--	int ncpus = 0;
--	struct device_node *dn;
-+	int ncpus = num_possible_cpus();
-+	int cpu;
+diff --git a/block/partitions/core.c b/block/partitions/core.c
+index 7b8ef6296abd..9fdb69f08f4e 100644
+--- a/block/partitions/core.c
++++ b/block/partitions/core.c
+@@ -698,11 +698,7 @@ int bdev_disk_changed(struct gendisk *disk, bool invalidate)
  
- 	if (clock_complex_base == NULL) {
- 		pr_err("%s: clock-complex base register not set\n",
-@@ -181,9 +181,6 @@ static void __init of_cpu_clk_setup(struct device_node *node)
- 		pr_warn("%s: pmu-dfs base register not set, dynamic frequency scaling not available\n",
- 			__func__);
+ 	return ret;
+ }
+-/*
+- * Only exported for loop and dasd for historic reasons.  Don't use in new
+- * code!
+- */
+-EXPORT_SYMBOL_GPL(bdev_disk_changed);
++EXPORT_SYMBOL_NS_GPL(bdev_disk_changed, BLOCK_DEPRECATED);
  
--	for_each_of_cpu_node(dn)
--		ncpus++;
--
- 	cpuclk = kcalloc(ncpus, sizeof(*cpuclk), GFP_KERNEL);
- 	if (WARN_ON(!cpuclk))
- 		goto cpuclk_out;
-@@ -192,19 +189,14 @@ static void __init of_cpu_clk_setup(struct device_node *node)
- 	if (WARN_ON(!clks))
- 		goto clks_out;
+ void *read_part_sector(struct parsed_partitions *state, sector_t n, Sector *p)
+ {
+diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+index 28eb59fd71ca..2e74cd93e8eb 100644
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -37,6 +37,8 @@
+ #include <linux/spinlock.h>
+ #include <uapi/linux/loop.h>
  
--	for_each_of_cpu_node(dn) {
-+	for_each_possible_cpu(cpu) {
- 		struct clk_init_data init;
- 		struct clk *clk;
- 		char *clk_name = kzalloc(5, GFP_KERNEL);
--		int cpu, err;
++MODULE_IMPORT_NS(BLOCK_DEPRECATED);
++
+ /* Possible states of device */
+ enum {
+ 	Lo_unbound,
+diff --git a/drivers/s390/block/dasd_genhd.c b/drivers/s390/block/dasd_genhd.c
+index 998a961e1704..5ea244aec534 100644
+--- a/drivers/s390/block/dasd_genhd.c
++++ b/drivers/s390/block/dasd_genhd.c
+@@ -25,6 +25,8 @@
  
- 		if (WARN_ON(!clk_name))
- 			goto bail_out;
+ #include "dasd_int.h"
  
--		err = of_property_read_u32(dn, "reg", &cpu);
--		if (WARN_ON(err))
--			goto bail_out;
--
- 		sprintf(clk_name, "cpu%d", cpu);
++MODULE_IMPORT_NS(BLOCK_DEPRECATED);
++
+ static unsigned int queue_depth = 32;
+ static unsigned int nr_hw_queues = 4;
  
- 		cpuclk[cpu].parent_name = of_clk_get_parent_name(node, 0);
-
 -- 
 2.39.2
 
