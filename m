@@ -2,109 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2DA6CA2BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7D66CA2C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbjC0Lqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 07:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
+        id S232519AbjC0Ls1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 07:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjC0Lqh (ORCPT
+        with ESMTP id S231196AbjC0Ls0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 07:46:37 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357A62713;
-        Mon, 27 Mar 2023 04:46:35 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id C55E21C0AB3; Mon, 27 Mar 2023 13:46:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1679917593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zFykRxzmTbL7DBBLByyFMIZThBCBkMRsBj1bnaQnEfI=;
-        b=TX+T+yKp5DacOLhkpQ4BA8cBSLOVIO3ikm4LDE7/oCmhs0Hj1zKoLT9qTDwqeX9E7yZNag
-        bqvc4VBmhBC7TUZksefeTGwAk1IMTeneJXk5NqdWroUMzHRUcV0HnQdgW37H3wyuv46t64
-        cVzIRKYzod+VUMAxlt2cqgVHp/O/TAU=
-Date:   Mon, 27 Mar 2023 13:46:33 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     ChiaEn Wu <chiaen_wu@richtek.com>
-Cc:     corbet@lwn.net, lee@kernel.org, matthias.bgg@gmail.com,
-        andriy.shevchenko@linux.intel.com, jacek.anaszewski@gmail.com,
-        angelogioacchino.delregno@collabora.com, linux-doc@vger.kernel.org,
-        peterwu.pub@gmail.com, cy_huang@richtek.com,
-        linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        szunichen@gmail.com, Alice Chen <alice_chen@richtek.com>
-Subject: Re: [PATCH v18 1/3] leds: rgb: mt6370: Add MediaTek MT6370 current
- sink type LED Indicator support
-Message-ID: <ZCGCGb9E4KYlFNXR@duo.ucw.cz>
-References: <cover.1678430444.git.chiaen_wu@richtek.com>
- <1df93a583c3f508a7158b83b95857e9bce235e1b.1678430444.git.chiaen_wu@richtek.com>
+        Mon, 27 Mar 2023 07:48:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7825526B2;
+        Mon, 27 Mar 2023 04:48:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C6C9611CD;
+        Mon, 27 Mar 2023 11:48:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 004AEC433EF;
+        Mon, 27 Mar 2023 11:48:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679917704;
+        bh=tLtZvmFNf2Kfy0YYLLGC3FJmLP1Ns+V1EFzqh3HVKjE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AlA+lU+HeeU1QK/EZjKCJ0Tso+B99iq80yZ4PX7XM7btkyuPud9ecJWHwD1LiMnts
+         t94baSO5Tt1vEuuJvkXBTIVQCgaFenyI3vVx+DE3wm+TyusW8VycOHWMW1woFEa9k4
+         bBL2JPMukpC/qJ5Z1/fjyq5Oa//6Z1E/p8C/E/hY=
+Date:   Mon, 27 Mar 2023 13:48:21 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] device property: Remove unused struct net_device
+ forward declaration
+Message-ID: <ZCGChRgzVZoaElge@kroah.com>
+References: <20230323151519.58479-1-andriy.shevchenko@linux.intel.com>
+ <ZCFryP+yZ7w38Ix9@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="D4r0h3j33WbMHnmz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1df93a583c3f508a7158b83b95857e9bce235e1b.1678430444.git.chiaen_wu@richtek.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZCFryP+yZ7w38Ix9@smile.fi.intel.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 27, 2023 at 01:11:20PM +0300, Andy Shevchenko wrote:
+> On Thu, Mar 23, 2023 at 05:15:19PM +0200, Andy Shevchenko wrote:
+> > There is no users in the property.h for the struct net_device.
+> > Remove the latter for good.
+> 
+> Oh, this seems unfortunate as it doesn't Cc Greg. Folks, shall we add
+> the header to "DRIVER CORE, KOBJECTS, DEBUGFS AND SYSFS"?
 
---D4r0h3j33WbMHnmz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi!
-
-> The MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery
-> charger, a USB Type-C & Power Delivery (PD) controller, dual
-> Flash LED current sources, a RGB LED driver, a backlight WLED driver,
-> a display bias driver and a general LDO for portable devices.
->=20
-> Add support for the MediaTek MT6370 Current Sink Type LED Indicator
-> driver. It can control four channels current-sink RGB LEDs with 3 modes:
-> constant current, PWM, and breath mode.
->=20
-> Acked-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-> Co-developed-by: Alice Chen <alice_chen@richtek.com>
-> Signed-off-by: Alice Chen <alice_chen@richtek.com>
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-
-
-> +++ b/drivers/leds/rgb/Makefile
-> @@ -2,3 +2,4 @@
-> =20
->  obj-$(CONFIG_LEDS_PWM_MULTICOLOR)	+=3D leds-pwm-multicolor.o
->  obj-$(CONFIG_LEDS_QCOM_LPG)		+=3D leds-qcom-lpg.o
-> +obj-$(CONFIG_LEDS_MT6370_RGB)		+=3D leds-mt6370-rgb.o
-
-I'd preffer leds-mt6370 name. We already have "rgb" in directory
-name...
-
-Otherwise looks good. Thanks for doing this.
-
-BR,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---D4r0h3j33WbMHnmz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZCGCGQAKCRAw5/Bqldv6
-8i3ZAJ9qQLfE458c3OH+zEji2EkMi7QlSgCeK9mwxBDeevOjUAyXRclkUMQNHsc=
-=XX/d
------END PGP SIGNATURE-----
-
---D4r0h3j33WbMHnmz--
+Yes please.
