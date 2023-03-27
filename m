@@ -2,80 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68AB6CABF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461436CABF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjC0RhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 13:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
+        id S229492AbjC0Riz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 13:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjC0RhR (ORCPT
+        with ESMTP id S229452AbjC0Riw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:37:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE8E26BD;
-        Mon, 27 Mar 2023 10:37:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69EAAB817B1;
-        Mon, 27 Mar 2023 17:37:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F55C433EF;
-        Mon, 27 Mar 2023 17:37:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679938633;
-        bh=MuO52qaReqcIdln0NNIIySF7AxqlHDIpBM5VMCT2wUk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DGI9BwjhcAXlq/YTscQOGBnqoTxUhfBwhV+jRtf6RNgRegYfDp41f8sRhNajMyTo+
-         Na+9cVqFjlwHIPqqXgx77sKZLvtUhULQSVyVDI1h2bgkCc8n5KCF1oKZpP+fhW0rZu
-         ti3C1IGtFDAMWC8g88j3Yzo/Si+tC3fSwL9yROZeeHbqRrHYI9a5qzNvdfkGQBBCSe
-         skVFkMlVtv6WgZxCROvIsvobWot0AXwCZAkoubZqCMornTpFGPjYv8Wrk/DzJihf1i
-         YHIyX6mWpI2MOSr0YT4kiXC5JD9n2MmcNs0v6rPk5vO9/AyudKzrOr4pBX/A1UVTUa
-         JZOXTnHY8NlmA==
-Date:   Mon, 27 Mar 2023 10:37:11 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Min Li <min.li.xe@renesas.com>
-Cc:     Min Li <lnimi@hotmail.com>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH mfd-n 1/2] ptp: clockmatrix: support 32-bit address
- space
-Message-ID: <20230327103711.7d73ea09@kernel.org>
-In-Reply-To: <OS3PR01MB6593510463322D4410EB8D59BA8B9@OS3PR01MB6593.jpnprd01.prod.outlook.com>
-References: <MW5PR03MB69324DE0DEA03E3C62C57447A0879@MW5PR03MB6932.namprd03.prod.outlook.com>
-        <20230323095626.14d6d4da@kernel.org>
-        <OS3PR01MB6593510463322D4410EB8D59BA8B9@OS3PR01MB6593.jpnprd01.prod.outlook.com>
+        Mon, 27 Mar 2023 13:38:52 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C04E1998
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:38:50 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id d5-20020a923605000000b003232594207dso6342566ila.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:38:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679938729;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=86xtUdlUoaFaW4jF9AAQbjpLasDppMrDiecKJxkCSqk=;
+        b=LSTCwW39X5kS/HFuUlDa7uTeMxDozbreGxO3h99cancX3FKJeidygkbY6QEcp37Ki+
+         YQ06RSLdJ6dh6betmJt4d1HLZeNYt6bNgUxk5thn9xbYyOaQK8yEFBpihxKVVamlR4MJ
+         U7uurusLlHC7M3XbjItbkEvbG+1gAvKI0sL9rTU1gtI2E58N+HbeZiaHfB38TOLMQpIp
+         tkBEUISx8UYGp6NlM3rAQVIMvdXSFQxQMlufbkHSpGWw5FkQWlDUeTQyTrK3eHI1hfro
+         gmmZP82CIt0PU1MM5zC4RvEY4Hf3HZvYQqlsgzIa1QrNON3HgoLe5LCWNrJ+aWKOG9iW
+         Cm7w==
+X-Gm-Message-State: AO0yUKWDpPTOt30GunvYtVvFVE+LC5qgBgVxy28lll3e0cc6XRfKj6Dr
+        Ycfc7cs37utrgUYvv1Dihp5YXCpoXgWUP2V2m5OMJf4HRcOX
+X-Google-Smtp-Source: AK7set8PWIAiENHl4ch+8KDhGfPfcKelKlwfLIIESpa9o1Z4COxo6QpBPC3CTaW2/+ol7A39UEFF/ZFpYC8MrnvUIAbOn6uFpWrt
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:3313:0:b0:3c5:df3:a58b with SMTP id
+ c19-20020a023313000000b003c50df3a58bmr4951042jae.2.1679938729792; Mon, 27 Mar
+ 2023 10:38:49 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 10:38:49 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003bfb4a05f7e537a7@google.com>
+Subject: [syzbot] Monthly ntfs3 report
+From:   syzbot <syzbot+list1f86ee42427f86558b42@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023 14:54:41 +0000 Min Li wrote:
-> > On Thu, 23 Mar 2023 12:15:17 -0400 Min Li wrote:  
-> > > -		err = idtcm_write(idtcm, 0, HW_Q8_CTRL_SPARE,
-> > > +		err = idtcm_write(idtcm, HW_Q8_CTRL_SPARE, 0,
-> > >  				  &temp, sizeof(temp));  
-> > 
-> > The flipping of the arguments should also be a separate patch.  
-> 
-> Hi Jakub
-> 
-> If I separate this change, the other patch would be broken since it changed
-> HW_Q8_CTRL_SPARE from a u16 value to u32 and it doesn't fit the function's
-> particular parameter anymore
+Hello ntfs3 maintainers/developers,
 
-Both arguments are u16 now, so nothing can overflow until you change
-the addresses to be u32.
+This is a 30-day syzbot report for the ntfs3 subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/ntfs3
 
-patch 1 - reorder the arguments
-patch 2 - bump the types to u32
-patch 3 - change the addresses
+During the period, 2 new issues were detected and 0 were fixed.
+In total, 61 issues are still open and 20 have been fixed so far.
+
+Some of the still happening issues:
+
+Crashes Repro Title
+3452    Yes   KASAN: slab-out-of-bounds Read in ntfs_iget5
+              https://syzkaller.appspot.com/bug?extid=b4084c18420f9fad0b4f
+897     Yes   KASAN: out-of-bounds Write in end_buffer_read_sync
+              https://syzkaller.appspot.com/bug?extid=3f7f291a3d327486073c
+840     Yes   possible deadlock in ni_fiemap
+              https://syzkaller.appspot.com/bug?extid=c300ab283ba3bc072439
+658     Yes   UBSAN: shift-out-of-bounds in ntfs_fill_super (2)
+              https://syzkaller.appspot.com/bug?extid=478c1bf0e6bf4a8f3a04
+606     Yes   possible deadlock in attr_data_get_block
+              https://syzkaller.appspot.com/bug?extid=36bb70085ef6edc2ebb9
+243     Yes   possible deadlock in mi_read
+              https://syzkaller.appspot.com/bug?extid=bc7ca0ae4591cb2550f9
+182     Yes   possible deadlock in ntfs_set_state
+              https://syzkaller.appspot.com/bug?extid=f91c29a5d5a01ada051a
+178     Yes   possible deadlock in ntfs_fiemap
+              https://syzkaller.appspot.com/bug?extid=96cee7d33ca3f87eee86
+128     No    possible deadlock in ntfs_mark_rec_free
+              https://syzkaller.appspot.com/bug?extid=f83f0dbef763c426e3cf
+56      Yes   WARNING in do_symlinkat
+              https://syzkaller.appspot.com/bug?extid=e78eab0c1cf4649256ed
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
