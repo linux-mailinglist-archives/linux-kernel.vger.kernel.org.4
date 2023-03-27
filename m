@@ -2,139 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D376CA853
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466016CA85B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233013AbjC0O46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
+        id S233148AbjC0O6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233017AbjC0O4y (ORCPT
+        with ESMTP id S233121AbjC0O6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:56:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B14130F8;
-        Mon, 27 Mar 2023 07:56:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679929003; x=1711465003;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=BRqQ/P0VMt4c6LS9SziOR7bbAmyIDfw7eWqlAV9D8cc=;
-  b=L55txLuimMA25e4m5A0LQeof3omTRmqYC5ffh7duKOIX3X34QGx2SyYR
-   KucuknSSDQypflfrO8aw9DbvMU/b8vZfeyZEKECRm2sUU+t96XHJEtlN3
-   dlSoRMfMGxnoMZpz5qOZgO84fzwk4qflPRR+zGCJBSejQv2gwPH+PEvLK
-   XwfNGV7kAuMVeza+zGhMMkVQhcw1SCK7mgkiscYRxDHOqDDFcTSe7ObJ5
-   A6GtisK+zRu7vUcetroxFS31cq5Ken3DLO0cBp+siCyC9ulBjGSXYXt8m
-   ZnZ7fXtDAZiR9J/YrcAsHn4Mo/sXa6oHrhz9xHG6qu3Z1jBVoktRGtDOw
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="426547735"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="426547735"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 07:56:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="794368272"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="794368272"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga002.fm.intel.com with ESMTP; 27 Mar 2023 07:56:40 -0700
-Message-ID: <086a7af9-0a33-1a37-2bf3-1338adf96b12@linux.intel.com>
-Date:   Mon, 27 Mar 2023 17:58:02 +0300
+        Mon, 27 Mar 2023 10:58:47 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFB149E9;
+        Mon, 27 Mar 2023 07:58:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=cE0RQJv+FQscAn7Kg18zI4d5MgKmBRB/NIb1/jav8Js=; b=Qjf6fdufszYfPvYeyKk/7u11qa
+        9K6I5TfacvrDxJyo0Sf077teARpsMFYaxJmPUM+beCxy0yUkgEI6uV1jo79+LWq0LFetIKlSHsYrG
+        eLggNARQNmV+huipzexYXs2GdFhqoV8pOKRRcuxbFljiEFsP/k1EIaljZhsmIGah/2mj459hIMbas
+        jRpzXJvJSdIb8R/EhpVgnu9jDMNCfIubiUXgfFnXy7Mp707oebFYE2XDNvwOnBcgU5FUOYQ70FmLy
+        8GAJVbV/rJ2J+8t/QU5CAqhj8wcYXf+RQxG+qBqodbdaFhVhU5n5lYVORJ6cGqaraUNDl1+chJGdF
+        7rvddM+A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pgoIZ-007UFv-V7; Mon, 27 Mar 2023 14:58:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5454A3001E5;
+        Mon, 27 Mar 2023 16:58:13 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 17AE62111BE15; Mon, 27 Mar 2023 16:58:13 +0200 (CEST)
+Date:   Mon, 27 Mar 2023 16:58:13 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Markus Elfring <Markus.Elfring@web.de>,
+        kernel-janitors@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>, x86@kernel.org,
+        cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH resent] perf/x86/amd/uncore: Fix exception handling in
+ amd_uncore_cpu_up_prepare()
+Message-ID: <20230327145813.GA11425@hirez.programming.kicks-ass.net>
+References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
+ <ab860edf-79ca-2035-c5a3-d25be6fd9dac@web.de>
+ <3a35fb28-5937-72f8-b2e8-b1d9899b5e43@web.de>
+ <d691d740-c172-a5cb-e4f0-5bc5687c8464@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Content-Language: en-US
-To:     Hongyu Xie <xiehongyu1@kylinos.cn>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, sunke <sunke@kylinos.cn>
-References: <20230327011117.33953-1-xiehongyu1@kylinos.cn>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH -next v2] usb: xhci: do not free an empty cmd ring
-In-Reply-To: <20230327011117.33953-1-xiehongyu1@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d691d740-c172-a5cb-e4f0-5bc5687c8464@intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.3.2023 4.11, Hongyu Xie wrote:
-> It was first found on HUAWEI Kirin 9006C platform with a builtin xhci
-> controller during stress cycle test(stress-ng, glmark2, x11perf, S4...).
+On Mon, Mar 27, 2023 at 12:11:54PM +0300, Adrian Hunter wrote:
+> On 25/03/23 16:15, Markus Elfring wrote:
+> > Date: Fri, 17 Mar 2023 13:13:14 +0100
+> > 
+> > The label “fail” was used to jump to another pointer check despite of
+> > the detail in the implementation of the function “amd_uncore_cpu_up_prepare”
+> > that it was determined already that the corresponding variable contained
+> > a null pointer (because of a failed function call in two cases).
+> > 
+> > 1. Thus return directly after a call of the function “amd_uncore_alloc”
+> >    failed in the first if branch.
+> > 
+> > 2. Use more appropriate labels instead.
+> > 
+> > 3. Reorder jump targets at the end.
+> > 
+> > 4. Delete a redundant check and kfree() call.
+> > 
+> > 5. Omit an explicit initialisation for the local variable “uncore_llc”.
+> > 
+> > 
+> > This issue was detected by using the Coccinelle software.
+> > 
+> > Fixes: 39621c5808f5dda75d03dc4b2d4d2b13a5a1c34b ("perf/x86/amd/uncore: Use dynamic events array")
+> > Fixes: 503d3291a937b726757c1f7c45fa02389d2f4324 ("perf/x86/amd: Try to fix some mem allocation failure handling")
 > 
-> phase one:
-> [26788.706878] PM: dpm_run_callback(): platform_pm_thaw+0x0/0x68 returns -12
-> [26788.706878] PM: Device xhci-hcd.1.auto failed to thaw async: error -12
-> ...
-> phase two:
-> [28650.583496] [2023:01:19 04:43:29]Unable to handle kernel NULL pointer dereference at virtual address 0000000000000028
-> ...
-> [28650.583526] user pgtable: 4k pages, 39-bit VAs, pgdp=000000027862a000
-> [28650.583557] [0000000000000028] pgd=0000000000000000
-> ...
-> [28650.583587] pc : xhci_suspend+0x154/0x5b0
-> [28650.583618] lr : xhci_suspend+0x148/0x5b0
-> [28650.583618] sp : ffffffc01c7ebbd0
-> [28650.583618] x29: ffffffc01c7ebbd0 x28: ffffffec834d0000
-> [28650.583618] x27: ffffffc0106a3cc8 x26: ffffffb2c540c848
-> [28650.583618] x25: 0000000000000000 x24: ffffffec82ee30b0
-> [28650.583618] x23: ffffffb43b31c2f8 x22: 0000000000000000
-> [28650.583618] x21: 0000000000000000 x20: ffffffb43b31c000
-> [28650.583648] x19: ffffffb43b31c2a8 x18: 0000000000000001
-> [28650.583648] x17: 0000000000000803 x16: 00000000fffffffe
-> [28650.583648] x15: 0000000000001000 x14: ffffffb150b67e00
-> [28650.583648] x13: 00000000f0000000 x12: 0000000000000001
-> [28650.583648] x11: 0000000000000000 x10: 0000000000000a80
-> [28650.583648] x9 : ffffffc01c7eba00 x8 : ffffffb43ad10ae0
-> [28650.583648] x7 : ffffffb84cd98dc0 x6 : 0000000cceb6a101
-> [28650.583679] x5 : 00ffffffffffffff x4 : 0000000000000001
-> [28650.583679] x3 : 0000000000000011 x2 : 0000000000e2cfa8
-> [28650.583679] x1 : 00000000823535e1 x0 : 0000000000000000
+> Commit should be only the first 12 characters of the hash.
+> Refer:	https://docs.kernel.org/process/submitting-patches.html
 > 
-> gdb:
-> (gdb) l *(xhci_suspend+0x154)
-> 0xffffffc010b6cd44 is in xhci_suspend (/.../drivers/usb/host/xhci.c:854).
-> 849	{
-> 850		struct xhci_ring *ring;
-> 851		struct xhci_segment *seg;
-> 852
-> 853		ring = xhci->cmd_ring;
-> 854		seg = ring->deq_seg;
-> (gdb) disassemble 0xffffffc010b6cd44
-> ...
-> 0xffffffc010b6cd40 <+336>:	ldr	x22, [x19, #160]
-> 0xffffffc010b6cd44 <+340>:	ldr	x20, [x22, #40]
-> 0xffffffc010b6cd48 <+344>:	mov	w1, #0x0                   	// #0
+> But this is not a fix. Redundant calls to kfree do not break
+> anything.
 > 
-> During phase one, platform_pm_thaw called xhci_plat_resume which called
-> xhci_resume. The rest possible calling routine might be
-> xhci_resume->xhci_init->xhci_mem_init, and xhci->cmd_ring was cleaned in
-> xhci_mem_cleanup before xhci_mem_init returned -ENOMEM.
-> 
-> During phase two, systemd was tring to hibernate again and called
-> xhci_suspend, then xhci_clear_command_ring dereferenced xhci->cmd_ring
-> which was already NULL.
-> 
+> Also avoid using the term "exception" since, in x86, exceptions are
+> hardware events.  Better to just call it "error handling".
 
-Any comments on the questions I had on the first version of the patch?
-
-xhci_mem_init() failing with -ENOMEM looks like the real problem here.
-
-Are we really running out of memory? does kmemleak say anything?
-
-Any chance you could look into where exactly xhci_mem_init() fails as
-xhci_mem_init() always returns -ENOMEM on failure?
-
-> So if xhci->cmd_ring is NULL, xhci_clear_command_ring just return.
-
-This hides the problem more than solves it. Root cause is still unknown
-
-Thanks
-Mathias
-
+Don't feed the trolls; Markus is a bot or other weird construct that's
+been banned from lkml.
