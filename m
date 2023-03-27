@@ -2,238 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216746CA977
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590C36CA97B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbjC0PqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 11:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
+        id S232957AbjC0Pqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 11:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232613AbjC0Pp7 (ORCPT
+        with ESMTP id S232789AbjC0PqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:45:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04DD410C9;
-        Mon, 27 Mar 2023 08:45:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 01367143D;
-        Mon, 27 Mar 2023 08:46:42 -0700 (PDT)
-Received: from e120937-lin.. (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 631AB3F6C4;
-        Mon, 27 Mar 2023 08:45:56 -0700 (PDT)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Cc:     sudeep.holla@arm.com, vincent.guittot@linaro.org,
-        souvik.chakravarty@arm.com, nicola.mazzucato@arm.com,
-        cristian.marussi@arm.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Subject: [PATCH v2 2/2] firmware: arm_scmi: Add support for unidirectional mailbox channels
-Date:   Mon, 27 Mar 2023 16:45:28 +0100
-Message-Id: <20230327154528.460836-3-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230327154528.460836-1-cristian.marussi@arm.com>
-References: <20230327154528.460836-1-cristian.marussi@arm.com>
+        Mon, 27 Mar 2023 11:46:22 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE83A55B2;
+        Mon, 27 Mar 2023 08:46:13 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 193A8604F2;
+        Mon, 27 Mar 2023 17:46:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1679931971; bh=kB+P1N+4RPMDv1e2HhvD7kV2dHk0AT6TukSryazX3DE=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=Eyr8b73JusPM6z5Chc9NqqC2+gaiZRscBym0NU2YYx4LW/bO/VrSANSYUsFcCs2J2
+         b530fvVDjGZni80EHEziQwO2Civw9b7FIgfiMd1prHjSuBirvi8IQ5H/NVCHgEKEr9
+         dVJXEk+jBXsiTdE6BFtjnQU4CPW+rMxNAvHUBi+hbd+m0CCeDq45Dada6x0gxopPYL
+         2M2OFHGWj3E91kIU2vuBJM7FT9C/TFCpmc2yUCAw9saY0RkpzIZoToeRQ9PdTrdF+w
+         Ec24DljmIIeUV9IcgTthebMzV+X+w9fj3MF664Kgo/NKwmuRgi9zJihyAI+sHdarbK
+         w3CMOfDw+vJYw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id cAvTwWYXfs8c; Mon, 27 Mar 2023 17:46:08 +0200 (CEST)
+Received: from [192.168.1.3] (unknown [77.237.101.225])
+        by domac.alu.hr (Postfix) with ESMTPSA id F2036604EF;
+        Mon, 27 Mar 2023 17:46:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1679931968; bh=kB+P1N+4RPMDv1e2HhvD7kV2dHk0AT6TukSryazX3DE=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=woegmFr6GR0EFaPiZl4H6TkNI3ZKmIIsVgTumO4FTp2vIFJKxtBzX7pezpuTN9h5r
+         gEWuyYsSxpPW7sdQliXjbDzp1Mj6cDQqGLczMUSc6rb3De3dXEPvzcXesaYRpKqCT2
+         4Wf5WOSnW6FCmyKi7lTHA+xBsmsoTufJZLSYqmWWPgfsID0Vanb7t8+8+VuSeSZvmq
+         Bw1d18SH3QJX9MpgZaLfjEg7dwUiCsBbVQbn2P/PtRPPyT3gOgHbvpIq6botcVg/L5
+         pBB4SIAB0v9Aa2zYeUi1Qw656a6a3/nDdhv9b2Zin55XHifDo4hEVmdv9qepBJyQKp
+         DErLrUWEIsvjg==
+Message-ID: <cd5d13c8-10b5-af8f-03b7-2a8e919e058a@alu.unizg.hr>
+Date:   Mon, 27 Mar 2023 17:46:07 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: Re: [PATCH] xhci: Free the command allocated for setting LPM if we
+ return early
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ubuntu-devel-discuss@lists.ubuntu.com, stern@rowland.harvard.edu,
+        arnd@arndb.de, Stable@vger.kernel.org
+References: <b86fcdbd-f1c6-846f-838f-b7679ec4e2b4@linux.intel.com>
+ <20230327095019.1017159-1-mathias.nyman@linux.intel.com>
+ <ZCGDRrT4Bo3-UYOZ@kroah.com>
+ <70474413-fcb0-7527-d7a3-67c3e55d0f1b@linux.intel.com>
+Content-Language: en-US, hr
+In-Reply-To: <70474413-fcb0-7527-d7a3-67c3e55d0f1b@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend the SCMI transport layer to support mailbox controllers that expose
-communication channels that are unidirectional by nature.
+On 27. 03. 2023. 15:31, Mathias Nyman wrote:
+> On 27.3.2023 14.51, Greg KH wrote:
+>> On Mon, Mar 27, 2023 at 12:50:19PM +0300, Mathias Nyman wrote:
+>>> The command allocated to set exit latency LPM values need to be freed in
+>>> case the command is never queued. This would be the case if there is no
+>>> change in exit latency values, or device is missing.
+>>>
+>>> Fixes: 5c2a380a5aa8 ("xhci: Allocate separate command structures for each LPM command")
+>>> Cc: <Stable@vger.kernel.org>
+>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>> ---
+>>>   drivers/usb/host/xhci.c | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>
+>> Do you want me to take this now, or will you be sending this to me in a
+>> separate series of xhci fixes?  Either is fine with me.
+> 
+> I can send a separate series this week, there are some other fixes as well.
 
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
- drivers/firmware/arm_scmi/mailbox.c | 95 +++++++++++++++++++++++++----
- 1 file changed, 84 insertions(+), 11 deletions(-)
+Hi, Mathias,
 
-diff --git a/drivers/firmware/arm_scmi/mailbox.c b/drivers/firmware/arm_scmi/mailbox.c
-index 112c285deb97..1efa5e9392c4 100644
---- a/drivers/firmware/arm_scmi/mailbox.c
-+++ b/drivers/firmware/arm_scmi/mailbox.c
-@@ -19,13 +19,15 @@
-  * struct scmi_mailbox - Structure representing a SCMI mailbox transport
-  *
-  * @cl: Mailbox Client
-- * @chan: Transmit/Receive mailbox channel
-+ * @chan: Transmit/Receive mailbox uni/bi-directional channel
-+ * @chan_receiver: Optional Receiver mailbox unidirectional channel
-  * @cinfo: SCMI channel info
-  * @shmem: Transmit/Receive shared memory area
-  */
- struct scmi_mailbox {
- 	struct mbox_client cl;
- 	struct mbox_chan *chan;
-+	struct mbox_chan *chan_receiver;
- 	struct scmi_chan_info *cinfo;
- 	struct scmi_shared_mem __iomem *shmem;
- };
-@@ -48,30 +50,62 @@ static void rx_callback(struct mbox_client *cl, void *m)
- 
- static bool mailbox_chan_available(struct device_node *of_node, int idx)
- {
-+	int num_mb;
-+
-+	/*
-+	 * Just check if bidirrectional channels are involved, and check the
-+	 * index accordingly; proper full validation will be made later
-+	 * in mailbox_chan_setup().
-+	 */
-+	num_mb = of_count_phandle_with_args(of_node, "mboxes", "#mbox-cells");
-+	if (num_mb == 3 && idx == 1)
-+		idx = 2;
-+
- 	return !of_parse_phandle_with_args(of_node, "mboxes",
- 					   "#mbox-cells", idx, NULL);
- }
- 
--static int mailbox_chan_validate(struct device *cdev)
-+/**
-+ * mailbox_chan_validate  - Validate transport configuration and map channels
-+ *
-+ * @cdev: Reference to the underlying transport device carrying the
-+ *	  of_node descriptor to analyze.
-+ * @a2p_rx_chan: A reference to an optional unidirectional channel to use
-+ *		 for replies on the a2p channel. Set as zero if not present.
-+ * @p2a_chan: A reference to the optional p2a channel.
-+ *	      Set as zero if not present.
-+ *
-+ * At first, validate the transport configuration as described in terms of
-+ * 'mboxes' and 'shmem', then determin which mailbox channel indexes are
-+ * appropriate to be use in the current configuration.
-+ *
-+ * Return: 0 on Success or error
-+ */
-+static int mailbox_chan_validate(struct device *cdev,
-+				 int *a2p_rx_chan, int *p2a_chan)
- {
- 	int num_mb, num_sh, ret = 0;
- 	struct device_node *np = cdev->of_node;
- 
- 	num_mb = of_count_phandle_with_args(np, "mboxes", "#mbox-cells");
- 	num_sh = of_count_phandle_with_args(np, "shmem", NULL);
-+	dev_dbg(cdev, "Found %d mboxes and %d shmems !\n", num_mb, num_sh);
-+
- 	/* Bail out if mboxes and shmem descriptors are inconsistent */
--	if (num_mb <= 0 || num_sh > 2 || num_mb != num_sh) {
--		dev_warn(cdev, "Invalid channel descriptor for '%s'\n",
--			 of_node_full_name(np));
-+	if (num_mb <= 0 || num_sh <= 0 || num_sh > 2 || num_mb > 3 ||
-+	    (num_mb == 1 && num_sh != 1) || (num_mb == 3 && num_sh != 2)) {
-+		dev_warn(cdev,
-+			 "Invalid channel descriptor for '%s' - mbs:%d  shm:%d\n",
-+			 of_node_full_name(np), num_mb, num_sh);
- 		return -EINVAL;
- 	}
- 
-+	/* Bail out if provided shmem descriptors do not refer distinct areas  */
- 	if (num_sh > 1) {
- 		struct device_node *np_tx, *np_rx;
- 
- 		np_tx = of_parse_phandle(np, "shmem", 0);
- 		np_rx = of_parse_phandle(np, "shmem", 1);
--		/* SCMI Tx and Rx shared mem areas have to be distinct */
- 		if (!np_tx || !np_rx || np_tx == np_rx) {
- 			dev_warn(cdev, "Invalid shmem descriptor for '%s'\n",
- 				 of_node_full_name(np));
-@@ -82,6 +116,29 @@ static int mailbox_chan_validate(struct device *cdev)
- 		of_node_put(np_rx);
- 	}
- 
-+	/* Calculate channels IDs to use depending on mboxes/shmem layout */
-+	if (!ret) {
-+		switch (num_mb) {
-+		case 1:
-+			*a2p_rx_chan = 0;
-+			*p2a_chan = 0;
-+			break;
-+		case 2:
-+			if (num_sh == 2) {
-+				*a2p_rx_chan = 0;
-+				*p2a_chan = 1;
-+			} else {
-+				*a2p_rx_chan = 1;
-+				*p2a_chan = 0;
-+			}
-+			break;
-+		case 3:
-+			*a2p_rx_chan = 1;
-+			*p2a_chan = 2;
-+			break;
-+		}
-+	}
-+
- 	return ret;
- }
- 
-@@ -92,15 +149,18 @@ static int mailbox_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
- 	struct device *cdev = cinfo->dev;
- 	struct scmi_mailbox *smbox;
- 	struct device_node *shmem;
--	int ret, idx = tx ? 0 : 1;
-+	int ret, a2p_rx_chan, p2a_chan, idx = tx ? 0 : 1;
- 	struct mbox_client *cl;
- 	resource_size_t size;
- 	struct resource res;
- 
--	ret = mailbox_chan_validate(cdev);
-+	ret = mailbox_chan_validate(cdev, &a2p_rx_chan, &p2a_chan);
- 	if (ret)
- 		return ret;
- 
-+	if (!tx && !p2a_chan)
-+		return -ENODEV;
-+
- 	smbox = devm_kzalloc(dev, sizeof(*smbox), GFP_KERNEL);
- 	if (!smbox)
- 		return -ENOMEM;
-@@ -130,15 +190,26 @@ static int mailbox_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
- 	cl->tx_block = false;
- 	cl->knows_txdone = tx;
- 
--	smbox->chan = mbox_request_channel(cl, tx ? 0 : 1);
-+	smbox->chan = mbox_request_channel(cl, tx ? 0 : p2a_chan);
- 	if (IS_ERR(smbox->chan)) {
- 		ret = PTR_ERR(smbox->chan);
- 		if (ret != -EPROBE_DEFER)
--			dev_err(cdev, "failed to request SCMI %s mailbox\n",
--				tx ? "Tx" : "Rx");
-+			dev_err(cdev,
-+				"failed to request SCMI %s mailbox\n", desc);
- 		return ret;
- 	}
- 
-+	/* Additional unidirectional channel for TX if needed */
-+	if (tx && a2p_rx_chan) {
-+		smbox->chan_receiver = mbox_request_channel(cl, a2p_rx_chan);
-+		if (IS_ERR(smbox->chan_receiver)) {
-+			ret = PTR_ERR(smbox->chan_receiver);
-+			if (ret != -EPROBE_DEFER)
-+				dev_err(cdev, "failed to request SCMI Tx Receiver mailbox\n");
-+			return ret;
-+		}
-+	}
-+
- 	cinfo->transport_info = smbox;
- 	smbox->cinfo = cinfo;
- 
-@@ -152,8 +223,10 @@ static int mailbox_chan_free(int id, void *p, void *data)
- 
- 	if (smbox && !IS_ERR(smbox->chan)) {
- 		mbox_free_channel(smbox->chan);
-+		mbox_free_channel(smbox->chan_receiver);
- 		cinfo->transport_info = NULL;
- 		smbox->chan = NULL;
-+		smbox->chan_receiver = NULL;
- 		smbox->cinfo = NULL;
- 	}
- 
+I can confirm from the original setup that triggered the bug:
+
+root@marvin-IdeaPad-3-15ITL6:~# uname -rms
+Linux 6.3.0-rc3-kobj-rlse-00317-g65aca32efdcb-dirty x86_64
+root@marvin-IdeaPad-3-15ITL6:~# 
+
+The version without the patch still manifests the issue:
+
+root@marvin-IdeaPad-3-15ITL6:/home/marvin# uname -rms
+Linux 6.3.0-rc3-kobj-rlse-wop-00317-g65aca32efdcb x86_64
+root@marvin-IdeaPad-3-15ITL6:/home/marvin# echo scan > /sys/kernel/debug/kmemleak 
+root@marvin-IdeaPad-3-15ITL6:/home/marvin# cat /sys/kernel/debug/kmemleak
+unreferenced object 0xffff96e59c4e1400 (size 64):
+  comm "systemd-udevd", pid 420, jiffies 4294893221 (age 260.340s)
+  hex dump (first 32 bytes):
+    c0 8b c3 98 e5 96 ff ff 00 00 00 00 00 00 00 00  ................
+    60 8c c3 98 e5 96 ff ff 00 00 00 00 00 00 00 00  `...............
+  backtrace:
+    [<ffffffffacbde94c>] slab_post_alloc_hook+0x8c/0x320
+    [<ffffffffacbe5107>] __kmem_cache_alloc_node+0x1c7/0x2b0
+    [<ffffffffacb62f3b>] kmalloc_node_trace+0x2b/0xa0
+    [<ffffffffad3af2ec>] xhci_alloc_command+0x7c/0x1b0
+    [<ffffffffad3af451>] xhci_alloc_command_with_ctx+0x21/0x70
+    [<ffffffffad3a8a3e>] xhci_change_max_exit_latency+0x2e/0x1c0
+    [<ffffffffad3a8c5b>] xhci_disable_usb3_lpm_timeout+0x7b/0xb0
+    [<ffffffffad3457a7>] usb_disable_link_state+0x57/0xe0
+    [<ffffffffad345f46>] usb_disable_lpm+0x86/0xc0
+    [<ffffffffad345fc1>] usb_unlocked_disable_lpm+0x31/0x60
+    [<ffffffffad355db6>] usb_disable_device+0x136/0x250
+    [<ffffffffad356b23>] usb_set_configuration+0x583/0xa70
+    [<ffffffffad364c6d>] usb_generic_driver_disconnect+0x2d/0x40
+    [<ffffffffad358612>] usb_unbind_device+0x32/0x90
+    [<ffffffffad222295>] device_remove+0x65/0x70
+    [<ffffffffad223903>] device_release_driver_internal+0xc3/0x140
+unreferenced object 0xffff96e598c38c60 (size 32):
+  comm "systemd-udevd", pid 420, jiffies 4294893221 (age 260.340s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    70 8c c3 98 e5 96 ff ff 70 8c c3 98 e5 96 ff ff  p.......p.......
+  backtrace:
+    [<ffffffffacbde94c>] slab_post_alloc_hook+0x8c/0x320
+    [<ffffffffacbe5107>] __kmem_cache_alloc_node+0x1c7/0x2b0
+    [<ffffffffacb62f3b>] kmalloc_node_trace+0x2b/0xa0
+    [<ffffffffad3af364>] xhci_alloc_command+0xf4/0x1b0
+    [<ffffffffad3af451>] xhci_alloc_command_with_ctx+0x21/0x70
+    [<ffffffffad3a8a3e>] xhci_change_max_exit_latency+0x2e/0x1c0
+    [<ffffffffad3a8c5b>] xhci_disable_usb3_lpm_timeout+0x7b/0xb0
+    [<ffffffffad3457a7>] usb_disable_link_state+0x57/0xe0
+    [<ffffffffad345f46>] usb_disable_lpm+0x86/0xc0
+    [<ffffffffad345fc1>] usb_unlocked_disable_lpm+0x31/0x60
+    [<ffffffffad355db6>] usb_disable_device+0x136/0x250
+    [<ffffffffad356b23>] usb_set_configuration+0x583/0xa70
+    [<ffffffffad364c6d>] usb_generic_driver_disconnect+0x2d/0x40
+    [<ffffffffad358612>] usb_unbind_device+0x32/0x90
+    [<ffffffffad222295>] device_remove+0x65/0x70
+    [<ffffffffad223903>] device_release_driver_internal+0xc3/0x140
+unreferenced object 0xffff96e598c38bc0 (size 32):
+  comm "systemd-udevd", pid 420, jiffies 4294893221 (age 260.340s)
+  hex dump (first 32 bytes):
+    02 00 00 00 20 04 00 00 00 90 79 9c e5 96 ff ff  .... .....y.....
+    00 90 79 1c 01 00 00 00 00 00 00 00 00 00 00 00  ..y.............
+  backtrace:
+    [<ffffffffacbde94c>] slab_post_alloc_hook+0x8c/0x320
+    [<ffffffffacbe5107>] __kmem_cache_alloc_node+0x1c7/0x2b0
+    [<ffffffffacb62f3b>] kmalloc_node_trace+0x2b/0xa0
+    [<ffffffffad3ad86e>] xhci_alloc_container_ctx+0x7e/0x140
+    [<ffffffffad3af469>] xhci_alloc_command_with_ctx+0x39/0x70
+    [<ffffffffad3a8a3e>] xhci_change_max_exit_latency+0x2e/0x1c0
+    [<ffffffffad3a8c5b>] xhci_disable_usb3_lpm_timeout+0x7b/0xb0
+    [<ffffffffad3457a7>] usb_disable_link_state+0x57/0xe0
+    [<ffffffffad345f46>] usb_disable_lpm+0x86/0xc0
+    [<ffffffffad345fc1>] usb_unlocked_disable_lpm+0x31/0x60
+    [<ffffffffad355db6>] usb_disable_device+0x136/0x250
+    [<ffffffffad356b23>] usb_set_configuration+0x583/0xa70
+    [<ffffffffad364c6d>] usb_generic_driver_disconnect+0x2d/0x40
+.
+.
+.
+
+It is completely the same commit save to the difference of applying your patch
+kobj-rlse-dirty version and removing it and rebuilding -kobj-rlse-wop- version
+
+Congratulations, for further bisect appears obsoleted.
+
+I haven't been able to iterate the bug, or cause more leaks by unplugging and
+plugging in again USB devices, so I cannot estimate severity of this bug, but
+I really wouldn't have an idea without bisecting first.
+
+Best regards,
+Mirsad
+
 -- 
-2.34.1
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+ 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
 
