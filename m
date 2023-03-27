@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996326CAA54
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 275B76CAA69
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbjC0QRq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 12:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S232220AbjC0QTw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 12:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbjC0QRg (ORCPT
+        with ESMTP id S232518AbjC0QTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:17:36 -0400
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA52D5FCD;
-        Mon, 27 Mar 2023 09:17:04 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id b20so38530905edd.1;
-        Mon, 27 Mar 2023 09:17:04 -0700 (PDT)
+        Mon, 27 Mar 2023 12:19:25 -0400
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EEC199A
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:18:59 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id er18so27239354edb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:18:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679933812;
+        d=1e100.net; s=20210112; t=1679933916;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zxPtolN39h2PLfA1b2YCugQifzSuo9B122mhTUOTwWk=;
-        b=BI8AfE8/QvUaOAYiSsqgInyjhGSv7+YnoRX6MuaPHcRrrweyp/iBViIC2f6KFDzXlM
-         D1OD4WxeSx17tqub8rnANXP3EbrnR78NagwnPYDA8+CviqoyGI0tsWn/REkdp8JnepYm
-         S4mmfh+FE3tTRiPhPolhkIt6tIWAO87CuVje6c9sExQe1Ka3VOaBYROATrP2lH3AktYc
-         1np/xAWDW/i8jQ92jClae9IlfEZ0s9Shj2PwdCQQfk/jeykiptq+5tQxNDfTr3BrGOP1
-         XPbCDC1qMZA+Hoy6qygZns8jpKLw0tsWbT46XxhsBx2ouPmRTqgJnlu/YTaTAs8SbCwC
-         TWag==
-X-Gm-Message-State: AAQBX9csaBXHDz9EeNxYIbFhg4c3MmybbERPsE7nBsphvp1mi6IM8Fxv
-        1xThcGRKS//Nro0ifEtMNOoUlt1TJxtaVVmv2AM=
-X-Google-Smtp-Source: AKy350aaYoiVU1D2NAgL7MckmXbcMbIzlqVSmHA3O8q4kPD4hJT3CIQdm5RxbHrlc1Nk1hiPHLjBXd9Ved4a6NggsjY=
+        bh=heYbHNQfEN7S9sOX/eUUSP2pPGVNkRdC0D6uHjeWTDU=;
+        b=o0FI8qX6QVx750uqe0WtjRk5hXXdQQHoOy4mj4KXEg+Gs/bBWGdiQBb8y7IL8RYNJn
+         BgT/5aDvnvvvx75nqOErt/A5d1q8hlrA1CgJFw1BQ8xxgF50MlS7OnG2hBIH96vwb4Qm
+         XOgxENr+rfA5Nq86+ThbnB/EE2sNpYwtdJ8UEjqTNFx2Wq7Z5ZRUIdruSz6MVn8RirEA
+         3XQLK85qHqbDndOlpVIeOw4hO2we/6sYXKKkeNZTOoN8EJD4t2rQzzUHD7QzcaFkn7rg
+         Q2sVC3HQhDV1iVsPxhCp2HeNf10MJD9T/+fLFL+lAVgjRAzWj+vRtbg0oh+sMBBKwQH+
+         CB+Q==
+X-Gm-Message-State: AAQBX9dmdQqguOxnufQeqqfaQmyqx+jmq4wCO3nMYG2P/eKxaUWLbb+h
+        OyHuW4fii1AbWMPn2f5idl5dpxFJlFZacQGFZVo=
+X-Google-Smtp-Source: AKy350akqV8OiIdtnx6tGUo9j+P2mzwsc0LofO121pXrdAYXGLjOJhjKr+Q/hPFIs28483L4N/lIBGsnc2gRhA4HzSI=
 X-Received: by 2002:a17:907:3e8b:b0:931:ce20:db6e with SMTP id
- hs11-20020a1709073e8b00b00931ce20db6emr6710511ejc.2.1679933812554; Mon, 27
- Mar 2023 09:16:52 -0700 (PDT)
+ hs11-20020a1709073e8b00b00931ce20db6emr6713871ejc.2.1679933916087; Mon, 27
+ Mar 2023 09:18:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230307133735.90772-1-daniel.lezcano@linaro.org> <20230307133735.90772-10-daniel.lezcano@linaro.org>
-In-Reply-To: <20230307133735.90772-10-daniel.lezcano@linaro.org>
+References: <20230327160319.513974-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20230327160319.513974-1-gregkh@linuxfoundation.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 18:16:41 +0200
-Message-ID: <CAJZ5v0hW1B7XmU16PHRE2B6z2e-qs=X8m4v8qb--MUttiPuGqw@mail.gmail.com>
-Subject: Re: [PATCH v1 09/11] thermal/core: Add a linked device parameter
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, amitk@kernel.org,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, rui.zhang@intel.com
+Date:   Mon, 27 Mar 2023 18:18:25 +0200
+Message-ID: <CAJZ5v0hZjCJK0JVQ431+CcnNSKebcunHFkMcgdYXVyPRSVwQ4A@mail.gmail.com>
+Subject: Re: [PATCH] driver core: move sysfs_dev_char_kobj out of class.h
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
@@ -58,34 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 2:38 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+On Mon, Mar 27, 2023 at 6:03 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Some drivers want to create a link from the thermal zone to the device
-> sysfs entry and vice versa.
+> The structure sysfs_dev_char_kobj is local only to the driver core code,
+> so move it out of the global class.h file and into the internal base.h
+> file as no one else should be touching this symbol.
 
-Which device is this, exactly?
+Good idea.
 
-> That is the case of the APCI driver.
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+
+> ---
+>  drivers/base/base.h          | 3 +++
+>  include/linux/device/class.h | 1 -
+>  2 files changed, 3 insertions(+), 1 deletion(-)
 >
-> Having a backpointer from the device to the thermal zone sounds akward
-> as we can have the same device instantiating multiple thermal zones so
-> there will be a conflict while creating the second link with the same
-> name. Moreover, the userspace has enough information to build the
-> dependency from the thermal zone device link without having this cyclic
-> link from the device to thermal zone.
+> diff --git a/drivers/base/base.h b/drivers/base/base.h
+> index 6659cf1d3a44..6296164bb7f3 100644
+> --- a/drivers/base/base.h
+> +++ b/drivers/base/base.h
+> @@ -191,6 +191,9 @@ const char *device_get_devnode(const struct device *dev, umode_t *mode,
+>  extern struct kset *devices_kset;
+>  void devices_kset_move_last(struct device *dev);
 >
-> Anyway, everything in its time.
+> +/* /sys/dev/char directory */
+> +extern struct kobject *sysfs_dev_char_kobj;
+> +
+>  #if defined(CONFIG_MODULES) && defined(CONFIG_SYSFS)
+>  void module_add_driver(struct module *mod, struct device_driver *drv);
+>  void module_remove_driver(struct device_driver *drv);
+> diff --git a/include/linux/device/class.h b/include/linux/device/class.h
+> index af7fefc39364..f7aad64e256a 100644
+> --- a/include/linux/device/class.h
+> +++ b/include/linux/device/class.h
+> @@ -79,7 +79,6 @@ struct class_dev_iter {
+>  };
 >
-> This change allows to create a these cyclic links tz <-> device as
-> ACPI does and will allow to remove the code in the ACPI driver.
-
-Well, I'd rather have it in the driver than in the core TBH.
-
-If ACPI is the only user of this, let it do the dirty thing by itself.
-
-There are two cases which would justify making this change:
-1. There will be more users of it going forward (seems unlikely from
-the description).
-2. It gets in the way of some other changes somehow.
-
-I kind of expect 2. to be the case, so how does it get in the way?
+>  extern struct kobject *sysfs_dev_block_kobj;
+> -extern struct kobject *sysfs_dev_char_kobj;
+>
+>  int __must_check class_register(struct class *class);
+>  void class_unregister(const struct class *class);
+> --
+> 2.40.0
+>
