@@ -2,155 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7E06CA7B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BC26CA7C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbjC0Oby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
+        id S232925AbjC0Ocu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbjC0Obt (ORCPT
+        with ESMTP id S232276AbjC0Ocs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:31:49 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B12210D8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:31:47 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id F3EFA21CC8;
-        Mon, 27 Mar 2023 14:31:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679927506; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s2w61i4ixMyqYusHwfrvLzXW5aN7Xtkku6WNwaDadPY=;
-        b=m4EQn2/jdCZ3O/fv1kxvv0zziOQljSrWfBGaK69LM66+XLU1Z09GuiKAbPhteNAaDSL6ow
-        vkvISD0nqygDQ2g0TJdrkQ7QMso4tAp7S5rDBX2K/LndwIyGQfKu8h1S2v7nBVKfkgZNuJ
-        gpyaa1uT9Tov5FStjIE+YPCQJD5I6cw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679927506;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s2w61i4ixMyqYusHwfrvLzXW5aN7Xtkku6WNwaDadPY=;
-        b=wT9VT+Pw1gsMGJhRIY9yDIfTMGZvt+XEWCFlX2FUykZyimCDOzkEXDppVZYeoUpJltlZsm
-        fH9XkbMyzpNDygCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BDAC613482;
-        Mon, 27 Mar 2023 14:31:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bkqBLdGoIWT2FQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 27 Mar 2023 14:31:45 +0000
-Message-ID: <f2702360-d560-95da-a93d-16fae1dbf766@suse.cz>
-Date:   Mon, 27 Mar 2023 16:31:45 +0200
+        Mon, 27 Mar 2023 10:32:48 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B340319B9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:32:41 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-54184571389so174013177b3.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:32:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679927561;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oZWYt2A1/xegsDaR9fdcxpuR4sCQsiDX1CHwh3kGLtI=;
+        b=aFlzEpm3jS5c8Qt8xlwCGn9pcvUmoRnZQXEwcDzfRk2NX/Ad+4ieeQgIf+Ly12IAJV
+         gW3CfuVrLZXDlf3+lzbkpm0IW+sqoIcR/I9vNWRsL4ZCNQLNc3QP4OwqF7ixJNo2+1HM
+         ncRWqrVZpHahKE+KObjsVch8rSd0ya95mMao8jpoInJFlOz1UKbNDv8XqapeVq/jvCft
+         ZDt23UJUjworIWWsJ76H+FdLBRUDrPfarccUMRBH/Q/EjUAFJMG/i+Yqq0XcTrPRs3rV
+         Iyc4HgsncEKgKoS734APuWVIL69jCnwqHNMp6NPYVR+VdFM/Sc1W+OkqsUYSGqSVKDu/
+         Nzdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679927561;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oZWYt2A1/xegsDaR9fdcxpuR4sCQsiDX1CHwh3kGLtI=;
+        b=QwhGNtkm7OSlXj0ZqrwllE944g/Aw2TK4wDXyn8RGG3Eq/AFB0fo04Lu1kFJcFlohP
+         E3/rSBp20tzlcP/ajXfIYKOeeLeme+YLoXTxrDR7rVkcsaxkYlJl5MyfxmUdyPBt0AS6
+         vKfwhbAx5EUVAjzid9nyVWyBP+Op+Fxe/81Hf5VpUQJX7PLUMFTzWaZWnaGWYbY9PzbG
+         HN1zlEBUdk4cghKHuUFf0pudqeoqtg7qVZZ7xitAO4oeMQ+PzLsewTckP40B8kmLc1Z5
+         u84fpXBHY3fAPTv3eoNvtuBL8he18jQYZOY7K7d+DhdAe8KK8F0/cyUtVAfKaP95cT4g
+         J8vg==
+X-Gm-Message-State: AAQBX9dA0kOCnEEegL7f/12Rau2RI2uW0GOjb3UW/AD4yeFpkFRSZIZW
+        UeGDjejrHnb5KJ60IUgQCX9ot116cKxetb0v6iLa9A==
+X-Google-Smtp-Source: AKy350YGL//ko0YOoMJn0yEBqBZM1OBbm7i8Gh3XLiKPeHWOd4Tug/7//ICczuY6fpZH922jDtuTVP3l2J/SHPOrcPc=
+X-Received: by 2002:a05:690c:3:b0:541:698b:7bdb with SMTP id
+ bc3-20020a05690c000300b00541698b7bdbmr4131051ywb.2.1679927560837; Mon, 27 Mar
+ 2023 07:32:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Song Liu <song@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Mel Gorman <mgorman@techsingularity.net>
-References: <20230308094106.227365-1-rppt@kernel.org>
- <20230308094106.227365-2-rppt@kernel.org> <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
- <ZB6W1C88TU6CcjJH@kernel.org> <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230325134410.21092-1-me@dylanvanassche.be> <20230325134410.21092-2-me@dylanvanassche.be>
+ <883c3c48-c6e5-556d-431f-e92592b9106a@linaro.org> <b75b92bf64b55ba0ace0fbff65955c838a294dec.camel@dylanvanassche.be>
+ <44904ffc-83d4-1137-3479-737a81b31d16@linaro.org> <1f3fb4bd5387c8d69a6eb068fb773b9273081c13.camel@dylanvanassche.be>
+In-Reply-To: <1f3fb4bd5387c8d69a6eb068fb773b9273081c13.camel@dylanvanassche.be>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 27 Mar 2023 17:32:30 +0300
+Message-ID: <CAA8EJprxn6LSDu3NV8r0pFr1pc+zRydoyOdJ2y6VRN3zZ8a52g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: misc: qcom,fastrpc: add
+ qcom,assign-all-memory property
+To:     Dylan Van Assche <me@dylanvanassche.be>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/27/23 15:43, Michal Hocko wrote:
-> On Sat 25-03-23 09:38:12, Mike Rapoport wrote:
->> On Fri, Mar 24, 2023 at 09:37:31AM +0100, Michal Hocko wrote:
->> > On Wed 08-03-23 11:41:02, Mike Rapoport wrote:
->> > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->> > > 
->> > > When set_memory or set_direct_map APIs used to change attribute or
->> > > permissions for chunks of several pages, the large PMD that maps these
->> > > pages in the direct map must be split. Fragmenting the direct map in such
->> > > manner causes TLB pressure and, eventually, performance degradation.
->> > > 
->> > > To avoid excessive direct map fragmentation, add ability to allocate
->> > > "unmapped" pages with __GFP_UNMAPPED flag that will cause removal of the
->> > > allocated pages from the direct map and use a cache of the unmapped pages.
->> > > 
->> > > This cache is replenished with higher order pages with preference for
->> > > PMD_SIZE pages when possible so that there will be fewer splits of large
->> > > pages in the direct map.
->> > > 
->> > > The cache is implemented as a buddy allocator, so it can serve high order
->> > > allocations of unmapped pages.
->> > 
->> > Why do we need a dedicated gfp flag for all this when a dedicated
->> > allocator is used anyway. What prevents users to call unmapped_pages_{alloc,free}?
->> 
->> Using unmapped_pages_{alloc,free} adds complexity to the users which IMO
->> outweighs the cost of a dedicated gfp flag.
-> 
-> Aren't those users rare and very special anyway?
+On Mon, 27 Mar 2023 at 17:27, Dylan Van Assche <me@dylanvanassche.be> wrote:
+>
+> Hi Krzysztof,
+>
+> On Mon, 2023-03-27 at 14:22 +0200, Krzysztof Kozlowski wrote:
+> > On 27/03/2023 13:37, Dylan Van Assche wrote:
+> > > Hi Krzysztof,
+> > >
+> > > On Sun, 2023-03-26 at 10:55 +0200, Krzysztof Kozlowski wrote:
+> > > > On 25/03/2023 14:44, Dylan Van Assche wrote:
+> > > > > Document the added qcom,assign-all-memory in devicetree
+> > > > > bindings.
+> > > > >
+> > > > > Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
+> > > > > ---
+> > > > >  Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml | 6
+> > > > > ++++++
+> > > > >  1 file changed, 6 insertions(+)
+> > > > >
+> > > > > diff --git
+> > > > > a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> > > > > b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> > > > > index 1ab9588cdd89..fa5b00534b30 100644
+> > > > > --- a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> > > > > @@ -57,6 +57,12 @@ properties:
+> > > > >        Virtual machine IDs for remote processor.
+> > > > >      $ref: "/schemas/types.yaml#/definitions/uint32-array"
+> > > > >
+> > > > > +  qcom,assign-all-mem:
+> > > > > +    description:
+> > > > > +      Assign memory to all Virtual machines defined by
+> > > > > qcom,vmids.
+> > > >
+> > > > This (neither commit msg) does not explain why this is needed and
+> > > > actually does not sound like hardware-related property.
+> > >
+> > > This is made a separate property to toggle different behavior in
+> > > the
+> > > driver if it is needed for some FastRPC nodes.
+> >
+> > Bindings are not for driver behavior.
+> >
+> > > Downstream does guard
+> > > this with a property 'restrict-access' as well, see [1] for a
+> > > random
+> > > SDM845 downstream kernel. On SDM845, this property is not present,
+> > > thus
+> > > the IF block runs. On SDM670, this property is present, then the IF
+> > > block is skipped. That's why I opt for this property to have this
+> > > behaviour conditionally. I'm not sure how to explain it better
+> > > though.
+> >
+> > Still you described driver... Please come with something more
+> > hardware
+> > related.
+>
+> So just updating the description is enough then?
+>
+> As this is all reverse engineered, I have no access to the
+> documentation of FastRPC, so best effort:
 
-I think it's mostly about the freeing that can happen from a generic context
-not aware of the special allocation, so it's not about how rare it is, but
-how complex would be to determine exhaustively those contexts and do
-something in them.
+Vendor kernels put a lot of controls into DT, despite some of these
+controls being related to software or being a platform constant.
+Upstream tends to push some of the constraints into the driver data,
+leaving only variadic parts in DT.
+Could you please check if the property you are proposing is constant
+among the devices on a platform or not. If it is a platform
+peculiarity, a usual way is to add it to driver data rather than the
+DT.
 
->> For modules we'd have to make x86::module_{alloc,free}() take care of
->> mapping and unmapping the allocated pages in the modules virtual address
->> range. This also might become relevant for another architectures in future
->> and than we'll have several complex module_alloc()s. 
-> 
-> The module_alloc use is lacking any justification. More context would be
-> more than useful. Also vmalloc support for the proposed __GFP_UNMAPPED
-> likely needs more explanation as well.
-> 
->> And for secretmem while using unmapped_pages_alloc() is easy, the free path
->> becomes really complex because actual page freeing for fd-based memory is
->> deeply buried in the page cache code.
-> 
-> Why is that a problem? You already hook into the page freeing path and
-> special case unmapped memory.
+>
+> """
+> Mark allocated memory region accessible to remote processor.
+> This memory region is used by remote processor to communicate
+> when no dedicated Fastrpc context bank hardware is available
+> for remote processor.
+> """
+>
+> Is this the description that is 'more hardware related'?
 
-But the proposal of unmapped_pages_free() would suggest this would no longer
-be the case?
-
-But maybe we could, as a compromise, provide unmapped_pages_alloc() to get
-rid of the new __GFP flag, provide unmapped_pages_free() to annotate places
-that are known to free unmapped memory explicitly, but the generic page
-freeing would also keep the hook?
-
->> My gut feeling is that for PKS using a gfp flag would save a lot of hassle
->> as well.
-> 
-> Well, my take on this is that this is not a generic page allocator
-> functionality. It is clearly an allocator on top of the page allocator.
-> In general gfp flags are scarce and convenience argument usually fires
-> back later on in hard to predict ways. So I've learned to be careful
-> here. I am not saying this is a no-go but right now I do not see any
-> acutal advantage. The vmalloc usecase could be interesting in that
-> regards but it is not really clear to me whether this is a good idea in
-> the first place.
-> 
-
+-- 
+With best wishes
+Dmitry
