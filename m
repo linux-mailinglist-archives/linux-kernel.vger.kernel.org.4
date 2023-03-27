@@ -2,204 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057766C9973
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 03:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C826C9981
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 04:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjC0B6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 21:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
+        id S230379AbjC0CHd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 26 Mar 2023 22:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjC0B6g (ORCPT
+        with ESMTP id S229475AbjC0CHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 21:58:36 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061B14C37;
-        Sun, 26 Mar 2023 18:58:33 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id a16so6270725pjs.4;
-        Sun, 26 Mar 2023 18:58:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679882312;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZjmUW5IisW2GWYy+PxnI3Bi0lsrMsX8ocUsfSaOhCyo=;
-        b=WixHUlX/hYnaWWj5sw3xrgqurQGEGntBs6MIlZLXVl8IU9yOM7X+6txDnoh9zC6ldj
-         X/wMby3DoEf+RjlGceqBnSUi2GOgA1IAjt32LJUgzE3WZw3ye2RGWMsxYQY80xbUk4OK
-         dS6FLZ1cZ+Y89wNewGmUsTtiIgnifd7Ro6C9cotSMntovUwzTkBdB6BL0o5Q2FljQpf3
-         aVSqo++ybvR8512hQSDNAIed3fs7phCpBc7iLxBLluxznNEawob4r42XaSSXUQQoph1j
-         ibxUEYJRZ2UwJOcrOMCNjp4hexRwkjw28QlKwlLOxAHQqkRCFJr8L16aKZLsv+xMGQHr
-         W/QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679882312;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZjmUW5IisW2GWYy+PxnI3Bi0lsrMsX8ocUsfSaOhCyo=;
-        b=Bf9RlKUXfl5Gisywn6iCJR89WssebIGpIcihT+d0tnqQ1D7iWr2oNL/RrAmo/dOnxI
-         Tu5b+KddirLR4aAvoeDWS1GiKF1Z6lF5AqxKzll0Fuan92062XY6SdbVdlsBtJzwS/gY
-         CIwQTyhY4uq5t6VCGsV+fZhiqmfynWYSCN9Jjtq2PVdL5AOdajz8Jd4GjetJQWY51hI5
-         oRAW6CvXtPLXHTab3X2HxZVj1iyrf6IiSCClTjtPCDq9EQ4jeyXDD3J6/3VieBghGq9A
-         dgE6M5utSA6VOUbXcqOohVPwKGnG8fPsS+GA9hD9HiobQG4LAFm5OItBKQIVLXhRhJOo
-         kNUw==
-X-Gm-Message-State: AAQBX9c5TijfaXlBtagbCXiu2LBtgHv7N3x3TQu0hXpIYn2Ij23Zbqnj
-        5sr9BJvUpm5XLq+cFD1odzg=
-X-Google-Smtp-Source: AKy350Z3zNguzhGHpgATQ8MDf0wd9rCZgBSx26nl8J2OHV3dYBp2fVoJa4zU1w1V3CPYh6oSPmALOg==
-X-Received: by 2002:a17:902:ba88:b0:19e:25b4:7740 with SMTP id k8-20020a170902ba8800b0019e25b47740mr8682259pls.28.1679882312213;
-        Sun, 26 Mar 2023 18:58:32 -0700 (PDT)
-Received: from dragonet (dragonet.kaist.ac.kr. [143.248.133.220])
-        by smtp.gmail.com with ESMTPSA id b20-20020a170902d89400b001a217a7a11csm5175006plz.131.2023.03.26.18.58.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 18:58:31 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 10:58:27 +0900
-From:   "Dae R. Jeong" <threeearcat@gmail.com>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: WARNING in isotp_tx_timer_handler and WARNING in print_tainted
-Message-ID: <ZCD4Q2rHnQokUxbe@dragonet>
-References: <ZB/93xJxq/BUqAgG@dragonet>
- <31c4a218-ee1b-4b64-59b6-ba5ef6ecce3c@hartkopp.net>
- <ZCAytf0CpfAhjUSe@dragonet>
- <81ebf23b-f539-5782-2abd-8db8a232bb72@hartkopp.net>
+        Sun, 26 Mar 2023 22:07:31 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4204C38;
+        Sun, 26 Mar 2023 19:07:26 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 723E31A00A7A;
+        Mon, 27 Mar 2023 10:07:32 +0800 (CST)
+X-Virus-Scanned: amavisd-new at nfschina.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id T-yrv0qkjBf9; Mon, 27 Mar 2023 10:07:31 +0800 (CST)
+Received: from 127.0.0.1 (unknown [127.0.0.1])
+        (Authenticated sender: yuzhe@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id B108A1A009F3;
+        Mon, 27 Mar 2023 10:07:31 +0800 (CST)
+Date:   Mon, 27 Mar 2023 10:07:31 +0800 (CST)
+From:   yuzhe <yuzhe@nfschina.com>
+Reply-To: yuzhe@nfschina.com
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Yu Zhe <yuzhe@nfschina.com>, linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        liqiong <liqiong@nfschina.com>
+Message-ID: <95083698.3076.1679882851720@127.0.0.1>
+Subject: Re: Re: [PATCH] mmc: core: remove unnecessary (void*) conversions
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <81ebf23b-f539-5782-2abd-8db8a232bb72@hartkopp.net>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Priority: 3
+X-NFS-GUID: ssqreoDnzK1SiXj1Du7b
+X-ISRICH: 0
+Content-ID: 96d1d1a3-6230-4603-a0a4-48f60747430f
+X-Mail-src: 21
+X-Spam-Status: No, score=2.6 required=5.0 tests=RCVD_IN_VALIDITY_RPBL,
+        RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 06:17:17PM +0200, Oliver Hartkopp wrote:
-> Hi Dae,
-> 
-> On 26.03.23 13:55, Dae R. Jeong wrote:
-> > > diff --git a/net/can/isotp.c b/net/can/isotp.c
-> > > index 9bc344851704..0b95c0df7a63 100644
-> > > --- a/net/can/isotp.c
-> > > +++ b/net/can/isotp.c
-> > > @@ -912,13 +912,12 @@ static enum hrtimer_restart
-> > > isotp_txfr_timer_handler(struct hrtimer *hrtimer)
-> > >   		isotp_send_cframe(so);
-> > > 
-> > >   	return HRTIMER_NORESTART;
-> > >   }
-> > > 
-> > > -static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t
-> > > size)
-> > > +static int isotp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t
-> > > size)
-> > >   {
-> > > -	struct sock *sk = sock->sk;
-> > >   	struct isotp_sock *so = isotp_sk(sk);
-> > >   	u32 old_state = so->tx.state;
-> > >   	struct sk_buff *skb;
-> > >   	struct net_device *dev;
-> > >   	struct canfd_frame *cf;
-> > > @@ -1091,10 +1090,22 @@ static int isotp_sendmsg(struct socket *sock, struct
-> > > msghdr *msg, size_t size)
-> > >   		wake_up_interruptible(&so->wait);
-> > > 
-> > >   	return err;
-> > >   }
-> > > 
-> > > +static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t
-> > > size)
-> > > +{
-> > > +	struct sock *sk = sock->sk;
-> > > +	int ret;
-> > > +
-> > > +	lock_sock(sk);
-> > > +	ret = isotp_sendmsg_locked(sk, msg, size);
-> > > +	release_sock(sk);
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > >   static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t
-> > > size,
-> > >   			 int flags)
-> > >   {
-> > >   	struct sock *sk = sock->sk;
-> > >   	struct sk_buff *skb;
-> > 
-> > Hi, Oliver.
-> > 
-> > It seems that the patch should address the scenario I was thinking
-> > of. But using a lock is always scary for a newbie like me because of
-> > the possibility of causing other problems, e.g., deadlock. If it does
-> > not cause other problems, it looks good for me.
-> 
-> Yes, I feel you!
-> 
-> We use lock_sock() also in the notifier which is called when someone removes
-> the CAN interface.
-> 
-> But the other cases for e.g. set_sockopt() and for sendmsg() seem to be a
-> common pattern to lock concurrent user space calls.
+<p><br /><br /><br />在 2023-03-24, 星期五, 23:47:08 ,Ulf Hansson 写到：</p>
+<pre>On Fri, 24 Mar 2023 at 14:28, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>
+> On 17.03.2023 07:47, Yu Zhe wrote:
+> > Pointer variables of void * type do not require type cast.
+> >
+> > Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+> > ---
+> > drivers/mmc/core/debugfs.c | 2 +-
+> > drivers/mmc/core/host.c | 2 +-
+> > drivers/mmc/core/mmc_test.c | 6 +++---
+> > 3 files changed, 5 insertions(+), 5 deletions(-)
+> ...
+> > diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
+> > index 096093f7be00..76900f67c782 100644
+> > --- a/drivers/mmc/core/host.c
+> > +++ b/drivers/mmc/core/host.c
+> > @@ -590,7 +590,7 @@ EXPORT_SYMBOL(mmc_alloc_host);
+> >
+> > static void devm_mmc_host_release(struct device *dev, void *res)
+> > {
+> > - mmc_free_host(*(struct mmc_host **)res);
+> > + mmc_free_host(res);
+>
+> The above chunk is wrong and causes following regression on today's
+> Linux next-20230324:
+>
+> Unable to handle kernel paging request at virtual address 0000000000001020
+> Mem abort info:
+> meson-gx-mmc ffe07000.mmc: allocated mmc-pwrseq
+> ...
+> [0000000000001020] user address but active_mm is swapper
+> Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+> Modules linked in:
+> CPU: 3 PID: 10 Comm: kworker/u12:0 Not tainted 6.3.0-rc3-next-20230324+
+> #13452
+> Hardware name: Khadas VIM3 (DT)
+> Workqueue: events_unbound async_run_entry_fn
+> pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : mmc_pwrseq_free+0x1c/0x38
+> lr : devm_mmc_host_release+0x1c/0x34
+> ...
+> Call trace:
+> mmc_pwrseq_free+0x1c/0x38
+> devm_mmc_host_release+0x1c/0x34
+> release_nodes+0x5c/0x90
+> devres_release_all+0x8c/0xdc
+> device_unbind_cleanup+0x18/0x68
+> really_probe+0x11c/0x2b4
+> __driver_probe_device+0x78/0xe0
+> driver_probe_device+0xd8/0x160
+> __device_attach_driver+0xb8/0x138
+> bus_for_each_drv+0x84/0xe0
+> __device_attach_async_helper+0xb0/0xd4
+> async_run_entry_fn+0x34/0xe0
+> process_one_work+0x288/0x5c0
+> worker_thread+0x74/0x450
+> kthread+0x124/0x128
+> ret_from_fork+0x10/0x20
+> Code: f9000bf3 aa0003f3 f9424c00 b4000080 (f9401000)
+> ---[ end trace 0000000000000000 ]---
+>
+> Ulf: do You want me to send a partial revert or will you handle it by
+> dropping this patch?
 
+Thanks for the report, I will simply drop the patch!
 
-Yes, I see lock_sock() is a common pattern in *_sendmsg(). One thing I
-wonder is whether sleeping (i.e., wait_event_*) after lock_sock() is
-safe or not, as lock_sock() seems to have mutex_lock() semantics.
+Kind regards
+Uffe
+</pre>
 
-Perhaps we may need to unlock - wait_event - lock in istop_sendmsg()?
-If so, we also need to consider various possible thread interleaving
-cases.
-
-
-> > Or although I'm not sure about this, what about getting rid of
-> > reverting so->tx.state to old_state?
-> > 
-> > I think the concurrent execution of isotp_sendmsg() would be
-> > problematic when reverting so->tx.state to old_state after goto'ing
-> > err_out.
-> Your described case in the original post indeed shows that this might lead
-> to a problem.
-> 
-> > There are two locations of "goto err_out", and
-> > iostp_sendmsg() does nothing to the socket before both of "goto
-> > err_out". So after goto'ing err_out, it seems fine for me even if we
-> > do not revert so->tx.state to old_state.
-> > 
-> > If I think correctly, this will make cmpxchg() work, and prevent the
-> > problematic concurrent execution. Could you please check the patch
-> > below?
-> 
-> Hm, interesting idea.
-> 
-> But in which state will so->tx.state be here:
-> 
-> /* wait for complete transmission of current pdu */
-> err = wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
-> if (err)
-> 	goto err_out;
-> 
-> 
-> Should we better set the tx.state in the error case?
-> 
-> if (err) {
-> 	so->tx.state = ISOTP_IDLE;
-> 	goto err_out;
-> }
-> 
-> Best regards,
-> Oliver
-> 
-> (..)
-
-Hmm... my original thought was that 1) isotp_sendmsg() waiting the
-event (so->tx.state == ISTOP_IDLE) does not touch anything related to
-the socket as well as the sending process yet, so 2) this
-isotp_sendmsg() does not need to change the tx.state if it returns an
-error due to a signal. I'm not sure that we need to set tx.state in
-this case. Do we still need to do it?
-
-
-Best regards,
-Dae R. Jeong.
+sorry for making this mistake, I will check seriously next time.
