@@ -2,254 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95046CA691
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF17C6CA693
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbjC0N4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
+        id S232526AbjC0N4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232526AbjC0N4Q (ORCPT
+        with ESMTP id S232717AbjC0N43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:56:16 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F1E3C25;
-        Mon, 27 Mar 2023 06:56:10 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 4E58D320034E;
-        Mon, 27 Mar 2023 09:56:07 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 27 Mar 2023 09:56:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1679925366; x=1680011766; bh=HQT73unAvjM/fisNmxvsr2xKlXq84rjVLT6
-        NDbZHsog=; b=OIroo5S7CwonPlMw2XW5OLfdr/Xv3LJtwlzS+QhdDZqjC0TT1S1
-        dohG4xJhHByP4VgFIIHwlFfgnhdmtlKbvDUg2Hq7S4DiF7s+DHx+e2M1WX8dDnjV
-        ZiwJAKHcqv5FpvOxLWKC21i6PZHmL//+FLuFEvFvHUKLicFKRlp4aOnPXW0eti7q
-        LFVOHkwCnpZBFzOp6fFNfxTZ4NTAE23jq+/ExdLE5Q4yj9aDbKZAeVtbsu8iJlD7
-        fGsXi5k4NCt84Kbj4wRc3Nnl2FzByVxVxTrpONLHOHty5ITL3HV4ghvGAmdVzQu6
-        l9ZBmOOwuT/R/2+pVje41Hv5DrkEEV/qzTg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1679925366; x=1680011766; bh=HQT73unAvjM/fisNmxvsr2xKlXq84rjVLT6
-        NDbZHsog=; b=mr7mpDhP9QGafW+njvAQGQuglvXNusInBlcZTQj1HueI0gU8+3d
-        iT4us/ykq0dZPlzw/dvSGfTmuPl0k9MCyK0aYj/IkDzug+4B3PPiCTzpc76NLBTK
-        ALvmCAZOSU1zt/AHTrCy3IAD7O90kzUg++PrF4UzKnUNsFP5fJdmsq5mIKwJP8Sk
-        19jozbm4tnljLw9CxXbirSt6IKDFgqmvyPhwIN3lt2sWbn3RtbsFxSk8Xpv/apvX
-        OkPFtaKRL3zA7KN8BMAu3J6ocIB2+3FIUGPAyNo0e+/JasoEtDrOKC/e8lV93Tog
-        47GIBNZ/STP1jyAjkkvApHhsY75oygc9wHw==
-X-ME-Sender: <xms:dqAhZPMJQ9zb-hggCYEAcoIUsTX9YCErD5gF_IJRJqztDneVn_0Qkw>
-    <xme:dqAhZJ-qdTFdvqXWHSguC-RVjphf-Ok9NS_Ab6JgAg2uDFJAgUOY8U27vViddB6L_
-    U7SVsZ9ue4zAkN0poE>
-X-ME-Received: <xmr:dqAhZOTXWOqlgK85bsEOxdAVUt1-cxuQbW8yaILst0kobqjR2VlNw7v0_CQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehvddgjedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnheptefgleeggfegkeekgffgleduieduffejffegveevkeejudektdduueet
-    feetfefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:dqAhZDsw3pwh1Cf2t9_CjJj8UQIA4i2JULDcXEGqjo4-yP5LKe5PSw>
-    <xmx:dqAhZHdPl0YArw1A7PqHnYIEh6-gUJn-CKufKCDHBY1yZCvX6ERI5A>
-    <xmx:dqAhZP1bbPSF30FvcHd5ilSi-Y8VaNH64z-Fm81ptruVjFFleBR5Hw>
-    <xmx:dqAhZP1ndbW_KSyh4uUPR3UuCs09gu0w5IpDg9YMubNP0WXNAcTe4Q>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Mar 2023 09:56:05 -0400 (EDT)
-Date:   Mon, 27 Mar 2023 15:56:04 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     David Gow <davidgow@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Subject: Re: [RFC PATCH 1/2] kunit: resource: Add kunit_defer() functionality
-Message-ID: <20230327135604.rxqlt2kjvfkf2vhb@penduick>
-References: <20230325043104.3761770-1-davidgow@google.com>
- <20230325043104.3761770-2-davidgow@google.com>
+        Mon, 27 Mar 2023 09:56:29 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B313C18
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:56:28 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id d8so5194717pgm.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:56:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679925388;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0ZeK4ZJ1o6tGrUVsDjmi+mms9O6S9hGyBZoeD/hC1EM=;
+        b=UIf5bRzBfUMXz/54gEACPx5wc1XBr3yDReJu7xeSLelHH26DBF11bfeXLhs+Ss8Ryw
+         U+XKAZEMI0GL8mpLNJ86oSXDV8tOkziJu5+hsYYVFic1XL3ao5yutKofkEGCUynq0uWb
+         vpE/1HTkL7aDYEIFqm5InaaHmzo0leJuaVl/fgF07Ira9YaVqF6qNHc7MmuuooxwssFo
+         qkYZ6nAK1ciXHOTd5pugPKy+Yxp+d/CqCnLM9NajduY16Iz0UT7DNOlTTXFuw2FMpkJb
+         j27cQuVQiqRUuVxisE8G5ysFMks1ubKKIrWP2X9kL+JKGd3amM1/o266c9HBtY9q0eZY
+         nutQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679925388;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0ZeK4ZJ1o6tGrUVsDjmi+mms9O6S9hGyBZoeD/hC1EM=;
+        b=qC4haOICnsgUnFXbEF4hM7ZkrjCUL6ZF7L3nZ2Pot/DmF/RvGyfwWJyQtuhg5UKOgB
+         jeNOBZv72/xfCjcG2uLssn3qcTnhv0Vgpy+PVFgKfJxPZlYg0p4F0MLTqAwMYaB+sHwE
+         2BmQ/TtASsIytZy1OEOa/CFrr/6mmsl8McjX6E1BsZeq3LeIyUTn5fNRYvKLudeHe4sW
+         AKEkOdqVBTBRZWKx/639dQVcbyjssePeKH3WXQDStuKAnqLE6RDdcwQ/gmSXnhBbx+QJ
+         5mqxB9wg9yTh5ZwmnOTGT5VID4LrraIBPBcZ1z+0a6hEcrnZbOqk0m+1RQhlLCW8R1Yj
+         kRig==
+X-Gm-Message-State: AAQBX9dtvQsvXwshtlhLY9OdqH5mJspcUtzUggkSX7nHRe5QWKmylr8i
+        O8eplVMtTv5rYt0RNRgrZYQ28At9HLU0f9E+DHI=
+X-Google-Smtp-Source: AKy350ZXKsGSVTB5CUXvpBA9QmN8XJL3rRf6UWF+Zgo3c8FTExOfmtWkqGAVWz1OqE7Q78nzxrO4woetGMipmNzFli4=
+X-Received: by 2002:a05:6a00:2e9a:b0:624:1261:918f with SMTP id
+ fd26-20020a056a002e9a00b006241261918fmr5764268pfb.1.1679925388014; Mon, 27
+ Mar 2023 06:56:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230325043104.3761770-2-davidgow@google.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+Received: by 2002:a05:6a10:ed27:b0:40a:64ae:d236 with HTTP; Mon, 27 Mar 2023
+ 06:56:27 -0700 (PDT)
+Reply-To: fiona.hill.2023@outlook.com
+From:   Fiona Hill <kevinhansen8819@gmail.com>
+Date:   Mon, 27 Mar 2023 06:56:27 -0700
+Message-ID: <CA++QgS8EiedgKD5a=Wcw5SBH58e_h_omR4v_Y+Sy_OjU5MCb9A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
-
-Thanks a lot for doing this
-
-On Sat, Mar 25, 2023 at 12:31:03PM +0800, David Gow wrote:
-> Many uses of the KUnit resource system are intended to simply defer
-> calling a function until the test exits (be it due to success or
-> failure). The existing kunit_alloc_resource() function is often used for
-> this, but was awkward to use (requiring passing NULL init functions, etc),
-> and returned a resource without incrementing its reference count, which
-> -- while okay for this use-case -- could cause problems in others.
->=20
-> Instead, introduce a simple kunit_defer() API: a simple function
-> (returning nothing, accepting a single void* argument) can be scheduled
-> to be called when the test exits. Deferred functions are called in the
-> opposite order to that which they were registered.
->=20
-> This is implemented as a resource under the hood, so the ordering
-> between resource cleanup and deferred functions is maintained.
->=20
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->  include/kunit/resource.h |  87 +++++++++++++++++++++++++++++++
->  lib/kunit/resource.c     | 110 +++++++++++++++++++++++++++++++++++++++
->  2 files changed, 197 insertions(+)
->=20
-> diff --git a/include/kunit/resource.h b/include/kunit/resource.h
-> index cf6fb8f2ac1b..6c4728ca9237 100644
-> --- a/include/kunit/resource.h
-> +++ b/include/kunit/resource.h
-> @@ -387,4 +387,91 @@ static inline int kunit_destroy_named_resource(struc=
-t kunit *test,
->   */
->  void kunit_remove_resource(struct kunit *test, struct kunit_resource *re=
-s);
-> =20
-> +typedef void (*kunit_defer_function_t)(void *ctx);
-> +
-> +/**
-> + * kunit_defer() - Defer a function call until the test ends.
-
-devm (and drm resource management) uses devm_add_action for this, and
-providing consistency across resource management API would be neat.
-
-> + * @test: Test case to associate the deferred function with.
-> + * @func: The function to run on test exit
-> + * @ctx: Data passed into @func
-> + * @internal_gfp: gfp to use for internal allocations, if unsure, use GF=
-P_KERNEL
-
-Do you really expect any GFP flag other than GFP_KERNEL?
-
-> + * Defer the execution of a function until the test exits, either normal=
-ly or
-> + * due to a failure.  @ctx is passed as additional context. All functions
-> + * registered with kunit_defer() will execute in the opposite order to t=
-hat
-> + * they were registered in.
-> + *
-> + * This is useful for cleaning up allocated memory and resources.
-> + *
-> + * RETURNS:
-> + *   An opaque "cancellation token", or NULL on error. Pass this token to
-> + *   kunit_defer_cancel() in order to cancel the deferred execution of f=
-unc().
-> + */
-
-devm also gets away with this by (iirc) associating the function
-pointer and context to the device. That triplet is pretty much
-guaranteed to be unique across calls and thus you don't have to keep
-(and pass!) a token around.
-
-> +void *kunit_defer(struct kunit *test, kunit_defer_function_t func,
-> +		  void *ctx, gfp_t internal_gfp);
-> +
-> +/**
-> + * kunit_defer_cancel_token() - Cancel a deferred function call.
-> + * @test: Test case the deferred function is associated with.
-> + * @cancel_token: The cancellation token returned by kunit_defer()
-> + *
-> + * Prevent a function deferred using kunit_defer() from executing when t=
-he
-> + * test ends.
-> + *
-> + * Prefer using this to kunit_defer_cancel() where possible.
-> + */
-> +void kunit_defer_cancel_token(struct kunit *test, void *cancel_token);
-> +
-> +/**
-> + * kunit_defer_trigger_token() - Run a deferred function call immediatel=
-y.
-> + * @test: Test case the deferred function is associated with.
-> + * @cancel_token: The cancellation token returned by kunit_defer()
-> + *
-> + * Execute a deferred function call immediately, instead of waiting for =
-the
-> + * test to end.
-> + *
-> + * Prefer using this to kunit_defer_trigger() where possible.
-> + */
-> +void kunit_defer_trigger_token(struct kunit *test, void *cancel_token);
-> +
-> +/**
-> + * kunit_defer_cancel() - Cancel a matching deferred function call.
-> + * @test: Test case the deferred function is associated with.
-> + * @func: The deferred function to cancel.
-> + * @ctx: The context passed to the deferred function to trigger.
-> + *
-> + * Prevent a function deferred via kunit_defer() from executing at shutd=
-own.
-> + * Unlike kunit_defer_cancel_token(), this takes the (func, ctx) pair in=
-stead of
-> + * the cancellation token. If that function/context pair was deferred mu=
-ltiple
-> + * times, only the most recent one will be cancelled.
-> + *
-> + * Prefer using kunit_defer_cancel_token() to this where possible.
-> + */
-> +void kunit_defer_cancel(struct kunit *test,
-> +			kunit_defer_function_t func,
-> +			void *ctx);
-> +
-> +/**
-> + * kunit_defer_trigger() - Run a matching deferred function call immedia=
-tely.
-> + * @test: Test case the deferred function is associated with.
-> + * @func: The deferred function to trigger.
-> + * @ctx: The context passed to the deferred function to trigger.
-> + *
-> + * Execute a function deferred via kunit_defer() immediately, rather tha=
-n when
-> + * the test ends.
-> + * Unlike kunit_defer_trigger_token(), this takes the (func, ctx) pair i=
-nstead of
-> + * the cancellation token. If that function/context pair was deferred mu=
-ltiple
-> + * times, it will only be executed once here. The most recent deferral w=
-ill
-> + * no longer execute when the test ends.
-> + *
-> + * kunit_defer_trigger(test, func, ctx);
-> + * is equivalent to
-> + * func(ctx);
-> + * kunit_defer_cancel(test, func, ctx);
-> + *
-> + * Prefer using kunit_defer_trigger_token() to this where possible.
-> + */
-> +void kunit_defer_trigger(struct kunit *test,
-> +			 kunit_defer_function_t func,
-> +			 void *ctx);
->  #endif /* _KUNIT_RESOURCE_H */
-
-I think I agree with Matti here, you might want some function to
-cancel an action/deferral but it's not clear to me why you would need
-all the other functions there (for now at least)
-
-Maxime
+-- 
+Hello friend did you receive my message i send to you? please get back to me
