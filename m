@@ -2,91 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6ACE6CA763
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739586CA780
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232493AbjC0OUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
+        id S233114AbjC0OYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjC0OT2 (ORCPT
+        with ESMTP id S230089AbjC0OXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:19:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F442722;
-        Mon, 27 Mar 2023 07:17:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2CC7B815F3;
-        Mon, 27 Mar 2023 14:17:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5456C433EF;
-        Mon, 27 Mar 2023 14:17:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679926658;
-        bh=ST6/Tf0Hd9KxwNCo9HY/s+ET1/l38vy0oeHUythJylI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KQ6IaZFvjr7xiN1RVix4oLQO7K1Vr9gUYuIiuoHmzBFbay7taWsNJO0Um/mXYW3hg
-         rGCWQ6lc36khTW7dQo6RSK/O2ePhFgGcV4K/KpYunPcbEJdU5foBGsH1XmMXILjCE0
-         gi16UwCMXipAXicUYe+/9sCMihX6ap+lEXbzfeVKwa+YT0d9hH8UodmRrz+F903aJK
-         ghXhtorKg3HmFFtdG50t2LMYfm/BMJrD0qHk/2+UUxZBgKbxNw077/TPVIkZSbhqfi
-         XnOAKnT5/QCHwRK0HQa9MKnqt7q3GhGs2Um4VsQroi15ueLqhlBKGhdcvcMK5yeCym
-         b1jLBac/PGuuA==
-Date:   Mon, 27 Mar 2023 07:20:43 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 12/12] arm64: dts: qcom: sc8180x: Introduce Lenovo
- Flex 5G
-Message-ID: <20230327142043.4q62vfcd2557caen@ripper>
-References: <20230325122444.249507-1-vkoul@kernel.org>
- <20230325122444.249507-13-vkoul@kernel.org>
- <cf4feba0-de96-9e81-592b-e4b7520340a6@linaro.org>
- <ZCEs57ttv67KfOua@matsya>
- <84bcb9a7-40f7-b692-0f06-4075b27b5b7e@linaro.org>
+        Mon, 27 Mar 2023 10:23:49 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160197AA1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:22:16 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pgnja-0008Hn-Kr; Mon, 27 Mar 2023 16:22:06 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pgnjY-0076IW-Q5; Mon, 27 Mar 2023 16:22:04 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pgnjW-00Fkib-OJ; Mon, 27 Mar 2023 16:22:02 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Wei Fang <wei.fang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Amit Cohen <amcohen@nvidia.com>, Gal Pressman <gal@nvidia.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: [PATCH net-next v2 0/8] Make SmartEEE support controllable 
+Date:   Mon, 27 Mar 2023 16:21:54 +0200
+Message-Id: <20230327142202.3754446-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <84bcb9a7-40f7-b692-0f06-4075b27b5b7e@linaro.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 10:51:38AM +0200, Konrad Dybcio wrote:
-> On 27.03.2023 07:43, Vinod Koul wrote:
-> > On 25-03-23, 13:40, Konrad Dybcio wrote:
-> >> On 25.03.2023 13:24, Vinod Koul wrote:
-> >>> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-[..]
-> >>> +&dispcc {
-> >>> +	status = "okay";
-> >> Any reason for disabling dispcc by default?
-> > 
-> > I think that is a good question. I would prefer disabling and enabling
-> > in places it is required, we might have a headless system or a dev board
-> > where we dont have display..?
-> It's a double-edged sword: on one side we could disable clocks that were
-> mistakenly enabled, but on the other hand we do keep some some clocks
-> always-on within that driver..
-> 
-> Perhaps leave it on by default and shut it off per-board if need be.
-> 
+changes v2:
+- handle lack of eee_get/set directly by the ethtool framework. This
+  will avoid the need to patch all ethernet controller drivers.
+- add mac_supports_eee and is_smart_eee_phy flags to indicate support
+  of different levels.
+- reword commit logs.
+- add FEC patch to indicated EEE support for some SoCs
 
-There is a little bit of overhead in keeping the clock controllers
-enabled at all times, but I expect it to benefit us in that it would
-ensure that any clocks that the bootloader might have left on will be
-disabled.
+Some PHYs, such as the AR8035, provide so-called SmartEEE support, which
+enables the use of EEE with MACs that lack native EEE capabilities,
+particularly the LPI support. Since this functionality is usually
+enabled by default, it may have a negative impact on certain use cases
+(e.g., PTP) or even prevent the use of all link modes without PHY driver
+assistance (e.g., a full range of half-duplex modes).
 
-So, I think we should go with enable by default and leave enabled.
+To address at least some of these issues, this patch series aims to pass
+EEE ethtool access to PHY drivers, enabling them to control SmartEEE
+support more effectively. The series consists of several patches that
+improve EEE handling for specific PHYs and MACs, making it possible to
+enable or disable SmartEEE functionality as needed, depending on the
+specific use case and requirements. As a result, users will gain more
+control and flexibility over energy-saving features and compatibility in
+their networking setups.
 
-Regards,
-Bjorn
+Oleksij Rempel (8):
+  net: phy: Add driver-specific get/set_eee support for non-standard
+    PHYs
+  net: phy: add is_smart_eee_phy variable for SmartEEE support
+  net: phy: Add mac_supports_eee variable for EEE support and LPI
+    handling
+  ethtool: eee: Rework get/set handler for SmartEEE-capable PHYs with
+    non-EEE MACs
+  net: phy: at803x: Indicate SmartEEE support for AR8035 and AR8031 PHYs
+  net: phy: at803x: Make SmartEEE support optional and configurable via
+    ethtool
+  net: phy: at803x: Fix SmartEEE support for some link configurations
+  net: fec: Indicate EEE (LPI) support for some FEC Ethernet controllers
+
+ drivers/net/ethernet/freescale/fec_main.c |   2 +
+ drivers/net/phy/at803x.c                  | 158 +++++++++++++++++++++-
+ drivers/net/phy/phy.c                     |  10 +-
+ include/linux/phy.h                       |   9 ++
+ net/ethtool/common.c                      |  38 ++++++
+ net/ethtool/common.h                      |   2 +
+ net/ethtool/eee.c                         |  17 ++-
+ 7 files changed, 221 insertions(+), 15 deletions(-)
+
+-- 
+2.30.2
+
