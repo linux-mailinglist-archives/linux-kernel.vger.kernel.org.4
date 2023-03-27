@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE57F6CA37D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036F56CA382
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232903AbjC0MQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
+        id S232287AbjC0MQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjC0MQE (ORCPT
+        with ESMTP id S232700AbjC0MQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:16:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F0E49F5;
-        Mon, 27 Mar 2023 05:15:26 -0700 (PDT)
+        Mon, 27 Mar 2023 08:16:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FD244AC;
+        Mon, 27 Mar 2023 05:15:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 127FD611F2;
-        Mon, 27 Mar 2023 12:15:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56A3DC433A4;
-        Mon, 27 Mar 2023 12:15:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1278611F5;
+        Mon, 27 Mar 2023 12:15:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECBF0C433EF;
+        Mon, 27 Mar 2023 12:15:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679919324;
-        bh=X7ixDT/eME8zr2M/ikt5bC5rQoS3uASy2IlC1ftIdSM=;
+        s=k20201202; t=1679919333;
+        bh=1A9PPhpjfn5VxBSmEZUVZ96wOnXUnzHwhEr/+6UxMII=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y2ffntjZwCcvJ7ZjcddqfIzivLJJTiZqbCBMhicCNOoftlZSKr8SZk1bt+v6QBdJ3
-         AqWhwmcTeaS96y4RUjpqI9FGKTqNfAOz/7RBt+ymuWQLCwljPJr+H8JgdNwFdqMXwE
-         J72tIuLXAnxcA7lDtjwg32UTtKQ0DkssHKQnBWYb3L+gXkApRayP0Mte6XTqD4QU75
-         zUBFdzaO9TiPGVooVFe2U07En2yoiRB9h1tj51608yH2BmWke6vfUVRIXO9jhZyAf0
-         Nifety/7HWh8t+jBWCaVsZT7PH2v1d96plBTbAk5HzBMivkiokDHTCIu3jr6mGkPTw
-         a3+V9R9fKm3ag==
+        b=ZTcyGdTSTyjUcBoLSVeACST/PtG6gZO3O0XJKQPppvSvNB4NDcy90mHMF4gJPiNS6
+         dNtpCw1Tg4EZtsG9wUbybuw0872LTI9FUQllw/7Q76rCvz6Crnc81KUI9Kj4chNtUZ
+         csalhGjvFzfmW3DiLJ6yzIpVXX+f5lcRxoFKXzIm876A40pKei6+o+8NXVAEYBZqzo
+         s4oPjpuA8RpmeGU6lv0FlQ6gA3tl8++a/WzT9oNtEmsVj2YTsrbo7DHFpEIVM4/NkV
+         v133TD824709IDedq8WaO7uGv2weYLR4T+0csPE1290Z1QSEI0fkOubzH+lLl8W9RM
+         VLW1WwaNQGF9g==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>,
@@ -67,16 +67,16 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>,
         linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-xtensa@linux-xtensa.org
-Subject: [PATCH 10/21] csky: dma-mapping: skip invalidating before DMA from device
-Date:   Mon, 27 Mar 2023 14:13:06 +0200
-Message-Id: <20230327121317.4081816-11-arnd@kernel.org>
+Subject: [PATCH 11/21] mips: dma-mapping: skip invalidating before bidirectional DMA
+Date:   Mon, 27 Mar 2023 14:13:07 +0200
+Message-Id: <20230327121317.4081816-12-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230327121317.4081816-1-arnd@kernel.org>
 References: <20230327121317.4081816-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,35 +86,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-csky is the only architecture that does a full flush for the
-dma_sync_*_for_device(..., DMA_FROM_DEVICE) operation. The requirement
-is only make sure there are no dirty cache lines for the buffer,
-which can be either done through an invalidate operation (as on most
-architectures including arm32, mips and arc), or a writeback (as on
-arm64 and riscv). The cache also has to be invalidated eventually but
-csky already does that after the transfer.
+Some architectures that need to invalidate buffers after bidirectional
+DMA because of speculative prefetching only do a simpler writeback
+before that DMA, while architectures that don't need to do the second
+invalidate tend to have a combined writeback+invalidate before the
+DMA.
 
-Use a 'clean' operation here for consistency with arm64 and riscv.
+The behavior on mips is slightly inconsistent, as it always
+does the invalidation before bidirectional DMA and conditionally
+does it a second time.
+
+In order to make the behavior the same as the rest, change it
+so that there is exactly one invalidation here, either before
+or after the DMA.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/csky/mm/dma-mapping.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ arch/mips/mm/dma-noncoherent.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
-index 82447029feb4..c90f912e2822 100644
---- a/arch/csky/mm/dma-mapping.c
-+++ b/arch/csky/mm/dma-mapping.c
-@@ -60,11 +60,9 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
- {
- 	switch (dir) {
- 	case DMA_TO_DEVICE:
--		cache_op(paddr, size, dma_wb_range);
--		break;
- 	case DMA_FROM_DEVICE:
+diff --git a/arch/mips/mm/dma-noncoherent.c b/arch/mips/mm/dma-noncoherent.c
+index 3c4fc97b9f39..b4350faf4f1e 100644
+--- a/arch/mips/mm/dma-noncoherent.c
++++ b/arch/mips/mm/dma-noncoherent.c
+@@ -65,7 +65,11 @@ static inline void dma_sync_virt_for_device(void *addr, size_t size,
+ 		dma_cache_inv((unsigned long)addr, size);
+ 		break;
  	case DMA_BIDIRECTIONAL:
--		cache_op(paddr, size, dma_wbinv_range);
-+		cache_op(paddr, size, dma_wb_range);
+-		dma_cache_wback_inv((unsigned long)addr, size);
++		if (IS_ENABLED(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) &&
++		    cpu_needs_post_dma_flush())
++			dma_cache_wback((unsigned long)addr, size);
++		else
++			dma_cache_wback_inv((unsigned long)addr, size);
  		break;
  	default:
  		BUG();
