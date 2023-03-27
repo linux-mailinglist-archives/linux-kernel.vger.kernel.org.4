@@ -2,184 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5247E6CA151
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A0A6CA135
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbjC0KYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 06:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60254 "EHLO
+        id S233622AbjC0KWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233527AbjC0KYY (ORCPT
+        with ESMTP id S233617AbjC0KWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:24:24 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156C4618D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:24:18 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id m2so8169449wrh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:24:18 -0700 (PDT)
+        Mon, 27 Mar 2023 06:22:37 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25E661A4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:22:32 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id c29so10720762lfv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:22:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1679912657;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VW3IChK5d/LMd19IisgoH//5UFlp1VHM94HpnaBU+Yc=;
-        b=MHjCaeveR0nLvCez0W14hOk+lY88zGiY+MtGz7b37omDe49MRW//+Jh3ZX+LhPr0xf
-         s38b+FeFevyydUSnJvBS9fnLrUofHcA8omadWCa31JPR4lCjzeWL3pNqmKUsXy9FpY7f
-         PGBtJm4HVfSgIIp434awf4kpHGCJqZBQY9EvwL/CwRAx8eG3EuiXslx/hutQmuJXwveP
-         /tzIs6Neyad/ysb/ObQKKswcmV5A3bzkqXKVmGuAlUopwt258xASbe5muXa9NQTtarM8
-         LUyTmSjnRR645SKYQIIZC4garvFLy4rbiZYzDpVHd+/SeCbHXuN9YSRz5oJT8rpG7UfO
-         nxyA==
+        d=linaro.org; s=google; t=1679912551;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kXuNWn+kwx1/pVD5N4boc9q0CgRFBEBRRr2sRkN+SN4=;
+        b=cwF5ErRR+qEDo0+T4zOR4jg1boWAGPkaZJymyGJGbK3R+fC61Cn7zLoNsaqTnln1iP
+         V043SOgg1QBKyNOihel//YzABPaynsyKEIPS9dvixrXiNp4gevxsJvX/E5xpko0xuem9
+         eDQ8jGxY4+1HG+c8XDJzhVvc3lvNqrU+tdBYjccwLwpWTYozqiKGele8eag7MaiG7zY+
+         zWWkutCtl6X5+w5iBtYPshQYCCr21ArVdKjUtRBteZPQxFO9vXml1hy7PkM9BZVtNsLR
+         Hd+4bYiknSz4DVDmQhxrhA/mJxLE4cASg8KXuJG+s/EuAUpEBhS1lAX622klH3UP1bK/
+         x68w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679912657;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VW3IChK5d/LMd19IisgoH//5UFlp1VHM94HpnaBU+Yc=;
-        b=eJ7R8Yd1uYr3yiBnME8HkyDDtJK7EjR3093CNN8gnJaOAuL0lpU09X+F3F7rJsKH/g
-         KSS9AAjyTEwfMrlzJK0FM71pn2ju4L7j0T5cVg2S0n9VdC1dVMgXawO0rSIBb06dM/7K
-         2SqySdcQHw5Ked2iV1Hq4UcUOqSetxUqpkQ1Y507BzSbePG17ooV21VNIcDfqtm4IwUR
-         dEEnSP3sHzeFNhsQ5VesC7hx89xrIrkQV0xkJZ/Bw/UOwXDQbckmJiQIC+kq4Rr4wkOj
-         iSXw0dxO3N0RRwkEt1P7aTWZiKDlXm3e3WcYzUtY7DfwBk/1Q37mySyRmsbKXTo5bbL9
-         5/qQ==
-X-Gm-Message-State: AAQBX9dpohaIcDVoRJk/bhT3SITjK9KiwzV24U0LQHxQpZeWjm7W685N
-        heZPwGjDeHiL+F5QDmcKJltHEw==
-X-Google-Smtp-Source: AKy350ZnTqf78NEN7xNAnvWTczWnbazaiB3XMXvoI9TF3wdfUBYXs4wNYne4EP6hBB0f6Yxpet1vwQ==
-X-Received: by 2002:a5d:420d:0:b0:2cf:d25a:635b with SMTP id n13-20020a5d420d000000b002cfd25a635bmr8804536wrq.62.1679912657412;
-        Mon, 27 Mar 2023 03:24:17 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003ef6f87118dsm2220615wmq.42.2023.03.27.03.24.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 03:24:17 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Mon, 27 Mar 2023 12:22:24 +0200
-Subject: [PATCH net-next v2 4/4] selftests: mptcp: add mptcp_info tests
+        d=1e100.net; s=20210112; t=1679912551;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kXuNWn+kwx1/pVD5N4boc9q0CgRFBEBRRr2sRkN+SN4=;
+        b=amIiCXiauz4NjIglR3bdnTDASFut5/khk/GDR2qNNsyuSSSnwuhEJEDyqDGMtkUq8L
+         Ua8TmoWt4jJprFR+LTf7WVEhrzj9xrgUKbieIT2AK5i5mQv4OmCekLK8yWaOpiCk7rSl
+         OCm0FzKAvaxAJ4CsdnPFRNCfUgUpXY7Cm9ztlX42GTOZYwlz105Y31EZAEyPiH0vj7ib
+         kH5UwvK1P2HYScu6bPyF2vLb3z4JMDkoB7KAU1MBGfmBpZpCWpLvGPiu3yOEQrALfnBr
+         S0Obh3jKCsOq+J0sTf8TpzoEfvlZJA8Z39NLRZaIuZLd3RZkEMkQL8/6438n2WiGFU50
+         cu1w==
+X-Gm-Message-State: AAQBX9dHMtd8jc0YlHArOLjlUDOUsvec92Qdna8WuZqkqjVCbJ0sdfpj
+        bcjILgfpCeeK24UmBBhSWyEaKQ==
+X-Google-Smtp-Source: AKy350bDp4KKf73jwCTmhjkPKmh9+gjpKxmjaff2URSut+nOkp8CGfFIaLZSpnZlvGMATa1FrEEnTQ==
+X-Received: by 2002:ac2:4219:0:b0:4db:28ce:e5ef with SMTP id y25-20020ac24219000000b004db28cee5efmr3021764lfh.0.1679912551323;
+        Mon, 27 Mar 2023 03:22:31 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id m15-20020a056512014f00b004d0b1327b75sm4627086lfo.61.2023.03.27.03.22.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 03:22:30 -0700 (PDT)
+Message-ID: <c49d6297-5376-ab9e-886f-e9df1f815bc7@linaro.org>
+Date:   Mon, 27 Mar 2023 13:22:30 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 10/11] arm64: dts: qcom: sdm845-xiaomi-beryllium: drop
+ invalid panel properties
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230326155753.92007-1-krzysztof.kozlowski@linaro.org>
+ <20230326155753.92007-10-krzysztof.kozlowski@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230326155753.92007-10-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230324-upstream-net-next-20230324-misc-features-v2-4-fca1471efbaa@tessares.net>
-References: <20230324-upstream-net-next-20230324-misc-features-v2-0-fca1471efbaa@tessares.net>
-In-Reply-To: <20230324-upstream-net-next-20230324-misc-features-v2-0-fca1471efbaa@tessares.net>
-To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Geliang Tang <geliang.tang@suse.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2389;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=QeiNRTK3EtggzUHbWnfSGf4g3uU4Ocezndf67d7El5Q=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkIW7NXKdb4dxMlhzSbDAHfngN3I6Tno49jBB1w
- 9wkpMWGEhGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZCFuzQAKCRD2t4JPQmmg
- c92dD/4zNxMiqdjA6KqIPL1tAFlRl6VCTI2idiN6Z8PkYq3y0q07BFbQ3otEDtfcVqcWc3C5r8V
- BOn2ssLS34vGjWxMofBz3E4L7CmUpgVBPuaLKHq0S8w/cM0nBuvCsqoyDM8XaHvGqlyYEIdkhcq
- FkjwM4Ut40WYZbZfeeMPtR9AzYSVwHrTIj0a9U++UV3Bw51bOVI3T3KqctrGf+YNEL//byka15o
- h+eSU4pZ5dZcWj/ohiSaBKZ7bmKaGBoE2ttG/Dp5NQftUakEdWEVy4jNumKOSIVjBx+TWbGeicU
- ObkYtZF+OxWdfCuPjc5vNJIkzBh5vmziu89eiEclc7l17/2bacpfVX0he1F7l7jfx8heml1bMbJ
- KcFhuB2CbjK4btrsgRaWWD1gCcof6AvTBSoE5cIMIrH2RWo9aNZJ2XL+KAg+5XCOopi0CNniWdG
- 1bjehBk62nXEKfp5jMsK6qH777uJPKRQs6M575gSI1Fd9ZBV6VC+UWGaZ99b5dztnzIHZd+YS3t
- 5mtb/xFZ/mm0LA7hLqpHCNiyFUIf0A9NvspXvQ3jEpCYG1vSkcb3mKA6YbFi3bXxjUJVeOW5ZJD
- t9Fp+30MyxxZeJ+AaVHnhWfrFJhRTATxYf7ZDPxB+oPBVluRzNl40Bbs+ajQ4A95dszExXBfj5J
- /5v6Gn9hz8U7XFQ==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geliang Tang <geliang.tang@suse.com>
+On 26/03/2023 18:57, Krzysztof Kozlowski wrote:
+> Panel does not have children with unit-addresses thus address/size-cells
+> are not valid:
+> 
+>    sdm845-xiaomi-beryllium-tianma.dtb: panel@0: Unevaluated properties are not allowed ('#address-cells', '#size-cells' were unexpected)
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi | 3 ---
+>   1 file changed, 3 deletions(-)
 
-This patch adds the mptcp_info fields tests in endpoint_tests(). Add a
-new function chk_mptcp_info() to check the given number of the given
-mptcp_info field.
-
-Link: https://github.com/multipath-tcp/mptcp_net-next/issues/330
-Signed-off-by: Geliang Tang <geliang.tang@suse.com>
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 47 ++++++++++++++++++++++++-
- 1 file changed, 46 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 42e3bd1a05f5..fafd19ec7e1f 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -1719,6 +1719,46 @@ chk_subflow_nr()
- 	fi
- }
- 
-+chk_mptcp_info()
-+{
-+	local nr_info=$1
-+	local info
-+	local cnt1
-+	local cnt2
-+	local dump_stats
-+
-+	if [[ $nr_info = "subflows_"* ]]; then
-+		info="subflows"
-+		nr_info=${nr_info:9}
-+	else
-+		echo "[fail] unsupported argument: $nr_info"
-+		fail_test
-+		return 1
-+	fi
-+
-+	printf "%-${nr_blank}s %-30s" " " "mptcp_info $info=$nr_info"
-+
-+	cnt1=$(ss -N $ns1 -inmHM | grep "$info:" |
-+		sed -n 's/.*\('"$info"':\)\([[:digit:]]*\).*$/\2/p;q')
-+	[ -z "$cnt1" ] && cnt1=0
-+	cnt2=$(ss -N $ns2 -inmHM | grep "$info:" |
-+		sed -n 's/.*\('"$info"':\)\([[:digit:]]*\).*$/\2/p;q')
-+	[ -z "$cnt2" ] && cnt2=0
-+	if [ "$cnt1" != "$nr_info" ] || [ "$cnt2" != "$nr_info" ]; then
-+		echo "[fail] got $cnt1:$cnt2 $info expected $nr_info"
-+		fail_test
-+		dump_stats=1
-+	else
-+		echo "[ ok ]"
-+	fi
-+
-+	if [ "$dump_stats" = 1 ]; then
-+		ss -N $ns1 -inmHM
-+		ss -N $ns2 -inmHM
-+		dump_stats
-+	fi
-+}
-+
- chk_link_usage()
- {
- 	local ns=$1
-@@ -3118,13 +3158,18 @@ endpoint_tests()
- 		run_tests $ns1 $ns2 10.0.1.1 4 0 0 speed_20 2>/dev/null &
- 
- 		wait_mpj $ns2
-+		chk_subflow_nr needtitle "before delete" 2
-+		chk_mptcp_info subflows_1
-+
- 		pm_nl_del_endpoint $ns2 2 10.0.2.2
- 		sleep 0.5
--		chk_subflow_nr needtitle "after delete" 1
-+		chk_subflow_nr "" "after delete" 1
-+		chk_mptcp_info subflows_0
- 
- 		pm_nl_add_endpoint $ns2 10.0.2.2 dev ns2eth2 flags subflow
- 		wait_mpj $ns2
- 		chk_subflow_nr "" "after re-add" 2
-+		chk_mptcp_info subflows_1
- 		kill_tests_wait
- 	fi
- }
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 -- 
-2.39.2
+With best wishes
+Dmitry
 
