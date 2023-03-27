@@ -2,169 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F8B6C9B71
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 08:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B956C9B73
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 08:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbjC0GjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 02:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S232282AbjC0GmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 02:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjC0GjT (ORCPT
+        with ESMTP id S230379AbjC0GmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 02:39:19 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0382140C3;
-        Sun, 26 Mar 2023 23:39:16 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id bn14so4474932pgb.11;
-        Sun, 26 Mar 2023 23:39:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679899155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cA+h4cW7bS5QMhc2GeLujGQv7axs1KyDCUQ4H4EHlTc=;
-        b=RStl+2N5eEXhnZ4ov2uhIPwX1sDuAhSn04jchEuqxcQgRE+5BydO7SCs2hj1IvJJdT
-         KeSjrwrqTo7nYCCm/QHVvfbtfcJ4RN/OoLd1koDuAXbDRMLINtaoJJSmRerykc04YskV
-         ltpsYSJa+4SjlXYY27qtm94fZ/cUCJavLtBl/gTciG2KTWd1J2xWF7sykbW5DkmGyQP/
-         vLeaAe1MpjekfF2+absdHbVNcC+CsPODsrwjtv20zF569iV/S+mL2yOyTifWTV3SkcQa
-         hvXTjNC43Ej/Y1hlPGs0W0pM6B9esB7TUwtnYYNCiSSoTW2P0GeyC2QsqqS95Nz8y4vX
-         O9LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679899155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cA+h4cW7bS5QMhc2GeLujGQv7axs1KyDCUQ4H4EHlTc=;
-        b=JXE1EMj8ZZoIdlh5fSy3lMnP7fpCPAXpjGRd21K1aPD/oskAU0WJvrLkeV5Hl3xvMM
-         XZSuuM84ziO9Y/iIufHMldsA8D63Yvr6mCojJAQFArj5UwWDLRQDdPqzbNrqNRSjLft6
-         W2qH9yWLQo/B1xUUR6g3G9XFWf1xCPDsMZ1S4BL/JWl2tYpURtWL/aSc5SSx50vbnDpS
-         h86Cu60UBuSTEetH0DPgp+TbfzwiD2llcAEGmUXI4GotDccnRgQM85B/1ds5AxjW3mi7
-         ajDLPwCaQbUG0yVFd9LhA/fWFo4pYxn6dfad4yVEFcUbqeKunQ/IBBz3LCKydvoJ1dtE
-         WPow==
-X-Gm-Message-State: AAQBX9e/jaic1ikV1UoNZcUpSM5586YLOig1h6ZnZZIzxPikhp4fWmY/
-        TaeN4hn5n9Kr4xXOgr+Bz7fx7JILPBRMVn3FiuM=
-X-Google-Smtp-Source: AKy350b+JjOeVv1nh07UqJAH32FY6Z3m4WsW1Y4L12/UPCjLAd3AirzoLohYzQ87C9JLJXEuSeSF23BSPBtxFl4pAC8=
-X-Received: by 2002:a05:6a00:1a8b:b0:625:dac0:5263 with SMTP id
- e11-20020a056a001a8b00b00625dac05263mr5956249pfv.0.1679899155457; Sun, 26 Mar
- 2023 23:39:15 -0700 (PDT)
+        Mon, 27 Mar 2023 02:42:00 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249B640C3;
+        Sun, 26 Mar 2023 23:41:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679899319; x=1711435319;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qAK/3jcev0hqxCOfT4A9HqnYk8eKg+NJ4uoviLouFRY=;
+  b=bUhsXal8Ea+P4JI2nBaMgbJEQFlX/+KqqgrNAAwkNct4i+aFTfekNxuT
+   XVI6KVpgKbGrT3waMGzdhG6Fw3JrGfENt0BeBLFbHqp0Z0FdUXECBLcX0
+   4YnQKSqlGhsjZMHbe8g+XmLEjyDttvIEQIuTy+ibTITDleA0VWC7PGxfO
+   mbLPWgflBf4eaRkwV/TFTbmXCgFoFcJbd5jfr5eftdtrqguCTHVQYfpep
+   rQRueP987yiyfdUgfb9QVsyAdquQjIRQ242fdbHoVJZHytpEfPcKPbgTG
+   fByqQXCq4QB1zIqkcvLF9nNV54opLaoQebq8SRLcV4aXBzeuZezsV2NAk
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="319847304"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="319847304"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 23:41:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="715960756"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="715960756"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.174.244]) ([10.249.174.244])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 23:41:52 -0700
+Message-ID: <1d56964c-bdf7-393a-5fdb-9ad50bdfcc85@intel.com>
+Date:   Mon, 27 Mar 2023 14:41:48 +0800
 MIME-Version: 1.0
-References: <20230320132316.3126838-1-korantwork@gmail.com>
-In-Reply-To: <20230320132316.3126838-1-korantwork@gmail.com>
-From:   Xinghui Li <korantwork@gmail.com>
-Date:   Mon, 27 Mar 2023 14:39:04 +0800
-Message-ID: <CAEm4hYXDwkjt9hYUkerkD6KvtCCdLXtz1D34WFrmjPNsTxLANw@mail.gmail.com>
-Subject: Re: [PATCH v4] PCI: vmd: Add the module param to adjust MSI mode
-To:     helgaas@kernel.org, nirmal.patel@linux.intel.com,
-        kbusch@kernel.org, jonathan.derrick@linux.dev,
-        lpieralisi@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xinghui Li <korantli@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH 4/6] KVM: x86: Move MSR_IA32_PRED_CMD WRMSR emulation to
+ common code
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>
+References: <20230322011440.2195485-1-seanjc@google.com>
+ <20230322011440.2195485-5-seanjc@google.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20230322011440.2195485-5-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping~
+On 3/22/2023 9:14 AM, Sean Christopherson wrote:
+> Dedup the handling of MSR_IA32_PRED_CMD across VMX and SVM by moving the
+> logic to kvm_set_msr_common().  Now that the MSR interception toggling is
+> handled as part of setting guest CPUID, the VMX and SVM paths are
+> identical.
+> 
+> Opportunistically massage the code to make it a wee bit denser.
+> 
 
+Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
 
-On Mon, Mar 20, 2023 at 9:23=E2=80=AFPM <korantwork@gmail.com> wrote:
->
-> From: Xinghui Li <korantli@tencent.com>
->
-> In the legacy, the vmd MSI mode can only be adjusted by configuring
-> vmd_ids table. This patch adds another way to adjust MSI mode by
-> adjusting module param, which allows users easier to adjust the vmd
-> according to the I/O scenario without rebuilding driver. There are two
-> params that could be recognized: on, off. The default param is NULL,
-> the goal is not to effect the existing settings of the device.
->
-> Signed-off-by: Xinghui Li <korantli@tencent.com>
-> Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  drivers/pci/controller/vmd.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->
-> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> index 990630ec57c6..fb61181baa9e 100644
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -34,6 +34,19 @@
->  #define MB2_SHADOW_OFFSET      0x2000
->  #define MB2_SHADOW_SIZE                16
->
-> +/*
-> + * The VMD msi_remap module parameter provides the alternative way
-> + * to adjust MSI mode when loading vmd.ko other than vmd_ids table.
-> + * There are two params could be recognized:
-> + *
-> + * off: disable MSI remapping
-> + * on:  enable MSI remapping
-> + *
-> + */
-> +static char *msi_remap;
-> +module_param(msi_remap, charp, 0444);
-> +MODULE_PARM_DESC(msi_remap, "Whether to enable MSI remapping function");
+>   arch/x86/kvm/svm/svm.c | 14 --------------
+>   arch/x86/kvm/vmx/vmx.c | 14 --------------
+>   arch/x86/kvm/x86.c     | 11 +++++++++++
+>   3 files changed, 11 insertions(+), 28 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index f757b436ffae..85bb535fc321 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -2942,20 +2942,6 @@ static int svm_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr)
+>   		 */
+>   		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_SPEC_CTRL, 1, 1);
+>   		break;
+> -	case MSR_IA32_PRED_CMD:
+> -		if (!msr->host_initiated &&
+> -		    !guest_has_pred_cmd_msr(vcpu))
+> -			return 1;
+> -
+> -		if (data & ~PRED_CMD_IBPB)
+> -			return 1;
+> -		if (!boot_cpu_has(X86_FEATURE_IBPB))
+> -			return 1;
+> -		if (!data)
+> -			break;
+> -
+> -		wrmsrl(MSR_IA32_PRED_CMD, PRED_CMD_IBPB);
+> -		break;
+>   	case MSR_AMD64_VIRT_SPEC_CTRL:
+>   		if (!msr->host_initiated &&
+>   		    !guest_cpuid_has(vcpu, X86_FEATURE_VIRT_SSBD))
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 5c01c76c0d45..29807be219b9 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2285,20 +2285,6 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>   		if (data & ~(TSX_CTRL_RTM_DISABLE | TSX_CTRL_CPUID_CLEAR))
+>   			return 1;
+>   		goto find_uret_msr;
+> -	case MSR_IA32_PRED_CMD:
+> -		if (!msr_info->host_initiated &&
+> -		    !guest_has_pred_cmd_msr(vcpu))
+> -			return 1;
+> -
+> -		if (data & ~PRED_CMD_IBPB)
+> -			return 1;
+> -		if (!boot_cpu_has(X86_FEATURE_IBPB))
+> -			return 1;
+> -		if (!data)
+> -			break;
+> -
+> -		wrmsrl(MSR_IA32_PRED_CMD, PRED_CMD_IBPB);
+> -		break;
+>   	case MSR_IA32_CR_PAT:
+>   		if (!kvm_pat_valid(data))
+>   			return 1;
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 237c483b1230..c83ec88da043 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -3617,6 +3617,17 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>   		vcpu->arch.perf_capabilities = data;
+>   		kvm_pmu_refresh(vcpu);
+>   		return 0;
+> +	case MSR_IA32_PRED_CMD:
+> +		if (!msr_info->host_initiated && !guest_has_pred_cmd_msr(vcpu))
+> +			return 1;
 > +
->  enum vmd_features {
->         /*
->          * Device may contain registers which hint the physical location =
-of the
-> @@ -875,6 +888,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, uns=
-igned long features)
->                         return ret;
->
->                 vmd_set_msi_remapping(vmd, true);
-> +               dev_info(&vmd->dev->dev, "init vmd with remapping MSI\n")=
-;
->
->                 ret =3D vmd_create_irq_domain(vmd);
->                 if (ret)
-> @@ -887,6 +901,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, uns=
-igned long features)
->                 irq_domain_update_bus_token(vmd->irq_domain, DOMAIN_BUS_V=
-MD_MSI);
->         } else {
->                 vmd_set_msi_remapping(vmd, false);
-> +               dev_info(&vmd->dev->dev, "init vmd with bypass MSI\n");
->         }
->
->         pci_add_resource(&resources, &vmd->resources[0]);
-> @@ -955,6 +970,16 @@ static int vmd_enable_domain(struct vmd_dev *vmd, un=
-signed long features)
->         return 0;
->  }
->
-> +static void vmd_config_msi_remap_param(unsigned long *features)
-> +{
-> +       if (msi_remap) {
-> +               if (strcmp(msi_remap, "on") =3D=3D 0)
-> +                       *features &=3D ~(VMD_FEAT_CAN_BYPASS_MSI_REMAP);
-> +               else if (strcmp(msi_remap, "off") =3D=3D 0)
-> +                       *features |=3D VMD_FEAT_CAN_BYPASS_MSI_REMAP;
-> +       }
-> +}
+> +		if (!boot_cpu_has(X86_FEATURE_IBPB) || (data & ~PRED_CMD_IBPB))
+> +			return 1;
+> +		if (!data)
+> +			break;
 > +
->  static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id=
-)
->  {
->         unsigned long features =3D (unsigned long) id->driver_data;
-> @@ -984,6 +1009,8 @@ static int vmd_probe(struct pci_dev *dev, const stru=
-ct pci_device_id *id)
->         if (err < 0)
->                 goto out_release_instance;
->
-> +       vmd_config_msi_remap_param(&features);
-> +
->         vmd->cfgbar =3D pcim_iomap(dev, VMD_CFGBAR, 0);
->         if (!vmd->cfgbar) {
->                 err =3D -ENOMEM;
-> --
-> 2.31.1
->
+> +		wrmsrl(MSR_IA32_PRED_CMD, PRED_CMD_IBPB);
+> +		break;
+>   	case MSR_EFER:
+>   		return set_efer(vcpu, msr_info);
+>   	case MSR_K7_HWCR:
+
