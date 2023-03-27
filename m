@@ -2,80 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E943F6CA1D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4396CA1DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbjC0K5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 06:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S232102AbjC0K7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjC0K5f (ORCPT
+        with ESMTP id S231913AbjC0K7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:57:35 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54FFFE;
-        Mon, 27 Mar 2023 03:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=onlZ3BW/ohpzwNjPNz62W4K6Z+/iFWEigy06QiA3/PQ=; b=TNfv9X/+XWLgMmxbwbfvvl5iza
-        JF/NG1pYn4CuIbbyC0FfJaqoDJG+cgm8GSJAtO3nc1VvmQEQ2srTdxq4MtHMAxsR38Gv8jRiz0ze4
-        IHBH9ynoLhfRSxIyOItTmNsi2NLom/lT0KSAN66LgGYNeR4eGHUyr+65WMvT4XncEYJu7cKs/vRTo
-        xW0MxmTJkBjsqWYOYlbBwHKlhWUo9WQsdkq+fTCgm+fhwWg3z7HHl/sm96s6UxI6gwBjRCxXsQ9bl
-        8P2zw5tTcY2vOmFpc90tVKjZX3yfsiFm9/excxE/jv914YGQT4kPOMRo0ubunuzQ0f9KPTapiIG8S
-        jXc0YYpA==;
-Received: from p200300ccff0533001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff05:3300:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pgkXK-0000EF-Ag; Mon, 27 Mar 2023 12:57:14 +0200
-Date:   Mon, 27 Mar 2023 12:57:13 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bcousson@baylibre.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: omap4: add initial support for Epson Moverio
- BT-200
-Message-ID: <20230327125713.49537a26@aktux>
-In-Reply-To: <20230327082137.GH7501@atomide.com>
-References: <20230313110409.2294154-1-andreas@kemnade.info>
-        <20230327082137.GH7501@atomide.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 27 Mar 2023 06:59:43 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF01F110
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:59:42 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id n125so9946141ybg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:59:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679914782;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4cIVo2dlqJiiyp85rWZ9bI1y0w9kmh/mgSwb0qLyW7E=;
+        b=HpAU6+Yufd8ekUlVDHkFI81rDPd94b4qWTH7yuDsOEA2Ut0f5J9ba2s3LHM7SMrzD0
+         w4fZByz8p4ux2lldYl3Q1UsWPLfmAcEf/nDVyEBb/ndixUMiN8pxVvjIqr7bVdm8ury0
+         sg97heLG4+thQaiKAgBZ29ytx6MeDpoIz+tCv3bvymjOe25rY+GO5p+ikIMWu9jyuhn4
+         W2IZDHevp92O1BcmnOh8RmtV5hw/VZH0BqjixPMJqjiJl9FFjq+OhRch/rh/pVhbdrd9
+         dxaxbnvOcfRF/Kzto/tuDreZSm9wNbGsfp7VmlmGInt1sU4+xdWBrNxWvYmwbgzbE0v1
+         /o3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679914782;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4cIVo2dlqJiiyp85rWZ9bI1y0w9kmh/mgSwb0qLyW7E=;
+        b=4e9Ld/G2ubnf8iqGSTkWbNXe+GH8Qrpf6QSswAn/qsJjxuaoaFqvom7AG16MqaklLj
+         68yatkvXMRrXPLsNYYaokpbfzIpjFnarWrMPARnpjIVokyig8ggP3k6fI151KFfxfniw
+         xFuj6YeHkjJCl9eXni2RJ/5D1mO4NGVRKIvoiKYaE001Fopj3hlnsieasRlu2cbEByH0
+         E4aPaQG+s1CSOhDsLLe3I79MRMwhAX00cxTo/av65pfjjUIyg2T2bQY3LDf3fB8/6Xxa
+         EnqVGLLBHMQg+9k0eBgo0Ss2ANVvOQO3uxlLlop4I0O25WwmGvMF1Rc4E9eNLA8g7sLI
+         JXRg==
+X-Gm-Message-State: AAQBX9cwcsNcS4jXquKvvkdbBBTMGYG3GOED6wVYyKXBXhcH6Z+1n3w2
+        htVfM3AM4S/U2XMKBvybIBoYqPBfXGawxOBPd4JJgA==
+X-Google-Smtp-Source: AKy350b5PoC9b2J9/khe3V6Tkw9uAc0Lp6gjwZcsHGSG0CxqeaAumyEo+6eqBsCqxlWqhiTzMb1m1rI7YuEqSoTqylI=
+X-Received: by 2002:a05:6902:1586:b0:98e:6280:74ca with SMTP id
+ k6-20020a056902158600b0098e628074camr6889426ybu.1.1679914782191; Mon, 27 Mar
+ 2023 03:59:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221122-mt8365-i2c-support-v5-0-6e4f3b54937f@baylibre.com>
+ <20221122-mt8365-i2c-support-v5-2-6e4f3b54937f@baylibre.com>
+ <2a1b1f66-970e-5adb-389e-b9c47a790712@collabora.com> <CAFGrd9pf+ojPDciF3Mtw-QT51LZCj+GNLHXurGx_vcC17GHA2A@mail.gmail.com>
+In-Reply-To: <CAFGrd9pf+ojPDciF3Mtw-QT51LZCj+GNLHXurGx_vcC17GHA2A@mail.gmail.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Mon, 27 Mar 2023 12:59:31 +0200
+Message-ID: <CAFGrd9r-s564RPk+F5J_=Ns-1tjWo-osEYaXNNt0uXU_k=TKqw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] arm64: dts: mediatek: enable i2c0 for mt8365-evk board
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Qii Wang <qii.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023 11:21:37 +0300
-Tony Lindgren <tony@atomide.com> wrote:
-
-> * Andreas Kemnade <andreas@kemnade.info> [230313 13:04]:
-> > yes, epson,embt2ws is unknown, is the txt->yaml conversion around the
-> > corner? I would then resubmit it includding an addition
-> > to that yaml. If not probably I resubmit the conversion patch with
-> > the compatible added. But that should not stop the rest of this patch from
-> > being reviewed.  
-> 
-> Yeah let's do the yaml conversion first as otherwise we'll be adding some
-> extra warnings for the dt folks.
-> 
-> Your patch looks otherwise OK to me.
+> > ...and please do *not* use the mediatek,pull-up-adv property: this is
+> > supposed to be there only for older devicetrees and there's a replacement
+> > for it.... unless you have any specific reason to do so (and if you do,
+> > you should well explain that).
 >
-So I will try to incooperate the feedback into the last version
-of the conversion patch and include epson,embt2ws.
+> bias-pull-up isn't necessary currently because MT8365 doesn't use MTK
 
-Regards,
-Andreas
+I mean mediatek,pull-up-adv. bias-pull-up can be kept.
