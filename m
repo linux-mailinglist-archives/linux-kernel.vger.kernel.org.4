@@ -2,149 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8246CA407
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44CFC6CA409
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232548AbjC0MZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
+        id S232633AbjC0MZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232502AbjC0MZr (ORCPT
+        with ESMTP id S232587AbjC0MZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:25:47 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B5010D8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:25:44 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id er18so24173400edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:25:44 -0700 (PDT)
+        Mon, 27 Mar 2023 08:25:52 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD353ABA;
+        Mon, 27 Mar 2023 05:25:50 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id q7-20020a05600c46c700b003ef6e809574so1874448wmo.4;
+        Mon, 27 Mar 2023 05:25:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679919943;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=joz+G6GhOPLGNBgYdWhUUWc1HzQelk6ITcZ+QD28jgk=;
-        b=PUi0LeSnL35LCF40u+FnoMXcDyIOPwaEQ/se2minV7DA3YrB7wY/VZTnpMHz0Ry9tf
-         dLCHdEMWsPtv0vVyFyGxf+eCDx1WMHfiSkgb6Vw5neIRpMXm4D1oPUxaH4bUOuNLLwm3
-         Se0tIU0XjGiiKN8+9IRPPyj8DDVRNAWodmMosL7UUrxsY2x89dIT4eIkPVD7cW81qe3G
-         RYRLi2rI5rJwgAkMuXBUXBRYTSYSOlIr8tlI4ayFjUU7OO3k9K4UTBNH1/WgyPrZzKMZ
-         v1ABqVJTaDtWCUBEXPQ8GJ3d62h/0z7co1k873E6DzB18I2pqOb1HqvKoB0UKeC16oKm
-         sn+g==
+        d=gmail.com; s=20210112; t=1679919949;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uslYjtv4m4AksflLGnoX5lwwTxOvcq4QRw5RlSVhmQw=;
+        b=PolfwCa4IcIK/n1Oye+8d0lgDu5S86ppO9k9VnMxzkxR4mlDsXWKRuEN8Wwa9GHlLi
+         TRRK46gDB7oUpZyQDk98GV+bj/f1JD3ILY4I/x2RqkTgtJToR/klNkZmZk+D0fy5S7Ov
+         7oaUO59O34ggm9cYdnewFt66WppKiqlW3zkEF+7+aURbQpDjOWGDNM8W/w0K94l4x2W7
+         CTizHGz0IVtz4H7qjCkZpXAzY7tEzvA5QIPJSwICyJGGtRAnZeagBGYVnhENx4VlXkLz
+         UrEqPXgcP3LfY13X9A68zKtG5KMdfZYaBhp9rAIARwmentau8XmHIlBAJsytXYlhafBF
+         6CZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679919943;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=joz+G6GhOPLGNBgYdWhUUWc1HzQelk6ITcZ+QD28jgk=;
-        b=HomZlVCqEaMDbKG4QP31KIKnKmQVPTzQM6sFUIP4KwoWV3+qzIf2pgFbNAlXVlc0w0
-         3qh6w9Pe/UgGazKEuqSrc9ZG+cDCYXZrOCEH2aKCxriYRepeywuzKHao0Lu5lv+BLK/E
-         SEo00LU7uGo5HrNV5Nql/vFkgOgQ+GFA8mn1IVe5KF3U6cstMulwARsGtiu5XVwO22Uf
-         IkncmJmWIkwwuh4bg94IYt8qu8iFlM3gsnweAhM6QH4L7iKOL9f/65QGmipAG3RZoIwe
-         bOLKm7JBMj+ROFDmPQN0krO2H6TpNAE7ZcEOnzFU6Wxwng5sfAzoFScNEFBZQvOrJK/W
-         5iLg==
-X-Gm-Message-State: AAQBX9cS1pGyEV/+tLXeUSTaOmQnVg20xI70phvXvFO64w0DnCevrGtN
-        sAEAXks+DezdgJompFObIeY0OQ==
-X-Google-Smtp-Source: AKy350ZNyr6TRFP8CITB+F5cFxCV/EJslb7jdFVW+g9u1hhfHi7ZWRh5k14gIa9lPQ3jru7laaK7hw==
-X-Received: by 2002:a17:906:e0c5:b0:931:4f2c:4e83 with SMTP id gl5-20020a170906e0c500b009314f2c4e83mr11694068ejb.63.1679919942873;
-        Mon, 27 Mar 2023 05:25:42 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:581e:789c:7616:5ee? ([2a02:810d:15c0:828:581e:789c:7616:5ee])
-        by smtp.gmail.com with ESMTPSA id c19-20020a170906155300b0093ebc654f78sm3931897ejd.25.2023.03.27.05.25.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 05:25:42 -0700 (PDT)
-Message-ID: <757afef7-5be2-9487-8a1a-4917528ca135@linaro.org>
-Date:   Mon, 27 Mar 2023 14:25:41 +0200
+        d=1e100.net; s=20210112; t=1679919949;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uslYjtv4m4AksflLGnoX5lwwTxOvcq4QRw5RlSVhmQw=;
+        b=qMdSWY4ptLBds11vurm5YlOoeX4+z0/JBsW5dvGexzaymwArL21tdwQur6LErC9RYN
+         +yTD78XgCU4on/5IixvopRUnHwDIX3+tLylPkvQSH0CfrCKXrry9USz4bpVno5hCA6BN
+         MKM9Zq4rbhTUQdghCtmK+pBJQimbrksPmf0sz6PgEgUmv77gS/+GmqscwUIxR7QHj+CD
+         vfh6roI2Qd3LBGGN7DHguxT6oo1WxavhIcISNuS3LdXDqpvd4iRqvj2dZkzwxhM2hAZi
+         0jOHEaiRH50BtLVVZLpIH9/05Oi6sQjuzbveHUPy6RyAzd4qQusHDqZrKuC0DgbMG+ZD
+         CKug==
+X-Gm-Message-State: AO0yUKUSMlCE9E0x7sv7ihpsjNqL0w/F0H6L4jJzSwEtVnB0vjxwY5Tu
+        eUjU4Ex1D9wUfx3cdYvxzmm1EaNEqdM=
+X-Google-Smtp-Source: AK7set/0A4okK2dgo4fW1zVAEQe9LUB6jX7YJlVK/yTZPM2X1C4gkyjrVKH+mEqxf1SGXfO7XIX7Zg==
+X-Received: by 2002:a05:600c:d2:b0:3ee:9909:acc8 with SMTP id u18-20020a05600c00d200b003ee9909acc8mr9576073wmm.32.1679919949093;
+        Mon, 27 Mar 2023 05:25:49 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id i6-20020a05600c354600b003ede6540190sm8895718wmq.0.2023.03.27.05.25.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 05:25:48 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 15:25:43 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>
+Cc:     outreachy@lists.linux.dev, Marc Dietrich <marvin24@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        ac100@lists.launchpad.net, linux-tegra@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: nvec: replace udelay() with usleep_range()
+Message-ID: <453453f4-1496-4735-8fab-efb7e4240e05@kili.mountain>
+References: <ZCGK4+zUDT1lLz6s@khadija-virtual-machine>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: qcom: adsp: add
- qcom,sdm845-slpi-pas compatible
-Content-Language: en-US
-To:     Dylan Van Assche <me@dylanvanassche.be>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230325132117.19733-1-me@dylanvanassche.be>
- <20230325132117.19733-2-me@dylanvanassche.be>
- <8ab9d0c3-89f7-90f3-58d6-d2994d372518@linaro.org>
- <fe83e6f62d802109024f6203cf0d50c1ef348da1.camel@dylanvanassche.be>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <fe83e6f62d802109024f6203cf0d50c1ef348da1.camel@dylanvanassche.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCGK4+zUDT1lLz6s@khadija-virtual-machine>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2023 13:39, Dylan Van Assche wrote:
-> Hi Krzysztof,
+On Mon, Mar 27, 2023 at 05:24:03PM +0500, Khadija Kamran wrote:
+> Replace 'udelay()' with 'usleep_range()' with 1000us as upper limit.
+> This issue is reported by checkpatch.pl script.
 > 
-> On Sun, 2023-03-26 at 10:53 +0200, Krzysztof Kozlowski wrote:
->> On 25/03/2023 14:21, Dylan Van Assche wrote:
->>> SLPI DSP remoteproc on DSP is defined by the 'qcom,sdm845-slpi-pas'
->>> compatible in the qcom_q6v5_pas driver. Add this compatible to the
->>> devicetree bindings.
->>>
->>> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
->>> ---
->>>  Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 3
->>> +++
->>>  1 file changed, 3 insertions(+)
->>>
->>> diff --git
->>> a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
->>> b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
->>> index 643ee787a81f..175be01ecd1c 100644
->>> --- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
->>> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
->>> @@ -26,6 +26,7 @@ properties:
->>>        - qcom,sdm660-adsp-pas
->>>        - qcom,sdm845-adsp-pas
->>>        - qcom,sdm845-cdsp-pas
->>> +      - qcom,sdm845-slpi-pas
->>>  
->>>    reg:
->>>      maxItems: 1
->>> @@ -63,6 +64,7 @@ allOf:
->>>                - qcom,msm8998-adsp-pas
->>>                - qcom,sdm845-adsp-pas
->>>                - qcom,sdm845-cdsp-pas
->>> +              - qcom,sdm845-slpi-pas
->>>      then:
->>>        properties:
->>>          clocks:
->>> @@ -104,6 +106,7 @@ allOf:
->>
->>
->> You miss also if:then: for power-domains.
+> CHECK: usleep_range is preferred over udelay; see
+> Documentation/timers/timers-howto.rst
 > 
-> I am not sure what to put for the power-domains, 
+> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> ---
 
-Doesn't your driver patch clearly state it?
+This kind of change requires you to test on the hardware and have
+slightly in depth knowledge of the spec.
 
-> newer remoteprocs from
-> SM8150/SM8250/SM8350 etc. are not in this binding either.
-
-They have their own binding, but why is it an argument to add
-sdm845-slpi a bit incomplete?
-
-> 
-> Could you elaborate a bit here? Thanks!
-
-There are already examples of other remoteprocs which do it, so I do not
-understand why this one is different. What to elaborate more?
-
-Best regards,
-Krzysztof
+regards,
+dan carpenter
 
