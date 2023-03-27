@@ -2,437 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB8E6C9B05
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 07:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 448186C9B0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 07:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbjC0FnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 01:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
+        id S232025AbjC0Fo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 01:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjC0FnN (ORCPT
+        with ESMTP id S229577AbjC0Fo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 01:43:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D400D3C03;
-        Sun, 26 Mar 2023 22:43:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 681C6B80DAC;
-        Mon, 27 Mar 2023 05:43:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F75DC433EF;
-        Mon, 27 Mar 2023 05:43:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679895788;
-        bh=bVoKqlEKcb4Utbw/q4YYQWsU3JeRXa7XO93nRHgQgkw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MWVnIZZADuvKR00+OZ+oyfpjZyEaShUcdXdF6PU6flgnts7YeE7xGUMZh5G0RYF/d
-         ttR9uC1JKv+DqcVq/G8RaSOZW6qWaThBUxbtOcRRvP/kM7vqbBXPjBdM/cfJvZmdjL
-         Bkxcng9a5iZQWdR4L6bsUmG7Tw3eK5dHzjRB6Zb6XVOdKlXUf/jaq48IQLnxqovGGl
-         L4/VBCIry+G8rUSOda0Wc/pVcl3lXyimU3dNLNpOiJ1afneE/MOEEwGcKds/EFf6Ws
-         YTQi0bXWkm9pR19GzX2mGoy2CesvIE+htCRcYxAwNz8O1audJJSP23cGKGrBw6aY4V
-         XCJ0mpZb/u8CA==
-Date:   Mon, 27 Mar 2023 11:13:03 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mon, 27 Mar 2023 01:44:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC894C2B;
+        Sun, 26 Mar 2023 22:44:25 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32R4FwgK010547;
+        Mon, 27 Mar 2023 05:44:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=jaSpJzbnuH1nfhIFJcuWIyzDNFQ81oF5rq5TFzLet/k=;
+ b=GUEHTXnVxwrNbm12b7mAEv1fWAkBpD/pOKeHajXPYLkRevVY2JZ+h0Q4ps/iU0uU0vCS
+ h660rE9rQ1xFmuCAamBmYu8Z7OcyqaOuKWRdpIYBaQeewNJ0O2wPWZCuxd3Nv5639ruZ
+ lWFUX95cIMLjhNWs6+cCF25+imkt8uABbcIkS3RRcdcXPswCQ3mkqBWdf8OLOsndWXM3
+ g8wxF9kAD9lReiAa9+oYamR63UIHJhfMiPsorDQtRf1h+XTUUpn6N9P6iLM8Z9zbv7OH
+ Uqr5xsg+TGsGiJVht+PWWhFAOVZc2FwtOkg1rK1iDojfP+mcJMjvkYw5Vg3G6xt7e4sE BQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pht50uds3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 05:44:05 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32R5i4l0031718
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 05:44:04 GMT
+Received: from [10.253.35.148] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Sun, 26 Mar
+ 2023 22:43:57 -0700
+Message-ID: <5f027f1b-ad01-b7f6-fee2-8ffaef20446f@quicinc.com>
+Date:   Mon, 27 Mar 2023 13:43:52 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 1/3] Coresight: Add coresight dummy driver
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 12/12] arm64: dts: qcom: sc8180x: Introduce Lenovo
- Flex 5G
-Message-ID: <ZCEs57ttv67KfOua@matsya>
-References: <20230325122444.249507-1-vkoul@kernel.org>
- <20230325122444.249507-13-vkoul@kernel.org>
- <cf4feba0-de96-9e81-592b-e4b7520340a6@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cf4feba0-de96-9e81-592b-e4b7520340a6@linaro.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Andy Gross <agross@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonathan Corbet <corbet@lwn.net>
+CC:     Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        <linux-doc@vger.kernel.org>
+References: <20230324061608.33609-1-quic_hazha@quicinc.com>
+ <20230324061608.33609-2-quic_hazha@quicinc.com>
+ <0c1d60f7-0d01-832f-a49c-12527665e86e@arm.com>
+Content-Language: en-US
+From:   Hao Zhang <quic_hazha@quicinc.com>
+In-Reply-To: <0c1d60f7-0d01-832f-a49c-12527665e86e@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: x6rw_R6JRCMJ7kkLgTrVBbUWJv27MG6V
+X-Proofpoint-ORIG-GUID: x6rw_R6JRCMJ7kkLgTrVBbUWJv27MG6V
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ lowpriorityscore=0 suspectscore=0 priorityscore=1501 spamscore=0
+ malwarescore=0 impostorscore=0 adultscore=0 phishscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303270047
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-03-23, 13:40, Konrad Dybcio wrote:
+Hi Suzuki,
+
+On 3/24/2023 6:44 PM, Suzuki K Poulose wrote:
+> On 24/03/2023 06:16, Hao Zhang wrote:
+>> Some Coresight devices that HLOS don't have permission to access
+>> or configure. Such as Coresight sink EUD, some TPDMs etc. So there
+>> need driver to register dummy devices as Coresight devices. Provide
+>> Coresight API for dummy device operations, such as enabling and
+>> disabling dummy devices. Build the Coresight path for dummy sink or
+>> dummy source for debugging.
+>>
+>> Signed-off-by: Hao Zhang <quic_hazha@quicinc.com>
+>> ---
+>>   drivers/hwtracing/coresight/Kconfig           |  11 ++
+>>   drivers/hwtracing/coresight/Makefile          |   1 +
+>>   drivers/hwtracing/coresight/coresight-dummy.c | 176 ++++++++++++++++++
+>>   3 files changed, 188 insertions(+)
+>>   create mode 100644 drivers/hwtracing/coresight/coresight-dummy.c
+>>
+>> diff --git a/drivers/hwtracing/coresight/Kconfig 
+>> b/drivers/hwtracing/coresight/Kconfig
+>> index 2b5bbfffbc4f..06f0a7594169 100644
+>> --- a/drivers/hwtracing/coresight/Kconfig
+>> +++ b/drivers/hwtracing/coresight/Kconfig
+>> @@ -236,4 +236,15 @@ config CORESIGHT_TPDA
+>>         To compile this driver as a module, choose M here: the module 
+>> will be
+>>         called coresight-tpda.
+>> +
+>> +config CORESIGHT_DUMMY
+>> +    tristate "Dummy driver support"
+>> +    help
+>> +      Enables support for dummy driver. Dummy driver can be used for
+>> +      CoreSight sources/sinks that are owned and configured by some
+>> +      other subsystem and use Linux drivers to configure rest of trace
+>> +      path.
+>> +
+>> +      To compile this driver as a module, choose M here: the module 
+>> will be
+>> +      called coresight-dummy.
+>>   endif
+>> diff --git a/drivers/hwtracing/coresight/Makefile 
+>> b/drivers/hwtracing/coresight/Makefile
+>> index 33bcc3f7b8ae..995d3b2c76df 100644
+>> --- a/drivers/hwtracing/coresight/Makefile
+>> +++ b/drivers/hwtracing/coresight/Makefile
+>> @@ -30,3 +30,4 @@ obj-$(CONFIG_CORESIGHT_TPDA) += coresight-tpda.o
+>>   coresight-cti-y := coresight-cti-core.o    coresight-cti-platform.o \
+>>              coresight-cti-sysfs.o
+>>   obj-$(CONFIG_ULTRASOC_SMB) += ultrasoc-smb.o
+>> +obj-$(CONFIG_CORESIGHT_DUMMY) += coresight-dummy.o
+>> diff --git a/drivers/hwtracing/coresight/coresight-dummy.c 
+>> b/drivers/hwtracing/coresight/coresight-dummy.c
+>> new file mode 100644
+>> index 000000000000..2d4eb3e546eb
+>> --- /dev/null
+>> +++ b/drivers/hwtracing/coresight/coresight-dummy.c
+>> @@ -0,0 +1,176 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights 
+>> reserved.
+>> + */
+>> +
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/coresight.h>
+>> +#include <linux/of.h>
+>> +#include <linux/pm_runtime.h>
+>> +
+>> +#include "coresight-priv.h"
+>> +#include "coresight-trace-id.h"
+>> +
+>> +struct dummy_drvdata {
+>> +    struct device            *dev;
+>> +    struct coresight_device        *csdev;
+>> +    int                traceid;
+>> +};
+>> +
+>> +DEFINE_CORESIGHT_DEVLIST(dummy_devs, "dummy");
+>> +
+>> +static int dummy_source_enable(struct coresight_device *csdev,
+>> +                   struct perf_event *event, u32 mode)
+>> +{
+>> +    struct dummy_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
+>> +
+>> +    dev_info(drvdata->dev, "Dummy source enabled\n");
 > 
-> 
-> On 25.03.2023 13:24, Vinod Koul wrote:
-> > From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > 
-> > Introduce support for the Lenovo Flex 5G laptop, built on the Qualcomm
-> > SC8180X platform. Supported peripherals includes keyboard, touchpad,
-> > UFS storage, external USB and WiFi.
-> > 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/Makefile             |   1 +
-> >  .../boot/dts/qcom/sc8180x-lenovo-flex-5g.dts  | 590 ++++++++++++++++++
-> >  2 files changed, 591 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> > index fdce44a7a902..f096561f711e 100644
-> > --- a/arch/arm64/boot/dts/qcom/Makefile
-> > +++ b/arch/arm64/boot/dts/qcom/Makefile
-> > @@ -141,6 +141,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-zombie-nvme-lte.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
-> > +dtb-$(CONFIG_ARCH_QCOM)	+= sc8180x-lenovo-flex-5g.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sc8180x-primus.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-crd.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-lenovo-thinkpad-x13s.dtb
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts b/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
-> > new file mode 100644
-> > index 000000000000..76dad608fb85
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
-> > @@ -0,0 +1,590 @@
-> > +// SPDX-License-Identifier: BSD-3-Clause
-> > +/*
-> > + * Copyright (c) 2017-2019, The Linux Foundation. All rights reserved.
-> > + * Copyright (c) 2020-2023, Linaro Limited
-> > + */
-> > +
-> > +/dts-v1/;
-> > +
-> > +#include <dt-bindings/gpio/gpio.h>
-> > +#include <dt-bindings/input/gpio-keys.h>
-> > +#include <dt-bindings/input/input.h>
-> > +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> > +#include "sc8180x.dtsi"
-> > +#include "sc8180x-pmics.dtsi"
-> > +
-> > +/ {
-> > +	model = "Lenovo Flex 5G";
-> > +	compatible = "lenovo,flex-5g", "qcom,sc8180x";
-> > +
-> > +	aliases {
-> > +		serial0 = &uart13;
-> > +	};
-> > +
-> > +	backlight: backlight {
-> > +		compatible = "pwm-backlight";
-> > +		pwms = <&pmc8180c_lpg 4 1000000>;
-> > +		enable-gpios = <&pmc8180c_gpios 8 GPIO_ACTIVE_HIGH>;
-> > +
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&bl_pwm_default>;
-> > +	};
-> > +
-> > +	chosen {
-> > +	};
-> Unused, remove.
+> Please use dev_dbg everywher.
 
-ok
-
-> 
-> > +
-> > +	gpio-keys {
-> > +		compatible = "gpio-keys";
-> > +
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&hall_int_active_state>;
-> property
-> property-names
-
-ack here and everwhere else
-
-> 
-> > +
-> > +		lid {
-> > +			gpios = <&tlmm 121 GPIO_ACTIVE_LOW>;
-> > +			linux,input-type = <EV_SW>;
-> > +			linux,code = <SW_LID>;
-> > +			wakeup-source;
-> > +			wakeup-event-action = <EV_ACT_DEASSERTED>;
-> > +		};
-> > +	};
-> > +
-> > +	reserved-memory {
-> > +		rmtfs_mem: rmtfs-region@85500000 {
-> > +			compatible = "qcom,rmtfs-mem";
-> > +			reg = <0x0 0x85500000 0x0 0x200000>;
-> You're using 0 and 0x0 in a mixed fashion. Please stick with one,
-> preferably 0x0 everywhere.
-
-yep
+Sure, I will change to dev_dbg in the next patch series.
 
 > 
-> > +			no-map;
-> > +
-> > +			qcom,client-id = <1>;
-> > +			qcom,vmid = <15>;
-> > +		};
-> > +
-> [...]
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void dummy_source_disable(struct coresight_device *csdev,
+>> +                 struct perf_event *event)
+>> +{
+>> +    struct dummy_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
+>> +
+>> +    dev_info(drvdata->dev, "Dummy source disabled\n");
+>> +}
+>> +
+>> +static int dummy_sink_enable(struct coresight_device *csdev, u32 mode,
+>> +                void *data)
+>> +{
+>> +    struct dummy_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
+>> +
+>> +    dev_info(drvdata->dev, "Dummy sink enabled\n");
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int dummy_sink_disable(struct coresight_device *csdev)
+>> +{
+>> +    struct dummy_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
+>> +
+>> +    dev_info(drvdata->dev, "Dummy sink disabled\n");
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static const struct coresight_ops_source dummy_source_ops = {
+>> +    .enable        = dummy_source_enable,
+>> +    .disable    = dummy_source_disable,
+>> +};
+>> +
+>> +static const struct coresight_ops_sink dummy_sink_ops = {
+>> +    .enable        = dummy_sink_enable,
+>> +    .disable    = dummy_sink_disable,
+>> +};
+>> +
+>> +static const struct coresight_ops dummy_cs_ops = {
+>> +    .source_ops    = &dummy_source_ops,
+>> +    .sink_ops    = &dummy_sink_ops,
+>> +};
+>> +
+>> +static int dummy_probe(struct platform_device *pdev)
+>> +{
+>> +    int ret, trace_id;
+>> +    struct device *dev = &pdev->dev;
+>> +    struct coresight_platform_data *pdata;
+>> +    struct dummy_drvdata *drvdata;
+>> +    struct coresight_desc desc = { 0 };
+>> +
+>> +    desc.name = coresight_alloc_device_name(&dummy_devs, dev);
+>> +    if (!desc.name)
+>> +        return -ENOMEM;
+>> +
+>> +    pdata = coresight_get_platform_data(dev);
+>> +    if (IS_ERR(pdata))
+>> +        return PTR_ERR(pdata);
+>> +    pdev->dev.platform_data = pdata;
+>> +
+>> +    drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+>> +    if (!drvdata)
+>> +        return -ENOMEM;
+>> +
+>> +    drvdata->dev = &pdev->dev;
+>> +    platform_set_drvdata(pdev, drvdata);
+>> +
+>> +    if (of_property_read_bool(pdev->dev.of_node, "qcom,dummy-source")) {
 > 
-> > +
-> > +&dispcc {
-> > +	status = "okay";
-> Any reason for disabling dispcc by default?
-
-I think that is a good question. I would prefer disabling and enabling
-in places it is required, we might have a headless system or a dev board
-where we dont have display..?
-
+> I don't see any reason why this should be qcom,...
 > 
-> > +};
-> > +
-> > +&gpu {
-> > +	status = "okay";
-> > +
-> > +	zap-shader {
-> > +		memory-region = <&gpu_mem>;
-> > +		firmware-name = "qcom/sc8180x/qcdxkmsuc8180.mbn";
-> > +	};
-> > +};
-> > +
-> > +&i2c1 {
-> > +	clock-frequency = <100000>;
-> > +
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&i2c1_active>, <&i2c1_hid_active>;
-> property
-> property-names
+> Please could we use : "arm,coresight-", everywhere including the "dt"
+> compatible ?
+
+It's not only for qcom device, I will update this according to your 
+advice in the next patch series.
+
+>> +        desc.type = CORESIGHT_DEV_TYPE_SOURCE;
+>> +        desc.subtype.source_subtype =
+>> +                    CORESIGHT_DEV_SUBTYPE_SOURCE_OTHERS;
+>> +    } else if (of_property_read_bool(pdev->dev.of_node,
+>> +                     "qcom,dummy-sink")) {
+>> +        desc.type = CORESIGHT_DEV_TYPE_SINK;
+>> +        desc.subtype.sink_subtype = CORESIGHT_DEV_SUBTYPE_SINK_BUFFER;
+>> +    } else {
+>> +        dev_info(dev, "Device type not set\n");
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    desc.ops = &dummy_cs_ops;
+>> +    desc.pdata = pdev->dev.platform_data;
+>> +    desc.dev = &pdev->dev;
+>> +    drvdata->csdev = coresight_register(&desc);
+>> +    if (IS_ERR(drvdata->csdev))
+>> +        return PTR_ERR(drvdata->csdev);
+>> +
+>> +    trace_id = coresight_trace_id_get_system_id();
+>> +    if (trace_id < 0) {
+>> +        ret = trace_id;
+>> +        goto cs_unregister;
+>> +    }
+>> +    drvdata->traceid = (u8)trace_id;
+>> +
+>> +    pm_runtime_enable(dev);
+>> +    dev_info(dev, "Dummy device initialized\n");
+>> +
+>> +    return 0;
+>> +
+>> +cs_unregister:
+>> +    coresight_unregister(drvdata->csdev);
+>> +
+>> +    return ret;
+>> +}
+>> +
+>> +static int dummy_remove(struct platform_device *pdev)
+>> +{
+>> +    struct dummy_drvdata *drvdata = platform_get_drvdata(pdev);
+>> +    struct device *dev = &pdev->dev;
+>> +
+>> +    coresight_trace_id_put_system_id(drvdata->traceid);
+>> +    pm_runtime_disable(dev);
+>> +    coresight_unregister(drvdata->csdev);
+>> +    return 0;
+>> +}
+>> +
+>> +static const struct of_device_id dummy_match[] = {
+>> +    {.compatible = "qcom,coresight-dummy"},
 > 
-> > +
-> > +	status = "okay";
-> > +
-> > +	hid@10 {
-> > +		compatible = "hid-over-i2c";
-> > +		reg = <0x10>;
-> > +		hid-descr-addr = <0x1>;
-> > +
-> > +		interrupts-extended = <&tlmm 122 IRQ_TYPE_LEVEL_LOW>;
-> > +	};
-> > +};
-> > +
-> > +&i2c7 {
-> > +	clock-frequency = <100000>;
-> > +
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&i2c7_active>, <&i2c7_hid_active>;
-> > +
-> > +	status = "okay";
-> > +
-> > +	hid@5 {
-> > +		compatible = "hid-over-i2c";
-> > +		reg = <0x5>;
-> > +		hid-descr-addr = <0x20>;
-> > +
-> > +		interrupts-extended = <&tlmm 37 IRQ_TYPE_LEVEL_LOW>;
-> > +	};
-> > +
-> > +	hid@2c {
-> > +		compatible = "hid-over-i2c";
-> > +		reg = <0x2c>;
-> > +		hid-descr-addr = <0x20>;
-> > +
-> > +		interrupts-extended = <&tlmm 24 IRQ_TYPE_LEVEL_LOW>;
-> > +	};
-> > +};
-> > +
-> > +&mdss {
-> > +	status = "okay";
-> > +};
-> > +
-> > +&mdss_edp {
-> > +	data-lanes = <0 1 2 3>;
-> > +
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&edp_hpd_active>;
-> > +
-> > +	status = "okay";
-> > +
-> > +	aux-bus {
-> > +		panel {
-> > +			compatible = "edp-panel";
-> > +			no-hpd;
-> > +
-> > +			backlight = <&backlight>;
-> > +
-> > +			ports {
-> > +				port {
-> > +					auo_b140han06_in: endpoint {
-> > +						remote-endpoint = <&mdss_edp_out>;
-> > +					};
-> > +				};
-> > +			};
-> > +		};
-> > +	};
-> > +
-> > +	ports {
-> > +		port@1 {
-> > +			reg = <1>;
-> > +			mdss_edp_out: endpoint {
-> > +				remote-endpoint = <&auo_b140han06_in>;
-> > +			};
-> > +		};
-> > +	};
-> > +};
-> > +
-> > +&pcie3 {
-> > +	perst-gpio = <&tlmm 178 GPIO_ACTIVE_LOW>;
-> > +	wake-gpio = <&tlmm 180 GPIO_ACTIVE_HIGH>;
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&pcie3_default_state>;
-> > +
-> > +	status = "okay";
-> > +};
-> > +
-> > +&pcie3_phy {
-> > +	vdda-phy-supply = <&vreg_l5e_0p88>;
-> > +	vdda-pll-supply = <&vreg_l3c_1p2>;
-> > +
-> > +	status = "okay";
-> > +};
-> > +
-> > +&pmc8180c_lpg {
-> > +	status = "okay";
-> > +};
-> > +
-> > +&qupv3_id_0 {
-> > +	status = "okay";
-> > +};
-> > +
-> > +&qupv3_id_1 {
-> > +	status = "okay";
-> > +};
-> > +
-> > +&qupv3_id_2 {
-> > +	status = "okay";
-> > +};
-> > +
-> > +&remoteproc_adsp {
-> > +	memory-region = <&adsp_mem>;
-> > +	firmware-name = "qcom/sc8180x/LENOVO/82AK/qcadsp8180.mbn";
-> > +
-> > +	status = "okay";
-> > +};
-> > +
-> > +&remoteproc_cdsp {
-> > +	memory-region = <&cdsp_mem>;
-> > +	firmware-name = "qcom/sc8180x/LENOVO/82AK/qccdsp8180.mbn";
-> > +
-> > +	status = "okay";
-> > +};
-> > +
-> > +&remoteproc_mpss {
-> > +	memory-region = <&mpss_mem>;
-> > +	firmware-name = "qcom/sc8180x/LENOVO/82AK/qcmpss8180_nm.mbn";
-> > +
-> > +	status = "okay";
-> > +};
-> > +
-> > +&uart13 {
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&uart13_state>;
-> > +
-> > +	status = "okay";
-> > +
-> > +	bluetooth {
-> > +		compatible = "qcom,wcn3998-bt";
-> > +
-> > +		vddio-supply = <&vreg_s4a_1p8>;
-> > +		vddxo-supply = <&vreg_l7a_1p8>;
-> > +		vddrf-supply = <&vreg_l9a_1p3>;
-> > +		vddch0-supply = <&vreg_l11c_3p3>;
-> > +		max-speed = <3200000>;
-> > +	};
-> > +};
-> > +
-> > +&ufs_mem_hc {
-> > +	reset-gpios = <&tlmm 190 GPIO_ACTIVE_LOW>;
-> > +
-> > +	vcc-supply = <&vreg_l10e_2p9>;
-> > +	vcc-max-microamp = <155000>;
-> > +
-> > +	vccq2-supply = <&vreg_l7e_1p8>;
-> > +	vccq2-max-microamp = <425000>;
-> Missing regulator-allow-set-load for regulators that have current
-> ops assigned to them.
+> As mentioned above, "arm,coresight-dummy-device" ? This has
+> nothing to do with qcom IP. qcom has a use for this. So, I would
+> like to keep this "coresight" subsystem specific compatibles.
 > 
-> > +
-> > +	status = "okay";
-> > +};
-> > +
-> > +&ufs_mem_phy {
-> > +	vdda-phy-supply = <&vreg_l5e_0p88>;
-> > +	vdda-pll-supply = <&vreg_l3c_1p2>;
-> > +
-> > +	status = "okay";
-> > +};
-> > +
-> > +&usb_prim_hsphy {
-> > +	vdda-pll-supply = <&vreg_l5e_0p88>;
-> > +	vdda18-supply = <&vreg_l12a_1p8>;
-> > +	vdda33-supply = <&vreg_l16e_3p0>;
-> > +
-> > +	status = "okay";
-> > +};
-> > +
-> > +&usb_prim_qmpphy {
-> > +	vdda-phy-supply = <&vreg_l3c_1p2>;
-> > +	vdda-pll-supply = <&vreg_l5e_0p88>;
-> > +
-> > +	status = "okay";
-> > +};
-> > +
-> > +&usb_prim {
-> We mostly use usb_1 / usb_2 for this
-
-Isnt this better from readablity pov? esp since this is board dts
-
+> May be we could even add other types too : i.e,
 > 
-> > +	status = "okay";
-> > +};
-> > +
-> > +&usb_prim_dwc3 {
-> > +	dr_mode = "host";
-> > +};
-> > +
-> > +&usb_sec_hsphy {
-> > +	vdda-pll-supply = <&vreg_l5e_0p88>;
-> > +	vdda18-supply = <&vreg_l12a_1p8>;
-> > +	vdda33-supply = <&vreg_l16e_3p0>;
-> > +
-> > +	status = "okay";
-> > +};
-> > +
-> > +&usb_sec_qmpphy {
-> > +	vdda-phy-supply = <&vreg_l3c_1p2>;
-> > +	vdda-pll-supply = <&vreg_l5e_0p88>;
-> > +
-> > +	status = "okay";
-> > +};
-> > +
-> > +&usb_sec {
-> > +	status = "okay";
-> > +};
-> > +
-> > +&usb_sec_dwc3 {
-> > +	dr_mode = "host";
-> No roleswitching?
-
-Laptop :-) Always in host mode
-
+> arm,coresight-dummy-link-split, arm,coresight-dummy-link-merge
 > 
-> > +};
-> > +
-> > +&wifi {
-> > +	memory-region = <&wlan_mem>;
-> It comes from the common dt file, so this may as well stay there.
+> Suzuki
+>
 
-I can do that
+I will change this it to "arm,coresight-dummy-device" in the next patch 
+series.
 
--- 
-~Vinod
+Thanks,
+Hao
+
+>> +    {},
+>> +};
+>> +
+>> +static struct platform_driver dummy_driver = {
+>> +    .probe    = dummy_probe,
+>> +    .remove    = dummy_remove,
+>> +    .driver    = {
+>> +        .name   = "coresight-dummy",
+>> +        .of_match_table = dummy_match,
+>> +    },
+>> +};
+>> +
+>> +static int __init dummy_init(void)
+>> +{
+>> +    return platform_driver_register(&dummy_driver);
+>> +}
+>> +module_init(dummy_init);
+>> +
+>> +static void __exit dummy_exit(void)
+>> +{
+>> +    platform_driver_unregister(&dummy_driver);
+>> +}
+>> +module_exit(dummy_exit);
+>> +
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_DESCRIPTION("CoreSight dummy source driver");
+> 
