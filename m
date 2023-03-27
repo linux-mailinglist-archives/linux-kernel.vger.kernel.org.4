@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE406CAB6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 533516CAB73
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbjC0REL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 13:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
+        id S232829AbjC0REl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 13:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232721AbjC0RDF (ORCPT
+        with ESMTP id S232659AbjC0RD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:03:05 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9575B8E;
-        Mon, 27 Mar 2023 10:02:45 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-17ab3a48158so9982016fac.1;
-        Mon, 27 Mar 2023 10:02:45 -0700 (PDT)
+        Mon, 27 Mar 2023 13:03:56 -0400
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429CA423C;
+        Mon, 27 Mar 2023 10:03:02 -0700 (PDT)
+Received: by mail-oo1-f54.google.com with SMTP id o15-20020a4ae58f000000b00538c0ec9567so1441667oov.1;
+        Mon, 27 Mar 2023 10:03:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679936541;
+        d=1e100.net; s=20210112; t=1679936549;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SeYOWo17NBb5LwjtRv9cwvlWMOg9Mhp9twhBeVekPd8=;
-        b=65zzXP8U/C+WIq8F5fvPKb3pTiLjJLDecc/f6Lt938zdqx5AkHLuLJU4lI9eGPMgft
-         +ZzUIYTaNeRL6AjH7ezyBltSs9u4fQmQVTwSesO+anCWtPJD/UoP21/gq0/ArDRRRcvC
-         UUr4lNKpPRJKfI7lqGFBBVnnYqZH9JHYWmYDaN/VtvPvSTHbdmr3ukhd5fqh2fYfspQA
-         stZrIC9fGr69smwRJSE/kb+mQPSkBgNDU+VO/v2m64EDb3MuJCzBTZWlyGaV0tUARLH8
-         uEOUIJLn9fgE9J/31pKUMmMj969nx5majupnYcUVHgKv9Sbrd6OhLfWxuXFCtRHPcL96
-         wnNw==
-X-Gm-Message-State: AO0yUKUnH2nx6BzA+QMCCvPT0ph3uHUAP2wuAtqgSvN4UIs/OaMEf5mG
-        dJ7ckkFtZlkgrMnIkyHlBA==
-X-Google-Smtp-Source: AKy350bYJwV674V/NT/QiO8BH27KTt+gXSM0CYfo27RZ2Hy/c9vYRecH/gvO1mw2vV9rm/kYGBxvUw==
-X-Received: by 2002:a05:6870:3385:b0:177:8358:d03e with SMTP id w5-20020a056870338500b001778358d03emr7884692oae.16.1679936540740;
-        Mon, 27 Mar 2023 10:02:20 -0700 (PDT)
+        bh=nPOFBMhoL4jHZsvJmOjSl5D0BIN5gJSRQGiqE9q2H3c=;
+        b=EV95hzMCUzndCFTjh9sIYlnowRNnMu6abJVpBzlHRvAYWrLfUfbg+hO7bQSUPvgIqJ
+         3B2RupqgWWp3FGKQo5DhzOUSlUi8vaLwJFDBMytPiivB3GBlSBQWw51OwLofIZPxXjRO
+         7i2oMmclJI6R0heMP1jVUxY9TXwbWAP6rQOQhLMmzy5BTDhnDdPNi+NBlraOmJYPyEZz
+         KXUNTdwcvxwc0T4DTkDg5hb+ff6B6OUNeIuvSha5lttUQqlYHLo56kooLUL21gh86Kx9
+         M/iEgpB4mhwAWGk8z0A81qxkOZNa0j8vmU/+OcAk+N2UcJfplWf8NOXq80EF86U8DNxB
+         N+0Q==
+X-Gm-Message-State: AO0yUKUc2lzfbgI36YRC0lJiyjijA+tge9zLpSnt7y/vtq64zKvQcSlc
+        r4NrNDoxXU3d7EyBmEoGtMmj/xjD4g==
+X-Google-Smtp-Source: AK7set+ReDeZtRjKuKxOhzOxaf9gzw3n2yPYHW0trSCSXupHPjmIjp9ZmSyOMp5s4T1qdqiErzfeYA==
+X-Received: by 2002:a4a:4185:0:b0:533:c6b7:27dc with SMTP id x127-20020a4a4185000000b00533c6b727dcmr5766669ooa.0.1679936549473;
+        Mon, 27 Mar 2023 10:02:29 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y81-20020acae154000000b003878631adaesm2916056oig.52.2023.03.27.10.02.19
+        by smtp.gmail.com with ESMTPSA id j13-20020a4a944d000000b00539b8372bd7sm10950434ooi.29.2023.03.27.10.02.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 10:02:19 -0700 (PDT)
-Received: (nullmailer pid 4107685 invoked by uid 1000);
-        Mon, 27 Mar 2023 17:02:18 -0000
+        Mon, 27 Mar 2023 10:02:28 -0700 (PDT)
+Received: (nullmailer pid 4108900 invoked by uid 1000);
+        Mon, 27 Mar 2023 17:02:28 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: soc: qcom: Drop unneeded quotes
-Date:   Mon, 27 Mar 2023 12:02:04 -0500
-Message-Id: <20230327170205.4106310-1-robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: soc: amlogic: Drop unneeded quotes
+Date:   Mon, 27 Mar 2023 12:02:22 -0500
+Message-Id: <20230327170222.4107746-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -71,117 +69,55 @@ checking for this can be enabled in yamllint.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml     | 4 ++--
- Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml     | 4 ++--
- Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml | 4 ++--
- Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml | 4 ++--
- Documentation/devicetree/bindings/soc/qcom/qcom,smem.yaml    | 4 ++--
- Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml     | 4 ++--
- Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.yaml   | 2 +-
- 7 files changed, 13 insertions(+), 13 deletions(-)
+ .../bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml      | 4 ++--
+ .../bindings/arm/amlogic/amlogic,meson-mx-secbus2.yaml        | 4 ++--
+ .../devicetree/bindings/soc/amlogic/amlogic,canvas.yaml       | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
-index 6026c21736d8..dfcd41429d25 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+diff --git a/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml b/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
+index 1748f1605cc7..7dff32f373cb 100644
+--- a/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
++++ b/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2019 BayLibre, SAS
  %YAML 1.2
  ---
--$id: "http://devicetree.org/schemas/soc/qcom/qcom,apr.yaml#"
+-$id: "http://devicetree.org/schemas/arm/amlogic/amlogic,meson-gx-ao-secure.yaml#"
 -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/soc/qcom/qcom,apr.yaml#
++$id: http://devicetree.org/schemas/arm/amlogic/amlogic,meson-gx-ao-secure.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
  
- title: Qualcomm APR/GPR (Asynchronous/Generic Packet Router)
+ title: Amlogic Meson Firmware registers Interface
  
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-index c98aab209bc5..14dd29471c80 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+diff --git a/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-mx-secbus2.yaml b/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-mx-secbus2.yaml
+index eee7cda9f91b..09b27e98d4c9 100644
+--- a/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-mx-secbus2.yaml
++++ b/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-mx-secbus2.yaml
 @@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
  %YAML 1.2
  ---
--$id: "http://devicetree.org/schemas/soc/qcom/qcom,eud.yaml#"
+-$id: "http://devicetree.org/schemas/arm/amlogic/amlogic,meson-mx-secbus2.yaml#"
 -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/soc/qcom/qcom,eud.yaml#
++$id: http://devicetree.org/schemas/arm/amlogic/amlogic,meson-mx-secbus2.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
  
- title: Qualcomm Embedded USB Debugger
+ title: Amlogic Meson8/Meson8b/Meson8m2 SECBUS2 register interface
  
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-index ab4df0205285..8a4b7ba3aaf6 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+diff --git a/Documentation/devicetree/bindings/soc/amlogic/amlogic,canvas.yaml b/Documentation/devicetree/bindings/soc/amlogic/amlogic,canvas.yaml
+index c3c599096353..cd06865e1f2a 100644
+--- a/Documentation/devicetree/bindings/soc/amlogic/amlogic,canvas.yaml
++++ b/Documentation/devicetree/bindings/soc/amlogic/amlogic,canvas.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2019 BayLibre, SAS
  %YAML 1.2
  ---
--$id: "http://devicetree.org/schemas/soc/qcom/qcom,geni-se.yaml#"
+-$id: "http://devicetree.org/schemas/soc/amlogic/amlogic,canvas.yaml#"
 -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/soc/qcom/qcom,geni-se.yaml#
++$id: http://devicetree.org/schemas/soc/amlogic/amlogic,canvas.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
  
- title: GENI Serial Engine QUP Wrapper Controller
- 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
-index 16fd67c0bd1f..abb3bfde85a8 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/soc/qcom/qcom,smd-rpm.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/soc/qcom/qcom,smd-rpm.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm Resource Power Manager (RPM) over SMD/GLINK
- 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smem.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smem.yaml
-index 497614ddf005..bc7815d985e4 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,smem.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smem.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/soc/qcom/qcom,smem.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/soc/qcom/qcom,smem.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm Shared Memory Manager
- 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml
-index aca3d40bcccb..20c8cd38ff0d 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/soc/qcom/qcom,spm.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/soc/qcom/qcom,spm.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm Subsystem Power Manager
- 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.yaml
-index 0e6fd57d658d..74bb92e31554 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.yaml
-@@ -20,7 +20,7 @@ properties:
- 
-   firmware-name:
-     $ref: /schemas/types.yaml#/definitions/string
--    default: "wlan/prima/WCNSS_qcom_wlan_nv.bin"
-+    default: wlan/prima/WCNSS_qcom_wlan_nv.bin
-     description:
-       Relative firmware image path for the WLAN NV blob.
+ title: Amlogic Canvas Video Lookup Table
  
 -- 
 2.39.2
