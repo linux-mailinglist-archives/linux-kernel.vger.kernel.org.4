@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4399A6C9912
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 02:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15D5D6C9916
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 02:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjC0Aqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 20:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
+        id S231659AbjC0Arr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 20:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjC0Aqs (ORCPT
+        with ESMTP id S229479AbjC0Aro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 20:46:48 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8443149FC;
-        Sun, 26 Mar 2023 17:46:47 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id y4so29392816edo.2;
-        Sun, 26 Mar 2023 17:46:47 -0700 (PDT)
+        Sun, 26 Mar 2023 20:47:44 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2D349F5;
+        Sun, 26 Mar 2023 17:47:43 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id cn12so29355200edb.4;
+        Sun, 26 Mar 2023 17:47:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google; t=1679878006;
+        d=jms.id.au; s=google; t=1679878062;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iwNKwWEmP0+GBVy7Aoyp0/jnxyDCmqGAIfdYaEYV01Q=;
-        b=JtsN+5D9e8csHqSMHYvyo6EvP2mKy0R29zsl3MPx8eDxeScV0UoljmM81XYMTbwJR5
-         eOPbWx8UipBzCi4sVdxaoljBRNz1wezsTWSkQEjo92pPAFbbU/nqgJAYM4Re3vxDGkoi
-         mJ0a9BtjTpJQpX3aoxzHISwCH1bm0Zt21sLRY=
+        bh=8U/kCluxO6B+PSARzu8RjX0sOedAO1dFag2paOw8YcA=;
+        b=dzNR+8yt25epPqrGhHtRTfI5b07bmwbKE6CGWoCN4qvZpGQSvoaFIH58ldwIDKOxaL
+         gMfNCAnEOFs3bpaebkk3ZzeF2CwWvAQ8J7+HllMrkMyFqwfGwGuZvQ/lN9ifWKAaFT+/
+         QORmeS1KOq4GJCO3QdQFGbA047MfaG2lWfvLk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679878006;
+        d=1e100.net; s=20210112; t=1679878062;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iwNKwWEmP0+GBVy7Aoyp0/jnxyDCmqGAIfdYaEYV01Q=;
-        b=D7Vppgsm2kNlwjZ6BGQwNGb816tKHj9o4K4fR95NEDuoyezoHy1v6Ar/GFow/0HTEa
-         srMccTvAXEI4pwu+2Q9l5qttxTJ9a/YRjdxq8rqWbFjUbAEhDhaz/4Yxv/AJg6lPwgdf
-         G6V6kLvdfBr6dU2zWgRW7JVhXOs5USl7YSKBW4C+kJ5aXBsfa3YEamc8MXabx7PVLA8u
-         GLzE3rix3g/rf1JRU3W4jy+tC8yAM+9FyIvyfanBadSx+zpD+zJsIHVfG/BjPw0P1mvk
-         O4X63GQKHTyFiriR8xfx8cjjKZdekLi0jCX0Z2ijIOImYgc/wJdmA7ZoHTPj0sFwe0UB
-         P8Kg==
-X-Gm-Message-State: AAQBX9dzl1w5N3Ajk9jV/PTVHrdgiUD2kDlhze1QzaleJIEwx1+cHCcQ
-        9bgjpwOdQGdyhlrxFnxShefGa+RtICrV4DsKOjyCGjTs
-X-Google-Smtp-Source: AKy350YxyRrBNpB+l72B0KEPxWYOuuDAh8I+xWUczm85SPuXBBnshTxQkofqnrgwImaPDip50XzGGVfk680VYgKGsNQ=
-X-Received: by 2002:a17:906:eec7:b0:93e:186f:ea0d with SMTP id
- wu7-20020a170906eec700b0093e186fea0dmr4376106ejb.15.1679878005645; Sun, 26
- Mar 2023 17:46:45 -0700 (PDT)
+        bh=8U/kCluxO6B+PSARzu8RjX0sOedAO1dFag2paOw8YcA=;
+        b=1HyL5aelbcjONaxWl3dAOh0jn/8GDJE1UXxdaYqqCJzdxqomsKAYp00LkRbc9e7ldV
+         Ad7brlLgJwzoPkuL52xleC2VTVxgpc2cV6nZ6wAPYYdRO94aHH6QMb6RRXMrN9M9P/LH
+         MDmz8ynwHTJKBqTEN+xVl54ag/LQAPKomg1E6XJcb9oaJpCA4Z4pwD5ghnXBKmBs5V8n
+         yc2q1hXHSq5c6tOvePPbUdtYI8wymn0l1vbJVeBoDrh7C5C3ZzebXvNwfBw2l5dz+8k4
+         7GXx2eP+EY8dZtA6o9p3WzwGvQhNg1gkPXHGxa1TLq8//m0l9kokwCt7Xasx9k4D1oMc
+         437g==
+X-Gm-Message-State: AAQBX9fYS8lh5n41KHHz5DXA8u1unhqnYOyLJ1gLRJPtvy13l9gcOGqE
+        bebdOkgISUMeMhR/oW4Uraj5iy0pqaj58D721DU=
+X-Google-Smtp-Source: AKy350YuUI6Ov7M1JXz/f5WFAFINfRoDgXv40HbW6V5KKxwGX+W6DfvovjGBJyDlNfwi6fursVxWYuUD1nZNzzwuPyI=
+X-Received: by 2002:a17:907:7b8a:b0:931:6e39:3d0b with SMTP id
+ ne10-20020a1709077b8a00b009316e393d0bmr4932622ejc.15.1679878062063; Sun, 26
+ Mar 2023 17:47:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230322140348.569397-1-eajames@linux.ibm.com> <20230322140348.569397-5-eajames@linux.ibm.com>
-In-Reply-To: <20230322140348.569397-5-eajames@linux.ibm.com>
+References: <20230321190914.2266216-1-lakshmiy@us.ibm.com> <20230321190914.2266216-6-lakshmiy@us.ibm.com>
+In-Reply-To: <20230321190914.2266216-6-lakshmiy@us.ibm.com>
 From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 27 Mar 2023 00:46:33 +0000
-Message-ID: <CACPK8XfJr03L43KbWcZ44nAiVhpPF8Pao2OM4R2F36b=bkQ-fQ@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] ARM: dts: aspeed: bonnell: Add DIMM SPD
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        devicetree@vger.kernel.org, andrew@aj.id.au,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        arnd@arndb.de, gregkh@linuxfoundation.org
+Date:   Mon, 27 Mar 2023 00:47:29 +0000
+Message-ID: <CACPK8Xd70HABKrSRXKM5vA57YUCckykKOZV1ECuJc1=g70k--Q@mail.gmail.com>
+Subject: Re: [PATCH v3 5/5] ARM: dts: aspeed: p10bmc: Change power supply info
+To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>,
+        Eddie James <eajames@linux.ibm.com>
+Cc:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
+        krzysztof.kozlowski+dt@linaro.org, andrew@aj.id.au,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -66,63 +67,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Mar 2023 at 14:04, Eddie James <eajames@linux.ibm.com> wrote:
+On Tue, 21 Mar 2023 at 19:09, Lakshmi Yadlapati <lakshmiy@us.ibm.com> wrote:
 >
-> Add the DIMM SPD to the processor I2C busses.
+> Bonnell system supports new ACBEL FSG032 power supply on
+> I2C addresses 5A and 5B. Update the device tree with new
+> power supply information and device addresses.
 >
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+Eddie, can I get you to review?
 
 I will take this through the aspeed tree.
 
 > ---
->  arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
+>  arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 >
 > diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-> index 79516dc21c01..ab99d915b50e 100644
+> index a5be0ee048ec..4f959a4f8b58 100644
 > --- a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
 > +++ b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-> @@ -232,18 +232,38 @@ cfam0_i2c1: i2c-bus@1 {
+> @@ -552,14 +552,14 @@ ucd90160@64 {
+>  &i2c3 {
+>         status = "okay";
 >
->                         cfam0_i2c10: i2c-bus@a {
->                                 reg = <10>;     /* OP3A */
-> +
-> +                               eeprom@50 {
-> +                                       compatible = "atmel,at30tse004a";
-> +                                       reg = <0x50>;
-> +                               };
->                         };
+> -       power-supply@58 {
+> -               compatible = "ibm,cffps";
+> -               reg = <0x58>;
+> +       power-supply@5a {
+> +               compatible = "acbel,fsg032";
+> +               reg = <0x5a>;
+>         };
 >
->                         cfam0_i2c11: i2c-bus@b {
->                                 reg = <11>;     /* OP3B */
-> +
-> +                               eeprom@50 {
-> +                                       compatible = "atmel,at30tse004a";
-> +                                       reg = <0x50>;
-> +                               };
->                         };
+> -       power-supply@59 {
+> -               compatible = "ibm,cffps";
+> -               reg = <0x59>;
+> +       power-supply@5b {
+> +               compatible = "acbel,fsg032";
+> +               reg = <0x5b>;
+>         };
+>  };
 >
->                         cfam0_i2c12: i2c-bus@c {
->                                 reg = <12>;     /* OP4A */
-> +
-> +                               eeprom@50 {
-> +                                       compatible = "atmel,at30tse004a";
-> +                                       reg = <0x50>;
-> +                               };
->                         };
->
->                         cfam0_i2c13: i2c-bus@d {
->                                 reg = <13>;     /* OP4B */
-> +
-> +                               eeprom@50 {
-> +                                       compatible = "atmel,at30tse004a";
-> +                                       reg = <0x50>;
-> +                               };
->                         };
->
->                         cfam0_i2c14: i2c-bus@e {
 > --
-> 2.31.1
+> 2.37.2
 >
