@@ -2,237 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7982A6C99CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 05:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1625C6C99D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 05:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbjC0DBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 23:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
+        id S232159AbjC0DB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 23:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjC0DBb (ORCPT
+        with ESMTP id S232156AbjC0DBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 23:01:31 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144DD4EDA;
-        Sun, 26 Mar 2023 20:01:30 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id t10so29921089edd.12;
-        Sun, 26 Mar 2023 20:01:30 -0700 (PDT)
+        Sun, 26 Mar 2023 23:01:49 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9665558D;
+        Sun, 26 Mar 2023 20:01:40 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-17683b570b8so7811556fac.13;
+        Sun, 26 Mar 2023 20:01:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679886088;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p4GDymRNkOjJsSOA045LY2BxPvnP/qlaatdo8SbJ1ag=;
-        b=BeqgldFIF9KNNqp3xkPobO47Au0GuRWs6O550fC5qZUX6rZj2jI5nLtid7pbD79K7A
-         GShLM0THnmXOoczuzis8P0HfzYVn55NFPP0ibx2SNXZwGJcYO6RjJzCWVyAI1JHsBjt8
-         L9Vj9K/6+V+W/iAgrrv+x/ePlp9wPAdHeHglgkTl9LY982zb5XevQlcsb427BLgNrhq4
-         pLxeyjosXtLlLnrkTl3QzvvW2HdPoFCb+6TzWtaXY6iL+VsC/CEfE7KxJ1SuRZz/2nKp
-         TOa0WDBuONPadPy073GjGrQDdhA6lsCNvjGkHcBo/W9DshUHNAz0cr9XUIq3HiPfUXGR
-         8vwQ==
+        d=gmail.com; s=20210112; t=1679886100;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D/ODnD91UY42Ysvog6gyqrIAdQSS1mTSw0ElJHMXsUQ=;
+        b=fnNrSwJTJTEF0B70kqmJw1ENbREis1qbd5p9GmPzE1v4KQcUELgHIxtJrNha+1fqR5
+         UMlCSGp604H5740+mzjN8Uo4vwU2gxuj9dghmuzXrKNYi0qfIH/czrn0yUqYo+17FiDZ
+         TQ3wIfF0VUQiRE+Y+Vwo2EBEN+r4aLe/5U0HzZKAIZpNVk3nhBrudpIWwxOKla5XZxkI
+         o5MxCGGCVFvK0QDQB7egcRUMXvdgWnRMqXDEQaoTiDaPjSBvlRewxqTTWP/S0WOm2Eq4
+         n7ID0D6VDYdR8WO7zvuwyEO3IEqJ2RkDfe0swxXHcjoqcQHdcFbesN2QRb0rfSWDPXO4
+         mjxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679886088;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p4GDymRNkOjJsSOA045LY2BxPvnP/qlaatdo8SbJ1ag=;
-        b=eCHEZHM+XXsukv9yjknFHo3BfU2iPdxEM5cQd604UfiCLJZpnMjxwVknemVaioOc4J
-         Xm8Wj7Gd2t8ht+weoVFHZjYZOGGY102PWTe7H2zo2HdbLDvQLtgh1liYyEw/n7WNvKUW
-         9vG0ANdrU9Ib03xPE6WCdQkw576m2TKDeC8qDK0x5gY+F4egIKOY2qiitFbne0uZJGv+
-         j42bufLVvqdbtQPlNNCiAsnUvIYmLRjSE7TFjHorPsqEnIE8hb0EoFZshD+UJXZnVtf/
-         3ETGsIIcm/eVPSCoCORrvgEZtHvUuA9gXM8ieCfxry8qlKoqnP2bTPzWgGTca6Q6+o32
-         Tbwg==
-X-Gm-Message-State: AAQBX9dw2oVlfDyWEA+q3Ym1hTmGLgvsFYseyn69l7xcTEBuyBwwP2H8
-        S9c6mFZaauXZYwd681UR5ro2rES28drJLthdgC8=
-X-Google-Smtp-Source: AKy350Y4tsa4GkxwUruZFX5WMh1p6Mk7SPuaQ6mvh29LEOaYwSB6NmzCCKdBR7ylAyeZQ3VFM6+5LIh0W3O0fwdwxkA=
-X-Received: by 2002:a17:906:eda6:b0:8dd:70a:3a76 with SMTP id
- sa6-20020a170906eda600b008dd070a3a76mr5140850ejb.11.1679886088494; Sun, 26
- Mar 2023 20:01:28 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679886100;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D/ODnD91UY42Ysvog6gyqrIAdQSS1mTSw0ElJHMXsUQ=;
+        b=7dVQYmOiSfoy6vBQPbewLpcCaHZf+W8zf3tZGjSbhsMnwoVfatZxwJZ71EFfMiFkk1
+         MJxLrF+XarFVLgPPVyRloE4/cCctkdxwKKsSCNuCNx4xvx/CmEzji/fg/GaUsNXrlGUo
+         2ANgwmH40E/aP9cGBka0MoGgPlXtcla3dvTnYjieIgE5ZdxQPsqZt7vjohbUaOkIhZtZ
+         5Vioep5OaPzZmAud2UvdixSojh/ZZ3y/Yf3f6u56kgbD+ITC17/vDqWjW7agZ8g0Ue5c
+         br21IZmAeEyLj4Df01NiQZAEk9XFe1VLUYwRXNX2FOZe+2NhGLqiTYE9Q6OoKBJ5Nh86
+         Rxug==
+X-Gm-Message-State: AAQBX9ew4YKv7wfyu5+j2vMilMsn0KbiMJwdNT95kI4aBrexOdg1WzcN
+        9vKAVBjCIC8e7ajQHwKgItM=
+X-Google-Smtp-Source: AK7set/4eDYG1uEuvh2RsElDMslo5k4epLRJSOnyys22BmZJTqrLzLKk3XBWac/gx9pQGS52dIrLQQ==
+X-Received: by 2002:a05:6870:40d2:b0:177:c6f2:a74b with SMTP id l18-20020a05687040d200b00177c6f2a74bmr6693499oal.1.1679886100067;
+        Sun, 26 Mar 2023 20:01:40 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:988b:7dda:764e:c744? ([2600:1700:2442:6db0:988b:7dda:764e:c744])
+        by smtp.gmail.com with ESMTPSA id l26-20020a0568301d7a00b0069fa776d3c2sm4932048oti.18.2023.03.26.20.01.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Mar 2023 20:01:39 -0700 (PDT)
+Message-ID: <a14f6e0d-88fe-4c38-0489-a9d2d97ef307@gmail.com>
+Date:   Sun, 26 Mar 2023 22:01:38 -0500
 MIME-Version: 1.0
-References: <20230308220756.587317-1-jjh@daedalian.us>
-In-Reply-To: <20230308220756.587317-1-jjh@daedalian.us>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Mon, 27 Mar 2023 11:00:52 +0800
-Message-ID: <CAL+tcoCMCq0y6ktXTUdjCuoX+Z+UCNxchEN3jGn9o-zRY4EZSA@mail.gmail.com>
-Subject: Re: [PATCH net v3] ixgbe: Panic during XDP_TX with > 64 CPUs
-To:     John Hickey <jjh@daedalian.us>
-Cc:     anthony.l.nguyen@intel.com,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH V7 0/3] Generate device tree node for pci devices
+Content-Language: en-US
+To:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Rob Herring <robh@kernel.org>, Lizhi Hou <lizhi.hou@amd.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, helgaas@kernel.org, max.zhen@amd.com,
+        sonal.santan@amd.com, larry.liu@amd.com, brian.xu@amd.com,
+        stefano.stabellini@xilinx.com, trix@redhat.com,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Steen.Hegelund@microchip.com" <Steen.Hegelund@microchip.com>,
+        "Horatiu.Vultur@microchip.com" <Horatiu.Vultur@microchip.com>,
+        "Allan.Nielsen@microchip.com" <Allan.Nielsen@microchip.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+References: <1674183732-5157-1-git-send-email-lizhi.hou@amd.com>
+ <af2a6686-ea35-e5fc-7541-27e5d6ca9311@gmail.com>
+ <20230227113150.398dcfa7@fixe.home>
+ <52b8f136-c73f-a97d-2bb6-48aff3755f98@gmail.com>
+ <f927790dc9839cd93902c0d2e5afe5e8@bootlin.com>
+ <1886b888-a0e8-b1ee-c48a-ddbc8b5b0c63@gmail.com>
+ <CAL_JsqL_ER32ys-yW_7-QKLjEmKK8StOeM5yvH2ChuvX++fe5Q@mail.gmail.com>
+ <9b4bb45a-f6e4-c95c-d27c-21c7fecb5505@gmail.com>
+ <20230309094507.62d7c35e@fixe.home>
+ <CAH9NwWfvXjY8=OFesytZ1HAM-wBJ=tNB8wAkP99JLw=inYJJgg@mail.gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <CAH9NwWfvXjY8=OFesytZ1HAM-wBJ=tNB8wAkP99JLw=inYJJgg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 6:22=E2=80=AFAM John Hickey <jjh@daedalian.us> wrote=
-:
->
-> In commit 'ixgbe: let the xdpdrv work with more than 64 cpus'
-> (4fe815850bdc), support was added to allow XDP programs to run on systems
-> with more than 64 CPUs by locking the XDP TX rings and indexing them
-> using cpu % 64 (IXGBE_MAX_XDP_QS).
->
-> Upon trying this out patch via the Intel 5.18.6 out of tree driver
-> on a system with more than 64 cores, the kernel paniced with an
-> array-index-out-of-bounds at the return in ixgbe_determine_xdp_ring in
-> ixgbe.h, which means ixgbe_determine_xdp_q_idx was just returning the
-> cpu instead of cpu % IXGBE_MAX_XDP_QS.  An example splat:
->
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->  UBSAN: array-index-out-of-bounds in
->  /var/lib/dkms/ixgbe/5.18.6+focal-1/build/src/ixgbe.h:1147:26
->  index 65 is out of range for type 'ixgbe_ring *[64]'
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->  BUG: kernel NULL pointer dereference, address: 0000000000000058
->  #PF: supervisor read access in kernel mode
->  #PF: error_code(0x0000) - not-present page
->  PGD 0 P4D 0
->  Oops: 0000 [#1] SMP NOPTI
->  CPU: 65 PID: 408 Comm: ksoftirqd/65
->  Tainted: G          IOE     5.15.0-48-generic #54~20.04.1-Ubuntu
->  Hardware name: Dell Inc. PowerEdge R640/0W23H8, BIOS 2.5.4 01/13/2020
->  RIP: 0010:ixgbe_xmit_xdp_ring+0x1b/0x1c0 [ixgbe]
->  Code: 3b 52 d4 cf e9 42 f2 ff ff 66 0f 1f 44 00 00 0f 1f 44 00 00 55 b9
->  00 00 00 00 48 89 e5 41 57 41 56 41 55 41 54 53 48 83 ec 08 <44> 0f b7
->  47 58 0f b7 47 5a 0f b7 57 54 44 0f b7 76 08 66 41 39 c0
->  RSP: 0018:ffffbc3fcd88fcb0 EFLAGS: 00010282
->  RAX: ffff92a253260980 RBX: ffffbc3fe68b00a0 RCX: 0000000000000000
->  RDX: ffff928b5f659000 RSI: ffff928b5f659000 RDI: 0000000000000000
->  RBP: ffffbc3fcd88fce0 R08: ffff92b9dfc20580 R09: 0000000000000001
->  R10: 3d3d3d3d3d3d3d3d R11: 3d3d3d3d3d3d3d3d R12: 0000000000000000
->  R13: ffff928b2f0fa8c0 R14: ffff928b9be20050 R15: 000000000000003c
->  FS:  0000000000000000(0000) GS:ffff92b9dfc00000(0000)
->  knlGS:0000000000000000
->  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->  CR2: 0000000000000058 CR3: 000000011dd6a002 CR4: 00000000007706e0
->  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->  PKRU: 55555554
->  Call Trace:
->   <TASK>
->   ixgbe_poll+0x103e/0x1280 [ixgbe]
->   ? sched_clock_cpu+0x12/0xe0
->   __napi_poll+0x30/0x160
->   net_rx_action+0x11c/0x270
->   __do_softirq+0xda/0x2ee
->   run_ksoftirqd+0x2f/0x50
->   smpboot_thread_fn+0xb7/0x150
->   ? sort_range+0x30/0x30
->   kthread+0x127/0x150
->   ? set_kthread_struct+0x50/0x50
->   ret_from_fork+0x1f/0x30
->   </TASK>
->
-> I think this is how it happens:
->
-> Upon loading the first XDP program on a system with more than 64 CPUs,
-> ixgbe_xdp_locking_key is incremented in ixgbe_xdp_setup.  However,
-> immediately after this, the rings are reconfigured by ixgbe_setup_tc.
-> ixgbe_setup_tc calls ixgbe_clear_interrupt_scheme which calls
-> ixgbe_free_q_vectors which calls ixgbe_free_q_vector in a loop.
-> ixgbe_free_q_vector decrements ixgbe_xdp_locking_key once per call if
-> it is non-zero.  Commenting out the decrement in ixgbe_free_q_vector
-> stopped my system from panicing.
->
-> I suspect to make the original patch work, I would need to load an XDP
-> program and then replace it in order to get ixgbe_xdp_locking_key back
-> above 0 since ixgbe_setup_tc is only called when transitioning between
-> XDP and non-XDP ring configurations, while ixgbe_xdp_locking_key is
-> incremented every time ixgbe_xdp_setup is called.
->
-> Also, ixgbe_setup_tc can be called via ethtool --set-channels, so this
-> becomes another path to decrement ixgbe_xdp_locking_key to 0 on systems
-> with greater than 64 CPUs.
->
-> For this patch, I have changed static_branch_inc to static_branch_enable
-> in ixgbe_setup_xdp.  We weren't counting references.  The
-> ixgbe_xdp_locking_key only protects code in the XDP_TX path, which is
-> not run when an XDP program is loaded.  The other condition for setting
-> it on is the number of CPUs, which I assume is static.
->
-> Fixes: 4fe815850bdc ("ixgbe: let the xdpdrv work with more than 64 cpus")
-> Signed-off-by: John Hickey <jjh@daedalian.us>
-> ---
-> v1 -> v2:
->         Added Fixes and net tag.  No code changes.
-> v2 -> v3:
->         Added splat.  Slight clarification as to why ixgbe_xdp_locking_ke=
-y
->         is not turned off.  Based on feedback from Maciej Fijalkowski.
-> ---
->  drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c  | 3 ---
->  drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 2 +-
->  2 files changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c b/drivers/net/e=
-thernet/intel/ixgbe/ixgbe_lib.c
-> index f8156fe4b1dc..0ee943db3dc9 100644
-> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
-> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
-> @@ -1035,9 +1035,6 @@ static void ixgbe_free_q_vector(struct ixgbe_adapte=
-r *adapter, int v_idx)
->         adapter->q_vector[v_idx] =3D NULL;
->         __netif_napi_del(&q_vector->napi);
->
-> -       if (static_key_enabled(&ixgbe_xdp_locking_key))
-> -               static_branch_dec(&ixgbe_xdp_locking_key);
-> -
+On 3/21/23 03:44, Christian Gmeiner wrote:
+> Hi all
+> 
+> Am Do., 9. März 2023 um 09:52 Uhr schrieb Clément Léger
+> <clement.leger@bootlin.com>:
+>>
+>> Le Wed, 8 Mar 2023 01:31:52 -0600,
+>> Frank Rowand <frowand.list@gmail.com> a écrit :
+>>
+>>> On 3/6/23 18:52, Rob Herring wrote:
+>>>> On Mon, Mar 6, 2023 at 3:24 PM Frank Rowand <frowand.list@gmail.com> wrote:
+>>>>>
+>>>
+>>> < snip >
+>>>
+>>> Hi Rob,
+>>>
+>>> I am in no position to comment intelligently on your comments until I
+>>> understand the SoC on PCI card model I am asking to be described in
+>>> this subthread.
+>>
+>> Hi Frank,
+>>
+>> Rather than answering all of the assumptions that were made in the upper
+>> thread (that are probably doing a bit too much of inference), I will
+>> re-explain that from scratch.
+>>
+>> Our usecase involves the lan966x SoCs. These SoCs are mainly targeting
+>> networking application and offers multiple SFP and RGMII interfaces.
+>> This Soc can be used in two exclusive modes (at least for the intended
+>> usage):
+>>
+>> SoC mode:
+>>    The device runs Linux by itself, on ARM64 cores included in the
+>>    SoC. This use-case of the lan966x is currently almost upstreamed,
+>>    using a traditional Device Tree representation of the lan996x HW
+>>    blocks [1] A number of drivers for the different IPs of the SoC have
+>>    already been merged in upstream Linux (see
+>>    arch/arm/boot/dts/lan966x.dtsi)
+>>
+>> PCI mode:
+>>   The lan966x SoC is configured as a PCIe endpoint (PCI card),
+>>   connected to a separate platform that acts as the PCIe root complex.
+>>   In this case, all the IO memories that are exposed by the devices
+>>   embedded on this SoC are exposed through PCI BARs 0 & 1 and the ARM64
+>>   cores of the SoC are not used. Since this is a PCIe card, it can be
+>>   plugged on any platform, of any architecture supporting PCIe.
+>>
+>> This work only focus on the *PCI mode* usage. In this mode, we have the
+>> following prerequisites:
+>> - Should work on all architectures (x86, ARM64, etc)
+>> - Should be self-contained in the driver
+>> - Should be able to reuse all existing platform drivers
+>>
+>> In PCI mode, the card runs a firmware (not that it matters at all by
+>> the way) which configure the card in PCI mode at boot time. In this
+>> mode, it exposes a single PCI physical function associated with
+>> vendor/product 0x1055/0x9660. This is not a multi-function PCI device !
+>> This means that all the IO memories (peripheral memories, device
+>> memories, registers, whatever you call them) are accessible using
+>> standard readl()/writel() on the BARs that have been remapped. For
+>> instance (not accurate), in the BAR 0, we will have this kind of memory
+>> map:
+>>
+>>            BAR0
+>>    0x0 ┌───────────┐
+>>        │           │
+>>        ├───────────┤
+>>        │   Clock   │
+>>        │ controller│
+>>        ├───────────┤
+>>        │           │
+>>        ├───────────┤
+>>        │   I2C     │
+>>        │ controller│
+>>        ├───────────┤
+>>        │           │
+>>        ├───────────┤
+>>        │   MDIO    │
+>>        │ Controller│
+>>        ├───────────┤
+>>        │           │
+>>        ├───────────┤
+>>        │  Switch   │
+>>        │ Controller│
+>>        ├───────────┤
+>>        │           │
+>>        │   ...     │
+>>
+>>
+>> It also exposes either a single interrupt via the legacy interrupt
+>> (which can then be demuxed by reading the SoC internal interrupt
+>> controller registers), or multiple interrupts using MSI interrupts.
+>>
+>> As stated before, all these peripherals are already supported in SoC
+>> mode and thus, there are aleready existing platform drivers for each of
+>> them. For more information about the devices that are exposed please
+>> see link [1] which is the device-tree overlay used to describe the
+>> lan9662 card.
+>>
+>> In order to use the ethernet switch, we must configure everything that
+>> lies around this ethernet controller, here are a few amongst all of
+>> them:
+>> - MDIO bus
+>> - I2C controller for SFP modules access
+>> - Clock controller
+>> - Ethernet controller
+>> - Syscon
+>>
+>> Since all the platform drivers already exist for these devices, we
+>> want to reuse them. Multiple solutions were thought of (fwnode, mfd,
+>> ACPI, device-tree) and eventually ruled out for some of them and efforts
+>> were made to try to tackle that (using fwnode [2], device-tree [3])
+>>
+>> One way to do so is to use a device-tree overlay description that is
+>> loaded dynamically on the PCI device OF node. This can be done using the
+>> various device-tree series series that have been proposed (included
+>> this one). On systems that do not provide a device-tree of_root, create
+>> an empty of_root node (see [4]). Then during PCI enumeration, create
+>> device-tree node matching the PCI tree that was enumerated (See [5]).
+>> This is needed since the PCI card can be plugged on whatever port the
+>> user wants and thus it can not be statically described using a fixed
+>> "target-path" property in the overlay.
+>>
+>> Finally, to glue everything together, we add a PCI driver for the
+>> VID/PID of the PCI card (See [6]). This driver is responsible of adding
+>> the "ranges" property in the device-tree PCI node to remap the child
+>> nodes "reg" property to the PCI memory map. This is needed because the
+>> PCI memory addresses differ between platform, enumeration order and so
+>> on.Finally, the driver will load the device-tree overlay (See [1]) to
+>> the PCI device-tree node. Eventually, a call to
+>> of_platform_default_populate() will probe the nodes and platform
+>> drivers.
+>>
+>> I hope this will help you understanding what is going on here. In the
+>> meantime, I'm also trying to obtain public documentation about the
+>> lan966x SoC.
+>>
+>> [1]
+>> https://github.com/clementleger/linux/blob/bf9b4ef803d86c4ae59a4ca195a4152b0d5c3cea/drivers/mfd/lan966x_pci.dts
+>> [2]
+>> https://lore.kernel.org/netdev/YhPSkz8+BIcdb72R@smile.fi.intel.com/T/
+>> [3]
+>> https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
+>> [4]
+>> https://lore.kernel.org/lkml/20230223213418.891942-1-frowand.list@gmail.com/
+>> [5]
+>> https://lore.kernel.org/lkml/1674183732-5157-1-git-send-email-lizhi.hou@amd.com/
+>> [6]
+>> https://github.com/clementleger/linux/blob/bf9b4ef803d86c4ae59a4ca195a4152b0d5c3cea/drivers/mfd/lan966x_pci_of.c
+>>
+>> --
+>> Clément Léger,
+>> Embedded Linux and Kernel engineer at Bootlin
+>> https://bootlin.com
+> 
+> What is missing to move on with this patch set?
 
-Seems like you still didn't add another pair (enable VS disable)
-static_branch_disable() to switch off this static key as Maciej
-Fijalkowski suggested on top of your 1st patch.
+I need to evaluate what Clément Léger wrote in the email you replied to.  I had overlooked this
+reply to my questions.  From a quick scan, it looks like he _probably_ provided the context I
+was looking for to understand the architecture of the proposal.  But it is late Sunday night,
+so I won't get to this tonight.
 
-Since we use this static key indicating that we switch it on at the
-very beginning, we also need to switch it off in turn as its life
-cycle comes to an end.
+-Frank
 
-For me, I would recommend to use _inc/_dec to control the whole thing
-even though it's relatively more complicated to balance the uses of
-the inc and dec pairs.
+> 
 
-Never mind, enable/disable can work well if maintainers don't have
-opinions on this.
-
-Thanks,
-Jason
-
->         /*
->          * after a call to __netif_napi_del() napi may still be used and
->          * ixgbe_get_stats64() might access the rings on this vector,
-> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/=
-ethernet/intel/ixgbe/ixgbe_main.c
-> index ab8370c413f3..cd2fb72c67be 100644
-> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> @@ -10283,7 +10283,7 @@ static int ixgbe_xdp_setup(struct net_device *dev=
-, struct bpf_prog *prog)
->         if (nr_cpu_ids > IXGBE_MAX_XDP_QS * 2)
->                 return -ENOMEM;
->         else if (nr_cpu_ids > IXGBE_MAX_XDP_QS)
-> -               static_branch_inc(&ixgbe_xdp_locking_key);
-> +               static_branch_enable(&ixgbe_xdp_locking_key);
->
->         old_prog =3D xchg(&adapter->xdp_prog, prog);
->         need_reset =3D (!!prog !=3D !!old_prog);
-> --
-> 2.37.2
->
