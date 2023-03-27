@@ -2,122 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0796CA609
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:36:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB43B6CA615
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjC0NgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
+        id S232602AbjC0Nhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjC0NgD (ORCPT
+        with ESMTP id S232102AbjC0Nhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:36:03 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9713420A
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:36:01 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id u20so5667760pfk.12
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679924161; x=1682516161;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qk8mEmXhmkij8TFHjllJ20n3reyRkxB51/J3Ax/p7n0=;
-        b=2Gk3ezhjrVnvJZJD1N/OMSWUjmgh1iwcVRjCz3DVGcgZG92GdNw+CFM9I06aJL1Rbf
-         9NqFfADa9ykfd5bBOwhSyG0ym1BtUuN/beUzlVFRsLBOSJtawH2gL3PyCrmIF1Z/kzt4
-         JFDp6r4h0ugpkkN6cwOPAx41YYDfcJ35zyGj7VjIblrpEsNh3c536YpA5SEerN46g4JA
-         /WswQ/cu0wfCyUv1eUNyjHrYQ0E0DSbfZDeQQwJ+nsbSjpbt+O8mGUgB/GaA13QRTXqr
-         dTq5nUwrR/dOIIftlofcdDGRnR8Oy+6pSozGNuNx/5/OGTSeu64G9eE1Vym6qk52a8Td
-         oUqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679924161; x=1682516161;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qk8mEmXhmkij8TFHjllJ20n3reyRkxB51/J3Ax/p7n0=;
-        b=lpdJ6Gv4mj5eiRTkKgnEK//zutjv+20qUQQhse747iGfk7Vfhh1Cg7ouC5D5ePMTwI
-         bQ20AK81UcZ4JlsqdV7JPsNDMbgpt/er7hPesI1PDgWXffKWMqd5BThc61amK2f99P6Y
-         bIUxLOJ+Zx2foH6dlofIZ/IgAxxy1Mw8STd2nXO+cnbo3u8MC/EybBz+72QKFObxAXKK
-         jXwEMbVrAteUEC76XIKygEY0/XJVGNSGJtYusO3lQDDqfmqo7dxMZoUj8T2Fj0PKCkBW
-         87Yk+udrmAQgwm4rTxwJA1H0HJqNN9/0hkSV/fZ6Y4jx/e0LCN7b7K/VS1PZe5+DkXh+
-         Ppvg==
-X-Gm-Message-State: AAQBX9f9YeaPJdaZTDyB3IeG//yayNGRoWvLChdQdnVTQfpwD0klq0aB
-        jdzWcU1UBD/SyaBi/lvpX1Uu5A==
-X-Google-Smtp-Source: AKy350Zz+gdHQ/wN2j/B1WoIVJSpBA6wWKADWT0oO0RAhFL6sv6RQnVfETBicFxwyjWuAV1b5VeS/A==
-X-Received: by 2002:aa7:8b1a:0:b0:628:630:a374 with SMTP id f26-20020aa78b1a000000b006280630a374mr10585278pfd.2.1679924160975;
-        Mon, 27 Mar 2023 06:36:00 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id p26-20020aa7861a000000b006249928aba2sm19038827pfn.59.2023.03.27.06.36.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 06:36:00 -0700 (PDT)
-Message-ID: <d6818b66-e1c8-e2bf-e54f-73d1f83db020@kernel.dk>
-Date:   Mon, 27 Mar 2023 07:35:59 -0600
+        Mon, 27 Mar 2023 09:37:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E9E1BC6;
+        Mon, 27 Mar 2023 06:37:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02D5E61286;
+        Mon, 27 Mar 2023 13:37:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66B4CC433AE;
+        Mon, 27 Mar 2023 13:37:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679924255;
+        bh=sKw5GnPYWTx1tEo+IYG63yzmzH5uUSkHi5W70RXeiXE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=me5d4slZ7BQwLYQm0UbRAC2iVqyUYiUxghqwGTfCH/vpOgHLgDekGA1TBK2dJnpUc
+         9WkLB4v/ufSmAfgCCV5YSuoaGaKiOwCqLyqumjx5XyRbF9dJBFFSs6HLt7PEmp891n
+         XwMOQwvU37TpfHRmLM6F2Wu2rjJcr08TSj+OfMLw3e/eYNtc8Ff3gi22phENHfgyn4
+         DNtHVC4q96uONAXntDKuUBjVgg2LmxrGjTx5EvWUGZrk2TnDCWrxinTYGMaEa37yw+
+         smAD8fYPQMq6WbMRXe/30WkwvLcPhMLKpDQqlLl5O9Eqp+HZa9Zv6aqE9YRxyDLRSD
+         1UErhgcXn+Ddg==
+Received: by mail-ed1-f52.google.com with SMTP id r11so36361759edd.5;
+        Mon, 27 Mar 2023 06:37:35 -0700 (PDT)
+X-Gm-Message-State: AAQBX9eEu4XKsmRvh0JrG+LYiYn12N/qN/lZiehJvyNIK6uUwrxWSZIa
+        fogXil5VslYgdYJZExPp8pksxJBCtWLuhtdig5k=
+X-Google-Smtp-Source: AKy350aPL1uQ3r2MblLdeWPWx+R7rA3ZaUJTGPp0hWqhXUlS0wDj97jvk8gg6F5BBuMMpzVJHH5p6CMaiE85EcR30Es=
+X-Received: by 2002:a17:906:4746:b0:8ab:b606:9728 with SMTP id
+ j6-20020a170906474600b008abb6069728mr5893837ejs.5.1679924253534; Mon, 27 Mar
+ 2023 06:37:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [Syzkaller & bisect] There is "io_poll_remove_entries" NULL
- pointer BUG in v6.3-rc4 kernel
-Content-Language: en-US
-To:     Pengfei Xu <pengfei.xu@intel.com>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        heng.su@intel.com, lkp@intel.com
-References: <ZCEy5jA2nT/vaO56@xpf.sh.intel.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZCEy5jA2nT/vaO56@xpf.sh.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=3.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-11-arnd@kernel.org>
+In-Reply-To: <20230327121317.4081816-11-arnd@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 27 Mar 2023 21:37:22 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT73KBZ01N2fr8z6=9XWFKo4D7cGKOtZLZeXN9NrscCXg@mail.gmail.com>
+Message-ID: <CAJF2gTT73KBZ01N2fr8z6=9XWFKo4D7cGKOtZLZeXN9NrscCXg@mail.gmail.com>
+Subject: Re: [PATCH 10/21] csky: dma-mapping: skip invalidating before DMA
+ from device
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/27/23 12:08?AM, Pengfei Xu wrote:
-> Hi Jens Axboe and kernel experts,
-> 
-> Platform: x86 platforms
-> There is "io_poll_remove_entries" NULL pointer BUG in v6.3-rc4 kernel.
-> 
-> All detailed log: https://github.com/xupengfe/syzkaller_logs/tree/main/230327_041425_io_poll_remove_entries
-> Syzkaller reproduced code: https://github.com/xupengfe/syzkaller_logs/blob/main/230327_041425_io_poll_remove_entries/repro.c
-> Syzkaller analysis report0: https://github.com/xupengfe/syzkaller_logs/blob/main/230327_041425_io_poll_remove_entries/report0
-> Syzkaller analysis status: https://github.com/xupengfe/syzkaller_logs/blob/main/230327_041425_io_poll_remove_entries/repro.stats
-> v6.3-rc4 issue dmesg: https://github.com/xupengfe/syzkaller_logs/blob/main/230327_041425_io_poll_remove_entries/v63rc4_reproduce_dmesg.log
-> Kconfig: https://github.com/xupengfe/syzkaller_logs/blob/main/230327_041425_io_poll_remove_entries/kconfig_origin
-> Bisect info: https://github.com/xupengfe/syzkaller_logs/blob/main/230327_041425_io_poll_remove_entries/bisect_info.log
-> 
-> It could be reproduced in v6.3-rc3 and v6.3-rc4 kernel, and bisected between
-> v6.3-rc3 and v5.11 kernel, bad commit was:
-> "
-> c16bda37594f83147b167d381d54c010024efecf
-> io_uring/poll: allow some retries for poll triggering spuriously
-> "
-> After reverted above commit on top of v6.3-rc3 kernel, this issue was gone.
+On Mon, Mar 27, 2023 at 8:15=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> csky is the only architecture that does a full flush for the
+> dma_sync_*_for_device(..., DMA_FROM_DEVICE) operation. The requirement
+> is only make sure there are no dirty cache lines for the buffer,
+> which can be either done through an invalidate operation (as on most
+> architectures including arm32, mips and arc), or a writeback (as on
+> arm64 and riscv). The cache also has to be invalidated eventually but
+> csky already does that after the transfer.
+>
+> Use a 'clean' operation here for consistency with arm64 and riscv.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/csky/mm/dma-mapping.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
+> index 82447029feb4..c90f912e2822 100644
+> --- a/arch/csky/mm/dma-mapping.c
+> +++ b/arch/csky/mm/dma-mapping.c
+> @@ -60,11 +60,9 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_=
+t size,
+>  {
+>         switch (dir) {
+>         case DMA_TO_DEVICE:
+> -               cache_op(paddr, size, dma_wb_range);
+> -               break;
+>         case DMA_FROM_DEVICE:
+>         case DMA_BIDIRECTIONAL:
+> -               cache_op(paddr, size, dma_wbinv_range);
+> +               cache_op(paddr, size, dma_wb_range);
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-This should probably fix it, though I do wonder why this can only
-trigger after that patch. Seems like it would've been possible before
-too.
+
+>                 break;
+>         default:
+>                 BUG();
+> --
+> 2.39.2
+>
 
 
-diff --git a/io_uring/poll.c b/io_uring/poll.c
-index 795facbd0e9f..90555a22a900 100644
---- a/io_uring/poll.c
-+++ b/io_uring/poll.c
-@@ -600,7 +600,8 @@ static int __io_arm_poll_handler(struct io_kiocb *req,
- 	mask = vfs_poll(req->file, &ipt->pt) & poll->events;
- 
- 	if (unlikely(ipt->error || !ipt->nr_entries)) {
--		io_poll_remove_entries(req);
-+		if (ipt->nr_entries)
-+			io_poll_remove_entries(req);
- 
- 		if (!io_poll_can_finish_inline(req, ipt)) {
- 			io_poll_mark_cancelled(req);
-
--- 
-Jens Axboe
-
+--=20
+Best Regards
+ Guo Ren
