@@ -2,143 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045F76CAECC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4376CAF08
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232443AbjC0Tgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
+        id S229598AbjC0TnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 15:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbjC0Tgh (ORCPT
+        with ESMTP id S229477AbjC0TnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:36:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7329310CC;
-        Mon, 27 Mar 2023 12:36:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0781EB818D4;
-        Mon, 27 Mar 2023 19:36:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B068C433EF;
-        Mon, 27 Mar 2023 19:36:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679945793;
-        bh=3VinL61oh1AfiLtJ/xna8xib3ysQ3OiMQrgj/aGjWKw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i3lFG3GXZulHbQyv6vKwtbgDnKO5FZsdlsEMhFxcKSgyVVJAJy7SKXfsa0H4wDE/T
-         9CVF7XnQAv5LRpHzNc9SsQ9WX44ZgNd8oXPdd6Aw4Zu1veDhnHi/ft62BNzdq8OEJm
-         Sab9TjY4O+NeUiZjfqAzyLuXOasynDm0WOTV4D5Od/DSf415BSNLRXkZwVKHyhmTUN
-         /GRcd2aiJiA2zCsAXq38AJ4vCaQSmLP5pf85YnbA4gmOTrAzkosjh3gITFXsxpolgb
-         jfMLaIc6jOuAaR8O6VUbrCDyo5EfHJrN6lxckVhyNaBXrb9BSYhdUCrKXRVr4NpNiJ
-         1ck3nRVlq06MA==
-Date:   Mon, 27 Mar 2023 12:39:38 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: dts: qcom: sdm630: move DSI opp-table out of
- soc node
-Message-ID: <20230327193938.42rvpttgo5p4kia6@ripper>
-References: <20230326091605.18908-1-krzysztof.kozlowski@linaro.org>
+        Mon, 27 Mar 2023 15:43:18 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CE52D77
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:43:17 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-7585535bd79so5772539f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:43:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1679946196;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F4TnUKE6dIQQ87kL1s9DdezkHsj4NeJBgTDMt2DH/Y4=;
+        b=I2GXA4sDA4ZYNG5d5aE57iXNnuqiTrlyQu61Mc2nQzVD/Rdne46yxY2K8snsrdNVx7
+         8VB2psZxmX6yqEmcn3OY3YYj04APFccRQJVwnB9iNIKklwjQNEA/Vc33W0Sechke5bvQ
+         wKkebiYFtesd7Cmur19Hyuh1DXB+05vzUdTb8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679946196;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F4TnUKE6dIQQ87kL1s9DdezkHsj4NeJBgTDMt2DH/Y4=;
+        b=pIF6jKpzt8MuKqe5ohAmTRRvQHhtJ4tB/GjK44RYeH2JawyFBS+dhBeVkj2XXr+QWc
+         op03f7qVapiRbqHd8ETpgGQJ40YBO7XxjqGNZgFg6CYXgkFbLnjU7LLXdJye7OeocF3o
+         eofrNvTb+GCRyDA9kbEfoThzJWRZcCM6jAsbH6MdBfuXsortM8vkh9zRPE8OuUclv6lD
+         uyNPmtPzWC3+m2222ejW0MTa3i0zWDetZakkM0ESf60fuy2hZdcw9iXrA50UhG3Ogxn4
+         u4B+hGIWrscDIc+SONCOhPW7oNhaA4liu41Cmgz4jzkhP134ppZBkCcjMFLRSZud7mXm
+         6TQg==
+X-Gm-Message-State: AO0yUKXK2Xnj/UJBm5VHk0/gGL1nnucaTseczzT4hEVoOFKraGpBFdBF
+        SYJp0KKGO84g4YNskzMGrYZGIQ==
+X-Google-Smtp-Source: AK7set811ugU67g7Ya8gmj9X8Ibt1JxrkN3OdPvUT4vnE3cXoI5M4xUDyLKZOicBwaiHovqJXae+LQ==
+X-Received: by 2002:a05:6602:2c82:b0:740:7d21:d96f with SMTP id i2-20020a0566022c8200b007407d21d96fmr8089458iow.1.1679946196649;
+        Mon, 27 Mar 2023 12:43:16 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id l12-20020a056638144c00b00406ae1bd4a9sm5802503jad.178.2023.03.27.12.43.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 12:43:16 -0700 (PDT)
+Message-ID: <1e2b5a9e-9e92-6394-74fd-18dae2ed0712@linuxfoundation.org>
+Date:   Mon, 27 Mar 2023 13:43:15 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230326091605.18908-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] selftests/ftrace: Improve integration with kselftest
+ runner
+Content-Language: en-US
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230302-ftrace-kselftest-ktap-v1-1-a84a0765b7ad@kernel.org>
+ <20230319232438.786c46feaf9bb7ddcb78a731@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230319232438.786c46feaf9bb7ddcb78a731@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 11:16:05AM +0200, Krzysztof Kozlowski wrote:
-> The soc node is supposed to have only device nodes with MMIO addresses,
-> so move the DSI OPP out of it (it is used also by second DSI1 on
-> SDM660):
+On 3/19/23 08:24, Masami Hiramatsu (Google) wrote:
+> Hi Mark,
 > 
+> On Mon, 06 Mar 2023 15:35:10 +0000
+> Mark Brown <broonie@kernel.org> wrote:
+> 
+>> The ftrace selftests do not currently produce KTAP output, they produce a
+>> custom format much nicer for human consumption. This means that when run in
+>> automated test systems we just get a single result for the suite as a whole
+>> rather than recording results for individual test cases, making it harder
+>> to look at the test data and masking things like inappropriate skips.
+>>
+>> Address this by adding support for KTAP output to the ftracetest script and
+>> providing a trivial wrapper which will be invoked by the kselftest runner
+>> to generate output in this format by default, users using ftracetest
+>> directly will continue to get the existing output.
+>>
+>> This is not the most elegant solution but it is simple and effective. I
+>> did consider implementing this by post processing the existing output
+>> format but that felt more complex and likely to result in all output being
+>> lost if something goes seriously wrong during the run which would not be
+>> helpful. I did also consider just writing a separate runner script but
+>> there's enough going on with things like the signal handling for that to
+>> seem like it would be duplicating too much.
+> 
+> This looks great! and is what we need.
+> 
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Thank you!
+> 
+>>
 
-This node has been moved into the dsi node, so if we still want this,
-could you please update the commit message.
+Steve,
 
-Regards,
-Bjorn
+Okay to pick this up for the Linux 6.4?
 
->   sda660-inforce-ifc6560.dtb: soc: opp-table-dsi: {'compatible': ['operating-points-v2'], ... should not be valid under {'type': 'object'}
->     From schema: dtschema/schemas/simple-bus.yaml
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes since v1:
-> 1. Move the node out of soc. Don't add Konrad's review tag.
-> ---
->  arch/arm64/boot/dts/qcom/sdm630.dtsi | 38 ++++++++++++++--------------
->  1 file changed, 19 insertions(+), 19 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> index 72d9a12b5e9c..b91e423a3cfc 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> @@ -328,6 +328,25 @@ memory@80000000 {
->  		reg = <0x0 0x80000000 0x0 0x0>;
->  	};
->  
-> +	dsi_opp_table: opp-table-dsi {
-> +		compatible = "operating-points-v2";
-> +
-> +		opp-131250000 {
-> +			opp-hz = /bits/ 64 <131250000>;
-> +			required-opps = <&rpmpd_opp_svs>;
-> +		};
-> +
-> +		opp-210000000 {
-> +			opp-hz = /bits/ 64 <210000000>;
-> +			required-opps = <&rpmpd_opp_svs_plus>;
-> +		};
-> +
-> +		opp-262500000 {
-> +			opp-hz = /bits/ 64 <262500000>;
-> +			required-opps = <&rpmpd_opp_nom>;
-> +		};
-> +	};
-> +
->  	pmu {
->  		compatible = "arm,armv8-pmuv3";
->  		interrupts = <GIC_PPI 6 IRQ_TYPE_LEVEL_HIGH>;
-> @@ -1450,25 +1469,6 @@ mmcc: clock-controller@c8c0000 {
->  					<0>;
->  		};
->  
-> -		dsi_opp_table: opp-table-dsi {
-> -			compatible = "operating-points-v2";
-> -
-> -			opp-131250000 {
-> -				opp-hz = /bits/ 64 <131250000>;
-> -				required-opps = <&rpmpd_opp_svs>;
-> -			};
-> -
-> -			opp-210000000 {
-> -				opp-hz = /bits/ 64 <210000000>;
-> -				required-opps = <&rpmpd_opp_svs_plus>;
-> -			};
-> -
-> -			opp-262500000 {
-> -				opp-hz = /bits/ 64 <262500000>;
-> -				required-opps = <&rpmpd_opp_nom>;
-> -			};
-> -		};
-> -
->  		mdss: display-subsystem@c900000 {
->  			compatible = "qcom,mdss";
->  			reg = <0x0c900000 0x1000>,
-> -- 
-> 2.34.1
-> 
+thanks,
+-- Shuah
+
