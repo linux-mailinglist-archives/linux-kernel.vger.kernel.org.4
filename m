@@ -2,133 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9D66C99AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 04:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF0D6C99A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 04:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjC0Coy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 22:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
+        id S231659AbjC0Coe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 22:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjC0Cov (ORCPT
+        with ESMTP id S229793AbjC0Cod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 22:44:51 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83AF46BD;
-        Sun, 26 Mar 2023 19:44:48 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id n14so7237388qta.10;
-        Sun, 26 Mar 2023 19:44:48 -0700 (PDT)
+        Sun, 26 Mar 2023 22:44:33 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D08F44B1;
+        Sun, 26 Mar 2023 19:44:32 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-17ab3a48158so7843614fac.1;
+        Sun, 26 Mar 2023 19:44:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679885088;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CjPRw7a8pMHELQ53oymZFeBvbCGiVm/Rg9umw+16D4A=;
-        b=R2EoaN+p6+koB5S3sZg0C8WmMZ1DNFr+GTnOprbfL1XkZnwG/V69NyBkMuUaNPx1V3
-         TW6G0ueC6Vu4cQLsZfY2cCYdT88jioE9o8SWhGgNH5Rp7LCiNOnzNdMyPvs5WmmLWw2/
-         iXPN+WoIk+rDF04qQTRmhUnS+FLZ1vH7XGhsMjyxrAykIBuQKkQvhPDJ5Qd/mAeCA4Ck
-         ztzQA3qiPyAKfICjPw1MxfKYpQcUX13DCEl3jePOtycKyaVL8f4G9YhovyXd2Y3B5cpr
-         /giI9cOvp1xDNx9Q25YcAStpxEHpmSCJMjvVgj9xaIsU54NzXjYRBCdns9Mn78kqIeY7
-         54UQ==
+        d=gmail.com; s=20210112; t=1679885071;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/IehCeOspUlraWZ1AW390EFHJWuA8vsflh6eGOs0IcA=;
+        b=BbckQad35hdIB9AdNC5ttGTvQW6Ag3M3+i/mD07LFEO0/0OG5KtWfja/NltAxlqblv
+         W92Ozr9ODRVfHcOKuSZFQOVApstuOaJaf1jfJ2Lb64GtA5L8Zs8Ncwz+ZzsvXcEaf9xQ
+         1O9LmIc5OyhrV6BFndIQzeXEsoOw4wst4uSqrcBB2hyi3vtYpe9ZVlgK3kkFMoItAtXn
+         nvx6hdyvAmpXTM8c/4eqqzuqC/nQAqSoRHvc+LVCw5YsKeqfUwGZJhDPbPqkdim9W6RY
+         3/3eA9eY7BTV6QZ1PpgZ6vQXSiVkIwJhgicoiU2WbmnsJ1Uwc4U1WbcczpXFcXMPXnzw
+         8otg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679885088;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CjPRw7a8pMHELQ53oymZFeBvbCGiVm/Rg9umw+16D4A=;
-        b=79skYBIDCmDb98R+rEBOsfFczwWyLl5BRP20q4IDeUB4XFf8c8L/DgKJHOexJqiuAi
-         e1x9LbEvLKakNOnvkYbV1bB5WPjNg6HufxWOqcaipsQhGrtJus0NJAwxLCZFPWh3nP1a
-         2BnEyzFN0sUt/mnw46w2lX8UMX0r11h2AyqSv5YYjZq5BGJ5Maoegx9DRIrPS/xx8gbv
-         NBH4ti01Mr7QZJQyepCTDItOcLOdF2Yo5H9fjcgl54LMIbf/YaPYQrL0b/QCmNeOi6vX
-         5IsY+DBYzlfbzvpYRLCDRQ+Rbg3WmeUqW4xaqJ2hUE99eOZdbL6ku5pBy7Nbn1Eaeb5a
-         dHxw==
-X-Gm-Message-State: AO0yUKVg/PL5WjI8IRbKSMDx7LY199t3tFuPuRjPmTcae45KOcx+AHRD
-        VxLpeK9cvYBNOQggtNtpo9Mox3+pCCCy8DzJs10=
-X-Google-Smtp-Source: AKy350aOzVpb4lrDmXf1MemVwOUyXJP4Tz2Fl8Psq7HOSU1iRGITSzt6y4unqzOZD/SuOyKBAVXq/fhksYoE9v/9Vt0=
-X-Received: by 2002:a05:622a:199f:b0:3c0:2b0b:84c with SMTP id
- u31-20020a05622a199f00b003c02b0b084cmr3971968qtc.6.1679885088035; Sun, 26 Mar
- 2023 19:44:48 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679885072;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/IehCeOspUlraWZ1AW390EFHJWuA8vsflh6eGOs0IcA=;
+        b=lv9aPTlO1IBbFr7R9krKvRsqzwHLwLJ+mXP11socjR2o/fRwHgl+hslsEZLfFQm0l4
+         9XzwVSkF+kSY79OoScJWe4TkziaSuRw/EDP3zu20GbIDzvEH783KWhs0H8mKUMfAj0mh
+         782OYd/vk4YnIM4lga1+72UPE601wuSpOfcvSM9sxwkKLgUxsyWNaVGFwmeXm3yy/VcW
+         VbXZf4kqWXz0a3O1ya2Lf5qysoJCdgmH2aPehgtzfccHVsiVefausqIcE3+USzJ3NPDj
+         c/B+YaYldFj2Q6O5HAkJLMG61d+Brhje2e+uSux2c2u5s33BDvJqQVImr3B+sPKelbS0
+         MJHA==
+X-Gm-Message-State: AO0yUKWRbeLnb91bFQG8H6cPauM3NamIlfWTdz7iEwRAU8uBZDanVprr
+        0H67QfC0+TXsDr1y1QxYiJc=
+X-Google-Smtp-Source: AKy350bKgFENzE6qQyN7mlnvfyBQfZAEoRGTFjt+++dpuLKoa54K7yO5TvsNKRANtW4od3i3j1/FfQ==
+X-Received: by 2002:a05:6870:3396:b0:17e:8ac6:5399 with SMTP id w22-20020a056870339600b0017e8ac65399mr7726353oae.0.1679885071798;
+        Sun, 26 Mar 2023 19:44:31 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:988b:7dda:764e:c744? ([2600:1700:2442:6db0:988b:7dda:764e:c744])
+        by smtp.gmail.com with ESMTPSA id vh22-20020a0568710d1600b00177c21c3ae1sm9429423oab.54.2023.03.26.19.44.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Mar 2023 19:44:31 -0700 (PDT)
+Message-ID: <3a4ed4a0-5694-ba59-a141-26e37576ff67@gmail.com>
+Date:   Sun, 26 Mar 2023 21:44:30 -0500
 MIME-Version: 1.0
-References: <20230326092208.13613-1-laoar.shao@gmail.com> <20230326092208.13613-9-laoar.shao@gmail.com>
- <87mt3z7pm5.fsf@toke.dk>
-In-Reply-To: <87mt3z7pm5.fsf@toke.dk>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Mon, 27 Mar 2023 10:44:12 +0800
-Message-ID: <CALOAHbBd5Bx0Tnzv1MW_NV9mOJrqdk5oySYWQr-XXURAM5xndw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 08/13] bpf: Alloc and free bpf_map id in bpf namespace
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@kernel.org>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [KTAP V2 PATCH] ktap_v2: add recognized test name line
+Content-Language: en-US
+To:     Daniel Latypov <dlatypov@google.com>, Rae Moar <rmoar@google.com>
+Cc:     davidgow@google.com, skhan@linuxfoundation.org,
+        keescook@chromium.org, Tim.Bird@sony.com,
+        brendanhiggins@google.com, corbet@lwn.net,
+        guillaume.tucker@collabora.com, kernelci@lists.linux.dev,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230316225915.494688-1-rmoar@google.com>
+ <CAGS_qxp2u3F4abmYgN+XwCG8CJN37NSqWSC===SWLCjZG8HYBw@mail.gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <CAGS_qxp2u3F4abmYgN+XwCG8CJN37NSqWSC===SWLCjZG8HYBw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 6:51=E2=80=AFPM Toke H=C3=B8iland-J=C3=B8rgensen <t=
-oke@kernel.org> wrote:
->
-> Yafang Shao <laoar.shao@gmail.com> writes:
->
-> > We only expose the bpf map id under current bpf namespace to user. The
-> > map->id is still the id in the init bpf namespace.
-> >
-> > The result as follows,
-> >
-> > Run bpftool in a new bpf namespace
-> > $ bpftool map show
-> > 4: array  name kprobe_b.rodata  flags 0x80
-> >         key 4B  value 37B  max_entries 1  memlock 360B
-> >         btf_id 159  frozen
->
-> The btf_id is identical for all the different objects in this example
-> output; surely that can't be right? Copy-paste error? Same thing in the
-> other patches...
->
+On 3/20/23 14:21, Daniel Latypov wrote:
+> On Thu, Mar 16, 2023 at 3:59 PM Rae Moar <rmoar@google.com> wrote:
+>>
+>> Add recognition of the test name line ("# Subtest: <name>") to the KTAP v2
+>> spec.
+>>
+>> The purpose of this line is to declare the name of a test before its
+>> results. This functionality is especially useful when trying to parse test
+>> results incrementally and when interpretting results after a crash.
+>>
+>> This line is already compliant with KTAP v1 as it is interpretted as a
+> 
+> minor nit for if there's a v2, s/interprett/interpret (here and above)
+> 
+> Also, I want to elaborate on the previous paragraph a bit more, in
+> case the motivation isn't clear.
+> The problem with TAP and KTAP as-is is that the name of a test case is
+> only known *after* it completes.
+> 
+> So the scenario being referred to is
+> 
+> KTAP version 1
+> 1..1
+> <lots of output>
+> <kernel crash, no more output>
+> 
+> It would be nice if parsers could report "test FOO caused a crash" as
+> opposed to "the first test case caused a crash, good luck figuring out
+> which one that was"
+> 
+> Daniel
 
-The bpf progs {"kretprobe_run","kprobe_run"} and the bpf maps
-{"kprobe_b.rodata","kprobe_b.data"} belong to the same bpf program. So
-the btf_id of them are always the same. For example, below is the
-result when I rerun it on my test server,
-$ bpftool btf show
-...
-943: name <anon>  size 1086B  prog_ids 48824,48822  map_ids 43712,43711
-        pids kprobe(3599801)
-...
+It would be useful to take some of the motivation explanation from TAP14,
+which says (everything to the end of this email):
 
-$ bpftool map show
-43711: array  name kprobe_b.rodata  flags 0x80
-        key 4B  value 37B  max_entries 1  memlock 360B
-        btf_id 943  frozen
-        pids kprobe(3599801)
-43712: array  name kprobe_b.data  flags 0x400
-        key 4B  value 4B  max_entries 1  memlock 8192B
-        btf_id 943
-        pids kprobe(3599801)
+Commented Subtests are encouraged, as they provide the following benefits:
 
-$ bpftool prog show
-48822: kprobe  name kretprobe_run  tag 0de47cc241a2b1b3  gpl
-        loaded_at 2023-03-27T10:35:01+0800  uid 0
-        xlated 112B  jited 78B  memlock 4096B  map_ids 43711
-        btf_id 943
-        pids kprobe(3599801)
-48824: kprobe  name kprobe_run  tag bf163b23cd3b174d  gpl
-        loaded_at 2023-03-27T10:35:01+0800  uid 0
-        xlated 104B  jited 75B  memlock 4096B  map_ids 43711
-        btf_id 943
-        pids kprobe(3599801)
+Easier for humans to read. For example:
 
-The btf_id hasn't been added into the bpf namespace, so the btf id in
-init bpf namespace and child bpf namespace are the same value.
+  TAP version 14
+              1..1
+              ok 1 - hmm, what level is this?
+vs:
 
---=20
-Regards
-Yafang
+  TAP version 14
+  # Subtest: level 1
+      # Subtest: level 2
+          # Subtest: level 3
+              1..1
+              ok 1 - clearly level 3
+
+Additional strictness around matching the Test Point description to Subtest Name can catch errors and detect accidentally interleaved output.
