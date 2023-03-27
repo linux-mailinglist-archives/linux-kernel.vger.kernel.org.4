@@ -2,79 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71966CAA89
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F31BF6CAA8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbjC0Q0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 12:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
+        id S232345AbjC0Q1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 12:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjC0Q0g (ORCPT
+        with ESMTP id S229677AbjC0Q1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:26:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C661BE8;
-        Mon, 27 Mar 2023 09:26:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01F0BB8170C;
-        Mon, 27 Mar 2023 16:26:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80DC2C433EF;
-        Mon, 27 Mar 2023 16:26:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679934392;
-        bh=4pIuc9A52G9w0T0G5dmVhtnXgoYMhwTan2323fMt7Ww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KJBNAQI7hUUfZvr3HqpZUDiESll5GYalC0D1MjvZfRLn+J/I1TYxg9MNKBW9A1ICV
-         RzxSHjgBpimysipDCQjrxW7R/oGCp8P6fqYgmzeYySKjZEs2DxHTG4LZasBAcK90SQ
-         SR3egae/XnNHtO5Xaf7+aJ07j1f0hRcVfleHK16qXMOWuWncZc80tWku2rRQfAbNvV
-         NplrroNp3Za1HoCNspaoWqB+3lMkDpLBK6FGKCEkZLfVA+53yHuGJzJh+tRNzqGEhU
-         zLGjlqTXmkB2RXpkXHWMBYUCYOR7cfiJaGCiNOCLxdeDcBHK/VR3STp4lqPo6wqxky
-         6b7YBfNzxCwjw==
-Date:   Mon, 27 Mar 2023 09:26:30 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the block tree
-Message-ID: <20230327162630.wmxpycxhllt4clpt@treble>
-References: <20230327120017.6bb826d7@canb.auug.org.au>
+        Mon, 27 Mar 2023 12:27:43 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C0E1707
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:27:37 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id e11so9646803lji.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1679934456;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sfqsUiLP5Vh8YGPxF2VMjFnsdklhQkYhzVCbJtdJx1Y=;
+        b=BULGouv4k14uH72Y42Uplkdk+YxchsnjND6wQ+JwP5esObqf5l7IIL+EH8bPZ8VOuv
+         ZuCgr2KQXEjieFab/CwvaUP5WVSHaQzymir9PpPgM01oUBC2bLL2dbGlfeBGqbEQJ9hQ
+         RSaWr+Q8RDY647kvicF7BJCQw9QoX4D2PXGss=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679934456;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sfqsUiLP5Vh8YGPxF2VMjFnsdklhQkYhzVCbJtdJx1Y=;
+        b=xQbR8hy/N2vfCasQAy9H0t7KbQTjC5se9Fs9y5lY3BhvE4mt+ve9S/+k+A2Eh/x9b2
+         ApuPWXlnghaqLydoJ9pgwXyuZqqlSmSy5ykHHSdA8EceuBLzgDKDG0yTZm/CP9aE0eqC
+         kVVmg9t70SK73wO9/NUiEKlDk7rNUje0ilqIvPUUk1DlcDnPvyC3wDjFXLTKGj6kcBWs
+         BHjuDLOy/mibM0RAeovWpQTUhPUD0/zDjYPVKNEoENqmef9uZq8TTcOxW5Le0fgCbB6e
+         uF7CdYXJ08raETv/LB9h9u2Z7/mztXGPt96BHrJA7zysUOhS1oihr4/eEs5E5BMDEUXS
+         pjOQ==
+X-Gm-Message-State: AAQBX9fUPSc5IFWIDPtLD2pl+cDg5SniLY2GYz6HB5UgErK8VYUW2aTj
+        530ZCOGdGgrSipZ7qC+yD8yX6IL0EwCDZxGqFH+iyQ==
+X-Google-Smtp-Source: AKy350Y5rCbfQeYtWgJzS3zFEW8VUffjLZ9uIR3CgRrH+NheaWYomMEl7eyKQ0BV0h4gWbqifwKF1r/nWBPuk4A4eaY=
+X-Received: by 2002:a2e:9792:0:b0:2a3:fc8:711b with SMTP id
+ y18-20020a2e9792000000b002a30fc8711bmr3696218lji.10.1679934456057; Mon, 27
+ Mar 2023 09:27:36 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 27 Mar 2023 16:27:35 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230327120017.6bb826d7@canb.auug.org.au>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230326163556.iesjkoh3nw3iwvf2@ripper>
+References: <1677774797-31063-1-git-send-email-quic_vpolimer@quicinc.com>
+ <1677774797-31063-15-git-send-email-quic_vpolimer@quicinc.com>
+ <20230326162723.3lo6pnsfdwzsvbhj@ripper> <20230326163556.iesjkoh3nw3iwvf2@ripper>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 27 Mar 2023 16:27:35 +0000
+Message-ID: <CAE-0n520ypTRNT1X6kZ8o_Z+DN_68qwqZc1wZGMwsFqV5naktw@mail.gmail.com>
+Subject: Re: [PATCH v14 14/14] drm/msm/dp: set self refresh aware based on PSR support
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, quic_kalyant@quicinc.com,
+        dmitry.baryshkov@linaro.org, quic_khsieh@quicinc.com,
+        quic_vproddut@quicinc.com, quic_bjorande@quicinc.com,
+        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 12:00:17PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the block tree, today's linux-next build (x86_64
-> allnoconfig) produced these warnings:
-> 
-> lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x0: redundant UACCESS d
-> isable
-> lib/iov_iter.o: warning: objtool: iovec_from_user.part.0+0xc7: call to copy_comp
-> at_iovec_from_user.part.0() with UACCESS enabled
-> lib/iov_iter.o: warning: objtool: __import_iovec+0x21d: call to copy_compat_iovec_from_user.part.0() with UACCESS enabled
-> 
-> Presumably introduced by commit
-> 
->   6376ce56feb6 ("iov_iter: import single vector iovecs as ITER_UBUF")
+Quoting Bjorn Andersson (2023-03-26 09:35:56)
+> On Sun, Mar 26, 2023 at 09:27:23AM -0700, Bjorn Andersson wrote:
+> > On Thu, Mar 02, 2023 at 10:03:17PM +0530, Vinod Polimera wrote:
+> > > For the PSR to kick in, self_refresh_aware has to be set.
+> > > Initialize it based on the PSR support for the eDP interface.
+> > >
+> >
+> > When I boot my sc8280xp devices (CRD and X13s) to console with this
+> > patch included I get a login prompt, and then there are no more screen
+> > updates.
+> >
+> > Switching virtual terminal (ctrl+alt+fN) causes the screen to redraw.
+> >
+> > Blindly login in and launching Wayland works and from then on screen
+> > updates works as expected.
+> >
+> > Switching from Wayland to another virtual terminal causes the problem to
+> > re-appear, no updates after the initial refresh, switching back go the
+> > Wayland-terminal crashed the machine.
+> >
+>
+> Also, trying to bring the eDP-screen back from DPMS gives me:
+>
+> <3>[ 2355.218099] [drm:dp_catalog_ctrl_set_pattern_state_bit [msm]] *ERROR* set state_bit for link_train=1 failed
+> <3>[ 2355.218926] [drm:dp_ctrl_setup_main_link [msm]] *ERROR* link training #1 failed. ret=-110
+> <3>[ 2355.262859] [drm:dp_catalog_ctrl_set_pattern_state_bit [msm]] *ERROR* set state_bit for link_train=1 failed
+> <3>[ 2355.263600] [drm:dp_ctrl_setup_main_link [msm]] *ERROR* link training #1 failed. ret=-110
+> <3>[ 2355.305211] [drm:dp_catalog_ctrl_set_pattern_state_bit [msm]] *ERROR* set state_bit for link_train=1 failed
+> <3>[ 2355.305955] [drm:dp_ctrl_setup_main_link [msm]] *ERROR* link training #1 failed. ret=-110
+> <3>[ 2355.345250] [drm:dp_catalog_ctrl_set_pattern_state_bit [msm]] *ERROR* set state_bit for link_train=1 failed
+> <3>[ 2355.346026] [drm:dp_ctrl_setup_main_link [msm]] *ERROR* link training #1 failed. ret=-110
+> <3>[ 2355.405650] [drm:dp_display_process_hpd_high [msm]] *ERROR* failed to complete DP link training
+> <3>[ 2355.668988] [drm:dpu_encoder_phys_vid_wait_for_commit_done:488] [dpu error]vblank timeout
+> <3>[ 2355.669030] [drm:dpu_kms_wait_for_commit_done:510] [dpu error]wait for commit done returned -110
+> <3>[ 2355.699989] [drm:dpu_encoder_frame_done_timeout:2398] [dpu error]enc35 frame done timeout
+>
+> And then the machine just resets.
+>
 
-I'm not able to recreate.  What's your compiler version?
+I saw similar behavior on ChromeOS after we picked the PSR patches into
+our kernel. I suspect it's the same problem. I switched back and forth
+between VT2 and the OOBE screen with ctrl+alt+forward and that showed
+what I typed on the virtual terminal after switching back and forth.
+It's like the redraw only happens once on the switch and never again. I
+switched back and forth enough times that it eventually crashed the
+kernel and rebooted. This was on CRD (sc7280-herobrine-crd.dts).
 
-It's complaining about a call to a "part.0" function, maybe the IPA
-optimization is moving the STAC to before the call.
-
--- 
-Josh
+There's an animation on the OOBE screen that is working though, so
+perhaps PSR is working with the chrome compositor but not the virtual
+terminal? I haven't investigated.
