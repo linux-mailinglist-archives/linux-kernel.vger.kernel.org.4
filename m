@@ -2,81 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A20666C9D7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D706C9D7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbjC0ISU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
+        id S233067AbjC0ITQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232734AbjC0ISJ (ORCPT
+        with ESMTP id S233066AbjC0ISx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:18:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5206C2137;
-        Mon, 27 Mar 2023 01:18:08 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 27 Mar 2023 04:18:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D02444AE
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:18:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 49D4E66030B4;
-        Mon, 27 Mar 2023 09:18:06 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679905087;
-        bh=2E+31zGWciZzbNco4Iv4Sm3znwMEN8uECfV+WcpMeYA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IpUYF0y9HIU0RfVggcqh70OairrRcB3LondNY5uiThxvc9bpCb+iWWribeNPqkCjA
-         2/qMeYJr6y5HZdV1GgEtMwgMI3vUGVPOWypq9NXDJ0ZvyGvJs4l7h1Qm7yZJHB6i8V
-         PsW8SR1KKYHjHsSkzHpcQ6g3lTzaxg7TV5ZciYkJuPf75mZyv88yvdKdCTFcKO5MVV
-         Gkitkza6g5RroKBzkomnEeHX7E1B1nnrG3yVpNc+gMuu0e4T/DiHccrH32pWr0bz4k
-         GFllI4gQu8t8NyCvYoKzgej+boNXvv6cbQdxKSvEgPbqeEtNeleRW5nJnN6IEdWEzk
-         KkG77e8N1LavQ==
-Message-ID: <74fbdb2c-8913-cac0-3e7f-2fde18890c0a@collabora.com>
-Date:   Mon, 27 Mar 2023 10:18:03 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1A8FB80EBE
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:18:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAB30C433D2;
+        Mon, 27 Mar 2023 08:18:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679905112;
+        bh=9t0cjx0L/FLsmroHFm0u19SkOnzyUFj2X8tdR02p+qM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZAAkBg8eewEHp+8nMBEQ9oRlD3ru3FHPTjBRPNlZwQFK+6B3aDZRR1SjIHSTcKL8v
+         krj/05l/1aWuHhZNGf6Jpa6VX2w8Fi/Wnw/BT7/Wmo3jbjYXSojamPKqnEstJ+xmMb
+         FwIMr65Ni3/l1+cMZyIf8MwdQVTJfrwIowYClWI0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH] driver core: class: fix documentation for class_create()
+Date:   Mon, 27 Mar 2023 10:18:28 +0200
+Message-Id: <20230327081828.1087364-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3,6/7] media: mediatek: vcodec: Change dbgfs interface to
- support encode
-Content-Language: en-US
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230327055315.13936-1-yunfei.dong@mediatek.com>
- <20230327055315.13936-7-yunfei.dong@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230327055315.13936-7-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1215; i=gregkh@linuxfoundation.org; h=from:subject; bh=9t0cjx0L/FLsmroHFm0u19SkOnzyUFj2X8tdR02p+qM=; b=owGbwMvMwCRo6H6F97bub03G02pJDCmKgUEMgZ/E1aI9vmhL9K36lV4nxmR0UcQkrd5r43pj6 Svl7+o7YlkYBJkYZMUUWb5s4zm6v+KQopeh7WmYOaxMYEO4OAVgIh+PMiw4avZ3x77EbytvT1sQ Hr9nm7kgr8kvhrliTt+VZ8Vx2nyI1thxtVayZk20WxwA
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/03/23 07:53, Yunfei Dong ha scritto:
-> Extend dbgfs init interface to support encode and create encode
-> dbgfs file.
-> 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+In commit dcfbb67e48a2 ("driver core: class: use lock_class_key already
+present in struct subsys_private") we removed the key parameter to the
+function class_create() but forgot to remove it from the kerneldoc,
+which causes a build warning.  Fix that up by removing the key parameter
+from the documentation as it is now gone.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: dcfbb67e48a2 ("driver core: class: use lock_class_key already present in struct subsys_private")
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/base/class.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/base/class.c b/drivers/base/class.c
+index dbaeb79ae917..0f8938a17144 100644
+--- a/drivers/base/class.c
++++ b/drivers/base/class.c
+@@ -223,7 +223,6 @@ static void class_create_release(struct class *cls)
+ /**
+  * class_create - create a struct class structure
+  * @name: pointer to a string for the name of this class.
+- * @key: the lock_class_key for this class; used by mutex lock debugging
+  *
+  * This is used to create a struct class pointer that can then be used
+  * in calls to device_create().
+-- 
+2.40.0
 
