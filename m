@@ -2,55 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178D56C9E85
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 537326C9E83
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233257AbjC0ItA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
+        id S233324AbjC0Isx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233328AbjC0Isa (ORCPT
+        with ESMTP id S233175AbjC0Is3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:48:30 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CAF9036
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:45:14 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679906669;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=2sySZtQBfq4L19gj/4gjZ3ggLK9raMfJSFg59Wjh2eU=;
-        b=PC1Fc8oyBCQtNOG/RnSIyDobcxaq7sMrCF1hF+CwvZPusMXk3D5P/LTBXewhtj7bNe4fVB
-        S7EyLoO+7d5gI/uO00+66r0SOEQ1nvCEANuJ3QPNHhB1WQ96YZ5z9EKnR5qVFMBanGbqDX
-        rvW0Tz3EeCoqCROjgXWGVnYMcsU1cpwl67gLTxd1FvsxFg/1kEnnte8u6Z0KGd9muZyi/p
-        cfPp6HueDZ4WUX+WIqBS54k7cL2jSfiPitT3sIxEjRcVJk4GOGbcHDmJiyFSZ7wlrK64Zi
-        f3M8F42H3SCSM4HvI8cKlYKKxFSyjX8WThZMnvyc2ERzcYAmjtxg/snBuNML9Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679906669;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=2sySZtQBfq4L19gj/4gjZ3ggLK9raMfJSFg59Wjh2eU=;
-        b=2Ow1ZUN2AJU6ec7XoFSU8BgyUDtigL8sf39ypFZkE/5U6DU1vxTwZ+GirXQ594h0jEES5u
-        aVhREx4DPqz5lNBw==
-To:     Tanmay Bhushan <007047221b@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Tanmay Bhushan <007047221b@gmail.com>
-Subject: Re: [PATCH] drm/nouveau: Fix bug in buffer relocs for Nouveau
-In-Reply-To: <20230119225351.71657-1-007047221b@gmail.com>
-Date:   Mon, 27 Mar 2023 10:48:48 +0206
-Message-ID: <87r0taa8l3.fsf@jogness.linutronix.de>
+        Mon, 27 Mar 2023 04:48:29 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7658A6E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:45:11 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id c29so10329116lfv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:45:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679906671;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KLrKAr+c7u8+WkfYnvdsqKkhxaW/xmaQn97MpcR7do8=;
+        b=rdogzM223NHg8iJx7iIN2LHYZn7tUjiFtUG9eoMoJTXpUK32coL01Ru11TIQbmWWOP
+         VKCBJBjnt0SQEZ3jeNQWQSALELd1RJCWRVgVn5znTCUioLfpT5I0pAyE8nVsXnrhvKmr
+         XXgxpsb4MRhJh5W7tj4qpUxPjzCwZVvDNePFeope9K0zHDiXNlVpl737EvCassslHUg/
+         4W369SCxed9tNg11GGBDRgExuMDsWuUwhXXkhzt5n/M81kMTIY/z7xfX0UClA/VP5+Nc
+         /Ju/SXpvGo/WX1n7Lqu9BfXvCK8EGnvBX5HwtyTr5/ygFq0ofey+MgrlvL3bDLKUud6y
+         d8Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679906671;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KLrKAr+c7u8+WkfYnvdsqKkhxaW/xmaQn97MpcR7do8=;
+        b=CLJ4UNC4lmyVc3V7oiCqRed6RjY0UBKoFXZjE8X0ncqg3zBOiUARPtwoDjVB20sBIY
+         UL6j7xMtdod2iJ6yHAvvsFMgYwrKTYlRh4qQf46vdbkpGCvcdMRue2uZyvdPgsUWMzbb
+         pOrujEwL4yN2vwA45bLDNhCIQLOEPJAOIiIAHhgFS45Jl/MxHAOzFI3ZXXwUx29aoK2t
+         /HGlxulyYXIQAozMwrie0N4uVI2ay9aEqf/C/LA76BBL/trU7KZMxd8nqLJFP2AEiI6x
+         T2WW8OgqAYTQ0Ogk00gojZ+3oAjpqLLSf3Z/UmTzJ4r/rpx4OEwJdOwtweUL52O2YCiQ
+         3ujQ==
+X-Gm-Message-State: AAQBX9dNKYGUcMSj/RIvn0YUw5DeNovFCcEZxwfR+gV/7ifweNqcRw2n
+        h0LQpeUAHWq5uT90V5pinuMY6g==
+X-Google-Smtp-Source: AKy350ZGT9cY4UQC0D9IPOa/NyJ/hHznWUNEoPQIk9+IaHao2iitH0e524xsgtLK7ODG9AmvF+W5MA==
+X-Received: by 2002:ac2:46f9:0:b0:4e9:d719:3603 with SMTP id q25-20020ac246f9000000b004e9d7193603mr3463966lfo.55.1679906671138;
+        Mon, 27 Mar 2023 01:44:31 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id r10-20020a19ac4a000000b004b5979f9ba8sm4591731lfc.210.2023.03.27.01.44.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 01:44:30 -0700 (PDT)
+Message-ID: <a27e7e67-a3e8-01ec-1f0d-717d705af117@linaro.org>
+Date:   Mon, 27 Mar 2023 10:44:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/2] remoteproc: qcom: pas: add SDM845 SLPI resource
+Content-Language: en-US
+To:     Dylan Van Assche <me@dylanvanassche.be>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230325132117.19733-1-me@dylanvanassche.be>
+ <20230325132117.19733-3-me@dylanvanassche.be>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230325132117.19733-3-me@dylanvanassche.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,88 +83,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-19, Tanmay Bhushan <007047221b@gmail.com> wrote:
-> dma_resv_wait_timeout returns greater than zero on success
-> as opposed to ttm_bo_wait_ctx. As a result of that relocs
-> will fail and give failure even when it was a success.
 
-Today I switched my workstation from 6.2 to 6.3-rc3 and started seeing
-lots of new kernel messages:
 
-[  642.138313][ T1751] nouveau 0000:f0:10.0: X[1751]: reloc wait_idle failed: 1500
-[  642.138389][ T1751] nouveau 0000:f0:10.0: X[1751]: reloc apply: 1500
-[  646.123490][ T1751] nouveau 0000:f0:10.0: X[1751]: reloc wait_idle failed: 1500
-[  646.123573][ T1751] nouveau 0000:f0:10.0: X[1751]: reloc apply: 1500
-
-The graphics seemed to go slower or hang a bit when these messages would
-appear. I then found your patch! However, I have some comments about it.
-
-First, it should include a fixes tag:
-
-Fixes: 41d351f29528 ("drm/nouveau: stop using ttm_bo_wait")
-
-> Signed-off-by: Tanmay Bhushan <007047221b@gmail.com>
+On 25.03.2023 14:21, Dylan Van Assche wrote:
+> Add SLPI resources for the SDM845 Qualcomm SoC to the Qualcomm
+> remoteproc q6v5_pas driver to define the default firmware name
+> and GLink edge name.
+> 
+> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
 > ---
->  drivers/gpu/drm/nouveau/nouveau_gem.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_gem.c b/drivers/gpu/drm/nouveau/nouveau_gem.c
-> index f77e44958037..0e3690459144 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_gem.c
-> +++ b/drivers/gpu/drm/nouveau/nouveau_gem.c
-> @@ -706,9 +706,8 @@ nouveau_gem_pushbuf_reloc_apply(struct nouveau_cli *cli,
->  		ret = dma_resv_wait_timeout(nvbo->bo.base.resv,
->  					    DMA_RESV_USAGE_BOOKKEEP,
->  					    false, 15 * HZ);
-> -		if (ret == 0)
-> +		if (ret <= 0) {
->  			ret = -EBUSY;
+>  drivers/remoteproc/qcom_q6v5_pas.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+> index c99a20542685..d82b6f4bced4 100644
+> --- a/drivers/remoteproc/qcom_q6v5_pas.c
+> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+> @@ -1028,6 +1028,22 @@ static const struct adsp_data slpi_resource_init = {
+>  		.ssctl_id = 0x16,
+>  };
+>  
+> +static const struct adsp_data sdm845_slpi_resource = {
+> +		.crash_reason_smem = 424,
+> +		.firmware_name = "slpi.mdt",
+> +		.pas_id = 12,
+> +		.auto_boot = true,
+> +		.proxy_pd_names = (char*[]){
+> +			"lcx",
+> +			"lmx",
+> +			NULL
+> +		},
+> +		.load_state = "slpi",
+> +		.ssr_name = "dsps",
+> +		.sysmon_name = "slpi",
+> +		.ssctl_id = 0x16,
+Isn't this identical to sm8150_slpi_resource?
 
-This is incorrect for 2 reasons:
-
-* it treats restarts as timeouts
-
-* this function now returns >0 on success
-
-> -		if (ret) {
->  			NV_PRINTK(err, cli, "reloc wait_idle failed: %ld\n",
->  				  ret);
->  			break;
-
-I rearranged things to basically correctly translate the return code of
-dma_resv_wait_timeout() to match the previous ttm_bo_wait():
-
-		ret = dma_resv_wait_timeout(nvbo->bo.base.resv,
-					    DMA_RESV_USAGE_BOOKKEEP,
-					    false, 15 * HZ);
-		if (ret == 0)
-			ret = -EBUSY;
-		if (ret > 0)
-			ret = 0;
-		if (ret) {
-			NV_PRINTK(err, cli, "reloc wait_idle failed: %ld\n",
-				  ret);
-			break;
-		}
-
-So the patch just becomes:
-
-@@ -708,6 +708,8 @@ nouveau_gem_pushbuf_reloc_apply(struct n
- 					    false, 15 * HZ);
- 		if (ret == 0)
- 			ret = -EBUSY;
-+		if (ret > 0)
-+			ret = 0;
- 		if (ret) {
- 			NV_PRINTK(err, cli, "reloc wait_idle failed: %ld\n",
- 				  ret);
-
-With this variant, everything runs correctly on my workstation again.
-
-It probably deserves a comment about why @ret is being translated. Or
-perhaps a new variable should be introduced to separate the return value
-of dma_resv_wait_timeout() from the return value of this function.
-
-Either way, this is an important fix for 6.3-rc!
-
-John Ogness
+Konrad
+> +};
+> +
+>  static const struct adsp_data sm8150_slpi_resource = {
+>  		.crash_reason_smem = 424,
+>  		.firmware_name = "slpi.mdt",
+> @@ -1201,6 +1217,7 @@ static const struct of_device_id adsp_of_match[] = {
+>  	{ .compatible = "qcom,sdm660-adsp-pas", .data = &adsp_resource_init},
+>  	{ .compatible = "qcom,sdm845-adsp-pas", .data = &sdm845_adsp_resource_init},
+>  	{ .compatible = "qcom,sdm845-cdsp-pas", .data = &sdm845_cdsp_resource_init},
+> +	{ .compatible = "qcom,sdm845-slpi-pas", .data = &sdm845_slpi_resource},
+>  	{ .compatible = "qcom,sdx55-mpss-pas", .data = &sdx55_mpss_resource},
+>  	{ .compatible = "qcom,sm6115-adsp-pas", .data = &adsp_resource_init},
+>  	{ .compatible = "qcom,sm6115-cdsp-pas", .data = &cdsp_resource_init},
