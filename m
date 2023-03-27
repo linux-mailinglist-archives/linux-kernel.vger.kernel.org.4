@@ -2,267 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B376CA7B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6ACE6CA763
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232199AbjC0Obv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
+        id S232493AbjC0OUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjC0Obr (ORCPT
+        with ESMTP id S230287AbjC0OT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:31:47 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B54A422F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:31:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679927504; x=1711463504;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZzKtHhDArkoXCCLzATYG9vE13jPDCh6NMhFB6ze5+nY=;
-  b=NC7O6XLNWeOUIFuOA6KT59cXdvwSuL70qCkF7W0/rhRSABha6xDNGS61
-   mvRjs+Lw/E/vf3CUilL2k4cZLTBhgcf432NNHu7EcjnAuCbDCYvTQ8Lbh
-   YdASbXR5MoBypRoQLv6gMLh5qi2vsEsKk/r5YCV/XA+8Kv1FD1U1yng/+
-   sknPgpwKPWmW6WbivDZQkgcDrmYqHMJGzcf9X/pBw688iB4DORaExplqx
-   7BoQliK7SrmObLCgsTIWIWyvPKoW1UNwrQb8Ee5glWCwOySDTdxV0+3+1
-   BX1stAjFSIn/l/MvvMAa0/6YR2t3Y8OEuZrGC1hU1tFf+f25o+2n0VIFi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="320677860"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="320677860"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 07:30:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="676982848"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="676982848"
-Received: from dchheda-mobl2.amr.corp.intel.com (HELO [10.212.176.72]) ([10.212.176.72])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 07:30:58 -0700
-Message-ID: <18a04b79-bbba-2f58-8e9c-5446aa0eb34d@linux.intel.com>
-Date:   Mon, 27 Mar 2023 09:20:39 -0500
+        Mon, 27 Mar 2023 10:19:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F442722;
+        Mon, 27 Mar 2023 07:17:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2CC7B815F3;
+        Mon, 27 Mar 2023 14:17:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5456C433EF;
+        Mon, 27 Mar 2023 14:17:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679926658;
+        bh=ST6/Tf0Hd9KxwNCo9HY/s+ET1/l38vy0oeHUythJylI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KQ6IaZFvjr7xiN1RVix4oLQO7K1Vr9gUYuIiuoHmzBFbay7taWsNJO0Um/mXYW3hg
+         rGCWQ6lc36khTW7dQo6RSK/O2ePhFgGcV4K/KpYunPcbEJdU5foBGsH1XmMXILjCE0
+         gi16UwCMXipAXicUYe+/9sCMihX6ap+lEXbzfeVKwa+YT0d9hH8UodmRrz+F903aJK
+         ghXhtorKg3HmFFtdG50t2LMYfm/BMJrD0qHk/2+UUxZBgKbxNw077/TPVIkZSbhqfi
+         XnOAKnT5/QCHwRK0HQa9MKnqt7q3GhGs2Um4VsQroi15ueLqhlBKGhdcvcMK5yeCym
+         b1jLBac/PGuuA==
+Date:   Mon, 27 Mar 2023 07:20:43 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 12/12] arm64: dts: qcom: sc8180x: Introduce Lenovo
+ Flex 5G
+Message-ID: <20230327142043.4q62vfcd2557caen@ripper>
+References: <20230325122444.249507-1-vkoul@kernel.org>
+ <20230325122444.249507-13-vkoul@kernel.org>
+ <cf4feba0-de96-9e81-592b-e4b7520340a6@linaro.org>
+ <ZCEs57ttv67KfOua@matsya>
+ <84bcb9a7-40f7-b692-0f06-4075b27b5b7e@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [PATCH v8] ASoC: tas2781: Add tas2781 driver
-Content-Language: en-US
-To:     Shenghao Ding <13916275206@139.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, perex@perex.cz
-Cc:     kevin-lu@ti.com, shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
-        navada@ti.com
-References: <20230327105157.21752-1-13916275206@139.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230327105157.21752-1-13916275206@139.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <84bcb9a7-40f7-b692-0f06-4075b27b5b7e@linaro.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code looks much better, and now that you've replaced all the -1
-error codes with -EINVAL or -ENOMEM we can see clearly cases with memory
-leaks in the error handling path.
+On Mon, Mar 27, 2023 at 10:51:38AM +0200, Konrad Dybcio wrote:
+> On 27.03.2023 07:43, Vinod Koul wrote:
+> > On 25-03-23, 13:40, Konrad Dybcio wrote:
+> >> On 25.03.2023 13:24, Vinod Koul wrote:
+> >>> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+[..]
+> >>> +&dispcc {
+> >>> +	status = "okay";
+> >> Any reason for disabling dispcc by default?
+> > 
+> > I think that is a good question. I would prefer disabling and enabling
+> > in places it is required, we might have a headless system or a dev board
+> > where we dont have display..?
+> It's a double-edged sword: on one side we could disable clocks that were
+> mistakenly enabled, but on the other hand we do keep some some clocks
+> always-on within that driver..
+> 
+> Perhaps leave it on by default and shut it off per-board if need be.
+> 
 
-> +	/* Skip the unused prog_size */
-> +	offset += (4 * (TASDEVICE_MAXPROGRAM_NUM_KERNEL -
-> +		tas_fmw->nr_programs));
-> +
-> +	if (offset + 4 > fmw->size) {
-> +		dev_err(tas_dev->dev, "%s: Configurations error\n", __func__);
-> +		offset = -EINVAL;
-> +		goto out;
-> +	}
-> +	tas_fmw->nr_configurations = SMS_HTONL(buf[offset], buf[offset + 1],
-> +		buf[offset + 2], buf[offset + 3]);
-> +	offset += 4;
-> +
-> +	/* The max of conf for more than equal to 4 pcs of tas2781s is
-> +	 * different from the one less than 4 pcs of tas2781s.
-> +	 */
+There is a little bit of overhead in keeping the clock controllers
+enabled at all times, but I expect it to benefit us in that it would
+ensure that any clocks that the bootloader might have left on will be
+disabled.
 
-Consider rewording, this comment is just confusing. Not sure what 'pcs'
-means here, and "more than equal' and 'one less than' should be replaced
-by 'greater than' and 'lower than'.
+So, I think we should go with enable by default and leave enabled.
 
-> +static int fw_parse_data(struct tasdevice_fw *tas_fmw,
-> +	struct tasdevice_data *img_data, const struct firmware *fmw,
-> +	int offset)
-> +{
-> +	const unsigned char *data = (unsigned char *)fmw->data;
-> +	struct tasdev_blk *blk;
-> +	unsigned int i;
-> +	int n;
-> +
-> +	if (offset + 64 > fmw->size) {
-> +		dev_err(tas_fmw->dev, "%s: Name error\n", __func__);
-> +		offset = -EINVAL;
-> +		goto out;
-> +	}
-> +	memcpy(img_data->name, &data[offset], 64);
-> +	offset += 64;
-> +
-> +	n = strlen((char *)&data[offset]);
-> +	n++;
-> +	if (offset + n > fmw->size) {
-> +		dev_err(tas_fmw->dev, "%s: Description error\n", __func__);
-> +		offset = -EINVAL;
-> +		goto out;
-> +	}
-> +	offset += n;
-> +
-> +	if (offset + 2 > fmw->size) {
-> +		dev_err(tas_fmw->dev, "%s: Blocks error\n", __func__);
-> +		offset = -EINVAL;
-> +		goto out;
-> +	}
-> +	img_data->nr_blk = SMS_HTONS(data[offset], data[offset + 1]);
-> +	offset += 2;
-> +
-> +	img_data->dev_blks = kcalloc(img_data->nr_blk,
-> +		sizeof(struct tasdev_blk), GFP_KERNEL);
-> +	if (!img_data->dev_blks) {
-> +		offset = -ENOMEM;
-> +		goto out;
-> +	}
-> +	for (i = 0; i < img_data->nr_blk; i++) {
-> +		blk = &(img_data->dev_blks[i]);
-> +		offset = fw_parse_block_data(tas_fmw, blk, fmw, offset);
-> +		if (offset < 0) {
-> +			offset = -EINVAL;
-> +			goto out;
-> +		}
-> +	}
-> +
-> +out:
-> +	return offset;
-
-memory leak on img_data->dev_blks, you need to free memory in the error
-handling path.
-
-> +}
-> +
-> +static int fw_parse_calibration_data(struct tasdevice_priv *tas_dev,
-> +	struct tasdevice_fw *tas_fmw, const struct firmware *fmw, int offset)
-> +{
-> +	struct tasdevice_calibration *calibration;
-> +	unsigned char *data = (unsigned char *)fmw->data;
-> +	unsigned int i, n;
-> +
-> +	if (offset + 2 > fmw->size) {
-> +		dev_err(tas_dev->dev, "%s: Calibrations error\n", __func__);
-> +		offset = -EINVAL;
-> +		goto out;
-> +	}
-> +	tas_fmw->nr_calibrations = SMS_HTONS(data[offset], data[offset + 1]);
-> +	offset += 2;
-> +
-> +	if (tas_fmw->nr_calibrations != 1) {
-> +		dev_err(tas_dev->dev,
-> +			"%s: only support one calibraiton(%d)!\n",
-> +			__func__, tas_fmw->nr_calibrations);
-> +		goto out;
-> +	}
-> +
-> +	tas_fmw->calibrations = kcalloc(tas_fmw->nr_calibrations,
-> +		sizeof(struct tasdevice_calibration), GFP_KERNEL);
-> +	if (!tas_fmw->calibrations) {
-> +		offset = -ENOMEM;
-> +		goto out;
-> +	}
-> +	for (i = 0; i < tas_fmw->nr_calibrations; i++) {
-> +		if (offset + 64 > fmw->size) {
-> +			dev_err(tas_dev->dev, "Calibrations error\n");
-> +			offset = -EINVAL;
-
-memory leak on tas_fmw->calibrations, you need to change the error
-handling path.
-
-> +			goto out;
-> +		}
-> +		calibration = &(tas_fmw->calibrations[i]);
-> +		offset += 64;
-> +
-> +		n = strlen((char *)&data[offset]);
-> +		n++;
-> +		if (offset + n > fmw->size) {
-> +			dev_err(tas_dev->dev, "Description err\n");
-> +			offset = -EINVAL;
-> +			goto out;
-> +		}
-> +		offset += n;
-> +
-> +		if (offset + 1 > fmw->size) {
-> +			dev_err(tas_dev->dev, "%s: Prog err, offset = %d\n",
-> +				__func__, offset);
-> +			offset = -EINVAL;
-> +			goto out;
-> +		}
-> +		offset++;
-> +
-> +		if (offset + 1 > fmw->size) {
-> +			dev_err(tas_dev->dev, "%s: Conf err, offset = %d\n",
-> +				__func__, offset);
-> +			offset = -EINVAL;
-> +			goto out;
-> +		}
-> +		offset++;
-> +
-> +		offset = fw_parse_data(tas_fmw, &(calibration->dev_data), fmw,
-> +			offset);
-> +		if (offset < 0)
-> +			goto out;
-> +	}
-> +
-> +out:
-> +	return offset;
-> +}
-> +
-> +static int fw_parse_program_data(struct tasdevice_priv *tas_dev,
-> +	struct tasdevice_fw *tas_fmw, const struct firmware *fmw, int offset)
-> +{
-> +	unsigned char *buf = (unsigned char *)fmw->data;
-> +	struct tasdevice_prog *program;
-> +	int i;
-> +
-> +	if (offset + 2 > fmw->size) {
-> +		dev_err(tas_dev->dev, "%s: File Size error\n", __func__);
-> +		offset = -EINVAL;
-> +		goto out;
-> +	}
-> +	tas_fmw->nr_programs = SMS_HTONS(buf[offset], buf[offset + 1]);
-> +	offset += 2;
-> +
-> +	if (tas_fmw->nr_programs == 0) {
-> +		/*Not error in calibration Data file, return directly*/
-> +		dev_info(tas_dev->dev, "%s: No Programs data, maybe calbin\n",
-> +			__func__);
-> +		goto out;
-> +	}
-> +
-> +	tas_fmw->programs =
-> +		kcalloc(tas_fmw->nr_programs, sizeof(struct tasdevice_prog),
-> +			GFP_KERNEL);
-> +	if (!tas_fmw->programs) {
-> +		offset = -ENOMEM;
-> +		goto out;
-> +	}
-> +	for (i = 0; i < tas_fmw->nr_programs; i++) {
-> +		int n = 0;
-> +
-> +		program = &(tas_fmw->programs[i]);
-> +		if (offset + 64 > fmw->size) {
-> +			dev_err(tas_dev->dev, "%s: mpName error\n", __func__);
-> +			offset = -EINVAL;
-> +			goto out;
-
-and memory leak here as well.
-
-Stopping the review here, please revisit the error handling. you
-probably need two labels when memory is allocated, and a kfree() for one
-of the two.
+Regards,
+Bjorn
