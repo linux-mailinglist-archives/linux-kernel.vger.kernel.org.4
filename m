@@ -2,124 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8636CA900
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 162B86CA902
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbjC0Pah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 11:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S232825AbjC0Pak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 11:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232734AbjC0Paf (ORCPT
+        with ESMTP id S232787AbjC0Pag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:30:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 972AD3C15
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:30:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B582C14;
-        Mon, 27 Mar 2023 08:31:17 -0700 (PDT)
-Received: from [10.57.65.10] (unknown [10.57.65.10])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6BE0A3F6C4;
-        Mon, 27 Mar 2023 08:30:32 -0700 (PDT)
-Message-ID: <d347c5b0-0c0f-ae50-9613-2cf962d8676e@arm.com>
-Date:   Mon, 27 Mar 2023 16:30:30 +0100
+        Mon, 27 Mar 2023 11:30:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC433A80;
+        Mon, 27 Mar 2023 08:30:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B19AD6132A;
+        Mon, 27 Mar 2023 15:30:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF6F5C433D2;
+        Mon, 27 Mar 2023 15:30:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679931035;
+        bh=JHargJmoV2rpLqiVYrLlfoessqmQMDUkG266orZF8xo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j3j9dFtzDxvAAtciOQtbBmZjKSjWKnOTy+3e4aHO6Fmezj0zAi2fcTv9TLgM8lNy2
+         qkt6NeYsF/zz5nxm1yLa+7aHfSMN9xg9tfOYl2bRP6/mtQU/oBTze8t8pDsxylTU2o
+         ibYGcJaZ5s4TCXDHu2fyK3jo/5YQZ3hMsDDplKqI1TVq4v2R2KYeNdjIP0wcekub5D
+         mG7XeAFqxJQXa3GWSC2PHfAlwHMhyoIBWGrhKtyZcA4JQ1eqvRzfPsbG3Eph2N0960
+         Iwo+afIagZqqjn7OBpArjS2WzGKaYdY901NYtIAWSFJUNRpbvY0cqgdq/b3Go0Lefa
+         wmYIq5aY82yvg==
+Date:   Mon, 27 Mar 2023 08:30:33 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, stable@vger.kernel.org,
+        willy@infradead.org
+Subject: Re: [f2fs-dev] [PATCH] f2fs: get out of a repeat loop when getting a
+ locked data page
+Message-ID: <ZCG2mfviZfY1dqb4@google.com>
+References: <20230323213919.1876157-1-jaegeuk@kernel.org>
+ <8aea02b0-86f9-539a-02e9-27b381e68b66@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: What size anonymous folios should we allocate?
-Content-Language: en-US
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <Y/U8bQd15aUO97vS@casper.infradead.org>
- <CAHbLzkrkZmbVMkh-Y-bDxgy0T0ZRRd+T+o5y5-wKmjKmhN0NmA@mail.gmail.com>
- <Y/WRlX+MkmxelNbg@casper.infradead.org>
- <022e1c15-7988-9975-acbc-e661e989ca4a@suse.cz>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <022e1c15-7988-9975-acbc-e661e989ca4a@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8aea02b0-86f9-539a-02e9-27b381e68b66@kernel.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2023 13:41, Vlastimil Babka wrote:
-> On 2/22/23 04:52, Matthew Wilcox wrote:
->> On Tue, Feb 21, 2023 at 03:05:33PM -0800, Yang Shi wrote:
->>
->>>> C. We add a new wrinkle to the LRU handling code.  When our scan of the
->>>>    active list examines a folio, we look to see how many of the PTEs
->>>>    mapping the folio have been accessed.  If it is fewer than half, and
->>>>    those half are all in either the first or last half of the folio, we
->>>>    split it.  The active half stays on the active list and the inactive
->>>>    half is moved to the inactive list.
->>>
->>> With contiguous PTE, every PTE still maintains its own access bit (but
->>> it is implementation defined, some implementations may just set access
->>> bit once for one PTE in the contiguous region per arm arm IIUC). But
->>> anyway this is definitely feasible.
->>
->> If a CPU doesn't have separate access bits for PTEs, then we should just
->> not use the contiguous bits.  Knowing which parts of the folio are
->> unused is more important than using the larger TLB entries.
+On 03/26, Chao Yu wrote:
+> On 2023/3/24 5:39, Jaegeuk Kim wrote:
+> > https://bugzilla.kernel.org/show_bug.cgi?id=216050
+> > 
+> > Somehow we're getting a page which has a different mapping.
+> > Let's avoid the infinite loop.
+> > 
+> > Cc: <stable@vger.kernel.org>
+> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > ---
+> >   fs/f2fs/data.c | 8 ++------
+> >   1 file changed, 2 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> > index bf51e6e4eb64..80702c93e885 100644
+> > --- a/fs/f2fs/data.c
+> > +++ b/fs/f2fs/data.c
+> > @@ -1329,18 +1329,14 @@ struct page *f2fs_get_lock_data_page(struct inode *inode, pgoff_t index,
+> >   {
+> >   	struct address_space *mapping = inode->i_mapping;
+> >   	struct page *page;
+> > -repeat:
+> > +
+> >   	page = f2fs_get_read_data_page(inode, index, 0, for_write, NULL);
+> >   	if (IS_ERR(page))
+> >   		return page;
+> >   	/* wait for read completion */
+> >   	lock_page(page);
+> > -	if (unlikely(page->mapping != mapping)) {
 > 
-> Hm but AFAIK the AMD aggregation is transparent, there are no bits. And IIUC
-> the "Hardware Page Aggregation (HPA)" Ryan was talking about elsewhere in
-> the thread, that sounds similar. So I IIUC there will be a larger TLB entry
-> transparently, and then I don't expect the CPU to update individual bits as
-> that would defeat the purpose. So I'd expect it will either set them all to
-> active when forming the larger TLB entry, or set them on a single subpage
-> and leave the rest at whatever state they were. Hm I wonder if the exact
-> behavior is defined anywhere.
+> How about using such logic only for move_data_page() to limit affect for
+> other paths?
 
-For arm64, at least, there are 2 separate mechanisms:
-
-"The Contiguous Bit" (D8.6.1 in the Arm ARM) is a bit in the translation table
-descriptor that SW can set to indicate that a set of adjacent entries are
-contiguous and have same attributes and permissions etc. It is architectural.
-The order of the contiguous range is fixed and depends on the base page size
-that is in use. When in use, HW access and dirty reporting is only done at the
-granularity of the contiguous block.
-
-"HPA" is a micro-architectural feature on some Arm CPUs, which aims to do a
-similar thing, but is transparent to SW. In this case, the dirty and access bits
-remain per-page. But when they differ, this affects the performance of the feature.
-
-Typically HPA can coalesce up to 4 adjacent entries, whereas for a 4KB base page
-at least, the contiguous bit applies to 16 adjacent entries.
-
-I'm hearing that there are workloads where being able to use the contiguous bit
-really does make a difference, so I would like to explore solutions that can
-work when we only have access/dirty at the folio level.
-
-Thanks,
-Ryan
-
-
+Why move_data_page() only? If this happens, we'll fall into a loop in anywhere?
 
 > 
->>>> For the third case, in contrast, the parent had already established
->>>> an appropriate size folio to use for this VMA before calling fork().
->>>> Whether it is the parent or the child causing the COW, it should probably
->>>> inherit that choice and we should default to the same size folio that
->>>> was already found.
->>>
->>> Actually this is not what THP does now. The current THP behavior is to
->>> split the PMD then fallback to order-0 page fault. For smaller orders,
->>> we may consider allocating a large folio.
->>
->> I know it's not what THP does now.  I think that's because the gap
->> between PMD and PAGE size is too large and we end up wasting too much
->> memory.  We also have very crude mechanisms for determining when to
->> use THPs.  With the adaptive mechanism I described above, I think it's
->> time to change that.
->>
->>
-> 
+> Jaegeuk, any thoughts about why mapping is mismatch in between page's one and
+> inode->i_mapping?
 
+> 
+> After several times code review, I didn't get any clue about why f2fs always
+> get the different mapping in a loop.
+
+I couldn't find the path to happen this. So weird. Please check the history in the
+bug.
+
+> 
+> Maybe we can loop MM guys to check whether below folio_file_page() may return
+> page which has different mapping?
+
+Matthew may have some idea on this?
+
+> 
+> struct page *pagecache_get_page(struct address_space *mapping, pgoff_t index,
+> 		int fgp_flags, gfp_t gfp)
+> {
+> 	struct folio *folio;
+> 
+> 	folio = __filemap_get_folio(mapping, index, fgp_flags, gfp);
+> 	if (IS_ERR(folio))
+> 		return NULL;
+> 	return folio_file_page(folio, index);
+> }
+> 
+> Thanks,
+> 
+> > -		f2fs_put_page(page, 1);
+> > -		goto repeat;
+> > -	}
+> > -	if (unlikely(!PageUptodate(page))) {
+> > +	if (unlikely(page->mapping != mapping || !PageUptodate(page))) {
+> >   		f2fs_put_page(page, 1);
+> >   		return ERR_PTR(-EIO);
+> >   	}
