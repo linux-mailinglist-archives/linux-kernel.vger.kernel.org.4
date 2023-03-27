@@ -2,68 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49C26CA528
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8242D6CA52C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbjC0NFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
+        id S231359AbjC0NGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232134AbjC0NFg (ORCPT
+        with ESMTP id S229985AbjC0NGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:05:36 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C368710CC
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:05:33 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5445009c26bso168865937b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:05:33 -0700 (PDT)
+        Mon, 27 Mar 2023 09:06:30 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC75A9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:06:29 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id ek18so35917131edb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:06:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679922333;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1kI4+ZML1G+b7UOhhIPy0YcoMp05rWzeHpNMkjZ5sBM=;
-        b=eGJbxFAKr99gaJCfSPpVY6tAXOC7kz1Z46129jPkjmRZI15o7BPYTsYLErf27oMdMa
-         GUEx4Rgn5/dQ3LeRfTITSn6S4uYMdJTLqtSnS79SyCvaq9ls8IPQA9fMDTQYAVVwHjp/
-         pWBmRSCoqH8ZuxqsM+EWBOBvuqrG5hXlmmh/bLryQcUo7seFk9YLrZYAL3zrNhsY7KUl
-         rJ7mXz6/dF/TQIgEAZ0ih4evyEwWOaEINft6m0VhmKRaCDqvCs0ZrTztGn/ax1nenvjn
-         btfKj1Rr6PjxEIWbe6qXRwEdnO9jN3lzWNpK9PXsdPMDIBW9xys9iXb/AMtMBSq2emOU
-         mi8Q==
+        d=tessares.net; s=google; t=1679922388;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cBRzSjF1ItIhFkB/xfzfFNBgliDQkj3K2tL0x/5xLLA=;
+        b=JwHQ5CYDRZgnqIABG/vIRSL/jAk6QRm9Ebi1hd8dh6gsxeEtqS4/fNF3/nuK7dv2N2
+         C++uIegHeA6s3eTPmJ8a8MzVHXjS7rfZeROG9dxb5N8U3M+dqTP+gQKVbqEIYn4wAI5y
+         uIHv78JsTM90s+XP8FAz7yyYcmJjIBps8CdNdpfWzBY4VUFnuc8vGX6F8OlG0gMaCSAK
+         mAeBcIRaXARtMzmwonZhHcGSqauZhRaBZdDFuzsUV8cIBrgqzNToy8KhOz54/YZtyKev
+         FXlT3YWbKnVP34us4nth/s6kuNa762qNOJv2WXyoOqLsTL8PdTecUgCqJxlUs+pC6wek
+         MzKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679922333;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1kI4+ZML1G+b7UOhhIPy0YcoMp05rWzeHpNMkjZ5sBM=;
-        b=1hP444GZV7rdLDkH98eeyShOvgiFRoXmSpPOUGDrwH50U680O4VNPMLSlJrrXljlhJ
-         s2gxlklli7Ktwg7F2hMO3EyDiXzN+kvFMRGjKCBccNngyLe62hwQN0lvUDSvkURvtO+z
-         hYmXiqUlkn8FedSZwvBT/34IpyD2Fj1utDIGwEpIVyFr5zaWozFjyTiWEDHbQzVtasRT
-         tyNh4Qd5BB4/eZVqxtLEdE8qS/xJkClc9BwyYdtO0y+ZtyfJHqoTQChIygzc25lnlcWK
-         OzE/T5Ro/74wp1y8EGOFlRMc3uN4+frTHm+Hew+VH+pzbNf+XvhKWx08q38A+mm406Sg
-         h23g==
-X-Gm-Message-State: AAQBX9cubzZZT3olrkh+qqrqDbLAS8AfrIC0xTPaMCOQCHrMcidT7fox
-        ia2xPyMDTNL9jUNknCbRZui/Wooo+pZbWkpq/e8=
-X-Google-Smtp-Source: AKy350Z4VggKyeXerp4WTMHkr70rECNj3yJhtgG+y0uIKDVAuijNVMVhTx7ee5r0HbhuJJ+bP33wjPL819meQ/JtP90=
-X-Received: by 2002:a81:ae4f:0:b0:545:ed8e:f4f6 with SMTP id
- g15-20020a81ae4f000000b00545ed8ef4f6mr1504273ywk.5.1679922332668; Mon, 27 Mar
- 2023 06:05:32 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679922388;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cBRzSjF1ItIhFkB/xfzfFNBgliDQkj3K2tL0x/5xLLA=;
+        b=SdVXxVcHJBd+kCfA+dUKf5vB6aYhxy6OPNZ5FZCucINVSHwgsMQEl5jpSfiHXlTfPV
+         KA98sCL9O+lmZlofZuGlcOKcTMtZIPD+cnQo68P3Lt2oc1X8yymjTNEwdeFZBW56If+b
+         nnmcRAITo9lCKeDv5UjpWMRcCBWeewmiK4aRcW7+OXgvnnuG0iLdu6ujOFeSYXXmnMHo
+         f1tvmnGsx+USUO4bjCe/Dajhmq3wyGHVWC42t41tyRNyvL80PHWkp242n0sLH76Wgoqj
+         hV4gouSUeh1CUvyXorBD2dF166vGf0p1oklzW3LIrYHGx03D8m7YCcLWApsf00i5VMzf
+         4BWg==
+X-Gm-Message-State: AAQBX9fLRyn/tgNBGvGEvs+f0CvV4xrwqs+9RH4Z9GAIVnuI1/yp6g/4
+        /Cw/MxAX3sXTNYaX+o1GeHb6Ew==
+X-Google-Smtp-Source: AKy350aubl4IeRos5yxV+0Tm1DFsUgWeynjATke5ZllIc+r07irJ1p6DoXT2tO0X3ANifJBSe5VRxA==
+X-Received: by 2002:a17:907:9626:b0:8a9:e031:c4ae with SMTP id gb38-20020a170907962600b008a9e031c4aemr14908672ejc.2.1679922387777;
+        Mon, 27 Mar 2023 06:06:27 -0700 (PDT)
+Received: from [10.44.2.5] ([81.246.10.41])
+        by smtp.gmail.com with ESMTPSA id s9-20020a170906454900b008f89953b761sm14066107ejq.3.2023.03.27.06.06.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 06:06:27 -0700 (PDT)
+Message-ID: <bf7546ab-6c76-05b0-4539-f4aa854ffae9@tessares.net>
+Date:   Mon, 27 Mar 2023 15:06:27 +0200
 MIME-Version: 1.0
-References: <ZA0FEyOtRBvpIXbi@bombadil.infradead.org> <CAFkjPTmVbyuA0jEAjYhsOsg-SE99yXgehmjqUZb4_uWS_L-ZTQ@mail.gmail.com>
- <ZBSc1jjYJn6noeMl@bombadil.infradead.org>
-In-Reply-To: <ZBSc1jjYJn6noeMl@bombadil.infradead.org>
-From:   Eric Van Hensbergen <ericvh@gmail.com>
-Date:   Mon, 27 Mar 2023 08:05:21 -0500
-Message-ID: <CAFkjPTmc-OgMEj9kF3y04sRGeOVO_ogEv1fGG=-CfKP-0ZKC_g@mail.gmail.com>
-Subject: Re: 9p caching with cache=loose and cache=fscache
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Josef Bacik <josef@toxicpanda.com>,
-        Jeff Layton <jlayton@kernel.org>, lucho@ionkov.net,
-        asmadeus@codewreck.org, v9fs-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/2] checkpatch: allow Closes tags with links
+Content-Language: en-GB
+To:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
+References: <20230314-doc-checkpatch-closes-tag-v2-0-f4a417861f6d@tessares.net>
+ <20230314-doc-checkpatch-closes-tag-v2-2-f4a417861f6d@tessares.net>
+ <2f96048b-c580-625f-6fc7-06237292efe3@leemhuis.info>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <2f96048b-c580-625f-6fc7-06237292efe3@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,84 +89,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, took a bit to unstack from day job, but while going through the
-patch queue I remembered I still had some questions to answer here.
+Hi Thorsten,
 
-On Fri, Mar 17, 2023 at 12:01=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.or=
-g> wrote:
->
-> On Sun, Mar 12, 2023 at 01:22:34PM -0500, Eric Van Hensbergen wrote:
-> > I was looking at kdevops the other day - cool stuff.  Was trying to
-> > figure out how we could do v9fs CI with it.
->
-> Happy to help any questions you may have about it!
->
-> > Both cache=3Dloose and cache=3Dfscache currently don't validate via hos=
-t.
->
-> What does this mean exactly?
->
+On 25/03/2023 07:25, Thorsten Leemhuis wrote:
+> On 24.03.23 19:52, Matthieu Baerts wrote:
+>> As a follow-up of the previous patch modifying the documentation to
+>> allow using the "Closes:" tag, checkpatch.pl is updated accordingly.
+>>
+>> checkpatch.pl now mentions the "Closes:" tag between brackets to express
+>> the fact it should be used only if it makes sense.
+>>
+>> While at it, checkpatch.pl will not complain if the "Closes" tag is used
+>> with a "long" line, similar to what is done with the "Link" tag.
+>>
+>> [...]
+>>  
+>> -# check if Reported-by: is followed by a Link:
+>> +# check if Reported-by: is followed by a Link: (or Closes:) tag
+> 
+> Small detail: why the parenthesis here? Why no simply "check if
+> Reported-by: is followed by a either Link: or Closes: tag". Same below...
+> 
+>>  			if ($sign_off =~ /^reported(?:|-and-tested)-by:$/i) {
+>>  				if (!defined $lines[$linenr]) {
+>>  					WARN("BAD_REPORTED_BY_LINK",
+>> -					     "Reported-by: should be immediately followed by Link: to the report\n" . $herecurr . $rawlines[$linenr] . "\n");
+>> -				} elsif ($rawlines[$linenr] !~ m{^link:\s*https?://}i) {
+>> +					     "Reported-by: should be immediately followed by Link: (or Closes:) to the report\n" . $herecurr . $rawlines[$linenr] . "\n");
+> 
+> ...here, where users actually get to see this and might wonder why it's
+> written like that, without getting any answer.
 
-That's a good question - I guess the answer is "by design" they don't
-do anything special to check that the cache is up to date with the
-host.  That being said, there are several places in the code where the
-cache will be invalidated (in some cases even if its up to date with
-the host, yes, those are likely bugs).  Many of the invalidations that
-are present are overly conservative.  The key missing one is
-v9fs_lookup_revalidate which currently fills missing inode data but
-should potentially also check to see if anything in the file changed
-and react accordingly.  The other thing is that we aren't always using
-the caches when we should, if you look at the traffic even when
-everything should be perfectly cached in fscache we are getting data
-and metadata from the wire -- those are mostly bugs in the cache
-implementation that I'm trying to go through and fix now.
+I tried to explain that in the cover-letter but maybe I should add an
+additional comment in the code: checkpatch.pl now mentions the "Closes:"
+tag between parenthesis to express the fact it should be used only if it
+makes sense. I didn't find any other short ways to express that but I'm
+open to suggestions.
 
-From the 9p perspective, we should be looking at qid.version values
-returned from the host and matching them to our internal notion of
-version.  If the versions don't match we should be invalidating
-caches.  qid.versions get returned on open, lookup, and most meta-data
-operations so there's lots of opportunities there.  There are still
-some issues with this approach, namely that not all servers populate
-qid.version and right now the ones that do use a hashed timestamp
-(since qid.version is only 32-bits).  This probably covers most bases,
-but its not ideal -- so currrently thinking through whether we do a
-further extension of the protocol or use some other mechanism.
-There's a possibility of using a full getattr every so often to
-back-up qid.version validation, but if we want truly tight coherence
-(not just open to close) then we need to open up some sort of back
-channel for invalidates from the server -- but I think the qid based
-invalidation probably gets us most of what we need so going to start
-with that.
+Now as discussed on patch 1/2, if the "Closes:" tag can be used with any
+public link, we should definitively remove the parenthesis here and
+probably below (see "Check for odd tags before a URI/URL") as well.
 
-> Right now a host with debian 6.0.0-6-amd64 certainly does not seem to pus=
-h
-> out changes to 9p clients on VMs but Josef informs me that with 6.2-rc8
-> he did see the changes propagate.
-
-I did tighten up some of the invalidation in the last round of
-patches, however these are likely more on the overly conservative side
-versus doing the right thing -- however, its really not at the point
-where you can rely on it.  If consistency is something you care about,
-I'd suggest cache=3Dnone until you can get cache=3Dreadahead.
-
->
-> Do none of the existing 9p cache modes not support open-to-close policies
-> at all?
->
-
-not specifically open-to-close, loose supports file and dir caching
-but without consistency, it might be tempting to try cache=3Dmmap to see
-if it gets you closer, but my frame of reference is more the current
-patches versus the old code so not sure it would buy you anything.
-
->
-> Right now the cache mode used is cache=3Dloose as that's the default,
-> what do you recommend for a typical kernel development environemnt?
->
-
-As I said, if you are interactively changing things I think you'd want
-to go for cache=3Dnone for now (as painful as it is).  I have fixed what
-I hope to be my last bug with the new patch series so it should be
-going into linux-next today.
-
-      -eric
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
