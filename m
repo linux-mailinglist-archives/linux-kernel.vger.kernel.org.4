@@ -2,76 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C5F6C9F21
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5F16C9F23
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233094AbjC0JNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S233038AbjC0JP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233038AbjC0JNd (ORCPT
+        with ESMTP id S232345AbjC0JPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:13:33 -0400
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFBC133;
-        Mon, 27 Mar 2023 02:13:31 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id qh28so6218224qvb.7;
-        Mon, 27 Mar 2023 02:13:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679908411;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Umb9hUbfu4RXL6KlGkF01LiyDptRngvjLvFGabW/70w=;
-        b=y1UaIbGx+4wKJ2wk2Hub37TFJ1cq0ubQFNw7MbfK5zJo7kamFg9kcUFo1bo6vX85GD
-         0NgtVXOjl3gB5GET1x1dEO1BbQ/CH9FmGeccEnci2nA2VVURepTTpTkSsoT8qaM4GJ3q
-         4ilX+X0FYhgvrI9fuHm3YDqUmmAPk+hEP0/bqbJ/2kdD4Wvj75zofWirmTv8jRSHgSF5
-         A3BuMEiadcNudFab+MhENmM2Liv1zZs473N+ffl8rb+t0sMIGsQJCz40ogT55jy66QKw
-         14hAnbjtRLZRQywLCBdnkCWOruVVgUNI6VVzsf0oaGpQ+gGMv1aVcDs1GOvdShvP2+CK
-         zXxg==
-X-Gm-Message-State: AAQBX9empRtKgnBzrEQiW2cufujT9sU1OJzbDNH4fokqny65V0xpg/3C
-        1s4HHHBMj8kT4Q8aU/J5Bi8=
-X-Google-Smtp-Source: AKy350Y06rMs/401uxhflhl8CYmN7DqjbNmD9t0V5jGwKE6OwXPeDLRcEQJJWCwLvw2M9hVJch4zPw==
-X-Received: by 2002:ad4:5dc1:0:b0:5ad:e777:1fc2 with SMTP id m1-20020ad45dc1000000b005ade7771fc2mr14569629qvh.15.1679908410637;
-        Mon, 27 Mar 2023 02:13:30 -0700 (PDT)
-Received: from maniforge ([24.1.27.177])
-        by smtp.gmail.com with ESMTPSA id t2-20020a374602000000b00746ac14e29asm6562753qka.5.2023.03.27.02.13.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 02:13:30 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 04:13:27 -0500
-From:   David Vernet <void@manifault.com>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     kernel-janitors@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        Jay Kamat <jgkamat@fb.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>, cocci@inria.fr,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] selftests: cgroup: Fix exception handling in
- test_memcg_oom_group_score_events()
-Message-ID: <20230327091327.GK363182@maniforge>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <c383bdca-6f0d-4a75-e788-e1920faa0a62@web.de>
- <fffcd98a-bb73-41cd-8545-0f2c55dd38f9@lucifer.local>
- <5b7921c9-ee5d-c372-b19b-2701bcf33148@web.de>
- <20230326213900.GJ363182@maniforge>
- <c46dbb48-259b-1de9-2364-9bfaf1061944@web.de>
+        Mon, 27 Mar 2023 05:15:24 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477AF3C26;
+        Mon, 27 Mar 2023 02:15:23 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id E602D5C00FE;
+        Mon, 27 Mar 2023 05:15:20 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 27 Mar 2023 05:15:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1679908520; x=1679994920; bh=A5
+        +gI2srvfn+f8eE2nwKRdqo4mc6G9sjufQGQbcwNyg=; b=aXkRMHccd8a4geZ+52
+        uwp9RwQecgEi3YJNVgKAQ+ZqZyt4Y2dAVO2gdQunyAGOPra/SG5mU0XkziDtZJay
+        VKAK4oMU7QQ27FHnmCpEkLRnsYbCi56S0ORgv3zejaQjAPrP71SGhq0kXH43ovCR
+        l+wHsqbP3+flivnMycP7t56gsJKFc2jMUG+rHdT+K3Nlb0v0gU3lObSvaxFJLO6+
+        TEDT8REeOTTbVifNqqkIpyQTckwg8r7oXwfN+MxIunr7mncxCRdI+HuWr7Lkm6Kn
+        ahdgbnUgOrFIXc2G5iJ7lKf+10an8VR8AMRxRm7C7sjKYqlrFHzRUzXJBUsZP56V
+        Yojg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679908520; x=1679994920; bh=A5+gI2srvfn+f
+        8eE2nwKRdqo4mc6G9sjufQGQbcwNyg=; b=CMiPOPKE7dMI3gBff9OWxR9YwKMrk
+        AVvjTC2iDWQppJUw/3VTompsO19d8EmtSxPwMeJ+vF0bqS6k4/AJJDOL/+kMqL4t
+        r1lsAl+O+0Alp2P8lKU8jZPiIkE7UH/y/gQ06Z+YYInlkdl9d2gd+8M+lDukZTr8
+        KGF8Az1v197Twkb3PsBiN1E2U7V2xFBtnPgoiSbERcapCdK07ZE0zA8zg3HjUd11
+        xPnasqVVLo1JX+N8uW9FLJCmSA+hXZp8u1ERm4Znnw7njsMTyi78PqrWo2tzcaTY
+        noThQoYVa0G80lVKvUCVgyMxOlPD9SpD1y6HYSv+B5/MMsiW2Yo2Dq0Jg==
+X-ME-Sender: <xms:qF4hZL8qs4JNn2r7UeRwkjWyMnRfg-HWYDfdN9tKr3ooSDl0RGxGaw>
+    <xme:qF4hZHvpuvBEUPcCbnDTWuRoKzfOSPqmoox9ps5PGbrLfeYXBHGoh2EzSlTur3tAA
+    NuM5zLzFQ_iDA>
+X-ME-Received: <xmr:qF4hZJBDHkze57I9_RU04Dz45sRxI1ruco1MSJ5kYx4GEYbG7quMTqdSsCyhLGT6_HPLB6FkAoCDw-P5MD_mr_cI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehvddgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:qF4hZHeQOQcAHiJN-hsOKvbtxbGOhWWliYvq8XnpHNMOY-tdf5QyWA>
+    <xmx:qF4hZAMxRWcPNlGml6sIH40E55ZykBemkiHuGLM6J4oJK7iDoUGN6w>
+    <xmx:qF4hZJksKWzyAiZJOQ_bAO2E7eiZnM_zvHABP1tzDxeBcasmb8qFTw>
+    <xmx:qF4hZMmFNQRKONQoa9llhLlr4X1_HTa6AUyN0PCrcAa3C4A0NusMuQ>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Mar 2023 05:15:19 -0400 (EDT)
+Date:   Mon, 27 Mar 2023 11:15:16 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Message-ID: <ZCFepL_u27Dxq9jd@kroah.com>
+References: <20230327154655.58dd627d@canb.auug.org.au>
+ <ZCFG1hUpsoB9acpi@kroah.com>
+ <20230327192215.060fd858@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c46dbb48-259b-1de9-2364-9bfaf1061944@web.de>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20230327192215.060fd858@canb.auug.org.au>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,37 +90,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 07:56:03AM +0200, Markus Elfring wrote:
-> >> 2. Can a cg_destroy() call ever work as expected if a cg_create() call failed?
-> >
-> > Perhaps next time you can answer your own question by spending 30
-> > seconds actually reading the code you're "fixing":
-> >
-> > int cg_destroy(const char *cgroup)
-> > {
-> …
-> >         ret = rmdir(cgroup);
-> …
-> >         if (ret && errno == ENOENT) <<< that case is explicitly handled here
-> >                 ret = 0;
-> >
-> >         return ret;
-> > }
+On Mon, Mar 27, 2023 at 07:22:15PM +1100, Stephen Rothwell wrote:
+> Hi All,
 > 
-> Is it interesting somehow that a non-existing directory (which would occasionally
-> not be found) is tolerated so far?
-> https://elixir.bootlin.com/linux/v6.3-rc3/source/tools/testing/selftests/cgroup/cgroup_util.c#L285
+> On Mon, 27 Mar 2023 09:33:42 +0200 Greg KH <greg@kroah.com> wrote:
+> >
+> > Patch is correct, thank you.
 > 
-> Should such a function call be avoided because of a failed cg_create() call?
+> Thanks for checking.
+> 
+> > s390 developers, if you have a persistent tag/branch, I can suck this
+> > into the driver core tree and apply this fixup there so that you don't
+> > have to deal with any merge issues for 6.4-rc1 if you want.  Or I can
+> > provide one for you if you need/want that instead.  Or we can just leave
+> > it alone and deal with it during the 6.4-rc1 merge window, your choice.
+> 
+> Or (it being pretty trivial) you could both just let Linus know when
+> you send your merge requests ...
 
-The point is that (a) you were wrong that this is fixing anything, and
-(b) this patch is functionally useless. Sure, we could move some goto's
-around and subjectively improve "something". Why?  What's the point?
-It's highly debatable that what you're doing is even an improvement, and
-I'm not interested in wasting time pontificating about the merits of a
-trivial "fix" for a test cleanup function that isn't even broken.
-
-Several people have already either advised or directly asked you to stop
-sending these patches. I'm not sure why you're choosing to ignore them,
-but I'll throw my hat in the ring regardless and do the same. Please
-stop sending these fake cleanup patches.
+True, that works for me!
