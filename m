@@ -2,88 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3D56CA79E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1C96CA7A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbjC0O2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
+        id S233145AbjC0O2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbjC0O2R (ORCPT
+        with ESMTP id S233144AbjC0O2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Mar 2023 10:28:17 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FABCD
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:27:46 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id k17so10778727ybm.11
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A780011B
         for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679927265;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sgiisWdAkK9TZByL6qo6IqTFGMxPn6Lsp6OHLkAuwu4=;
-        b=sWUOgoKORUJyz6il5vhJZSTWG2/9Re59WLZ8D5hSzxihnW7ewbqtooTLxWT+ZrgVjo
-         w4MC2Gphns5ot05nr+eNMYLbiiVZWR0th/Er7M+3ZaLSc4v85G7BW2JhkZzSdVHu/sIJ
-         C6YAPuWvdAsqjcuN/Aq2qL9XsAJxg8dn4nb4YUHTCmKeFiWRZlOqQmh4Ty3ZcPTb3qoV
-         C29hR+WGvHT0mDuYtLj+DC9I1psnQB2nyLP1QiXzJh82ThNa71JiQiQdPrArQJ1i7wNs
-         6S7Jaq3tXUBceY3vv/JmHsbkf1mQl/Jl1Qezo7SAdX8W+K1eGHVbWZocV3G7nVljn0C3
-         y5+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679927265;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sgiisWdAkK9TZByL6qo6IqTFGMxPn6Lsp6OHLkAuwu4=;
-        b=qeBq09a/SBVs0K8KHNECwhc94N/KIOnDf16nJ0ICpflkIWM5qo36bYvBE01Zsz7YG+
-         6JDmc38cng89wR7bcMrNBtCd9HRrUCx4crMMOc+M5ylW1edQBX0TtQLoRYOOLgKJ7fmY
-         yl131EZyEkYarZbg6O8q0IJKm4mCluqCt2r0u/sPSFt1uN0H4T/quUiG+32PmX1ioO3y
-         KYDsqPcyNoiigjBcftuSee+xHhv+LbTtYGvsw06f7EV/CSct0i1I88t/MHK3m3eIjbRN
-         7kpFCpwuQmNVBdXmp4kWs8ipH2+rcYqp3jXnDM8FzpENoyd/oS4wWNasCm/0lcGU0Qlk
-         As3A==
-X-Gm-Message-State: AAQBX9fhhxol2GagKQW9Vje6BumULBWrxPz0xgGE8Lw7pPeJopXNPYxw
-        aXTjR4/0Af1b+5CVUibgqiLwCrc38XuTeRUIyVXY/w==
-X-Google-Smtp-Source: AKy350YLZ8BJ7UVOhyWMGjbJZVGwlJuUQmqILqBjohAFBFlpR3qOR5Llb1TnhXzJFqWNNKEUZGMBqr3nzj1e1QM1opY=
-X-Received: by 2002:a05:6902:102b:b0:b46:4a5e:3651 with SMTP id
- x11-20020a056902102b00b00b464a5e3651mr7197095ybt.9.1679927265147; Mon, 27 Mar
- 2023 07:27:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9DEA8C14;
+        Mon, 27 Mar 2023 07:28:29 -0700 (PDT)
+Received: from [10.57.53.238] (unknown [10.57.53.238])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 271063F6C4;
+        Mon, 27 Mar 2023 07:27:44 -0700 (PDT)
+Message-ID: <b90d3b99-a4d2-86f5-be9a-803b33d787b6@arm.com>
+Date:   Mon, 27 Mar 2023 15:27:39 +0100
 MIME-Version: 1.0
-References: <20230327140752.163009-1-krzysztof.kozlowski@linaro.org> <20230327140752.163009-5-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230327140752.163009-5-krzysztof.kozlowski@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 27 Mar 2023 17:27:34 +0300
-Message-ID: <CAA8EJprfS_xfiu8v_GPcTkspV1hoyGYkKnufaX7G1SW8X7vfzw@mail.gmail.com>
-Subject: Re: [PATCH v4 4/5] arm64: dts: qcom: sc7180: add compatible fallback
- to mailbox
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] perf/arm-cmn: Fix and refactor device mapping resource
+Content-Language: en-GB
+To:     Will Deacon <will@kernel.org>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        ilkka@os.amperecomputing.com
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1676535470-120560-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <20230327140536.GB31752@willie-the-truck>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230327140536.GB31752@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023 at 17:17, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> SC7180 mailbox is compatible with SDM845.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc7180.dtsi | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+On 2023-03-27 15:05, Will Deacon wrote:
+> [+Robin and Ilkka, as they contribute most to this driver]
+> 
+> On Thu, Feb 16, 2023 at 04:17:50PM +0800, Jing Zhang wrote:
+>> The devm_platform_ioremap_resource() won't let the platform device
+>> claim resource when the ACPI companion device has already claimed it.
+>> If CMN-ANY except CMN600 is ACPI companion device, it will return
+>> -EBUSY in devm_platform_ioremap_resource(), and the driver cannot be
+>> successfully installed.
+>>
+>> So let ACPI companion device call arm_cmn_acpi_probe and not claim
+>> resource again. In addition, the arm_cmn_acpi_probe() and
+>> arm_cmn_of_probe() functions are refactored to make them compatible
+>> with both CMN600 and CMN-ANY.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
--- 
-With best wishes
-Dmitry
+No, the whole point of CMN-600 probing being a special case is that the 
+ACPI and DT bindings for CMN-600 are special cases. In ACPI, only 
+ARMHC600 has the two nested memory resources; all the other models 
+should only have one memory resource because one is all that is 
+meaningful. See table 16 the document[1] in where the description of 
+ROOTNODEBASE says "This field is specific to the CMN-600 device object."
+
+Similarly in DT, "arm,root-node" is only required for "arm,cmn-600" - it 
+didn't seem worth overcomplicating the schema to actively disallow it 
+for other models, but that is supposed to be implied by its description 
+as "not relevant for newer CMN/CI products".
+
+If you're hitting this because you've written your ACPI DSDT 
+incorrectly, it's a sign that you should fix your DSDT.
+
+Thanks,
+Robin.
+
+[1] https://developer.arm.com/documentation/den0093/latest/
+
+>> Fixes: 61ec1d875812 ("perf/arm-cmn: Demarcate CMN-600 specifics")
+>> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+>> ---
+>>   drivers/perf/arm-cmn.c | 57 ++++++++++++++++++++++++++++++++------------------
+>>   1 file changed, 37 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+>> index 1deb61b..beb3b37 100644
+>> --- a/drivers/perf/arm-cmn.c
+>> +++ b/drivers/perf/arm-cmn.c
+>> @@ -2206,7 +2206,7 @@ static int arm_cmn_discover(struct arm_cmn *cmn, unsigned int rgn_offset)
+>>   	return 0;
+>>   }
+>>   
+>> -static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *cmn)
+>> +static int arm_cmn_acpi_probe(struct platform_device *pdev, struct arm_cmn *cmn)
+>>   {
+>>   	struct resource *cfg, *root;
+>>   
+>> @@ -2214,12 +2214,21 @@ static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *c
+>>   	if (!cfg)
+>>   		return -EINVAL;
+>>   
+>> -	root = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+>> -	if (!root)
+>> -		return -EINVAL;
+>> +	/* If ACPI defines more than one resource, such as cmn-600, then there may be
+>> +	 * a deviation between ROOTNODEBASE and PERIPHBASE, and ROOTNODEBASE can
+>> +	 * be obtained from the second resource. Otherwise, it can be considered that
+>> +	 * ROOT NODE BASE is PERIPHBASE. This is compatible with cmn-600 and cmn-any.
+>> +	 */
+>> +	if (pdev->num_resources > 1) {
+>> +		root = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+>> +		if (!root)
+>> +			return -EINVAL;
+>>   
+>> -	if (!resource_contains(cfg, root))
+>> -		swap(cfg, root);
+>> +		if (!resource_contains(cfg, root))
+>> +			swap(cfg, root);
+>> +	} else {
+>> +		root = cfg;
+>> +	}
+>>   	/*
+>>   	 * Note that devm_ioremap_resource() is dumb and won't let the platform
+>>   	 * device claim cfg when the ACPI companion device has already claimed
+>> @@ -2227,17 +2236,30 @@ static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *c
+>>   	 * appropriate name, we don't really need to do it again here anyway.
+>>   	 */
+>>   	cmn->base = devm_ioremap(cmn->dev, cfg->start, resource_size(cfg));
+>> -	if (!cmn->base)
+>> -		return -ENOMEM;
+>> +	if (IS_ERR(cmn->base))
+>> +		return PTR_ERR(cmn->base);
+>>   
+>>   	return root->start - cfg->start;
+>>   }
+>>   
+>> -static int arm_cmn600_of_probe(struct device_node *np)
+>> +static int arm_cmn_of_probe(struct platform_device *pdev, struct arm_cmn *cmn)
+>>   {
+>>   	u32 rootnode;
+>> +	int ret;
+>> +
+>> +	cmn->base = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(cmn->base))
+>> +		return PTR_ERR(cmn->base);
+>>   
+>> -	return of_property_read_u32(np, "arm,root-node", &rootnode) ?: rootnode;
+>> +	/* If of_property_read_u32() return EINVAL, it means that device tree has
+>> +	 * not define root-node, and root-node will return 0, which is compatible
+>> +	 * with cmn-600 and cmn-any.
+>> +	 */
+>> +	ret = of_property_read_u32(pdev->dev.of_node, "arm,root-node", &rootnode);
+>> +	if (ret == -EINVAL)
+>> +		return 0;
+>> +
+>> +	return rootnode;
+>>   }
+>>   
+>>   static int arm_cmn_probe(struct platform_device *pdev)
+>> @@ -2255,16 +2277,11 @@ static int arm_cmn_probe(struct platform_device *pdev)
+>>   	cmn->model = (unsigned long)device_get_match_data(cmn->dev);
+>>   	platform_set_drvdata(pdev, cmn);
+>>   
+>> -	if (cmn->model == CMN600 && has_acpi_companion(cmn->dev)) {
+>> -		rootnode = arm_cmn600_acpi_probe(pdev, cmn);
+>> -	} else {
+>> -		rootnode = 0;
+>> -		cmn->base = devm_platform_ioremap_resource(pdev, 0);
+>> -		if (IS_ERR(cmn->base))
+>> -			return PTR_ERR(cmn->base);
+>> -		if (cmn->model == CMN600)
+>> -			rootnode = arm_cmn600_of_probe(pdev->dev.of_node);
+>> -	}
+>> +	if (has_acpi_companion(cmn->dev))
+>> +		rootnode = arm_cmn_acpi_probe(pdev, cmn);
+>> +	else
+>> +		rootnode = arm_cmn_of_probe(pdev, cmn);
+>> +
+>>   	if (rootnode < 0)
+>>   		return rootnode;
+>>   
+>> -- 
+>> 1.8.3.1
+>>
