@@ -2,183 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835706CA78F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F636CA790
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233147AbjC0O15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
+        id S232841AbjC0O2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232692AbjC0O1k (ORCPT
+        with ESMTP id S233117AbjC0O1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:27:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B671F59EF
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:26:47 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 27 Mar 2023 10:27:41 -0400
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5727955A3;
+        Mon, 27 Mar 2023 07:26:50 -0700 (PDT)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B7C791FDB1;
-        Mon, 27 Mar 2023 14:26:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679927185; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4PlZr51Rwfz9t6d;
+        Mon, 27 Mar 2023 16:26:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
+        s=MBO0001; t=1679927189;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zkUGfTBzri88vyqVRAjr/zBGLSkKyUU2kKjDDkG9L+I=;
-        b=AzKV+n6O7HzHwGPodrH53Kh/y/+Wx1niqMAj8L+r8sRmOqSk45BihCwrXstKZc/CW6v840
-        tDzxArmKyUkljptD+sU//4sykzqafSl4Hf3dqzC/yJ2s+OMTs7QCzLZbVbpM7Kq2dZlrKj
-        sQJXIQV4zVSV9fRu3b8VdavH8FYxCGw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7AB3413482;
-        Mon, 27 Mar 2023 14:26:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Rr0vHJGnIWTiEgAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 27 Mar 2023 14:26:25 +0000
-Message-ID: <d5f7e4ac-2085-41ac-11c6-8cb3085a666f@suse.com>
+        bh=9rOAJ6mYjJCPRKt+lu0rKWy0FC1qYxXDWw3444VdaWE=;
+        b=y8eULv06lBVmn/GXaB7wAZ9IFTinKqgYb15FTQZccKVKcLhDkG6AxkYJaLPLCjYLDlACKv
+        UCbohsS1oFS0e9/OdkC9owIEycxFqJeP2DV6ZunxEyZTlDL+bPb87smd+qWTeCm+6e1gps
+        R/lio4sh1rcYq8OTC82qVq5//wc7qNTu5yr/m5qhSxhESrNl0MIDHAWL6c/7WiuX8D3x2J
+        yNdRK0b/ABEnblPJfFtZybpEutoYT3Hn0jhNuvNrAySvn9SBgEzjq87FNzPCwR8Ye4z1vc
+        e10P+LN6LFcYsW4RyPlB3q/CXpzCamf4z0Oh4SkFcBwDNUrlYLhjFH6XAxyHRQ==
+Message-ID: <1f3fb4bd5387c8d69a6eb068fb773b9273081c13.camel@dylanvanassche.be>
+Subject: Re: [PATCH 1/2] dt-bindings: misc: qcom,fastrpc: add
+ qcom,assign-all-memory property
+From:   Dylan Van Assche <me@dylanvanassche.be>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
 Date:   Mon, 27 Mar 2023 16:26:25 +0200
+In-Reply-To: <44904ffc-83d4-1137-3479-737a81b31d16@linaro.org>
+References: <20230325134410.21092-1-me@dylanvanassche.be>
+         <20230325134410.21092-2-me@dylanvanassche.be>
+         <883c3c48-c6e5-556d-431f-e92592b9106a@linaro.org>
+         <b75b92bf64b55ba0ace0fbff65955c838a294dec.camel@dylanvanassche.be>
+         <44904ffc-83d4-1137-3479-737a81b31d16@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] x86/mm: fix __swp_entry_to_pte() for Xen PV guests
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20230306123259.12461-1-jgross@suse.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20230306123259.12461-1-jgross@suse.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------EjWHNbc13qvC6nsinH0B5LKF"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------EjWHNbc13qvC6nsinH0B5LKF
-Content-Type: multipart/mixed; boundary="------------5x5b1r5f3Ip9uZpSkVM8Wcwt";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: linux-kernel@vger.kernel.org, x86@kernel.org
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <d5f7e4ac-2085-41ac-11c6-8cb3085a666f@suse.com>
-Subject: Re: [PATCH] x86/mm: fix __swp_entry_to_pte() for Xen PV guests
-References: <20230306123259.12461-1-jgross@suse.com>
-In-Reply-To: <20230306123259.12461-1-jgross@suse.com>
+Hi Krzysztof,
 
---------------5x5b1r5f3Ip9uZpSkVM8Wcwt
-Content-Type: multipart/mixed; boundary="------------cUCYvEIEk35DiR9lq2vPWw0O"
+On Mon, 2023-03-27 at 14:22 +0200, Krzysztof Kozlowski wrote:
+> On 27/03/2023 13:37, Dylan Van Assche wrote:
+> > Hi Krzysztof,
+> >=20
+> > On Sun, 2023-03-26 at 10:55 +0200, Krzysztof Kozlowski wrote:
+> > > On 25/03/2023 14:44, Dylan Van Assche wrote:
+> > > > Document the added qcom,assign-all-memory in devicetree
+> > > > bindings.
+> > > >=20
+> > > > Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
+> > > > ---
+> > > > =C2=A0Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml | 6
+> > > > ++++++
+> > > > =C2=A01 file changed, 6 insertions(+)
+> > > >=20
+> > > > diff --git
+> > > > a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> > > > b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> > > > index 1ab9588cdd89..fa5b00534b30 100644
+> > > > --- a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> > > > +++ b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> > > > @@ -57,6 +57,12 @@ properties:
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Virtual machine IDs for remote=
+ processor.
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0 $ref: "/schemas/types.yaml#/definitions/ui=
+nt32-array"
+> > > > =C2=A0
+> > > > +=C2=A0 qcom,assign-all-mem:
+> > > > +=C2=A0=C2=A0=C2=A0 description:
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Assign memory to all Virtual machin=
+es defined by
+> > > > qcom,vmids.
+> > >=20
+> > > This (neither commit msg) does not explain why this is needed and
+> > > actually does not sound like hardware-related property.
+> >=20
+> > This is made a separate property to toggle different behavior in
+> > the
+> > driver if it is needed for some FastRPC nodes.=20
+>=20
+> Bindings are not for driver behavior.
+>=20
+> > Downstream does guard
+> > this with a property 'restrict-access' as well, see [1] for a
+> > random
+> > SDM845 downstream kernel. On SDM845, this property is not present,
+> > thus
+> > the IF block runs. On SDM670, this property is present, then the IF
+> > block is skipped. That's why I opt for this property to have this
+> > behaviour conditionally. I'm not sure how to explain it better
+> > though.
+>=20
+> Still you described driver... Please come with something more
+> hardware
+> related.
 
---------------cUCYvEIEk35DiR9lq2vPWw0O
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+So just updating the description is enough then?
 
-T24gMDYuMDMuMjMgMTM6MzIsIEp1ZXJnZW4gR3Jvc3Mgd3JvdGU6DQo+IE5vcm1hbGx5IF9f
-c3dwX2VudHJ5X3RvX3B0ZSgpIGlzIG5ldmVyIGNhbGxlZCB3aXRoIGEgdmFsdWUgdHJhbnNs
-YXRpbmcNCj4gdG8gYSB2YWxpZCBQVEUuIFRoZSBvbmx5IGtub3duIGV4Y2VwdGlvbiBpcyBw
-dGVfc3dhcF90ZXN0cygpLCByZXN1bHRpbmcNCj4gaW4gYSBXQVJOIHNwbGF0IGluIFhlbiBQ
-ViBndWVzdHMsIGFzIF9fcHRlX3RvX3N3cF9lbnRyeSgpIGRpZA0KPiB0cmFuc2xhdGUgdGhl
-IFBGTiBvZiB0aGUgdmFsaWQgUFRFIHRvIGEgZ3Vlc3QgbG9jYWwgUEZOLCB3aGlsZQ0KPiBf
-X3N3cF9lbnRyeV90b19wdGUoKSBkb2Vzbid0IGRvIHRoZSBvcHBvc2l0ZSB0cmFuc2xhdGlv
-bi4NCj4gDQo+IEZpeCB0aGF0IGJ5IHVzaW5nIF9fcHRlKCkgaW4gX19zd3BfZW50cnlfdG9f
-cHRlKCkgaW5zdGVhZCBvZiBvcGVuDQo+IGNvZGluZyB0aGUgbmF0aXZlIHZhcmlhbnQgb2Yg
-aXQuDQo+IA0KPiBGb3IgY29ycmVjdG5lc3MgZG8gdGhlIHNpbWlsYXIgY29udmVyc2lvbiBm
-b3IgX19zd3BfZW50cnlfdG9fcG1kKCkuDQo+IA0KPiBGaXhlczogMDUyODk0MDJkNzE3ICgi
-bW0vZGVidWdfdm1fcGd0YWJsZTogYWRkIHRlc3RzIHZhbGlkYXRpbmcgYXJjaCBoZWxwZXJz
-IGZvciBjb3JlIE1NIGZlYXR1cmVzIikNCj4gU2lnbmVkLW9mZi1ieTogSnVlcmdlbiBHcm9z
-cyA8amdyb3NzQHN1c2UuY29tPg0KDQpBbnkgZnVydGhlciBjb21tZW50cyAoYXBhcnQgZnJv
-bSAiSXQgbG9va3Mgc2FuZSIpPw0KDQoNCkp1ZXJnZW4NCg0K
---------------cUCYvEIEk35DiR9lq2vPWw0O
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+As this is all reverse engineered, I have no access to the
+documentation of FastRPC, so best effort:
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+"""
+Mark allocated memory region accessible to remote processor.
+This memory region is used by remote processor to communicate
+when no dedicated Fastrpc context bank hardware is available=C2=A0
+for remote processor.
+"""
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+Is this the description that is 'more hardware related'?
 
---------------cUCYvEIEk35DiR9lq2vPWw0O--
+Kind regards,
+Dylan Van Assche
 
---------------5x5b1r5f3Ip9uZpSkVM8Wcwt--
+>=20
+> Best regards,
+> Krzysztof
+>=20
 
---------------EjWHNbc13qvC6nsinH0B5LKF
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmQhp5EFAwAAAAAACgkQsN6d1ii/Ey/E
-owf+PVmqjkOPs7w1cO4uAHOljMzBXJmWDCcvsGTpzRt69oQqWOU7RZHSYEn3aG7jsboLqkn6pb7v
-cXhnV+fpyssbzKQik/F/0Lm1HGMwpN4prDWbn3nQFHm0wZmzveKvvWLQVlynBy83AuWdZytOWD3O
-T+6zmtHycOmn0++JvdTWuHw8kiQ5CJWWHxhFmIs7Yw9Gvnq7jiVNrOn45lJ3FQwuTjVV3lgjHwNy
-nycQoJ3Uus/2Yi5YCFjUZ7S8OCw+seiIqJgxaBu5GbRITm1W4w0nNdwo/+PeVwTp1iSGIasZgvgV
-Eq9VlRWgK4y/oTNiIApWQSn2UyFmjn3JnQ9h1PNyjw==
-=S3X8
------END PGP SIGNATURE-----
-
---------------EjWHNbc13qvC6nsinH0B5LKF--
