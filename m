@@ -2,137 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871EF6CB296
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93EE6CB299
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbjC0XlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 19:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
+        id S231925AbjC0XpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 19:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjC0XlD (ORCPT
+        with ESMTP id S229493AbjC0XpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 19:41:03 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C55594
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:41:02 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id e13so4667801ioc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:41:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679960461;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JoaFrK1DNRcSQ1ImrxF44n1yrzlCAr4sckNkLw8fzgI=;
-        b=ynLrYPNn6MrJNCQybk3kIizkcAFvpdHlUVrlKkTSEFf6vsFf0NdNb+GzmdccfMMi+v
-         p/5kub3wqmBElnCB9zoFf+tyhpFJxH8e3odsVyR7ElHioJdCKTwnELseuFLpqNZ1GXst
-         RfQwqM7KRmF6SJLzKxuUt2U71O2SiEPJgAcMKPo2s2vCSmvLcuNyseaV5JUdddVN5Wxl
-         yKqoc2ZLtUQ+jTyZuvgmGSnOm2lZlNi3EFvV4hu+erMjPY0ZBgc/+oxrOiq65jq9A4nF
-         ywPBjX1FsxgQaWaz+1NdPITcer+pRX4EGMdVBlH/jqi7CIcbFTegj1TfoWlkhHc98ZI/
-         F1GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679960461;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JoaFrK1DNRcSQ1ImrxF44n1yrzlCAr4sckNkLw8fzgI=;
-        b=Oxjxa6tvrFO8jDH4UtyDAnJxo4sUq3/+WbvgFHsC7SCyEJzw8+Gjojwed+1a2v10tI
-         mVRi4mV8bPioFxrLz5EgQ2Sc+vjJf4K5R2c/cZPQ5e/0EFQex6IO0p/FSzvFm4hV4Hmo
-         TgmqOFTyZs+I55IozNu9+CuaigBwl6ug2yhl3GPKpbruYGbRwzT96ugLvkwO33sk4xMu
-         Qx5qmPh/JE2v58NQaTgtc7CYnXRm2360JDgR7JMJkJauFri/mOc+muUUnHsN8TwGznhb
-         0OhvKIbEiFeuVdBP2Y64L07dSgszqZXK+jTFjuZmXEE1S5ygq4G4Gg/byPuAemZ1Aao3
-         cDKg==
-X-Gm-Message-State: AO0yUKXc7+Y27fv2Pvs65EqV/6V4/luYJn/QhZ9c3c0+HtVJ31i67FnF
-        JVjTbRu8aSclln3ZVDnasWqVYA==
-X-Google-Smtp-Source: AK7set+bRCdcdl3Ae9vYyBV57C+4JF+6Noaiw/aikNo5KecpU4wjfRCVr2njCldm4zVFNaxS7XZmZQ==
-X-Received: by 2002:a6b:720b:0:b0:74c:bc14:46a1 with SMTP id n11-20020a6b720b000000b0074cbc1446a1mr10993237ioc.4.1679960461433;
-        Mon, 27 Mar 2023 16:41:01 -0700 (PDT)
-Received: from smtpclient.apple ([152.179.59.114])
-        by smtp.gmail.com with ESMTPSA id g8-20020a6b7608000000b0074c7db1470dsm8107156iom.20.2023.03.27.16.41.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 16:41:00 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Alex Elder <alex.elder@linaro.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH net] net: ipa: compute DMA pool size properly
-Date:   Mon, 27 Mar 2023 18:40:49 -0500
-Message-Id: <2E9EE299-E500-429E-9D19-CA8A55326100@linaro.org>
-References: <20230327211627.GA3248042@hu-bjorande-lv.qualcomm.com>
-Cc:     Alex Elder <elder@linaro.org>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        andersson@kernel.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230327211627.GA3248042@hu-bjorande-lv.qualcomm.com>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-X-Mailer: iPhone Mail (20D67)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 27 Mar 2023 19:45:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1E531B8;
+        Mon, 27 Mar 2023 16:45:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB4ACC14;
+        Mon, 27 Mar 2023 16:46:03 -0700 (PDT)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6556C3F73F;
+        Mon, 27 Mar 2023 16:45:17 -0700 (PDT)
+Date:   Tue, 28 Mar 2023 00:44:45 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lee Jones <lee@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        martin.botka1@gmail.com, Shengyu Qu <wiagn233@outlook.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v9 1/3] dt-bindings: mfd: x-powers,axp152: Document the
+ AXP313a variant
+Message-ID: <20230328002802.5ae4961b@slackpad.lan>
+In-Reply-To: <460ee8a7-23a8-fc70-1eb6-88bbaa99b35a@linaro.org>
+References: <20230324113013.254371-1-andre.przywara@arm.com>
+ <20230324113013.254371-2-andre.przywara@arm.com>
+ <460ee8a7-23a8-fc70-1eb6-88bbaa99b35a@linaro.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 25 Mar 2023 12:40:38 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
+Hi,
 
-> On Mar 27, 2023, at 4:16 PM, Bjorn Andersson <quic_bjorande@quicinc.com> w=
-rote:
->=20
-> =EF=BB=BFOn Sun, Mar 26, 2023 at 11:52:23AM -0500, Alex Elder wrote:
->> In gsi_trans_pool_init_dma(), the total size of a pool of memory
->> used for DMA transactions is calculated.  However the calculation is
->> done incorrectly.
->>=20
->> For 4KB pages, this total size is currently always more than one
->> page, and as a result, the calculation produces a positive (though
->> incorrect) total size.  The code still works in this case; we just
->> end up with fewer DMA pool entries than we intended.
->>=20
->> Bjorn Andersson tested booting a kernel with 16KB pages, and hit a
->> null pointer derereference in sg_alloc_append_table_from_pages(),
->> descending from gsi_trans_pool_init_dma().  The cause of this was
->> that a 16KB total size was going to be allocated, and with 16KB
->> pages the order of that allocation is 0.  The total_size calculation
->> yielded 0, which eventually led to the crash.
->>=20
->> Correcting the total_size calculation fixes the problem.
->>=20
->> Reported-by: <quic_bjorande@quicinc.com>
->> Tested-by: <quic_bjorande@quicinc.com>
->=20
-> It would be nice to add "Bjorn Andersson" to these two.
->=20
+> On 24/03/2023 12:30, Andre Przywara wrote:
+> > From: Martin Botka <martin.botka@somainline.org>
+> > 
+> > The X-Powers AXP313a is a PMIC used on some devices with the Allwinner
+> > H616 or H313 SoC.
+> > According to the datasheet, the DC/DC converter PWM frequency is fixed
+> > (to 3 MHz), so disallow the property that lets us set this frequency
+> > for the other PMICs.
+> > 
+> > Signed-off-by: Martin Botka <martin.botka@somainline.org>
+> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> > ---
+> >  .../devicetree/bindings/mfd/x-powers,axp152.yaml     | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
+> > index b7a8747d5fa0e..4b4f42cb09ef7 100644
+> > --- a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
+> > +++ b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
+> > @@ -79,6 +79,17 @@ allOf:
+> >        required:
+> >          - interrupts
+> >  
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            const: x-powers,axp313a
+> > +
+> > +    then:
+> > +      not:
+> > +        required:
+> > +          - x-powers,dcdc-freq  
+> 
+> Should be simpler x-powers,dcdc-freq: false
 
-Oh yeah sorry about that. I=E2=80=99ll add it.   -Alex
+Ah, many thanks! I was a bit concerned about "not required" not sounding
+quite right, but I indeed copied from the other cases and verified that
+it worked as expected.
+But yours is indeed much better, thanks for the other patch!
 
-> Regards,
-> Bjorn
->=20
->> Fixes: 9dd441e4ed57 ("soc: qcom: ipa: GSI transactions")
->> Signed-off-by: Alex Elder <elder@linaro.org>
->> ---
->> drivers/net/ipa/gsi_trans.c | 2 +-
->> 1 file changed, 1 insertion(+), 1 deletion(-)
->>=20
->> diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
->> index 0f52c068c46d6..ee6fb00b71eb6 100644
->> --- a/drivers/net/ipa/gsi_trans.c
->> +++ b/drivers/net/ipa/gsi_trans.c
->> @@ -156,7 +156,7 @@ int gsi_trans_pool_init_dma(struct device *dev, struc=
-t gsi_trans_pool *pool,
->>     * gsi_trans_pool_exit_dma() can assume the total allocated
->>     * size is exactly (count * size).
->>     */
->> -    total_size =3D get_order(total_size) << PAGE_SHIFT;
->> +    total_size =3D PAGE_SIZE << get_order(total_size);
->>=20
->>    virt =3D dma_alloc_coherent(dev, total_size, &addr, GFP_KERNEL);
->>    if (!virt)
->> --=20
->> 2.34.1
->>=20
+Cheers,
+Andre
+
+> I'll fix the other cases.
+> 
+> Best regards,
+> Krzysztof
+> 
+
