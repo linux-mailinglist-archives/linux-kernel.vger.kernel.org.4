@@ -2,250 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1775B6CA260
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CE46CA25B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbjC0L2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 07:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
+        id S230227AbjC0L1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 07:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjC0L2B (ORCPT
+        with ESMTP id S230089AbjC0L1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 07:28:01 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3948B8;
-        Mon, 27 Mar 2023 04:27:58 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PlVgX39kFz9xFQR;
-        Mon, 27 Mar 2023 19:18:48 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAn9FqWfSFk7BTRAQ--.62311S2;
-        Mon, 27 Mar 2023 12:27:33 +0100 (CET)
-Message-ID: <bfe6ba6a3953f2f66ed040a8096c4dd5e2724b95.camel@huaweicloud.com>
-Subject: Re: [PATCH 0/5] usermode_driver: Add management library and API
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 27 Mar 2023 13:27:15 +0200
-In-Reply-To: <CAADnVQJv0qWaxRD2_tmXeR9Wf=zdnvk8SwztOAorGaer0dFv3w@mail.gmail.com>
-References: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
-         <CAADnVQLKONwKwkJMopRq-dzcV2ZejrjGzyuzW_5QX=0BY=Z4jw@mail.gmail.com>
-         <b5c80613c696818ce89b92dac54e98878ec3ccd0.camel@huaweicloud.com>
-         <CAADnVQJC0h7rtuntt0tqS5BbxWsmyWs3ZSbboZMmUKetMG2VhA@mail.gmail.com>
-         <e0b828d994a8427ad48b7b514f75d751ea791b47.camel@huaweicloud.com>
-         <CAADnVQJv0qWaxRD2_tmXeR9Wf=zdnvk8SwztOAorGaer0dFv3w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 27 Mar 2023 07:27:43 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED4444B8;
+        Mon, 27 Mar 2023 04:27:38 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id j11so10917599lfg.13;
+        Mon, 27 Mar 2023 04:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679916458;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OQC5OuYYB5bXTGsTSu+XARSUI0pqTHor1aKx4p1f4tg=;
+        b=Q87CmO0tyG+0j+kCyK7VxNkBm77Qy3pEHP2bsbaBgcC5tLC1JHf5WYYrorV6wIWfsE
+         S81ERDvbPWithU3KVVqyUCydJ2uLePIQJpX9qRgvr2GXS5CPAypnHBXdgnpoDkg74zj8
+         CHHbUsA8+FoNanaPBRHEky9Mk2h9TlWvdVEvSx9ahhjk94HhCtPZkbqEU1Q3AIuUjTiP
+         BJfGyvDcGxmJIxMfAjtf+2itagbG/wR/auJHombJ5uoZA4WPqZ1eVN6iVr7ajWZQTYJa
+         X5oRx3DvlHBUaFtT2D0+EsQareS9nPpVc24V5j3IFyosT1ebPAkThWUkrTbOgwS46C9r
+         mXfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679916458;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OQC5OuYYB5bXTGsTSu+XARSUI0pqTHor1aKx4p1f4tg=;
+        b=SrBU+Nq6/OVW2mntn9MZYic9ivrahUxCzocW+ToZfSplWk08p91nbkKHD2kt85IP9O
+         f8ozjIb9KOeyJc6QGwdPV9zs2EZQ1rNQvx65+RpX/OzmRtMeSYmM0PrZsvRTk3tAqvJF
+         yg/TTigc5YlPDKoFvzFb1ZwzHPFPdiyZag/dtcSrsdJK9xM40ArNMnmy0xw+S2iCeztu
+         SxoWZjZh5mZoRpZjr++IEHbyyphEVI/kF9ibu/xO7p3pqPlrz20eSMzPY70qQy5WvWsU
+         tEXDg6g9L+L86b4rFFMkTOBxXp3bTXEt7uV6zWVW3Q5Lot+RjxKVkk5Vys7sSm2kFvpi
+         MR0g==
+X-Gm-Message-State: AAQBX9fSzjKRze988I99IoVcS9H8bVuRekF753DkmZnCfaiYZtNYbxdG
+        +AZNKToZ1/Re7TYoyItuFOg=
+X-Google-Smtp-Source: AKy350ZCeObX9MknMXFokduoANK1g/lvcMqZYUUdhRmo4XooTNwX9C4tmB1cZGiS6IG0eb0bHUOl6A==
+X-Received: by 2002:ac2:5085:0:b0:4eb:d20:b2ad with SMTP id f5-20020ac25085000000b004eb0d20b2admr1515705lfm.63.1679916457757;
+        Mon, 27 Mar 2023 04:27:37 -0700 (PDT)
+Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id e2-20020ac25462000000b004eaef4b51dasm2663450lfn.107.2023.03.27.04.27.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 04:27:37 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 14:27:33 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 1/7] dt-bindings: iio: light: Support ROHM BU27034
+Message-ID: <8ae2e7ac3f2df981f5d424f4d1e5f2aa37020b7d.1679915278.git.mazziesaccount@gmail.com>
+References: <cover.1679915278.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwAn9FqWfSFk7BTRAQ--.62311S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3ArWUCryDCw47JrWDXr15twb_yoW3GFW3pF
-        WrGF4jka1DJr13Arn2vw18Ca409397tw45WrnxJryfAwn09F1xKr12kF1a9F1DGr1fKw1Y
-        vr4Uta42g3Z8ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFYFCUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj4c1XAAAsQ
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2GzT8EOhGp/ew666"
+Content-Disposition: inline
+In-Reply-To: <cover.1679915278.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-03-24 at 19:54 -0700, Alexei Starovoitov wrote:
-> On Thu, Mar 23, 2023 at 6:37 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > On Wed, 2023-03-22 at 15:27 -0700, Alexei Starovoitov wrote:
-> > > On Wed, Mar 22, 2023 at 5:08 AM Roberto Sassu
-> > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > On Tue, 2023-03-21 at 19:23 -0700, Alexei Starovoitov wrote:
-> > > > > On Fri, Mar 17, 2023 at 7:53 AM Roberto Sassu
-> > > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > 
-> > > > > > A User Mode Driver (UMD) is a specialization of a User Mode Helper (UMH),
-> > > > > > which runs a user space process from a binary blob, and creates a
-> > > > > > bidirectional pipe, so that the kernel can make a request to that process,
-> > > > > > and the latter provides its response. It is currently used by bpfilter,
-> > > > > > although it does not seem to do any useful work.
-> > > > > 
-> > > > > FYI the new home for bpfilter is here:
-> > > > > https://github.com/facebook/bpfilter
-> > > > 
-> > > > Thanks. I just ensured that it worked, by doing:
-> > > > 
-> > > > getsockopt(fd, SOL_IP, IPT_SO_GET_INFO, &info, &optlen);
-> > > > 
-> > > > and accepting IPT_SO_GET_INFO in main.c.
-> > > > 
-> > > > > > The problem is, if other users would like to implement a UMD similar to
-> > > > > > bpfilter, they would have to duplicate the code. Instead, make an UMD
-> > > > > > management library and API from the existing bpfilter and sockopt code,
-> > > > > > and move it to common kernel code.
-> > > > > > 
-> > > > > > Also, define the software architecture and the main components of the
-> > > > > > library: the UMD Manager, running in the kernel, acting as the frontend
-> > > > > > interface to any user or kernel-originated request; the UMD Loader, also
-> > > > > > running in the kernel, responsible to load the UMD Handler; the UMD
-> > > > > > Handler, running in user space, responsible to handle requests from the UMD
-> > > > > > Manager and to send to it the response.
-> > > > > 
-> > > > > That doesn't look like a generic interface for UMD.
-> > > > 
-> > > > What would make it more generic? I made the API message format-
-> > > > independent. It has the capability of starting the user space process
-> > > > as required, when there is a communication.
-> > > > 
-> > > > > It was a quick hack to get bpfilter off the ground, but certainly
-> > > > > not a generic one.
-> > > > 
-> > > > True, it is not generic in the sense that it can accomodate any
-> > > > possible use case. The main goal is to move something that was running
-> > > > in the kernel to user space, with the same isolation guarantees as if
-> > > > the code was executed in the kernel.
-> > > 
-> > > They are not the same guarantees.
-> > > UMD is exactly equivalent to root process running in user space.
-> > > Meaning it can be killed, ptraced, priority inverted, etc
-> > 
-> > That is the starting point.
-> > 
-> > I suppose you can remove any privilege from the UMD process, it just
-> > needs to read/write from/to a pipe (and in my case to use socket() with
-> > AF_ALG to interact with the Crypto API).
-> > 
-> > Also, as I mentioned, you can enforce a very strict seccomp profile,
-> > which forces the UMD process to use a very limited number of system
-> > calls.
-> > 
-> > For the interactions of the rest of the system to the UMD process, you
-> > could deny with an LSM all the operations that you mentioned. The rest
-> > of the system would not be affected, only operations which have the UMD
-> > process as target are denied.
-> > 
-> > > > > > I have two use cases, but for sake of brevity I will propose one.
-> > > > > > 
-> > > > > > I would like to add support for PGP keys and signatures in the kernel, so
-> > > > > > that I can extend secure boot to applications, and allow/deny code
-> > > > > > execution based on the signed file digests included in RPM headers.
-> > > > > > 
-> > > > > > While I proposed a patch set a while ago (based on a previous work of David
-> > > > > > Howells), the main objection was that the PGP packet parser should not run
-> > > > > > in the kernel.
-> > > > > > 
-> > > > > > That makes a perfect example for using a UMD. If the PGP parser is moved to
-> > > > > > user space (UMD Handler), and the kernel (UMD Manager) just instantiates
-> > > > > > the key and verifies the signature on already parsed data, this would
-> > > > > > address the concern.
-> > > > > 
-> > > > > I don't think PGP parser belongs to UMD either.
-> > > > > Please do it as a normal user space process and define a proper
-> > > > > protocol for communication between kernel and user space.
-> > > > 
-> > > > UMD is better in the sense that it establishes a bidirectional pipe
-> > > > between the kernel and the user space process. With that, there is no
-> > > > need to further restrict the access to a sysfs file, for example.
-> > > 
-> > > If a simple pipe is good enough then you can have a kernel module
-> > > that creates it and interacts with the user space process.
-> > 
-> > Few points I forgot to mention.
-> > 
-> > With the UMD approach, the binary blob is embedded in the kernel
-> > module, which means that no external dependencies are needed for
-> > integrity verification. The binary is statically compiled, and the
-> > kernel write-protects it at run-time.
-> > 
-> > Second, since DIGLIM would check the integrity of any executable,
-> > including init, the PGP signature verification needs to occur before.
-> > So, the PGP UMD should be already started by then. That is not going to
-> > be a problem, since the binary is copied to a private tmpfs mount.
-> > 
-> > > Out-of-tree bpftiler can do that, so can you.
-> > 
-> > As far as I can see, the out-of-tree bpfilter works exactly in the same
-> > way as the in-tree counterpart. The binary blob is embedded in the
-> > kernel module.
-> > 
-> > > PGP is not suitable for kernel git repo either as kernel code or as UMD.
-> > 
-> > Well, the asymmetric key type can be extended with new parsers, so this
-> > possibility was already taken into account. The objection that the PGP
-> > parser should not run in kernel space is fair, but I think the UMD
-> > approach fully addresses that.
-> > 
-> > Also, I agree with you that we should not just take any code and
-> > pretend that it is part of the kernel. However, in this particular
-> > case, the purpose of the PGP UMD would be simply to extract very few
-> > information from the PGP packets. The asymmetric key type and the
-> > signature verification infrastructure already take care of the rest.
-> > 
-> > PGP keys and signatures would act as an additional system trust anchor
-> > for verifying critical system data (for DIGLIM, which executables are
-> > allowed to run), similarly to how X.509 certificates are used for
-> > verifying kernel modules. RPM headers, executables digests are taken
-> > from, are signed with PGP, so there is no other way than adding this
-> > functionality.
-> > 
-> > And unfortunately, especially for features impacting the entire system,
-> > out-of-tree drivers are not really an option:
-> 
-> I think you have to start out of tree and prove that the PGP thing
-> is worth considering at all.
-> Only then we can talk about merits of UMD and generalization
-> of pipe interface if it's applicable.
 
-Ok. This is my plan:
+--2GzT8EOhGp/ew666
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-1) send the kernel part necessary to support PGP keys and signatures
-2) evaluate/discuss if something else can be moved to user space
-3) propose the implementation of the PGP UMD
-4) assess the robustness of the solution, and compare to different
-   designs
+ROHM BU27034 is an ambient light sesnor with 3 channels and 3 photo diodes
+capable of detecting a very wide range of illuminance. Typical application
+is adjusting LCD and backlight power of TVs and mobile phones.
 
-Thanks
+Add dt-bindings.
 
-Roberto
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> DIGLIM and everything else you mentioned above doesn't add weight
-> to the decision. PGP work should be acceptable on its own.
-> Out-of-tree is a method to prove that it works and later argue
-> for inclusion as in-tree either as kernel module or UMD.
-> Generalization of current bpfilter is out of scope here.
+---
+v2 =3D>
+- No changes
 
+Changes since RFCv1 =3D> v2
+- Fix binding file name and id by using comma instead of a hyphen to
+  separate the vendor and part names.
+---
+ .../bindings/iio/light/rohm,bu27034.yaml      | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/light/rohm,bu2703=
+4.yaml
+
+diff --git a/Documentation/devicetree/bindings/iio/light/rohm,bu27034.yaml =
+b/Documentation/devicetree/bindings/iio/light/rohm,bu27034.yaml
+new file mode 100644
+index 000000000000..30a109a1bf3b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/light/rohm,bu27034.yaml
+@@ -0,0 +1,46 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/light/rohm,bu27034.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ROHM BU27034 ambient light sensor
++
++maintainers:
++  - Matti Vaittinen <mazziesaccount@gmail.com>
++
++description: |
++  ROHM BU27034 is an ambient light sesnor with 3 channels and 3 photo diod=
+es
++  capable of detecting a very wide range of illuminance. Typical applicati=
+on
++  is adjusting LCD and backlight power of TVs and mobile phones.
++  https://fscdn.rohm.com/en/products/databook/datasheet/ic/sensor/light/bu=
+27034nuc-e.pdf
++
++properties:
++  compatible:
++    const: rohm,bu27034
++
++  reg:
++    maxItems: 1
++
++  vdd-supply: true
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells =3D <1>;
++      #size-cells =3D <0>;
++
++      light-sensor@38 {
++        compatible =3D "rohm,bu27034";
++        reg =3D <0x38>;
++        vdd-supply =3D <&vdd>;
++      };
++    };
++
++...
+--=20
+2.39.2
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--2GzT8EOhGp/ew666
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmQhfaUACgkQeFA3/03a
+ocWyNgf/fSKl1mtQ43s64s8dHSW7Jf5NV8QmBlp11KOfP1T3b7lQAA4z9Kit4cug
+XbxozXhluvF8Vl9xCGLCgDYRooy6e/t+huWfPFj/VmNphPt6i+4msTJYqQsvTKRy
+gtN+AfsA3CZX0LUyUNGcWgB91G0+3PlyfpP9S+dEPfS2oP3LVFzF2OILydbsQcv6
+5u+n+Zp9ngPiZaBRkUeaU/e1LHvSUIvd73SSB72WI855KfDEb0yT24yNHtXI0WNy
++mwM1H2JCC1bExplCaG76IS55ywJTeB+zO7lbqBkiX2G81o822Cj404hQLO5NNeW
+hB53jW4WTRaeipH6ZwblLgniQPXhDQ==
+=KwB6
+-----END PGP SIGNATURE-----
+
+--2GzT8EOhGp/ew666--
