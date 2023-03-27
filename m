@@ -2,213 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5989B6CAB40
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119BC6CAB3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 19:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbjC0RBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 13:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
+        id S232520AbjC0RBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 13:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232602AbjC0RBk (ORCPT
+        with ESMTP id S232503AbjC0RBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:01:40 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298B13C31;
-        Mon, 27 Mar 2023 10:01:36 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id r14so1183789oiw.12;
-        Mon, 27 Mar 2023 10:01:36 -0700 (PDT)
+        Mon, 27 Mar 2023 13:01:37 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFB74216
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:01:29 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id ew6so38931124edb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 10:01:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679936488;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MiwTgU7gCi7Y1Efu5iqCpK4GW+Ibe2u/4CDr6wU0ciU=;
+        b=VuwcNy6RW81yA7xf/j2OkbcH2aJCR/IAPvX6ggUPJyMiRJOM3xgphsThTHMf3iIWsk
+         qADyQMlC7N17pNN2HHtsL4sNmyhlr/NUlU3gfAaXaHdNbHsd3MCdirAT7CZyBIhXLnji
+         rFHFUxKWDyR5+1AhUnW3m32hwt2egzgc3MyFr1Va4p+DaYpXcBD1GSb9Kc2gdDptu3g2
+         qaKlY4AHOuXzQ3n7lViZv97v6u8YplWfF98/CgL8b7+exOQLmyVwB3SwkhG+uomPgYnX
+         kFq2JmFvC9T9CmDuDz0G2k341sJinKa0gqoFeR4r0pM6rqLFiUvrZtQSG90xSt70YBOf
+         Fzvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679936495;
+        d=1e100.net; s=20210112; t=1679936488;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=A1cer0myC+DWXq6An3rnd+VU8s9Hlurez1Dtqg1RAXY=;
-        b=ROpqpACInh74Ci1JpVcsye1pNNkh2QC+5vt5MySEHLTB65qEc0+9VAo1Hdmp92yWRP
-         YqCoeKNy5+xl+WWB/sgoqeMvEsaSVJXPS8NFw61uk75VCWpdMk+czKjPbMGw5AmVtRAe
-         QRuG30rc/GoZKrawXgMn363rhx+86VoOaCmy7OdSIlTYLWKhSMo/z48a34Fre5g0iYlC
-         t4aIZVvRaJWjS/rYeBrs5mdQ3/BasskUEMzIZcSDsHKxE/oZopljBn8OPAnR0O93Y0i1
-         dwB0VJjt0qkO5sIQsbq3M5QOOXJ5GmcbbVEmCQQr1bIZFRHqOhWNfR6WVBbPJQFiIu+I
-         Xfgw==
-X-Gm-Message-State: AO0yUKXx0guzd08hsBFqKI01Vln+EpBMhLFVEYDcmUWXe5LMQAgVB2h8
-        A+qRuofsUUWJ1P92KYTGAg==
-X-Google-Smtp-Source: AK7set9SgajdaFm03+ruzVbdS8nr9AGDu1wFpBNE1MkKTQ3SXd6u3tEkVayylaoJu/IVuphkeImN8w==
-X-Received: by 2002:aca:2217:0:b0:387:6a3b:5a86 with SMTP id b23-20020aca2217000000b003876a3b5a86mr5256962oic.28.1679936493734;
-        Mon, 27 Mar 2023 10:01:33 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n67-20020acabd46000000b0038919e6eb5esm1610639oif.3.2023.03.27.10.01.32
+        bh=MiwTgU7gCi7Y1Efu5iqCpK4GW+Ibe2u/4CDr6wU0ciU=;
+        b=GW+nGpK59VKVR+xT18hb9qu5/X26O+yC2a+pfCa14e6PlrhoSuLi7XRjnsQb3oRgmC
+         EdpIz9dPVN1oAEdAW1IBGAhWCX+ohbM7ibLOQJXfzr3491O24AUmvsCQjOUmUSRyTNqf
+         IwGmB0OSGIUiX0DDeWAgK5MBO7ZXRCAafE05VR2ldVAfCrFcAFCmwpmWUpZMO/8dY3mr
+         3VujTSh3eUof21vN9AqKR+F5Vk7SHY9L24Zq4mdGPSrJRBnUtzdFqVSTLduDc4malj1W
+         fF7UpLuGVau2/VkVtFQp6a/k7b1f7UQ8ahDxbNyOHg1BDfwyKu61HFKPAWnava5j2qns
+         DxqA==
+X-Gm-Message-State: AAQBX9c90i+2q+8eIcALtmT4+H0BIOjZ691Li4hcK8E2xJSjK5VsIoBT
+        ywrcvZMSmHmjCjGPNIB7DLI=
+X-Google-Smtp-Source: AKy350blcU31zArFdsw3R4rpxiKy5JwQp/0Wh2XL2VeKxnjpCY4W9K1IjkEdzo3FsQlP0SswPG9PDA==
+X-Received: by 2002:aa7:c54f:0:b0:4fa:4bc4:a911 with SMTP id s15-20020aa7c54f000000b004fa4bc4a911mr12898927edr.13.1679936488024;
+        Mon, 27 Mar 2023 10:01:28 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id t27-20020a50ab5b000000b004c0c5864cc5sm14936026edc.25.2023.03.27.10.01.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 10:01:33 -0700 (PDT)
-Received: (nullmailer pid 4104036 invoked by uid 1000);
-        Mon, 27 Mar 2023 17:01:32 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] dt-bindings: reserved-memory: Drop unneeded quotes
-Date:   Mon, 27 Mar 2023 12:01:22 -0500
-Message-Id: <20230327170122.4103518-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Mon, 27 Mar 2023 10:01:27 -0700 (PDT)
+From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Baoquan He <bhe@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: [PATCH v3 1/2] mm: vmalloc: Remove a global vmap_blocks xarray
+Date:   Mon, 27 Mar 2023 19:01:25 +0200
+Message-Id: <20230327170126.406044-1-urezki@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-checking for this can be enabled in yamllint.
+A global vmap_blocks-xarray array can be contented under
+heavy usage of the vm_map_ram()/vm_unmap_ram() APIs. The
+lock_stat shows that a "vmap_blocks.xa_lock" lock is a
+second in a top-list when it comes to contentions:
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+<snip>
+----------------------------------------
+class name con-bounces contentions ...
+----------------------------------------
+vmap_area_lock:         2554079 2554276 ...
+  --------------
+  vmap_area_lock        1297948  [<00000000dd41cbaa>] alloc_vmap_area+0x1c7/0x910
+  vmap_area_lock        1256330  [<000000009d927bf3>] free_vmap_block+0x4a/0xe0
+  vmap_area_lock              1  [<00000000c95c05a7>] find_vm_area+0x16/0x70
+  --------------
+  vmap_area_lock        1738590  [<00000000dd41cbaa>] alloc_vmap_area+0x1c7/0x910
+  vmap_area_lock         815688  [<000000009d927bf3>] free_vmap_block+0x4a/0xe0
+  vmap_area_lock              1  [<00000000c1d619d7>] __get_vm_area_node+0xd2/0x170
+
+vmap_blocks.xa_lock:    862689  862698 ...
+  -------------------
+  vmap_blocks.xa_lock   378418    [<00000000625a5626>] vm_map_ram+0x359/0x4a0
+  vmap_blocks.xa_lock   484280    [<00000000caa2ef03>] xa_erase+0xe/0x30
+  -------------------
+  vmap_blocks.xa_lock   576226    [<00000000caa2ef03>] xa_erase+0xe/0x30
+  vmap_blocks.xa_lock   286472    [<00000000625a5626>] vm_map_ram+0x359/0x4a0
+...
+<snip>
+
+that is a result of running vm_map_ram()/vm_unmap_ram() in
+a loop. The test creates 64(on 64 CPUs system) threads and
+each one maps/unmaps 1 page.
+
+After this change the "xa_lock" can be considered as a noise
+in the same test condition:
+
+<snip>
+...
+&xa->xa_lock#1:         10333 10394 ...
+  --------------
+  &xa->xa_lock#1        5349      [<00000000bbbc9751>] xa_erase+0xe/0x30
+  &xa->xa_lock#1        5045      [<0000000018def45d>] vm_map_ram+0x3a4/0x4f0
+  --------------
+  &xa->xa_lock#1        7326      [<0000000018def45d>] vm_map_ram+0x3a4/0x4f0
+  &xa->xa_lock#1        3068      [<00000000bbbc9751>] xa_erase+0xe/0x30
+...
+<snip>
+
+This patch does not fix vmap_area_lock/free_vmap_area_lock and
+purge_vmap_area_lock bottle-necks, it is rather a separate rework.
+
+v1 - v2:
+   - Add more comments(Andrew Morton req.)
+   - Switch to WARN_ON_ONCE(Lorenzo Stoakes req.)
+
+v2 -> v3:
+   - Fix a kernel-doc complain(Matthew Wilcox)
+
+Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 ---
- .../bindings/reserved-memory/google,open-dice.yaml          | 2 +-
- .../bindings/reserved-memory/nvidia,tegra210-emc-table.yaml | 2 +-
- .../devicetree/bindings/reserved-memory/phram.yaml          | 4 ++--
- .../devicetree/bindings/reserved-memory/qcom,cmd-db.yaml    | 6 +++---
- .../devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml | 6 +++---
- .../devicetree/bindings/reserved-memory/ramoops.yaml        | 6 +++---
- .../bindings/reserved-memory/shared-dma-pool.yaml           | 2 +-
- 7 files changed, 14 insertions(+), 14 deletions(-)
+ mm/vmalloc.c | 85 +++++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 64 insertions(+), 21 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml b/Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml
-index a924fcfca085..c591ec37d7e8 100644
---- a/Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml
-+++ b/Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml
-@@ -16,7 +16,7 @@ maintainers:
-   - David Brazdil <dbrazdil@google.com>
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 978194dc2bb8..821256ecf81c 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -1908,9 +1908,22 @@ static struct vmap_area *find_unlink_vmap_area(unsigned long addr)
+ #define VMAP_BLOCK		0x2 /* mark out the vmap_block sub-type*/
+ #define VMAP_FLAGS_MASK		0x3
  
- allOf:
--  - $ref: "reserved-memory.yaml"
-+  - $ref: reserved-memory.yaml
++/*
++ * We should probably have a fallback mechanism to allocate virtual memory
++ * out of partially filled vmap blocks. However vmap block sizing should be
++ * fairly reasonable according to the vmalloc size, so it shouldn't be a
++ * big problem.
++ */
+ struct vmap_block_queue {
+ 	spinlock_t lock;
+ 	struct list_head free;
++
++	/*
++	 * An xarray requires an extra memory dynamically to
++	 * be allocated. If it is an issue, we can use rb-tree
++	 * instead.
++	 */
++	struct xarray vmap_blocks;
+ };
  
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/reserved-memory/nvidia,tegra210-emc-table.yaml b/Documentation/devicetree/bindings/reserved-memory/nvidia,tegra210-emc-table.yaml
-index b1b0421a4255..e2ace3df942a 100644
---- a/Documentation/devicetree/bindings/reserved-memory/nvidia,tegra210-emc-table.yaml
-+++ b/Documentation/devicetree/bindings/reserved-memory/nvidia,tegra210-emc-table.yaml
-@@ -14,7 +14,7 @@ description: On Tegra210, firmware passes a binary representation of the
-   EMC frequency table via a reserved memory region.
+ struct vmap_block {
+@@ -1928,24 +1941,46 @@ struct vmap_block {
+ static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
  
- allOf:
--  - $ref: "reserved-memory.yaml"
-+  - $ref: reserved-memory.yaml
+ /*
+- * XArray of vmap blocks, indexed by address, to quickly find a vmap block
+- * in the free path. Could get rid of this if we change the API to return a
+- * "cookie" from alloc, to be passed to free. But no big deal yet.
++ * In order to fast access to any "vmap_block" associated with a
++ * specific address, we store them into a per-cpu xarray. A hash
++ * function is addr_to_vbq() whereas a key is a vb->va->va_start
++ * value.
++ *
++ * Please note, a vmap_block_queue, which is a per-cpu, is not
++ * serialized by a raw_smp_processor_id() current CPU, instead
++ * it is chosen based on a CPU-index it belongs to, i.e. it is
++ * a hash-table.
++ *
++ * An example:
++ *
++ *  CPU_1  CPU_2  CPU_0
++ *    |      |      |
++ *    V      V      V
++ * 0     10     20     30     40     50     60
++ * |------|------|------|------|------|------|...<vmap address space>
++ *   CPU0   CPU1   CPU2   CPU0   CPU1   CPU2
++ *
++ * - CPU_1 invokes vm_unmap_ram(6), 6 belongs to CPU0 zone, thus
++ *   it access: CPU0/INDEX0 -> vmap_blocks -> xa_lock;
++ *
++ * - CPU_2 invokes vm_unmap_ram(11), 11 belongs to CPU1 zone, thus
++ *   it access: CPU1/INDEX1 -> vmap_blocks -> xa_lock;
++ *
++ * - CPU_0 invokes vm_unmap_ram(20), 20 belongs to CPU2 zone, thus
++ *   it access: CPU2/INDEX2 -> vmap_blocks -> xa_lock.
+  */
+-static DEFINE_XARRAY(vmap_blocks);
++static struct vmap_block_queue *
++addr_to_vbq(unsigned long addr)
++{
++	int index = (addr / VMAP_BLOCK_SIZE) % num_possible_cpus();
  
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/reserved-memory/phram.yaml b/Documentation/devicetree/bindings/reserved-memory/phram.yaml
-index 6c4db28015f1..65c7cacf9be4 100644
---- a/Documentation/devicetree/bindings/reserved-memory/phram.yaml
-+++ b/Documentation/devicetree/bindings/reserved-memory/phram.yaml
-@@ -17,8 +17,8 @@ maintainers:
-   - Vincent Whitchurch <vincent.whitchurch@axis.com>
+-/*
+- * We should probably have a fallback mechanism to allocate virtual memory
+- * out of partially filled vmap blocks. However vmap block sizing should be
+- * fairly reasonable according to the vmalloc size, so it shouldn't be a
+- * big problem.
+- */
++	return &per_cpu(vmap_block_queue, index);
++}
  
- allOf:
--  - $ref: "reserved-memory.yaml"
--  - $ref: "/schemas/mtd/mtd.yaml"
-+  - $ref: reserved-memory.yaml
-+  - $ref: /schemas/mtd/mtd.yaml
+-static unsigned long addr_to_vb_idx(unsigned long addr)
++static unsigned long
++addr_to_vb_va_start(unsigned long addr)
+ {
+-	addr -= VMALLOC_START & ~(VMAP_BLOCK_SIZE-1);
+-	addr /= VMAP_BLOCK_SIZE;
+-	return addr;
++	return rounddown(addr, VMAP_BLOCK_SIZE);
+ }
  
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,cmd-db.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,cmd-db.yaml
-index df1b5e0ed3f4..610f8ef37e8d 100644
---- a/Documentation/devicetree/bindings/reserved-memory/qcom,cmd-db.yaml
-+++ b/Documentation/devicetree/bindings/reserved-memory/qcom,cmd-db.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/reserved-memory/qcom,cmd-db.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/reserved-memory/qcom,cmd-db.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+ static void *vmap_block_vaddr(unsigned long va_start, unsigned long pages_off)
+@@ -1953,7 +1988,7 @@ static void *vmap_block_vaddr(unsigned long va_start, unsigned long pages_off)
+ 	unsigned long addr;
  
- title: Qualcomm Command DB
+ 	addr = va_start + (pages_off << PAGE_SHIFT);
+-	BUG_ON(addr_to_vb_idx(addr) != addr_to_vb_idx(va_start));
++	WARN_ON_ONCE(addr_to_vb_va_start(addr) != va_start);
+ 	return (void *)addr;
+ }
  
-@@ -20,7 +20,7 @@ maintainers:
-   - Bjorn Andersson <bjorn.andersson@linaro.org>
+@@ -1970,7 +2005,6 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+ 	struct vmap_block_queue *vbq;
+ 	struct vmap_block *vb;
+ 	struct vmap_area *va;
+-	unsigned long vb_idx;
+ 	int node, err;
+ 	void *vaddr;
  
- allOf:
--  - $ref: "reserved-memory.yaml"
-+  - $ref: reserved-memory.yaml
+@@ -2003,8 +2037,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+ 	bitmap_set(vb->used_map, 0, (1UL << order));
+ 	INIT_LIST_HEAD(&vb->free_list);
  
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-index 08eb10c25821..bab982f00485 100644
---- a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-+++ b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/reserved-memory/qcom,rmtfs-mem.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/reserved-memory/qcom,rmtfs-mem.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+-	vb_idx = addr_to_vb_idx(va->va_start);
+-	err = xa_insert(&vmap_blocks, vb_idx, vb, gfp_mask);
++	vbq = addr_to_vbq(va->va_start);
++	err = xa_insert(&vbq->vmap_blocks, va->va_start, vb, gfp_mask);
+ 	if (err) {
+ 		kfree(vb);
+ 		free_vmap_area(va);
+@@ -2021,9 +2055,11 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
  
- title: Qualcomm Remote File System Memory
+ static void free_vmap_block(struct vmap_block *vb)
+ {
++	struct vmap_block_queue *vbq;
+ 	struct vmap_block *tmp;
  
-@@ -15,7 +15,7 @@ maintainers:
-   - Bjorn Andersson <bjorn.andersson@linaro.org>
+-	tmp = xa_erase(&vmap_blocks, addr_to_vb_idx(vb->va->va_start));
++	vbq = addr_to_vbq(vb->va->va_start);
++	tmp = xa_erase(&vbq->vmap_blocks, vb->va->va_start);
+ 	BUG_ON(tmp != vb);
  
- allOf:
--  - $ref: "reserved-memory.yaml"
-+  - $ref: reserved-memory.yaml
+ 	spin_lock(&vmap_area_lock);
+@@ -2135,6 +2171,7 @@ static void vb_free(unsigned long addr, unsigned long size)
+ 	unsigned long offset;
+ 	unsigned int order;
+ 	struct vmap_block *vb;
++	struct vmap_block_queue *vbq;
  
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
-index 0391871cf44d..45cc39ecc9f8 100644
---- a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
-+++ b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/reserved-memory/ramoops.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/reserved-memory/ramoops.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 	BUG_ON(offset_in_page(size));
+ 	BUG_ON(size > PAGE_SIZE*VMAP_MAX_ALLOC);
+@@ -2143,7 +2180,10 @@ static void vb_free(unsigned long addr, unsigned long size)
  
- title: Ramoops oops/panic logger
+ 	order = get_order(size);
+ 	offset = (addr & (VMAP_BLOCK_SIZE - 1)) >> PAGE_SHIFT;
+-	vb = xa_load(&vmap_blocks, addr_to_vb_idx(addr));
++
++	vbq = addr_to_vbq(addr);
++	vb = xa_load(&vbq->vmap_blocks, addr_to_vb_va_start(addr));
++
+ 	spin_lock(&vb->lock);
+ 	bitmap_clear(vb->used_map, offset, (1UL << order));
+ 	spin_unlock(&vb->lock);
+@@ -3486,6 +3526,7 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
+ {
+ 	char *start;
+ 	struct vmap_block *vb;
++	struct vmap_block_queue *vbq;
+ 	unsigned long offset;
+ 	unsigned int rs, re, n;
  
-@@ -27,7 +27,7 @@ maintainers:
-   - Kees Cook <keescook@chromium.org>
+@@ -3503,7 +3544,8 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
+ 	 * Area is split into regions and tracked with vmap_block, read out
+ 	 * each region and zero fill the hole between regions.
+ 	 */
+-	vb = xa_load(&vmap_blocks, addr_to_vb_idx((unsigned long)addr));
++	vbq = addr_to_vbq((unsigned long) addr);
++	vb = xa_load(&vbq->vmap_blocks, addr_to_vb_va_start((unsigned long) addr));
+ 	if (!vb)
+ 		goto finished;
  
- allOf:
--  - $ref: "reserved-memory.yaml"
-+  - $ref: reserved-memory.yaml
+@@ -4272,6 +4314,7 @@ void __init vmalloc_init(void)
+ 		p = &per_cpu(vfree_deferred, i);
+ 		init_llist_head(&p->list);
+ 		INIT_WORK(&p->wq, delayed_vfree_work);
++		xa_init(&vbq->vmap_blocks);
+ 	}
  
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/reserved-memory/shared-dma-pool.yaml b/Documentation/devicetree/bindings/reserved-memory/shared-dma-pool.yaml
-index 47696073b665..457de0920cd1 100644
---- a/Documentation/devicetree/bindings/reserved-memory/shared-dma-pool.yaml
-+++ b/Documentation/devicetree/bindings/reserved-memory/shared-dma-pool.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - devicetree-spec@vger.kernel.org
- 
- allOf:
--  - $ref: "reserved-memory.yaml"
-+  - $ref: reserved-memory.yaml
- 
- properties:
-   compatible:
+ 	/* Import existing vmlist entries. */
 -- 
-2.39.2
+2.30.2
 
