@@ -2,90 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBFC6CA1FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C386CA204
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbjC0LDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 07:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
+        id S232289AbjC0LEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 07:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbjC0LDp (ORCPT
+        with ESMTP id S232231AbjC0LEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 07:03:45 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA23D40CD
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:03:43 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id i17-20020a056e020d9100b00325a80f683cso5739697ilj.22
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:03:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679915023;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YyhK+BtLiyEB31FwYNSc62BTerEF/wzBlZyPMAiY0dA=;
-        b=edhOzYht8VVRr3u/1H+DhJbyioWtateabI6zEEBOBjq4C0PfsW0Hqf7jlJ4cYeUcug
-         7E+kf6m8ewdEe2FzTA6bhhx4rA6U659ft9tDxddHcMxvHVLUdDmfH11Ew0GzwBGpP/5/
-         JdtuGAbVGBwjYlYEFpHOa75lgKlwuVik0vJfB/N4Jw84XJox1minGPEVSFLZ5tEOC3Y8
-         lsFl+nzW1TL5QcfJ9JpqeF9KYv+UHDCYPokJyGwsoBwrEmsK47w+RATFH36umXvvvbXO
-         h7VpD+ZfdtZUNPqREYIqRmmF7waHbVpCtZni969ZNdUpgTua8xsActCtKojgsjnuZXdx
-         cKUw==
-X-Gm-Message-State: AAQBX9fVWP3i24zmHvPgxr3GR2eQMks5T9ptKPuYTQmjnSrxyrH3c8Tl
-        MVbBageDO6FtZwP0FFYTMNQP9bQfL5kwndCLOXUy/jouRZ4D
-X-Google-Smtp-Source: AKy350ZEOEJnwF7hjKeyDYaOKx9n4l8S/2r788Ijl00bYfSf9WaAr8s9czGNCRjI7x9Ctl9lyBrYHZN9j11ULRJsSVA9fNV/nwj4
+        Mon, 27 Mar 2023 07:04:20 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE574483;
+        Mon, 27 Mar 2023 04:04:11 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 606B524E114;
+        Mon, 27 Mar 2023 19:04:04 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Mar
+ 2023 19:04:04 +0800
+Received: from [192.168.125.108] (113.72.145.117) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Mar
+ 2023 19:04:03 +0800
+Message-ID: <20774e11-b7d4-e895-13f1-ea6dad130e4e@starfivetech.com>
+Date:   Mon, 27 Mar 2023 19:04:02 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b46:b0:316:fa49:3705 with SMTP id
- f6-20020a056e020b4600b00316fa493705mr5941337ilu.1.1679915023298; Mon, 27 Mar
- 2023 04:03:43 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 04:03:43 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000037783a05f7dfb2c8@google.com>
-Subject: [syzbot] Monthly nilfs report
-From:   syzbot <syzbot+list91fd19ac4f0e1b0d9d06@syzkaller.appspotmail.com>
-To:     konishi.ryusuke@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 4/5] usb: cdns3: add StarFive JH7110 USB driver.
+Content-Language: en-US
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        "Vinod Koul" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+References: <20230315104411.73614-1-minda.chen@starfivetech.com>
+ <20230315104411.73614-5-minda.chen@starfivetech.com>
+ <2c99725a0bf259203a5b00f4c752eeb1b6596f59.camel@pengutronix.de>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <2c99725a0bf259203a5b00f4c752eeb1b6596f59.camel@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.117]
+X-ClientProxiedBy: EXCAS063.cuchost.com (172.16.6.23) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello nilfs maintainers/developers,
 
-This is a 30-day syzbot report for the nilfs subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/nilfs
 
-During the period, 6 new issues were detected and 1 were fixed.
-In total, 20 issues are still open and 16 have been fixed so far.
-
-Some of the still happening issues:
-
-Crashes Repro Title
-1236    Yes   INFO: task hung in lock_mount
-              https://syzkaller.appspot.com/bug?extid=221d75710bde87fa0e97
-901     Yes   WARNING in mark_buffer_dirty (4)
-              https://syzkaller.appspot.com/bug?extid=2af3bc9585be7f23f290
-821     No    KMSAN: uninit-value in nilfs_add_checksums_on_logs
-              https://syzkaller.appspot.com/bug?extid=048585f3f4227bb2b49b
-404     Yes   WARNING in nilfs_btree_assign
-              https://syzkaller.appspot.com/bug?extid=31837fe952932efc8fb9
-316     Yes   WARNING in nilfs_sufile_set_segment_usage
-              https://syzkaller.appspot.com/bug?extid=14e9f834f6ddecece094
-169     No    INFO: task hung in path_openat (7)
-              https://syzkaller.appspot.com/bug?extid=950a0cdaa2fdd14f5bdc
-44      Yes   INFO: task hung in nilfs_detach_log_writer
-              https://syzkaller.appspot.com/bug?extid=e3973c409251e136fdd0
-13      No    KASAN: slab-out-of-bounds Read in nilfs_iget_test
-              https://syzkaller.appspot.com/bug?extid=cac676135771fc8f1eb2
-5       No    possible deadlock in nilfs_evict_inode
-              https://syzkaller.appspot.com/bug?extid=5b7d542076d9bddc3c6a
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On 2023/3/23 17:29, Philipp Zabel wrote:
+> On Mi, 2023-03-15 at 18:44 +0800, Minda Chen wrote:
+>> There is a Cadence USB3 core for JH7110 SoCs, the cdns
+>> core is the child of this USB wrapper module device.
+>> 
+>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>> ---
+> [...]
+>> diff --git a/drivers/usb/cdns3/cdns3-starfive.c b/drivers/usb/cdns3/cdns3-starfive.c
+>> new file mode 100644
+>> index 000000000000..a99f98f85235
+>> --- /dev/null
+>> +++ b/drivers/usb/cdns3/cdns3-starfive.c
+>> @@ -0,0 +1,305 @@
+> [...]
+>> +static int cdns_clk_rst_init(struct cdns_starfive *data)
+>> +{
+>> +	int ret;
+>> +
+>> +	data->num_clks = devm_clk_bulk_get_all(data->dev, &data->clks);
+>> +	if (data->num_clks < 0)
+>> +		return dev_err_probe(data->dev, -ENODEV,
+>> +			"Failed to get clocks\n");
+>> +
+>> +	ret = clk_bulk_prepare_enable(data->num_clks, data->clks);
+>> +	if (ret)
+>> +		return dev_err_probe(data->dev, ret,
+>> +			"failed to enable clocks\n");
+> 
+> In general, it's better to acquire all resources first and only then
+> start interacting with them, and to order all devm_ calls before non-
+> devm calls to make sure cleanup is done in reverse order.
+> 
+> In this case you can switch clk_bulk_prepare_enable() with
+> devm_reset_control_array_get_exclusive() and simplify the error path.
+> 
+OK, thanks
+>> +	data->resets = devm_reset_control_array_get_exclusive(data->dev);
+>> +	if (IS_ERR(data->resets)) {
+>> +		ret = dev_err_probe(data->dev, PTR_ERR(data->resets),
+>> +			"Failed to get resets");
+>> +		goto err_clk_init;
+>> +	}
+>> +
+>> +	ret = reset_control_deassert(data->resets);
+>> +	if (ret) {
+>> +		ret = dev_err_probe(data->dev, ret,
+>> +			"failed to reset clocks\n");
+>> +		goto err_clk_init;
+>> +	}
+>> +
+>> +	return ret;
+>> +
+>> +err_clk_init:
+>> +	clk_bulk_disable_unprepare(data->num_clks, data->clks);
+>> +	return ret;
+>> +}
+> 
+> regards
+> Philipp
