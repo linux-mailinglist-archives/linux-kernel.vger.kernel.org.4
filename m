@@ -2,190 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A1A6CB042
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA656CB040
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbjC0VCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 17:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
+        id S230424AbjC0VBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 17:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjC0VCD (ORCPT
+        with ESMTP id S229971AbjC0VBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 17:02:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343321BD1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679950877;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pePBFHN5s0mkHf+iMKhZSRwNai0pCDXlXPyFKRXDXsc=;
-        b=MUVjvo1pdwxdHsylps3sXG7iZ/5f4LMl2PTjL7L7TvxNObywROTE6gWZcMH816tN3XeGxa
-        R0hPo40b3vIDnXZCGrerGcRN9XdrJbIdZjRnmkqSrnQdDoGFTRa79a3CCW/heFQ7lH8pzA
-        Sp2PAa4Dbxy28GoxiVFypA96W+9Lngo=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-149-nusCBFGgMTy4KzOXWw91Ew-1; Mon, 27 Mar 2023 17:01:16 -0400
-X-MC-Unique: nusCBFGgMTy4KzOXWw91Ew-1
-Received: by mail-qt1-f200.google.com with SMTP id v10-20020a05622a130a00b003e4ee70e001so894438qtk.6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:01:16 -0700 (PDT)
+        Mon, 27 Mar 2023 17:01:31 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765F32126
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:01:30 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so13103759pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:01:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679950890;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=I47QgG80c18NHe2QXGtpe6IXSCOJbQsxdw+n6WwyTPc=;
+        b=qEMxtwtl57eh3jwNaDlneulqEJP59uEeZdGMNUBJvreTP9e94ESJcY8Jo7vY9WHvSQ
+         ahMzjIJhOtkCwnV0g5A4O/aNEWAnicKi2dfHbEnZ5lShR7llIZ49aK2KwBA45Fh44Dbj
+         5fK7WxfNzUdfG5Ci0+Y9QADuCr9zGKlPIwJVis+6X4ICttn9DcgH5dNw1Wj4LRRgaI4a
+         pPeeDS2OmegcbFJPxOHZVp7sE5P+x0vEhMGlAin26j6QA3/4vTHTHdck9n4FHyJ0WGrD
+         FTG4+dOiu8nnONYgQEOPIjtX5dFKN1NadCgxyamiPKEx5Y4eRsQpVnp5O+mKC3uPdnT4
+         I+eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679950875; x=1682542875;
+        d=1e100.net; s=20210112; t=1679950890;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pePBFHN5s0mkHf+iMKhZSRwNai0pCDXlXPyFKRXDXsc=;
-        b=5C83OGECUmDlENOYaS2qnXwNV+KnySp4AhrSc7GVTdKYAT7FQ1KDjUn9wzxcXp7hZn
-         Nh5Xts4zNEV92fw3gJnI/+Y2kJi41aDqI4UIAUgR4eZzYIgZmETOyxetgWD1sr+ypsPy
-         ri454XnHRVyicN423+v6X8wB4g/+E9+PZTZmUvOYSSgCvLyJys6+pTDjkq7gpUULinLd
-         rru1wdjg3VZvv0Um6gJLpMUE2zNX6sVtF28IsZQo8cuwf73P5fAiUSOvC8+AjrWc+pHt
-         c0dALPXscbk7eWXKshdmM+0F/R98zLl0AJijrj9I0yQYcWVn+5Fl45CFWu+WcTkrrgi4
-         JkCg==
-X-Gm-Message-State: AAQBX9cHWbZusrpiGxORjqwwm/hJ40NAqL3dh/+s5ACzsS/kk9Ac0BBc
-        +age8yUDm3PmqVTRNmV1Q44Tv3/600sim7BZ0F/dJvCq70n3vusjtTfMc0TDXIXvWWxf09wfPOJ
-        yWETMlOY3Dg2t/6vGA3Iq0fjx
-X-Received: by 2002:a05:6214:528f:b0:5af:3a13:202d with SMTP id kj15-20020a056214528f00b005af3a13202dmr20867696qvb.4.1679950875516;
-        Mon, 27 Mar 2023 14:01:15 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aVDWYJQwWqIHwZUh5ktHNEupzgPiHGj1mY8GkaRJKKsVQEhsdqRHbLM5b4eazfi17GQ4yXtw==
-X-Received: by 2002:a05:6214:528f:b0:5af:3a13:202d with SMTP id kj15-20020a056214528f00b005af3a13202dmr20867635qvb.4.1679950875081;
-        Mon, 27 Mar 2023 14:01:15 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id jh19-20020a0562141fd300b005dd8b93457csm3195224qvb.20.2023.03.27.14.01.13
+        bh=I47QgG80c18NHe2QXGtpe6IXSCOJbQsxdw+n6WwyTPc=;
+        b=XwgSgpRHc51YBfvuhROtp+AQbmC+uUU25jk5lTckS6K16we+aBUFu3K3gHKTCRxlnJ
+         DrZUiAe5uBJ+HU9kMeCAYkp+QtIekSWHtcjTsYPhY0D9aK2cCdQ9cWm6T14zMMx3DDsD
+         PEyJOWH0div+IsDC2iVqRDLgzqaZlW9g+475BeZ/8/T/Ju6AsGJDqMXCcBJF38b6/cVN
+         WT2zkASbymPHoH86MlLvTUR/4C+mD3LcT0Wszo7BWTGN+sLd20RgIeabQiqYGMfE7XQE
+         eLGTGIts+T+osVtKCnAQiY19Mqge3BdP3kLScVeWaiv+W3CXsTqH5DcFKgB8GONi75Yw
+         0ORA==
+X-Gm-Message-State: AAQBX9dGF6ZaJuSci5fq6exCs/RwmnEvhNHC2+J0or2Bt0/BXVtmnQOY
+        7DMgEmMqOyly5Oa9uks1Y4iX+w==
+X-Google-Smtp-Source: AKy350aHdL7wM6XPVYpmTCr5+ubBfWHZ0yH2Ao164vY7yTBP8KHuhKBry5rT2/49WOb0LzeOxmuENA==
+X-Received: by 2002:a17:903:32ca:b0:1a0:53f3:3761 with SMTP id i10-20020a17090332ca00b001a053f33761mr13617248plr.15.1679950889923;
+        Mon, 27 Mar 2023 14:01:29 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:ad52:968f:ad4a:52d2])
+        by smtp.gmail.com with ESMTPSA id y15-20020a1709027c8f00b001a21fceff33sm6267741pll.48.2023.03.27.14.01.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 14:01:14 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 17:01:13 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] userfaultfd: don't fail on unrecognized features
-Message-ID: <ZCIEGblnsWHKF8RD@x1n>
-References: <20220722201513.1624158-1-axelrasmussen@google.com>
+        Mon, 27 Mar 2023 14:01:29 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 15:01:26 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     MD Danish Anwar <danishanwar@ti.com>
+Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v5 3/5] soc: ti: pruss: Add pruss_cfg_read()/update() API
+Message-ID: <20230327210126.GC3158115@p14s>
+References: <20230323062451.2925996-1-danishanwar@ti.com>
+ <20230323062451.2925996-4-danishanwar@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220722201513.1624158-1-axelrasmussen@google.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230323062451.2925996-4-danishanwar@ti.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think I overlooked this patch..
-
-Axel, could you explain why this patch is correct?  Comments inline.
-
-On Fri, Jul 22, 2022 at 01:15:13PM -0700, Axel Rasmussen wrote:
-> The basic interaction for setting up a userfaultfd is, userspace issues
-> a UFFDIO_API ioctl, and passes in a set of zero or more feature flags,
-> indicating the features they would prefer to use.
+On Thu, Mar 23, 2023 at 11:54:49AM +0530, MD Danish Anwar wrote:
+> From: Suman Anna <s-anna@ti.com>
 > 
-> Of course, different kernels may support different sets of features
-> (depending on kernel version, kconfig options, architecture, etc).
-> Userspace's expectations may also not match: perhaps it was built
-> against newer kernel headers, which defined some features the kernel
-> it's running on doesn't support.
+> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
+> the PRUSS platform driver to read and program respectively a register
+> within the PRUSS CFG sub-module represented by a syscon driver.
 > 
-> Currently, if userspace passes in a flag we don't recognize, the
-> initialization fails and we return -EINVAL. This isn't great, though.
-
-Why?  IIUC that's the major way for user app to detect any misconfig of
-feature list so it can bail out early.
-
-Quoting from man page (ioctl_userfaultfd(2)):
-
-UFFDIO_API
-       (Since Linux 4.3.)  Enable operation of the userfaultfd and perform API handshake.
-
-       ...
-
-           struct uffdio_api {
-               __u64 api;        /* Requested API version (input) */
-               __u64 features;   /* Requested features (input/output) */
-               __u64 ioctls;     /* Available ioctl() operations (output) */
-           };
-
-       ...
-
-       For Linux kernel versions before 4.11, the features field must be
-       initialized to zero before the call to UFFDIO_API, and zero (i.e.,
-       no feature bits) is placed in the features field by the kernel upon
-       return from ioctl(2).
-
-       ...
-
-       To enable userfaultfd features the application should set a bit
-       corresponding to each feature it wants to enable in the features
-       field.  If the kernel supports all the requested features it will
-       enable them.  Otherwise it will zero out the returned uffdio_api
-       structure and return EINVAL.
-
-IIUC the right way to use this API is first probe with features==0, then
-the kernel will return all the supported features, then the user app should
-enable only a subset (or all, but not a superset) of supported ones in the
-next UFFDIO_API with a new uffd.
-
-> Userspace doesn't have an obvious way to react to this; sure, one of the
-> features I asked for was unavailable, but which one? The only option it
-> has is to turn off things "at random" and hope something works.
+> These APIs are internal to PRUSS driver. Various useful registers
+> and macros for certain register bit-fields and their values have also
+> been added.
 > 
-> Instead, modify UFFDIO_API to just ignore any unrecognized feature
-> flags. The interaction is now that the initialization will succeed, and
-> as always we return the *subset* of feature flags that can actually be
-> used back to userspace.
-> 
-> Now userspace has an obvious way to react: it checks if any flags it
-> asked for are missing. If so, it can conclude this kernel doesn't
-> support those, and it can either resign itself to not using them, or
-> fail with an error on its own, or whatever else.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
 > ---
->  fs/userfaultfd.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> index e943370107d0..4974da1f620c 100644
-> --- a/fs/userfaultfd.c
-> +++ b/fs/userfaultfd.c
-> @@ -1923,10 +1923,8 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
->  	ret = -EFAULT;
->  	if (copy_from_user(&uffdio_api, buf, sizeof(uffdio_api)))
->  		goto out;
-> -	features = uffdio_api.features;
-> -	ret = -EINVAL;
-> -	if (uffdio_api.api != UFFD_API || (features & ~UFFD_API_FEATURES))
-> -		goto err_out;
+>  drivers/soc/ti/pruss.c |   1 +
+>  drivers/soc/ti/pruss.h | 112 +++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 113 insertions(+)
+>  create mode 100644 drivers/soc/ti/pruss.h
+>
 
-What's worse is that I think you removed the only UFFD_API check.  Although
-I'm not sure whether it'll be extended in the future or not at all (very
-possible we keep using 0xaa forever..), but removing this means we won't be
-able to extend it to a new api version in the future, and misconfig of
-uffdio_api will wrongly succeed I think:
+This patch doesn't compile without warnings.
 
-	/* Test wrong UFFD_API */
-	uffdio_api.api = 0xab;
-	uffdio_api.features = 0;
-	if (ioctl(uffd, UFFDIO_API, &uffdio_api) == 0)
-		err("UFFDIO_API should fail but didn't");
-
-> +	/* Ignore unsupported features (userspace built against newer kernel) */
-> +	features = uffdio_api.features & UFFD_API_FEATURES;
->  	ret = -EPERM;
->  	if ((features & UFFD_FEATURE_EVENT_FORK) && !capable(CAP_SYS_PTRACE))
->  		goto err_out;
+> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+> index 126b672b9b30..2fa7df667592 100644
+> --- a/drivers/soc/ti/pruss.c
+> +++ b/drivers/soc/ti/pruss.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/regmap.h>
+>  #include <linux/remoteproc.h>
+>  #include <linux/slab.h>
+> +#include "pruss.h"
+>  
+>  /**
+>   * struct pruss_private_data - PRUSS driver private data
+> diff --git a/drivers/soc/ti/pruss.h b/drivers/soc/ti/pruss.h
+> new file mode 100644
+> index 000000000000..4626d5f6b874
+> --- /dev/null
+> +++ b/drivers/soc/ti/pruss.h
+> @@ -0,0 +1,112 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * PRU-ICSS Subsystem user interfaces
+> + *
+> + * Copyright (C) 2015-2023 Texas Instruments Incorporated - http://www.ti.com
+> + *	MD Danish Anwar <danishanwar@ti.com>
+> + */
+> +
+> +#ifndef _SOC_TI_PRUSS_H_
+> +#define _SOC_TI_PRUSS_H_
+> +
+> +#include <linux/bits.h>
+> +#include <linux/regmap.h>
+> +
+> +/*
+> + * PRU_ICSS_CFG registers
+> + * SYSCFG, ISRP, ISP, IESP, IECP, SCRP applicable on AMxxxx devices only
+> + */
+> +#define PRUSS_CFG_REVID         0x00
+> +#define PRUSS_CFG_SYSCFG        0x04
+> +#define PRUSS_CFG_GPCFG(x)      (0x08 + (x) * 4)
+> +#define PRUSS_CFG_CGR           0x10
+> +#define PRUSS_CFG_ISRP          0x14
+> +#define PRUSS_CFG_ISP           0x18
+> +#define PRUSS_CFG_IESP          0x1C
+> +#define PRUSS_CFG_IECP          0x20
+> +#define PRUSS_CFG_SCRP          0x24
+> +#define PRUSS_CFG_PMAO          0x28
+> +#define PRUSS_CFG_MII_RT        0x2C
+> +#define PRUSS_CFG_IEPCLK        0x30
+> +#define PRUSS_CFG_SPP           0x34
+> +#define PRUSS_CFG_PIN_MX        0x40
+> +
+> +/* PRUSS_GPCFG register bits */
+> +#define PRUSS_GPCFG_PRU_GPO_SH_SEL              BIT(25)
+> +
+> +#define PRUSS_GPCFG_PRU_DIV1_SHIFT              20
+> +#define PRUSS_GPCFG_PRU_DIV1_MASK               GENMASK(24, 20)
+> +
+> +#define PRUSS_GPCFG_PRU_DIV0_SHIFT              15
+> +#define PRUSS_GPCFG_PRU_DIV0_MASK               GENMASK(15, 19)
+> +
+> +#define PRUSS_GPCFG_PRU_GPO_MODE                BIT(14)
+> +#define PRUSS_GPCFG_PRU_GPO_MODE_DIRECT         0
+> +#define PRUSS_GPCFG_PRU_GPO_MODE_SERIAL         BIT(14)
+> +
+> +#define PRUSS_GPCFG_PRU_GPI_SB                  BIT(13)
+> +
+> +#define PRUSS_GPCFG_PRU_GPI_DIV1_SHIFT          8
+> +#define PRUSS_GPCFG_PRU_GPI_DIV1_MASK           GENMASK(12, 8)
+> +
+> +#define PRUSS_GPCFG_PRU_GPI_DIV0_SHIFT          3
+> +#define PRUSS_GPCFG_PRU_GPI_DIV0_MASK           GENMASK(7, 3)
+> +
+> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE_POSITIVE   0
+> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE_NEGATIVE   BIT(2)
+> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE            BIT(2)
+> +
+> +#define PRUSS_GPCFG_PRU_GPI_MODE_MASK           GENMASK(1, 0)
+> +#define PRUSS_GPCFG_PRU_GPI_MODE_SHIFT          0
+> +
+> +#define PRUSS_GPCFG_PRU_MUX_SEL_SHIFT           26
+> +#define PRUSS_GPCFG_PRU_MUX_SEL_MASK            GENMASK(29, 26)
+> +
+> +/* PRUSS_MII_RT register bits */
+> +#define PRUSS_MII_RT_EVENT_EN                   BIT(0)
+> +
+> +/* PRUSS_SPP register bits */
+> +#define PRUSS_SPP_XFER_SHIFT_EN                 BIT(1)
+> +#define PRUSS_SPP_PRU1_PAD_HP_EN                BIT(0)
+> +#define PRUSS_SPP_RTU_XFR_SHIFT_EN              BIT(3)
+> +
+> +/**
+> + * pruss_cfg_read() - read a PRUSS CFG sub-module register
+> + * @pruss: the pruss instance handle
+> + * @reg: register offset within the CFG sub-module
+> + * @val: pointer to return the value in
+> + *
+> + * Reads a given register within the PRUSS CFG sub-module and
+> + * returns it through the passed-in @val pointer
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +static int pruss_cfg_read(struct pruss *pruss, unsigned int reg, unsigned int *val)
+> +{
+> +	if (IS_ERR_OR_NULL(pruss))
+> +		return -EINVAL;
+> +
+> +	return regmap_read(pruss->cfg_regmap, reg, val);
+> +}
+> +
+> +/**
+> + * pruss_cfg_update() - configure a PRUSS CFG sub-module register
+> + * @pruss: the pruss instance handle
+> + * @reg: register offset within the CFG sub-module
+> + * @mask: bit mask to use for programming the @val
+> + * @val: value to write
+> + *
+> + * Programs a given register within the PRUSS CFG sub-module
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +static int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+> +			    unsigned int mask, unsigned int val)
+> +{
+> +	if (IS_ERR_OR_NULL(pruss))
+> +		return -EINVAL;
+> +
+> +	return regmap_update_bits(pruss->cfg_regmap, reg, mask, val);
+> +}
+> +
+> +#endif  /* _SOC_TI_PRUSS_H_ */
 > -- 
-> 2.37.1.359.gd136c6c3e2-goog
+> 2.25.1
 > 
-
--- 
-Peter Xu
-
