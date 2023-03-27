@@ -2,135 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816F36C9B7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 08:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6B16C9B78
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 08:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232319AbjC0Gql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 02:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
+        id S230379AbjC0GqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 02:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbjC0Gqf (ORCPT
+        with ESMTP id S229462AbjC0GqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 02:46:35 -0400
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 960EB469E;
-        Sun, 26 Mar 2023 23:46:30 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.47
-        by mg.richtek.com with MailGates ESMTP Server V5.0(26696:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>); Mon, 27 Mar 2023 14:46:13 +0800 (CST)
-Received: from ex4.rt.l (192.168.10.47) by ex4.rt.l (192.168.10.47) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Mon, 27 Mar
- 2023 14:46:13 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Mon, 27 Mar 2023 14:46:13 +0800
-From:   <cy_huang@richtek.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <lgirdwood@gmail.com>, <cy_huang@richtek.com>,
-        <jeff_chang@richtek.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH 1/2] dt-bindings: regulator: Add Richtek RT4803
-Date:   Mon, 27 Mar 2023 14:46:11 +0800
-Message-ID: <1679899572-16182-1-git-send-email-cy_huang@richtek.com>
-X-Mailer: git-send-email 1.8.3.1
+        Mon, 27 Mar 2023 02:46:15 -0400
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFE130CB;
+        Sun, 26 Mar 2023 23:46:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VehiUOk_1679899569;
+Received: from 30.97.48.73(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VehiUOk_1679899569)
+          by smtp.aliyun-inc.com;
+          Mon, 27 Mar 2023 14:46:10 +0800
+Message-ID: <60a08a27-f611-c64c-eec7-27703a08cfa0@linux.alibaba.com>
+Date:   Mon, 27 Mar 2023 14:46:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH -next 1/2] spi: sprd-adi: Use
+ devm_platform_get_and_ioremap_resource()
+To:     Yang Li <yang.lee@linux.alibaba.com>, broonie@kernel.org
+Cc:     orsonzhai@gmail.com, zhang.lyra@gmail.com,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230327060516.93509-1-yang.lee@linux.alibaba.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20230327060516.93509-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
 
-Add the binding document for Richtek RT4803.
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
- .../bindings/regulator/richtek,rt4803.yaml         | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt4803.yaml
+On 3/27/2023 2:05 PM, Yang Li wrote:
+> According to commit 890cc39a8799 ("drivers: provide
+> devm_platform_get_and_ioremap_resource()"), convert
+> platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+> 
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt4803.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt4803.yaml
-new file mode 100644
-index 00000000..6ceba02
---- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/richtek,rt4803.yaml
-@@ -0,0 +1,68 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/richtek,rt4803.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Richtek RT4803 Boost Regulator
-+
-+maintainers:
-+  - ChiYuan Huang <cy_huang@richtek.com>
-+
-+description: |
-+  RT4803 is a boost regulator that's designed to provide the minimum output
-+  voltage, even if the input voltage is lower than the required voltage. It
-+  supports boost and auto bypass mode that depends on the difference between the
-+  input and output voltage. If the input is lower than the output, mode will
-+  transform to boost mode. Otherwise, turn on bypass switch to enter bypass mode.
-+
-+  Datasheet is available at
-+  https://www.richtek.com/assets/product_file/RT4803/DS4803-03.pdf
-+  https://www.richtek.com/assets/product_file/RT4803A/DS4803A-06.pdf
-+
-+allOf:
-+  - $ref: regulator.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - richtek,rt4803
-+
-+  reg:
-+    maxItems: 1
-+
-+  richtek,vsel-active-high:
-+    type: boolean
-+    description: Specify the VSEL register group is using when system is active
-+
-+  regulator-allowed-modes:
-+    description: |
-+      Available operating mode
-+        1: Auto PFM/PWM
-+        2: Force PWM
-+    items:
-+      enum: [1, 2]
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      regulator@75 {
-+        compatible = "richtek,rt4803";
-+        reg = <0x75>;
-+        richtek,vsel-active-high;
-+        regulator-name = "rt4803-regulator";
-+        regulator-min-microvolt = <2850000>;
-+        regulator-max-microvolt = <4400000>;
-+        regulator-allowed-modes = <1 2>;
-+        regulator-always-on;
-+      };
-+    };
--- 
-2.7.4
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
+> ---
+>   drivers/spi/spi-sprd-adi.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
+> index 3b158124d79f..22e39c4c12c4 100644
+> --- a/drivers/spi/spi-sprd-adi.c
+> +++ b/drivers/spi/spi-sprd-adi.c
+> @@ -541,8 +541,7 @@ static int sprd_adi_probe(struct platform_device *pdev)
+>   	dev_set_drvdata(&pdev->dev, ctlr);
+>   	sadi = spi_controller_get_devdata(ctlr);
+>   
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	sadi->base = devm_ioremap_resource(&pdev->dev, res);
+> +	sadi->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+>   	if (IS_ERR(sadi->base)) {
+>   		ret = PTR_ERR(sadi->base);
+>   		goto put_ctlr;
