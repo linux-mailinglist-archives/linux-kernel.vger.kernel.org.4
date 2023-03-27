@@ -2,66 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEE66C9EC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6CA6C9EC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232852AbjC0I77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
+        id S233257AbjC0JAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233139AbjC0I7Z (ORCPT
+        with ESMTP id S233321AbjC0I7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:59:25 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DD75B9B;
-        Mon, 27 Mar 2023 01:57:23 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32R8v7Yp071080;
-        Mon, 27 Mar 2023 03:57:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679907427;
-        bh=gpvh8embFevY7Yb9xj0+drMw50vCPv+1YQ2lGEkaDdw=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=vIrEsa8dXHwUexJ4UrGDCHHqRwc6Q7ucISDLZ348H8xWLDDnWTa0ldJwANDho8DY6
-         yeFFNjjl8SoEYbvjDDOBraHr9/T7l/fLUZNxlnl/nXJHatUPuWPtkFBaUbnqD+SAyI
-         dB5cbX6HimrFXeknMplrhG0pl2i1oXLQrl+zrFRo=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32R8v7lu124627
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 27 Mar 2023 03:57:07 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 27
- Mar 2023 03:57:07 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 27 Mar 2023 03:57:07 -0500
-Received: from [172.24.218.103] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32R8v1Gk123170;
-        Mon, 27 Mar 2023 03:57:03 -0500
-Message-ID: <7aff4422-d82e-846a-7d84-a841acd00111@ti.com>
-Date:   Mon, 27 Mar 2023 14:27:01 +0530
+        Mon, 27 Mar 2023 04:59:36 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A513B5FFC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:57:45 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id g17so10360873lfv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679907464;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qO70piV6L5co88Z+RIZ+x/s1SHwenabxlhCDD1NSUPA=;
+        b=E83RXsk7l6zQ0U5TKuJdTMB6PM7vC3IgyA9euiyfZNFi1FPMEWvptlGoDBZBZLYAp0
+         H+Qt/w7lvY8u9jpU15Aedh2F9OG4MiqW6UdQecxZNZkGTBLe5nirWcZE6furimBnIWlL
+         0XUFrkcx7baqB8BKCZgt7F2WXwbsn0duPHdqSiDXqyRICaD5r11H3DyDeH1RpPRk1VSX
+         RyAxQBVkg91sIHWik56QBip0sI/lm7yMV0UYKjbfxCSPpT4P4AJMJgeqIsJDZ237/ojf
+         7Lm+/SdP+QWO81Gozcbj5pBZhvnVmOxP2lOYcKvWKqvB03IMEQIsSvP9sGD/UH8IUZmx
+         41QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679907464;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qO70piV6L5co88Z+RIZ+x/s1SHwenabxlhCDD1NSUPA=;
+        b=JAHNpws7m43tYj5z0rx9+i8tuLZJkxfLktdn34duBEltz6hS0dH5qOxN//4U/rh7xZ
+         Jv6OtcfTIagyLI/guNRV9GP+0JKd8g2SQIzXsYg+isSgKvicQ4NHvniVkeqHvGWIK+Sp
+         IYPklfZoakJcUVOrSb/o127c+cQECJSDGxVBL/FJAjikiG92csTaJd3wJxQjzPtDKbeB
+         nXgHeiV3uwjdkNs0X2WKK+d1af/QYZ3mBtiPCrLxubwPSFQyYAQO/P3t7M7Dt2Fj6Nu5
+         JXUBfrio5cWnSOYIA+QQ1vLP1+U9sddeqnPUaqi5rNkqAjJRQL0WMn5n10Tuc5IxLnyF
+         Biyg==
+X-Gm-Message-State: AAQBX9enqOpaBTcO4zcHbbzOss+SKxdszJ3fGsiAtbbM+XKyVOJmEnLw
+        7xqX8FmP8ivgr6rlRhgjnuiFig==
+X-Google-Smtp-Source: AKy350bq7PWQ0j+JQ0lJzGuzoliax57NGExzC4FLMTzh59uAlRnHrFWt+qseT5HE34jJbSBYcBnkIA==
+X-Received: by 2002:a05:6512:25b:b0:4e9:7d60:7108 with SMTP id b27-20020a056512025b00b004e97d607108mr2871056lfo.53.1679907463889;
+        Mon, 27 Mar 2023 01:57:43 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id y1-20020a2eb001000000b002986854f27dsm4536171ljk.23.2023.03.27.01.57.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 01:57:43 -0700 (PDT)
+Message-ID: <d9cd11e1-1d71-e54f-5d3a-f3de54d71f01@linaro.org>
+Date:   Mon, 27 Mar 2023 10:57:41 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] arm64: dts: ti: k3-j784s4-evm: Add OSPI0 flash support
+Subject: Re: [PATCH 1/2] ARM: dts: qcom: sdx65: add IPA information
 Content-Language: en-US
-To:     Apurva Nandan <a-nandan@ti.com>, Nishanth Menon <nm@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230327082924.12427-1-a-nandan@ti.com>
-From:   "Raghavendra, Vignesh" <vigneshr@ti.com>
-In-Reply-To: <20230327082924.12427-1-a-nandan@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+To:     Alex Elder <elder@ieee.org>, Krzysztof Kozlowski <krzk@kernel.org>,
+        Alex Elder <elder@linaro.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     quic_rohiagar@quicinc.com, caleb.connolly@linaro.org,
+        mka@chromium.org, evgreen@chromium.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230324201528.2540564-1-elder@linaro.org>
+ <20230324201528.2540564-2-elder@linaro.org>
+ <98fcbdd4-77b3-5b17-7102-c590f1a5a63e@kernel.org>
+ <f600869e-0fd8-ca19-1baf-d23f7a9103d6@linaro.org>
+ <5f825218-c583-7ccd-6845-684a4b166abe@ieee.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <5f825218-c583-7ccd-6845-684a4b166abe@ieee.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,154 +88,119 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 3/27/2023 1:59 PM, Apurva Nandan wrote:
-> Add support for OSPI flash connected to OSPI0 instance through FSS.
-> Also enumerate OSPI1 instance in MCU DTSI.
+On 26.03.2023 18:04, Alex Elder wrote:
+> On 3/25/23 7:12 AM, Konrad Dybcio wrote:
+>>
+>>
+>> On 25.03.2023 12:14, Krzysztof Kozlowski wrote:
+>>> On 24/03/2023 21:15, Alex Elder wrote:
+>>>> Add IPA-related nodes and definitions to "sdx65.dtsi".  The SMP2P
+>>>> nodes (ipa_smp2p_out and ipa_smp2p_in) are already present.
+>>>>
+>>>> Enable IPA in "sdx65-mtp.dts"; this GSI firmware is loaded by Trust
+>>>> Zone on this platform.
+>>>>
+>>>> Tested-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>>>> Signed-off-by: Alex Elder <elder@linaro.org>
+>>>> ---
+>>>>   arch/arm/boot/dts/qcom-sdx65-mtp.dts |  5 ++++
+>>>>   arch/arm/boot/dts/qcom-sdx65.dtsi    | 38 ++++++++++++++++++++++++++++
+>>>>   2 files changed, 43 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm/boot/dts/qcom-sdx65-mtp.dts b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+>>>> index ed98c83c141fc..72e25de0db5fc 100644
+>>>> --- a/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+>>>> +++ b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+>>>> @@ -245,6 +245,11 @@ &blsp1_uart3 {
+>>>>       status = "okay";
+>>>>   };
+>>>>   +&ipa {
+>>>> +    qcom,gsi-loader = "skip";
+>>>> +    status = "okay";
+>>>> +};
+>>>> +
+>>>>   &qpic_bam {
+>>>>       status = "okay";
+>>>>   };
+>>>> diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
+>>>> index 192f9f94bc8b4..360d6dc144811 100644
+>>>> --- a/arch/arm/boot/dts/qcom-sdx65.dtsi
+>>>> +++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
+>>>> @@ -11,6 +11,7 @@
+>>>>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>>>   #include <dt-bindings/power/qcom-rpmpd.h>
+>>>>   #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+>>>> +#include <dt-bindings/interconnect/qcom,sdx65.h>
+>>>>     / {
+>>>>       #address-cells = <1>;
+>>>> @@ -299,6 +300,43 @@ tcsr_mutex: hwlock@1f40000 {
+>>>>               #hwlock-cells = <1>;
+>>>>           };
+>>>>   +        ipa: ipa@3e04000 {
+>>>> +            compatible = "qcom,sdx65-ipa";
+>>>> +
+>>>> +            iommus = <&apps_smmu 0x5e0 0x0>,
+>>>> +                 <&apps_smmu 0x5e2 0x0>;
+>>>> +            reg = <0x3f40000 0x10000>,
+>>>> +                  <0x3f50000 0x5000>,
+>>>> +                  <0x3e04000 0xfc000>;
+>>>> +            reg-names = "ipa-reg",
+>>>> +                    "ipa-shared",
+>>>> +                    "gsi";
+>>>> +
+>>>> +            interrupts-extended = <&intc GIC_SPI 241 IRQ_TYPE_EDGE_RISING>,
+>>>> +                          <&intc GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>,
+>>>> +                          <&ipa_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
+>>>> +                          <&ipa_smp2p_in 1 IRQ_TYPE_EDGE_RISING>;
+>>>> +            interrupt-names = "ipa",
+>>>> +                       "gsi",
+>>>> +                       "ipa-clock-query",
+>>>> +                       "ipa-setup-ready";
+>>>
+>>> These look misaligned.
+>>>
+>>> With above:
+>>>
+>>> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+>> With this and moving iommus below interconnect:
 > 
-> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-j784s4-evm.dts      | 44 +++++++++++++++++++
->  .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     | 43 ++++++++++++++++++
->  2 files changed, 87 insertions(+)
+> Is there guidance somewhere that states what order should be
+> used for these properties?
+This is a very slippery topic, but..
+
+ Why should iommus be below
+> interconnects?
+..everybody agrees iommus shouldn't between compatible and
+reg (these two go first hand-in-hand) and most of our DTs
+have it somewhere low, often below interconnect.
+
+In a perfect world we'd have a computer taking care of this
+but for now it remains an open question.
+
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> index 8cd4a7ecc121..7480f37e89e8 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> @@ -138,6 +138,24 @@ vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
->  			J784S4_IOPAD(0x020, PIN_INPUT, 7) /* (AJ35) MCAN15_RX.GPIO0_8 */
->  		>;
->  	};
-> +
-> +	mcu_fss0_ospi0_pins_default: mcu-fss0-ospi0-pins-default {
-> +		pinctrl-single,pins = <
-> +			J784S4_WKUP_IOPAD(0x000, PIN_OUTPUT, 0) /* (E32) MCU_OSPI0_CLK */
-> +			J784S4_WKUP_IOPAD(0x02c, PIN_OUTPUT, 0) /* (A32) MCU_OSPI0_CSn0 */
-> +			J784S4_WKUP_IOPAD(0x00c, PIN_INPUT, 0) /* (B33) MCU_OSPI0_D0 */
-> +			J784S4_WKUP_IOPAD(0x010, PIN_INPUT, 0) /* (B32) MCU_OSPI0_D1 */
-> +			J784S4_WKUP_IOPAD(0x014, PIN_INPUT, 0) /* (C33) MCU_OSPI0_D2 */
-> +			J784S4_WKUP_IOPAD(0x018, PIN_INPUT, 0) /* (C35) MCU_OSPI0_D3 */
-> +			J784S4_WKUP_IOPAD(0x01c, PIN_INPUT, 0) /* (D33) MCU_OSPI0_D4 */
-> +			J784S4_WKUP_IOPAD(0x020, PIN_INPUT, 0) /* (D34) MCU_OSPI0_D5 */
-> +			J784S4_WKUP_IOPAD(0x024, PIN_INPUT, 0) /* (E34) MCU_OSPI0_D6 */
-> +			J784S4_WKUP_IOPAD(0x028, PIN_INPUT, 0) /* (E33) MCU_OSPI0_D7 */
-> +			J784S4_WKUP_IOPAD(0x008, PIN_INPUT, 0) /* (C34) MCU_OSPI0_DQS */
-> +			J784S4_WKUP_IOPAD(0x03c, PIN_OUTPUT, 6) /* (C32) MCU_OSPI0_CSn3.MCU_OSPI0_ECC_FAIL */
-> +			J784S4_WKUP_IOPAD(0x038, PIN_OUTPUT, 6) /* (B34) MCU_OSPI0_CSn2.MCU_OSPI0_RESET_OUT0 */
-> +		>;
-> +	};
->  };
->  
->  &main_uart8 {
-> @@ -146,6 +164,32 @@ &main_uart8 {
->  	pinctrl-0 = <&main_uart8_pins_default>;
->  };
->  
-> +&fss {
-> +	status = "okay";
-> +};
-> +
-> +&ospi0 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&mcu_fss0_ospi0_pins_default>;
-> +
-> +	flash@0 {
-> +		compatible = "jedec,spi-nor";
-> +		reg = <0x0>;
-> +		spi-tx-bus-width = <8>;
-> +		spi-rx-bus-width = <8>;
-> +		spi-max-frequency = <25000000>;
-> +		cdns,tshsl-ns = <60>;
-> +		cdns,tsd2d-ns = <60>;
-> +		cdns,tchsh-ns = <60>;
-> +		cdns,tslch-ns = <60>;
-> +		cdns,read-delay = <4>;
+> As I said to Krzysztof, I *think* all of the IPA nodes look
+> like this; should all of them be updated to follow whatever
+> the preferred convention is?
+This is the ugly part of this, we don't have a solid,
+widely-agreed-upon scheme of ordering properties other than
+some loose guidelines (e.g. compatible, reg, ...,  status),
+so I think it's not worth making extra noise in existing files
+until figure it out.
 
-> +		cdns,phy-mode;
-
-Need binding doc
-
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +	};
-> +};
-> +
->  &main_i2c0 {
->  	status = "okay";
->  	pinctrl-names = "default";
-> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
-> index 93952af618f6..b29b95a532f6 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
-> @@ -308,4 +308,47 @@ cpts@3d000 {
->  			ti,cpts-periodic-outputs = <2>;
->  		};
->  	};
-> +
-> +	fss: syscon@47000000 {
-> +		compatible = "syscon", "simple-mfd";
-
-NACK. Please run make dtbs_check and fix all the issues..
-
-See whats being done for J721s2 [0] for example
-
-[0] https://lore.kernel.org/linux-arm-kernel/20230309082940.31535-1-r-gunasekaran@ti.com/
-
-> +		reg = <0x00 0x47000000 0x00 0x100>;
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +		status = "disabled";
-
-Lets keep the FSS enabled as there is not board dependency
-and disable individual SPI controllers
-
-> +
-> +		ospi0: spi@47040000 {
-> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
-> +			reg = <0x00 0x47040000 0x00 0x100>,
-> +			      <0x5 0x0000000 0x1 0x0000000>;
-
-			      <0x05 0x0000000 0x01 0x0000000>;
-
-> +			interrupts = <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>;
-> +			cdns,fifo-depth = <256>;
-> +			cdns,fifo-width = <4>;
-> +			cdns,trigger-address = <0x0>;
-> +			clocks = <&k3_clks 161 7>;
-> +			assigned-clocks = <&k3_clks 161 7>;
-> +			assigned-clock-parents = <&k3_clks 161 9>;
-> +			assigned-clock-rates = <166666666>;
-> +			power-domains = <&k3_pds 161 TI_SCI_PD_EXCLUSIVE>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			status = "disabled";
-> +		};
-> +
-> +		ospi1: spi@47050000 {
-> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
-> +			reg = <0x00 0x47050000 0x00 0x100>,
-> +			      <0x7 0x0000000 0x1 0x0000000>;
-
-
-			      <0x07 0x0000000 0x01 0x0000000>;
-
-
-> +			interrupts = <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>;
-> +			cdns,fifo-depth = <256>;
-> +			cdns,fifo-width = <4>;
-> +			cdns,trigger-address = <0x0>;
-> +			clocks = <&k3_clks 162 7>;
-> +			power-domains = <&k3_pds 162 TI_SCI_PD_EXCLUSIVE>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			status = "disabled";
-> +		};
-> +	};
-> +
->  };
-
-
-Regards
-Vignesh
+Konrad
+> 
+> Thanks.
+> 
+>                     -Alex
+> 
+> 
+>>
+>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>
+>> Konrad
+>>>
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>>
+> 
