@@ -2,268 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7AFF6CACBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D721C6CACC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjC0SIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 14:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        id S230138AbjC0SLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 14:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232378AbjC0SI0 (ORCPT
+        with ESMTP id S229477AbjC0SLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:08:26 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B282C30FC;
-        Mon, 27 Mar 2023 11:08:23 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RAAhJd020748;
-        Mon, 27 Mar 2023 11:08:21 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=dSTe5tKyUDPYYE43T/TCzSl40TipFrMRqxFOWDoEKEs=;
- b=UjJIZtCr63Ez1yDuF+/V7Ug0ai19hx1jEpirZA5Rtm9MUhGHBYJlomUnbUhbTeULMxQZ
- fJe5VeylOWAzCllX7Cdt3tXrUvKDMe2AAMx6YhfEQF/hbsbVlOG3u62YRSpUxkyv7ihM
- 03PvDq6YQfTa3DAdYRWX64Y/s9PlG9pUrLeKLLmkDL5CtuE9TcmSS1/9BOWERqPqjhb2
- SIBw+1wU7hiEijk7+2bRnn4xiS0uZqBQ0nFDMu25h45XEU637ymcEJGitfNQwoT5CkZT
- 6QVYVuCK7u/jhhFuJgDBkmxMuJtYyH8vOlMA9D9CGf8wG/PTLb4dFchgFji/t+/EvXpR sA== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3phxas85uy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 11:08:21 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 27 Mar
- 2023 11:08:19 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Mon, 27 Mar 2023 11:08:19 -0700
-Received: from localhost.localdomain (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id A23635B6921;
-        Mon, 27 Mar 2023 11:08:19 -0700 (PDT)
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <jannadurai@marvell.com>, <cchavva@marvell.com>,
-        Piyush Malgujar <pmalgujar@marvell.com>
-Subject: [PATCH 2/2] spi: octeontx2: Add ACPI support
-Date:   Mon, 27 Mar 2023 11:07:53 -0700
-Message-ID: <20230327180753.2279-3-pmalgujar@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230327180753.2279-1-pmalgujar@marvell.com>
-References: <20230327180753.2279-1-pmalgujar@marvell.com>
+        Mon, 27 Mar 2023 14:11:47 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8AF95;
+        Mon, 27 Mar 2023 11:11:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679940706; x=1711476706;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=OWH2uOgNeiZW7Bw/QuQRkVHwLq0qsNjVWxbSTLJc9OY=;
+  b=Vjfsy5NJsbEGC3/TnLuPKcN8UfyPgQVR1T1fAWlmFCmggBtPa81Utfve
+   SS8To+ih1XKtRpOeavFdI+UpWKVRfBro5QuTq+b+XRLSi7UST/uEBeFIR
+   4jlYt/VhTRS7Oi+w8C+wSfRSAFOJfV7FPD+fycvZYBk6hxy9iyULsREAc
+   vYegjsJJYkj9jLUGtxlcNAhLSRBQu2lVHdpwJL0y/etLY3KwdbJmZmVfz
+   zk43xdKxt4rGbRf9LvaJUt76wWZuVJdxi8cnv3bgqcoarBUGYaOVttyhc
+   gQqTuLCXXgeZ2OzeZarLbbv0nOUGw983fDtzc+U2qj6l9YbolJPQOSPK6
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="342752959"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="342752959"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 11:11:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="677072639"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="677072639"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga007.jf.intel.com with ESMTP; 27 Mar 2023 11:11:46 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 27 Mar 2023 11:11:45 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 27 Mar 2023 11:11:45 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Mon, 27 Mar 2023 11:11:45 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.49) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Mon, 27 Mar 2023 11:11:44 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HyFhoxxAqDGo/5S2F+JjtZuk5f1ESglUenoE3ZNY1S8kjx6qpjCaa+TCL/aCRpQUAjZp93VRSTGT6EKq9uLCns/V++9DgE/ONLgHihOcTyt86RpXUvPF/lNPklMtNr0RFcnlbI915aJGv7HqLx00gH3117cNNX/3qj2t+m4wQySPjyq6FI8iCv/xptqhoMFD0GjS05A9h2xkePohDIs8GPaHh9n9vPsdcrJVYU1y7SR1Ig8ArV9kgX1YdXBs3RnT5aOdr1OvxfCL5BOL/5cSiY94xjpzBH2QpLRSM2MBE4PZf7U0w/gTPJlwcWS+XLZZS/cK/8+SgH6Ujpkji/zDBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6gLsXOsLUH3S4+h37r8zhItmiJtXGMIyWV6YdVcYT8k=;
+ b=StZ9LD8vcCTfPB4ZjBUe9JzgeNvPXTYeo/YeBmjYzqr2wb+BgHKW4RK88ShBbh7GEy/UQ66o0wfYTAOEkkG4aBYo/qeVXFwfbMDv0BubIxvLORs7DkH1kkpjFOjpkSkR+mIaHj+FNirFKs/Rw7whPuU8Jf0+ap1eGdF5BDrBcsaehPkrs3j5yoNYnlj3jvt+ozGC+qwD6k6BFmXL7J/IfTt94ChN0b3rRGo1MDtB2KE899j2L/ayml+smRcfYw3CiLyWNoUVMx49q5Ec5WJ4BIMhFdRS2CH9zZq7rcdVkXciQy/VUD2Xv5lvvL8nKJ13cc6nXrI0eHkpB3ImufuCWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com (2603:10b6:303:192::22)
+ by DS0PR11MB8205.namprd11.prod.outlook.com (2603:10b6:8:162::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.30; Mon, 27 Mar
+ 2023 18:11:43 +0000
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::9121:8fa8:e7d9:8e46]) by MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::9121:8fa8:e7d9:8e46%8]) with mapi id 15.20.6178.038; Mon, 27 Mar 2023
+ 18:11:43 +0000
+Message-ID: <5ea54045-e5d6-720f-5b37-5f019c147a66@intel.com>
+Date:   Mon, 27 Mar 2023 20:11:35 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: linux-next: duplicate patch in the pm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Aymeric Wibo <obiwac@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+References: <20230327074547.5c418918@canb.auug.org.au>
+Content-Language: en-US
+From:   "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
+In-Reply-To: <20230327074547.5c418918@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0017.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1d::20) To MW5PR11MB5810.namprd11.prod.outlook.com
+ (2603:10b6:303:192::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: xZ5BkSUKDRp8zA7NLhknLqMlIyIxz6US
-X-Proofpoint-ORIG-GUID: xZ5BkSUKDRp8zA7NLhknLqMlIyIxz6US
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW5PR11MB5810:EE_|DS0PR11MB8205:EE_
+X-MS-Office365-Filtering-Correlation-Id: b820216c-085a-428d-d297-08db2eeeb804
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sMIw8uIxV9l+CmC/sosUkax2BzG730pLO03gSZ0yOW55bImtOxiH8+Uvp+5be2rtnu+MYN55c9JFm4+v8UlVyLiZquVFWATI9ip0J61kn3G1/FrvrIQhqCr28Egi5qyMgadgwWZBIYzCwSvB4GOP1smuUgkbtH4IDXVWLv0YUpeoiYlvRrh+iR3U5VeiZe2jGMom8ex3tLwjtWMi9Oii3faXcS9CAoZ+VuDg/83cHfUVPt/ABLelyeXJiS80XV0QOTK1ZAs9NINbFl7Klw4Tt+HHogUimVtU3rScCJwu837g8YBYKHXF+NRJUUjtRwBx63giTGwjvIsGDdaLXNXi9AUycqvEU/Xe0jY9X4BAXUjGRtPv+j2y7wU/qOY5MwZzXVyZ7ocLFULQa+7xXBMOHHpya10+pdAoaAdqlUDDbzYHclNUnO+YDmbIaBZI3uNJ3sanZG+y6cziTfgGmI7i/08CMxcRqOrpn65Wlu3bdMZn8E2jQCVCmiuj03Pr+XbM/sMlFc3gqpd6uhgg+lYOtK35L1EvX2GoIQCr2ZBHEoAcT6rtKKmliQDzJ5c0dWT0lTYO+jGpfLQdN48X4A9PxymWNPGeVAo6z2B15vH3Cdtl2aGU2UYMrlF1wA5uXAf2XiSbAeFFvaRgkHuocUog1A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5810.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(396003)(366004)(136003)(39860400002)(376002)(451199021)(6512007)(6506007)(26005)(54906003)(6486002)(316002)(6666004)(4326008)(186003)(53546011)(6916009)(66476007)(66556008)(66946007)(8676002)(478600001)(31686004)(41300700001)(86362001)(5660300002)(82960400001)(38100700002)(2906002)(36756003)(4744005)(2616005)(31696002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d3dWN2toMG1YMVFCcEszYiswYlVVSHJOZzZidTdKa3JWVVMwd2tHRnordnRx?=
+ =?utf-8?B?N21nRE9WcCtqN2ZkdmVWNnVVR3ZYTXJ2TS9MR0N2YzVESFNMbUtBdWpqbVND?=
+ =?utf-8?B?bnc0UTlqcGgwVHVPYlJQS3luV2V1VTNZejNIOW9EZWN0UWZQUy9oUEFCTGVs?=
+ =?utf-8?B?ZmxJV2VhZGh1VGN1b2tJT2lxV2lVVlFOK0NLMi9sdFFkaW00LzRpcmNJcytp?=
+ =?utf-8?B?cFJHMVlvRHdGeWRTVlBMalFCT2pvaUVrYmpKOTJ1SktoVUZrdm9KY3RNeVlK?=
+ =?utf-8?B?NEY3SGJlMGEzbTkwSGRyVFE3TmtlSjdVd3VFVlhNaXZRcjd3eXBibGxkVCtl?=
+ =?utf-8?B?S3NNSzBLNmE3MHNJMW9jQU91OUh6NWRQQkxndWFYVHR6dThKWUpTRENHYU1F?=
+ =?utf-8?B?RnRxeTEwczR6VitsZVN1enVQait4L3J0aEpScFdoREtmMXRveDZGai9BK3lB?=
+ =?utf-8?B?dllqaGl4TU5FOWVUN2xiclRaU0lBaUd6anV2cUR1STczUzNHcHVPVzZwWUN0?=
+ =?utf-8?B?Tkw5RWlIUlJZcFNzK2xUQWdrRUtUcVhJSUZpN1J5UTFQdytPa0ZzMzNwTFBt?=
+ =?utf-8?B?b2tkckNjQnNHakg2a2UyZUdjN0s2TWZBcGhFZjlaSWdKeEdzN0w4SkphQXEw?=
+ =?utf-8?B?WDltT1FKY0J1REFYaERIMW9nL01GaVh6aDJ3THN5VUpUT0xzcmxpamZNcFNG?=
+ =?utf-8?B?akpoZm80NS9QYkVjd3RUV1VoQTNEeWVxM2syZEZ0N24vcGg5MW8yMXNYZ29I?=
+ =?utf-8?B?Z3g2dlpFdExRdnNHTXBWc09kRmZQVVVRY2g0bzg0OU00OHVYQXdNQXRhZzdG?=
+ =?utf-8?B?MWJqck1lWFJEcTlGRXBrRHJsOUxpUzRPc1JpU3ZPSW9QTEZWQUtHakxZeHNo?=
+ =?utf-8?B?SFpHNWJNWVZEMWFuQlhzVXpwRUlZVWM5c1Z6MTBHTVo0RnJsT1B0VHZDNnNo?=
+ =?utf-8?B?K0Izenp1NExyZEZsV041cEltdG9FazE1MVI0b2g3dTVoSk4vZEttUytqTTVv?=
+ =?utf-8?B?cnhRVXh5UmVNaVdTZ1BJNjdtbStDWURxR1dCOEN0ZzNrejJhWkYyNGo4SnJ3?=
+ =?utf-8?B?T2h2S2tVcS9RL2JRb1g2clBZK2VzbVU2NUFxbTJtcklRQVN6Z0dtYklXdEZJ?=
+ =?utf-8?B?UkF1Y3BuMFJvYUpNYmhZWXNON2tNa3hycVlXQzFpNmh6YUEzd01Ub0RlTmRV?=
+ =?utf-8?B?MzNDVnRDYmp4KzlVU211UjBtN0FpaXhDbWx1OVBzd3c0Uk5PYzlCdkhYb0Zi?=
+ =?utf-8?B?d0J3Vm10dVFvc3NsaHJVSjA4bFppUEpyVG1JcHFBb0RETy95YjBHK3hTeUF2?=
+ =?utf-8?B?UzB4S0tOT2tiOHYrREwxWmRaQnJDbm9rblR4WE1rbmtzWDQ5TXJwSzFtcnZP?=
+ =?utf-8?B?dUNHeTVUZFQwamttYUE3ZWhQd1hSeVJYaEEvZE8wNEdpZnh2SVRES2xjR2pL?=
+ =?utf-8?B?VDJ1NVk1MU5qeDE1TnVCZ0ljdmZ6UUR4d05FaXB4R2Jrck5CMDRxVGJWMjdl?=
+ =?utf-8?B?NDc4a1VMUHlzayt0SFozUlhab2dYWEJOY0ZVQUpHemREaFdZV2tOQXlIUitn?=
+ =?utf-8?B?MXhkc256dk4vNkpTVUJJY0QxQXNsRGc4QnFOdmVYRnlGSFBXYkFQNEttZjBX?=
+ =?utf-8?B?OGJTeW82NlU0eTlKQVNVazRLaFFuZnBpc2hUcmJRc1BwVk4xRytDSGs1SkNy?=
+ =?utf-8?B?YURPNUw1NzZLbFpMUitlTURndmFyS0J0Y0NsRmRpME9OMWk3VGQxRDdITWda?=
+ =?utf-8?B?blVBQWtjd2p5RkV5T0pyWGNaWVpCOS9BRWNtVHpUMlIyZlY4Y1hEbWIvUGhx?=
+ =?utf-8?B?dmNUV3FKVnJwM0tSMmxtNjh6ZW5qdXppNE04bDVpNnRoZTB2U0xQZHlUNmZE?=
+ =?utf-8?B?cmNMUWVLQjRROGFoUDhEaUgvWkc4SGdqV0ljVGpYbDBEUzFKOEhZcFJVd29F?=
+ =?utf-8?B?UlBXMUFyVlhYOGhlUE4rUFBxOXhDMHNWRENnS1BqMzlJSVpwTFArdmhLSjQz?=
+ =?utf-8?B?MVBMQzV2emJZUDE2L1ZxSGFkSXExWldLQUg0UjNMMmxKWTlhN2NCMk9oK0t1?=
+ =?utf-8?B?QnN5Zzk2L3RmdDNJTEFRanNWbUs0RVpUMlZYaHN3ODArekxCNjk4aFpRMUNn?=
+ =?utf-8?B?OXZUVjJpYXgrb01MYXFXN3hkZXJ3R21CN3VEUFREdmVkU1ZvZlcrN3EwVVU1?=
+ =?utf-8?B?b1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b820216c-085a-428d-d297-08db2eeeb804
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5810.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 18:11:43.1380
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: u7uShfNSfgED3UAxmg2H1mVNAL8Ivc0yM7kxtmp1S4X4w8PCZnyy/GBzmah3qyyD0zD8/m/aggq3WPm8La3AOd+rX/ERQqS+bPBPgBKlOZQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB8205
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable ACPI support for SPI controller on Marvell Octeontx2 SOC. This
-supports reading the tx(rx)-bus-width from ACPI table which is used to
-set the SPI mode - DUAL, QUAD, OCTAL.
+On 3/26/2023 10:45 PM, Stephen Rothwell wrote:
+> Hi all,
+>
+> The following commit is also in Linus Torvalds' tree as a different commit
+> (but the same patch):
+>
+>    bb796d5112d2 ("ACPI: resource: Add Medion S17413 to IRQ override quirk")
+>
+> This is commit
+>
+>    2d0ab14634a2 ("ACPI: resource: Add Medion S17413 to IRQ override quirk")
+>
+> in Linus' tree.
 
-Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
----
- drivers/spi/spi-octeontx2.c | 117 +++++++++++++++++++++++++++++++-----
- 1 file changed, 103 insertions(+), 14 deletions(-)
+The duplicate patch should be gone from linux-next tomorrow, sorry for 
+the trouble.
 
-diff --git a/drivers/spi/spi-octeontx2.c b/drivers/spi/spi-octeontx2.c
-index 80d9355d119de5486a1a3803f798dd0673b0adf1..31a08b4e574f6f391336852ad0e90f84d63de51a 100644
---- a/drivers/spi/spi-octeontx2.c
-+++ b/drivers/spi/spi-octeontx2.c
-@@ -5,11 +5,16 @@
-  * Copyright (C) 2018 Marvell International Ltd.
-  */
- 
-+#include <linux/acpi.h>
- #include <linux/delay.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/pci.h>
-+#include <linux/property.h>
- #include <linux/spi/spi.h>
-+#ifdef CONFIG_ACPI
-+#include <linux/spi/spi-mem.h>
-+#endif
- 
- #include "spi-octeontx2.h"
- 
-@@ -227,6 +232,73 @@ int octeontx2_spi_transfer_one_message(struct spi_master *master,
- 	return status;
- }
- 
-+#ifdef CONFIG_ACPI
-+
-+static bool octeontx2_spi_supports_op(struct spi_mem *mem,
-+				      const struct spi_mem_op *op)
-+{
-+	struct spi_device *spi = mem->spi;
-+	const union acpi_object *obj;
-+	struct acpi_device *adev;
-+
-+	adev = ACPI_COMPANION(&spi->dev);
-+
-+	if (!acpi_dev_get_property(adev, "spi-tx-bus-width", ACPI_TYPE_INTEGER,
-+				   &obj)) {
-+		switch (obj->integer.value) {
-+		case 1:
-+			break;
-+		case 2:
-+			spi->mode |= SPI_TX_DUAL;
-+			break;
-+		case 4:
-+			spi->mode |= SPI_TX_QUAD;
-+			break;
-+		case 8:
-+			spi->mode |= SPI_TX_OCTAL;
-+			break;
-+		default:
-+			dev_warn(&spi->dev,
-+				 "spi-tx-bus-width %lld not supported\n",
-+				 obj->integer.value);
-+			break;
-+		}
-+	}
-+
-+	if (!acpi_dev_get_property(adev, "spi-rx-bus-width", ACPI_TYPE_INTEGER,
-+				   &obj)) {
-+		switch (obj->integer.value) {
-+		case 1:
-+			break;
-+		case 2:
-+			spi->mode |= SPI_RX_DUAL;
-+			break;
-+		case 4:
-+			spi->mode |= SPI_RX_QUAD;
-+			break;
-+		case 8:
-+			spi->mode |= SPI_RX_OCTAL;
-+			break;
-+		default:
-+			dev_warn(&spi->dev,
-+				 "spi-rx-bus-width %lld not supported\n",
-+				 obj->integer.value);
-+			break;
-+		}
-+	}
-+
-+	if (!spi_mem_default_supports_op(mem, op))
-+		return false;
-+
-+	return true;
-+}
-+
-+static const struct spi_controller_mem_ops octeontx2_spi_mem_ops = {
-+	.supports_op = octeontx2_spi_supports_op,
-+};
-+
-+#endif
-+
- static int octeontx2_spi_probe(struct pci_dev *pdev,
- 			       const struct pci_device_id *ent)
- {
-@@ -235,6 +307,7 @@ static int octeontx2_spi_probe(struct pci_dev *pdev,
- 	struct octeontx2_spi *p;
- 	union mpix_sts mpi_sts;
- 	int ret = -ENOENT;
-+	bool has_acpi;
- 
- 	/* may need to hunt for devtree entry */
- 	if (!pdev->dev.of_node) {
-@@ -248,6 +321,8 @@ static int octeontx2_spi_probe(struct pci_dev *pdev,
- 		of_node_put(np);
- 	}
- 
-+	has_acpi = has_acpi_companion(dev);
-+
- 	master = spi_alloc_master(dev, sizeof(struct octeontx2_spi));
- 	if (!master) {
- 		ret = -ENOMEM;
-@@ -280,20 +355,26 @@ static int octeontx2_spi_probe(struct pci_dev *pdev,
- 	mpi_sts.u64 = readq(p->register_base + OCTEONTX2_SPI_STS(p));
- 	p->rcvd_present = mpi_sts.u64 & 0x4 ? true : false;
- 
--	p->clk = devm_clk_get(dev, NULL);
--	if (IS_ERR(p->clk)) {
--		p->clk = devm_clk_get(dev, "sclk");
--		p->sys_freq = 0;
-+	if (!has_acpi) {
-+		p->clk = devm_clk_get(dev, NULL);
-+		if (IS_ERR(p->clk)) {
-+			p->clk = devm_clk_get(dev, "sclk");
-+			p->sys_freq = 0;
-+		} else {
-+			ret = clk_prepare_enable(p->clk);
-+			if (!ret)
-+				p->sys_freq = clk_get_rate(p->clk);
-+		}
-+
-+		if (!p->sys_freq)
-+			p->sys_freq = SYS_FREQ_DEFAULT;
-+		if (tbi_clk_en)
-+			p->sys_freq = TBI_FREQ;
- 	} else {
--		ret = clk_prepare_enable(p->clk);
--		if (!ret)
--			p->sys_freq = clk_get_rate(p->clk);
-+		device_property_read_u32(dev, "sclk", &p->sys_freq);
-+		if (!p->sys_freq)
-+			p->sys_freq = TBI_FREQ;
- 	}
--
--	if (!p->sys_freq)
--		p->sys_freq = SYS_FREQ_DEFAULT;
--	if (tbi_clk_en)
--		p->sys_freq = TBI_FREQ;
- 	dev_info(dev, "Reference clock is %u\n", p->sys_freq);
- 
- 	master->num_chipselect = 4;
-@@ -305,6 +386,10 @@ static int octeontx2_spi_probe(struct pci_dev *pdev,
- 	master->bits_per_word_mask = SPI_BPW_MASK(8);
- 	master->max_speed_hz = OCTEONTX2_SPI_MAX_CLOCK_HZ;
- 	master->dev.of_node = pdev->dev.of_node;
-+	master->dev.fwnode = pdev->dev.fwnode;
-+	#ifdef CONFIG_ACPI
-+		master->mem_ops = &octeontx2_spi_mem_ops;
-+	#endif
- 
- 	pci_set_drvdata(pdev, master);
- 
-@@ -315,7 +400,8 @@ static int octeontx2_spi_probe(struct pci_dev *pdev,
- 	return 0;
- 
- error_disable:
--	clk_disable_unprepare(p->clk);
-+	if (!has_acpi)
-+		clk_disable_unprepare(p->clk);
- error_put:
- 	spi_master_put(master);
- error:
-@@ -327,10 +413,13 @@ static void octeontx2_spi_remove(struct pci_dev *pdev)
- 	struct spi_master *master = pci_get_drvdata(pdev);
- 	struct octeontx2_spi *p;
- 
-+	bool has_acpi = has_acpi_companion(&pdev->dev);
-+
- 	p = spi_master_get_devdata(master);
- 	/* Put everything in a known state. */
- 	if (p) {
--		clk_disable_unprepare(p->clk);
-+		if (!has_acpi)
-+			clk_disable_unprepare(p->clk);
- 		writeq(0, p->register_base + OCTEONTX2_SPI_CFG(p));
- 	}
- 
--- 
-2.17.1
 
