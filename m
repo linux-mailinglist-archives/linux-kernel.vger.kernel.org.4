@@ -2,122 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC056C9F59
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8156C9EB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232960AbjC0J2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
+        id S233473AbjC0I6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbjC0J2O (ORCPT
+        with ESMTP id S232792AbjC0I6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:28:14 -0400
-X-Greylist: delayed 1811 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Mar 2023 02:28:09 PDT
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935E02707;
-        Mon, 27 Mar 2023 02:28:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=HcWg8teO8lRj5+fkRN/aU7d/uNN4yhTheMQkiD4xApM=;
-        b=KQ+S8jrBgKzWq5ysztQlVTE5vhmb8TDKsiJ4AO73EnQOimsNUYphLd5V2nwURWxND6CVI5o5OJ9i4
-         f5sPMyiqKaCSqOcaAlGJrttb8tGs3UU2qMTHoyTcRxw5c6aXIsf2Wyyn9buSofhf0WU1+uIKXSaO4V
-         PeHpQBWTSNaxq3G+jjpvXhw9rq5aV5521JIOi4v7FZhMcgT40Z9kjWtsWstNIL1jMO7vD6Lfm6fFFS
-         Nb9kiqeFKsoXPWBWOzx8mVoDn5qU4be6cb0TLPkmE7656dxzQe/oqJjPYiCCnOtZGpUtsoN5ItMSx3
-         7XgmsZelFzdYD08AsLEA9CtHvQfb1Xg==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.17.2.1477, Stamp: 3], Multi: [Enabled, t: (0.000008,0.010549)], BW: [Enabled, t: (0.000023,0.000001)], RTDA: [Enabled, t: (0.088525), Hit: No, Details: v2.49.0; Id: 15.zxpjd.1gsh4j5iu.3nlts; mclb], total: 0(700)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Mon, 27 Mar 2023 11:57:39 +0300
-Date:   Mon, 27 Mar 2023 11:54:01 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] treewide: Fix instantiation of devices in DT overlays
-Message-ID: <20230327085401.pgnira5btzbgehb3@h-e2.ddg>
-References: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
- <20230327030213.GJ3364759@dragon>
+        Mon, 27 Mar 2023 04:58:03 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FBC7AA2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:55:20 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id w9so32851498edc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:55:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679907318;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XT9BdnGYtPYThjY8LloDnbmIxfJ+0QWdiNM959e0Dys=;
+        b=PWoAJ5vTFdugSRs05vJq49fX/YPmDogp4aIdlUt9RNHn+WZVrqKHjas6bicMLu7Ccn
+         XRo/uOzqwZzST4Z2ML7tDsIVYrbhk06gWbHMsDVmSmrGFAsAhBMN+s4Q5TLS5tl/OTFT
+         rs0mRj06fRgJfXy8eGDn0NPCUel+scc5hnuOir6rD86njVALOLz7Cy0s5WBiUCu7XfGf
+         rvfWfItpX/EcEXMJRfrvkojjX9Lx9YQzSdYmtTNuOegyg9Wb+f8T8c2bIGYKG7X0AQ5W
+         biTLK+i4paO+T+OXxbBDyJ4uEuZ9MuqcOTYsuu/9/HdQRz8/kjqbGZpcGTazdFdQLQZO
+         2gPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679907318;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XT9BdnGYtPYThjY8LloDnbmIxfJ+0QWdiNM959e0Dys=;
+        b=RZyHne7SlOFJPuVAumiTru+g0PYRufsgYV1Betd8bjdr+CWNaDkcyDhS453iD8EAjw
+         dlcPnTYTfLalULf2QpZNO4viPkTyO1tX+9gTxMRYD/BhkJDTW6xwjeqHZYZxtx1NcLkv
+         12JGcm+Wh95q50I2WdCy0d3PNkPgyOSnctCeQg3/WIqy5/0Csv8TAeLgTYOmkecotLRT
+         mQvhhHILWUhASEacLJXEhDB0BfwAnrh/NX8BMHRl+ZmG/DDiuWyU+8SJMrLPzIUvFxna
+         gEeogsBnvUaBMZw8u4knqK/w/550CojVvRH+A1LRhApfLDURgJROeg7kxWQzfWIEbSl+
+         PYyw==
+X-Gm-Message-State: AAQBX9et2eU2bUfdnebpOo2/WicTzAaS6gOvzrT0og0bGBY2dvcQVpud
+        U5bhCL2SHrkscnVSzaIDDcdRUw==
+X-Google-Smtp-Source: AKy350Ywv2T7IE75T69dWTwniYZIc3VRt1lnyfl/sYuW/unJMiTuWNiuVzjT5/kx3JnXfIHjfbx5yg==
+X-Received: by 2002:a17:906:ac1:b0:92d:9767:8e0a with SMTP id z1-20020a1709060ac100b0092d97678e0amr10205796ejf.13.1679907318583;
+        Mon, 27 Mar 2023 01:55:18 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:198e:c1a5:309b:d678? ([2a02:810d:15c0:828:198e:c1a5:309b:d678])
+        by smtp.gmail.com with ESMTPSA id v19-20020a17090651d300b0092b86d41dbasm13887119ejk.114.2023.03.27.01.55.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 01:55:18 -0700 (PDT)
+Message-ID: <c89e1c75-360f-214b-5406-f1983a5aef2d@linaro.org>
+Date:   Mon, 27 Mar 2023 10:55:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327030213.GJ3364759@dragon>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] arm64: dts: ti: k3-j784s4-evm: Add OSPI0 flash support
+Content-Language: en-US
+To:     Apurva Nandan <a-nandan@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230327082924.12427-1-a-nandan@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230327082924.12427-1-a-nandan@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Shawn!
+On 27/03/2023 10:29, Apurva Nandan wrote:
+> Add support for OSPI flash connected to OSPI0 instance through FSS.
+> Also enumerate OSPI1 instance in MCU DTSI.
 
-On Mon, Mar 27, 2023 at 11:02:13AM +0800, Shawn Guo wrote:
-> + Ivan
-> 
-> On Fri, Mar 24, 2023 at 10:30:39AM +0100, Geert Uytterhoeven wrote:
-> > When loading a DT overlay that creates a device, the device is not
-> > instantiated, unless the DT overlay is unloaded and reloaded again.
-> > 
-> > Saravana explains:
-> >   Basically for all overlays (I hope the function is only used for
-> >   overlays) we assume all nodes are NOT devices until they actually
-> >   get added as a device.
-> > 
-> > Based on a patch by Saravana Kannan, which covered only platform and spi
-> > devices.
-> > 
-> > Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
-> > Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=rWYnkCZ6z5bGX-wj4w@mail.gmail.com
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > Acked-by: Mark Brown <broonie@kernel.org>
-> > ---
-> > v2:
-> >   - Add Acked-by,
-> >   - Drop RFC.
-> > ---
-> >  drivers/bus/imx-weim.c    | 1 +
-> >  drivers/i2c/i2c-core-of.c | 1 +
-> >  drivers/of/dynamic.c      | 1 +
-> >  drivers/of/platform.c     | 1 +
-> >  drivers/spi/spi.c         | 1 +
-> >  5 files changed, 5 insertions(+)
-> > 
-> > diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
-> > index 36d42484142aede2..898e23a4231400fa 100644
-> > --- a/drivers/bus/imx-weim.c
-> > +++ b/drivers/bus/imx-weim.c
-> > @@ -329,6 +329,7 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
-> >  				 "Failed to setup timing for '%pOF'\n", rd->dn);
-> >  
-> >  		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
-> > +			rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
-> >  			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
-> >  				dev_err(&pdev->dev,
-> >  					"Failed to create child device '%pOF'\n",
-> 
-> Ivan, so you were aware of that the device is not instantiated before
-> this change?
-> 
 
-I was not aware of that, thanks for warning me.
-Will test in the near future.
+
+> +
+> +&ospi0 {
+> +	status = "okay";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&mcu_fss0_ospi0_pins_default>;
+> +
+> +	flash@0 {
+> +		compatible = "jedec,spi-nor";
+> +		reg = <0x0>;
+> +		spi-tx-bus-width = <8>;
+> +		spi-rx-bus-width = <8>;
+> +		spi-max-frequency = <25000000>;
+> +		cdns,tshsl-ns = <60>;
+> +		cdns,tsd2d-ns = <60>;
+> +		cdns,tchsh-ns = <60>;
+> +		cdns,tslch-ns = <60>;
+> +		cdns,read-delay = <4>;
+> +		cdns,phy-mode;
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +	};
+> +};
+> +
+>  &main_i2c0 {
+>  	status = "okay";
+>  	pinctrl-names = "default";
+> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+> index 93952af618f6..b29b95a532f6 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+> @@ -308,4 +308,47 @@ cpts@3d000 {
+>  			ti,cpts-periodic-outputs = <2>;
+>  		};
+>  	};
+> +
+> +	fss: syscon@47000000 {
+> +		compatible = "syscon", "simple-mfd";
+
+NAK. This is not allowed on itself and dtbs_check would warn you.
+
+> +		reg = <0x00 0x47000000 0x00 0x100>;
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +		status = "disabled";
+> +
+> +		ospi0: spi@47040000 {
+> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
+> +			reg = <0x00 0x47040000 0x00 0x100>,
+> +			      <0x5 0x0000000 0x1 0x0000000>;
+> +			interrupts = <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>;
+> +			cdns,fifo-depth = <256>;
+> +			cdns,fifo-width = <4>;
+> +			cdns,trigger-address = <0x0>;
+> +			clocks = <&k3_clks 161 7>;
+> +			assigned-clocks = <&k3_clks 161 7>;
+> +			assigned-clock-parents = <&k3_clks 161 9>;
+> +			assigned-clock-rates = <166666666>;
+> +			power-domains = <&k3_pds 161 TI_SCI_PD_EXCLUSIVE>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		ospi1: spi@47050000 {
+> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
+> +			reg = <0x00 0x47050000 0x00 0x100>,
+> +			      <0x7 0x0000000 0x1 0x0000000>;
+> +			interrupts = <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>;
+> +			cdns,fifo-depth = <256>;
+> +			cdns,fifo-width = <4>;
+> +			cdns,trigger-address = <0x0>;
+> +			clocks = <&k3_clks 162 7>;
+> +			power-domains = <&k3_pds 162 TI_SCI_PD_EXCLUSIVE>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +	};
+> +
+
+Don't add stay blank lines.
+
+>  };
+
+Best regards,
+Krzysztof
 
