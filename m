@@ -2,191 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2386C9F0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A81A76C9F13
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjC0JML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53950 "EHLO
+        id S233054AbjC0JMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbjC0JMG (ORCPT
+        with ESMTP id S233036AbjC0JMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:12:06 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FD8CA;
-        Mon, 27 Mar 2023 02:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679908325; x=1711444325;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zwYVDyBScBvmHn6CqlqF0q715WS9mRUwOHAV6jvv1tU=;
-  b=eWzasY2q5wXr/GLXINR8kskI0FE6ujbf60JPPNRevQwqvMddVh+vMKS1
-   G24fWP4sPD9psAAzNwK0ultlms7FRYwc/r/5uI5L3Hz7hKDr6qPOs7oYT
-   IbOUs0Evnbm0cgox+6lNH+HKuCqsuCgC5unaJ2lygip02ESSm1+QW5iAZ
-   dVrYsNNDRi0kwS9Y1xil2eECfjGqt/UhSDAX5hB5zTrUvaG4WqxKJdFmT
-   HPYeYSzvEmdY8JOS8koOTLcaWaYQrcYyC3WHunlQqvCXZ6MANfNz8KtKo
-   e/m7SAmnj7U9I2Q7f9QD91uMAWkK5X6e96bq1DEe8oZnkVDI0XnXND07l
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="324102834"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="324102834"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 02:12:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="857594201"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="857594201"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.63.101])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 02:11:59 -0700
-Message-ID: <d691d740-c172-a5cb-e4f0-5bc5687c8464@intel.com>
-Date:   Mon, 27 Mar 2023 12:11:54 +0300
+        Mon, 27 Mar 2023 05:12:18 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DBC49E8;
+        Mon, 27 Mar 2023 02:12:15 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32R9BfaN6021750, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32R9BfaN6021750
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Mon, 27 Mar 2023 17:11:41 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Mon, 27 Mar 2023 17:11:57 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 27 Mar 2023 17:11:57 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Mon, 27 Mar 2023 17:11:57 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Chris Morgan <macroalpha82@gmail.com>,
+        "Nitin Gupta" <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>
+Subject: RE: [PATCH v3 2/9] wifi: rtw88: sdio: Add HCI implementation for SDIO based chipsets
+Thread-Topic: [PATCH v3 2/9] wifi: rtw88: sdio: Add HCI implementation for
+ SDIO based chipsets
+Thread-Index: AQHZW3PmZA7gPA0kmU6G6BuQjRUl4q8HoQbggAAT5QCAAIJ4AIAGJ0Tw
+Date:   Mon, 27 Mar 2023 09:11:56 +0000
+Message-ID: <33e7ca4c7ba947d68d451e919837f6b7@realtek.com>
+References: <20230320213508.2358213-1-martin.blumenstingl@googlemail.com>
+ <20230320213508.2358213-3-martin.blumenstingl@googlemail.com>
+ <f7b9dda9d852456caffc3c0572f88947@realtek.com>
+ <CAFBinCCspK=GaCMEiHsXi=0H4Sbp2vg_4EK=8bqQLWR8+qg7Sw@mail.gmail.com>
+ <CAFBinCAxuEyNkUxsqJ9wVxXupErcp33JCFsJ2hDupWj9MRMYGA@mail.gmail.com>
+In-Reply-To: <CAFBinCAxuEyNkUxsqJ9wVxXupErcp33JCFsJ2hDupWj9MRMYGA@mail.gmail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [PATCH resent] perf/x86/amd/uncore: Fix exception handling in
- amd_uncore_cpu_up_prepare()
-To:     Markus Elfring <Markus.Elfring@web.de>,
-        kernel-janitors@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>, x86@kernel.org
-Cc:     cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <ab860edf-79ca-2035-c5a3-d25be6fd9dac@web.de>
- <3a35fb28-5937-72f8-b2e8-b1d9899b5e43@web.de>
-Content-Language: en-US
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <3a35fb28-5937-72f8-b2e8-b1d9899b5e43@web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/03/23 16:15, Markus Elfring wrote:
-> Date: Fri, 17 Mar 2023 13:13:14 +0100
-> 
-> The label “fail” was used to jump to another pointer check despite of
-> the detail in the implementation of the function “amd_uncore_cpu_up_prepare”
-> that it was determined already that the corresponding variable contained
-> a null pointer (because of a failed function call in two cases).
-> 
-> 1. Thus return directly after a call of the function “amd_uncore_alloc”
->    failed in the first if branch.
-> 
-> 2. Use more appropriate labels instead.
-> 
-> 3. Reorder jump targets at the end.
-> 
-> 4. Delete a redundant check and kfree() call.
-> 
-> 5. Omit an explicit initialisation for the local variable “uncore_llc”.
-> 
-> 
-> This issue was detected by using the Coccinelle software.
-> 
-> Fixes: 39621c5808f5dda75d03dc4b2d4d2b13a5a1c34b ("perf/x86/amd/uncore: Use dynamic events array")
-> Fixes: 503d3291a937b726757c1f7c45fa02389d2f4324 ("perf/x86/amd: Try to fix some mem allocation failure handling")
-
-Commit should be only the first 12 characters of the hash.
-Refer:	https://docs.kernel.org/process/submitting-patches.html
-
-But this is not a fix. Redundant calls to kfree do not break
-anything.
-
-Also avoid using the term "exception" since, in x86, exceptions are
-hardware events.  Better to just call it "error handling".
-
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
->  arch/x86/events/amd/uncore.c | 20 +++++++++-----------
->  1 file changed, 9 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/x86/events/amd/uncore.c b/arch/x86/events/amd/uncore.c
-> index 83f15fe411b3..0a9b5cb97bb4 100644
-> --- a/arch/x86/events/amd/uncore.c
-> +++ b/arch/x86/events/amd/uncore.c
-> @@ -440,13 +440,13 @@ amd_uncore_events_alloc(unsigned int num, unsigned int cpu)
-> 
->  static int amd_uncore_cpu_up_prepare(unsigned int cpu)
->  {
-> -	struct amd_uncore *uncore_nb = NULL, *uncore_llc = NULL;
-> +	struct amd_uncore *uncore_nb = NULL, *uncore_llc;
-> 
->  	if (amd_uncore_nb) {
->  		*per_cpu_ptr(amd_uncore_nb, cpu) = NULL;
->  		uncore_nb = amd_uncore_alloc(cpu);
->  		if (!uncore_nb)
-> -			goto fail;
-> +			return -ENOMEM;
->  		uncore_nb->cpu = cpu;
->  		uncore_nb->num_counters = num_counters_nb;
->  		uncore_nb->rdpmc_base = RDPMC_BASE_NB;
-> @@ -455,7 +455,7 @@ static int amd_uncore_cpu_up_prepare(unsigned int cpu)
->  		uncore_nb->pmu = &amd_nb_pmu;
->  		uncore_nb->events = amd_uncore_events_alloc(num_counters_nb, cpu);
->  		if (!uncore_nb->events)
-> -			goto fail;
-> +			goto free_nb;
->  		uncore_nb->id = -1;
->  		*per_cpu_ptr(amd_uncore_nb, cpu) = uncore_nb;
->  	}
-> @@ -464,7 +464,7 @@ static int amd_uncore_cpu_up_prepare(unsigned int cpu)
->  		*per_cpu_ptr(amd_uncore_llc, cpu) = NULL;
->  		uncore_llc = amd_uncore_alloc(cpu);
->  		if (!uncore_llc)
-> -			goto fail;
-> +			goto check_uncore_nb;
->  		uncore_llc->cpu = cpu;
->  		uncore_llc->num_counters = num_counters_llc;
->  		uncore_llc->rdpmc_base = RDPMC_BASE_LLC;
-> @@ -473,24 +473,22 @@ static int amd_uncore_cpu_up_prepare(unsigned int cpu)
->  		uncore_llc->pmu = &amd_llc_pmu;
->  		uncore_llc->events = amd_uncore_events_alloc(num_counters_llc, cpu);
->  		if (!uncore_llc->events)
-> -			goto fail;
-> +			goto free_llc;
->  		uncore_llc->id = -1;
->  		*per_cpu_ptr(amd_uncore_llc, cpu) = uncore_llc;
->  	}
-> 
->  	return 0;
-> 
-> -fail:
-> +free_llc:
-> +	kfree(uncore_llc);
-> +check_uncore_nb:
->  	if (uncore_nb) {
->  		kfree(uncore_nb->events);
-> +free_nb:
->  		kfree(uncore_nb);
->  	}
-> 
-> -	if (uncore_llc) {
-> -		kfree(uncore_llc->events);
-> -		kfree(uncore_llc);
-> -	}
-> -
->  	return -ENOMEM;
->  }
-> 
-> --
-> 2.40.0
-> 
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWFydGluIEJsdW1lbnN0
+aW5nbCA8bWFydGluLmJsdW1lbnN0aW5nbEBnb29nbGVtYWlsLmNvbT4NCj4gU2VudDogRnJpZGF5
+LCBNYXJjaCAyNCwgMjAyMyAzOjA0IEFNDQo+IFRvOiBQaW5nLUtlIFNoaWggPHBrc2hpaEByZWFs
+dGVrLmNvbT4NCj4gQ2M6IGxpbnV4LXdpcmVsZXNzQHZnZXIua2VybmVsLm9yZzsgWWFuLUhzdWFu
+IENodWFuZyA8dG9ueTA2MjBlbW1hQGdtYWlsLmNvbT47IEthbGxlIFZhbG8NCj4gPGt2YWxvQGtl
+cm5lbC5vcmc+OyBVbGYgSGFuc3NvbiA8dWxmLmhhbnNzb25AbGluYXJvLm9yZz47IGxpbnV4LWtl
+cm5lbEB2Z2VyLmtlcm5lbC5vcmc7DQo+IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LW1t
+Y0B2Z2VyLmtlcm5lbC5vcmc7IENocmlzIE1vcmdhbiA8bWFjcm9hbHBoYTgyQGdtYWlsLmNvbT47
+IE5pdGluIEd1cHRhDQo+IDxuaXRpbi5ndXB0YTk4MUBnbWFpbC5jb20+OyBOZW8gSm91IDxuZW9q
+b3VAZ21haWwuY29tPjsgSmVybmVqIFNrcmFiZWMgPGplcm5lai5za3JhYmVjQGdtYWlsLmNvbT47
+IExhcnJ5DQo+IEZpbmdlciA8TGFycnkuRmluZ2VyQGx3ZmluZ2VyLm5ldD4NCj4gU3ViamVjdDog
+UmU6IFtQQVRDSCB2MyAyLzldIHdpZmk6IHJ0dzg4OiBzZGlvOiBBZGQgSENJIGltcGxlbWVudGF0
+aW9uIGZvciBTRElPIGJhc2VkIGNoaXBzZXRzDQo+IA0KPiBIZWxsbyBQaW5nLUtlLA0KPiANCj4g
+T24gVGh1LCBNYXIgMjMsIDIwMjMgYXQgMTI6MTbigK9QTSBNYXJ0aW4gQmx1bWVuc3RpbmdsDQo+
+IDxtYXJ0aW4uYmx1bWVuc3RpbmdsQGdvb2dsZW1haWwuY29tPiB3cm90ZToNCj4gWy4uLl0NCj4g
+PiA+ID4gKyAgICAgICBpZiAoZGlyZWN0KSB7DQo+ID4gPiA+ICsgICAgICAgICAgICAgICBhZGRy
+ID0gcnR3X3NkaW9fdG9fYnVzX29mZnNldChydHdkZXYsIGFkZHIpOw0KPiA+ID4gPiArICAgICAg
+ICAgICAgICAgdmFsID0gcnR3X3NkaW9fcmVhZGwocnR3ZGV2LCBhZGRyLCAmcmV0KTsNCj4gPiA+
+ID4gKyAgICAgICB9IGVsc2UgaWYgKGFkZHIgJiAzKSB7DQo+ID4gPg0KPiA+ID4gZWxzZSBpZiAo
+SVNfQUxJR05FRChhZGRyLCA0KSB7DQo+ID4gSSdsbCBhZGQgdGhlc2UgSVNfQUxJR05FRCBpbiB2
+NA0KPiA+IEFsc28gSSBmb3VuZCBhbiBpc3N1ZSB3aXRoIFJUV19XQ1BVXzExTiBkZXZpY2VzIHdo
+ZXJlIGluZGlyZWN0IHJlYWQNCj4gPiB3b3JrcyBkaWZmZXJlbnRseSAodGhvc2UgY2FuJ3QgdXNl
+DQo+ID4gUkVHX1NESU9fSU5ESVJFQ1RfUkVHX0NGRy9SRUdfU0RJT19JTkRJUkVDVF9SRUdfREFU
+QSBidXQgbmVlZCB0byBnbw0KPiA+IHRocm91Z2ggdGhlIG5vcm1hbCBwYXRoIHdpdGggV0xBTl9J
+T1JFR19PRkZTRVQgaW5zdGVhZCkuIEknbGwgYWxzbw0KPiA+IGluY2x1ZGUgdGhhdCBmaXggaW4g
+djQNCj4gSSBoYXZlIGEgcXVlc3Rpb24gYWJvdXQgdGhlICJpbmRpcmVjdCIgaGFuZGxpbmcuDQo+
+IExldCBtZSBzdGFydCB3aXRoIHdoYXQgSSBrbm93Og0KPiAtIFJFR19TRElPX0lORElSRUNUX1JF
+R19DRkcgYW5kIFJFR19TRElPX0lORElSRUNUX1JFR19EQVRBIGFyZSBvbmx5DQo+IHByZXNlbnQg
+b24gUlRXX1dDUFVfMTFBQyBiYXNlZCBjaGlwcyAob2xkZXIgUlRXX1dDUFVfMTFOIGNoaXBzIGRv
+bid0DQo+IGhhdmUgdGhlc2UgcmVnaXN0ZXJzKQ0KPiAtIHRoZSBuYW1lIG9mIFJFR19TRElPX0lO
+RElSRUNUX1JFR19DRkdbMjBdIGlzIG5vdCBrbm93biBidXQgd2UncmUNCj4gcG9sbGluZyB0aGF0
+IGJpdCB0byBjaGVjayBpZiBSRUdfU0RJT19JTkRJUkVDVF9SRUdfREFUQSBpcyByZWFkeSB0byBi
+ZQ0KPiByZWFkIG9yIGhhcyBkYXRhIGZyb20gUkVHX1NESU9fSU5ESVJFQ1RfUkVHX0RBVEEgaGFz
+IGJlZW4gd3JpdHRlbg0KPiAtIFJFR19TRElPX0lORElSRUNUX1JFR19DRkdbMTldIGNvbmZpZ3Vy
+ZXMgYSByZWFkIG9wZXJhdGlvbg0KPiAtIFJFR19TRElPX0lORElSRUNUX1JFR19DRkdbMThdIGNv
+bmZpZ3VyZXMgYSB3cml0ZSBvcGVyYXRpb24NCj4gLSBSRUdfU0RJT19JTkRJUkVDVF9SRUdfQ0ZH
+WzE3XSBpbmRpY2F0ZXMgdGhhdCBhIERXT1JEICgzMi1iaXQpIGFyZQ0KPiB3cml0dGVuIHRvIFJF
+R19TRElPX0lORElSRUNUX1JFR19EQVRBICgrIHRoZSBmb2xsb3dpbmcgMyksIHRoaXMgYml0DQo+
+IHNlZW1zIGlycmVsZXZhbnQgZm9yIHJlYWQgbW9kZQ0KPiAtIFJFR19TRElPX0lORElSRUNUX1JF
+R19DRkdbMTZdIGluZGljYXRlcyB0aGF0IGEgRFdPUkQgKDE2LWJpdCkgYXJlDQo+IHdyaXR0ZW4g
+dG8gUkVHX1NESU9fSU5ESVJFQ1RfUkVHX0RBVEEgKCsgdGhlIGZvbGxvd2luZyAzKSwgdGhpcyBi
+aXQNCj4gc2VlbXMgaXJyZWxldmFudCBmb3IgcmVhZCBtb2RlDQo+IC0gUlRXX1dDUFVfMTFOIGNo
+aXBzIGFyZSBzaW1wbHkgdXNpbmcgImFkZHIgfCBXTEFOX0lPUkVHX09GRlNFVCIgZm9yDQo+IGFj
+Y2Vzc2VzIHRoYXQgd291bGQgdXN1YWxseSBiZSAiaW5kaXJlY3QiIHJlYWRzL3dyaXRlcyBvbg0K
+PiBSVFdfV0NQVV8xMUFDIGNoaXBzDQo+IA0KPiBXaGlsZSBmaXhpbmcgdGhlIGlzc3VlIGZvciB0
+aGUgUlRXX1dDUFVfMTFOIGNoaXBzIEkgZGlzY292ZXJlZCB0aGF0DQo+IHRoZSAib2xkIiBhcHBy
+b2FjaCBmb3IgaW5kaXJlY3QgcmVnaXN0ZXIgYWNjZXNzICh3aXRob3V0DQo+IFJFR19TRElPX0lO
+RElSRUNUX1JFR19DRkcgYW5kIFJFR19TRElPX0lORElSRUNUX1JFR19EQVRBKSBhbHNvIHdvcmtz
+DQo+IG9uIFJUV19XQ1BVXzExQUMgY2hpcHMuDQo+IChJJ20gY2FsbGluZyBpdCB0aGUgIm9sZCIg
+YXBwcm9hY2ggYmVjYXVzZSBpdCdzIHdoYXQgdGhlIFJUTDg3MjNEUyBhbg0KPiBSVEw4NzIzQlMg
+dmVuZG9yIGRyaXZlcnMgdXNlKQ0KPiBJbiBmYWN0LCB0aGlzIHNlcmllcyBpcyB1c2luZyB0aGUg
+Im9sZCIgYXBwcm9hY2ggZm9yIHdyaXRlcywgYnV0IHRoZQ0KPiBuZXcgKFJFR19TRElPX0lORElS
+RUNUX1JFR19DRkcgYW5kIFJFR19TRElPX0lORElSRUNUX1JFR19EQVRBIGJhc2VkKQ0KPiBhcHBy
+b2FjaCBmb3IgcmVhZHMuDQo+IE5hdHVyYWxseSBJJ20gY3VyaW91cyBhcyB0byB3aHkgdHdvIGRp
+ZmZlcmVudCBhcHByb2FjaGVzIGFjaGlldmUgdGhlDQo+IHNhbWUgZ29hbC4gVXNpbmcgdGhlICJv
+bGQiIGFwcHJvYWNoIChhZGRyIHwgV0xBTl9JT1JFR19PRkZTRVQpIG1lYW5zIGENCj4gbG90IG9m
+IGNvZGUgY291bGQgYmUgZGVsZXRlZC9zaW1wbGlmaWVkLg0KPiANCj4gTm93IG15IHF1ZXN0aW9u
+Og0KPiBEbyB5b3UgaGF2ZSBhbnkgZXhwbGFuYXRpb24gKGVpdGhlciBmcm9tIGludGVybmFsIGRv
+Y3VtZW50YXRpb24gb3INCj4gZnJvbSB0aGUgaGFyZHdhcmUvZmlybXdhcmUgdGVhbXMpIGlmIGFu
+ZCB3aGVuIHRoZQ0KPiBSRUdfU0RJT19JTkRJUkVDVF9SRUdfQ0ZHIGFuZCBSRUdfU0RJT19JTkRJ
+UkVDVF9SRUdfREFUQSByZWdpc3RlcnMNCj4gc2hvdWxkIGJlIHVzZWQgb24gUlRXX1dDUFVfMTFB
+QyBjaGlwcz8NCj4gDQoNClVzaW5nIFJFR19TRElPX0lORElSRUNUX1JFR19DRkcgYW5kIFJFR19T
+RElPX0lORElSRUNUX1JFR19EQVRBIGlmIHlvdSBhcmUNCnVzaW5nIFNESU8gMy4wOyBvdGhlcndp
+c2UsIGl0IGNvdWxkIGNhdXNlcyBJTyBhYm5vcm1hbC4gT3Bwb3NpdGVseSwgdXNpbmcNCiJvbGQi
+IGFwcHJvYWNoIChhZGRyIHwgV0xBTl9JT1JFR19PRkZTRVQpIGZvciBTRElPIDIuMC4gDQoNClBp
+bmctS2UNCg0K
