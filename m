@@ -2,85 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE016CA3F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388E16CA3F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232823AbjC0MX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        id S229456AbjC0MYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbjC0MXI (ORCPT
+        with ESMTP id S232417AbjC0MYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:23:08 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C102E65AB
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:22:22 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id cn12so35406192edb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:22:22 -0700 (PDT)
+        Mon, 27 Mar 2023 08:24:12 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE912D65;
+        Mon, 27 Mar 2023 05:24:08 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r29so8561285wra.13;
+        Mon, 27 Mar 2023 05:24:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679919741;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112; t=1679919846;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EzcyCIFG4peg2Ww15uJJ3yrB4ucDFkS9kgu5aS0qaCA=;
-        b=OeLzruwP9GLcp39m617tUG87vVomI1TznaxtZiaTiuU6a0rqWHMFmN95zDJkYYGb6r
-         AEDRoSB69YYCzQCwbgk1q3CrbkMH2S+vwUqI2g281YZf2vQ4Zjqg3QmE7SG7D5i0yzFP
-         fjCQwrxiBezH3qX7aMIK4pHtj2SLuVhRA6x6k+sjStVjwUxASkP7Mqw3pUoU6/oS5BoI
-         vAItJh0NKmgKr8RE+CritAAmsa4Hrv2T9mHT+b+IwMCYyVXmLi4Wz4FeoGkeGSDjHESA
-         q5kSUOImgCh25bpPbCZQwvCFf+SiogH3ryfGFKW+6dr+g4zmLFAGauLUTdtBC/KPFc5w
-         Vjjg==
+        bh=bSN9Ecs9VgPdHBd5DnU/Mgt1P34wB8c/uf3669zchqk=;
+        b=UsozCZrqIdoaol4lsXeG6Jm+fEgT2eIoHwmPfbkhHu60pYddYnrGELrNj1HM16VO+g
+         0VN25oOSeZkqv+Hu3w+i2vQLWz2f3sg0+zUfS7wRrFIA8riP8pcogE6cJkmeQXdKvZaq
+         lshsdJbAYQWg9U4GfIh7vlX1Ns9/q30KoaujAEnVjQz2l6EcV21uCqoLbxfkDapZ3v21
+         6dZh9/nq2oLXkDjurwy0B06V1qGbqMp73x3uKoedFJ6b70VBP15kVuNSNa6hN41rTjO8
+         shSZupws5iDXSHKpEdTl+LpxUyyTrFmh01bL3urp/TTUdRq0xesowqqTlw28UrJv2dj3
+         aJmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679919741;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1679919846;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EzcyCIFG4peg2Ww15uJJ3yrB4ucDFkS9kgu5aS0qaCA=;
-        b=Zw43wrEVZJIL3m+lVN5f3LB/nyABobNxSrcQNwZhcSG1qDN7XuYMff3nioO1KSw5OG
-         sQhQEQhni0lZysUgOb3M+9Rzag4PEea1UiamXsPnKSTGZU6OcnnOevExIk4AkqFiVo9g
-         rGNID0FsigDwcUA2Mic4QJtbsJ76YdxIAJ/X8xgwYN/VpfJArheCgiuEoqULf5ZoWi0m
-         tom7usFbR2Ra3vTX9ba5rJaV3K7m97zxKSnJCqn6I6pZP4eyOHXTpMwVUJhSVuwjWyRr
-         N1uC1Kp6h0k6ihC7iyGtZT3Z448PzJD7Gtc/yYr+9i/3mATQsyzeRUOH1i5XGrWMmsFJ
-         yHDA==
-X-Gm-Message-State: AAQBX9d7BZlAu+7kL+7B4bOScR3zikmaa+wqtuhgJOaQyARpwDqjRe6o
-        MfgUlCLe8uQJ6b6lpCbT/Wiusw==
-X-Google-Smtp-Source: AKy350b5C4pJiIvUzsrA9B/KVMoGz4SHnz6GuLSmUzJvLb+RSOf6DPNrMtcyeFZKWBqPQbO5n22qeQ==
-X-Received: by 2002:a05:6402:d7:b0:501:c4e3:9914 with SMTP id i23-20020a05640200d700b00501c4e39914mr11017861edu.33.1679919741277;
-        Mon, 27 Mar 2023 05:22:21 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:581e:789c:7616:5ee? ([2a02:810d:15c0:828:581e:789c:7616:5ee])
-        by smtp.gmail.com with ESMTPSA id n7-20020a509347000000b005023ddb37eesm2312482eda.8.2023.03.27.05.22.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 05:22:20 -0700 (PDT)
-Message-ID: <44904ffc-83d4-1137-3479-737a81b31d16@linaro.org>
-Date:   Mon, 27 Mar 2023 14:22:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: misc: qcom,fastrpc: add
- qcom,assign-all-memory property
-Content-Language: en-US
-To:     Dylan Van Assche <me@dylanvanassche.be>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
+        bh=bSN9Ecs9VgPdHBd5DnU/Mgt1P34wB8c/uf3669zchqk=;
+        b=pBptnsgdE9KT35Zm8RFLsmWAf+Zr+Y6OT73O0ne3Zq+dR9PyHXNcjIm3TrqKL6xfpA
+         b81dn2JqeSw6TPaEdZGJXhhJa55UyMVm33uxw7jKwr+yOysw0QY4f7LZD887MTDoDPK+
+         53RPoTW/I+D1/fs4eWvN5AgaOE6WuFkeM4XIN2LojmKPGIUM1G2DmZPBB+ywGHJr1+5A
+         vmAMD81b5Td0V6GOzU1D1YubezsXQcShuxxBJjsHm3igJGqcAU7CXT6emBwIzgiLpyY/
+         WY2micAfftODI5AbqanMpSI0wNaGHp8kbm9L6QTq8T70cpriBXPBc2QwmHHuBj9JBsY4
+         YZZg==
+X-Gm-Message-State: AAQBX9f4qZTqEr/LW/0nwN3I27j63cZtwXZhuV2dkh5GIMRaHyiwnurX
+        6wG8j4OLLeyIEOteuLvHVl/m2fN5V+3ubf38
+X-Google-Smtp-Source: AKy350Y4+SmDaAw0i4BZZuuGJw+65kINTLrCwALVgm/y45Sj0LIANiuD5QhZrxawSRu+H/4ReKGB9w==
+X-Received: by 2002:adf:d849:0:b0:2ce:aa2f:55ff with SMTP id k9-20020adfd849000000b002ceaa2f55ffmr10455838wrl.1.1679919846201;
+        Mon, 27 Mar 2023 05:24:06 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.14.14])
+        by smtp.gmail.com with ESMTPSA id n16-20020adffe10000000b002cfe63ded49sm25001223wrr.26.2023.03.27.05.24.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 05:24:05 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 17:24:03 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     Marc Dietrich <marvin24@gmx.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230325134410.21092-1-me@dylanvanassche.be>
- <20230325134410.21092-2-me@dylanvanassche.be>
- <883c3c48-c6e5-556d-431f-e92592b9106a@linaro.org>
- <b75b92bf64b55ba0ace0fbff65955c838a294dec.camel@dylanvanassche.be>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b75b92bf64b55ba0ace0fbff65955c838a294dec.camel@dylanvanassche.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        ac100@lists.launchpad.net, linux-tegra@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: nvec: replace udelay() with usleep_range()
+Message-ID: <ZCGK4+zUDT1lLz6s@khadija-virtual-machine>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,51 +70,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2023 13:37, Dylan Van Assche wrote:
-> Hi Krzysztof,
-> 
-> On Sun, 2023-03-26 at 10:55 +0200, Krzysztof Kozlowski wrote:
->> On 25/03/2023 14:44, Dylan Van Assche wrote:
->>> Document the added qcom,assign-all-memory in devicetree bindings.
->>>
->>> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
->>> ---
->>>  Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml | 6
->>> ++++++
->>>  1 file changed, 6 insertions(+)
->>>
->>> diff --git
->>> a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
->>> b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
->>> index 1ab9588cdd89..fa5b00534b30 100644
->>> --- a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
->>> +++ b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
->>> @@ -57,6 +57,12 @@ properties:
->>>        Virtual machine IDs for remote processor.
->>>      $ref: "/schemas/types.yaml#/definitions/uint32-array"
->>>  
->>> +  qcom,assign-all-mem:
->>> +    description:
->>> +      Assign memory to all Virtual machines defined by qcom,vmids.
->>
->> This (neither commit msg) does not explain why this is needed and
->> actually does not sound like hardware-related property.
-> 
-> This is made a separate property to toggle different behavior in the
-> driver if it is needed for some FastRPC nodes. 
+Replace 'udelay()' with 'usleep_range()' with 1000us as upper limit.
+This issue is reported by checkpatch.pl script.
 
-Bindings are not for driver behavior.
+CHECK: usleep_range is preferred over udelay; see
+Documentation/timers/timers-howto.rst
 
-> Downstream does guard
-> this with a property 'restrict-access' as well, see [1] for a random
-> SDM845 downstream kernel. On SDM845, this property is not present, thus
-> the IF block runs. On SDM670, this property is present, then the IF
-> block is skipped. That's why I opt for this property to have this
-> behaviour conditionally. I'm not sure how to explain it better though.
+Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+---
+ drivers/staging/nvec/nvec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Still you described driver... Please come with something more hardware
-related.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/staging/nvec/nvec.c b/drivers/staging/nvec/nvec.c
+index b3f114cb00dc..1b51935dba4f 100644
+--- a/drivers/staging/nvec/nvec.c
++++ b/drivers/staging/nvec/nvec.c
+@@ -627,7 +627,7 @@ static irqreturn_t nvec_interrupt(int irq, void *dev)
+ 		break;
+ 	case 2:		/* first byte after command */
+ 		if (status == (I2C_SL_IRQ | RNW | RCVD)) {
+-			udelay(33);
++			usleep_range(33, 1000);
+ 			if (nvec->rx->data[0] != 0x01) {
+ 				dev_err(nvec->dev,
+ 					"Read without prior read command\n");
+@@ -714,7 +714,7 @@ static irqreturn_t nvec_interrupt(int irq, void *dev)
+ 	 * We experience less incomplete messages with this delay than without
+ 	 * it, but we don't know why. Help is appreciated.
+ 	 */
+-	udelay(100);
++	usleep_range(100, 1000);
+ 
+ 	return IRQ_HANDLED;
+ }
+-- 
+2.34.1
 
