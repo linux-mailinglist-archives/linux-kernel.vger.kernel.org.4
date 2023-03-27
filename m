@@ -2,141 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FB96CA1CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E943F6CA1D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbjC0K4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 06:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
+        id S232037AbjC0K5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbjC0K4u (ORCPT
+        with ESMTP id S229651AbjC0K5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:56:50 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F5910C9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:56:48 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id j7so9960311ybg.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679914607;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/V3pA35xhVCbP9jkYQO9e9S5qEV2hgRETTuNLYG0J5I=;
-        b=q6NUh0GLhbSm+jdtm5u/zJSq9hxnLKIfoo86F6ho5smnjf34w4TPsj9OZwgJekDkfe
-         W+/E4fPYuxWqCcR0vFt/V5DtbFMv76+JyAmmnJ0wDwyX9VkezXK6dmfKe0lGXCkVV1nQ
-         punl2iTjp0SNLSPRDx0NFGQ5yRKS1RhOa+esRXcB0rDOTQMuv6QnlQ6J0w3XbombUITr
-         maO1C4mmuLpNd4Yky5AvLakgbvtYmCIuyXvMSstF73DGH90kUum/xdYY4Lvz/2gGcsF1
-         BKAD5nHXNHn0M7WGb+KgnAMiTaGScaC4MXH6KxkSk+tALMQm2DQxRv8i6rZRUoe1a891
-         pdyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679914607;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/V3pA35xhVCbP9jkYQO9e9S5qEV2hgRETTuNLYG0J5I=;
-        b=sY7U/+CJKExLfr6qtER6oPm1se9vQ0JUcuLvdMKcRIS7bd4K8S3a1qObsCpWtTZNhs
-         Kc1DTft0M+Kp4RvmVfqRQW2DivIL+R3gcTHDSaQhAv1SaHlcUKm2TcLfa3R+v7dXfNt6
-         KCCNDiPE1EFf/1ZumE9LANApcwJckvlJU2UtCHWhQeHRHUTpA6B64vcILupDgquio5MB
-         9Kd33tTZfg3bfc6YcVFxQm6qGdyhwEkY6hHRgKfwkiqIGGCq5sAjNXe4k8fGn/BH9LWA
-         lQSZdhID28KqiII2Foc10JEUjsoK1YTak2qtzym/Zbny9T2AmnwmrHrTzJmdj+TVtG/D
-         AI3Q==
-X-Gm-Message-State: AAQBX9fimDOhvDssS/+afJSkrpL+BuGe8AlqNa3nM0SdBjrnzLcHFfDn
-        dyGn0pl5ERKX1pIZJVnQQCMIClzRmm8Ysm1EiPRtow==
-X-Google-Smtp-Source: AKy350YfvVDOEdafb4m5KIOnnCg2t8RAuLdF4lY57Kt2SzbDhA40QER8ozVCwQkqO3tcWU5y9O4EoOR4PmQqRw+iAnQ=
-X-Received: by 2002:a05:6902:1181:b0:b6c:2224:8a77 with SMTP id
- m1-20020a056902118100b00b6c22248a77mr7052843ybu.1.1679914607297; Mon, 27 Mar
- 2023 03:56:47 -0700 (PDT)
+        Mon, 27 Mar 2023 06:57:35 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54FFFE;
+        Mon, 27 Mar 2023 03:57:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=onlZ3BW/ohpzwNjPNz62W4K6Z+/iFWEigy06QiA3/PQ=; b=TNfv9X/+XWLgMmxbwbfvvl5iza
+        JF/NG1pYn4CuIbbyC0FfJaqoDJG+cgm8GSJAtO3nc1VvmQEQ2srTdxq4MtHMAxsR38Gv8jRiz0ze4
+        IHBH9ynoLhfRSxIyOItTmNsi2NLom/lT0KSAN66LgGYNeR4eGHUyr+65WMvT4XncEYJu7cKs/vRTo
+        xW0MxmTJkBjsqWYOYlbBwHKlhWUo9WQsdkq+fTCgm+fhwWg3z7HHl/sm96s6UxI6gwBjRCxXsQ9bl
+        8P2zw5tTcY2vOmFpc90tVKjZX3yfsiFm9/excxE/jv914YGQT4kPOMRo0ubunuzQ0f9KPTapiIG8S
+        jXc0YYpA==;
+Received: from p200300ccff0533001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff05:3300:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pgkXK-0000EF-Ag; Mon, 27 Mar 2023 12:57:14 +0200
+Date:   Mon, 27 Mar 2023 12:57:13 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bcousson@baylibre.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: omap4: add initial support for Epson Moverio
+ BT-200
+Message-ID: <20230327125713.49537a26@aktux>
+In-Reply-To: <20230327082137.GH7501@atomide.com>
+References: <20230313110409.2294154-1-andreas@kemnade.info>
+        <20230327082137.GH7501@atomide.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20221122-mt8365-i2c-support-v5-0-6e4f3b54937f@baylibre.com>
- <20221122-mt8365-i2c-support-v5-2-6e4f3b54937f@baylibre.com> <2a1b1f66-970e-5adb-389e-b9c47a790712@collabora.com>
-In-Reply-To: <2a1b1f66-970e-5adb-389e-b9c47a790712@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Mon, 27 Mar 2023 12:56:36 +0200
-Message-ID: <CAFGrd9pf+ojPDciF3Mtw-QT51LZCj+GNLHXurGx_vcC17GHA2A@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] arm64: dts: mediatek: enable i2c0 for mt8365-evk board
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Qii Wang <qii.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Angelo,
+On Mon, 27 Mar 2023 11:21:37 +0300
+Tony Lindgren <tony@atomide.com> wrote:
 
-Le lun. 27 mars 2023 =C3=A0 10:45, AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> a =C3=A9crit :
+> * Andreas Kemnade <andreas@kemnade.info> [230313 13:04]:
+> > yes, epson,embt2ws is unknown, is the txt->yaml conversion around the
+> > corner? I would then resubmit it includding an addition
+> > to that yaml. If not probably I resubmit the conversion patch with
+> > the compatible added. But that should not stop the rest of this patch from
+> > being reviewed.  
+> 
+> Yeah let's do the yaml conversion first as otherwise we'll be adding some
+> extra warnings for the dt folks.
+> 
+> Your patch looks otherwise OK to me.
 >
-> Il 27/03/23 10:27, Alexandre Mergnat ha scritto:
-> > Enable the I2C0 bus provides communication with:
-> > - The integrated RT9466 Switching Battery Charger.
-> > - The integrated MT6691 LP4X buck for VDDQ.
-> > - The integrated MT6691 LP4X buck for VDD2.
-> > - The pin header, to plug external I2C devices.
-> >
-> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> > ---
-> >   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 16 ++++++++++++++++
-> >   1 file changed, 16 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/b=
-oot/dts/mediatek/mt8365-evk.dts
-> > index 4683704ea235..35cb142004a4 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> > @@ -87,6 +87,13 @@ optee_reserved: optee@43200000 {
-> >       };
-> >   };
-> >
-> > +&i2c0 {
-> > +     clock-frequency =3D <100000>;
-> > +     pinctrl-0 =3D <&i2c0_pins>;
-> > +     pinctrl-names =3D "default";
-> > +     status =3D "okay";
-> > +};
-> > +
-> >   &pio {
-> >       gpio_keys: gpio-keys-pins {
-> >               pins {
-> > @@ -96,6 +103,15 @@ pins {
-> >               };
-> >       };
-> >
-> > +     i2c0_pins: i2c0-pins {
-> > +             pins {
->                         pinmux =3D ...pins...
->                         bias-pull-up =3D <your-pull-up-adv-value>;
->                 };
->
-> ...and please do *not* use the mediatek,pull-up-adv property: this is
-> supposed to be there only for older devicetrees and there's a replacement
-> for it.... unless you have any specific reason to do so (and if you do,
-> you should well explain that).
-
-bias-pull-up isn't necessary currently because MT8365 doesn't use MTK
-paris/moore drivers.
-
-> Besides, if you introduce the usage of that property in any 8365 devicetr=
-ee,
-> the previously proposed 8365 pinctrl cleanup will become a bit harder to =
-do.
-
-I'm thinking of deprecating the "mediatek,pull-up-adv",
-"mediatek,pull-down-adv" properties from mt8365 pinctrl binding too.
+So I will try to incooperate the feedback into the last version
+of the conversion patch and include epson,embt2ws.
 
 Regards,
-Alex
+Andreas
