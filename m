@@ -2,49 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60986CA5B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFA16CA5BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232667AbjC0NY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S232743AbjC0NZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232607AbjC0NYj (ORCPT
+        with ESMTP id S232496AbjC0NZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:24:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F1D5FE1;
-        Mon, 27 Mar 2023 06:23:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=RLzmFr8AmbjIY1B1jEN0btaao1pVMqT2Dh1OkNlg1IM=; b=kZE665LhpJ3pAkpkQurCtqXGr3
-        3ns14crmk1+cSV3MbJ381mXQgOVruGRvb0wNz6zz0OWOrD+mymMFNQhzD5qB4YlOKjyklu6nqm6N1
-        OxJAHqaBZAGvOYqhVubOZ0pQci0Fe2P6ntLZp0+G3hrS4oTPKlM4IvDxW06wGHxhfnZL0rgIXKcGQ
-        u0EQovuNQNfH3oZ91DVUoB3NR5BlFDVzTwTCpTwaQ6AspmC/PimietJjPZLnOYbp3WfRffIO/BQI+
-        /4tfsenPBcqrfX3Z9vjvbnuRBHhlGKiwgZ6XNUAYUvGFlCl2mau/rw+73gPHEBvbxRWHsvCaPq+oV
-        bYib1JZA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pgmp3-007QOk-NL; Mon, 27 Mar 2023 13:23:41 +0000
-Date:   Mon, 27 Mar 2023 14:23:41 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Evgeniy Dushistov <dushistov@mail.ru>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v5 0/4] fs/ufs: Replace kmap() with kmap_local_page
-Message-ID: <ZCGY3c5avRefahms@casper.infradead.org>
-References: <20221229225100.22141-1-fmdefrancesco@gmail.com>
- <11383508.F0gNSz5aLb@suse>
+        Mon, 27 Mar 2023 09:25:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336BB59FD;
+        Mon, 27 Mar 2023 06:24:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 724676126E;
+        Mon, 27 Mar 2023 13:24:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90AB3C433D2;
+        Mon, 27 Mar 2023 13:23:56 +0000 (UTC)
+Message-ID: <87e68e05-8512-17fc-584c-0022ddefb8f0@linux-m68k.org>
+Date:   Mon, 27 Mar 2023 23:23:53 +1000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <11383508.F0gNSz5aLb@suse>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] arm64: dts: imx8mp: add vpu pgc nodes
+Content-Language: en-US
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     "Markus.Niebel@ew.tq-group.com" <Markus.Niebel@ew.tq-group.com>,
+        "aford173@gmail.com" <aford173@gmail.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "marex@denx.de" <marex@denx.de>,
+        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "gerg@kernel.org" <gerg@kernel.org>
+References: <20220713063653.2584488-6-peng.fan@oss.nxp.com>
+ <20230327050642.593778-1-gerg@linux-m68k.org>
+ <DU0PR04MB94174D60EE38B56FEB6CD5BC888B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+In-Reply-To: <DU0PR04MB94174D60EE38B56FEB6CD5BC888B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,33 +69,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 12:13:08PM +0200, Fabio M. De Francesco wrote:
-> On giovedì 29 dicembre 2022 23:50:56 CEST Fabio M. De Francesco wrote:
-> > kmap() is being deprecated in favor of kmap_local_page().
-> > 
-> > There are two main problems with kmap(): (1) It comes with an overhead as
-> > the mapping space is restricted and protected by a global lock for
-> > synchronization and (2) it also requires global TLB invalidation when the
-> > kmap’s pool wraps and it might block when the mapping space is fully
-> > utilized until a slot becomes available.
-> > 
-> > With kmap_local_page() the mappings are per thread, CPU local, can take
-> > page faults, and can be called from any context (including interrupts).
-> > It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-> > the tasks can be preempted and, when they are scheduled to run again, the
-> > kernel virtual addresses are restored and still valid.
-> > 
-> > Since its use in fs/ufs is safe everywhere, it should be preferred.
-> > 
-> > Therefore, replace kmap() with kmap_local_page() in fs/ufs. kunmap_local()
-> > requires the mapping address, so return that address from ufs_get_page()
-> > to be used in ufs_put_page().
-> 
-> Hi Al,
-> 
-> I see that this series is here since Dec 29, 2022.
-> Is there anything that prevents its merging? 
-> Can you please its four patches in your tree?
+Hi Peng,
 
-I'm pretty sure UFS directories should simply be allocated from lowmem.
-There's really no reason to put them in highmem these days.
+On 27/3/23 20:01, Peng Fan wrote:
+>> Subject: Re: [PATCH] arm64: dts: imx8mp: add vpu pgc nodes
+>>
+>> On 22/8/22 14:45, Peng Fan wrote:
+>>> Add i.MX8MP PGC nodes for vpu, which are used to supply power for VPU.
+>>>
+>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>>> Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+>>> ---
+>>>   arch/arm64/boot/dts/freescale/imx8mp.dtsi | 27
+>>> +++++++++++++++++++++++
+>>>   1 file changed, 27 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+>>> b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+>>> index 0b165f98a82c..34af983b0210 100644
+>>> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+>>> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+>>> @@ -598,6 +598,33 @@ pgc_ispdwp: power-domain@18 {
+>>>                                                  reg =
+>> <IMX8MP_POWER_DOMAIN_MEDIAMIX_ISPDWP>;
+>>>                                                  clocks = <&clk IMX8MP_CLK_MEDIA_ISP_ROOT>;
+>>>                                          };
+>>> +
+>>> +                                       pgc_vpumix: power-domain@19 {
+>>> +                                               #power-domain-cells = <0>;
+>>> +                                               reg = <IMX8MP_POWER_DOMAIN_VPUMIX>;
+>>> +                                               clocks =<&clk IMX8MP_CLK_VPU_ROOT>;
+>>> +                                       };
+>>> +
+>>> +                                       pgc_vpu_g1: power-domain@20 {
+>>> +                                               #power-domain-cells = <0>;
+>>> +                                               power-domains = <&pgc_vpumix>;
+>>> +                                               reg = <IMX8MP_POWER_DOMAIN_VPU_G1>;
+>>> +                                               clocks = <&clk IMX8MP_CLK_VPU_G1_ROOT>;
+>>> +                                       };
+>>> +
+>>> +                                       pgc_vpu_g2: power-domain@21 {
+>>> +                                               #power-domain-cells = <0>;
+>>> +                                               power-domains = <&pgc_vpumix>;
+>>> +                                               reg = <IMX8MP_POWER_DOMAIN_VPU_G2>;
+>>> +                                               clocks = <&clk IMX8MP_CLK_VPU_G2_ROOT>;
+>>> +                                       };
+>>> +
+>>> +                                       pgc_vpu_vc8000e: power-domain@22 {
+>>> +                                               #power-domain-cells = <0>;
+>>> +                                               power-domains = <&pgc_vpumix>;
+>>> +                                               reg =
+>> <IMX8MP_POWER_DOMAIN_VPU_VC8000E>;
+>>> +                                               clocks = <&clk
+>> IMX8MP_CLK_VPU_VC8KE_ROOT>;
+>>> +                                       };
+>>>                                  };
+>>>                          };
+>>>                  };
+>>
+>> This change causes new error messages to come out during boot, for
+>> example:
+>>
+>>      ...
+>>      imx-pgc imx-pgc-domain.8: failed to command PGC
+>>      imx-pgc imx-pgc-domain.8: failed to command PGC
+>>      imx-pgc imx-pgc-domain.8: failed to command PGC
+>>      30890000.serial: ttymxc1 at MMIO 0x30890000 (irq = 197, base_baud =
+>> 1500000) is a IMX
+>>      ...
+>>      hwmon hwmon1: temp1_input not attached to any thermal zone
+>>      imx-pgc imx-pgc-domain.8: failed to command PGC
+>>      imx-pgc imx-pgc-domain.8: failed to command PGC
+>>      imx-pgc imx-pgc-domain.8: failed to command PGC
+>>      ...
+>>
+>> They don't seem to cause any problems on the hardware I am using, well, at
+>> least not that I have found so far.
+>>
+>> This first appeared for me in linux-6.1. But it is the same in todays linux 6.3-
+>> rc4. Reverting this change (not completely trivial due to a couple of commits
+>> after it that rely on it) fixes it - no more errors.
+> [Peng Fan]
+> 
+> The VPU BLK CTRL seems not enabled.
+
+How to enable it?
+I have the blk-ctrl config options enabled:
+
+     #
+     # i.MX SoC drivers
+     #
+     CONFIG_IMX_GPCV2_PM_DOMAINS=y
+     CONFIG_SOC_IMX8M=y
+     CONFIG_SOC_IMX9=y
+     CONFIG_IMX8M_BLK_CTRL=y
+     CONFIG_IMX9_BLK_CTRL=y
+     # end of i.MX SoC drivers
+
+Running with the full arm64 defconfig and using the imx8mp-evk.dtb still
+outputs these messages:
+
+     [   18.150679] imx-pgc imx-pgc-domain.8: failed to command PGC
+     [   18.159241] imx-pgc imx-pgc-domain.8: failed to command PGC
+     [   18.167822] imx-pgc imx-pgc-domain.8: failed to command PGC
+
+Or do you mean something more fundamental, like the hardware block not
+being enabled by boot loader?  (Something to keep in mind is that the
+platform I am using has no video output, only serial console).
+
+Regards
+Greg
+
