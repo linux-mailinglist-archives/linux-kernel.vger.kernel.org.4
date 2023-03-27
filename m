@@ -2,1370 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1876CA3DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 938476CA31E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbjC0MTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
+        id S232660AbjC0MNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbjC0MSj (ORCPT
+        with ESMTP id S232378AbjC0MNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:18:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C7E6180;
-        Mon, 27 Mar 2023 05:17:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FA62B81151;
-        Mon, 27 Mar 2023 12:17:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 100F9C433D2;
-        Mon, 27 Mar 2023 12:16:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679919420;
-        bh=Ml5ZUxLRBcXZxDX8ISyxdZtftACTwtt/RJRGQgyDcA4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=syMJ7nxN1404wL8MSmBDBzMbmZHCdTm1Ngp/hp0OZKrTQv6VukcslNqnocgIYm0Pg
-         z2nDiDT5g3WGM7PQyOsYmBSR9OWBLcuCQsrbgKlcQhgarGx+B1WnHMbIAicdtUX90I
-         rv7MkL1vIAzNzi9mV+9HYRQdyax0NNIb8SsxYgbEwbxZ3T+9s7FySsaLMrv38UOthy
-         rsnkD0oaYSIFFeNAIxmAdoDDC6b+8rN89kcPfR/lqO8SVhG1dbQNBMihp0dKI9sDYi
-         S4OY7F19HPM4r+W9fx9IRFRNFVh1DnIy9BLSjbmduw1o6ookXnZJF7dHfVeo3epEYb
-         LMkF5xk0Gxohg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org
-Subject: [PATCH 21/21] dma-mapping: replace custom code with generic implementation
-Date:   Mon, 27 Mar 2023 14:13:17 +0200
-Message-Id: <20230327121317.4081816-22-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230327121317.4081816-1-arnd@kernel.org>
-References: <20230327121317.4081816-1-arnd@kernel.org>
+        Mon, 27 Mar 2023 08:13:46 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E393A92
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:13:45 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id h8so35222372ede.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:13:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112; t=1679919223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=trl+bImJQ3EgoJ4i2dWsILqUzku4TBzDkRq+ya+AVms=;
+        b=S3QwttMFY5Sba4ck9s2mbvVljORJ8LjGP/BHdTQuCiCDqGHgJoOxr+Xzkhkmzp6ecC
+         +K56RSQdXa6mmIHqH3S25tgsrNbWx5Nhh05O/V6Gb4zIc2w2ihWV/UyvwHt8iXeEglZK
+         dm537GxXf15MZMb4F8xMCoQkeVv4UqVhvVUi/SnkCw6lOc+drjFASQBJKMu3lECF3uxY
+         rV9bvxUDUOAdxL+bFi/G9RRZMOBXxKxtiBwl18YoPUO2S4XUt6C1HaLIO5ZUxTKjp3cR
+         j/tF8hvmrKT8dweDu+lgJnfQoLaQX3JL4HbNLH+h9VSnMjEvSjy4+vlMd4gjo2x/ogvA
+         7jPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679919223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=trl+bImJQ3EgoJ4i2dWsILqUzku4TBzDkRq+ya+AVms=;
+        b=lXh3SrxsIdDZekTa1NQ6YvYfXOYAPjeGKxuT+NGRBtonhINEOzkXqSlOliiryGOmWg
+         9KeWAJJRdI8JPn6plsUSx0MQcKqAUWYY9ZBqCNFQmRmJiTMqMPlf1jtj5hLH2ecFhqLK
+         J90wYwt8HPMXVzOfKq2KvPYls74606cIO4JNfWaEgg/wC1NVu1NLwr8i+/ArSz0mJNXr
+         CPb6qeGQf3u1osbCS29kyyoJDRcf/71NyEyfdwjypDiTpNg/FQLBgztFy3SKyuux7R8H
+         WZ2Zm2/FrPZoQCVfmfM7J+CvXvCeDGin4G0L8FAIemBoxBKBXpdDXDBfGgnycq9+fJPK
+         voJQ==
+X-Gm-Message-State: AAQBX9f7dL2TBzJ3TVbVs5V/IJP2ubHx4oi7YR/txSZrLGbrJePSad4N
+        lDCAgzsSDMCckXwhvqKldvMZfbdlnNhe6cnfoiLkDQ==
+X-Google-Smtp-Source: AKy350aDMC6dh+BEhiA05N5lQnQ89RL6xNP8S7Jq5R9NwPKSWnVPqUxY0N2g97djIE1AOxmIIGL3hr8CGGaCujMVx+g=
+X-Received: by 2002:a17:906:184d:b0:930:310:abc3 with SMTP id
+ w13-20020a170906184d00b009300310abc3mr5003850eje.13.1679919223437; Mon, 27
+ Mar 2023 05:13:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230324155421.271544-1-alexghiti@rivosinc.com> <20230324155421.271544-4-alexghiti@rivosinc.com>
+In-Reply-To: <20230324155421.271544-4-alexghiti@rivosinc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 27 Mar 2023 17:43:32 +0530
+Message-ID: <CAAhSdy3j38AZt7BOipiW_b+t-NZg6xVHEAhOfJLU6TQzSSdcXQ@mail.gmail.com>
+Subject: Re: [PATCH v9 3/3] riscv: Use PUD/P4D/PGD pages for the linear mapping
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Mar 24, 2023 at 9:27=E2=80=AFPM Alexandre Ghiti <alexghiti@rivosinc=
+.com> wrote:
+>
+> During the early page table creation, we used to set the mapping for
+> PAGE_OFFSET to the kernel load address: but the kernel load address is
+> always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
+> pages as this physical address is not aligned on PUD/P4D/PGD size (wherea=
+s
+> PAGE_OFFSET is).
+>
+> But actually we don't have to establish this mapping (ie set va_pa_offset=
+)
+> that early in the boot process because:
+>
+> - first, setup_vm installs a temporary kernel mapping and among other
+>   things, discovers the system memory,
+> - then, setup_vm_final creates the final kernel mapping and takes
+>   advantage of the discovered system memory to create the linear
+>   mapping.
+>
+> During the first phase, we don't know the start of the system memory and
+> then until the second phase is finished, we can't use the linear mapping =
+at
+> all and phys_to_virt/virt_to_phys translations must not be used because i=
+t
+> would result in a different translation from the 'real' one once the fina=
+l
+> mapping is installed.
+>
+> So here we simply delay the initialization of va_pa_offset to after the
+> system memory discovery. But to make sure noone uses the linear mapping
+> before, we add some guard in the DEBUG_VIRTUAL config.
+>
+> Finally we can use PUD/P4D/PGD hugepages when possible, which will result
+> in a better TLB utilization.
+>
+> Note that:
+> - this does not apply to rv32 as the kernel mapping lies in the linear
+>   mapping.
+> - we rely on the firmware to protect itself using PMP.
+>
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> Acked-by: Rob Herring <robh@kernel.org> # DT bits
 
-Now that all of these have consistent behavior, replace them with
-a single shared implementation of arch_sync_dma_for_device() and
-arch_sync_dma_for_cpu() and three parameters to pick how they should
-operate:
+Reviewed-by: Anup Patel <anup@brainfault.org>
+Tested-by: Anup Patel <anup@brainfault.org>
 
- - If the CPU has speculative prefetching, then the cache
-   has to be invalidated after a transfer from the device.
-   On the rarer CPUs without prefetching, this can be skipped,
-   with all cache management happening before the transfer.
-   This flag can be runtime detected, but is usually fixed
-   per architecture.
+Regards,
+Anup
 
- - Some architectures currently clean the caches before DMA
-   from a device, while others invalidate it. There has not
-   been a conclusion regarding whether we should change all
-   architectures to use clean instead, so this adds an
-   architecture specific flag that we can change later on.
-
- - On 32-bit Arm, the arch_sync_dma_for_cpu() function keeps
-   track pages that are marked clean in the page cache, to
-   avoid flushing them again. The implementation for this is
-   generic enough to work on all architectures that use the
-   PG_dcache_clean page flag, but a Kconfig symbol is used
-   to only enable it on Arm to preserve the existing behavior.
-
-For the function naming, I picked 'wback' over 'clean', and 'wback_inv'
-over 'flush', to avoid any ambiguity of what the helper functions are
-supposed to do.
-
-Moving the global functions into a header file is usually a bad idea
-as it prevents the header from being included more than once, but it
-helps keep the behavior as close as possible to the previous state,
-including the possibility of inlining most of it into these functions
-where that was done before. This also helps keep the global namespace
-clean, by hiding the new arch_dma_cache{_wback,_inv,_wback_inv} from
-device drivers that might use them incorrectly.
-
-It would be possible to do this one architecture at a time, but
-as the change is the same everywhere, the combined patch helps
-explain it better once.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arc/mm/dma.c                 |  66 +++++-------------
- arch/arm/Kconfig                  |   3 +
- arch/arm/mm/dma-mapping-nommu.c   |  39 ++++++-----
- arch/arm/mm/dma-mapping.c         |  64 +++++++-----------
- arch/arm64/mm/dma-mapping.c       |  28 +++++---
- arch/csky/mm/dma-mapping.c        |  44 ++++++------
- arch/hexagon/kernel/dma.c         |  44 ++++++------
- arch/m68k/kernel/dma.c            |  43 +++++++-----
- arch/microblaze/kernel/dma.c      |  48 +++++++-------
- arch/mips/mm/dma-noncoherent.c    |  60 +++++++----------
- arch/nios2/mm/dma-mapping.c       |  57 +++++++---------
- arch/openrisc/kernel/dma.c        |  63 +++++++++++-------
- arch/parisc/kernel/pci-dma.c      |  46 ++++++-------
- arch/powerpc/mm/dma-noncoherent.c |  34 ++++++----
- arch/riscv/mm/dma-noncoherent.c   |  51 +++++++-------
- arch/sh/kernel/dma-coherent.c     |  43 +++++++-----
- arch/sparc/kernel/ioport.c        |  38 ++++++++---
- arch/xtensa/kernel/pci-dma.c      |  40 ++++++-----
- include/linux/dma-sync.h          | 107 ++++++++++++++++++++++++++++++
- 19 files changed, 527 insertions(+), 391 deletions(-)
- create mode 100644 include/linux/dma-sync.h
-
-diff --git a/arch/arc/mm/dma.c b/arch/arc/mm/dma.c
-index ddb96786f765..61cd01646222 100644
---- a/arch/arc/mm/dma.c
-+++ b/arch/arc/mm/dma.c
-@@ -30,63 +30,33 @@ void arch_dma_prep_coherent(struct page *page, size_t size)
- 	dma_cache_wback_inv(page_to_phys(page), size);
- }
- 
--/*
-- * Cache operations depending on function and direction argument, inspired by
-- * https://lore.kernel.org/lkml/20180518175004.GF17671@n2100.armlinux.org.uk
-- * "dma_sync_*_for_cpu and direction=TO_DEVICE (was Re: [PATCH 02/20]
-- * dma-mapping: provide a generic dma-noncoherent implementation)"
-- *
-- *          |   map          ==  for_device     |   unmap     ==  for_cpu
-- *          |----------------------------------------------------------------
-- * TO_DEV   |   writeback        writeback      |   none          none
-- * FROM_DEV |   invalidate       invalidate     |   invalidate*   invalidate*
-- * BIDIR    |   writeback        writeback      |   invalidate    invalidate
-- *
-- *     [*] needed for CPU speculative prefetches
-- *
-- * NOTE: we don't check the validity of direction argument as it is done in
-- * upper layer functions (in include/linux/dma-mapping.h)
-- */
--
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
--	switch (dir) {
--	case DMA_TO_DEVICE:
--		dma_cache_wback(paddr, size);
--		break;
--
--	case DMA_FROM_DEVICE:
--		dma_cache_inv(paddr, size);
--		break;
--
--	case DMA_BIDIRECTIONAL:
--		dma_cache_wback(paddr, size);
--		break;
-+	dma_cache_wback(paddr, size);
-+}
- 
--	default:
--		break;
--	}
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
-+{
-+	dma_cache_inv(paddr, size);
- }
- 
--void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
- {
--	switch (dir) {
--	case DMA_TO_DEVICE:
--		break;
-+	dma_cache_wback_inv(paddr, size);
-+}
- 
--	/* FROM_DEVICE invalidate needed if speculative CPU prefetch only */
--	case DMA_FROM_DEVICE:
--	case DMA_BIDIRECTIONAL:
--		dma_cache_inv(paddr, size);
--		break;
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return false;
-+}
- 
--	default:
--		break;
--	}
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return true;
- }
- 
-+#include <linux/dma-sync.h>
-+
- /*
-  * Plug in direct dma map ops.
-  */
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 125d58c54ab1..0de84e861027 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -212,6 +212,9 @@ config LOCKDEP_SUPPORT
- 	bool
- 	default y
- 
-+config ARCH_DMA_MARK_DCACHE_CLEAN
-+	def_bool y
-+
- config ARCH_HAS_ILOG2_U32
- 	bool
- 
-diff --git a/arch/arm/mm/dma-mapping-nommu.c b/arch/arm/mm/dma-mapping-nommu.c
-index 12b5c6ae93fc..0817274aed15 100644
---- a/arch/arm/mm/dma-mapping-nommu.c
-+++ b/arch/arm/mm/dma-mapping-nommu.c
-@@ -13,27 +13,36 @@
- 
- #include "dma.h"
- 
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
--	if (dir == DMA_FROM_DEVICE) {
--		dmac_inv_range(__va(paddr), __va(paddr + size));
--		outer_inv_range(paddr, paddr + size);
--	} else {
--		dmac_clean_range(__va(paddr), __va(paddr + size));
--		outer_clean_range(paddr, paddr + size);
--	}
-+	dmac_clean_range(__va(paddr), __va(paddr + size));
-+	outer_clean_range(paddr, paddr + size);
- }
- 
--void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
- {
--	if (dir != DMA_TO_DEVICE) {
--		outer_inv_range(paddr, paddr + size);
--		dmac_inv_range(__va(paddr), __va(paddr));
--	}
-+	dmac_inv_range(__va(paddr), __va(paddr + size));
-+	outer_inv_range(paddr, paddr + size);
- }
- 
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-+{
-+	dmac_flush_range(__va(paddr), __va(paddr + size));
-+	outer_flush_range(paddr, paddr + size);
-+}
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return false;
-+}
-+
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return true;
-+}
-+
-+#include <linux/dma-sync.h>
-+
- void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
- 			const struct iommu_ops *iommu, bool coherent)
- {
-diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
-index b703cb83d27e..aa6ee820a0ab 100644
---- a/arch/arm/mm/dma-mapping.c
-+++ b/arch/arm/mm/dma-mapping.c
-@@ -687,6 +687,30 @@ void arch_dma_mark_clean(phys_addr_t paddr, size_t size)
- 	}
- }
- 
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
-+{
-+	dma_cache_maint(paddr, size, dmac_clean_range);
-+	outer_clean_range(paddr, paddr + size);
-+}
-+
-+
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
-+{
-+	dma_cache_maint(paddr, size, dmac_inv_range);
-+	outer_inv_range(paddr, paddr + size);
-+}
-+
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-+{
-+	dma_cache_maint(paddr, size, dmac_flush_range);
-+	outer_flush_range(paddr, paddr + size);
-+}
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return false;
-+}
-+
- static bool arch_sync_dma_cpu_needs_post_dma_flush(void)
- {
- 	if (IS_ENABLED(CONFIG_CPU_V6) ||
-@@ -699,45 +723,7 @@ static bool arch_sync_dma_cpu_needs_post_dma_flush(void)
- 	return false;
- }
- 
--/*
-- * Make an area consistent for devices.
-- * Note: Drivers should NOT use this function directly.
-- * Use the driver DMA support - see dma-mapping.h (dma_sync_*)
-- */
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
--{
--	switch (dir) {
--	case DMA_TO_DEVICE:
--		dma_cache_maint(paddr, size, dmac_clean_range);
--		outer_clean_range(paddr, paddr + size);
--		break;
--	case DMA_FROM_DEVICE:
--		dma_cache_maint(paddr, size, dmac_inv_range);
--		outer_inv_range(paddr, paddr + size);
--		break;
--	case DMA_BIDIRECTIONAL:
--		if (arch_sync_dma_cpu_needs_post_dma_flush()) {
--			dma_cache_maint(paddr, size, dmac_clean_range);
--			outer_clean_range(paddr, paddr + size);
--		} else {
--			dma_cache_maint(paddr, size, dmac_flush_range);
--			outer_flush_range(paddr, paddr + size);
--		}
--		break;
--	default:
--		break;
--	}
--}
--
--void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
--{
--	if (dir != DMA_TO_DEVICE && arch_sync_dma_cpu_needs_post_dma_flush()) {
--		outer_inv_range(paddr, paddr + size);
--		dma_cache_maint(paddr, size, dmac_inv_range);
--	}
--}
-+#include <linux/dma-sync.h>
- 
- #ifdef CONFIG_ARM_DMA_USE_IOMMU
- 
-diff --git a/arch/arm64/mm/dma-mapping.c b/arch/arm64/mm/dma-mapping.c
-index 5240f6acad64..bae741aa65e9 100644
---- a/arch/arm64/mm/dma-mapping.c
-+++ b/arch/arm64/mm/dma-mapping.c
-@@ -13,25 +13,33 @@
- #include <asm/cacheflush.h>
- #include <asm/xen/xen-ops.h>
- 
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--			      enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
--	unsigned long start = (unsigned long)phys_to_virt(paddr);
-+	dcache_clean_poc(paddr, paddr + size);
-+}
- 
--	dcache_clean_poc(start, start + size);
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
-+{
-+	dcache_inval_poc(paddr, paddr + size);
- }
- 
--void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
--			   enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
- {
--	unsigned long start = (unsigned long)phys_to_virt(paddr);
-+	dcache_clean_inval_poc(paddr, paddr + size);
-+}
- 
--	if (dir == DMA_TO_DEVICE)
--		return;
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return true;
-+}
- 
--	dcache_inval_poc(start, start + size);
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return true;
- }
- 
-+#include <linux/dma-sync.h>
-+
- void arch_dma_prep_coherent(struct page *page, size_t size)
- {
- 	unsigned long start = (unsigned long)page_address(page);
-diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
-index c90f912e2822..9402e101b363 100644
---- a/arch/csky/mm/dma-mapping.c
-+++ b/arch/csky/mm/dma-mapping.c
-@@ -55,31 +55,29 @@ void arch_dma_prep_coherent(struct page *page, size_t size)
- 	cache_op(page_to_phys(page), size, dma_wbinv_set_zero_range);
- }
- 
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
--	switch (dir) {
--	case DMA_TO_DEVICE:
--	case DMA_FROM_DEVICE:
--	case DMA_BIDIRECTIONAL:
--		cache_op(paddr, size, dma_wb_range);
--		break;
--	default:
--		BUG();
--	}
-+	cache_op(paddr, size, dma_wb_range);
- }
- 
--void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
- {
--	switch (dir) {
--	case DMA_TO_DEVICE:
--		return;
--	case DMA_FROM_DEVICE:
--	case DMA_BIDIRECTIONAL:
--		cache_op(paddr, size, dma_inv_range);
--		break;
--	default:
--		BUG();
--	}
-+	cache_op(paddr, size, dma_inv_range);
- }
-+
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-+{
-+	cache_op(paddr, size, dma_wbinv_range);
-+}
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return true;
-+}
-+
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return true;
-+}
-+
-+#include <linux/dma-sync.h>
-diff --git a/arch/hexagon/kernel/dma.c b/arch/hexagon/kernel/dma.c
-index 882680e81a30..e6538128a75b 100644
---- a/arch/hexagon/kernel/dma.c
-+++ b/arch/hexagon/kernel/dma.c
-@@ -9,29 +9,33 @@
- #include <linux/memblock.h>
- #include <asm/page.h>
- 
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
--	void *addr = phys_to_virt(paddr);
--
--	switch (dir) {
--	case DMA_TO_DEVICE:
--		hexagon_clean_dcache_range((unsigned long) addr,
--		(unsigned long) addr + size);
--		break;
--	case DMA_FROM_DEVICE:
--		hexagon_inv_dcache_range((unsigned long) addr,
--		(unsigned long) addr + size);
--		break;
--	case DMA_BIDIRECTIONAL:
--		flush_dcache_range((unsigned long) addr,
--		(unsigned long) addr + size);
--		break;
--	default:
--		BUG();
--	}
-+	hexagon_clean_dcache_range(paddr, paddr + size);
- }
- 
-+static inline void arch_dma_cache_inv(phys_addr_t start, size_t size)
-+{
-+	hexagon_inv_dcache_range(paddr, paddr + size);
-+}
-+
-+static inline void arch_dma_cache_wback_inv(phys_addr_t start, size_t size)
-+{
-+	hexagon_flush_dcache_range(paddr, paddr + size);
-+}
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return false;
-+}
-+
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return false;
-+}
-+
-+#include <linux/dma-sync.h>
-+
- /*
-  * Our max_low_pfn should have been backed off by 16MB in mm/init.c to create
-  * DMA coherent space.  Use that for the pool.
-diff --git a/arch/m68k/kernel/dma.c b/arch/m68k/kernel/dma.c
-index 2e192a5df949..aa9b434e6df8 100644
---- a/arch/m68k/kernel/dma.c
-+++ b/arch/m68k/kernel/dma.c
-@@ -58,20 +58,33 @@ void arch_dma_free(struct device *dev, size_t size, void *vaddr,
- 
- #endif /* CONFIG_MMU && !CONFIG_COLDFIRE */
- 
--void arch_sync_dma_for_device(phys_addr_t handle, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
--	switch (dir) {
--	case DMA_BIDIRECTIONAL:
--	case DMA_TO_DEVICE:
--		cache_push(handle, size);
--		break;
--	case DMA_FROM_DEVICE:
--		cache_clear(handle, size);
--		break;
--	default:
--		pr_err_ratelimited("dma_sync_single_for_device: unsupported dir %u\n",
--				   dir);
--		break;
--	}
-+	/*
-+	 * cache_push() always invalidates in addition to cleaning
-+	 * write-back caches.
-+	 */
-+	cache_push(paddr, size);
-+}
-+
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
-+{
-+	cache_clear(paddr, size);
-+}
-+
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-+{
-+	cache_push(paddr, size);
- }
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return false;
-+}
-+
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return false;
-+}
-+
-+#include <linux/dma-sync.h>
-diff --git a/arch/microblaze/kernel/dma.c b/arch/microblaze/kernel/dma.c
-index b4c4e45fd45e..01110d4aa5b0 100644
---- a/arch/microblaze/kernel/dma.c
-+++ b/arch/microblaze/kernel/dma.c
-@@ -14,32 +14,30 @@
- #include <linux/bug.h>
- #include <asm/cacheflush.h>
- 
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
--	switch (direction) {
--	case DMA_TO_DEVICE:
--	case DMA_BIDIRECTIONAL:
--		flush_dcache_range(paddr, paddr + size);
--		break;
--	case DMA_FROM_DEVICE:
--		invalidate_dcache_range(paddr, paddr + size);
--		break;
--	default:
--		BUG();
--	}
-+	/* writeback plus invalidate, could be a nop on WT caches */
-+	flush_dcache_range(paddr, paddr + size);
- }
- 
--void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
- {
--	switch (direction) {
--	case DMA_TO_DEVICE:
--		break;
--	case DMA_BIDIRECTIONAL:
--	case DMA_FROM_DEVICE:
--		invalidate_dcache_range(paddr, paddr + size);
--		break;
--	default:
--		BUG();
--	}}
-+	invalidate_dcache_range(paddr, paddr + size);
-+}
-+
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-+{
-+	flush_dcache_range(paddr, paddr + size);
-+}
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return false;
-+}
-+
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return true;
-+}
-+
-+#include <linux/dma-sync.h>
-diff --git a/arch/mips/mm/dma-noncoherent.c b/arch/mips/mm/dma-noncoherent.c
-index b9d68bcc5d53..902d4b7c1f85 100644
---- a/arch/mips/mm/dma-noncoherent.c
-+++ b/arch/mips/mm/dma-noncoherent.c
-@@ -85,50 +85,38 @@ static inline void dma_sync_phys(phys_addr_t paddr, size_t size,
- 	} while (left);
- }
- 
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
--	switch (dir) {
--	case DMA_TO_DEVICE:
--		dma_sync_phys(paddr, size, _dma_cache_wback);
--		break;
--	case DMA_FROM_DEVICE:
--		dma_sync_phys(paddr, size, _dma_cache_inv);
--		break;
--	case DMA_BIDIRECTIONAL:
--		if (IS_ENABLED(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) &&
--		    cpu_needs_post_dma_flush())
--			dma_sync_phys(paddr, size, _dma_cache_wback);
--		else
--			dma_sync_phys(paddr, size, _dma_cache_wback_inv);
--		break;
--	default:
--		break;
--	}
-+	dma_sync_phys(paddr, size, _dma_cache_wback);
- }
- 
--#ifdef CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU
--void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
- {
--	switch (dir) {
--	case DMA_TO_DEVICE:
--		break;
--	case DMA_FROM_DEVICE:
--	case DMA_BIDIRECTIONAL:
--		if (cpu_needs_post_dma_flush())
--			dma_sync_phys(paddr, size, _dma_cache_inv);
--		break;
--	default:
--		break;
--	}
-+	dma_sync_phys(paddr, size, _dma_cache_inv);
- }
--#endif
-+
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-+{
-+	dma_sync_phys(paddr, size, _dma_cache_wback_inv);
-+}
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return false;
-+}
-+
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return IS_ENABLED(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) &&
-+                    cpu_needs_post_dma_flush();
-+}
-+
-+#include <linux/dma-sync.h>
- 
- #ifdef CONFIG_ARCH_HAS_SETUP_DMA_OPS
- void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
--		const struct iommu_ops *iommu, bool coherent)
-+               const struct iommu_ops *iommu, bool coherent)
- {
--	dev->dma_coherent = coherent;
-+       dev->dma_coherent = coherent;
- }
- #endif
-diff --git a/arch/nios2/mm/dma-mapping.c b/arch/nios2/mm/dma-mapping.c
-index fd887d5f3f9a..29978970955e 100644
---- a/arch/nios2/mm/dma-mapping.c
-+++ b/arch/nios2/mm/dma-mapping.c
-@@ -13,53 +13,46 @@
- #include <linux/types.h>
- #include <linux/mm.h>
- #include <linux/string.h>
-+#include <linux/dma-map-ops.h>
- #include <linux/dma-mapping.h>
- #include <linux/io.h>
- #include <linux/cache.h>
- #include <asm/cacheflush.h>
- 
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
-+	/*
-+	 * We just need to write back the caches here, but Nios2 flush
-+	 * instruction will do both writeback and invalidate.
-+	 */
- 	void *vaddr = phys_to_virt(paddr);
-+	flush_dcache_range((unsigned long)vaddr, (unsigned long)(vaddr + size));
-+}
- 
--	switch (dir) {
--	case DMA_FROM_DEVICE:
--		invalidate_dcache_range((unsigned long)vaddr,
--			(unsigned long)(vaddr + size));
--		break;
--	case DMA_TO_DEVICE:
--		/*
--		 * We just need to flush the caches here , but Nios2 flush
--		 * instruction will do both writeback and invalidate.
--		 */
--	case DMA_BIDIRECTIONAL: /* flush and invalidate */
--		flush_dcache_range((unsigned long)vaddr,
--			(unsigned long)(vaddr + size));
--		break;
--	default:
--		BUG();
--	}
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
-+{
-+	unsigned long vaddr = (unsigned long)phys_to_virt(paddr);
-+	invalidate_dcache_range(vaddr, (unsigned long)(vaddr + size));
- }
- 
--void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
- {
- 	void *vaddr = phys_to_virt(paddr);
-+	flush_dcache_range((unsigned long)vaddr, (unsigned long)(vaddr + size));
-+}
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return false;
-+}
- 
--	switch (dir) {
--	case DMA_BIDIRECTIONAL:
--	case DMA_FROM_DEVICE:
--		invalidate_dcache_range((unsigned long)vaddr,
--			(unsigned long)(vaddr + size));
--		break;
--	case DMA_TO_DEVICE:
--		break;
--	default:
--		BUG();
--	}
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return true;
- }
- 
-+#include <linux/dma-sync.h>
-+
- void arch_dma_prep_coherent(struct page *page, size_t size)
- {
- 	unsigned long start = (unsigned long)page_address(page);
-diff --git a/arch/openrisc/kernel/dma.c b/arch/openrisc/kernel/dma.c
-index 91a00d09ffad..aba2258e62eb 100644
---- a/arch/openrisc/kernel/dma.c
-+++ b/arch/openrisc/kernel/dma.c
-@@ -95,32 +95,47 @@ void arch_dma_clear_uncached(void *cpu_addr, size_t size)
- 	mmap_write_unlock(&init_mm);
- }
- 
--void arch_sync_dma_for_device(phys_addr_t addr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
- 	unsigned long cl;
- 	struct cpuinfo_or1k *cpuinfo = &cpuinfo_or1k[smp_processor_id()];
- 
--	switch (dir) {
--	case DMA_TO_DEVICE:
--		/* Write back the dcache for the requested range */
--		for (cl = addr; cl < addr + size;
--		     cl += cpuinfo->dcache_block_size)
--			mtspr(SPR_DCBWR, cl);
--		break;
--	case DMA_FROM_DEVICE:
--		/* Invalidate the dcache for the requested range */
--		for (cl = addr; cl < addr + size;
--		     cl += cpuinfo->dcache_block_size)
--			mtspr(SPR_DCBIR, cl);
--		break;
--	case DMA_BIDIRECTIONAL:
--		/* Flush the dcache for the requested range */
--		for (cl = addr; cl < addr + size;
--		     cl += cpuinfo->dcache_block_size)
--			mtspr(SPR_DCBFR, cl);
--		break;
--	default:
--		break;
--	}
-+	/* Write back the dcache for the requested range */
-+	for (cl = paddr; cl < paddr + size;
-+	     cl += cpuinfo->dcache_block_size)
-+		mtspr(SPR_DCBWR, cl);
- }
-+
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
-+{
-+	unsigned long cl;
-+	struct cpuinfo_or1k *cpuinfo = &cpuinfo_or1k[smp_processor_id()];
-+
-+	/* Invalidate the dcache for the requested range */
-+	for (cl = paddr; cl < paddr + size;
-+	     cl += cpuinfo->dcache_block_size)
-+		mtspr(SPR_DCBIR, cl);
-+}
-+
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-+{
-+	unsigned long cl;
-+	struct cpuinfo_or1k *cpuinfo = &cpuinfo_or1k[smp_processor_id()];
-+
-+	/* Flush the dcache for the requested range */
-+	for (cl = paddr; cl < paddr + size;
-+	     cl += cpuinfo->dcache_block_size)
-+		mtspr(SPR_DCBFR, cl);
-+}
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return false;
-+}
-+
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return false;
-+}
-+
-+#include <linux/dma-sync.h>
-diff --git a/arch/parisc/kernel/pci-dma.c b/arch/parisc/kernel/pci-dma.c
-index 6d3d3cffb316..a7955aab8ce2 100644
---- a/arch/parisc/kernel/pci-dma.c
-+++ b/arch/parisc/kernel/pci-dma.c
-@@ -443,35 +443,35 @@ void arch_dma_free(struct device *dev, size_t size, void *vaddr,
- 	free_pages((unsigned long)__va(dma_handle), order);
- }
- 
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
- 	unsigned long virt = (unsigned long)phys_to_virt(paddr);
- 
--	switch (dir) {
--	case DMA_TO_DEVICE:
--		clean_kernel_dcache_range(virt, size);
--		break;
--	case DMA_FROM_DEVICE:
--		clean_kernel_dcache_range(virt, size);
--		break;
--	case DMA_BIDIRECTIONAL:
--		flush_kernel_dcache_range(virt, size);
--		break;
--	}
-+	clean_kernel_dcache_range(virt, size);
- }
- 
--void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
- {
- 	unsigned long virt = (unsigned long)phys_to_virt(paddr);
- 
--	switch (dir) {
--	case DMA_TO_DEVICE:
--		break;
--	case DMA_FROM_DEVICE:
--	case DMA_BIDIRECTIONAL:
--		purge_kernel_dcache_range(virt, size);
--		break;
--	}
-+	purge_kernel_dcache_range(virt, size);
-+}
-+
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-+{
-+	unsigned long virt = (unsigned long)phys_to_virt(paddr);
-+
-+	flush_kernel_dcache_range(virt, size);
- }
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return true;
-+}
-+
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return true;
-+}
-+
-+#include <linux/dma-sync.h>
-diff --git a/arch/powerpc/mm/dma-noncoherent.c b/arch/powerpc/mm/dma-noncoherent.c
-index 00e59a4faa2b..268510c71156 100644
---- a/arch/powerpc/mm/dma-noncoherent.c
-+++ b/arch/powerpc/mm/dma-noncoherent.c
-@@ -101,27 +101,33 @@ static void __dma_phys_op(phys_addr_t paddr, size_t size, enum dma_cache_op op)
- #endif
- }
- 
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
- 	__dma_phys_op(start, end, DMA_CACHE_CLEAN);
- }
- 
--void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
- {
--	switch (direction) {
--	case DMA_NONE:
--		BUG();
--	case DMA_TO_DEVICE:
--		break;
--	case DMA_FROM_DEVICE:
--	case DMA_BIDIRECTIONAL:
--		__dma_phys_op(start, end, DMA_CACHE_INVAL);
--		break;
--	}
-+	__dma_phys_op(start, end, DMA_CACHE_INVAL);
- }
- 
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-+{
-+	__dma_phys_op(start, end, DMA_CACHE_FLUSH);
-+}
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return true;
-+}
-+
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return true;
-+}
-+
-+#include <linux/dma-sync.h>
-+
- void arch_dma_prep_coherent(struct page *page, size_t size)
- {
- 	unsigned long kaddr = (unsigned long)page_address(page);
-diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
-index 69c80b2155a1..b9a9f57e02be 100644
---- a/arch/riscv/mm/dma-noncoherent.c
-+++ b/arch/riscv/mm/dma-noncoherent.c
-@@ -12,43 +12,40 @@
- 
- static bool noncoherent_supported;
- 
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--			      enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
- 	void *vaddr = phys_to_virt(paddr);
- 
--	switch (dir) {
--	case DMA_TO_DEVICE:
--		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
--		break;
--	case DMA_FROM_DEVICE:
--		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
--		break;
--	case DMA_BIDIRECTIONAL:
--		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
--		break;
--	default:
--		break;
--	}
-+	ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
- }
- 
--void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
--			   enum dma_data_direction dir)
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
- {
- 	void *vaddr = phys_to_virt(paddr);
- 
--	switch (dir) {
--	case DMA_TO_DEVICE:
--		break;
--	case DMA_FROM_DEVICE:
--	case DMA_BIDIRECTIONAL:
--		ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
--		break;
--	default:
--		break;
--	}
-+	ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
- }
- 
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-+{
-+	void *vaddr = phys_to_virt(paddr);
-+
-+	ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-+}
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return true;
-+}
-+
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return true;
-+}
-+
-+#include <linux/dma-sync.h>
-+
-+
- void arch_dma_prep_coherent(struct page *page, size_t size)
- {
- 	void *flush_addr = page_address(page);
-diff --git a/arch/sh/kernel/dma-coherent.c b/arch/sh/kernel/dma-coherent.c
-index 6a44c0e7ba40..41f031ae7609 100644
---- a/arch/sh/kernel/dma-coherent.c
-+++ b/arch/sh/kernel/dma-coherent.c
-@@ -12,22 +12,35 @@ void arch_dma_prep_coherent(struct page *page, size_t size)
- 	__flush_purge_region(page_address(page), size);
- }
- 
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
- 	void *addr = sh_cacheop_vaddr(phys_to_virt(paddr));
- 
--	switch (dir) {
--	case DMA_FROM_DEVICE:		/* invalidate only */
--		__flush_invalidate_region(addr, size);
--		break;
--	case DMA_TO_DEVICE:		/* writeback only */
--		__flush_wback_region(addr, size);
--		break;
--	case DMA_BIDIRECTIONAL:		/* writeback and invalidate */
--		__flush_purge_region(addr, size);
--		break;
--	default:
--		BUG();
--	}
-+	__flush_wback_region(addr, size);
- }
-+
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
-+{
-+	void *addr = sh_cacheop_vaddr(phys_to_virt(paddr));
-+
-+	__flush_invalidate_region(addr, size);
-+}
-+
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-+{
-+	void *addr = sh_cacheop_vaddr(phys_to_virt(paddr));
-+
-+	__flush_purge_region(addr, size);
-+}
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return false;
-+}
-+
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return false;
-+}
-+
-+#include <linux/dma-sync.h>
-diff --git a/arch/sparc/kernel/ioport.c b/arch/sparc/kernel/ioport.c
-index 4f3d26066ec2..6926ead2f208 100644
---- a/arch/sparc/kernel/ioport.c
-+++ b/arch/sparc/kernel/ioport.c
-@@ -300,21 +300,39 @@ arch_initcall(sparc_register_ioport);
- 
- #endif /* CONFIG_SBUS */
- 
--/*
-- * IIep is write-through, not flushing on cpu to device transfer.
-- *
-- * On LEON systems without cache snooping, the entire D-CACHE must be flushed to
-- * make DMA to cacheable memory coherent.
-- */
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
--	if (dir != DMA_TO_DEVICE &&
--	    sparc_cpu_model == sparc_leon &&
-+	/* IIep is write-through, not flushing on cpu to device transfer. */
-+}
-+
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
-+{
-+	/*
-+	 * On LEON systems without cache snooping, the entire D-CACHE must be
-+	 * flushed to make DMA to cacheable memory coherent.
-+	 */
-+	if (sparc_cpu_model == sparc_leon &&
- 	    !sparc_leon3_snooping_enabled())
- 		leon_flush_dcache_all();
- }
- 
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-+{
-+	arch_dma_cache_inv(paddr, size);
-+}
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return true;
-+}
-+
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return false;
-+}
-+
-+#include <linux/dma-sync.h>
-+
- #ifdef CONFIG_PROC_FS
- 
- static int sparc_io_proc_show(struct seq_file *m, void *v)
-diff --git a/arch/xtensa/kernel/pci-dma.c b/arch/xtensa/kernel/pci-dma.c
-index ff3bf015eca4..d4ff96585545 100644
---- a/arch/xtensa/kernel/pci-dma.c
-+++ b/arch/xtensa/kernel/pci-dma.c
-@@ -43,24 +43,34 @@ static void do_cache_op(phys_addr_t paddr, size_t size,
- 		}
- }
- 
--void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
--		enum dma_data_direction dir)
-+static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
--	switch (dir) {
--	case DMA_TO_DEVICE:
--		do_cache_op(paddr, size, __flush_dcache_range);
--		break;
--	case DMA_FROM_DEVICE:
--		do_cache_op(paddr, size, __invalidate_dcache_range);
--		break;
--	case DMA_BIDIRECTIONAL:
--		do_cache_op(paddr, size, __flush_invalidate_dcache_range);
--		break;
--	default:
--		break;
--	}
-+	do_cache_op(paddr, size, __flush_dcache_range);
- }
- 
-+static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
-+{
-+	do_cache_op(paddr, size, __invalidate_dcache_range);
-+}
-+
-+static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-+{
-+	do_cache_op(paddr, size, __flush_invalidate_dcache_range);
-+}
-+
-+static inline bool arch_sync_dma_clean_before_fromdevice(void)
-+{
-+	return false;
-+}
-+
-+static inline bool arch_sync_dma_cpu_needs_post_dma_flush(void)
-+{
-+	return false;
-+}
-+
-+#include <linux/dma-sync.h>
-+
-+
- void arch_dma_prep_coherent(struct page *page, size_t size)
- {
- 	__invalidate_dcache_range((unsigned long)page_address(page), size);
-diff --git a/include/linux/dma-sync.h b/include/linux/dma-sync.h
-new file mode 100644
-index 000000000000..18e33d5e8eaf
---- /dev/null
-+++ b/include/linux/dma-sync.h
-@@ -0,0 +1,107 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Cache operations depending on function and direction argument, inspired by
-+ * https://lore.kernel.org/lkml/20180518175004.GF17671@n2100.armlinux.org.uk
-+ * "dma_sync_*_for_cpu and direction=TO_DEVICE (was Re: [PATCH 02/20]
-+ * dma-mapping: provide a generic dma-noncoherent implementation)"
-+ *
-+ *          |   map          ==  for_device     |   unmap     ==  for_cpu
-+ *          |----------------------------------------------------------------
-+ * TO_DEV   |   writeback        writeback      |   none          none
-+ * FROM_DEV |   invalidate       invalidate     |   invalidate*   invalidate*
-+ * BIDIR    |   writeback        writeback      |   invalidate    invalidate
-+ *
-+ *     [*] needed for CPU speculative prefetches
-+ *
-+ * NOTE: we don't check the validity of direction argument as it is done in
-+ * upper layer functions (in include/linux/dma-mapping.h)
-+ *
-+ * This file can be included by arch/.../kernel/dma-noncoherent.c to provide
-+ * the respective high-level operations without having to expose the
-+ * cache management ops to drivers.
-+ */
-+
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
-+{
-+	switch (dir) {
-+	case DMA_TO_DEVICE:
-+		/*
-+		 * This may be an empty function on write-through caches,
-+		 * and it might invalidate the cache if an architecture has
-+		 * a write-back cache but no way to write it back without
-+		 * invalidating
-+		 */
-+		arch_dma_cache_wback(paddr, size);
-+		break;
-+
-+	case DMA_FROM_DEVICE:
-+		/*
-+		 * FIXME: this should be handled the same across all
-+		 * architectures, see
-+		 * https://lore.kernel.org/all/20220606152150.GA31568@willie-the-truck/
-+		 */
-+		if (!arch_sync_dma_clean_before_fromdevice()) {
-+			arch_dma_cache_inv(paddr, size);
-+			break;
-+		}
-+		fallthrough;
-+
-+	case DMA_BIDIRECTIONAL:
-+		/* Skip the invalidate here if it's done later */
-+		if (IS_ENABLED(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) &&
-+		    arch_sync_dma_cpu_needs_post_dma_flush())
-+			arch_dma_cache_wback(paddr, size);
-+		else
-+			arch_dma_cache_wback_inv(paddr, size);
-+		break;
-+
-+	default:
-+		break;
-+	}
-+}
-+
-+#ifdef CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU
-+/*
-+ * Mark the D-cache clean for these pages to avoid extra flushing.
-+ */
-+static void arch_dma_mark_dcache_clean(phys_addr_t paddr, size_t size)
-+{
-+#ifdef CONFIG_ARCH_DMA_MARK_DCACHE_CLEAN
-+	unsigned long pfn = PFN_UP(paddr);
-+	unsigned long off = paddr & (PAGE_SIZE - 1);
-+	size_t left = size;
-+
-+	if (off)
-+		left -= PAGE_SIZE - off;
-+
-+	while (left >= PAGE_SIZE) {
-+		struct page *page = pfn_to_page(pfn++);
-+		set_bit(PG_dcache_clean, &page->flags);
-+		left -= PAGE_SIZE;
-+	}
-+#endif
-+}
-+
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
-+{
-+	switch (dir) {
-+	case DMA_TO_DEVICE:
-+		break;
-+
-+	case DMA_FROM_DEVICE:
-+	case DMA_BIDIRECTIONAL:
-+		/* FROM_DEVICE invalidate needed if speculative CPU prefetch only */
-+		if (arch_sync_dma_cpu_needs_post_dma_flush())
-+			arch_dma_cache_inv(paddr, size);
-+
-+		if (size > PAGE_SIZE)
-+			arch_dma_mark_dcache_clean(paddr, size);
-+		break;
-+
-+	default:
-+		break;
-+	}
-+}
-+#endif
--- 
-2.39.2
-
+> ---
+>  arch/riscv/include/asm/page.h | 16 ++++++++++
+>  arch/riscv/mm/init.c          | 58 +++++++++++++++++++++++++++++++----
+>  arch/riscv/mm/physaddr.c      | 16 ++++++++++
+>  drivers/of/fdt.c              | 11 ++++---
+>  4 files changed, 90 insertions(+), 11 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.=
+h
+> index 8dc686f549b6..ea1a0e237211 100644
+> --- a/arch/riscv/include/asm/page.h
+> +++ b/arch/riscv/include/asm/page.h
+> @@ -90,6 +90,14 @@ typedef struct page *pgtable_t;
+>  #define PTE_FMT "%08lx"
+>  #endif
+>
+> +#ifdef CONFIG_64BIT
+> +/*
+> + * We override this value as its generic definition uses __pa too early =
+in
+> + * the boot process (before kernel_map.va_pa_offset is set).
+> + */
+> +#define MIN_MEMBLOCK_ADDR      0
+> +#endif
+> +
+>  #ifdef CONFIG_MMU
+>  #define ARCH_PFN_OFFSET                (PFN_DOWN((unsigned long)phys_ram=
+_base))
+>  #else
+> @@ -121,7 +129,11 @@ extern phys_addr_t phys_ram_base;
+>  #define is_linear_mapping(x)   \
+>         ((x) >=3D PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE=
+_OFFSET + KERN_VIRT_SIZE))
+>
+> +#ifndef CONFIG_DEBUG_VIRTUAL
+>  #define linear_mapping_pa_to_va(x)     ((void *)((unsigned long)(x) + ke=
+rnel_map.va_pa_offset))
+> +#else
+> +void *linear_mapping_pa_to_va(unsigned long x);
+> +#endif
+>  #define kernel_mapping_pa_to_va(y)     ({                               =
+       \
+>         unsigned long _y =3D (unsigned long)(y);                         =
+         \
+>         (IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?          =
+       \
+> @@ -130,7 +142,11 @@ extern phys_addr_t phys_ram_base;
+>         })
+>  #define __pa_to_va_nodebug(x)          linear_mapping_pa_to_va(x)
+>
+> +#ifndef CONFIG_DEBUG_VIRTUAL
+>  #define linear_mapping_va_to_pa(x)     ((unsigned long)(x) - kernel_map.=
+va_pa_offset)
+> +#else
+> +phys_addr_t linear_mapping_va_to_pa(unsigned long x);
+> +#endif
+>  #define kernel_mapping_va_to_pa(y) ({                                   =
+       \
+>         unsigned long _y =3D (unsigned long)(y);                         =
+         \
+>         (IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP=
+_OFFSET) ? \
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 3b37d8606920..f803671d18b2 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -213,6 +213,14 @@ static void __init setup_bootmem(void)
+>         phys_ram_end =3D memblock_end_of_DRAM();
+>         if (!IS_ENABLED(CONFIG_XIP_KERNEL))
+>                 phys_ram_base =3D memblock_start_of_DRAM();
+> +
+> +       /*
+> +        * In 64-bit, any use of __va/__pa before this point is wrong as =
+we
+> +        * did not know the start of DRAM before.
+> +        */
+> +       if (IS_ENABLED(CONFIG_64BIT))
+> +               kernel_map.va_pa_offset =3D PAGE_OFFSET - phys_ram_base;
+> +
+>         /*
+>          * memblock allocator is not aware of the fact that last 4K bytes=
+ of
+>          * the addressable memory can not be mapped because of IS_ERR_VAL=
+UE
+> @@ -667,9 +675,16 @@ void __init create_pgd_mapping(pgd_t *pgdp,
+>
+>  static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size=
+)
+>  {
+> -       /* Upgrade to PMD_SIZE mappings whenever possible */
+> -       base &=3D PMD_SIZE - 1;
+> -       if (!base && size >=3D PMD_SIZE)
+> +       if (!(base & (PGDIR_SIZE - 1)) && size >=3D PGDIR_SIZE)
+> +               return PGDIR_SIZE;
+> +
+> +       if (!(base & (P4D_SIZE - 1)) && size >=3D P4D_SIZE)
+> +               return P4D_SIZE;
+> +
+> +       if (!(base & (PUD_SIZE - 1)) && size >=3D PUD_SIZE)
+> +               return PUD_SIZE;
+> +
+> +       if (!(base & (PMD_SIZE - 1)) && size >=3D PMD_SIZE)
+>                 return PMD_SIZE;
+>
+>         return PAGE_SIZE;
+> @@ -978,11 +993,22 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>         set_satp_mode();
+>  #endif
+>
+> -       kernel_map.va_pa_offset =3D PAGE_OFFSET - kernel_map.phys_addr;
+> +       /*
+> +        * In 64-bit, we defer the setup of va_pa_offset to setup_bootmem=
+,
+> +        * where we have the system memory layout: this allows us to alig=
+n
+> +        * the physical and virtual mappings and then make use of PUD/P4D=
+/PGD
+> +        * for the linear mapping. This is only possible because the kern=
+el
+> +        * mapping lies outside the linear mapping.
+> +        * In 32-bit however, as the kernel resides in the linear mapping=
+,
+> +        * setup_vm_final can not change the mapping established here,
+> +        * otherwise the same kernel addresses would get mapped to differ=
+ent
+> +        * physical addresses (if the start of dram is different from the
+> +        * kernel physical address start).
+> +        */
+> +       kernel_map.va_pa_offset =3D IS_ENABLED(CONFIG_64BIT) ?
+> +                               0UL : PAGE_OFFSET - kernel_map.phys_addr;
+>         kernel_map.va_kernel_pa_offset =3D kernel_map.virt_addr - kernel_=
+map.phys_addr;
+>
+> -       phys_ram_base =3D kernel_map.phys_addr;
+> -
+>         /*
+>          * The default maximal physical memory size is KERN_VIRT_SIZE for=
+ 32-bit
+>          * kernel, whereas for 64-bit kernel, the end of the virtual addr=
+ess
+> @@ -1106,6 +1132,17 @@ static void __init create_linear_mapping_page_tabl=
+e(void)
+>         phys_addr_t start, end;
+>         u64 i;
+>
+> +#ifdef CONFIG_STRICT_KERNEL_RWX
+> +       phys_addr_t ktext_start =3D __pa_symbol(_start);
+> +       phys_addr_t ktext_size =3D __init_data_begin - _start;
+> +       phys_addr_t krodata_start =3D __pa_symbol(__start_rodata);
+> +       phys_addr_t krodata_size =3D _data - __start_rodata;
+> +
+> +       /* Isolate kernel text and rodata so they don't get mapped with a=
+ PUD */
+> +       memblock_mark_nomap(ktext_start,  ktext_size);
+> +       memblock_mark_nomap(krodata_start, krodata_size);
+> +#endif
+> +
+>         /* Map all memory banks in the linear mapping */
+>         for_each_mem_range(i, &start, &end) {
+>                 if (start >=3D end)
+> @@ -1118,6 +1155,15 @@ static void __init create_linear_mapping_page_tabl=
+e(void)
+>
+>                 create_linear_mapping_range(start, end);
+>         }
+> +
+> +#ifdef CONFIG_STRICT_KERNEL_RWX
+> +       create_linear_mapping_range(ktext_start, ktext_start + ktext_size=
+);
+> +       create_linear_mapping_range(krodata_start,
+> +                                   krodata_start + krodata_size);
+> +
+> +       memblock_clear_nomap(ktext_start,  ktext_size);
+> +       memblock_clear_nomap(krodata_start, krodata_size);
+> +#endif
+>  }
+>
+>  static void __init setup_vm_final(void)
+> diff --git a/arch/riscv/mm/physaddr.c b/arch/riscv/mm/physaddr.c
+> index 9b18bda74154..18706f457da7 100644
+> --- a/arch/riscv/mm/physaddr.c
+> +++ b/arch/riscv/mm/physaddr.c
+> @@ -33,3 +33,19 @@ phys_addr_t __phys_addr_symbol(unsigned long x)
+>         return __va_to_pa_nodebug(x);
+>  }
+>  EXPORT_SYMBOL(__phys_addr_symbol);
+> +
+> +phys_addr_t linear_mapping_va_to_pa(unsigned long x)
+> +{
+> +       BUG_ON(!kernel_map.va_pa_offset);
+> +
+> +       return ((unsigned long)(x) - kernel_map.va_pa_offset);
+> +}
+> +EXPORT_SYMBOL(linear_mapping_va_to_pa);
+> +
+> +void *linear_mapping_pa_to_va(unsigned long x)
+> +{
+> +       BUG_ON(!kernel_map.va_pa_offset);
+> +
+> +       return ((void *)((unsigned long)(x) + kernel_map.va_pa_offset));
+> +}
+> +EXPORT_SYMBOL(linear_mapping_pa_to_va);
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index d1a68b6d03b3..d14735a81301 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -887,12 +887,13 @@ const void * __init of_flat_dt_match_machine(const =
+void *default_match,
+>  static void __early_init_dt_declare_initrd(unsigned long start,
+>                                            unsigned long end)
+>  {
+> -       /* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
+> -        * enabled since __va() is called too early. ARM64 does make use
+> -        * of phys_initrd_start/phys_initrd_size so we can skip this
+> -        * conversion.
+> +       /*
+> +        * __va() is not yet available this early on some platforms. In t=
+hat
+> +        * case, the platform uses phys_initrd_start/phys_initrd_size ins=
+tead
+> +        * and does the VA conversion itself.
+>          */
+> -       if (!IS_ENABLED(CONFIG_ARM64)) {
+> +       if (!IS_ENABLED(CONFIG_ARM64) &&
+> +           !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
+>                 initrd_start =3D (unsigned long)__va(start);
+>                 initrd_end =3D (unsigned long)__va(end);
+>                 initrd_below_start_ok =3D 1;
+> --
+> 2.37.2
+>
