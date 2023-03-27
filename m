@@ -2,162 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458946CA1B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4529B6CA1BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbjC0KwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 06:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
+        id S230468AbjC0Kxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbjC0KwF (ORCPT
+        with ESMTP id S230178AbjC0Kxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:52:05 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47E140C8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:52:01 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id eh3so34113749edb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:52:01 -0700 (PDT)
+        Mon, 27 Mar 2023 06:53:33 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3850110C9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:53:31 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id c29so10832090lfv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:53:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112; t=1679914320;
+        d=linaro.org; s=google; t=1679914409;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wd/POrxQypBhLMF2V1CYad4Fz3s/OVjgtvRSXxYdi6w=;
-        b=Ksl9pb3IbeS3DiJI8LyBvaJrGSMJw4vJ34z8SssBxEX+RWd73IWtzSdRFBLnVrLMpz
-         e4nxMmL7DPiOitY/5mwce+TK5pq/fJqRzveP+3+u0CpxYMrDcWLmWXU6fpEDknTbRSYI
-         +gf5MWzDETcGy2GtnDQVfyS6em/pyvX6nIstijacnVrv4GqF76R2ndKlGH5Pho9ogEhr
-         OhrRYMPzB9STuVic+vu/5SGWQum7LXvZt7qvAEsQJuU7G3Dwj8uBkZ0PBxLomR+xCzzR
-         6vpcKZHdwEBU9Cil1logR/+m1KvONkAmT+kZmRvXiN6I/LNvsRI8CRxJk9TTuFteRZ3/
-         yBLw==
+        bh=3WnzOjHdVfvoCMG3pjVqA605yGhXEuWWs9v71lH5Wbo=;
+        b=Xm77A2gZGJkkJRtH7/hFJbceaoRhHoVaOSxcCKITYDDDP4yT2vupGTRCWt74OJ+uen
+         KpfmZs5f/A++PJKPsZoJ6OjGV1chdMTpQIT9W34thZ+h4J+1HBG5uQf/ULfnLqhSEhAR
+         0z2ytp0tax/KYyx3JEkAfBBO2lIHsftrPRqBA0YLEYkSMMT15/0t3CAd6SrcqN+1g47q
+         jtkLfIFkq1wFK11UujS6j+bkWaqUZk227f5/1D2vBf3KRUDoEd5LbNqToHxKTLKtfdwf
+         J+kVvbDFHlA86Mza2ojvGiC3UT4ARSxK1gD8jkyOI8I6qp3idVgIagCeWYrDvpCAtJqL
+         J5ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679914320;
+        d=1e100.net; s=20210112; t=1679914409;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wd/POrxQypBhLMF2V1CYad4Fz3s/OVjgtvRSXxYdi6w=;
-        b=XEbtOwwGZ97m+hnvFC3tbbpU5bo2raLu1xmT+ylB5CggPginYocIB4yEmWpgo9U6M8
-         BprklNhspBxA5PbAqplk/3oQ8f7fuDgfQjXd+wmz246uhdBNokz8QPcuUF3aVkWyNcvG
-         JYeYVbz7dM5zfOtv92TTVC34tp7OWsZ4TsDp6YtPjvkHAGrMy0jwVlLqpChL3b19Wcag
-         yHTalruwBlPAasd283aagCjUEuSOJF6JwSeCLtZhs6/sSLbQNZRM7MiBwmgDuCwhDfOV
-         YZuah6vuhZMUTb6HO5ZN6hBsM+RIimL37lKPjO+yvY/05WaXVPNv6pZij8b3w4JP4p7u
-         8/Jw==
-X-Gm-Message-State: AAQBX9czj8v63zSeVsqhsUsYjpeE2M2kmToTI7JVbdK+wNyHJlyk9AI8
-        RgD3H6FvKGjpCEB/0h4Rz6Eezw==
-X-Google-Smtp-Source: AKy350YQ9/vyGdqu8iodTKkawJiPKGinHIvrkQ9JKOoVHWOdhEfku8GbiVqs6KmvV+N2OnzU4NqcqA==
-X-Received: by 2002:a17:906:2bc9:b0:939:e870:2b37 with SMTP id n9-20020a1709062bc900b00939e8702b37mr12478545ejg.70.1679914320052;
-        Mon, 27 Mar 2023 03:52:00 -0700 (PDT)
-Received: from [192.168.0.161] (62-73-72-43.ip.btc-net.bg. [62.73.72.43])
-        by smtp.gmail.com with ESMTPSA id rk28-20020a170907215c00b00933b38505f9sm11382514ejb.152.2023.03.27.03.51.58
+        bh=3WnzOjHdVfvoCMG3pjVqA605yGhXEuWWs9v71lH5Wbo=;
+        b=NzPugeRJYwSEEFZ44Z5xbW+t2TUcutUBq6D1BXhws/T9Z5POP4hvRR66f9eP+bmXeM
+         lr5PpKGqgaaWu0BzkIeMqIqBe/yPnaOp8hRevHPVpxriYeI3oRTHMqO5iFTyi0I7RFWb
+         fprZYBipwbN9nSN0EbKfn7tUB2UZb7coOHJfnE7BlxIepbrrkdnYwqZJbBAJ7VKjMGcB
+         PCZKhmRAPNE7n4WaCRpaNdkWjzckE/VM+jHicOdoJP2aBnekKUodoNKpxsXHs9S2W+Pz
+         ik+Ku6wLjeInKv5Qo1488cJRqvPhnUieC8FdYJZhjPrE5YSAO3kGVKAaLYMFRZn36mAC
+         orEg==
+X-Gm-Message-State: AAQBX9ert7PbpPAYrYSBTrTbmMiiRErmsb2TLFYffYoeOUb4i8Zz/zGc
+        kB9BgvtM6QI0CKxZjsN3IeKRuQ==
+X-Google-Smtp-Source: AKy350aYInrCK0ZXczOvivBLQCQFlcg1lhhCSj4cNtly1U8Jiy5o34ej8P5uE+5wVjEIyQgO5SUasw==
+X-Received: by 2002:ac2:5541:0:b0:4e0:2455:3ade with SMTP id l1-20020ac25541000000b004e024553ademr2952253lfk.60.1679914409515;
+        Mon, 27 Mar 2023 03:53:29 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id y28-20020ac2447c000000b004eafa141a12sm2075784lfl.9.2023.03.27.03.53.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 03:51:59 -0700 (PDT)
-Message-ID: <46d04b78-bde5-b979-c552-57b6e8d1eee4@blackwall.org>
-Date:   Mon, 27 Mar 2023 13:51:58 +0300
+        Mon, 27 Mar 2023 03:53:29 -0700 (PDT)
+Message-ID: <d8ff650c-fd6a-bec4-354b-eb7b27b6394e@linaro.org>
+Date:   Mon, 27 Mar 2023 12:53:27 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: What is the best way to provide FDB related metrics to user
- space?
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/2] remoteproc: qcom: pas: add SDM845 SLPI resource
 Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Woojung Huh <woojung.huh@microchip.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, Roopa Prabhu <roopa@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>
-References: <20230324140622.GB28424@pengutronix.de>
- <20230324144351.54kyejvgqvkozuvp@skbuf>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20230324144351.54kyejvgqvkozuvp@skbuf>
+To:     Dylan Van Assche <me@dylanvanassche.be>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230325132117.19733-1-me@dylanvanassche.be>
+ <20230325132117.19733-3-me@dylanvanassche.be>
+ <a27e7e67-a3e8-01ec-1f0d-717d705af117@linaro.org>
+ <91875b7f6f77d6bc846e2da6d009b44c89cbafab.camel@dylanvanassche.be>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <91875b7f6f77d6bc846e2da6d009b44c89cbafab.camel@dylanvanassche.be>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=3.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/03/2023 16:43, Vladimir Oltean wrote:
-> Hi Oleksij,
+
+
+On 27.03.2023 11:34, Dylan Van Assche wrote:
+> Hi Konrad,
 > 
-> On Fri, Mar 24, 2023 at 03:06:22PM +0100, Oleksij Rempel wrote:
->> Hello all,
+> On Mon, 2023-03-27 at 10:44 +0200, Konrad Dybcio wrote:
 >>
->> I am currently working on implementing an interface to provide
->> FDB-related metrics to user space, such as the size of the FDB, the
->> count of objects, and so on. The IEEE 802.1Q-2018 standard offers some
->> guidance on this topic. For instance, section "17.2.4 Structure of the
->> IEEE8021-Q-BRIDGE-MIB" defines the ieee8021QBridgeFdbDynamicCount
->> object, and section "12.7.1.1.3 Outputs" provides additional outputs
->> that can be utilized for proper bridge management.
 >>
->> I've noticed that some DSA drivers implement devlink raw access to the
->> FDB. I am wondering if it would be acceptable to provide a generic
->> interface for all DSA switches for these kinds of metrics. What would be
->> the best interface to use for this purpose - devlink, sysfs, or
->> something else?
+>> On 25.03.2023 14:21, Dylan Van Assche wrote:
+>>> Add SLPI resources for the SDM845 Qualcomm SoC to the Qualcomm
+>>> remoteproc q6v5_pas driver to define the default firmware name
+>>> and GLink edge name.
+>>>
+>>> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
+>>> ---
+>>>  drivers/remoteproc/qcom_q6v5_pas.c | 17 +++++++++++++++++
+>>>  1 file changed, 17 insertions(+)
+>>>
+>>> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c
+>>> b/drivers/remoteproc/qcom_q6v5_pas.c
+>>> index c99a20542685..d82b6f4bced4 100644
+>>> --- a/drivers/remoteproc/qcom_q6v5_pas.c
+>>> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+>>> @@ -1028,6 +1028,22 @@ static const struct adsp_data
+>>> slpi_resource_init = {
+>>>                 .ssctl_id = 0x16,
+>>>  };
+>>>  
+>>> +static const struct adsp_data sdm845_slpi_resource = {
+>>> +               .crash_reason_smem = 424,
+>>> +               .firmware_name = "slpi.mdt",
+>>> +               .pas_id = 12,
+>>> +               .auto_boot = true,
+>>> +               .proxy_pd_names = (char*[]){
+>>> +                       "lcx",
+>>> +                       "lmx",
+>>> +                       NULL
+>>> +               },
+>>> +               .load_state = "slpi",
+>>> +               .ssr_name = "dsps",
+>>> +               .sysmon_name = "slpi",
+>>> +               .ssctl_id = 0x16,
+>> Isn't this identical to sm8150_slpi_resource?
+>>
+>> Konrad
 > 
-> It's not an easy question. It probably depends on what exactly you need
-> it for.
-> 
-> At a first glance, I'd say that the bridge's netlink interface should
-> probably report these, based on information collected and aggregated
-> from its bridge ports. But it becomes quite complicated to aggregate
-> info from switchdev and non-switchdev (Wi-Fi, plain Ethernet) ports into
-> a single meaningful number. Also, the software bridge does not have a
-> hard limit per se when it comes to the number of FDB entries (although
-> maybe it wouldn't be such a bad idea).
-> 
+> Yes it is. I added a new entry because for SM8150, SM8250, and SM8350
+> they are duplicated as well. The SDM845's struct is indentical to
+> SM8150/SM8250/SM8350's structs.
+Well, you just found a quick improvement to make then! :D
 
-I've had such patch lying around for a very long time. I can polish and upstream
-it if there is interest, I think I dropped it because I wanted to do also per-port
-limits for dynamic entries which are much harder to get right and higher prio
-tasks took over at the time. I could revisit if there is interest.
-
-> ieee8021QBridgeFdbDynamicCount seems defined as "The current number of
-> dynamic entries in this Filtering Database." So we're already outside
-> the territory of statically defined "maximums" and we're now talking
-> about the degree of occupancy of certain tables. That will be a lot
-> harder for the software bridge to aggregate coherently, and it can't
-> just count its own dynamic FDB entries. Things like dynamic address
-> learning of FDB entries learned on foreign interfaces would make that
-> utilization figure quite imprecise. Also, some DSA switches have a
-> VLAN-unaware FDB, and if the bridge is VLAN-aware, it will have one FDB
-> entry per each VLAN, whereas the hardware table will have a single FDB
-> entry. Also, DSA in general does not attempt to sync the software FDB
-> with the hardware FDB.
+Konrad
 > 
-
-Agreed, it's hard to sync the hw/sw fdb.
-
-> So, while we could in theory make the bridge forward this information
-> from drivers to user space in a unified form, it seems that the device
-> specific information is hard to convert in a lossless form to generic
-> information.
+> Kind regards,
+> Dylan Van Assche
 > 
-
-If it can be made consistent somehow and the counters are generic enough for
-everyone to use and export, and it can work with multiple bridges and so on,
-that's not so bad.
-
-> Which is exactly the reason why we have what we have now, I guess.
+>>> +};
+>>> +
+>>>  static const struct adsp_data sm8150_slpi_resource = {
+>>>                 .crash_reason_smem = 424,
+>>>                 .firmware_name = "slpi.mdt",
+>>> @@ -1201,6 +1217,7 @@ static const struct of_device_id
+>>> adsp_of_match[] = {
+>>>         { .compatible = "qcom,sdm660-adsp-pas", .data =
+>>> &adsp_resource_init},
+>>>         { .compatible = "qcom,sdm845-adsp-pas", .data =
+>>> &sdm845_adsp_resource_init},
+>>>         { .compatible = "qcom,sdm845-cdsp-pas", .data =
+>>> &sdm845_cdsp_resource_init},
+>>> +       { .compatible = "qcom,sdm845-slpi-pas", .data =
+>>> &sdm845_slpi_resource},
+>>>         { .compatible = "qcom,sdx55-mpss-pas", .data =
+>>> &sdx55_mpss_resource},
+>>>         { .compatible = "qcom,sm6115-adsp-pas", .data =
+>>> &adsp_resource_init},
+>>>         { .compatible = "qcom,sm6115-cdsp-pas", .data =
+>>> &cdsp_resource_init},
 > 
-> What do you mean by "devlink raw access"? In Documentation/networking/dsa/dsa.rst
-> we say:
-> 
-> | - Resources: a monitoring feature which enables users to see the degree of
-> |   utilization of certain hardware tables in the device, such as FDB, VLAN, etc.
-> 
-> If you search for dsa_devlink_resource_register(), you'll see the
-> current state of things. What is reported there as device-specific
-> resources seems to be the kind of thing you would be interested in.
-
