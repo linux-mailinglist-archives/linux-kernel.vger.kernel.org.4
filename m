@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6686CA49B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC1A6CA49E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbjC0Mw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
+        id S232354AbjC0Mwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbjC0MwV (ORCPT
+        with ESMTP id S232115AbjC0MwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:52:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354AC173F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:52:20 -0700 (PDT)
+        Mon, 27 Mar 2023 08:52:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2604215;
+        Mon, 27 Mar 2023 05:52:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D28F2B811D9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:52:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A993C433A1;
-        Mon, 27 Mar 2023 12:52:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDA18B8121C;
+        Mon, 27 Mar 2023 12:52:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0930FC4339E;
+        Mon, 27 Mar 2023 12:52:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679921537;
-        bh=ERkDPrE1t41RAkQ/wfC7GUX0HHhzIsOCq5HwwVyTEOs=;
+        s=k20201202; t=1679921540;
+        bh=TiNqf98ADycgBI6z6Xc+TjvbRRtxYsDak8spskoXiFA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pb3H6HnS3ls35CnSmyWzLYbqa4xY7gJ+ODpuHIC9lt+69cXWEgPdYbJMjRRC8/yXO
-         rTQMFxKC1dAkOYS/Zt9YoMjlb3cYjH21bvbxn9T041nfigSreDeLCCqIPF5tbFK1FC
-         XnCBEfrWgVZKIAn7pcvXTzx9KBJKb4Thht6yqjXswouC3pbjR6EMIdu/pixvwRXyvH
-         MpSX3QRyl6tOLVeVgledhX5ohLI/nbsf4FnlQ2YYzssgVF/4l9m4ho93K0SS91aS9a
-         e/KshNU60hgoA+WeCd6SjfVoWet5QMHq9S+47R3YnFNS/MHnurZgI4c3QVOVZ679Yo
-         abZfuCTBHfmRw==
+        b=PItEEgeDQzes6BzFSC3cdJg/LxgE3V7YFyrWEVTjlMvLeXyhNvWPeU/63fWvAi06k
+         W0K665kYq1tSsqXxGUATcn+cMuof9v51JWJeaUXWMg192xYQYorNdPzhNWiXQBDat4
+         SjqeonVwYc07L5USz83O0hxA2GydRChm5F9tj2+ZSrNdeR9pHTVoghxJyXrWz34amY
+         U/eTIWIdYPCW0JanDUmmZCSbJIsNzHkflMAEM1/jgpwzSivBepvCrcbchWJs4Ffukb
+         qVlCkx7P7dT9s5Klytf5Rpu0brogyw50cx0JHLEXwlGPjJEXGYghHmVNW9qz1YSFr+
+         Vby1W/rmSDANQ==
 From:   Will Deacon <will@kernel.org>
-To:     joro@8bytes.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joerg Roedel <joro@8bytes.org>, neil.armstrong@linaro.org,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>
 Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        steev@kali.org, iommu@lists.linux.dev, johan+linaro@kernel.org,
-        andersson@kernel.org, linux-arm-kernel@lists.infradead.org,
-        robin.murphy@arm.com
-Subject: Re: [PATCH v5] iommu/arm-smmu-qcom: Limit the SMR groups to 128
-Date:   Mon, 27 Mar 2023 13:52:01 +0100
-Message-Id: <167991987524.1305084.466646756285487652.b4-ty@kernel.org>
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] dt-bindings: arm-smmu: Add compatible for SM8550 SoC
+Date:   Mon, 27 Mar 2023 13:52:02 +0100
+Message-Id: <167991649885.1301297.18067853856975635652.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230327080029.11584-1-manivannan.sadhasivam@linaro.org>
-References: <20230327080029.11584-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20230207-topic-sm8550-upstream-smmu-bindings-v3-1-cb15a7123cfe@linaro.org>
+References: <20230207-topic-sm8550-upstream-smmu-bindings-v3-1-cb15a7123cfe@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,22 +60,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023 13:30:29 +0530, Manivannan Sadhasivam wrote:
-> Some platforms support more than 128 stream matching groups than what is
-> defined by the ARM SMMU architecture specification. But due to some unknown
-> reasons, those additional groups don't exhibit the same behavior as the
-> architecture supported ones.
+On Wed, 08 Feb 2023 10:13:58 +0100, neil.armstrong@linaro.org wrote:
+> From: Abel Vesa <abel.vesa@linaro.org>
 > 
-> For instance, the additional groups will not detect the quirky behavior of
-> some firmware versions intercepting writes to S2CR register, thus skipping
-> the quirk implemented in the driver and causing boot crash.
+> Add the SoC specific compatible for SM8550 implementing
+> arm,mmu-500.
 > 
-> [...]
+> 
 
-Applied to will (for-joerg/arm-smmu/updates), thanks!
+Applied to will (for-joerg/arm-smmu/bindings), thanks!
 
-[1/1] iommu/arm-smmu-qcom: Limit the SMR groups to 128
-      https://git.kernel.org/will/c/122611347326 
+[1/1] dt-bindings: arm-smmu: Add compatible for SM8550 SoC
+      https://git.kernel.org/will/c/7f061c19f652
 
 Cheers,
 -- 
