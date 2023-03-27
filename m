@@ -2,49 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76AFE6C9CC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1BD6C9CCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbjC0HvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 03:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
+        id S232841AbjC0Hvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 03:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbjC0HvM (ORCPT
+        with ESMTP id S232862AbjC0Hv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 03:51:12 -0400
+        Mon, 27 Mar 2023 03:51:29 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BDD4233
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 00:51:02 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A68C55A8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 00:51:27 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pghcr-0003Wv-70; Mon, 27 Mar 2023 09:50:45 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pghcq-0003UX-As; Mon, 27 Mar 2023 09:50:44 +0200
-Date:   Mon, 27 Mar 2023 09:50:44 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: [PATCH] usb: dwc3: gadget: lower informal user notifaction
- dequeue operation
-Message-ID: <20230327075044.qcvdwou57lb5vyqc@pengutronix.de>
-References: <20230323171931.4085496-1-m.felsch@pengutronix.de>
- <20230323234103.mx7f3pzvbrrguzqe@synopsys.com>
- <20230324083603.vkbnyygx645fcfxl@pengutronix.de>
- <20230324172413.lpd3cces7byoe7tk@synopsys.com>
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pghdG-0003gU-7y; Mon, 27 Mar 2023 09:51:10 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id ADDD219CEAC;
+        Mon, 27 Mar 2023 07:51:07 +0000 (UTC)
+Date:   Mon, 27 Mar 2023 09:51:06 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        michael@amarulasolutions.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: Re: [RESEND PATCH v7 0/5] can: bxcan: add support for ST bxCAN
+ controller
+Message-ID: <20230327075106.ucfzckbhkwa23wci@pengutronix.de>
+References: <20230315211040.2455855-1-dario.binacchi@amarulasolutions.com>
+ <CABGWkvpHHLNzZHDMzWveoHtApmR3czVvoCOnuWBZt-UoLVU-6g@mail.gmail.com>
+ <20230324155632.24chi5ndo23awhhp@pengutronix.de>
+ <CABGWkvpsza=b8GAFkyL2VMMHqkHyY4VLQ=8aky5G8vWTeAR49g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w6wvx2l43euoafha"
 Content-Disposition: inline
-In-Reply-To: <20230324172413.lpd3cces7byoe7tk@synopsys.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
+In-Reply-To: <CABGWkvpsza=b8GAFkyL2VMMHqkHyY4VLQ=8aky5G8vWTeAR49g@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
@@ -56,105 +66,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-03-24, Thinh Nguyen wrote:
-> On Fri, Mar 24, 2023, Marco Felsch wrote:
-> > Hi,
-> > 
-> > On 23-03-23, Thinh Nguyen wrote:
-> > > Hi,
-> > > 
-> > > On Thu, Mar 23, 2023, Marco Felsch wrote:
-> > > > Printing an error message during usb_ep_dequeue() is more confusing than
-> > > > helpful since the usb_ep_dequeue() could be call during unbind() just
-> > > > in case that everything is canceld before unbinding the driver. Lower
-> > > > the dev_err() message to dev_dbg() to keep the message for developers.
-> > > > 
-> > > > Fixes: fcd2def66392 ("usb: dwc3: gadget: Refactor dwc3_gadget_ep_dequeue")
-> > > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > > > ---
-> > > >  drivers/usb/dwc3/gadget.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > > > index 89dcfac01235f..6699db26cc7b5 100644
-> > > > --- a/drivers/usb/dwc3/gadget.c
-> > > > +++ b/drivers/usb/dwc3/gadget.c
-> > > > @@ -2106,7 +2106,7 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
-> > > >  		}
-> > > >  	}
-> > > >  
-> > > > -	dev_err(dwc->dev, "request %pK was not queued to %s\n",
-> > > > +	dev_dbg(dwc->dev, "request %pK was not queued to %s\n",
-> > > >  		request, ep->name);
-> > > >  	ret = -EINVAL;
-> > > >  out:
-> > > > -- 
-> > > > 2.30.2
-> > > > 
-> > > 
-> > > How were you able to reproduce this error message?
-> > 
-> > We use the driver within barebox where we do have support for fastboot.
-> > During the driver unbind usb_ep_dequeue() is called which throw this
-> > error.
-> 
-> I mean which gadget/function driver did you use.
 
-As I have written, the fastboot driver within barebox.
+--w6wvx2l43euoafha
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > During unbind(), the function driver would typically call to
-> > > usb_ep_disable(). Before the call usb_ep_disable() completes, all queued
-> > > and incompleted requests are expected to be returned with -ESHUTDOWN.
-> > 
-> > So the unbind() function driver should use usb_ep_disable() instead of
-> > usb_ep_dequeue()?
-> 
-> No, it can do whatever it wants. I'm just pointing out the typical
-> behavior when this case happens during unbind().
+On 26.03.2023 18:07:14, Dario Binacchi wrote:
+> > On 21.03.2023 12:25:15, Dario Binacchi wrote:
+> > > A gentle ping to remind you of this series.
+> > > I have no idea why it hasn't deserved any response for quite some
+> > > time.
+> > > Is there anything I am still missing?
+> >
+> > I wonder if we want to do a s/master/primary/ in the DT bindings and
+> > driver?
+>=20
+> The ST reference manual (RM0386) explicitly uses the master and slave wor=
+ds
+> in the bxcan chapter.
 
-Okay.
+ACK
 
-> > > For you to see this error, this means that the function driver issued
-> > > usb_ep_dequeue() to an already disabled endpoint, and the request was
-> > > probably already given back.
-> > 
-> > The unbind() just calls usb_ep_dequeue() which isn't forbidden according
-> > the API doc. We just want to ensure that the request is cancled if any.
-> 
-> It's not forbidden, and it's not unexpected for this message to be
-> generated if usb_ep_dequeue() is called after usb_ep_disable().
+> I would stay consistent with it.
 
-Exactly that happened: usb_ep_disable() called in front of the
-usb_ep_dequeue(). Thanks to your first response which explained the
-behaviour, since I'm not that familiar with the gadget stack.
+Yes, this is a known problem, on the one hand I'd like the drivers to
+match the datasheet, but here I am in favor of a deviation.
 
-> However, knowing the behavior of usb_ep_disable(), does it make sense
-> to call usb_ep_dequeue() after usb_ep_disable() completes? (I'm
-> assuming this is what happened in your case from the commit
-> description).
+> But I have no problem changing it to primary. I just sent v8 with the
+> changes you suggested for shared irq and clock enable/disable,
 
-Nope and therefore we removed it.
+These changes look good!
 
-> > > Even though this error message is not critical and shouldn't affect the
-> > > driver's behavior, it's better to fix the function driver to handle this
-> > > race.
-> > 
-> > As you have pointed out: 'it is not criticial' and therefore we shouldn't
-> > use dev_err() for non crictical information since this can cause
-> > user-space confusion.
-> 
-> I noted this particular case that it's not critical because we know
-> where/when it happened because you pointed out that it occurs during
-> unbind(). However, in any case, we want to notify that the
-> usb_ep_dequeue() was used on a wrong request, allowing the user to
-> review and fix this if needed.
+> but if you prefer to use primary I will send the v9 version with that
+> change. Please let me know your opinion.
 
-Right, thanks for your input. Please ignore this patch.
+Please convert the driver and bindings to use "primary". Feel free to
+mention that the datasheet calls the primary peripheral "master".
 
-Regards,
-  Marco
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-> 
-> Thanks,
-> Thinh
+--w6wvx2l43euoafha
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQhSucACgkQvlAcSiqK
+BOiPjQf9E5vCrptcbyNMbkUflXvdpNyA61rS146Nh9RTyCJEn2ACUqG+HnYYLtoY
+za2I3hFo7w8rtro5lMUCpm5VelthwcH0ye1rg6l27SrXoNJqscr1FIfjULRTCgPb
+UcKxrn++mNJILZVBCEVD0e9cEA6ZVz7aWXWOCodnjzR/Zs8t61VBYaKOU/owFzfl
+ukyZeFWOAlfHidUNyOf9DZcYH0yEyWDgQ1epR+FHvuMkj2/5u35K/dZjD0QzO0Ee
+wJzk3qbrJaR7amHXfaOwm+FYUl4xIEV6CDDXVxTvvUAAajNfzm+WZceALYU4tRQw
+GLaIUlEJklglv+zm79XBdEZeaGSQag==
+=FOmF
+-----END PGP SIGNATURE-----
+
+--w6wvx2l43euoafha--
