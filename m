@@ -2,85 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4ED6CA55D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6EB6CA55F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbjC0NQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        id S232405AbjC0NQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC0NQW (ORCPT
+        with ESMTP id S229456AbjC0NQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:16:22 -0400
-Received: from omta001.cacentral1.a.cloudfilter.net (omta001.cacentral1.a.cloudfilter.net [3.97.99.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1909C1985
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:16:20 -0700 (PDT)
-Received: from shw-obgw-4001a.ext.cloudfilter.net ([10.228.9.142])
-        by cmsmtp with ESMTP
-        id gTB2pdOA5uZMSgmhvpWkgb; Mon, 27 Mar 2023 13:16:19 +0000
-Received: from fanir.tuyoix.net ([68.150.218.192])
-        by cmsmtp with ESMTP
-        id gmhvpXMbRHFsOgmhvps1k1; Mon, 27 Mar 2023 13:16:19 +0000
-X-Authority-Analysis: v=2.4 cv=XZqaca15 c=1 sm=1 tr=0 ts=64219723
- a=LfNn7serMq+1bQZBlMsSfQ==:117 a=LfNn7serMq+1bQZBlMsSfQ==:17
- a=k__wU0fu6RkA:10 a=M51BFTxLslgA:10 a=nlC_4_pT8q9DhB4Ho9EA:9 a=iox4zFpeAAAA:8
- a=RJS_abe42CKYiTlhkZkA:9 a=QEXdDO2ut3YA:10 a=WzC6qhA0u3u7Ye7llzcV:22
-Received: from CLUIJ (cluij.tuyoix.net [192.168.144.15])
-        (authenticated bits=0)
-        by fanir.tuyoix.net (8.17.1/8.17.1) with ESMTPSA id 32RDGIiH011254
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NO);
-        Mon, 27 Mar 2023 07:16:18 -0600
-Date:   Mon, 27 Mar 2023 07:16:11 -0600 (Mountain Daylight Time)
-From:   =?UTF-8?Q?Marc_Aur=C3=A8le_La_France?= <tsi@tuyoix.net>
-To:     Petr Mladek <pmladek@suse.com>
-cc:     John Ogness <john.ogness@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Remove orphaned CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT
-In-Reply-To: <ZCF72chpZx77+lEM@alley>
-Message-ID: <alpine.WNT.2.20.2303270710530.3348@CLUIJ>
-References: <5c19e248-1b6b-330c-7c4c-a824688daefe@tuyoix.net> <Y/Teb9QnY8DOihZ1@alley> <ZCF72chpZx77+lEM@alley>
-User-Agent: Alpine 2.20 (WNT 67 2015-01-07)
+        Mon, 27 Mar 2023 09:16:45 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD281985;
+        Mon, 27 Mar 2023 06:16:44 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7CC275C00F3;
+        Mon, 27 Mar 2023 09:16:43 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 27 Mar 2023 09:16:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1679923003; x=1680009403; bh=PM
+        Ybv6lzMtV9aBsvN9bUd8L45MF7C3r1CJYwE0yaT8c=; b=dObTmFqWuQq4O1QxWL
+        axiTetLUSGpUp88T5qYMZOgBlWuyrI3p91pD0WcrZxqJspmncBSXXdIA2RHvQzDo
+        legvDcHDa2XA7ivgIJUGIzLyYVHzm92gQAK7nFvy9Xvvc3yCSXMzFrpjAymR7L8D
+        cQblmLAFh/SjQcB2trKJnHHiKCWpDjXMfbZpydcg50g4i0qZ7Ehxv2p8PNPhaJrh
+        cLKaI25cRC2+7vtK5so8eUy8XOpI35khdTpN9SuPofR+ojhwVOzmaE5FXVaVt+LL
+        cNGhHD9GpGvlUMg33HncCt+dPBt0VEWvk+CWUt72E8yf0YyOfmlSTJT4DpaHUwXP
+        o6Ug==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679923003; x=1680009403; bh=PMYbv6lzMtV9a
+        BsvN9bUd8L45MF7C3r1CJYwE0yaT8c=; b=M4Hh45eJ8jVZqVk+rC75IIspBdWrw
+        VXTjZZJXIJMfei/INdp9skdKGBm0Nt8AjQTBWJuiRQnUFCs2hvZ7z/rNhYnu3G1Q
+        N5ybBP7gPGr6btaD+U0r0cYJ084kUeVAfaqIJPO8E+ADG+MI/k8hp5XGTVL+1omP
+        u0T9EGfNlZh6rSgi4EI2acuop2cJhgRjKPtc8BNqUFGouOV+fD9USxfy+qrWEjcw
+        RDNs2/HRtEQLpcW2Zq4zGEbmnaGc5riNJRxU5vTZP4Sx1Tf6uB4H0sjkkB5IWt+D
+        JLmlw1XixHPsqq1/qOn+561kJszua4nBou2ECKiVxNtn8WxQqD/MLc2Xw==
+X-ME-Sender: <xms:O5chZJWIY09st7tvRJB1Olv8Nxz1dIx-G4T4qS_OeJy_J6-c2FSc-w>
+    <xme:O5chZJkhaaH_wsZG5bhBCykjO27FdXuQy9TyV0qxcJEvUPHsJkr-vSq-LSwSyTKbh
+    5fNJHydYI9NjV3HzKE>
+X-ME-Received: <xmr:O5chZFYcX8xys0oNIrYeg9vDijg0w8r143KJ2VhcdLc7iLOTYB6-Eu6SsqkdlA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehvddgieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghh
+    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
+    grthhtvghrnhepueettdetgfejfeffheffffekjeeuveeifeduleegjedutdefffetkeel
+    hfelleetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epthihtghhohesthihtghhohdrphhiiiiirg
+X-ME-Proxy: <xmx:O5chZMXAH3DmQEklLFJ0MAQg714IPGcf9z_Y64FfvFKBFSXQo5B7XQ>
+    <xmx:O5chZDnWlQz_KVL_lkxtIPxSzjRhEqHUZnGqzwqrFM8cXWzfesrsDA>
+    <xmx:O5chZJcItmUmZvr4NR_1f2T7hV2zAHPA0s81uvzi-DhzezYS4kj0vQ>
+    <xmx:O5chZBVEslk11RufJp5QNts12fsPkagVrs01kzSi1d6bvDBtMXyvuA>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Mar 2023 09:16:41 -0400 (EDT)
+Date:   Mon, 27 Mar 2023 07:16:39 -0600
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     aloktiagi <aloktiagi@gmail.com>, viro@zeniv.linux.org.uk,
+        willy@infradead.org, David.Laight@aculab.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, hch@infradead.org
+Subject: Re: [RFC v4 2/2] file, epoll: Implement do_replace() and
+ eventpoll_replace()
+Message-ID: <ZCGXNwvymHVJ7O6K@tycho.pizza>
+References: <20230324063422.1031181-2-aloktiagi@gmail.com>
+ <ZBzRfDnHaEycE72s@ip-172-31-38-16.us-west-2.compute.internal>
+ <20230324082344.xgze2vu3ds2kubcz@wittgenstein>
+ <ZB2o8cs+VTQlz5GA@tycho.pizza>
+ <20230327090106.zylztuk77vble7ye@wittgenstein>
+ <ZCGU5JBg02+DU6JN@tycho.pizza>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="372313-13982-1679922971=:3348"
-X-CMAE-Envelope: MS4xfB/+HjES4Zcdh8MPyQIzFJq9kn/nUULn1SQaxFuHz5Zp1GUd9VawR08dXE+ZuPwCa1gzVvVyiqReprJpubsVVBxNyYAuiVNR45UiuK78y32Nm8ZOwrwK
- ltB2kObEoR/p5DU+iJur89f2hIveLH5xE8cD81N+6J7edIalBCQ6j31tPC68DUEkGOPg32uDjMtf1aXaTfL8KfkBFCekIyQaHIxTjtScL6t1ITI5I1Kl64gi
- QxZazf7NZazJOBQr5mOLhGDDkeqxoWMNURCwch+QW9k=
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCGU5JBg02+DU6JN@tycho.pizza>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Mon, Mar 27, 2023 at 07:06:46AM -0600, Tycho Andersen wrote:
+> On Mon, Mar 27, 2023 at 11:01:06AM +0200, Christian Brauner wrote:
+> > On Fri, Mar 24, 2023 at 07:43:13AM -0600, Tycho Andersen wrote:
+> > > Perhaps we could add a flag that people could set from SECCOMP_ADDFD
+> > > asking for this extra behavior?
+> > 
+> >         +       if (fd > 0 && addfd->ioctl_flags & SECCOMP_ADDFD_FLAG_EPOLL) {
+> >         +               /*
+> >         +                * - retrieve old struct file that addfd->fd refered to if any.
+> >         +                * - call your epoll seccomp api to update the references in the epoll instance
+> >         +                */
+> > 			epoll_seccomp_notify()
+> >         +       }
+> >         +
+> >         +       if (fd > 0 && addfd->ioctl_flags & SECCOMP_ADDFD_FLAG_IO_URING) {
+> >         +               /*
+> >         +                * - call your io_uring seccomp api to update the references in the io_uring instance
+> >         +                */
+> > 			io_uring_seccomp_notify()
+> >         +       }
+> 
+> Looks reasonable to me, thanks.
 
---372313-13982-1679922971=:3348
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+One change I might suggest is only using a single flag bit -- we don't
+need to consume all of seccomp's remaining flag bits with the various
+subsystems. If you want to do this logic for epoll, you almost
+certainly want it for io_uring, select, and whatever else is out
+there.
 
-On Mon, 27 Mar 2023, Petr Mladek wrote:
-> On Tue 2023-02-21 16:08:37, Petr Mladek wrote:
->> On Mon 2023-02-20 22:10:32, Marc Aurèle La France wrote:
->>> After 93d102f094be9beab28e5afb656c188b16a3793b "printk: remove safe buffers",
->>> CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT is no longer useful.  Remove it.
-
->>> This change is not eligible for stable@.
-
->>> Please Reply-To-All.
-
->> Great catch!
->> Reviewed-by: Petr Mladek <pmladek@suse.com>
-
->> I have already sent pull request with printk changes for 6.3.
->> I am going to queue this patch either for 6.3-rc or 6.4.
-
-> JFYI, the patch has been committed into printk/linux.git,
-> branch for-6.4.
-
-Thanks and have a great day.
-
-Marc.
---372313-13982-1679922971=:3348--
+Tycho
