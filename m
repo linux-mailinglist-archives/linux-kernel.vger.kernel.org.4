@@ -2,109 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE046CB029
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3D66CB02D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjC0Uzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 16:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S230033AbjC0U6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 16:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC0Uzp (ORCPT
+        with ESMTP id S229456AbjC0U6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 16:55:45 -0400
-Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853C412F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:55:40 -0700 (PDT)
-Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
-        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 2EE838047110
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:55:40 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 8D8C71004B4E5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:55:39 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id gtsRp19OaNX2agtsRpgOEw; Mon, 27 Mar 2023 20:55:39 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=642202cb
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=k__wU0fu6RkA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=Tjjzyx2epAFAt2jio4cA:9
- a=QEXdDO2ut3YA:10:nop_charset_2
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=IbG506QGMSuWow45FPISLdd8sXyJb3ywf8UWxzRGnFE=; b=ZvI7fNwj48QqgjBu3+KcmrG6BF
-        tgDZdzWy8HGhiFPJlaxYYZ5anBOzE9HMQygbU83QT1e43jkBnPAD7HcogvKoc2+b53rEKwMvOreOU
-        OOLbjebilMZkMlJvKdwRXQvHiHep3YFu1uvPsFY4o1i05lX2KZHDwU7sDB5DNuVCBe3p6zIeIuDCN
-        k8dDbSIsj18Dt1YOip9Zg7REZLJwjWp6vq5FJLkvE+6tTn/2eO2PsBke64aLVx2axv/lo6R+WpIOg
-        FnWJKmAxpxrKl2p2qnv0NEGxE+uM56OaQjbTe3rkobbGQMJMyasO+KjyONE+ed0DAP9xodyqodwG5
-        iqi7+LYA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33266 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pgtsR-003YhS-1Z
-        for linux-kernel@vger.kernel.org;
-        Mon, 27 Mar 2023 14:55:39 -0600
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-From:   Ron Economos <re@w6rz.net>
-Subject: Bug in recent changes to builddeb
-Message-ID: <54a519ec-bfe5-60f3-fc43-707a11d38d2a@w6rz.net>
-Date:   Mon, 27 Mar 2023 13:55:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 27 Mar 2023 16:58:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD0212F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:57:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679950670;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l0k5HQijZZiTI5JKuN0wulOwFUsOATJ37PiPOJOEgWU=;
+        b=Lngh6tTtFRmSqToWVxm0YpFycEpyiFbDGs05CpmWRYVO5LFIRZNQuhR6jqArfb7ysXn9i8
+        uwW2aLvzlXlKpHHfuHdpfcTBlxq2xSgPvrYBP5lRQNdp9Yq8qg869vVe88GoqhC3RsUCe6
+        +ITmx9XEHpWqz9Vy53mSDrUTF0c5BI4=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-56-zQp8aW2xNO-9cZwde1CGGA-1; Mon, 27 Mar 2023 16:57:48 -0400
+X-MC-Unique: zQp8aW2xNO-9cZwde1CGGA-1
+Received: by mail-pg1-f197.google.com with SMTP id d34-20020a630e22000000b005039e28b68cso2517744pgl.13
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 13:57:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679950668;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l0k5HQijZZiTI5JKuN0wulOwFUsOATJ37PiPOJOEgWU=;
+        b=CotDZslgNpIe8MuU/z32HWmY1PdMlVHf+hpacYwTlzmZhqIfd3LdtbBmXceyNDPguH
+         I2qF87t9NMg0RQERYzMbiyz/AkciebKZJzT9Aic7b3NzDIh1V/tZtl53jwTxWSadDXgj
+         bjMX2vAF/r1kD+NH3wYVqnuh0Hl5lwImKHDPF24ZB0SiHxtvP7ldN3jtpmHZKjhOmzi8
+         xDKOLiH4TMpfJNHfEvbWsaZaWEVW2/OV1GaxcYpBZrRoBJWhJsE3+G7dFLjQDbq0HNz/
+         pJmHYFwHVJ09shuZ7u794Xs8nyLoFNyYxLDtSaV+b+dHdNfJ5gnNbOQkgfPy/q9NFmG/
+         XSUQ==
+X-Gm-Message-State: AO0yUKUjPZQ+fADowTKWRpC/3WyyaTB9txECHZFSkuKT5PmMqFXoSmFn
+        phNpEasV1CK+/VZbKa0HA1sor+AHr4/cg6XzHokH2j+deRI3ODvVO0Hr9FoaDhac73KA824iQQ+
+        elcdAgAzQHdOSr1qT5SJHwYrW
+X-Received: by 2002:a17:90b:2243:b0:23f:7176:df32 with SMTP id hk3-20020a17090b224300b0023f7176df32mr13751413pjb.40.1679950667911;
+        Mon, 27 Mar 2023 13:57:47 -0700 (PDT)
+X-Google-Smtp-Source: AKy350a0pTeUjTnPuwRDsnKWfscYaKPzIjcxZsvU3tPZsN9ULXGT5CBiCjeFnwCwJ4yaAP2G4njNvw==
+X-Received: by 2002:a17:90b:2243:b0:23f:7176:df32 with SMTP id hk3-20020a17090b224300b0023f7176df32mr13751400pjb.40.1679950667631;
+        Mon, 27 Mar 2023 13:57:47 -0700 (PDT)
+Received: from [172.16.65.120] ([64.114.255.114])
+        by smtp.gmail.com with ESMTPSA id j8-20020a17090a060800b0023d01900d7bsm7675288pjj.0.2023.03.27.13.57.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 13:57:47 -0700 (PDT)
+Message-ID: <c762297d-5c65-f20a-4c11-90d2f966c675@redhat.com>
+Date:   Mon, 27 Mar 2023 22:57:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3] mm/hugetlb: Fix uffd wr-protection for CoW
+ optimization path
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pgtsR-003YhS-1Z
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:33266
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        linux-stable <stable@vger.kernel.org>
+References: <20230324142620.2344140-1-peterx@redhat.com>
+ <20230324222707.GA3046@monkey>
+ <8a06be33-1b44-b992-f80a-8764810ebf3f@redhat.com> <ZCBavqZE2cyVOzaW@x1n>
+ <20230327183438.GC4184@monkey>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230327183438.GC4184@monkey>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks like there's a bug in /scripts/package/builddeb. On lines 188, 197 
-and 198, the variable $version is used. However, it's not defined 
-(removed with recent changes).
+On 27.03.23 20:34, Mike Kravetz wrote:
+> On 03/26/23 10:46, Peter Xu wrote:
+>> On Fri, Mar 24, 2023 at 11:36:53PM +0100, David Hildenbrand wrote:
+>>>>> @@ -5487,6 +5487,17 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>>>>>    	unsigned long haddr = address & huge_page_mask(h);
+>>>>>    	struct mmu_notifier_range range;
+>>>>> +	/*
+>>>>> +	 * Never handle CoW for uffd-wp protected pages.  It should be only
+>>>>> +	 * handled when the uffd-wp protection is removed.
+>>>>> +	 *
+>>>>> +	 * Note that only the CoW optimization path (in hugetlb_no_page())
+>>>>> +	 * can trigger this, because hugetlb_fault() will always resolve
+>>>>> +	 * uffd-wp bit first.
+>>>>> +	 */
+>>>>> +	if (!unshare && huge_pte_uffd_wp(pte))
+>>>>> +		return 0;
+>>>>
+>>>> This looks correct.  However, since the previous version looked correct I must
+>>>> ask.  Can we have unshare set and huge_pte_uffd_wp true?  If so, then it seems
+>>>> we would need to possibly propogate that uffd_wp to the new pte as in v2
+>>
+>> Good point, thanks for spotting!
+>>
+>>>
+>>> We can. A reproducer would share an anon hugetlb page because parent and
+>>> child. In the parent, we would uffd-wp that page. We could trigger unsharing
+>>> by R/O-pinning that page.
+>>
+>> Right.  This seems to be a separate bug..  It should be triggered in
+>> totally different context and much harder due to rare use of RO pins,
+>> meanwhile used with userfault-wp.
+>>
+>> If both of you agree, I can prepare a separate patch for this bug, and I'll
+>> better prepare a reproducer/selftest with it.
+>>
+> 
+> I am OK with separate patches, and agree that the R/O pinning case is less
+> likely to happen.
 
-This causes the headers to be put into /usr/src/linux-headers-. When the 
-next version is attempted to be installed, the following error occurs.
+Yes, the combination should be rather rare and we can fix that 
+separately. Ideally, we'd try to mimic the same uffd code flow in 
+hugetlb cow/unshare handling that we use in memory.c
 
-$ sudo dpkg -i linux-headers-6.3.0-rc4_6.3.0-rc4-2_riscv64.deb
-Selecting previously unselected package linux-headers-6.3.0-rc4.
-(Reading database ... 376925 files and directories currently installed.)
-Preparing to unpack linux-headers-6.3.0-rc4_6.3.0-rc4-2_riscv64.deb ...
-Unpacking linux-headers-6.3.0-rc4 (6.3.0-rc4-2) ...
-dpkg: error processing archive 
-linux-headers-6.3.0-rc4_6.3.0-rc4-2_riscv64.deb (--install):
-  trying to overwrite '/usr/src/linux-headers-/.config', which is also 
-in package linux-headers-6.3.0-rc3 6.3.0-rc3-4
-dpkg-deb: error: paste subprocess was killed by signal (Broken pipe)
-Errors were encountered while processing:
-  linux-headers-6.3.0-rc4_6.3.0-rc4-2_riscv64.deb
+> 
+> Since this patch addresses the issue found by Muhammad,
+> 
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+
+Hopefully we didn't forget about yet another case :D
+
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
 
