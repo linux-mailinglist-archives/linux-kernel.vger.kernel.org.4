@@ -2,140 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14FF36CA3E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF926CA3EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232846AbjC0MVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
+        id S232848AbjC0MWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232362AbjC0MVa (ORCPT
+        with ESMTP id S232506AbjC0MWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:21:30 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2267883EA
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:19:41 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id cn12so35371890edb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:19:41 -0700 (PDT)
+        Mon, 27 Mar 2023 08:22:03 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FB176A7;
+        Mon, 27 Mar 2023 05:20:10 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id x20so8771325ljq.9;
+        Mon, 27 Mar 2023 05:20:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679919563;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3EakUI0jPNAKMyGSbXLdAYtexLz6JRBq3/S7X5rdpkM=;
-        b=YfOGi5nIN1LMTUEwVIBWmw5WfzTXuwcFr6VkD9El4PILnUwRTn3tA1fPy81Q+aVppr
-         cXMxGPGNiWUWNw1RV2+rFWcv0QCT4Ik4de8GtvQpKVBKJnl5K1t1Mv7gFeMB1RjLP2U8
-         O1mRf3twnqy4kExwXswjwwKvGHxcqHl4DeXfT7IVT9InR/2c1j6zZyUIwQuBgQF3jpKf
-         03yOzbOs7oRCbLVc5YzdvmKaj6/0haPCuyy3hWK9Cq05OPsbwjvsHGrPn6XDzB2/PB+y
-         JJAtAxUos3kfWw3Oy0fC66+DFiuxyYG4soxu1ypMr8oCqcRkVsfXxFyl4rNMovRYY63Y
-         Ixcg==
+        d=gmail.com; s=20210112; t=1679919607;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FWnunhEsuJEWbwQ8zih8owiESZ1bj98jfmJyeLipbGk=;
+        b=AXp7pDNSgF/hf5SpY/lR8BFw972fobQ4ucdzAs4gZllepquz9kr8JIoNK4JIVDOnlL
+         Gtb0k2fPEzzyoqAhFHDaWYCwcwMPbD1Uw172EIgKRQZ7hmK54jGQuOEIjuleTe3L7qbD
+         iuBjx0ZuwpABuB8KYkFeNFLuwGzhzb1E9XKYN7BWzu8ost7ZA1XiX5AkKuUECv7jAxar
+         B5MAbo1F3Df0kmbPyUBDUwjpqEHWotgx2fXER3NKdNVTBg0fIizc0vnj7d11UGQnCY3A
+         EBL5aAU8jNK+TvCMtFIA3V2zK0jNiAGJe1EctsWvMwny3ZaVY+g7S/Ve2o1gafBoOUzt
+         EuJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679919563;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1679919607;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3EakUI0jPNAKMyGSbXLdAYtexLz6JRBq3/S7X5rdpkM=;
-        b=osjyug+JKpt4dGxvQisHl+i9W4mK6KknoaR5ZSrMjczAzr2DdxMwCgt3Obq0NHRKZo
-         d6RwyFnKYh0GViZ6EvA2P2N6ya9l8MsRIFAPnAtzg5w1R/IRNPpk4Ubor+9jAZJhi6Ot
-         bAoZmXEZIGRB94ZRkLwUpQ71D/eUfKHSzxTCnc0lqqLaKU1gqsLjHxnosXVnJom1IbY+
-         uuNBK0bub2z2jfUBZ2qbBUCxDj8IV5gbmIWaKInfgCPFscfAqrqfj9rrypUlvNuvDalI
-         9UYCkKYrHKuGHl7ReGdwTCQ3lUWlA30BoMMT3vhq3wgTFSHv9WkVIBIhvq0dqcUhgcTD
-         JzpA==
-X-Gm-Message-State: AAQBX9fiWSLM7+Inmq7gLOXsG/lDW1DtY6n+2Fa2zCt2B2ETRLSIfGAL
-        xhGBpTo2gMe4eUH04YBK3ILgzg==
-X-Google-Smtp-Source: AKy350b6d9XE2HHWOHZjV/5/85T1ouRUKqmWiG8PcQum228h/qDy8/lVOV2pixdrzmpNPdtK01VMrw==
-X-Received: by 2002:a17:906:11d6:b0:93b:68a8:a0e0 with SMTP id o22-20020a17090611d600b0093b68a8a0e0mr11190947eja.16.1679919562742;
-        Mon, 27 Mar 2023 05:19:22 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:581e:789c:7616:5ee? ([2a02:810d:15c0:828:581e:789c:7616:5ee])
-        by smtp.gmail.com with ESMTPSA id u6-20020a50d506000000b004fd2aab4953sm14660386edi.45.2023.03.27.05.19.21
+        bh=FWnunhEsuJEWbwQ8zih8owiESZ1bj98jfmJyeLipbGk=;
+        b=4plT/w2UnEs7VLIsn2CowtdkLN0UUjsfAJCQlH0fNgSX/if2fGPyhmSHB1JekLrx8/
+         yOU7KFd1pYo+TKDkPTSQ4LiXDJBeq52tHiWeJi78xEI//4HUOgmIQtozWGe9tAygDGEd
+         8+wI21u/rkkWzW5/eAZC3vJIoGxLOZ+ySe/87xT7OoZK+WXr8o4OaUbGQSElYu/t9h8K
+         8fm+3QrKk44/I+Fu1IKDir2LvValIPzY9bSvt8bLN4FmwpInLxzYlNoUAMK1TeG5PpAF
+         ztYdYGJTl3Hu1Tbg4C1oKP2n+r6DSb6v1ocqREKJQC3oYpkMQmagySqLcsDdoiaJyYAO
+         khxQ==
+X-Gm-Message-State: AAQBX9dYX4i3EV7W2IVgEkm+K0LxQx583Pgd1FVV0tMb0cvcWq5baQBc
+        Rku+FIG834ddTKaTJSKkJrc=
+X-Google-Smtp-Source: AKy350aACm+hxMqa7cx0UuE3GRhQRJAiENJpqRKWCphlLXDPKfpyDpuDZxL6LFfl5DDpesy55tcQWw==
+X-Received: by 2002:a2e:86d5:0:b0:29f:e144:6c6a with SMTP id n21-20020a2e86d5000000b0029fe1446c6amr3270748ljj.23.1679919607681;
+        Mon, 27 Mar 2023 05:20:07 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id t22-20020a2e9d16000000b002934d555783sm4597346lji.6.2023.03.27.05.20.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 05:19:22 -0700 (PDT)
-Message-ID: <d5821429-032d-e1e6-3a4e-ca19eb4a60ed@linaro.org>
-Date:   Mon, 27 Mar 2023 14:19:20 +0200
+        Mon, 27 Mar 2023 05:20:07 -0700 (PDT)
+Message-ID: <e027fc0c-83e0-be6f-d62b-dac00ce9b761@gmail.com>
+Date:   Mon, 27 Mar 2023 15:20:06 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v2 03/10] dt-bindings: qcom-qce: Fix compatibles
- combinations for SM8150 and IPQ4019 SoCs
-To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, rfoss@kernel.org,
-        neil.armstrong@linaro.org
-References: <20230322114519.3412469-1-bhupesh.sharma@linaro.org>
- <20230322114519.3412469-4-bhupesh.sharma@linaro.org>
- <333081a2-6b31-3fca-1a95-4273b5a46fb7@linaro.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <333081a2-6b31-3fca-1a95-4273b5a46fb7@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Language: en-US, en-GB
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+References: <cover.1679915278.git.mazziesaccount@gmail.com>
+ <f2c7f7b04f7e4ee7b9cef73ecba672f5fa40eb73.1679915278.git.mazziesaccount@gmail.com>
+ <ZCGFgypeuJXqNwQt@kroah.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v6 3/7] kunit: Add kunit wrappers for (root) device
+ creation
+In-Reply-To: <ZCGFgypeuJXqNwQt@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2023 13:49, Vladimir Zapolskiy wrote:
-> Hi Bhupesh,
-> 
-> On 3/22/23 13:45, Bhupesh Sharma wrote:
->> Currently the compatible list available in 'qce' dt-bindings does not
->> support SM8150 and IPQ4019 SoCs directly, leading to following
->> 'dtbs_check' error:
+On 3/27/23 15:01, Greg Kroah-Hartman wrote:
+> On Mon, Mar 27, 2023 at 02:34:02PM +0300, Matti Vaittinen wrote:
+>> A few tests need to have a valid struct device. One such example is
+>> tests which want to be testing devm-managed interfaces.
 >>
->>   arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-griffin.dtb:
->>    crypto@1dfa000: compatible: 'oneOf' conditional failed, one must be fixed:
->> 	['qcom,sm8150-qce', 'qcom,qce'] is too long
->> 	['qcom,sm8150-qce', 'qcom,qce'] is too short
->>
->> Fix the same.
->>
->> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->> ---
->>   Documentation/devicetree/bindings/crypto/qcom-qce.yaml | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
->> index e375bd981300..90ddf98a6df9 100644
->> --- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
->> +++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
->> @@ -24,6 +24,12 @@ properties:
->>           deprecated: true
->>           description: Kept only for ABI backward compatibility
->>   
->> +      - items:
->> +          - enum:
->> +              - qcom,ipq4019-qce
->> +              - qcom,sm8150-qce
->> +          - const: qcom,qce
->> +
+>> Add kunit wrapper for root_device_[un]register(), which create a root
+>> device and also add a kunit managed clean-up routine for the device
+>> destruction upon test exit.
 > 
-> thank you for the fix, the change is correct, please apply the tag:
+> I really do not like this as a "root device" is a horrible hack and
+> should only be used if you have to hang other devices off of it and you
+> don't have a real device to tie those devices to.
 > 
-> Fixes: 00f3bc2db351 ("dt-bindings: qcom-qce: Add new SoC compatible strings for Qualcomm QCE IP")
+> Here you are abusing it and attempting to treat it as a real device,
+> which it is not at all, because:
 > 
-> But let me ask you to split the "items" into two:
+>> Special note: In some cases the device reference-count does not reach
+>> zero and devm-unwinding is not done if device is not sitting on a bus.
+>> The root_device_[un]register() are dealing with such devices and thus
+>> this interface may not be usable by all in its current form. More
+>> information can be found from:
+>> https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@houat/
 > 
->        - items:
->            - const: qcom,ipq4019-qce
->            - const: qcom,qce
-> 
->        - items:
->            - const: qcom,sm8150-qce
->            - const: qcom,qce
-> 
+> See, not a real device, doesn't follow normal "struct device" rules and
+> lifetimes, don't try to use it for a test as it will only cause problems
+> and you will be forced to work around that in a test.
 
-Why splitting these? The enum is the preferred way usually, so why here
-do it differently?
+Ok. I understood using the root-device has been a work-around in some 
+other tests. Thus continuing use it for tests where we don't need the 
+bus until we have a proper alternative was suggested by David.
 
-Best regards,
-Krzysztof
+> Do the right thing here, create a fake bus and add devices to it.
+> 
+> Heck, I'll even write that code if you want it, what's the requirement,
+> something like:
+> 	struct device *kunit_device_create(struct kunit *test, const char *name);
+> 	void kunit_device_destroy(struct device *dev);
+
+Thanks for the offer Greg. This, however, is being already worked on by 
+David. I don't want to step on his toes by writing the same thing, nor 
+do I think I should be pushing him to rush on his work.
+
+> Why do you want a "match" function?  You don't provide documentation
+> here for it so I have no idea.
+> 
+> Anything else needed?
+> 
+>> The use of root-devices in the kunit helpers is intended to be an
+>> intermediate solution to allow tests which do not require device to sit
+>> on a bus avoid directly abusing the root_device_[un]register() while
+>> proper kunit device solution is being worked on. Related discussion can be
+>> found from:
+>> https://lore.kernel.org/lkml/CABVgOSmx3A4Vwos2_8xO-XQrQAw5gvY0nc5zLpLmcJ7FtA-dTQ@mail.gmail.com/
+> 
+> Again, no, please let's not get this wrong now and say "we will fix this
+> later" as that's not how kernel development should work...
+
+Ok. In that case I need to drop the tests from the series until we get 
+the new APIs in place. It really sucks but I guess I understand the 
+rationale for not wanting to "intermediate" solutions merged. Yes, I 
+hoped it'd be Ok as David is already working on it - but I was still 
+kind of expecting your response. This is why I made it very clear in the 
+cover-letter and this commit message what is suggested here.
+
+Jonathan, should I re-spin the series without patches 3/7 and 5/7 or can 
+you please review this and I'll just drop those for the next version?
+
+Thanks for the review Greg, I think this case is now "closed".
+
+Yours,
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
