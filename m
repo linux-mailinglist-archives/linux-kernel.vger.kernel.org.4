@@ -2,299 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57B86C9CB3
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8266C9CB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232762AbjC0HsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 03:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
+        id S232255AbjC0HsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 03:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232255AbjC0HsJ (ORCPT
+        with ESMTP id S232672AbjC0HsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 03:48:09 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173BB1986;
-        Mon, 27 Mar 2023 00:47:45 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id c4so4986650pfl.0;
-        Mon, 27 Mar 2023 00:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679903264;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S0vxj5YCRRJuld0ubNXra4DXbGLmwPLiSWw6QOm1FNk=;
-        b=dgkJCoTzfDroB99NtBKd57edkxKCItwRC3ZB6rUDR2S91Ki2PH7zpq6gjxeGGvo8KK
-         BNCDGtXV7SYWj46aMIggMdKMcqSwYCQBeU8uPGsNnp1fPIi3xPwYJqsIBsL6kxX2mOIs
-         whLytDBmlEXx7NUbd0G4vQ5m0vYagerliJp6EOjddDErX4Q3qs21fW+DWUxKkkNiKEhZ
-         tdcT6SrrYbGRJiZChtsVx4p9YbWzYOqcyVN0LvJi1ni1S9c9Kmw8Cik+uiRcmz4cmJQQ
-         pD2sw0xA+RAKKwmcOb02wHGLMqj72cgTAoSaarGF8Z4P2hsSsSM2MTN9M/oL1790vot2
-         toTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679903264;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S0vxj5YCRRJuld0ubNXra4DXbGLmwPLiSWw6QOm1FNk=;
-        b=BN/KXIZ55zQWTXO37s2Lj0s+4DsHW+XMg2BrcxTm9dARoVQ9IpCn7JDSbnG7BvvJ10
-         jLPdVU2iO+YXbD69ku9no24220tGM4WzmPrfSAYoxRy22kjwmOijJHJZPaFC3CTKQXfM
-         ju9i6vTH/yTeuQHd+eThNuwy/4TjGmlM1AyiYeN3h75XhYStk6fd1sPt3woqCmt2mY/2
-         xWPMC6iuJZArQ2CixQHSGvF0KPKXRI7FUTj+D2Qhr4VOFp+wcGkkAaIgEE3N3n6lVSUL
-         KEeX5W6WNIsi7dw3nPIndyVau7w3y9OQiPhbC/BofU06VFEpvYr2oWd37tf0huPZqDxt
-         h7Gg==
-X-Gm-Message-State: AO0yUKU6yAhYXqT/g6WV0DYBPW7crRG+ygUZ0VqXHl4jmcwOEXnzXlMz
-        328i7ZTI0v3enQDy5bynu0g=
-X-Google-Smtp-Source: AK7set+G2S9xHqUd+wHS0T8pOug+8soPc6VrZ/Wh+sI2BWybHHrsJfIzUB8Yg3DikXFRMdSKkm5LgQ==
-X-Received: by 2002:a05:6a00:1795:b0:594:1f1c:3d3b with SMTP id s21-20020a056a00179500b005941f1c3d3bmr20993157pfg.16.1679903264250;
-        Mon, 27 Mar 2023 00:47:44 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id i10-20020aa78d8a000000b006281bc04392sm10679150pfr.191.2023.03.27.00.47.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 00:47:43 -0700 (PDT)
-Message-ID: <e002f554-b69d-cedf-162c-271bc3609a39@gmail.com>
-Date:   Mon, 27 Mar 2023 15:47:33 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH] KVM: x86/pmu: Add Intel PMU supported fixed counters bit
- mask
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Mon, 27 Mar 2023 03:48:15 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 999B149D2;
+        Mon, 27 Mar 2023 00:48:00 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxXNonSiFkSjwSAA--.16333S3;
+        Mon, 27 Mar 2023 15:47:51 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxAeUaSiFkSf0NAA--.45014S3;
+        Mon, 27 Mar 2023 15:47:40 +0800 (CST)
+Subject: Re: [PATCH v3 2/2] spi: loongson: add bus driver for the loongson spi
+ controller
+To:     kernel test robot <lkp@intel.com>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230321112742.25255-1-likexu@tencent.com>
- <CALMp9eT0SrXCLriBN+nBv5fFQQ3n+b4Guq=-yLsFFQjeQ-nczA@mail.gmail.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <CALMp9eT0SrXCLriBN+nBv5fFQQ3n+b4Guq=-yLsFFQjeQ-nczA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230324063317.14664-3-zhuyinbo@loongson.cn>
+ <202303250536.OV1LR58y-lkp@intel.com>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <5de5ca5f-d920-9ed9-a6d2-983a46d3b740@loongson.cn>
+Date:   Mon, 27 Mar 2023 15:47:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <202303250536.OV1LR58y-lkp@intel.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8DxAeUaSiFkSf0NAA--.45014S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxZw1xWFWxWF4kJr1xKFWfZrb_yoW5Cw4fpa
+        1UCa1qkrs5Xr18CFWkGayDZ3WYqrZ5X3srWFWjyr4UuF9xZ34jqrn2kF15XFnIyF1kWFy8
+        ZrW8WrWkKF18ua7anT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8ajg7UUUUU==
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/3/2023 7:19 am, Jim Mattson wrote:
-> On Tue, Mar 21, 2023 at 4:28â€¯AM Like Xu <like.xu.linux@gmail.com> wrote:
->>
->> From: Like Xu <likexu@tencent.com>
->>
->> Per Intel SDM, fixed-function performance counter 'i' is supported if:
->>
->>          FxCtr[i]_is_supported := ECX[i] || (EDX[4:0] > i);
->>
->> which means that the KVM user space can use EDX to limit the number of
->> fixed counters and at the same time, using ECX to enable part of other
->> KVM supported fixed counters.
->>
->> Add a bitmap (instead of always checking the vcpu's CPUIDs) to keep track
->> of the guest available fixed counters and perform the semantic checks.
->>
->> Signed-off-by: Like Xu <likexu@tencent.com>
->> ---
->>   arch/x86/include/asm/kvm_host.h |  2 ++
->>   arch/x86/kvm/pmu.h              |  8 +++++
->>   arch/x86/kvm/vmx/pmu_intel.c    | 53 +++++++++++++++++++++------------
->>   3 files changed, 44 insertions(+), 19 deletions(-)
->>
->> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
->> index a45de1118a42..14689e583127 100644
->> --- a/arch/x86/include/asm/kvm_host.h
->> +++ b/arch/x86/include/asm/kvm_host.h
->> @@ -565,6 +565,8 @@ struct kvm_pmu {
->>           */
->>          bool need_cleanup;
->>
->> +       DECLARE_BITMAP(supported_fixed_pmc_idx, KVM_PMC_MAX_FIXED);
->> +
->>          /*
->>           * The total number of programmed perf_events and it helps to avoid
->>           * redundant check before cleanup if guest don't use vPMU at all.
->> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
->> index be62c16f2265..9f4504e5e9d5 100644
->> --- a/arch/x86/kvm/pmu.h
->> +++ b/arch/x86/kvm/pmu.h
->> @@ -111,6 +111,11 @@ static inline struct kvm_pmc *get_gp_pmc(struct kvm_pmu *pmu, u32 msr,
->>          return NULL;
->>   }
->>
->> +static inline bool fixed_ctr_is_supported(struct kvm_pmu *pmu, unsigned int idx)
->> +{
->> +       return test_bit(idx, pmu->supported_fixed_pmc_idx);
->> +}
->> +
->>   /* returns fixed PMC with the specified MSR */
->>   static inline struct kvm_pmc *get_fixed_pmc(struct kvm_pmu *pmu, u32 msr)
->>   {
->> @@ -120,6 +125,9 @@ static inline struct kvm_pmc *get_fixed_pmc(struct kvm_pmu *pmu, u32 msr)
->>                  u32 index = array_index_nospec(msr - base,
->>                                                 pmu->nr_arch_fixed_counters);
->>
->> +               if (!fixed_ctr_is_supported(pmu, index))
->> +                       return NULL;
->> +
->>                  return &pmu->fixed_counters[index];
->>          }
->>
->> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
->> index e8a3be0b9df9..12f4b2fe7756 100644
->> --- a/arch/x86/kvm/vmx/pmu_intel.c
->> +++ b/arch/x86/kvm/vmx/pmu_intel.c
->> @@ -43,13 +43,16 @@ static int fixed_pmc_events[] = {1, 0, 7};
->>   static void reprogram_fixed_counters(struct kvm_pmu *pmu, u64 data)
->>   {
->>          struct kvm_pmc *pmc;
->> -       u8 old_fixed_ctr_ctrl = pmu->fixed_ctr_ctrl;
->> +       u8 new_ctrl, old_ctrl, old_fixed_ctr_ctrl = pmu->fixed_ctr_ctrl;
->>          int i;
->>
->>          pmu->fixed_ctr_ctrl = data;
->>          for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
->> -               u8 new_ctrl = fixed_ctrl_field(data, i);
->> -               u8 old_ctrl = fixed_ctrl_field(old_fixed_ctr_ctrl, i);
->> +               if (!fixed_ctr_is_supported(pmu, i))
->> +                       continue;
->> +
->> +               new_ctrl = fixed_ctrl_field(data, i);
->> +               old_ctrl = fixed_ctrl_field(old_fixed_ctr_ctrl, i);
->>
->>                  if (old_ctrl == new_ctrl)
->>                          continue;
->> @@ -125,6 +128,9 @@ static bool intel_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
->>
->>          idx &= ~(3u << 30);
->>
->> +       if (fixed && !fixed_ctr_is_supported(pmu, idx))
->> +               return false;
->> +
->>          return fixed ? idx < pmu->nr_arch_fixed_counters
->>                       : idx < pmu->nr_arch_gp_counters;
->>   }
->> @@ -145,7 +151,7 @@ static struct kvm_pmc *intel_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
->>                  counters = pmu->gp_counters;
->>                  num_counters = pmu->nr_arch_gp_counters;
->>          }
->> -       if (idx >= num_counters)
->> +       if (idx >= num_counters || (fixed && !fixed_ctr_is_supported(pmu, idx)))
->>                  return NULL;
->>          *mask &= pmu->counter_bitmask[fixed ? KVM_PMC_FIXED : KVM_PMC_GP];
->>          return &counters[array_index_nospec(idx, num_counters)];
->> @@ -500,6 +506,9 @@ static void setup_fixed_pmc_eventsel(struct kvm_pmu *pmu)
->>          int i;
->>
->>          for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
->> +               if (!fixed_ctr_is_supported(pmu, i))
->> +                       continue;
->> +
->>                  pmc = &pmu->fixed_counters[i];
->>                  event = fixed_pmc_events[array_index_nospec(i, size)];
->>                  pmc->eventsel = (intel_arch_events[event].unit_mask << 8) |
->> @@ -520,6 +529,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->>
->>          pmu->nr_arch_gp_counters = 0;
->>          pmu->nr_arch_fixed_counters = 0;
->> +       bitmap_zero(pmu->supported_fixed_pmc_idx, KVM_PMC_MAX_FIXED);
->>          pmu->counter_bitmask[KVM_PMC_GP] = 0;
->>          pmu->counter_bitmask[KVM_PMC_FIXED] = 0;
->>          pmu->version = 0;
->> @@ -551,13 +561,24 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->>          pmu->available_event_types = ~entry->ebx &
->>                                          ((1ull << eax.split.mask_length) - 1);
->>
->> -       if (pmu->version == 1) {
->> -               pmu->nr_arch_fixed_counters = 0;
->> -       } else {
->> +       counter_mask = ~(BIT_ULL(pmu->nr_arch_gp_counters) - 1);
->> +       bitmap_set(pmu->all_valid_pmc_idx, 0, pmu->nr_arch_gp_counters);
->> +
->> +       if (pmu->version > 1) {
->>                  pmu->nr_arch_fixed_counters =
->> -                       min3(ARRAY_SIZE(fixed_pmc_events),
->> -                            (size_t) edx.split.num_counters_fixed,
->> -                            (size_t)kvm_pmu_cap.num_counters_fixed);
->> +                       min_t(int, ARRAY_SIZE(fixed_pmc_events),
->> +                             kvm_pmu_cap.num_counters_fixed);
->> +               for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
->> +                       /* FxCtr[i]_is_supported := CPUID.0xA.ECX[i] || (EDX[4:0] > i) */
-> 
-> This is true only when pmu->version >= 5.
 
-This is true in for "Version 5" section, but not mentioned in the CPUID.0xA section.
-I would argue that this is a deliberate omission for the instruction implementation,
-as it does use the word "version>1" in the near CPUID.0xA.EDX section.
 
-For virtualised use, this feature offers a kind of flexibility as users can 
-enable part of
-the fixed counters, don't you think? Or maybe you're more looking forward to the
-patch set that raises the vPMU version number from 2 to 5, that part of the code
-was already in my tree some years ago.
+ÔÚ 2023/3/25 ÉÏÎç5:53, kernel test robot Ð´µÀ:
+> Hi Yinbo,
+> 
+> I love your patch! Yet something to improve:
+> 
+> [auto build test ERROR on broonie-spi/for-next]
+> [also build test ERROR on robh/for-next krzk-dt/for-next linus/master v6.3-rc3 next-20230324]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230324-143432
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> patch link:    https://lore.kernel.org/r/20230324063317.14664-3-zhuyinbo%40loongson.cn
+> patch subject: [PATCH v3 2/2] spi: loongson: add bus driver for the loongson spi controller
+> config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230325/202303250536.OV1LR58y-lkp@intel.com/config)
+> compiler: powerpc-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/3742622c455d25c4a110d2caf2f5b2ceefe88f91
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230324-143432
+>          git checkout 3742622c455d25c4a110d2caf2f5b2ceefe88f91
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303250536.OV1LR58y-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+> 
+>>> ERROR: modpost: "loongson_spi_dev_pm_ops" [drivers/spi/spi-loongson-pci.ko] undefined!
+>>> ERROR: modpost: "loongson_spi_dev_pm_ops" [drivers/spi/spi-loongson-plat.ko] undefined!
+> 
+This compile issue when spi config was set as module then 
+"loongson_spi_dev_pm_ops undefined" will occur, but if set spi config as 
+built-in and not this issue, and my patch was tested that use spi config 
+built-in so not this error occur,  and this compile fail issue's reason 
+was "loongson_spi_dev_pm_ops" not use EXPORT_SYMBOL_GPL to export, I 
+will add following change to fix this compile error issue.
 
-> 
->  From the SDM, volume 3, section 20.2.5 Architectural Performance
-> Monitoring Version 5:
-> 
-> With Architectural Performance Monitoring Version 5, register
-> CPUID.0AH.ECX indicates Fixed Counter enumeration. It is a bit mask
-> which enumerates the supported Fixed Counters in a processor. If bit
-> 'i' is set, it implies that Fixed Counter 'i' is supported. Software
-> is recommended to use the following logic to check if a Fixed Counter
-> is supported on a given processor: FxCtr[i]_is_supported := ECX[i] ||
-> (EDX[4:0] > i);
-> 
-> Prior to PMU version 5, all fixed counters from 0 through <number of
-> fixed counters - 1> are supported.
-> 
->> +                       if (!(entry->ecx & BIT_ULL(i) ||
->> +                             edx.split.num_counters_fixed > i))
->> +                               continue;
->> +
->> +                       set_bit(i, pmu->supported_fixed_pmc_idx);
->> +                       set_bit(INTEL_PMC_MAX_GENERIC + i, pmu->all_valid_pmc_idx);
->> +                       pmu->fixed_ctr_ctrl_mask &= ~(0xbull << (i * 4));
->> +                       counter_mask &= ~BIT_ULL(INTEL_PMC_MAX_GENERIC + i);
->> +               }
->>                  edx.split.bit_width_fixed = min_t(int, edx.split.bit_width_fixed,
->>                                                    kvm_pmu_cap.bit_width_fixed);
->>                  pmu->counter_bitmask[KVM_PMC_FIXED] =
->> @@ -565,10 +586,6 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->>                  setup_fixed_pmc_eventsel(pmu);
->>          }
->>
->> -       for (i = 0; i < pmu->nr_arch_fixed_counters; i++)
->> -               pmu->fixed_ctr_ctrl_mask &= ~(0xbull << (i * 4));
->> -       counter_mask = ~(((1ull << pmu->nr_arch_gp_counters) - 1) |
->> -               (((1ull << pmu->nr_arch_fixed_counters) - 1) << INTEL_PMC_IDX_FIXED));
->>          pmu->global_ctrl_mask = counter_mask;
->>          pmu->global_ovf_ctrl_mask = pmu->global_ctrl_mask
->>                          & ~(MSR_CORE_PERF_GLOBAL_OVF_CTRL_OVF_BUF |
->> @@ -585,11 +602,6 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->>                  pmu->raw_event_mask |= (HSW_IN_TX|HSW_IN_TX_CHECKPOINTED);
->>          }
->>
->> -       bitmap_set(pmu->all_valid_pmc_idx,
->> -               0, pmu->nr_arch_gp_counters);
->> -       bitmap_set(pmu->all_valid_pmc_idx,
->> -               INTEL_PMC_MAX_GENERIC, pmu->nr_arch_fixed_counters);
->> -
->>          perf_capabilities = vcpu_get_perf_capabilities(vcpu);
->>          if (cpuid_model_is_consistent(vcpu) &&
->>              (perf_capabilities & PMU_CAP_LBR_FMT))
->> @@ -605,6 +617,9 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->>                          pmu->pebs_enable_mask = counter_mask;
->>                          pmu->reserved_bits &= ~ICL_EVENTSEL_ADAPTIVE;
->>                          for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
->> +                               if (!fixed_ctr_is_supported(pmu, i))
->> +                                       continue;
->> +
->>                                  pmu->fixed_ctr_ctrl_mask &=
->>                                          ~(1ULL << (INTEL_PMC_IDX_FIXED + i * 4));
->>                          }
->>
->> base-commit: d8708b80fa0e6e21bc0c9e7276ad0bccef73b6e7
->> --
->> 2.40.0
->>
+--- a/drivers/spi/spi-loongson-core.c
++++ b/drivers/spi/spi-loongson-core.c
+@@ -297,6 +297,7 @@ const struct dev_pm_ops loongson_spi_dev_pm_ops = {
+         .suspend = loongson_spi_suspend,
+         .resume = loongson_spi_resume,
+  };
++EXPORT_SYMBOL_GPL(loongson_spi_dev_pm_ops);
+
