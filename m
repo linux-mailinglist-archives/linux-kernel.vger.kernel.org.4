@@ -2,114 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012246C9FF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD866CA065
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 11:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbjC0JkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 05:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
+        id S232716AbjC0JoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 05:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbjC0JkR (ORCPT
+        with ESMTP id S232739AbjC0Jnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:40:17 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0CB469E;
-        Mon, 27 Mar 2023 02:40:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679910016; x=1711446016;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=IW3zsAq16i6wCn3thgfU7ml+pZV5tKxghHNUo4jwRwY=;
-  b=FDGyH6pqgr3wqJqZRpqfUFCwVne2Ith+F7VJLYJGtkYy7H6VcHZ1twlh
-   nShmxVqHwWmUb3TCeynTm4/9Hq4ACJqCvtMdlfZszh+wXcz3qh56mbA5S
-   QHxiNhG8xX6BYlXMEPJjF7zS0Pe6+4A00ioadMDkGDggH7RPE3HufB0fl
-   MKTFWJ94tvKzf0HC3nJSpHkbfMVqBROKEPS9zjAstWFcouECoMJLKITQh
-   16QVwRQTono1u9rhzXl2UJ+Y0EcfY8Ru5nh6cnYYBE4YOoTBWnO0cq20j
-   vZm6fhqFOCRNyXzL2OpPlft3nLQ9A3ztyYNCTws/wXYwvycghTTYgVV7u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="402818920"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="402818920"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 02:40:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="857596828"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="857596828"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga005.jf.intel.com with ESMTP; 27 Mar 2023 02:40:13 -0700
-Message-ID: <b86fcdbd-f1c6-846f-838f-b7679ec4e2b4@linux.intel.com>
-Date:   Mon, 27 Mar 2023 12:41:34 +0300
+        Mon, 27 Mar 2023 05:43:45 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C645B46BB
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 02:43:36 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32R97upD003787;
+        Mon, 27 Mar 2023 09:43:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=p4h/Ki1l7XLcn/2JAO3dVKAxyLdissmypHLOZOUJ7Fs=;
+ b=PT6AEDFZIIOOvUdoMbUqvCmBjO39PN1Dwu1BSGwWNjPdaYtvz7gp83fws+VfWAM5QgIE
+ xtQ/stW8lJ2URLRO7Hsz1y3Em07JYQsvycIIj+4uMLIs2EayAkZEYPljX0pfmu0E00cx
+ C4l4xidHnNFtbVsq0BuOVEms3nplI9vXzdzK/ynXT/o+97qSXeB23J/1tVjeYhCwk7zJ
+ ty5pZFmleXyHxwUJ6n9aktMFNzq+y/ienTk+WJOLGSnfnXGR4o5cRy/utnA/nstNNbv1
+ 1qZFcWjdmAS39CdBige6R6QoBfmDTQuYfRLAO580Kq0g6/qgbq1kbaN3upKXnDTfMy3Q fQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjaunb2nv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 09:43:25 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32R98WaW008346;
+        Mon, 27 Mar 2023 09:43:25 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjaunb2mt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 09:43:24 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32QGCIHY028881;
+        Mon, 27 Mar 2023 09:43:22 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3phr7fjkv2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 09:43:22 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32R9hI0t26935836
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Mar 2023 09:43:18 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C430920043;
+        Mon, 27 Mar 2023 09:43:18 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 24CCB20049;
+        Mon, 27 Mar 2023 09:43:16 +0000 (GMT)
+Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.40.181])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon, 27 Mar 2023 09:43:15 +0000 (GMT)
+Date:   Mon, 27 Mar 2023 15:13:12 +0530
+From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] arch/powerpc/kvm: kvmppc_hv_entry: remove .global
+ scope
+Message-ID: <ZCFlMJPed3NCDP3e@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+References: <20230316051025.1424093-1-kconsul@linux.vnet.ibm.com>
+ <20230316051025.1424093-2-kconsul@linux.vnet.ibm.com>
+ <CRH1YM72SK4L.QU56WGVQQ2GE@bobo>
+ <ZCFhnNPrMr3D5+rZ@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+ <ZCFjJ1sMuLMUkBWc@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <24263902-c9b3-ce29-237b-1c3d6918f4fe@alu.unizg.hr>
- <651c0500-2b84-d938-fdc2-45e92b322b38@alu.unizg.hr>
-Content-Language: en-US
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: BUG: drivers/usb/host/xhci: memleak in alloc from
- xhci_disable_usb3_lpm_timeout()
-In-Reply-To: <651c0500-2b84-d938-fdc2-45e92b322b38@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCFjJ1sMuLMUkBWc@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: YD5Mhvk575dDb1KWm7ML0xsKBZicgtXq
+X-Proofpoint-GUID: nf4yspvZbqsqqCgH13ST4jU1mVPUMG2s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ impostorscore=0 clxscore=1015 adultscore=0 lowpriorityscore=0
+ suspectscore=0 priorityscore=1501 spamscore=0 phishscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303270078
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.3.2023 13.33, Mirsad Goran Todorovac wrote:
-> On 25. 03. 2023. 12:27, Mirsad Goran Todorovac wrote:
->> Hi all!
->>
->> Here are again the good news and the bad news:
->>
->> BAD:  another kernel memory leak detected (one more to hunt down and fix)
->> GOOD: another kernel memory leak detected (one less unaccounted for)
->>
->> I tried to make some fun, but maintainers are busy folks, so let's get down
->> to business:
->>
->> ---
->> Nine (9) new systemd-udevd kernel memory leaks occurred (unable to reproduce).
->>
->> The platform is Ubuntu 22.10 with (relatively recent) systemd 251.4-1ubuntu7.1
->> on LENOVO_MT_82H8_BU_idea_FM_IdeaPad 3 15ITL6 with BIOS GGCN51WW from 11/16/2022.
->>
->> The symptom (/sys/kernel/debug/kmemleak output):
->>
->> unreferenced object 0xffff909698ff9280 (size 64):
->>    comm "systemd-udevd", pid 436, jiffies 4294893239 (age 6287.088s)
->>    hex dump (first 32 bytes):
->>      e0 51 bb 99 96 90 ff ff 00 00 00 00 00 00 00 00  .Q..............
->>      40 5b bb 99 96 90 ff ff 00 00 00 00 00 00 00 00  @[..............
->>    backtrace:
->>      [<ffffffffb29de94c>] slab_post_alloc_hook+0x8c/0x320
->>      [<ffffffffb29e5107>] __kmem_cache_alloc_node+0x1c7/0x2b0
->>      [<ffffffffb2962f3b>] kmalloc_node_trace+0x2b/0xa0
->>      [<ffffffffb31af2ec>] xhci_alloc_command+0x7c/0x1b0
->>      [<ffffffffb31af451>] xhci_alloc_command_with_ctx+0x21/0x70
->>      [<ffffffffb31a8a3e>] xhci_change_max_exit_latency+0x2e/0x1c0>>      [<ffffffffb31a8c5b>] xhci_disable_usb3_lpm_timeout+0x7b/0xb0
->>      [<ffffffffb31457a7>] usb_disable_link_state+0x57/0xe0
-
-Thanks for the report.
-
-I think I found the leak, and wrote a patch for it.
-Any chance you could test it with the same setup?
-
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=for-usb-linus&id=8bacee588602ed74cc22aaf4c56b796300e5a943
-
-Thanks
--Mathias
-
+On 2023-03-27 15:04:38, Kautuk Consul wrote:
+> On 2023-03-27 14:58:03, Kautuk Consul wrote:
+> > On 2023-03-27 19:19:37, Nicholas Piggin wrote:
+> > > On Thu Mar 16, 2023 at 3:10 PM AEST, Kautuk Consul wrote:
+> > > > kvmppc_hv_entry isn't called from anywhere other than
+> > > > book3s_hv_rmhandlers.S itself. Removing .global scope for
+> > > > this function and annotating it with SYM_INNER_LABEL.
+> > > >
+> > > > Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
+> > > > ---
+> > > >  arch/powerpc/kvm/book3s_hv_rmhandlers.S | 3 +--
+> > > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> > > > index acf80915f406..b81ba4ee0521 100644
+> > > > --- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> > > > +++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> > > > @@ -502,8 +502,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
+> > > >   *                                                                            *
+> > > >   *****************************************************************************/
+> > > >  
+> > > > -.global kvmppc_hv_entry
+> > > 
+> > > I think this is okay.
+> > > 
+> > > > -kvmppc_hv_entry:
+> > > > +SYM_INNER_LABEL(kvmppc_hv_entry, SYM_L_LOCAL)
+> > > 
+> > > The documentation for SYM_INNER_LABEL says it for labels inside a SYM
+> > > function block, is that a problem? This is a function but doesn't have
+> > > C calling convention, so asm annotation docs say that it should use
+> > > SYM_CODE_START_LOCAL?
+> > That is correct. Will create a v4 patch for this and send it.
+> But using SYM_CODE_START_LOCAL again causes a warning in the build
+> (which we were trying to avoid):
+> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x48: unannotated intra-function call
+For that matter, even SYM_INNER_LABEL shows that warning. When I tested
+it on my setup it seemed to work fine. I'll investigate and try to come
+up with a solution.
+> > > 
+> > > BTW. why don't our _GLOBAL() macros use these SYM annotations? I haven't
+> > > really looked into them.
+> > Not sure. Was mostly just concentrating on the kvmppc_hv_entry code.
+> > > 
+> > > Thanks,
+> > > Nick
