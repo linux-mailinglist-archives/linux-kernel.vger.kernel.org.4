@@ -2,134 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537326C9E83
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F13A26C9E91
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233324AbjC0Isx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
+        id S233420AbjC0IuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233175AbjC0Is3 (ORCPT
+        with ESMTP id S233489AbjC0Its (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:48:29 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7658A6E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:45:11 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id c29so10329116lfv.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:45:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679906671;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KLrKAr+c7u8+WkfYnvdsqKkhxaW/xmaQn97MpcR7do8=;
-        b=rdogzM223NHg8iJx7iIN2LHYZn7tUjiFtUG9eoMoJTXpUK32coL01Ru11TIQbmWWOP
-         VKCBJBjnt0SQEZ3jeNQWQSALELd1RJCWRVgVn5znTCUioLfpT5I0pAyE8nVsXnrhvKmr
-         XXgxpsb4MRhJh5W7tj4qpUxPjzCwZVvDNePFeope9K0zHDiXNlVpl737EvCassslHUg/
-         4W369SCxed9tNg11GGBDRgExuMDsWuUwhXXkhzt5n/M81kMTIY/z7xfX0UClA/VP5+Nc
-         /Ju/SXpvGo/WX1n7Lqu9BfXvCK8EGnvBX5HwtyTr5/ygFq0ofey+MgrlvL3bDLKUud6y
-         d8Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679906671;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KLrKAr+c7u8+WkfYnvdsqKkhxaW/xmaQn97MpcR7do8=;
-        b=CLJ4UNC4lmyVc3V7oiCqRed6RjY0UBKoFXZjE8X0ncqg3zBOiUARPtwoDjVB20sBIY
-         UL6j7xMtdod2iJ6yHAvvsFMgYwrKTYlRh4qQf46vdbkpGCvcdMRue2uZyvdPgsUWMzbb
-         pOrujEwL4yN2vwA45bLDNhCIQLOEPJAOIiIAHhgFS45Jl/MxHAOzFI3ZXXwUx29aoK2t
-         /HGlxulyYXIQAozMwrie0N4uVI2ay9aEqf/C/LA76BBL/trU7KZMxd8nqLJFP2AEiI6x
-         T2WW8OgqAYTQ0Ogk00gojZ+3oAjpqLLSf3Z/UmTzJ4r/rpx4OEwJdOwtweUL52O2YCiQ
-         3ujQ==
-X-Gm-Message-State: AAQBX9dNKYGUcMSj/RIvn0YUw5DeNovFCcEZxwfR+gV/7ifweNqcRw2n
-        h0LQpeUAHWq5uT90V5pinuMY6g==
-X-Google-Smtp-Source: AKy350ZGT9cY4UQC0D9IPOa/NyJ/hHznWUNEoPQIk9+IaHao2iitH0e524xsgtLK7ODG9AmvF+W5MA==
-X-Received: by 2002:ac2:46f9:0:b0:4e9:d719:3603 with SMTP id q25-20020ac246f9000000b004e9d7193603mr3463966lfo.55.1679906671138;
-        Mon, 27 Mar 2023 01:44:31 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id r10-20020a19ac4a000000b004b5979f9ba8sm4591731lfc.210.2023.03.27.01.44.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 01:44:30 -0700 (PDT)
-Message-ID: <a27e7e67-a3e8-01ec-1f0d-717d705af117@linaro.org>
-Date:   Mon, 27 Mar 2023 10:44:29 +0200
+        Mon, 27 Mar 2023 04:49:48 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BB0AF13;
+        Mon, 27 Mar 2023 01:46:03 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4A0C86601F5E;
+        Mon, 27 Mar 2023 09:45:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679906717;
+        bh=nI/bv+FYvlvhbSwQ/rVx+2wqovQpOadhWJXyJqW4ADA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IFO/vaqNFG45fpRw/Gm9vcN3rzC+MHK5CV+YTcqpLeuWPnEaoZKqAlm2CRUITPd/S
+         0RlWS8xKkhUTz/HYHiUKWMC8yweaKbZ2rn1QZ8TKIl7Peh5hjc1fc70Mc1Y+slXG2o
+         9EgHkl82N3sz06AzWkMt10YmdOgjjOaPzIwIOJVLhiZq4Q/4VzgvYTJECH92bgOoHM
+         iym+tSwEG7QTFji2jjwN5EZzeHUGslxRo2aSjDfvDHN5/WMBRc5KfBncN7xdpxwOQq
+         xHHayRzCEJzLa0xu2/LkkmIwsUIbxoUqQ9hoBX/HNrH16JdhVJCDcahs2tR5tCMiR8
+         iXWMBXOQKVyIw==
+Message-ID: <2a1b1f66-970e-5adb-389e-b9c47a790712@collabora.com>
+Date:   Mon, 27 Mar 2023 10:45:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] remoteproc: qcom: pas: add SDM845 SLPI resource
+Subject: Re: [PATCH v5 2/2] arm64: dts: mediatek: enable i2c0 for mt8365-evk
+ board
 Content-Language: en-US
-To:     Dylan Van Assche <me@dylanvanassche.be>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Qii Wang <qii.wang@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230325132117.19733-1-me@dylanvanassche.be>
- <20230325132117.19733-3-me@dylanvanassche.be>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230325132117.19733-3-me@dylanvanassche.be>
-Content-Type: text/plain; charset=UTF-8
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh@kernel.org>
+References: <20221122-mt8365-i2c-support-v5-0-6e4f3b54937f@baylibre.com>
+ <20221122-mt8365-i2c-support-v5-2-6e4f3b54937f@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221122-mt8365-i2c-support-v5-2-6e4f3b54937f@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 25.03.2023 14:21, Dylan Van Assche wrote:
-> Add SLPI resources for the SDM845 Qualcomm SoC to the Qualcomm
-> remoteproc q6v5_pas driver to define the default firmware name
-> and GLink edge name.
+Il 27/03/23 10:27, Alexandre Mergnat ha scritto:
+> Enable the I2C0 bus provides communication with:
+> - The integrated RT9466 Switching Battery Charger.
+> - The integrated MT6691 LP4X buck for VDDQ.
+> - The integrated MT6691 LP4X buck for VDD2.
+> - The pin header, to plug external I2C devices.
 > 
-> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 > ---
->  drivers/remoteproc/qcom_q6v5_pas.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+>   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 16 ++++++++++++++++
+>   1 file changed, 16 insertions(+)
 > 
-> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-> index c99a20542685..d82b6f4bced4 100644
-> --- a/drivers/remoteproc/qcom_q6v5_pas.c
-> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
-> @@ -1028,6 +1028,22 @@ static const struct adsp_data slpi_resource_init = {
->  		.ssctl_id = 0x16,
->  };
->  
-> +static const struct adsp_data sdm845_slpi_resource = {
-> +		.crash_reason_smem = 424,
-> +		.firmware_name = "slpi.mdt",
-> +		.pas_id = 12,
-> +		.auto_boot = true,
-> +		.proxy_pd_names = (char*[]){
-> +			"lcx",
-> +			"lmx",
-> +			NULL
-> +		},
-> +		.load_state = "slpi",
-> +		.ssr_name = "dsps",
-> +		.sysmon_name = "slpi",
-> +		.ssctl_id = 0x16,
-Isn't this identical to sm8150_slpi_resource?
-
-Konrad
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+> index 4683704ea235..35cb142004a4 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+> @@ -87,6 +87,13 @@ optee_reserved: optee@43200000 {
+>   	};
+>   };
+>   
+> +&i2c0 {
+> +	clock-frequency = <100000>;
+> +	pinctrl-0 = <&i2c0_pins>;
+> +	pinctrl-names = "default";
+> +	status = "okay";
 > +};
 > +
->  static const struct adsp_data sm8150_slpi_resource = {
->  		.crash_reason_smem = 424,
->  		.firmware_name = "slpi.mdt",
-> @@ -1201,6 +1217,7 @@ static const struct of_device_id adsp_of_match[] = {
->  	{ .compatible = "qcom,sdm660-adsp-pas", .data = &adsp_resource_init},
->  	{ .compatible = "qcom,sdm845-adsp-pas", .data = &sdm845_adsp_resource_init},
->  	{ .compatible = "qcom,sdm845-cdsp-pas", .data = &sdm845_cdsp_resource_init},
-> +	{ .compatible = "qcom,sdm845-slpi-pas", .data = &sdm845_slpi_resource},
->  	{ .compatible = "qcom,sdx55-mpss-pas", .data = &sdx55_mpss_resource},
->  	{ .compatible = "qcom,sm6115-adsp-pas", .data = &adsp_resource_init},
->  	{ .compatible = "qcom,sm6115-cdsp-pas", .data = &cdsp_resource_init},
+>   &pio {
+>   	gpio_keys: gpio-keys-pins {
+>   		pins {
+> @@ -96,6 +103,15 @@ pins {
+>   		};
+>   	};
+>   
+> +	i2c0_pins: i2c0-pins {
+> +		pins {
+			pinmux = ...pins...
+			bias-pull-up = <your-pull-up-adv-value>;
+		};
+
+...and please do *not* use the mediatek,pull-up-adv property: this is
+supposed to be there only for older devicetrees and there's a replacement
+for it.... unless you have any specific reason to do so (and if you do,
+you should well explain that).
+
+Besides, if you introduce the usage of that property in any 8365 devicetree,
+the previously proposed 8365 pinctrl cleanup will become a bit harder to do.
+
+Cheers,
+Angelo
+
+
