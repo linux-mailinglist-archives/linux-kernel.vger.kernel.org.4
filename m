@@ -2,36 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113C66CAD21
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6346CAD22
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbjC0Sh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 14:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        id S232489AbjC0SiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 14:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbjC0Sh4 (ORCPT
+        with ESMTP id S230461AbjC0Sh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Mar 2023 14:37:56 -0400
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D2D3AAF;
-        Mon, 27 Mar 2023 11:37:53 -0700 (PDT)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B048E;
+        Mon, 27 Mar 2023 11:37:55 -0700 (PDT)
+Received: from smtp1.mailbox.org (unknown [10.196.197.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4PlhQ54Lpsz9sbP;
-        Mon, 27 Mar 2023 20:37:49 +0200 (CEST)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4PlhQ76bdvz9sTQ;
+        Mon, 27 Mar 2023 20:37:51 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
-        s=MBO0001; t=1679942269;
+        s=MBO0001; t=1679942271;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=C8kkdUguiMjdIapGBB4Pr2z2atFYN6EF4wazx5kklCs=;
-        b=gAbXfp4dquLJjFqWTC1MnWG1++pJ2iXoRNrydg8SYK6C0hBryDC5DEOY/wwTUvi/NqfjFO
-        dOaXw8FcxVf6X/OAZ2L3gDKOXQUTTCpDQuT/zICvZkoNJcr7bN1PeQdsBe4hGTBlxAFVIR
-        xWeIiTgfXGexixR+ukJjnGkacoKO5uM7Os9Pm3ywVdRAR8PiK3nSP7QsNsOu84rhAetTPg
-        4JT874O0GDR/Rys88iYr4uUSxouq/Cy858IPpZXkSVr7Yi+NCh9lJLJkCAhyOVZcY9fUEF
-        fEFAb7FK+asYwHaKzGCaxlMXU4vmtwnFZ12bJlFLWS+jbCSRaenhcsSFQ0WhrQ==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IIvrfq7nPBrhOHJF/rCo/28hLbusgGnVy+v+bHtkkN4=;
+        b=A3bRQUWQbemZgduxd1HMFw9MyHqgdbfGJvA6qN1aoX/inj48X5WF+3y4cIyI5/CSYM4gqG
+        BrrVVIuCyG5kLYsAkkT8OJvutnFGvPrx2SLoI+GjTpwEY3H7FIAOI64Vz6+fLnVp3xSjMS
+        GzpuGmck2Fspx/XZD04XbLEwc1opX2OgGLjjBEFx0E+cri/OK6c1fl0+q6bee4nQRc500P
+        dXI5HwgwI7UbZSnKiBznoWgRtYnrKyS1vopb3XjQaImHkma6kgd6B289HzMxHd0RdCMhXj
+        W3uC5shL1VxHywClv6Esx1si+NJJjngfiG2w7/hJcWIgBB7SjIwrulQ+w2Ymkg==
 From:   Dylan Van Assche <me@dylanvanassche.be>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -43,9 +44,11 @@ Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dylan Van Assche <me@dylanvanassche.be>
-Subject: [PATCH v2 0/3] remoteproc: qcom: pas: Support SDM845 SLPI
-Date:   Mon, 27 Mar 2023 20:37:33 +0200
-Message-Id: <20230327183736.496170-1-me@dylanvanassche.be>
+Subject: [PATCH v2 1/3] dt-bindings: remoteproc: qcom: adsp: add qcom,sdm845-slpi-pas compatible
+Date:   Mon, 27 Mar 2023 20:37:34 +0200
+Message-Id: <20230327183736.496170-2-me@dylanvanassche.be>
+In-Reply-To: <20230327183736.496170-1-me@dylanvanassche.be>
+References: <20230327183736.496170-1-me@dylanvanassche.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -57,55 +60,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* About *
+SLPI DSP remoteproc on DSP is defined by the 'qcom,sdm845-slpi-pas'
+compatible in the qcom_q6v5_pas driver. Add this compatible to the
+devicetree bindings.
 
-The Qualcomm SDM845 SoC has a separate SLPI (Sensor Low Power Island)
-DSP for sensors connected to the SoC which is responsible for exposing
-sensors to userspace, power saving, and other features. 
-While sensors are connected to GPIOs of the SoC, they cannot be used
-because the hypervisor blocks direct access to the sensors, thus the 
-DSP must be used to access any sensor on this SoC. The SLPI DSP uses a
-GLink edge (dsps) to communicate with the host and has a FastRPC interface
-to load files from the host filesystem such as sensor configuration files.
-The FastRPC interface does not use regular FastRPC Compute Banks
-but instead uses an allocated CMA region through which communication happens.
+Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
+---
+ .../bindings/remoteproc/qcom,adsp.yaml        | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-* Changes *
-
-This patchseries adds support for this remoteproc in the q6v5_pas driver
-to allow booting the SLPI on the SDM845 and expose its service 400 over QRTR.
-
-* Related patches *
-
-Support for the FastRPC side of the SLPI and DTS changes are submitted 
-in separate series. These are the links to v1 of the series:
-
-1. FastRPC changes:
-https://lore.kernel.org/linux-arm-msm/20230325134410.21092-1-me@dylanvanassche.be/
-2. DTS changes:
-https://lore.kernel.org/linux-devicetree/20230325135114.21688-1-me@dylanvanassche.be/
-
-* Changelog *
-
-Changes in v2:
-
-- Removed double blank lines
-- Added power-domain if:then: for SDM845 SLPI
-- After adding SDM845 SLPI, refactor SLPI resource init
-
-Kind regards,
-Dylan Van Assche
-
-Dylan Van Assche (3):
-  dt-bindings: remoteproc: qcom: adsp: add qcom,sdm845-slpi-pas
-    compatible
-  remoteproc: qcom: pas: add SDM845 SLPI resource
-  remoteproc: qcom: pas: refactor SLPI remoteproc init
-
- .../bindings/remoteproc/qcom,adsp.yaml        | 19 +++++++
- drivers/remoteproc/qcom_q6v5_pas.c            | 49 ++++---------------
- 2 files changed, 28 insertions(+), 40 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+index 643ee787a81f..eb4a440a661a 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+@@ -26,6 +26,7 @@ properties:
+       - qcom,sdm660-adsp-pas
+       - qcom,sdm845-adsp-pas
+       - qcom,sdm845-cdsp-pas
++      - qcom,sdm845-slpi-pas
+ 
+   reg:
+     maxItems: 1
+@@ -63,6 +64,7 @@ allOf:
+               - qcom,msm8998-adsp-pas
+               - qcom,sdm845-adsp-pas
+               - qcom,sdm845-cdsp-pas
++              - qcom,sdm845-slpi-pas
+     then:
+       properties:
+         clocks:
+@@ -104,6 +106,7 @@ allOf:
+               - qcom,msm8998-slpi-pas
+               - qcom,sdm845-adsp-pas
+               - qcom,sdm845-cdsp-pas
++              - qcom,sdm845-slpi-pas
+     then:
+       properties:
+         interrupts:
+@@ -157,6 +160,22 @@ allOf:
+       required:
+         - px-supply
+ 
++  - if:
++      properties:
++        compatible:
++          enum:
++            - qcom,sdm845-slpi-pas
++    then:
++      properties:
++        power-domains:
++          items:
++            - description: LCX power domain
++            - description: LMX power domain
++        power-domain-names:
++          items:
++            - const: lcx
++            - const: lmx
++
+   - if:
+       properties:
+         compatible:
 -- 
 2.39.2
 
