@@ -2,110 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CED6CA927
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03366CA92F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjC0Phn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 11:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
+        id S232767AbjC0PiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 11:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbjC0Phl (ORCPT
+        with ESMTP id S232957AbjC0PiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:37:41 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F3C2738
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:37:40 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id y184so6651774oiy.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679931460;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2scqCpn+SlvwNwMyXAR1S8e8r39frvTEmZWmCdUynfo=;
-        b=rFuTXmnSGmSvQSqlTCwOwfje4dNunkyQvBQO1B0OEvIHKkhsQfByRaQcSeSdkocF5F
-         yX5bCRDLIxqpm38oYlhRVTBZnKZZyCzAT3tmFdduJnJIWAB4dNqYrmwMuqy5p0BI3sSD
-         mhkrQ8TcipD6vcrzyVkebrs0a3r308DuqctCTsGHROhou/kEUIj8jvRKfVIzu6Q9HPLw
-         dFjRG+qM+HSJhcNuO1bncPlwqbiI0YzErn7+H1mTYkhwIol9FFPfJ8h3ieDG/VxCH+LK
-         hhNfznLzq/+I9QjUSBuPCbtWWn5xvv1gxYSFnb+/aIijxkOshfIyTFx4YYYC/r4rYjmu
-         VRCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679931460;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2scqCpn+SlvwNwMyXAR1S8e8r39frvTEmZWmCdUynfo=;
-        b=sToLXqI1D/T+K5PCF5z7+Yp327PAMOaVV5WSivGtQadGx/EclYa7x7yKAwa6ohbw2P
-         OzisbpVQetItIDiZukgmF5zzkKRbdo5HWz3fIeexK0KbTmZjFtZ9JGvuMSKPy/lb+U+I
-         9IojbI9sMFP8bOVLJkDGE/prZLHKjpvGNUTgnGZG2oqU7LYAwCKGUAhIZCRtkD0UGayX
-         rFRiN9k1ZAqhYT5esq6r84fKjZntOHqMTV809cgkoGKC7G0ltD5g8ikdv8QuAJ2hoRup
-         ZAqP/qHuEatwqPUHWSYkzqiDwXpJfYKYSxFySafm7818KQYf4wbesHCdufm3UtTIAR6Z
-         pKDQ==
-X-Gm-Message-State: AO0yUKVV6qJ0SoO//wveD7daPc0pb+S0I0l+Dwdg08xLVwDYMx7GQZXR
-        0PWgqBSn0emrR2UiUGUjJCmDrNZY1v0OHiIadHeSvg==
-X-Google-Smtp-Source: AK7set+yYWM5lvMs9lQ15RVaYTAVVUaZW7sK+M1vnndSyDeraV8KLjlOca7p039jDbWxUJ7HlCk9vl5058ikbPt7n3g=
-X-Received: by 2002:a54:4710:0:b0:384:4e2d:81ea with SMTP id
- k16-20020a544710000000b003844e2d81eamr3381518oik.9.1679931459915; Mon, 27 Mar
- 2023 08:37:39 -0700 (PDT)
+        Mon, 27 Mar 2023 11:38:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF6C4680;
+        Mon, 27 Mar 2023 08:38:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 188846131B;
+        Mon, 27 Mar 2023 15:38:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AF93C433A8;
+        Mon, 27 Mar 2023 15:38:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679931481;
+        bh=3XmuKg7477g2NoJtqEb5iNb4ATj0+FqT6dHhTQ0IQGs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=h77Uyo826XxSmu3DX6sM0b4XADQ6cucMcCdMFfq7hWdB9LMN+NZbrVrVR34v9X6t2
+         myxVy3WUwLigNSHR92LJN2VS1wiVsGo0xjSDCNJ+ObeVsK688j/0l1LsLvWSGI31wQ
+         tao0pMm7Bqv3I1jm2g8t9/U29uCUIsKC6VH5qhfCl/kLDW4+3oEuahwHSWpJhdL3bq
+         Qm+yH6ZakaD3gzVKjb8Ms8dsOdev3pdfpMV+720yF88lmTd52ZTdk43rhqTtAFNEuA
+         e4zszYx9LY6unv9pvpgYNEZlvN8wiuq25Q2gWWNPEjjQDlztVbWr+iAq7yszrfWjvv
+         oyjhRwBt5B39g==
+Received: by mail-lj1-f181.google.com with SMTP id 20so9514036lju.0;
+        Mon, 27 Mar 2023 08:38:01 -0700 (PDT)
+X-Gm-Message-State: AAQBX9cXfByS76kzG3JGtDsxlFj3Th9LF/4rFE6CKtjJhe4Y4Uycw3oL
+        3xv4Bg3EpC6eH2coR3/A+pcKTlQn6TajNRfVpw==
+X-Google-Smtp-Source: AKy350a/drZtpde24N1RhyJMimhp9a0kDjKzSFBl49N+1lgOAUv7hKCRbn9292vlLz1kg5xb2w8lratj4rv3wLsalcQ=
+X-Received: by 2002:a2e:7017:0:b0:295:bb34:9c2 with SMTP id
+ l23-20020a2e7017000000b00295bb3409c2mr3663347ljc.10.1679931479496; Mon, 27
+ Mar 2023 08:37:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230322011440.2195485-1-seanjc@google.com> <20230322011440.2195485-6-seanjc@google.com>
- <373823f7-00ba-070c-53c7-384d29889e40@intel.com>
-In-Reply-To: <373823f7-00ba-070c-53c7-384d29889e40@intel.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Mon, 27 Mar 2023 08:37:28 -0700
-Message-ID: <CALMp9eTEG5o2jQ457BTAL=srPYFbFi2Jx1YLp+a3NW3tQ19wDQ@mail.gmail.com>
-Subject: Re: [PATCH 5/6] KVM: x86: Virtualize FLUSH_L1D and passthrough MSR_IA32_FLUSH_CMD
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+References: <20230220-display-v1-0-45cbc68e188b@baylibre.com> <20230220-display-v1-18-45cbc68e188b@baylibre.com>
+In-Reply-To: <20230220-display-v1-18-45cbc68e188b@baylibre.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Mon, 27 Mar 2023 23:37:47 +0800
+X-Gmail-Original-Message-ID: <CAAOTY__=p3pyrX8r55iTR19PiJB3HciS1W9zHF7vR_cVxYgg+Q@mail.gmail.com>
+Message-ID: <CAAOTY__=p3pyrX8r55iTR19PiJB3HciS1W9zHF7vR_cVxYgg+Q@mail.gmail.com>
+Subject: Re: [PATCH 18/21] drm/mediatek: dsi: Improves the DSI lane setup robustness
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Xinlei Lee <xinlei.lee@mediatek.com>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 8:33=E2=80=AFPM Xiaoyao Li <xiaoyao.li@intel.com> w=
-rote:
->
-> On 3/22/2023 9:14 AM, Sean Christopherson wrote:
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index c83ec88da043..3c58dbae7b4c 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -3628,6 +3628,18 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, st=
-ruct msr_data *msr_info)
-> >
-> >               wrmsrl(MSR_IA32_PRED_CMD, PRED_CMD_IBPB);
-> >               break;
-> > +     case MSR_IA32_FLUSH_CMD:
-> > +             if (!msr_info->host_initiated &&
-> > +                 !guest_cpuid_has(vcpu, X86_FEATURE_FLUSH_L1D))
-> > +                     return 1;
-> > +
-> > +             if (!boot_cpu_has(X86_FEATURE_FLUSH_L1D) || (data & ~L1D_=
-FLUSH))
-> > +                     return 1;
-> > +             if (!data)
-> > +                     break;
-> > +
-> > +             wrmsrl(MSR_IA32_FLUSH_CMD, L1D_FLUSH);
-> > +             break;
->
-> Then KVM provides the ability to flush the L1 data cache of host to
-> userspace. Can it be exploited to degrade the host performance if
-> userspace VMM keeps flushing the L1 data cache?
+Hi, Xinlei:
 
-The L1D$ isn't very big. A guest could always flush out any previously
-cached data simply by referencing its own data. Is the ability to
-flush the L1D$ by WRMSR that egregious?
+Could you help to review this patch?
+
+Regards,
+Chun-Kuang.
+
+Alexandre Mergnat <amergnat@baylibre.com> =E6=96=BC 2023=E5=B9=B43=E6=9C=88=
+9=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:23=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> Currently, mtk_dsi_lane_ready (which setup the DSI lane) is triggered
+> before mtk_dsi_poweron. lanes_ready flag toggle to true during
+> mtk_dsi_lane_ready function, and the DSI module is set up during
+> mtk_dsi_poweron.
+>
+> Later, during panel driver init, mtk_dsi_lane_ready is triggered but does
+> nothing because lanes are considered ready. Unfortunately, when the panel
+> driver try to communicate, the DSI returns a timeout.
+>
+> The solution found here is to put lanes_ready flag to false after the DSI
+> module setup into mtk_dsi_poweron to init the DSI lanes after the power /
+> setup of the DSI module.
+>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dsi.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediate=
+k/mtk_dsi.c
+> index 3b7d13028fb6..35c36cc05c04 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -667,6 +667,8 @@ static int mtk_dsi_poweron(struct mtk_dsi *dsi)
+>         mtk_dsi_config_vdo_timing(dsi);
+>         mtk_dsi_set_interrupt_enable(dsi);
+>
+> +       dsi->lanes_ready =3D false;
+> +
+>         return 0;
+>  err_disable_engine_clk:
+>         clk_disable_unprepare(dsi->engine_clk);
+>
+> --
+> b4 0.10.1
