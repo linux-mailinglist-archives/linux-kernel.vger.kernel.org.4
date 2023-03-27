@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13A26C9E91
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E80156C9EA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233420AbjC0IuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
+        id S232660AbjC0Iyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233489AbjC0Its (ORCPT
+        with ESMTP id S232542AbjC0Ixy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:49:48 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BB0AF13;
-        Mon, 27 Mar 2023 01:46:03 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4A0C86601F5E;
-        Mon, 27 Mar 2023 09:45:17 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679906717;
-        bh=nI/bv+FYvlvhbSwQ/rVx+2wqovQpOadhWJXyJqW4ADA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IFO/vaqNFG45fpRw/Gm9vcN3rzC+MHK5CV+YTcqpLeuWPnEaoZKqAlm2CRUITPd/S
-         0RlWS8xKkhUTz/HYHiUKWMC8yweaKbZ2rn1QZ8TKIl7Peh5hjc1fc70Mc1Y+slXG2o
-         9EgHkl82N3sz06AzWkMt10YmdOgjjOaPzIwIOJVLhiZq4Q/4VzgvYTJECH92bgOoHM
-         iym+tSwEG7QTFji2jjwN5EZzeHUGslxRo2aSjDfvDHN5/WMBRc5KfBncN7xdpxwOQq
-         xHHayRzCEJzLa0xu2/LkkmIwsUIbxoUqQ9hoBX/HNrH16JdhVJCDcahs2tR5tCMiR8
-         iXWMBXOQKVyIw==
-Message-ID: <2a1b1f66-970e-5adb-389e-b9c47a790712@collabora.com>
-Date:   Mon, 27 Mar 2023 10:45:15 +0200
+        Mon, 27 Mar 2023 04:53:54 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BF361A8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:49:22 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so6785361wmq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679906960;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=UDSqP7fpfKlKQVx/rVKsTS5+4DHlxYXGctzY/lz+9Ho=;
+        b=5UJ/GXirQ7wgMEFINuifffVu8CODx5qLiO9QZwxXCtKEKM+75oZAu25XvAjTf3Mukd
+         lVDHLQTo0AOOQcN5NlWIUSvcKvN32YA5hJUWuvNjyFXAByF1uiR2VcvlikFKLYKEBmOn
+         eDx+RS9fSjaPFpSvMY1eVdj5AlrPgGKU31/9RH/tg2j1jU4AbH43wXOmYH7I2SbnW74s
+         7py0fyyDHwvalOsnobnGpmz4MyKAxZWgrhDqMGcGyEgoifsfAdrikkoSAaPvNKx7TImx
+         qNZcc3t1JrP9dMg1sXC70lpblPv+C9p97e4IDNGsXPmZvdqFu1e0O8EuVXhAqEIk+Pst
+         rXEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679906960;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UDSqP7fpfKlKQVx/rVKsTS5+4DHlxYXGctzY/lz+9Ho=;
+        b=XZ0m7284h8ikr4EcJYu0inSrqiI6RNaSdhBr7TOeCbBqJ1VK1+mYyaEaZ4yWbPpVzY
+         g/mI68HSIEIsmmNEWSbZ7mCSOSApEf1KVSyxZV4m1Pkuau38V7Z3SCbS/ojoNAJGdUTj
+         DndRWr+7DXxDYg6Mv1KwmRT9A69R1Bw20qe2WO2nzEfDPT1dc5PBK0JNCoE+0fiqsMQV
+         GWsC7QofMpokjwhmBamisfh5TLohGojTvvq35AV6NOpppue1qk75ykbiWmy0UDyS0aCR
+         JjEp0gWTmLlyKfIaEeCbl/JzcxhLNg39+WnyVB9DuBXQYpAa8wWHg93dY4fg3gUQ0qYA
+         e5GQ==
+X-Gm-Message-State: AAQBX9dVH9NcSeCAQpih4oOP60UEuy2uP4juu+Zqc4+rGFilNybwBVGS
+        OiZQVVHpZ6FWunkA3wgIKT0ZrCUnCdTBUnFRmhU=
+X-Google-Smtp-Source: AKy350a1+/eDpxejUWxQfz4ZUV5XMrdV2fNL9j9I2+FCSXACd1jk3wa03RjMGPX4FF4onxWuoaOJcA==
+X-Received: by 2002:a7b:c852:0:b0:3ef:64b4:b081 with SMTP id c18-20020a7bc852000000b003ef64b4b081mr4840082wml.39.1679906960535;
+        Mon, 27 Mar 2023 01:49:20 -0700 (PDT)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id v9-20020a05600c444900b003ef5deb4188sm8001026wmn.17.2023.03.27.01.49.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 01:49:20 -0700 (PDT)
+References: <8dab942d6ce47657a9c038295959be80bb2ee09e.1679834598.git.christophe.jaillet@wanadoo.fr>
+User-agent: mu4e 1.8.13; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH] ASoC: meson: Use the devm_clk_get_optional() helper
+Date:   Mon, 27 Mar 2023 10:45:44 +0200
+In-reply-to: <8dab942d6ce47657a9c038295959be80bb2ee09e.1679834598.git.christophe.jaillet@wanadoo.fr>
+Message-ID: <1jy1nio9yo.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v5 2/2] arm64: dts: mediatek: enable i2c0 for mt8365-evk
- board
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Qii Wang <qii.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh@kernel.org>
-References: <20221122-mt8365-i2c-support-v5-0-6e4f3b54937f@baylibre.com>
- <20221122-mt8365-i2c-support-v5-2-6e4f3b54937f@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221122-mt8365-i2c-support-v5-2-6e4f3b54937f@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/03/23 10:27, Alexandre Mergnat ha scritto:
-> Enable the I2C0 bus provides communication with:
-> - The integrated RT9466 Switching Battery Charger.
-> - The integrated MT6691 LP4X buck for VDDQ.
-> - The integrated MT6691 LP4X buck for VDD2.
-> - The pin header, to plug external I2C devices.
-> 
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+
+On Sun 26 Mar 2023 at 14:43, Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
+
+> Use devm_clk_get_optional() instead of hand writing it.
+> This saves some loC and improves the semantic.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+
+Thx.
+
+Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+
+
 > ---
->   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 16 ++++++++++++++++
->   1 file changed, 16 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> index 4683704ea235..35cb142004a4 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> @@ -87,6 +87,13 @@ optee_reserved: optee@43200000 {
->   	};
->   };
->   
-> +&i2c0 {
-> +	clock-frequency = <100000>;
-> +	pinctrl-0 = <&i2c0_pins>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +};
-> +
->   &pio {
->   	gpio_keys: gpio-keys-pins {
->   		pins {
-> @@ -96,6 +103,15 @@ pins {
->   		};
->   	};
->   
-> +	i2c0_pins: i2c0-pins {
-> +		pins {
-			pinmux = ...pins...
-			bias-pull-up = <your-pull-up-adv-value>;
-		};
-
-...and please do *not* use the mediatek,pull-up-adv property: this is
-supposed to be there only for older devicetrees and there's a replacement
-for it.... unless you have any specific reason to do so (and if you do,
-you should well explain that).
-
-Besides, if you introduce the usage of that property in any 8365 devicetree,
-the previously proposed 8365 pinctrl cleanup will become a bit harder to do.
-
-Cheers,
-Angelo
-
+>  sound/soc/meson/axg-tdm-interface.c | 13 ++++---------
+>  1 file changed, 4 insertions(+), 9 deletions(-)
+>
+> diff --git a/sound/soc/meson/axg-tdm-interface.c b/sound/soc/meson/axg-tdm-interface.c
+> index 7624aafe9009..5e5e4c56d505 100644
+> --- a/sound/soc/meson/axg-tdm-interface.c
+> +++ b/sound/soc/meson/axg-tdm-interface.c
+> @@ -496,7 +496,7 @@ static int axg_tdm_iface_probe(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	struct snd_soc_dai_driver *dai_drv;
+>  	struct axg_tdm_iface *iface;
+> -	int ret, i;
+> +	int i;
+>  
+>  	iface = devm_kzalloc(dev, sizeof(*iface), GFP_KERNEL);
+>  	if (!iface)
+> @@ -533,14 +533,9 @@ static int axg_tdm_iface_probe(struct platform_device *pdev)
+>  	 * At this point, ignore the error if mclk is missing. We'll
+>  	 * throw an error if the cpu dai is master and mclk is missing
+>  	 */
+> -	iface->mclk = devm_clk_get(dev, "mclk");
+> -	if (IS_ERR(iface->mclk)) {
+> -		ret = PTR_ERR(iface->mclk);
+> -		if (ret == -ENOENT)
+> -			iface->mclk = NULL;
+> -		else
+> -			return dev_err_probe(dev, ret, "failed to get mclk\n");
+> -	}
+> +	iface->mclk = devm_clk_get_optional(dev, "mclk");
+> +	if (IS_ERR(iface->mclk))
+> +		return dev_err_probe(dev, PTR_ERR(iface->mclk), "failed to get mclk\n");
+>  
+>  	return devm_snd_soc_register_component(dev,
+>  					&axg_tdm_iface_component_drv, dai_drv,
 
