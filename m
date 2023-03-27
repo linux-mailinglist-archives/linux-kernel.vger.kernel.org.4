@@ -2,129 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186576C9907
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 02:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B386C990C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 02:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbjC0AiI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 26 Mar 2023 20:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
+        id S229564AbjC0AjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 20:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbjC0AiG (ORCPT
+        with ESMTP id S230354AbjC0AjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 20:38:06 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A3912E;
-        Sun, 26 Mar 2023 17:38:05 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32R0bIhoD005218, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32R0bIhoD005218
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Mon, 27 Mar 2023 08:37:18 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Mon, 27 Mar 2023 08:37:34 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 27 Mar 2023 08:37:34 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Mon, 27 Mar 2023 08:37:34 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-CC:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        "ath10k@lists.infradead.org" <ath10k@lists.infradead.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ath11k@lists.infradead.org" <ath11k@lists.infradead.org>,
-        "ath12k@lists.infradead.org" <ath12k@lists.infradead.org>
-Subject: RE: [PATCH 5/5] wifi: rtw89: Remove redundant pci_clear_master
-Thread-Topic: [PATCH 5/5] wifi: rtw89: Remove redundant pci_clear_master
-Thread-Index: AQHZXXpgQZeubkOvMUyQJYDWG6thja8NzZ5A
-Date:   Mon, 27 Mar 2023 00:37:33 +0000
-Message-ID: <90e016cbdf5846b6989af90c1f57d532@realtek.com>
-References: <20230323112613.7550-1-cai.huoqing@linux.dev>
- <20230323112613.7550-5-cai.huoqing@linux.dev>
-In-Reply-To: <20230323112613.7550-5-cai.huoqing@linux.dev>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Sun, 26 Mar 2023 20:39:05 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69391469E
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 17:38:55 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso6939711pjb.3
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 17:38:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1679877535;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZL3a+TWIB4wbyH+pk+yppXVzEy45w2PnT959afXZzfE=;
+        b=Gfy6rgbqQVzlNT/IqFJC4s7YUkiSfRHkSozUxvidIMjOLmOwomJ5cqMjYLGOoAJ2uW
+         BSr2RUY/EQtVtt2Rgzv6fJM3bXde2QyLTjhZ3GDyu6tPvjmJirsmt3NOcQ4sdjWGL7HM
+         w5J4XUDP9RplRMJ/7PO+1/a/Ou/XwCwAEYemRsZgoaybiN7WY7MYd6m7bTa/AUoaH4ff
+         7PY7hNTaHUA1u5ATl+6dTxBG3FYljAZ6LnSCrm7xkRL6EOwDjFCwDxBrirqvH03aqWWz
+         nyyMbDRtciGtEzzRC9W1IAGWhGZ9idnqglS5SONBeH03aOGgo8/1Gw8AIqEYf79cIDy4
+         zUjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679877535;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZL3a+TWIB4wbyH+pk+yppXVzEy45w2PnT959afXZzfE=;
+        b=MmMIHnLR2ENBacOdHXnV/yTj1IQu07Sc7SWi22txS9IoaIhztQeMQpkTwtXlV6hOgP
+         caneptDn4J2iI4pFlXngVJIJQY3rwRdt69FyJKd9XUy/sIX/bKZPYWlHsNImjUa3zaOR
+         KC4wto40Z4iT41we2QuVDqmbPqqCDjEbkGNJFZm+y4LeT8yIyRkZ0Vi8dN+v9bmb3r8n
+         3qgi5eJ3TV+DVb+fUaEkitX2a688YbFLGgdePjGS0H/tbHDshbxn5++pz+7j6HAvwhUi
+         uJfjfna7RfP2MRyxgeSi+yDQpyl6QWoatle9eKkUaQOkyENW6ZuzKldHOQHp1SvFiRFJ
+         dVTA==
+X-Gm-Message-State: AAQBX9d3gQ+DiDjvJCJO9yzYk6zKR2uE0hIUORHvQGREVcSUtvZ9CTUe
+        wBdFJygdD71RNqIru6FXACmfkw==
+X-Google-Smtp-Source: AKy350Zn6mhhHR8MBqsUL/fpMKj0au7tP24g1nhgaaInJCemK83mogbizHRNfMnFFf6N1TmLLZFOAA==
+X-Received: by 2002:a17:90b:17c9:b0:237:9cc7:28a6 with SMTP id me9-20020a17090b17c900b002379cc728a6mr10658956pjb.26.1679877534805;
+        Sun, 26 Mar 2023 17:38:54 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-91-157.pa.nsw.optusnet.com.au. [49.181.91.157])
+        by smtp.gmail.com with ESMTPSA id dw18-20020a17090b095200b002407750c3c3sm1432675pjb.37.2023.03.26.17.38.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 17:38:53 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pgasr-00Da2e-QH; Mon, 27 Mar 2023 11:38:49 +1100
+Date:   Mon, 27 Mar 2023 11:38:49 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baoquan He <bhe@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
+ and vmap_block->lock
+Message-ID: <20230327003849.GA3222767@dread.disaster.area>
+References: <cover.1679209395.git.lstoakes@gmail.com>
+ <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
+ <ZBkDuLKLhsOHNUeG@destitution>
+ <ZBsAG5cpOFhFZZG6@pc636>
+ <ZB00U2S4g+VqzDPL@destitution>
+ <ZB01yw3MpOswyL1e@casper.infradead.org>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZB01yw3MpOswyL1e@casper.infradead.org>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 24, 2023 at 05:31:55AM +0000, Matthew Wilcox wrote:
+> On Fri, Mar 24, 2023 at 04:25:39PM +1100, Dave Chinner wrote:
+> > Did you read the comment above this function? I mean, it's all about
+> > how poorly kvmalloc() works for the highly concurrent, fail-fast
+> > context that occurs in the journal commit fast path, and how we open
+> > code it with kmalloc and vmalloc to work "ok" in this path.
+> > 
+> > Then if you go look at the commits related to it, you might find
+> > that XFS developers tend to write properly useful changelogs to
+> > document things like "it's better, but vmalloc will soon have lock
+> > contention problems if we hit it any harder"....
+> 
+> The problem with writing whinges like this is that mm developers don't
+> read XFS changelogs.  I certainly had no idea this was a problem, and
+> I doubt anybody else who could make a start at fixing this problem had
+> any idea either.  Why go to all this effort instead of sending an email
+> to linux-mm?
 
+<sigh>
 
-> -----Original Message-----
-> From: Cai Huoqing <cai.huoqing@linux.dev>
-> Sent: Thursday, March 23, 2023 7:26 PM
-> To: cai.huoqing@linux.dev
-> Cc: Kalle Valo <kvalo@kernel.org>; David S. Miller <davem@davemloft.net>; Eric Dumazet
-> <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Yan-Hsuan Chuang
-> <tony0620emma@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>; ath10k@lists.infradead.org;
-> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org;
-> ath11k@lists.infradead.org; ath12k@lists.infradead.org
-> Subject: [PATCH 5/5] wifi: rtw89: Remove redundant pci_clear_master
-> 
-> Remove pci_clear_master to simplify the code,
-> the bus-mastering is also cleared in do_pci_disable_device,
-> like this:
-> ./drivers/pci/pci.c:2197
-> static void do_pci_disable_device(struct pci_dev *dev)
-> {
->         u16 pci_command;
-> 
->         pci_read_config_word(dev, PCI_COMMAND, &pci_command);
->         if (pci_command & PCI_COMMAND_MASTER) {
->                 pci_command &= ~PCI_COMMAND_MASTER;
->                 pci_write_config_word(dev, PCI_COMMAND, pci_command);
->         }
-> 
->         pcibios_disable_device(dev);
-> }.
-> And dev->is_busmaster is set to 0 in pci_disable_device.
-> 
-> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+If you read the mm/vmalloc.c change logs, you'd find that two weeks
+later, a bunch of commits went into the vmalloc code to change some
+of the stuff mentioned in the above XFS commit. That was a direct
+result of the discussion of vmalloc/kvmalloc inadequacies, and if
+you followed the links from these three commits:
 
-Acked-by: Ping-Ke Shih <pkshih@realtek.com>
+30d3f01191d3 mm/vmalloc: be more explicit about supported gfp flags.
+9376130c390a mm/vmalloc: add support for __GFP_NOFAIL
+451769ebb7e7 mm/vmalloc: alloc GFP_NO{FS,IO} for vmalloc
 
-> ---
->  drivers/net/wireless/realtek/rtw89/pci.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw89/pci.c b/drivers/net/wireless/realtek/rtw89/pci.c
-> index ec8bb5f10482..75bd3ac4dd71 100644
-> --- a/drivers/net/wireless/realtek/rtw89/pci.c
-> +++ b/drivers/net/wireless/realtek/rtw89/pci.c
-> @@ -2694,7 +2694,6 @@ static int rtw89_pci_claim_device(struct rtw89_dev *rtwdev,
->  static void rtw89_pci_declaim_device(struct rtw89_dev *rtwdev,
->                                      struct pci_dev *pdev)
->  {
-> -       pci_clear_master(pdev);
->         pci_disable_device(pdev);
->  }
-> 
-> --
-> 2.34.1
+You'd have found those discussions.
 
+I went into great detail in that discussion about the problems with
+the kvmalloc/vmalloc APIs and the problems with actually using it in
+anger. e.g:
+
+https://lore.kernel.org/all/163184741778.29351.16920832234899124642.stgit@noble.brown/T/#e8bc85de35d432dcbc35a16fc72b6a3daef2a0f78
+
+In that discussion, I gave these examples and use cases about
+fail-fast for the kmalloc part of kvmalloc being needed, that
+arguments that GFP_NOFS didn't work with vmalloc were bullshit
+because we'd been using it heavily for years in GFP_NOFS contexts
+without issues, the lack of scope APIs for anything other NOFS/NOIO,
+that filesytsems want "retry forever" semantics, not the current
+__GFP_NOFAIL semantics that have all sorts of weird side effects,
+etc. I also point out that vmalloc is rapidly becoming one of the
+hottest paths in XFS in response to the comments that vmalloc "isn't
+a hot path".
+
+Indeed, I point that the XFS change in that commit during that
+discussion, and you made exactly the same "you should raise this
+with mm developers" complaint then, too. Imagine how frsutrating it
+is when I was being told to raise vmalloc issues on the linux-mm
+list with mm developers during a discussion about vmalloc issues
+with mm developers on the linux-mm list. Especially as it wasn't
+just one mm developer that responded like that.
+
+And yet, the 3 commits that came out of the discussion did nothing
+to change the actual problem we need to fix - fail-fast high-order
+kmalloc behaviour in kvmalloc() - and so the XFS commit still stands
+and is badly needed.
+
+Repeatedly castigating people saying we should talk to mm developers
+rather than working around the API they maintain when we've
+repeatedly talked to the mm developers about getting changes made
+and repeatedly failed to get the changes we need made? Yeah, that
+leads to frustrations and commit messages documenting all the shit
+we haven't been able to get changed and so need to work around.....
+
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
