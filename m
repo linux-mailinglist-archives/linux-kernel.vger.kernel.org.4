@@ -2,129 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F9A6CA0CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE1C6CA0D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbjC0KEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 06:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        id S233183AbjC0KHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbjC0KEf (ORCPT
+        with ESMTP id S233066AbjC0KHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:04:35 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB8C422D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:04:34 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32R95vDm022639;
-        Mon, 27 Mar 2023 10:04:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=/W5deOdsFgWeGXmULFNjF9JgASqMyj1Umh0xpdv/GbQ=;
- b=LwUvoXtVV+G+k7mQ8hFLox22fALJiG9sjzMcAvIXJDFX+p2qKkt+nLS2b85ImoaUjPrj
- qqBwHiAn0SdWEiuMa9ceesFR5VDU5FsOCsDIHhvcyn3h5JMhZbdhqm4fnOoIgqipmCNM
- WBZ7vsME+uwCLPb4pOUpWL7dwAZH2ZDgjCSgFKtPnpc5hSLT+OUxeHEa1VMkkRwJfbXw
- CtykRmC7k5BcRLsBL50ub5OJg+UdQ5UKgiJpMD+LwEBb/BSu68NNXd++1onGqtrGV3ly
- 24votjIv8Lyi5m9q75gics/EUQN10DLk2YImiuwYTahD7/FX0Z8RlIEwPvgv8uplwuQh gQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjb42ku3m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 10:04:23 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32R9gTSk030754;
-        Mon, 27 Mar 2023 10:04:23 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjb42ku30-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 10:04:23 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32R0uMkL023253;
-        Mon, 27 Mar 2023 10:04:21 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3phr7ft9vg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 10:04:21 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32RA4HT624183492
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Mar 2023 10:04:18 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D6E042006E;
-        Mon, 27 Mar 2023 10:04:17 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2B15420067;
-        Mon, 27 Mar 2023 10:04:16 +0000 (GMT)
-Received: from r223l.aus.stglabs.ibm.com (unknown [9.3.109.14])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 27 Mar 2023 10:04:15 +0000 (GMT)
-From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Fabiano Rosas <farosas@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Kautuk Consul <kconsul@linux.vnet.ibm.com>
-Subject: [PATCH v4] arch/powerpc/kvm: kvmppc_hv_entry: remove .global scope
-Date:   Mon, 27 Mar 2023 06:04:11 -0400
-Message-Id: <20230327100411.3342194-1-kconsul@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 27 Mar 2023 06:07:01 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C299F46AC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:06:59 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id h9so8353378ljq.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679911618;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KFv/A1+uJn3CnMRGy/hasrUt1t16K7NodNwg6vSfcFk=;
+        b=IdP5kqn82eh9bgkRp3Z2liP32XsdMsNhWaiV1xVFrkUnDDdOgJNqCKvX6cMc2pDu93
+         8gg4nWR/Ttc0Jqyd7iyE8dKcXkHmJ//8kQ8H+j+/uumRJqeZWv8JyaNdX3M9uQFRho67
+         CBQ78CZa5lIvoKLWTVM04LWj+WeE1MWEyYu2sgb7BBynDbRvPhx7bimOWJpHDd95kZ5f
+         EQeCKKyfafSHXq21IZ8d88qrCrirv8e0RZzDTo9iEoN5UlWxCp7RvL6ivDdyy8ccr9Ni
+         efODoystPOCp1d9pAyHkyVcVaxJm3eu94F6I3oimPlUcABp00yBeRTX55r7GsyYmMj/z
+         oW+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679911618;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KFv/A1+uJn3CnMRGy/hasrUt1t16K7NodNwg6vSfcFk=;
+        b=7nauIVKbvtpxJACUD8LMMSnyQPhNzHQqlwVCwkwiYBxvHuoYh7MeKw/9WrCIg/jJIS
+         o5HY+k7lLeZG7BWN88KDyzxfpCqid6D14piJi0YWoKTBABNKxCyQoOAcVmyPsabCPsYN
+         GLzFv2ecUV1UDcd7UpxPH24pX/NyxKV5NQFNiha1+9zHssBJUyQ9ovz9eYQ+jJWW5/9+
+         NpkTVIxuMZ48ApJ0FYuu9Z250+N/eA1uUnrf1o7M9AeABt6YeJKiCIPXEUQgBWIbz5fj
+         u2X33oyxX1zs9/43+9waTGWdLjZwka0hFgwjOdwjS7irV4wdRfHIF6BDRbjBte7sBzXU
+         HreQ==
+X-Gm-Message-State: AAQBX9dqp0R6cXgF/k9TjnQ4Jcto3gXWqDg6uvlXRoj6b2qmLBt9Sv/J
+        UHSHW1792Rz6ae9PZJeSg/plOg==
+X-Google-Smtp-Source: AKy350ZoyXzkePDlK0a2Zv/qtfAPQqmBLJtchcelEf+6jFDMmAb+gyVqvE+cz+ETMv+aPdHloSJs2Q==
+X-Received: by 2002:a2e:9c01:0:b0:29b:964e:693d with SMTP id s1-20020a2e9c01000000b0029b964e693dmr3635550lji.42.1679911618103;
+        Mon, 27 Mar 2023 03:06:58 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id j12-20020a2e6e0c000000b002a5faadb938sm156521ljc.138.2023.03.27.03.06.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 03:06:57 -0700 (PDT)
+Message-ID: <522e9f28-bcb7-13cf-8da9-8db8a66193cc@linaro.org>
+Date:   Mon, 27 Mar 2023 13:06:57 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: mispF0Wx5_k-yPAxmn6qBJ6L2kNbNNdt
-X-Proofpoint-GUID: jh0v-fpjDlU0xVAvf7QAaqolE6lOpc54
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 spamscore=0 clxscore=1015 bulkscore=0 mlxscore=0
- lowpriorityscore=0 phishscore=0 priorityscore=1501 malwarescore=0
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2303270078
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 4/8] clk: qcom: gcc-ipq9574: Add USB related clocks
+Content-Language: en-GB
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1679909245.git.quic_varada@quicinc.com>
+ <ff189b0316ad524a7d8331bd89452112b60cdbb2.1679909245.git.quic_varada@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <ff189b0316ad524a7d8331bd89452112b60cdbb2.1679909245.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kvmppc_hv_entry isn't called from anywhere other than
-book3s_hv_rmhandlers.S itself. Removing .global scope for
-this function and annotating it with SYM_CODE_START_LOCAL
-and SYM_CODE_END.
+On 27/03/2023 12:30, Varadarajan Narayanan wrote:
+> Add the clocks needed for enabling USB in IPQ9574
+> 
+> Acked-by: Stephen Boyd <sboyd@kernel.org>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>   Changes in v2:
+> 	- Fixed coding style issues
+> ---
+>   drivers/clk/qcom/gcc-ipq9574.c               | 37 ++++++++++++++++++++++++++++
+>   include/dt-bindings/clock/qcom,ipq9574-gcc.h |  2 ++
+>   2 files changed, 39 insertions(+)
 
-Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
----
- arch/powerpc/kvm/book3s_hv_rmhandlers.S | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-index acf80915f406..0a9781192b86 100644
---- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-+++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-@@ -502,8 +502,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
-  *                                                                            *
-  *****************************************************************************/
- 
--.global kvmppc_hv_entry
--kvmppc_hv_entry:
-+SYM_CODE_START_LOCAL(kvmppc_hv_entry)
- 
- 	/* Required state:
- 	 *
-@@ -940,6 +939,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_HAS_PPR)
- 	ld	r4, VCPU_GPR(R4)(r4)
- 	HRFI_TO_GUEST
- 	b	.
-+SYM_CODE_END(kvmppc_hv_entry)
- 
- secondary_too_late:
- 	li	r12, 0
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
 -- 
-2.39.2
+With best wishes
+Dmitry
 
