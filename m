@@ -2,169 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4D16CAF1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A30F6CAF21
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjC0TsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
+        id S230206AbjC0Ts4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 15:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjC0TsW (ORCPT
+        with ESMTP id S229525AbjC0Tsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:48:22 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7C09E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:48:21 -0700 (PDT)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RJYcAU014854;
-        Mon, 27 Mar 2023 19:48:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=q2lRqeXcM02lNAi6IXfHuGF8Y5GyVfmfFiOMZ0qDulo=;
- b=jE2icYKi8CL/hxIrRV+TDqF2AzPd9gVvrxjzop/EJIV8pOELwCjHS0TlvK6k4BNkA87N
- /t91eKg4ewcIqkcnh4wJz8l4Q6x/Jj0ZS9UlPme9DcFeSTMzZtRR3PXr1hLKpRsLKUdI
- AGe22uz52HarHYZ/JDIo19YdrRZLN7IiBYBVjyjmyUTE+hc2SA+rRW4gH4A9gQMiYk3T
- da2RCCGWv1ahjjqC5AozM/FBQSHgTvy5smJH+iLyNHBGILiOhPfNIDQCXE2NqFraBybT
- qcRSAHRQvNPzdYHHm/5kxOe0wfjwVStRORn48EiIZaNjjUiX+XwtG2EK7lp+8Wor0zK1 9Q== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pkhdsg127-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Mar 2023 19:48:08 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32RIYNpG005473;
-        Mon, 27 Mar 2023 19:48:07 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2108.outbound.protection.outlook.com [104.47.58.108])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3phqd5ehtx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Mar 2023 19:48:07 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cYYLpTOqq9vAIVaD8UaRCQmIgJIKmgzEDO6pF4eec5ha9PZ6p9X4UbhW5g0y+hp4EToJIPRBItcQPGVNNMnUlHwED7yhwK5bNTb5UIINuKtsquxs82l61dZ7iAmxRLGhNFDGdHJ6wjlvsMgWuYbYxy8XwBAxrmIsqJoMyE1qKcWA9r1xlIHjeGm/nJp78TVZCoDjOducZD3smtIIyWDWTfXhQ9hkLuNtD+lpFvDDAm8Rc55h24btxR+t1B5BIvz0EK5iPMPInpX31GrpwZYHKFaDdcqQkWvflLNa9L7TFG1uL7540rTP4U3Chpl/X/7w9kHYvlHa+vil9Z1yquW/hg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q2lRqeXcM02lNAi6IXfHuGF8Y5GyVfmfFiOMZ0qDulo=;
- b=MW2eXrpn4K1aX+Gxg5Q/B/FLonU8pnZTqIsWvstexPXlkwQw4hTmOGIoC8o8wdWTa8sTSGlYgD6AlVoldZQtvhZMdQOocXHT8prMCGTR4qGS34nY85ViWKcIK71GcK4HpmodIYhy2clDEMcpEQCODW9LUsHu/a3xwtaLK+qmyhFmj63I792mHGKESDv4N1zQoguW04NX+QZGq7DYOU6h6mF0rjXch8trNdWyKPw5P05fLVF84O7h1OHVWI4Wao+vGjiXncy8JLhQjhzYx/ubmxpjN3Lmq4mmtDt19i92vR791By2jSCCIUm3S4p/bLiJuCku+CYPKINxeMPv60B9Tw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Mon, 27 Mar 2023 15:48:54 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2935335B3;
+        Mon, 27 Mar 2023 12:48:43 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id h9so10268361ljq.2;
+        Mon, 27 Mar 2023 12:48:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q2lRqeXcM02lNAi6IXfHuGF8Y5GyVfmfFiOMZ0qDulo=;
- b=kQk4fLkPTQkGJtTDH8MpmJOlne4K7LE6loB/90rghzrXVtt4f4YZMejY4R3SBx5PyM+7SLyfjFvLi3r7bP5DPY8Pr+vQ2Y0iGYwk6PVop/byIcHpd4zYqe4BTEWMcjidzk3lJj3BW4R2TGTFb1BzstNVbF2vbgGnekhJIk+eies=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by MW4PR10MB6464.namprd10.prod.outlook.com (2603:10b6:303:222::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Mon, 27 Mar
- 2023 19:48:03 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::9fc8:73bb:cc29:9060]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::9fc8:73bb:cc29:9060%5]) with mapi id 15.20.6222.029; Mon, 27 Mar 2023
- 19:48:03 +0000
-Date:   Mon, 27 Mar 2023 15:48:00 -0400
-From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH 0/8] Fix VMA tree modification under mmap read lock
-Message-ID: <20230327194800.fzqfrxfh3nfmqwgk@revolver>
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>
-References: <20230327185532.2354250-1-Liam.Howlett@oracle.com>
- <20230327123515.bce6c1ea3660e9b17db50c33@linux-foundation.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327123515.bce6c1ea3660e9b17db50c33@linux-foundation.org>
-User-Agent: NeoMutt/20220429
-X-ClientProxiedBy: YT4PR01CA0338.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:fc::9) To SN6PR10MB3022.namprd10.prod.outlook.com
- (2603:10b6:805:d8::25)
+        d=gmail.com; s=20210112; t=1679946521;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XcVM4CJRWxDPPXEqbhuPEZtCcbmEaUWm5GlqZ20MK+M=;
+        b=EFREdTokB3aj0dK4dOgEQc284esTJ0cdFtvXHKT9EgROGQI0DBuEXqCn4Ryyqm28xB
+         QBLwOcZS47E0W20uU8RmsrAQg2fsV6OzauwGaRoFyoo0pvIUakx2FRJEHcMQmgJ1v7Mo
+         EjZs+/DrRyy3H+3a+toGAzEha/pCCOisXwZaoArJg/G6B/KA8bA4lFhPWntEaOhbLdzN
+         DO+egjsTiVbaxLwUBmB1Py2Ut5yWnKXC0KI6wFY1BEfyfXgiMyfOSa1WtCcLAid4ppRi
+         lJEmQ/azRW44jdpsS8rxUyhUssICxMrixUeStc0h8lIkrY/M+eqwS6soke578iVp8pPt
+         7O3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679946521;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XcVM4CJRWxDPPXEqbhuPEZtCcbmEaUWm5GlqZ20MK+M=;
+        b=cS+iwt6pYbFRtas5iKZ0ks9MXIJBj/5JVaDSYEkzgaQbQidQiB9PMajW8S53Di3ohP
+         MfrdxNlHecwgyM7N6k9F63A0zS6OM09JFyagvBFoCrQuwmDHodyQWGMnlvJC3bdpoecr
+         Z2aKZFCslZT5dDki5+VEXnPjk9JkxUseJ/WK562/TNJF35YrnF6aJf20A6gdQoxXOpL6
+         byYi3evflEnC5iAudsuzX0OMpBMgAtYIXp2w1zeyyJBIWQTVTE3vhhZUsEozBI/+Nzxm
+         lZWwVPRlZ/5KVMrBU87JBggXo/LQrwrYaCFkJ96zdSs8h0UDx9m51TWZVywtHKne8MbL
+         rzLw==
+X-Gm-Message-State: AAQBX9dsM7G6DvJXLr/1+P568M4YHT03tfbOiB16pxRI3UNte/apVOrT
+        dPUYGALO23xV03I2vRJhXCrmCeTEnX0Q+3bRQio=
+X-Google-Smtp-Source: AKy350b+4HwYHTQhmbZlgOYaL5Wjx/F90GsBFY0Kkzs/r54XyyAOTXcFBS75CODDOVDmbOMgq9su8SNa042E7nem1Lk=
+X-Received: by 2002:a2e:a175:0:b0:2a0:5b04:5fe8 with SMTP id
+ u21-20020a2ea175000000b002a05b045fe8mr4019265ljl.0.1679946521108; Mon, 27 Mar
+ 2023 12:48:41 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|MW4PR10MB6464:EE_
-X-MS-Office365-Filtering-Correlation-Id: dc86de8b-e33d-47ae-65d5-08db2efc2d73
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MxTuoZJM/jsvgprSHfiLmXlUc1vwMk9nU2Kq8Aa7OoSIlS3RGOGJK49aHCbjYt4S3Zx2UL2smaE1gEGdGXVh6rOAAwPNdtxISBJDYLsIW7U5V0uXdom2MAQG5aILi6xaq6b9mIyBmhJLqzNGdGbci1CKvmg70XuNwDl1pWIJLUStodbmyTr1y3wQhcXPDu0CGL6Tw8UhoIuLR+/peXEspobCKUKpXZk/GZq2N+HKJV4zg61WvFFGr1NxVkVodRRqkOX0/z63S9ep1ohnuOyh2d7qBCcIJgkw9hVIGK6rhvUZbyQ5otwRcPQ3Uzej/3kqii1PDbYnqNbj2h8lhy16MAVIH0dHppB8sUBnkYFwsCv2S64Aw+kGEPEKSGYSuIV540mW3UWf8v+r4UMfQ51YbEa1oof2JGPuR2290eE8vLSjuZqq7MtMdqi+2iPHE3f4LFPH5+tEfxdF/f5C6IYfplHhP124kOsbbnbjtz0q4VAsjda5IvTt6N/K0WKwFzV0djLnYyBO0i+QoociQJQQLOyBCRzjaaO4l+5cT4RYaiRDxos8ae9T0pmRk+VQ03At
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(366004)(346002)(39860400002)(396003)(376002)(451199021)(1076003)(9686003)(6512007)(6506007)(83380400001)(26005)(8676002)(186003)(316002)(54906003)(41300700001)(66946007)(66476007)(6916009)(66556008)(4326008)(2906002)(8936002)(4744005)(38100700002)(6486002)(5660300002)(33716001)(86362001)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gWdEB8ARIE6uDLM0CJpvPzI+pVtSio2TPLvvVnJTmszZ+1uy43Vk4cRovcM+?=
- =?us-ascii?Q?N21c/5OI5V6hla7KjgOdx7pmAa2OcV0FZURllZD4jVdUmg3e7vC77PYSsDAB?=
- =?us-ascii?Q?A56we3+4AB8gvPRHgs/lImDUpCc7rGdgEzqt9QGARF7pKTHepoO+ZbiFKWt/?=
- =?us-ascii?Q?rufh2ZSHN2bK6Uou+4x7hWYBAehpvHj7c7AzUj3gHM8xG3Eg/mzEFWNvDR4B?=
- =?us-ascii?Q?vSVK4B98mYI13hgLxV0Gsh2QucJ+ZBONcsB0Ziv3UXdhrDw2WjjQaLzkksRV?=
- =?us-ascii?Q?b6jWw64plPk3HvtQDWN9qcNln3ieHHVt/cqKf4hewl71jQ8C8EQcpBYXKiIO?=
- =?us-ascii?Q?7ktv8OiaaXF0biZU8PFrkWB3BjmhA7qmWBlBpufVUnpPx0mA+NQDm8RzmA9o?=
- =?us-ascii?Q?NVf0M35RYPmUhIqlHIz7IIKQ3umE4o90IgTfOLoQVennb9t7Vmp5o1HAfdvZ?=
- =?us-ascii?Q?hESv/DN1sGDvyL1w9VZP8f2S/uIG9cgMOmammueQrJRIEh0Y2lVYKG3lLOLT?=
- =?us-ascii?Q?NT5Mx3d7wpj8woPo6I0P4xUUUDIVlkeH/PzdfN4OwdgD2bnUTwj2MDqq7hbR?=
- =?us-ascii?Q?Xy+8CLorIY+yTfUJ+03U0FHLcJHDNkWOkfKx4ENBpSbEIit1pDLb7lrnynU2?=
- =?us-ascii?Q?9iCENMhTFp+xbLnRIDuf5VkwjMjQcUiLERrWTnICDn2HCXWv2SIDnyKAWcO9?=
- =?us-ascii?Q?5VFAnC3TZQrcWDrnpjqcrLNt1dPHEBNkYU2CDdxFy5VGezfATKEzH+rKHIhj?=
- =?us-ascii?Q?PB/BiyShiC+QVVl5l8u63GVgoaG+VIm1j4p2t4dvtjMowova5JW4N7zZctr6?=
- =?us-ascii?Q?iDOXwIdKJNr1h4sYCq06dZYUcGuyBfb3S+vsCyz4mi8Ti+FNnT2rfcsR9IjT?=
- =?us-ascii?Q?xeOFK5+2lytnm+4x6Fu5VOLuRvyQg4oU/BmzfTuuJTnm0tMF/cdrC+L0K4to?=
- =?us-ascii?Q?r59tTIANFa1NjSpcvLthvi4FMxTAcd2qm9U2ffGofk4B2QU6rSjxkFfSmTNC?=
- =?us-ascii?Q?Ko5m/cdMiSGV3YW4SbRE5tHluE88S77De5pr5tMs2uZFTceDXPDo4UBXpe7v?=
- =?us-ascii?Q?k3lw8hENwisRk5JoXrS5QLm7H7nq1sVKLBaCSOowcGV2mFRkfruIjcRDa4KK?=
- =?us-ascii?Q?vypu35jl0s2XwGN0Ks+KyEbvp6dsq0ID7yUoSFVPe3ZzcE2gJqCmgYBMCh3F?=
- =?us-ascii?Q?W2mIWhvmGN9ypVWbefxAd5TeLYpV9fsr7yBRiB2AMen5ruTQ+K8LuSBqWMvf?=
- =?us-ascii?Q?rfTEkzQSWpPPPBFNgrCvpsSZGTmGzU33yAPTObnMo24DdfYDg6aJJw02mQ2s?=
- =?us-ascii?Q?t03SF2v9DDoheUthw6OBgulO3lFo5THSCxb/nuqZVU16771wcUOX9JxkCAs4?=
- =?us-ascii?Q?RQOAcVVajhLxu+xCDyCTEBZr2luk7HxkamVvfsAID6qvYXjHHTTbqhMEaOsM?=
- =?us-ascii?Q?+rI3BzA2kBT1dPveCTDh8UBGjFcpzSNYH9f96ueR42I00Nc/QMXVgaBnbkqS?=
- =?us-ascii?Q?BLlkygykChZRAUxaDi+8Ao8rbo2C65xLOtZpHCB4NxE5CwufERh/o3UHmkue?=
- =?us-ascii?Q?+Ko3OEwhxywF/BgI9YQPDP20DgKT7tQBOHop9t5cGpw99HLXeSaYA8vKL3Tq?=
- =?us-ascii?Q?gQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?da3IE1nL97xYrPuYXqpD0vgg7lsytZXqkxaRzAaVe8hjGgqMfcwxBuUvOkg0?=
- =?us-ascii?Q?J0qqQGheO2TFnsg88ot41wVCKbgXVloKCyNTMzzdvDBMo+PsC9bGQTduPJkO?=
- =?us-ascii?Q?YkoByxUI6P6zClh2+Xon5BwJ8GmRK1EaUu2BEynL9xH1erveJmpgN9tpj/QP?=
- =?us-ascii?Q?At7p/D3srGy027Mz9FsZGNR4YIu6lMyuLNsA2kCYYZYnxKD8odFUwdUDKuB4?=
- =?us-ascii?Q?aeFmodlhDEVeYtcSpqnZP8Ztm3EEvL10HWwaqZ2N7H3Qsw5Bhv6MYMvBCNVN?=
- =?us-ascii?Q?UaN2wta1Ty9jYaUvwHsy0fpU12WUikZl1Lpy02xOzfPvpLFRFW88p7eJ0Hae?=
- =?us-ascii?Q?XM4KdOmVTDZF54RhEsndV5Qqq3C2g7WNDXQf4KqGxQLDXSPs8mKZ8Mb7QXRx?=
- =?us-ascii?Q?3evx2mr3AUkLz1wwoHl8IrLHav2+q6yc89QHPU7AhWN8xTDK9MXAP4BlOjWk?=
- =?us-ascii?Q?bL393CcNVodD/Q20r+Y0w1mL/A8ODd6s0aJX2Lxnee+f4BvJdP5PLwo4CI2u?=
- =?us-ascii?Q?i6Mu7hrblkSr1JuswLmo0n1oHxw+O71F3tGtutgq/81hGdc+yc/K/vklNugy?=
- =?us-ascii?Q?IY4seYbt/sKorMWW36MmLiJudcahfz2wNdqOFz/aZyxJjq4Hb/dBSGqznHT+?=
- =?us-ascii?Q?fPGIbHbRcysV3y3bODmhMzDbwmIKuSJwLhBQILt4QwsJ3psoVq5LhwBaZLlf?=
- =?us-ascii?Q?xO747is7/FMQdAKxcN7VYKiXtDjm/w9D1nCVK6xYlozdi6t/Uk0ZmxwypPyZ?=
- =?us-ascii?Q?1RdTIvlCNczArHJGw100e+EVgEVy/eaQn2i3nHooTG0V9qbHNnBjO95vWXyJ?=
- =?us-ascii?Q?RZPKNIETfWtWqpXOJ1u28fMc1HO2/lATcgW3697OiBra/n2MJYK0msk7pCZk?=
- =?us-ascii?Q?kq7CaVGhW90Hl3CadTbs5eBYxip/gMIpEujfYc8Wg/Jw6BY8ArMEHPzkzEWu?=
- =?us-ascii?Q?BeP5xOy5WVw7lNXI8N8hTg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc86de8b-e33d-47ae-65d5-08db2efc2d73
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 19:48:03.3179
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PmzEM1FnGoes2m7v6gM2YxzH648YoZcnM1PKIazBNUeWEbR252IcKlR2f0H+YPAqFT57POsIFgklGPtF/tFG8A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6464
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=743 adultscore=0
- phishscore=0 suspectscore=0 malwarescore=0 spamscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303270161
-X-Proofpoint-ORIG-GUID: twAXGF4kunHyRYimV4jBQ9XtPMiSeutj
-X-Proofpoint-GUID: twAXGF4kunHyRYimV4jBQ9XtPMiSeutj
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+References: <20230323140942.v8.1.I9b4e4818bab450657b19cda3497d363c9baa616e@changeid>
+ <ZCBpBs3i4+RCv5SI@corigine.com>
+In-Reply-To: <ZCBpBs3i4+RCv5SI@corigine.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Mon, 27 Mar 2023 12:48:29 -0700
+Message-ID: <CABBYNZ+Hjr=Feu2c-Vf1dfH1TKEu_6TnPTzmcLNjJWTF61MBAg@mail.gmail.com>
+Subject: Re: [PATCH v8 1/4] Bluetooth: Add support for hci devcoredump
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Manish Mandlik <mmandlik@google.com>, marcel@holtmann.org,
+        linux-bluetooth@vger.kernel.org,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -172,25 +78,374 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andrew Morton <akpm@linux-foundation.org> [230327 15:35]:
-> On Mon, 27 Mar 2023 14:55:24 -0400 "Liam R. Howlett" <Liam.Howlett@oracle.com> wrote:
-> 
-> > These patches have been in -next since next-20230301, and have received
-> > intensive testing in Android as part of the RCU page fault patchset.
-> > They were also sent as part of the "Per-VMA locks" v4 patch series.
-> > Patches 1 to 7 are bug fixes for RCU mode of the tree and patch 8 enables
-> > RCU mode for the tree.
-> 
-> What's happening here?  I assume you've decided that the first 8
-> patches of the "Per-VMA locks v4" series should be fast-tracked into
-> 6.3-rcX and backported?  And we retain the rest of that series for
-> 6.4-rc1?
+Hi Manish, Simon,
 
-Yes, they need to be backported and fast tracked to fix the issue syzbot
-found.
+On Sun, Mar 26, 2023 at 8:47=E2=80=AFAM Simon Horman <simon.horman@corigine=
+.com> wrote:
+>
+> On Thu, Mar 23, 2023 at 02:10:15PM -0700, Manish Mandlik wrote:
+> > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> >
+> > Add devcoredump APIs to hci core so that drivers only have to provide
+> > the dump skbs instead of managing the synchronization and timeouts.
+> >
+> > The devcoredump APIs should be used in the following manner:
+> >  - hci_devcoredump_init is called to allocate the dump.
+> >  - hci_devcoredump_append is called to append any skbs with dump data
+> >    OR hci_devcoredump_append_pattern is called to insert a pattern.
+> >  - hci_devcoredump_complete is called when all dump packets have been
+> >    sent OR hci_devcoredump_abort is called to indicate an error and
+> >    cancel an ongoing dump collection.
+> >
+> > The high level APIs just prepare some skbs with the appropriate data an=
+d
+> > queue it for the dump to process. Packets part of the crashdump can be
+> > intercepted in the driver in interrupt context and forwarded directly t=
+o
+> > the devcoredump APIs.
+> >
+> > Internally, there are 5 states for the dump: idle, active, complete,
+> > abort and timeout. A devcoredump will only be in active state after it
+> > has been initialized. Once active, it accepts data to be appended,
+> > patterns to be inserted (i.e. memset) and a completion event or an abor=
+t
+> > event to generate a devcoredump. The timeout is initialized at the same
+> > time the dump is initialized (defaulting to 10s) and will be cleared
+> > either when the timeout occurs or the dump is complete or aborted.
+> >
+> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > Signed-off-by: Manish Mandlik <mmandlik@google.com>
+> > Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+>
+> ...
+>
+> > +static int hci_devcoredump_update_hdr_state(char *buf, size_t size, in=
+t state)
+> > +{
+> > +     int len =3D 0;
+> > +
+> > +     if (!buf)
+> > +             return 0;
+> > +
+> > +     len =3D snprintf(buf, size, "Bluetooth devcoredump\nState: %d\n",=
+ state);
+>
+> The snprintf documentation says:
+>
+>  * The return value is the number of characters which would be
+>  * generated for the given input, excluding the trailing null,
+>  * as per ISO C99.  If the return is greater than or equal to
+>  * @size, the resulting string is truncated.
+>
+> While the scnprintf documentation says:
+>
+>  * The return value is the number of characters written into @buf not inc=
+luding
+>  * the trailing '\0'. If @size is =3D=3D 0 the function returns 0.
+>
+> As the return value us used to determine how many bytes to put to
+> an skb, you might want scnprintf(), or a check on the value of len here.
 
-> 
-> Patch [3/8] hasn't come through to me, to linux-mm or to linux-kernel.
++1
 
-Should arrive shortly, I received it from one of the ML.
+> > +
+> > +     return len + 1; /* snprintf adds \0 at the end upon state rewrite=
+ */
+> > +}
+> > +
+> > +/* Call with hci_dev_lock only. */
+> > +static int hci_devcoredump_update_state(struct hci_dev *hdev, int stat=
+e)
+> > +{
+> > +     hdev->dump.state =3D state;
+> > +
+> > +     return hci_devcoredump_update_hdr_state(hdev->dump.head,
+> > +                                             hdev->dump.alloc_size, st=
+ate);
+> > +}
+>
+> ...
+>
+> > +/* Call with hci_dev_lock only. */
+> > +static int hci_devcoredump_prepare(struct hci_dev *hdev, u32 dump_size=
+)
+> > +{
+> > +     struct sk_buff *skb =3D NULL;
+> > +     int dump_hdr_size;
+> > +     int err =3D 0;
+> > +
+> > +     skb =3D alloc_skb(MAX_DEVCOREDUMP_HDR_SIZE, GFP_ATOMIC);
+> > +     if (!skb) {
+> > +             bt_dev_err(hdev, "Failed to allocate devcoredump prepare"=
+);
+>
+> I don't think memory allocation errors need to be logged like this,
+> as they are already logged by the core.
+>
+> Please run checkpatch, which flags this.
 
++1, looks like the CI was already causing warnings about these.
+
+> > +             return -ENOMEM;
+> > +     }
+> > +
+> > +     dump_hdr_size =3D hci_devcoredump_mkheader(hdev, skb);
+> > +
+> > +     if (hci_devcoredump_alloc(hdev, dump_hdr_size + dump_size)) {
+> > +             err =3D -ENOMEM;
+> > +             goto hdr_free;
+> > +     }
+> > +
+> > +     /* Insert the device header */
+> > +     if (!hci_devcoredump_copy(hdev, skb->data, skb->len)) {
+> > +             bt_dev_err(hdev, "Failed to insert header");
+> > +             hci_devcoredump_free(hdev);
+> > +
+> > +             err =3D -ENOMEM;
+> > +             goto hdr_free;
+> > +     }
+> > +
+> > +hdr_free:
+> > +     if (skb)
+>
+> It seems that this condition is always true.
+> And in any case, kfree_skb can handle a NULL argument.
+
++1
+
+> > +             kfree_skb(skb);
+> > +
+> > +     return err;
+> > +}
+>
+> ...
+>
+> > +void hci_devcoredump_rx(struct work_struct *work)
+> > +{
+> > +     struct hci_dev *hdev =3D container_of(work, struct hci_dev, dump.=
+dump_rx);
+> > +     struct sk_buff *skb;
+> > +     struct hci_devcoredump_skb_pattern *pattern;
+> > +     u32 dump_size;
+> > +     int start_state;
+> > +
+> > +#define DBG_UNEXPECTED_STATE() \
+> > +             bt_dev_dbg(hdev, \
+> > +                        "Unexpected packet (%d) for state (%d). ", \
+> > +                        hci_dmp_cb(skb)->pkt_type, hdev->dump.state)
+>
+> nit: indentation seems excessive in above 3 lines.
+>
+> > +
+> > +     while ((skb =3D skb_dequeue(&hdev->dump.dump_q))) {
+> > +             hci_dev_lock(hdev);
+> > +             start_state =3D hdev->dump.state;
+> > +
+> > +             switch (hci_dmp_cb(skb)->pkt_type) {
+> > +             case HCI_DEVCOREDUMP_PKT_INIT:
+> > +                     if (hdev->dump.state !=3D HCI_DEVCOREDUMP_IDLE) {
+> > +                             DBG_UNEXPECTED_STATE();
+> > +                             goto loop_continue;
+>
+> I'm probably missing something terribly obvious.
+> But can the need for the loop_continue label be avoided by using 'break;'=
+ ?
+
+Yeah, in fact I think Id use dedicated functions for each state.
+
+> > +                     }
+> > +
+> > +                     if (skb->len !=3D sizeof(dump_size)) {
+> > +                             bt_dev_dbg(hdev, "Invalid dump init pkt")=
+;
+> > +                             goto loop_continue;
+> > +                     }
+> > +
+> > +                     dump_size =3D *((u32 *)skb->data);
+> > +                     if (!dump_size) {
+> > +                             bt_dev_err(hdev, "Zero size dump init pkt=
+");
+> > +                             goto loop_continue;
+> > +                     }
+
+I'd replace the code above with skb_pull_data, we could perhaps start
+adding something like skb_pull_u32 to make it simpler though.
+
+> > +                     if (hci_devcoredump_prepare(hdev, dump_size)) {
+> > +                             bt_dev_err(hdev, "Failed to prepare for d=
+ump");
+> > +                             goto loop_continue;
+> > +                     }
+> > +
+> > +                     hci_devcoredump_update_state(hdev,
+> > +                                                  HCI_DEVCOREDUMP_ACTI=
+VE);
+> > +                     queue_delayed_work(hdev->workqueue,
+> > +                                        &hdev->dump.dump_timeout,
+> > +                                        DEVCOREDUMP_TIMEOUT);
+> > +                     break;
+> > +
+> > +             case HCI_DEVCOREDUMP_PKT_SKB:
+> > +                     if (hdev->dump.state !=3D HCI_DEVCOREDUMP_ACTIVE)=
+ {
+> > +                             DBG_UNEXPECTED_STATE();
+> > +                             goto loop_continue;
+> > +                     }
+> > +
+> > +                     if (!hci_devcoredump_copy(hdev, skb->data, skb->l=
+en))
+> > +                             bt_dev_dbg(hdev, "Failed to insert skb");
+> > +                     break;
+> > +
+> > +             case HCI_DEVCOREDUMP_PKT_PATTERN:
+> > +                     if (hdev->dump.state !=3D HCI_DEVCOREDUMP_ACTIVE)=
+ {
+> > +                             DBG_UNEXPECTED_STATE();
+> > +                             goto loop_continue;
+> > +                     }
+> > +
+> > +                     if (skb->len !=3D sizeof(*pattern)) {
+> > +                             bt_dev_dbg(hdev, "Invalid pattern skb");
+> > +                             goto loop_continue;
+> > +                     }
+> > +
+> > +                     pattern =3D (void *)skb->data;
+> > +
+> > +                     if (!hci_devcoredump_memset(hdev, pattern->patter=
+n,
+> > +                                                 pattern->len))
+> > +                             bt_dev_dbg(hdev, "Failed to set pattern")=
+;
+> > +                     break;
+> > +
+> > +             case HCI_DEVCOREDUMP_PKT_COMPLETE:
+> > +                     if (hdev->dump.state !=3D HCI_DEVCOREDUMP_ACTIVE)=
+ {
+> > +                             DBG_UNEXPECTED_STATE();
+> > +                             goto loop_continue;
+> > +                     }
+> > +
+> > +                     hci_devcoredump_update_state(hdev,
+> > +                                                  HCI_DEVCOREDUMP_DONE=
+);
+> > +                     dump_size =3D hdev->dump.tail - hdev->dump.head;
+> > +
+> > +                     bt_dev_info(hdev,
+> > +                                 "Devcoredump complete with size %u "
+> > +                                 "(expect %zu)",
+>
+> I think it is best practice not to split quoted strings across multiple l=
+ines.
+> Although it leads to long lines (which is undesirable)
+> keeping the string on one line aids searching the code (with grep).
+>
+> checkpatch warns about this.
+
+Well this should be an info to begin with and I'd probably add a
+bt_dev_dbg at the beginning printing like "%s -> %s", old_state,
+new_state, which makes things a lot simpler.
+
+> > +                                 dump_size, hdev->dump.alloc_size);
+> > +
+> > +                     dev_coredumpv(&hdev->dev, hdev->dump.head, dump_s=
+ize,
+> > +                                   GFP_KERNEL);
+> > +                     break;
+> > +
+> > +             case HCI_DEVCOREDUMP_PKT_ABORT:
+> > +                     if (hdev->dump.state !=3D HCI_DEVCOREDUMP_ACTIVE)=
+ {
+> > +                             DBG_UNEXPECTED_STATE();
+> > +                             goto loop_continue;
+> > +                     }
+> > +
+> > +                     hci_devcoredump_update_state(hdev,
+> > +                                                  HCI_DEVCOREDUMP_ABOR=
+T);
+> > +                     dump_size =3D hdev->dump.tail - hdev->dump.head;
+> > +
+> > +                     bt_dev_info(hdev,
+> > +                                 "Devcoredump aborted with size %u "
+> > +                                 "(expect %zu)",
+> > +                                 dump_size, hdev->dump.alloc_size);
+
+Ditto, lets log the old state and new state using bt_dev_dbg.
+
+> > +                     /* Emit a devcoredump with the available data */
+> > +                     dev_coredumpv(&hdev->dev, hdev->dump.head, dump_s=
+ize,
+> > +                                   GFP_KERNEL);
+> > +                     break;
+> > +
+> > +             default:
+> > +                     bt_dev_dbg(hdev,
+> > +                                "Unknown packet (%d) for state (%d). "=
+,
+> > +                                hci_dmp_cb(skb)->pkt_type, hdev->dump.=
+state);
+> > +                     break;
+> > +             }
+> > +
+> > +loop_continue:
+> > +             kfree_skb(skb);
+> > +             hci_dev_unlock(hdev);
+> > +
+> > +             if (start_state !=3D hdev->dump.state)
+> > +                     hci_devcoredump_notify(hdev, hdev->dump.state);
+> > +
+> > +             hci_dev_lock(hdev);
+> > +             if (hdev->dump.state =3D=3D HCI_DEVCOREDUMP_DONE ||
+> > +                 hdev->dump.state =3D=3D HCI_DEVCOREDUMP_ABORT)
+> > +                     hci_devcoredump_reset(hdev);
+> > +             hci_dev_unlock(hdev);
+
+Don't think this is much better than calling hci_devcoredump_reset at
+the respective state handler instead since you had to lock again, or
+is this because hci_devcoredump_notifty? I'd probably document if that
+is the case, otherwise I'd move it to be called by
+hci_devcoredump_update_state.
+
+> > +     }
+> > +}
+> > +EXPORT_SYMBOL(hci_devcoredump_rx);
+>
+> ...
+>
+> > +static inline bool hci_devcoredump_enabled(struct hci_dev *hdev)
+> > +{
+> > +     return hdev->dump.supported;
+> > +}
+> > +
+> > +int hci_devcoredump_init(struct hci_dev *hdev, u32 dmp_size)
+> > +{
+> > +     struct sk_buff *skb =3D NULL;
+>
+> nit: I don't think it is necessary to initialise skb here.
+>      Likewise elsewhere in this patch.
+>
+> > +
+> > +     if (!hci_devcoredump_enabled(hdev))
+> > +             return -EOPNOTSUPP;
+> > +
+> > +     skb =3D alloc_skb(sizeof(dmp_size), GFP_ATOMIC);
+> > +     if (!skb) {
+> > +             bt_dev_err(hdev, "Failed to allocate devcoredump init");
+> > +             return -ENOMEM;
+> > +     }
+> > +
+> > +     hci_dmp_cb(skb)->pkt_type =3D HCI_DEVCOREDUMP_PKT_INIT;
+> > +     skb_put_data(skb, &dmp_size, sizeof(dmp_size));
+> > +
+> > +     skb_queue_tail(&hdev->dump.dump_q, skb);
+> > +     queue_work(hdev->workqueue, &hdev->dump.dump_rx);
+> > +
+> > +     return 0;
+> > +}
+> > +EXPORT_SYMBOL(hci_devcoredump_init);
+
+Since it looks like we are going to need another round, could you
+please use hci_devcd_ as prefix instead?
+
+
+--=20
+Luiz Augusto von Dentz
