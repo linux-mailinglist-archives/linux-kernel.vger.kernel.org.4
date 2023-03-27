@@ -2,98 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616706CB00F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86F86CB013
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 22:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjC0Ukn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 16:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
+        id S230380AbjC0UlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 16:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC0Ukk (ORCPT
+        with ESMTP id S229456AbjC0UlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 16:40:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4485F1719;
-        Mon, 27 Mar 2023 13:40:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 27 Mar 2023 16:41:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87C310D1;
+        Mon, 27 Mar 2023 13:41:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DE16C1FE22;
-        Mon, 27 Mar 2023 20:40:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679949637; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IgIrKz0UNBCn4PDiHW0xzrI6MTRBYSXxkJu/zMHUvKg=;
-        b=aTyTas8xnndKQ+7rRpt7+uxegjLQTBesNPvbKnCfTN5qLbE6ycmNqY7poDyjI3gNMFpEEc
-        q9Tr3ZJm7OP//76yYW4qy6Urq56r/oM+X/rPvVywvwdlCrSja9e+wB0YDmj0DVFfr2QMqj
-        TEEofls4ExVM5wz3WIr2NkNvgkrZNJI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C06BA13482;
-        Mon, 27 Mar 2023 20:40:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id PIgTLEX/IWSFNAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 27 Mar 2023 20:40:37 +0000
-Date:   Mon, 27 Mar 2023 22:40:37 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Florian Schmidt <flosch@nutanix.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC] memcg v1: provide read access to memory.pressure_level
-Message-ID: <ZCH/RVlh1M6DRXaU@dhcp22.suse.cz>
-References: <20230322142525.162469-1-flosch@nutanix.com>
- <20230324150350.fu7itbqqvtjmyf3s@blackpad>
- <6f4420d0-2f86-7294-01e1-6806ef7e4686@nutanix.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82A2B614B0;
+        Mon, 27 Mar 2023 20:41:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE63C433EF;
+        Mon, 27 Mar 2023 20:41:07 +0000 (UTC)
+Date:   Mon, 27 Mar 2023 16:41:06 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/ftrace: Improve integration with kselftest
+ runner
+Message-ID: <20230327164106.0d1270db@gandalf.local.home>
+In-Reply-To: <1e2b5a9e-9e92-6394-74fd-18dae2ed0712@linuxfoundation.org>
+References: <20230302-ftrace-kselftest-ktap-v1-1-a84a0765b7ad@kernel.org>
+        <20230319232438.786c46feaf9bb7ddcb78a731@kernel.org>
+        <1e2b5a9e-9e92-6394-74fd-18dae2ed0712@linuxfoundation.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6f4420d0-2f86-7294-01e1-6806ef7e4686@nutanix.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 27-03-23 14:59:37, Florian Schmidt wrote:
-> Hi Michal,
-> 
-> On 24/03/2023 15:03, Michal Koutný wrote:
-> > On Wed, Mar 22, 2023 at 02:25:25PM +0000, Florian Schmidt <flosch@nutanix.com> wrote:
-[...]
-> > > (b) would you be interested to take this patch, or is it too niche a fix
-> > >      for a legacy subsystem?
-> > 
-> > I'd rather not extend this "unique way" with additionally unique dummy
-> > helpers.
-> 
-> I understand that this is all code that has no modern user any more, which
-> is why I tried to keep the fix as self-contained as possible.
-> Another option would be to have a special handler in cgroup_file_mode(), but
-> that feels a lot klunkier to me, and leaks a v1-specific behaviour into the
-> shared cgroup code.
+On Mon, 27 Mar 2023 13:43:15 -0600
+Shuah Khan <skhan@linuxfoundation.org> wrote:
 
-Yes, this is effectivelly a deprecated interface but I do agree that we
-shouldn't really make life of users more complicated than necessary. If
-the simplest solution to address this is to provide an empty callback
-then be it. I am not sure but I do not think there are other cgroup
-interfaces to warrant a more generic solution.
+> Steve,
+> 
+> Okay to pick this up for the Linux 6.4?
 
--- 
-Michal Hocko
-SUSE Labs
+Fine by me.
+
+Thanks Shuah.
+
+-- Steve
