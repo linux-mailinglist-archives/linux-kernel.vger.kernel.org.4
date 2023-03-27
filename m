@@ -2,92 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88536CA207
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8AA6CA210
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbjC0LEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 07:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
+        id S232310AbjC0LFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 07:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231921AbjC0LEp (ORCPT
+        with ESMTP id S231737AbjC0LFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 07:04:45 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE84940CD
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:04:44 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id d6-20020a92d786000000b00316f1737173so5715151iln.16
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:04:44 -0700 (PDT)
+        Mon, 27 Mar 2023 07:05:48 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417974214
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:05:46 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id q7-20020a05600c46c700b003ef6e809574so1685655wmo.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:05:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679915144;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ehsWNKlF0rOfJEhYzl+s3Qt/MT/o/tgkdKM9etceMxA=;
+        b=b/cIc4MbvLRHtWGN8L21g5I7bfjRqRPmXfvJ5KTWHCnLw8UXIlmBZHx74R2EuC41SX
+         BU5/k7qgGe6KTX+mOQSZgmSUY8qN3XV/kOsgbfhCnkjwOTv8O/s6iis7WFXDksbsOThe
+         NpwlLU3jAYgz9qCzwNT0MyJwDc2VzbNbi2EyxZZsgCbYg2dzWwEG7H/2BtafYrWZWUir
+         /9L60TnHoUgdSiwNcoZrgLf2VSMmuldh0VgSII5pck847xYccV2a5EC2mviciUa9U2NR
+         pmYtCfK4qoINZoy1IbtKBZo/d67bkov1ndzKao8Qv3edhm1vAn5DwIpxLLTioKG/q9IH
+         E8Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679915084;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=emt1ULZZ6W4mFF6ss+84fHuus1j7XUjDPCWHdXcHyD0=;
-        b=L8R/Xy10WJoFGmdnlB24T6TMkIfhy41qR+tJhwUMwk1AdOVLlwblzjhHPCV4So5Hd3
-         CAEd6f3UygnCG2d0e8ET7S5a1o7NrisgfBx9qtlepSToqRgz0I+o1sBd9Pxflo92WzPG
-         3BMsP4nYmZI4nuhhTO86p7rDhCmGluO0CqOr2dTMlKzEDv0HxGcoHnWNUHaioI5tiZkd
-         jA6Mg0LLT0J3BLvLVenxQFwGohIVpm16fNFd0nc3X7zZDV80ogLixBNm91+v/yy21x06
-         WGM4Ht9M2htXQUloia74NieaNRkUTKFQ5QsFgnpDoUhO87mLNWU1KTP8Ww057fbg+9ls
-         H0/w==
-X-Gm-Message-State: AO0yUKUf6pynApGrj5HDTV1Jee64kd2frj56O/FfAk0aga7vf0cPQzqN
-        D3M/O00q2ketaGVZuMS6XXKI+6yYk24PUD4HGpWrVN+VqXrtio8=
-X-Google-Smtp-Source: AK7set9ef5v1L+0zGEB25NhsZ+smgcx18EiFi22wPnmmYg29FQ9HKVW367CjsAhbEl2DGP1ms4/eD8dMf3guftxDHdcC0V1lRRBi
+        d=1e100.net; s=20210112; t=1679915144;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ehsWNKlF0rOfJEhYzl+s3Qt/MT/o/tgkdKM9etceMxA=;
+        b=dGoOEB0Vb29ez60wbYfEp6TuERB4rAGFGmpUjgMccuLVp9qk49B79QTFVi01WVHLFQ
+         nZoh4LhZDuNAEVE+Qk+ZZnG+iH18A0W+mzYHTqWWe6gqqzu9uZWSTEZL5rtAPmmEQDc2
+         csfing1RIy6lOeatVQStrroHJdGVPzwhj3cBuFmB5R2zHEgxhq8yYw0EFoPn6qWcvpm1
+         Qk9xP5uBeXTrAJt0GMrkmJ7Oj4dk/0328T3d9RkTdRuCEb2pEIZ/r244s5f7Cdz0Aesk
+         yrkSL+IBGgLj1YuRlZOXfnOw9ILMKE3v60UFBNHdIcNejPYsEbRk5VEo800YSXx75nnV
+         XePg==
+X-Gm-Message-State: AO0yUKV+ggoa1jVgwIU3EQ9mjZ49Mn7I2LvXYFmrbBT4kOxAg4hyMK8d
+        VBRBhoh1QG2ajXkiWeC1lO1js1WdGZAvbwjopqbwLw==
+X-Google-Smtp-Source: AK7set8A0Txc1zlj45/dH5R295Jf5SnDiewPZOSCHPNeQ+47JZZhHBFGkkabaqFtS4EbNLIYmqVtZmN7+bFxB6wTMiU=
+X-Received: by 2002:a7b:c3c7:0:b0:3ed:fddf:b771 with SMTP id
+ t7-20020a7bc3c7000000b003edfddfb771mr8982017wmj.12.1679915144600; Mon, 27 Mar
+ 2023 04:05:44 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:b18e:0:b0:3e0:6875:f5e2 with SMTP id
- t14-20020a02b18e000000b003e06875f5e2mr4500533jah.6.1679915084091; Mon, 27 Mar
- 2023 04:04:44 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 04:04:44 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d71d1c05f7dfb548@google.com>
-Subject: [syzbot] Monthly net report
-From:   syzbot <syzbot+list46777706270de0980b12@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20230327034149.942-1-thunder.leizhen@huawei.com>
+In-Reply-To: <20230327034149.942-1-thunder.leizhen@huawei.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 27 Mar 2023 13:05:07 +0200
+Message-ID: <CAG_fn=VeP9HbpwEY3wYCrb7cMaLbX7-VFxPdM9zN1dSQ09A8Mw@mail.gmail.com>
+Subject: Re: [PATCH] kmsan: fix a stale comment in kmsan_save_stack_with_flags()
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello net maintainers/developers,
+On Mon, Mar 27, 2023 at 5:45=E2=80=AFAM Zhen Lei <thunder.leizhen@huawei.co=
+m> wrote:
+>
+> After commit 446ec83805dd ("mm/page_alloc: use might_alloc()") and
+> commit 84172f4bb752 ("mm/page_alloc: combine __alloc_pages and
+> __alloc_pages_nodemask"), the comment is no longer accurate.
+> Flag '__GFP_DIRECT_RECLAIM' is clear enough on its own, so remove the
+> comment rather than update it.
+>
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
 
-This is a 30-day syzbot report for the net subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/net
+>
+>         nr_entries =3D stack_trace_save(entries, KMSAN_STACK_DEPTH, 0);
+>
+> -       /* Don't sleep (see might_sleep_if() in __alloc_pages_nodemask())=
+. */
+> +       /* Don't sleep. */
 
-During the period, 22 new issues were detected and 11 were fixed.
-In total, 178 issues are still open and 1240 have been fixed so far.
-
-Some of the still happening issues:
-
-Crashes Repro Title
-25343   Yes   BUG: MAX_LOCKDEP_CHAINS too low! (3)
-              https://syzkaller.appspot.com/bug?extid=8a249628ae32ea7de3a2
-6203    Yes   WARNING in dev_watchdog (2)
-              https://syzkaller.appspot.com/bug?extid=d55372214aff0faa1f1f
-3609    Yes   KMSAN: uninit-value in eth_type_trans (2)
-              https://syzkaller.appspot.com/bug?extid=0901d0cc75c3d716a3a3
-2575    No    BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low! (2)
-              https://syzkaller.appspot.com/bug?extid=9bbbacfbf1e04d5221f7
-1226    Yes   KMSAN: uninit-value in mii_nway_restart
-              https://syzkaller.appspot.com/bug?extid=1f53a30781af65d2c955
-413     Yes   INFO: task hung in rtnetlink_rcv_msg
-              https://syzkaller.appspot.com/bug?extid=8218a8a0ff60c19b8eae
-322     Yes   KMSAN: uninit-value in IP6_ECN_decapsulate
-              https://syzkaller.appspot.com/bug?extid=bf7e6250c7ce248f3ec9
-275     Yes   WARNING in kcm_write_msgs
-              https://syzkaller.appspot.com/bug?extid=52624bdfbf2746d37d70
-274     No    KMSAN: uninit-value in __hw_addr_add_ex
-              https://syzkaller.appspot.com/bug?extid=cec7816c907e0923fdcc
-255     Yes   KMSAN: uninit-value in ipv6_find_tlv
-              https://syzkaller.appspot.com/bug?extid=8257f4dcef79de670baf
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Thanks for spotting this!
