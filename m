@@ -2,120 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E2B6CA30F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8616CA314
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232638AbjC0MGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
+        id S232478AbjC0MJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbjC0MGh (ORCPT
+        with ESMTP id S232019AbjC0MJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:06:37 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931AF113;
-        Mon, 27 Mar 2023 05:06:35 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PlWfw3rdTz17MBh;
-        Mon, 27 Mar 2023 20:03:20 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Mar 2023 20:06:33 +0800
-Message-ID: <11b2fbb6-ab71-10a4-d2cb-8d115f15f16d@huawei.com>
-Date:   Mon, 27 Mar 2023 20:06:32 +0800
+        Mon, 27 Mar 2023 08:09:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249973A94
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679918911;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=f6OgJqgpSNTTFYSUSudYbvVLpng6GaBH202qHK3zoFk=;
+        b=GRtKQ8ZPIGezvq0f9RP1TxcsJ1sz8zb38pOyP2bCjhVERraEE+Bfww0CY22xi7TzmZcndd
+        toT2wT6HUwdZbTLD4dvw8OLAyfNkLSAFft762oSt1pGyrv9xAeEuBcQgYf/YkH9CJvA0bb
+        tNaC1lp5QdNsQxMVDlKpg3ya/y57w8c=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-84-I2WpT1nbO1Oy0aDp0Vk7qA-1; Mon, 27 Mar 2023 08:08:27 -0400
+X-MC-Unique: I2WpT1nbO1Oy0aDp0Vk7qA-1
+Received: by mail-qt1-f197.google.com with SMTP id n10-20020a05622a11ca00b003e4e30c6c98so3123546qtk.19
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 05:08:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679918907;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f6OgJqgpSNTTFYSUSudYbvVLpng6GaBH202qHK3zoFk=;
+        b=cOjRRvBxg6WtEopH/JhshzXV/QmH7ll4IgQlTwwwtohIAmU927P0OrZzMP6X4PsP+L
+         Mym9dkIrHwmATUHQ47eZ1TyeKUNU4UcY+BqY+Yi/kq/9wBXJ/4nGTmK+HMd9pXiksVcM
+         5D8aP0hElMkAuf62mLicbXQPTa8neI+GsPEogTRWIsw7+Xh70fODcfXHyattnnyb1CZj
+         XCUdfry2OdtVRKWH35ZF9UMKlhGy/ad8tss3sTsQ0sib1O1xZFAnlLHPMa90k8Uy9stR
+         OhlJVHw+90GKiOIpDeMM3jPVNUu7gMWZL9pJmfGbRbsU+U8CTLIkkIUBJmTiArCEJj/W
+         znWg==
+X-Gm-Message-State: AO0yUKXdpzzVFr268fp48pjdQlmIkkEjJgYJ6NBPpxXMQTh4eXnkGar6
+        wrLKEfoN/NTHmix8ANK6CH9H1mvlnQB1NtrjhI4nuUmsEpO0He2fvXjDYsY7rkz7RjeodUjCrun
+        IQNaTM+9mTFoTtvpmmCP0Dr62
+X-Received: by 2002:ac8:574e:0:b0:3d6:d1d3:eeb8 with SMTP id 14-20020ac8574e000000b003d6d1d3eeb8mr20398694qtx.11.1679918907443;
+        Mon, 27 Mar 2023 05:08:27 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YyfOhpAFIIn4S3oaK+SRWKemSRvTcR5bSBOqlG0NAjA410/ztoUYY6RVRQVXHBhcaeImdxww==
+X-Received: by 2002:ac8:574e:0:b0:3d6:d1d3:eeb8 with SMTP id 14-20020ac8574e000000b003d6d1d3eeb8mr20398655qtx.11.1679918907195;
+        Mon, 27 Mar 2023 05:08:27 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id bn29-20020a05620a2add00b007486052d731sm1396515qkb.10.2023.03.27.05.08.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 05:08:26 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     jic23@kernel.org, lars@metafoo.de, nathan@kernel.org,
+        ndesaulniers@google.com, andriy.shevchenko@linux.intel.com,
+        u.kleine-koenig@pengutronix.de
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] iio: tsl2772: remove unused prox_diode_mask variable
+Date:   Mon, 27 Mar 2023 08:08:23 -0400
+Message-Id: <20230327120823.1369700-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2 1/2] ext4: turning quotas off if mount failed after
- enable quotas
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <yukuai3@huawei.com>, <stable@kernel.org>,
-        Baokun Li <libaokun1@huawei.com>
-References: <20230327022703.576857-1-libaokun1@huawei.com>
- <20230327022703.576857-2-libaokun1@huawei.com>
- <20230327090506.a3notb7a2zgz4hue@quack3>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230327090506.a3notb7a2zgz4hue@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/27 17:05, Jan Kara wrote:
-> On Mon 27-03-23 10:27:02, Baokun Li wrote:
->> Yi found during a review of the patch "ext4: don't BUG on inconsistent
->> journal feature" that when ext4_mark_recovery_complete() returns an error
->> value, the error handling path does not turn off the enabled quotas,
->> which triggers the following kmemleak:
->>
->> ================================================================
->> unreferenced object 0xffff8cf68678e7c0 (size 64):
->> comm "mount", pid 746, jiffies 4294871231 (age 11.540s)
->> hex dump (first 32 bytes):
->> 00 90 ef 82 f6 8c ff ff 00 00 00 00 41 01 00 00  ............A...
->> c7 00 00 00 bd 00 00 00 0a 00 00 00 48 00 00 00  ............H...
->> backtrace:
->> [<00000000c561ef24>] __kmem_cache_alloc_node+0x4d4/0x880
->> [<00000000d4e621d7>] kmalloc_trace+0x39/0x140
->> [<00000000837eee74>] v2_read_file_info+0x18a/0x3a0
->> [<0000000088f6c877>] dquot_load_quota_sb+0x2ed/0x770
->> [<00000000340a4782>] dquot_load_quota_inode+0xc6/0x1c0
->> [<0000000089a18bd5>] ext4_enable_quotas+0x17e/0x3a0 [ext4]
->> [<000000003a0268fa>] __ext4_fill_super+0x3448/0x3910 [ext4]
->> [<00000000b0f2a8a8>] ext4_fill_super+0x13d/0x340 [ext4]
->> [<000000004a9489c4>] get_tree_bdev+0x1dc/0x370
->> [<000000006e723bf1>] ext4_get_tree+0x1d/0x30 [ext4]
->> [<00000000c7cb663d>] vfs_get_tree+0x31/0x160
->> [<00000000320e1bed>] do_new_mount+0x1d5/0x480
->> [<00000000c074654c>] path_mount+0x22e/0xbe0
->> [<0000000003e97a8e>] do_mount+0x95/0xc0
->> [<000000002f3d3736>] __x64_sys_mount+0xc4/0x160
->> [<0000000027d2140c>] do_syscall_64+0x3f/0x90
->> ================================================================
->>
->> To solve this problem, we add a "failed_mount10" tag, and call
->> ext4_quota_off_umount() in this tag to release the enabled qoutas.
->>
->> Fixes: 11215630aada ("ext4: don't BUG on inconsistent journal feature")
->> Cc: stable@kernel.org
->> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
->> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> Looks good. Just one comment:
->
->> +failed_mount10:
->> +#ifdef CONFIG_QUOTA
->> +	ext4_quota_off_umount(sb);
->>   failed_mount9:
->> +#endif  /* CONFIG_QUOTA */
-> How about dealing with this using __maybe_unused attribute instead. Like:
->
-> failed_mount9: __maybe_unused
->
-> That would be much easier to read...
->
-> 								Honza
+clang with W=1 reports
+drivers/iio/light/tsl2772.c:576:24: error: variable
+  'prox_diode_mask' set but not used [-Werror,-Wunused-but-set-variable]
+        int i, ret, num_leds, prox_diode_mask;
+                              ^
+This variable is not used so remove it.
 
-Indeed!
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/iio/light/tsl2772.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-Thank you very much for the review!
-
-I will send a patch V3 with the changes suggested by you.
+diff --git a/drivers/iio/light/tsl2772.c b/drivers/iio/light/tsl2772.c
+index ad50baa0202c..c090405c2358 100644
+--- a/drivers/iio/light/tsl2772.c
++++ b/drivers/iio/light/tsl2772.c
+@@ -573,7 +573,7 @@ static int tsl2772_read_prox_led_current(struct tsl2772_chip *chip)
+ static int tsl2772_read_prox_diodes(struct tsl2772_chip *chip)
+ {
+ 	struct device *dev = &chip->client->dev;
+-	int i, ret, num_leds, prox_diode_mask;
++	int i, ret, num_leds;
+ 	u32 leds[TSL2772_MAX_PROX_LEDS];
+ 
+ 	ret = device_property_count_u32(dev, "amstaos,proximity-diodes");
+@@ -590,13 +590,8 @@ static int tsl2772_read_prox_diodes(struct tsl2772_chip *chip)
+ 		return ret;
+ 	}
+ 
+-	prox_diode_mask = 0;
+ 	for (i = 0; i < num_leds; i++) {
+-		if (leds[i] == 0)
+-			prox_diode_mask |= TSL2772_DIODE0;
+-		else if (leds[i] == 1)
+-			prox_diode_mask |= TSL2772_DIODE1;
+-		else {
++		if (leds[i] > 1) {
+ 			dev_err(dev, "Invalid value %d in amstaos,proximity-diodes.\n", leds[i]);
+ 			return -EINVAL;
+ 		}
 -- 
-With Best Regards,
-Baokun Li
-.
+2.27.0
+
