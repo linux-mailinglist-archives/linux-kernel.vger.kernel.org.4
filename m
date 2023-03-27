@@ -2,97 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38586C9E17
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D00306C9E19
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbjC0Iij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56702 "EHLO
+        id S233363AbjC0IjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233312AbjC0IiU (ORCPT
+        with ESMTP id S233165AbjC0Iin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:38:20 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C23A5D2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=aVuvyhKAC3iN4VeKP3wIsTfoGjND
-        VWqpZy+lP5v9nwg=; b=LBAqKoHbd85YMHIc+gavwB2Zv/he9yP5vn2JxkwA76Tg
-        +sZAVRMv2DX7xp120nCvawyFcskviiSPpyIF2HDt884shCM/koeTOsAjiFqJiozS
-        V3PuR9kfonZb3uroczdskE869m4pFN00vJf6S4cCpqY0A2uz7R8vz0dVVUVPluQ=
-Received: (qmail 3064472 invoked from network); 27 Mar 2023 10:32:22 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Mar 2023 10:32:22 +0200
-X-UD-Smtp-Session: l3s3148p1@iKzzlN33lrAujnv6
-Date:   Mon, 27 Mar 2023 10:32:22 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     netdev@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "sh_eth: remove open coded netif_running()"
-Message-ID: <ZCFUljNn2oclk3nK@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        linux-kernel@vger.kernel.org
-References: <20230327081933.5460-1-wsa+renesas@sang-engineering.com>
+        Mon, 27 Mar 2023 04:38:43 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1802135A3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:33:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679905983; x=1711441983;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rQkQFFARodZAWLn6M7t7NWjKx+Qr4ZsrnIS1liy4gUk=;
+  b=SGRv3NZTFTzpgECatpNWjfmNsym27hESd59CErN6hl5r7D5ijCIdPd1Y
+   9GgPzA5FkwICkCtOkf8PT8ncT4lltjr0vSROVKE0d62vuC5fzTRJkx+3S
+   wG55LFeSVkq/wTNMmQGEdSDbH8dYoR6wy/2ASP+DYUOV8afVYWTspYRPU
+   XJidw8wN2YKLcoLHnF7wFAMOkBeViH2PY0bkLERDUhOzeu9tftXXmHvrY
+   w+LjeZCfalKZmEBStW8Y1+R+DWpNtEQxZQXVVv9ErBnICVeHEKhCSu31h
+   ncu9rzjF29cjdoGySwgwRkKiIupacAlz81bKmUyPmanXJX+Q48WaQDi1w
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="338932284"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="338932284"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 01:33:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="713790151"
+X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
+   d="scan'208";a="713790151"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.25.71]) ([10.213.25.71])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 01:32:59 -0700
+Message-ID: <c78389ca-ca0d-da13-7471-21aff6cc346c@intel.com>
+Date:   Mon, 27 Mar 2023 10:32:57 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8eJdQj0TMrNOHpom"
-Content-Disposition: inline
-In-Reply-To: <20230327081933.5460-1-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/bridge: it6505: Add range and selector_reg
+To:     Hsin-Yi Wang <hsinyi@chromium.org>, Robert Foss <rfoss@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        kenneth.hung@ite.corp-partner.google.com
+References: <20230327044804.3657551-1-hsinyi@chromium.org>
+Content-Language: en-US
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20230327044804.3657551-1-hsinyi@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 27.03.2023 06:48, Hsin-Yi Wang wrote:
+> There are 2 banks on it6505, and when writing to different bank,
+> REG_BANK_SEL needs to be set to the targeted bank. The current code set
+> this additionally, which causes a race condition when a process is
+> writing bank 0 registers while another process set the bank to 1. Set
+> ranges in regmap config so the regmap API would handle the bank changes.
+> 
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
 
---8eJdQj0TMrNOHpom
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Looks cool, especially comparing to locking patches.
 
-On Mon, Mar 27, 2023 at 10:19:33AM +0200, Wolfram Sang wrote:
-> This reverts commit ce1fdb065695f49ef6f126d35c1abbfe645d62d5. It turned
-> out this actually introduces a race condition. netif_running() is not a
-> suitable check for get_stats.
->=20
-> Reported-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
 
-Geez, I forgot 'net-next' in $subject. I need to script that somehow...
+Regards
+Andrzej
 
+> ---
+>   drivers/gpu/drm/bridge/ite-it6505.c | 34 +++++++++++++++++++----------
+>   1 file changed, 23 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
+> index bc451b2a77c28..abaf6e23775eb 100644
+> --- a/drivers/gpu/drm/bridge/ite-it6505.c
+> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
+> @@ -258,12 +258,12 @@
+>   #define REG_AUD_INFOFRAM_SUM 0xFB
+>   
+>   /* the following six registers are in bank1 */
+> -#define REG_DRV_0_DB_800_MV 0x7E
+> -#define REG_PRE_0_DB_800_MV 0x7F
+> -#define REG_PRE_3P5_DB_800_MV 0x81
+> -#define REG_SSC_CTRL0 0x88
+> -#define REG_SSC_CTRL1 0x89
+> -#define REG_SSC_CTRL2 0x8A
+> +#define REG_DRV_0_DB_800_MV 0x17E
+> +#define REG_PRE_0_DB_800_MV 0x17F
+> +#define REG_PRE_3P5_DB_800_MV 0x181
+> +#define REG_SSC_CTRL0 0x188
+> +#define REG_SSC_CTRL1 0x189
+> +#define REG_SSC_CTRL2 0x18A
+>   
+>   #define RBR DP_LINK_BW_1_62
+>   #define HBR DP_LINK_BW_2_7
+> @@ -489,7 +489,7 @@ static const struct it6505_audio_sample_rate_map audio_sample_rate_map[] = {
+>   };
+>   
+>   static const struct regmap_range it6505_bridge_volatile_ranges[] = {
+> -	{ .range_min = 0, .range_max = 0xFF },
+> +	{ .range_min = 0, .range_max = 0x1FF },
+>   };
+>   
+>   static const struct regmap_access_table it6505_bridge_volatile_table = {
+> @@ -497,11 +497,27 @@ static const struct regmap_access_table it6505_bridge_volatile_table = {
+>   	.n_yes_ranges = ARRAY_SIZE(it6505_bridge_volatile_ranges),
+>   };
+>   
+> +static const struct regmap_range_cfg it6505_regmap_banks[] = {
+> +	{
+> +		.name = "it6505",
+> +		.range_min = 0x00,
+> +		.range_max = 0x1FF,
+> +		.selector_reg = REG_BANK_SEL,
+> +		.selector_mask = 0x1,
+> +		.selector_shift = 0,
+> +		.window_start = 0x00,
+> +		.window_len = 0x100,
+> +	},
+> +};
+> +
+>   static const struct regmap_config it6505_regmap_config = {
+>   	.reg_bits = 8,
+>   	.val_bits = 8,
+>   	.volatile_table = &it6505_bridge_volatile_table,
+>   	.cache_type = REGCACHE_NONE,
+> +	.ranges = it6505_regmap_banks,
+> +	.num_ranges = ARRAY_SIZE(it6505_regmap_banks),
+> +	.max_register = 0x1FF,
+>   };
+>   
+>   static int it6505_read(struct it6505 *it6505, unsigned int reg_addr)
+> @@ -1267,7 +1283,6 @@ static void it6505_init(struct it6505 *it6505)
+>   	it6505_write(it6505, REG_TIME_STMP_CTRL,
+>   		     EN_SSC_GAT | EN_ENHANCE_VID_STMP | EN_ENHANCE_AUD_STMP);
+>   	it6505_write(it6505, REG_INFOFRAME_CTRL, 0x00);
+> -	it6505_write(it6505, REG_BANK_SEL, 0x01);
+>   	it6505_write(it6505, REG_DRV_0_DB_800_MV,
+>   		     afe_setting_table[it6505->afe_setting][0]);
+>   	it6505_write(it6505, REG_PRE_0_DB_800_MV,
+> @@ -1277,7 +1292,6 @@ static void it6505_init(struct it6505 *it6505)
+>   	it6505_write(it6505, REG_SSC_CTRL0, 0x9E);
+>   	it6505_write(it6505, REG_SSC_CTRL1, 0x1C);
+>   	it6505_write(it6505, REG_SSC_CTRL2, 0x42);
+> -	it6505_write(it6505, REG_BANK_SEL, 0x00);
+>   }
+>   
+>   static void it6505_video_disable(struct it6505 *it6505)
+> @@ -1506,11 +1520,9 @@ static void it6505_setup_ssc(struct it6505 *it6505)
+>   	it6505_set_bits(it6505, REG_TRAIN_CTRL0, SPREAD_AMP_5,
+>   			it6505->enable_ssc ? SPREAD_AMP_5 : 0x00);
+>   	if (it6505->enable_ssc) {
+> -		it6505_write(it6505, REG_BANK_SEL, 0x01);
+>   		it6505_write(it6505, REG_SSC_CTRL0, 0x9E);
+>   		it6505_write(it6505, REG_SSC_CTRL1, 0x1C);
+>   		it6505_write(it6505, REG_SSC_CTRL2, 0x42);
+> -		it6505_write(it6505, REG_BANK_SEL, 0x00);
+>   		it6505_write(it6505, REG_SP_CTRL0, 0x07);
+>   		it6505_write(it6505, REG_IP_CTRL1, 0x29);
+>   		it6505_write(it6505, REG_IP_CTRL2, 0x03);
 
---8eJdQj0TMrNOHpom
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQhVJYACgkQFA3kzBSg
-KbZ9xg//cBklNc7gsUajNoqwrDg7VlssJEu1Ka/JqsPRnG2UZhIUABFVopXhb/R4
-TbD0NheilEIt3AzPYTXqUuygAiMDfWCMKupHYbSXarHb0tJzk+FcO+MDNejFjyUC
-Wt43BuyVJLEopf6C6XVwXmEBc7s+9WQ66yULyzAtJZQK0b3WfFESvT3HRyleNLzN
-qn1G+vhw3r10EcsNzK7DyY2XJZCehrT0rNoWh5GDzNTodnOv0yIf+2M3mYnjupF+
-lD9bgJDHnQvtu9clwa0lyoTavB9r6ck6GC0iu1CpzvJAp4YUgg6pZMu1pRSgxOx5
-9do6k+kC0C3MpVi1LXJ0uBgWZ+ygZqL/Zkjc0Ji3hBQf6CXpHG8ofP6CVZI1UXES
-NCLIEoP9MKAnMRcaSSxmbzNuFd3LICzL+49nj8jZynj/Q0JX2e9kfPviwlqmnJP3
-QqCPf6NwWg+Y2F4iecThuVDuC/2gIS98Y2/GI0ACg0V81dDcIR8lriAHQ71V6TIw
-r/fBgBR16N5CtibD/GNhtCOtGkqHgRbGHl1L6zn2abn/WlABQwERyvX/db1usn6o
-QVqwbpkBB5k3fzYWxlFERmj6opbPhwKS0J+swR9e7UaYMNqbqpLApIElHGR4HwYJ
-MomhZLZFF28w1W9TfSBaeYaDRL+2HJ4p3PEdtlD9YAlF5IyYvAQ=
-=L1kA
------END PGP SIGNATURE-----
-
---8eJdQj0TMrNOHpom--
