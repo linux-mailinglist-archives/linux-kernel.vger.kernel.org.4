@@ -2,92 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A14F6CAE02
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407736CAE03
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbjC0S4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 14:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
+        id S230104AbjC0S56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 14:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbjC0S4R (ORCPT
+        with ESMTP id S229464AbjC0S54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:56:17 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8108D2697;
-        Mon, 27 Mar 2023 11:56:16 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id ew6so40213031edb.7;
-        Mon, 27 Mar 2023 11:56:16 -0700 (PDT)
+        Mon, 27 Mar 2023 14:57:56 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7720E94
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 11:57:55 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id g19so9582869qts.9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 11:57:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679943375;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9kdFzEqP1sLEIpGSE6bD26PwKxdQuQNtb+UIdaFS6w4=;
-        b=UGymmXiuIlLml8ijpf+xg6TTWxqyOmO29fMqond0Chl519oazCi6HipKFEmbHhcRyr
-         kFd+NhLJL3R6Ik/DjNFUBBPD4ptYE7ntse3turxwUSZctRayA3G7gdNU+x0tvIG0CkdW
-         HQqz5n0+Q3XHZoIBK58G+nO3yfnyykbwx3QREmxdBgiuTe7P7XF9W3K/q4cQDrlaB25v
-         Zw+9STo270ZfEmqSBD/n63vOUPQnfgz9sijrU8Xni/DZsLb0HqhzF2VGIUYL+L6Kbllw
-         aBno+V12LnQbwPUiyVYuvTpxZM/Whl0JoawAMyrj9U+fbAl62+noh7WAqEpTD6QuKnhc
-         OiJQ==
+        d=gmail.com; s=20210112; t=1679943474;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XS8wwv8ptwz4F6/9PSxWEmUWc2CGzYarPSG8lT31fJI=;
+        b=RLIQgdQnIjQbcNwXOpHsQO9TrhShODFMT+EPokbjhVXBWrOrIb9XStz3DFIkSnWr/6
+         qXpZ8xvS0UwrUjBL5taDu8JkfAL4IP9tw0rAlin62bH0GxoElx3eUouvK9ldCdK3OalY
+         OKDZlB4BwUfK9tiCUfzwUxm9CzNpant7cTXInONeD5n0OgSYX5QAeRnmuOHp32ogHKc9
+         hUJbfj7cDlv3ezeGnvtv0WF836YxR0vENmjyyy3iHeI5eQfHtICs2iINT1BMXMWuhv8M
+         p/aPn2zZVyqpPf7iAz1weUIk4IXQLdCOTwVTJBVfKpoMCRDziJO+L6M4jf5gn2ddLo2X
+         SBTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679943375;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9kdFzEqP1sLEIpGSE6bD26PwKxdQuQNtb+UIdaFS6w4=;
-        b=JSnDKtWUCyhTx2b46w0YCs49Pra82ie8A40mc8EOBE9CY1hs96icN21ciXhEyXv3QG
-         CSOLlycsJkDk/m0hrDMYyykTbpSCg3T6ywMOU4mwJRjhS5TLjkdHSlgd9LkvVVq/GAGS
-         4Eo16qxTSAZVclDGOq/eJ8hbWuxIOMk+BMgI0jl+0i+7T3GpzGxM8n+l/W8TiqlYpTa9
-         jMZNpsoOjWV2d/aE1sUhXJQQLAkxa16Sn6sDWNppRr3tMqqlyJac5Fe8l9QzzoSN8/mW
-         dqHp1K+QLYWeyWYwXtMRDh5HRpYhCB9OsnTNgt9sE3PJFHb7zrs2U/J9yUbO506AygJh
-         FYiw==
-X-Gm-Message-State: AAQBX9fVGrs5QLUkNXfJmM9gKIPYdgqlYBfcn/xX4ausXFETARPeX5UU
-        8HMIo3+cmkC1uAv7VS4GUfY=
-X-Google-Smtp-Source: AKy350YAx3rW1SyuJCnBZhBxCFQ7rsS3Tq/yQDzMp69TUHeQbWPH6REg0eDj/nLcvQWAEZQjxF/XiQ==
-X-Received: by 2002:a17:907:8687:b0:933:499e:62a7 with SMTP id qa7-20020a170907868700b00933499e62a7mr16565873ejc.49.1679943374605;
-        Mon, 27 Mar 2023 11:56:14 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id u27-20020a170906069b00b00923bb9f0c36sm14288264ejb.127.2023.03.27.11.56.13
+        d=1e100.net; s=20210112; t=1679943474;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XS8wwv8ptwz4F6/9PSxWEmUWc2CGzYarPSG8lT31fJI=;
+        b=Xh/k/YAdjKj83MDnTRH7g5xHswUtMOrKMyJUbwY3m3EMNEKnlkoPXImr1WIF2WnAu7
+         xhuDmq1EO3iNkTEr3eOpT7wWaKhviFgEY2WSvVaeuSkz1ka9yUW0KwhQ8hH2oAfXZ6Ew
+         5hUF1FpuFTWt47VVpAfO/BTeNQ+pouaC+6HxOdWwjnJsounjGlsDiZ/0yTui/ZSK2JZo
+         QqyodTvAufBIoLjb8YmDtjUmEbfHoTHBEYhaQqA87xWoAYzwpD+bPBSwfwrsOxfiSYF6
+         +b+bOjL0CgvzMx1F38+TdgtYWCGWDW9Qr8yFW9+uSniSeW9BEIsIZx5KKH/xYrUFreLj
+         K6Sg==
+X-Gm-Message-State: AAQBX9e8qFdk09/o3PwnR+nsmiQQChxmsssRFk2wawL9kQWT7mKz1vS2
+        RPum4S/elt1k7xEUb/HVBwgDHaCDuwk=
+X-Google-Smtp-Source: AKy350a2QLPf3Z1Tw9oU67F2p8DGYVQguYu8yNN3vUtS7bcNx7oPu50GFuMgs35LvAdUNQ30c6hYtA==
+X-Received: by 2002:a05:622a:1886:b0:3e4:d6bb:d1c6 with SMTP id v6-20020a05622a188600b003e4d6bbd1c6mr19334389qtc.56.1679943474062;
+        Mon, 27 Mar 2023 11:57:54 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id x17-20020a376311000000b00741a8e96f25sm6526143qkb.88.2023.03.27.11.57.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 11:56:14 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 21:56:11 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?utf-8?B?UmVuw6k=?= van Dorst <opensource@vdorst.com>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net 3/7] net: dsa: mt7530: do not run
- mt7530_setup_port5() if port 5 is disabled
-Message-ID: <20230327185611.gjwlrmhaiorfpj5q@skbuf>
-References: <20230326140818.246575-1-arinc.unal@arinc9.com>
- <20230326140818.246575-1-arinc.unal@arinc9.com>
- <20230326140818.246575-4-arinc.unal@arinc9.com>
- <20230326140818.246575-4-arinc.unal@arinc9.com>
+        Mon, 27 Mar 2023 11:57:53 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     akpm@linux-foundation.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, cdleonard@gmail.com
+Subject: [PATCH v2] scripts/gdb: Bail early if there are no generic PD
+Date:   Mon, 27 Mar 2023 11:57:46 -0700
+Message-Id: <20230327185746.3856407-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230326140818.246575-4-arinc.unal@arinc9.com>
- <20230326140818.246575-4-arinc.unal@arinc9.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -98,21 +71,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 05:08:14PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> There's no need to run all the code on mt7530_setup_port5() if port 5 is
-> disabled. Run mt7530_setup_port5() if priv->p5_intf_sel is not P5_DISABLED
-> and remove the P5_DISABLED case from mt7530_setup_port5().
-> 
-> Stop initialising the interface variable as the remaining cases will always
-> call mt7530_setup_port5() with it initialised.
-> 
-> Fixes: 38f790a80560 ("net: dsa: mt7530: Add support for port 5")
-> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
+Avoid generating an exception if there are no generic power domain(s)
+registered:
 
-Again, not sure what is the problem, and how this solution addresses
-that problem. I see Fixes tags for all patches, but I don't understand
-what they fix, what didn't work before that works now?
+(gdb) lx-genpd-summary
+domain                          status          children
+    /device                                             runtime status
+----------------------------------------------------------------------
+Python Exception <class 'gdb.error'>: No symbol "gpd_list" in current context.
+Error occurred in Python: No symbol "gpd_list" in current context.
+(gdb) quit
+
+Fixes: 8207d4a88e1e ("scripts/gdb: add lx-genpd-summary command")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+Changes in v2:
+
+- correctly invoke gdb_eval_or_none
+
+ scripts/gdb/linux/genpd.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/gdb/linux/genpd.py b/scripts/gdb/linux/genpd.py
+index 39cd1abd8559..b53649c0a77a 100644
+--- a/scripts/gdb/linux/genpd.py
++++ b/scripts/gdb/linux/genpd.py
+@@ -5,7 +5,7 @@
+ import gdb
+ import sys
+ 
+-from linux.utils import CachedType
++from linux.utils import CachedType, gdb_eval_or_none
+ from linux.lists import list_for_each_entry
+ 
+ generic_pm_domain_type = CachedType('struct generic_pm_domain')
+@@ -70,6 +70,8 @@ Output is similar to /sys/kernel/debug/pm_genpd/pm_genpd_summary'''
+             gdb.write('    %-50s  %s\n' % (kobj_path, rtpm_status_str(dev)))
+ 
+     def invoke(self, arg, from_tty):
++        if gdb_eval_or_none("&gpd_list") is None:
++            raise gdb.GdbError("No power domain(s) registered")
+         gdb.write('domain                          status          children\n');
+         gdb.write('    /device                                             runtime status\n');
+         gdb.write('----------------------------------------------------------------------\n');
+-- 
+2.34.1
+
