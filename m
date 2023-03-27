@@ -2,162 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399576CB2A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E53AA6CB2B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232153AbjC0XsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 19:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
+        id S231819AbjC0X5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 19:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjC0XsT (ORCPT
+        with ESMTP id S229771AbjC0X5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 19:48:19 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F35C3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:48:17 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id r40-20020a05683044a800b006a14270bc7eso2152094otv.6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:48:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679960897;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6uOJzLF5++wuNkGYdTRIM5Imo+cCIkOUu91mcxK3VoM=;
-        b=BEXIiX+2N7jyn0zT6SrIbqb3pyq9kKoUg0pavRgLNSD2dNuJP0SnsvDojBtp9m4nga
-         n7buh4tfRiFKpjX3AUMrJMlPdV5kTiTXG+WT1XYIDbls/IPVeZhYgyoa5h6iCSlSDFxo
-         jenQcOfc/sHV1+0oTgeK6lHYkvyvmb30b0vlwXYOtBybKY+NluOMxPG9WAOYtzqAVy7W
-         u1JM0nhEng/1nn1y1MyVcl1gqXBPCVkZQYJlqSdVzzMREJiWNdItKvmW/Ljw06fdzUH4
-         vD1rgzKaRyDYElynqN41T1Bhebs9x8qUTJIfpiD1D9bW4VVIIzjmFuAxtar2qOoFHdhZ
-         m62Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679960897;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6uOJzLF5++wuNkGYdTRIM5Imo+cCIkOUu91mcxK3VoM=;
-        b=3NAe4b8TE4NgjhUrcLcJFZWSnnu0jyLHOOIK6FntohJEeozGAjeAnHDb8bsZKL9Zrg
-         UOum7Ax9zDuvQHr6WPyebArWfkg9Uhyksqc7Nae8EuOQ2nxtc7e4xPbZrO6zcNJqH/gX
-         QE8BApk1Yk4yseTmosnVcXXCXtzwNcQ4DsdmBD5eTibftzLy8tzFCp21aBH7qC0VJFKy
-         YmKGSC/HbikdhSNjokLUkMRDgAApUcZQpitpSehKTk8Zmw9M3FlYM+y8lH1xDn1AwBOl
-         ltuXh4Tr5ya+EnZuFT5XIlQYM3/Xx3hKAajjF/g0LhjdH69uMczLYYDEJpYozuvHSkDG
-         ULwA==
-X-Gm-Message-State: AO0yUKWoiSK6UxLeikVYPucD/NccKY56d8BzqMi+3D+L6LQnlyTqtdd1
-        fYXbPyvg0+kWDZyTxznMjAIbAa0r7tudVXtZX44=
-X-Google-Smtp-Source: AKy350adTHg4TU7FBkltvQF9jydEMHuQrJG7Gz7uoTUxJXaHA05ZgeroITIoceYc0rQL7sJ/+wsdu/CJOHU3MzjOMMU=
-X-Received: by 2002:a05:6830:1bed:b0:69f:882:cdb2 with SMTP id
- k13-20020a0568301bed00b0069f0882cdb2mr4519086otb.3.1679960897109; Mon, 27 Mar
- 2023 16:48:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230327233353.64081-1-caionovais@usp.br> <20230327233353.64081-3-caionovais@usp.br>
-In-Reply-To: <20230327233353.64081-3-caionovais@usp.br>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 27 Mar 2023 19:48:06 -0400
-Message-ID: <CADnq5_MpPB-V2ZUr7AQDyczuSyJ4=sMCnRSdqEFG9sfBdn1eLQ@mail.gmail.com>
-Subject: Re: [PATCH 02/12] drm/amd: Remove unused variable 'value0'
-To:     Caio Novais <caionovais@usp.br>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Felipe Clark <felipe.clark@amd.com>,
-        Wenjing Liu <wenjing.liu@amd.com>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jun Lei <Jun.Lei@amd.com>, Charlene Liu <Charlene.Liu@amd.com>,
-        Gabe Teeger <gabe.teeger@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Taimur Hassan <Syed.Hassan@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Alvin Lee <alvin.lee2@amd.com>,
-        George Shen <George.Shen@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Chaitanya Dhere <chaitanya.dhere@amd.com>,
-        Alan Liu <HaoPing.Liu@amd.com>,
-        Mukul Joshi <mukul.joshi@amd.com>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-        Jingwen Zhu <Jingwen.Zhu@amd.com>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Leo Li <sunpeng.li@amd.com>, Melissa Wen <mwen@igalia.com>,
-        Le Ma <le.ma@amd.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Martin Leung <Martin.Leung@amd.com>,
-        Ryan Lin <tsung-hua.lin@amd.com>,
-        Brian Chang <Brian.Chang@amd.com>,
-        Sung Joon Kim <sungjoon.kim@amd.com>,
-        Yifan Zhang <yifan1.zhang@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>,
-        Dillon Varone <Dillon.Varone@amd.com>,
-        Tom Chung <chiahsuan.chung@amd.com>,
-        Wesley Chalmers <Wesley.Chalmers@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, Zhan Liu <zhan.liu@amd.com>,
-        Roman Li <Roman.Li@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Wayne Lin <wayne.lin@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Ethan Wellenreiter <Ethan.Wellenreiter@amd.com>,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
-        Joshua Ashton <joshua@froggi.es>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 27 Mar 2023 19:57:11 -0400
+X-Greylist: delayed 512 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Mar 2023 16:57:10 PDT
+Received: from ci74p00im-qukt09090301.me.com (ci74p00im-qukt09090301.me.com [17.57.156.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D1B1724
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+        s=1a1hai; t=1679960917;
+        bh=Q+4Mb10klAZfMB/A5WCIqgvbYnDs5kzDVHJcVRl+RCs=;
+        h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To;
+        b=RSTB7ckd1aOjjLJRWit0Cy7vETE2wbok67SWzCI9qyxcISWS33pRhXYDDjf41ykry
+         RO/dRmauj3/cvlsaSfmkSgZa1S2+5m8KV1Rs776lzvya6PAnJ1X12n8IRYXbJNe/us
+         MGH5On5zf1f0lYc0KfFoq7ghe9IEPOoZBAN8qaH+77dtZdoM73iURM3md6ba0DxEKh
+         dRlqVdMUjyNV6dHsKuNglKrXUY7EVnCdeCRiC/0DfOnIDdX8FwdyIoU2hiE+QUYGPd
+         3K/jdQHO35TkLQGUcsEHA2uzy2+7NZSpfX+FBff8seHaEIGQ3dFz0Cp8EAHDYh085A
+         Xyv/n5Tz4MYPQ==
+Received: from localhost (ci77p00im-dlb-asmtp-mailmevip.me.com [17.57.156.26])
+        by ci74p00im-qukt09090301.me.com (Postfix) with ESMTPSA id 323E011202B4;
+        Mon, 27 Mar 2023 23:48:34 +0000 (UTC)
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 28 Mar 2023 01:48:33 +0200
+Message-Id: <CRHKFX934UA0.1MCKCD8SJSPIE@iMac.local>
+Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
+ TCON0_DCLK_REG
+From:   "Roman Beranek" <romanberanek@icloud.com>
+To:     "Maxime Ripard" <maxime@cerno.tech>,
+        "Frank Oltmanns" <frank@oltmanns.dev>
+Cc:     "Chen-Yu Tsai" <wens@csie.org>, "David Airlie" <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
+        "Samuel Holland" <samuel@sholland.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20230320161636.24411-1-romanberanek@icloud.com>
+ <87wn356ni4.fsf@oltmanns.dev> <20230327202045.ceeqqwjug4ktxtsf@penduick>
+In-Reply-To: <20230327202045.ceeqqwjug4ktxtsf@penduick>
+X-Proofpoint-GUID: p8h-miPlykEtip94gyjHAwmjbUceibHK
+X-Proofpoint-ORIG-GUID: p8h-miPlykEtip94gyjHAwmjbUceibHK
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.572,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-01-11=5F01:2022-01-11=5F01,2020-02-14=5F11,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=272 phishscore=0
+ suspectscore=0 mlxscore=0 adultscore=0 clxscore=1015 bulkscore=0
+ malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2303270187
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 7:34=E2=80=AFPM Caio Novais <caionovais@usp.br> wro=
-te:
+On Mon Mar 27, 2023 at 10:20 PM CEST, Maxime Ripard wrote:
 >
-> Compiling AMD GPU drivers displays a warning:
+> On Sat, Mar 25, 2023 at 12:40:04PM +0100, Frank Oltmanns wrote:
+> > Claiming to set the divider to a different value (bpp / lanes) than wha=
+t we=E2=80=99re actually using in
+> > the end (SUN6I_DSIO_TCON_DIV) is somehow bugging me. I feel like the pr=
+oposal that I submitted is
+> > more direct: <https://lore.kernel.org/all/20230319160704.9858-2-frank@o=
+ltmanns.dev/>
 >
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_link_encoder.c: In f=
-unction =E2=80=98dcn10_link_encoder_update_mst_stream_allocation_table=E2=
-=80=99:
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_link_encoder.c:1222:=
-18: warning: variable =E2=80=98value0=E2=80=99 set but not used [-Wunused-b=
-ut-set-variable]
+> Yeah, this patch looks better to me too: it's simpler, more straightforwa=
+rd. If Roman can confirm it
+> works with his testing, I'll be happy to merge it.
 >
-> Get rid of it by removing the variable.
->
-> Signed-off-by: Caio Novais <caionovais@usp.br>
-> ---
->  drivers/gpu/drm/amd/display/dc/dcn10/dcn10_link_encoder.c | 3 ---
->  1 file changed, 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_link_encoder.c b/=
-drivers/gpu/drm/amd/display/dc/dcn10/dcn10_link_encoder.c
-> index c4287147b853..81aa1631945a 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_link_encoder.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_link_encoder.c
-> @@ -1219,7 +1219,6 @@ void dcn10_link_encoder_update_mst_stream_allocatio=
-n_table(
->         const struct link_mst_stream_allocation_table *table)
->  {
->         struct dcn10_link_encoder *enc10 =3D TO_DCN10_LINK_ENC(enc);
-> -       uint32_t value0 =3D 0;
->         uint32_t value1 =3D 0;
->         uint32_t value2 =3D 0;
->         uint32_t slots =3D 0;
-> @@ -1321,8 +1320,6 @@ void dcn10_link_encoder_update_mst_stream_allocatio=
-n_table(
->         do {
->                 udelay(10);
->
-> -               value0 =3D REG_READ(DP_MSE_SAT_UPDATE);
 
-This reads a register.  Removing it may adversely affect the
-programming sequence.  If you want to avoid the set but unused
-warning, just drop the assignment, but leave the REG_READ.
+So I've just found out that my understanding of what sun4i_dotclock is
+was wrong the whole time. I treated it as a virtual clock representing
+the true CRTC pixel clock and only coincidentally also matching what
+A64 Reference Manual labels as TCON0 data clock (a coincidence to which
+DSI is an exception).
 
-Alex
+Now that I finally see dotclock as 'what could dclk be an abbreviation
+to', I to agree that it's not only straightforward but also correct to
+keep the divider at 4 and adjust the rate as is done it the patch Frank
+submitted.
 
-> -
->                 REG_GET(DP_MSE_SAT_UPDATE,
->                                 DP_MSE_SAT_UPDATE, &value1);
->
-> --
-> 2.40.0
->
+In order to preserve semantic correctness however, I propose to preface
+the change with a patch that renames sun4i_dotclock and tcon-pixel-clock
+such that dot/pixel is replaced with d/data. What do you think?
+
+Roman
