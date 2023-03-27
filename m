@@ -2,111 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BD96CAEB3
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5F36CAEB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbjC0Tcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
+        id S231956AbjC0TfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 15:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232224AbjC0Tcl (ORCPT
+        with ESMTP id S229822AbjC0TfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:32:41 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C3C3C21
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:32:38 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id n1so4466058ili.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:32:38 -0700 (PDT)
+        Mon, 27 Mar 2023 15:35:05 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D90E1731
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:35:04 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id i5so40894212eda.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:35:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679945558;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aUpj/H7BkNuUkIGOFcYHAsDAOJ/fBIWLI9WpunppJHQ=;
-        b=V1ozkARYxrB61HHUBZUMLIO9Rah39OCNgEMabehkhHaWX2HyRHyoOjL2DDCHaJayr4
-         RYL5JAJcgmQ8GVXFLYx83LlNQVCBjaHmt+/54871tFhPPDP0xRjFKcDJbVZXpeIdkNO0
-         5BscX/UA/e+q7IpIc1lu4IC9JGvG4YvhszAFdq1j95XL8oRDNh1Cdr/6/ZINQmyElM0/
-         0Y8jH9R7qEZAz9Dc3zdV6qtb9lsDZyTKmw/W+u3pAwa5zl+pjtnGgIlot82UYfSlaW+H
-         EMamoxukuvlcvt7ZWEEWhem4p9TsUUZe7f7CiNwPlA8tfStTOZyZ/BDwYe5OuGlycjVU
-         qYmA==
+        d=gmail.com; s=20210112; t=1679945702;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rAw6XJ1fgnGt+Qt//vZMySIcxRN5BjqGMW61n6KkE4o=;
+        b=m2iy7Xy3jVqU+tO5YusakE9NsiZbvYHloJaBcOiNnBH+beCr9j4+unXFsPJQxioy1z
+         P+SuBwYoqt8xh01YtYGPKkzDHLvFA6wrKzhoYVrDN/yLeMcLtj4jIL4tPMiUUEFOueq4
+         jnp3i+sT0eaCdQ2Nqxlaa1PvTpSzQ7bqYz7O+1c466AcV/FcXjjyfrABoFZVlgPKV8iO
+         ho1eAbB17x457eRLCUpZXiRyDTQrjdv6DRyHUoa0N3+A1oXzCcyzHst95+5QBubs8EJC
+         7QBVMV/O4agQEk5S7jtVF3ApTN1WdBNwyrpPY1xRtnXALpWhffCoeFzKS7mmGuXLomAR
+         NF7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679945558;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aUpj/H7BkNuUkIGOFcYHAsDAOJ/fBIWLI9WpunppJHQ=;
-        b=7DxyHtkmUfLMNedRTgiWmJ0Y4eRXzQInK6Uv7a6YF2V01ZMbMK0ApxzfW7JydW9noZ
-         fAaMJPSKQS21zzBprCzuGTBq92ux54UTnU2bR4Ry//ms4rqJcvuQlxQuiFRFiA+B8bh5
-         oUN2FUHH1DHQgcfuP4FyPh+mBcbCcKmyXTwMSeMo5my79W4unbRYYGmnUQ639YcvsnCO
-         X1xmzvoElSPgsmmB+h5Q0lr9ZDDfi8Y0G4aoeSAaVE1xhlGSOzQj48t7FPif/C0BzD0K
-         FJEiHoJ54TZ/iMbcYMd1rlaIm0vjRDIGQu3qVOAH/GY9t0UDJ5HoPK3hXP5UVNLA5NEi
-         RItA==
-X-Gm-Message-State: AAQBX9dkm90WwGydsGeqLKcx5sILqI1hPNhPa9GTTzwUxhwArZihDDHW
-        +UQwCXId7d9g6rgPa+Aj47p9eA==
-X-Google-Smtp-Source: AKy350Zv+PcQW4lgvwD6aEwR+cxdAXWBw6dtwrFHEouo+w2Uefvyxv2g1u6yTFXxyCigF3j+R65hFA==
-X-Received: by 2002:a92:908:0:b0:315:9749:7a0e with SMTP id y8-20020a920908000000b0031597497a0emr10802213ilg.23.1679945557870;
-        Mon, 27 Mar 2023 12:32:37 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id n18-20020a922612000000b00316dc3afe57sm7956100ile.86.2023.03.27.12.32.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 12:32:37 -0700 (PDT)
-Message-ID: <601c9862-6261-3cf1-b7ec-31a75e1fe9b4@linaro.org>
-Date:   Mon, 27 Mar 2023 14:32:36 -0500
+        d=1e100.net; s=20210112; t=1679945702;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rAw6XJ1fgnGt+Qt//vZMySIcxRN5BjqGMW61n6KkE4o=;
+        b=OJvlAI3lZoKHMwNoI91D71pCuXu7SGJicr5CF6+xyR2n0UMcm7iokLQxNgAzX2/DV3
+         AqonJ8rYqjp8yuKnS2wgMlIdc0xm3/Aiy6iIL6mJo0xuOVLeHPcqadhnPKqQI6pK2EuL
+         kcGZWeDfh/D/s323n8bpttmrLuNuzWUoKRA3l+mGf5kOsiXwxddtkziJQ1WGjo12fK7d
+         2EVhRNpUwuOlJYPGL3Be6ZCLzNm5WwR3qQBlck+esOVCIqT8Aui8Yw73CxhanSTR/PdU
+         Pp1iGNMHAAzoCewqNYIjM+CDlVIsVHvc9369gMTixJ7vDDBLVzhEJowtp+u8UFbL+v0k
+         yvJg==
+X-Gm-Message-State: AAQBX9d57hMlu1KbwRmdhHiqZ0HDw6u+xycS98v/ro9WQPJqdPfcT98H
+        WexJqdMmjV09svStBs9giDNOM9YeErZIseuAnwY=
+X-Google-Smtp-Source: AKy350b8JLnbeiyREbGKeLCXB834bizQhV90xQMHiSbKigkIqhHjlh2gk5O5nu1jkcnImy+sBG3EcK3fDzg6FtY3at0=
+X-Received: by 2002:a17:907:2152:b0:888:b471:8e18 with SMTP id
+ rk18-20020a170907215200b00888b4718e18mr5845444ejb.8.1679945702374; Mon, 27
+ Mar 2023 12:35:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 0/2] ARM: dts: qcom: sdx65: support IPA
-Content-Language: en-US
-From:   Alex Elder <elder@linaro.org>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org
-Cc:     quic_rohiagar@quicinc.com, caleb.connolly@linaro.org,
-        mka@chromium.org, evgreen@chromium.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230327191542.2765834-1-elder@linaro.org>
-In-Reply-To: <20230327191542.2765834-1-elder@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:7208:5583:b0:65:ee66:643d with HTTP; Mon, 27 Mar 2023
+ 12:35:01 -0700 (PDT)
+From:   Daniel Ndoye <fcr423384@gmail.com>
+Date:   Mon, 27 Mar 2023 19:35:01 +0000
+Message-ID: <CAJYHccwVB5c9CUSQhDwRMKnZdE87QzXD9j1EF5ntzSh4gezRYg@mail.gmail.com>
+Subject: We shall stand in understanding
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=ADVANCE_FEE_2_NEW_FORM,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
+        FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:541 listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [fcr423384[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [fcr423384[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  1.0 ADVANCE_FEE_2_NEW_FORM Advance Fee fraud and a form
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/27/23 2:15 PM, Alex Elder wrote:
-> The upstream IPA driver now supports IPA v5.0 for SDX65.  Add
-> IPA-related nodes and definitions to "sdx65.dtsi", and enable IPA
-> in "sdx65-mtp.dts".
-> 
-> Having touched these files, Konrad advised I should update them to
-> move the "status" property to the end of nodes where it is used.
-> 
-> Version 2 of this series addresses comments made by Krzysztof and
-> Konrad, and adds their reviewed-by tags.
+We shall stand in understanding.
 
-I'm sorry but building "dtbs" with this change adds a warning
-I had not noticed before.
-   simple-bus unit address format error
+Would you be interested in handling a good deal worth more than
+Millions of dollars.
+   Please Permit to tell you this this transaction is 100% risk free
+as I legitimately I am a banker and during our periodic audits last we
+discovered dormant accounts with holding balances.
+  I hoping you will cooperate with me as a partner in a project of
+transferring an abandoned fund.
+Am confident that it will be of great benefit to both of us. How we'll
+realize this fund. Please contact me via below with your details.
 
-I'll be sending v3 shortly.  Sorry for the noise.
+Full Name and Address
+Occupation
+Country of Origin
+Cellphone Number
 
-					-Alex
-
-> 					-Alex
-> 
-> Alex Elder (2):
->    ARM: dts: qcom: sdx65: add IPA information
->    ARM: dts: qcom-sdx65: move status properties to end of nodes
-> 
->   arch/arm/boot/dts/qcom-sdx65-mtp.dts | 11 +++++--
->   arch/arm/boot/dts/qcom-sdx65.dtsi    | 47 ++++++++++++++++++++++++++--
->   2 files changed, 52 insertions(+), 6 deletions(-)
-> 
-
+Regards.
+Daniel Ndoye
