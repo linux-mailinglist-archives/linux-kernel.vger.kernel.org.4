@@ -2,122 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4575B6CADB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAFE6CADB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 20:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjC0Spi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 14:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
+        id S231960AbjC0Spt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 14:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjC0Spf (ORCPT
+        with ESMTP id S229935AbjC0Spn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:45:35 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57D511B;
-        Mon, 27 Mar 2023 11:45:29 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id w9so40211343edc.3;
-        Mon, 27 Mar 2023 11:45:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679942728;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N+foyrv0NPxQYFYNXu1z87ZeyW7A9es9zcBbNUhhtzU=;
-        b=ILG6XqMfhx1dSbFz5TG5AyzDdV/dwa0eaB4P2rouIf/ena71aCNGRemyfx1k4Hb4aT
-         CjebUQQ6vTLcstGMPYdtLDUj1CBV6Snz3JqNBPHqREs5jH/ncWytxzUk2vBSTgiN4SSp
-         WvusyphhLV80WD5ZlnyDQYqWfayAkiK74o0CiRBYAWlrF5cL6o0lxLtl+KwqcW6dNjXG
-         pIyjjKArIcrb2MOZV3gX6I3IuherGQQklHOfiDwHNnjmm3saWb/Uo5XNB6orFh3/X4/o
-         aZFJ92/94i9QOEvtj8cbwyx1z2Z7y0JZwojwp3uyJeKFWwKW9j4KK+5uy/MpSla9Pg58
-         nWog==
-X-Gm-Message-State: AAQBX9eZvGRTqGd1W9M6FV7l66iGQZukXfeecGrJEcGlYK/XNVp/31AD
-        9dx8Dy4EkuDSEOfhxRPyQ6k70tR/j+hhYHg1vCU=
-X-Google-Smtp-Source: AKy350btpilZc+iXong2/3h7WtnYlg9nGYoTCcoNTiL94NlUGLd0H767OuFoyxdjPvme5UCSEBwunl/LvXIuVMg2Rcg=
-X-Received: by 2002:a50:d49e:0:b0:502:148d:9e1e with SMTP id
- s30-20020a50d49e000000b00502148d9e1emr6362846edi.3.1679942728143; Mon, 27 Mar
- 2023 11:45:28 -0700 (PDT)
+        Mon, 27 Mar 2023 14:45:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF41E3C13;
+        Mon, 27 Mar 2023 11:45:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72FE261472;
+        Mon, 27 Mar 2023 18:45:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47DA0C433D2;
+        Mon, 27 Mar 2023 18:45:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679942740;
+        bh=cPADjkmRo6v7PQmzp77eeshIMF05/BF4SyAuwPUuVEQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j619G8NZJ0oX4nI/xT6v6vdbKwKT7JDOgw+dd+x9ra774uad3q9XX1AeUSY5Bl93B
+         oCyAcvQPXL6yVaAV1QRG1Giy1vSa6zKUU+3cMz0Az7u841R696GhbcnciLswrIl9jT
+         V9wz+BVmMqEjdLDb0lERcli3bVZHYMNonH/ytC+lTZV5LnfPi0bQY/Kkgv6bZRMYKI
+         V8r3xZhsFP/aNrjePLTB3aXMjBWkyi8OQGqULCSVOmFvpM0AzHxl2veq0cmZB7/+/C
+         t6AsnfO1cSQa0wYNKY3M3gU7dHm6Z0Iq3X8zYuW2eP1DqJKXneO63exKBjGrvek+IA
+         8zS+M93AWzywQ==
+Date:   Mon, 27 Mar 2023 11:45:38 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Iskren Chernev <me@iskren.info>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 2/3] dt-bindings: ufs: qcom: Add reg-names property
+ for ICE
+Message-ID: <20230327184538.GB73752@sol.localdomain>
+References: <20221209-dt-binding-ufs-v3-0-499dff23a03c@fairphone.com>
+ <20221209-dt-binding-ufs-v3-2-499dff23a03c@fairphone.com>
 MIME-Version: 1.0
-References: <20230322191313.22804-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230322191313.22804-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 20:45:16 +0200
-Message-ID: <CAJZ5v0i3TWajRr1bMOVj7o7aCEEurt4b_SnyPCndJL8r3Mad7Q@mail.gmail.com>
-Subject: Re: [PATCH v3] ACPI: sysfs: Enable ACPI sysfs support for CCEL records
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Rafael J Wysocki <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221209-dt-binding-ufs-v3-2-499dff23a03c@fairphone.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 8:13 PM Kuppuswamy Sathyanarayanan
-<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->
-> The Confidential Computing Event Log (CCEL) table provides the address
-> and length of the CCEL records area in UEFI reserved memory.
->
-> To allow user space access to these records, expose a sysfs interface
-> similar to the BERT table.
->
-> More details about the CCEL table can be found in the ACPI specification
-> r6.5 [1], sec 5.2.34.
->
-> Link: https://uefi.org/specs/ACPI/6.5/05_ACPI_Software_Programming_Model.html#cc-event-log-acpi-table # [1]
-> Co-developed-by: Haibo Xu <haibo1.xu@intel.com>
-> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+On Fri, Mar 24, 2023 at 08:41:29AM +0100, Luca Weiss wrote:
+> The code in ufs-qcom-ice.c needs the ICE reg to be named "ice". Add this
+> in the bindings so the existing dts can validate successfully.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 > ---
->
-> Changes since v2:
->  * Fixed the commit log as per review suggestion.
->
-> Changes since v1:
->  * Removed unnecessary parenthesis as per Rafael's suggestion.
->
->  drivers/acpi/sysfs.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->
-> diff --git a/drivers/acpi/sysfs.c b/drivers/acpi/sysfs.c
-> index 7f4ff56c9d42..687524b50085 100644
-> --- a/drivers/acpi/sysfs.c
-> +++ b/drivers/acpi/sysfs.c
-> @@ -458,11 +458,28 @@ static int acpi_bert_data_init(void *th, struct acpi_data_attr *data_attr)
->         return sysfs_create_bin_file(tables_data_kobj, &data_attr->attr);
->  }
->
-> +static int acpi_ccel_data_init(void *th, struct acpi_data_attr *data_attr)
-> +{
-> +       struct acpi_table_ccel *ccel = th;
+>  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> index 23447281deec..ebc8e1adbc6f 100644
+> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> @@ -75,6 +75,10 @@ properties:
+>      minItems: 1
+>      maxItems: 2
+>  
+> +  reg-names:
+> +    minItems: 1
+> +    maxItems: 2
 > +
-> +       if (ccel->header.length < sizeof(struct acpi_table_ccel) ||
-> +           !ccel->log_area_start_address || !ccel->log_area_minimum_length) {
-> +               kfree(data_attr);
-> +               return -EINVAL;
-> +       }
-> +       data_attr->addr = ccel->log_area_start_address;
-> +       data_attr->attr.size = ccel->log_area_minimum_length;
-> +       data_attr->attr.attr.name = "CCEL";
-> +
-> +       return sysfs_create_bin_file(tables_data_kobj, &data_attr->attr);
-> +}
-> +
->  static struct acpi_data_obj {
->         char *name;
->         int (*fn)(void *, struct acpi_data_attr *);
->  } acpi_data_objs[] = {
->         { ACPI_SIG_BERT, acpi_bert_data_init },
-> +       { ACPI_SIG_CCEL, acpi_ccel_data_init },
->  };
->
->  #define NUM_ACPI_DATA_OBJS ARRAY_SIZE(acpi_data_objs)
-> --
+>    required-opps:
+>      maxItems: 1
+>  
+> @@ -129,6 +133,8 @@ allOf:
+>          reg:
+>            minItems: 1
+>            maxItems: 1
+> +        reg-names:
+> +          maxItems: 1
+>  
+>    - if:
+>        properties:
+> @@ -157,6 +163,12 @@ allOf:
+>          reg:
+>            minItems: 2
+>            maxItems: 2
+> +        reg-names:
+> +          items:
+> +            - const: std
+> +            - const: ice
+> +      required:
+> +        - reg-names
+>  
+>    - if:
+>        properties:
+> @@ -185,6 +197,8 @@ allOf:
+>          reg:
+>            minItems: 1
+>            maxItems: 1
+> +        reg-names:
+> +          maxItems: 1
+>  
+>    - if:
+>        properties:
+> @@ -210,6 +224,12 @@ allOf:
+>          reg:
+>            minItems: 2
+>            maxItems: 2
+> +        reg-names:
+> +          items:
+> +            - const: std
+> +            - const: ice
+> +      required:
+> +        - reg-names
+>  
+>      # TODO: define clock bindings for qcom,msm8994-ufshc
+>  
 
-Applied as 6.4 material, thanks!
+Looks good to me, though I'm not an expert in device tree bindings.  It's
+unfortunate that whether ICE is present needs to be explicitly declared for each
+SoC here (I would have expected that to only be done in the device tree files
+themselves), and that the order of the regs and clocks is fixed (I would have
+expected them to act as maps keyed by name).  But it seems that's the way it is.
+
+Reviewed-by: Eric Biggers <ebiggers@google.com>
+
+- Eric
