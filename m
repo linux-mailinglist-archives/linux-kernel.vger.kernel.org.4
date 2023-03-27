@@ -2,113 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E006C99D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 05:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8B66C99D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 05:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbjC0DCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 23:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41908 "EHLO
+        id S231822AbjC0DD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 23:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbjC0DCd (ORCPT
+        with ESMTP id S229475AbjC0DD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 23:02:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3804EDA;
-        Sun, 26 Mar 2023 20:02:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56B8260FA6;
-        Mon, 27 Mar 2023 03:02:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52A44C433D2;
-        Mon, 27 Mar 2023 03:02:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679886141;
-        bh=ro2qYTrcUU+cYhFXYtbYc9UeqCUWNKAZPvp1734oaxE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aLZt7NmN7dW3zHYBppahDR1suBSqRyBNY6gEku33VIEE8YNRasAVWE8W8XUqsIArJ
-         Ci3xKcKUIEDN9Q9djm7qkK7Nevf4zuoXQNzQjVlU8h7p3Kk/wJr0ULzeYnh/pENXEW
-         DJR8ZlP3LOyo9VoX103xUNM2I0mlKX+iROjSK7fPMx2SqJeRAoTrUpneH2kpeh91g8
-         uBCf9kZ0aQ4FlVpRAEXDeS1jLsr1hUXRBXoxeim4u6cc/Cs6qZuegxhPD+dekgmtcy
-         vUdAL7AAJClbM04zLcsuGXUwuL5yIFVdpm9xkxVQkgN8kRGHj68oz7vPEpw8RicxIH
-         Lk3zOs4Oh+5RA==
-Date:   Mon, 27 Mar 2023 11:02:13 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] treewide: Fix instantiation of devices in DT overlays
-Message-ID: <20230327030213.GJ3364759@dragon>
-References: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
+        Sun, 26 Mar 2023 23:03:56 -0400
+Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA0519AB;
+        Sun, 26 Mar 2023 20:03:54 -0700 (PDT)
+Received: from [192.168.2.16] (unknown [106.38.161.27])
+        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 8A9D35807D9;
+        Mon, 27 Mar 2023 11:03:38 +0800 (CST)
+Message-ID: <3c8e08d5-1069-4df8-5f53-5bd5c6aedd75@sangfor.com.cn>
+Date:   Mon, 27 Mar 2023 11:03:39 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v7 4/8] arm64: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
+        will@kernel.org, catalin.marinas@arm.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        chenhuacai@kernel.org, zhangqing@loongson.cn, kernel@xen0n.name,
+        mingo@redhat.com, peterz@infradead.org, xiehuan09@gmail.com,
+        dinghui@sangfor.com.cn, huangcun@sangfor.com.cn,
+        dolinux.peng@gmail.com, linux-trace-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230324123731.3801920-1-pengdonglin@sangfor.com.cn>
+ <20230324123731.3801920-5-pengdonglin@sangfor.com.cn>
+ <ZB2eLsD4aoR3LEOV@FVFF77S0Q05N>
+From:   Donglin Peng <pengdonglin@sangfor.com.cn>
+In-Reply-To: <ZB2eLsD4aoR3LEOV@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZHU1LVkNJHRlDSU5KSE9IT1UTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpLTVVIQ1VKTUpVSUxZV1kWGg8SFR0UWUFZT0tIVUpKS09ISFVKS0tVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MC46Szo4SD0IMQwfKwECMy8t
+        CSxPCj1VSlVKTUxCQ0NNSUlLSk9MVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
+        WRILWUFZSktNVUhDVUpNSlVJTFlXWQgBWUFMSUpKNwY+
+X-HM-Tid: 0a872105794b2eb7kusn8a9d35807d9
+X-HM-MType: 1
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Ivan
+On 2023/3/24 20:57, Mark Rutland wrote:
+> On Fri, Mar 24, 2023 at 05:37:27AM -0700, Donglin Peng wrote:
+>> The commit d4815c5d1bbd ("function_graph: Support recording and
+>> printing the return value of function") laid the groundwork for the
+>> for the funcgraph-retval, and this modification makes it available
+>> on the ARM64 platform.
+>>
+>> We introduce a new structure called fgraph_ret_regs for the ARM64
+>> platform to hold return registers and the frame pointer. We then
+>> fill its content in the return_to_handler and pass its address to
+>> the function ftrace_return_to_handler to record the return value.
+> 
+> I'm happy with this, or with using ftrace_regs and capturing more regs here.
 
-On Fri, Mar 24, 2023 at 10:30:39AM +0100, Geert Uytterhoeven wrote:
-> When loading a DT overlay that creates a device, the device is not
-> instantiated, unless the DT overlay is unloaded and reloaded again.
-> 
-> Saravana explains:
->   Basically for all overlays (I hope the function is only used for
->   overlays) we assume all nodes are NOT devices until they actually
->   get added as a device.
-> 
-> Based on a patch by Saravana Kannan, which covered only platform and spi
-> devices.
-> 
-> Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
-> Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=rWYnkCZ6z5bGX-wj4w@mail.gmail.com
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> ---
-> v2:
->   - Add Acked-by,
->   - Drop RFC.
-> ---
->  drivers/bus/imx-weim.c    | 1 +
->  drivers/i2c/i2c-core-of.c | 1 +
->  drivers/of/dynamic.c      | 1 +
->  drivers/of/platform.c     | 1 +
->  drivers/spi/spi.c         | 1 +
->  5 files changed, 5 insertions(+)
-> 
-> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
-> index 36d42484142aede2..898e23a4231400fa 100644
-> --- a/drivers/bus/imx-weim.c
-> +++ b/drivers/bus/imx-weim.c
-> @@ -329,6 +329,7 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
->  				 "Failed to setup timing for '%pOF'\n", rd->dn);
->  
->  		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
-> +			rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
->  			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
->  				dev_err(&pdev->dev,
->  					"Failed to create child device '%pOF'\n",
+Thanks, I think ftrace_regs has several members that are unnecessary to
+fill. And each function that can be traced will do this work when using
+function graph tracer, so the overhead is bit high.
 
-Ivan, so you were aware of that the device is not instantiated before
-this change?
+> 
+> This overall looks good, but there's one functional issue and a couple of minor
+> nits which I've detailed below.
 
-Shawn
+Thanks.
+
+> 
+>>
+>> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
+>> ---
+>>   arch/arm64/Kconfig               |  1 +
+>>   arch/arm64/include/asm/ftrace.h  | 23 +++++++++++++++++++++++
+>>   arch/arm64/kernel/entry-ftrace.S |  9 +++++----
+>>   3 files changed, 29 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index 1023e896d46b..48856d230800 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -195,6 +195,7 @@ config ARM64
+>>   	select HAVE_FTRACE_MCOUNT_RECORD
+>>   	select HAVE_FUNCTION_TRACER
+>>   	select HAVE_FUNCTION_ERROR_INJECTION
+>> +	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
+>>   	select HAVE_FUNCTION_GRAPH_TRACER
+>>   	select HAVE_GCC_PLUGINS
+>>   	select HAVE_HW_BREAKPOINT if PERF_EVENTS
+>> diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
+>> index 1c2672bbbf37..f68dcc41be3b 100644
+>> --- a/arch/arm64/include/asm/ftrace.h
+>> +++ b/arch/arm64/include/asm/ftrace.h
+>> @@ -170,4 +170,27 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
+>>   }
+>>   #endif /* ifndef __ASSEMBLY__ */
+>>   
+>> +#ifndef __ASSEMBLY__
+>> +
+>> +#ifdef CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
+>> +struct fgraph_ret_regs {
+>> +	/* x0 - x7 */
+>> +	u64 regs[8];
+>> +
+>> +	u64 fp;
+>> +};
+> 
+> As a minor nit, for ftrace_regs we used `unsigned long` rather than `u64`;
+> could we do the same here for consistency?
+
+Yes, I will fix it.
+
+> 
+> This will need to be padded to 16 bytes, as within the kernel, arm64 requires
+> the SP to be aligned to 16 bytes at all time. Please can you add an `__unused`
+> field, like we have in ftrace_regs, to ensure that?
+> 
+
+Yes, I will fix it.
+
+>> +
+>> +static inline unsigned long fgraph_ret_regs_return_value(struct fgraph_ret_regs *ret_regs)
+>> +{
+>> +	return ret_regs->regs[0];
+>> +}
+>> +
+>> +static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_ret_regs *ret_regs)
+>> +{
+>> +	return ret_regs->fp;
+>> +}
+>> +#endif
+>> +
+>> +#endif
+>> +
+>>   #endif /* __ASM_FTRACE_H */
+>> diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
+>> index 350ed81324ac..8ac6f952e68f 100644
+>> --- a/arch/arm64/kernel/entry-ftrace.S
+>> +++ b/arch/arm64/kernel/entry-ftrace.S
+>> @@ -270,14 +270,15 @@ SYM_FUNC_END(ftrace_stub_graph)
+>>    */
+>>   SYM_CODE_START(return_to_handler)
+>>   	/* save return value regs */
+>> -	sub sp, sp, #64
+>> +	sub sp, sp, #72
+>>   	stp x0, x1, [sp]
+>>   	stp x2, x3, [sp, #16]
+>>   	stp x4, x5, [sp, #32]
+>>   	stp x6, x7, [sp, #48]
+>> +	str x29,    [sp, #64]		//     parent's fp
+> 
+> As above, this will need to be padded to keep the stack aligned to 16 bytes,
+> and I'd prefer if we could use asm-offsets so that we can have something like:
+> 
+> 	sub	sp, sp, #FRET_REGS_SIZE
+> 	stp	x0, x1, [sp, #FRET_REGS_X0]
+> 	stp	x2, x3, [sp, #FRET_REGS_X2]
+> 	stp	x4, x5, [sp, #FRET_REGS_X4]
+> 	stp	x6, x7, [sp, #FRET_REGS_X6]
+> 	str	x29, [sp, FRET_REGS_FP]
+
+Thank you, I will fix it.
+
+> 
+>>   
+>> -	mov	x0, x29			//     parent's fp
+>> -	bl	ftrace_return_to_handler// addr = ftrace_return_to_hander(fp);
+>> +	mov	x0, sp
+>> +	bl	ftrace_return_to_handler// addr = ftrace_return_to_hander(regs);
+>>   	mov	x30, x0			// restore the original return address
+>>   
+>>   	/* restore return value regs */
+>> @@ -285,7 +286,7 @@ SYM_CODE_START(return_to_handler)
+>>   	ldp x2, x3, [sp, #16]
+>>   	ldp x4, x5, [sp, #32]
+>>   	ldp x6, x7, [sp, #48]
+>> -	add sp, sp, #64
+>> +	add sp, sp, #72
+> 
+> Likewise here.
+
+Thank you, I will fix it.
+
+> 
+> Other than that, this looks good to me, thanks for respinning!
+> 
+> Thanks,
+> Mark.
+
