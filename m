@@ -2,150 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95B66CA8CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E90846CA8C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbjC0PSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 11:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
+        id S232220AbjC0PSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 11:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjC0PSd (ORCPT
+        with ESMTP id S231717AbjC0PSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:18:33 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3393F19A1;
-        Mon, 27 Mar 2023 08:18:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679930312; x=1711466312;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=17LMq6FcckRvCjRKh2cYsU9tHbmYq+HS/t9LCbX9zWs=;
-  b=XRxKw6YDlwBjmsBEeav0LrqO3G2aKK/iojUhC19QrU4PpcmL17WaU9gR
-   ysUh9e2f/qtH+5KQ5MrBDJIQWBhbfeVixS1GEKkmct95+OczyGaCLuE4x
-   nWxhkkcQVZzh18u6YaiPHZ87N3PeuZsTQntlg0vUz3FRua9whQUxjsoZx
-   394K7rLvaEyUJ5lr/Qe/DIY6pFxXusQH0pVLRHUYh4sDJOGpr57abwFN5
-   0g+wINomQr+6l9z4h4R5/z6uYEgjPZRqiziTIrAt1xl16ZWbwhU5ghFJq
-   xGGWKQIaYCOn2ZFq3hLKm9UGD+89JvZgvc4o9VQbly1Gtb5En/nuaD19C
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="320693417"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="320693417"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 08:18:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="676999194"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="676999194"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 27 Mar 2023 08:18:16 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pgobv-000Hnx-10;
-        Mon, 27 Mar 2023 15:18:15 +0000
-Date:   Mon, 27 Mar 2023 23:17:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Maximilian Weigand <mweigand@mweigand.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Maximilian Weigand <mweigand@mweigand.net>,
-        Alistair Francis <alistair@alistair23.me>
-Subject: Re: [PATCH 2/6] Input: cyttsp5: remove unused code
-Message-ID: <202303272323.nRNi9Sso-lkp@intel.com>
-References: <20230323135205.1160879-3-mweigand@mweigand.net>
+        Mon, 27 Mar 2023 11:18:05 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C09106;
+        Mon, 27 Mar 2023 08:18:04 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id q27so5865119oiw.0;
+        Mon, 27 Mar 2023 08:18:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679930284;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vUSCOsxTscJFykA96S2HHz11yN7G7jVkej50uNItSXY=;
+        b=Oxz9Lq5Qss0glRzgWHB2m0SlgVVhids3lzYBVJRnuehoq0KH6pqTdh0l3hUvT7fK41
+         /9wH+eeEKBKOt8ZfscXoBTfM6D5nk7a1YQFI8XyCgvXKEIwBzab8izy5+BwfXqxjajkk
+         eQUH7QanLO9WTUAm8NLdtkkOH5HfjsyJlpMJmXi4ZapwmMyE8taMqkCeFKjast+olroV
+         kr7xSW2NQJjVPOGMn0RSQhR1N63iG5HG8/ULwQ7PqAbWNMqKqxrMhylOdnBa7a+MLfZR
+         MhXjm5KRst/w+Wjhv6HPX1Y0hE4TWpuaGv29fjveMqB89gnOh3ewYId7ABYC7g9wdPCp
+         PPPA==
+X-Gm-Message-State: AAQBX9dFY6ADVjIONdmvQxQKVjydo99Hl1mwHM3nCoBaharP2VlMoqrL
+        5zT1kN9W369ZyczJ+yDRew==
+X-Google-Smtp-Source: AKy350aYr658iaouhuPMz5BUi/6LPvCml2JNjfTHY3Dd+GRk2+ni9Tm9z1RVzieyWuXYsh0ctaPzTA==
+X-Received: by 2002:a05:6808:93:b0:389:1601:fb7 with SMTP id s19-20020a056808009300b0038916010fb7mr2090348oic.51.1679930283810;
+        Mon, 27 Mar 2023 08:18:03 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z6-20020a4aae06000000b0051763d6497fsm11218156oom.38.2023.03.27.08.18.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 08:18:03 -0700 (PDT)
+Received: (nullmailer pid 3893016 invoked by uid 1000);
+        Mon, 27 Mar 2023 15:18:02 -0000
+Date:   Mon, 27 Mar 2023 10:18:02 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        arnd@arndb.de, linux-aspeed@lists.ozlabs.org,
+        gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org
+Subject: Re: [PATCH v2 2/4] doc: Add Atmel AT30TSE serial eeprom
+Message-ID: <20230327151802.GA3485600-robh@kernel.org>
+References: <20230321151642.461618-1-eajames@linux.ibm.com>
+ <20230321151642.461618-3-eajames@linux.ibm.com>
+ <6d4cf513-0787-6b39-8d38-30484be7ddff@linaro.org>
+ <baf7ad36-0410-3063-7960-8dd7040fb8fd@linux.ibm.com>
+ <5993d93e-f57b-51aa-85a3-f58ca0cf846d@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230323135205.1160879-3-mweigand@mweigand.net>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5993d93e-f57b-51aa-85a3-f58ca0cf846d@linux.ibm.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maximilian,
+On Tue, Mar 21, 2023 at 10:55:43AM -0500, Eddie James wrote:
+> 
+> On 3/21/23 10:46, Eddie James wrote:
+> > 
+> > On 3/21/23 10:19, Krzysztof Kozlowski wrote:
+> > > On 21/03/2023 16:16, Eddie James wrote:
+> > > > The AT30TSE is compatible with the JEDEC EE1004 standard. Document it
+> > > > as a trivial I2C device.
+> > > > 
+> > > > Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> > > Use subject prefixes matching the subsystem (which you can get for
+> > > example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> > > your patch is touching).
+> > 
+> > 
+> > Oops, sorry, will fix.
+> > 
+> > 
+> > > 
+> > > > ---
+> > > >   Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+> > > >   1 file changed, 2 insertions(+)
+> > > > 
+> > > > diff --git
+> > > > a/Documentation/devicetree/bindings/trivial-devices.yaml
+> > > > b/Documentation/devicetree/bindings/trivial-devices.yaml
+> > > > index 6f482a254a1d..43e26c73a95f 100644
+> > > > --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> > > > +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> > > > @@ -47,6 +47,8 @@ properties:
+> > > >             - ams,iaq-core
+> > > >               # i2c serial eeprom (24cxx)
+> > > >             - at,24c08
+> > > > +            # i2c serial eeprom (EE1004 standard)
+> > > AT30TSE?
+> > > 
+> > > > +          - atmel,at30tse
+> > > Microchip does not find anything on AT30TSE. Are you sure this is the
+> > > model name?
+> > 
+> > 
+> > Yes: https://www.microchip.com/content/dam/mchp/documents/OTH/ProductDocuments/DataSheets/Atmel-8868-DTS-AT30TSE004A-Datasheet.pdf
+> > 
+> > 
+> > Maybe it's actually an 8868? Or should I include the 004A as well?
+> 
+> 
+> I found some other AT30TSE (AT30TSE752A for example) devices that do not
+> appear compatible with the EE1004 standard, so I will include the full model
+> number.
 
-Thank you for the patch! Perhaps something to improve:
+If this standard is sufficiently complete, then you might want a EE1004 
+fallback compatible. Complete would mean power supply(ies) and any extra 
+i/o are defined and the exact device model is discoverable.
 
-[auto build test WARNING on dtor-input/next]
-[also build test WARNING on dtor-input/for-linus linus/master v6.3-rc4 next-20230327]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Maximilian-Weigand/Input-cyttsp5-fix-array-length/20230323-215957
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-patch link:    https://lore.kernel.org/r/20230323135205.1160879-3-mweigand%40mweigand.net
-patch subject: [PATCH 2/6] Input: cyttsp5: remove unused code
-config: i386-randconfig-a011-20230327 (https://download.01.org/0day-ci/archive/20230327/202303272323.nRNi9Sso-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4358a60821eb8149dabed197c09d3c0eab63bf38
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Maximilian-Weigand/Input-cyttsp5-fix-array-length/20230323-215957
-        git checkout 4358a60821eb8149dabed197c09d3c0eab63bf38
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/input/touchscreen/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303272323.nRNi9Sso-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/input/touchscreen/cyttsp5.c:604:5: warning: unused variable 'cmd' [-Wunused-variable]
-           u8 cmd[2];
-              ^
-   1 warning generated.
-
-
-vim +/cmd +604 drivers/input/touchscreen/cyttsp5.c
-
-5b0c03e24a061f Alistair Francis 2022-10-31  598  
-5b0c03e24a061f Alistair Francis 2022-10-31  599  static int cyttsp5_get_hid_descriptor(struct cyttsp5 *ts,
-5b0c03e24a061f Alistair Francis 2022-10-31  600  				      struct cyttsp5_hid_desc *desc)
-5b0c03e24a061f Alistair Francis 2022-10-31  601  {
-5b0c03e24a061f Alistair Francis 2022-10-31  602  	struct device *dev = ts->dev;
-5b0c03e24a061f Alistair Francis 2022-10-31  603  	int rc;
-5b0c03e24a061f Alistair Francis 2022-10-31 @604  	u8 cmd[2];
-5b0c03e24a061f Alistair Francis 2022-10-31  605  
-5b0c03e24a061f Alistair Francis 2022-10-31  606  	rc = cyttsp5_write(ts, HID_DESC_REG, NULL, 0);
-5b0c03e24a061f Alistair Francis 2022-10-31  607  	if (rc) {
-5b0c03e24a061f Alistair Francis 2022-10-31  608  		dev_err(dev, "Failed to get HID descriptor, rc=%d\n", rc);
-5b0c03e24a061f Alistair Francis 2022-10-31  609  		return rc;
-5b0c03e24a061f Alistair Francis 2022-10-31  610  	}
-5b0c03e24a061f Alistair Francis 2022-10-31  611  
-5b0c03e24a061f Alistair Francis 2022-10-31  612  	rc = wait_for_completion_interruptible_timeout(&ts->cmd_done,
-5b0c03e24a061f Alistair Francis 2022-10-31  613  			msecs_to_jiffies(CY_HID_GET_HID_DESCRIPTOR_TIMEOUT_MS));
-5b0c03e24a061f Alistair Francis 2022-10-31  614  	if (rc <= 0) {
-5b0c03e24a061f Alistair Francis 2022-10-31  615  		dev_err(ts->dev, "HID get descriptor timed out\n");
-5b0c03e24a061f Alistair Francis 2022-10-31  616  		rc = -ETIMEDOUT;
-5b0c03e24a061f Alistair Francis 2022-10-31  617  		return rc;
-5b0c03e24a061f Alistair Francis 2022-10-31  618  	}
-5b0c03e24a061f Alistair Francis 2022-10-31  619  
-5b0c03e24a061f Alistair Francis 2022-10-31  620  	memcpy(desc, ts->response_buf, sizeof(*desc));
-5b0c03e24a061f Alistair Francis 2022-10-31  621  
-5b0c03e24a061f Alistair Francis 2022-10-31  622  	/* Check HID descriptor length and version */
-5b0c03e24a061f Alistair Francis 2022-10-31  623  	if (le16_to_cpu(desc->hid_desc_len) != sizeof(*desc) ||
-5b0c03e24a061f Alistair Francis 2022-10-31  624  	    le16_to_cpu(desc->bcd_version) != HID_VERSION) {
-5b0c03e24a061f Alistair Francis 2022-10-31  625  		dev_err(dev, "Unsupported HID version\n");
-5b0c03e24a061f Alistair Francis 2022-10-31  626  		return -ENODEV;
-5b0c03e24a061f Alistair Francis 2022-10-31  627  	}
-5b0c03e24a061f Alistair Francis 2022-10-31  628  
-5b0c03e24a061f Alistair Francis 2022-10-31  629  	return 0;
-5b0c03e24a061f Alistair Francis 2022-10-31  630  }
-5b0c03e24a061f Alistair Francis 2022-10-31  631  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Rob
