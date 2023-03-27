@@ -2,58 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FCA6C9DE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7922B6C9D21
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233115AbjC0I1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
+        id S232579AbjC0IF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233052AbjC0I1F (ORCPT
+        with ESMTP id S232019AbjC0IFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:27:05 -0400
+        Mon, 27 Mar 2023 04:05:22 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F8F5FF9;
-        Mon, 27 Mar 2023 01:25:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D1749D1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:05:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679905505; x=1711441505;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MdNLDINmriyqE7KeCKfADER0gVCNbMyHdH3hw5/HrHQ=;
-  b=kKmkED1czx7Sfskt/cv4466E6hEYlpFGNlvDFQLHjHXR7ealU3UEenCM
-   v0S4SrdykcnVEwE+/GeLaBUhQkq2EnDYxrouP6Nai948tonm57Lf6qETd
-   TIfGHS2nU3+sfZFz+SDRFcO/C6N4cbULYHsrLIwN7TcaKVIkfx/TKVgFP
-   LMyhiKb3WsAGDqojJcJXmRXvFF5HOxVc1LsjzntouKb/hwwv1ue2pZJBa
-   YaPlR2AC9NmXIIeI1udGwtQoiqDCL/OQ+oRikWBcJF7NCBogja5WkLUzC
-   MWWqdIdq705/7OLyxGs1hsucPYm1S1nsD8P4iSnfJ+rcj6SMz/gluIxM+
+  t=1679904321; x=1711440321;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bF6FvUsBWv5aao+c+XUQZz/pLDCLvZpbUI0Ma9Oo5XA=;
+  b=nRakkajxQ1ODVbP2W5ty4Mizu87dQ78ydCC+FivSWOGwNeGQfXq12jE2
+   2EggbGNa4hOeATrjVMB/uCwDvgXtGjpTgq/Qa4eCrqzWYyq4+lsvVd9Re
+   vG2eJxQ97NS9+ko0pi3+n4qiElfINYji2+VCM6GfcR2KKgVM0VmE7On0r
+   CkfTQAvog4N0LFNucspMAHUhGrRkmz2brK6h+5CdAw2cvfN279Ea1X2yK
+   7Dolw8CCVusRSEhVN6OLEBiulLOg9r/pa4cdzWgcSuqmtsJprQrm7QQjI
+   Vpcdm3vGeCEiKySLGN6g5fZk1NWm+eBIaRJYVzt8f9ipZBS9kl+Q7a9SW
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="338930440"
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="338926243"
 X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="338930440"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 01:24:43 -0700
+   d="scan'208";a="338926243"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 01:05:14 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="713787170"
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="752601955"
 X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="713787170"
-Received: from unknown (HELO fred..) ([172.25.112.68])
-  by orsmga008.jf.intel.com with ESMTP; 27 Mar 2023 01:24:42 -0700
-From:   Xin Li <xin3.li@intel.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
-        andrew.cooper3@citrix.com, seanjc@google.com, pbonzini@redhat.com,
-        ravi.v.shankar@intel.com, jiangshanlai@gmail.com,
-        shan.kang@intel.com
-Subject: [PATCH v6 33/33] KVM: x86/vmx: refactor VMX_DO_EVENT_IRQOFF to generate FRED stack frames
-Date:   Mon, 27 Mar 2023 00:58:38 -0700
-Message-Id: <20230327075838.5403-34-xin3.li@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230327075838.5403-1-xin3.li@intel.com>
-References: <20230327075838.5403-1-xin3.li@intel.com>
+   d="scan'208";a="752601955"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Mar 2023 01:05:14 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 27 Mar 2023 01:05:14 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 27 Mar 2023 01:05:13 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Mon, 27 Mar 2023 01:05:13 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Mon, 27 Mar 2023 01:05:13 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=juhzNdSreKJDgLaaIlua66uLMUsGPZPxbp0+5jpMesz4xjus6tGGSfWzpcBkJhSa0V10H53lqDNh0T0TvPv+IbBiof/4e50SHNHSNpTzOzmdmCuB7nReTj0T6OqM3YItYTiZCl+mUf6TNylvCklcrLbquKOGjsRCuTsm9U0PEKekSow3h3uPFaID/a6fmzayA/DJM/nRNdpqr09oozYsNlUXupzLfi4J/ZUGlpjCJACXVVhIXIohPFtNsNnNqacLSMwpbdApL59hNXPJ6o6oEjwonk/JvjheXKlf249/8yn5Nma7hVxOxaVaTU0RxdSJpGQ32Fe65tPkBxg4kC8/OA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SyrXOHCjLjNBrCbhGfxJFODYI+kXPg4QEe1VGAap2wg=;
+ b=SCTZeC8r0Qjnf04DWha2J1LYUUx5HA6nC43g7RNH1EhId94kH+I7QL0SnAjOOlI8SjSbUEM1FZ72kbJIXMMNC6ZVGDs/FeGonODk0uqgQShn0DAHCeTJDLGVvs/2ZQeb2xvcpMXjRuyI8O7yZJlAMlAOqFBlPxvy1Of2XYECwgEEwpxv5L0Y4e1pD+5Xcp7zIVF8ZP0oQ31uoDgnV2rUtHsKMnCjHBCc3clQRPV0vYud+dtR8iWQEjoWlJY2FhmeYZr4dMHMl9mgi6hyRHlz6jIsC0hhtkDfYempyBJqydsuIjt7abjuO6X7fy09zuPZjQq4vNizMpyuCtF0M9mW4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
+ by DM4PR11MB7205.namprd11.prod.outlook.com (2603:10b6:8:113::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Mon, 27 Mar
+ 2023 08:05:11 +0000
+Received: from BYAPR11MB3062.namprd11.prod.outlook.com
+ ([fe80::78d1:41fe:eae2:1f6d]) by BYAPR11MB3062.namprd11.prod.outlook.com
+ ([fe80::78d1:41fe:eae2:1f6d%7]) with mapi id 15.20.6178.041; Mon, 27 Mar 2023
+ 08:05:11 +0000
+Date:   Mon, 27 Mar 2023 16:05:02 +0800
+From:   Aaron Lu <aaron.lu@intel.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: rq lock contention due to commit af7f588d8f73
+Message-ID: <20230327080502.GA570847@ziqianlu-desk2>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-ClientProxiedBy: SGAP274CA0019.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::31)
+ To BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3062:EE_|DM4PR11MB7205:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35a88c45-2113-4a77-bc8f-08db2e99fd22
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: m/O7VsDD3lzLFWjBOItp2Fuj29R/fKo3kr5pA3/ZWXvViXJXEkCtcCCQuCAvjCLE12pxzn8KJ5gW/Hwjd9X/qpYLy3hkxRbpmeQYY1T4EXVyiEynTulljg7mQHo1gLnLkz2/sLgYV3tYt+SOxo/KLMb0ls8NWSKa1ef2/nf4JVlTtzMbCJSTTeh8YkNr5jS22SzOFK5Z2L8Ujqwp7Wr0X0U+WHWM8utQFl+qpaDBuw30wx0bsklPErutttmrMDM/XNdXwjFrXnAzS4+l3pDciY6b7GjKLUGugO8z0f7eOsjRi5a2AdVeNCKRMYGdXvXk9ogpvTTo4Jgc3nPdfgFunmIZrEzqV7pC6L8LUiIYhdjJVOZp2F2U2Codli1Sc9CyyictVbZYteRlySxgLmxWvT8LHmdN2/A+y6CjYnd8kOafKGxWQSC/BUTvudliFp52DvKtFGLxF1/KlRBR48PU7G3wTHlJVJmlb8XMOJJOjMr1Ip2sVGF1Js9vFTGIN9I2Scv2T468KctAl2r7hsYPTHakZLVprjfuSbk5vkzTV9Jx3TBaA3wace7QfngMOz2InjCZP6djb0jATKrCC4p1gSZNb/SFn15g/KPRvnJfdvQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3062.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(136003)(366004)(346002)(396003)(376002)(451199021)(8936002)(5660300002)(38100700002)(82960400001)(1076003)(9686003)(26005)(186003)(6506007)(41300700001)(44832011)(83380400001)(2906002)(4326008)(316002)(966005)(86362001)(6486002)(6666004)(6512007)(33656002)(66556008)(66946007)(478600001)(33716001)(66476007)(6916009)(8676002)(98903001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4xi9rybDLydYmPZDfiRX00JKXRmkPCAi9LjM51/c6lwLxCZUwYpLVwEgUWEv?=
+ =?us-ascii?Q?jtVysNywd9aidhp9PNYJGv8YO4g0H0iidVr24LNNyRaG9/GSHCxuPlasiCqc?=
+ =?us-ascii?Q?bS1luGKBx1ikbT0PvQhLJJNcF5Jm9Hyy4lg6hDXQmJA4OljfrB80s0W8qlMc?=
+ =?us-ascii?Q?9H2orvVxNsyR545D+1NXUZ4kz0KJsE6ZMLGw3PpPwS+q2Vk/Y51y34AFznoP?=
+ =?us-ascii?Q?4Sxds+yYfkH/8Lsyo7n1cAHOyK2kKV0mw7ZaHUuyLCfTA2bnmWynx2qu0Duk?=
+ =?us-ascii?Q?35vwZTw/avoRRZhc1viSSQfrXONkUcfq3JRU8i0ABR62BPrD6Ld8BCbkfY+t?=
+ =?us-ascii?Q?WacxYs6eZKlY4A0c6jOu3uZcNb/oIw3x5cERbDkUgtbHO9kFna95t1aNfw0A?=
+ =?us-ascii?Q?Lb5/23z3+PTPK1snHi6CT/qkpFkmX8IJPkTIoT7rUmMftFxvcU6ztziJxBtf?=
+ =?us-ascii?Q?ZoWK4b+zqlHeloP4ZooRHyWfxyVWq0ROUodPEnI5J5tRaDjxeziMuQ6MSWvz?=
+ =?us-ascii?Q?/0/WRZjSkZ+Z9j4d1QZeW3G3fJSWeNXhPm8qi9qb0jILvSHr90eCH4F4op1w?=
+ =?us-ascii?Q?jsGPzwzxDG43DnBQRw6nJg96j6USUnVVgjRLNLCF+SjxVJZ8+9d4uYYZChFK?=
+ =?us-ascii?Q?FnOG/WACLCrO0O2WTixScLXhgYVS7QwrVB4zti41PMZ6h0c2feqVXEuNd4I4?=
+ =?us-ascii?Q?8pGyUOuG89NSk3gjwF+aznU7Z+0DhoPLUgg7dRljt4qH3/X8ULpC3aX2Ep6P?=
+ =?us-ascii?Q?Zc60rLxu02zqHHesTaDD0tMC7fNU9FLsMYNIGZTjAWCg0Xi8nUXIO3Ab+weC?=
+ =?us-ascii?Q?mNKRcJToCSnLY1H8JY7hKDOvsOeL9a0NHHoUEDJhXJGS9l/kcRTqYJHJSprK?=
+ =?us-ascii?Q?8mdOccz5SKHyKLm1WQHIluRDOpfPrTzuhwBjy3a/9ETENShBuRF2WyaO5Aou?=
+ =?us-ascii?Q?d8SF92odTKGwoQPdTKXo/Dpzd7FHYF6NZjGRsivnYcgiamds4xQY4TseZ+TO?=
+ =?us-ascii?Q?gsuGDZ3yOy588ta3hSstsm9SY1rvZ+SWb8VUtsWIn3j+jeC8HKkRLe0iZRPu?=
+ =?us-ascii?Q?BBnQ6WfGARe2IrIltT+VMT9O0ki70sBkqCl/NKz+QSs+IBQG7hMrWvAK80GM?=
+ =?us-ascii?Q?XLDAgFPm2IsXef88Pa5Hdxu6sSe+ohqGPWkRhMA+BuOR2otYAw996chaPMIz?=
+ =?us-ascii?Q?wFIi19+TklTJ/TuVyCwhD45E6Ghl26vyWSRnhJVH0Jllc1Xd4Z6P9lgHcJEh?=
+ =?us-ascii?Q?EtFejkxMBvneZCf9piyeichpFO8swQKfpge+1Mgdgz/rUkLOUkF/uMm319FM?=
+ =?us-ascii?Q?3r1lw4Kg2Xn7+Hi1+Tu9xsj4J9zD2XxGMJ1LBuk/BKh8Qs01yCBORbkIKJhD?=
+ =?us-ascii?Q?rRn6MNBg7QSNn4qyOoA/IUNgdlTH6O1A986igHFhDxc3m3cOOhFLmLd6FGdo?=
+ =?us-ascii?Q?Nu0zWXczl2qv8Xpp4YYTuHbvRItDSh5zH3RTuod2+zag4QJ2iF/5pgtIQnce?=
+ =?us-ascii?Q?WORs6ru2GUf7xbvao0CPdrEiv0Vp4OrBONLeU9q71AwCVzjY+yxTzdCT5i5c?=
+ =?us-ascii?Q?tjiKopgySdYDGmd/ijxAPrhiGN31E/90117KnCwG?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35a88c45-2113-4a77-bc8f-08db2e99fd22
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3062.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 08:05:11.5936
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Puj2MxOJ0iJVDNXXplC/HfNndPy3tc+mAYUCBBuK1bRO4myfANyg4OrzwaRkG+diKtpFNxAKA6j8lUQkCX+4HA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB7205
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
@@ -63,188 +143,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Comparing to an IDT stack frame, a FRED stack frame has extra 16 bytes of
-information pushed at the regular stack top and 8 bytes of error code _always_
-pushed at the regular stack bottom, VMX_DO_EVENT_IRQOFF can be refactored
-to generate FRED stack frames with event type and vector properly set. Thus,
-IRQ/NMI can be handled with the existing approach when FRED is enabled.
+Hi Mathieu,
 
-As a FRED stack frame always contains an error code pushed by hardware, call
-a trampoline function first to have the return instruction address pushed on
-the regular stack. Then the trampoline function pushes an error code (0 for
-both IRQ and NMI) and jumps to fred_entrypoint_kernel() for NMI handling or
-calls external_interrupt() for IRQ handling.
+I was doing some optimization work[1] for kernel scheduler using a
+database workload: sysbench+postgres and before I submit my work, I
+rebased my patch on top of latest v6.3-rc kernels to see if everything
+still works expected and then I found rq's lock became very heavily
+contended as compared to v6.2 based kernels.
 
-The trampoline function for IRQ handling pushes general purpose registers to
-form a pt_regs structure and then use it to call external_interrupt(). As a
-result, IRQ handling does not execute any noinstr code.
+Using the above mentioned workload, before commit af7f588d8f73("sched:
+Introduce per-memory-map concurrency ID"), the profile looked like:
 
-Of course external_interrupt() needs to be exported.
+     7.30%     0.71%  [kernel.vmlinux]            [k] __schedule
+     0.03%     0.03%  [kernel.vmlinux]            [k] native_queued_spin_lock_slowpath
 
-Tested-by: Shan Kang <shan.kang@intel.com>
-Signed-off-by: Xin Li <xin3.li@intel.com>
----
- arch/x86/include/asm/traps.h |  2 ++
- arch/x86/kernel/traps.c      |  5 +++
- arch/x86/kvm/vmx/vmenter.S   | 59 ++++++++++++++++++++++++++++++++++--
- arch/x86/kvm/vmx/vmx.c       |  8 ++++-
- 4 files changed, 70 insertions(+), 4 deletions(-)
+After that commit:
 
-diff --git a/arch/x86/include/asm/traps.h b/arch/x86/include/asm/traps.h
-index 612b3d6fec53..017b95624325 100644
---- a/arch/x86/include/asm/traps.h
-+++ b/arch/x86/include/asm/traps.h
-@@ -58,4 +58,6 @@ typedef DECLARE_SYSTEM_INTERRUPT_HANDLER((*system_interrupt_handler));
- 
- system_interrupt_handler get_system_interrupt_handler(unsigned int i);
- 
-+int external_interrupt(struct pt_regs *regs);
-+
- #endif /* _ASM_X86_TRAPS_H */
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index 73471053ed02..0f1fcd53cb52 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -1573,6 +1573,11 @@ int external_interrupt(struct pt_regs *regs)
- 	return 0;
- }
- 
-+#if IS_ENABLED(CONFIG_KVM_INTEL)
-+/* For KVM VMX to handle IRQs in IRQ induced VM exits. */
-+EXPORT_SYMBOL_GPL(external_interrupt);
-+#endif
-+
- #endif /* CONFIG_X86_64 */
- 
- void __init install_system_interrupt_handler(unsigned int n, const void *asm_addr, const void *addr)
-diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-index 631fd7da2bc3..43c9da9c9c24 100644
---- a/arch/x86/kvm/vmx/vmenter.S
-+++ b/arch/x86/kvm/vmx/vmenter.S
-@@ -8,6 +8,7 @@
- #include <asm/segment.h>
- #include "kvm-asm-offsets.h"
- #include "run_flags.h"
-+#include "../../entry/calling.h"
- 
- #define WORD_SIZE (BITS_PER_LONG / 8)
- 
-@@ -31,7 +32,7 @@
- #define VCPU_R15	__VCPU_REGS_R15 * WORD_SIZE
- #endif
- 
--.macro VMX_DO_EVENT_IRQOFF call_insn call_target
-+.macro VMX_DO_EVENT_IRQOFF call_insn call_target fred=1 nmi=0
- 	/*
- 	 * Unconditionally create a stack frame, getting the correct RSP on the
- 	 * stack (for x86-64) would take two instructions anyways, and RBP can
-@@ -46,11 +47,34 @@
- 	 * creating the synthetic interrupt stack frame for the IRQ/NMI.
- 	 */
- 	and  $-16, %rsp
-+
-+	.if \fred
-+	push $0		/* Reserved by FRED, must be 0 */
-+	push $0		/* FRED event data, 0 for NMI and external interrupts */
-+
-+	.if \nmi
-+	mov $(2 << 32 | 2 << 48), %_ASM_AX	/* NMI event type and vector */
-+	.else
-+	mov %_ASM_ARG1, %_ASM_AX
-+	shl $32, %_ASM_AX			/* external interrupt vector */
-+	.endif
-+	add $__KERNEL_DS, %_ASM_AX
-+	bts $57, %_ASM_AX			/* bit 57: 64-bit mode */
-+	push %_ASM_AX
-+	.else
- 	push $__KERNEL_DS
-+	.endif
-+
- 	push %rbp
- #endif
- 	pushf
-+	.if \nmi
-+	mov $__KERNEL_CS, %_ASM_AX
-+	bts $28, %_ASM_AX			/* set the NMI bit */
-+	push %_ASM_AX
-+	.else
- 	push $__KERNEL_CS
-+	.endif
- 	\call_insn \call_target
- 
- 	/*
-@@ -299,8 +323,19 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
- 
- SYM_FUNC_END(__vmx_vcpu_run)
- 
-+SYM_FUNC_START(vmx_do_nmi_trampoline)
-+#ifdef CONFIG_X86_FRED
-+	ALTERNATIVE "jmp .Lno_errorcode_push", "", X86_FEATURE_FRED
-+	push $0		/* FRED error code, 0 for NMI */
-+	jmp fred_entrypoint_kernel
-+#endif
-+
-+.Lno_errorcode_push:
-+	jmp asm_exc_nmi_kvm_vmx
-+SYM_FUNC_END(vmx_do_nmi_trampoline)
-+
- SYM_FUNC_START(vmx_do_nmi_irqoff)
--	VMX_DO_EVENT_IRQOFF call asm_exc_nmi_kvm_vmx
-+	VMX_DO_EVENT_IRQOFF call vmx_do_nmi_trampoline nmi=1
- SYM_FUNC_END(vmx_do_nmi_irqoff)
- 
- 
-@@ -358,5 +393,23 @@ SYM_FUNC_END(vmread_error_trampoline)
- #endif
- 
- SYM_FUNC_START(vmx_do_interrupt_irqoff)
--	VMX_DO_EVENT_IRQOFF CALL_NOSPEC _ASM_ARG1
-+	VMX_DO_EVENT_IRQOFF CALL_NOSPEC _ASM_ARG1 fred=0
- SYM_FUNC_END(vmx_do_interrupt_irqoff)
-+
-+#ifdef CONFIG_X86_64
-+SYM_FUNC_START(vmx_do_fred_interrupt_trampoline)
-+	push $0	/* FRED error code, 0 for NMI and external interrupts */
-+	PUSH_REGS
-+
-+	movq	%rsp, %rdi	/* %rdi -> pt_regs */
-+	call external_interrupt
-+
-+	POP_REGS
-+	addq $8,%rsp		/* Drop FRED error code */
-+	RET
-+SYM_FUNC_END(vmx_do_fred_interrupt_trampoline)
-+
-+SYM_FUNC_START(vmx_do_fred_interrupt_irqoff)
-+	VMX_DO_EVENT_IRQOFF call vmx_do_fred_interrupt_trampoline
-+SYM_FUNC_END(vmx_do_fred_interrupt_irqoff)
-+#endif
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index d2d6e1b6c788..5addfee5cc6d 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -6875,6 +6875,7 @@ static void vmx_apicv_post_state_restore(struct kvm_vcpu *vcpu)
- }
- 
- void vmx_do_interrupt_irqoff(unsigned long entry);
-+void vmx_do_fred_interrupt_irqoff(unsigned int vector);
- void vmx_do_nmi_irqoff(void);
- 
- static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
-@@ -6923,7 +6924,12 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
- 		return;
- 
- 	kvm_before_interrupt(vcpu, KVM_HANDLING_IRQ);
--	vmx_do_interrupt_irqoff(gate_offset(desc));
-+#ifdef CONFIG_X86_64
-+	if (cpu_feature_enabled(X86_FEATURE_FRED))
-+		vmx_do_fred_interrupt_irqoff(vector);
-+	else
-+#endif
-+		vmx_do_interrupt_irqoff(gate_offset(desc));
- 	kvm_after_interrupt(vcpu);
- 
- 	vcpu->arch.at_instruction_boundary = true;
--- 
-2.34.1
+    49.01%     0.87%  [kernel.vmlinux]            [k] __schedule
+    43.20%    43.18%  [kernel.vmlinux]            [k] native_queued_spin_lock_slowpath
 
+The above profile was captured with sysbench's nr_threads set to 56; if
+I used more thread number, the contention would be more severe on that
+2sockets/112core/224cpu Intel Sapphire Rapids server.
+
+The docker image I used to do optimization work is not available outside
+but I managed to reproduce this problem using only publicaly available
+stuffs, here it goes:
+1 docker pull postgres
+2 sudo docker run --rm --name postgres-instance -e POSTGRES_PASSWORD=mypass -e POSTGRES_USER=sbtest -d postgres -c shared_buffers=80MB -c max_connections=250
+3 go inside the container
+  sudo docker exec -it $the_just_started_container_id bash
+4 install sysbench inside container
+  sudo apt update and sudo apt install sysbench
+5 prepare
+  root@container:/# sysbench --db-driver=pgsql --pgsql-user=sbtest --pgsql_password=mypass --pgsql-db=sbtest --pgsql-port=5432 --tables=16 --table-size=10000 --threads=56 --time=60 --report-interval=2 /usr/share/sysbench/oltp_read_only.lua prepare
+6 run
+  root@container:/# sysbench --db-driver=pgsql --pgsql-user=sbtest --pgsql_password=mypass --pgsql-db=sbtest --pgsql-port=5432 --tables=16 --table-size=10000 --threads=56 --time=60 --report-interval=2 /usr/share/sysbench/oltp_read_only.lua run
+
+Let it warm up a little bit and after 10-20s you can do profile and see
+the increased rq lock contention. You may need a machine that has at
+least 56 cpus to see this, I didn't try on other machines.
+
+Feel free to let me know if you need any other info.
+
+[1]: https://lore.kernel.org/lkml/20230327053955.GA570404@ziqianlu-desk2/
+
+Best wishes,
+Aaron
