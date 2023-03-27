@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3E46CA9E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB8A6CA9EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjC0QEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 12:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
+        id S229906AbjC0QFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 12:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232568AbjC0QER (ORCPT
+        with ESMTP id S229916AbjC0QFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:04:17 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA443C12
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:04:15 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id i5so38496467eda.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:04:15 -0700 (PDT)
+        Mon, 27 Mar 2023 12:05:11 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD801BF
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:05:10 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id cn12so38347460edb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:05:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679933054;
+        d=linaro.org; s=google; t=1679933109;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=r9d+CJ7xH0NeUIZvPiaZdq/zmEARl/7DsQh+htUqnO4=;
-        b=taKDcuQ01TOwBn5emk4eJEOyvH7uNbZHzQ4LaVKRxDAknBe6gooEFvYy+ZjZ8dVXwl
-         VI+7zWrX7BCgW1r2OoAKiCQlWCYtEOs4zYqyf7mn6dbt1uU+mdcmJkOy3/1MrUwiQegO
-         y59CwGa/LsKRSgmnJpDRDqKBccE2eGsbQtYl0S0Sb10/rKD9qXYUJLONeq2uCEbaKAsf
-         4ea0ZGhvgTv8/ZH5x1Vrf2Gm4ceou97im+I/G31g/LcvX3A66MrItEOr2u/kgy6wEYHn
-         ib7YkKDPvG8hbOOebou1kegcpXdj/GALmfAQMNz87oXopgjr32RCCM/u+c4KukyamHSg
-         +A9g==
+        bh=+xWYiS3llu2HpwOSTJeOhknc09GbN4E66RoEIS5/sjs=;
+        b=N0lhdKu1Wt1wakJ4GZ5rAE32F86Cwg+uPgtKI8cdDYcQDSOkdI5RqyoenNHspPDbZ1
+         NgB6kd/48VFxqqB1/LxR55cRlGZb9KSZFaLqKeBLNE2rv801ii31R0AfpFriWlTJAfJk
+         VmzurPJBhLPDddZnCNjJUn1Fc/rjbXCTUw5YL9S56uKbWTHQKMyRB8rIL+jyvKD2sScz
+         73RupSe+hfofNOQJiXDWKXdsty7kiMJWrGcc98ERQzv75WJaJw650M0oNKPyHw8JyVjn
+         VcSJgSlxCdLx+RnKbBLJl4v8NyWH/nVEVjlWK7IwuCSq3yiAl7lF3sgEW99m+Zuk+YhH
+         Qqwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679933054;
+        d=1e100.net; s=20210112; t=1679933109;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r9d+CJ7xH0NeUIZvPiaZdq/zmEARl/7DsQh+htUqnO4=;
-        b=cUfGj71pLxHwv2X9+8z73/PYzx29TS10OX86Rtwudu2YsZWKbcNm4PilelgzHldyUQ
-         FxUS2kSV8RKFKbdsuKUyuAlHvlqMUNwwH6F+RWuJGbIC+4elJF1ToJLzkVwngt6EFCFM
-         v7Gn/bEddDz47Nlxd083CUcKUhzl20Pm/sFNiQ50oXQjJeoaaHl8WkEVyTg/0qZoxCWi
-         ZEREnI08tjUjq7dr1+oXYsNWhNsHCu66UV8mKwGq71X8MgGA6l1Pyn2mahP57NuJyE8Q
-         dY43I3KDEMFvKXObYHcqOH9yjBKORrn+i7cEus0fvzqfnj1TjCRKr3+hrKoobd5kT05+
-         gB+g==
-X-Gm-Message-State: AAQBX9dEd8CNwauTwQDKQaaatYp5NHkvuijngy0HGSdlJuBqd3Mex6r9
-        j10HqX9wA5kP/70R0U73HXQJ63+ydK/iiZ4y54I=
-X-Google-Smtp-Source: AKy350aXxjXxWZUWc28oW6GgoYbcSBUB0NXoeU5O09Qr5yX5ooIkPywTvdE6GOALkRyZ4RCZKydGZA==
-X-Received: by 2002:a17:906:578c:b0:88f:a236:69e6 with SMTP id k12-20020a170906578c00b0088fa23669e6mr12928910ejq.7.1679933054387;
-        Mon, 27 Mar 2023 09:04:14 -0700 (PDT)
+        bh=+xWYiS3llu2HpwOSTJeOhknc09GbN4E66RoEIS5/sjs=;
+        b=zZ2pGTZnQ039cm/ayPkK7G89dAqks02b14d4QMQuMOZStLt/fOMNWrZGDlxr6Fp1PH
+         krFvBSiEGpyhdybUUfKv0i8oZVjq5HzE3niCxg6gHH+epMDdn1JjwbveUzg4ZH+SIcTJ
+         fym28HUC2wi+KSqlUZhqlnPpS56xeNxYLf3jnXxP7yVrkw3xtNL/WfvUiR5e9VpJhM7I
+         6eJ0Z9cAb88m9uTt3QX8xUGzf0ItRQOu8h2qu7v0jnw/SU8fPAQ98/4vOotCNKf+pdoC
+         XOq1Jo5lu9FVvtjc1xK6q/wAQUaRCxWo9zydMqx2E3yePMutwYld6rqaV2AK9cijVVio
+         T0Eg==
+X-Gm-Message-State: AAQBX9dCGDm4QztB6gnC/TtxsqWwud68v9xsmxHMdHtKF39ONFLYyOwC
+        /ypxDAkZvUz7TAdLGuBw89dCMDA0W4/n51nwMTA=
+X-Google-Smtp-Source: AKy350ZnoR9P3I9BdnZ/TMQKT/EOkIrQZ1OTR5vigOyQRanxSzAkd1f0gLI52BjTe6OdWnPHmIABVQ==
+X-Received: by 2002:a50:ec89:0:b0:4fa:4b1c:5ea3 with SMTP id e9-20020a50ec89000000b004fa4b1c5ea3mr12716995edr.23.1679933109297;
+        Mon, 27 Mar 2023 09:05:09 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:581e:789c:7616:5ee? ([2a02:810d:15c0:828:581e:789c:7616:5ee])
-        by smtp.gmail.com with ESMTPSA id yj8-20020a170907708800b00930170bc292sm14127889ejb.22.2023.03.27.09.04.13
+        by smtp.gmail.com with ESMTPSA id k24-20020a50ce58000000b004fc9e462743sm14685826edj.91.2023.03.27.09.05.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 09:04:14 -0700 (PDT)
-Message-ID: <fd349801-0ca1-7f89-f110-513a2cd4fc0f@linaro.org>
-Date:   Mon, 27 Mar 2023 18:04:13 +0200
+        Mon, 27 Mar 2023 09:05:08 -0700 (PDT)
+Message-ID: <efa9a89e-ead7-8604-5d7a-07c728485eee@linaro.org>
+Date:   Mon, 27 Mar 2023 18:05:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 3/3] memory: brcmstb_memc: Add new DDR attributes
+Subject: Re: [PATCH 0/2] depends on ARCH_STM32 instead of MACH_STM32MP157
 Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230324165231.3468069-1-f.fainelli@gmail.com>
- <20230324165231.3468069-4-f.fainelli@gmail.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>
+Cc:     richard@nod.at, vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230324155105.826063-1-christophe.kerello@foss.st.com>
+ <20230324170320.5087c223@xps-13>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230324165231.3468069-4-f.fainelli@gmail.com>
+In-Reply-To: <20230324170320.5087c223@xps-13>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -79,51 +78,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/03/2023 17:52, Florian Fainelli wrote:
-> Provide information about the DDR size, type, width, total width,
-> dual/single rank. This is useful for reporting purposes and inventory of
-> the system(s).
+On 24/03/2023 17:03, Miquel Raynal wrote:
+> Hi Christophe,
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  drivers/memory/brcmstb_memc.c | 80 ++++++++++++++++++++++++++++++++++-
->  1 file changed, 79 insertions(+), 1 deletion(-)
+> christophe.kerello@foss.st.com wrote on Fri, 24 Mar 2023 16:51:03 +0100:
 > 
-> diff --git a/drivers/memory/brcmstb_memc.c b/drivers/memory/brcmstb_memc.c
-> index 67c75e21c95e..032567dfd6e2 100644
-> --- a/drivers/memory/brcmstb_memc.c
-> +++ b/drivers/memory/brcmstb_memc.c
-> @@ -13,7 +13,14 @@
->  
->  #define REG_MEMC_CNTRLR_CONFIG		0x00
->  #define  CNTRLR_CONFIG_LPDDR4_SHIFT	5
-> -#define  CNTRLR_CONFIG_MASK		0xf
-> +#define  CNTRLR_CONFIG_MASK		GENMASK(3, 0)
-> +#define  CNTRLR_CONFIG_SIZE_SHIFT	4
-> +#define  CNTRLR_CONFIG_SIZE_MASK	GENMASK(7, 4)
-> +#define  CNTRLR_CONFIG_WIDTH_SHIFT	8
-> +#define  CNTRLR_CONFIG_WIDTH_MASK	GENMASK(9, 8)
-> +#define  CNTRLR_CONFIG_TOT_WIDTH_SHIFT	10
-> +#define  CNTRLR_CONFIG_TOT_WIDTH_MASK	GENMASK(11, 10)
-> +#define  CNTRLR_CONFIG_RANK_SHIFT	16
->  #define REG_MEMC_SRPD_CFG_21		0x20
->  #define REG_MEMC_SRPD_CFG_20		0x34
->  #define REG_MEMC_SRPD_CFG_1x		0x3c
-> @@ -63,6 +70,67 @@ static int brcmstb_memc_srpd_config(struct brcmstb_memc *memc,
->  	return 0;
->  }
->  
-> +static ssize_t ddr_rank_show(struct device *dev,
-> +			     struct device_attribute *attr, char *buf)
-> +{
-> +	struct brcmstb_memc *memc = dev_get_drvdata(dev);
-> +
-> +	return sprintf(buf, "%s\n",
-> +		       memc->config_reg & CNTRLR_CONFIG_RANK_SHIFT ?
-> +		       "dual" : "single");
+>> To be able to compile the driver on all STM32MP SOCs, we move the
+>> "depends on" on ARCH_STM32.
+>>
+>> Christophe Kerello (2):
+>>   memory: stm32-fmc2-ebi: depends on ARCH_STM32 instead of
+>>     MACH_STM32MP157
+>>   mtd: rawnand: stm32_fmc2: depends on ARCH_STM32 instead of
+>>     MACH_STM32MP157
+> 
+> I don't see issue with taking these two patches in independent trees so
+> if nobody disagrees I will take the second one through the mtd tree and
+> let Krzysztof take the first one through mem-ctrl.
 
-Why all these are not sysfs_emit()? I think it is the preferred (safer)
-interface.
+Sure, np.
 
 Best regards,
 Krzysztof
