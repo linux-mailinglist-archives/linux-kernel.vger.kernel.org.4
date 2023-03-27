@@ -2,78 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADD06C98E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 02:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B7B6C98E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 02:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjC0ABa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 20:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S230180AbjC0ADY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 20:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC0AB2 (ORCPT
+        with ESMTP id S229850AbjC0ADV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 20:01:28 -0400
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CB449EA
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 17:01:26 -0700 (PDT)
-Received: by mail-oo1-xc2f.google.com with SMTP id f24-20020a4aeb18000000b0053b78077c9dso1081697ooj.12
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 17:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679875286;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0mqNgHwIwhxr1KwcRcX5YFnIl6XBIDIyAfjEZK+PHDM=;
-        b=dVz1b0idsHmc85OTInQKiN0Q8jFxK+sv1qdp24KLMg8WIN6kln+oPitk+/H4G8H10d
-         dILm0QCrIwGctYcvg3eH0bZqBJd6ZOqYEfnC/rj+Y55t2dE2x2pvzUtzeZaO91K/0j4m
-         zXnuI94lOwU7029aCkbIAlInzZpdj9mF+MZ2JYBWY/Hpk1Xf4zRurLJDUzjVy15lTX//
-         VOC1twFCnBJBZzt6vGtr8HogzqHxwJIJTh8ymaJQ9Fk5d+8jEyqvdVuGYiGjppl2rDas
-         xeUKRd2CefMYuGQAYKzd4vcIe6KgZBzed42oousGD+pPACtDY4gRooBTGGhmhbF43Zha
-         LuIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679875286;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0mqNgHwIwhxr1KwcRcX5YFnIl6XBIDIyAfjEZK+PHDM=;
-        b=vdlVJZFKVpMyvY567MpzPjfwpt5hIEMo294Zg6SHRIgFcj5bARC3toNS/xGrztTn1w
-         6K7hlRhQOaN89tr47qlgShboSAr/lXeCOb5jlj/GPJxEGIE915u3mCC3m8P3k3P0oLhQ
-         UmQgVQL1ZMFtNQHR6kCo72g6d2et+DBSb2BQz9vIXTL6teiHySsf4BdQ0RxrcAMip38B
-         h9dzWvY8ZEGQqtpTqPvA50MWntbbqfvkZ1SFAoa+/IYCNs8oIJZe4LMfq/5IF8E2SMaT
-         6R1Lu5ug7jAGTywtDNIm95b2dM+ejWfY9jQY9Hk/pcpYCAuYJpBtBdggkAqpQTLz0kqS
-         gQ4A==
-X-Gm-Message-State: AO0yUKVcw+LVITWocjBbO2fGmCnKPqH5QZ/mCPQCvXFLOwB23wkzJASq
-        9cZO75wqVM5sPsZn7m/8p5u40+18RhV3BhewIEYL5g==
-X-Google-Smtp-Source: AK7set/rjDvuG3fJXQoZvhqm2wXcsciTm3HPhrb06n51ekP2LwhUp1dIcsn5TJa2ZrNBYjgZkbk3CQ==
-X-Received: by 2002:a4a:4542:0:b0:525:a9a9:b44a with SMTP id y63-20020a4a4542000000b00525a9a9b44amr5055633ooa.7.1679875286250;
-        Sun, 26 Mar 2023 17:01:26 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id e20-20020a4a8f14000000b0053dfd96fa61sm2896021ool.39.2023.03.26.17.01.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 17:01:25 -0700 (PDT)
-Date:   Sun, 26 Mar 2023 20:01:23 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Johannes Berg <johannes.berg@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] counter: 104-quad-8: Refactor to buffer states
- for CMR, IOR, and IDR
-Message-ID: <ZCDc0zPtPSyDgOaF@fedora>
-References: <cover.1679605919.git.william.gray@linaro.org>
- <c5adb13b4b0887beb1df40b34d2ef03d63a2860d.1679605919.git.william.gray@linaro.org>
- <ZB2OG4zZXsqqyN8v@smile.fi.intel.com>
- <ZB2Ob9VGe3GoEVko@smile.fi.intel.com>
- <ZB2k9m7rL7Hpy/zU@fedora>
- <ZB2qI7k/Igws5khg@smile.fi.intel.com>
- <ZB3DJjQLa48AodSD@fedora>
+        Sun, 26 Mar 2023 20:03:21 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4395E1FC0;
+        Sun, 26 Mar 2023 17:03:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=obMd8KxYaBJXLS2xOEVfqjlspcNMPlMz2DU/vmZvzIM=; b=I6n7Lh9tnllYJTO4KInJvH3BR2
+        RLEDLmVeohYvkb0v9e3Fpkdq4TUKXmRA4FIAj1uL9v6KWehnGjNpR2KoUJQExYf4bvCMxde3OA47s
+        LT/kh7BJX0cbk8sn2JoMJFKBgtKY/FKj76gfjB6VrskjgNOBxx5lEyaa55KulW5+o+Hk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pgaK7-008SvW-34; Mon, 27 Mar 2023 02:02:55 +0200
+Date:   Mon, 27 Mar 2023 02:02:55 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rafael@kernel.org, Colin Foster <colin.foster@in-advantage.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee@kernel.org>, davem@davemloft.net,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        thomas.petazzoni@bootlin.com
+Subject: Re: [RFC 4/7] mfd: ocelot-spi: Change the regmap stride to reflect
+ the real one
+Message-ID: <826e295b-6a0b-4015-85bc-5ba6015678dc@lunn.ch>
+References: <20230324093644.464704-1-maxime.chevallier@bootlin.com>
+ <20230324093644.464704-5-maxime.chevallier@bootlin.com>
+ <c87cd0b0-9ea4-493d-819d-217334c299dd@lunn.ch>
+ <20230324134817.50358271@pc-7.home>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VOBZKfGdbh/Z/7o0"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZB3DJjQLa48AodSD@fedora>
+In-Reply-To: <20230324134817.50358271@pc-7.home>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,54 +61,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> > >  static const struct regmap_config ocelot_spi_regmap_config = {
+> > >  	.reg_bits = 24,
+> > > -	.reg_stride = 4,
+> > > +	.reg_stride = 1,
+> > >  	.reg_shift = REGMAP_DOWNSHIFT(2),
+> > >  	.val_bits = 32,  
+> > 
+> > This does not look like a bisectable change? Or did it never work
+> > before?
+> 
+> Actually this works in all cases because of "regmap: check for alignment
+> on translated register addresses" in this series. Before this series,
+> I think using a stride of 1 would have worked too, as any 4-byte-aligned
+> accesses are also 1-byte aligned.
 
---VOBZKfGdbh/Z/7o0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is the sort of think which is good to explain in the commit
+message. That is the place to answer questions reviewers are likely to
+ask for things which are not obvious from just the patch.
 
-On Fri, Mar 24, 2023 at 11:35:02AM -0400, William Breathitt Gray wrote:
-> There are eight calls to quad8_control_register_update() in 104-quad-8:
->=20
->         quad8_control_register_update(priv, priv->idr, id, DISABLE_INDEX_=
-MODE, INDEX_MODE);
->         quad8_control_register_update(priv, priv->cmr, id, mode_cfg, QUAD=
-RATURE_MODE);
->         quad8_control_register_update(priv, priv->ior, event_node->channe=
-l, flg_pins, FLG_PINS);
->         quad8_control_register_update(priv, priv->idr, channel_id, index_=
-polarity, INDEX_POLARITY);
->         quad8_control_register_update(priv, priv->idr, channel_id, synchr=
-onous_mode, INDEX_MODE);
->         quad8_control_register_update(priv, priv->cmr, count->id, count_m=
-ode, COUNT_MODE);
->         quad8_control_register_update(priv, priv->ior, count->id, enable,=
- AB_GATE);
->         quad8_control_register_update(priv, priv->ior, count->id, !preset=
-_enable, LOAD_PIN);
-
-I attempted the cross-compiling using an x86-64 system and I was able to
-recreate the build error. I tried to isolate the problem line by
-commenting out quad8_control_register_update() calls and discover that
-this appears to be an inline issue after all: if there are more than six
-calls to quad8_control_register_update() are in the code, then the
-'__bad_mask' build error occurs.
-
-The build error doesn't occur if I force the inline via __always_inline,
-so I'll add that to quad8_control_register_update() to resolve this
-issue and submit a v3 patchset later this week.
-
-William Breathitt Gray
-
---VOBZKfGdbh/Z/7o0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZCDc0wAKCRC1SFbKvhIj
-K6DUAQCHK6g+zrtL2opXqvDT2GFt26czSyY6ss78QElPdbKgbgEA7jhk8Q8oAeE2
-fnq8aYq272RzeXV1qKomPviXXtZMbgc=
-=2imo
------END PGP SIGNATURE-----
-
---VOBZKfGdbh/Z/7o0--
+    Andrew
