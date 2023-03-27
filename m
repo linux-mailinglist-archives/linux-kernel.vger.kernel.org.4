@@ -2,182 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00306C9E19
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD4D6C9E1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 10:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233363AbjC0IjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 04:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
+        id S233011AbjC0IjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 04:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbjC0Iin (ORCPT
+        with ESMTP id S233382AbjC0Iis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:38:43 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1802135A3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 01:33:03 -0700 (PDT)
+        Mon, 27 Mar 2023 04:38:48 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420806190;
+        Mon, 27 Mar 2023 01:33:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679905983; x=1711441983;
+  t=1679905993; x=1711441993;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=rQkQFFARodZAWLn6M7t7NWjKx+Qr4ZsrnIS1liy4gUk=;
-  b=SGRv3NZTFTzpgECatpNWjfmNsym27hESd59CErN6hl5r7D5ijCIdPd1Y
-   9GgPzA5FkwICkCtOkf8PT8ncT4lltjr0vSROVKE0d62vuC5fzTRJkx+3S
-   wG55LFeSVkq/wTNMmQGEdSDbH8dYoR6wy/2ASP+DYUOV8afVYWTspYRPU
-   XJidw8wN2YKLcoLHnF7wFAMOkBeViH2PY0bkLERDUhOzeu9tftXXmHvrY
-   w+LjeZCfalKZmEBStW8Y1+R+DWpNtEQxZQXVVv9ErBnICVeHEKhCSu31h
-   ncu9rzjF29cjdoGySwgwRkKiIupacAlz81bKmUyPmanXJX+Q48WaQDi1w
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="338932284"
+  bh=CwTyyQW4iRIx73+0zahTMIDt9YZj2NtiJZJdq6G+7h0=;
+  b=ApuILe9cBktejN28MVyRD6iRQF3dZ/EZR6lPaFMGUzZgKMRO9khle6DO
+   q7xjUBfFjlWygEfbLYeCQArUCuPFIBRoL22a0hzUyrWoCEbBE2+KyvnGZ
+   VFn42pcLsp+hbmiVd9/Xqv+4d6iinluqx4rXQ/npCN28frrtLaiTH7rMO
+   a6vRngSOo+U++wn+I4orpuit5haBNyHbsoR7B7eFGP9xPbytjRjYZWND3
+   81Z3zVc8l4+oJcrCTDWmarWtJ+zGCG9TsxdeFXLd+vIqYCFOtRxItHYYd
+   XYXu40072yRBwatROpVU8jd+l4iaE5Swn8Rw1Wf+oXo3C9fAy9eHvXUTd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="367953307"
 X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="338932284"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 01:33:02 -0700
+   d="scan'208";a="367953307"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 01:33:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="713790151"
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="929381007"
 X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="713790151"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.25.71]) ([10.213.25.71])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 01:32:59 -0700
-Message-ID: <c78389ca-ca0d-da13-7471-21aff6cc346c@intel.com>
-Date:   Mon, 27 Mar 2023 10:32:57 +0200
+   d="scan'208";a="929381007"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.174.244]) ([10.249.174.244])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 01:33:10 -0700
+Message-ID: <9261e319-084b-b6fe-550e-31b3683776c4@intel.com>
+Date:   Mon, 27 Mar 2023 16:33:06 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/bridge: it6505: Add range and selector_reg
-To:     Hsin-Yi Wang <hsinyi@chromium.org>, Robert Foss <rfoss@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        kenneth.hung@ite.corp-partner.google.com
-References: <20230327044804.3657551-1-hsinyi@chromium.org>
+Subject: Re: [PATCH v4 6/6] KVM: VMX: Make CR0.WP a guest owned bit
 Content-Language: en-US
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <20230327044804.3657551-1-hsinyi@chromium.org>
+To:     Mathias Krause <minipli@grsecurity.net>, kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20230322013731.102955-1-minipli@grsecurity.net>
+ <20230322013731.102955-7-minipli@grsecurity.net>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20230322013731.102955-7-minipli@grsecurity.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.03.2023 06:48, Hsin-Yi Wang wrote:
-> There are 2 banks on it6505, and when writing to different bank,
-> REG_BANK_SEL needs to be set to the targeted bank. The current code set
-> this additionally, which causes a race condition when a process is
-> writing bank 0 registers while another process set the bank to 1. Set
-> ranges in regmap config so the regmap API would handle the bank changes.
+On 3/22/2023 9:37 AM, Mathias Krause wrote:
+> Guests like grsecurity that make heavy use of CR0.WP to implement kernel
+> level W^X will suffer from the implied VMEXITs.
 > 
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> With EPT there is no need to intercept a guest change of CR0.WP, so
+> simply make it a guest owned bit if we can do so.
 
-Looks cool, especially comparing to locking patches.
+I'm interested in the performance gain. Do you have data like Patch 2?
 
-Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
-
-Regards
-Andrzej
-
+> This implies that a read of a guest's CR0.WP bit might need a VMREAD.
+> However, the only potentially affected user seems to be kvm_init_mmu()
+> which is a heavy operation to begin with. But also most callers already
+> cache the full value of CR0 anyway, so no additional VMREAD is needed.
+> The only exception is nested_vmx_load_cr3().
+> 
+> This change is VMX-specific, as SVM has no such fine grained control
+> register intercept control.
+> 
+> Suggested-and-co-developed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
 > ---
->   drivers/gpu/drm/bridge/ite-it6505.c | 34 +++++++++++++++++++----------
->   1 file changed, 23 insertions(+), 11 deletions(-)
+>   arch/x86/kvm/kvm_cache_regs.h |  2 +-
+>   arch/x86/kvm/vmx/nested.c     |  4 ++--
+>   arch/x86/kvm/vmx/vmx.c        |  2 +-
+>   arch/x86/kvm/vmx/vmx.h        | 18 ++++++++++++++++++
+>   4 files changed, 22 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> index bc451b2a77c28..abaf6e23775eb 100644
-> --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> @@ -258,12 +258,12 @@
->   #define REG_AUD_INFOFRAM_SUM 0xFB
+> diff --git a/arch/x86/kvm/kvm_cache_regs.h b/arch/x86/kvm/kvm_cache_regs.h
+> index 4c91f626c058..e50d353b5c1c 100644
+> --- a/arch/x86/kvm/kvm_cache_regs.h
+> +++ b/arch/x86/kvm/kvm_cache_regs.h
+> @@ -4,7 +4,7 @@
 >   
->   /* the following six registers are in bank1 */
-> -#define REG_DRV_0_DB_800_MV 0x7E
-> -#define REG_PRE_0_DB_800_MV 0x7F
-> -#define REG_PRE_3P5_DB_800_MV 0x81
-> -#define REG_SSC_CTRL0 0x88
-> -#define REG_SSC_CTRL1 0x89
-> -#define REG_SSC_CTRL2 0x8A
-> +#define REG_DRV_0_DB_800_MV 0x17E
-> +#define REG_PRE_0_DB_800_MV 0x17F
-> +#define REG_PRE_3P5_DB_800_MV 0x181
-> +#define REG_SSC_CTRL0 0x188
-> +#define REG_SSC_CTRL1 0x189
-> +#define REG_SSC_CTRL2 0x18A
+>   #include <linux/kvm_host.h>
 >   
->   #define RBR DP_LINK_BW_1_62
->   #define HBR DP_LINK_BW_2_7
-> @@ -489,7 +489,7 @@ static const struct it6505_audio_sample_rate_map audio_sample_rate_map[] = {
->   };
+> -#define KVM_POSSIBLE_CR0_GUEST_BITS X86_CR0_TS
+> +#define KVM_POSSIBLE_CR0_GUEST_BITS	(X86_CR0_TS | X86_CR0_WP)
+>   #define KVM_POSSIBLE_CR4_GUEST_BITS				  \
+>   	(X86_CR4_PVI | X86_CR4_DE | X86_CR4_PCE | X86_CR4_OSFXSR  \
+>   	 | X86_CR4_OSXMMEXCPT | X86_CR4_PGE | X86_CR4_TSD | X86_CR4_FSGSBASE)
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index f63b28f46a71..61d940fc91ba 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -4481,7 +4481,7 @@ static void load_vmcs12_host_state(struct kvm_vcpu *vcpu,
+>   	 * CR0_GUEST_HOST_MASK is already set in the original vmcs01
+>   	 * (KVM doesn't change it);
+>   	 */
+> -	vcpu->arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
+> +	vcpu->arch.cr0_guest_owned_bits = vmx_l1_guest_owned_cr0_bits();
+>   	vmx_set_cr0(vcpu, vmcs12->host_cr0);
 >   
->   static const struct regmap_range it6505_bridge_volatile_ranges[] = {
-> -	{ .range_min = 0, .range_max = 0xFF },
-> +	{ .range_min = 0, .range_max = 0x1FF },
->   };
+>   	/* Same as above - no reason to call set_cr4_guest_host_mask().  */
+> @@ -4632,7 +4632,7 @@ static void nested_vmx_restore_host_state(struct kvm_vcpu *vcpu)
+>   	 */
+>   	vmx_set_efer(vcpu, nested_vmx_get_vmcs01_guest_efer(vmx));
 >   
->   static const struct regmap_access_table it6505_bridge_volatile_table = {
-> @@ -497,11 +497,27 @@ static const struct regmap_access_table it6505_bridge_volatile_table = {
->   	.n_yes_ranges = ARRAY_SIZE(it6505_bridge_volatile_ranges),
->   };
+> -	vcpu->arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
+> +	vcpu->arch.cr0_guest_owned_bits = vmx_l1_guest_owned_cr0_bits();
+>   	vmx_set_cr0(vcpu, vmcs_readl(CR0_READ_SHADOW));
 >   
-> +static const struct regmap_range_cfg it6505_regmap_banks[] = {
-> +	{
-> +		.name = "it6505",
-> +		.range_min = 0x00,
-> +		.range_max = 0x1FF,
-> +		.selector_reg = REG_BANK_SEL,
-> +		.selector_mask = 0x1,
-> +		.selector_shift = 0,
-> +		.window_start = 0x00,
-> +		.window_len = 0x100,
-> +	},
-> +};
+>   	vcpu->arch.cr4_guest_owned_bits = ~vmcs_readl(CR4_GUEST_HOST_MASK);
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 8fc1a0c7856f..e501f6864a72 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -4790,7 +4790,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
+>   	/* 22.2.1, 20.8.1 */
+>   	vm_entry_controls_set(vmx, vmx_vmentry_ctrl());
+>   
+> -	vmx->vcpu.arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
+> +	vmx->vcpu.arch.cr0_guest_owned_bits = vmx_l1_guest_owned_cr0_bits();
+>   	vmcs_writel(CR0_GUEST_HOST_MASK, ~vmx->vcpu.arch.cr0_guest_owned_bits);
+>   
+>   	set_cr4_guest_host_mask(vmx);
+> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+> index 2acdc54bc34b..423e9d3c9c40 100644
+> --- a/arch/x86/kvm/vmx/vmx.h
+> +++ b/arch/x86/kvm/vmx/vmx.h
+> @@ -640,6 +640,24 @@ BUILD_CONTROLS_SHADOW(tertiary_exec, TERTIARY_VM_EXEC_CONTROL, 64)
+>   				(1 << VCPU_EXREG_EXIT_INFO_1) | \
+>   				(1 << VCPU_EXREG_EXIT_INFO_2))
+>   
+> +static inline unsigned long vmx_l1_guest_owned_cr0_bits(void)
+> +{
+> +	unsigned long bits = KVM_POSSIBLE_CR0_GUEST_BITS;
 > +
->   static const struct regmap_config it6505_regmap_config = {
->   	.reg_bits = 8,
->   	.val_bits = 8,
->   	.volatile_table = &it6505_bridge_volatile_table,
->   	.cache_type = REGCACHE_NONE,
-> +	.ranges = it6505_regmap_banks,
-> +	.num_ranges = ARRAY_SIZE(it6505_regmap_banks),
-> +	.max_register = 0x1FF,
->   };
->   
->   static int it6505_read(struct it6505 *it6505, unsigned int reg_addr)
-> @@ -1267,7 +1283,6 @@ static void it6505_init(struct it6505 *it6505)
->   	it6505_write(it6505, REG_TIME_STMP_CTRL,
->   		     EN_SSC_GAT | EN_ENHANCE_VID_STMP | EN_ENHANCE_AUD_STMP);
->   	it6505_write(it6505, REG_INFOFRAME_CTRL, 0x00);
-> -	it6505_write(it6505, REG_BANK_SEL, 0x01);
->   	it6505_write(it6505, REG_DRV_0_DB_800_MV,
->   		     afe_setting_table[it6505->afe_setting][0]);
->   	it6505_write(it6505, REG_PRE_0_DB_800_MV,
-> @@ -1277,7 +1292,6 @@ static void it6505_init(struct it6505 *it6505)
->   	it6505_write(it6505, REG_SSC_CTRL0, 0x9E);
->   	it6505_write(it6505, REG_SSC_CTRL1, 0x1C);
->   	it6505_write(it6505, REG_SSC_CTRL2, 0x42);
-> -	it6505_write(it6505, REG_BANK_SEL, 0x00);
->   }
->   
->   static void it6505_video_disable(struct it6505 *it6505)
-> @@ -1506,11 +1520,9 @@ static void it6505_setup_ssc(struct it6505 *it6505)
->   	it6505_set_bits(it6505, REG_TRAIN_CTRL0, SPREAD_AMP_5,
->   			it6505->enable_ssc ? SPREAD_AMP_5 : 0x00);
->   	if (it6505->enable_ssc) {
-> -		it6505_write(it6505, REG_BANK_SEL, 0x01);
->   		it6505_write(it6505, REG_SSC_CTRL0, 0x9E);
->   		it6505_write(it6505, REG_SSC_CTRL1, 0x1C);
->   		it6505_write(it6505, REG_SSC_CTRL2, 0x42);
-> -		it6505_write(it6505, REG_BANK_SEL, 0x00);
->   		it6505_write(it6505, REG_SP_CTRL0, 0x07);
->   		it6505_write(it6505, REG_IP_CTRL1, 0x29);
->   		it6505_write(it6505, REG_IP_CTRL2, 0x03);
+> +	/*
+> +	 * CR0.WP needs to be intercepted when KVM is shadowing legacy paging
+> +	 * in order to construct shadow PTEs with the correct protections.
+> +	 * Note!  CR0.WP technically can be passed through to the guest if
+> +	 * paging is disabled, but checking CR0.PG would generate a cyclical
+> +	 * dependency of sorts due to forcing the caller to ensure CR0 holds
+> +	 * the correct value prior to determining which CR0 bits can be owned
+> +	 * by L1.  Keep it simple and limit the optimization to EPT.
+> +	 */
+> +	if (!enable_ept)
+> +		bits &= ~X86_CR0_WP;
+> +	return bits;
+> +}
+> +
+>   static __always_inline struct kvm_vmx *to_kvm_vmx(struct kvm *kvm)
+>   {
+>   	return container_of(kvm, struct kvm_vmx, kvm);
 
