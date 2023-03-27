@@ -2,96 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD016C9A3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 05:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49F36C9A44
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 05:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbjC0DeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 23:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        id S230104AbjC0Dij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 23:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbjC0Ddx (ORCPT
+        with ESMTP id S229456AbjC0Dig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 23:33:53 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA325244;
-        Sun, 26 Mar 2023 20:33:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679888016; x=1711424016;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=nxfAgc5ecFlYMIYq+Laj/P3oIvX7oAWJ+xSWuaR1CDs=;
-  b=YwTkDZjidC7NLWLxL+b2imb5DCuUiBHRxUrSXI/eIWMIoefDiUaGyrtd
-   MgXX3HSaYStWZWhLhR85gKdzvJwL47kMXHLASp0OjZeMEkOqWciIAjcw6
-   PE0iWpCnlCJHXE2mDka87HcA820mtlmyPC4RKdWY7qovgO1+3f25BCf/v
-   CJOGCKQ9du0Wq8ob2UyZvGck07POKKWLep1kTV6OFSjoolO3X2ufPJbUv
-   xNAyFrZHjxcO9s8k86c+t6FltXBkWkCV7KjUwH3LL2txyBPH6JHJyVhMX
-   8uGZiHvnemmI3041RLqRLVJFmgZFFJICuGm+iy9AIYeAexlHf1R8nRwV8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="340197826"
-X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
-   d="scan'208";a="340197826"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 20:33:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="752538192"
-X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
-   d="scan'208";a="752538192"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.174.244]) ([10.249.174.244])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 20:33:34 -0700
-Message-ID: <373823f7-00ba-070c-53c7-384d29889e40@intel.com>
-Date:   Mon, 27 Mar 2023 11:33:31 +0800
+        Sun, 26 Mar 2023 23:38:36 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008573C02
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 20:38:34 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5419d4c340aso145537937b3.11
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 20:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679888314;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vcb55Ou7uI2TRw8K+yKQzYFPLlfYdsQrebeh+xvrZrk=;
+        b=Xhwelrp33lw+/YO1lHe6aGe5TWTXloyGkabpNRqN3Rk8CUgY/KYfqMUDSfVKflPw0t
+         mNoIv+qNdz4blRvRlJbz0MLK7xjInspU76GCYb7f9D2P7+tJV8hEe+lSYE8sJcBsZSeL
+         imyV9WdF/HRWUpwfI9nC+y+mj+iwK2+0w6ejoLyGlmvBpVZS+7BvNykj3qTvxNgupjie
+         ZG0aSnmkWLi3Gd6RjGDOYqzG8vXo+FC1VK1w/XL7dFQEsYhVri9ECcW5NRHcnTsiy1Y1
+         UD0PRb560xNPrxfy/0xRPMXZ4HJbJuuDsSckcNbKA7k9NV0WpBtFwKEKbijtBJIru4gn
+         810w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679888314;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vcb55Ou7uI2TRw8K+yKQzYFPLlfYdsQrebeh+xvrZrk=;
+        b=Uth1akBpAAAIpBOIyVX3TP149rlRb0EfqB3eGGfIj3iL5N0eqDlBUUN76JrPLSbuhx
+         QSih7xQEJHCtBwekCwKRNV3cE+0C/VCVW6hVX5qHsEScKT2M8VnXvdvSHVqtqKCo27iU
+         Vdg2nglEo7erBCeyI0K6iTaiZbuc+hAwlYtKobwtcZ0txqLYGFRX3edU5r9x7YypB4v9
+         JtDMr7n/BCQ3CEC3jHAn2C/d35sJV7A7PuX+QBRNUQorqCYBBn4xBDvjlSgPyiABiJ6/
+         sSXyrAmLcEx/ZMy1CuLoow4MVQu0HwglOlyuHvxxpUFyd5O4eF0vXRSTC//orWkVonN2
+         2YQA==
+X-Gm-Message-State: AAQBX9fXsQ4DfuUyCfZbyhJA1HHOkt9xzVXSnzSOiETO9VHebv1v0abe
+        4xbSO+GqeEFboNCiovIoUXHjgCrIryU=
+X-Google-Smtp-Source: AKy350avJPFQFYmD6EmuUCIoUW8XxB61IMu5d6kTftyX2je+OU8n6lyg3gH1+4SzJhFV0KoUkWu6Dg==
+X-Received: by 2002:a0d:d94a:0:b0:544:b871:bcb0 with SMTP id b71-20020a0dd94a000000b00544b871bcb0mr9498263ywe.12.1679888314191;
+        Sun, 26 Mar 2023 20:38:34 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 192-20020a810fc9000000b00545c373f7c0sm963988ywp.139.2023.03.26.20.38.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 20:38:33 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 26 Mar 2023 20:38:31 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Guillermo Rodriguez Garcia <guille.rodriguez@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Alejandro Vazquez <avazquez.dev@gmail.com>,
+        sergey.senozhatsky@gmail.com, rostedt@goodmis.org,
+        shreyasjoshi15@gmail.com
+Subject: Re: Change of behaviour when console=null and ttynull driver is used
+Message-ID: <ccf51347-d00e-43cf-9d6f-1a3190a87e14@roeck-us.net>
+References: <CABDcavZWz=YOvZnW8pkQmuTVjTDxPPoa0zOiC7A_0HAEg_Vi3w@mail.gmail.com>
+ <ZBRiRu7hlwxSKHBg@alley>
+ <CABDcavYLQ63V81z5JiOxZ6hXMj=M+PQpfDLPk6AQynLGwuYTKQ@mail.gmail.com>
+ <ZB281JxlZtKSkJoJ@alley>
+ <CAHk-=wheQYsUiKmJnqR3qGrjjh8z7b2ov4rZzHLHJS+VJT9aLQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [PATCH 5/6] KVM: x86: Virtualize FLUSH_L1D and passthrough
- MSR_IA32_FLUSH_CMD
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>
-References: <20230322011440.2195485-1-seanjc@google.com>
- <20230322011440.2195485-6-seanjc@google.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20230322011440.2195485-6-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wheQYsUiKmJnqR3qGrjjh8z7b2ov4rZzHLHJS+VJT9aLQ@mail.gmail.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/2023 9:14 AM, Sean Christopherson wrote:
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index c83ec88da043..3c58dbae7b4c 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3628,6 +3628,18 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   
->   		wrmsrl(MSR_IA32_PRED_CMD, PRED_CMD_IBPB);
->   		break;
-> +	case MSR_IA32_FLUSH_CMD:
-> +		if (!msr_info->host_initiated &&
-> +		    !guest_cpuid_has(vcpu, X86_FEATURE_FLUSH_L1D))
-> +			return 1;
-> +
-> +		if (!boot_cpu_has(X86_FEATURE_FLUSH_L1D) || (data & ~L1D_FLUSH))
-> +			return 1;
-> +		if (!data)
-> +			break;
-> +
-> +		wrmsrl(MSR_IA32_FLUSH_CMD, L1D_FLUSH);
-> +		break;
+On Sun, Mar 26, 2023 at 04:20:16PM -0700, Linus Torvalds wrote:
+> On Fri, Mar 24, 2023 at 8:08 AM Petr Mladek <pmladek@suse.com> wrote:
+> >
+> > I need an advice whether to revert the commit 3cffa06aeef7ece30f
+> > ("printk/console: Allow to disable console output by using
+> > console="" or console=null").
+> 
+> I think it's too late to revert it by now. It sounds like people who
+> were affected are either chrome developers that already changed their
+> setup, or embedded people who similarly have already reacted to it.
+> 
 
-Then KVM provides the ability to flush the L1 data cache of host to 
-userspace. Can it be exploited to degrade the host performance if 
-userspace VMM keeps flushing the L1 data cache?
+Autually, our (non-)solution was to revert the patches in question in
+all ChromeOS branches.
+
+> This went into 5.11, it's ancient history by now, so reverting it
+> would likely just cause more issues.
+> 
+Agreed. Maybe we'll find a better solution at some point, but for now
+we'll just keep the reverts in ChromeOS.
+
+Guenter
