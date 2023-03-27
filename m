@@ -2,233 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8606CB039
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A1A6CB042
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbjC0VAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 17:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
+        id S231375AbjC0VCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 17:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjC0VAe (ORCPT
+        with ESMTP id S231359AbjC0VCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 17:00:34 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3AF1BD1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:00:33 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id o32so5763224wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:00:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679950831;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UxHAeSRmvmOJM7L4xuCcGB4JYeN7eUOth0obgJagveg=;
-        b=OFxDCJ00sKrXWuZpBpo1/2sLI8XscM7kjI7zfuUzce86Ua2/IJPxdxon8Ade68rDUu
-         QWCCDYf0er65HRXHKmqc+pDQkJXonuy0P3Ha7zfq2AChR7jiMX9zliTN6OcqqvF1qg/e
-         r/eEsvLDxK4Lsbc3OwdNIQz3ARG1CnaBGDRoCtw3QjyUk6PETEBstRKk3eyww7i30pZj
-         UnE/nRwK858ImDsi90jc13KJ4Xs57u670YLMFbx6NErvyR8A/2nISp7/UYZW9cIBm5ew
-         9BAgxUbLcDzuCbE1LYmdTOSpJNEW8qF1zDADRqnRvNOswp/Wq8NCufcXvG0cxWJJPMEH
-         R2DQ==
+        Mon, 27 Mar 2023 17:02:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343321BD1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:01:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679950877;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pePBFHN5s0mkHf+iMKhZSRwNai0pCDXlXPyFKRXDXsc=;
+        b=MUVjvo1pdwxdHsylps3sXG7iZ/5f4LMl2PTjL7L7TvxNObywROTE6gWZcMH816tN3XeGxa
+        R0hPo40b3vIDnXZCGrerGcRN9XdrJbIdZjRnmkqSrnQdDoGFTRa79a3CCW/heFQ7lH8pzA
+        Sp2PAa4Dbxy28GoxiVFypA96W+9Lngo=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-149-nusCBFGgMTy4KzOXWw91Ew-1; Mon, 27 Mar 2023 17:01:16 -0400
+X-MC-Unique: nusCBFGgMTy4KzOXWw91Ew-1
+Received: by mail-qt1-f200.google.com with SMTP id v10-20020a05622a130a00b003e4ee70e001so894438qtk.6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:01:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679950831;
+        d=1e100.net; s=20210112; t=1679950875; x=1682542875;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UxHAeSRmvmOJM7L4xuCcGB4JYeN7eUOth0obgJagveg=;
-        b=kJT1n/fqm8uFqDmsWRl0FjJi7gzNFz2jYTMKy+jl4c+vwVcDCmps8MdWf6UV/cO4qn
-         SyIeC6wu7YJPhs2pZyQoPxHjRr7VRp5nMWjbvr0Y5luxsVsWZfCjL6UZ/PF/lKvUEK0H
-         u3vfN7gz0OPl/mlHI1KC5a4ugZIasYfPqSW3sejgKeC7i0O3S3NiQrEo2cFlRSZOj2O1
-         dUmyoTB6VzshMAoTj9FfXT+TuMZXs3Y/Czyc7KidcGXdzQeKR0DJdxnG6gUVjc6ty2Qo
-         TWlTDeEFTJO0QgMCeI0sENHgVkYc/P/2H1kGVb4m4sT2sTs8QG7QgTxsgx90Ad+XJ0PZ
-         lZag==
-X-Gm-Message-State: AO0yUKUgYxfA71Y7HXiDi6cyS0n0qfgZ4N3v1B4uR5zu/rhfojHH+69E
-        cRtbAs9CKb71z3aAzdif+py1D1m0rzk1FvN9uRc=
-X-Google-Smtp-Source: AK7set+aO3K1IkWIVR3WucMal2t2FuelYtWE7IhhNpxFyGBukHpajR9/zQQZsR0pHGHyefvQt8fgcQ==
-X-Received: by 2002:a7b:c44f:0:b0:3ed:d3a7:7077 with SMTP id l15-20020a7bc44f000000b003edd3a77077mr9782042wmi.40.1679950831480;
-        Mon, 27 Mar 2023 14:00:31 -0700 (PDT)
-Received: from khadija-virtual-machine ([39.41.14.14])
-        by smtp.gmail.com with ESMTPSA id g8-20020a05600c310800b003ee610d1ce9sm10115062wmo.34.2023.03.27.14.00.30
+        bh=pePBFHN5s0mkHf+iMKhZSRwNai0pCDXlXPyFKRXDXsc=;
+        b=5C83OGECUmDlENOYaS2qnXwNV+KnySp4AhrSc7GVTdKYAT7FQ1KDjUn9wzxcXp7hZn
+         Nh5Xts4zNEV92fw3gJnI/+Y2kJi41aDqI4UIAUgR4eZzYIgZmETOyxetgWD1sr+ypsPy
+         ri454XnHRVyicN423+v6X8wB4g/+E9+PZTZmUvOYSSgCvLyJys6+pTDjkq7gpUULinLd
+         rru1wdjg3VZvv0Um6gJLpMUE2zNX6sVtF28IsZQo8cuwf73P5fAiUSOvC8+AjrWc+pHt
+         c0dALPXscbk7eWXKshdmM+0F/R98zLl0AJijrj9I0yQYcWVn+5Fl45CFWu+WcTkrrgi4
+         JkCg==
+X-Gm-Message-State: AAQBX9cHWbZusrpiGxORjqwwm/hJ40NAqL3dh/+s5ACzsS/kk9Ac0BBc
+        +age8yUDm3PmqVTRNmV1Q44Tv3/600sim7BZ0F/dJvCq70n3vusjtTfMc0TDXIXvWWxf09wfPOJ
+        yWETMlOY3Dg2t/6vGA3Iq0fjx
+X-Received: by 2002:a05:6214:528f:b0:5af:3a13:202d with SMTP id kj15-20020a056214528f00b005af3a13202dmr20867696qvb.4.1679950875516;
+        Mon, 27 Mar 2023 14:01:15 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aVDWYJQwWqIHwZUh5ktHNEupzgPiHGj1mY8GkaRJKKsVQEhsdqRHbLM5b4eazfi17GQ4yXtw==
+X-Received: by 2002:a05:6214:528f:b0:5af:3a13:202d with SMTP id kj15-20020a056214528f00b005af3a13202dmr20867635qvb.4.1679950875081;
+        Mon, 27 Mar 2023 14:01:15 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id jh19-20020a0562141fd300b005dd8b93457csm3195224qvb.20.2023.03.27.14.01.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 14:00:31 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 02:00:28 +0500
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     Alison Schofield <alison.schofield@intel.com>
-Cc:     outreachy@lists.linux.dev,
-        Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        Mon, 27 Mar 2023 14:01:14 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 17:01:13 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] staging: greybus: merge split lines
-Message-ID: <ZCID7MUrIHy8+qb4@khadija-virtual-machine>
-References: <ZBgYsqkpdYpGQniB@khadija-virtual-machine>
- <ZBnZj3JbTOsplHvw@khadija-virtual-machine>
- <ZBnc3qWTSeWw0Ulo@aschofie-mobl2>
- <ZCFvTndYXmPvQunt@khadija-virtual-machine>
- <ZCHPokeiKV37uOmr@aschofie-mobl2>
+Subject: Re: [PATCH] userfaultfd: don't fail on unrecognized features
+Message-ID: <ZCIEGblnsWHKF8RD@x1n>
+References: <20220722201513.1624158-1-axelrasmussen@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZCHPokeiKV37uOmr@aschofie-mobl2>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220722201513.1624158-1-axelrasmussen@google.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 10:17:22AM -0700, Alison Schofield wrote:
-> On Mon, Mar 27, 2023 at 03:26:22PM +0500, Khadija Kamran wrote:
-> > On Tue, Mar 21, 2023 at 09:35:42AM -0700, Alison Schofield wrote:
-> > > On Tue, Mar 21, 2023 at 09:21:35PM +0500, Khadija Kamran wrote:
-> > > > On Mon, Mar 20, 2023 at 01:26:33PM +0500, Khadija Kamran wrote:
-> > > > > If condition and spin_unlock_...() call is split into two lines, merge
-> > > > > them to form a single line.
-> > > > > 
-> > > > > Suggested-by: Deepak R Varma drv@mailo.com
-> > > > > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-> > > > > ---
-> > > > > 
-> > > > > Changes in v3:
-> > > > >  - Removing tab to fix line length results in a new checkpatch warning,
-> > > > >    so let the fix length be as it is.
-> > > > > Changes in v2:
-> > > > >  - Rephrased he subject and description
-> > > > >  - Merged if_condition() and spin_unlock...() into one line
-> > > > >  - Link to patch:
-> > > > >  https://lore.kernel.org/outreachy/ZAusnKYVTGvO5zoi@khadija-virtual-machine/
-> > > > > 
-> > > > > Link to first patch:
-> > > > > https://lore.kernel.org/outreachy/ZAtkW6g6DwPg%2FpDp@khadija-virtual-machine/
-> > > > > 
-> > > > >  drivers/staging/greybus/arche-platform.c | 6 ++----
-> > > > >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/staging/greybus/arche-platform.c b/drivers/staging/greybus/arche-platform.c
-> > > > > index fcbd5f71eff2..6890710afdfc 100644
-> > > > > --- a/drivers/staging/greybus/arche-platform.c
-> > > > > +++ b/drivers/staging/greybus/arche-platform.c
-> > > > > @@ -176,12 +176,10 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
-> > > > >  				 * Check we are not in middle of irq thread
-> > > > >  				 * already
-> > > > >  				 */
-> > > > > -				if (arche_pdata->wake_detect_state !=
-> > > > > -						WD_STATE_COLDBOOT_START) {
-> > > > > +				if (arche_pdata->wake_detect_state != WD_STATE_COLDBOOT_START) {
-> > > > >  					arche_platform_set_wake_detect_state(arche_pdata,
-> > > > >  									     WD_STATE_COLDBOOT_TRIG);
-> > > > > -					spin_unlock_irqrestore(&arche_pdata->wake_lock,
-> > > > > -							       flags);
-> > > > > +					spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
-> > > > >  					return IRQ_WAKE_THREAD;
-> > > > >  				}
-> > > > >  			}
-> > > > > --
-> > > > > 2.34.1
-> > > > >
-> > > > 
-> > > > Hey Outreachy Mentors,
-> > > > 
-> > > > Kindly take a look at this patch and let me know if it is okay to work
-> > > > on this file or should I look for other cleanup patches.
-> > > 
-> > > Hi Khadija,
-> > > 
-> > > I thought you were abandoning *this* patch, and doing a refactor on
-> > > the function.  I'd expect that would be a new patch, probably a
-> > > patchset. One where you align the work based on the 'rising' and
-> > > 'falling' detection, 
-> > 
-> > Hey Alison,
-> > 
-> > Can you please elaborate that what do you mean by aligning on the basis
-> > of rising and falling detection. Are you perhaps saying that I should
-> > group the rising detection and group the falling detection separately?
-> > 
-> > > and perhaps a second patch that centralizes
-> > > the unlock and return.
-> > 
-> > To do this I should make the use of goto statement, right?
-> > 
-> > So the next patchset should be:
-> > Patch 1: merge split lines
-> > Patch 2: align on the basis of rising and falling detection
-> > Patch 3: use goto statement to centralize unlock and return
-> > 
-> > Kindly guide me.
-> > 
-> > Regards,
-> > Khadija
-> 
-> Hi,
-> 
-> Glad you are picking this back up!
-> I know Ira sent you some links to refactoring info. Go back and
-> look at those.
-> 
-> When we submit patches that refactor a function, we try to make
-> the patches obviously correct and easy to review.
-> 
-> I'll tell you how I approached this one, and you can see how
-> it works for you:
-> 
-> 1. Edit the function until it is just how you'd like it. Hint:
->    no lines over 80, minimal indentation.
-> 
-> {
-> 	--snip--
-> 
-> 	if (!gpiod_get_value(arche_pdata->wake_detect))
->                 goto falling;
-> 
->         /* wake/detect rising */
-> 
-> 	
-> 
-> falling:
-> 	/* wake/detect falling */
-> 
-> 
-> out:
-> 	spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
-> 
->         return rc;
-> }
-> 
-> 
-> 2. Figure out how you can present that in patches. This function
->    is just long enough that I think you have to split it up into
->    two or more obvious steps, rather than throwing it into one
->    patch.
-> 
-> How about you do Step 1, and send the diff to the Outreachy mailing
-> list (only) for review. Please start a new thread. 
->
+I think I overlooked this patch..
 
-Hey Alison,
+Axel, could you explain why this patch is correct?  Comments inline.
 
-I am sorry about sending a new patch instead of sending a diff for
-discussion. I realize that I did not read your message carefully and
-misunderstood its contents. 
-
-Let me start a new thread. Sorry for the inconvenience.
-
-Regards,
-Khadija 
-
-> Alison
+On Fri, Jul 22, 2022 at 01:15:13PM -0700, Axel Rasmussen wrote:
+> The basic interaction for setting up a userfaultfd is, userspace issues
+> a UFFDIO_API ioctl, and passes in a set of zero or more feature flags,
+> indicating the features they would prefer to use.
 > 
-> > 
-> > > 
-> > > Is there some other concern with working on this file?
-> > > 
-> > > Alison
-> > > 
-> > > > 
-> > > > Thank you for your time.
-> > > > Regards,
-> > > > Khadija
-> > > > 
-> > > > 
+> Of course, different kernels may support different sets of features
+> (depending on kernel version, kconfig options, architecture, etc).
+> Userspace's expectations may also not match: perhaps it was built
+> against newer kernel headers, which defined some features the kernel
+> it's running on doesn't support.
+> 
+> Currently, if userspace passes in a flag we don't recognize, the
+> initialization fails and we return -EINVAL. This isn't great, though.
+
+Why?  IIUC that's the major way for user app to detect any misconfig of
+feature list so it can bail out early.
+
+Quoting from man page (ioctl_userfaultfd(2)):
+
+UFFDIO_API
+       (Since Linux 4.3.)  Enable operation of the userfaultfd and perform API handshake.
+
+       ...
+
+           struct uffdio_api {
+               __u64 api;        /* Requested API version (input) */
+               __u64 features;   /* Requested features (input/output) */
+               __u64 ioctls;     /* Available ioctl() operations (output) */
+           };
+
+       ...
+
+       For Linux kernel versions before 4.11, the features field must be
+       initialized to zero before the call to UFFDIO_API, and zero (i.e.,
+       no feature bits) is placed in the features field by the kernel upon
+       return from ioctl(2).
+
+       ...
+
+       To enable userfaultfd features the application should set a bit
+       corresponding to each feature it wants to enable in the features
+       field.  If the kernel supports all the requested features it will
+       enable them.  Otherwise it will zero out the returned uffdio_api
+       structure and return EINVAL.
+
+IIUC the right way to use this API is first probe with features==0, then
+the kernel will return all the supported features, then the user app should
+enable only a subset (or all, but not a superset) of supported ones in the
+next UFFDIO_API with a new uffd.
+
+> Userspace doesn't have an obvious way to react to this; sure, one of the
+> features I asked for was unavailable, but which one? The only option it
+> has is to turn off things "at random" and hope something works.
+> 
+> Instead, modify UFFDIO_API to just ignore any unrecognized feature
+> flags. The interaction is now that the initialization will succeed, and
+> as always we return the *subset* of feature flags that can actually be
+> used back to userspace.
+> 
+> Now userspace has an obvious way to react: it checks if any flags it
+> asked for are missing. If so, it can conclude this kernel doesn't
+> support those, and it can either resign itself to not using them, or
+> fail with an error on its own, or whatever else.
+> 
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> ---
+>  fs/userfaultfd.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index e943370107d0..4974da1f620c 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -1923,10 +1923,8 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
+>  	ret = -EFAULT;
+>  	if (copy_from_user(&uffdio_api, buf, sizeof(uffdio_api)))
+>  		goto out;
+> -	features = uffdio_api.features;
+> -	ret = -EINVAL;
+> -	if (uffdio_api.api != UFFD_API || (features & ~UFFD_API_FEATURES))
+> -		goto err_out;
+
+What's worse is that I think you removed the only UFFD_API check.  Although
+I'm not sure whether it'll be extended in the future or not at all (very
+possible we keep using 0xaa forever..), but removing this means we won't be
+able to extend it to a new api version in the future, and misconfig of
+uffdio_api will wrongly succeed I think:
+
+	/* Test wrong UFFD_API */
+	uffdio_api.api = 0xab;
+	uffdio_api.features = 0;
+	if (ioctl(uffd, UFFDIO_API, &uffdio_api) == 0)
+		err("UFFDIO_API should fail but didn't");
+
+> +	/* Ignore unsupported features (userspace built against newer kernel) */
+> +	features = uffdio_api.features & UFFD_API_FEATURES;
+>  	ret = -EPERM;
+>  	if ((features & UFFD_FEATURE_EVENT_FORK) && !capable(CAP_SYS_PTRACE))
+>  		goto err_out;
+> -- 
+> 2.37.1.359.gd136c6c3e2-goog
+> 
+
+-- 
+Peter Xu
+
