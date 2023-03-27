@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48EA76CA920
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44CED6CA927
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232916AbjC0Pfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 11:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
+        id S230239AbjC0Phn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 11:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232572AbjC0Pfe (ORCPT
+        with ESMTP id S231834AbjC0Phl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:35:34 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DD5189
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:35:32 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id m2so9238680wrh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:35:32 -0700 (PDT)
+        Mon, 27 Mar 2023 11:37:41 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F3C2738
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:37:40 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id y184so6651774oiy.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 08:37:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679931331;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8N0hw4+EMSVtCyZmq7J5HduUc9xYRvfHTSgJBWJto70=;
-        b=6TAtyyrRhTgXGlXDflWGtkR6vdqzDTcQXvrMvSCFyT809wO1uDB8+q7Ol208GnrjDQ
-         jdR9pVUSe/+Bkl2YkjNcBDPStTK54dohQt4Xf8imHMBJSlA2jqnwvVBtL2Eo/XTTnTuy
-         ifjjDeRJkvJgouPPhm9PZsh7/UFkU1X3uOcQ5iNIDmHDdPKNje/IJfkfU2bPnnW+bODu
-         7y6iNXTYQeNECKahRh81jTTpbYCwKDuUrT6y58MvmJK7+SZ+jQaCJCUfID6d/PPQ7eyM
-         s+G4V92W5xzHn3korVCP9Fy9JYNJ49Kz9ckzIblaDaw1xxT2FnxHT94xmgaPtvet9k0l
-         1baA==
+        d=google.com; s=20210112; t=1679931460;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2scqCpn+SlvwNwMyXAR1S8e8r39frvTEmZWmCdUynfo=;
+        b=rFuTXmnSGmSvQSqlTCwOwfje4dNunkyQvBQO1B0OEvIHKkhsQfByRaQcSeSdkocF5F
+         yX5bCRDLIxqpm38oYlhRVTBZnKZZyCzAT3tmFdduJnJIWAB4dNqYrmwMuqy5p0BI3sSD
+         mhkrQ8TcipD6vcrzyVkebrs0a3r308DuqctCTsGHROhou/kEUIj8jvRKfVIzu6Q9HPLw
+         dFjRG+qM+HSJhcNuO1bncPlwqbiI0YzErn7+H1mTYkhwIol9FFPfJ8h3ieDG/VxCH+LK
+         hhNfznLzq/+I9QjUSBuPCbtWWn5xvv1gxYSFnb+/aIijxkOshfIyTFx4YYYC/r4rYjmu
+         VRCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679931331;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8N0hw4+EMSVtCyZmq7J5HduUc9xYRvfHTSgJBWJto70=;
-        b=fO6PqVABH0zx2CZKy6oYqxTCJOD4LHT/+FG3AYIBtOQqJey+irHmhgONW8FPDi8Jrm
-         mBAFxetWkDx+yk+hAeJUk01olyl/oxQczLf9aI/u3HWDc0ZqXtecxvYjEKUjcI2Flkr8
-         Orls3AKi3xNJ3nXaqByYXXlLoCRsmbvB5aj1RBxf9PbuGe3SQvlGY/V7eMnI8h/D4jf3
-         WwvE1BqeZMFds+bmDzDouU2P/eaM1PdOcC43DJKGiyLtAgELy19Vs+pkFbhEPbAaXCoM
-         QPsi64iBKYX85dAdmhdAjgzzFL/4yZbt81LK0JmyNTD+p18/ZTnR1EHgG0jUNNFYSpdX
-         Zi+A==
-X-Gm-Message-State: AAQBX9cE6awXOPpRsOLvL6oK4eK/Z7JU96iapbJw63/Ll2wz3BNyEuQQ
-        8OKbWIU+WDMOuzjmvHBoXC6ZEg==
-X-Google-Smtp-Source: AKy350YJn17Drgd1PMAWXHDxj5oFw5AMn5zFS9BIUMVYNI+vwzGpQHTMb1wO4ytJZFVcUx3HPRdxQQ==
-X-Received: by 2002:a5d:4291:0:b0:2c3:db98:3e87 with SMTP id k17-20020a5d4291000000b002c3db983e87mr9522092wrq.20.1679931331232;
-        Mon, 27 Mar 2023 08:35:31 -0700 (PDT)
-Received: from [192.168.1.70] (151.31.102.84.rev.sfr.net. [84.102.31.151])
-        by smtp.gmail.com with ESMTPSA id e9-20020adffc49000000b002be5bdbe40csm25374042wrs.27.2023.03.27.08.35.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 08:35:30 -0700 (PDT)
-Message-ID: <2ea21982-485a-d052-2e25-84907e263743@baylibre.com>
-Date:   Mon, 27 Mar 2023 17:35:28 +0200
+        d=1e100.net; s=20210112; t=1679931460;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2scqCpn+SlvwNwMyXAR1S8e8r39frvTEmZWmCdUynfo=;
+        b=sToLXqI1D/T+K5PCF5z7+Yp327PAMOaVV5WSivGtQadGx/EclYa7x7yKAwa6ohbw2P
+         OzisbpVQetItIDiZukgmF5zzkKRbdo5HWz3fIeexK0KbTmZjFtZ9JGvuMSKPy/lb+U+I
+         9IojbI9sMFP8bOVLJkDGE/prZLHKjpvGNUTgnGZG2oqU7LYAwCKGUAhIZCRtkD0UGayX
+         rFRiN9k1ZAqhYT5esq6r84fKjZntOHqMTV809cgkoGKC7G0ltD5g8ikdv8QuAJ2hoRup
+         ZAqP/qHuEatwqPUHWSYkzqiDwXpJfYKYSxFySafm7818KQYf4wbesHCdufm3UtTIAR6Z
+         pKDQ==
+X-Gm-Message-State: AO0yUKVV6qJ0SoO//wveD7daPc0pb+S0I0l+Dwdg08xLVwDYMx7GQZXR
+        0PWgqBSn0emrR2UiUGUjJCmDrNZY1v0OHiIadHeSvg==
+X-Google-Smtp-Source: AK7set+yYWM5lvMs9lQ15RVaYTAVVUaZW7sK+M1vnndSyDeraV8KLjlOca7p039jDbWxUJ7HlCk9vl5058ikbPt7n3g=
+X-Received: by 2002:a54:4710:0:b0:384:4e2d:81ea with SMTP id
+ k16-20020a544710000000b003844e2d81eamr3381518oik.9.1679931459915; Mon, 27 Mar
+ 2023 08:37:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 2/4] mfd: tps6594: Add driver for TI TPS6594 PMIC
-Content-Language: en-US
-From:   Julien Panis <jpanis@baylibre.com>
-To:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
-        gregkh@linuxfoundation.org, derek.kiernan@xilinx.com,
-        dragan.cvetic@xilinx.com
-Cc:     eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
-        stephen@networkplumber.org, davem@davemloft.net,
-        christian.koenig@amd.com, contact@emersion.fr,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
-        eblanc@baylibre.com, jneanne@baylibre.com
-References: <20230321171020.74736-1-jpanis@baylibre.com>
- <20230321171020.74736-3-jpanis@baylibre.com>
-In-Reply-To: <20230321171020.74736-3-jpanis@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230322011440.2195485-1-seanjc@google.com> <20230322011440.2195485-6-seanjc@google.com>
+ <373823f7-00ba-070c-53c7-384d29889e40@intel.com>
+In-Reply-To: <373823f7-00ba-070c-53c7-384d29889e40@intel.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Mon, 27 Mar 2023 08:37:28 -0700
+Message-ID: <CALMp9eTEG5o2jQ457BTAL=srPYFbFi2Jx1YLp+a3NW3tQ19wDQ@mail.gmail.com>
+Subject: Re: [PATCH 5/6] KVM: x86: Virtualize FLUSH_L1D and passthrough MSR_IA32_FLUSH_CMD
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/21/23 18:10, Julien Panis wrote:
-> This patch adds support for TPS6594 PMIC MFD core. It provides
-> communication through the I2C and SPI interfaces, and supports
-> protocols with embedded CRC data fields for safety applications.
+On Sun, Mar 26, 2023 at 8:33=E2=80=AFPM Xiaoyao Li <xiaoyao.li@intel.com> w=
+rote:
 >
-> Signed-off-by: Julien Panis <jpanis@baylibre.com>
-> Acked-for-MFD-by: Lee Jones <lee@kernel.org>
+> On 3/22/2023 9:14 AM, Sean Christopherson wrote:
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index c83ec88da043..3c58dbae7b4c 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -3628,6 +3628,18 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, st=
+ruct msr_data *msr_info)
+> >
+> >               wrmsrl(MSR_IA32_PRED_CMD, PRED_CMD_IBPB);
+> >               break;
+> > +     case MSR_IA32_FLUSH_CMD:
+> > +             if (!msr_info->host_initiated &&
+> > +                 !guest_cpuid_has(vcpu, X86_FEATURE_FLUSH_L1D))
+> > +                     return 1;
+> > +
+> > +             if (!boot_cpu_has(X86_FEATURE_FLUSH_L1D) || (data & ~L1D_=
+FLUSH))
+> > +                     return 1;
+> > +             if (!data)
+> > +                     break;
+> > +
+> > +             wrmsrl(MSR_IA32_FLUSH_CMD, L1D_FLUSH);
+> > +             break;
+>
+> Then KVM provides the ability to flush the L1 data cache of host to
+> userspace. Can it be exploited to degrade the host performance if
+> userspace VMM keeps flushing the L1 data cache?
 
-Lee, I will have to drop your ack for next version (v4).
-A bug will be fixed in tps6594-core (a couple of lines
-will be added/moved in 2 functions, it will be explained
-in the coverletter changelog so that you can easily see
-the diff).
-Sorry for the disturbance.
+The L1D$ isn't very big. A guest could always flush out any previously
+cached data simply by referencing its own data. Is the ability to
+flush the L1D$ by WRMSR that egregious?
