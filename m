@@ -2,65 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF856CAE91
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0726CAE95
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232461AbjC0T2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
+        id S229705AbjC0T3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 15:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjC0T2W (ORCPT
+        with ESMTP id S229475AbjC0T3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:28:22 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08642D48;
-        Mon, 27 Mar 2023 12:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xcVWACh9AVKFBL+pW+FE9Xpu1vqOmtVYgQ8/xR2RZCI=; b=zrsUJ8Hbn4+JP3KFeqaeFDDib1
-        9I+in64FRU8MmlqsojhKYp4fSx9/Eq37GabpFr3Y0mhunAH34v6wwEO1u2xZsFRMzgibGqGy0wN+K
-        QcjjLcTH/k5PL/cCSVpH9ZoY2jDPIaskWMU587NLbbGuXdFlLJgaxnxwYNoUgAff8PhJpl4ZFgwQr
-        004lzTzr4iHhzG7L3+ZfAODnEFVElU7gXfF+5wfESrU63CXJhgnK+6S0J1EndtBPQ11j1VFuXlZEu
-        hQ1vrtdEyNp1DyRLBuKPMc2bqGE649drC8LCfb22mQXZc9nvwRiEZoBWBzEUeAeqh0zRd8lKPp08K
-        mt2t7EAQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pgsVv-00CE4Z-0k;
-        Mon, 27 Mar 2023 19:28:19 +0000
-Date:   Mon, 27 Mar 2023 12:28:19 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Viktor Malik <vmalik@redhat.com>
-Cc:     bpf@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH bpf-next] kallsyms: move module-related functions under
- correct configs
-Message-ID: <ZCHuU4Wui7Dwmdm2@bombadil.infradead.org>
-References: <20230327161251.1129511-1-vmalik@redhat.com>
- <ZCHWtptOwPPtUe+u@bombadil.infradead.org>
- <c076e249-705a-e1bb-c657-f80cd4f2145b@redhat.com>
+        Mon, 27 Mar 2023 15:29:21 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2055.outbound.protection.outlook.com [40.107.14.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4D42D48
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 12:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kU6dPEOgWunbX+Tx7TcUsoyBaBnnh9n44XxEBh2AQJ0=;
+ b=iZYsMa17U+8HlT6cMFMxNL7eUnAx7JCVpyNeStZY/pIW5vklpmUz9fIV9PvSs7+lmww+ZjDeFwru1Q32zINd+B7JTM03ABy+EgeO2clWioIy/3KBULtIDu5hzKxrSF9aRo7Qojae8uyGx1N5nO+757JEJhiLFvuFvKycKK81ENUHsUeC2D0NG50Y0UhPcNsPTKAc1fHyx9pu/4RKL2W5rVxKkUI3pXcB/jmailF7Wz13WgCS+ogcClx+6Ot5lre+Hs7y/7CFWKczDQrOhEaiLglLpkU093rroDWy4mWRYVvmC5pASPRVAQquuzYr0ZIifJWhCy2wofwc8yvPnQfwzA==
+Received: from AM6P195CA0012.EURP195.PROD.OUTLOOK.COM (2603:10a6:209:81::25)
+ by DU0PR03MB8390.eurprd03.prod.outlook.com (2603:10a6:10:3ba::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.30; Mon, 27 Mar
+ 2023 19:29:15 +0000
+Received: from VI1EUR05FT054.eop-eur05.prod.protection.outlook.com
+ (2603:10a6:209:81:cafe::a9) by AM6P195CA0012.outlook.office365.com
+ (2603:10a6:209:81::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.42 via Frontend
+ Transport; Mon, 27 Mar 2023 19:29:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.160.56.87)
+ smtp.mailfrom=seco.com; dkim=pass (signature was verified)
+ header.d=seco.com;dmarc=pass action=none header.from=seco.com;
+Received-SPF: Pass (protection.outlook.com: domain of seco.com designates
+ 20.160.56.87 as permitted sender) receiver=protection.outlook.com;
+ client-ip=20.160.56.87; helo=inpost-eu.tmcas.trendmicro.com; pr=C
+Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.87) by
+ VI1EUR05FT054.mail.protection.outlook.com (10.233.242.144) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.17 via Frontend Transport; Mon, 27 Mar 2023 19:29:14 +0000
+Received: from outmta (unknown [192.168.82.140])
+        by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id 81A642008026E;
+        Mon, 27 Mar 2023 19:29:14 +0000 (UTC)
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (unknown [104.47.11.111])
+        by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id AEF3E2008006C;
+        Mon, 27 Mar 2023 19:29:07 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cbe7yj9UyYemmbA+3yNkhOfFdLDQpzKsmVVWlWUCrGeFmvsXSnusEfF1mTt9IrUPJar8FsF0GcmdREJE9lQ8xQ4peq1p++imHQ3u2IsR6JhJafok2Odib3nc2aBJgXJ72AizgcjO5j8b5c3b1FPvoVGCUMn5a3pIuw/XvK1g1l8CPzi96EpppYsQ/W8zQxqPBl1wUt5lxzaS9aMIgiBy9n8fUOSPHQJCozs1iW3y5NVm7bZ1x9hwyRnSGBDySa+owVnckW1tD+0DpYxvPuC69x/68yLDlE+x5ksGG3PYGF5ZAMdXm9iiTh5CfgUDX3uAyb0TJIAEeYj/vpHHl7qymA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kU6dPEOgWunbX+Tx7TcUsoyBaBnnh9n44XxEBh2AQJ0=;
+ b=MerzjDC6OTSuRbXiBKX/DAzrwljNklZF8KyKVLWhEiCJxkmvrczoTgV/+zZvv/eaW69nIH9XehoVNzHhhcy5IeeUcTvTmIJ97hpB4HGul2RCvCoTsd6owvenZL+/gfb+0zXaTC3PFxq8TD9Wsf7Tkw+Zb+GMeUvhjSBm0hN9MasbE+J1iLjpKAtZ5HtDkQrJB3atFQcK8XCKbyMGbNGzAatgUyIUitAM9lIdQxJhtHxB4FfXfOzDG0pQ0uqjmcSgguFF/5mmwlQfHBK5O4vytknQDx5wF0L75u6N71QZKnYVmkPA95DFDldvgE3F69V2LAJiqQd0Fj5GCz/39ZTu5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kU6dPEOgWunbX+Tx7TcUsoyBaBnnh9n44XxEBh2AQJ0=;
+ b=iZYsMa17U+8HlT6cMFMxNL7eUnAx7JCVpyNeStZY/pIW5vklpmUz9fIV9PvSs7+lmww+ZjDeFwru1Q32zINd+B7JTM03ABy+EgeO2clWioIy/3KBULtIDu5hzKxrSF9aRo7Qojae8uyGx1N5nO+757JEJhiLFvuFvKycKK81ENUHsUeC2D0NG50Y0UhPcNsPTKAc1fHyx9pu/4RKL2W5rVxKkUI3pXcB/jmailF7Wz13WgCS+ogcClx+6Ot5lre+Hs7y/7CFWKczDQrOhEaiLglLpkU093rroDWy4mWRYVvmC5pASPRVAQquuzYr0ZIifJWhCy2wofwc8yvPnQfwzA==
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from AS8PR03MB8832.eurprd03.prod.outlook.com (2603:10a6:20b:56e::11)
+ by GV1PR03MB8862.eurprd03.prod.outlook.com (2603:10a6:150:85::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Mon, 27 Mar
+ 2023 19:29:00 +0000
+Received: from AS8PR03MB8832.eurprd03.prod.outlook.com
+ ([fe80::6c3f:aabb:5e8f:6126]) by AS8PR03MB8832.eurprd03.prod.outlook.com
+ ([fe80::6c3f:aabb:5e8f:6126%4]) with mapi id 15.20.6222.028; Mon, 27 Mar 2023
+ 19:28:55 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     Li Yang <leoyang.li@nxp.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Scott Wood <oss@buserror.net>, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Roy Pledge <roy.pledge@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Camelia Groza <camelia.groza@nxp.com>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH 1/2] soc: fsl: qbman: Always disable interrupts when taking cgr_lock
+Date:   Mon, 27 Mar 2023 15:28:40 -0400
+Message-Id: <20230327192841.952688-1-sean.anderson@seco.com>
+X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BL1PR13CA0319.namprd13.prod.outlook.com
+ (2603:10b6:208:2c1::24) To AS8PR03MB8832.eurprd03.prod.outlook.com
+ (2603:10a6:20b:56e::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c076e249-705a-e1bb-c657-f80cd4f2145b@redhat.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+X-MS-TrafficTypeDiagnostic: AS8PR03MB8832:EE_|GV1PR03MB8862:EE_|VI1EUR05FT054:EE_|DU0PR03MB8390:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4e02a0cb-42a8-4bc0-bd24-08db2ef98cfe
+X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: DUKEiQHnEGewBaSQYYYnnYrLR95aVQzfH7pXH9spBKbWrd6P4PCHD0gq8qbJdzy7R0mSm29xs//kgyP99HPq5Qlb8ygppBU2fabE2ur/Ur1RmT6oF1zHx6k2nt+sgDK/nB7k+/K6ZSNUUYuP8W94g5hqa3x+YQEPUN2pU3kfl+j4CHg7/D4gZxa7uUMNBpkgdYJKIzxa8+jPFR/A5alg6g8N5dRm06GmIZYBafVgrjzvTVM3II2j9VWlsNRwuhQzWB+bBmxe+KCPBObwzHZ8HnJZyMZoGwPP74V3yq2MExAXCMVrG7HydBNMaxkdsYI267aI+y5yMYWyKV4cwcClcjME+MuV8ghfKw3HzGvZj9CcSweBPykvYYM+O5ZDkGhWClBqePAEolL5WsdRiFuqfNP31rM6s7wOTS2q0jrCNdxfkK/YfyaUSOItXXm/RzbhURnijIa5Em3RW9cdjrG/zPeMaPo5+kwqCt/N1OgSgT7pU6AeBM5K1iVW+NUFU03T79GJzxPldPQp0NBoR/eEd6/geHl4TuzoxluM5EaIcT2wNM73vxkcEhYK0MAg4gqeki+xrZL97mR7Ww0afEVkHZmb/IABNvBWHwpqkfi56kF6SR/0W7j3R8dYOh9f8Wq+
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR03MB8832.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39850400004)(346002)(396003)(366004)(376002)(136003)(451199021)(2906002)(83380400001)(7416002)(5660300002)(44832011)(8936002)(38350700002)(36756003)(86362001)(38100700002)(26005)(316002)(1076003)(6512007)(6506007)(54906003)(66476007)(8676002)(4326008)(66556008)(66946007)(186003)(52116002)(6486002)(107886003)(6666004)(478600001)(41300700001)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR03MB8862
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: VI1EUR05FT054.eop-eur05.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 5bd28394-fba5-4e95-3b10-08db2ef980db
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iwWZSdbAKEBo9qFwoT4yylusTqDwkESjdegp3u8UzqOr2PW81v2ZtSxR73+0nP0iex4hfV/YMDXxFlAd8sdVn/ZaspVDu1A+OxX02dwLzXh0Sx0kEL/h3PJ0RLT7qlxgq841LWP301wXHYClMsAZ10Wrv5i6EHdjNvApnQB3t5kphOlk7gr5F+lBd9jtYilnFEDQktLtKrd9Nq4WGSDOywnX85iocpQoeGkzB8ERmYIvkGTI/2gu1qCIijmTv6EE2D9iWL8fUypTlqQkI/k3ydIflgGdE54jDOFtePG1VDv2w9UCTYiaobhr8CKjwqK8eWctWUjzCRi44ic3HYHhT6lxaScsuQvNSc2ZMr0ReBccIPGioVHtH4yzYPcx3UPGox1Qxim2cVZqPNK4i/FKZUjGATzDygAQoCwNIvGQCNjMJCNcbut5pjHduIypzXFuK1y4qyGHEoHJiEcgQw7OHeUGz9Tzwb6bAIQ/dA0iiOhYEiaWBFeerNPaODg4DmEErrCnPTBen300JM7Myqm1dufjxLVaA33ZMAiI7lRVbLFmMmz0ZiMRzTBG94wlNeC4bTUKCg5FXJoRMNDeeYI46UKHT0xPLPcW7XR8EO1HC1cGHOfjijVQmWlymEACaMESe2UFUIoiG7Si4OXLZo1nbU17fOcxlcxkSgZfhDaFtMyygLcSZYHeVNrJC7ZyY8oOk7fKeNyQ3iN25tj1ONBVwSbmFm9ZtGy/X7abMmONsLo=
+X-Forefront-Antispam-Report: CIP:20.160.56.87;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230028)(396003)(136003)(346002)(376002)(39850400004)(451199021)(36840700001)(40470700004)(46966006)(36756003)(82310400005)(336012)(86362001)(26005)(6506007)(1076003)(186003)(2616005)(83380400001)(7416002)(6512007)(44832011)(7596003)(356005)(7636003)(107886003)(8936002)(82740400003)(5660300002)(6666004)(6486002)(41300700001)(36860700001)(40480700001)(70586007)(34020700004)(4326008)(54906003)(2906002)(47076005)(70206006)(316002)(8676002)(40460700003)(478600001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 19:29:14.9515
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e02a0cb-42a8-4bc0-bd24-08db2ef98cfe
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.87];Helo=[inpost-eu.tmcas.trendmicro.com]
+X-MS-Exchange-CrossTenant-AuthSource: VI1EUR05FT054.eop-eur05.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR03MB8390
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,30 +126,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 08:20:56PM +0200, Viktor Malik wrote:
-> On 3/27/23 19:47, Luis Chamberlain wrote:
-> > On Mon, Mar 27, 2023 at 06:12:51PM +0200, Viktor Malik wrote:
-> > > Functions for searching module kallsyms should have non-empty
-> > > definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
-> > > only CONFIG_MODULES check was used for many of these, which may have
-> > > caused complilation errors on some configs.
-> > > 
-> > > This patch moves all relevant functions under the correct configs.
-> > > 
-> > > Signed-off-by: Viktor Malik <vmalik@redhat.com>
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Link: https://lore.kernel.org/oe-kbuild-all/202303181535.RFDCnz3E-lkp@intel.com/
-> > 
-> > Thanks Viktor!  Does this fix something from an existing commit? If so
-> > which one?  The commit log should mention it.
-> 
-> Ah, right, I forgot about that. The commit log is missing:
-> 
-> Fixes: bd5314f8dd2d ("kallsyms, bpf: Move find_kallsyms_symbol_value out of internal header")
-> 
-> I can post v2 but I'm also fine with maintainers applying the tag.
+smp_call_function_single disables IRQs when executing the callback. To
+prevent deadlocks, we must disable IRQs when taking cgr_lock elsewhere.
+This is already done by qman_update_cgr and qman_delete_cgr; fix the
+other lockers.
 
-That patch went through the bpf tree so its fix can go throug that tree.
-So up to Daniel if he wants a new patch.
+Fixes: c535e923bb97 ("soc/fsl: Introduce DPAA 1.x QMan device driver")
+Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+---
 
-  Luis
+ drivers/soc/fsl/qbman/qman.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/soc/fsl/qbman/qman.c b/drivers/soc/fsl/qbman/qman.c
+index 739e4eee6b75..ff870ca07596 100644
+--- a/drivers/soc/fsl/qbman/qman.c
++++ b/drivers/soc/fsl/qbman/qman.c
+@@ -1456,7 +1456,7 @@ static void qm_congestion_task(struct work_struct *work)
+ 	union qm_mc_result *mcr;
+ 	struct qman_cgr *cgr;
+ 
+-	spin_lock(&p->cgr_lock);
++	spin_lock_irq(&p->cgr_lock);
+ 	qm_mc_start(&p->p);
+ 	qm_mc_commit(&p->p, QM_MCC_VERB_QUERYCONGESTION);
+ 	if (!qm_mc_result_timeout(&p->p, &mcr)) {
+@@ -1476,7 +1476,7 @@ static void qm_congestion_task(struct work_struct *work)
+ 	list_for_each_entry(cgr, &p->cgr_cbs, node)
+ 		if (cgr->cb && qman_cgrs_get(&c, cgr->cgrid))
+ 			cgr->cb(p, cgr, qman_cgrs_get(&rr, cgr->cgrid));
+-	spin_unlock(&p->cgr_lock);
++	spin_unlock_irq(&p->cgr_lock);
+ 	qman_p_irqsource_add(p, QM_PIRQ_CSCI);
+ }
+ 
+@@ -2440,7 +2440,7 @@ int qman_create_cgr(struct qman_cgr *cgr, u32 flags,
+ 	preempt_enable();
+ 
+ 	cgr->chan = p->config->channel;
+-	spin_lock(&p->cgr_lock);
++	spin_lock_irq(&p->cgr_lock);
+ 
+ 	if (opts) {
+ 		struct qm_mcc_initcgr local_opts = *opts;
+@@ -2477,7 +2477,7 @@ int qman_create_cgr(struct qman_cgr *cgr, u32 flags,
+ 	    qman_cgrs_get(&p->cgrs[1], cgr->cgrid))
+ 		cgr->cb(p, cgr, 1);
+ out:
+-	spin_unlock(&p->cgr_lock);
++	spin_unlock_irq(&p->cgr_lock);
+ 	put_affine_portal();
+ 	return ret;
+ }
+-- 
+2.35.1.1320.gc452695387.dirty
+
