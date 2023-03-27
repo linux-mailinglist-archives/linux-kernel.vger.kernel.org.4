@@ -2,147 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DF56CB10E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3860F6CB11B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 23:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjC0VxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 17:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
+        id S229501AbjC0V7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 17:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjC0Vw6 (ORCPT
+        with ESMTP id S229844AbjC0V7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 17:52:58 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03B73A87
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:52:49 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id i6so12644549ybu.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 14:52:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679953969;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nLI5m06f2WlStlUywkxHpgfVuIZ5JS/MDTFzEPNuSfU=;
-        b=pOSHTN0gxWzMWkqyiNymvzEciJmMzDynaEbRFezy7nLLDqD1LINJt9Abz9IIuoPrea
-         w6BYlguZiNT/hPuPXgbYFH+nK5VQNYOCmkfeTEJcefvBQi9za56UC8iqta+AKeLauOTu
-         BYL0/iVJoeimYgwvs/tGLDATSN9mnXGj/ZTsNmgMmjZWjqUGqwweml9p3K3ISlDJ3pRy
-         FJb0uOBeoz+CDw0gVfgEvWnExyi8ZW1zUmJYIiBbYreayGe/FxZCi8XsTr1Ox7zjK0S5
-         OocDVIB4YAfd2kuVypBdFKkODtS9bY96MYlXVs23YNcbgJMXbEQCjP9ECgACofB2FL3i
-         aWQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679953969;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nLI5m06f2WlStlUywkxHpgfVuIZ5JS/MDTFzEPNuSfU=;
-        b=OESEloViE1iSqyz81coCX7JmvU6FS9E7MbVDpOJ1BZkvgJ0vrR3tErV4OGPMOVNiVQ
-         2ezgp1Mx2yrnBCYbVAbqwsWJGhZfMAtPgRW/G/QVgvP83DQ/HdglB9ls9Lvd+8rhRYJL
-         cmFk/SDDtt1XcfpvJoBq8KXoxqFHshj9Xcr8R+zaIZVSPmKaJ31fez0IKw4iaCxGmZIR
-         mzHK0TAC31QtjS6ha54bjlXzeWSSaUSYhJCh+bQ7gAO96BVXolIp/Bbe4zRtc4fnSXth
-         kpVpQ64jq/w0y9dX0y4r9XQYhz8FEQtswuCAgch9Hb31Fq5UzcjpfWze1TGedTefKJB1
-         aPQg==
-X-Gm-Message-State: AAQBX9cDd3lg9sUJ08P54oC0vdgg/ah4h+xlhwzp2biSewyIA4PSNnBp
-        nUlYASNsbf+driTZodZYaX5OpZlZTmIzg0nMXpvRtg==
-X-Google-Smtp-Source: AKy350YXWieWPPn4qPNXsbtFZBIPGWFVrw4KqEcgFae4NZrCaiM4DhD+RmS9uESY7KP/zdWUYuSeFcGkhfdSERGtuKw=
-X-Received: by 2002:a25:542:0:b0:a6b:bc64:a0af with SMTP id
- 63-20020a250542000000b00a6bbc64a0afmr8149446ybf.4.1679953969020; Mon, 27 Mar
- 2023 14:52:49 -0700 (PDT)
+        Mon, 27 Mar 2023 17:59:09 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4118D30D3;
+        Mon, 27 Mar 2023 14:59:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1679954286; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=anV16UVMtNp/NW2ItYLiRB4AQ1SLN50vfbExP7irbCMV9YCnPN8JgnZff1N4KZ4OCApLXdn/m/9f1OKbZRLTniTMpR0AeV9WVbxb88/xdMM5opnS2lF1cpi0s7NDNV9t0JUItFQaoKsCvj0bf0qwd9tB8WCVYOGC7y0oEC52xao=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1679954286; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=m3Nxnw2EJKi8PgND390b4ttccCknFAa+VCeuBtlni8M=; 
+        b=F99QbKOhBuUMdCEMnGaJw5EdSw2SS4kCm822f0A913FJ4g3N0PXHDdc70fCskgcCR1Pb0KZ7Znobd572rOywpd3Dt86MZ3S7v1dy3ewywfxnw1IlyAXhVhlscqLGVyND4piXdfLuqVa8Tn7lIpw95yyjChuhNZpeL6BoIIu5B2o=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1679954286;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=m3Nxnw2EJKi8PgND390b4ttccCknFAa+VCeuBtlni8M=;
+        b=ciE8XK1PKqy/bE+GnsMM82LHIa2TtViiZ1rMMxc0lyZi2Wde8VL628n6LTpIyEgK
+        ETSgndvMVoSDkOx8t99wmW5jnfweSGjh+yza1K3XxQzaJ3ZhM9ChFTJIpqJI0ncSlFR
+        CfeKkCTQr0Azx2Qy12XWLcb+6ofC0oS1/EZErJus=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1679954284745209.8283533930612; Mon, 27 Mar 2023 14:58:04 -0700 (PDT)
+Message-ID: <8450084e-1474-17fa-32c2-a4653b74ff17@arinc9.com>
+Date:   Tue, 28 Mar 2023 00:57:57 +0300
 MIME-Version: 1.0
-References: <20230317233623.3968172-1-robh@kernel.org> <CACRpkdYq4jE7Qn1w8iPeGz7vxj_CeZ+H48B0TVYmeF4Tt=kHgA@mail.gmail.com>
- <CAL_JsqL+nF_WwZ-EDpUSD2yrxPLZWxaeb=WpTtPnnbpgcXT7qA@mail.gmail.com>
-In-Reply-To: <CAL_JsqL+nF_WwZ-EDpUSD2yrxPLZWxaeb=WpTtPnnbpgcXT7qA@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 27 Mar 2023 23:52:37 +0200
-Message-ID: <CACRpkdbR_PFSkqeK4xAmxdfdhi332hyax8jAnEa7VXFVp=QEDA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: pinctrl: Drop unneeded quotes
-To:     Rob Herring <robh@kernel.org>
-Cc:     =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sean Wang <sean.wang@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net 4/7] net: dsa: mt7530: set both CPU port interfaces to
+ PHY_INTERFACE_MODE_NA
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        Dvorkin Dmitry <dvorkin@tibbo.com>,
-        Wells Lu <wellslutw@gmail.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, asahi@lists.linux.dev,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, patches@opensource.cirrus.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Russell King <linux@armlinux.org.uk>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230326140818.246575-1-arinc.unal@arinc9.com>
+ <20230326140818.246575-5-arinc.unal@arinc9.com>
+ <20230327191242.4qabzrn3vtx3l2a7@skbuf>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230327191242.4qabzrn3vtx3l2a7@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 3:33=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
-> On Thu, Mar 23, 2023 at 3:40=E2=80=AFAM Linus Walleij <linus.walleij@lina=
-ro.org> wrote:
-> > On Sat, Mar 18, 2023 at 12:36=E2=80=AFAM Rob Herring <robh@kernel.org> =
-wrote:
-> >
-> > > Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> > > checking for this can be enabled in yamllint.
-> > >
-> > > Signed-off-by: Rob Herring <robh@kernel.org>
-> >
-> > Should I queue this patch by the way, or do you need it to go into some
-> > DT-related tree?
->
-> Stands on its own. You can take it.
+On 27.03.2023 22:12, Vladimir Oltean wrote:
+> On Sun, Mar 26, 2023 at 05:08:15PM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> Set interfaces of both CPU ports to PHY_INTERFACE_MODE_NA. Either phylink
+>> or mt7530_setup_port5() on mt7530_setup() will handle the rest.
+>>
+>> This is already being done for port 6, do it for port 5 as well.
+>>
+>> Fixes: 38f790a80560 ("net: dsa: mt7530: Add support for port 5")
+> 
+> This is getting comical.. I think I'm putting too much energy in
+> trying to understand the hidden meaning of this patch set.
+> 
+> In include/linux/phy.h we have:
+> 
+> typedef enum {
+> 	PHY_INTERFACE_MODE_NA,
+> 
+> In lack of other initializer, the first element of an enum gets the
+> value 0 in C.
+> 
+> Then, "priv" is allocated by this driver with devm_kzalloc(), which
+> means that its entire memory is zero-filled. So priv->p5_interface and
+> priv->p6_interface are already set to 0, or PHY_INTERFACE_MODE_NA.
+> 
+> There is no code path between the devm_kzalloc() and the position in
+> mt7530_setup() that would change the value of priv->p5_interface or
+> priv->p6_interface from their value of 0 (PHY_INTERFACE_MODE_NA).
+> For example, mt753x_phylink_mac_config() can only be called from
+> phylink, after dsa_port_phylink_create() was called. But
+> dsa_port_phylink_create() comes later than ds->ops->setup() - one comes
+> from dsa_tree_setup_ports(), and the other from dsa_tree_setup_switches().
+> 
+> The movement of the priv->p6_interface assignment with a few lines
+> earlier does not change anything relative to the other call sites which
+> assign different values to priv->p6_interface, so there isn't any
+> functional change there, either.
+> 
+> So this patch is putting 0 into a variable containing 0, and claiming,
+> through the presence of the Fixes: tag and the submission to the "net"
+> tree, that it is a bug fix which should be backported to "stable".
+> 
+> Can it be that you are abusing the meaning of a "bug fix", and that I'm
+> trying too hard to take this patch set seriously?
 
-This sadly conflicts hard with my "devel" branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/lo=
-g/?h=3Ddevel
+I don't appreciate your consistent use of the word "abuse" on my 
+patches. I'm by no means a senior C programmer. I'm doing my best to 
+correct the driver.
 
-Cause seems to be major refactorings of Mediatek and Ralink
-bindings.
+Thank you for explaining the process of phylink with DSA, I will adjust 
+my patches accordingly.
 
-Yours,
-Linus Walleij
+I suggest you don't take my patches seriously for a while, until I know 
+better.
+
+Arınç
