@@ -2,236 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2966CAAE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5086CAAF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 18:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjC0QrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 12:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
+        id S230300AbjC0Qsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 12:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC0QrV (ORCPT
+        with ESMTP id S229804AbjC0Qsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:47:21 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779132698
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 09:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679935640; x=1711471640;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=n2/lhGReilsNzT2kPNlMhWaiAv78EvToljWfHgP6T8o=;
-  b=T5HVre3VGUxB2vIrYfVL1EIWbG01R3HKuGoRdjonqjlQz63oVrKin83/
-   5zU22GmBq3dCLdEy37czVuoa6gA6L/261rqCHtlaBVmLLkGWNsDHyGM89
-   VQ+QxMSXAIQUGhDIISQz5qSLUwzbp7O+1X20qzPdM21n5oTR1V3lMxPWh
-   3UD9bjUzaEA5+YOaeVFa4TJ0/1McmTJdxM/Dk+y7Kz3ZQPSYkIJxKa1Qi
-   qgu54E9penxeFXfco+O/J432YvSH5oJyrnvaddy4PirmyyKJQqe0Leqgc
-   xoeq7YeR3T+bTTqgtABc/ss4qHvRmjPhZYKp+fSQNQZZOh8crZd5RR0VQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="340349990"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="340349990"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 09:47:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="929530032"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="929530032"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Mar 2023 09:47:19 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pgq06-000Hql-1P;
-        Mon, 27 Mar 2023 16:47:18 +0000
-Date:   Tue, 28 Mar 2023 00:46:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:srcu-cf.2023.03.26a] BUILD SUCCESS
- 9607cde099a20296cf0234f571d60184f277aa37
-Message-ID: <6421c85b.sNjh4w0fmWlfOiqM%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 27 Mar 2023 12:48:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632602718;
+        Mon, 27 Mar 2023 09:48:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14D97B817B0;
+        Mon, 27 Mar 2023 16:48:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CFDDC433D2;
+        Mon, 27 Mar 2023 16:48:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679935729;
+        bh=RBHLpix/Xszw9JJ0ucrZ1EJILEOxun33InjcawwuCE4=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=NFJzwgrr4eBE9U877Qj9iwNQVN3CSva0WlZVYlhzk5QTBEQ/JnlaUJ/zdEf3Agylr
+         4KonOj+BjRk5SMrCm99RotKuLIVL2L1fx+9iUJeJUsGIUPMt/b0qu25qmrWGUbpWW1
+         wQEKbOStS83AG+Wr94+TSX1Yz6rymnDklS2dgI0v4lceabnviiN2kLFHdCvz1WmWaL
+         ZIqTDy/B2D+Lj6CY4QatRjxsZrp0R6O0mkEOzqRcXR4rXSIL87uEmynQ6sapMekxCz
+         o2aS4pZTTqCfLCrkdoCHaVLP0wtqTJmUeie3CX9FuSQxNxrIzz96ZT54Y+A3up5vcA
+         pxuWLFB7wOTEw==
+Message-ID: <0af15083921c5d3c89392209654f0c9b.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230327132718.573-3-quic_devipriy@quicinc.com>
+References: <20230327132718.573-1-quic_devipriy@quicinc.com> <20230327132718.573-3-quic_devipriy@quicinc.com>
+Subject: Re: [PATCH V10 2/4] clk: qcom: Add Global Clock Controller driver for IPQ9574
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, arnd@arndb.de, broonie@kernel.org,
+        catalin.marinas@arm.com, devicetree@vger.kernel.org,
+        dmitry.baryshkov@linaro.org, konrad.dybcio@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marcel.ziswiler@toradex.com, mturquette@baylibre.com,
+        nfraprado@collabora.com, p.zabel@pengutronix.de,
+        robh+dt@kernel.org, shawnguo@kernel.org, will@kernel.org
+Date:   Mon, 27 Mar 2023 09:48:47 -0700
+User-Agent: alot/0.10
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git srcu-cf.2023.03.26a
-branch HEAD: 9607cde099a20296cf0234f571d60184f277aa37  srcu: Fix long lines in srcu_funnel_gp_start()
+Quoting Devi Priya (2023-03-27 06:27:16)
+> diff --git a/drivers/clk/qcom/gcc-ipq9574.c b/drivers/clk/qcom/gcc-ipq957=
+4.c
+> new file mode 100644
+> index 000000000000..b2a2d618a5ec
+> --- /dev/null
+> +++ b/drivers/clk/qcom/gcc-ipq9574.c
+> @@ -0,0 +1,4248 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +/*
+> + * Copyright (c) 2023 The Linux Foundation. All rights reserved.
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/err.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
 
-elapsed time: 721m
+What is this include for?
 
-configs tested: 156
-configs skipped: 10
+> +#include <linux/regmap.h>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Need to include clk-provider.h
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r002-20230326   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r012-20230326   gcc  
-alpha                randconfig-r026-20230327   gcc  
-alpha                randconfig-r032-20230327   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r003-20230326   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r021-20230326   gcc  
-arc                  randconfig-r024-20230326   gcc  
-arc                  randconfig-r025-20230326   gcc  
-arc                  randconfig-r026-20230326   gcc  
-arc                  randconfig-r043-20230326   gcc  
-arc                  randconfig-r043-20230327   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r002-20230327   clang
-arm                  randconfig-r022-20230327   gcc  
-arm                  randconfig-r023-20230326   clang
-arm                  randconfig-r033-20230326   gcc  
-arm                  randconfig-r046-20230326   clang
-arm                  randconfig-r046-20230327   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r001-20230326   clang
-arm64        buildonly-randconfig-r006-20230326   clang
-arm64                               defconfig   gcc  
-arm64                randconfig-r011-20230326   gcc  
-arm64                randconfig-r016-20230327   clang
-arm64                randconfig-r026-20230326   gcc  
-arm64                randconfig-r031-20230327   gcc  
-csky         buildonly-randconfig-r002-20230326   gcc  
-csky         buildonly-randconfig-r004-20230327   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r006-20230327   gcc  
-csky                 randconfig-r024-20230326   gcc  
-hexagon              randconfig-r001-20230327   clang
-hexagon              randconfig-r012-20230327   clang
-hexagon              randconfig-r024-20230327   clang
-hexagon              randconfig-r041-20230326   clang
-hexagon              randconfig-r041-20230327   clang
-hexagon              randconfig-r045-20230326   clang
-hexagon              randconfig-r045-20230327   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230327   gcc  
-i386                 randconfig-a002-20230327   gcc  
-i386                 randconfig-a003-20230327   gcc  
-i386                 randconfig-a004-20230327   gcc  
-i386                 randconfig-a005-20230327   gcc  
-i386                 randconfig-a006-20230327   gcc  
-i386                 randconfig-a011-20230327   clang
-i386                 randconfig-a012-20230327   clang
-i386                 randconfig-a013-20230327   clang
-i386                 randconfig-a014-20230327   clang
-i386                 randconfig-a015-20230327   clang
-i386                 randconfig-a016-20230327   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r013-20230327   gcc  
-ia64                 randconfig-r022-20230326   gcc  
-ia64                 randconfig-r031-20230326   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r021-20230326   gcc  
-loongarch            randconfig-r023-20230327   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r035-20230327   gcc  
-microblaze           randconfig-r014-20230326   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r001-20230326   gcc  
-mips         buildonly-randconfig-r002-20230327   clang
-mips         buildonly-randconfig-r003-20230327   clang
-mips                 randconfig-r034-20230326   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r005-20230326   gcc  
-openrisc     buildonly-randconfig-r003-20230327   gcc  
-openrisc     buildonly-randconfig-r005-20230327   gcc  
-openrisc             randconfig-r001-20230326   gcc  
-openrisc             randconfig-r003-20230327   gcc  
-openrisc             randconfig-r026-20230327   gcc  
-parisc       buildonly-randconfig-r001-20230327   gcc  
-parisc       buildonly-randconfig-r005-20230326   gcc  
-parisc       buildonly-randconfig-r006-20230327   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r003-20230326   gcc  
-parisc               randconfig-r004-20230326   gcc  
-parisc               randconfig-r016-20230326   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r003-20230326   gcc  
-powerpc              randconfig-r004-20230327   gcc  
-powerpc              randconfig-r014-20230327   clang
-powerpc              randconfig-r021-20230327   clang
-powerpc              randconfig-r025-20230326   gcc  
-powerpc              randconfig-r034-20230327   gcc  
-powerpc              randconfig-r036-20230326   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r023-20230327   clang
-riscv                randconfig-r042-20230326   gcc  
-riscv                randconfig-r042-20230327   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r004-20230327   clang
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230326   gcc  
-s390                 randconfig-r044-20230327   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r032-20230326   gcc  
-sparc        buildonly-randconfig-r006-20230327   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r006-20230326   gcc  
-sparc                randconfig-r023-20230326   gcc  
-sparc                randconfig-r035-20230326   gcc  
-sparc                randconfig-r036-20230327   gcc  
-sparc64      buildonly-randconfig-r001-20230327   gcc  
-sparc64              randconfig-r005-20230327   gcc  
-sparc64              randconfig-r011-20230327   gcc  
-sparc64              randconfig-r015-20230327   gcc  
-sparc64              randconfig-r022-20230326   gcc  
-sparc64              randconfig-r024-20230327   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r002-20230327   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230327   gcc  
-x86_64               randconfig-a002-20230327   gcc  
-x86_64               randconfig-a003-20230327   gcc  
-x86_64               randconfig-a004-20230327   gcc  
-x86_64               randconfig-a005-20230327   gcc  
-x86_64               randconfig-a006-20230327   gcc  
-x86_64               randconfig-a011-20230327   clang
-x86_64               randconfig-a012-20230327   clang
-x86_64               randconfig-a013-20230327   clang
-x86_64               randconfig-a014-20230327   clang
-x86_64               randconfig-a015-20230327   clang
-x86_64               randconfig-a016-20230327   clang
-x86_64               randconfig-r033-20230327   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r005-20230327   gcc  
-xtensa               randconfig-r002-20230326   gcc  
-xtensa               randconfig-r021-20230327   gcc  
-xtensa               randconfig-r022-20230327   gcc  
-xtensa               randconfig-r025-20230327   gcc  
+> +
+> +#include <linux/reset-controller.h>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Put a newline here.
+
+> +#include <dt-bindings/clock/qcom,ipq9574-gcc.h>
+> +#include <dt-bindings/reset/qcom,ipq9574-gcc.h>
+> +
+> +#include "clk-rcg.h"
+> +#include "clk-branch.h"
+> +#include "clk-alpha-pll.h"
+> +#include "clk-regmap-divider.h"
+> +#include "clk-regmap-mux.h"
+> +#include "clk-regmap-phy-mux.h"
+> +#include "reset.h"
+> +
+> +/* Need to match the order of clocks in DT binding */
+> +enum {
+> +       DT_XO,
+> +       DT_SLEEP_CLK,
+> +       DT_BIAS_PLL_UBI_NC_CLK,
+> +       DT_PCIE30_PHY0_PIPE_CLK,
+> +       DT_PCIE30_PHY1_PIPE_CLK,
+> +       DT_PCIE30_PHY2_PIPE_CLK,
+> +       DT_PCIE30_PHY3_PIPE_CLK,
+> +       DT_USB3PHY_0_CC_PIPE_CLK,
+> +};
+> +
+> +enum {
+> +       P_XO,
+> +       P_PCIE30_PHY0_PIPE,
+> +       P_PCIE30_PHY1_PIPE,
+> +       P_PCIE30_PHY2_PIPE,
+> +       P_PCIE30_PHY3_PIPE,
+> +       P_USB3PHY_0_PIPE,
+> +       P_GPLL0,
+> +       P_GPLL0_DIV2,
+> +       P_GPLL0_OUT_AUX,
+> +       P_GPLL2,
+> +       P_GPLL4,
+> +       P_PI_SLEEP,
+> +       P_BIAS_PLL_UBI_NC_CLK,
+> +};
+> +
+> +static const struct parent_map gcc_xo_map[] =3D {
+> +       { P_XO, 0 },
+> +};
+> +
+> +static const struct clk_parent_data gcc_xo_data[] =3D {
+> +       { .index =3D DT_XO },
+> +};
+> +
+> +static const struct clk_parent_data gcc_sleep_clk_data[] =3D {
+> +       { .index =3D DT_SLEEP_CLK },
+> +};
+> +
+> +static struct clk_alpha_pll gpll0_main =3D {
+> +       .offset =3D 0x20000,
+> +       .regs =3D clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
+> +       .clkr =3D {
+> +               .enable_reg =3D 0x0b000,
+> +               .enable_mask =3D BIT(0),
+> +               .hw.init =3D &(struct clk_init_data) {
+
+All these clk_init_data structs should be const.
+
+> +                       .name =3D "gpll0_main",
+> +                       .parent_data =3D gcc_xo_data,
+> +                       .num_parents =3D ARRAY_SIZE(gcc_xo_data),
+> +                       .ops =3D &clk_alpha_pll_ops,
+> +               },
+> +       },
+> +};
