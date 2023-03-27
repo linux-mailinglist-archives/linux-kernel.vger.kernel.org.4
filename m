@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27326CA599
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5746CA59C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232688AbjC0NX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
+        id S232690AbjC0NYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbjC0NX3 (ORCPT
+        with ESMTP id S232616AbjC0NX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Mar 2023 09:23:29 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7D05582
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:23:15 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id ew6so36099074edb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:23:15 -0700 (PDT)
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D563755BF
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:23:16 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id y4so36244351edo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:23:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679923394;
+        d=linaro.org; s=google; t=1679923395;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g5MmJ5LIwdnukpeI8mJdU12Zu69B4U+Xf4C7JlgmOHg=;
-        b=nq3I2u663v6g+hfpctFjctJjj2P2BHhwH3JUz27R8TJHQoyTa8L6ddYJznEnRhnXwZ
-         iHZ3lx0/DGDGJHm2LxoSXJp5KAu3YZ3ndp9iZOYxGm05B/wSVkh18lpp16CC8lojrean
-         eMw0j7qhr5uCLlY7/wRwM/CH18GeS6oDkN1OIHJWat5uSqtMK5hIiMb1MNl7jKx3fuaa
-         nYcL5kvR2Gcl1sjVB/xnFRuG6HUOWNlL2ndxGfhHNCeAMpgcEFvpw8/rEG3fBNQxExGw
-         CZkjzeuvMzjCvKIavgiVRhWDb9rzbsag0JVgSNAyGgH1g9acJOiIvOSPad43WAHRf4Da
-         nr/w==
+        bh=7a67ZOiT2KfjiEjYrFPwDekMeNpv3czyvxhnWd0/zIc=;
+        b=az4uIKb/12yPmBeHcyfAcgIIWW2EHltUAJIhxzSP2LxUgnKxodnLJlMfr08lDXYYBf
+         TIxObZRbbhhYXnvX3rKCkZEVMl/orgmbb2f3ql54+XtIEddlhGAhAMbpKC10jiN6+bFt
+         rGzSiWXy3WjZrYGiyMJ7xEpCc+7w+UzqUiVVYoaxcddwk62VaKeVo8tYjDJsw/ed5RA0
+         bCmBrCiFMTcIP2KgqIGZvF9AgkPMxEXFTFjhOsG5bRAZx+oItfoVoehCuIc1o2J0VXjm
+         TynKYCmRwN6DET4YN+FBFlt8vOk4bIs4fqPl9NQN0Fcst2itkWWA47ZoeluJDM+n6hK7
+         gBiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679923394;
+        d=1e100.net; s=20210112; t=1679923395;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=g5MmJ5LIwdnukpeI8mJdU12Zu69B4U+Xf4C7JlgmOHg=;
-        b=AduET/WjBomAFeQhb9Bgo/VQRDC+RM2dQHobqZqjzcaZBy9rnFWQLNdtDY6+1/66fo
-         xOJXER4mWDagNjwc4tRPUAkUMAAIimcXRFjrgMZM9l4FaJlGgeoKJMD/hcxbSPlFmImo
-         K9/hGIcIcJ2v5BJUQkqrRoLYrfK+uJoabVo9pQYZxTEgz9UyOEFH9UzwU++eDtFo2guq
-         Iur8++ltV2XVAUYsZM4rCkq/1T8/IzXBdb8pXCt++eIAHpCL8k+4dKrnMnV51mGpYSYa
-         j6chGmRWnMcbfWDIXW4r0zy6OVaCUX62699egNCz4A7H0FZyK32JpCWofZlVIK6a2EAW
-         fHMA==
-X-Gm-Message-State: AAQBX9c0J5InFJIsr7aSivP/A2WhPMSfnyyYJPDQx0pDmwk4n+y27J9Y
-        JONWgcNUAky9XNTwdZ66KhyMjg==
-X-Google-Smtp-Source: AKy350al8tfsgucLaBgpfCROmShW0R0tsRa+vgjUucQMyp9m+vXhNpUNNVleYP6iUjqViS3XJbWahw==
-X-Received: by 2002:a17:907:2099:b0:8b0:ad0b:7ab8 with SMTP id pv25-20020a170907209900b008b0ad0b7ab8mr12658198ejb.14.1679923394166;
-        Mon, 27 Mar 2023 06:23:14 -0700 (PDT)
+        bh=7a67ZOiT2KfjiEjYrFPwDekMeNpv3czyvxhnWd0/zIc=;
+        b=Qqcq0t3Okgwlbz4M1gZRDo9dCdNccPS4kEyssXmOPSt0c2tVhiKSYTrlVGONiIIJAw
+         fdWz91jJLjhTroq3NPuLHZuAkuWtNOZV7ZbCi85M5K3PqTSPomZoHNGEUxu3LWw5ggF2
+         1XX3q43SUEOE0GYBPLJWvFbbX75nTn0jlXhU26ymtl5koQbSQs4d7owxIJZnRiLwJ3FQ
+         QGJVemvaFCuR6HUkoUXZ3H7ptSjGxhHMpoNAceolSN7Mj9J2/92Z9rwV7BGM2tAWxfau
+         vRKsfmbHicy1gZWOtDDqmdCFnJ2p8aT/WRE71G/1jNm+4GsDdlTLRF3Cp/lSdI/LVCOF
+         wUIw==
+X-Gm-Message-State: AAQBX9diesQq3McvH7kUXdYmoapAEDqmroBKbSqmPEqnavedWUZbzW93
+        PCMovMWEy216riPHC2Oae+ivkA==
+X-Google-Smtp-Source: AKy350YNqlH9FY7SJSed3F0rsVsq/wJy1/Z5BpFQat8+QvN7Il7dBiaXRWwqeI79HqLgfTTJY+ijMg==
+X-Received: by 2002:a17:906:e0c6:b0:93b:a133:f7e6 with SMTP id gl6-20020a170906e0c600b0093ba133f7e6mr11457539ejb.46.1679923395297;
+        Mon, 27 Mar 2023 06:23:15 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:581e:789c:7616:5ee])
-        by smtp.gmail.com with ESMTPSA id gy24-20020a170906f25800b00930445428acsm14286814ejb.14.2023.03.27.06.23.13
+        by smtp.gmail.com with ESMTPSA id gy24-20020a170906f25800b00930445428acsm14286814ejb.14.2023.03.27.06.23.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 06:23:13 -0700 (PDT)
+        Mon, 27 Mar 2023 06:23:15 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -67,9 +67,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     Patrick Lai <quic_plai@quicinc.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 04/10] ASoC: dt-bindings: qcom,lpass-tx-macro: narrow clocks per variants
-Date:   Mon, 27 Mar 2023 15:22:48 +0200
-Message-Id: <20230327132254.147975-5-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 05/10] ASoC: dt-bindings: qcom,lpass-tx-macro: Add SM8550 TX macro
+Date:   Mon, 27 Mar 2023 15:22:49 +0200
+Message-Id: <20230327132254.147975-6-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230327132254.147975-1-krzysztof.kozlowski@linaro.org>
 References: <20230327132254.147975-1-krzysztof.kozlowski@linaro.org>
@@ -84,100 +84,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the Qualcomm TX macro codec binding allows two different clock
-setups - with (for ADSP) and without macro/dcodec entries (for ADSP
-bypassed).  With more devices coming soon, this will keep growing, thus
-rework the clocks/clock-names to be specific for each binding.
+Add the TX macro codec on Qualcomm SM8550, which comes without NPL clock
+exposed.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/sound/qcom,lpass-tx-macro.yaml   | 63 ++++++++++++++-----
- 1 file changed, 46 insertions(+), 17 deletions(-)
+ .../bindings/sound/qcom,lpass-tx-macro.yaml    | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/sound/qcom,lpass-tx-macro.yaml b/Documentation/devicetree/bindings/sound/qcom,lpass-tx-macro.yaml
-index 6c8751497d36..768757cd077d 100644
+index 768757cd077d..4156981fe02b 100644
 --- a/Documentation/devicetree/bindings/sound/qcom,lpass-tx-macro.yaml
 +++ b/Documentation/devicetree/bindings/sound/qcom,lpass-tx-macro.yaml
-@@ -9,9 +9,6 @@ title: LPASS(Low Power Audio Subsystem) TX Macro audio codec
- maintainers:
-   - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+@@ -15,6 +15,7 @@ properties:
+       - qcom,sc7280-lpass-tx-macro
+       - qcom,sm8250-lpass-tx-macro
+       - qcom,sm8450-lpass-tx-macro
++      - qcom,sm8550-lpass-tx-macro
+       - qcom,sc8280xp-lpass-tx-macro
  
--allOf:
--  - $ref: dai-common.yaml#
--
- properties:
-   compatible:
-     enum:
-@@ -30,22 +27,12 @@ properties:
-     const: 0
+   reg:
+@@ -96,6 +97,23 @@ allOf:
+             - const: dcodec
+             - const: fsgen
  
-   clocks:
--    oneOf:
--      - maxItems: 3
--      - maxItems: 5
-+    minItems: 3
-+    maxItems: 5
- 
-   clock-names:
--    oneOf:
--      - items:   # for ADSP based platforms
--          - const: mclk
--          - const: npl
--          - const: macro
--          - const: dcodec
--          - const: fsgen
--      - items:   # for ADSP bypass based platforms
--          - const: mclk
--          - const: npl
--          - const: fsgen
-+    minItems: 3
-+    maxItems: 5
- 
-   clock-output-names:
-     maxItems: 1
-@@ -67,6 +54,48 @@ required:
-   - reg
-   - "#sound-dai-cells"
- 
-+allOf:
-+  - $ref: dai-common.yaml#
 +  - if:
 +      properties:
 +        compatible:
 +          enum:
-+            - qcom,sc7280-lpass-tx-macro
-+    then:
-+      properties:
-+        clock-names:
-+          oneOf:
-+            - items:   # for ADSP based platforms
-+                - const: mclk
-+                - const: npl
-+                - const: macro
-+                - const: dcodec
-+                - const: fsgen
-+            - items:   # for ADSP bypass based platforms
-+                - const: mclk
-+                - const: npl
-+                - const: fsgen
-+
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - qcom,sc8280xp-lpass-tx-macro
-+            - qcom,sm8250-lpass-tx-macro
-+            - qcom,sm8450-lpass-tx-macro
++            - qcom,sm8550-lpass-tx-macro
 +    then:
 +      properties:
 +        clocks:
-+          minItems: 5
-+          maxItems: 5
++          minItems: 4
++          maxItems: 4
 +        clock-names:
 +          items:
 +            - const: mclk
-+            - const: npl
 +            - const: macro
 +            - const: dcodec
 +            - const: fsgen
