@@ -2,152 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC6E6C9A48
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 05:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCED6C9A4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 05:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbjC0Dkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Mar 2023 23:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        id S232102AbjC0Dle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Mar 2023 23:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231990AbjC0Dkm (ORCPT
+        with ESMTP id S229804AbjC0Dlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Mar 2023 23:40:42 -0400
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F4249F1
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 20:40:41 -0700 (PDT)
-Received: by mail-il1-f208.google.com with SMTP id w8-20020a92db48000000b00322124084f3so4975002ilq.3
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 20:40:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679888440;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vBmRuY0titHxK9jm3zIYfXCs7kYdreINgFapoYnk6EY=;
-        b=nwwkHf228DxTjyd+say7swcjXFfEFLEgkxoPKD6/FAe7ioKa8COzchsO6syCRb7KL9
-         onD9g1QQUt0LJrWd4Rwb2wJvrBCKzeNG+4sIq85sKLsTW6HUjn9q/fg3ovvc8Wn7aSyx
-         hl1/N5+0vji6Yn7rTeGVncOMX+HYHDoDXosj5UQX3LAlWi+XQM6lPs69s3pFVF5ms6IT
-         GGgBiEAkEkclzCAB/xFb7Dzk81KaSO1KvhA1CMiwo1mAM8J5J8hm3LCjJYez2weC05PE
-         Ho4Aij0E0Rr4s4S+YwtOgXe9D0jHTHLgQKwAxERJABWM3o9Te6hppBpFgbfNl/PIYjDm
-         IUUQ==
-X-Gm-Message-State: AO0yUKU9IV/tLmFyoZttstVO+R+3MR88IuUZlhDnRBPI6WMpEOWeXVTG
-        eUV8vicLhHjdBtJIwCw7pwibYO6uXOj6LsRi6bwMbJNl+rBf
-X-Google-Smtp-Source: AK7set+y267l1chfZnErITPTXtnox2QC9BSFt9ulwJPdMTQrRZoaXqzPt3xAsPp/rCrEh5PoTA/7SzRxcSTSrS1K9Yd2dgjhr8ei
+        Sun, 26 Mar 2023 23:41:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECBE3C3B
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 20:41:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A262260F91
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:41:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA9D0C433D2;
+        Mon, 27 Mar 2023 03:41:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679888489;
+        bh=3kWWMiFdYWioPh97XETsY7EN3Qgvh9m0ERHUwWdk5zA=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=XdHgHv3lPUOkj/Ddw4eeEJwkzxZfqOeVAWS//UrBCt9Jixy09T2FoWkSMGNLdbq6m
+         QqJqOTOtKzGc4DTgPqX5QuJz3GciAayerWNvzwcqg6BPKtw138X7Z4l5L6CN4QSgZl
+         kWcjyfJvzYG5zN68eL2ylg0PGaI/0fjitULbjqwLC21o9vNKFfsUyhoztfjZxyZLik
+         TyYsw2J7pK98y7xO281xUX5mfTGk/dO9UC1yIXMY0yTeNrOiWu901ieWWeEBU0o8B5
+         g4tGsaJtKkw/bqOnehDLfr7fDc4d73tommIVzR5j/r01bRS0mqp4PCEb0xDTV8oOsy
+         YirPidXU+L81w==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 682051540474; Sun, 26 Mar 2023 20:41:29 -0700 (PDT)
+Date:   Sun, 26 Mar 2023 20:41:29 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     linux@weissschuh.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/8] tools/nolibc: add support for stack protector
+Message-ID: <d186bd6a-e8ed-4a89-875b-6a4406dd1fbc@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <0d9bbc94-7ea2-4bc5-8523-29b100c0f1a1@paulmck-laptop>
+ <a65340bb-2d11-445b-8595-9bf25a9f7a47@paulmck-laptop>
+ <ZCBiDZfQW+YuiVNs@1wt.eu>
+ <35a26245-0171-44b0-8072-325576768f91@paulmck-laptop>
+ <ZCBkrOqWR7EVMeP/@1wt.eu>
+ <d2c780bb-00ec-4966-87a2-d233f19032ab@paulmck-laptop>
+ <ZCBsLQARaZBHeE4k@1wt.eu>
+ <ZCBtOxqRJ9+P+G0z@1wt.eu>
+ <ZCB5HZVbrjTM37Bd@1wt.eu>
+ <8927157b-bf2c-46b7-a385-f4e230a4777d@paulmck-laptop>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:9901:0:b0:745:c41a:8f0f with SMTP id
- t1-20020a5e9901000000b00745c41a8f0fmr3899286ioj.2.1679888440391; Sun, 26 Mar
- 2023 20:40:40 -0700 (PDT)
-Date:   Sun, 26 Mar 2023 20:40:40 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c0822e05f7d9812d@google.com>
-Subject: [syzbot] linux-next test error: general protection fault in vma_merge
-From:   syzbot <syzbot+a2fd5af4a33891110a79@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8927157b-bf2c-46b7-a385-f4e230a4777d@paulmck-laptop>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Mar 26, 2023 at 11:00:26AM -0700, Paul E. McKenney wrote:
+> On Sun, Mar 26, 2023 at 06:55:57PM +0200, Willy Tarreau wrote:
+> > On Sun, Mar 26, 2023 at 06:05:15PM +0200, Willy Tarreau wrote:
+> > > On Sun, Mar 26, 2023 at 06:00:45PM +0200, Willy Tarreau wrote:
+> > > > On Sun, Mar 26, 2023 at 08:45:55AM -0700, Paul E. McKenney wrote:
+> > > > > Glad I could "help"!  Timers.  Huh.  ;-)
+> > > > > 
+> > > > > Checking v6.2, though the rebase is a bit messy, so I won't be all
+> > > > > that confident in the results.
+> > > > 
+> > > > I got the same as you now. I don't know what I missed before not to
+> > > > face it, maybe it's the consequence of the rebase. I've re-applied
+> > > > the patches on top of 6.2.8 and am retesting now.
+> > > > 
+> > > > I think you don't need to waste more of your time on this for now
+> > > > since we have a reproducer. Thomas and I should take over.
+> > > 
+> > > And it's a 6.3 regression, as 6.2.8 works fine:
+> > > 
+> > >   $ make run
+> > >   (...)
+> > >   Kernel: arch/x86/boot/bzImage is ready  (#2)
+> > >   make[1]: Leaving directory '/g/public/linux/master'
+> > >   126 test(s) passed.
+> > >   $ tail  run.out 
+> > >   Errors during this test: 0
+> > >   
+> > >   Running test 'protection'
+> > >   0 -fstackprotector                                               [OK]
+> > >   Errors during this test: 0
+> > >   
+> > >   Total number of errors: 0
+> > >   Leaving init with final status: 0
+> > >   [    3.388706] ACPI: PM: Preparing to enter system sleep state S5
+> > >   [    3.389424] reboot: Power down
+> > > 
+> > > Now let's have fun bisecting it!
+> > 
+> > So I have a good news, 6.3-rc1 which dev.2023.03.20a is based on, fails,
+> > while 6.3-rc3 works. I haven't got further yet and am not sure it's useful
+> > to dig further given that it's an already fixed problem that is not related
+> > to the patches in your branch. I don't know if you usually rebase on more
+> > recent tags though.
+> 
+> Thank you for chasing this down!
+> 
+> In this case, I will at the very least merge with v6.3 before testing.
+> I have Joel Fernandes and Boqun Feng trying their hands at running
+> the RCU pull request for v6.4, so I will probably resist the urge to
+> inject confusion by rebasing onto v6.3-rc1.  ;-)
 
-syzbot found the following issue on:
+And merging the -rcu tree's "dev" branch with v6.3-rc3 got me a successful test:
 
-HEAD commit:    7c4a254d78f8 Add linux-next specific files for 20230323
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=15f70246c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=20fd034702e6edd2
-dashboard link: https://syzkaller.appspot.com/bug?extid=a2fd5af4a33891110a79
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+	Kernel: arch/x86/boot/bzImage is ready  (#5)
+	make[1]: Leaving directory '/home/git/linux-build'
+	125 test(s) passed.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/dc0bbbecd2a5/disk-7c4a254d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6b2c8c7cfd4b/vmlinux-7c4a254d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ae312a388585/bzImage-7c4a254d.xz
+So looking good.  ;-)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a2fd5af4a33891110a79@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xdffffc0000000018: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x00000000000000c0-0x00000000000000c7]
-CPU: 1 PID: 5080 Comm: syz-fuzzer Not tainted 6.3.0-rc3-next-20230323-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-RIP: 0010:vma_merge+0x234/0x1fd0 mm/mmap.c:952
-Code: 08 00 0f 84 b0 03 00 00 e8 e9 54 bf ff 48 8b 44 24 08 48 8d b8 a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 4d 18 00 00 48 8b 44 24 08 48 8b b0 a8 00 00 00
-RSP: 0018:ffffc90003d0f998 EFLAGS: 00010207
-RAX: dffffc0000000000 RBX: ffff88802974b800 RCX: 0000000000000000
-RDX: 0000000000000018 RSI: ffffffff81c37957 RDI: 00000000000000c7
-RBP: ffff888079aaa400 R08: 0000000000000006 R09: 0000000000000000
-R10: 000000c001ffffff R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000000 R14: 000000c002000000 R15: 0000000000000000
-FS:  000000c000524890(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fe510676000 CR3: 00000000249a5000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- madvise_update_vma+0x23f/0xd40 mm/madvise.c:153
- madvise_vma_behavior+0x7f6/0x20e0 mm/madvise.c:1091
- madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1260
- do_madvise.part.0+0x193/0x470 mm/madvise.c:1439
- do_madvise mm/madvise.c:1452 [inline]
- __do_sys_madvise mm/madvise.c:1452 [inline]
- __se_sys_madvise mm/madvise.c:1450 [inline]
- __x64_sys_madvise+0x117/0x150 mm/madvise.c:1450
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x46b557
-Code: 8b 24 24 48 8b 6c 24 10 48 83 c4 18 c3 cc cc cc cc cc cc 48 8b 7c 24 08 48 8b 74 24 10 8b 54 24 18 48 c7 c0 1c 00 00 00 0f 05 <89> 44 24 20 c3 cc cc cc cc 48 8b 7c 24 08 8b 74 24 10 8b 54 24 14
-RSP: 002b:000000c00022de60 EFLAGS: 00000206 ORIG_RAX: 000000000000001c
-RAX: ffffffffffffffda RBX: 0000000000a12000 RCX: 000000000046b557
-RDX: 000000000000000e RSI: 0000000000800000 RDI: 000000c001c00000
-RBP: 000000c00022de88 R08: 0000000000000509 R09: 000000c001b6a000
-R10: 00000000000012bd R11: 0000000000000206 R12: 0000000000000509
-R13: 0000000000000003 R14: 000000c0003f1a00 R15: 00000000010e0700
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:vma_merge+0x234/0x1fd0 mm/mmap.c:952
-Code: 08 00 0f 84 b0 03 00 00 e8 e9 54 bf ff 48 8b 44 24 08 48 8d b8 a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 4d 18 00 00 48 8b 44 24 08 48 8b b0 a8 00 00 00
-RSP: 0018:ffffc90003d0f998 EFLAGS: 00010207
-RAX: dffffc0000000000 RBX: ffff88802974b800 RCX: 0000000000000000
-RDX: 0000000000000018 RSI: ffffffff81c37957 RDI: 00000000000000c7
-RBP: ffff888079aaa400 R08: 0000000000000006 R09: 0000000000000000
-R10: 000000c001ffffff R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000000 R14: 000000c002000000 R15: 0000000000000000
-FS:  000000c000524890(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000564702bbb078 CR3: 00000000249a5000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	08 00                	or     %al,(%rax)
-   2:	0f 84 b0 03 00 00    	je     0x3b8
-   8:	e8 e9 54 bf ff       	callq  0xffbf54f6
-   d:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
-  12:	48 8d b8 a8 00 00 00 	lea    0xa8(%rax),%rdi
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	0f 85 4d 18 00 00    	jne    0x1881
-  34:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
-  39:	48 8b b0 a8 00 00 00 	mov    0xa8(%rax),%rsi
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+								Thanx, Paul
