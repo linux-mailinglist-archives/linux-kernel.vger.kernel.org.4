@@ -2,117 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D0F6CA5FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D1D6CA5FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbjC0NdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
+        id S232577AbjC0NdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232384AbjC0NdH (ORCPT
+        with ESMTP id S232540AbjC0NdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:33:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C27268B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:32:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679923942;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=45ANxRXv+CmKBORJQeZkZo556TyX4xY4z1xyvoQpf7s=;
-        b=Trp5NM+np1pwYOEswT4IaywUulbTOIHN1zb8YCJfH0d1d5zfl9sU4lUTAx1P7nd90AQrCz
-        D94dxVo5pWd9wM//VJENKYXR2ZQYrq5uRNLgvEZLM/bwOMfcMqEuzHJAoQCGyyzHLxz4UU
-        sFDv1KQf4WQ95NSEBomexfVdgfsLaGE=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-662-3BIIqeoeOL2daUORk07UEA-1; Mon, 27 Mar 2023 09:32:21 -0400
-X-MC-Unique: 3BIIqeoeOL2daUORk07UEA-1
-Received: by mail-wr1-f71.google.com with SMTP id d5-20020adfa345000000b002d716fc080fso766837wrb.22
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 06:32:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679923940;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=45ANxRXv+CmKBORJQeZkZo556TyX4xY4z1xyvoQpf7s=;
-        b=jv6TK34NGrRzy/BxX6SxBc+sc+jcr5jRWV2lWPP6satWG2PrqSynV7ZPke6z7+ZUG7
-         ybDA0gkkQeJf0h2o1sbtmPVa7OKM7oj79Jl7fNAvViJr6N9Ok6ngBJCtN2VLF8X9Yc9q
-         C4Iz8Wa04ogDi11cLsyr2JQ5zGUxg5xYDkx9GgxNzf0lHBdJ5gepnjV6Dscwk85T8Mke
-         /UoLPPOeeL2H+cXQKCGSkVGleg4kDTAlyBLyAOw3fnPmTT/ez6421W6AHoemqGTsraDj
-         1NYgQmncQius0D5zMI0NU44ilSmcJBs1ND2f/K57c6KbaQczsDnB87sSTB+SSMNhiPwA
-         UfRw==
-X-Gm-Message-State: AO0yUKVyFOuh3hFBs0wQfeoJzKO81h/8HljRT0Gx1kWBDAY/BL9jiouH
-        GE876jvj/U9pfOD5NCrpCdAIgSJ9nc6TP1d4RBIigGMmKcQLnQecOlTQbKZfNnJ8JRxKkdFB6/Y
-        rTzcL7d9OO/QPcUtdY4nEV7sH
-X-Received: by 2002:a7b:c7d6:0:b0:3e1:f8af:8772 with SMTP id z22-20020a7bc7d6000000b003e1f8af8772mr9393541wmk.9.1679923940256;
-        Mon, 27 Mar 2023 06:32:20 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8gdRVPXdFw2VEM14Dq51u4OtBaddjJUio2jBLT7UtvdL6xG4rHCigflYhYz9nOXRbjvmAY9g==
-X-Received: by 2002:a7b:c7d6:0:b0:3e1:f8af:8772 with SMTP id z22-20020a7bc7d6000000b003e1f8af8772mr9393524wmk.9.1679923940000;
-        Mon, 27 Mar 2023 06:32:20 -0700 (PDT)
-Received: from redhat.com ([2.52.153.142])
-        by smtp.gmail.com with ESMTPSA id i6-20020a05600c354600b003ede6540190sm9086871wmq.0.2023.03.27.06.32.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 06:32:19 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 09:32:16 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        elic@nvidia.com
-Subject: Re: [GIT PULL] vdpa: bugfix
-Message-ID: <20230327093125-mutt-send-email-mst@kernel.org>
-References: <20230327091947-mutt-send-email-mst@kernel.org>
- <20230327092909-mutt-send-email-mst@kernel.org>
+        Mon, 27 Mar 2023 09:33:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C71268B;
+        Mon, 27 Mar 2023 06:33:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 434E4B81038;
+        Mon, 27 Mar 2023 13:33:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A48BC4339E;
+        Mon, 27 Mar 2023 13:33:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679923985;
+        bh=I2nC4RvrI3XPmmchXfIbX9tkGi9QcppowdjfP5n6HKg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rvN4TbP3P41UabfoZduu5VujQxmn3s5MCDlwFPHGjHfRKUm6ZtrjBNhM6ZH/OjzSM
+         qPWGpP9/0h2WsebqSy0ZZpA7Dj0F7Q5V4JCpEUFnhYLcXgcFvYML+rpduMj/CL4WBh
+         QBSARR67Rr2c5pSCOwQFCuRIRW14OHF8Wm+t5+GrmM7Hq06Cct4XQPxpr84uFHBgC0
+         NMCo3BJaTJ5IYtwshXKeLofd71XNQCvU3vyQG57fVM/MNWY1jxgYcbdTQupNPa5Vbm
+         cQHN/mxSpxUMIbRNM04vDttP7tT5sygci9gfgxYUOqsdC6HmLVsiYEZHR/dnj75oZq
+         FqGZg4Z4YrfFg==
+Received: by mail-ed1-f47.google.com with SMTP id b20so36366951edd.1;
+        Mon, 27 Mar 2023 06:33:04 -0700 (PDT)
+X-Gm-Message-State: AAQBX9cVRSOyFyyxSmjjYEmJNt2BYvCBCOZQ77DV56viQgcK/8vBIL6E
+        7mr62JOP+ppTN5zqny63pG82fiScHxhxPfz/vv8=
+X-Google-Smtp-Source: AKy350ZI7DmaR3+YGbP/NXYZhn7km7KIid6qvRQlw0MFKgLBu59N2QBPhw3hOGGid8N91ENewfUMIFA1hkMms2hAc5c=
+X-Received: by 2002:a17:906:2303:b0:930:310:abf1 with SMTP id
+ l3-20020a170906230300b009300310abf1mr5900219eja.5.1679923983279; Mon, 27 Mar
+ 2023 06:33:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327092909-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230324071239.151677-1-guoren@kernel.org> <20230324071239.151677-2-guoren@kernel.org>
+ <f170c68c-4975-4f71-ac50-979483cb5848@spud>
+In-Reply-To: <f170c68c-4975-4f71-ac50-979483cb5848@spud>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 27 Mar 2023 21:32:51 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSwt1XkC=kisOAf0_aHmi6E6ty-EV0eSA110E1DzvWc2Q@mail.gmail.com>
+Message-ID: <CAJF2gTSwt1XkC=kisOAf0_aHmi6E6ty-EV0eSA110E1DzvWc2Q@mail.gmail.com>
+Subject: Re: [PATCH -next V11 1/3] riscv: stack: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, mark.rutland@arm.com, bjorn@kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-And the issue was that the author self-nacked the single fix here.
-So we'll merge another fix, later.
+On Mon, Mar 27, 2023 at 7:30=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
+p.com> wrote:
+>
+> On Fri, Mar 24, 2023 at 03:12:37AM -0400, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Add independent irq stacks for percpu to prevent kernel stack overflows=
+.
+> > It is also compatible with VMAP_STACK by implementing
+> > arch_alloc_vmap_stack.  Many architectures have supported
+> > HAVE_IRQ_EXIT_ON_IRQ_STACK, riscv should follow up.
+> >
+> > Tested-by: Jisheng Zhang <jszhang@kernel.org>
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+>
+> > --- a/arch/riscv/kernel/irq.c
+> > +++ b/arch/riscv/kernel/irq.c
+> > @@ -9,6 +9,37 @@
+> >  #include <linux/irqchip.h>
+> >  #include <linux/seq_file.h>
+> >  #include <asm/smp.h>
+> > +#include <asm/vmap_stack.h>
+> > +
+> > +#ifdef CONFIG_IRQ_STACKS
+> > +DEFINE_PER_CPU(ulong *, irq_stack_ptr);
+>
+> btw, sparse is complaining about this variable:
+> ../arch/riscv/kernel/irq.c:15:1: warning: symbol '__pcpu_scope_irq_stack_=
+ptr' was not declared. Should it be static?
+I declared it in traps.c, maybe I should put it in the vmap_stack.h.
 
-On Mon, Mar 27, 2023 at 09:30:13AM -0400, Michael S. Tsirkin wrote:
-> Looks like a sent a bad pull request. Sorry!
-> Please disregard.
-> 
-> On Mon, Mar 27, 2023 at 09:19:50AM -0400, Michael S. Tsirkin wrote:
-> > The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
-> > 
-> >   Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-> > 
-> > are available in the Git repository at:
-> > 
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-> > 
-> > for you to fetch changes up to 8fc9ce051f22581f60325fd87a0fd0f37a7b70c3:
-> > 
-> >   vdpa/mlx5: Remove debugfs file after device unregister (2023-03-21 16:39:02 -0400)
-> > 
-> > ----------------------------------------------------------------
-> > vdpa: bugfix
-> > 
-> > An error handling fix in mlx5.
-> > 
-> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> 
-> 
-> 
-> 
-> > ----------------------------------------------------------------
-> > Eli Cohen (1):
-> >       vdpa/mlx5: Remove debugfs file after device unregister
-> > 
-> >  drivers/vdpa/mlx5/net/mlx5_vnet.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> I'm not immediately sure why that is the case, but should be
+> reproducible with gcc-12 allmodconfig.
+>
+> Thanks,
+> Conor.
+>
+> > +
+> > +#ifdef CONFIG_VMAP_STACK
+> > +static void init_irq_stacks(void)
+> > +{
+> > +     int cpu;
+> > +     ulong *p;
+> > +
+> > +     for_each_possible_cpu(cpu) {
+> > +             p =3D arch_alloc_vmap_stack(IRQ_STACK_SIZE, cpu_to_node(c=
+pu));
+> > +             per_cpu(irq_stack_ptr, cpu) =3D p;
+> > +     }
+> > +}
+> > +#else
+> > +/* irq stack only needs to be 16 byte aligned - not IRQ_STACK_SIZE ali=
+gned. */
+> > +DEFINE_PER_CPU_ALIGNED(ulong [IRQ_STACK_SIZE/sizeof(ulong)], irq_stack=
+);
+> > +
+> > +static void init_irq_stacks(void)
+> > +{
+> > +     int cpu;
+> > +
+> > +     for_each_possible_cpu(cpu)
+> > +             per_cpu(irq_stack_ptr, cpu) =3D per_cpu(irq_stack, cpu);
+> > +}
+> > +#endif /* CONFIG_VMAP_STACK */
+> > +#else
+> > +static void init_irq_stacks(void) {}
+> > +#endif /* CONFIG_IRQ_STACKS */
+> >
+> >  int arch_show_interrupts(struct seq_file *p, int prec)
+> >  {
+> > @@ -18,6 +49,7 @@ int arch_show_interrupts(struct seq_file *p, int prec=
+)
+> >
+> >  void __init init_IRQ(void)
+> >  {
+> > +     init_irq_stacks();
+> >       irqchip_init();
+> >       if (!handle_arch_irq)
+> >               panic("No interrupt controller found.");
+> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> > index 1f4e37be7eb3..b69933ab6bf8 100644
+> > --- a/arch/riscv/kernel/traps.c
+> > +++ b/arch/riscv/kernel/traps.c
+> > @@ -305,16 +305,50 @@ asmlinkage __visible noinstr void do_page_fault(s=
+truct pt_regs *regs)
+> >  }
+> >  #endif
+> >
+> > -asmlinkage __visible noinstr void do_irq(struct pt_regs *regs)
+> > +static void noinstr handle_riscv_irq(struct pt_regs *regs)
+> >  {
+> >       struct pt_regs *old_regs;
+> > -     irqentry_state_t state =3D irqentry_enter(regs);
+> >
+> >       irq_enter_rcu();
+> >       old_regs =3D set_irq_regs(regs);
+> >       handle_arch_irq(regs);
+> >       set_irq_regs(old_regs);
+> >       irq_exit_rcu();
+> > +}
+> > +
+> > +#ifdef CONFIG_IRQ_STACKS
+> > +DECLARE_PER_CPU(ulong *, irq_stack_ptr);
+> > +#endif
+I declared it here.
 
+> > +
+> > +asmlinkage void noinstr do_irq(struct pt_regs *regs)
+> > +{
+> > +     irqentry_state_t state =3D irqentry_enter(regs);
+> > +#ifdef CONFIG_IRQ_STACKS
+> > +     if (on_thread_stack()) {
+> > +             ulong *sp =3D per_cpu(irq_stack_ptr, smp_processor_id())
+> > +                                     + IRQ_STACK_SIZE/sizeof(ulong);
+> > +             __asm__ __volatile(
+> > +             "addi   sp, sp, -"RISCV_SZPTR  "\n"
+> > +             REG_S"  ra, (sp)                \n"
+> > +             "addi   sp, sp, -"RISCV_SZPTR  "\n"
+> > +             REG_S"  s0, (sp)                \n"
+> > +             "addi   s0, sp, 2*"RISCV_SZPTR "\n"
+> > +             "move   sp, %[sp]               \n"
+> > +             "move   a0, %[regs]             \n"
+> > +             "call   handle_riscv_irq        \n"
+> > +             "addi   sp, s0, -2*"RISCV_SZPTR"\n"
+> > +             REG_L"  s0, (sp)                \n"
+> > +             "addi   sp, sp, "RISCV_SZPTR   "\n"
+> > +             REG_L"  ra, (sp)                \n"
+> > +             "addi   sp, sp, "RISCV_SZPTR   "\n"
+> > +             :
+> > +             : [sp] "r" (sp), [regs] "r" (regs)
+> > +             : "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
+> > +               "t0", "t1", "t2", "t3", "t4", "t5", "t6",
+> > +               "memory");
+> > +     } else
+> > +#endif
+> > +             handle_riscv_irq(regs);
+> >
+> >       irqentry_exit(regs, state);
+> >  }
+> > --
+> > 2.36.1
+> >
+> >
+
+
+
+--=20
+Best Regards
+ Guo Ren
