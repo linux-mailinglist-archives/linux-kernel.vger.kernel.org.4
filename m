@@ -2,98 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4066CA772
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CD76CA788
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbjC0OYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
+        id S232199AbjC0OZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232841AbjC0OXr (ORCPT
+        with ESMTP id S233119AbjC0OZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:23:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875D47D84
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:22:14 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pgnja-0008Hq-Kw; Mon, 27 Mar 2023 16:22:06 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pgnjZ-0076If-Bh; Mon, 27 Mar 2023 16:22:05 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pgnjW-00Fkjl-VA; Mon, 27 Mar 2023 16:22:02 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Amit Cohen <amcohen@nvidia.com>, Gal Pressman <gal@nvidia.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH net-next v2 8/8] net: fec: Indicate EEE (LPI) support for some FEC Ethernet controllers
-Date:   Mon, 27 Mar 2023 16:22:02 +0200
-Message-Id: <20230327142202.3754446-9-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230327142202.3754446-1-o.rempel@pengutronix.de>
-References: <20230327142202.3754446-1-o.rempel@pengutronix.de>
+        Mon, 27 Mar 2023 10:25:24 -0400
+Received: from mail.unsolicited.net (mail.unsolicited.net [IPv6:2001:8b0:15df::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E636A1731
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 07:23:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=unsolicited.net; s=one; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=iBA+zqud33RRUVt6yvEOAT5+aBUPiy67yFZ/uPi9bJY=; b=Kz82X9+MVCvVJgSMhUVfkJ4RZ+
+        YjOMBscVBIidrnS6DTt5B81pABOd5hxRagLkQOafRzREz0v7fmot8SOuZ1Pma6d4VzXb6lKJK6Ifa
+        QUM4QA1pKadkOSZhJqjOimC25CofORA5s1oE0fjqNHZD54Y/ENuT8wkPsNdkbs9SIGKcB/kTo/5Uh
+        Don/CRxRFqkI8ZLeizgvBCP2UF+l8RrBTzYFtwdqO9azq3+rXaG01SgUZH53E0v+dL4gfxaOTzGoB
+        t8KCtkmGv+NV/K9Ng7I6LV9XcEd19hta1oThoTFseteInNLkxuXKPzsBWRvsSH76hnqfeK3kvum4E
+        le0f7rjw==;
+Message-ID: <a15c6a64-dcd7-b102-9d9f-0225dfa1172b@unsolicited.net>
+Date:   Mon, 27 Mar 2023 15:23:48 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: Panic starting 6.2.x and later 6.1.x kernels
+Content-Language: en-GB
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <943d2445-84df-d939-f578-5d8240d342cc@unsolicited.net>
+ <20230327074952.GAZCFKoDOiJUdtse2H@fat_crate.local>
+ <e8d15248-e694-79d7-da9c-b4485b471e14@unsolicited.net> <878rfi718j.ffs@tglx>
+From:   David R <david@unsolicited.net>
+In-Reply-To: <878rfi718j.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds EEE (LPI) support indication for specific FEC Ethernet
-controllers. By indicating EEE support for these controllers, it allows
-PHY drivers to choose the right configuration for EEE and LPI features,
-depending on whether the MAC or the PHY is responsible for handling them.
+On 27/03/2023 14:49, Thomas Gleixner wrote:
+> On Mon, Mar 27 2023 at 09:13, David R. wrote:
+>> On 27/03/2023 08:49, Borislav Petkov wrote:
+>>> On Mon, Mar 27, 2023 at 07:43:52AM +0100, David R wrote:
+>>>> I have the following panic after upgrading my kernel. Working version is
+>>>> 6.1.10, so something has happened after that.
+> IIUC 6.1.11 is failing, right?
+>
+>>>> 6.2.x kernels crash in the same way. Attached config.
+>>>>
+>>> Please send dmesg from 6.1.
+>>>
+>> Of course - attached.
+> Thanks for the info.
+>
+>         tglx
+6.1.11 is OK -I will 'bisect' by version and find the one that starts 
+failing.
 
-This change provides more flexibility and control over energy-saving
-features, enabling PHY drivers to disable SmartEEE functionality in favor
-of MAC EEE support when appropriate, depending on their specific use cases
-and requirements.
-
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/ethernet/freescale/fec_main.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index f3b16a6673e2..554a5dc92817 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -2318,6 +2318,8 @@ static int fec_enet_mii_probe(struct net_device *ndev)
- 	fep->link = 0;
- 	fep->full_duplex = 0;
- 
-+	if (fep->quirks & FEC_QUIRK_HAS_EEE)
-+		phy_dev->mac_supports_eee = true;
- 	phy_dev->mac_managed_pm = true;
- 
- 	phy_attached_info(phy_dev);
--- 
-2.30.2
-
+David
