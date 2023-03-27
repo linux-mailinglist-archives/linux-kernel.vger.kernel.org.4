@@ -2,71 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868666CA30C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E2B6CA30F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 14:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232632AbjC0MES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 08:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
+        id S232638AbjC0MGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 08:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbjC0MEQ (ORCPT
+        with ESMTP id S232019AbjC0MGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:04:16 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D65A3A8D;
-        Mon, 27 Mar 2023 05:04:14 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id B2AE6604F9;
-        Mon, 27 Mar 2023 14:04:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679918651; bh=2qn7tQz4Wsy7KiaxUkWsPEtOXrlWXUluDRiyZZzfMGA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cMo+nOj422y0yfPlcW1KCKMXguM5sIqc6AWVuG4QA3SUnI1ktrIrY6ADE5rlHyMNl
-         niggDxsuijM5Wzdo9IR/xW9xu2n0JEeMHAYWGAIIPXJsyTjncQI0kvB1+v8jOy4Uay
-         kqrUQS2qDSFKu5StZ6oitiYBffYAsf1Uw8fdeH5qpHkeYlEmqcp4snwmuE2GeofUqL
-         U0ZOq9A4b0MHZH+SNX5LGzjXhLXaWi/YD671PoHf5EbVz3UFNAfWRs6365MT6Rit1X
-         M89q99Waci+PcINfCYqkJtXDGGzlR5w3yZK5h8TTqIrT605UcOc2plRTrXSdDWv3jd
-         CHr6T6B9s4HWw==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fykIBuf8Syi3; Mon, 27 Mar 2023 14:04:09 +0200 (CEST)
-Received: from [10.0.1.103] (grf-nat.grf.hr [161.53.83.23])
-        by domac.alu.hr (Postfix) with ESMTPSA id EE834604EF;
-        Mon, 27 Mar 2023 14:04:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679918649; bh=2qn7tQz4Wsy7KiaxUkWsPEtOXrlWXUluDRiyZZzfMGA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JpVPLlby5viqDTjS/9a4veW8S8Vii/rh3YOtwrF3eePTTf4ZuMyzc26aPz16kF2Ji
-         yd1QkCXiU+7omf1B6HJvqPDvLx1nzVQrC1evw+ruRPxBGpjJCXbHT8xvKSk5A0+a8m
-         dsSUTCJ0WAlbez1cfzdz4echbDkJ3eADE7nHnVSp+nlMolWfUy4ci7+CkrXWt85ozA
-         5YVX0cvlZvoYR628tfk7Hk6COnb3GzCyT/YeSSE3YKXz7ypGu/S/x3hr1B7tYW6cKa
-         5QDYG3KBfSinzYxoHaLtrqTAJIzOgs1N5h5gB+YBk1RrFRywr4A3fIjzKqA8cXASwY
-         rL27XI17NMtFw==
-Message-ID: <04d5e796-8938-3faa-c7dc-f966135da1b9@alu.unizg.hr>
-Date:   Mon, 27 Mar 2023 14:04:07 +0200
+        Mon, 27 Mar 2023 08:06:37 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931AF113;
+        Mon, 27 Mar 2023 05:06:35 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PlWfw3rdTz17MBh;
+        Mon, 27 Mar 2023 20:03:20 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 27 Mar 2023 20:06:33 +0800
+Message-ID: <11b2fbb6-ab71-10a4-d2cb-8d115f15f16d@huawei.com>
+Date:   Mon, 27 Mar 2023 20:06:32 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: BUG: drivers/usb/host/xhci: memleak in alloc from
- xhci_disable_usb3_lpm_timeout()
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v2 1/2] ext4: turning quotas off if mount failed after
+ enable quotas
 Content-Language: en-US
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <24263902-c9b3-ce29-237b-1c3d6918f4fe@alu.unizg.hr>
- <651c0500-2b84-d938-fdc2-45e92b322b38@alu.unizg.hr>
- <b86fcdbd-f1c6-846f-838f-b7679ec4e2b4@linux.intel.com>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <b86fcdbd-f1c6-846f-838f-b7679ec4e2b4@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+To:     Jan Kara <jack@suse.cz>
+CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
+        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yangerkun@huawei.com>, <yukuai3@huawei.com>, <stable@kernel.org>,
+        Baokun Li <libaokun1@huawei.com>
+References: <20230327022703.576857-1-libaokun1@huawei.com>
+ <20230327022703.576857-2-libaokun1@huawei.com>
+ <20230327090506.a3notb7a2zgz4hue@quack3>
+From:   Baokun Li <libaokun1@huawei.com>
+In-Reply-To: <20230327090506.a3notb7a2zgz4hue@quack3>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,71 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.3.2023. 11:41, Mathias Nyman wrote:
-> On 25.3.2023 13.33, Mirsad Goran Todorovac wrote:
->> On 25. 03. 2023. 12:27, Mirsad Goran Todorovac wrote:
->>> Hi all!
->>>
->>> Here are again the good news and the bad news:
->>>
->>> BAD:  another kernel memory leak detected (one more to hunt down and fix)
->>> GOOD: another kernel memory leak detected (one less unaccounted for)
->>>
->>> I tried to make some fun, but maintainers are busy folks, so let's get down
->>> to business:
->>>
->>> ---
->>> Nine (9) new systemd-udevd kernel memory leaks occurred (unable to reproduce).
->>>
->>> The platform is Ubuntu 22.10 with (relatively recent) systemd 251.4-1ubuntu7.1
->>> on LENOVO_MT_82H8_BU_idea_FM_IdeaPad 3 15ITL6 with BIOS GGCN51WW from 11/16/2022.
->>>
->>> The symptom (/sys/kernel/debug/kmemleak output):
->>>
->>> unreferenced object 0xffff909698ff9280 (size 64):
->>>    comm "systemd-udevd", pid 436, jiffies 4294893239 (age 6287.088s)
->>>    hex dump (first 32 bytes):
->>>      e0 51 bb 99 96 90 ff ff 00 00 00 00 00 00 00 00  .Q..............
->>>      40 5b bb 99 96 90 ff ff 00 00 00 00 00 00 00 00  @[..............
->>>    backtrace:
->>>      [<ffffffffb29de94c>] slab_post_alloc_hook+0x8c/0x320
->>>      [<ffffffffb29e5107>] __kmem_cache_alloc_node+0x1c7/0x2b0
->>>      [<ffffffffb2962f3b>] kmalloc_node_trace+0x2b/0xa0
->>>      [<ffffffffb31af2ec>] xhci_alloc_command+0x7c/0x1b0
->>>      [<ffffffffb31af451>] xhci_alloc_command_with_ctx+0x21/0x70
->>>      [<ffffffffb31a8a3e>] xhci_change_max_exit_latency+0x2e/0x1c0>>      [<ffffffffb31a8c5b>] 
->>> xhci_disable_usb3_lpm_timeout+0x7b/0xb0
->>>      [<ffffffffb31457a7>] usb_disable_link_state+0x57/0xe0
-> 
-> Thanks for the report.
-> 
-> I think I found the leak, and wrote a patch for it.
-> Any chance you could test it with the same setup?
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=for-usb-linus&id=8bacee588602ed74cc22aaf4c56b796300e5a943
+On 2023/3/27 17:05, Jan Kara wrote:
+> On Mon 27-03-23 10:27:02, Baokun Li wrote:
+>> Yi found during a review of the patch "ext4: don't BUG on inconsistent
+>> journal feature" that when ext4_mark_recovery_complete() returns an error
+>> value, the error handling path does not turn off the enabled quotas,
+>> which triggers the following kmemleak:
+>>
+>> ================================================================
+>> unreferenced object 0xffff8cf68678e7c0 (size 64):
+>> comm "mount", pid 746, jiffies 4294871231 (age 11.540s)
+>> hex dump (first 32 bytes):
+>> 00 90 ef 82 f6 8c ff ff 00 00 00 00 41 01 00 00  ............A...
+>> c7 00 00 00 bd 00 00 00 0a 00 00 00 48 00 00 00  ............H...
+>> backtrace:
+>> [<00000000c561ef24>] __kmem_cache_alloc_node+0x4d4/0x880
+>> [<00000000d4e621d7>] kmalloc_trace+0x39/0x140
+>> [<00000000837eee74>] v2_read_file_info+0x18a/0x3a0
+>> [<0000000088f6c877>] dquot_load_quota_sb+0x2ed/0x770
+>> [<00000000340a4782>] dquot_load_quota_inode+0xc6/0x1c0
+>> [<0000000089a18bd5>] ext4_enable_quotas+0x17e/0x3a0 [ext4]
+>> [<000000003a0268fa>] __ext4_fill_super+0x3448/0x3910 [ext4]
+>> [<00000000b0f2a8a8>] ext4_fill_super+0x13d/0x340 [ext4]
+>> [<000000004a9489c4>] get_tree_bdev+0x1dc/0x370
+>> [<000000006e723bf1>] ext4_get_tree+0x1d/0x30 [ext4]
+>> [<00000000c7cb663d>] vfs_get_tree+0x31/0x160
+>> [<00000000320e1bed>] do_new_mount+0x1d5/0x480
+>> [<00000000c074654c>] path_mount+0x22e/0xbe0
+>> [<0000000003e97a8e>] do_mount+0x95/0xc0
+>> [<000000002f3d3736>] __x64_sys_mount+0xc4/0x160
+>> [<0000000027d2140c>] do_syscall_64+0x3f/0x90
+>> ================================================================
+>>
+>> To solve this problem, we add a "failed_mount10" tag, and call
+>> ext4_quota_off_umount() in this tag to release the enabled qoutas.
+>>
+>> Fixes: 11215630aada ("ext4: don't BUG on inconsistent journal feature")
+>> Cc: stable@kernel.org
+>> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+>> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> Looks good. Just one comment:
+>
+>> +failed_mount10:
+>> +#ifdef CONFIG_QUOTA
+>> +	ext4_quota_off_umount(sb);
+>>   failed_mount9:
+>> +#endif  /* CONFIG_QUOTA */
+> How about dealing with this using __maybe_unused attribute instead. Like:
+>
+> failed_mount9: __maybe_unused
+>
+> That would be much easier to read...
+>
+> 								Honza
 
-Hi, Mathias,
+Indeed!
 
-Great you have found the leak!
+Thank you very much for the review!
 
-I cannot make testing in the same setup because I can access that particular box
-until after I finish my day job.
-
-I will prioritise it.
-
-If this is the catch, it will save me almost a dozen bisect builds. :-)
-
-Best regards,
-Mirsad
-
+I will send a patch V3 with the changes suggested by you.
 -- 
-Mirsad Todorovac
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb
-Republic of Croatia, the European Union
-
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
+With Best Regards,
+Baokun Li
+.
