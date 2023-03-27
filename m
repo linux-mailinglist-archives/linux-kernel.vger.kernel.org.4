@@ -2,90 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080456CA518
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E173A6CA523
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 15:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbjC0NCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 09:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
+        id S230104AbjC0NFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 09:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbjC0NCu (ORCPT
+        with ESMTP id S229771AbjC0NFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 09:02:50 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402681FC9;
-        Mon, 27 Mar 2023 06:02:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679922151; x=1711458151;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GnN5yMqKyMoVbSr4z5kndngc7czLeDZTZGsv8tnHdGc=;
-  b=V+HX8Eoprow8Teo2tLScxdFqERdBKybHJZIAKrUE6D7IzcEgybG+zAaA
-   NokwtY5lmjykbW7pdR9uwwCyYRdsM3sl/6sfFlWA3eXzugPtxnpOqWHDb
-   8E8kfUFL3tjb/s0NDMSFH7PeKwoY8tbySAf6720kDu5C5bKYGDTbX4aE2
-   40FI+aB7jzTklQKojPNhfBYqDF7IOoty8Ka9TQ9U/lYU7NLelsz9d4J5v
-   B1b4BS4tqu4OQqX/eDjqna4Os19BHQs2XSTlj4GHs5FwJHGffzlrYod8U
-   hc6w5ym63e8vD18QMmaX6WNgTQkBT8yPWJIgJmxpl2rwuauRoTtVIAufx
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="324137774"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="324137774"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 06:02:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="676954488"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="676954488"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 27 Mar 2023 06:02:28 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pgmUV-009EsW-0c;
-        Mon, 27 Mar 2023 16:02:27 +0300
-Date:   Mon, 27 Mar 2023 16:02:26 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] device property: Remove unused struct net_device
- forward declaration
-Message-ID: <ZCGT4iONq6hjNQIK@smile.fi.intel.com>
-References: <20230323151519.58479-1-andriy.shevchenko@linux.intel.com>
- <ZCFryP+yZ7w38Ix9@smile.fi.intel.com>
- <ZCGChRgzVZoaElge@kroah.com>
+        Mon, 27 Mar 2023 09:05:12 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CF2F9;
+        Mon, 27 Mar 2023 06:05:10 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1679922309;
+        bh=EhBft7sNwakRLdpX39yVMFqZnYW/lfmJHKEsvTMzAtc=;
+        h=From:Date:Subject:To:Cc:From;
+        b=oYGplpnO7zHncNS/wEqOM9M2w5JwuoM4MVy0ahNKQIC09HRrzUrei4N2BriEU/XNd
+         K1vphGh1A2B87F60ICV6KP/zXuNdDwN+zmGKpn992iqfVIjQanRac+axBLS+HzsZ1y
+         yGWW6IctWcD3tLKV3duCOKcog0dlSIKDwysbnyXs=
+Date:   Mon, 27 Mar 2023 13:05:02 +0000
+Subject: [PATCH] platform/x86: gigabyte-wmi: add support for B650 AORUS
+ ELITE AX
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCGChRgzVZoaElge@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230327-gigabyte-wmi-b650-elite-ax-v1-1-d4d645c21d0b@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAH6UIWQC/x3NQQrCMBCF4auUWTswJlTFq4iLSTpNB2KUpGql9
+ O4dXH5v8b8VmlSVBtduhSofbfoshuOhgzhxSYI6mMGR8+TdGZMmDr9Z8PtQDKeeULIaeUEiP1L
+ oL+KjBwsEboKhcomTJco7ZxtfVUZd/o+3+7btl3DucoEAAAA=
+To:     =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        got3nks <got3nks@users.noreply.github.com>,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1679922307; l=1263;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=EhBft7sNwakRLdpX39yVMFqZnYW/lfmJHKEsvTMzAtc=;
+ b=PVjXaUaoOayIhaDnqTlwRTAFZLmmPGtJzrUsaFl1pjG+vmV7kaL10FglOKU0PnC1VBR8FhRu8
+ uhkv8CXhjsSDsUkkCag/Szqd1lG9rmF2OM/TVCuB37ilgL6an/whOu+
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 01:48:21PM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Mar 27, 2023 at 01:11:20PM +0300, Andy Shevchenko wrote:
-> > On Thu, Mar 23, 2023 at 05:15:19PM +0200, Andy Shevchenko wrote:
-> > > There is no users in the property.h for the struct net_device.
-> > > Remove the latter for good.
-> > 
-> > Oh, this seems unfortunate as it doesn't Cc Greg. Folks, shall we add
-> > the header to "DRIVER CORE, KOBJECTS, DEBUGFS AND SYSFS"?
-> 
-> Yes please.
+This has been reported as working.
 
-Done as v2 with this patch also resent there.
+Suggested-by: got3nks <got3nks@users.noreply.github.com>
+Link: https://github.com/t-8ch/linux-gigabyte-wmi-driver/issues/15#issuecomment-1483942966
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ drivers/platform/x86/gigabyte-wmi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/platform/x86/gigabyte-wmi.c b/drivers/platform/x86/gigabyte-wmi.c
+index 322cfaeda17b..078afa98e6c6 100644
+--- a/drivers/platform/x86/gigabyte-wmi.c
++++ b/drivers/platform/x86/gigabyte-wmi.c
+@@ -150,6 +150,7 @@ static const struct dmi_system_id gigabyte_wmi_known_working_platforms[] = {
+ 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550I AORUS PRO AX"),
+ 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550M AORUS PRO-P"),
+ 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550M DS3H"),
++	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B650 AORUS ELITE AX"),
+ 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B660 GAMING X DDR4"),
+ 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B660I AORUS PRO DDR4"),
+ 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("Z390 I AORUS PRO WIFI-CF"),
+
+---
+base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
+change-id: 20230327-gigabyte-wmi-b650-elite-ax-003f0b58e3c3
+
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Thomas Weißschuh <linux@weissschuh.net>
 
