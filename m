@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462136CB28F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E606CB292
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 01:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbjC0XgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 19:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
+        id S232132AbjC0Xgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 19:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231927AbjC0XgR (ORCPT
+        with ESMTP id S232102AbjC0Xg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 19:36:17 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7D030E0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:35:50 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id w133so7710456oib.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:35:50 -0700 (PDT)
+        Mon, 27 Mar 2023 19:36:29 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B0F30C1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:36:00 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id l18so7676082oic.13
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 16:36:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google; t=1679960150;
+        d=usp.br; s=usp-google; t=1679960160;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K1xhDxA3uWDRifG4IvLBAoRIIiYm0r4QC9LLNbKp2X8=;
-        b=hvoaJX2ufI+udaK8mtxiLI21DzeH7JurXG/B43jOARKu83aSms5p/jUB7lwFs6omfL
-         C3MvJEbwKrp4+zN7nS9bwwLJRstOf0GeeBnUjX0wuSPeyXQ2hqrkBQek1SQGMIiX+KCX
-         /4ZPrhOgZvJ0MEOfcTm3nKfKoZUGeUiv8O33K6TquSH+CmZVXyqzo50twDCInP4i9q9l
-         LtUwMM4WfNHC2cmc/CLIiaJJAaok/ssG3j/4jAMDz7SP/mcITFs8jlPilmDmUbIu1rpa
-         S8HtZoIjJX3ZkBhEtr41i+hLJVS4ef1KC5FtF535WpCQQdngJk+XZwGB3Wp0bFrZvPsJ
-         rcZA==
+        bh=1STa2/pWkCDUQgTVLH0svd7MRisCAzPtmwfg6lpY0tI=;
+        b=qPr+/DvkkL35CXSg4gE7/ktKUvTDyUTO7/IL0lvUrUhq8xvT+h0HhqzQfjWn1sHUfq
+         En1aRSU2RJDmigFYzTkS8EzveTOuSZurTNaXQXuMC6z/L0zjjcJ8pOP/RAK6YNbcQw4q
+         N5w7bZZE64NLFvAe+hhsuZfaHKcZTlvPLUVB9WGh8vWvbT6Bw4YEgTBixKkzkX8laK7u
+         c3mserAVKXZC8U5cNFsmkDDulr/6NVBOx3crHKcKt03a7xXztRoIGeA5RCQKYfaqLqZm
+         P+MTr26pEMPaE0/LT8tYpGLXoDohT7fYS5w7xLTwM+j6dYp92VoQgWbJwQ7Uly27Grox
+         qGtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679960150;
+        d=1e100.net; s=20210112; t=1679960160;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K1xhDxA3uWDRifG4IvLBAoRIIiYm0r4QC9LLNbKp2X8=;
-        b=sZaFtVDmiF1BUV78mBatW9UMhCjDQd9bO+EOTb/S9OmWxzqp+E4YfCig+8WoInXqMA
-         7J3DmjngKgzwWIFV0TTvWvqVOEcGQt0IpZLTIvMUX4V1uap/t/m9tC4E05lIYm4+NdXH
-         s5zl2omyGVXPS8MuJcN2WgtwSOVuo18q//QI8NzOtLcaDNxnbMYejGLcvsP2+SgEP4mJ
-         QQbbUbYzm1Vl7frYKGXH9ZpAlq1Emxu3Mfpyhv6PNlG3GgJXHu9CyZBSVIbUKWg+ke30
-         blZp/gANCHSKEG0nLryjjbPdC0MxQERAkCV5XFUegWcv7NlX9h+y/IhhiKVRlMTPS4ur
-         +VGw==
-X-Gm-Message-State: AO0yUKWBykkt+1dkYHfdknSEjUunW4xzu2nnbOpPubN0lvpR8o4WU6nH
-        Bond+lZP3rwuOI1X/8rhUIhGww==
-X-Google-Smtp-Source: AK7set8NiGmgJV8HERS4O1DEMBfqAEeV4IytdUJ48dLagBB0+Hq6qQQfvpgB8IkKbofF5pTimWiQAg==
-X-Received: by 2002:aca:6507:0:b0:387:3239:61fa with SMTP id m7-20020aca6507000000b00387323961famr5553985oim.30.1679960149872;
-        Mon, 27 Mar 2023 16:35:49 -0700 (PDT)
+        bh=1STa2/pWkCDUQgTVLH0svd7MRisCAzPtmwfg6lpY0tI=;
+        b=xT+IrSrCl/yKP6NN1mts34fVrJpCr9zlU/ariqZ/Ffn7FUsR/DLfYWLNdiXq0N6v0o
+         i1pn4nbaVgBCn7qXo+UF9qfRUPSKQuHQ2VkOPJe3PK9IXOKP8D5i6SGnhdg8RsGpzSxx
+         vQr8UEPDI7QKV5GOylmpXY5u0IoZJ+8NlW6twKMB++k+ZqGUdG6imaRXr+s5Mfw+PCDA
+         E2OJ1iiL9oDhZoVXxcOuZwV58/98IMO1o37kSgi1IXeRsP2Ru57gMalMXGHQJ7mpM5mY
+         /TwZSSrtSziD/R4s8LNbVmF1ipEZddaxAYdcxpvqMow+3wasTvm001JrYjKLst5stTcw
+         oS/Q==
+X-Gm-Message-State: AO0yUKVO8JRzzS9J4nRUeHcuQgJYKofDnygA7YSJoTF7ylo1o7oyp8vQ
+        X8bCEKfAFPmXtn+PsCA0sJ6Klg==
+X-Google-Smtp-Source: AK7set8j4D0nhypplSsU3HBthDUICnrtCgmJYFcK94O5rdy1CxC8OtORoO7uyBWCp1vj0T0Q4dZCWA==
+X-Received: by 2002:a05:6808:659:b0:383:caf3:a30e with SMTP id z25-20020a056808065900b00383caf3a30emr5533117oih.17.1679960159943;
+        Mon, 27 Mar 2023 16:35:59 -0700 (PDT)
 Received: from ARCHaio.localdomain ([2804:1b3:a2c0:c911:919f:bd20:4f2a:8383])
-        by smtp.gmail.com with ESMTPSA id b186-20020aca34c3000000b00389295e8424sm1643409oia.45.2023.03.27.16.35.40
+        by smtp.gmail.com with ESMTPSA id b186-20020aca34c3000000b00389295e8424sm1643409oia.45.2023.03.27.16.35.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 16:35:49 -0700 (PDT)
+        Mon, 27 Mar 2023 16:35:59 -0700 (PDT)
 From:   Caio Novais <caionovais@usp.br>
 To:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
@@ -97,9 +97,9 @@ Cc:     Alex Deucher <alexander.deucher@amd.com>,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
         Ryan Lin <tsung-hua.lin@amd.com>,
         Hamza Mahfooz <hamza.mahfooz@amd.com>
-Subject: [PATCH 10/12] drm/amd/display: Remove unused variable 'cursor_bpp'
-Date:   Mon, 27 Mar 2023 20:33:51 -0300
-Message-Id: <20230327233353.64081-11-caionovais@usp.br>
+Subject: [PATCH 11/12] drm/amd/display: Remove unused variable 'scl_enable'
+Date:   Mon, 27 Mar 2023 20:33:52 -0300
+Message-Id: <20230327233353.64081-12-caionovais@usp.br>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230327233353.64081-1-caionovais@usp.br>
 References: <20230327233353.64081-1-caionovais@usp.br>
@@ -117,46 +117,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Compiling AMD GPU drivers displays a warning:
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_resource_helpers.c: In function ‘dcn32_helper_calculate_mall_bytes_for_cursor’:
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_resource_helpers.c:62:18: warning: variable ‘cursor_bpp’ set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_31.c: In function ‘dml_rq_dlg_get_dlg_params’:
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_31.c:905:14: warning: variable ‘scl_enable’ set but not used [-Wunused-but-set-variable]
 
 Get rid of it by removing the variable.
 
 Signed-off-by: Caio Novais <caionovais@usp.br>
 ---
- drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource_helpers.c | 4 ----
- 1 file changed, 4 deletions(-)
+ .../gpu/drm/amd/display/dc/dml/dcn31/display_rq_dlg_calc_31.c   | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource_helpers.c b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource_helpers.c
-index 3a2d7bcc4b6d..a616cf078cf4 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource_helpers.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource_helpers.c
-@@ -59,25 +59,21 @@ uint32_t dcn32_helper_calculate_mall_bytes_for_cursor(
- {
- 	struct hubp *hubp = pipe_ctx->plane_res.hubp;
- 	uint32_t cursor_size = hubp->curs_attr.pitch * hubp->curs_attr.height;
--	uint32_t cursor_bpp = 4;
- 	uint32_t cursor_mall_size_bytes = 0;
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_rq_dlg_calc_31.c b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_rq_dlg_calc_31.c
+index 35d10b4d018b..2244e4fb8c96 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_rq_dlg_calc_31.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_rq_dlg_calc_31.c
+@@ -902,7 +902,6 @@ static void dml_rq_dlg_get_dlg_params(
+ 	double hratio_c;
+ 	double vratio_l;
+ 	double vratio_c;
+-	bool scl_enable;
  
- 	switch (pipe_ctx->stream->cursor_attributes.color_format) {
- 	case CURSOR_MODE_MONO:
- 		cursor_size /= 2;
--		cursor_bpp = 4;
- 		break;
- 	case CURSOR_MODE_COLOR_1BIT_AND:
- 	case CURSOR_MODE_COLOR_PRE_MULTIPLIED_ALPHA:
- 	case CURSOR_MODE_COLOR_UN_PRE_MULTIPLIED_ALPHA:
- 		cursor_size *= 4;
--		cursor_bpp = 4;
- 		break;
+ 	unsigned int swath_width_ub_l;
+ 	unsigned int dpte_groups_per_row_ub_l;
+@@ -1020,7 +1019,6 @@ static void dml_rq_dlg_get_dlg_params(
+ 	hratio_c = scl->hscl_ratio_c;
+ 	vratio_l = scl->vscl_ratio;
+ 	vratio_c = scl->vscl_ratio_c;
+-	scl_enable = scl->scl_enable;
  
- 	case CURSOR_MODE_COLOR_64BIT_FP_PRE_MULTIPLIED:
- 	case CURSOR_MODE_COLOR_64BIT_FP_UN_PRE_MULTIPLIED:
- 		cursor_size *= 8;
--		cursor_bpp = 8;
- 		break;
- 	}
- 
+ 	swath_width_ub_l = rq_dlg_param->rq_l.swath_width_ub;
+ 	dpte_groups_per_row_ub_l = rq_dlg_param->rq_l.dpte_groups_per_row_ub;
 -- 
 2.40.0
 
