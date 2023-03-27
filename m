@@ -2,416 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42296C9C6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E1F6C9C6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 09:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbjC0Hky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 03:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S232700AbjC0Hkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 03:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232664AbjC0Hko (ORCPT
+        with ESMTP id S232647AbjC0Hkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 03:40:44 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C2846A3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 00:40:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679902824; x=1711438824;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pKOSXn65w46JuYz/MaG0A2MmHx6Io4eeOYVM1dB1WyY=;
-  b=E9WuVGkxVkcqQJ+PMoMvBDCIRt0CGpcCTa3COueBFdhXJpj900Po76Hi
-   E4wgvWhs7RzQvPKx83t06TdYfqOmQ+VGoiyJJzCTY8zj6BtvZvXKkiFLA
-   LrK5a1m0nVYxUoIwpkQx62NFV9H5aaLsSPFSfP8vHf3nSC9guQYuz5gB6
-   y3u9ExNBgw8PLSnbdUzGqN0nPNZfG6y7BvbqNYv23utf5tFC2RhKveoW7
-   c9VlMD+ftPc4ACfVRNwq1s5Fgq7AjoUc9fhidMHrxz/DQUYjPJDO+kLmJ
-   vGCec36PJN4lThBDdzhF6K2vJLy/lXWwHopjyVrLpbF9xWXAURvuJrhFr
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="367942268"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="367942268"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 00:40:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="683375750"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="683375750"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 27 Mar 2023 00:40:06 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pghSY-000Hbb-0N;
-        Mon, 27 Mar 2023 07:40:06 +0000
-Date:   Mon, 27 Mar 2023 15:39:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:srcu-cf.2023.03.26a 4/20]
- kernel/rcu/srcutree.c:1907:67: error: 'struct srcu_usage' has no member
- named 'srcu_gp_seq_needed'
-Message-ID: <202303271532.p78iYvzM-lkp@intel.com>
+        Mon, 27 Mar 2023 03:40:37 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5C34C32
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 00:40:14 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso6658104wms.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 00:40:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679902812;
+        h=content-transfer-encoding:in-reply-to:organization:references:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ClBOj0gK1ahT7UCzB1KKn78jhUJGd6/ThX8Qzeq7fl4=;
+        b=rkmmZgxto45TV5TxYS3lbMJdrFAD+Y5TOh+x/fv77Bv2IZE3RvXg+GOWS+SkDCpNDl
+         Qv0tTi7xSwYLhxUy+kaMoElTho4JRiEPruE3gOz4SfuNqDAS3FV6qxnmCWbeajELqm1u
+         SlrWJzE93kFMDTptxyh2v7cmkHIrsAjYUX+jBgamFaw1AJ+VGXfX1058zcsjmPVq78k4
+         WM6ub73hbp8v4jLiCQ1EcsD0i+ltTicD2u3S8xISdk7ORn4UYukO1r42iZQxBbn4dgH5
+         6M0+VK0paAYS277slAolKZPQ/ghiXgcUae4jfRI7C9Q5sJJzHyRDvDU3NUyjY6WYuwQy
+         Wu0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679902812;
+        h=content-transfer-encoding:in-reply-to:organization:references:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ClBOj0gK1ahT7UCzB1KKn78jhUJGd6/ThX8Qzeq7fl4=;
+        b=QK0nB+f7mxc07QFWnRNQG5FI23suk5ppFs+X7hssc4TRCEtuJKTPIzT1y9QvHGbCU1
+         OJaKLbmx0ZVjAVgefjSFV9mQh0IehRit7dtzAdRuctyPLkl+QhHumknkUzQluK+8a8oE
+         zvcJkJ9Y6/zrOFaLJTLRXACcwJTP+LlJqwKp9m5Kp4iYiGwS3muCSqE+nSrpA3fguPux
+         Yrb+hU0cI9Dd7VRhAPSm3JvebzNYBc/RuGaTGDJi57fj0YnbNIl49J/cpohrlICztQfq
+         2HyMOhDK6SMj0NyrJmjHEfW9Z+hGu7rdruz/QS1avlu/vNzrDQ9Gk7BeXSTukCT6prQC
+         3CWA==
+X-Gm-Message-State: AO0yUKXj9OmLsG2iVrxkrfkWf0GM+RwtGSa95JlrPgur1+qBGshPFeQ1
+        HH9gQnjAPuGUtRH3+yd5qloNUA==
+X-Google-Smtp-Source: AK7set/HbomPUYJYpvAz8cosQ1bhr1ic2igEN2YfjSfVteCKmqlgQXoWWUqdknydjiR2gEP3SPDJiA==
+X-Received: by 2002:a1c:f418:0:b0:3ed:8780:f265 with SMTP id z24-20020a1cf418000000b003ed8780f265mr8940924wma.21.1679902812220;
+        Mon, 27 Mar 2023 00:40:12 -0700 (PDT)
+Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id n20-20020a7bc5d4000000b003ee10fb56ebsm12796925wmk.9.2023.03.27.00.40.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 00:40:11 -0700 (PDT)
+Message-ID: <3c30663c-e78b-388a-5822-932434436a4c@linaro.org>
+Date:   Mon, 27 Mar 2023 09:40:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] dt-bindings: display: sitronix,st7789v: document dc-gpios
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230326164700.104570-1-krzysztof.kozlowski@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230326164700.104570-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git srcu-cf.2023.03.26a
-head:   9607cde099a20296cf0234f571d60184f277aa37
-commit: 428843e3b2f64d472d38f68968c532acafe42490 [4/20] srcu: Begin offloading srcu_struct fields to srcu_update
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230327/202303271532.p78iYvzM-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=428843e3b2f64d472d38f68968c532acafe42490
-        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-        git fetch --no-tags paulmck-rcu srcu-cf.2023.03.26a
-        git checkout 428843e3b2f64d472d38f68968c532acafe42490
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash kernel/rcu/
+On 26/03/2023 18:47, Krzysztof Kozlowski wrote:
+> The device comes with DCX pin which is already used in
+> canaan/sipeed_maixduino.dts (although not in Linux driver).
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   .../devicetree/bindings/display/panel/sitronix,st7789v.yaml   | 4 ++++
+>   1 file changed, 4 insertions(+)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303271532.p78iYvzM-lkp@intel.com/
+<snip>
 
-Note: the paulmck-rcu/srcu-cf.2023.03.26a HEAD 9607cde099a20296cf0234f571d60184f277aa37 builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/list.h:11,
-                    from include/linux/mutex.h:15,
-                    from kernel/rcu/srcutree.c:19:
-   kernel/rcu/srcutree.c: In function 'srcu_module_going':
->> kernel/rcu/srcutree.c:1907:67: error: 'struct srcu_usage' has no member named 'srcu_gp_seq_needed'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                                                   ^~
-   arch/powerpc/include/asm/barrier.h:81:17: note: in definition of macro '__smp_load_acquire'
-      81 |         typeof(*p) ___p1 = READ_ONCE(*p);                               \
-         |                 ^
-   kernel/rcu/srcutree.c:1907:36: note: in expansion of macro 'smp_load_acquire'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                    ^~~~~~~~~~~~~~~~
-   In file included from <command-line>:
->> kernel/rcu/srcutree.c:1907:67: error: 'struct srcu_usage' has no member named 'srcu_gp_seq_needed'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                                                   ^~
-   include/linux/compiler_types.h:377:23: note: in definition of macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:397:9: note: in expansion of macro '_compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                            ^~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:49:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/barrier.h:81:28: note: in expansion of macro 'READ_ONCE'
-      81 |         typeof(*p) ___p1 = READ_ONCE(*p);                               \
-         |                            ^~~~~~~~~
-   include/asm-generic/barrier.h:176:29: note: in expansion of macro '__smp_load_acquire'
-     176 | #define smp_load_acquire(p) __smp_load_acquire(p)
-         |                             ^~~~~~~~~~~~~~~~~~
-   kernel/rcu/srcutree.c:1907:36: note: in expansion of macro 'smp_load_acquire'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                    ^~~~~~~~~~~~~~~~
->> kernel/rcu/srcutree.c:1907:67: error: 'struct srcu_usage' has no member named 'srcu_gp_seq_needed'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                                                   ^~
-   include/linux/compiler_types.h:377:23: note: in definition of macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:397:9: note: in expansion of macro '_compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                            ^~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:49:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/barrier.h:81:28: note: in expansion of macro 'READ_ONCE'
-      81 |         typeof(*p) ___p1 = READ_ONCE(*p);                               \
-         |                            ^~~~~~~~~
-   include/asm-generic/barrier.h:176:29: note: in expansion of macro '__smp_load_acquire'
-     176 | #define smp_load_acquire(p) __smp_load_acquire(p)
-         |                             ^~~~~~~~~~~~~~~~~~
-   kernel/rcu/srcutree.c:1907:36: note: in expansion of macro 'smp_load_acquire'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                    ^~~~~~~~~~~~~~~~
->> kernel/rcu/srcutree.c:1907:67: error: 'struct srcu_usage' has no member named 'srcu_gp_seq_needed'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                                                   ^~
-   include/linux/compiler_types.h:377:23: note: in definition of macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:397:9: note: in expansion of macro '_compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                            ^~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:49:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/barrier.h:81:28: note: in expansion of macro 'READ_ONCE'
-      81 |         typeof(*p) ___p1 = READ_ONCE(*p);                               \
-         |                            ^~~~~~~~~
-   include/asm-generic/barrier.h:176:29: note: in expansion of macro '__smp_load_acquire'
-     176 | #define smp_load_acquire(p) __smp_load_acquire(p)
-         |                             ^~~~~~~~~~~~~~~~~~
-   kernel/rcu/srcutree.c:1907:36: note: in expansion of macro 'smp_load_acquire'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                    ^~~~~~~~~~~~~~~~
->> kernel/rcu/srcutree.c:1907:67: error: 'struct srcu_usage' has no member named 'srcu_gp_seq_needed'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                                                   ^~
-   include/linux/compiler_types.h:377:23: note: in definition of macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:397:9: note: in expansion of macro '_compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                            ^~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:49:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/barrier.h:81:28: note: in expansion of macro 'READ_ONCE'
-      81 |         typeof(*p) ___p1 = READ_ONCE(*p);                               \
-         |                            ^~~~~~~~~
-   include/asm-generic/barrier.h:176:29: note: in expansion of macro '__smp_load_acquire'
-     176 | #define smp_load_acquire(p) __smp_load_acquire(p)
-         |                             ^~~~~~~~~~~~~~~~~~
-   kernel/rcu/srcutree.c:1907:36: note: in expansion of macro 'smp_load_acquire'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                    ^~~~~~~~~~~~~~~~
->> kernel/rcu/srcutree.c:1907:67: error: 'struct srcu_usage' has no member named 'srcu_gp_seq_needed'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                                                   ^~
-   include/linux/compiler_types.h:377:23: note: in definition of macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:397:9: note: in expansion of macro '_compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:49:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/barrier.h:81:28: note: in expansion of macro 'READ_ONCE'
-      81 |         typeof(*p) ___p1 = READ_ONCE(*p);                               \
-         |                            ^~~~~~~~~
-   include/asm-generic/barrier.h:176:29: note: in expansion of macro '__smp_load_acquire'
-     176 | #define smp_load_acquire(p) __smp_load_acquire(p)
-         |                             ^~~~~~~~~~~~~~~~~~
-   kernel/rcu/srcutree.c:1907:36: note: in expansion of macro 'smp_load_acquire'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                    ^~~~~~~~~~~~~~~~
->> kernel/rcu/srcutree.c:1907:67: error: 'struct srcu_usage' has no member named 'srcu_gp_seq_needed'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                                                   ^~
-   include/linux/compiler_types.h:353:27: note: in definition of macro '__unqual_scalar_typeof'
-     353 |                 _Generic((x),                                           \
-         |                           ^
-   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
-      50 |         __READ_ONCE(x);                                                 \
-         |         ^~~~~~~~~~~
-   arch/powerpc/include/asm/barrier.h:81:28: note: in expansion of macro 'READ_ONCE'
-      81 |         typeof(*p) ___p1 = READ_ONCE(*p);                               \
-         |                            ^~~~~~~~~
-   include/asm-generic/barrier.h:176:29: note: in expansion of macro '__smp_load_acquire'
-     176 | #define smp_load_acquire(p) __smp_load_acquire(p)
-         |                             ^~~~~~~~~~~~~~~~~~
-   kernel/rcu/srcutree.c:1907:36: note: in expansion of macro 'smp_load_acquire'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                    ^~~~~~~~~~~~~~~~
-   In file included from ./arch/powerpc/include/generated/asm/rwonce.h:1,
-                    from include/linux/compiler.h:247,
-                    from include/linux/build_bug.h:5,
-                    from include/linux/container_of.h:5,
-                    from include/linux/list.h:5:
->> kernel/rcu/srcutree.c:1907:67: error: 'struct srcu_usage' has no member named 'srcu_gp_seq_needed'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                                                   ^~
-   include/asm-generic/rwonce.h:44:73: note: in definition of macro '__READ_ONCE'
-      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
-         |                                                                         ^
-   arch/powerpc/include/asm/barrier.h:81:28: note: in expansion of macro 'READ_ONCE'
-      81 |         typeof(*p) ___p1 = READ_ONCE(*p);                               \
-         |                            ^~~~~~~~~
-   include/asm-generic/barrier.h:176:29: note: in expansion of macro '__smp_load_acquire'
-     176 | #define smp_load_acquire(p) __smp_load_acquire(p)
-         |                             ^~~~~~~~~~~~~~~~~~
-   kernel/rcu/srcutree.c:1907:36: note: in expansion of macro 'smp_load_acquire'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                    ^~~~~~~~~~~~~~~~
->> kernel/rcu/srcutree.c:1907:67: error: 'struct srcu_usage' has no member named 'srcu_gp_seq_needed'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                                                   ^~
-   include/linux/compiler_types.h:377:23: note: in definition of macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:397:9: note: in expansion of macro '_compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:400:9: note: in expansion of macro 'compiletime_assert'
-     400 |         compiletime_assert(__native_word(t),                            \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:400:28: note: in expansion of macro '__native_word'
-     400 |         compiletime_assert(__native_word(t),                            \
-         |                            ^~~~~~~~~~~~~
-   arch/powerpc/include/asm/barrier.h:82:9: note: in expansion of macro 'compiletime_assert_atomic_type'
-      82 |         compiletime_assert_atomic_type(*p);                             \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/barrier.h:176:29: note: in expansion of macro '__smp_load_acquire'
-     176 | #define smp_load_acquire(p) __smp_load_acquire(p)
-         |                             ^~~~~~~~~~~~~~~~~~
-   kernel/rcu/srcutree.c:1907:36: note: in expansion of macro 'smp_load_acquire'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                    ^~~~~~~~~~~~~~~~
->> kernel/rcu/srcutree.c:1907:67: error: 'struct srcu_usage' has no member named 'srcu_gp_seq_needed'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                                                   ^~
-   include/linux/compiler_types.h:377:23: note: in definition of macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:397:9: note: in expansion of macro '_compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:400:9: note: in expansion of macro 'compiletime_assert'
-     400 |         compiletime_assert(__native_word(t),                            \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:400:28: note: in expansion of macro '__native_word'
-     400 |         compiletime_assert(__native_word(t),                            \
-         |                            ^~~~~~~~~~~~~
-   arch/powerpc/include/asm/barrier.h:82:9: note: in expansion of macro 'compiletime_assert_atomic_type'
-      82 |         compiletime_assert_atomic_type(*p);                             \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/barrier.h:176:29: note: in expansion of macro '__smp_load_acquire'
-     176 | #define smp_load_acquire(p) __smp_load_acquire(p)
-         |                             ^~~~~~~~~~~~~~~~~~
-   kernel/rcu/srcutree.c:1907:36: note: in expansion of macro 'smp_load_acquire'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                    ^~~~~~~~~~~~~~~~
->> kernel/rcu/srcutree.c:1907:67: error: 'struct srcu_usage' has no member named 'srcu_gp_seq_needed'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                                                   ^~
-   include/linux/compiler_types.h:377:23: note: in definition of macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:397:9: note: in expansion of macro '_compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:400:9: note: in expansion of macro 'compiletime_assert'
-     400 |         compiletime_assert(__native_word(t),                            \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:400:28: note: in expansion of macro '__native_word'
-     400 |         compiletime_assert(__native_word(t),                            \
-         |                            ^~~~~~~~~~~~~
-   arch/powerpc/include/asm/barrier.h:82:9: note: in expansion of macro 'compiletime_assert_atomic_type'
-      82 |         compiletime_assert_atomic_type(*p);                             \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/barrier.h:176:29: note: in expansion of macro '__smp_load_acquire'
-     176 | #define smp_load_acquire(p) __smp_load_acquire(p)
-         |                             ^~~~~~~~~~~~~~~~~~
-   kernel/rcu/srcutree.c:1907:36: note: in expansion of macro 'smp_load_acquire'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                    ^~~~~~~~~~~~~~~~
->> kernel/rcu/srcutree.c:1907:67: error: 'struct srcu_usage' has no member named 'srcu_gp_seq_needed'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                                                   ^~
-   include/linux/compiler_types.h:377:23: note: in definition of macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:397:9: note: in expansion of macro '_compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:400:9: note: in expansion of macro 'compiletime_assert'
-     400 |         compiletime_assert(__native_word(t),                            \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:400:28: note: in expansion of macro '__native_word'
-     400 |         compiletime_assert(__native_word(t),                            \
-         |                            ^~~~~~~~~~~~~
-   arch/powerpc/include/asm/barrier.h:82:9: note: in expansion of macro 'compiletime_assert_atomic_type'
-      82 |         compiletime_assert_atomic_type(*p);                             \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/barrier.h:176:29: note: in expansion of macro '__smp_load_acquire'
-     176 | #define smp_load_acquire(p) __smp_load_acquire(p)
-         |                             ^~~~~~~~~~~~~~~~~~
-   kernel/rcu/srcutree.c:1907:36: note: in expansion of macro 'smp_load_acquire'
-    1907 |                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-         |                                    ^~~~~~~~~~~~~~~~
-   In file included from arch/powerpc/include/asm/bug.h:159,
-                    from include/linux/bug.h:5,
-                    from include/linux/fortify-string.h:5,
-                    from include/linux/string.h:254,
-                    from include/linux/bitmap.h:11,
-                    from include/linux/cpumask.h:12,
-                    from include/linux/smp.h:13,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/mutex.h:17:
->> kernel/rcu/srcutree.c:1908:49: error: 'struct srcu_usage' has no member named 'sda_is_static'
-    1908 |                     !WARN_ON_ONCE(!ssp->srcu_sup->sda_is_static))
-         |                                                 ^~
-   include/asm-generic/bug.h:110:32: note: in definition of macro 'WARN_ON_ONCE'
-     110 |         int __ret_warn_on = !!(condition);                      \
-         |                                ^~~~~~~~~
-
-
-vim +1907 kernel/rcu/srcutree.c
-
-fe15b50cdeeebd Paul E. McKenney 2019-04-05  1897  
-fe15b50cdeeebd Paul E. McKenney 2019-04-05  1898  /* Clean up any global-scope srcu_struct structures used by this module. */
-fe15b50cdeeebd Paul E. McKenney 2019-04-05  1899  static void srcu_module_going(struct module *mod)
-fe15b50cdeeebd Paul E. McKenney 2019-04-05  1900  {
-fe15b50cdeeebd Paul E. McKenney 2019-04-05  1901  	int i;
-7a8ec79485d274 Paul E. McKenney 2023-03-17  1902  	struct srcu_struct *ssp;
-fe15b50cdeeebd Paul E. McKenney 2019-04-05  1903  	struct srcu_struct **sspp = mod->srcu_struct_ptrs;
-fe15b50cdeeebd Paul E. McKenney 2019-04-05  1904  
-7a8ec79485d274 Paul E. McKenney 2023-03-17  1905  	for (i = 0; i < mod->num_srcu_structs; i++) {
-7a8ec79485d274 Paul E. McKenney 2023-03-17  1906  		ssp = *(sspp++);
-7a8ec79485d274 Paul E. McKenney 2023-03-17 @1907  		if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
-7a8ec79485d274 Paul E. McKenney 2023-03-17 @1908  		    !WARN_ON_ONCE(!ssp->srcu_sup->sda_is_static))
-7a8ec79485d274 Paul E. McKenney 2023-03-17  1909  			cleanup_srcu_struct(ssp);
-7a8ec79485d274 Paul E. McKenney 2023-03-17  1910  		free_percpu(ssp->sda);
-7a8ec79485d274 Paul E. McKenney 2023-03-17  1911  	}
-fe15b50cdeeebd Paul E. McKenney 2019-04-05  1912  }
-fe15b50cdeeebd Paul E. McKenney 2019-04-05  1913  
-
-:::::: The code at line 1907 was first introduced by commit
-:::::: 7a8ec79485d27415fdc6ffb5bcb2d71626e3c8fb srcu: Use static init for statically allocated in-module srcu_struct
-
-:::::: TO: Paul E. McKenney <paulmck@kernel.org>
-:::::: CC: Paul E. McKenney <paulmck@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
