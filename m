@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353186C9A8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 06:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4366E6C9A90
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 06:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232180AbjC0Eeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 00:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S232192AbjC0Eel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 00:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbjC0Eef (ORCPT
+        with ESMTP id S232186AbjC0Eej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 00:34:35 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241F84C30
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 21:34:34 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id e23-20020a25e717000000b00b66ab374ba1so7629530ybh.22
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 21:34:34 -0700 (PDT)
+        Mon, 27 Mar 2023 00:34:39 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5CC4ECB
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 21:34:38 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-545e529206eso18391137b3.9
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 21:34:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679891673;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YLP0iDbOKmp5dR6zyew5bYI8A6UpTe5M67jJip6qNr8=;
-        b=g54fLmoT+eCwIo9hM5uYaRt1FxlYmcHJiirjrrMOIdIU1qL5XHkojOnUfop8aJYQJe
-         tywuLZnNbXmydIntqTGTKl9zvhc2O4Y90ulmf7KAeqdDz9V+ECv6k98tSdWOZnRHqDx9
-         i1X+KMj4v6BURWtkCviLLwTK6xxZpu7kudu/MchQwy+dBBcCRudopBXhU4/4lN73LfMg
-         0L2yqrC/xWPzo9eWRUDObnn2WxjcMb2wxVkpUEsnJPlK6E1/5ypgWGL6ZQejJ0odf25X
-         /w0HAt3SjV8yLXthSc7S6ldDlC+G/7w20yL0vj2nSBzqWS2S6Zio8JSsKV6iptRf3B4/
-         pNnQ==
+        d=google.com; s=20210112; t=1679891677;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sPVKlHs8rdxB8UK5BU2ADWdalnh8Q9IQfmw/DaMpLMc=;
+        b=Hn0rFABF3w227/orfbWGzUmPI0QrILbuKF4wmvZ1wwW31KwSk1UudgpTAnvdn8NDVw
+         Bg3SAYFLkqHAyYO6DXbcqvBMQyaKa/gBDRp2MgrS+AVSE0w9/bXEBv299glKl0mh4f+A
+         s1oKfbKa8KBvExwwWcrx/Yl8TEl8FKg4VekK6sSsDOFJlFvS+9dwRTFomCl8Dis17fp8
+         azxWvEk0dluGeI4guR8j7AwrZunEBHrkTATiAIWn1Wt6qHlM/wxddCsCjfzHjpD6Rrc+
+         c83vKqcUJz6ij//ltyzYO/+/JJRcCz9fBKpg2BADknUuAugmCTMFjvoVPdpwW/wk5U5o
+         P6dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679891673;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YLP0iDbOKmp5dR6zyew5bYI8A6UpTe5M67jJip6qNr8=;
-        b=yZEa5Pbpkaj8L9urrFQe91lCHO6KNpv9o/um9OioLM8IXRE5rUMvMmmRBCjwepfC7U
-         gUYOb/coWpxnJtlNhuQBCPIlzN1/K5mh1qIvKMFX2ZdtBP2vVt5PzHmz6ckqmCOkzwGg
-         YIOvyh03KImkFXd2KUsk4GUyyP8YMd3MPQmJzUy/rMcPKA9u09HTlG+TR2HAYSSFQ0et
-         qPLNUdC0/5aaLWrFA6VVG7F6TjuM7atj0Kd/d7PtdyqiSjwrIDTOVnJOypOSxbR9B931
-         +GBW7smQE7ysMwY+M5NpuJH6+NPGMGEIDxfQ4GB/iVSU+Xuj+l526Jph3xnpdzvh4FjP
-         T2NA==
-X-Gm-Message-State: AAQBX9cuIZ1WYIjfSaYjgMcMNLVuEOBHrBRdSIjR21qN1V7nqEb6vQz4
-        D2AzUHfJoDH6mqUkQzk0D8WzNvMYMg5FOg==
-X-Google-Smtp-Source: AKy350ZUQ0qK0zEXhjwjUG2z+xViu8bIT3LYZfUmL6Xxd+qcGfk2WmGtgR78o7qqVFc1XV7uraTYEQiMmXNfrg==
+        d=1e100.net; s=20210112; t=1679891677;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sPVKlHs8rdxB8UK5BU2ADWdalnh8Q9IQfmw/DaMpLMc=;
+        b=V+hJRRCee5e9ub+5OYb0hwcPPILZcwlO5ioI4sus32CLjyLbnkxsFvf402WLpfVDuV
+         m8/p+HtL1oUoN5nkIhAXaT982DYOciEAvalRrx+sSUM5yRsgrCzX1/ZOpNtL7dXFD1nl
+         Y0YvMu0vLQ9acNZgTuWKcN1e98d9m4rEoPW2ZASKQxnh83Z5Rpa1poZrtENlVGY7VQAX
+         ucFQsGA81u0qzRIxsvWVMnuWpTtLJQdQUcmazDoaL45Ipwy0fOdXWWkPWVFA17YgNDd6
+         8WQyUDRKcHLTkvlMUSUjXzJrBIZA6UPMLarCqDc1l5OXsDxqDVOwTUvNFAyIJgxT9Bwq
+         3iBA==
+X-Gm-Message-State: AAQBX9dGv9zE4tSQuodnK951UI2uZmEJ9H7OOZ6TL5ojmIc/7yB7F/jP
+        QGMyi1eDWpdSCnsGnj/xXrx2fBwRwptJNw==
+X-Google-Smtp-Source: AKy350ZgmAqvY+rvLG19P9MAICkhUZ57zTI/O1tDGw1hxJxsyZslVjt8Pv8bjnoIxbeCQYY0wRo2IE8XeB5MCw==
 X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
- (user=joychakr job=sendgmr) by 2002:a81:a707:0:b0:545:6225:4536 with SMTP id
- e7-20020a81a707000000b0054562254536mr4462251ywh.9.1679891673439; Sun, 26 Mar
- 2023 21:34:33 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 04:34:03 +0000
+ (user=joychakr job=sendgmr) by 2002:a05:6902:168d:b0:b26:47f3:6cb with SMTP
+ id bx13-20020a056902168d00b00b2647f306cbmr4767786ybb.4.1679891677537; Sun, 26
+ Mar 2023 21:34:37 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 04:34:04 +0000
+In-Reply-To: <20230327043405.881645-1-joychakr@google.com>
 Mime-Version: 1.0
+References: <20230327043405.881645-1-joychakr@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230327043405.881645-1-joychakr@google.com>
-Subject: [PATCH v4 0/2] spi: dw: DW SPI DMA Driver updates
+Message-ID: <20230327043405.881645-2-joychakr@google.com>
+Subject: [PATCH v4 1/2] spi: dw: Add 32 bpw support to DW DMA Controller
 From:   Joy Chakraborty <joychakr@google.com>
 To:     Serge Semin <fancer.lancer@gmail.com>,
         Mark Brown <broonie@kernel.org>
@@ -68,30 +70,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This Patch series adds support for 32 bits per word trasfers using DMA
-and some defensive checks around dma controller capabilities.
----
-V1 Changes : Add support for AxSize=4 bytes to support 32bits/word.
----
-V1->V2 Changes : Add dma capability check to make sure address widths
-are supported.
----
-V2->V3 Changes : Split changes , add DMA direction check and other
-cosmetic chnages.
----
-V3->V4 Changes : Fix Sparce Warning
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@intel.com/
----
+Add Support for AxSize = 4 bytes configuration from dw dma driver if
+n_bytes i.e. number of bytes per write to fifo is 3 or 4.
 
-Joy Chakraborty (2):
-  spi: dw: Add 32 bpw support to DW DMA Controller
-  spi: dw: Add dma controller capability checks
+Number of bytes written to fifo per write is depended on the bits/word
+configuration being used which the DW core driver translates to n_bytes.
 
- drivers/spi/spi-dw-dma.c | 67 +++++++++++++++++++++++++++++++---------
- drivers/spi/spi-dw.h     |  1 +
- 2 files changed, 53 insertions(+), 15 deletions(-)
+Signed-off-by: Joy Chakraborty <joychakr@google.com>
+---
+ drivers/spi/spi-dw-dma.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+index ababb910b391..b3a88bb75907 100644
+--- a/drivers/spi/spi-dw-dma.c
++++ b/drivers/spi/spi-dw-dma.c
+@@ -208,12 +208,17 @@ static bool dw_spi_can_dma(struct spi_controller *master,
+ 
+ static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
+ {
+-	if (n_bytes == 1)
++	switch (n_bytes) {
++	case 1:
+ 		return DMA_SLAVE_BUSWIDTH_1_BYTE;
+-	else if (n_bytes == 2)
++	case 2:
+ 		return DMA_SLAVE_BUSWIDTH_2_BYTES;
+-
+-	return DMA_SLAVE_BUSWIDTH_UNDEFINED;
++	case 3:
++	case 4:
++		return DMA_SLAVE_BUSWIDTH_4_BYTES;
++	default:
++		return DMA_SLAVE_BUSWIDTH_UNDEFINED;
++	}
+ }
+ 
+ static int dw_spi_dma_wait(struct dw_spi *dws, unsigned int len, u32 speed)
 -- 
 2.40.0.348.gf938b09366-goog
 
