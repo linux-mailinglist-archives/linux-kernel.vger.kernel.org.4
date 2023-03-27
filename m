@@ -2,95 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2D76CA8F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7CD66CA90D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 17:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbjC0P3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 11:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        id S232806AbjC0PbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 11:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232630AbjC0P2t (ORCPT
+        with ESMTP id S232916AbjC0PbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:28:49 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A322540EE;
-        Mon, 27 Mar 2023 08:28:45 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id f4-20020a9d0384000000b0069fab3f4cafso4733247otf.9;
-        Mon, 27 Mar 2023 08:28:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679930924;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LEE//CVec7N01zWXhmb3QcGzLCREQLQp/FRs8Lve+i8=;
-        b=0K/p1PL7PZUZoufEM8AhsUo15BgZ9CZ9Rl8yQK+H3tvouIL3HbaC3TBH1Sdp7MzY2D
-         TQ9bduZvE5G4rJsSovvCgFczg3+/6rVBwZijFGBUY1VK6RxgWh1pYOjl17uZb5Dj93pI
-         itN19KP/U2TCa2HrxAsRzYymyg8lT1XFKZ9qmFv9jUFP39QHdHCdxQ+AjlnXbX9et8gC
-         zU1vux54LlycbUbv2kh+frptV8wxd1N4edB1YGcRGZyipaVUbMK6LNXZZNEkAdcOn9vh
-         v7DzAkkuKCMn0L2h805N3aGG6ZpRzq0tlbab0ABf/RrtMprpeCBX/u9yr7r9NRwzgVgo
-         +lsA==
-X-Gm-Message-State: AAQBX9csWQKNC8Pc7Ct0aorKjAZtvBuRsB4ib/NkqG1OaTQC8VhfW5FH
-        5QZjBMUTMNk6vDsp5UAbOQ==
-X-Google-Smtp-Source: AKy350bmPVQig+xpjcFDj6G5EpbUIjt419xav/Kwr6elxAu9ry41ovS9zixIUChIOJIaJ1v3e4y4UQ==
-X-Received: by 2002:a05:6830:3892:b0:6a1:2a17:16f2 with SMTP id bq18-20020a056830389200b006a12a1716f2mr4375958otb.1.1679930924535;
-        Mon, 27 Mar 2023 08:28:44 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n37-20020a056870972500b00177b33ce85bsm9935770oaq.30.2023.03.27.08.28.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 08:28:44 -0700 (PDT)
-Received: (nullmailer pid 3907135 invoked by uid 1000);
-        Mon, 27 Mar 2023 15:28:43 -0000
-Date:   Mon, 27 Mar 2023 10:28:43 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        jbrunet@baylibre.com, neil.armstrong@linaro.org,
-        rockosov@gmail.com, sboyd@kernel.org, mturquette@baylibre.com,
-        khilman@baylibre.com, jian.hu@amlogic.com, kernel@sberdevices.ru,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        martin.blumenstingl@googlemail.com
-Subject: Re: [PATCH v11 3/5] dt-bindings: clock: meson: add A1 PLL and
- Peripherals clkcs bindings
-Message-ID: <167993090466.3906795.9343915150600336952.robh@kernel.org>
-References: <20230321193014.26349-1-ddrokosov@sberdevices.ru>
- <20230321193014.26349-4-ddrokosov@sberdevices.ru>
+        Mon, 27 Mar 2023 11:31:13 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9B840C6;
+        Mon, 27 Mar 2023 08:31:09 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RBq7UQ015391;
+        Mon, 27 Mar 2023 17:30:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=NDwSsoDBiRbxH/ftqQ+RHeKYD8ZjHWglAr/pS89OLKE=;
+ b=g1GnXXuYAPy3651z2icetYdqHZ71hnmPEzeiIpkDM3iv15TdISOniP94GxTXyqy1q65T
+ Ro9ohYovC+/+g6fewYGL5lzx1P8dUAnTOb6TOa+yA1Mh/ISdQiK+aaEEyBjK+5jPkC3f
+ X7+r62uP4a6pTEG3yZf/gD+5Svp0MCCkpNd5KmSR5dpKX3MlW1T6C3r4UDVvz/3XuB+T
+ z6+OSNhuzfejx/WLH9YI7VBh1QaTEXgUe3bd8BOcLo5FzV/OZm1rb+eCNy1co2SPrNnd
+ wcrTZ0QM+o8XATXDxuWV65jrkwpIdRJ9DE/lKNDxMv18351Al5/O1GaPnPmL9hnQ5Kni Ew== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3phsr5c4te-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 17:30:48 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0D42B10002A;
+        Mon, 27 Mar 2023 17:30:47 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B07B721A206;
+        Mon, 27 Mar 2023 17:30:46 +0200 (CEST)
+Received: from localhost (10.201.20.168) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Mon, 27 Mar
+ 2023 17:30:46 +0200
+From:   Valentin Caron <valentin.caron@foss.st.com>
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/7] ARM: dts: stm32: stm32mp15 various fixes and add stm32mp13 usart nodes
+Date:   Mon, 27 Mar 2023 17:29:41 +0200
+Message-ID: <20230327152948.274743-1-valentin.caron@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321193014.26349-4-ddrokosov@sberdevices.ru>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.20.168]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
+X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On stm32mp15 device trees:
+  - Add USART1 scmi clock
+  - Remove duplicates serial aliases
 
-On Tue, 21 Mar 2023 22:30:12 +0300, Dmitry Rokosov wrote:
-> Add the documentation for Amlogic A1 PLL and Amlogic A1 Peripherals
-> clock drivers.
-> Introduce Amlogic A1 PLL and Amlogic A1 Peripherals device tree
-> bindings and include them to MAINTAINERS.
-> 
-> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> ---
->  .../bindings/clock/amlogic,a1-clkc.yaml       |  73 +++++++++++
->  .../bindings/clock/amlogic,a1-pll-clkc.yaml   |  59 +++++++++
->  MAINTAINERS                                   |   1 +
->  include/dt-bindings/clock/amlogic,a1-clkc.h   | 113 ++++++++++++++++++
->  .../dt-bindings/clock/amlogic,a1-pll-clkc.h   |  21 ++++
->  5 files changed, 267 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
->  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
->  create mode 100644 include/dt-bindings/clock/amlogic,a1-clkc.h
->  create mode 100644 include/dt-bindings/clock/amlogic,a1-pll-clkc.h
-> 
+On stm32mp13 device trees:
+  - Add USART nodes in stm32mp131.dtsi
+  - Add USART nodes in stm32mp135f-dk.dts
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Valentin Caron (7):
+  ARM: dts: stm32: change USART1 clock to an SCMI clock on stm32mp15
+    boards
+  ARM: dts: stm32: fix slew-rate of USART2 on stm32mp15xx-dkx
+  ARM: dts: stm32: clean uart aliases on stm32mp15xx-dkx boards
+  ARM: dts: stm32: clean uart aliases on stm32mp15xx-exx boards
+  ARM: dts: stm32: add uart nodes on stm32mp13
+  ARM: dts: stm32: add pins for usart2/1/4/8 in stm32mp13-pinctrl
+  ARM: dts: stm32: add uart nodes and uart aliases on stm32mp135f-dk
+
+ arch/arm/boot/dts/stm32mp13-pinctrl.dtsi   | 129 +++++++++++++++++++++
+ arch/arm/boot/dts/stm32mp131.dtsi          |  97 +++++++++++++++-
+ arch/arm/boot/dts/stm32mp135f-dk.dts       |  42 ++++++-
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi   |   4 +-
+ arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts |   4 +
+ arch/arm/boot/dts/stm32mp157a-dk1.dts      |   3 -
+ arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts |   4 +
+ arch/arm/boot/dts/stm32mp157c-dk2.dts      |   3 -
+ arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts |   4 +
+ arch/arm/boot/dts/stm32mp157c-ed1.dts      |   8 +-
+ arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts |   4 +
+ arch/arm/boot/dts/stm32mp157c-ev1.dts      |   9 +-
+ arch/arm/boot/dts/stm32mp15xx-dkx.dtsi     |   6 +
+ 13 files changed, 298 insertions(+), 19 deletions(-)
+
+-- 
+2.25.1
 
