@@ -2,198 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4366CA6B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D87F6CA6BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 16:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbjC0OBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 10:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        id S231960AbjC0OCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 10:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbjC0OAi (ORCPT
+        with ESMTP id S232381AbjC0OCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 10:00:38 -0400
-Received: from mx0b-002c1b01.pphosted.com (mx0b-002c1b01.pphosted.com [148.163.155.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F102940CD;
-        Mon, 27 Mar 2023 07:00:13 -0700 (PDT)
-Received: from pps.filterd (m0127843.ppops.net [127.0.0.1])
-        by mx0b-002c1b01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RCDEbk010335;
-        Mon, 27 Mar 2023 06:59:52 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint20171006;
- bh=Y8oMA2Kh90fJuaqHhLVsPbnGur2i+yIZVcZrAVQRP/A=;
- b=W4WeRm0IU4n37kzCd8POz3yWGzxUg7seVsLUW3V5IGq/j4nmbMPx1FZprJabu88hWENk
- v8vCB9gQFVJgqqhijHeu8auEFybDh8OkTnmnkOmMhFhbv5Nir5aXw9Nlo6BmyxneZ2Io
- NHVFh9tfCrOZUd3QF0zyvFcjDFg/1mIkOf5w+2S9VcWy9CbIHcTX5za9IswzbgGJw/Do
- 8+Agdd9CokYXwCXHOdOFGKMdWA8euh7pZ1oypgvKJ+ABMP2rEc7zWp8OHaUMy936wp7S
- Qbhh6SmvktOMkrc2uWuOLxaSa/DIMZx4eChDY5KAxz1WUr5fZDJ6bOgW9VXfGPv/Bitp nw== 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172])
-        by mx0b-002c1b01.pphosted.com (PPS) with ESMTPS id 3phy2jkx53-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 06:59:51 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xk6j3t4ChSS9xTsxGBIqO7ERe5YL+3r2ZkLeYs7qNxHpHpXdMgS366f82fBtp4VMbrBqBCiP7HXVnXYy4So22fUr9qYUynfxjSgNXMTys9KNUIs/kj3QNf338XeKng7Eu175WhGlM84GKw9KU9gTtn1M5LYyG/q29Niu2JBnZDNUytwZ+OmL8Uxvzbq8qoMC5jmY3djRjyyyoxRoxXpRSmqLF7FtaAKLPNZAS9liecUVkRQAA1un2CiNCnt25uTSTCONvDFSpofcza3eQK60P0uPFZs+ZNdR76KY4p1llzx0zGC/m0kHXFQ7Y2YWcueksDdTETkF4bztcVcgRAkQ7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y8oMA2Kh90fJuaqHhLVsPbnGur2i+yIZVcZrAVQRP/A=;
- b=DYyYTeI7S4qQP93HYCKkADAlAufcdw8cpgucNmEqFN+4yVL0FfoR3snjYiBk0NcyDVNJdqZVxHcGL7caCGK9LYEbdLMLYNp3sqNata9rhcLAUuYKwVG5MCzk13p2Gs9gLmsuoLNmLdFOKQMRrw8krM3c+C/IDTAYwIE7zyHotKhCK5wsHrLKWzvPdIhFmrf6Y+GncPCxMILJ/5yU7uuBSAqSjMmgqPLCSOUYotPbgRQBkxpCvZgIitfVt3vmXW8KlzC1S9DoY7dxzc80Xszxu99KW/5RisyG3GcLK5kOTYJQlJ4jVBAFWsq73VqZfUlnncTO/wtvX/YN4oGkhoaoiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
- dkim=pass header.d=nutanix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y8oMA2Kh90fJuaqHhLVsPbnGur2i+yIZVcZrAVQRP/A=;
- b=ejONGk/JR1bdBpcjQN9SClty6+JTvbF27IwWTmDZQ33r1ES1kH0jMg5fCPGrmBaaq412Yiiul1Tb7KK2YXWOI6YxVrX+F2oo5TIu6ZLrjB7PmbMG27zIWjLGUlPfErR+8JLdqP7LGmLRf/x0EWdGtFjOz57R7EFDD0tNDruk73cyx98BSkBGu1viNjw7j1Qc6ruUo0ik4VNuP2mLYE/kFw2jp9ruOuMnVXpzpbsTfuppSFt/y2dIcqUZtTe6xB8z8IzabqnSw96JxAGS8TQwIjRFlSmxyiCWn0oJ6e1Oce29VB4I3bshc5XIY8VlXhhQAf+FIcddss3/upr61MnmtA==
-Received: from BL3PR02MB8217.namprd02.prod.outlook.com (2603:10b6:208:33b::20)
- by SJ0PR02MB7629.namprd02.prod.outlook.com (2603:10b6:a03:32c::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Mon, 27 Mar
- 2023 13:59:49 +0000
-Received: from BL3PR02MB8217.namprd02.prod.outlook.com
- ([fe80::5065:b9d6:42c9:823e]) by BL3PR02MB8217.namprd02.prod.outlook.com
- ([fe80::5065:b9d6:42c9:823e%6]) with mapi id 15.20.6222.028; Mon, 27 Mar 2023
- 13:59:49 +0000
-Message-ID: <6f4420d0-2f86-7294-01e1-6806ef7e4686@nutanix.com>
-Date:   Mon, 27 Mar 2023 14:59:37 +0100
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [RFC] memcg v1: provide read access to memory.pressure_level
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230322142525.162469-1-flosch@nutanix.com>
- <20230324150350.fu7itbqqvtjmyf3s@blackpad>
-Content-Language: en-US
-From:   Florian Schmidt <flosch@nutanix.com>
-In-Reply-To: <20230324150350.fu7itbqqvtjmyf3s@blackpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM0PR02CA0121.eurprd02.prod.outlook.com
- (2603:10a6:20b:28c::18) To BL3PR02MB8217.namprd02.prod.outlook.com
- (2603:10b6:208:33b::20)
+        Mon, 27 Mar 2023 10:02:43 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA6E3C00;
+        Mon, 27 Mar 2023 07:02:38 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PlZJT3qWrz4f3l8l;
+        Mon, 27 Mar 2023 22:02:33 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgDn4R_5oSFkbm6iFg--.46084S4;
+        Mon, 27 Mar 2023 22:02:35 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     djwong@kernel.org, linux-xfs@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Ye Bin <yebin10@huawei.com>
+Subject: [PATCH] xfs: fix BUG_ON in xfs_getbmap()
+Date:   Mon, 27 Mar 2023 22:02:18 +0800
+Message-Id: <20230327140218.4154709-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL3PR02MB8217:EE_|SJ0PR02MB7629:EE_
-X-MS-Office365-Filtering-Correlation-Id: 83713e37-0f3a-42cd-42c3-08db2ecb877a
-x-proofpoint-crosstenant: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HTwQtqi5l5wSLTz+xLdy9ZHPun26ozx6MpVVctUxoCHiwCBegm8Zd6/uWo0NG99PajpBpu1yOnTN8tcaRsfZ/y5hCxmdU+GylZaJLR9hqlz0xjnljsPxY4Q8p2iyIXuiY1y5QfW+onuobWK9SA0b4RjwZDyx2fe9UmFaSogHHJR/sn1HuwbQQ9OaRGxwgHeq2F2P9ZAooD/fiEQthl2Y+zKtcrjXFlj/6wHmZfGhAIWiHq55+R/d4EXnGzP/0XCwLgNbp30SgHbTfQPpt1KYX4+4squZSmDYvv6axQNCo4sFMfZKJ9BfjTe4T9P/e/Nvrp36EjzRkneyjxddxUdo9hkADwg2UG7k4BeYOh9+U0AiZWLCMvDFoxxs3fZ8+cvu9MHhTm51ZRyiRDHw8lZaBttz6/rEX263JTWJ9u1rWyZGp9bzidb+NFU2rwyesC19BNv2K3TmA0AxR2Mbimo20oa/hOH8LuSEaeFFHnjNl1B8b9azw13d2WEtjWELcw3yu7STpmVPOIqrXLZY+4LfmviV/hUr0J7JMie4anD6rLDMqT7VwIVxVJtCz3Ruo9Yf5vW2GsP9bfozNxjhsiizNJeqZ5GNTnLef2soCCVAySXvS65HN5hRze2k3XH2slv419jbbTb343pL0hajmA3f4g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR02MB8217.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(376002)(366004)(39860400002)(396003)(346002)(451199021)(478600001)(54906003)(316002)(8936002)(5660300002)(31696002)(36756003)(86362001)(38100700002)(7416002)(2906002)(66556008)(66476007)(66946007)(8676002)(6916009)(41300700001)(4326008)(31686004)(186003)(2616005)(26005)(6512007)(6666004)(83380400001)(6506007)(53546011)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T296dkRnUVArS3d2VllGYU5aOG9JQ3ZVL0xGQ1QzZHRxblpYTHJic1J3Vk12?=
- =?utf-8?B?SzFuQmRNaUJYQm02TnpNRXpLNGRET1U0ZEFTOEZPaVdXN0FQWWMybmVwbERO?=
- =?utf-8?B?WVVpVGJkUDdwVC9nZ2tXM240aXlxTmFlRnV3L043bmxVOWFBNGFCbThHeURP?=
- =?utf-8?B?MGtLcFMzenpmZVNVNm1uZElSa1pYOG5SN2pyUnUvZ3B2ZkRmRGVQVGgzVWh5?=
- =?utf-8?B?TGlLUG1YajVKTnBoaGpiZXJjdzBvbUorMjgxZXVFLzZMa0tUQk5ZNGJuK0M4?=
- =?utf-8?B?enlLQjlFbDQwUUR6V2w1NXFJYm5sRi9MZURrRnBNbUk5ZUJpYXJvajdDUXZa?=
- =?utf-8?B?bWJEc3FQdWVoWWN0eGxidGxIS0l1am9zd3ArSnFHUU51bTAvYkNieXFIWWtt?=
- =?utf-8?B?NnRueVlNYUhtVU56ZlkwcGd3diswb3k3MS9kNEd1S21lc0VSaS95WFVXZ3J1?=
- =?utf-8?B?dlk4OUx2clpRanNmUFd2d29PemZVRTY1c0p3K3hlSGlpbXRsd3U5R2s5U1V1?=
- =?utf-8?B?TkVDaThCbUt4UGticnBSOTRVWGR6Tis4a3FYTHo4SE5GUythem5lVG1xbk8r?=
- =?utf-8?B?SHBkd2lqMm5lSXQzVXMwN1NuR1NSNitVUDZESFdWa05GRk9XaEJCcmdleVFh?=
- =?utf-8?B?cUtYSU5nN2h5SFpvUWM5SG14S1ltcXhrcloxV09BUW5xdjJudWJtNWlOV1Nj?=
- =?utf-8?B?MlZTTUcyN0pIZVBqYnYwRTZOTFhXWXdQbEJ2S2M3alZ4VE1pcy9TOFo2KytO?=
- =?utf-8?B?TmFXc3JaUXlFZkZxTGFvM1cwRm5VZjFWblk2T2VYTzNYeG13MjhRUko4RTJn?=
- =?utf-8?B?MXRvYmFTN2hPdHQwWGdvSUs2d0JydjRPTDV1VUJ4WHpueHExaW50SzR0UWV5?=
- =?utf-8?B?TnU3YmhMd0svK3VZUTVKUFpCMFlldm41MXJ1R1kvN284eVgvZlVpNGtJTU55?=
- =?utf-8?B?NUlob1Y0SEpHSmpiaDAxa252akprTVNkTWxTVit6WGxjcVMrVk1IcFN1eWVr?=
- =?utf-8?B?cm40VlE5aUdNS0FIV3FmQzE4YTltK2E0cVJtakgwOVk1Yjk3b3BWbnZ1L3VM?=
- =?utf-8?B?RkkyNEVsSDlNT2VISDlFZ0Z5ZDhONVExblQyOGRqN1l3Q1ZWVWk0dmNhVWZ5?=
- =?utf-8?B?andCaE1mVVhHaVp3eTA4OEhkOHRJSE5ybnBXOGZQOFRYbzRYVVMrS051UEt3?=
- =?utf-8?B?MFFlYm9OUWJkRUpNcDAveEpYY0VtODZHSkhFY3RSWWtPVnVKdDdhanlHN2dV?=
- =?utf-8?B?WGhGTmJkZk55RmMxZmN1QmFQaW5mVnFJWmlkdVdxYnNUd0xPdHBrZlQxQ0hs?=
- =?utf-8?B?dkVtUXg1ekdWYkVrMStMK0RiWGhFeFR6dnlMdVpObGNPQXpNTzgzRUp4NHQ0?=
- =?utf-8?B?ME12T0VZaGN5eCtIU1k1ZExGdHgwdTE5SjIxQy9lbXF2R21ITGhTM0tIQ1Br?=
- =?utf-8?B?N0VGSTN0a2d4dlhoYzdlS1VheUNSRzlHNHFjbEM5SFRvNzhDWEMvTGJadXZR?=
- =?utf-8?B?cmlFUHQ2aGFHc0trM1pCRkxIeGxxSUJibUpzN3pUaGpra1hFNS94ZmJjMDJy?=
- =?utf-8?B?VmJtM2tIMEtPbUFyRWFWb05PSmtQYmFBY2dtZzBiQ3VuR2hiMHdJZTRDRkpM?=
- =?utf-8?B?Z0ZWYllsUlcrWXRqS1ZqS1ZRTjBURTVXaVZhVVlFMkNUejVtOUZkOVdmdHRw?=
- =?utf-8?B?V3NqaEhraUo1V2srNVVVRUFKNURXUkliRjM3bVVtTVpFeXNSZ0JnbG4vMEtB?=
- =?utf-8?B?TkxZWEV4VnRubFRIY1Jhbi9xRVh2UTZsTjZybFhWeVE1NXVVbHlTemI3MG9v?=
- =?utf-8?B?MHB1SXhYZ1hwSUFOWStNZ1YwdkNkdVJuTHhMVkRFVFRQWlc3eDl2OXJ4UWEy?=
- =?utf-8?B?Q0lYSUlJK0dCVzZpK0F6WC9BckRjZ290NGNRRG90czVDQU56WllUWkxOMnFJ?=
- =?utf-8?B?OHI4QjdiWWp5c240N29wc3hWQ2VQNWxWOWNVd1hRc21QWmtpb0dsZ3ZrOGds?=
- =?utf-8?B?a1ZKRytJMFBFZFZZSm5qK1UzVlluZGc3Sy9KbGJBZW5ZR3ZjL3Q1YUh6ampE?=
- =?utf-8?B?NnhrZ0NsTk5ncmRxTWlQUG9kSlNhMmNwazNicy91SXVINHdBZDV2d3Voblg3?=
- =?utf-8?B?VjdRRlZjUmV3UkZXRnBwVDc1am5ZQTRyVnFORkF1Y09abXNzSTloTWNGUDRT?=
- =?utf-8?B?M2c9PQ==?=
-X-OriginatorOrg: nutanix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83713e37-0f3a-42cd-42c3-08db2ecb877a
-X-MS-Exchange-CrossTenant-AuthSource: BL3PR02MB8217.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 13:59:49.0976
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RSt5OCEvB83rBl4SZg2NFJ8VMYGyGa4smz+rAqmd7pLVDeHTAfoJrekD1dM1Ma8OOk1/9pUIW/IIwECF1dHlT1A0cxT978bknJzNYj3gRtQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7629
-X-Proofpoint-GUID: updZuJLp8r7V3RxbuJolT82p6OJ0z8o0
-X-Proofpoint-ORIG-GUID: updZuJLp8r7V3RxbuJolT82p6OJ0z8o0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-27_01,2023-02-09_01
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgDn4R_5oSFkbm6iFg--.46084S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFy5Gw1UurWxJr43ZFWUurg_yoW5tw13pr
+        93Kw1UGr4vqr1UZr1kJw1jgw1UGw17CF4rZr1xWr1xX3WUCr17tr40kFWfAFyUJrWxZryf
+        tr1DJw18t345JaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
+        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
+From: Ye Bin <yebin10@huawei.com>
 
-On 24/03/2023 15:03, Michal Koutný wrote:
-> On Wed, Mar 22, 2023 at 02:25:25PM +0000, Florian Schmidt <flosch@nutanix.com> wrote:
->> cgroups v1 has a unique way of setting up memory pressure notifications:
-> ...
->> There are several ways around this issue, but adding a dummy read
->> handler seems like the least invasive to me. I'd be interested to hear:
->> (a) do you think there is a less invasive way? Alternatively, we could
->>      add a flag in cftype in include/linux/cgroup-defs.h, but that seems
->>      more invasive for what is a legacy interface.
-> 
-> You can (as privileged user) modify file perms in userspace first (e.g.
-> chmod o+r memory.pressure_level) and then it can used by non-privileged
-> users. (Or do LSM prevent you from that too?)
+There's issue as follows:
+XFS: Assertion failed: (bmv->bmv_iflags & BMV_IF_DELALLOC) != 0, file: fs/xfs/xfs_bmap_util.c, line: 329
+------------[ cut here ]------------
+kernel BUG at fs/xfs/xfs_message.c:102!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 14612 Comm: xfs_io Not tainted 6.3.0-rc2-next-20230315-00006-g2729d23ddb3b-dirty #422
+RIP: 0010:assfail+0x96/0xa0
+RSP: 0018:ffffc9000fa178c0 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff888179a18000
+RDX: 0000000000000000 RSI: ffff888179a18000 RDI: 0000000000000002
+RBP: 0000000000000000 R08: ffffffff8321aab6 R09: 0000000000000000
+R10: 0000000000000001 R11: ffffed1105f85139 R12: ffffffff8aacc4c0
+R13: 0000000000000149 R14: ffff888269f58000 R15: 000000000000000c
+FS:  00007f42f27a4740(0000) GS:ffff88882fc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000b92388 CR3: 000000024f006000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ xfs_getbmap+0x1a5b/0x1e40
+ xfs_ioc_getbmap+0x1fd/0x5b0
+ xfs_file_ioctl+0x2cb/0x1d50
+ __x64_sys_ioctl+0x197/0x210
+ do_syscall_64+0x39/0xb0
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-That's true, we can work around this in userspace (though it means you 
-need to give the process additional permissions, to change file 
-permissions on top of just reading and writing).
+Above issue may happen as follows:
+         ThreadA                       ThreadB
+do_shared_fault
+ __do_fault
+  xfs_filemap_fault
+   __xfs_filemap_fault
+    filemap_fault
+                             xfs_ioc_getbmap -> Without BMV_IF_DELALLOC flag
+			      xfs_getbmap
+			       xfs_ilock(ip, XFS_IOLOCK_SHARED);
+			       filemap_write_and_wait
+ do_page_mkwrite
+  xfs_filemap_page_mkwrite
+   __xfs_filemap_fault
+    xfs_ilock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
+    iomap_page_mkwrite
+     ...
+     xfs_buffered_write_iomap_begin
+      xfs_bmapi_reserve_delalloc -> Allocate delay extent
+                              xfs_ilock_data_map_shared(ip)
+	                      xfs_getbmap_report_one
+			       ASSERT((bmv->bmv_iflags & BMV_IF_DELALLOC) != 0)
+	                        -> trigger BUG_ON
 
-Though considering that the memcg_write_event_control() explicitly 
-checks whether the caller has read permissions on pressure_level, it 
-felt sensible to me that the file would be created with read permissions 
-in the first place, just like all the other files are created with 
-permissions that are suitable for their immediate use without having to 
-manually change permissions. The current implementation feels 
-inconsistent in that way.
+As xfs_filemap_page_mkwrite() only hold XFS_MMAPLOCK_SHARED lock, there's
+small window mkwrite can produce delay extent after file write in xfs_getbmap().
+To solve above issue, hold XFS_MMAPLOCK_EXCL lock when do xfs_getbmap(),
+to prevent write operations by do_page_mkwrite().
+During doing __xfs_filemap_fault() we can't hold IOLOCK lock, as it's may lead
+to ABBA dealock with xfs_file_write_iter().It's very easy to reproduce when
+do fsstress, lockdep will detect deadlock.
 
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ fs/xfs/xfs_bmap_util.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
->> (b) would you be interested to take this patch, or is it too niche a fix
->>      for a legacy subsystem?
-> 
-> I'd rather not extend this "unique way" with additionally unique dummy
-> helpers.
+diff --git a/fs/xfs/xfs_bmap_util.c b/fs/xfs/xfs_bmap_util.c
+index a09dd2606479..f23771a0cc8d 100644
+--- a/fs/xfs/xfs_bmap_util.c
++++ b/fs/xfs/xfs_bmap_util.c
+@@ -463,11 +463,13 @@ xfs_getbmap(
+ 			max_len = XFS_ISIZE(ip);
+ 		break;
+ 	case XFS_DATA_FORK:
++		lock = XFS_MMAPLOCK_EXCL;
++		xfs_ilock(ip, lock);
+ 		if (!(iflags & BMV_IF_DELALLOC) &&
+ 		    (ip->i_delayed_blks || XFS_ISIZE(ip) > ip->i_disk_size)) {
+ 			error = filemap_write_and_wait(VFS_I(ip)->i_mapping);
+ 			if (error)
+-				goto out_unlock_iolock;
++				goto out_unlock_ilock;
+ 
+ 			/*
+ 			 * Even after flushing the inode, there can still be
+@@ -486,7 +488,7 @@ xfs_getbmap(
+ 		else
+ 			max_len = XFS_ISIZE(ip);
+ 
+-		lock = xfs_ilock_data_map_shared(ip);
++		lock |= xfs_ilock_data_map_shared(ip);
+ 		break;
+ 	}
+ 
+-- 
+2.31.1
 
-I understand that this is all code that has no modern user any more, 
-which is why I tried to keep the fix as self-contained as possible.
-Another option would be to have a special handler in cgroup_file_mode(), 
-but that feels a lot klunkier to me, and leaks a v1-specific behaviour 
-into the shared cgroup code.
-
-
-Cheers,
-Florian
