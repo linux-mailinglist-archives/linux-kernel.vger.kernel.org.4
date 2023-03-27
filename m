@@ -2,86 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AEDA6CA13C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54DD6CA13F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 12:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233116AbjC0KXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 06:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
+        id S233199AbjC0KYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 06:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbjC0KXy (ORCPT
+        with ESMTP id S233365AbjC0KYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:23:54 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1258BC
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:23:53 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id iw3so7957942plb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:23:53 -0700 (PDT)
+        Mon, 27 Mar 2023 06:24:00 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E752C59EB
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:23:58 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id c29so10725944lfv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 03:23:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=infob2bdata-com.20210112.gappssmtp.com; s=20210112; t=1679912633;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fd041Km9JR+rEbkknkSS85NuSHr4TlfBRZ9hZBTdfGI=;
-        b=CxbgeiuvFWwARtL1+qmvaGUQ3t3DVEO3MVCLWY1nsrYxpss2CwrPNw3u6gX9rNHsgo
-         Ap4qVQUuQI7CXWUlA+lcRs9QydTnDcHDQlI3+pjtYkLv+z8GNyJOHTaOjgVmS/Vujxth
-         NbbJyrbkFoiIzCq8MkGOxiRFdlnIgcB0PtPOBEmVuCL8BCLADouR7KXLOCjPT1Ld7AeH
-         yvCvZZlLhb80TgjXp3QpQgM6FE1xYJRWuOD8DRiWmL2XieyX9JdcsB4is0V1AgtmiJOd
-         uYYVgsTB0XYvwJ3jcmQsF/0dcVQsVZItGBdhz7ig2Pcp3kW3TmYipqsBqvt04pvQpvg9
-         M3/Q==
+        d=linaro.org; s=google; t=1679912637;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OXY8IRNCSKZca0K2kiIzOX2fUKB15EaV/gOhP693Hqs=;
+        b=Rp4mSsS5/CFBgAMWJhDxq7VhPlhdmak0SfpaRUcycI38SjUL/5FWhAhdpY+rm4qJby
+         EnIK0ziGReOzY5mHdnle4BZYGz88umvm/B8+9KYdXl1KPYO5AgOiJGCWiLXAdPAq0XAr
+         wECP36Hh/s8jzqIrQwRMAx/wfMIz/qua7t+EocX7R4YDZIriJVIwMRo0fqf11/IZcVhz
+         LUC83ZQT7KH2kiaDfhfet5ddz8dNkNtZ1A6OHAfi/Nf3Wd9+IALUJrUTCveSWQ81G2CP
+         Icq3AqGL+i5s9Qs3lwtA3ux78Q2XBCSrV0xACQmglb2fWJmv5hJ69wpo2Ia+ALs6f234
+         lFZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679912633;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fd041Km9JR+rEbkknkSS85NuSHr4TlfBRZ9hZBTdfGI=;
-        b=Cc7Rwj0jehREOQwpG6C+VK3qwCRAiWqjCUGl/ynE3xhUggVm85QwXWjgXw23eoDm8A
-         pe+3Rxd0/RhYA7U1Oj2psfo3H6eQnVG7AnLCMnMi/ni6ZWOxZZUBhkXVGg4RU7T0xlyd
-         Us+3LLxKseiF2GDmp6eqakUiBnAkivlJ3UsERVos2nToICAaK47uJTynl6hgGqdgHOww
-         IvmLvb0JDT6frFEDB6xpQXx+1a2LyxWqFNbrkNMpepAqK4IDVZ40pWlJJP4bJ8qjlF9r
-         GLb0iIRW/uCjfKS7HXqNPDM9JVnDsz6QofnBctd8yej17zxS41lkfUZrQanQMKiFapPR
-         ZX2A==
-X-Gm-Message-State: AAQBX9eWYJpmCNCncSEtKQfxd+BKw/y33c4al0GaVjhdhUkZLD6CbPyk
-        zB0VGehUyr1mRoVm0WmcNsM2369Blw15ur0THSvD4Q==
-X-Google-Smtp-Source: AKy350aVtV7Gyeq0ZlPh2S/bbwFGxuWbfIGoO1kuUDGrvw4W0IXtKWqSQVJAgUpZg3PRSoSGvRMd2nAPtT5co6FAePI=
-X-Received: by 2002:a17:902:6948:b0:1a2:3436:4119 with SMTP id
- k8-20020a170902694800b001a234364119mr2229296plt.8.1679912633215; Mon, 27 Mar
- 2023 03:23:53 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679912637;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OXY8IRNCSKZca0K2kiIzOX2fUKB15EaV/gOhP693Hqs=;
+        b=h9igoXE94NKcb+bv+XUC/xOe7ohyFJTsklmqI1Rktz3IB1oopU42i3yLBoMQNC84oR
+         2wvIwBD+V9S5OFavT8u6l1TTckhYqfE9+vc220zPrt8DRoNPEisRfNoiC11bumSCcXfN
+         V2u0/Z5V7kit7etYvnKl2TRloqNT1rVdJbjsK9aF98oeFAZGlo4eiyucwnnlN7v6gs0o
+         SDF4Q4FlktD66Dn+1ZKsdsI1EAOMI5MOKHlD/2kzWdNyvh3ESlIiEmkYWsu1hjqSrMI3
+         l1hEz4hQZpFI/qerv4wNpc2cgB9+h2J38VsY2rTt1inTugNdcDVI43L204rrk0W11tcs
+         BW8A==
+X-Gm-Message-State: AAQBX9dCqoqNQbxxZmknffrhukT9l7J3/SDBMXcWG++tQea9paMsT1Cj
+        dbz21qMJEk0gqowDFq3cta/HzOr/LXvymXEBBxVr798r
+X-Google-Smtp-Source: AKy350b53GGowlrJj3Qj5suXs1ON/M2gAxWORjYROJ4mBEOwZdzBmU7Uky4JdXT32164TgGdZf/21Q==
+X-Received: by 2002:a19:551a:0:b0:4dd:9931:c4f6 with SMTP id n26-20020a19551a000000b004dd9931c4f6mr3506834lfe.16.1679912637208;
+        Mon, 27 Mar 2023 03:23:57 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id r28-20020ac252bc000000b004e9cad1cd7csm3530126lfm.229.2023.03.27.03.23.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 03:23:56 -0700 (PDT)
+Message-ID: <d3456d31-ce4a-f49e-4d46-f07d84968ccd@linaro.org>
+Date:   Mon, 27 Mar 2023 13:23:56 +0300
 MIME-Version: 1.0
-From:   Stella Jacob <stella@infob2bdata.com>
-Date:   Mon, 27 Mar 2023 05:23:42 -0500
-Message-ID: <CADH7MrEs0PJyG0QV+-cUfZDB+jOfrSTc1qwjxXC2WCrpY-ynNQ@mail.gmail.com>
-Subject: RE: 50k+Verified HIMSS Healthcare Email Lists-2023
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        FILL_THIS_FORM,FILL_THIS_FORM_LONG,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 11/11] arm64: dts: qcom: sdm845-xiaomi-beryllium: correct
+ compatible
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230326155753.92007-1-krzysztof.kozlowski@linaro.org>
+ <20230326155753.92007-11-krzysztof.kozlowski@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230326155753.92007-11-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 26/03/2023 18:57, Krzysztof Kozlowski wrote:
+> Tianma FHD panel is supposed to be used with fallback compatible:
+> 
+>    sdm845-xiaomi-beryllium-tianma.dtb: panel@0: compatible: ['tianma,fhd-video'] is too short
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-tianma.dts | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 
-Would you be interested in acquiring HIMSS Global Health Conference
-Attendees Email List 2023?
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-List contains: Company Name, Contact Name, First Name, Middle Name,
-Last Name, Title, Address, Street, City, Zip code, State, Country,
-Telephone, Email address and more,
+-- 
+With best wishes
+Dmitry
 
-No of Contacts: - 50,964
-Cost: $ 2,652
-
- Looking forward for your response,
-
-Kind Regards,
-Stella Jacob
-Marketing Coordinator
-
- if you don=E2=80=99t wish to receive further any email please reply us wit=
-h
-sub line =E2=80=98leave out=E2=80=99
