@@ -2,154 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD4D6CAE0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E01976CAE17
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 21:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbjC0TCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 15:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
+        id S232487AbjC0TES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 15:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjC0TCJ (ORCPT
+        with ESMTP id S229946AbjC0TEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:02:09 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E783C1BDF;
-        Mon, 27 Mar 2023 12:02:07 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RHuJNr030758;
-        Mon, 27 Mar 2023 19:01:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=fcRMmpHYtxnemVock2fj1N7kRtm6iRUFjEOHQeXSKqg=;
- b=ebe+wLCbAUs5BpvRWX7R2XLnpe8c4ddFFWA6N6p0TziWVZknuE5fP21LCJF0R6V6IZuX
- CNUIM1vg27guQyp8XeBJkEKIDV7Ron92qm+VuTxW2QJNsaSt0k/zz9n6BhJfeCCsRMFl
- 788C/tCA5MDlAzGx1YsWWPwrQbDaxXJbHQ4fr47deCa4r9MAYpmUhYPgy0Nkq24iolDi
- Q29WlKy2FruQrvyWnWKyHCVjhFzV1DiNgK2M6wBUjysU17d+nz+Ctif2ZLZQ2e8wVD90
- xo7INkCmB9SkB9N0yDsT80bm9tpGI1wpvKFH554vr/BWCt5hq4vcWZpfCGjmZ8rg4A3c CQ== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pkfyvhevs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 19:01:56 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32RHXeZ1032115;
-        Mon, 27 Mar 2023 19:01:55 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3phrk74pjg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 19:01:55 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32RJ1sKc15139408
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Mar 2023 19:01:54 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9C7BF58055;
-        Mon, 27 Mar 2023 19:01:54 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BACC058043;
-        Mon, 27 Mar 2023 19:01:53 +0000 (GMT)
-Received: from [9.65.211.237] (unknown [9.65.211.237])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 27 Mar 2023 19:01:53 +0000 (GMT)
-Message-ID: <f99a2e40-abd0-699e-d764-0351bd0b2ff5@linux.ibm.com>
-Date:   Mon, 27 Mar 2023 14:01:53 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 2/4] doc: Add Atmel AT30TSE serial eeprom
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        arnd@arndb.de, linux-aspeed@lists.ozlabs.org,
-        gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org
-References: <20230321151642.461618-1-eajames@linux.ibm.com>
- <20230321151642.461618-3-eajames@linux.ibm.com>
- <6d4cf513-0787-6b39-8d38-30484be7ddff@linaro.org>
- <baf7ad36-0410-3063-7960-8dd7040fb8fd@linux.ibm.com>
- <5993d93e-f57b-51aa-85a3-f58ca0cf846d@linux.ibm.com>
- <20230327151802.GA3485600-robh@kernel.org>
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <20230327151802.GA3485600-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: e5URi3DU3HIyHNCfg0CU-597uFbpicow
-X-Proofpoint-ORIG-GUID: e5URi3DU3HIyHNCfg0CU-597uFbpicow
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 27 Mar 2023 15:04:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7401FEC;
+        Mon, 27 Mar 2023 12:04:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB723B818A4;
+        Mon, 27 Mar 2023 19:04:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADE7DC4339B;
+        Mon, 27 Mar 2023 19:04:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679943851;
+        bh=5gBuPNoKep58jZJZ2A7T/PwMZj21euhJkbbmerZDQl8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sw05c/rO4PxHWF3R2aaZ8OKUInpF3cxm0e2+Sf69qvtnKH7XVIWehtO+3owXuSiWF
+         /3uDucZMvDBifEbDl692VTOoJYS5ymNBir9tdKub8ik2q24652nJyuku4MxlrXy5L4
+         tcxksh1WgwNRFg6WrWS1c8CbauK+WWYM0zzn6rNLqudqNOXY6luQ4G0jWIZ0sICBpx
+         4CuK4QQTdiiLPx8W7EKm+peW4l/HiVM36ekjeYBA81SMIugfL6wG1/j5ur1VvU/5Rr
+         2ucsB8JgRMx5QSCz+2ug8KOc95Pu5Pnc1OnGZU7Etjzgm5jyx4XHdEN9Muk507tncb
+         TJFbuhGiN+vjQ==
+Received: by mail-lf1-f41.google.com with SMTP id c29so12796902lfv.3;
+        Mon, 27 Mar 2023 12:04:11 -0700 (PDT)
+X-Gm-Message-State: AAQBX9fRYwA2dZ2DIPj3vRfcMTuqygjOaKwOMFL2/V+7oFY4j+T2TLSy
+        XzKMjOPAIHk2Cxa/VVdTCfb5vxscN9DzBFhbuqc=
+X-Google-Smtp-Source: AKy350aI7otTUFAj1Lu3xkTRCygHh6+IkNJ0FCb50NrI4XbsKhMraNZsmBGv5AeouqLYd6UZy//NWILZAo5bQ+khyDY=
+X-Received: by 2002:ac2:5dd7:0:b0:4e8:5f14:20fb with SMTP id
+ x23-20020ac25dd7000000b004e85f1420fbmr3873834lfq.3.1679943849639; Mon, 27 Mar
+ 2023 12:04:09 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 phishscore=0 priorityscore=1501 adultscore=0 malwarescore=0
- mlxlogscore=999 bulkscore=0 clxscore=1011 spamscore=0 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303270152
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230326092208.13613-1-laoar.shao@gmail.com>
+In-Reply-To: <20230326092208.13613-1-laoar.shao@gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 27 Mar 2023 12:03:56 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW43EiH0tVKU8s+JwV_V6EBETTDyXsAmMzAftpVtcgLHag@mail.gmail.com>
+Message-ID: <CAPhsuW43EiH0tVKU8s+JwV_V6EBETTDyXsAmMzAftpVtcgLHag@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 3/27/23 10:18, Rob Herring wrote:
-> On Tue, Mar 21, 2023 at 10:55:43AM -0500, Eddie James wrote:
->> On 3/21/23 10:46, Eddie James wrote:
->>> On 3/21/23 10:19, Krzysztof Kozlowski wrote:
->>>> On 21/03/2023 16:16, Eddie James wrote:
->>>>> The AT30TSE is compatible with the JEDEC EE1004 standard. Document it
->>>>> as a trivial I2C device.
->>>>>
->>>>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->>>> Use subject prefixes matching the subsystem (which you can get for
->>>> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
->>>> your patch is touching).
->>>
->>> Oops, sorry, will fix.
->>>
->>>
->>>>> ---
->>>>>    Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->>>>>    1 file changed, 2 insertions(+)
->>>>>
->>>>> diff --git
->>>>> a/Documentation/devicetree/bindings/trivial-devices.yaml
->>>>> b/Documentation/devicetree/bindings/trivial-devices.yaml
->>>>> index 6f482a254a1d..43e26c73a95f 100644
->>>>> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
->>>>> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
->>>>> @@ -47,6 +47,8 @@ properties:
->>>>>              - ams,iaq-core
->>>>>                # i2c serial eeprom (24cxx)
->>>>>              - at,24c08
->>>>> +            # i2c serial eeprom (EE1004 standard)
->>>> AT30TSE?
->>>>
->>>>> +          - atmel,at30tse
->>>> Microchip does not find anything on AT30TSE. Are you sure this is the
->>>> model name?
->>>
->>> Yes: https://www.microchip.com/content/dam/mchp/documents/OTH/ProductDocuments/DataSheets/Atmel-8868-DTS-AT30TSE004A-Datasheet.pdf
->>>
->>>
->>> Maybe it's actually an 8868? Or should I include the 004A as well?
->>
->> I found some other AT30TSE (AT30TSE752A for example) devices that do not
->> appear compatible with the EE1004 standard, so I will include the full model
->> number.
-> If this standard is sufficiently complete, then you might want a EE1004
-> fallback compatible. Complete would mean power supply(ies) and any extra
-> i/o are defined and the exact device model is discoverable.
-
-
-I don't think this standard would meet those requirements unfortunately. 
-Thanks for the suggestion!
-
-Eddie
-
-
+On Sun, Mar 26, 2023 at 2:22=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com> =
+wrote:
 >
-> Rob
+> Currently only CAP_SYS_ADMIN can iterate BPF object IDs and convert IDs
+> to FDs, that's intended for BPF's security model[1]. Not only does it
+> prevent non-privilidged users from getting other users' bpf program, but
+> also it prevents the user from iterating his own bpf objects.
+>
+> In container environment, some users want to run bpf programs in their
+> containers. These users can run their bpf programs under CAP_BPF and
+> some other specific CAPs, but they can't inspect their bpf programs in a
+> generic way. For example, the bpftool can't be used as it requires
+> CAP_SYS_ADMIN. That is very inconvenient.
+
+Agreed that it is important to enable tools like bpftool without
+CAP_SYS_ADMIN. However, I am not sure whether we need a new
+namespace for this. Can we reuse some existing namespace for this?
+
+If we do need a new namespace, maybe we should share some effort
+with tracer namespace proposal [1]?
+
+Thanks,
+Song
+
+[1] https://lpc.events/event/16/contributions/1237/
