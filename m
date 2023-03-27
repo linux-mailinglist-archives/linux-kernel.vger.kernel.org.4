@@ -2,231 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449F26CA274
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4E16CA278
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 13:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbjC0Lcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 07:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S232240AbjC0Ldo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 07:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjC0Lcx (ORCPT
+        with ESMTP id S229475AbjC0Ldm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 07:32:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44447BD;
-        Mon, 27 Mar 2023 04:32:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFB05611A8;
-        Mon, 27 Mar 2023 11:32:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D133DC433EF;
-        Mon, 27 Mar 2023 11:32:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679916771;
-        bh=xzeQeF7VDSQfdcn9lbYTzhWKS+0PyOIQvXJKv/d68Gk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TdX+KXEEIWmMG1tH70EnTTpYWpUdldoj4gv9jg3J7lO37Vgi6v0uVF+5/YLW+HyYS
-         3QPO8+DC1AT2tvbD1QwE3lXTmmJsc4ATvx181cnz+aJj7C0TcCOU9vmu0an5oYiAxo
-         SDnBIR9FrdqXoH6QO1fv2cnE1+uu/jsdwWirE3gKVUUoci+TWkL0ckJnBlN8E0CyJs
-         5PDiTATBqfh2mCrtEx6sr6dZcZUBvCGbojJGOgmGYLOFHofEHUHX4lQfzR/A5C/Q8j
-         OEBjW3W69854sv5W3sEX0QNtHIDqAKvnoeU1yVQJ6widVDSPKpQLv28c4L4oeMFeMe
-         tP2F9loYj8cqg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5861E4052D; Mon, 27 Mar 2023 08:32:48 -0300 (-03)
-Date:   Mon, 27 Mar 2023 08:32:48 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH] perf bench syscall: Add fork syscall benchmark
-Message-ID: <ZCF+4NQzctwgqxhM@kernel.org>
-References: <1679381821-22736-1-git-send-email-yangtiezhu@loongson.cn>
- <CAM9d7chTUDnrwrOnOS-CDBjNnuyLcSx05agDS4S7DgJ2Sj_9vw@mail.gmail.com>
+        Mon, 27 Mar 2023 07:33:42 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E884B3C03
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 04:33:40 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RB9SfA025655;
+        Mon, 27 Mar 2023 11:33:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=/W5deOdsFgWeGXmULFNjF9JgASqMyj1Umh0xpdv/GbQ=;
+ b=FXpAm1QimbrfNyg8gHVofQhA757h+b8L65e4cwEqsGWTW2vZcJ5GE5iPmUI3w2cwMDqC
+ Rrhf5iRB3d8HVCjoxWJdu9eS7H8HWxAlxCg7qr7pR5xEvUa8U8JTM2yJU9EHqLT+6y2n
+ M9Af1SHU/AW2FJZcSd5WT+ry+8E32grCGL39Aqna6yM3bjpBEvcVXQ6fQBG0U9W6Srqn
+ msUB9qXAMrp3PF9HPr+UHgDdGkCqEtPyl4S12YH8Kt+XoI+RMsa6aMa/CiuXNOCVi0aY
+ 8Wm9Vpdo+mWBwjcxu6TQqJZYDICtCa9Xm1Qhw3L6FEN59+/8lhn8Ye3EHiJWFJ+FH+qo cg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjadkxnvh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 11:33:31 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32RACUF2004747;
+        Mon, 27 Mar 2023 11:33:30 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjadkxnuj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 11:33:30 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32QJfqfx017824;
+        Mon, 27 Mar 2023 11:33:28 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3phrk6tb7e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 11:33:28 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32RBXOtk56164720
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Mar 2023 11:33:24 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 82E142004B;
+        Mon, 27 Mar 2023 11:33:24 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D3DC020043;
+        Mon, 27 Mar 2023 11:33:22 +0000 (GMT)
+Received: from r223l.aus.stglabs.ibm.com (unknown [9.3.109.14])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Mar 2023 11:33:22 +0000 (GMT)
+From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Fabiano Rosas <farosas@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Kautuk Consul <kconsul@linux.vnet.ibm.com>
+Subject: [PATCH v5] KVM: PPC: Book3S HV: kvmppc_hv_entry: remove .global scope
+Date:   Mon, 27 Mar 2023 07:33:20 -0400
+Message-Id: <20230327113320.3407491-1-kconsul@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAM9d7chTUDnrwrOnOS-CDBjNnuyLcSx05agDS4S7DgJ2Sj_9vw@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FmLFMqzSdOazMwgFKgpoP-5yWvgqnjBV
+X-Proofpoint-ORIG-GUID: C1IwOKotwJ3PLKy910W3rSAwwFlW26L-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ suspectscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0 impostorscore=0
+ priorityscore=1501 mlxlogscore=999 clxscore=1015 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303270090
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Mar 24, 2023 at 09:31:25PM -0700, Namhyung Kim escreveu:
-> Hello,
-> 
-> On Mon, Mar 20, 2023 at 11:57 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
-> >
-> > This is a follow up patch for the execve bench which is actually
-> > fork + execve, it makes sense to add the fork syscall benchmark
-> > to compare the execve part precisely.
-> >
-> > Some archs have no __NR_fork definition which is used only as a
-> > check condition to call test_fork(), let us just define it as -1
-> > to avoid build error.
-> >
-> > Suggested-by: Namhyung Kim <namhyung@kernel.org>
-> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> 
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
+kvmppc_hv_entry isn't called from anywhere other than
+book3s_hv_rmhandlers.S itself. Removing .global scope for
+this function and annotating it with SYM_CODE_START_LOCAL
+and SYM_CODE_END.
 
-Thanks, applied.
+Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
+---
+ arch/powerpc/kvm/book3s_hv_rmhandlers.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-- Arnaldo
-
+diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+index acf80915f406..0a9781192b86 100644
+--- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
++++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+@@ -502,8 +502,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
+  *                                                                            *
+  *****************************************************************************/
  
-> Thanks,
-> Namhyung
-> 
-> 
-> > ---
-> >  tools/arch/x86/include/uapi/asm/unistd_32.h |  4 ++--
-> >  tools/arch/x86/include/uapi/asm/unistd_64.h |  3 +++
-> >  tools/perf/bench/bench.h                    |  1 +
-> >  tools/perf/bench/syscall.c                  | 35 +++++++++++++++++++++++++++++
-> >  tools/perf/builtin-bench.c                  |  1 +
-> >  5 files changed, 42 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/arch/x86/include/uapi/asm/unistd_32.h b/tools/arch/x86/include/uapi/asm/unistd_32.h
-> > index 2712d5e..b8ddfc4 100644
-> > --- a/tools/arch/x86/include/uapi/asm/unistd_32.h
-> > +++ b/tools/arch/x86/include/uapi/asm/unistd_32.h
-> > @@ -1,6 +1,6 @@
-> >  /* SPDX-License-Identifier: GPL-2.0 */
-> > -#ifndef __NR_execve
-> > -#define __NR_execve 11
-> > +#ifndef __NR_fork
-> > +#define __NR_fork 2
-> >  #endif
-> >  #ifndef __NR_getppid
-> >  #define __NR_getppid 64
-> > diff --git a/tools/arch/x86/include/uapi/asm/unistd_64.h b/tools/arch/x86/include/uapi/asm/unistd_64.h
-> > index a6f7fe8..f70d2cad 100644
-> > --- a/tools/arch/x86/include/uapi/asm/unistd_64.h
-> > +++ b/tools/arch/x86/include/uapi/asm/unistd_64.h
-> > @@ -1,4 +1,7 @@
-> >  /* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef __NR_fork
-> > +#define __NR_fork 57
-> > +#endif
-> >  #ifndef __NR_execve
-> >  #define __NR_execve 59
-> >  #endif
-> > diff --git a/tools/perf/bench/bench.h b/tools/perf/bench/bench.h
-> > index e438931..edfc257 100644
-> > --- a/tools/perf/bench/bench.h
-> > +++ b/tools/perf/bench/bench.h
-> > @@ -23,6 +23,7 @@ int bench_sched_messaging(int argc, const char **argv);
-> >  int bench_sched_pipe(int argc, const char **argv);
-> >  int bench_syscall_basic(int argc, const char **argv);
-> >  int bench_syscall_getpgid(int argc, const char **argv);
-> > +int bench_syscall_fork(int argc, const char **argv);
-> >  int bench_syscall_execve(int argc, const char **argv);
-> >  int bench_mem_memcpy(int argc, const char **argv);
-> >  int bench_mem_memset(int argc, const char **argv);
-> > diff --git a/tools/perf/bench/syscall.c b/tools/perf/bench/syscall.c
-> > index fe79f7f..ea4dfc07 100644
-> > --- a/tools/perf/bench/syscall.c
-> > +++ b/tools/perf/bench/syscall.c
-> > @@ -18,6 +18,10 @@
-> >  #include <unistd.h>
-> >  #include <stdlib.h>
-> >
-> > +#ifndef __NR_fork
-> > +#define __NR_fork -1
-> > +#endif
-> > +
-> >  #define LOOPS_DEFAULT 10000000
-> >  static int loops = LOOPS_DEFAULT;
-> >
-> > @@ -31,6 +35,23 @@ static const char * const bench_syscall_usage[] = {
-> >         NULL
-> >  };
-> >
-> > +static void test_fork(void)
-> > +{
-> > +       pid_t pid = fork();
-> > +
-> > +       if (pid < 0) {
-> > +               fprintf(stderr, "fork failed\n");
-> > +               exit(1);
-> > +       } else if (pid == 0) {
-> > +               exit(0);
-> > +       } else {
-> > +               if (waitpid(pid, NULL, 0) < 0) {
-> > +                       fprintf(stderr, "waitpid failed\n");
-> > +                       exit(1);
-> > +               }
-> > +       }
-> > +}
-> > +
-> >  static void test_execve(void)
-> >  {
-> >         const char *pathname = "/bin/true";
-> > @@ -71,6 +92,12 @@ static int bench_syscall_common(int argc, const char **argv, int syscall)
-> >                 case __NR_getpgid:
-> >                         getpgid(0);
-> >                         break;
-> > +               case __NR_fork:
-> > +                       test_fork();
-> > +                       /* Only loop 10000 times to save time */
-> > +                       if (i == 10000)
-> > +                               loops = 10000;
-> > +                       break;
-> >                 case __NR_execve:
-> >                         test_execve();
-> >                         /* Only loop 10000 times to save time */
-> > @@ -92,6 +119,9 @@ static int bench_syscall_common(int argc, const char **argv, int syscall)
-> >         case __NR_getpgid:
-> >                 name = "getpgid()";
-> >                 break;
-> > +       case __NR_fork:
-> > +               name = "fork()";
-> > +               break;
-> >         case __NR_execve:
-> >                 name = "execve()";
-> >                 break;
-> > @@ -143,6 +173,11 @@ int bench_syscall_getpgid(int argc, const char **argv)
-> >         return bench_syscall_common(argc, argv, __NR_getpgid);
-> >  }
-> >
-> > +int bench_syscall_fork(int argc, const char **argv)
-> > +{
-> > +       return bench_syscall_common(argc, argv, __NR_fork);
-> > +}
-> > +
-> >  int bench_syscall_execve(int argc, const char **argv)
-> >  {
-> >         return bench_syscall_common(argc, argv, __NR_execve);
-> > diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
-> > index 814e9af..d0fcc3c 100644
-> > --- a/tools/perf/builtin-bench.c
-> > +++ b/tools/perf/builtin-bench.c
-> > @@ -53,6 +53,7 @@ static struct bench sched_benchmarks[] = {
-> >  static struct bench syscall_benchmarks[] = {
-> >         { "basic",      "Benchmark for basic getppid(2) calls",         bench_syscall_basic     },
-> >         { "getpgid",    "Benchmark for getpgid(2) calls",               bench_syscall_getpgid   },
-> > +       { "fork",       "Benchmark for fork(2) calls",                  bench_syscall_fork      },
-> >         { "execve",     "Benchmark for execve(2) calls",                bench_syscall_execve    },
-> >         { "all",        "Run all syscall benchmarks",                   NULL                    },
-> >         { NULL,         NULL,                                           NULL                    },
-> > --
-> > 2.1.0
-> >
-
+-.global kvmppc_hv_entry
+-kvmppc_hv_entry:
++SYM_CODE_START_LOCAL(kvmppc_hv_entry)
+ 
+ 	/* Required state:
+ 	 *
+@@ -940,6 +939,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_HAS_PPR)
+ 	ld	r4, VCPU_GPR(R4)(r4)
+ 	HRFI_TO_GUEST
+ 	b	.
++SYM_CODE_END(kvmppc_hv_entry)
+ 
+ secondary_too_late:
+ 	li	r12, 0
 -- 
+2.39.2
 
-- Arnaldo
