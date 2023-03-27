@@ -2,173 +2,807 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C411A6C9AE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 07:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AD76C9AE8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Mar 2023 07:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbjC0Fej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 01:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
+        id S231950AbjC0Fi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 01:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjC0Feh (ORCPT
+        with ESMTP id S230309AbjC0Fiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 01:34:37 -0400
-Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6533449C
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Mar 2023 22:34:35 -0700 (PDT)
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32QLWGc0027719;
-        Sun, 26 Mar 2023 22:34:18 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=/81IUI0e5gw2xPqM1tw3Ys8Yy+ICOt08deLUtyoM+V0=;
- b=PcoSBMDiOxOY6U3qh7zWvRI99kW61Kuqkz6pxFMMqnz3xArfpIBOoanwA9d3ViRgHsqB
- 0NtgNKikU4fQdxskGg4Cfg0jMURgJudVE1/VB08BC/hkuGR8fF2e2PBrnm9btyTqY+2m
- MFOoIC9kiaVRwE15rv1MeUnv7vXALyzIdJIUL4BI8YACWaB/kwBXaZsGDPqVRuDm5AED
- Qqm3mJffjGadhODzwDmij0GzlAY/B5TGYmc434ByI4h0TdwdtPkw7VvM30yRtGX73FhR
- DsArW9MunGePaHqzaHikQIZdMneBijzey/Zne7p61JE2zEIINezZKPF2WgQCyZdODBPc kw== 
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3phvj0e1je-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 26 Mar 2023 22:34:18 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HhG4bHS5Yq02xLT02sxwVtJnCWOWsY5kSgUqK6AyewUFV3rN7IlKcxVwI08QzPorciT/JoG8yBJfqAVS5csSFpltOaDaCro3qsh+D+buOmPNJsCTfKvmu8RlUBLI8E4LcgCuIY53JSxMo2lzLbz6gfbkcUJHT5FVimpZybQ3lEsjPYZRDSOjGJofu1Of8FaR3VFyRIfYqZMAogpBNCNwpUUejshuUtzV6UPW3GhQgoK5LSlYmkOEZvX99LQRhvBBmZMniJalsW6ebg9T2N8nL1xK+ZduNGM2ogmkKodtFxb8NxBYm+yZ6jstoS1nsILhxy+mlLMPsE3LVHzCkHyBBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/81IUI0e5gw2xPqM1tw3Ys8Yy+ICOt08deLUtyoM+V0=;
- b=eJWUIi73I9CrhWJKaKzmnwdkqs0skPl2M74n47UOwEF/l2G3zIhOfey6PTnllxA3kQIzpnljiIxDBLi24N/CobprKCQkDB7CduT6QteC+Ei6emf1ql+7pv4WWjtlD26su9rcOVZh6MJ7nIu8s0jRyyqmEkluaIAENTnlZOl3dutLyItpRCVd/q3S4CWOyXOyHb2Q1A/o73jEkoLDqsoEQo3W3J5BToxwM9c+jZ5rzqQPERr4YVILBwJzQx7wQI2O18H2l7G79zadtCDwrT8zGXvCI+KE/+QbuDqnJlTnZKrFlDXX1DMBZKu2/v6dt/XDdnDYtsJDZO4QcgvoePMamg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/81IUI0e5gw2xPqM1tw3Ys8Yy+ICOt08deLUtyoM+V0=;
- b=W8TUe14CgIwPctgH7oYH4DV5Y0y2YJzRjplrEgWhT3tqm+JQ8ZGB0jYWQSywMn6Yhy1p5G5BBQb6EaRFPrn2ATT4feCXJDv+WefukrWusrSUUvO3EXs2itPpWsWtN2QPyzZJL9E9gH0jVVqIHdraBXwBHY1DAvs+7XvdF99qz1Y=
-Received: from DM6PR07MB6154.namprd07.prod.outlook.com (2603:10b6:5:17e::20)
- by SJ0PR07MB9666.namprd07.prod.outlook.com (2603:10b6:a03:4e2::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Mon, 27 Mar
- 2023 05:34:09 +0000
-Received: from DM6PR07MB6154.namprd07.prod.outlook.com
- ([fe80::6d9d:8f21:f49b:6acc]) by DM6PR07MB6154.namprd07.prod.outlook.com
- ([fe80::6d9d:8f21:f49b:6acc%5]) with mapi id 15.20.6178.041; Mon, 27 Mar 2023
- 05:34:08 +0000
-From:   Swapnil Kashinath Jakhade <sjakhade@cadence.com>
-To:     Roger Quadros <rogerq@kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "kishon@kernel.org" <kishon@kernel.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Milind Parab <mparab@cadence.com>
-Subject: RE: [PATCH] phy: cadence: Sierra: Add PCIe + SGMII PHY multilink
- configuration
-Thread-Topic: [PATCH] phy: cadence: Sierra: Add PCIe + SGMII PHY multilink
- configuration
-Thread-Index: AQHZRTVZZt7PSGILJ0qEJdebsUpxC67YBBOAgDZMgeA=
-Date:   Mon, 27 Mar 2023 05:34:08 +0000
-Message-ID: <DM6PR07MB615438BAA6DA35E5FFE4737FC58B9@DM6PR07MB6154.namprd07.prod.outlook.com>
-References: <20230220141216.25326-1-sjakhade@cadence.com>
- <c7bdaf8f-d377-9fdc-c11a-747c65775b3c@kernel.org>
-In-Reply-To: <c7bdaf8f-d377-9fdc-c11a-747c65775b3c@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcc2pha2hhZGVcYXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRiYTI5ZTM1Ylxtc2dzXG1zZy1mZDhhN2ZjNS1jYzYwLTExZWQtODVlNC1jOGY3NTA0NDIyZDhcYW1lLXRlc3RcZmQ4YTdmYzctY2M2MC0xMWVkLTg1ZTQtYzhmNzUwNDQyMmQ4Ym9keS50eHQiIHN6PSI5NTEiIHQ9IjEzMzI0MzY4ODQ3MTI5MzAwNyIgaD0icU9ieGQwSTFSVlFuTXhBSU12QjRWVk5kZVR3PSIgaWQ9IiIgYmw9IjAiIGJvPSIxIi8+PC9tZXRhPg==
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR07MB6154:EE_|SJ0PR07MB9666:EE_
-x-ms-office365-filtering-correlation-id: b3b97cdf-9837-4bea-4137-08db2e84e320
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: betnF/mc+RAopgT/vycFl+Nfo3Pkpg5oUrz/3UG59MoqqCRtcgi9akcC9zy8xZ69ivFEgnHgXvVbDV5Plh3gXkiXYdjduXJjallX8c1WOUo4YeHKVw4SAzVIhuaWnVGapS1dpif/D9VVPanuDIFGlXaQ0tvoT3iFgOEUxaT55qL1WGJlshu7BswBr6pCq9qduwr0K1WM/O4j38Vnpp1Vnlyz9Rm6PyjC1chth4P6njmb9nSOvVj9v3as5RUYmF1x5mPJ+XZrGGE5eUwWWhOQJbTUeQ7In2wBWJfLcLLVVL0FUtrb40DiWgYTGorfkvBXWgVuQv6PuGat3dAynCHailrv5Xz9wFhmNdK7DBy8FMY/jlheho7YqcTGVKv0WUhV5UG/Tdur3CSN3Xw/Ekgs7Fm4HCCo1KG0+X57eSdaHEZnDcFaHTLOlNl/h6O8AwnVLITq1Y36AM1Vkl8tn7MLOOdS3CwKCmzVIUhCsqWu06gKKVHhZ08tPO4VMetzm1KKeiL6xGX+gZ+V2koyp427XO1pam6bFb5ABk+4ccETrQQ4nyeqMH/VZqdTrH6KcUmWpYAmeL/I7akgqHaQMtHLz+ge17XY1Eln3NmTTEXctV71n1OBTfzkn24PYW92wPTR6b/Uwr/6oHnHFdp9X8wr/85hMoudfxLB5evlVfx+hc4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR07MB6154.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(136003)(396003)(39860400002)(376002)(36092001)(451199021)(8676002)(83380400001)(52536014)(4326008)(53546011)(26005)(6506007)(8936002)(7696005)(186003)(9686003)(478600001)(64756008)(33656002)(66476007)(86362001)(110136005)(71200400001)(66556008)(66946007)(4744005)(38070700005)(316002)(66446008)(55016003)(38100700002)(122000001)(41300700001)(2906002)(5660300002)(76116006)(107886003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WXhPemJOYlhwRlNKTTJOTVRHWURveUxFQzlCcUxXOVRGVkZSU2lCaXVrc1FI?=
- =?utf-8?B?RmFzT2ZHUXhmcWZZQVhNTUhpUXdldGZMdGV1aGkvQUdNWEwyejk2dm9rSURr?=
- =?utf-8?B?WVVkclZtWWtRRXBCUHE3RGpWYStFbWFvZkNUbThORkp1M2E1dDJrYTZwT2NI?=
- =?utf-8?B?SjY2S3RTL29WcWVLanNaMlh6UnZFRjRPUUI4M3FNa3V3dTEyOHFtS1ZuZTRO?=
- =?utf-8?B?ZTVBSHNWQXJlWlVpdVNPY0lCNkM0YWxWYkFSOEpMTzNWS09DeEk2WEtncG44?=
- =?utf-8?B?a3YxeERGb0F4bDFseGwyVlJZZnJQZUxuSTFRTXN4VkZ0UGo1b0F0UGc4V0lv?=
- =?utf-8?B?OEFWdy9VSDNtclJRYVJUcDlOckRGd2xnOUZJTVhHbWt4dWx1VlJyL1NiL3R2?=
- =?utf-8?B?N1ZOdWpxT3N4Tk1WQmpuZlJmZFNlY3VQUFhLd3QwWlloMjFzdGJZdjlvWmlI?=
- =?utf-8?B?a0tQWm15Z1N5Z09MeUUrNnFiNWlqc3c5MktucktvbW5jcWI0TlIzVDJ1Y1NO?=
- =?utf-8?B?b3A4aHpiWVRneG1NOTdZOUlsb0V3T2R3anVhM001TEFvdVYwTUxxR24vQTQv?=
- =?utf-8?B?RkRicGNYWmxJU3RNMzA5dlR1aWtkS3hBQ2xLR0VncXF5Wi9tTzg4MjVqRURn?=
- =?utf-8?B?RWMxSG9QaDgrMWdIRVBocDZhSDkrc2EwUFhNcHVMOThhd2VYcGYzVnYzbWJR?=
- =?utf-8?B?ZU14dUp0K2NsYlBlV045WEc2NXFrYlM5Z0hLTUtzcWNmaVVCVnI0NTdZRFYy?=
- =?utf-8?B?ajV3RFpPL1d5dkNydlJQNmRMTXB2eE16d1VwMlZWS3BLWDdOczdKaURXWlN3?=
- =?utf-8?B?bHcreWlrVFFQNWdVZ21VQXBTZ1RzYzFwQXhMU0VOZkxpbW83UTNPYnhlWW1X?=
- =?utf-8?B?dHJ5MWsrMWJRUitRZ1Nkc09vdktMckFlRlllTmZxWVBXSlNQN0svSEZnK0sw?=
- =?utf-8?B?aSs3ZU8vQm1zbDE5REt3aWtlSXp6c0tidldEZ3BPSWJ6SFNWazRpWS9waUIv?=
- =?utf-8?B?WWtEZE5UVkQ1WTlwMURvU0ZWeGJoeWlGQzJkRDNORzhvaTgrQWE4L2xzQkNr?=
- =?utf-8?B?bDV3b05KV1NKa3VTK0JEWm0rYmNqUkd6UytoRDJkQlZNanNxR1FERlhORE42?=
- =?utf-8?B?anVnOTJGeHRWM2xqQjVCQVg1alBMeW5ERW44MEhGNjF5YWNnV2h6TUFlV25w?=
- =?utf-8?B?Q1ZLNUpFQXZMWEloUGNkTGlHRExOcG5QWnJqb1VBZWdVV2lFOThpYkVWTDI1?=
- =?utf-8?B?SWgrdzZDT2drOC90T29SSDFsS3JaaFcrOGdmSHZoc0dRRloveTl4dytZMjk1?=
- =?utf-8?B?Y09ydVp0cmtNZFRIUHk4SFIvMURBWVVFc2tDdkdsZjNpYmpldyt6NXRBRkd0?=
- =?utf-8?B?TDRXc1NPWFRyb0FWR1h3b1ErSTA2MWlpMDk3UnhWcVkyWnFVVmk1NmlsZTRw?=
- =?utf-8?B?QmczaHhzdVpRWFEyaTBRenZkdWJpQURuOVltaHlXcG5LcEVjQVV4bVR5Y25V?=
- =?utf-8?B?SDVDeFdnUkxRd0pRUnZwanhKNnRpbEt2N2lTT1AvNXpuR3FFZzJMODJOQWJ1?=
- =?utf-8?B?dzJtR0toQnRzR2JwbjBtV1lrZTJiZTdiRzdxRVlscDdFK1BEc0E1M0pBWmR2?=
- =?utf-8?B?NzVhVXN6UitBcHFVcHZydC80bXdPN2VRRUxuRmQxK0ZOWWRkd2ZEVFNWeG5Q?=
- =?utf-8?B?Tm5RZElXWGdiWjUwcFlZdlhpckdoVThFTnNJaTB3MmhTV0ZuYmRLRlFTNG1M?=
- =?utf-8?B?NkV5YVdhRklLVU5qZkl6OVB4aDlUSWxKbGRoVnRaaFNCanNOaSt6Tm9KQm9Y?=
- =?utf-8?B?VXRCRDZyc1FZTzgwS25LbXo3S2hpOUxpYkdrK0c3WWp3Y1hCUElaQUU4emZa?=
- =?utf-8?B?d21KWURsN0RDM25pWE5QMXJoZUN0ZkMxYUlCdG5OSEJRWmd1Nm82dmVMVTA1?=
- =?utf-8?B?eGVVZnlKR3NDSWZlOWJPTG0vYlF2UG1LTm9VbnFnclc1akl4azRLa0NjWUdC?=
- =?utf-8?B?TkZCRzI4V1UvVTVTdjlOczBYY2Z4U21WNE0xWjg5eHhkRXNJbUZ5Tjl6OHl5?=
- =?utf-8?B?MmZIVFF4cnFGblBQbUt2T3V2VWREYWxkNXdrVVNtRjNWdTJtSmVjTThDdlln?=
- =?utf-8?B?bXNOSndvNmx6aWhnVzZPMHR4Nm52VUhrWkg0ZFhueUlHem4zZlJwTXVRRUVQ?=
- =?utf-8?B?cXc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 27 Mar 2023 01:38:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826184C01;
+        Sun, 26 Mar 2023 22:38:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EFC1B80DAC;
+        Mon, 27 Mar 2023 05:38:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4655C433D2;
+        Mon, 27 Mar 2023 05:38:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679895530;
+        bh=Yhb2RGYjg/g3c0wqYGwzgujjwyviDdmR0hflJF8Bga0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dMphlRGkOjzy2goSoW7ymBZEjRZ9qSvWG/AtZOyRTElak+e5fDVowtpqT1UU2BrbH
+         tGx8H4u1tlmeGexvd9QvaD8N7Ji8DfyuvfETvQ1CpcjPnNEBcdYME0P5vJbkGN9A+c
+         f0mhFxiFaw+KVjzYcv7ZOL1juwleZnFfDz/rfoHLFgJZj6Yy6eFK57lMNe/ibz3PoG
+         iTILb2Gftve7LOUj7kG7M8OJwlL7RN7ZVodWp3MgeuK+Mlf0CKCOc3bX/9KUozKuk7
+         bbsFC8+k5W/fMZ6/pETxEosuREL4Q6Kwp7oK8/lqbUnGnXhx4aPn8uGucPag8/Qu72
+         an22BHIWfb34Q==
+Date:   Mon, 27 Mar 2023 11:08:45 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 10/12] arm64: dts: qcom: Introduce the SC8180x platform
+Message-ID: <ZCEr5WnbvA2jkHLn@matsya>
+References: <20230325122444.249507-1-vkoul@kernel.org>
+ <20230325122444.249507-11-vkoul@kernel.org>
+ <bfc64e55-3c06-e36b-70cc-33a0303681be@linaro.org>
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR07MB6154.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3b97cdf-9837-4bea-4137-08db2e84e320
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Mar 2023 05:34:08.3534
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ze5zGTzRxzdGSdNi6C6qrCXqYBgr0qscvYRZQ90CgSUz3MvzY86EFslqEaWpl1k7wDJdrVZHzARhx9dQR5I8639kJ5okrE/Ig2vnrIIpnDI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR07MB9666
-X-Proofpoint-GUID: o39Dk0_if5inIDSMVdDH4Qn2TfDREtdO
-X-Proofpoint-ORIG-GUID: o39Dk0_if5inIDSMVdDH4Qn2TfDREtdO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 impostorscore=0
- priorityscore=1501 suspectscore=0 mlxlogscore=998 spamscore=0 mlxscore=0
- malwarescore=0 phishscore=0 adultscore=0 clxscore=1011 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303270046
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bfc64e55-3c06-e36b-70cc-33a0303681be@linaro.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgVmlub2QsDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUm9nZXIg
-UXVhZHJvcyA8cm9nZXJxQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IE1vbmRheSwgRmVicnVhcnkgMjAs
-IDIwMjMgOTo1MCBQTQ0KPiBUbzogU3dhcG5pbCBLYXNoaW5hdGggSmFraGFkZSA8c2pha2hhZGVA
-Y2FkZW5jZS5jb20+Ow0KPiB2a291bEBrZXJuZWwub3JnOyBraXNob25Aa2VybmVsLm9yZzsgbGlu
-dXgtcGh5QGxpc3RzLmluZnJhZGVhZC5vcmc7IGxpbnV4LQ0KPiBrZXJuZWxAdmdlci5rZXJuZWwu
-b3JnDQo+IENjOiBNaWxpbmQgUGFyYWIgPG1wYXJhYkBjYWRlbmNlLmNvbT4NCj4gU3ViamVjdDog
-UmU6IFtQQVRDSF0gcGh5OiBjYWRlbmNlOiBTaWVycmE6IEFkZCBQQ0llICsgU0dNSUkgUEhZIG11
-bHRpbGluaw0KPiBjb25maWd1cmF0aW9uDQo+IA0KPiBFWFRFUk5BTCBNQUlMDQo+IA0KPiANCj4g
-DQo+IA0KPiBPbiAyMC8wMi8yMDIzIDE2OjEyLCBTd2FwbmlsIEpha2hhZGUgd3JvdGU6DQo+ID4g
-QWRkIHJlZ2lzdGVyIHNlcXVlbmNlcyBmb3IgUENJZSArIFNHTUlJIFBIWSBtdWx0aWxpbmsgY29u
-ZmlndXJhdGlvbi4NCj4gPiBUaGlzIGhhcyBiZWVuIHZhbGlkYXRlZCBvbiBUSSBKNyBwbGF0Zm9y
-bXMuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBTd2FwbmlsIEpha2hhZGUgPHNqYWtoYWRlQGNh
-ZGVuY2UuY29tPg0KPiANCj4gUmV2aWV3ZWQtYnk6IFJvZ2VyIFF1YWRyb3MgPHJvZ2VycUBrZXJu
-ZWwub3JnPg0KDQpDb3VsZCB5b3UgcGxlYXNlIGNvbnNpZGVyIHJldmlld2luZyBhbmQgbWVyZ2lu
-ZyB0aGlzIHBhdGNoLg0KDQpUaGFua3MgJiByZWdhcmRzLA0KU3dhcG5pbA0K
+On 25-03-23, 13:34, Konrad Dybcio wrote:
+> 
+> 
+> On 25.03.2023 13:24, Vinod Koul wrote:
+> > From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > 
+> > Introduce a base dtsi for the Qualcomm SC8180x platform, with CPUs,
+> > global clock controller, SMMU, rpmh clocks, rpmh power-domains, CPUfreq,
+> > QUP blocks, UFS, USB, ADSP, CDSP and MPSS and WiFi.
+> > 
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sc8180x.dtsi | 3950 +++++++++++++++++++++++++
+> >  1 file changed, 3950 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/qcom/sc8180x.dtsi
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
+> > new file mode 100644
+> > index 000000000000..4d4ee6bc91e5
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
+> > @@ -0,0 +1,3950 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause
+> > +/*
+> > + * Copyright (c) 2017-2019, The Linux Foundation. All rights reserved.
+> > + * Copyright (c) 2020-2023, Linaro Limited
+> > + */
+> > +
+> > +#include <dt-bindings/clock/qcom,dispcc-sm8250.h>
+> > +#include <dt-bindings/clock/qcom,gcc-sc8180x.h>
+> > +#include <dt-bindings/clock/qcom,gpucc-sm8150.h>
+> > +#include <dt-bindings/clock/qcom,rpmh.h>
+> > +#include <dt-bindings/interconnect/qcom,osm-l3.h>
+> > +#include <dt-bindings/interconnect/qcom,sc8180x.h>
+> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +#include <dt-bindings/power/qcom-rpmpd.h>
+> > +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
+> > +#include <dt-bindings/thermal/thermal.h>
+> > +
+> > +/ {
+> > +	interrupt-parent = <&intc>;
+> > +
+> > +	#address-cells = <2>;
+> > +	#size-cells = <2>;
+> > +
+> > +	clocks {
+> > +		xo_board_clk: xo-board {
+> > +			compatible = "fixed-clock";
+> > +			#clock-cells = <0>;
+> > +			clock-frequency = <38400000>;
+> > +		};
+> > +
+> > +		sleep_clk: sleep-clk {
+> > +			compatible = "fixed-clock";
+> > +			#clock-cells = <0>;
+> > +			clock-frequency = <32764>;
+> > +			clock-output-names = "sleep_clk";
+> > +		};
+> > +	};
+> > +
+> > +	cpus {
+> > +		#address-cells = <2>;
+> > +		#size-cells = <0>;
+> > +
+> > +		CPU0: cpu@0 {
+> > +			device_type = "cpu";
+> > +			compatible = "qcom,kryo485";
+> > +			reg = <0x0 0x0>;
+> Please add clocks = <&cpufreq_hw n>;
+>  
+> > +			enable-method = "psci";
+> > +			capacity-dmips-mhz = <602>;
+> > +			next-level-cache = <&L2_0>;
+> > +			qcom,freq-domain = <&cpufreq_hw 0>;
+
+You mean this or something else?
+
+> > +			operating-points-v2 = <&cpu0_opp_table>;
+> > +			interconnects = <&gem_noc MASTER_AMPSS_M0 3 &mc_virt SLAVE_EBI_CH0 3>,
+> > +					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+> > +			power-domains = <&CPU_PD0>;
+> > +			power-domain-names = "psci";
+> > +			#cooling-cells = <2>;
+> Add a newline before subnodes, please.
+
+Sure
+
+> 
+> > +			L2_0: l2-cache {
+> > +				compatible = "cache";
+> > +				next-level-cache = <&L3_0>;
+> > +				L3_0: l3-cache {
+> > +				      compatible = "cache";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> [...]
+> 
+> > +
+> > +	cpu0_opp_table: opp-table-cpu0 {
+> > +		compatible = "operating-points-v2";
+> > +		opp-shared;
+> > +
+> > +		opp-300000000 {
+> > +			opp-hz = /bits/ 64 <300000000>;
+> > +			opp-peak-kBps = <800000 9600000>;
+> Maybe adding bwmon from the get-go would be better than statically
+> scaling DDR freq?
+
+Maybe :-) but we would like to land the dts now rather than wait more :)
+
+> 
+> [...]
+> 
+> > +	camnoc_virt: interconnect-0{
+> Missing space before {
+
+Will fix
+
+> > +		compatible = "qcom,sc8180x-camnoc-virt";
+> > +		#interconnect-cells = <2>;
+> > +		qcom,bcm-voters = <&apps_bcm_voter>;
+> > +	};
+> > +
+> > +	mc_virt: interconnect-mc-virt {
+> Please be consistent with your naming.
+
+Are you referring to adding -0 for this?
+
+> 
+> > +		compatible = "qcom,sc8180x-mc-virt";
+> > +		#interconnect-cells = <2>;
+> > +		qcom,bcm-voters = <&apps_bcm_voter>;
+> > +	};
+> > +
+> > +	qup_virt: interconnect-qup-virt {
+> > +		compatible = "qcom,sc8180x-qup-virt";
+> > +		#interconnect-cells = <2>;
+> > +		qcom,bcm-voters = <&apps_bcm_voter>;
+> > +	};
+> > +
+> [...]
+> 
+> > +	reserved-memory {
+> > +		#address-cells = <2>;
+> > +		#size-cells = <2>;
+> > +		ranges;
+> > +
+> > +		hyp_mem: hyp-region@85700000 {
+> the -region seems a bit unnecessary in all of these nodes
+
+This is reserved for hyp, I think we should add it here so that we dont
+touch this piece..?
+
+> 
+> > +			reg = <0x0 0x85700000 0x0 0x600000>;
+> > +			no-map;
+> > +		};
+> > +
+> [...]
+> 
+> > +
+> > +	soc: soc@0 {
+> > +		#address-cells = <2>;
+> > +		#size-cells = <2>;
+> > +		ranges = <0 0 0 0 0x10 0>;
+> > +		dma-ranges = <0 0 0 0 0x10 0>;
+> > +		compatible = "simple-bus";
+> compat
+> addr-cells
+> size-cella
+> ranges
+> dma-ranges
+> 
+> please
+
+Sure
+
+> 
+> > +
+> > +		gcc: clock-controller@100000 {
+> > +			compatible = "qcom,gcc-sc8180x";
+> > +			reg = <0x0 0x00100000 0x0 0x1f0000>;
+> > +			#clock-cells = <1>;
+> > +			#reset-cells = <1>;
+> > +			#power-domain-cells = <1>;
+> > +			clock-names = "bi_tcxo",
+> > +				      "bi_tcxo_ao",
+> > +				      "sleep_clk";
+> > +			clocks = <&rpmhcc RPMH_CXO_CLK>,
+> > +				 <&rpmhcc RPMH_CXO_CLK_A>,
+> > +				 <&sleep_clk>;
+> property before property-names
+
+ok
+
+> 
+> 
+> > +		};
+> > +
+> > +		qupv3_id_0: geniqup@8c0000 {
+> > +			compatible = "qcom,geni-se-qup";
+> > +			reg = <0 0x008c0000 0 0x6000>;
+> > +			clock-names = "m-ahb", "s-ahb";
+> > +			clocks = <&gcc GCC_QUPV3_WRAP_0_M_AHB_CLK>,
+> > +				 <&gcc GCC_QUPV3_WRAP_0_S_AHB_CLK>;
+> > +			#address-cells = <2>;
+> > +			#size-cells = <2>;
+> > +			ranges;
+> > +			iommus = <&apps_smmu 0x4c3 0>;
+> > +			status = "disabled";
+> > +
+> > +			i2c0: i2c@880000 {
+> > +				compatible = "qcom,geni-i2c";
+> > +				reg = <0 0x00880000 0 0x4000>;
+> > +				clock-names = "se";
+> > +				clocks = <&gcc GCC_QUPV3_WRAP0_S0_CLK>;
+> property before property-names
+> 
+> Please split QUPs into a separate patch, this one is way
+> too big.
+
+Will do
+
+> 
+> [...]
+> 
+> > +		config_noc: interconnect@1500000 {
+> Interconnect could also realistically go to a separate patch.
+
+Yeah already list is complaining, let me see how to split it up...
+
+> 
+> > +			compatible = "qcom,sc8180x-config-noc";
+> > +			reg = <0 0x01500000 0 0x7400>;
+> > +			#interconnect-cells = <2>;
+> > +			qcom,bcm-voters = <&apps_bcm_voter>;
+> > +		};
+> > +
+> > +		system_noc: interconnect@1620000 {
+> > +			compatible = "qcom,sc8180x-system-noc";
+> > +			reg = <0 0x01620000 0 0x19400>;
+> > +			#interconnect-cells = <2>;
+> > +			qcom,bcm-voters = <&apps_bcm_voter>;
+> > +		};
+> > +
+> > +		aggre1_noc: interconnect@16e0000 {
+> > +			compatible = "qcom,sc8180x-aggre1-noc";
+> > +			reg = <0 0x016e0000 0 0xd080>;
+> > +			#interconnect-cells = <2>;
+> > +			qcom,bcm-voters = <&apps_bcm_voter>;
+> > +		};
+> > +
+> > +		aggre2_noc: interconnect@1700000 {
+> > +			compatible = "qcom,sc8180x-aggre2-noc";
+> > +			reg = <0 0x01700000 0 0x20000>;
+> > +			#interconnect-cells = <2>;
+> > +			qcom,bcm-voters = <&apps_bcm_voter>;
+> > +		};
+> > +
+> > +		compute_noc: interconnect@1720000 {
+> > +			compatible = "qcom,sc8180x-compute-noc";
+> > +			reg = <0 0x01720000 0 0x7000>;
+> > +			#interconnect-cells = <2>;
+> > +			qcom,bcm-voters = <&apps_bcm_voter>;
+> > +		};
+> > +
+> > +		mmss_noc: interconnect@1740000 {
+> > +			compatible = "qcom,sc8180x-mmss-noc";
+> > +			reg = <0 0x01740000 0 0x1c100>;
+> > +			#interconnect-cells = <2>;
+> > +			qcom,bcm-voters = <&apps_bcm_voter>;
+> > +		};
+> > +
+> [...]
+> 
+> > +		pcie0: pci@1c00000 {
+> And PCIe
+> 
+> > +			compatible = "qcom,pcie-sc8180x";
+> > +			reg = <0 0x01c00000 0 0x3000>,
+> > +			      <0 0x60000000 0 0xf1d>,
+> > +			      <0 0x60000f20 0 0xa8>,
+> > +			      <0 0x60001000 0 0x1000>,
+> > +			      <0 0x60100000 0 0x100000>;
+> > +			reg-names = "parf", "dbi", "elbi", "atu", "config";
+> One per line, please
+
+ok
+
+> 
+> 
+> [...]
+> 
+> > +
+> > +		ufs_mem_hc: ufshc@1d84000 {
+> > +			compatible = "qcom,sc8180x-ufshc", "qcom,ufshc",
+> > +				     "jedec,ufs-2.0";
+> > +			reg = <0 0x01d84000 0 0x2500>;
+> > +			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
+> > +			phys = <&ufs_mem_phy_lanes>;
+> > +			phy-names = "ufsphy";
+> > +			lanes-per-direction = <2>;
+> > +			#reset-cells = <1>;
+> > +			resets = <&gcc GCC_UFS_PHY_BCR>;
+> > +			reset-names = "rst";
+> > +
+> > +			iommus = <&apps_smmu 0x300 0>;
+> > +
+> > +			clock-names =
+> No need for this weird newline split.
+> 
+> Also, property before property-names.
+> 
+> [...]
+> 
+> 
+> > +
+> > +		gpu: gpu@2c00000 {
+> GPUSS and MDSS related nodes should also go to their separate,
+> respective patches.
+
+ok
+
+> 
+> [...]
+> > +
+> > +		remoteproc_mpss: remoteproc@4080000 {
+> And remote procs as well
+> 
+> > +			compatible = "qcom,sc8180x-mpss-pas";
+> > +			reg = <0x0 0x04080000 0x0 0x4040>;
+> > +
+> [...]
+> 
+> > +	thermal-zones {
+> And thermal-zones as well.
+> 
+> 
+> I'll go more in-depth after you split it up, this is pretty hard
+> to review as-is.
+> 
+> Konrad
+> > +		cpu0-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 1>;
+> > +
+> > +			trips {
+> > +				cpu-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <1000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		cpu1-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 2>;
+> > +
+> > +			trips {
+> > +				cpu-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <1000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		cpu2-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 3>;
+> > +
+> > +			trips {
+> > +				cpu-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <1000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		cpu3-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 4>;
+> > +
+> > +			trips {
+> > +				cpu-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <1000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		cpu4-top-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 7>;
+> > +
+> > +			trips {
+> > +				cpu-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <1000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		cpu5-top-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 8>;
+> > +
+> > +			trips {
+> > +				cpu-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <1000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		cpu6-top-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 9>;
+> > +
+> > +			trips {
+> > +				cpu-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <1000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		cpu7-top-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 10>;
+> > +
+> > +			trips {
+> > +				cpu-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <1000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		cpu4-bottom-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 11>;
+> > +
+> > +			trips {
+> > +				cpu-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <1000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		cpu5-bottom-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 12>;
+> > +
+> > +			trips {
+> > +				cpu-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <1000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		cpu6-bottom-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 13>;
+> > +
+> > +			trips {
+> > +				cpu-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <1000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		cpu7-bottom-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 14>;
+> > +
+> > +			trips {
+> > +				cpu-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <1000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		aoss0-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 0>;
+> > +
+> > +			trips {
+> > +				trip-point0 {
+> > +					temperature = <90000>;
+> > +					hysteresis = <2000>;
+> > +					type = "hot";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		cluster0-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 5>;
+> > +
+> > +			trips {
+> > +				cluster-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <2000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		cluster1-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 6>;
+> > +
+> > +			trips {
+> > +				cluster-crit {
+> > +					temperature = <110000>;
+> > +					hysteresis = <2000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		gpu-thermal-top {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens0 15>;
+> > +
+> > +			trips {
+> > +				trip-point0 {
+> > +					temperature = <90000>;
+> > +					hysteresis = <2000>;
+> > +					type = "hot";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		aoss1-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens1 0>;
+> > +
+> > +			trips {
+> > +				trip-point0 {
+> > +					temperature = <90000>;
+> > +					hysteresis = <2000>;
+> > +					type = "hot";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		wlan-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens1 1>;
+> > +
+> > +			trips {
+> > +				trip-point0 {
+> > +					temperature = <90000>;
+> > +					hysteresis = <2000>;
+> > +					type = "hot";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		video-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens1 2>;
+> > +
+> > +			trips {
+> > +				trip-point0 {
+> > +					temperature = <90000>;
+> > +					hysteresis = <2000>;
+> > +					type = "hot";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		mem-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens1 3>;
+> > +
+> > +			trips {
+> > +				trip-point0 {
+> > +					temperature = <90000>;
+> > +					hysteresis = <2000>;
+> > +					type = "hot";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		q6-hvx-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens1 4>;
+> > +
+> > +			trips {
+> > +				trip-point0 {
+> > +					temperature = <90000>;
+> > +					hysteresis = <2000>;
+> > +					type = "hot";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		camera-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens1 5>;
+> > +
+> > +			trips {
+> > +				trip-point0 {
+> > +					temperature = <90000>;
+> > +					hysteresis = <2000>;
+> > +					type = "hot";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		compute-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens1 6>;
+> > +
+> > +			trips {
+> > +				trip-point0 {
+> > +					temperature = <90000>;
+> > +					hysteresis = <2000>;
+> > +					type = "hot";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		mdm-dsp-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens1 7>;
+> > +
+> > +			trips {
+> > +				trip-point0 {
+> > +					temperature = <90000>;
+> > +					hysteresis = <2000>;
+> > +					type = "hot";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		npu-thermal {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens1 8>;
+> > +
+> > +			trips {
+> > +				trip-point0 {
+> > +					temperature = <90000>;
+> > +					hysteresis = <2000>;
+> > +					type = "hot";
+> > +				};
+> > +			};
+> > +		};
+> > +
+> > +		gpu-thermal-bottom {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <1000>;
+> > +
+> > +			thermal-sensors = <&tsens1 11>;
+> > +
+> > +			trips {
+> > +				trip-point0 {
+> > +					temperature = <90000>;
+> > +					hysteresis = <2000>;
+> > +					type = "hot";
+> > +				};
+> > +			};
+> > +		};
+> > +	};
+> > +
+> > +	timer {
+> > +		compatible = "arm,armv8-timer";
+> > +		interrupts = <GIC_PPI 1 IRQ_TYPE_LEVEL_LOW>,
+> > +			     <GIC_PPI 2 IRQ_TYPE_LEVEL_LOW>,
+> > +			     <GIC_PPI 3 IRQ_TYPE_LEVEL_LOW>,
+> > +			     <GIC_PPI 0 IRQ_TYPE_LEVEL_LOW>;
+> > +	};
+> > +};
+
+-- 
+~Vinod
