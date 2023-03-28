@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CADC76CCE50
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6936CCE56
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbjC1X4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 19:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
+        id S229910AbjC1X5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 19:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjC1X4t (ORCPT
+        with ESMTP id S229839AbjC1X46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 19:56:49 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5FC3C3B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:56:29 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536a4eba107so137616207b3.19
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:56:29 -0700 (PDT)
+        Tue, 28 Mar 2023 19:56:58 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377073591
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:56:38 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id f66-20020a255145000000b00b714602d43fso13833350ybb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:56:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680047787;
+        d=google.com; s=20210112; t=1680047795;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+dfoa7PdTPtz3CWTqB9VBABZ1zyUPbRz1qawtN8lLUw=;
-        b=JOCvXaIQUwp3GmrZVG0iTKQw3DjbjHg9V4hS3mDV7xL/qOfUvSQd1PP5g7zQoDkf+l
-         z6JEMy6cVerZN2lL19u8LIlEWmpbRC+1eyBjpPrzJPkxcQEj/27I+DzbRCXS/08wmZiZ
-         YaLBZd5GQdQ4a+8srbC9t9WD/o/57PN2Qwkk7e7gQyQiBVSpsHch1JKtX3lOTQzpdSzh
-         X19AuhLhTKEuoJ3N8cc/uL9VPYhX3mTAYT3CRjyUuJz028mqJflerumABKFoZRH0VHoQ
-         Wxj2T951BsdXRBBdU0pwg0uUt958Pd1iWideC98cUWcOf8UaWJCI7Tnm39x6KCoQQz9u
-         vWng==
+        bh=ZLwl6lqshUJrYpudRLUNg3JmQvCjYB/FLO+tQsQQJpQ=;
+        b=XnvygogEgzonzrrSq9l6TzoXcbOQmCY53hMyUXr621BGx6mEB14SMpXAG4EzOBf88G
+         1Q8vwVBihtpmg7wfXXvAGVMXO9LhOhg4YYhfTLGW7/DrAwn9TFoB8iGDtOwho0wLSyWG
+         F7yDuRQxYYjB8HmVV2pHPVb8r5NTYghs4EyJ0hUFs+vDfGzajtqMJb4mHJ6yDKFnSOxR
+         F7BexECaHBoyyGLIB5oXRdt784Sh3aoLb1CoOnu34QtXXEQakpm9XseP4hw7WFxFcsG3
+         sw85tr+RwZgAH1IkVWuJctw3LAfRIKzcUNfPX+2uOig5U2nvI3gSnQTVBsQH0m2opRAg
+         o1/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680047787;
+        d=1e100.net; s=20210112; t=1680047795;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+dfoa7PdTPtz3CWTqB9VBABZ1zyUPbRz1qawtN8lLUw=;
-        b=7G9F5zv67NpOXpyNMWU1q4lI57hSidbev2sfLWPhYOFTkOpqv5P2ePWXgymAZ69PMe
-         ks9nTZ8yJVu9/h/fK0Bwg30UNWtk3lcq9YFsFwX+EUU/hhNH1u0JlvicuSXBE/fMxk3M
-         zrOqhpdOjSZNl3LK2bwZ0jTCdgmHJPSRnalgvQLhyaojaALDf3C0160oPS0kLS2JkgbT
-         R80qXAEDw3peOWx7b44jpoV5JonBn3ralBbpgvcNaeZ0aNKtr2AxviOlwVB90lFHGMKz
-         LCRGadhKEyLenhBU4kxvhl9FEoRUW+UpUWUtXa8ckzElSTsn9P4Ovjpyl43htT9i2/pT
-         qYVQ==
-X-Gm-Message-State: AAQBX9cCnk/CwOgBHRYe2f/Dr6XiNg8HDYG8zcRH/J+tjIOJTQJ456LA
-        VBcJVFGo8MsMHATgHIQxdH/+1iTNnXkJ
-X-Google-Smtp-Source: AKy350ahcnG4NmrRAxiaGFjY5GRM39BpBc5DCjPsLOlTLi7MjzLVvZsH6GUuG8LAVOpVD/lrKP4wwY6WtVSw
+        bh=ZLwl6lqshUJrYpudRLUNg3JmQvCjYB/FLO+tQsQQJpQ=;
+        b=2v3pCftvqpas1cY7C5Fg/Yusq8KEpE+R4UYCWG5SKZKhcnZfxKFUwlCuVx21Z0frFd
+         1OqpRWjWWgzRZQHK8lTkJEPAzIMLgP54qyIgk3UFIK87IRnpCdHgFfcNrrUBW/lOGPdY
+         pMstXpfjrjcbtRvOyvXRyAn7h9YeQJaOCHyKlmjSExOjgL0BdqjmpS++nFh3NZYLRWiG
+         gaVDwwWRlo5LgtjFnAOmmSX8ND0pw5OIT2aLUS5St1fOS/wjvRi+RxGyWJlVwwHo1px+
+         92CBckyFuF9lxRIKJuT7csNJ6nSFauj94tNobUl7RyuN29zoI9HDk/RNwvfdZTQgAxsd
+         FJOA==
+X-Gm-Message-State: AAQBX9dDqvexYSZHlH18SlIKKlPOnOHJGCYNvjU8DCmgalm+lWckNW7D
+        djd/lfzVw8CtFARdMlSkpvNhLcypyKjV
+X-Google-Smtp-Source: AKy350bAcDR00breSQ4TUpY8mhI99EKXmR4Gbx3YKucZJfbextj5+Qrrnc7kQwofHP6QfllYpfWO9w7l7kfy
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:6519:f0d3:9540:5c31])
- (user=irogers job=sendgmr) by 2002:a05:6902:1102:b0:b2f:bdc9:2cdc with SMTP
- id o2-20020a056902110200b00b2fbdc92cdcmr11705564ybu.7.1680047787567; Tue, 28
- Mar 2023 16:56:27 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 16:55:40 -0700
+ (user=irogers job=sendgmr) by 2002:a81:b647:0:b0:541:a17f:c779 with SMTP id
+ h7-20020a81b647000000b00541a17fc779mr8460207ywk.4.1680047795353; Tue, 28 Mar
+ 2023 16:56:35 -0700 (PDT)
+Date:   Tue, 28 Mar 2023 16:55:41 -0700
 In-Reply-To: <20230328235543.1082207-1-irogers@google.com>
-Message-Id: <20230328235543.1082207-4-irogers@google.com>
+Message-Id: <20230328235543.1082207-5-irogers@google.com>
 Mime-Version: 1.0
 References: <20230328235543.1082207-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v1 3/6] perf annotate: Add init/exit to annotation_options
- remove default
+Subject: [PATCH v1 4/6] perf annotate: Own objdump_path and disassembler_style strings
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -85,182 +84,237 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-annotation__default_options was used to initialize
-annotation_options. Switch to the init/exit pattern as later changes
-will give ownership over strings and this will be necessary to avoid
-memory leaks.
+Make struct annotation_options own the strings objdump_path and
+disassembler_style, freeing them on exit. Add missing strdup for
+disassembler_style when read from a config file.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-annotate.c |  3 ++-
- tools/perf/builtin-report.c   |  7 ++++---
- tools/perf/builtin-top.c      |  4 +++-
- tools/perf/util/annotate.c    | 25 +++++++++++++++++--------
- tools/perf/util/annotate.h    |  5 +++--
- 5 files changed, 29 insertions(+), 15 deletions(-)
+ tools/perf/arch/common.c      |  4 ++--
+ tools/perf/arch/common.h      |  2 +-
+ tools/perf/builtin-annotate.c | 16 ++++++++++++++--
+ tools/perf/builtin-report.c   | 16 ++++++++++++++--
+ tools/perf/builtin-top.c      | 17 +++++++++++++++--
+ tools/perf/util/annotate.c    | 10 ++++++++--
+ tools/perf/util/annotate.h    |  4 ++--
+ 7 files changed, 56 insertions(+), 13 deletions(-)
 
+diff --git a/tools/perf/arch/common.c b/tools/perf/arch/common.c
+index 59dd875fd5e4..28ac09997928 100644
+--- a/tools/perf/arch/common.c
++++ b/tools/perf/arch/common.c
+@@ -130,7 +130,7 @@ static int lookup_triplets(const char *const *triplets, const char *name)
+ }
+ 
+ static int perf_env__lookup_binutils_path(struct perf_env *env,
+-					  const char *name, const char **path)
++					  const char *name, char **path)
+ {
+ 	int idx;
+ 	const char *arch = perf_env__arch(env), *cross_env;
+@@ -202,7 +202,7 @@ static int perf_env__lookup_binutils_path(struct perf_env *env,
+ 	return -1;
+ }
+ 
+-int perf_env__lookup_objdump(struct perf_env *env, const char **path)
++int perf_env__lookup_objdump(struct perf_env *env, char **path)
+ {
+ 	/*
+ 	 * For live mode, env->arch will be NULL and we can use
+diff --git a/tools/perf/arch/common.h b/tools/perf/arch/common.h
+index e965ed8bb328..4224c299cc70 100644
+--- a/tools/perf/arch/common.h
++++ b/tools/perf/arch/common.h
+@@ -6,7 +6,7 @@
+ 
+ struct perf_env;
+ 
+-int perf_env__lookup_objdump(struct perf_env *env, const char **path);
++int perf_env__lookup_objdump(struct perf_env *env, char **path);
+ bool perf_env__single_address_space(struct perf_env *env);
+ 
+ #endif /* ARCH_PERF_COMMON_H */
 diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-index 98d1b6379230..0ceb41f16663 100644
+index 0ceb41f16663..d781639b644f 100644
 --- a/tools/perf/builtin-annotate.c
 +++ b/tools/perf/builtin-annotate.c
-@@ -509,7 +509,6 @@ int cmd_annotate(int argc, const char **argv)
- 			.ordered_events = true,
- 			.ordering_requires_timestamps = true,
- 		},
--		.opts = annotation__default_options,
+@@ -516,6 +516,7 @@ int cmd_annotate(int argc, const char **argv)
+ 	struct itrace_synth_opts itrace_synth_opts = {
+ 		.set = 0,
  	};
- 	struct perf_data data = {
- 		.mode  = PERF_DATA_MODE_READ,
-@@ -598,6 +597,7 @@ int cmd_annotate(int argc, const char **argv)
- 	set_option_flag(options, 0, "show-total-period", PARSE_OPT_EXCLUSIVE);
- 	set_option_flag(options, 0, "show-nr-samples", PARSE_OPT_EXCLUSIVE);
- 
-+	annotation_options__init(&annotate.opts);
- 
- 	ret = hists__init();
- 	if (ret < 0)
-@@ -698,6 +698,7 @@ int cmd_annotate(int argc, const char **argv)
- #ifndef NDEBUG
- 	perf_session__delete(annotate.session);
- #endif
-+	annotation_options__exit(&annotate.opts);
- 
- 	return ret;
- }
-diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-index 500f9d8902e7..b41e1219d153 100644
---- a/tools/perf/builtin-report.c
-+++ b/tools/perf/builtin-report.c
-@@ -728,8 +728,7 @@ static int hists__resort_cb(struct hist_entry *he, void *arg)
- 	if (rep->symbol_ipc && sym && !sym->annotate2) {
- 		struct evsel *evsel = hists_to_evsel(he->hists);
- 
--		symbol__annotate2(&he->ms, evsel,
--				  &annotation__default_options, NULL);
-+		symbol__annotate2(&he->ms, evsel, &rep->annotation_opts, NULL);
++	const char *disassembler_style = NULL, *objdump_path = NULL;
+ 	struct option options[] = {
+ 	OPT_STRING('i', "input", &input_name, "file",
+ 		    "input file name"),
+@@ -560,13 +561,13 @@ int cmd_annotate(int argc, const char **argv)
+ 		    "Interleave source code with assembly code (default)"),
+ 	OPT_BOOLEAN(0, "asm-raw", &annotate.opts.show_asm_raw,
+ 		    "Display raw encoding of assembly instructions (default)"),
+-	OPT_STRING('M', "disassembler-style", &annotate.opts.disassembler_style, "disassembler style",
++	OPT_STRING('M', "disassembler-style", &disassembler_style, "disassembler style",
+ 		   "Specify disassembler style (e.g. -M intel for intel syntax)"),
+ 	OPT_STRING(0, "prefix", &annotate.opts.prefix, "prefix",
+ 		    "Add prefix to source file path names in programs (with --prefix-strip)"),
+ 	OPT_STRING(0, "prefix-strip", &annotate.opts.prefix_strip, "N",
+ 		    "Strip first N entries of source file path name in programs (with --prefix)"),
+-	OPT_STRING(0, "objdump", &annotate.opts.objdump_path, "path",
++	OPT_STRING(0, "objdump", &objdump_path, "path",
+ 		   "objdump binary to use for disassembly and annotations"),
+ 	OPT_BOOLEAN(0, "demangle", &symbol_conf.demangle,
+ 		    "Enable symbol demangling"),
+@@ -617,6 +618,17 @@ int cmd_annotate(int argc, const char **argv)
+ 		annotate.sym_hist_filter = argv[0];
  	}
  
- 	return 0;
-@@ -1223,7 +1222,6 @@ int cmd_report(int argc, const char **argv)
- 		.max_stack		 = PERF_MAX_STACK_DEPTH,
- 		.pretty_printing_style	 = "normal",
- 		.socket_filter		 = -1,
--		.annotation_opts	 = annotation__default_options,
- 		.skip_empty		 = true,
++	if (disassembler_style) {
++		annotate.opts.disassembler_style = strdup(disassembler_style);
++		if (!annotate.opts.disassembler_style)
++			return -ENOMEM;
++	}
++	if (objdump_path) {
++		annotate.opts.objdump_path = strdup(objdump_path);
++		if (!annotate.opts.objdump_path)
++			return -ENOMEM;
++	}
++
+ 	if (annotate_check_args(&annotate.opts) < 0)
+ 		return -EINVAL;
+ 
+diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+index b41e1219d153..15b0cf649e1a 100644
+--- a/tools/perf/builtin-report.c
++++ b/tools/perf/builtin-report.c
+@@ -1226,6 +1226,7 @@ int cmd_report(int argc, const char **argv)
  	};
  	char *sort_order_help = sort_help("sort by key(s):");
-@@ -1403,6 +1401,8 @@ int cmd_report(int argc, const char **argv)
- 	if (ret < 0)
- 		goto exit;
+ 	char *field_order_help = sort_help("output field(s): overhead period sample ");
++	const char *disassembler_style = NULL, *objdump_path = NULL;
+ 	const struct option options[] = {
+ 	OPT_STRING('i', "input", &input_name, "file",
+ 		    "input file name"),
+@@ -1322,7 +1323,7 @@ int cmd_report(int argc, const char **argv)
+ 		    "Interleave source code with assembly code (default)"),
+ 	OPT_BOOLEAN(0, "asm-raw", &report.annotation_opts.show_asm_raw,
+ 		    "Display raw encoding of assembly instructions (default)"),
+-	OPT_STRING('M', "disassembler-style", &report.annotation_opts.disassembler_style, "disassembler style",
++	OPT_STRING('M', "disassembler-style", &disassembler_style, "disassembler style",
+ 		   "Specify disassembler style (e.g. -M intel for intel syntax)"),
+ 	OPT_STRING(0, "prefix", &report.annotation_opts.prefix, "prefix",
+ 		    "Add prefix to source file path names in programs (with --prefix-strip)"),
+@@ -1341,7 +1342,7 @@ int cmd_report(int argc, const char **argv)
+ 		    parse_branch_mode),
+ 	OPT_BOOLEAN(0, "branch-history", &branch_call_mode,
+ 		    "add last branch records to call history"),
+-	OPT_STRING(0, "objdump", &report.annotation_opts.objdump_path, "path",
++	OPT_STRING(0, "objdump", &objdump_path, "path",
+ 		   "objdump binary to use for disassembly and annotations"),
+ 	OPT_BOOLEAN(0, "demangle", &symbol_conf.demangle,
+ 		    "Disable symbol demangling"),
+@@ -1419,6 +1420,17 @@ int cmd_report(int argc, const char **argv)
+ 		report.symbol_filter_str = argv[0];
+ 	}
  
-+	annotation_options__init(&report.annotation_opts);
++	if (disassembler_style) {
++		report.annotation_opts.disassembler_style = strdup(disassembler_style);
++		if (!report.annotation_opts.disassembler_style)
++			return -ENOMEM;
++	}
++	if (objdump_path) {
++		report.annotation_opts.objdump_path = strdup(objdump_path);
++		if (!report.annotation_opts.objdump_path)
++			return -ENOMEM;
++	}
 +
- 	ret = perf_config(report__config, &report);
- 	if (ret)
+ 	if (annotate_check_args(&report.annotation_opts) < 0) {
+ 		ret = -EINVAL;
  		goto exit;
-@@ -1706,6 +1706,7 @@ int cmd_report(int argc, const char **argv)
- 	zstd_fini(&(session->zstd_data));
- 	perf_session__delete(session);
- exit:
-+	annotation_options__exit(&report.annotation_opts);
- 	free(sort_order_help);
- 	free(field_order_help);
- 	return ret;
 diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index d4b5b02bab73..592eb827fba9 100644
+index 592eb827fba9..57a273cd03de 100644
 --- a/tools/perf/builtin-top.c
 +++ b/tools/perf/builtin-top.c
-@@ -1435,7 +1435,6 @@ int cmd_top(int argc, const char **argv)
- 			.sample_time_set = true,
- 		},
- 		.max_stack	     = sysctl__max_stack(),
--		.annotation_opts     = annotation__default_options,
- 		.nr_threads_synthesize = UINT_MAX,
+@@ -1439,6 +1439,7 @@ int cmd_top(int argc, const char **argv)
  	};
  	struct record_opts *opts = &top.record_opts;
-@@ -1587,6 +1586,8 @@ int cmd_top(int argc, const char **argv)
- 	if (status < 0)
- 		return status;
+ 	struct target *target = &opts->target;
++	const char *disassembler_style = NULL, *objdump_path = NULL;
+ 	const struct option options[] = {
+ 	OPT_CALLBACK('e', "event", &top.evlist, "event",
+ 		     "event selector. use 'perf list' to list available events",
+@@ -1524,9 +1525,9 @@ int cmd_top(int argc, const char **argv)
+ 	OPT_BOOLEAN(0, "demangle-kernel", &symbol_conf.demangle_kernel,
+ 		    "Enable kernel symbol demangling"),
+ 	OPT_BOOLEAN(0, "no-bpf-event", &top.record_opts.no_bpf_event, "do not record bpf events"),
+-	OPT_STRING(0, "objdump", &top.annotation_opts.objdump_path, "path",
++	OPT_STRING(0, "objdump", &objdump_path, "path",
+ 		    "objdump binary to use for disassembly and annotations"),
+-	OPT_STRING('M', "disassembler-style", &top.annotation_opts.disassembler_style, "disassembler style",
++	OPT_STRING('M', "disassembler-style", &disassembler_style, "disassembler style",
+ 		   "Specify disassembler style (e.g. -M intel for intel syntax)"),
+ 	OPT_STRING(0, "prefix", &top.annotation_opts.prefix, "prefix",
+ 		    "Add prefix to source file path names in programs (with --prefix-strip)"),
+@@ -1618,6 +1619,18 @@ int cmd_top(int argc, const char **argv)
+ 	if (argc)
+ 		usage_with_options(top_usage, options);
  
-+	annotation_options__init(&top.annotation_opts);
++	if (disassembler_style) {
++		top.annotation_opts.disassembler_style = strdup(disassembler_style);
++		if (!top.annotation_opts.disassembler_style)
++			return -ENOMEM;
++	}
++	if (objdump_path) {
++		top.annotation_opts.objdump_path = strdup(objdump_path);
++		if (!top.annotation_opts.objdump_path)
++			return -ENOMEM;
++	}
 +
- 	top.annotation_opts.min_pcnt = 5;
- 	top.annotation_opts.context  = 4;
- 
-@@ -1783,6 +1784,7 @@ int cmd_top(int argc, const char **argv)
- out_delete_evlist:
- 	evlist__delete(top.evlist);
- 	perf_session__delete(top.session);
-+	annotation_options__exit(&top.annotation_opts);
- 
- 	return status;
- }
++
+ 	status = symbol__validate_sym_arguments();
+ 	if (status)
+ 		goto out_delete_evlist;
 diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-index db475e44f42f..a984bdae7811 100644
+index a984bdae7811..7338249dfdd9 100644
 --- a/tools/perf/util/annotate.c
 +++ b/tools/perf/util/annotate.c
-@@ -55,14 +55,6 @@
- 
- #include <linux/ctype.h>
- 
--struct annotation_options annotation__default_options = {
--	.use_offset     = true,
--	.jump_arrows    = true,
--	.annotate_src	= true,
--	.offset_level	= ANNOTATION__OFFSET_JUMP_TARGETS,
--	.percent_type	= PERCENT_PERIOD_LOCAL,
--};
--
- static regex_t	 file_lineno;
- 
- static struct ins_ops *ins__find(struct arch *arch, const char *name);
-@@ -3226,6 +3218,23 @@ static int annotation__config(const char *var, const char *value, void *data)
- 	return 0;
+@@ -3206,7 +3206,11 @@ static int annotation__config(const char *var, const char *value, void *data)
+ 	} else if (!strcmp(var, "annotate.use_offset")) {
+ 		opt->use_offset = perf_config_bool("use_offset", value);
+ 	} else if (!strcmp(var, "annotate.disassembler_style")) {
+-		opt->disassembler_style = value;
++		opt->disassembler_style = strdup(value);
++		if (!opt->disassembler_style) {
++			pr_err("Not enough memory for annotate.disassembler_style\n");
++			return -1;
++		}
+ 	} else if (!strcmp(var, "annotate.demangle")) {
+ 		symbol_conf.demangle = perf_config_bool("demangle", value);
+ 	} else if (!strcmp(var, "annotate.demangle_kernel")) {
+@@ -3231,8 +3235,10 @@ void annotation_options__init(struct annotation_options *opt)
  }
  
-+void annotation_options__init(struct annotation_options *opt)
-+{
-+	memset(opt, 0, sizeof(*opt));
-+
-+	/* Default values. */
-+	opt->use_offset = true;
-+	opt->jump_arrows = true;
-+	opt->annotate_src = true;
-+	opt->offset_level = ANNOTATION__OFFSET_JUMP_TARGETS;
-+	opt->percent_type = PERCENT_PERIOD_LOCAL;
-+}
-+
-+
-+void annotation_options__exit(struct annotation_options *opt __maybe_unused)
-+{
-+}
-+
- void annotation_config__init(struct annotation_options *opt)
+ 
+-void annotation_options__exit(struct annotation_options *opt __maybe_unused)
++void annotation_options__exit(struct annotation_options *opt)
  {
- 	perf_config(annotation__config, opt);
++	free(opt->disassembler_style);
++	free(opt->objdump_path);
+ }
+ 
+ void annotation_config__init(struct annotation_options *opt)
 diff --git a/tools/perf/util/annotate.h b/tools/perf/util/annotate.h
-index 8934072c39e6..e7238c694465 100644
+index e7238c694465..1c6335b8333a 100644
 --- a/tools/perf/util/annotate.h
 +++ b/tools/perf/util/annotate.h
-@@ -109,8 +109,6 @@ enum {
- 
- #define ANNOTATION__MIN_OFFSET_LEVEL ANNOTATION__OFFSET_JUMP_TARGETS
- 
--extern struct annotation_options annotation__default_options;
--
- struct annotation;
- 
- struct sym_hist_entry {
-@@ -418,6 +416,9 @@ static inline int symbol__tui_annotate(struct map_symbol *ms __maybe_unused,
- }
- #endif
- 
-+void annotation_options__init(struct annotation_options *opt);
-+void annotation_options__exit(struct annotation_options *opt);
-+
- void annotation_config__init(struct annotation_options *opt);
- 
- int annotate_parse_percent_type(const struct option *opt, const char *_str,
+@@ -94,8 +94,8 @@ struct annotation_options {
+ 	int  min_pcnt;
+ 	int  max_lines;
+ 	int  context;
+-	const char *objdump_path;
+-	const char *disassembler_style;
++	char *objdump_path;
++	char *disassembler_style;
+ 	const char *prefix;
+ 	const char *prefix_strip;
+ 	unsigned int percent_type;
 -- 
 2.40.0.348.gf938b09366-goog
 
