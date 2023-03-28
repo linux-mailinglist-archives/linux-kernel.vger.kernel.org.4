@@ -2,180 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508FC6CBB42
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A11D6CBB3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232132AbjC1Jjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53246 "EHLO
+        id S232692AbjC1JkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjC1Jjo (ORCPT
+        with ESMTP id S230468AbjC1Jjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Mar 2023 05:39:44 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3750155A4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:39:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3775BA5;
+        Tue, 28 Mar 2023 02:39:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E8C561F8BA;
-        Tue, 28 Mar 2023 09:39:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679996368; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=UgfE83B87JnzYkBplYgpUKueaTqClGbainLz0Z27234=;
-        b=gfW4yDUUcpChSDwKbNwRwXDijsOrfTAYRLllKADw1zl14hMfdZIMuXN3TbT4u6uaSFrDqT
-        Q2vFJQRYFbG8AjjFNyNEcn651PsaOqFI97MLfmMww8FlBy070mZdJ/W+m/I5+RASiIcqQa
-        vOUS4k4u/p/h3gEUPsirmtaOOyp2Jec=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B4D771390B;
-        Tue, 28 Mar 2023 09:39:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7X7MKtC1ImS8TgAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 28 Mar 2023 09:39:28 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org, Dan Carpenter <error27@gmail.com>
-Subject: [PATCH] xen/pvcalls: don't call bind_evtchn_to_irqhandler() under lock
-Date:   Tue, 28 Mar 2023 11:39:24 +0200
-Message-Id: <20230328093924.12260-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88E206163C;
+        Tue, 28 Mar 2023 09:39:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CE24C4339B;
+        Tue, 28 Mar 2023 09:39:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679996373;
+        bh=Wd9Ay6SO5CAcXIM2nKfNytXszwXbA4x1Yllp/z8nE64=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HhDTMnACS8BU9XlDEHNeiGmsk2PXPK9tYvnPlubxps5rR6KJPQ9mr1nPpTspQwlSq
+         oITu2u1ZCBeqO4BSPhNMswLSeK0zYfZqAfGn5RRpUqZbnJukr33dYgufTUL9G4a6DF
+         PiDpKNWo2zE3fBsBh2ExB8rrK4pT2cIrVPDJQJaXMtiDPDf31xKJe+go5EItMzflQx
+         WX73XNznOsacVlfXDzipjaVX91Y1AS+agNIAqYaWJi5qpe5NfkAEmw2Par0042S+9O
+         H+HeVgrQw+YawW4rFgpDlrHqNtSu5AXOZrG/zU1iyYBjvK8+aQpbsemALDS/phicNT
+         gI/KCpt10LDug==
+Date:   Tue, 28 Mar 2023 11:39:29 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Piyush Malgujar <pmalgujar@marvell.com>
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jannadurai@marvell.com,
+        cchavva@marvell.com, Suneel Garapati <sgarapati@marvell.com>
+Subject: Re: [PATCH 1/2] spi: octeontx2: Add support for octeontx2 spi
+ controller
+Message-ID: <20230328093929.qkg2oseuibot3afl@intel.intel>
+References: <20230327180753.2279-1-pmalgujar@marvell.com>
+ <20230327180753.2279-2-pmalgujar@marvell.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327180753.2279-2-pmalgujar@marvell.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bind_evtchn_to_irqhandler() shouldn't be called under spinlock, as it
-can sleep.
+Hi Suneel,
 
-This requires to move the calls of create_active() out of the locked
-regions. This is no problem, as the worst which could happen would be
-a spurious call of the interrupt handler, causing a spurious wake_up().
+[...]
 
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://lore.kernel.org/lkml/Y+JUIl64UDmdkboh@kadam/
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
- drivers/xen/pvcalls-front.c | 46 ++++++++++++++++++++++---------------
- 1 file changed, 27 insertions(+), 19 deletions(-)
+> +static int tbi_clk_en = 1;
 
-diff --git a/drivers/xen/pvcalls-front.c b/drivers/xen/pvcalls-front.c
-index d5d589bda243..6e5d712e3115 100644
---- a/drivers/xen/pvcalls-front.c
-+++ b/drivers/xen/pvcalls-front.c
-@@ -227,22 +227,31 @@ static irqreturn_t pvcalls_front_event_handler(int irq, void *dev_id)
- 
- static void free_active_ring(struct sock_mapping *map);
- 
--static void pvcalls_front_free_map(struct pvcalls_bedata *bedata,
--				   struct sock_mapping *map)
-+static void pvcalls_front_destroy_active(struct pvcalls_bedata *bedata,
-+					 struct sock_mapping *map)
- {
- 	int i;
- 
- 	unbind_from_irqhandler(map->active.irq, map);
- 
--	spin_lock(&bedata->socket_lock);
--	if (!list_empty(&map->list))
--		list_del_init(&map->list);
--	spin_unlock(&bedata->socket_lock);
-+	if (bedata) {
-+		spin_lock(&bedata->socket_lock);
-+		if (!list_empty(&map->list))
-+			list_del_init(&map->list);
-+		spin_unlock(&bedata->socket_lock);
-+	}
- 
- 	for (i = 0; i < (1 << PVCALLS_RING_ORDER); i++)
- 		gnttab_end_foreign_access(map->active.ring->ref[i], NULL);
- 	gnttab_end_foreign_access(map->active.ref, NULL);
-+
- 	free_active_ring(map);
-+}
-+
-+static void pvcalls_front_free_map(struct pvcalls_bedata *bedata,
-+				   struct sock_mapping *map)
-+{
-+	pvcalls_front_destroy_active(bedata, map);
- 
- 	kfree(map);
- }
-@@ -433,19 +442,18 @@ int pvcalls_front_connect(struct socket *sock, struct sockaddr *addr,
- 		pvcalls_exit_sock(sock);
- 		return ret;
- 	}
--
--	spin_lock(&bedata->socket_lock);
--	ret = get_request(bedata, &req_id);
-+	ret = create_active(map, &evtchn);
- 	if (ret < 0) {
--		spin_unlock(&bedata->socket_lock);
- 		free_active_ring(map);
- 		pvcalls_exit_sock(sock);
- 		return ret;
- 	}
--	ret = create_active(map, &evtchn);
-+
-+	spin_lock(&bedata->socket_lock);
-+	ret = get_request(bedata, &req_id);
- 	if (ret < 0) {
- 		spin_unlock(&bedata->socket_lock);
--		free_active_ring(map);
-+		pvcalls_front_destroy_active(NULL, map);
- 		pvcalls_exit_sock(sock);
- 		return ret;
- 	}
-@@ -821,28 +829,28 @@ int pvcalls_front_accept(struct socket *sock, struct socket *newsock, int flags)
- 		pvcalls_exit_sock(sock);
- 		return ret;
- 	}
--	spin_lock(&bedata->socket_lock);
--	ret = get_request(bedata, &req_id);
-+	ret = create_active(map2, &evtchn);
- 	if (ret < 0) {
-+		free_active_ring(map2);
-+		kfree(map2);
- 		clear_bit(PVCALLS_FLAG_ACCEPT_INFLIGHT,
- 			  (void *)&map->passive.flags);
- 		spin_unlock(&bedata->socket_lock);
--		free_active_ring(map2);
--		kfree(map2);
- 		pvcalls_exit_sock(sock);
- 		return ret;
- 	}
- 
--	ret = create_active(map2, &evtchn);
-+	spin_lock(&bedata->socket_lock);
-+	ret = get_request(bedata, &req_id);
- 	if (ret < 0) {
--		free_active_ring(map2);
--		kfree(map2);
- 		clear_bit(PVCALLS_FLAG_ACCEPT_INFLIGHT,
- 			  (void *)&map->passive.flags);
- 		spin_unlock(&bedata->socket_lock);
-+		pvcalls_front_free_map(bedata, map2);
- 		pvcalls_exit_sock(sock);
- 		return ret;
- 	}
-+
- 	list_add_tail(&map2->list, &bedata->socket_mappings);
- 
- 	req = RING_GET_REQUEST(&bedata->ring, req_id);
--- 
-2.35.3
+bool?
 
+> +module_param(tbi_clk_en, uint, 0644);
+> +MODULE_PARM_DESC(tbi_clk_en,
+> +		 "Use Fixed Time Base 100MHz Reference Clock (0=Disable, 1=Enable [default])");
+
+can we avoid using module parameters? You can have these defined
+in device tree and you can also make sysfs interfaces, as well.
+
+> +static int cfg_mode_delay = 30;
+> +module_param(cfg_mode_delay, uint, 0644);
+> +MODULE_PARM_DESC(cfg_mode_delay,
+> +		 "Delay in micro-seconds for mode change in MPI CFG register (30 [default])");
+> +
+> +static void octeontx2_spi_wait_ready(struct octeontx2_spi *p)
+> +{
+> +	union mpix_sts mpi_sts;
+> +	unsigned int loops = 0;
+> +
+> +	mpi_sts.u64 = 0;
+> +	do {
+> +		if (loops++)
+> +			__delay(500);
+
+mmhhh... why have you chosen __delay() ?
+
+> +		mpi_sts.u64 = readq(p->register_base + OCTEONTX2_SPI_STS(p));
+> +	} while (mpi_sts.s.busy);
+
+[...]
+
+> +	if (mpi_cfg.u64 != p->last_cfg) {
+> +		p->last_cfg = mpi_cfg.u64;
+> +		writeq(mpi_cfg.u64, p->register_base + OCTEONTX2_SPI_CFG(p));
+> +		mpi_cfg.u64 = readq(p->register_base + OCTEONTX2_SPI_CFG(p));
+> +		udelay(cfg_mode_delay); /* allow CS change to settle */
+
+before "udelaying" anything that the user gives you, I would
+check what cfg_mode_delay is.
+
+Andi
