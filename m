@@ -2,258 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E386CB2C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 02:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF6F6CB2CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 02:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjC1ASJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 20:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S231258AbjC1AVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 20:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbjC1ASH (ORCPT
+        with ESMTP id S229879AbjC1AVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 20:18:07 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D9510F5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 17:18:05 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id u38so6840749pfg.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 17:18:05 -0700 (PDT)
+        Mon, 27 Mar 2023 20:21:04 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1180610E2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 17:21:02 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id y4so43129037edo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 17:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679962685;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679962860;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NAT8YKWoRzsnW/D83k7oze0TqtTySta11nv0MrTObWM=;
-        b=XPBm+9xksh5PxzAYsl8E2AlRmfp5jgrv9AuRc2x4dXApa3Kq+h8rESDLxoOEVNhg/+
-         0PxFMH1ADI4OynnF8Aw62CSuC90wI/rUFShKEp06NyDRwuADSb5kzJF5IIZdhG9T85RU
-         QzbJ/0i2LlYQCweBp+wP2uyZCby0ZsyuMziV2RaNGMx4ECDk8VgWJTI33ShhLu4BQ1wP
-         bIpE6lcCispSViefdnCH3Xd50Z6G0SUG+EQPFu56pvsGLLfh/KrCsJL1b2VfzFlFSE5y
-         5phRhyXvIJI4KIczbMnXtDsfKPoiGJpqPG0eKt4JdhNpmVtoeE1b/MYSxZP4AX+xRcMQ
-         sxAg==
+        bh=OWxYxwYnDh/M3AqcQxupiWYE616Su6/3AVIH7JVpi+4=;
+        b=iQky6ik4kDwcReUzej4+0VfVe0WBZObyKBPejB3AzdUu2vBgMJGvC+HEb/lU/4nPel
+         bJgq4p1jPRFqRck8x2nm7QlGy+lf7fVlk+BRnX36blHctgndC8i7E4S3ytJk2+oFQFCt
+         IFN7SJiaXctCjcRtLCuRdSt1xDx7g69MgPI8L4K9A1D1a3aFxZHs/bzXulnXGipOr62E
+         QEwlTpDKxBx+vvW1ozaLPZnh5qSGFP3fnjd9LIQcGf/qde1kZn4J8FXQZTtnnGB93Dzz
+         ZwvpSEbG40ESYC4RpoIciqTuoP6egsu4hhYR5vK9MwSKg+89YBVPHosawxgaaZNL+WZZ
+         IsJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679962685;
+        d=1e100.net; s=20210112; t=1679962860;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NAT8YKWoRzsnW/D83k7oze0TqtTySta11nv0MrTObWM=;
-        b=m1MvFYdmXFbbStYtz5sclixkQKNF9cxFkFdJV001TiKhGmgk/s2wTGdWBuksPtkDHv
-         wJ2FqtriXQuYfvQl2Iwo0q2odaQadHG44WbAOwJ6zNKuSINQBRPTkHb4lNSkqOhspjZ5
-         v8sk+xXDtXxK3V+O04RRUU3OD1N+yzs2msCtxhIOy27PUeyOkpP/kPySL9WiyvycbF3w
-         Aa5+Hev56TBbbyFjSgKiLpWHfGzjYP6I2XBeKtJK7sHJhmG8X1Jdya51F9O04FBPb05S
-         xwJDmZ/wkeBjZA/MOKcwayZQiOIcbjB7Sp/CEzuFnoOebeZogCl94274JBjZ9RY+2ASi
-         i7Iw==
-X-Gm-Message-State: AAQBX9f9kb0htXKblLwxpp2SaV7ZRE+790MVwXF7F/fasv1afPcd1Xsy
-        xerlMZLEf0wyXBR9Rvu84bMHQM8v3T2JnI9GU4rrlA==
-X-Google-Smtp-Source: AKy350ZfVurdmDvbshJjR8lJnRWOqXeP2QfY8WKwM1OLga/HLMcolMzF6jCx6t5oZGgAAV3jHCML2DnLXVBFIwbDpRk=
-X-Received: by 2002:a63:d157:0:b0:50c:2b1:7a8f with SMTP id
- c23-20020a63d157000000b0050c02b17a8fmr3720403pgj.6.1679962685061; Mon, 27 Mar
- 2023 17:18:05 -0700 (PDT)
+        bh=OWxYxwYnDh/M3AqcQxupiWYE616Su6/3AVIH7JVpi+4=;
+        b=6FTQl+JQrlZ+TnctCDjwrUejyhzgEtJnZ66NiW3sjFuwri76Dc/Jmq4CF03ef8wVDW
+         zd1p0he8oFK0RVo0v9cSHCOLGGHiVG9L4Erhgb99QOLNPVpTbCuTisRzWQC9SEiWUGyf
+         vW3U2vGf1meMJ9NEMbMQM0b5Haf6pc5df+/dvWCOL/vaFUfacF5A/0w5fGHniq0lcrgP
+         Tps42vfNyapqTayV+j8g7qwNpHP62PpAXyc6dRiq3jDmsS6OGBfwYBnTyh4XoFBi5Oui
+         8BWu+4cdGDfgTXZB0FyK0cEDRbnzu38vZtvcIWt5ie1eOmw93bkVW65iODboQt5v2Xlq
+         3HhA==
+X-Gm-Message-State: AAQBX9dEBqqRLonJmOW3pOZemAw2Dd62EKeDDx6prt97KK4PCj1clfmD
+        Rr9ULD4DZwcFb+MWJ4Xe8IaYbhsan9FMWfoaACEDrg==
+X-Google-Smtp-Source: AKy350bS1Hba9qX/l6pm9XmTzJq4aBCpICVpxhFQWGi17RieKEkZ5vZWKqsJQqRR1BUm/4/yKCLx58qdU8g1jirg1BE=
+X-Received: by 2002:a17:907:d48d:b0:93e:c1ab:ae67 with SMTP id
+ vj13-20020a170907d48d00b0093ec1abae67mr5715532ejc.2.1679962860515; Mon, 27
+ Mar 2023 17:21:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230327193829.3756640-1-abel.vesa@linaro.org>
-In-Reply-To: <20230327193829.3756640-1-abel.vesa@linaro.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 27 Mar 2023 17:17:28 -0700
-Message-ID: <CAGETcx9f1p2esfyzyfU04EAB1FXh=d9-U81DaGyZNjL_Vti3oQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Allow genpd providers to power off domains on sync state
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Android Kernel Team <kernel-team@android.com>
+References: <20230307163413.143334-1-bchihi@baylibre.com> <CAGXv+5E0wUJYUVD3wx3-=uES612ARQmUE0rxgAruFHxpZCBjzA@mail.gmail.com>
+ <CAGuA+ooi7Kx05gagLzXAN3upDiSqDUNOM_djYdGftw6ogVx5gw@mail.gmail.com>
+ <CAGuA+oqDPPYFJef_8=YrOpHQNVJ3xgm_zXS6fq_HG2Jy_6t-Zg@mail.gmail.com> <CAGXv+5EZPWohGN5CaEiqVrM4MyAar3cPEUhHtGY_9wTJSJNVFQ@mail.gmail.com>
+In-Reply-To: <CAGXv+5EZPWohGN5CaEiqVrM4MyAar3cPEUhHtGY_9wTJSJNVFQ@mail.gmail.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Tue, 28 Mar 2023 02:20:24 +0200
+Message-ID: <CAGuA+oqF4jFMyEo09VDmCf-_7g0ua3XDKDAJ+t3Gat14pDM9NA@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Add LVTS support for mt8192
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 12:38=E2=80=AFPM Abel Vesa <abel.vesa@linaro.org> w=
+On Sat, Mar 25, 2023 at 5:33=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> w=
 rote:
 >
-> There have been already a couple of tries to make the genpd "disable
-> unused" late initcall skip the powering off of domains that might be
-> needed until later on (i.e. until some consumer probes). The conclusion
-> was that the provider could return -EBUSY from the power_off callback
-> until the provider's sync state has been reached. This patch series tries
-> to provide a proof-of-concept that is working on Qualcomm platforms.
+> On Wed, Mar 22, 2023 at 8:48=E2=80=AFPM Balsam CHIHI <bchihi@baylibre.com=
+> wrote:
+> >
+> > Hi Chen-Yu,
+> >
+> > I suspect the bug comes from incorrect calibration data offsets for AP
+> > Domain because you confirm that MCU Domain probe runs without issues.
+> > Is it possible to test something for us to confirm this theory (i
+> > don't have an mt8192 board on hand now), when you have the time of
+> > course?
+> > We would like to test AP Domain's calibration data offsets with a
+> > working one, for example :
+> >
+> >  static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] =3D {
+> >                 {
+> > -               .cal_offset =3D { 0x25, 0x28 },
+> > +               .cal_offset =3D { 0x04, 0x04 },
+> >                 .lvts_sensor =3D {
+> >                         { .dt_id =3D MT8192_AP_VPU0 },
+> >                         { .dt_id =3D MT8192_AP_VPU1 }
+> > @@ -1336,7 +1336,7 @@ static const struct lvts_ctrl_data
+> > mt8192_lvts_ap_data_ctrl[] =3D {
+> >                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
+> >         },
+> >         {
+> > -               .cal_offset =3D { 0x2e, 0x31 },
+> > +               .cal_offset =3D { 0x04, 0x04 },
+> >                 .lvts_sensor =3D {
+> >                         { .dt_id =3D MT8192_AP_GPU0 },
+> >                         { .dt_id =3D MT8192_AP_GPU1 }
+> > @@ -1346,7 +1346,7 @@ static const struct lvts_ctrl_data
+> > mt8192_lvts_ap_data_ctrl[] =3D {
+> >                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
+> >         },
+> >         {
+> > -               .cal_offset =3D { 0x37, 0x3a },
+> > +               .cal_offset =3D { 0x04, 0x04 },
+> >                 .lvts_sensor =3D {
+> >                         { .dt_id =3D MT8192_AP_INFRA },
+> >                         { .dt_id =3D MT8192_AP_CAM },
+> > @@ -1356,7 +1356,7 @@ static const struct lvts_ctrl_data
+> > mt8192_lvts_ap_data_ctrl[] =3D {
+> >                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
+> >         },
+> >         {
+> > -               .cal_offset =3D { 0x40, 0x43, 0x46 },
+> > +               .cal_offset =3D { 0x04, 0x04, 0x04 },
+> >                 .lvts_sensor =3D {
+> >                         { .dt_id =3D MT8192_AP_MD0 },
+> >                         { .dt_id =3D MT8192_AP_MD1 },
+> >
+> > This example is tested and works for mt8195,
+> > (all sensors use the same calibration data offset for testing purposes)=
+.
+> >
+> > Thank you in advance for your help.
+>
+> The MCU ones are still tripping though. If I change all of them to 0x04,
+> then nothing trips. There's also a bug in the interrupt handling code
+> that needs to be dealt with.
+>
+> AFAICT the calibration data is stored differently. If you look at ChromeO=
+S's
+> downstream v5.10 driver, you'll see mt6873_efuse_to_cal_data() for MT8192=
+,
+> and mt8195_efuse_to_cal_data() for MT8195. The difference sums up to:
+> MT8195 has all data sequentially stored, while MT8192 has most data store=
+d
+> in lower 24 bits of each 32-bit word, and the highest 8 bits are then use=
+d
+> to pack data for the remaining sensors.
+>
+> Regards
+> ChenYu
 
-I'm giving my thoughts in the cover letter instead of spreading it
-around all the patches so that there's context between the comments.
+Hi Chen-Yu Tsai,
 
-1) Why can't all the logic in this patch series be implemented at the
-framework level? And then allow the drivers to opt into this behavior
-by setting the sync_state() callback.
+Thank you very much for helping me testing this suggestion.
 
-That way, you can land it only for QC drivers by setting up
-sync_state() callback only for QC drivers, but actually have the same
-code function correctly for non-QC drivers too. And then once we have
-this functionality working properly for QC drivers for one kernel
-version (or two), we'll just have the framework set the device's
-driver's sync_state() if it doesn't have one already.
+Indeed, calibration data is stored differently in the mt8192 compared to mt=
+8195.
+So, the mt8192's support will be delayed for now, to allow further debuggin=
+g.
 
-2) sync_state() is not just about power on/off. It's also about the
-power domain level. Can you handle that too please?
+In the mean time, we will only continue to upstream the remaining
+mt8195's source code, so it will get full LVTS support.
+A new series will be submitted soon.
 
-3) In your GDSC drivers, it's not clear to me if you are preventing
-power off until sync_state() only for GDSCs that were already on at
-boot. So if an off-at-boot GDSC gets turned on, and then you attempt
-to turn it off before all its consumers have probed, it'll fail to
-power it off even though that wasn't necessary?
+Would you please point me out to the bug in interrupt handling code?
 
-4) The returning -EBUSY when a power off is attempted seems to be
-quite wasteful. The framework will go through the whole sequence of
-trying to power down, send the notifications and then fail and then
-send the undo notifications. Combined with point (2) I think this can
-be handled better at the aggregation level in the framework to avoid
-even going that far into the power off sequence.
-
--Saravana
-
->
-> I've been doing extensive testing on SM8450, but I've also spinned this
-> on my X13s (SC8280XP). Both patches that add the sync state callback to
-> the SC8280XP and SM8450 are here to provide context. Once we agree on
-> the form, I intend to add the sync state callback to all gdsc providers.
->
-> Currently, some of the gdsc providers might not reach sync state due to
-> list of consumers not probing yet (or at all). The sync state can be
-> enforced by writing 1 to the state_synced sysfs attribute of the
-> provider, thanks to Saravana's commit [1] which has been already merged.
->
-> [1] https://lore.kernel.org/r/20230304005355.746421-3-saravanak@google.co=
-m
->
-> V2 (RFC) of this patchset was here:
-> https://lore.kernel.org/all/20230320134217.1685781-1-abel.vesa@linaro.org=
-/
->
-> Changes since v2:
->  * renamed genpd_queue_power_off_work to pm_genpd_queue_power_off and add=
-ed
->    comment about its purpose w.r.t. it being exported.
->  * added the qcom_cc generic sync state callback to all providers that
->    register GDSCs, instead of SM8450 and SC8280XP
->
-> Changes since v1:
->  * Added the qcom_cc sync state callback which calls in turn the gdsc one
->  * dropped extra semicolon from pm_domain.h
->
-> Abel Vesa (4):
->   PM: domains: Allow power off queuing from providers
->   soc: qcom: rpmhpd: Do proper power off when state synced
->   clk: qcom: gdsc: Avoid actual power off until sync state
->   clk: qcom: Add sync state callback to all providers
->
->  drivers/base/power/domain.c            | 18 ++++++++++--------
->  drivers/clk/qcom/apss-ipq6018.c        |  1 +
->  drivers/clk/qcom/camcc-sc7180.c        |  1 +
->  drivers/clk/qcom/camcc-sc7280.c        |  1 +
->  drivers/clk/qcom/camcc-sdm845.c        |  1 +
->  drivers/clk/qcom/camcc-sm6350.c        |  1 +
->  drivers/clk/qcom/camcc-sm8250.c        |  1 +
->  drivers/clk/qcom/camcc-sm8450.c        |  1 +
->  drivers/clk/qcom/common.c              | 19 +++++++++++++++++++
->  drivers/clk/qcom/common.h              |  2 ++
->  drivers/clk/qcom/dispcc-qcm2290.c      |  1 +
->  drivers/clk/qcom/dispcc-sc7180.c       |  1 +
->  drivers/clk/qcom/dispcc-sc7280.c       |  1 +
->  drivers/clk/qcom/dispcc-sc8280xp.c     |  1 +
->  drivers/clk/qcom/dispcc-sdm845.c       |  1 +
->  drivers/clk/qcom/dispcc-sm6115.c       |  1 +
->  drivers/clk/qcom/dispcc-sm6125.c       |  1 +
->  drivers/clk/qcom/dispcc-sm6350.c       |  1 +
->  drivers/clk/qcom/dispcc-sm6375.c       |  1 +
->  drivers/clk/qcom/dispcc-sm8250.c       |  1 +
->  drivers/clk/qcom/dispcc-sm8450.c       |  1 +
->  drivers/clk/qcom/dispcc-sm8550.c       |  1 +
->  drivers/clk/qcom/gcc-apq8084.c         |  1 +
->  drivers/clk/qcom/gcc-ipq806x.c         |  1 +
->  drivers/clk/qcom/gcc-ipq8074.c         |  1 +
->  drivers/clk/qcom/gcc-mdm9615.c         |  1 +
->  drivers/clk/qcom/gcc-msm8660.c         |  1 +
->  drivers/clk/qcom/gcc-msm8909.c         |  1 +
->  drivers/clk/qcom/gcc-msm8916.c         |  1 +
->  drivers/clk/qcom/gcc-msm8939.c         |  1 +
->  drivers/clk/qcom/gcc-msm8953.c         |  1 +
->  drivers/clk/qcom/gcc-msm8960.c         |  1 +
->  drivers/clk/qcom/gcc-msm8974.c         |  1 +
->  drivers/clk/qcom/gcc-msm8976.c         |  1 +
->  drivers/clk/qcom/gcc-msm8994.c         |  1 +
->  drivers/clk/qcom/gcc-msm8996.c         |  1 +
->  drivers/clk/qcom/gcc-msm8998.c         |  1 +
->  drivers/clk/qcom/gcc-qcm2290.c         |  1 +
->  drivers/clk/qcom/gcc-qcs404.c          |  1 +
->  drivers/clk/qcom/gcc-qdu1000.c         |  1 +
->  drivers/clk/qcom/gcc-sa8775p.c         |  1 +
->  drivers/clk/qcom/gcc-sc7180.c          |  1 +
->  drivers/clk/qcom/gcc-sc7280.c          |  1 +
->  drivers/clk/qcom/gcc-sc8180x.c         |  1 +
->  drivers/clk/qcom/gcc-sc8280xp.c        |  1 +
->  drivers/clk/qcom/gcc-sdm660.c          |  1 +
->  drivers/clk/qcom/gcc-sdm845.c          |  1 +
->  drivers/clk/qcom/gcc-sdx55.c           |  1 +
->  drivers/clk/qcom/gcc-sdx65.c           |  1 +
->  drivers/clk/qcom/gcc-sm6115.c          |  1 +
->  drivers/clk/qcom/gcc-sm6125.c          |  1 +
->  drivers/clk/qcom/gcc-sm6350.c          |  1 +
->  drivers/clk/qcom/gcc-sm6375.c          |  1 +
->  drivers/clk/qcom/gcc-sm7150.c          |  1 +
->  drivers/clk/qcom/gcc-sm8150.c          |  1 +
->  drivers/clk/qcom/gcc-sm8250.c          |  1 +
->  drivers/clk/qcom/gcc-sm8350.c          |  1 +
->  drivers/clk/qcom/gcc-sm8450.c          |  1 +
->  drivers/clk/qcom/gcc-sm8550.c          |  1 +
->  drivers/clk/qcom/gdsc.c                | 26 ++++++++++++++++++++++++++
->  drivers/clk/qcom/gdsc.h                |  6 ++++++
->  drivers/clk/qcom/gpucc-msm8998.c       |  1 +
->  drivers/clk/qcom/gpucc-sc7180.c        |  1 +
->  drivers/clk/qcom/gpucc-sc7280.c        |  1 +
->  drivers/clk/qcom/gpucc-sc8280xp.c      |  1 +
->  drivers/clk/qcom/gpucc-sdm660.c        |  1 +
->  drivers/clk/qcom/gpucc-sdm845.c        |  1 +
->  drivers/clk/qcom/gpucc-sm6115.c        |  1 +
->  drivers/clk/qcom/gpucc-sm6125.c        |  1 +
->  drivers/clk/qcom/gpucc-sm6350.c        |  1 +
->  drivers/clk/qcom/gpucc-sm6375.c        |  1 +
->  drivers/clk/qcom/gpucc-sm8150.c        |  1 +
->  drivers/clk/qcom/gpucc-sm8250.c        |  1 +
->  drivers/clk/qcom/gpucc-sm8350.c        |  1 +
->  drivers/clk/qcom/lcc-ipq806x.c         |  1 +
->  drivers/clk/qcom/lpassaudiocc-sc7280.c |  1 +
->  drivers/clk/qcom/lpasscc-sc7280.c      |  1 +
->  drivers/clk/qcom/lpasscorecc-sc7180.c  |  2 ++
->  drivers/clk/qcom/lpasscorecc-sc7280.c  |  2 ++
->  drivers/clk/qcom/mmcc-apq8084.c        |  1 +
->  drivers/clk/qcom/mmcc-msm8974.c        |  1 +
->  drivers/clk/qcom/mmcc-msm8994.c        |  1 +
->  drivers/clk/qcom/mmcc-msm8996.c        |  1 +
->  drivers/clk/qcom/mmcc-msm8998.c        |  1 +
->  drivers/clk/qcom/mmcc-sdm660.c         |  1 +
->  drivers/clk/qcom/videocc-sc7180.c      |  1 +
->  drivers/clk/qcom/videocc-sc7280.c      |  1 +
->  drivers/clk/qcom/videocc-sdm845.c      |  1 +
->  drivers/clk/qcom/videocc-sm8150.c      |  1 +
->  drivers/clk/qcom/videocc-sm8250.c      |  1 +
->  drivers/soc/qcom/rpmhpd.c              | 19 +++++++------------
->  include/linux/pm_domain.h              |  4 ++++
->  92 files changed, 161 insertions(+), 20 deletions(-)
->
-> --
-> 2.34.1
->
+Best regards,
+Balsam
