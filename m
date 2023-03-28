@@ -2,210 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9450A6CCE6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A544D6CCE6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjC1X7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 19:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42928 "EHLO
+        id S229934AbjC1X7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 19:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjC1X7W (ORCPT
+        with ESMTP id S229848AbjC1X7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 19:59:22 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823263C31;
-        Tue, 28 Mar 2023 16:58:48 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id o2so13302325plg.4;
-        Tue, 28 Mar 2023 16:58:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680047922;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LkFN7H2PytEXuKDycRyGAldh/6JJOL2ZUvn2tVr7QFo=;
-        b=is6DVluW+AV1GZK3OSOeMcu3FKaxqigpbdV1G9moVsrobpffKbCUejI3Ox/yz4wZcr
-         IYFIlGPEJuQ4dCX4j+Qxs/i5wT4SKI3GhvXZ9Sr1K/MLMgi5dOCoWqONzt1cFCX/k3qS
-         pcw+ZJ5FfOMy0kKRxAl1qJ3jIaqP9CUTwbW+be7UhIL47VGu0LR++gadV/cGsZJsKq7U
-         GQbqomynkWfby8rRAk2ebHADRlWy0kSsjh/lmtn5/Gzo4GJki1NGVxKIA8hRKff2gqsk
-         5XHwVrBjBzRqM9h1Wbs+wfF/9a9sWnoDiXSk2uXziAtwkeXVAP0wIXELdAxX4OliT+j+
-         aKIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680047922;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LkFN7H2PytEXuKDycRyGAldh/6JJOL2ZUvn2tVr7QFo=;
-        b=VVImgljf2S82sOOiBTfSPaeQFZFBv/cQDk6NXrzL57uZpzZWqwM1t9kpBMFRNyzupX
-         UI46wReUuH/bPqx+NzlchIbeOrlpmhW9R10F5mu5oGDJSwnO38LdGwbkR4hGgF0k4B1A
-         WA/p1kohNODg+gv8VVEr1eWKjGSOxZ/CUwIKDG5ycT3TfpMrlMn9Hb7NMGiEZrU2tyY/
-         CJGrVU63Cv8QhSDcPgTSbWvCr02yN0x9q1qnIRpeE1JJiOOWXwasAOu8GMMI4oKstgzB
-         rRAt/GZtdUAAtvNxN/4ZOR33cN0dkHOA4L7bUwK1OKQlHkOf5h4EAEHn0H3f5ybtlHNE
-         0TNg==
-X-Gm-Message-State: AAQBX9f2w8MdaTJm3IR0SyXBIuoJN+nv+D+Ubf5zxz+TxgrocZKnkvf1
-        KDK/8jKtgvjx+l1pTBsyspI=
-X-Google-Smtp-Source: AKy350bibwVs0CQNJ3urAW1SgBLIoTWqs8Q50uOWDZD500mzJzkRQDVHxvQ6z4clVhwb9iqIAijOWw==
-X-Received: by 2002:a05:6a20:7491:b0:da:35d1:c46a with SMTP id p17-20020a056a20749100b000da35d1c46amr392937pzd.9.1680047921926;
-        Tue, 28 Mar 2023 16:58:41 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id x19-20020a631713000000b005033e653a17sm3407911pgl.85.2023.03.28.16.58.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 16:58:41 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 16:58:39 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-Subject: Re: [PATCH v13 003/113] KVM: TDX: Initialize the TDX module when
- loading the KVM intel kernel module
-Message-ID: <20230328235839.GA1069687@ls.amr.corp.intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
- <44f7fe9f235e29f2193eaac5890a4dede22c324c.1678643052.git.isaku.yamahata@intel.com>
- <20ebae70fd625f8a0fe87f98c25613a2d4dc5792.camel@intel.com>
- <20230315072711.GF3922605@ls.amr.corp.intel.com>
- <8ee89a1376babf0a5dbc2feb614890b7e2ccf2f8.camel@intel.com>
- <20230316002702.GA197448@ls.amr.corp.intel.com>
- <3ebe8d34ecf199b924f4892ce911077005526628.camel@intel.com>
+        Tue, 28 Mar 2023 19:59:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC743A8F;
+        Tue, 28 Mar 2023 16:59:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D23A6B81D7A;
+        Tue, 28 Mar 2023 23:59:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73EA4C433D2;
+        Tue, 28 Mar 2023 23:59:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680047953;
+        bh=5s/jceGBhS3x4pTau5j0F/bp4u/ttUTJOoT4GP/kaDM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nzzO98GPpCO3/vxDivRrwZP7vYJ3AhTGjwz49hFyKsvIMC5v4kQ4f1wBqaknH3Wc2
+         86EX97p7MJVPW+tpy9X6ZIPx/FioVMtSSnC6RXYXuyVzhR1/RhRLIIlEbq99ca6zFe
+         PdJb6L9KbxqJFPs96bHOPvXVlYySH+tQYQMS46cXMF/JWtz5X4ltlHVRsfWYHAjdgK
+         DVGxBLRYNT7VrKZt5mcWjn6PAsJbMAIuRJLgpmbv++QWUCuJxXBS7bxYo0oLDjpSIr
+         SqI2tIZW082oufaZLDWOrW/8m3DfpUZzOe949JLCmL4fbITAXcteER5p4OZGINxxB5
+         vE0qHonLLtpZQ==
+Received: by mail-lf1-f51.google.com with SMTP id y15so17969008lfa.7;
+        Tue, 28 Mar 2023 16:59:13 -0700 (PDT)
+X-Gm-Message-State: AAQBX9e9NMt9Yerw5mIJCVRxmJT8/iJ9fDfqfCjWvxpKIEFGOqOWkCWd
+        3wAQ83fApowtmH61xyAlsLIdd2bbuSbMC3T/Vbg=
+X-Google-Smtp-Source: AKy350YbrjYclmVhV0j1n7mZbByxXKtbnVAmnJcTWPqxpv6BuqIqu0kDvRzeody5bGDgfItmFOQpSZTilNi3xkQH2po=
+X-Received: by 2002:ac2:5338:0:b0:4eb:1316:a2e6 with SMTP id
+ f24-20020ac25338000000b004eb1316a2e6mr2124951lfh.3.1680047951477; Tue, 28 Mar
+ 2023 16:59:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3ebe8d34ecf199b924f4892ce911077005526628.camel@intel.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230322064122.2384589-1-yukuai1@huaweicloud.com>
+ <20230322064122.2384589-2-yukuai1@huaweicloud.com> <2c2599ec-ac35-6494-aedf-93ecca1969ee@linux.dev>
+ <d1d27b2a-96ec-319e-4690-64e781c9a473@huaweicloud.com> <b91ae03a-14d5-11eb-8ec7-3ed91ff2c59e@linux.dev>
+ <31e7f59e-579a-7812-632d-059ed0a6d441@huaweicloud.com> <3fc2a539-e4cc-e057-6cf0-da7b3953be6e@linux.dev>
+ <3aa073e9-5145-aae2-2201-5ba48c09c693@huaweicloud.com>
+In-Reply-To: <3aa073e9-5145-aae2-2201-5ba48c09c693@huaweicloud.com>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 28 Mar 2023 16:58:59 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7c2b4yYbwNcqKW+TBL=QYEzchnVQ4pDLBT-xoBoTvQmg@mail.gmail.com>
+Message-ID: <CAPhsuW7c2b4yYbwNcqKW+TBL=QYEzchnVQ4pDLBT-xoBoTvQmg@mail.gmail.com>
+Subject: Re: [PATCH -next 1/6] Revert "md: unlock mddev before reap
+ sync_thread in action_store"
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Guoqing Jiang <guoqing.jiang@linux.dev>, logang@deltatee.com,
+        pmenzel@molgen.mpg.de, agk@redhat.com, snitzer@kernel.org,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        Marc Smith <msmith626@gmail.com>,
+        "yukuai (C)" <yukuai3@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 10:41:56AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
+On Wed, Mar 22, 2023 at 11:32=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> =
+wrote:
+>
+> Hi,
+>
+> =E5=9C=A8 2023/03/23 11:50, Guoqing Jiang =E5=86=99=E9=81=93:
+>
+> > Combined your debug patch with above steps. Seems you are
+> >
+> > 1. add delay to action_store, so it can't get lock in time.
+> > 2. echo "want_replacement"**triggers md_check_recovery which can grab l=
+ock
+> >      to start sync thread.
+> > 3. action_store finally hold lock to clear RECOVERY_RUNNING in reap syn=
+c
+> > thread.
+> > 4. Then the new added BUG_ON is invoked since RECOVERY_RUNNING is clear=
+ed
+> >      in step 3.
+>
+> Yes, this is exactly what I did.
+>
+> > sync_thread can be interrupted once MD_RECOVERY_INTR is set which means
+> > the RUNNING
+> > can be cleared, so I am not sure the added BUG_ON is reasonable. And
+> > change BUG_ON
+>
+> I think BUG_ON() is reasonable because only md_reap_sync_thread can
+> clear it, md_do_sync will exit quictly if MD_RECOVERY_INTR is set, but
+> md_do_sync should not see that MD_RECOVERY_RUNNING is cleared, otherwise
+> there is no gurantee that only one sync_thread can be in progress.
+>
+> > like this makes more sense to me.
+> >
+> > +BUG_ON(!test_bit(MD_RECOVERY_RUNNING, &mddev->recovery) &&
+> > +!test_bit(MD_RECOVERY_INTR, &mddev->recovery));
+>
+> I think this can be reporduced likewise, md_check_recovery clear
+> MD_RECOVERY_INTR, and new sync_thread triggered by echo
+> "want_replacement" won't set this bit.
+>
+> >
+> > I think there might be racy window like you described but it should be
+> > really small, I prefer
+> > to just add a few lines like this instead of revert and introduce new
+> > lock to resolve the same
+> > issue (if it is).
+>
+> The new lock that I add in this patchset is just try to synchronize idle
+> and forzen from action_store=EF=BC=88patch 3), I can drop it if you think=
+ this
+> is not necessary.
+>
+> The main changes is patch 4, new lines is not much and I really don't
+> like to add new flags unless we have to, current code is already hard
+> to understand...
+>
+> By the way, I'm concerned that drop the mutex to unregister sync_thread
+> might not be safe, since the mutex protects lots of stuff, and there
+> might exist other implicit dependencies.
+>
+> >
+> > TBH, I am reluctant to see the changes in the series, it can only be
+> > considered
+> > acceptable with conditions:
+> >
+> > 1. the previous raid456 bug can be fixed in this way too, hopefully Mar=
+c
+> > or others
+> >      can verify it.
+> > 2. pass all the tests in mdadm
 
-> > +static int __init tdx_module_setup(void)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = tdx_enable();
-> > +	if (ret) {
-> > +		pr_info("Failed to initialize TDX module.\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	pr_info("TDX is supported.\n");
-> 
-> Both pr_info()s are not required, because tdx_enable() internally prints them.
+AFAICT, this set looks like a better solution for this problem. But I agree
+that we need to make sure it fixes the original bug. mdadm tests are not
+in a very good shape at the moment. I will spend more time to look into
+these tests.
 
-Ok, will drop this line.
-
-
-> >  #endif /* __KVM_X86_VMX_X86_OPS_H */
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 2125fcaa3973..b264012a8478 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -9435,6 +9435,16 @@ static int __kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
-> >  
-> >  	kvm_init_pmu_capability(ops->pmu_ops);
-> >  
-> > +	/*
-> > +	 * TDX requires those methods to enable VMXON by
-> > +	 * kvm_hardware_enable/disable_all()
-> > +	 */
-> > +	static_call_update(kvm_x86_check_processor_compatibility,
-> > +			   ops->runtime_ops->check_processor_compatibility);
-> > +	static_call_update(kvm_x86_hardware_enable,
-> > +			   ops->runtime_ops->hardware_enable);
-> > +	static_call_update(kvm_x86_hardware_disable,
-> > +			   ops->runtime_ops->hardware_disable);
-> >  	r = ops->hardware_setup();
-> >  	if (r != 0)
-> >  		goto out_mmu_exit;
-> 
-> Hmm.. I think this is ugly.  Perhaps we should never do any
-> static_call(kvm_x86_xxx)() in hardware_setup(), because hardware_setup() is
-> called before kvm_ops_update() and may update vendor's kvm_x86_ops.
-> 
-> So probably use hardware_enable_all() in hardware_setup() is a bad idea.
-> 
-> I think we have below options on how to handle:
-> 
-> 1) Use VMX's kvm_x86_ops directly in tdx_hardware_setup().  For instance,
-> something like below:
-> 
-> int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
-> {
-> 	...
-> 
-> 	cpus_read_lock();
-> 	r = on_each_cpu(vt_x86_ops.hardware_enable, ...);
-> 	if (!r)
-> 		r = tdx_module_setup();
-> 	on_each_cpu(vt_x86_ops.hardware_disable, ...);
-> 	cpus_read_unlock();
-> 
-> 	...
-> }
-> 
-> But this doesn't clean up nicely when there's some particular cpus fail to do
-> hardware_enable().  To clean up nicely, we do need additional things similar to
-> the hardware_enable_all() code path: a per-cpu variable or a cpumask_t + a
-> wrapper of vt_x86_ops->hardware_enable() to track which cpus have done
-> hardware_enable() successfully.
-> 
-> 2) Move those static_call_update() into tdx_hardware_setup() so they are TDX
-> code self-contained.  But this would require exposing kvm_x86_ops as symbol,
-> which isn't nice either.
-> 
-> 3) Introduce another kvm_x86_init_ops->hardware_post_setup(), which is called
-> after kvm_ops_update().
-> 
-> Personally, I think 3) perhaps is the most elegant one, but not sure whether
-> Sean/Paolo has any opinion.
-
-I think we can simply update the ops before calling hardware_enable() and
-clean up ops on failure.
-
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 709134e7c12e..42c9b58fd1ef 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -9436,20 +9436,15 @@ static int __kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
- 	kvm_init_pmu_capability(ops->pmu_ops);
- 
- 	/*
--	 * TDX requires those methods to enable VMXON by
--	 * kvm_hardware_enable/disable_all_nolock()
-+	 * Because TDX hardware_setup uses x86_ops, update ops before calling
-+	 * ops->hardware_setup().
- 	 */
--	static_call_update(kvm_x86_check_processor_compatibility,
--			   ops->runtime_ops->check_processor_compatibility);
--	static_call_update(kvm_x86_hardware_enable,
--			   ops->runtime_ops->hardware_enable);
--	static_call_update(kvm_x86_hardware_disable,
--			   ops->runtime_ops->hardware_disable);
-+	kvm_ops_update(ops);
- 	r = ops->hardware_setup();
--	if (r != 0)
-+	if (r != 0) {
-+		kvm_x86_ops.hardware_enable = NULL;
- 		goto out_mmu_exit;
--
--	kvm_ops_update(ops);
-+	}
- 
- 	for_each_online_cpu(cpu) {
- 		smp_call_function_single(cpu, kvm_x86_check_cpu_compat, &r, 1);
-
-
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Thanks,
+Song
