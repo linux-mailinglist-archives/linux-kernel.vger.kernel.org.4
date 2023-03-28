@@ -2,105 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B356CCBE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 23:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21746CCBE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 23:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjC1VHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 17:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
+        id S229800AbjC1VHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 17:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjC1VG5 (ORCPT
+        with ESMTP id S229610AbjC1VHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 17:06:57 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC2C10FC
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 14:06:56 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-752fe6c6d5fso8062739f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 14:06:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1680037615;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hanuyFiFhVc/3RlCbpgD6fgmr+rE2YPGOnPcwJgKGQ0=;
-        b=LYeEAX/3D65jXOQjO9a4EZnrh4gNd9cqsx7Z9HeeHrCaYw/KDOSjx5JiZDr6BlBmuf
-         JJ6Qt/QFydNGJykAO4T9vXIa+AfX9zDdPbNtaK4z3T7QxARh29RHlhVsUHZnSMMVseWu
-         DxkZmbiMzO0lcmUqlg3hYDP4Z/CbAsRNW9xxc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680037615;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hanuyFiFhVc/3RlCbpgD6fgmr+rE2YPGOnPcwJgKGQ0=;
-        b=BLq0qtSrcAP2M70gZ/v7D+KS0DkdBsgmnjC7QCRFRjjxDEGtiEyTM//fK+JyI+B8rC
-         D8DHc+/CBK5N+rKV5UGmyZeEdJfA8PgRAGL3aun3WMETMWNQNtnyKVKxZV9JmNN9nidJ
-         uygZMLujNPAUyBKm5DzMSdvAYF0bJZvL8YS7v864NKNu35CAoU/14C19or2SiK3eoTZr
-         UbH4zd+/TRefpX2y0JVM9i/Cm9eIngaQ3iz3CWOZplQA/REDnz8f2cQ/KSCkRQstrw+A
-         ck8za4PPjSo1nkUx7ucMersaTMXjmB9AQ/z/3okN7BqNH507EnTebjGIjbOT+v0F08GA
-         kkJw==
-X-Gm-Message-State: AO0yUKXklW2iVaA82rkqvQ6IBVBhJ5CCsOUCtRM7/7CipXYRWEBNwT1G
-        h4KXxn90kl+e7uHbF5HVyMnYBQ==
-X-Google-Smtp-Source: AK7set83tp04y3GJbPyEa2LtGOuxdx88tQRQq5+ZfqDKh8TFASHi9M2UIhXhFGmabMnwCbzzKSnmZg==
-X-Received: by 2002:a05:6602:2d87:b0:759:485:41d with SMTP id k7-20020a0566022d8700b007590485041dmr10044879iow.0.1680037615269;
-        Tue, 28 Mar 2023 14:06:55 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05663825d300b003ee71bccb7bsm9903752jat.158.2023.03.28.14.06.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 14:06:55 -0700 (PDT)
-Message-ID: <0b0cdfd6-07da-f146-3d63-c7b3e3b508d4@linuxfoundation.org>
-Date:   Tue, 28 Mar 2023 15:06:54 -0600
+        Tue, 28 Mar 2023 17:07:45 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC5E95;
+        Tue, 28 Mar 2023 14:07:44 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1680037663;
+        bh=8ux9UHqbqpMOlAJI+ZJEgyqwQHWiMyZYCque8yHWZRU=;
+        h=From:Date:Subject:To:Cc:From;
+        b=FUmw3S4kxf8Zu1dS5Ws4Tp4ii5oEjdIBQ+ojpDYFC2bIa17ajXjBsNZQyJuWs7ux3
+         LuzYPEyGZCu+00czxmpthEIcPZrjMG8/aWb0Y3gy3Fk8WvEJCj9y8s2pbenkfMvU8u
+         hi8a+FFSZ1oK0qP5wQloXaO15f9VJATiOyh5ZyPU=
+Date:   Tue, 28 Mar 2023 21:07:35 +0000
+Subject: [PATCH] tools/nolibc: validate C99 compatibility
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 5.15 000/146] 5.15.105-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230328142602.660084725@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230328142602.660084725@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230328-nolibc-c99-v1-1-a8302fb19f19@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIABZXI2QC/x2NQQqDMBAAvyJ7dsEmURq/Ih6SdK0LYZWEFkH8u
+ 4vHGRjmhEqFqcLYnFDoz5U3UXi1DaQ1yJeQP8pgOmM7a94oW+aYMHmPvV+co+D6wQ6gQQyVMJY
+ gadVEfjmr3AstfDyHab6uG/jq3HRxAAAA
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680037661; l=2491;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=8ux9UHqbqpMOlAJI+ZJEgyqwQHWiMyZYCque8yHWZRU=;
+ b=slWT4JgbJIqg7PxtMlqRH7dZbvh2R8m8ZhplDChXZgWmAzzPJJ4HCLnldGH8XlOUtDDAEFQa9
+ 3c3lcSWSWAQBnKyD3WrE5bApCjn/4LMzEil0pnOLAo+MJGngGJzuYPV
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/23 08:41, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.105 release.
-> There are 146 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 30 Mar 2023 14:25:33 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.105-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Most of the code was migrated to C99-conformant __asm__ statements
+before. It seems string.h was missed.
 
-Compiled and booted on my test system. No dmesg regressions.
+Fix string.h and also validate during build that nolibc stays within
+C99.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
 
-thanks,
--- Shuah
+This patch is based on the "dev" branch of the RCU tree.
+---
+ tools/include/nolibc/string.h                | 4 ++--
+ tools/testing/selftests/nolibc/Makefile      | 2 +-
+ tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
+index fffdaf6ff467..0c2e06c7c477 100644
+--- a/tools/include/nolibc/string.h
++++ b/tools/include/nolibc/string.h
+@@ -90,7 +90,7 @@ void *memset(void *dst, int b, size_t len)
+ 
+ 	while (len--) {
+ 		/* prevent gcc from recognizing memset() here */
+-		asm volatile("");
++		__asm__ volatile("");
+ 		*(p++) = b;
+ 	}
+ 	return dst;
+@@ -139,7 +139,7 @@ size_t strlen(const char *str)
+ 	size_t len;
+ 
+ 	for (len = 0; str[len]; len++)
+-		asm("");
++		__asm__("");
+ 	return len;
+ }
+ 
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index bbce57420465..55efcb1011cb 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -83,7 +83,7 @@ CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
+ CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
+ CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
+ CFLAGS_s390 = -m64
+-CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables \
++CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c99 \
+ 		$(call cc-option,-fno-stack-protector) \
+ 		$(CFLAGS_STKP_$(ARCH)) $(CFLAGS_$(ARCH))
+ LDFLAGS := -s
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 47013b78972e..932b2c7b0ce3 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -895,7 +895,7 @@ int main(int argc, char **argv, char **envp)
+ #else
+ 		else if (ioperm(0x501, 1, 1) == 0)
+ #endif
+-			asm volatile ("outb %%al, %%dx" :: "d"(0x501), "a"(0));
++			__asm__ volatile ("outb %%al, %%dx" :: "d"(0x501), "a"(0));
+ 		/* if it does nothing, fall back to the regular panic */
+ #endif
+ 	}
+
+---
+base-commit: a5333c037de823912dd20e933785c63de7679e64
+change-id: 20230328-nolibc-c99-59f44ea45636
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
