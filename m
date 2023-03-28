@@ -2,142 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289376CB5CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 07:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996A76CB5D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 07:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjC1FNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 01:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
+        id S229975AbjC1FOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 01:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjC1FNB (ORCPT
+        with ESMTP id S229496AbjC1FOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 01:13:01 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2585019F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 22:12:58 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id l8-20020a05600c1d0800b003ef6708bbf6so4486345wms.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 22:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679980376;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7NL5B2zEB3jTPHtWtDx1iz+SHXOLfKNEdYRThYQwGLc=;
-        b=zlnoQGiVIjJQBluz7v2YslRDbX63SbDbQkVOJkD/dKCrBo2xUDsMADewjEASdH0oTk
-         MT3kPwB22TWJZA0dWtYlg7kZ0x+102BmK2n40Dvk1lWEbInKiGKNLB8nL1EJ9PreJf4d
-         +IOuTuIsy0HD/Wg+rP3J56aUUchOwePBSkrtueL7/e7e7ATfA+mIApkDVsMndN/JkZPT
-         PrRQOWE9/8o8fPS7IpCV7aCBpNFwBKRaB2mq/Kbxp2sdXqSVWO8EQd4raCQGPgxV4mEC
-         cLyOPnMYmrFYyt8vKCo1vkW/bgA5MWrF2MTJWzyMMrTHphDU0FTSncc9pJpkEzrxwjsO
-         jYDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679980376;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7NL5B2zEB3jTPHtWtDx1iz+SHXOLfKNEdYRThYQwGLc=;
-        b=oHkW94Q59s3+b/63/S8Mj8ZIbb0lePiU3a+bOo5/zxK5A3RxqLFTOVR6BYWYzMxDG1
-         SZPxiyaG7BwWPLYoSbF9Ey4CoDLa3+ARQaf+ldLQ7JKRsFfzlvQB3qdHUYci0Nv12k8S
-         XlZzxtA/tuukT9e5y0h4/FinxCW6/bA6S3cuH4DnutMwpRv/zBrCnIupUjkJYr84vKLH
-         5B0z6hwj6REh9jbglLhLDdCy/6szLA/vRymF0U1vaUGC/UunGa+uxx6otgF0AQyKUUbm
-         vadecBRco89zdnsVY/ZVG6iJklNCc0eXVOgM0CIKjneA5jN6xbb0qfSBl/Uda7qKwWPV
-         WRfw==
-X-Gm-Message-State: AO0yUKXzDQc+aEaF0gmC/JjkDliFT7lfGIc4nyilG6VQDQtZz8NADulV
-        EzJKQ3BIYVj3FKZYzmGXtsKM8fHexConl23rdS1vFA==
-X-Google-Smtp-Source: AK7set9bejMNLadUHItCJEY+tvClPEZKRImqA5n8bQgifJgLS2Xs4Uk1TMn55w2Pog1JrL8aEtG93Bl3lse9l0tEV+0=
-X-Received: by 2002:a7b:cd17:0:b0:3ed:526c:25cb with SMTP id
- f23-20020a7bcd17000000b003ed526c25cbmr3217797wmj.8.1679980376495; Mon, 27 Mar
- 2023 22:12:56 -0700 (PDT)
+        Tue, 28 Mar 2023 01:14:43 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C93010DE
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 22:14:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=c+upOLAl1tNic16x8Kml180+4+m4/ZhbaMD9TGfmxxs=; b=fKGRKKkajfjv/3r8kcgNgFQfnP
+        ikAfkwv4pEVGu1o8CVFNaLzRiEME/UkqQWM+50kX8UwmxxNrySdrHVZiFVyVVCp6LHsCCMW4l7Aaq
+        VISqY0jRfjcgpSbf4jTNXj0ZZAOaddN9RU8H40G+o/+e0hm2ZRSBdP5Q8piYFC6GEB1tOyl9leUqd
+        AnLBLn2a3zmQokWbjKZokz7VD9V234oSaNtlzWAVDhdY6MVnLBK7puPV6n9WYqnjdGpb9nb+YSnc0
+        Rgmj1nu28F+MvOTyEcvGYg+N2heuu+xsfCm7o1kIB7WLirtaN+TGL4jxlkQsY0P4vg+qAfChjzgXG
+        IvqkkaWQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1ph1fH-00DA9M-2y;
+        Tue, 28 Mar 2023 05:14:35 +0000
+Date:   Mon, 27 Mar 2023 22:14:35 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jeff Layton <jlayton@kernel.org>, lucho@ionkov.net,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Amir Goldstein <amir73il@gmail.com>,
+        Pankaj Raghav <p.raghav@samsung.com>
+Subject: Re: 9p caching with cache=loose and cache=fscache
+Message-ID: <ZCJ3uzqDk6RPd28j@bombadil.infradead.org>
+References: <ZA0FEyOtRBvpIXbi@bombadil.infradead.org>
+ <CAFkjPTmVbyuA0jEAjYhsOsg-SE99yXgehmjqUZb4_uWS_L-ZTQ@mail.gmail.com>
+ <ZBSc1jjYJn6noeMl@bombadil.infradead.org>
+ <CAFkjPTmc-OgMEj9kF3y04sRGeOVO_ogEv1fGG=-CfKP-0ZKC_g@mail.gmail.com>
+ <ZCHU6k56nF5849xj@bombadil.infradead.org>
+ <ZCJRlqc/epbRhm93@codewreck.org>
 MIME-Version: 1.0
-References: <20230322114519.3412469-1-bhupesh.sharma@linaro.org>
- <20230322114519.3412469-4-bhupesh.sharma@linaro.org> <333081a2-6b31-3fca-1a95-4273b5a46fb7@linaro.org>
- <d5821429-032d-e1e6-3a4e-ca19eb4a60ed@linaro.org>
-In-Reply-To: <d5821429-032d-e1e6-3a4e-ca19eb4a60ed@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Tue, 28 Mar 2023 10:42:45 +0530
-Message-ID: <CAH=2NtypbmwuXgHTdCiaY6zRZEMrVvZipkoYRW=d_WmOMqE3Og@mail.gmail.com>
-Subject: Re: [PATCH v2 03/10] dt-bindings: qcom-qce: Fix compatibles
- combinations for SM8150 and IPQ4019 SoCs
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, rfoss@kernel.org,
-        neil.armstrong@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCJRlqc/epbRhm93@codewreck.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023 at 17:49, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 27/03/2023 13:49, Vladimir Zapolskiy wrote:
-> > Hi Bhupesh,
-> >
-> > On 3/22/23 13:45, Bhupesh Sharma wrote:
-> >> Currently the compatible list available in 'qce' dt-bindings does not
-> >> support SM8150 and IPQ4019 SoCs directly, leading to following
-> >> 'dtbs_check' error:
-> >>
-> >>   arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-griffin.dtb:
-> >>    crypto@1dfa000: compatible: 'oneOf' conditional failed, one must be fixed:
-> >>      ['qcom,sm8150-qce', 'qcom,qce'] is too long
-> >>      ['qcom,sm8150-qce', 'qcom,qce'] is too short
-> >>
-> >> Fix the same.
-> >>
-> >> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> >> ---
-> >>   Documentation/devicetree/bindings/crypto/qcom-qce.yaml | 6 ++++++
-> >>   1 file changed, 6 insertions(+)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> >> index e375bd981300..90ddf98a6df9 100644
-> >> --- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> >> +++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> >> @@ -24,6 +24,12 @@ properties:
-> >>           deprecated: true
-> >>           description: Kept only for ABI backward compatibility
-> >>
-> >> +      - items:
-> >> +          - enum:
-> >> +              - qcom,ipq4019-qce
-> >> +              - qcom,sm8150-qce
-> >> +          - const: qcom,qce
-> >> +
-> >
-> > thank you for the fix, the change is correct, please apply the tag:
-> >
-> > Fixes: 00f3bc2db351 ("dt-bindings: qcom-qce: Add new SoC compatible strings for Qualcomm QCE IP")
-> >
-> > But let me ask you to split the "items" into two:
-> >
-> >        - items:
-> >            - const: qcom,ipq4019-qce
-> >            - const: qcom,qce
-> >
-> >        - items:
-> >            - const: qcom,sm8150-qce
-> >            - const: qcom,qce
-> >
->
-> Why splitting these? The enum is the preferred way usually, so why here
-> do it differently?
+On Tue, Mar 28, 2023 at 11:31:50AM +0900, Dominique Martinet wrote:
+> Luis Chamberlain wrote on Mon, Mar 27, 2023 at 10:39:54AM -0700:
+> > > I have fixed what
+> > > I hope to be my last bug with the new patch series so it should be
+> > > going into linux-next today.
+> > 
+> > Nice, thanks, since kdevops relies on a host kernel though and we strive
+> > to have stability for that, I personally like to recommend distro
+> > kernels and so they're a few kernel releases out of date. So debian-testing
+> > is on 6.1 as of today for example.
+> > [...]
+> > -    opts: "ro,trans=virtio,version=9p2000.L,posixacl,cache=loose"
+> > +    opts: "ro,trans=virtio,version=9p2000.L,posixacl,cache=none"
+> 
+> Yes, if you want something mostly coherent with the host, cache=none (or
+> cache=mmap if you need mmap, iirc linux build does for linking? if you
+> want to do that on guest...) is what you'll want to use on current
+> kernels.
 
-Exactly, so our compatibles as per my patch can be :
-"qcom,ipq4019-qce", "qcom,qce" or "qcom,sm8150-qce", "qcom,qce" which
-is what we want to achieve as these are the base compatible versions
-for further socs, with compatible strings as:
+OK cool, we use 9p to build on the host and so all the guest has to do
+is just 'make modules_install install'.
 
-"qcom,<new-soc-with-crypto-same-as-ipq4019-qce", "qcom,ipq4019-qce",
-"qcom,qce" , or
-"qcom,<new-soc-with-crypto-same-as-sm8150-qce", "qcom,sm8150-qce", "qcom,qce"
+> > BTW the qemu wiki seems to suggest cache=loose and its why I used it on
+> > kdevops as a default. What about the following so to avoid folks running
+> > into similar issues? I can go and update the wiki too.
+> 
+> I've added Christian in Cc for this point, he's more active on the qemu
+> side
+> (thread started here:
+> https://lkml.kernel.org/r/ZA0FEyOtRBvpIXbi@bombadil.infradead.org
+> )
+> 
+> I have no opinion on the current wording, the default is there for a
+> reason and it's a safe default (none), and cache=loose is clearly
+> described with "no attempts are made at consistency, intended for
+> exclusive, read-only mounts" which I think ought to be clear enough
+> (exclusive means not shared with the host), but if you think it's not
+> clear enough it probably isn't.
 
-Thanks,
-Bhupesh
+It certainly was not.
+
+  LUis
