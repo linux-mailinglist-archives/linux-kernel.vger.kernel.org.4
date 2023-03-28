@@ -2,106 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BA56CB9F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 785B96CB9F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjC1I45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
+        id S230516AbjC1I5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjC1I4z (ORCPT
+        with ESMTP id S229610AbjC1I5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:56:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BED19A1;
-        Tue, 28 Mar 2023 01:56:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 34513219C2;
-        Tue, 28 Mar 2023 08:56:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679993813; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nh59YKaOupZZpTW1uDmCRUQ1aAKohqr+w5EA7d7jR+o=;
-        b=t2sipxadwSudSlY5Uvh6MJVXEiPOV924bCkqtrbZIXG9TkRf6kcSA5opwqRVMm50tG08H7
-        NMLk4pWmyyRlCWYTkuMZVw823ynOk0+WT1aqAEdwyRdusV+U2XIC0M+4OU0xC8BpQJN3Zo
-        aJAjx9sOTgpWEcZaBn/Z8VELsr7fE6M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679993813;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nh59YKaOupZZpTW1uDmCRUQ1aAKohqr+w5EA7d7jR+o=;
-        b=ZPtqPIHV2b/ncSH9qfDV+t916jW0VhX2ALCoE49wzX5TOKprWRiheCiQVk9+9cdvDibeyk
-        WNOTkluVrkaC4+DQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0BAEE1390B;
-        Tue, 28 Mar 2023 08:56:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zhMtAtWrImRqNQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 28 Mar 2023 08:56:53 +0000
-Message-ID: <a231f05c-b157-f495-bf06-8aca903c7e17@suse.cz>
-Date:   Tue, 28 Mar 2023 10:56:52 +0200
+        Tue, 28 Mar 2023 04:57:37 -0400
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A202F19A1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:57:35 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VesLx6b_1679993852;
+Received: from 30.221.134.40(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VesLx6b_1679993852)
+          by smtp.aliyun-inc.com;
+          Tue, 28 Mar 2023 16:57:32 +0800
+Message-ID: <7f3ec279-7a2a-40d9-a60a-b6329e78cb14@linux.alibaba.com>
+Date:   Tue, 28 Mar 2023 16:57:31 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V8 1/2] mm: compaction: move compaction sysctl to its own
- file
-Content-Language: en-US
-To:     ye.xingchen@zte.com.cn, mcgrof@kernel.org
-Cc:     keescook@chromium.org, yzaikin@google.com,
-        akpm@linux-foundation.org, chi.minghao@zte.com.cn,
-        linmiaohe@huawei.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-References: <202303281446280457758@zte.com.cn>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <202303281446280457758@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH 3/8] erofs: simplify erofs_xattr_generic_get()
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
+        chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20230323000949.57608-1-jefflexu@linux.alibaba.com>
+ <20230323000949.57608-4-jefflexu@linux.alibaba.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230323000949.57608-4-jefflexu@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/23 08:46, ye.xingchen@zte.com.cn wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> This moves all compaction sysctls to its own file.
-> 
-> Move sysctl to where the functionality truly belongs to improve
-> readability, reduce merge conflicts, and facilitate maintenance.
-> 
-> I use x86_defconfig and linux-next-20230327 branch
-> $ make defconfig;make all -jn
-> CONFIG_COMPACTION=y
-> 
-> add/remove: 1/0 grow/shrink: 1/1 up/down: 350/-256 (94)
-> Function                                     old     new   delta
-> vm_compaction                                  -     320    +320
-> kcompactd_init                               180     210     +30
-> vm_table                                    2112    1856    -256
-> Total: Before=21119987, After=21120081, chg +0.00%
-> 
-> Despite the addition of 94 bytes the patch still seems a worthwile
-> cleanup.
-> 
-> Link: https://lore.kernel.org/lkml/067f7347-ba10-5405-920c-0f5f985c84f4@suse.cz/
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-Thanks.
+On 2023/3/23 08:09, Jingbo Xu wrote:
+> erofs_xattr_generic_get() won't be called from xattr handlers other than
+> user/trusted/security xattr handler, and thus there's no need of extra
+> checking.
+> 
+> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+
+Thanks,
+Gao Xiang
+
+> ---
+>   fs/erofs/xattr.c | 17 +++--------------
+>   1 file changed, 3 insertions(+), 14 deletions(-)
+> 
+> diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
+> index ab4517e5ec84..b83331a694f3 100644
+> --- a/fs/erofs/xattr.c
+> +++ b/fs/erofs/xattr.c
+> @@ -431,20 +431,9 @@ static int erofs_xattr_generic_get(const struct xattr_handler *handler,
+>   				   struct dentry *unused, struct inode *inode,
+>   				   const char *name, void *buffer, size_t size)
+>   {
+> -	struct erofs_sb_info *const sbi = EROFS_I_SB(inode);
+> -
+> -	switch (handler->flags) {
+> -	case EROFS_XATTR_INDEX_USER:
+> -		if (!test_opt(&sbi->opt, XATTR_USER))
+> -			return -EOPNOTSUPP;
+> -		break;
+> -	case EROFS_XATTR_INDEX_TRUSTED:
+> -		break;
+> -	case EROFS_XATTR_INDEX_SECURITY:
+> -		break;
+> -	default:
+> -		return -EINVAL;
+> -	}
+> +	if (handler->flags == EROFS_XATTR_INDEX_USER &&
+> +	    !test_opt(&EROFS_I_SB(inode)->opt, XATTR_USER))
+> +		return -EOPNOTSUPP;
+>   
+>   	return erofs_getxattr(inode, handler->flags, name, buffer, size);
+>   }
