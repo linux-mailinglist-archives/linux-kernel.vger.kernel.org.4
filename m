@@ -2,122 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BD36CC975
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D12F96CC979
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjC1RlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
+        id S229615AbjC1RmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjC1RlK (ORCPT
+        with ESMTP id S229604AbjC1RmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:41:10 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AC8AF09
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:41:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XA3V/SqCMK03TX/XK2Fih6eGxCHfmkEQA7ESYIGi5Fk=; b=wSBhrhYnvDL1WlDW+LBAElxarl
-        ZR2NCQ2dBSyG9IhbY5oWyVLJGh0Yc3uNJZ7hiV3EiTSqux8Fa/936yvG4bjeQ3F6+auHlCsNZYe2j
-        UWqkpvzzMvld0VUXKopREQfYoOAn5GBnLiISGA3Mv1vqRtqBVrNuLGUTDBkJ6cXz8cUOy/1XfPdi8
-        m2j/hLjPyWNp+m5ShslGKL+X4ndyaaHFZj+PraJxfT6esn+4g9Ms49NZFXVE2W0vLjWco1U4SZDIB
-        eNvtI97S8YJpvgWbXEm4hcReX9tq9JhmM4Bhg3FW9yboPKIkJMPXwSc/nGazL2qODu3KJYjQXBfVe
-        LgdAEKZA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1phDJe-00FLag-0g;
-        Tue, 28 Mar 2023 17:41:02 +0000
-Date:   Tue, 28 Mar 2023 10:41:02 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     Dominique Martinet <asmadeus@codewreck.org>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jeff Layton <jlayton@kernel.org>, lucho@ionkov.net,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Amir Goldstein <amir73il@gmail.com>,
-        Pankaj Raghav <p.raghav@samsung.com>
-Subject: Re: 9p caching with cache=loose and cache=fscache
-Message-ID: <ZCMmrnmZFcH65Orp@bombadil.infradead.org>
-References: <ZA0FEyOtRBvpIXbi@bombadil.infradead.org>
- <ZCHU6k56nF5849xj@bombadil.infradead.org>
- <ZCJRlqc/epbRhm93@codewreck.org>
- <2391219.DQnbcWml7j@silver>
+        Tue, 28 Mar 2023 13:42:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67F4E06B;
+        Tue, 28 Mar 2023 10:42:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C0776181B;
+        Tue, 28 Mar 2023 17:42:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1BFDC433EF;
+        Tue, 28 Mar 2023 17:42:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680025321;
+        bh=2SMsf25Os8n/Nh4s1s1UZQy+WrqVW8lL7AF37NLGxhE=;
+        h=In-Reply-To:References:Subject:From:To:Date:From;
+        b=cZIk5LMM/eQRh5i9MUcZzAdXLzyqXmMMnSXdA1QzSryyEEhco5byULYBGCPq7h+c6
+         9Wh2FIUizPRVV9RfkIs6YelU4xYJlYjQSqyOKIVKxE15K6pakoOh8msL5zVC0zQImk
+         sGBi4GXpIcK7zkmG3ZwZ1+xCN4m4PURdChHj1AbOnKh1hJ1iuKk6c0z0fJ16p2jy09
+         ImHzGJ1tjz2RpJYb8LYLDr3USGDTgEswDxXbDoENWzS74n4RzfWGJt96QeSHNlEVfa
+         nSfUYlp/4oc9htfgTAdKO/+ZzmflTnsZYVcIKVuCIqnK4e6Kn0BYm04HuyGkPHwogJ
+         mBGHNemAn0ErA==
+Message-ID: <5c89937f7b208e872af58636933194a0.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2391219.DQnbcWml7j@silver>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <fb9712fc-d103-769c-2ed7-51a08bbe76b2@quicinc.com>
+References: <20230327163249.1081824-1-quic_mohs@quicinc.com> <b347395dd736194ae9392f2f6ea450b0.sboyd@kernel.org> <fb9712fc-d103-769c-2ed7-51a08bbe76b2@quicinc.com>
+Subject: Re: [PATCH v1 0/4] Remove the qdsp6ss register from lpasscc
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, broonie@kernel.org,
+        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
+        quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
+        quic_visr@quicinc.com, robh+dt@kernel.org, swboyd@chromium.org
+Date:   Tue, 28 Mar 2023 10:41:59 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 01:53:49PM +0200, Christian Schoenebeck wrote:
-> Hi Luis,
-> 
-> not sure which QEMU wiki page you are referring to. AFAIK we currently have 3
-> QEMU wiki pages concerning 9p:
-> 
-> 1. 9p documentation for users:
-> https://wiki.qemu.org/Documentation/9psetup
+Quoting Mohammad Rafi Shaik (2023-03-27 23:02:38)
+>=20
+> On 3/27/2023 11:11 PM, Stephen Boyd wrote:
+> > Quoting Mohammad Rafi Shaik (2023-03-27 09:32:45)
+> >> This patch set is to remove the qdsp6ss register from lpasscc to
+> >> resolve memory conflict's between lpascc and ADSP remoteproc driver.
+> > Is this related to the other patch series[1] ("[PATCH v9 0/4] Add resets
+> > for ADSP based audio clock controller driver")? Does it supersede those?
+> Thanks for comment,
+>=20
+> yes, its superseded form patch series[1] ("[PATCH v9 0/4] Add resets
+> for ADSP based audio clock controller driver") which is required many
+> changes.
+>=20
+> As the qdsp6ss clocks are being enabled in remoteproc driver,
+> the qdsp6ss not required in lpasscc node.
+>=20
+> For audioreach solution required to create the remoteproc_adsp
+> device tree node with base address 0x3000000 for remoteproc driver,
+> as already this address being used in lpasscc node it's causing memory
+> conflict.
 
-It was this one. I hadn't looked at the other ones.
-
-> 2. 9p documentation for developers only:
-> https://wiki.qemu.org/Documentation/9p
-> 
-> 3. How to setup an entire guest on top of a 9p root filesystem:
-> https://wiki.qemu.org/Documentation/9p_root_fs
-> 
-> Only the latter wiki page mentions cache=loose at all:
-> 
->   "To speedup things you can also consider to use e.g. cache=loose instead. 
->    That will deploy a filesystem cache on guest side and reduces the amount
->    of 9p requests to hosts. As a consequence however guest might not 
->    immediately see file changes performed on host side. So choose wisely upon
->    intended use case scenario. You can change between cache=mmap or e.g.
->    cache=loose at any time."
-> 
-> Which I now changed to:
-> 
->   "To speedup things you can also consider to use e.g. cache=loose instead.
-
-My experience is that cache=loose is totally useless.
-
->    That will deploy a filesystem cache on guest side and reduces the amount of
->    9p requests to hosts. As a consequence however guest might not see file
->    changes performed on host side *at* *all*
-
-I think that makes it pretty useless, aren't most setups on the guest read-only?
-
-It is not about "may not see", just won't. For example I modified the
-Makefile and compiled a full kernel and even with those series of
-changes, the guest *minutes later* never saw any updates.
-
-> (as Linux kernel's 9p client 
->    currently does not revalidate for fs changes on host side at all, which is
->    planned to be changed on Linux kernel side soon though). So choose wisely
->    upon intended use case scenario. You can change between cache=mmap or e.g.
->    cache=loose at any time."
-> 
-> On the user page it was already clearly mentioned though:
-> 
->   "Mount the shared folder on guest using
-> 
->       mount -t 9p -o trans=virtio test_mount /tmp/shared/ -oversion=9p2000.L,posixacl,msize=104857600,cache=none
-> 
->   In the above example the folder /home/guest/9p_setup/ shared of the host
->   is shared with the folder /tmp/shared on the guest. We use no cache because
->   current caching mechanisms need more work and the results are not what you
->   would expect."
-
-I got a wiki account now and I was the one who had clarified this.
-
-  Luis
+Ok. Please add the details of superseded patch series to the cover
+letter. It helps us understand what to do with the other patches on the
+list.
