@@ -2,97 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0855E6CC7AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1E16CC76B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232717AbjC1QPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 12:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
+        id S231890AbjC1QEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 12:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbjC1QP0 (ORCPT
+        with ESMTP id S229580AbjC1QEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 12:15:26 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A653F74F;
-        Tue, 28 Mar 2023 09:15:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=DIa//tqesq+okM3W9KzuD9kS6Wsulq7u13ktyLV/9P0=; b=oAbTZVWricJjawxSqQgLP10Eub
-        ZcD+mJ4spWGfPVOsuisyybb7YKhtxLHAY/vn7r5Y3vnOk9QKHAauGth5/Ut143751Cffm5+dEDyGQ
-        irFAEor7/UA9S1lPJyMbRE8tuMImoJ+NeW1OKkMCHpXxN/PzY+MPeLWGDVUnqii+SlSQrSWyCOXPa
-        gmBXjPAIgskwvWZnNfH5cM5tEtM1PUzy9eJWd/iBS3RwuN+1mE2INoA4tkRGiILOjFR256U2pp36i
-        Nj+iYFj0UPNzH4KAMwJ8bmmJGvVaIuJQEO6f6pm6eeuL/Bfe2xl6hProsOdjUac97I6eujNJSZYrB
-        IUwLqZYQ==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1phBSC-00BxbA-Od; Tue, 28 Mar 2023 09:41:45 -0600
-Message-ID: <adaf3376-6f4f-3b6c-1cdb-dfad9df204b8@deltatee.com>
-Date:   Tue, 28 Mar 2023 09:41:43 -0600
+        Tue, 28 Mar 2023 12:04:05 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CADD109;
+        Tue, 28 Mar 2023 09:04:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680019444; x=1711555444;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SfGRpCf7OIzFTMmIf1Wn3fEO6wTX8X/ZvQC/5/Sa2vQ=;
+  b=MVUQFnz6302jsmdezMR3MK++pGj9sYT94Fr5CR+mz37KNihV4P8+k/3m
+   3hK6081CtegIR0OMnKiXsejCLBNSrEOJYCqi+EYWWtQJxGqei2yOhBYDb
+   TYcTHu/2ePcUK/Hb2qEdlRLMUdNdF+yum28tVhYa67LHqw3vHgRSPcyON
+   UCTQjEqe5FM8xXsNAq6Um4sOXf7RAmyM88FxmZyQJ6zlZVjAoUUG77bFL
+   P0oN6IBVdV/m9B883Qcpe/fCuzs1xqg3oYSwy+/0w5O2DzwGHyCkgcyxm
+   WbLCQgmivzZmoC7h6crMs7KtdjTaR/3o1xSn82qP6fzdj3xXE86eAcnzF
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="403223354"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="403223354"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 09:02:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="794882439"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="794882439"
+Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.40.188]) ([10.212.40.188])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 09:02:46 -0700
+Message-ID: <ff0d983c-ad72-6075-c0e3-a9cee1ac46f4@intel.com>
+Date:   Tue, 28 Mar 2023 09:02:45 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-CA
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230328110610.3824-1-cai.huoqing@linux.dev>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20230328110610.3824-1-cai.huoqing@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH v2 03/15] dmaengine: idxd: Export drv_enable/disable and
+ related functions
+Content-Language: en-US
+To:     Tom Zanussi <tom.zanussi@linux.intel.com>,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        fenghua.yu@intel.com, vkoul@kernel.org
+Cc:     tony.luck@intel.com, wajdi.k.feghali@intel.com,
+        james.guilford@intel.com, kanchana.p.sridhar@intel.com,
+        giovanni.cabiddu@intel.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org
+References: <20230328153535.126223-1-tom.zanussi@linux.intel.com>
+ <20230328153535.126223-4-tom.zanussi@linux.intel.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20230328153535.126223-4-tom.zanussi@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: cai.huoqing@linux.dev, bhelgaas@google.com, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v2] PCI/P2PDMA: Fix the comments on pci_p2pmem_find_many()
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023-03-28 05:06, Cai Huoqing wrote:
-> Remove pci_p2pmem_dma() reference,
-> because pci_p2pmem_dma() method is already removed.
+On 3/28/23 8:35 AM, Tom Zanussi wrote:
+> To allow idxd sub-drivers to enable and disable wqs, export them.
 > 
-> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+> Signed-off-by: Tom Zanussi <tom.zanussi@linux.intel.com>
 
-Looks good to me, thanks.
-
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 
 > ---
-> v1->v2:
->   1.remove pci_p2pmem_dma() reference directly instead of
->     using pci_p2pdma_map_segment().
+>   drivers/dma/idxd/device.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> v1 link:
->   https://lore.kernel.org/lkml/eea970cd-d781-9d4c-e020-9086505a4ba7@deltatee.com/
-> 
->  drivers/pci/p2pdma.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
-> index 9e8205572830..6cd98ffca198 100644
-> --- a/drivers/pci/p2pdma.c
-> +++ b/drivers/pci/p2pdma.c
-> @@ -746,8 +746,7 @@ EXPORT_SYMBOL_GPL(pci_has_p2pmem);
->  
->  /**
->   * pci_p2pmem_find_many - find a peer-to-peer DMA memory device compatible with
-> - *	the specified list of clients and shortest distance (as determined
-> - *	by pci_p2pmem_dma())
-> + *	the specified list of clients and shortest distance
->   * @clients: array of devices to check (NULL-terminated)
->   * @num_clients: number of client devices in the list
->   *
+> diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
+> index 5f321f3b4242..af1aa88a66c1 100644
+> --- a/drivers/dma/idxd/device.c
+> +++ b/drivers/dma/idxd/device.c
+> @@ -1406,6 +1406,7 @@ int drv_enable_wq(struct idxd_wq *wq)
+>   err:
+>   	return rc;
+>   }
+> +EXPORT_SYMBOL_NS_GPL(drv_enable_wq, IDXD);
+>   
+>   void drv_disable_wq(struct idxd_wq *wq)
+>   {
+> @@ -1427,6 +1428,7 @@ void drv_disable_wq(struct idxd_wq *wq)
+>   	wq->type = IDXD_WQT_NONE;
+>   	wq->client_count = 0;
+>   }
+> +EXPORT_SYMBOL_NS_GPL(drv_disable_wq, IDXD);
+>   
+>   int idxd_device_drv_probe(struct idxd_dev *idxd_dev)
+>   {
