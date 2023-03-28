@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389536CB5B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 06:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0666CB5BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 07:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbjC1E7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 00:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        id S231977AbjC1FBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 01:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjC1E7S (ORCPT
+        with ESMTP id S229606AbjC1FBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 00:59:18 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21EC02121
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 21:59:15 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 32S4x8Z6026649;
-        Tue, 28 Mar 2023 06:59:08 +0200
-Date:   Tue, 28 Mar 2023 06:59:08 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/8] tools/nolibc: tests: add test for -fstack-protector
-Message-ID: <ZCJ0HDbV1P0Lzv6i@1wt.eu>
-References: <89a960c7-0c9b-43ab-9fc8-a68405f7ed6a@p183>
- <8e156377-e7d9-48ec-a7ee-292aba002201@t-8ch.de>
- <ZCCSsFGqTFWknGBL@1wt.eu>
- <f141145c-fc73-4820-8a1b-98b722f1f28a@p183>
- <ZCCgJSEIqLQ9ZIOC@1wt.eu>
- <c0584807-511c-4496-b062-1263ea38f349@p183>
- <ZCG8I7dVafU/BCGx@1wt.eu>
- <162bc469-1654-4636-bf22-e929170ff092@t-8ch.de>
+        Tue, 28 Mar 2023 01:01:20 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE8D31BDC;
+        Mon, 27 Mar 2023 22:01:17 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id CD7348108;
+        Tue, 28 Mar 2023 05:01:16 +0000 (UTC)
+Date:   Tue, 28 Mar 2023 08:01:15 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Andrew Davis <afd@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC 1/2] ARM: dts: omap: Drop ti,omap36xx compatible
+Message-ID: <20230328050115.GI7501@atomide.com>
+References: <20230216153339.19987-1-afd@ti.com>
+ <20230216153339.19987-2-afd@ti.com>
+ <20230327211838.580af7a9@aktux>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <162bc469-1654-4636-bf22-e929170ff092@t-8ch.de>
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+In-Reply-To: <20230327211838.580af7a9@aktux>
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,44 +45,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
-
-On Mon, Mar 27, 2023 at 11:20:32PM +0000, Thomas Weißschuh wrote:
-> On 2023-03-27 17:54:11+0200, Willy Tarreau wrote:
-> > On Mon, Mar 27, 2023 at 06:32:51PM +0300, Alexey Dobriyan wrote:
-> > > On Sun, Mar 26, 2023 at 09:42:29PM +0200, Willy Tarreau wrote:
-> > > > On Sun, Mar 26, 2023 at 10:38:39PM +0300, Alexey Dobriyan wrote:
-> > > > > > I'm not seeing any issue with your approach instead, let's
-> > > > > > keep it as-is for now (also it does what the stack protector is supposed
-> > > > > > to catch anyway).
-> > > > > 
-> > > > > There are no guarantess about stack layout and dead writes.
-> > > > > The test doesn't corrupt stack reliably, just 99.99% reliably.
-> > > > 
-> > > > Sure but it's for a regtest which can easily be adjusted and its
-> > > > posrtability and ease of maintenance outweights its reliability,
-> > > > especially when in practice what the code does is what we want to
-> > > > test for. And if an extra zero needs to be added to the loop, it
-> > > > can be at a lower cost than maintaining arch-specific asm code.
-> > > 
-> > > For the record, I disagree. Use volatile writes at least.
+* Andreas Kemnade <andreas@kemnade.info> [230327 19:18]:
+> On Thu, 16 Feb 2023 09:33:38 -0600
+> Andrew Davis <afd@ti.com> wrote:
+> 
+> > This was not matched anywhere and provides no additional information.
 > > 
-> > Yeah I agree on the volatile one.
+> > Signed-off-by: Andrew Davis <afd@ti.com>
+> > ---
+> >  arch/arm/boot/dts/omap3-beagle-xm.dts              | 2 +-
+> >  arch/arm/boot/dts/omap3-cm-t3730.dts               | 2 +-
+> >  arch/arm/boot/dts/omap3-igep0020-rev-f.dts         | 2 +-
+> >  arch/arm/boot/dts/omap3-igep0020.dts               | 2 +-
+> >  arch/arm/boot/dts/omap3-igep0030-rev-g.dts         | 2 +-
+> >  arch/arm/boot/dts/omap3-igep0030.dts               | 2 +-
+> >  arch/arm/boot/dts/omap3-lilly-dbb056.dts           | 2 +-
+> >  arch/arm/boot/dts/omap3-n9.dts                     | 2 +-
+> >  arch/arm/boot/dts/omap3-n950.dts                   | 2 +-
+> >  arch/arm/boot/dts/omap3-overo-storm-alto35.dts     | 2 +-
+> >  arch/arm/boot/dts/omap3-overo-storm-chestnut43.dts | 2 +-
+> >  arch/arm/boot/dts/omap3-overo-storm-gallop43.dts   | 2 +-
+> >  arch/arm/boot/dts/omap3-overo-storm-palo35.dts     | 2 +-
+> >  arch/arm/boot/dts/omap3-overo-storm-palo43.dts     | 2 +-
+> >  arch/arm/boot/dts/omap3-overo-storm-summit.dts     | 2 +-
+> >  arch/arm/boot/dts/omap3-overo-storm-tobi.dts       | 2 +-
+> >  arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts    | 2 +-
+> >  arch/arm/boot/dts/omap3-pandora-1ghz.dts           | 2 +-
+> >  arch/arm/boot/dts/omap3-sbc-t3730.dts              | 2 +-
+> >  arch/arm/boot/dts/omap3-sniper.dts                 | 2 +-
+> >  arch/arm/boot/dts/omap3-zoom3.dts                  | 2 +-
+> >  21 files changed, 21 insertions(+), 21 deletions(-)
+> > 
+> hmm, we have
+> drivers/clk/ti/dpll.c:         of_machine_is_compatible("ti,omap36xx"))
 > 
-> Sounds good.
+> but that is more completely
+>   if ((of_machine_is_compatible("ti,omap3630") ||
+>              of_machine_is_compatible("ti,omap36xx")) &&
 > 
-> How do we proceed?
-> 
-> Do I send a new revision?
-> Will you fix up the series?
-> Will someone create a new patch? If so who?
+> so missing omap36xx will not harm if 3630 is there. SO this should
+> be probably ok.
 
-Please just send an additional patch to be applied on top of the existing
-series that turns this to volatile, and add a Reported-by: with Alexey's
-e-mail.
+Looks like we still have these that should be patched away first:
 
-You may even verify that once you do this it's safe to remove the
-optimize attributes.
+drivers/cpufreq/ti-cpufreq.c-   { .compatible = "ti,omap34xx", .data = &omap34xx_soc_data, },
+drivers/cpufreq/ti-cpufreq.c:   { .compatible = "ti,omap36xx", .data = &omap36xx_soc_data, },
 
-Thank you!
-Willy
+Regards,
+
+Tony
