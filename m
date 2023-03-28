@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371FE6CC149
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B25C6CC14E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233288AbjC1NoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
+        id S229638AbjC1Noh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233291AbjC1NoA (ORCPT
+        with ESMTP id S233298AbjC1NoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:44:00 -0400
+        Tue, 28 Mar 2023 09:44:16 -0400
 Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE49A9ECD;
-        Tue, 28 Mar 2023 06:43:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3860C640;
+        Tue, 28 Mar 2023 06:44:01 -0700 (PDT)
 Received: from ubuntu.localdomain (unknown [117.133.56.22])
-        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 9C657580982;
-        Tue, 28 Mar 2023 21:43:30 +0800 (CST)
+        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 487B1580407;
+        Tue, 28 Mar 2023 21:43:32 +0800 (CST)
 From:   Donglin Peng <pengdonglin@sangfor.com.cn>
 To:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
         mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com,
@@ -31,21 +31,21 @@ Cc:     linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
         linux-riscv@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Donglin Peng <pengdonglin@sangfor.com.cn>
-Subject: [PATCH v8 6/8] x86/ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
-Date:   Tue, 28 Mar 2023 06:43:17 -0700
-Message-Id: <20230328134319.2185812-7-pengdonglin@sangfor.com.cn>
+Subject: [PATCH v8 7/8] LoongArch: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+Date:   Tue, 28 Mar 2023 06:43:18 -0700
+Message-Id: <20230328134319.2185812-8-pengdonglin@sangfor.com.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230328134319.2185812-1-pengdonglin@sangfor.com.cn>
 References: <20230328134319.2185812-1-pengdonglin@sangfor.com.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaTBhIVk5JSk4ZTkJCHk0aTVUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpKS0hKTFVKS0tVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OjY6Phw6AT0cKVYRPxQZDzwv
-        PR8aFClVSlVKTUNLS0pKS0pJSUlPVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
-        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFOTU9KNwY+
-X-HM-Tid: 0a872875a62e2eb7kusn9c657580982
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDHhkYVh4aTUkZHx1DH0xISlUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpKS09LQ1VKS0tVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NjY6PRw4Ej0KA1YfAQsTDzUv
+        IxBPCxJVSlVKTUNLS0pKS0pITEpIVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
+        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFOQ0xCNwY+
+X-HM-Tid: 0a872875ac292eb7kusn487b1580407
 X-HM-MType: 1
 X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
@@ -59,115 +59,117 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The commit d4815c5d1bbd ("function_graph: Support recording and
 printing the return value of function") laid the groundwork for the
 for the funcgraph-retval, and this modification makes it available
-on the x86 platform.
+on the LoongArch platform.
 
-We introduce a new structure called fgraph_ret_regs for the x86
-platform to hold return registers and the frame pointer. We then
-fill its content in the return_to_handler and pass its address
-to the function ftrace_return_to_handler to record the return
-value.
+We introduce a new structure called fgraph_ret_regs for the LoongArch
+platform to hold return registers and the frame pointer. We then fill
+its content in the return_to_handler and pass its address to the
+function ftrace_return_to_handler to record the return value.
 
 Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
 ---
 v8:
  - Modify the control range of CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
 ---
- arch/x86/Kconfig              |  1 +
- arch/x86/include/asm/ftrace.h | 18 ++++++++++++++++++
- arch/x86/kernel/ftrace_32.S   |  8 +++++---
- arch/x86/kernel/ftrace_64.S   |  7 ++++---
- 4 files changed, 28 insertions(+), 6 deletions(-)
+ arch/loongarch/Kconfig              |  1 +
+ arch/loongarch/include/asm/ftrace.h | 18 ++++++++++++++++++
+ arch/loongarch/kernel/mcount.S      |  6 ++++--
+ arch/loongarch/kernel/mcount_dyn.S  |  7 ++++---
+ 4 files changed, 27 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index a825bf031f49..956cc988bdf9 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -214,6 +214,7 @@ config X86
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 7fd51257e0ed..4bf60132869b 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -99,6 +99,7 @@ config LOONGARCH
  	select HAVE_FAST_GUP
- 	select HAVE_FENTRY			if X86_64 || DYNAMIC_FTRACE
  	select HAVE_FTRACE_MCOUNT_RECORD
-+	select HAVE_FUNCTION_GRAPH_RETVAL	if HAVE_FUNCTION_GRAPH_TRACER
- 	select HAVE_FUNCTION_GRAPH_TRACER	if X86_32 || (X86_64 && DYNAMIC_FTRACE)
+ 	select HAVE_FUNCTION_ARG_ACCESS_API
++	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
+ 	select HAVE_FUNCTION_GRAPH_TRACER
  	select HAVE_FUNCTION_TRACER
- 	select HAVE_GCC_PLUGINS
-diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
-index 5061ac98ffa1..0b7cda39f29b 100644
---- a/arch/x86/include/asm/ftrace.h
-+++ b/arch/x86/include/asm/ftrace.h
-@@ -147,4 +147,22 @@ static inline bool arch_trace_is_compat_syscall(struct pt_regs *regs)
- #endif /* !COMPILE_OFFSETS */
- #endif /* !__ASSEMBLY__ */
+ 	select HAVE_GENERIC_VDSO
+diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
+index 3418d32d4fc7..433c6218888b 100644
+--- a/arch/loongarch/include/asm/ftrace.h
++++ b/arch/loongarch/include/asm/ftrace.h
+@@ -63,4 +63,22 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+ 
+ #endif /* CONFIG_FUNCTION_TRACER */
  
 +#ifndef __ASSEMBLY__
 +struct fgraph_ret_regs {
-+	unsigned long ax;
-+	unsigned long dx;
-+	unsigned long bp;
++	unsigned long a0;
++	unsigned long a1;
++	unsigned long fp;
 +};
 +
 +static inline unsigned long fgraph_ret_regs_return_value(struct fgraph_ret_regs *ret_regs)
 +{
-+	return ret_regs->ax;
++	return ret_regs->a0;
 +}
 +
 +static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_ret_regs *ret_regs)
 +{
-+	return ret_regs->bp;
++	return ret_regs->fp;
 +}
 +#endif
 +
- #endif /* _ASM_X86_FTRACE_H */
-diff --git a/arch/x86/kernel/ftrace_32.S b/arch/x86/kernel/ftrace_32.S
-index a0ed0e4a2c0c..5a9cc723f81f 100644
---- a/arch/x86/kernel/ftrace_32.S
-+++ b/arch/x86/kernel/ftrace_32.S
-@@ -182,12 +182,14 @@ SYM_CODE_END(ftrace_graph_caller)
+ #endif /* _ASM_LOONGARCH_FTRACE_H */
+diff --git a/arch/loongarch/kernel/mcount.S b/arch/loongarch/kernel/mcount.S
+index 8cdc1563cd33..3e405c0212c0 100644
+--- a/arch/loongarch/kernel/mcount.S
++++ b/arch/loongarch/kernel/mcount.S
+@@ -79,10 +79,12 @@ SYM_FUNC_START(ftrace_graph_caller)
+ SYM_FUNC_END(ftrace_graph_caller)
  
- .globl return_to_handler
- return_to_handler:
--	pushl	%eax
-+	pushl	$0
- 	pushl	%edx
--	movl	$0, %eax
-+	pushl	%eax
-+	movl	%esp, %eax
- 	call	ftrace_return_to_handler
- 	movl	%eax, %ecx
--	popl	%edx
- 	popl	%eax
-+	popl	%edx
-+	addl	$4, %esp		# skip ebp
- 	JMP_NOSPEC ecx
- #endif
-diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-index fb4f1e01b64a..ef78c0bbae62 100644
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -344,12 +344,13 @@ STACK_FRAME_NON_STANDARD_FP(__fentry__)
+ SYM_FUNC_START(return_to_handler)
+-	PTR_ADDI	sp, sp, -2 * SZREG
++	PTR_ADDI	sp, sp, -3 * SZREG
+ 	PTR_S		a0, sp, 0
+ 	PTR_S		a1, sp, SZREG
++	PTR_S		zero, sp, 2 * SZREG
+ 
++	move		a0, sp
+ 	bl		ftrace_return_to_handler
+ 
+ 	/* Restore the real parent address: a0 -> ra */
+@@ -90,7 +92,7 @@ SYM_FUNC_START(return_to_handler)
+ 
+ 	PTR_L		a0, sp, 0
+ 	PTR_L		a1, sp, SZREG
+-	PTR_ADDI	sp, sp, 2 * SZREG
++	PTR_ADDI	sp, sp, 3 * SZREG
+ 	jr		ra
+ SYM_FUNC_END(return_to_handler)
+ #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
+diff --git a/arch/loongarch/kernel/mcount_dyn.S b/arch/loongarch/kernel/mcount_dyn.S
+index bbabf06244c2..ab85a953c6d3 100644
+--- a/arch/loongarch/kernel/mcount_dyn.S
++++ b/arch/loongarch/kernel/mcount_dyn.S
+@@ -131,18 +131,19 @@ SYM_CODE_END(ftrace_graph_caller)
+ 
  SYM_CODE_START(return_to_handler)
- 	UNWIND_HINT_EMPTY
- 	ANNOTATE_NOENDBR
--	subq  $16, %rsp
-+	subq  $24, %rsp
+ 	/* Save return value regs */
+-	PTR_ADDI 	sp, sp, -2 * SZREG
++	PTR_ADDI 	sp, sp, -3 * SZREG
+ 	PTR_S		a0, sp, 0
+ 	PTR_S		a1, sp, SZREG
++	PTR_S		zero, sp, 2 * SZREG
  
- 	/* Save the return values */
- 	movq %rax, (%rsp)
- 	movq %rdx, 8(%rsp)
--	movq %rbp, %rdi
-+	movq %rbp, 16(%rsp)
-+	movq %rsp, %rdi
+-	move		a0, zero
++	move		a0, sp
+ 	bl		ftrace_return_to_handler
+ 	move		ra, a0
  
- 	call ftrace_return_to_handler
+ 	/* Restore return value regs */
+ 	PTR_L		a0, sp, 0
+ 	PTR_L		a1, sp, SZREG
+-	PTR_ADDI 	sp, sp, 2 * SZREG
++	PTR_ADDI 	sp, sp, 3 * SZREG
  
-@@ -357,7 +358,7 @@ SYM_CODE_START(return_to_handler)
- 	movq 8(%rsp), %rdx
- 	movq (%rsp), %rax
- 
--	addq $16, %rsp
-+	addq $24, %rsp
- 	/*
- 	 * Jump back to the old return address. This cannot be JMP_NOSPEC rdi
- 	 * since IBT would demand that contain ENDBR, which simply isn't so for
+ 	jr		ra
+ SYM_CODE_END(return_to_handler)
 -- 
 2.25.1
 
