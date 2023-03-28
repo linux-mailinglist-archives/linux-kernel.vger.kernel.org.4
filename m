@@ -2,163 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095386CC0CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CB56CC0C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbjC1N3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
+        id S232494AbjC1N3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232647AbjC1N3d (ORCPT
+        with ESMTP id S229848AbjC1N3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:29:33 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57133A5C9;
-        Tue, 28 Mar 2023 06:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680010168; x=1711546168;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tQTkT+hUldu+rXz3mb+LVVHL+mcEWhZt7e4D4RyAuNs=;
-  b=PnwKNHjOwDrC9pV3GmBuNyiTYk/IwWo9ZoeACKyvj4dA0yDpWloViYuk
-   H9X2jORUdfDuq2lVwvw9046wTy76gg2Ru3Fa2BraIKQA+HGzh5cUumgt/
-   xmpP1hZPU55YOljumq9PO7KknlTvEg0oztYHAxunhdzxgNX2gdB6KNiRS
-   SFNbGOikncGVaSmbrZTrOYo/A4rS9rGA/CJ9MsMzk65i7L7EU4DkAmzWr
-   JQndu0JCDSZeNpYVH9Gxc68P2vx8McHe4oD893Gij0wPIWG8rgLXcpbC7
-   9lCiahsZdFcPU3sgwWO7BC9MzxQc21m1mE/2gX1A5SG3+7uItkjPiKZbF
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="403174813"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="403174813"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 06:29:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="794803518"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="794803518"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 28 Mar 2023 06:29:05 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ph9No-000IYf-2B;
-        Tue, 28 Mar 2023 13:29:04 +0000
-Date:   Tue, 28 Mar 2023 21:28:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Wei Chen <harperchen1110@gmail.com>, tiffany.lin@mediatek.com
-Cc:     oe-kbuild-all@lists.linux.dev, andrew-ct.chen@mediatek.com,
-        yunfei.dong@mediatek.com, mchehab@kernel.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Wei Chen <harperchen1110@gmail.com>
-Subject: Re: [PATCH] media: mediatek: vcodec: Fix potential array
- out-of-bounds in decoder queue_setup
-Message-ID: <202303282152.CXxK3RNH-lkp@intel.com>
-References: <20230328100951.536955-1-harperchen1110@gmail.com>
+        Tue, 28 Mar 2023 09:29:06 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431521B6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:29:04 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id y35so10045091ljq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:29:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680010142;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AYY5Dr1Z1I9hb8CrXHC9U6DlzlFB2ypBISlRnxmPY3I=;
+        b=LSUtWT/AWGybRwLerH/91aATgi4rurZprloou1LoGbGck955eT2qPbsBESu3GGovM1
+         Ef82KFLSrfncXdZPa+HO0VHz6/FWeQDOYPZtXTBvOcftd29V/kbshbm89jeOhdgNv72z
+         tIBltFQthZyxbP6DnlXHUCQvj7zsXrtmWMZmNso1w1Vz49P7zG/ASg7HQ7r4ifogj/ws
+         eRl3o9x5JWVcUPqx5/Wt8dKS6a6guAPmnjP/QFyjmsxcN542w9RqBqdCOFTBbSRGNeMg
+         tJ/FR4tWEHOoOd6iME5heju7i64W4GuYfqI6w2KVY5O6997+lc7nztRn7DyHHjQcYCvg
+         3g2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680010142;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AYY5Dr1Z1I9hb8CrXHC9U6DlzlFB2ypBISlRnxmPY3I=;
+        b=1VvMbNIfaFPxL6hjAH66Acnw2deg/DKUkHDFRI3sw+gtLl7WLYJlbiCIfBOSOUnv5J
+         QKYmO4/eMqeFM8Q2EzjbOcnFCah619SiRpP/OFKRlSLhtYRY5D3H6U5KipBlRZsYaHED
+         kv3qujzcrPaULQvwtXUDAWPrE2He0hgt04wFZtgW8O7tK8vyE0xGaV1swOWoeBKRJvPw
+         dAXXHvMs+a3hPvGlUD5pSm3+oRsAXMSY652dfsDVmvmmuqAqzQI6ao4MFiexm875WXCf
+         gd11dUEzHMJU9vRT3yPembJWxJ1VnIIuQKajOP9nqwUQve3UpHBSCKlXGEx1S6Ge775T
+         nX3g==
+X-Gm-Message-State: AAQBX9cvUZaZcQhVNx9+yINoHaawqlyhvm+ORu+pVQAv//7i58uHsjTb
+        dyx0cM/gGHaSBsPiNY0RTRj65g==
+X-Google-Smtp-Source: AKy350YAExXR6RZ2krFV7pgEcgdlDZBlWD13Eq4CYLuYxlMIcsU/t+DkcS1rzXhKdXibAB8k4462cA==
+X-Received: by 2002:a2e:9a8e:0:b0:2a0:7d07:edba with SMTP id p14-20020a2e9a8e000000b002a07d07edbamr5228469lji.43.1680010142574;
+        Tue, 28 Mar 2023 06:29:02 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id n12-20020a2e904c000000b00299f0194108sm5049811ljg.31.2023.03.28.06.29.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 06:29:02 -0700 (PDT)
+Message-ID: <76c5b46c-82d6-847c-aaca-7380d310d012@linaro.org>
+Date:   Tue, 28 Mar 2023 15:29:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328100951.536955-1-harperchen1110@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 2/5] ARM: dts: qcom: sdx65: Add support for PCIe PHY
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mani@kernel.org,
+        lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
+        manivannan.sadhasivam@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+References: <1679036039-27157-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1679036039-27157-3-git-send-email-quic_rohiagar@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1679036039-27157-3-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wei,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on linus/master v6.3-rc4 next-20230328]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Chen/media-mediatek-vcodec-Fix-potential-array-out-of-bounds-in-decoder-queue_setup/20230328-181142
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230328100951.536955-1-harperchen1110%40gmail.com
-patch subject: [PATCH] media: mediatek: vcodec: Fix potential array out-of-bounds in decoder queue_setup
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20230328/202303282152.CXxK3RNH-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/caa43627286fb5f3b0b3af7e01e1baeca5c5f9cc
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Wei-Chen/media-mediatek-vcodec-Fix-potential-array-out-of-bounds-in-decoder-queue_setup/20230328-181142
-        git checkout caa43627286fb5f3b0b3af7e01e1baeca5c5f9cc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/media/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303282152.CXxK3RNH-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c: In function 'vb2ops_vdec_queue_setup':
->> drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c:756:20: warning: suggest explicit braces to avoid ambiguous 'else' [-Wdangling-else]
-     756 |                 if (vq->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
-         |                    ^
 
 
-vim +/else +756 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+On 17.03.2023 07:53, Rohit Agarwal wrote:
+> Add devicetree support for PCIe PHY used in SDX65 platform. This PHY is
+> used by the PCIe EP controller.
+> 
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-   739	
-   740	int vb2ops_vdec_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
-   741				    unsigned int *nplanes, unsigned int sizes[],
-   742				    struct device *alloc_devs[])
-   743	{
-   744		struct mtk_vcodec_ctx *ctx = vb2_get_drv_priv(vq);
-   745		struct mtk_q_data *q_data;
-   746		unsigned int i;
-   747	
-   748		q_data = mtk_vdec_get_q_data(ctx, vq->type);
-   749	
-   750		if (q_data == NULL) {
-   751			mtk_v4l2_err("vq->type=%d err\n", vq->type);
-   752			return -EINVAL;
-   753		}
-   754	
-   755		if (*nplanes) {
- > 756			if (vq->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
-   757				if (*nplanes != q_data->fmt->num_planes)
-   758					return -EINVAL;
-   759			else
-   760				if (*nplanes != 1)
-   761					return -EINVAL;
-   762	
-   763			for (i = 0; i < *nplanes; i++) {
-   764				if (sizes[i] < q_data->sizeimage[i])
-   765					return -EINVAL;
-   766			}
-   767		} else {
-   768			if (vq->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
-   769				*nplanes = q_data->fmt->num_planes;
-   770			else
-   771				*nplanes = 1;
-   772	
-   773			for (i = 0; i < *nplanes; i++)
-   774				sizes[i] = q_data->sizeimage[i];
-   775		}
-   776	
-   777		mtk_v4l2_debug(1,
-   778				"[%d]\t type = %d, get %d plane(s), %d buffer(s) of size 0x%x 0x%x ",
-   779				ctx->id, vq->type, *nplanes, *nbuffers,
-   780				sizes[0], sizes[1]);
-   781	
-   782		return 0;
-   783	}
-   784	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Konrad
+>  arch/arm/boot/dts/qcom-sdx65.dtsi | 31 +++++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
+> index 192f9f9..084daf8 100644
+> --- a/arch/arm/boot/dts/qcom-sdx65.dtsi
+> +++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
+> @@ -293,6 +293,37 @@
+>  			status = "disabled";
+>  		};
+>  
+> +		pcie_phy: phy@1c06000 {
+> +			compatible = "qcom,sdx65-qmp-gen4x2-pcie-phy";
+> +			reg = <0x01c06000 0x2000>;
+> +
+> +			clocks = <&gcc GCC_PCIE_AUX_PHY_CLK_SRC>,
+> +				 <&gcc GCC_PCIE_CFG_AHB_CLK>,
+> +				 <&gcc GCC_PCIE_0_CLKREF_EN>,
+> +				 <&gcc GCC_PCIE_RCHNG_PHY_CLK>,
+> +				 <&gcc GCC_PCIE_PIPE_CLK>;
+> +			clock-names = "aux",
+> +				      "cfg_ahb",
+> +				      "ref",
+> +				      "rchng",
+> +				      "pipe";
+> +
+> +			resets = <&gcc GCC_PCIE_PHY_BCR>;
+> +			reset-names = "phy";
+> +
+> +			assigned-clocks = <&gcc GCC_PCIE_RCHNG_PHY_CLK>;
+> +			assigned-clock-rates = <100000000>;
+> +
+> +			power-domains = <&gcc PCIE_GDSC>;
+> +
+> +			#clock-cells = <0>;
+> +			clock-output-names = "pcie_pipe_clk";
+> +
+> +			#phy-cells = <0>;
+> +
+> +			status = "disabled";
+> +		};
+> +
+>  		tcsr_mutex: hwlock@1f40000 {
+>  			compatible = "qcom,tcsr-mutex";
+>  			reg = <0x01f40000 0x40000>;
