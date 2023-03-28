@@ -2,56 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7486CC9FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 20:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2326CC9FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 20:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjC1SUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 14:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
+        id S229520AbjC1SXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 14:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjC1SUe (ORCPT
+        with ESMTP id S229451AbjC1SXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 14:20:34 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B95510EF
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:20:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680027633; x=1711563633;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ehl2l/YXzABPoP55K0efsJ5+hepRqDPbrMR4yAeoFdE=;
-  b=GxUTy6UCjnYbhAWUdpZLI2a7ITbjc3oLMrSNCCrlXyOWZmZcZPIURHxD
-   cm/m3DR7rFRJdjz/Knu9ZPsRL6h6C0RRgxma1PxG/DX5OwJ9CIWLmpwcp
-   DoV7hm6mbONg8Y7nsEj2OwTGYJzL4V6HysLhSfzWpiOokzg8h/L7bBCXD
-   Im+dRjboOsmBOimhZ10Ypnd8jFfNShFQBRV3pYv8qpEWVsf4QGBaMg7ka
-   z8ABUMXbXtMDrGLklp1XvycpEC4WkKl78U+zttANfS2whrbi8KHe7Quj+
-   tAVT6AI70C79GUw8IL8eKPRxgI5+RaPfUvV0D/oi35tXNf+aXUZu81gVm
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="321055067"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="321055067"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 11:20:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="716570304"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="716570304"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga001.jf.intel.com with ESMTP; 28 Mar 2023 11:20:32 -0700
-From:   kan.liang@linux.intel.com
-To:     joro@8bytes.org, will@kernel.org, baolu.lu@linux.intel.com,
-        dwmw2@infradead.org, robin.murphy@arm.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH V2] iommu/vt-d: Fix a IOMMU perfmon warning when CPU hotplug
-Date:   Tue, 28 Mar 2023 11:20:28 -0700
-Message-Id: <20230328182028.1366416-1-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 28 Mar 2023 14:23:50 -0400
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7590E1736
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:23:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1680027808; bh=Zhkb52UN4pGmOgfIInyrCcAMDrh46P0XG+aPDtokb5Q=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=hk0/8TUt4RGEGszjChE1b9tACwVvqxkdd36F4bUKVl1koivoH7ZAAyIjf0OBusLbg
+         3nvR/roBtlqWE5lfoJTUyQdemwqNEEeyN5TK4qkuAlSisTQXvT5HNNb5AusyWdVVPR
+         IUifgGmd/az6/ehDslyyM2ssFNRM4KpC2Jcim9O0=
+Received: by b221-6.in.mailobj.net [192.168.90.26] with ESMTP
+        via ip-20.mailobj.net [213.182.54.20]
+        Tue, 28 Mar 2023 20:23:28 +0200 (CEST)
+X-EA-Auth: vSezUHgXhoJQdfC2bzp9VLgj31jApqprS7Ch5L3kM4I+hH1Tg7vk9I1bi02/R+4ieIExgTRHteZIq4j9f9YMsNOxiVV5kKZV
+Date:   Tue, 28 Mar 2023 23:53:22 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Kloudifold <cloudifold.3125@gmail.com>
+Cc:     outreachy@lists.linux.dev, teddy.wang@siliconmotion.com,
+        sudipm.mukherjee@gmail.com, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        alison.schofield@intel.com
+Subject: Re: [PATCH v5] staging: sm750: Rename sm750_hw_cursor_* functions to
+ snake_case
+Message-ID: <ZCMwmpEoe4qCuxMz@ubun2204.myguest.virtualbox.org>
+References: <ZCLMAJ5APrFRMCWu@CloudiRingWorld>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCLMAJ5APrFRMCWu@CloudiRingWorld>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,206 +50,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On Tue, Mar 28, 2023 at 07:16:54PM +0800, Kloudifold wrote:
 
-A warning can be triggered when hotplug CPU 0.
-$ echo 0 > /sys/devices/system/cpu/cpu0/online
+Hi Kloudifold,
 
-[11958.737635] ------------[ cut here ]------------
-[11958.742882] Voluntary context switch within RCU read-side critical
-section!
-[11958.742891] WARNING: CPU: 0 PID: 19 at kernel/rcu/tree_plugin.h:318
-rcu_note_context_switch+0x4f4/0x580
-[11958.860095] RIP: 0010:rcu_note_context_switch+0x4f4/0x580
-[11958.960360] Call Trace:
-[11958.963161]  <TASK>
-[11958.965565]  ? perf_event_update_userpage+0x104/0x150
-[11958.971293]  __schedule+0x8d/0x960
-[11958.975165]  ? perf_event_set_state.part.82+0x11/0x50
-[11958.980891]  schedule+0x44/0xb0
-[11958.984464]  schedule_timeout+0x226/0x310
-[11958.989017]  ? __perf_event_disable+0x64/0x1a0
-[11958.994054]  ? _raw_spin_unlock+0x14/0x30
-[11958.998605]  wait_for_completion+0x94/0x130
-[11959.003352]  __wait_rcu_gp+0x108/0x130
-[11959.007616]  synchronize_rcu+0x67/0x70
-[11959.011876]  ? invoke_rcu_core+0xb0/0xb0
-[11959.016333]  ? __bpf_trace_rcu_stall_warning+0x10/0x10
-[11959.022147]  perf_pmu_migrate_context+0x121/0x370
-[11959.027478]  iommu_pmu_cpu_offline+0x6a/0xa0
-[11959.032325]  ? iommu_pmu_del+0x1e0/0x1e0
-[11959.036782]  cpuhp_invoke_callback+0x129/0x510
-[11959.041825]  cpuhp_thread_fun+0x94/0x150
-[11959.046283]  smpboot_thread_fn+0x183/0x220
-[11959.050933]  ? sort_range+0x20/0x20
-[11959.054902]  kthread+0xe6/0x110
-[11959.058479]  ? kthread_complete_and_exit+0x20/0x20
-[11959.063911]  ret_from_fork+0x1f/0x30
-[11959.067982]  </TASK>
-[11959.070489] ---[ end trace 0000000000000000 ]---
+> sm750 driver has sm750_hw_cursor_* functions, which are named in
 
-The synchronize_rcu() will be invoked in the perf_pmu_migrate_context(),
-when migrating a PMU to a new CPU. However, the current for_each_iommu()
-is within RCU read-side critical section.
+As mentioned earlier, the driver name "sm750" is not required here. You can
+simply start the line with "The driver ...".
 
-Two methods were considered to fix the issue.
-- Use the dmar_global_lock to replace the RCU read lock when going
-  through the drhd list. But it triggers a lockdep warning.
-- Use the cpuhp_setup_state_multi() to set up a dedicated state for each
-  IOMMU PMU. The lock can be avoided.
+> camelcase. Rename them to snake case to follow the function naming
+> convention.
+> 
+> - sm750_hw_cursor_setSize  => sm750_hw_cursor_set_size
+> - sm750_hw_cursor_setPos   => sm750_hw_cursor_set_pos
+> - sm750_hw_cursor_setColor => sm750_hw_cursor_set_color
+> - sm750_hw_cursor_setData  => sm750_hw_cursor_set_data
+> - sm750_hw_cursor_setData2 => sm750_hw_cursor_set_data2
+> 
+> Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
+> 
+> ---
+> Changes in v5:
+> - Include missed recipients in v4, no functional change to the code
 
-The latter method is implemented in this patch. Since each IOMMU PMU has
-a dedicated state, add cpuhp_node and cpu in struct iommu_pmu to track
-the state. The state can be dynamically allocated now. Remove the
-CPUHP_AP_PERF_X86_IOMMU_PERF_ONLINE.
+I still do not see the full maintainer list on this patch. If I do the
+following:
+	$ perl scripts/get_maintainer.pl --separator , --nokeywords --nogit --nogit-fallback --norolestats drivers/staging/sm750fb/sm750.c
 
-Fixes: 46284c6ceb5e ("iommu/vt-d: Support cpumask for IOMMU perfmon")
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- drivers/iommu/intel/iommu.h   |  2 ++
- drivers/iommu/intel/perfmon.c | 68 ++++++++++++++++++++++-------------
- include/linux/cpuhotplug.h    |  1 -
- 3 files changed, 46 insertions(+), 25 deletions(-)
+I get the following list:
+Sudip Mukherjee <sudipm.mukherjee@gmail.com>,Teddy Wang <teddy.wang@siliconmotion.com>,Greg Kroah-Hartman <gregkh@linuxfoundation.org>,linux-fbdev@vger.kernel.org,devel@driverdev.osuosl.org,linux-kernel@vger.kernel.org
 
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index d6df3b865812..694ab9b7d3e9 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -641,6 +641,8 @@ struct iommu_pmu {
- 	DECLARE_BITMAP(used_mask, IOMMU_PMU_IDX_MAX);
- 	struct perf_event	*event_list[IOMMU_PMU_IDX_MAX];
- 	unsigned char		irq_name[16];
-+	struct hlist_node	cpuhp_node;
-+	int			cpu;
- };
- 
- #define IOMMU_IRQ_ID_OFFSET_PRQ		(DMAR_UNITS_SUPPORTED)
-diff --git a/drivers/iommu/intel/perfmon.c b/drivers/iommu/intel/perfmon.c
-index e17d9743a0d8..e27bc954e866 100644
---- a/drivers/iommu/intel/perfmon.c
-+++ b/drivers/iommu/intel/perfmon.c
-@@ -773,19 +773,34 @@ static void iommu_pmu_unset_interrupt(struct intel_iommu *iommu)
- 	iommu->perf_irq = 0;
- }
- 
--static int iommu_pmu_cpu_online(unsigned int cpu)
-+static int iommu_pmu_cpu_online(unsigned int cpu, struct hlist_node *node)
- {
-+	struct iommu_pmu *iommu_pmu = hlist_entry_safe(node, typeof(*iommu_pmu), cpuhp_node);
-+
- 	if (cpumask_empty(&iommu_pmu_cpu_mask))
- 		cpumask_set_cpu(cpu, &iommu_pmu_cpu_mask);
- 
-+	if (cpumask_test_cpu(cpu, &iommu_pmu_cpu_mask))
-+		iommu_pmu->cpu = cpu;
-+
- 	return 0;
- }
- 
--static int iommu_pmu_cpu_offline(unsigned int cpu)
-+static int iommu_pmu_cpu_offline(unsigned int cpu, struct hlist_node *node)
- {
--	struct dmar_drhd_unit *drhd;
--	struct intel_iommu *iommu;
--	int target;
-+	struct iommu_pmu *iommu_pmu = hlist_entry_safe(node, typeof(*iommu_pmu), cpuhp_node);
-+	int target = cpumask_first(&iommu_pmu_cpu_mask);
-+
-+	/*
-+	 * The iommu_pmu_cpu_mask has been updated when offline the CPU
-+	 * for the first iommu_pmu. Migrate the other iommu_pmu to the
-+	 * new target.
-+	 */
-+	if ((target < nr_cpu_ids) && (target != iommu_pmu->cpu)) {
-+		perf_pmu_migrate_context(&iommu_pmu->pmu, cpu, target);
-+		iommu_pmu->cpu = target;
-+		return 0;
-+	}
- 
- 	if (!cpumask_test_and_clear_cpu(cpu, &iommu_pmu_cpu_mask))
- 		return 0;
-@@ -795,45 +810,50 @@ static int iommu_pmu_cpu_offline(unsigned int cpu)
- 	if (target < nr_cpu_ids)
- 		cpumask_set_cpu(target, &iommu_pmu_cpu_mask);
- 	else
--		target = -1;
-+		return 0;
- 
--	rcu_read_lock();
--
--	for_each_iommu(iommu, drhd) {
--		if (!iommu->pmu)
--			continue;
--		perf_pmu_migrate_context(&iommu->pmu->pmu, cpu, target);
--	}
--	rcu_read_unlock();
-+	perf_pmu_migrate_context(&iommu_pmu->pmu, cpu, target);
-+	iommu_pmu->cpu = target;
- 
- 	return 0;
- }
- 
- static int nr_iommu_pmu;
-+static enum cpuhp_state iommu_cpuhp_slot;
- 
- static int iommu_pmu_cpuhp_setup(struct iommu_pmu *iommu_pmu)
- {
- 	int ret;
- 
--	if (nr_iommu_pmu++)
--		return 0;
-+	if (!nr_iommu_pmu) {
-+		ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN,
-+					      "driver/iommu/intel/perfmon:online",
-+					      iommu_pmu_cpu_online,
-+					      iommu_pmu_cpu_offline);
-+		if (ret < 0)
-+			return ret;
-+		iommu_cpuhp_slot = ret;
-+	}
- 
--	ret = cpuhp_setup_state(CPUHP_AP_PERF_X86_IOMMU_PERF_ONLINE,
--				"driver/iommu/intel/perfmon:online",
--				iommu_pmu_cpu_online,
--				iommu_pmu_cpu_offline);
--	if (ret)
--		nr_iommu_pmu = 0;
-+	ret = cpuhp_state_add_instance(iommu_cpuhp_slot, &iommu_pmu->cpuhp_node);
-+	if (ret) {
-+		if (!nr_iommu_pmu)
-+			cpuhp_remove_multi_state(iommu_cpuhp_slot);
-+		return ret;
-+	}
-+	nr_iommu_pmu++;
- 
--	return ret;
-+	return 0;
- }
- 
- static void iommu_pmu_cpuhp_free(struct iommu_pmu *iommu_pmu)
- {
-+	cpuhp_state_remove_instance(iommu_cpuhp_slot, &iommu_pmu->cpuhp_node);
-+
- 	if (--nr_iommu_pmu)
- 		return;
- 
--	cpuhp_remove_state(CPUHP_AP_PERF_X86_IOMMU_PERF_ONLINE);
-+	cpuhp_remove_multi_state(iommu_cpuhp_slot);
- }
- 
- void iommu_pmu_register(struct intel_iommu *iommu)
-diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-index c6fab004104a..5b2f8147d1ae 100644
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -218,7 +218,6 @@ enum cpuhp_state {
- 	CPUHP_AP_PERF_X86_CQM_ONLINE,
- 	CPUHP_AP_PERF_X86_CSTATE_ONLINE,
- 	CPUHP_AP_PERF_X86_IDXD_ONLINE,
--	CPUHP_AP_PERF_X86_IOMMU_PERF_ONLINE,
- 	CPUHP_AP_PERF_S390_CF_ONLINE,
- 	CPUHP_AP_PERF_S390_SF_ONLINE,
- 	CPUHP_AP_PERF_ARM_CCI_ONLINE,
--- 
-2.35.1
+You are still missing these mailing list in your to list: linux-fbdev@vger.kernel.org,devel@driverdev.osuosl.org
+
+Are you doing anything different to get the maintainer list? What?
+
+Thank you,
+Deepak.
+
+> 
+> Changes in v4:
+> - Update the commit msg (Deepak)
+> - Use tabs replace 8 spaces
+> 
+> This v4 patch was prompted by 2 errors, 2 warnings and 1 checks reported
+> by the scripts/checkpatch.pl, which detected the style problem.
+> 
+> Changes in v3:
+> - Add this changelog (Philipp)
+> - Move lkp tags and link to the correct location in commit log (Alison)
+> - Update the commit msg (Philip)
+> - Update the commit log (Bagas, Julia)
+> 
+> Changes in v2:
+> - Use new function names in call sites (LKP)
+> 
+> This v2 patch was prompted by an error reported by the Linux test
+> robot, which detected the compile error.
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@intel.com/
+> ---
+>  drivers/staging/sm750fb/sm750.c        | 22 +++++++++++-----------
+>  drivers/staging/sm750fb/sm750_cursor.c | 14 +++++++-------
+>  drivers/staging/sm750fb/sm750_cursor.h | 12 ++++++------
+>  3 files changed, 24 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
+> index effc7fcc3..5d7249e82 100644
+> --- a/drivers/staging/sm750fb/sm750.c
+> +++ b/drivers/staging/sm750fb/sm750.c
+> @@ -121,14 +121,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
+>  
+>  	sm750_hw_cursor_disable(cursor);
+>  	if (fbcursor->set & FB_CUR_SETSIZE)
+> -		sm750_hw_cursor_setSize(cursor,
+> -					fbcursor->image.width,
+> -					fbcursor->image.height);
+> +		sm750_hw_cursor_set_size(cursor,
+> +					 fbcursor->image.width,
+> +					 fbcursor->image.height);
+>  
+>  	if (fbcursor->set & FB_CUR_SETPOS)
+> -		sm750_hw_cursor_setPos(cursor,
+> -				       fbcursor->image.dx - info->var.xoffset,
+> -				       fbcursor->image.dy - info->var.yoffset);
+> +		sm750_hw_cursor_set_pos(cursor,
+> +					fbcursor->image.dx - info->var.xoffset,
+> +					fbcursor->image.dy - info->var.yoffset);
+>  
+>  	if (fbcursor->set & FB_CUR_SETCMAP) {
+>  		/* get the 16bit color of kernel means */
+> @@ -142,14 +142,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
+>  		     ((info->cmap.green[fbcursor->image.bg_color] & 0xfc00) >> 5) |
+>  		     ((info->cmap.blue[fbcursor->image.bg_color] & 0xf800) >> 11);
+>  
+> -		sm750_hw_cursor_setColor(cursor, fg, bg);
+> +		sm750_hw_cursor_set_color(cursor, fg, bg);
+>  	}
+>  
+>  	if (fbcursor->set & (FB_CUR_SETSHAPE | FB_CUR_SETIMAGE)) {
+> -		sm750_hw_cursor_setData(cursor,
+> -					fbcursor->rop,
+> -					fbcursor->image.data,
+> -					fbcursor->mask);
+> +		sm750_hw_cursor_set_data(cursor,
+> +					 fbcursor->rop,
+> +					 fbcursor->image.data,
+> +					 fbcursor->mask);
+>  	}
+>  
+>  	if (fbcursor->enable)
+> diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
+> index 43e6f52c2..ff643e33f 100644
+> --- a/drivers/staging/sm750fb/sm750_cursor.c
+> +++ b/drivers/staging/sm750fb/sm750_cursor.c
+> @@ -58,13 +58,13 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
+>  	poke32(HWC_ADDRESS, 0);
+>  }
+>  
+> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
+> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
+>  {
+>  	cursor->w = w;
+>  	cursor->h = h;
+>  }
+>  
+> -void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
+> +void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y)
+>  {
+>  	u32 reg;
+>  
+> @@ -73,7 +73,7 @@ void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
+>  	poke32(HWC_LOCATION, reg);
+>  }
+>  
+> -void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
+> +void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg)
+>  {
+>  	u32 reg = (fg << HWC_COLOR_12_2_RGB565_SHIFT) &
+>  		HWC_COLOR_12_2_RGB565_MASK;
+> @@ -82,8 +82,8 @@ void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
+>  	poke32(HWC_COLOR_3, 0xffe0);
+>  }
+>  
+> -void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+> -			     const u8 *pcol, const u8 *pmsk)
+> +void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
+> +			      const u8 *pcol, const u8 *pmsk)
+>  {
+>  	int i, j, count, pitch, offset;
+>  	u8 color, mask, opr;
+> @@ -132,8 +132,8 @@ void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+>  	}
+>  }
+>  
+> -void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
+> -			      const u8 *pcol, const u8 *pmsk)
+> +void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
+> +			       const u8 *pcol, const u8 *pmsk)
+>  {
+>  	int i, j, count, pitch, offset;
+>  	u8 color, mask;
+> diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
+> index b59643dd6..88fa02f63 100644
+> --- a/drivers/staging/sm750fb/sm750_cursor.h
+> +++ b/drivers/staging/sm750fb/sm750_cursor.h
+> @@ -5,11 +5,11 @@
+>  /* hw_cursor_xxx works for voyager,718 and 750 */
+>  void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
+>  void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
+> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
+> -void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
+> -void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
+> -void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+> -			     const u8 *data, const u8 *mask);
+> -void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
+> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
+> +void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y);
+> +void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg);
+> +void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
+>  			      const u8 *data, const u8 *mask);
+> +void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
+> +			       const u8 *data, const u8 *mask);
+>  #endif
+> -- 
+> 2.40.0
+> 
+> 
+
 
