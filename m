@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9936CC065
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D21B6CC066
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233131AbjC1NPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
+        id S232809AbjC1NP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232537AbjC1NOw (ORCPT
+        with ESMTP id S232433AbjC1NO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:14:52 -0400
+        Tue, 28 Mar 2023 09:14:58 -0400
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95ADA269
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:14:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D42B463
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:14:48 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sendonly@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 40576425BD;
-        Tue, 28 Mar 2023 13:14:42 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 12A7C425FF;
+        Tue, 28 Mar 2023 13:14:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1680009284; bh=7ZNytj3rXeQBs6gPjD4i3yWkwyH0nFzGUCcQ2o/qxC8=;
+        t=1680009287; bh=7+GJvR9Q7iwdn6RqvrNP3aRb/S8micm1/klhGlkjTQs=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=EVmoJS82Q3iiN9At/Do+rv3pDPq3v+0ZS6eYH8eXLPScwjCahi2OTJ9EXjmY6QcqU
-         vdeoam1wqI9i/KvnJTXv1/XHz2WnEDkGyf5R8+yhNlb9/Djzyk+Qlo92Xh0ILxZJZk
-         crR7TSlRAKwn8C+aeWMFE7YEYY9vQGeZuRrm7j/EAgYwM5xCUqpSEunZWVQqvqHhnb
-         CCl6H+7QhynjChGQCCRsiKphQRc4bu7A9aNZSSrZv7XedBDG4Dg3TKx+M/VW7LkUE/
-         6wzLUB3JmTCjQWsfwST2TgE2nviQq/Ox7qQU4kagDp/OOy9Ms7mJA5WQolVKVAgrWf
-         JVGKsAoK5aMLw==
+        b=hmxYgkrmhKrSMm1gsbnyzuk/Oy5Z9ZH4Yk2doGwr2ElU+dG8ORruuNYMvyZg21x7d
+         ZNe0BhG5knyu2NXY6w8YxOuaUsOLx4aPUaskc659yxlOnmdcVh/pxGbhrIdhh7QDv8
+         akB+yp2FzyOMUHulOeI+OcUxXBmJcJHEOzCBAcc+wqadjIlNIYabkVZGt35Zd/4wSh
+         EKYjVa8+adiglibmgZGRdFrr6HqqiCTEKuNYW+dQ/IRNpD+Cc7m1cc16OljBeDPPT+
+         ZDlvaf71ceYRuH1Gu24U8tifqGusHjEbkPzVS024A4nfApJ1d5pEtuaIe461T2ofdE
+         Z61s+TVPw0heA==
 From:   Hector Martin <marcan@marcan.st>
-Date:   Tue, 28 Mar 2023 22:14:15 +0900
-Subject: [PATCH 2/5] soc: apple: mailbox: Add ASC/M3 mailbox driver
+Date:   Tue, 28 Mar 2023 22:14:16 +0900
+Subject: [PATCH 3/5] soc: apple: rtkit: Port to the internal mailbox driver
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230328-soc-mailbox-v1-2-3953814532fd@marcan.st>
+Message-Id: <20230328-soc-mailbox-v1-3-3953814532fd@marcan.st>
 References: <20230328-soc-mailbox-v1-0-3953814532fd@marcan.st>
 In-Reply-To: <20230328-soc-mailbox-v1-0-3953814532fd@marcan.st>
 To:     Sven Peter <sven@svenpeter.dev>,
@@ -48,12 +48,12 @@ Cc:     linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org,
         Hector Martin <marcan@marcan.st>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=16645; i=marcan@marcan.st;
- h=from:subject:message-id; bh=7ZNytj3rXeQBs6gPjD4i3yWkwyH0nFzGUCcQ2o/qxC8=;
- b=owGbwMvMwCEm+yP4NEe/cRLjabUkhhSlF1ay65fk7DRQF7z0ONR5QaTElYja9wuvPfujWrnE8
- CCrmQVTRykLgxgHg6yYIkvjid5T3Z7Tz6mrpkyHmcPKBDKEgYtTACayfQ8jw+7pTipNdSlTy1bb
- TSq4YHLlKPO6WWfEi4L6nD6K7n+75gjDX+k1mRx1XnzTP57J0TxRfedrYP87R40mrdu1j339d3p
- XcwMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8077; i=marcan@marcan.st;
+ h=from:subject:message-id; bh=7+GJvR9Q7iwdn6RqvrNP3aRb/S8micm1/klhGlkjTQs=;
+ b=owGbwMvMwCEm+yP4NEe/cRLjabUkhhSlF1Z6n1/9W5qvvm3p9Rf3MhJuu679rryuvts9e/vJB
+ sN1bbmXO0pZGMQ4GGTFFFkaT/Se6vacfk5dNWU6zBxWJpAhDFycAjCRA2sYGTZIV3PsWCXqE7zG
+ 6n3dye3KFyxbjykqPX1fdWOpYqylayojw9/IUqY7u04c6pilePWw+uejmgr3ky69OBpS/1+S+cE
+ De1YA
 X-Developer-Key: i=marcan@marcan.st; a=openpgp;
  fpr=FC18F00317968B7BE86201CBE22A629A4C515DD5
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -65,560 +65,269 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This new driver is based on the existing apple-mailbox driver, but
-replaces the usage of the mailbox subsystem with directly exported
-symbols.
-
-As part of this refactor, this adds support for using the hardware FIFOs
-(not supported in mailbox) and implicitly fixes a bunch of bugs caused
-by bad interactions with the mailbox subsystem. It also adds runtime-PM
-support.
-
-The new config symbol is APPLE_MBOX, while the module name remains
-identical ("apple-mailbox"). The configs are mutually exclusive in
-Kconfig, to avoid conflicts.
+Now that we have a mailbox driver in drivers/soc/apple, port the RTKit
+code to it. This mostly just entails replacing calls through the mailbox
+subsystem with direct calls into the driver.
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- drivers/soc/apple/Kconfig   |  14 ++
- drivers/soc/apple/Makefile  |   3 +
- drivers/soc/apple/mailbox.c | 434 ++++++++++++++++++++++++++++++++++++++++++++
- drivers/soc/apple/mailbox.h |  48 +++++
- 4 files changed, 499 insertions(+)
+ drivers/soc/apple/Kconfig          |   2 +-
+ drivers/soc/apple/rtkit-internal.h |   8 +--
+ drivers/soc/apple/rtkit.c          | 101 ++++++++++---------------------------
+ 3 files changed, 31 insertions(+), 80 deletions(-)
 
 diff --git a/drivers/soc/apple/Kconfig b/drivers/soc/apple/Kconfig
-index a1596fefacff..caa2cf09ff7a 100644
+index caa2cf09ff7a..d0e29bbd8c6f 100644
 --- a/drivers/soc/apple/Kconfig
 +++ b/drivers/soc/apple/Kconfig
-@@ -17,6 +17,20 @@ config APPLE_PMGR_PWRSTATE
- 	  controls for SoC devices. This driver manages them through the
- 	  generic power domain framework, and also provides reset support.
+@@ -33,7 +33,7 @@ config APPLE_MBOX
  
-+config APPLE_MBOX
-+	tristate "Apple SoC mailboxes"
-+	depends on PM
-+	depends on ARCH_APPLE || (64BIT && COMPILE_TEST)
-+	depends on !APPLE_MAILBOX
-+	default ARCH_APPLE
-+	help
-+	  Apple SoCs have various co-processors required for certain
-+	  peripherals to work (NVMe, display controller, etc.). This
-+	  driver adds support for the mailbox controller used to
-+	  communicate with those.
-+
-+	  Say Y here if you have an Apple SoC.
-+
  config APPLE_RTKIT
  	tristate "Apple RTKit co-processor IPC protocol"
- 	depends on MAILBOX
-diff --git a/drivers/soc/apple/Makefile b/drivers/soc/apple/Makefile
-index e293770cf66d..e52edf6a73da 100644
---- a/drivers/soc/apple/Makefile
-+++ b/drivers/soc/apple/Makefile
-@@ -1,6 +1,9 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_APPLE_PMGR_PWRSTATE)	+= apple-pmgr-pwrstate.o
+-	depends on MAILBOX
++	depends on APPLE_MBOX
+ 	depends on ARCH_APPLE || COMPILE_TEST
+ 	default ARCH_APPLE
+ 	help
+diff --git a/drivers/soc/apple/rtkit-internal.h b/drivers/soc/apple/rtkit-internal.h
+index 24bd619ec5e4..27c9fa745fd5 100644
+--- a/drivers/soc/apple/rtkit-internal.h
++++ b/drivers/soc/apple/rtkit-internal.h
+@@ -7,18 +7,17 @@
+ #ifndef _APPLE_RTKIT_INTERAL_H
+ #define _APPLE_RTKIT_INTERAL_H
  
-+obj-$(CONFIG_APPLE_MBOX) += apple-mailbox.o
-+apple-mailbox-y = mailbox.o
-+
- obj-$(CONFIG_APPLE_RTKIT) += apple-rtkit.o
- apple-rtkit-y = rtkit.o rtkit-crashlog.o
- 
-diff --git a/drivers/soc/apple/mailbox.c b/drivers/soc/apple/mailbox.c
-new file mode 100644
-index 000000000000..7bdebafa6e83
---- /dev/null
-+++ b/drivers/soc/apple/mailbox.c
-@@ -0,0 +1,434 @@
-+// SPDX-License-Identifier: GPL-2.0-only OR MIT
-+/*
-+ * Apple mailbox driver
-+ *
-+ * Copyright The Asahi Linux Contributors
-+ *
-+ * This driver adds support for two mailbox variants (called ASC and M3 by
-+ * Apple) found in Apple SoCs such as the M1. It consists of two FIFOs used to
-+ * exchange 64+32 bit messages between the main CPU and a co-processor.
-+ * Various coprocessors implement different IPC protocols based on these simple
-+ * messages and shared memory buffers.
-+ *
-+ * Both the main CPU and the co-processor see the same set of registers but
-+ * the first FIFO (A2I) is always used to transfer messages from the application
-+ * processor (us) to the I/O processor and the second one (I2A) for the
-+ * other direction.
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/iopoll.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/spinlock.h>
-+#include <linux/types.h>
+-#include <linux/apple-mailbox.h>
+ #include <linux/bitfield.h>
+ #include <linux/bitmap.h>
+ #include <linux/completion.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+-#include <linux/mailbox_client.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/soc/apple/rtkit.h>
+ #include <linux/workqueue.h>
 +#include "mailbox.h"
-+
-+#define APPLE_ASC_MBOX_CONTROL_FULL BIT(16)
-+#define APPLE_ASC_MBOX_CONTROL_EMPTY BIT(17)
-+
-+#define APPLE_ASC_MBOX_A2I_CONTROL 0x110
-+#define APPLE_ASC_MBOX_A2I_SEND0 0x800
-+#define APPLE_ASC_MBOX_A2I_SEND1 0x808
-+#define APPLE_ASC_MBOX_A2I_RECV0 0x810
-+#define APPLE_ASC_MBOX_A2I_RECV1 0x818
-+
-+#define APPLE_ASC_MBOX_I2A_CONTROL 0x114
-+#define APPLE_ASC_MBOX_I2A_SEND0 0x820
-+#define APPLE_ASC_MBOX_I2A_SEND1 0x828
-+#define APPLE_ASC_MBOX_I2A_RECV0 0x830
-+#define APPLE_ASC_MBOX_I2A_RECV1 0x838
-+
-+#define APPLE_M3_MBOX_CONTROL_FULL BIT(16)
-+#define APPLE_M3_MBOX_CONTROL_EMPTY BIT(17)
-+
-+#define APPLE_M3_MBOX_A2I_CONTROL 0x50
-+#define APPLE_M3_MBOX_A2I_SEND0 0x60
-+#define APPLE_M3_MBOX_A2I_SEND1 0x68
-+#define APPLE_M3_MBOX_A2I_RECV0 0x70
-+#define APPLE_M3_MBOX_A2I_RECV1 0x78
-+
-+#define APPLE_M3_MBOX_I2A_CONTROL 0x80
-+#define APPLE_M3_MBOX_I2A_SEND0 0x90
-+#define APPLE_M3_MBOX_I2A_SEND1 0x98
-+#define APPLE_M3_MBOX_I2A_RECV0 0xa0
-+#define APPLE_M3_MBOX_I2A_RECV1 0xa8
-+
-+#define APPLE_M3_MBOX_IRQ_ENABLE 0x48
-+#define APPLE_M3_MBOX_IRQ_ACK 0x4c
-+#define APPLE_M3_MBOX_IRQ_A2I_EMPTY BIT(0)
-+#define APPLE_M3_MBOX_IRQ_A2I_NOT_EMPTY BIT(1)
-+#define APPLE_M3_MBOX_IRQ_I2A_EMPTY BIT(2)
-+#define APPLE_M3_MBOX_IRQ_I2A_NOT_EMPTY BIT(3)
-+
-+#define APPLE_MBOX_MSG1_OUTCNT GENMASK(56, 52)
-+#define APPLE_MBOX_MSG1_INCNT GENMASK(51, 48)
-+#define APPLE_MBOX_MSG1_OUTPTR GENMASK(47, 44)
-+#define APPLE_MBOX_MSG1_INPTR GENMASK(43, 40)
-+#define APPLE_MBOX_MSG1_MSG GENMASK(31, 0)
-+
-+#define APPLE_MBOX_TX_TIMEOUT 500
-+
-+struct apple_mbox_hw {
-+	unsigned int control_full;
-+	unsigned int control_empty;
-+
-+	unsigned int a2i_control;
-+	unsigned int a2i_send0;
-+	unsigned int a2i_send1;
-+
-+	unsigned int i2a_control;
-+	unsigned int i2a_recv0;
-+	unsigned int i2a_recv1;
-+
-+	bool has_irq_controls;
-+	unsigned int irq_enable;
-+	unsigned int irq_ack;
-+	unsigned int irq_bit_recv_not_empty;
-+	unsigned int irq_bit_send_empty;
-+};
-+
-+int apple_mbox_send(struct apple_mbox *mbox, const struct apple_mbox_msg msg,
-+		    bool atomic)
-+{
-+	unsigned long flags;
-+	int ret;
-+	u32 mbox_ctrl;
-+	long t;
-+
-+	spin_lock_irqsave(&mbox->tx_lock, flags);
-+	mbox_ctrl = readl_relaxed(mbox->regs + mbox->hw->a2i_control);
-+
-+	while (mbox_ctrl & mbox->hw->control_full) {
-+		if (atomic) {
-+			ret = readl_poll_timeout_atomic(
-+				mbox->regs + mbox->hw->a2i_control, mbox_ctrl,
-+				!(mbox_ctrl & mbox->hw->control_full), 100,
-+				APPLE_MBOX_TX_TIMEOUT * 1000);
-+
-+			if (ret) {
-+				spin_unlock_irqrestore(&mbox->tx_lock, flags);
-+				return ret;
-+			}
-+
-+			break;
-+		}
-+		/*
-+		 * The interrupt is level triggered and will keep firing as long as the
-+		 * FIFO is empty. It will also keep firing if the FIFO was empty
-+		 * at any point in the past until it has been acknowledged at the
-+		 * mailbox level. By acknowledging it here we can ensure that we will
-+		 * only get the interrupt once the FIFO has been cleared again.
-+		 * If the FIFO is already empty before the ack it will fire again
-+		 * immediately after the ack.
-+		 */
-+		if (mbox->hw->has_irq_controls) {
-+			writel_relaxed(mbox->hw->irq_bit_send_empty,
-+				       mbox->regs + mbox->hw->irq_ack);
-+		}
-+		enable_irq(mbox->irq_send_empty);
-+		reinit_completion(&mbox->tx_empty);
-+		spin_unlock_irqrestore(&mbox->tx_lock, flags);
-+
-+		t = wait_for_completion_interruptible_timeout(
-+			&mbox->tx_empty,
-+			msecs_to_jiffies(APPLE_MBOX_TX_TIMEOUT));
-+		if (t < 0)
-+			return t;
-+		else if (t == 0)
-+			return -ETIMEDOUT;
-+
-+		spin_lock_irqsave(&mbox->tx_lock, flags);
-+		mbox_ctrl = readl_relaxed(mbox->regs + mbox->hw->a2i_control);
-+	}
-+
-+	writeq_relaxed(msg.msg0, mbox->regs + mbox->hw->a2i_send0);
-+	writeq_relaxed(FIELD_PREP(APPLE_MBOX_MSG1_MSG, msg.msg1),
-+		       mbox->regs + mbox->hw->a2i_send1);
-+
-+	spin_unlock_irqrestore(&mbox->tx_lock, flags);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(apple_mbox_send);
-+
-+static irqreturn_t apple_mbox_send_empty_irq(int irq, void *data)
-+{
-+	struct apple_mbox *mbox = data;
-+
-+	/*
-+	 * We don't need to acknowledge the interrupt at the mailbox level
-+	 * here even if supported by the hardware. It will keep firing but that
-+	 * doesn't matter since it's disabled at the main interrupt controller.
-+	 * apple_mbox_send will acknowledge it before enabling
-+	 * it at the main controller again.
-+	 */
-+	spin_lock(&mbox->tx_lock);
-+	disable_irq_nosync(mbox->irq_send_empty);
-+	complete(&mbox->tx_empty);
-+	spin_unlock(&mbox->tx_lock);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int apple_mbox_poll_locked(struct apple_mbox *mbox)
-+{
-+	struct apple_mbox_msg msg;
-+	int ret = 0;
-+
-+	u32 mbox_ctrl = readl_relaxed(mbox->regs + mbox->hw->i2a_control);
-+
-+	while (!(mbox_ctrl & mbox->hw->control_empty)) {
-+		msg.msg0 = readq_relaxed(mbox->regs + mbox->hw->i2a_recv0);
-+		msg.msg1 = FIELD_GET(
-+			APPLE_MBOX_MSG1_MSG,
-+			readq_relaxed(mbox->regs + mbox->hw->i2a_recv1));
-+
-+		mbox->rx(mbox, msg, mbox->cookie);
-+		ret++;
-+		mbox_ctrl = readl_relaxed(mbox->regs + mbox->hw->i2a_control);
-+	}
-+
-+	/*
-+	 * The interrupt will keep firing even if there are no more messages
-+	 * unless we also acknowledge it at the mailbox level here.
-+	 * There's no race if a message comes in between the check in the while
-+	 * loop above and the ack below: If a new messages arrives inbetween
-+	 * those two the interrupt will just fire again immediately after the
-+	 * ack since it's level triggered.
-+	 */
-+	if (mbox->hw->has_irq_controls) {
-+		writel_relaxed(mbox->hw->irq_bit_recv_not_empty,
-+			       mbox->regs + mbox->hw->irq_ack);
-+	}
-+
-+	return ret;
-+}
-+
-+static irqreturn_t apple_mbox_recv_irq(int irq, void *data)
-+{
-+	struct apple_mbox *mbox = data;
-+
-+	spin_lock(&mbox->rx_lock);
-+	apple_mbox_poll_locked(mbox);
-+	spin_unlock(&mbox->rx_lock);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+int apple_mbox_poll(struct apple_mbox *mbox)
-+{
-+	unsigned long flags;
-+	int ret;
-+
-+	spin_lock_irqsave(&mbox->rx_lock, flags);
-+	ret = apple_mbox_poll_locked(mbox);
-+	spin_unlock_irqrestore(&mbox->rx_lock, flags);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL(apple_mbox_poll);
-+
-+int apple_mbox_start(struct apple_mbox *mbox)
-+{
-+	int ret;
-+
-+	if (mbox->active)
-+		return 0;
-+
-+	ret = pm_runtime_resume_and_get(mbox->dev);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Only some variants of this mailbox HW provide interrupt control
-+	 * at the mailbox level. We therefore need to handle enabling/disabling
-+	 * interrupts at the main interrupt controller anyway for hardware that
-+	 * doesn't. Just always keep the interrupts we care about enabled at
-+	 * the mailbox level so that both hardware revisions behave almost
-+	 * the same.
-+	 */
-+	if (mbox->hw->has_irq_controls) {
-+		writel_relaxed(mbox->hw->irq_bit_recv_not_empty |
-+				       mbox->hw->irq_bit_send_empty,
-+			       mbox->regs + mbox->hw->irq_enable);
-+	}
-+
-+	enable_irq(mbox->irq_recv_not_empty);
-+	mbox->active = true;
-+	return 0;
-+}
-+EXPORT_SYMBOL(apple_mbox_start);
-+
-+void apple_mbox_stop(struct apple_mbox *mbox)
-+{
-+	if (!mbox->active)
-+		return;
-+
-+	mbox->active = false;
-+	disable_irq(mbox->irq_recv_not_empty);
-+	pm_runtime_mark_last_busy(mbox->dev);
-+	pm_runtime_put_autosuspend(mbox->dev);
-+}
-+EXPORT_SYMBOL(apple_mbox_stop);
-+
-+struct apple_mbox *apple_mbox_get(struct device *dev, int index)
-+{
-+	struct of_phandle_args args;
-+	struct platform_device *pdev;
+ 
+ #define APPLE_RTKIT_APP_ENDPOINT_START 0x20
+ #define APPLE_RTKIT_MAX_ENDPOINTS 0x100
+@@ -28,10 +27,7 @@ struct apple_rtkit {
+ 	const struct apple_rtkit_ops *ops;
+ 	struct device *dev;
+ 
+-	const char *mbox_name;
+-	int mbox_idx;
+-	struct mbox_client mbox_cl;
+-	struct mbox_chan *mbox_chan;
 +	struct apple_mbox *mbox;
-+	int ret;
+ 
+ 	struct completion epmap_completion;
+ 	struct completion iop_pwr_ack_completion;
+diff --git a/drivers/soc/apple/rtkit.c b/drivers/soc/apple/rtkit.c
+index 7c9b9f25bbc1..e6d940292c9f 100644
+--- a/drivers/soc/apple/rtkit.c
++++ b/drivers/soc/apple/rtkit.c
+@@ -72,11 +72,6 @@ enum {
+ #define APPLE_RTKIT_MIN_SUPPORTED_VERSION 11
+ #define APPLE_RTKIT_MAX_SUPPORTED_VERSION 12
+ 
+-struct apple_rtkit_msg {
+-	struct completion *completion;
+-	struct apple_mbox_msg mbox_msg;
+-};
+-
+ struct apple_rtkit_rx_work {
+ 	struct apple_rtkit *rtk;
+ 	u8 ep;
+@@ -550,12 +545,12 @@ static void apple_rtkit_rx_work(struct work_struct *work)
+ 	kfree(rtk_work);
+ }
+ 
+-static void apple_rtkit_rx(struct mbox_client *cl, void *mssg)
++static void apple_rtkit_rx(struct apple_mbox *mbox, struct apple_mbox_msg msg,
++			   void *cookie)
+ {
+-	struct apple_rtkit *rtk = container_of(cl, struct apple_rtkit, mbox_cl);
+-	struct apple_mbox_msg *msg = mssg;
++	struct apple_rtkit *rtk = cookie;
+ 	struct apple_rtkit_rx_work *work;
+-	u8 ep = msg->msg1;
++	u8 ep = msg.msg1;
+ 
+ 	/*
+ 	 * The message was read from a MMIO FIFO and we have to make
+@@ -571,7 +566,7 @@ static void apple_rtkit_rx(struct mbox_client *cl, void *mssg)
+ 
+ 	if (ep >= APPLE_RTKIT_APP_ENDPOINT_START &&
+ 	    rtk->ops->recv_message_early &&
+-	    rtk->ops->recv_message_early(rtk->cookie, ep, msg->msg0))
++	    rtk->ops->recv_message_early(rtk->cookie, ep, msg.msg0))
+ 		return;
+ 
+ 	work = kzalloc(sizeof(*work), GFP_ATOMIC);
+@@ -580,30 +575,18 @@ static void apple_rtkit_rx(struct mbox_client *cl, void *mssg)
+ 
+ 	work->rtk = rtk;
+ 	work->ep = ep;
+-	work->msg = msg->msg0;
++	work->msg = msg.msg0;
+ 	INIT_WORK(&work->work, apple_rtkit_rx_work);
+ 	queue_work(rtk->wq, &work->work);
+ }
+ 
+-static void apple_rtkit_tx_done(struct mbox_client *cl, void *mssg, int r)
+-{
+-	struct apple_rtkit_msg *msg =
+-		container_of(mssg, struct apple_rtkit_msg, mbox_msg);
+-
+-	if (r == -ETIME)
+-		return;
+-
+-	if (msg->completion)
+-		complete(msg->completion);
+-	kfree(msg);
+-}
+-
+ int apple_rtkit_send_message(struct apple_rtkit *rtk, u8 ep, u64 message,
+ 			     struct completion *completion, bool atomic)
+ {
+-	struct apple_rtkit_msg *msg;
+-	int ret;
+-	gfp_t flags;
++	struct apple_mbox_msg msg = {
++		.msg0 = message,
++		.msg1 = ep,
++	};
+ 
+ 	if (rtk->crashed)
+ 		return -EINVAL;
+@@ -611,19 +594,6 @@ int apple_rtkit_send_message(struct apple_rtkit *rtk, u8 ep, u64 message,
+ 	    !apple_rtkit_is_running(rtk))
+ 		return -EINVAL;
+ 
+-	if (atomic)
+-		flags = GFP_ATOMIC;
+-	else
+-		flags = GFP_KERNEL;
+-
+-	msg = kzalloc(sizeof(*msg), flags);
+-	if (!msg)
+-		return -ENOMEM;
+-
+-	msg->mbox_msg.msg0 = message;
+-	msg->mbox_msg.msg1 = ep;
+-	msg->completion = completion;
+-
+ 	/*
+ 	 * The message will be sent with a MMIO write. We need the barrier
+ 	 * here to ensure any previous writes to buffers are visible to the
+@@ -631,19 +601,13 @@ int apple_rtkit_send_message(struct apple_rtkit *rtk, u8 ep, u64 message,
+ 	 */
+ 	dma_wmb();
+ 
+-	ret = mbox_send_message(rtk->mbox_chan, &msg->mbox_msg);
+-	if (ret < 0) {
+-		kfree(msg);
+-		return ret;
+-	}
+-
+-	return 0;
++	return apple_mbox_send(rtk->mbox, msg, atomic);
+ }
+ EXPORT_SYMBOL_GPL(apple_rtkit_send_message);
+ 
+ int apple_rtkit_poll(struct apple_rtkit *rtk)
+ {
+-	return mbox_client_peek_data(rtk->mbox_chan);
++	return apple_mbox_poll(rtk->mbox);
+ }
+ EXPORT_SYMBOL_GPL(apple_rtkit_poll);
+ 
+@@ -665,20 +629,6 @@ int apple_rtkit_start_ep(struct apple_rtkit *rtk, u8 endpoint)
+ }
+ EXPORT_SYMBOL_GPL(apple_rtkit_start_ep);
+ 
+-static int apple_rtkit_request_mbox_chan(struct apple_rtkit *rtk)
+-{
+-	if (rtk->mbox_name)
+-		rtk->mbox_chan = mbox_request_channel_byname(&rtk->mbox_cl,
+-							     rtk->mbox_name);
+-	else
+-		rtk->mbox_chan =
+-			mbox_request_channel(&rtk->mbox_cl, rtk->mbox_idx);
+-
+-	if (IS_ERR(rtk->mbox_chan))
+-		return PTR_ERR(rtk->mbox_chan);
+-	return 0;
+-}
+-
+ struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+ 					    const char *mbox_name, int mbox_idx,
+ 					    const struct apple_rtkit_ops *ops)
+@@ -704,13 +654,18 @@ struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+ 	bitmap_zero(rtk->endpoints, APPLE_RTKIT_MAX_ENDPOINTS);
+ 	set_bit(APPLE_RTKIT_EP_MGMT, rtk->endpoints);
+ 
+-	rtk->mbox_name = mbox_name;
+-	rtk->mbox_idx = mbox_idx;
+-	rtk->mbox_cl.dev = dev;
+-	rtk->mbox_cl.tx_block = false;
+-	rtk->mbox_cl.knows_txdone = false;
+-	rtk->mbox_cl.rx_callback = &apple_rtkit_rx;
+-	rtk->mbox_cl.tx_done = &apple_rtkit_tx_done;
++	if (mbox_name)
++		rtk->mbox = apple_mbox_get_byname(dev, mbox_name);
++	else
++		rtk->mbox = apple_mbox_get(dev, mbox_idx);
 +
-+	ret = of_parse_phandle_with_args(dev->of_node, "mboxes", "#mbox-cells",
-+					 index, &args);
-+	if (ret || !args.np)
-+		return ERR_PTR(ret);
++	if (IS_ERR(rtk->mbox)) {
++		ret = PTR_ERR(rtk->mbox);
++		goto free_rtk;
++	}
 +
-+	pdev = of_find_device_by_node(args.np);
-+	of_node_put(args.np);
-+
-+	if (!pdev)
-+		return ERR_PTR(EPROBE_DEFER);
-+
-+	mbox = platform_get_drvdata(pdev);
-+	if (!mbox)
-+		return ERR_PTR(EPROBE_DEFER);
-+
-+	if (!device_link_add(dev, &pdev->dev, DL_FLAG_AUTOREMOVE_CONSUMER))
-+		return ERR_PTR(ENODEV);
-+
-+	return mbox;
-+}
-+EXPORT_SYMBOL(apple_mbox_get);
-+
-+struct apple_mbox *apple_mbox_get_byname(struct device *dev, const char *name)
-+{
-+	int index;
-+
-+	index = of_property_match_string(dev->of_node, "mbox-names", name);
-+	if (index < 0)
-+		return ERR_PTR(index);
-+
-+	return apple_mbox_get(dev, index);
-+}
-+EXPORT_SYMBOL(apple_mbox_get_byname);
-+
-+static int apple_mbox_probe(struct platform_device *pdev)
-+{
-+	int ret;
-+	char *irqname;
-+	struct apple_mbox *mbox;
-+	struct device *dev = &pdev->dev;
-+
-+	mbox = devm_kzalloc(dev, sizeof(*mbox), GFP_KERNEL);
-+	if (!mbox)
-+		return -ENOMEM;
-+
-+	mbox->dev = &pdev->dev;
-+	mbox->hw = of_device_get_match_data(dev);
-+	if (!mbox->hw)
-+		return -EINVAL;
-+
-+	mbox->regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(mbox->regs))
-+		return PTR_ERR(mbox->regs);
-+
-+	mbox->irq_recv_not_empty =
-+		platform_get_irq_byname(pdev, "recv-not-empty");
-+	if (mbox->irq_recv_not_empty < 0)
-+		return -ENODEV;
-+
-+	mbox->irq_send_empty = platform_get_irq_byname(pdev, "send-empty");
-+	if (mbox->irq_send_empty < 0)
-+		return -ENODEV;
-+
-+	spin_lock_init(&mbox->rx_lock);
-+	spin_lock_init(&mbox->tx_lock);
-+	init_completion(&mbox->tx_empty);
-+
-+	irqname = devm_kasprintf(dev, GFP_KERNEL, "%s-recv", dev_name(dev));
-+	if (!irqname)
-+		return -ENOMEM;
-+
-+	ret = devm_request_irq(dev, mbox->irq_recv_not_empty,
-+			       apple_mbox_recv_irq,
-+			       IRQF_NO_AUTOEN | IRQF_NO_SUSPEND, irqname, mbox);
-+	if (ret)
-+		return ret;
-+
-+	irqname = devm_kasprintf(dev, GFP_KERNEL, "%s-send", dev_name(dev));
-+	if (!irqname)
-+		return -ENOMEM;
-+
-+	ret = devm_request_irq(dev, mbox->irq_send_empty,
-+			       apple_mbox_send_empty_irq,
-+			       IRQF_NO_AUTOEN | IRQF_NO_SUSPEND, irqname, mbox);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_pm_runtime_enable(dev);
-+	if (ret)
-+		return ret;
-+
-+	platform_set_drvdata(pdev, mbox);
-+	return 0;
-+}
-+
-+static const struct apple_mbox_hw apple_mbox_asc_hw = {
-+	.control_full = APPLE_ASC_MBOX_CONTROL_FULL,
-+	.control_empty = APPLE_ASC_MBOX_CONTROL_EMPTY,
-+
-+	.a2i_control = APPLE_ASC_MBOX_A2I_CONTROL,
-+	.a2i_send0 = APPLE_ASC_MBOX_A2I_SEND0,
-+	.a2i_send1 = APPLE_ASC_MBOX_A2I_SEND1,
-+
-+	.i2a_control = APPLE_ASC_MBOX_I2A_CONTROL,
-+	.i2a_recv0 = APPLE_ASC_MBOX_I2A_RECV0,
-+	.i2a_recv1 = APPLE_ASC_MBOX_I2A_RECV1,
-+
-+	.has_irq_controls = false,
-+};
-+
-+static const struct apple_mbox_hw apple_mbox_m3_hw = {
-+	.control_full = APPLE_M3_MBOX_CONTROL_FULL,
-+	.control_empty = APPLE_M3_MBOX_CONTROL_EMPTY,
-+
-+	.a2i_control = APPLE_M3_MBOX_A2I_CONTROL,
-+	.a2i_send0 = APPLE_M3_MBOX_A2I_SEND0,
-+	.a2i_send1 = APPLE_M3_MBOX_A2I_SEND1,
-+
-+	.i2a_control = APPLE_M3_MBOX_I2A_CONTROL,
-+	.i2a_recv0 = APPLE_M3_MBOX_I2A_RECV0,
-+	.i2a_recv1 = APPLE_M3_MBOX_I2A_RECV1,
-+
-+	.has_irq_controls = true,
-+	.irq_enable = APPLE_M3_MBOX_IRQ_ENABLE,
-+	.irq_ack = APPLE_M3_MBOX_IRQ_ACK,
-+	.irq_bit_recv_not_empty = APPLE_M3_MBOX_IRQ_I2A_NOT_EMPTY,
-+	.irq_bit_send_empty = APPLE_M3_MBOX_IRQ_A2I_EMPTY,
-+};
-+
-+static const struct of_device_id apple_mbox_of_match[] = {
-+	{ .compatible = "apple,asc-mailbox-v4", .data = &apple_mbox_asc_hw },
-+	{ .compatible = "apple,m3-mailbox-v2", .data = &apple_mbox_m3_hw },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, apple_mbox_of_match);
-+
-+static struct platform_driver apple_mbox_driver = {
-+	.driver = {
-+		.name = "apple-mailbox",
-+		.of_match_table = apple_mbox_of_match,
-+	},
-+	.probe = apple_mbox_probe,
-+};
-+module_platform_driver(apple_mbox_driver);
-+
-+MODULE_LICENSE("Dual MIT/GPL");
-+MODULE_AUTHOR("Sven Peter <sven@svenpeter.dev>");
-+MODULE_DESCRIPTION("Apple Mailbox driver");
-diff --git a/drivers/soc/apple/mailbox.h b/drivers/soc/apple/mailbox.h
-new file mode 100644
-index 000000000000..f73a8913da95
---- /dev/null
-+++ b/drivers/soc/apple/mailbox.h
-@@ -0,0 +1,48 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR MIT */
-+/*
-+ * Apple mailbox message format
-+ *
-+ * Copyright The Asahi Linux Contributors
-+ */
-+
-+#ifndef _APPLE_MAILBOX_H_
-+#define _APPLE_MAILBOX_H_
-+
-+#include <linux/device.h>
-+#include <linux/types.h>
-+
-+/* encodes a single 96bit message sent over the single channel */
-+struct apple_mbox_msg {
-+	u64 msg0;
-+	u32 msg1;
-+};
-+
-+struct apple_mbox {
-+	struct device *dev;
-+	void __iomem *regs;
-+	const struct apple_mbox_hw *hw;
-+	bool active;
-+
-+	int irq_recv_not_empty;
-+	int irq_send_empty;
-+
-+	spinlock_t rx_lock;
-+	spinlock_t tx_lock;
-+
-+	struct completion tx_empty;
-+
-+	/** Receive callback for incoming messages */
-+	void (*rx)(struct apple_mbox *mbox, struct apple_mbox_msg msg, void *cookie);
-+	void *cookie;
-+};
-+
-+struct apple_mbox *apple_mbox_get(struct device *dev, int index);
-+struct apple_mbox *apple_mbox_get_byname(struct device *dev, const char *name);
-+
-+int apple_mbox_start(struct apple_mbox *mbox);
-+void apple_mbox_stop(struct apple_mbox *mbox);
-+int apple_mbox_poll(struct apple_mbox *mbox);
-+int apple_mbox_send(struct apple_mbox *mbox, struct apple_mbox_msg msg,
-+		    bool atomic);
-+
-+#endif
++	rtk->mbox->rx = apple_rtkit_rx;
++	rtk->mbox->cookie = rtk;
+ 
+ 	rtk->wq = alloc_ordered_workqueue("rtkit-%s", WQ_MEM_RECLAIM,
+ 					  dev_name(rtk->dev));
+@@ -719,7 +674,7 @@ struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+ 		goto free_rtk;
+ 	}
+ 
+-	ret = apple_rtkit_request_mbox_chan(rtk);
++	ret = apple_mbox_start(rtk->mbox);
+ 	if (ret)
+ 		goto destroy_wq;
+ 
+@@ -750,7 +705,7 @@ static int apple_rtkit_wait_for_completion(struct completion *c)
+ int apple_rtkit_reinit(struct apple_rtkit *rtk)
+ {
+ 	/* make sure we don't handle any messages while reinitializing */
+-	mbox_free_channel(rtk->mbox_chan);
++	apple_mbox_stop(rtk->mbox);
+ 	flush_workqueue(rtk->wq);
+ 
+ 	apple_rtkit_free_buffer(rtk, &rtk->ioreport_buffer);
+@@ -774,7 +729,7 @@ int apple_rtkit_reinit(struct apple_rtkit *rtk)
+ 	rtk->iop_power_state = APPLE_RTKIT_PWR_STATE_OFF;
+ 	rtk->ap_power_state = APPLE_RTKIT_PWR_STATE_OFF;
+ 
+-	return apple_rtkit_request_mbox_chan(rtk);
++	return apple_mbox_start(rtk->mbox);
+ }
+ EXPORT_SYMBOL_GPL(apple_rtkit_reinit);
+ 
+@@ -930,7 +885,7 @@ EXPORT_SYMBOL_GPL(apple_rtkit_wake);
+ 
+ void apple_rtkit_free(struct apple_rtkit *rtk)
+ {
+-	mbox_free_channel(rtk->mbox_chan);
++	apple_mbox_stop(rtk->mbox);
+ 	destroy_workqueue(rtk->wq);
+ 
+ 	apple_rtkit_free_buffer(rtk, &rtk->ioreport_buffer);
 
 -- 
 2.40.0
