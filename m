@@ -2,84 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC206CB453
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C56076CB456
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbjC1Cu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 22:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
+        id S229952AbjC1Cuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 22:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbjC1CuY (ORCPT
+        with ESMTP id S232609AbjC1Cug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 22:50:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6385226A2;
-        Mon, 27 Mar 2023 19:50:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B16E7B81A43;
-        Tue, 28 Mar 2023 02:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 64FC0C433D2;
-        Tue, 28 Mar 2023 02:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679971819;
-        bh=aQDi9ckmCb/RBFxUSwC2YEMEUG9O2Ay2bDiRKwbkDLM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TZ3QLfBeNv3xH9ry2owvom4TXFodO4NkcSldllsjNlTDctwgsMevafxx5+a1qBsSg
-         lKp0OoxFJPX34ElfgiNrWN/bphDZzb/tQjT/5yhfw5UGqNa/pKx01dO5U5nGpWttDf
-         sQbIurqwfZ5UQ1zJ2CCVR41K78mzYxYFc8wKSV8pmIMPGTXfHDPwbbLDhT0Q+XlHf0
-         R4onTLr2yG+yQTFrpT5UQuGAJMKYuBBHCLluRX0GPOhcfvJxmcBouJmUezvalzyxe7
-         W0okBFGgbJHK0953MbAiOlQo37fUBdjIWWzbuIhcpjKOfKPVpRdtPSBBmkPWMc5QGX
-         BJAiL/+YRsVxg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 48970E4D02F;
-        Tue, 28 Mar 2023 02:50:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 27 Mar 2023 22:50:36 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFE72717;
+        Mon, 27 Mar 2023 19:50:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679971833; x=1711507833;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=n2VgJtM3YVLe97n6BZzoF1luNuCvu30L97QOFMLacDY=;
+  b=flkTSjEIMCkAELkoxNu4Fr9Ib3n2TPg6r7PYemwLFSNmg/6E4vCicolH
+   Y5RQFm3M7G+uoh3LSk0HTHvypwYib6wkTuUZVcIClfKwko1E7i0aD6DB5
+   KLC8Qo+ctOft5OIqYvBFmhF4kjd6D5OaNO9c5ySL3ngwEkilh8WA0uCD7
+   GGh9qIdDPoRWVupGSgASvEgUZR3gsnAraSQ3EOEIsyDEcsDyiQvWgFdiS
+   iEzzRUHmSnA7KVq1q20PtdIkXLaTMV/AXhHMJMTSjyK/5Wq4dS8LCrYz7
+   zsRQn4/T4qXc+VesJu0rrmtqyVY50CDfgxu3J2R2zVYqbrI0OdfJto8DC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="337955448"
+X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
+   d="scan'208";a="337955448"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 19:50:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="772963850"
+X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
+   d="scan'208";a="772963850"
+Received: from arshowal-mobl1.amr.corp.intel.com (HELO [10.212.227.9]) ([10.212.227.9])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 19:50:31 -0700
+Message-ID: <c49727dc-1fe8-2214-07c7-e3be269030af@linux.intel.com>
+Date:   Mon, 27 Mar 2023 19:50:30 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [PATCH v1 1/3] x86/tdx: Add TDX Guest event notify interrupt
+ support
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>
+Cc:     "Yu, Guorui" <guorui.yu@linux.alibaba.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "wander@redhat.com" <wander@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>, "Du, Fan" <fan.du@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+References: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20230326062039.341479-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <3c88945515eba868056906f4a269e6ffcf49e1ec.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <3c88945515eba868056906f4a269e6ffcf49e1ec.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] qed: remove unused num_ooo_add_to_peninsula variable
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167997181929.12698.4724410106148898115.git-patchwork-notify@kernel.org>
-Date:   Tue, 28 Mar 2023 02:50:19 +0000
-References: <20230326001733.1343274-1-trix@redhat.com>
-In-Reply-To: <20230326001733.1343274-1-trix@redhat.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     aelior@marvell.com, manishc@marvell.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        nathan@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Kai,
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sat, 25 Mar 2023 20:17:33 -0400 you wrote:
-> clang with W=1 reports
-> drivers/net/ethernet/qlogic/qed/qed_ll2.c:649:6: error: variable
->   'num_ooo_add_to_peninsula' set but not used [-Werror,-Wunused-but-set-variable]
->         u32 num_ooo_add_to_peninsula = 0, cid;
->             ^
-> This variable is not used so remove it.
+On 3/27/23 7:38 PM, Huang, Kai wrote:
+>> +/* Reserve an IRQ from x86_vector_domain for TD event notification */
+>> +static int __init tdx_event_irq_init(void)
+>> +{
+>> +	struct irq_alloc_info info;
+>> +	cpumask_t saved_cpumask;
+>> +	struct irq_cfg *cfg;
+>> +	int cpu, irq;
+>> +
+>> +	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+>> +		return 0;
+>> +
+>> +	init_irq_alloc_info(&info, NULL);
+>> +
+>> +	/*
+>> +	 * Event notification vector will be delivered to the CPU
+>> +	 * in which TDVMCALL_SETUP_NOTIFY_INTR hypercall is requested.
+>> +	 * So set the IRQ affinity to the current CPU.
+>> +	 */
+>> +	cpu = get_cpu();
+>> +	cpumask_copy(&saved_cpumask, current->cpus_ptr);
+>> +	info.mask = cpumask_of(cpu);
+>> +	put_cpu();
+> The 'saved_cpumask' related code is ugly.  If you move put_cpu() to the end of
+> this function, I think you can remove all related code:
 > 
-> [...]
+> 	cpu = get_cpu();
+> 
+> 	/*
+> 	 * Set @info->mask to local cpu to make sure a valid vector is
+> 	 * pre-allocated when TDX event notification IRQ is allocated
+> 	 * from x86_vector_domain.
+> 	 */
+> 	init_irq_alloc_info(&info, cpumask_of(cpu));
+> 
+> 	// rest staff: request_irq(), hypercall ...
+> 
+> 	put_cpu();
+> 	
 
-Here is the summary with links:
-  - qed: remove unused num_ooo_add_to_peninsula variable
-    https://git.kernel.org/netdev/net-next/c/2bcc74ffd21a
+init_irq_alloc_info() is a sleeping function. Since get_cpu() disables
+preemption, we cannot call sleeping function after it. Initially, I
+have implemented it like you have mentioned. However, I discovered the
+following error.
 
-You are awesome, thank you!
+[    2.400755] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:580
+[    2.404664] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
+[    2.408671] preempt_count: 1, expected: 0
+[    2.412650] RCU nest depth: 0, expected: 0
+[    2.412666] no locks held by swapper/0/1.
+[    2.416650] Preemption disabled at:
+[    2.416650] [<ffffffff83b8089f>] tdx_arch_init+0x38/0x117
+[    2.420670] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc4-00117-g672ca073d9f9-dirty #2527
+[    2.424650] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+[    2.424650] Call Trace:
+[    2.424650]  <TASK>
+[    2.424650]  dump_stack_lvl+0x6a/0x86
+[    2.424650]  __might_resched.cold+0xf4/0x12f
+[    2.424650]  __mutex_lock+0x50/0x810
+[    2.424650]  ? lock_is_held_type+0xd8/0x130
+[    2.424650]  ? __irq_alloc_descs+0xcf/0x310
+[    2.424650]  ? find_held_lock+0x2b/0x80
+[    2.424650]  ? __irq_alloc_descs+0xcf/0x310
+[    2.424650]  __irq_alloc_descs+0xcf/0x310
+[    2.424650]  irq_domain_alloc_descs.part.0+0x49/0xa0
+[    2.424650]  __irq_domain_alloc_irqs+0x2a0/0x4f0
+[    2.424650]  ? next_arg+0x129/0x1f0
+[    2.424650]  ? tdx_guest_init+0x5b/0x5b
+[    2.424650]  tdx_arch_init+0x8e/0x117
+[    2.424650]  do_one_initcall+0x137/0x2ec
+[    2.424650]  ? rcu_read_lock_sched_held+0x36/0x60
+[    2.424650]  kernel_init_freeable+0x1e3/0x241
+[    2.424650]  ? rest_init+0x1a0/0x1a0
+[    2.424650]  kernel_init+0x17/0x170
+[    2.424650]  ? rest_init+0x1a0/0x1a0
+[    2.424650]  ret_from_fork+0x1f/0x30
+[    2.424650]  </TASK>
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
