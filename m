@@ -2,141 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54EE6CB689
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 422DD6CB6AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbjC1GGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 02:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
+        id S232252AbjC1GNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 02:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjC1GGf (ORCPT
+        with ESMTP id S231970AbjC1GM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 02:06:35 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2047.outbound.protection.outlook.com [40.107.6.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344F22D73;
-        Mon, 27 Mar 2023 23:06:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZHGsFIYWCBt7bulu81JHUsSZGZB40Xp1XbhuC3nPiCpO5JEUzdPWI8MytSxB1vFk4eLZII3UueldnnivZ8avKj8aD4AsZWKX+F2R4ruhZyfVFrC0FQJDGdYUCqcYC3kPeZzCgX2xrIUYZqn18O0zsDjKFKOYPkP164R4CxYfIpanwyisBuUz4GooNHWOq5+8N5N3fI3bpgDNFmGFQVBGxTvZn6657r/bYk29JKJLVN2gsYiDz9hStXCCsvTSFd1sLSFLbWcdjMir7IadUUqYbrmC61FAdbQjqHLPhhDwYsn8rKQDQBhVX3FuydBwPvhG9iTFJzQ3RSQXw0A4lcGl+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oikn2s35fucKZvH65NC/WPoMHrcbh6tZGnPZIOOAfes=;
- b=Ee+psMa6yMwvnyahqDWRPonuiR+jb3zQq8g920rIoOmYksWbvRQ77J6inU/gOM0PstmRAKdPKnExK9kALxMqqWTiGNX8+w42HCCQXnQ0ll5AWcGH13wu0bOwdsMXh8aMm5fm+5MyQG5ECA5fbpU7XstV9ylIG0AUksHwl0P8D3+bwPDTRvZ34FzH6yjyHq6ENFkSDQcfS66+A3D53smLH4n+OyxyON3Zi5pm/i/UCx3aW4ZVatP487XhWgZjnkB73ETLIJj89XZ7sL6NPdOw9Blvlwj/qbycOfBrjidxRuEVJZZAL0GRZC55g7Wksop+eNrLRlJPiGBVpsB5j6TDMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oikn2s35fucKZvH65NC/WPoMHrcbh6tZGnPZIOOAfes=;
- b=cmwf/beNO+UvjeLoQiiuDIeMEx5BXtJEISqfMoa8Y3gFg4Xyn1CIx6NhmOaJ9dZgIMmA+axhBr4g/xh0NUi9z/7qTD8Ye0zr+XovlY/+qQh7ciZ9vBe3N/Fq94Lpj+J7lzOpAvlBFocu1g7RPNBlZ+TPAOALffOqEqbY4LkOGgw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by PAXPR04MB8846.eurprd04.prod.outlook.com (2603:10a6:102:20d::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Tue, 28 Mar
- 2023 06:06:18 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::778e:19d0:cba0:5cc0]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::778e:19d0:cba0:5cc0%4]) with mapi id 15.20.6222.028; Tue, 28 Mar 2023
- 06:06:18 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH] arm64: dts: imx8mq-librem5: add missing #clock-cells
-Date:   Tue, 28 Mar 2023 14:11:23 +0800
-Message-Id: <20230328061123.1984643-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0060.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::17) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Tue, 28 Mar 2023 02:12:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7591995
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679983928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UNYsS8oHSFCBVyHN2UTLJCCtfI7eARSYYdIRY7lOzMs=;
+        b=C9vDs2g2CcO28QXTsV/sPeioZJIcRC/zmVyppA3u+rXANX724Rb9qGa78B4CkcYgDmWIeL
+        LdVlLGdVuJzAs55r86VcDq7dXAs1UnI9k5zVqrHfZ3nPCANObvRQvpOoA7u8/TbVOdINLH
+        lMYmM0ya1avsvWyHZjSuEYT3TrGvong=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-637-oa5GXXL7NZqBLlf5caZboA-1; Tue, 28 Mar 2023 02:12:07 -0400
+X-MC-Unique: oa5GXXL7NZqBLlf5caZboA-1
+Received: by mail-pf1-f197.google.com with SMTP id i192-20020a6287c9000000b0062a43acb7faso5236093pfe.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:12:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679983926;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UNYsS8oHSFCBVyHN2UTLJCCtfI7eARSYYdIRY7lOzMs=;
+        b=uxz1h0gdBSI0guwI2Is9+fyDfTWr4+QeMnF3qbaeElKVI60pAvk/GPXKmj/Yek8ynN
+         B+iDFgSPJdPsARbdpYFXiOiaRCWzGlRMHHfm1pCN6mP74VWoQLJGfdrTRV2AwfbSEpPX
+         xIDFeZl5AAdTfYLvEK6nmFDkdeBi9PocMfeYhPP+lirAFjdtY1+p9TBag+PWbmo/wA6o
+         NqcWmMN/XnbZZen5VWTyV6rHtP69GdyIeDOx8rlEv7U7JNRSbsdFq28fzDMCWpw1pKbD
+         FtvqKmy/4xQySNeCgPKzziGN6dXULC3nqLevnvcNHu9hLk+caJbu3t3RZJb6Lg7q1FY7
+         kxRQ==
+X-Gm-Message-State: AO0yUKVXYqgeHdCShctACNQX79J/ckkQAlWOAT9cy6E/wC9E+HIIbHlV
+        SQz7JmBEZeqwIaXdkeVab/gVc47l3OTMhGc1o2guOsG0iyQnw6WCcYdXP4Y5JcD6wDEhET41VaV
+        K/OG1yHsE6yJO9B7U8IAXMZdG
+X-Received: by 2002:a05:6a20:7a90:b0:d9:bf06:cd85 with SMTP id u16-20020a056a207a9000b000d9bf06cd85mr13027290pzh.25.1679983926207;
+        Mon, 27 Mar 2023 23:12:06 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9b73dlMpd/8UZwVEk4ZbGlEc2YwAOKpta3/KFIcfRmaz1cHfe5wKsj8Lc0+L6lCJaJP4bu6A==
+X-Received: by 2002:a05:6a20:7a90:b0:d9:bf06:cd85 with SMTP id u16-20020a056a207a9000b000d9bf06cd85mr13027276pzh.25.1679983925877;
+        Mon, 27 Mar 2023 23:12:05 -0700 (PDT)
+Received: from [10.72.13.204] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id k12-20020a6568cc000000b005136d5a2b26sm1436311pgt.60.2023.03.27.23.12.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 23:12:05 -0700 (PDT)
+Message-ID: <de2efe1a-1868-2552-7a1a-4aed398dfb98@redhat.com>
+Date:   Tue, 28 Mar 2023 14:12:00 +0800
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|PAXPR04MB8846:EE_
-X-MS-Office365-Filtering-Correlation-Id: 128d02d6-3a27-4899-00a4-08db2f528b7a
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gBCJw2vrCsCHAd+/cIToKGLMnwiLIy1tz3ZWUEekdEufdtHOBP4GcAjSZXCp45UbJ/iIVddxtkv6mBC4y5w5MeJp1ahKT4L+g1TQ6AW5IQJc05M/oao3rsVSR3Hk2fSWCbQuQuHZvwjts/YXcvszAQY7eIwskviHkHck9P+DvonDwY1BvMCoDcZZ0gRPT/NIL1d8RUm3OueAYOyBEY8DN26dV3ZLCVr7n4COIZNzYKYm8y4X9ufkKPG5c2kDalsB9FDyXkOEBLS3NooYsHG/laWLYlp5B6H3rJRqY87x1vGUu4cdfSlDVWVhmv8xYjapzxzeeTk3SnLBVQBHAJQEzq6yH4b1VEQEKmaE3Z9dVxRfwbjlPWzfV3zlxllUXZvLOAmtTPzIwW9cQSRefK1CyVi9VGQerDK+lpiaIBvAwDbulr+dn2CqZUvQdKJA74SC5iMYuoEsvwc3uihunLvRl4f76s0c/scNfT+JdxPpgZAAIXwCXF6mb2n+Sd70k6E0YaNqnofu7PZikx44Oe3WRMsBhlcaE1S2m3FnJ+vDjCGxr2PS0rhXtloIldYcEUberj/ZnzrQ2e97y4fy/E4x6tYxXIb2HTDWNRJlvjb3EmRrBQw9Mn4k5YvzH7/trL+zFxHpuS6leadQpeV/0YmHNw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(396003)(136003)(346002)(39860400002)(451199021)(6486002)(52116002)(8676002)(4326008)(66476007)(66946007)(41300700001)(66556008)(2906002)(86362001)(8936002)(5660300002)(38100700002)(38350700002)(4744005)(478600001)(316002)(6512007)(6506007)(1076003)(83380400001)(26005)(186003)(2616005)(6666004)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cca1Bhi1BvMSPQ44g5DxDGEFbFeJLlPxJUBIdzhgJjmnqwH8SEIazgadyd0C?=
- =?us-ascii?Q?5iOua/M0WRW1lrNRBaW4asp8a5tkBirwN7tCVYx9F7niiVddFtg6RW59xiA/?=
- =?us-ascii?Q?H67qhqLrUQrW2WxC9ryQLQiGkFUPtLBH1hfZcxjZ7kHREJyXE5igR9nWHO5S?=
- =?us-ascii?Q?GTJxmLvz13zqRXNCg7LleNCU4WsBWUu7cLMowQiNPIcqGZWVv2BQl41qvMHU?=
- =?us-ascii?Q?38gHpBQHvFfJqKIjpzjg4bQuZwwKDXfeWKLPfRkfNmWqngesq4X3vwfFwqqG?=
- =?us-ascii?Q?oH5wDo+L/g9sw1o3RnRN+v9WovL940/171YrjiwXnHi7azXueu33Hjls2n1S?=
- =?us-ascii?Q?BNQJyG3tJ16FvM5UIuYZKxuz5asnXgKauAga5K1l4JkTmqaGAsqlV1uhg7j8?=
- =?us-ascii?Q?i8DCMxdMDKlJSs9InEZwJIPlgnuq9nJLvVJLUufwJAUuJGw4LVpar5fUWVla?=
- =?us-ascii?Q?7uDsMjQpODE7942mkcfpYSgyoOD4gduR+nQlB5WTevt2p6zNd6lvDJmUbH8R?=
- =?us-ascii?Q?RPaWAnEpKx92yJ1F2TbietHxU4W1F5A/QGsgZVFpTe907dd4tuimkIYdfaDF?=
- =?us-ascii?Q?1uicI1bJE7Iq6N0xmO1QuqcWYJ4Jq0hgCuMojCe+im38GU7o2stw6/ub/ofi?=
- =?us-ascii?Q?+0PNCd8WY5tnble5gmE9jzIWZNdyEdNMGWKbR7A776qCUDlggEZ+nNHNaeKr?=
- =?us-ascii?Q?DB+GhXNIrKhAHyZCKG9PLjWS9bpgeFzhMe7agDjCUMaMfkABzi4xjlueciVe?=
- =?us-ascii?Q?Dzi1UVjcCczf1w/gL1KjASMwWlq7mxCPGsmwPZ1XMKwjvGfijFjzjnt5Uceq?=
- =?us-ascii?Q?37zeguLr71jeKpp5RxuVa1c5AFFbgCHWKxJ8Yy+PnnXNLaJFQ1rtd7Z26LCp?=
- =?us-ascii?Q?i/sIoGzCFWzY6uuBGF6sKMk+Z5K3iNafxFNrg6jYhxwpQhuGh3fvOs9CaBm3?=
- =?us-ascii?Q?gocxsbni09Pvw4E52+3xu9QLgL+3nHlOSnqQDGqhJ5qX74HYPlzdwFzaeDYb?=
- =?us-ascii?Q?F6z5gUD+SUHaV46cgi0uyzTAJLOhPf8MIb6TBxcuIKUFYFdaBAmDzhOVibbE?=
- =?us-ascii?Q?BzDojTMmZM92G2lISG1Y66QiuQaxSP3pXqTnQ4AC25nALuE3CYLfoyInn8Ii?=
- =?us-ascii?Q?j6fchddA8WLV3DUTyl1KyGNUA0R/V7u/wcRUeGru3hHU6FhxYGIA9UAQPPaG?=
- =?us-ascii?Q?31qEdULzn9DR1uNl6Q/N4f02i+eRrOtyz+i0aMC0jHq/S5UOth5f1kRHf0b7?=
- =?us-ascii?Q?aS3GvkF36zq3xvakBYwX04WbdHpPormMAu/n5uq4Xbp373PnoY39CMjA35uR?=
- =?us-ascii?Q?NHKz37N7f6HkBSABMhQBYgSlycxqhQOa+bhmN9pBo+78SvYXMYEVOqTN1Wmj?=
- =?us-ascii?Q?zmOaSHeCBNVObT1fWoJdMwEFQGIJA3VNUmWZb86AKkcIIoMEWx45jwW6a0vH?=
- =?us-ascii?Q?ycxGZHS0KwmWqP+em9W75UMwR0gf5UKUkdy0qXvJCB1fIzcaDIn1XyJyp5Jo?=
- =?us-ascii?Q?tsUVvan3pw5DzAHZDVgOs16i8YtzU/gxdnNdGtTA2TcYuTaaAQq2di9nm15I?=
- =?us-ascii?Q?jSh4P6qnRcWxT4O+VTJ1hOldQjBOJrQ6SbkLzc+e?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 128d02d6-3a27-4899-00a4-08db2f528b7a
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 06:06:18.0297
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: G41OYAE/kiqPBpfrkFiMsI3u7sKENvd6wewelihnt3d8JZPqXh21W1rT0fZOwyO7hvDCwBU+6o/g903eMSKFKA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8846
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v4 03/11] virtio-vdpa: Support interrupt affinity
+ spreading mechanism
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Xie Yongji <xieyongji@bytedance.com>, tglx@linutronix.de,
+        hch@lst.de, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20230323053043.35-1-xieyongji@bytedance.com>
+ <20230323053043.35-4-xieyongji@bytedance.com>
+ <CACGkMEtH0=vr6JQrqWFZqf4p8bcgeKCr4ipqdBc9nv-st3Pfiw@mail.gmail.com>
+ <20230324051153-mutt-send-email-mst@kernel.org>
+Content-Language: en-US
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20230324051153-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
 
-'#clock-cells' is a dependency of 'clock-output-names', following
-binding doc, add it.
+在 2023/3/24 17:12, Michael S. Tsirkin 写道:
+> On Fri, Mar 24, 2023 at 02:27:52PM +0800, Jason Wang wrote:
+>> On Thu, Mar 23, 2023 at 1:31 PM Xie Yongji <xieyongji@bytedance.com> wrote:
+>>> To support interrupt affinity spreading mechanism,
+>>> this makes use of group_cpus_evenly() to create
+>>> an irq callback affinity mask for each virtqueue
+>>> of vdpa device. Then we will unify set_vq_affinity
+>>> callback to pass the affinity to the vdpa device driver.
+>>>
+>>> Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+>> Thinking hard of all the logics, I think I've found something interesting.
+>>
+>> Commit ad71473d9c437 ("virtio_blk: use virtio IRQ affinity") tries to
+>> pass irq_affinity to transport specific find_vqs().  This seems a
+>> layer violation since driver has no knowledge of
+>>
+>> 1) whether or not the callback is based on an IRQ
+>> 2) whether or not the device is a PCI or not (the details are hided by
+>> the transport driver)
+>> 3) how many vectors could be used by a device
+>>
+>> This means the driver can't actually pass a real affinity masks so the
+>> commit passes a zero irq affinity structure as a hint in fact, so the
+>> PCI layer can build a default affinity based that groups cpus evenly
+>> based on the number of MSI-X vectors (the core logic is the
+>> group_cpus_evenly). I think we should fix this by replacing the
+>> irq_affinity structure with
+>>
+>> 1) a boolean like auto_cb_spreading
+>>
+>> or
+>>
+>> 2) queue to cpu mapping
+>>
+>> So each transport can do its own logic based on that. Then virtio-vDPA
+>> can pass that policy to VDUSE where we only need a group_cpus_evenly()
+>> and avoid duplicating irq_create_affinity_masks()?
+>>
+>> Thanks
+> I don't really understand what you propose. Care to post a patch?
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi b/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
-index 6895bcc12165..b3de4947762f 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
-@@ -806,6 +806,7 @@ pmic: pmic@4b {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_pmic>, <&pinctrl_camera_pwr>;
- 		clocks = <&pmic_osc>;
-+		#clock-cells = <0>;
- 		clock-names = "osc";
- 		clock-output-names = "pmic_clk";
- 		interrupt-parent = <&gpio1>;
--- 
-2.37.1
+I meant to avoid passing irq_affinity structure in find_vqs but an array 
+of boolean telling us whether or not the vq requires a automatic 
+spreading of callbacks. But it seems less flexible.
+
+
+> Also does it have to block this patchset or can it be done on top?
+
+
+We can leave it in the future.
+
+So
+
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+Thanks
+
+
+>
+>>> ---
+>>>   drivers/virtio/virtio_vdpa.c | 68 ++++++++++++++++++++++++++++++++++++
+>>>   1 file changed, 68 insertions(+)
+>>>
+>>> diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
+>>> index f72696b4c1c2..f3826f42b704 100644
+>>> --- a/drivers/virtio/virtio_vdpa.c
+>>> +++ b/drivers/virtio/virtio_vdpa.c
+>>> @@ -13,6 +13,7 @@
+>>>   #include <linux/kernel.h>
+>>>   #include <linux/slab.h>
+>>>   #include <linux/uuid.h>
+>>> +#include <linux/group_cpus.h>
+>>>   #include <linux/virtio.h>
+>>>   #include <linux/vdpa.h>
+>>>   #include <linux/virtio_config.h>
+>>> @@ -272,6 +273,66 @@ static void virtio_vdpa_del_vqs(struct virtio_device *vdev)
+>>>                  virtio_vdpa_del_vq(vq);
+>>>   }
+>>>
+>>> +static void default_calc_sets(struct irq_affinity *affd, unsigned int affvecs)
+>>> +{
+>>> +       affd->nr_sets = 1;
+>>> +       affd->set_size[0] = affvecs;
+>>> +}
+>>> +
+>>> +static struct cpumask *
+>>> +create_affinity_masks(unsigned int nvecs, struct irq_affinity *affd)
+>>> +{
+>>> +       unsigned int affvecs = 0, curvec, usedvecs, i;
+>>> +       struct cpumask *masks = NULL;
+>>> +
+>>> +       if (nvecs > affd->pre_vectors + affd->post_vectors)
+>>> +               affvecs = nvecs - affd->pre_vectors - affd->post_vectors;
+>>> +
+>>> +       if (!affd->calc_sets)
+>>> +               affd->calc_sets = default_calc_sets;
+>>> +
+>>> +       affd->calc_sets(affd, affvecs);
+>>> +
+>>> +       if (!affvecs)
+>>> +               return NULL;
+>>> +
+>>> +       masks = kcalloc(nvecs, sizeof(*masks), GFP_KERNEL);
+>>> +       if (!masks)
+>>> +               return NULL;
+>>> +
+>>> +       /* Fill out vectors at the beginning that don't need affinity */
+>>> +       for (curvec = 0; curvec < affd->pre_vectors; curvec++)
+>>> +               cpumask_setall(&masks[curvec]);
+>>> +
+>>> +       for (i = 0, usedvecs = 0; i < affd->nr_sets; i++) {
+>>> +               unsigned int this_vecs = affd->set_size[i];
+>>> +               int j;
+>>> +               struct cpumask *result = group_cpus_evenly(this_vecs);
+>>> +
+>>> +               if (!result) {
+>>> +                       kfree(masks);
+>>> +                       return NULL;
+>>> +               }
+>>> +
+>>> +               for (j = 0; j < this_vecs; j++)
+>>> +                       cpumask_copy(&masks[curvec + j], &result[j]);
+>>> +               kfree(result);
+>>> +
+>>> +               curvec += this_vecs;
+>>> +               usedvecs += this_vecs;
+>>> +       }
+>>> +
+>>> +       /* Fill out vectors at the end that don't need affinity */
+>>> +       if (usedvecs >= affvecs)
+>>> +               curvec = affd->pre_vectors + affvecs;
+>>> +       else
+>>> +               curvec = affd->pre_vectors + usedvecs;
+>>> +       for (; curvec < nvecs; curvec++)
+>>> +               cpumask_setall(&masks[curvec]);
+>>> +
+>>> +       return masks;
+>>> +}
+>>> +
+>>>   static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+>>>                                  struct virtqueue *vqs[],
+>>>                                  vq_callback_t *callbacks[],
+>>> @@ -282,9 +343,15 @@ static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+>>>          struct virtio_vdpa_device *vd_dev = to_virtio_vdpa_device(vdev);
+>>>          struct vdpa_device *vdpa = vd_get_vdpa(vdev);
+>>>          const struct vdpa_config_ops *ops = vdpa->config;
+>>> +       struct irq_affinity default_affd = { 0 };
+>>> +       struct cpumask *masks;
+>>>          struct vdpa_callback cb;
+>>>          int i, err, queue_idx = 0;
+>>>
+>>> +       masks = create_affinity_masks(nvqs, desc ? desc : &default_affd);
+>>> +       if (!masks)
+>>> +               return -ENOMEM;
+>>> +
+>>>          for (i = 0; i < nvqs; ++i) {
+>>>                  if (!names[i]) {
+>>>                          vqs[i] = NULL;
+>>> @@ -298,6 +365,7 @@ static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+>>>                          err = PTR_ERR(vqs[i]);
+>>>                          goto err_setup_vq;
+>>>                  }
+>>> +               ops->set_vq_affinity(vdpa, i, &masks[i]);
+>>>          }
+>>>
+>>>          cb.callback = virtio_vdpa_config_cb;
+>>> --
+>>> 2.20.1
+>>>
 
