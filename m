@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233976CB715
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E63E86CB719
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbjC1GZb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Mar 2023 02:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        id S229497AbjC1G0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 02:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232439AbjC1GZM (ORCPT
+        with ESMTP id S232658AbjC1G0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 02:25:12 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFD340DB
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:24:22 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 6E9D024E2F2;
-        Tue, 28 Mar 2023 14:23:52 +0800 (CST)
-Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Mar
- 2023 14:23:52 +0800
-Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX067.cuchost.com
- (172.16.6.67) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Mar
- 2023 14:23:51 +0800
-Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
- EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
- 15.00.1497.044; Tue, 28 Mar 2023 14:23:51 +0800
-From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: RE: [PATCH v7 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Topic: [PATCH v7 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Index: AQHZXUPUmSFyHAHJnEaKAA/P9UfMX68OGliAgAADeoCAAaM50A==
-Date:   Tue, 28 Mar 2023 06:23:51 +0000
-Message-ID: <c6e4a3cb42044c07b1ec37b76ea6596d@EXMBX066.cuchost.com>
-References: <20230323045604.536099-1-jeeheng.sia@starfivetech.com>
- <20230323045604.536099-5-jeeheng.sia@starfivetech.com>
- <20230327131025.6bawvoti65sth4rk@orel> <20230327132251.dejgmcpxjdrqzmvk@orel>
-In-Reply-To: <20230327132251.dejgmcpxjdrqzmvk@orel>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [202.188.176.82]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 28 Mar 2023 02:26:11 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB6B4ED5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:25:28 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ph2lX-00081R-6e; Tue, 28 Mar 2023 08:25:07 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 25D5119DDFA;
+        Tue, 28 Mar 2023 06:24:58 +0000 (UTC)
+Date:   Tue, 28 Mar 2023 08:24:56 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Peter Hong <peter_hong@fintek.com.tw>, wg@grandegger.com,
+        michal.swiatkowski@linux.intel.com, Steen.Hegelund@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, frank.jungclaus@esd.eu,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com
+Subject: Re: [PATCH V3] can: usb: f81604: add Fintek F81604 support
+Message-ID: <20230328062456.wjk5gj4vbriu7fzq@pengutronix.de>
+References: <20230327051048.11589-1-peter_hong@fintek.com.tw>
+ <CAMZ6Rq+ps1tLii1VfYyAqfD4ck_TGWBUo_ouK_vLfhoNEg-BPg@mail.gmail.com>
+ <5bdee736-7868-81c3-e63f-a28787bd0007@fintek.com.tw>
+ <CAMZ6Rq++N9ui5srP2uBYz0FPXttBYd2m982K8X-ESCC=qu1dAQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rqa5tlkfbiozleiu"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6Rq++N9ui5srP2uBYz0FPXttBYd2m982K8X-ESCC=qu1dAQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,79 +61,66 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--rqa5tlkfbiozleiu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> -----Original Message-----
-> From: Andrew Jones <ajones@ventanamicro.com>
-> Sent: Monday, March 27, 2023 9:23 PM
-> To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>; Conor Dooley
-> <conor.dooley@microchip.com>
-> Subject: Re: [PATCH v7 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> 
-> On Mon, Mar 27, 2023 at 03:10:25PM +0200, Andrew Jones wrote:
-> > On Thu, Mar 23, 2023 at 12:56:04PM +0800, Sia Jee Heng wrote:
-> > > Low level Arch functions were created to support hibernation.
-> > > swsusp_arch_suspend() relies code from __cpu_suspend_enter() to write
-> > > cpu state onto the stack, then calling swsusp_save() to save the memory
-> > > image.
-> > >
-> > > Arch specific hibernation header is implemented and is utilized by the
-> > > arch_hibernation_header_restore() and arch_hibernation_header_save()
-> > > functions. The arch specific hibernation header consists of satp, hartid,
-> > > and the cpu_resume address. The kernel built version is also need to be
-> > > saved into the hibernation image header to making sure only the same
-> > > kernel is restore when resume.
-> > >
-> > > swsusp_arch_resume() creates a temporary page table that covering only
-> > > the linear map. It copies the restore code to a 'safe' page, then start
-> > > to restore the memory image. Once completed, it restores the original
-> > > kernel's page table. It then calls into __hibernate_cpu_resume()
-> > > to restore the CPU context. Finally, it follows the normal hibernation
-> > > path back to the hibernation core.
-> > >
-> > > To enable hibernation/suspend to disk into RISCV, the below config
-> > > need to be enabled:
-> > > - CONFIG_ARCH_HIBERNATION_HEADER
-> > > - CONFIG_ARCH_HIBERNATION_POSSIBLE
-> > >
-> > > Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-> > > Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> > > Reviewed-by: Mason Huo <mason.huo@starfivetech.com>
-> > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > > ---
-> > >  arch/riscv/Kconfig                 |   6 +
-> > >  arch/riscv/include/asm/assembler.h |  20 ++
-> > >  arch/riscv/include/asm/suspend.h   |  19 ++
-> > >  arch/riscv/kernel/Makefile         |   1 +
-> > >  arch/riscv/kernel/asm-offsets.c    |   5 +
-> > >  arch/riscv/kernel/hibernate-asm.S  |  77 ++++++
-> > >  arch/riscv/kernel/hibernate.c      | 427 +++++++++++++++++++++++++++++
-> > >  7 files changed, 555 insertions(+)
-> > >  create mode 100644 arch/riscv/kernel/hibernate-asm.S
-> > >  create mode 100644 arch/riscv/kernel/hibernate.c
+On 28.03.2023 13:49:05, Vincent MAILHOL wrote:
+[...]
+> > >> +       int status, len;
+> > >> +
+> > >> +       if (can_dropped_invalid_skb(netdev, skb))
+> > >> +               return NETDEV_TX_OK;
+> > >> +
+> > >> +       netif_stop_queue(netdev);
+> > > In your driver, you send the CAN frames one at a time and wait for the
+> > > rx_handler to restart the queue. This approach dramatically degrades
+> > > the throughput. Is this a device limitation? Is the device not able to
+> > > manage more than one frame at a time?
 > > >
 > >
-> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> 
-> Actually, I forgot to point out something. As hibernation depends on
-> suspend.c for save/restore_csrs, we need something like
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 73cca7f17f6f..f1d2289df660 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -54,7 +54,7 @@ config RISCV
->         select CLINT_TIMER if !MMU
->         select CLONE_BACKWARDS
->         select COMMON_CLK
-> -       select CPU_PM if CPU_IDLE
-> +       select CPU_PM if CPU_IDLE || HIBERNATION
-Sure. Will add it
->         select EDAC_SUPPORT
->         select GENERIC_ARCH_TOPOLOGY
->         select GENERIC_ATOMIC64 if !64BIT
-> 
-> 
-> Thanks,
-> drew
+> > This device will not NAK on TX frame not complete, it only NAK on TX
+> > endpoint
+> > memory not processed, so we'll send next frame unitl TX complete(TI)
+> > interrupt
+> > received.
+> >
+> > The device can polling status register via TX/RX endpoint, but it's more
+> > complex.
+> > We'll plan to do it when first driver landing in mainstream.
+>=20
+> OK for me to have this as a next step. Marc, what do you think?
+
+Fine with me. First make it work, then make it fast.
+
+But I think this will never be a fast and resource-efficient USB CAN
+adapter. There are exiting drivers with an open and documented USB
+interface (gs_usb) and Open Source =C2=B5C implementations (candlelight) wi=
+th
+better performance.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--rqa5tlkfbiozleiu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQiiDUACgkQvlAcSiqK
+BOh0cwf+OIsyfvXP3U85cp2q7trhkPiSxchYbsU7gUaDHBWKN1VDhNOwWYIyBpl3
+8iCh88sGwjX0Q9Ib1qmNJvNibgf4kr0ekK0sUgHhVg3IJjA/nEatAXNDO9vtEjGt
+vsHz+UPuLWWGnwxXmIAjbUiKpzvk7UO3uzlaQu4TKRMUKX0gG3ZzhVt1KNf5hj6J
+P2XQO2/AfQ3ve1rEGLJBf4T0Y6Y+D7EDiYVV7070yYt43/N9Z8z+sdB/1YRDZ5RD
+Fh7QDzGSM/91ZDlNpO120YyWX5Eu8UzDOaP7sCcwnd/Y+8Je3/fcyGXW6He1Sf6t
+HW9clTQNLjK5nrQenqZymCyeOCj1+w==
+=BXc1
+-----END PGP SIGNATURE-----
+
+--rqa5tlkfbiozleiu--
