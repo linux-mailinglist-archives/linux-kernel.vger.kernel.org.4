@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F136CB96F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36256CB971
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjC1IbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
+        id S232129AbjC1Id7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbjC1IbU (ORCPT
+        with ESMTP id S230263AbjC1Id5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:31:20 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082E0C7;
-        Tue, 28 Mar 2023 01:31:18 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 54CDF1C0ABB; Tue, 28 Mar 2023 10:31:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1679992277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NZKxrePiLV6l9V0HmcTkJ0mbMEOMo46hydocfIMAsEM=;
-        b=TaQUejS3XvePiDrGtbQ3Wr4dI+7/5Ann4SxcWJnc33K3QFtaE90LrCi65fNBrL6leBXaFY
-        caltXj6eY/KUdYbTwcLVSYBx/D3/C+URYSLi2W8eFxu6Vapd7eDoRMlpuR0R7efR5KJ4YC
-        AqrjXY8FKBXLwFGBQLqDO6nrIiTOtJg=
-Date:   Tue, 28 Mar 2023 10:31:16 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [net-next PATCH v6 16/16] arm: mvebu: dt: Add PHY LED support
- for 370-rd WAN port
-Message-ID: <ZCKl1A9dZOIAdMY8@duo.ucw.cz>
-References: <20230327141031.11904-1-ansuelsmth@gmail.com>
- <20230327141031.11904-17-ansuelsmth@gmail.com>
+        Tue, 28 Mar 2023 04:33:57 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36CE3C33;
+        Tue, 28 Mar 2023 01:33:53 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id a16so10134825pjs.4;
+        Tue, 28 Mar 2023 01:33:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679992433;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9eASjuq7QsT1jP8e0B7Ep9hMFmqx6RAn1FELDlXM3sM=;
+        b=SIosOkaDUhjhmzZHFExwoJ5Wpc/KV5sFPxiqDz4tHq7Ugy3FaER99RpfqdXPjAUqV5
+         CeJUXZdaLv+u4nLTryHSV8/oApWO30A4XVQWUqlUoW6Jec4FBG2VA8rYdv4+Woleu9P0
+         GuWjqDJpNyc1GalXL6k/QU+wuIRZGZ4Adat5YgGlNb3DQPIwkauw61k0uSYhLVgJxgUa
+         KXrTKPyMxUCLNBWQXSKTI0CJO4wwBBPHyIkbSmHkw1IWkpfkHG7eQbOXrTg8KIXDBNy2
+         N1iIa8yRRB2trtv6Gya2Nou4crGnWXVqU9BkMDVhvJBYvKRmviC6kMPgCedYYSoWWvAR
+         7/zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679992433;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9eASjuq7QsT1jP8e0B7Ep9hMFmqx6RAn1FELDlXM3sM=;
+        b=mYNAG5wkrGSzfdjz0VtJCO8Y9NO7QZA9IWXfBKx7YCkGdJQh9R5JB7RnIlB5Tpo972
+         pB1icmZQGm06kIGyOrsRbu3acbULWJEDt7xdH8FmHRCPy8ONQ2gnkAH3tV6/pZWLj/kc
+         CqBKOC1f+95U0flEIdPUzz1rpf0yrZrxT7rNTwyI9EW43JAw3MwAkPaSVPHcE++qnI5H
+         wY0SoVbE/IVmWQW54u+LLXvT9HMnVrE9v3jCattCzl2eiqy6IppmqFONiMFNI6k9WMt7
+         fuXDM9XKMJvTaAnymaBM8xHhtdFWuKZtEaAv7Zn1Z6bzbwDb4xHphQCzDQJgRTlg0DHV
+         YPcg==
+X-Gm-Message-State: AAQBX9fsTTxq2LpvXylPr1+ts2Tjp1ZXDUlbpnuMyMkNCsE2xUzaBllA
+        MgSBL6ceFBDsoJK8bCeW1qX32vpFbw+AtEzc
+X-Google-Smtp-Source: AKy350aGqfEkgasMNRB2lsZyLqmvpcd2JhSPu34Dni4d6ESTjCoYiWk/NiBwqlK/d6bq/OPfRWH3OQ==
+X-Received: by 2002:a17:902:da8e:b0:19c:c9d0:5bf8 with SMTP id j14-20020a170902da8e00b0019cc9d05bf8mr18783116plx.35.1679992433287;
+        Tue, 28 Mar 2023 01:33:53 -0700 (PDT)
+Received: from pavilion.. ([2402:e280:2146:a9a:db37:2c9f:dcb8:89a9])
+        by smtp.gmail.com with ESMTPSA id t12-20020a170902b20c00b0019abd4ddbf2sm20505307plr.179.2023.03.28.01.33.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 01:33:53 -0700 (PDT)
+From:   Saalim Quadri <danascape@gmail.com>
+To:     krzysztof.kozlowski@linaro.org
+Cc:     alsa-devel@alsa-project.org, broonie@kernel.org,
+        danascape@gmail.com, daniel.baluta@nxp.com,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, leon@leon.nu
+Subject: Re: [PATCH v4] ASoC: dt-bindings: alc5632: Convert to dtschema
+Date:   Tue, 28 Mar 2023 14:03:47 +0530
+Message-Id: <20230328083347.54958-1-danascape@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <9490b5ef-3068-fcbb-0105-baf3839c21df@linaro.org>
+References: <9490b5ef-3068-fcbb-0105-baf3839c21df@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="M1XUwPa0tTn2VCRg"
-Content-Disposition: inline
-In-Reply-To: <20230327141031.11904-17-ansuelsmth@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC.  It might happen, that command when run on an older
+> kernel, gives you outdated entries.  Therefore please be sure you base
+> your patches on recent Linux kernel.
 
---M1XUwPa0tTn2VCRg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Apologies but, this is the output of get_maintainers.pl, is there something that I missed?
 
-On Mon 2023-03-27 16:10:31, Christian Marangi wrote:
-> From: Andrew Lunn <andrew@lunn.ch>
->=20
-> The WAN port of the 370-RD has a Marvell PHY, with one LED on
-> the front panel. List this LED in the device tree.
+I am currently working no 6.3-rc3 as my base kernel.
 
-> @@ -135,6 +136,19 @@ &mdio {
->  	pinctrl-names =3D "default";
->  	phy0: ethernet-phy@0 {
->  		reg =3D <0>;
-> +		leds {
-> +			#address-cells =3D <1>;
-> +			#size-cells =3D <0>;
-> +
-> +			led@0 {
-> +				reg =3D <0>;
-> +				label =3D "WAN";
-> +				color =3D <LED_COLOR_ID_WHITE>;
-> +				function =3D LED_FUNCTION_LAN;
-> +				function-enumerator =3D <1>;
-> +				linux,default-trigger =3D "netdev";
-> +			};
+> saalim@pavilion:~/workspace/linux$ scripts/get_maintainer.pl Documentation/devicetree/bindings/sound/alc5632.txt
+> Liam Girdwood <lgirdwood@gmail.com> (supporter:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM...)
+> Mark Brown <broonie@kernel.org> (supporter:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM...)
+> Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+> Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+> alsa-devel@alsa-project.org (moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM...)
+> devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+> linux-kernel@vger.kernel.org (open list)
 
-/sys/class/leds/WAN is not acceptable.
+Thank you,
 
-Best regards,
-							Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---M1XUwPa0tTn2VCRg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZCKl1AAKCRAw5/Bqldv6
-8oOMAJ94SXgT/9W1NuDgolccPqIAuAiokgCgo5aEvcznB5Zg1V+9XSXaeddQA6M=
-=n8Nw
------END PGP SIGNATURE-----
-
---M1XUwPa0tTn2VCRg--
+Saalim
