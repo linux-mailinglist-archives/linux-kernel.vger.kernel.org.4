@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364EC6CC139
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B0A6CC13E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjC1Nm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S233157AbjC1Nm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbjC1Nmq (ORCPT
+        with ESMTP id S232484AbjC1Nmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:42:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D73C650
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:42:34 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1ph9aN-00056V-CC; Tue, 28 Mar 2023 15:42:03 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1ph9aL-0002K8-Jb; Tue, 28 Mar 2023 15:42:01 +0200
-Date:   Tue, 28 Mar 2023 15:42:01 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>, peng.fan@nxp.com,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        abailon@baylibre.com, krzysztof.kozlowski+dt@linaro.org,
-        festevam@gmail.com, abelvesa@kernel.org, marex@denx.de,
-        Markus.Niebel@ew.tq-group.com, paul.elder@ideasonboard.com,
-        gerg@kernel.org, linux-imx@nxp.com, devicetree@vger.kernel.org,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, linux-pm@vger.kernel.org,
-        s.hauer@pengutronix.de, robh+dt@kernel.org, aford173@gmail.com,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        djakov@kernel.org, l.stach@pengutronix.de, shawnguo@kernel.org,
-        laurent.pinchart@ideasonboard.com
-Subject: Re: [PATCH V3 7/7] arm64: dts: imx8mp: add interconnect for hsio blk
- ctrl
-Message-ID: <20230328134201.yaxrdtetjygkgkmz@pengutronix.de>
-References: <20220703091451.1416264-8-peng.fan@oss.nxp.com>
- <20230327045037.593326-1-gerg@linux-m68k.org>
- <2678294.mvXUDI8C0e@steina-w>
- <b23a44ab-3666-8a41-d2a0-0d2fbdbd9f00@pengutronix.de>
- <ecd3a92b-ba1e-e7c1-088a-371bd1a2c100@linux-m68k.org>
- <20230328073302.jj64u5hvdpc6axa5@pengutronix.de>
- <426b4776-104c-cb47-c8cc-c26515fcb6e3@linux-m68k.org>
+        Tue, 28 Mar 2023 09:42:49 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1119778;
+        Tue, 28 Mar 2023 06:42:39 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id d10so7205741pgt.12;
+        Tue, 28 Mar 2023 06:42:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680010959;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zhuOF8Ho5g7rK8i7Gjjphp+Xz2ush8RYPAJ3+nO8+hU=;
+        b=ohv1R6BsJ0apfHnfIaYD0x+ssyU4aWoNEXnATWn2rcvn29C/EsJGK7p6IDnuM9fJMo
+         UOtC34kKxAZjwY84umK4/vicnSdHCBd6qgMiRWHpE7h/hgRFM82W+dJglled/echbUQ1
+         E1K0v84j+vnl7V5Zy5Fn5uaLHHhFKkCsjRx3vtPfrC9FHjGApF/xGMzc2CigYWS919Dr
+         jaxtUJy1iRunvTtsHeYhd3a8LnyWhjQV0DNnURVouXTAG0jex6sTV43umwktvLXRVyIb
+         j7iKNpcsPY13un2CQi4of8BswcmImAdR6XvOD/CnYM47BUz/tzStpE44TF+MzCXZn3gG
+         iB+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680010959;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zhuOF8Ho5g7rK8i7Gjjphp+Xz2ush8RYPAJ3+nO8+hU=;
+        b=28KtK3M+11nHcfYTmCM8YCs3Wpw9m0puVpAIXttkbwzYBq6HPOfxC59viamiE6Yvlv
+         BPn8cjPSGsqxcyiSA8OfrvEfZfgUitsrtR7meyVkiNQR+1xSs/bVp8yTpKB62nBIrt/+
+         ONumljC+ZrQekRguepbUsf6LkpFLzL/NC11xTQvVOOm8bUEDq1poJrSd98Z95VQJi3zS
+         Dwj+qJCmfDUOqN2joGqWkdzI7Pnxyj7eO13QT39xOzlKiNYP8o9Xk6k81/YS3Q0mOhjL
+         cyuTNBD/KoKuH+Ef4bqTIHWXJcLV7suA6kdu1jHy6N8a452AFkio11j3Lf8Ch07Dcz8z
+         eVOw==
+X-Gm-Message-State: AAQBX9del6dtMsjzJc6qTP+ZqBXYuO+1JtCMe4umlGBKghEVyWd5Jx49
+        DJJ1chOmd5j8MrnHPkkz3JO+r0Cobnc+8mAyPuqC766n
+X-Google-Smtp-Source: AKy350bVKJbK4HdlOq50XmTjRNX5ftQ2y602rndF1NQGJZJwBaI0ysvg4ceiDozOC6jOtPOZm9kKgj2yO8M4S5/4mqU=
+X-Received: by 2002:a63:ef0c:0:b0:50f:aafa:6bc9 with SMTP id
+ u12-20020a63ef0c000000b0050faafa6bc9mr4067379pgh.6.1680010958857; Tue, 28 Mar
+ 2023 06:42:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <426b4776-104c-cb47-c8cc-c26515fcb6e3@linux-m68k.org>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+References: <20230327174402.1655365-1-kent.overstreet@linux.dev>
+In-Reply-To: <20230327174402.1655365-1-kent.overstreet@linux.dev>
+From:   Phillip Lougher <phillip.lougher@gmail.com>
+Date:   Tue, 28 Mar 2023 14:42:28 +0100
+Message-ID: <CAB3woddAP_6uOUJ4Yjj_PATme-CQao3p2JErBBtjtpzYxQejng@mail.gmail.com>
+Subject: Re: [PATCH 0/2] bio iter improvements
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        willy@infradead.org, axboe@kernel.dk,
+        Phillip Lougher <phillip@squashfs.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,84 +70,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Mon, Mar 27, 2023 at 7:02=E2=80=AFPM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
+>
+> Small patch series cleaning up/standardizing bio_for_each_segment_all(),
+> which means we can use the same guts for bio_for_each_folio_all(),
+> considerably simplifying that code.
+>
+> The squashfs maintainer will want to look at and test those changes,
+> that code was doing some slightly tricky things. The rest was a pretty
+> mechanical conversion.
 
-On 23-03-28, Greg Ungerer wrote:
-> Hi Marco,
-> 
-> On 28/3/23 17:33, Marco Felsch wrote:
-> > Hi Greg,
-> > 
-> > On 23-03-27, Greg Ungerer wrote:
-> > > Hi Ahmad,
-> > > 
-> > > On 27/3/23 17:16, Ahmad Fatoum wrote:
-> > > > On 27.03.23 08:27, Alexander Stein wrote:
-> > > > > Am Montag, 27. März 2023, 06:50:37 CEST schrieb Greg Ungerer:
-> > > > > > Any thoughts on why this breaks USB?
-> > > > > 
-> > > > > Maybe you are missing CONFIG_INTERCONNECT_IMX8MP?
-> > > > 
-> > > > And if that's the case, did you check /sys/kernel/debug/devices_deferred
-> > > > to see if there was any indication that this is the reason?
-> > > 
-> > > Yeah, it does:
-> > > 
-> > >      # cat /sys/kernel/debug/devices_deferred
-> > >      32f10100.usb	platform: supplier 32f10000.blk-ctrl not ready
-> > >      32f10108.usb	platform: supplier 32f10000.blk-ctrl not ready
-> > >      32ec0000.blk-ctrl	imx8m-blk-ctrl: failed to get noc entries
-> > >      381f0040.usb-phy	platform: supplier 32f10000.blk-ctrl not ready
-> > >      382f0040.usb-phy	platform: supplier 32f10000.blk-ctrl not ready
-> > >      imx-pgc-domain.11	
-> > >      imx-pgc-domain.12	
-> > >      imx-pgc-domain.13	
-> > >      38330000.blk-ctrl	platform: supplier imx-pgc-domain.11 not ready
-> > >      32f10000.blk-ctrl	imx8mp-blk-ctrl: failed to get noc entries
-> > > 
-> > > As far as I can tell blk-ctrl should be good:
-> > > 
-> > >      #
-> > >      # i.MX SoC drivers
-> > >      #
-> > >      CONFIG_IMX_GPCV2_PM_DOMAINS=y
-> > >      CONFIG_SOC_IMX8M=y
-> > >      # CONFIG_SOC_IMX9 is not set
-> > >      CONFIG_IMX8M_BLK_CTRL=y
-> > >      # end of i.MX SoC drivers
-> > > 
-> > > 
-> > > > If you didn't find any hint there, you might want to place a
-> > > > dev_err_probe with a suitable message at the place where -EPROBE_DEFER
-> > > > was returned.
-> > > 
-> > > I will try that.
-> > 
-> > Can you check that CONFIG_ARM_IMX_BUS_DEVFREQ is enabled? This is the
-> > noc/interconnect driver. This could also the problem for you vpu issue.
-> 
-> I do not have that enabled. Enabling that fixes the USB probing.
-> So that is good, thanks.
-> 
-> It doesn't fix the other problem I mentioned with the vpu pgc nodes though.
-> I do get some extra messages now with this enabled and the 6.1 kernel:
-> 
->     imx-pgc imx-pgc-domain.8: failed to command PGC
->     imx-pgc imx-pgc-domain.8: failed to command PGC
->     imx8m-blk-ctrl 38330000.blk-ctrl: deferred probe timeout, ignoring dependency
->     imx8m-blk-ctrl 38330000.blk-ctrl: error -110: failed to attach power domain "g1"
->     imx8m-blk-ctrl: probe of 38330000.blk-ctrl failed with error -110
+An eyeball of the changes doesn't bring up anything obviously wrong.
 
-Okay, this seems more like a "real" issue not related to some missing
-drivers. I followed the code and found a poll within the
-imx_pgc_power_up() in gpcv2.c. Power-domain 8 is the vpumix domain which
-is used as power-domain for the g1 power-domain. My assumption is that
-this poll does run into the timeout. Maybe Peng can support you here
-since I didn't had the time for to test the VPUs yet and he did the
-integration patches.
+I'll apply and do some tests.
 
-Just ignore the errors if you don't use the VPUs or disable the
-blk-ctrl@38330000 node via status = "disabled".
+Phillip
 
-Regards,
-  Marco
+BTW please CC me on the cover letter as well as patch [1/2].
+
+
+>
+> Kent Overstreet (2):
+>   block: Rework bio_for_each_segment_all()
+>   block: Rework bio_for_each_folio_all()
+>
+>  block/bio.c               |  38 ++++++------
+>  block/blk-map.c           |  38 ++++++------
+>  block/bounce.c            |  12 ++--
+>  drivers/md/bcache/btree.c |   8 +--
+>  drivers/md/dm-crypt.c     |  10 ++--
+>  drivers/md/raid1.c        |   4 +-
+>  fs/btrfs/disk-io.c        |  10 ++--
+>  fs/btrfs/extent_io.c      |  52 ++++++++--------
+>  fs/btrfs/inode.c          |   8 +--
+>  fs/btrfs/raid56.c         |  18 +++---
+>  fs/crypto/bio.c           |   8 +--
+>  fs/erofs/zdata.c          |   4 +-
+>  fs/ext4/page-io.c         |   8 +--
+>  fs/ext4/readpage.c        |   4 +-
+>  fs/f2fs/data.c            |  20 +++----
+>  fs/gfs2/lops.c            |  10 ++--
+>  fs/gfs2/meta_io.c         |   8 +--
+>  fs/iomap/buffered-io.c    |  14 +++--
+>  fs/mpage.c                |   4 +-
+>  fs/squashfs/block.c       |  48 ++++++++-------
+>  fs/squashfs/lz4_wrapper.c |  17 +++---
+>  fs/squashfs/lzo_wrapper.c |  17 +++---
+>  fs/verity/verify.c        |   4 +-
+>  include/linux/bio.h       | 123 +++++++++++++++++++++-----------------
+>  include/linux/bvec.h      |  70 ++++++++++++++--------
+>  25 files changed, 302 insertions(+), 255 deletions(-)
+>
+> --
+> 2.39.2
+>
