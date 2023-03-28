@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAED6CC136
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364EC6CC139
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232987AbjC1NmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
+        id S229718AbjC1Nm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbjC1NmJ (ORCPT
+        with ESMTP id S232678AbjC1Nmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:42:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CE67A88;
-        Tue, 28 Mar 2023 06:41:53 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3D5286603152;
-        Tue, 28 Mar 2023 14:41:51 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680010911;
-        bh=mdZaeHtWUcUws+H6KHaUGd/J+/ss4cO3a1++cudlA0E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LZG/eBD8utsG50ZHCgvDv2s5UltJ6GMYEzujJ260sZbFSgxCRB/ndUNYo8UTgpOOL
-         5Cc4T7oYgSQBhbd/KU+xGIwgwNj+ikhxH1KEL/jyD5KGCnGwEjxK/dL/gkCM1YcCiu
-         z0/ido9OaQyUi2aogP5cMgAurotCLPcr4+ay34Pen7CFJViiovacmbEuNv74jRn7Zs
-         OX2nx2h9AG/TjxUkH/3fPUP5eZZ/+lS71Uvmw8cG7Qiyc1TxhAbGXarYODvSfaG8vK
-         /NemcTJ5C6JSYBnZuN76G1gsJd7dWSklXXKPbk5+rRkfI6kLgYDUolu+Xanq10LbL3
-         KizIBlytgiuNg==
-Message-ID: <334089fd-f0e8-bf63-5100-d8632c478ccc@collabora.com>
-Date:   Tue, 28 Mar 2023 15:41:48 +0200
+        Tue, 28 Mar 2023 09:42:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D73C650
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:42:34 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1ph9aN-00056V-CC; Tue, 28 Mar 2023 15:42:03 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1ph9aL-0002K8-Jb; Tue, 28 Mar 2023 15:42:01 +0200
+Date:   Tue, 28 Mar 2023 15:42:01 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>, peng.fan@nxp.com,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        abailon@baylibre.com, krzysztof.kozlowski+dt@linaro.org,
+        festevam@gmail.com, abelvesa@kernel.org, marex@denx.de,
+        Markus.Niebel@ew.tq-group.com, paul.elder@ideasonboard.com,
+        gerg@kernel.org, linux-imx@nxp.com, devicetree@vger.kernel.org,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, linux-pm@vger.kernel.org,
+        s.hauer@pengutronix.de, robh+dt@kernel.org, aford173@gmail.com,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        djakov@kernel.org, l.stach@pengutronix.de, shawnguo@kernel.org,
+        laurent.pinchart@ideasonboard.com
+Subject: Re: [PATCH V3 7/7] arm64: dts: imx8mp: add interconnect for hsio blk
+ ctrl
+Message-ID: <20230328134201.yaxrdtetjygkgkmz@pengutronix.de>
+References: <20220703091451.1416264-8-peng.fan@oss.nxp.com>
+ <20230327045037.593326-1-gerg@linux-m68k.org>
+ <2678294.mvXUDI8C0e@steina-w>
+ <b23a44ab-3666-8a41-d2a0-0d2fbdbd9f00@pengutronix.de>
+ <ecd3a92b-ba1e-e7c1-088a-371bd1a2c100@linux-m68k.org>
+ <20230328073302.jj64u5hvdpc6axa5@pengutronix.de>
+ <426b4776-104c-cb47-c8cc-c26515fcb6e3@linux-m68k.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: mediatek: deprecate custom
- drive strength property
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230327-cleanup-pinctrl-binding-v1-0-b695e32e4f2e@baylibre.com>
- <20230327-cleanup-pinctrl-binding-v1-1-b695e32e4f2e@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230327-cleanup-pinctrl-binding-v1-1-b695e32e4f2e@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.2 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <426b4776-104c-cb47-c8cc-c26515fcb6e3@linux-m68k.org>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,50 +68,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/03/23 15:06, Alexandre Mergnat ha scritto:
-> Deprecate mediatek,drive-strength-adv which shall not exist, that was an
-> unnecessary property that leaked upstream from downstream kernels and
-> there's no reason to use it.
+Hi Greg,
+
+On 23-03-28, Greg Ungerer wrote:
+> Hi Marco,
 > 
-> The generic property drive-strength-microamp should be used instead.
+> On 28/3/23 17:33, Marco Felsch wrote:
+> > Hi Greg,
+> > 
+> > On 23-03-27, Greg Ungerer wrote:
+> > > Hi Ahmad,
+> > > 
+> > > On 27/3/23 17:16, Ahmad Fatoum wrote:
+> > > > On 27.03.23 08:27, Alexander Stein wrote:
+> > > > > Am Montag, 27. März 2023, 06:50:37 CEST schrieb Greg Ungerer:
+> > > > > > Any thoughts on why this breaks USB?
+> > > > > 
+> > > > > Maybe you are missing CONFIG_INTERCONNECT_IMX8MP?
+> > > > 
+> > > > And if that's the case, did you check /sys/kernel/debug/devices_deferred
+> > > > to see if there was any indication that this is the reason?
+> > > 
+> > > Yeah, it does:
+> > > 
+> > >      # cat /sys/kernel/debug/devices_deferred
+> > >      32f10100.usb	platform: supplier 32f10000.blk-ctrl not ready
+> > >      32f10108.usb	platform: supplier 32f10000.blk-ctrl not ready
+> > >      32ec0000.blk-ctrl	imx8m-blk-ctrl: failed to get noc entries
+> > >      381f0040.usb-phy	platform: supplier 32f10000.blk-ctrl not ready
+> > >      382f0040.usb-phy	platform: supplier 32f10000.blk-ctrl not ready
+> > >      imx-pgc-domain.11	
+> > >      imx-pgc-domain.12	
+> > >      imx-pgc-domain.13	
+> > >      38330000.blk-ctrl	platform: supplier imx-pgc-domain.11 not ready
+> > >      32f10000.blk-ctrl	imx8mp-blk-ctrl: failed to get noc entries
+> > > 
+> > > As far as I can tell blk-ctrl should be good:
+> > > 
+> > >      #
+> > >      # i.MX SoC drivers
+> > >      #
+> > >      CONFIG_IMX_GPCV2_PM_DOMAINS=y
+> > >      CONFIG_SOC_IMX8M=y
+> > >      # CONFIG_SOC_IMX9 is not set
+> > >      CONFIG_IMX8M_BLK_CTRL=y
+> > >      # end of i.MX SoC drivers
+> > > 
+> > > 
+> > > > If you didn't find any hint there, you might want to place a
+> > > > dev_err_probe with a suitable message at the place where -EPROBE_DEFER
+> > > > was returned.
+> > > 
+> > > I will try that.
+> > 
+> > Can you check that CONFIG_ARM_IMX_BUS_DEVFREQ is enabled? This is the
+> > noc/interconnect driver. This could also the problem for you vpu issue.
 > 
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
->   .../devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml      | 8 ++++++--
->   .../devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml      | 6 +++++-
->   2 files changed, 11 insertions(+), 3 deletions(-)
+> I do not have that enabled. Enabling that fixes the USB probing.
+> So that is good, thanks.
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
-> index c30cd0d010dd..b82a066b91ec 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
+> It doesn't fix the other problem I mentioned with the vpu pgc nodes though.
+> I do get some extra messages now with this enabled and the 6.1 kernel:
+> 
+>     imx-pgc imx-pgc-domain.8: failed to command PGC
+>     imx-pgc imx-pgc-domain.8: failed to command PGC
+>     imx8m-blk-ctrl 38330000.blk-ctrl: deferred probe timeout, ignoring dependency
+>     imx8m-blk-ctrl 38330000.blk-ctrl: error -110: failed to attach power domain "g1"
+>     imx8m-blk-ctrl: probe of 38330000.blk-ctrl failed with error -110
 
-Thanks for doing MT8183!!!
+Okay, this seems more like a "real" issue not related to some missing
+drivers. I followed the code and found a poll within the
+imx_pgc_power_up() in gpcv2.c. Power-domain 8 is the vpumix domain which
+is used as power-domain for the g1 power-domain. My assumption is that
+this poll does run into the timeout. Maybe Peng can support you here
+since I didn't had the time for to test the VPUs yet and he did the
+integration patches.
 
-> @@ -110,8 +110,13 @@ patternProperties:
->             drive-strength:
+Just ignore the errors if you don't use the VPUs or disable the
+blk-ctrl@38330000 node via status = "disabled".
 
-..snip..
-
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
-> index 4b96884a1afc..347f533776ba 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
-> @@ -91,8 +91,13 @@ patternProperties:
->   
->             input-schmitt-disable: true
->   
-> +          drive-strength-microamp:
-> +            enum: [125, 250, 500, 1000]
-> +
->             mediatek,drive-strength-adv:
-> +            deprecated: true
-
-In the case of MT8365, since there's *no* devicetree using this property, *at all*,
-I think you can even just entirely remove this block, as that should not be
-considered an ABI breakage in that case.
-
-Krzysztof, can you please confirm?
-
-Cheers!
-Angelo
+Regards,
+  Marco
