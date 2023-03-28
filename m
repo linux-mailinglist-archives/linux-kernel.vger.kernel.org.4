@@ -2,121 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAEB6CBA45
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE7F6CBA41
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjC1JP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
+        id S232526AbjC1JPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232392AbjC1JPP (ORCPT
+        with ESMTP id S231717AbjC1JPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:15:15 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09E7100;
+        Tue, 28 Mar 2023 05:15:14 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06205FC3;
         Tue, 28 Mar 2023 02:15:03 -0700 (PDT)
-X-UUID: 0145ee56cd4911edb6b9f13eb10bd0fe-20230328
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=RSvJJIzc07jNs5xyFBfiiy/4bckZKwo6oSXXK8nF9/0=;
-        b=mAcwyYQ5gwQbbba4RgMcuWExThH5n0lsu7XSXKT4OORrgOEmxC8TQOZMGRsoCNj2YdIbC9KEXK8R3zJq94kW2wQYiSGzhTCXcEVElgBoUW/9gq08yZq1UzVkoKgsa1Ec5jXfWZ2aI4/4/JKpwCZ6njZJNdlmk0QNO2xdUVWnhII=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:a0116e93-fbae-4945-aa9b-9261989c2d6b,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.22,REQID:a0116e93-fbae-4945-aa9b-9261989c2d6b,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:120426c,CLOUDID:778928f7-ddba-41c3-91d9-10eeade8eac7,B
-        ulkID:230328171456U74Z9494,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: 0145ee56cd4911edb6b9f13eb10bd0fe-20230328
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 17486555; Tue, 28 Mar 2023 17:14:55 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Tue, 28 Mar 2023 17:14:54 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Tue, 28 Mar 2023 17:14:53 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 2/2] media: mediatek: vcodec: add remove function for decoder platform driver
-Date:   Tue, 28 Mar 2023 17:14:50 +0800
-Message-ID: <20230328091451.21979-2-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230328091451.21979-1-yunfei.dong@mediatek.com>
-References: <20230328091451.21979-1-yunfei.dong@mediatek.com>
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 87E051FD6A;
+        Tue, 28 Mar 2023 09:15:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679994902; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=A3PY4kAmdN+G4LKEzbQiBUxXWfapjGR4y3Y+c4QLJFE=;
+        b=2/x+U4R7qqP+59Noj8UT5qLT6YBLSdNNO5wbMKW+dorYuJpNMvYwB/6rVUq3UwWkDl1o/3
+        lYL9BUpOObcbbaMYZ5fWsXHepA04B9BYh2KjAEZLsx2CxdS9esUa2QBSokD4Y5BP0Zhr8S
+        moxZIItpN8HWEQi+0kuwnrdJ7FAMgyg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679994902;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=A3PY4kAmdN+G4LKEzbQiBUxXWfapjGR4y3Y+c4QLJFE=;
+        b=yaK7nTFXoeCKjoidyd5uUSiAA+mKW7ilMdRveXZkMGvpA8dq6oIXbtHiVDKgOgbG5b1zJz
+        4RtjTok0IuvDLwDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 77E161390B;
+        Tue, 28 Mar 2023 09:15:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uAw7HRawImRcQAAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 28 Mar 2023 09:15:02 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id F150CA071C; Tue, 28 Mar 2023 11:15:01 +0200 (CEST)
+Date:   Tue, 28 Mar 2023 11:15:01 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, yukuai3@huawei.com, stable@kernel.org
+Subject: Re: [PATCH v3 1/2] ext4: turning quotas off if mount failed after
+ enable quotas
+Message-ID: <20230328091501.o27zc5yjnrotgyfl@quack3>
+References: <20230327141630.156875-1-libaokun1@huawei.com>
+ <20230327141630.156875-2-libaokun1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327141630.156875-2-libaokun1@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Need to disable decoder power when remove decoder hardware driver, adding
-remove callback function in the definition of platform driver.
+On Mon 27-03-23 22:16:29, Baokun Li wrote:
+> Yi found during a review of the patch "ext4: don't BUG on inconsistent
+> journal feature" that when ext4_mark_recovery_complete() returns an error
+> value, the error handling path does not turn off the enabled quotas,
+> which triggers the following kmemleak:
+> 
+> ================================================================
+> unreferenced object 0xffff8cf68678e7c0 (size 64):
+> comm "mount", pid 746, jiffies 4294871231 (age 11.540s)
+> hex dump (first 32 bytes):
+> 00 90 ef 82 f6 8c ff ff 00 00 00 00 41 01 00 00  ............A...
+> c7 00 00 00 bd 00 00 00 0a 00 00 00 48 00 00 00  ............H...
+> backtrace:
+> [<00000000c561ef24>] __kmem_cache_alloc_node+0x4d4/0x880
+> [<00000000d4e621d7>] kmalloc_trace+0x39/0x140
+> [<00000000837eee74>] v2_read_file_info+0x18a/0x3a0
+> [<0000000088f6c877>] dquot_load_quota_sb+0x2ed/0x770
+> [<00000000340a4782>] dquot_load_quota_inode+0xc6/0x1c0
+> [<0000000089a18bd5>] ext4_enable_quotas+0x17e/0x3a0 [ext4]
+> [<000000003a0268fa>] __ext4_fill_super+0x3448/0x3910 [ext4]
+> [<00000000b0f2a8a8>] ext4_fill_super+0x13d/0x340 [ext4]
+> [<000000004a9489c4>] get_tree_bdev+0x1dc/0x370
+> [<000000006e723bf1>] ext4_get_tree+0x1d/0x30 [ext4]
+> [<00000000c7cb663d>] vfs_get_tree+0x31/0x160
+> [<00000000320e1bed>] do_new_mount+0x1d5/0x480
+> [<00000000c074654c>] path_mount+0x22e/0xbe0
+> [<0000000003e97a8e>] do_mount+0x95/0xc0
+> [<000000002f3d3736>] __x64_sys_mount+0xc4/0x160
+> [<0000000027d2140c>] do_syscall_64+0x3f/0x90
+> ================================================================
+> 
+> To solve this problem, we add a "failed_mount10" tag, and call
+> ext4_quota_off_umount() in this tag to release the enabled qoutas.
+> 
+> Fixes: 11215630aada ("ext4: don't BUG on inconsistent journal feature")
+> Cc: stable@kernel.org
+> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-Fixes: c05bada35f01 ("media: mtk-vcodec: Add to support multi hardware decode")
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
-- test pass when remove and insmod decoder hardware driver.
----
- .../media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c    | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Looks good. Feel free to add:
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-index 376db0e433d7..b753bf54ebd9 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-@@ -193,8 +193,16 @@ static int mtk_vdec_hw_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static int mtk_vdec_hw_remove(struct platform_device *pdev)
-+{
-+	pm_runtime_disable(&pdev->dev);
-+
-+	return 0;
-+}
-+
- static struct platform_driver mtk_vdec_driver = {
- 	.probe	= mtk_vdec_hw_probe,
-+	.remove = mtk_vdec_hw_remove,
- 	.driver	= {
- 		.name	= "mtk-vdec-comp",
- 		.of_match_table = mtk_vdec_hw_match,
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+> V1->V2:
+>         Add judgment for CONFIG_QUOTA to avoid warning
+>         "label 'failed_mount9' defined but not used".
+>         (Reported-by: kernel test robot <lkp@intel.com>)
+> V2->V3:
+>         By adding __maybe_unused to silence possible compilation
+>         complain in patch one, instead of adding the judgment.
+>         (Suggested by Jan Kara).
+> 
+>  fs/ext4/super.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index e6d84c1e34a4..97addf5fd642 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -5520,7 +5520,7 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+>  		ext4_msg(sb, KERN_INFO, "recovery complete");
+>  		err = ext4_mark_recovery_complete(sb, es);
+>  		if (err)
+> -			goto failed_mount9;
+> +			goto failed_mount10;
+>  	}
+>  
+>  	if (test_opt(sb, DISCARD) && !bdev_max_discard_sectors(sb->s_bdev))
+> @@ -5539,7 +5539,9 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+>  
+>  	return 0;
+>  
+> -failed_mount9:
+> +failed_mount10:
+> +	ext4_quota_off_umount(sb);
+> +failed_mount9: __maybe_unused
+>  	ext4_release_orphan_info(sb);
+>  failed_mount8:
+>  	ext4_unregister_sysfs(sb);
+> -- 
+> 2.31.1
+> 
 -- 
-2.18.0
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
