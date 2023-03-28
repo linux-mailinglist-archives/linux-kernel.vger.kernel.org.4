@@ -2,162 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5656CB40A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB246CB427
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbjC1C2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 22:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
+        id S232115AbjC1Cb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 22:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbjC1C2I (ORCPT
+        with ESMTP id S230140AbjC1Cb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 22:28:08 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F6119A9;
-        Mon, 27 Mar 2023 19:28:03 -0700 (PDT)
-X-UUID: 26b7ce90cd1011eda9a90f0bb45854f4-20230328
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=da8xtj3GEK5PCXWnakDtGHNuxmDl0f1XqfPRmZJ45xk=;
-        b=MxtvDsih3SE9tRK/C5yeiagliwpFHG07AIKTGqs0ErAZmZsua/nJI69Oz8Pplk12sOxbd0LRQgfb2HP+h3dBwb5Yf+aKyw5RB0KDDDB1gTVMP2I83P/XLfpvmCP2uNmE45m/E0fAZbBugoKLdQIla2MF8D31gd9zuqYVI8mG+rs=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:7cc04742-36b0-4118-a6d8-fce49b49cd4f,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.22,REQID:7cc04742-36b0-4118-a6d8-fce49b49cd4f,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:120426c,CLOUDID:96e98db4-beed-4dfc-bd9c-e1b22fa6ccc4,B
-        ulkID:230328102759ICX4TM7P,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 26b7ce90cd1011eda9a90f0bb45854f4-20230328
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 722749702; Tue, 28 Mar 2023 10:27:57 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Tue, 28 Mar 2023 10:27:56 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Tue, 28 Mar 2023 10:27:56 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v9 11/11] arm64: dts: mediatek: mt8195: Add SCP 2nd core
-Date:   Tue, 28 Mar 2023 10:27:33 +0800
-Message-ID: <20230328022733.29910-12-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230328022733.29910-1-tinghan.shen@mediatek.com>
-References: <20230328022733.29910-1-tinghan.shen@mediatek.com>
+        Mon, 27 Mar 2023 22:31:56 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B46282136
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
+        Content-Type; bh=tA0fWIdSREazRi2gsLXlzBOKFVkGlLcy9hDX6nupWJw=;
+        b=dTgF/Uti4piGybbbfm/Ad3OY7td8IalSUzmPmCJ32ywJSDRRG4fo1e53h31xMo
+        TeMjEeO3NZXKy5CB2n2NH9bSBV5t2ng96SpCsL58XiUk83VAx3lYDlhq4jpOILd4
+        PUPIcNqY1VCnIJh3e97oeB+lGp8MbRtwEgfWsWgAJ7HpI=
+Received: from [10.88.19.164] (unknown [61.150.11.36])
+        by zwqz-smtp-mta-g2-0 (Coremail) with SMTP id _____wA3vVXwUCJkCStCAg--.9235S2;
+        Tue, 28 Mar 2023 10:29:06 +0800 (CST)
+Message-ID: <79968005-28f3-d890-dfea-faca2e7d7947@163.com>
+Date:   Tue, 28 Mar 2023 10:29:04 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 2/3] perf/amlogic: Fix large number of counter issue
+To:     Will Deacon <will@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Chris Healy <healych@amazon.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230209115403.521868-1-jiucheng.xu@amlogic.com>
+ <20230209115403.521868-2-jiucheng.xu@amlogic.com>
+ <20230327141054.GC31752@willie-the-truck>
+Content-Language: en-US
+From:   Jiucheng Xu <jiuchengxu@163.com>
+In-Reply-To: <20230327141054.GC31752@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: _____wA3vVXwUCJkCStCAg--.9235S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7trykurW7Xr1kJw4fGrW3ZFb_yoW8ur43pF
+        WkCFyFkrs8Jr1qgw17Z3Wa9a18Xw47Ar9agrW2gw1YvF12qF9xWasrW39I9r1DJrs2kF4I
+        qFyYg3y5uFyrZr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jfqXdUUUUU=
+X-Originating-IP: [61.150.11.36]
+X-CM-SenderInfo: pmlxuxxhqj53i6rwjhhfrp/xtbB0xhA4lXlyiHoCgAAsQ
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rewrite the MT8195 SCP device node as a cluster and
-add the SCP 2nd core in it.
 
-Since the SCP device node is changed to multi-core structure,
-enable SCP cluster to enable probing SCP core 0.
+My Amlogic email box has some issues. Use my personal email 
+<jiucheng.xu@163.com> to reply.
 
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../boot/dts/mediatek/mt8195-cherry.dtsi      |  6 +++-
- arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 32 ++++++++++++++-----
- 2 files changed, 29 insertions(+), 9 deletions(-)
+On 2023/3/27 22:10, Will Deacon wrote:
+> [ EXTERNAL EMAIL ]
+>
+> On Thu, Feb 09, 2023 at 07:54:02PM +0800, Jiucheng Xu wrote:
+>> When use 1ms interval, very large number of counter happens
+>> once in a while as below:
+>>
+>> 25.968654513 281474976710655.84 MB meson_ddr_bw/chan_1_rw_bytes,arm=1/
+>> 26.118657346 281474976710655.88 MB meson_ddr_bw/chan_1_rw_bytes,arm=1/
+>> 26.180137180 281474976710655.66 MB meson_ddr_bw/chan_1_rw_bytes,arm=1/
+>>
+>> Root cause is the race between irq handler
+>> and pmu.read callback. Use spin lock to protect the sw&hw
+>> counters.
+>>
+>> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
+>> ---
+>>   drivers/perf/amlogic/meson_ddr_pmu_core.c | 10 +++++++++-
+>>   1 file changed, 9 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/perf/amlogic/meson_ddr_pmu_core.c b/drivers/perf/amlogic/meson_ddr_pmu_core.c
+>> index 0b24dee1ed3c..9b2e5d5c0626 100644
+>> --- a/drivers/perf/amlogic/meson_ddr_pmu_core.c
+>> +++ b/drivers/perf/amlogic/meson_ddr_pmu_core.c
+>> @@ -14,6 +14,7 @@
+>>   #include <linux/perf_event.h>
+>>   #include <linux/platform_device.h>
+>>   #include <linux/printk.h>
+>> +#include <linux/spinlock.h>
+>>   #include <linux/sysfs.h>
+>>   #include <linux/types.h>
+>>   
+>> @@ -23,6 +24,7 @@ struct ddr_pmu {
+>>   	struct pmu pmu;
+>>   	struct dmc_info info;
+>>   	struct dmc_counter counters;	/* save counters from hw */
+>> +	spinlock_t lock;		/* protect hw/sw counter */
+>>   	bool pmu_enabled;
+>>   	struct device *dev;
+>>   	char *name;
+>> @@ -92,10 +94,12 @@ static void meson_ddr_perf_event_update(struct perf_event *event)
+>>   	int idx;
+>>   	int chann_nr = pmu->info.hw_info->chann_nr;
+>>   
+>> +	spin_lock(&pmu->lock);
+> Why doesn't this need the _irqsave() variant if we're racing with the irq
+> handler?
+>
+> Will
+I think meson_ddr_perf_event_update function is called with hard irq off.
+So update function couldn't be interrupted by irq handler. Right?
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index 56749cfe7c33..31415d71b6a4 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -933,7 +933,11 @@
- 	interrupts-extended = <&pio 222 IRQ_TYPE_LEVEL_HIGH>;
- };
- 
--&scp {
-+&scp_cluster {
-+	status = "okay";
-+};
-+
-+&scp_c0 {
- 	status = "okay";
- 
- 	firmware-name = "mediatek/mt8195/scp.img";
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 8fc527570791..5fe5fb32261e 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -826,14 +826,30 @@
- 			clocks = <&infracfg_ao CLK_INFRA_AO_GCE2>;
- 		};
- 
--		scp: scp@10500000 {
--			compatible = "mediatek,mt8195-scp";
--			reg = <0 0x10500000 0 0x100000>,
--			      <0 0x10720000 0 0xe0000>,
--			      <0 0x10700000 0 0x8000>;
--			reg-names = "sram", "cfg", "l1tcm";
--			interrupts = <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH 0>;
-+		scp_cluster: scp@10500000 {
-+			compatible = "mediatek,mt8195-scp-dual";
-+			reg = <0 0x10720000 0 0xe0000>, <0 0x10700000 0 0x8000>;
-+			reg-names = "cfg", "l1tcm";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x10500000 0x100000>;
- 			status = "disabled";
-+
-+			scp_c0: scp@0 {
-+				compatible = "mediatek,scp-core";
-+				reg = <0x0 0xa0000>;
-+				reg-names = "sram";
-+				interrupts = <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH 0>;
-+				status = "disabled";
-+			};
-+
-+			scp_c1: scp@a0000 {
-+				compatible = "mediatek,scp-core";
-+				reg = <0xa0000 0x20000>;
-+				reg-names = "sram";
-+				interrupts = <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH 0>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		scp_adsp: clock-controller@10720000 {
-@@ -2309,7 +2325,7 @@
- 				 <&iommu_vdo M4U_PORT_L19_VENC_REF_LUMA>,
- 				 <&iommu_vdo M4U_PORT_L19_VENC_REF_CHROMA>;
- 			interrupts = <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH 0>;
--			mediatek,scp = <&scp>;
-+			mediatek,scp = <&scp_c0>;
- 			clocks = <&vencsys CLK_VENC_VENC>;
- 			clock-names = "venc_sel";
- 			assigned-clocks = <&topckgen CLK_TOP_VENC>;
--- 
-2.18.0
+Thanks,
+Jiucheng
+>
 
