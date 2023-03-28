@@ -2,115 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301C96CB741
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 132DA6CB747
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbjC1GgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 02:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
+        id S232336AbjC1Gg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 02:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjC1GgT (ORCPT
+        with ESMTP id S230105AbjC1Gg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 02:36:19 -0400
-Received: from out28-76.mail.aliyun.com (out28-76.mail.aliyun.com [115.124.28.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E349612E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:36:17 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1147712|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.150056-0.238842-0.611101;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.S0fYFjk_1679985371;
-Received: from SunxiBot.allwinnertech.com(mailfrom:victor@allwinnertech.com fp:SMTPD_---.S0fYFjk_1679985371)
-          by smtp.aliyun-inc.com;
-          Tue, 28 Mar 2023 14:36:12 +0800
-From:   Victor Hassan <victor@allwinnertech.com>
-To:     fweisbec@gmail.com, tglx@linutronix.de, mingo@kernel.org,
-        jindong.yue@nxp.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] tick/broadcast: Do not set oneshot_mask except was_periodic was true
-Date:   Tue, 28 Mar 2023 14:36:29 +0800
-Message-Id: <20230328063629.108510-1-victor@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
+        Tue, 28 Mar 2023 02:36:56 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A0FC7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:36:54 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id r11so45317676edd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:36:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679985413;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rg7ln0vtWUz2rX09aiXxcm/NmjbrwQwhmjlO2+xf65c=;
+        b=bJFuoeYvos6lpzBKhbZ13koLXy0NZysEjyNZje4vCdC0hEor+K56w5X94AhomyWBPK
+         +arik7s1GIUOE4i3bp1dViZXfhYiDWje5wDy+VguF6ZE4b6165vuScAkj9h3qnYy50uo
+         +e71NUyCldyEvdC6VjA2F+HGlimCffcz4hiCpLRJMXwHIkuZM2tmuPRNuXiO4zleFvhN
+         kGg4okFvG6lc4W/timUsjP3mJxDN5pwaqqC0LyshnJHCMvuMXvMk5RzW1lrcsArnX9kw
+         4EBXz+ExSJDKrEx10Q1rYaDxrVpXcbRtamA466QBSihz1LtVDDuue1qLjHIRcNKxav84
+         7ysA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679985413;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rg7ln0vtWUz2rX09aiXxcm/NmjbrwQwhmjlO2+xf65c=;
+        b=2VLiXCw1mHKkFVN7Q0QmPhoJS2XU4wi7CqvK28BA1JNFO/xIpwu81qfqoKRJx2ZuMo
+         Cf/QXooBiAmN+m0csVNlg3R33bVwuQ9QohfH1P/rPYKjJlL9ZLBi9oOe0fHLLPAK9Cda
+         ZJQm0PE4mwXLhiZ6dYbgUR/wkGrXwRX/pHs5YUaxi6w2moc54eNQje1QvlFtNq13xqAa
+         nUhyIupiD6a8NCtu1zPiiFi+Rxr2BpoIyOXZI7rtGJCk1McCQt4FefK0bmbY5oSNytwf
+         COUOggZao/7uaNHVrfJ+x0XmATDrAvkvaFkA+ewnXBeUnyZX1Hrk+yKOjsVuiRBslp6m
+         gOLw==
+X-Gm-Message-State: AAQBX9eGoS2sguVm6/p4nAXmVdvfuObloMzUuywcqQ9obUGcPggesIYP
+        16QFuCnokLbRvY6xh72l7jXbzg==
+X-Google-Smtp-Source: AKy350YR4kjr4yCk8UnUPhlJWSjLT1aUW1CZ0zwUJkBhu0R6dQMskjbM2t0Zl3BjeL+CDVqDOR++FA==
+X-Received: by 2002:a17:906:d78f:b0:932:40f4:5c49 with SMTP id pj15-20020a170906d78f00b0093240f45c49mr15253200ejb.67.1679985413260;
+        Mon, 27 Mar 2023 23:36:53 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
+        by smtp.gmail.com with ESMTPSA id r5-20020a1709064d0500b00923f05b2931sm14868672eju.118.2023.03.27.23.36.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 23:36:52 -0700 (PDT)
+Message-ID: <1838b760-c911-cb0a-184e-150df2f86c3b@linaro.org>
+Date:   Tue, 28 Mar 2023 08:36:51 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: firmware: arm,scmi: Support mailboxes
+ unidirectional channels
+Content-Language: en-US
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, sudeep.holla@arm.com,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
+        nicola.mazzucato@arm.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+References: <20230327140342.222168-1-cristian.marussi@arm.com>
+ <20230327140342.222168-2-cristian.marussi@arm.com>
+ <dd8d1503-e2bf-7032-4d0a-16d9a5b2aa51@linaro.org>
+ <ZCG154hlWbLMAzIi@e120937-lin>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZCG154hlWbLMAzIi@e120937-lin>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a broadcast timer is registered after the system switched to oneshot
-mode, a hang_task err could occur like that:
+On 27/03/2023 17:27, Cristian Marussi wrote:
+>>> +  - |
+>>> +    firmware {
+>>> +        scmi {
+>>> +            compatible = "arm,scmi";
+>>> +            mboxes = <&mhu_U_tx 0 0>, <&mhu_U_rx 0 0>;
+>>> +            shmem = <&cpu_scp_lpri0>;
+>>> +
+>>> +            #address-cells = <1>;
+>>> +            #size-cells = <0>;
+>>
+>> I don't think adding one more example with difference in only one piece
+>> is needed here.
+>>
+> 
+> Mmm, I thought was sensible to add this example, given that a mailbox
+> transport configuration for a mailbox exposing unidrectional channels is
+> quite different from the usual bidirectional channel config already
+> present in the pre-existent example.
+> 
+> I'll add mbox-names into this example and see if I can change your
+> mind...or I can then finally drop it.
 
-INFO: task kworker/u15:0:7 blocked for more than 120 seconds.
-      Tainted: G            E     5.15.41-android13-8-00002-xxx #1
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/u16:0   state:D stack: 9808 pid:  7 ppid: 2 flags:0x00000008
-Workqueue: events_unbound deferred_probe_work_func.cfi_jt
-Call trace:
- __switch_to+0y240/0x490
- __schedule+0x620/0xafc
- schedule+0x110/0x204
- schedule_hrtimeout_range_clock+0x9c/0x118
- usleep_range_state+0x150/0x1ac
- _regulator_do_enable+0x528/0x878
- set_machine_constraints+0x6a0/0xf2c
- regulator_register+0x3ac/0x7ac
- devm_regulator_register+0xbc/0x120
- pmu_ext_regulator_probe+0xb0/0x1b4 [pmu_ext_regulator]
- platform_probe+0x70/0x194
- really_proe+0x320/0x68c
- __driver_probe_device+0x204/0x260
- driver_probe_device+0x48/0x1e0
+And what exactly this one more example changes? Does not validate
+different parts of the binding if only one property differs...
 
-When the new broadcast timer was registered after the system switched
-to oneshot mode, the broadcast timer was not used as periodic. If the
-oneshot mask was set incorrectly, all cores which did not enter cpu_idle
-state can't enter cpu_idle normally, causing the hrtimer mechanism to
-break.
-
-This patch fixes the issue by moving the update action about oneshot
-mask to a more strict conditions. The tick_broadcast_setup_oneshot would
-be called in two typical condition, and they all will work.
-
-1. tick_handle_periodic -> tick_broadcast_setup_oneshot
-
-The origin broadcast was periodic, so it can set the oneshot_mask bits
-for those waiting for periodic broadcast and program the broadcast timer
-to fire.
-
-2. tick_install_broadcast_device -> tick_broadcast_setup_oneshot
-
-The origin broadcast was oneshot, so the cores which enter the cpu_idle
-already used the oneshot_mask bits. It is unnecessary to update the
-oneshot_mask.
-
-Fixes: 9c336c9935cf ("tick/broadcast: Allow late registered device to enter oneshot mode")
-
-Signed-off-by: Victor Hassan <victor@allwinnertech.com>
----
- kernel/time/tick-broadcast.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/time/tick-broadcast.c b/kernel/time/tick-broadcast.c
-index 93bf2b4e47e5..fdbbba487978 100644
---- a/kernel/time/tick-broadcast.c
-+++ b/kernel/time/tick-broadcast.c
-@@ -1041,12 +1041,13 @@ static void tick_broadcast_setup_oneshot(struct clock_event_device *bc)
- 		 */
- 		cpumask_copy(tmpmask, tick_broadcast_mask);
- 		cpumask_clear_cpu(cpu, tmpmask);
--		cpumask_or(tick_broadcast_oneshot_mask,
--			   tick_broadcast_oneshot_mask, tmpmask);
- 
- 		if (was_periodic && !cpumask_empty(tmpmask)) {
- 			ktime_t nextevt = tick_get_next_period();
- 
-+			cpumask_or(tick_broadcast_oneshot_mask,
-+				   tick_broadcast_oneshot_mask, tmpmask);
-+
- 			clockevents_switch_state(bc, CLOCK_EVT_STATE_ONESHOT);
- 			tick_broadcast_init_next_event(tmpmask, nextevt);
- 			tick_broadcast_set_event(bc, cpu, nextevt);
--- 
-2.29.0
+Best regards,
+Krzysztof
 
