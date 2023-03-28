@@ -2,71 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66F26CBC51
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2F56CBC61
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbjC1KPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
+        id S230263AbjC1KRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbjC1KPb (ORCPT
+        with ESMTP id S230128AbjC1KRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:15:31 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6136A4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:15:24 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id c9so4666796lfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:15:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679998523;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ukK4h27NxoigC7dSjFLoWuySuRs80nENr66pmBmOuMs=;
-        b=SIWBJdYx0NsDp3HLVTSD2orttoOvTI+JMUKiRHbVMoPvP/fkf8dD95XDm51CtZ+OOo
-         kgnz7f/HpqYgeq1C3viPhmbollrT91JCSA8Wstwy21QduknsnlZooS/DFUiOqqxy951i
-         fa5d3HQWjTPb2PjSZewdjExQOE3f1J5afX4jl4Ok0DIU2Oj1qIaal25zxE8BTMsfnamA
-         i1fhGP5pRtZV0JgSgFe0KmOmY27YMoVVdY+2mJiz8sx1gRfneUrbvaIkFhLyEvX8IU2j
-         GNYnME+73KjwIe7emky/aX8/tfXBsaxAuOzykXQsVc43ggc5+0rU9eTALBG4ucDbFMvx
-         OC/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679998523;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ukK4h27NxoigC7dSjFLoWuySuRs80nENr66pmBmOuMs=;
-        b=no8joZVD34LGZGd9ps1rYbts6VNgLh+xYfttkc+cCPeqraldR8/ljt7p1nfmFIxUQo
-         dG6nAQp5IIlSPnVIwl9bJZIPd3R/HkvgbBCx+0sjH0NILYy6/riwO2FQ0+AIyec6xjCH
-         pNEspzwbd1RWaINupzdgd+dwW+b/lxteqeHIeBMRnUf5cUGcMbZySTJLbfUO5146DdDk
-         DDw5UwrOOnEUtXG0HdDjqDfBJbiHU/+EMB3vKkT3XDklwMxtc5RmaHTwLunaIbI9uhvZ
-         FxsqMWhLNnPDGAios1VSE4dguSIMdDbFcGc4Sy6jGpFq74uXDmexrerQsP04Rt1sr9LF
-         OMFw==
-X-Gm-Message-State: AAQBX9f9uqfbjsRjJSLXQ/Hz3jmWa5qZcPVt/eR1NZ8ogt145ToE6XJG
-        HIcFij6Eb/zTJQ9Eob5mPqRJCw==
-X-Google-Smtp-Source: AKy350aae0f2FYHIpDZhSd7ktpKXsqTfGK8Y8AMhjonOemsJggYQiRFmsDVMKoCcXA5YT6VMPczprg==
-X-Received: by 2002:ac2:50c3:0:b0:4e8:5854:11ce with SMTP id h3-20020ac250c3000000b004e8585411cemr4748667lfm.41.1679998522917;
-        Tue, 28 Mar 2023 03:15:22 -0700 (PDT)
-Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
-        by smtp.gmail.com with ESMTPSA id o25-20020ac24959000000b004e84d64ab51sm5061405lfi.58.2023.03.28.03.15.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 03:15:22 -0700 (PDT)
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-To:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com
-Cc:     alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tudor.ambarus@linaro.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH v3 4/4] ARM: dts: at91: sam9x60ek: Set sst26vf064b SPI NOR flash at its maximum frequency
-Date:   Tue, 28 Mar 2023 10:15:17 +0000
-Message-Id: <20230328101517.1595738-5-tudor.ambarus@linaro.org>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-In-Reply-To: <20230328101517.1595738-1-tudor.ambarus@linaro.org>
-References: <20230328101517.1595738-1-tudor.ambarus@linaro.org>
+        Tue, 28 Mar 2023 06:17:05 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD42619A3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679998605; x=1711534605;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=YNcmTAzIivIIG1nw9WZggF/K2IYvfLlzFc8+1akrKgM=;
+  b=Pundf8vfZkjIf755tBEPpvBd2JCiacgGhLKPduQ4PFre2K6k/Z6EkRR/
+   zfJEXNnPMl867TFjEKb8wkfd5r2hx/NxRNVgBvLMO8O97SeOwDQuZJJbE
+   ovgPxUbLVTfucVCk1kcPfCKRYusv+tJIWWHsNYB5LNI2ITgXXyowPIPty
+   2IC/rxT3oZKyQx0ngh1X/LM4nfdlEYjYfXWEOhcsO8NnqU7woihQeLC/h
+   0m1tY9ZahPSFI6o1Ry1ro0PEEqm/SoscHrz3IncKyWsgOOdJv5WIN+ehp
+   KmxkxaA0bJ/9kdgNB3HyS1YXurqB9Oks2RocCxiP0xvnVDg8jvtSmpui8
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="339252097"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="339252097"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 03:16:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="929817003"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="929817003"
+Received: from gprivite-mobl.ger.corp.intel.com (HELO localhost) ([10.252.50.147])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 03:16:31 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Caio Novais <caionovais@usp.br>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Felipe Clark <felipe.clark@amd.com>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        =?utf-8?Q?Ma=C3=ADra?= Canal <mairacanal@riseup.net>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jun Lei <Jun.Lei@amd.com>, Charlene Liu <Charlene.Liu@amd.com>,
+        Gabe Teeger <gabe.teeger@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Taimur Hassan <Syed.Hassan@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Alvin Lee <alvin.lee2@amd.com>,
+        George Shen <George.Shen@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Chaitanya Dhere <chaitanya.dhere@amd.com>,
+        Alan Liu <HaoPing.Liu@amd.com>,
+        Mukul Joshi <mukul.joshi@amd.com>,
+        =?utf-8?Q?A?= =?utf-8?Q?ndr=C3=A9?= Almeida 
+        <andrealmeid@igalia.com>, Jingwen Zhu <Jingwen.Zhu@amd.com>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Leo Li <sunpeng.li@amd.com>, Melissa Wen <mwen@igalia.com>,
+        Le Ma <le.ma@amd.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Caio Novais <caionovais@usp.br>,
+        Martin Leung <Martin.Leung@amd.com>,
+        Ryan Lin <tsung-hua.lin@amd.com>,
+        Brian Chang <Brian.Chang@amd.com>,
+        Sung Joon Kim <sungjoon.kim@amd.com>,
+        Yifan Zhang <yifan1.zhang@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>,
+        Dillon Varone <Dillon.Varone@amd.com>,
+        Tom Chung <chiahsuan.chung@amd.com>,
+        Wesley Chalmers <Wesley.Chalmers@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, Zhan Liu <zhan.liu@amd.com>,
+        Roman Li <Roman.Li@amd.com>,
+        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
+        Wayne Lin <wayne.lin@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Ethan Wellenreiter <Ethan.Wellenreiter@amd.com>,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
+        Joshua Ashton <joshua@froggi.es>,
+        Hawking Zhang <Hawking.Zhang@amd.com>
+Subject: Re: [PATCH 00/12] drm/amd: Remove unused variables
+In-Reply-To: <20230327233353.64081-1-caionovais@usp.br>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230327233353.64081-1-caionovais@usp.br>
+Date:   Tue, 28 Mar 2023 13:16:28 +0300
+Message-ID: <878rfh5gg3.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,42 +100,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+On Mon, 27 Mar 2023, Caio Novais <caionovais@usp.br> wrote:
+> This patchset cleans the code removing unused variables and one unused
+> function.
+>
+> Caio Novais (12):
+>   Remove unused variable 'r'
+>   Remove unused variable 'value0'
+>   Remove unused variable 'pixel_width'
+>   Remove unused variable 'hubp'
+>   Remove unused variable 'speakers'
+>   Remove unused variable 'mc_vm_apt_default'
+>   Remove unused variable 'optc'
+>   Remove two unused variables 'speakers' and 'channels' and remove
+>     unused function 'speakers_to_channels'
+>   Remove two unused variables 'is_pipe_split_expected' and 'state'
+>   Remove unused variable 'cursor_bpp'
+>   Remove unused variable 'scl_enable'
+>   Remove two unused variables 'result_write_min_hblank' and
+>     'hblank_size'
 
-sam9x60ek populates an sst26vf064b SPI NOR flash. Its maximum operating
-frequency for 2.7-3.6V is 104 MHz. As the flash is operated at 3.3V,
-increase its maximum supported frequency to 104MHz. The increasing of the
-spi-max-frequency value requires the setting of the
-"CE# Not Active Hold Time", thus set the spi-cs-setup-ns to a value of 7.
+Curious, how did you create this? It does not match the patches.
 
-The sst26vf064b datasheet specifies just a minimum value for the
-"CE# Not Active Hold Time" and it advertises it to 5 ns. There's no
-maximum time specified. I determined experimentally that 5 ns for the
-spi-cs-setup-ns is not enough when the flash is operated close to its
-maximum frequency and tests showed that 7 ns is just fine, so set the
-spi-cs-setup-ns dt property to 7.
+BR,
+Jani.
 
-With the increase of frequency the reads are now faster with ~33%.
+>
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c       |  8 ----
+>  .../amd/display/dc/dcn10/dcn10_link_encoder.c |  3 --
+>  .../drm/amd/display/dc/dcn201/dcn201_dpp.c    |  6 ---
+>  .../drm/amd/display/dc/dcn201/dcn201_hwseq.c  |  2 -
+>  .../gpu/drm/amd/display/dc/dcn30/dcn30_afmt.c |  2 -
+>  .../gpu/drm/amd/display/dc/dcn30/dcn30_hubp.c |  4 --
+>  .../drm/amd/display/dc/dcn30/dcn30_hwseq.c    |  3 --
+>  .../gpu/drm/amd/display/dc/dcn31/dcn31_apg.c  | 39 -------------------
+>  .../drm/amd/display/dc/dcn32/dcn32_resource.c |  4 --
+>  .../display/dc/dcn32/dcn32_resource_helpers.c |  4 --
+>  .../dc/dml/dcn31/display_rq_dlg_calc_31.c     |  2 -
+>  .../dc/link/protocols/link_dp_capability.c    |  7 ----
+>  12 files changed, 84 deletions(-)
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
- arch/arm/boot/dts/at91-sam9x60ek.dts | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
-index 180e4b1aa2f6..5cd593028aff 100644
---- a/arch/arm/boot/dts/at91-sam9x60ek.dts
-+++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
-@@ -578,7 +578,8 @@ flash@0 {
- 		#size-cells = <1>;
- 		compatible = "jedec,spi-nor";
- 		reg = <0>;
--		spi-max-frequency = <80000000>;
-+		spi-max-frequency = <104000000>;
-+		spi-cs-setup-ns = <7>;
- 		spi-tx-bus-width = <4>;
- 		spi-rx-bus-width = <4>;
- 		m25p,fast-read;
 -- 
-2.40.0.348.gf938b09366-goog
-
+Jani Nikula, Intel Open Source Graphics Center
