@@ -2,108 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8505D6CC576
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D73E26CC545
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbjC1PO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
+        id S233191AbjC1PND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjC1POI (ORCPT
+        with ESMTP id S232769AbjC1PMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:14:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A638F10257
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:13:20 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1phAyU-00013x-BO; Tue, 28 Mar 2023 17:11:02 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1phAyS-0007PR-P8; Tue, 28 Mar 2023 17:11:00 +0200
-Date:   Tue, 28 Mar 2023 17:11:00 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     peng.fan@nxp.com,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        abailon@baylibre.com, krzysztof.kozlowski+dt@linaro.org,
-        festevam@gmail.com, abelvesa@kernel.org, marex@denx.de,
-        Markus.Niebel@ew.tq-group.com,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        paul.elder@ideasonboard.com, gerg@kernel.org, linux-imx@nxp.com,
-        devicetree@vger.kernel.org,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, linux-pm@vger.kernel.org,
-        s.hauer@pengutronix.de, robh+dt@kernel.org, aford173@gmail.com,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, djakov@kernel.org, shawnguo@kernel.org,
-        l.stach@pengutronix.de
-Subject: Re: [PATCH V3 7/7] arm64: dts: imx8mp: add interconnect for hsio blk
- ctrl
-Message-ID: <20230328151100.msl46qupstwplkgw@pengutronix.de>
-References: <20220703091451.1416264-8-peng.fan@oss.nxp.com>
- <20230327045037.593326-1-gerg@linux-m68k.org>
- <2678294.mvXUDI8C0e@steina-w>
- <b23a44ab-3666-8a41-d2a0-0d2fbdbd9f00@pengutronix.de>
- <ecd3a92b-ba1e-e7c1-088a-371bd1a2c100@linux-m68k.org>
- <20230328073302.jj64u5hvdpc6axa5@pengutronix.de>
- <426b4776-104c-cb47-c8cc-c26515fcb6e3@linux-m68k.org>
- <20230328134201.yaxrdtetjygkgkmz@pengutronix.de>
- <20230328135100.rbmnfelphe7juhxo@pengutronix.de>
- <c368a0f8-41f0-69ac-04f4-459e5fc8b9d6@linux-m68k.org>
+        Tue, 28 Mar 2023 11:12:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1C11027C
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:12:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36602B81D92
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:11:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7A49C4339B;
+        Tue, 28 Mar 2023 15:11:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680016293;
+        bh=kEtXdgCEBV5p0GqSsNHxDFPAO4gt8lDkvKFBSENj3yE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qmi4b60jdCXHiubROfANwWXwBPf/XpnrzqrX94qr468D5KhnYOpEyIcXYc9Enains
+         BN3pDUwsgTHq8z5Ar+M8UuwU05OJbflhrIHJafv3SpdCNq3F84eZioEbdvrA8oR5tU
+         pLI9lj2C8nYsFfz0SgTHE0d+uCuH3hzLVNqxO1s0AQWWLzMbu/E90zIzEJt0vsle25
+         +8rdrtGX873DLMg2heMztHWRmul3QK11yyYzOQ+pyExEGjemPfYwi38WsPKxRJQ7/T
+         NBKg2Lz3eV9txZkD8TelrzTdIyp5Vptjk9xKxv19LdbdAL+mwm3o+l3OXRPou0q7xQ
+         jPD3A1wr/CFJw==
+Date:   Tue, 28 Mar 2023 18:11:20 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Song Liu <song@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
+Message-ID: <ZCMDmHSqOeCj1EIo@kernel.org>
+References: <20230308094106.227365-1-rppt@kernel.org>
+ <20230308094106.227365-2-rppt@kernel.org>
+ <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
+ <ZB6W1C88TU6CcjJH@kernel.org>
+ <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
+ <ZCKIX3de5AZfGggK@kernel.org>
+ <ZCKZuXxq38obmYpn@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c368a0f8-41f0-69ac-04f4-459e5fc8b9d6@linux-m68k.org>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZCKZuXxq38obmYpn@dhcp22.suse.cz>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On 23-03-29, Greg Ungerer wrote:
-> Hi Marco,
-
-...
-
-> > I forgot to ask: Does your i.MX8MP have a VPU? There are i.MX8MP devices
-> > (don't know the name) which don't have support for certain IPs. If this
+On Tue, Mar 28, 2023 at 09:39:37AM +0200, Michal Hocko wrote:
+> On Tue 28-03-23 09:25:35, Mike Rapoport wrote:
+> > On Mon, Mar 27, 2023 at 03:43:27PM +0200, Michal Hocko wrote:
+> > > On Sat 25-03-23 09:38:12, Mike Rapoport wrote:
+> > > > On Fri, Mar 24, 2023 at 09:37:31AM +0100, Michal Hocko wrote:
+> > > > > On Wed 08-03-23 11:41:02, Mike Rapoport wrote:
+> > > > > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > > > > > 
+> > > > > > When set_memory or set_direct_map APIs used to change attribute or
+> > > > > > permissions for chunks of several pages, the large PMD that maps these
+> > > > > > pages in the direct map must be split. Fragmenting the direct map in such
+> > > > > > manner causes TLB pressure and, eventually, performance degradation.
+> > > > > > 
+> > > > > > To avoid excessive direct map fragmentation, add ability to allocate
+> > > > > > "unmapped" pages with __GFP_UNMAPPED flag that will cause removal of the
+> > > > > > allocated pages from the direct map and use a cache of the unmapped pages.
+> > > > > > 
+> > > > > > This cache is replenished with higher order pages with preference for
+> > > > > > PMD_SIZE pages when possible so that there will be fewer splits of large
+> > > > > > pages in the direct map.
+> > > > > > 
+> > > > > > The cache is implemented as a buddy allocator, so it can serve high order
+> > > > > > allocations of unmapped pages.
+> > > > > 
+> > > > > Why do we need a dedicated gfp flag for all this when a dedicated
+> > > > > allocator is used anyway. What prevents users to call unmapped_pages_{alloc,free}?
+> > > > 
+> > > > Using unmapped_pages_{alloc,free} adds complexity to the users which IMO
+> > > > outweighs the cost of a dedicated gfp flag.
+> > > 
+> > > Aren't those users rare and very special anyway?
+> > > 
+> > > > For modules we'd have to make x86::module_{alloc,free}() take care of
+> > > > mapping and unmapping the allocated pages in the modules virtual address
+> > > > range. This also might become relevant for another architectures in future
+> > > > and than we'll have several complex module_alloc()s. 
+> > > 
+> > > The module_alloc use is lacking any justification. More context would be
+> > > more than useful. Also vmalloc support for the proposed __GFP_UNMAPPED
+> > > likely needs more explanation as well.
+> >  
+> > Right now module_alloc() boils down to vmalloc() with the virtual range
+> > limited to the modules area. The allocated chunk contains both code and
+> > data. When CONFIG_STRICT_MODULE_RWX is set, parts of the memory allocated
+> > with module_alloc() remapped with different permissions both in vmalloc
+> > address space and in the direct map. The change of permissions for small
+> > ranges causes splits of large pages in the direct map.
 > 
-> The hardware platform I have is using the MIMX8ML4CVNKZAB "i.MX 8M Plus QuadLite"
-> (https://www.nxp.com/part/MIMX8ML4CVNKZAB#/) which does not have the hardware
-> video encode/decoder module (like the "i.MX 8M Plus Quad" parts).
+> OK, so you want to reduce that direct map fragmentation?
 
-and that's the problem :) You need to update your bootloader to a
-version which support disabling the VPU nodes else you will always see
-the errors.
+Yes.
 
-> > is the case the bootloader will fixup your devicetree by disable the
-> > corresponding nodes, we call this feature-controller:
-> > 
-> > https://elixir.bootlin.com/barebox/latest/source/arch/arm/dts/imx8mp.dtsi
-> > 
-> > As you can see the imx8mp.dtsi is missing the feature bits for the VPU
-> > but you can check the i.mx8mm.dtsi. Here you can see that barebox will
-> > check the availability of the vpu:
-> > 
-> > https://elixir.bootlin.com/barebox/latest/source/arch/arm/dts/imx8mm.dtsi
+> Is that a real problem?
+
+A while ago Intel folks published report [1] that showed better performance
+with large pages in the direct map for majority of benchmarks.
+
+> My impression is that modules are mostly static thing. BPF
+> might be a different thing though. I have a recollection that BPF guys
+> were dealing with direct map fragmention as well.
+
+Modules are indeed static, but module_alloc() used by anything that
+allocates code pages, e.g. kprobes, ftrace and BPF. Besides, Thomas
+mentioned that having code in 2M pages reduces iTLB pressure [2], but
+that's not only about avoiding the splits in the direct map but also about
+using large mappings in the modules address space.
+
+BPF guys suggested an allocator for executable memory [3] mainly because
+they've seen performance improvement of 0.6% - 0.9% in their setups [4].
+ 
+> > If we were to use unmapped_pages_alloc() in modules_alloc(), we would have
+> > to implement the part of vmalloc() that reserves the virtual addresses and
+> > maps the allocated memory there in module_alloc().
 > 
-> Ok, thanks, I'll take a look.
+> Another option would be to provide an allocator for the backing pages to
+> vmalloc. But I do agree that a gfp flag is a less laborous way to
+> achieve the same. So the primary question really is whether we really
+> need vmalloc support for unmapped memory.
 
-Patches are welcome if you use barebox :)
+I'm not sure I follow here. module_alloc() is essentially an alias to
+vmalloc(), so to reduce direct map fragmentation caused by code allocations
+the most sensible way IMO is to support unmapped memory in vmalloc().
 
-Regards,
-  Marco
+I also think vmalloc with unmmapped pages can provide backing pages for
+execmem_alloc() Song proposed.
+
+> -- 
+> Michal Hocko
+> SUSE Labs
+
+[1] https://lore.kernel.org/linux-mm/213b4567-46ce-f116-9cdf-bbd0c884eb3c@linux.intel.com/
+[2] https://lore.kernel.org/all/87mt86rbvy.ffs@tglx/
+[3] https://lore.kernel.org/all/20221107223921.3451913-1-song@kernel.org/
+[4] https://lore.kernel.org/bpf/20220707223546.4124919-1-song@kernel.org/
+
+-- 
+Sincerely yours,
+Mike.
