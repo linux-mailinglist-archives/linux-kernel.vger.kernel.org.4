@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CF56CBA09
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C2F6CBA0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbjC1JFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
+        id S232392AbjC1JFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjC1JFG (ORCPT
+        with ESMTP id S232365AbjC1JFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Mar 2023 05:05:06 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8DF524C
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:05:03 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id l12so11321162wrm.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:05:03 -0700 (PDT)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252155271
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:05:04 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id d17so11326530wrb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:05:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679994302;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JqhIf7wHsvu3kZClALu/ZsQ43yPjSHEDO4Bh0IFxfIc=;
-        b=kSTUngGbd0x2rICWSwKqHBDxwwZwUqBr3JtNVGGONj1jRj24D0rImM/g4be0T0YjZs
-         USUb/3lv0YOjsBdcXat/eGnwpOTfONZTF3QmR8nHEYJDy5U88VuFIlQQFSsFXss46b9v
-         ZH2HDy37IJp25e1Xvkwdr7U3PtpMZsuaqtZwnP7/pbZAUXT/YYkNSFxD4FP0nqijM3ZH
-         IC3iUQz8UlBAa/MiMBO6QaYzO024AQB7hkbciheNCcrF5HsyabyjrB7Hv1Gknp9W0UlT
-         0jPPmAVi39YZa8SDWOX9SRnDZFm/hMKJiR+VHLaAg02zmTfHAj32vjJi7d0DHN6oCns+
-         tOaA==
+        bh=uj5gr+4mPVvnfCNzOk8V4mj5Wru/QwptKiCL/eRZCmY=;
+        b=qCkdQ2dqjq+QOkVFUbmaznTsXM2hRjYkSbe4oiqjIKbZ/ctBff9QAi1HEBeKc2h5Jd
+         9DlUSeab/6QzHZ8pu5KRTS17qlALbNnOjCunCNn2nPydexs5Rv5Y4+KRerp6tUPFPAKa
+         cqpXeko7/uSoGrFzmMmDD9G1kACkH+JvV11eFio6QclUl2okZ0A83RePs9CZ1oQHJHNa
+         9WHaFVRSWMzXNsaah4oVedkPQ+tgU5O/4CEvVsW7oAXIzJdnohR0POMQEFHtpybcsYa2
+         783LI5KvInQPjV3em37nQpspXgpKGuhJW6zzBIdOEMNzigL48OACLgnaRPu+r2OysLjO
+         xkGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1679994302;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JqhIf7wHsvu3kZClALu/ZsQ43yPjSHEDO4Bh0IFxfIc=;
-        b=Es2ZYz9JXrPWJT3oliD3QAlk/xTJ/lzGSSV9j/URM+DyoDIV/nuNR6VIOQZhOD/oIw
-         B5OR6PltrJASWwOBq+p30fHUEz8dBwUzP7UPNGRonKcxXIOlOY2KdMUidbCAa6FgbQdA
-         ZERuE5t9YqDhRXq8VXPKrEz4XcrR8nDY95P8gb84IQmqk8Aai5NCO6UdoTz23bjP0ctG
-         yyqcjENypGioj8CX1idmLEE7M3l+1xBuocm6lHepmKKWQ4yMtnukJinK5+mvMJG/7SR0
-         0jlKEbJdhQWzeXUpJeWQISwqtEyv3KAllEuKJLoLZCaj8/7auNxXp3gQUbakLygolFXx
-         1hQw==
-X-Gm-Message-State: AAQBX9curWV+4mGIb3e1DKWyfY/4I4LVdx5i0WbSFiW6k12n1bcwm6UL
-        97uQGYhbit6iN8GuqLgx/dApgA==
-X-Google-Smtp-Source: AKy350byL89JIjiOjxqBRHMtLnvi9g0Z+r/G3kxD/7mZHnJZ8HQ3SBI70fCbQHE89decSsBspr6HIw==
-X-Received: by 2002:adf:f6c9:0:b0:2ce:a612:e3a5 with SMTP id y9-20020adff6c9000000b002cea612e3a5mr11695132wrp.50.1679994301835;
-        Tue, 28 Mar 2023 02:05:01 -0700 (PDT)
+        bh=uj5gr+4mPVvnfCNzOk8V4mj5Wru/QwptKiCL/eRZCmY=;
+        b=5DzN42JUospAchB0rrXVYJ0i50dVjaCzdtxKn1+zKcChZKz+MeeUD/BSAVlLO/2tXC
+         NFFKe45Jr6knSFK0F+6F8EQ/NSfc5eLQ8lzPkMr+YFmliKNBbXj3JBTMjNtgce7R2K7u
+         erci1CDOHOJPpe0qaOFdGZRZAVSZIGavmFACBgVtk0kceHerni6wW7R4pP8Pl0P4v9+t
+         er/MK2F5qWf6LjKLx2MvuR7jUeg7RYP076ydGlz6e0qrzlNm13eu3rUwqqVGKWBQqP0g
+         mxwCRCFNZ5/zm+7WIi1hink80u++ZjsOK6jfq4Ank7jMMxvtSzIjokkgPeIIpR46v3MP
+         8EWQ==
+X-Gm-Message-State: AAQBX9cUWOdVODY/K+gT//qrOl9Fin7K/TGK4w7OQNmnDUycNcnhZvJk
+        FhWcSTu8a6RJLaE8q/EyeK0V6Q==
+X-Google-Smtp-Source: AKy350bL24mYxay1rxaA6oH1zPGG9FbBr3x2RneSqPXJnpTZGtmlJTfU7Mh9wuCqvW3n6LHxbapjZA==
+X-Received: by 2002:adf:f64d:0:b0:2cf:ed44:693c with SMTP id x13-20020adff64d000000b002cfed44693cmr11074807wrp.31.1679994302716;
+        Tue, 28 Mar 2023 02:05:02 -0700 (PDT)
 Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
         by smtp.googlemail.com with ESMTPSA id j10-20020adff00a000000b002d1bfe3269esm27102109wro.59.2023.03.28.02.05.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 02:05:01 -0700 (PDT)
+        Tue, 28 Mar 2023 02:05:02 -0700 (PDT)
 From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Tue, 28 Mar 2023 11:04:47 +0200
-Subject: [PATCH v6 1/2] arm64: dts: mediatek: add i2c support for mt8365
- SoC
+Date:   Tue, 28 Mar 2023 11:04:48 +0200
+Subject: [PATCH v6 2/2] arm64: dts: mediatek: enable i2c0 for mt8365-evk
+ board
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221122-mt8365-i2c-support-v6-1-e1009c8afd53@baylibre.com>
+Message-Id: <20221122-mt8365-i2c-support-v6-2-e1009c8afd53@baylibre.com>
 References: <20221122-mt8365-i2c-support-v6-0-e1009c8afd53@baylibre.com>
 In-Reply-To: <20221122-mt8365-i2c-support-v6-0-e1009c8afd53@baylibre.com>
 To:     Qii Wang <qii.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
@@ -72,19 +72,19 @@ Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         <angelogioacchino.delregno@collabora.com>,
         Alexandre Mergnat <amergnat@baylibre.com>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2696; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=751COW4mlyt6NiZw3ZmEVilTCKVZTkOYnz6i1pHU/mc=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkIq27A//D5eTADCDZW5waqfVl8NWE1cZPKo7QzgiC
- QRY+qwWJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZCKtuwAKCRArRkmdfjHURdKcD/
- 9dklIQyjq2bmzwRR1bmW/+ucAFmmdbP+ueL5/JvJgO2UYTKs0dAUjRvVeAlRUimE/+1PRxlG9vmw6R
- W2HSHcsx2m0stXGqwqLUeSGoO7VO61cHl3CD4ksm1sw8BIXkGee+9guQwuCpvm+G43Qik20amAVn4k
- 76j5WjfNGANer3cuTkBqFfcI2EpUy8G51UfKyfoBvHmy543aR0A8gccs4fptpVkcYqS7QF3q0xku9V
- Tb7icnO+irswsZGNe90mnAdzUPWf4cDlcLPH2AnddCHJ8F1jpeM804/cxzzi5zs51IL7hkg54TvkB8
- 4e+1jWeV64d5BxhUL+rcnRE0S9AsovOq+X+Nc7Vfr7sLnjTMCwojclLcQ9I03fRNJ5fAGs1x5uMzfR
- V8DSU3Xgzt5BcFjDbFjHIJf31Y9UgMWLexRz41gJcaiudvPPK0B9gjsEij78LnLoQD5O40Au45+hpv
- nDJOX7PHM5GrzSw0aowSIFZQVmmAb1I7JqHZqmUh4UijJf/czUMi95xVmQ6neBEAhwc0/2qy1g7f0J
- B5vqq34XX/Iyr08yVdl2oU/TW0V5AM6uA4gnsVQuBwMnCSc1QnDhuRbtf/7tdU5TDpvtaxomYodWa0
- IE9TZtRb0iZR3iJBvgH+rRojySvGge/iZb2iWhmSnG8LnJfQRT3RZuD3Jniw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1213; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=oenjaAD8yENugJ98bbechsKeee+bhy6mS/fPCtOzVTk=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkIq27SlFTL8MC9k4ujZdwxuq3vNeLbQumhcib27er
+ OgQI70uJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZCKtuwAKCRArRkmdfjHURWz/D/
+ sFXI8s9TB/qi3jpFd/eIFHieqQczvcNbppzmtw2IaKeSYj4L5NQ2IHJq1BVTDqt4C+63+P6LudKs/o
+ hurxwr/Gi7n7GxUIokB3Pqaiza0PmwZh/+ty8GmE25C2VrWXSXie6bwya9ciOcvzvRHjneZWzzwpNf
+ 4GO+ZoXHAhS7HRzUxtrKUxuk1skldQszNlc+hPzcL9hzl+N+YNqxrFBbZaAjgqJ2RS/E49fp6r8vI8
+ 0SaLRQHzOZOEDEioGdE/3MvytFVGEBiHuONio7h/O1+ae00ZHjcbfJ7Ns5kCQlUcjfWiTt4D5EIfe7
+ UhC6hGUtBOxjQzR5geXTtM8IjY4acENy2/MSpHEIWMLcGWF/IO2tmXzno/wdLPD2q4LPzSXYlCkrk+
+ ja8194zterVHQY9ecTD/KsDzfsgkAsnVB6cbCv2OxrihuzePBRZPoQhs3B/0a+nk9AqqTYt+DZviI4
+ trmjzAo3ykqHOxtdPdKRUpEsm/3ku8irhv9HQTCEgms7VHL4usqWTwE0MINlJePPNYTpgiIe4kOYDN
+ UDIw3AWNImmYClwUcnX40Xas+gWTXU8UH5C47HH8aXmryu2Z3KEXqmItRiU9mu1askHaiJNLST3QyA
+ etFbBfVE6NMlGxRUAbrHKkA1W1VLBKhkjh1h97cR9BcdwPBLg//URJnWqDBw==
 X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
  fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
 X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -96,80 +96,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are four I2C master channels in MT8365 with a same HW architecture.
+Enable the I2C0 bus provides communication with:
+- The integrated RT9466 Switching Battery Charger.
+- The integrated MT6691 LP4X buck for VDDQ.
+- The integrated MT6691 LP4X buck for VDD2.
+- The pin header, to plug external I2C devices.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8365.dtsi | 48 ++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-index 15ac4c1f0966..b70f4d256f63 100644
---- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-@@ -282,6 +282,42 @@ pwm: pwm@11006000 {
- 			clock-names = "top", "main", "pwm1", "pwm2", "pwm3";
- 		};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+index 4683704ea235..adc79ba14b33 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+@@ -87,6 +87,13 @@ optee_reserved: optee@43200000 {
+ 	};
+ };
  
-+		i2c0: i2c@11007000 {
-+			compatible = "mediatek,mt8365-i2c", "mediatek,mt8168-i2c";
-+			reg = <0 0x11007000 0 0xa0>, <0 0x11000080 0 0x80>;
-+			interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_LOW>;
-+			clock-div = <1>;
-+			clocks = <&infracfg CLK_IFR_I2C0_AXI>, <&infracfg CLK_IFR_AP_DMA>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
++&i2c0 {
++	clock-frequency = <100000>;
++	pinctrl-0 = <&i2c0_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++};
 +
-+		i2c1: i2c@11008000 {
-+			compatible = "mediatek,mt8365-i2c", "mediatek,mt8168-i2c";
-+			reg = <0 0x11008000 0 0xa0>, <0 0x11000100 0 0x80>;
-+			interrupts = <GIC_SPI 29 IRQ_TYPE_LEVEL_LOW>;
-+			clock-div = <1>;
-+			clocks = <&infracfg CLK_IFR_I2C1_AXI>, <&infracfg CLK_IFR_AP_DMA>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c2: i2c@11009000 {
-+			compatible = "mediatek,mt8365-i2c", "mediatek,mt8168-i2c";
-+			reg = <0 0x11009000 0 0xa0>, <0 0x11000180 0 0x80>;
-+			interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_LOW>;
-+			clock-div = <1>;
-+			clocks = <&infracfg CLK_IFR_I2C2_AXI>, <&infracfg CLK_IFR_AP_DMA>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
- 		spi: spi@1100a000 {
- 			compatible = "mediatek,mt8365-spi", "mediatek,mt7622-spi";
- 			reg = <0 0x1100a000 0 0x100>;
-@@ -295,6 +331,18 @@ spi: spi@1100a000 {
- 			status = "disabled";
+ &pio {
+ 	gpio_keys: gpio-keys-pins {
+ 		pins {
+@@ -96,6 +103,14 @@ pins {
  		};
+ 	};
  
-+		i2c3: i2c@1100f000 {
-+			compatible = "mediatek,mt8365-i2c", "mediatek,mt8168-i2c";
-+			reg = <0 0x1100f000 0 0xa0>, <0 0x11000200 0 0x80>;
-+			interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_LOW>;
-+			clock-div = <1>;
-+			clocks = <&infracfg CLK_IFR_I2C3_AXI>, <&infracfg CLK_IFR_AP_DMA>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
++	i2c0_pins: i2c0-pins {
++		pins {
++			bias-pull-up;
++			pinmux = <MT8365_PIN_57_SDA0__FUNC_SDA0_0>,
++				 <MT8365_PIN_58_SCL0__FUNC_SCL0_0>;
 +		};
++	};
 +
- 		ssusb: usb@11201000 {
- 			compatible = "mediatek,mt8365-mtu3", "mediatek,mtu3";
- 			reg = <0 0x11201000 0 0x2e00>, <0 0x11203e00 0 0x0100>;
+ 	uart0_pins: uart0-pins {
+ 		pins {
+ 			pinmux = <MT8365_PIN_35_URXD0__FUNC_URXD0>,
 
 -- 
 2.25.1
