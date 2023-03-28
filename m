@@ -2,143 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93EB36CC25B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402C06CC25D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbjC1Oob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
+        id S233144AbjC1Ooe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231432AbjC1Oo3 (ORCPT
+        with ESMTP id S233098AbjC1Oob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:44:29 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2108.outbound.protection.outlook.com [40.107.93.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577D7BDDA;
-        Tue, 28 Mar 2023 07:44:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cV9qdT/tWW6Y+MUofDCMRthqrkSQtNPORjSl4VT2O7hLi19PLuy4JS2Na6xp6jj7o/PvE28nnPpBKzIGhsvZutc+Gh1q1q+fiEr72DO9asPAhJ2eEAwY9aV6u1hh/a+exrU+KTRM9EWzW5WSuDSC8YfEEsQHBcIZkRScxW1ciiXMV3eHhs99dB6XQuQnwwgsiZ9VATM/tBdCNC8l3NpjoJOqH+lSnWk685c9yWbTIbroq1BG4NHA2yWBVV7/dMPU+r9ReQ10Ka/Ma28GzqQSSD4vk/ej2fbSZwk+dUAMPut66ZMFVdDiQrvcmf1SYVxNI8g4bZKXvFNMzOEZ/PvyAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U32y6OUaoBJ+YoDQQ7L6aEGN6IYgH5zVI/yl7zfBFiE=;
- b=VIIr1FowJDhsfcfDqVVT9Xu6x+1yssu+TRU4tLanFXWSsmxS/dtSL0TiMDIP8uSxEY0mNUiav1sd8fNw67ROZ78RHxQEXAh/UiUKq7u8c3Wgy2KNc57OLqjgxR28C501EFv+Rq7a6vnNmYDlrpz16UAzj+XLbCVheI4iv5UPg+xduyaNdC2t0rMWMrTUcjbeMvKI3o0Hr3uhIw0usAxz1G8uKIwtRlItkdDRFpY91iYunO7r18hpC9a4Ej6PNsGrlMdqmpzDxIohunYppuNP9Pw9oVoFKbNm1cenpmzYHTs14BD7JnLlHTKh32ScuqY2mbeO99OdHQENEgEWld+BJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Tue, 28 Mar 2023 10:44:31 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCFBBDE9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:44:27 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id y4so50792573edo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:44:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U32y6OUaoBJ+YoDQQ7L6aEGN6IYgH5zVI/yl7zfBFiE=;
- b=KfApa1k3Lng6v8KqkcVKwrYHxdLgh/BGAugYttYXETD30+ViQWAdPUL1sq3oLnbznib6V/hqXzict+ANtukiqfcIDuyNqcrRs3rod3GSsNeGDObtfT532OrWMlvkHQUMX+tuMyBN7grT3EVjdrYtjzENpUdi2EaDjqzzBxpd13I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BY3PR13MB4914.namprd13.prod.outlook.com (2603:10b6:a03:361::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Tue, 28 Mar
- 2023 14:44:25 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::c506:5243:557e:82cb]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::c506:5243:557e:82cb%4]) with mapi id 15.20.6222.028; Tue, 28 Mar 2023
- 14:44:25 +0000
-Date:   Tue, 28 Mar 2023 16:44:17 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Hariprasad Kelam <hkelam@marvell.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kuba@kernel.org, davem@davemloft.net,
-        willemdebruijn.kernel@gmail.com, andrew@lunn.ch,
-        sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
-        jerinj@marvell.com, sbhatta@marvell.com, naveenm@marvel.com,
-        edumazet@google.com, pabeni@redhat.com, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, maxtram95@gmail.com
-Subject: Re: [net-next Patch v5 1/6] sch_htb: Allow HTB priority parameter in
- offload mode
-Message-ID: <ZCL9QQSRBWEYrT/R@corigine.com>
-References: <20230326181245.29149-1-hkelam@marvell.com>
- <20230326181245.29149-2-hkelam@marvell.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230326181245.29149-2-hkelam@marvell.com>
-X-ClientProxiedBy: AM9P193CA0024.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:20b:21e::29) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google; t=1680014666;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j1RXGFn+vcWvifONYTCuI6mtyH3vlLPcp2qfAwB5mMg=;
+        b=vsJbZiNlnEUa4STeqicxMpHCCmqUTSxPEvkllbFnHOCt5OZZSSrexWZ+hwPMwfF96P
+         P2Xom75jo1ltINp+kb89Eo1bVDq8hfk5bvHX38sPDPAoAdGJeTsrO/wra+j/ru7lCZtG
+         ynXt7mSIb9irD+/OS2lkgPAO9Gk7XcAhQj6kzgIAkzjT2GaKt/9Rw/Lo4EeWM77Ifb4s
+         8hIb9GTnfkJ6/rpRG/+U8M1ucr3UsrC8nhc/mm7F2TMZW2qacJE6V6i8Ia5ROurrvcj6
+         F4t/yNxSMFrXdKMEkAK3f+xA/DR35mtYUslJkatfa0JdpKVGqCl1Q+ekxAiPUA+gamVw
+         LhiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680014666;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j1RXGFn+vcWvifONYTCuI6mtyH3vlLPcp2qfAwB5mMg=;
+        b=oIiYyBQDJsoIyXgRCHYuWTxwQncqb5dTWT43beaZNxxxTkoDmg00U8n0W0aCSdY3bQ
+         i8ZxcEYlawoB1LhQUYNOAV0DiOjzbYMGYCzK9cFgxrgAhiMuklv8mmPcDe9miUhyy9B7
+         hDNVqJDGqSmAhKCseHVcwLZ5+ireLIE2IYPpH/sOFWAu/Zb4Lkbn8GxP5D37abp96Nb6
+         SUWIs7bMBduYIk75+bhZSjvs4FKSTJLENQU/oPUNa9s8TjrzYSIZ0dN8uoomdjE4CbfG
+         E91vtYyFMTjoEXXcgSvM6nASYZQGcYcHMSz8npKrs3VYHOj9OhWWuDW72lVTKItWqQ1X
+         Xu/g==
+X-Gm-Message-State: AAQBX9dj8x6YO5nLAJkUKsdPjExpJ/NbDdKDmpKTDfPMDGpCwevUzB1m
+        XjWZ/uHyVOZM0ABAObSU3jXRPQ==
+X-Google-Smtp-Source: AKy350YzR+xGfHrkbNMHzkSLkADtXYt1PeHCFRiRdVPuS6jMW9QCjmlAubHsid6h5lOXd9SbB3Rbew==
+X-Received: by 2002:a17:907:6e17:b0:92f:c6b5:de08 with SMTP id sd23-20020a1709076e1700b0092fc6b5de08mr17365113ejc.76.1680014666011;
+        Tue, 28 Mar 2023 07:44:26 -0700 (PDT)
+Received: from [10.105.135.205] ([88.128.92.162])
+        by smtp.gmail.com with ESMTPSA id q7-20020a170906b28700b00931c887372dsm15199037ejz.107.2023.03.28.07.44.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 07:44:25 -0700 (PDT)
+Message-ID: <fa74223a-b0ae-9f5d-406e-b41c95332dfa@linaro.org>
+Date:   Tue, 28 Mar 2023 16:44:23 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY3PR13MB4914:EE_
-X-MS-Office365-Filtering-Correlation-Id: bf336e79-ada7-4980-e552-08db2f9aed31
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NZHEAdQsrwES604azxvTKiJyB0e08+D7rlb4dTYY0OJa79Bw0IdTw4AdigC9mGGzbBm9PxsCQOeY8M3c2WrKhxN54H1ihFTL8x1Y0O1PNAgXH4PZyuHdjLPNGAOTf3ke5LlB9fKuQ2IiKbtRtszS5EkCbVnjwY+4KFis+VXFfuzdz3G4BO8VSSkIq1+Zh1bo4PKinefcpKjYVZJlBp3khsv0JvvfeVMvNMxNqawHlg3nP1ufirWMNyfnFXFxU5FSFSLg+FBwxYveLTP/2Hz+VrYPEVXeE1byuUOliGrf7wB3APxSpjGEB1cFoLto9NMnTuukC6AE5o8jxjo2blOGHHhxGfDwagU9cV3PLctMejM3aQW8iuuEKhJhIg7PiE3xP3DhhPDIAkSqAfRk316z0Tas+ETzvRt57r2hCfZBK1Sefxyd32t5s5lfBz3lgCnEA4qAeq+J5b/pWlABcFEAZmkW8+fGrGfp95qNZlf39B/8qd86iAze7P9oQ2XGpoVIMG95vd1jkJbItyG0T5q+SHXhzMkAkL0VQge47Tsfk8pw1cC3MQqvhO3UZrTSURXU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(366004)(396003)(346002)(39840400004)(451199021)(316002)(66556008)(66476007)(6916009)(4326008)(8676002)(41300700001)(186003)(66946007)(2616005)(6506007)(6512007)(478600001)(6666004)(5660300002)(4744005)(8936002)(44832011)(2906002)(7416002)(6486002)(36756003)(86362001)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Nvt/4pKcNe7z47hWIb531d7/oX4gaqw26p0SMh25qoMbJa6ek84R/twDn+f9?=
- =?us-ascii?Q?o7epjFQ2FDL/y6ZjM3M3esUd8P70TlzaGXsCBl+qTzqzLeybIouOv5j8kqEK?=
- =?us-ascii?Q?c96+E9qA++lwkCX/XleFY2RGgj0KuTduVPx1iEOfB1hFt9uOyf3eWXKzbSXn?=
- =?us-ascii?Q?E2K9ZeRutzfW+OPnOigRmJuiqb4srm8w1WCi9vXtQ4Jk/+PNldlPAfr1CcC9?=
- =?us-ascii?Q?RoSDpDsKulq+yEA7ojYTXMcRAt1MrglxmQqmXpXIY4Lgeg7HXI4W0kkqizwN?=
- =?us-ascii?Q?ZCwjjilQQLLmTFMW2vz7am2e3UHFgT7ovvgXe1Rmgjr1tPDYAYbc+ADBI1Da?=
- =?us-ascii?Q?cyB5NLahti1pB4OOsadP+ziGQYybBdeNQrJIw1oRNGr3hC4fAzUHKd6Coc/k?=
- =?us-ascii?Q?BHXPXRfzrvLjiCGxDDi0YD2IYdpSfP8sDtnPS7BLV1h1vHeVyWidcZuoHNzg?=
- =?us-ascii?Q?YoAtPZCzvma15jFGpbFavEd/AzwFEzs/a1iitDHdUBhVaF5jeEtXAFrG9f64?=
- =?us-ascii?Q?t7W5YemZ84QtrCHi61+SK1Kkgr2QRruMadxTghBZDM8RYGVbGJCQ0ZH/r91B?=
- =?us-ascii?Q?zmZVi6TMIoNH1c+ix6GBpRicuuLf1SRFBY37gcoQQwx/72Yru2UHn4n5ZPKS?=
- =?us-ascii?Q?4R7VgOWskvltaN6p5G+JLbrhrPPtG5qGm+vEcClXx65WoDKhv72QfGyIaoCj?=
- =?us-ascii?Q?sjTgpJTleLgPwxsH+SREXvZGN3V2f+bL1J2wvaXcVMohUaCS0WQPsEZdikTz?=
- =?us-ascii?Q?CtTniDL1UZ0d/VLvMdS1AVL8eraJM3qpwHjLvjFNu26pV37tz7QAhAkEUp52?=
- =?us-ascii?Q?Fweg7GgcRrnOhGmmzEgBXasjIRcou7XC+ZYymqltCsJqvrWRGy9jNyd+HZwW?=
- =?us-ascii?Q?B7WQhsFCJwpXA3U8sTIH1aTE8POjd8b3k8x+QDzF2rFudm9QMKIbJb1Yw+ds?=
- =?us-ascii?Q?CW8Sti00jETIKokUq2bB2TjqEyi3Yl4OMnal5hzsQebGUsv5oP35m/S105Eh?=
- =?us-ascii?Q?Mmmd3hDzwr+LQBb1Cq/Hp25uhjW4R4Ljty+bVqaE9XleKAOJtU6Hqs7JnMZj?=
- =?us-ascii?Q?uzdGvcM8cv90QqIEqHwqJHFmkCVu1wGc/PoK3dLEvgLrVtOSgTvz9QdIYM23?=
- =?us-ascii?Q?HuvCOZ6p7lXJ1E1BCHbj0+ctm4rMbh4Xsa6q5sYxh6zYe9gwZT4A8UZEILex?=
- =?us-ascii?Q?Kzvr4pJuAdmo0QRAUxZjwqq9pvKVdEMQxgSo4dBhz5E4GmqnQtBsM71Td/d5?=
- =?us-ascii?Q?uhq2UM+Hwm6ooscvVpr7Hm4NSzpu0t7YC8enFHCBY18YlxeyrqvLwBgEyfOu?=
- =?us-ascii?Q?L86NcwhMext9/trHUPYB5Z3rEakLes9fb/Cbl0IRBKcrrrIqiW+PuqszC+ce?=
- =?us-ascii?Q?uL0XFbkaViRg10YHKSY96kin3oAYVby0FX3QBywoqaEteQi77hGhZf5HU86x?=
- =?us-ascii?Q?mvy+/mUQMRx9cNrVaXSQkZkWYZ5skDt/195J71EwrRZq/I3e8FPjHb5eOO1I?=
- =?us-ascii?Q?XYNxcuadjc3jgtI1jRN8n52aXLbn1ZltaMAMdU3mWxvHTlV/0rauCBj/KPd/?=
- =?us-ascii?Q?5nITypMdde0kTV6NmWLkZ3LNltCEguoYS7SoR/tS1YrN7KQbSAv02O87bSrW?=
- =?us-ascii?Q?O3KYzi7LYfpLEt/bWNBg0KouzrAOUdgxyKN3nXvZ1vWk08ATDkMA93e5qlYM?=
- =?us-ascii?Q?ePTdAQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf336e79-ada7-4980-e552-08db2f9aed31
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 14:44:25.5750
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aCed7MMxllQ7RVP6MBQk/LhT2y5+FGZbF+FKqYLkIGYzmTRRe8nu/0EgfHJWSiThvfl+RYmhQyQuX0B5q1Xdz31BHQ1dLNfgl47EW+dWcmI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR13MB4914
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 1/4] dt-bindings: mfd: Add TI TPS6594 PMIC
+Content-Language: en-US
+To:     Julien Panis <jpanis@baylibre.com>, lee@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        corbet@lwn.net, arnd@arndb.de, gregkh@linuxfoundation.org,
+        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com
+Cc:     eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, davem@davemloft.net,
+        christian.koenig@amd.com, contact@emersion.fr,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
+        eblanc@baylibre.com, jneanne@baylibre.com
+References: <20230327154101.211732-1-jpanis@baylibre.com>
+ <20230327154101.211732-2-jpanis@baylibre.com>
+ <a0c18c3a-4f9e-f491-582f-8d3ca56ec26f@linaro.org>
+ <75f0a18d-aed9-8610-2925-4e604b4b0241@baylibre.com>
+ <f69d7b3a-6b30-5f30-9e72-7197a3a62a2c@linaro.org>
+ <fc519231-dd00-8ce3-ecdb-a1e1364cd0c4@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <fc519231-dd00-8ce3-ecdb-a1e1364cd0c4@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 11:42:40PM +0530, Hariprasad Kelam wrote:
-> From: Naveen Mamindlapalli <naveenm@marvell.com>
+On 28/03/2023 16:20, Julien Panis wrote:
 > 
-> The current implementation of HTB offload returns the EINVAL error
-> for unsupported parameters like prio and quantum. This patch removes
-> the error returning checks for 'prio' parameter and populates its
-> value to tc_htb_qopt_offload structure such that driver can use the
-> same.
 > 
-> Add prio parameter check in mlx5 driver, as mlx5 devices are not capable
-> of supporting the prio parameter when htb offload is used. Report error
-> if prio parameter is set to a non-default value.
+> On 3/28/23 13:21, Krzysztof Kozlowski wrote:
+>> On 28/03/2023 12:45, Julien Panis wrote:
+>>>
+>>> On 3/28/23 08:51, Krzysztof Kozlowski wrote:
+>>>> On 27/03/2023 17:40, Julien Panis wrote:
+>>>>> TPS6594 is a Power Management IC which provides regulators and others
+>>>>> features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+>>>>> PFSM (Pre-configurable Finite State Machine) managing the state of the
+>>>>> device.
+>>>>> TPS6594 is the super-set device while TPS6593 and LP8764X are derivatives.
+>>>>>
+>>>>> Signed-off-by: Julien Panis <jpanis@baylibre.com>
+>>>>> ---
+>>>>>    .../devicetree/bindings/mfd/ti,tps6594.yaml   | 231 ++++++++++++++++++
+>>>>>    1 file changed, 231 insertions(+)
+>>>>>    create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..4498e6361b34
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+>>>>> @@ -0,0 +1,231 @@
+>>>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id: http://devicetree.org/schemas/mfd/ti,tps6594.yaml#
+>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>> +
+>>>>> +title: TI TPS6594 Power Management Integrated Circuit
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - Julien Panis <jpanis@baylibre.com>
+>>>>> +
+>>>>> +description:
+>>>>> +  TPS6594 is a Power Management IC which provides regulators and others
+>>>>> +  features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+>>>>> +  PFSM (Pre-configurable Finite State Machine) managing the state of the device.
+>>>>> +  TPS6594 is the super-set device while TPS6593 and LP8764X are derivatives.
+>>>> LP8764X? Compatible says LP8764.
+>>>>
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    enum:
+>>>>> +      - ti,lp8764
+>>>> It's confusing. If x was wildcard, didn't you remove part of model name?
+>>> OK, I will remove 'X' from model name in v5.
+>> There is no x in compatible. What is (are) the model name(s)?
 > 
-> Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
-> Co-developed-by: Rahul Rameshbabu <rrameshbabu@nvidia.com>
-> Signed-off-by: Rahul Rameshbabu <rrameshbabu@nvidia.com>
-> Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
-> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+> Basically, the model names are:
+> - lp8764-q1 ('x' came from an error in internal documentation)
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Ah, ok, that explains.
+
+> - tps6593-q1
+> - tps6594-q1
+> 
+> But...for these 3 pmics, there are 19 PN provided
+> by TI. For instance: tps659413f, tps659411f, ...
+> Each PN gives information about non-volatile memory
+> settings and firmware. So, there can be several PN
+> for a given model name.
+> 
+> Which solution is recommended in such situation ?
+> 
+> IMO, using the 3 'xxxxxx-q1' names for compatible
+> strings makes sense (that's what already exists in
+> linux for others TI pmics).
+> But if you think that full PN names should be specified
+> to differentiate internal FW/NVM configurations, I will do
+> that and we will get 19 compatible strings.
+
+I think it is fine as long as their programming model is exactly the same.
+
+> 
+>>
+>>>>
+>>>>> +      - ti,tps6593
+>>>>> +      - ti,tps6594
+>> (...)
+>>
+>>>>> +
+>>>>> +  rtc:
+>>>>> +    type: object
+>>>>> +    description: RTC provided by this controller.
+>>>>> +    $ref: /schemas/rtc/rtc.yaml#
+>>>> I doubt that you can have here any RTC and any watchdog (below). This
+>>>> should be specific binding instead. Or list of compatibles if you have 3
+>>>> or more possible bindings.
+>>>>
+>>>> Additionally, judging by your DTS you do not have any resources in rtc
+>>>> and watchdog, so these should not be nodes by themself in such case.
+>>> It seems that I can't figure out what you and Rob mean by saying that
+>>> "binding must be complete" and that "RTC and watchdog may or may not
+>>> need binding changes".
+>>> What does "specific binding" mean ?
+>> Specific means not loose, not generic, precise with some accurate
+>> properties.
+>>
+>>> Should we add some specific property
+>>> for RTC/WDG provided by the PMIC ?
+>> You know ask me to know what is in your device. I don't know. You should
+>> know.
+>>
+>>> Should we write another yaml for both
+>>> of them ?
+>> Depends. Pretty often yes, but think what do you want to put there?
+> 
+> There's nothing to put there actually.
+> 
+>>
+>>> Why shouldn't they use the generic rtc/watchdog yaml ?
+>> There are no properties in these nodes, so you do not need nodes. Or if
+>> you have properties then you need specific binding, not generic one.
+> 
+> We do not need nodes indeed, since we do not have properties to put in them.
+
+OK. Then please remove the watchdog and rtc nodes. We asked about them
+to make binding complete, because often they need additional data (e.g.
+pins or interrupts). In this case the expectation will be to add
+rtc.yaml and watchdog.yaml refs to main device node (top level) if you
+ever need their properties (like start-year).
+
+Best regards,
+Krzysztof
 
