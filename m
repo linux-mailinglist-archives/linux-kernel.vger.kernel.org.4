@@ -2,81 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5226CBD5E
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2366CBD5D
 	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbjC1LVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
+        id S229608AbjC1LV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjC1LVl (ORCPT
+        with ESMTP id S231978AbjC1LVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:21:41 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846A23C32
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:21:39 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id x3so48063886edb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:21:39 -0700 (PDT)
+        Tue, 28 Mar 2023 07:21:54 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB827A8A;
+        Tue, 28 Mar 2023 04:21:51 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id eh3so48068669edb.11;
+        Tue, 28 Mar 2023 04:21:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680002498;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U0zoscBlvTHjjRLwzqsmHVflR54yqyBJXWRu4DbHXfo=;
-        b=XtXJ51p1c5JDwQyfHP2EKx1Qz42375Mks7R9KstgVvtV2PRPZcANgVeDO7XXqdA9h5
-         PSgbZezCFSem+O67TiS5EfewoERX2rxMVCyE8Eq69KHdw+pOdP+sqypLdjMjuBu8sCb2
-         ss+mnNHN4+Awx20ymc19Vo+AJVQ8rzEM4Pa/bhgJafT4QLhHKLCdYSGdqKnj+4D2NwH/
-         AxJvAl6aCarlLqtCkE6Xzfa2agU3gwz5hIJwfY0WFLcnK/8sAFZEdWuvfDLXF9W+NQhC
-         oaizRHasHtIHiH6xv319gD3rkrY46DKW2CjVwharOR3iJBISKkuzhl/Kxy0XVuseapiA
-         e8Fw==
+        d=gmail.com; s=20210112; t=1680002510;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/uV8dWinN4UoTmw9006A8Yi8Nmf//s38L4m1uuCw/6o=;
+        b=Z8IWeCmXyimOyR61VNL6lafjFaK/PgrLtpeBX+Ym3xj3VI17fe7f7cJDSch1CZph2f
+         fzg7PVGr5Iy2ytybSxI7+vrm/1PLfFfPByUuV0lOasqgwTscpRq0xjpqVgL2WTcyZ/QC
+         AB/vtbBDObUQOF5fFzVtBeZEmS+JoYVq34EGdgE5zdFfhm+MmPq0J/KN0mi+eOJBDAKA
+         hmfPx5NG3tPrDnzZDPrqlaC85mlncNponnV/NZ1X/MMXfjxBg3U1PcwurJ3rkCp+lG/3
+         1K8iBq04OB2kozVcFyASya30U+ISjv/0FRoRI+BCyoQx9HCSFpDFikGLosMMJlDoQKPA
+         pBAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680002498;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U0zoscBlvTHjjRLwzqsmHVflR54yqyBJXWRu4DbHXfo=;
-        b=ZLcwNRGgcasiOZ1CPM8A5/oQYDs6F4+Ha/eKeRfhkcLjIAEdFF5p0xG4ov52Ecc1h8
-         RTMe39frUs8FGxMlmf7IhaAd+vrUZm/M5/VnwT5pTPu880Yv+sQG/I4DuRZC5PmxCpK3
-         GSFMjFIX0YnNTLP81YwBwQ7zdRJQUQB8lyyDiSVpyuEulZMpBdLbpHs1CNuUoccE0YmV
-         z7b9MLBkKlEeFL6b8WF01C0wJXlTiu2IvuI/bGapBHhGAm+K/LmmtC0nCLv4mG8Qjgt6
-         drLjBJGsIPROGidbGYdJ7aZ8m1fmnCTMGG7avNIv9vAIx9cETgayvtfJuFK0MIe+FqXw
-         8RDw==
-X-Gm-Message-State: AAQBX9eNzBdRbnJUf8BUsmqxII/4JC2eEP2ccKa+4+jPlKl4PgiU5Pit
-        yYlBaZXvvjY4eVQHdsmAQWejrA==
-X-Google-Smtp-Source: AKy350bhS8sE1Git1AtlRiQDnYdFsSNHAsm/FNF0ywmE0CYXHD1GHyeP1JMP0ltV2FR9TFbU782THg==
-X-Received: by 2002:a17:906:f6cd:b0:92f:b8d0:746c with SMTP id jo13-20020a170906f6cd00b0092fb8d0746cmr15259029ejb.20.1680002497988;
-        Tue, 28 Mar 2023 04:21:37 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
-        by smtp.gmail.com with ESMTPSA id k24-20020a50ce58000000b004fc9e462743sm15608623edj.91.2023.03.28.04.21.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 04:21:37 -0700 (PDT)
-Message-ID: <f69d7b3a-6b30-5f30-9e72-7197a3a62a2c@linaro.org>
-Date:   Tue, 28 Mar 2023 13:21:36 +0200
+        d=1e100.net; s=20210112; t=1680002510;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/uV8dWinN4UoTmw9006A8Yi8Nmf//s38L4m1uuCw/6o=;
+        b=6wujYzTPYfoKEQDncohuTUO+b2HCUCPQ3tKU4y2gW5LaZsYXYW/YPc01tAoLfSeghu
+         yMsRjwJryTPhY8bSRo5rCMnLd9M+VdOZqwl/ALrI2McuIGqlXamcmxpit22gGu6z23Gq
+         VYS1sX7L0oV6zEsJYq6C8hrCX1hY0QGExbKt5MINbH3x9IASsfJL09nMsYR40wuZ5pLZ
+         3Vql1JsQSHbpFrsaWQUj/kn9Gog2UmFU9OUUqqBorEnedypu7qPEFbL0TVWwDMQiATUl
+         v75ZHPyDcVLr7jO3u9zB195igHvGV4vLdAceq/LIS7Bk7hyAA/ku8vXhQbm+BthisxYw
+         PS+A==
+X-Gm-Message-State: AAQBX9e3HMWuG1O4/I0KJvBSsN8wXix0uHii/Bpzlpr0wKeM2Wjqk3dQ
+        VthSgnM9IosOeB43MNwpfFvXvz1u/Uw=
+X-Google-Smtp-Source: AKy350YNJqW2Fdv328B0CnIhA6U3LZ8U501/lms78tE7OXPrOZ21aK+VITMTCPn3H0WQ8FFMnVcd9w==
+X-Received: by 2002:a17:906:4b08:b0:8b1:7de3:cfaa with SMTP id y8-20020a1709064b0800b008b17de3cfaamr16262164eju.3.1680002509658;
+        Tue, 28 Mar 2023 04:21:49 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id k19-20020a508ad3000000b00501c0eaf10csm12868133edk.40.2023.03.28.04.21.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 04:21:49 -0700 (PDT)
+Date:   Tue, 28 Mar 2023 13:21:47 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v4 0/2] Fix sound on ASUS Transformers
+Message-ID: <ZCLNy7jB1H6eClwf@orome>
+References: <20230327150219.13636-1-clamor95@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 1/4] dt-bindings: mfd: Add TI TPS6594 PMIC
-Content-Language: en-US
-To:     Julien Panis <jpanis@baylibre.com>, lee@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        corbet@lwn.net, arnd@arndb.de, gregkh@linuxfoundation.org,
-        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com
-Cc:     eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
-        stephen@networkplumber.org, davem@davemloft.net,
-        christian.koenig@amd.com, contact@emersion.fr,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
-        eblanc@baylibre.com, jneanne@baylibre.com
-References: <20230327154101.211732-1-jpanis@baylibre.com>
- <20230327154101.211732-2-jpanis@baylibre.com>
- <a0c18c3a-4f9e-f491-582f-8d3ca56ec26f@linaro.org>
- <75f0a18d-aed9-8610-2925-4e604b4b0241@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <75f0a18d-aed9-8610-2925-4e604b4b0241@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zp4bjfirGDraf1PA"
+Content-Disposition: inline
+In-Reply-To: <20230327150219.13636-1-clamor95@gmail.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,110 +78,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 12:45, Julien Panis wrote:
-> 
-> 
-> On 3/28/23 08:51, Krzysztof Kozlowski wrote:
->> On 27/03/2023 17:40, Julien Panis wrote:
->>> TPS6594 is a Power Management IC which provides regulators and others
->>> features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
->>> PFSM (Pre-configurable Finite State Machine) managing the state of the
->>> device.
->>> TPS6594 is the super-set device while TPS6593 and LP8764X are derivatives.
->>>
->>> Signed-off-by: Julien Panis <jpanis@baylibre.com>
->>> ---
->>>   .../devicetree/bindings/mfd/ti,tps6594.yaml   | 231 ++++++++++++++++++
->>>   1 file changed, 231 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
->>> new file mode 100644
->>> index 000000000000..4498e6361b34
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
->>> @@ -0,0 +1,231 @@
->>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/mfd/ti,tps6594.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: TI TPS6594 Power Management Integrated Circuit
->>> +
->>> +maintainers:
->>> +  - Julien Panis <jpanis@baylibre.com>
->>> +
->>> +description:
->>> +  TPS6594 is a Power Management IC which provides regulators and others
->>> +  features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
->>> +  PFSM (Pre-configurable Finite State Machine) managing the state of the device.
->>> +  TPS6594 is the super-set device while TPS6593 and LP8764X are derivatives.
->> LP8764X? Compatible says LP8764.
->>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - ti,lp8764
->> It's confusing. If x was wildcard, didn't you remove part of model name?
-> 
-> OK, I will remove 'X' from model name in v5.
 
-There is no x in compatible. What is (are) the model name(s)?
+--zp4bjfirGDraf1PA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
->>
->>
->>> +      - ti,tps6593
->>> +      - ti,tps6594
+On Mon, Mar 27, 2023 at 06:02:17PM +0300, Svyatoslav Ryhel wrote:
+> - update dts bindings
+>=20
+> ---
+> Changes from v3
+> - fixed typo in wm8903 audio-routing
+>=20
+> Changes from v2
+> - dropped already picked patches
+> - adjustments in binding updates (tf101 and tf300t require wm8903
+>   codec patch to properly work with internal mic)
+>=20
+> Changes from v1
+> - fm34 dropped for re-work
+> - quirk for headset detection and rt5631 bringup splitted
+> - minor adjustments in binding updates
+> - improvement of rt5631 rate asignment
+> ---
+>=20
+> Svyatoslav Ryhel (2):
+>   ARM: tegra: transformers: update WM8903 sound nodes
+>   ARM: tegra: transformers: bind RT5631 sound nodes
 
-(...)
+Applied, with a slightly modified commit message on the first patch.
 
->>> +
->>> +  rtc:
->>> +    type: object
->>> +    description: RTC provided by this controller.
->>> +    $ref: /schemas/rtc/rtc.yaml#
->> I doubt that you can have here any RTC and any watchdog (below). This
->> should be specific binding instead. Or list of compatibles if you have 3
->> or more possible bindings.
->>
->> Additionally, judging by your DTS you do not have any resources in rtc
->> and watchdog, so these should not be nodes by themself in such case.
-> 
-> It seems that I can't figure out what you and Rob mean by saying that
-> "binding must be complete" and that "RTC and watchdog may or may not
-> need binding changes".
-> What does "specific binding" mean ?
+Thanks,
+Thierry
 
-Specific means not loose, not generic, precise with some accurate
-properties.
+--zp4bjfirGDraf1PA
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> Should we add some specific property
-> for RTC/WDG provided by the PMIC ?
+-----BEGIN PGP SIGNATURE-----
 
-You know ask me to know what is in your device. I don't know. You should
-know.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQizcsACgkQ3SOs138+
+s6Gz4Q/+NOMS5FzvQg5WA+9YZlqgugF7iYmC9iLdDMeRQDBJOH26CNTS6JpYqtxa
+oilauC4jeuVhGVRFQtoESm7cplU0nUdy4tDbdiT46/iLaDXRk+0YXAbo7EOgJoLv
+mm4SmUDNIW5QrAKrgQkQNXCVStSI3c/eaoGoI4/LW4y69LeYUwRz3jmNiPUnFHE7
+MLrYEYqTcWU3eoQeyEF6FZTIkZLob7z08roTRVUEmVa0JPwmZYRZ8ASCGF5X3UOw
+QbJcKTwFoEf9PFBj7mZCWj6cm63crA4+yLAKyvnqImKBbX9XXXw+DoxuzMq7LSCV
+c4ANiAIwngwRbwoGsvY/KCkL78jG3TRtqCtMD4yGowlrL1Q3aIt29fWJ9J+RpRxe
+8LVi5zNDf5eZ1EYSwNhWybJLjzslmC9ihS8aDZg54zXttCcDoXugGlvUd/PRi2oe
+lppGr1c/fC01Tkzyniq2PlnTW2EnfJXdYwfOusJ9z/IbV+UwkKyeiElc0DA4Yq9E
+M+qfj9r/lsjQRiE0yfNx6t+uexZV5Voqw+A8H5P22giNbs0FVHP+cINwJPOe2WrB
+pNgxv+1xgq0oJSrSJ8bXKyc1dMmaUZa1tzJYEjuY37eNccdgaZWvg/FuTnmfb2O+
+VmdOOTsJWZ2cZ11Nz5u/h+RTEdfLuckssJ83pndXlugvSNIIe4I=
+=II9E
+-----END PGP SIGNATURE-----
 
-> Should we write another yaml for both
-> of them ? 
-
-Depends. Pretty often yes, but think what do you want to put there?
-
-> Why shouldn't they use the generic rtc/watchdog yaml ? 
-
-There are no properties in these nodes, so you do not need nodes. Or if
-you have properties then you need specific binding, not generic one.
-
-> I don't
-> understand why they would need some "binding changes". Any example
-> I could refer to ? (I might have not looked at the relevant ones for my case
-> before sending this v4)
-
-git grep $ref | grep rtc.yaml
-
-
-Best regards,
-Krzysztof
-
+--zp4bjfirGDraf1PA--
