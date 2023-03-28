@@ -2,131 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707BB6CC9B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7A76CC9BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjC1Rxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
+        id S229724AbjC1RyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjC1Rxg (ORCPT
+        with ESMTP id S229690AbjC1RyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:53:36 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616E6EC5A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:53:25 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id y4so53144712edo.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1680026004;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GBBAU6hZLECWp0UudInEHiiA2FkG0Dhl57EhHD71/2w=;
-        b=WyJBv5Pqllid3pNI6/ikTPvxnNXwwYvm5BeSsZHlodYCQOrWeIKez1PCCxvY3x1D8c
-         3+AZOlaWzwu1aKR+OAeUfaGWTxiIfflV7gGlohUIYiEqEskdjBV9QYa+PD/HDQeJZU3Y
-         pFQhYKU+arSbJemfnq9SR0DQ6bDuZPsw4fp/k2p3LlpGJi35X785hbTi0EoGjexbJdKT
-         /zo4sSXmA7NblVWxBBey8ZK0PCmLNdDA177py1CZsWHspE6EGmptD4//mQHui9cQkTEc
-         kPDtXGZPdalt51dVpXNabobGHyskSSeC52qpMMTruKTKj6Vgxy77Pb7DYdWEsqx2UcyW
-         ZVrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680026004;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GBBAU6hZLECWp0UudInEHiiA2FkG0Dhl57EhHD71/2w=;
-        b=n/YCxWqz1p5WHK0tcTJF2N4RURWQwGQrDT9Ofsjs3Q5U+qBrUZvvzzyLxD42qgqGHh
-         UYxugXFJgTyXRPn+B7JF+l2WV5ofVL/OBZ0DAKTehPbKlb7SwAgO/0YnGH9EiDeCKKIh
-         Vfpjw061HFisKvBl6Pmrpa7QF/jsp8cxHOpw46VCQ9G9zN45jpV4lia9qmBQw9DDwQIt
-         9O0xswHkBvU+pvEQa/O5+3n0IcAKQPgBKWOoP52QXfxifYph49z2/Gv61ts5gspC+lTe
-         NkERrw5MLnSx2B0ACh9IIviDh4emMG0oiZWc/2lmj6HIqW2uy7AUopJP3K8s3CuDgV0O
-         pQAw==
-X-Gm-Message-State: AAQBX9dD1jPhv3fgR4Kq/XPfHV8NCgQs76Ejq/y6QaSuyFDxNRC9wCaa
-        moX9ITLKBevRY5V6YKI376zqaA==
-X-Google-Smtp-Source: AKy350ZpnwLB5iKCMGCbwwvWk9Vdlstn38oUzOZza2h97UWxvDmZVbQkVawtzBlghbIBM/+YOMAKfg==
-X-Received: by 2002:a05:6402:716:b0:502:2494:b8fc with SMTP id w22-20020a056402071600b005022494b8fcmr15014577edx.7.1680026003884;
-        Tue, 28 Mar 2023 10:53:23 -0700 (PDT)
-Received: from localhost ([2a02:8070:6387:ab20:5139:4abd:1194:8f0e])
-        by smtp.gmail.com with ESMTPSA id t27-20020a50ab5b000000b004c0c5864cc5sm16157912edc.25.2023.03.28.10.53.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 10:53:23 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 13:53:22 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH v1 5/9] memcg: replace stats_flush_lock with an atomic
-Message-ID: <ZCMpklJZqwWHro0u@cmpxchg.org>
-References: <20230328061638.203420-1-yosryahmed@google.com>
- <20230328061638.203420-6-yosryahmed@google.com>
+        Tue, 28 Mar 2023 13:54:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA86BE05C;
+        Tue, 28 Mar 2023 10:53:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F158B81E34;
+        Tue, 28 Mar 2023 17:53:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1AEDC433EF;
+        Tue, 28 Mar 2023 17:53:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680026032;
+        bh=2YiRa5zMmLavggXXj54qS1KpalIDFc2G9Mo2Yjx/i+s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=d1Jz9mFoMyg/YgxPBKDO/yvKkTgt8/GT8XBPbHu5QOP0cMWOODHX2SQJDx0RdhGIY
+         PfEuHxmKwpNeM9/KWDoVOMIoXWvmhOAqZSGMPi+6INV0NfxFXJwPdZBt8bSrcZSBHo
+         wh22JAu/Wb4hPdSUzNHGBlTpHi6wScwSpz3Is8zW40fZryc+CaFp/6gC+LKaKqmyuk
+         fR7v0xIKH0mLrldmBA+vdsx4I/XCskuJrnKE/Ab++MVgVttm4ZUb3PtRAfYRvj0x0Y
+         vMnxxs4qigE3avnh6Rfqkon9vbMm9aY7cvnNWLI6ziYfohWeQRgj88fWQd7txEnLl+
+         sK+wMk++drGmg==
+Date:   Tue, 28 Mar 2023 12:53:50 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
+        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
+        ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v4 10/10] PCI: tegra194: add interconnect support in
+ Tegra234
+Message-ID: <20230328175350.GA2953686@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328061638.203420-6-yosryahmed@google.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230327161426.32639-11-sumitg@nvidia.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 06:16:34AM +0000, Yosry Ahmed wrote:
-> As Johannes notes in [1], stats_flush_lock is currently used to:
-> (a) Protect updated to stats_flush_threshold.
-> (b) Protect updates to flush_next_time.
-> (c) Serializes calls to cgroup_rstat_flush() based on those ratelimits.
-> 
-> However:
-> 
-> 1. stats_flush_threshold is already an atomic
-> 
-> 2. flush_next_time is not atomic. The writer is locked, but the reader
->    is lockless. If the reader races with a flush, you could see this:
-> 
->                                         if (time_after(jiffies, flush_next_time))
->         spin_trylock()
->         flush_next_time = now + delay
->         flush()
->         spin_unlock()
->                                         spin_trylock()
->                                         flush_next_time = now + delay
->                                         flush()
->                                         spin_unlock()
-> 
->    which means we already can get flushes at a higher frequency than
->    FLUSH_TIME during races. But it isn't really a problem.
-> 
->    The reader could also see garbled partial updates, so it needs at
->    least READ_ONCE and WRITE_ONCE protection.
-> 
-> 3. Serializing cgroup_rstat_flush() calls against the ratelimit
->    factors is currently broken because of the race in 2. But the race
->    is actually harmless, all we might get is the occasional earlier
->    flush. If there is no delta, the flush won't do much. And if there
->    is, the flush is justified.
-> 
-> So the lock can be removed all together. However, the lock also served
-> the purpose of preventing a thundering herd problem for concurrent
-> flushers, see [2]. Use an atomic instead to serve the purpose of
-> unifying concurrent flushers.
-> 
-> [1]https://lore.kernel.org/lkml/20230323172732.GE739026@cmpxchg.org/
-> [2]https://lore.kernel.org/lkml/20210716212137.1391164-2-shakeelb@google.com/
-> 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+Capitalize subject line please, to match pcie-tegra194.c history.
 
-With Shakeel's suggestion:
+On Mon, Mar 27, 2023 at 09:44:26PM +0530, Sumit Gupta wrote:
+> Add support to request DRAM bandwidth with Memory Interconnect
+> in Tegra234 SoC. The DRAM BW required for different modes depends
+> on speed (Gen-1/2/3/4) and width/lanes (x1/x2/x4/x8).
+> 
+> Suggested-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-tegra194.c | 40 +++++++++++++++++-----
+>  1 file changed, 32 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
+> index 09825b4a075e..d2513c9d3feb 100644
+> --- a/drivers/pci/controller/dwc/pcie-tegra194.c
+> +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/gpio.h>
+>  #include <linux/gpio/consumer.h>
+>  #include <linux/interrupt.h>
+> +#include <linux/interconnect.h>
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Almost alphabetized, swap interrupt.h and interconnect.h.
+
+>  #include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> @@ -287,6 +288,7 @@ struct tegra_pcie_dw {
+>  	unsigned int pex_rst_irq;
+>  	int ep_state;
+>  	long link_status;
+> +	struct icc_path *icc_path;
+>  };
+>  
+>  static inline struct tegra_pcie_dw *to_tegra_pcie(struct dw_pcie *pci)
+> @@ -309,6 +311,24 @@ struct tegra_pcie_soc {
+>  	enum dw_pcie_device_mode mode;
+>  };
+>  
+> +static void tegra_pcie_icc_set(struct tegra_pcie_dw *pcie)
+> +{
+> +	struct dw_pcie *pci = &pcie->pci;
+> +	u32 val, speed, width;
+> +
+> +	val = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA);
+> +
+> +	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val);
+> +	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, val);
+> +
+> +	val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) / BITS_PER_BYTE);
+> +
+> +	if (icc_set_bw(pcie->icc_path, MBps_to_icc(val), 0))
+> +		dev_err(pcie->dev, "can't set bw[%u]\n", val);
+> +
+> +	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
+
+Array bounds violation; PCI_EXP_LNKSTA_CLS is 0x000f, so possible
+speed (CLS) values are 0..0xf and "speed - 1" values are -1..0xe.
+
+pcie_gen_freq[] is of size 4 (valid indices 0..3).
+
+I see that you're just *moving* this code, but might as well fix it.
+
+> +}
+> +
+>  static void apply_bad_link_workaround(struct dw_pcie_rp *pp)
+>  {
+>  	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+> @@ -452,14 +472,12 @@ static irqreturn_t tegra_pcie_ep_irq_thread(int irq, void *arg)
+>  	struct tegra_pcie_dw *pcie = arg;
+>  	struct dw_pcie_ep *ep = &pcie->pci.ep;
+>  	struct dw_pcie *pci = &pcie->pci;
+> -	u32 val, speed;
+> +	u32 val;
+>  
+>  	if (test_and_clear_bit(0, &pcie->link_status))
+>  		dw_pcie_ep_linkup(ep);
+>  
+> -	speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
+> -		PCI_EXP_LNKSTA_CLS;
+> -	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
+> +	tegra_pcie_icc_set(pcie);
