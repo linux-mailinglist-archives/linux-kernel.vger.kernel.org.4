@@ -2,101 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B068F6CC060
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54C16CC062
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbjC1NOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
+        id S233079AbjC1NOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233118AbjC1NOB (ORCPT
+        with ESMTP id S233096AbjC1NON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:14:01 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D161B458;
-        Tue, 28 Mar 2023 06:13:42 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id u10so11585846plz.7;
-        Tue, 28 Mar 2023 06:13:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680009222;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C9vHjCxIjnbJV+D1kIkkgMWfWHa4MSx5Br+Gi/URJXY=;
-        b=eASSDHDI/SwtNuH2zZQNURqNiP7TcxCqqOkwEvoTB6VPh9yCsDi9eQEKB9qSwZfiDu
-         t0Y5pp5a2WtAajKUVBiP/OlefYDH67ApHEbkGXEQfYUGBYQp4GzVUahT6aDH+fEcIXaL
-         WMrLt9Fn9XdseCjBzzwD9hJzCS4CDIrfRC+VSr+XNyV47h+nr6atYaSYXAdIp+b3bMYc
-         LED3SlaUpvBhOqTFdPLPCIoyFvGaC32Uucl0Vw6WnSBgPQMlRTrDBI/U79Fy5niKwx0A
-         rMQIqv38gwFYIgkJHhHYej3w+0S2wFG73gsZacVfm1qoilllZ9Wc/hvkfuPMPIBgzwWM
-         91zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680009222;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C9vHjCxIjnbJV+D1kIkkgMWfWHa4MSx5Br+Gi/URJXY=;
-        b=67DOu8IhfxkeUBX4hxC7/dtGRszeRLVhM0gUw9s7i5KGGuwj3k0v4Yt2dqtKkq3bX+
-         jXxFzySs/q97efkWqQaDLlkyNqOr622iCyNPytCoLmQzJITa7e9JKFch0ZBMX8K2KZJo
-         yJGhjZig6M48ju2t44jei6q0HWclug0NskKkGvS2OZHpQAz3EtEQAFU9JNBlh4Ln1yJO
-         CaEGtsc750FAajIDY/6YTz2sL82YB4rvc5VtNkQwDBQFoeizC/TirzG6SmrUNRYZV3IF
-         WpPhDiRGwsGf4l02uaupliioHLSyUf7+AzxQ8rAUge/LvtJbk7vmpaPwn389ptIqb4Hz
-         1WcQ==
-X-Gm-Message-State: AAQBX9eatHT7/WccnjLARSBImYVO6DUUEY3Yxt5IBqKXKngMk60r44fw
-        t0W4GAPcatMjz/7bg0DFHy4x2x2xZeK9eQ==
-X-Google-Smtp-Source: AKy350aJ+T+hdHviafYXKpyM3dcU1QV3g25fUqBprPiMOv0XbIa3xlXVbCVQ9jrzJvjk6a8A6Fj1iA==
-X-Received: by 2002:a17:903:886:b0:1a1:bcaa:aaea with SMTP id kt6-20020a170903088600b001a1bcaaaaeamr14617060plb.3.1680009221761;
-        Tue, 28 Mar 2023 06:13:41 -0700 (PDT)
-Received: from c1ion.lan ([139.227.13.23])
-        by smtp.gmail.com with ESMTPSA id io20-20020a17090312d400b001a1faeac240sm10642646plb.186.2023.03.28.06.13.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 06:13:41 -0700 (PDT)
-From:   Mingyi Cong <congmingyi@gmail.com>
-To:     linkinjeon@kernel.org, senozhatsky@chromium.org, sfrench@samba.org,
-        tom@talpey.com
-Cc:     congmingyi@gmail.com, linux-kernel@vger.kernel.org,
-        linux-cifs@vger.kernel.org
-Subject: [PATCH v3] fs: add the tuncate check of exfat
-Date:   Tue, 28 Mar 2023 21:13:34 +0800
-Message-Id: <20230328131334.5572-1-congmingyi@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAKYAXd8GzB_onCcs=2aZs0MGTy_7oGhECEdr+rcdVS+Jf2C5xQ@mail.gmail.com>
-References: <CAKYAXd8GzB_onCcs=2aZs0MGTy_7oGhECEdr+rcdVS+Jf2C5xQ@mail.gmail.com>
+        Tue, 28 Mar 2023 09:14:13 -0400
+Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A856310D0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:13:59 -0700 (PDT)
+Received: from 8bytes.org (p200300c27714bc0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7714:bc00:86ad:4f9d:2505:dd0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id E1528243320;
+        Tue, 28 Mar 2023 15:13:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1680009239;
+        bh=siVvYTCQb0ZSa9thXjSJwXr3U3XCeqEfC9Xp+vXUmBU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UoUs0ZbMCV++pSZwoOHyya0Ceb6ZFRWrm84QzYVZLDMaOuG1wmDpX6m7GR9n+jlAg
+         6HAISvLJHQYWRusrZ0gyUHPMdB6guGI9yNd1oh0BZX18UE3GwQkgMm961ximZv6m1i
+         kZWehK4xif5GTKsvdR1+Wnhz1sdUge+hfycyf2PE25DgUvsqEoBPAWbptJoleduBaf
+         4DO7bnoxgmsoBSqv8l4EP2hWTT9/VK9ukrvRNLJmj3aOgIdDcX1fn2yJnW9OjgqRIU
+         RBqLFW+nlGAjSpt//fqLcGfi4p6Bo9hAVltBZCPoKRq0/J6tTQMrWWTz6CX97z9Vt4
+         I2RUEI0xakbew==
+Date:   Tue, 28 Mar 2023 15:13:57 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux.dev, Baolu Lu <baolu.lu@linux.intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Subject: Re: [PATCH V3 0/2] Add reattaching support and fix memory leak issue
+Message-ID: <ZCLoFSRnzl/xLo9L@8bytes.org>
+References: <20230313075017.668204-1-chunyan.zhang@unisoc.com>
+ <CAAfSe-tg7JwakdCcoLn3Ws_164HcsT21pWHkjjw0Qqwy8PWkhQ@mail.gmail.com>
+ <ZCFNRfpUHbaGBvJb@8bytes.org>
+ <CAAfSe-stDTabua1EMQBF-xp_=zyn6yzrRR9VFmzyQ6jwzufMfA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAfSe-stDTabua1EMQBF-xp_=zyn6yzrRR9VFmzyQ6jwzufMfA@mail.gmail.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: MIngyi Cong <congmingyi@gmail.com>
+On Tue, Mar 28, 2023 at 10:57:30AM +0800, Chunyan Zhang wrote:
+> Have sent it to you.
 
-EXFAT will fill zero data in truncated range.
-Fix this by adding EXFAT_SUPER_MAGIC check.
+I see, can you please re-send the patch-set to me from a properly
+configures email domain?
 
-Signed-off-by: MIngyi Cong <congmingyi@gmail.com>
----
- fs/ksmbd/smb2pdu.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Regards,
 
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index 0685c1c77b9f..3f2e34936b8d 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -5746,7 +5746,8 @@ static int set_end_of_file_info(struct ksmbd_work *work, struct ksmbd_file *fp,
- 	 * truncate of some filesystem like FAT32 fill zero data in
- 	 * truncated range.
- 	 */
--	if (inode->i_sb->s_magic != MSDOS_SUPER_MAGIC) {
-+	if (inode->i_sb->s_magic != MSDOS_SUPER_MAGIC ||
-+		inode->i_sb->s_magic != EXFAT_SUPER_MAGIC) {
- 		ksmbd_debug(SMB, "truncated to newsize %lld\n", newsize);
- 		rc = ksmbd_vfs_truncate(work, fp, newsize);
- 		if (rc) {
--- 
-2.34.1
-
+	Joerg
