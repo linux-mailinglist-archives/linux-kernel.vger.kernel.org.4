@@ -2,133 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B807D6CC7DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCAC06CC805
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233218AbjC1QZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 12:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
+        id S231383AbjC1QbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 12:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233209AbjC1QZ0 (ORCPT
+        with ESMTP id S233281AbjC1Qag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 12:25:26 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A7DEB53;
-        Tue, 28 Mar 2023 09:25:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680020718; x=1711556718;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=SaaqVoGJRHXzDcbDSy0ZzDlNvUMy2t3he0H/VelSyig=;
-  b=m9L0G9MENhIhqWuh2df/RxByIdiHKS7pqU1e5/K2LuhjuUdmAArP1iHh
-   uBeCNynZwznsw5CIFGND5mXuSrnh7bBMCLFEWtdx4vTK74kXct5jyLjF3
-   FQN5VS4E6JN0a5XMqK+9uk/OtWW0vLjF0RedR0zR8Ky7DhaZw9gfC6QKM
-   I+ywoHs53vE2gOCHb0fCgo/SKfwOHRUNtmu6om5IiZ/MRXz5oGbZTwSZ3
-   keWXG+zE3qLFaCQdWRKr+8NuEtoU+MlZ/NAFrQQE8Xcx8g+otSKvPzCrs
-   HHNC50v6CbrYLBekfx3kbjo0VdNxHaeEbusHp2Mw8xhcFAIzIIIS0BLRD
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="321018544"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="321018544"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 09:25:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="773198759"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="773198759"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 09:25:16 -0700
-Date:   Tue, 28 Mar 2023 09:29:19 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v2 4/8] iommu/vt-d: Reserve RID_PASID from global SVA
- PASID space
-Message-ID: <20230328092919.372f0545@jacob-builder>
-In-Reply-To: <41d31adf-577e-431c-c400-2708885400c1@linux.intel.com>
-References: <20230327232138.1490712-1-jacob.jun.pan@linux.intel.com>
-        <20230327232138.1490712-5-jacob.jun.pan@linux.intel.com>
-        <41d31adf-577e-431c-c400-2708885400c1@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 28 Mar 2023 12:30:36 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659AACDE7;
+        Tue, 28 Mar 2023 09:30:35 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id z19so12244694plo.2;
+        Tue, 28 Mar 2023 09:30:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680021035;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6cp3hZpmMkj3LJBeC/SGV9aCh/7ARFpl+ERfyritQVU=;
+        b=NI8a+SZgZ2/8RILumxLjqGrYUxI7+Misxwqzcbo3JtDUMYM4N0UMIM8gJwbsIhc6WB
+         reHEU3+jREon5ZIlLEolgafDb2UExAbxbiAmxhDvnobMI0J882SBjoOxqxVNQNFHh1S2
+         0taTKxthhehl8TOvsUs8/EPWznDMJWUAbkiePnXrwbUSnl0RZg5jlSah/OWvVphaOkfJ
+         5dVHm5cAv84Bqji+Lgr2RtxfXOfBjlmvo1fiXpASeDm1bA5vQ0ghEaqSTbpSDVKSbqKz
+         jzpNg3uRrJnOk88X7gUFYN1QlXFS8qlnz/SYCH2KJ9PMqq5gQGDM2c1ZVYkNN5ueO8cm
+         MTPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680021035;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6cp3hZpmMkj3LJBeC/SGV9aCh/7ARFpl+ERfyritQVU=;
+        b=mbiCQgRZAqe1k9Z6HoIY9CtjyozPV4OGqnCegH/OBeK7/Kbf1lB6WAdnVjEV8/+CsV
+         En3WriQzzzPhbG0GxsjFnSQ3kAG+F4Z9i/QdqfjcOVTMG7vDEcB6qRKJ2dCTdL57YukI
+         AVYDcB1vondqI1X1SBwNNJEnVqJ159n/v1Sl9rvF3B4VkE1u/1771BPmnwjLYppFG2LI
+         bGKzp/A25w5v5/ElYHtjHLSDn0VahICtCMDhhz4xJAFbeMupbv4mo7yfLHvfbWwBA456
+         NP7wBUIqP8qucm8aZ26Ha9vfd4SqyPHkE85tNGyQno0mjXkOXZD4EFSyOj7NBQ7nc/8s
+         oMKw==
+X-Gm-Message-State: AO0yUKW7MZ3Lc+rSyUJd9zb183+SSnO4zimIfratcRzmh4B/5ODok+1N
+        UYwGuERvboo5mRhrYs/5dw0=
+X-Google-Smtp-Source: AK7set9pDNfylTlDix0ysd/Jj09hT3+N6/Wb/qgtWNiN3xtFp6pVScb+Ln5C2/3K+rULqhF81hV/nw==
+X-Received: by 2002:a05:6a20:6695:b0:cc:6699:dd8a with SMTP id o21-20020a056a20669500b000cc6699dd8amr15589058pzh.45.1680021034781;
+        Tue, 28 Mar 2023 09:30:34 -0700 (PDT)
+Received: from localhost.localdomain ([60.177.121.211])
+        by smtp.gmail.com with ESMTPSA id n26-20020aa78a5a000000b006260e5bdd81sm21107337pfa.45.2023.03.28.09.30.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 09:30:34 -0700 (PDT)
+From:   Bang Li <libang.linuxer@gmail.com>
+To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Bang Li <libang.linuxer@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH v2] mtdblock: tolerate corrected bit-flips
+Date:   Wed, 29 Mar 2023 00:30:12 +0800
+Message-Id: <20230328163012.4264-1-libang.linuxer@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolu,
+mtd_read() may return -EUCLEAN in case of corrected bit-flips.This
+particular condition should not be treated like an error.
 
-On Tue, 28 Mar 2023 13:20:19 +0800, Baolu Lu <baolu.lu@linux.intel.com>
-wrote:
+Signed-off-by: Bang Li <libang.linuxer@gmail.com>
+Fixes: e47f68587b82 ("mtd: check for max_bitflips in mtd_read_oob()")
+Cc: <stable@vger.kernel.org> # v3.7
+---
+Changes since v1:
+- Resend this patch with Cc and Fixes tags
+---
+ drivers/mtd/mtdblock.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-> On 3/28/23 7:21 AM, Jacob Pan wrote:
-> > On VT-d platforms, RID_PASID is used for DMA request without PASID. We
-> > should not treat RID_PASID special instead let it be allocated from the
-> > global SVA PASID number space.  
-> 
-> It's same to AMD and ARM SMMUv3, right? They also need an explicit
-> reservation of PASID 0.
-> 
-yes, all IOMMU drivers need to do that. I will give it a try but might need
-help to place the call.
+diff --git a/drivers/mtd/mtdblock.c b/drivers/mtd/mtdblock.c
+index 1e94e7d10b8b..a0a1194dc1d9 100644
+--- a/drivers/mtd/mtdblock.c
++++ b/drivers/mtd/mtdblock.c
+@@ -153,7 +153,7 @@ static int do_cached_write (struct mtdblk_dev *mtdblk, unsigned long pos,
+ 				mtdblk->cache_state = STATE_EMPTY;
+ 				ret = mtd_read(mtd, sect_start, sect_size,
+ 					       &retlen, mtdblk->cache_data);
+-				if (ret)
++				if (ret && !mtd_is_bitflip(ret))
+ 					return ret;
+ 				if (retlen != sect_size)
+ 					return -EIO;
+@@ -188,8 +188,12 @@ static int do_cached_read (struct mtdblk_dev *mtdblk, unsigned long pos,
+ 	pr_debug("mtdblock: read on \"%s\" at 0x%lx, size 0x%x\n",
+ 			mtd->name, pos, len);
+ 
+-	if (!sect_size)
+-		return mtd_read(mtd, pos, len, &retlen, buf);
++	if (!sect_size) {
++		ret = mtd_read(mtd, pos, len, &retlen, buf);
++		if (ret && !mtd_is_bitflip(ret))
++			return ret;
++		return 0;
++	}
+ 
+ 	while (len > 0) {
+ 		unsigned long sect_start = (pos/sect_size)*sect_size;
+@@ -209,7 +213,7 @@ static int do_cached_read (struct mtdblk_dev *mtdblk, unsigned long pos,
+ 			memcpy (buf, mtdblk->cache_data + offset, size);
+ 		} else {
+ 			ret = mtd_read(mtd, pos, size, &retlen, buf);
+-			if (ret)
++			if (ret && !mtd_is_bitflip(ret))
+ 				return ret;
+ 			if (retlen != size)
+ 				return -EIO;
+-- 
+2.25.1
 
-> > 
-> > Consequently, for devices also do DMA with PASID, drivers will not worry
-> > about conflicts when it comes to allocating PASIDs for in-kernel DMA.
-> > 
-> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > ---
-> >   drivers/iommu/intel/iommu.c | 4 ++++
-> >   1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> > index 9f737ef55463..61c06f7ad8f7 100644
-> > --- a/drivers/iommu/intel/iommu.c
-> > +++ b/drivers/iommu/intel/iommu.c
-> > @@ -3956,6 +3956,10 @@ int __init intel_iommu_init(void)
-> >   
-> >   	intel_iommu_enabled = 1;
-> >   
-> > +#ifdef CONFIG_INTEL_IOMMU_SVM  
-> 
-> Do we really need this #ifdef? IOMMU_SVA is selected by INTEL_IOMMU_SVM,
-> right? So if CONFIG_INTEL_IOMMU_SVM is not set,
-> iommu_sva_reserve_pasid() is just a dumb.
-> 
-good catch! will remove
-
-> > +	/* Reserved RID_PASID from the global namespace for legacy DMA
-> > */
-> > +	iommu_sva_reserve_pasid(PASID_RID2PASID, PASID_RID2PASID);
-> > +#endif
-> >   	return 0;
-> >   
-> >   out_free_dmar:  
-> 
-> Best regards,
-> baolu
-
-
-Thanks,
-
-Jacob
