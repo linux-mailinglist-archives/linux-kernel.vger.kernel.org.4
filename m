@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E036CBEC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44166CBECA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjC1MMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
+        id S230413AbjC1MNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjC1MMr (ORCPT
+        with ESMTP id S229632AbjC1MNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:12:47 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BDD93D5;
-        Tue, 28 Mar 2023 05:12:39 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32SCCYo8022416;
-        Tue, 28 Mar 2023 07:12:34 -0500
+        Tue, 28 Mar 2023 08:13:15 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FEB4EF7;
+        Tue, 28 Mar 2023 05:13:14 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32SCD5QP119130;
+        Tue, 28 Mar 2023 07:13:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680005554;
-        bh=Hemn+0/3QAwoeXpph7kNxgGoqMgwSj3ze3+kHIyy6Fw=;
+        s=ti-com-17Q1; t=1680005585;
+        bh=nrF79L5u1UWlkuJClhugIRv8py+KerdzrdsJIk0Bwr8=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=okGi0p/U85cJ8326HDdhNNJOEBDM6ZpS88Q24RRYaDl06mNj1e4Kcgm3RFuInGE/d
-         6YskVYoOS10TwuFdWeF6RZylNanW2pvUUBmsU8Mbdih1Zx3AdZrWE3CdzZ0zT8ewtm
-         GqFWFHxyIFIloRRMXBhE1uPDKECOXX07E5+LPrUI=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32SCCYTc065328
+        b=QFoA1jkfL+iGxWGSxYj2ryXP31gFUmpVgeTrnUGN0XPVcBw4gfiu288OCwOLyOdkz
+         dmQ+BvlQZE2tApE33VjUcrHvYrz4os9oPUt+tfoM3lv9Hz7YG+WHAuaqNOnot5Ju46
+         cQpw4xmWqDHGz1muXxZSt8MdQc+54LU/5Hhx0Ex8=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32SCD537020987
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 28 Mar 2023 07:12:34 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 28 Mar 2023 07:13:05 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 28
- Mar 2023 07:12:33 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 07:13:05 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 28 Mar 2023 07:12:33 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32SCCXuF026508;
-        Tue, 28 Mar 2023 07:12:33 -0500
+ Frontend Transport; Tue, 28 Mar 2023 07:13:05 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32SCD5IG026937;
+        Tue, 28 Mar 2023 07:13:05 -0500
 From:   Nishanth Menon <nm@ti.com>
-To:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>
+To:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Vaishnav Achath <vaishnav.a@ti.com>
 CC:     Nishanth Menon <nm@ti.com>, <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lore.kernel.org/r/20230320051304.2730692-1-vigneshr@ti.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        Anand Gadiyar <gadiyar@ti.com>
-Subject: Re: [PATCH v2 0/3] arm64: dts: ti: Introduce AM62x LP SK board support
-Date:   Tue, 28 Mar 2023 07:12:32 -0500
-Message-ID: <168000554249.589847.2232339506854109334.b4-ty@ti.com>
+        <j-keerthy@ti.com>, <u-kumar1@ti.com>, <j-luthra@ti.com>
+Subject: Re: [PATCH v3 0/4] arm64: dts: ti: j7: Add device-tree nodes for MCSPI
+Date:   Tue, 28 Mar 2023 07:13:04 -0500
+Message-ID: <168000556145.589951.11862527421010581648.b4-ty@ti.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230321-am62-lp-sk-v2-0-0a56e1694804@ti.com>
-References: <20230321-am62-lp-sk-v2-0-0a56e1694804@ti.com>
+In-Reply-To: <20230321082827.14274-1-vaishnav.a@ti.com>
+References: <20230321082827.14274-1-vaishnav.a@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -68,30 +66,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vignesh Raghavendra,
+Hi Vaishnav Achath,
 
-On Wed, 22 Mar 2023 18:09:19 +0530, Vignesh Raghavendra wrote:
-> This add DT support for AM62x LP SK board which has Automotive package
-> variant of AM62x SoC with LPDDR4 and OSPI NAND
-> 
-> Product link: https://www.ti.com/tool/SK-AM62-LP
-> Logs: https://gist.github.com/r-vignesh/0ad701f3df614cc5f90b6de775f2584e
-> 
-> Since v1:
-> Drop wild card 'x' and rename compatible and dts file to am62-lp-sk.dts
-> as suggested by Krzysztof.
+On Tue, 21 Mar 2023 13:58:23 +0530, Vaishnav Achath wrote:
+> This series adds device tree nodes for Multi Channel Serial Peripheral
+> Interface (MCSPI) on J721E, J7200, J721S2 and J784S4 platforms. All the
+> MCSPI instances are disabled by default and can be enabled through overlays
+> as required, the changes were tested using spidev loopback test for all
+> instances and the data verified only for main_spi4 which is connected
+> internally as slave to mcu_spi2 for all existing J7 devices.
 > 
 > [...]
 
 I have applied the following to branch ti-k3-dts-next on [1].
 Thank you!
 
-[1/3] dt-bindings: arm: ti: k3: Add compatible for AM62x LP SK
-      commit: 1fb3876129214f397b027eff98c614c0f015ecdf
-[2/3] arm64: dts: ti: Refractor AM625 SK dts
-      commit: ba0b22eaef1d2feda379ce486ca68e365ce4baf1
-[3/3] arm64: ti: dts: Add support for AM62x LP SK
-      commit: d956a851ac3c4e1a0ab8c9ed873281b85be01406
+[1/4] arm64: dts: ti: k3-j721e: Add MCSPI nodes
+      commit: 29cb8ddaab1cdbe2ace42fc1f7f5795d7c0bd82b
+[2/4] arm64: dts: ti: k3-j7200: Add MCSPI nodes
+      commit: e416410edf5b35632eefad09ad022eb70dc7b926
+[3/4] arm64: dts: ti: k3-j721s2: Add MCSPI nodes
+      commit: e1ce299d86fbb831de1a8ae76ea6d7f911fa554a
+[4/4] arm64: dts: ti: k3-j784s4: Add MCSPI nodes
+      commit: e1ecd17c0d1e2219c58e5152243e4702bae4f0a4
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during
