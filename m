@@ -2,128 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D546CC040
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BE76CC04A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232694AbjC1NLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
+        id S233009AbjC1NLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjC1NLK (ORCPT
+        with ESMTP id S232996AbjC1NLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:11:10 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183F79EF0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:10:48 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-545e907790fso112684537b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:10:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680009044;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p5yUH2O4hFCVjfaJWgubVrQf+rHb0zN2XaPsX21lAqI=;
-        b=vpa/+dtXjYAGKZeU8wx922IUmAzz10Ey2PwnEv3C6YNXcpfFqDvPP9DAyCYP/Rp6US
-         xopnZ+5Vz+RzGo033bP6o44pPbxUQ9qrXT8ouYCOeR2mmX29fKdZPNQI6JXw5VVtCEbE
-         K2d+jCn3Qr38rlPs7tLJSjq5sKNy+HrzQ8WvMXu1/KBgRyf4B2oc3g/ocJ530XxOA0A0
-         mzHUzru5ARo8f8qnw0hvTNU90vLr2XYzmJdAPqUp4fQ94R85EvyzoH41ISOnWdg8vxGS
-         f18UVQbyZ9MWZ3D3f3WgH4G8oNm9zUEnX5ryw0NdgpkDWURzHPsXfbCjkgo2eYmZhQmT
-         +xCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680009044;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p5yUH2O4hFCVjfaJWgubVrQf+rHb0zN2XaPsX21lAqI=;
-        b=bjH9HDZ1CnqmV8/dUW49uPGm1sY07rWp2a3kXTq1GFdgcJ+VVhbYv9WxugZz+1Mobd
-         rjJE27fL2f39mp8Pp+6pN8B/H9hX1nlDYBW93z/OPYmnOIwyGCQp1gVND8wrpGLbuZlQ
-         fMwqGrhDRHyJoGlTLmVJd/3qzCmyBWf4Zm8J89x5UDxQ0s47MwUqzLhUUPclnGtqeApE
-         hge4tAs1PvAZMUJ0agqSxi3eZW/DaYHIhQQAABHSeOPavJFlNMdtDhDrjLytHZ8heX7O
-         EUxWGGYn6yk84nbbYMiWol0fBbBJX4J6jzcBGSPC3VH1sEiuOYqprEBbaU5CCWx+NbRY
-         QMkw==
-X-Gm-Message-State: AAQBX9cCsJY1QmKD07cRa4kTgBEQzkjFcHxmSAoaRrN+g3z361QzYopK
-        s2lkHf0iwMPCbhtrL25qorGUyvKVXszbYCB7dDRkwQ==
-X-Google-Smtp-Source: AKy350bdKqptsJnHXGuH0PKZyaYDntgiQ0cShdje6zVHnvCC14jNHBYIsZq725pn7qWvX7BedhrW3FtTFjBXS25A3qI=
-X-Received: by 2002:a81:b721:0:b0:545:3f42:2d97 with SMTP id
- v33-20020a81b721000000b005453f422d97mr6264242ywh.3.1680009044455; Tue, 28 Mar
- 2023 06:10:44 -0700 (PDT)
+        Tue, 28 Mar 2023 09:11:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4164BBA1;
+        Tue, 28 Mar 2023 06:11:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9897B8184D;
+        Tue, 28 Mar 2023 13:11:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10F9C433D2;
+        Tue, 28 Mar 2023 13:11:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680009079;
+        bh=lJyiBCVdnzxr4yd5Lb2VGLQC1Zp1xb1Nz87QPZwsGSI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YsDET0ju8F6Q8xDcaF6krp5Ykg3FLeXzqVIWTebSehbvu2h7XwxXtajYgHgyVEpkR
+         f5OmcLAwpQIvg8gYsKPCFTjz1Aw1uK7IKpqkO1GUhcH+rXVO/AQf30RInoCsB2CWFQ
+         VPZ65Pzu56PrMr6lNkQ985Q4kiQMgDeGKc67QOIIMbAjeZCpQuU5O/imwyNT6dd48i
+         1yGNpf0CmPNEdyRWl2wVydjMke5SS+qtVfFNm3v2h13feTWQJ18ni72fE3wJytnNCB
+         OIwy+SZYanGUwoCLlQufQNvxE6ApCUJAEKhwFPd1kxe71w57FBg0tZzbxwyLfXbWe1
+         2r46WEmMrjCCw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Josue David Hernandez Gutierrez 
+        <josue.d.hernandez.gutierrez@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] xhci: use pm_ptr() instead of #ifdef for CONFIG_PM conditionals
+Date:   Tue, 28 Mar 2023 15:10:43 +0200
+Message-Id: <20230328131114.1296430-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20221122-mt8365-i2c-support-v6-0-e1009c8afd53@baylibre.com>
- <20221122-mt8365-i2c-support-v6-2-e1009c8afd53@baylibre.com> <945d8a82-80b3-8ae2-3b2a-7011621ad8d9@collabora.com>
-In-Reply-To: <945d8a82-80b3-8ae2-3b2a-7011621ad8d9@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Tue, 28 Mar 2023 15:10:33 +0200
-Message-ID: <CAFGrd9oV9isSmpsT7VZ6VY4VpW4RtNnM4J+t_TbRMwt7t13gRw@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] arm64: dts: mediatek: enable i2c0 for mt8365-evk board
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Qii Wang <qii.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mar. 28 mars 2023 =C3=A0 12:05, AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> a =C3=A9crit :
->
-> Il 28/03/23 11:04, Alexandre Mergnat ha scritto:
-> > Enable the I2C0 bus provides communication with:
-> > - The integrated RT9466 Switching Battery Charger.
-> > - The integrated MT6691 LP4X buck for VDDQ.
-> > - The integrated MT6691 LP4X buck for VDD2.
-> > - The pin header, to plug external I2C devices.
-> >
-> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> > ---
-> >   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 15 +++++++++++++++
-> >   1 file changed, 15 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/b=
-oot/dts/mediatek/mt8365-evk.dts
-> > index 4683704ea235..adc79ba14b33 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> > @@ -87,6 +87,13 @@ optee_reserved: optee@43200000 {
-> >       };
-> >   };
-> >
-> > +&i2c0 {
-> > +     clock-frequency =3D <100000>;
-> > +     pinctrl-0 =3D <&i2c0_pins>;
-> > +     pinctrl-names =3D "default";
-> > +     status =3D "okay";
-> > +};
-> > +
-> >   &pio {
-> >       gpio_keys: gpio-keys-pins {
-> >               pins {
-> > @@ -96,6 +103,14 @@ pins {
-> >               };
-> >       };
-> >
-> > +     i2c0_pins: i2c0-pins {
-> > +             pins {
-> > +                     bias-pull-up;
->
-> I prefer seeing pinmux first, any other properties last....
+From: Arnd Bergmann <arnd@arndb.de>
 
-Here the pinctrl binding cleanup [1]
+A recent patch caused an unused-function warning in builds with
+CONFIG_PM disabled, after the function became marked 'static':
 
-Regards,
-Alex
+drivers/usb/host/xhci-pci.c:91:13: error: 'xhci_msix_sync_irqs' defined but not used [-Werror=unused-function]
+   91 | static void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
+      |             ^~~~~~~~~~~~~~~~~~~
 
-[1]: https://lore.kernel.org/all/20230327-cleanup-pinctrl-binding-v1-0-b695=
-e32e4f2e@baylibre.com/
+This could be solved by adding another #ifdef, but as there is
+a trend towards removing CONFIG_PM checks in favor of helper
+macros, do the same conversion here and use pm_ptr() to get
+either a function pointer or NULL but avoid the warning.
+
+As the hidden functions reference some other symbols, make
+sure those are visible at compile time, at the minimal cost of
+a few extra bytes for 'struct usb_device'.
+
+Fixes: 9abe15d55dcc ("xhci: Move xhci MSI sync function to to xhci-pci")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/usb/host/xhci-pci.c | 16 +++++-----------
+ include/linux/usb.h         |  3 +--
+ include/linux/usb/hcd.h     |  2 --
+ 3 files changed, 6 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index a53ecc8ff8c5..bbbb01282038 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -728,7 +728,6 @@ static void xhci_pci_remove(struct pci_dev *dev)
+ 	usb_hcd_pci_remove(dev);
+ }
+ 
+-#ifdef CONFIG_PM
+ /*
+  * In some Intel xHCI controllers, in order to get D3 working,
+  * through a vendor specific SSIC CONFIG register at offset 0x883c,
+@@ -927,7 +926,6 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
+ 	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
+ 		pci_set_power_state(pdev, PCI_D3hot);
+ }
+-#endif /* CONFIG_PM */
+ 
+ /*-------------------------------------------------------------------------*/
+ 
+@@ -970,9 +968,7 @@ static struct pci_driver xhci_pci_driver = {
+ 
+ 	.shutdown = 	usb_hcd_pci_shutdown,
+ 	.driver = {
+-#ifdef CONFIG_PM
+-		.pm = &usb_hcd_pci_pm_ops,
+-#endif
++		.pm = pm_ptr(&usb_hcd_pci_pm_ops),
+ 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+ 	},
+ };
+@@ -980,12 +976,10 @@ static struct pci_driver xhci_pci_driver = {
+ static int __init xhci_pci_init(void)
+ {
+ 	xhci_init_driver(&xhci_pci_hc_driver, &xhci_pci_overrides);
+-#ifdef CONFIG_PM
+-	xhci_pci_hc_driver.pci_suspend = xhci_pci_suspend;
+-	xhci_pci_hc_driver.pci_resume = xhci_pci_resume;
+-	xhci_pci_hc_driver.pci_poweroff_late = xhci_pci_poweroff_late;
+-	xhci_pci_hc_driver.shutdown = xhci_pci_shutdown;
+-#endif
++	xhci_pci_hc_driver.pci_suspend = pm_ptr(xhci_pci_suspend);
++	xhci_pci_hc_driver.pci_resume = pm_ptr(xhci_pci_resume);
++	xhci_pci_hc_driver.pci_poweroff_late = pm_ptr(xhci_pci_poweroff_late);
++	xhci_pci_hc_driver.shutdown = pm_ptr(xhci_pci_shutdown);
+ 	xhci_pci_hc_driver.stop = xhci_pci_stop;
+ 	return pci_register_driver(&xhci_pci_driver);
+ }
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 9642ee02d713..d510fabcafa2 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -704,13 +704,12 @@ struct usb_device {
+ 
+ 	unsigned long active_duration;
+ 
+-#ifdef CONFIG_PM
+ 	unsigned long connect_time;
+ 
+ 	unsigned do_remote_wakeup:1;
+ 	unsigned reset_resume:1;
+ 	unsigned port_is_suspended:1;
+-#endif
++
+ 	struct wusb_dev *wusb_dev;
+ 	int slot_id;
+ 	struct usb2_lpm_parameters l1_params;
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index b51c07111729..094c77eaf455 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -488,9 +488,7 @@ extern void usb_hcd_pci_shutdown(struct pci_dev *dev);
+ 
+ extern int usb_hcd_amd_remote_wakeup_quirk(struct pci_dev *dev);
+ 
+-#ifdef CONFIG_PM
+ extern const struct dev_pm_ops usb_hcd_pci_pm_ops;
+-#endif
+ #endif /* CONFIG_USB_PCI */
+ 
+ /* pci-ish (pdev null is ok) buffer alloc/mapping support */
+-- 
+2.39.2
+
