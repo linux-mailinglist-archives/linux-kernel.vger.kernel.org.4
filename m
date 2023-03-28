@@ -2,134 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3046CC05F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B068F6CC060
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232884AbjC1NOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
+        id S233125AbjC1NOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233145AbjC1NN7 (ORCPT
+        with ESMTP id S233118AbjC1NOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:13:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC00AF27;
-        Tue, 28 Mar 2023 06:13:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EE336177E;
-        Tue, 28 Mar 2023 13:13:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71742C433D2;
-        Tue, 28 Mar 2023 13:13:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680009219;
-        bh=xDV/rnXaG4zPjSk/m3uIXh8upXUA/UdagRMunPLZZX0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uffR3YwJXzhxQ4+vkLQxrDU4I52FhGeDv29OrJuOBjMGdss6voJqf0/NmarBEu9Ti
-         dzA4h1f7lELyA+HG/jYjO459UhplolVjRfoNtPBkhGvPgNEKKALS02SxDu+9WwdvsM
-         MZvHe169bzcXUsVi0MHcbSJk0gADO37Dx52AvzJE+/ji/NuYJemsgMszbYcc6IEMtB
-         eTsbaKF8oCxs4t2tq27IZTsR/kRbZOnKatOBAkQCM43JOasPhj7w1J+zpsVbA7azav
-         dUMDAfnUKzd0d/S0IC384fiiLsqQ2hyOLgg/EO4NK+aYPI08yiJq+l3SfgK+L3En4k
-         0ZA7vFNQiFsxQ==
-Date:   Tue, 28 Mar 2023 18:43:34 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 10/12] arm64: dts: qcom: Introduce the SC8180x platform
-Message-ID: <ZCLn/m8GKVo7p/Ga@matsya>
-References: <20230325122444.249507-1-vkoul@kernel.org>
- <20230325122444.249507-11-vkoul@kernel.org>
- <bfc64e55-3c06-e36b-70cc-33a0303681be@linaro.org>
- <ZCEr5WnbvA2jkHLn@matsya>
- <5ad54197-3638-fc75-02ee-5c285fe4dabb@linaro.org>
+        Tue, 28 Mar 2023 09:14:01 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D161B458;
+        Tue, 28 Mar 2023 06:13:42 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id u10so11585846plz.7;
+        Tue, 28 Mar 2023 06:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680009222;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C9vHjCxIjnbJV+D1kIkkgMWfWHa4MSx5Br+Gi/URJXY=;
+        b=eASSDHDI/SwtNuH2zZQNURqNiP7TcxCqqOkwEvoTB6VPh9yCsDi9eQEKB9qSwZfiDu
+         t0Y5pp5a2WtAajKUVBiP/OlefYDH67ApHEbkGXEQfYUGBYQp4GzVUahT6aDH+fEcIXaL
+         WMrLt9Fn9XdseCjBzzwD9hJzCS4CDIrfRC+VSr+XNyV47h+nr6atYaSYXAdIp+b3bMYc
+         LED3SlaUpvBhOqTFdPLPCIoyFvGaC32Uucl0Vw6WnSBgPQMlRTrDBI/U79Fy5niKwx0A
+         rMQIqv38gwFYIgkJHhHYej3w+0S2wFG73gsZacVfm1qoilllZ9Wc/hvkfuPMPIBgzwWM
+         91zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680009222;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C9vHjCxIjnbJV+D1kIkkgMWfWHa4MSx5Br+Gi/URJXY=;
+        b=67DOu8IhfxkeUBX4hxC7/dtGRszeRLVhM0gUw9s7i5KGGuwj3k0v4Yt2dqtKkq3bX+
+         jXxFzySs/q97efkWqQaDLlkyNqOr622iCyNPytCoLmQzJITa7e9JKFch0ZBMX8K2KZJo
+         yJGhjZig6M48ju2t44jei6q0HWclug0NskKkGvS2OZHpQAz3EtEQAFU9JNBlh4Ln1yJO
+         CaEGtsc750FAajIDY/6YTz2sL82YB4rvc5VtNkQwDBQFoeizC/TirzG6SmrUNRYZV3IF
+         WpPhDiRGwsGf4l02uaupliioHLSyUf7+AzxQ8rAUge/LvtJbk7vmpaPwn389ptIqb4Hz
+         1WcQ==
+X-Gm-Message-State: AAQBX9eatHT7/WccnjLARSBImYVO6DUUEY3Yxt5IBqKXKngMk60r44fw
+        t0W4GAPcatMjz/7bg0DFHy4x2x2xZeK9eQ==
+X-Google-Smtp-Source: AKy350aJ+T+hdHviafYXKpyM3dcU1QV3g25fUqBprPiMOv0XbIa3xlXVbCVQ9jrzJvjk6a8A6Fj1iA==
+X-Received: by 2002:a17:903:886:b0:1a1:bcaa:aaea with SMTP id kt6-20020a170903088600b001a1bcaaaaeamr14617060plb.3.1680009221761;
+        Tue, 28 Mar 2023 06:13:41 -0700 (PDT)
+Received: from c1ion.lan ([139.227.13.23])
+        by smtp.gmail.com with ESMTPSA id io20-20020a17090312d400b001a1faeac240sm10642646plb.186.2023.03.28.06.13.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 06:13:41 -0700 (PDT)
+From:   Mingyi Cong <congmingyi@gmail.com>
+To:     linkinjeon@kernel.org, senozhatsky@chromium.org, sfrench@samba.org,
+        tom@talpey.com
+Cc:     congmingyi@gmail.com, linux-kernel@vger.kernel.org,
+        linux-cifs@vger.kernel.org
+Subject: [PATCH v3] fs: add the tuncate check of exfat
+Date:   Tue, 28 Mar 2023 21:13:34 +0800
+Message-Id: <20230328131334.5572-1-congmingyi@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAKYAXd8GzB_onCcs=2aZs0MGTy_7oGhECEdr+rcdVS+Jf2C5xQ@mail.gmail.com>
+References: <CAKYAXd8GzB_onCcs=2aZs0MGTy_7oGhECEdr+rcdVS+Jf2C5xQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5ad54197-3638-fc75-02ee-5c285fe4dabb@linaro.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27-03-23, 10:49, Konrad Dybcio wrote:
-> On 27.03.2023 07:38, Vinod Koul wrote:
-> > On 25-03-23, 13:34, Konrad Dybcio wrote:
+From: MIngyi Cong <congmingyi@gmail.com>
 
-> >>> +	cpus {
-> >>> +		#address-cells = <2>;
-> >>> +		#size-cells = <0>;
-> >>> +
-> >>> +		CPU0: cpu@0 {
-> >>> +			device_type = "cpu";
-> >>> +			compatible = "qcom,kryo485";
-> >>> +			reg = <0x0 0x0>;
-> >> Please add clocks = <&cpufreq_hw n>;
-> >>  
-> >>> +			enable-method = "psci";
-> >>> +			capacity-dmips-mhz = <602>;
-> >>> +			next-level-cache = <&L2_0>;
-> >>> +			qcom,freq-domain = <&cpufreq_hw 0>;
-> > 
-> > You mean this or something else?
-> Check
-> 
-> https://lore.kernel.org/lkml/20221102065448.GA10650@thinkpad/T/
+EXFAT will fill zero data in truncated range.
+Fix this by adding EXFAT_SUPER_MAGIC check.
 
-Good point, thanks
+Signed-off-by: MIngyi Cong <congmingyi@gmail.com>
+---
+ fs/ksmbd/smb2pdu.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> >>> +		compatible = "qcom,sc8180x-camnoc-virt";
-> >>> +		#interconnect-cells = <2>;
-> >>> +		qcom,bcm-voters = <&apps_bcm_voter>;
-> >>> +	};
-> >>> +
-> >>> +	mc_virt: interconnect-mc-virt {
-> >> Please be consistent with your naming.
-> > 
-> > Are you referring to adding -0 for this?
-> I'm not sure which is preferred (-n vs -name), there's a mixed bag
-> upstream.. Krzysztof?
-
-Either ways this should be consistent, so camnoc_virt:
-interconnect-camnoc_virt makes sense rather than arbitrary -0
-
-> >>> +		compatible = "qcom,sc8180x-mc-virt";
-> >>> +		#interconnect-cells = <2>;
-> >>> +		qcom,bcm-voters = <&apps_bcm_voter>;
-> >>> +	};
-> >>> +
-> >>> +	qup_virt: interconnect-qup-virt {
-> >>> +		compatible = "qcom,sc8180x-qup-virt";
-> >>> +		#interconnect-cells = <2>;
-> >>> +		qcom,bcm-voters = <&apps_bcm_voter>;
-> >>> +	};
-> >>> +
-> >> [...]
-> >>
-> >>> +	reserved-memory {
-> >>> +		#address-cells = <2>;
-> >>> +		#size-cells = <2>;
-> >>> +		ranges;
-> >>> +
-> >>> +		hyp_mem: hyp-region@85700000 {
-> >> the -region seems a bit unnecessary in all of these nodes
-> > 
-> > This is reserved for hyp, I think we should add it here so that we dont
-> > touch this piece..?
-> I meant the '-region' bit in the node names
-> 
-> (label: name@unit-address)
-
-ack, thanks for clearing my misunderstanding
-
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index 0685c1c77b9f..3f2e34936b8d 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -5746,7 +5746,8 @@ static int set_end_of_file_info(struct ksmbd_work *work, struct ksmbd_file *fp,
+ 	 * truncate of some filesystem like FAT32 fill zero data in
+ 	 * truncated range.
+ 	 */
+-	if (inode->i_sb->s_magic != MSDOS_SUPER_MAGIC) {
++	if (inode->i_sb->s_magic != MSDOS_SUPER_MAGIC ||
++		inode->i_sb->s_magic != EXFAT_SUPER_MAGIC) {
+ 		ksmbd_debug(SMB, "truncated to newsize %lld\n", newsize);
+ 		rc = ksmbd_vfs_truncate(work, fp, newsize);
+ 		if (rc) {
 -- 
-~Vinod
+2.34.1
+
