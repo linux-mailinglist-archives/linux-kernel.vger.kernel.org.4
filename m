@@ -2,86 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F536CC972
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BD36CC975
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjC1RiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
+        id S229554AbjC1RlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjC1Rhx (ORCPT
+        with ESMTP id S229544AbjC1RlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:37:53 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7B0D50B;
-        Tue, 28 Mar 2023 10:37:51 -0700 (PDT)
+        Tue, 28 Mar 2023 13:41:10 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AC8AF09
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:41:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=c7ay3PzfLUlKczzYKFS0hIWxG5cR/FUCy4TCuFGv3qg=; b=PeenjWv1jMr3I+rMLnHAOXi8Ov
-        LpHwi74bFLig9FY8+yCpUh5rs4nDlcpMFFb/PK6vIz7iga4gtSTxpW+2RAZXIIML3GWHgZ0cE0Glv
-        2BjSFL7OS7hk0QmHUjjRT+u62r95HSe3G31uOvz6fv0UgkQ+EJcPtrY+TvqRS0J52ciZl8nC7eR8V
-        iXYAsHhqjmj6IH4hVi6V1WIs4zyrbh2weILUMkDfuUU0/yb0K6ySz7HzDlyYCmvK8LHuLbsW3GRyw
-        0RPJvWB8LsA1xKCLyzMLB621XHfks0lbQa69mKbudJShGX860rTEOWYlgtAGoe3QD4EcCxpz58HHC
-        6SXRMklQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1phDFx-008d3L-CI; Tue, 28 Mar 2023 17:37:13 +0000
-Date:   Tue, 28 Mar 2023 18:37:13 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Song Liu <song@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-modules@vger.kernel.org,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        Daniel Gomez <da.gomez@samsung.com>,
-        "kbus >> Keith Busch" <kbusch@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
-Message-ID: <ZCMlyUewrAjTBb5i@casper.infradead.org>
-References: <20230308094106.227365-1-rppt@kernel.org>
- <20230308094106.227365-2-rppt@kernel.org>
- <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
- <ZB6W1C88TU6CcjJH@kernel.org>
- <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
- <ZCKIX3de5AZfGggK@kernel.org>
- <ZCKZuXxq38obmYpn@dhcp22.suse.cz>
- <ZCMDmHSqOeCj1EIo@kernel.org>
- <CAB=NE6UTC4VkNM57GGJ3XkG_PWLkMfXv2e2=yQJhtM6Fc-uMsQ@mail.gmail.com>
+        bh=XA3V/SqCMK03TX/XK2Fih6eGxCHfmkEQA7ESYIGi5Fk=; b=wSBhrhYnvDL1WlDW+LBAElxarl
+        ZR2NCQ2dBSyG9IhbY5oWyVLJGh0Yc3uNJZ7hiV3EiTSqux8Fa/936yvG4bjeQ3F6+auHlCsNZYe2j
+        UWqkpvzzMvld0VUXKopREQfYoOAn5GBnLiISGA3Mv1vqRtqBVrNuLGUTDBkJ6cXz8cUOy/1XfPdi8
+        m2j/hLjPyWNp+m5ShslGKL+X4ndyaaHFZj+PraJxfT6esn+4g9Ms49NZFXVE2W0vLjWco1U4SZDIB
+        eNvtI97S8YJpvgWbXEm4hcReX9tq9JhmM4Bhg3FW9yboPKIkJMPXwSc/nGazL2qODu3KJYjQXBfVe
+        LgdAEKZA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1phDJe-00FLag-0g;
+        Tue, 28 Mar 2023 17:41:02 +0000
+Date:   Tue, 28 Mar 2023 10:41:02 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     Dominique Martinet <asmadeus@codewreck.org>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jeff Layton <jlayton@kernel.org>, lucho@ionkov.net,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Amir Goldstein <amir73il@gmail.com>,
+        Pankaj Raghav <p.raghav@samsung.com>
+Subject: Re: 9p caching with cache=loose and cache=fscache
+Message-ID: <ZCMmrnmZFcH65Orp@bombadil.infradead.org>
+References: <ZA0FEyOtRBvpIXbi@bombadil.infradead.org>
+ <ZCHU6k56nF5849xj@bombadil.infradead.org>
+ <ZCJRlqc/epbRhm93@codewreck.org>
+ <2391219.DQnbcWml7j@silver>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAB=NE6UTC4VkNM57GGJ3XkG_PWLkMfXv2e2=yQJhtM6Fc-uMsQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <2391219.DQnbcWml7j@silver>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 10:18:50AM -0700, Luis Chamberlain wrote:
-> differences with eBPF programs is that modules *can* be rather large
-> in size. What is the average size of modules? Well let's take a look:
+On Tue, Mar 28, 2023 at 01:53:49PM +0200, Christian Schoenebeck wrote:
+> Hi Luis,
 > 
-> mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
-> -name \*.ko| wc -l
-> 9173
+> not sure which QEMU wiki page you are referring to. AFAIK we currently have 3
+> QEMU wiki pages concerning 9p:
+> 
+> 1. 9p documentation for users:
+> https://wiki.qemu.org/Documentation/9psetup
 
-ummm ... wc -c, surely?
+It was this one. I hadn't looked at the other ones.
 
-> mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
-> -name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
-> -$((9173-5)) | awk 'BEGIN {sum=0} {sum+=$1} END {print sum/NR/1024}'
-> 160.54
+> 2. 9p documentation for developers only:
+> https://wiki.qemu.org/Documentation/9p
+> 
+> 3. How to setup an entire guest on top of a 9p root filesystem:
+> https://wiki.qemu.org/Documentation/9p_root_fs
+> 
+> Only the latter wiki page mentions cache=loose at all:
+> 
+>   "To speedup things you can also consider to use e.g. cache=loose instead. 
+>    That will deploy a filesystem cache on guest side and reduces the amount
+>    of 9p requests to hosts. As a consequence however guest might not 
+>    immediately see file changes performed on host side. So choose wisely upon
+>    intended use case scenario. You can change between cache=mmap or e.g.
+>    cache=loose at any time."
+> 
+> Which I now changed to:
+> 
+>   "To speedup things you can also consider to use e.g. cache=loose instead.
 
-... which invalidates all of these.
+My experience is that cache=loose is totally useless.
+
+>    That will deploy a filesystem cache on guest side and reduces the amount of
+>    9p requests to hosts. As a consequence however guest might not see file
+>    changes performed on host side *at* *all*
+
+I think that makes it pretty useless, aren't most setups on the guest read-only?
+
+It is not about "may not see", just won't. For example I modified the
+Makefile and compiled a full kernel and even with those series of
+changes, the guest *minutes later* never saw any updates.
+
+> (as Linux kernel's 9p client 
+>    currently does not revalidate for fs changes on host side at all, which is
+>    planned to be changed on Linux kernel side soon though). So choose wisely
+>    upon intended use case scenario. You can change between cache=mmap or e.g.
+>    cache=loose at any time."
+> 
+> On the user page it was already clearly mentioned though:
+> 
+>   "Mount the shared folder on guest using
+> 
+>       mount -t 9p -o trans=virtio test_mount /tmp/shared/ -oversion=9p2000.L,posixacl,msize=104857600,cache=none
+> 
+>   In the above example the folder /home/guest/9p_setup/ shared of the host
+>   is shared with the folder /tmp/shared on the guest. We use no cache because
+>   current caching mechanisms need more work and the results are not what you
+>   would expect."
+
+I got a wiki account now and I was the one who had clarified this.
+
+  Luis
