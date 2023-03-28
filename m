@@ -2,111 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A426CB8AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249CC6CB8AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbjC1HvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 03:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
+        id S230093AbjC1Hut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 03:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232532AbjC1HvC (ORCPT
+        with ESMTP id S232144AbjC1Huq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 03:51:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947A83C24
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679989760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8slMBXaX5tKJuNxDkb5aHuL3vFrJ6coZs8pJFAMGiK0=;
-        b=fdC5SZ8pyg4ek1F+5re7IwEvmVuiYm7pykharUak6CMJ88ofewDVcrGpBHxeT/Wg30MgP8
-        cixnorjDcvH8UM8OHyn4QSDjd3KQ44Cx8SnYEY0wD/HCEOwlnLoVmOyteo3C3SyXn7kOnl
-        bcjN0m6kHqSxuLNEfXdXMdiHIjDqJac=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-155-S1U-sEedNAmYkFR8ydSW7w-1; Tue, 28 Mar 2023 03:49:16 -0400
-X-MC-Unique: S1U-sEedNAmYkFR8ydSW7w-1
-Received: by mail-qt1-f199.google.com with SMTP id h6-20020ac85846000000b003e3c23d562aso7633880qth.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:49:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679989756;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Tue, 28 Mar 2023 03:50:46 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2504D420A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:50:13 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id u11-20020a05600c19cb00b003edcc414997so6731342wmq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679989809;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8slMBXaX5tKJuNxDkb5aHuL3vFrJ6coZs8pJFAMGiK0=;
-        b=GFTevY/WDRpGuuLZLsihxeZ6ChO7gjsqE5l7xEOeT0QDi3vrVlk1ruHWWCCODoclSY
-         yvhSy8DpYpey1bIdl10rq3rkT0hgB5CW86WJPQFla2IuCflIcXLDf16lSbGjq24cfp7E
-         0GTdcbFKk8NUWOHP0wG+1cL27OLb9aktKm017hY1eWoEvSX5+IXEOJS/lE0WyQkeEGM4
-         mkm8t3H0ukq71m3Y4ar5gWlnUa0k0maqzluvtYTeZ6bGnNgJaa19gKsHtA88s8vxorP5
-         HU4Fj+q652ciF01oW4oEXXKhhwrEn8ly8+RSzCgGe5++XOw5j7StIWKHX7Fbig0cZAXb
-         1R3g==
-X-Gm-Message-State: AAQBX9fL2c0MOY/Ucnl2D71NFHar6HhlBNEIKQqsTn6a/sMVFtFMu1V8
-        LMN94ztwQZJBVhLTxqrRKv5LLpIS5asnuPB5u2b9CQ0l1UCREPW+4qIYVBJQgGaz9PwOmDk/Bca
-        y/CIN3EnHyJPO40ybac8UIxhZ
-X-Received: by 2002:a05:622a:2c1:b0:3e4:e8be:c3a4 with SMTP id a1-20020a05622a02c100b003e4e8bec3a4mr11464855qtx.56.1679989756323;
-        Tue, 28 Mar 2023 00:49:16 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ail0lTX7WFSmqdfltJySh8ck2FEvfITqls1VGpUAH8boD39DgywjVABQBk7ihF++gBl2ur+A==
-X-Received: by 2002:a05:622a:2c1:b0:3e4:e8be:c3a4 with SMTP id a1-20020a05622a02c100b003e4e8bec3a4mr11464840qtx.56.1679989756097;
-        Tue, 28 Mar 2023 00:49:16 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-53-134-98.retail.telecomitalia.it. [82.53.134.98])
-        by smtp.gmail.com with ESMTPSA id x6-20020ac86b46000000b003e4e7e89828sm1491267qts.20.2023.03.28.00.49.13
+        bh=SChvSSb/SRcsLKxwF2svsDucGRCoUm07182sZYmBoNM=;
+        b=oj5Mdf2jkdk5NhG/RmJvDPSKUWbt8I4xdd/RR3JnfnBFAx3J54bf7VzK2Y3pw0NswH
+         rU5AYkv8jYtKHoTGF3ySrsJHBEf2OpbTlflgeXDOexiD2gH456ytvZ9C6TBZlmxtIkyH
+         7l+lh7abddcsUUj2tryK4rGg06QVfcOk9TvygRKfMXOX6IIGfhYPTCp9Cu7J6o1EBd4e
+         040ae/MRjkjLB6ZxeUbVt7a0inP8xsoesHZIuRqbHc0LAYNeQzNEFNZlJ/UdpfdUzmBl
+         dVVCbbNSwl9L1TbrGRFc6ithCohZzunH7YAy+fK+7R3yffRNmYq47+FyhBD4OCLRqWQ9
+         UFyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679989809;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SChvSSb/SRcsLKxwF2svsDucGRCoUm07182sZYmBoNM=;
+        b=ADP2aDpCvm2sBrIIGIN/3fejcWb1kMF0UbOXZw9YcfxchtpG7iVH+iaeGLx8kKB+CD
+         fo1oCWRZlLetTFvDEHW8OsdXTp2Ka3DsftrY9r0LEv0QpFNH2Zsq3CZlKXaBy4nQCTkJ
+         lnM74boyPgAPT65E5snrBm10uSv0LByS7ZPJMZ5Zgeg9ODN98XKeKzbR5PF26nvFu6yD
+         d3BlzACCsraUIiwc4/GiifvT23psLcdKQDd+qv75olQ6ZntBQuDsVm0YtPclT0UAO08/
+         V0zHz/clvc7HhlyJS54jccihABSbb55R1md5b9XdyjUjo4AJHtAP/SBLZWtqbrzg50mA
+         DNOw==
+X-Gm-Message-State: AO0yUKVfypbsjb0Z/5pgwZBzz/8WG9niSDpt2BGNQxfhyFln1NaEsAHh
+        OVdbOnIBn/Jgfwm43J0TWIawI/Fhdu0v1m+4KZbZt1Jn
+X-Google-Smtp-Source: AK7set/L/mW1tAj1qo5ca5xnWMQ4csh1yJ7NP0m5e6IY+5PLNs11lRdHsi5Y6cgsmIrZinxOjMKR6g==
+X-Received: by 2002:a05:600c:22d4:b0:3ed:b56c:9496 with SMTP id 20-20020a05600c22d400b003edb56c9496mr11274673wmg.31.1679989809280;
+        Tue, 28 Mar 2023 00:50:09 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id w2-20020a5d6802000000b002cfe687fc7asm26827310wru.67.2023.03.28.00.50.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 00:49:15 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 09:49:10 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        Paolo Abeni <pabeni@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] testing/vsock: add vsock_perf to gitignore
-Message-ID: <w5lm46kj3wfxzscga6333b6bw26lgzqmlkb675px6ya23ysym4@mqt33kghsp7z>
-References: <20230327-vsock-add-vsock-perf-to-ignore-v1-1-f28a84f3606b@bytedance.com>
+        Tue, 28 Mar 2023 00:50:08 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230327170222.4107746-1-robh@kernel.org>
+References: <20230327170222.4107746-1-robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: soc: amlogic: Drop unneeded quotes
+Message-Id: <167998980857.903588.15028659186028325608.b4-ty@linaro.org>
+Date:   Tue, 28 Mar 2023 09:50:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230327-vsock-add-vsock-perf-to-ignore-v1-1-f28a84f3606b@bytedance.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 10:16:06PM +0000, Bobby Eshleman wrote:
->This adds the vsock_perf binary to the gitignore file.
->
->Fixes: 8abbffd27ced ("test/vsock: vsock_perf utility")
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->---
-> tools/testing/vsock/.gitignore | 1 +
-> 1 file changed, 1 insertion(+)
+Hi,
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+On Mon, 27 Mar 2023 12:02:22 -0500, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+> 
+> 
 
->
->diff --git a/tools/testing/vsock/.gitignore b/tools/testing/vsock/.gitignore
->index 87ca2731cff9..a8adcfdc292b 100644
->--- a/tools/testing/vsock/.gitignore
->+++ b/tools/testing/vsock/.gitignore
->@@ -2,3 +2,4 @@
-> *.d
-> vsock_test
-> vsock_diag_test
->+vsock_perf
->
->---
->base-commit: e5b42483ccce50d5b957f474fd332afd4ef0c27b
->change-id: 20230327-vsock-add-vsock-perf-to-ignore-82b46b1f3f6f
->
->Best regards,
->-- 
->Bobby Eshleman <bobby.eshleman@bytedance.com>
->
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.4/drivers)
+
+[1/1] dt-bindings: soc: amlogic: Drop unneeded quotes
+      https://git.kernel.org/amlogic/c/1b61fdfdd656b3940cff24c25c211777389174b0
+
+These changes has been applied on the intermediate git tree [1].
+
+The v6.4/drivers branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
+
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
+
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+-- 
+Neil
 
