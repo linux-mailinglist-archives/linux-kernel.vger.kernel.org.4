@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4584D6CCB13
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE16D6CCB1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjC1T6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 15:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S229926AbjC1T7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 15:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjC1T6h (ORCPT
+        with ESMTP id S229742AbjC1T6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 15:58:37 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092873C07
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:58:02 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id l27so13423348wrb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:58:02 -0700 (PDT)
+        Tue, 28 Mar 2023 15:58:38 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E2B1BC6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:58:03 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id e18so13401053wra.9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:58:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680033481;
+        d=bytedance.com; s=google; t=1680033482;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PYvh1s2ZCo/2BwztG9fqIEjBvGQeOoHd9NlNhXt+v68=;
-        b=k8IGY8FXbInHectY0rZvxlmn9L+tWhj0zGMBI7O8Ql7u5Z4ceqiRTB2gFHXzX2MGac
-         11Z1JyFHrbV8fvIa+MAjKzA7iwoBsywMYXQmCkw1YR9M/QCiAyPisYIf4KnzupN1aUem
-         dp8cS3tDEW7nzZxeIPhDTU4ElIXhJxIq0aVNmA02eRT7Ce93WjhGheAezSTwl3W6MPEZ
-         hmsobvHyyWuFgl6GiC+yg1kK6M+/utjCkVtO4wdmAf/UGD63kd09EGWJnfQxbrAt9pmu
-         y6fATlkNrGrpADFnsb/jR/Eo/Qmk8HCJuuDAM+66SjQKUCjmusTD7fvQuvwUhUyXARQk
-         nwPg==
+        bh=XHD5cN+9NG2teoVVuOSus5vfOKvUrEkkcqEu7E43kuM=;
+        b=ZWbGy/qB9O4uIXmbnFJPzgndZVBdjQ7fRWg0uO8JRvcFhlus0uhdFK85yQMon2+hSO
+         Ih2Wuad+2T/mmT1ReIQ8AzXzEN4Hxo/5h5gvFLl/p9mYvN1NUYN/NNqXtZlRqcLhiAGd
+         bK4JNMc7njvwdLhuMUDHpOQImnYK+97PG5LALvKK5WqgXgLC4EzHEGyk3E8j07YoebtM
+         8N/QPVWvNnKs5om6hiI2QilQDcUi29GH4R+a6NFfomkEIZ8PeFU3l5xDhAtNZYFRoo2K
+         fWKRYD4KdIaWpHtqTqbLn214mh6hCmJG67hDxryH+ErkUnM+o5jnnRs7F6+DfSLVp/t8
+         rY7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680033481;
+        d=1e100.net; s=20210112; t=1680033482;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PYvh1s2ZCo/2BwztG9fqIEjBvGQeOoHd9NlNhXt+v68=;
-        b=c7Utn8x9x3MntLPOcwcoagYX5ImxqLpZFXwtRboku6lGXgm7sQiPIgR1J8cdNUrNTX
-         POE04LBIDwPp/k4SUffvWrEYTRtxJnckRIKJnaTZL3wnB57WohUys8IRLnujUyz70pyu
-         +vQMgcYZ1lP3DTgXH+OqZN13sFkooRkJANX3p/jaFcQJNFpZ5C3FB/6dnEfzOSOE51J8
-         PO8KLipC6K2hCnQzvhoOhNBkKLOE1foNy44FRxZhHBXDK8dR4BV+X/mj2gJAvJvyhgVY
-         VFtex9R4HE9t5PAPD8PSIkUCfaIJREvezZhbdhNDmHy9SQZ7jzEfivFUrkpa0e400hZa
-         zykg==
-X-Gm-Message-State: AAQBX9dKLolVlGv2WSdc+piXCipy5GSnuThSF3QhCmz099P+rpwLH3gV
-        hOG8h2u14UjDnX1EROR1FzqyTQ==
-X-Google-Smtp-Source: AKy350Y5RvAESxe4hLG/sTeNGiybz+f/imU5YRREC5r9As0LNEwIOPdnGUldjcK/izlEsaSCOMvdsg==
-X-Received: by 2002:adf:f982:0:b0:2d6:5afe:7b99 with SMTP id f2-20020adff982000000b002d65afe7b99mr14282352wrr.10.1680033481472;
-        Tue, 28 Mar 2023 12:58:01 -0700 (PDT)
+        bh=XHD5cN+9NG2teoVVuOSus5vfOKvUrEkkcqEu7E43kuM=;
+        b=K4LfehT05lO5egFOds2IrLD5ohqRjtOTOKNSw6zLm7J7QCUjWQFejFxQtYnieubay5
+         Jn0qDG5LBsmt4svmsXjmXubUO1T6InPwjLjQogeVFZzgX2sS0W9gPNcU8X5SNlhlpfFI
+         ZLOlldb+6GZWSVjutooWS2bdgvMuo05wCiL7lvD7wapIIpwsGJSBFoXBO9UdEUqMAjGX
+         VxzN0m57cHWlO974jsMb6FoxCByqGT6Y4GZvbqV+hbrUe0TLEpyQ57CzC/lcIRYyFLT/
+         kZqn2cWz4+uHSkQq5uGSbx/+fHlN9O1jsInELA6yg4WZPgTLSTEPNVMGF7N3jkw1qH9u
+         l6KA==
+X-Gm-Message-State: AAQBX9fI+X/x2i27anq0PMEZcjF3pRzFD6z5UWbOAyMICmf63C6ml5QM
+        3sF0k2IJYgUyIJ27yw1zy9ragw==
+X-Google-Smtp-Source: AKy350a+CkM599ZmoWKEKahYxx4p6YM4cZDHr6OxnnBGr3OOYOjDokmLrgjI/ZkKjBeWoPEYwQ+P+w==
+X-Received: by 2002:a05:6000:542:b0:2d1:7ade:aad with SMTP id b2-20020a056000054200b002d17ade0aadmr13593380wrf.31.1680033482442;
+        Tue, 28 Mar 2023 12:58:02 -0700 (PDT)
 Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:8445:3123:91d7:959d])
-        by smtp.gmail.com with ESMTPSA id z6-20020a056000110600b002c557f82e27sm28248386wrw.99.2023.03.28.12.58.00
+        by smtp.gmail.com with ESMTPSA id z6-20020a056000110600b002c557f82e27sm28248386wrw.99.2023.03.28.12.58.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 12:58:00 -0700 (PDT)
+        Tue, 28 Mar 2023 12:58:02 -0700 (PDT)
 From:   Usama Arif <usama.arif@bytedance.com>
 To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
         brgerst@gmail.com
@@ -63,11 +63,10 @@ Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
         fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
         simon.evans@bytedance.com, liangma@liangbit.com,
         gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
         Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH v17 1/8] cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
-Date:   Tue, 28 Mar 2023 20:57:51 +0100
-Message-Id: <20230328195758.1049469-2-usama.arif@bytedance.com>
+Subject: [PATCH v17 2/8] cpu/hotplug: Reset task stack state in _cpu_up()
+Date:   Tue, 28 Mar 2023 20:57:52 +0100
+Message-Id: <20230328195758.1049469-3-usama.arif@bytedance.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230328195758.1049469-1-usama.arif@bytedance.com>
 References: <20230328195758.1049469-1-usama.arif@bytedance.com>
@@ -84,66 +83,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-Instead of relying purely on the special-case wrapper in bringup_cpu()
-to pass the idle thread to __cpu_up(), expose idle_thread_get() so that
-the architecture code can obtain it directly when necessary.
+Commit dce1ca0525bf ("sched/scs: Reset task stack state in bringup_cpu()")
+ensured that the shadow call stack was reset and KASAN poisoning removed
+from a CPU's stack each time that CPU is brought up, not just once.
 
-This will be useful when the existing __cpu_up() is split into multiple
-phases, only *one* of which will actually need the idle thread.
+This is not incorrect. However, with parallel bringup, an architecture
+may obtain the idle thread for a new CPU from a pre-bringup stage, by
+calling idle_thread_get() for itself. This would mean that the cleanup
+in bringup_cpu() would be too late.
 
-If the architecture code is to register its new pre-bringup states with
-the cpuhp core, having a special-case wrapper to pass extra arguments is
-non-trivial and it's easier just to let the arch register its function
-pointer to be invoked with the standard API.
+Move the SCS/KASAN cleanup to the generic _cpu_up() function instead,
+which already ensures that the new CPU's stack is available, purely to
+allow for early failure. This occurs when the CPU to be brought up is
+in the CPUHP_OFFLINE state, which should correctly do the cleanup any
+time the CPU has been taken down to the point where such is needed.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
-Tested-by: Kim Phillips <kim.phillips@amd.com>
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 Reviewed-by: Mark Rutland <mark.rutland@arm.com>
 Tested-by: Mark Rutland <mark.rutland@arm.com> [arm64]
 ---
- include/linux/smpboot.h | 7 +++++++
- kernel/smpboot.h        | 2 --
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ kernel/cpu.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/smpboot.h b/include/linux/smpboot.h
-index 9d1bc65d226c..3862addcaa34 100644
---- a/include/linux/smpboot.h
-+++ b/include/linux/smpboot.h
-@@ -5,6 +5,13 @@
- #include <linux/types.h>
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 6c0a92ca6bb5..43e0a77f21e8 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -591,12 +591,6 @@ static int bringup_cpu(unsigned int cpu)
+ 	struct task_struct *idle = idle_thread_get(cpu);
+ 	int ret;
  
- struct task_struct;
+-	/*
+-	 * Reset stale stack state from the last time this CPU was online.
+-	 */
+-	scs_task_reset(idle);
+-	kasan_unpoison_task_stack(idle);
+-
+ 	/*
+ 	 * Some architectures have to walk the irq descriptors to
+ 	 * setup the vector space for the cpu which comes online.
+@@ -1383,6 +1377,12 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen, enum cpuhp_state target)
+ 			ret = PTR_ERR(idle);
+ 			goto out;
+ 		}
 +
-+#ifdef CONFIG_GENERIC_SMP_IDLE_THREAD
-+struct task_struct *idle_thread_get(unsigned int cpu);
-+#else
-+static inline struct task_struct *idle_thread_get(unsigned int cpu) { return NULL; }
-+#endif
-+
- /* Cookie handed to the thread_fn*/
- struct smpboot_thread_data;
++		/*
++		 * Reset stale stack state from the last time this CPU was online.
++		 */
++		scs_task_reset(idle);
++		kasan_unpoison_task_stack(idle);
+ 	}
  
-diff --git a/kernel/smpboot.h b/kernel/smpboot.h
-index 34dd3d7ba40b..60c609318ad6 100644
---- a/kernel/smpboot.h
-+++ b/kernel/smpboot.h
-@@ -5,11 +5,9 @@
- struct task_struct;
- 
- #ifdef CONFIG_GENERIC_SMP_IDLE_THREAD
--struct task_struct *idle_thread_get(unsigned int cpu);
- void idle_thread_set_boot_cpu(void);
- void idle_threads_init(void);
- #else
--static inline struct task_struct *idle_thread_get(unsigned int cpu) { return NULL; }
- static inline void idle_thread_set_boot_cpu(void) { }
- static inline void idle_threads_init(void) { }
- #endif
+ 	cpuhp_tasks_frozen = tasks_frozen;
 -- 
 2.25.1
 
