@@ -2,130 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7006CC2E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6656CC314
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233360AbjC1Otb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
+        id S233467AbjC1OvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233353AbjC1OtH (ORCPT
+        with ESMTP id S233439AbjC1Oup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:49:07 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42996D530
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:48:42 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 0BCE020FD938; Tue, 28 Mar 2023 07:48:34 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0BCE020FD938
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1680014914;
-        bh=8VO+3ed6W3NzNNMpeJI1EmLS7SCE8p0W/8ziHHb1e+Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NPuxrTDCuw3QPzXY4ESNCtJHM9Jw95vPNfr3qTN22QHtW9MsVj8E6fx+KDSkLY+1s
-         OqlhKqR9eUGwnkJni3eR1Vi3t4WwiWVZJvO0Z//HfIytjZpCvWfUDCzTJH1u/dYSUw
-         KlIBrQNnyWUhK0BUZZKB1hw1DABJrdiIAz8mvts0=
-Date:   Tue, 28 Mar 2023 07:48:34 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        johan+linaro@kernel.org, isaku.yamahata@intel.com,
-        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
-        andriy.shevchenko@intel.com
-Subject: Re: [PATCH v2] x86/ioapic: Don't return 0 from
- arch_dynirq_lower_bound()
-Message-ID: <20230328144834.GA17868@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1679988604-20308-1-git-send-email-ssengar@linux.microsoft.com>
- <3D028B51-35D7-435F-B912-DC5C0D6C36C6@zytor.com>
+        Tue, 28 Mar 2023 10:50:45 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12714E385;
+        Tue, 28 Mar 2023 07:50:19 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id i6so15394315ybu.8;
+        Tue, 28 Mar 2023 07:50:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680015019;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NiDQyAXhgWCz4KK2SHpIkYv9FCWP7ln2+V7AJtildZ4=;
+        b=oAx3D/IZESQgWeH5/u7nYGbo3gkv70eejPKpr225Vmm66knBU37kofn38W0AKNTGn+
+         x/4pe7fBnIOnazHzKhbu6Ov5SemHVPLZ5WRkKoPINymk8S2yHH5bV1lkGMp9/e8wm+9e
+         Y3KBOmQqODrOdVZqBIOHqzn1IBWbj8UW4B5FlSG8rnPhp8q57ROI3jH3S+3tFs2ypn/V
+         RxNJlGeedBXxyUI2yigo/mGPdA42ft2WLnjpKusmgIbJTrSW+6vkaNEmum49ezotR90m
+         IMZJkGXyS/+7+9E29GIYE1FWPLIrp9vpUPTLsa96ngE8zi6nTtfJ8ypIXrwsPvk0Fxfi
+         jibw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680015019;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NiDQyAXhgWCz4KK2SHpIkYv9FCWP7ln2+V7AJtildZ4=;
+        b=OW9Wzr4RoiVWOBqsnWu8q75px0DHS20FGkT6iQGHyrCJ0v+00VVUNBKHveVV7cXtAE
+         4UTx3PO1ym8grzs/sWcKxWNz9+/cp2QOnJ3+zvS/nrMcGmZFLTXakdZncy/4m0EQc8Zo
+         fToyWTjwnuYnuo0xK0GsnGW/r72XEKxgeqk8+DFvBdC0vQxzwkN6+t3U40yOIEXI5Ji6
+         c7/oskmzfkbyO49PYZXQ3zo4okBcjuLSc/KcRib2LhSAyId+nL9Lfqq6n4fHZ6DH1Qh1
+         8JU1yBnMWa146/4cavkvstAJ03DhX2HEQDWWRlggLcRl9db+LOXurJb7grhLbFk1XhnS
+         vGuA==
+X-Gm-Message-State: AAQBX9dWR4bJ8UtwDPGBko3SYf82S8W/s9e7aCq49zS/eCkXIjRA4up0
+        me6frmt8EnHimOurys1aZUU=
+X-Google-Smtp-Source: AKy350ZIHS0JDgLGX9+NMLarjPoffiIgQyFp/HsmWdcvG5BWLOJWQI7cUPnqyiUWvUooG8byHw3i+w==
+X-Received: by 2002:a25:468a:0:b0:b3d:5a52:5c6b with SMTP id t132-20020a25468a000000b00b3d5a525c6bmr18947517yba.21.1680015018888;
+        Tue, 28 Mar 2023 07:50:18 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o137-20020a25418f000000b00b7767ca7496sm2938471yba.51.2023.03.28.07.50.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 07:50:18 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 28 Mar 2023 07:50:16 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        konrad.dybcio@linaro.org, wim@linux-watchdog.org,
+        agross@kernel.org, andersson@kernel.org,
+        saiprakash.ranjan@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2] dt-bindings: watchdog: Document Qualcomm SM6115
+ watchdog
+Message-ID: <501ab5b8-568f-43d4-8121-b888cc49cb50@roeck-us.net>
+References: <20230314051351.1754321-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3D028B51-35D7-435F-B912-DC5C0D6C36C6@zytor.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230314051351.1754321-1-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 06:59:04AM -0700, H. Peter Anvin wrote:
-> On March 28, 2023 12:30:04 AM PDT, Saurabh Sengar <ssengar@linux.microsoft.com> wrote:
-> >arch_dynirq_lower_bound() is invoked by the core interrupt code to
-> >retrieve the lowest possible Linux interrupt number for dynamically
-> >allocated interrupts like MSI.
-> >
-> >The x86 implementation uses this to exclude the IO/APIC GSI space.
-> >This works correctly as long as there is an IO/APIC registered, but
-> >returns 0 if not. This has been observed in VMs where the BIOS does
-> >not advertise an IO/APIC.
-> >
-> >0 is an invalid interrupt number except for the legacy timer interrupt
-> >on x86. The return value is unchecked in the core code, so it ends up
-> >to allocate interrupt number 0 which is subsequently considered to be
-> >invalid by the caller, e.g. the MSI allocation code.
-> >
-> >The function has already a check for 0 in the case that an IO/APIC is
-> >registered, but ioapic_dynirq_base is 0 in case of device tree setups.
-> >
-> >Consolidate this and zero check for both ioapic_dynirq_base and gsi_top,
-> >which is used in the case that no IO/APIC is registered.
-> >
-> >Fixes: 3e5bedc2c258 ("x86/apic: Fix arch_dynirq_lower_bound() bug for DT enabled machines")
-> >Co-developed-by: Thomas Gleixner <tglx@linutronix.de>
-> >Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> >Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> >Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
-> >Cc: Thomas Gleixner <tglx@linutronix.de>
-> >---
-> >[V2]
-> >- Edit commit message
-> >- Consolidated the 0 check for ioapic_dynirq_base as well
-> >
-> > arch/x86/kernel/apic/io_apic.c | 14 +++++++++-----
-> > 1 file changed, 9 insertions(+), 5 deletions(-)
-> >
-> >diff --git a/arch/x86/kernel/apic/io_apic.c b/arch/x86/kernel/apic/io_apic.c
-> >index 1f83b052bb74..f980b38b0227 100644
-> >--- a/arch/x86/kernel/apic/io_apic.c
-> >+++ b/arch/x86/kernel/apic/io_apic.c
-> >@@ -2477,17 +2477,21 @@ static int io_apic_get_redir_entries(int ioapic)
-> > 
-> > unsigned int arch_dynirq_lower_bound(unsigned int from)
-> > {
-> >+	unsigned int ret;
-> >+
-> > 	/*
-> > 	 * dmar_alloc_hwirq() may be called before setup_IO_APIC(), so use
-> > 	 * gsi_top if ioapic_dynirq_base hasn't been initialized yet.
-> > 	 */
-> >-	if (!ioapic_initialized)
-> >-		return gsi_top;
-> >+	ret = ioapic_dynirq_base ? : gsi_top;
-> >+
-> > 	/*
-> >-	 * For DT enabled machines ioapic_dynirq_base is irrelevant and not
-> >-	 * updated. So simply return @from if ioapic_dynirq_base == 0.
-> >+	 * For DT enabled machines ioapic_dynirq_base is irrelevant and
-> >+	 * always 0. gsi_top can be 0 if there is no IO/APIC registered.
-> >+	 * 0 is an invalid interrupt number for dynamic allocations. Return
-> >+	 * @from instead.
-> > 	 */
-> >-	return ioapic_dynirq_base ? : from;
-> >+	return ret ? : from;
-> > }
-> > 
-> > #ifdef CONFIG_X86_32
+On Tue, Mar 14, 2023 at 10:43:51AM +0530, Bhupesh Sharma wrote:
+> Add devicetree binding for watchdog present on Qualcomm
+> SM6115 SoC.
 > 
-> Is there any reason why this variable can't be initialized to a fixed nonzero number, like 16?
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 
-Yes, initializing gst_top to any non-zero value should fix this issue.
-At first I thought to intialize gst_top to 1. But then I looked at how
-the ioapic_dynirq_base case is handled and followed a similar approach.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Regards,
-Saurabh
+Guenter
