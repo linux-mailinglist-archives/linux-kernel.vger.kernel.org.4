@@ -2,91 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AED06CB7FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB42E6CB802
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjC1H1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 03:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
+        id S230331AbjC1H1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 03:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjC1H05 (ORCPT
+        with ESMTP id S229497AbjC1H1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 03:26:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D4602111;
-        Tue, 28 Mar 2023 00:26:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 36E71C14;
-        Tue, 28 Mar 2023 00:27:40 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8FEF73F73F;
-        Tue, 28 Mar 2023 00:26:54 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 08:26:47 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, sudeep.holla@arm.com,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
-        nicola.mazzucato@arm.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH 1/2] dt-bindings: firmware: arm,scmi: Support mailboxes
- unidirectional channels
-Message-ID: <ZCKWt0FpSguUgUel@e120937-lin>
-References: <20230327140342.222168-1-cristian.marussi@arm.com>
- <20230327140342.222168-2-cristian.marussi@arm.com>
- <dd8d1503-e2bf-7032-4d0a-16d9a5b2aa51@linaro.org>
- <ZCG154hlWbLMAzIi@e120937-lin>
- <1838b760-c911-cb0a-184e-150df2f86c3b@linaro.org>
+        Tue, 28 Mar 2023 03:27:46 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03682C1;
+        Tue, 28 Mar 2023 00:27:45 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 446108117;
+        Tue, 28 Mar 2023 07:27:44 +0000 (UTC)
+Date:   Tue, 28 Mar 2023 10:27:43 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Andrew Davis <afd@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC 1/2] ARM: dts: omap: Drop ti,omap36xx compatible
+Message-ID: <20230328072743.GP7501@atomide.com>
+References: <20230216153339.19987-1-afd@ti.com>
+ <20230216153339.19987-2-afd@ti.com>
+ <20230327211838.580af7a9@aktux>
+ <20230328050115.GI7501@atomide.com>
+ <20230328090603.317196c7@aktux>
+ <20230328070844.GN7501@atomide.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1838b760-c911-cb0a-184e-150df2f86c3b@linaro.org>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230328070844.GN7501@atomide.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 08:36:51AM +0200, Krzysztof Kozlowski wrote:
-> On 27/03/2023 17:27, Cristian Marussi wrote:
-> >>> +  - |
-> >>> +    firmware {
-> >>> +        scmi {
-> >>> +            compatible = "arm,scmi";
-> >>> +            mboxes = <&mhu_U_tx 0 0>, <&mhu_U_rx 0 0>;
-> >>> +            shmem = <&cpu_scp_lpri0>;
-> >>> +
-> >>> +            #address-cells = <1>;
-> >>> +            #size-cells = <0>;
-> >>
-> >> I don't think adding one more example with difference in only one piece
-> >> is needed here.
-> >>
+* Tony Lindgren <tony@atomide.com> [230328 07:08]:
+> * Andreas Kemnade <andreas@kemnade.info> [230328 07:06]:
+> > On Tue, 28 Mar 2023 08:01:15 +0300
+> > Tony Lindgren <tony@atomide.com> wrote:
 > > 
-> > Mmm, I thought was sensible to add this example, given that a mailbox
-> > transport configuration for a mailbox exposing unidrectional channels is
-> > quite different from the usual bidirectional channel config already
-> > present in the pre-existent example.
+> > > * Andreas Kemnade <andreas@kemnade.info> [230327 19:18]:
+> > > > On Thu, 16 Feb 2023 09:33:38 -0600
+> > > > Andrew Davis <afd@ti.com> wrote:
+> > > >   
+> > > > > This was not matched anywhere and provides no additional information.
+> > > > > 
+> > > > > Signed-off-by: Andrew Davis <afd@ti.com>
+> > > > > ---
+> > > > >  arch/arm/boot/dts/omap3-beagle-xm.dts              | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-cm-t3730.dts               | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-igep0020-rev-f.dts         | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-igep0020.dts               | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-igep0030-rev-g.dts         | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-igep0030.dts               | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-lilly-dbb056.dts           | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-n9.dts                     | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-n950.dts                   | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-overo-storm-alto35.dts     | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-overo-storm-chestnut43.dts | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-overo-storm-gallop43.dts   | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-overo-storm-palo35.dts     | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-overo-storm-palo43.dts     | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-overo-storm-summit.dts     | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-overo-storm-tobi.dts       | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts    | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-pandora-1ghz.dts           | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-sbc-t3730.dts              | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-sniper.dts                 | 2 +-
+> > > > >  arch/arm/boot/dts/omap3-zoom3.dts                  | 2 +-
+> > > > >  21 files changed, 21 insertions(+), 21 deletions(-)
+> > > > >   
+> > > > hmm, we have
+> > > > drivers/clk/ti/dpll.c:         of_machine_is_compatible("ti,omap36xx"))
+> > > > 
+> > > > but that is more completely
+> > > >   if ((of_machine_is_compatible("ti,omap3630") ||
+> > > >              of_machine_is_compatible("ti,omap36xx")) &&
+> > > > 
+> > > > so missing omap36xx will not harm if 3630 is there. SO this should
+> > > > be probably ok.  
+> > > 
+> > > Looks like we still have these that should be patched away first:
+> > > 
+> > > drivers/cpufreq/ti-cpufreq.c-   { .compatible = "ti,omap34xx", .data = &omap34xx_soc_data, },
+> > > drivers/cpufreq/ti-cpufreq.c:   { .compatible = "ti,omap36xx", .data = &omap36xx_soc_data, },
+> > >
+> > seen that but there is also
+> >     { .compatible = "ti,omap3430", .data = &omap34xx_soc_data, },
+> >     { .compatible = "ti,omap3630", .data = &omap36xx_soc_data, },
 > > 
-> > I'll add mbox-names into this example and see if I can change your
-> > mind...or I can then finally drop it.
+> > so, no trouble will appear when omap36xx is removed.
 > 
-> And what exactly this one more example changes? Does not validate
-> different parts of the binding if only one property differs...
+> Oh OK, thanks for pointing that out, looks like I missed it. Seems like
+> we should apply this patch already if no issues.
 
-Well it showcases how the extended new mboxes/shmem prop can be used in
-to support such unidirectional channels (which is pretty much different
-from the usual existing biridrectional synatx) ... anyway I never really
-thought as the examples in terms of validation really (and I am not saying
-that this is right eh) ... but more as an aid to help the unfortunate
-human being that has finally to write some DT based on this.
+Applied this one to omap-for-v6.4/dt and pushed out.
 
-Anyway since it does not seem appropriate, I'll just drop the whole
-example in V3, after waiting for some more (if any) feedback on the
-binding in general. Are the mbox-names fixes I added in V2 fine ?
+Regards,
 
-Thanks,
-Cristian
+Tony
