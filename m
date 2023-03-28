@@ -2,183 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F76D6CB4C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 05:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DD06CB4CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 05:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232524AbjC1DT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 23:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
+        id S229879AbjC1DZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 23:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjC1DTx (ORCPT
+        with ESMTP id S229670AbjC1DZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 23:19:53 -0400
-Received: from mail.fintek.com.tw (mail.fintek.com.tw [59.120.186.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4357710CA;
-        Mon, 27 Mar 2023 20:19:50 -0700 (PDT)
-Received: from vmMailSRV.fintek.com.tw ([192.168.1.1])
-        by mail.fintek.com.tw with ESMTP id 32S3IiQi058277;
-        Tue, 28 Mar 2023 11:18:44 +0800 (+08)
-        (envelope-from peter_hong@fintek.com.tw)
-Received: from [192.168.1.111] (192.168.1.111) by vmMailSRV.fintek.com.tw
- (192.168.1.1) with Microsoft SMTP Server id 14.3.498.0; Tue, 28 Mar 2023
- 11:18:43 +0800
-Message-ID: <5bdee736-7868-81c3-e63f-a28787bd0007@fintek.com.tw>
-Date:   Tue, 28 Mar 2023 11:18:44 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V3] can: usb: f81604: add Fintek F81604 support
-Content-Language: en-US
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-CC:     <wg@grandegger.com>, <mkl@pengutronix.de>,
-        <michal.swiatkowski@linux.intel.com>,
-        <Steen.Hegelund@microchip.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <frank.jungclaus@esd.eu>, <linux-kernel@vger.kernel.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <hpeter+linux_kernel@gmail.com>
-References: <20230327051048.11589-1-peter_hong@fintek.com.tw>
- <CAMZ6Rq+ps1tLii1VfYyAqfD4ck_TGWBUo_ouK_vLfhoNEg-BPg@mail.gmail.com>
-From:   Peter Hong <peter_hong@fintek.com.tw>
-In-Reply-To: <CAMZ6Rq+ps1tLii1VfYyAqfD4ck_TGWBUo_ouK_vLfhoNEg-BPg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.1.111]
-X-TM-AS-Product-Ver: SMEX-12.5.0.2055-9.0.1002-27530.001
-X-TM-AS-Result: No-7.990000-8.000000-10
-X-TMASE-MatchedRID: gzVbiXtWD9v/9O/B1c/Qy3UVR7WQKpLPC/ExpXrHizzNcDGAMPdV9+J1
-        Z55wDcxTB1Q/hS3bW9EOLDetfgAGJuELIy87MLr+nVTWWiNp+v/0swHSFcVJ6OjMOEZ5AL0S8y0
-        S9JacVy+7NbSZc60NuauVCdsHobg3xZYesGakkusZgmFGHqyx63607foZgOWytwi3bXRtaAjLqp
-        eT6UXHoA0mmbOIq98WQZndHGkHvOfKVlK+ZD4tD9yBRU/cKn69MoS2PLq1B75M+b8yxBqvA46My
-        bdCDh5gSpAFNe4DUJ6H+8KYiFISoinqwKmU0oYzhqdH8K9g7xd7hg5h3855AubnFWpNX1DBunqB
-        IQj+1JmQn/TyVRWddCYHONDCYeA20qC4NoBZfqzEOJqSsn5KmR6OXxdRGLx8y3v7xMC1C6RsKs8
-        i+cqOr5xuEByUpzTftB35FpYtHMZyNLIRgHOxXsp9Bgr5ONKhMVx/3ZYby7+q+LxFU7C3tmcduY
-        7Ph1FD585VzGMOFzABi3kqJOK62QtuKBGekqUpnH7sbImOEBTIljWAt/a0oj3gWXE4r5BuZktF7
-        gomgCu2Vh+y/eGrhbyH+tFkkwsg8UVNvYa2McYoDkna7QJAeA99pC5jqgWkq7qwdb6tHadiouj3
-        9kMFs02viMYyOMeglkEG27gbXTQ3u31m+KVyduulxyHOcPoH
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--7.990000-8.000000
-X-TMASE-Version: SMEX-12.5.0.2055-9.0.1002-27530.001
-X-TM-SNTS-SMTP: 5C27E5AABC32B491905B4A7100DA75432EDE5757E0E3DDF12F1128D1E404E12E2000:8
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL: mail.fintek.com.tw 32S3IiQi058277
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 27 Mar 2023 23:25:03 -0400
+Received: from t03.bc.larksuite.com (t03.bc.larksuite.com [209.127.231.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1601E10CF
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=s1; d=lixiang-com.20200927.dkim.feishu.cn; t=1679973888;
+  h=from:subject:mime-version:from:date:message-id:subject:to:cc:
+ reply-to:content-type:mime-version:in-reply-to:message-id;
+ bh=0ZsZ4rpcQtccHo+nCntHpjTAj1f20IXn/GZUCcCVFoM=;
+ b=TTkZvRp7zBVCMhSTUavv+lCD181DhpEH1q7y8ik13lFeG3okfVpplmUfw/CBIKUYxE3BYG
+ MSHW0o94LkwWExmbKGDo2XZVnFZEUPlOqyzPejZQa7S3/NhuX4f2ITtp5fbmFR5+kJmjQw
+ /A9PFR2uu7CzK2ytNo++XjkIVRHc/cq6CDXoAvpFdmYD0uuxK9ejhGSgj5b2M/EFh4FOtN
+ da2HrvOvBeqHMwCv1SfIWIxyMgLqpYlueHXHlZPtlgptVPbyiGyzYBnWCMSJ6jr4Nn0MZe
+ ENRorH3fmfxtToMmm7OIc3pqmCZxGM6u3f78rpWY9Eh5OVa+IJzaHuFqf5WAkg==
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
+X-Lms-Return-Path: <lba+264225dff+0cf98b+vger.kernel.org+zangchunxin@lixiang.com>
+To:     "Namhyung Kim" <namhyung@kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C84E377A-CBC1-49A7-A8EC-09F2503433D2@lixiang.com>
+References: <20230317063246.1128219-1-zangchunxin@lixiang.com> <CAM9d7chc+eJvPMm3ZhcxcbYUjNzVvBG7N0DvVwMzmOOb+-xiMQ@mail.gmail.com>
+Subject: Re: [PATCH v3] perf sched: Fix sched latency analysis incorrect
+Date:   Tue, 28 Mar 2023 11:24:48 +0800
+In-Reply-To: <CAM9d7chc+eJvPMm3ZhcxcbYUjNzVvBG7N0DvVwMzmOOb+-xiMQ@mail.gmail.com>
+Content-Type: multipart/alternative;
+ boundary=649a99a623d56ad6933784b4a889eceaa58638550dcfe8361313871d3bcf
+Cc:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <irogers@google.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Jerry Zhou" <zhouchunhua@lixiang.com>
+From:   "Chunxin Zang" <zangchunxin@lixiang.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+--649a99a623d56ad6933784b4a889eceaa58638550dcfe8361313871d3bcf
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 
-Vincent MAILHOL 於 2023/3/27 下午 06:27 寫道:
-> eff->id is a 32 bit value. It is not aligned. So, you must always use
-> {get|set}_unaligned_be32() to manipulate this value.
-> N.B. on x86 architecture, unaligned access is fine, but some other
-> architecture may throw a fault. Read this for more details:
->
->    https://docs.kernel.org/arm/mem_alignment.html
+PiBPbiBNYXIgMjgsIDIwMjMsIGF0IDAzOjAwLCBOYW1oeXVuZyBLaW0gPG5hbWh5dW5nQGtlcm5l
+bC5vcmc+IHdyb3RlOg0KPiANCj4gT24gVGh1LCBNYXIgMTYsIDIwMjMgYXQgMTE6MzPigK9QTSBD
+aHVueGluIFphbmcgPHphbmdjaHVueGluQGxpeGlhbmcuY29tPiB3cm90ZToNCj4+IA0KPj4gJ3Bl
+cmYgc2NoZWQgbGF0ZW5jeScgaXMgaW5jb3JyZWN0IHRvIGdldCBwcm9jZXNzIHNjaGVkdWxlIGxh
+dGVuY3kNCj4+IHdoZW4gaXQgdXNlZCAnc2NoZWQ6c2NoZWRfd2FrZXVwJyB0byBhbmFseXNpcyBw
+ZXJmLmRhdGEuDQo+PiANCj4+IEJlY2F1c2UgJ3BlcmYgcmVjb3JkJyBwcmVmZXIgdXNlICdzY2hl
+ZDpzY2hlZF93YWtpbmcnIHRvDQo+PiAnc2NoZWQ6c2NoZWRfd2FrZXVwJyBzaW5jZSBjb21taXQg
+ZDU2NmE5YzJkNDgyICgicGVyZiBzY2hlZDogUHJlZmVyDQo+PiBzY2hlZF93YWtpbmcgZXZlbnQg
+d2hlbiBpdCBleGlzdHMiKS4gSXQncyB2ZXJ5IHJlYXNvbmFibGUgdG8NCj4+IGV2YWx1YXRlIHBy
+b2Nlc3Mgc2NoZWR1bGUgbGF0ZW5jeS4NCj4+IA0KPj4gU2ltaWxhcmx5LCB1cGRhdGUgc2NoZWQg
+bGF0ZW5jeS9tYXAvcmVwbGF5IHRvIHVzZSBzY2hlZF93YWtpbmcgZXZlbnRzLg0KPiANCj4gSGF2
+ZSB5b3UgY2hlY2tlZCBwZXJmIHNjaGVkIHJlcGxheSAoYWRkX3NjaGVkX2V2ZW50X3dha2V1cCk/
+ICBJIHRoaW5rDQo+IGl0J2QgbWFrZSB1bm5lY2Vzc2FyeSBzY2hlZCBhdG9tcyBmb3Igc2NoZWRf
+d2FrZXVwLg0KPiANCj4gQ2FuIHdlIGNoZWNrIHRoZSB3YWtldXAgYW5kIHdha2luZyBldmVudHMg
+YW5kIGRpc2FibGUgdGhlIHdha2V1cA0KPiBpZiB0aGUgd2FraW5nIGlzIGZvdW5kIGxpa2UgaW4g
+cGVyZl9zY2hlZF9fdGltZWhpc3Q/DQoNClRoYXQncyBhIGdvb2QgaWRlYSwgSSB3aWxsIGRvIHRo
+YXQgaW4gdjQgdmVyc2lvbi4NCg0KQmVzdCByZWdhcmRzDQpDaHVueGluDQoNCj4gDQo+IFRoYW5r
+cywNCj4gTmFtaHl1bmcNCj4gDQo+IA0KPj4gDQo+PiBJIHVzZWQgJ3BlcmYgcmVjb3JkIC1lICJz
+Y2hlZDoqICInIHRvIHJlY29yZCBib3RoIHdha2V1cCBhbmQgd2FraW5nIGV2ZW50cywNCj4+IGFu
+ZCB1c2UgZml4ZWQgcGVyZiB2ZXJzaW9uIHRvIGFuYWx5c2lzIHRoZW0sIHRoZSByZXN1bHQgaXMg
+Y29ycmVjdC4NCj4+IEJlY2F1c2UgdGhlIGZ1bmN0aW9uICJsYXRlbmN5X3dha2V1cF9ldmVudCIg
+d2lsbCBjaGFuZ2UgYXRvbS0+c3RhdGUgdG8NCj4+IFRIUkVBRF9XQUlUX0NQVSBhdCB3YWtpbmcg
+ZXZlbnQsIGFuZCBqdWRnZSB0aGUgJ2F0b20tPnN0YXRlICE9DQo+PiBUSFJFQURfU0xFRVBJTkcn
+IGlzIGZhbHNlIHRoZW4gcmV0dXJuZWQgYXQgd2FrZXVwIGV2ZW50Lg0KPj4gDQo+PiBTaWduZWQt
+b2ZmLWJ5OiBDaHVueGluIFphbmcgPHphbmdjaHVueGluQGxpeGlhbmcuY29tPg0KPj4gU2lnbmVk
+LW9mZi1ieTogSmVycnkgWmhvdSA8emhvdWNodW5odWFAbGl4aWFuZy5jb20+DQo+PiAtLS0NCj4+
+IA0KPj4gICAgICAgIGNoYW5nZWxvZ3MgaW4gdjM6DQo+PiAgICAgICAgMSkgZml4IG5vbi1BU0NJ
+SSBjaGFyYWN0ZXJzIGluIGNvbW1pdCBsb2cuDQo+PiANCj4+ICAgICAgICBjaGFuZ2Vsb2dzIGlu
+IHYyOg0KPj4gICAgICAgIDEpIGZpeCBlbWFpbCBhZGRyZXNzIGRpc2FwcGVhcmluZyBpbiAnc2ln
+bmVkIG9mZiBieScNCj4+IA0KPj4gdG9vbHMvcGVyZi9idWlsdGluLXNjaGVkLmMgfCAxICsNCj4+
+IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0KPj4gDQo+PiBkaWZmIC0tZ2l0IGEvdG9v
+bHMvcGVyZi9idWlsdGluLXNjaGVkLmMgYi90b29scy9wZXJmL2J1aWx0aW4tc2NoZWQuYw0KPj4g
+aW5kZXggODZlMTg1NzVjOWJlLi4xYWY0ZWMxYWM4MjQgMTAwNjQ0DQo+PiAtLS0gYS90b29scy9w
+ZXJmL2J1aWx0aW4tc2NoZWQuYw0KPj4gKysrIGIvdG9vbHMvcGVyZi9idWlsdGluLXNjaGVkLmMN
+Cj4+IEBAIC0xODE5LDYgKzE4MTksNyBAQCBzdGF0aWMgaW50IHBlcmZfc2NoZWRfX3JlYWRfZXZl
+bnRzKHN0cnVjdCBwZXJmX3NjaGVkICpzY2hlZCkNCj4+ICAgICAgICBjb25zdCBzdHJ1Y3QgZXZz
+ZWxfc3RyX2hhbmRsZXIgaGFuZGxlcnNbXSA9IHsNCj4+ICAgICAgICAgICAgICAgIHsgInNjaGVk
+OnNjaGVkX3N3aXRjaCIsICAgICAgIHByb2Nlc3Nfc2NoZWRfc3dpdGNoX2V2ZW50LCB9LA0KPj4g
+ICAgICAgICAgICAgICAgeyAic2NoZWQ6c2NoZWRfc3RhdF9ydW50aW1lIiwgcHJvY2Vzc19zY2hl
+ZF9ydW50aW1lX2V2ZW50LCB9LA0KPj4gKyAgICAgICAgICAgICAgIHsgInNjaGVkOnNjaGVkX3dh
+a2luZyIsICAgICAgIHByb2Nlc3Nfc2NoZWRfd2FrZXVwX2V2ZW50LCB9LA0KPj4gICAgICAgICAg
+ICAgICAgeyAic2NoZWQ6c2NoZWRfd2FrZXVwIiwgICAgICAgcHJvY2Vzc19zY2hlZF93YWtldXBf
+ZXZlbnQsIH0sDQo+PiAgICAgICAgICAgICAgICB7ICJzY2hlZDpzY2hlZF93YWtldXBfbmV3Iiwg
+ICBwcm9jZXNzX3NjaGVkX3dha2V1cF9ldmVudCwgfSwNCj4+ICAgICAgICAgICAgICAgIHsgInNj
+aGVkOnNjaGVkX21pZ3JhdGVfdGFzayIsIHByb2Nlc3Nfc2NoZWRfbWlncmF0ZV90YXNrX2V2ZW50
+LCB9LA0KPj4gLS0NCj4+IDIuMjUuMQ0KPj4gDQo+PiDlo7DmmI7vvJrov5nlsIHpgq7ku7blj6rl
+hYHorrjmlofku7bmjqXmlLbogIXpmIXor7vvvIzmnInlvojpq5jnmoTmnLrlr4bmgKfopoHmsYLj
+gILnpoHmraLlhbbku5bkurrkvb/nlKjjgIHmiZPlvIDjgIHlpI3liLbmiJbovazlj5Hph4zpnaLn
+moTku7vkvZXlhoXlrrnjgILlpoLmnpzmnKzpgq7ku7bplJnor6/lnLDlj5Hnu5nkuobkvaDvvIzo
+r7fogZTns7vpgq7ku7blj5Hlh7rogIXlubbliKDpmaTov5nkuKrmlofku7bjgILmnLrlr4blj4rm
+s5XlvovnmoTnibnmnYPlubbkuI3lm6DkuLror6/lj5Hpgq7ku7bogIzmlL7lvIPmiJbkuKflpLHj
+gILku7vkvZXmj5Dlh7rnmoTop4LngrnmiJbmhI/op4Hlj6rlsZ7kuo7kvZzogIXnmoTkuKrkurro
+p4Hop6PvvIzlubbkuI3kuIDlrprku6PooajmnKzlhazlj7jjgIINCgrlo7DmmI7vvJrov5nlsIHp
+gq7ku7blj6rlhYHorrjmlofku7bmjqXmlLbogIXpmIXor7vvvIzmnInlvojpq5jnmoTmnLrlr4bm
+gKfopoHmsYLjgILnpoHmraLlhbbku5bkurrkvb/nlKjjgIHmiZPlvIDjgIHlpI3liLbmiJbovazl
+j5Hph4zpnaLnmoTku7vkvZXlhoXlrrnjgILlpoLmnpzmnKzpgq7ku7bplJnor6/lnLDlj5Hnu5nk
+uobkvaDvvIzor7fogZTns7vpgq7ku7blj5Hlh7rogIXlubbliKDpmaTov5nkuKrmlofku7bjgILm
+nLrlr4blj4rms5XlvovnmoTnibnmnYPlubbkuI3lm6DkuLror6/lj5Hpgq7ku7bogIzmlL7lvIPm
+iJbkuKflpLHjgILku7vkvZXmj5Dlh7rnmoTop4LngrnmiJbmhI/op4Hlj6rlsZ7kuo7kvZzogIXn
+moTkuKrkurrop4Hop6PvvIzlubbkuI3kuIDlrprku6PooajmnKzlhazlj7jjgII=
 
-for the consistency of the code, could I also add get/put_unaligned_be16 
-in SFF
-sections ?
-
->> +static int f81604_set_reset_mode(struct net_device *netdev)
->> +{
->> +       struct f81604_port_priv *priv = netdev_priv(netdev);
->> +       int status, i;
->> +       u8 tmp;
->> +
->> +       /* disable interrupts */
->> +       status = f81604_set_sja1000_register(priv->dev, netdev->dev_id,
->> +                                            SJA1000_IER, IRQ_OFF);
->> +       if (status)
->> +               return status;
->> +
->> +       for (i = 0; i < F81604_SET_DEVICE_RETRY; i++) {
-> Thanks for removing F81604_USB_MAX_RETRY.
->
-> Yet, I still would like to understand why you need one hundred tries?
-> Is this some paranoiac safenet? Or does the device really need so many
-> attempts to operate reliably? If those are needed, I would like to
-> understand the root cause.
-
-This section is copy from sja1000.c. In my test, the operation/reset may 
-retry 1 times.
-I'll reduce it from 100 to 10 times.
-
-
->> +       int status, len;
->> +
->> +       if (can_dropped_invalid_skb(netdev, skb))
->> +               return NETDEV_TX_OK;
->> +
->> +       netif_stop_queue(netdev);
-> In your driver, you send the CAN frames one at a time and wait for the
-> rx_handler to restart the queue. This approach dramatically degrades
-> the throughput. Is this a device limitation? Is the device not able to
-> manage more than one frame at a time?
->
-
-This device will not NAK on TX frame not complete, it only NAK on TX 
-endpoint
-memory not processed, so we'll send next frame unitl TX complete(TI) 
-interrupt
-received.
-
-The device can polling status register via TX/RX endpoint, but it's more 
-complex.
-We'll plan to do it when first driver landing in mainstream.
-
->> +static int f81604_set_termination(struct net_device *netdev, u16 term)
->> +{
->> +       struct f81604_port_priv *port_priv = netdev_priv(netdev);
->> +       struct f81604_priv *priv;
->> +       u8 mask, data = 0;
->> +       int r;
->> +
->> +       priv = usb_get_intfdata(port_priv->intf);
->> +
->> +       if (netdev->dev_id == 0)
->> +               mask = F81604_CAN0_TERM;
->> +       else
->> +               mask = F81604_CAN1_TERM;
->> +
->> +       if (term == F81604_TERMINATION_ENABLED)
->> +               data = mask;
->> +
->> +       mutex_lock(&priv->mutex);
-> Did you witness a race condition?
->
-> As far as I know, this call back is only called while the network
-> stack big kernel lock (a.k.a. rtnl_lock) is being hold.
-> If you have doubt, try adding a:
->
->    ASSERT_RTNL()
->
-> If this assert works, then another mutex is not needed.
-
-It had added ASSERT_RTNL() into f81604_set_termination(). It only assert
-in f81604_probe() -> f81604_set_termination(), not called via ip command:
-     ip link set dev can0 type can termination 120
-     ip link set dev can0 type can termination 0
-
-so I'll still use mutex on here.
-
->> +               port_priv->can.do_get_berr_counter = f81604_get_berr_counter;
->> +               port_priv->can.ctrlmode_supported =
->> +                       CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_3_SAMPLES |
->> +                       CAN_CTRLMODE_ONE_SHOT | CAN_CTRLMODE_BERR_REPORTING |
->> +                       CAN_CTRLMODE_CC_LEN8_DLC | CAN_CTRLMODE_PRESUME_ACK;
-> Did you test the CAN_CTRLMODE_CC_LEN8_DLC feature? Did you confirm
-> that you can send and receive DLC greater than 8?
-
-Sorry, I had misunderstand the define. This device is only support 0~8 
-data length,
-so I'll remove CAN_CTRLMODE_CC_LEN8_DLC in future patch.
-
-Thanks,
-
+--649a99a623d56ad6933784b4a889eceaa58638550dcfe8361313871d3bcf--
