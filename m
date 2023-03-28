@@ -2,146 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F177C6CBF74
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB796CBF7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbjC1Mmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57738 "EHLO
+        id S229924AbjC1MoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbjC1Mmj (ORCPT
+        with ESMTP id S231238AbjC1MoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:42:39 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2088.outbound.protection.outlook.com [40.107.223.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E025283F6;
-        Tue, 28 Mar 2023 05:42:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N7VvDVJa4KwRG/ZJDI4wWcfJgygOr/A8dG7Q/BM8SU0CSRmaMUMqSPjRZ56fXFeG+AWldmN3/SJnNnWS2NgL23Q4LpeFkUArE41+dzLr2xdj0ap0kGEk/XNUP6zOSAsmfDxWkjmfrNafc5b+BNuXQrDnIF6X5SID9AXOUlWHcIqbeFuhFhJiplm+NDtpKqxJnUkexrS9O9B1IeZb+VVOpaHfVT2so2xgjhTddQTLl1oDyxT7fKqpydV5okPknbpIQMTbTLUFrodATqN/LwDQfn2omuJ/aC3nUkv9ebizmdX+6mM3Sux9qqqxboXaRPVMcRiLZT9FscmhBeZjO/QK1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RCNWDk1jVtPNZxpVXdlzF4nocbA7v7f8PjQq1mHeOHA=;
- b=IdJkpbGwiUb9LxUaj6VtVbiPs1WN5G7TiJP3P9c7qP/4YZzNXwN0I6pHvIdbfEjUgRzfjWUfpqvzJM2PpyORjMNNqPNh0Igv/DzXmeTASqLAVZqzqzojPnLZQqpiR0Y5YFuP8bhV0GyrbZyJzSZVAbQgWAB2U5j2YXdRHEPTmqkbKZJw84H481hemYJyyBv2ZWxUZB6CqGf+tOQeAmQydhQjb1VVYaz23ioZMGPf3v4sxJ7Wbo54QCRpmiuTn4EiItBQoXu43WHabagw/Ylgdwc6PsA/phsUWbCfds3WYgM0XsprgLtahSuGGeM7rpNtVJAlReYfv0jkFDAWl61TVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RCNWDk1jVtPNZxpVXdlzF4nocbA7v7f8PjQq1mHeOHA=;
- b=mwkYexB6B/4TiHW7QFhWTQ51Xkaahay0UuZduCLUDsA+bhvLmCiOCQpPvX0GqJqam/U4mzplz6baCryG9A+D0qr7F4sB+uArxjNvtkU5uMYLJK3hJp2cjnwd9KDZQMBvrCg8DaCTXFOb8RZpoCZGt9rvX6X+p8HmfT9OGLBtZiBpuQWS3eYJGYUOEtlLL6fttxcifQeI0T2sbF7TCHaIlUzhM48AgrZGF9czcEYQy7MeykivxPyVrA71l9dgn3lZ60dzKmnFXOxHPo4mqNEm2OBvW4sVR9PgfbpHxOYhbvUMDx4e5dUJ9ElV8Iswf5rIb8938raezEnpB0vuOVt7BA==
-Received: from BN9PR03CA0045.namprd03.prod.outlook.com (2603:10b6:408:fb::20)
- by IA1PR12MB6019.namprd12.prod.outlook.com (2603:10b6:208:3d5::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Tue, 28 Mar
- 2023 12:42:14 +0000
-Received: from BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:fb:cafe::8e) by BN9PR03CA0045.outlook.office365.com
- (2603:10b6:408:fb::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.43 via Frontend
- Transport; Tue, 28 Mar 2023 12:42:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT059.mail.protection.outlook.com (10.13.177.120) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6222.22 via Frontend Transport; Tue, 28 Mar 2023 12:42:14 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 28 Mar 2023
- 05:42:04 -0700
-Received: from [10.41.21.79] (10.126.230.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 28 Mar
- 2023 05:41:58 -0700
-Message-ID: <db682990-573f-e827-7342-ca8cda0b4067@nvidia.com>
-Date:   Tue, 28 Mar 2023 18:11:56 +0530
+        Tue, 28 Mar 2023 08:44:03 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD81AD22;
+        Tue, 28 Mar 2023 05:43:50 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Pm8Hn0YmLz9v7cL;
+        Tue, 28 Mar 2023 20:33:57 +0800 (CST)
+Received: from [10.48.131.174] (unknown [10.48.131.174])
+        by APP1 (Coremail) with SMTP id LxC2BwC3QAza4CJklbTXAQ--.65267S2;
+        Tue, 28 Mar 2023 13:43:16 +0100 (CET)
+Message-ID: <8cf7c515-9ce6-a2ed-0643-972aa3eba2fb@huaweicloud.com>
+Date:   Tue, 28 Mar 2023 14:43:03 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [Patch v4 02/10] arm64: tegra: add bpmp ref in tegra234-mc node
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+From:   Petr Tesarik <petrtesarik@huaweicloud.com>
+Subject: Re: [RFC v1 3/4] swiotlb: Allow dynamic allocation of bounce buffers
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huawei.com>, petr@tesarici.cz,
+        Alexander Graf <graf@amazon.com>
+References: <cover.1679309810.git.petr.tesarik.ext@huawei.com>
+ <0334a54332ab75312c9de825548b616439dcc9f5.1679309810.git.petr.tesarik.ext@huawei.com>
+ <20230328040724.GB25506@lst.de>
+ <4268fa4e-4f0f-a2f6-a2a5-5b78ca4a073d@huaweicloud.com>
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <treding@nvidia.com>, <dmitry.osipenko@collabora.com>,
-        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
-        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
-        <lpieralisi@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <mmaddireddy@nvidia.com>,
-        <kw@linux.com>, <bhelgaas@google.com>, <vidyas@nvidia.com>,
-        <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>, <ishah@nvidia.com>,
-        <bbasu@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
-References: <20230327161426.32639-1-sumitg@nvidia.com>
- <20230327161426.32639-3-sumitg@nvidia.com>
- <af455119-7178-bed8-4099-ee50c7b6134b@linaro.org>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <af455119-7178-bed8-4099-ee50c7b6134b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <4268fa4e-4f0f-a2f6-a2a5-5b78ca4a073d@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.37]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT059:EE_|IA1PR12MB6019:EE_
-X-MS-Office365-Filtering-Correlation-Id: 78d0f487-76db-435a-e95a-08db2f89db99
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1tAHrFmrmFxxzDEMAy9twXiDJtMp638uARarkaes7lglUE1xassMz+qOCUFtQ6J+kbAza8/XCmO/Fy7dSLLVXEDKnRWbYRJcNoauZYDY+QsPYF6kZy0ygbRTSg5wrOR79gACHygCYa7VKvXnxHdYLimmdBtWHpkg2grFiFPOQ1HG+2qpC8/FBQTFoKWitz6n6SQf1swK4/a35SKH7Y6HH0tdp92mB3GqiYU9HAqVqUmo0qIjRumtmfcDwkgvPebEhKVduzpDIn/xnT03Ir6Y51uc8/04AaHwgs0TNiVXSu0I12oypaF5G5eTT00lL+FB/WOKCONLcBIR/cy7TYB/jY+twxJHEu33SThE8Q1aVq+Dk7QCRJ8D9E8dyQhuEMYiWWsYYrrkiTsAGhLoWO2XkVXbVlQdY3ZdtjHc+IDJDZBTWml189S5uNw16dafLfDfB+zXQFmyM2La7E5aB3Y6jeU6eVdUsEFQHdP3fy74FlFvtk1Qq3YcuGBhJjMdKuNyDM4xrKyuVd4+uDrX/cC7u71U6XjNQddsGlhYfPbCSbkj8kXBMtw9zUtSn2x4yn5d8u7AXY1gC+vWQsZJV3ffKyKe3VnPsrI6NBM9yoYmoPlII6+PMvUVi20TB6na3oYl2WOZmZJ6/FSh1+NTWFyEQDjL6WRxaPOIJvLllPFyftpT4WxVL9g0tKu3g46IDfO2iwbPi5tscSSFygsDZnrtqtxNPhMELajw67aIcaUWtKyTp7Ne1MIvtLSWJizSaTT5VV3+c/c0JWPCG3bbJoVkwvkQPfyZS95dmJB+By7k2nrVup2A9qpISRD1qL4AfEvc
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(346002)(136003)(376002)(451199021)(46966006)(40470700004)(36840700001)(4326008)(40480700001)(41300700001)(36860700001)(40460700003)(70586007)(70206006)(16576012)(316002)(34020700004)(110136005)(478600001)(8676002)(54906003)(2906002)(53546011)(16526019)(186003)(7416002)(5660300002)(4744005)(2616005)(82310400005)(336012)(426003)(31696002)(31686004)(86362001)(47076005)(36756003)(82740400003)(107886003)(26005)(8936002)(7636003)(356005)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 12:42:14.2348
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 78d0f487-76db-435a-e95a-08db2f89db99
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6019
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwC3QAza4CJklbTXAQ--.65267S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCr4xXw18Ar43uFy8Aw4xJFb_yoW5tFWxpF
+        y7ZF95KF4UWF4kC34Duw48GF1j9w4vk3yfW39Yvr1FkrnxXr95XF1DGrWYy3s5tr4vkF42
+        qry093yYk3WUXrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU13rcDUUUUU==
+X-CM-SenderInfo: hshw23xhvd2x3n6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 28/03/23 12:51, Krzysztof Kozlowski wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> On 27/03/2023 18:14, Sumit Gupta wrote:
->> Add the "nvidia,bpmp" property within the "memory-controller" node
->> to reference BPMP node. This is needed by the MC driver to pass
->> the client info to the BPMP-FW when memory interconnect support is
->> available.
+On 3/28/2023 9:54 AM, Petr Tesarik wrote:
+> On 3/28/2023 6:07 AM, Christoph Hellwig wrote:
+>> [adding Alex as he has been interested in this in the past]
 >>
->> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>[...]>> I'm a little worried about all that because it causes quite a bit
+>> of overhead even for callers that don't end up going into the
+>> dynamic range or do not use swiotlb at all.  I don't really have a
+>> good answer here except for the usual avoid bounce buffering whenever
+>> you can that might not always be easy to do.
 > 
-> DTS goes to the end of patchset. If you put it here to fix
-> bisectability, then your patchset is already broken.
-> 
-> Best regards,
-> Krzysztof
-> 
+> I'm also worried about all this overhead.
 
-Ok, will move the 'Patch 2 & 7' to the end of patch set (i.e. Patch 9 & 10)
-   [Patch v4 02/10] arm64: tegra: add bpmp ref in tegra234-mc node
-   [Patch v4 07/10] arm64: tegra: Add cpu OPP tables and interconnects 
-property
+Oh, wait! I can do at least something for devices which do not use
+swiotlb at all.
 
-Thank you,
-Sumit Gupta
+If a device does not use bounce buffers, it cannot pass an address
+that belongs to the swiotlb. Consequently, the potentially
+expensive check can be skipped. This avoids the dynamic lookup
+penalty for devices which do not need the swiotlb.
+
+Note that the counter always remains zero if dma_io_tlb_mem is
+NULL, so the NULL check is not required.
+
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index a3e14143ec0c..f36638f207b8 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2957,6 +2957,7 @@ void device_initialize(struct device *dev)
+ #endif
+ #ifdef CONFIG_SWIOTLB
+ 	dev->dma_io_tlb_mem = &io_tlb_default_mem;
++	atomic_set(&dev->dma_io_tlb_cnt, 0);
+ #endif
+ }
+ EXPORT_SYMBOL_GPL(device_initialize);
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 44e3acae7b36..cfdddce4cc30 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -504,6 +504,7 @@ struct device_physical_location {
+  * @dma_mem:	Internal for coherent mem override.
+  * @cma_area:	Contiguous memory area for dma allocations
+  * @dma_io_tlb_mem: Pointer to the swiotlb pool used.  Not for driver use.
++ * @dma_io_tlb_cnt: Number of buffers mapped from the swiotlb pool.
+  * @archdata:	For arch-specific additions.
+  * @of_node:	Associated device tree node.
+  * @fwnode:	Associated device node supplied by platform firmware.
+@@ -609,6 +610,7 @@ struct device {
+ #endif
+ #ifdef CONFIG_SWIOTLB
+ 	struct io_tlb_mem *dma_io_tlb_mem;
++	atomic_t dma_io_tlb_cnt;
+ #endif
+ 	/* arch specific additions */
+ 	struct dev_archdata	archdata;
+diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
+index 628e25ad7db7..7a115f4db49d 100644
+--- a/include/linux/swiotlb.h
++++ b/include/linux/swiotlb.h
+@@ -122,7 +122,7 @@ static inline bool is_swiotlb_buffer(struct device *dev, phys_addr_t paddr)
+ {
+ 	struct io_tlb_mem *mem = dev->dma_io_tlb_mem;
+ 
+-	return mem &&
++	return atomic_read(&dev->dma_io_tlb_cnt) &&
+ 		(is_swiotlb_fixed(mem, paddr) ||
+ 		 (mem->allow_dyn && is_swiotlb_dyn(mem, paddr)));
+ }
+diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+index 3efaefebb6af..3dda1d3a39e8 100644
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -954,6 +954,8 @@ phys_addr_t swiotlb_tbl_map_single(struct device *dev, phys_addr_t orig_addr,
+ 		return tlb_addr;
+ 	}
+ 
++	atomic_inc(&dev->dma_io_tlb_cnt);
++
+ 	/*
+ 	 * When dir == DMA_FROM_DEVICE we could omit the copy from the orig
+ 	 * to the tlb buffer, if we knew for sure the device will
+@@ -1030,6 +1032,7 @@ void swiotlb_tbl_unmap_single(struct device *dev, phys_addr_t tlb_addr,
+ 		swiotlb_release_slots(dev, tlb_addr);
+ 	else
+ 		swiotlb_dyn_unmap(dev, tlb_addr, dir);
++	atomic_dec(&dev->dma_io_tlb_cnt);
+ }
+ 
+ void swiotlb_sync_single_for_device(struct device *dev, phys_addr_t tlb_addr,
 
