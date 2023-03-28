@@ -2,54 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AC46CBDE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65BA6CBDF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbjC1Lfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
+        id S232802AbjC1Li4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbjC1Lfm (ORCPT
+        with ESMTP id S232797AbjC1Liy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:35:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D435BBD;
-        Tue, 28 Mar 2023 04:35:40 -0700 (PDT)
+        Tue, 28 Mar 2023 07:38:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C54C55BB
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:38:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13F48616E1;
-        Tue, 28 Mar 2023 11:35:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D00DCC4339B;
-        Tue, 28 Mar 2023 11:35:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 237DCB81C14
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:38:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61D88C433EF;
+        Tue, 28 Mar 2023 11:38:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680003339;
-        bh=EVYhKptsbY/fUtII/R3Rxzc/AKD8pNXREsDk4jICzrY=;
+        s=k20201202; t=1680003525;
+        bh=jOmrs/Lchl59dAkRYGNIhG6/nypGKLzZbxjHzoW4mfQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PccUEc5q+Zf/8w83+CglGcqMIkR1K8jd23nJpwAanyYniq9CP+sCmTtGp0dMhHpJj
-         fLMh4a0ufTWGGJuZUuNh7GzvmxsyxSTby8X1j++jj2E6Knl7YsGdvMpOLXvj+mfD0P
-         nzXKnyXZk0URAq1k2vZPUDcpGXUSLm81pNPscgp4q8ToKI9uYcGEHn4CjhOG07o+9e
-         Pm1tjpL6aFutsePpCEUKj2b/iXNHiNh4kz9dcUJqhI7a3S52iwGkbB4m3WiZWHA3Ip
-         k3WmxsZ05doOEvZCp4DDpV8XUwsRlPF9bhlYuSsfn01s6G32m80cmGQsE83pj3vIkL
-         c8+BHiTlPeepw==
-Date:   Tue, 28 Mar 2023 13:35:36 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v4 0/2] spi: loongson: add bus driver for the loongson spi
-Message-ID: <20230328113536.ldxpvx3hibezcqtb@intel.intel>
-References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
+        b=TXBdL1RALxKCk3tpTvdW+ixaWAD/0SsshjdwXvmH8P9hpo6oNhoKa6ijmxu9vljze
+         IwKi5Yj2uz+xgwqKnWglcpcvOP7WeKFVnmVhKl7CsSyjbo+mBbmUWr3UBLZB93cuoK
+         XB3+IE1O0Ed6CcAXtIppJDAc6C9c3jGLnFcTq39vlwKMTrRwfamVrDqDmsxvHS380A
+         t+2o5gJWTkxoYgjr435kPSfKPdad19ykRkuJso4zt1PaXJ+H1IUHXKBW2++kyHn8z8
+         yqlSIFxiwGJcYZkNQoDN8re986Nf0lI/xTaEClN9vatYwz24DjDz/n72JZn3x3Kiy+
+         jCrrG/Y8zJ10A==
+Date:   Tue, 28 Mar 2023 13:38:42 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Frederic Weisbecker <fweisbecker@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Leonardo Bras <leobras@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org
+Subject: Re: [PATCH 1/2] sched/isolation: Add cpu_is_isolated() API
+Message-ID: <ZCLRwgAHc7/TAOiN@lothringen>
+References: <20230317134448.11082-1-mhocko@kernel.org>
+ <20230317134448.11082-2-mhocko@kernel.org>
+ <ZBSyaVk919Fi07Wv@tpad>
+ <ZBSy2QZYZRtCNBd8@tpad>
+ <ZBVwlv+Mi+GfR1E3@dhcp22.suse.cz>
+ <ZB4lt3IaPWVmn41n@localhost.localdomain>
+ <ZCFu9jFm/rskeNlM@tpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230328112210.23089-1-zhuyinbo@loongson.cn>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZCFu9jFm/rskeNlM@tpad>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,74 +69,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yinbo,
+On Mon, Mar 27, 2023 at 07:24:54AM -0300, Marcelo Tosatti wrote:
+> On Fri, Mar 24, 2023 at 11:35:35PM +0100, Frederic Weisbecker wrote:
+> > Le Sat, Mar 18, 2023 at 09:04:38AM +0100, Michal Hocko a écrit :
+> > > On Fri 17-03-23 15:35:05, Marcelo Tosatti wrote:
+> > > > On Fri, Mar 17, 2023 at 03:33:13PM -0300, Marcelo Tosatti wrote:
+> > > > > On Fri, Mar 17, 2023 at 02:44:47PM +0100, Michal Hocko wrote:
+> > > > > > From: Frederic Weisbecker <frederic@kernel.org>
+> > > > > > 
+> > > > > > Provide this new API to check if a CPU has been isolated either through
+> > > > > > isolcpus= or nohz_full= kernel parameter.
+> > > > > > 
+> > > > > > It aims at avoiding kernel load deemed to be safely spared on CPUs
+> > > > > > running sensitive workload that can't bear any disturbance, such as
+> > > > > > pcp cache draining.
+> > > > > 
+> > > > > Hi Michal,
+> > > > > 
+> > > > > This makes no sense to me.
+> > > > > 
+> > > > > HK_TYPE_DOMAIN is set when isolcpus=domain is configured.
+> > > > > HK_TYPE_TICK is set when nohz_full= is configured.
+> > > > > 
+> > > > > The use-cases i am aware of use either:
+> > > > > 
+> > > > > isolcpus=managed_irq,... nohz_full=
+> > > > > OR
+> > > > > isolcpus=domain,managed_irq,... nohz_full=
+> > > > > 
+> > > > > So what is the point of this function again?
+> > > > > 
+> > > > > Perhaps it made sense along with, but now does not make sense
+> > > > > anymore:
+> > > > > 
+> > > > > Subject: [PATCH 1/2] sched/isolation: Merge individual nohz_full features into a common housekeeping flag
+> > > > > 
+> > > > > The individual isolation features turned on by nohz_full were initially
+> > > > > split in order for each of them to be tunable through cpusets. However
+> > > > > plans have changed in favour of an interface (be it cpusets or sysctl)
+> > > > > grouping all these features to be turned on/off altogether. Then should
+> > > > > the need ever arise, the interface can still be expanded to handle the
+> > > > > individual isolation features.
+> > > > > 
+> > > > > But Michal can just use housekeeping_test_cpu(cpu, HK_TYPE_TICK) and
+> > > > > the convertion of nohz_full features into a common housekeeping flag
+> > > > > can convert that to something else later?
+> > > > 
+> > > > Actually introducing cpu_is_isolated() seems fine, but it can call
+> > > > housekeeping_test_cpu(cpu, HK_TYPE_TICK) AFAICS.
+> > >  
+> > > This is not really my area. Frederic, could you have a look please?
+> > 
+> > The point is to have a function that tells if either nohz_full= or
+> > isolcpus=[domain] has been passed for the given CPU.
+> > 
+> > Because I assumed that both would be interested in avoiding that flush
+> > noise, wouldn't it be the case?
+> 
+> Yes, that is the case. But as a note: for the two main types of
+> configuration performed (one uses isolcpus=[domain] and the other
+> cgroups, for isolating processes) nohz_full= is always set.
+> 
+> So just testing for nohz_full= would be sufficient (which perhaps would
+> make the code simpler).
 
-before submitting the patches for review... can you please run
-checkpatch.pl on them?
-
-Thanks,
-Andi
-
-On Tue, Mar 28, 2023 at 07:22:08PM +0800, Yinbo Zhu wrote:
-> Loongson platform support spi hardware controller and this series patch
-> was to add spi driver and binding support.
-> 
-> Change in v2:
-> 		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
-> 	 	   https://
-> 		   lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
-> 		2. Remove the clock-names in spi yaml file.
-> 		3. Add "loongson,ls7a-spi" compatible in spi yaml file.
-> 		4. Add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI
-> 		   macro to limit some pci code.
-> 		5. Make the spi driver top code comment block that use C++ style.
-> 		6. Drop spi->max_speed_hz.
-> 		7. Add a spin_lock for loongson_spi_setup.
-> 		8. Add a timeout and cpu_relax() in loongson_spi_write_read_8bit.
-> 		9. Add spi_transfer_one and drop transfer and rework entire spi
-> 		   driver that include some necessary changes.
-> 		10. Use module_init replace subsys_initcall.
-> 		11. About PM interface that I don't find any issue so I don't add
-> 		    any changes.
-> Change in v3:
-> 		1. This [PATCH v3 1/2] dt-bindings patch need depend on clk patch:
-> 		   https://
-> 		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
-> 		2. Drop the unused blank line in loongson,ls-spi.yaml file.
-> 		3. Replace clock minItems with clock maxItems in yaml file.
-> 		4. Separate spi driver into platform module, pci module and core
-> 		   module.
-> 		5. Replace DIV_ROUND_UP with DIV_ROUND_UP_ULL to fix compile error
-> 		   "undefined reference to `__aeabi_uldivmod'" and  "__udivdi3 undefined"
-> 		   that reported by test robot.
-> 		6. Remove the spin lock.
-> 		7. Clear the loongson_spi->hz and loongson_spi->mode in setup to fixup
-> 		   the issue that multiple spi device transfer that maybe cause spi was
-> 		   be misconfigured.
-> Change in v4:
-> 		1. This [PATCH v4 1/2] dt-bindings patch need depend on clk patch:
-> 		   https://
-> 		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
-> 		2. Add "#include <linux/io.h>" in spi-loongson-core.c for fix the compile
-> 		   issue which devm_ioremap no declaration.
-> 		3. Add "EXPORT_SYMBOL_GPL(loongson_spi_dev_pm_ops)" in
-> 		   spi-loongson-core.c for fix the compile issue which
-> 		   loongson_spi_dev_pm_ops undefined.
-> 
-> Yinbo Zhu (2):
->   dt-bindings: spi: add loongson spi
->   spi: loongson: add bus driver for the loongson spi controller
-> 
->  .../bindings/spi/loongson,ls-spi.yaml         |  43 +++
->  MAINTAINERS                                   |  10 +
->  drivers/spi/Kconfig                           |  31 ++
->  drivers/spi/Makefile                          |   3 +
->  drivers/spi/spi-loongson-core.c               | 304 ++++++++++++++++++
->  drivers/spi/spi-loongson-pci.c                |  89 +++++
->  drivers/spi/spi-loongson-plat.c               |  66 ++++
->  drivers/spi/spi-loongson.h                    |  41 +++
->  8 files changed, 587 insertions(+)
-> 
-> -- 
-> 2.20.1
-> 
+Ok then all is needed is to test tick_nohz_full_cpu(target), right?
