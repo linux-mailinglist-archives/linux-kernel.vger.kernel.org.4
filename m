@@ -2,113 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3346CBF66
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD3D6CBF68
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbjC1Mk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S232509AbjC1MlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232417AbjC1Mku (ORCPT
+        with ESMTP id S232322AbjC1Mkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:40:50 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71764AD1B;
+        Tue, 28 Mar 2023 08:40:55 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719BDAD1D;
         Tue, 28 Mar 2023 05:40:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E786F21A1E;
-        Tue, 28 Mar 2023 12:40:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1680007233; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=vqqlZblvF32Oc3IEsXbE37GU4gfQk/3dHtRa1C6odSg=;
-        b=xHt7RMHDZj9iis1BjDPp6W38V2IQqat+XbSH3pDFr3Q8lMsHhl6OUz4BbYU3sA+TAgW0yZ
-        Ggu1w7SxsIRtvWZzMX9xKCfrTnUEVCcHQngs3zUc4bEE5jkLd/mrFq9nGCWDKHC53Blgvx
-        aRpaNBKDFvI7RbL9f17QXIRbUb1qFSI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1680007233;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=vqqlZblvF32Oc3IEsXbE37GU4gfQk/3dHtRa1C6odSg=;
-        b=o5Jo4JPHBesRVld4amUIZZUpKqjp/6hduT5zW2BbvcHXU86DH/woDQc6NLpc9eMdEXszql
-        bDnM1A3n/EFvo3DQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D2B631390D;
-        Tue, 28 Mar 2023 12:40:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +CQBM0HgImTWOgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 28 Mar 2023 12:40:33 +0000
+Received: by mail-lj1-x230.google.com with SMTP id s20so12399691ljp.1;
+        Tue, 28 Mar 2023 05:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680007236;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JQvGHzQ+Wj6h0GZci6E4OJ3p7YN4IspLtSyoRGDx948=;
+        b=XeB/xdjfocDtQOXVJOQ1qYz1GTmks1YyJw2oeNFVZaprZvJZ5r9OiTyw/3OmU4+l8J
+         SvgKkL7/42lZhZYAV2j6Kex/+LbwuslmmYVT1bGzXMf5VT0v8EV4PKppYvpxThTssrfG
+         0LDZjkhq88y0yIzdHqkTzgJbWVXxKZrGxpqN/w9Swr5+R9dpT1OVrjAPNOD5ri4bz9cZ
+         qtE6BEIJl7G3BgHWQN6TXJLVidQWU+JdS6hMpTkuAGMdXCQACO0KZiLphDYfBp5+FUCi
+         kqRwDbBE+LD9KWN/6Q0hOwByp2P25HUAo1GotTfS/mOK44zK3dfYxYGfpJ4nCP1P4Hjy
+         poZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680007236;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JQvGHzQ+Wj6h0GZci6E4OJ3p7YN4IspLtSyoRGDx948=;
+        b=srwh9fuoxezixLNF5XAAjDICrd0X2ZxeuXMdsiVVQYE/r22axZ/WPPJgq5I7KaSbHl
+         /CpCcvYs+JrmhxMrOcv+5X3NvDc4+hcYLuUGaY2qD0vKgdsSd6AyfVLbxTdp7o+6oPb9
+         zv7b+ZV8Pdw5aT9bolxqPNbC5W85GVoWT4cYnGSZILBa9kAuHRXLOrM41qcZ+pgFrPJ8
+         TZhWZcr+8CXOZwTvi+YTcTfn7i7IqJrTAjqFAnG8vKX/C3/MYRK5KS4JyiMQvkJ8cUlX
+         2sk0Vq8nlgLG5CpNJwp4Ik+Sas6QU+MmHZTWf18EM78eaH8x32HoN0GCYSXFNEUudUvV
+         C7CQ==
+X-Gm-Message-State: AAQBX9exU8rfftzVJbZLCLeVaoUAencfI8YhQgKVlRiEj06GyNWNDri0
+        kRr+QyFFJPQSuL+q75bxUGFYYfMaEPpKYg==
+X-Google-Smtp-Source: AKy350Z1a8irWZjaLN9fUZq6p+NEYF5IRs+Vqh6pkF+dTZfIO4NprtYcjMWtQw3iKObYVa37gX6fJA==
+X-Received: by 2002:a2e:9455:0:b0:29c:8a05:1a38 with SMTP id o21-20020a2e9455000000b0029c8a051a38mr4539691ljh.30.1680007236070;
+        Tue, 28 Mar 2023 05:40:36 -0700 (PDT)
+Received: from pc636 (host-90-233-209-50.mobileonline.telia.com. [90.233.209.50])
+        by smtp.gmail.com with ESMTPSA id r9-20020a2e80c9000000b0029573844d03sm4896655ljg.109.2023.03.28.05.40.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 05:40:35 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
 Date:   Tue, 28 Mar 2023 14:40:33 +0200
-Message-ID: <87jzz13v7i.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc:     regressions@lists.linux.dev, intel-wired-lan@lists.osuosl.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [REGRESSION] e1000e probe/link detection fails since 6.2 kernel
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baoquan He <bhe@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
+ and vmap_block->lock
+Message-ID: <ZCLgQXpIi7A7hYrT@pc636>
+References: <cover.1679209395.git.lstoakes@gmail.com>
+ <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
+ <ZBkDuLKLhsOHNUeG@destitution>
+ <ZBsAG5cpOFhFZZG6@pc636>
+ <ZB00U2S4g+VqzDPL@destitution>
+ <ZCHQ5Pdr203+2LMI@pc636>
+ <20230328025327.GB3222767@dread.disaster.area>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328025327.GB3222767@dread.disaster.area>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Mar 28, 2023 at 01:53:27PM +1100, Dave Chinner wrote:
+> On Mon, Mar 27, 2023 at 07:22:44PM +0200, Uladzislau Rezki wrote:
+> > >     So, this patch open codes the kvmalloc() in the commit path to have
+> > >     the above described behaviour. The result is we more than halve the
+> > >     CPU time spend doing kvmalloc() in this path and transaction commits
+> > >     with 64kB objects in them more than doubles. i.e. we get ~5x
+> > >     reduction in CPU usage per costly-sized kvmalloc() invocation and
+> > >     the profile looks like this:
+> > >     
+> > >       - 37.60% xlog_cil_commit
+> > >             16.01% memcpy_erms
+> > >           - 8.45% __kmalloc
+> > >              - 8.04% kmalloc_order_trace
+> > >                 - 8.03% kmalloc_order
+> > >                    - 7.93% alloc_pages
+> > >                       - 7.90% __alloc_pages
+> > >                          - 4.05% __alloc_pages_slowpath.constprop.0
+> > >                             - 2.18% get_page_from_freelist
+> > >                             - 1.77% wake_all_kswapds
+> > >     ....
+> > >                                         - __wake_up_common_lock
+> > >                                            - 0.94% _raw_spin_lock_irqsave
+> > >                          - 3.72% get_page_from_freelist
+> > >                             - 2.43% _raw_spin_lock_irqsave
+> > >           - 5.72% vmalloc
+> > >              - 5.72% __vmalloc_node_range
+> > >                 - 4.81% __get_vm_area_node.constprop.0
+> > >                    - 3.26% alloc_vmap_area
+> > >                       - 2.52% _raw_spin_lock
+> > >                    - 1.46% _raw_spin_lock
+> > >                   0.56% __alloc_pages_bulk
+> > >           - 4.66% kvfree
+> > >              - 3.25% vfree
+> > OK, i see. I tried to use the fs_mark in different configurations. For
+> > example:
+> > 
+> > <snip>
+> > time fs_mark -D 10000 -S0 -n 100000 -s 0 -L 32 -d ./scratch/0 -d ./scratch/1 -d ./scratch/2  \
+> > -d ./scratch/3 -d ./scratch/4 -d ./scratch/5 -d ./scratch/6 -d ./scratch/7 -d ./scratch/8 \
+> > -d ./scratch/9 -d ./scratch/10 -d ./scratch/11 -d ./scratch/12 -d ./scratch/13 \
+> > -d ./scratch/14 -d ./scratch/15 -t 64 -F
+> > <snip>
+> > 
+> > But i did not manage to trigger xlog_cil_commit() to fallback to vmalloc
+> > code. I think i should reduce an amount of memory on my kvm-pc and
+> > repeat the tests!
+> 
+> Simple way of doing is to use directory blocks that are larger than
+> page size:
+> 
+> mkfs.xfs -n size=64k ....
+> 
+> We can hit that path in other ways - large attributes will hit it in
+> the attr buffer allocation path, enabling the new attribute
+> intent-based logging mode will hit it in the xlog_cil_commit path as
+> well. IIRC, the above profile comes from the latter case, creating
+> lots of zero length files with 64kB xattrs attached via fsmark.
+> 
+Good. Thank you that is useful.
 
-we've got a regression report for e1000e device on Lenovo T460p since
-6.2 kernel (with openSUSE Tumbleweed).  The details are found in
-  https://bugzilla.opensuse.org/show_bug.cgi?id=1209254
-
-It seems that the driver can't detect the 1000Mbps but only 10/100Mbps
-link, eventually making the device unusable.
-
-On 6.1.12:
-[    5.119117] e1000e: Intel(R) PRO/1000 Network Driver
-[    5.119120] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
-[    5.121754] e1000e 0000:00:1f.6: Interrupt Throttling Rate (ints/sec) set to dynamic conservative mode
-[    7.905526] e1000e 0000:00:1f.6 0000:00:1f.6 (uninitialized): Failed to disable ULP
-[    7.988925] e1000e 0000:00:1f.6 0000:00:1f.6 (uninitialized): registered PHC clock
-[    8.069935] e1000e 0000:00:1f.6 eth0: (PCI Express:2.5GT/s:Width x1) 50:7b:9d:cf:13:43
-[    8.069942] e1000e 0000:00:1f.6 eth0: Intel(R) PRO/1000 Network Connection
-[    8.072691] e1000e 0000:00:1f.6 eth0: MAC: 12, PHY: 12, PBA No: 1000FF-0FF
-[   11.643919] e1000e 0000:00:1f.6 eth0: NIC Link is Up 1000 Mbps Full Duplex, Flow Control: None
-[   15.437437] e1000e 0000:00:1f.6 eth0: NIC Link is Up 1000 Mbps Full Duplex, Flow Control: None
-
-On 6.2.4:
-[    4.344140] e1000e: Intel(R) PRO/1000 Network Driver
-[    4.344143] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
-[    4.344933] e1000e 0000:00:1f.6: Interrupt Throttling Rate (ints/sec) set to dynamic conservative mode
-[    7.113334] e1000e 0000:00:1f.6 0000:00:1f.6 (uninitialized): Failed to disable ULP
-[    7.201715] e1000e 0000:00:1f.6 0000:00:1f.6 (uninitialized): registered PHC clock
-[    7.284038] e1000e 0000:00:1f.6 eth0: (PCI Express:2.5GT/s:Width x1) 50:7b:9d:cf:13:43
-[    7.284044] e1000e 0000:00:1f.6 eth0: Intel(R) PRO/1000 Network Connection
-[    7.284125] e1000e 0000:00:1f.6 eth0: MAC: 12, PHY: 12, PBA No: 1000FF-0FF
-[   10.897973] e1000e 0000:00:1f.6 eth0: NIC Link is Up 10 Mbps Full Duplex, Flow Control: None
-[   10.897977] e1000e 0000:00:1f.6 eth0: 10/100 speed: disabling TSO
-[   14.710059] e1000e 0000:00:1f.6 eth0: NIC Link is Up 10 Mbps Full Duplex, Flow Control: None
-[   14.710064] e1000e 0000:00:1f.6 eth0: 10/100 speed: disabling TSO
-[   59.894807] e1000e 0000:00:1f.6 eth0: NIC Link is Up 10 Mbps Full Duplex, Flow Control: None
-[   59.894812] e1000e 0000:00:1f.6 eth0: 10/100 speed: disabling TSO
-[   63.808662] e1000e 0000:00:1f.6 eth0: NIC Link is Up 10 Mbps Full Duplex, Flow Control: None
-[   63.808668] e1000e 0000:00:1f.6 eth0: 10/100 speed: disabling TSO
-
-The same problem persists with 6.3-rc3.
-
-Can you guys check what can go wrong, or if there is a fix?
-
-
-Thanks!
-
-Takashi
+--
+Uladzislau Rezki
