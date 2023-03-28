@@ -2,109 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF726CC180
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3336CC163
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbjC1N4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
+        id S231978AbjC1NvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbjC1N4L (ORCPT
+        with ESMTP id S231435AbjC1NvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:56:11 -0400
-X-Greylist: delayed 344 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Mar 2023 06:56:07 PDT
-Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73071AB
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:56:07 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 83BF0163CEC;
-        Tue, 28 Mar 2023 15:50:18 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1680011419; bh=g0tcLRO9G5v06N0p/X+8+aWeQpvDq7kJq1+slNUVrtk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KgwSeHuEMi+ns7hZ/VrSTdeDWlz/M/VkzamNDw3v34BtEu9AMm17fh2AaOFBl22Tj
-         V9W9kmXW6maLR+BCbO9IAvVUMQEVyR4Sj3YF8ZXluZSNTWSGRMf6uM6x7rJaYwdA6h
-         x1E0R188zE+U9U0R67dWW9nLdkR8a6j/rvWEH7ZVAgYGmkvIM9PKY5q+RFwulQpR3E
-         nrkp+eCa/dFJrgFplgWY2ZVlniZM77UNUb/yjUl+30qyl2k4H0MqoPSf5uDdXTsh7Y
-         +cx+XLlkrcF7rjbcg0nYEFkQ569kpwpnSn2QDnaadki1p+YZZzBL89ZmoB2pEnI2xI
-         o+Bu+kgypdhLQ==
-Date:   Tue, 28 Mar 2023 15:50:17 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] swiotlb: Track and report io_tlb_used high water
- mark in debugfs
-Message-ID: <20230328155017.5636393b@meshulam.tesarici.cz>
-In-Reply-To: <BYAPR21MB1688852ED49499249368D939D7889@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <1679766790-24629-1-git-send-email-mikelley@microsoft.com>
-        <ZCJEAx/G0x6zokPF@infradead.org>
-        <BYAPR21MB1688852ED49499249368D939D7889@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-suse-linux-gnu)
+        Tue, 28 Mar 2023 09:51:13 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BF140EE
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:51:12 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1ph9j4-0006rX-Iq; Tue, 28 Mar 2023 15:51:02 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1ph9j2-0002cQ-JR; Tue, 28 Mar 2023 15:51:00 +0200
+Date:   Tue, 28 Mar 2023 15:51:00 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     peng.fan@nxp.com,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        abailon@baylibre.com, krzysztof.kozlowski+dt@linaro.org,
+        festevam@gmail.com, abelvesa@kernel.org, marex@denx.de,
+        Markus.Niebel@ew.tq-group.com,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        paul.elder@ideasonboard.com, gerg@kernel.org, linux-imx@nxp.com,
+        devicetree@vger.kernel.org,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, linux-pm@vger.kernel.org,
+        s.hauer@pengutronix.de, robh+dt@kernel.org, aford173@gmail.com,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, djakov@kernel.org, shawnguo@kernel.org,
+        l.stach@pengutronix.de
+Subject: Re: [PATCH V3 7/7] arm64: dts: imx8mp: add interconnect for hsio blk
+ ctrl
+Message-ID: <20230328135100.rbmnfelphe7juhxo@pengutronix.de>
+References: <20220703091451.1416264-8-peng.fan@oss.nxp.com>
+ <20230327045037.593326-1-gerg@linux-m68k.org>
+ <2678294.mvXUDI8C0e@steina-w>
+ <b23a44ab-3666-8a41-d2a0-0d2fbdbd9f00@pengutronix.de>
+ <ecd3a92b-ba1e-e7c1-088a-371bd1a2c100@linux-m68k.org>
+ <20230328073302.jj64u5hvdpc6axa5@pengutronix.de>
+ <426b4776-104c-cb47-c8cc-c26515fcb6e3@linux-m68k.org>
+ <20230328134201.yaxrdtetjygkgkmz@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230328134201.yaxrdtetjygkgkmz@pengutronix.de>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023 13:12:13 +0000
-"Michael Kelley (LINUX)" <mikelley@microsoft.com> wrote:
-
-> From: Christoph Hellwig <hch@infradead.org> Sent: Monday, March 27, 2023 6:34 PM
-> > 
-> > On Sat, Mar 25, 2023 at 10:53:10AM -0700, Michael Kelley wrote:  
-> > > @@ -659,6 +663,14 @@ static int swiotlb_do_find_slots(struct device *dev, int  
-> > area_index,  
-> > >  	area->index = wrap_area_index(mem, index + nslots);
-> > >  	area->used += nslots;
-> > >  	spin_unlock_irqrestore(&area->lock, flags);
-> > > +
-> > > +	new_used = atomic_long_add_return(nslots, &total_used);
-> > > +	old_hiwater = atomic_long_read(&used_hiwater);
-> > > +	do {
-> > > +		if (new_used <= old_hiwater)
-> > > +			break;
-> > > +	} while (!atomic_long_try_cmpxchg(&used_hiwater, &old_hiwater, new_used));
-> > > +
-> > >  	return slot_index;  
-> > 
-> > Hmm, so we're right in the swiotlb hot path here and add two new global
-> > atomics?  
+On 23-03-28, Marco Felsch wrote:
+> Hi Greg,
 > 
-> It's only one global atomic, except when the high water mark needs to be
-> bumped.  That results in an initial transient of doing the second global
-> atomic, but then it won't be done unless there's a spike in usage or the
-> high water mark is manually reset to zero.  Of course, there's a similar
-> global atomic subtract when the slots are released.
+> On 23-03-28, Greg Ungerer wrote:
+> > Hi Marco,
+> > 
+> > On 28/3/23 17:33, Marco Felsch wrote:
+> > > Hi Greg,
+> > > 
+> > > On 23-03-27, Greg Ungerer wrote:
+> > > > Hi Ahmad,
+> > > > 
+> > > > On 27/3/23 17:16, Ahmad Fatoum wrote:
+> > > > > On 27.03.23 08:27, Alexander Stein wrote:
+> > > > > > Am Montag, 27. März 2023, 06:50:37 CEST schrieb Greg Ungerer:
+> > > > > > > Any thoughts on why this breaks USB?
+> > > > > > 
+> > > > > > Maybe you are missing CONFIG_INTERCONNECT_IMX8MP?
+> > > > > 
+> > > > > And if that's the case, did you check /sys/kernel/debug/devices_deferred
+> > > > > to see if there was any indication that this is the reason?
+> > > > 
+> > > > Yeah, it does:
+> > > > 
+> > > >      # cat /sys/kernel/debug/devices_deferred
+> > > >      32f10100.usb	platform: supplier 32f10000.blk-ctrl not ready
+> > > >      32f10108.usb	platform: supplier 32f10000.blk-ctrl not ready
+> > > >      32ec0000.blk-ctrl	imx8m-blk-ctrl: failed to get noc entries
+> > > >      381f0040.usb-phy	platform: supplier 32f10000.blk-ctrl not ready
+> > > >      382f0040.usb-phy	platform: supplier 32f10000.blk-ctrl not ready
+> > > >      imx-pgc-domain.11	
+> > > >      imx-pgc-domain.12	
+> > > >      imx-pgc-domain.13	
+> > > >      38330000.blk-ctrl	platform: supplier imx-pgc-domain.11 not ready
+> > > >      32f10000.blk-ctrl	imx8mp-blk-ctrl: failed to get noc entries
+> > > > 
+> > > > As far as I can tell blk-ctrl should be good:
+> > > > 
+> > > >      #
+> > > >      # i.MX SoC drivers
+> > > >      #
+> > > >      CONFIG_IMX_GPCV2_PM_DOMAINS=y
+> > > >      CONFIG_SOC_IMX8M=y
+> > > >      # CONFIG_SOC_IMX9 is not set
+> > > >      CONFIG_IMX8M_BLK_CTRL=y
+> > > >      # end of i.MX SoC drivers
+> > > > 
+> > > > 
+> > > > > If you didn't find any hint there, you might want to place a
+> > > > > dev_err_probe with a suitable message at the place where -EPROBE_DEFER
+> > > > > was returned.
+> > > > 
+> > > > I will try that.
+> > > 
+> > > Can you check that CONFIG_ARM_IMX_BUS_DEVFREQ is enabled? This is the
+> > > noc/interconnect driver. This could also the problem for you vpu issue.
+> > 
+> > I do not have that enabled. Enabling that fixes the USB probing.
+> > So that is good, thanks.
+> > 
+> > It doesn't fix the other problem I mentioned with the vpu pgc nodes though.
+> > I do get some extra messages now with this enabled and the 6.1 kernel:
+> > 
+> >     imx-pgc imx-pgc-domain.8: failed to command PGC
+> >     imx-pgc imx-pgc-domain.8: failed to command PGC
+> >     imx8m-blk-ctrl 38330000.blk-ctrl: deferred probe timeout, ignoring dependency
+> >     imx8m-blk-ctrl 38330000.blk-ctrl: error -110: failed to attach power domain "g1"
+> >     imx8m-blk-ctrl: probe of 38330000.blk-ctrl failed with error -110
 > 
-> Perhaps this accounting should go under #ifdef CONFIG_DEBUGFS?  Or
-> even add a swiotlb-specific debugfs config option to cover all the swiotlb
-> debugfs code.  From Petr Tesarik's earlier comments, it sounds like there
-> is interest in additional accounting, such as for fragmentation.
+> Okay, this seems more like a "real" issue not related to some missing
+> drivers. I followed the code and found a poll within the
+> imx_pgc_power_up() in gpcv2.c. Power-domain 8 is the vpumix domain which
+> is used as power-domain for the g1 power-domain. My assumption is that
+> this poll does run into the timeout. Maybe Peng can support you here
+> since I didn't had the time for to test the VPUs yet and he did the
+> integration patches.
+> 
+> Just ignore the errors if you don't use the VPUs or disable the
+> blk-ctrl@38330000 node via status = "disabled".
 
-For my purposes, it does not have to be 100% accurate. I don't really
-mind if it is off by a few slots because of a race window, so we could
-(for instance):
+I forgot to ask: Does your i.MX8MP have a VPU? There are i.MX8MP devices
+(don't know the name) which don't have support for certain IPs. If this
+is the case the bootloader will fixup your devicetree by disable the
+corresponding nodes, we call this feature-controller:
 
-- update a local variable and set the atomic after the loop,
-- or make it a per-cpu to reduce CPU cache bouncing,
-- or just about anything that is less heavy-weight than an atomic
-  CMPXCHG in the inner loop of a slot search.
+https://elixir.bootlin.com/barebox/latest/source/arch/arm/dts/imx8mp.dtsi
 
-Just my two cents,
-Petr T
+As you can see the imx8mp.dtsi is missing the feature bits for the VPU
+but you can check the i.mx8mm.dtsi. Here you can see that barebox will
+check the availability of the vpu:
+
+https://elixir.bootlin.com/barebox/latest/source/arch/arm/dts/imx8mm.dtsi
+
+Regards,
+  Marco
