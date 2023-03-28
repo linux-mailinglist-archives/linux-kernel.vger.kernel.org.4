@@ -2,58 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E501A6CCDE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFEA6CCDEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjC1XJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 19:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
+        id S229865AbjC1XNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 19:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjC1XJc (ORCPT
+        with ESMTP id S229757AbjC1XNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 19:09:32 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7B02109;
-        Tue, 28 Mar 2023 16:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=TtAWW+rcRDNEtRaY+5PARKcs7L5jYJy9Gvn5idod+V8=; b=T6qhdSfj75BjrmtNtqPQemMtTQ
-        6UA+i8rTanrpWdnc/mgCBuuhh7AwBmjkiGbms4BD9FOndFiKjb6kA5WgXVXSgkpKwB2+sShQt/kb1
-        XTRd7QAODPJSm656Vxq5sS1YT8vkGmqQ+sQB80d8+KKwLy7Hzee6ULrbQw7ggnyRnjvLPJXlXH4RW
-        xcaosmceEBhUVbuYQQAO5urm238UFDRppDvfp2GJcnUBRTNDjWiFwjPTqSphvfRL57un/8zbOJKpc
-        J4TriE2hqlL8eDhplEcKNh3khT12GSBI4NlmbSDLWMfCwdy3+iqBvLEGnYyRNFQlNnzTVC5x2woNL
-        c4Fbj3+A==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1phIRP-00G5fs-2c;
-        Tue, 28 Mar 2023 23:09:23 +0000
-Message-ID: <988d7f44-4c4a-982a-90a9-86fc10f2fc15@infradead.org>
-Date:   Tue, 28 Mar 2023 16:09:22 -0700
+        Tue, 28 Mar 2023 19:13:37 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F861BF0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:13:34 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id r7so10140129uaj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:13:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680045214;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9Ovm+AM85KXAJZHu2fD53I2qFnekQy/WozXcpTNpGGI=;
+        b=Dnh//BOQKl1nkYVftlXgaATG8gbO0cTyEPMrBs5HAYsbWGowNRajjCifsI/vIZgLNu
+         Tjt0Tmm9zQxzn2NTJyBR/8uM3MZh9heUL07KmfnRS5COYj2T2xckjf0LxMVs8cjOewS9
+         NYz7jIbXQcnk8byiK+pYEu9mtRx73cRD4q/lIjQ3WEqh9I69sD5H8zWp5l5RNcqJuD9L
+         B/lmajj6pvI5pH1UvMmEb9b99s/Ekxm3z4i0lQt4WvOnArzetoUU3oAYdaSA02LEhS1E
+         2eV3VVkXy4+De5jJXoMYgWSU320EMUj2I4v8zgw0hYG6JBa6LC/U/ZhNEDDoVWlqTQKo
+         /+ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680045214;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9Ovm+AM85KXAJZHu2fD53I2qFnekQy/WozXcpTNpGGI=;
+        b=GemyzJZVkXpjnnT0OZeVtFpIPgPt4TIVcXpC856sDiNDubKGRg5feoEfB0Vqv5QqoC
+         Rc/SewPY16q0+jCC2yfSZchRo4R2yxLX9uE3/v6SKqCVAjtVPAHBRouraiY8DVS6QNof
+         eN5TzyTsGqf28I2Ia/F4zT1rRU6z1veuUNpjGBtO710Qp8ypZ46U+fZZUzm6haIAK0Ny
+         yu7Zb+H1XyOta+eJaIUKRClhrMomAJIUA3QVS35ij9u9imGGrDvcBIT68dYEjubAgea8
+         NLnN/yVzWIqFKtCpHJGGWwM1VlybgH8bVtEgxpl/vveuu+vMY7+q3Gr1QcKesqO7/lXt
+         OLFg==
+X-Gm-Message-State: AAQBX9e9oJPRvnp3S/9PyI//DeaETzujDb55ZfMkoVIVcrYVHldTbVUV
+        wyezAIL2WSw4Jcm5K6S3KfIunHkQLEj2LqAKpS+auw==
+X-Google-Smtp-Source: AKy350ZUtjKBRPgsVzb0NsvH9ktDoKD0M4zlZHz9dMVIVnpXMME0mXMlPzdM9gmRFI/jrkFWsuRZI4V23Qv4c5QV1os=
+X-Received: by 2002:a1f:b2d2:0:b0:43b:96b8:1a9f with SMTP id
+ b201-20020a1fb2d2000000b0043b96b81a9fmr5841630vkf.2.1680045213907; Tue, 28
+ Mar 2023 16:13:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/msm/a6xx: add CONFIG_PM dependency
-To:     Arnd Bergmann <arnd@kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Sean Paul <sean@poorly.run>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230324095502.3289094-1-arnd@kernel.org>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230324095502.3289094-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-15-vipinsh@google.com>
+ <ZBzSgI2mkpl3QTNt@google.com> <CAHVum0dSh-=VsiR+dC6MC3FO_ev4CqNZ6PrVuZoQ+uRd5qn-0g@mail.gmail.com>
+In-Reply-To: <CAHVum0dSh-=VsiR+dC6MC3FO_ev4CqNZ6PrVuZoQ+uRd5qn-0g@mail.gmail.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Tue, 28 Mar 2023 16:13:07 -0700
+Message-ID: <CALzav=dURfiFvCZNjysk28q4sJMzFWLLnjXZ_LfP9kcHsAz50g@mail.gmail.com>
+Subject: Re: [Patch v4 14/18] KVM: mmu: Initialize kvm_mmu_memory_cache.gfp_zero
+ to __GFP_ZERO by default
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,51 +73,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 28, 2023 at 10:31=E2=80=AFAM Vipin Sharma <vipinsh@google.com> =
+wrote:
+>
+> On Thu, Mar 23, 2023 at 3:28=E2=80=AFPM David Matlack <dmatlack@google.co=
+m> wrote:
+> >
+> > On Mon, Mar 06, 2023 at 02:41:23PM -0800, Vipin Sharma wrote:
+> > > Set __GFP_ZERO to gfp_zero in default initizliation of struct
+> > > kvm_mmu_memory_cache{}
+> > >
+> > > All of the users of default initialization code of struct
+> > > kvm_mmu_memory_cache{} explicitly sets gfp_zero to __GFP_ZERO. This c=
+an
+> > > be moved to common initialization logic.
+> >
+> > If that were true we could get rid of gfp_zero entirely and hard-code
+> > __GFP_ZERO in the memory allocator! mmu_shadowed_info_cache is the one
+> > that does not set __GFP_ZERO.
+> >
+>
+> Can we use __GFP_ZERO for mmu_shadowed_info_cache?
 
+Yes but doing so would add CPU cost to zero the memory on allocation.
+Someone would need to do some performance testing to confirm that the
+cost of zeroing is acceptable.
 
-On 3/24/23 02:54, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Selecting CONFIG_PM_GENERIC_DOMAINS causes a build failure when CONFIG_PM
-> is not enabled:
-> 
-> WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS
->   Depends on [n]: PM [=n]
->   Selected by [m]:
->   - DRM_MSM [=m] && HAS_IOMEM [=y] && DRM [=m] && (ARCH_QCOM [=y] || SOC_IMX5 || COMPILE_TEST [=y]) && COMMON_CLK [=y] && IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=y] || QCOM_OCMEM [=y]=n) && (QCOM_LLCC [=n] || QCOM_LLCC [=n]=n) && (QCOM_COMMAND_DB [=y] || QCOM_COMMAND_DB [=y]=n) && DEVFREQ_GOV_SIMPLE_ONDEMAND [=y]
-> 
-> drivers/base/power/domain.c:654:13: error: use of undeclared identifier 'pm_wq'
->         queue_work(pm_wq, &genpd->power_off_work);
->                    ^
-> drivers/base/power/domain.c:853:26: error: no member named 'ignore_children' in 'struct dev_pm_info'
->                 if (!dev || dev->power.ignore_children)
->                             ~~~~~~~~~~ ^
-> 
-> Fixes: c11fa1204fe9 ("drm/msm/a6xx: Use genpd notifier to ensure cx-gdsc collapse")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
->  drivers/gpu/drm/msm/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
-> index 1c417ba53b5b..85f5ab1d552c 100644
-> --- a/drivers/gpu/drm/msm/Kconfig
-> +++ b/drivers/gpu/drm/msm/Kconfig
-> @@ -9,6 +9,7 @@ config DRM_MSM
->  	depends on QCOM_OCMEM || QCOM_OCMEM=n
->  	depends on QCOM_LLCC || QCOM_LLCC=n
->  	depends on QCOM_COMMAND_DB || QCOM_COMMAND_DB=n
-> +	depends on PM
->  	select IOMMU_IO_PGTABLE
->  	select QCOM_MDT_LOADER if ARCH_QCOM
->  	select REGULATOR
-
--- 
-~Randy
+> Also, MIPS doesn't
+> use __GFP_ZERO, I think it might be a missed thing in MIPS rather than
+> intentional.
