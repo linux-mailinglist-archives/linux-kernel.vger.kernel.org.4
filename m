@@ -2,194 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D446CC003
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8326CC005
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbjC1M7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
+        id S230313AbjC1NAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbjC1M7p (ORCPT
+        with ESMTP id S232748AbjC1NAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:59:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E10358E;
-        Tue, 28 Mar 2023 05:59:28 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 12:59:25 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1680008366;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xY7Gu0X7NFSrJJ2PYPZHUedWk+GWBVWLgCO0JJisAuI=;
-        b=f7qD0NfHuZNAFdUH+Swja5PJ/pb0TxFykGsqCuhbz4dWfFC/di69DUW35g2/LA0BpFuNOc
-        9ydBOHP9iR8M59mnABnqbVcqrOiKqajBVVx+FceXw/BE5D6OowfxC3psjn+Z5Kc3Fr0uSH
-        DUsNIuAo2Tx4c/QhSjHRlKbPLicd9X1cCEv5f2rMaPZR5siu7+lzBjDpx0a3rkrGGy+4pO
-        PlcItfqtM1xDRTp5+EErMNM2ySngp0acprZ9OmyA4ZEh/6DLuPpmAhj7bl+siqIIN/9dse
-        fE2gupsFVLVerAbbecxj8cf41ct1ptbRvEax0wrwYLBg9HS1/fjHlVpA3LnwZA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1680008366;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xY7Gu0X7NFSrJJ2PYPZHUedWk+GWBVWLgCO0JJisAuI=;
-        b=4Rnswf+XShKl2yNCCdSop5QvT/OHVi/7vA0wUMJXYY9xMbKIKxnypmKTkW2IasOpw0uZ8d
-        wUm5hRKc38psWoDA==
-From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] x86/coco: Export cc_vendor
-Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230318115634.9392-2-bp@alien8.de>
-References: <20230318115634.9392-2-bp@alien8.de>
+        Tue, 28 Mar 2023 09:00:35 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54195B463
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:00:26 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-536af432ee5so228536567b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:00:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680008425;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+huGA2Pj+bVMB5ImXYOSsvTzp1LUROSbW9q/pibPfZk=;
+        b=tUw9ivkOFvOutpO3vZF1294VVPaqjFYRzSTC8ta9jaGGvrB7OVcIFUvr1dN2buhuDY
+         ObMOc71gnqyMgj+JMBsF50M4lfvc/z8iWdduY/waRvHGWEtT+9XXZ/Zd5/FYdFzbu6oy
+         OwuH3h2YoV5v3mCrMEL4FOJci3DegXTF0QQf94T3nzi6A5tPRqallcteny/XxcCxHhip
+         1IkFEj+2DDINaSTOjA0oDRM8b679kyYr49R6PHVXc/07Z5cEYxKHiKfpHSGdBkHHIKFQ
+         3JkKjJJ1UKTc//4AMeQnPiR90Au2IkEtl0GE9CuY9/MFw0NDKfBEAYR4Zgt+j4sJeSTA
+         /Osg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680008425;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+huGA2Pj+bVMB5ImXYOSsvTzp1LUROSbW9q/pibPfZk=;
+        b=qCrWyOJrIPa3ZDmS7xgGaZcW4HrAtxGoj07d/BDjzmRgnajsdoAIXhqepthM0yFm0K
+         3tl+HDbA/KFZ4ymCPxpA+d8aJRTLyKReFphWoL9t3V+p0YAVuYZZp63l2UiaNmpCAFpI
+         h0fijplH60jg+59GWWC2KNFiPpoF3LHm6JooQmRPckMrwJ4Gu0UcoBI31jVu/VUftxwZ
+         PPzm7iNIS5ewtqCsOtNaUh/Wf3mhKIx7dLwS8o07S0+cWtTpOqFOdqFXqRugW+OXx5d3
+         GcJjg/Yfgcqqkqz9NQDSgnFvhFvO5ZqWW1iGhY9vBGYd7lTUrB1f/KI2BsSL/xe46heo
+         GVmw==
+X-Gm-Message-State: AAQBX9dsGwLA+eUYayM5xygkW7bhfUXgTFe2uwvMxjfLO6ud+f8UtjO1
+        hrdm1s7j6pPFo81hKnAZKdSTJvEf8Qr4Vh4sJkSe8w==
+X-Google-Smtp-Source: AKy350YACvUMAelvnSZlTYMgg5DNeiYkah+uj1gFLlg6pWuOcKuRZWK2bogfhyYR8w7emQspC1Az9WMoV0N+hmBDcS8=
+X-Received: by 2002:a0d:c787:0:b0:542:471d:ec62 with SMTP id
+ j129-20020a0dc787000000b00542471dec62mr14895469ywd.25.1680008425050; Tue, 28
+ Mar 2023 06:00:25 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <168000836538.5837.8228160837944505902.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230328095807.7014-1-songmuchun@bytedance.com> <20230328095807.7014-6-songmuchun@bytedance.com>
+In-Reply-To: <20230328095807.7014-6-songmuchun@bytedance.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 28 Mar 2023 14:59:48 +0200
+Message-ID: <CANpmjNPZxDYPYzEjr55ONydwH1FZF_Eh_gu7XKg=4-+HK6vL9Q@mail.gmail.com>
+Subject: Re: [PATCH 5/6] mm: kfence: change kfence pool page layout
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     glider@google.com, dvyukov@google.com, akpm@linux-foundation.org,
+        jannh@google.com, sjpark@amazon.de, muchun.song@linux.dev,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/sev branch of tip:
+On Tue, 28 Mar 2023 at 11:58, 'Muchun Song' via kasan-dev
+<kasan-dev@googlegroups.com> wrote:
+>
+> The original kfence pool layout (Given a layout with 2 objects):
+>
+>  +------------+------------+------------+------------+------------+------------+
+>  | guard page | guard page |   object   | guard page |   object   | guard page |
+>  +------------+------------+------------+------------+------------+------------+
+>                            |                         |                         |
+>                            +----kfence_metadata[0]---+----kfence_metadata[1]---+
+>
+> The comment says "the additional page in the beginning gives us an even
+> number of pages, which simplifies the mapping of address to metadata index".
+>
+> However, removing the additional page does not complicate any mapping
+> calculations. So changing it to the new layout to save a page. And remmove
+> the KFENCE_ERROR_INVALID test since we cannot test this case easily.
+>
+> The new kfence pool layout (Given a layout with 2 objects):
+>
+>  +------------+------------+------------+------------+------------+
+>  | guard page |   object   | guard page |   object   | guard page |
+>  +------------+------------+------------+------------+------------+
+>  |                         |                         |
+>  +----kfence_metadata[0]---+----kfence_metadata[1]---+
+>
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> ---
+>  include/linux/kfence.h  |  8 ++------
+>  mm/kfence/core.c        | 40 ++++++++--------------------------------
+>  mm/kfence/kfence.h      |  2 +-
+>  mm/kfence/kfence_test.c | 14 --------------
+>  4 files changed, 11 insertions(+), 53 deletions(-)
+>
+> diff --git a/include/linux/kfence.h b/include/linux/kfence.h
+> index 726857a4b680..25b13a892717 100644
+> --- a/include/linux/kfence.h
+> +++ b/include/linux/kfence.h
+> @@ -19,12 +19,8 @@
+>
+>  extern unsigned long kfence_sample_interval;
+>
+> -/*
+> - * We allocate an even number of pages, as it simplifies calculations to map
+> - * address to metadata indices; effectively, the very first page serves as an
+> - * extended guard page, but otherwise has no special purpose.
+> - */
+> -#define KFENCE_POOL_SIZE ((CONFIG_KFENCE_NUM_OBJECTS + 1) * 2 * PAGE_SIZE)
+> +/* The last page serves as an extended guard page. */
 
-Commit-ID:     5ae57743f578725a5dadb6f31d7798ee55e6e967
-Gitweb:        https://git.kernel.org/tip/5ae57743f578725a5dadb6f31d7798ee55e6e967
-Author:        Borislav Petkov (AMD) <bp@alien8.de>
-AuthorDate:    Sat, 18 Mar 2023 12:56:33 +01:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Tue, 28 Mar 2023 14:52:51 +02:00
+The last page is just a normal guard page? I.e. the last 2 pages are:
+<object page> | <guard page>
 
-x86/coco: Export cc_vendor
+Or did I misunderstand?
 
-It will be used in different checks in future changes. Export it
-directly and drop the setter as it is a __ro_after_init variable anyway.
+> +#define KFENCE_POOL_SIZE       ((CONFIG_KFENCE_NUM_OBJECTS * 2 + 1) * PAGE_SIZE)
+>  extern char *__kfence_pool;
+>
+>  DECLARE_STATIC_KEY_FALSE(kfence_allocation_key);
+> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+> index 41befcb3b069..f205b860f460 100644
+> --- a/mm/kfence/core.c
+> +++ b/mm/kfence/core.c
+> @@ -240,24 +240,7 @@ static inline void kfence_unprotect(unsigned long addr)
+>
+>  static inline unsigned long metadata_to_pageaddr(const struct kfence_metadata *meta)
+>  {
+> -       unsigned long offset = (meta - kfence_metadata + 1) * PAGE_SIZE * 2;
+> -       unsigned long pageaddr = (unsigned long)&__kfence_pool[offset];
+> -
+> -       /* The checks do not affect performance; only called from slow-paths. */
+> -
+> -       /* Only call with a pointer into kfence_metadata. */
+> -       if (KFENCE_WARN_ON(meta < kfence_metadata ||
+> -                          meta >= kfence_metadata + CONFIG_KFENCE_NUM_OBJECTS))
+> -               return 0;
 
-No functional changes.
+Could we retain this WARN_ON? Or just get rid of
+metadata_to_pageaddr() altogether, because there's only 1 use left and
+the function would now just be a simple ALIGN_DOWN() anyway.
 
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230318115634.9392-2-bp@alien8.de
----
- arch/x86/coco/core.c               | 13 ++++---------
- arch/x86/coco/tdx/tdx.c            |  2 +-
- arch/x86/hyperv/ivm.c              |  2 +-
- arch/x86/include/asm/coco.h        |  2 +-
- arch/x86/mm/mem_encrypt_identity.c |  2 +-
- 5 files changed, 8 insertions(+), 13 deletions(-)
+> -       /*
+> -        * This metadata object only ever maps to 1 page; verify that the stored
+> -        * address is in the expected range.
+> -        */
+> -       if (KFENCE_WARN_ON(ALIGN_DOWN(meta->addr, PAGE_SIZE) != pageaddr))
+> -               return 0;
+> -
+> -       return pageaddr;
+> +       return ALIGN_DOWN(meta->addr, PAGE_SIZE);
+>  }
+>
+>  /*
+> @@ -535,34 +518,27 @@ static void kfence_init_pool(void)
+>         unsigned long addr = (unsigned long)__kfence_pool;
+>         int i;
+>
+> -       /*
+> -        * Protect the first 2 pages. The first page is mostly unnecessary, and
+> -        * merely serves as an extended guard page. However, adding one
+> -        * additional page in the beginning gives us an even number of pages,
+> -        * which simplifies the mapping of address to metadata index.
+> -        */
+> -       for (i = 0; i < 2; i++, addr += PAGE_SIZE)
+> -               kfence_protect(addr);
+> -
+>         for (i = 0; i < CONFIG_KFENCE_NUM_OBJECTS; i++, addr += 2 * PAGE_SIZE) {
+>                 struct kfence_metadata *meta = &kfence_metadata[i];
+> -               struct slab *slab = page_slab(virt_to_page(addr));
+> +               struct slab *slab = page_slab(virt_to_page(addr + PAGE_SIZE));
+>
+>                 /* Initialize metadata. */
+>                 INIT_LIST_HEAD(&meta->list);
+>                 raw_spin_lock_init(&meta->lock);
+>                 meta->state = KFENCE_OBJECT_UNUSED;
+> -               meta->addr = addr; /* Initialize for validation in metadata_to_pageaddr(). */
+> +               meta->addr = addr + PAGE_SIZE;
+>                 list_add_tail(&meta->list, &kfence_freelist);
+>
+> -               /* Protect the right redzone. */
+> -               kfence_protect(addr + PAGE_SIZE);
+> +               /* Protect the left redzone. */
+> +               kfence_protect(addr);
+>
+>                 __folio_set_slab(slab_folio(slab));
+>  #ifdef CONFIG_MEMCG
+>                 slab->memcg_data = (unsigned long)&meta->objcg | MEMCG_DATA_OBJCGS;
+>  #endif
+>         }
+> +
+> +       kfence_protect(addr);
+>  }
+>
+>  static bool __init kfence_init_pool_early(void)
+> @@ -1043,7 +1019,7 @@ bool kfence_handle_page_fault(unsigned long addr, bool is_write, struct pt_regs
+>
+>         atomic_long_inc(&counters[KFENCE_COUNTER_BUGS]);
+>
+> -       if (page_index % 2) {
+> +       if (page_index % 2 == 0) {
+>                 /* This is a redzone, report a buffer overflow. */
+>                 struct kfence_metadata *meta;
+>                 int distance = 0;
+> diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
+> index 600f2e2431d6..249d420100a7 100644
+> --- a/mm/kfence/kfence.h
+> +++ b/mm/kfence/kfence.h
+> @@ -110,7 +110,7 @@ static inline struct kfence_metadata *addr_to_metadata(unsigned long addr)
+>          * __kfence_pool, in which case we would report an "invalid access"
+>          * error.
+>          */
+> -       index = (addr - (unsigned long)__kfence_pool) / (PAGE_SIZE * 2) - 1;
+> +       index = (addr - (unsigned long)__kfence_pool) / (PAGE_SIZE * 2);
+>         if (index < 0 || index >= CONFIG_KFENCE_NUM_OBJECTS)
+>                 return NULL;
 
-diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-index f4f0625..73f8323 100644
---- a/arch/x86/coco/core.c
-+++ b/arch/x86/coco/core.c
-@@ -13,7 +13,7 @@
- #include <asm/coco.h>
- #include <asm/processor.h>
- 
--static enum cc_vendor vendor __ro_after_init;
-+enum cc_vendor cc_vendor __ro_after_init;
- static u64 cc_mask __ro_after_init;
- 
- static bool intel_cc_platform_has(enum cc_attr attr)
-@@ -99,7 +99,7 @@ static bool amd_cc_platform_has(enum cc_attr attr)
- 
- bool cc_platform_has(enum cc_attr attr)
- {
--	switch (vendor) {
-+	switch (cc_vendor) {
- 	case CC_VENDOR_AMD:
- 		return amd_cc_platform_has(attr);
- 	case CC_VENDOR_INTEL:
-@@ -119,7 +119,7 @@ u64 cc_mkenc(u64 val)
- 	 * - for AMD, bit *set* means the page is encrypted
- 	 * - for AMD with vTOM and for Intel, *clear* means encrypted
- 	 */
--	switch (vendor) {
-+	switch (cc_vendor) {
- 	case CC_VENDOR_AMD:
- 		if (sev_status & MSR_AMD64_SNP_VTOM)
- 			return val & ~cc_mask;
-@@ -135,7 +135,7 @@ u64 cc_mkenc(u64 val)
- u64 cc_mkdec(u64 val)
- {
- 	/* See comment in cc_mkenc() */
--	switch (vendor) {
-+	switch (cc_vendor) {
- 	case CC_VENDOR_AMD:
- 		if (sev_status & MSR_AMD64_SNP_VTOM)
- 			return val | cc_mask;
-@@ -149,11 +149,6 @@ u64 cc_mkdec(u64 val)
- }
- EXPORT_SYMBOL_GPL(cc_mkdec);
- 
--__init void cc_set_vendor(enum cc_vendor v)
--{
--	vendor = v;
--}
--
- __init void cc_set_mask(u64 mask)
- {
- 	cc_mask = mask;
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 055300e..bab29cb 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -852,7 +852,7 @@ void __init tdx_early_init(void)
- 
- 	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
- 
--	cc_set_vendor(CC_VENDOR_INTEL);
-+	cc_vendor = CC_VENDOR_INTEL;
- 	tdx_parse_tdinfo(&cc_mask);
- 	cc_set_mask(cc_mask);
- 
-diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-index f6a020c..4395d2f 100644
---- a/arch/x86/hyperv/ivm.c
-+++ b/arch/x86/hyperv/ivm.c
-@@ -364,7 +364,7 @@ void __init hv_vtom_init(void)
- 	 * Set it here to indicate a vTOM VM.
- 	 */
- 	sev_status = MSR_AMD64_SNP_VTOM;
--	cc_set_vendor(CC_VENDOR_AMD);
-+	cc_vendor = CC_VENDOR_AMD;
- 	cc_set_mask(ms_hyperv.shared_gpa_boundary);
- 	physical_mask &= ms_hyperv.shared_gpa_boundary - 1;
- 
-diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
-index d2c6a2e..61fc7c1 100644
---- a/arch/x86/include/asm/coco.h
-+++ b/arch/x86/include/asm/coco.h
-@@ -10,7 +10,7 @@ enum cc_vendor {
- 	CC_VENDOR_INTEL,
- };
- 
--void cc_set_vendor(enum cc_vendor v);
-+extern enum cc_vendor cc_vendor;
- void cc_set_mask(u64 mask);
- 
- #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
-diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
-index c6efcf5..bfe22fd 100644
---- a/arch/x86/mm/mem_encrypt_identity.c
-+++ b/arch/x86/mm/mem_encrypt_identity.c
-@@ -612,7 +612,7 @@ void __init sme_enable(struct boot_params *bp)
- out:
- 	if (sme_me_mask) {
- 		physical_mask &= ~sme_me_mask;
--		cc_set_vendor(CC_VENDOR_AMD);
-+		cc_vendor = CC_VENDOR_AMD;
- 		cc_set_mask(sme_me_mask);
- 	}
- }
+Assume there is a right OOB that hit the last guard page. In this case
+
+  addr >= __kfence_pool + (NUM_OBJECTS * 2 * PAGE_SIZE) && addr <
+__kfence_pool + POOL_SIZE
+
+therefore
+
+  index >= (NUM_OBJECTS * 2 * PAGE_SIZE) / (PAGE_SIZE * 2) && index <
+POOL_SIZE / (PAGE_SIZE * 2)
+  index == NUM_OBJECTS
+
+And according to the above comparison, this will return NULL and
+report KFENCE_ERROR_INVALID, which is wrong.
+
+> diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
+> index b5d66a69200d..d479f9c8afb1 100644
+> --- a/mm/kfence/kfence_test.c
+> +++ b/mm/kfence/kfence_test.c
+> @@ -637,19 +637,6 @@ static void test_gfpzero(struct kunit *test)
+>         KUNIT_EXPECT_FALSE(test, report_available());
+>  }
+>
+> -static void test_invalid_access(struct kunit *test)
+> -{
+> -       const struct expect_report expect = {
+> -               .type = KFENCE_ERROR_INVALID,
+> -               .fn = test_invalid_access,
+> -               .addr = &__kfence_pool[10],
+> -               .is_write = false,
+> -       };
+> -
+> -       READ_ONCE(__kfence_pool[10]);
+> -       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
+> -}
+> -
+>  /* Test SLAB_TYPESAFE_BY_RCU works. */
+>  static void test_memcache_typesafe_by_rcu(struct kunit *test)
+>  {
+> @@ -787,7 +774,6 @@ static struct kunit_case kfence_test_cases[] = {
+>         KUNIT_CASE(test_kmalloc_aligned_oob_write),
+>         KUNIT_CASE(test_shrink_memcache),
+>         KUNIT_CASE(test_memcache_ctor),
+> -       KUNIT_CASE(test_invalid_access),
+
+The test can be retained by doing an access to a guard page in between
+2 unallocated objects. But it's probably not that easy to reliably set
+that up (could try to allocate 2 objects and see if they're next to
+each other, then free them).
