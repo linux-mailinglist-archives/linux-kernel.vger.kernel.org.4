@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055CA6CBB38
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4BD6CBB37
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjC1JjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+        id S231359AbjC1JjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjC1JjF (ORCPT
+        with ESMTP id S230156AbjC1JjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:39:05 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E24F2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:39:03 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id fd25so7557661pfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:39:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679996343;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9xwdE2IE7PNZO4yNNxVXzXNCrW6RVKY2tviFY/6w78Q=;
-        b=TSY/B0ZRhgYwqc6csVXym8zms317WIvtdacvoLJ8+7m5Myi18vu+5cFWBAzYGX2Hin
-         DB5g33pihRKOQxoLUPq/PLYkPtcQPsbF9Csl5saA1w/pta117XswrEgrFN3gfp2J2kEF
-         oR5OKwS4va6jvBx1tfc67nm9h0ckluQGl2yyyTVogDhvXnoq6NM1OZ+ckJ2V42aYqCfG
-         0FLpwnDGE6blXnGA8AXBjFVMMuQ+OAg4LL/QwFlQfQ6pSG8jbbwx6SzhvM+Q1sTxVgIM
-         8TD1ME8AvReeFWufxfqydo8AWwMOl7T5umd7VYT/e65/abw7ELV0FtJQ/rjqzxyLkwN/
-         ciDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679996343;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9xwdE2IE7PNZO4yNNxVXzXNCrW6RVKY2tviFY/6w78Q=;
-        b=EwqW5jXjPehBNppfOCV8Aomf/0wHt228oNaqhbN5gwvJg/UCU9iSaX58xbGnBNojtx
-         CWkn0Z+vmdx4+ppjjlpICGnbR+4qYsI1i8yALjoHjatEISLQD0OxUFm1ZYdgGX7BvB75
-         5jsTS7SMa6tqkQ3fNKEDxyvNUCKLKIwO817wjQFOBt9AduFttxwM3oCJfFYXdKagRBCm
-         14DuL5cwb1OBOLeMejl2+wfQEUZTGCYyGpJB/2S3xwXnAU4RtXKdCzCR0i3dMuzqUHj8
-         7g49i5lL9tyUO9kJhm0ectKexulkFbUD10cQzII19NjrxQ6V1txc54bgfqGyG8LIMVhB
-         YlVw==
-X-Gm-Message-State: AAQBX9c1xCRTNeVB0UzSllJU+NEYctJx4rpSlPQtx8efJRIi20KBeKTg
-        YPJH0WhsHaibZ+K++R2BNLlw
-X-Google-Smtp-Source: AKy350bHDX3Rrj57zUrO/5RLT7vUI0eFxDpGfCXLQUU0RNc8bm08CmNKN9NMIR+qBrhCc73UDpa1EQ==
-X-Received: by 2002:a62:1c57:0:b0:624:f46:7256 with SMTP id c84-20020a621c57000000b006240f467256mr15126001pfc.21.1679996343067;
-        Tue, 28 Mar 2023 02:39:03 -0700 (PDT)
-Received: from thinkpad ([117.193.212.166])
-        by smtp.gmail.com with ESMTPSA id a23-20020a62bd17000000b005a91d570972sm18330448pff.41.2023.03.28.02.38.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 02:39:02 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 15:08:53 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
-        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/5] arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
-Message-ID: <20230328093853.GA5695@thinkpad>
-References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
- <20230325165217.31069-2-manivannan.sadhasivam@linaro.org>
- <ZCKrXZn7Eu/jvdpG@hovoldconsulting.com>
+        Tue, 28 Mar 2023 05:39:09 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B1C5B99
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:39:08 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32S8TEUN024888;
+        Tue, 28 Mar 2023 11:38:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=OYiJ//G5VBRLV8o+Mq0MH5geZvdUpWk4yWOPx1fr6wY=;
+ b=FViwJHg88F706F2Xm2584pc0apTKG8Lwk7DEyTKg0t+GCkBBZC1q1byehgjuhDB3kWNy
+ BRamH0hv0rw3pKM8FgUMWp+E8HvXTqrdbFg7/3Oc1RZqnDw2/XKifLQURRCrzlY7YI7L
+ V+ZPuYOkS4hQ2lnUOTB2+hlM9XIq16yKXWAAmBRv0OdUF7IrEolqL2AjPoJH427jPpCo
+ HuUeXZzoicYb1t+u9LC7wMzU7wMOvFMFLZqa+0wpzvcsrz0xPBAvklnn+bG38H8anPkW
+ YkCG3LYbeXj5/pgx9vaHRSdIKg3/BhnyRauGpGBxQI0XNLjhNqszZvJlA0w8i4fwVqTp Nw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pkvs4rhgq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 11:38:56 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1855310002A;
+        Tue, 28 Mar 2023 11:38:55 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 112BE21160E;
+        Tue, 28 Mar 2023 11:38:55 +0200 (CEST)
+Received: from [10.48.0.175] (10.48.0.175) by SHFDAG1NODE3.st.com
+ (10.75.129.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Tue, 28 Mar
+ 2023 11:38:54 +0200
+Message-ID: <4fa90fd4-c8c3-6621-4aed-51f916fbddc8@foss.st.com>
+Date:   Tue, 28 Mar 2023 11:38:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/2] mtd: rawnand: stm32_fmc2: use timings.mode instead
+ of checking tRC_min
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Tudor Ambarus <tudor.ambarus@linaro.org>, <richard@nod.at>,
+        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20230327094742.38856-1-christophe.kerello@foss.st.com>
+ <20230327094742.38856-3-christophe.kerello@foss.st.com>
+ <75dcd205-5432-7103-370c-d65d792631ea@linaro.org>
+ <20230327124313.1ccd3d66@xps-13>
+ <70d0a8b6-62c2-fa3e-df5c-f86ba75484d0@linaro.org>
+ <6759a843-409b-d9fe-8a00-ed6d69144aaf@foss.st.com>
+ <20230328095633.188aff27@xps-13>
+From:   Christophe Kerello <christophe.kerello@foss.st.com>
+In-Reply-To: <20230328095633.188aff27@xps-13>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCKrXZn7Eu/jvdpG@hovoldconsulting.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+X-Originating-IP: [10.48.0.175]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE3.st.com
+ (10.75.129.71)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
+X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,84 +80,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 10:54:53AM +0200, Johan Hovold wrote:
-> On Sat, Mar 25, 2023 at 10:22:13PM +0530, Manivannan Sadhasivam wrote:
-> > Add missing quirks for the USB DWC3 IP.
+Hi Miquel,
+
+On 3/28/23 09:56, Miquel Raynal wrote:
+> Hi Christophe,
 > 
-> This is not an acceptable commit message generally and certainly not for
-> something that you have tagged for stable.
+> christophe.kerello@foss.st.com wrote on Tue, 28 Mar 2023 09:27:55 +0200:
 > 
-> At a minimum, you need to describe why these are needed and what the
-> impact is.
+>> Hello Miquel,
+>>
+>> On 3/27/23 13:06, Tudor Ambarus wrote:
+>>>
+>>>
+>>> On 3/27/23 11:43, Miquel Raynal wrote:
+>>>> Hi Tudor,
+>>>>
+>>>> tudor.ambarus@linaro.org wrote on Mon, 27 Mar 2023 11:30:51 +0100:
+>>>>   
+>>>>> On 3/27/23 10:47, Christophe Kerello wrote:
+>>>>>> This patch is using timings.mode value instead of checking tRC_min timing
+>>>>>> for EDO mode support.
+>>>>>>     >>>
+>>>>> Fixes and Cc to stable here too, as you'd like to have this backported
+>>>>> as well, don't you?
+>>>>
+>>>> Actually the reason why Christophe split this into two patches is
+>>>> because timings.mode was introduced rather lately, he wanted the same
+>>>> patch to apply on all stable kernels, he actually asked for that split
+>>>> and I agreed (another solution would have been to send this current
+>>>> patch to Linus and have the other version sent to stable, but it
+>>>> requires a bit of scheduling on both ends).
+>>>>
+>>>> Link: https://lore.kernel.org/linux-mtd/20230327101156.0ec2816a@xps-13/T/#t
+>>>
+>>> Right, I understood that from the beginning. If it were to me, I would
+>>> Cc: stable@vger.kernel.org #v5.4+ for the first patch and
+>>> Cc: stable@vger.kernel.org #v5.10+ for the second.
+>>>
+>>> So first would be alone just in v5.4, and starting with v5.10 we'll have
+>>> both and we'll mimic what we currently have in upstream mainline.
+>>>    
+>>
+>> I can send a V3 with cc tag added as per Tudor's suggestion.
+>> Or cc tag will be added when the patches will be applied?
+> 
+> I'll handle it, no problem. Is it fine if I send this as part of the
+> next merge window or do you expect this fix to be applied earlier? I
+> just sent my fixes PR on Monday morning.
 > 
 
-I can certainly improve the commit message. But usually the quirks are copied
-from the downstream devicetree where qualcomm engineers would've added them
-based on the platform requirements.
+Yes, it is fine. This patch set can be applied on next merge window.
 
-> Also, why are you sending as part of a series purporting to enable
-> runtime PM when it appears to be all about optimising specific gadget
-> applications?
-> 
+Regards,
+Christophe Kerello.
 
-It's not related to this series I agree but just wanted to group it with a
-series touching usb so that it won't get lost.
-
-I could respin it separately though in v2.
-
-> Did you confirm that the below makes any sense or has this just been
-> copied verbatim from the vendor devicetree (it looks like that)?
+>>
+>> Regards,
+>> Christophe Kerello.
+>>
+>>>>   
+>>>>>   
+>>>>>> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+>>>>>
+>>>>> Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+>>>>>   
+>>>>>> ---
+>>>>>>    drivers/mtd/nand/raw/stm32_fmc2_nand.c | 2 +-
+>>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/drivers/mtd/nand/raw/stm32_fmc2_nand.c b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
+>>>>>> index 3abb63d00a0b..9e74bcd90aaa 100644
+>>>>>> --- a/drivers/mtd/nand/raw/stm32_fmc2_nand.c
+>>>>>> +++ b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
+>>>>>> @@ -1531,7 +1531,7 @@ static int stm32_fmc2_nfc_setup_interface(struct nand_chip *chip, int chipnr,
+>>>>>>    	if (IS_ERR(sdrt))
+>>>>>>    		return PTR_ERR(sdrt);
+>>>>>>    >>>> -	if (sdrt->tRC_min < 30000)
+>>>>>> +	if (conf->timings.mode > 3)
+>>>>>>    		return -EOPNOTSUPP;
+>>>>>>    >>>>   	if (chipnr == NAND_DATA_IFACE_CHECK_ONLY)
+>>>>
+>>>>
+>>>> Thanks,
+>>>> Miquèl
 > 
-
-As you've mentioned, most of the quirks are for gadget mode which is not
-supported by the upstream supported boards. So I haven't really tested them but
-for I assumed that Qcom engineers did.
-
-> The fact that almost none of the qcom SoCs sets these also indicates
-> that something is not right here.
 > 
-> > Cc: stable@vger.kernel.org # 5.20
-> > Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > index 0d02599d8867..266a94c712aa 100644
-> > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > @@ -3040,6 +3040,13 @@ usb_0_dwc3: usb@a600000 {
-> >  				iommus = <&apps_smmu 0x820 0x0>;
-> >  				phys = <&usb_0_hsphy>, <&usb_0_qmpphy QMP_USB43DP_USB3_PHY>;
-> >  				phy-names = "usb2-phy", "usb3-phy";
-> > +				snps,hird-threshold = /bits/ 8 <0x0>;
-> > +				snps,usb2-gadget-lpm-disable;
-> 
-> Here you are disabling LPM for gadget mode, which makes most of the
-> other properties entirely pointless.
-> 
-> > +				snps,is-utmi-l1-suspend;
-> > +				snps,dis-u1-entry-quirk;
-> > +				snps,dis-u2-entry-quirk;
-> 
-> These appear to be used to optimise certain gadget application and
-> likely not something that should be set in a dtsi.
-> 
-
-I will cross check these with Qcom and respin accordingly.
-
-- Mani
-
-> > +				snps,has-lpm-erratum;
-> > +				tx-fifo-resize;
-> 
-> Same here.
-> 
-> >  				port {
-> >  					usb_0_role_switch: endpoint {
-> 
-> Johan
-
--- 
-மணிவண்ணன் சதாசிவம்
+> Thanks,
+> Miquèl
