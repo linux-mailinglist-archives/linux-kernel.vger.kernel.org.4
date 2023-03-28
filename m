@@ -2,119 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B2D6CC7D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757D56CC7E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbjC1QYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 12:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
+        id S233137AbjC1Q2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 12:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjC1QYQ (ORCPT
+        with ESMTP id S229815AbjC1Q15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 12:24:16 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A19A5D1;
-        Tue, 28 Mar 2023 09:24:14 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PmFMb6p3kz6J7gX;
-        Wed, 29 Mar 2023 00:22:35 +0800 (CST)
-Received: from localhost (10.195.244.179) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 28 Mar
- 2023 17:24:10 +0100
-Date:   Tue, 28 Mar 2023 17:24:09 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Yicong Yang <yangyicong@huawei.com>
-CC:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <corbet@lwn.net>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alexander.shishkin@linux.intel.com>,
-        <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
-        <prime.zeng@huawei.com>, <linuxarm@huawei.com>
-Subject: Re: [PATCH 1/4] hwtracing: hisi_ptt: Make cpumask only present
- online CPUs
-Message-ID: <20230328172409.000021f5@Huawei.com>
-In-Reply-To: <20230315094316.26772-2-yangyicong@huawei.com>
-References: <20230315094316.26772-1-yangyicong@huawei.com>
-        <20230315094316.26772-2-yangyicong@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Tue, 28 Mar 2023 12:27:57 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF471716
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 09:27:55 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id s1so6606156ild.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 09:27:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680020875;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HZlLwQPOb8jKLc2eNXMwjH3kvxbHnpPjAYHKfKgd7uA=;
+        b=Qtxy9wPVh5rqdceW19ctke0VfOWZMgcfxj6GjZesd+Pd9vieH4JM1u8sejWiGo2BxB
+         WT2qiUUZE5kv7/kYXwFQwDi4BKmVmod9Z9YoY39MubGBP8Q5PYUKTsm3hNjqW2YUXGYA
+         duSYZBfxSHuODhD80wW3+aRpuL4SPAxpIS14OOgD8i2lX/3R1dLLTMF4Ogyt/Zlo5WUw
+         5uLA613pQMPoqacuHvClHq8/2Wfmz+k+S/S5W1kNSQ1YwiRA5jb73pXIRyhITApxjZtv
+         jn40+ffjxJd3ZTS9WJ14eeJ9czJLt47Ks33FNntjUbmfUTxzMUYnFV+QJ5qQk+Sfw4XY
+         vJFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680020875;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HZlLwQPOb8jKLc2eNXMwjH3kvxbHnpPjAYHKfKgd7uA=;
+        b=JpMoImWbYGM6KrH1MJ6KaHMm8M+tOffVXfgfq9/E5iKubiNMCH+ks/9QAK8PtsN7hS
+         g5iXkOyzot1BhmZt0Bwc3umiKuZ7edsQTi3o4TrGhEjXkPoU/Ub/bUy//u+GoKvpWJIF
+         t1mTPSiEfpntFxoV2Xjd/BF9FkXMuzayUTKAbeY8qsTDqjH8zXuuINH8XQ69ucX4BanO
+         K8p844UCzqjrdtoMrSC4BhzUWgXSaPEd+N97h3RnHHTzW3eugoFyU3ZS6JkutRbgqM4t
+         zMFR6dZ64+Ur98nUtrvRR69Kylv7DVMQt2/qbflPe23MXQSnaPVCJ+MbXM0bBgAfvB24
+         tcLA==
+X-Gm-Message-State: AAQBX9fjYDhVzICwwpazr7nEskRg8yDlrxS1lcrmbbQXz9Lurix7UcAC
+        dbdPKEr3vMWj+yNX2p7a9z0Khw==
+X-Google-Smtp-Source: AKy350auGPR2rXe6tX4isI+DRP4rAbQtTgO5YEMWMmej3TcLoAd9VmkXAB1ub8WFQZAjitvbzGN9hw==
+X-Received: by 2002:a92:c8c6:0:b0:315:8bc0:1d85 with SMTP id c6-20020a92c8c6000000b003158bc01d85mr12800420ilq.11.1680020874908;
+        Tue, 28 Mar 2023 09:27:54 -0700 (PDT)
+Received: from localhost.localdomain ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id g2-20020a92c7c2000000b003159b6d97d6sm8642814ilk.52.2023.03.28.09.27.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 09:27:54 -0700 (PDT)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     quic_bjorande@quicinc.com, mbloch@nvidia.com,
+        caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
+        andersson@kernel.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net v3] net: ipa: compute DMA pool size properly
+Date:   Tue, 28 Mar 2023 11:27:51 -0500
+Message-Id: <20230328162751.2861791-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.244.179]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023 17:43:13 +0800
-Yicong Yang <yangyicong@huawei.com> wrote:
+In gsi_trans_pool_init_dma(), the total size of a pool of memory
+used for DMA transactions is calculated.  However the calculation is
+done incorrectly.
 
-> From: Yicong Yang <yangyicong@hisilicon.com>
-> 
-> perf will try to start PTT trace on every CPU presented in cpumask sysfs
-> attribute and it will fail to start on offline CPUs(see the comments in
-> perf_event_open()). But the driver is using cpumask_of_node() to export
-> the available cpumask which may include offline CPUs and may fail the
-> perf unintendedly. Fix this by only export the online CPUs of the node.
+For 4KB pages, this total size is currently always more than one
+page, and as a result, the calculation produces a positive (though
+incorrect) total size.  The code still works in this case; we just
+end up with fewer DMA pool entries than we intended.
 
-There isn't clear documentation that I can find for cpumask_of_node()
-and chasing through on arm64 (which is what we care about for this driver)
-it's maintained via numa_add_cpu() numa_remove_cpu()
-Those are called in arch/arm64/kernel/smp.c in locations that are closely coupled
-with set_cpu_online(cpu, XXX);
-https://elixir.bootlin.com/linux/v6.3-rc4/source/arch/arm64/kernel/smp.c#L246
-https://elixir.bootlin.com/linux/v6.3-rc4/source/arch/arm64/kernel/smp.c#L303
+Bjorn Andersson tested booting a kernel with 16KB pages, and hit a
+null pointer derereference in sg_alloc_append_table_from_pages(),
+descending from gsi_trans_pool_init_dma().  The cause of this was
+that a 16KB total size was going to be allocated, and with 16KB
+pages the order of that allocation is 0.  The total_size calculation
+yielded 0, which eventually led to the crash.
 
-Now there are races when the two might not be in sync but in this case
-we are just exposing the result to userspace, so chances of a race
-after this sysfs attribute has been read seems much higher to me and
-I don't think we can do anything about that.
+Correcting the total_size calculation fixes the problem.
 
-Is there another path that I'm missing where online and node masks are out
-of sync?
+Reported-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+Tested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+Fixes: 9dd441e4ed57 ("soc: qcom: ipa: GSI transactions")
+Reviewed-by: Mark Bloch <mbloch@nvidia.com>
+Signed-off-by: Alex Elder <elder@linaro.org>
+---
+Note: This was reported via private communication.
+v3: - Added Mark Bloch's reviewed-by tag.
+v2: - Added Bjorn's actual name to tags.  
 
-Jonathan
+ drivers/net/ipa/gsi_trans.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-> 
-> Fixes: ff0de066b463 ("hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe Tune and Trace device")
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-
-> ---
->  drivers/hwtracing/ptt/hisi_ptt.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
-> index 30f1525639b5..0a10c7ec46ad 100644
-> --- a/drivers/hwtracing/ptt/hisi_ptt.c
-> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
-> @@ -487,9 +487,18 @@ static ssize_t cpumask_show(struct device *dev, struct device_attribute *attr,
->  			    char *buf)
->  {
->  	struct hisi_ptt *hisi_ptt = to_hisi_ptt(dev_get_drvdata(dev));
-> -	const cpumask_t *cpumask = cpumask_of_node(dev_to_node(&hisi_ptt->pdev->dev));
-> +	cpumask_var_t mask;
-> +	ssize_t n;
->  
-> -	return cpumap_print_to_pagebuf(true, buf, cpumask);
-> +	if (!alloc_cpumask_var(&mask, GFP_KERNEL))
-> +		return 0;
-> +
-> +	cpumask_and(mask, cpumask_of_node(dev_to_node(&hisi_ptt->pdev->dev)),
-> +		    cpu_online_mask);
-> +	n = cpumap_print_to_pagebuf(true, buf, mask);
-> +	free_cpumask_var(mask);
-> +
-> +	return n;
->  }
->  static DEVICE_ATTR_RO(cpumask);
->  
+diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
+index 0f52c068c46d6..ee6fb00b71eb6 100644
+--- a/drivers/net/ipa/gsi_trans.c
++++ b/drivers/net/ipa/gsi_trans.c
+@@ -156,7 +156,7 @@ int gsi_trans_pool_init_dma(struct device *dev, struct gsi_trans_pool *pool,
+ 	 * gsi_trans_pool_exit_dma() can assume the total allocated
+ 	 * size is exactly (count * size).
+ 	 */
+-	total_size = get_order(total_size) << PAGE_SHIFT;
++	total_size = PAGE_SIZE << get_order(total_size);
+ 
+ 	virt = dma_alloc_coherent(dev, total_size, &addr, GFP_KERNEL);
+ 	if (!virt)
+-- 
+2.34.1
 
