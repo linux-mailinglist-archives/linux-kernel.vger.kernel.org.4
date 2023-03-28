@@ -2,123 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BD46CB8D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA9C6CB902
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbjC1H64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 03:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
+        id S229967AbjC1ICi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232392AbjC1H6x (ORCPT
+        with ESMTP id S229507AbjC1ICd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 03:58:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D62440CA
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:58:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679990287;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zX64wamSvcuBg/+n8EW5C/QE8JCYba2x9NZLoF8LKOI=;
-        b=QructXApXTiSuLD9AMSFAiTXvHMzTX7Piz/Io9gUT2Y0O7H0LDUKMKV6LQjk8wHa/LbZZC
-        VmSK4Jzq5rOAMv2pnDBHHCtp7ELseboumrDmc6Bwn4K3/OyNH+UVp3yWtcns4yQEw0XjXK
-        h5C9BUiNHZM4LWyx/UqeaE2IFCtmQ4g=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-642-JRmGf73mNXaSDMjG2sn17Q-1; Tue, 28 Mar 2023 03:58:06 -0400
-X-MC-Unique: JRmGf73mNXaSDMjG2sn17Q-1
-Received: by mail-qv1-f69.google.com with SMTP id l18-20020ad44bd2000000b005a9cf5f609eso4694683qvw.15
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:58:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679990285;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zX64wamSvcuBg/+n8EW5C/QE8JCYba2x9NZLoF8LKOI=;
-        b=XVYseOwuTxbHmjvbldMy6KA0dyTLyJYUPjWsMeU8zxmf8VtnUQOgHhkmgDY99s6D7Z
-         zcUzOOptcEPbNo1wE2I+8PBc5s/l+6Zf91OM7wSByH3ZVKviBhsNT3tonTrirTh824LK
-         l9afqOHo0C1YgsZIBq1nIwnnPDoiNdjoNEadjGW7CqnL8M2yccSOlSQbNSFyunT023Kk
-         OO2sXocHTlAXE9ejHOj5Cvs610vJJiNN/yMtcZqsDxDLcsvXIZp28gc+E8g290u6uSHF
-         6ewi0EEFblsNK9rU8SiOGRBeOU4KsWYIGZR28Riaa7/l3Usv5ZKxCXVg9+3qSsIF7e1G
-         3pJQ==
-X-Gm-Message-State: AO0yUKXRKu/Z5ClIEDI3wAeX+9Uf6Nzw5MH7ae+lpi1AFxd+gq4kEC4K
-        Fby56KxX13dePRIpC2dKRs7tVTebi8tP9ZuH3zMa2qxdDH02HTWYp6/SKtZlyaSEESsm0GPsQSF
-        bNn5R8Sectcpht7wPEA2vrPwL
-X-Received: by 2002:ac8:584e:0:b0:3d3:95fd:9085 with SMTP id h14-20020ac8584e000000b003d395fd9085mr25956584qth.42.1679990285644;
-        Tue, 28 Mar 2023 00:58:05 -0700 (PDT)
-X-Google-Smtp-Source: AKy350a8LN3HbXJ4yvKz19Oadd4R8pyBHJFdmxnmtbIae9l3nU8wgRH2HBkaFmqmIFsJT4IA1NyyBw==
-X-Received: by 2002:ac8:584e:0:b0:3d3:95fd:9085 with SMTP id h14-20020ac8584e000000b003d395fd9085mr25956565qth.42.1679990285424;
-        Tue, 28 Mar 2023 00:58:05 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-53-134-98.retail.telecomitalia.it. [82.53.134.98])
-        by smtp.gmail.com with ESMTPSA id h20-20020ac85154000000b003e4e1dbdcc3sm2122686qtn.47.2023.03.28.00.58.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 00:58:05 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 09:58:00 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <xiyou.wangcong@gmail.com>
-Subject: Re: [PATCH net] virtio/vsock: fix leak due to missing skb owner
-Message-ID: <jinx5oduhddyyaxnreey2riem3s7ju5zuszddmoiie6dcnyiiy@fr4cg33vi7aq>
-References: <20230327-vsock-fix-leak-v1-1-3fede367105f@bytedance.com>
+        Tue, 28 Mar 2023 04:02:33 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3969B3C24;
+        Tue, 28 Mar 2023 01:02:32 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32S6XBr2019175;
+        Tue, 28 Mar 2023 08:02:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=TI6CfWwlXuhNOW1naYuuJZOwDDyz9eYdva5tnP4XpDg=;
+ b=GMYNMRWb5+u1OjZ2Bot0vZKEFDcsp22fv1iQIBeRujMR6cOmC/qxpRvpgDePNL5SrcNu
+ Fw/rBJsUYA9Z7EyHJOicT0XQOyE82MQ0oInNMfm9Q3D+ModvIpT5bndEZHHpnjSAAxJc
+ QhxfNuAH2n73S0OWld1pYJOgJaSUowhtd1sRo6/y5aVFVNikiPUiQK3MHwfVJ2fpnooI
+ eCqqjcVxLoZhMPqEyOn2tawC42CguP9XDJrZyKaRFqNzKVpcDhyeXbTpJZTtADUASXms
+ 6TbDhw9EaO1TcKrwfpbk9CrU4/vnvBrYAYgJ6hgF/Q8VfjtZk+uXQkvhdkrQdemT975n Dg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pk79bb0an-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 08:02:21 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32S82K5b000524
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 08:02:20 GMT
+Received: from [10.239.154.73] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Mar
+ 2023 01:02:17 -0700
+Message-ID: <ed4a2dc4-4382-0c17-a227-cfa8fec569d8@quicinc.com>
+Date:   Tue, 28 Mar 2023 16:02:15 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230327-vsock-fix-leak-v1-1-3fede367105f@bytedance.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v8 1/2] leds: flash: add driver to support flash LED
+ module in QCOM PMICs
+Content-Language: en-US
+To:     Pavel Machek <pavel@ucw.cz>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lee@kernel.org>, <krzysztof.kozlowski@linaro.org>,
+        <linux-leds@vger.kernel.org>, <quic_collinsd@quicinc.com>,
+        <quic_subbaram@quicinc.com>, Luca Weiss <luca.weiss@fairphone.com>
+References: <20230303095023.538917-1-quic_fenglinw@quicinc.com>
+ <20230303095023.538917-2-quic_fenglinw@quicinc.com>
+ <ZB8wbv93+Vmx3trt@duo.ucw.cz>
+From:   Fenglin Wu <quic_fenglinw@quicinc.com>
+In-Reply-To: <ZB8wbv93+Vmx3trt@duo.ucw.cz>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 3QEOupkb2NeUKfi_tMvDgNnJe2ipTJJv
+X-Proofpoint-GUID: 3QEOupkb2NeUKfi_tMvDgNnJe2ipTJJv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 mlxscore=0 priorityscore=1501 clxscore=1015 suspectscore=0
+ mlxlogscore=559 spamscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303280066
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 10:01:05PM +0000, Bobby Eshleman wrote:
->This patch sets the owner for the skb when being sent from a socket and
->so solves the leak caused when virtio_transport_purge_skbs() finds
->skb->sk is always NULL and therefore never matches it with the current
->socket. Setting the owner upon allocation fixes this.
->
->Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->Reported-by: Cong Wang <xiyou.wangcong@gmail.com>
->Link: https://lore.kernel.org/all/ZCCbATwov4U+GBUv@pop-os.localdomain/
->---
-> net/vmw_vsock/virtio_transport_common.c | 3 +++
-> 1 file changed, 3 insertions(+)
->
->diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->index 957cdc01c8e8..2a2f0c1a9fbd 100644
->--- a/net/vmw_vsock/virtio_transport_common.c
->+++ b/net/vmw_vsock/virtio_transport_common.c
->@@ -94,6 +94,9 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
-> 					 info->op,
-> 					 info->flags);
->
->+	if (info->vsk)
->+		skb_set_owner_w(skb, sk_vsock(info->vsk));
->+
 
-Should we do the same also in virtio_transport_recv_pkt()?
 
-The skb in that cases is allocated in drivers/vhost/vsock.c and
-net/vmw_vsock/virtio_transport.c using directly
-virtio_vsock_alloc_skb(), because we don't know in advance which socket
-it belongs to.
+On 3/26/2023 1:33 AM, Pavel Machek wrote:
+> Hi!
+> 
+>> Add initial driver to support flash LED module found in Qualcomm
+>> Technologies, Inc. PMICs. The flash module can have 3 or 4 channels
+>> and each channel can be controlled indepedently and support full scale
+>> current up to 1.5 A. It also supports connecting two channels together
+>> to supply one LED component with full scale current up to 2 A. In that
+>> case, the current will be split on each channel symmetrically and the
+>> channels will be enabled and disabled at the same time.
+> 
+> 
+>> +static int qcom_flash_strobe_set(struct led_classdev_flash *fled_cdev, bool state)
+>> +{
+>> +	struct qcom_flash_led *led = flcdev_to_qcom_fled(fled_cdev);
+>> +	int rc;
+>> +
+>> +	rc = set_flash_current(led, led->flash_current_ma, FLASH_MODE);
+>> +	if (rc)
+>> +		return rc;
+>> +
+>> +	rc = set_flash_timeout(led, led->flash_timeout_ms);
+>> +	if (rc)
+>> +		return rc;
+>> +
+>> +	rc = set_flash_module_en(led, state);
+>> +	if (rc)
+>> +		return rc;
+>> +
+>> +	return set_flash_strobe(led, SW_STROBE, state);
+>> +}
+> 
+> Should we disable the module before setting the current? It might be
+> already active due to torch mode...
+> 
+The module enabling status should be kept as it is because it may be 
+still controlling other LED channels, I can strobe off the LED before 
+setting the current to cover such case. I will update it as a following 
+patch.
 
-Then in virtio_transport_recv_pkt() we look for the socket and queue it
-up. This should also solve the problem in vsock_loopback.c where we move
-skb from one socket to another.
+> 
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	flash_data->v4l2_flash = devm_kcalloc(dev, count,
+>> +			sizeof(*flash_data->v4l2_flash), GFP_KERNEL);
+>> +	if (!flash_data->v4l2_flash)
+>> +		return -ENOMEM;
+>> +
+>> +	device_for_each_child_node(dev, child) {
+>> +		led = devm_kzalloc(dev, sizeof(*led), GFP_KERNEL);
+>> +		if (!led) {
+>> +			rc = -ENOMEM;
+>> +			goto release;
+>> +		}
+>> +
+>> +		led->flash_data = flash_data;
+>> +		rc = qcom_flash_register_led_device(dev, child, led);
+>> +		if (rc < 0)
+>> +			goto release;
+>> +
+>> +		flash_data->leds_count++;
+>> +	}
+> 
+> Do you need to do of_node_put in error path
+I will update this as well.
 
-Thanks,
-Stefano
-
+> 
+> BR,
+> 							Pavel
