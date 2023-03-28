@@ -2,109 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963116CBBEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC886CBBF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232954AbjC1KHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
+        id S233109AbjC1KH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232912AbjC1KG7 (ORCPT
+        with ESMTP id S232921AbjC1KHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:06:59 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6216A5E;
-        Tue, 28 Mar 2023 03:06:55 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id p34so6577395wms.3;
-        Tue, 28 Mar 2023 03:06:55 -0700 (PDT)
+        Tue, 28 Mar 2023 06:07:15 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C5172A4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:07:01 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id y4so47387060edo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:07:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679998014;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=73pdQE2RorPp4K5P6rPxPM8jjQELSWY3LdlpO/znf2s=;
-        b=jIeDIg0n+1dtLzvxv8SXyDJE3eRt4Dzewm6GLazGgsBbOZ9ppZWKv5KtAD1w3LLLAr
-         Lc7zqbdjgahli2/kitRIz9gyGhRalA5zOY2guWt01QY1weRHtrw5mT0fyko536pO38uR
-         r5a7l1S9rZcB210OwnRlLjXgK15iAcYy8dQNk8QRQqtcI5ZS05smmDZu7csBDRLB3Id+
-         W/L0U9i3SQ3rtgyr1AMHPiL3X3AzC/zKL1sBnOW94pzwYdKCur3plME6WeVAed/VagvQ
-         deTvx+2RhEKl1uL4AAfauhp0HcOwrCYuk/F2pRMK1mxR1wZflnPihIWZV19UtYUG4JcO
-         FXKQ==
+        d=linaro.org; s=google; t=1679998020;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0ZPljhKeSnuSGlSWfKaLNDMSdJrVY6lMlRIxToWIHSE=;
+        b=vgTGHg8fA3BZsk9LUPzWlrSQZGnASPGPFuZqfImemSFhHCJj5lrtNpJl1qhJaeaYPE
+         leDREJVTlbajzM8RI1c/JJjEonQftsvxksAxwpBnCXhjUjMQyZCY4O7SkHN3OBwzks9Q
+         bSr5gSOwPFoaT1eeMkd5r80jXAD5DRr7hRbPRW9rD8V9QLlHdLS6qaVN7LXketIv2oGr
+         aUCy2skJ6KxoLOyx9EuzZc6uSN/bxCuCJjKG7VExpH/QuwU/f09lG+YfT/ojSHZl4qh5
+         XyE2kG1yPMFqjfQgNc0IQHuEDp6GG1mNDOzZOWLy0yK0OsdVuG6AogQkCxaEJ5VYdtiH
+         4Rxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679998014;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=73pdQE2RorPp4K5P6rPxPM8jjQELSWY3LdlpO/znf2s=;
-        b=xjtbiwOKFGoEQiw84nEuaUOp/sXhKw0ZlOEZKHQ0wBNmIyWJmduRcjeFe3VBpdkKrj
-         EJqHNXFmvHglvXKWRXxMs0iKhpB2sbzXJB/M7VlDN5UnQD9m6xoBjum9LgzZMxv+FDgF
-         gO3E099+tZ3RUG3WDO4HY6ti8aV5JJXbwdycD+fL2iv2WhqU0S/oXtMEywW6pD3UI7lp
-         O/AewbGTLhOainaknMzE/GwyxbJmcmw5443h/ZCWlvZDrKJT4GsB9DyS6olGupXwVYDN
-         mNQmMNlXhCc8CZGuQG90RYprEvbLmYT4THWYHj5RcRLpaGLp8jAikIS/v3xDaPzPPZ1a
-         I3eg==
-X-Gm-Message-State: AO0yUKUWOLoVB9kB7G1K+Rd17A8+3kzCg/DuiFJbcaSI7rGXkAFKSQKM
-        gW31DwDzBYWccV9ZxBCIXyc=
-X-Google-Smtp-Source: AK7set8zILEWsxEHvYfLQ0pLB68ehJg+eI8U12Z4Kyzq3vzt+0ZKzp4q4oKQ0yAEwmxFCTjm+YTZ4Q==
-X-Received: by 2002:a05:600c:2114:b0:3dc:1687:9ba2 with SMTP id u20-20020a05600c211400b003dc16879ba2mr11027722wml.35.1679998013685;
-        Tue, 28 Mar 2023 03:06:53 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id v4-20020a05600c214400b003ef62deb830sm10531539wml.25.2023.03.28.03.06.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 03:06:53 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 13:06:50 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [BUG] selftests/firmware: copious kernel memory leaks in
- test_fw_run_batch_request()
-Message-ID: <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
-References: <97e284be-5018-9d18-feb2-7ec4b08c06fd@alu.unizg.hr>
+        d=1e100.net; s=20210112; t=1679998020;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0ZPljhKeSnuSGlSWfKaLNDMSdJrVY6lMlRIxToWIHSE=;
+        b=q7ilFYjLQ/ivaofIXoik7LNizZ+0hrbqjcCsklwMqNg1NuO34b5uKevuIRvkG/jd8n
+         s/BHDtgn5Dsr7lmc72SiQ4tm7inGJxLN90/8KgSWWvShC5uzPb3lW28YI1yyXkkj/ihm
+         jYzs4WmRHBfJDFEGPUUVX3M3MVQdmM9MWNswmSghxHqrT0JwnFCx+VIQtLeM6uIS47W9
+         bFt7GHMmcOje8Vc51K0VBF3gopSSWncXRfoYCHyU1tJbz3R+RDH1N0/rBddanlyeqUzg
+         GQ/Yd7SPVaJ5Ul85fBLaVaKI3SbFzLqe5b/YBCP5dTpNhebAH9JostVVySR7tfGCIkjF
+         IB9A==
+X-Gm-Message-State: AAQBX9ecNpyWBrydtEk645Xnyg9pSgA64YGxxinW+dfWl2lnMdVJaX0i
+        /v8LZRLyv2D/GzqB5M+vWuDpew==
+X-Google-Smtp-Source: AKy350ZFYyOvQbIZ2wc5ylrWhyV44C9OKuB3cjIa2tHpjn0Dm3C5pFk/kZSkKlTmHvKCSly/UXuydw==
+X-Received: by 2002:a17:906:9244:b0:939:4c86:d492 with SMTP id c4-20020a170906924400b009394c86d492mr14400048ejx.5.1679998019965;
+        Tue, 28 Mar 2023 03:06:59 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
+        by smtp.gmail.com with ESMTPSA id u7-20020a170906b10700b0092f38a6d082sm15071729ejy.209.2023.03.28.03.06.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 03:06:59 -0700 (PDT)
+Message-ID: <81fad553-e8c1-f387-4df2-70c91a6ebc33@linaro.org>
+Date:   Tue, 28 Mar 2023 12:06:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <97e284be-5018-9d18-feb2-7ec4b08c06fd@alu.unizg.hr>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH -next] devfreq: exynos-ppmu: Use
+ devm_platform_get_and_ioremap_resource()
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Yang Li <yang.lee@linux.alibaba.com>, kyungmin.park@samsung.com,
+        myungjoo.ham@samsung.com, cw00.choi@samsung.com,
+        alim.akhtar@samsung.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230328053853.23159-1-yang.lee@linux.alibaba.com>
+ <8779217b-bd70-37a4-c779-139690048d4d@linaro.org>
+ <20230328095337.sr6s3klmhiyz63pr@intel.intel>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230328095337.sr6s3klmhiyz63pr@intel.intel>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 11:23:00AM +0200, Mirsad Todorovac wrote:
-> The leaks are in chunks of 1024 bytes (+ overhead), but so far I could not
-> reproduce w/o root privileges, as tests refuse to run as unprivileged user.
-> (This is not the proof of non-existence of an unprivileged automated exploit
-> that would exhaust the kernel memory at approx. rate 4 MB/hour on our setup.
+On 28/03/2023 11:53, Andi Shyti wrote:
+> Hi,
 > 
-> This would mean about 96 MB / day or 3 GB / month (of kernel memory).
+> On Tue, Mar 28, 2023 at 09:19:01AM +0200, Krzysztof Kozlowski wrote:
+>> On 28/03/2023 07:38, Yang Li wrote:
+>>> According to commit 890cc39a8799 ("drivers: provide
+>>> devm_platform_get_and_ioremap_resource()"), convert
+>>
+>> I don't understand why do you reference this commit. There is no bug
+>> introduced there, there is nothing related to this driver.
+>>
+>>> platform_get_resource(), devm_ioremap_resource() to a single
+>>> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+>>> what this function does.
+> 
+> I've seen Yang has sent many of these cleanups, perhaps he can
+> write something like:
+> 
+> "
+> Commit 890cc39a8799 ("drivers: provide
+> devm_platform_get_and_ioremap_resource()") introduces the
+> devm_platform_get_and_ioremap_resource() function which combines
+> both platform_get_resource() and devm_ioremap_resource() into a
+> single call.
 
-This is firmware testing stuff.  In the real world people aren't going
-to run their test scripts in a loop for days.
+I don't think we need to reference that commit at all. It does not
+matter when the API was introduced and just makes commit msg unnecessary
+long. Instead the commit msg should shortly say why this change is
+needed or even worth accepting.
 
-There is no security implications.  This is root only.  Also if the
-user could load firmware then that would be the headline.  Once someone
-is can already load firmware then who cares if they leak 100MB per day?
+> 
+> Update the code to use the new combined function instead of the
+> separate calls.
 
-It looks like if you call trigger_batched_requests_store() twice in a
-row then it will leak memory.  Definitely test_fw_config->reqs is leaked.
-That's different from what the bug report is complaining about, but the
-point is that there are some obvious leaks.  It looks like you're
-supposed to call trigger_batched_requests_store() in between runs?
-
-There are other races like config_num_requests_store() should hold the
-mutex over the call to test_dev_config_update_u8() instead of dropping
-and retaking it.
-
-regards,
-dan carpenter
+Best regards,
+Krzysztof
 
