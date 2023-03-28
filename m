@@ -2,128 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CAA6CB9EC
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDA16CB9ED
 	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbjC1Iy7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Mar 2023 04:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
+        id S232200AbjC1IzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjC1Iyu (ORCPT
+        with ESMTP id S232276AbjC1Iyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:54:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F230319A1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:54:48 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1ph56E-0002sU-Jk; Tue, 28 Mar 2023 10:54:38 +0200
-Message-ID: <2a84875dde6565842aa07ddb96245b7d939cb4fd.camel@pengutronix.de>
-Subject: Re: [Regression] drm/scheduler: track GPU active time per entity
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Danilo Krummrich <dakr@redhat.com>, daniel@ffwll.ch,
-        Dave Airlie <airlied@gmail.com>, luben.tuikov@amd.com,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        andrey.grodzovsky@amd.com,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Date:   Tue, 28 Mar 2023 10:54:37 +0200
-In-Reply-To: <3e00d8a9-b6c4-8202-4f2d-5a659c61d094@redhat.com>
-References: <3e00d8a9-b6c4-8202-4f2d-5a659c61d094@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Tue, 28 Mar 2023 04:54:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B253719A1;
+        Tue, 28 Mar 2023 01:54:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6230DB81BBF;
+        Tue, 28 Mar 2023 08:54:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD22FC433EF;
+        Tue, 28 Mar 2023 08:54:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679993683;
+        bh=FlhEhP6prp2j0gTaGdnVSIx+i5NWL7KCri11ZYnsy3I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SJRGXCjhZkx/iOapcmyPGdXscZHKSIdLVHHLMURh1Rf6qwEnc3Xlad0Qvwr7KT+qF
+         1MENXlQqeB6wAxszDpo0TlZmxkBw9FBjElNI3lmZEwodbevs5J0gzufBZbX0mRJdhf
+         vC8+Ux1CbqncIrFCgHueOAiBJ+SC1rsOFyCvtvF8jIFY1Og2EUQ7iCdVEy7jrzzCGJ
+         YQsXyp4K2PTCsfootJyrObN8PSegqIaDFVCs650s/Kz/BEbhs4gmnYGP3HVngdZrES
+         FvDmZClERmEwCYz3P6muXFqsF2d3ARRaq5wJPoyotbW36VpAoQYf/hmQcGjpBck2D5
+         QfcbOfLgQZHBw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ph56U-0003mE-05; Tue, 28 Mar 2023 10:54:54 +0200
+Date:   Tue, 28 Mar 2023 10:54:53 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
+        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/5] arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
+Message-ID: <ZCKrXZn7Eu/jvdpG@hovoldconsulting.com>
+References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
+ <20230325165217.31069-2-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230325165217.31069-2-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Danilo,
+On Sat, Mar 25, 2023 at 10:22:13PM +0530, Manivannan Sadhasivam wrote:
+> Add missing quirks for the USB DWC3 IP.
 
-Am Dienstag, dem 28.03.2023 um 02:57 +0200 schrieb Danilo Krummrich:
-> Hi all,
-> 
-> Commit df622729ddbf ("drm/scheduler: track GPU active time per entity") 
-> tries to track the accumulated time that a job was active on the GPU 
-> writing it to the entity through which the job was deployed to the 
-> scheduler originally. This is done within drm_sched_get_cleanup_job() 
-> which fetches a job from the schedulers pending_list.
-> 
-> Doing this can result in a race condition where the entity is already 
-> freed, but the entity's newly added elapsed_ns field is still accessed 
-> once the job is fetched from the pending_list.
-> 
-> After drm_sched_entity_destroy() being called it should be safe to free 
-> the structure that embeds the entity. However, a job originally handed 
-> over to the scheduler by this entity might still reside in the 
-> schedulers pending_list for cleanup after drm_sched_entity_destroy() 
-> already being called and the entity being freed. Hence, we can run into 
-> a UAF.
-> 
-Sorry about that, I clearly didn't properly consider this case.
+This is not an acceptable commit message generally and certainly not for
+something that you have tagged for stable.
 
-> In my case it happened that a job, as explained above, was just picked 
-> from the schedulers pending_list after the entity was freed due to the 
-> client application exiting. Meanwhile this freed up memory was already 
-> allocated for a subsequent client applications job structure again. 
-> Hence, the new jobs memory got corrupted. Luckily, I was able to 
-> reproduce the same corruption over and over again by just using 
-> deqp-runner to run a specific set of VK test cases in parallel.
-> 
-> Fixing this issue doesn't seem to be very straightforward though (unless 
-> I miss something), which is why I'm writing this mail instead of sending 
-> a fix directly.
-> 
-> Spontaneously, I see three options to fix it:
-> 
-> 1. Rather than embedding the entity into driver specific structures 
-> (e.g. tied to file_priv) we could allocate the entity separately and 
-> reference count it, such that it's only freed up once all jobs that were 
-> deployed through this entity are fetched from the schedulers pending list.
-> 
-My vote is on this or something in similar vain for the long term. I
-have some hope to be able to add a GPU scheduling algorithm with a bit
-more fairness than the current one sometime in the future, which
-requires execution time tracking on the entities.
+At a minimum, you need to describe why these are needed and what the
+impact is.
 
-> 2. Somehow make sure drm_sched_entity_destroy() does block until all 
-> jobs deployed through this entity were fetched from the schedulers 
-> pending list. Though, I'm pretty sure that this is not really desirable.
-> 
-> 3. Just revert the change and let drivers implement tracking of GPU 
-> active times themselves.
-> 
-Given that we are already pretty late in the release cycle and etnaviv
-being the only driver so far making use of the scheduler elapsed time
-tracking I think the right short term solution is to either move the
-tracking into etnaviv or just revert the change for now. I'll have a
-look at this.
+Also, why are you sending as part of a series purporting to enable
+runtime PM when it appears to be all about optimising specific gadget
+applications?
 
-Regards,
-Lucas
+Did you confirm that the below makes any sense or has this just been
+copied verbatim from the vendor devicetree (it looks like that)?
 
-> In the case of just reverting the change I'd propose to also set a jobs 
-> entity pointer to NULL  once the job was taken from the entity, such 
-> that in case of a future issue we fail where the actual issue resides 
-> and to make it more obvious that the field shouldn't be used anymore 
-> after the job was taken from the entity.
-> 
-> I'm happy to implement the solution we agree on. However, it might also 
-> make sense to revert the change until we have a solution in place. I'm 
-> also happy to send a revert with a proper description of the problem. 
-> Please let me know what you think.
-> 
-> - Danilo
-> 
+The fact that almost none of the qcom SoCs sets these also indicates
+that something is not right here.
 
+> Cc: stable@vger.kernel.org # 5.20
+> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 0d02599d8867..266a94c712aa 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -3040,6 +3040,13 @@ usb_0_dwc3: usb@a600000 {
+>  				iommus = <&apps_smmu 0x820 0x0>;
+>  				phys = <&usb_0_hsphy>, <&usb_0_qmpphy QMP_USB43DP_USB3_PHY>;
+>  				phy-names = "usb2-phy", "usb3-phy";
+> +				snps,hird-threshold = /bits/ 8 <0x0>;
+> +				snps,usb2-gadget-lpm-disable;
+
+Here you are disabling LPM for gadget mode, which makes most of the
+other properties entirely pointless.
+
+> +				snps,is-utmi-l1-suspend;
+> +				snps,dis-u1-entry-quirk;
+> +				snps,dis-u2-entry-quirk;
+
+These appear to be used to optimise certain gadget application and
+likely not something that should be set in a dtsi.
+
+> +				snps,has-lpm-erratum;
+> +				tx-fifo-resize;
+
+Same here.
+
+>  				port {
+>  					usb_0_role_switch: endpoint {
+
+Johan
