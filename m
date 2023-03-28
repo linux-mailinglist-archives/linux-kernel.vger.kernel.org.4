@@ -2,646 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC5F6CB9CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE446CB9D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjC1ItS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
+        id S230518AbjC1IvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbjC1ItP (ORCPT
+        with ESMTP id S229654AbjC1IvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:49:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503534EEC;
-        Tue, 28 Mar 2023 01:49:10 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 08:49:08 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679993348;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D1qn+aDiAj489yQ4raHD/kwuzhL+9FPfNvnwYKFWj1M=;
-        b=JCRKoCWMTGyNpaBXXlLth/MK7ZCEIdvuPI11GAwLfeLv3e6lUzSfHFCYIbCQQ3Km/Edk9e
-        4Z5wgUEKgv12gpDcyIOk6GG+zgDU/nnpQUAbIyGvfK9LoInka89U4WhbBrl1+P9l2xItkk
-        z4VlHimssqB6p8flZwAksSvSewAa6iuRg2Dm1uRd4Q9Hi9OXFvbIJHlBqQrvfVbBG2PPBX
-        bHEH9j8BUg+vLdC98j8DMrxU6IVt9uVxle+lQ7LDWdm/T5ihbCv5iUYdF44CxeQxIXz603
-        1sNZtiQtlrevA4QciLkrFy88w9q8moR4apRk42ytzKvW1iOsOEKrvE94Bp7JUg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679993348;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D1qn+aDiAj489yQ4raHD/kwuzhL+9FPfNvnwYKFWj1M=;
-        b=V2MSJkBBonbjSJkzaJZAydxUtyfk4je1cjyTNlkg7HGSqnpUwmRolp041N6MMY+sWPpUWS
-        FR078Fg9p2IznDBg==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] atomics: Provide rcuref - scalable reference counting
-Cc:     Wangyang Guo <wangyang.guo@intel.com>,
-        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230323102800.158429195@linutronix.de>
-References: <20230323102800.158429195@linutronix.de>
+        Tue, 28 Mar 2023 04:51:20 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D51FA;
+        Tue, 28 Mar 2023 01:51:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1679993479; x=1711529479;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=T0f2kgJ9KZyICJJMWIGxZxVKRVW/cJ1iN/Ny6VWy2aE=;
+  b=sk5ESEVWn3myTmsq+cgffAP6RCXuIdPUJpyx2IWbBB+pJzpmyAAcHTrF
+   ae74gTnQeLE50aunfu+7nBTNHCRVGjFT3iOZspjqTpBCxuFuLXuaYWBsC
+   bGfpbV+NGMZTbnGEumuCTUWZnyq8/4amF7ReNEG1hm1gwuXOi/YZSN5od
+   8mJft7e5CKM4Cjp1AQ+n16G4XD/m13cgIfg2RXlVyM60ySZ8t9JYol3u6
+   mJziAJDaIs+1WIEhSHa0F+t32w0bzCMCrefkQ3lRJ0l+Py53lP3xhRdp5
+   EPknN7EMerzzQr+0Gpr69HjjZKjlHaxUV4r28+KswAUfnWEZb5RabMyAM
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,296,1673938800"; 
+   d="scan'208";a="206642288"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Mar 2023 01:51:14 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 28 Mar 2023 01:51:13 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Tue, 28 Mar 2023 01:51:11 -0700
+Message-ID: <a6fe77b6-4ff4-3c91-0c67-a9da5a638e7b@microchip.com>
+Date:   Tue, 28 Mar 2023 10:51:05 +0200
 MIME-Version: 1.0
-Message-ID: <167999334826.5837.17425023090038981462.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 5/8] ARM: dts: at91-sama5d27_wlsom1: Set sst26vf064b SPI
+ NOR flash at its maximum frequency
+Content-Language: en-US
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>
+CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mtd@lists.infradead.org>
+References: <20221117105249.115649-1-tudor.ambarus@microchip.com>
+ <20221117105249.115649-6-tudor.ambarus@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20221117105249.115649-6-tudor.ambarus@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+Hi Tudor,
 
-Commit-ID:     ee1ee6db07795d9637bc5e8993a8ddcf886541ef
-Gitweb:        https://git.kernel.org/tip/ee1ee6db07795d9637bc5e8993a8ddcf886541ef
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Thu, 23 Mar 2023 21:55:31 +01:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 28 Mar 2023 10:39:29 +02:00
+On 17/11/2022 at 11:52, Tudor Ambarus wrote:
+> sama5d27-wlsom1 populates an sst26vf064b SPI NOR flash. Its maximum
+> operating frequency for 2.7-3.6V is 104 MHz. As the flash is operated
+> at 3.3V, increase its maximum supported frequency to 104MHz. The
+> increasing of the spi-max-frequency value requires the setting of the
+> "CE# Not Active Hold Time", thus set the spi-cs-setup-ns to a value of 7.
+> 
+> The sst26vf064b datasheet specifies just a minimum value for the
+> "CE# Not Active Hold Time" and it advertises it to 5 ns. There's no
+> maximum time specified. I determined experimentally that 5 ns for the
+> spi-cs-setup-ns is not enough when the flash is operated close to its
+> maximum frequency and tests showed that 7 ns is just fine, so set the
+> spi-cs-setup-ns dt property to 7.
+> 
+> With the increase of frequency the reads are now faster with ~37%.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> ---
+>   arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi b/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
+> index 83bcf9fe0152..20caf40b4755 100644
+> --- a/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
+> +++ b/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
+> @@ -220,7 +220,8 @@ qspi1_flash: flash@0 {
+>   		#size-cells = <1>;
+>   		compatible = "jedec,spi-nor";
+>   		reg = <0>;
+> -		spi-max-frequency = <80000000>;
+> +		spi-max-frequency = <104000000>;
+> +		spi-cs-setup-ns = /bits/ 16 <7>;
 
-atomics: Provide rcuref - scalable reference counting
+Following the different changes that happened to this property after 
+this post, am I right saying that this must now be changed to:
 
-atomic_t based reference counting, including refcount_t, uses
-atomic_inc_not_zero() for acquiring a reference. atomic_inc_not_zero() is
-implemented with a atomic_try_cmpxchg() loop. High contention of the
-reference count leads to retry loops and scales badly. There is nothing to
-improve on this implementation as the semantics have to be preserved.
+spi-cs-setup-delay-ns = <7>;
 
-Provide rcuref as a scalable alternative solution which is suitable for RCU
-managed objects. Similar to refcount_t it comes with overflow and underflow
-detection and mitigation.
+?
 
-rcuref treats the underlying atomic_t as an unsigned integer and partitions
-this space into zones:
+Thanks for your insight. Best regards,
+   Nicolas
 
-  0x00000000 - 0x7FFFFFFF	valid zone (1 .. (INT_MAX + 1) references)
-  0x80000000 - 0xBFFFFFFF	saturation zone
-  0xC0000000 - 0xFFFFFFFE	dead zone
-  0xFFFFFFFF   			no reference
+>   		spi-rx-bus-width = <4>;
+>   		spi-tx-bus-width = <4>;
+>   		m25p,fast-read;
 
-rcuref_get() unconditionally increments the reference count with
-atomic_add_negative_relaxed(). rcuref_put() unconditionally decrements the
-reference count with atomic_add_negative_release().
+-- 
+Nicolas Ferre
 
-This unconditional increment avoids the inc_not_zero() problem, but
-requires a more complex implementation on the put() side when the count
-drops from 0 to -1.
-
-When this transition is detected then it is attempted to mark the reference
-count dead, by setting it to the midpoint of the dead zone with a single
-atomic_cmpxchg_release() operation. This operation can fail due to a
-concurrent rcuref_get() elevating the reference count from -1 to 0 again.
-
-If the unconditional increment in rcuref_get() hits a reference count which
-is marked dead (or saturated) it will detect it after the fact and bring
-back the reference count to the midpoint of the respective zone. The zones
-provide enough tolerance which makes it practically impossible to escape
-from a zone.
-
-The racy implementation of rcuref_put() requires to protect rcuref_put()
-against a grace period ending in order to prevent a subtle use after
-free. As RCU is the only mechanism which allows to protect against that, it
-is not possible to fully replace the atomic_inc_not_zero() based
-implementation of refcount_t with this scheme.
-
-The final drop is slightly more expensive than the atomic_dec_return()
-counterpart, but that's not the case which this is optimized for. The
-optimization is on the high frequeunt get()/put() pairs and their
-scalability.
-
-The performance of an uncontended rcuref_get()/put() pair where the put()
-is not dropping the last reference is still on par with the plain atomic
-operations, while at the same time providing overflow and underflow
-detection and mitigation.
-
-The performance of rcuref compared to plain atomic_inc_not_zero() and
-atomic_dec_return() based reference counting under contention:
-
- -  Micro benchmark: All CPUs running a increment/decrement loop on an
-    elevated reference count, which means the 0 to -1 transition never
-    happens.
-
-    The performance gain depends on microarchitecture and the number of
-    CPUs and has been observed in the range of 1.3X to 4.7X
-
- - Conversion of dst_entry::__refcnt to rcuref and testing with the
-    localhost memtier/memcached benchmark. That benchmark shows the
-    reference count contention prominently.
-
-    The performance gain depends on microarchitecture and the number of
-    CPUs and has been observed in the range of 1.1X to 2.6X over the
-    previous fix for the false sharing issue vs. struct
-    dst_entry::__refcnt.
-
-    When memtier is run over a real 1Gb network connection, there is a
-    small gain on top of the false sharing fix. The two changes combined
-    result in a 2%-5% total gain for that networked test.
-
-Reported-by: Wangyang Guo <wangyang.guo@intel.com>
-Reported-by: Arjan Van De Ven <arjan.van.de.ven@intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20230323102800.158429195@linutronix.de
----
- include/linux/rcuref.h | 155 ++++++++++++++++++++++-
- include/linux/types.h  |   6 +-
- lib/Makefile           |   2 +-
- lib/rcuref.c           | 281 ++++++++++++++++++++++++++++++++++++++++-
- 4 files changed, 443 insertions(+), 1 deletion(-)
- create mode 100644 include/linux/rcuref.h
- create mode 100644 lib/rcuref.c
-
-diff --git a/include/linux/rcuref.h b/include/linux/rcuref.h
-new file mode 100644
-index 0000000..2c8bfd0
---- /dev/null
-+++ b/include/linux/rcuref.h
-@@ -0,0 +1,155 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef _LINUX_RCUREF_H
-+#define _LINUX_RCUREF_H
-+
-+#include <linux/atomic.h>
-+#include <linux/bug.h>
-+#include <linux/limits.h>
-+#include <linux/lockdep.h>
-+#include <linux/preempt.h>
-+#include <linux/rcupdate.h>
-+
-+#define RCUREF_ONEREF		0x00000000U
-+#define RCUREF_MAXREF		0x7FFFFFFFU
-+#define RCUREF_SATURATED	0xA0000000U
-+#define RCUREF_RELEASED		0xC0000000U
-+#define RCUREF_DEAD		0xE0000000U
-+#define RCUREF_NOREF		0xFFFFFFFFU
-+
-+/**
-+ * rcuref_init - Initialize a rcuref reference count with the given reference count
-+ * @ref:	Pointer to the reference count
-+ * @cnt:	The initial reference count typically '1'
-+ */
-+static inline void rcuref_init(rcuref_t *ref, unsigned int cnt)
-+{
-+	atomic_set(&ref->refcnt, cnt - 1);
-+}
-+
-+/**
-+ * rcuref_read - Read the number of held reference counts of a rcuref
-+ * @ref:	Pointer to the reference count
-+ *
-+ * Return: The number of held references (0 ... N)
-+ */
-+static inline unsigned int rcuref_read(rcuref_t *ref)
-+{
-+	unsigned int c = atomic_read(&ref->refcnt);
-+
-+	/* Return 0 if within the DEAD zone. */
-+	return c >= RCUREF_RELEASED ? 0 : c + 1;
-+}
-+
-+extern __must_check bool rcuref_get_slowpath(rcuref_t *ref);
-+
-+/**
-+ * rcuref_get - Acquire one reference on a rcuref reference count
-+ * @ref:	Pointer to the reference count
-+ *
-+ * Similar to atomic_inc_not_zero() but saturates at RCUREF_MAXREF.
-+ *
-+ * Provides no memory ordering, it is assumed the caller has guaranteed the
-+ * object memory to be stable (RCU, etc.). It does provide a control dependency
-+ * and thereby orders future stores. See documentation in lib/rcuref.c
-+ *
-+ * Return:
-+ *	False if the attempt to acquire a reference failed. This happens
-+ *	when the last reference has been put already
-+ *
-+ *	True if a reference was successfully acquired
-+ */
-+static inline __must_check bool rcuref_get(rcuref_t *ref)
-+{
-+	/*
-+	 * Unconditionally increase the reference count. The saturation and
-+	 * dead zones provide enough tolerance for this.
-+	 */
-+	if (likely(!atomic_add_negative_relaxed(1, &ref->refcnt)))
-+		return true;
-+
-+	/* Handle the cases inside the saturation and dead zones */
-+	return rcuref_get_slowpath(ref);
-+}
-+
-+extern __must_check bool rcuref_put_slowpath(rcuref_t *ref);
-+
-+/*
-+ * Internal helper. Do not invoke directly.
-+ */
-+static __always_inline __must_check bool __rcuref_put(rcuref_t *ref)
-+{
-+	RCU_LOCKDEP_WARN(!rcu_read_lock_held() && preemptible(),
-+			 "suspicious rcuref_put_rcusafe() usage");
-+	/*
-+	 * Unconditionally decrease the reference count. The saturation and
-+	 * dead zones provide enough tolerance for this.
-+	 */
-+	if (likely(!atomic_add_negative_release(-1, &ref->refcnt)))
-+		return false;
-+
-+	/*
-+	 * Handle the last reference drop and cases inside the saturation
-+	 * and dead zones.
-+	 */
-+	return rcuref_put_slowpath(ref);
-+}
-+
-+/**
-+ * rcuref_put_rcusafe -- Release one reference for a rcuref reference count RCU safe
-+ * @ref:	Pointer to the reference count
-+ *
-+ * Provides release memory ordering, such that prior loads and stores are done
-+ * before, and provides an acquire ordering on success such that free()
-+ * must come after.
-+ *
-+ * Can be invoked from contexts, which guarantee that no grace period can
-+ * happen which would free the object concurrently if the decrement drops
-+ * the last reference and the slowpath races against a concurrent get() and
-+ * put() pair. rcu_read_lock()'ed and atomic contexts qualify.
-+ *
-+ * Return:
-+ *	True if this was the last reference with no future references
-+ *	possible. This signals the caller that it can safely release the
-+ *	object which is protected by the reference counter.
-+ *
-+ *	False if there are still active references or the put() raced
-+ *	with a concurrent get()/put() pair. Caller is not allowed to
-+ *	release the protected object.
-+ */
-+static inline __must_check bool rcuref_put_rcusafe(rcuref_t *ref)
-+{
-+	return __rcuref_put(ref);
-+}
-+
-+/**
-+ * rcuref_put -- Release one reference for a rcuref reference count
-+ * @ref:	Pointer to the reference count
-+ *
-+ * Can be invoked from any context.
-+ *
-+ * Provides release memory ordering, such that prior loads and stores are done
-+ * before, and provides an acquire ordering on success such that free()
-+ * must come after.
-+ *
-+ * Return:
-+ *
-+ *	True if this was the last reference with no future references
-+ *	possible. This signals the caller that it can safely schedule the
-+ *	object, which is protected by the reference counter, for
-+ *	deconstruction.
-+ *
-+ *	False if there are still active references or the put() raced
-+ *	with a concurrent get()/put() pair. Caller is not allowed to
-+ *	deconstruct the protected object.
-+ */
-+static inline __must_check bool rcuref_put(rcuref_t *ref)
-+{
-+	bool released;
-+
-+	preempt_disable();
-+	released = __rcuref_put(ref);
-+	preempt_enable();
-+	return released;
-+}
-+
-+#endif
-diff --git a/include/linux/types.h b/include/linux/types.h
-index ea8cf60..688fb94 100644
---- a/include/linux/types.h
-+++ b/include/linux/types.h
-@@ -175,6 +175,12 @@ typedef struct {
- } atomic64_t;
- #endif
- 
-+typedef struct {
-+	atomic_t refcnt;
-+} rcuref_t;
-+
-+#define RCUREF_INIT(i)	{ .refcnt = ATOMIC_INIT(i - 1) }
-+
- struct list_head {
- 	struct list_head *next, *prev;
- };
-diff --git a/lib/Makefile b/lib/Makefile
-index baf2821..31a3a25 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -47,7 +47,7 @@ obj-y += bcd.o sort.o parser.o debug_locks.o random32.o \
- 	 list_sort.o uuid.o iov_iter.o clz_ctz.o \
- 	 bsearch.o find_bit.o llist.o memweight.o kfifo.o \
- 	 percpu-refcount.o rhashtable.o base64.o \
--	 once.o refcount.o usercopy.o errseq.o bucket_locks.o \
-+	 once.o refcount.o rcuref.o usercopy.o errseq.o bucket_locks.o \
- 	 generic-radix-tree.o
- obj-$(CONFIG_STRING_SELFTEST) += test_string.o
- obj-y += string_helpers.o
-diff --git a/lib/rcuref.c b/lib/rcuref.c
-new file mode 100644
-index 0000000..5ec00a4
---- /dev/null
-+++ b/lib/rcuref.c
-@@ -0,0 +1,281 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * rcuref - A scalable reference count implementation for RCU managed objects
-+ *
-+ * rcuref is provided to replace open coded reference count implementations
-+ * based on atomic_t. It protects explicitely RCU managed objects which can
-+ * be visible even after the last reference has been dropped and the object
-+ * is heading towards destruction.
-+ *
-+ * A common usage pattern is:
-+ *
-+ * get()
-+ *	rcu_read_lock();
-+ *	p = get_ptr();
-+ *	if (p && !atomic_inc_not_zero(&p->refcnt))
-+ *		p = NULL;
-+ *	rcu_read_unlock();
-+ *	return p;
-+ *
-+ * put()
-+ *	if (!atomic_dec_return(&->refcnt)) {
-+ *		remove_ptr(p);
-+ *		kfree_rcu((p, rcu);
-+ *	}
-+ *
-+ * atomic_inc_not_zero() is implemented with a try_cmpxchg() loop which has
-+ * O(N^2) behaviour under contention with N concurrent operations.
-+ *
-+ * rcuref uses atomic_add_negative_relaxed() for the fast path, which scales
-+ * better under contention.
-+ *
-+ * Why not refcount?
-+ * =================
-+ *
-+ * In principle it should be possible to make refcount use the rcuref
-+ * scheme, but the destruction race described below cannot be prevented
-+ * unless the protected object is RCU managed.
-+ *
-+ * Theory of operation
-+ * ===================
-+ *
-+ * rcuref uses an unsigned integer reference counter. As long as the
-+ * counter value is greater than or equal to RCUREF_ONEREF and not larger
-+ * than RCUREF_MAXREF the reference is alive:
-+ *
-+ * ONEREF   MAXREF               SATURATED             RELEASED      DEAD    NOREF
-+ * 0        0x7FFFFFFF 0x8000000 0xA0000000 0xBFFFFFFF 0xC0000000 0xE0000000 0xFFFFFFFF
-+ * <---valid --------> <-------saturation zone-------> <-----dead zone----->
-+ *
-+ * The get() and put() operations do unconditional increments and
-+ * decrements. The result is checked after the operation. This optimizes
-+ * for the fast path.
-+ *
-+ * If the reference count is saturated or dead, then the increments and
-+ * decrements are not harmful as the reference count still stays in the
-+ * respective zones and is always set back to STATURATED resp. DEAD. The
-+ * zones have room for 2^28 racing operations in each direction, which
-+ * makes it practically impossible to escape the zones.
-+ *
-+ * Once the last reference is dropped the reference count becomes
-+ * RCUREF_NOREF which forces rcuref_put() into the slowpath operation. The
-+ * slowpath then tries to set the reference count from RCUREF_NOREF to
-+ * RCUREF_DEAD via a cmpxchg(). This opens a small window where a
-+ * concurrent rcuref_get() can acquire the reference count and bring it
-+ * back to RCUREF_ONEREF or even drop the reference again and mark it DEAD.
-+ *
-+ * If the cmpxchg() succeeds then a concurrent rcuref_get() will result in
-+ * DEAD + 1, which is inside the dead zone. If that happens the reference
-+ * count is put back to DEAD.
-+ *
-+ * The actual race is possible due to the unconditional increment and
-+ * decrements in rcuref_get() and rcuref_put():
-+ *
-+ *	T1				T2
-+ *	get()				put()
-+ *					if (atomic_add_negative(-1, &ref->refcnt))
-+ *		succeeds->			atomic_cmpxchg(&ref->refcnt, NOREF, DEAD);
-+ *
-+ *	atomic_add_negative(1, &ref->refcnt);	<- Elevates refcount to DEAD + 1
-+ *
-+ * As the result of T1's add is negative, the get() goes into the slow path
-+ * and observes refcnt being in the dead zone which makes the operation fail.
-+ *
-+ * Possible critical states:
-+ *
-+ *	Context Counter	References	Operation
-+ *	T1	0	1		init()
-+ *	T2	1	2		get()
-+ *	T1	0	1		put()
-+ *	T2     -1	0		put() tries to mark dead
-+ *	T1	0	1		get()
-+ *	T2	0	1		put() mark dead fails
-+ *	T1     -1	0		put() tries to mark dead
-+ *	T1    DEAD	0		put() mark dead succeeds
-+ *	T2    DEAD+1	0		get() fails and puts it back to DEAD
-+ *
-+ * Of course there are more complex scenarios, but the above illustrates
-+ * the working principle. The rest is left to the imagination of the
-+ * reader.
-+ *
-+ * Deconstruction race
-+ * ===================
-+ *
-+ * The release operation must be protected by prohibiting a grace period in
-+ * order to prevent a possible use after free:
-+ *
-+ *	T1				T2
-+ *	put()				get()
-+ *	// ref->refcnt = ONEREF
-+ *	if (!atomic_add_negative(-1, &ref->refcnt))
-+ *		return false;				<- Not taken
-+ *
-+ *	// ref->refcnt == NOREF
-+ *	--> preemption
-+ *					// Elevates ref->refcnt to ONEREF
-+ *					if (!atomic_add_negative(1, &ref->refcnt))
-+ *						return true;			<- taken
-+ *
-+ *					if (put(&p->ref)) { <-- Succeeds
-+ *						remove_pointer(p);
-+ *						kfree_rcu(p, rcu);
-+ *					}
-+ *
-+ *		RCU grace period ends, object is freed
-+ *
-+ *	atomic_cmpxchg(&ref->refcnt, NOREF, DEAD);	<- UAF
-+ *
-+ * This is prevented by disabling preemption around the put() operation as
-+ * that's in most kernel configurations cheaper than a rcu_read_lock() /
-+ * rcu_read_unlock() pair and in many cases even a NOOP. In any case it
-+ * prevents the grace period which keeps the object alive until all put()
-+ * operations complete.
-+ *
-+ * Saturation protection
-+ * =====================
-+ *
-+ * The reference count has a saturation limit RCUREF_MAXREF (INT_MAX).
-+ * Once this is exceedded the reference count becomes stale by setting it
-+ * to RCUREF_SATURATED, which will cause a memory leak, but it prevents
-+ * wrap arounds which obviously cause worse problems than a memory
-+ * leak. When saturation is reached a warning is emitted.
-+ *
-+ * Race conditions
-+ * ===============
-+ *
-+ * All reference count increment/decrement operations are unconditional and
-+ * only verified after the fact. This optimizes for the good case and takes
-+ * the occasional race vs. a dead or already saturated refcount into
-+ * account. The saturation and dead zones are large enough to accomodate
-+ * for that.
-+ *
-+ * Memory ordering
-+ * ===============
-+ *
-+ * Memory ordering rules are slightly relaxed wrt regular atomic_t functions
-+ * and provide only what is strictly required for refcounts.
-+ *
-+ * The increments are fully relaxed; these will not provide ordering. The
-+ * rationale is that whatever is used to obtain the object to increase the
-+ * reference count on will provide the ordering. For locked data
-+ * structures, its the lock acquire, for RCU/lockless data structures its
-+ * the dependent load.
-+ *
-+ * rcuref_get() provides a control dependency ordering future stores which
-+ * ensures that the object is not modified when acquiring a reference
-+ * fails.
-+ *
-+ * rcuref_put() provides release order, i.e. all prior loads and stores
-+ * will be issued before. It also provides a control dependency ordering
-+ * against the subsequent destruction of the object.
-+ *
-+ * If rcuref_put() successfully dropped the last reference and marked the
-+ * object DEAD it also provides acquire ordering.
-+ */
-+
-+#include <linux/export.h>
-+#include <linux/rcuref.h>
-+
-+/**
-+ * rcuref_get_slowpath - Slowpath of rcuref_get()
-+ * @ref:	Pointer to the reference count
-+ *
-+ * Invoked when the reference count is outside of the valid zone.
-+ *
-+ * Return:
-+ *	False if the reference count was already marked dead
-+ *
-+ *	True if the reference count is saturated, which prevents the
-+ *	object from being deconstructed ever.
-+ */
-+bool rcuref_get_slowpath(rcuref_t *ref)
-+{
-+	unsigned int cnt = atomic_read(&ref->refcnt);
-+
-+	/*
-+	 * If the reference count was already marked dead, undo the
-+	 * increment so it stays in the middle of the dead zone and return
-+	 * fail.
-+	 */
-+	if (cnt >= RCUREF_RELEASED) {
-+		atomic_set(&ref->refcnt, RCUREF_DEAD);
-+		return false;
-+	}
-+
-+	/*
-+	 * If it was saturated, warn and mark it so. In case the increment
-+	 * was already on a saturated value restore the saturation
-+	 * marker. This keeps it in the middle of the saturation zone and
-+	 * prevents the reference count from overflowing. This leaks the
-+	 * object memory, but prevents the obvious reference count overflow
-+	 * damage.
-+	 */
-+	if (WARN_ONCE(cnt > RCUREF_MAXREF, "rcuref saturated - leaking memory"))
-+		atomic_set(&ref->refcnt, RCUREF_SATURATED);
-+	return true;
-+}
-+EXPORT_SYMBOL_GPL(rcuref_get_slowpath);
-+
-+/**
-+ * rcuref_put_slowpath - Slowpath of __rcuref_put()
-+ * @ref:	Pointer to the reference count
-+ *
-+ * Invoked when the reference count is outside of the valid zone.
-+ *
-+ * Return:
-+ *	True if this was the last reference with no future references
-+ *	possible. This signals the caller that it can safely schedule the
-+ *	object, which is protected by the reference counter, for
-+ *	deconstruction.
-+ *
-+ *	False if there are still active references or the put() raced
-+ *	with a concurrent get()/put() pair. Caller is not allowed to
-+ *	deconstruct the protected object.
-+ */
-+bool rcuref_put_slowpath(rcuref_t *ref)
-+{
-+	unsigned int cnt = atomic_read(&ref->refcnt);
-+
-+	/* Did this drop the last reference? */
-+	if (likely(cnt == RCUREF_NOREF)) {
-+		/*
-+		 * Carefully try to set the reference count to RCUREF_DEAD.
-+		 *
-+		 * This can fail if a concurrent get() operation has
-+		 * elevated it again or the corresponding put() even marked
-+		 * it dead already. Both are valid situations and do not
-+		 * require a retry. If this fails the caller is not
-+		 * allowed to deconstruct the object.
-+		 */
-+		if (atomic_cmpxchg_release(&ref->refcnt, RCUREF_NOREF, RCUREF_DEAD) != RCUREF_NOREF)
-+			return false;
-+
-+		/*
-+		 * The caller can safely schedule the object for
-+		 * deconstruction. Provide acquire ordering.
-+		 */
-+		smp_acquire__after_ctrl_dep();
-+		return true;
-+	}
-+
-+	/*
-+	 * If the reference count was already in the dead zone, then this
-+	 * put() operation is imbalanced. Warn, put the reference count back to
-+	 * DEAD and tell the caller to not deconstruct the object.
-+	 */
-+	if (WARN_ONCE(cnt >= RCUREF_RELEASED, "rcuref - imbalanced put()")) {
-+		atomic_set(&ref->refcnt, RCUREF_DEAD);
-+		return false;
-+	}
-+
-+	/*
-+	 * This is a put() operation on a saturated refcount. Restore the
-+	 * mean saturation value and tell the caller to not deconstruct the
-+	 * object.
-+	 */
-+	if (cnt > RCUREF_MAXREF)
-+		atomic_set(&ref->refcnt, RCUREF_SATURATED);
-+	return false;
-+}
-+EXPORT_SYMBOL_GPL(rcuref_put_slowpath);
