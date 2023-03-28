@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5D86CB995
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621016CB99B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjC1Ii1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
+        id S230371AbjC1IkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbjC1IiM (ORCPT
+        with ESMTP id S229647AbjC1Ij6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:38:12 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BF25B8C;
-        Tue, 28 Mar 2023 01:38:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=c2gJkGR3ZVhZjd+ydR7063pupKsOxtcVp5HBCZXf92Y=; b=IWCKPYunG2TLjovBm3mAvmLI+H
-        DQWyS8H4iohgGN1q88CjKUi2pJs9F54e1Xv8zqf8aUsrykXFi1YOsV4SXu1AjREYSRCpga8/xaA/R
-        bsc8u2eWRCJJmo/XWhU7JDViFWKzjoHknYuR84bo/91vjaLjA9Qtq+ha2EIZR6jofzBv2jS2Uc1Jp
-        85lSdA9MyWwBsHjAp8xBsTavsw0+Hgjksxd+6ChmvbxK+Fore6L8473BiDS948cYF6XAAGxvneOQG
-        S3I+Pny1cWHrTQ+TPjBO7SfxGPcuoEm5g/DNDBXaRwp/AFqpVWWQayhaH6cetvS0dM1LzAekctfle
-        ahspeLwA==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1ph4pu-000FI6-En; Tue, 28 Mar 2023 10:37:46 +0200
-Received: from [219.59.88.22] (helo=localhost.localdomain)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1ph4pt-000UJx-IV; Tue, 28 Mar 2023 10:37:45 +0200
-Subject: Re: [PATCH v2] loongarch/bpf: Skip speculation barrier opcode, which
- caused ltp testcase bpf_prog02 to fail
-To:     WANG Xuerui <kernel@xen0n.name>, George Guo <guodongtai@kylinos.cn>
-Cc:     ast@kernel.org, bpf@vger.kernel.org, chenhuacai@kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, masahiroy@kernel.org,
-        michal.lkml@markovi.net, ndesaulniers@google.com,
-        hengqi.chen@gmail.com, yangtiezhu@loongson.cn,
-        tangyouling@loongson.cn
-References: <c1932d0d-cf3f-5005-958d-7e08dddf42c9@iogearbox.net>
- <20230328071335.2664966-1-guodongtai@kylinos.cn>
- <ddb2f552-252f-4533-469b-31044b4fc2d6@iogearbox.net>
- <d4409486-7b3e-5b59-3b4e-9e832a7c98d5@xen0n.name>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <a8640220-4555-7f14-b1d3-deaaae587331@iogearbox.net>
-Date:   Tue, 28 Mar 2023 10:37:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 28 Mar 2023 04:39:58 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B8B2111;
+        Tue, 28 Mar 2023 01:39:56 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32S7bdFv002982;
+        Tue, 28 Mar 2023 10:39:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Oo5Fr4iLIl0dbDky1BO8KNDKbs0qovmmIrHm+rhBjfY=;
+ b=x1f+WBgbb8ohbJYPW4OP9dOg5VxsebrxULRqPggIB1f+CsM6HhSVbSHGBkT4lfkUbX4J
+ koPLGYxlsczkZ0R6oCjAk7KRg8yAUS8Upg3LlbxKjGd5bFtG6GecNRXur9PwmhOzH8Uh
+ 5Xukax2HlIvB4TTIlUJsuTCrzY4vDY6wLUfM1JODCgDOy10qHrhTr7WZOgizNyLNspr1
+ F4w/Huse38b+ud8ZoICHE60iQORmEzmnnepCKWVW9gLUyx2Xng8eF7+3maj+osCitr45
+ vMsX7+mvgdXvZ2FV+0c2fVTHPn9dbj0c44/3UAgH24plHXweyVPqZ6dU+OJ9TIhVfOKC UA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3phsn309u3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 10:39:46 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CC69E10002A;
+        Tue, 28 Mar 2023 10:39:44 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BF0D620F2AB;
+        Tue, 28 Mar 2023 10:39:44 +0200 (CEST)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Tue, 28 Mar
+ 2023 10:39:44 +0200
+Message-ID: <570618d3-fd74-1921-10cc-5ac87c16facf@foss.st.com>
+Date:   Tue, 28 Mar 2023 10:39:43 +0200
 MIME-Version: 1.0
-In-Reply-To: <d4409486-7b3e-5b59-3b4e-9e832a7c98d5@xen0n.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] ARM: dts: stm32mp157c-lxa: drop invalid simple-panel
+ compatible
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26857/Tue Mar 28 09:23:39 2023)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230326204452.80751-1-krzysztof.kozlowski@linaro.org>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20230326204452.80751-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
+X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,36 +77,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/23 9:52 AM, WANG Xuerui wrote:
-> On 2023/3/28 15:22, Daniel Borkmann wrote:
->> On 3/28/23 9:13 AM, George Guo wrote:
->>> Here just skip the opcode(BPF_ST | BPF_NOSPEC) that has no couterpart to the loongarch.
->>>
->>> <snip>
->>>
->>> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
->>> index 288003a9f0ca..d3c6b1c4ccbb 100644
->>> --- a/arch/loongarch/net/bpf_jit.c
->>> +++ b/arch/loongarch/net/bpf_jit.c
->>> @@ -1022,6 +1022,11 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
->>>           emit_atomic(insn, ctx);
->>>           break;
->>> +    /* Speculation barrier */
->>> +    case BPF_ST | BPF_NOSPEC:
->>> +        pr_info_once("bpf_jit: skip speculation barrier opcode %0x2x\n", code);
->>> +        break;
->>
->> Thanks that looks better. Question to LoongArch folks (Cc): There is no equivalent
->> to a speculation barrier here, correct? Either way, I think the pr_info_once() can
->> just be removed given there is little value for a users to have this in the kernel
->> log. I can take care of this while applying, that's fine.
-> 
-> I can confirm there's currently no speculation barrier equivalent on lonogarch. (Loongson says there are builtin mitigations for Spectre-V1 and V2 on their chips, and AFAIK efforts to port the exploits to mips/loongarch have all failed a few years ago.)
-> 
-> And yes I'd agree with removing the warning altogether. Thanks for the reviews!
-> 
-> Acked-by: WANG Xuerui <git@xen0n.name>
+Hi Krzysztof
 
-Ok, sounds good. I've cleaned this up and applied to bpf tree. Thanks!
+On 3/26/23 22:44, Krzysztof Kozlowski wrote:
+> "simple-panel" compatible is not documented and nothing in Linux kernel
+> binds to it.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts b/arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts
+> index cb00ce7cec8b..407ed3952f75 100644
+> --- a/arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts
+> +++ b/arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts
+> @@ -73,7 +73,7 @@ led-3 {
+>   	};
+>   
+>   	panel: panel {
+> -		compatible = "edt,etm0700g0edh6", "simple-panel";
+> +		compatible = "edt,etm0700g0edh6";
+>   		backlight = <&backlight>;
+>   		enable-gpios = <&gpiod 4 GPIO_ACTIVE_HIGH>;
+>   		power-supply = <&reg_3v3>;
 
-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/commit/?id=a6f6a95f25803500079513780d11a911ce551d76
+Applied on stm32-next with a tiny update in commit title.
+
+Cheers.
+Alex
