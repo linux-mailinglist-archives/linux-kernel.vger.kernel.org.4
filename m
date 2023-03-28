@@ -2,96 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42136CCC13
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 23:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799E36CCC0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 23:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbjC1VWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 17:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
+        id S229827AbjC1VU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 17:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjC1VWp (ORCPT
+        with ESMTP id S229540AbjC1VU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 17:22:45 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03311BD6;
-        Tue, 28 Mar 2023 14:22:44 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so16475760pjb.4;
-        Tue, 28 Mar 2023 14:22:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680038564;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/xIQy0+A8zq3DrF5z48P1QzrBmuhb1Zz7wkOxJIg7hA=;
-        b=SiAbb8S/MRqEbNMnvQ8YN/aGHLMQj0nWQQRYLY/rQqj9DGdnb5p+WZ9RDbjzwb/7va
-         MjGFOI+IQ7TtwUF+L+r1BTCqRhVHESYMLWe6iPTyYuV6c6ZZRyCmAPZ6URZislp9VbXt
-         7oU+wUd7EZq5zzVL/g2XnyqORAgubocOhw2pSX3CTW8uOL1YsLiTjUUBnnou4ZzWpuZW
-         07w5mJdCV+tPIw2+/psHNX+2QRJfiV6SbI4I9G0BAAMPgo9BWK+3HHw6EM+ZA/jAdLbl
-         vgUAi75mzIYlzM2OWL5eypox16e+o15mztwSXdzurz2pSVzb4HsC4Fq8mrY7Bejj+uTD
-         G9Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680038564;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/xIQy0+A8zq3DrF5z48P1QzrBmuhb1Zz7wkOxJIg7hA=;
-        b=effUkTcg8wRNqjvP7PiaH1WfYRSdu5lqMzjBFrdY0c5Q8CL66iPRVr1ZXpBM9mD/3N
-         GL048MaBQvbJRZFY7tx6UkpGtMU5fHW7ok52BZD+X5mmfuuVxg98+qEQDSXOUhZ1bXBg
-         JL3KXRxV/pYrNzX3eo1P1Ha5jiScmTKE5UcGIlnQFkN1E6p0tanvjARNHlRK9MFPiRL6
-         EdZqBc9bLIVmEtUihHI6xknDmfZNKhkNkQUOac/YlBPZsXfJKiv7zw2OwWjhjFTFcL4S
-         FtEcwmQmq4JQej1miLWbBlQd4YoA6LizZ529cmJ/5Ms+0AJaYv8zXhrr4OHfzp3YCiir
-         8+Kg==
-X-Gm-Message-State: AAQBX9d0JU6f1c9AfEJL4rAYv/SSB4NFelB7ptG07M06qZqrQzZ58Xjq
-        3UbjD5gUxYl2ez+Pu9ddxtc/kjGeoODGT6eWJ2Y=
-X-Google-Smtp-Source: AKy350ap4nJ00eJQxyVs5SFbU7vw1IHgd6XMWhheSRWrHMmPQ6mDFp3+8uRAGoCJJMHex8TOrhqnKwMih2QRvlPg3fQ=
-X-Received: by 2002:a17:90a:9481:b0:234:ac9c:5daf with SMTP id
- s1-20020a17090a948100b00234ac9c5dafmr5432085pjo.2.1680038564265; Tue, 28 Mar
- 2023 14:22:44 -0700 (PDT)
+        Tue, 28 Mar 2023 17:20:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEB21BC8;
+        Tue, 28 Mar 2023 14:20:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A07761952;
+        Tue, 28 Mar 2023 21:20:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E4EC433EF;
+        Tue, 28 Mar 2023 21:20:51 +0000 (UTC)
+Date:   Tue, 28 Mar 2023 17:20:49 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
+        brauner@kernel.org, akpm@linux-foundation.org,
+        ebiederm@xmission.com, keescook@chromium.org, tglx@linutronix.de,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v8 04/11] tracing/user_events: Fixup enable faults
+ asyncly
+Message-ID: <20230328172049.10061257@gandalf.local.home>
+In-Reply-To: <20230221211143.574-5-beaub@linux.microsoft.com>
+References: <20230221211143.574-1-beaub@linux.microsoft.com>
+        <20230221211143.574-5-beaub@linux.microsoft.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-From:   Vincent Legoll <vincent.legoll@gmail.com>
-Date:   Tue, 28 Mar 2023 23:20:06 +0200
-Message-ID: <CAEwRq=pkZZD232BbWnSc_5bHkMeLcMW8UK6+RiOz5YcEUVVzEw@mail.gmail.com>
-Subject: Re: [PATCHv7 00/11] Introduce RK806 Support
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        broonie@kernel.org, devicetree@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>, kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        lee@kernel.org, lgirdwood@gmail.com, linus.walleij@linaro.org,
-        Linux Kernel ML <linux-kernel@vger.kernel.org>,
-        linux-rockchip@lists.infradead.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, sboyd@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 21 Feb 2023 13:11:36 -0800
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
-I tested this series through the collabora repo at:
+> @@ -263,7 +277,85 @@ static int user_event_mm_fault_in(struct user_event_mm *mm, unsigned long uaddr)
+>  }
+>  
+>  static int user_event_enabler_write(struct user_event_mm *mm,
+> -				    struct user_event_enabler *enabler)
+> +				    struct user_event_enabler *enabler,
+> +				    bool fixup_fault);
+> +
+> +static void user_event_enabler_fault_fixup(struct work_struct *work)
+> +{
+> +	struct user_event_enabler_fault *fault = container_of(
+> +		work, struct user_event_enabler_fault, work);
+> +	struct user_event_enabler *enabler = fault->enabler;
+> +	struct user_event_mm *mm = fault->mm;
+> +	unsigned long uaddr = enabler->addr;
+> +	int ret;
+> +
+> +	ret = user_event_mm_fault_in(mm, uaddr);
+> +
+> +	if (ret && ret != -ENOENT) {
+> +		struct user_event *user = enabler->event;
+> +
+> +		pr_warn("user_events: Fault for mm: 0x%pK @ 0x%llx event: %s\n",
+> +			mm->mm, (unsigned long long)uaddr, EVENT_NAME(user));
+> +	}
+> +
+> +	/* Prevent state changes from racing */
+> +	mutex_lock(&event_mutex);
+> +
+> +	/*
+> +	 * If we managed to get the page, re-issue the write. We do not
+> +	 * want to get into a possible infinite loop, which is why we only
+> +	 * attempt again directly if the page came in. If we couldn't get
+> +	 * the page here, then we will try again the next time the event is
+> +	 * enabled/disabled.
+> +	 */
 
-https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux
-commit ID : 1676b0dc5719f8f8bb48620bc71570e29d18801e
+What case would we not get the page? A bad page mapping? User space doing
+something silly?
 
-on top of which I added the Pine64 QuartzPro64 DTS from:
-https://github.com/neggles/linux-quartz64
+Or something else, for which how can it go into an infinite loop? Can that
+only happen if userspace is doing something mischievous?
 
-I took 2 commits from there:
-9783cb904f4e30850c017f22e4160d164b571a01 (the rk806-dual)
-01f523af0fce727a0e0a37029bbb2d45626d209a (the qp64 DTS)
+-- Steve
 
-The SoC ethernet, SD card and  eMMC are working properly,
-the serial console is also OK.
 
-You can add my T-B:
-Tested-by: Vincent Legoll <vincent.legoll@gmail.com>
-
-Regards
-
--- 
-Vincent Legoll
+> +	clear_bit(ENABLE_VAL_FAULTING_BIT, ENABLE_BITOPS(enabler));
+> +
+> +	if (!ret) {
+> +		mmap_read_lock(mm->mm);
+> +		user_event_enabler_write(mm, enabler, true);
+> +		mmap_read_unlock(mm->mm);
+> +	}
+> +
+> +	mutex_unlock(&event_mutex);
+> +
+> +	/* In all cases we no longer need the mm or fault */
+> +	user_event_mm_put(mm);
+> +	kmem_cache_free(fault_cache, fault);
+> +}
+> +
+> +static bool user_event_enabler_queue_fault(struct user_event_mm *mm,
+> +					   struct user_event_enabler *enabler)
+> +{
+> +	struct user_event_enabler_fault *fault;
+> +
+> +	fault = kmem_cache_zalloc(fault_cache, GFP_NOWAIT | __GFP_NOWARN);
+> +
+> +	if (!fault)
+> +		return false;
+> +
+> +	INIT_WORK(&fault->work, user_event_enabler_fault_fixup);
+> +	fault->mm = user_event_mm_get(mm);
+> +	fault->enabler = enabler;
+> +
+> +	/* Don't try to queue in again while we have a pending fault */
+> +	set_bit(ENABLE_VAL_FAULTING_BIT, ENABLE_BITOPS(enabler));
+> +
+> +	if (!schedule_work(&fault->work)) {
+> +		/* Allow another attempt later */
+> +		clear_bit(ENABLE_VAL_FAULTING_BIT, ENABLE_BITOPS(enabler));
+> +
+> +		user_event_mm_put(mm);
+> +		kmem_cache_free(fault_cache, fault);
+> +
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
