@@ -2,61 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398236CC1AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436246CC1AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbjC1OFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47066 "EHLO
+        id S230215AbjC1OEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjC1OFN (ORCPT
+        with ESMTP id S229728AbjC1OEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:05:13 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AD3CC1C;
-        Tue, 28 Mar 2023 07:04:00 -0700 (PDT)
+        Tue, 28 Mar 2023 10:04:31 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E782CA2D
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:03:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=04vP3RzMs3P/u6ra9aohOJriuOsHdgwipqyExrFrTjc=; b=mh6/AUJNqn+FdcuZzLxS1JRPCX
-        9PjtU4toaTdFVFl8Oq9o4nbuQoE4aiZM9QOcGREWE4jLWY5DoSYbELFv8DeY1wFP2mTYG070hd6Wd
-        Tfe7eR5++Rk8eczns5zb+jJ9Ky7ydT3o9MEOVkd+Mvo6y2Qjj49i8W/cXrM3mUJ50OxS/wVoAjwtZ
-        4xrdvc55AKGF1grOslzBDBZlBkvSAxdNwdMzb7XPRz/+prNath1ct2o3sL3EpinKQF/tOKsNcQqQw
-        Ig2781259z8H1OdssQ8MsAn/tTHXr6eCszj7n0Dxt3/by0YcDWPkadhEKH46s76AMvQbseCeW5+h7
-        yic00bRw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51186)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1ph9uX-0006Pz-8z; Tue, 28 Mar 2023 15:02:53 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1ph9uJ-0006WX-6C; Tue, 28 Mar 2023 15:02:39 +0100
-Date:   Tue, 28 Mar 2023 15:02:39 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Donglin Peng <pengdonglin@sangfor.com.cn>
-Cc:     mhiramat@kernel.org, rostedt@goodmis.org, mark.rutland@arm.com,
-        will@kernel.org, catalin.marinas@arm.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        chenhuacai@kernel.org, zhangqing@loongson.cn, kernel@xen0n.name,
-        mingo@redhat.com, peterz@infradead.org, xiehuan09@gmail.com,
-        dinghui@sangfor.com.cn, huangcun@sangfor.com.cn,
-        dolinux.peng@gmail.com, linux-trace-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 3/8] ARM: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
-Message-ID: <ZCLzf6RX4U00g9Cu@shell.armlinux.org.uk>
-References: <20230328134319.2185812-1-pengdonglin@sangfor.com.cn>
- <20230328134319.2185812-4-pengdonglin@sangfor.com.cn>
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=A3w95t3Y79Y8W3NoFIxjXeMSyu9Go6dr+2vTrbGZEj4=; b=eA3PiZxsnoKlBNnWiV65LpSpXP
+        MMaILDer/ZJSYltW+wA//8K5Uxtk37bEgr6+4/5AObdPbiOhPV3Qi0COQLe1Bt/PnGX/DSC0yK1io
+        u3iYFINPNH7w20UrdgmzZLi03soWpBwL/y7L/N5DnB24fuXhCp4gC9KC7jjw3Hh8RzirsxjGZBYds
+        cwpnrK9Gw1PYGmJxKgnLQp322PlnPoBMLTfBFwcD2/FPI9Bp12W4BUIOri9rghvgibYnWbJOiFtwb
+        Q4fYX1BWjgDqu1cpEiKlZBvpaG1esPBuG4t2BWyoOxeBrC7qWgWFBSO+ZbSTlBoGilWDWG8gSFES7
+        52e7KQ3w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ph9ue-008TpY-UG; Tue, 28 Mar 2023 14:03:01 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 61D773001E5;
+        Tue, 28 Mar 2023 16:02:59 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3ACB42CB95721; Tue, 28 Mar 2023 16:02:59 +0200 (CEST)
+Date:   Tue, 28 Mar 2023 16:02:59 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 8/8] locking/rwsem: Restore old write lock slow path
+ behavior
+Message-ID: <20230328140259.GF4253@hirez.programming.kicks-ass.net>
+References: <20230327202413.1955856-1-longman@redhat.com>
+ <20230327202413.1955856-9-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328134319.2185812-4-pengdonglin@sangfor.com.cn>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20230327202413.1955856-9-longman@redhat.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -66,111 +59,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 06:43:14AM -0700, Donglin Peng wrote:
-> The commit d4815c5d1bbd ("function_graph: Support recording and printing
-> the return value of function") laid the groundwork for the for the
-> funcgraph-retval, and this modification makes it available on the
-> ARM platform.
+On Mon, Mar 27, 2023 at 04:24:13PM -0400, Waiman Long wrote:
+
+>  kernel/locking/rwsem.c | 34 +++++++++++++++++++++++++++++++---
+>  1 file changed, 31 insertions(+), 3 deletions(-)
 > 
-> We introduce a new structure called fgraph_ret_regs for the ARM platform
-> to hold return registers and the frame pointer. We then fill its content
-> in the return_to_handler and pass its address to the function
-> ftrace_return_to_handler to record the return value.
-> 
-> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
-> ---
-> v8:
->  - Modify the control range of CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
-> ---
->  arch/arm/Kconfig               |  1 +
->  arch/arm/include/asm/ftrace.h  | 18 ++++++++++++++++++
->  arch/arm/kernel/entry-ftrace.S |  6 +++++-
->  3 files changed, 24 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index e24a9820e12f..73061379855a 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -98,6 +98,7 @@ config ARM
->  	select HAVE_FAST_GUP if ARM_LPAE
->  	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
->  	select HAVE_FUNCTION_ERROR_INJECTION
-> +	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
->  	select HAVE_FUNCTION_GRAPH_TRACER
->  	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
->  	select HAVE_GCC_PLUGINS
-> diff --git a/arch/arm/include/asm/ftrace.h b/arch/arm/include/asm/ftrace.h
-> index 7e9251ca29fe..2ab4bee21d79 100644
-> --- a/arch/arm/include/asm/ftrace.h
-> +++ b/arch/arm/include/asm/ftrace.h
-> @@ -77,4 +77,22 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
+> diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
+> index 7bd26e64827a..cf9dc1e250e0 100644
+> --- a/kernel/locking/rwsem.c
+> +++ b/kernel/locking/rwsem.c
+> @@ -426,6 +426,7 @@ rwsem_waiter_wake(struct rwsem_waiter *waiter, struct wake_q_head *wake_q)
+>  static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
+>  					struct rwsem_waiter *waiter)
+>  {
+> +	bool first = (rwsem_first_waiter(sem) == waiter);
+>  	long count, new;
 >  
->  #endif /* ifndef __ASSEMBLY__ */
+>  	lockdep_assert_held(&sem->wait_lock);
+> @@ -434,6 +435,9 @@ static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
+>  	do {
+>  		new = count;
 >  
+> +		if (!first && (count & (RWSEM_FLAG_HANDOFF | RWSEM_LOCK_MASK)))
+> +			return false;
 > +
-> +#ifndef __ASSEMBLY__
-> +struct fgraph_ret_regs {
-> +	unsigned long regs[4];
-> +	unsigned long fp;
-> +};
-> +
-> +static inline unsigned long fgraph_ret_regs_return_value(struct fgraph_ret_regs *ret_regs)
-> +{
-> +	return ret_regs->regs[0];
-> +}
-> +
-> +static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_ret_regs *ret_regs)
-> +{
-> +	return ret_regs->fp;
-> +}
-> +#endif
-> +
->  #endif /* _ASM_ARM_FTRACE */
-> diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
-> index 3e7bcaca5e07..5f1e74555b25 100644
-> --- a/arch/arm/kernel/entry-ftrace.S
-> +++ b/arch/arm/kernel/entry-ftrace.S
-> @@ -257,11 +257,15 @@ ENDPROC(ftrace_graph_regs_caller)
->  
->  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->  ENTRY(return_to_handler)
-> +	sub	sp, sp, #4
->  	stmdb	sp!, {r0-r3}
-> -	add	r0, sp, #16		@ sp at exit of instrumented routine
-> +	add	r0, sp, #20		@ sp at exit of instrumented routine
-> +	str	r0, [sp, #16]
-> +	mov	r0, sp
+>  		if (count & RWSEM_LOCK_MASK) {
+>  			/*
+>  			 * A waiter (first or not) can set the handoff bit
 
-1) EABI wants the stack to be aligned to 8 bytes.
-2) We can do better than this.
+I couldn't immediately make sense of the above, and I think there's case
+where not-first would still want to set handoff you're missing.
 
-	mov	ip, sp
-	stmdb	sp!, {r0-r3, ip, lr}
-	mov	r0, sp
+After a few detours, I ended up with the below; does that make sense or
+did I just make a bigger mess? (entirely possible due to insufficient
+sleep etc..).
 
->  	bl	ftrace_return_to_handler
->  	mov	lr, r0			@ r0 has real ret addr
->  	ldmia	sp!, {r0-r3}
 
-	ldmia	sp, {r0-r3}		@ since we need to manually adjust sp,
-
-> +	add	sp, sp, #4		@ skip fp
-
-	add	sp, sp, #4 * 6		@ restore stack pointer here
-
->  	ret	lr
->  ENDPROC(return_to_handler)
->  #endif
-> -- 
-> 2.25.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+--- a/kernel/locking/rwsem.c
++++ b/kernel/locking/rwsem.c
+@@ -426,12 +426,27 @@ rwsem_waiter_wake(struct rwsem_waiter *w
+ static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
+ 					struct rwsem_waiter *waiter)
+ {
++	bool first = (rwsem_first_waiter(sem) == waiter);
+ 	long count, new;
+ 
+ 	lockdep_assert_held(&sem->wait_lock);
+ 
+ 	count = atomic_long_read(&sem->count);
+ 	do {
++		/*
++		 * first handoff
++		 *
++		 *   0     0     | take
++		 *   0     1     | not take
++		 *   1     0     | take
++		 *   1     1     | take
++		 *
++		 */
++		bool handoff = count & RWSEM_FLAG_HANDOFF;
++
++		if (!first && handoff)
++			return false;
++
+ 		new = count;
+ 
+ 		if (count & RWSEM_LOCK_MASK) {
+@@ -440,7 +455,7 @@ static inline bool rwsem_try_write_lock(
+ 			 * if it is an RT task or wait in the wait queue
+ 			 * for too long.
+ 			 */
+-			if ((count & RWSEM_FLAG_HANDOFF) ||
++			if (handoff ||
+ 			    (!rt_task(waiter->task) &&
+ 			     !time_after(jiffies, waiter->timeout)))
+ 				return false;
+@@ -501,11 +516,19 @@ static void rwsem_writer_wake(struct rw_
+ 		 */
+ 		list_del(&waiter->list);
+ 		atomic_long_set(&sem->owner, (long)waiter->task);
+-
+-	} else if (!rwsem_try_write_lock(sem, waiter))
++		rwsem_waiter_wake(waiter, wake_q);
+ 		return;
++	}
+ 
+-	rwsem_waiter_wake(waiter, wake_q);
++	/*
++	 * Mark writer at the front of the queue for wakeup.
++	 *
++	 * Until the task is actually awoken later by the caller, other writers
++	 * are able to steal it. Readers, on the other hand, will block as they
++	 * will notice the queued writer.
++	 */
++	wake_q_add(wake_q, waiter->task);
++	lockevent_inc(rwsem_wake_writer);
+ }
+ 
+ static void rwsem_reader_wake(struct rw_semaphore *sem,
+@@ -1038,6 +1061,25 @@ rwsem_waiter_wait(struct rw_semaphore *s
+ 			/* Matches rwsem_waiter_wake()'s smp_store_release(). */
+ 			break;
+ 		}
++		if (!reader) {
++			/*
++			 * If rwsem_writer_wake() did not take the lock, we must
++			 * rwsem_try_write_lock() here.
++			 */
++			raw_spin_lock_irq(&sem->wait_lock);
++			if (waiter->task && rwsem_try_write_lock(sem, waiter)) {
++				waiter->task = NULL;
++				raw_spin_unlock_irq(&sem->wait_lock);
++				break;
++			}
++			raw_spin_unlock_irq(&sem->wait_lock);
++
++			if (waiter->handoff_set)
++				rwsem_spin_on_owner(sem);
++
++			if (!smp_load_acquire(&waiter->task))
++				break;
++		}
+ 		if (signal_pending_state(state, current)) {
+ 			raw_spin_lock_irq(&sem->wait_lock);
+ 			if (waiter->task)
