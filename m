@@ -2,120 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B169A6CB337
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9016CB338
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjC1BgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 21:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
+        id S232190AbjC1Bgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 21:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjC1BgI (ORCPT
+        with ESMTP id S229611AbjC1Bgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 21:36:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BFE1BCB
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679967319;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z/Lu4hvYujwOnJPvUPGyeNPV9KRZBeHZntNLTuypEck=;
-        b=dhNLpkXBt/DcegCFXJyUnv7Qaoctcn878uUUUN/Tphm/vhV/Lp3V8b57pkKs0gxwgh6J61
-        R+vSJjCr5LwTRAADrAqkczhjuyz64XymiaFCrnNk4PdqnkYqno2oKXNcbE2FvnEAy1xxE4
-        Si83NI769Il5Nil6APe3Dh4Ptl6QYOc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-516-hxmlryEPOm6Xasr0nnst2A-1; Mon, 27 Mar 2023 21:35:15 -0400
-X-MC-Unique: hxmlryEPOm6Xasr0nnst2A-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DAEBE1C05138;
-        Tue, 28 Mar 2023 01:35:14 +0000 (UTC)
-Received: from ovpn-8-20.pek2.redhat.com (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 12AA7492C3E;
-        Tue, 28 Mar 2023 01:35:06 +0000 (UTC)
-Date:   Tue, 28 Mar 2023 09:35:01 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Dan Williams <dan.j.williams@intel.com>, io-uring@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Bernd Schubert <bschubert@ddn.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>, ming.lei@redhat.com
-Subject: Re: [PATCH V4 00/17] io_uring/ublk: add IORING_OP_FUSED_CMD
-Message-ID: <ZCJERSOkzIo+SIm7@ovpn-8-20.pek2.redhat.com>
-References: <20230324135808.855245-1-ming.lei@redhat.com>
- <642236912a229_29cc2942c@dwillia2-xfh.jf.intel.com.notmuch>
- <ZCJABlFshb0UmTMv@ovpn-8-20.pek2.redhat.com>
- <11651593-79d3-b21a-6441-63e1de5b39aa@kernel.dk>
+        Mon, 27 Mar 2023 21:36:32 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B352128
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:36:26 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 742D468AA6; Tue, 28 Mar 2023 03:36:23 +0200 (CEST)
+Date:   Tue, 28 Mar 2023 03:36:23 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Petr Tesarik <petrtesarik@huaweicloud.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>,
+        roberto.sassu@huaweicloud.com
+Subject: Re: [PATCH] dma-direct: cleanup parameters to
+ dma_direct_optimal_gfp_mask
+Message-ID: <20230328013623.GA22651@lst.de>
+References: <20230220150622.454-1-petrtesarik@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <11651593-79d3-b21a-6441-63e1de5b39aa@kernel.dk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230220150622.454-1-petrtesarik@huaweicloud.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 07:29:36PM -0600, Jens Axboe wrote:
-> On 3/27/23 7:16 PM, Ming Lei wrote:
-> > Hi Dan,
-> > 
-> > On Mon, Mar 27, 2023 at 05:36:33PM -0700, Dan Williams wrote:
-> >> Ming Lei wrote:
-> >>> Hello Jens,
-> >>>
-> >>> Add IORING_OP_FUSED_CMD, it is one special URING_CMD, which has to
-> >>> be SQE128. The 1st SQE(master) is one 64byte URING_CMD, and the 2nd
-> >>> 64byte SQE(slave) is another normal 64byte OP. For any OP which needs
-> >>> to support slave OP, io_issue_defs[op].fused_slave needs to be set as 1,
-> >>> and its ->issue() can retrieve/import buffer from master request's
-> >>> fused_cmd_kbuf. The slave OP is actually submitted from kernel, part of
-> >>> this idea is from Xiaoguang's ublk ebpf patchset, but this patchset
-> >>> submits slave OP just like normal OP issued from userspace, that said,
-> >>> SQE order is kept, and batching handling is done too.
-> >>
-> >> Hi Ming,
-> >>
-> >> io_uring and ublk are starting to be more on my radar these days. I
-> >> wanted to take a look at this series, but could not get past the
-> >> distracting "master"/"slave" terminology in this lead-in paragraph let
-> >> alone start looking at patches.
-> >>
-> >> Frankly, the description sounds more like "head"/"tail", or even
-> >> "fuse0"/"fuse1" because, for example, who is to say you might not have
-> > 
-> > The term "master/slave" is from patches.
-> > 
-> > The master command not only provides buffer for slave request, but also requires
-> > slave request for serving master command, and master command is always completed
-> > after all slave request are done.
-> > 
-> > That is why it is named as master/slave. Actually Jens raised the similar concern
-> > and I hate the name too, but it is always hard to figure out perfect name, or
-> > any other name for reflecting the relation? (head/tail, fuse0/1 can't
-> > do that, IMO)
-> 
-> Indeed. What about primary/secondary? And it'd be quite possible to have
-> multiple secondaries too.
-
-OK, I will take primary/secondary in V5 if no better name is suggested.
-
-
 Thanks,
-Ming
 
+applied to the dma-mapping for-next tree.
