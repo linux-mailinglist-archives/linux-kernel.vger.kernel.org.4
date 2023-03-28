@@ -2,79 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551646CCB65
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 22:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E46226CCB6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 22:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjC1UTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 16:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
+        id S229603AbjC1UUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 16:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjC1UTl (ORCPT
+        with ESMTP id S229532AbjC1UUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 16:19:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A2510C2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 13:19:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED28BB81E5F
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:19:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E5BC433D2;
-        Tue, 28 Mar 2023 20:19:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680034763;
-        bh=c4X4UarW8BUeoFTnNxKw16LGyvWcYJv8v6XPLNTgq9M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HnFfjScwgUayrZeU+4+PotXmOMlcQ0uQvWx4X0mQyTi+0UIOY/dUvlQOFMoU4NVga
-         m0z4w/3ScXappDc9CQry31E4r/P9I3Ihj9KGIF1AvrVVpXxROK2VA+MLEk2fzD2R7g
-         O9zpdUlwkl+GBmIUPgzScDLaAjxgaRwIbEcy8X44ktejkqY8yYl8NdQitfnB9lUboM
-         DA3x4dmg5YgYhFNCcSHE3TliqCNqWWd8X41/OHT9GTGSlbAZNQmSRShJIroxSzuF/d
-         +w8STkDOlB/gFcccD7SbXKkvJjVSaHffea0df3Gc5gk2NycZQ2DZCGCT068cYy7IbJ
-         Aom7BAdrGw2XA==
-Date:   Tue, 28 Mar 2023 13:19:21 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH 2/5] objtool: Combine '--backtrace' with '--verbose'
-Message-ID: <20230328201921.ccl7p65le5aysa6j@treble>
-References: <cover.1679932620.git.jpoimboe@kernel.org>
- <ef477e7cf3f188c623279764e831772eab2a4016.1679932620.git.jpoimboe@kernel.org>
- <20230328080743.GC4253@hirez.programming.kicks-ass.net>
+        Tue, 28 Mar 2023 16:20:09 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC6040EF
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 13:20:07 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id b18so16751467ybp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 13:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1680034806;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YTUjsnH0pjAMPCdWUs8KgtrmbEQ7uRQfh39xHtc1mOI=;
+        b=ZISzzUBAp2B86WTvie3LaaTm+XXMV1NsBYT+ss9Ay2P2TZV18c736vvSEzIoAMgiAD
+         yyMfrBITnvGzSe0zitTngdlv9FE5B7kqtcVHa5dUfi5qBhCuM018z5BcpYSoI7bEVt2z
+         ZC3kowL2cQRNQzFOhwJRwPeyH2MQqrp8NURsIr5JDzQpyL3WseVUnD7mAC626z6TQglg
+         UoOeDKCOiKNAkc7HGHrpOlFtTEimlh5Dg4uX3bQo4lcrs02hnNHTYJq/Kw3dPuYr2VQI
+         hXkP49aeyOtDyuAYueE49r0lldY98MycnxQ5Y1KBuHU/CwgwrBTDgx/qGu38MPY3mDw7
+         CiGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680034806;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YTUjsnH0pjAMPCdWUs8KgtrmbEQ7uRQfh39xHtc1mOI=;
+        b=DO7FMQE2CzTVHJflFrH53n1SFwa+/OS8uHLLaDweDkMteumDwlpn2dDOVfBPRyYrpN
+         wC5A1mGIlG+x+nsnkfygRZxBTLPaSMhCNlxxVHALXYsDUJR9AmLNR6TxqvSYryhHlo9M
+         ChH5vmlzU6H6cHXC4e7QTtdCINR3wFbX5GLVd0LcC6QHSH7m+V70/GFFux4vigUY7vFn
+         MDey5IXPOu7aHKXMNeovv0EWE9WPcwQt2zf/JgNJhjeAhLd2ewVEA4aEX3dpadQi/+lo
+         vggk9L6RfV/BnYqlOt2DSFf6hhOsoV42P+OVygb/yG8XW5PkmD5hB+ftSUwVHFtAxz6A
+         xwiA==
+X-Gm-Message-State: AAQBX9f0af9qK9eNMqA010sf9/AvvUulqo1YM/QWThF6X6a0ybiihIiI
+        vCjd2FYULFIkoPD4cFh+c+rIIBl1jvWeCaXZOPJT
+X-Google-Smtp-Source: AKy350ZEFOCwjRsMkv4tCJSQFPlfwfLVNNFZyIK63atBOV/sH54NXrYaRWqhboUJbp5+ys+9+LucpxgK3fri3wARgIs=
+X-Received: by 2002:a05:6902:102a:b0:b71:f49f:8d22 with SMTP id
+ x10-20020a056902102a00b00b71f49f8d22mr8605060ybt.3.1680034806304; Tue, 28 Mar
+ 2023 13:20:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230328080743.GC4253@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230314081720.4158676-1-roberto.sassu@huaweicloud.com>
+ <20230314081720.4158676-5-roberto.sassu@huaweicloud.com> <CAHC9VhTD3EyDiJs9+NQrgp84JcUs_sx8WONtRk2YYH4m1C8nVw@mail.gmail.com>
+ <939e6c88662ad90b963993c4cc1b702083e74a7a.camel@huaweicloud.com>
+ <ffc86b3907f7b87d3c568ae62bea3cdb3275be4e.camel@huaweicloud.com>
+ <CAHC9VhRNjvjMOF5KLM6BoGfk=QpEBs_ur_CgRdGL5R1bA-JAwg@mail.gmail.com>
+ <8b63d00d8ac3f686e51889ea4fc8d83f8ecb300d.camel@huaweicloud.com>
+ <CAHC9VhRaKtsM=CuNhDy0Kx0NGSUrVhG+MhwKnHiyJxfgUwx7nA@mail.gmail.com> <1e08006f9011efa48deaf656c358ca3d438b9768.camel@huaweicloud.com>
+In-Reply-To: <1e08006f9011efa48deaf656c358ca3d438b9768.camel@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 28 Mar 2023 16:19:55 -0400
+Message-ID: <CAHC9VhRNWeZtxain_Hi-EfS49Vac8_vg7KRRyV4a9Sq3XPhZsg@mail.gmail.com>
+Subject: Re: [PATCH v8 4/6] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 10:07:43AM +0200, Peter Zijlstra wrote:
-> On Mon, Mar 27, 2023 at 09:00:45AM -0700, Josh Poimboeuf wrote:
-> > Get rid of the '--backtrace' option, instead including that
-> > functionality in '--verbose'.  This makes it easy to gather all the
-> > information needed for diagnosing objtool warnings.
-> 
-> Hurmm.. can't we have verbose imply backtrace but keep the separate
-> option? I'm not sure if I always want the objdump thing -- esp with
-> multiple warnings on vmlinux that's going to be really slow -- better to
-> dump the whole of vmlinux.o once at the end.
+On Tue, Mar 28, 2023 at 3:47=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> On Mon, 2023-03-27 at 17:02 -0400, Paul Moore wrote:
+> > On Mon, Mar 27, 2023 at 3:30=E2=80=AFAM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > On Fri, 2023-03-24 at 17:39 -0400, Paul Moore wrote:
+> > > > On Fri, Mar 24, 2023 at 9:26=E2=80=AFAM Roberto Sassu
+> > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > On Fri, 2023-03-24 at 11:18 +0100, Roberto Sassu wrote:
+> > > > > > On Thu, 2023-03-23 at 20:09 -0400, Paul Moore wrote:
+> > > > > > > On Tue, Mar 14, 2023 at 4:19=E2=80=AFAM Roberto Sassu
+> > > > > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
 
-That's a good point, vmlinux would be unbearable for multiple warnings.
+...
 
-We could accumulate a list of affected functions and then supply that to
-objdump-func.sh at the end and dump them all at the same time.
+> > Okay, that's fair, but we could still pass the full xattrs array and a
+> > reference to the current count which could be both read and updated by
+> > the individual LSMs, right?
+>
+> Yes, we could do.
+>
+> > The issue is that the separate compaction stage is not something we
+> > want to have to do if we can avoid it.  Maybe we're stuck with it, but
+> > I'm not yet convinced that we can't make some minor changes to the
+> > LSMs to avoid the compaction step.
+>
+> I liked more the idea that LSMs do what they are most familiar with,
+> get an offset in a security blob or, in this case, a starting slot in
+> the new_xattrs array, and write there.
+>
+> v3 had the lsm_find_xattr_slot() helper, to get the starting slot, but
+> somehow I find it less intuitive.
+>
+> Ok, if you prefer to avoid the compaction stage, I will rewrite this
+> patch.
 
-objdump-func.sh would need to be changed to look for multiple funcs at
-once.
+My concern is having to look through the xattr array after each LSM
+has been run and in at least one case having to then do a memcpy() to
+keep the array packed.  There are some cases where there is no way to
+avoid all that extra work, but here I think we have the LSMs do the
+Right Thing with respect to packing the xattr array without overly
+burdening the individual LSMs.
 
-If I do that, do you still want the separate backtrace option?
+Does that make sense?  It basically comes down to being smart about
+our abstractions and both selectively, and carefully, breaking them
+when there is a reasonable performance gain to be had.
 
--- 
-Josh
+--=20
+paul-moore.com
