@@ -2,198 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E55E6CBF34
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87D086CBF6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbjC1Mck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S232502AbjC1Mm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232658AbjC1Mbv (ORCPT
+        with ESMTP id S230339AbjC1MmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:31:51 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3834E9764;
-        Tue, 28 Mar 2023 05:31:36 -0700 (PDT)
-Received: from loongson.cn (unknown [10.2.5.185])
-        by gateway (Coremail) with SMTP id _____8BxIk4f3iJk0hkTAA--.29034S3;
-        Tue, 28 Mar 2023 20:31:27 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.185])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxPL4X3iJku2cPAA--.12046S31;
-        Tue, 28 Mar 2023 20:31:27 +0800 (CST)
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>, zhaotianrui@loongson.cn
-Subject: [PING PATCH v4 29/29] LoongArch: KVM: Enable kvm config and add the makefile
-Date:   Tue, 28 Mar 2023 20:31:19 +0800
-Message-Id: <20230328123119.3649361-30-zhaotianrui@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230328123119.3649361-1-zhaotianrui@loongson.cn>
-References: <20230328123119.3649361-1-zhaotianrui@loongson.cn>
+        Tue, 28 Mar 2023 08:42:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2C0BA5C1;
+        Tue, 28 Mar 2023 05:41:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 45B75C14;
+        Tue, 28 Mar 2023 05:34:09 -0700 (PDT)
+Received: from [10.57.54.240] (unknown [10.57.54.240])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 986B73F6C4;
+        Tue, 28 Mar 2023 05:33:21 -0700 (PDT)
+Message-ID: <c3f5af31-b6ef-dc45-25f0-4e52d93fcaa7@arm.com>
+Date:   Tue, 28 Mar 2023 13:33:20 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v3 02/11] coresight-tpda: Add DSB dataset support
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        James Clark <james.clark@arm.com>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>
+References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
+ <1679551448-19160-3-git-send-email-quic_taozha@quicinc.com>
+ <e578790c-4794-5609-16e8-15d63082760e@arm.com>
+ <51ad3cb3-bd83-51c9-52bc-f700cd17103c@quicinc.com>
+ <48f31b84-573f-fe1d-bcd7-e55ec7f47831@arm.com>
+ <595568c3-d2bc-e37e-83b3-2adfd3fa4193@quicinc.com>
+ <6f8b087d-77a7-512e-6504-e4841447eda9@arm.com>
+ <edbd1f10-70e5-1fd4-44de-da59b387e9dd@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <edbd1f10-70e5-1fd4-44de-da59b387e9dd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxPL4X3iJku2cPAA--.12046S31
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWr4xGF4xXF15tw4UWFWxZwb_yoW5KFy3pF
-        4fAr1kGF4xWFn3JrZ3t34kWrs8CFn7KrW7u3Waya48CrW7Z34kur1ktr9rXFyUJ393JrW8
-        Wr1rGa1agayUJaUanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b4AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6x
-        kF7I0E14v26F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
-        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6c
-        x26rWlOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r12
-        6r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWDJVCq3wCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAI
-        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr1j6F4UJwCI42IY6I8E87Iv6x
-        kF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7xRiTKZJUUUUU==
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable loongarch kvm config and add the makefile to support build kvm
-module.
+On 28/03/2023 12:31, Tao Zhang wrote:
+> Hi Suzuki,
+> 
+> On 3/27/2023 5:43 PM, Suzuki K Poulose wrote:
+>> On 27/03/2023 04:31, Tao Zhang wrote:
+>>>
+>>> On 3/26/2023 3:31 AM, Suzuki K Poulose wrote:
+>>>> On 24/03/2023 14:58, Tao Zhang wrote:
+>>>>> Hi Suzuki,
+>>>>>
+>>>>> 在 3/23/2023 7:51 PM, Suzuki K Poulose 写道:
+>>>>>> On 23/03/2023 06:03, Tao Zhang wrote:
+>>>>>>> Read the DSB element size from the device tree. Set the register
+>>>>>>> bit that controls the DSB element size of the corresponding port.
+>>>>>>>
+>>>>>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>>>>>>> ---
+>>>>>>>   drivers/hwtracing/coresight/coresight-tpda.c | 58 
+>>>>>>> ++++++++++++++++++++++++++++
+>>>>>>>   drivers/hwtracing/coresight/coresight-tpda.h |  4 ++
+>>>>>>>   2 files changed, 62 insertions(+)
+>>>>>>>
+>>>>>>> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c 
+>>>>>>> b/drivers/hwtracing/coresight/coresight-tpda.c
+>>>>>>> index f712e11..8dcfc4a 100644
+>>>>>>> --- a/drivers/hwtracing/coresight/coresight-tpda.c
+>>>>>>> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
+>>>>>>> @@ -21,6 +21,47 @@
+>>>>>>>     DEFINE_CORESIGHT_DEVLIST(tpda_devs, "tpda");
+>>>>>>>   +/* Search and read element data size from the TPDM node in
+>>>>>>> + * the devicetree. Each input port of TPDA is connected to
+>>>>>>> + * a TPDM. Different TPDM supports different types of dataset,
+>>>>>>> + * and some may support more than one type of dataset.
+>>>>>>> + * Parameter "inport" is used to pass in the input port number
+>>>>>>> + * of TPDA, and it is set to 0 in the recursize call.
+>>>>>>> + * Parameter "parent" is used to pass in the original call.
+>>>>>>> + */
+>>>>>>
+>>>>>> I am still not clear why we need to do this recursively ?
+>>>>>
+>>>>> Some TPDMs are not directly output connected to the TPDAs. So here I
+>>>>>
+>>>>> use a recursive method to check from the TPDA input port until I find
+>>>>>
+>>>>> the connected TPDM.
+>>>>>
+>>>>> Do you have a better suggestion besides a recursive method?
+>>>>>
+>>>>>>
+>>>>>>> +static int tpda_set_element_size(struct tpda_drvdata *drvdata,
+>>>>>>> +               struct coresight_device *csdev, int inport, bool 
+>>>>>>> parent)
+>>>>>>
+>>>>>> Please could we renamse csdev => tpda_dev
+>>>>>
+>>>>> Since this is a recursively called function, this Coresight device 
+>>>>> is not
+>>>>>
+>>>>> necessarily TPDA, it can be other Coresight device.
+>>>>>
+>>>>>>
+>>>>>>> +{
+>>>>>>> +    static int nr_inport;
+>>>>>>> +    int i;
+>>>>>>> +    struct coresight_device *in_csdev;
+>>>>>>
+>>>>>> similarly tpdm_dev ?
+>>>>> Same as above, this variable may not necessarily be a TPDM.
+>>>>>>
+>>>>>> Could we not add a check here to see if the dsb_esize[inport] is 
+>>>>>> already
+>>>>>> set and then bail out, reading this over and over ?
+>>>>>>
+>>>>> I will update this in the next patch series.
+>>>>>>> +
+>>>>>>> +    if (inport > (TPDA_MAX_INPORTS - 1))
+>>>>>>> +        return -EINVAL;
+>>>>>>> +
+>>>>>>> +    if (parent)
+>>>>>>> +        nr_inport = inport;
+>>>>>>> +
+>>>>>>> +    for (i = 0; i < csdev->pdata->nr_inconns; i++) {
+>>>>>>> +        in_csdev = csdev->pdata->in_conns[i].remote_dev;
+>>>>>>
+>>>>>> Please note, the names of the structure field might change in the
+>>>>>> next version of James' series
+>>>>> Got it. I will keep an eye out for the James' patch series.
+>>>>>>
+>>>>>>> +        if (!in_csdev)
+>>>>>>> +            break;
+>>>>>>> +
+>>>>>>> +        if (parent)
+>>>>>>> +            if (csdev->pdata->in_conns[i].port != inport)
+>>>>>>> +                continue;
+>>>>>>> +
+>>>>>>> +        if (in_csdev && strstr(dev_name(&in_csdev->dev), "tpdm")) {
+>>>>>>
+>>>>>> Isn't there a better way to distinguish a device to be TPDM ? May 
+>>>>>> be we
+>>>>>> could even add a source_sub_type - SOURCE_TPDM instead of using
+>>>>>> SOURCE_OTHERS ? Do you expect other sources to be connected to TPDA?
+>>>>>> e.g., STMs ?
+>>>>>
+>>>>> I can add "SOURCE_TPDM" as a source_sub_type, but SOURCE_OTHERS needs
+>>>>>
+>>>>> to be kept since the other Coresight component we will upstream 
+>>>>> later may
+>>>>>
+>>>>> need it.
+>>>>>
+>>>>>>
+>>>>>>> + of_property_read_u32(in_csdev->dev.parent->of_node,
+>>>>>>> +                    "qcom,dsb-element-size", 
+>>>>>>> &drvdata->dsb_esize[nr_inport]);
+>>>>>>> +            break;
+>>>>>>> +        }
+>>>>>>> +        tpda_set_element_size(drvdata, in_csdev, 0, false);
+>>>>>>
+>>>>>> What is the point of this ? Is this for covering the a TPDA 
+>>>>>> connected to
+>>>>>> another TPDA ?
+>>>>>>
+>>>>>> e.g., { TPDM0, TPDM1 } -> TPDA0 -> TPDA1 ?
+>>>>>
+>>>>> A TPDM may not connect to the TPDA directly, for example,
+>>>>>
+>>>>> TPDM0 ->FUNNEL0->FUNNEL1->TPDA0
+>>>>>
+>>>>> And many TPDMs can connect to one TPDA, one input port on TPDA only 
+>>>>> has
+>>>>>
+>>>>> one TPDM connected. Therefore, we use a recursive method to find 
+>>>>> the TPDM
+>>>>>
+>>>>> corresponding to the input port of TPDA.
+>>>>
+>>>> How do you find out decide what to choose, if there are multiple TPDMs
+>>>> connected to FUNNEL0 or even FUNNEL1 ?
+>>>>
+>>>> e.g
+>>>>
+>>>> TPDM0->FUNNEL0->FUNNEL1->TPDA0
+>>>>                 /
+>>>>           TPDM1
+>>>
+>>> We can find out the corresponding TPDM by the input port number of TPDA.
+>>>
+>>> Each input port is connected to a TPDM. So we have an input port 
+>>> number in
+>>>
+>>> the input parameter of the recursive lookup function 
+>>> "tpda_set_element_size".
+>>
+>> I don't understand, how you would figure out, in the above situation.
+>> i.e., FUNNEL1 is connected to TPDA0, but there are two TPDMs that could
+>> be pumping the trace. They both arrive via FUNNEL1. So, how does that
+>> solve your problem ?
+> 
+> In our HW design, the input ports of TPDA and TPDM are one-one-one 
+> corresponding.  Only one
+> 
+> TPDM can be found connected from one TPDA's input port. The path to a 
+> TPDA input port doesn't
+> 
+> connect more than one TPDM. It's by HW design.
 
-Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
----
- arch/loongarch/Kbuild                      |  1 +
- arch/loongarch/Kconfig                     |  2 ++
- arch/loongarch/configs/loongson3_defconfig |  2 ++
- arch/loongarch/kvm/Kconfig                 | 38 ++++++++++++++++++++++
- arch/loongarch/kvm/Makefile                | 22 +++++++++++++
- 5 files changed, 65 insertions(+)
- create mode 100644 arch/loongarch/kvm/Kconfig
- create mode 100644 arch/loongarch/kvm/Makefile
+Your current designs may be like that. But as far as the driver is
+concerned, I would like to add in extra measures to ensure that it
+encounters a variation from the above on a future platform. So, please
+could you add a check to detect this case and add a WARNING ?
 
-diff --git a/arch/loongarch/Kbuild b/arch/loongarch/Kbuild
-index b01f5cdb2..40be8a169 100644
---- a/arch/loongarch/Kbuild
-+++ b/arch/loongarch/Kbuild
-@@ -2,6 +2,7 @@ obj-y += kernel/
- obj-y += mm/
- obj-y += net/
- obj-y += vdso/
-+obj-y += kvm/
- 
- # for cleaning
- subdir- += boot
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 7fd51257e..f9beeb2e0 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -148,6 +148,7 @@ config LOONGARCH
- 	select USE_PERCPU_NUMA_NODE_ID
- 	select USER_STACKTRACE_SUPPORT
- 	select ZONE_DMA32
-+	select HAVE_KVM
- 
- config 32BIT
- 	bool
-@@ -588,3 +589,4 @@ source "drivers/acpi/Kconfig"
- endmenu
- 
- source "drivers/firmware/Kconfig"
-+source "arch/loongarch/kvm/Kconfig"
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index e18213f01..c99520374 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -63,6 +63,8 @@ CONFIG_EFI_ZBOOT=y
- CONFIG_EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER=y
- CONFIG_EFI_CAPSULE_LOADER=m
- CONFIG_EFI_TEST=m
-+CONFIG_VIRTUALIZATION=y
-+CONFIG_KVM=m
- CONFIG_MODULES=y
- CONFIG_MODULE_FORCE_LOAD=y
- CONFIG_MODULE_UNLOAD=y
-diff --git a/arch/loongarch/kvm/Kconfig b/arch/loongarch/kvm/Kconfig
-new file mode 100644
-index 000000000..8a999b4c0
---- /dev/null
-+++ b/arch/loongarch/kvm/Kconfig
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# KVM configuration
-+#
-+
-+source "virt/kvm/Kconfig"
-+
-+menuconfig VIRTUALIZATION
-+	bool "Virtualization"
-+	help
-+	  Say Y here to get to see options for using your Linux host to run
-+	  other operating systems inside virtual machines (guests).
-+	  This option alone does not add any kernel code.
-+
-+	  If you say N, all options in this submenu will be skipped and
-+	  disabled.
-+
-+if VIRTUALIZATION
-+
-+config KVM
-+	tristate "Kernel-based Virtual Machine (KVM) support"
-+	depends on HAVE_KVM
-+	select MMU_NOTIFIER
-+	select ANON_INODES
-+	select PREEMPT_NOTIFIERS
-+	select KVM_MMIO
-+	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
-+	select HAVE_KVM_VCPU_ASYNC_IOCTL
-+	select HAVE_KVM_EVENTFD
-+	select SRCU
-+	help
-+	  Support hosting virtualized guest machines using hardware
-+	  virtualization extensions. You will need a fairly processor
-+	  equipped with virtualization extensions.
-+
-+	  If unsure, say N.
-+
-+endif # VIRTUALIZATION
-diff --git a/arch/loongarch/kvm/Makefile b/arch/loongarch/kvm/Makefile
-new file mode 100644
-index 000000000..2335e873a
---- /dev/null
-+++ b/arch/loongarch/kvm/Makefile
-@@ -0,0 +1,22 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Makefile for LOONGARCH KVM support
-+#
-+
-+ccflags-y += -I $(srctree)/$(src)
-+
-+include $(srctree)/virt/kvm/Makefile.kvm
-+
-+obj-$(CONFIG_KVM) += kvm.o
-+
-+kvm-y += main.o
-+kvm-y += vm.o
-+kvm-y += vmid.o
-+kvm-y += tlb.o
-+kvm-y += mmu.o
-+kvm-y += vcpu.o
-+kvm-y += exit.o
-+kvm-y += interrupt.o
-+kvm-y += timer.o
-+kvm-y += switch.o
-+kvm-y += csr_ops.o
--- 
-2.31.1
+Suzuki
+
+
+> 
+> 
+> Tao
+> 
+>>
+>> Suzuki
+>>
+>>
+>>>
+>>>> Suzuki
+>>>>
+>>>>
+>>
 
