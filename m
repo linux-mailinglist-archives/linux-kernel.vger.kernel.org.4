@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641416CBD26
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E87C6CBD12
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232556AbjC1LIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S232672AbjC1LHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232532AbjC1LHN (ORCPT
+        with ESMTP id S232470AbjC1LHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:07:13 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39D37EEE
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:07:10 -0700 (PDT)
+        Tue, 28 Mar 2023 07:07:08 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8271BE4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:07:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=kQG2l/tKeYJT6zXifHihyhG77ZWdoGPsh4TIiXCPCIM=; b=lbu36IMjlnbZ2kmncp4XjiFD4S
-        i3J0R2TMJ6Tb4BEUJrGw6WRS0uq/qns36hVsnHPE8jKj46BT53O/mrq/aoeKyThcg5llGdZQI4bA2
-        mZLeqDFN8rvhncnZXd8/ViPxsT2441z1IOb5LrTAnMa07YRzKV/88YGt2Rzmp4vVA9lPbx0MxGRzd
-        sEMG5dzn4SsyKVRZdJy2NqPNPUEDzhw4kjKmf3NbpCemlCedJ8wIkMUI+atWrQwjM6PHOFShG7pLn
-        W2/doO/rgzSzrXb27d18r5M8WYR3rS8/02+a+fJjE0l8PSb1CI1M05nbH2McX+pskO+28pVj8Yf/a
-        QZsg6WYw==;
+        bh=H9x+ShaeP9YoW47hGaGvsVgtEZo3ZxR71JolnNzDIQ8=; b=TYkZFOTPB9o8fat0R9ZFyZPr9I
+        toX25dX7KaJ4Q0aIpka2EYarmoXS354x1SwXr4/VtLxoVytg9etPESaikkHnJBhHidg8fp9LYaa2x
+        yHXR9QDc3QUhi29HvgVHE2i1l7Jq/ws8DMI9RLWLWFZ1nWv7FRM2eBt7dXzogjLlOyEvKCRMlcZlf
+        3Ik+3NDMm4WiY0InOBjRARBKs/cL3YSaB/6NxQTFNkrURAL6zhbA5//Davwz+Niw87HSSW2x8esdA
+        OM78VSO0NQ0NcHS2TC36zIunNJWYbSoyU6RHpbIo+lML2tZBiXEVYagSxfGbwuXXkPBeDeGdhIZoh
+        qjUwzPwA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ph79m-008MDF-5D; Tue, 28 Mar 2023 11:06:26 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1ph79m-006XVB-29;
+        Tue, 28 Mar 2023 11:06:34 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6994F303128;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 723D8303283;
         Tue, 28 Mar 2023 13:06:23 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 117D32CB8D7A2; Tue, 28 Mar 2023 13:06:21 +0200 (CEST)
-Message-ID: <20230328110354.712296502@infradead.org>
+        id 187762CB8D7B0; Tue, 28 Mar 2023 13:06:21 +0200 (CEST)
+Message-ID: <20230328110354.780171563@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 28 Mar 2023 11:26:38 +0200
+Date:   Tue, 28 Mar 2023 11:26:39 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     mingo@kernel.org, vincent.guittot@linaro.org
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
@@ -50,7 +51,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
         yu.c.chen@intel.com, youssefesmat@chromium.org,
         joel@joelfernandes.org, efault@gmx.de
-Subject: [PATCH 16/17] [RFC] sched/eevdf: Minimal vavg option
+Subject: [PATCH 17/17] [DEBUG] sched/eevdf: Debug / validation crud
 References: <20230328092622.062917921@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,87 +64,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alternative means of tracking min_vruntime to minimize the deltas
-going into avg_vruntime -- note that because vavg move backwards this
-is all sorts of tricky.
-
-Also more expensive because of extra divisions... Not found this
-convincing.
+XXX do not merge
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/sched/fair.c     |   51 ++++++++++++++++++++++++++++--------------------
+ kernel/sched/fair.c     |   95 ++++++++++++++++++++++++++++++++++++++++++++++++
  kernel/sched/features.h |    2 +
- 2 files changed, 32 insertions(+), 21 deletions(-)
+ 2 files changed, 97 insertions(+)
 
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -732,28 +732,37 @@ static u64 __update_min_vruntime(struct
+@@ -793,6 +793,92 @@ static inline bool min_deadline_update(s
+ RB_DECLARE_CALLBACKS(static, min_deadline_cb, struct sched_entity,
+ 		     run_node, min_deadline, min_deadline_update);
  
- static void update_min_vruntime(struct cfs_rq *cfs_rq)
- {
--	struct sched_entity *se = __pick_first_entity(cfs_rq);
--	struct sched_entity *curr = cfs_rq->curr;
--
--	u64 vruntime = cfs_rq->min_vruntime;
--
--	if (curr) {
--		if (curr->on_rq)
--			vruntime = curr->vruntime;
--		else
--			curr = NULL;
-+	if (sched_feat(MINIMAL_VA)) {
-+		u64 vruntime = avg_vruntime(cfs_rq);
-+		s64 delta = (s64)(vruntime - cfs_rq->min_vruntime);
++#ifdef CONFIG_SCHED_DEBUG
++struct validate_data {
++	s64 va;
++	s64 avg_vruntime;
++	s64 avg_load;
++	s64 min_deadline;
++};
 +
-+		avg_vruntime_update(cfs_rq, delta);
++static void __print_se(struct cfs_rq *cfs_rq, struct sched_entity *se, int level,
++		       struct validate_data *data)
++{
++	static const char indent[] = "                                           ";
++	unsigned long weight = scale_load_down(se->load.weight);
++	struct task_struct *p = NULL;
 +
-+		u64_u32_store(cfs_rq->min_vruntime, vruntime);
-+	} else {
-+		struct sched_entity *se = __pick_first_entity(cfs_rq);
-+		struct sched_entity *curr = cfs_rq->curr;
++	s64 v = se->vruntime - cfs_rq->min_vruntime;
++	s64 d = se->deadline - cfs_rq->min_vruntime;
 +
-+		u64 vruntime = cfs_rq->min_vruntime;
++	data->avg_vruntime += v * weight;
++	data->avg_load += weight;
 +
-+		if (curr) {
-+			if (curr->on_rq)
-+				vruntime = curr->vruntime;
-+			else
-+				curr = NULL;
-+		}
++	data->min_deadline = min(data->min_deadline, d);
 +
-+		if (se) {
-+			if (!curr)
-+				vruntime = se->vruntime;
-+			else
-+				vruntime = min_vruntime(vruntime, se->vruntime);
-+		}
++	if (entity_is_task(se))
++		p = task_of(se);
 +
-+		/* ensure we never gain time by being placed backwards. */
-+		u64_u32_store(cfs_rq->min_vruntime,
-+				__update_min_vruntime(cfs_rq, vruntime));
- 	}
--
--	if (se) {
--		if (!curr)
--			vruntime = se->vruntime;
--		else
--			vruntime = min_vruntime(vruntime, se->vruntime);
--	}
--
--	/* ensure we never gain time by being placed backwards. */
--	u64_u32_store(cfs_rq->min_vruntime,
--		      __update_min_vruntime(cfs_rq, vruntime));
++	trace_printk("%.*s%lx w: %ld ve: %Ld lag: %Ld vd: %Ld vmd: %Ld %s (%d/%s)\n",
++		     level*2, indent, (unsigned long)se,
++		     weight,
++		     v, data->va - se->vruntime, d,
++		     se->min_deadline - cfs_rq->min_vruntime,
++		     entity_eligible(cfs_rq, se) ? "E" : "N",
++		     p ? p->pid : -1,
++		     p ? p->comm : "(null)");
++}
++
++static void __print_node(struct cfs_rq *cfs_rq, struct rb_node *node, int level,
++			 struct validate_data *data)
++{
++	if (!node)
++		return;
++
++	__print_se(cfs_rq, __node_2_se(node), level, data);
++	__print_node(cfs_rq, node->rb_left, level+1, data);
++	__print_node(cfs_rq, node->rb_right, level+1, data);
++}
++
++static struct sched_entity *pick_eevdf(struct cfs_rq *cfs_rq);
++
++static void validate_cfs_rq(struct cfs_rq *cfs_rq, bool pick)
++{
++	struct sched_entity *curr = cfs_rq->curr;
++	struct rb_node *root = cfs_rq->tasks_timeline.rb_root.rb_node;
++	struct validate_data _data = {
++		.va = avg_vruntime(cfs_rq),
++		.min_deadline = (~0ULL) >> 1,
++	}, *data = &_data;
++
++	trace_printk("---\n");
++
++	__print_node(cfs_rq, root, 0, data);
++
++	trace_printk("min_deadline: %Ld avg_vruntime: %Ld / %Ld = %Ld\n",
++		     data->min_deadline,
++		     data->avg_vruntime, data->avg_load,
++		     data->avg_load ? div_s64(data->avg_vruntime, data->avg_load) : 0);
++
++	if (WARN_ON_ONCE(cfs_rq->avg_vruntime != data->avg_vruntime))
++		cfs_rq->avg_vruntime = data->avg_vruntime;
++
++	if (WARN_ON_ONCE(cfs_rq->avg_load != data->avg_load))
++		cfs_rq->avg_load = data->avg_load;
++
++	data->min_deadline += cfs_rq->min_vruntime;
++	WARN_ON_ONCE(cfs_rq->avg_load && __node_2_se(root)->min_deadline != data->min_deadline);
++
++	if (curr && curr->on_rq)
++		__print_se(cfs_rq, curr, 0, data);
++
++	if (pick)
++		trace_printk("pick: %lx\n", (unsigned long)pick_eevdf(cfs_rq));
++}
++#else
++static inline void validate_cfs_rq(struct cfs_rq *cfs_rq, bool pick) { }
++#endif
++
+ /*
+  * Enqueue an entity into the rb-tree:
+  */
+@@ -802,6 +888,9 @@ static void __enqueue_entity(struct cfs_
+ 	se->min_deadline = se->deadline;
+ 	rb_add_augmented_cached(&se->run_node, &cfs_rq->tasks_timeline,
+ 				__entity_less, &min_deadline_cb);
++
++	if (sched_feat(VALIDATE_QUEUE))
++		validate_cfs_rq(cfs_rq, true);
  }
  
- static inline bool __entity_less(struct rb_node *a, const struct rb_node *b)
+ static void __dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
+@@ -809,6 +898,9 @@ static void __dequeue_entity(struct cfs_
+ 	rb_erase_augmented_cached(&se->run_node, &cfs_rq->tasks_timeline,
+ 				  &min_deadline_cb);
+ 	avg_vruntime_sub(cfs_rq, se);
++
++	if (sched_feat(VALIDATE_QUEUE))
++		validate_cfs_rq(cfs_rq, true);
+ }
+ 
+ struct sched_entity *__pick_first_entity(struct cfs_rq *cfs_rq)
+@@ -894,6 +986,9 @@ static struct sched_entity *pick_eevdf(s
+ 	if (unlikely(!best)) {
+ 		struct sched_entity *left = __pick_first_entity(cfs_rq);
+ 		if (left) {
++			trace_printk("EEVDF scheduling fail, picking leftmost\n");
++			validate_cfs_rq(cfs_rq, false);
++			tracing_off();
+ 			pr_err("EEVDF scheduling fail, picking leftmost\n");
+ 			return left;
+ 		}
 --- a/kernel/sched/features.h
 +++ b/kernel/sched/features.h
-@@ -9,6 +9,8 @@ SCHED_FEAT(PLACE_FUDGE, true)
- SCHED_FEAT(PLACE_DEADLINE_INITIAL, true)
- SCHED_FEAT(PLACE_BONUS, false)
+@@ -6,6 +6,8 @@ SCHED_FEAT(PLACE_DEADLINE_INITIAL, true)
  
-+SCHED_FEAT(MINIMAL_VA, false)
+ SCHED_FEAT(MINIMAL_VA, false)
+ 
++SCHED_FEAT(VALIDATE_QUEUE, false)
 +
  /*
   * Prefer to schedule the task we woke last (assuming it failed
