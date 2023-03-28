@@ -2,51 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6664B6CC140
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1CD6CC13F
 	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbjC1NnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S233213AbjC1NnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbjC1Nmx (ORCPT
+        with ESMTP id S232545AbjC1Nmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Mar 2023 09:42:53 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F668BDD6;
-        Tue, 28 Mar 2023 06:42:48 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3825FBDDC;
+        Tue, 28 Mar 2023 06:42:49 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8B2071EC0338;
-        Tue, 28 Mar 2023 15:42:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680010966;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A78xYloQ+yZx5Ifx41UP+WIUtAPbUFWRbtDnsZCyfoU=;
-        b=fFEyh6Ig0XjRpwc2iR0PqsACwkxdtXelTmgj5gAlmKYzIS9hXz/w8dU7iwDbwMTWOKif+/
-        gULhbXpECPMNL/EkKL/15gXdxbjGir/jpNY7II2fka/JROHbsviQkoE/uAyxlFfXQfK975
-        3hqmZW/GQ3kgCLAim59TFKGf2XLmLJM=
-Date:   Tue, 28 Mar 2023 15:42:42 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/amd81*1: Remove "\n" from MODULE_AUTHOR
-Message-ID: <20230328134242.GBZCLu0o9mJm9h9jEL@fat_crate.local>
-References: <20230129165054.1675554-1-j.neuschaefer@gmx.net>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 755956603152;
+        Tue, 28 Mar 2023 14:42:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680010968;
+        bh=qsVPM3z/5gvfqY0OJHUnJjWl2dyu6dw5XnunJEzfZJU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gJRtMbN8bhOpMo9aGLczdnRGpiM9202XYqLjcbrrxp9dntyv/7Mn45lQpYNtyHWcM
+         O/sUv4uKMTb9xLveJADK6yFkUcUfnPSsuuKHxpxVAlDUhGPnPMGPra0kfXUjUyoAUS
+         OqqPNamE1+8wujXki+tMjPXUjr2s6R8ww1fq57vWZdKOhD0ybk6GGZ0IQAKEoTSMFp
+         iBci9Gb49fW4be44BOH1eG7IxJNM6Ti8XC2+cxwjo44Esg1mJP63/w8swMgZo0idA5
+         TU1aGsa8KEbTEIU6tznM2zaGj60NZZdf4xka/a8juo22DrNQFVMoGtlw+a3hlNEYKu
+         dxLNdhMvzAmhQ==
+Message-ID: <9a9837ce-f800-f960-a82a-55ef6e71e95d@collabora.com>
+Date:   Tue, 28 Mar 2023 15:42:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230129165054.1675554-1-j.neuschaefer@gmx.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/2] dt-bindings: pinctrl: mediatek: deprecate custom bias
+ pull properties for mt8365
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230327-cleanup-pinctrl-binding-v1-0-b695e32e4f2e@baylibre.com>
+ <20230327-cleanup-pinctrl-binding-v1-2-b695e32e4f2e@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230327-cleanup-pinctrl-binding-v1-2-b695e32e4f2e@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,43 +66,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 05:50:54PM +0100, Jonathan Neuschäfer wrote:
-> MODULE_AUTHOR strings don't usually include a newline character.
+Il 28/03/23 15:06, Alexandre Mergnat ha scritto:
+> In order to be more generic, "mediatek,pull-up-adv" and
+> "mediatek,pull-down-adv" should be deprecated. Use "bias-pull-up" and
+> "bias-pull-down" instead.
 > 
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 > ---
->  drivers/edac/amd8111_edac.c | 2 +-
->  drivers/edac/amd8131_edac.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>   .../bindings/pinctrl/mediatek,mt8365-pinctrl.yaml  | 32 +++++++++++++++++++---
+>   1 file changed, 28 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/edac/amd8111_edac.c b/drivers/edac/amd8111_edac.c
-> index 7508aa416ddbd..ca718f63fcbcd 100644
-> --- a/drivers/edac/amd8111_edac.c
-> +++ b/drivers/edac/amd8111_edac.c
-> @@ -593,5 +593,5 @@ module_init(amd8111_edac_init);
->  module_exit(amd8111_edac_exit);
-> 
->  MODULE_LICENSE("GPL");
-> -MODULE_AUTHOR("Cao Qingtao <qingtao.cao@windriver.com>\n");
-> +MODULE_AUTHOR("Cao Qingtao <qingtao.cao@windriver.com>");
->  MODULE_DESCRIPTION("AMD8111 HyperTransport I/O Hub EDAC kernel module");
-> diff --git a/drivers/edac/amd8131_edac.c b/drivers/edac/amd8131_edac.c
-> index 1693537109826..28610ba514f4d 100644
-> --- a/drivers/edac/amd8131_edac.c
-> +++ b/drivers/edac/amd8131_edac.c
-> @@ -354,5 +354,5 @@ module_init(amd8131_edac_init);
->  module_exit(amd8131_edac_exit);
-> 
->  MODULE_LICENSE("GPL");
-> -MODULE_AUTHOR("Cao Qingtao <qingtao.cao@windriver.com>\n");
-> +MODULE_AUTHOR("Cao Qingtao <qingtao.cao@windriver.com>");
->  MODULE_DESCRIPTION("AMD8131 HyperTransport PCI-X Tunnel EDAC kernel module");
-> --
+> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+> index 347f533776ba..4ebc7f1caf55 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+> @@ -72,12 +72,32 @@ patternProperties:
+>             bias-disable: true
+>   
+>             bias-pull-up:
+> +            oneOf:
+> +              - type: boolean
+> +              - enum: [0, 1, 2, 3]
+> +                description: Pull up R1/R0 type define value.
+>               description: |
+> -              Besides generic pinconfig options, it can be used as the pull up
+> -              settings for 2 pull resistors, R0 and R1. User can configure those
+> -              special pins.
+> +              For pull up type is normal, it don't need add R1/R0 define.
+> +              For pull up type is R1/R0 type, it can add value to set different
+> +              resistance. Valid arguments are described as below:
+> +              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
+> +              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
+> +              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
+> +              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
+>   
+> -          bias-pull-down: true
+> +          bias-pull-down:
+> +            oneOf:
+> +              - type: boolean
+> +              - enum: [0, 1, 2, 3]
+> +                description: Pull down R1/R0 type define value.
+> +            description: |
+> +              For pull down type is normal, it don't need add R1/R0 define.
+> +              For pull down type is R1/R0 type, it can add value to set
+> +              different resistance. Valid arguments are described as below:
+> +              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
+> +              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
+> +              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
+> +              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
+>   
+>             input-enable: true
+>   
+> @@ -123,7 +143,9 @@ patternProperties:
+>               enum: [0, 1, 2, 3, 4, 5, 6, 7]
+>   
+>             mediatek,pull-up-adv:
+> +            deprecated: true
 
-Applied, thanks.
+Same for this one, removing it shouldn't be a ABI breakage.... but please wait
+for Krzysztof or Rob to confirm that before pushing a v2.
 
--- 
-Regards/Gruss,
-    Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette
