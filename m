@@ -2,143 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7C86CCC3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 23:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED5B6CCC38
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 23:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjC1VnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 17:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjC1VnE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229902AbjC1VnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 28 Mar 2023 17:43:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A5D10F5;
-        Tue, 28 Mar 2023 14:43:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43E2F6195E;
-        Tue, 28 Mar 2023 21:43:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98AA0C433D2;
-        Tue, 28 Mar 2023 21:43:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680039782;
-        bh=AL26jRXOYUbvhq3Ssc/GIxdGUCwkOvFTKnr8aSbyD4w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Gf0XeA673rNtAVE/M1fOJwnv79NY1dbG0JNBYuEnjvjTxucnWxKLXjRsby+uCfGu8
-         TlI1EkbgAWo6DYTCJbwJo7bgnXapit9bd6DT220JRkd5IjQpJThGXJd5Oiq1KAQyhg
-         /n22izwjLoQrSsnwzMTiUfRX/9b/nuUtpy9Xrr+c84vzzuJQa1ZwkXl57kdErthx4+
-         xTJPfWGUS9NBvVFXzPQlb1tiFM9k51gnJh5HNU8IVHlSWe7SpOJxLLYkP2hVKgPtSR
-         +Ii//Funpa5KFKIvbtxQGjPFhVkrdxGiT00bk9VBM1tss1rKS7HDQSELJf1zzX0MC5
-         8dsmpS4lyy2uw==
-Received: by mail-lj1-f182.google.com with SMTP id x20so14043607ljq.9;
-        Tue, 28 Mar 2023 14:43:02 -0700 (PDT)
-X-Gm-Message-State: AAQBX9fkF/R90AF88/il3vvUFHVS0zd2fmWNPJm02HOiKJuhoqXpV+mV
-        sBuWfNFADIOl0NoxGQMF7YZY66XeLeEVClH/1fY=
-X-Google-Smtp-Source: AKy350Zw5FqhVro20/10UegQdde16M7C5YqEn+uPuZuevgyVZURL2fVpSWkCu94o9xJDqXskjSnpo892vf0sdNILNEQ=
-X-Received: by 2002:a2e:7a17:0:b0:2a5:fe8f:b313 with SMTP id
- v23-20020a2e7a17000000b002a5fe8fb313mr1725987ljc.5.1680039780663; Tue, 28 Mar
- 2023 14:43:00 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229556AbjC1VnC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Mar 2023 17:43:02 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57DF010F5;
+        Tue, 28 Mar 2023 14:43:01 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6DCE820FD93E;
+        Tue, 28 Mar 2023 14:43:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6DCE820FD93E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1680039780;
+        bh=+850YOqLoGdgtDg3iL3aEjBqFLOqMf5TEeXHkCzL97I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CIzmU5iqR8HdDZffizvvLtEB9Wt/Y9BX4SAEK9yQsNcE5JwqCzAAISeFlMKvopgqf
+         5ZJ1LAhKvoQcXr7t2fWrqz+LzhBlsVmr5fiXIDugexcb1rcK9hUjEh1P4dU6mJdcAI
+         kk+orsVZCV/HMwHKo9yJQGM/4+cBivYqwU9GU9lE=
+Date:   Tue, 28 Mar 2023 14:42:54 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
+        brauner@kernel.org, akpm@linux-foundation.org,
+        ebiederm@xmission.com, keescook@chromium.org, tglx@linutronix.de,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v8 04/11] tracing/user_events: Fixup enable faults asyncly
+Message-ID: <20230328214254.GA85@W11-BEAU-MD.localdomain>
+References: <20230221211143.574-1-beaub@linux.microsoft.com>
+ <20230221211143.574-5-beaub@linux.microsoft.com>
+ <20230328172049.10061257@gandalf.local.home>
 MIME-Version: 1.0
-References: <20230328094400.1448955-1-yukuai1@huaweicloud.com>
-In-Reply-To: <20230328094400.1448955-1-yukuai1@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 28 Mar 2023 14:42:48 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4hRBQ9YooAOHsZhio88ykAtrbxxZBfKND_5CzhJBHQoQ@mail.gmail.com>
-Message-ID: <CAPhsuW4hRBQ9YooAOHsZhio88ykAtrbxxZBfKND_5CzhJBHQoQ@mail.gmail.com>
-Subject: Re: [PATCH -next] md: fix regression for null-ptr-deference in __md_stop()
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     xni@redhat.com, logang@deltatee.com, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com, yangerkun@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328172049.10061257@gandalf.local.home>
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 2:44=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
->
-> From: Yu Kuai <yukuai3@huawei.com>
->
-> Commit 3e453522593d ("md: Free resources in __md_stop") tried to fix
-> null-ptr-deference for 'active_io' by moving percpu_ref_exit() to
-> __md_stop(), however, the commit also moving 'writes_pending' to
-> __md_stop(), and this will cause mdadm tests broken:
->
-> BUG: kernel NULL pointer dereference, address: 0000000000000038
-> Oops: 0000 [#1] PREEMPT SMP
-> CPU: 15 PID: 17830 Comm: mdadm Not tainted 6.3.0-rc3-next-20230324-00009-=
-g520d37
-> RIP: 0010:free_percpu+0x465/0x670
-> Call Trace:
->  <TASK>
->  __percpu_ref_exit+0x48/0x70
->  percpu_ref_exit+0x1a/0x90
->  __md_stop+0xe9/0x170
->  do_md_stop+0x1e1/0x7b0
->  md_ioctl+0x90c/0x1aa0
->  blkdev_ioctl+0x19b/0x400
->  vfs_ioctl+0x20/0x50
->  __x64_sys_ioctl+0xba/0xe0
->  do_syscall_64+0x6c/0xe0
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> And the problem can be reporduced 100% by following test:
->
-> mdadm -CR /dev/md0 -l1 -n1 /dev/sda --force
-> echo inactive > /sys/block/md0/md/array_state
-> echo read-auto  > /sys/block/md0/md/array_state
-> echo inactive > /sys/block/md0/md/array_state
->
-> Root cause:
->
-> // start raid
-> raid1_run
->  mddev_init_writes_pending
->   percpu_ref_init
->
-> // inactive raid
-> array_state_store
->  do_md_stop
->   __md_stop
->    percpu_ref_exit
->
-> // start raid again
-> array_state_store
->  do_md_run
->   raid1_run
->    mddev_init_writes_pending
->     if (mddev->writes_pending.percpu_count_ptr)
->     // won't reinit
->
-> // inactive raid again
-> ...
-> percpu_ref_exit
-> -> null-ptr-deference
->
-> Before the commit, 'writes_pending' is exited when mddev is freed, and
-> it's safe to restart raid because mddev_init_writes_pending() already mak=
-e
-> sure that 'writes_pending' will only be initialized once.
->
-> Fix the prblem by moving 'writes_pending' back, it's a litter hard to fin=
-d
-> the relationship between alloc memory and free memory, however, code
-> changes is much less and we lived with this for a long time already.
->
-> Fixes: 3e453522593d ("md: Free resources in __md_stop")
->
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+On Tue, Mar 28, 2023 at 05:20:49PM -0400, Steven Rostedt wrote:
+> On Tue, 21 Feb 2023 13:11:36 -0800
+> Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> 
+> > @@ -263,7 +277,85 @@ static int user_event_mm_fault_in(struct user_event_mm *mm, unsigned long uaddr)
+> >  }
+> >  
+> >  static int user_event_enabler_write(struct user_event_mm *mm,
+> > -				    struct user_event_enabler *enabler)
+> > +				    struct user_event_enabler *enabler,
+> > +				    bool fixup_fault);
+> > +
+> > +static void user_event_enabler_fault_fixup(struct work_struct *work)
+> > +{
+> > +	struct user_event_enabler_fault *fault = container_of(
+> > +		work, struct user_event_enabler_fault, work);
+> > +	struct user_event_enabler *enabler = fault->enabler;
+> > +	struct user_event_mm *mm = fault->mm;
+> > +	unsigned long uaddr = enabler->addr;
+> > +	int ret;
+> > +
+> > +	ret = user_event_mm_fault_in(mm, uaddr);
+> > +
+> > +	if (ret && ret != -ENOENT) {
+> > +		struct user_event *user = enabler->event;
+> > +
+> > +		pr_warn("user_events: Fault for mm: 0x%pK @ 0x%llx event: %s\n",
+> > +			mm->mm, (unsigned long long)uaddr, EVENT_NAME(user));
+> > +	}
+> > +
+> > +	/* Prevent state changes from racing */
+> > +	mutex_lock(&event_mutex);
+> > +
+> > +	/*
+> > +	 * If we managed to get the page, re-issue the write. We do not
+> > +	 * want to get into a possible infinite loop, which is why we only
+> > +	 * attempt again directly if the page came in. If we couldn't get
+> > +	 * the page here, then we will try again the next time the event is
+> > +	 * enabled/disabled.
+> > +	 */
+> 
+> What case would we not get the page? A bad page mapping? User space doing
+> something silly?
+> 
 
-Applied to md-fixes.
+A user space program unmapping the page is the most common I can think
+of. A silly action would be unmapping the page while forgetting to call
+the unregister IOCTL. We would then possibly see this if the event was
+enabled in perf/ftrace before the process exited (and the mm getting
+cleaned up).
 
-Thanks!
-Song
+> Or something else, for which how can it go into an infinite loop? Can that
+> only happen if userspace is doing something mischievous?
+> 
+
+I'm not sure if changing page permissions on the user side would prevent
+write permitted mapping in the kernel, but I wanted to ensure if that
+type of thing did occur, we wouldn't loop forever. The code lets the mm
+decide if a page is ever coming in via fixup_user_fault() with 
+FAULT_FLAG_WRITE | FAULT_FLAG_REMOTE set.
+
+My understanding is that fixup_user_fault() will retry to get the page
+up until it's decided it's either capable of coming in or not. It will
+do this since we pass the unlocked bool as a parameter. I used
+fixup_user_fault() since it was created for the futex code to handle
+this scenario better.
+
+From what I gather, the fault in should only fail for these reasons:
+#define VM_FAULT_ERROR (VM_FAULT_OOM | VM_FAULT_SIGBUS |	\
+			VM_FAULT_SIGSEGV | VM_FAULT_HWPOISON |	\
+			VM_FAULT_HWPOISON_LARGE | VM_FAULT_FALLBACK)
+
+If these are hit, I don't believe we want to retry as they aren't likely
+to ever get corrected.
+
+Thanks,
+-Beau
+
+> -- Steve
+> 
+> 
+> > +	clear_bit(ENABLE_VAL_FAULTING_BIT, ENABLE_BITOPS(enabler));
+> > +
+> > +	if (!ret) {
+> > +		mmap_read_lock(mm->mm);
+> > +		user_event_enabler_write(mm, enabler, true);
+> > +		mmap_read_unlock(mm->mm);
+> > +	}
+> > +
+> > +	mutex_unlock(&event_mutex);
+> > +
+> > +	/* In all cases we no longer need the mm or fault */
+> > +	user_event_mm_put(mm);
+> > +	kmem_cache_free(fault_cache, fault);
+> > +}
+> > +
+> > +static bool user_event_enabler_queue_fault(struct user_event_mm *mm,
+> > +					   struct user_event_enabler *enabler)
+> > +{
+> > +	struct user_event_enabler_fault *fault;
+> > +
+> > +	fault = kmem_cache_zalloc(fault_cache, GFP_NOWAIT | __GFP_NOWARN);
+> > +
+> > +	if (!fault)
+> > +		return false;
+> > +
+> > +	INIT_WORK(&fault->work, user_event_enabler_fault_fixup);
+> > +	fault->mm = user_event_mm_get(mm);
+> > +	fault->enabler = enabler;
+> > +
+> > +	/* Don't try to queue in again while we have a pending fault */
+> > +	set_bit(ENABLE_VAL_FAULTING_BIT, ENABLE_BITOPS(enabler));
+> > +
+> > +	if (!schedule_work(&fault->work)) {
+> > +		/* Allow another attempt later */
+> > +		clear_bit(ENABLE_VAL_FAULTING_BIT, ENABLE_BITOPS(enabler));
+> > +
+> > +		user_event_mm_put(mm);
+> > +		kmem_cache_free(fault_cache, fault);
+> > +
+> > +		return false;
+> > +	}
+> > +
+> > +	return true;
+> > +}
+> > +
