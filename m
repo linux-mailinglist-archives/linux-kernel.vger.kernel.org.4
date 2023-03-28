@@ -2,137 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD78C6CC736
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2876CC744
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbjC1P4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53064 "EHLO
+        id S232748AbjC1P7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjC1P4P (ORCPT
+        with ESMTP id S232530AbjC1P7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:56:15 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED44B6;
-        Tue, 28 Mar 2023 08:56:13 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-17ab3a48158so13198140fac.1;
-        Tue, 28 Mar 2023 08:56:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680018971;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zLQmwWJisvp20MnJ4qDI8yRnwjPlaeebVHetENzuzzU=;
-        b=OMbM7O9EwBPWWFjEMJ+FlcmYiUgbLAfQbAtSTuyxoESDSgQ8hxghe6qUyRx/vWMcwh
-         aHVOiBp14eBMTCpWI7EXffI2UDinCk6c7HEi5vnnMdOt0RWbeGRltPE7QsecSf6UZvCy
-         m/dzpD6UfN14mpt/DqrhS//y9OxBhElytj2WCu1DJ5badiC7j7HoZfUgvU669VHBXz3N
-         UzYknZTA9gE7NJ0H/WeB9SV6uKDRhvEHjv5o2wMVCnVVIh+eKF+8tCUOzzC7LjAztv/T
-         v47jIBW3dO77hkBHYiaxICiyfMo4YGu/+7ZHQcLuQUMzxJDp4W3IVeKVsm+FbzfXUSp3
-         fyKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680018971;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zLQmwWJisvp20MnJ4qDI8yRnwjPlaeebVHetENzuzzU=;
-        b=eSFt3fhxwSl2ZGqh8ZDH//fnVK1hkyaU5gKa4gKf9dd9vwht7huHUzMAtP6ihmzNEr
-         H5aciabOKAML7h7z3+S5XtbbG61tnXJETsugfdbFBIODUFOD82Lrp3SZUJZl+Udv7zLK
-         4Lrg8JJ/TDnkzKmZUBZlIbrsuuSZ94e4RqWa6G+VeFojUdugv/dj0jURjvuQwr01AmH9
-         I5NH01fswoP0TTQWvsMVpO4oriUBeAprSNL8fUvSywv52kPOlvR2n1Nr8/J+pPWWHSOD
-         6C+Z1vWfOmqk26XofxYHb52zmsxH1ZLnzje0kaKCoe3+tiofyHkn/jiwPGOKeor9SQYZ
-         pEyA==
-X-Gm-Message-State: AO0yUKWQfP3gdHgkzXb9EVwb+1wq/kEPvrzVU5RaMw0tiWboPP+Ptnm+
-        3TURxseA8dumaZK8GY5qEpNPoGPul3KtuCk4BHs=
-X-Google-Smtp-Source: AK7set9Dbu34N1vzrjqQsCVc28MeYvZObEv0k5MjUDJn0LlSibv+c/2Gjo7q6ZirexlX1fKiTuUOUJWWFpxN4YAPvJI=
-X-Received: by 2002:a05:6871:4796:b0:17a:df9b:6b1b with SMTP id
- qa22-20020a056871479600b0017adf9b6b1bmr5890211oab.5.1680018971653; Tue, 28
- Mar 2023 08:56:11 -0700 (PDT)
+        Tue, 28 Mar 2023 11:59:47 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08DF187
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:59:44 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id B5DBB5FD14;
+        Tue, 28 Mar 2023 18:59:41 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1680019181;
+        bh=+9QzWAPZdJiLUFjtZdhRNkgT3cxt2ae3HLNCpRJ9kPU=;
+        h=Message-ID:Date:MIME-Version:Subject:From:To:Content-Type;
+        b=PwgMmjo/Kxzg/W6eWz0KRU0W4mpnwLI0b2PGpnnEHBendI5jN+SPPADZbqqLV6euH
+         ODQIzsGZOr4FywYx22t44lrXwORZSrVAnhznj8BlSlHtvlvU3l0UTZpU/jFgJMtymK
+         /aV2tVjrcNWOdy7PmlSZ0OXpohPZ0cLuNnWbpl2MX+YdNLhH+rWfpVB+MLnf/28Rwp
+         9Bkr8/nD29zsgiPZgEDYFr8dUvoXOjWiaY2T1bUnJHO7G3oh55KWzgA3kGk4QwZN6U
+         VE3a6Rq98oPpBFqZ89orGrucuBj8ixwkMLXkruYhGlFVCnqvpd47E1W9kKnLOWLcST
+         xpUmrL6S9Xi5w==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 28 Mar 2023 18:59:40 +0300 (MSK)
+Message-ID: <81632eee-533e-5e44-1520-5321a06c6797@sberdevices.ru>
+Date:   Tue, 28 Mar 2023 18:56:19 +0300
 MIME-Version: 1.0
-References: <20230324220013.191795-1-robdclark@gmail.com> <af31e11c-6c70-a358-1198-3cddc3ee2f89@linaro.org>
-In-Reply-To: <af31e11c-6c70-a358-1198-3cddc3ee2f89@linaro.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 28 Mar 2023 08:56:00 -0700
-Message-ID: <CAF6AEGs8yH4SHvjDHKkHT3c4UNc35m3tFGiPBcHA3oATZQiKVA@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm: Avoid rounding down to zero jiffies
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1] mtd: rawnand: meson: fix bitmask for length in command
+ word
+Content-Language: en-US
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
+        <oxffffaa@gmail.com>
+References: <d4338bd5-125c-a9e7-cb46-6f5e1da05cfa@sberdevices.ru>
+ <CAFBinCB3yuyNJD=7UJ7jzf45Masms_PD4sm42YNjO8M4cr+4wg@mail.gmail.com>
+ <fe2ed378-cdac-dbb3-acd2-ff542bd7e887@sberdevices.ru>
+In-Reply-To: <fe2ed378-cdac-dbb3-acd2-ff542bd7e887@sberdevices.ru>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/28 12:08:00 #21021610
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 8:28=E2=80=AFAM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On 25/03/2023 00:00, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > If userspace asked for a timeout greater than zero, but less than a
-> > jiffy, they clearly weren't planning on spinning.  So it is better
-> > to round up to one.
-> >
-> > This fixes an issue with supertuxkart that was (for some reason)
-> > spinning on a gl sync with 1ms timeout.  CPU time for a demo lap
-> > drops from:
-> >
-> >    15.83user 20.98system 0:47.46elapsed 77%CPU
-> >
-> > to:
-> >
-> >    8.84user 2.30system 0:46.67elapsed 23%CPU
->
-> Interesting. We potentially increased the timeout, but the overall
-> (elapsed) time has decreased. Nevertheless:
+Hello!
 
-There is some randomness from run to run so small variations in total
---profile-laps=3DN time are normal.  So I wouldn't read too much into
-that, compared to %CPU.  This shouldn't really change how long it
-takes for the fence to signal, as much as just prevent the CPU from
-busy looping until the fence does signal ;-)
+@Miquel Raynal, what is the status of this patch?
 
-(In theory the CPU busy looping could cause GPU thermal throttling,
-but I don't think that was happening in this case.)
+Thanks, Arseniy
 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-thx
-
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >   drivers/gpu/drm/msm/msm_drv.h | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_dr=
-v.h
-> > index 9f0c184b02a0..7936aa6cad03 100644
-> > --- a/drivers/gpu/drm/msm/msm_drv.h
-> > +++ b/drivers/gpu/drm/msm/msm_drv.h
-> > @@ -548,7 +548,7 @@ static inline unsigned long timeout_to_jiffies(cons=
-t ktime_t *timeout)
-> >               remaining_jiffies =3D ktime_divns(rem, NSEC_PER_SEC / HZ)=
-;
-> >       }
-> >
-> > -     return clamp(remaining_jiffies, 0LL, (s64)INT_MAX);
-> > +     return clamp(remaining_jiffies, 1LL, (s64)INT_MAX);
-> >   }
-> >
-> >   /* Driver helpers */
->
-> --
-> With best wishes
-> Dmitry
->
+On 23.03.2023 10:57, Arseniy Krasnov wrote:
+> 
+> 
+> On 22.03.2023 23:10, Martin Blumenstingl wrote:
+>> Hello Arseniy,
+>>
+>> thank you for submitting this fix!
+> Thanks!
+>>
+>> On Wed, Mar 22, 2023 at 7:45 PM Arseniy Krasnov
+>> <avkrasnov@sberdevices.ru> wrote:
+>>>
+>>> Valid mask is 0x3FFF, without this patch the following problems were
+>>> found:
+>>>
+>>> 1) [    0.938914] Could not find a valid ONFI parameter page, trying
+>>>                   bit-wise majority to recover it
+>>>    [    0.947384] ONFI parameter recovery failed, aborting
+>>>
+>>> 2) Read with disabled ECC mode was broken.
+>>>
+>>> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
+>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>> This matches what I can see in the old vendor driver, so:
+> Moreover it was clear that mask of 0x3f is too small for length of data in
+> bytes, for example for 2048 + OOB size.
+>> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+>>
+>> [...]
+>>> -               cmd = (len & GENMASK(5, 0)) | scrambler | DMA_DIR(dir);
+>>> +               cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
+>> My understanding of the vendor driver is that this "len" is only used
+>> for "raw" access (my own words: any access that doesn't use the HW ECC
+>> engine).
+> Exactly, 'len' is only for raw access.
+>> As a future improvement (no need to update re-send this patch) it
+>> would be great to have a #define with a meaningful name for
+>> "GENMASK(13, 0)" (maybe something like NFC_CMD_RAW_LENGTH) as it's
+>> used in multiple places now
+> Ack
+> 
+> Thanks, Arseniy
+>>
+>>
+>> Best regards,
+>> Martin
