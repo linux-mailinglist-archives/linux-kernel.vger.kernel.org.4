@@ -2,117 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE666CC36F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB18B6CC3F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233321AbjC1Oxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
+        id S233709AbjC1O6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233348AbjC1Oxs (ORCPT
+        with ESMTP id S233702AbjC1O6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:53:48 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52B2BDC9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:53:46 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id ew6so50797745edb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:53:46 -0700 (PDT)
+        Tue, 28 Mar 2023 10:58:24 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC4B6A54
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:57:57 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so15375404pjp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:57:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680015225;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ntLeAvwYo13KTBL/y3l0lVOyzh8Kzne6sGlhIyPSqF8=;
-        b=PXvhstG7uj98LaXH//8Mek02Wg4U3UZ8zfWHZSNsOZd8YJ4UxzaxecApgTd4fjZ3bj
-         Bbyx2nHV5Jkki3PUzUCenleDE4DicrZVJbxFuqg6V0VUSSuywv7I2S8SHztMCn1otkQQ
-         COj9zRgbEEh1Uy6oA/0mPXK+peu0cCCbTfRYpVKcZLw4HfVDCdzN9yho8QsoqWKlFcCm
-         BhwEXX2U+uUUXKEzzfOKG5bqGYXPJWh/vKncrAAmds6Y6ejr52/Cesq1aSjEpg4UpMqu
-         SOsS3fulziPQ74G83lOibK3hS1iAX/CYFRexVyORkzvtGJNoNR0s+D7VZEdxHUO9OF1/
-         EIVw==
+        d=bytedance.com; s=google; t=1680015477;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JKgdRUirgIZoU7+JyVOh+FcbHYUvKjPRVe7MS66oIFw=;
+        b=U64rvy0fPv5B3bl2GVSa2WjftX+lfIuzgkjwaxrNFtIrB+XsboRO7PFXTQbk1mwVsV
+         FN6Pzz6qfjLHk9sbxl5SSLhjBVRJeg409SHrQXfxHdvwEiPn/EEBtMtQSkTVhJrXX42v
+         zjU4KHit5sr8z2482ceOgCcDuI79Gupf681GcQ14KPG4ueLDcRAusKZ97ntmP8YS2uA4
+         JvUfvKJk3+5iZsFxJVlL2WY/wtvmN4Q4LYfc3qAyAGDTViRjQgOtVSLAwaHGgty/KUQO
+         Zi+ohbIa49gVpGmlp7KYceNekMRIH31UNYsivdlNODxViXDeplMjIoqMXtx8YEK+2WYA
+         WIEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680015225;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ntLeAvwYo13KTBL/y3l0lVOyzh8Kzne6sGlhIyPSqF8=;
-        b=R7UXwNBl+aB3Q17gLLFTNzH4+L3dUxvJQREER/UrYOWsc9kbyukLO+U6su9CAFxFAV
-         IchQtL06DwglwDzR7L/a1JcC2lufwYnLFSIKkZG/jSHobxSy+ui5c+rKFUA/Y3ISsKvk
-         kJzWSOQA49rcJkj12bqFyGSiC8kNlpRQOhBgL+whhfwLpiTw+NAlQtqHRhqDgtV4av8V
-         oqXY98vWmff5Vy/WwSuCp95ot/0yG2KdJwJD+Y3klRDhD6jZ4GjHGBxIPvSxBWvh7YVV
-         QkKCAK1pNOBoOQTuN6DqXsv7KW7E/BwpQ8kOqv49PQlLagEqzusbzgJKMX36wHO93fMu
-         0buQ==
-X-Gm-Message-State: AAQBX9dzQnldBC+doDtyHr2u/LgDTOnqceO0gB8J2xeDKvy4PW58aBUT
-        qesukS1n/6CbhkstPQi5bge+Rw==
-X-Google-Smtp-Source: AKy350ZSEV0js3KfJtOUIg3AsvSN0lpPFcekKk98Ii0WXFpPSUOeYbhZinzigEa1AusquOGm8BnhLg==
-X-Received: by 2002:aa7:d815:0:b0:4fd:2533:f56 with SMTP id v21-20020aa7d815000000b004fd25330f56mr15055439edq.39.1680015225030;
-        Tue, 28 Mar 2023 07:53:45 -0700 (PDT)
-Received: from [10.105.135.205] ([88.128.92.162])
-        by smtp.gmail.com with ESMTPSA id x21-20020a50d615000000b004bb810e0b87sm16032493edi.39.2023.03.28.07.53.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 07:53:44 -0700 (PDT)
-Message-ID: <fc0738f5-0494-6142-56a4-ae3d0182a903@linaro.org>
-Date:   Tue, 28 Mar 2023 16:53:43 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] ARM: dts: stm32: add FMC support on STM32MP13x SoC family
-Content-Language: en-US
-To:     Christophe Kerello <christophe.kerello@foss.st.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        alexandre.torgue@foss.st.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        d=1e100.net; s=20210112; t=1680015477;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JKgdRUirgIZoU7+JyVOh+FcbHYUvKjPRVe7MS66oIFw=;
+        b=k1L7G8p2mYnq59VivdJQ6n4+StXVu6n4FEmE7yxMTg1FvbCQTJtowtKXCi83p901z2
+         ZgXGLJhhf+GyhvVoQ/TngFtpug+WKuY3IGwiCA+4hc43MMDdb696ogfJFzTkp5UnnQbP
+         SvXxKDOIShHYqTYzH2Z7Nj9YUN0VpoBFFxKLkO1EfAkEZM6AxCr1/rk8FolUYvE1zioG
+         Eg6RLKRaU81qEkFx0Qdemk1r1uIQXY8CPcLXNa+h1GpvTb/LCO+rtlnwsmd/boyabl1F
+         vZajfOh437SJFvT4rF0ZDm1oQWRFOqYY9vf/gY48hbd83YL86FZzL572DiuDIfrc6oMh
+         ilUg==
+X-Gm-Message-State: AAQBX9cdGLk+Ntd0yAYb9Am1RanijgzCHt2Mud0J6CIGmPkl/QdZz98r
+        pFfbU0nbIOEtj4YbN9GEoF4iu/untD5Jkw0zBrLHFw==
+X-Google-Smtp-Source: AKy350Z0gk1JmhHV2YqkSNfo28WpGsA4+RBZHbcWp07wiKZE7+TZEdXt7UeGnkNFOSnlhbvip4WaPw==
+X-Received: by 2002:a17:90b:1e4f:b0:23f:4dfd:4fc1 with SMTP id pi15-20020a17090b1e4f00b0023f4dfd4fc1mr18014809pjb.43.1680015476833;
+        Tue, 28 Mar 2023 07:57:56 -0700 (PDT)
+Received: from localhost.localdomain ([2409:8a28:e6d:5da0:f469:aa9c:494f:b32f])
+        by smtp.gmail.com with ESMTPSA id nk13-20020a17090b194d00b0023b3179f0fcsm6382250pjb.6.2023.03.28.07.57.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 07:57:56 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     paolo.valente@linaro.org, axboe@kernel.dk, tj@kernel.org,
+        josef@toxicpanda.com
+Cc:     linux-block@vger.kernel.org, cgroups@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20230328122606.191211-1-christophe.kerello@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230328122606.191211-1-christophe.kerello@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH 1/4] block, bfq: remove BFQ_WEIGHT_LEGACY_DFL
+Date:   Tue, 28 Mar 2023 22:56:58 +0800
+Message-Id: <20230328145701.33699-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 14:26, Christophe Kerello wrote:
-> This patch adds the FMC support on STM32MP13x SoC family.
+BFQ_WEIGHT_LEGACY_DFL is the same as CGROUP_WEIGHT_DFL, which means
+we don't need cpd_bind_fn() callback to update default weight when
+attached to a hierarchy.
 
-Do not use "This commit/patch", but imperative mood. See:
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+This patch remove BFQ_WEIGHT_LEGACY_DFL and cpd_bind_fn().
 
-> 
-> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
-> ---
->  arch/arm/boot/dts/stm32mp131.dtsi | 34 +++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
-> index 5949473cbbfd..7af3eb15c204 100644
-> --- a/arch/arm/boot/dts/stm32mp131.dtsi
-> +++ b/arch/arm/boot/dts/stm32mp131.dtsi
-> @@ -1137,6 +1137,40 @@ mdma: dma-controller@58000000 {
->  			dma-requests = <48>;
->  		};
->  
-> +		fmc: memory-controller@58002000 {
-> +			#address-cells = <2>;
-> +			#size-cells = <1>;
-> +			compatible = "st,stm32mp1-fmc2-ebi";
-> +			reg = <0x58002000 0x1000>;
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+ block/bfq-cgroup.c  | 4 +---
+ block/bfq-iosched.h | 1 -
+ 2 files changed, 1 insertion(+), 4 deletions(-)
 
-
-compatible is first, reg is second. ranges if present should be third.
-
-> +			clocks = <&rcc FMC_K>;
-> +			resets = <&rcc FMC_R>;
-> +			status = "disabled";
-> +
-> +			ranges = <0 0 0x60000000 0x04000000>, /* EBI CS 1 */
-
-Best regards,
-Krzysztof
+diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+index 89ffb3aa992c..a2ab5dd58068 100644
+--- a/block/bfq-cgroup.c
++++ b/block/bfq-cgroup.c
+@@ -504,8 +504,7 @@ static void bfq_cpd_init(struct blkcg_policy_data *cpd)
+ {
+ 	struct bfq_group_data *d = cpd_to_bfqgd(cpd);
+ 
+-	d->weight = cgroup_subsys_on_dfl(io_cgrp_subsys) ?
+-		CGROUP_WEIGHT_DFL : BFQ_WEIGHT_LEGACY_DFL;
++	d->weight = CGROUP_WEIGHT_DFL;
+ }
+ 
+ static void bfq_cpd_free(struct blkcg_policy_data *cpd)
+@@ -1302,7 +1301,6 @@ struct blkcg_policy blkcg_policy_bfq = {
+ 
+ 	.cpd_alloc_fn		= bfq_cpd_alloc,
+ 	.cpd_init_fn		= bfq_cpd_init,
+-	.cpd_bind_fn	        = bfq_cpd_init,
+ 	.cpd_free_fn		= bfq_cpd_free,
+ 
+ 	.pd_alloc_fn		= bfq_pd_alloc,
+diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+index 69aaee52285a..467e8cfc41a2 100644
+--- a/block/bfq-iosched.h
++++ b/block/bfq-iosched.h
+@@ -20,7 +20,6 @@
+ 
+ #define BFQ_DEFAULT_QUEUE_IOPRIO	4
+ 
+-#define BFQ_WEIGHT_LEGACY_DFL	100
+ #define BFQ_DEFAULT_GRP_IOPRIO	0
+ #define BFQ_DEFAULT_GRP_CLASS	IOPRIO_CLASS_BE
+ 
+-- 
+2.39.2
 
