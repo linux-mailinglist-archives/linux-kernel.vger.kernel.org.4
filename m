@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DBB6CBEC6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E036CBEC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbjC1MMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
+        id S230326AbjC1MMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbjC1MM0 (ORCPT
+        with ESMTP id S229632AbjC1MMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:12:26 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEC593D1;
-        Tue, 28 Mar 2023 05:12:23 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32SCCClG118932;
-        Tue, 28 Mar 2023 07:12:12 -0500
+        Tue, 28 Mar 2023 08:12:47 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BDD93D5;
+        Tue, 28 Mar 2023 05:12:39 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32SCCYo8022416;
+        Tue, 28 Mar 2023 07:12:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680005532;
-        bh=bBUSi456e1BUIENl28eny9NwPSGtSu5fNgL73OGAADI=;
+        s=ti-com-17Q1; t=1680005554;
+        bh=Hemn+0/3QAwoeXpph7kNxgGoqMgwSj3ze3+kHIyy6Fw=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=YxkLq3sQ2k6jDqDVilN1bo3XWTrlKCXrW8n8PV8VWcflZtZPsPrN321PXTz3f+8GT
-         ld/kyqLNqtM9VftxS0eUlSgmk6YwO664aNnuyrJ9vS6ttZyqDuP6bzQwn27BdyQg1R
-         gNuj39qXNf9KjawmeKgJKP5Xo+zJ8rDeBs/eV+Yw=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32SCCCcU039341
+        b=okGi0p/U85cJ8326HDdhNNJOEBDM6ZpS88Q24RRYaDl06mNj1e4Kcgm3RFuInGE/d
+         6YskVYoOS10TwuFdWeF6RZylNanW2pvUUBmsU8Mbdih1Zx3AdZrWE3CdzZ0zT8ewtm
+         GqFWFHxyIFIloRRMXBhE1uPDKECOXX07E5+LPrUI=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32SCCYTc065328
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 28 Mar 2023 07:12:12 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 28 Mar 2023 07:12:34 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 28
- Mar 2023 07:12:11 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 07:12:33 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 28 Mar 2023 07:12:11 -0500
+ Frontend Transport; Tue, 28 Mar 2023 07:12:33 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32SCCC3H026278;
-        Tue, 28 Mar 2023 07:12:12 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32SCCXuF026508;
+        Tue, 28 Mar 2023 07:12:33 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Sinthu Raja <sinthu.raja@mistralsolutions.com>
-CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Sinthu Raja <sinthu.raja@ti.com>
-Subject: Re: [PATCH] arm64: dts: ti: k3-am68-sk-base-board: Update IO EXP GPIO lines for Rev E2
-Date:   Tue, 28 Mar 2023 07:12:10 -0500
-Message-ID: <168000552285.589760.16281695652330219261.b4-ty@ti.com>
+        <lore.kernel.org/r/20230320051304.2730692-1-vigneshr@ti.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        Anand Gadiyar <gadiyar@ti.com>
+Subject: Re: [PATCH v2 0/3] arm64: dts: ti: Introduce AM62x LP SK board support
+Date:   Tue, 28 Mar 2023 07:12:32 -0500
+Message-ID: <168000554249.589847.2232339506854109334.b4-ty@ti.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230315120934.16954-1-sinthu.raja@ti.com>
-References: <20230315120934.16954-1-sinthu.raja@ti.com>
+In-Reply-To: <20230321-am62-lp-sk-v2-0-0a56e1694804@ti.com>
+References: <20230321-am62-lp-sk-v2-0-0a56e1694804@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -67,21 +68,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sinthu Raja,
+Hi Vignesh Raghavendra,
 
-On Wed, 15 Mar 2023 17:39:34 +0530, Sinthu Raja wrote:
-> Rev E2 of the AM68 SK baseboard has updated the GPIO IO expander pins
-> functionality. To match the Rev E2 schematics, update existing IO expander
-> GPIO line names and the corresponding node which uses the expansion(exp1)
-> node.
+On Wed, 22 Mar 2023 18:09:19 +0530, Vignesh Raghavendra wrote:
+> This add DT support for AM62x LP SK board which has Automotive package
+> variant of AM62x SoC with LPDDR4 and OSPI NAND
 > 
+> Product link: https://www.ti.com/tool/SK-AM62-LP
+> Logs: https://gist.github.com/r-vignesh/0ad701f3df614cc5f90b6de775f2584e
 > 
+> Since v1:
+> Drop wild card 'x' and rename compatible and dts file to am62-lp-sk.dts
+> as suggested by Krzysztof.
+> 
+> [...]
 
 I have applied the following to branch ti-k3-dts-next on [1].
 Thank you!
 
-[1/1] arm64: dts: ti: k3-am68-sk-base-board: Update IO EXP GPIO lines for Rev E2
-      commit: 276fa0066b03875f77dba67867d9902361e646fc
+[1/3] dt-bindings: arm: ti: k3: Add compatible for AM62x LP SK
+      commit: 1fb3876129214f397b027eff98c614c0f015ecdf
+[2/3] arm64: dts: ti: Refractor AM625 SK dts
+      commit: ba0b22eaef1d2feda379ce486ca68e365ce4baf1
+[3/3] arm64: ti: dts: Add support for AM62x LP SK
+      commit: d956a851ac3c4e1a0ab8c9ed873281b85be01406
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during
