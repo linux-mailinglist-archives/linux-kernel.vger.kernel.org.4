@@ -2,133 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BCF6CBDD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BE46CBDBB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbjC1Ldl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
+        id S230047AbjC1LbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjC1Ldg (ORCPT
+        with ESMTP id S230444AbjC1LbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:33:36 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93E886A4;
-        Tue, 28 Mar 2023 04:33:33 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id EFEE35FD14;
-        Tue, 28 Mar 2023 14:33:31 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1680003212;
-        bh=fgF6s5R3U6VGsdB/76CfdbRQ/kHWhdlTZAEkRxHRzOU=;
-        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-        b=bikirb1Ql8swooSwbJKkbGyecirZhzgFIIJ1eIbn0LzxQTWBlTO8i2Mb0ziJPeiih
-         26mdEmH2f6Df4DdjowrJW+AL9End2sosrHwgQgU7RIP0crhsP8BZfAUUfacTk1DFij
-         YGap/IChwUBh/fql7KCC9wRN+fI/u7TWITERMlpBDWJJ9y4iTCBChQTyxOv/KbCOVA
-         s7o4J4Nnlh+DV58SVeuBvQVrLznzEbB2F5fwDE+Ue0XtQRqVRnkAtkLElcMpypueTK
-         zjD3YNcWPZ1D0PDmfZnutu+/L2EJucASOIu4O9EcehKDMDLDOX0VwUDkrSGmxfvMUE
-         gmnu/Icq3Ia4w==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 28 Mar 2023 14:33:31 +0300 (MSK)
-Message-ID: <0683cc6e-5130-484c-1105-ef2eb792d355@sberdevices.ru>
-Date:   Tue, 28 Mar 2023 14:30:10 +0300
+        Tue, 28 Mar 2023 07:31:09 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91CA97ABC;
+        Tue, 28 Mar 2023 04:30:49 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8BxEJXizyJkeRATAA--.29225S3;
+        Tue, 28 Mar 2023 19:30:42 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx_77ezyJkYloPAA--.46008S3;
+        Tue, 28 Mar 2023 19:30:41 +0800 (CST)
+Subject: Re: [PATCH v4 1/2] dt-bindings: spi: add loongson spi
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
+ <20230328112210.23089-2-zhuyinbo@loongson.cn>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <8a729488-43f1-de38-a69c-7ac9579cc6e6@loongson.cn>
+Date:   Tue, 28 Mar 2023 19:30:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
+In-Reply-To: <20230328112210.23089-2-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Language: en-US
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <avkrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Subject: [PATCH net v2 0/3] fix header length on skb merging
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/28 06:38:00 #21021220
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Cx_77ezyJkYloPAA--.46008S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxXw47KryrGFyfJw1Uur47XFb_yoW5Jw48pF
+        nrCFs3GF4xtF17A393Ka4xC3Z8X3s5G3ZFgFsrZr12kF98t3WxZa13Kr1UZFW7AF18XFW7
+        Zas29r4Yka1jqaUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
+        1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAaw2AFwI0_Jrv_JF1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7V
+        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5
+        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07jOyCJUUUUU=
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This patch need depend on
+https://lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+then the spi yaml file will build successful, if no this clock patch 
+that spi yaml will build fail, so please test it that base on above 
+clock patch.
+ÔÚ 2023/3/28 ÏÂÎç7:22, Yinbo Zhu Ð´µÀ:
+> Add the Loongson platform spi binding with DT schema format using
+> json-schema.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+>   .../bindings/spi/loongson,ls-spi.yaml         | 43 +++++++++++++++++++
+>   MAINTAINERS                                   |  6 +++
+>   2 files changed, 49 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+> new file mode 100644
+> index 000000000000..ee80049b1258
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/loongson,ls-spi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson SPI controller
+> +
+> +maintainers:
+> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - loongson,ls2k-spi
+> +      - loongson,ls7a-spi
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/loongson,ls2k-clk.h>
+> +    spi0: spi@1fff0220{
+> +        compatible = "loongson,ls2k-spi";
+> +        reg = <0x1fff0220 0x10>;
+> +        clocks = <&clk LOONGSON2_BOOT_CLK>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 25a0981c74b6..9bc2158c735d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12157,6 +12157,12 @@ S:	Maintained
+>   F:	Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+>   F:	include/dt-bindings/clock/loongson,ls2k-clk.h
+>   
+> +LOONGSON SPI DRIVER
+> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+> +L:	linux-spi@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+> +
+>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+>   M:	Sathya Prakash <sathya.prakash@broadcom.com>
+>   M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+> 
 
-this patchset fixes appending newly arrived skbuff to the last skbuff of
-the socket's queue during rx path. Problem fires when we are trying to
-append data to skbuff which was already processed in dequeue callback
-at least once. Dequeue callback calls function 'skb_pull()' which changes
-'skb->len'. In current implementation 'skb->len' is used to update length
-in header of last skbuff after new data was copied to it. This is bug,
-because value in header is used to calculate 'rx_bytes'/'fwd_cnt' and
-thus must be constant during skbuff lifetime. Here is example, we have
-two skbuffs: skb0 with length 10 and skb1 with length 4.
-
-1) skb0 arrives, hdr->len == skb->len == 10, rx_bytes == 10
-2) Read 3 bytes from skb0, skb->len == 7, hdr->len == 10, rx_bytes == 10
-3) skb1 arrives, hdr->len == skb->len == 4, rx_bytes == 14
-4) Append skb1 to skb0, skb0 now has skb->len == 11, hdr->len == 11.
-   But value of 11 in header is invalid.
-5) Read whole skb0, update rx_bytes by 11 from skb0's header.
-6) At this moment rx_bytes == 3, but socket's queue is empty.
-
-This bug starts to fire since:
-
-commit
-077706165717 ("virtio/vsock: don't use skbuff state to account credit")
-
-In fact, it presents before, but didn't triggered due to a little bit
-buggy implementation of credit calculation logic. So i'll use Fixes tag
-for it.
-
-I really forgot about this branch in rx path when implemented patch
-077706165717.
-
-This patchset contains 3 patches:
-1) Fix itself.
-2) Patch with WARN_ONCE() to catch such problems in future.
-3) Patch with test which triggers skb appending logic. It looks like
-   simple test with several 'send()' and 'recv()', but it checks, that
-   skbuff appending works ok.
-
-Link to v1:
-https://lore.kernel.org/netdev/e141e6f1-00ae-232c-b840-b146bdb10e99@sberdevices.ru/
-
-Changelog:
-
-v1 -> v2:
- - Replace 'WARN()' with 'WARN_ONCE()'.
- - Clean and refactor source code of the reproducer, now it is test for
-   vsock_test suite.
- - Commit messages update.
-
-Arseniy Krasnov (3):
-  virtio/vsock: fix header length on skb merging
-  virtio/vsock: WARN_ONCE() for invalid state of socket
-  test/vsock: new skbuff appending test
-
- net/vmw_vsock/virtio_transport_common.c |  9 ++-
- tools/testing/vsock/vsock_test.c        | 90 +++++++++++++++++++++++++
- 2 files changed, 98 insertions(+), 1 deletion(-)
-
--- 
-2.25.1
