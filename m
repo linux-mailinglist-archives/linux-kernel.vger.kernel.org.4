@@ -2,128 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33766CBB69
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC7D6CBB66
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbjC1Jpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
+        id S232888AbjC1Jpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjC1JpY (ORCPT
+        with ESMTP id S232889AbjC1Jp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:45:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7316180
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679996670;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GyxpUUnFruYhLDW97U96aBL0RSI09u9J7yvwV5Q6QsQ=;
-        b=iqe5j9qUCnWbGqE+d1ov1worlyZrY/2ilgjtJfeMeAXNWB2sksgbSi9VrX7+LJGtxwzpoQ
-        2GLWucC3BF9OKabnXyTFBpe8WiO+XpXDL8sDEyN0V+YNUc3Arbzlx4qn9f98KejW7wQIfs
-        mk1RJe4knto8/iMgasMAm/7XP7h8dHY=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-170-d0nAe_svODexzsPv5q261A-1; Tue, 28 Mar 2023 05:44:29 -0400
-X-MC-Unique: d0nAe_svODexzsPv5q261A-1
-Received: by mail-qk1-f199.google.com with SMTP id 195-20020a3705cc000000b00746a3ab9426so5343017qkf.20
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:44:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679996669;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GyxpUUnFruYhLDW97U96aBL0RSI09u9J7yvwV5Q6QsQ=;
-        b=cIdcCaq8mFiZIAHCC33707/FOQBMSG+XLVJNjO7aVhTNy7dTc3YTJvkNFa7UzMmW/Y
-         LYWcpmzImxYT8idTSfNfdPqqwB0pVKaFSZRB9CztFxwG/MqpLbbI0wwh6IWVWz+L+aEJ
-         IbGWbm4Xnit79Pvx6nDadia5IE6orEi7S7uaLuCekLl44DmhYRt0gASkttUxMJIrsdxM
-         aHTo5+YgXbhg/cshdIUJ91R1T/E3lpLLcFIjHhnad8vthngu5SouPOJvoFf6hXWo8zeS
-         /BoCXhEtSuwPnTlB5QjKocyNstUkqruqkvNYBCY0Llnf0HVwjRjSgw1vr3etZ+DCnTZN
-         Se+g==
-X-Gm-Message-State: AO0yUKWhIad94yBRGb50j9I2dUdaa1RiFy60cp9gh8ODWW0LXBy6ggEg
-        MXad+mT4BtAmiOBYo+Jwmbwpz2M3mmxA7BbQ6rRM9suTXGA0PHBGt+hssDJOICz3C43r8yrDjwk
-        Yk+0l6QUrp602TiMdZ3I1l0pq
-X-Received: by 2002:a05:622a:13cc:b0:3e3:89a5:192f with SMTP id p12-20020a05622a13cc00b003e389a5192fmr22427362qtk.61.1679996669193;
-        Tue, 28 Mar 2023 02:44:29 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+hHbSqMRRzFJgBA3hfVusjzZ/rusAYAK9YK1O6yI6x5F2UoicEOao0GkyXZn34kiaPcnzB3Q==
-X-Received: by 2002:a05:622a:13cc:b0:3e3:89a5:192f with SMTP id p12-20020a05622a13cc00b003e389a5192fmr22427348qtk.61.1679996668960;
-        Tue, 28 Mar 2023 02:44:28 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-53-134-98.retail.telecomitalia.it. [82.53.134.98])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05620a040b00b007468733cd1fsm6632277qkp.58.2023.03.28.02.44.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 02:44:28 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 11:44:23 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v1 2/2] vsock/test: update expected return values
-Message-ID: <eysn6yxwzwe4mirxk6maqubfdu33yy6b6jjrxa6lqexxxqghln@3ean24dkrf5v>
-References: <97f19214-ba04-c47e-7486-72e8aa16c690@sberdevices.ru>
- <f302d3de-28aa-e0b1-1fed-88d3c3bd606a@sberdevices.ru>
+        Tue, 28 Mar 2023 05:45:26 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73845FC6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:44:59 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pm4Xk2N3Wz4wj7;
+        Tue, 28 Mar 2023 20:44:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1679996695;
+        bh=h44tjwPWW2IRwuQCXs8ZriqQ5qG2iC4F4mxOhWNfVck=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=F5gJRWm7WYCKGU8Q8KbQ8Da7oWCG2XDwriXfyP60NS1OhQb9+TdIrYsLHNpqTlhiF
+         R4Uhpez9mvEBvPvasQa8NQSZZUDDcf7zykZMwRbD4lJJICohazRItWFu+hz42L9kIP
+         NnzigE0Fc0+gX7nimp5REAYTGzmdD395VaF1zgu7UNtKlJRHgMgIidbCCbKpSNmjRk
+         vMzYtIPuoMcD14nFNidNlNcraSx1+aD/ay3yrSd8dNvswFbBalIErdrAxncLkek7Lh
+         Soq5ckLM7ksSOjlq6mHUeR9fbdeeH6PRVeni4wyqlf45qb9a5Y1vq1rAv6vqu6SbzM
+         2CpPJwZzloZyA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Kautuk Consul <kconsul@linux.vnet.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Fabiano Rosas <farosas@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Kautuk Consul <kconsul@linux.vnet.ibm.com>
+Subject: Re: [PATCH] arch/powerpc/kvm: kvmppc_core_vcpu_create_hv: check for
+ kzalloc failure
+In-Reply-To: <20230323074718.2810914-1-kconsul@linux.vnet.ibm.com>
+References: <20230323074718.2810914-1-kconsul@linux.vnet.ibm.com>
+Date:   Tue, 28 Mar 2023 20:44:48 +1100
+Message-ID: <87pm8tcir3.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <f302d3de-28aa-e0b1-1fed-88d3c3bd606a@sberdevices.ru>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 01:14:01AM +0300, Arseniy Krasnov wrote:
->This updates expected return values for invalid buffer test. Now such
->values are returned from transport, not from af_vsock.c.
+Kautuk Consul <kconsul@linux.vnet.ibm.com> writes:
+> kvmppc_vcore_create() might not be able to allocate memory through
+> kzalloc. In that case the kvm->arch.online_vcores shouldn't be
+> incremented.
 
-Since only virtio transport supports it for now, it's okay.
-In the future we should make sure that we have the same behavior between 
-transports.
+I agree that looks wrong.
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Have you tried to test what goes wrong if it fails? It looks like it
+will break the LPCR update, which likely will cause the guest to crash
+horribly.
 
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> tools/testing/vsock/vsock_test.c | 4 ++--
-> 1 file changed, 2 insertions(+), 2 deletions(-)
->
->diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
->index 3de10dbb50f5..a91d0ef963be 100644
->--- a/tools/testing/vsock/vsock_test.c
->+++ b/tools/testing/vsock/vsock_test.c
->@@ -723,7 +723,7 @@ static void test_seqpacket_invalid_rec_buffer_server(const struct test_opts *opt
-> 		exit(EXIT_FAILURE);
-> 	}
->
->-	if (errno != ENOMEM) {
->+	if (errno != EFAULT) {
-> 		perror("unexpected errno of 'broken_buf'");
-> 		exit(EXIT_FAILURE);
-> 	}
->@@ -887,7 +887,7 @@ static void test_inv_buf_client(const struct test_opts *opts, bool stream)
-> 		exit(EXIT_FAILURE);
-> 	}
->
->-	if (errno != ENOMEM) {
->+	if (errno != EFAULT) {
-> 		fprintf(stderr, "unexpected recv(2) errno %d\n", errno);
-> 		exit(EXIT_FAILURE);
-> 	}
->-- 
->2.25.1
->
+You could use CONFIG_FAIL_SLAB and fail-nth etc. to fail just one
+allocation for a guest. Or probably easier to just hack the code to fail
+the 4th time it's called using a static counter.
 
+Doesn't really matter but could be interesting.
+
+> Add a check for kzalloc failure and return with -ENOMEM from
+> kvmppc_core_vcpu_create_hv().
+>
+> Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
+> ---
+>  arch/powerpc/kvm/book3s_hv.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
+> index 6ba68dd6190b..e29ee755c920 100644
+> --- a/arch/powerpc/kvm/book3s_hv.c
+> +++ b/arch/powerpc/kvm/book3s_hv.c
+> @@ -2968,13 +2968,17 @@ static int kvmppc_core_vcpu_create_hv(struct kvm_vcpu *vcpu)
+>  			pr_devel("KVM: collision on id %u", id);
+>  			vcore = NULL;
+>  		} else if (!vcore) {
+> +			vcore = kvmppc_vcore_create(kvm,
+> +					id & ~(kvm->arch.smt_mode - 1));
+
+That line doesn't need to be wrapped, we allow 90 columns.
+
+> +			if (unlikely(!vcore)) {
+> +				mutex_unlock(&kvm->lock);
+> +				return -ENOMEM;
+> +			}
+
+Rather than introducing a new return point here, I think it would be
+preferable to use the existing !vcore case below.
+
+>  			/*
+>  			 * Take mmu_setup_lock for mutual exclusion
+>  			 * with kvmppc_update_lpcr().
+>  			 */
+> -			err = -ENOMEM;
+> -			vcore = kvmppc_vcore_create(kvm,
+> -					id & ~(kvm->arch.smt_mode - 1));
+
+So leave that as is (maybe move the comment down).
+
+And wrap the below in:
+
+ +                      if (vcore) {
+
+>  			mutex_lock(&kvm->arch.mmu_setup_lock);
+>  			kvm->arch.vcores[core] = vcore;
+>  			kvm->arch.online_vcores++;
+ 			
+ 			mutex_unlock(&kvm->arch.mmu_setup_lock);
+ +                      }
+		}
+	}
+
+Meaning the vcore == NULL case will fall through to here and return via
+this existing path:
+
+	mutex_unlock(&kvm->lock);
+
+	if (!vcore)
+		return err;
+
+
+cheers
