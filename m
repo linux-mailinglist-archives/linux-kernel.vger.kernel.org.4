@@ -2,111 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB4E6CC1E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3900A6CC1E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbjC1OQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
+        id S232377AbjC1ORu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbjC1OQe (ORCPT
+        with ESMTP id S230215AbjC1ORp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:16:34 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F95ECA2F;
-        Tue, 28 Mar 2023 07:16:33 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id eg48so50260900edb.13;
-        Tue, 28 Mar 2023 07:16:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680012991;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AgXQ38nFmCt03RIhoEWzT+O1IRQrnX5UaoYuVRV+Ngk=;
-        b=UccGLVY8aF5GrsZxcYM4gYSkKtnsrizHORYCcD1SC9BNSCK8Y73HDUjAub1ECaS+l6
-         rDtb0Vf6Z90VRRaotlbuCWeinvAPenWTEwlD0xB9Tj0Fs+ubQvCvQHlX46+3EFFTTtfq
-         doWEX6OTOqQTQ8SzxPMfV71dBjgD9XQL6uwHY3l0/yQVrsMY0ATfTHCVYrlzaEoMGhCZ
-         Tsyt9GJnSsXTVQAIm0YeqL6r7blXUVIJPpDpFLlJ6AYYOIAhmClYp2r9zN3rpcvYzaPh
-         0p2wmqYdNTc/MphMvvr3S/VhznoSUYiTygm+1MEtvloYmEybAFbXFv9ihZugYWzS5gaO
-         J6Iw==
+        Tue, 28 Mar 2023 10:17:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17370D321
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:16:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680013016;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=McVfL5jdOZS7kfAfgWz7ZBlWLPWSFJhKhjaCyPWzQL0=;
+        b=aBsxDkRv4EEYayz+/siLlEAZSr61NKHj0uJsRfCwewpZqYfafQdum1h30BwSzqdtbqWA73
+        cXcnW6EGTNakzO1YPM6lF8ppgXwtfkjWFhBSopbG4nJ3BwQvqLGpC/NTODzZKpCDUDG1fJ
+        82nMWf8rTUh6yGthapWqBJUczV5BRMY=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-449-6eaAIWmJPVKZky_9or9_Fw-1; Tue, 28 Mar 2023 10:16:43 -0400
+X-MC-Unique: 6eaAIWmJPVKZky_9or9_Fw-1
+Received: by mail-ed1-f71.google.com with SMTP id m18-20020a50d7d2000000b00501dfd867a4so17886330edj.20
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:16:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680012991;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AgXQ38nFmCt03RIhoEWzT+O1IRQrnX5UaoYuVRV+Ngk=;
-        b=bpLSi5gtXDwwdhWlmV13dv0lwJZHgjCRFLymReYQb5ACZzNZqT3CvA9jC2Nd8wMa6Z
-         yr0NGpWbNOGO4nTilrngCXcwnBCPE43z7f7lqSeikc7xCFGKWK/VjsntKVn9fCLyPXcR
-         He5WANaFBWKIEtsPsLJ/fUSxvDdbcJUlwOMpMC/DH0aQzvfgtpuEfLqqpBQzCFqB1Vfl
-         pQdGZ7/ttPPhMMKFdViTOvLTZvbMPq7rotiOldw5htFI+KQCMgnGT/iOus2JkA2KWyF/
-         Ah5/rbEqummHPYCD5byh8azyfTRsVb/tiXcpEQc7XAf2M0EX7CmFTBJn5kTtZXBPT2zb
-         9v0g==
-X-Gm-Message-State: AAQBX9elwwT7cJ8fjuTqeZcz+IuM7JQ86zMb8JUxDUnoG/fTGxc8peaZ
-        Qma0jL6JXXhVFYFNrwupejE=
-X-Google-Smtp-Source: AKy350aJWYjsszzYhUL0PG8dKnI+Yf+TIxCMuHt140T1o8FjgTI3qFPkWjkkkVUq44n1faJ1y+AfoA==
-X-Received: by 2002:a17:906:f6cd:b0:92f:b8d0:746c with SMTP id jo13-20020a170906f6cd00b0092fb8d0746cmr15874361ejb.20.1680012991394;
-        Tue, 28 Mar 2023 07:16:31 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id h13-20020a170906110d00b009333aa81446sm13671380eja.115.2023.03.28.07.16.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 07:16:31 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 17:16:28 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: Re: [RFC PATCH net-next 2/2] net: dsa: mt7530: introduce MMIO driver
- for MT7988 SoC
-Message-ID: <20230328141628.ahteqtqniey45wb6@skbuf>
-References: <ZCIML310vc8/uoM4@makrotopia.org>
- <a3458e6d-9a30-4ece-9586-18799f532580@lunn.ch>
- <ZCIML310vc8/uoM4@makrotopia.org>
- <a3458e6d-9a30-4ece-9586-18799f532580@lunn.ch>
- <ZCLmwm01FK7laSqs@makrotopia.org>
- <ZCLmwm01FK7laSqs@makrotopia.org>
+        d=1e100.net; s=20210112; t=1680012994;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=McVfL5jdOZS7kfAfgWz7ZBlWLPWSFJhKhjaCyPWzQL0=;
+        b=20zn4oJRteNnDKNjSKjyD26nhwChWQmJoXXb9CVXY8IwpooREhmJlVXtgKO9a0SAjv
+         JHNQgqP/PhUEyQTsSc6mslEIOv420f5U0kIz5P2RpjJ7EBzB6KQBSCHEuP/jLy4eMCaf
+         Eo2TXq1SjGgKSC59C08LUdwhhuLZhzT/bTEOEfrVoaVPk9vGQ2YluHdrZzuXse7/via6
+         3yK6h0F12xSTXBr5WNqUjPQvyCQggzFR2Z8BFXGkPREU7cCln+5C7d3iItw+Mml66B6a
+         HpAvBKz1NzHwoQ1J2XGCQFbt8PukhVg3PJuvxoVnrESY3rLesTWsY15dMpSw5P/vFVxE
+         bz7g==
+X-Gm-Message-State: AAQBX9f9Mf8hJNOPcuCxTwCArO+8tvdm72mhExGjZPmm1lB9J1fTwg3V
+        vM4mn81xG4iMR5G0wGAPVf73D09HnX1RtA9owlW0O0YuONGZdZ/3FzOKu9IE0AQkMVWTPoFxzF3
+        MrfG0eETYyRLetneMy446hnjf
+X-Received: by 2002:a17:906:5a43:b0:8aa:be5c:b7c5 with SMTP id my3-20020a1709065a4300b008aabe5cb7c5mr17112819ejc.41.1680012994692;
+        Tue, 28 Mar 2023 07:16:34 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aoU2aSW/2CIaXWA1zbjboShcLbK5aGfXZD89zPwYbyXrwZeU0E5CjgejUESFiorIvBi+i+dA==
+X-Received: by 2002:a17:906:5a43:b0:8aa:be5c:b7c5 with SMTP id my3-20020a1709065a4300b008aabe5cb7c5mr17112786ejc.41.1680012994437;
+        Tue, 28 Mar 2023 07:16:34 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id i11-20020a170906264b00b009255b14e91dsm15283127ejc.46.2023.03.28.07.16.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 07:16:33 -0700 (PDT)
+Message-ID: <e142e2ac-2207-2d97-55b6-fb2ed0e9db89@redhat.com>
+Date:   Tue, 28 Mar 2023 16:16:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCLmwm01FK7laSqs@makrotopia.org>
- <ZCLmwm01FK7laSqs@makrotopia.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PING PATCH v4 00/29] Add KVM LoongArch support
+Content-Language: en-US
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>
+References: <20230328123119.3649361-1-zhaotianrui@loongson.cn>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20230328123119.3649361-1-zhaotianrui@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 02:08:18PM +0100, Daniel Golle wrote:
-> I agree that using regmap would be better and I have evaluated that
-> approach as well. As regmap doesn't allow lock-skipping and mt7530.c is
-> much more complex than xrs700x in the way indirect access to its MDIO bus
-> and interrupts work, using regmap accessors for everything would not be
-> trivial.
+On 3/28/23 14:30, Tianrui Zhao wrote:
+> Ping patch series, please help for reviewing the loongarch kvm patch
+> set. Thanks very much.
 > 
-> So here we can of course use regmap_read_poll_timeout and a bunch of
-> readmap_write operations. However, each of them will individually acquire
-> and release the mdio bus mutex while the current code acquires the lock
-> at the top of the function and then uses unlocked operations.
-> regmap currently doesn't offer any way to skip the locking and/or perform
-> locking manually. regmap_read, regmap_write, regmap_update_bits, ... always
-> acquire and release the lock on each operation.
+> This series adds KVM LoongArch support. Loongson 3A5000 supports hardware
+> assisted virtualization. With cpu virtualization, there are separate
+> hw-supported user mode and kernel mode in guest mode. With memory
+> virtualization, there are two-level hw mmu table for guest mode and host
+> mode. Also there is separate hw cpu timer with consant frequency in
+> guest mode, so that vm can migrate between hosts with different freq.
+> Currently, we are able to boot LoongArch Linux Guests.
+> 
+> Few key aspects of KVM LoongArch added by this series are:
+> 1. Enable kvm hardware function when kvm module is loaded.
+> 2. Implement VM and vcpu related ioctl interface such as vcpu create,
+>     vcpu run etc. GET_ONE_REG/SET_ONE_REG ioctl commands are use to
+>     get general registers one by one.
+> 3. Hardware access about MMU, timer and csr are emulated in kernel.
+> 4. Hardwares such as mmio and iocsr device are emulated in user space
+>     such as APIC, IPI, pci devices etc.
 
-What does struct regmap_config :: disable_locking do?
+Please check Documentation/virtual/kvm/api.rst and document the 
+loongarch-specific parts of the API, in particular ioctls that have 
+architecture-specific semantics (KVM_GET/SET_ONE_REG, KVM_INTERRUPT) and 
+vcpu->run fields.
+
+Code-wise what I could understand looked okay, I only made a suggestion 
+on the handling of idle; thanks for going through the previous review 
+carefully.
+
+Paolo
+
