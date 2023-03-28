@@ -2,115 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01AA6CCA9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB626CCAAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjC1T2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 15:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S229576AbjC1TgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 15:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjC1T2M (ORCPT
+        with ESMTP id S229451AbjC1TgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 15:28:12 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204C42690
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:28:12 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-545e907790fso133949267b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:28:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680031691;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YujjpUZD+Q1jEde3/ZaCZtJJBkVmO1XlOY4kEzyMtns=;
-        b=PhhYKJhXpGjlraKgnxTA1ox1zCuQDINg4H+NjqECLIwcVewsJ2UmF/XldtrOxzUW8F
-         FtkMxK9XYIcC/gvDvo1cxA29U3ULWGCBaajKqJk4rgMHA4ss0Alf25G8t46R7Lp02Xut
-         O+DxLHWvNCJdltEaU/xNOPwle2JDPTEN6cuVv0Zhrr8Lkz33KxXfau2W3yTNNCA9y3Xp
-         LQiDdGk9NrgkoMvxC8Ehixwa8p3N51flc75mRDOp0exVkF6k6E4Hs69JMi+L3/TWelEW
-         6mlpBQZHrXZuZqhCm7o9gUs274DyVLH9j018hTkghuZN3NqPxQMPN2+CHF+Zi2aGJdO3
-         GnjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680031691;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YujjpUZD+Q1jEde3/ZaCZtJJBkVmO1XlOY4kEzyMtns=;
-        b=L52M3EWT07yHsqnaE+f3IL+QWWoDEnLUb7gUkREt7XLaa4pkqnyXyYP+u7wI86QZzX
-         1Jt6NzyBM4Da8TBpz2lN5/howpMTUNpgkME4HhixIR3Aeifg3p5yo7DBHPzpzNg4hDq4
-         Pmg6YOQ3fiLsrS8zrm7W8i92BBnrUvbogE1ypq0dvbkdbpQD0+DsNUjXXKUn+RnV+8Xy
-         cbLtW2XqPmPa3g60t/NnMcY+wc+ryn4LEcOFDO1GSJtZoP/ZGneNwqdGJcCmxmK7G8TW
-         R+ytfV8J1SPoBjR9qKxvzDDnAYo+Ww9B1uduKk2oq3UmIILZsw8X124y92pehUQfYI+2
-         Biww==
-X-Gm-Message-State: AAQBX9fX/w/rdPamD2zKE+LAz+bm9S3RLlhskmC1ViU5j/GChFM3FN/X
-        8bw7qphTBYT4XS2a68I90k3tiAKMuJ7lV4dTo7cfMA==
-X-Google-Smtp-Source: AKy350as29FZcp4Hu0tcOiv3iwZMMe8Tutrvh0MvK9Mp8FSELCYsBga7jimfk6sxXcp6Bx7kDkhWcd+YkT9zVUBO2h4=
-X-Received: by 2002:a81:ac46:0:b0:544:6828:3c09 with SMTP id
- z6-20020a81ac46000000b0054468283c09mr8104683ywj.0.1680031691214; Tue, 28 Mar
- 2023 12:28:11 -0700 (PDT)
+        Tue, 28 Mar 2023 15:36:12 -0400
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BBA9F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:36:09 -0700 (PDT)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4PmKft0KQbz9sbg;
+        Tue, 28 Mar 2023 21:36:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1680032166;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UctDcSLnkPivkt/lZEarG/yH4/UnvtCzaIKp7oU4z5Q=;
+        b=oxD0cpNIO7C5J5hVIgVd6Iyoq+y/5F561v/J+JXWEEPjL3r9fSzW0ylGbbfgo+IfTY8lfs
+        js7zuhBtZ8Zv+WDFXGwe5gWv9HHt91x7yE2ZhX+semyXoenaCOppvTdmrH630d4A+qZef0
+        eOyhPiASVPpLRu+aH+zlbV7k4bNPNoHYysMv3Mu+Od6PbTXxfG7uYyx0t49uluri/ZBl5x
+        mbZpJb3td4X2cIq2ErlUAwJEOItYB6N6Yr/6X1JyFCCTWwhgMF9MiWapEdz+mMfIj/qvxL
+        Y3oN80duQKuPxnJpjcQqedONgt6SIl/eZPnumD1bnR15ucrC9kteN29tvWKgvQ==
+References: <20230320161636.24411-1-romanberanek@icloud.com>
+ <87wn356ni4.fsf@oltmanns.dev> <20230327202045.ceeqqwjug4ktxtsf@penduick>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Roman Beranek <romanberanek@icloud.com>,
+        Chen-Yu Tsai <wens@csie.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
+ TCON0_DCLK_REG
+Date:   Tue, 28 Mar 2023 21:28:19 +0200
+In-reply-to: <20230327202045.ceeqqwjug4ktxtsf@penduick>
+Message-ID: <87bkkc3bzc.fsf@oltmanns.dev>
 MIME-Version: 1.0
-References: <20230328061638.203420-1-yosryahmed@google.com>
- <20230328061638.203420-6-yosryahmed@google.com> <20230328141523.txyhl7wt7wtvssea@google.com>
- <CAJD7tkYo=CeXJPUi_KxjzC0QCxC2qd_J2_FQi_aXh7svD8u60A@mail.gmail.com>
-In-Reply-To: <CAJD7tkYo=CeXJPUi_KxjzC0QCxC2qd_J2_FQi_aXh7svD8u60A@mail.gmail.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Tue, 28 Mar 2023 12:28:00 -0700
-Message-ID: <CALvZod4Gsngc6MjXdk4s5+ePVjsgcVppdRmsQovN6gSrxzdbfA@mail.gmail.com>
-Subject: Re: [PATCH v1 5/9] memcg: replace stats_flush_lock with an atomic
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Rspamd-Queue-Id: 4PmKft0KQbz9sbg
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 11:53=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com=
-> wrote:
+
+Hi,
+
+On 2023-03-27 at 22:20:45 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
+> Hi,
 >
+> On Sat, Mar 25, 2023 at 12:40:04PM +0100, Frank Oltmanns wrote:
 [...]
-> > > +     if (atomic_xchg(&stats_flush_ongoing, 1))
-> >
-> > Have you profiled this? I wonder if we should replace the above with
-> >
-> >         if (atomic_read(&stats_flush_ongoing) || atomic_xchg(&stats_flu=
-sh_ongoing, 1))
+>> Actually, I had the following third patch prepared that adjusted the dot=
+clock rate so that the
+>> required PLL rate is set. But again, this seems very indirect, so that=
+=E2=80=99s why I refrained from
+>> submitting it and I submitted the linked patch above instead.
+>>
+>> Anyway, here is the third proposal:
+>>
+>> =E2=80=94 a/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
+>> +++ b/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
+>> @@ -819,6 +819,34 @@ static void sun6i_dsi_encoder_disable(struct drm_en=
+coder *encoder)
+>>  	regulator_disable(dsi->regulator);
+>>  }
+>>
+>> +static bool sun6i_dsi_encoder_mode_fixup(
+>> =E2=81=83 struct drm_encoder *encoder,
+>> =E2=81=83 const struct drm_display_mode *mode,
+>> =E2=81=83 struct drm_display_mode *adjusted_mode)
+>> +{
+>> =E2=81=83 if (encoder->encoder_type =3D=3D DRM_MODE_ENCODER_DSI) {
+>> =E2=81=83 /*
+>> =E2=81=83 * For DSI the PLL rate has to respect the bits per pixel and
+>> =E2=81=83 * number of lanes.
+>> =E2=81=83 *
+>> =E2=81=83 * According to the BSP code:
+>> =E2=81=83 * PLL rate =3D DOTCLOCK * bpp / lanes
+>> =E2=81=83 *
+>> =E2=81=83 * Therefore, the clock has to be adjusted in order to set the
+>> =E2=81=83 * correct PLL rate when actually setting the clock.
+>> =E2=81=83 */
+>> =E2=81=83 struct sun6i_dsi *dsi =3D encoder_to_sun6i_dsi(encoder);
+>> =E2=81=83 struct mipi_dsi_device *device =3D dsi->device;
+>> =E2=81=83 u8 bpp =3D mipi_dsi_pixel_format_to_bpp(device->format);
+>> =E2=81=83 u8 lanes =3D device->lanes;
+>> =E2=81=83
+>>
+>> =E2=81=83 adjusted_mode->crtc_clock =3D mode->crtc_clock
+>> =E2=81=83 * bpp / (lanes * SUN6I_DSI_TCON_DIV);
+>> =E2=81=83 }
+>> =E2=81=83
+>>
+>> =E2=81=83 return true;
+>> +}
+>> =E2=81=83 static int sun6i_dsi_get_modes(struct drm_connector *connector)
+>>   {
+>>       struct sun6i_dsi *dsi =3D connector_to_sun6i_dsi(connector);
+>> @@ -851,6 +879,7 @@ static const struct drm_connector_funcs sun6i_dsi_co=
+nnector_funcs =3D {
+>>  static const struct drm_encoder_helper_funcs sun6i_dsi_enc_helper_funcs=
+ =3D {
+>>  	.disable	=3D sun6i_dsi_encoder_disable,
+>>  	.enable		=3D sun6i_dsi_encoder_enable,
+>> =E2=81=83 .mode_fixup =3D sun6i_dsi_encoder_mode_fixup,
+>>   };
 >
-> I profiled the entire series with perf and I haven't noticed a notable
-> difference between before and after the patch series -- but maybe some
-> specific access patterns cause a regression, not sure.
->
-> Does an atomic_cmpxchg() satisfy the same purpose? it's easier to read
-> / more concise I guess.
->
-> Something like
->
->     if (atomic_cmpxchg(&stats_flush_ongoing, 0, 1))
->
-> WDYT?
+> It's not clear to me what this patch is supposed to be doing, there's no =
+mode_fixup implementation
+> upstream?
 >
 
-No, I don't think cmpxchg will be any different from xchg(). On x86,
-the cmpxchg will always write to stats_flush_ongoing and depending on
-the comparison result, it will either be 0 or 1 here.
+Sorry, my mail client tried some fancy formatting. :(
 
-If you see the implementation of queued_spin_trylock(), it does the
-same as well.
+This is the patch again.
+
+--- a/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
++++ b/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
+@@ -819,6 +819,34 @@ static void sun6i_dsi_encoder_disable(struct drm_encod=
+er *encoder)
+ 	regulator_disable(dsi->regulator);
+ }
+
++static bool sun6i_dsi_encoder_mode_fixup(
++				   struct drm_encoder *encoder,
++				   const struct drm_display_mode *mode,
++				   struct drm_display_mode *adjusted_mode)
++{
++	if (encoder->encoder_type =3D=3D DRM_MODE_ENCODER_DSI) {
++		/*
++		 * For DSI the PLL rate has to respect the bits per pixel and
++		 * number of lanes.
++		 *
++		 * According to the BSP code:
++		 * PLL rate =3D DOTCLOCK * bpp / lanes
++		 *
++		 * Therefore, the clock has to be adjusted in order to set the
++		 * correct PLL rate when actually setting the clock.
++		 */
++		struct sun6i_dsi *dsi =3D encoder_to_sun6i_dsi(encoder);
++		struct mipi_dsi_device *device =3D dsi->device;
++		u8 bpp =3D mipi_dsi_pixel_format_to_bpp(device->format);
++		u8 lanes =3D device->lanes;
++
++		adjusted_mode->crtc_clock =3D mode->crtc_clock
++				 * bpp / (lanes * SUN6I_DSI_TCON_DIV);
++	}
++
++	return true;
++}
++
+ static int sun6i_dsi_get_modes(struct drm_connector *connector)
+ {
+ 	struct sun6i_dsi *dsi =3D connector_to_sun6i_dsi(connector);
+@@ -851,6 +879,7 @@ static const struct drm_connector_funcs sun6i_dsi_conne=
+ctor_funcs =3D {
+ static const struct drm_encoder_helper_funcs sun6i_dsi_enc_helper_funcs =
+=3D {
+ 	.disable	=3D sun6i_dsi_encoder_disable,
+ 	.enable		=3D sun6i_dsi_encoder_enable,
++	.mode_fixup	=3D sun6i_dsi_encoder_mode_fixup,
+ };
+
+ static u32 sun6i_dsi_dcs_build_pkt_hdr(struct sun6i_dsi *dsi,
+
+
+I still like the original patch better, but I'd be happy to submit this
+as a proper patch, if this is more to your liking.
+
+Thanks,
+  Frank
+
+
+> Maxime
+>
+--
