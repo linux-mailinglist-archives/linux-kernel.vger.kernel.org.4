@@ -2,134 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CC56CCDDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994166CCDDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjC1XGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 19:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
+        id S229827AbjC1XIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 19:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjC1XGU (ORCPT
+        with ESMTP id S229477AbjC1XIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 19:06:20 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D692683;
-        Tue, 28 Mar 2023 16:06:18 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PmQKK5TkHz4x91;
-        Wed, 29 Mar 2023 10:06:13 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680044774;
-        bh=KdJ09PCPVP0eDPbHTNgYmbVuTNoaWI35HTEXHBJ/wEg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ei1jh5oO6EnPPYZJplEvFCHTnqxa0Ixdj0nbH8fdGL95CFPZZbnNqYDu2leD5p6Hr
-         17tTkJ+xRp33W7YONmM384zppHqrADDwbdxXpPT3LOR+0jb2Of5HS80GBRX453iDia
-         nzwu2cYhYK2UJUEgvTQ4jpuS8ZlEre47QRQkSaqw/GJq+ClxCVp9mp9S87L6Ss/drJ
-         KUFwrZ/Q11vOZAzQfIdn3ruuE6fiVJBN9/zA6AdfJgm+a4v3bU2G6bNcv3JueSjucP
-         aZWHNA+VPM84OM8tUM45y+T04AOdUu7V9V5U1GjzDpm7N7f2ONWz+C/65pGxWqGHFS
-         lkW3dJV+KM8zg==
-Date:   Wed, 29 Mar 2023 10:06:12 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        namhyung@kernel.org
-Subject: Re: linux-next: build failure after merge of the perf tree
-Message-ID: <20230329100612.074b18d0@canb.auug.org.au>
-In-Reply-To: <ZCNES6N7AkskjD0o@kernel.org>
-References: <20230317095025.49aa34f9@canb.auug.org.au>
-        <20230322083956.5c051777@canb.auug.org.au>
-        <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
-        <20230323095437.1ecccec1@canb.auug.org.au>
-        <ZBxTyLqkIaoVhIXU@kernel.org>
-        <20230328123332.0a3e2b6d@canb.auug.org.au>
-        <ZCNES6N7AkskjD0o@kernel.org>
+        Tue, 28 Mar 2023 19:08:11 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6D310F8;
+        Tue, 28 Mar 2023 16:08:10 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1phIQ9-000450-1v;
+        Wed, 29 Mar 2023 01:08:05 +0200
+Date:   Wed, 29 Mar 2023 00:08:02 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: Re: [RFC PATCH net-next v2 2/2] net: dsa: mt7530: introduce MMIO
+ driver for MT7988 SoC
+Message-ID: <ZCNzUrgTUGVF6YxF@makrotopia.org>
+References: <cover.1680041193.git.daniel@makrotopia.org>
+ <6f628e3a56ad8390b1f5a00b86b61c54d66d3106.1680041193.git.daniel@makrotopia.org>
+ <8494e02c-6c04-46c9-af86-a414f27fcf23@lunn.ch>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QFDnZ254T1RjKuMJrMf96jD";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8494e02c-6c04-46c9-af86-a414f27fcf23@lunn.ch>
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/QFDnZ254T1RjKuMJrMf96jD
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Mar 29, 2023 at 12:45:37AM +0200, Andrew Lunn wrote:
+> > @@ -146,11 +149,13 @@ core_write(struct mt7530_priv *priv, u32 reg, u32 val)
+> >  {
+> >  	struct mii_bus *bus = priv->bus;
+> >  
+> > -	mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
+> > +	if (bus)
+> > +		mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
+> >  
+> >  	core_write_mmd_indirect(priv, reg, MDIO_MMD_VEND2, val);
+> >  
+> > -	mutex_unlock(&bus->mdio_lock);
+> > +	if (bus)
+> > +		mutex_unlock(&bus->mdio_lock);
+> >  }
+> 
+> All this if (bus) is pretty ugly.
+> 
+> First off, what is this mutex actually protecting? And why is the same
+> protection not required for MMIO?
 
-Hi Arnaldo,
+The mutex is protecting the MDIO bus. Each access to any register of the
+MT753x switch requires at least two operations on the MDIO bus.
+Hence if there is congruent access, e.g. due to PCS or PHY polling, this
+can mess up and interfere with another ongoing register access sequence.
 
-On Tue, 28 Mar 2023 16:47:23 -0300 Arnaldo Carvalho de Melo <acme@kernel.or=
-g> wrote:
->=20
-> The config files you used don't match the running kernels
+You may argue that we should just use regmap's locking API for that, as
+it is done also when creating the pcs-mtk-lynxi instance. However, some
+things like interrupt handling require more complex (as in: not covered
+by regmap_update_bits) pseudo-atomic operations, so the idea was to keep
+the locking just like it was before for MDIO-connected MT753x switches
+and provide a lock-less regmap replacing the former mt7530_mii_write() and 
+mt7530_mii_read() functions.
 
-This is just the way Debian names its kernel packages.
+If we use MMIO we can directly access the 32-bit wide registers and hence
+do not require locking.
 
-> > $ uname -a
-> > Linux zz1 6.0.0-5-powerpc64le #1 SMP Debian 6.0.10-2 (2022-12-01) ppc64=
-le GNU/Linux
-              ^^^^^^^^^^^^^^^^^^^
-> > $ ls -l /sys/kernel/bpf/
-> > ls: cannot access '/sys/kernel/bpf/': No such file or directory
-> > $ grep CONFIG_DEBUG_INFO_BTF /boot/config-6.0.0-5-powerpc64le
-                                              ^^^^^^^^^^^^^^^^^^^
+> 
+> If you have a convincing argument the mutex is not needed, please add
+> two helpers:
+> 
+> mt7530_mutex_lock(struct mt7530_priv *priv)
+> mt7530_mutex_unlock(struct mt7530_priv *priv)
+> 
+> and hide the if inside that. As part of the commit message, explain
+> why the mutex is not needed for MDIO.
 
-And so on.  It just happens that this kernel is based on v6.0.10.
+Ok, will do.
 
-$ uname -r
-6.0.0-5-powerpc64le
+> 
+> Adding these helpers and changing all calls can be a preparation
+> patch. It is the sort of patch which should be obviously correct.
 
-So they are the correct config files.
+Understood.
 
-Also, the mail I replied to talked about checking /sys/kernel/bpf/ (not
-btf) :-(
+> 
+> > @@ -2588,6 +2664,8 @@ mt7531_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
+> >  	case PHY_INTERFACE_MODE_NA:
+> >  	case PHY_INTERFACE_MODE_1000BASEX:
+> >  	case PHY_INTERFACE_MODE_2500BASEX:
+> > +	case PHY_INTERFACE_MODE_USXGMII:
+> > +	case PHY_INTERFACE_MODE_10GKR:
+> >  		/* handled in SGMII PCS driver */
+> >  		return 0;
+> >  	default:
+> > @@ -2712,7 +2790,9 @@ static void mt753x_phylink_mac_link_up(struct dsa_switch *ds, int port,
+> >  	 * variants.
+> >  	 */
+> >  	if (interface == PHY_INTERFACE_MODE_TRGMII ||
+> > -	    (phy_interface_mode_is_8023z(interface))) {
+> > +	    interface == PHY_INTERFACE_MODE_USXGMII ||
+> > +	    interface == PHY_INTERFACE_MODE_10GKR ||
+> > +	    phy_interface_mode_is_8023z(interface)) {
+> >  		speed = SPEED_1000;
+> >  		duplex = DUPLEX_FULL;
+> >  	}
+> 
+> This looks like something which should be in a separate patch.
 
-still on my build machine (of course):
+Ok, I will put it into a separate patch before adding support for
+MT7988 which is the only switch supporting those modes (and also
+requiring them).
 
-$ ls -l /sys/kernel/btf/
-ls: cannot access '/sys/kernel/btf/': No such file or directory
+> 
+> > +static int mt7988_setup(struct dsa_switch *ds)
+> > +{
+> > +	struct mt7530_priv *priv = ds->priv;
+> > +	u32 unused_pm = 0;
+> > +	int i;
+> > +
+> > +	/* Reset the switch */
+> > +	reset_control_assert(priv->rstc);
+> > +	udelay(20);
+> > +	reset_control_deassert(priv->rstc);
+> > +	udelay(20);
+> > +
+> > +	/* Reset the switch PHYs */
+> > +	mt7530_write(priv, MT7530_SYS_CTRL, SYS_CTRL_PHY_RST);
+> > +
+> > +	/* BPDU to CPU port */
+> > +	mt7530_rmw(priv, MT7531_CFC, MT7531_CPU_PMAP_MASK,
+> > +		   BIT(MT7988_CPU_PORT));
+> > +	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
+> > +		   MT753X_BPDU_CPU_ONLY);
+> > +
+> > +	/* Enable and reset MIB counters */
+> > +	mt7530_mib_reset(ds);
+> > +
+> > +	for (i = 0; i < MT7530_NUM_PORTS; i++) {
+> > +		/* Disable forwarding by default on all ports */
+> > +		mt7530_rmw(priv, MT7530_PCR_P(i), PCR_MATRIX_MASK,
+> > +			   PCR_MATRIX_CLR);
+> > +
+> > +		mt7530_set(priv, MT7531_DBG_CNT(i), MT7531_DIS_CLR);
+> > +
+> > +		if (dsa_is_unused_port(ds, i))
+> > +			unused_pm |= BIT(i);
+> > +		else if (dsa_is_cpu_port(ds, i))
+> > +			mt753x_cpu_port_enable(ds, i);
+> > +		else
+> > +			mt7530_port_disable(ds, i);
+> > +
+> > +		/* Enable consistent egress tag */
+> > +		mt7530_rmw(priv, MT7530_PVC_P(i), PVC_EG_TAG_MASK,
+> > +			   PVC_EG_TAG(MT7530_VLAN_EG_CONSISTENT));
+> > +	}
+> > +
+> > +	ds->configure_vlan_while_not_filtering = true;
+> > +
+> > +	/* Flush the FDB table */
+> > +	return mt7530_fdb_cmd(priv, MT7530_FDB_FLUSH, NULL);
+> 
+> Is this really specific to the mt7988? 
 
-So it seems that Debian do not build their powerpcle kernels with
-CONFIG_DEBUG_INFO_BTF. I don't know why not since all the dependencies
-seem to be OK.
+While the setup function is somehow similar to mt7530_setup or
+mt7531_setup there are also differences. It would be possible to
+split this more, so more common parts can be shared, such as the
+loop over the ports which is the same as for MT7531.
+The way initial reset is carried out as well as setting up the CPU
+port is specific to MT7988.
 
-[On my arm64 machine:
-
-$ ls -l /sys/kernel/btf/vmlinux
--r--r--r-- 1 root root 5209570 Mar 29 09:52 /sys/kernel/btf/vmlinux
-
-and on my amd64 machine:
-
-$ ls -l /sys/kernel/btf/vmlinux
--r--r--r-- 1 root root 8536946 Mar 29 10:04 /sys/kernel/btf/vmlinux
-]
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/QFDnZ254T1RjKuMJrMf96jD
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQjcuQACgkQAVBC80lX
-0GwpUgf+Lpof9NASqZYY8vuy/deXTNsOLMTTFp55sY3llg+DEiJhU74u3rfP8ia+
-JUCqihqi7Q4T6P+U9oyut0br3iJecwLxYmSbYZoJaGu42o3k+1JM0V6SpWMFwxFU
-dMNMSdaq0aTcszL9hj2n8ElHLBjmj550fwlxT9BwFvgcwfAvIq8BA05BE0v4+Lh2
-9P0q/6F9UTrDIi9MMafkKi8jVTJjlM5hNayb48UoQUAI7QvfRgq/rT1bMKSY922a
-4s3OWQEf5dT5IDlV6KjMkIMPVWwbZvp5w90kt6QK0EymKJKoUsag7oomBrDY5PsP
-MO8AyJc8Btc7K9b7yQKoaEHcSHDhew==
-=WZe8
------END PGP SIGNATURE-----
-
---Sig_/QFDnZ254T1RjKuMJrMf96jD--
+> 
+>    Andrew
