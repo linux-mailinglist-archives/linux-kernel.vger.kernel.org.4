@@ -2,110 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC4C56CBCF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 663606CBCFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjC1LBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33932 "EHLO
+        id S229778AbjC1LDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjC1LBP (ORCPT
+        with ESMTP id S230215AbjC1LDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:01:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A0D76AC;
-        Tue, 28 Mar 2023 04:01:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57BC6B81BDF;
-        Tue, 28 Mar 2023 11:01:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9180FC4339B;
-        Tue, 28 Mar 2023 11:01:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680001271;
-        bh=rVwYw8oNfAjcRZtetRMIy5t1JK4xKEoXm7nC/lTdtM0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SHGK9uzPkKjjmZPlNcc6V/hMrHAmP5ibSu5trUNzpmG6KtHR6ZU2PS/sQXCGT1RzZ
-         utxzEiic4pIOA/h0NLun1avPsHwicEQWo5IIYk/gyn0nTLLXslUNkDPrkpcYr3Q3je
-         pi4kYq8cF4obKVbOkxSFL8rHs/G0VlCx1g2yoFtU=
-Date:   Tue, 28 Mar 2023 13:01:08 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        linux-cxl@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        dan.j.williams@intel.com, linuxarm@huawei.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>
-Subject: Re: [PATCH v2 2/5] perf: Allow a PMU to have a parent.
-Message-ID: <ZCLI9A40PJsyqAmq@kroah.com>
-References: <20230324171313.18448-1-Jonathan.Cameron@huawei.com>
- <20230324171313.18448-3-Jonathan.Cameron@huawei.com>
- <f8123e7c-36a6-a302-1101-e778622dc997@linux.intel.com>
- <20230328115444.000036ea@Huawei.com>
+        Tue, 28 Mar 2023 07:03:01 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E15110CF
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:03:00 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1ph76I-0005mW-Es; Tue, 28 Mar 2023 13:02:50 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1ph76F-0003Or-5S; Tue, 28 Mar 2023 13:02:47 +0200
+Date:   Tue, 28 Mar 2023 13:02:47 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1] ARM: dts: stm32: prtt1c: Add PoDL PSE regulator nodes
+Message-ID: <20230328110247.GE15196@pengutronix.de>
+References: <20230323123242.3763673-1-o.rempel@pengutronix.de>
+ <1a2d16c8-8c16-5fcc-7906-7b454a81922f@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230328115444.000036ea@Huawei.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <1a2d16c8-8c16-5fcc-7906-7b454a81922f@foss.st.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 11:54:44AM +0100, Jonathan Cameron wrote:
-> On Mon, 27 Mar 2023 13:04:08 -0400
-> "Liang, Kan" <kan.liang@linux.intel.com> wrote:
+On Tue, Mar 28, 2023 at 11:58:34AM +0200, Alexandre TORGUE wrote:
+> Hi Oleksij
 > 
-> > On 2023-03-24 1:13 p.m., Jonathan Cameron wrote:
-> > > Some PMUs have well defined parents such as PCI devices.
-> > > As the device_initialize() and device_add() are all within
-> > > pmu_dev_alloc() which is called from perf_pmu_register()
-> > > there is no opportunity to set the parent from within a driver.
-> > > 
-> > > Add a struct device *parent field to struct pmu and use that
-> > > to set the parent.  
+> On 3/23/23 13:32, Oleksij Rempel wrote:
+> > This commit introduces Power over Data Line (PoDL) Power Source
+> > Equipment (PSE) regulator nodes to the PRTT1C devicetree. The addition
+> > of these nodes enables support for PoDL in PRTT1C devices, allowing
+> > power delivery and data transmission over a single twisted pair.
 > > 
-> > Why we want a PMU parent? Maybe I missed it. I don't see that the parent
-> > is used anywhere.
+> > The new PoDL PSE regulator nodes provide voltage capability information
+> > of the current board design, which can be used as a hint for system
+> > administrators when configuring and managing power settings. This
+> > update enhances the versatility and simplifies the power management of
+> > PRTT1C devices while ensuring compatibility with connected Powered
+> > Devices (PDs).
+> > 
+> > After applying this patch, the power delivery can be controlled from
+> > user space with a patched [1] ethtool version using the following commands:
+> >    ethtool --set-pse t1l2 podl-pse-admin-control enable
+> > to enable power delivery, and
+> >    ethtool --show-pse t1l2
+> > to display the PoDL PSE settings.
+> > 
+> > By integrating PoDL PSE support into the PRTT1C devicetree, users can
+> > benefit from streamlined power and data connections in their
+> > deployments, improving overall system efficiency and reducing cabling
+> > complexity.
+> > 
+> > [1] https://lore.kernel.org/all/20230317093024.1051999-1-o.rempel@pengutronix.de/
+> > 
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > ---
 > 
-> This allows you to identify the association between PMU and the hardware related
-> device that is providing it by looking at the directory structure in sysfs rather
-> than putting them directly under /sys/devices.
+> Please, fix the introduction of those new yaml validation errors:
 > 
-> ls -l /sys/bus/event_sources/devices/
-> 
-> ... armv8_pmuv3_0 -> ../../../devices/arm8_pmuv3_0
-> ... breakpoint -> ../../../devices/breakpoint
-> ... cpmu0 -> ../../../devices/pci0000:0c/0000:0c:00.0/0000:0d:00.0/cpmu0/cpmu0
-> etc
-> 
-> (the first cpmu0 is the parent registered as a child of the PCI EP and used for
->  driver binding).  So it's of use to userspace rather than in the kernel driver
-> itself.
-> 
-> Note that almost nothing is normally in the top level /sys/devices other than
-> event_sources - because nearly all other struct device instances created by
-> subsystems have parents assigned.
-> 
-> On my system
-> 
-> ls /sys/devices
-> 
-> armv8_pmuv3_0	LNXSYSTEM:00	pci0000:0c	pnp0		system		uprobe
-> breakpoint	pci0000:00	platform	software	tracepoint	virtual
-> 
-> +CC Greg KH for input on whether / why this make sense.
+> arch/arm/boot/dts/stm32mp151a-prtt1c.dtb: ethernet-pse-1: $nodename:0:
+> 'ethernet-pse-1' does not match '^ethernet-pse(@.*)?$'
+>         From schema:
+> /Documentation/devicetree/bindings/net/pse-pd/podl-pse-regulator.yaml
+> arch/arm/boot/dts/stm32mp151a-prtt1c.dtb: ethernet-pse-2: $nodename:0:
+> 'ethernet-pse-2' does not match '^ethernet-pse(@.*)?$'
+>         From schema: /local/home/frq08678/STLINUX/kernel/my-kernel/stm32/Documentation/devicetree/bindings/net/pse-pd/podl-pse-regulator.yaml
 
-That doesn't make sense, nothing should be in /sys/devices/ EXCEPT the
-root device of busses.  Everything else is wrong and should have their
-code fixed up (i.e. "breakpoint", "software", etc.)
+Using ethernet-pse@1 will require to use "reg" or "ranges" properties.
+Which makes no sense in this use case. I need to fix the schema instead by
+allowing this patter with following regex: "^ethernet-pse(@.*|-[0-9a-f])*$"
 
-thanks,
+Should I send schema fix together with this patch?
 
-greg k-h
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
