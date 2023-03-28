@@ -2,101 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF046CC117
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 326746CC11B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233183AbjC1NgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
+        id S232802AbjC1NiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232776AbjC1NgK (ORCPT
+        with ESMTP id S232303AbjC1NiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:36:10 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB072713;
-        Tue, 28 Mar 2023 06:35:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A4483CE1D0B;
-        Tue, 28 Mar 2023 13:35:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC6ACC4339C;
-        Tue, 28 Mar 2023 13:35:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680010516;
-        bh=k7B50eOUaIqO0y0tx+624NKxyiYI62MTUuFy5J3oNR4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oFgEPrvuCVNG1w1Ymg3p8HqRstdy/Y66hPoy0MHI/dmhNuf2RvaqVn+3NrixP7Ho5
-         wanGMkr3pqtcjBSM0BbqOGPz7UrGCyraevUnYbCTOsx3V/w7KZrYvJ1GMM+b8A3LSM
-         giAdwHthr2jMeZ8WwdDR3JV4li1FrgHrk8ig8mPlJGYOyYpOnTMOBJln+te1FDqKia
-         OnlvRm4a8cCH3t6rOEFlgTdAGn4gayvZFaeQlf1A+Bt/QelvyxQR2ms0hJ6fExA9O3
-         32OZRgsO0wsTW4qDa0zoBj4guHe3cS+JVod+csfJMeWlAFFAj83bvmaujfjoCY+sRl
-         APO0yNfRO82yA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ph9U1-0008Se-5W; Tue, 28 Mar 2023 15:35:29 +0200
-Date:   Tue, 28 Mar 2023 15:35:29 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
-        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 5/5] usb: dwc3: qcom: Allow runtime PM
-Message-ID: <ZCLtITAsPiCnmndQ@hovoldconsulting.com>
-References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
- <20230325165217.31069-6-manivannan.sadhasivam@linaro.org>
- <ZCK3fGkgowvAd6Dw@hovoldconsulting.com>
- <20230328100501.GD5695@thinkpad>
- <ZCLbCJi80AKyVgnq@hovoldconsulting.com>
- <20230328125705.GG5695@thinkpad>
+        Tue, 28 Mar 2023 09:38:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5598CCA07
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:36:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680010604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=38WhB1xhz6iO9xwaGoOJESCsJJ1GMow8wYkaX1OpVf0=;
+        b=cznFg6XMfwGXc6k4vXdyQ5Vkq5Z1pzwBSGo/CuLUQ/ihAGv2IVc+CT6O74rsirowiHPYKB
+        h3wyUFwDyLxIoZ7niFj0zHklX8diSCmSXmo7Tu7Sck9+rRq85h+xcSRa/l4EiPQnRttvXm
+        WixAkV5WPB8LCRd/dJFHQ4AldqbgSgk=
+Received: from mail-vs1-f70.google.com (mail-vs1-f70.google.com
+ [209.85.217.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-467-eUazwkn0MdabtsOMonE5fw-1; Tue, 28 Mar 2023 09:36:43 -0400
+X-MC-Unique: eUazwkn0MdabtsOMonE5fw-1
+Received: by mail-vs1-f70.google.com with SMTP id y22-20020a67d216000000b00425ef23aa54so3702538vsi.20
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:36:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680010602;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=38WhB1xhz6iO9xwaGoOJESCsJJ1GMow8wYkaX1OpVf0=;
+        b=P/1AXrbw9SVXkIu5VMdcY3lH7rccCjCAfjkAigYIwUoRW6wXCsHVxI/48qD//0rNmO
+         fsod43cSI78FHhKgJT1rnHelKsFpFQoQWmO+flzPX0tzZPrYMG1cBrciGa5I4aKDls1J
+         WgOjTYD0H6LLA2APRgbfqUVstM9+cXG8vsb1eyDJ65aTVHTRHJcREwH5kZk3ChULjY1a
+         iKEDHTJriz/P5CkF/k5SRTd5C/pbL68KeNok5GlAQXaFcVGKL12X6TJZs/zwRLP5qHQw
+         AkgBNVzCWIu0i1bGhEkHLfUDjQ3NkkIZg7LCwA6u4ZCXZtZk4aPg3hBGveQkQC5qO3CV
+         lUPw==
+X-Gm-Message-State: AAQBX9evU3MLDB3f8FA6yifGFV7ikLF48Erqt0ZZ2YFvCbUCp4OGvBlG
+        CAxd/ZwryTnybztvSpkFmPprlSuTSWPYmA98YiSKHbyUeAgWUQSWeCu6ZCvQl/OGK9jS7gEBTPs
+        E6Hrg8P5Jn/70Vh956R9Vy0yl6Ys3gP+wfRtoUo+uZrxaaFM//EIwwg==
+X-Received: by 2002:a67:d78d:0:b0:425:dd21:acc8 with SMTP id q13-20020a67d78d000000b00425dd21acc8mr8457957vsj.7.1680010602695;
+        Tue, 28 Mar 2023 06:36:42 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aD49wliP3FptdixB7cu5C7ONZu/9rIPSHjym/CTFrbaUpovBd8LuxZBaGrdm3pSCVMhO5vQdqJWYOKsWvWXH8=
+X-Received: by 2002:a67:d78d:0:b0:425:dd21:acc8 with SMTP id
+ q13-20020a67d78d000000b00425dd21acc8mr8457942vsj.7.1680010602358; Tue, 28 Mar
+ 2023 06:36:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328125705.GG5695@thinkpad>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230328-soc-mailbox-v1-0-3953814532fd@marcan.st> <20230328-soc-mailbox-v1-1-3953814532fd@marcan.st>
+In-Reply-To: <20230328-soc-mailbox-v1-1-3953814532fd@marcan.st>
+From:   Eric Curtin <ecurtin@redhat.com>
+Date:   Tue, 28 Mar 2023 14:36:26 +0100
+Message-ID: <CAOgh=Fwur3_aBhKqRW-JaTKXHJaKhCpvA-9d7ZKhMbRmtGYHWQ@mail.gmail.com>
+Subject: Re: [PATCH 1/5] soc: apple: rtkit: Get rid of apple_rtkit_send_message_wait
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Janne Grunau <j@jannau.net>, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 06:27:05PM +0530, Manivannan Sadhasivam wrote:
-> On Tue, Mar 28, 2023 at 02:18:16PM +0200, Johan Hovold wrote:
+On Tue, 28 Mar 2023 at 14:20, Hector Martin <marcan@marcan.st> wrote:
+>
+> It is fundamentally broken and has no users. Just remove it.
+>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 
-> > > > > @@ -948,6 +948,8 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
-> > > > >  	struct device *dev = &pdev->dev;
-> > > > >  	int i;
-> > > > >  
-> > > > > +	pm_runtime_get_sync(dev);
-> > > > 
-> > > > This call needs to be balanced. But this is a fix for a bug in the
-> > > > current implementation that should go in a separate patch.
-> > > 
-> > > Ok. For balancing I could add pm_runtime_put_noidle() before pm_runtime_disable.
-> > 
-> > You should do it after disabling runtime pm.
-> 
-> May I know why?
+Watched the stream
 
-The usage counter should be balanced after disabling runtime PM so that
-there is no window where you could get a racing suspend request.
+Acked-by: Eric Curtin <ecurtin@redhat.com>
 
-> > > > > +
-> > > > >  	device_remove_software_node(&qcom->dwc3->dev);
-> > > > >  	of_platform_depopulate(dev);
-> > > > >  
-> > > > > @@ -960,7 +962,6 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
-> > > > >  	dwc3_qcom_interconnect_exit(qcom);
-> > > > >  	reset_control_assert(qcom->resets);
-> > > > >  
-> > > > > -	pm_runtime_allow(dev);
-> > > > >  	pm_runtime_disable(dev);
-> > > > >  
-> > > > >  	return 0;
+Is mise le meas/Regards,
 
-Johan
+Eric Curtin
+
+> ---
+>  drivers/soc/apple/rtkit.c       | 32 --------------------------------
+>  include/linux/soc/apple/rtkit.h | 18 ------------------
+>  2 files changed, 50 deletions(-)
+>
+> diff --git a/drivers/soc/apple/rtkit.c b/drivers/soc/apple/rtkit.c
+> index d9f19dc99da5..7c9b9f25bbc1 100644
+> --- a/drivers/soc/apple/rtkit.c
+> +++ b/drivers/soc/apple/rtkit.c
+> @@ -641,38 +641,6 @@ int apple_rtkit_send_message(struct apple_rtkit *rtk, u8 ep, u64 message,
+>  }
+>  EXPORT_SYMBOL_GPL(apple_rtkit_send_message);
+>
+> -int apple_rtkit_send_message_wait(struct apple_rtkit *rtk, u8 ep, u64 message,
+> -                                 unsigned long timeout, bool atomic)
+> -{
+> -       DECLARE_COMPLETION_ONSTACK(completion);
+> -       int ret;
+> -       long t;
+> -
+> -       ret = apple_rtkit_send_message(rtk, ep, message, &completion, atomic);
+> -       if (ret < 0)
+> -               return ret;
+> -
+> -       if (atomic) {
+> -               ret = mbox_flush(rtk->mbox_chan, timeout);
+> -               if (ret < 0)
+> -                       return ret;
+> -
+> -               if (try_wait_for_completion(&completion))
+> -                       return 0;
+> -
+> -               return -ETIME;
+> -       } else {
+> -               t = wait_for_completion_interruptible_timeout(
+> -                       &completion, msecs_to_jiffies(timeout));
+> -               if (t < 0)
+> -                       return t;
+> -               else if (t == 0)
+> -                       return -ETIME;
+> -               return 0;
+> -       }
+> -}
+> -EXPORT_SYMBOL_GPL(apple_rtkit_send_message_wait);
+> -
+>  int apple_rtkit_poll(struct apple_rtkit *rtk)
+>  {
+>         return mbox_client_peek_data(rtk->mbox_chan);
+> diff --git a/include/linux/soc/apple/rtkit.h b/include/linux/soc/apple/rtkit.h
+> index fc456f75c131..8c9ca857ccf6 100644
+> --- a/include/linux/soc/apple/rtkit.h
+> +++ b/include/linux/soc/apple/rtkit.h
+> @@ -160,24 +160,6 @@ int apple_rtkit_start_ep(struct apple_rtkit *rtk, u8 endpoint);
+>  int apple_rtkit_send_message(struct apple_rtkit *rtk, u8 ep, u64 message,
+>                              struct completion *completion, bool atomic);
+>
+> -/*
+> - * Send a message to the given endpoint and wait until it has been submitted
+> - * to the hardware FIFO.
+> - * Will return zero on success and a negative error code on failure
+> - * (e.g. -ETIME when the message couldn't be written within the given
+> - * timeout)
+> - *
+> - * @rtk:            RTKit reference
+> - * @ep:             target endpoint
+> - * @message:        message to be sent
+> - * @timeout:        timeout in milliseconds to allow the message transmission
+> - *                  to be completed
+> - * @atomic:         if set to true this function can be called from atomic
+> - *                  context.
+> - */
+> -int apple_rtkit_send_message_wait(struct apple_rtkit *rtk, u8 ep, u64 message,
+> -                                 unsigned long timeout, bool atomic);
+> -
+>  /*
+>   * Process incoming messages in atomic context.
+>   * This only guarantees that messages arrive as far as the recv_message_early
+>
+> --
+> 2.40.0
+>
+>
+
