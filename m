@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB22F6CB989
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4DB6CB975
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbjC1IfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232289AbjC1Ieu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232277AbjC1Ieu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 28 Mar 2023 04:34:50 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA9A420A;
-        Tue, 28 Mar 2023 01:34:49 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229543AbjC1Ies (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Mar 2023 04:34:48 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2A0420A;
+        Tue, 28 Mar 2023 01:34:47 -0700 (PDT)
 Date:   Tue, 28 Mar 2023 08:34:45 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679992486;
+        s=2020; t=1679992485;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8m0BjTV4H8QXJz3U7MbSbwIQl4vClbzedXdI0q9vbk0=;
-        b=A5Rs7ZlVywkHISCBs2ltP5ZuEGo59QChlukr4iIaaJX1d9T/uqlOQFiIpIjaKLBCyRJ6Op
-        1APtDLAf7FyJsz7oqgfsxYbeMALBspyauPXQ0T2ivpRMkL7A+BEJwPJuoWLALGZZ7afU41
-        0f0hY7ynX1Ixrra4d8cvQlYeXGU7v4EAp5KF0wih/wnSCwqFilU+cgDlg5WCWRazI72zC5
-        pDoC6GSHWJurczQUTXmncQ78E1SheM2Hi4GH5KifQFdhsouTWcoh+pvvLugUHzNhDAKqkH
-        FN8trF+9jLbYC5nFbN7T/DBq2dBYQ+ToqY4IRpYwry2oPykK6/DnBSgSfwnSLg==
+        bh=JwnODAabhQth5uPvugI0OVmAVkGREG74VHgJRy0IVJk=;
+        b=OOdP35I/3UcZDG6TUGzUxPHPbHwqQ19fkFhusHa3gjLbmHzF6SxN9NgqCL6+XxDnK+lqIa
+        xHzr47pV1J0D4GEGWa7uXINGb0OIVuciXF40hR3V4i15LlAMtVCKmCwZerLxte7Dw43hiD
+        JCYPJZicV3akjEXhYEbCJNvF2CxwpSWTsbjgMnNBPc4ER+EhCRbM3rjIODUujBYqBZckQb
+        an6YaGjonGD0obc6xWgbSdJFmZtAJeo4vSFQ89/xUpqsMTlVVG8RehMk31iJFp23GQensj
+        Thh3TPpVCLM4CWecvljGiF6lcPeLQPl6QZ3p2kL1eeYhlVOL0FmcQgpH0BV1LQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679992486;
+        s=2020e; t=1679992485;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8m0BjTV4H8QXJz3U7MbSbwIQl4vClbzedXdI0q9vbk0=;
-        b=68mO9lTUsCvowwnlL0b2hMymSZLqP9J9P6O3aIUHwg1WEQgsZQXIDF7JesH//x9s22ypRZ
-        TxCn3p5D+MSW/DAg==
+        bh=JwnODAabhQth5uPvugI0OVmAVkGREG74VHgJRy0IVJk=;
+        b=/IcDuLfFtcmOyg0aOFo84DfrAuTROQ2Z0lLprU4egfclBPSyNOFPRsuR4Kl92GceVu48qy
+        LYJNkPbp8XD1xaDA==
 From:   "tip-bot2 for Valentin Schneider" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/core] irq_work: Trace self-IPIs sent via arch_irq_work_raise()
+Subject: [tip: smp/core] smp: reword smp call IPI comment
 Cc:     Valentin Schneider <vschneid@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>, x86@kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230307143558.294354-5-vschneid@redhat.com>
-References: <20230307143558.294354-5-vschneid@redhat.com>
+In-Reply-To: <20230307143558.294354-7-vschneid@redhat.com>
+References: <20230307143558.294354-7-vschneid@redhat.com>
 MIME-Version: 1.0
-Message-ID: <167999248584.5837.2675247233861998370.tip-bot2@tip-bot2>
+Message-ID: <167999248523.5837.16636131269794439264.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,63 +66,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the smp/core branch of tip:
 
-Commit-ID:     4468161a5ca2ea239c92de7c0a0dca61854ec4da
-Gitweb:        https://git.kernel.org/tip/4468161a5ca2ea239c92de7c0a0dca61854ec4da
+Commit-ID:     253a0fb4c62827cdcaf43afcea5d675507eaf7a3
+Gitweb:        https://git.kernel.org/tip/253a0fb4c62827cdcaf43afcea5d675507eaf7a3
 Author:        Valentin Schneider <vschneid@redhat.com>
-AuthorDate:    Tue, 07 Mar 2023 14:35:55 
+AuthorDate:    Tue, 07 Mar 2023 14:35:57 
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 24 Mar 2023 11:01:27 +01:00
+CommitterDate: Fri, 24 Mar 2023 11:01:28 +01:00
 
-irq_work: Trace self-IPIs sent via arch_irq_work_raise()
+smp: reword smp call IPI comment
 
-IPIs sent to remote CPUs via irq_work_queue_on() are now covered by
-trace_ipi_send_cpumask(), add another instance of the tracepoint to cover
-self-IPIs.
+Accessing the call_single_queue hasn't involved a spinlock since 2014:
+
+  6897fc22ea01 ("kernel: use lockless list for smp_call_function_single")
+
+The llist operations (namely cmpxchg() and xchg()) provide similar ordering
+guarantees, update the comment to lessen confusion.
 
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Link: https://lore.kernel.org/r/20230307143558.294354-5-vschneid@redhat.com
+Link: https://lore.kernel.org/r/20230307143558.294354-7-vschneid@redhat.com
 ---
- kernel/irq_work.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ kernel/smp.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/irq_work.c b/kernel/irq_work.c
-index 7afa40f..c33e88e 100644
---- a/kernel/irq_work.c
-+++ b/kernel/irq_work.c
-@@ -22,6 +22,8 @@
- #include <asm/processor.h>
- #include <linux/kasan.h>
- 
-+#include <trace/events/ipi.h>
-+
- static DEFINE_PER_CPU(struct llist_head, raised_list);
- static DEFINE_PER_CPU(struct llist_head, lazy_list);
- static DEFINE_PER_CPU(struct task_struct *, irq_workd);
-@@ -74,6 +76,16 @@ void __weak arch_irq_work_raise(void)
- 	 */
- }
- 
-+static __always_inline void irq_work_raise(struct irq_work *work)
-+{
-+	if (trace_ipi_send_cpumask_enabled() && arch_irq_work_has_interrupt())
-+		trace_ipi_send_cpumask(cpumask_of(smp_processor_id()),
-+				       _RET_IP_,
-+				       work->func);
-+
-+	arch_irq_work_raise();
-+}
-+
- /* Enqueue on current CPU, work must already be claimed and preempt disabled */
- static void __irq_work_queue_local(struct irq_work *work)
+diff --git a/kernel/smp.c b/kernel/smp.c
+index 03e6d57..6bbfabb 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -312,9 +312,10 @@ static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
+ void __smp_call_single_queue(int cpu, struct llist_node *node)
  {
-@@ -99,7 +111,7 @@ static void __irq_work_queue_local(struct irq_work *work)
- 
- 	/* If the work is "lazy", handle it from next tick if any */
- 	if (!lazy_work || tick_nohz_tick_stopped())
--		arch_irq_work_raise();
-+		irq_work_raise(work);
- }
- 
- /* Enqueue the irq work @work on the current CPU */
+ 	/*
+-	 * The list addition should be visible before sending the IPI
+-	 * handler locks the list to pull the entry off it because of
+-	 * normal cache coherency rules implied by spinlocks.
++	 * The list addition should be visible to the target CPU when it pops
++	 * the head of the list to pull the entry off it in the IPI handler
++	 * because of normal cache coherency rules implied by the underlying
++	 * llist ops.
+ 	 *
+ 	 * If IPIs can go out of order to the cache coherency protocol
+ 	 * in an architecture, sufficient synchronisation should be added
