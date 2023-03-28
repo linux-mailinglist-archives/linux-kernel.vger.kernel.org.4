@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9516CC1BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E2D6CC1D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232819AbjC1OKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
+        id S232984AbjC1OPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbjC1OKi (ORCPT
+        with ESMTP id S232918AbjC1OO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:10:38 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACE6D307;
-        Tue, 28 Mar 2023 07:09:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680012568; x=1711548568;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p+jhuM41Z8A7O30nRgxLD83meAEpxjYd5HkJJ3O8Yq0=;
-  b=PPqi/5lfUs954+tjLjkUQaxge/WoJMmRr3Jj+m6Co8gEz8bH6is7yVMZ
-   wG+/IYSzIVy/icNnXUf868tlDlQ6voEOGYkE3WyJS0+rIuMSfmEIi5vyo
-   hwmJu0mxw8tedlMFUfpEOvju3sxQSP1CHJkimxxdMPYXCTfb22/no4SpU
-   F55I/gaxs6/afsP+DGszMQUcJo4OYD52fFv38YERU3wAbHTpauQZcq8+Z
-   s/WeMHvhvtu4iKbV1DRA+woMS5Cxj/KqVtbLljAt1nY/sxnQhGGzLOwOv
-   UDkZLbQp/ebeZC2w6RNSsLOfF1ejMOAA8CfCtgyll0Q/7yz1HCKCa60LR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="342161339"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="342161339"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 07:09:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="827491097"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="827491097"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 28 Mar 2023 07:08:57 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 28 Mar 2023 17:08:56 +0300
-Date:   Tue, 28 Mar 2023 17:08:56 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     linux@roeck-us.net, andersson@kernel.org, robh@kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/1] usb: typec: tcpm: Support role-switch remote
- endpoint in connector
-Message-ID: <ZCL0+COeAkinuaBL@kuha.fi.intel.com>
-References: <20230325011552.2241155-1-bryan.odonoghue@linaro.org>
- <20230325011552.2241155-2-bryan.odonoghue@linaro.org>
+        Tue, 28 Mar 2023 10:14:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BCAC656
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:13:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680012749;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jFnQl8ATxoafGr28+mJKj23xjOS1vRu21jhKl7IouiY=;
+        b=Y2IwJzajupMsDIWNXxUAVGNyXkFphemcJwsf973Cm/az0M57mouZ/7Az7+EE9XmnJaCKzk
+        cZkMRGCS0G0tW2/QEWvdoK/Zg9BT4Ng3FcAgPhHy2Ow13FUJUJQHMsr3WpFOHEMcSV/dL/
+        fpCp9dBDyub532jB+MeRsDUFxcYsuS0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-189-ycdylGt2MaKNYmlGjU3KkA-1; Tue, 28 Mar 2023 10:12:27 -0400
+X-MC-Unique: ycdylGt2MaKNYmlGjU3KkA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD323100DEAE;
+        Tue, 28 Mar 2023 14:12:26 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 88E5C492C13;
+        Tue, 28 Mar 2023 14:12:25 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230111052515.53941-4-zhujia.zj@bytedance.com>
+References: <20230111052515.53941-4-zhujia.zj@bytedance.com> <20230111052515.53941-1-zhujia.zj@bytedance.com>
+To:     Jia Zhu <zhujia.zj@bytedance.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        linux-erofs@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xin Yin <yinxin.x@bytedance.com>,
+        Jingbo Xu <jefflexu@linux.alibaba.com>
+Subject: Re: [PATCH V4 3/5] cachefiles: resend an open request if the read request's object is closed
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230325011552.2241155-2-bryan.odonoghue@linaro.org>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <132776.1680012744.1@warthog.procyon.org.uk>
+Date:   Tue, 28 Mar 2023 15:12:24 +0100
+Message-ID: <132777.1680012744@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,117 +66,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 01:15:52AM +0000, Bryan O'Donoghue wrote:
-> Right now in TCPM when we want to send a role-switch message the
-> remote-endpoint must appear inside of the TCPM bound node, not in the
-> connector associated with TCPM.
-> 
-> &typec {
-> 	status = "okay";
-> 
-> 	port {
-> 		typec_role_switch: endpoint {
-> 			remote-endpoint = <&dwc3_role_switch>;
-> 		};
-> 	};
-> 
-> 	connector {
-> 		compatible = "usb-c-connector";
-> 
-> 		power-role = "source";
-> 		data-role = "dual";
-> 		self-powered;
-> 
-> 		ports {
-> 			#address-cells = <1>;
-> 			#size-cells = <0>;
-> 
-> 			port@0 {
-> 				reg = <0>;
-> 				typec_mux: endpoint {
-> 					remote-endpoint = <&phy_typec_mux>;
-> 				};
-> 			};
-> 		};
-> 	};
-> };
-> 
-> This change makes it possible to declare the remote-endpoint inside of the
-> connector of the TCPM e.g.
-> 
-> &typec {
-> 	status = "okay";
-> 
-> 	connector {
-> 		compatible = "usb-c-connector";
-> 
-> 		power-role = "source";
-> 		data-role = "dual";
-> 		self-powered;
-> 
-> 		ports {
-> 			#address-cells = <1>;
-> 			#size-cells = <0>;
-> 
-> 			port@0 {
-> 				reg = <0>;
-> 				typec_role_switch: endpoint {
-> 					remote-endpoint = <&dwc3_role_switch>;
-> 				};
-> 			};
-> 			port@1 {
-> 				reg = <1>;
-> 				typec_mux: endpoint {
-> 					remote-endpoint = <&phy_typec_mux>;
-> 				};
-> 			};
-> 		};
-> 	};
-> };
-> 
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 1ee774c263f08..a62fecf3bb44c 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -6515,6 +6515,7 @@ static enum hrtimer_restart send_discover_timer_handler(struct hrtimer *timer)
->  struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->  {
->  	struct tcpm_port *port;
-> +	struct fwnode_handle *fwnode;
->  	int err;
->  
->  	if (!dev || !tcpc ||
-> @@ -6582,6 +6583,14 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->  		goto out_destroy_wq;
->  	}
->  
-> +	if (!port->role_sw) {
-> +		fwnode = device_get_named_child_node(port->dev, "connector");
+Jia Zhu <zhujia.zj@bytedance.com> wrote:
 
-You already have that assigned to tcpc->fwnode, no?
+> +	struct cachefiles_object *object =
+> +		((struct cachefiles_ondemand_info *)work)->object;
 
-At least drivers/usb/typec/tcpm/tcpci.c assignes it there, and I think
-so do the other port controller drivers.
+container_of().
 
-> +		if (fwnode) {
-> +			port->role_sw = fwnode_usb_role_switch_get(fwnode);
-> +			fwnode_handle_put(fwnode);
-> +		}
-> +	}
+> +			continue;
+> +		} else if (cachefiles_ondemand_object_is_reopening(object)) {
 
-If that is the case, then I think this is enough:
+The "else" is unnecessary.
 
-        if (!port->role_sw)
-		port->role_sw = fwnode_usb_role_switch_get(tcpc->fwnode);
+> +static void ondemand_object_worker(struct work_struct *work)
+> +{
+> +	struct cachefiles_object *object =
+> +		((struct cachefiles_ondemand_info *)work)->object;
+> +
+> +	cachefiles_ondemand_init_object(object);
+> +}
 
-Or maybe I missed something. If I did then sorry for the noise :-)
+I can't help but feel there's some missing exclusion/locking.  This feels like
+it really ought to be driven from the fscache object state machine.
 
-thanks,
-
--- 
-heikki
