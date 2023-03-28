@@ -2,274 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E1C6CBF95
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A906CBFA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbjC1MqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
+        id S232572AbjC1MsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232909AbjC1Mp5 (ORCPT
+        with ESMTP id S231819AbjC1MsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:45:57 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18259AF04
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:45:26 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id n10-20020a05600c4f8a00b003ee93d2c914so9003594wmq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:45:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680007523;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JzVXnbBiEEn4qwo5Qci6PsToee+sdMsxUyL4F4VgKW4=;
-        b=b9+3IFGUpi74Su+dszskACLdtXQsaVX99X99aorKJOTGjdsV50HecaelFWzTuXSMP9
-         Uq2hTN7rIEsjUS7L/dIYLJIpIM0DOAdt0KIQ36JhJ8xOlHXW+CbtQ1EsdYKVGAMnTUsU
-         MXTv4GHrwXeSweXv98WUbm86hFAiGNa8K7PkrssiJ1dZ2ZANKA5o0uboyVy8bzx99Njp
-         GbSQCi0Bs1IhmfQWxwWkxr1zPkgexNVkQlAPH99b+aDim8DsYGew6x+XEwUo4EKCMS0r
-         q71jbYQPp3E+6Cteidfzwm1e3xsJalVm4tQFDaHRBChIbtSV6HGsgSgGBwdVcPn/ltQU
-         l5dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680007523;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JzVXnbBiEEn4qwo5Qci6PsToee+sdMsxUyL4F4VgKW4=;
-        b=1UKgBwmEjo8V0MJzHFObKylfFnwA+PuYJ5A6zSPb8dy5AARYtg4J45Z27RmfLqa0pE
-         taQuOmr7S3uNa8IClBbd+GriVuMZ0e5KTF4z7LRL8eMqb9iF9+6F2K+LkRBmq+0P36pH
-         iLwNwV9uS67jUXqfF0qACN2ln7Qs3ZFq13lxY409gb5GPg50tnWMMniyLPy5O/jIMarm
-         Y7wkqcbHTVaJReCxPiWjTCLwA2gi/l0LzXnavTvPO5L53etNjKPmGaFlBuC7rCND6plo
-         YRL2NnTG+7+f4xWFdAd4w9x7NwBs1khqPxUdQWH48NeIWAxJkmTH7yaHMMxyxbT7V18Z
-         R4eg==
-X-Gm-Message-State: AO0yUKXrzmbtXGBzc+yF8+XB+9Y4LFbro32EH5CaDvaNTRqWI1eEpeK8
-        QHsp6MY7htusO+1fNqRvit3ORcQ4Zc8/nkmS4xamQw==
-X-Google-Smtp-Source: AK7set+ledd+drpHIpsG7+OgCtMnLKfAZV+VWtOxJbQIKrW8vdv2q4unjuYjgC1QPZaklT3wJNz+qVVhl/wDfND7xZU=
-X-Received: by 2002:a1c:4b07:0:b0:3df:97b0:ba02 with SMTP id
- y7-20020a1c4b07000000b003df97b0ba02mr3490013wma.3.1680007522289; Tue, 28 Mar
- 2023 05:45:22 -0700 (PDT)
+        Tue, 28 Mar 2023 08:48:13 -0400
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DA8AD2E;
+        Tue, 28 Mar 2023 05:47:54 -0700 (PDT)
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SA0s6m004579;
+        Tue, 28 Mar 2023 05:47:09 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=PPS06212021;
+ bh=naE6LNIxPHawDqJIfZUggQ4oY0WnkTWyO5LaGtkXH3Q=;
+ b=qIMkHDaXKn2w3yvqWzJS0t3sdf97rU5vfbc6wvPBWNkvhjROhqhT5kiE6TPhss6c92oZ
+ Tr3tP98YgOFpAp67cVUkbVk3X5z9jslh6qQ1gmOTXYrgXQBfoUCXpoN0dEwkN5llCl+/
+ EQHVX21zQJQoNGijxbhk6Nlfm81uoxaihC4ITunaK5nBVL63K8Nmp3PMr94aJV1+RrpA
+ mftwSlrkVbNYFGsBAq73ciQu8aa9Q9MDuI+dzREQPbntWecczN6bJ8hAGAxoDaU8Rk/Q
+ pibkqwXA/L5EWX9QjIZJ+fl6qxYyKVuE5vKFpxBuYhgjr1waK8xKSuVRgwhVHGIspeNW bw== 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2173.outbound.protection.outlook.com [104.47.56.173])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3phv85u3a8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 05:47:09 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FtyGXrDYXa5po7jMbNIggWC/YSP8MtLs2dxRXJNCGfW6tgWXEIOFyj078kII4foh22JPQG5bwgITVLMgFROnf8CSJ3ZrjkpKlxGopRWTjyt+t5lGebPYv/Nvk+7gRb8PVSudkkaoTmWoCfX6yhAhT2I/7HGX0LTVLue5FZMojWdq+4+0Efo+/F2lEjq335yhuXOhgk0CaLIqqqtqNkWWbWU5mItEu9jg7vCFotXbHy9hck9RPYL1wBA4jmJmA7H6nUNfSb5QALoXtBGGd7HfRNK4XLhHK2vAeYMLjPh+R+Zeq2HWAd0gU2mv7o4UjOqWuFW6TKt1ucZiyRAMhzNQkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=naE6LNIxPHawDqJIfZUggQ4oY0WnkTWyO5LaGtkXH3Q=;
+ b=Ojg2I+G6FHxgS9Xl735958U9yxtRInH+Rkufz4kNBqD3brYnRiE1Y1amtiFp7l2MEhZRZkSw31movS3fk908MaJbKEUvIilSHXktvXSC1GzT7EK2imLmW0It+evuKxh5Euyk3/QKvAMxnHZWmUdlWNbfmG3xKysdgAYG0h652Zneu7EYustZ2tvEqXN+Yppou481EsjBbDj9cE2zHUO8pAwMCuC9fe0WTNtbV+PJM58AB6bCf/gcVCgORN5ofi62JAe9q5tSHTeCEd858DqcBlK4Reos/TW54nkJnHdUzRrWPs7QmtSIrggrpS8Ba2fI/w6Ng+ZBJ0CVSptjYrSSiA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from PH0PR11MB4952.namprd11.prod.outlook.com (2603:10b6:510:40::15)
+ by SN7PR11MB7466.namprd11.prod.outlook.com (2603:10b6:806:34c::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.30; Tue, 28 Mar
+ 2023 12:47:06 +0000
+Received: from PH0PR11MB4952.namprd11.prod.outlook.com
+ ([fe80::95b3:67a1:30a6:f10e]) by PH0PR11MB4952.namprd11.prod.outlook.com
+ ([fe80::95b3:67a1:30a6:f10e%5]) with mapi id 15.20.6222.033; Tue, 28 Mar 2023
+ 12:47:06 +0000
+From:   Dragos-Marian Panait <dragos.panait@windriver.com>
+To:     stable@vger.kernel.org
+Cc:     George Kennedy <george.kennedy@oracle.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 5.4 0/1] tun: avoid double free in tun_free_netdev
+Date:   Tue, 28 Mar 2023 15:46:27 +0300
+Message-Id: <20230328124628.1645138-1-dragos.panait@windriver.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR04CA0050.eurprd04.prod.outlook.com
+ (2603:10a6:802:2::21) To PH0PR11MB4952.namprd11.prod.outlook.com
+ (2603:10b6:510:40::15)
 MIME-Version: 1.0
-References: <cover.1679915278.git.mazziesaccount@gmail.com>
- <f2c7f7b04f7e4ee7b9cef73ecba672f5fa40eb73.1679915278.git.mazziesaccount@gmail.com>
- <ZCGFgypeuJXqNwQt@kroah.com> <e027fc0c-83e0-be6f-d62b-dac00ce9b761@gmail.com> <ZCGONl0mC8oyBj-0@kroah.com>
-In-Reply-To: <ZCGONl0mC8oyBj-0@kroah.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 28 Mar 2023 20:45:09 +0800
-Message-ID: <CABVgOSnUCsxPf1mAL03GQzaw_kFtgf5J7aTPodo=j6O+wYZ2iQ@mail.gmail.com>
-Subject: Re: [PATCH v6 3/7] kunit: Add kunit wrappers for (root) device creation
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        Maxime Ripard <maxime@cerno.tech>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a2e95e05f7f53bab"
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4952:EE_|SN7PR11MB7466:EE_
+X-MS-Office365-Filtering-Correlation-Id: 21b9badc-20e3-45b6-6e24-08db2f8a8979
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QzXr97P64tRlCSFWvdCS1xwwoPq6mxRZEvjg8MFBCdfzX70PmVgWJSy6eipy8ESOt82P3gFJ8Z5Wf41Hg1/JhrPRWghpnAFpTwGCRWsetDuenm7MpFn25RnX+kBJXMLEgen7Hi1eZPJmK3him0BeQgzHZOjfCZuG4CHZZE5nfwf49HkjYEr+woLbtnwOtGdUKvemVcExeFGRtpqww0t3vImgRx2p2tnvWvnz5v+cHWmL3NPLF3PQTfsqr9a6Uc9ixo7Qc9G1jITCbAYfgsL7RlMisFHvNNi8fre9Aua4/Rfi0rjw7Sid0y8E/K5p0bjCR+Tj5TRhnoPVogVF89ZqKxSTyyA67xlaS/HLOZeXpS87KMIfSyJeriyrrfk7vTQkr9Jh8j849oXXBGkdRyWf5fH38eqeTd+gdv4cfi4Lr7KTcJ4Mi5uE6ZwG5YEFtO8/gQWKzeXmMa/QBQdBJwJtyiwGvML5WFIrHZROmD4sfvt/8bIx1LgIwvzSFNXI4hlOp6PnET7VVwRF6AEUFVcN3JLWXK9xNXm9g+voJR/VawdqxjMvx2KDiT2g+/yH9otS3PGyRzrJ/VmpmOen/ZAyic/khfI8ptp5FoV0pquF9yo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4952.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(39850400004)(396003)(136003)(451199021)(66946007)(41300700001)(38100700002)(38350700002)(478600001)(54906003)(6916009)(4326008)(66476007)(8676002)(66556008)(316002)(8936002)(5660300002)(4744005)(52116002)(966005)(186003)(83380400001)(26005)(6486002)(2906002)(36756003)(2616005)(6512007)(6506007)(1076003)(86362001)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nDCWbOAfI2YLH9ojDGs9npRd7wsIG0Te3tDwvtzYF+7jak2B7C0uB3UsOJ7C?=
+ =?us-ascii?Q?VVM0KO7d2U6BsgkdzSbqMtSfAJI3GGNKC9LYz0HIcH0X02SmCzAB1zEBsk28?=
+ =?us-ascii?Q?qXMbqJ/AyvJOYlkPY5VQ1j9gPkm78/9BOsRoq8yxgO8ZqjDpw+ui/t3DqBo+?=
+ =?us-ascii?Q?5ttZYegMbRtTewZIcq42/IKrOeP6CURcozod8Tl73wVaxEpUrm5Oym6GOGL4?=
+ =?us-ascii?Q?hcrctCnqEFI6VmEftOWTAOERqsBqZc/u+ZRHFo4s/60COGss1kWbv1+C1z6k?=
+ =?us-ascii?Q?OCBboce7oqXTGu8sWk3tAM19OGmIEnyb2QTyGZNR/77higZ9G313fWovx8No?=
+ =?us-ascii?Q?Fv9YGfzhxGDMpxsi4omGWnJPy9rYqc+hfSODIX+SX9Qd+Wb+xQ1zO+gqqVt1?=
+ =?us-ascii?Q?UiVs7nzNjxgJLUwGA6YLBlQbrq85P7xDaPObUUPND0mXvz2+TTcU7ZmgoD7e?=
+ =?us-ascii?Q?fCDatSsq0NWA/NWqZrpj67QSegtf2P+Rl7hFEeCf/mOd2ZuV0+ikI9FsWb/Y?=
+ =?us-ascii?Q?aW72K/73c2g3KWYeRudhZw0SGUdkutjlmDEj+uqh2UFEOc94/a85AEY3Zhgt?=
+ =?us-ascii?Q?oENPEpPg6xixlTFMSmQiTs4AADIMMyOZoFNwN9fTiwW3/L38N35Qugvecz6I?=
+ =?us-ascii?Q?MLsJua15/ruUdb/iY+imSE9YIzJ2wmhWbxj9P8SY5GZKEHEORC7E3vo+52L+?=
+ =?us-ascii?Q?Kh5Totrb8DpD1v8mATW0qzSvn93TWL664Rweblej2HChaCvCgobNKjUZThSX?=
+ =?us-ascii?Q?e4+d33+szyfL8tM2jYzXSYJgn3/DG4c6q58D/62b6DOr2ualm/wHgsHbtBet?=
+ =?us-ascii?Q?EsK9BOHRcbiORbQuXXwzOGCyDJsubq1X+DS7G1uAiWr5ft172WYT/N2a81jH?=
+ =?us-ascii?Q?sY0LsxgRPd5gStGdg7NIdSQVGlND2G2rE/jZR7bfkuW8qh75AYnvc0fbu9mi?=
+ =?us-ascii?Q?sasOqb6z9PkJKow7WwPsQPtbxxsN2u7l1cBcRD7mtlY7v4QvXcYuDX2cUM2r?=
+ =?us-ascii?Q?4rw1ZhIkcWgvNIr4uvcXyQJPY6XZaJPeTnbzljGnJwZPShNY8sH7ucIvkYbu?=
+ =?us-ascii?Q?YV4Oe0MsM23LchA98gzyfuRgOrIB7BQeEjlMIPeRsRcS8SXG9a4qWC6RbVIH?=
+ =?us-ascii?Q?on8B7numGhJvRnF5bKB8m5u8yf18LPIDy523ynz8c7Cjq5vlavPqrEAqQs12?=
+ =?us-ascii?Q?piZBnMeDZjTLS3NdyyLfSGSC8maJGDmIwPR2SAIslDF/83KquFkUOr8ZqeuO?=
+ =?us-ascii?Q?Loh8gFRwK1YhGVSX+qJzDIewPmk7oiRGVYxoP5Xm6ua8taJv8ao6NHuLJ5wH?=
+ =?us-ascii?Q?MPj57gLtzd1kSP2rI/tBn9MrRR+BKm9G+V/R9kPP8/gxGtQcX94OcehiBikt?=
+ =?us-ascii?Q?fVViOUflv/Nc6TKdtsEpNu3Ev5aEwWQoGQJOP8VlIQtHF7yZn4FPX0vB6Wgk?=
+ =?us-ascii?Q?tPhXnCFl/UJUvE3EyLCdgd+rsXmZ+jqdaUaFV9UWEfqOuTflxnx1elKkA5+2?=
+ =?us-ascii?Q?ex6tknXTgCadlF0toJBHWSQJ7JGMM0ED780nASIswYDc5kyUe1nioOZ2xBru?=
+ =?us-ascii?Q?e5qPHiMWJobK04OqKqnxxD4ZiPF2D8TT0jOCg4jMAZuzOKLWWXbCF54JbAjp?=
+ =?us-ascii?Q?9A=3D=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21b9badc-20e3-45b6-6e24-08db2f8a8979
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4952.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 12:47:06.5581
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BFrH2raFFnXBsEfIdg9tfm7QUk5UJ8RIOKbvoDLubKgI+Qp7wFSysGyzjAKAD8ePhQNAV/lzb7lb8g/n9Aq+08MWxKcP6XwsPIi4aJT1VYU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7466
+X-Proofpoint-GUID: 78Wiqoer-Pzy2tcHU4y0Rypcbq7MOOq0
+X-Proofpoint-ORIG-GUID: 78Wiqoer-Pzy2tcHU4y0Rypcbq7MOOq0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-28_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=1 suspectscore=0 malwarescore=0
+ adultscore=0 clxscore=1011 mlxlogscore=217 bulkscore=0 spamscore=1
+ impostorscore=0 phishscore=0 mlxscore=1 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303280102
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a2e95e05f7f53bab
-Content-Type: text/plain; charset="UTF-8"
+The following commit is needed to fix CVE-2022-4744:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=158b515f703e75e7d68289bf4d98c664e1d632df
 
-Thanks, Gred and Matti.
+George Kennedy (1):
+  tun: avoid double free in tun_free_netdev
 
-On Mon, 27 Mar 2023 at 20:38, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Mar 27, 2023 at 03:20:06PM +0300, Matti Vaittinen wrote:
-> > On 3/27/23 15:01, Greg Kroah-Hartman wrote:
-> > > On Mon, Mar 27, 2023 at 02:34:02PM +0300, Matti Vaittinen wrote:
-> > > > A few tests need to have a valid struct device. One such example is
-> > > > tests which want to be testing devm-managed interfaces.
-> > > >
-> > > > Add kunit wrapper for root_device_[un]register(), which create a root
-> > > > device and also add a kunit managed clean-up routine for the device
-> > > > destruction upon test exit.
-> > >
-> > > I really do not like this as a "root device" is a horrible hack and
-> > > should only be used if you have to hang other devices off of it and you
-> > > don't have a real device to tie those devices to.
-> > >
-> > > Here you are abusing it and attempting to treat it as a real device,
-> > > which it is not at all, because:
-> > >
+ drivers/net/tun.c | 109 +++++++++++++++++++++++++---------------------
+ 1 file changed, 59 insertions(+), 50 deletions(-)
 
-There's a tradeoff here in that we want to pull in as little code (and
-complexity) as possible into unit tests, both to make them as easy as
-possible to write, and to make them as targeted as possible. This
-leads to a lot of tests manually filling out structures with the bare
-minimum to get the code being tested to run, and creating "root
-devices" seems to have been a convenient way of doing that while only
-registering _one_ thing in a big global list per test. So having a
-"real device" is not something I'd consider a _necessity_ in designing
-these sorts of helpers: a convincing enough fake is sometimes better.
 
-That being said, now that I've got a bit of a better understanding of
-the device model, I agree that "root devices" are not an ideal
-solution, even if they are a convenient one. I'm still not thrilled by
-the prospect of having to register extra things like drivers to get
-these simple tests to work, but when wrapped behind helpers, it's a
-nice solution in practice.
+base-commit: 6849d8c4a61a93bb3abf2f65c84ec1ebfa9a9fb6
+-- 
+2.39.1
 
-> > > > Special note: In some cases the device reference-count does not reach
-> > > > zero and devm-unwinding is not done if device is not sitting on a bus.
-> > > > The root_device_[un]register() are dealing with such devices and thus
-> > > > this interface may not be usable by all in its current form. More
-> > > > information can be found from:
-> > > > https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@houat/
-> > >
-> > > See, not a real device, doesn't follow normal "struct device" rules and
-> > > lifetimes, don't try to use it for a test as it will only cause problems
-> > > and you will be forced to work around that in a test.
-
-I think there's still some confusion around exactly what these issues
-are, and if they're indeed bugs or expected behaviour. I think it
-hangs off the question of what uses of a device with no driver
-attached are valid. My initial reading through of the various bits of
-the devres implementation seemed to imply that using it with such an
-unattached device was supported, but I'm less certain now. In any
-case, Maxime's tests in the other thread are a good starting point to
-clarify this behaviour, and if we use the bus-based KUnit helpers, it
-won't matter either way.
-
-> >
-> > Ok. I understood using the root-device has been a work-around in some other
-> > tests. Thus continuing use it for tests where we don't need the bus until we
-> > have a proper alternative was suggested by David.
-> >
-> > > Do the right thing here, create a fake bus and add devices to it.
-> > >
-> > > Heck, I'll even write that code if you want it, what's the requirement,
-> > > something like:
-> > >     struct device *kunit_device_create(struct kunit *test, const char *name);
-> > >     void kunit_device_destroy(struct device *dev);
-> >
-> > Thanks for the offer Greg. This, however, is being already worked on by
-> > David. I don't want to step on his toes by writing the same thing, nor do I
-> > think I should be pushing him to rush on his work.
->
-> Ok, David, my offer stands, if you want me to write this I will be glad
-> to do so.
-
-I'm happy to keep working on this, but would definitely appreciate
-your feedback.
-
-I've put my work-in-progress code here:
-https://kunit.googlesource.com/linux/+/refs/heads/kunit/device-helpers%5E%21/#F0
-
-It creates a "kunit" bus, and adds a few helpers to create both
-devices and drivers on that bus, and clean them up when the test
-exits. It seems to work on all of the tests which used
-root_device_register so far (except those -- only
-test_iio_find_closest_gain_low so far -- which create multiple devices
-with the same name, as the driver name won't be unique), and the drm
-tests work fine when ported to it as well.
-
-There's still a lot of cleanup to do and questions which need
-answering, including:
-- Working out how best to provide an owning module (it's currently
-just kunit, but probably should be the module which contains the
-actual tests)
-- Improving the API around drivers: probably exposing the helper to
-create a driver, and add a way of cleaning it up early.
-- Properly testing it with modules, not just with kunit.py (including
-looking at what actually appears in sysfs)
-- Experimenting with using probe, etc, callbacks.
-- Cleaning up lots of ugly, still experimental code, documenting, testing, etc.
-
-The thought of trying to expand the match function to support, e.g.,
-devicetree occurred to me, but I _think_ that devicetree-based tests
-are probably still better off using a platform_device. Regardless, it
-can probably wait to a follow-up
-
-In any case, does this seem like the right way forward?
-
-Cheers,
--- David
-
---000000000000a2e95e05f7f53bab
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
-bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
-TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
-TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
-CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
-El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
-A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
-MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
-MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
-MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
-BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
-Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
-l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
-pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
-6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
-+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
-S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
-bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
-ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
-q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
-hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAHHLXCbS0CYcocWQtL1
-FY8wDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
-c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMzAxMjkw
-NjQ2MThaFw0yMzA3MjgwNjQ2MThaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
-b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC+31G8qfgjYj6KzASqulKfP5LGLw1o
-hZ6j8Uv9o+fA+zL+2wOPYHLNIb6jyAS16+FwevgTr7d9QynTPBiCGE9Wb/i2ob9aBcupQVtBjlJZ
-I6qUXdVBlo5zsORdNV7/XEqlpu+X5MK5gNHlWhe8gNpAhADSib2H4rjBvFF2yi9BHBAYZU95f0IN
-cSS0WDNSSCktPaXtAGsI3tslroyjFYUluwGklmQms/tV8f/52zc7A5lzX+hxnnJdsRgirJRI9Sb6
-Uypzk06KLxOO2Pg9SFn6MwbAO6LuInpokhxcULUz3g/CMQBmEMSEzPPnfDIAqwDI0Kqh0NAin+V4
-fQxJfDCZAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
-DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFJyglaiY
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDj
-bIV+34iPu3Z/b1tx5Xxul5zartaNzqTyH8AKeNwY9zAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMjgxMjQ1MjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAEhGT4R+dJU302AHNKoqA
-fr29Wl14fRDJQ7NVG7xUwvhTf2U3H7B9l1OJhWUXbKdQMRAVT7n95A5LinRXV00WQZe0mLY39Uc5
-KGknjGYuNxoM80tUumXBqmJwFkpvy+NgX9esbqmKEOoGrc+NoYncPs7na0TRq+tgmSp+FvshzQss
-qnjb3rKMbXjRLC5EW4X60tp/mK4kNtBOU158LvQJGdFGG8T6lsph7fL1QwqQpFJXy1JvKfSwgrkY
-v75yYVWpUXm0lc0c3sHFk3BrPo7CAQ4oJ+SWjeOPxYgkFvGixUU43g0xwAlJbi5FBYoxfEkQcgFP
-JXsVtFc4Mqx8etgWbA==
---000000000000a2e95e05f7f53bab--
