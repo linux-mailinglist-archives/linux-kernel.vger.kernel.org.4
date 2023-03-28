@@ -2,201 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B726CBED4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7AE6CBEDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjC1MQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
+        id S230376AbjC1MRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjC1MQf (ORCPT
+        with ESMTP id S229611AbjC1MRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:16:35 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4885376A7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:16:34 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DE1FB21A12;
-        Tue, 28 Mar 2023 12:16:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1680005792; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gwQi3q3Bh569WHn1/HEyVnEt9J7ZGibnBaP8gSjl2Yk=;
-        b=Sqdng2tUb7p0lumCNGr680EuB9gWsxhC4bT0FdP2tNDPv0XMqjxni3LNnYpOHan2qsKers
-        nZmJv16I4Mp5lHCrDwY8kNwSYly6kobR5wb6WjcjuNXyhuFE3y+5N7Fx7y6u4I2TJeLQ6c
-        N2DMaGqao84JIUrhBaL5kqTHCyvvDGQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1680005792;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gwQi3q3Bh569WHn1/HEyVnEt9J7ZGibnBaP8gSjl2Yk=;
-        b=YhmbwhOsKfl/zCB28+Omsufo1CQF5Kuekh5JcaTYIeseS3TUtoafQuIX0mjh4PQuQHaW3S
-        Sxsb3WXW+rQeiODw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C50531390D;
-        Tue, 28 Mar 2023 12:16:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iAuGL6DaImQVLgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 28 Mar 2023 12:16:32 +0000
-Message-ID: <4740455e-0b41-3f52-eca2-bf8d4a7c6181@suse.cz>
-Date:   Tue, 28 Mar 2023 14:16:32 +0200
+        Tue, 28 Mar 2023 08:17:17 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BF976A7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:17:16 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id t4so6738308wra.7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:17:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1680005834;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fpixAugXoZaAwUVYpLsM7+hqMka5O+Qfwz+XpgeRjTs=;
+        b=DdfEr+id/MsD4EX/KXTGF7dom2NnWml6VBX2ms3hp9tl13YcQyka7TRbrQ8kgwm98+
+         n9dglToiVSIkx7BTzyKAtydVhxOlKocYd75G0KCdl4BpnEuQq7Eku0vu+onGqGsUarvI
+         uDCxVMif68sVanItPLIYH9Xe6SkJzXfokDa8u7+2+gDNS6KvXXkd+KDmmUo+/r9yeDuu
+         W1S1+uUTovHL7LdVpoa9S2fX3EkyLJl45TezoDDNzt2CcIAf37tNBmFPUGobldCUd1Gx
+         qs5nvEkiuEJyJPcIOwKPJsQl/qcOiOMGm29n6E0Nmjm9EvgUM9Dw0/L/k93Bd3rfvpZH
+         yPZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680005834;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fpixAugXoZaAwUVYpLsM7+hqMka5O+Qfwz+XpgeRjTs=;
+        b=XJfJPyRse/+ygbQpkJxfUf1U/u0QsJWD5DmHhN/sizsWCc4zjIHcUIPxbW8PHemlr4
+         wGYbdv69d+FM3V8C4/8MD7CYN2lF0DkbrowK+jpyMIAy/OLrm8hY8boyYCABFGFr/eqT
+         8iKU+mc44n1/+srEiellagBAXZpNSn6r1YBcFdmn9LKesADwTWNT9wyqH00L3XVoVEsw
+         sBQqrDep14Al4TDr4b/hFvDVtsVk7d/Fv7qVIYDdnNR/lycUsukD1RqtI9qQ74QEY15p
+         PL20KodvcIg6NnwYz7V8XthYPMROjo2LrAYNt/6ZhF24XNZsZCf3ofayU5xFv+og7ujn
+         OGDg==
+X-Gm-Message-State: AAQBX9dNd7REOzTbBNW0CMjh2C1BNDsv/Fjv4h5QV1WANGLQfUvPYk6N
+        9MCJUqRJmaK8Bx7kzlg680zcew==
+X-Google-Smtp-Source: AKy350Z4U/haF9SCuRslvAh7oWJBrD/bo6ZTNjsaoe00bHp+ERY97BdOBWKdeYJ4z5nRervvH+cR3w==
+X-Received: by 2002:adf:f089:0:b0:2cf:e849:e13c with SMTP id n9-20020adff089000000b002cfe849e13cmr12706092wro.61.1680005834541;
+        Tue, 28 Mar 2023 05:17:14 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id c9-20020a5d4cc9000000b002d21379bcabsm27503187wrt.110.2023.03.28.05.17.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 05:17:13 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] hwmon: (pmbus/core): Add rdev in pmbus_data struct
+Date:   Tue, 28 Mar 2023 14:17:09 +0200
+Message-Id: <20230328121712.4057359-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: What size anonymous folios should we allocate?
-Content-Language: en-US
-To:     Ryan Roberts <ryan.roberts@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <Y/U8bQd15aUO97vS@casper.infradead.org>
- <CAHbLzkrkZmbVMkh-Y-bDxgy0T0ZRRd+T+o5y5-wKmjKmhN0NmA@mail.gmail.com>
- <Y/WRlX+MkmxelNbg@casper.infradead.org>
- <022e1c15-7988-9975-acbc-e661e989ca4a@suse.cz>
- <d347c5b0-0c0f-ae50-9613-2cf962d8676e@arm.com>
- <babd6fcb-0062-0450-99b3-df5a74c2f683@suse.cz>
- <7981dd12-4e56-a449-980b-52f27279df81@arm.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <7981dd12-4e56-a449-980b-52f27279df81@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/23 12:12, Ryan Roberts wrote:
-> On 27/03/2023 16:48, Vlastimil Babka wrote:
->> On 3/27/23 17:30, Ryan Roberts wrote:
->>> On 27/03/2023 13:41, Vlastimil Babka wrote:
->>>> On 2/22/23 04:52, Matthew Wilcox wrote:
->>>>> On Tue, Feb 21, 2023 at 03:05:33PM -0800, Yang Shi wrote:
->>>>>
->>>>>>> C. We add a new wrinkle to the LRU handling code.  When our scan of the
->>>>>>>    active list examines a folio, we look to see how many of the PTEs
->>>>>>>    mapping the folio have been accessed.  If it is fewer than half, and
->>>>>>>    those half are all in either the first or last half of the folio, we
->>>>>>>    split it.  The active half stays on the active list and the inactive
->>>>>>>    half is moved to the inactive list.
->>>>>>
->>>>>> With contiguous PTE, every PTE still maintains its own access bit (but
->>>>>> it is implementation defined, some implementations may just set access
->>>>>> bit once for one PTE in the contiguous region per arm arm IIUC). But
->>>>>> anyway this is definitely feasible.
->>>>>
->>>>> If a CPU doesn't have separate access bits for PTEs, then we should just
->>>>> not use the contiguous bits.  Knowing which parts of the folio are
->>>>> unused is more important than using the larger TLB entries.
->>>>
->>>> Hm but AFAIK the AMD aggregation is transparent, there are no bits. And IIUC
->>>> the "Hardware Page Aggregation (HPA)" Ryan was talking about elsewhere in
->>>> the thread, that sounds similar. So I IIUC there will be a larger TLB entry
->>>> transparently, and then I don't expect the CPU to update individual bits as
->>>> that would defeat the purpose. So I'd expect it will either set them all to
->>>> active when forming the larger TLB entry, or set them on a single subpage
->>>> and leave the rest at whatever state they were. Hm I wonder if the exact
->>>> behavior is defined anywhere.
->>>
->>> For arm64, at least, there are 2 separate mechanisms:
->>>
->>> "The Contiguous Bit" (D8.6.1 in the Arm ARM) is a bit in the translation table
->>> descriptor that SW can set to indicate that a set of adjacent entries are
->>> contiguous and have same attributes and permissions etc. It is architectural.
->>> The order of the contiguous range is fixed and depends on the base page size
->>> that is in use. When in use, HW access and dirty reporting is only done at the
->>> granularity of the contiguous block.
->>>
->>> "HPA" is a micro-architectural feature on some Arm CPUs, which aims to do a
->>> similar thing, but is transparent to SW. In this case, the dirty and access bits
->>> remain per-page. But when they differ, this affects the performance of the feature.
+Add regulator device in pmbus_data & initialize the same during PMBus
+regulator register.
 
-Oh looks like I get this part properly. Wonder if AMD works the same.
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
->>> Typically HPA can coalesce up to 4 adjacent entries, whereas for a 4KB base page
->>> at least, the contiguous bit applies to 16 adjacent entries.
->> 
->> Hm if it's 4 entries on arm64 and presumably 8 on AMD, maybe we can only
->> care about how actively accessed are the individual "subpages" above that
->> size, to avoid dealing with this uncertainty whether HW tracks them. At such
->> smallish sizes we shouldn't induce massive overhead?
-> 
-> I'm not sure I've fully understood this point. For arm64's HPA, there is no
-> "uncertainty [about] whether HW tracks them"; HW will always track access/dirty
-> individually for each base page. The problem is the inverse; if SW (or HW) sets
-> those bits differently in each page, then TLB coalescing performance may
-> decrease. Or are you actually suggesting that SW should always set the bits the
-> same for a 4 or 8 page run, and forgo the extra granularity?
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 0ddef2c9ba9b..d93405f1a495 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -81,6 +81,7 @@ struct pmbus_label {
+ struct pmbus_data {
+ 	struct device *dev;
+ 	struct device *hwmon_dev;
++	struct regulator_dev **rdevs;
+ 
+ 	u32 flags;		/* from platform data */
+ 
+@@ -3109,9 +3110,13 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ 	struct device *dev = data->dev;
+ 	const struct pmbus_driver_info *info = data->info;
+ 	const struct pmbus_platform_data *pdata = dev_get_platdata(dev);
+-	struct regulator_dev *rdev;
+ 	int i;
+ 
++	data->rdevs = devm_kzalloc(dev, sizeof(struct regulator_dev *) * info->num_regulators,
++				   GFP_KERNEL);
++	if (!data->rdevs)
++		return -ENOMEM;
++
+ 	for (i = 0; i < info->num_regulators; i++) {
+ 		struct regulator_config config = { };
+ 
+@@ -3121,10 +3126,10 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ 		if (pdata && pdata->reg_init_data)
+ 			config.init_data = &pdata->reg_init_data[i];
+ 
+-		rdev = devm_regulator_register(dev, &info->reg_desc[i],
+-					       &config);
+-		if (IS_ERR(rdev))
+-			return dev_err_probe(dev, PTR_ERR(rdev),
++		data->rdevs[i] = devm_regulator_register(dev, &info->reg_desc[i],
++							 &config);
++		if (IS_ERR(data->rdevs[i]))
++			return dev_err_probe(dev, PTR_ERR(data->rdevs[i]),
+ 					     "Failed to register %s regulator\n",
+ 					     info->reg_desc[i].name);
+ 	}
 
-I guess we'll need some experiments to see what's the optimal way. IIRC what
-we do is just clearing the access bit and then let HW set them. If we have
-4/8-page folio on the LRU then we likely should clear the whole of it.
-Perhaps if all subpages are indeed hot enough, the HW will eventually set
-the accessed bits back and then create the coelesced TLB entry. If we are
-about the reclaim or split the folio, we would see if it wasn't hot enough
-and all subpages have the accessed bit, or not, so maybe that should all
-automatically work.
-
->> 
->>> I'm hearing that there are workloads where being able to use the contiguous bit
->>> really does make a difference, so I would like to explore solutions that can
->>> work when we only have access/dirty at the folio level.
->> 
->> And on the higher orders where we have explicit control via bits, we could
->> split the explicitly contiguous mappings once in a while to determine if the
->> sub-folios are still accessed? Although maybe with 16x4kB pages limit it may
->> still be not worth the trouble?
-> 
-> I have a bigger-picture question; why is it useful to split these large folios?
-> I think there are 2 potential reasons (but would like to be educated):
-> 
-> 1. If a set of sub-pages that were pre-faulted as part of a large folio have
-> _never_ been accessed and we are under memory pressure, I guess we would like to
-> split the folio and free those pages?
-> 
-> 2. If a set of subpages within a folio are cold (but were written in the past)
-> and a separate set of subpages within the same folio are hot and we are under
-> memory pressure, we would like to swap out the cold pages?
-
-These are not fundamentally different, only 1. depends if we optimistically
-start large (I think the proposal here was not to start (too) large).
-
-> If the first reason is important, I guess we would want to initially map
-> non-contig, then only remap as contig once every subpage has been touched at
-> least once.
-
-Yeah. But the second reason will always apply anyway, access patterns of a
-workload may change over time.
-
-> For the second reason, my intuition says that a conceptual single access and
-> dirty bit per folio should be sufficient, and folios could be split from
-> time-to-time to see if one half is cold?
-
-Maybe not complete folios need split but just their mappings?
-
-> Thanks,
-> Ryan
-> 
-> 
-> 
->> 
->>> Thanks,
->>> Ryan
->> 
-> 
+base-commit: 8a863eb1b1162653d133856702e13560f3596b85
+-- 
+2.39.1
 
