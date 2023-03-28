@@ -2,76 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1366CC625
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24626CC725
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233549AbjC1PYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
+        id S233367AbjC1PxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233258AbjC1PX7 (ORCPT
+        with ESMTP id S233178AbjC1PxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:23:59 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C698EF745;
-        Tue, 28 Mar 2023 08:22:31 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SEBd7o005936;
-        Tue, 28 Mar 2023 17:21:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=3sl3gaodW7BicjGmVlR6sK/D2fcnxp6E1ErIi0k9bhc=;
- b=IgjZwH/52DBT+sjCMLfoF+gi2dHoas0bL/boWHnDG1mnLKJ1Nluxd0FmEpbDEiObgsAB
- q3ZhS60MZil9FfQGpL0g/Y9RsCEJAfhmXDtHtBvnNqTfAKWQ4S3PAdVOhHBEeaplTMUP
- WUHBL9eweB2bontmSdbnNTdnm5OJDTpJe0lS8U/Znx7HdhsPcFqSyGIiUMnUzhB/sAj+
- 7/Z5OEuYYkotU+mLsWxa+lBviRYPCMo6V0xISmymDx2DlCuPb6SzgUEkGrqlTeCxP5nx
- tQXLgRIfHW2BQAtvlIhQDTFiT1+5BM/AxfuDdiJ0re0cLPjaMyjlAhHt6ERFtWKrJ+r3 8g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pk5xkjq9q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Mar 2023 17:21:10 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C77A310002A;
-        Tue, 28 Mar 2023 17:21:09 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C1C252194CB;
-        Tue, 28 Mar 2023 17:21:09 +0200 (CEST)
-Received: from [10.201.20.168] (10.201.20.168) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Tue, 28 Mar
- 2023 17:21:09 +0200
-Message-ID: <50e8d0ee-fe6f-7e31-98f0-ea4eceb597d6@foss.st.com>
-Date:   Tue, 28 Mar 2023 17:21:01 +0200
+        Tue, 28 Mar 2023 11:53:09 -0400
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F73EF93;
+        Tue, 28 Mar 2023 08:52:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:From
+        :References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=5yw49PqP0hAxp96MX56AWP776z6YCEYv9dmgDK54FaU=; b=EZGQ4AvOiXz1K4qmbOiBCRJRjg
+        a5+U403wi7uwIUd43NJmUDO3CbpbSHHuwRPYO5mfcyYhXn+xJur6OKDsaMJEnS/1Gkt0qF1jO3JjG
+        lQGu2kyuzMJTGnajDGuyPyjaIxJEN5erL66MDjOJCszmBb3OrzPZQgi1rYNhJPT0Wsts=;
+Received: from p54ae9730.dip0.t-ipconnect.de ([84.174.151.48] helo=nf.local)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1phB8G-007lrD-Gm; Tue, 28 Mar 2023 17:21:08 +0200
+Message-ID: <d594019c-95a5-3412-4696-2533afdbda74@nbd.name>
+Date:   Tue, 28 Mar 2023 17:21:08 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/7] ARM: dts: stm32: change USART1 clock to an SCMI clock
- on stm32mp15 boards
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230327152948.274743-1-valentin.caron@foss.st.com>
- <20230327152948.274743-2-valentin.caron@foss.st.com>
- <5c67d003-c893-8540-a971-6954a57399e5@foss.st.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
 Content-Language: en-US
-From:   Valentin CARON <valentin.caron@foss.st.com>
-In-Reply-To: <5c67d003-c893-8540-a971-6954a57399e5@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.201.20.168]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-28_02,2023-02-09_01
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+To:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230324171314.73537-1-nbd@nbd.name>
+ <20230324102038.7d91355c@kernel.org>
+ <2d251879-1cf4-237d-8e62-c42bb4feb047@nbd.name>
+ <20230324104733.571466bc@kernel.org>
+ <f59ee83f-7267-04df-7286-f7ea147b5b49@nbd.name>
+ <751fd5bb13a49583b1593fa209bfabc4917290ae.camel@redhat.com>
+ <b001c8ed-214f-94e6-2d4f-0ee13e3d8760@nbd.name>
+ <9331f1358cf7c24442d705d840812e9cd490e018.camel@redhat.com>
+From:   Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH net-next] net/core: add optional threading for backlog
+ processing
+In-Reply-To: <9331f1358cf7c24442d705d840812e9cd490e018.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,87 +63,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex,
+On 28.03.23 17:13, Paolo Abeni wrote:
+> On Tue, 2023-03-28 at 11:45 +0200, Felix Fietkau wrote:
+>> On 28.03.23 11:29, Paolo Abeni wrote:
+>> > On Fri, 2023-03-24 at 18:57 +0100, Felix Fietkau wrote:
+>> > > On 24.03.23 18:47, Jakub Kicinski wrote:
+>> > > > On Fri, 24 Mar 2023 18:35:00 +0100 Felix Fietkau wrote:
+>> > > > > I'm primarily testing this on routers with 2 or 4 CPUs and limited 
+>> > > > > processing power, handling routing/NAT. RPS is typically needed to 
+>> > > > > properly distribute the load across all available CPUs. When there is 
+>> > > > > only a small number of flows that are pushing a lot of traffic, a static 
+>> > > > > RPS assignment often leaves some CPUs idle, whereas others become a 
+>> > > > > bottleneck by being fully loaded. Threaded NAPI reduces this a bit, but 
+>> > > > > CPUs can become bottlenecked and fully loaded by a NAPI thread alone.
+>> > > > 
+>> > > > The NAPI thread becomes a bottleneck with RPS enabled?
+>> > > 
+>> > > The devices that I work with often only have a single rx queue. That can
+>> > > easily become a bottleneck.
+>> > > 
+>> > > > > Making backlog processing threaded helps split up the processing work 
+>> > > > > even more and distribute it onto remaining idle CPUs.
+>> > > > 
+>> > > > You'd want to have both threaded NAPI and threaded backlog enabled?
+>> > > 
+>> > > Yes
+>> > > 
+>> > > > > It can basically be used to make RPS a bit more dynamic and 
+>> > > > > configurable, because you can assign multiple backlog threads to a set 
+>> > > > > of CPUs and selectively steer packets from specific devices / rx queues 
+>> > > > 
+>> > > > Can you give an example?
+>> > > > 
+>> > > > With the 4 CPU example, in case 2 queues are very busy - you're trying
+>> > > > to make sure that the RPS does not end up landing on the same CPU as
+>> > > > the other busy queue?
+>> > > 
+>> > > In this part I'm thinking about bigger systems where you want to have a
+>> > > group of CPUs dedicated to dealing with network traffic without
+>> > > assigning a fixed function (e.g. NAPI processing or RPS target) to each
+>> > > one, allowing for more dynamic processing.
+>> > > 
+>> > > > > to them and allow the scheduler to take care of the rest.
+>> > > > 
+>> > > > You trust the scheduler much more than I do, I think :)
+>> > > 
+>> > > In my tests it brings down latency (both avg and p99) considerably in
+>> > > some cases. I posted some numbers here:
+>> > > https://lore.kernel.org/netdev/e317d5bc-cc26-8b1b-ca4b-66b5328683c4@nbd.name/
+>> > 
+>> > It's still not 110% clear to me why/how this additional thread could
+>> > reduce latency. What/which threads are competing for the busy CPU[s]? I
+>> > suspect it could be easier/cleaner move away the others (non RPS)
+>> > threads.
+>> In the tests that I'm doing, network processing load from routing/NAT is 
+>> enough to occupy all available CPUs.
+>> If I dedicate the NAPI thread to one core and use RPS to steer packet 
+>> processing to the other cores, the core taking care of NAPI has some 
+>> idle cycles that go to waste, while the other cores are busy.
+>> If I include the core in the RPS mask, it can take too much away from 
+>> the NAPI thread.
+> 
+> I feel like I'm missing some relevant points.
+> 
+> If RPS keeps the target CPU fully busy, moving RPS processing in a
+> separate thread still will not allow using more CPU time.
+RPS doesn't always keep the target CPU fully busy. The combination of 
+NAPI thread + RPS threads is enough to keep the system busy. The number 
+of flows is often small enough, that some (but not all) RPS instances 
+could be keeping their target CPU busy.
 
-I think this patch is useless.
-I will send you a V2 without.
+With my patch, one CPU could be busy with a NAPI thread + remaining 
+cycles allocated to a bit of extra RPS work, while the other CPUs handle 
+the rest of the RPS load. In reality it bounces around CPUs a bit more 
+instead of sticking to this assigned setup, but it allows cores to be 
+more fully utilized by the network processing load, and the resulting 
+throughput/latency improves because of that.
 
-Thank you,
-Valentin
+> Which NIC driver are you using?
+I've been testing on multiple platforms. Mainly mtk_eth_soc, but also bgmac.
 
-On 3/28/23 14:02, Alexandre TORGUE wrote:
-> Hi Valentin
->
-> On 3/27/23 17:29, Valentin Caron wrote:
->> On ST stm32mp15 boards, change clock of USART1 node to SCMI clock
->> "CK_SCMI_USART1"
->
-> I'll change commit title and message as your patch doesn't target 
-> STM43MP15 boards but STM32MP15 SCMI boards.
->
-> Cheers
-> Alex
->
->
->
->> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
->> ---
->>   arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts | 4 ++++
->>   arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts | 4 ++++
->>   arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts | 4 ++++
->>   arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts | 4 ++++
->>   4 files changed, 16 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts 
->> b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
->> index e539cc80bef8..5c8164c10e46 100644
->> --- a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
->> +++ b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
->> @@ -77,3 +77,7 @@ &rng1 {
->>   &rtc {
->>       clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
->>   };
->> +
->> +&usart1 {
->> +    clocks = <&scmi_clk CK_SCMI_USART1>;
->> +};
->> diff --git a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts 
->> b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
->> index 97e4f94b0a24..2c9a207a9d49 100644
->> --- a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
->> +++ b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
->> @@ -83,3 +83,7 @@ &rng1 {
->>   &rtc {
->>       clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
->>   };
->> +
->> +&usart1 {
->> +    clocks = <&scmi_clk CK_SCMI_USART1>;
->> +};
->> diff --git a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts 
->> b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
->> index 9cf0a44d2f47..21c8169f0e82 100644
->> --- a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
->> +++ b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
->> @@ -82,3 +82,7 @@ &rng1 {
->>   &rtc {
->>       clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
->>   };
->> +
->> +&usart1 {
->> +    clocks = <&scmi_clk CK_SCMI_USART1>;
->> +};
->> diff --git a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts 
->> b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
->> index 3b9dd6f4ccc9..0084abbeb60e 100644
->> --- a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
->> +++ b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
->> @@ -88,3 +88,7 @@ &rng1 {
->>   &rtc {
->>       clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
->>   };
->> +
->> +&usart1 {
->> +    clocks = <&scmi_clk CK_SCMI_USART1>;
->> +};
->
+- Felix
