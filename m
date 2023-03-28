@@ -2,107 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794506CC936
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE036CC920
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjC1RYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
+        id S230161AbjC1RVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbjC1RYu (ORCPT
+        with ESMTP id S230325AbjC1RVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:24:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E329B2D5B;
-        Tue, 28 Mar 2023 10:24:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87299B81D72;
-        Tue, 28 Mar 2023 17:24:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E803EC4339B;
-        Tue, 28 Mar 2023 17:24:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680024287;
-        bh=O8m+p0zD+XNFiA03Z+/yCzyznUzLzCLRpXdQTJ8dP+Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=RldpunhtC07J9KzcN6AhpUCmYq+S2XB4JSuwhsGPYTfVDvDz0rkamEDIHzb53qlzY
-         UH0NCPk2pyMqQ7XhPU4+B6QRoHbW6qopkRssgz7ZXzG87ReBJtU2RPqyNeLwxJdRgB
-         AwvgMNJ91k3jHME+1zm+fxvIEyVp7a8YgMckCKuFvk+U/0KElQytwPOdNMnMU/2m9N
-         5Y0R6mjaZaipytIgrDIOlCuZGbmRAyjJh5Bhj4YoR/Ika5lg4OG5WLjyE5auzsbOud
-         Ji65Cp3/2Dh6FTnUBinyRs/35CvO8iUXoC0swemghz7ySQWSCq5p/pvu1qJuC2Bgdc
-         YM5GHRU5QMy7w==
-Date:   Tue, 28 Mar 2023 12:24:45 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Jake Oshins <jakeo@microsoft.com>,
-        "kuba@kernel.org" <kuba@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "saeedm@nvidia.com" <saeedm@nvidia.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Long Li <longli@microsoft.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [EXTERNAL] [PATCH 1/6] PCI: hv: fix a race condition bug in
- hv_pci_query_relations()
-Message-ID: <20230328172445.GA2951931@bhelgaas>
+        Tue, 28 Mar 2023 13:21:47 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F21DBD7;
+        Tue, 28 Mar 2023 10:21:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680024098; x=1711560098;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0TfcPjksoLAS4Lgr8pbWYVIORpk7kQ3431tuOunQDOM=;
+  b=c1LlDWWVA7LveZDO81c2JJSKTHfs0ULzF3DqcItXafz0qlXUc3sMZ6OK
+   NDsIusPtHlgemaW4UTVRNE/7mxM48BQ2wbZNuqPKoptum1Ji9V1ldSfxF
+   5oVkfdIDKFu11CE94H/Ts8f1n7oHhM8jysPDdHNi1/3oCSlQq6iOS7w/l
+   /xfhcHBA1EdLzgl2AHLY4Q0Ussfmu+xaOOH5mzraFTZuSrhO66Syj+BRI
+   +LjnEDkoCG+GASpvAj3L3nBDp3Kicm8uQ+8FH/99Gz2ZnLk3haVTweoom
+   JQKjQlGqwYIZ1HdC/lNWmI4frLZzGv+fxGKMCeWmxWk54CXHR8rfjwm2C
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="320289000"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="320289000"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 10:21:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="714333438"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="714333438"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 10:21:36 -0700
+Date:   Tue, 28 Mar 2023 10:25:40 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Joerg Roedel <joro@8bytes.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v2 7/8] iommu: Export iommu_get_dma_domain
+Message-ID: <20230328102540.6158e642@jacob-builder>
+In-Reply-To: <ZCMTf5RwebmELsoT@nvidia.com>
+References: <20230327232138.1490712-1-jacob.jun.pan@linux.intel.com>
+        <20230327232138.1490712-8-jacob.jun.pan@linux.intel.com>
+        <e7d53d04-6b7f-05a4-3077-42470c6d2823@linux.intel.com>
+        <BN9PR11MB527623AC2CE25EDA10FF81548C889@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <20230328084822.4b46e649@jacob-builder>
+        <ZCMTf5RwebmELsoT@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SA1PR21MB133553326FBAD376DE9DB48ABF889@SA1PR21MB1335.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 05:38:59AM +0000, Dexuan Cui wrote:
-> > From: Saurabh Singh Sengar <ssengar@microsoft.com>
-> > Sent: Monday, March 27, 2023 10:29 PM
-> > > ...
-> > > ---
+Hi Jason,
+
+On Tue, 28 Mar 2023 13:19:11 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
+
+> On Tue, Mar 28, 2023 at 08:48:22AM -0700, Jacob Pan wrote:
 > 
-> Please note this special line "---". 
-> Anything after the special line and before the line "diff --git" is discarded
-> automaticaly by 'git' and 'patch'. 
-> 
-> > >  drivers/pci/controller/pci-hyperv.c | 13 +++++++++++++
-> > >  1 file changed, 13 insertions(+)
-> > >
-> > > @@ -3635,6 +3641,8 @@ static int hv_pci_probe(struct hv_device *hdev,
-> > >
-> > >  retry:
-> > >  	ret = hv_pci_query_relations(hdev);
-> > > +	printk("hv_pci_query_relations() exited\n");
+> > > Agree. The kernel driver managing the device wants to get the current 
+> > > domain of the device then iommu_get_domain_for_dev() is the right
+> > > interface. It knows the domain is the dma domain.  
+> > This goes back to v1 then :)
 > > 
-> > Can we use pr_* or the appropriate KERN_<LEVEL> in all the printk(s).
+> > I thought the comments from v1 is that we don't want to check the domain
+> > type is DMA domain returned by iommu_get_domain_for_dev()
+> > 
+> > If the driver "knows" the domain is dma domain, why can't it use
+> > iommu_get_dma_domain()? seems paradoxical.  
 > 
-> This is not part of the real patch :-)
-> I just thought the debug code can help understand the issues
-> resolved by the patches.
-> I'll remove the debug code to avoid confusion if I need to post v2.
+> Huh?
+> 
+> The DMA API operates on the current domain of the device, be it
+> IDENTITY or UNMANAGED.
+> 
+> You have to copy whatever the current domain is to the PASID and you
+> should definately not check if it is DMA or something.
+> 
+right, the PASID works for IOVA, passthrough. I misunderstood the v1
+review comments. I will go back to use iommu_get_domain_for_dev() but w/o
+checking domain types.
 
-I guess that means you *will* post a v2, right?  Or do you expect
-somebody else to remove the debug code?  If you do keep any debug or
-other logging, use pci_info() (or dev_info()) whenever possible.
+Thanks all,
 
-Also capitalize the subject line to match the others in the series.
-
-Bjorn
+Jacob
