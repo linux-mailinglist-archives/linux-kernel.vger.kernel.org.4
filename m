@@ -2,276 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DF16CB6B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CA66CB696
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbjC1GPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 02:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
+        id S232019AbjC1GKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 02:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232278AbjC1GPE (ORCPT
+        with ESMTP id S229436AbjC1GKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 02:15:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6947730ED
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:14:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679984055;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UDqF1GrbzQq1+HPSvJYRs4W/bqOwDA7041P8KA7sUJw=;
-        b=hQb2tdObMHzFsjULAbtOlZV976wgEgjW1srp7kHgyTZb1lgfzSz0Tsoa7hjmHZs2Xf3qUT
-        VcAHmjUqJNf3YlbpvkTh3ofHUoxIWvO7WZJKV7vwORC62FK0DHBHjRe4hvML7LpXIwbMfw
-        aPTSizRyWtjkINqTFIQkNhZz8JKP2Lw=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-586-28IayVukNRGb4TOGT01ppw-1; Tue, 28 Mar 2023 02:14:13 -0400
-X-MC-Unique: 28IayVukNRGb4TOGT01ppw-1
-Received: by mail-pf1-f200.google.com with SMTP id i26-20020aa796fa000000b006261da7aeceso5310336pfq.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:14:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679984052;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UDqF1GrbzQq1+HPSvJYRs4W/bqOwDA7041P8KA7sUJw=;
-        b=R9+q8ivykZjfN9u8MxWNKpVlHJovGALxoB/thGnm8v9hufF3creS+7MGCu+9OY8jyO
-         TkyvIK8m4QZGWuxEx4upRIiXoR/4DS67iw0UowveTXsJ7fo3QU0JrAKJ+56VYnieNe36
-         aFyKrA9rJ+POQpdTpHM564CGGAIY1zs8ZA3llYtRG66zRUCwadAcFfO4XOuj0U9PesW6
-         o4q0R+40M7aEYFo50qcwlUpBjvZqeECOYQaeXU8NH52exQ6yf8auERvgUJ8o3JYIWmZW
-         NR9yhy68y/mqnJqGV5fo0g9SBnVDhT+GkbKnMGYMF5DNWwDEXf91h4tYcB6yHeNFuUYg
-         8N4A==
-X-Gm-Message-State: AAQBX9dQfZJ2s6P4un9zWQhc/lFp8NXv66owahZGvXvQlqciAymJawcx
-        W7l5sxK2EjUsUl+6vmAD+BXfW1vo6BbPD6LiIdN1eMdnGKWCRobFsF9A6bBx4V10iPCcXtWyX4P
-        kq1Eo7VOk/RMaiEKO/jKAn19A
-X-Received: by 2002:a17:903:410c:b0:1a2:62d7:8c2a with SMTP id r12-20020a170903410c00b001a262d78c2amr998865pld.11.1679984052498;
-        Mon, 27 Mar 2023 23:14:12 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YCxm+v8tsCs7SvvbxdQdgSa17TenhAG4E2V0AMUT3eHfgR8foPhJ00O1N7zmi2Sqbt6+LHxQ==
-X-Received: by 2002:a17:903:410c:b0:1a2:62d7:8c2a with SMTP id r12-20020a170903410c00b001a262d78c2amr998855pld.11.1679984052141;
-        Mon, 27 Mar 2023 23:14:12 -0700 (PDT)
-Received: from [10.72.13.204] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id p8-20020a1709026b8800b0019ab151eb90sm2552767plk.139.2023.03.27.23.14.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 23:14:11 -0700 (PDT)
-Message-ID: <54ac21bb-4a11-13c3-c341-73744138f386@redhat.com>
-Date:   Tue, 28 Mar 2023 14:14:08 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v4 05/11] vduse: Support set_vq_affinity callback
-Content-Language: en-US
-To:     Xie Yongji <xieyongji@bytedance.com>, mst@redhat.com,
-        tglx@linutronix.de, hch@lst.de
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-References: <20230323053043.35-1-xieyongji@bytedance.com>
- <20230323053043.35-6-xieyongji@bytedance.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20230323053043.35-6-xieyongji@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 28 Mar 2023 02:10:18 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2075.outbound.protection.outlook.com [40.107.7.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4721995;
+        Mon, 27 Mar 2023 23:10:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jl2ISrWKDe+/X2KxnFHml7pZM0kVBuTrxUhMSwGz3aVqH+orThV9ksmD+j0GJf4Svfqq+UJl+N6V4Gi9V8RN6xIfWFCZpwDgqwGOFfQPRRCLoIpGvmcTUsYnJxvcMSDzvg00xBdgFW0MO/Z6sxK/YgSqJ1PJN9Y8iOC52/O6xpxTNTG3y8IY2CW6xO4g1j7x538lXmD9L0QUkcdNcFC41/Vde0rUBT4CMKSQT0pNbnS5qzgk6krLKlAH7k72fSVqCe3pyzBxq/o8+Nk6Phc2PPWJaAnrVN6u3R+70g6iHbVY08j6K/aBvA3nIUCD5Sqcav2vNQ2hdEIz2KXNCNK1/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RFaAJTc4KBz8p7rysd8hNMsfJYL6COW5LqrtJJ5ieI0=;
+ b=d2J9TLjH9XHodosKcJRgesVEGPh7OBOp6qK1jLlmzaZNwbi2AxJczy89icGsZigoQUA2z9D/IeAUMAA3WtxhmoQif+JkCUHMrQyPhmNzmdPtf3jw9oEQ0Vj5wASySeqSXTFOdLY3r5sIlXzC1E5X+i5ILGYVsfeOBDWrD3oL7x2tCRF1KH/BquuTmqf8Ap3q7qf4pj9aMmMkDtJK+gODksTYifH93vowV/f/e9v33oI6sf+En/S5M5rDMz9fRUlUOWs3/LRuBk+8j44IPAITdihgmsaP6xZz3faIOqVAUZwS4gY5bLQF1ymQerTUjyy4Lrq3GukuRkAnxRqhDDaG8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RFaAJTc4KBz8p7rysd8hNMsfJYL6COW5LqrtJJ5ieI0=;
+ b=HK+gVV/IescuIQC8mLNf9qGj5NnU44L2d35e6aV3oSwBtxVRUZlBK1012ytO41KsWQfOvkB1PoJfN4EupNbHn9SkiVtuSuhg1R+LCNklmJimncvwbmBacBCGxN1C93ge1Pbc5KoxUUhIUBaLO97z/rxD/cYb67LF8Ru5e+uDAis=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM9PR04MB8923.eurprd04.prod.outlook.com (2603:10a6:20b:40a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Tue, 28 Mar
+ 2023 06:10:13 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::778e:19d0:cba0:5cc0]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::778e:19d0:cba0:5cc0%4]) with mapi id 15.20.6222.028; Tue, 28 Mar 2023
+ 06:10:13 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     wei.fang@nxp.com, shenwei.wang@nxp.com, xiaoning.wang@nxp.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org
+Cc:     linux-imx@nxp.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH] dt-bindings: net: fec: add power-domains property
+Date:   Tue, 28 Mar 2023 14:15:18 +0800
+Message-Id: <20230328061518.1985981-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SGAP274CA0023.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::35)
+ To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AM9PR04MB8923:EE_
+X-MS-Office365-Filtering-Correlation-Id: ff260929-8530-4588-8035-08db2f5317f5
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7J0675Mqd5kQVu0APcybGr012wZIKuO2J6GiUhZMzzCs1zafC8rTttVPFHBYt0eD3tP25ohHpyS4EF8BQYc6gC2jfe2pACdcF3BYMFViNTQjIRZX2bqUe2VoZr7LtH5ZX4tmT2jde5AkyE05MIHrx0VQh1d9SenH8sTPunFLVzF8egg7RiM5w583y7Tq98+8DV9aIGKIlfuIbDiA9dPbzwOIcrVwUQ7FuHnD785CcLw+Ufj69sACylqWRfAuiLfuSbj4mUnP3op/CuPU9kYOON8kASmHC/Cs++VgbxiBJ1XPMS+q+d/vVsvoBZcb8ZxLdlYjL8hnUkdoYZL778up1/1M8Mab+KKG7Lf91x+3be8hCRdechKelXSZASml1Uj3sLCX+9vLU6WVlrdSIPUTCNEwE5I1K/9jy4p5nnAe0RQhxmQxbI2FsFP4JMtTNtoGxJ2x+XHEBSKhC+U+oRRyTaMS3m3QOqfQxkSw3JGHCrKx4YnjS5VCiQIezd9CKkjEHYFe3qj88vZ6pC99f9jGwT4D0SetgOQ2vuRTj62mRfx1S6YRopcU743wciuyc868ZJbk/pM3a+cF4AoAJSRgVn0OcS9siTekdDciqTVrcTc/SwyP97QvfFusW2bomW7NIJpaFRsrLjxBZLG7mZBAjA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(136003)(39860400002)(396003)(451199021)(5660300002)(921005)(8936002)(41300700001)(66946007)(66556008)(66476007)(8676002)(4326008)(2906002)(38100700002)(38350700002)(7416002)(4744005)(2616005)(6486002)(86362001)(52116002)(6506007)(6512007)(26005)(1076003)(186003)(478600001)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?m9jLKQ3BsxNgAzM2G7AWR1A82nmDGLJqphrQPn4AhHRWhT+9IYP7BZV0wsW4?=
+ =?us-ascii?Q?Xzz14X/QeBd/59kh9wDJjURoyiLvvcRAmhhP25kqxgR/egkeo+KLD+CmA8Lk?=
+ =?us-ascii?Q?+3GVQH/GOOi9PRMLd7aKDm9aLQ+p1WlV9BBJeihBhdLI1eUsuNBN0lFDJh5P?=
+ =?us-ascii?Q?5rnq0+XV6IsUSbSDhpeRWEHQ781lmB+aweDc91uLhP6cNhGh16gBi+aFo7/B?=
+ =?us-ascii?Q?JOqpxrQZ9vX5/RD6NKkUzE5vCLfTe/H/3A7dx4jHvq3aXmtXGkDWe2RHYIM6?=
+ =?us-ascii?Q?3I+f+109H+0v2EIp6L7eyzW+niR/3ehLop8zL5yu4XcbLb1m9FUu5lyoXGJv?=
+ =?us-ascii?Q?omRhkoDmQNPyKGYxVRNrO55B33nJtyDAYcMrJbnJE0enX2nqE+OcEDml5Lux?=
+ =?us-ascii?Q?Rq5sNO9Lux+qUNHb9Ku9BJA3TlA4qK792ov6FyOzkYWI/hIxjZmCN4IhzLg+?=
+ =?us-ascii?Q?3UULV4wjCgttPfWY3BshqWdtVEpPoOv1Mrk4hXAUkyg8Qdn7ZP2YHuzdOfwD?=
+ =?us-ascii?Q?9BSrlgPijEyCXBkNgN2K91oo6MY9S7JIVndebjpAT5xDHTNJdmQuXKvCfr1C?=
+ =?us-ascii?Q?OxJg17TpcXQn9oH7SDoYTzhoFEDWDuZLeZ40bZO2PqTFafq8qQegGucxEbC5?=
+ =?us-ascii?Q?cizTumJpRKFcupf5pwXbACLMkRZutIS+g2iynYWRADQM6QJAszeR/U35jNf+?=
+ =?us-ascii?Q?LeAP7R4xkv9yfW6BOHUl27MSJz6Xl35IdPhZK5Hc/BM3XD/NSuqk1SzuQIfd?=
+ =?us-ascii?Q?hrIz2VF1kcxkyMM8Jg8Zt2mAmB9PtYHHEDh/Xyb4IIgIyVq++oo2xhU/pHmK?=
+ =?us-ascii?Q?ZbUwpTFcXenb2iMv2agaaOi2CpOHi8H3LYxB9Zy9Jse/wAzz0pUcHQoho87G?=
+ =?us-ascii?Q?i0ErJ0DbFcX7tzFSoMb0DstoQfbW09Y6vxPH8xvh3l4yp4DgDqaUGMD/LLBz?=
+ =?us-ascii?Q?Bb4feovCJPp6EaxjD1cHaQVyfZbELHZ/N3nYacTBEIcIxsN2YlfRvA198wzf?=
+ =?us-ascii?Q?tnTDN5wDAg0ZTAm+hAJ7bsD64ofovsbVz4YMZY91L9d9jgSeZhrh5tRsvlR8?=
+ =?us-ascii?Q?9ZvNyP6grqqmis09eim9EUi4/bC7qCrXH55DYtxT2AKQwEkNcO5B5zAprtHG?=
+ =?us-ascii?Q?+zQ8MjDHXEN9axaqbDFxB+2MdjLylhS1hhM89M1HPDa+xzd6aTVlcShBh9y4?=
+ =?us-ascii?Q?oQs4j+IC9EuuhNFOtTR7jgObREkhkhaAUK3Ld5DoAE0KJvYInP7bfRxOCakD?=
+ =?us-ascii?Q?L4GSvsNr7NukE5wx05PHUXCd2JW/4N/Gdw7QVGv8M+dMb0eB9ilSb74tyYwE?=
+ =?us-ascii?Q?Ysu7B9ChlURErHIjCeJ+PzaaNwTzwHfY025redgaQnI4K+l+EzaZgX95tsva?=
+ =?us-ascii?Q?IUt0tdeNSw/SRinbvBtdnh8Lp1W4nJNtXVUEFisXUTJ1TZqnVUe6TkLllTOY?=
+ =?us-ascii?Q?8cvJbeHyPmoEjOhdIg8O/edf1tVSyT5BDnqoQbb444TSX37NjZXIlMrTTU+y?=
+ =?us-ascii?Q?RDfcb1fGWN6a5Xz4WJcMhkeAWkVM9BgDCtYOsgVkCgamm5s4iSUZv5+szPL6?=
+ =?us-ascii?Q?wILlumOzNaz0Ryz7zBE/RhHgAnH42U7CmXomvVgW?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff260929-8530-4588-8035-08db2f5317f5
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 06:10:13.7416
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: p66fAQ+jpkGvxdeYDYBnoboGsZ/P3Igazx+aJ8UweRZEF1rZbHobJnPzOfgciK+OARJPMtB6P9xyXbFqiwo6KA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8923
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Peng Fan <peng.fan@nxp.com>
 
-在 2023/3/23 13:30, Xie Yongji 写道:
-> Since virtio-vdpa bus driver already support interrupt
-> affinity spreading mechanism, let's implement the
-> set_vq_affinity callback to bring it to vduse device.
-> After we get the virtqueue's affinity, we can spread
-> IRQs between CPUs in the affinity mask, in a round-robin
-> manner, to run the irq callback.
->
-> Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+Add optional power domains property
 
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
+ Documentation/devicetree/bindings/net/fsl,fec.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Acked-by: Jason Wang <jasowang@redhat.com>
-
-Thanks
-
-
-> ---
->   drivers/vdpa/vdpa_user/vduse_dev.c | 61 ++++++++++++++++++++++++++----
->   1 file changed, 54 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-> index 98359d87a06f..45aa8703c4b5 100644
-> --- a/drivers/vdpa/vdpa_user/vduse_dev.c
-> +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-> @@ -41,6 +41,8 @@
->   #define VDUSE_IOVA_SIZE (128 * 1024 * 1024)
->   #define VDUSE_MSG_DEFAULT_TIMEOUT 30
->   
-> +#define IRQ_UNBOUND -1
-> +
->   struct vduse_virtqueue {
->   	u16 index;
->   	u16 num_max;
-> @@ -57,6 +59,8 @@ struct vduse_virtqueue {
->   	struct vdpa_callback cb;
->   	struct work_struct inject;
->   	struct work_struct kick;
-> +	int irq_effective_cpu;
-> +	struct cpumask irq_affinity;
->   };
->   
->   struct vduse_dev;
-> @@ -128,6 +132,7 @@ static struct class *vduse_class;
->   static struct cdev vduse_ctrl_cdev;
->   static struct cdev vduse_cdev;
->   static struct workqueue_struct *vduse_irq_wq;
-> +static struct workqueue_struct *vduse_irq_bound_wq;
->   
->   static u32 allowed_device_id[] = {
->   	VIRTIO_ID_BLOCK,
-> @@ -708,6 +713,15 @@ static u32 vduse_vdpa_get_generation(struct vdpa_device *vdpa)
->   	return dev->generation;
->   }
->   
-> +static int vduse_vdpa_set_vq_affinity(struct vdpa_device *vdpa, u16 idx,
-> +				      const struct cpumask *cpu_mask)
-> +{
-> +	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
-> +
-> +	cpumask_copy(&dev->vqs[idx]->irq_affinity, cpu_mask);
-> +	return 0;
-> +}
-> +
->   static int vduse_vdpa_set_map(struct vdpa_device *vdpa,
->   				unsigned int asid,
->   				struct vhost_iotlb *iotlb)
-> @@ -758,6 +772,7 @@ static const struct vdpa_config_ops vduse_vdpa_config_ops = {
->   	.get_config		= vduse_vdpa_get_config,
->   	.set_config		= vduse_vdpa_set_config,
->   	.get_generation		= vduse_vdpa_get_generation,
-> +	.set_vq_affinity	= vduse_vdpa_set_vq_affinity,
->   	.reset			= vduse_vdpa_reset,
->   	.set_map		= vduse_vdpa_set_map,
->   	.free			= vduse_vdpa_free,
-> @@ -917,7 +932,8 @@ static void vduse_vq_irq_inject(struct work_struct *work)
->   }
->   
->   static int vduse_dev_queue_irq_work(struct vduse_dev *dev,
-> -				    struct work_struct *irq_work)
-> +				    struct work_struct *irq_work,
-> +				    int irq_effective_cpu)
->   {
->   	int ret = -EINVAL;
->   
-> @@ -926,7 +942,11 @@ static int vduse_dev_queue_irq_work(struct vduse_dev *dev,
->   		goto unlock;
->   
->   	ret = 0;
-> -	queue_work(vduse_irq_wq, irq_work);
-> +	if (irq_effective_cpu == IRQ_UNBOUND)
-> +		queue_work(vduse_irq_wq, irq_work);
-> +	else
-> +		queue_work_on(irq_effective_cpu,
-> +			      vduse_irq_bound_wq, irq_work);
->   unlock:
->   	up_read(&dev->rwsem);
->   
-> @@ -1029,6 +1049,22 @@ static int vduse_dev_reg_umem(struct vduse_dev *dev,
->   	return ret;
->   }
->   
-> +static void vduse_vq_update_effective_cpu(struct vduse_virtqueue *vq)
-> +{
-> +	int curr_cpu = vq->irq_effective_cpu;
-> +
-> +	while (true) {
-> +		curr_cpu = cpumask_next(curr_cpu, &vq->irq_affinity);
-> +		if (cpu_online(curr_cpu))
-> +			break;
-> +
-> +		if (curr_cpu >= nr_cpu_ids)
-> +			curr_cpu = IRQ_UNBOUND;
-> +	}
-> +
-> +	vq->irq_effective_cpu = curr_cpu;
-> +}
-> +
->   static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
->   			    unsigned long arg)
->   {
-> @@ -1111,7 +1147,7 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
->   		break;
->   	}
->   	case VDUSE_DEV_INJECT_CONFIG_IRQ:
-> -		ret = vduse_dev_queue_irq_work(dev, &dev->inject);
-> +		ret = vduse_dev_queue_irq_work(dev, &dev->inject, IRQ_UNBOUND);
->   		break;
->   	case VDUSE_VQ_SETUP: {
->   		struct vduse_vq_config config;
-> @@ -1198,7 +1234,10 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
->   			break;
->   
->   		index = array_index_nospec(index, dev->vq_num);
-> -		ret = vduse_dev_queue_irq_work(dev, &dev->vqs[index]->inject);
-> +
-> +		vduse_vq_update_effective_cpu(dev->vqs[index]);
-> +		ret = vduse_dev_queue_irq_work(dev, &dev->vqs[index]->inject,
-> +					dev->vqs[index]->irq_effective_cpu);
->   		break;
->   	}
->   	case VDUSE_IOTLB_REG_UMEM: {
-> @@ -1367,10 +1406,12 @@ static int vduse_dev_init_vqs(struct vduse_dev *dev, u32 vq_align, u32 vq_num)
->   			goto err;
->   
->   		dev->vqs[i]->index = i;
-> +		dev->vqs[i]->irq_effective_cpu = IRQ_UNBOUND;
->   		INIT_WORK(&dev->vqs[i]->inject, vduse_vq_irq_inject);
->   		INIT_WORK(&dev->vqs[i]->kick, vduse_vq_kick_work);
->   		spin_lock_init(&dev->vqs[i]->kick_lock);
->   		spin_lock_init(&dev->vqs[i]->irq_lock);
-> +		cpumask_setall(&dev->vqs[i]->irq_affinity);
->   	}
->   
->   	return 0;
-> @@ -1858,12 +1899,15 @@ static int vduse_init(void)
->   	if (ret)
->   		goto err_cdev;
->   
-> +	ret = -ENOMEM;
->   	vduse_irq_wq = alloc_workqueue("vduse-irq",
->   				WQ_HIGHPRI | WQ_SYSFS | WQ_UNBOUND, 0);
-> -	if (!vduse_irq_wq) {
-> -		ret = -ENOMEM;
-> +	if (!vduse_irq_wq)
->   		goto err_wq;
-> -	}
-> +
-> +	vduse_irq_bound_wq = alloc_workqueue("vduse-irq-bound", WQ_HIGHPRI, 0);
-> +	if (!vduse_irq_bound_wq)
-> +		goto err_bound_wq;
->   
->   	ret = vduse_domain_init();
->   	if (ret)
-> @@ -1877,6 +1921,8 @@ static int vduse_init(void)
->   err_mgmtdev:
->   	vduse_domain_exit();
->   err_domain:
-> +	destroy_workqueue(vduse_irq_bound_wq);
-> +err_bound_wq:
->   	destroy_workqueue(vduse_irq_wq);
->   err_wq:
->   	cdev_del(&vduse_cdev);
-> @@ -1896,6 +1942,7 @@ static void vduse_exit(void)
->   {
->   	vduse_mgmtdev_exit();
->   	vduse_domain_exit();
-> +	destroy_workqueue(vduse_irq_bound_wq);
->   	destroy_workqueue(vduse_irq_wq);
->   	cdev_del(&vduse_cdev);
->   	device_destroy(vduse_class, vduse_major);
+diff --git a/Documentation/devicetree/bindings/net/fsl,fec.yaml b/Documentation/devicetree/bindings/net/fsl,fec.yaml
+index e6f2045f05de..b494e009326e 100644
+--- a/Documentation/devicetree/bindings/net/fsl,fec.yaml
++++ b/Documentation/devicetree/bindings/net/fsl,fec.yaml
+@@ -144,6 +144,9 @@ properties:
+     description:
+       Regulator that powers the Ethernet PHY.
+ 
++  power-domains:
++    maxItems: 1
++
+   fsl,num-tx-queues:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     description:
+-- 
+2.37.1
 
