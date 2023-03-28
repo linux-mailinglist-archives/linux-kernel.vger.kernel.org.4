@@ -2,105 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282EA6CC023
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B396CC02A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232676AbjC1NGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S231779AbjC1NH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbjC1NGq (ORCPT
+        with ESMTP id S230052AbjC1NHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:06:46 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAD8E1;
-        Tue, 28 Mar 2023 06:06:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7B5F7CE1B5B;
-        Tue, 28 Mar 2023 13:06:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F54C433D2;
-        Tue, 28 Mar 2023 13:06:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680008789;
-        bh=x4cblEk4sOAHylEWs5F6A2qdw79QFRP52N4WmGSIy8s=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=c+eZL4ETzBjnp+yIOByAeNjjF0YLvWNg2ViZc4LPi3i+3n9Jw2OI1bVcGRNbHJYEG
-         2xvgU5S66RLQxyxrex/zd71yU9bolvfhngXdtqHzvqy2dzmqgWT+glhjW+idG6RkuD
-         I0enkVVElhWUjGtjZo2NUAUStLUtjnsRxvcUp5kBzMLhoqJRQSSLlZnELAQq7/cJvu
-         Kh0Z1FMTc8Q+zpv963cofBMV/DS40oIe3o2tgKm0s9X+aaybBETxxoe4LCsALP/LJY
-         j6UIbu4B4qOucDw3Nyz4FQd2jENbb3Ou2KY0oT7ZVjDNKh/acyFiAZSqpSP01LkWt4
-         e431l5ITCNC6w==
-From:   Mark Brown <broonie@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-gpio@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Rajesh Patil <rajpat@codeaurora.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230323173019.3706069-1-dianders@chromium.org>
-References: <20230323173019.3706069-1-dianders@chromium.org>
-Subject: Re: (subset) [PATCH 00/14] Control Quad SPI pinctrl better on
- Qualcomm Chromebooks
-Message-Id: <168000878531.3186355.13214896425216649908.b4-ty@kernel.org>
-Date:   Tue, 28 Mar 2023 14:06:25 +0100
+        Tue, 28 Mar 2023 09:07:53 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03EA358E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:07:23 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id q7-20020a05600c46c700b003ef6e809574so4118948wmo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:07:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680008842;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OpdRkM3R0JQlVYGauxzADNJOFLfabEXJ53niUWlHTGk=;
+        b=rn8cYKKWZlUX64DaNwMePTuIwr6mLJ3k/hyunrzYft7lUDnUW9ReRXtsYa6ndZNT47
+         20r7av+3YF0zNRK1UJ3b5ZtJpOdBPLsq8hUldQDhNIqjJGEfRb+XDE9yUP4wROQgpGKG
+         nFzUriXQV5to0GarhtS7zKRy/TYCz7ffW7j/wptei4/X0Ln1W5Mi4KE6N3+M0uuYrXIP
+         h31phkBc3kTghA16/bG37haFRbufTEbmmukmmoPlnYNtLMc4rCoHTeH5c0NyxPY1EjzF
+         1URDfW5djEh6Qwmdu0yLW1gZAlwaXbidH4xGilNQMYHBqJ2TE55pR/QVR4R/0foThzBd
+         VNJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680008842;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OpdRkM3R0JQlVYGauxzADNJOFLfabEXJ53niUWlHTGk=;
+        b=zkcTW5UllXeK3z+gPYJreS+CcRqcDnij0s/UeqldLtqy7ki9hQLFTBnoghJTyfcL3q
+         Up25GsYv7sWXlVhq+bS0UnCPdY8qvEWd7BtNw3uVo/I3g9CSHfNRfpCTfBy1HGf2MdiO
+         c64LIiAu9gO+S+jc+M9BK1WlVlr4Ai8ViDozhwADNPlv+m1pxGmlmcoAm1yc3e2I10kF
+         z8JwWTr9ZqZ09hT27lhSamdRFwA8Nf4HDSrA+szm3MB7TNcTvNdYmMj7SlTul+tY8CSA
+         OQw0RLCVTtJ/YhAgR8naXPvSsJ1Y8M1HyxIbXfW0nIrQ/seTGQXXvq5Ery+cTeRKYD2a
+         xviw==
+X-Gm-Message-State: AO0yUKVZQct/h3QWRMytpdAhUj0sVPGRIIWbSwI1pZ/B99psT1CTdhHZ
+        MU29a8Pp7Bs00MEVkHWHOSgN5g==
+X-Google-Smtp-Source: AK7set+PAOVrphLG3TzOJnmPrwVbTDuKV5by80RyF/I58ryqteQWWMVyEVY/9Qr6DV1yoLlDgB1l7w==
+X-Received: by 2002:a1c:7703:0:b0:3ed:3268:5f35 with SMTP id t3-20020a1c7703000000b003ed32685f35mr12171344wmi.18.1680008842420;
+        Tue, 28 Mar 2023 06:07:22 -0700 (PDT)
+Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.googlemail.com with ESMTPSA id z6-20020a05600c0a0600b003ee6aa4e6a9sm12733650wmp.5.2023.03.28.06.07.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 06:07:22 -0700 (PDT)
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Subject: [PATCH 0/2] Cleanup Mediatek pinctrl device tree binding
+Date:   Tue, 28 Mar 2023 15:06:31 +0200
+Message-Id: <20230327-cleanup-pinctrl-binding-v1-0-b695e32e4f2e@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-2eb1a
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAFfmImQC/3WOQQ6DIBAAv2I4d4tCS4lfaXoAXHQTuxJQ08T49
+ 2rvPc5hJrOJgpmwiLbaRMaVCk18QHOpRBgc9wjUHSxUrXSt1QPCiI6XBIk4zHkET9wR92Brc3M
+ 2Wh+NFYftXUHw2XEYTn9JcjVXDTk0cp4SBfmerTZ3+ad3JlLGSJ/f3PO1718Qh3DorAAAAA==
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?utf-8?q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Mergnat <amergnat@baylibre.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1142; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=4nMN7tX1HIYk8GXeEmFaDGFsrli+O0c5eDh/c1JgHw0=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkIuaJbgyBcMCGFgwrsQKRqQ5kkKVAFy/3/3tCgver
+ P4J7pd+JAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZCLmiQAKCRArRkmdfjHURfjuD/
+ 93rRLDRJBC05EsNk/H1hRUWIUYd7Vg5EhiyaDmZe1DmmA5RLrgiT8Y9mrpBq9a5AMG1ktH/jSwJ2sb
+ jvSgdCqqUZtfDhcJP9TFjmwjEvzkKQbVTTToWStTljuTpuEO770Y/wzhKPsowuQyw86zgOWSkBlkkQ
+ 8gPSL5i62H9iUBbq9eOhI9cr1O2RDuhXLKqEfICVyODg9SrV5yTq+OEZAWOGAQ1t+aKXHo91Fe1pb8
+ hClK/e6oOF1qLMjXsyr7ktU5Auq1qWYpT7dKCq0CGpYq25vAeAokPkNt+0RQkaGCeunecn9AyCDoiy
+ Nj0hisZBCM1/Y7Kf22WPGugJyIif5VKghvK2i1Hu912PoNRyRn/AtgUpRL8HhJf7GwKt1JcMuNpfZG
+ DL+1xOkUbZKlJHRvf/OimdwM2oCxctYQb8JpwxDjGHHYEnlSGHr0ZDfdTIuARbMTYq4Mrnpe3Xu3Tb
+ YeUOgDbhmYSZxodPp80gtfCFIUDhVZV6Ug8IS9/gmpjbaD9tNAdBik6KwAnruEy2p7yf4AneuX1Eha
+ fUegukwv8n7LZUs0X4ilCLejylrDITaR02S7v6TNBuOhVWy4kW5O7pL01Dszd/ymfVuHMnseiHnh6D
+ 4BdrJUeJ/hXDYiJB9gdXpVzmhqlJ5Kh9cgdlrpgxV5Ghm39wfdvbBVobshbw==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Mar 2023 10:30:04 -0700, Douglas Anderson wrote:
-> The main goal of this series is to do a better job of controling the
-> pins related to the "Quad SPI" IP block on Qualcomm Chromebooks. This
-> is essentially 'v2' of my previous attempt in the patch ("arm64: dts:
-> qcom: sc7180: Fix trogdor qspi pull direction") [1] but since it's
-> spiraled out a bit and there are no patches that are exactly the same
-> I've reset to v1.
-> 
-> [...]
+Deprecate properties which shall not exist, leaked upstream from downstream
+kernels, there's no reason to use them. Here the deprecated properties and
+the generic properties which will replace them:
 
-Applied to
+- mediatek,drive-strength-adv => drive-strength-microamp
+- mediatek,pull-up-adv        => bias-pull-up
+- mediatek,pull-down-adv      => bias-pull-down
 
-   broonie/spi.git for-next
+Thanks AngeloGioacchino Del Regno to reported it. [1]
 
-Thanks!
+[1]: https://lore.kernel.org/all/6e08d78f-ef4c-b228-f7d2-d63767ea87b8@collabora.com/
 
-[05/14] spi: spi-qcom-qspi: Support pinctrl sleep states
-        commit: 0098c52745112c4387942a37559ababeaf072f0c
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+---
+Alexandre Mergnat (2):
+      dt-bindings: pinctrl: mediatek: deprecate custom drive strength property
+      dt-bindings: pinctrl: mediatek: deprecate custom bias pull properties for mt8365
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+ .../bindings/pinctrl/mediatek,mt8183-pinctrl.yaml  |  8 +++--
+ .../bindings/pinctrl/mediatek,mt8365-pinctrl.yaml  | 38 +++++++++++++++++++---
+ 2 files changed, 39 insertions(+), 7 deletions(-)
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230327-cleanup-pinctrl-binding-8064a8f8bf68
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Best regards,
+-- 
+Alexandre Mergnat <amergnat@baylibre.com>
 
