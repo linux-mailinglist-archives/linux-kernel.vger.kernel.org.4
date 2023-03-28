@@ -2,133 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD61A6CC8C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBFF6CC8C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbjC1RDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48594 "EHLO
+        id S229806AbjC1RDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232296AbjC1RDH (ORCPT
+        with ESMTP id S229664AbjC1RDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:03:07 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on20606.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8d::606])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3071F86A5;
-        Tue, 28 Mar 2023 10:03:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MdyiGoHpkEZ6Qvh446N5I9XC2p1BSWk6y1KORKwJ418pRFujjlLLAbgjmevYd9BI0uoNy/a5EW7ZRBuNusqLmPQLjyOhp90uxZFTXIMyYNScVnHAUQ6H/2wXMZzgXCmWh+AMCRnpSaAW69lJbPRNgUp17MsrbAgS9b50wz/w7PAKUHb2eMCjFwKlx+q1YA5jcuaN+IjuJy9LSpUYMVuztnF+3zPUOwf+sWhQGcqK9ineo5tLJ+e9mURvmF8zormxQq8jUiFZ2Qqj0cJMqEtrs2miqqCFBPnCUy5mw0/O9j8O2RFL3ajwd+krVvPyUlxG9KG2oOPsHqLtqpRfcmVW+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I7DZOZ33qAEmUL5Ll0k87h+43qGUqRKo/j4A4Nu1dlw=;
- b=TBD018XBlaGFy6yBo2Jmp4lID/HkluEYdS58rI1uAIMPqjKTLxPvIsMx5xM7EfVQAfF/ONTacci6mCaAaFwHPlqs7Y4TODdiIb1F4ausa2/RDw45aERCV/hHyWjJyfvJrTg0moOS5Wc7hsH49spT/lgW4c9uvGorQRc7TCvPj53853Z5KQHtiiKj8KNXYjEExhOyCwhYtDkQsYmjZAwpcndTSjWFzsGEN01kqGL0GxE85xi1zhj9L/pl2tfiRlJxYkmIe7ajIE6yMdvzG2UJhSoaARnsck+79r0fDDnQRokR8J2nfx8LD32exx/szkFZozX+6Smd6aOITETA7KoQ3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I7DZOZ33qAEmUL5Ll0k87h+43qGUqRKo/j4A4Nu1dlw=;
- b=itFV/AGqvzKLQjUEYymln/thbgL38ejnZ9ETUMHWPAhIap0Rd8WMHj+54b1usZmLRUFEkrq5QoOnKX/vs7+5Oz8Tkz+uJfaCzK09Z9l+X576TwprO55/M0k3Fp5Qq81/S6mZUdyht8t6kxQxlsG361E+KnmBy89z5DRX767a9wyUPQkbvTf7mjTKvC9K+Hh2WEHv4cesIYg0E+WtTTiZ7u0Aqv/m2GCMnZwpZqrPIHJ7uIBYsm1ZjRiCw/gOcNOsGYmHPNmdJYeUtqFMMLB+FCJqDiFPBx6+wjZzlGVr1EwQkOdCezzLH3fxSDWcgWZCezn/2rXzMtvqW865snjPoQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- MN6PR12MB8490.namprd12.prod.outlook.com (2603:10b6:208:470::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Tue, 28 Mar
- 2023 17:02:55 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::abe1:c2f2:c4bb:ba78]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::abe1:c2f2:c4bb:ba78%2]) with mapi id 15.20.6222.033; Tue, 28 Mar 2023
- 17:02:55 +0000
-Message-ID: <9baff4c3-31ff-c19c-01fb-f438797da9ea@nvidia.com>
-Date:   Tue, 28 Mar 2023 18:02:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] PCI: Assign PCI domain by ida_alloc()
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        =?UTF-8?Q?Marek_Beh=c3=ban?= <marek.behun@nic.cz>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <20220702204737.7719-1-pali@kernel.org>
- <20220714184130.5436-1-pali@kernel.org>
- <b529cb69-0602-9eed-fc02-2f068707a006@nvidia.com>
- <20230320205936.wd6pj3trljsduj5c@pali>
- <993ca7dc-1d39-6ae9-1033-838d81aeb076@nvidia.com>
- <3414723d-7d79-809f-e63f-35243d945b50@nvidia.com>
- <CAL_JsqJ+3j60WK0HSr0rFQYwPkMbs=ZW=mifd7ggeNQA8+iuaA@mail.gmail.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <CAL_JsqJ+3j60WK0HSr0rFQYwPkMbs=ZW=mifd7ggeNQA8+iuaA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0390.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18f::17) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        Tue, 28 Mar 2023 13:03:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A52F770
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:03:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4650CCE1DDD
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 17:03:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0870C433D2;
+        Tue, 28 Mar 2023 17:03:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680023009;
+        bh=in0IdUiQPH3Cv4MI/zIdwXOMEHraRgEvyxAlOWnfFm0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nvCdDWGuafHDjP2V7kD1KJP+i46DEda3R4GL0p14N49usgSmntPk/iZzrvlnQmvvS
+         /MA0UzAkuUzNtGIV3J2rEPtkfyDfEkoGxsWaC6ciejXHgKn3X0BhvwkcHXHxIMdghy
+         cZBh4pQ5XeTTY0D7JJ8qbDIyLtOfKb06RtVx0Uzd8/EhARQDXhIYD58OBcaIwppd8G
+         l/SKNn3J3Z5ADmDx59y/P+KSge4Z4aaLNsI3skjFni3a+tHMyM0edp4XI/7U+R7G8f
+         sTq947L1JruZRGkPDJ5+RMi6RutKeMT62wxwCUSl9iRCWf7BGf/oeuYupngAmGKbM/
+         X2hyg29GXuwAw==
+Date:   Tue, 28 Mar 2023 18:03:25 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Yunhui Cui <cuiyunhui@bytedance.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] riscv/fault: Dump user opcode bytes on fatal faults
+Message-ID: <d7111158-7e17-4c88-a8c1-a568db5891fa@spud>
+References: <20230327115642.1610-1-cuiyunhui@bytedance.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|MN6PR12MB8490:EE_
-X-MS-Office365-Filtering-Correlation-Id: f4337476-1a51-4d95-0773-08db2fae4645
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cAGQl5oc7Aq1cfKl8znS8/AJ6rR9oLQ9OPbelg+YRNl6snvD7ZZB0BATI46ea5mnRbZJw0KzcgzRLhNDTp4XKoyIw4RW2acCJlhwgt3dquEUWsHnTWJnL3ss+I0u5u1TaGlNu7eBtHhtZghDkmaXtkTI0+qCZqyihRGWC9AVsHtbz5Ij2kCO7z53L/Gb5whdHtY9r1hxaQNBSgEf4RbYnDzY76oDqIMR4Wl0bsOJKSgIjboVEdJClGhaiyqQ/pZa4JJaoGl1PgcMzMTPai5WG92WUqEUIJkU3FCDKozRhQm7Oa3EJRRnDr3ow1NCxB4AGi1aT2hImHelpjhKFCNFGol1u3HnhrBJH8K4GDpyUfCInkuhMwwxRryQM8ybmsWCiYEPUtSH+Mygxha6vwEsOFefR3+nwb44+OtySahxQVQjAkhX7Y/KCCA/pigv3nAJh/HP5nZU8VW28b7LtYDOyRNLebGbpj8WHF+PuXjMQ8pCAVjQ4w8vzgMnQH2t85OIYNwYXsQHB1oXK+DDAEvkjGbBDUIiwO1BHvVIVNK6VRavNM4f/sTwVeSF6suiRliUTYGAvz+jIgFjxsQ8cOF2szNWBIRTJ5fWYfg6FKNyqCN2FF9qWPbIopti8UxSEMZhpEZCc/QTb3hGJL9a/6Vu6g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(396003)(136003)(39860400002)(346002)(451199021)(38100700002)(26005)(53546011)(6666004)(36756003)(55236004)(6512007)(6506007)(186003)(6486002)(86362001)(54906003)(41300700001)(31686004)(2906002)(31696002)(8936002)(316002)(8676002)(5660300002)(66476007)(2616005)(66556008)(478600001)(4326008)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZVVxam9STWJZYVZReE91NzIvWllibUxlSjdTd0ppZXBNK0NoVGVkM3RrTVho?=
- =?utf-8?B?ZGtldGxoQkQ5Nko4eG9Tc0RDMEZmYTRpckswWnZKZFRZbWVMYk9ITnFPNkI5?=
- =?utf-8?B?eHdYZC83Z1JsbWdMRVUvaEh2K1VuZGdrek10R3cvK0c0dmpCZzZld0dsaW5K?=
- =?utf-8?B?UmFBcFFsUEt4UFBoalBWbDlIbFB3K3JMeXdvSlhRNVVKQzhldjdsT256bGFs?=
- =?utf-8?B?cVhhYURsdGpobFNRR0F4Y2d6bm1EdzBwYmdwSVNaclpkVitpU0tnV3Nmb3Zt?=
- =?utf-8?B?dmJTSFZZQUx1QlU3OEZvYVdHME1XVXptcHpLcW5VczJtbEwrc2FSRVc1NDE1?=
- =?utf-8?B?cW9mRGhyWTVHVXY4TEVTZHZ3SXVuN3dRRFJtTTBYZ1BRa0REUGl4dTdSSjFv?=
- =?utf-8?B?dXVqYTJLNmZmMEtQRjJJVjFCcjZkVlJHTzBBYWtDZXg4ekpHZHFnTlNpeU5Z?=
- =?utf-8?B?bGhJRjE1cTdTUkJPTG9yT1RmM2I2cGhHemlaZjBRMmNNWFhmZ1RTM2htWHQ4?=
- =?utf-8?B?WkdRRFVMVHg5d291OHlYYmkweHJXL3BNakNlQmJ6RlhPQjlIUnJ1a3J2S3l4?=
- =?utf-8?B?ek9hSm9ickNhbnVqWm4wcUpaNlNSQmFDQWV3RmRoVEEzek1uWlk0SHpFUEgx?=
- =?utf-8?B?RTFvMjdlUTRXS0NHcnN6MS9mbkt5QTJVeTVYU3FGaVNCZit6cFRpN1NHRG9u?=
- =?utf-8?B?QlQ1RWtUb01kQ0dUUlhyTkVabHpRZzY3TXdvdXJYM3NrOSt2WStrcHkrVmJk?=
- =?utf-8?B?NVBUaFdxaDVUYjJRbDR2Y2gybnlXYzFDQU5HSlBkZDdqTi9uV0Z4WVFNTWVV?=
- =?utf-8?B?aTZBUzlycGZDYmtKZnZDK1lWRG5pMnkrbEZpNm9OaWdhK1NtNUQzdlR4NEhS?=
- =?utf-8?B?VHFoMDRGWW5FSzIwb2cyRUlvaFgyQTRqcHJ4M0hWZEljaVdVdXMxWW1yUXBi?=
- =?utf-8?B?U3JNRUFkZEdFUktYcmNTZWt5MG9ocFFOV0tRVFp5S2xCTjFWZGZTMmN1R2JU?=
- =?utf-8?B?MmVUSEtNNEt4ZlVJc0kvRDRrM21haGtYbGtRS3JEY0k3R21ZYk0zWlFMeXJo?=
- =?utf-8?B?Ujc3THQ1dlUzM2JkbnJ4RGFCeWlrVUVZUzBlcnFaYkN1Wi9qUUJzbXpXVGlC?=
- =?utf-8?B?aDRVcE5Ma1RGbjVXTDMrbjhZTHFGRENTRmNPY2Rxa0l0SDI5QXNqWFRxQVVm?=
- =?utf-8?B?cldHdjExTytwTy9iY2k4R29BQTcwMDZjOEZ3RWw2b242a1E0aSt2T2hXc0Z3?=
- =?utf-8?B?UXhPTUplU1I0RVp4TFlBTWxITFoyT2VGOGlEMnA5Wm1nTkxFMFc3NVh0VkJt?=
- =?utf-8?B?TEg0RllEUE5OQXlaV0FkYnR3OFM1dHFDRUVsbnYrWWdNMG5oanFYQ3lORkZE?=
- =?utf-8?B?clVmaUdsNzZBdktKc3NjRndrMkRoenc1dlVtSjBxL2tkTUNRU3djeVozbzB4?=
- =?utf-8?B?YXVNMmtOYU1ZR3ZEbjRycStNTEVqSXBkNjBxMEY0RlJBcm9NdWk3KzFVTy9t?=
- =?utf-8?B?S3ZwdDJKL0dzQzhlS3lsZXArWkkyS2ozUmc0Z0hNVlpTeGE3QzU4bWNteHpp?=
- =?utf-8?B?aVlSclhidWc5WG1vVlpCL0NVaE94dnFCYTVTMXNZZmpUeEdpaldiTUlOTjZ6?=
- =?utf-8?B?YVhzYUJ0bVN1b21WUDU4WmRQOWViK002aUFyRXJac21sZWpTci93WHVoU3hn?=
- =?utf-8?B?V1ZHVkljbFUvdEhVMTFJdC9xZVYyYVc4T0piNlQ4ZXZzOENkaTFDNjBBR2p0?=
- =?utf-8?B?UjBST0h2cmRZblRBRUFsY3BQb3F3eFc5dzRrOHlrRDF2ZytCOXBFamg5ZFpH?=
- =?utf-8?B?MGl1WXZRYlUzcDNvWE11TnQvQ0dtTXhKR24yL1JPTHNWWnB5YTdMS1dDTXJ6?=
- =?utf-8?B?RkdqMkUrUWplWnFnaVhQY1Fja3Q2bkRjZXdMYmp3Q3FoQnZ2cWRPRVpHS2dY?=
- =?utf-8?B?VDdaUVRkTDBzRXZVbk83VXd2bW1HTGdibFg4Y2M1N1FrYlIramUxRVp3aGhl?=
- =?utf-8?B?VCtBeCs2V0tHRVBJdEN3QmVJWkFyUFlJSURhVk9aQThNMlE3SHNUNTRxY2Vy?=
- =?utf-8?B?c0ZuTlZ6cGs0c2E1RXpqeE85V1dKcllOUkZhUzBxZUVPbDBNRUdaMDkvcEVu?=
- =?utf-8?Q?+jOtyeMxPrF3xOqT0mN0qWOBB?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4337476-1a51-4d95-0773-08db2fae4645
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 17:02:55.6417
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i3f1aSUStKkbcg3KHN2Afe4B6jceJdGWNEDkT2rYwEONKzjcDRxza0H4TkUhot8umvFNO+Qurg89uTBDcrg8CQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR12MB8490
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="E30cZZlBmncUM56x"
+Content-Disposition: inline
+In-Reply-To: <20230327115642.1610-1-cuiyunhui@bytedance.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -136,47 +56,168 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--E30cZZlBmncUM56x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 28/03/2023 14:31, Rob Herring wrote:
+Hey,
 
-...
+riscv/fault: Dump user opcode bytes on fatal faults
 
-> Does this fix it?:
-> 
-> diff --git a/drivers/pci/remove.c b/drivers/pci/remove.c
-> index 0145aef1b930..22d39e12b236 100644
-> --- a/drivers/pci/remove.c
-> +++ b/drivers/pci/remove.c
-> @@ -157,8 +157,6 @@ void pci_remove_root_bus(struct pci_bus *bus)
->          list_for_each_entry_safe(child, tmp,
->                                   &bus->devices, bus_list)
->                  pci_remove_bus_device(child);
-> -       pci_remove_bus(bus);
-> -       host_bridge->bus = NULL;
-> 
->   #ifdef CONFIG_PCI_DOMAINS_GENERIC
->          /* Release domain_nr if it was dynamically allocated */
-> @@ -166,6 +164,9 @@ void pci_remove_root_bus(struct pci_bus *bus)
->                  pci_bus_release_domain_nr(bus, host_bridge->dev.parent);
->   #endif
-> 
-> +       pci_remove_bus(bus);
-> +       host_bridge->bus = NULL;
+I think you can drop the /fault, we don't usually use prefixes that like
+for RISC-V.
+
+On Mon, Mar 27, 2023 at 07:56:42PM +0800, Yunhui Cui wrote:
+> We encountered such a problem(logs are below). We are more curious about
+> which instruction execution caused the exception. After dumping it
+> through show_opcodes(), we found that it was caused by a floating-point
+> instruction.
+>=20
+> In this way, we found the problem: in the system bringup , it is
+> precisely that we have not enabled the floating point function.
+
+What do you mean by that "have not enabled the floating point function"?
+
+> So when an exception occurs, it is necessary to dump the instruction
+> that caused the exception, like x86/fault (ba54d856a9d8).
+
+That's not the usual format for referring to commits, checkpatch should
+complain about that.
+
+>=20
+> Logs:
+> [    0.822481] Run /init as init process
+> [    0.837569] init[1]: unhandled signal 4 code 0x1 at 0x000000000005e028=
+ in bb[10000+5fe000]
+> [    0.932292] CPU: 0 PID: 1 Comm: init Not tainted 5.14.0-rc4-00048-g4a8=
+43c9043e8-dirty #138
+
+5.14-rc4?, oof! Need to get yourself onto a released, LTS kernel I
+think!
+
+Anyway, this patch doesn't apply to either riscv/for-next, riscv/fixes
+or v6.3-rc1. What is the appropriate base to apply this patch?
+
+> [    0.932949] Hardware name:  , BIOS
+> [    0.933399] epc : 000000000005e028 ra : 000000000007c7c4 sp : 0000003f=
+ffd45da0
+> [    0.933855]  gp : ffffffff816ea2d8 tp : 0000000000000000 t0 : 00000000=
+00000000
+> [    0.934303]  t1 : 0000003fffd35df0 t2 : 0000000000000000 s0 : 00000000=
+00000000
+> [    0.934734]  s1 : 0000000000000000 a0 : 0000003fffd36190 a1 : 0000003f=
+ffd45e18
+> [    0.935200]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 00000000=
+00000000
+> [    0.935622]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 00000000=
+00000000
+> [    0.936073]  s2 : 0000000000000000 s3 : 0000000000000000 s4 : 00000000=
+00000000
+> [    0.936495]  s5 : 0000000000000000 s6 : 0000000000000000 s7 : 00000000=
+00000000
+> [    0.936947]  s8 : 0000000000000000 s9 : 0000000000000000 s10: 00000000=
+00000000
+> [    0.937487]  s11: 0000000000d14980 t3 : 0000000000000000 t4 : 00000000=
+00000000
+> [    0.937954]  t5 : 0000000000000000 t6 : 0000000000000000
+> [    0.938510] status: 0000000200000020 badaddr: 00000000f0028053 cause: =
+0000000000000002
+
+I have no idea what the significance of this particular backtrace is,
+could you elaborate on what this is demonstrating? (and drop the leading
+[###] too as it doesn't exactly add anything!
+
+Thanks,
+Conor.
+
+> Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+> ---
+>  arch/riscv/include/asm/bug.h |  1 +
+>  arch/riscv/kernel/process.c  | 30 ++++++++++++++++++++++++++++++
+>  arch/riscv/kernel/traps.c    |  1 +
+>  3 files changed, 32 insertions(+)
+>=20
+> diff --git a/arch/riscv/include/asm/bug.h b/arch/riscv/include/asm/bug.h
+> index d3804a2f9aad..77655dd10a2c 100644
+> --- a/arch/riscv/include/asm/bug.h
+> +++ b/arch/riscv/include/asm/bug.h
+> @@ -86,6 +86,7 @@ struct pt_regs;
+>  struct task_struct;
+> =20
+>  void __show_regs(struct pt_regs *regs);
+> +void show_opcodes(struct pt_regs *regs);
+>  void die(struct pt_regs *regs, const char *str);
+>  void do_trap(struct pt_regs *regs, int signo, int code, unsigned long ad=
+dr);
+> =20
+> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+> index 03ac3aa611f5..759dc74fe160 100644
+> --- a/arch/riscv/kernel/process.c
+> +++ b/arch/riscv/kernel/process.c
+> @@ -83,6 +83,36 @@ void show_regs(struct pt_regs *regs)
+>  		dump_backtrace(regs, NULL, KERN_DEFAULT);
+>  }
+> =20
+> +static int copy_code(struct pt_regs *regs, u8 *buf, unsigned long src,
+> +		     unsigned int nbytes)
+> +{
+> +	if (!user_mode(regs))
+> +		return copy_from_kernel_nofault(buf, (u8 *)src, nbytes);
 > +
->          /* remove the host bridge */
->          device_del(&host_bridge->dev);
->   }
+> +	/* The user space code from other tasks cannot be accessed. */
+> +	if (regs !=3D task_pt_regs(current))
+> +		return -EPERM;
+> +
+> +	return copy_from_user_nofault(buf, (void __user *)src, nbytes);
+> +}
+> +
+> +void show_opcodes(struct pt_regs *regs)
+> +{
+> +	u8 opcodes[4];
+> +
+> +	switch (copy_code(regs, opcodes, regs->epc, sizeof(opcodes))) {
+> +	case 0:
+> +		pr_info("Opcode: %4ph", opcodes);
+> +		break;
+> +	case -EPERM:
+> +		pr_err("Unable to access userspace of other tasks");
+> +		break;
+> +	default:
+> +		pr_err("Failed to access opcode");
+> +		break;
+> +	}
+> +}
+> +
+>  void start_thread(struct pt_regs *regs, unsigned long pc,
+>  	unsigned long sp)
+>  {
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index 0a98fd0ddfe9..a6f6851e4e87 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -68,6 +68,7 @@ void do_trap(struct pt_regs *regs, int signo, int code,=
+ unsigned long addr)
+>  		print_vma_addr(KERN_CONT " in ", instruction_pointer(regs));
+>  		pr_cont("\n");
+>  		__show_regs(regs);
+> +		show_opcodes(regs);
+>  	}
+> =20
+>  	force_sig_fault(signo, code, (void __user *)addr);
+> --=20
+> 2.20.1
+>=20
 
+--E30cZZlBmncUM56x
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Yes that does fix it! I had been meaning to get back to this this week 
-to figure out what is going on and so thanks for figuring this out.
+-----BEGIN PGP SIGNATURE-----
 
-If you plan to send a fix for this, please add my ...
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCMd3QAKCRB4tDGHoIJi
+0nJKAP9oJW+U6s6WiBG8oDlJhmx8KPX90ULPIfUpYQ1nxxY8IQEAmUowIBaGhB3C
+SlrhQD6IrQ8MekBvxWWSBkONCR3A+AM=
+=D2JS
+-----END PGP SIGNATURE-----
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-
-Cheers!
-Jon
-
--- 
-nvpublic
+--E30cZZlBmncUM56x--
