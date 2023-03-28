@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AF46CB3C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6B56CB3C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbjC1CT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 22:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
+        id S232378AbjC1CTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 22:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjC1CT1 (ORCPT
+        with ESMTP id S231881AbjC1CT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 22:19:27 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94821984;
-        Mon, 27 Mar 2023 19:19:23 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id w4so10257926plg.9;
-        Mon, 27 Mar 2023 19:19:23 -0700 (PDT)
+        Mon, 27 Mar 2023 22:19:29 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D4B2736;
+        Mon, 27 Mar 2023 19:19:26 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso13724161pjb.3;
+        Mon, 27 Mar 2023 19:19:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679969963;
+        d=gmail.com; s=20210112; t=1679969966;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ed17VsKqIYY1EHY3aBloZZET84zjPJ3dZSJioIcN9l0=;
-        b=JrZiDQCM8obn47HG6nG2G2UpXVKihakdoFKZkex0s0+WFdxEg+P637vEFMh4T+9KI2
-         bkumzgsfPG7wTsqf1wWQW+0swBS0Bk+m52AA4IYzHFKLdXqbOAXG6fjE7ZowXHBJmlkP
-         mw4WLEsWRPZ279PUzqzehOErdhz8k7ziKHIAQNptdDUajohBhWr0isJo0JVox3X3yiyo
-         nrixUIqhi5X7H0jyl3teDep+iWaYJlpmUBPoCLR9TAnoRLb07Phg6aTu1C6zpqYt/0aZ
-         EmprwQX3/6eRtDLzoFVh3ZUoe+3hhhwvIraB+K+Gmd6yxQwLruB8qdggUTe2HUuORfsk
-         SpyQ==
+        bh=CaSv0fqLKCElmpWFPdMbQfJoPfoV6HUW2XrOse+W9mw=;
+        b=dZefeMxtwXiPA+uVGntQkHb5kQ5RvKohl3FkllwFiBehryzS/ywPXlplhTOaVz8D44
+         4RRnIXm0SVaJ/CfN+GCx8TnkElLDPRSGCOOTBd/1s8edMs/RzB3W4A++03yPZKVJEWxB
+         1Kloimvlua9SIGbrHh/+rERyq+sH5/tFfGAYYuZLQBItUaNPI6qA0TxSaGjfXtLYMoO0
+         04q3Tnq+0cnXy3eK3B5sos1HrdNhapzxfOelfEe3hE74WmAP0SoaAXZiYS+aJJ7Run2X
+         x+RTviBksxvi7YgWGbgw4W4jScG47xXhFuSKcaZPLWXI9D7Jk+ELqZoNVo4mLFW0ckpd
+         QmKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679969963;
+        d=1e100.net; s=20210112; t=1679969966;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ed17VsKqIYY1EHY3aBloZZET84zjPJ3dZSJioIcN9l0=;
-        b=xI8GYffYZcO0lh+Fl8iyf/is8Zh0YkRUNNbpSqVVnLgIslFkCWiy9tcMV2Callgz/f
-         OVlfAszT0zme7r9l3YTOJsrFdVsuEqxvCaHIlrn8UgWQzS8M+piz8vfbiW+q1360SSvi
-         gUe8Zo2aEa2LXN8P8ji3XflujqAhtypynwVJztYV7flfLEx/WSoIJRFfQRxW6UGfven/
-         6GJ+61APQxrqhduuqlHmWPmpbjgrNWsEAIGxL9EdL5iFudO3KBLFoUH4tVUtfVqjL5ju
-         hqgjDJLBO7Fgex9l31Ds13iKpor6NSy1QyFN3LCGI/NP7V3Ip4L9vBO5gt/MCM2pfsnq
-         v7iw==
-X-Gm-Message-State: AAQBX9cBD5Gu9+I1psNmAphZWgp/jSwsdbxdwNKMK6w3xBLaUv3NWyrE
-        oYjMeMP1RaDxE7YKFPSeTQM=
-X-Google-Smtp-Source: AKy350YfyhdyweZtFN/BNXq0hVSxafPGhhlEDcagMGpm3IymCcmIgTPyVrsg4P3GnM9R0GxshUeBTQ==
-X-Received: by 2002:a17:90b:4c12:b0:23f:7dfb:7dc1 with SMTP id na18-20020a17090b4c1200b0023f7dfb7dc1mr15163422pjb.33.1679969963077;
-        Mon, 27 Mar 2023 19:19:23 -0700 (PDT)
+        bh=CaSv0fqLKCElmpWFPdMbQfJoPfoV6HUW2XrOse+W9mw=;
+        b=Qp6t/TpcQyK91avqTl+F5EIgjGjGIGWSlzhdQs1G3VaaeBAmxjnd3yzNUxPYsy6afR
+         x25bDOxnTqa1wlYTUgWlk/mOpLwK3BnO8wUu5DixMI5soCOMTfbWZjqHOsPBhRYQIxCf
+         MIl5klWZ1RpmvDuw0xCiATKaikLy7d8Wk+k8WZBofZKbi11mr6wOnWAZRohkSulKyfrU
+         C6/R0SnBQ9pnlTEC+O/duc67jE91EddtW8gXHLfPE6TcJlTIWYLkAhhMKX1qX966fshe
+         z+HYvs2dR2p2xmbJBDu2Bvd85WUa9yAxIV7NzjISAsevGcTL8cEz9wx6ulJKBqIyiJIA
+         bjAA==
+X-Gm-Message-State: AAQBX9e9QJvRxZbWvW0p6PjQKum2/rNIjmxXvrUzllC51wt1/wbwAgEM
+        4d2cEnmwsRYRJXdfiHHu9no=
+X-Google-Smtp-Source: AKy350ZZyf1nEh9VkNgaBZVXfsQcFR+H0vcOCtB3IuysSh6TfYnrWyClBBi3MRCPyVeXT8U2OO6BZw==
+X-Received: by 2002:a17:90b:1e01:b0:23f:b35b:7789 with SMTP id pg1-20020a17090b1e0100b0023fb35b7789mr15353524pjb.28.1679969965791;
+        Mon, 27 Mar 2023 19:19:25 -0700 (PDT)
 Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id f17-20020a17090ac29100b00232cc61e16bsm5029301pjt.35.2023.03.27.19.19.20
+        by smtp.gmail.com with ESMTPSA id f17-20020a17090ac29100b00232cc61e16bsm5029301pjt.35.2023.03.27.19.19.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 19:19:22 -0700 (PDT)
+        Mon, 27 Mar 2023 19:19:25 -0700 (PDT)
 From:   Jacky Huang <ychuang570808@gmail.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
@@ -59,9 +59,9 @@ Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
         arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
         Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH v6 01/12] arm64: Kconfig.platforms: Add config for Nuvoton MA35 platform
-Date:   Tue, 28 Mar 2023 02:19:01 +0000
-Message-Id: <20230328021912.177301-2-ychuang570808@gmail.com>
+Subject: [PATCH v6 02/12] arm64: defconfig: Add support for Nuvoton MA35 family SoCs
+Date:   Tue, 28 Mar 2023 02:19:02 +0000
+Message-Id: <20230328021912.177301-3-ychuang570808@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230328021912.177301-1-ychuang570808@gmail.com>
 References: <20230328021912.177301-1-ychuang570808@gmail.com>
@@ -79,33 +79,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jacky Huang <ychuang3@nuvoton.com>
 
-Add ARCH_NUVOTON configuration option for Nuvoton MA35 family SoCs.
+This adds support for the Nuvoton MA35 family SoCs which
+are based on the Cortex-A35 Armv8-A 64-bit architecture.
 
 Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 ---
- arch/arm64/Kconfig.platforms | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 89a0b13b058d..c1f277c05569 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -236,6 +236,15 @@ config ARCH_NPCM
- 	  General support for NPCM8xx BMC (Arbel).
- 	  Nuvoton NPCM8xx BMC based on the Cortex A35.
- 
-+config ARCH_NUVOTON
-+	bool "Nuvoton MA35 Platforms"
-+	select GPIOLIB
-+	select PINCTRL
-+	select RESET_CONTROLLER
-+	help
-+	  This enables support for the ARMv8 based Nuvoton SoCs such
-+	  as MA35D1.
-+
- config ARCH_QCOM
- 	bool "Qualcomm Platforms"
- 	select GPIOLIB
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 7790ee42c68a..c96189acb02c 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -53,6 +53,7 @@ CONFIG_ARCH_LAYERSCAPE=y
+ CONFIG_ARCH_MXC=y
+ CONFIG_ARCH_S32=y
+ CONFIG_ARCH_NPCM=y
++CONFIG_ARCH_NUVOTON=y
+ CONFIG_ARCH_QCOM=y
+ CONFIG_ARCH_RENESAS=y
+ CONFIG_ARCH_ROCKCHIP=y
 -- 
 2.34.1
 
