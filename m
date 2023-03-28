@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF786CC87D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2486CC87E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjC1Qud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 12:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S231482AbjC1Quh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 12:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjC1Qua (ORCPT
+        with ESMTP id S229491AbjC1Qua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Mar 2023 12:50:30 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2088.outbound.protection.outlook.com [40.107.102.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6CC1025F;
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2057.outbound.protection.outlook.com [40.107.94.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B943D1024D;
         Tue, 28 Mar 2023 09:49:57 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jYCDPwmiIp8UMkU+2twGoDISShyzzZKWwDuSNwMJBMMmwV5CtV7dnWknLagtOxqs/5uy/v6QjgQ97xqy/MIDpBhBHSCvhHAJa7Ln/HxTSuP2rXTAgBr1OzLc5wCa02IStLMyrQhQ2ClK7/AAjZMM3tC7119wLVVwHZAgB5NnXiP77r6UcpEdBfeNQp/NMEMPjCF3m8h9c7Iz7BmjNyE3p49rOJpaa85iFCdA+H+rQCMdhcJweSrs9gQcTemunmLBGa7rcghJ8vZrk2tYddiwQv4TwhVWzAw5wASFvsiRawHrac6qzxsVbFPIOp/6BGWlV1N5r4T3wpHTKGw1ABXVmw==
+ b=N7kdmcgEtKwUHZ3K4U80M5KIGqRmjSCYFZoXRBZFnDuQeLGB1n7pOju+q86VesUdFvukG0Wte+3xs+peguNQ71n7iD0OT9I67JIVyA+8+aJ20XMSvffE+CHjWiyWPCimb56pFZlzDurbcnl/1XKUA9toHy10f6x+9gn4B+pPWrQmknbabUWhS3yz8flGgwQfBUY8w68UaitVgMffa5pdNdXkakmxnuI17M4uARXSHiym5oiyrEjTIAaMm6K43hJlopevFs6+yflnjVnGXT46ZZjRTaguxLTc/AbhVnjHrfDZ8+/olcjWL3NDnYu2c+4e9GHhyDn78AoRi90siYb93w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LGzDELjD1JXsU+fFJ87JsZE+0HoE3FC/fuLUhKJSPo4=;
- b=inVGWjz+PUIXAv2PyIjvZE5zYy2STLt5qaEDMDnMPIFZM0wfzMWEHCRrWiUnikdZZEru9Zlw05o6aDS4iWmevABCLQkquQKf9CMU5LzqSSyImGPJPA2FD9FEmlwPGHs2YclJp+h7UEwWwCSIN7S536ZeqpWGj8lA1KjjWcFuwuso0YjPDntci7pP32UzHaf089ndOn18ubUU18QNmfdKRKARki80El0xBGyc7b4tmDwlq0fVNdltFw9osY4LZ37x4HrPs4f8xBTyhUmhXrSHiBwRvqbew+fAu3pvaRkWWPBdh6WESL4L1rCzTaNxbnHxIgwRKxhY82hshIHTHSrwfg==
+ bh=waXwmx6v93/a48giSXE8o8Eupo8VCthQfd07N3Sc3bA=;
+ b=WEOQ5Nz4Mwx1FMKBPNjAavHY1xrQgwwsb6IKRUwY39i7UxKTQSi9rVC5W+WuRmvBGjejlN7c79vVhAcqk1kIYk6OdJ9f90913JLZP0sfFqz+XfPgq7TF5TVNKD9xvQjGLW/dlOr4iX6S8RvFo5WE7fNBoba+pUsOSfHqwz4ycZwj16wD5RcvRXnyxcTDlMeEYUOnK0OliArNBE+j7mRk8dspqkjSxjwdBD/389RB9lZOq/2LHEqSZNUUE0NEdT59LMhl4cMwkK47+u6IRIEAdFTGivTq+XCBXmusGzHsGLMn9gtoC2+q2Z4rWTwn9RUpvd+1rYw2gYpiHfAcLgwqwA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LGzDELjD1JXsU+fFJ87JsZE+0HoE3FC/fuLUhKJSPo4=;
- b=UVeI+KXez8s4UuhcvPS4OtZbtFKAcvy43wqn2TLxilFRvfqckUF+jHvbU6tfttleMU8Eb1TRqayLniqi5nIP1y0Vj7EC5XgPBbS18/H+zUPWH1xW28ebitnL+V8sDL2okPo+5DLijRgkB+9c/9UglaZ3+/sauJsjZ4HlwrBap4g=
-Received: from BLAPR05CA0035.namprd05.prod.outlook.com (2603:10b6:208:335::16)
- by CH2PR12MB4907.namprd12.prod.outlook.com (2603:10b6:610:68::20) with
+ bh=waXwmx6v93/a48giSXE8o8Eupo8VCthQfd07N3Sc3bA=;
+ b=Nspit4K3CsfNLjtancyNi+z2TdXVPBifWY+vr/pMmeiwx2ShxZL4TDYv79nQZ6nnynwydtVPfefV7y1GjuhbuScjxTwXOeXDTilamS18XcdYAPTw6/gqGtQT3xbsUMwoyqXotaOEVurTJlm9fxL55hreYIRghUqc5+iHfP/Xpg4=
+Received: from CY5PR15CA0160.namprd15.prod.outlook.com (2603:10b6:930:67::28)
+ by SJ0PR12MB5673.namprd12.prod.outlook.com (2603:10b6:a03:42b::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.30; Tue, 28 Mar
- 2023 16:49:45 +0000
-Received: from BL02EPF000100D1.namprd05.prod.outlook.com
- (2603:10b6:208:335:cafe::43) by BLAPR05CA0035.outlook.office365.com
- (2603:10b6:208:335::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.18 via Frontend
- Transport; Tue, 28 Mar 2023 16:49:45 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Tue, 28 Mar
+ 2023 16:49:52 +0000
+Received: from CY4PEPF0000C97D.namprd02.prod.outlook.com
+ (2603:10b6:930:67:cafe::87) by CY5PR15CA0160.outlook.office365.com
+ (2603:10b6:930:67::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.43 via Frontend
+ Transport; Tue, 28 Mar 2023 16:49:52 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BL02EPF000100D1.mail.protection.outlook.com (10.167.241.205) with Microsoft
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000C97D.mail.protection.outlook.com (10.167.241.136) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6178.30 via Frontend Transport; Tue, 28 Mar 2023 16:49:45 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.6178.30 via Frontend Transport; Tue, 28 Mar 2023 16:49:51 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 28 Mar
- 2023 11:49:44 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ 2023 11:49:51 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 28 Mar
- 2023 11:49:44 -0500
+ 2023 09:49:51 -0700
 Received: from xsjtanmays50.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Tue, 28 Mar 2023 11:49:44 -0500
+ Transport; Tue, 28 Mar 2023 11:49:50 -0500
 From:   Tanmay Shah <tanmay.shah@amd.com>
 To:     <andersson@kernel.org>, <mathieu.poirier@linaro.org>
 CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Tanmay Shah <tanmay.shah@amd.com>
-Subject: [PATCH v3 0/2] remoteproc: get rproc devices for clusters
-Date:   Tue, 28 Mar 2023 09:49:20 -0700
-Message-ID: <20230328164921.1895937-1-tanmay.shah@amd.com>
+        "Ben Levinsky" <ben.levinsky@xilinx.com>,
+        Ben Levinsky <ben.levinsky@amd.com>
+Subject: [PATCH v3 1/2] remoteproc: Make rproc_get_by_phandle() work for clusters
+Date:   Tue, 28 Mar 2023 09:49:22 -0700
+Message-ID: <20230328164921.1895937-2-tanmay.shah@amd.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230328164921.1895937-1-tanmay.shah@amd.com>
+References: <20230328164921.1895937-1-tanmay.shah@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000100D1:EE_|CH2PR12MB4907:EE_
-X-MS-Office365-Filtering-Correlation-Id: f6622305-543c-4b30-77e4-08db2fac6f68
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C97D:EE_|SJ0PR12MB5673:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6b958f16-41f1-44f2-eebe-08db2fac7360
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hkV4LJtH3XE01v2uAH9/UI6Ygy+JU6tiI7E1wzx/GSyWnYz+CsE7hEHsvvESRmAGsZEHXp541ieegE5V0wUoFQ5e9M641PUI92dSxlEOZK7po7Jh+uuEzLkdueqVE+K7SOau7ewTWsuVu1JeJEO5Qnihf9x3P1YF89rA+TSeTMxgeR/VX51gA5gEBr1Z6ObM42TvmFSSKjCupjeqaB5NY/SybmXIop3mnJ4QaFiTffnn85EXoEOqM2vUTVO6vbifc5ZFSMHTkdFJron4aJbJUMY0T3pjkJXL91o53FH3B7vT0smEP2VdfKfXkPqEPs6gK8juVXr1w5lO0i+fz09+pyPQWBLfEL8pI2g0Rvy/3GNiSYB30FKiwLUgdij/q4onnsJirZNx/2KRRow/TQOQW4Op88ftFYLH5YQ8vx3r+ISsGOxLjKygnEsf7cdRCkDJQpxXAbCLonNrgUSwrVu7BN1loft4Kt0aQXiWmUstsYpEZNgUg3PosoP1iPgoP1dzN7d+M5rwlFwfUqxP6RzR//tUAClTIMSZF4XUfQh5A1gj2BNn5ygg2gd50IQbZMjhQhcBGsGIYnwjxZ2xhnQBmsHUg/r4NTdz8uNRgvaihzMqBUdf0I6+SzhQIYKrNDk8x9h0p5EsTJdQhVNzDxY7g9wYOwV0UIcZPSi2Q7MbI79RqsZarRVa+sU9LXRtgRXPTrw7Rh0ezv8pumCxm1SQNfr4ZnXL3GiwMN6uZ7fwkeQ=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(136003)(396003)(451199021)(46966006)(40470700004)(36840700001)(316002)(110136005)(40460700003)(36860700001)(478600001)(54906003)(356005)(81166007)(82740400003)(8936002)(82310400005)(36756003)(86362001)(5660300002)(70586007)(4744005)(4326008)(44832011)(70206006)(8676002)(2906002)(41300700001)(40480700001)(426003)(1076003)(186003)(6666004)(26005)(336012)(2616005)(83380400001)(47076005)(966005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ZUESMd3hTrgXQPxb61UYTpz4S7SY/mqCGFIdBK91yGKnBieXugQKKnvTnxtB8YLQhwewXBPY/o4R6/MLQaHEwiycFF9UsHAoNDo06vk5bXeJQiSREa47FRzxKfoJoGNI2MC0KthKabug4qmBaneeKvTMxhR/I0zI8LY26khCMkSWPnsad2UKsKPEkrLXPKJXwDnIY0fG5SAqK8Pavk6bi2cQm31zjL5zkeWWVMJzAabh7Pth1Va8UfSGoF1BEYm952/abAuFB6MFSG473x/SE7j7AgLX6MG8PV7U6jH35DRrIoPsLrH7vFNTufiOCvAvxx54U4Va+92SKbly38NPXjqEgoROhOmKrkgRCZW99Cq+ztg+b3Mxq/ftLw0+V4gLXmLy2tKTe59TfDkXu07k1WL5uA0Y6Z/Un16g55i3CHEzAm8PelbCF2pyvKDHUlPUU1x6QAmZMMRF0GBnF204RiRoJ3OYy8Tizu2bxwmetoaKsq0liz4+C2xBvZCttiY01BfjUUULvAVDFlIzK6Z5Ib43gUabaHa9lXOyu75LMSP99NNHyjoRkShpt9eJ2hFq39/7+Wdf59Pk4zCCwYHU7yWjq3/mA16v+sK4/N3vaX1BzlVyBvIkWYA+z6m24oun3WRLTqVA1Wnh86/4QCXQjtoJZFsziVme7P2caGHRf1gDYC46l7/uZGr5QCUotb0dWh2DkWeWRtWg6mdbbnPe9WnahbpQu+3hV37X22B7/Ds=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(376002)(346002)(451199021)(40470700004)(46966006)(36840700001)(83380400001)(426003)(47076005)(336012)(44832011)(186003)(2906002)(2616005)(26005)(40460700003)(6666004)(356005)(82740400003)(316002)(41300700001)(54906003)(110136005)(86362001)(70586007)(4326008)(8676002)(70206006)(82310400005)(1076003)(40480700001)(36860700001)(36756003)(5660300002)(8936002)(81166007)(478600001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 16:49:45.2586
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 16:49:51.8732
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6622305-543c-4b30-77e4-08db2fac6f68
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b958f16-41f1-44f2-eebe-08db2fac7360
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000100D1.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C97D.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4907
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5673
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
@@ -101,30 +104,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series extends original patch and makes rproc_put() work
-for clusters along with rprog_get_by_phandle().
+From: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-Changes in v3:
-  - remove module_put call that was introduced in the patch by mistake
-  - remove redundant check in rproc_put
-  - Add inline comments in rproc_put that explains functionality
+Multi-cluster remoteproc designs typically have the following DT
+declaration:
 
-Changes in v2:
-  - Introduce patch to fix rproc_put as per modified rproc_get_by_phandle
+	remoteproc_cluster {
+		compatible = "soc,remoteproc-cluster";
 
-v1 is here: https://lore.kernel.org/all/20221214221643.1286585-1-mathieu.poirier@linaro.org/
+                core0: core0 {
+			compatible = "soc,remoteproc-core"
+                        memory-region;
+                        sram;
+                };
 
-Mathieu Poirier (1):
-  remoteproc: Make rproc_get_by_phandle() work for clusters
+                core1: core1 {
+			compatible = "soc,remoteproc-core"
+                        memory-region;
+                        sram;
+                }
+        };
 
-Tanmay Shah (1):
-  remoteproc: enhance rproc_put() for clusters
+A driver exists for the cluster rather than the individual cores
+themselves so that operation mode and HW specific configurations
+applicable to the cluster can be made.
 
- drivers/remoteproc/remoteproc_core.c | 45 ++++++++++++++++++++++++++--
- 1 file changed, 43 insertions(+), 2 deletions(-)
+Because the driver exists at the cluster level and not the individual
+core level, function rproc_get_by_phandle() fails to return the
+remoteproc associated with the phandled it is called for.
 
+This patch enhances rproc_get_by_phandle() by looking for the cluster's
+driver when the driver for the immediate remoteproc's parent is not
+found.
 
-base-commit: e19967994d342a5986d950a1bfddf19d7e1191b7
+Reported-by: Ben Levinsky <ben.levinsky@xilinx.com>
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Tested-by: Ben Levinsky <ben.levinsky@amd.com>
+---
+ drivers/remoteproc/remoteproc_core.c | 28 +++++++++++++++++++++++++++-
+ 1 file changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 80072b6b6283..a3e7c8798381 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -33,6 +33,7 @@
+ #include <linux/idr.h>
+ #include <linux/elf.h>
+ #include <linux/crc32.h>
++#include <linux/of_platform.h>
+ #include <linux/of_reserved_mem.h>
+ #include <linux/virtio_ids.h>
+ #include <linux/virtio_ring.h>
+@@ -2111,7 +2112,9 @@ EXPORT_SYMBOL(rproc_detach);
+ #ifdef CONFIG_OF
+ struct rproc *rproc_get_by_phandle(phandle phandle)
+ {
++	struct platform_device *cluster_pdev;
+ 	struct rproc *rproc = NULL, *r;
++	struct device_driver *driver;
+ 	struct device_node *np;
+ 
+ 	np = of_find_node_by_phandle(phandle);
+@@ -2122,7 +2125,30 @@ struct rproc *rproc_get_by_phandle(phandle phandle)
+ 	list_for_each_entry_rcu(r, &rproc_list, node) {
+ 		if (r->dev.parent && device_match_of_node(r->dev.parent, np)) {
+ 			/* prevent underlying implementation from being removed */
+-			if (!try_module_get(r->dev.parent->driver->owner)) {
++
++			/*
++			 * If the remoteproc's parent has a driver, the
++			 * remoteproc is not part of a cluster and we can use
++			 * that driver.
++			 */
++			driver = r->dev.parent->driver;
++
++			/*
++			 * If the remoteproc's parent does not have a driver,
++			 * look for the driver associated with the cluster.
++			 */
++			if (!driver) {
++				cluster_pdev = of_find_device_by_node(np->parent);
++				if (!cluster_pdev) {
++					dev_err(&r->dev, "can't get parent\n");
++					break;
++				}
++
++				driver = cluster_pdev->dev.driver;
++				put_device(&cluster_pdev->dev);
++			}
++
++			if (!try_module_get(driver->owner)) {
+ 				dev_err(&r->dev, "can't get owner\n");
+ 				break;
+ 			}
 -- 
 2.25.1
 
