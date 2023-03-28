@@ -2,129 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97B06CCB24
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 22:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794AA6CCB27
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 22:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjC1UAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 16:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
+        id S229792AbjC1UBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 16:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjC1UAm (ORCPT
+        with ESMTP id S229742AbjC1UBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 16:00:42 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26F640CA
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 13:00:06 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id z11so8816166pfh.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 13:00:06 -0700 (PDT)
+        Tue, 28 Mar 2023 16:01:10 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA70240D3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 13:00:43 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id i6so16674488ybu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 13:00:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680033571;
+        d=paul-moore.com; s=google; t=1680033602;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0/yvlhEoGf4lYD0w5w4illgGKFOLps9NjXpDI+7ErcQ=;
-        b=Kj4ahUJ17/TklSj8P4aYyhNWSNUggUnfHpq42Yf2/g2G1VGWGWrewPLvp9vsLX/JEg
-         Bo8mZjMkfy7Ctlho2KRKOpKqTbOfwp+ZKHRKs6VdamQXWlk+XXleJft4Oz61Oo6NQ4pw
-         KGYJwhnhB3/D0jfIu8miCDACYf921OreR3HQSswBQW4rpuJCq8+F+dboOuddBBTNRJ7Q
-         VAjey0lem6IOqAD6Q/8oNVUFh4Oe+mz5d1NunBWyGOByo8e7HkQXRnaO9wXGbSxcVuOU
-         k+XH0lQKF/eHBchip2FdOmhmF1eQBFBUO8i0IDxZ9EOdGZNFd8SUBL8dWE5arhzeF1Al
-         3IIg==
+        bh=VyZf9+UJUfqCnRIlslbdqTbbosh6eMQPs6SnpxPb5CM=;
+        b=B1Lv9Cpzqq0MwAVYWee4B/SMgpHkR9rorpdv15HtT5fi6svGF8Xbq1BCeO+G38+18j
+         VgEZKdj0wayKVDhEEIQvgieAKccVMrsIfeWG/oHjGi3BqIxi/I47GiyLsbph/TuahZYN
+         mIQ29nZNruWmeNT0YnW06HhJVNUaIHMBFaLAe0VNLUgZW6DDkXTYLWvGZfjUZp4HTxr3
+         pnqIsaIJ8GrCojH2E0ViK3ZXihUfils7sYYMhYn6lbvjaSC14oCfOQWQSigYaytiu7Bk
+         qooGpjNwrozPXyRlXHaaLMHUnbZDDjPXuLo3p+uJAYVbuoCFuEQkNkJ9D8plHgdhyVpy
+         17dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680033571;
+        d=1e100.net; s=20210112; t=1680033602;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0/yvlhEoGf4lYD0w5w4illgGKFOLps9NjXpDI+7ErcQ=;
-        b=mxJvARMmlHWfSliNFrPCh83kMBb1ZOhE4sNVXkNdo9w0DCxmB5Mode51QRbDSvzHNp
-         rtcDMIxF8NKfV6Lrx3mc5qH2o9c78TVfjJpaFi/tRyKJoL2DosmmHbc09RpItVs0mCgl
-         3NaYs3lFj54oa+3kpAT/gDJLlncsRDmr9LX8CeiSErQzWAegVM4W7xV465s2Atpq/0eh
-         Js/911Xoxji6FzlFm5rv/5fR5ZzVA3OrVH887+TaZEqfdaQLVGNOWDfcha5V3DORb2mT
-         6LyUu5nS7XHTd3vl2kFJwpPo+dMG5G8NFFe1F3AujOOedkJO/crN/2dvFtk3AV2rAhap
-         fllA==
-X-Gm-Message-State: AAQBX9fZLaQXMSXp53NW9OrOE6RUyGADP9rXq2D+/4jWXwh4J05YiHWH
-        /Y/YewSD5IAlqgso9WlLSlM5J+CBmR3tzgHKx+vsYQ==
-X-Google-Smtp-Source: AKy350a02nhWjZJNaefPpoZ0AZzLMqgU+rjEYIaK5jw3IZfaHRS4Bp2uRB/lOVaXyN/t2Dcrapc37Bok73ZdIIbqPUU=
-X-Received: by 2002:a63:5a47:0:b0:513:2523:1b5f with SMTP id
- k7-20020a635a47000000b0051325231b5fmr4363099pgm.3.1680033570922; Tue, 28 Mar
- 2023 12:59:30 -0700 (PDT)
+        bh=VyZf9+UJUfqCnRIlslbdqTbbosh6eMQPs6SnpxPb5CM=;
+        b=1TZl8qoeRs7WhMRHpdk1iFhiA4k/xF5D0MmCJahEdYtdQfQxJt6PchbOaPzAliw4a9
+         KgU9oHyIBSbSf+tC+ZUpDkAF77xsVuk19LSVfCgbh3hFG8WyXTMTZz7mN+OXXN1QOB4W
+         4vNm7wNPlmiENRk/b+kBFH5QzamAtwdiwl1MwqjjT2vzwmzN7IZWG6Sy9QTA0ZeKmHE0
+         FPhqpnnHYD3meEQqbuwOi8fmDVe518bgmHk0rONHFCA/VzVeK4WXpd/R3BKI+VmXCjbR
+         IhOeiCyqHQwuVKUDEUXd0cfuae4QcAp+Excfve/AvPrJ0QzyTJN0mvZLtLgGATAct++w
+         GZ7A==
+X-Gm-Message-State: AAQBX9cwRDFfuU4olQDHfW47quvh+nTIQVScAvjTnx+V7JNh83E8huv9
+        qSxxO50PYgh1mikh3at05pItBlDzysZfAVUCLqdL
+X-Google-Smtp-Source: AKy350biWaC8N7ijdohCMbaHzL5yhuFYIlbMY5hI7o/mw+AcRdJwIXeJMk+loAOOPVUZPOfEk7o+aTjx7vgfjgck5s0=
+X-Received: by 2002:a05:6902:70a:b0:b6e:361a:c86 with SMTP id
+ k10-20020a056902070a00b00b6e361a0c86mr8804150ybt.3.1680033602328; Tue, 28 Mar
+ 2023 13:00:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <CAAYXXYxC++kRW_Kg0jieaxuwzTC2hu-9SxRjsHH_kqZW_DTE7Q@mail.gmail.com>
-In-Reply-To: <CAAYXXYxC++kRW_Kg0jieaxuwzTC2hu-9SxRjsHH_kqZW_DTE7Q@mail.gmail.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Tue, 28 Mar 2023 12:59:18 -0700
-Message-ID: <CAAH4kHZWW6QsMcLCLYwRo25i6d6Uhg+=rTeoVV7yrGHqUWwFUQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] TDX Guest Quote generation support
-To:     Erdem Aktas <erdemaktas@google.com>, Chong Cai <chongc@google.com>
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de> <83763b78-453d-de21-9b48-1c226afa13a0@web.de>
+ <57a97109-7a67-245b-8072-54aec3b5021d@web.de> <CAHC9VhR=yK72JXW3hJR+gUQtGCNpF0Bzk5RDzPZR0MunC84AUQ@mail.gmail.com>
+ <CAHC9VhREfdgiCji=uEeCrc4w1kPGfnWGKnJuUYKXwTApdneSjQ@mail.gmail.com> <9e8bb69f-99e8-f204-6435-cc6e52816ebf@web.de>
+In-Reply-To: <9e8bb69f-99e8-f204-6435-cc6e52816ebf@web.de>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 28 Mar 2023 15:59:51 -0400
+Message-ID: <CAHC9VhQfiNd_4uWBmKCC81UnOJb7Y=UFCDMXuqz3=UPr8QtqNw@mail.gmail.com>
+Subject: Re: selinux: Adjust implementation of security_get_bools()
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     kernel-janitors@vger.kernel.org, selinux@vger.kernel.org,
+        =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Michal Orzel <michalorzel.eng@gmail.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Ruiqi Gong <gongruiqi1@huawei.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>, cocci@inria.fr,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ruiqi Gong <ruiqi.gong@qq.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Chong Cai
-
-Adding a colleague per his request since he's not subscribed to the list ye=
-t.
-
-On Mon, Mar 27, 2023 at 10:36=E2=80=AFAM Erdem Aktas <erdemaktas@google.com=
-> wrote:
+On Tue, Mar 28, 2023 at 3:30=E2=80=AFAM Markus Elfring <Markus.Elfring@web.=
+de> wrote:
 >
-> On Sat, Mar 25, 2023 at 11:20=E2=80=AFPM Kuppuswamy Sathyanarayanan
-> <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
-> >
-> > Hi All,
-> >
-> > In TDX guest, the attestation process is used to verify the TDX guest
-> > trustworthiness to other entities before provisioning secrets to the
-> > guest.
-> >
-> > The TDX guest attestation process consists of two steps:
-> >
-> > 1. TDREPORT generation
-> > 2. Quote generation.
-> >
-> > The First step (TDREPORT generation) involves getting the TDX guest
-> > measurement data in the format of TDREPORT which is further used to
-> > validate the authenticity of the TDX guest. The second step involves
-> > sending the TDREPORT to a Quoting Enclave (QE) server to generate a
-> > remotely verifiable Quote. TDREPORT by design can only be verified on
-> > the local platform. To support remote verification of the TDREPORT,
-> > TDX leverages Intel SGX Quoting Enclave to verify the TDREPORT
-> > locally and convert it to a remotely verifiable Quote. Although
-> > attestation software can use communication methods like TCP/IP or
-> > vsock to send the TDREPORT to QE, not all platforms support these
-> > communication models. So TDX GHCI specification [1] defines a method
-> > for Quote generation via hypercalls. Please check the discussion from
-> > Google [2] and Alibaba [3] which clarifies the need for hypercall based
-> Thanks Sathyanarayanan for submitting patches again.
+> =E2=80=A6
+> >>>  security/selinux/ss/services.c | 52 ++++++++++++++------------------=
+--
+> =E2=80=A6
+> > Given the fairly extensive refactoring here,
+> =E2=80=A6
+> > If nothing else it will make the function easier to read,
+> > and I think it will simplify the code a bit too.
 >
-> I just wanted to reiterate what I said before that having a clean
-> TDVMCALL based interface to get TDX Quote without any virtio/vsock
-> dependency  is critical for us to support many use cases.
+> I am curious which change possibilities will finally be picked up.
 
+It's hard to extract out the various changes due to the way the diff
+was generated, however, looking at the changes in your commit
+description, the only change I can saw with any certainty that I would
+merge would be your item #2:
 
+> 2. Replace the statement =E2=80=9Cgoto out;=E2=80=9D by =E2=80=9Creturn -=
+ENOMEM;=E2=80=9D.
+
+Agreed, gotos that jump straight to a return can be replaced.
+
+> > I would probably also keep the combined @names/@values cleanup under
+> > one jump label; this function isn't complicated enough to warrant that
+> > many jump labels for error conditions.
+>
+> I got an other impression for the affected function implementation.
+>
+> Would you like to take advice from another information source
+> better into account?
+
+In this case, I prefer what I suggested.
 
 --=20
--Dionna Glaze, PhD (she/her)
+paul-moore.com
