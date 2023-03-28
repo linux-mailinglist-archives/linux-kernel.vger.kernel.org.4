@@ -2,135 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46226CCB6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 22:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A43036CCB6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 22:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjC1UUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 16:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
+        id S229745AbjC1UWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 16:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjC1UUJ (ORCPT
+        with ESMTP id S229637AbjC1UWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 16:20:09 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC6040EF
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 13:20:07 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id b18so16751467ybp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 13:20:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1680034806;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YTUjsnH0pjAMPCdWUs8KgtrmbEQ7uRQfh39xHtc1mOI=;
-        b=ZISzzUBAp2B86WTvie3LaaTm+XXMV1NsBYT+ss9Ay2P2TZV18c736vvSEzIoAMgiAD
-         yyMfrBITnvGzSe0zitTngdlv9FE5B7kqtcVHa5dUfi5qBhCuM018z5BcpYSoI7bEVt2z
-         ZC3kowL2cQRNQzFOhwJRwPeyH2MQqrp8NURsIr5JDzQpyL3WseVUnD7mAC626z6TQglg
-         UoOeDKCOiKNAkc7HGHrpOlFtTEimlh5Dg4uX3bQo4lcrs02hnNHTYJq/Kw3dPuYr2VQI
-         hXkP49aeyOtDyuAYueE49r0lldY98MycnxQ5Y1KBuHU/CwgwrBTDgx/qGu38MPY3mDw7
-         CiGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680034806;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YTUjsnH0pjAMPCdWUs8KgtrmbEQ7uRQfh39xHtc1mOI=;
-        b=DO7FMQE2CzTVHJflFrH53n1SFwa+/OS8uHLLaDweDkMteumDwlpn2dDOVfBPRyYrpN
-         wC5A1mGIlG+x+nsnkfygRZxBTLPaSMhCNlxxVHALXYsDUJR9AmLNR6TxqvSYryhHlo9M
-         ChH5vmlzU6H6cHXC4e7QTtdCINR3wFbX5GLVd0LcC6QHSH7m+V70/GFFux4vigUY7vFn
-         MDey5IXPOu7aHKXMNeovv0EWE9WPcwQt2zf/JgNJhjeAhLd2ewVEA4aEX3dpadQi/+lo
-         vggk9L6RfV/BnYqlOt2DSFf6hhOsoV42P+OVygb/yG8XW5PkmD5hB+ftSUwVHFtAxz6A
-         xwiA==
-X-Gm-Message-State: AAQBX9f0af9qK9eNMqA010sf9/AvvUulqo1YM/QWThF6X6a0ybiihIiI
-        vCjd2FYULFIkoPD4cFh+c+rIIBl1jvWeCaXZOPJT
-X-Google-Smtp-Source: AKy350ZEFOCwjRsMkv4tCJSQFPlfwfLVNNFZyIK63atBOV/sH54NXrYaRWqhboUJbp5+ys+9+LucpxgK3fri3wARgIs=
-X-Received: by 2002:a05:6902:102a:b0:b71:f49f:8d22 with SMTP id
- x10-20020a056902102a00b00b71f49f8d22mr8605060ybt.3.1680034806304; Tue, 28 Mar
- 2023 13:20:06 -0700 (PDT)
+        Tue, 28 Mar 2023 16:22:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BADB1FD8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 13:22:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EFA2B81CAB
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:22:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34E4EC433D2;
+        Tue, 28 Mar 2023 20:22:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680034927;
+        bh=54nMkls0+I29HMEM1YCHcejfYPJPJVWADs2YaBN33sw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KZUnYdIOdDiJtnu7j2PijSL5084ft6vcFDLeUBBtbtPMLaj7m/84vxZxKnFQsqBpn
+         XRaTLvIlD3OS0q8KB5r+/EBbwIztblt8V7FpUE8/z9W0FvEZc0lLGXJB37hhkcRRds
+         1XoSyNn8yPyKzNnExDsXFgwUP3vrjl6VNCWmqC5KBiL8HvH7zIQ0MCPhprGQFhF1SS
+         plP/T7P5++OtFywJfUnqymBaZ8D3G4fO+bwbZua5JBSpe/KLJIjKtKzbIsVAFz7np6
+         lIior2JwoFrl7dUz2QZ+JfZ9tWQY9qix5DLUzeaZnuEMCmcBDGS4xk9yenS1xlM+xp
+         IrIQmG24p8YnQ==
+Date:   Tue, 28 Mar 2023 13:22:05 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] objtool: Add per-function rate limiting for
+ unreachable warnings
+Message-ID: <20230328202205.cfd7hvpj74rv7ry4@treble>
+References: <cover.1679932620.git.jpoimboe@kernel.org>
+ <b21f7791b30c54cf8c4d0f489decdc4a47a18963.1679932620.git.jpoimboe@kernel.org>
+ <20230328081105.GD4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20230314081720.4158676-1-roberto.sassu@huaweicloud.com>
- <20230314081720.4158676-5-roberto.sassu@huaweicloud.com> <CAHC9VhTD3EyDiJs9+NQrgp84JcUs_sx8WONtRk2YYH4m1C8nVw@mail.gmail.com>
- <939e6c88662ad90b963993c4cc1b702083e74a7a.camel@huaweicloud.com>
- <ffc86b3907f7b87d3c568ae62bea3cdb3275be4e.camel@huaweicloud.com>
- <CAHC9VhRNjvjMOF5KLM6BoGfk=QpEBs_ur_CgRdGL5R1bA-JAwg@mail.gmail.com>
- <8b63d00d8ac3f686e51889ea4fc8d83f8ecb300d.camel@huaweicloud.com>
- <CAHC9VhRaKtsM=CuNhDy0Kx0NGSUrVhG+MhwKnHiyJxfgUwx7nA@mail.gmail.com> <1e08006f9011efa48deaf656c358ca3d438b9768.camel@huaweicloud.com>
-In-Reply-To: <1e08006f9011efa48deaf656c358ca3d438b9768.camel@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 28 Mar 2023 16:19:55 -0400
-Message-ID: <CAHC9VhRNWeZtxain_Hi-EfS49Vac8_vg7KRRyV4a9Sq3XPhZsg@mail.gmail.com>
-Subject: Re: [PATCH v8 4/6] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230328081105.GD4253@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 3:47=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> On Mon, 2023-03-27 at 17:02 -0400, Paul Moore wrote:
-> > On Mon, Mar 27, 2023 at 3:30=E2=80=AFAM Roberto Sassu
-> > <roberto.sassu@huaweicloud.com> wrote:
-> > > On Fri, 2023-03-24 at 17:39 -0400, Paul Moore wrote:
-> > > > On Fri, Mar 24, 2023 at 9:26=E2=80=AFAM Roberto Sassu
-> > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > On Fri, 2023-03-24 at 11:18 +0100, Roberto Sassu wrote:
-> > > > > > On Thu, 2023-03-23 at 20:09 -0400, Paul Moore wrote:
-> > > > > > > On Tue, Mar 14, 2023 at 4:19=E2=80=AFAM Roberto Sassu
-> > > > > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+On Tue, Mar 28, 2023 at 10:11:05AM +0200, Peter Zijlstra wrote:
+> On Mon, Mar 27, 2023 at 09:00:47AM -0700, Josh Poimboeuf wrote:
+> > Unreachable instruction warnings are rate limited to once per object
+> > file.  That no longer makes sense for vmlinux validation, which might
+> > have other unreachable instructions lurking in other places.  Change it
+> > to once per function.
+> 
+> Do we want a negative option to disable this? --no-ratelimit or such?
 
-...
+Per-function rate-limiting is almost always the right thing, personally
+I don't envision needing to disable it.
 
-> > Okay, that's fair, but we could still pass the full xattrs array and a
-> > reference to the current count which could be both read and updated by
-> > the individual LSMs, right?
->
-> Yes, we could do.
->
-> > The issue is that the separate compaction stage is not something we
-> > want to have to do if we can avoid it.  Maybe we're stuck with it, but
-> > I'm not yet convinced that we can't make some minor changes to the
-> > LSMs to avoid the compaction step.
->
-> I liked more the idea that LSMs do what they are most familiar with,
-> get an offset in a security blob or, in this case, a starting slot in
-> the new_xattrs array, and write there.
->
-> v3 had the lsm_find_xattr_slot() helper, to get the starting slot, but
-> somehow I find it less intuitive.
->
-> Ok, if you prefer to avoid the compaction stage, I will rewrite this
-> patch.
-
-My concern is having to look through the xattr array after each LSM
-has been run and in at least one case having to then do a memcpy() to
-keep the array packed.  There are some cases where there is no way to
-avoid all that extra work, but here I think we have the LSMs do the
-Right Thing with respect to packing the xattr array without overly
-burdening the individual LSMs.
-
-Does that make sense?  It basically comes down to being smart about
-our abstractions and both selectively, and carefully, breaking them
-when there is a reasonable performance gain to be had.
-
---=20
-paul-moore.com
+-- 
+Josh
