@@ -2,195 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F476CC1F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4586CC1FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbjC1OV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
+        id S232630AbjC1OV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjC1OVZ (ORCPT
+        with ESMTP id S231913AbjC1OVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:21:25 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E2A102;
-        Tue, 28 Mar 2023 07:21:24 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso1831317pjf.0;
-        Tue, 28 Mar 2023 07:21:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680013284;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EBTD9anSg+DK8ZTYd/DgBczIs+okCYD2CyOH9MpwvwM=;
-        b=ksycxZwnk4UEPjWWOOiiqyDfXgfNPznq5Xcrsca/beigGP9no3pfZAIphhSoCHPOVA
-         iVlLABmX4ctAi9nXWG0wVJPTrvn24ketP21QZWc8l8qoN0RYxF56ep4hMtKcz0a9ddA4
-         8lPxep52D0Qedn7RqeW5AF/1B1CUJfj1AJt1piKejolZYTN0llifmxmy0OUdD0kwb0ei
-         zPvyQet/XJdNFZqURh/+dBl7BlTo0nIyFkqqeYRr3ZdEuObN/uTdaOjIdRZvSFcntAEU
-         rkgXznM2yCPQZBsBwEOjTxONthQhDsR+EPszwLHbPa5dVjNkkgJYgzkDlfslX8ucG7yt
-         +IaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680013284;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EBTD9anSg+DK8ZTYd/DgBczIs+okCYD2CyOH9MpwvwM=;
-        b=jhtfQPHOvcsBrLnQ0QSlS/XJ7fq8zP+R/DVCXLApZb1HLiSzJRbOwrQkSe1cIqdxd8
-         dR9BkPwFNnEoB1NLvrX/3rNLGolOBxbIfrEnQh+u51aMJWBzRrInAvXb75nkqZRPxlhh
-         3b8hkjtimYwG/e0CDabMlj2jiq8LUf6GHjbQIti7+Gc8VFFqpAZmGgHVtNEJ/pGfcCLn
-         P+HX9pWC48/Aquvk3ruYxD2YvoyGM/krMj+doag40Ta8B3KXtVzQYeC3+BiE9ZuCuI3L
-         54ehhEbLQebLg0DsVQVOTUH7g6NJfsO7G6PBcVHGLSbrFLmqc5XoRpJ2ODm0Yb3wRivq
-         2NEg==
-X-Gm-Message-State: AAQBX9fsBClccYF1nAbkOHyuuEXVpV5yr6pLRUdNyMLEp7cpkaq690Fv
-        YK4jjg2w0gb3tnHfUp1vNkE=
-X-Google-Smtp-Source: AKy350ZUOoMaKKaMZEP+Uclx7Qf8HuNoKAm6zEbBiBBN5ugLie1EzM4ICCQko4Td+hPakrvv7/LLrQ==
-X-Received: by 2002:a17:902:cec6:b0:19a:ad2f:2df9 with SMTP id d6-20020a170902cec600b0019aad2f2df9mr17179609plg.55.1680013284114;
-        Tue, 28 Mar 2023 07:21:24 -0700 (PDT)
-Received: from KERNELXING-MB0.tencent.com ([103.7.29.31])
-        by smtp.gmail.com with ESMTPSA id g7-20020a170902934700b0019d397b0f18sm21141552plp.214.2023.03.28.07.21.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 07:21:23 -0700 (PDT)
-From:   Jason Xing <kerneljasonxing@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kerneljasonxing@gmail.com, Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH v2 net] net: rps: avoid raising a softirq on the current cpu when scheduling napi
-Date:   Tue, 28 Mar 2023 22:21:12 +0800
-Message-Id: <20230328142112.12493-1-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        Tue, 28 Mar 2023 10:21:55 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCE0199;
+        Tue, 28 Mar 2023 07:21:51 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PmBhB4HM4z4f3w0K;
+        Tue, 28 Mar 2023 22:21:46 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgCnUyH69yJkQ_PfFg--.50877S4;
+        Tue, 28 Mar 2023 22:21:48 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     djwong@kernel.org, linux-xfs@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, yebin10@huawei.com
+Subject: [PATCH v2] xfs: fix BUG_ON in xfs_getbmap()
+Date:   Tue, 28 Mar 2023 22:21:29 +0800
+Message-Id: <20230328142129.2636535-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: _Ch0CgCnUyH69yJkQ_PfFg--.50877S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFy5Gw1UurWxJr43ZFWUurg_yoW5Ar45pr
+        n3Gr1UGr4vgr1UZr1DJw1UKw1UGr4UCF48Ar1xWr1Sq3WUAw17tr40kFWFyr9rJrW8Xryx
+        Jr1DJw18t345JaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgCb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
+        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsG
+        vfC2KfnxnUUI43ZEXa7IU1CPfJUUUUU==
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Xing <kernelxing@tencent.com>
+From: Ye Bin <yebin10@huawei.com>
 
-When we are scheduling napi and then RPS decides to put the skb into
-a backlog queue of another cpu, we shouldn't raise the softirq for
-the current cpu. When to raise a softirq is based on whether we have
-more data left to process later. But apparently, as to the current
-cpu, there is no indication of more data enqueued, so we do not need
-this action. After enqueuing to another cpu, net_rx_action() or
-process_backlog() will call ipi and then another cpu will raise the
-softirq as expected.
+There's issue as follows:
+XFS: Assertion failed: (bmv->bmv_iflags & BMV_IF_DELALLOC) != 0, file: fs/xfs/xfs_bmap_util.c, line: 329
+------------[ cut here ]------------
+kernel BUG at fs/xfs/xfs_message.c:102!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 14612 Comm: xfs_io Not tainted 6.3.0-rc2-next-20230315-00006-g2729d23ddb3b-dirty #422
+RIP: 0010:assfail+0x96/0xa0
+RSP: 0018:ffffc9000fa178c0 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff888179a18000
+RDX: 0000000000000000 RSI: ffff888179a18000 RDI: 0000000000000002
+RBP: 0000000000000000 R08: ffffffff8321aab6 R09: 0000000000000000
+R10: 0000000000000001 R11: ffffed1105f85139 R12: ffffffff8aacc4c0
+R13: 0000000000000149 R14: ffff888269f58000 R15: 000000000000000c
+FS:  00007f42f27a4740(0000) GS:ffff88882fc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000b92388 CR3: 000000024f006000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ xfs_getbmap+0x1a5b/0x1e40
+ xfs_ioc_getbmap+0x1fd/0x5b0
+ xfs_file_ioctl+0x2cb/0x1d50
+ __x64_sys_ioctl+0x197/0x210
+ do_syscall_64+0x39/0xb0
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Also, raising more softirqs which set the corresponding bit field
-can make the IRQ mechanism think we probably need to start ksoftirqd
-on the current cpu. Actually it shouldn't happen.
+Above issue may happen as follows:
+         ThreadA                       ThreadB
+do_shared_fault
+ __do_fault
+  xfs_filemap_fault
+   __xfs_filemap_fault
+    filemap_fault
+                             xfs_ioc_getbmap -> Without BMV_IF_DELALLOC flag
+			      xfs_getbmap
+			       xfs_ilock(ip, XFS_IOLOCK_SHARED);
+			       filemap_write_and_wait
+ do_page_mkwrite
+  xfs_filemap_page_mkwrite
+   __xfs_filemap_fault
+    xfs_ilock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
+    iomap_page_mkwrite
+     ...
+     xfs_buffered_write_iomap_begin
+      xfs_bmapi_reserve_delalloc -> Allocate delay extent
+                              xfs_ilock_data_map_shared(ip)
+	                      xfs_getbmap_report_one
+			       ASSERT((bmv->bmv_iflags & BMV_IF_DELALLOC) != 0)
+	                        -> trigger BUG_ON
 
-Here are some codes to clarify how it can trigger ksoftirqd:
-__do_softirq()
-  [1] net_rx_action() -> enqueue_to_backlog() -> raise an IRQ
-  [2] check if pending is set again -> wakeup_softirqd
+As xfs_filemap_page_mkwrite() only hold XFS_MMAPLOCK_SHARED lock, there's
+small window mkwrite can produce delay extent after file write in xfs_getbmap().
+To solve above issue, just skip delalloc extents.
 
-Comments on above:
-[1] when RPS chooses another cpu to enqueue skb
-[2] in __do_softirq() it will wait a little bit of time around 2 jiffies
-
-In this patch, raising an IRQ can be avoided when RPS enqueues the skb
-into another backlog queue not the current one.
-
-I captured some data when starting one iperf3 process and found out
-we can reduces around ~1500 times/sec at least calling
-__raise_softirq_irqoff().
-
-Fixes: 0a9627f2649a ("rps: Receive Packet Steering")
-Signed-off-by: Jason Xing <kernelxing@tencent.com>
+Signed-off-by: Ye Bin <yebin10@huawei.com>
 ---
-v2:
-1) change the title and add more details.
-2) add one parameter to recognise whether it is napi or non-napi case
-suggested by Eric.
-Link: https://lore.kernel.org/lkml/20230325152417.5403-1-kerneljasonxing@gmail.com/
----
- net/core/dev.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ fs/xfs/xfs_bmap_util.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 1518a366783b..504dc3fc09b1 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4586,7 +4586,7 @@ static void trigger_rx_softirq(void *data)
-  * If yes, queue it to our IPI list and return 1
-  * If no, return 0
-  */
--static int napi_schedule_rps(struct softnet_data *sd)
-+static int napi_schedule_rps(struct softnet_data *sd, bool napi)
- {
- 	struct softnet_data *mysd = this_cpu_ptr(&softnet_data);
- 
-@@ -4594,8 +4594,9 @@ static int napi_schedule_rps(struct softnet_data *sd)
- 	if (sd != mysd) {
- 		sd->rps_ipi_next = mysd->rps_ipi_list;
- 		mysd->rps_ipi_list = sd;
-+		if (!napi)
-+			__raise_softirq_irqoff(NET_RX_SOFTIRQ);
- 
--		__raise_softirq_irqoff(NET_RX_SOFTIRQ);
- 		return 1;
- 	}
- #endif /* CONFIG_RPS */
-@@ -4648,7 +4649,7 @@ static bool skb_flow_limit(struct sk_buff *skb, unsigned int qlen)
-  * queue (may be a remote CPU queue).
-  */
- static int enqueue_to_backlog(struct sk_buff *skb, int cpu,
--			      unsigned int *qtail)
-+			      unsigned int *qtail, bool napi)
- {
- 	enum skb_drop_reason reason;
- 	struct softnet_data *sd;
-@@ -4675,7 +4676,7 @@ static int enqueue_to_backlog(struct sk_buff *skb, int cpu,
- 		 * We can use non atomic operation since we own the queue lock
+diff --git a/fs/xfs/xfs_bmap_util.c b/fs/xfs/xfs_bmap_util.c
+index a09dd2606479..d2a109ceb922 100644
+--- a/fs/xfs/xfs_bmap_util.c
++++ b/fs/xfs/xfs_bmap_util.c
+@@ -322,7 +322,8 @@ xfs_getbmap_report_one(
+ 		 * extents.
  		 */
- 		if (!__test_and_set_bit(NAPI_STATE_SCHED, &sd->backlog.state))
--			napi_schedule_rps(sd);
-+			napi_schedule_rps(sd, napi);
- 		goto enqueue;
- 	}
- 	reason = SKB_DROP_REASON_CPU_BACKLOG;
-@@ -4933,7 +4934,7 @@ static int netif_rx_internal(struct sk_buff *skb)
- 		if (cpu < 0)
- 			cpu = smp_processor_id();
+ 		if (got->br_startoff < XFS_B_TO_FSB(ip->i_mount, XFS_ISIZE(ip)))
+-			ASSERT((bmv->bmv_iflags & BMV_IF_DELALLOC) != 0);
++			if (!(bmv->bmv_iflags & BMV_IF_DELALLOC))
++				return 0;
  
--		ret = enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
-+		ret = enqueue_to_backlog(skb, cpu, &rflow->last_qtail, false);
- 
- 		rcu_read_unlock();
- 	} else
-@@ -4941,7 +4942,7 @@ static int netif_rx_internal(struct sk_buff *skb)
- 	{
- 		unsigned int qtail;
- 
--		ret = enqueue_to_backlog(skb, smp_processor_id(), &qtail);
-+		ret = enqueue_to_backlog(skb, smp_processor_id(), &qtail, false);
- 	}
- 	return ret;
- }
-@@ -5670,7 +5671,7 @@ static int netif_receive_skb_internal(struct sk_buff *skb)
- 		int cpu = get_rps_cpu(skb->dev, skb, &rflow);
- 
- 		if (cpu >= 0) {
--			ret = enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
-+			ret = enqueue_to_backlog(skb, cpu, &rflow->last_qtail, false);
- 			rcu_read_unlock();
- 			return ret;
- 		}
-@@ -5705,7 +5706,7 @@ void netif_receive_skb_list_internal(struct list_head *head)
- 			if (cpu >= 0) {
- 				/* Will be handled, remove from list */
- 				skb_list_del_init(skb);
--				enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
-+				enqueue_to_backlog(skb, cpu, &rflow->last_qtail, true);
- 			}
- 		}
- 	}
+ 		p->bmv_oflags |= BMV_OF_DELALLOC;
+ 		p->bmv_block = -2;
 -- 
-2.37.3
+2.31.1
 
