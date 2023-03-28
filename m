@@ -2,81 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1339A6CBA5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9376CBA62
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbjC1JVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
+        id S231493AbjC1JWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbjC1JV1 (ORCPT
+        with ESMTP id S230452AbjC1JWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:21:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06D25252
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:20:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679995240;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cmenFZrPmab5EsKw3TDMXYEC3Wdv3EkUt5K0GPSSZs0=;
-        b=fz7l7tiKbQlSyglQ8VimGjBmkU9MMDEulhBOabibeOBY1SLdChJl2CAwG8YO31Mb1RM914
-        k1VQPKZSXJ7lkUnYfuS/bs86otIR7vUfL5kWRQFSV5yc6F8PpvoBGM7Tl4vtlNsDiJGxpS
-        K3+0cCL9Lb/VU9ZdrQ5Y2oB8MRDQYsw=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-513-CTcXMRQgOoW-qAB61ofMZg-1; Tue, 28 Mar 2023 05:20:39 -0400
-X-MC-Unique: CTcXMRQgOoW-qAB61ofMZg-1
-Received: by mail-wm1-f71.google.com with SMTP id bi5-20020a05600c3d8500b003edda1368d7so6118512wmb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:20:39 -0700 (PDT)
+        Tue, 28 Mar 2023 05:22:15 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9DA5272
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:22:13 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id i7so14208950ybt.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:22:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679995333;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WfEbC+QvlmYRFEpM334dDDmHLZzT53TFZ7pAp7zhwe4=;
+        b=O+6rpHUxMrocg+PNRSUNrl09ruDw8nFucVYoEuKiSkUoYU+rAaaZhtmXvt6TdGkwNP
+         M1b8yBJvevc5Zt7Jyzawt3sUx2+8btHWzfMFZYbqpV5ujpvuCnm6uUn66khGbaDrI4/b
+         BnOZaXOaZ1QBeFNUU7FRBwi2CjsBQzbK8g1XLS5nhmorHOweLMGd0v+/YX2qMdHObYeV
+         flOhgDotNum9SI+7uxyc4MfExqnGRtrmIxceFdg59KEnFajy5Cv80DUd+NdLRx8k3RA4
+         7LEesg4hoH8OgLFhlxClH+aKYg8loDZNrIsxSLEo9AIGjCJ+YOTdQbIxwY0yUZUkHLT6
+         Rexg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679995238;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cmenFZrPmab5EsKw3TDMXYEC3Wdv3EkUt5K0GPSSZs0=;
-        b=3/mFvWj9lJRIr0/sshmJRpiJ+jOtep7Xuf9MUYHjJJWbNnc+BzC0WY5gZoeU7uSlhC
-         XjcNEZo9B4pgyHWHxksUUJQZfmHolzogj+Zm8yVY/Qfca0Tmw3SpqwkEbq0XJn1b8mnJ
-         iFeSDuwvHZ3dFeAUkR3QQc+sES5kv8cv+Phh8Qe7cQcOy38UaWnJusZeP6DUMNYMsmaw
-         B2cWu1YRGY9fUub/EgL8fjvFFFvzYMIcphoHMviWpV24Yy4dXcVefI21liOzrYqu09Pp
-         OnwulAk/BiLILFphOhpGjuJye0SPOjJpHSMNH3Cs6KHsl72y6OQTgaLi3hGVDnmrstIj
-         12xQ==
-X-Gm-Message-State: AAQBX9cdmhyXw9f6GHKXw7s6RV64OK6bOU/M1jk2i5HO3hxGr9WHqwir
-        JpkGoGmDsnj+wM8dEN4ghHokjW4fPp1F4idESICHFFOKECraHRT9sum1S8LpteNSMu/1nYKLBo2
-        179sKMmyNxd/u9ldMY5dTuLsgAXxiejDarI8=
-X-Received: by 2002:a5d:4b0d:0:b0:2d7:8254:bc14 with SMTP id v13-20020a5d4b0d000000b002d78254bc14mr11626369wrq.47.1679995238003;
-        Tue, 28 Mar 2023 02:20:38 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZzbnxZqk7E1yEYPpAjTaJXCiLIyKzmOLraPzZ/v8H+G8UaOf8S3BcIKhbMbICZjtEJDUPb6w==
-X-Received: by 2002:a5d:4b0d:0:b0:2d7:8254:bc14 with SMTP id v13-20020a5d4b0d000000b002d78254bc14mr11626354wrq.47.1679995237687;
-        Tue, 28 Mar 2023 02:20:37 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id p5-20020a5d4e05000000b002d75909c76esm20275639wrt.73.2023.03.28.02.20.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 02:20:36 -0700 (PDT)
-Message-ID: <fce5c1ad-24a3-febf-127e-e97238492143@redhat.com>
-Date:   Tue, 28 Mar 2023 11:20:34 +0200
+        d=1e100.net; s=20210112; t=1679995333;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WfEbC+QvlmYRFEpM334dDDmHLZzT53TFZ7pAp7zhwe4=;
+        b=AQlpprOp0N4Q3cLjJUKYDlIzYVI2eYtjsXiYv2wrL6l321H3wvUOhcLiLCA/TUXmNb
+         S2neth90GlW1Vz1+fUALG7eCJEzinSfAECBiOJ2Tz9+nqm3sMXXOS+ZtcLeLMh7Lvf3u
+         KFPsId8dIeOc71vGxbubsBROAVba2AMfXUHzJTO7tLiPl6fMhVUTAr+/J98RqmlPjKmQ
+         iKunBe5WmUV2LMAps8FuibvEdz0sSnflZO4dqgy7xW2oI6Ok6OrTAjteVArGDqYs491q
+         rxgvo/BQZyiZ1A7cyQNYiz/tf9dLfS3+7tbg+0ySOVPq8hgHWwsOBER5llpPZ23PO72F
+         EVbw==
+X-Gm-Message-State: AAQBX9cCX5NVxpGoIULeTL4YkP50PF6SnCz7GrXACxgOl7aLfjPVtuYB
+        i3jdXGMIRWjuXtd4M/oJK9V4+703f6SRukasH6vv4A==
+X-Google-Smtp-Source: AKy350auimLGCr8ILoBzGItiYAiR4pgO8LPEdWrnD1Vk5Z4GVtmW4pyg+5kEg5lZTH5zOTSGFwsCl8xX2CPkdVQT06U=
+X-Received: by 2002:a25:a2c3:0:b0:b78:1b26:a642 with SMTP id
+ c3-20020a25a2c3000000b00b781b26a642mr6658558ybn.1.1679995333140; Tue, 28 Mar
+ 2023 02:22:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] KVM: x86/pmu: Fix emulation on Intel counters' bit
- width
-Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230322093117.48335-1-likexu@tencent.com>
- <CABgObfYfiUDf4zY=izcg_32yGCbUxxVc+JAkHGHwiQ0VmGdOgA@mail.gmail.com>
- <871434fe-ae80-bec6-9920-a6411f5842c0@gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <871434fe-ae80-bec6-9920-a6411f5842c0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230324094205.33266-1-angelogioacchino.delregno@collabora.com> <20230324094205.33266-4-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230324094205.33266-4-angelogioacchino.delregno@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Tue, 28 Mar 2023 11:22:02 +0200
+Message-ID: <CAFGrd9pjm97+Et-auw2rh4nWUJAcqXzy2cix42QJRx4UHNzq2g@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] soc: mediatek: pwrap: Add kerneldoc for struct pwrap_slv_type
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, flora.fu@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,34 +73,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/23 11:16, Like Xu wrote:
-> 
-> 
-> If IA32_PERF_CAPABILITIES.FW_WRITE[bit 13] =1, each IA32_PMCi is 
-> accompanied by a
-> corresponding alias address starting at 4C1H for IA32_A_PMC0.
-> 
-> The bit width of the performance monitoring counters is specified in 
-> CPUID.0AH:EAX[23:16].
-> If IA32_A_PMCi is present, the 64-bit input value (EDX:EAX) of WRMSR to 
-> IA32_A_PMCi will cause
-> IA32_PMCi to be updated by:
-> 
->      COUNTERWIDTH =
->          CPUID.0AH:EAX[23:16] bit width of the performance monitoring 
-> counter
->      IA32_PMCi[COUNTERWIDTH-1:32] := EDX[COUNTERWIDTH-33:0]);
->      IA32_PMCi[31:0] := EAX[31:0];
->      EDX[63:COUNTERWIDTH] are reserved
-> 
+Le ven. 24 mars 2023 =C3=A0 10:42, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> a =C3=A9crit :
+>
+> In preparation for adding new members with name abbreviations describe
+> the struct pwrap_slv_type with kerneldoc to enhance human readability.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
 > ---
-> 
-> Some might argue that this is all talking about GP counters, not
-> fixed counters. In fact, the full-width write hw behaviour is
-> presumed to do the same thing for all counters.
-But the above behavior, and the #GP, is only true for IA32_A_PMCi (the 
-full-witdh MSR).  Did I understand correctly that the behavior for fixed 
-counters is changed without introducing an alias MSR?
+>  drivers/soc/mediatek/mtk-pmic-wrap.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/=
+mtk-pmic-wrap.c
+> index 5c500be48f7c..a33a1b1820cb 100644
+> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
+> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> @@ -1218,11 +1218,17 @@ struct pwrap_slv_regops {
+>         int (*pwrap_write)(struct pmic_wrapper *wrp, u32 adr, u32 wdata);
+>  };
+>
+> +/**
+> + * struct pwrap_slv_type - PMIC device wrapper definitions
+> + * @dew_regs:      Device Wrapper (DeW) register offsets
+> + * @type:          PMIC Type (model)
+> + * @regops:        Register R/W ops
+> + * @caps:          Capability flags for the target device
+> + */
+>  struct pwrap_slv_type {
+>         const u32 *dew_regs;
+>         enum pmic_type type;
+>         const struct pwrap_slv_regops *regops;
+> -       /* Flags indicating the capability for the target slave */
+>         u32 caps;
+>  };
 
-Paolo
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
+Regards,
+Alexandre
