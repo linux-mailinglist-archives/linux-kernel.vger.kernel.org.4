@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDA16CB9ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BA56CB9F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbjC1IzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
+        id S230315AbjC1I45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbjC1Iyq (ORCPT
+        with ESMTP id S229610AbjC1I4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:54:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B253719A1;
-        Tue, 28 Mar 2023 01:54:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 28 Mar 2023 04:56:55 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BED19A1;
+        Tue, 28 Mar 2023 01:56:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6230DB81BBF;
-        Tue, 28 Mar 2023 08:54:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD22FC433EF;
-        Tue, 28 Mar 2023 08:54:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679993683;
-        bh=FlhEhP6prp2j0gTaGdnVSIx+i5NWL7KCri11ZYnsy3I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SJRGXCjhZkx/iOapcmyPGdXscZHKSIdLVHHLMURh1Rf6qwEnc3Xlad0Qvwr7KT+qF
-         1MENXlQqeB6wAxszDpo0TlZmxkBw9FBjElNI3lmZEwodbevs5J0gzufBZbX0mRJdhf
-         vC8+Ux1CbqncIrFCgHueOAiBJ+SC1rsOFyCvtvF8jIFY1Og2EUQ7iCdVEy7jrzzCGJ
-         YQsXyp4K2PTCsfootJyrObN8PSegqIaDFVCs650s/Kz/BEbhs4gmnYGP3HVngdZrES
-         FvDmZClERmEwCYz3P6muXFqsF2d3ARRaq5wJPoyotbW36VpAoQYf/hmQcGjpBck2D5
-         QfcbOfLgQZHBw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ph56U-0003mE-05; Tue, 28 Mar 2023 10:54:54 +0200
-Date:   Tue, 28 Mar 2023 10:54:53 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
-        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/5] arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
-Message-ID: <ZCKrXZn7Eu/jvdpG@hovoldconsulting.com>
-References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
- <20230325165217.31069-2-manivannan.sadhasivam@linaro.org>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 34513219C2;
+        Tue, 28 Mar 2023 08:56:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679993813; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nh59YKaOupZZpTW1uDmCRUQ1aAKohqr+w5EA7d7jR+o=;
+        b=t2sipxadwSudSlY5Uvh6MJVXEiPOV924bCkqtrbZIXG9TkRf6kcSA5opwqRVMm50tG08H7
+        NMLk4pWmyyRlCWYTkuMZVw823ynOk0+WT1aqAEdwyRdusV+U2XIC0M+4OU0xC8BpQJN3Zo
+        aJAjx9sOTgpWEcZaBn/Z8VELsr7fE6M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679993813;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nh59YKaOupZZpTW1uDmCRUQ1aAKohqr+w5EA7d7jR+o=;
+        b=ZPtqPIHV2b/ncSH9qfDV+t916jW0VhX2ALCoE49wzX5TOKprWRiheCiQVk9+9cdvDibeyk
+        WNOTkluVrkaC4+DQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0BAEE1390B;
+        Tue, 28 Mar 2023 08:56:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zhMtAtWrImRqNQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 28 Mar 2023 08:56:53 +0000
+Message-ID: <a231f05c-b157-f495-bf06-8aca903c7e17@suse.cz>
+Date:   Tue, 28 Mar 2023 10:56:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230325165217.31069-2-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH V8 1/2] mm: compaction: move compaction sysctl to its own
+ file
+Content-Language: en-US
+To:     ye.xingchen@zte.com.cn, mcgrof@kernel.org
+Cc:     keescook@chromium.org, yzaikin@google.com,
+        akpm@linux-foundation.org, chi.minghao@zte.com.cn,
+        linmiaohe@huawei.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+References: <202303281446280457758@zte.com.cn>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <202303281446280457758@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 10:22:13PM +0530, Manivannan Sadhasivam wrote:
-> Add missing quirks for the USB DWC3 IP.
-
-This is not an acceptable commit message generally and certainly not for
-something that you have tagged for stable.
-
-At a minimum, you need to describe why these are needed and what the
-impact is.
-
-Also, why are you sending as part of a series purporting to enable
-runtime PM when it appears to be all about optimising specific gadget
-applications?
-
-Did you confirm that the below makes any sense or has this just been
-copied verbatim from the vendor devicetree (it looks like that)?
-
-The fact that almost none of the qcom SoCs sets these also indicates
-that something is not right here.
-
-> Cc: stable@vger.kernel.org # 5.20
-> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+On 3/28/23 08:46, ye.xingchen@zte.com.cn wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 0d02599d8867..266a94c712aa 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -3040,6 +3040,13 @@ usb_0_dwc3: usb@a600000 {
->  				iommus = <&apps_smmu 0x820 0x0>;
->  				phys = <&usb_0_hsphy>, <&usb_0_qmpphy QMP_USB43DP_USB3_PHY>;
->  				phy-names = "usb2-phy", "usb3-phy";
-> +				snps,hird-threshold = /bits/ 8 <0x0>;
-> +				snps,usb2-gadget-lpm-disable;
+> This moves all compaction sysctls to its own file.
+> 
+> Move sysctl to where the functionality truly belongs to improve
+> readability, reduce merge conflicts, and facilitate maintenance.
+> 
+> I use x86_defconfig and linux-next-20230327 branch
+> $ make defconfig;make all -jn
+> CONFIG_COMPACTION=y
+> 
+> add/remove: 1/0 grow/shrink: 1/1 up/down: 350/-256 (94)
+> Function                                     old     new   delta
+> vm_compaction                                  -     320    +320
+> kcompactd_init                               180     210     +30
+> vm_table                                    2112    1856    -256
+> Total: Before=21119987, After=21120081, chg +0.00%
+> 
+> Despite the addition of 94 bytes the patch still seems a worthwile
+> cleanup.
+> 
+> Link: https://lore.kernel.org/lkml/067f7347-ba10-5405-920c-0f5f985c84f4@suse.cz/
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 
-Here you are disabling LPM for gadget mode, which makes most of the
-other properties entirely pointless.
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-> +				snps,is-utmi-l1-suspend;
-> +				snps,dis-u1-entry-quirk;
-> +				snps,dis-u2-entry-quirk;
-
-These appear to be used to optimise certain gadget application and
-likely not something that should be set in a dtsi.
-
-> +				snps,has-lpm-erratum;
-> +				tx-fifo-resize;
-
-Same here.
-
->  				port {
->  					usb_0_role_switch: endpoint {
-
-Johan
+Thanks.
