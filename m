@@ -2,124 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467C46CC9C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984AA6CC9C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjC1R4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
+        id S229889AbjC1R5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjC1R4G (ORCPT
+        with ESMTP id S229539AbjC1R5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:56:06 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87491BBA8;
-        Tue, 28 Mar 2023 10:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mF44mTcQDxi32SHw5oS+hBomZQPJLxNczN7gzosvezE=; b=y0TFmUPknQKAfD9dwyLjsgdaED
-        XgLLqy5ZHDwzF4g/tlxv6M/rpKW6NB0Bx2ITjzBzuybM65sgwYr13eKwHVZVqfaRBhW4g+0QlHksX
-        RLfqpGVYMm3c/QiP+EwB5QFm41QTg2/ZaukbmG/ReovW0muWrP/1yEqzI3Ertj/O05CL7oDqIj3Gv
-        Cjq+1cbyHwksimH75ezvlCkjFoCIG94wLIKsK7A4lzQf9DwkaxZGnHq3zr2xWgHt7hxox7pErzp1S
-        ktUyn2DraEcxedanXjc8L6/36fJ9l4AiF+04u/Dsk4Zn7iYxWDa6egToAOkX5V3VBgyxQAHDz8bW6
-        enIB5zxw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1phDY0-00FNsr-1z;
-        Tue, 28 Mar 2023 17:55:52 +0000
-Date:   Tue, 28 Mar 2023 10:55:52 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Song Liu <song@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-modules@vger.kernel.org,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        Daniel Gomez <da.gomez@samsung.com>,
-        "kbus >> Keith Busch" <kbusch@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
-Message-ID: <ZCMqKKhHWISu8eTz@bombadil.infradead.org>
-References: <20230308094106.227365-2-rppt@kernel.org>
- <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
- <ZB6W1C88TU6CcjJH@kernel.org>
- <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
- <ZCKIX3de5AZfGggK@kernel.org>
- <ZCKZuXxq38obmYpn@dhcp22.suse.cz>
- <ZCMDmHSqOeCj1EIo@kernel.org>
- <CAB=NE6UTC4VkNM57GGJ3XkG_PWLkMfXv2e2=yQJhtM6Fc-uMsQ@mail.gmail.com>
- <ZCMlyUewrAjTBb5i@casper.infradead.org>
- <ZCMpSJzXg/+JSHNY@bombadil.infradead.org>
+        Tue, 28 Mar 2023 13:57:07 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F369E194
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:57:06 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id b18so16206773ybp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:57:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1680026226;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VVMjvkUiQpIYhxok9nUkY/T7s0aJ2xwVUiGCBB2sdwo=;
+        b=EFPZM1Py1Dnl1l6LPwbu9pqTYrzH8qNSmgr221CZCa4FklAzrki+HClymGX5wIWR2q
+         8/+lFyXnpI1tF/G65VL6zkCcw8Fqwocikg2eqACXDUa3TRWeOpb/0tt+R43UgqrcILEK
+         YSb57HSDYgG2pNs/pC+MJXsiZlklna94FHeaY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680026226;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VVMjvkUiQpIYhxok9nUkY/T7s0aJ2xwVUiGCBB2sdwo=;
+        b=an6r+CsqYChnq4y5E721veSfrh+O1uDrsixyEdrUnSsqLpHKiqGvnvJa7hOf/GRjKj
+         qTghQVCL5BnP9a2O5cC9VgJ1+lwjTNpJv3ItMOn8qUG4F18niEoVPPJJBl33Ma5SWf0M
+         dqakkQ7Yq0t41UF8VIzPpeO6A8Z75d9NdLrG5DsJpkEgwQcTiuHqQ4Umkikh8X2EnHij
+         Hhu+eJ4/sEFH+Bbw1MLWTc5YsbRmFXu+iiN3VJsE90fP9BMzqd+sWVYFebFF/MmqsCNY
+         td66t9Ny87NClRJf9re01cdyX6XlT69ms7Utpy9MMcqs5KXhs8dM2XvzRkQ7MeDuiPfG
+         iBow==
+X-Gm-Message-State: AAQBX9enABl2O99euxXv0XJqmAzY6wCjX11jKQyTXgmdvc1aC69LSJNu
+        M/Jat2LRGiRCphRcw50n8J5LsrMm7SdntJtBzhKDpQ==
+X-Google-Smtp-Source: AKy350ZW2rVwU9TY3Aic68rt7ThnXakit0m4ZvpacupHoz8LSjOf507tB8hwNX+1n2ZAbLJbWHkZa/sHYDfi7IuecIk=
+X-Received: by 2002:a25:d954:0:b0:b7d:9e72:d792 with SMTP id
+ q81-20020a25d954000000b00b7d9e72d792mr1556367ybg.5.1680026226171; Tue, 28 Mar
+ 2023 10:57:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCMpSJzXg/+JSHNY@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230326204224.80181-1-krzysztof.kozlowski@linaro.org> <20230326204224.80181-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230326204224.80181-4-krzysztof.kozlowski@linaro.org>
+From:   Jagan Teki <jagan@amarulasolutions.com>
+Date:   Tue, 28 Mar 2023 23:26:54 +0530
+Message-ID: <CAMty3ZBznkToP9_zq_LdaoxXcPps9c6tMD4fRH0=YpS98C=swQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: display: sitronix,st7701: document port
+ and rotation
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 10:52:08AM -0700, Luis Chamberlain wrote:
-> On Tue, Mar 28, 2023 at 06:37:13PM +0100, Matthew Wilcox wrote:
-> > On Tue, Mar 28, 2023 at 10:18:50AM -0700, Luis Chamberlain wrote:
-> > > differences with eBPF programs is that modules *can* be rather large
-> > > in size. What is the average size of modules? Well let's take a look:
-> > > 
-> > > mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
-> > > -name \*.ko| wc -l
-> > > 9173
-> > 
-> > ummm ... wc -c, surely?
-> 
-> That's the number of allmodconfig modules found.
-> 
-> mcgrof@fulton ~/linux (git::sysctl-next)$ find ./ -name \*.ko| head -2
-> ./arch/x86/crypto/twofish-x86_64.ko
-> ./arch/x86/crypto/serpent-avx2.ko
-> mcgrof@fulton ~/linux (git::sysctl-next)$ find ./ -name \*.ko| head -2 |
-> wc -l
-> 2
-> mcgrof@fulton ~/linux (git::sysctl-next)$ find ./ -name \*.ko| head -2 |
-> wc -c
-> 70
-> 
-> wc -c would give a lot more. wc -l gives me the module count.
-> 
-> > > mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
-> > > -name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
-> > > -$((9173-5)) | awk 'BEGIN {sum=0} {sum+=$1} END {print sum/NR/1024}'
-> > > 160.54
-> > 
-> > ... which invalidates all of these.
-> 
-> Not sure ? But regardless the *.text* lookup is what we care for though
-> which was later.
+On Mon, Mar 27, 2023 at 2:12=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Panels are supposed to have one port (defined in panel-common.yaml
+> binding) and can have also rotation:
+>
+>   rk3326-odroid-go3.dtb: panel@0: 'port', 'rotation' do not match any of =
+the regexes: 'pinctrl-[0-9]+'
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-Which gets me thinking it'd be super nice if kmod tools supported
-querying this for us, then no fat finger could mess up the math:
-
-For all modules available:
- * Average module size
- * Average .text module size
-
-For only modules loaded:
- * Average module size
- * Average .text module size
-
-  Luis
+Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
