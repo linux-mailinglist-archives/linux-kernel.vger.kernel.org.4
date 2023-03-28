@@ -2,113 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3781B6CC235
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D286CC243
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbjC1Ogm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        id S232394AbjC1OjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbjC1Ogj (ORCPT
+        with ESMTP id S230248AbjC1OjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:36:39 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485F6C671
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:36:03 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id ek18so50617172edb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680014161;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wkUxb1yN1awxacFzY/nANVpb9fbOuHgLElxbE/XrNOY=;
-        b=NlviKrSbiJ6rmZgJIY/VL8iDRUl4VMonk0wujvV6GNcBmtzluNhpICT0Ja8dp/Vq5S
-         E12AjeI1kEPzOpELfj85huH7m+wcQNlsZUvXLh2BTTSDx69C/CZbREsIyCRacau4esz8
-         9JjbHSf9ZeMxxUKW7MMmvK1ZHj+IN0PaUa121RQ1T3xzdXJ3EN58hs2I17dfxln2/qj2
-         snkgsiCg3lpu7PXAar871dT+anpr7PKrJANZhDXc8QN1MEambLNUHKzREzOOz9nat2IS
-         DaxIhouOXvHf2ylVwaO6joJJQFLbZ4AGllwWd5o6JbDaHMhvpCNa6aJofxgfBT9xTGDt
-         aAAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680014161;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wkUxb1yN1awxacFzY/nANVpb9fbOuHgLElxbE/XrNOY=;
-        b=LvgN3102hh5ds3lUr7VOnsgFmagiMCo4U+Rqq/p+h4+eZBDqstNd5WD+uz8xFGoHkA
-         iL9ZraKNjKravSKTdMkpzwV9rjO9275FYt6kSHGSbfhMRT+vejEnUqKHLqnzM+ZNsg4p
-         app1cSXcRhcGBXKGfNOK59lsvFNpfAtFkIEgfOfOVY5CI6+j8TgN1G/frmDG1mM/zqzE
-         Z7HUE4GfKn7Af+61rEXmK/ulRAkNKvFMlIDUvXSVvEpDv5aVixLnFZbjsmsohSONqip1
-         sbJHRg1oAO0q2qNiJCMSrwBeV8kawpL18FvMiFFlsXJ1ceTP/FM4FtHGSRWMrqW+sw7n
-         q6/Q==
-X-Gm-Message-State: AAQBX9fVh7if79J+hdSEPVQH03V9vtxxGA5SA2iZmYnfue5MZdaadjFC
-        1hkxmlvTuPiP1BHTKciDE0RJaQ==
-X-Google-Smtp-Source: AKy350aMxSkeVpVehYPInFnohdXS1ZEfyugD9A3W5oUCVFJdHZugT2owddmW86nqFx5ryQ4w12jsRw==
-X-Received: by 2002:a17:906:3449:b0:93b:b8f3:225d with SMTP id d9-20020a170906344900b0093bb8f3225dmr15892263ejb.15.1680014161037;
-        Tue, 28 Mar 2023 07:36:01 -0700 (PDT)
-Received: from [10.105.135.205] ([88.128.92.162])
-        by smtp.gmail.com with ESMTPSA id p25-20020a50cd99000000b004bf76fdfdb3sm15808831edi.26.2023.03.28.07.35.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 07:36:00 -0700 (PDT)
-Message-ID: <ad96f28a-7b2d-a58b-50fb-648063ed0b18@linaro.org>
-Date:   Tue, 28 Mar 2023 16:35:59 +0200
+        Tue, 28 Mar 2023 10:39:10 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1262212E;
+        Tue, 28 Mar 2023 07:39:04 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id DF99261CC457B;
+        Tue, 28 Mar 2023 16:39:01 +0200 (CEST)
+Message-ID: <652a9a96-f499-f31f-2a55-3c80b6ac9c75@molgen.mpg.de>
+Date:   Tue, 28 Mar 2023 16:39:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [Patch v7] dt-bindings: media: s5p-mfc: convert bindings to
- json-schema
+Subject: Re: [Intel-wired-lan] [REGRESSION] e1000e probe/link detection fails
+ since 6.2 kernel
 Content-Language: en-US
-To:     Aakarsh Jain <aakarsh.jain@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
-        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
-        david.plowman@raspberrypi.com, mark.rutland@arm.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
-        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
-        pankaj.dubey@samsung.com
-References: <CGME20230328114738epcas5p475b8fa1d1e86bbb86d004afe365e0259@epcas5p4.samsung.com>
- <20230328114729.61436-1-aakarsh.jain@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230328114729.61436-1-aakarsh.jain@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <87jzz13v7i.wl-tiwai@suse.de>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <87jzz13v7i.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 13:47, Aakarsh Jain wrote:
-> Convert s5p-mfc bindings to DT schema format using json-schema.
+Dear Takashi,
+
+
+Am 28.03.23 um 14:40 schrieb Takashi Iwai:
+
+> we've got a regression report for e1000e device on Lenovo T460p since
+> 6.2 kernel (with openSUSE Tumbleweed).  The details are found in
+>    https://bugzilla.opensuse.org/show_bug.cgi?id=1209254
+
+Thank you for forwarding the report.
+
+> It seems that the driver can't detect the 1000Mbps but only 10/100Mbps
+> link, eventually making the device unusable.
 > 
-> Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
-> ---
-> changes since v6:
+> On 6.1.12:
+> [    5.119117] e1000e: Intel(R) PRO/1000 Network Driver
+> [    5.119120] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+> [    5.121754] e1000e 0000:00:1f.6: Interrupt Throttling Rate (ints/sec) set to dynamic conservative mode
+> [    7.905526] e1000e 0000:00:1f.6 0000:00:1f.6 (uninitialized): Failed to disable ULP
+> [    7.988925] e1000e 0000:00:1f.6 0000:00:1f.6 (uninitialized): registered PHC clock
+> [    8.069935] e1000e 0000:00:1f.6 eth0: (PCI Express:2.5GT/s:Width x1) 50:7b:9d:cf:13:43
+> [    8.069942] e1000e 0000:00:1f.6 eth0: Intel(R) PRO/1000 Network Connection
+> [    8.072691] e1000e 0000:00:1f.6 eth0: MAC: 12, PHY: 12, PBA No: 1000FF-0FF
+> [   11.643919] e1000e 0000:00:1f.6 eth0: NIC Link is Up 1000 Mbps Full Duplex, Flow Control: None
+> [   15.437437] e1000e 0000:00:1f.6 eth0: NIC Link is Up 1000 Mbps Full Duplex, Flow Control: None
+> 
+> On 6.2.4:
+> [    4.344140] e1000e: Intel(R) PRO/1000 Network Driver
+> [    4.344143] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+> [    4.344933] e1000e 0000:00:1f.6: Interrupt Throttling Rate (ints/sec) set to dynamic conservative mode
+> [    7.113334] e1000e 0000:00:1f.6 0000:00:1f.6 (uninitialized): Failed to disable ULP
+> [    7.201715] e1000e 0000:00:1f.6 0000:00:1f.6 (uninitialized): registered PHC clock
+> [    7.284038] e1000e 0000:00:1f.6 eth0: (PCI Express:2.5GT/s:Width x1) 50:7b:9d:cf:13:43
+> [    7.284044] e1000e 0000:00:1f.6 eth0: Intel(R) PRO/1000 Network Connection
+> [    7.284125] e1000e 0000:00:1f.6 eth0: MAC: 12, PHY: 12, PBA No: 1000FF-0FF
+> [   10.897973] e1000e 0000:00:1f.6 eth0: NIC Link is Up 10 Mbps Full Duplex, Flow Control: None
+> [   10.897977] e1000e 0000:00:1f.6 eth0: 10/100 speed: disabling TSO
+> [   14.710059] e1000e 0000:00:1f.6 eth0: NIC Link is Up 10 Mbps Full Duplex, Flow Control: None
+> [   14.710064] e1000e 0000:00:1f.6 eth0: 10/100 speed: disabling TSO
+> [   59.894807] e1000e 0000:00:1f.6 eth0: NIC Link is Up 10 Mbps Full Duplex, Flow Control: None
+> [   59.894812] e1000e 0000:00:1f.6 eth0: 10/100 speed: disabling TSO
+> [   63.808662] e1000e 0000:00:1f.6 eth0: NIC Link is Up 10 Mbps Full Duplex, Flow Control: None
+> [   63.808668] e1000e 0000:00:1f.6 eth0: 10/100 speed: disabling TSO
+> 
+> The same problem persists with 6.3-rc3.
+> 
+> Can you guys check what can go wrong, or if there is a fix?
 
-This is a friendly reminder during the review process.
+Does openSUSE Tumbleweed make it easy to bisect the regression at least 
+on “rc level”? It be great if narrow it more down, so we know it for 
+example regressed in 6.2-rc7.
 
-It looks like you received a tag and forgot to add it.
 
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
+Kind regards,
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-If a tag was not added on purpose, please state why and what changed.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Paul
