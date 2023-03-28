@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0D86CBBCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1461C6CBBCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbjC1KDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
+        id S232787AbjC1KDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232743AbjC1KDE (ORCPT
+        with ESMTP id S231238AbjC1KDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:03:04 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75E25FC0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:03:02 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id q16so15032642lfe.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:03:02 -0700 (PDT)
+        Tue, 28 Mar 2023 06:03:06 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59996184
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:03:03 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id h25so15048830lfv.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:03:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679997781;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LyqTQFK+uVxsQYwyzlRv5E2d4XzzuOepwBhUJm638mk=;
-        b=PAcNESty8n7ZDp/KEZo9JNWQa6AN4XTktJyIb1sZ/X4ENi7kKl3q7x+l/74NA5lm+t
-         keIv6Tu6cu4i9sh9bS7QAeLG7xv4mWlpIGadaQe4lMeh4hPhpMeOQVl7c4O7Wpozd+BJ
-         sRMCiTdlHUNksMFbc5kKk7axX9fEoOMl+HDYnVv0teDq1acidnFK7GH/IzD9xkaFRbSi
-         pxKZYsbZN7sKHRyHTqQg+EhVF8AVrKoRGsaovmlPXIi6N4ixUqh+45OnD8oG+BFZzmuj
-         hVZKouzjEvDsBxzB6rA9XRz4+Gaj13neYe0lOlwV8/sZOSgcpEyOQuRxZY2ENzD3EXCR
-         jIgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679997781;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1679997782;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LyqTQFK+uVxsQYwyzlRv5E2d4XzzuOepwBhUJm638mk=;
-        b=ekmgSiH/0SyJF5Dgn1RpG0hx5QYGRgf104tH1wm/BF9ExTaoF75heUPHtnMEPJubK2
-         +6mDFUnj5Nv/6P58gtOHU5NnuiWE7pmJk3j7mNFefjDnosZKMbRUyTKJUpxfgKGTSW9V
-         0/nUhfKdEzrloDuPmf6P3McSqqyTCtiOqOlb0SNN4F+QUO8yIswjjSciDcvilIse+7Y+
-         +qTCCkseQXi8j6NpLGqnr7N3U7lyQmpvzW7/JaSfkI1FzwHC1AEUFN2uou4agEkx+k3S
-         BUoRMOFryUmfeoqAh3PY8kSP5W0HEoMaHHIyuBAAL0jMLu3G87suOJREXCQkEl69y29C
-         r6SQ==
-X-Gm-Message-State: AAQBX9eyY2WejY2FkGTHPus/I3ZRiN32few45CCnkjohhThmmYRCU8sW
-        UnWcnt3ZOhWBNddEDfKoDMJ3i6R+oc1047Ronlg=
-X-Google-Smtp-Source: AKy350YGbDiP4mhI2oNX77LkOc1pOGIfCa8AEk/jlSS+DxHtn2jn82eGU9gBAH+BT52Bo/Vvx30jcw==
-X-Received: by 2002:ac2:44b4:0:b0:4eb:c85:bdc2 with SMTP id c20-20020ac244b4000000b004eb0c85bdc2mr3113821lfm.2.1679997780947;
-        Tue, 28 Mar 2023 03:03:00 -0700 (PDT)
+        bh=0PzeyQrd2Tc1EuOfrldCPoi2vXLAKnhW3XMPQDwN2ac=;
+        b=f4c1QRz0gcjGtyirFi0ANq0c/1qKueB5uUwVlvypcnBvwqg8GWZIngXHoI6g7W0VLr
+         wnxQLYQKSK7Rv98k1xeV8aZcCTY+0CjQXvB20yPQRAVl3fyfNyOe79jUZwUAZ//jaKb1
+         CUyzsYWFFLKBFB7dGe+8j+2J42ODchwmo3TQ6Y2ZsJ6piJDYP2+XrLpXaUKB3fiaHSRX
+         kxR/ctPJG+JSHkgVgOYRcDH0GqB4+O9z109PcrwBDy7m+LojQVe+m2dXgkUMwOpTkmys
+         rljRgZZgXJkGLfDF3uFg8r64xK1tqd/YcfFwLhz/xy+Dg2QsTN/g17dAypWNJwPOU4oF
+         VMPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679997782;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0PzeyQrd2Tc1EuOfrldCPoi2vXLAKnhW3XMPQDwN2ac=;
+        b=K2xVzhAK5ZfBp9ff4yfwFQhxllgYjR1qvC7XuSTvA9efI6QHXFS8YyDSC7EZFYqzSA
+         WupRmiiEAR66t6bRmyCFkEhK/9lRPelYnu4J9V5KnHGWDGSrpig3rY9ymahOl8+tLQI3
+         pIy/R/jVKcsPGppOdZ7xOr0ZmYuTnL8b1Aqe7CU049YRS3An7Ft82NmRaYxezDJQFsyJ
+         JJSi+7vJZCWT4oBv+AZzt2m74H/youq7gbMENcQfFwtbtoHuC77I5Z3S+XHUGUsR9vcA
+         xJNqYnLVh9fGlVdwGmmEPuy/fVdbSuZ0sspPkqZdXnvbNQjyjYAkSVBB0M9/VkmsYU01
+         ymig==
+X-Gm-Message-State: AAQBX9eR3RK4hoHmLG+WcjHOuPYvHp+Y/BosWOjSCyXuTwJXKv7DVThy
+        o5uaGDFf3KP0iVxFSHIepk+Sgdf9mfvcStvqudo=
+X-Google-Smtp-Source: AKy350YnpvWToCO4K7eYa+DJcOXfV40TWaRERpWOJp08TxYhyxkD4JFWIHPyeB5j8KhWgHtikVVfaA==
+X-Received: by 2002:ac2:5963:0:b0:4d5:ae35:b221 with SMTP id h3-20020ac25963000000b004d5ae35b221mr4284717lfp.34.1679997782048;
+        Tue, 28 Mar 2023 03:03:02 -0700 (PDT)
 Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id f10-20020ac24e4a000000b004db3e330dcesm5008471lfr.178.2023.03.28.03.02.59
+        by smtp.gmail.com with ESMTPSA id f10-20020ac24e4a000000b004db3e330dcesm5008471lfr.178.2023.03.28.03.03.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 03:03:00 -0700 (PDT)
+        Tue, 28 Mar 2023 03:03:01 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH 0/2] Resolve MPM register space situation
-Date:   Tue, 28 Mar 2023 12:02:51 +0200
-Message-Id: <20230328-topic-msgram_mpm-v1-0-1b788a5f5a33@linaro.org>
+Date:   Tue, 28 Mar 2023 12:02:52 +0200
+Subject: [PATCH 1/2] dt-bindings: interrupt-controller: mpm: Allow passing
+ reg through phandle
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEu7ImQC/x2N0QrCMAwAf2Xk2cBsh1R/RUTaGLfA2pVmijD27
- ws+3sFxGyg3YYVbt0Hjr6gsxeB86oCmWEZGeRmD653vvQu4LlUIs44t5meuGekSQmKfyF0HsCx
- FZUwtFposLJ95Nlkbv+X3/9wf+34ARPLR+3cAAAA=
+Message-Id: <20230328-topic-msgram_mpm-v1-1-1b788a5f5a33@linaro.org>
+References: <20230328-topic-msgram_mpm-v1-0-1b788a5f5a33@linaro.org>
+In-Reply-To: <20230328-topic-msgram_mpm-v1-0-1b788a5f5a33@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -71,11 +72,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         devicetree@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1679997779; l=1895;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1679997779; l=1381;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=lF/bvkNJ7NLlgQqY7yN7AeVawfTeX3/WEciMsVGTE3U=;
- b=fcbsdJo5+WcFlPqfdWkwDg2oF4yvKNoIHpAZnGXRnPm4LbzWTwVvxhKLcC5BFQOdRQ45U5uZjkeJ
- hcTDCb0iAdJYaWg+95rEY7hXkXk3FcpPviMvbKzTRNnaZrbl17JO
+ bh=C4N0Ev8VKX3zoI5LrzMOtOGVDcPvF0sVmEyLrmGffDM=;
+ b=5VTz0TXYou6dESAd20JbdSqHQfvEqtSex/DVC7nsLbDDDFk1MRXmIhegfP3UUOj0Hwa28Li2VIg9
+ 7jVFDEIBCvVhPHyP1gldQPvO0g3ZxbeD9i8Zi4xH2OVWQZcnicj1
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -87,64 +88,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MPM (and some other things, irrelevant to this patchset) resides
-(as far as the ARM cores are concerned, anyway) in a MMIO-mapped region
-that's a portion of the RPM (low-power management core)'s RAM, known
-as the RPM Message RAM. Representing this relation in the Device Tree
-creates some challenges, as one would either have to treat a memory
-region as a bus, map nodes in a way such that their reg-s would be
-overlapping, or supply the nodes with a slice of that region.
+Due to the wild nature of the Qualcomm RPM Message RAM, we can't really
+use 'reg' to point to the MPM's slice of Message RAM without cutting into
+an already-defined RPM MSG RAM node used for GLINK and SMEM.
 
-This series implements the third option, by adding a qcom,rpm-msg-ram
-property, which has been used for some drivers poking into this region
-before. Bindings ABI compatibility is preserved through keeping the
-"normal" (a.k.a read the reg property and map that region) way of
-passing the register space.
-
-Example representation with this patchset:
-
-/ {
-	[...]
-
-	mpm: interrupt-controller {
-		compatible = "qcom,mpm";
-		qcom,rpm-msg-ram = <&apss_mpm>;
-		[...]
-	};
-
-	[...]
-
-	soc: soc@0 {
-		[...]
-
-		rpm_msg_ram: sram@45f0000 {
-			compatible = "qcom,rpm-msg-ram", "mmio-sram";
-			reg = <0 0x045f0000 0 0x7000>;
-			#address-cells = <1>;
-			#size-cells = <1>;
-			ranges = <0 0x0 0x045f0000 0x7000>;
-
-			apss_mpm: sram@1b8 {
-				reg = <0x1b8 0x48>;
-			};
-		};
-	};
-};
+Document passing the register space as a slice of SRAM through the
+qcom,rpm-msg-ram property. This also makes 'reg' no longer required.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Konrad Dybcio (2):
-      dt-bindings: interrupt-controller: mpm: Allow passing reg through phandle
-      irqchip: irq-qcom-mpm: Support passing a slice of SRAM as reg space
+ .../devicetree/bindings/interrupt-controller/qcom,mpm.yaml          | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
- .../bindings/interrupt-controller/qcom,mpm.yaml    |  6 ++++-
- drivers/irqchip/irq-qcom-mpm.c                     | 30 ++++++++++++++++++----
- 2 files changed, 30 insertions(+), 6 deletions(-)
----
-base-commit: a6faf7ea9fcb7267d06116d4188947f26e00e57e
-change-id: 20230328-topic-msgram_mpm-c688be3bc294
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
+index 509d20c091af..77fe5e0b378f 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
+@@ -30,6 +30,11 @@ properties:
+     description:
+       Specifies the base address and size of vMPM registers in RPM MSG RAM.
+ 
++  qcom,rpm-msg-ram:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Phandle to the APSS MPM slice of the RPM Message RAM
++
+   interrupts:
+     maxItems: 1
+     description:
+@@ -64,7 +69,6 @@ properties:
+ 
+ required:
+   - compatible
+-  - reg
+   - interrupts
+   - mboxes
+   - interrupt-controller
 
-Best regards,
 -- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+2.40.0
 
