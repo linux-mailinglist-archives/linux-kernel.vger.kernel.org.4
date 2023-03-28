@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC626CBB2D
+	by mail.lfdr.de (Postfix) with ESMTP id 38FE86CBB2C
 	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbjC1JhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
+        id S232706AbjC1Jh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbjC1JhJ (ORCPT
+        with ESMTP id S232156AbjC1JhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:37:09 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681A96588
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:36:37 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-62810466cccso571379b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:36:37 -0700 (PDT)
+        Tue, 28 Mar 2023 05:37:11 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98556A71
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:36:43 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id j24so11480497wrd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:36:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679996197;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8E4/REgp9ODotbn96PHap4rQOEyKET0fJwvNul5gBUU=;
-        b=kcvEiLGcR7zycIQCd+7hOL4Mu8tar4WGIXDOhiTgEDa/iJ7d3OTT/k7PJ0fgfWXXCw
-         0Qq/dQKNTMaRMovY+LFbJBFqk783Piejk6LlnJgvCJkowblsEMf6bgOnT8dYx7Slw5O3
-         c4lwNAvDbXUy5ygcBsdUeliCWfCxdOMKo27IY84kWK2qw/b0T49UH0Li1xW2/nchWR0t
-         jDwDlT6m0GVLjhrPmlh/QEBK8+BHVf+/MjEkdmHbFXEZuIHdiyntAaCkzJqTyNvjBiUp
-         JSeDsk6aHCZqZWq2bC4Mid7Y9N+hPtf9IlJTldxhpCsnlASBl52AVIkvKAQv8fZiazyn
-         oe5g==
+        d=linaro.org; s=google; t=1679996202;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XQV5jAujDsjlmJ7i4zzoeSJ8msTMIxUMBP2P8RrksF8=;
+        b=Mig5vyIslkZvEXRrGtnwNDJ79tHpngfDxYk99Sqqz63WsvDJV6ZCXlLQWmKNLfO8H8
+         2FFB/dIPxmrnuorZKOlXk168FTqEzjMfV2cYS/GntQADcvY2y50Su0U+3+zBlPzeQRoH
+         B3LwTgwGUSoekmwy9sWGdWUvU0QrIYCdAV3hAen5URjiP1YLl4lnrS8RpYe3TBR+xfkk
+         GjXj+EZJH6xAr1nNQDpgzzHa/3fhOBI55ZEsFA5MONcVQs1XA7IGDwbzJUtlBXeYf16B
+         BFHQcmXCO0zxSpGBxmsEK2vWjevflJAX/amSeJlJ4L047/GZgTuuPAnRuNRg13LcwONs
+         k4/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679996197;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8E4/REgp9ODotbn96PHap4rQOEyKET0fJwvNul5gBUU=;
-        b=VxfEHIzhOwVIKfLz4u7t52Ay4DJvRUYiO5xMKSzxszEJKTjuo6cbV0+CaAjNoAcht+
-         S6oOfMMXYvif0hhHRnebKYNiawvPOl1WXvNnY/qb5gyfG05Isv3CuhLvkoFp1yHlFcNG
-         2c/4r337gcypd4aRzpi3CtKKvjokBPodBJr2BRlXCKrSa4q7SCq+cGmb8sKj4kOLVKae
-         YRSCgNqKDsbpLZEtqGdACU3Lnr6a0KFuo09YHl/Ann2TtK4jnBi0OZg8O8j2Ri8ntR2R
-         /EtKL9vi13N5vhu5ylzSAnt4hJLJ+6FOaRdAtVO3LwsOU6wkpki0PfHuCK2bnp94FA+8
-         nUpg==
-X-Gm-Message-State: AAQBX9ckSSxVcr/wKw1ngu62b8KshJeMXUgPXJEAgb8ZCwZB7D5l+h5C
-        hnksx321HzePkE/1FK7jT/ATddVYRomiypV6E90=
-X-Google-Smtp-Source: AKy350YleEYd7R05h2kxGvupb45hdhpsCF5j3upr5y4AS+OoezqifsjZF3EWhW3l3a7qAH1honoqMw==
-X-Received: by 2002:a05:6a00:3002:b0:627:e180:ac04 with SMTP id ay2-20020a056a00300200b00627e180ac04mr12763467pfb.0.1679996196817;
-        Tue, 28 Mar 2023 02:36:36 -0700 (PDT)
-Received: from ubuntu.localdomain ([183.208.21.231])
-        by smtp.gmail.com with ESMTPSA id i10-20020aa78b4a000000b0062619a002f6sm20512150pfd.187.2023.03.28.02.36.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 02:36:36 -0700 (PDT)
-From:   Min Li <lm0963hack@gmail.com>
-To:     jani.nikula@linux.intel.com
-Cc:     joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-        tvrtko.ursulin@linux.intel.com, airlied@gmail.com, daniel@ffwll.ch,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] drm/i915: fix race condition UAF in i915_perf_add_config_ioctl
-Date:   Tue, 28 Mar 2023 17:36:27 +0800
-Message-Id: <20230328093627.5067-1-lm0963hack@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20210112; t=1679996202;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XQV5jAujDsjlmJ7i4zzoeSJ8msTMIxUMBP2P8RrksF8=;
+        b=e9FBB0dXn+ubmehs4UIowpy9MN0BMBGdQgNF0nlVQze4I3s9EwGxxmOSGOL62Zs7vK
+         eaDzYcVBOLxYmnrcHR7utoxMl3YqJcMBOsLDz2Kdk8cHJ3ecggakUHAhC8jAGgz2UceF
+         6zpdFjCkBx8hmO8W609uqrwPHd5B0Qa9VMZHOWJgiFK0Czh/1RalhFME9GHY8+Gvkw6+
+         jc9VUTHfnBinFp9ChNcIvXLMQnDU9li5HcB5U7tj/PHomlNPRerAUhwSVHzgeySM7kpT
+         mzREhrZHEog+rKK+ilsr9X09QKakKwCaatqh5Ib5Z+yaMArqqSf+vbUl0FBsccmKKl+J
+         n0Kg==
+X-Gm-Message-State: AAQBX9crvccKuoVczrwGJ+QrU7TLBqcnLUr2m/UCODQK0RZ9zabxTnNQ
+        RDtl532jbu+pVbKf5kmCxxyRmw==
+X-Google-Smtp-Source: AKy350a+LASx+WRjrECQYarn1n17idhSsDraP6ddv/ReLQYmMPK4bvDvhWHQ4zmmyRarSWf+n10QFg==
+X-Received: by 2002:adf:f78b:0:b0:2ce:aed4:7f22 with SMTP id q11-20020adff78b000000b002ceaed47f22mr12920141wrp.50.1679996202349;
+        Tue, 28 Mar 2023 02:36:42 -0700 (PDT)
+Received: from [192.168.2.107] ([79.115.63.91])
+        by smtp.gmail.com with ESMTPSA id n12-20020adfe34c000000b002da75c5e143sm14794062wrj.29.2023.03.28.02.36.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 02:36:42 -0700 (PDT)
+Message-ID: <4b8b629b-62f8-8e0d-5de2-9020a955f0e2@linaro.org>
+Date:   Tue, 28 Mar 2023 10:36:40 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 5/8] ARM: dts: at91-sama5d27_wlsom1: Set sst26vf064b SPI
+ NOR flash at its maximum frequency
+Content-Language: en-US
+To:     Nicolas Ferre <nicolas.ferre@microchip.com>, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mtd@lists.infradead.org
+References: <20221117105249.115649-1-tudor.ambarus@microchip.com>
+ <20221117105249.115649-6-tudor.ambarus@microchip.com>
+ <a6fe77b6-4ff4-3c91-0c67-a9da5a638e7b@microchip.com>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <a6fe77b6-4ff4-3c91-0c67-a9da5a638e7b@microchip.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,37 +81,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Userspace can guess the id value and try to race oa_config object creation
-with config remove, resulting in a use-after-free if we dereference the
-object after unlocking the metrics_lock.  For that reason, unlocking the
-metrics_lock must be done after we are done dereferencing the object.
 
-Signed-off-by: Min Li <lm0963hack@gmail.com>
----
- drivers/gpu/drm/i915/i915_perf.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
-index 824a34ec0b83..93748ca2c5da 100644
---- a/drivers/gpu/drm/i915/i915_perf.c
-+++ b/drivers/gpu/drm/i915/i915_perf.c
-@@ -4634,13 +4634,13 @@ int i915_perf_add_config_ioctl(struct drm_device *dev, void *data,
- 		err = oa_config->id;
- 		goto sysfs_err;
- 	}
--
--	mutex_unlock(&perf->metrics_lock);
-+	id = oa_config->id;
- 
- 	drm_dbg(&perf->i915->drm,
- 		"Added config %s id=%i\n", oa_config->uuid, oa_config->id);
-+	mutex_unlock(&perf->metrics_lock);
- 
--	return oa_config->id;
-+	return id;
- 
- sysfs_err:
- 	mutex_unlock(&perf->metrics_lock);
--- 
-2.25.1
+On 3/28/23 09:51, Nicolas Ferre wrote:
+> Hi Tudor,
 
+Hi!
+
+> 
+> On 17/11/2022 at 11:52, Tudor Ambarus wrote:
+>> sama5d27-wlsom1 populates an sst26vf064b SPI NOR flash. Its maximum
+>> operating frequency for 2.7-3.6V is 104 MHz. As the flash is operated
+>> at 3.3V, increase its maximum supported frequency to 104MHz. The
+>> increasing of the spi-max-frequency value requires the setting of the
+>> "CE# Not Active Hold Time", thus set the spi-cs-setup-ns to a value of 7.
+>>
+>> The sst26vf064b datasheet specifies just a minimum value for the
+>> "CE# Not Active Hold Time" and it advertises it to 5 ns. There's no
+>> maximum time specified. I determined experimentally that 5 ns for the
+>> spi-cs-setup-ns is not enough when the flash is operated close to its
+>> maximum frequency and tests showed that 7 ns is just fine, so set the
+>> spi-cs-setup-ns dt property to 7.
+>>
+>> With the increase of frequency the reads are now faster with ~37%.
+>>
+>> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+>> ---
+>>   arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
+>> b/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
+>> index 83bcf9fe0152..20caf40b4755 100644
+>> --- a/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
+>> +++ b/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
+>> @@ -220,7 +220,8 @@ qspi1_flash: flash@0 {
+>>           #size-cells = <1>;
+>>           compatible = "jedec,spi-nor";
+>>           reg = <0>;
+>> -        spi-max-frequency = <80000000>;
+>> +        spi-max-frequency = <104000000>;
+>> +        spi-cs-setup-ns = /bits/ 16 <7>;
+> 
+> Following the different changes that happened to this property after
+> this post, am I right saying that this must now be changed to:
+> 
+> spi-cs-setup-delay-ns = <7>;
+> 
+> ?
+> 
+
+Yes, that should do it. I'm amending the series right now. Can you do a
+little test on your side so that we make sure everything is in place?
+After the update, something like that should be run on any board (maybe
+wlsom1-ek?):
+#!/bin/sh
+
+dd if=/dev/urandom of=./qspi_test bs=1M count=6
+mtd_debug write /dev/mtd5 0 6291456 qspi_test
+mtd_debug erase /dev/mtd5 0 6291456
+mtd_debug read /dev/mtd5 0 6291456 qspi_read
+hexdump qspi_read
+mtd_debug write /dev/mtd5 0 6291456 qspi_test
+mtd_debug read /dev/mtd5 0 6291456 qspi_read
+sha1sum qspi_test qspi_read
+
+brb,
+ta
