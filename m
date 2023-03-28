@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029296CBE8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2F56CBE95
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbjC1MFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S229848AbjC1MGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbjC1MFs (ORCPT
+        with ESMTP id S231674AbjC1MGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:05:48 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DF093C2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:05:24 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ph84j-0006Ir-CN; Tue, 28 Mar 2023 14:05:17 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ph84g-0006UO-Rj; Tue, 28 Mar 2023 14:05:14 +0200
-Date:   Tue, 28 Mar 2023 14:05:14 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Amit Cohen <amcohen@nvidia.com>, Gal Pressman <gal@nvidia.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH net-next v2 6/8] net: phy: at803x: Make SmartEEE support
- optional and configurable via ethtool
-Message-ID: <20230328120514.GF15196@pengutronix.de>
-References: <20230327142202.3754446-1-o.rempel@pengutronix.de>
- <20230327142202.3754446-7-o.rempel@pengutronix.de>
+        Tue, 28 Mar 2023 08:06:31 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF118A6A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:06:10 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id e65so14644119ybh.10
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680005169;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3nAcSUy1w+Q3o4Q/OHStFI724GxYk97V8A1XUu2jF9g=;
+        b=tZa3WmFVr6RJgCaIfgBSVSh5UJAade1I1QF6Y5qLZX+p5/0pOE+NyAqJb34ijpgvjd
+         a6w/tekWdgzKPOFQrdoYaQh73r3k1rc4X9mt3Ao0AY0PHt72GMO8ZXDSSdUNefdX/+7k
+         Kn+vfIc31GHU4gb0wXLaw/1UTW0uTLE34ZJzIa4WtXMcu67P4SdjX6mPOW+QGdEuMwsV
+         DFZFOBBnZGM2/gfm25X5YqKAz/TPJ0zUmtMLaGRqkYdC5wIwXaUokpflDtQ+WzgP5L65
+         Zd839NwdPk96D/HoVrbKoCgviUXxXuc58uifBzz4BLe8CLZu1r5+hJYIUK7NdBNjIYHx
+         qqLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680005169;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3nAcSUy1w+Q3o4Q/OHStFI724GxYk97V8A1XUu2jF9g=;
+        b=nLixMIDySv78dJPStVJYwG47AN8TKfcL9EY+hzgXayXUWuWFvFF6qmCD1X7jGoXPlv
+         ntraRJi66xNod9g3aqGky/B+uZVh6G7DA64dFU8woWqleY4cMQ9Hbk9SP35PRWrv5t96
+         t+a2CSDs/QXdrwemSzLd1X9hHDqPqlID38zyWbnwUM4SBKQd9Ug4ym1NHjmdfvIpa7vF
+         wS6oqb0v9EpGUV5IYOQ+gCeWYkrQ4i2eQLFGjzjsl+v9y8FMMYZfKdkF5Pprphw2aBG8
+         WIPS2UOUZzF3pgMFtcqwTQ6jKa//WLyk/rz0r+CSlrzXf5UPobWxHTl8z6HpKV7dNCOL
+         oNHw==
+X-Gm-Message-State: AAQBX9c60cHHYWdIUXwfDdWBLq5SPBvzrwIQmfrR8bVO4b/m8ihpIqsI
+        YDLc692zZ1HLmf3YuswTswHNM9I/USXzvN0OVwzcHg==
+X-Google-Smtp-Source: AKy350aToJDCkqdHj4cvOy9j5YOCIDb5O0Wx7AGL45KuARN30ai2RSkBk4pWZ82+ReFD4c9+OqF0SoFAI0rKZsxtvQY=
+X-Received: by 2002:a25:5d7:0:b0:b67:8ad6:7529 with SMTP id
+ 206-20020a2505d7000000b00b678ad67529mr14054216ybf.65.1680005168914; Tue, 28
+ Mar 2023 05:06:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230327142202.3754446-7-o.rempel@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230328095807.7014-1-songmuchun@bytedance.com>
+ <20230328095807.7014-2-songmuchun@bytedance.com> <CANpmjNP+nLfMKLj-4L4wXBfQpO5N0Y6q_TEkxjM+Z0WXxPvVxg@mail.gmail.com>
+In-Reply-To: <CANpmjNP+nLfMKLj-4L4wXBfQpO5N0Y6q_TEkxjM+Z0WXxPvVxg@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 28 Mar 2023 14:05:32 +0200
+Message-ID: <CANpmjNNXDHZGr_r6aZi1bv5itc5KvGhRNnq_CSQRrmB6Wwx+Dg@mail.gmail.com>
+Subject: Re: [PATCH 1/6] mm: kfence: simplify kfence pool initialization
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     glider@google.com, dvyukov@google.com, akpm@linux-foundation.org,
+        jannh@google.com, sjpark@amazon.de, muchun.song@linux.dev,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,61 +71,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 04:22:00PM +0200, Oleksij Rempel wrote:
-> This commit makes SmartEEE support in the AR8035 PHY optional and
-> configurable through the ethtool eee_set/get interface. Before this
-> patch, SmartEEE was always enabled except when a device tree option was
-> preventing it. Since EEE support not only provides advantages in power
-> management, but can also uncover compatibility issues and other bugs, it
-> is beneficial to allow users to control this functionality.
-> 
-> By making SmartEEE support optional and configurable via ethtool, the
-> at803x driver can adapt to different MAC configurations and properly
-> handle EEE and LPI features. This flexibility empowers users to manage
-> the trade-offs between power management, compatibility, and overall
-> performance as needed.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  drivers/net/phy/at803x.c | 126 ++++++++++++++++++++++++++++++++++++---
->  1 file changed, 118 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
-> index 653d27a2e62b..4f65b3ebf806 100644
-> --- a/drivers/net/phy/at803x.c
-> +++ b/drivers/net/phy/at803x.c
-> @@ -165,8 +165,18 @@
->  
->  #define AT803X_MMD3_SMARTEEE_CTL1		0x805b
->  #define AT803X_MMD3_SMARTEEE_CTL2		0x805c
-> +#define AT803X_MMD3_SMARTEEE_LPI_TIME_LOW	GENMASK(15, 0)
-> +#define AT803X_MMD3_SMARTEEE_LPI_TIME_15_0	GENMASK(15, 0)
->  #define AT803X_MMD3_SMARTEEE_CTL3		0x805d
->  #define AT803X_MMD3_SMARTEEE_CTL3_LPI_EN	BIT(8)
-> +#define AT803X_MMD3_SMARTEEE_LPI_TIME_HIGH	GENMASK(7, 0)
-> +#define AT803X_MMD3_SMARTEEE_LPI_TIME_23_16	GENMASK(23, 16)
-> +/* Tx LPI timer resolution */
-> +#define AT803X_MMD3_SMARTEEE_LPI_TIME_RESOL_NS	163840
-> +#define AT803X_MMD3_SMARTEEE_LPI_TIME_MAX_US	\
-> +	((GENMASK(23, 0) * AT803X_MMD3_SMARTEEE_LPI_TIME_RESOL_NS) / \
-> +	       NSEC_PER_USEC)
-> +#define AT803X_MMD3_SMARTEEE_LPI_TIME_DEF_US	335544
->  
->  #define ATH9331_PHY_ID				0x004dd041
->  #define ATH8030_PHY_ID				0x004dd076
-> @@ -302,6 +312,8 @@ struct at803x_priv {
->  	u8 smarteee_lpi_tw_100m;
->  	bool is_fiber;
->  	bool is_1000basex;
-> +	bool tx_lpi_on;
+On Tue, 28 Mar 2023 at 13:55, Marco Elver <elver@google.com> wrote:
+>
+> On Tue, 28 Mar 2023 at 11:58, Muchun Song <songmuchun@bytedance.com> wrote:
+> >
+> > There are three similar loops to initialize kfence pool, we could merge
+> > all of them into one loop to simplify the code and make code more
+> > efficient.
+> >
+> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+>
+> Reviewed-by: Marco Elver <elver@google.com>
+>
+> > ---
+> >  mm/kfence/core.c | 47 ++++++-----------------------------------------
+> >  1 file changed, 6 insertions(+), 41 deletions(-)
+> >
+> > diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+> > index 7d01a2c76e80..de62a84d4830 100644
+> > --- a/mm/kfence/core.c
+> > +++ b/mm/kfence/core.c
+> > @@ -539,35 +539,10 @@ static void rcu_guarded_free(struct rcu_head *h)
+> >  static unsigned long kfence_init_pool(void)
+> >  {
+> >         unsigned long addr = (unsigned long)__kfence_pool;
+> > -       struct page *pages;
+> >         int i;
+> >
+> >         if (!arch_kfence_init_pool())
+> >                 return addr;
+> > -
+> > -       pages = virt_to_page(__kfence_pool);
+> > -
+> > -       /*
+> > -        * Set up object pages: they must have PG_slab set, to avoid freeing
+> > -        * these as real pages.
+> > -        *
+> > -        * We also want to avoid inserting kfence_free() in the kfree()
+> > -        * fast-path in SLUB, and therefore need to ensure kfree() correctly
+> > -        * enters __slab_free() slow-path.
+> > -        */
 
-@Andrew, this variable can be replace by your phydev->tx_lpi_enabled
-variable. Should I wait for your patches went mainline?
+Actually: can you retain this comment somewhere?
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> > -       for (i = 0; i < KFENCE_POOL_SIZE / PAGE_SIZE; i++) {
+> > -               struct slab *slab = page_slab(nth_page(pages, i));
+> > -
+> > -               if (!i || (i % 2))
+> > -                       continue;
+> > -
+> > -               __folio_set_slab(slab_folio(slab));
+> > -#ifdef CONFIG_MEMCG
+> > -               slab->memcg_data = (unsigned long)&kfence_metadata[i / 2 - 1].objcg |
+> > -                                  MEMCG_DATA_OBJCGS;
+> > -#endif
+> > -       }
+> > -
+> >         /*
+> >          * Protect the first 2 pages. The first page is mostly unnecessary, and
+> >          * merely serves as an extended guard page. However, adding one
+> > @@ -581,8 +556,9 @@ static unsigned long kfence_init_pool(void)
+> >                 addr += PAGE_SIZE;
+> >         }
+> >
+> > -       for (i = 0; i < CONFIG_KFENCE_NUM_OBJECTS; i++) {
+> > +       for (i = 0; i < CONFIG_KFENCE_NUM_OBJECTS; i++, addr += 2 * PAGE_SIZE) {
+> >                 struct kfence_metadata *meta = &kfence_metadata[i];
+> > +               struct slab *slab = page_slab(virt_to_page(addr));
+> >
+> >                 /* Initialize metadata. */
+> >                 INIT_LIST_HEAD(&meta->list);
+> > @@ -593,26 +569,15 @@ static unsigned long kfence_init_pool(void)
+> >
+> >                 /* Protect the right redzone. */
+> >                 if (unlikely(!kfence_protect(addr + PAGE_SIZE)))
+> > -                       goto reset_slab;
+> > -
+> > -               addr += 2 * PAGE_SIZE;
+> > -       }
+> > -
+> > -       return 0;
+> > -
+> > -reset_slab:
+> > -       for (i = 0; i < KFENCE_POOL_SIZE / PAGE_SIZE; i++) {
+> > -               struct slab *slab = page_slab(nth_page(pages, i));
+> > +                       return addr;
+> >
+> > -               if (!i || (i % 2))
+> > -                       continue;
+> > +               __folio_set_slab(slab_folio(slab));
+> >  #ifdef CONFIG_MEMCG
+> > -               slab->memcg_data = 0;
+> > +               slab->memcg_data = (unsigned long)&meta->objcg | MEMCG_DATA_OBJCGS;
+> >  #endif
+> > -               __folio_clear_slab(slab_folio(slab));
+> >         }
+> >
+> > -       return addr;
+> > +       return 0;
+> >  }
+> >
+> >  static bool __init kfence_init_pool_early(void)
+> > --
+> > 2.11.0
+> >
