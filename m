@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2306CBF78
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 779C36CBF7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjC1Mnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
+        id S232546AbjC1Mnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjC1Mnk (ORCPT
+        with ESMTP id S229924AbjC1Mnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Mar 2023 08:43:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4005283F6;
-        Tue, 28 Mar 2023 05:43:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4051B9775;
+        Tue, 28 Mar 2023 05:43:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE6046175C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE7C961755;
+        Tue, 28 Mar 2023 12:43:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B168BC4339E;
         Tue, 28 Mar 2023 12:43:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA91EC4339B;
-        Tue, 28 Mar 2023 12:43:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680007403;
-        bh=HqRo2IiLCl8s8WIcTJePjNjvjxnKWkQIdDVbVRtFaac=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KVZsKzaP/DBDxYyLwtrFy21b1Sfv2dexAKxDBQO7W4m8h8U5Q60MxLdueXfb6YzpV
-         svzGymfxtLffzlQaZ9EB8yPnGbVy+XxY/ho5p4JPwftbWDYCJ4UXNMV2xAkLu55gMP
-         9L+OfP/EL1iSRGiQ9+N584mPRTHq6OVEnD/E+FMT1KPvw8ysgk+sqdzq91RgfRs2Fz
-         /CVIBJajApgNqi3Orrtcmo5H0stcdkWfcWGdKNosWXtzwtGo8w/38XSpLCxMZJFIVS
-         S5srxGuWz2V6s7ZUKyfN22qhjognvA/y+MBdi/lAZW2qhsrcDIT6QTjOulYqORqtfA
-         TVw72sVEm2O5Q==
+        s=k20201202; t=1680007406;
+        bh=PbVK8hEsU/pH2vkw9lfbR9b5VjLWZjOk4C9N4xsA4JA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jCop1h0fove66g+f/vn1sAECEewDNGmVo8iZa+GfP2C/UwPb3fv+q9GCnr0MRpbRf
+         ibmLYqdPXdN8olc5H0UlKsTQ6f/kdndcaXCZLtFI87JfCIsXm8eEFH9erCHsT3cjRJ
+         k8xDQuTBx2S4sXj7rU59AOBPmOMgNPKA1K9hmhugUIXqWUsNh5nGy/IiVvjURqsuqc
+         U9lcUpzbBv5Wb3vtnLVxquYiKyr/J2to6++xG8e3jeWF1i5fXqkcXKjkOhA2BwrT+h
+         GYL8MJ9Hxy+hQIC8eNxbRqSo2Vp8TMimLaN2mW2YQG7jnnnZBzEI+hpy6vSf7Ysx60
+         o1ABJOKGm5tjQ==
 From:   Roger Quadros <rogerq@kernel.org>
 To:     nm@ti.com, vigneshr@ti.com
 Cc:     kristo@kernel.org, srk@ti.com, r-gunasekaran@ti.com,
         linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH v2 0/2] arm64: dts: ti: k3-am625-sk: Enable Type-C dual-role
-Date:   Tue, 28 Mar 2023 15:43:13 +0300
-Message-Id: <20230328124315.123778-1-rogerq@kernel.org>
+        Dhruva Gole <d-gole@ti.com>, Roger Quadros <rogerq@kernel.org>
+Subject: [PATCH v2 1/2] arm64: dts: ti: k3-am625-sk: Add ti,vbus-divider property to usbss1
+Date:   Tue, 28 Mar 2023 15:43:14 +0300
+Message-Id: <20230328124315.123778-2-rogerq@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230328124315.123778-1-rogerq@kernel.org>
+References: <20230328124315.123778-1-rogerq@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
@@ -53,39 +55,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Dhruva Gole <d-gole@ti.com>
 
-This series enables Type-C port on USB0.
-Series is based on [1]
+The property "ti,vbus-divider" is needed for both usbss0 and usbss1 as
+both USB0 and USB1 have the same external voltage divider circuit.
 
-Although k3-am625-lp-sk USB is exactly the same as on k3-am625-sk,
-it is missing the IRQ line from Type-C chip which is currently
-required as per chip's DT binding. So we don't add Type-C support
-for k3-am625-lp-sk till h/w is fixed or polling mode support for
-Type-C chip is accepted [2]
+Fixes: 2d94dfc43885 ("arm64: dts: ti: k3-am625-sk: Add support for USB")
+Signed-off-by: Dhruva Gole <d-gole@ti.com>
+Signed-off-by: Roger Quadros <rogerq@kernel.org>
+---
+ arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-Changelog:
-v2:
-- rebase off [1]
-- add fixes tag to patch 1
-
-[1] - https://lore.kernel.org/all/20230321-am62-lp-sk-v2-0-0a56e1694804@ti.com/
-[2] - https://lore.kernel.org/lkml/20230324133741.43408-1-rogerq@kernel.org/T/
-
-cheers,
--roger
-
-Dhruva Gole (1):
-  arm64: dts: ti: k3-am625-sk: Add ti,vbus-divider property to usbss1
-
-Roger Quadros (1):
-  arm64: dts: ti: k3-am625-sk: Enable Type-C port for USB0
-
- arch/arm64/boot/dts/ti/k3-am62-lp-sk.dts      |  4 ++
- arch/arm64/boot/dts/ti/k3-am625-sk.dts        | 44 ++++++++++++++++++-
- .../arm64/boot/dts/ti/k3-am62x-sk-common.dtsi |  5 +--
- 3 files changed, 48 insertions(+), 5 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi b/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
+index 54318a07d50c..80e8b9b9a5f5 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
+@@ -261,6 +261,7 @@ &usbss0 {
+ 
+ &usbss1 {
+ 	status = "okay";
++	ti,vbus-divider;
+ };
+ 
+ &usb0 {
 -- 
 2.34.1
 
