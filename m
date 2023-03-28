@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513506CC341
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE666CC36F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbjC1Owd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
+        id S233321AbjC1Oxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233519AbjC1OwR (ORCPT
+        with ESMTP id S233348AbjC1Oxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:52:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F365DBE6;
-        Tue, 28 Mar 2023 07:52:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2036B81D68;
-        Tue, 28 Mar 2023 14:52:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2383C4339C;
-        Tue, 28 Mar 2023 14:52:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680015122;
-        bh=KX7IJV912x3GONHn/38qR81S/BRxmOK0zLKhQFw3hWY=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=DztcWDb2N5B9PG9axChu6NJkJ8RdEUUNnl5O+iUV0ZAufXJlcJNaQ18rj/GmwOvnE
-         iaErxzdJOJ2ep0vzds8Vzp/aafl+Zmo45IMG0CgU67EL6NtI1/yRMUPq0j4dYPP84b
-         9687f1T/lW4ly/Vh0VB3/0sy6A4XgSOp736XciCu9Ir9A5vkvpzvIrEEPsxRsDCAOZ
-         n2tkbS0YvGxCscig3d5RnKuj1KbI3nPf0dEKmlSxtjkiNGDn4CSZ5LjHEaZmqTWScp
-         3BgjuDnMkNEZyw3ujnDYNzb4okaPlBhqRnU1YZ9EtZ9/PnoA32ANoApwPFERcKR4vR
-         vy64mHXJ5WAjw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     michal.simek@xilinx.com, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230328061524.77529-1-yang.lee@linux.alibaba.com>
-References: <20230328061524.77529-1-yang.lee@linux.alibaba.com>
-Subject: Re: [PATCH -next] spi: xilinx: Use
- devm_platform_get_and_ioremap_resource()
-Message-Id: <168001512138.38474.12518288863480198713.b4-ty@kernel.org>
-Date:   Tue, 28 Mar 2023 15:52:01 +0100
+        Tue, 28 Mar 2023 10:53:48 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52B2BDC9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:53:46 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id ew6so50797745edb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680015225;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ntLeAvwYo13KTBL/y3l0lVOyzh8Kzne6sGlhIyPSqF8=;
+        b=PXvhstG7uj98LaXH//8Mek02Wg4U3UZ8zfWHZSNsOZd8YJ4UxzaxecApgTd4fjZ3bj
+         Bbyx2nHV5Jkki3PUzUCenleDE4DicrZVJbxFuqg6V0VUSSuywv7I2S8SHztMCn1otkQQ
+         COj9zRgbEEh1Uy6oA/0mPXK+peu0cCCbTfRYpVKcZLw4HfVDCdzN9yho8QsoqWKlFcCm
+         BhwEXX2U+uUUXKEzzfOKG5bqGYXPJWh/vKncrAAmds6Y6ejr52/Cesq1aSjEpg4UpMqu
+         SOsS3fulziPQ74G83lOibK3hS1iAX/CYFRexVyORkzvtGJNoNR0s+D7VZEdxHUO9OF1/
+         EIVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680015225;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ntLeAvwYo13KTBL/y3l0lVOyzh8Kzne6sGlhIyPSqF8=;
+        b=R7UXwNBl+aB3Q17gLLFTNzH4+L3dUxvJQREER/UrYOWsc9kbyukLO+U6su9CAFxFAV
+         IchQtL06DwglwDzR7L/a1JcC2lufwYnLFSIKkZG/jSHobxSy+ui5c+rKFUA/Y3ISsKvk
+         kJzWSOQA49rcJkj12bqFyGSiC8kNlpRQOhBgL+whhfwLpiTw+NAlQtqHRhqDgtV4av8V
+         oqXY98vWmff5Vy/WwSuCp95ot/0yG2KdJwJD+Y3klRDhD6jZ4GjHGBxIPvSxBWvh7YVV
+         QkKCAK1pNOBoOQTuN6DqXsv7KW7E/BwpQ8kOqv49PQlLagEqzusbzgJKMX36wHO93fMu
+         0buQ==
+X-Gm-Message-State: AAQBX9dzQnldBC+doDtyHr2u/LgDTOnqceO0gB8J2xeDKvy4PW58aBUT
+        qesukS1n/6CbhkstPQi5bge+Rw==
+X-Google-Smtp-Source: AKy350ZSEV0js3KfJtOUIg3AsvSN0lpPFcekKk98Ii0WXFpPSUOeYbhZinzigEa1AusquOGm8BnhLg==
+X-Received: by 2002:aa7:d815:0:b0:4fd:2533:f56 with SMTP id v21-20020aa7d815000000b004fd25330f56mr15055439edq.39.1680015225030;
+        Tue, 28 Mar 2023 07:53:45 -0700 (PDT)
+Received: from [10.105.135.205] ([88.128.92.162])
+        by smtp.gmail.com with ESMTPSA id x21-20020a50d615000000b004bb810e0b87sm16032493edi.39.2023.03.28.07.53.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 07:53:44 -0700 (PDT)
+Message-ID: <fc0738f5-0494-6142-56a4-ae3d0182a903@linaro.org>
+Date:   Tue, 28 Mar 2023 16:53:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] ARM: dts: stm32: add FMC support on STM32MP13x SoC family
+Content-Language: en-US
+To:     Christophe Kerello <christophe.kerello@foss.st.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        alexandre.torgue@foss.st.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230328122606.191211-1-christophe.kerello@foss.st.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230328122606.191211-1-christophe.kerello@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023 14:15:24 +0800, Yang Li wrote:
-> According to commit 890cc39a8799 ("drivers: provide
-> devm_platform_get_and_ioremap_resource()"), convert
-> platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+On 28/03/2023 14:26, Christophe Kerello wrote:
+> This patch adds the FMC support on STM32MP13x SoC family.
+
+Do not use "This commit/patch", but imperative mood. See:
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+
 > 
+> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+> ---
+>  arch/arm/boot/dts/stm32mp131.dtsi | 34 +++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
 > 
-> [...]
+> diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
+> index 5949473cbbfd..7af3eb15c204 100644
+> --- a/arch/arm/boot/dts/stm32mp131.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp131.dtsi
+> @@ -1137,6 +1137,40 @@ mdma: dma-controller@58000000 {
+>  			dma-requests = <48>;
+>  		};
+>  
+> +		fmc: memory-controller@58002000 {
+> +			#address-cells = <2>;
+> +			#size-cells = <1>;
+> +			compatible = "st,stm32mp1-fmc2-ebi";
+> +			reg = <0x58002000 0x1000>;
 
-Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+compatible is first, reg is second. ranges if present should be third.
 
-Thanks!
+> +			clocks = <&rcc FMC_K>;
+> +			resets = <&rcc FMC_R>;
+> +			status = "disabled";
+> +
+> +			ranges = <0 0 0x60000000 0x04000000>, /* EBI CS 1 */
 
-[1/1] spi: xilinx: Use devm_platform_get_and_ioremap_resource()
-      commit: 0623ec17c45ed3e96880453f69461d526dc97f41
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Best regards,
+Krzysztof
 
