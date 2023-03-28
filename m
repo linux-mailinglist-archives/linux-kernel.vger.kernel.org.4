@@ -2,175 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E307D6CBA5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3826B6CBA5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbjC1JUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47144 "EHLO
+        id S230510AbjC1JVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjC1JUF (ORCPT
+        with ESMTP id S230346AbjC1JVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:20:05 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EDEFB
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:20:03 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id i7so14202633ybt.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:20:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679995203;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rydAqL2xjCh9m8x5P5P2xf+yVVNlT8mq2EopIER2YF4=;
-        b=Rjr+MdnqwFCGnuQdLml0S8Rg+dbGWPtX0rYliRuYF6Vx1BGLHxmv6BqbxyH+0adZWt
-         F4F25hvkqcOJZlpWwo6b5GR+8oC7WRANZsp1iZtlM10kl43ujXjzT4mVnjn+QN7nkgH/
-         ylTdaoxbTSTFpvfWJ/g0nndUO0lYAvmY9yhg1/8mIWR5OEvmAWMkjDfOKgUuhqZKCqbd
-         /XnCOmgTUB7Jaf88M6jctxsTiOC4cPYSWTzYQ3VK+ZC/OsqtaI+LviwJ68FcYbjcW2li
-         1YKX3WbXfqFml0Qo8EG3vuVsx79HR+CcCAm0vKhI+PvaHiudqk1bm6pgS6G6pcpgh7yx
-         iwdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679995203;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rydAqL2xjCh9m8x5P5P2xf+yVVNlT8mq2EopIER2YF4=;
-        b=tsUlJkLfeguaxPK3OEuIZDa6BQYGDERbURAL4FJno/ggWxRtINxQrfdNrOnRmDjsvo
-         EUqfn4jOvq0lKr58+db7Dl9BkD9QGuanuCVHxpdCisKIkR04PMxuGEyJr0kZiByy2/1f
-         jQ3/fTG+Niwovu4iu8gL/ifuSxdWKRcLzeXoXeK49g+wHTskyNiBb/GL1BB1z9FqqCEt
-         8/U1kQAYlbccHEVtYaBf2b4pwqa49wfv+9e1eSKnYYJIF0DiilOh3QSitVkAxJfx2GtN
-         7vW5D7rL476sfVx4Yh8G27AchG8nP70x/2LpkgmtWAPwZw1BI01wkLHd/Ro5Zvg864Fq
-         83Zw==
-X-Gm-Message-State: AAQBX9fxx/BoWz3kGRNMNCmg5FhCFuZemUHNBUYRJB88P6Y40OapZxS0
-        PH5wdV8hrSXkfLTYqFhfsIxw7EGinIcYIehzxjm67Q==
-X-Google-Smtp-Source: AKy350bysJsJQEMIVvOgRrtDQqvgDbyfnCMQZJxShJfJthTEA4O/F/mDGDMWyhxv19f8BsA5jRUCcPGquZnZUmPXvCU=
-X-Received: by 2002:a05:6902:1586:b0:98e:6280:74ca with SMTP id
- k6-20020a056902158600b0098e628074camr9294491ybu.1.1679995202855; Tue, 28 Mar
- 2023 02:20:02 -0700 (PDT)
+        Tue, 28 Mar 2023 05:21:01 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553135272
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:21:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679995260; x=1711531260;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hbGJvgGRae3alSbsJ4r4Vy/RfR9KZM8wn9pxikVMdeY=;
+  b=Tb1cDDYwAujRTEdR/EYPjInZMiggK5z9LeWk759Xj5JzY8/vRTWU+Uop
+   IqbgP8nOK5tubEx8Ohieqm8BJsMC7kgUI2AsiB+RI+1KsfqUCRClXGCgY
+   YSTyIjCWZIsNa8WXFPKlQY/RtMbOe4aic2WuQE/zThTv7qBl91KmGkYJ5
+   jRviHm8htpCe2godOiFdcSYrcR9iAgtvTj32PRuD6Y7/uvdSiyRn3lh7+
+   mgUaHLAN4oW6/YjOn7mseD3QNDHqgBiaINT1mhbkQjb8V6PNSBllcaAIh
+   mvtDsMt3+uHz3VT2e7Co+hs/fun9aKJNukCl8ZXjQ+UtqwQuAuu7nSJmH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="403127332"
+X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
+   d="scan'208";a="403127332"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 02:20:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="794736121"
+X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
+   d="scan'208";a="794736121"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 28 Mar 2023 02:20:58 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ph5Vh-000IQb-2T;
+        Tue, 28 Mar 2023 09:20:57 +0000
+Date:   Tue, 28 Mar 2023 17:20:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 09a81ebff8c6036514b788328d2309fa22833ea6
+Message-ID: <6422b15c.nb9MAFr4CEQwnSr4%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20230324094205.33266-1-angelogioacchino.delregno@collabora.com> <20230324094205.33266-3-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230324094205.33266-3-angelogioacchino.delregno@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Tue, 28 Mar 2023 11:19:52 +0200
-Message-ID: <CAFGrd9oyOz8-gf10-1QkaBzZwTvm9V7b63BZeoUbbM45CO8E1Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] soc: mediatek: pwrap: Move PMIC read test sequence
- in function
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, flora.fu@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le ven. 24 mars 2023 =C3=A0 10:42, AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> a =C3=A9crit :
->
-> The PMIC read test is performed in two places: pwrap_init_dual_io()
-> and pwrap_init_sidly().
-> In preparation for adding support for PMICs requiring a companion
-> part, move this sequence to a new function pwrap_pmic_read_test().
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
->  drivers/soc/mediatek/mtk-pmic-wrap.c | 32 +++++++++++++++++-----------
->  1 file changed, 20 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/=
-mtk-pmic-wrap.c
-> index 15789a03e6c6..5c500be48f7c 100644
-> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
-> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
-> @@ -1455,6 +1455,18 @@ static int pwrap_regmap_write(void *context, u32 a=
-dr, u32 wdata)
->         return pwrap_write(context, adr, wdata);
->  }
->
-> +static bool pwrap_pmic_read_test(struct pmic_wrapper *wrp, const u32 *de=
-w_regs,
-> +                                u16 read_test_val)
-> +{
-> +       bool is_success;
-> +       u32 rdata;
-> +
-> +       pwrap_read(wrp, dew_regs[PWRAP_DEW_READ_TEST], &rdata);
-> +       is_success =3D ((rdata & U16_MAX) =3D=3D read_test_val);
-> +
-> +       return is_success;
-> +}
-> +
->  static int pwrap_reset_spislave(struct pmic_wrapper *wrp)
->  {
->         bool tmp;
-> @@ -1498,18 +1510,18 @@ static int pwrap_reset_spislave(struct pmic_wrapp=
-er *wrp)
->   */
->  static int pwrap_init_sidly(struct pmic_wrapper *wrp)
->  {
-> -       u32 rdata;
->         u32 i;
->         u32 pass =3D 0;
-> +       bool read_ok;
->         signed char dly[16] =3D {
->                 -1, 0, 1, 0, 2, -1, 1, 1, 3, -1, -1, -1, 3, -1, 2, 1
->         };
->
->         for (i =3D 0; i < 4; i++) {
->                 pwrap_writel(wrp, i, PWRAP_SIDLY);
-> -               pwrap_read(wrp, wrp->slave->dew_regs[PWRAP_DEW_READ_TEST]=
-,
-> -                          &rdata);
-> -               if (rdata =3D=3D PWRAP_DEW_READ_TEST_VAL) {
-> +               read_ok =3D pwrap_pmic_read_test(wrp, wrp->slave->dew_reg=
-s,
-> +                                              PWRAP_DEW_READ_TEST_VAL);
-> +               if (read_ok) {
->                         dev_dbg(wrp->dev, "[Read Test] pass, SIDLY=3D%x\n=
-", i);
->                         pass |=3D 1 << i;
->                 }
-> @@ -1529,8 +1541,7 @@ static int pwrap_init_sidly(struct pmic_wrapper *wr=
-p)
->  static int pwrap_init_dual_io(struct pmic_wrapper *wrp)
->  {
->         int ret;
-> -       bool tmp;
-> -       u32 rdata;
-> +       bool read_ok, tmp;
->
->         /* Enable dual IO mode */
->         pwrap_write(wrp, wrp->slave->dew_regs[PWRAP_DEW_DIO_EN], 1);
-> @@ -1546,12 +1557,9 @@ static int pwrap_init_dual_io(struct pmic_wrapper =
-*wrp)
->         pwrap_writel(wrp, 1, PWRAP_DIO_EN);
->
->         /* Read Test */
-> -       pwrap_read(wrp,
-> -                  wrp->slave->dew_regs[PWRAP_DEW_READ_TEST], &rdata);
-> -       if (rdata !=3D PWRAP_DEW_READ_TEST_VAL) {
-> -               dev_err(wrp->dev,
-> -                       "Read failed on DIO mode: 0x%04x!=3D0x%04x\n",
-> -                       PWRAP_DEW_READ_TEST_VAL, rdata);
-> +       read_ok =3D pwrap_pmic_read_test(wrp, wrp->slave->dew_regs, PWRAP=
-_DEW_READ_TEST_VAL);
-> +       if (!read_ok) {
-> +               dev_err(wrp->dev, "Read failed on DIO mode.\n");
->                 return -EFAULT;
->         }
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 09a81ebff8c6036514b788328d2309fa22833ea6  Merge x86/sev into tip/master
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+elapsed time: 727m
 
-Regards,
-Alexandre
+configs tested: 133
+configs skipped: 9
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r016-20230327   gcc  
+arc                  randconfig-r043-20230326   gcc  
+arc                  randconfig-r043-20230327   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r021-20230327   gcc  
+arm                  randconfig-r024-20230327   gcc  
+arm                  randconfig-r036-20230327   clang
+arm                  randconfig-r046-20230326   clang
+arm                  randconfig-r046-20230327   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r001-20230327   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r012-20230326   gcc  
+arm64                randconfig-r013-20230327   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r003-20230327   gcc  
+csky                 randconfig-r012-20230326   gcc  
+csky                 randconfig-r016-20230326   gcc  
+csky                 randconfig-r035-20230327   gcc  
+hexagon              randconfig-r006-20230326   clang
+hexagon              randconfig-r041-20230326   clang
+hexagon              randconfig-r041-20230327   clang
+hexagon              randconfig-r045-20230326   clang
+hexagon              randconfig-r045-20230327   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230327   gcc  
+i386                 randconfig-a002-20230327   gcc  
+i386                 randconfig-a003-20230327   gcc  
+i386                 randconfig-a004-20230327   gcc  
+i386                 randconfig-a005-20230327   gcc  
+i386                 randconfig-a006-20230327   gcc  
+i386                 randconfig-a011-20230327   clang
+i386                 randconfig-a012-20230327   clang
+i386                 randconfig-a013-20230327   clang
+i386                 randconfig-a014-20230327   clang
+i386                 randconfig-a015-20230327   clang
+i386                 randconfig-a016-20230327   clang
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r003-20230326   gcc  
+ia64                 randconfig-r015-20230327   gcc  
+ia64                 randconfig-r016-20230326   gcc  
+ia64                 randconfig-r032-20230327   gcc  
+ia64                 randconfig-r034-20230326   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r002-20230326   gcc  
+loongarch    buildonly-randconfig-r003-20230326   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r015-20230326   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r005-20230327   gcc  
+microblaze           randconfig-r004-20230327   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2        buildonly-randconfig-r006-20230327   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r006-20230327   gcc  
+nios2                randconfig-r013-20230326   gcc  
+openrisc     buildonly-randconfig-r001-20230326   gcc  
+openrisc     buildonly-randconfig-r004-20230326   gcc  
+openrisc             randconfig-r004-20230326   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r001-20230327   gcc  
+parisc               randconfig-r005-20230326   gcc  
+parisc               randconfig-r035-20230326   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r012-20230327   clang
+powerpc              randconfig-r023-20230327   clang
+powerpc              randconfig-r036-20230326   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r003-20230327   clang
+riscv                               defconfig   gcc  
+riscv                randconfig-r013-20230326   gcc  
+riscv                randconfig-r033-20230327   gcc  
+riscv                randconfig-r042-20230326   gcc  
+riscv                randconfig-r042-20230327   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390         buildonly-randconfig-r004-20230327   clang
+s390                                defconfig   gcc  
+s390                 randconfig-r014-20230326   gcc  
+s390                 randconfig-r014-20230327   clang
+s390                 randconfig-r044-20230326   gcc  
+s390                 randconfig-r044-20230327   clang
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r005-20230326   gcc  
+sh                   randconfig-r011-20230326   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r032-20230326   gcc  
+sparc64      buildonly-randconfig-r006-20230326   gcc  
+sparc64              randconfig-r031-20230326   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r005-20230327   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230327   gcc  
+x86_64               randconfig-a002-20230327   gcc  
+x86_64               randconfig-a003-20230327   gcc  
+x86_64               randconfig-a004-20230327   gcc  
+x86_64               randconfig-a005-20230327   gcc  
+x86_64               randconfig-a006-20230327   gcc  
+x86_64               randconfig-a011-20230327   clang
+x86_64               randconfig-a012-20230327   clang
+x86_64               randconfig-a013-20230327   clang
+x86_64               randconfig-a014-20230327   clang
+x86_64               randconfig-a015-20230327   clang
+x86_64               randconfig-a016-20230327   clang
+x86_64               randconfig-r002-20230327   gcc  
+x86_64               randconfig-r025-20230327   clang
+x86_64               randconfig-r026-20230327   clang
+x86_64               randconfig-r031-20230327   gcc  
+x86_64               randconfig-r034-20230327   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r011-20230326   gcc  
+xtensa               randconfig-r011-20230327   gcc  
+xtensa               randconfig-r022-20230327   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
