@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB8B6CCA08
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 20:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0BF6CCA12
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 20:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjC1Sap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 14:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36130 "EHLO
+        id S229716AbjC1Sfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 14:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjC1San (ORCPT
+        with ESMTP id S229436AbjC1Sfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 14:30:43 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4511F19BB
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:30:38 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id p204so16291968ybc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:30:38 -0700 (PDT)
+        Tue, 28 Mar 2023 14:35:42 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EF71BE9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:35:41 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id z83so16364359ybb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:35:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680028237;
+        d=google.com; s=20210112; t=1680028540;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yuuegu1cFbRg24plQOb38sIUWOVRgzcrx7ze3bOovCw=;
-        b=EisE82n2osFxVjm+P56hUIztGP0SJpbOuCu+bnFrUJjzLGGVpT2AMhxGRhRvEmA+e2
-         mwHDcinzo8KSut3L9WhHnDG/sBbyKItO3o5cOrsEclcaVTAdmsgDzbiHLetqMON/2c7R
-         qpZOC3CsPKMtgEHwCwx1v1wiK2iAa31b/nQXGNFHbIbIzwDXJkIOYFqK/mwHKVOKMwGS
-         eoPsvPi7xFBVvhTj0e8R8qCfZ78hkH22H8NGb+a9kyQqKqEAASHKv2y/b5mhdDZAjIMc
-         uBbLtidGE9RRevnYtrdZjt5I7c3DLMwMWcWbUg99OolXIxTbL0WtfU/TrRwxVn+2cC6R
-         hvFA==
+        bh=QAYteq3mFV588TpLqRaA86uUyETx+bdriGoU/y4d71Q=;
+        b=EtkvNeRanejerUBKb1YW3cH+uFNUeYLsqvaqGYBqdrzxnDPIhaTdpsAP5STbq4tqos
+         VX3vS/hPsUvsRaov5cj5X+n8Dfw9cSF6EBigZbkMh08EAPI+bGNfsAItFKbgAWRnOahG
+         3ura0nlamPbFBr1BxPGMsB3sQVsh3sB3eB/sP9+nKQdNYIAdsu+dxXbVuWHIwwl/Utl+
+         V4qDqg+93Ku6ZNgowrnSX2vnpi8+X7GdsqEb6etgloYbB8ZnhRhS8AjL5jPncd02y8Lx
+         DJ+2GSWatIo1RZXLx77f8fpT8JOLpChsogotPbGX6gzNf1pQzd/u9tfmn1buGCjQ95Av
+         EbzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680028237;
+        d=1e100.net; s=20210112; t=1680028540;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yuuegu1cFbRg24plQOb38sIUWOVRgzcrx7ze3bOovCw=;
-        b=oFUXm7yGbx4ZkeqxAA5Ul5XWiLtqyYT9iW78uGqv3195HKDFdQ/fCbJ5eSbxknvWYK
-         hM5vszKD1BRrasdfc0Zw/txE2ZAVH7txV84zVfwqZGWp+CRUeri13ExTvYv+SSCRP6qH
-         TMnROkf+WeinBaoVixww//hBUeSesf4wr8UflKnBS9KfEFa3sbnv0CaIAlr7hmNDjRTL
-         6p6vvcsOZVl6e3uvMZXEbZlX2hK/11I2vR4oVzEGAZ7m0NQgZbX9xPjy4x1OG6wzQIau
-         JYhf8RwZMBmuU6tLQ1gumBqVb7kI3Ru1CObghJVT+C7sb0us1H4RshkkKIt68DVIPJR1
-         ib1g==
-X-Gm-Message-State: AAQBX9coTpoVWta9TtPtdumbv47/Vg9uSf1XCp9uCRZNeSku2fHgdQcS
-        S7E1yFBItqNe/DOMRoGeLGEPwxAt0WPZQB/xAsVgvw==
-X-Google-Smtp-Source: AKy350bdcqdugUTreAEdn+N2C6zWYXNTotXJWZHwzhwo68iZpT2NVGuPdqGaegdgwHn5bo8EA+DZTRUfdIbWCVZZmyQ=
-X-Received: by 2002:a25:ef0e:0:b0:b6a:5594:5936 with SMTP id
- g14-20020a25ef0e000000b00b6a55945936mr10356788ybd.5.1680028237374; Tue, 28
- Mar 2023 11:30:37 -0700 (PDT)
+        bh=QAYteq3mFV588TpLqRaA86uUyETx+bdriGoU/y4d71Q=;
+        b=x7IPkMYOD9f0qKk5lRRoWOy0QIXL6C3etUJP6PR0O9G/O8sPX5fkc4XBAAc0bwg+MC
+         FpkRtj6WP+S1gQe1Nav1mwuR2VWTJmEnpdNaGT/LNoOwb0hSsblf5JL97B0/d0z9znNl
+         rAYXyffFuFYfweXPvSO0ERnwNEAtd5ejqn86ZfL5L3P2+gvV6DHXDXbmA7x5OAmWxUcD
+         vLplWsBDmZlZJ7955OWkPllQvhUZMjDEs+Ym7Gt1yTzVuEN7J+E36RvomtdnKPmc4UaC
+         mlhMcsf8AKkKflCQq8JqFreNfTDN8DrsmvxPc1b1jDC/BS9G/L2SelOmK7qt3aWhzhWk
+         dI5Q==
+X-Gm-Message-State: AAQBX9efMjeCrUCrfP/HWPm2zQ1G56ASXjnFJmEwkZHfvf3UnJh5TJbg
+        dr0L1/OJnAkKZZfiUXIv9h7MqP791Xu0HGG0rC+AWQ==
+X-Google-Smtp-Source: AKy350YdWjxd5LK3M07fya8VNGhvEsapUC41YfV/gEay0jSdep7mSp60+MTMxUlrV/q2Vtcbppv04hHCkyRuXanpzEM=
+X-Received: by 2002:a05:6902:1543:b0:b77:158d:b3a0 with SMTP id
+ r3-20020a056902154300b00b77158db3a0mr14053685ybu.6.1680028540565; Tue, 28 Mar
+ 2023 11:35:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230327115331.122562-1-hca@linux.ibm.com>
-In-Reply-To: <20230327115331.122562-1-hca@linux.ibm.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 28 Mar 2023 14:30:22 -0400
-Message-ID: <CA+GJov6YeJA5Hed=sLOdDY43WkwVrQ9i1dPsQ_inVdDhpBjUug@mail.gmail.com>
-Subject: Re: [PATCH] kunit: increase KUNIT_LOG_SIZE to 2048 bytes
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
+References: <CGME20230328125807epcas1p1606c068a9043d6581a1fbdd30e7c53a2@epcas1p1.samsung.com>
+ <20230328125818.5574-1-jaewon31.kim@samsung.com>
+In-Reply-To: <20230328125818.5574-1-jaewon31.kim@samsung.com>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Tue, 28 Mar 2023 11:35:29 -0700
+Message-ID: <CABdmKX1J6WzE9CMbRthROgHZLLhXZJBw4iOz-7q+RK5fGpggLA@mail.gmail.com>
+Subject: Re: [PATCH] dma-buf/heaps: c9e8440eca61 staging: ion: Fix overflow
+ and list bugs in system heap:
+To:     Jaewon Kim <jaewon31.kim@samsung.com>
+Cc:     jstultz@google.com, sumit.semwal@linaro.org,
+        daniel.vetter@ffwll.ch, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, mhocko@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, jaewon31.kim@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
@@ -75,47 +74,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 7:53=E2=80=AFAM Heiko Carstens <hca@linux.ibm.com> =
-wrote:
+On Tue, Mar 28, 2023 at 5:58=E2=80=AFAM Jaewon Kim <jaewon31.kim@samsung.co=
+m> wrote:
 >
-> The s390 specific test_unwind kunit test has 39 parameterized tests. The
-> results in debugfs are truncated since the full log doesn't fit into 1500
-> bytes.
-> Therefore increase KUNIT_LOG_SIZE to 2048 bytes in a similar way like it
-> was done recently with commit "kunit: fix bug in debugfs logs of
-> parameterized tests". With that the whole test result is present.
+> Normal free:212600kB min:7664kB low:57100kB high:106536kB
+>   reserved_highatomic:4096KB active_anon:276kB inactive_anon:180kB
+>   active_file:1200kB inactive_file:0kB unevictable:2932kB
+>   writepending:0kB present:4109312kB managed:3689488kB mlocked:2932kB
+>   pagetables:13600kB bounce:0kB free_pcp:0kB local_pcp:0kB
+>   free_cma:200844kB
+> Out of memory and no killable processes...
+> Kernel panic - not syncing: System is deadlocked on memory
 >
-> Reported-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+> An OoM panic was reported, there were only native processes which are
+> non-killable as OOM_SCORE_ADJ_MIN.
+>
+> After looking into the dump, I've found the dma-buf system heap was
+> trying to allocate a huge size. It seems to be a signed negative value.
+>
+> dma_heap_ioctl_allocate(inline)
+>     |  heap_allocation =3D 0xFFFFFFC02247BD38 -> (
+>     |    len =3D 0xFFFFFFFFE7225100,
+>
+> Actually the old ion system heap had policy which does not allow that
+> huge size with commit c9e8440eca61 ("staging: ion: Fix overflow and list
+> bugs in system heap"). We need this change again. Single allocation
+> should not be bigger than half of all memory.
+>
+> Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
 > ---
-
-This looks good to me. I don't see an issue increasing the log size.
-Maybe eventually we could create a config option or test attribute for
-a large log size but for now this seems good. Glad to see people are
-starting to get use of the parameterized test logs after the debugfs
-fixes.
-
-Thanks!
--Rae
-
-Reviewed-by: Rae Moar <rmoar@google.com>
-
->  include/kunit/test.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/dma-buf/heaps/system_heap.c | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 9721584027d8..57b309c6ca27 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -34,7 +34,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
->  struct kunit;
+> diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/=
+system_heap.c
+> index e8bd10e60998..4c1ef2ecfb0f 100644
+> --- a/drivers/dma-buf/heaps/system_heap.c
+> +++ b/drivers/dma-buf/heaps/system_heap.c
+> @@ -351,6 +351,9 @@ static struct dma_buf *system_heap_allocate(struct dm=
+a_heap *heap,
+>         struct page *page, *tmp_page;
+>         int i, ret =3D -ENOMEM;
 >
->  /* Size of log associated with test. */
-> -#define KUNIT_LOG_SIZE 1500
-> +#define KUNIT_LOG_SIZE 2048
->
->  /* Maximum size of parameter description string. */
->  #define KUNIT_PARAM_DESC_SIZE 128
-> --
-> 2.37.2
->
+> +       if (len / PAGE_SIZE > totalram_pages() / 2)
+> +               return ERR_PTR(-ENOMEM);
+> +
+
+Instead of policy like that, would __GFP_RETRY_MAYFAIL on the system
+heap's LOW_ORDER_GFP flags also avoid the panic, and eventually fail
+the allocation request?
