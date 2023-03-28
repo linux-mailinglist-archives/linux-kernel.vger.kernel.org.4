@@ -2,80 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1400D6CBECB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E006CBECD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbjC1MOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
+        id S232276AbjC1MPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjC1MOl (ORCPT
+        with ESMTP id S230478AbjC1MPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:14:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11471AC;
-        Tue, 28 Mar 2023 05:14:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 680BB60DE6;
-        Tue, 28 Mar 2023 12:14:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7245BC433D2;
-        Tue, 28 Mar 2023 12:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680005679;
-        bh=xbFRyZyzqgBp4VY8lMbcNo1SclMc/sKJFwaJaJqJz1Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GQh60RuKjQE+ypYjIPjSg5WaCab4xlth7fo/NlmTwPibO3sOYEWrnh/D7vDwY2QSW
-         tWTIEnDr59z5yZhhtb9XH6ZF1RX3C1eybQ6FnEQns5ZMru22gEcrpMVC/DOno1zA3n
-         U5qPz0SieK2GlIUBZOLgMamzdMdn9mTN02rhBMec=
-Date:   Tue, 28 Mar 2023 14:14:37 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mathias Krause <minipli@grsecurity.net>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, torvalds@linux-foundation.org,
-        lwn@lwn.net, jslaby@suse.cz
-Subject: Re: Linux 5.15.103
-Message-ID: <ZCLaLWJiIsDV5yGr@kroah.com>
-References: <1679040264214179@kroah.com>
- <c359c777-c3af-b4a6-791d-d51916160bf5@grsecurity.net>
+        Tue, 28 Mar 2023 08:15:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27D8D900E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:14:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B5E3C14;
+        Tue, 28 Mar 2023 05:15:42 -0700 (PDT)
+Received: from [10.34.100.129] (pierre123.nice.arm.com [10.34.100.129])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8E4263F6C4;
+        Tue, 28 Mar 2023 05:14:56 -0700 (PDT)
+Message-ID: <bda4c7e6-a819-dfa4-7f1d-f9e3f6adbd23@arm.com>
+Date:   Tue, 28 Mar 2023 14:14:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c359c777-c3af-b4a6-791d-d51916160bf5@grsecurity.net>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] cacheinfo: Fix LLC is not exported through sysfs
+To:     Yicong Yang <yangyicong@huawei.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, sudeep.holla@arm.com, palmer@rivosinc.com,
+        linux-kernel@vger.kernel.org
+Cc:     prime.zeng@hisilicon.com, linuxarm@huawei.com,
+        yangyicong@hisilicon.com
+References: <20230328114915.33340-1-yangyicong@huawei.com>
+Content-Language: en-US
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <20230328114915.33340-1-yangyicong@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 02:02:03PM +0200, Mathias Krause wrote:
-> On 17.03.23 09:04, Greg Kroah-Hartman wrote:
-> > I'm announcing the release of the 5.15.103 kernel.
-> > 
-> > [...]
-> > 
-> > Vitaly Kuznetsov (4):
-> >       KVM: Optimize kvm_make_vcpus_request_mask() a bit
-> >       KVM: Pre-allocate cpumasks for kvm_make_all_cpus_request_except()
-> >       KVM: nVMX: Don't use Enlightened MSR Bitmap for L3
-> >       KVM: VMX: Introduce vmx_msr_bitmap_l01_changed() helper
-> > 
-> 
-> That list is missing commit 6470accc7ba9 ("KVM: x86: hyper-v: Avoid
-> calling kvm_make_vcpus_request_mask() with vcpu_mask==NULL") to fulfill
-> the prerequisite of "KVM: Optimize kvm_make_vcpus_request_mask() a bit".
-> 
-> Right now the kvm selftests trigger a kernel NULL deref for the hyperv
-> test, making the system hang.
-> 
-> Please consider applying commit 6470accc7ba9 for the next v5.15.x release.
+Hello Yicong,
+Thanks for the new version,
 
-It wasn't tagged for the stable kernels, so we didn't pick it up :(
+Reviewed-by: Pierre Gondois <pierre.gondois@arm.com>
 
-Have now done so, thanks.
-
-greg k-h
+On 3/28/23 13:49, Yicong Yang wrote:
+> From: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> After entering 6.3-rc1 the LLC cacheinfo is not exported on our ACPI
+> based arm64 server. This is because the LLC cacheinfo is partly reset
+> when secondary CPUs boot up. On arm64 the primary cpu will allocate
+> and setup cacheinfo:
+> init_cpu_topology()
+>    for_each_possible_cpu()
+>      fetch_cache_info() // Allocate cacheinfo and init levels
+> detect_cache_attributes()
+>    cache_shared_cpu_map_setup()
+>      if (!last_level_cache_is_valid()) // not valid, setup LLC
+>        cache_setup_properties() // setup LLC
+> 
+> On secondary CPU boot up:
+> detect_cache_attributes()
+>    populate_cache_leaves()
+>      get_cache_type() // Get cache type from clidr_el1,
+>                       // for LLC type=CACHE_TYPE_NOCACHE
+>    cache_shared_cpu_map_setup()
+>      if (!last_level_cache_is_valid()) // Valid and won't go to this branch,
+>                                        // leave LLC's type=CACHE_TYPE_NOCACHE
+> 
+> The last_level_cache_is_valid() use cacheinfo->{attributes, fw_token} to
+> test it's valid or not, but populate_cache_leaves() will only reset
+> LLC's type, so we won't try to re-setup LLC's type and leave it
+> CACHE_TYPE_NOCACHE and won't export it through sysfs.
+> 
+> This patch tries to fix this by not re-populating the cache leaves if
+> the LLC is valid.
+> 
+> Fixes: 5944ce092b97 ("arch_topology: Build cacheinfo from primary CPU")
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> ---
+> Change since v1:
+> - Get rid of the goto label, per Pierre
+> Link: https://lore.kernel.org/all/20230323122528.16691-1-yangyicong@huawei.com/
+> 
+>   drivers/base/cacheinfo.c | 16 +++++++++++-----
+>   1 file changed, 11 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
+> index f6573c335f4c..f3903d002819 100644
+> --- a/drivers/base/cacheinfo.c
+> +++ b/drivers/base/cacheinfo.c
+> @@ -474,12 +474,18 @@ int detect_cache_attributes(unsigned int cpu)
+>   
+>   populate_leaves:
+>   	/*
+> -	 * populate_cache_leaves() may completely setup the cache leaves and
+> -	 * shared_cpu_map or it may leave it partially setup.
+> +	 * If LLC is valid the cache leaves were already populated so just go to
+> +	 * update the cpu map.
+>   	 */
+> -	ret = populate_cache_leaves(cpu);
+> -	if (ret)
+> -		goto free_ci;
+> +	if (!last_level_cache_is_valid(cpu)) {
+> +		/*
+> +		 * populate_cache_leaves() may completely setup the cache leaves and
+> +		 * shared_cpu_map or it may leave it partially setup.
+> +		 */
+> +		ret = populate_cache_leaves(cpu);
+> +		if (ret)
+> +			goto free_ci;
+> +	}
+>   
+>   	/*
+>   	 * For systems using DT for cache hierarchy, fw_token
