@@ -2,106 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A8A6CCBED
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 23:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAED76CCBF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 23:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjC1VIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 17:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
+        id S229569AbjC1VI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 17:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjC1VIs (ORCPT
+        with ESMTP id S229664AbjC1VIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 17:08:48 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF63210C;
-        Tue, 28 Mar 2023 14:08:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680037718; x=1711573718;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6GLo3d35oVtHdFhb6UNpuguyDFJRdNOuxUvgwUhlmnY=;
-  b=LglhwN39RVgEo5FLlQyQGAK7E30JKuG6QDcXLAacgGymVQqdiPyM9BsR
-   PktPGUQtOjjF+E9K7+bhDXyds1N41adi2+hJ+URoTDczRt1nyf2HfXu9c
-   VKXxaTb6EWB3IoGbaTMokBgLTqN2h3QtU2NZGHGsSWlQCc8ciB5r4OP8w
-   ovFBAEz9OkSGFT24L602Kk3rloMh1zso3/DQcrU/Ce8AgNKUHgXLyZLWB
-   DV9L2v1qD9FpjwpnrJNLFjoBkmNbM2S9P1JR3Mcfl5gX0DD7vHum0dfVl
-   xnEZd8Qm1wxv/atGHEvT9cggufuivuepzgqofbUPRr4oC+NU1Hw5O+e4J
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="338193556"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="338193556"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 14:08:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="827628736"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="827628736"
-Received: from fhannebi-mobl.ger.corp.intel.com (HELO intel.com) ([10.252.50.224])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 14:08:36 -0700
-Date:   Tue, 28 Mar 2023 23:08:11 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Min Li <lm0963hack@gmail.com>
-Cc:     jani.nikula@linux.intel.com, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        daniel@ffwll.ch, rodrigo.vivi@intel.com, airlied@gmail.com,
-        stable@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH 1/1] drm/i915: fix race condition UAF in
- i915_perf_add_config_ioctl
-Message-ID: <ZCNXO/NJecxaGwep@ashyti-mobl2.lan>
-References: <20230328093627.5067-1-lm0963hack@gmail.com>
+        Tue, 28 Mar 2023 17:08:55 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B341FE9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 14:08:51 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-544f7c176easo254730407b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 14:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680037730;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HjM/ZqYn/T7unhyITZnKsFzK8c16l02nzfEEL176xOU=;
+        b=ocoA87DNTSkmHztT5vnke6BiFUYBXc6/lZxINhcigUkk0S1CcjEXgStw7e9Zp88jv+
+         i89diJ/hJM1JqzrRRVhBca1mfW48YWKNSscl5VxNxl/D8BuvFLHWAN4JwAYSOtJsAnvU
+         /hLRstVR0H2yntq3lWpDGRwmwcMZGwMsqstB4dAb+RrozEc4vmQ5viXaNAHQbq7tKKtp
+         bsDDdWbOfanraXHIIKTb/3e2+ED5o30OM1egoRKfHSontwTNP2Ocq5mm+XuTmXg9cwR+
+         7CfkIF9F9SFfzSbUPIN0ev0xFztzmGXuEfR7BLx+g6u52KVj0QwddYgJTyOOUy8WqtJ7
+         MRlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680037730;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HjM/ZqYn/T7unhyITZnKsFzK8c16l02nzfEEL176xOU=;
+        b=KzR9O3l+wY88R95qfjXqvctElrQUWNmIDWXIfdD5qXZtnIx+dfUcfoOYJ22mr6tqrX
+         V/qSF9OR2598zkCvHjXvwDlnd+kcu1HpA8hyUgVLiM590Za//NPJwNqwQeJFQufxueqk
+         NQk//gIZjbErWu/VbfCigxt1aY1csfzon6FpKx6Hi/OYUzx+PRdxKyx0YQs2iMMNvD0Y
+         EapEXh6kjqdo1fxSGYnPId5Jv6EHiU4XF/lUWVniESws6Jd2HRTpe7qVHVKnNQq5fxWr
+         gC6zMasQtb+1dYxEf++cJjjzuLgZSK9C42o2idmmiBXjlfCFxf9r4IrRXaqzF7wSRmkw
+         u8EQ==
+X-Gm-Message-State: AAQBX9cpYra/xC5FCYpZnxr9nNB+7c7fUFVrqAyxksvrqamAEd1t5N4a
+        F6GOvqPy1BwE08ZqvWXV9GT32Pvo2kQz5f7yfvb5iA==
+X-Google-Smtp-Source: AKy350ZLcUn0YW0dPW8RrTZpH1OlJLUgV7pk23eKHtHIEBdLUfe+SXlC99rlPRcKPdL9i7z5gyFajqvtscRGyxF3v54=
+X-Received: by 2002:a81:a908:0:b0:545:7164:49ac with SMTP id
+ g8-20020a81a908000000b00545716449acmr7922856ywh.5.1680037730422; Tue, 28 Mar
+ 2023 14:08:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328093627.5067-1-lm0963hack@gmail.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230316225915.494688-1-rmoar@google.com> <CAGS_qxp2u3F4abmYgN+XwCG8CJN37NSqWSC===SWLCjZG8HYBw@mail.gmail.com>
+In-Reply-To: <CAGS_qxp2u3F4abmYgN+XwCG8CJN37NSqWSC===SWLCjZG8HYBw@mail.gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Tue, 28 Mar 2023 17:08:38 -0400
+Message-ID: <CA+GJov4F+Vjw2gFj=YTYEoZ5wmy774xE5+aDQv55BKQE3VZo1g@mail.gmail.com>
+Subject: Re: [KTAP V2 PATCH] ktap_v2: add recognized test name line
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     frowand.list@gmail.com, davidgow@google.com,
+        skhan@linuxfoundation.org, keescook@chromium.org,
+        Tim.Bird@sony.com, brendanhiggins@google.com, corbet@lwn.net,
+        guillaume.tucker@collabora.com, kernelci@lists.linux.dev,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 05:36:27PM +0800, Min Li wrote:
-> Userspace can guess the id value and try to race oa_config object creation
-> with config remove, resulting in a use-after-free if we dereference the
-> object after unlocking the metrics_lock.  For that reason, unlocking the
-> metrics_lock must be done after we are done dereferencing the object.
-> 
-> Signed-off-by: Min Li <lm0963hack@gmail.com>
+On Mon, Mar 20, 2023 at 3:21=E2=80=AFPM 'Daniel Latypov' via KUnit Developm=
+ent
+<kunit-dev@googlegroups.com> wrote:
+>
+> On Thu, Mar 16, 2023 at 3:59=E2=80=AFPM Rae Moar <rmoar@google.com> wrote=
+:
+> >
+> > Add recognition of the test name line ("# Subtest: <name>") to the KTAP=
+ v2
+> > spec.
+> >
+> > The purpose of this line is to declare the name of a test before its
+> > results. This functionality is especially useful when trying to parse t=
+est
+> > results incrementally and when interpretting results after a crash.
+> >
+> > This line is already compliant with KTAP v1 as it is interpretted as a
+>
+> minor nit for if there's a v2, s/interprett/interpret (here and above)
+>
 
-I think we should also add
+Oops. Thanks for catching this. I will change this for a v2. Unsure
+why I repeated the typo twice.
 
-Fixes: f89823c21224 ("drm/i915/perf: Implement I915_PERF_ADD/REMOVE_CONFIG interface")
-Cc: <stable@vger.kernel.org> # v4.14+
+> Also, I want to elaborate on the previous paragraph a bit more, in
+> case the motivation isn't clear.
+> The problem with TAP and KTAP as-is is that the name of a test case is
+> only known *after* it completes.
+>
+> So the scenario being referred to is
+>
+> KTAP version 1
+> 1..1
+> <lots of output>
+> <kernel crash, no more output>
+>
+> It would be nice if parsers could report "test FOO caused a crash" as
+> opposed to "the first test case caused a crash, good luck figuring out
+> which one that was"
+>
 
-Andi
+Yes, this is exactly what I think is the largest benefit of a line to
+define the test name pre-results. Thanks for expanding. I will likely
+add in some of this explanation into the commit message for v2.
 
-> ---
->  drivers/gpu/drm/i915/i915_perf.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
-> index 824a34ec0b83..93748ca2c5da 100644
-> --- a/drivers/gpu/drm/i915/i915_perf.c
-> +++ b/drivers/gpu/drm/i915/i915_perf.c
-> @@ -4634,13 +4634,13 @@ int i915_perf_add_config_ioctl(struct drm_device *dev, void *data,
->  		err = oa_config->id;
->  		goto sysfs_err;
->  	}
-> -
-> -	mutex_unlock(&perf->metrics_lock);
-> +	id = oa_config->id;
->  
->  	drm_dbg(&perf->i915->drm,
->  		"Added config %s id=%i\n", oa_config->uuid, oa_config->id);
-> +	mutex_unlock(&perf->metrics_lock);
->  
-> -	return oa_config->id;
-> +	return id;
->  
->  sysfs_err:
->  	mutex_unlock(&perf->metrics_lock);
-> -- 
-> 2.25.1
+Thanks,
+
+Rae
+
+> Daniel
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/kunit-dev/CAGS_qxp2u3F4abmYgN%2BXwCG8CJN37NSqWSC%3D%3D%3DSWLCjZG8HYBw%40m=
+ail.gmail.com.
