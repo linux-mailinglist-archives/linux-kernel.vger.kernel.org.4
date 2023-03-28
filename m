@@ -2,191 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F746CB942
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69866CB947
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjC1IWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
+        id S230447AbjC1IXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbjC1IWb (ORCPT
+        with ESMTP id S229459AbjC1IXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:22:31 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EA55593
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:22:12 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id t10so46100386edd.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679991731;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TjLk7s/ILNPy05fW3mtB8q+T3+ZfJadYGXeEI//OHA4=;
-        b=nbVgsIqDmhYjo2zpI1NxF9G7P13ZUCoomofgad9VxdCmVGj6Nu3tBawyjCSeRg1jxG
-         VfmoFSaRMJgNmxHFUVX94hkTRg6MBrIBXssSDToYHfi4JpviP6q2Mi8s6G7SWIg8MNFD
-         TWxJUDigcLS9p/mKxugg4jOd6JbZDVbtlVCUg0ngqdgG87zhDsgJIKkRTgU2EEG/uw1e
-         hf4nwVFHC6l69V4pdCKqi9jwACf/df8FDrNXCyAjPoLOwsEqZcGND0g3S4oCTwv/UaKZ
-         z7VWSxEG6gxsUK3WjBOm99ekdolfW75Wp80rZDW8hgXqd8iiBX0qGdU4j1PVjndDzS51
-         yEDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679991731;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TjLk7s/ILNPy05fW3mtB8q+T3+ZfJadYGXeEI//OHA4=;
-        b=otDohtDCI33IBeRhQY4oCNibrkL4zSQp0KwWPdhcaWJSU3nf72BnhVqhnJTHFib0HT
-         d5dqvcxLCwzjZEk+702J8vMZXZbLHQzRV8XFgaTbUtretvPj9CuEnHoEFlTUvHrME27G
-         XsUu7gRZwgohLwXO3DGt5ilRCWMB0PrTb8pPa8WofqKkSHkGYPqoyFoO74Bb/4VVqlD8
-         Nj1+K0pii9GftbkMQuyXHz4LXfegm4+nvHB3gnZVT3+Ci/v9JtpCXG9Bb+yfVbiNqf9Q
-         4Eet4+ZIVUs4vG1cNMU9zXiCzeffmkLwMmAIkZJynA1lWjqqvlLsDHVd8jeVMjjxyXWS
-         rwIw==
-X-Gm-Message-State: AAQBX9c83WA9SuKuf2CiGftf8a3/yT7J4sZqcEr0ftk3CsJgz8gz6NOK
-        TWxNL2bAwrMsH1SnExGN8r2L7w==
-X-Google-Smtp-Source: AKy350bZ4edHuT+xY2SDY2CDRsHlxVx3YYIulDNRVyIMWIfCBo1UlW2mN+FmnKM1kDtckc9i+joyjQ==
-X-Received: by 2002:aa7:c249:0:b0:4fb:395a:6aa4 with SMTP id y9-20020aa7c249000000b004fb395a6aa4mr14791797edo.31.1679991730921;
-        Tue, 28 Mar 2023 01:22:10 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
-        by smtp.gmail.com with ESMTPSA id r12-20020a50c00c000000b00501d2f10d19sm11134313edb.20.2023.03.28.01.22.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 01:22:10 -0700 (PDT)
-Message-ID: <0a77e40f-1b6a-38ed-78df-9259959fd2c1@linaro.org>
-Date:   Tue, 28 Mar 2023 10:22:09 +0200
+        Tue, 28 Mar 2023 04:23:32 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EF744A2;
+        Tue, 28 Mar 2023 01:23:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=v68PtqY53cBqGu08f6wYN/a5E1D7BK1+ERrIL89e9Js=; b=GbzzZs6uNlXrSFOYAe5eE8kg4X
+        PT3e/Xrq11Ey3IcSRBPJF1Gr+tuVeflaCKoReFgRrF3w3LyS8ig+UCcVGtOuz2O21ciwyFhuF0RVX
+        p53vHw9evnXen+EgEdwXqMqXSf1gM3U43TmDLkxOVf9lX8adKyF0AC4hDmqsKDm/YwaM6dHs4147+
+        OnOmpKb98HaowZkXQyj4XMxb8opZLCuQfVelgfALrq8k+tQapRW/EjenboHNmhLy21NHQkfbXbs/v
+        hMCbw2ORmnzAtwzyfwJlKGVjS7jiw9JKo5VdBWmxAQM48E2Tt6do/z2OZZUMp54Gsms7SM4YirbH0
+        7MUhS+mg==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ph4bz-000DfI-25; Tue, 28 Mar 2023 10:23:23 +0200
+Received: from [219.59.88.22] (helo=localhost.localdomain)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ph4by-000EJ3-3o; Tue, 28 Mar 2023 10:23:22 +0200
+Subject: Re: [PATCH bpf-next] kallsyms: move module-related functions under
+ correct configs
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Viktor Malik <vmalik@redhat.com>
+Cc:     bpf@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
+References: <20230327161251.1129511-1-vmalik@redhat.com>
+ <ZCHWtptOwPPtUe+u@bombadil.infradead.org>
+ <c076e249-705a-e1bb-c657-f80cd4f2145b@redhat.com>
+ <ZCHuU4Wui7Dwmdm2@bombadil.infradead.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <bfaefad6-692f-e687-ad55-05a43aa54883@iogearbox.net>
+Date:   Tue, 28 Mar 2023 10:23:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3] ASoC: dt-bindings: ak4458: Convert to dtschema
+In-Reply-To: <ZCHuU4Wui7Dwmdm2@bombadil.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Saalim Quadri <danascape@gmail.com>, broonie@kernel.org,
-        daniel.baluta@nxp.com, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, shengjiu.wang@nxp.com
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230327213250.29199-1-danascape@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230327213250.29199-1-danascape@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26857/Tue Mar 28 09:23:39 2023)
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2023 23:32, Saalim Quadri wrote:
-> Convert the AK4458 audio DAC bindings to DT schema.
+On 3/27/23 9:28 PM, Luis Chamberlain wrote:
+> On Mon, Mar 27, 2023 at 08:20:56PM +0200, Viktor Malik wrote:
+>> On 3/27/23 19:47, Luis Chamberlain wrote:
+>>> On Mon, Mar 27, 2023 at 06:12:51PM +0200, Viktor Malik wrote:
+>>>> Functions for searching module kallsyms should have non-empty
+>>>> definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
+>>>> only CONFIG_MODULES check was used for many of these, which may have
+>>>> caused complilation errors on some configs.
+>>>>
+>>>> This patch moves all relevant functions under the correct configs.
+>>>>
+>>>> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>> Link: https://lore.kernel.org/oe-kbuild-all/202303181535.RFDCnz3E-lkp@intel.com/
+>>>
+>>> Thanks Viktor!  Does this fix something from an existing commit? If so
+>>> which one?  The commit log should mention it.
+>>
+>> Ah, right, I forgot about that. The commit log is missing:
+>>
+>> Fixes: bd5314f8dd2d ("kallsyms, bpf: Move find_kallsyms_symbol_value out of internal header")
+>>
+>> I can post v2 but I'm also fine with maintainers applying the tag.
 > 
-> Signed-off-by: Saalim Quadri <danascape@gmail.com>
-> ---
-> Changes:
-> V1 -> V2: Use the correct way for dsd-path property
->           Drop ak4458 label form example
-> V2 -> V3: ak4458 is the only one that does not support dsd-path, so we
->           do not require to define an array
-> 
->  .../devicetree/bindings/sound/ak4458.txt      | 28 --------
->  .../bindings/sound/asahi-kasei,ak4458.yaml    | 65 +++++++++++++++++++
->  2 files changed, 65 insertions(+), 28 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/sound/ak4458.txt
->  create mode 100644 Documentation/devicetree/bindings/sound/asahi-kasei,ak4458.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/ak4458.txt b/Documentation/devicetree/bindings/sound/ak4458.txt
-> deleted file mode 100644
-> index 0416c14895d6..000000000000
-> --- a/Documentation/devicetree/bindings/sound/ak4458.txt
-> +++ /dev/null
-> @@ -1,28 +0,0 @@
-> -AK4458 audio DAC
-> -
-> -This device supports I2C mode.
-> -
-> -Required properties:
-> -
-> -- compatible : "asahi-kasei,ak4458" or "asahi-kasei,ak4497"
-> -- reg : The I2C address of the device for I2C
-> -
-> -Optional properties:
-> -- reset-gpios: A GPIO specifier for the power down & reset pin
-> -- mute-gpios: A GPIO specifier for the soft mute pin
-> -- AVDD-supply: Analog power supply
-> -- DVDD-supply: Digital power supply
-> -- dsd-path: Select DSD input pins for ak4497
-> -            0: select #16, #17, #19 pins
-> -            1: select #3, #4, #5 pins
-> -
-> -Example:
-> -
-> -&i2c {
-> -	ak4458: dac@10 {
-> -		compatible = "asahi-kasei,ak4458";
-> -		reg = <0x10>;
-> -		reset-gpios = <&gpio1 10 GPIO_ACTIVE_LOW>
-> -		mute-gpios = <&gpio1 11 GPIO_ACTIVE_HIGH>
-> -	};
-> -};
-> diff --git a/Documentation/devicetree/bindings/sound/asahi-kasei,ak4458.yaml b/Documentation/devicetree/bindings/sound/asahi-kasei,ak4458.yaml
-> new file mode 100644
-> index 000000000000..3842e75d9921
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/asahi-kasei,ak4458.yaml
-> @@ -0,0 +1,65 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/asahi-kasei,ak4458.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: AK4458 audio DAC
-> +
-> +maintainers:
-> +  - Shengjiu Wang <shengjiu.wang@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - asahi-kasei,ak4458
-> +      - asahi-kasei,ak4497
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  avdd-supply:
-> +    description: Analog power supply
-> +
-> +  dvdd-supply:
-> +    description: Digital power supply
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +
-> +  mute-gpios:
-> +    maxItems: 1
-> +    description:
-> +      GPIO used to mute all the outputs
+> That patch went through the bpf tree so its fix can go throug that tree.
+> So up to Daniel if he wants a new patch.
 
-What happened to dsd-path? Do not remove properties from the bindings
-without some valid reason.
+Fixing up is fine with me. Viktor, which config combinations did you test for this
+patch and under which architectures?
 
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const:
-> +              asahi-kasei,ak4458
+I suspect kbuild bot might still complain. For example, your patch moves
+dereference_module_function_descriptor() stub definition under !CONFIG_MODULES ||
+!CONFIG_KALLSYMS. Looking at ppc's dereference_module_function_descriptor()
+implementation (!CONFIG_PPC64_ELF_ABI_V2 case), it's build under CONFIG_MODULES,
+so you'll have two different implementations of the functions, the generic one
+then w/o __weak attribute.
 
-This is one line - const: foo bar
+Also small nit, please fix the patch up wrt indentation to align with kernel coding
+style.
 
-> +
-> +    then:
-> +      properties:
-> +        dsd-path: false
-> +
-Best regards,
-Krzysztof
-
+Thanks,
+Daniel
