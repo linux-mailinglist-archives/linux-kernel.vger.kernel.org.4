@@ -2,181 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743376CC8E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B176CC8E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjC1RMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53646 "EHLO
+        id S229525AbjC1RMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjC1RL6 (ORCPT
+        with ESMTP id S229493AbjC1RMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:11:58 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A564694;
-        Tue, 28 Mar 2023 10:11:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680023517; x=1711559517;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JAwonjw06QIWC8+gEYwUhiPYiTvL66Vf/7FiKNG5dRI=;
-  b=MGBP3hMFDr7Prmj2DlcQhXLKucah8SOdlQSPZGEAeLfMir2jURukgcx+
-   GoTnb2izZaqEIXsED8BmPy0xxLO2JfbV/HHQwkoul0acrqqn4vk7xzOSq
-   yxltMbjSshnK9Zj1s4QbuRlIrKYvSeUyDrNDSP4gjel7QDlQeQeHeWU2Z
-   FOZ2bkXHnURB4ygdlSiYqCcg+u5/9njbdtM0OvJTE2x2lARBNNvVv0Pym
-   GZxam42lHiGlZRVYfy49hiP9S3AwqiLn+eEURVCPrLu9O+pBZdMGnKhUh
-   IFc1/NajApdoSGaaqYQlwM/uA9s8aw86wL2YUnp2t4e+S0fEnwd+qHpst
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="368397554"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="368397554"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 10:11:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="773210987"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="773210987"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.32.11])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 10:11:39 -0700
-Message-ID: <cf2bd4c9-c895-2533-cce2-28e9d6b89f1f@intel.com>
-Date:   Tue, 28 Mar 2023 20:11:33 +0300
+        Tue, 28 Mar 2023 13:12:46 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3C09750
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:12:44 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5456249756bso242458017b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:12:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680023563;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PbNlEte7WMbmZc6PNi2hN6381AIGaQueRvLWr852tYk=;
+        b=hGcLW+xd5490BDPJ/p03Anuj876RlSmx7zN13qOmso06WFk2oeF3Z2U7ElD5onoAIm
+         PSnG2CnS1jEHm4+6KVVUvbh2Gi74u7nOYs9i9wDwSmUMaJd6XerTa2p9mO3nPeRWmJ1x
+         kPSkVTLcoNGt4iO+cvbWHzR6Rzp5S8e/kglowo6Y+We1xYOvSpLE587jkRm97kvxM5w4
+         GcPp+mRmMRE3eIsG9kTldxK3q95+Emh7FM1jK02fFuxHr6iU8JWiKU1s9biPFqrbmqdO
+         jWDiGaSUUda69BGHJ5d5JKoDyRJFsy7SL3D8pCYq3E+9CIkrgVJWTBiWuhaUCMg1KiSY
+         SuqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680023563;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PbNlEte7WMbmZc6PNi2hN6381AIGaQueRvLWr852tYk=;
+        b=DaYkTADiTpJ/5ro//YntF0PCRgC2H221VhkGj3Ami6G6MROkcLOIZShzoUOJ37v6DP
+         d7H45PW+lT5dkKbUD7kVJ8PxXdeeMieR2OAn61dKyfVYC8rOVzDUM9lV2rb5Vr4R3c6G
+         l6pqfNaBkpusIvV7/PI2cJd2vxst39tGXYzjD9J6RR6afKg5drtnnkFCbe0edlTMjN72
+         4Jg2/WZqtx7ye2R+lBCmimnbFCQ37STUoWuaXEYBypyCLT7Rg7717yMsYBuvmXozEBDt
+         xrAE7+d9Q4G+FB2yIe+pBHozJWW49RUhGQ7keE5w4CeJwJ5wpDYqriZ6BdH4x7sDuCEm
+         /RZw==
+X-Gm-Message-State: AAQBX9fI/gpTAxT5jSZF8AoB0yo4nPkbAE+77+WZ7gmLWEAPVFMgaeYN
+        qRdmFvPQVtpzhj4OWwk3s+aL0GaadvuoVChnTCRnyQ==
+X-Google-Smtp-Source: AKy350bFaBtEkhs/Q734XnSZoEzi2GmilGfdhaKEyLnDFyrn9pan2V0E1H+rbZ9emo1clHbanpioAtt3rLbMgI+rvEc=
+X-Received: by 2002:a81:d44d:0:b0:545:f7cb:f3ad with SMTP id
+ g13-20020a81d44d000000b00545f7cbf3admr3214498ywl.10.1680023563419; Tue, 28
+ Mar 2023 10:12:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [PATCH v1 0/6] Simplify linking against tools/perf code
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Raul Silvera <rsilvera@google.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Rob Herring <robh@kernel.org>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Chengdong Li <chengdongli@tencent.com>,
-        Denis Nikitin <denik@chromium.org>,
-        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org
-References: <20230328014058.870413-1-irogers@google.com>
- <fe36e38f-d42f-efe5-bb3c-cf802f8001a9@intel.com>
- <CAP-5=fV749yr+wMMYjm87ThnM7ESd+i4Ko=+6H+cuCNdKJM50A@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAP-5=fV749yr+wMMYjm87ThnM7ESd+i4Ko=+6H+cuCNdKJM50A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-13-vipinsh@google.com>
+ <ZBzPeETL7/R1Qwwe@google.com>
+In-Reply-To: <ZBzPeETL7/R1Qwwe@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Tue, 28 Mar 2023 10:12:07 -0700
+Message-ID: <CAHVum0f3F51Nu=vxP_qStp+DW+q9AOZKh4RQTrz-Jk-=T9CYnQ@mail.gmail.com>
+Subject: Re: [Patch v4 12/18] KVM: x86/mmu: Allocate NUMA aware page tables on
+ TDP huge page splits
+To:     David Matlack <dmatlack@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/23 19:14, Ian Rogers wrote:
-> On Tue, Mar 28, 2023 at 6:24 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>
->> On 28/03/23 04:40, Ian Rogers wrote:
->>> When fuzzing something like parse-events, having the main function in
->>> perf.c alongside global variables like input_name means that
->>> input_name must be redeclared with the fuzzer function's
->>> main. However, as the fuzzer is using the tools/perf code as a library
->>> this causes backward linking reference that the linker may warn
->>> about. Reorganize perf.c and perf.h to avoid potential backward
->>> references, or so that the declaration/definition locations are more
->>> consistent.
->>>
->>
->> Seems like it could be a pain to maintain.
->>
->> Did you consider just adding:
->>
->> diff --git a/tools/perf/perf.c b/tools/perf/perf.c
->> index 82bbe0ca858b..a75dd47d68ee 100644
->> --- a/tools/perf/perf.c
->> +++ b/tools/perf/perf.c
->> @@ -456,6 +456,7 @@ static int libperf_print(enum libperf_print_level level,
->>         return veprintf(level, verbose, fmt, ap);
->>  }
->>
->> +#ifndef CUSTOM_MAIN
->>  int main(int argc, const char **argv)
->>  {
->>         int err;
->> @@ -576,3 +577,4 @@ int main(int argc, const char **argv)
->>  out:
->>         return 1;
->>  }
->> +#endif
->>
-> 
-> It's possible. Would need to make the static functions not warn about
-> being declared and not used. I still think that just aligning
-> definitions and declarations yields the most expected code and will
-> lead to fewer problems in the long run.
+On Thu, Mar 23, 2023 at 3:15=E2=80=AFPM David Matlack <dmatlack@google.com>=
+ wrote:
+>
+> On Mon, Mar 06, 2023 at 02:41:21PM -0800, Vipin Sharma wrote:
+> > +
+> > +void *kvm_mmu_get_free_page(gfp_t gfp, int nid)
+> > +{
+> > +#ifdef CONFIG_NUMA
+>
+> Is this #ifdef necessary? alloc_pages_node() is defined regardless of
+> CONFIG_NUMA.
+>
 
-Making perf source dependent on an unknown derivative makes
-things more complicated.
+It is not necessary. Only advantage will be skipping the if()
+condition check. I will remove it.
 
-If you are not going to contribute it to perf, then a
-suggestion is along the lines of the following:
-
-diff --git a/tools/perf/perf.c b/tools/perf/perf.c
-index 82bbe0ca858b..6a7fe1534664 100644
---- a/tools/perf/perf.c
-+++ b/tools/perf/perf.c
-@@ -456,7 +456,18 @@ static int libperf_print(enum libperf_print_level level,
- 	return veprintf(level, verbose, fmt, ap);
- }
- 
-$ git diff
-+#ifdef CUSTOM_MAIN
-+int main(void)
-+{
-+	printf("This is not perf\n");
-+	return 0;
-+}
-+
-+int perf_main(int argc, const char **argv);
-+int perf_main(int argc, const char **argv)
-+#else
- int main(int argc, const char **argv)
-+#endif
- {
- 	int err;
- 	const char *cmd;
-$ make EXTRA_CFLAGS="-DCUSTOM_MAIN" NO_BPF_SKEL=1 -C tools/perf >/dev/null
-Warning: Kernel ABI header at 'tools/include/uapi/linux/in.h' differs from latest version at 'include/uapi/linux/in.h'
-Warning: Kernel ABI header at 'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version at 'arch/x86/include/asm/cpufeatures.h'
-Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.h'
-Warning: Kernel ABI header at 'tools/include/linux/coresight-pmu.h' differs from latest version at 'include/linux/coresight-pmu.h'
-Makefile.config:587: No sys/sdt.h found, no SDT events are defined, please install systemtap-sdt-devel or systemtap-sdt-dev
-Makefile.config:805: Missing perl devel files. Disabling perl scripting support, please install perl-ExtUtils-Embed/libperl-dev
-Makefile.config:1046: No libbabeltrace found, disables 'perf data' CTF format support, please install libbabeltrace-dev[el]/libbabeltrace-ctf-dev
-Makefile.config:1075: No alternatives command found, you need to set JDIR= to point to the root of your Java directory
-Makefile.config:1137: libpfm4 not found, disables libpfm4 support. Please install libpfm4-dev
-$ tools/perf/perf version
-This is not perf
-
-
-
+> > +     struct page *page;
+> > +
+> > +     if (nid !=3D NUMA_NO_NODE) {
+> > +             page =3D alloc_pages_node(nid, gfp, 0);
+> > +             if (!page)
+> > +                     return (void *)0;
+> > +             return page_address(page);
+> > +     }
+> > +#endif /* CONFIG_NUMA */
+> > +     return (void *)__get_free_page(gfp);
+> > +}
+> > +
