@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE16D6CCB1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BC86CCB1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjC1T7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 15:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        id S229897AbjC1T7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 15:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjC1T6i (ORCPT
+        with ESMTP id S229765AbjC1T6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Mar 2023 15:58:38 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E2B1BC6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:58:03 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id e18so13401053wra.9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:58:03 -0700 (PDT)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D6D3C38
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:58:04 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id q19so10339740wrc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:58:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680033482;
+        d=bytedance.com; s=google; t=1680033483;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XHD5cN+9NG2teoVVuOSus5vfOKvUrEkkcqEu7E43kuM=;
-        b=ZWbGy/qB9O4uIXmbnFJPzgndZVBdjQ7fRWg0uO8JRvcFhlus0uhdFK85yQMon2+hSO
-         Ih2Wuad+2T/mmT1ReIQ8AzXzEN4Hxo/5h5gvFLl/p9mYvN1NUYN/NNqXtZlRqcLhiAGd
-         bK4JNMc7njvwdLhuMUDHpOQImnYK+97PG5LALvKK5WqgXgLC4EzHEGyk3E8j07YoebtM
-         8N/QPVWvNnKs5om6hiI2QilQDcUi29GH4R+a6NFfomkEIZ8PeFU3l5xDhAtNZYFRoo2K
-         fWKRYD4KdIaWpHtqTqbLn214mh6hCmJG67hDxryH+ErkUnM+o5jnnRs7F6+DfSLVp/t8
-         rY7Q==
+        bh=X91DtJ/JfDBYHgJ9R+MsUlxcd9N/rlmrW5KIlOR8liw=;
+        b=NWYwEsRz9geMdPiZTptjEO/9APlaCqvEYwMbECwAldxXFGFACgIWK90ii/GU/MH0bv
+         BZi+c0pfVDIua+d5qc0dsTUUYxTuWgQo943MJfDPirAdFrEzrxH9/wQ5VZbbD7+9M+8V
+         VFdYMw4UFXT1TIsDaSj/BN3KRp2iVO55u2TfrvQohfiR8WW6ukbp+Qb7nink2lOLE/N2
+         QGPBXS7HapIA84q1rxlmR3mOhwTq0O2ZGtfFsDrPzi9MDfgUGNBDuP+zPhMWUUwJ7sTa
+         pT+OQ4Sgm2fD8eEXcfi1nICr9juzJneQFELj28gTxjEZ8pY9F+uiPs6ZMU/JjykbSJ6J
+         DMxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680033482;
+        d=1e100.net; s=20210112; t=1680033483;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XHD5cN+9NG2teoVVuOSus5vfOKvUrEkkcqEu7E43kuM=;
-        b=K4LfehT05lO5egFOds2IrLD5ohqRjtOTOKNSw6zLm7J7QCUjWQFejFxQtYnieubay5
-         Jn0qDG5LBsmt4svmsXjmXubUO1T6InPwjLjQogeVFZzgX2sS0W9gPNcU8X5SNlhlpfFI
-         ZLOlldb+6GZWSVjutooWS2bdgvMuo05wCiL7lvD7wapIIpwsGJSBFoXBO9UdEUqMAjGX
-         VxzN0m57cHWlO974jsMb6FoxCByqGT6Y4GZvbqV+hbrUe0TLEpyQ57CzC/lcIRYyFLT/
-         kZqn2cWz4+uHSkQq5uGSbx/+fHlN9O1jsInELA6yg4WZPgTLSTEPNVMGF7N3jkw1qH9u
-         l6KA==
-X-Gm-Message-State: AAQBX9fI+X/x2i27anq0PMEZcjF3pRzFD6z5UWbOAyMICmf63C6ml5QM
-        3sF0k2IJYgUyIJ27yw1zy9ragw==
-X-Google-Smtp-Source: AKy350a+CkM599ZmoWKEKahYxx4p6YM4cZDHr6OxnnBGr3OOYOjDokmLrgjI/ZkKjBeWoPEYwQ+P+w==
-X-Received: by 2002:a05:6000:542:b0:2d1:7ade:aad with SMTP id b2-20020a056000054200b002d17ade0aadmr13593380wrf.31.1680033482442;
-        Tue, 28 Mar 2023 12:58:02 -0700 (PDT)
+        bh=X91DtJ/JfDBYHgJ9R+MsUlxcd9N/rlmrW5KIlOR8liw=;
+        b=1zsCW13+42tbB2rs0Mdz8Zntws+IOosjTvzCaPDJjolVAGKvrLzvKX3qEQsUh7sZdr
+         r2VmfHHMpx5AH5GpplZ062DrvVP7EydnKU41H1esLnoKwRDRCea+qredFQp3SmHDMkjg
+         s3L2pOscWCMlTM84uA88GMuAF7Dcr2FdgDGbHbPE664IS1yzyISDd3AM+p6FTZA7HG/m
+         3gFNrFPAnGKmH6kfjPBfd2tuHEA5Y1Bf9xGCst43HAajnufxBsZyaV6fV6b11zSaAI27
+         L3dS7Bycl68qzbdo4JsQd7qnppskiY9sQOkddtv+p3whTlvVHfmS4sukEOMsuCF6zFcO
+         Srvw==
+X-Gm-Message-State: AAQBX9cE1iItNyJojn49b1I/AmQ3Z6tdl+pTtonMXqIEeOYTl0SLegrB
+        upSU/7PhvX7xpGQjt1zfNDvkRQ==
+X-Google-Smtp-Source: AKy350amb/QgxxCJbkb1cMFpzryewCgKpdAjyNU+f2iuwOROJhsX0a0Dv8edkHUKYfph0Bz2+qREpg==
+X-Received: by 2002:a5d:54d0:0:b0:2d5:553a:93ac with SMTP id x16-20020a5d54d0000000b002d5553a93acmr14146098wrv.7.1680033483331;
+        Tue, 28 Mar 2023 12:58:03 -0700 (PDT)
 Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:8445:3123:91d7:959d])
-        by smtp.gmail.com with ESMTPSA id z6-20020a056000110600b002c557f82e27sm28248386wrw.99.2023.03.28.12.58.01
+        by smtp.gmail.com with ESMTPSA id z6-20020a056000110600b002c557f82e27sm28248386wrw.99.2023.03.28.12.58.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 28 Mar 2023 12:58:02 -0700 (PDT)
 From:   Usama Arif <usama.arif@bytedance.com>
@@ -63,10 +63,11 @@ Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
         fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
         simon.evans@bytedance.com, liangma@liangbit.com,
         gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
         Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH v17 2/8] cpu/hotplug: Reset task stack state in _cpu_up()
-Date:   Tue, 28 Mar 2023 20:57:52 +0100
-Message-Id: <20230328195758.1049469-3-usama.arif@bytedance.com>
+Subject: [PATCH v17 3/8] cpu/hotplug: Add CPUHP_BP_PARALLEL_STARTUP state before CPUHP_BRINGUP_CPU
+Date:   Tue, 28 Mar 2023 20:57:53 +0100
+Message-Id: <20230328195758.1049469-4-usama.arif@bytedance.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230328195758.1049469-1-usama.arif@bytedance.com>
 References: <20230328195758.1049469-1-usama.arif@bytedance.com>
@@ -83,58 +84,147 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-Commit dce1ca0525bf ("sched/scs: Reset task stack state in bringup_cpu()")
-ensured that the shadow call stack was reset and KASAN poisoning removed
-from a CPU's stack each time that CPU is brought up, not just once.
+There is often significant latency in the early stages of CPU bringup,
+and time is wasted by waking each CPU (e.g. with SIPI/INIT/INIT on x86)
+and then waiting for it to make its way through hardware powerup and
+through firmware before finally reaching the kernel entry point and
+moving on through its startup.
 
-This is not incorrect. However, with parallel bringup, an architecture
-may obtain the idle thread for a new CPU from a pre-bringup stage, by
-calling idle_thread_get() for itself. This would mean that the cleanup
-in bringup_cpu() would be too late.
+Allow a platform to register a pre-bringup CPUHP state to which each
+CPU can be stepped in parallel, thus absorbing some of that latency.
 
-Move the SCS/KASAN cleanup to the generic _cpu_up() function instead,
-which already ensures that the new CPU's stack is available, purely to
-allow for early failure. This occurs when the CPU to be brought up is
-in the CPUHP_OFFLINE state, which should correctly do the cleanup any
-time the CPU has been taken down to the point where such is needed.
+There is a subtlety here: even with an empty CPUHP_BP_PARALLEL_STARTUP
+step, this means that *all* CPUs are brought through the prepare states
+all the way to CPUHP_BP_PARALLEL_STARTUP before any of them are taken
+to CPUHP_BRINGUP_CPU and then are allowed to run for themselves to
+CPUHP_ONLINE.
+
+So any combination of prepare/start calls which depend on A-B ordering
+for each CPU in turn would explore horribly. As an example, the X2APIC
+code prior to commit cefad862f238 ("x86/apic/x2apic: Allow CPU
+cluster_mask to be populated in parallel") would allocate a new cluster
+mask "just in case" and store it in a global variable in the prep stage,
+then the AP would potentially consume that preallocated structure and set
+the global pointer to NULL to be reallocated in CPUHP_X2APIC_PREPARE for
+the next CPU. Which doesn't work at all if the prepare step is run for
+all the CPUs first.
+
+Any platform enabling the CPUHP_BP_PARALLEL_STARTUP step must be
+reviewed and tested to ensure that such issues do not exist, and the
+existing behaviour of each AP through to CPUHP_BP_PREPARE_DYN and then
+immediately to CPUHP_BRINGUP_CPU and CPUHP_ONLINE only one at a time
+does not change unless such a state is registered.
+
+Note that this does *not* yet bring each AP to the CPUHP_BRINGUP_CPU
+state at the same time, only to the new CPUHP_BP_PARALLEL_STARTUP state.
+The final loop in bringup_nonboot_cpus() remains the same, bringing each
+AP in turn from the CPUHP_BP_PARALLEL_STARTUP (or all the way from
+CPUHP_OFFLINE) to CPUHP_BRINGUP_CPU and then waiting for that AP to do
+its own processing and reach CPUHP_ONLINE before releasing the next.
+
+Parallelising that part by bringing them all to CPUHP_BRINGUP_CPU and
+then waiting for them all to run to CPUHP_ONLINE at the same time is a
+more complicated exercise for the future.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+Tested-by: Paul E. McKenney <paulmck@kernel.org>
+Tested-by: Kim Phillips <kim.phillips@amd.com>
+Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 Reviewed-by: Mark Rutland <mark.rutland@arm.com>
 Tested-by: Mark Rutland <mark.rutland@arm.com> [arm64]
 ---
- kernel/cpu.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ include/linux/cpuhotplug.h | 22 ++++++++++++++++++++++
+ kernel/cpu.c               | 38 +++++++++++++++++++++++++++++++++++---
+ 2 files changed, 57 insertions(+), 3 deletions(-)
 
+diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+index c6fab004104a..84efd33ed3a3 100644
+--- a/include/linux/cpuhotplug.h
++++ b/include/linux/cpuhotplug.h
+@@ -133,6 +133,28 @@ enum cpuhp_state {
+ 	CPUHP_MIPS_SOC_PREPARE,
+ 	CPUHP_BP_PREPARE_DYN,
+ 	CPUHP_BP_PREPARE_DYN_END		= CPUHP_BP_PREPARE_DYN + 20,
++	/*
++	 * This is an optional state if the architecture supports parallel
++	 * startup. It's used to start bringing the CPU online (e.g. send
++	 * the startup IPI) so that the APs can run in parallel through
++	 * the low level startup code instead of waking them one by one in
++	 * CPUHP_BRINGUP_CPU. This avoids waiting for the AP to react and
++	 * shortens the serialized phase of the bringup.
++	 *
++	 * If the architecture registers this state, all APs will be taken
++	 * to it (and thus through all prior states) before any is taken
++	 * to the subsequent CPUHP_BRINGUP_CPU state.
++	 */
++	CPUHP_BP_PARALLEL_STARTUP,
++
++	/*
++	 * This step brings the AP online and takes it to the point where it
++	 * manages its own state from here on. For the time being, the rest
++	 * of the AP bringup is fully serialized despite running on the AP.
++	 * If the architecture doesn't use the CPUHP_BP_PARALLEL_STARTUP
++	 * state, this step also does all the work of bringing the CPU
++	 * online.
++	 */
+ 	CPUHP_BRINGUP_CPU,
+ 
+ 	/*
 diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 6c0a92ca6bb5..43e0a77f21e8 100644
+index 43e0a77f21e8..3382273ea3f4 100644
 --- a/kernel/cpu.c
 +++ b/kernel/cpu.c
-@@ -591,12 +591,6 @@ static int bringup_cpu(unsigned int cpu)
- 	struct task_struct *idle = idle_thread_get(cpu);
- 	int ret;
+@@ -1504,13 +1504,45 @@ int bringup_hibernate_cpu(unsigned int sleep_cpu)
  
--	/*
--	 * Reset stale stack state from the last time this CPU was online.
--	 */
--	scs_task_reset(idle);
--	kasan_unpoison_task_stack(idle);
--
- 	/*
- 	 * Some architectures have to walk the irq descriptors to
- 	 * setup the vector space for the cpu which comes online.
-@@ -1383,6 +1377,12 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen, enum cpuhp_state target)
- 			ret = PTR_ERR(idle);
- 			goto out;
- 		}
+ void bringup_nonboot_cpus(unsigned int setup_max_cpus)
+ {
+-	unsigned int cpu;
++	unsigned int cpu, n = num_online_cpus();
+ 
++	/*
++	 * On architectures which have setup the CPUHP_BP_PARALLEL_STARTUP
++	 * state, this invokes all BP prepare states and the parallel
++	 * startup state sends the startup IPI to each of the to be onlined
++	 * APs. This avoids waiting for each AP to respond to the startup
++	 * IPI in CPUHP_BRINGUP_CPU. The APs proceed through the low level
++	 * bringup code and then wait for the control CPU to release them
++	 * one by one for the final onlining procedure in the loop below.
++	 *
++	 * For architectures which do not support parallel bringup all
++	 * states are fully serialized in the loop below.
++	 */
++	if (!cpuhp_step_empty(true, cpuhp_get_step(CPUHP_BP_PARALLEL_STARTUP))) {
++		for_each_present_cpu(cpu) {
++			if (n++ >= setup_max_cpus)
++				break;
++			cpu_up(cpu, CPUHP_BP_PARALLEL_STARTUP);
++		}
++	}
 +
-+		/*
-+		 * Reset stale stack state from the last time this CPU was online.
-+		 */
-+		scs_task_reset(idle);
-+		kasan_unpoison_task_stack(idle);
++	/* Do the per CPU serialized bringup to ONLINE state */
+ 	for_each_present_cpu(cpu) {
+ 		if (num_online_cpus() >= setup_max_cpus)
+ 			break;
+-		if (!cpu_online(cpu))
+-			cpu_up(cpu, CPUHP_ONLINE);
++
++		if (!cpu_online(cpu)) {
++			struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
++			int ret = cpu_up(cpu, CPUHP_ONLINE);
++
++			/*
++			 * Due to the above preparation loop a failed online attempt
++			 * might have only rolled back to CPUHP_BP_PARALLEL_STARTUP. Do the
++			 * remaining cleanups. NOOP for the non parallel case.
++			 */
++			if (ret && can_rollback_cpu(st))
++				WARN_ON(cpuhp_invoke_callback_range(false, cpu, st, CPUHP_OFFLINE));
++		}
  	}
+ }
  
- 	cpuhp_tasks_frozen = tasks_frozen;
 -- 
 2.25.1
 
