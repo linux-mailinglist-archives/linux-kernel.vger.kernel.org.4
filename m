@@ -2,103 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFEA6CCDEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 061656CCDEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjC1XNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 19:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
+        id S229451AbjC1XQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 19:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjC1XNh (ORCPT
+        with ESMTP id S229531AbjC1XQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 19:13:37 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F861BF0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:13:34 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id r7so10140129uaj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:13:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680045214;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9Ovm+AM85KXAJZHu2fD53I2qFnekQy/WozXcpTNpGGI=;
-        b=Dnh//BOQKl1nkYVftlXgaATG8gbO0cTyEPMrBs5HAYsbWGowNRajjCifsI/vIZgLNu
-         Tjt0Tmm9zQxzn2NTJyBR/8uM3MZh9heUL07KmfnRS5COYj2T2xckjf0LxMVs8cjOewS9
-         NYz7jIbXQcnk8byiK+pYEu9mtRx73cRD4q/lIjQ3WEqh9I69sD5H8zWp5l5RNcqJuD9L
-         B/lmajj6pvI5pH1UvMmEb9b99s/Ekxm3z4i0lQt4WvOnArzetoUU3oAYdaSA02LEhS1E
-         2eV3VVkXy4+De5jJXoMYgWSU320EMUj2I4v8zgw0hYG6JBa6LC/U/ZhNEDDoVWlqTQKo
-         /+ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680045214;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9Ovm+AM85KXAJZHu2fD53I2qFnekQy/WozXcpTNpGGI=;
-        b=GemyzJZVkXpjnnT0OZeVtFpIPgPt4TIVcXpC856sDiNDubKGRg5feoEfB0Vqv5QqoC
-         Rc/SewPY16q0+jCC2yfSZchRo4R2yxLX9uE3/v6SKqCVAjtVPAHBRouraiY8DVS6QNof
-         eN5TzyTsGqf28I2Ia/F4zT1rRU6z1veuUNpjGBtO710Qp8ypZ46U+fZZUzm6haIAK0Ny
-         yu7Zb+H1XyOta+eJaIUKRClhrMomAJIUA3QVS35ij9u9imGGrDvcBIT68dYEjubAgea8
-         NLnN/yVzWIqFKtCpHJGGWwM1VlybgH8bVtEgxpl/vveuu+vMY7+q3Gr1QcKesqO7/lXt
-         OLFg==
-X-Gm-Message-State: AAQBX9e9oJPRvnp3S/9PyI//DeaETzujDb55ZfMkoVIVcrYVHldTbVUV
-        wyezAIL2WSw4Jcm5K6S3KfIunHkQLEj2LqAKpS+auw==
-X-Google-Smtp-Source: AKy350ZUtjKBRPgsVzb0NsvH9ktDoKD0M4zlZHz9dMVIVnpXMME0mXMlPzdM9gmRFI/jrkFWsuRZI4V23Qv4c5QV1os=
-X-Received: by 2002:a1f:b2d2:0:b0:43b:96b8:1a9f with SMTP id
- b201-20020a1fb2d2000000b0043b96b81a9fmr5841630vkf.2.1680045213907; Tue, 28
- Mar 2023 16:13:33 -0700 (PDT)
+        Tue, 28 Mar 2023 19:16:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B331BF0;
+        Tue, 28 Mar 2023 16:16:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90935619E8;
+        Tue, 28 Mar 2023 23:16:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E7CDC433EF;
+        Tue, 28 Mar 2023 23:16:16 +0000 (UTC)
+Date:   Tue, 28 Mar 2023 19:16:13 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH] tracing/osnoise: Fix notify new tracing_max_latency
+Message-ID: <20230328191613.33ac3f5e@gandalf.local.home>
+In-Reply-To: <c22302a7db3cee6bcabf87462ed22a35dd38690f.1679675521.git.bristot@kernel.org>
+References: <c22302a7db3cee6bcabf87462ed22a35dd38690f.1679675521.git.bristot@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-15-vipinsh@google.com>
- <ZBzSgI2mkpl3QTNt@google.com> <CAHVum0dSh-=VsiR+dC6MC3FO_ev4CqNZ6PrVuZoQ+uRd5qn-0g@mail.gmail.com>
-In-Reply-To: <CAHVum0dSh-=VsiR+dC6MC3FO_ev4CqNZ6PrVuZoQ+uRd5qn-0g@mail.gmail.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Tue, 28 Mar 2023 16:13:07 -0700
-Message-ID: <CALzav=dURfiFvCZNjysk28q4sJMzFWLLnjXZ_LfP9kcHsAz50g@mail.gmail.com>
-Subject: Re: [Patch v4 14/18] KVM: mmu: Initialize kvm_mmu_memory_cache.gfp_zero
- to __GFP_ZERO by default
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 10:31=E2=80=AFAM Vipin Sharma <vipinsh@google.com> =
-wrote:
->
-> On Thu, Mar 23, 2023 at 3:28=E2=80=AFPM David Matlack <dmatlack@google.co=
-m> wrote:
-> >
-> > On Mon, Mar 06, 2023 at 02:41:23PM -0800, Vipin Sharma wrote:
-> > > Set __GFP_ZERO to gfp_zero in default initizliation of struct
-> > > kvm_mmu_memory_cache{}
-> > >
-> > > All of the users of default initialization code of struct
-> > > kvm_mmu_memory_cache{} explicitly sets gfp_zero to __GFP_ZERO. This c=
-an
-> > > be moved to common initialization logic.
-> >
-> > If that were true we could get rid of gfp_zero entirely and hard-code
-> > __GFP_ZERO in the memory allocator! mmu_shadowed_info_cache is the one
-> > that does not set __GFP_ZERO.
-> >
->
-> Can we use __GFP_ZERO for mmu_shadowed_info_cache?
+On Fri, 24 Mar 2023 18:51:35 +0100
+Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
 
-Yes but doing so would add CPU cost to zero the memory on allocation.
-Someone would need to do some performance testing to confirm that the
-cost of zeroing is acceptable.
+> timerlat is not reporting a new tracing_max_latency for the thread
+> latency. Also, the tracer is reporting new max latency on instances
+> where the tracing is off, creating inconsistencies between the max
+> reported values in the trace and in the tracing_max_latency. Thus
+> only report new tracing_max_latency on active tracing instances.
 
-> Also, MIPS doesn't
-> use __GFP_ZERO, I think it might be a missed thing in MIPS rather than
-> intentional.
+Sounds to me this patch fixes two different bugs. If so, can you please
+break it up into two different patches?
+
+Thanks!
+
+-- Steve
+
+> 
+> Fixes: dae181349f1e ("tracing/osnoise: Support a list of trace_array *tr")
+> Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+> ---
+>  kernel/trace/trace_osnoise.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
+> index 210e1f168392..2a1b337ac643 100644
+> --- a/kernel/trace/trace_osnoise.c
+> +++ b/kernel/trace/trace_osnoise.c
+> @@ -1296,7 +1296,7 @@ static void notify_new_max_latency(u64 latency)
+>  	rcu_read_lock();
+>  	list_for_each_entry_rcu(inst, &osnoise_instances, list) {
+>  		tr = inst->tr;
+> -		if (tr->max_latency < latency) {
+> +		if (tracer_tracing_is_on(tr) && tr->max_latency < latency) {
+>  			tr->max_latency = latency;
+>  			latency_fsnotify(tr);
+>  		}
+> @@ -1738,6 +1738,8 @@ static int timerlat_main(void *data)
+>  
+>  		trace_timerlat_sample(&s);
+>  
+> +		notify_new_max_latency(diff);
+> +
+>  		timerlat_dump_stack(time_to_us(diff));
+>  
+>  		tlat->tracing_thread = false;
+
