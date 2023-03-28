@@ -2,57 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514C76CCBFE
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8C96CCBFF
 	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 23:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjC1VP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 17:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52712 "EHLO
+        id S229838AbjC1VQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 17:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjC1VP4 (ORCPT
+        with ESMTP id S229540AbjC1VP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 17:15:56 -0400
+        Tue, 28 Mar 2023 17:15:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A681BCE
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 14:15:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC4E1BCE;
+        Tue, 28 Mar 2023 14:15:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E08CA61973
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 21:15:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C3D1C433EF;
-        Tue, 28 Mar 2023 21:15:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8756E6195E;
+        Tue, 28 Mar 2023 21:15:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBF88C4339C;
+        Tue, 28 Mar 2023 21:15:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680038154;
-        bh=r/+up7IBLePhqWvv9WmEvRBGSNPOe/2CnxDucQMfDmM=;
+        s=k20201202; t=1680038157;
+        bh=8+1POfPIyk9eZyS7d4f6YafqwcEcQOb0IhINBdzdB6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rYHDGgNaIe2yuUKKKx1D88ezDfwa/gXMpi0+8Cf+K9V3+whRjMhE9ivFkKw5M0riq
-         vCJ98xFXh9pA44u0Up8Ji+E32S8KOUHh27PMpy1vqSH6O95E13EmyrrBfE8S6SbpvY
-         ozgilh0Sfmef+3ofCpkS08tZO8KDq894y5enXENZ8ocmhQhObwgC187h+B8gZL05+d
-         TgOA0HjsXeweo5HhBUg2lAU5/d1blhUHshjNgayZONMs8rQbKRG+JS2PxvRZQXJEMd
-         OETYgNTmp+utnKKpzIfQ2ppw3I064XQK+xk6+kvypeUbPQc1P688OC1hiJwvdOQ70e
-         5FlRp1CRbYr7w==
+        b=FoSW+mH8RBQ6t5LbJoDJ3UB9/X38LJrkVRGo8Tdxgl0SBn8D+FFnXX0x/tf3AsioU
+         pTL5wYZXjPlClIpKDkuRk1L6WYryHm2HscsoV36/lZDkwG08gfzuEKQcE61vF2fDV8
+         h/B1dV2+r3r6CreTIYKGI9rIJ0WsntL6TC4BbBrSiza+MLfsD3V8CDLhS+2e8rphmW
+         Z2tg0n0IJHDJkCFwmm6qG+AH4ShiGlUlGMfUI1S3dDn5dPM9CpjlX6BCss8pwFqGcQ
+         uoQmGxkvTBuuCtIdF/H0rR1aRx9maa+eLaZQiCO6u7ylWtWrRSkAxjJAstAdDVDTMW
+         ju2Ox/qm5s0HQ==
 From:   Will Deacon <will@kernel.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Nick Child <nnac123@linux.ibm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Juergen Gross <jgross@suse.com>,
-        John Garry <john.garry@huawei.com>,
-        WANG Xuerui <git@xen0n.name>, Borislav Petkov <bp@suse.de>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        James Morse <james.morse@arm.com>,
-        Bibo Mao <maobibo@loongson.cn>
-Subject: Re: [PATCH v4] firmware: arm_sdei: Fix sleep from invalid context BUG
-Date:   Tue, 28 Mar 2023 22:15:43 +0100
-Message-Id: <168001329595.983896.13957861833923514918.b4-ty@kernel.org>
+To:     Yu Zhe <yuzhe@nfschina.com>, haibinzhang@tencent.com,
+        hewenliang4@huawei.com, catalin.marinas@arm.com,
+        mark.rutland@arm.com, renzhijie2@huawei.com
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        liqiong@nfschina.com, linux-arm-kernel@lists.infradead.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: armv8_deprecated: remove unnecessary (void*) conversions
+Date:   Tue, 28 Mar 2023 22:15:44 +0100
+Message-Id: <168001462439.1894650.12936155000889402443.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230216084920.144064-1-pierre.gondois@arm.com>
-References: <20230216084920.144064-1-pierre.gondois@arm.com>
+In-Reply-To: <20230303025047.19717-1-yuzhe@nfschina.com>
+References: <20230303025047.19717-1-yuzhe@nfschina.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -65,44 +57,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Feb 2023 09:49:19 +0100, Pierre Gondois wrote:
-> Running a preemp_rt kernel based on vv6.2-rc3-rt1 based kernel on an
-> Ampere Altra triggers:
->   BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
->   in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 24, name: cpuhp/0
->   preempt_count: 0, expected: 0
->   RCU nest depth: 0, expected: 0
->   3 locks held by cpuhp/0/24:
->     #0: ffffda30217c70d0 (cpu_hotplug_lock){++++}-{0:0}, at: cpuhp_thread_fun+0x5c/0x248
->     #1: ffffda30217c7120 (cpuhp_state-up){+.+.}-{0:0}, at: cpuhp_thread_fun+0x5c/0x248
->     #2: ffffda3021c711f0 (sdei_list_lock){....}-{3:3}, at: sdei_cpuhp_up+0x3c/0x130
->   irq event stamp: 36
->   hardirqs last  enabled at (35): [<ffffda301e85b7bc>] finish_task_switch+0xb4/0x2b0
->   hardirqs last disabled at (36): [<ffffda301e812fec>] cpuhp_thread_fun+0x21c/0x248
->   softirqs last  enabled at (0): [<ffffda301e80b184>] copy_process+0x63c/0x1ac0
->   softirqs last disabled at (0): [<0000000000000000>] 0x0
->   CPU: 0 PID: 24 Comm: cpuhp/0 Not tainted 5.19.0-rc3-rt5-[...]
->   Hardware name: WIWYNN Mt.Jade Server [...]
->   Call trace:
->     dump_backtrace+0x114/0x120
->     show_stack+0x20/0x70
->     dump_stack_lvl+0x9c/0xd8
->     dump_stack+0x18/0x34
->     __might_resched+0x188/0x228
->     rt_spin_lock+0x70/0x120
->     sdei_cpuhp_up+0x3c/0x130
->     cpuhp_invoke_callback+0x250/0xf08
->     cpuhp_thread_fun+0x120/0x248
->     smpboot_thread_fn+0x280/0x320
->     kthread+0x130/0x140
->     ret_from_fork+0x10/0x20
+On Fri, 3 Mar 2023 10:50:47 +0800, Yu Zhe wrote:
+> Pointer variables of void * type do not require type cast.
 > 
-> [...]
+> 
 
 Applied to arm64 (for-next/misc), thanks!
 
-[1/1] firmware: arm_sdei: Fix sleep from invalid context BUG
-      https://git.kernel.org/arm64/c/d2c48b2387eb
+[1/1] arm64: armv8_deprecated: remove unnecessary (void*) conversions
+      https://git.kernel.org/arm64/c/0e2cb49ef104
 
 Cheers,
 -- 
