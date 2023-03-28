@@ -2,153 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4CC6CBCC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B2A6CBCBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbjC1Kpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
+        id S230269AbjC1KnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232479AbjC1Kpw (ORCPT
+        with ESMTP id S231833AbjC1KnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:45:52 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8ADA618A;
-        Tue, 28 Mar 2023 03:45:48 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 931785FD0E;
-        Tue, 28 Mar 2023 13:45:45 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1680000345;
-        bh=NOp8u9X32RM0zpODrfERJaF8FGjQ60rLL3xGd0/0O24=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=SQ3aqtO5iBBEDf77OVZEn6ncK4ysjWNeuDmP4PQOsqm0KAEOBGKOw5nzTXGV3+SM1
-         FSjPopWFLrn3eu2BPpunLsThx+rnWXJkSYVbio89J5BaD0HOAVUesWYdOEXcMH97Y3
-         Ej4S+weC5xkJVYHEYmaE1k3Xl7pVntlIPRQWCmvrY/gPTs8KeQU1J3ee0LgevrT9YJ
-         g0u6wQifc17OTob4P2DLiLQQNufdsGxYpLvxsV0IbQJJhGumPskSlVWXgLNGWmZbIM
-         LHrehH7hOiixBNRWZVJ8TvwsHdyyz2cVivOh2/613aWqGDFZVbtgGAVudTAhhZg8Lw
-         GbKVyPpn+Tqjw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 28 Mar 2023 13:45:39 +0300 (MSK)
-Message-ID: <0f0a8603-e8a1-5fb2-23d9-5773c808ef85@sberdevices.ru>
-Date:   Tue, 28 Mar 2023 13:42:19 +0300
+        Tue, 28 Mar 2023 06:43:14 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C1C49F6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:43:11 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id er13so6733497edb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680000190;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zgOiq+AtOeciCdmH4CfKTQkHujujZJqW/oCAjnkxQJQ=;
+        b=z2fbJCUs40UgcqDVbQGQh4kmhI6WeRhHxPmP8pKs0i8yh52/eine8xe/tM/6QfvHbP
+         QJ84tlX3SNKaesXQdNLzBBkJHTcBgYG7l2PiH0gk90E2Chf5Q8oxKOxEQZzjceExb8vV
+         IFVjPu6VDsTPVaDViZGIefeYhR1c4k5DYYYwxvCTyMrdGYlVYsbct9l4o4yRFTLvE6pt
+         vlLybW/hJd+JVIsi5Xs53rx0D2PkCx0duxyHUGoPHLLWQol/hyhwBr1dgVwtULDJqQw7
+         732Bg4O/RimTRXeC9m48hFh3Q2utdgpE4jfJ1dLpIrMKbGJz/F2vu4hnYh454T3cAXpQ
+         ckeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680000190;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zgOiq+AtOeciCdmH4CfKTQkHujujZJqW/oCAjnkxQJQ=;
+        b=LmaBJ3nk4Pz63wdIrbIYmxxgFpBJx3MIIGnGcw8RErfICwRq2k27xJf/Iu04YxuTWA
+         MyLnnglE7NLdDE3vv2K5KQGG+qvV3MZNyhf1AsgdfGjz8UbKuISogSKB8To38Bc/In5L
+         7S/PkFv4YoA0FhIxsqhlD4Tn7WTdxuLopxe2nzG5sKWpl5LhmlDiQViFJnyjB3bZHq5L
+         3CDGxNMLHAgCoqj6OBlATQ+AKT35uDtJQGqrHrexJSt0ykFgVDGheEvpnVhNrc6As+Qg
+         dkduQ5EF95HeqUqLpN3oX8DLrP44uOu4wHqQp2A80Tnt0ZaGOjgspalfjilz6OANfq5K
+         qsjQ==
+X-Gm-Message-State: AAQBX9dd30gO1cvRkztlgMHFIhfzWdxJM/T/Jqft283GXk5dgJLstvzn
+        2dszTNzVK1RCOdcZhqbuZvlZDQ==
+X-Google-Smtp-Source: AKy350Zfnrc8ZewffEwh0R/rtujIhidB2cKU4fpAUyOT7kpfXTOeG5IhvfNxPAEsI9UYX+OUDcVZNQ==
+X-Received: by 2002:a17:906:3f8e:b0:939:ad91:adf5 with SMTP id b14-20020a1709063f8e00b00939ad91adf5mr17014758ejj.25.1680000189965;
+        Tue, 28 Mar 2023 03:43:09 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
+        by smtp.gmail.com with ESMTPSA id lj24-20020a170906f9d800b00932ba722482sm14366953ejb.149.2023.03.28.03.43.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 03:43:09 -0700 (PDT)
+Message-ID: <aec9e01b-c358-0982-3090-ef980d4a5623@linaro.org>
+Date:   Tue, 28 Mar 2023 12:43:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v1 1/2] vsock: return errors other than -ENOMEM to
- socket
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] dt-bindings: usb: typec-tcpci: convert to DT schema
+ format
 Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <97f19214-ba04-c47e-7486-72e8aa16c690@sberdevices.ru>
- <99da938b-3e67-150c-2f74-41d917a95950@sberdevices.ru>
- <itjmw7vh3a7ggbodsu4mksu2hqbpdpxmu6cpexbra66nfhsw4x@hzpuzwldkfx5>
- <CAGxU2F648TyvAJN+Zk6YCnGUhn=0W_MZTox7RxQ45zHmHHO0SA@mail.gmail.com>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <CAGxU2F648TyvAJN+Zk6YCnGUhn=0W_MZTox7RxQ45zHmHHO0SA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/28 06:38:00 #21021220
-X-KSMG-AntiVirus-Status: Clean, skipped
+To:     Jun Li <jun.li@nxp.com>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Peng Fan <peng.fan@nxp.com>
+References: <20230323065824.3857573-1-peng.fan@oss.nxp.com>
+ <5675373c-af4f-906f-9906-7853a85f8ed6@linaro.org>
+ <PA4PR04MB96405A3B0B5158561D9E068F89889@PA4PR04MB9640.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <PA4PR04MB96405A3B0B5158561D9E068F89889@PA4PR04MB9640.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 28.03.2023 12:42, Stefano Garzarella wrote:
-> I pressed send too early...
-> 
-> CCing Bryan, Vishnu, and pv-drivers@vmware.com
-> 
-> On Tue, Mar 28, 2023 at 11:39 AM Stefano Garzarella <sgarzare@redhat.com> wrote:
+On 28/03/2023 11:24, Jun Li wrote:
+> Hi Krzysztof,
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Sent: Monday, March 27, 2023 3:41 PM
+>> To: Peng Fan (OSS) <peng.fan@oss.nxp.com>; robh+dt@kernel.org;
+>> krzysztof.kozlowski+dt@linaro.org; gregkh@linuxfoundation.org; Jun Li
+>> <jun.li@nxp.com>
+>> Cc: linux-usb@vger.kernel.org; devicetree@vger.kernel.org;
+>> linux-kernel@vger.kernel.org; Peng Fan <peng.fan@nxp.com>
+>> Subject: Re: [PATCH] dt-bindings: usb: typec-tcpci: convert to DT schema
+>> format
 >>
->> On Sun, Mar 26, 2023 at 01:13:11AM +0300, Arseniy Krasnov wrote:
->>> This removes behaviour, where error code returned from any transport
->>> was always switched to ENOMEM. This works in the same way as:
->>> commit
->>> c43170b7e157 ("vsock: return errors other than -ENOMEM to socket"),
->>> but for receive calls.
+>> On 23/03/2023 07:58, Peng Fan (OSS) wrote:
+>>> From: Peng Fan <peng.fan@nxp.com>
 >>>
->>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>> Convert the binding to DT schema format. The default speed is HS, so
+>>> add a dummy port@0 in the example.
+>>>
+>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 >>> ---
->>> net/vmw_vsock/af_vsock.c | 4 ++--
->>> 1 file changed, 2 insertions(+), 2 deletions(-)
 >>>
->>> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->>> index 19aea7cba26e..9262e0b77d47 100644
->>> --- a/net/vmw_vsock/af_vsock.c
->>> +++ b/net/vmw_vsock/af_vsock.c
->>> @@ -2007,7 +2007,7 @@ static int __vsock_stream_recvmsg(struct sock *sk, struct msghdr *msg,
+>>> V1:
+>>>  The default speed is HS, so port@0 is not added for some device tree,
+>>> however the usb-c-connector requires port@0. Not sure we should drop
+>>> the required port@0 from usb-c-connector schema or add a dummy port@0
+>>> for tcpci as what this patch does.
+>>
+>> imx8mq-librem5-devkit has full port@0 so just use similar approach.
+>>
 >>>
->>>               read = transport->stream_dequeue(vsk, msg, len - copied, flags);
->>
->> In vmci_transport_stream_dequeue() vmci_qpair_peekv() and
->> vmci_qpair_dequev() return VMCI_ERROR_* in case of errors.
->>
->> Maybe we should return -ENOMEM in vmci_transport_stream_dequeue() if
->> those functions fail to keep the same behavior.
-
-Yes, seems i missed it, because several months ago we had similar question for send
-logic:
-https://www.spinics.net/lists/kernel/msg4611091.html
-And it was ok to not handle VMCI send path in this way. So i think current implementation
-for tx is a little bit buggy, because VMCI specific error from 'vmci_qpair_enquev()' is
-returned to af_vsock.c. I think error conversion must be added to VMCI transport for tx
-also.
-
-Good thing is that Hyper-V uses general error codes.
-
-Thanks, Arseniy
->>
->> CCing Bryan, Vishnu, and pv-drivers@vmware.com
->>
->> The other transports seem okay to me.
->>
->> Thanks,
->> Stefano
->>
->>>               if (read < 0) {
->>> -                      err = -ENOMEM;
->>> +                      err = read;
->>>                       break;
->>>               }
+>>>  .../devicetree/bindings/usb/typec-tcpci.txt   | 49 ------------
+>>>  .../devicetree/bindings/usb/typec-tcpci.yaml  | 80
+>>> +++++++++++++++++++
+>>>  2 files changed, 80 insertions(+), 49 deletions(-)  delete mode
+>>> 100644 Documentation/devicetree/bindings/usb/typec-tcpci.txt
+>>>  create mode 100644
+>>> Documentation/devicetree/bindings/usb/typec-tcpci.yaml
 >>>
->>> @@ -2058,7 +2058,7 @@ static int __vsock_seqpacket_recvmsg(struct sock *sk, struct msghdr *msg,
->>>       msg_len = transport->seqpacket_dequeue(vsk, msg, flags);
->>>
->>>       if (msg_len < 0) {
->>> -              err = -ENOMEM;
->>> +              err = msg_len;
->>>               goto out;
->>>       }
->>>
->>> --
->>> 2.25.1
->>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/typec-tcpci.txt
+>>> b/Documentation/devicetree/bindings/usb/typec-tcpci.txt
+>>> deleted file mode 100644
+>>> index 2082522b1c32..000000000000
+>>> --- a/Documentation/devicetree/bindings/usb/typec-tcpci.txt
+>>> +++ /dev/null
+>>> @@ -1,49 +0,0 @@
+>>> -TCPCI(Typec port cotroller interface) binding
+>>> ----------------------------------------------
+>>> -
+>>> -Required properties:
+>>> -- compatible:       should be set one of following:
+>>> -		    - "nxp,ptn5110" for NXP USB PD TCPC PHY IC ptn5110.
+>>> -
+>>> -- reg:              the i2c slave address of typec port controller device.
+>>> -- interrupt-parent: the phandle to the interrupt controller which provides
+>>> -                    the interrupt.
+>>> -- interrupts:       interrupt specification for tcpci alert.
+>>> -
+>>> -Required sub-node:
+>>> -- connector: The "usb-c-connector" attached to the tcpci chip, the
+>>> bindings
+>>> -  of connector node are specified in
+>>> -  Documentation/devicetree/bindings/connector/usb-connector.yaml
+>>> -
+>>> -Example:
+>>> -
+>>> -ptn5110@50 {
+>>> -	compatible = "nxp,ptn5110";
+>>> -	reg = <0x50>;
+>>> -	interrupt-parent = <&gpio3>;
+>>> -	interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+>>> -
+>>> -	usb_con: connector {
+>>> -		compatible = "usb-c-connector";
+>>> -		label = "USB-C";
+>>> -		data-role = "dual";
+>>> -		power-role = "dual";
+>>> -		try-power-role = "sink";
+>>> -		source-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)>;
+>>> -		sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)
+>>> -			     PDO_VAR(5000, 12000, 2000)>;
+>>> -		op-sink-microwatt = <10000000>;
+>>> -
+>>> -		ports {
+>>> -			#address-cells = <1>;
+>>> -			#size-cells = <0>;
+>>> -
+>>> -			port@1 {
+>>> -				reg = <1>;
+>>> -				usb_con_ss: endpoint {
+>>> -					remote-endpoint = <&usb3_data_ss>;
+>>> -				};
+>>> -			};
+>>> -		};
+>>> -	};
+>>> -};
+>>> diff --git a/Documentation/devicetree/bindings/usb/typec-tcpci.yaml
+>>> b/Documentation/devicetree/bindings/usb/typec-tcpci.yaml
+>>> new file mode 100644
+>>> index 000000000000..067d3b032e3d
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/usb/typec-tcpci.yaml
+>>
+>> Is this a binding for PTN5110 or for generic tcpci? Looks like the first,
+>> thus name should be rather device specific, so nxp,ptn5110.
+>> Specially that there are other tcpci chips in separate bindings.
 > 
+> This binding doc is target for generic tcpci, ptn5110 is the one
+
+
+Does this mean that TCPCI requires every device to have exactly one
+interrupt (no 0, no 2, exactly 1), no supplies and no additional GPIOs
+(like reset GPIO)?
+
+Because this is what this binding is saying.
+
+> fully compliance with tcpci spec, if change it to be only specific
+> to nxp,ptn5110, my understanding is then other chips need duplicate
+> a binding doc even common tcpci binding and driver is enough for them.
+
+Depends. Usually we have common schema used by actual device schemas. If
+TCPCI-compliant device cannot have additional properties, then this one
+here looks fine.
+
+One more thing - typec-tcpci is a bit redundant "tc" means typec, so
+basicaly you said "typec-typec-pci". This shouold be then just typec-pci
+or tcpci.
+
+Best regards,
+Krzysztof
+
