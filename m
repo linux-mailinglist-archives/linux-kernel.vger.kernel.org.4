@@ -2,304 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918FC6CCB1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97B06CCB24
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 22:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjC1T65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 15:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S229615AbjC1UAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 16:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjC1T6n (ORCPT
+        with ESMTP id S229484AbjC1UAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 15:58:43 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F772D77
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:58:09 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so10150337wmq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:58:09 -0700 (PDT)
+        Tue, 28 Mar 2023 16:00:42 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26F640CA
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 13:00:06 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id z11so8816166pfh.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 13:00:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680033488;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20210112; t=1680033571;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A416pUmXSfyjfvZmC8DpRUw6ME53SsgLznqZ8bBGXvQ=;
-        b=PXfJSuhwiQ7FZQisc1aUqZ35MafZWj18AsDcwFxDGSrbdIUHFDHHNw12nM0YVnjvof
-         LfZDfX230Z3IT1Q5f4YmiYznazFru6ktoDwH4rb5NMm5pduXceFyLIQd0mSKkh1xcoAo
-         tvpZE2sj8yTeE127cTr528j+An/QwXGRVEHUGNfl/ueyLmKvYCB8WfofLLfTTcmwunmQ
-         ESqUpFpKpcQGJJJvwMZjKydItfibCTzFdC2yUNqiqnpBZHtcG2CyBbC48lAsC5VczmBy
-         4bvhmfT5lFTPXcoszDXs9TIvI/4d1m1H/K+aCxf/di3O0O8wAa71uDKhM0jMXC8F2zT8
-         ovmQ==
+        bh=0/yvlhEoGf4lYD0w5w4illgGKFOLps9NjXpDI+7ErcQ=;
+        b=Kj4ahUJ17/TklSj8P4aYyhNWSNUggUnfHpq42Yf2/g2G1VGWGWrewPLvp9vsLX/JEg
+         Bo8mZjMkfy7Ctlho2KRKOpKqTbOfwp+ZKHRKs6VdamQXWlk+XXleJft4Oz61Oo6NQ4pw
+         KGYJwhnhB3/D0jfIu8miCDACYf921OreR3HQSswBQW4rpuJCq8+F+dboOuddBBTNRJ7Q
+         VAjey0lem6IOqAD6Q/8oNVUFh4Oe+mz5d1NunBWyGOByo8e7HkQXRnaO9wXGbSxcVuOU
+         k+XH0lQKF/eHBchip2FdOmhmF1eQBFBUO8i0IDxZ9EOdGZNFd8SUBL8dWE5arhzeF1Al
+         3IIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680033488;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680033571;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=A416pUmXSfyjfvZmC8DpRUw6ME53SsgLznqZ8bBGXvQ=;
-        b=hmGdNP//uDjSpR08uwUHBkuD7XHCLzFg81/p7XV1qfE5nuCNMjHzgTjSOOpAKUINKw
-         d0/HaxQ8vsuGHCZ+pplVacV1gtYmmx7rfNia5CXsTu1BCQUm7hlDiv8dTmSDQVGc31PI
-         r+pu7vUFV5IP08pzNopkmPjiorUi/OaJBEDHEI6+AmYX/leF3lswy03Ufpc4QoelomQE
-         Y0ztbBp1M46rIm6vUsVT8wyxFO52FZZ2aHe+GeCNUGcvvnQv8nyQJgQZXA9bBDymTBhP
-         1Eh9bc/PMJGxbLIfOqLu+0L0eKfgijpzG0s4epSn8Po3iHx3AyE0wjaNrfpHazCcASih
-         1LaA==
-X-Gm-Message-State: AAQBX9eVpF9Cxig89Y2y12pBAxFyQq6v7bX8/I65dRjCBdy94ggjsJBP
-        bNTW0CM5KmZV3Fef5h2z+LkdWQ==
-X-Google-Smtp-Source: AKy350ZAOz8VV6bkSjlOCGrsiNr2MEoP0GQ/uNLnytCPdeZNDdgNF6XCyh0Xv5cqxCV5+2QxiSKiXw==
-X-Received: by 2002:a7b:cdef:0:b0:3ef:7616:d179 with SMTP id p15-20020a7bcdef000000b003ef7616d179mr2667200wmj.20.1680033488375;
-        Tue, 28 Mar 2023 12:58:08 -0700 (PDT)
-Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:8445:3123:91d7:959d])
-        by smtp.gmail.com with ESMTPSA id z6-20020a056000110600b002c557f82e27sm28248386wrw.99.2023.03.28.12.58.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 12:58:07 -0700 (PDT)
-From:   Usama Arif <usama.arif@bytedance.com>
-To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
-        brgerst@gmail.com
-Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        Usama Arif <usama.arif@bytedance.com>
-Subject: [PATCH v17 8/8] x86/smpboot: Allow parallel bringup for SEV-ES
-Date:   Tue, 28 Mar 2023 20:57:58 +0100
-Message-Id: <20230328195758.1049469-9-usama.arif@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230328195758.1049469-1-usama.arif@bytedance.com>
-References: <20230328195758.1049469-1-usama.arif@bytedance.com>
+        bh=0/yvlhEoGf4lYD0w5w4illgGKFOLps9NjXpDI+7ErcQ=;
+        b=mxJvARMmlHWfSliNFrPCh83kMBb1ZOhE4sNVXkNdo9w0DCxmB5Mode51QRbDSvzHNp
+         rtcDMIxF8NKfV6Lrx3mc5qH2o9c78TVfjJpaFi/tRyKJoL2DosmmHbc09RpItVs0mCgl
+         3NaYs3lFj54oa+3kpAT/gDJLlncsRDmr9LX8CeiSErQzWAegVM4W7xV465s2Atpq/0eh
+         Js/911Xoxji6FzlFm5rv/5fR5ZzVA3OrVH887+TaZEqfdaQLVGNOWDfcha5V3DORb2mT
+         6LyUu5nS7XHTd3vl2kFJwpPo+dMG5G8NFFe1F3AujOOedkJO/crN/2dvFtk3AV2rAhap
+         fllA==
+X-Gm-Message-State: AAQBX9fZLaQXMSXp53NW9OrOE6RUyGADP9rXq2D+/4jWXwh4J05YiHWH
+        /Y/YewSD5IAlqgso9WlLSlM5J+CBmR3tzgHKx+vsYQ==
+X-Google-Smtp-Source: AKy350a02nhWjZJNaefPpoZ0AZzLMqgU+rjEYIaK5jw3IZfaHRS4Bp2uRB/lOVaXyN/t2Dcrapc37Bok73ZdIIbqPUU=
+X-Received: by 2002:a63:5a47:0:b0:513:2523:1b5f with SMTP id
+ k7-20020a635a47000000b0051325231b5fmr4363099pgm.3.1680033570922; Tue, 28 Mar
+ 2023 12:59:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <CAAYXXYxC++kRW_Kg0jieaxuwzTC2hu-9SxRjsHH_kqZW_DTE7Q@mail.gmail.com>
+In-Reply-To: <CAAYXXYxC++kRW_Kg0jieaxuwzTC2hu-9SxRjsHH_kqZW_DTE7Q@mail.gmail.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Tue, 28 Mar 2023 12:59:18 -0700
+Message-ID: <CAAH4kHZWW6QsMcLCLYwRo25i6d6Uhg+=rTeoVV7yrGHqUWwFUQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] TDX Guest Quote generation support
+To:     Erdem Aktas <erdemaktas@google.com>, Chong Cai <chongc@google.com>
+Cc:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Woodhouse <dwmw@amazon.co.uk>
++Chong Cai
 
-Enable parallel bringup for SEV-ES guests. The APs can't actually
-execute the CPUID instruction directly during early startup, but they
-can make the GHCB call directly instead, just as the VC trap handler
-would do.
+Adding a colleague per his request since he's not subscribed to the list ye=
+t.
 
-Thanks to Sabin for talking me through the way this works.
+On Mon, Mar 27, 2023 at 10:36=E2=80=AFAM Erdem Aktas <erdemaktas@google.com=
+> wrote:
+>
+> On Sat, Mar 25, 2023 at 11:20=E2=80=AFPM Kuppuswamy Sathyanarayanan
+> <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+> >
+> > Hi All,
+> >
+> > In TDX guest, the attestation process is used to verify the TDX guest
+> > trustworthiness to other entities before provisioning secrets to the
+> > guest.
+> >
+> > The TDX guest attestation process consists of two steps:
+> >
+> > 1. TDREPORT generation
+> > 2. Quote generation.
+> >
+> > The First step (TDREPORT generation) involves getting the TDX guest
+> > measurement data in the format of TDREPORT which is further used to
+> > validate the authenticity of the TDX guest. The second step involves
+> > sending the TDREPORT to a Quoting Enclave (QE) server to generate a
+> > remotely verifiable Quote. TDREPORT by design can only be verified on
+> > the local platform. To support remote verification of the TDREPORT,
+> > TDX leverages Intel SGX Quoting Enclave to verify the TDREPORT
+> > locally and convert it to a remotely verifiable Quote. Although
+> > attestation software can use communication methods like TCP/IP or
+> > vsock to send the TDREPORT to QE, not all platforms support these
+> > communication models. So TDX GHCI specification [1] defines a method
+> > for Quote generation via hypercalls. Please check the discussion from
+> > Google [2] and Alibaba [3] which clarifies the need for hypercall based
+> Thanks Sathyanarayanan for submitting patches again.
+>
+> I just wanted to reiterate what I said before that having a clean
+> TDVMCALL based interface to get TDX Quote without any virtio/vsock
+> dependency  is critical for us to support many use cases.
 
-Suggested-by: Sabin Rapan <sabrapan@amazon.com>
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
-Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
----
- arch/x86/coco/core.c              |  5 ++++
- arch/x86/include/asm/coco.h       |  1 +
- arch/x86/include/asm/sev-common.h |  3 +++
- arch/x86/include/asm/smp.h        |  5 +++-
- arch/x86/kernel/head_64.S         | 30 ++++++++++++++++++++++++
- arch/x86/kernel/smpboot.c         | 39 ++++++++++++++++++++++++++-----
- 6 files changed, 76 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-index 49b44f881484..0bab38efb15a 100644
---- a/arch/x86/coco/core.c
-+++ b/arch/x86/coco/core.c
-@@ -129,6 +129,11 @@ u64 cc_mkdec(u64 val)
- }
- EXPORT_SYMBOL_GPL(cc_mkdec);
- 
-+enum cc_vendor cc_get_vendor(void)
-+{
-+	return vendor;
-+}
-+
- __init void cc_set_vendor(enum cc_vendor v)
- {
- 	vendor = v;
-diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
-index 3d98c3a60d34..0428d9712c96 100644
---- a/arch/x86/include/asm/coco.h
-+++ b/arch/x86/include/asm/coco.h
-@@ -12,6 +12,7 @@ enum cc_vendor {
- };
- 
- void cc_set_vendor(enum cc_vendor v);
-+enum cc_vendor cc_get_vendor(void);
- void cc_set_mask(u64 mask);
- 
- #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
-diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
-index b63be696b776..0abf8a39cee1 100644
---- a/arch/x86/include/asm/sev-common.h
-+++ b/arch/x86/include/asm/sev-common.h
-@@ -70,6 +70,7 @@
- 	/* GHCBData[63:12] */				\
- 	(((u64)(v) & GENMASK_ULL(63, 12)) >> 12)
- 
-+#ifndef __ASSEMBLY__
- /*
-  * SNP Page State Change Operation
-  *
-@@ -161,6 +162,8 @@ struct snp_psc_desc {
- 
- #define GHCB_RESP_CODE(v)		((v) & GHCB_MSR_INFO_MASK)
- 
-+#endif /* __ASSEMBLY__ */
-+
- /*
-  * Error codes related to GHCB input that can be communicated back to the guest
-  * by setting the lower 32-bits of the GHCB SW_EXITINFO1 field to 2.
-diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
-index defe76ee9e64..1584f04a7007 100644
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -204,7 +204,10 @@ extern unsigned int smpboot_control;
- /* Control bits for startup_64 */
- #define STARTUP_APICID_CPUID_0B	0x80000000
- #define STARTUP_APICID_CPUID_01	0x40000000
-+#define STARTUP_APICID_SEV_ES	0x20000000
- 
--#define STARTUP_PARALLEL_MASK (STARTUP_APICID_CPUID_01 | STARTUP_APICID_CPUID_0B)
-+#define STARTUP_PARALLEL_MASK (STARTUP_APICID_CPUID_01 | \
-+			       STARTUP_APICID_CPUID_0B | \
-+			       STARTUP_APICID_SEV_ES)
- 
- #endif /* _ASM_X86_SMP_H */
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index ff3a5f008d8a..9c38849fcac8 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -26,6 +26,7 @@
- #include <asm/nospec-branch.h>
- #include <asm/fixmap.h>
- #include <asm/smp.h>
-+#include <asm/sev-common.h>
- 
- /*
-  * We are not able to switch in one step to the final KERNEL ADDRESS SPACE
-@@ -242,6 +243,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	 *
- 	 * Bit 31	STARTUP_APICID_CPUID_0B flag (use CPUID 0x0b)
- 	 * Bit 30	STARTUP_APICID_CPUID_01 flag (use CPUID 0x01)
-+	 * Bit 29	STARTUP_APICID_SEV_ES flag (CPUID 0x0b via GHCB MSR)
- 	 * Bit 0-24	CPU# if STARTUP_APICID_CPUID_xx flags are not set
- 	 */
- 	movl	smpboot_control(%rip), %ecx
-@@ -249,6 +251,10 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	jnz	.Luse_cpuid_0b
- 	testl	$STARTUP_APICID_CPUID_01, %ecx
- 	jnz	.Luse_cpuid_01
-+#ifdef CONFIG_AMD_MEM_ENCRYPT
-+	testl	$STARTUP_APICID_SEV_ES, %ecx
-+	jnz	.Luse_sev_cpuid_0b
-+#endif
- 	andl	$0x0FFFFFFF, %ecx
- 	jmp	.Lsetup_cpu
- 
-@@ -259,6 +265,30 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	shr	$24, %edx
- 	jmp	.Lsetup_AP
- 
-+#ifdef CONFIG_AMD_MEM_ENCRYPT
-+.Luse_sev_cpuid_0b:
-+	/* Set the GHCB MSR to request CPUID 0xB_EDX */
-+	movl	$MSR_AMD64_SEV_ES_GHCB, %ecx
-+	movl	$(GHCB_CPUID_REQ_EDX << 30) | GHCB_MSR_CPUID_REQ, %eax
-+	movl	$0x0B, %edx
-+	wrmsr
-+
-+	/* Perform GHCB MSR protocol */
-+	rep; vmmcall		/* vmgexit */
-+
-+	/*
-+	 * Get the result. After the RDMSR:
-+	 *   EAX should be 0xc0000005
-+	 *   EDX should have the CPUID register value and since EDX
-+	 *   is the target register, no need to move the result.
-+	 */
-+	rdmsr
-+	andl	$GHCB_MSR_INFO_MASK, %eax
-+	cmpl	$GHCB_MSR_CPUID_RESP, %eax
-+	jne	1f
-+	jmp	.Lsetup_AP
-+#endif
-+
- .Luse_cpuid_0b:
- 	mov	$0x0B, %eax
- 	xorl	%ecx, %ecx
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 05d202b7dcaa..6ef040fd28a0 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -85,6 +85,7 @@
- #include <asm/hw_irq.h>
- #include <asm/stackprotector.h>
- #include <asm/sev.h>
-+#include <asm/coco.h>
- 
- /* representing HT siblings of each logical CPU */
- DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_sibling_map);
-@@ -1514,15 +1515,36 @@ void __init smp_prepare_cpus_common(void)
-  * We can do 64-bit AP bringup in parallel if the CPU reports its APIC
-  * ID in CPUID (either leaf 0x0B if we need the full APIC ID in X2APIC
-  * mode, or leaf 0x01 if 8 bits are sufficient). Otherwise it's too
-- * hard. And not for SEV-ES guests because they can't use CPUID that
-- * early.
-+ * hard.
-  */
- static bool prepare_parallel_bringup(void)
- {
--	if (IS_ENABLED(CONFIG_X86_32) || cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
-+	bool has_sev_es = false;
-+
-+	if (IS_ENABLED(CONFIG_X86_32))
- 		return false;
- 
--	if (x2apic_mode) {
-+	/*
-+	 * Encrypted guests other than SEV-ES (in the future) will need to
-+	 * implement an early way of finding the APIC ID, since they will
-+	 * presumably block direct CPUID too. Be kind to our future selves
-+	 * by warning here instead of just letting them break. Parallel
-+	 * startup doesn't have to be in the first round of enabling patches
-+	 * for any such technology.
-+	 */
-+	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
-+		switch (cc_get_vendor()) {
-+		case CC_VENDOR_AMD:
-+			has_sev_es = true;
-+			break;
-+
-+		default:
-+			pr_info("Disabling parallel bringup due to guest state encryption\n");
-+			return false;
-+		}
-+	}
-+
-+	if (x2apic_mode || has_sev_es) {
- 		if (boot_cpu_data.cpuid_level < 0x0b)
- 			return false;
- 
-@@ -1531,8 +1553,13 @@ static bool prepare_parallel_bringup(void)
- 			return false;
- 		}
- 
--		pr_debug("Using CPUID 0xb for parallel CPU startup\n");
--		smpboot_control = STARTUP_APICID_CPUID_0B;
-+		if (has_sev_es) {
-+			pr_debug("Using SEV-ES CPUID 0xb for parallel CPU startup\n");
-+			smpboot_control = STARTUP_APICID_SEV_ES;
-+		} else {
-+			pr_debug("Using CPUID 0xb for parallel CPU startup\n");
-+			smpboot_control = STARTUP_APICID_CPUID_0B;
-+		}
- 	} else {
- 		/* Without X2APIC, what's in CPUID 0x01 should suffice. */
- 		if (boot_cpu_data.cpuid_level < 0x01)
--- 
-2.25.1
 
+--=20
+-Dionna Glaze, PhD (she/her)
