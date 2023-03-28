@@ -2,143 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5623C6CC0E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF48F6CC0E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233259AbjC1Nar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
+        id S233182AbjC1NbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233098AbjC1Nad (ORCPT
+        with ESMTP id S233119AbjC1NbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:30:33 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13955BDF8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:30:03 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id br6so15798026lfb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:30:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680010202;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XKTtxXBQXNdB3mDvc7ywZLQeEEIHxxzdUGBM34gb4BA=;
-        b=I8xms0l0rNHplSHi9RGLTwbge69HPDturDYNFRl1tfLXCHpa4y2XoX38Ka1qyUMkaN
-         cv25wbwMfJl0YsVfSM03v0dD6iUxuK/4A/g+14/BZxf/Gdo5n0RF7yrGRkh8ZZGGJfUH
-         BpEcmPTZ/ap7X+dADikfLPXa3GMl3fBI86ZeXlf5tClGBx5msFW/Vyq83tkAhoMgSnlX
-         tdYXJDVfe3DV1wpnbfCepRRSBo2jupakArQOwSIRt4RTYICNhYbgfDshBloUqNHcyd5G
-         DDK83XrJ3p+X51CwwIPB6V6etzQFw0o6FBN/suhAqEw+fNBNX2olqYFPHH7WtMvwH4sE
-         hvKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680010202;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XKTtxXBQXNdB3mDvc7ywZLQeEEIHxxzdUGBM34gb4BA=;
-        b=P+swGze/QbY/K1OEUfLKJntWVQtDOtbcGiOLB9dGOiU6EnoXwspFjpXcbGF1dILJG5
-         U3y3TB3L1fLueOihSU+/ZOKGG1KXsAM4/Ulr3m4zb+7aJ7JI+Tvjsr/D04QYb85waj0l
-         aKa70Kx0CVdoXI2BUDJz/x2yJqvp822lLgIINDvILEOvpYQhnILv+C04PePfliG3L44F
-         VhxGAgCsh4wmbnaq+4WD2uRqTLpVautRyMfM0GTNDVzl/5dSr37JU3Nl97cofuFepIJ6
-         AUezbm2TcgyboGYOOO+OM4LWxn+HmImnoMk+ss0Fyo5aErBFCFeizQ1WIhrEEyceKNZA
-         ySkg==
-X-Gm-Message-State: AAQBX9c1qh3JFlmI5LBXFd2UQznRVEc0l5KIO7SZpqqA9NTkunIua/mX
-        qbd3ZdolvhKG8Rux8cRs9Jiqlw==
-X-Google-Smtp-Source: AKy350aQBV4ZvZHbN/PDT47IBCkZUFzZ1c/0U0S8aAiHh6D2eyakbST1XrzpZ1XrLEJ90DUuXhbH3A==
-X-Received: by 2002:a05:6512:3c2:b0:4dd:98c6:ee2 with SMTP id w2-20020a05651203c200b004dd98c60ee2mr4295986lfp.15.1680010201754;
-        Tue, 28 Mar 2023 06:30:01 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id b26-20020a056512025a00b0048a9e899693sm5080765lfo.16.2023.03.28.06.30.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 06:30:01 -0700 (PDT)
-Message-ID: <b1eb5e35-87a5-fd8f-da35-f2303fa29ade@linaro.org>
-Date:   Tue, 28 Mar 2023 15:30:00 +0200
+        Tue, 28 Mar 2023 09:31:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B63DCC17;
+        Tue, 28 Mar 2023 06:30:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87428617BB;
+        Tue, 28 Mar 2023 13:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DF534C433A7;
+        Tue, 28 Mar 2023 13:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680010218;
+        bh=wAOqKXa5k+PpvaTqojjqTGvRwfUjAI5kHX4cGuCo+zg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uYFmZ+KCxb84fhWh6BTAOpT75G1dlq265BRyJH9EwV+5fNqyj3t1NNe3aEKjwz49z
+         /7k2Zjq5O+zK7A0piXnv5r2oPRwUpKWezf/XSaRx4x/92BArDGtSAcOI/iicezlmjB
+         0947QOThA8fpXzkBlpXJdFni1ygDCQIOeY7LmyqK5u1kTBjBvMfy649GCcYY9Yg0za
+         1x2jFsD6J+wRbxLqZmxrUs8F1qIwQ5iou6lt4p+XAU6m7ejMvlW3BOtimwKJ5vnihi
+         adc6QkoW9kYQnYXxxPHqmcjU+cWtGdwQGsoLrfOcR0tpc1xzGtb+xuNkh4r9p5npHt
+         P7oWeNeAswnYA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BE71DE50D77;
+        Tue, 28 Mar 2023 13:30:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 4/5] ARM: dts: qcom: sdx65-mtp: Enable PCIe PHY
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mani@kernel.org,
-        lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
-        manivannan.sadhasivam@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-References: <1679036039-27157-1-git-send-email-quic_rohiagar@quicinc.com>
- <1679036039-27157-5-git-send-email-quic_rohiagar@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1679036039-27157-5-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 0/3] xen/netback: fix issue introduced recently
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168001021877.12098.5546775808625533153.git-patchwork-notify@kernel.org>
+Date:   Tue, 28 Mar 2023 13:30:18 +0000
+References: <20230328131047.2440-1-jgross@suse.com>
+In-Reply-To: <20230328131047.2440-1-jgross@suse.com>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        wei.liu@kernel.org, paul@xen.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        xen-devel@lists.xenproject.org, stable@vger.kernel.org
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This series was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-On 17.03.2023 07:53, Rohit Agarwal wrote:
-> Enable PCIe PHY on SDX65 MTP for PCIe EP. While at it,
-> updating status as last property for each node.
+On Tue, 28 Mar 2023 15:10:44 +0200 you wrote:
+> The fix for XSA-423 introduced a bug which resulted in loss of network
+> connection in some configurations.
 > 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  arch/arm/boot/dts/qcom-sdx65-mtp.dts | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
+> The first patch is fixing the issue, while the second one is removing
+> a test which isn't needed. The third patch is making error messages
+> more uniform.
 > 
-> diff --git a/arch/arm/boot/dts/qcom-sdx65-mtp.dts b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
-> index ed98c83..70720e6 100644
-> --- a/arch/arm/boot/dts/qcom-sdx65-mtp.dts
-> +++ b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
-> @@ -245,6 +245,13 @@
->  	status = "okay";
->  };
->  
-> +&pcie_phy {
-> +	vdda-phy-supply = <&vreg_l1b_1p2>;
-> +	vdda-pll-supply = <&vreg_l4b_0p88>;
-> +
-> +	status = "okay";
-> +};
-> +
->  &qpic_bam {
->  	status = "okay";
->  };
-> @@ -265,8 +272,9 @@
->  };
->  
->  &remoteproc_mpss {
-> -	status = "okay";
->  	memory-region = <&mpss_adsp_mem>;
-> +
-> +	status = "okay";
->  };
->  
->  &usb {
-> @@ -278,14 +286,16 @@
->  };
->  
->  &usb_hsphy {
-> -	status = "okay";
->  	vdda-pll-supply = <&vreg_l4b_0p88>;
->  	vdda33-supply = <&vreg_l10b_3p08>;
->  	vdda18-supply = <&vreg_l5b_1p8>;
-> +
-> +	status = "okay";
->  };
->  
->  &usb_qmpphy {
-> -	status = "okay";
->  	vdda-phy-supply = <&vreg_l4b_0p88>;
->  	vdda-pll-supply = <&vreg_l1b_1p2>;
-> +
-> +	status = "okay";
->  };
+> [...]
+
+Here is the summary with links:
+  - [v2,1/3] xen/netback: don't do grant copy across page boundary
+    (no matching commit)
+  - [v2,2/3] xen/netback: remove not needed test in xenvif_tx_build_gops()
+    https://git.kernel.org/netdev/net/c/8fb8ebf94877
+  - [v2,3/3] xen/netback: use same error messages for same errors
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
