@@ -2,282 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7AB06CBC91
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495246CBC92
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbjC1Kdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
+        id S231970AbjC1Kdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjC1Kdd (ORCPT
+        with ESMTP id S232590AbjC1Kdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:33:33 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F466184;
-        Tue, 28 Mar 2023 03:33:32 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id eh3so47501559edb.11;
-        Tue, 28 Mar 2023 03:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679999611;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xIQtKmY6yWS8CDXvo4BZswBARmIubt6ewMMSD2EbBJg=;
-        b=o4qT9SLghP4XbsHKw9QxW2+RPXLZrIgtQgby5gUwPo/7cOw/RNnLSvEY0bU2OeFUTu
-         ojRw+U4yltSYLTyibFiWX8Xby2z2WnzJz2tS56S7IY5c/BhlGj8M/HX63wOhrSkOPbLo
-         f1V3e9JjUvv77z2hsH2MHZVU3ztkIh0DkoZ07zjQ9VNOwoQet7VJmTG5eezvsK5DZvzN
-         nk8RS7WEHuFmGXseieuMoizjue2HDbHr8jrE3L6jggeZexP4h1/KQ2W8TQcf+FV148ZH
-         gr5xQrLDAjpeoQERSU+c9UxinojfuawU/jH+zHDCi1aF9TdJrkbvkZjXo+jTHm3HxleH
-         0/IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679999611;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xIQtKmY6yWS8CDXvo4BZswBARmIubt6ewMMSD2EbBJg=;
-        b=LZlHeUMxOiWkq2pH2hAPxQE5SXw8GWJ0SU4LF7z9WvSyZqxt+IZHqfwdTsWQKkj2Vg
-         o+Zo28WIgxtnFcm4nYnpsxvacQcez1JfxY9KjPLNtiNT2AxVGj81KFkN3wDt00kUJ+9Q
-         +nIoWtId8qPtEsI8muaEAl1yzt+4V2NaOKnqfbjAgkBTdNAoa94vZTJBodCQUqZcGOyN
-         4cVonrR3zzEL7TGamulibP/gLazyGcDCT7hhUh4m83V9hvnfL23XDsBmXZtBOEYh/v5R
-         gpvLPx/WEIM5BAODYGvAUqcaNSUj+kNskoMGiOtd1kV5PekRuswakUAZujXZsmce5GGO
-         W9ow==
-X-Gm-Message-State: AAQBX9dNIZRP3jN+yK+oqtBH8FyfpAOOK17VnKbTamnVmmFRxalJOspx
-        i8CeRJ+Ur5pMRtfA5XMWdL4=
-X-Google-Smtp-Source: AKy350YvW5QQ8F3pllLvIf5HJCqeL8GzHWuERe1VUWtWMxMrHM8FBwDUAVkg16gdmX1/2PUX6IRVhQ==
-X-Received: by 2002:a17:907:8a8e:b0:944:49ee:aea2 with SMTP id sf14-20020a1709078a8e00b0094449eeaea2mr9148171ejc.71.1679999610846;
-        Tue, 28 Mar 2023 03:33:30 -0700 (PDT)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id hy16-20020a1709068a7000b00931d3509af1sm15025292ejc.222.2023.03.28.03.33.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 03:33:30 -0700 (PDT)
-Message-ID: <2d8f0889da0e3dfa9c1c8fe9da301d54636a2e6d.camel@gmail.com>
-Subject: Re: [PATCH] arm64: remove special treatment for the link order of
- head.o
-From:   Eduard Zingerman <eddyz87@gmail.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <bpf@vger.kernel.org>
-Date:   Tue, 28 Mar 2023 13:33:29 +0300
-In-Reply-To: <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
-References: <20221012233500.156764-1-masahiroy@kernel.org>
-         <ZBovCrMXJk7NPISp@aurel32.net>
-         <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
-         <ZBzAp457rrO52FPy@aurel32.net>
-         <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
-         <CAK7LNASdsWMP2jud4niOkrR5+a2jG-Vfo0XEa63bh3L3W6_t0Q@mail.gmail.com>
-         <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Tue, 28 Mar 2023 06:33:37 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA1E95;
+        Tue, 28 Mar 2023 03:33:35 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 696CE604FF;
+        Tue, 28 Mar 2023 12:33:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1679999613; bh=ISc5UrYNIsjj3V2cg/yKaSxQ/8CIikplimUZX2Ben+o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=m7voJDS6iam9caCvklnd9K1SUP988Pk7i3pxARY6zB/+Qv3qw0J88eOD1mLJGW5Ox
+         LhUJ6c5X0tpDZ7MYOWl9TeBZRm1ZAq6wj38T2PzP2GaCssEI2hjD75/LpoXNUyvRfB
+         bJ6NKHHqoCUDZfTfOiKP0ViCSsiG3EiPS4Ytx2K6Ho/zMHM/b4KCK9sx84ViJ3gZP/
+         NiPIR1IdKFKNMjeWbyiO9Zdsvs+jH5PN7nYvGxL5VNq3y0ceyD200mjX2e4Ex/gXZi
+         du2Q6a0q5jUfyBHC81rUdKOgi/HA+ZS+ssW14UEo583DfXnfMrY7JIidx4Xe23+PLh
+         KG+8coxns30Tg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id EHf0-TFIbBiz; Tue, 28 Mar 2023 12:33:31 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 81D7E604FE;
+        Tue, 28 Mar 2023 12:33:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1679999611; bh=ISc5UrYNIsjj3V2cg/yKaSxQ/8CIikplimUZX2Ben+o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BAa1zR6wEWABATrrYbVdZ1KyyZhdf9Wryiq86CH/TlgEKjBAI/16zkefCsLdLIJ03
+         YhsMTZ8/dPY9cV/EPVaC8TAdHLOyfPIP0978G6mMPRVvMZw0Di/iJIlySZJ7HJPlBu
+         8usGFGSIcKC4PO9JKfSQ+4HgzwW6YHrN2Ff5iEkFAKbgAnsa6CaLsIGkAv+RzFyUTB
+         azy8yh7kMhTORmav3TK9wNMfF3mH+7GMKkCC0JRh/QT8SWJDZ2wtmcHbfdjCYxPnkF
+         WCM7+P1T+n+47SI7mur/E6/n1Z91tXKp5kj/HLQMONY0SoWvKJ4wNEgif0qULoibjH
+         PUbYM+unWi9yw==
+Message-ID: <fa82b641-365c-c1ca-1fec-1826df63db64@alu.unizg.hr>
+Date:   Tue, 28 Mar 2023 12:33:30 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [BUG] selftests/firmware: copious kernel memory leaks in
+ test_fw_run_batch_request()
+Content-Language: en-US, hr
+To:     Dan Carpenter <error27@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <97e284be-5018-9d18-feb2-7ec4b08c06fd@alu.unizg.hr>
+ <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-03-25 at 20:42 +0900, Masahiro Yamada wrote:
-[...]
-> > Strange.
-> >=20
-> > I used the .config file Aurelien provided, but
-> > I still cannot reproduce this issue.
-> >=20
-> >=20
-> > The vmlinux size is small
-> > as-is in the current mainline.
-> >=20
-> >=20
-> >=20
-> > [mainline]
-> >=20
-> >=20
-> > masahiro@zoe:~/ref/linux(master)$ git log --oneline -1
-> > 65aca32efdcb (HEAD -> master, origin/master, origin/HEAD) Merge tag
-> > 'mm-hotfixes-stable-2023-03-24-17-09' of
-> > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-size  vmlinux
-> >    text    data     bss     dec     hex filename
-> > 24561282 8186912 622032 33370226 1fd3072 vmlinux
-> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-readelf -S
-> > vmlinux | grep -A1 BTF
-> >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
-> >        000000000048209c  0000000000000000   A       0     0     1
-> >   [16] .BTF_ids          PROGBITS         ffff8000096427a4  016527a4
-> >        0000000000000a1c  0000000000000000   A       0     0     1
-> >=20
-> >=20
-> >=20
-> >=20
-> > [mainline + revert 994b7ac]
-> >=20
-> > masahiro@zoe:~/ref/linux2(testing)$ git log --oneline -2
-> > 856c80dd789c (HEAD -> testing) Revert "arm64: remove special treatment
-> > for the link order of head.o"
-> > 65aca32efdcb (origin/master, origin/HEAD, master) Merge tag
-> > 'mm-hotfixes-stable-2023-03-24-17-09' of
-> > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-size  vmlinux
-> >    text    data     bss     dec     hex filename
-> > 24561329 8186912 622032 33370273 1fd30a1 vmlinux
-> > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-readelf -S
-> > vmlinux | grep -A1 BTF
-> >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
-> >        00000000004820cb  0000000000000000   A       0     0     1
-> >   [16] .BTF_ids          PROGBITS         ffff8000096427d4  016527d4
-> >        0000000000000a1c  0000000000000000   A       0     0     1
-> >=20
-> >=20
-> >=20
-> > I still do not know what affects reproducibility.
-> > (compiler version, pahole version, etc. ?)
-> >=20
-> >=20
-> >=20
-> >=20
-> > Aurelien used GCC 12 + binutils 2.40, but
-> > my toolchain is a bit older.
-> >=20
-> >=20
-> >=20
-> > FWIW, I tested this on Ubuntu 22.04LTS.
-> >=20
-> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-gcc --version
-> > aarch64-linux-gnu-gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
-> > Copyright (C) 2021 Free Software Foundation, Inc.
-> > This is free software; see the source for copying conditions.  There is=
- NO
-> > warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURP=
-OSE.
-> >=20
-> > masahiro@zoe:~/ref/linux(master)$ pahole --version
-> > v1.22
-> >=20
-> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-as --version
-> > GNU assembler (GNU Binutils for Ubuntu) 2.38
-> > Copyright (C) 2022 Free Software Foundation, Inc.
-> > This program is free software; you may redistribute it under the terms =
-of
-> > the GNU General Public License version 3 or later.
-> > This program has absolutely no warranty.
-> > This assembler was configured for a target of `aarch64-linux-gnu'.
->=20
->=20
->=20
->=20
->=20
-> I did the same things in Deiban sid
-> in order to use newer versions of tools.
+Hi, Dan,
 
+On 3/28/23 12:06, Dan Carpenter wrote:
+> On Tue, Mar 28, 2023 at 11:23:00AM +0200, Mirsad Todorovac wrote:
+>> The leaks are in chunks of 1024 bytes (+ overhead), but so far I could not
+>> reproduce w/o root privileges, as tests refuse to run as unprivileged user.
+>> (This is not the proof of non-existence of an unprivileged automated exploit
+>> that would exhaust the kernel memory at approx. rate 4 MB/hour on our setup.
+>>
+>> This would mean about 96 MB / day or 3 GB / month (of kernel memory).
+> 
+> This is firmware testing stuff.  In the real world people aren't going
+> to run their test scripts in a loop for days.
 
-Hi Masahiro,
+Thank you for making that clear.
 
-An upgrade from gcc 11 to gcc 12, BTF section increase and a number of
-duplicate IDs reported by resolve_btfids matches the description of
-the following thread:
+> There is no security implications.  This is root only.  Also if the
+> user could load firmware then that would be the headline.  Once someone
+> is can already load firmware then who cares if they leak 100MB per day?
 
-https://lore.kernel.org/bpf/Y%2FP1yxAuV6Wj3A0K@google.com/
+Yes, this is correct, but I just don't like leaks even in the userland programs.
+But that might be just me ...
 
-The issue is caused by change in GNU assembler DWARF generation.
-I've sent a patch to fix it a few weeks ago and it is merged in
-dwarves master:
+IMHO the purpose of the tests is to find and fix bugs. There are probably
+more critical issues, but pick seemed manageable.
 
-a9498899109d ("dwarf_loader: Fix for BTF id drift caused by adding unspecif=
-ied types")
+> It looks like if you call trigger_batched_requests_store() twice in a
+> row then it will leak memory.  Definitely test_fw_config->reqs is leaked.
+> That's different from what the bug report is complaining about, but the
+> point is that there are some obvious leaks.  It looks like you're
+> supposed to call trigger_batched_requests_store() in between runs?
+> 
+> There are other races like config_num_requests_store() should hold the
+> mutex over the call to test_dev_config_update_u8() instead of dropping
+> and retaking it.
 
-Could you please grab a fresh version of dwarves from:
+Please consider the scope of the void *test_buf in lines 836-859 and whether the
+fact that test_buf is not kfree()-ed on (req->fw != NULL) and its going out of the
+scope affects this issue.
 
-git@github.com:acmel/dwarves.git
+I saw there is an additional race condition involved since the exact count of leaks
+is not always the same (not deterministic), but I could not figure that out by myself.
 
-compile 'pahole' and try with?
+Thank you again very much for your quick reply.
 
-Thanks,
-Eduard
+BTW, I can confirm that the leak still exists in 6.3.0-rc4-00025-g3a93e40326c8
+build.
 
->=20
->=20
->=20
-> Yup, I saw a huge increase in the .BTF section,
-> and observed the difference w/wo 994b7ac.
->=20
-> masahiro@3e9802d667e3:~/ref/linux2$ aarch64-linux-gnu-readelf -S
-> vmlinux | grep -A1 BTF
->   [15] .BTF              PROGBITS         ffff8000091d26c4  011e26c4
->        000000000093e626  0000000000000000   A       0     0     1
->   [16] .BTF_ids          PROGBITS         ffff800009b10cec  01b20cec
->        0000000000000a1c  0000000000000000   A       0     0     1
->=20
->=20
-> I guess some tool might be affecting this.
-> Even with 994b7ac reverted, the .BTF section
-> is much bigger.
->=20
->=20
-> At the same time, I saw a ton of warnings
-> while building BTF.
->=20
->=20
-> masahiro@3e9802d667e3:~/ref/linux2$ cat /etc/os-release
-> PRETTY_NAME=3D"Debian GNU/Linux bookworm/sid"
-> NAME=3D"Debian GNU/Linux"
-> VERSION_CODENAME=3Dbookworm
-> ID=3Ddebian
-> HOME_URL=3D"https://www.debian.org/"
-> SUPPORT_URL=3D"https://www.debian.org/support"
-> BUG_REPORT_URL=3D"https://bugs.debian.org/"
->=20
->=20
->=20
->   LD      vmlinux
->   BTFIDS  vmlinux
-> WARN: multiple IDs found for 'task_struct': 177, 16690 - using 177
-> WARN: multiple IDs found for 'file': 517, 16712 - using 517
-> WARN: multiple IDs found for 'vm_area_struct': 524, 16714 - using 524
-> WARN: multiple IDs found for 'inode': 586, 16773 - using 586
-> WARN: multiple IDs found for 'path': 618, 16802 - using 618
-> WARN: multiple IDs found for 'task_struct': 177, 17267 - using 177
-> WARN: multiple IDs found for 'file': 517, 17312 - using 517
-> WARN: multiple IDs found for 'vm_area_struct': 524, 17315 - using 524
-> WARN: multiple IDs found for 'seq_file': 1029, 17376 - using 1029
-> WARN: multiple IDs found for 'inode': 586, 17494 - using 586
-> WARN: multiple IDs found for 'path': 618, 17523 - using 618
-> WARN: multiple IDs found for 'cgroup': 704, 17532 - using 704
-> WARN: multiple IDs found for 'task_struct': 177, 18652 - using 177
-> WARN: multiple IDs found for 'file': 517, 18704 - using 517
-> WARN: multiple IDs found for 'vm_area_struct': 524, 18707 - using 524
-> WARN: multiple IDs found for 'seq_file': 1029, 18781 - using 1029
-> WARN: multiple IDs found for 'inode': 586, 18911 - using 586
-> WARN: multiple IDs found for 'path': 618, 18940 - using 618
-> WARN: multiple IDs found for 'cgroup': 704, 18949 - using 704
-> WARN: multiple IDs found for 'task_struct': 177, 20514 - using 177
-> WARN: multiple IDs found for 'file': 517, 20515 - using 517
-> WARN: multiple IDs found for 'vm_area_struct': 524, 20541 - using 524
-> WARN: multiple IDs found for 'inode': 586, 20595 - using 586
-> WARN: multiple IDs found for 'path': 618, 20624 - using 618
-> WARN: multiple IDs found for 'cgroup': 704, 20639 - using 704
-> WARN: multiple IDs found for 'seq_file': 1029, 20801 - using 1029
->    ...
->=20
->=20
->=20
->=20
-> I am not sure whether these warnings are related to
-> the current issue or not.
->=20
->=20
-> I did not look into it any further.
-> I may not be seeing a sane build result.
->=20
->=20
+Best regards,
+Mirsad
 
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+
+"Something is quickly approaching ... Will it be friends with me?"
