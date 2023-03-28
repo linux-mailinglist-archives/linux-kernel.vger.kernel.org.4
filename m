@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 646676CCD61
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 00:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4596CCD63
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 00:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbjC1WiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 18:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
+        id S229782AbjC1WiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 18:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjC1WiL (ORCPT
+        with ESMTP id S229706AbjC1WiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 18:38:11 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D052D4D
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:38:05 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id s20so14187176ljp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:38:05 -0700 (PDT)
+        Tue, 28 Mar 2023 18:38:13 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DBD2681
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:38:08 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id s20so14187246ljp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:38:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680043084;
+        d=linaro.org; s=google; t=1680043086;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WtFbj44YPSQR/4fSgUx5IndQxVE/oG1HTaVeharokM4=;
-        b=D0zPtyHkNeoJ9RqKP32Oa+YqC5WmMueAOAc4YAhJOMoxzbWyFjeNQmAlnlTMNYOaM+
-         QWmtYwYrj6NIkNHIQT0FojJo7bjonvqDOYUujM+67t9y0QwXhsWISlY3BVLiXgTBzvUC
-         v9G4fqliEJurzIFqkQJLmN8jA03v5QvW8+Y7CjOUWFZ7weQPTlWpYRoShXQ42r/q2mNq
-         InLjLLAvUs36JR/CKbwLSL4vPp+R0TJVKTtuvcWYOcHGBk1EO8YlG6gAZIwlyLVJhs3k
-         rMlBy4Wj8Tv8cOuGiWgZLl+6HLtn7zOREh6JV2a6Mu38+ELZsSnGiGK81mNxOlK6DW8C
-         D/Pw==
+        bh=NZTRJ0TTqpgk5AjNv95VOIk7xe/ymEV+pZnyuKfYsGM=;
+        b=MeyWE82b5nRejN5xQ6xs/nTf4qV/VYG55PfiMgUVuECOnfrCeGEAFUAdAfV7a3QVWS
+         F0oR+OhDiAoLm2+K2dI/DEXjvwQ1s8LXB6+6RK8cIq4iRN32sY/GyCnve8TTBKjgQuEc
+         Kg4bdvcZje4GD0Cg/jjCR8WTPdU/hJrE5TBK/u6zVMrefCe+x/aZTojiP0sc6XhSiu2X
+         Iz1w21O5qJkrRNU5fjGBRn8903bqEruNkSm8TxTgugVHYuw1Q3kBSSz9GH7SHiXYvf+P
+         bPJs+IY75bLsmrhlPu2nj8whMLi7mk/qDRAe2UEg92EBynFLjmeDMoZ5EIvPTosSP5LC
+         6Vog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680043084;
+        d=1e100.net; s=20210112; t=1680043086;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WtFbj44YPSQR/4fSgUx5IndQxVE/oG1HTaVeharokM4=;
-        b=dS5/r52nupWFZTQJ3zzwdyNC6JsyAKEzWOBRKxdmHu9LgE5p/OUwZt5x0BqNMmHgyV
-         OMEwz+gbPNAo3OYCxzTeYkF5u2YzD32JZFWf3TBqLvoKML5r+nWwaEESx+g7t+e1UwYX
-         9/YXXXBkHm2pGLLpFwJ/wAH4P0p45WvBtJH5VUqjpLs9PyxycC+iRDImk4yCf8csXQA0
-         YqdKSc3U9TQ2IqFCD8xoAn0VuOczl/0XhyOmyqo24MYtZIUXLs1gE8FaBB7oN26DPsCB
-         MYR0yg4E/LNaSxcZIzSGuc11WqgJCvXavJ7hvjSwzyFRQRFPvkFpNpFmO4rA4d3uiB1Z
-         dLIA==
-X-Gm-Message-State: AAQBX9dIGRSMm2Mybr2KjbrFC/IL1pdKYjwZWAi6Ypx7MYePVApZqC8c
-        /NEuzsnrX982TRZ2y1s7yLG3KMY03MbemHofnSQ=
-X-Google-Smtp-Source: AKy350ZR+mT4CfQ2Ri1gunD53Flr5HdyR228sB0xZCr0s2ILhY5VdzrYf4HYOKAfKXHACX/9j1SYRg==
-X-Received: by 2002:a2e:82d7:0:b0:298:9e64:c916 with SMTP id n23-20020a2e82d7000000b002989e64c916mr4837634ljh.17.1680043083914;
-        Tue, 28 Mar 2023 15:38:03 -0700 (PDT)
+        bh=NZTRJ0TTqpgk5AjNv95VOIk7xe/ymEV+pZnyuKfYsGM=;
+        b=FMHN7En2viaF8Ic/1xbyc08pPurgnYNQD1W1OMuu067gtdBL5Dlp1G0wqRWUrf9dEG
+         WJBK9Uem+ujuIgqwfJR1gijLgvb5KqWiYuU26xzsLRGQuYLnIn4olZwd7EfP6P5gi6fC
+         sBGcZemBpE3GkDr6ttil0Fn6z+m3yfLqxLrZCHGDcGrLPsYV/YZNU73RddjPUw42zAWj
+         REaK2bzR39SYQdTnFWWUEz8bJbuXQPnt1FSydOlGjkmH4wzCAOJNKUAH+k/coY/I9HMc
+         eU27B+XfLh5fDDdvYVDCAbAAULHZV+iVSFu9q3Qp0CxdVp+ssnwPGr2ONK2eLM61o2tq
+         7P9Q==
+X-Gm-Message-State: AAQBX9cRevpwfxHsV5tDWz8lj9QE8aKxGJYjPA13aWxC1ElraWHKn6Sb
+        gYmVgLx4Nkgy1E+EH/wahB574A==
+X-Google-Smtp-Source: AKy350ZZ6ELOP4cO/h4cwM1q/AaisZK8fOKm7ULEBLxVANiD4pFWjDs6CEtRSDHRPCZDhKNGppC+8g==
+X-Received: by 2002:a2e:3813:0:b0:299:9de5:2f08 with SMTP id f19-20020a2e3813000000b002999de52f08mr5119053lja.6.1680043086182;
+        Tue, 28 Mar 2023 15:38:06 -0700 (PDT)
 Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id t22-20020a2e9d16000000b002934d555783sm5199522lji.6.2023.03.28.15.38.03
+        by smtp.gmail.com with ESMTPSA id t22-20020a2e9d16000000b002934d555783sm5199522lji.6.2023.03.28.15.38.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 15:38:03 -0700 (PDT)
+        Tue, 28 Mar 2023 15:38:05 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
         Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] drm/msm/dp: Clean up handling of DP AUX interrupts
-Date:   Wed, 29 Mar 2023 01:37:47 +0300
-Message-Id: <168004255468.1060915.8365675966800695901.b4-ty@linaro.org>
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/msm/dpu: Fix bit-shifting UB in DPU_HW_VER() macro
+Date:   Wed, 29 Mar 2023 01:37:50 +0300
+Message-Id: <168004255463.1060915.9592020077874857953.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230126170745.v2.1.I90ffed3ddd21e818ae534f820cb4d6d8638859ab@changeid>
-References: <20230126170745.v2.1.I90ffed3ddd21e818ae534f820cb4d6d8638859ab@changeid>
+In-Reply-To: <20230306090633.65918-1-geert+renesas@glider.be>
+References: <20230306090633.65918-1-geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -82,28 +81,26 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 26 Jan 2023 17:09:12 -0800, Douglas Anderson wrote:
-> The DP AUX interrupt handling was a bit of a mess.
-> * There were two functions (one for "native" transfers and one for
->   "i2c" transfers) that were quite similar. It was hard to say how
->   many of the differences between the two functions were on purpose
->   and how many of them were just an accident of how they were coded.
-> * Each function sometimes used "else if" to test for error bits and
->   sometimes didn't and again it was hard to say if this was on purpose
->   or just an accident.
-> * The two functions wouldn't notice whether "unknown" bits were
->   set. For instance, there seems to be a bit "DP_INTR_PLL_UNLOCKED"
->   and if it was set there would be no indication.
-> * The two functions wouldn't notice if more than one error was set.
+On Mon, 06 Mar 2023 10:06:33 +0100, Geert Uytterhoeven wrote:
+> With gcc-5 and CONFIG_UBSAN_SHIFT=y:
+> 
+>     drivers/gpu/drm/msm/msm_mdss.c: In function 'msm_mdss_enable':
+>     drivers/gpu/drm/msm/msm_mdss.c:296:2: error: case label does not reduce to an integer constant
+>       case DPU_HW_VER_800:
+>       ^
+>     drivers/gpu/drm/msm/msm_mdss.c:299:2: error: case label does not reduce to an integer constant
+>       case DPU_HW_VER_810:
+>       ^
+>     drivers/gpu/drm/msm/msm_mdss.c:300:2: error: case label does not reduce to an integer constant
+>       case DPU_HW_VER_900:
+>       ^
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] drm/msm/dp: Clean up handling of DP AUX interrupts
-      https://gitlab.freedesktop.org/lumag/msm/-/commit/9dd5895a5687
-[2/2] drm/msm/dp: Return IRQ_NONE for unhandled interrupts
-      https://gitlab.freedesktop.org/lumag/msm/-/commit/f185c87fa119
+[1/1] drm/msm/dpu: Fix bit-shifting UB in DPU_HW_VER() macro
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/c8f370bde5b9
 
 Best regards,
 -- 
