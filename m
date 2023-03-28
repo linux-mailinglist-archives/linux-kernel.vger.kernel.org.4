@@ -2,122 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD746CBB86
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02DA16CBB8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233022AbjC1JvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
+        id S232132AbjC1JxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232789AbjC1Jug (ORCPT
+        with ESMTP id S232656AbjC1Jwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:50:36 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246E07283
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:50:16 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id y19so6838161pgk.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679997016;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=savA42+t30mTd9rOjIgnp5RGjWHZtgVT9nH0jQI5MeU=;
-        b=Z2MdKaFIakeP5bVLEtuQ/us2JLrUJZEGjx1QY2SUyJzAU1+gJoezn/+zJm27rwIt1S
-         8JzW5WpiJbp/o95EljAyyw6k0rNcjZ1nYMu4i03LDW8uKODSa/feaZX7sYkEqiw3b877
-         fwIBHfxMaEqMzjOKIibe+LCgM3vDE6nBVDMLy05lDUjWuzSx3ycvIzxal/tgSmPAKpeL
-         HXYamUkVgJ3gI6CwppqN7qbloUyI7uSqEBkDSWkDxRiyhOLWWgLLYrQDoiTd0fCL1lyU
-         jY7lNZwmDKRM8E11tG+8e7Jdy9oS3HxKdTRCcHFWYr4KJd/SVHhooLNWMBEhlBwPn5KF
-         6/2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679997016;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=savA42+t30mTd9rOjIgnp5RGjWHZtgVT9nH0jQI5MeU=;
-        b=Cworj7gdd1jZSVuW+V/ZjS66Zx5a9rkgKR23BH3fMJhBk7kOdmGwWsd42xWp9ps6c3
-         GYwVKdF7oNq4Lmbd7akn7yCWcUN08BZI4VhEkODLPhroF6HDJ/MpX45PIKfK6ZvNu1mI
-         aPiBI2aBgTal/7sEQwFTPb9cPtVMxHnCtdS81/fnj5wSRDDtVEhfufSkeoVKDBvlwD0F
-         lvTdKXRodlB05i/ItixPfHxtDVfW7Y2Bm9AMtj9l2peWGcYGq7gK8URQSTIwY5r+CLi0
-         bbheUf3fiKWn2vlGsyDM73UaSaJkArTQ+NwnYssi+3CkXmJ8H20VPAaAmKvFSum72xW1
-         FDvg==
-X-Gm-Message-State: AAQBX9dAPdoVoUofTl63co68bZHXPdMrUPd50Ss+8tkQeyFb0PMmMN8C
-        rzoMbDGcyirdX99hFLFUJatQ
-X-Google-Smtp-Source: AKy350ZYmbuWMEQRc+4NP1mt32BUkgR6DbHCPdiXkQ6eZdQJM+4FyDHCLgrMUvJGdj40W9b61JYQpA==
-X-Received: by 2002:aa7:9402:0:b0:62b:107d:c3cb with SMTP id x2-20020aa79402000000b0062b107dc3cbmr12149943pfo.33.1679997016151;
-        Tue, 28 Mar 2023 02:50:16 -0700 (PDT)
-Received: from thinkpad ([117.202.191.80])
-        by smtp.gmail.com with ESMTPSA id d1-20020aa78141000000b0062608a7557fsm20702468pfn.75.2023.03.28.02.50.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 02:50:15 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 15:20:09 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
+        Tue, 28 Mar 2023 05:52:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25D472AB;
+        Tue, 28 Mar 2023 02:51:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57BA261630;
+        Tue, 28 Mar 2023 09:51:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B250BC433EF;
+        Tue, 28 Mar 2023 09:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679997101;
+        bh=IeUoFJsAwrYDiV9XdFo6igFhnSlqKPAMMJqeh4qtdc4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p2cTDIPDDT+JT8iVO9/oDNpMHwO3quM7caq//p3/vN+Noit24Eb5L+Po1Yrp2kGt+
+         CquPJOSo38v1miL/GhoQUJa0AMz6Ab0KMqiW4nlf/zsO9+HJcJpqkT7djb7T+Ly53Y
+         UtKaANYFP3bsks3tYGN3JtZE/DAeaHn+vUMMPkCFzRIvwFRQHJfWiO2C7o1Pqqsi+6
+         +/3134tB122RUrUMAYpIuZU0BU2Vj2/UjJ5yCyI6ljiCtqhzWusMWW0UlGB8s7EH0A
+         Z2zfLMq42PvmtjGcX61xOOngKb+1hmtPjotDVUmNYqQnL6XXLF44eKA+bNIOEMkZwD
+         /f7MwuMvMWNbQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ph5zd-0004dS-3v; Tue, 28 Mar 2023 11:51:53 +0200
+Date:   Tue, 28 Mar 2023 11:51:53 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
         gregkh@linuxfoundation.org, mathias.nyman@intel.com,
         konrad.dybcio@linaro.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 4/5] usb: dwc3: qcom: Clear pending interrupt before
- enabling wake interrupt
-Message-ID: <20230328095009.GC5695@thinkpad>
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 3/5] usb: dwc3: qcom: Fix null ptr access during
+ runtime_suspend()
+Message-ID: <ZCK4uZCrbVZ/HfRq@hovoldconsulting.com>
 References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
- <20230325165217.31069-5-manivannan.sadhasivam@linaro.org>
- <ZCKzQA1YhXQ/6n3L@hovoldconsulting.com>
+ <20230325165217.31069-4-manivannan.sadhasivam@linaro.org>
+ <ZCKyFEc087xoypdo@hovoldconsulting.com>
+ <20230328094718.GB5695@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCKzQA1YhXQ/6n3L@hovoldconsulting.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230328094718.GB5695@thinkpad>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 11:28:32AM +0200, Johan Hovold wrote:
-> On Sat, Mar 25, 2023 at 10:22:16PM +0530, Manivannan Sadhasivam wrote:
-> > It is possible that there may be a pending interrupt logged into the dwc IP
-> > while the interrupts were disabled in the driver. And when the wakeup
-> > interrupt is enabled, the pending interrupt might fire which is not
-> > required to be serviced by the driver.
+On Tue, Mar 28, 2023 at 03:17:18PM +0530, Manivannan Sadhasivam wrote:
+> On Tue, Mar 28, 2023 at 11:23:32AM +0200, Johan Hovold wrote:
+> > On Sat, Mar 25, 2023 at 10:22:15PM +0530, Manivannan Sadhasivam wrote:
+
+> > >  static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
+> > >  {
+> > > +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> > >  	u32 val;
+> > >  	int i, ret;
+> > >  
+> > > -	if (qcom->is_suspended)
+> > > +	if (qcom->is_suspended || !dwc)
+> > >  		return 0;
 > > 
-> > So always clear the pending interrupt before enabling wake interrupt.
+> > I think we should try to keep the layering violations confined to the
+> > helper functions. So how about amending dwc3_qcom_is_host() and check
+> > for NULL before dereferencing the xhci pointer?
 > > 
-> > Cc: stable@vger.kernel.org # 5.20
-> > Fixes: 360e8230516d ("usb: dwc3: qcom: Add helper functions to enable,disable wake irqs")
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/usb/dwc3/dwc3-qcom.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > index bbf67f705d0d..f1059dfcb0e8 100644
-> > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > @@ -346,6 +346,8 @@ static void dwc3_qcom_enable_wakeup_irq(int irq, unsigned int polarity)
-> >  	if (!irq)
-> >  		return;
-> >  
-> > +	irq_set_irqchip_state(irq, IRQCHIP_STATE_PENDING, 0);
-> > +
+> > If the dwc3 driver hasn't probed yet, we're clearly not in host mode
+> > either...
 > 
-> This looks like a hack (and a layering violation). Note that there are
-> no other non-irqchip drivers calling this function.
+> Well, that's what I initially did but then I reverted to this approach as
+> returning true/false from dwc3_qcom_is_host() based on the pointer availability
+> doesn't sound right.
 > 
+> For example, if we return true then it implies that the driver is in host mode
+> which is logically wrong (before dwc3 probe) even though there is no impact.
 
-I can check if this can be achieved by clearing some dwc specific registers.
+No, you should return false of course as we are *not* in host mode as I
+mentioned above.
 
-- Mani
-
-> >  	if (polarity)
-> >  		irq_set_irq_type(irq, polarity);
-> 
-> Johan
-
--- 
-மணிவண்ணன் சதாசிவம்
+Johan
