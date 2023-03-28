@@ -2,240 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F07C6CB8C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579006CB8CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232470AbjC1HyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 03:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
+        id S232499AbjC1Hzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 03:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjC1HyG (ORCPT
+        with ESMTP id S231932AbjC1Hza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 03:54:06 -0400
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD5F40EA
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:53:48 -0700 (PDT)
-Received: by mail-il1-f206.google.com with SMTP id o8-20020a056e0214c800b00325f0a48812so5175129ilk.13
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:53:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679990027;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1SlVrSmVb4xLt28lrc5slQniv6oNhQ+2/mxD6CxBMnM=;
-        b=zRdCtwwmi4OcdrJlZaI6aOgsjeIi88dy7uV5XpbrXlYEqU7F4ve4CA9QL3bLbd7Cvg
-         xsG6iftUNaGsg4vw9lo6YCnlYkH6QMJq2dI8SpQbRm996eTqrZRICIvF+qKXie5mUIzn
-         aQRoJmbd9UB2DzSYCMn0h8Wa4U4sgDwNiFpW5n7uiDMxfpxpB/7IO6zZJVmTm22djV16
-         qOJP2rzK6HZlQEvXU3fq2jHqp+/h34t1yjAccXAtMgXPRxbGfVPQkxC8mG75gCDmGfpo
-         VL+44KNygVmWOwTiwR79GmZXyhNwtE4Gev5us203jNqTLm3ah6BJxa4yiBgQA2KPC46D
-         q56A==
-X-Gm-Message-State: AO0yUKXTrtzIlz4U77/UP/APWLDwXig3TWHbIbM8WfW9x4GqHFhSDd+u
-        pSEBg55eyEM5GuOy2Q029WR+7MHVDcsogrXzMLxXWcfeXNi2
-X-Google-Smtp-Source: AK7set9w0J7tYYWkCa59KAloy9lJH8PRgS4e+UfBX0Ci5HFNAeOkbDqka+QmM0mYaMf4xOzO3vsSo/lX0wTW79iAyooUuv0bhkt2
+        Tue, 28 Mar 2023 03:55:30 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE2E358E;
+        Tue, 28 Mar 2023 00:55:26 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Pm1v06XbSz9xFr3;
+        Tue, 28 Mar 2023 15:45:32 +0800 (CST)
+Received: from [10.48.131.174] (unknown [10.48.131.174])
+        by APP2 (Coremail) with SMTP id GxC2BwAX510+nSJk3K7UAQ--.16527S2;
+        Tue, 28 Mar 2023 08:54:49 +0100 (CET)
+Message-ID: <4268fa4e-4f0f-a2f6-a2a5-5b78ca4a073d@huaweicloud.com>
+Date:   Tue, 28 Mar 2023 09:54:35 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a02:b0c1:0:b0:406:3588:9456 with SMTP id
- w1-20020a02b0c1000000b0040635889456mr5541455jah.0.1679990027693; Tue, 28 Mar
- 2023 00:53:47 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 00:53:47 -0700
-In-Reply-To: <000000000000b62cdb05f7dfab8b@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d3b32005f7f12805@google.com>
-Subject: Re: [syzbot] [ext4?] KASAN: slab-use-after-free Read in ext4_convert_inline_data_nolock
-From:   syzbot <syzbot+db6caad9ebd2c8022b41@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC v1 3/4] swiotlb: Allow dynamic allocation of bounce buffers
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huawei.com>, petr@tesarici.cz,
+        Alexander Graf <graf@amazon.com>
+References: <cover.1679309810.git.petr.tesarik.ext@huawei.com>
+ <0334a54332ab75312c9de825548b616439dcc9f5.1679309810.git.petr.tesarik.ext@huawei.com>
+ <20230328040724.GB25506@lst.de>
+From:   Petr Tesarik <petrtesarik@huaweicloud.com>
+In-Reply-To: <20230328040724.GB25506@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwAX510+nSJk3K7UAQ--.16527S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZr4DWFy8ZFWxAFWDZryftFb_yoWrtF1kpF
+        WfKw4YvrWDJr1Iyry8Cw18W3W0ywsxAFy5GrySgr1avw45WryF9F1SkFW5Wa9rCwn3Xw1j
+        qr4Yvw4kAas8Ja7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UZ18PUUUUU=
+X-CM-SenderInfo: hshw23xhvd2x3n6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 3/28/2023 6:07 AM, Christoph Hellwig wrote:
+> [adding Alex as he has been interested in this in the past]
+> 
+> On Mon, Mar 20, 2023 at 01:28:15PM +0100, Petr Tesarik wrote:
+>> Second, on the Raspberry Pi 4, swiotlb is used by dma-buf for pages
+>> moved from the rendering GPU (v3d driver), which can access all
+>> memory, to the display output (vc4 driver), which is connected to a
+>> bus with an address limit of 1 GiB and no IOMMU. These buffers can
+>> be large (several megabytes) and cannot be handled by SWIOTLB,
+>> because they exceed maximum segment size of 256 KiB. Such mapping
+>> failures can be easily reproduced on a Raspberry Pi4: Starting
+>> GNOME remote desktop results in a flood of kernel messages like
+>> these:
+> 
+> Shouldn't we make sure dma-buf allocates the buffers for the most
+> restricted devices, and more importantly does something like a dma
+> coherent allocation instead of a dynamic mapping of random memory?
+> 
+> While a larger swiotlb works around this I don't think this fixes the root
+> cause.
 
-HEAD commit:    3a93e40326c8 Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1034aed5c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9c35b3803e5ad668
-dashboard link: https://syzkaller.appspot.com/bug?extid=db6caad9ebd2c8022b41
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11a2cd05c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=158e1f29c80000
+I tend to agree here. However, it's the DMABUF design itself that causes
+some trouble. The buffer is allocated by the v3d driver, which does not
+have the restriction, so the DMA API typically allocates an address
+somewhere near the 4G boundary. Userspace then exports the buffer, sends
+it to another process as a file descriptor and imports it into the vc4
+driver, which requires DMA below 1G. In the beginning, v3d had no idea
+that the buffer would be exported to userspace, much less that it would
+be later imported into vc4.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/65fe3e7679b9/disk-3a93e403.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/169220ad146c/vmlinux-3a93e403.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6f5e2d192c51/bzImage-3a93e403.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/343663881b01/mount_0.gz
+Anyway, I suspected that the buffers need not be imported into the vc4
+driver (also hinted by Eric Anholt in a 2018 blog post [1]), and it
+seems I was right. I encountered the issue with Ubuntu 22.10; I
+installed latest openSUSE Tumbleweed yesterday, and I was not able to
+reproduce the issue there, most likely because the Mesa drivers have
+been fixed meanwhile. This makes the specific case of the Raspberry Pi 4
+drivers moot. The issue may still affect other combinations of drivers,
+but I don't have any other real-world example ATM.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+db6caad9ebd2c8022b41@syzkaller.appspotmail.com
+[1] https://anholt.github.io/twivc4/2018/02/12/twiv/
 
-EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: none.
-==================================================================
-BUG: KASAN: slab-out-of-bounds in ext4_read_inline_data fs/ext4/inline.c:199 [inline]
-BUG: KASAN: slab-out-of-bounds in ext4_convert_inline_data_nolock+0x31a/0xd80 fs/ext4/inline.c:1204
-Read of size 20 at addr ffff88807645e1a3 by task syz-executor378/5075
+>> 1. The value is limited to ULONG_MAX, which is too little both for
+>>    physical addresses (e.g. x86 PAE or 32-bit ARM LPAE) and DMA
+>>    addresses (e.g. Xen guests on 32-bit ARM).
+>>
+>> 2. Since buffers are currently allocated with page granularity, a
+>>    PFN can be used instead. However, some values are reserved by
+>>    the maple tree implementation. Liam suggests to use
+>>    xa_mk_value() in that case, but that reduces the usable range by
+>>    half. Luckily, 31 bits are still enough to hold a PFN on all
+>>    32-bit platforms.
+>>
+>> 3. Software IO TLB is used from interrupt context. The maple tree
+>>    implementation is not IRQ-safe (MT_FLAGS_LOCK_IRQ does nothing
+>>    AFAICS). Instead, I use an external lock, spin_lock_irqsave() and
+>>    spin_unlock_irqrestore().
+>>
+>> Note that bounce buffers are never allocated dynamically if the
+>> software IO TLB is in fact a DMA restricted pool, which is intended
+>> to be stay in its designated location in physical memory.
+> 
+> I'm a little worried about all that because it causes quite a bit
+> of overhead even for callers that don't end up going into the
+> dynamic range or do not use swiotlb at all.  I don't really have a
+> good answer here except for the usual avoid bounce buffering whenever
+> you can that might not always be easy to do.
 
-CPU: 0 PID: 5075 Comm: syz-executor378 Not tainted 6.3.0-rc4-syzkaller-00025-g3a93e40326c8 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:319 [inline]
- print_report+0x163/0x540 mm/kasan/report.c:430
- kasan_report+0x176/0x1b0 mm/kasan/report.c:536
- kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
- __asan_memcpy+0x29/0x70 mm/kasan/shadow.c:105
- ext4_read_inline_data fs/ext4/inline.c:199 [inline]
- ext4_convert_inline_data_nolock+0x31a/0xd80 fs/ext4/inline.c:1204
- ext4_convert_inline_data+0x4da/0x620 fs/ext4/inline.c:2065
- ext4_fallocate+0x14d/0x2050 fs/ext4/extents.c:4701
- vfs_fallocate+0x54b/0x6b0 fs/open.c:324
- ksys_fallocate fs/open.c:347 [inline]
- __do_sys_fallocate fs/open.c:355 [inline]
- __se_sys_fallocate fs/open.c:353 [inline]
- __x64_sys_fallocate+0xbd/0x100 fs/open.c:353
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fb0579425c9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 31 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffdcef99758 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb0579425c9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
-RBP: 0000000000000003 R08: 0000000000000003 R09: 0000000000000003
-R10: 0000000000008000 R11: 0000000000000246 R12: 00007ffdcef99790
-R13: 00007ffdcef99788 R14: 00007ffdcef99784 R15: 0000000000000003
- </TASK>
+I'm also worried about all this overhead. OTOH I was not able to confirm
+it, because the difference between two successive fio test runs on an
+unmodified kernel was bigger than the difference between a vanilla and a
+patched kernel, except the maximum completion latency, which OTOH
+affected less than 0.01% of all requests.
 
-Allocated by task 5023:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
- __kasan_slab_alloc+0x66/0x70 mm/kasan/common.c:328
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook+0x68/0x3a0 mm/slab.h:769
- slab_alloc_node mm/slub.c:3452 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc+0x11f/0x2e0 mm/slub.c:3476
- mt_alloc_one lib/maple_tree.c:159 [inline]
- mas_alloc_nodes+0x26e/0x780 lib/maple_tree.c:1233
- mas_node_count_gfp lib/maple_tree.c:1318 [inline]
- mas_preallocate+0x131/0x350 lib/maple_tree.c:5717
- vma_iter_prealloc mm/internal.h:972 [inline]
- __split_vma+0x1e0/0x7f0 mm/mmap.c:2177
- mprotect_fixup+0x5f5/0x920 mm/mprotect.c:663
- do_mprotect_pkey+0x8f8/0xc60 mm/mprotect.c:831
- __do_sys_mprotect mm/mprotect.c:852 [inline]
- __se_sys_mprotect mm/mprotect.c:849 [inline]
- __x64_sys_mprotect+0x80/0x90 mm/mprotect.c:849
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+BTW my testing also suggests that the streaming DMA API is quite
+inefficient, because UAS performance _improved_ with swiotlb=force.
+Sure, this should probably be addressed in the UAS and/or xHCI driver,
+but what I mean is that moving away from swiotlb may even cause
+performance regressions, which is counter-intuitive. At least I would
+_not_ have expected it.
 
-Freed by task 5023:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
- kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:521
- ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
- kasan_slab_free include/linux/kasan.h:162 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook mm/slub.c:1807 [inline]
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0x297/0x520 mm/slub.c:3809
- mas_destroy+0x1bdc/0x2280 lib/maple_tree.c:5774
- mas_store_prealloc+0x351/0x460 lib/maple_tree.c:5702
- vma_complete+0x1ed/0x970 mm/mmap.c:572
- __split_vma+0x7b9/0x7f0 mm/mmap.c:2214
- mprotect_fixup+0x5f5/0x920 mm/mprotect.c:663
- do_mprotect_pkey+0x8f8/0xc60 mm/mprotect.c:831
- __do_sys_mprotect mm/mprotect.c:852 [inline]
- __se_sys_mprotect mm/mprotect.c:849 [inline]
- __x64_sys_mprotect+0x80/0x90 mm/mprotect.c:849
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> +	gfp = (attrs & DMA_ATTR_MAY_SLEEP) ? GFP_KERNEL : GFP_NOWAIT;
+>> +	slot = kmalloc(sizeof(*slot), gfp | __GFP_NOWARN);
+>> +	if (!slot)
+>> +		goto err;
+>> +
+>> +	slot->orig_addr = orig_addr;
+>> +	slot->alloc_size = alloc_size;
+>> +	slot->page = dma_direct_alloc_pages(dev, PAGE_ALIGN(alloc_size),
+>> +					    &slot->dma_addr, dir,
+>> +					    gfp | __GFP_NOWARN);
+>> +	if (!slot->page)
+>> +		goto err_free_slot;
+> 
+> Without GFP_NOIO allocations this will deadlock eventually.
 
-The buggy address belongs to the object at ffff88807645e000
- which belongs to the cache maple_node of size 256
-The buggy address is located 163 bytes to the right of
- allocated 256-byte region [ffff88807645e000, ffff88807645e100)
+Ah, that would affect the non-sleeping case (GFP_KERNEL), right?
 
-The buggy address belongs to the physical page:
-page:ffffea0001d91780 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7645e
-head:ffffea0001d91780 order:1 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffff8880124cd000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 5023, tgid 5023 (rm), ts 57145564531, free_ts 41308598324
- prep_new_page mm/page_alloc.c:2553 [inline]
- get_page_from_freelist+0x3246/0x33c0 mm/page_alloc.c:4326
- __alloc_pages+0x255/0x670 mm/page_alloc.c:5592
- alloc_slab_page+0x6a/0x160 mm/slub.c:1851
- allocate_slab mm/slub.c:1998 [inline]
- new_slab+0x84/0x2f0 mm/slub.c:2051
- ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
- __slab_alloc mm/slub.c:3292 [inline]
- __slab_alloc_node mm/slub.c:3345 [inline]
- slab_alloc_node mm/slub.c:3442 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc+0x1b9/0x2e0 mm/slub.c:3476
- mt_alloc_one lib/maple_tree.c:159 [inline]
- mas_alloc_nodes+0x26e/0x780 lib/maple_tree.c:1233
- mas_node_count_gfp lib/maple_tree.c:1318 [inline]
- mas_preallocate+0x131/0x350 lib/maple_tree.c:5717
- vma_iter_prealloc mm/internal.h:972 [inline]
- __split_vma+0x1e0/0x7f0 mm/mmap.c:2177
- mprotect_fixup+0x5f5/0x920 mm/mprotect.c:663
- do_mprotect_pkey+0x8f8/0xc60 mm/mprotect.c:831
- __do_sys_mprotect mm/mprotect.c:852 [inline]
- __se_sys_mprotect mm/mprotect.c:849 [inline]
- __x64_sys_mprotect+0x80/0x90 mm/mprotect.c:849
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1454 [inline]
- free_pcp_prepare mm/page_alloc.c:1504 [inline]
- free_unref_page_prepare+0xe2f/0xe70 mm/page_alloc.c:3388
- free_unref_page+0x37/0x3f0 mm/page_alloc.c:3483
- discard_slab mm/slub.c:2098 [inline]
- __unfreeze_partials+0x1b1/0x1f0 mm/slub.c:2637
- put_cpu_partial+0x116/0x180 mm/slub.c:2713
- qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x14b/0x160 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x23/0x70 mm/kasan/common.c:305
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook+0x68/0x3a0 mm/slab.h:769
- slab_alloc_node mm/slub.c:3452 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc+0x11f/0x2e0 mm/slub.c:3476
- vm_area_alloc+0x24/0xe0 kernel/fork.c:458
- mmap_region+0xbfb/0x20c0 mm/mmap.c:2553
- do_mmap+0x8c9/0xf70 mm/mmap.c:1364
- vm_mmap_pgoff+0x1ce/0x2e0 mm/util.c:542
- ksys_mmap_pgoff+0x4f9/0x6d0 mm/mmap.c:1410
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff88807645e080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807645e100: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff88807645e180: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                               ^
- ffff88807645e200: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807645e280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+Petr T
 
