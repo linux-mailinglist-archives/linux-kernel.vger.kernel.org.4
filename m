@@ -2,136 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064D16CB73F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E916CB778
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbjC1Gee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 02:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
+        id S231279AbjC1Gqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 02:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232336AbjC1Gea (ORCPT
+        with ESMTP id S230014AbjC1Gqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 02:34:30 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5ABAB;
-        Mon, 27 Mar 2023 23:34:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1679985258; x=1711521258;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tiG1v6NfOzPmruzIudxgHxX7Fr23+NkzRWHlkxxT8xc=;
-  b=xPl8pOeWj3aTQ06zEc02NONzxbcDns0wE7I8PePYlf1o/8hLjV/7fVQ3
-   s0sl+/Ly2VuJTz5EJenofOpd4RL6JOewzLLnIGrnwDOAmWIGMDQnXxfuy
-   V4rphg+ZB/CvG1vZyYf6EjO5BytOUs9T/eBHKUPXnolDjN0QbzgKZnak2
-   YoyNqOQDO+4QmXsZN5dRx09al0qgFn2VrhYh9xVl0XIt2hJPRQTZRigot
-   dFAWwHmfTzYIX6yu2zZYdatewufNX2wFtcElyLhOsaAxAcXNWHzWbuJmL
-   uKUCQ1JyVjOZ9XQKLLRx7Pa+vhYa40QFcMn4ZUbsTf9zlpMvUurGQ5wKv
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,296,1673938800"; 
-   d="asc'?scan'208";a="206622339"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Mar 2023 23:34:17 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Mar 2023 23:34:16 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 27 Mar 2023 23:34:11 -0700
-Date:   Tue, 28 Mar 2023 07:45:28 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Evan Green <evan@rivosinc.com>
-CC:     Palmer Dabbelt <palmer@rivosinc.com>, <slewis@rivosinc.com>,
-        <vineetg@rivosinc.com>, <heiko@sntech.de>,
-        Conor Dooley <conor@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Atish Patra <atishp@rivosinc.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Dao Lu <daolu@rivosinc.com>, Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Jann Horn <jannh@google.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Xu <peterx@redhat.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v5 0/6] RISC-V Hardware Probing User Interface
-Message-ID: <d47020f9-e5a8-4ef3-94bc-6aa6f6b2465c@spud>
-References: <20230327163203.2918455-1-evan@rivosinc.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="PnlzjXfdKEpPFvxa"
-Content-Disposition: inline
-In-Reply-To: <20230327163203.2918455-1-evan@rivosinc.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 28 Mar 2023 02:46:40 -0400
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633EFFB;
+        Mon, 27 Mar 2023 23:46:38 -0700 (PDT)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4Pm0b029jxz501Rk;
+        Tue, 28 Mar 2023 14:46:36 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.99.176])
+        by mse-fl1.zte.com.cn with SMTP id 32S6kPDL015126;
+        Tue, 28 Mar 2023 14:46:25 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Tue, 28 Mar 2023 14:46:28 +0800 (CST)
+Date:   Tue, 28 Mar 2023 14:46:28 +0800 (CST)
+X-Zmail-TransId: 2afa64228d44ffffffff925-41e84
+X-Mailer: Zmail v1.0
+Message-ID: <202303281446280457758@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <mcgrof@kernel.org>
+Cc:     <keescook@chromium.org>, <yzaikin@google.com>,
+        <akpm@linux-foundation.org>, <chi.minghao@zte.com.cn>,
+        <linmiaohe@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>
+Subject: =?UTF-8?B?W1BBVENIIFY4IDEvMl0gbW06IGNvbXBhY3Rpb246IG1vdmUgY29tcGFjdGlvbiBzeXNjdGwgdG8gaXRzIG93biBmaWxl?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 32S6kPDL015126
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 64228D4C.001/4Pm0b029jxz501Rk
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---PnlzjXfdKEpPFvxa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-On Mon, Mar 27, 2023 at 09:31:57AM -0700, Evan Green wrote:
+This moves all compaction sysctls to its own file.
 
-Hey Evan,
+Move sysctl to where the functionality truly belongs to improve
+readability, reduce merge conflicts, and facilitate maintenance.
 
-Patchwork has a rake of complaints about the series unfortunately:
-https://patchwork.kernel.org/project/linux-riscv/list/?series=734234
+I use x86_defconfig and linux-next-20230327 branch
+$ make defconfig;make all -jn
+CONFIG_COMPACTION=y
 
-Some of the checkpatch whinging may be spurious, but there's some
-definitely valid stuff in there!
+add/remove: 1/0 grow/shrink: 1/1 up/down: 350/-256 (94)
+Function                                     old     new   delta
+vm_compaction                                  -     320    +320
+kcompactd_init                               180     210     +30
+vm_table                                    2112    1856    -256
+Total: Before=21119987, After=21120081, chg +0.00%
 
-> Evan Green (6):
->   RISC-V: Move struct riscv_cpuinfo to new header
->   RISC-V: Add a syscall for HW probing
->   RISC-V: hwprobe: Add support for RISCV_HWPROBE_BASE_BEHAVIOR_IMA
->   RISC-V: hwprobe: Support probing of misaligned access performance
->   selftests: Test the new RISC-V hwprobe interface
+Despite the addition of 94 bytes the patch still seems a worthwile
+cleanup.
 
->   RISC-V: Add hwprobe vDSO function and data
+Link: https://lore.kernel.org/lkml/067f7347-ba10-5405-920c-0f5f985c84f4@suse.cz/
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ include/linux/compaction.h |  7 ----
+ kernel/sysctl.c            | 59 --------------------------
+ mm/compaction.c            | 84 ++++++++++++++++++++++++++++++++------
+ 3 files changed, 72 insertions(+), 78 deletions(-)
 
-And this one breaks the build for !MMU kernels unfortunately.
+diff --git a/include/linux/compaction.h b/include/linux/compaction.h
+index 52a9ff65faee..a6e512cfb670 100644
+--- a/include/linux/compaction.h
++++ b/include/linux/compaction.h
+@@ -81,13 +81,6 @@ static inline unsigned long compact_gap(unsigned int order)
+ }
 
-Thanks,
-Conor.
+ #ifdef CONFIG_COMPACTION
+-extern unsigned int sysctl_compaction_proactiveness;
+-extern int sysctl_compaction_handler(struct ctl_table *table, int write,
+-			void *buffer, size_t *length, loff_t *ppos);
+-extern int compaction_proactiveness_sysctl_handler(struct ctl_table *table,
+-		int write, void *buffer, size_t *length, loff_t *ppos);
+-extern int sysctl_extfrag_threshold;
+-extern int sysctl_compact_unevictable_allowed;
 
---PnlzjXfdKEpPFvxa
-Content-Type: application/pgp-signature; name="signature.asc"
+ extern unsigned int extfrag_for_order(struct zone *zone, unsigned int order);
+ extern int fragmentation_index(struct zone *zone, unsigned int order);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 0a8a3c9c82e4..bfe53e835524 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -42,7 +42,6 @@
+ #include <linux/highuid.h>
+ #include <linux/writeback.h>
+ #include <linux/ratelimit.h>
+-#include <linux/compaction.h>
+ #include <linux/hugetlb.h>
+ #include <linux/initrd.h>
+ #include <linux/key.h>
+@@ -746,27 +745,6 @@ int proc_dointvec(struct ctl_table *table, int write, void *buffer,
+ 	return do_proc_dointvec(table, write, buffer, lenp, ppos, NULL, NULL);
+ }
 
------BEGIN PGP SIGNATURE-----
+-#ifdef CONFIG_COMPACTION
+-static int proc_dointvec_minmax_warn_RT_change(struct ctl_table *table,
+-		int write, void *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	int ret, old;
+-
+-	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || !write)
+-		return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+-
+-	old = *(int *)table->data;
+-	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+-	if (ret)
+-		return ret;
+-	if (old != *(int *)table->data)
+-		pr_warn_once("sysctl attribute %s changed by %s[%d]\n",
+-			     table->procname, current->comm,
+-			     task_pid_nr(current));
+-	return ret;
+-}
+-#endif
+-
+ /**
+  * proc_douintvec - read a vector of unsigned integers
+  * @table: the sysctl table
+@@ -2157,43 +2135,6 @@ static struct ctl_table vm_table[] = {
+ 		.extra1		= SYSCTL_ONE,
+ 		.extra2		= SYSCTL_FOUR,
+ 	},
+-#ifdef CONFIG_COMPACTION
+-	{
+-		.procname	= "compact_memory",
+-		.data		= NULL,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0200,
+-		.proc_handler	= sysctl_compaction_handler,
+-	},
+-	{
+-		.procname	= "compaction_proactiveness",
+-		.data		= &sysctl_compaction_proactiveness,
+-		.maxlen		= sizeof(sysctl_compaction_proactiveness),
+-		.mode		= 0644,
+-		.proc_handler	= compaction_proactiveness_sysctl_handler,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE_HUNDRED,
+-	},
+-	{
+-		.procname	= "extfrag_threshold",
+-		.data		= &sysctl_extfrag_threshold,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE_THOUSAND,
+-	},
+-	{
+-		.procname	= "compact_unevictable_allowed",
+-		.data		= &sysctl_compact_unevictable_allowed,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax_warn_RT_change,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE,
+-	},
+-
+-#endif /* CONFIG_COMPACTION */
+ 	{
+ 		.procname	= "min_free_kbytes",
+ 		.data		= &min_free_kbytes,
+diff --git a/mm/compaction.c b/mm/compaction.c
+index e689d66cedf4..3dfdb84b9c98 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -1728,7 +1728,14 @@ typedef enum {
+  * Allow userspace to control policy on scanning the unevictable LRU for
+  * compactable pages.
+  */
+-int sysctl_compact_unevictable_allowed __read_mostly = CONFIG_COMPACT_UNEVICTABLE_DEFAULT;
++static int sysctl_compact_unevictable_allowed __read_mostly = CONFIG_COMPACT_UNEVICTABLE_DEFAULT;
++/*
++ * Tunable for proactive compaction. It determines how
++ * aggressively the kernel should compact memory in the
++ * background. It takes values in the range [0, 100].
++ */
++static unsigned int __read_mostly sysctl_compaction_proactiveness = 20;
++static int sysctl_extfrag_threshold = 500;
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCKNAwAKCRB4tDGHoIJi
-0oy+AQCM8sPGm+KSyYCi9ckhnMclSSVU3IvS2XeSU1qNcJO+VQD/ZyBX5554srKJ
-1RmCuSKrnOwGjERvEz0BeAl13ls1+gk=
-=3HNq
------END PGP SIGNATURE-----
+ static inline void
+ update_fast_start_pfn(struct compact_control *cc, unsigned long pfn)
+@@ -2584,8 +2591,6 @@ static enum compact_result compact_zone_order(struct zone *zone, int order,
+ 	return ret;
+ }
 
---PnlzjXfdKEpPFvxa--
+-int sysctl_extfrag_threshold = 500;
+-
+ /**
+  * try_to_compact_pages - Direct compact to satisfy a high-order allocation
+  * @gfp_mask: The GFP mask of the current allocation
+@@ -2742,14 +2747,7 @@ static void compact_nodes(void)
+ 		compact_node(nid);
+ }
+
+-/*
+- * Tunable for proactive compaction. It determines how
+- * aggressively the kernel should compact memory in the
+- * background. It takes values in the range [0, 100].
+- */
+-unsigned int __read_mostly sysctl_compaction_proactiveness = 20;
+-
+-int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
++static int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
+ 		void *buffer, size_t *length, loff_t *ppos)
+ {
+ 	int rc, nid;
+@@ -2779,7 +2777,7 @@ int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
+  * This is the entry point for compacting all nodes via
+  * /proc/sys/vm/compact_memory
+  */
+-int sysctl_compaction_handler(struct ctl_table *table, int write,
++static int sysctl_compaction_handler(struct ctl_table *table, int write,
+ 			void *buffer, size_t *length, loff_t *ppos)
+ {
+ 	if (write)
+@@ -3075,6 +3073,65 @@ static int kcompactd_cpu_online(unsigned int cpu)
+ 	return 0;
+ }
+
++static int proc_dointvec_minmax_warn_RT_change(struct ctl_table *table,
++		int write, void *buffer, size_t *lenp, loff_t *ppos)
++{
++	int ret, old;
++
++	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || !write)
++		return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
++
++	old = *(int *)table->data;
++	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
++	if (ret)
++		return ret;
++	if (old != *(int *)table->data)
++		pr_warn_once("sysctl attribute %s changed by %s[%d]\n",
++			     table->procname, current->comm,
++			     task_pid_nr(current));
++	return ret;
++}
++
++#ifdef CONFIG_SYSCTL
++static struct ctl_table vm_compaction[] = {
++	{
++		.procname	= "compact_memory",
++		.data		= NULL,
++		.maxlen		= sizeof(int),
++		.mode		= 0200,
++		.proc_handler	= sysctl_compaction_handler,
++	},
++	{
++		.procname	= "compaction_proactiveness",
++		.data		= &sysctl_compaction_proactiveness,
++		.maxlen		= sizeof(sysctl_compaction_proactiveness),
++		.mode		= 0644,
++		.proc_handler	= compaction_proactiveness_sysctl_handler,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE_HUNDRED,
++	},
++	{
++		.procname	= "extfrag_threshold",
++		.data		= &sysctl_extfrag_threshold,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE_THOUSAND,
++	},
++	{
++		.procname	= "compact_unevictable_allowed",
++		.data		= &sysctl_compact_unevictable_allowed,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax_warn_RT_change,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE,
++	},
++	{ }
++};
++#endif
++
+ static int __init kcompactd_init(void)
+ {
+ 	int nid;
+@@ -3090,6 +3147,9 @@ static int __init kcompactd_init(void)
+
+ 	for_each_node_state(nid, N_MEMORY)
+ 		kcompactd_run(nid);
++#ifdef CONFIG_SYSCTL
++	register_sysctl_init("vm", vm_compaction);
++#endif
+ 	return 0;
+ }
+ subsys_initcall(kcompactd_init)
+-- 
+2.25.1
