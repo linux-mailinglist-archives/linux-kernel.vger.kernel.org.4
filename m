@@ -2,155 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4BB6CC502
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 408616CC644
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjC1PLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
+        id S234029AbjC1P2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjC1PLi (ORCPT
+        with ESMTP id S232989AbjC1P2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:11:38 -0400
-Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2EEEC4E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:10:41 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 28 Mar 2023 11:28:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7856C11EA6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680017119;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=pLTOFnnc1VmpWj6ZA8kv034hcnFXFgv2qtrDVUrrsM0=;
+        b=ehCDvNoztetL670WJGETNLmxV6x7Y19RmQ236J2xjfl/Nup2OUV8yx0kj16GoE2TcF/WWb
+        OpiIvXR/xW14gd8IxotI1EwkIKXAGi0SQ1qkjpPTos3CeEpLlkuQorjG4yV7YJJ4VcH5gL
+        jHXSlqRjQCTl5Mi2Hp/u3ryoR5q1O+o=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-62-ycV7bpnvMMST_p2X3cu_lw-1; Tue, 28 Mar 2023 11:11:25 -0400
+X-MC-Unique: ycV7bpnvMMST_p2X3cu_lw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 3D8A9162E7F;
-        Tue, 28 Mar 2023 17:07:40 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1680016060; bh=+/3nvo1yYXim8zKDDEGS5Ln3cTmFtDCEk+Ab9n7rpdA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hJdGEF4sm5cpMC96PhA7CJdP7X4/E2TDIlbCRhbxzRSrN7aeY+0D6JFo5YseQbKMc
-         c9QmAA7jyYGyo7QK+uvFpNH4J4xnuDt+KEOkTjiPwoJuqkeKreOK+27iV1dd9w2ydF
-         /A0DgOf70+M6yhkIDp3jEHqw/1UelXANFOwpsRxQ/DDe440of55Dy/NrzDvtGIMNYL
-         PzIDxwkAA6sidCbdxDDTMfdH+PfVAnh5xuyT0NkkqsuukcblNvHP1TxCK/AUh+OqPm
-         Z9uk4pFt3dYEvHsVbvCFwxY/wKq+Ohbk9Ga7toFWjHOXWTizA9EallH57bdHWszCaz
-         U7fbsGkU79MSQ==
-Date:   Tue, 28 Mar 2023 17:07:39 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] swiotlb: Track and report io_tlb_used high water
- mark in debugfs
-Message-ID: <20230328170739.10e33345@meshulam.tesarici.cz>
-In-Reply-To: <BYAPR21MB1688983A72B114BBC3AA1DE2D7889@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <1679766790-24629-1-git-send-email-mikelley@microsoft.com>
-        <ZCJEAx/G0x6zokPF@infradead.org>
-        <BYAPR21MB1688852ED49499249368D939D7889@BYAPR21MB1688.namprd21.prod.outlook.com>
-        <20230328155017.5636393b@meshulam.tesarici.cz>
-        <BYAPR21MB1688983A72B114BBC3AA1DE2D7889@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-suse-linux-gnu)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EEDB8887401;
+        Tue, 28 Mar 2023 15:10:46 +0000 (UTC)
+Received: from localhost (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E8E024020C82;
+        Tue, 28 Mar 2023 15:10:45 +0000 (UTC)
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        linux-block@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Bernd Schubert <bschubert@ddn.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Ming Lei <ming.lei@redhat.com>
+Subject: [PATCH V5 00/16] io_uring/ublk: add IORING_OP_FUSED_CMD
+Date:   Tue, 28 Mar 2023 23:09:42 +0800
+Message-Id: <20230328150958.1253547-1-ming.lei@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023 14:29:03 +0000
-"Michael Kelley (LINUX)" <mikelley@microsoft.com> wrote:
+Hello Jens,
 
-> From: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> Sent: Tuesday, March 28, =
-2023 6:50 AM
-> >=20
-> > On Tue, 28 Mar 2023 13:12:13 +0000
-> > "Michael Kelley (LINUX)" <mikelley@microsoft.com> wrote:
-> >  =20
-> > > From: Christoph Hellwig <hch@infradead.org> Sent: Monday, March 27, 2=
-023 6:34 =20
-> > PM =20
-> > > >
-> > > > On Sat, Mar 25, 2023 at 10:53:10AM -0700, Michael Kelley wrote: =20
-> > > > > @@ -659,6 +663,14 @@ static int swiotlb_do_find_slots(struct devi=
-ce *dev, int =20
-> > > > area_index, =20
-> > > > >   area->index =3D wrap_area_index(mem, index + nslots);
-> > > > >   area->used +=3D nslots;
-> > > > >   spin_unlock_irqrestore(&area->lock, flags);
-> > > > > +
-> > > > > + new_used =3D atomic_long_add_return(nslots, &total_used);
-> > > > > + old_hiwater =3D atomic_long_read(&used_hiwater);
-> > > > > + do {
-> > > > > +         if (new_used <=3D old_hiwater)
-> > > > > +                 break;
-> > > > > + } while (!atomic_long_try_cmpxchg(&used_hiwater, &old_hiwater, =
-new_used));
-> > > > > +
-> > > > >   return slot_index; =20
-> > > >
-> > > > Hmm, so we're right in the swiotlb hot path here and add two new gl=
-obal
-> > > > atomics? =20
->[...]
-> > For my purposes, it does not have to be 100% accurate. I don't really
-> > mind if it is off by a few slots because of a race window, so we could
-> > (for instance):
-> >=20
-> > - update a local variable and set the atomic after the loop,
-> > - or make it a per-cpu to reduce CPU cache bouncing,
-> > - or just about anything that is less heavy-weight than an atomic
-> >   CMPXCHG in the inner loop of a slot search.
-> >  =20
->=20
-> Perhaps I'm missing your point, but there's no loop here.  The atomic
-> add is done once per successful slot allocation.  If swiotlb_do_find_slot=
-s()
-> doesn't find any slots for the current area, it exits at the "not_found" =
-label
-> and the atomic add isn't done.
+Add IORING_OP_FUSED_CMD, it is one special URING_CMD, the 1st SQE(primary) is
+one 64byte URING_CMD, and the 2nd 64byte SQE(secondary) is another normal
+64byte OP. The primary command provides device/file io buffer and
+submits OP represented by the secondary SQE using the provided buffer. This way
+solves ublk zero copy problem easily, since io buffer shares same lifetime with
+the primary command.
 
-My bad. I read the patch too quickly and thought that the update was
-done for each searched area. I stay corrected here.
+The secondary OP is actually submitted from kernel, part of this idea is from
+Xiaoguang's ublk ebpf patchset, but this patchset submits secondary OP just
+like normal OP issued from userspace, that said, SQE order is kept, and
+batching handling is done too.
 
->[...]
-> I thought about tracking the high water mark on a per-CPU basis or
-> per-area basis, but I don't think the resulting data is useful.  Adding up
-> the individual high water marks likely significantly over-estimates the
-> true high water mark.   Is there a clever way to make this useful that I'm
-> not thinking about?
+Please see detailed design in commit log of the 2th patch, and one big
+point is how to handle buffer lifetime/ownership.
 
-No, not that I'm aware of. Min/max cannot be easily split.
+With this way, it is easy to support zero copy for ublk/fuse device.
 
->[...]
-> Regarding your other email about non-default io_tlb_mem instances,
-> my patch just extends what is already reported in debugfs, which
-> is only for the default io_tlb_mem.   The non-default instances seemed
-> to me to be fairly niche cases that weren't worth the additional
-> complexity, but maybe I'm wrong about that.
+Basically userspace can specify any sub-buffer of the ublk block request
+buffer from the fused command just by setting 'offset/len'
+in the secondary SQE for running secondary OP. This way is flexible to implement
+io mapping: mirror, stripped, ...
 
-What I mean is that the values currently reported in debugfs only refer
-to io_tlb_default_mem. Since restricted DMA pools also use
-swiotlb_find_slots() and swiotlb_release_slots(), the global counters
-now get updated both for io_tlb_default_mem and all restricted DMA
-pools.
+The 4th & 5th patches enable fused secondary support for the following OPs:
 
-In short, this hunk is a change in behaviour:
+	OP_READ/OP_WRITE
+	OP_SEND/OP_RECV/OP_SEND_ZC
 
- static int io_tlb_used_get(void *data, u64 *val)
- {
--	*val =3D mem_used(&io_tlb_default_mem);
-+	*val =3D (u64)atomic_long_read(&total_used);
- 	return 0;
- }
+The other ublk patches cleans ublk driver and implement fused command
+for supporting zero copy.
 
-Before the change, it shows the number of used slots in the default
-SWIOTLB, after the change it shows the total number of used slots in
-the SWIOTLB and all restricted DMA pools.
+Follows userspace code, which supports 128byte SQE fused command only:
 
-Petr T
+https://github.com/ming1/ubdsrv/tree/fused-cmd-zc-for-v5
+
+All three(loop, nbd and qcow2) ublk targets have supported zero copy by passing:
+
+	ublk add -t [loop|nbd|qcow2] -z .... 
+
+Basic fs mount/kernel building and builtin test are done, and also not
+observe regression on xfstest test over ublk-loop with zero copy.
+
+Also add liburing test case for covering fused command based on miniublk
+of blktest(supports 64byte normal SQE only)
+
+https://github.com/ming1/liburing/tree/fused_cmd_miniublk_for_v5
+
+Performance improvement is obvious on memory bandwidth related workloads,
+such as, 1~2X improvement on 64K/512K BS IO test on loop with ramfs backing file.
+ublk-null shows 5X IOPS improvement on big BS test when the copy is avoided.
+
+Please review and consider for v6.4.
+
+V5:
+	- rebase on for-6.4/io_uring
+	- rename to primary/secondary as suggested by Jens
+	- reserve interface for extending to support multiple secondary OPs in future,
+	which isn't a must, because it can be done by submitting multiple fused
+	commands with same primary request
+	- rename to primary/secondary in ublksrv and liburing test code
+
+V4:
+	- improve APIs naming(patch 1 ~ 4)
+	- improve documents and commit log(patch 2)
+	- add buffer direction bit to opdef, suggested by Jens(patch 2)
+	- add ublk zero copy document for cover: technical requirements(most related with
+	buffer lifetime), and explains why splice isn't good and how fused command solves it(patch 17)
+	- fix sparse warning(patch 7)
+	- supports 64byte SQE fused command(patch 3)
+
+V3:
+	- fix build warning reported by kernel test robot
+	- drop patch for checking fused flags on existed drivers with
+	  ->uring_command(), which isn't necessary, since we do not do that
+      when adding new ioctl or uring command
+    - inline io_init_rq() for core code, so just export io_init_secondary_req
+	- return result of failed secondary request unconditionally since REQ_F_CQE_SKIP
+	will be cleared
+	- pass xfstest over ublk-loop
+
+V2:
+	- don't resue io_mapped_ubuf (io_uring)
+	- remove REQ_F_FUSED_MASTER_BIT (io_uring)
+	- fix compile warning (io_uring)
+	- rebase on v6.3-rc1 (io_uring)
+	- grabbing io request reference when handling fused command 
+	- simplify ublk_copy_user_pages() by iov iterator
+	- add read()/write() for userspace to read/write ublk io buffer, so
+	that some corner cases(read zero, passthrough request(report zones)) can
+	be handled easily in case of zero copy; this way also helps to switch to
+	zero copy completely
+	- misc cleanup
+
+Ming Lei (16):
+  io_uring: increase io_kiocb->flags into 64bit
+  io_uring: add IORING_OP_FUSED_CMD
+  io_uring: support normal SQE for fused command
+  io_uring: support OP_READ/OP_WRITE for fused secondary request
+  io_uring: support OP_SEND_ZC/OP_RECV for fused secondary request
+  block: ublk_drv: add common exit handling
+  block: ublk_drv: don't consider flush request in map/unmap io
+  block: ublk_drv: add two helpers to clean up map/unmap request
+  block: ublk_drv: clean up several helpers
+  block: ublk_drv: cleanup 'struct ublk_map_data'
+  block: ublk_drv: cleanup ublk_copy_user_pages
+  block: ublk_drv: grab request reference when the request is handled by
+    userspace
+  block: ublk_drv: support to copy any part of request pages
+  block: ublk_drv: add read()/write() support for ublk char device
+  block: ublk_drv: don't check buffer in case of zero copy
+  block: ublk_drv: apply io_uring FUSED_CMD for supporting zero copy
+
+ Documentation/block/ublk.rst   | 126 ++++++-
+ drivers/block/ublk_drv.c       | 603 ++++++++++++++++++++++++++-------
+ include/linux/io_uring.h       |  50 ++-
+ include/linux/io_uring_types.h |  77 +++--
+ include/uapi/linux/io_uring.h  |  11 +-
+ include/uapi/linux/ublk_cmd.h  |  37 +-
+ io_uring/Makefile              |   2 +-
+ io_uring/fused_cmd.c           | 267 +++++++++++++++
+ io_uring/fused_cmd.h           |  11 +
+ io_uring/io_uring.c            |  51 ++-
+ io_uring/io_uring.h            |   5 +
+ io_uring/net.c                 |  30 +-
+ io_uring/opdef.c               |  22 ++
+ io_uring/opdef.h               |   7 +
+ io_uring/rw.c                  |  21 ++
+ 15 files changed, 1142 insertions(+), 178 deletions(-)
+ create mode 100644 io_uring/fused_cmd.c
+ create mode 100644 io_uring/fused_cmd.h
+
+-- 
+2.39.2
+
