@@ -2,326 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3D76CC10B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5588F6CC109
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbjC1NeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
+        id S233223AbjC1Nd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbjC1NeQ (ORCPT
+        with ESMTP id S233221AbjC1Ndq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:34:16 -0400
-Received: from out-16.mta1.migadu.com (out-16.mta1.migadu.com [95.215.58.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4BC1BE
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:33:29 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1680010386;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bApSM0pbQ1TIIJavw9zL4ET4YoxmQnS6zSB9mo2QPVs=;
-        b=h+3S9y6bJH2C+qKsJ2+jwk3bg681PdA/HojOJvujz1hEc6v3u+mLaM/MoR166+PkK9tFAq
-        mZLOw5/m6xhbiUiDIxXs+nA4pwholyum5LGMZ04VDT4nYkgudVONED/hzjadX2smNG0KFd
-        ILxBKPIbpqLH4BOWAGTbOCLDovKPeic=
+        Tue, 28 Mar 2023 09:33:46 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2044.outbound.protection.outlook.com [40.107.7.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BCACA2A;
+        Tue, 28 Mar 2023 06:33:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IoGdNevQl0l9nKEQUNppydx9akfVXMpFYM9fsEOYN7A6FUO4S9KNOrW6EzdxltDeK4kJ18C5HAI+2NF0rRzrsERV88v1wCtz0yUgZGsKnAjdxybNJ9MtPfPnLhOAJu6PFl5TDHZjAJSNBS+MhgTEG4t8ihp1w8l5pEyGQf/48ED5fFshDkAlfF6ehq7AxUKNnhKlWQ1cdPw6tBOcDqU5VEROZpn5CRaCZBYX/ACBTQCMGYm3kDLnFPuqlZkQibI+ziAXsKWg6puphhqNI7LC9tjvGPgdqHvXOkuLRJom20kCgeHf64rw52YoJNtA/QPkcBrI9BZTAR0gZ8nrS/CL+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZuEfew6F7O5FqpL5JfXk/rbchYCXeV0JaKg4P/PJ6vs=;
+ b=hIeZMn0LvSh4ftUjf0PPCKzwjNkzEtOyE3r9IVgBMGWtpUwfS8BVjn7i/zDncAqAaYWmqUofZ9yBWsq36gWhK+lYnhTeZlqU88R/IGi3VIfw/0h2/T1wS1kiSLqp8ODl1GJ/1kqec23v8OgisYCvtYxD5t+J2QijJnEBjJfLsR/X8Y/nU7c+L0uuzEuYDhhPbtyTUNIMreSit+BJMEQEJPOrY/PtR83Xq4Q0dfL941jJIPFTeOvig459XQWoRmAIh+ixa2KN3Zqupc5eKvHyAOByOlkDsjJHF/S3JXE3ysEDF2Rr3U4XT/EBpYeyhrbdsF9Ski5k1tkB+Gbpay0jHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZuEfew6F7O5FqpL5JfXk/rbchYCXeV0JaKg4P/PJ6vs=;
+ b=LoblLIO8Jg+axYjCeImL/5GgdHHP7R1JRzp0QrRlMYAO8g31/W1iUJz1I4fZCAZ/PP8+9zUHg0znqgPmA0hteY4MolYPMXnpmwL4humSJZhrFtkXRNyJ5oJtUREgRMaBG/ISbchQXOAXRqmbexyBqJ0uk+yb5EYb/21C7194zkHWSdo3n5TPSUg0iImAKs9moWq9huQc18q9i5RSCRGyyWSWk5zJdp8UtW45cAK8Qf5wVLQNfFZ/adKf0rOPB1wlM5gq3F+2ueQqig/fa730JX5qUyWInpy0S37J2C7xYSPXLtBYaQE910/qKqECTrgL6SgliQBSyZDmbavBWbenQg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM6PR04MB6551.eurprd04.prod.outlook.com (2603:10a6:20b:fa::20)
+ by AM0PR04MB7074.eurprd04.prod.outlook.com (2603:10a6:208:196::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.28; Tue, 28 Mar
+ 2023 13:32:43 +0000
+Received: from AM6PR04MB6551.eurprd04.prod.outlook.com
+ ([fe80::4189:2d2a:eb83:5965]) by AM6PR04MB6551.eurprd04.prod.outlook.com
+ ([fe80::4189:2d2a:eb83:5965%3]) with mapi id 15.20.6222.030; Tue, 28 Mar 2023
+ 13:32:43 +0000
+Message-ID: <435f5ab4-e0ca-f66d-dc0d-0ed8633ed2e7@suse.com>
+Date:   Tue, 28 Mar 2023 15:32:41 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 3/3] xen/netback: use same error messages for same
+ errors
+Content-Language: en-US
+To:     Juergen Gross <jgross@suse.com>
+Cc:     Wei Liu <wei.liu@kernel.org>, Paul Durrant <paul@xen.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230328131047.2440-1-jgross@suse.com>
+ <20230328131233.2534-4-jgross@suse.com>
+From:   Jan Beulich <jbeulich@suse.com>
+In-Reply-To: <20230328131233.2534-4-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0084.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1e::23) To AM6PR04MB6551.eurprd04.prod.outlook.com
+ (2603:10a6:20b:fa::20)
 MIME-Version: 1.0
-Subject: Re: [PATCH 5/6] mm: kfence: change kfence pool page layout
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <CANpmjNPZxDYPYzEjr55ONydwH1FZF_Eh_gu7XKg=4-+HK6vL9Q@mail.gmail.com>
-Date:   Tue, 28 Mar 2023 21:32:28 +0800
-Cc:     Muchun Song <songmuchun@bytedance.com>, glider@google.com,
-        dvyukov@google.com, akpm@linux-foundation.org, jannh@google.com,
-        sjpark@amazon.de, kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <291FB0BF-F824-4ED9-B836-DA7773BFDA48@linux.dev>
-References: <20230328095807.7014-1-songmuchun@bytedance.com>
- <20230328095807.7014-6-songmuchun@bytedance.com>
- <CANpmjNPZxDYPYzEjr55ONydwH1FZF_Eh_gu7XKg=4-+HK6vL9Q@mail.gmail.com>
-To:     Marco Elver <elver@google.com>
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB6551:EE_|AM0PR04MB7074:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1ad4562-b714-4248-27a9-08db2f90e91d
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IUauTuyV2q7+xh30MZeB/5pgoI31ZpHDXfyGpGTQ3bpxZsVx0wRKCDw7j5285EJAkXh9sbUiniVmHBjeDCU0guTt8vMVyrgtoLEGE4qmDfqVzAZ+3ihtd6PuV3pZVPlvdbaGe6zc9lh9Bu8aGkJNfl5qT+KkoekAEKn6uQPcFsRjw7SezHhrAurkmOpRRUZZOslYFELcQZHWKUXqeMi6XfuwizJEJ6M6XqQ2ibwoAFsSNNaHPaqLW3vZrXw/FcDiY+EM0O48wtCUhkv3HR50zDxZUPdv5ewU9xYO2f4Q9Uloj2iPRsbtOz7EC+qK6EYNRYmycgIC9aB1O/5Lv98OaivYQRCfHLqNU81m1M39PoQXpdxMzu2sT0b3J7iVzOvbH2xwvCSk+Ai0kpdmruS+C4vfOmP3/8IhxxNkola+7tNqLMn2w+ZhNwXelG1znjfBS8BUWWWeflIyJZeJEoKYV5lWnq5bWl89jPzf5PmGpM/rxl4+SzbUH8GiP0fciSQI2TLpxCOf0P9FwXL2uQ7qDTqKCVYmBfthM1Rp//niPbHJ91GcvyQCqowszyH6I6DOyRyHTXY/MQLeXpq4OWB5o5SL2SGezsUQSO5oPKTgP9YRCjsGzkzZw80HA75ASPW8brrN7WDB0Al10Q17KeUGHw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6551.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(39860400002)(366004)(396003)(346002)(451199021)(2616005)(83380400001)(2906002)(8676002)(66556008)(66946007)(4326008)(66476007)(6512007)(478600001)(6636002)(54906003)(53546011)(316002)(26005)(15650500001)(186003)(37006003)(6506007)(36756003)(86362001)(41300700001)(31696002)(8936002)(6486002)(38100700002)(5660300002)(31686004)(6862004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Um1mdi83OGduVGtCL3JQQjVVM0UzRUhqQ3hvK1AwY3dCcXNhdEpYenVXVzAx?=
+ =?utf-8?B?amdRNDM1bXZsR3dNeXkwR0YvSk02Sk9tOXBhRDMrTm9yWTJVRFZJWTJRelhW?=
+ =?utf-8?B?V0k1dlNpZFI4cWkrUXBpL3B1anJHUmQ4QjNUU1RqQ29JMTlGTTdtN1VhdG5L?=
+ =?utf-8?B?YTNYYVIzV2FqejM3MUxvSUsyWlBuUllxUWhJd29YZXpMNXQ3RUN3cTBaSUwy?=
+ =?utf-8?B?NkpBKzZKZjBGbGkzTDB5OXpHYzNvaWREVnpUY1pTQ2lyd3lyRjFCR2RKc1g5?=
+ =?utf-8?B?K3dqWnBmZTBnQ2RiaUJKQWFoZnA1UUViRmNqNG1CMFZSZTE2dkE0U3YyOFBS?=
+ =?utf-8?B?QjdzVHJITkFDMlhrcWR0ZEErQXpMYVhzZkxGdWIxZlIzQzJoS253MEM3SHlk?=
+ =?utf-8?B?K1lJUFczd0lCRENRVVVqek4rSGlIY2UvSXIycHVOMGJWQVF3bVpaNG5DdWdv?=
+ =?utf-8?B?S3huejE2S1VRL3N6UHAvaEczYnRTOEZqTkRnWGRyQmlMc29MVUMvd29wbWVT?=
+ =?utf-8?B?a2RjT3RxeUJFLzFMcjZjcDdZT2FjWnFvODdnTk95cGpNeUFSRWhPWDI4UnlT?=
+ =?utf-8?B?alBSSUJ6TnZGOFZsRmVsU1FoelN4OHJKZHZqcFpGY2F4azdLbVhTNGhlMG00?=
+ =?utf-8?B?QlhRdklPQjRyR3JibC9iTHA0VXZsRVppSmlPNStJWmYvVWlZbFJlcjNiTHgr?=
+ =?utf-8?B?OFE4cENJNlRTOExuWEtCSnhSY3FRQTRsajlTWkFwRm94OHY2Y2wxWDh5SWFG?=
+ =?utf-8?B?aWQzOHNmRDI3SXB3UmZvd3p5anhZSC9sdFh0TnluMHFtS3h3cUIxazNmYlQv?=
+ =?utf-8?B?SEMwOGo0TDF2a1JYNTBHeG93UmVzWDZmQjlSR1d1dldFUG0wSW5mNE91YnlW?=
+ =?utf-8?B?SlZSRUhiMDZvWGtGNXJndkxaUGtGeGE0bFJMRkNnZkJ5OEdiWitsbmdmaFB2?=
+ =?utf-8?B?SEpubXFHZEM5WDdQemJsMkZzNklsSTN4TlUyeHNqdWQ1cTR2Mmk2MnZtZVZG?=
+ =?utf-8?B?REhQRmFLMllVeU0xMWZDaXk3S2JwdStIb2l1TWxsWXlhOUFhR0t1eVl1OUtW?=
+ =?utf-8?B?Wkc0bDRRdjk4VVJXeEI2N3NVUmh4YjJjU2FnSVVXVDV3cDFzdjMwWFRMQlM2?=
+ =?utf-8?B?MlVuUUs2TjlHaC91MkxBcUI4VWlRRm0xcUZabWVML0NhTGpKU0hOOFdNZUdX?=
+ =?utf-8?B?bWtpck9OZGxjMUY3K1BtazNCMnlxaVpibzBSWHBIRDNHeWNrQmJqV3djSDNW?=
+ =?utf-8?B?aVJZbDhqRlhCUDBacmxRK2poSUJkamtKRnI4MzZsMStpWXVtMUFmS0JCeFJu?=
+ =?utf-8?B?U0liK1I4TzlaeGpvOURqRWptd1hrSVFia1pWYUUrWVQ2bjlBdE9vQmJzMTM1?=
+ =?utf-8?B?a05yY0Qzd0RENlpleGdTQ0N3b0tOMXpNMmxlTE9pYTJIclI5czVIMW5kYnJx?=
+ =?utf-8?B?MEUram1YNG82dmo4Y0FuUGtFQnYzY1VPekFBOW5aRzc0Q2dzc0ZGdEpuL1ZV?=
+ =?utf-8?B?Q3BnSzYvRXJ1UjBDSlFJeU95RTlvWkFyRjAybVR2SUE1dnIwd1dlQ0lEaUNF?=
+ =?utf-8?B?engrVU5WSnIxSjJJNFRUVFA3dXZBTWpVNWVHZjgzS2ZQYmN6TnJGcWtMa2Qx?=
+ =?utf-8?B?b0NRajl1NjhIa0FTTkpGMDNoRFc1OGJSODFiMHk4UnVWMlBKVEVEcUw5M0dx?=
+ =?utf-8?B?b0J4Q1VmMnoyZDExZnB0QUxSQ0tKYXBOV3J3emJUanlSczFaWThGd0I0dzAx?=
+ =?utf-8?B?MEczeE4zT3FCOE1taDVDUmhxMDNPVE5Ha3dsamQvTDFwYW9VdFBKSnVVTjRL?=
+ =?utf-8?B?dko5a1BCaC9abWZzU0ZGR0c0Z2VERXhmQlVQYVR5Ym5NR3UrcmFLNkpYTFkr?=
+ =?utf-8?B?enlxYWgxVmlzb3F4MmVkelpjU3lUWDhvM090NVRkcHAySityMWY0N3ZnOUt6?=
+ =?utf-8?B?cm9NeXJORjFFL3dDR0VyM1NWMmRub0tZMURpZmxEaTdoQVQ3YWNNMlNsVFkw?=
+ =?utf-8?B?WHFEbzg4ODZtaWJXc3lrL2VkdDZwS2tCbG5jOERsR0JBOXBBOHV3U2VDV0l6?=
+ =?utf-8?B?czRjdkU5dG80OGl2YS8xR0VzTU43a0NETG1jK2R3Vk1HU1hIM0VBNnFFMFlK?=
+ =?utf-8?Q?HuIwrKzSKIGBTcYEVT1Evex+i?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1ad4562-b714-4248-27a9-08db2f90e91d
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6551.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 13:32:43.7083
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CDhUOBZpEjcMuS9QNWxgIscSsywGOvD69wdu9tW2dfVOzmQukQ+MKzCDSro0wefJqZgmULa0xdlRbHbxIDEcvA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7074
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28.03.2023 15:12, Juergen Gross wrote:
+> Issue the same error message in case an illegal page boundary crossing
+> has been detected in both cases where this is tested.
+> 
+> Suggested-by: Jan Beulich <jbeulich@suse.com>
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> ---
+> V2:
+> - new patch
+> ---
+>  drivers/net/xen-netback/netback.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/xen-netback/netback.c b/drivers/net/xen-netback/netback.c
+> index 9ca4b69d3b39..5dfdec44354a 100644
+> --- a/drivers/net/xen-netback/netback.c
+> +++ b/drivers/net/xen-netback/netback.c
+> @@ -996,10 +996,8 @@ static void xenvif_tx_build_gops(struct xenvif_queue *queue,
+>  
+>  		/* No crossing a page as the payload mustn't fragment. */
+>  		if (unlikely((txreq.offset + txreq.size) > XEN_PAGE_SIZE)) {
+> -			netdev_err(queue->vif->dev,
+> -				   "txreq.offset: %u, size: %u, end: %lu\n",
+> -				   txreq.offset, txreq.size,
+> -				   (unsigned long)(txreq.offset&~XEN_PAGE_MASK) + txreq.size);
+> +			netdev_err(queue->vif->dev, "Cross page boundary, txp->offset: %u, size: %u\n",
+> +				   txreq.offset, txreq.size);
+>  			xenvif_fatal_tx_err(queue->vif);
+>  			break;
+>  		}
 
+To be honest I'm of the opinion that this goes slightly too far:
+Making the two messages more similar is certainly helpful. But in
+case of problems I think it wouldn't hurt if they're still
+distinguishable - when the one here triggers it may e.g also mean
+that the calculation of the residual size is causing an issue. So
+maybe stick to txreq.offset in the message text, with everything
+else left as you have it?
 
-> On Mar 28, 2023, at 20:59, Marco Elver <elver@google.com> wrote:
->=20
-> On Tue, 28 Mar 2023 at 11:58, 'Muchun Song' via kasan-dev
-> <kasan-dev@googlegroups.com> wrote:
->>=20
->> The original kfence pool layout (Given a layout with 2 objects):
->>=20
->> =
-+------------+------------+------------+------------+------------+--------=
-----+
->> | guard page | guard page |   object   | guard page |   object   | =
-guard page |
->> =
-+------------+------------+------------+------------+------------+--------=
-----+
->>                           |                         | |
->>                           =
-+----kfence_metadata[0]---+----kfence_metadata[1]---+
->>=20
->> The comment says "the additional page in the beginning gives us an =
-even
->> number of pages, which simplifies the mapping of address to metadata =
-index".
->>=20
->> However, removing the additional page does not complicate any mapping
->> calculations. So changing it to the new layout to save a page. And =
-remmove
->> the KFENCE_ERROR_INVALID test since we cannot test this case easily.
->>=20
->> The new kfence pool layout (Given a layout with 2 objects):
->>=20
->> +------------+------------+------------+------------+------------+
->> | guard page |   object   | guard page |   object   | guard page |
->> +------------+------------+------------+------------+------------+
->> |                         |                         |
->> +----kfence_metadata[0]---+----kfence_metadata[1]---+
->>=20
->> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
->> ---
->> include/linux/kfence.h  |  8 ++------
->> mm/kfence/core.c        | 40 ++++++++--------------------------------
->> mm/kfence/kfence.h      |  2 +-
->> mm/kfence/kfence_test.c | 14 --------------
->> 4 files changed, 11 insertions(+), 53 deletions(-)
->>=20
->> diff --git a/include/linux/kfence.h b/include/linux/kfence.h
->> index 726857a4b680..25b13a892717 100644
->> --- a/include/linux/kfence.h
->> +++ b/include/linux/kfence.h
->> @@ -19,12 +19,8 @@
->>=20
->> extern unsigned long kfence_sample_interval;
->>=20
->> -/*
->> - * We allocate an even number of pages, as it simplifies =
-calculations to map
->> - * address to metadata indices; effectively, the very first page =
-serves as an
->> - * extended guard page, but otherwise has no special purpose.
->> - */
->> -#define KFENCE_POOL_SIZE ((CONFIG_KFENCE_NUM_OBJECTS + 1) * 2 * =
-PAGE_SIZE)
->> +/* The last page serves as an extended guard page. */
->=20
-> The last page is just a normal guard page? I.e. the last 2 pages are:
-> <object page> | <guard page>
-
-Right.
-
-The new kfence pool layout (Given a layout with 2 objects):
-
-+------------+------------+------------+------------+------------+
-| guard page |   object   | guard page |   object   | guard page |
-+------------+------------+------------+------------+------------+
-|                         |                         |     ^
-+----kfence_metadata[0]---+----kfence_metadata[1]---+     |
-                                                          |
-                                                          |
-                                                     the last page
-
->=20
-> Or did I misunderstand?
->=20
->> +#define KFENCE_POOL_SIZE       ((CONFIG_KFENCE_NUM_OBJECTS * 2 + 1) =
-* PAGE_SIZE)
->> extern char *__kfence_pool;
->>=20
->> DECLARE_STATIC_KEY_FALSE(kfence_allocation_key);
->> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
->> index 41befcb3b069..f205b860f460 100644
->> --- a/mm/kfence/core.c
->> +++ b/mm/kfence/core.c
->> @@ -240,24 +240,7 @@ static inline void kfence_unprotect(unsigned =
-long addr)
->>=20
->> static inline unsigned long metadata_to_pageaddr(const struct =
-kfence_metadata *meta)
->> {
->> -       unsigned long offset =3D (meta - kfence_metadata + 1) * =
-PAGE_SIZE * 2;
->> -       unsigned long pageaddr =3D (unsigned =
-long)&__kfence_pool[offset];
->> -
->> -       /* The checks do not affect performance; only called from =
-slow-paths. */
->> -
->> -       /* Only call with a pointer into kfence_metadata. */
->> -       if (KFENCE_WARN_ON(meta < kfence_metadata ||
->> -                          meta >=3D kfence_metadata + =
-CONFIG_KFENCE_NUM_OBJECTS))
->> -               return 0;
->=20
-> Could we retain this WARN_ON? Or just get rid of
-> metadata_to_pageaddr() altogether, because there's only 1 use left and
-> the function would now just be a simple ALIGN_DOWN() anyway.
-
-I'll inline this function to its caller since the warning is unlikely.
-
->=20
->> -       /*
->> -        * This metadata object only ever maps to 1 page; verify that =
-the stored
->> -        * address is in the expected range.
->> -        */
->> -       if (KFENCE_WARN_ON(ALIGN_DOWN(meta->addr, PAGE_SIZE) !=3D =
-pageaddr))
->> -               return 0;
->> -
->> -       return pageaddr;
->> +       return ALIGN_DOWN(meta->addr, PAGE_SIZE);
->> }
->>=20
->> /*
->> @@ -535,34 +518,27 @@ static void kfence_init_pool(void)
->>        unsigned long addr =3D (unsigned long)__kfence_pool;
->>        int i;
->>=20
->> -       /*
->> -        * Protect the first 2 pages. The first page is mostly =
-unnecessary, and
->> -        * merely serves as an extended guard page. However, adding =
-one
->> -        * additional page in the beginning gives us an even number =
-of pages,
->> -        * which simplifies the mapping of address to metadata index.
->> -        */
->> -       for (i =3D 0; i < 2; i++, addr +=3D PAGE_SIZE)
->> -               kfence_protect(addr);
->> -
->>        for (i =3D 0; i < CONFIG_KFENCE_NUM_OBJECTS; i++, addr +=3D 2 =
-* PAGE_SIZE) {
->>                struct kfence_metadata *meta =3D &kfence_metadata[i];
->> -               struct slab *slab =3D page_slab(virt_to_page(addr));
->> +               struct slab *slab =3D page_slab(virt_to_page(addr + =
-PAGE_SIZE));
->>=20
->>                /* Initialize metadata. */
->>                INIT_LIST_HEAD(&meta->list);
->>                raw_spin_lock_init(&meta->lock);
->>                meta->state =3D KFENCE_OBJECT_UNUSED;
->> -               meta->addr =3D addr; /* Initialize for validation in =
-metadata_to_pageaddr(). */
->> +               meta->addr =3D addr + PAGE_SIZE;
->>                list_add_tail(&meta->list, &kfence_freelist);
->>=20
->> -               /* Protect the right redzone. */
->> -               kfence_protect(addr + PAGE_SIZE);
->> +               /* Protect the left redzone. */
->> +               kfence_protect(addr);
->>=20
->>                __folio_set_slab(slab_folio(slab));
->> #ifdef CONFIG_MEMCG
->>                slab->memcg_data =3D (unsigned long)&meta->objcg | =
-MEMCG_DATA_OBJCGS;
->> #endif
->>        }
->> +
->> +       kfence_protect(addr);
->> }
->>=20
->> static bool __init kfence_init_pool_early(void)
->> @@ -1043,7 +1019,7 @@ bool kfence_handle_page_fault(unsigned long =
-addr, bool is_write, struct pt_regs
->>=20
->>        atomic_long_inc(&counters[KFENCE_COUNTER_BUGS]);
->>=20
->> -       if (page_index % 2) {
->> +       if (page_index % 2 =3D=3D 0) {
->>                /* This is a redzone, report a buffer overflow. */
->>                struct kfence_metadata *meta;
->>                int distance =3D 0;
->> diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
->> index 600f2e2431d6..249d420100a7 100644
->> --- a/mm/kfence/kfence.h
->> +++ b/mm/kfence/kfence.h
->> @@ -110,7 +110,7 @@ static inline struct kfence_metadata =
-*addr_to_metadata(unsigned long addr)
->>         * __kfence_pool, in which case we would report an "invalid =
-access"
->>         * error.
->>         */
->> -       index =3D (addr - (unsigned long)__kfence_pool) / (PAGE_SIZE =
-* 2) - 1;
->> +       index =3D (addr - (unsigned long)__kfence_pool) / (PAGE_SIZE =
-* 2);
->>        if (index < 0 || index >=3D CONFIG_KFENCE_NUM_OBJECTS)
->>                return NULL;
->=20
-> Assume there is a right OOB that hit the last guard page. In this case
->=20
->  addr >=3D __kfence_pool + (NUM_OBJECTS * 2 * PAGE_SIZE) && addr <
-> __kfence_pool + POOL_SIZE
->=20
-> therefore
->=20
->  index >=3D (NUM_OBJECTS * 2 * PAGE_SIZE) / (PAGE_SIZE * 2) && index <
-> POOL_SIZE / (PAGE_SIZE * 2)
->  index =3D=3D NUM_OBJECTS
->=20
-> And according to the above comparison, this will return NULL and
-> report KFENCE_ERROR_INVALID, which is wrong.
-
-Look at kfence_handle_page_fault(), which first look up "addr - =
-PAGE_SIZE" (passed
-to addr_to_metadata()) and then look up "addr + PAGE_SIZE", the former =
-will not
-return NULL, the latter will return NULL. So kfence will report =
-KFENCE_ERROR_OOB
-in this case, right? Or what I missed here?
-
->=20
->> diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
->> index b5d66a69200d..d479f9c8afb1 100644
->> --- a/mm/kfence/kfence_test.c
->> +++ b/mm/kfence/kfence_test.c
->> @@ -637,19 +637,6 @@ static void test_gfpzero(struct kunit *test)
->>        KUNIT_EXPECT_FALSE(test, report_available());
->> }
->>=20
->> -static void test_invalid_access(struct kunit *test)
->> -{
->> -       const struct expect_report expect =3D {
->> -               .type =3D KFENCE_ERROR_INVALID,
->> -               .fn =3D test_invalid_access,
->> -               .addr =3D &__kfence_pool[10],
->> -               .is_write =3D false,
->> -       };
->> -
->> -       READ_ONCE(__kfence_pool[10]);
->> -       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
->> -}
->> -
->> /* Test SLAB_TYPESAFE_BY_RCU works. */
->> static void test_memcache_typesafe_by_rcu(struct kunit *test)
->> {
->> @@ -787,7 +774,6 @@ static struct kunit_case kfence_test_cases[] =3D =
-{
->>        KUNIT_CASE(test_kmalloc_aligned_oob_write),
->>        KUNIT_CASE(test_shrink_memcache),
->>        KUNIT_CASE(test_memcache_ctor),
->> -       KUNIT_CASE(test_invalid_access),
->=20
-> The test can be retained by doing an access to a guard page in between
-> 2 unallocated objects. But it's probably not that easy to reliably set
-> that up (could try to allocate 2 objects and see if they're next to
-> each other, then free them).
-
-Yes, it's not easy to trigger it 100%. So I removed the test.
-
-
+Jan
