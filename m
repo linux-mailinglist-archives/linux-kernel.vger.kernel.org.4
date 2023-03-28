@@ -2,71 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9DD6CBBA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0096CBB98
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbjC1J7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S232221AbjC1J6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232853AbjC1J7Z (ORCPT
+        with ESMTP id S229638AbjC1J6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:59:25 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453CB6E8E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:59:00 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso14616354pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:59:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679997539;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a9z+2OKezgBl6Xq8s4/uft3FH4lHgs0F/FglMYKuxZE=;
-        b=VsNWH6wbabZBW09E5p1rywOaT5p8dwv3DVQF4JxvKy8pAkOwOWTmSR3v5YYbHdOVIH
-         o9LpPW7UeEmwFT8bwKYV0uifRm0n7p6iEYBMeiwyTvcS/TasidJuyj7P88eL57v1KTDd
-         tI7u4PDJStX8H8gJLJrbqJ2Kof9xiRkHbs+wEsWSrPnUYYMPFzysTbud6J24HgyFWNpP
-         x/6rvB/nHTaJWJCevltlgD8XQOccc/yfD7VHMVUS6y71oqY16doN1wfGwwkfO74aIK1P
-         TXfWcZDvSIRMhEA4BilI3L6ew7QAaPregsJwYg77jDT/Rie9uRJd+pu1GfBpPZf028JJ
-         BL6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679997539;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a9z+2OKezgBl6Xq8s4/uft3FH4lHgs0F/FglMYKuxZE=;
-        b=LXQhbmv074VmdwOfaHR8Iv7UwbvY8hoIDYiw4RYUJaihZwWSinfjnkgvXQNL4zX/xm
-         yUX1DAVRzuV2uhVOABOoBX+4Hjo9lcCyKg6YIrK/v8yAIghoiFcpNKGSttWS7oJi/Wis
-         mNvq75i1lyb3LZJgLcuDUZSln6sr5q0TIckMOO1PHUFU7rE9sJQbc3t1TwHMRmRu25sv
-         8lcyd3u32szqptcEHr7LyBoVDPEdI02wKdyfoDa/nekYeAyebvAFgOPWvcnBvUL2L8so
-         3lphDEGAOFz1u2Cy0lSepIfji2j+xasPa4CyrSO+9J5pSB0/J56gbYF7AhANweYqxGFm
-         WbSg==
-X-Gm-Message-State: AO0yUKUDlikUitfj/AIYnUq1abfs03WKGc3vZ5d7QGueUZIXaLPoDWYJ
-        mlcQZHRgoogOtTSZU12m1knrzw==
-X-Google-Smtp-Source: AK7set+sSOqvm7BhrGFyb5OKdu0ZTvBWUBOT2Bfsk23ttc/ateaVqwe3xWklthmOX72MppMUmuO5pA==
-X-Received: by 2002:a05:6a20:6aa0:b0:d9:2d4e:c08c with SMTP id bi32-20020a056a206aa000b000d92d4ec08cmr12797492pzb.61.1679997539764;
-        Tue, 28 Mar 2023 02:58:59 -0700 (PDT)
-Received: from PXLDJ45XCM.bytedance.net ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id m26-20020aa78a1a000000b005a8a5be96b2sm17207556pfa.104.2023.03.28.02.58.55
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 28 Mar 2023 02:58:59 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     glider@google.com, elver@google.com, dvyukov@google.com,
-        akpm@linux-foundation.org, jannh@google.com, sjpark@amazon.de,
-        muchun.song@linux.dev
-Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH 6/6] mm: kfence: replace ALIGN_DOWN(x, PAGE_SIZE) with PAGE_ALIGN_DOWN(x)
-Date:   Tue, 28 Mar 2023 17:58:07 +0800
-Message-Id: <20230328095807.7014-7-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20230328095807.7014-1-songmuchun@bytedance.com>
-References: <20230328095807.7014-1-songmuchun@bytedance.com>
+        Tue, 28 Mar 2023 05:58:31 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE12155B8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:58:30 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32S815xv016265;
+        Tue, 28 Mar 2023 04:58:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=0f29YZuHBtOS/sG+Zd9YapVHz5G8a79jjm4w1xfzFX8=;
+ b=qVC4X0sYZUfG00H1epgic5cptRVOxGQ/RyrlZNF87gLA831sKKdvvdEGX0SiNsbqD8MO
+ q1kksJiBZDARr1fSV49xHdAasksu0H9HniActAg0P7QdxJSX6MMsWEKjZ4oydXXsiLvr
+ YiKkL1Z4b0F1rK+5jWF/kT8jJjzpP9w24JvmOhPdiw87rR1bKNE/TlyPBa6JBmRxFI4j
+ WeEt40lMXTZFGoD00sKjNHy93f0GjtAJHvJTwOR+45uy6mK/COpR89WoTIiEYm/pF2Gx
+ kRHL/Y7eqIogqq4AcQoeTv0ckcc3GNJ70MtnaecGNW2F4E5Svc4x219+JRoA4bKTf8e8 5A== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3phxc2kfw0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 04:58:21 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Tue, 28 Mar
+ 2023 04:58:19 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Tue, 28 Mar 2023 04:58:19 -0500
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2ADA511D3;
+        Tue, 28 Mar 2023 09:58:19 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <lgirdwood@gmail.com>, <clamor95@gmail.com>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ASoC: wm8903: Remove outdated DMIC comment
+Date:   Tue, 28 Mar 2023 10:58:19 +0100
+Message-ID: <20230328095819.1632802-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain
+X-Proofpoint-GUID: 6j9RyS3MjjFqx6Rv2RpSPxkU3JyD5rrW
+X-Proofpoint-ORIG-GUID: 6j9RyS3MjjFqx6Rv2RpSPxkU3JyD5rrW
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,66 +64,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace ALIGN_DOWN(x, PAGE_SIZE) with PAGE_ALIGN_DOWN(x) to simplify
-the code a bit.
+Support for DMICs was added in commit 97945c46a23d ("ASoC: WM8903:
+Implement DMIC support"). Remove them from the TODO list at the top of
+the driver.
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
- mm/kfence/core.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ sound/soc/codecs/wm8903.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-index f205b860f460..dbfb79a4d624 100644
---- a/mm/kfence/core.c
-+++ b/mm/kfence/core.c
-@@ -230,17 +230,17 @@ static bool alloc_covered_contains(u32 alloc_stack_hash)
+diff --git a/sound/soc/codecs/wm8903.c b/sound/soc/codecs/wm8903.c
+index 41346e5ec5ad4..1dc8e20bdace6 100644
+--- a/sound/soc/codecs/wm8903.c
++++ b/sound/soc/codecs/wm8903.c
+@@ -9,7 +9,6 @@
+  *
+  * TODO:
+  *  - TDM mode configuration.
+- *  - Digital microphone support.
+  */
  
- static inline void kfence_protect(unsigned long addr)
- {
--	kfence_protect_page(ALIGN_DOWN(addr, PAGE_SIZE), true);
-+	kfence_protect_page(PAGE_ALIGN_DOWN(addr), true);
- }
- 
- static inline void kfence_unprotect(unsigned long addr)
- {
--	kfence_protect_page(ALIGN_DOWN(addr, PAGE_SIZE), false);
-+	kfence_protect_page(PAGE_ALIGN_DOWN(addr), false);
- }
- 
- static inline unsigned long metadata_to_pageaddr(const struct kfence_metadata *meta)
- {
--	return ALIGN_DOWN(meta->addr, PAGE_SIZE);
-+	return PAGE_ALIGN_DOWN(meta->addr);
- }
- 
- /*
-@@ -308,7 +308,7 @@ static inline bool check_canary_byte(u8 *addr)
- /* __always_inline this to ensure we won't do an indirect call to fn. */
- static __always_inline void for_each_canary(const struct kfence_metadata *meta, bool (*fn)(u8 *))
- {
--	const unsigned long pageaddr = ALIGN_DOWN(meta->addr, PAGE_SIZE);
-+	const unsigned long pageaddr = PAGE_ALIGN_DOWN(meta->addr);
- 	unsigned long addr;
- 
- 	/*
-@@ -455,7 +455,7 @@ static void kfence_guarded_free(void *addr, struct kfence_metadata *meta, bool z
- 	}
- 
- 	/* Detect racy use-after-free, or incorrect reallocation of this page by KFENCE. */
--	kcsan_begin_scoped_access((void *)ALIGN_DOWN((unsigned long)addr, PAGE_SIZE), PAGE_SIZE,
-+	kcsan_begin_scoped_access((void *)PAGE_ALIGN_DOWN((unsigned long)addr), PAGE_SIZE,
- 				  KCSAN_ACCESS_SCOPED | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ASSERT,
- 				  &assert_page_exclusive);
- 
-@@ -464,7 +464,7 @@ static void kfence_guarded_free(void *addr, struct kfence_metadata *meta, bool z
- 
- 	/* Restore page protection if there was an OOB access. */
- 	if (meta->unprotected_page) {
--		memzero_explicit((void *)ALIGN_DOWN(meta->unprotected_page, PAGE_SIZE), PAGE_SIZE);
-+		memzero_explicit((void *)PAGE_ALIGN_DOWN(meta->unprotected_page), PAGE_SIZE);
- 		kfence_protect(meta->unprotected_page);
- 		meta->unprotected_page = 0;
- 	}
+ #include <linux/module.h>
 -- 
-2.11.0
+2.30.2
 
