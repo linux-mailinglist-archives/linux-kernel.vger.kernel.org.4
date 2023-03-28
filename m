@@ -2,129 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387396CC1A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087146CC19B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbjC1OBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39980 "EHLO
+        id S233071AbjC1OAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233074AbjC1OBT (ORCPT
+        with ESMTP id S233028AbjC1OAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:01:19 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3178CA26;
-        Tue, 28 Mar 2023 07:00:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680012008; x=1711548008;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jilw46ig3h4nFW0taBT9/fQ4a+6HEJTG4UBUL1RGGfk=;
-  b=FNk7Efo1s1/kGT4ieuUPDZtRGqP8PyYw07+F97iPL8wI0q8q0HlSVJcM
-   BUHZ/s00rypXoe0z9eLSNV5IWm81Fg2xOgW5LkxKEL8RpX/k+JNZestA2
-   q9xUdj3kyh2M0fE2BlcxkCtisfM7iPAbs1P/gvBLMozGYg5mlUL8Keysx
-   AgfXDlsR/L2Y+/Mc5HJmNddfax3KyvQhW/OCtrMNgOIRJQxbK8tXPgseo
-   S49sCqw0rzQRYWFowmwOWz6QAmpA1Oib1KpqXRL1cBaHsvvfGcs8R45Bi
-   nuHEjStP8zzxh/4cjkGQkjFDuQVB9ODoNpbuN8iDa6U6VxlUmanvz1ziu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="405505971"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="405505971"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 07:00:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="929892745"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="929892745"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Mar 2023 07:00:06 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ph9rp-000IaN-21;
-        Tue, 28 Mar 2023 14:00:05 +0000
-Date:   Tue, 28 Mar 2023 21:59:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] hwmon: (pmbus/core): Add regulator event support
-Message-ID: <202303282129.T1h4aFZp-lkp@intel.com>
-References: <20230328121712.4057359-2-Naresh.Solanki@9elements.com>
+        Tue, 28 Mar 2023 10:00:07 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986B2CC33;
+        Tue, 28 Mar 2023 06:59:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=v+3vKgAYziYUNd1/YtEm0M2tEuJj+3Sc+fTWjNKvGfM=; b=AA0Yc10UggUYifkJN5+9WMeg/m
+        NbiCMrPKVFf6g1DW046vTIOwTs44SSQzGVWuxI1tzR7ly2TQhW5HM+jXggnfndYrHltFlTBSEKcKL
+        9Xg60iIePWc/Y02BGM6fzgQXzmsW5vJcupJ3NPHBIUAQVko6k3bM+WZB5g+ETK3UtLf4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ph9r3-008eUK-Ek; Tue, 28 Mar 2023 15:59:17 +0200
+Date:   Tue, 28 Mar 2023 15:59:17 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: Re: [RFC PATCH net-next 2/2] net: dsa: mt7530: introduce MMIO driver
+ for MT7988 SoC
+Message-ID: <7e6915bf-f773-4644-b0a7-3cd0730dad8b@lunn.ch>
+References: <ZCIML310vc8/uoM4@makrotopia.org>
+ <a3458e6d-9a30-4ece-9586-18799f532580@lunn.ch>
+ <ZCLmwm01FK7laSqs@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328121712.4057359-2-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZCLmwm01FK7laSqs@makrotopia.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Naresh,
+> I agree that using regmap would be better and I have evaluated that
+> approach as well. As regmap doesn't allow lock-skipping and mt7530.c is
+> much more complex than xrs700x in the way indirect access to its MDIO bus
+> and interrupts work, using regmap accessors for everything would not be
+> trivial.
 
-I love your patch! Yet something to improve:
+O.K, so lets go another way.
 
-[auto build test ERROR on 8a863eb1b1162653d133856702e13560f3596b85]
+Study the low level accesors, and put an abstraction over
+them. Provide an MDIO set and an MMIO set.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/hwmon-pmbus-core-Add-regulator-event-support/20230328-201831
-base:   8a863eb1b1162653d133856702e13560f3596b85
-patch link:    https://lore.kernel.org/r/20230328121712.4057359-2-Naresh.Solanki%409elements.com
-patch subject: [PATCH 2/3] hwmon: (pmbus/core): Add regulator event support
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20230328/202303282129.T1h4aFZp-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/bc5ab0ded8947e49f5292c04bf381274a0272f3f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Naresh-Solanki/hwmon-pmbus-core-Add-regulator-event-support/20230328-201831
-        git checkout bc5ab0ded8947e49f5292c04bf381274a0272f3f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/hwmon/pmbus/
+> To illustrate what I'm talking about, let me show some examples in the
+> current code for which I don't see a way to use regmap:
+> 634) static int
+> 635) mt7531_ind_c45_phy_read(struct mt7530_priv *priv, int port, int devad,
+> 636)                   int regnum)
+> 637) {
+> 638)   struct mii_bus *bus = priv->bus;
+> 639)   struct mt7530_dummy_poll p;
+> 640)   u32 reg, val;
+> 641)   int ret;
+> 642) 
+> 643)   INIT_MT7530_DUMMY_POLL(&p, priv, MT7531_PHY_IAC);
+> 644) 
+> 645)   mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303282129.T1h4aFZp-lkp@intel.com/
+So you need an abstract lock() and an unlock(). Maybe the MMIO
+implementation is a NOP? And the MDIO implementation does a real lock?
 
-All error/warnings (new ones prefixed by >>):
+> 646) 
+> 647)   ret = readx_poll_timeout(_mt7530_unlocked_read, &p, val,
+> 648)                            !(val & MT7531_PHY_ACS_ST), 20, 100000);
 
-   drivers/hwmon/pmbus/pmbus_core.c: In function 'pmbus_regulator_get_error_flags':
->> drivers/hwmon/pmbus/pmbus_core.c:2938:9: warning: the address of 'event' will always evaluate as 'true' [-Waddress]
-    2938 |         return pmbus_get_flags(data, rdev_get_id(rdev), flags, &event, false);
-         |         ^~~~~~
->> drivers/hwmon/pmbus/pmbus_core.c:2938:16: error: too many arguments to function 'pmbus_get_flags'
-    2938 |         return pmbus_get_flags(data, rdev_get_id(rdev), flags, &event, false);
-         |                ^~~~~~~~~~~~~~~
-   drivers/hwmon/pmbus/pmbus_core.c:2886:27: note: declared here
-    2886 | static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags,
-         |                           ^~~~~~~~~~~~~~~
+_mt7530_unlocked_read and presumably _mt7530_unlocked_write()?
 
+> 649)   if (ret < 0) {
+> 650)           dev_err(priv->dev, "poll timeout\n");
+> 651)           goto out;
+> 652)   }
+> 653) 
+> 654)   reg = MT7531_MDIO_CL45_ADDR | MT7531_MDIO_PHY_ADDR(port) |
+> 655)         MT7531_MDIO_DEV_ADDR(devad) | regnum;
+> 656)   mt7530_mii_write(priv, MT7531_PHY_IAC, reg | MT7531_PHY_ACS_ST);
 
-vim +/pmbus_get_flags +2938 drivers/hwmon/pmbus/pmbus_core.c
+mt7530_write() and mt7530_read()
 
-  2930	
-  2931	static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-  2932	{
-  2933		struct device *dev = rdev_get_dev(rdev);
-  2934		struct i2c_client *client = to_i2c_client(dev->parent);
-  2935		struct pmbus_data *data = i2c_get_clientdata(client);
-  2936		int event;
-  2937	
-> 2938		return pmbus_get_flags(data, rdev_get_id(rdev), flags, &event, false);
-  2939	}
-  2940	
+Put the MDIO accessors in the _mdio.c file, and the MMIO accessors in
+the _mmio.c file. Pass them to the core. If you have the abstraction
+correct, the core should not care how the registers are accessed.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+	 Andrew
