@@ -2,42 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0666CB5BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 07:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1A56CB5CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 07:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbjC1FBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 01:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S232037AbjC1FLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 01:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjC1FBU (ORCPT
+        with ESMTP id S230254AbjC1FLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 01:01:20 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE8D31BDC;
-        Mon, 27 Mar 2023 22:01:17 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id CD7348108;
-        Tue, 28 Mar 2023 05:01:16 +0000 (UTC)
-Date:   Tue, 28 Mar 2023 08:01:15 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     Andrew Davis <afd@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC 1/2] ARM: dts: omap: Drop ti,omap36xx compatible
-Message-ID: <20230328050115.GI7501@atomide.com>
-References: <20230216153339.19987-1-afd@ti.com>
- <20230216153339.19987-2-afd@ti.com>
- <20230327211838.580af7a9@aktux>
+        Tue, 28 Mar 2023 01:11:30 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB54210E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 22:11:27 -0700 (PDT)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230328051123epoutp047010c41923b7feba113b2f5fb936bdc7~QfSrQaxH61059810598epoutp04K
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:11:23 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230328051123epoutp047010c41923b7feba113b2f5fb936bdc7~QfSrQaxH61059810598epoutp04K
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1679980283;
+        bh=9Avr+yTfa9LLK9saCK49G1DKCcPcrY/twlH1AMLYC+Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CdqapUn+yKWgSQBQ604LYFowne4Z+4wvN0Cd6hAcVtcqiiXqH+9J+Y/c1ydGMOGuT
+         o24dxLoTlj9Gb1eSGLpHWD/McWJ7T954pXRhJWoDrD0rM5D+YhYev71cP0jfuJR7uM
+         iCKN29JLrifFJ8Rw18M0B0L69KFeYSJBXvYi9qfc=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20230328051123epcas5p35abba1121e835d343c49beaaa5ded462~QfSq7Hdhn0185101851epcas5p3U;
+        Tue, 28 Mar 2023 05:11:23 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4PlyT53s7vz4x9QK; Tue, 28 Mar
+        2023 05:11:21 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A7.E9.55678.8F672246; Tue, 28 Mar 2023 14:11:20 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230328051120epcas5p23b4a173dadbd6f125c881d3809202d85~QfSnsiGbd1367713677epcas5p2m;
+        Tue, 28 Mar 2023 05:11:20 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230328051120epsmtrp2790b231483430685416c7b3c303e01a2~QfSnrlTFx0876108761epsmtrp2K;
+        Tue, 28 Mar 2023 05:11:20 +0000 (GMT)
+X-AuditID: b6c32a4a-6a3ff7000000d97e-be-642276f89e8a
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        39.F9.18071.7F672246; Tue, 28 Mar 2023 14:11:19 +0900 (KST)
+Received: from green5 (unknown [107.110.206.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230328051117epsmtip1945862bfadb3271bf9b732bc79c0b27f~QfSluiTd_2317323173epsmtip1w;
+        Tue, 28 Mar 2023 05:11:17 +0000 (GMT)
+Date:   Tue, 28 Mar 2023 10:40:37 +0530
+From:   Kanchan Joshi <joshi.k@samsung.com>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Bernd Schubert <bschubert@ddn.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>
+Subject: Re: [PATCH V4 00/17] io_uring/ublk: add IORING_OP_FUSED_CMD
+Message-ID: <20230328051037.GB8405@green5>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327211838.580af7a9@aktux>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <20230324135808.855245-1-ming.lei@redhat.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKJsWRmVeSWpSXmKPExsWy7bCmhu6PMqUUgxX9AhZzVm1jtFh9t5/N
+        4uH7J2wW71rPsVjsvaVtcXnXHDaLQ5ObmSxm9p1hsng96T+rxaa/J5ks2p9OYnTg9pjytI/d
+        Y+esu+wel8+Weux8aOnxft9VNo/Pm+QC2KKybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwM
+        dQ0tLcyVFPISc1NtlVx8AnTdMnOAjlNSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTk
+        FJgU6BUn5haX5qXr5aWWWBkaGBiZAhUmZGe0v3/OVLCTp6Lz7X7GBsZNXF2MnBwSAiYSZ04f
+        ZOti5OIQEtjNKNF/bDEThPOJUWL58q/sEM43RonZS/6ywrR8ffSCGSKxF6jq11Yo5wmjxNM9
+        jSxdjBwcLAKqEn+WFYKYbAKaEhcml4L0iggoSdy9uxpsKLPATyaJE5+mMoMkhAVcJI7dbACz
+        eQW0JNZt74SyBSVOznzCAmJzClhJzDnUyQRiiwooSxzYdhzsVAmBuRwS9651MENc5yJx/dhC
+        KFtY4tXxLewQtpTE53d72SDsZIlLM88xQdglEo/3HISy7SVaT/WD9TILZEo8OTGNHcLmk+j9
+        /YQJ5BkJAV6JjjYhiHJFiXuTnkIDRVzi4YwlULaHxKpPj6Eh18socez/T7YJjHKzkPwzC8kK
+        CNtKovNDE+ssoBXMAtISy/9xQJiaEut36S9gZF3FKJlaUJybnlpsWmCUl1oOj+Tk/NxNjOD0
+        quW1g/Hhgw96hxiZOBgPMUpwMCuJ8G72VkwR4k1JrKxKLcqPLyrNSS0+xGgKjJ6JzFKiyfnA
+        BJ9XEm9oYmlgYmZmZmJpbGaoJM6rbnsyWUggPbEkNTs1tSC1CKaPiYNTqoEpg9Ei/GHRnzlF
+        D8/2KZrbLD9wcHXU32Xmz06I3Jr54/xc5g7LUtPNRbzfbHyTlvCeyGs+l//JWSP2e11WNjvT
+        0nnrJCs/HFugtvrYwkTTBIMFP21KrZxjDcOEub7vcP2dEct/4+S6X4Z+i1fvNt8euMToZ8GH
+        Bhv1yasenLlq9rut9kKifGd8kv7lT912IQ+jHrXKfV/2+p6zTfy+c9UdMvs//zTjvTjr3r5t
+        JxsvTt55fK+AvFKc4PY9db9Xsz7hmiS2math38ciM9n17o9bNucf9Lp8/fii/qCSbRXSH9Z/
+        /PiVV3D1sVWsqfeePY0/l77xtFqsrvTGrar/H190dmZwtHl5d8L1dQySyv1zmJVYijMSDbWY
+        i4oTATiZqWc4BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMLMWRmVeSWpSXmKPExsWy7bCSnO73MqUUgyVtFhZzVm1jtFh9t5/N
+        4uH7J2wW71rPsVjsvaVtcXnXHDaLQ5ObmSxm9p1hsng96T+rxaa/J5ks2p9OYnTg9pjytI/d
+        Y+esu+wel8+Weux8aOnxft9VNo/Pm+QC2KK4bFJSczLLUov07RK4Mp6f/s9U8IKz4vDb52wN
+        jL/Zuxg5OSQETCS+PnrB3MXIxSEksJtR4lT3V6iEuETztR9QtrDEyn/P2SGKHjFKfF+6m7GL
+        kYODRUBV4s+yQhCTTUBT4sLkUpByEQElibt3V4OVMwv8ZZJ4fOcNK0hCWMBF4tjNBmYQm1dA
+        S2Ld9k6oxb2MEnMuPWSFSAhKnJz5hAXEZhYwk5i3+SEzyAJmAWmJ5f84QMKcAlYScw51MoHY
+        ogLKEge2HWeawCg4C0n3LCTdsxC6FzAyr2KUTC0ozk3PLTYsMMxLLdcrTswtLs1L10vOz93E
+        CI4XLc0djNtXfdA7xMjEwXiIUYKDWUmEd7O3YooQb0piZVVqUX58UWlOavEhRmkOFiVx3gtd
+        J+OFBNITS1KzU1MLUotgskwcnFINTH6n2CYf8zp2sOgn+7mPVSpCkhcPadod5ZQ4/73Vv26p
+        u/P2L3lsXYU5N6wb787avGt35o1VThVdpxM+xfRcbk836KrqyHurzpqwOGB7bOWHyZs+POAr
+        rTwY9ptXlilcZp3ZVN1ladu5d+xl7Tm0qGufXKinWuKZmfc4nfa8qMp5deCme9CxGT58G/0v
+        837acG9bEbvkGiYe/SmfpQx3bedqmP/vtjbHRaMjYi4z7c7on3p9aVfTlp9WNid6q7eH1vNZ
+        iRueqX/Ql/R8X+PqZUL5u1kkPEpTD76WEfGwb5lzTV1FJPXrIY1igUeR9bq8C/wXGTJe5kle
+        VhqyqKJnTZ2jg4fiz7RvoVtEXA4dUmIpzkg01GIuKk4EANNV18YGAwAA
+X-CMS-MailID: 20230328051120epcas5p23b4a173dadbd6f125c881d3809202d85
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----KU2CxbTk4.ftA7vvsvzLW4bt.-m_7jRTbTuK1k18jgDVn8pS=_11136e_"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230324135916epcas5p37aad4c49c76c05567a484377d8909092
+References: <CGME20230324135916epcas5p37aad4c49c76c05567a484377d8909092@epcas5p3.samsung.com>
+        <20230324135808.855245-1-ming.lei@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,52 +121,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andreas Kemnade <andreas@kemnade.info> [230327 19:18]:
-> On Thu, 16 Feb 2023 09:33:38 -0600
-> Andrew Davis <afd@ti.com> wrote:
-> 
-> > This was not matched anywhere and provides no additional information.
-> > 
-> > Signed-off-by: Andrew Davis <afd@ti.com>
-> > ---
-> >  arch/arm/boot/dts/omap3-beagle-xm.dts              | 2 +-
-> >  arch/arm/boot/dts/omap3-cm-t3730.dts               | 2 +-
-> >  arch/arm/boot/dts/omap3-igep0020-rev-f.dts         | 2 +-
-> >  arch/arm/boot/dts/omap3-igep0020.dts               | 2 +-
-> >  arch/arm/boot/dts/omap3-igep0030-rev-g.dts         | 2 +-
-> >  arch/arm/boot/dts/omap3-igep0030.dts               | 2 +-
-> >  arch/arm/boot/dts/omap3-lilly-dbb056.dts           | 2 +-
-> >  arch/arm/boot/dts/omap3-n9.dts                     | 2 +-
-> >  arch/arm/boot/dts/omap3-n950.dts                   | 2 +-
-> >  arch/arm/boot/dts/omap3-overo-storm-alto35.dts     | 2 +-
-> >  arch/arm/boot/dts/omap3-overo-storm-chestnut43.dts | 2 +-
-> >  arch/arm/boot/dts/omap3-overo-storm-gallop43.dts   | 2 +-
-> >  arch/arm/boot/dts/omap3-overo-storm-palo35.dts     | 2 +-
-> >  arch/arm/boot/dts/omap3-overo-storm-palo43.dts     | 2 +-
-> >  arch/arm/boot/dts/omap3-overo-storm-summit.dts     | 2 +-
-> >  arch/arm/boot/dts/omap3-overo-storm-tobi.dts       | 2 +-
-> >  arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts    | 2 +-
-> >  arch/arm/boot/dts/omap3-pandora-1ghz.dts           | 2 +-
-> >  arch/arm/boot/dts/omap3-sbc-t3730.dts              | 2 +-
-> >  arch/arm/boot/dts/omap3-sniper.dts                 | 2 +-
-> >  arch/arm/boot/dts/omap3-zoom3.dts                  | 2 +-
-> >  21 files changed, 21 insertions(+), 21 deletions(-)
-> > 
-> hmm, we have
-> drivers/clk/ti/dpll.c:         of_machine_is_compatible("ti,omap36xx"))
-> 
-> but that is more completely
->   if ((of_machine_is_compatible("ti,omap3630") ||
->              of_machine_is_compatible("ti,omap36xx")) &&
-> 
-> so missing omap36xx will not harm if 3630 is there. SO this should
-> be probably ok.
+------KU2CxbTk4.ftA7vvsvzLW4bt.-m_7jRTbTuK1k18jgDVn8pS=_11136e_
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Disposition: inline
 
-Looks like we still have these that should be patched away first:
+On Fri, Mar 24, 2023 at 09:57:51PM +0800, Ming Lei wrote:
+>Hello Jens,
+>
+>Add IORING_OP_FUSED_CMD, it is one special URING_CMD, which has to
+>be SQE128. The 1st SQE(master) is one 64byte URING_CMD, and the 2nd
+>64byte SQE(slave) is another normal 64byte OP. For any OP which needs
+>to support slave OP, io_issue_defs[op].fused_slave needs to be set as 1,
+>and its ->issue() can retrieve/import buffer from master request's
+>fused_cmd_kbuf. The slave OP is actually submitted from kernel, part of
+>this idea is from Xiaoguang's ublk ebpf patchset, but this patchset
+>submits slave OP just like normal OP issued from userspace, that said,
+>SQE order is kept, and batching handling is done too.
+>
+>Please see detailed design in commit log of the 2th patch, and one big
+>point is how to handle buffer ownership.
+>
+>With this way, it is easy to support zero copy for ublk/fuse device.
+>
+>Basically userspace can specify any sub-buffer of the ublk block request
+>buffer from the fused command just by setting 'offset/len'
+>in the slave SQE for running slave OP. 
 
-drivers/cpufreq/ti-cpufreq.c-   { .compatible = "ti,omap34xx", .data = &omap34xx_soc_data, },
-drivers/cpufreq/ti-cpufreq.c:   { .compatible = "ti,omap36xx", .data = &omap36xx_soc_data, },
+Wondering if this new OP can also be used to do larger IO (than
+device limit) on nvme-passthrough?
+For example, 1MB IO on NVMe than has 512k or 256K maximum transfer
+size.
 
-Regards,
+------KU2CxbTk4.ftA7vvsvzLW4bt.-m_7jRTbTuK1k18jgDVn8pS=_11136e_
+Content-Type: text/plain; charset="utf-8"
 
-Tony
+
+------KU2CxbTk4.ftA7vvsvzLW4bt.-m_7jRTbTuK1k18jgDVn8pS=_11136e_--
