@@ -2,62 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD016CC170
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE08F6CC176
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbjC1NxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
+        id S231987AbjC1Nxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbjC1NxA (ORCPT
+        with ESMTP id S232640AbjC1Nxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:53:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A15A4696
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:52:17 -0700 (PDT)
+        Tue, 28 Mar 2023 09:53:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F68A5C5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:52:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680011537;
+        s=mimecast20190719; t=1680011563;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0Bjk4mx3lBKFeadPQXueJB7h/c8lDuCBaVc1H5uzUP4=;
-        b=Qmwpldc5BctCzG4vqNEeknc9px02/nZO9pamd4tajaeokuCO1+S14DLl4PJdnzBZ33p5z2
-        4Uf3AJkUUvzC77ejTSxRUZVwQfRP72IeH7zDXhKRnSkG7BlVagXMkEfpIMOnzK2JGm9eVL
-        I5ZttBplkt4CS02xBY+N+eDZi+Kgm4s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-gnJ2ogLqNoKHz6FfAC4XsA-1; Tue, 28 Mar 2023 09:52:14 -0400
-X-MC-Unique: gnJ2ogLqNoKHz6FfAC4XsA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7A9C1855315;
-        Tue, 28 Mar 2023 13:52:13 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3E09614171BB;
-        Tue, 28 Mar 2023 13:52:12 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230111052515.53941-2-zhujia.zj@bytedance.com>
-References: <20230111052515.53941-2-zhujia.zj@bytedance.com> <20230111052515.53941-1-zhujia.zj@bytedance.com>
-To:     Jia Zhu <zhujia.zj@bytedance.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        linux-erofs@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xin Yin <yinxin.x@bytedance.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>
-Subject: Re: [PATCH V4 1/5] cachefiles: introduce object ondemand state
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <131868.1680011531.1@warthog.procyon.org.uk>
+        bh=Lj+lqmXXS0BSikuA1TdKYzG9abofXGYmvsNuCdhCLz8=;
+        b=FYIKUnu4O4fWwrwalTCOfjjHkXf12Ymk/4lVH5i13RoeyczFYSV6jc/Leig1EFYgTZJO3n
+        AFwHzvCaOV3MnllS+uhFyIR7cWWf6jrE1Lm8R7ughNuf2BJxJKLahDGyWGx8BlubxkfcPZ
+        JLDj4nR/MsvjHpY1oeAYuT+4WwQaQ6A=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-240-oQ0q1b5hMJ2oktgkK2vjqw-1; Tue, 28 Mar 2023 09:52:42 -0400
+X-MC-Unique: oQ0q1b5hMJ2oktgkK2vjqw-1
+Received: by mail-qt1-f197.google.com with SMTP id v7-20020a05622a188700b003e0e27bbc2eso8185636qtc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:52:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680011562;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lj+lqmXXS0BSikuA1TdKYzG9abofXGYmvsNuCdhCLz8=;
+        b=hEDDmWVZvyCBL6XTNi8oK+mzabN/hVhWESBuiaIeGCBucxRdRZXZMc/FW3AJMDaItF
+         kVC404WN+fYGMZhcp0U61cBJLBXBYNyh7+QQlA0nZU5r9k6DrsCYOvj40dDHWjgXtTYz
+         313LkwjN5HaiKRQ2z6ngT5tsA2Ls9cNltF46miq0Y2qpFnOAkNPBBHZSe6BcMxR8uae+
+         7DoKdIyDK3K5AI6sDPKc9n9zqgGFHq+dg7cDD9dHqDf4C7iEWRHms5S4L6o67HunrD7N
+         ECetusrXo9PcBkQ8XVJFF6oMae8d4N3JZS3qYuL29EKrgnqq0rSx1HHB4/CWFZSbtGkm
+         DvUw==
+X-Gm-Message-State: AO0yUKWp5sNdvqnJ3IopKKziWx3RfPBmEcEiGOYvnZVCaRMCDg8jrwZx
+        Qg11wpMRvU+aZjRkBXSDAIu8EoeLqhlxudanJ/yjBp7NX38FGhasn3ieUzihvofyfvlyNUyJfZh
+        YgIxeTl6hCFkzUWYYzosuz6Xw
+X-Received: by 2002:ac8:5c49:0:b0:3e1:b2b4:f766 with SMTP id j9-20020ac85c49000000b003e1b2b4f766mr26805725qtj.5.1680011561953;
+        Tue, 28 Mar 2023 06:52:41 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+Nsnehld0v77wMMLYEKM1+leVknIUJ69BwExMVTazmwQLBmfGnLpDVN40nlnWtQr6AxhbgBA==
+X-Received: by 2002:ac8:5c49:0:b0:3e1:b2b4:f766 with SMTP id j9-20020ac85c49000000b003e1b2b4f766mr26805706qtj.5.1680011561719;
+        Tue, 28 Mar 2023 06:52:41 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-232-148.dyn.eolo.it. [146.241.232.148])
+        by smtp.gmail.com with ESMTPSA id s20-20020a374514000000b00746b2ca65edsm7102786qka.75.2023.03.28.06.52.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 06:52:41 -0700 (PDT)
+Message-ID: <da45f73bcc2642260ef7718a6650dc535cc05c86.camel@redhat.com>
+Subject: Re: [PATCH v2 0/3] xen/netback: fix issue introduced recently
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Wei Liu <wei.liu@kernel.org>, Paul Durrant <paul@xen.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        xen-devel@lists.xenproject.org, stable@vger.kernel.org
+Date:   Tue, 28 Mar 2023 15:52:38 +0200
+In-Reply-To: <20230328131047.2440-1-jgross@suse.com>
+References: <20230328131047.2440-1-jgross@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 28 Mar 2023 14:52:11 +0100
-Message-ID: <131869.1680011531@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -68,45 +83,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jia Zhu <zhujia.zj@bytedance.com> wrote:
+Hi,
 
-> +enum cachefiles_object_state {
-> +	CACHEFILES_ONDEMAND_OBJSTATE_close, /* Anonymous fd closed by daemon o=
-r initial state */
-> +	CACHEFILES_ONDEMAND_OBJSTATE_open, /* Anonymous fd associated with obj=
-ect is available */
+On Tue, 2023-03-28 at 15:10 +0200, Juergen Gross wrote:
+> The fix for XSA-423 introduced a bug which resulted in loss of network
+> connection in some configurations.
+>=20
+> The first patch is fixing the issue, while the second one is removing
+> a test which isn't needed. The third patch is making error messages
+> more uniform.
+>=20
+> Changes in V2:
+> - add patch 3
+> - comment addressed (patch 1)
 
-That looks weird.  Maybe make them all-lowercase?
+I misread the thread on v2 as the build_bug_on() was not needed and
+applied such revision.=C2=A0
 
-> @@ -296,6 +302,21 @@ extern void cachefiles_ondemand_clean_object(struct=
- cachefiles_object *object);
->  extern int cachefiles_ondemand_read(struct cachefiles_object *object,
->  				    loff_t pos, size_t len);
->  =
+Please rebase any further change on top of current net.
 
-> +#define CACHEFILES_OBJECT_STATE_FUNCS(_state)	\
-> +static inline bool								\
-> +cachefiles_ondemand_object_is_##_state(const struct cachefiles_object *=
-object) \
-> +{												\
-> +	return object->state =3D=3D CACHEFILES_ONDEMAND_OBJSTATE_##_state; \
-> +}												\
-> +												\
-> +static inline void								\
-> +cachefiles_ondemand_set_object_##_state(struct cachefiles_object *objec=
-t) \
-> +{												\
-> +	object->state =3D CACHEFILES_ONDEMAND_OBJSTATE_##_state; \
-> +}
-> +
-> +CACHEFILES_OBJECT_STATE_FUNCS(open);
-> +CACHEFILES_OBJECT_STATE_FUNCS(close);
+Thanks,
 
-Or just get rid of the macroisation?  If there are only two states, it doe=
-sn't
-save you that much and it means that "make TAGS" won't generate refs for t=
-hose
-functions and grep won't find them.
-
-David
+Paolo
 
