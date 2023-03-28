@@ -2,115 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE9F6CC5B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940886CC5BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233141AbjC1PQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
+        id S233973AbjC1PR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232995AbjC1PQP (ORCPT
+        with ESMTP id S232624AbjC1PRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:16:15 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98F0113E0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:15:19 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id l15-20020a05600c4f0f00b003ef6d684102so4354919wmq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:15:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680016493;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PiMcWrRifwEUskuyIQFulIGS7kWqc1dpRYsMeE3Bnt8=;
-        b=lkLswlCp30qWwFIoG0VhbwpbY4a6zCPS1qSMwqwqeiFFRzUZmaUPXzqNBgLn9KbnZA
-         EjRMoSidmm0G1ZqXLco7qoaIeAGtEqy9CzCmGT113ZV9pZlOZXo3Q4EQCvl5QeTp1+07
-         kEIka5g6iNZos2U6DbuOOzeSxbQ/cJ+Ymvhn4t6dwcq9C/hnxbYylLgrMYJp0a4BoA9y
-         E8vCYfeNd7p3wsnJmXtnAPbXhT/qlhRza6jRb6elaW6Yp0GEpqkFB2A/bwALWysQ5g6S
-         Q6c0Hr9njtIXFUbe4cyCN9r+vmJFm9YuhFp7Q/rjIsMdNApQtZJ3QRPehh/ts8+0ft+2
-         zzOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680016493;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PiMcWrRifwEUskuyIQFulIGS7kWqc1dpRYsMeE3Bnt8=;
-        b=qxr3UZ7MkJyq/VIEghYauBs+zbzGbEY7bi4+96jXmF3xlSfExC0RUIkr++VwNDNGyh
-         WMvWf3oCGqfjWIbV8hOute09tHFcUuR+dyr+1x7eN3UWYIoXKLQRGy7xEsbCzM3zj7W3
-         e2mlMIqM8Zp+Dfb7H/eSqnaEYjh1vEUmCh/TVJi/khbhULlW+Goq8Btoka/00SbW118z
-         WYGyovbN6TCcRHgqA8VQQvRSH0FwDYQ2Kca3VdCrhVUpqOesc8LgGD5cblpOzsWJssoB
-         A/qkZuylZLSXS9b2No1iC7RkLaxdSJCLiShs//x3exdw/DgQakGk4BIfB5qnyX12sZxp
-         y2mw==
-X-Gm-Message-State: AO0yUKWla6a5tnobWwU2HKreiDQVFcioAcUT7bHQIioRslJ9ES7T8WvL
-        OrCueuTfKejpnJmquhoSkefgPg==
-X-Google-Smtp-Source: AK7set95wY5EE0YNtfyvHTheORBSmDzHYguznEV+XEbkUnM0uVPMSwFMBcmsjKdakudAhAOmOYBvCQ==
-X-Received: by 2002:a7b:ce08:0:b0:3da:1f6a:7b36 with SMTP id m8-20020a7bce08000000b003da1f6a7b36mr12456491wmc.0.1680016493494;
-        Tue, 28 Mar 2023 08:14:53 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.91])
-        by smtp.gmail.com with ESMTPSA id v4-20020a05600c214400b003ef62deb830sm11354391wml.25.2023.03.28.08.14.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 08:14:53 -0700 (PDT)
-Message-ID: <48f1ee32-a030-8188-3a9d-612888b9678f@linaro.org>
-Date:   Tue, 28 Mar 2023 16:14:51 +0100
+        Tue, 28 Mar 2023 11:17:14 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34C61117F;
+        Tue, 28 Mar 2023 08:16:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680016588; x=1711552588;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=k2hx/WBFqL7VuFz0I6+8fGkxNCCWOhJe2NR5annG8QI=;
+  b=ChPqkUu4nXQMSKWoAx6g1zrYvJ8YQgnBgllAnsuMLFqKSDD6eLhjmz53
+   sRSvi2z+TIlep5fLxlaZ7lp3k0/UdQnxXUr45ROS5HQFfMAW/k47Z/IvI
+   TR4HrHbjMO2ZpEQFCKkaU05YddJ5aKd7NAPKyU4MkZrBGGPMREq9PJgYZ
+   tA9ZI6necyza8uCd+C2KG8+AysrfYm5yPKI9o27sgM+3LfuuD4eesG+6j
+   1EM1x5ljApxHhqSz/5uFOimDIrZxz+toO6ey4lNLiznmRBdFoJg/KL7fj
+   JYnC2bDD4nZHqMrjFtdrgfQacPZ21TwlsSe0xOdx/yFiwJI3LX4hzEm4P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="403208612"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="403208612"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 08:15:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="773181739"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="773181739"
+Received: from lab-ah.igk.intel.com ([10.102.138.202])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 08:15:46 -0700
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Date:   Tue, 28 Mar 2023 17:15:24 +0200
+Subject: [PATCH v5 1/8] lib/ref_tracker: add unlocked leak print helper
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH -next] spi: rockchip-sfc: Use
- devm_platform_get_and_ioremap_resource()
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, broonie@kernel.org
-Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230328062118.86336-1-yang.lee@linux.alibaba.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20230328062118.86336-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-Id: <20230224-track_gt-v5-1-77be86f2c872@intel.com>
+References: <20230224-track_gt-v5-0-77be86f2c872@intel.com>
+In-Reply-To: <20230224-track_gt-v5-0-77be86f2c872@intel.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+To have reliable detection of leaks, caller must be able to check under the same
+lock both: tracked counter and the leaks. dir.lock is natural candidate for such
+lock and unlocked print helper can be called with this lock taken.
+As a bonus we can reuse this helper in ref_tracker_dir_exit.
 
+Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+---
+ include/linux/ref_tracker.h |  8 ++++++
+ lib/ref_tracker.c           | 66 ++++++++++++++++++++++++++-------------------
+ 2 files changed, 46 insertions(+), 28 deletions(-)
 
-On 3/28/23 07:21, Yang Li wrote:
-> According to commit 890cc39a8799 ("drivers: provide
-> devm_platform_get_and_ioremap_resource()"), convert
-> platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/spi/spi-rockchip-sfc.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+diff --git a/include/linux/ref_tracker.h b/include/linux/ref_tracker.h
+index 9ca353ab712b5e..87a92f2bec1b88 100644
+--- a/include/linux/ref_tracker.h
++++ b/include/linux/ref_tracker.h
+@@ -36,6 +36,9 @@ static inline void ref_tracker_dir_init(struct ref_tracker_dir *dir,
+ 
+ void ref_tracker_dir_exit(struct ref_tracker_dir *dir);
+ 
++void ref_tracker_dir_print_locked(struct ref_tracker_dir *dir,
++				  unsigned int display_limit);
++
+ void ref_tracker_dir_print(struct ref_tracker_dir *dir,
+ 			   unsigned int display_limit);
+ 
+@@ -56,6 +59,11 @@ static inline void ref_tracker_dir_exit(struct ref_tracker_dir *dir)
+ {
+ }
+ 
++static inline void ref_tracker_dir_print_locked(struct ref_tracker_dir *dir,
++						unsigned int display_limit)
++{
++}
++
+ static inline void ref_tracker_dir_print(struct ref_tracker_dir *dir,
+ 					 unsigned int display_limit)
+ {
+diff --git a/lib/ref_tracker.c b/lib/ref_tracker.c
+index dc7b14aa3431e2..d4eb0929af8f96 100644
+--- a/lib/ref_tracker.c
++++ b/lib/ref_tracker.c
+@@ -14,6 +14,38 @@ struct ref_tracker {
+ 	depot_stack_handle_t	free_stack_handle;
+ };
+ 
++void ref_tracker_dir_print_locked(struct ref_tracker_dir *dir,
++				  unsigned int display_limit)
++{
++	struct ref_tracker *tracker;
++	unsigned int i = 0;
++
++	lockdep_assert_held(&dir->lock);
++
++	list_for_each_entry(tracker, &dir->list, head) {
++		if (i < display_limit) {
++			pr_err("leaked reference.\n");
++			if (tracker->alloc_stack_handle)
++				stack_depot_print(tracker->alloc_stack_handle);
++			i++;
++		} else {
++			break;
++		}
++	}
++}
++EXPORT_SYMBOL(ref_tracker_dir_print_locked);
++
++void ref_tracker_dir_print(struct ref_tracker_dir *dir,
++			   unsigned int display_limit)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&dir->lock, flags);
++	ref_tracker_dir_print_locked(dir, display_limit);
++	spin_unlock_irqrestore(&dir->lock, flags);
++}
++EXPORT_SYMBOL(ref_tracker_dir_print);
++
+ void ref_tracker_dir_exit(struct ref_tracker_dir *dir)
+ {
+ 	struct ref_tracker *tracker, *n;
+@@ -27,13 +59,13 @@ void ref_tracker_dir_exit(struct ref_tracker_dir *dir)
+ 		kfree(tracker);
+ 		dir->quarantine_avail++;
+ 	}
+-	list_for_each_entry_safe(tracker, n, &dir->list, head) {
+-		pr_err("leaked reference.\n");
+-		if (tracker->alloc_stack_handle)
+-			stack_depot_print(tracker->alloc_stack_handle);
++	if (!list_empty(&dir->list)) {
++		ref_tracker_dir_print_locked(dir, 16);
+ 		leak = true;
+-		list_del(&tracker->head);
+-		kfree(tracker);
++		list_for_each_entry_safe(tracker, n, &dir->list, head) {
++			list_del(&tracker->head);
++			kfree(tracker);
++		}
+ 	}
+ 	spin_unlock_irqrestore(&dir->lock, flags);
+ 	WARN_ON_ONCE(leak);
+@@ -42,28 +74,6 @@ void ref_tracker_dir_exit(struct ref_tracker_dir *dir)
+ }
+ EXPORT_SYMBOL(ref_tracker_dir_exit);
+ 
+-void ref_tracker_dir_print(struct ref_tracker_dir *dir,
+-			   unsigned int display_limit)
+-{
+-	struct ref_tracker *tracker;
+-	unsigned long flags;
+-	unsigned int i = 0;
+-
+-	spin_lock_irqsave(&dir->lock, flags);
+-	list_for_each_entry(tracker, &dir->list, head) {
+-		if (i < display_limit) {
+-			pr_err("leaked reference.\n");
+-			if (tracker->alloc_stack_handle)
+-				stack_depot_print(tracker->alloc_stack_handle);
+-			i++;
+-		} else {
+-			break;
+-		}
+-	}
+-	spin_unlock_irqrestore(&dir->lock, flags);
+-}
+-EXPORT_SYMBOL(ref_tracker_dir_print);
+-
+ int ref_tracker_alloc(struct ref_tracker_dir *dir,
+ 		      struct ref_tracker **trackerp,
+ 		      gfp_t gfp)
 
-If I were you I would make a single patch addressing all the drivers
-from SPI as this is a single logical change. You get extra points as you
-avoid polluting the log.
-
-> 
-> diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
-> index 4fabd2e0439f..6830ecaa270b 100644
-> --- a/drivers/spi/spi-rockchip-sfc.c
-> +++ b/drivers/spi/spi-rockchip-sfc.c
-> @@ -576,8 +576,7 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
->  	sfc = spi_master_get_devdata(master);
->  	sfc->dev = dev;
->  
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	sfc->regbase = devm_ioremap_resource(dev, res);
-> +	sfc->regbase = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-
-No, you better use devm_platform_ioremap_resource() as res is not used
-afterwards. You'll get rid of the local variable too.
-
->  	if (IS_ERR(sfc->regbase))
->  		return PTR_ERR(sfc->regbase);
->  
+-- 
+2.34.1
