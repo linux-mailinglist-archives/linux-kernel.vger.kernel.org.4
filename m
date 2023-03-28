@@ -2,115 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE036CC920
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F05C6CC949
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjC1RVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
+        id S230021AbjC1Rb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjC1RVr (ORCPT
+        with ESMTP id S229838AbjC1Rb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:21:47 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F21DBD7;
-        Tue, 28 Mar 2023 10:21:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680024098; x=1711560098;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=0TfcPjksoLAS4Lgr8pbWYVIORpk7kQ3431tuOunQDOM=;
-  b=c1LlDWWVA7LveZDO81c2JJSKTHfs0ULzF3DqcItXafz0qlXUc3sMZ6OK
-   NDsIusPtHlgemaW4UTVRNE/7mxM48BQ2wbZNuqPKoptum1Ji9V1ldSfxF
-   5oVkfdIDKFu11CE94H/Ts8f1n7oHhM8jysPDdHNi1/3oCSlQq6iOS7w/l
-   /xfhcHBA1EdLzgl2AHLY4Q0Ussfmu+xaOOH5mzraFTZuSrhO66Syj+BRI
-   +LjnEDkoCG+GASpvAj3L3nBDp3Kicm8uQ+8FH/99Gz2ZnLk3haVTweoom
-   JQKjQlGqwYIZ1HdC/lNWmI4frLZzGv+fxGKMCeWmxWk54CXHR8rfjwm2C
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="320289000"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="320289000"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 10:21:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="714333438"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="714333438"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 10:21:36 -0700
-Date:   Tue, 28 Mar 2023 10:25:40 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v2 7/8] iommu: Export iommu_get_dma_domain
-Message-ID: <20230328102540.6158e642@jacob-builder>
-In-Reply-To: <ZCMTf5RwebmELsoT@nvidia.com>
-References: <20230327232138.1490712-1-jacob.jun.pan@linux.intel.com>
-        <20230327232138.1490712-8-jacob.jun.pan@linux.intel.com>
-        <e7d53d04-6b7f-05a4-3077-42470c6d2823@linux.intel.com>
-        <BN9PR11MB527623AC2CE25EDA10FF81548C889@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <20230328084822.4b46e649@jacob-builder>
-        <ZCMTf5RwebmELsoT@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 28 Mar 2023 13:31:56 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283BEC651
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:31:55 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id r187so16091177ybr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:31:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680024714;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DY7YgCh1iZeJKq9EsheOBiDYaF9Q7m8O4sVVQRTEOtQ=;
+        b=r86BZXlKh2IQx67G5OPEubqsNljPE7UW5dQk3KKfx0taW0k2gLEGJ0KskGNsNmSvO5
+         49z49W6/HN+WNnhR5uyF48EEh7C7W8ub/+SpF9yZH0T+dJHYF7nWJ8BjIQ7nCQ8cEqcP
+         FjxmTw+W06HCkU6L7A+QeVwwX+kk9XFZfDJFVbPdomeL4zw4VXErylakiGdBTlvwQdCC
+         cZUC6upH5mIciQ7/JCHmGyFCoQSyQ8pUC4GRXKkEGipvNn/qkiS+PBwTmnuFJPmHpQaG
+         uHLgDfWcJx2honDZ9BMj8fCdDxqYMlirsqd6jrQ+hg+RmCYNdqx2SHYQGbAPSWfxRXzA
+         PmFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680024714;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DY7YgCh1iZeJKq9EsheOBiDYaF9Q7m8O4sVVQRTEOtQ=;
+        b=Pw+wwQ/wniKLz7GyCRakQ4aj2VtTGm3mYjRI8SGN+tXr+Sv6WZNWcypnmHxGkctbZK
+         4ceaPszwWx94qC+7g/OIRpTjhrJSIuw1OYQeR25oxeVSzqsELn0c0rqowAONvdzNPVQp
+         VVSTLuVsHbNmcegwt3O8DDEFaF22pKy0DuGez0Ez2DB95MC5SjWYw4/sYCdf8WJaEwSV
+         s8vKfqWQOLAbiEhP5zZDkvcQSHGfPE959iPSxOYz+n4xIAztxtQJKV6GkszMKgKFHuMu
+         XCRY3SV6MEwt373JG4/29ZSsNZUgG4g5/axtg+qoSUSDy2wMrzwP0LgHCUP2X7Wt4lkb
+         fFzA==
+X-Gm-Message-State: AAQBX9fMfJ4BpYRGPCXtiqGZGMi5pxEMR0S1ZFMyX5rbjmYIipwLQJX1
+        Zb+CbS7nbzsnShlkl+oAXiiQlnx4UgVcT3WeZDS6MQ==
+X-Google-Smtp-Source: AKy350Z+jFy6i2s7WBj3hhG5uYYtFfJtpmAkGMeuxT4IHufp3T7blFtifyFS90kbxP4x7v2utE2351pqleUHO1aGuLQ=
+X-Received: by 2002:a05:6902:1009:b0:b6b:e967:920d with SMTP id
+ w9-20020a056902100900b00b6be967920dmr8469098ybt.13.1680024714097; Tue, 28 Mar
+ 2023 10:31:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-15-vipinsh@google.com>
+ <ZBzSgI2mkpl3QTNt@google.com>
+In-Reply-To: <ZBzSgI2mkpl3QTNt@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Tue, 28 Mar 2023 10:31:18 -0700
+Message-ID: <CAHVum0dSh-=VsiR+dC6MC3FO_ev4CqNZ6PrVuZoQ+uRd5qn-0g@mail.gmail.com>
+Subject: Re: [Patch v4 14/18] KVM: mmu: Initialize kvm_mmu_memory_cache.gfp_zero
+ to __GFP_ZERO by default
+To:     David Matlack <dmatlack@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+On Thu, Mar 23, 2023 at 3:28=E2=80=AFPM David Matlack <dmatlack@google.com>=
+ wrote:
+>
+> On Mon, Mar 06, 2023 at 02:41:23PM -0800, Vipin Sharma wrote:
+> > Set __GFP_ZERO to gfp_zero in default initizliation of struct
+> > kvm_mmu_memory_cache{}
+> >
+> > All of the users of default initialization code of struct
+> > kvm_mmu_memory_cache{} explicitly sets gfp_zero to __GFP_ZERO. This can
+> > be moved to common initialization logic.
+>
+> If that were true we could get rid of gfp_zero entirely and hard-code
+> __GFP_ZERO in the memory allocator! mmu_shadowed_info_cache is the one
+> that does not set __GFP_ZERO.
+>
 
-On Tue, 28 Mar 2023 13:19:11 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
-
-> On Tue, Mar 28, 2023 at 08:48:22AM -0700, Jacob Pan wrote:
-> 
-> > > Agree. The kernel driver managing the device wants to get the current 
-> > > domain of the device then iommu_get_domain_for_dev() is the right
-> > > interface. It knows the domain is the dma domain.  
-> > This goes back to v1 then :)
-> > 
-> > I thought the comments from v1 is that we don't want to check the domain
-> > type is DMA domain returned by iommu_get_domain_for_dev()
-> > 
-> > If the driver "knows" the domain is dma domain, why can't it use
-> > iommu_get_dma_domain()? seems paradoxical.  
-> 
-> Huh?
-> 
-> The DMA API operates on the current domain of the device, be it
-> IDENTITY or UNMANAGED.
-> 
-> You have to copy whatever the current domain is to the PASID and you
-> should definately not check if it is DMA or something.
-> 
-right, the PASID works for IOVA, passthrough. I misunderstood the v1
-review comments. I will go back to use iommu_get_domain_for_dev() but w/o
-checking domain types.
-
-Thanks all,
-
-Jacob
+Can we use __GFP_ZERO for mmu_shadowed_info_cache? Also, MIPS doesn't
+use __GFP_ZERO, I think it might be a missed thing in MIPS rather than
+intentional.
