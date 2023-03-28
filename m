@@ -2,149 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7506CC633
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F95F6CC639
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233967AbjC1P1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
+        id S233370AbjC1P2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232711AbjC1P0g (ORCPT
+        with ESMTP id S233344AbjC1P2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:26:36 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73FE10252
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:25:33 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id v1so12654867wrv.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:25:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680017116;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NbTGN4AmHnIHsx21UwKF1mcC0glvE7lkzW1Nfz99yWw=;
-        b=MHUZOeLXGOV7LXvnYEiNrrODlRDpNM21xPxy5cKPf2PteIGaDuQKEWCwHxrWHxOGz2
-         Bmb02PWAcdS1KBv2nygk5V1+U/rxsiGSN44rAxmRs9+RxGHdsqQ4P9akZHkp6fFaYO6K
-         3zoZ/MYIiLRXrxp+HpgItn9LkMR8JW6RiA9wJdYtKUBib7LrxflKfkI0HZpVyDcyoGg+
-         iO4zzn0bc/In/hxDslvhQGbL5FY45rGz5ttEVV5Qh2LQe2dmENUFFQdsQ6CRPfRswswH
-         paVcEf0TA55Iv/VBabedNkB26OmwSUEOijustAQtvTYAYPtj9HQOecZyuvQjMZdMV7ms
-         AmpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680017116;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NbTGN4AmHnIHsx21UwKF1mcC0glvE7lkzW1Nfz99yWw=;
-        b=4hqkjCv3LeOEWeZ33NdkvWhcSyzuQQYysl3yT3EsDjwLU0MllXfCO8KyXKNMw5qECX
-         +6pvj25K0d/m9dUT5M19dgEftosb59YPQLxG4p7I2/DLR8dJuHSwBpf2AeXNM0DyGw6n
-         13ECxDfhvWP2avM1q+lsXFbWj3BI/bdcNj3BSIsdZXuXtunD1HqD5BVzaIw9EeA2m2ko
-         4VpE8XZUa63B5emj8mxt3piIFpUfXVzGLj5aqCwjLiM/NIvX9CBMH8WVwBTzCSVHTJxw
-         dfsSGogh4oSRlMBa6L8mAY34G+fxx/6lGQ1yZh3mtl+iV1Us1balVi8SvCwGzxVBzQPI
-         9kWA==
-X-Gm-Message-State: AAQBX9cpRsPHNi/hM43teTs9ztcqztSxRzvfIbqGrZbrkZ7ZvOLaXYOi
-        huCDEc8nHz06qgE30qreI9yAsg==
-X-Google-Smtp-Source: AKy350YtNWIBuEbC2fJEJX4l8eZXgP1XMfWr6m4PEqfYoF7qyluW6LBaS9dnskEctqJNDZL9veDYCw==
-X-Received: by 2002:a5d:6645:0:b0:2d1:481d:5863 with SMTP id f5-20020a5d6645000000b002d1481d5863mr11107093wrw.11.1680017116682;
-        Tue, 28 Mar 2023 08:25:16 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.91])
-        by smtp.gmail.com with ESMTPSA id e11-20020a5d65cb000000b002c55de1c72bsm27838248wrw.62.2023.03.28.08.25.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 08:25:16 -0700 (PDT)
-Message-ID: <b8a14527-b95b-3366-d2b9-f87399d49779@linaro.org>
-Date:   Tue, 28 Mar 2023 16:25:15 +0100
+        Tue, 28 Mar 2023 11:28:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D117A11151;
+        Tue, 28 Mar 2023 08:26:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4CDCB81D63;
+        Tue, 28 Mar 2023 15:26:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 790AFC433D2;
+        Tue, 28 Mar 2023 15:26:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680017173;
+        bh=c9pKkQdbYczrPk/ZhXPcO6rkUETAl2Vzl8XLGqpUIIM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=P9LXSP1fmevehR/xg4Bn/89VjrdMBEAL69CrbDnfjHGw/qAH6z2VxM7BSAqG9uFgk
+         5vtzew0cTXkNOM5j0QrEOXVJpLcVcUQu5rCj0QD3WXLswPZYvITtkT2AoM6d7irXzG
+         NqGj3s8XCDBnjT0PHoku1DYikDsGVOmx9h1jBXZUcgfsO/YX2WB15adPODXy3yxOn9
+         UmhInvCe3/5t5ApJjfUqNr/cEAu14ePm9yL3IEP3gSrsrrrBgr7AiyGzGimP8uhveY
+         BuCNB9DGjnlY7Pj8BiCX0CVGL8EnVyXDrvVwgAABzEmtlwAnoIkg15dunAmCvKPIqT
+         snjygPDWDriWQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 1426C154039B; Tue, 28 Mar 2023 08:26:13 -0700 (PDT)
+Date:   Tue, 28 Mar 2023 08:26:13 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, RCU <rcu@vger.kernel.org>,
+        quic_neeraju@quicinc.com, Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH 1/1] Reduce synchronize_rcu() waiting time
+Message-ID: <2cd8f407-2b77-48b1-9f17-9aa8e4ce9c64@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <ca153af5-bd66-4d48-afa5-ace3a13aec3c@paulmck-laptop>
+ <FC49F388-0480-4687-8DD3-94049FCBC92B@joelfernandes.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH -next] spi: xilinx: Use
- devm_platform_get_and_ioremap_resource()
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, broonie@kernel.org
-Cc:     michal.simek@xilinx.com, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230328061524.77529-1-yang.lee@linux.alibaba.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20230328061524.77529-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <FC49F388-0480-4687-8DD3-94049FCBC92B@joelfernandes.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/28/23 07:15, Yang Li wrote:
-> According to commit 890cc39a8799 ("drivers: provide
-> devm_platform_get_and_ioremap_resource()"), convert
-> platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+On Mon, Mar 27, 2023 at 10:29:31PM -0400, Joel Fernandes wrote:
+> Hello,
 > 
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/spi/spi-xilinx.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> > On Mar 27, 2023, at 9:06 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > 
+> > ﻿On Mon, Mar 27, 2023 at 11:21:23AM +0000, Zhang, Qiang1 wrote:
+> >>>> From: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> >>>> Sent: Tuesday, March 21, 2023 6:28 PM
+> >>>> [...]
+> >>>> Subject: [PATCH 1/1] Reduce synchronize_rcu() waiting time
+> >>>> 
+> >>>> A call to a synchronize_rcu() can be expensive from time point of view.
+> >>>> Different workloads can be affected by this especially the ones which use this
+> >>>> API in its time critical sections.
+> >>>> 
+> >>> 
+> >>> This is interesting and meaningful research. ;-)
+> >>> 
+> >>>> For example in case of NOCB scenario the wakeme_after_rcu() callback
+> >>>> invocation depends on where in a nocb-list it is located. Below is an example
+> >>>> when it was the last out of ~3600 callbacks:
+> >>> 
+> >> 
+> >> 
+> >> 
+> >> Can it be implemented separately as follows?  it seems that the code is simpler
+> >> (only personal opinion)  😊.
+> >> 
+> >> But I didn't test whether this reduce synchronize_rcu() waiting time
+> >> 
+> >> +static void rcu_poll_wait_gp(struct rcu_tasks *rtp)
+> >> +{
+> >> +       unsigned long gp_snap;
+> >> +
+> >> +       gp_snap = start_poll_synchronize_rcu();
+> >> +       while (!poll_state_synchronize_rcu(gp_snap))
+> >> +               schedule_timeout_idle(1);
+> > 
+> > I could be wrong, but my guess is that the guys working with
+> > battery-powered devices are not going to be very happy with this loop.
+> > 
+> > All those wakeups by all tasks waiting for a grace period end up
+> > consuming a surprisingly large amount of energy.
 > 
-> diff --git a/drivers/spi/spi-xilinx.c b/drivers/spi/spi-xilinx.c
-> index 5dd3d1901412..8e6e3876aa9a 100644
-> --- a/drivers/spi/spi-xilinx.c
-> +++ b/drivers/spi/spi-xilinx.c
-> @@ -440,8 +440,7 @@ static int xilinx_spi_probe(struct platform_device *pdev)
->  	xspi->bitbang.txrx_bufs = xilinx_spi_txrx_bufs;
->  	init_completion(&xspi->done);
->  
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	xspi->regs = devm_ioremap_resource(&pdev->dev, res);
-> +	xspi->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
->  	if (IS_ERR(xspi->regs))
->  		return PTR_ERR(xspi->regs);
->  
+> Is that really the common case? On the general topic of wake-ups:
+> Most of the time there should be only one
+> task waiting synchronously on a GP to end. If that is
+> true, then it feels like waking
+> up nocb Kthreads which indirectly wake other threads is doing more work than usual?
 
-So we keep the local var res just to print its value? Wouldn't have been
-better to have something like:
+A good question, and the number of outstanding synchronize_rcu()
+calls will of course be limited by the number of tasks in the system.
+But I myself have raised the ire of battery-powered embedded folks with
+a rather small number of wakeups, so...
 
-diff --git a/drivers/spi/spi-xilinx.c b/drivers/spi/spi-xilinx.c
-index 1411548f4255..693be1eacaca 100644
---- a/drivers/spi/spi-xilinx.c
-+++ b/drivers/spi/spi-xilinx.c
-@@ -391,7 +391,6 @@ static int xilinx_spi_probe(struct platform_device
-*pdev)
- {
-        struct xilinx_spi *xspi;
-        struct xspi_platform_data *pdata;
--       struct resource *res;
-        int ret, num_cs = 0, bits_per_word;
-        struct spi_master *master;
-        bool force_irq = false;
-@@ -440,8 +439,7 @@ static int xilinx_spi_probe(struct platform_device
-*pdev)
-        xspi->bitbang.txrx_bufs = xilinx_spi_txrx_bufs;
-        init_completion(&xspi->done);
+And on larger systems there can be a tradeoff between contention on
+the one hand and number of wakeups on the other.
 
--       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--       xspi->regs = devm_ioremap_resource(&pdev->dev, res);
-+       xspi->regs = devm_platform_ioremap_resource(pdev, 0);
-        if (IS_ERR(xspi->regs))
-                return PTR_ERR(xspi->regs);
+The original nocb implementation in fact had the grace-period kthead
+waking up all of what are now called rcuoc kthreads.  The indirect scheme
+reduced the total number of wakeups by up to 50% and also reduced the
+CPU consumption of the grace-period kthread, which otherwise would have
+become a bottleneck on large systems.
 
-@@ -493,7 +491,7 @@ static int xilinx_spi_probe(struct platform_device
-*pdev)
-                return ret;
-        }
+And also, a scheme that directly wakes tasks waiting in synchronize_rcu()
+might well use the same ->nocb_gp_wq[] waitqueues that are used by the
+rcuog kthreads, if that is what you were getting at.
 
--       dev_info(&pdev->dev, "at %pR, irq=%d\n", res, xspi->irq);
-+       dev_info(&pdev->dev, "irq=%d\n", xspi->irq);
+> I am curious to measure how much does Vlad patch reduce wakeups in the common case.
 
-        if (pdata) {
-                for (i = 0; i < pdata->num_devices; i++)
+Sounds like a good thing to measure!
 
----
+> I was also wondering how Vlad patch effects RCU-barrier ordering. I guess
+> we want the wake up to happen in the order of
+> other callbacks also waiting.
 
-I would get rid of printing xspi->irq too, as I don't see any benefit in
-printing it, but that would be for another patch, as it is a different
-logical change.
+OK, I will bite.  Why would rcu_barrier() need to care about the
+synchronize_rcu() invocations if they no longer used call_rcu()?
+
+> One last note, most battery powered systems are perhaps already using expedited RCU ;-)
+
+Good point.  And that does raise the question of exactly what workloads
+and systems want faster wakeups from synchronize_rcu() and cannot get
+this effect from expedited grace periods.
+
+							Thanx, Paul
+
+> Thoughts?
+> 
+>  - Joel 
+> 
+> > 
+> >                            Thanx, Paul
+> > 
+> >> +}
+> >> +
+> >> +void call_rcu_poll(struct rcu_head *rhp, rcu_callback_t func);
+> >> +DEFINE_RCU_TASKS(rcu_poll, rcu_poll_wait_gp, call_rcu_poll,
+> >> +                 "RCU Poll");
+> >> +void call_rcu_poll(struct rcu_head *rhp, rcu_callback_t func)
+> >> +{
+> >> +       call_rcu_tasks_generic(rhp, func, &rcu_poll);
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(call_rcu_poll);
+> >> +
+> >> +void synchronize_rcu_poll(void)
+> >> +{
+> >> +       synchronize_rcu_tasks_generic(&rcu_poll);
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(synchronize_rcu_poll);
+> >> +
+> >> +static int __init rcu_spawn_poll_kthread(void)
+> >> +{
+> >> +       cblist_init_generic(&rcu_poll);
+> >> +       rcu_poll.gp_sleep = HZ / 10;
+> >> +       rcu_spawn_tasks_kthread_generic(&rcu_poll);
+> >> +       return 0;
+> >> +}
+> >> 
+> >> Thanks
+> >> Zqiang
+> >> 
+> >> 
+> >>>> 
+> >>>> <snip>
+> >>>>  <...>-29      [001] d..1. 21950.145313: rcu_batch_start: rcu_preempt
+> >>>> CBs=3613 bl=28
+> >>>> ...
+> >>>>  <...>-29      [001] ..... 21950.152578: rcu_invoke_callback: rcu_preempt
+> >>>> rhp=00000000b2d6dee8 func=__free_vm_area_struct.cfi_jt
+> >>>>  <...>-29      [001] ..... 21950.152579: rcu_invoke_callback: rcu_preempt
+> >>>> rhp=00000000a446f607 func=__free_vm_area_struct.cfi_jt
+> >>>>  <...>-29      [001] ..... 21950.152580: rcu_invoke_callback: rcu_preempt
+> >>>> rhp=00000000a5cab03b func=__free_vm_area_struct.cfi_jt
+> >>>>  <...>-29      [001] ..... 21950.152581: rcu_invoke_callback: rcu_preempt
+> >>>> rhp=0000000013b7e5ee func=__free_vm_area_struct.cfi_jt
+> >>>>  <...>-29      [001] ..... 21950.152582: rcu_invoke_callback: rcu_preempt
+> >>>> rhp=000000000a8ca6f9 func=__free_vm_area_struct.cfi_jt
+> >>>>  <...>-29      [001] ..... 21950.152583: rcu_invoke_callback: rcu_preempt
+> >>>> rhp=000000008f162ca8 func=wakeme_after_rcu.cfi_jt
+> >>>>  <...>-29      [001] d..1. 21950.152625: rcu_batch_end: rcu_preempt CBs-
+> >>>> invoked=3612 idle=....
+> >>>> <snip>
+> >>>> 
+> >>> 
+> >>> Did the results above tell us that CBs-invoked=3612 during the time 21950.145313 ~ 21950.152625?
+> >>> 
+> >>> Yes.
+> >>> 
+> >>> 
+> >>> If possible, may I know the steps, commands, and related parameters to produce the results above?
+> >>> Thank you!
+> >>> 
+> >>> Build the kernel with CONFIG_RCU_TRACE configuration. Update your "set_event"
+> >>> file with appropriate traces:
+> >>> 
+> >>> <snip>
+> >>> XQ-DQ54:/sys/kernel/tracing # echo rcu:rcu_batch_start rcu:rcu_batch_end rcu:rcu_invoke_callback > set_event
+> >>> 
+> >>> XQ-DQ54:/sys/kernel/tracing # cat set_event
+> >>> rcu:rcu_batch_start
+> >>> rcu:rcu_invoke_callback
+> >>> rcu:rcu_batch_end
+> >>> XQ-DQ54:/sys/kernel/tracing #
+> >>> <snip>
+> >>> 
+> >>> Collect traces as much as you want: XQ-DQ54:/sys/kernel/tracing # echo 1 > tracing_on; sleep 10; echo 0 > tracing_on
+> >>> Next problem is how to parse it. Of course you will not be able to parse
+> >>> megabytes of traces. For that purpose i use a special C trace parser.
+> >>> If you need an example please let me know i can show here.
+> >>> 
+> >>> --
+> >>> Uladzislau Rezki
