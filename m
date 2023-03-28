@@ -2,102 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C026CC9BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3057B6CC9C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbjC1Ryf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        id S229886AbjC1Rz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjC1Ryc (ORCPT
+        with ESMTP id S229837AbjC1Rz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:54:32 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DAEAF30
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:54:26 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id n1so6021808ili.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:54:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680026065;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4mhvhLb7D4riffRSL6raFnIME1Z/M2laCEfNPlg61Ao=;
-        b=Z2zkqwkq6Y2lOdMPTFGpEhKpmx7qA52CuqtQ6NeUpQRaEH5b1FDlVpdMTFBVkgXKJZ
-         1MocbI2g6UFrQqLxjgT3Xj/qEcjtcX6hnWu0RY+N1hj/ht0+TiC4q9zOymBLfJYKN39T
-         4yCI3/Aw76k79gv3g/nA6Pg42c0OrpG7CnUYkTgf3xaBvzDWhEaJI+OBphCkhuWmg6cm
-         h0drTxHj7Pu+CMVA4PkrnL/42GtWWm02RYCE5mxWHI1FffKthEjdhh9kc44M76q1Jpwt
-         kNB/z0Z3t7Ot7kZW4XJ/Hf97CA34jzbfgwqztrC1Gqkqp0rfSxNGnH5WegOyuZMvL2t7
-         cnHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680026065;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4mhvhLb7D4riffRSL6raFnIME1Z/M2laCEfNPlg61Ao=;
-        b=kMpP0jBQ6Dq1n281r+efEdWDuR1jwmwNiILew6V8UsRXSPh7bsXxV8WcqYMsmFH5ki
-         IdhOr4l4DnhZGGASi82a0qNNb8y4U7ke8TrsgKjO4PUzI0qZKhgGbjCuaUs2D0jl6ORM
-         wnynGvRq0x/CdT4rEap6PjXwEJ4n2T4/d6PsrpdXoShZ5DEabR25I4su9+gRByDL3TbI
-         DbGIjvSxfWTq1fQeFO5QNcoiAwP2HSYezrSv1DP9KqOz6ZN6K2tNhAwNKvjQ9KT1P1wk
-         PVQ4E0cd70TaPvw2Uar7PgYIx++73jSDpieYVi0xChZkHNkBmZ1dFRvd+Iwqj1ZL+ZKT
-         YN8w==
-X-Gm-Message-State: AAQBX9f2Tn+inZ7lGaatH16Q2vgQvr8uxznv1xtM8KRMKz84fmZ78qab
-        pKtMMUcrPCzGmGK+gTiNk+mklUN9GXkpBxbM2n2S9w==
-X-Google-Smtp-Source: AKy350Zb4mUt1zFrnZvoiL7x6WGFpRDkYSe7gQJMODodXCy9tySgTy5p7fzZnY1rbt5Bn0wTZqf/O/4JoWAqNMhwIn0=
-X-Received: by 2002:a05:6e02:106d:b0:30f:543d:e52c with SMTP id
- q13-20020a056e02106d00b0030f543de52cmr7803189ilj.2.1680026064971; Tue, 28 Mar
- 2023 10:54:24 -0700 (PDT)
+        Tue, 28 Mar 2023 13:55:26 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1448BE3B1;
+        Tue, 28 Mar 2023 10:55:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680026122; x=1711562122;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2VwTQJIr4BTFvryXJU5QaWYWC5ASSVnz8DiJqX6T0i8=;
+  b=GnM5rVll0VeUkxAjxhtfsrG/yvmwple2JP5F6K0wD+D/FD4V8dPUOeeH
+   ikEN3zm8JO/F/X+vz/0rM+93nEuOtP6+B0TcsKnALVumSfDuhJXQ5v7Se
+   wJtBjyPEssE2Z1XTj7hVPLKayY9aqfiH5S6W33GZHiF0UnGGnNCjyWHRo
+   AByCMhQAUPiLykwXcrLCmSzVEykN9h8gu4tcHj9skNfrgBOwnLNoM8Bjx
+   vipIey0FKg830pvmHWUjZTtd8tc8r4AC64Gy8Bb+gz6ZKmZVaUmpkFiuS
+   yqoFR9WjTw/VSRh9jMdiiv7D8EHfCQ5Yk5F3L2rPytCt4vaelVfBUnwJ5
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="342235632"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="342235632"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 10:55:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="677459329"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="677459329"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2023 10:55:17 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phDXP-000Iml-0d;
+        Tue, 28 Mar 2023 17:55:15 +0000
+Date:   Wed, 29 Mar 2023 01:54:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Wei Chen <harperchen1110@gmail.com>, tiffany.lin@mediatek.com
+Cc:     oe-kbuild-all@lists.linux.dev, andrew-ct.chen@mediatek.com,
+        yunfei.dong@mediatek.com, mchehab@kernel.org,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Wei Chen <harperchen1110@gmail.com>
+Subject: Re: [PATCH] media: mediatek: vcodec: Fix potential array
+ out-of-bounds in decoder queue_setup
+Message-ID: <202303290137.F9lOyCT4-lkp@intel.com>
+References: <20230328100951.536955-1-harperchen1110@gmail.com>
 MIME-Version: 1.0
-References: <b9182b02829b158d55acc53a0bcec1ed667b2668.1680000784.git.stefan@agner.ch>
-In-Reply-To: <b9182b02829b158d55acc53a0bcec1ed667b2668.1680000784.git.stefan@agner.ch>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 28 Mar 2023 19:54:13 +0200
-Message-ID: <CANn89iKxcqDO3-LyuroUkFUfG2dtZOLE4n2UJQ3y-ft5BRm30g@mail.gmail.com>
-Subject: Re: [RFC PATCH] ipv6: add option to explicitly enable reachability test
-To:     Stefan Agner <stefan@agner.ch>
-Cc:     davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        john.carr@unrouted.co.uk, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328100951.536955-1-harperchen1110@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 5:39=E2=80=AFPM Stefan Agner <stefan@agner.ch> wrot=
-e:
->
-> Systems which act as host as well as router might prefer the host
-> behavior. Currently the kernel does not allow to use IPv6 forwarding
-> globally and at the same time use route reachability probing.
->
-> Add a compile time flag to enable route reachability probe in any
-> case.
->
-> Signed-off-by: Stefan Agner <stefan@agner.ch>
-> ---
-> My use case is a OpenThread device which at the same time can also act as=
- a
-> client communicating with Thread devices. Thread Border routers use the R=
-oute
-> Information mechanism to publish routes with a lifetime of up to 1800s. I=
-f
-> one of the Thread Border router goes offline, the lack of reachability pr=
-obing
-> currenlty leads to outages of up to 30 minutes.
->
-> Not sure if the chosen method is acceptable. Maybe a runtime flag is pref=
-erred?
+Hi Wei,
 
-I guess so. Because distros would have to choose a compile option.
+Thank you for the patch! Perhaps something to improve:
 
-Not a new sysfs, only an IFLA_INET6_REACHABILITY_PROBE ?
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on linus/master v6.3-rc4 next-20230328]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks.
+url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Chen/media-mediatek-vcodec-Fix-potential-array-out-of-bounds-in-decoder-queue_setup/20230328-181142
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230328100951.536955-1-harperchen1110%40gmail.com
+patch subject: [PATCH] media: mediatek: vcodec: Fix potential array out-of-bounds in decoder queue_setup
+config: csky-randconfig-r013-20230327 (https://download.01.org/0day-ci/archive/20230329/202303290137.F9lOyCT4-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/caa43627286fb5f3b0b3af7e01e1baeca5c5f9cc
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Wei-Chen/media-mediatek-vcodec-Fix-potential-array-out-of-bounds-in-decoder-queue_setup/20230328-181142
+        git checkout caa43627286fb5f3b0b3af7e01e1baeca5c5f9cc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash drivers/media/platform/mediatek/vcodec/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303290137.F9lOyCT4-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/asm-generic/div64.h:27,
+                    from ./arch/csky/include/generated/asm/div64.h:1,
+                    from include/linux/math.h:6,
+                    from include/linux/math64.h:6,
+                    from include/linux/time.h:6,
+                    from include/linux/videodev2.h:59,
+                    from include/media/v4l2-event.h:16,
+                    from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c:8:
+   drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c: In function 'vb2ops_vdec_queue_setup':
+>> include/linux/compiler.h:56:26: warning: suggest explicit braces to avoid ambiguous 'else' [-Wdangling-else]
+      56 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                          ^
+   drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c:756:17: note: in expansion of macro 'if'
+     756 |                 if (vq->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
+         |                 ^~
+
+
+vim +/else +56 include/linux/compiler.h
+
+2bcd521a684cc9 Steven Rostedt 2008-11-21  50  
+2bcd521a684cc9 Steven Rostedt 2008-11-21  51  #ifdef CONFIG_PROFILE_ALL_BRANCHES
+2bcd521a684cc9 Steven Rostedt 2008-11-21  52  /*
+2bcd521a684cc9 Steven Rostedt 2008-11-21  53   * "Define 'is'", Bill Clinton
+2bcd521a684cc9 Steven Rostedt 2008-11-21  54   * "Define 'if'", Steven Rostedt
+2bcd521a684cc9 Steven Rostedt 2008-11-21  55   */
+a15fd609ad53a6 Linus Torvalds 2019-03-20 @56  #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+a15fd609ad53a6 Linus Torvalds 2019-03-20  57  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
