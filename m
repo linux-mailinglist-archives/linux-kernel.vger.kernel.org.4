@@ -2,71 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16726CCBE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 23:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A8A6CCBED
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 23:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjC1VIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 17:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
+        id S229813AbjC1VIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 17:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjC1VH7 (ORCPT
+        with ESMTP id S229569AbjC1VIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 17:07:59 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF27A6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 14:07:55 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id h34so9908864uag.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 14:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680037674;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=thpW2yIVRuQD3Ko7WI8K4xaeuPEUYZxxJQxPTk5qMCw=;
-        b=TDuXO9myu47KXaFFpuTiJWv2mHQABJaL6pDxvDsESiYyiIUFM7Wn7IYJ00HA68x3X+
-         6SuHcW9h8UWNhoinV2+UffSqUcyu8yjYICJzumTi5x+cWheT1fFn0OlYBWDhkL0UBmfG
-         7yq1E4N2Ro5v79zkOcsqBQVDwdyL5Rh3po6lQMmMnzx7R9K++FBkExFsKsXxgzWAqNZc
-         olUcc3mZL0z6qmmj9/cqxY6cgAot9impsfsjGVZ9x6HKvBV7hB2WI3jerZZDesdA4M2q
-         /q+VCNHxmHjrxTgVGcHyH7+68CoIQhIwC4PJkNW2v6Vfgw1LTUzHvLMyvmtx/6c4ta17
-         bruw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680037675;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=thpW2yIVRuQD3Ko7WI8K4xaeuPEUYZxxJQxPTk5qMCw=;
-        b=5A8O15ewlYSI4iXlPuUZIilsYxtFFsS4PW2AY2mwldkvVNyaNwTGYqHhhRi0Y+4+Ld
-         wy44LMbMYQM3W62XdY4YJEVD3WoE7Gw/JWm3OjKdoQDoeEmq07m5xWgsnv9YMmT85sCM
-         opR4cFeSMmIkRR28LFzLSTfAv9Xk51FhsP/heEIO8eWXzkjijHC+cYqD1yK1MKiP13QC
-         Sn7gI+DR8j7C0jpPoZHOavEa9SNKqbh8MSbhsqPXKf1C9kTmsnz4p4pmibA4Z/T1PRme
-         VjIk99M9T6ni4PIa6C/oN8bD/QTTWfn/YsxqeC7AGnFah1hK8eXulUXjrFxOBjQWU5jm
-         +Lpw==
-X-Gm-Message-State: AAQBX9fGBDNT+BbbtRUpKP9Syu/9aTXMKoig3FMB0fKRpfPhzUfy3OnV
-        Ta7ib/LhGlnSJpiZe4CUbt45yIEiMrGA7tx6fnA=
-X-Google-Smtp-Source: AKy350aSuw4SJ78hp3o1v0zusR2uRGHLa9jxsNyaSqj+DcB6mllBqyCvcB9dygUMy/Qn+0j+PPl02H0xQkp9hLYiE98=
-X-Received: by 2002:a05:6130:a6:b0:68b:9eed:1c7c with SMTP id
- x38-20020a05613000a600b0068b9eed1c7cmr13205168uaf.0.1680037674809; Tue, 28
- Mar 2023 14:07:54 -0700 (PDT)
+        Tue, 28 Mar 2023 17:08:48 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF63210C;
+        Tue, 28 Mar 2023 14:08:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680037718; x=1711573718;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6GLo3d35oVtHdFhb6UNpuguyDFJRdNOuxUvgwUhlmnY=;
+  b=LglhwN39RVgEo5FLlQyQGAK7E30JKuG6QDcXLAacgGymVQqdiPyM9BsR
+   PktPGUQtOjjF+E9K7+bhDXyds1N41adi2+hJ+URoTDczRt1nyf2HfXu9c
+   VKXxaTb6EWB3IoGbaTMokBgLTqN2h3QtU2NZGHGsSWlQCc8ciB5r4OP8w
+   ovFBAEz9OkSGFT24L602Kk3rloMh1zso3/DQcrU/Ce8AgNKUHgXLyZLWB
+   DV9L2v1qD9FpjwpnrJNLFjoBkmNbM2S9P1JR3Mcfl5gX0DD7vHum0dfVl
+   xnEZd8Qm1wxv/atGHEvT9cggufuivuepzgqofbUPRr4oC+NU1Hw5O+e4J
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="338193556"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="338193556"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 14:08:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="827628736"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="827628736"
+Received: from fhannebi-mobl.ger.corp.intel.com (HELO intel.com) ([10.252.50.224])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 14:08:36 -0700
+Date:   Tue, 28 Mar 2023 23:08:11 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Min Li <lm0963hack@gmail.com>
+Cc:     jani.nikula@linux.intel.com, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        daniel@ffwll.ch, rodrigo.vivi@intel.com, airlied@gmail.com,
+        stable@vger.kernel.org
+Subject: Re: [Intel-gfx] [PATCH 1/1] drm/i915: fix race condition UAF in
+ i915_perf_add_config_ioctl
+Message-ID: <ZCNXO/NJecxaGwep@ashyti-mobl2.lan>
+References: <20230328093627.5067-1-lm0963hack@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a59:adce:0:b0:385:8ff6:27be with HTTP; Tue, 28 Mar 2023
- 14:07:54 -0700 (PDT)
-Reply-To: jennifertrujillo735@gmail.com
-From:   Jennifer Trujillo <edithbrown035@gmail.com>
-Date:   Tue, 28 Mar 2023 22:07:54 +0100
-Message-ID: <CACFcicg-ZAZRPNuWKqTb4J8fv93WmTzaUHvqCMbEe8SE1wC2cA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328093627.5067-1-lm0963hack@gmail.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
-How are you?
+On Tue, Mar 28, 2023 at 05:36:27PM +0800, Min Li wrote:
+> Userspace can guess the id value and try to race oa_config object creation
+> with config remove, resulting in a use-after-free if we dereference the
+> object after unlocking the metrics_lock.  For that reason, unlocking the
+> metrics_lock must be done after we are done dereferencing the object.
+> 
+> Signed-off-by: Min Li <lm0963hack@gmail.com>
+
+I think we should also add
+
+Fixes: f89823c21224 ("drm/i915/perf: Implement I915_PERF_ADD/REMOVE_CONFIG interface")
+Cc: <stable@vger.kernel.org> # v4.14+
+
+Andi
+
+> ---
+>  drivers/gpu/drm/i915/i915_perf.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
+> index 824a34ec0b83..93748ca2c5da 100644
+> --- a/drivers/gpu/drm/i915/i915_perf.c
+> +++ b/drivers/gpu/drm/i915/i915_perf.c
+> @@ -4634,13 +4634,13 @@ int i915_perf_add_config_ioctl(struct drm_device *dev, void *data,
+>  		err = oa_config->id;
+>  		goto sysfs_err;
+>  	}
+> -
+> -	mutex_unlock(&perf->metrics_lock);
+> +	id = oa_config->id;
+>  
+>  	drm_dbg(&perf->i915->drm,
+>  		"Added config %s id=%i\n", oa_config->uuid, oa_config->id);
+> +	mutex_unlock(&perf->metrics_lock);
+>  
+> -	return oa_config->id;
+> +	return id;
+>  
+>  sysfs_err:
+>  	mutex_unlock(&perf->metrics_lock);
+> -- 
+> 2.25.1
