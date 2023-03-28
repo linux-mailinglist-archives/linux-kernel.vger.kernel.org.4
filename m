@@ -2,144 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA68D6CBE37
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B007A6CBE31
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232844AbjC1L40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:56:26 -0400
+        id S232667AbjC1Lz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:55:56 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232902AbjC1L4R (ORCPT
+        with ESMTP id S232377AbjC1Lzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:56:17 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1200586AA
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:56:16 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id k17so14609826ybm.11
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:56:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680004575;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nc5W1lE9EjIhY3BF/8rAhRpdJPCQCh8hr/U0i6aHjsc=;
-        b=hoLgsOkZ2x2vUsVYvB5E+SmxoYqNebP0ycxMynfyPa6K7RVfCwIH7l21ZbSc0/ESLu
-         mY9snWPalWGPggsJ3pd7YwOuIDkDupgeBzOXX0WANs8Kp1rRK5FB//hyL2uAehTGM5To
-         DspGUnxugzBT/BUr7IvG1rva6aQ3BGSKy/Medpctq8CC434cWDCNnJtm+d2uEVmPFmlv
-         NtYmK9+np/DOgURzp9tj0W+BdfZEwjgX4kAj2eAPR6GOKRycla+g8eeV/Y998rSrwyu4
-         DEL9Pf1/7lGBYxUWwEsz6Wd4wYS2TjUgqolw1pkX/1GqLzCB34tTLQlJqZfE7WWYvgJ/
-         2Xzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680004575;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nc5W1lE9EjIhY3BF/8rAhRpdJPCQCh8hr/U0i6aHjsc=;
-        b=BfH7T3eozFRnUP9muAgFeEm1XfCTffoGoabAzm3Gpgj9lZkkU/zRrsmqfmi6RnDi06
-         izvbH3MAnPo8VQ5n/o6/sExibf29gXyQT7zicYWDsGEh6NndEjXgTt2qLM/rhbnBPf+O
-         pSNUnq8TJXkVl+NwQ1qvYOwfuHy2bzciVWk+0Z+miUNTU6NvVwnltqMOFRQdMlrUFMov
-         pomhpJxPdB1KKh6sUvUL/oZk+CE//T4oTyQJFQv4o58qMKgVgb+18CsTf/PeaKESM3pa
-         BtpmFjkT6oakQ2YSpJHStAZbV199zuchf4UoHq1sOa9y+hZDmEV7zPDP6Vz/oQ+uiuYz
-         cyHQ==
-X-Gm-Message-State: AAQBX9d/iZ/SBE5yckzeNrXJF0DoPfF55j+URhAs7+XfkYuClqBtkcHL
-        EPawBYvyHS+3UjLkLQYjT0aCJV6jSKYDnzOZJsfDlg==
-X-Google-Smtp-Source: AKy350YP6oV53+191HmhMOuB0nH+1b8IUYvwyKlcGo3d6EZ2MKveajdpBVN3VzunfqGw/L3jRxjgEIF2nHHslh/iN3Y=
-X-Received: by 2002:a25:ab81:0:b0:b65:89bd:3c85 with SMTP id
- v1-20020a25ab81000000b00b6589bd3c85mr15082098ybi.4.1680004575191; Tue, 28 Mar
- 2023 04:56:15 -0700 (PDT)
+        Tue, 28 Mar 2023 07:55:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98C68A41
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:55:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68D8A60B24
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:55:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 985ABC433D2;
+        Tue, 28 Mar 2023 11:55:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680004549;
+        bh=o1gbd6Q5+PuxNMWGpMNsW7Voev+NdraTBgWWGtpU/jo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I1coS1fgw8eKHOf0GZTTiaC3squr9cE6N4AbGLMRghil2Ld13FSlWwegdInImTIMC
+         0oOObmG4zAPt1e+UMXYEYdho1rC+4xKcKyiw+pzc+AQ5N7siDyyiii8y/Duul23JIb
+         j3n6YUzqW/PnZMgParnLG88VMWEC1KR82J1STm2Xd4oonlbXWANR7Od6O4ftr9ai35
+         XLfufyKDUMQTRJQFNvEB8JA4a7hesFjyz+NSvOZKHj+CzTCG54bgROx0Oesi6Pd6Di
+         OwJdEVnrQ1wTZVxFKGpRpfLoKDAVON1lx8H4YEcM5Gog73mA7lC0rwQQdP2bzNs3UH
+         NmbaMXG/Ag2qg==
+Date:   Tue, 28 Mar 2023 12:55:43 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Jiucheng Xu <jiuchengxu@163.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Chris Healy <healych@amazon.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] perf/amlogic: Fix large number of counter issue
+Message-ID: <20230328115543.GA1159@willie-the-truck>
+References: <20230209115403.521868-1-jiucheng.xu@amlogic.com>
+ <20230209115403.521868-2-jiucheng.xu@amlogic.com>
+ <20230327141054.GC31752@willie-the-truck>
+ <79968005-28f3-d890-dfea-faca2e7d7947@163.com>
 MIME-Version: 1.0
-References: <20230328095807.7014-1-songmuchun@bytedance.com> <20230328095807.7014-7-songmuchun@bytedance.com>
-In-Reply-To: <20230328095807.7014-7-songmuchun@bytedance.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 28 Mar 2023 13:55:38 +0200
-Message-ID: <CANpmjNPeQBcV7qnpXJOoLYjonsjPnOW-cerYm=_U3ptNZrXu0Q@mail.gmail.com>
-Subject: Re: [PATCH 6/6] mm: kfence: replace ALIGN_DOWN(x, PAGE_SIZE) with PAGE_ALIGN_DOWN(x)
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     glider@google.com, dvyukov@google.com, akpm@linux-foundation.org,
-        jannh@google.com, sjpark@amazon.de, muchun.song@linux.dev,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <79968005-28f3-d890-dfea-faca2e7d7947@163.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023 at 11:59, 'Muchun Song' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> Replace ALIGN_DOWN(x, PAGE_SIZE) with PAGE_ALIGN_DOWN(x) to simplify
-> the code a bit.
->
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+On Tue, Mar 28, 2023 at 10:29:04AM +0800, Jiucheng Xu wrote:
+> 
+> My Amlogic email box has some issues. Use my personal email
+> <jiucheng.xu@163.com> to reply.
+> 
+> On 2023/3/27 22:10, Will Deacon wrote:
+> > [ EXTERNAL EMAIL ]
+> > 
+> > On Thu, Feb 09, 2023 at 07:54:02PM +0800, Jiucheng Xu wrote:
+> > > When use 1ms interval, very large number of counter happens
+> > > once in a while as below:
+> > > 
+> > > 25.968654513 281474976710655.84 MB meson_ddr_bw/chan_1_rw_bytes,arm=1/
+> > > 26.118657346 281474976710655.88 MB meson_ddr_bw/chan_1_rw_bytes,arm=1/
+> > > 26.180137180 281474976710655.66 MB meson_ddr_bw/chan_1_rw_bytes,arm=1/
+> > > 
+> > > Root cause is the race between irq handler
+> > > and pmu.read callback. Use spin lock to protect the sw&hw
+> > > counters.
+> > > 
+> > > Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
+> > > ---
+> > >   drivers/perf/amlogic/meson_ddr_pmu_core.c | 10 +++++++++-
+> > >   1 file changed, 9 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/perf/amlogic/meson_ddr_pmu_core.c b/drivers/perf/amlogic/meson_ddr_pmu_core.c
+> > > index 0b24dee1ed3c..9b2e5d5c0626 100644
+> > > --- a/drivers/perf/amlogic/meson_ddr_pmu_core.c
+> > > +++ b/drivers/perf/amlogic/meson_ddr_pmu_core.c
+> > > @@ -14,6 +14,7 @@
+> > >   #include <linux/perf_event.h>
+> > >   #include <linux/platform_device.h>
+> > >   #include <linux/printk.h>
+> > > +#include <linux/spinlock.h>
+> > >   #include <linux/sysfs.h>
+> > >   #include <linux/types.h>
+> > > @@ -23,6 +24,7 @@ struct ddr_pmu {
+> > >   	struct pmu pmu;
+> > >   	struct dmc_info info;
+> > >   	struct dmc_counter counters;	/* save counters from hw */
+> > > +	spinlock_t lock;		/* protect hw/sw counter */
+> > >   	bool pmu_enabled;
+> > >   	struct device *dev;
+> > >   	char *name;
+> > > @@ -92,10 +94,12 @@ static void meson_ddr_perf_event_update(struct perf_event *event)
+> > >   	int idx;
+> > >   	int chann_nr = pmu->info.hw_info->chann_nr;
+> > > +	spin_lock(&pmu->lock);
+> > Why doesn't this need the _irqsave() variant if we're racing with the irq
+> > handler?
+> > 
+> > Will
+> I think meson_ddr_perf_event_update function is called with hard irq off.
+> So update function couldn't be interrupted by irq handler. Right?
 
-Reviewed-by: Marco Elver <elver@google.com>
+I'm just confused about the race, then. The commit message says you have a
+race between an irq handler and a callback, which you fix with a spinlock
+that isn't irq safe. So either the race is real and the lock needs to be
+irqsafe, or the race is something else entirely, no?
 
-> ---
->  mm/kfence/core.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-> index f205b860f460..dbfb79a4d624 100644
-> --- a/mm/kfence/core.c
-> +++ b/mm/kfence/core.c
-> @@ -230,17 +230,17 @@ static bool alloc_covered_contains(u32 alloc_stack_hash)
->
->  static inline void kfence_protect(unsigned long addr)
->  {
-> -       kfence_protect_page(ALIGN_DOWN(addr, PAGE_SIZE), true);
-> +       kfence_protect_page(PAGE_ALIGN_DOWN(addr), true);
->  }
->
->  static inline void kfence_unprotect(unsigned long addr)
->  {
-> -       kfence_protect_page(ALIGN_DOWN(addr, PAGE_SIZE), false);
-> +       kfence_protect_page(PAGE_ALIGN_DOWN(addr), false);
->  }
->
->  static inline unsigned long metadata_to_pageaddr(const struct kfence_metadata *meta)
->  {
-> -       return ALIGN_DOWN(meta->addr, PAGE_SIZE);
-> +       return PAGE_ALIGN_DOWN(meta->addr);
->  }
->
->  /*
-> @@ -308,7 +308,7 @@ static inline bool check_canary_byte(u8 *addr)
->  /* __always_inline this to ensure we won't do an indirect call to fn. */
->  static __always_inline void for_each_canary(const struct kfence_metadata *meta, bool (*fn)(u8 *))
->  {
-> -       const unsigned long pageaddr = ALIGN_DOWN(meta->addr, PAGE_SIZE);
-> +       const unsigned long pageaddr = PAGE_ALIGN_DOWN(meta->addr);
->         unsigned long addr;
->
->         /*
-> @@ -455,7 +455,7 @@ static void kfence_guarded_free(void *addr, struct kfence_metadata *meta, bool z
->         }
->
->         /* Detect racy use-after-free, or incorrect reallocation of this page by KFENCE. */
-> -       kcsan_begin_scoped_access((void *)ALIGN_DOWN((unsigned long)addr, PAGE_SIZE), PAGE_SIZE,
-> +       kcsan_begin_scoped_access((void *)PAGE_ALIGN_DOWN((unsigned long)addr), PAGE_SIZE,
->                                   KCSAN_ACCESS_SCOPED | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ASSERT,
->                                   &assert_page_exclusive);
->
-> @@ -464,7 +464,7 @@ static void kfence_guarded_free(void *addr, struct kfence_metadata *meta, bool z
->
->         /* Restore page protection if there was an OOB access. */
->         if (meta->unprotected_page) {
-> -               memzero_explicit((void *)ALIGN_DOWN(meta->unprotected_page, PAGE_SIZE), PAGE_SIZE);
-> +               memzero_explicit((void *)PAGE_ALIGN_DOWN(meta->unprotected_page), PAGE_SIZE);
->                 kfence_protect(meta->unprotected_page);
->                 meta->unprotected_page = 0;
->         }
-> --
-> 2.11.0
->
-> --
-> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20230328095807.7014-7-songmuchun%40bytedance.com.
+Will
