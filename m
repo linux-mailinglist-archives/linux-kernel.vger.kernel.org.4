@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623026CB33F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6EF46CB340
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjC1Ble (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 21:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
+        id S232303AbjC1Blw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 21:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232307AbjC1Blc (ORCPT
+        with ESMTP id S230156AbjC1Blr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 21:41:32 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1912100
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:41:29 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id g5-20020a25a485000000b009419f64f6afso10516595ybi.2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:41:29 -0700 (PDT)
+        Mon, 27 Mar 2023 21:41:47 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA8D26B8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:41:38 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id f66-20020a255145000000b00b714602d43fso10668213ybb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:41:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679967688;
+        d=google.com; s=20210112; t=1679967698;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=verDCOyK5Vg94wY3RYziaAnvJXO3pRUoQeewltL/GMo=;
-        b=ndnM0GnxAOGbyZy68kGiLzbQMq4EeNAsxSUT51Bn6RMCvx2haDbE+mktB1A7n60kkf
-         LutpwxHw8zyfU9PxO983Ja7NQcDetX6Z2aa9dt8IwGXI/HJ/9IOIu2Pvebk4pyfG815X
-         xM0/qdH1XYOdZkC4QIeYFOVRFdSHjBVkrm7FxGI/JsU5Z971jcdx70WuEksPrOwW4mMQ
-         u+R5U77kTBA3RtHekOgY8tlhG5HjoUmpbq4siVNJNUoekTQ2yEgcIsDWqxcr3+VaVMRl
-         2rR5mhMfyO7QsW304uMlWQ7pblkGURwaXaLW3G5XeMCXPOqvC/rAiRbxB/1tsEa4IJgG
-         YdGg==
+        bh=ywXshmLmOGjaY4x40OQowm4pf0YHZ4IGihkPimWY52w=;
+        b=JIUT89bxDoFZJcK7cHK+S1+2ScqvgAOhnR2/gdEVFiQdimTI5sLS7tYKXNHkd/wfDN
+         azXmzSdOQUWVdrRKq3glGBbqfUTMJgp3upM7zhI9j7lGO0yxmtPoCNSSNtPQLqymSWz2
+         T2wdW/dChQF7lXw1j3v8C91bMlhMgC/GDR02wPIC72YMBK97oVlj8gJJ993PQY9HUZXD
+         xBrCI0hI34wHicBN3nPn2WgbEL3cpxp/yS5uVkzuFgjxc+q8qGrDHWTiwCPoRMfcKCTR
+         qTolJZOMbCVlErTsFP/FapOPHvTVimqClVJkpZi9q3KRgPyFuhNJ8Baa+CVrTc4xcCzD
+         7rPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679967688;
+        d=1e100.net; s=20210112; t=1679967698;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=verDCOyK5Vg94wY3RYziaAnvJXO3pRUoQeewltL/GMo=;
-        b=gm5wedFFyLAiEkbdutnJhUJaK2N6+tPfutVYy9XJIDkF/FY4Hsf3R9Ld1r8vkAodov
-         nx8sYknZm358+5ivZLsuTyR/+iWKdLpW6Oqk9VPQ6StNoD3IbEUUIJ6yp49WAIBRnE3z
-         jB1lsXAfrsugX3gnrEpJb0XLSLMyR527SWJY5YvmgKYsRLi7dMkJ9YhSCdaQWntplk9e
-         MAr/G9YJd2CnxDpuw1mVvelHkekHGoburPdMqEjLsn2uEYuq6wzwyyBLHzrSB3YJtoV1
-         1N0X7MI/7lWCIxqyPjxU7vjE6PE9hZaMd2kZvc0tMHm8vTF0qd2R7jvVFmO9N6lsN/TR
-         urzg==
-X-Gm-Message-State: AAQBX9cPx2xGyPDDpReSO5K0ql5REc11oukXN08YMRt2ypgUdYutgknd
-        39IB8aHWlwlBRCa3c4HcgeLvQv9Yh71I
-X-Google-Smtp-Source: AKy350YwGBCHh+XFGIs5PnSfm8ziU1iAddLYb++rz17r47e/PoS0PBSTU4sb5sYQtlNpV7zfvdyxIqDVAcsK
+        bh=ywXshmLmOGjaY4x40OQowm4pf0YHZ4IGihkPimWY52w=;
+        b=MYMOgOlVzJ5+I2nN9QfxNxe0fUOKwln0kmkwjwmx6KjG1gmks1j9IaP7Sh+izOr+Ck
+         bj05qEEyB2Gl+KHFSCREEs6fxRTO2oLiRBrc9OfYCh+AFdysM/iYKJhpxG1hbhp7FAIx
+         7e7veQm1i2h7z6UK2QiQGbeVL5NIN2dkqhwC1jgfPUChscC/NZkyuwNR35tULVCwsOKp
+         A4+Tk9QRSOL3Vu8AL3Wc1zWlQn85t2abzZcCvYbaK0eMF3Ss46TsVSgC/kXK6OZo6KR8
+         0/OiiDEZoB7cBUwNEiNdYSoXm8KxiJpPpUO1ILG1pWrg45BqMf0uZaamIR8fuPagQUiR
+         SBGw==
+X-Gm-Message-State: AAQBX9d6E9IvpW7UHdigRrpLUdghauc68NAeQdAvsvTFN14CLsCvLrDB
+        yvISfF2u5YLaoXRB8wth4kXaCQ7cozS2
+X-Google-Smtp-Source: AKy350Y6n28wu/MafERlysbCqy15XbAzYFhuYCmhQpAiBUTzBQwlNMpFtw8jJBVCP+CeoUWRtORJUH377it4
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a544:20a5:5228:d98f])
- (user=irogers job=sendgmr) by 2002:a81:ac13:0:b0:545:bade:c57e with SMTP id
- k19-20020a81ac13000000b00545badec57emr4179381ywh.5.1679967687965; Mon, 27 Mar
- 2023 18:41:27 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 18:40:54 -0700
+ (user=irogers job=sendgmr) by 2002:a25:b909:0:b0:b39:b0d3:9a7f with SMTP id
+ x9-20020a25b909000000b00b39b0d39a7fmr6562095ybj.7.1679967698066; Mon, 27 Mar
+ 2023 18:41:38 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 18:40:55 -0700
 In-Reply-To: <20230328014058.870413-1-irogers@google.com>
-Message-Id: <20230328014058.870413-3-irogers@google.com>
+Message-Id: <20230328014058.870413-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20230328014058.870413-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v1 2/6] perf usage: Move usage strings
+Subject: [PATCH v1 3/6] perf header: Move perf_version_string declaration
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -94,91 +94,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This simplifies linking a main function when perf.c isn't present.
+Move to match the definition in header.c.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-help.c | 1 +
- tools/perf/builtin.h      | 3 ---
- tools/perf/perf.c         | 6 ------
- tools/perf/util/usage.c   | 6 ++++++
- tools/perf/util/util.h    | 3 +++
- 5 files changed, 10 insertions(+), 9 deletions(-)
+ tools/perf/builtin-version.c | 2 +-
+ tools/perf/perf.h            | 1 -
+ tools/perf/util/header.h     | 2 ++
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/builtin-help.c b/tools/perf/builtin-help.c
-index 3976aebe3677..3e7f52054fac 100644
---- a/tools/perf/builtin-help.c
-+++ b/tools/perf/builtin-help.c
-@@ -14,6 +14,7 @@
- #include <subcmd/run-command.h>
- #include <subcmd/help.h>
- #include "util/debug.h"
-+#include "util/util.h"
- #include <linux/kernel.h>
- #include <linux/string.h>
- #include <linux/zalloc.h>
-diff --git a/tools/perf/builtin.h b/tools/perf/builtin.h
-index d03afea86217..f2ab5bae2150 100644
---- a/tools/perf/builtin.h
-+++ b/tools/perf/builtin.h
-@@ -2,9 +2,6 @@
- #ifndef BUILTIN_H
- #define BUILTIN_H
+diff --git a/tools/perf/builtin-version.c b/tools/perf/builtin-version.c
+index c5d03a11e565..4a43043ca8ef 100644
+--- a/tools/perf/builtin-version.c
++++ b/tools/perf/builtin-version.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include "builtin.h"
+-#include "perf.h"
+ #include "color.h"
++#include "util/header.h"
+ #include <tools/config.h>
+ #include <stdbool.h>
+ #include <stdio.h>
+diff --git a/tools/perf/perf.h b/tools/perf/perf.h
+index e21a7e15a34c..20e9b93f8a39 100644
+--- a/tools/perf/perf.h
++++ b/tools/perf/perf.h
+@@ -10,7 +10,6 @@
  
--extern const char perf_usage_string[];
--extern const char perf_more_info_string[];
--
- void list_common_cmds_help(void);
- const char *help_unknown_cmd(const char *cmd);
+ extern const char *input_name;
+ extern bool perf_host, perf_guest;
+-extern const char perf_version_string[];
  
-diff --git a/tools/perf/perf.c b/tools/perf/perf.c
-index 4b1b31e78332..997bb9ea5ebc 100644
---- a/tools/perf/perf.c
-+++ b/tools/perf/perf.c
-@@ -39,12 +39,6 @@
- #include <linux/string.h>
- #include <linux/zalloc.h>
+ enum perf_affinity {
+ 	PERF_AFFINITY_SYS = 0,
+diff --git a/tools/perf/util/header.h b/tools/perf/util/header.h
+index e3861ae62172..59eeb4a32ac5 100644
+--- a/tools/perf/util/header.h
++++ b/tools/perf/util/header.h
+@@ -115,6 +115,8 @@ struct perf_session;
+ struct perf_tool;
+ union perf_event;
  
--const char perf_usage_string[] =
--	"perf [--version] [--help] [OPTIONS] COMMAND [ARGS]";
--
--const char perf_more_info_string[] =
--	"See 'perf help COMMAND' for more information on a specific command.";
--
- static int use_pager = -1;
- const char *input_name;
- 
-diff --git a/tools/perf/util/usage.c b/tools/perf/util/usage.c
-index 196438ee4c9d..4c8ffbad2323 100644
---- a/tools/perf/util/usage.c
-+++ b/tools/perf/util/usage.c
-@@ -12,6 +12,12 @@
- #include <stdlib.h>
- #include <linux/compiler.h>
- 
-+const char perf_usage_string[] =
-+	"perf [--version] [--help] [OPTIONS] COMMAND [ARGS]";
++extern const char perf_version_string[];
 +
-+const char perf_more_info_string[] =
-+	"See 'perf help COMMAND' for more information on a specific command.";
-+
- static __noreturn void usage_builtin(const char *err)
- {
- 	fprintf(stderr, "\n Usage: %s\n", err);
-diff --git a/tools/perf/util/util.h b/tools/perf/util/util.h
-index 1d3b300af5a1..5010abf9e01e 100644
---- a/tools/perf/util/util.h
-+++ b/tools/perf/util/util.h
-@@ -15,6 +15,9 @@
- #include <internal/cpumap.h>
- #endif
- 
-+extern const char perf_usage_string[];
-+extern const char perf_more_info_string[];
-+
- /* General helper functions */
- void usage(const char *err) __noreturn;
- void die(const char *err, ...) __noreturn __printf(1, 2);
+ int perf_session__read_header(struct perf_session *session, int repipe_fd);
+ int perf_session__write_header(struct perf_session *session,
+ 			       struct evlist *evlist,
 -- 
 2.40.0.348.gf938b09366-goog
 
