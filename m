@@ -2,52 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC7D6CBB66
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5366CBB6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbjC1Jpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
+        id S232813AbjC1Jra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232889AbjC1Jp0 (ORCPT
+        with ESMTP id S230250AbjC1Jqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:45:26 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73845FC6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:44:59 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pm4Xk2N3Wz4wj7;
-        Tue, 28 Mar 2023 20:44:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1679996695;
-        bh=h44tjwPWW2IRwuQCXs8ZriqQ5qG2iC4F4mxOhWNfVck=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=F5gJRWm7WYCKGU8Q8KbQ8Da7oWCG2XDwriXfyP60NS1OhQb9+TdIrYsLHNpqTlhiF
-         R4Uhpez9mvEBvPvasQa8NQSZZUDDcf7zykZMwRbD4lJJICohazRItWFu+hz42L9kIP
-         NnzigE0Fc0+gX7nimp5REAYTGzmdD395VaF1zgu7UNtKlJRHgMgIidbCCbKpSNmjRk
-         vMzYtIPuoMcD14nFNidNlNcraSx1+aD/ay3yrSd8dNvswFbBalIErdrAxncLkek7Lh
-         Soq5ckLM7ksSOjlq6mHUeR9fbdeeH6PRVeni4wyqlf45qb9a5Y1vq1rAv6vqu6SbzM
-         2CpPJwZzloZyA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Kautuk Consul <kconsul@linux.vnet.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Fabiano Rosas <farosas@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Kautuk Consul <kconsul@linux.vnet.ibm.com>
-Subject: Re: [PATCH] arch/powerpc/kvm: kvmppc_core_vcpu_create_hv: check for
- kzalloc failure
-In-Reply-To: <20230323074718.2810914-1-kconsul@linux.vnet.ibm.com>
-References: <20230323074718.2810914-1-kconsul@linux.vnet.ibm.com>
-Date:   Tue, 28 Mar 2023 20:44:48 +1100
-Message-ID: <87pm8tcir3.fsf@mpe.ellerman.id.au>
+        Tue, 28 Mar 2023 05:46:55 -0400
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504937D85;
+        Tue, 28 Mar 2023 02:45:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:From
+        :References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=0CNRjou6xdCkIathO3rGxo5hgi1oDPOaYEyuDsxeASA=; b=AyconK3p7p532NSsOL0Vfdt3U8
+        bGH8Ux21wQnffEtZxyLf4xV0xqdelCNV5CdM76/+6S+DDvJXbDGggZsAJoK0oFUyoi/I/tuVMiiAM
+        YysHhu1xtFCI+wlk1IbLjl8XCfLBCN5ZAIxfgjCZCN7D2QiUQziZ2QRNhnmi7YFcyfic=;
+Received: from p54ae9730.dip0.t-ipconnect.de ([84.174.151.48] helo=nf.local)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1ph5tV-007gq8-03; Tue, 28 Mar 2023 11:45:33 +0200
+Message-ID: <b001c8ed-214f-94e6-2d4f-0ee13e3d8760@nbd.name>
+Date:   Tue, 28 Mar 2023 11:45:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230324171314.73537-1-nbd@nbd.name>
+ <20230324102038.7d91355c@kernel.org>
+ <2d251879-1cf4-237d-8e62-c42bb4feb047@nbd.name>
+ <20230324104733.571466bc@kernel.org>
+ <f59ee83f-7267-04df-7286-f7ea147b5b49@nbd.name>
+ <751fd5bb13a49583b1593fa209bfabc4917290ae.camel@redhat.com>
+From:   Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH net-next] net/core: add optional threading for backlog
+ processing
+In-Reply-To: <751fd5bb13a49583b1593fa209bfabc4917290ae.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,82 +61,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kautuk Consul <kconsul@linux.vnet.ibm.com> writes:
-> kvmppc_vcore_create() might not be able to allocate memory through
-> kzalloc. In that case the kvm->arch.online_vcores shouldn't be
-> incremented.
+On 28.03.23 11:29, Paolo Abeni wrote:
+> On Fri, 2023-03-24 at 18:57 +0100, Felix Fietkau wrote:
+>> On 24.03.23 18:47, Jakub Kicinski wrote:
+>> > On Fri, 24 Mar 2023 18:35:00 +0100 Felix Fietkau wrote:
+>> > > I'm primarily testing this on routers with 2 or 4 CPUs and limited 
+>> > > processing power, handling routing/NAT. RPS is typically needed to 
+>> > > properly distribute the load across all available CPUs. When there is 
+>> > > only a small number of flows that are pushing a lot of traffic, a static 
+>> > > RPS assignment often leaves some CPUs idle, whereas others become a 
+>> > > bottleneck by being fully loaded. Threaded NAPI reduces this a bit, but 
+>> > > CPUs can become bottlenecked and fully loaded by a NAPI thread alone.
+>> > 
+>> > The NAPI thread becomes a bottleneck with RPS enabled?
+>> 
+>> The devices that I work with often only have a single rx queue. That can
+>> easily become a bottleneck.
+>> 
+>> > > Making backlog processing threaded helps split up the processing work 
+>> > > even more and distribute it onto remaining idle CPUs.
+>> > 
+>> > You'd want to have both threaded NAPI and threaded backlog enabled?
+>> 
+>> Yes
+>> 
+>> > > It can basically be used to make RPS a bit more dynamic and 
+>> > > configurable, because you can assign multiple backlog threads to a set 
+>> > > of CPUs and selectively steer packets from specific devices / rx queues 
+>> > 
+>> > Can you give an example?
+>> > 
+>> > With the 4 CPU example, in case 2 queues are very busy - you're trying
+>> > to make sure that the RPS does not end up landing on the same CPU as
+>> > the other busy queue?
+>> 
+>> In this part I'm thinking about bigger systems where you want to have a
+>> group of CPUs dedicated to dealing with network traffic without
+>> assigning a fixed function (e.g. NAPI processing or RPS target) to each
+>> one, allowing for more dynamic processing.
+>> 
+>> > > to them and allow the scheduler to take care of the rest.
+>> > 
+>> > You trust the scheduler much more than I do, I think :)
+>> 
+>> In my tests it brings down latency (both avg and p99) considerably in
+>> some cases. I posted some numbers here:
+>> https://lore.kernel.org/netdev/e317d5bc-cc26-8b1b-ca4b-66b5328683c4@nbd.name/
+> 
+> It's still not 110% clear to me why/how this additional thread could
+> reduce latency. What/which threads are competing for the busy CPU[s]? I
+> suspect it could be easier/cleaner move away the others (non RPS)
+> threads.
+In the tests that I'm doing, network processing load from routing/NAT is 
+enough to occupy all available CPUs.
+If I dedicate the NAPI thread to one core and use RPS to steer packet 
+processing to the other cores, the core taking care of NAPI has some 
+idle cycles that go to waste, while the other cores are busy.
+If I include the core in the RPS mask, it can take too much away from 
+the NAPI thread.
+Also, with a smaller number of flows and depending on the hash 
+distribution of those flows, there can be an imbalance between how much 
+processing each RPS instance gets, making this even more difficult to 
+get right.
+With the extra threading it works out better in my tests, because the 
+scheduler can deal with these kinds of imbalances.
 
-I agree that looks wrong.
+- Felix
 
-Have you tried to test what goes wrong if it fails? It looks like it
-will break the LPCR update, which likely will cause the guest to crash
-horribly.
-
-You could use CONFIG_FAIL_SLAB and fail-nth etc. to fail just one
-allocation for a guest. Or probably easier to just hack the code to fail
-the 4th time it's called using a static counter.
-
-Doesn't really matter but could be interesting.
-
-> Add a check for kzalloc failure and return with -ENOMEM from
-> kvmppc_core_vcpu_create_hv().
->
-> Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
-> ---
->  arch/powerpc/kvm/book3s_hv.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
-> index 6ba68dd6190b..e29ee755c920 100644
-> --- a/arch/powerpc/kvm/book3s_hv.c
-> +++ b/arch/powerpc/kvm/book3s_hv.c
-> @@ -2968,13 +2968,17 @@ static int kvmppc_core_vcpu_create_hv(struct kvm_vcpu *vcpu)
->  			pr_devel("KVM: collision on id %u", id);
->  			vcore = NULL;
->  		} else if (!vcore) {
-> +			vcore = kvmppc_vcore_create(kvm,
-> +					id & ~(kvm->arch.smt_mode - 1));
-
-That line doesn't need to be wrapped, we allow 90 columns.
-
-> +			if (unlikely(!vcore)) {
-> +				mutex_unlock(&kvm->lock);
-> +				return -ENOMEM;
-> +			}
-
-Rather than introducing a new return point here, I think it would be
-preferable to use the existing !vcore case below.
-
->  			/*
->  			 * Take mmu_setup_lock for mutual exclusion
->  			 * with kvmppc_update_lpcr().
->  			 */
-> -			err = -ENOMEM;
-> -			vcore = kvmppc_vcore_create(kvm,
-> -					id & ~(kvm->arch.smt_mode - 1));
-
-So leave that as is (maybe move the comment down).
-
-And wrap the below in:
-
- +                      if (vcore) {
-
->  			mutex_lock(&kvm->arch.mmu_setup_lock);
->  			kvm->arch.vcores[core] = vcore;
->  			kvm->arch.online_vcores++;
- 			
- 			mutex_unlock(&kvm->arch.mmu_setup_lock);
- +                      }
-		}
-	}
-
-Meaning the vcore == NULL case will fall through to here and return via
-this existing path:
-
-	mutex_unlock(&kvm->lock);
-
-	if (!vcore)
-		return err;
-
-
-cheers
