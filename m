@@ -2,52 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7916CC4E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4BB6CC502
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232156AbjC1PKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
+        id S229936AbjC1PLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbjC1PKZ (ORCPT
+        with ESMTP id S229500AbjC1PLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:10:25 -0400
-Received: from mail.unsolicited.net (mail.unsolicited.net [IPv6:2001:8b0:15df::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004A586AB
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:09:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=unsolicited.net; s=one; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=KK2SFGrsQMr3j8FZqsNKuM7Ny/ZbyryWCbCocIFHq/8=; b=Gyovh8fJI3DfcZpG/E8UQuPhgk
-        AJdiHXWOcxkjAAZNyai+1akYzdFFzF5XAOED4RFB5h1EDT1/7MMfJhFaoPODBFol80ZG1+RGELh6I
-        lrZ5hF8JK4R69M6w71yElf+ZnxAMY2ABqBooy7BhwJVbjF7zrmd2PWsLmEjmUnwEl03xwfoQyWw2q
-        gdmiRxOkrU61PUZVDD63YNg++chlUKSBKbZuE1wdrQ0qImEs62ld8vyU4BZlfwXI8sxm7AZv/3X9p
-        DGHNkW/Gwlj+VRFJ52qc4R51ICkeinQUreOKoqeB5/RRxnSJXU94KentPRIw062TwfOhMxXzOM/m3
-        5lj4MApA==;
-Message-ID: <57385475-c289-356f-d696-fc6decce1390@unsolicited.net>
-Date:   Tue, 28 Mar 2023 16:06:41 +0100
+        Tue, 28 Mar 2023 11:11:38 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2EEEC4E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:10:41 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 3D8A9162E7F;
+        Tue, 28 Mar 2023 17:07:40 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1680016060; bh=+/3nvo1yYXim8zKDDEGS5Ln3cTmFtDCEk+Ab9n7rpdA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hJdGEF4sm5cpMC96PhA7CJdP7X4/E2TDIlbCRhbxzRSrN7aeY+0D6JFo5YseQbKMc
+         c9QmAA7jyYGyo7QK+uvFpNH4J4xnuDt+KEOkTjiPwoJuqkeKreOK+27iV1dd9w2ydF
+         /A0DgOf70+M6yhkIDp3jEHqw/1UelXANFOwpsRxQ/DDe440of55Dy/NrzDvtGIMNYL
+         PzIDxwkAA6sidCbdxDDTMfdH+PfVAnh5xuyT0NkkqsuukcblNvHP1TxCK/AUh+OqPm
+         Z9uk4pFt3dYEvHsVbvCFwxY/wKq+Ohbk9Ga7toFWjHOXWTizA9EallH57bdHWszCaz
+         U7fbsGkU79MSQ==
+Date:   Tue, 28 Mar 2023 17:07:39 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/1] swiotlb: Track and report io_tlb_used high water
+ mark in debugfs
+Message-ID: <20230328170739.10e33345@meshulam.tesarici.cz>
+In-Reply-To: <BYAPR21MB1688983A72B114BBC3AA1DE2D7889@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <1679766790-24629-1-git-send-email-mikelley@microsoft.com>
+        <ZCJEAx/G0x6zokPF@infradead.org>
+        <BYAPR21MB1688852ED49499249368D939D7889@BYAPR21MB1688.namprd21.prod.outlook.com>
+        <20230328155017.5636393b@meshulam.tesarici.cz>
+        <BYAPR21MB1688983A72B114BBC3AA1DE2D7889@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: Panic starting 6.2.x and later 6.1.x kernels
-Content-Language: en-GB
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <943d2445-84df-d939-f578-5d8240d342cc@unsolicited.net>
- <20230327074952.GAZCFKoDOiJUdtse2H@fat_crate.local>
- <e8d15248-e694-79d7-da9c-b4485b471e14@unsolicited.net>
- <4c660f0f-2845-0e02-ccf9-619958e24236@unsolicited.net>
- <20230328142014.GCZCL3nkW5Qx5jhfsB@fat_crate.local>
-From:   David R <david@unsolicited.net>
-In-Reply-To: <20230328142014.GCZCL3nkW5Qx5jhfsB@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,28 +63,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 15:20, Borislav Petkov wrote:
-> On Tue, Mar 28, 2023 at 12:02:57PM +0100, David R wrote:
->> After more investigation :
->>
->>      Revert "x86/acpi/boot: Do not register processors that cannot be onlined
->> for x2APIC"
->>
->>      This reverts commit ce7d894bed1a539a8d6cff42f6f78f9db0c9c26b.
->>
->> Corrects the issue for me.
-> Hmm, weird. That commit came up already yesterday. But in conjunction
-> with qemu.
->
-> Does this fix it per chance?
->
-> https://lore.kernel.org/all/20230327191026.3454-2-eric.devolder@oracle.com/
->
-> You'd need to revert the revert and apply this one ontop.
->
-> Thx.
->
-Yes, that patch fixes it also. By all means add my tested by:
+On Tue, 28 Mar 2023 14:29:03 +0000
+"Michael Kelley (LINUX)" <mikelley@microsoft.com> wrote:
 
-Thanks
-David
+> From: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> Sent: Tuesday, March 28, =
+2023 6:50 AM
+> >=20
+> > On Tue, 28 Mar 2023 13:12:13 +0000
+> > "Michael Kelley (LINUX)" <mikelley@microsoft.com> wrote:
+> >  =20
+> > > From: Christoph Hellwig <hch@infradead.org> Sent: Monday, March 27, 2=
+023 6:34 =20
+> > PM =20
+> > > >
+> > > > On Sat, Mar 25, 2023 at 10:53:10AM -0700, Michael Kelley wrote: =20
+> > > > > @@ -659,6 +663,14 @@ static int swiotlb_do_find_slots(struct devi=
+ce *dev, int =20
+> > > > area_index, =20
+> > > > >   area->index =3D wrap_area_index(mem, index + nslots);
+> > > > >   area->used +=3D nslots;
+> > > > >   spin_unlock_irqrestore(&area->lock, flags);
+> > > > > +
+> > > > > + new_used =3D atomic_long_add_return(nslots, &total_used);
+> > > > > + old_hiwater =3D atomic_long_read(&used_hiwater);
+> > > > > + do {
+> > > > > +         if (new_used <=3D old_hiwater)
+> > > > > +                 break;
+> > > > > + } while (!atomic_long_try_cmpxchg(&used_hiwater, &old_hiwater, =
+new_used));
+> > > > > +
+> > > > >   return slot_index; =20
+> > > >
+> > > > Hmm, so we're right in the swiotlb hot path here and add two new gl=
+obal
+> > > > atomics? =20
+>[...]
+> > For my purposes, it does not have to be 100% accurate. I don't really
+> > mind if it is off by a few slots because of a race window, so we could
+> > (for instance):
+> >=20
+> > - update a local variable and set the atomic after the loop,
+> > - or make it a per-cpu to reduce CPU cache bouncing,
+> > - or just about anything that is less heavy-weight than an atomic
+> >   CMPXCHG in the inner loop of a slot search.
+> >  =20
+>=20
+> Perhaps I'm missing your point, but there's no loop here.  The atomic
+> add is done once per successful slot allocation.  If swiotlb_do_find_slot=
+s()
+> doesn't find any slots for the current area, it exits at the "not_found" =
+label
+> and the atomic add isn't done.
+
+My bad. I read the patch too quickly and thought that the update was
+done for each searched area. I stay corrected here.
+
+>[...]
+> I thought about tracking the high water mark on a per-CPU basis or
+> per-area basis, but I don't think the resulting data is useful.  Adding up
+> the individual high water marks likely significantly over-estimates the
+> true high water mark.   Is there a clever way to make this useful that I'm
+> not thinking about?
+
+No, not that I'm aware of. Min/max cannot be easily split.
+
+>[...]
+> Regarding your other email about non-default io_tlb_mem instances,
+> my patch just extends what is already reported in debugfs, which
+> is only for the default io_tlb_mem.   The non-default instances seemed
+> to me to be fairly niche cases that weren't worth the additional
+> complexity, but maybe I'm wrong about that.
+
+What I mean is that the values currently reported in debugfs only refer
+to io_tlb_default_mem. Since restricted DMA pools also use
+swiotlb_find_slots() and swiotlb_release_slots(), the global counters
+now get updated both for io_tlb_default_mem and all restricted DMA
+pools.
+
+In short, this hunk is a change in behaviour:
+
+ static int io_tlb_used_get(void *data, u64 *val)
+ {
+-	*val =3D mem_used(&io_tlb_default_mem);
++	*val =3D (u64)atomic_long_read(&total_used);
+ 	return 0;
+ }
+
+Before the change, it shows the number of used slots in the default
+SWIOTLB, after the change it shows the total number of used slots in
+the SWIOTLB and all restricted DMA pools.
+
+Petr T
