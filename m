@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1009A6CC6C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C487D6CC6C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234105AbjC1PkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
+        id S233829AbjC1PlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233473AbjC1Pj5 (ORCPT
+        with ESMTP id S233824AbjC1Pko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:39:57 -0400
+        Tue, 28 Mar 2023 11:40:44 -0400
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4F711EA7;
-        Tue, 28 Mar 2023 08:38:30 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SDwn90013765;
-        Tue, 28 Mar 2023 17:37:39 +0200
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4A986AC;
+        Tue, 28 Mar 2023 08:39:37 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SE1LA6016212;
+        Tue, 28 Mar 2023 17:38:40 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=selector1;
- bh=WPEjXayWT+uWOiON+cXyIPwk9fPuwbN+4snzQyUm7ac=;
- b=TB/i2lBCP1h5is8mzTZh+EtEjoHbJQkf2BzEJ+GFpAiI6QnWcwagrRbk7S1dBnOjispA
- C+AG1mV0DlHPjVBfZoxP1LgMTw7VcLHX4rA6cR6cy4X01lCFprQ+w4M5+ZWbmMG/JPKh
- 2Bkg2SqcGH3kJetSJvt8dwtuxgCQhwTVO5BSSSD3CIsXCT2VvgbydEx+mfpJuzwgS36R
- ivQEe/6iNMsxN+cIQFwXDKJB3LH9ULoY/Np+jo2+uGS+vAti/jeolCdRM8fLxkh/yrEn
- TmIZi9shn+siWwWF85j/1kZhxcD+8zwMqbBUADuO8mjf+txTl6c3rqOqaamu1XcrTfBz Bw== 
+ bh=eQMMwdgtbCFYg6RdDX7MRzsB4HskdJ9yFYqsMjdrGSM=;
+ b=Lpb68G+T712ZWpf2lQ9iX6airbyfNaUsX5TDEinSF0mafdRw1gGz5ipFKdmPDCiZzZRx
+ pwWlbxJiMq+XdDRIqBUSZX/nt0NemkHHKC/kKR65OEui038BPjtNT+g1ca0hoCRWWXGg
+ HFHYaTtYoXCzKKC6iv51/CtaTR9ZoNbDOoddBbrzhZXzYzstM8NKm+9uGb3b1n9tWiyW
+ MN/wLEQusQkaTyeeZFxwYBOPPcl0oOAfbFh66XrJvm7BfUNxBSbWeKlebmhfsbMwr+Gv
+ rRmcNKc1c2i9nUKrYI+y6sQViWUCu7e+vEcLSJN1k6zcInJKtMi/292S0AhGn9e2JbZ2 bQ== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3phsqwk6jq-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pkwvsaate-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Mar 2023 17:37:39 +0200
+        Tue, 28 Mar 2023 17:38:40 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 298FE10002A;
-        Tue, 28 Mar 2023 17:37:39 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 32A6610002A;
+        Tue, 28 Mar 2023 17:38:40 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 231532194FA;
-        Tue, 28 Mar 2023 17:37:39 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2BD542194F6;
+        Tue, 28 Mar 2023 17:38:40 +0200 (CEST)
 Received: from localhost (10.201.20.168) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Tue, 28 Mar
- 2023 17:37:38 +0200
+ 2023 17:38:39 +0200
 From:   Valentin Caron <valentin.caron@foss.st.com>
 To:     Alexandre Torgue <alexandre.torgue@foss.st.com>
 CC:     Rob Herring <robh+dt@kernel.org>,
@@ -51,9 +51,9 @@ CC:     Rob Herring <robh+dt@kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 4/6] ARM: dts: stm32: add uart nodes on stm32mp13
-Date:   Tue, 28 Mar 2023 17:37:21 +0200
-Message-ID: <20230328153723.498672-5-valentin.caron@foss.st.com>
+Subject: [PATCH v2 5/6] ARM: dts: stm32: add pins for usart2/1/4/8 in stm32mp13-pinctrl
+Date:   Tue, 28 Mar 2023 17:37:22 +0200
+Message-ID: <20230328153723.498672-6-valentin.caron@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230328153723.498672-1-valentin.caron@foss.st.com>
 References: <20230328153723.498672-1-valentin.caron@foss.st.com>
@@ -75,152 +75,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update device-tree stm32mp131.dtsi to add some uart features.
-
-On uart 1, 2, 3, 5, 6, 7, 8 nodes, add compabible, exti interrupts, clock,
-reset properties, dma config.
-
-On uart 4 node, only add dma configuration and use exti interrupt.
+Add pins for uart4, uart8, usart1 and usart2 in stm32mp13-pinctrl.dtsi
+Theses pins have three states: default, sleep and idle.
 
 Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
 ---
- arch/arm/boot/dts/stm32mp131.dtsi | 97 ++++++++++++++++++++++++++++++-
- 1 file changed, 96 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/stm32mp13-pinctrl.dtsi | 129 +++++++++++++++++++++++
+ 1 file changed, 129 insertions(+)
 
-diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
-index 5949473cbbfd..9ea61687f023 100644
---- a/arch/arm/boot/dts/stm32mp131.dtsi
-+++ b/arch/arm/boot/dts/stm32mp131.dtsi
-@@ -397,12 +397,42 @@ spdifrx: audio-controller@4000d000 {
- 			status = "disabled";
+diff --git a/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi
+index b2dce3a29f39..27e0c3826789 100644
+--- a/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi
+@@ -258,4 +258,133 @@ pins2 {
+ 			bias-disable;
  		};
- 
-+		usart3: serial@4000f000 {
-+			compatible = "st,stm32h7-uart";
-+			reg = <0x4000f000 0x400>;
-+			interrupts-extended = <&exti 28 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&rcc USART3_K>;
-+			resets = <&rcc USART3_R>;
-+			wakeup-source;
-+			dmas = <&dmamux1 45 0x400 0x5>,
-+			       <&dmamux1 46 0x400 0x1>;
-+			dma-names = "rx", "tx";
-+			status = "disabled";
-+		};
+ 	};
 +
- 		uart4: serial@40010000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40010000 0x400>;
--			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupts-extended = <&exti 30 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&rcc UART4_K>;
- 			resets = <&rcc UART4_R>;
-+			wakeup-source;
-+			dmas = <&dmamux1 63 0x400 0x5>,
-+			       <&dmamux1 64 0x400 0x1>;
-+			dma-names = "rx", "tx";
-+			status = "disabled";
++	uart4_idle_pins_a: uart4-idle-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('D', 6, ANALOG)>; /* UART4_TX */
 +		};
-+
-+		uart5: serial@40011000 {
-+			compatible = "st,stm32h7-uart";
-+			reg = <0x40011000 0x400>;
-+			interrupts-extended = <&exti 31 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&rcc UART5_K>;
-+			resets = <&rcc UART5_R>;
-+			wakeup-source;
-+			dmas = <&dmamux1 65 0x400 0x5>,
-+			       <&dmamux1 66 0x400 0x1>;
-+			dma-names = "rx", "tx";
- 			status = "disabled";
- 		};
- 
-@@ -442,6 +472,32 @@ i2c2: i2c@40013000 {
- 			status = "disabled";
- 		};
- 
-+		uart7: serial@40018000 {
-+			compatible = "st,stm32h7-uart";
-+			reg = <0x40018000 0x400>;
-+			interrupts-extended = <&exti 32 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&rcc UART7_K>;
-+			resets = <&rcc UART7_R>;
-+			wakeup-source;
-+			dmas = <&dmamux1 79 0x400 0x5>,
-+			       <&dmamux1 80 0x400 0x1>;
-+			dma-names = "rx", "tx";
-+			status = "disabled";
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 8, AF8)>; /* UART4_RX */
++			bias-disable;
 +		};
++	};
 +
-+		uart8: serial@40019000 {
-+			compatible = "st,stm32h7-uart";
-+			reg = <0x40019000 0x400>;
-+			interrupts-extended = <&exti 33 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&rcc UART8_K>;
-+			resets = <&rcc UART8_R>;
-+			wakeup-source;
-+			dmas = <&dmamux1 81 0x400 0x5>,
-+			       <&dmamux1 82 0x400 0x1>;
-+			dma-names = "rx", "tx";
-+			status = "disabled";
++	uart4_sleep_pins_a: uart4-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('D', 6, ANALOG)>, /* UART4_TX */
++				 <STM32_PINMUX('D', 8, ANALOG)>; /* UART4_RX */
 +		};
++	};
 +
- 		timers1: timer@44000000 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -524,6 +580,19 @@ counter {
- 			};
- 		};
- 
-+		usart6: serial@44003000 {
-+			compatible = "st,stm32h7-uart";
-+			reg = <0x44003000 0x400>;
-+			interrupts-extended = <&exti 29 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&rcc USART6_K>;
-+			resets = <&rcc USART6_R>;
-+			wakeup-source;
-+			dmas = <&dmamux1 71 0x400 0x5>,
-+			       <&dmamux1 72 0x400 0x1>;
-+			dma-names = "rx", "tx";
-+			status = "disabled";
++	uart8_pins_a: uart8-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('E', 1, AF8)>; /* UART8_TX */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
 +		};
-+
- 		i2s1: audio-controller@44004000 {
- 			compatible = "st,stm32h7-i2s";
- 			reg = <0x44004000 0x400>;
-@@ -748,6 +817,32 @@ usbotg_hs: usb@49000000 {
- 			status = "disabled";
- 		};
- 
-+		usart1: serial@4c000000 {
-+			compatible = "st,stm32h7-uart";
-+			reg = <0x4c000000 0x400>;
-+			interrupts-extended = <&exti 26 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&rcc USART1_K>;
-+			resets = <&rcc USART1_R>;
-+			wakeup-source;
-+			dmas = <&dmamux1 41 0x400 0x5>,
-+			       <&dmamux1 42 0x400 0x1>;
-+			dma-names = "rx", "tx";
-+			status = "disabled";
++		pins2 {
++			pinmux = <STM32_PINMUX('F', 9, AF8)>; /* UART8_RX */
++			bias-pull-up;
 +		};
++	};
 +
-+		usart2: serial@4c001000 {
-+			compatible = "st,stm32h7-uart";
-+			reg = <0x4c001000 0x400>;
-+			interrupts-extended = <&exti 27 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&rcc USART2_K>;
-+			resets = <&rcc USART2_R>;
-+			wakeup-source;
-+			dmas = <&dmamux1 43 0x400 0x5>,
-+			       <&dmamux1 44 0x400 0x1>;
-+			dma-names = "rx", "tx";
-+			status = "disabled";
++	uart8_idle_pins_a: uart8-idle-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('E', 1, ANALOG)>; /* UART8_TX */
 +		};
++		pins2 {
++			pinmux = <STM32_PINMUX('F', 9, AF8)>; /* UART8_RX */
++			bias-pull-up;
++		};
++	};
 +
- 		i2s4: audio-controller@4c002000 {
- 			compatible = "st,stm32h7-i2s";
- 			reg = <0x4c002000 0x400>;
++	uart8_sleep_pins_a: uart8-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('E', 1, ANALOG)>, /* UART8_TX */
++				 <STM32_PINMUX('F', 9, ANALOG)>; /* UART8_RX */
++		};
++	};
++
++	usart1_pins_a: usart1-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('C', 0, AF7)>, /* USART1_TX */
++				 <STM32_PINMUX('C', 2, AF7)>; /* USART1_RTS */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('B', 0, AF4)>, /* USART1_RX */
++				 <STM32_PINMUX('A', 7, AF7)>; /* USART1_CTS_NSS */
++			bias-pull-up;
++		};
++	};
++
++	usart1_idle_pins_a: usart1-idle-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('C', 0, ANALOG)>, /* USART1_TX */
++				 <STM32_PINMUX('A', 7, ANALOG)>; /* USART1_CTS_NSS */
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('C', 2, AF7)>; /* USART1_RTS */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins3 {
++			pinmux = <STM32_PINMUX('B', 0, AF4)>; /* USART1_RX */
++			bias-pull-up;
++		};
++	};
++
++	usart1_sleep_pins_a: usart1-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('C', 0, ANALOG)>, /* USART1_TX */
++				 <STM32_PINMUX('C', 2, ANALOG)>, /* USART1_RTS */
++				 <STM32_PINMUX('A', 7, ANALOG)>, /* USART1_CTS_NSS */
++				 <STM32_PINMUX('B', 0, ANALOG)>; /* USART1_RX */
++		};
++	};
++
++	usart2_pins_a: usart2-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('H', 12, AF1)>, /* USART2_TX */
++				 <STM32_PINMUX('D', 4, AF3)>; /* USART2_RTS */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 15, AF1)>, /* USART2_RX */
++				 <STM32_PINMUX('E', 11, AF2)>; /* USART2_CTS_NSS */
++			bias-disable;
++		};
++	};
++
++	usart2_idle_pins_a: usart2-idle-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('H', 12, ANALOG)>, /* USART2_TX */
++				 <STM32_PINMUX('E', 11, ANALOG)>; /* USART2_CTS_NSS */
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 4, AF3)>; /* USART2_RTS */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins3 {
++			pinmux = <STM32_PINMUX('D', 15, AF1)>; /* USART2_RX */
++			bias-disable;
++		};
++	};
++
++	usart2_sleep_pins_a: usart2-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('H', 12, ANALOG)>, /* USART2_TX */
++				 <STM32_PINMUX('D', 4, ANALOG)>, /* USART2_RTS */
++				 <STM32_PINMUX('D', 15, ANALOG)>, /* USART2_RX */
++				 <STM32_PINMUX('E', 11, ANALOG)>; /* USART2_CTS_NSS */
++		};
++	};
+ };
 -- 
 2.25.1
 
