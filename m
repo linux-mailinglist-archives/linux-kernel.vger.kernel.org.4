@@ -2,98 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7051E6CBF83
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E1C6CBF95
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbjC1Mo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
+        id S232488AbjC1MqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbjC1Mox (ORCPT
+        with ESMTP id S232909AbjC1Mp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:44:53 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109EE93C3;
-        Tue, 28 Mar 2023 05:44:24 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-536af432ee5so227762287b3.0;
-        Tue, 28 Mar 2023 05:44:24 -0700 (PDT)
+        Tue, 28 Mar 2023 08:45:57 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18259AF04
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:45:26 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id n10-20020a05600c4f8a00b003ee93d2c914so9003594wmq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:45:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680007463;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UYM0LDWTymu0bPPL77EcCh7NegRUDjN6g7FPTmBma/w=;
-        b=JjUm88X4RKhTtd8pJK8O1h2ETqz0s9W+HLALN2xHbiPTPfx1d8GbfHK/c+50Xmbiac
-         Ys39w7Ej6CYzi+oVWrgRXPPeQEBJX9vBzHBeQAd9wzYeOdpgH15oJSwE0jfgGwIbLGg7
-         DIuD9nQBp3cRYtL3ShOuygmcXUEP2gHyrhDv7xD9REhX0s2dInRyXhvV94ED3A3ejcTL
-         IiCblLp/u0v1OJBS31IHUN7MnBDYm95/eE+XjeBUSOepAfcJtqFAa3E8FSsfu8QSyG2B
-         Pxa5JTOCnsKpRW90ZZJC4222jn4OVmCHyZwFh/f3MJnDJbtniqa6Gniaf1zfcuo0Kj95
-         1ySA==
+        d=google.com; s=20210112; t=1680007523;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JzVXnbBiEEn4qwo5Qci6PsToee+sdMsxUyL4F4VgKW4=;
+        b=b9+3IFGUpi74Su+dszskACLdtXQsaVX99X99aorKJOTGjdsV50HecaelFWzTuXSMP9
+         Uq2hTN7rIEsjUS7L/dIYLJIpIM0DOAdt0KIQ36JhJ8xOlHXW+CbtQ1EsdYKVGAMnTUsU
+         MXTv4GHrwXeSweXv98WUbm86hFAiGNa8K7PkrssiJ1dZ2ZANKA5o0uboyVy8bzx99Njp
+         GbSQCi0Bs1IhmfQWxwWkxr1zPkgexNVkQlAPH99b+aDim8DsYGew6x+XEwUo4EKCMS0r
+         q71jbYQPp3E+6Cteidfzwm1e3xsJalVm4tQFDaHRBChIbtSV6HGsgSgGBwdVcPn/ltQU
+         l5dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680007463;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1680007523;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UYM0LDWTymu0bPPL77EcCh7NegRUDjN6g7FPTmBma/w=;
-        b=j+Kp/W4Xsb9OpKFDz1/IpYlbQqbO6jN0QT1AlP7HyeLuH0j/HqrM4vuSolH010RIgn
-         gC32g0loUsWemPH53bcUjCknhPal/v6PucblO05vo5XIvPQ6eTpalWoKsMGHtlrR/dDx
-         7HbeULeIGLfHIAiyxB5gE/TtDW2oeGEJBgI+mSxernxE0BWuuvbSaIFcO9tzgSMGpKpc
-         raQGMp5jkudNunGWTWkQpD3D0Wh2EaPbTc+yamLz7EpLyeXJ067vGT3nutvoAqYu6bTP
-         FxF0BVHMN6JiK3sZU6H9MSjrWvtfAG6Ldia4h0r6Q/jsSM54emGHlqmRs3pTOWS/602V
-         oFjw==
-X-Gm-Message-State: AAQBX9cpUTgcREwayZZDJvLmrCaYEVnN9oI7gz4ytsHzVX18VaJ5fd02
-        BM3+1yZEc8m/WHcKb/NJQTATXJ99BEw=
-X-Google-Smtp-Source: AKy350aAesljbwFJTOWnmnvUuqGvqeYc/psTJV5UFSUS1mOGIiScDqwFviK0fhCbJqKaZamJKjvPYQ==
-X-Received: by 2002:a81:5a83:0:b0:544:7850:b62f with SMTP id o125-20020a815a83000000b005447850b62fmr14323652ywb.18.1680007463076;
-        Tue, 28 Mar 2023 05:44:23 -0700 (PDT)
-Received: from chcpu13.cse.ust.hk (191host119.mobilenet.cse.ust.hk. [143.89.191.119])
-        by smtp.gmail.com with ESMTPSA id n38-20020a81af26000000b00545a08184d5sm2382152ywh.101.2023.03.28.05.44.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 05:44:22 -0700 (PDT)
-From:   Wei Chen <harperchen1110@gmail.com>
-To:     mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Chen <harperchen1110@gmail.com>
-Subject: [PATCH] media: dvb-usb: dw2102: Fix uninit-value in su3000_read_mac_address
-Date:   Tue, 28 Mar 2023 12:44:16 +0000
-Message-Id: <20230328124416.560889-1-harperchen1110@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=JzVXnbBiEEn4qwo5Qci6PsToee+sdMsxUyL4F4VgKW4=;
+        b=1UKgBwmEjo8V0MJzHFObKylfFnwA+PuYJ5A6zSPb8dy5AARYtg4J45Z27RmfLqa0pE
+         taQuOmr7S3uNa8IClBbd+GriVuMZ0e5KTF4z7LRL8eMqb9iF9+6F2K+LkRBmq+0P36pH
+         iLwNwV9uS67jUXqfF0qACN2ln7Qs3ZFq13lxY409gb5GPg50tnWMMniyLPy5O/jIMarm
+         Y7wkqcbHTVaJReCxPiWjTCLwA2gi/l0LzXnavTvPO5L53etNjKPmGaFlBuC7rCND6plo
+         YRL2NnTG+7+f4xWFdAd4w9x7NwBs1khqPxUdQWH48NeIWAxJkmTH7yaHMMxyxbT7V18Z
+         R4eg==
+X-Gm-Message-State: AO0yUKXrzmbtXGBzc+yF8+XB+9Y4LFbro32EH5CaDvaNTRqWI1eEpeK8
+        QHsp6MY7htusO+1fNqRvit3ORcQ4Zc8/nkmS4xamQw==
+X-Google-Smtp-Source: AK7set+ledd+drpHIpsG7+OgCtMnLKfAZV+VWtOxJbQIKrW8vdv2q4unjuYjgC1QPZaklT3wJNz+qVVhl/wDfND7xZU=
+X-Received: by 2002:a1c:4b07:0:b0:3df:97b0:ba02 with SMTP id
+ y7-20020a1c4b07000000b003df97b0ba02mr3490013wma.3.1680007522289; Tue, 28 Mar
+ 2023 05:45:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <cover.1679915278.git.mazziesaccount@gmail.com>
+ <f2c7f7b04f7e4ee7b9cef73ecba672f5fa40eb73.1679915278.git.mazziesaccount@gmail.com>
+ <ZCGFgypeuJXqNwQt@kroah.com> <e027fc0c-83e0-be6f-d62b-dac00ce9b761@gmail.com> <ZCGONl0mC8oyBj-0@kroah.com>
+In-Reply-To: <ZCGONl0mC8oyBj-0@kroah.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 28 Mar 2023 20:45:09 +0800
+Message-ID: <CABVgOSnUCsxPf1mAL03GQzaw_kFtgf5J7aTPodo=j6O+wYZ2iQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/7] kunit: Add kunit wrappers for (root) device creation
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        Maxime Ripard <maxime@cerno.tech>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000a2e95e05f7f53bab"
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In su3000_read_mac_address, if i2c_transfer fails to execute two
-messages, array mac address will not be initialized. Without handling
-such error, later in function dvb_usb_adapter_dvb_init, proposed_mac
-is accessed before initialization.
+--000000000000a2e95e05f7f53bab
+Content-Type: text/plain; charset="UTF-8"
 
-Fix this error by returning a negative value if message execution fails.
+Thanks, Gred and Matti.
 
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
----
- drivers/media/usb/dvb-usb/dw2102.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, 27 Mar 2023 at 20:38, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Mar 27, 2023 at 03:20:06PM +0300, Matti Vaittinen wrote:
+> > On 3/27/23 15:01, Greg Kroah-Hartman wrote:
+> > > On Mon, Mar 27, 2023 at 02:34:02PM +0300, Matti Vaittinen wrote:
+> > > > A few tests need to have a valid struct device. One such example is
+> > > > tests which want to be testing devm-managed interfaces.
+> > > >
+> > > > Add kunit wrapper for root_device_[un]register(), which create a root
+> > > > device and also add a kunit managed clean-up routine for the device
+> > > > destruction upon test exit.
+> > >
+> > > I really do not like this as a "root device" is a horrible hack and
+> > > should only be used if you have to hang other devices off of it and you
+> > > don't have a real device to tie those devices to.
+> > >
+> > > Here you are abusing it and attempting to treat it as a real device,
+> > > which it is not at all, because:
+> > >
 
-diff --git a/drivers/media/usb/dvb-usb/dw2102.c b/drivers/media/usb/dvb-usb/dw2102.c
-index 0ca764282c76..8747960e6146 100644
---- a/drivers/media/usb/dvb-usb/dw2102.c
-+++ b/drivers/media/usb/dvb-usb/dw2102.c
-@@ -946,7 +946,7 @@ static int su3000_read_mac_address(struct dvb_usb_device *d, u8 mac[6])
- 	for (i = 0; i < 6; i++) {
- 		obuf[1] = 0xf0 + i;
- 		if (i2c_transfer(&d->i2c_adap, msg, 2) != 2)
--			break;
-+			return -1;
- 		else
- 			mac[i] = ibuf[0];
- 	}
--- 
-2.25.1
+There's a tradeoff here in that we want to pull in as little code (and
+complexity) as possible into unit tests, both to make them as easy as
+possible to write, and to make them as targeted as possible. This
+leads to a lot of tests manually filling out structures with the bare
+minimum to get the code being tested to run, and creating "root
+devices" seems to have been a convenient way of doing that while only
+registering _one_ thing in a big global list per test. So having a
+"real device" is not something I'd consider a _necessity_ in designing
+these sorts of helpers: a convincing enough fake is sometimes better.
 
+That being said, now that I've got a bit of a better understanding of
+the device model, I agree that "root devices" are not an ideal
+solution, even if they are a convenient one. I'm still not thrilled by
+the prospect of having to register extra things like drivers to get
+these simple tests to work, but when wrapped behind helpers, it's a
+nice solution in practice.
+
+> > > > Special note: In some cases the device reference-count does not reach
+> > > > zero and devm-unwinding is not done if device is not sitting on a bus.
+> > > > The root_device_[un]register() are dealing with such devices and thus
+> > > > this interface may not be usable by all in its current form. More
+> > > > information can be found from:
+> > > > https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@houat/
+> > >
+> > > See, not a real device, doesn't follow normal "struct device" rules and
+> > > lifetimes, don't try to use it for a test as it will only cause problems
+> > > and you will be forced to work around that in a test.
+
+I think there's still some confusion around exactly what these issues
+are, and if they're indeed bugs or expected behaviour. I think it
+hangs off the question of what uses of a device with no driver
+attached are valid. My initial reading through of the various bits of
+the devres implementation seemed to imply that using it with such an
+unattached device was supported, but I'm less certain now. In any
+case, Maxime's tests in the other thread are a good starting point to
+clarify this behaviour, and if we use the bus-based KUnit helpers, it
+won't matter either way.
+
+> >
+> > Ok. I understood using the root-device has been a work-around in some other
+> > tests. Thus continuing use it for tests where we don't need the bus until we
+> > have a proper alternative was suggested by David.
+> >
+> > > Do the right thing here, create a fake bus and add devices to it.
+> > >
+> > > Heck, I'll even write that code if you want it, what's the requirement,
+> > > something like:
+> > >     struct device *kunit_device_create(struct kunit *test, const char *name);
+> > >     void kunit_device_destroy(struct device *dev);
+> >
+> > Thanks for the offer Greg. This, however, is being already worked on by
+> > David. I don't want to step on his toes by writing the same thing, nor do I
+> > think I should be pushing him to rush on his work.
+>
+> Ok, David, my offer stands, if you want me to write this I will be glad
+> to do so.
+
+I'm happy to keep working on this, but would definitely appreciate
+your feedback.
+
+I've put my work-in-progress code here:
+https://kunit.googlesource.com/linux/+/refs/heads/kunit/device-helpers%5E%21/#F0
+
+It creates a "kunit" bus, and adds a few helpers to create both
+devices and drivers on that bus, and clean them up when the test
+exits. It seems to work on all of the tests which used
+root_device_register so far (except those -- only
+test_iio_find_closest_gain_low so far -- which create multiple devices
+with the same name, as the driver name won't be unique), and the drm
+tests work fine when ported to it as well.
+
+There's still a lot of cleanup to do and questions which need
+answering, including:
+- Working out how best to provide an owning module (it's currently
+just kunit, but probably should be the module which contains the
+actual tests)
+- Improving the API around drivers: probably exposing the helper to
+create a driver, and add a way of cleaning it up early.
+- Properly testing it with modules, not just with kunit.py (including
+looking at what actually appears in sysfs)
+- Experimenting with using probe, etc, callbacks.
+- Cleaning up lots of ugly, still experimental code, documenting, testing, etc.
+
+The thought of trying to expand the match function to support, e.g.,
+devicetree occurred to me, but I _think_ that devicetree-based tests
+are probably still better off using a platform_device. Regardless, it
+can probably wait to a follow-up
+
+In any case, does this seem like the right way forward?
+
+Cheers,
+-- David
+
+--000000000000a2e95e05f7f53bab
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDj
+bIV+34iPu3Z/b1tx5Xxul5zartaNzqTyH8AKeNwY9zAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMjgxMjQ1MjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAEhGT4R+dJU302AHNKoqA
+fr29Wl14fRDJQ7NVG7xUwvhTf2U3H7B9l1OJhWUXbKdQMRAVT7n95A5LinRXV00WQZe0mLY39Uc5
+KGknjGYuNxoM80tUumXBqmJwFkpvy+NgX9esbqmKEOoGrc+NoYncPs7na0TRq+tgmSp+FvshzQss
+qnjb3rKMbXjRLC5EW4X60tp/mK4kNtBOU158LvQJGdFGG8T6lsph7fL1QwqQpFJXy1JvKfSwgrkY
+v75yYVWpUXm0lc0c3sHFk3BrPo7CAQ4oJ+SWjeOPxYgkFvGixUU43g0xwAlJbi5FBYoxfEkQcgFP
+JXsVtFc4Mqx8etgWbA==
+--000000000000a2e95e05f7f53bab--
