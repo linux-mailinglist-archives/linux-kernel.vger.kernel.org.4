@@ -2,211 +2,397 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90C46CB817
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3D96CB810
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjC1HcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 03:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbjC1HcF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230378AbjC1HcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 28 Mar 2023 03:32:05 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2061.outbound.protection.outlook.com [40.107.243.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62ED7B4;
-        Tue, 28 Mar 2023 00:32:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XUo1W7Tttsf9/ZrwH8uFCPzGXnBLS3W/3q1wN5IDviGJFYbhpiohE2scUtat5DHApy1oyI33bSCUHfWDU2QcsJHu5v9MxjUlLc9wBc7Gdq1J4vrKC8AWoLbV/+psgLq9uoGvrD9hFaL1k5K0P0QSVgNQa6dCtCr2Fier7z0BLEx53SP7PLopvL0TPQ5Ea8une8/4YCo4xasAy2b+VI7XwtjYTru5XDDzl4hIs7hj3eXqzrLlUr4aSTSHBiYFGShUuBwNhlXZtswe9aq3TTrXEFS+rrwIN3rbmfrq5nNtJ0uXkeOzZeupszqqK7Tu/6vFajDCmasgBrci8/YG+7D8kg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hBHpQGTrC9TJw55y8fpvwbHyg/OGW/UWU0esCJNB6ps=;
- b=TF7G+HR6eKR+DbXgKnLnb/E1BE0LWwAU0d/j+OjEju140LixAjMT36JMGcUNaNfLM0xYa/d4NbkbC6RqJx50zjkk1+RINYAh4CtzxqQk+jc7sYFkQRmSHTs9rlyxUKP+Nqi0hg0rK/2RyBTdK/BNPUSVd2P6jTH5NeSXOVdDmX2zbxKhVq89+zcq5HC1nibEWwTlA7LZNMHBdC4DpvpXdT6CPuI6W9OB5TcaQQio7kiDU5YncNSv/N5uALsAM/6nCLLhbngzNbh1qACe3vo169eVA9ClML9sMU0IWmFQ89aMaD4cLyBJ0TXO5UiccCilS7RTfz8bd/CZsewd6yYYUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hBHpQGTrC9TJw55y8fpvwbHyg/OGW/UWU0esCJNB6ps=;
- b=AUSMyjWFyRe/zjZOWl2Rf6Y109O0Zbq3nHrsnbs8CWJMyjIRwOK09LvtO73RpXh0hWu2ho2B3xwIxi5Dh50mQ+BOQ0Tkj/FriVaP+SfyRr70t8HAWY1Rchr7Q+4nbXtbIGjKjEpANrDE8djRqHRcIvHG3Jf8xm/9CuIa3GIZpEI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
- by SJ0PR12MB5664.namprd12.prod.outlook.com (2603:10b6:a03:42b::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Tue, 28 Mar
- 2023 07:31:59 +0000
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::4d07:7f52:c833:9603]) by BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::4d07:7f52:c833:9603%6]) with mapi id 15.20.6178.041; Tue, 28 Mar 2023
- 07:31:58 +0000
-Message-ID: <84d34a5a-c29b-f38d-2a71-6cf39447b03d@amd.com>
-Date:   Tue, 28 Mar 2023 09:31:40 +0200
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229497AbjC1HcD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Mar 2023 03:32:03 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555FFC1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:32:01 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id r11so45775810edd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:32:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679988720;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OPsI5cRc/cuesNH3pdp2fw3uWubkgugrY8WXevRwjNA=;
+        b=UjKT8cqHKH/KSRzIqYt72GEu1207KY2hDyYfoXl86GnorTQtSMwyP2FeXWzt8gHsN8
+         3cltjwwXh3Q2D8cH/5suU0KUdfZqUagGFPo4AlWPoOBYRBMFyL8u1QCNG84YOuYC9mGQ
+         iB3aCWIo6nGKbF/M9j1iRkGQ6+RZ6zrD4098ysSfauGYg2RDlu+rFo7dgEZLi/WnfjGS
+         Vz9mHO5ubNsE2OYFW3KuvwyPlkVP5dVFAXlqKvO4gLZyX2dAK7MOdAGZ8TtrLuF0xDyp
+         xyZyq+ffLYiQvrAG3dnMA/vzSeJ5jVT4aLXEMpN6ppc3yn58xAe/HLJr+M1iunE8giap
+         3yHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679988720;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OPsI5cRc/cuesNH3pdp2fw3uWubkgugrY8WXevRwjNA=;
+        b=sHEnXS1o5fSb4pfhBcvSQeUNVKoQXm0dCVZKHJtnQYBx93uv0QtG+nRdeEKA4cuLl6
+         TIBDwaN0iF2CkbYIONO8d5qJsppLrrvfsyRw3Aje3Awe3J1/E0JNKLMcn9spkH49Tf4E
+         cgDbjsBvGfis1smYAtVrm466fL9EyyxTtuQ602lwfmm+2/RRn4nGygya2Au8XVVjZIvC
+         G8lUuwEVt2mcbVfPuJs6M2BWMa6aehniCHFx7fcPx/uROBAe44ic7R4A0y6B2D2XTxAK
+         9+yp4UlaIcKi+ovg36hd1TIVrSygaWuJJ2MbDcLoxEHEnxIvzCc66PlQxUFpqrowd8xa
+         vuWg==
+X-Gm-Message-State: AAQBX9ec8CHJNcDxhILW6XhHUTlrcZCORmlrhF5//rfSb3uVM9j4Eses
+        IWZmUAOf2EUtaIY96sR6PQpyAg==
+X-Google-Smtp-Source: AKy350Y6jVw5G4dBbe5beWjOBJfOj5lVrspKDgOVbHkcbC0TX/WFJ3Qucjac1D7aDu+YYdj900sV1Q==
+X-Received: by 2002:a17:906:d154:b0:930:a3fe:641d with SMTP id br20-20020a170906d15400b00930a3fe641dmr15978010ejb.63.1679988719810;
+        Tue, 28 Mar 2023 00:31:59 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
+        by smtp.gmail.com with ESMTPSA id z13-20020a1709064e0d00b009351565d1f5sm11442664eju.52.2023.03.28.00.31.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 00:31:59 -0700 (PDT)
+Message-ID: <8b04a266-20eb-f1c1-278f-764b1b06b78b@linaro.org>
+Date:   Tue, 28 Mar 2023 09:31:58 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: mmc: arasan,sdci: Add Xilinx Versal Net
- compatible
+Subject: Re: [Patch v4 03/10] memory: tegra: add interconnect support for DRAM
+ scaling in Tegra234
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Potthuri, Sai Krishna" <sai.krishna.potthuri@amd.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "saikrishna12468@gmail.com" <saikrishna12468@gmail.com>
-References: <20230324073630.3194724-1-sai.krishna.potthuri@amd.com>
- <20230324073630.3194724-2-sai.krishna.potthuri@amd.com>
- <d646d109-d0a6-aedb-a8b2-ac954336e628@linaro.org>
- <BY5PR12MB425806889EE700C1FCC8A465DB8B9@BY5PR12MB4258.namprd12.prod.outlook.com>
- <1f97dec8-d30c-ccc7-3026-713bf9a15850@linaro.org>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <1f97dec8-d30c-ccc7-3026-713bf9a15850@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: VI1P193CA0008.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:800:bd::18) To BYAPR12MB4758.namprd12.prod.outlook.com
- (2603:10b6:a03:a5::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|SJ0PR12MB5664:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4e326805-faac-4cb0-a5ba-08db2f5e8338
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: blk0jLwfjd45zTO6Vj/jo7Q11fAp8Ud1DK7MQppv1YU9+s0PtKAnZ5W8ign3oZ5bN5UPIUvuPWD98xpOs6SDTqC3EZzXrsUkXoHr4OHUB5X8Ntb7jlUoEudTr0QbwJqizaMpy/GQRtvgBTmCZEBxHMXkAFJXjLJj0+Q2PlIEK4IyiCkXJ4avi14H3hyBJhmEM8fuHAN91k/F8lokQOVTvEy4+4utnOujQHZOe6Wo+oHwa/NFV0a/ioYc4PKAv7Kw+30hEUxRqCeglho0AwYQLcapCFrWfEXYea6G17esHcpLW70XiAGKRTAWZV0UJ6cwgIy6Masp63K/jMuQvTdf4n2sTHww2JTRvRoICUqC/HJb70p/1g8PxzS0qv9sBGA1aqFbuyx+aw+sU1QF74Hh+7cgc95zzCsEIGHAF9C/tffsLQYVTPeza4OXhTR2JnzEBLxLwTRtk9p9M07XLQPRvGLiKSUXa2rYIBgda7d4SHCX1e8hYpqzyc9/MWPDIEnkn4i2bsB94zaxqZYX/JmKLvntzneJWtopRN7bCoUs5mP9uz8Gf9yfNMi0Z6Tk4pLJhqpHBpvNAU/G71CvQP9BZcSQQGO7ufG0pY+lxj7DDx+sgYUj7qGanptzbzNL4Vx2/CbBSWHXua8sWkQ0ZKkX2g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(366004)(39860400002)(396003)(451199021)(86362001)(31696002)(44832011)(36756003)(2906002)(31686004)(26005)(6666004)(83380400001)(2616005)(6486002)(478600001)(66476007)(110136005)(316002)(4326008)(6512007)(66556008)(66946007)(8676002)(7416002)(186003)(8936002)(54906003)(53546011)(6506007)(5660300002)(38100700002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NE5KQnRPZjdLOEtYQWgxUTZ0T1l3QnRseXRnVStkTmcyNjJ4TGFZZGlFNGFy?=
- =?utf-8?B?TFp1cVA3dk1TMkNnTzVUcFE1SngvWDRDdGp3SXlRckN3NFAzRFJaYjNocmNL?=
- =?utf-8?B?UE5HTlk2Y2RGY1FjOGF1WjJ0YnRZajl2R2RaaERva25vNXYwUzFxK3BucTYr?=
- =?utf-8?B?MGxQdDVQVzRLTE5jVThYOTBoMEsxZnluaFFiZnZER2ZDdUIvdGo5Y1ZvT0ht?=
- =?utf-8?B?eTFIUXpuL2poNHArQXkwNUpWdkRiWjljUldXbGxzbTlub09uRnAxWENXV3hL?=
- =?utf-8?B?L0tOQVZQL3JYenZoK2NUYllXcHBVcTZhUVA2SVhNVXZPbUxHZjYyMjFNZGI0?=
- =?utf-8?B?ZGdqV2hDS2hwMnBTa0tkVmtDaFNiZkw4Q3FhK0tNUnp4T3R1K3pTciszeWI2?=
- =?utf-8?B?UFFmRVVET2p4b0orZGNreVdlTmxhNnN4NXQwWXVocnlST28wcUVCQ0VjUy9Y?=
- =?utf-8?B?RGM4UzUzZzhHOTlLMExuWVRreVoyS1pNTzhVUnZGc2xGd1JxVGJLMittSERZ?=
- =?utf-8?B?WW9hS2FpTmI3bCtia1VuVThMQklYT3laRmhmU2NIenNrckpPQzVQc1oyYzVI?=
- =?utf-8?B?bnBzOGQ5TTFudjJsVWxQbG9yUEg0S3AvWmlUM2lwd3NwRnJWVm1BSUdYNFNs?=
- =?utf-8?B?TGQzaUhXSkZFWHBuSm0xSTIvRmFnclBtQVFOb0JsVllYVVlaOXliWjMyRTh6?=
- =?utf-8?B?MjBvaTFuOFFGMTU0clIxYTdLTzA2WXdPbkUyQ0NodzZLVDdqOVlJKzBTK3ho?=
- =?utf-8?B?NkFKdE51cFZldk9TUEV6ZHJ3c0IzR3IxMVdoV2haL0MxOXNMUmxYd3N1OWtq?=
- =?utf-8?B?c1MxOXdXR2JuMEJXZFNPZnd4eWZRbTZuRlA4NDhaekxDWDlkeXFYdUJTeWox?=
- =?utf-8?B?cnNGUWI1eDZCeFVZeFZHdlN2SDVPbEh1VUEvRmtoV1lDenBkRFp1ckpBbVRn?=
- =?utf-8?B?TzBpc29nanN5cGppcUtDTWQyUWpCR1pBcEJGQ1lLODVBYjYvQTNkMXI1Z20w?=
- =?utf-8?B?RHFtSjZhczFkeVdVaFI2alc1YkxsZHl4VmFhYWswSndVNWdBYU5RaVMzMlc5?=
- =?utf-8?B?UzhSOUJmSGlBZjgveFVYWWVoQVhUWGppemE0d2VFVmFSQTFSUmRBZXF6MTdF?=
- =?utf-8?B?V3JWektoaGwyTGZ0QW5taGp1T3h5UHd4bEx1ek5EZW9IT3dvM0JDUnpFelQx?=
- =?utf-8?B?bElqbEY0dWRObG0rVmZNQ0JyYmpVUlNXOTB6bVpzQVVYV0YvSTlWbll6ZUNl?=
- =?utf-8?B?RUhEaU1KY3FzeXZzaEpxRFIzejFOakUxaXcwQW5VQUwwakFnVCtLOWlrbGxl?=
- =?utf-8?B?azJRNGtaMXUxSTJhbzRTSEU3U1ZVdm9nbWwzT3lFNW5PR3plbnhzaEg2Z3By?=
- =?utf-8?B?d3JoRWFMVVkrQ3krbHhHdWk5YmtPNVU0bU0zeld1STVWZVJpMmdRWnhuT1Fy?=
- =?utf-8?B?N29BOHdFdGQ4YWxEOTNJckRya3MrdUxQUk5ISlRxYWQ5TmNjaG9kVEFMTFVN?=
- =?utf-8?B?Z2xsVEdFTDUwRzZjVEJ4L3RhY0NvejRSMDM5YmtwZjZ0OTl6a25xbVp6Vk9G?=
- =?utf-8?B?dEp6WUhqblluODNYdkZrY2xqSWR0clZNYURtOCtab1FSekRwRkx3TExFRHpt?=
- =?utf-8?B?NWUzZDhGUkc0UHR0YTIrbU41V1gva3liV0Vic1Z0Nk1CSHl5OWlPNzJNVld2?=
- =?utf-8?B?bWpVckNGSzdsT2x5d3NYR0NWSU8wcU5HYzR4WmxUcS9IaEtJNXBUbWdEOVNE?=
- =?utf-8?B?OVJicDZ3SHJkUjJvZk5JMXV4anFJaTdrZ2Z0bWRXNmhhTXB3SjFxMXMxWU1a?=
- =?utf-8?B?M3NDWE16MjNIM1NMOUtKa045Y2luQklGQ2tMMTNlVzZ6NzBKblkxWU0xa012?=
- =?utf-8?B?elNRb1Rzb1FiRGJFdEpEZ1AxSldUZDVtWEdQa2dxM3JjcXYyd1hJRU0xaktl?=
- =?utf-8?B?bUplM2hBTzJlWHUzdGJrbGc3SE9BTCtUcTVrNlFzcDV4aVhrTitXempoaTBP?=
- =?utf-8?B?ZmxsZ2pVenNHVU1yMks4R2dNZTRsVHg4SnJ5K2N1bFVkcFVuNFJjTGtBM21E?=
- =?utf-8?B?U0cxLzFMcU9DOWJWWXAzWUdrbktPcm0wYUo0WE5HMWJocW4wNkhtRWhRYS9j?=
- =?utf-8?Q?7rlvV58OK8triJe1ZpAUee3ZL?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e326805-faac-4cb0-a5ba-08db2f5e8338
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 07:31:58.0984
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KclbZVmCGnMRn/B7RI3WDJlNvmnmSv1VoAB2X++5bsNcXOK+4V2+WN0Nskw74R7V
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5664
+To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        lpieralisi@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
+        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
+        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
+References: <20230327161426.32639-1-sumitg@nvidia.com>
+ <20230327161426.32639-4-sumitg@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230327161426.32639-4-sumitg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/28/23 09:14, Krzysztof Kozlowski wrote:
-> On 27/03/2023 11:58, Potthuri, Sai Krishna wrote:
->> Hi Krzysztof,
->>
->>> -----Original Message-----
->>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> Sent: Friday, March 24, 2023 5:14 PM
->>> To: Potthuri, Sai Krishna <sai.krishna.potthuri@amd.com>; Ulf Hansson
->>> <ulf.hansson@linaro.org>; Rob Herring <robh+dt@kernel.org>; Krzysztof
->>> Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Michal Simek
->>> <michal.simek@xilinx.com>; Adrian Hunter <adrian.hunter@intel.com>
->>> Cc: linux-mmc@vger.kernel.org; linux-kernel@vger.kernel.org;
->>> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; git (AMD-
->>> Xilinx) <git@amd.com>; saikrishna12468@gmail.com
->>> Subject: Re: [PATCH 1/2] dt-bindings: mmc: arasan,sdci: Add Xilinx Versal Net
->>> compatible
->>>
->>> On 24/03/2023 08:36, Sai Krishna Potthuri wrote:
->>>> Add Xilinx Versal Net compatible to support eMMC 5.1 PHY.
->>>>
->>>> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
->>>> ---
->>>>   Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml | 6 ++++++
->>>>   1 file changed, 6 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->>>> b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->>>> index 8296c34cfa00..cf44a4b988a7 100644
->>>> --- a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->>>> +++ b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->>>> @@ -27,6 +27,7 @@ allOf:
->>>>               enum:
->>>>                 - xlnx,zynqmp-8.9a
->>>>                 - xlnx,versal-8.9a
->>>> +              - xlnx,versal-net-5.1-emmc
->>>
->>> v5.1 is eMMC standard or Versal block version? If the first, it's not suitable for
->>> compatibles.
->>>
->>> Also, what's the difference from xlnx,versal-8.9a?
->> V5.1 is an eMMC standard and this compatible is defined based on sdhci arasan
->> eMMC5.1 Host Controller(arasan,sdhci-5.1), where as in Versal, it’s a different
->> controller and it is based on 4.51 Host Controller(arasan,sdhci-8.9a).
+On 27/03/2023 18:14, Sumit Gupta wrote:
+> Add Interconnect framework support to dynamically set the DRAM
+> bandwidth from different clients. Both the MC and EMC drivers are
+> added as ICC providers. The path for any request is:
+>  MC-Client[1-n] -> MC -> EMC -> EMEM/DRAM
 > 
-> Mixing IP block versions and eMMC spec versions in one binding is a
-> great way to confuse.
-
-What do you suggest then?
-
+> MC client's request for bandwidth will go to the MC driver which
+> passes the client request info like BPMP Client ID, Client type
+> and the Bandwidth to the BPMP-FW. The final DRAM freq to achieve
+> the requested bandwidth is set by the BPMP-FW based on the passed
+> parameters.
 > 
->> Versal Net Compatible is defined it this way to make it inline with the other
->> existing SoC compatibles like "intel,keembay-sdhci-5.1-emmc".
->> Please suggest if the compatible need to be renamed to "xlnx,versal-net-emmc"?
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  drivers/memory/tegra/mc.c           |   5 +
+>  drivers/memory/tegra/tegra186-emc.c | 125 ++++++++++++++++++++++++
+>  drivers/memory/tegra/tegra186.c     |   3 +
+>  drivers/memory/tegra/tegra234.c     | 143 +++++++++++++++++++++++++++-
+>  include/linux/tegra-icc.h           |  65 +++++++++++++
+>  include/soc/tegra/mc.h              |   7 ++
+>  6 files changed, 347 insertions(+), 1 deletion(-)
+>  create mode 100644 include/linux/tegra-icc.h
 > 
-> Is Versal Net uniquely identifying your SoC or IP block?
+> diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
+> index 9082b6c3763d..983455b1f98d 100644
+> --- a/drivers/memory/tegra/mc.c
+> +++ b/drivers/memory/tegra/mc.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+>  #include <linux/sort.h>
+> +#include <linux/tegra-icc.h>
+>  
+>  #include <soc/tegra/fuse.h>
+>  
+> @@ -792,6 +793,8 @@ static int tegra_mc_interconnect_setup(struct tegra_mc *mc)
+>  	mc->provider.data = &mc->provider;
+>  	mc->provider.set = mc->soc->icc_ops->set;
+>  	mc->provider.aggregate = mc->soc->icc_ops->aggregate;
+> +	mc->provider.get_bw = mc->soc->icc_ops->get_bw;
+> +	mc->provider.xlate = mc->soc->icc_ops->xlate;
+>  	mc->provider.xlate_extended = mc->soc->icc_ops->xlate_extended;
+>  
+>  	icc_provider_init(&mc->provider);
+> @@ -824,6 +827,8 @@ static int tegra_mc_interconnect_setup(struct tegra_mc *mc)
+>  		err = icc_link_create(node, TEGRA_ICC_MC);
+>  		if (err)
+>  			goto remove_nodes;
+> +
+> +		node->data = (struct tegra_mc_client *)&(mc->soc->clients[i]);
+>  	}
+>  
+>  	err = icc_provider_register(&mc->provider);
+> diff --git a/drivers/memory/tegra/tegra186-emc.c b/drivers/memory/tegra/tegra186-emc.c
+> index e935ad4e95b6..1eefcf2ac0c7 100644
+> --- a/drivers/memory/tegra/tegra186-emc.c
+> +++ b/drivers/memory/tegra/tegra186-emc.c
+> @@ -7,9 +7,11 @@
+>  #include <linux/debugfs.h>
+>  #include <linux/module.h>
+>  #include <linux/mod_devicetable.h>
+> +#include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+>  
+>  #include <soc/tegra/bpmp.h>
+> +#include "mc.h"
+>  
+>  struct tegra186_emc_dvfs {
+>  	unsigned long latency;
+> @@ -29,8 +31,15 @@ struct tegra186_emc {
+>  		unsigned long min_rate;
+>  		unsigned long max_rate;
+>  	} debugfs;
+> +
+> +	struct icc_provider provider;
+>  };
+>  
+> +static inline struct tegra186_emc *to_tegra186_emc(struct icc_provider *provider)
+> +{
+> +	return container_of(provider, struct tegra186_emc, provider);
+> +}
+> +
+>  /*
+>   * debugfs interface
+>   *
+> @@ -146,11 +155,104 @@ DEFINE_DEBUGFS_ATTRIBUTE(tegra186_emc_debug_max_rate_fops,
+>  			  tegra186_emc_debug_max_rate_get,
+>  			  tegra186_emc_debug_max_rate_set, "%llu\n");
+>  
+> +/*
+> + * tegra_emc_icc_set_bw() - Set BW api for EMC provider
+> + * @src: ICC node for External Memory Controller (EMC)
+> + * @dst: ICC node for External Memory (DRAM)
+> + *
+> + * Do nothing here as info to BPMP-FW is now passed in the BW set function
+> + * of the MC driver. BPMP-FW sets the final Freq based on the passed values.
+> + */
+> +static int tegra_emc_icc_set_bw(struct icc_node *src, struct icc_node *dst)
+> +{
+> +	return 0;
+> +}
+> +
+> +static struct icc_node *
+> +tegra_emc_of_icc_xlate(struct of_phandle_args *spec, void *data)
+> +{
+> +	struct icc_provider *provider = data;
+> +	struct icc_node *node;
+> +
+> +	/* External Memory is the only possible ICC route */
+> +	list_for_each_entry(node, &provider->nodes, node_list) {
+> +		if (node->id != TEGRA_ICC_EMEM)
+> +			continue;
+> +
+> +		return node;
+> +	}
+> +
+> +	return ERR_PTR(-EPROBE_DEFER);
+> +}
+> +
+> +static int tegra_emc_icc_get_init_bw(struct icc_node *node, u32 *avg, u32 *peak)
+> +{
+> +	*avg = 0;
+> +	*peak = 0;
+> +
+> +	return 0;
+> +}
+> +
+> +static int tegra_emc_interconnect_init(struct tegra186_emc *emc)
+> +{
+> +	struct tegra_mc *mc = dev_get_drvdata(emc->dev->parent);
+> +	const struct tegra_mc_soc *soc = mc->soc;
+> +	struct icc_node *node;
+> +	int err;
+> +
+> +	emc->provider.dev = emc->dev;
+> +	emc->provider.set = tegra_emc_icc_set_bw;
+> +	emc->provider.data = &emc->provider;
+> +	emc->provider.aggregate = soc->icc_ops->aggregate;
+> +	emc->provider.xlate = tegra_emc_of_icc_xlate;
+> +	emc->provider.get_bw = tegra_emc_icc_get_init_bw;
+> +
+> +	icc_provider_init(&emc->provider);
+> +
+> +	/* create External Memory Controller node */
+> +	node = icc_node_create(TEGRA_ICC_EMC);
+> +	if (IS_ERR(node)) {
+> +		err = PTR_ERR(node);
+> +		goto err_msg;
+> +	}
+> +
+> +	node->name = "External Memory Controller";
+> +	icc_node_add(node, &emc->provider);
+> +
+> +	/* link External Memory Controller to External Memory (DRAM) */
+> +	err = icc_link_create(node, TEGRA_ICC_EMEM);
+> +	if (err)
+> +		goto remove_nodes;
+> +
+> +	/* create External Memory node */
+> +	node = icc_node_create(TEGRA_ICC_EMEM);
+> +	if (IS_ERR(node)) {
+> +		err = PTR_ERR(node);
+> +		goto remove_nodes;
+> +	}
+> +
+> +	node->name = "External Memory (DRAM)";
+> +	icc_node_add(node, &emc->provider);
+> +
+> +	err = icc_provider_register(&emc->provider);
+> +	if (err)
+> +		goto remove_nodes;
+> +
+> +	return 0;
 
-Yes. versal-net is unique identifier for specific silicon with fixed set if IPs.
+Blank line
 
-Can you please refresh my mind if we can introduce specific compatible strings 
-for this SOC or should we used existing one if functionality is the same with 
-previous SOC family?
-There could be currently unknown issues related to SOC wiring out of specific IP 
-version.
+> +remove_nodes:
+> +	icc_nodes_remove(&emc->provider);
+> +err_msg:
+> +	dev_err(emc->dev, "failed to initialize ICC: %d\n", err);
+> +
+> +	return err;
+> +}
+> +
+>  static int tegra186_emc_probe(struct platform_device *pdev)
+>  {
+>  	struct mrq_emc_dvfs_latency_response response;
+>  	struct tegra_bpmp_message msg;
+>  	struct tegra186_emc *emc;
+> +	struct tegra_mc *mc;
+>  	unsigned int i;
+>  	int err;
+>  
+> @@ -158,6 +260,9 @@ static int tegra186_emc_probe(struct platform_device *pdev)
+>  	if (!emc)
+>  		return -ENOMEM;
+>  
+> +	platform_set_drvdata(pdev, emc);
+> +	emc->dev = &pdev->dev;
 
-Thanks,
-Michal
+This patch looks like stiched from two or more patches... emc->dev does
+not look like new member of emc, thus why do you set in exisitng
+function in this patch? Why it wasn't needed before?
+
+Same about line before.
+
+> +
+>  	emc->bpmp = tegra_bpmp_get(&pdev->dev);
+>  	if (IS_ERR(emc->bpmp))
+>  		return dev_err_probe(&pdev->dev, PTR_ERR(emc->bpmp), "failed to get BPMP\n");
+> @@ -236,6 +341,25 @@ static int tegra186_emc_probe(struct platform_device *pdev)
+>  	debugfs_create_file("max_rate", S_IRUGO | S_IWUSR, emc->debugfs.root,
+>  			    emc, &tegra186_emc_debug_max_rate_fops);
+>  
+> +	mc = dev_get_drvdata(emc->dev->parent);
+> +	if (mc && mc->soc->icc_ops) {
+> +		/*
+> +		 * Initialize the ICC even if BPMP-FW doesn't support 'MRQ_BWMGR_INT'.
+> +		 * Use the flag 'mc->bwmgr_mrq_supported' within MC driver and return
+> +		 * EINVAL instead of passing the request to BPMP-FW later when the BW
+> +		 * request is made by client with 'icc_set_bw()' call.
+> +		 */
+> +		err = tegra_emc_interconnect_init(emc);
+> +		if (err)
+> +			goto put_bpmp;
+> +
+> +		if (tegra_bpmp_mrq_is_supported(emc->bpmp, MRQ_BWMGR_INT))
+> +			mc->bwmgr_mrq_supported = true;
+> +		else
+> +
+
+Drop blank line.
+
+> +			dev_info(&pdev->dev, "MRQ_BWMGR_INT not present\n");
+
+And what user is supposed to do with this? Either make it descriptive or
+drop.
+
+> +	}
+> +
+>  	return 0;
+>  
+>  put_bpmp:
+> @@ -272,6 +396,7 @@ static struct platform_driver tegra186_emc_driver = {
+>  		.name = "tegra186-emc",
+>  		.of_match_table = tegra186_emc_of_match,
+>  		.suppress_bind_attrs = true,
+> +		.sync_state = icc_sync_state,
+>  	},
+>  	.probe = tegra186_emc_probe,
+>  	.remove = tegra186_emc_remove,
+> diff --git a/drivers/memory/tegra/tegra186.c b/drivers/memory/tegra/tegra186.c
+> index 7bb73f06fad3..386e029e41bb 100644
+> --- a/drivers/memory/tegra/tegra186.c
+> +++ b/drivers/memory/tegra/tegra186.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+>  
+> +#include <soc/tegra/bpmp.h>
+>  #include <soc/tegra/mc.h>
+>  
+>  #if defined(CONFIG_ARCH_TEGRA_186_SOC)
+> @@ -65,6 +66,8 @@ static int tegra186_mc_probe(struct tegra_mc *mc)
+>  static void tegra186_mc_remove(struct tegra_mc *mc)
+>  {
+>  	of_platform_depopulate(mc->dev);
+> +
+> +	tegra_bpmp_put(mc->bpmp);
+>  }
+>  
+>  #if IS_ENABLED(CONFIG_IOMMU_API)
+> diff --git a/drivers/memory/tegra/tegra234.c b/drivers/memory/tegra/tegra234.c
+> index 02dcc5748bba..4f34247c9bda 100644
+> --- a/drivers/memory/tegra/tegra234.c
+> +++ b/drivers/memory/tegra/tegra234.c
+> @@ -1,18 +1,24 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Copyright (C) 2021-2022, NVIDIA CORPORATION.  All rights reserved.
+> + * Copyright (C) 20212-2023, NVIDIA CORPORATION.  All rights reserved.
+
+Typo, 2021.
+
+>   */
+>  
+>  #include <soc/tegra/mc.h>
+>  
+>  #include <dt-bindings/memory/tegra234-mc.h>
+> +#include <linux/interconnect.h>
+> +#include <linux/of_device.h>
+
+One more suprising change...
+
+> +#include <linux/tegra-icc.h>
+>  
+> +#include <soc/tegra/bpmp.h>
+>  #include "mc.h"
+>  
+>  static const struct tegra_mc_client tegra234_mc_clients[] = {
+>  	{
+>  		.id = TEGRA234_MEMORY_CLIENT_MGBEARD,
+>  		.name = "mgbeard",
+> +		.bpmp_id = TEGRA_ICC_BPMP_EQOS,
+> +		.type = TEGRA_ICC_NISO,
+>  		.sid = TEGRA234_SID_MGBE,
+>  		.regs = {
+>  			.sid = {
+
+
+Best regards,
+Krzysztof
 
