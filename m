@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC256CB33E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 623026CB33F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbjC1BlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 21:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
+        id S230379AbjC1Ble (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 21:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjC1BlU (ORCPT
+        with ESMTP id S232307AbjC1Blc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 21:41:20 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DE826B2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:41:19 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5425c04765dso104517127b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:41:19 -0700 (PDT)
+        Mon, 27 Mar 2023 21:41:32 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1912100
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:41:29 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id g5-20020a25a485000000b009419f64f6afso10516595ybi.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:41:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679967679;
+        d=google.com; s=20210112; t=1679967688;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GqR7zTtQQ91G+i7rdFae6kUQGU5KFoZk0zOPgnQCq6I=;
-        b=B0Dfmb6o01HAanc4lrfMoiaVNxqL0S2uylr1cXL/LiDQbcynQSWWeWuK52OcNkqXai
-         QT7QsiO9SEPdgRXDloU0JIN+nKU+2TmkBNosJoA5xIs1JCiGejNGO/tZOP9bZCWmIWNG
-         7gXaShd/TOmMs1NSBtum/P6ZzOTj7f2GCWL52s8tOnJyLnukOtdxC+Z3GPCnDLzopeBq
-         tCPdVCa/jwQ+mkEQrsnsJf/Iboxf4nZL6EmAphMO/Mf0oWUsk6QuG+c3S2MiieBUuWuE
-         25edoBOZkfXGG7hBrQ7aq+V2VnCtWtCCETyg39xV6ZD3BGmJa48J1hYow60AXVKBAQ+m
-         LHMw==
+        bh=verDCOyK5Vg94wY3RYziaAnvJXO3pRUoQeewltL/GMo=;
+        b=ndnM0GnxAOGbyZy68kGiLzbQMq4EeNAsxSUT51Bn6RMCvx2haDbE+mktB1A7n60kkf
+         LutpwxHw8zyfU9PxO983Ja7NQcDetX6Z2aa9dt8IwGXI/HJ/9IOIu2Pvebk4pyfG815X
+         xM0/qdH1XYOdZkC4QIeYFOVRFdSHjBVkrm7FxGI/JsU5Z971jcdx70WuEksPrOwW4mMQ
+         u+R5U77kTBA3RtHekOgY8tlhG5HjoUmpbq4siVNJNUoekTQ2yEgcIsDWqxcr3+VaVMRl
+         2rR5mhMfyO7QsW304uMlWQ7pblkGURwaXaLW3G5XeMCXPOqvC/rAiRbxB/1tsEa4IJgG
+         YdGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679967679;
+        d=1e100.net; s=20210112; t=1679967688;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GqR7zTtQQ91G+i7rdFae6kUQGU5KFoZk0zOPgnQCq6I=;
-        b=SvKxSp+o6h+7z1p2zM0BBSxQKaixDdZ6oK/q7tgtOx1aiob3SMGFMmjd8v85mqAffS
-         p2izXH7NFrp+nikiA1d2vkYqQ0jBPA7/E81rNqLyf8efX1DneznyLjE0xWzDPTxp5Ph0
-         TryAPbAXtfENNn6iZ8ZVFFogRebW9D37gTVDBNl/3uwTaC14QGn3NeSYK4Bm5K9LGPWX
-         xQtrwgHAzhstR9UgdRZs5iNf0DR0SRddR6vo1mdKLGXfeUUbdIUNf0z5MFmInraK5eWZ
-         3aSI9Ki+32aDL5VbeWA82rDwP4r197sdBooBwxhYis4OCwUsNVGhsM9JxnPrMicfU0j6
-         24tw==
-X-Gm-Message-State: AAQBX9d1rjripsXj6FgFwwha/GXPWlwzx2hua5p7dc6soAwRxcN+JSRS
-        +B0cq//mxZ11Ej9V8RXE1SZ26ep/mwZ1
-X-Google-Smtp-Source: AKy350ZQ0hlk2F8Saos9KfdCnbLkngJsg5ccYINLqQhqBFeKNhcn7HtzaZFNMEEOmc7mdPvGEpI8gXZ6j9EV
+        bh=verDCOyK5Vg94wY3RYziaAnvJXO3pRUoQeewltL/GMo=;
+        b=gm5wedFFyLAiEkbdutnJhUJaK2N6+tPfutVYy9XJIDkF/FY4Hsf3R9Ld1r8vkAodov
+         nx8sYknZm358+5ivZLsuTyR/+iWKdLpW6Oqk9VPQ6StNoD3IbEUUIJ6yp49WAIBRnE3z
+         jB1lsXAfrsugX3gnrEpJb0XLSLMyR527SWJY5YvmgKYsRLi7dMkJ9YhSCdaQWntplk9e
+         MAr/G9YJd2CnxDpuw1mVvelHkekHGoburPdMqEjLsn2uEYuq6wzwyyBLHzrSB3YJtoV1
+         1N0X7MI/7lWCIxqyPjxU7vjE6PE9hZaMd2kZvc0tMHm8vTF0qd2R7jvVFmO9N6lsN/TR
+         urzg==
+X-Gm-Message-State: AAQBX9cPx2xGyPDDpReSO5K0ql5REc11oukXN08YMRt2ypgUdYutgknd
+        39IB8aHWlwlBRCa3c4HcgeLvQv9Yh71I
+X-Google-Smtp-Source: AKy350YwGBCHh+XFGIs5PnSfm8ziU1iAddLYb++rz17r47e/PoS0PBSTU4sb5sYQtlNpV7zfvdyxIqDVAcsK
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a544:20a5:5228:d98f])
- (user=irogers job=sendgmr) by 2002:a05:6902:110b:b0:b71:addc:e19c with SMTP
- id o11-20020a056902110b00b00b71addce19cmr6723016ybu.8.1679967678878; Mon, 27
- Mar 2023 18:41:18 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 18:40:53 -0700
+ (user=irogers job=sendgmr) by 2002:a81:ac13:0:b0:545:bade:c57e with SMTP id
+ k19-20020a81ac13000000b00545badec57emr4179381ywh.5.1679967687965; Mon, 27 Mar
+ 2023 18:41:27 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 18:40:54 -0700
 In-Reply-To: <20230328014058.870413-1-irogers@google.com>
-Message-Id: <20230328014058.870413-2-irogers@google.com>
+Message-Id: <20230328014058.870413-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20230328014058.870413-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v1 1/6] perf ui: Move window resize signal functions
+Subject: [PATCH v1 2/6] perf usage: Move usage strings
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -94,117 +94,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move under tools/perf/ui rather than in perf.c. This simplifies
-linking a main function when perf.c isn't present.
+This simplifies linking a main function when perf.c isn't present.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/perf.c         | 18 ------------------
- tools/perf/perf.h         |  2 --
- tools/perf/ui/setup.c     | 19 +++++++++++++++++++
- tools/perf/ui/tui/setup.c |  1 -
- tools/perf/ui/ui.h        |  3 +++
- 5 files changed, 22 insertions(+), 21 deletions(-)
+ tools/perf/builtin-help.c | 1 +
+ tools/perf/builtin.h      | 3 ---
+ tools/perf/perf.c         | 6 ------
+ tools/perf/util/usage.c   | 6 ++++++
+ tools/perf/util/util.h    | 3 +++
+ 5 files changed, 10 insertions(+), 9 deletions(-)
 
+diff --git a/tools/perf/builtin-help.c b/tools/perf/builtin-help.c
+index 3976aebe3677..3e7f52054fac 100644
+--- a/tools/perf/builtin-help.c
++++ b/tools/perf/builtin-help.c
+@@ -14,6 +14,7 @@
+ #include <subcmd/run-command.h>
+ #include <subcmd/help.h>
+ #include "util/debug.h"
++#include "util/util.h"
+ #include <linux/kernel.h>
+ #include <linux/string.h>
+ #include <linux/zalloc.h>
+diff --git a/tools/perf/builtin.h b/tools/perf/builtin.h
+index d03afea86217..f2ab5bae2150 100644
+--- a/tools/perf/builtin.h
++++ b/tools/perf/builtin.h
+@@ -2,9 +2,6 @@
+ #ifndef BUILTIN_H
+ #define BUILTIN_H
+ 
+-extern const char perf_usage_string[];
+-extern const char perf_more_info_string[];
+-
+ void list_common_cmds_help(void);
+ const char *help_unknown_cmd(const char *cmd);
+ 
 diff --git a/tools/perf/perf.c b/tools/perf/perf.c
-index 82bbe0ca858b..4b1b31e78332 100644
+index 4b1b31e78332..997bb9ea5ebc 100644
 --- a/tools/perf/perf.c
 +++ b/tools/perf/perf.c
-@@ -432,24 +432,6 @@ static int run_argv(int *argcp, const char ***argv)
- 	return 0;
- }
+@@ -39,12 +39,6 @@
+ #include <linux/string.h>
+ #include <linux/zalloc.h>
  
--static void pthread__block_sigwinch(void)
--{
--	sigset_t set;
+-const char perf_usage_string[] =
+-	"perf [--version] [--help] [OPTIONS] COMMAND [ARGS]";
 -
--	sigemptyset(&set);
--	sigaddset(&set, SIGWINCH);
--	pthread_sigmask(SIG_BLOCK, &set, NULL);
--}
+-const char perf_more_info_string[] =
+-	"See 'perf help COMMAND' for more information on a specific command.";
 -
--void pthread__unblock_sigwinch(void)
--{
--	sigset_t set;
--
--	sigemptyset(&set);
--	sigaddset(&set, SIGWINCH);
--	pthread_sigmask(SIG_UNBLOCK, &set, NULL);
--}
--
- static int libperf_print(enum libperf_print_level level,
- 			 const char *fmt, va_list ap)
+ static int use_pager = -1;
+ const char *input_name;
+ 
+diff --git a/tools/perf/util/usage.c b/tools/perf/util/usage.c
+index 196438ee4c9d..4c8ffbad2323 100644
+--- a/tools/perf/util/usage.c
++++ b/tools/perf/util/usage.c
+@@ -12,6 +12,12 @@
+ #include <stdlib.h>
+ #include <linux/compiler.h>
+ 
++const char perf_usage_string[] =
++	"perf [--version] [--help] [OPTIONS] COMMAND [ARGS]";
++
++const char perf_more_info_string[] =
++	"See 'perf help COMMAND' for more information on a specific command.";
++
+ static __noreturn void usage_builtin(const char *err)
  {
-diff --git a/tools/perf/perf.h b/tools/perf/perf.h
-index 74014033df60..e21a7e15a34c 100644
---- a/tools/perf/perf.h
-+++ b/tools/perf/perf.h
-@@ -12,8 +12,6 @@ extern const char *input_name;
- extern bool perf_host, perf_guest;
- extern const char perf_version_string[];
- 
--void pthread__unblock_sigwinch(void);
--
- enum perf_affinity {
- 	PERF_AFFINITY_SYS = 0,
- 	PERF_AFFINITY_NODE,
-diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
-index 25ded88801a3..ff800047e697 100644
---- a/tools/perf/ui/setup.c
-+++ b/tools/perf/ui/setup.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <dlfcn.h>
-+#include <signal.h>
- #include <unistd.h>
- 
- #include <subcmd/pager.h>
-@@ -120,3 +121,21 @@ void exit_browser(bool wait_for_ok)
- 	}
- 	mutex_destroy(&ui__lock);
- }
-+
-+void pthread__block_sigwinch(void)
-+{
-+	sigset_t set;
-+
-+	sigemptyset(&set);
-+	sigaddset(&set, SIGWINCH);
-+	pthread_sigmask(SIG_BLOCK, &set, NULL);
-+}
-+
-+void pthread__unblock_sigwinch(void)
-+{
-+	sigset_t set;
-+
-+	sigemptyset(&set);
-+	sigaddset(&set, SIGWINCH);
-+	pthread_sigmask(SIG_UNBLOCK, &set, NULL);
-+}
-diff --git a/tools/perf/ui/tui/setup.c b/tools/perf/ui/tui/setup.c
-index a3b8c397c24d..c1886aa184b3 100644
---- a/tools/perf/ui/tui/setup.c
-+++ b/tools/perf/ui/tui/setup.c
-@@ -9,7 +9,6 @@
+ 	fprintf(stderr, "\n Usage: %s\n", err);
+diff --git a/tools/perf/util/util.h b/tools/perf/util/util.h
+index 1d3b300af5a1..5010abf9e01e 100644
+--- a/tools/perf/util/util.h
++++ b/tools/perf/util/util.h
+@@ -15,6 +15,9 @@
+ #include <internal/cpumap.h>
  #endif
  
- #include "../../util/debug.h"
--#include "../../perf.h"
- #include "../browser.h"
- #include "../helpline.h"
- #include "../ui.h"
-diff --git a/tools/perf/ui/ui.h b/tools/perf/ui/ui.h
-index 99f8d2fe9bc5..d8e911205582 100644
---- a/tools/perf/ui/ui.h
-+++ b/tools/perf/ui/ui.h
-@@ -31,4 +31,7 @@ struct option;
- 
- int stdio__config_color(const struct option *opt, const char *mode, int unset);
- 
-+void pthread__block_sigwinch(void);
-+void pthread__unblock_sigwinch(void);
++extern const char perf_usage_string[];
++extern const char perf_more_info_string[];
 +
- #endif /* _PERF_UI_H_ */
+ /* General helper functions */
+ void usage(const char *err) __noreturn;
+ void die(const char *err, ...) __noreturn __printf(1, 2);
 -- 
 2.40.0.348.gf938b09366-goog
 
