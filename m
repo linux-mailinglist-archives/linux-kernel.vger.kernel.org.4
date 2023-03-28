@@ -2,204 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994166CCDDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E501A6CCDE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjC1XIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 19:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        id S229851AbjC1XJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 19:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjC1XIL (ORCPT
+        with ESMTP id S229775AbjC1XJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 19:08:11 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6D310F8;
-        Tue, 28 Mar 2023 16:08:10 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1phIQ9-000450-1v;
-        Wed, 29 Mar 2023 01:08:05 +0200
-Date:   Wed, 29 Mar 2023 00:08:02 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: Re: [RFC PATCH net-next v2 2/2] net: dsa: mt7530: introduce MMIO
- driver for MT7988 SoC
-Message-ID: <ZCNzUrgTUGVF6YxF@makrotopia.org>
-References: <cover.1680041193.git.daniel@makrotopia.org>
- <6f628e3a56ad8390b1f5a00b86b61c54d66d3106.1680041193.git.daniel@makrotopia.org>
- <8494e02c-6c04-46c9-af86-a414f27fcf23@lunn.ch>
+        Tue, 28 Mar 2023 19:09:32 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7B02109;
+        Tue, 28 Mar 2023 16:09:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=TtAWW+rcRDNEtRaY+5PARKcs7L5jYJy9Gvn5idod+V8=; b=T6qhdSfj75BjrmtNtqPQemMtTQ
+        6UA+i8rTanrpWdnc/mgCBuuhh7AwBmjkiGbms4BD9FOndFiKjb6kA5WgXVXSgkpKwB2+sShQt/kb1
+        XTRd7QAODPJSm656Vxq5sS1YT8vkGmqQ+sQB80d8+KKwLy7Hzee6ULrbQw7ggnyRnjvLPJXlXH4RW
+        xcaosmceEBhUVbuYQQAO5urm238UFDRppDvfp2GJcnUBRTNDjWiFwjPTqSphvfRL57un/8zbOJKpc
+        J4TriE2hqlL8eDhplEcKNh3khT12GSBI4NlmbSDLWMfCwdy3+iqBvLEGnYyRNFQlNnzTVC5x2woNL
+        c4Fbj3+A==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1phIRP-00G5fs-2c;
+        Tue, 28 Mar 2023 23:09:23 +0000
+Message-ID: <988d7f44-4c4a-982a-90a9-86fc10f2fc15@infradead.org>
+Date:   Tue, 28 Mar 2023 16:09:22 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8494e02c-6c04-46c9-af86-a414f27fcf23@lunn.ch>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/msm/a6xx: add CONFIG_PM dependency
+To:     Arnd Bergmann <arnd@kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Sean Paul <sean@poorly.run>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230324095502.3289094-1-arnd@kernel.org>
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230324095502.3289094-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 12:45:37AM +0200, Andrew Lunn wrote:
-> > @@ -146,11 +149,13 @@ core_write(struct mt7530_priv *priv, u32 reg, u32 val)
-> >  {
-> >  	struct mii_bus *bus = priv->bus;
-> >  
-> > -	mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
-> > +	if (bus)
-> > +		mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
-> >  
-> >  	core_write_mmd_indirect(priv, reg, MDIO_MMD_VEND2, val);
-> >  
-> > -	mutex_unlock(&bus->mdio_lock);
-> > +	if (bus)
-> > +		mutex_unlock(&bus->mdio_lock);
-> >  }
+
+
+On 3/24/23 02:54, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> All this if (bus) is pretty ugly.
+> Selecting CONFIG_PM_GENERIC_DOMAINS causes a build failure when CONFIG_PM
+> is not enabled:
 > 
-> First off, what is this mutex actually protecting? And why is the same
-> protection not required for MMIO?
-
-The mutex is protecting the MDIO bus. Each access to any register of the
-MT753x switch requires at least two operations on the MDIO bus.
-Hence if there is congruent access, e.g. due to PCS or PHY polling, this
-can mess up and interfere with another ongoing register access sequence.
-
-You may argue that we should just use regmap's locking API for that, as
-it is done also when creating the pcs-mtk-lynxi instance. However, some
-things like interrupt handling require more complex (as in: not covered
-by regmap_update_bits) pseudo-atomic operations, so the idea was to keep
-the locking just like it was before for MDIO-connected MT753x switches
-and provide a lock-less regmap replacing the former mt7530_mii_write() and 
-mt7530_mii_read() functions.
-
-If we use MMIO we can directly access the 32-bit wide registers and hence
-do not require locking.
-
+> WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS
+>   Depends on [n]: PM [=n]
+>   Selected by [m]:
+>   - DRM_MSM [=m] && HAS_IOMEM [=y] && DRM [=m] && (ARCH_QCOM [=y] || SOC_IMX5 || COMPILE_TEST [=y]) && COMMON_CLK [=y] && IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=y] || QCOM_OCMEM [=y]=n) && (QCOM_LLCC [=n] || QCOM_LLCC [=n]=n) && (QCOM_COMMAND_DB [=y] || QCOM_COMMAND_DB [=y]=n) && DEVFREQ_GOV_SIMPLE_ONDEMAND [=y]
 > 
-> If you have a convincing argument the mutex is not needed, please add
-> two helpers:
+> drivers/base/power/domain.c:654:13: error: use of undeclared identifier 'pm_wq'
+>         queue_work(pm_wq, &genpd->power_off_work);
+>                    ^
+> drivers/base/power/domain.c:853:26: error: no member named 'ignore_children' in 'struct dev_pm_info'
+>                 if (!dev || dev->power.ignore_children)
+>                             ~~~~~~~~~~ ^
 > 
-> mt7530_mutex_lock(struct mt7530_priv *priv)
-> mt7530_mutex_unlock(struct mt7530_priv *priv)
+> Fixes: c11fa1204fe9 ("drm/msm/a6xx: Use genpd notifier to ensure cx-gdsc collapse")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  drivers/gpu/drm/msm/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> and hide the if inside that. As part of the commit message, explain
-> why the mutex is not needed for MDIO.
+> diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
+> index 1c417ba53b5b..85f5ab1d552c 100644
+> --- a/drivers/gpu/drm/msm/Kconfig
+> +++ b/drivers/gpu/drm/msm/Kconfig
+> @@ -9,6 +9,7 @@ config DRM_MSM
+>  	depends on QCOM_OCMEM || QCOM_OCMEM=n
+>  	depends on QCOM_LLCC || QCOM_LLCC=n
+>  	depends on QCOM_COMMAND_DB || QCOM_COMMAND_DB=n
+> +	depends on PM
+>  	select IOMMU_IO_PGTABLE
+>  	select QCOM_MDT_LOADER if ARCH_QCOM
+>  	select REGULATOR
 
-Ok, will do.
-
-> 
-> Adding these helpers and changing all calls can be a preparation
-> patch. It is the sort of patch which should be obviously correct.
-
-Understood.
-
-> 
-> > @@ -2588,6 +2664,8 @@ mt7531_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
-> >  	case PHY_INTERFACE_MODE_NA:
-> >  	case PHY_INTERFACE_MODE_1000BASEX:
-> >  	case PHY_INTERFACE_MODE_2500BASEX:
-> > +	case PHY_INTERFACE_MODE_USXGMII:
-> > +	case PHY_INTERFACE_MODE_10GKR:
-> >  		/* handled in SGMII PCS driver */
-> >  		return 0;
-> >  	default:
-> > @@ -2712,7 +2790,9 @@ static void mt753x_phylink_mac_link_up(struct dsa_switch *ds, int port,
-> >  	 * variants.
-> >  	 */
-> >  	if (interface == PHY_INTERFACE_MODE_TRGMII ||
-> > -	    (phy_interface_mode_is_8023z(interface))) {
-> > +	    interface == PHY_INTERFACE_MODE_USXGMII ||
-> > +	    interface == PHY_INTERFACE_MODE_10GKR ||
-> > +	    phy_interface_mode_is_8023z(interface)) {
-> >  		speed = SPEED_1000;
-> >  		duplex = DUPLEX_FULL;
-> >  	}
-> 
-> This looks like something which should be in a separate patch.
-
-Ok, I will put it into a separate patch before adding support for
-MT7988 which is the only switch supporting those modes (and also
-requiring them).
-
-> 
-> > +static int mt7988_setup(struct dsa_switch *ds)
-> > +{
-> > +	struct mt7530_priv *priv = ds->priv;
-> > +	u32 unused_pm = 0;
-> > +	int i;
-> > +
-> > +	/* Reset the switch */
-> > +	reset_control_assert(priv->rstc);
-> > +	udelay(20);
-> > +	reset_control_deassert(priv->rstc);
-> > +	udelay(20);
-> > +
-> > +	/* Reset the switch PHYs */
-> > +	mt7530_write(priv, MT7530_SYS_CTRL, SYS_CTRL_PHY_RST);
-> > +
-> > +	/* BPDU to CPU port */
-> > +	mt7530_rmw(priv, MT7531_CFC, MT7531_CPU_PMAP_MASK,
-> > +		   BIT(MT7988_CPU_PORT));
-> > +	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
-> > +		   MT753X_BPDU_CPU_ONLY);
-> > +
-> > +	/* Enable and reset MIB counters */
-> > +	mt7530_mib_reset(ds);
-> > +
-> > +	for (i = 0; i < MT7530_NUM_PORTS; i++) {
-> > +		/* Disable forwarding by default on all ports */
-> > +		mt7530_rmw(priv, MT7530_PCR_P(i), PCR_MATRIX_MASK,
-> > +			   PCR_MATRIX_CLR);
-> > +
-> > +		mt7530_set(priv, MT7531_DBG_CNT(i), MT7531_DIS_CLR);
-> > +
-> > +		if (dsa_is_unused_port(ds, i))
-> > +			unused_pm |= BIT(i);
-> > +		else if (dsa_is_cpu_port(ds, i))
-> > +			mt753x_cpu_port_enable(ds, i);
-> > +		else
-> > +			mt7530_port_disable(ds, i);
-> > +
-> > +		/* Enable consistent egress tag */
-> > +		mt7530_rmw(priv, MT7530_PVC_P(i), PVC_EG_TAG_MASK,
-> > +			   PVC_EG_TAG(MT7530_VLAN_EG_CONSISTENT));
-> > +	}
-> > +
-> > +	ds->configure_vlan_while_not_filtering = true;
-> > +
-> > +	/* Flush the FDB table */
-> > +	return mt7530_fdb_cmd(priv, MT7530_FDB_FLUSH, NULL);
-> 
-> Is this really specific to the mt7988? 
-
-While the setup function is somehow similar to mt7530_setup or
-mt7531_setup there are also differences. It would be possible to
-split this more, so more common parts can be shared, such as the
-loop over the ports which is the same as for MT7531.
-The way initial reset is carried out as well as setting up the CPU
-port is specific to MT7988.
-
-> 
->    Andrew
+-- 
+~Randy
