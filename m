@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A94F6CBC66
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6944D6CBC6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjC1KSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S230511AbjC1KUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjC1KSl (ORCPT
+        with ESMTP id S230054AbjC1KUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:18:41 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6D04EE8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:18:40 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id r11so47422809edd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:18:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1679998719;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vvzr4baxa/x4j/Rm5Ei8bsFwFUzNXSwUCnoszmxMI9k=;
-        b=Rq1Hw1Ehk1O95uaNy++X6HO/rBi6Zafxu3iitPBKBzR834+M3wpZjGyR3lLpUmZfRt
-         qIuBcga9mebLocWaRkFu8JE9g18UokzmcArwKtOfVT1XnZqL0xFf++23+gWxvhUrClTS
-         vCjGAFXHAcPpPNo6kGVolwB1yYriMu67CBL8Lw6e42zZVaQ5Jz43GlRTavwzdYYuthNS
-         idJx8oJawEqD8TS3QUjejMV4K9yf1lRaCQpmibLEvop+YzOQgbF2o6iDDDqKWsIpFzq2
-         /JFu+14sv+GAHQ/YMHsWzXSibztpR9estlfblfodn5ZcJmAfOgddhyMHvBWxw9LSV0UH
-         LmZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679998719;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vvzr4baxa/x4j/Rm5Ei8bsFwFUzNXSwUCnoszmxMI9k=;
-        b=sJ6ac+x/CWt2C6uKOlZcNkC+sI9L+2AWw5oWSEiaqx6b4kn6ZhDd5C2SGNfUFMoevA
-         gODJN3WNHdH2KuRWkQBQRL6kDYL0Yhb4rYtx0RZLLEbM+cXD5Gb2S+Q173wVDxCDD087
-         BRVXUoN/P88E9CNCIPXPi4a3AMkaATUWFRAnvv0ODUmgDcBb+JRPiE3MUY12d69nuRQl
-         omzomDOeBM8RoVFMdgDs8WiNdbt4jKkf8s7F5kdevnG5VC1LMDSzws6Ad0nqt2p10zne
-         ZgFo8AjdcqsYEOcGUtHv5wQkmtYVpY9u7ULLYXNr25piZ28VGVL/3mj1fE1vNxSuhAPb
-         3DIQ==
-X-Gm-Message-State: AAQBX9ehFt1hOVqH9NVb3brGHahRC5Rbm10TsatlHmSvzK95ak1L8ueP
-        3YTVF0lWjAmBc6/N+rt6VcpkunG2s/GQGvCt9RDuq6bFRxfL3KNH2lY=
-X-Google-Smtp-Source: AKy350bAjIfo1VzLBA/Mcp50eIeAbVuTMaMRgrXY3RuRJhFAjT6lyIbTBOTL+fcMK3N51HPw2QDYWKyPgxTouva1LS4=
-X-Received: by 2002:a17:906:b884:b0:932:a33a:3754 with SMTP id
- hb4-20020a170906b88400b00932a33a3754mr7455435ejb.14.1679998718779; Tue, 28
- Mar 2023 03:18:38 -0700 (PDT)
+        Tue, 28 Mar 2023 06:20:47 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4734EE8;
+        Tue, 28 Mar 2023 03:20:45 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SA39Rf021238;
+        Tue, 28 Mar 2023 10:20:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=WI7hat+HkOS+r0DWL2leZsJFqenf6gVLJkg4WXWjSh0=;
+ b=mw8TbpBpJgonbm/BMFTAZ0Ng/XFSjZl57xix7tBcu0tAHqEaQmsIorqIBg6p0mhAeqzC
+ jix/L6SJE5NZTHHpm/o0fDqBJZ9FAI4YjjznG0s4W7JFJ5xNrbX968VuB3cAiOVJEwou
+ 27snQ4jSRx10mY3ePsM5fcDTxOinVGwW6bfc/btKocW3LjFojCl6rmP5KcKiMsavbiEN
+ UoZPTWuzFbzUB8S86UyKX7s2MX/Q/94N999lTa6ifz0w+sGjobBLXPDCltSfDc9n6kBa
+ qpnf9PIssyRdcrtSGaqe2dW75/tasEXmqXXOhjkGJ3/c1/wk1DDOQgpYGUOpdWmFYtA5 Dg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pkx4t8157-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 10:20:39 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32SAKbY6005002
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 10:20:37 GMT
+Received: from poovendh-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Tue, 28 Mar 2023 03:20:31 -0700
+From:   Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <lee@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_devipriy@quicinc.com>
+Subject: [PATCH V6 0/2] Enable crashdump collection support for IPQ9574
+Date:   Tue, 28 Mar 2023 15:50:11 +0530
+Message-ID: <20230328102013.21361-1-quic_poovendh@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230320005258.1428043-1-sashal@kernel.org> <20230320005258.1428043-8-sashal@kernel.org>
- <CAN+4W8g6AcQQWe7rrBVOFYoqeQA-1VbUP_W7DPS3q0k-czOLfg@mail.gmail.com> <ZBiAPngOtzSwDhFz@kroah.com>
-In-Reply-To: <ZBiAPngOtzSwDhFz@kroah.com>
-From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Tue, 28 Mar 2023 11:18:27 +0100
-Message-ID: <CAN+4W8jAyJTdFL=tgp3wCpYAjGOs5ggo6vyOg8PbaW+tJP8TKA@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 6.2 08/30] selftests/bpf: check that modifier
- resolves after pointer
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Martin KaFai Lau <martin.lau@kernel.org>,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        shuah@kernel.org, yhs@fb.com, eddyz87@gmail.com, sdf@google.com,
-        error27@gmail.com, iii@linux.ibm.com, memxor@gmail.com,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: WjELJyxGZMFaeLPJlZwGeyde4OKkiGgd
+X-Proofpoint-ORIG-GUID: WjELJyxGZMFaeLPJlZwGeyde4OKkiGgd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ spamscore=0 bulkscore=0 phishscore=0 suspectscore=0 impostorscore=0
+ mlxlogscore=832 lowpriorityscore=0 priorityscore=1501 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303280086
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,17 +79,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 3:48=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> Why would it break?  Is that because the test is buggy, or the kernel is
-> buggy?
+Crashdump collection is enabled based on the DLOAD bit in the TCSR register.
+This bit is set during bootup and clearing during shutdown. During crash,
+dload bit is not cleared, due to which uboot starts crashdump collection.
 
-This test will be fine, but there have been several times when
-selftests/bpf for stable kernel releases didn't actually compile due
-to backported tests. This is because macros we're redefined, etc.
-Unless those also get picked (seems like a sisyphean task) we'll keep
-seeing broken selftests/bpf on stable.
+Enable the support for download mode to collect the crashdumps if
+system crashes, to debug crashes extensively.
 
-Best
-Lorenz
+During the bootup, bootloaders initialize the SMEM. However the bootup
+after crash, SMEM will not be initialized again. If the memory for the
+SMEM is not reserved, linux consumes that region, which leads to the
+loss of SMEM data. So, during the next bootup after crash, bootloaders
+will hang due to invalid data present in the SMEM region. Due to this,
+added the SMEM support along with crashdump collection series.
+
+This patch series adds the support for crashdump collection.
+
+DTS patch depends on the IPQ9574 baseport series
+	https://lore.kernel.org/linux-arm-kernel/20230327132718.573-1-quic_devipriy@quicinc.com/
+
+V6:
+	- Dropped the below patches as it is already part of linux-next/master
+          [1/5] dt-bindings: scm: Add compatible for IPQ9574
+	  [2/5] dt-bindings: mfd: Add the tcsr compatible for IPQ9574
+	- Dropping patch [5/5] firmware: scm: Modify only the DLOAD bit in TCSR
+	  register for download mode as it is posted part of below series
+	  https://lore.kernel.org/lkml/1676990381-18184-1-git-send-email-quic_mojha@quicinc.com/#r
+
+V5 can be found at
+	https://lore.kernel.org/linux-arm-kernel/20230216120012.28357-1-quic_poovendh@quicinc.com/
+
+V4 can be found at
+	https://lore.kernel.org/linux-arm-kernel/20230214051414.10740-1-quic_poovendh@quicinc.com/
+
+V3 can be found at
+	https://lore.kernel.org/linux-arm-msm/20230208053332.16537-1-quic_poovendh@quicinc.com/
+
+Changes in V2:
+	- rebased on linux-next/master
+	- dropped co-developed by tag wherever applicable
+	- V1 can be found at
+	  https://lore.kernel.org/linux-arm-kernel/20230113160012.14893-1-quic_poovendh@quicinc.com/
+
+Poovendhan Selvaraj (2):
+  arm64: dts: qcom: ipq9574: Enable the download mode support
+  arm64: dts: qcom: ipq9574: Add SMEM support
+
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+
+base-commit: a6faf7ea9fcb7267d06116d4188947f26e00e57e
+-- 
+2.17.1
+
