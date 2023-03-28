@@ -2,57 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1436CB936
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7498F6CB93D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbjC1IVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
+        id S230331AbjC1IVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjC1IUy (ORCPT
+        with ESMTP id S231124AbjC1IVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:20:54 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820D644A7;
-        Tue, 28 Mar 2023 01:20:29 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1807D1FD81;
-        Tue, 28 Mar 2023 08:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679991628; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HRcn8tarDsWg3kdLklqiCIWLcIN+nPnBDYzbSZWYh8Y=;
-        b=gZupk3tipjwAsFo6fQqtftzCaAwarwag9hpdUBGeMueBBBkNzMbWNCjWCUdWc+umQ3pGjm
-        1hELF15qK4IdF7Gl+WNc1bWAD3sHlRQo0MeNCbEAhN5pnGXnf4Gj6gNC85BA2HMNrqjocL
-        rtI67tDECoZrGzT+v6QPY+HRTVhKnDM=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id ACFC22C142;
-        Tue, 28 Mar 2023 08:20:27 +0000 (UTC)
-Date:   Tue, 28 Mar 2023 10:20:26 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: union: was: Re: [PATCH printk v1 05/18] printk: Add non-BKL
- console basic infrastructure
-Message-ID: <ZCKjSpDbiBVabbP5@alley>
-References: <20230302195618.156940-1-john.ogness@linutronix.de>
- <20230302195618.156940-6-john.ogness@linutronix.de>
- <ZBnVkarywpyWlDWW@alley>
- <87y1nip3a1.fsf@jogness.linutronix.de>
+        Tue, 28 Mar 2023 04:21:46 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D3E4EE2;
+        Tue, 28 Mar 2023 01:21:16 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32S6XIhE013994;
+        Tue, 28 Mar 2023 08:21:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=kmm9w/HUF5DL0XlfCw9kOGGhBrw7rQ+kN11GBM7+yFg=;
+ b=WWL4l/fcTEW3Z0g5HnqHby09RYAmWtpKNU+gUTkU221k0z9H3LPXAhjJ/Lts1kRbFIfG
+ bzBYoq8LsWJLgAxek1w3hJs0RuewWIywwiTmwMGc4bchNT/D0Q+jzye536pMdOtZPRXk
+ UIasJtV2ALC3E4VHDiCWDGctVdneR5cs2iLGFqYnX09iQUBmcfR489TYrVCtmdsEbJBt
+ XzmPB0E9nIxG7TLtSWUzwp/1Yp93IyZfN2ynIEDf9kgAjOq+EKFBxnzswrftqQAQf/QX
+ t3qDDlMjy47i9cBXXW4nMNSFsQQi4WlAQUis/KTFkQ+HuqJbXe4/gWo29B39rCxT/Oly RA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pkcm2tc1j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 08:21:13 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32S8LCgY019672
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 08:21:12 GMT
+Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Mar
+ 2023 01:21:02 -0700
+Message-ID: <4fa90274-9902-dd9a-f566-29c6956d8175@quicinc.com>
+Date:   Tue, 28 Mar 2023 13:50:59 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87y1nip3a1.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 5/5] firmware: qcom_scm: Add multiple download mode
+ support
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>
+CC:     <agross@kernel.org>, <konrad.dybcio@linaro.org>,
+        <linus.walleij@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
+References: <1679935281-18445-1-git-send-email-quic_mojha@quicinc.com>
+ <1679935281-18445-6-git-send-email-quic_mojha@quicinc.com>
+ <20230327182723.bopz73a5as4ft74g@ripper>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230327182723.bopz73a5as4ft74g@ripper>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: J4SD-L73fgLzGT_b1TL8NzMqMFMMSe4u
+X-Proofpoint-GUID: J4SD-L73fgLzGT_b1TL8NzMqMFMMSe4u
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501
+ suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303280069
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,40 +82,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2023-03-27 18:34:22, John Ogness wrote:
-> On 2023-03-21, Petr Mladek <pmladek@suse.com> wrote:
-> > It is not completely clear that that this struct is stored
-> > as atomic_long_t atomic_state[2] in struct console.
-> >
-> > What about adding?
-> >
-> > 		atomic_long_t atomic;
+
+
+On 3/27/2023 11:57 PM, Bjorn Andersson wrote:
+> On Mon, Mar 27, 2023 at 10:11:21PM +0530, Mukesh Ojha wrote:
+>> Currently, scm driver only supports full dump when download
+>> mode is selected. Add support to enable minidump as well both
+>> dump(full dump + minidump).
+>>
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+>> ---
+>>   drivers/firmware/qcom_scm.c | 13 +++++++++++--
+>>   1 file changed, 11 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+>> index 0c94429..19315d0 100644
+>> --- a/drivers/firmware/qcom_scm.c
+>> +++ b/drivers/firmware/qcom_scm.c
+>> @@ -32,6 +32,8 @@ static u32 download_mode;
+>>   
+>>   #define QCOM_DOWNLOAD_MODE_MASK 0x30
+>>   #define QCOM_DOWNLOAD_FULLDUMP	0x1
+>> +#define QCOM_DOWNLOAD_MINIDUMP  0x2
+>> +#define QCOM_DOWNLOAD_BOTHDUMP	(QCOM_DOWNLOAD_FULLDUMP | QCOM_DOWNLOAD_MINIDUMP)
+>>   #define QCOM_DOWNLOAD_NODUMP	0x0
+>>   
+>>   struct qcom_scm {
+>> @@ -1421,13 +1423,16 @@ static irqreturn_t qcom_scm_irq_handler(int irq, void *data)
+>>   	return IRQ_HANDLED;
+>>   }
+>>   
+>> -
+>>   static int get_download_mode(char *buffer, const struct kernel_param *kp)
+>>   {
+>>   	int len = 0;
+>>   
+>>   	if (download_mode == QCOM_DOWNLOAD_FULLDUMP)
+>>   		len = sysfs_emit(buffer, "full\n");
+>> +	else if (download_mode == QCOM_DOWNLOAD_MINIDUMP)
+>> +		len = sysfs_emit(buffer, "mini\n");
+>> +	else if (download_mode == QCOM_DOWNLOAD_BOTHDUMP)
+>> +		len = sysfs_emit(buffer, "both\n");
+>>   	else if (download_mode == QCOM_DOWNLOAD_NODUMP)
+>>   		len = sysfs_emit(buffer, "off\n");
+>>   
+>> @@ -1440,6 +1445,10 @@ static int set_download_mode(const char *val, const struct kernel_param *kp)
+>>   
+>>   	if (!strncmp(val, "full", strlen("full"))) {
+>>   		download_mode = QCOM_DOWNLOAD_FULLDUMP;
+>> +	} else if (!strncmp(val, "mini", strlen("mini"))) {
+>> +		download_mode = QCOM_DOWNLOAD_MINIDUMP;
+>> +	} else if (!strncmp(val, "both", strlen("both"))) {
 > 
-> The struct is used to simplify interpretting and creating values to be
-> stored in the atomic state variable. I do not think it makes sense that
-> the atomic variable type itself is part of it.
-
-It was just an idea. Feel free to keep it as is (not to add the atomic
-into the union).
-
-> > Anyway, we should at least add a comment into struct console
-> > about that atomic_state[2] is used to store and access
-> > struct cons_state an atomic way. Also add a compilation
-> > check that the size is the same.
+> "both" isn't very future proof...
 > 
-> A compilation check would be nice. Is that possible?
+> How about allowing mini,full? You don't need to do string tokenizing
+> etc, just strcmp mini,full (and full,mini if you want to be fancy)...
+> 
 
-I think the following might do the trick:
+Thanks for the suggestion, this looks good.
+I have applied the changes.
 
-static_assert(sizeof(struct cons_state) == sizeof(atomic_long_t));
+-- Mukesh
 
-
-> I am renaming the struct to nbcon_state. Also the variable will be
-> called nbcon_state. With the description updated, I think it makes it
-> clearer that "struct nbcon_state" is used to interpret/create values of
-> console->nbcon_state.
-
-Sounds good.
-
-Best Regards,
-Petr
+> Regards,
+> Bjorn
+> 
+>> +		download_mode = QCOM_DOWNLOAD_BOTHDUMP;
+>>   	} else if (!strncmp(val, "off", strlen("off"))) {
+>>   		download_mode = QCOM_DOWNLOAD_NODUMP;
+>>   	} else if (kstrtouint(val, 0, &download_mode) ||
+>> @@ -1462,7 +1471,7 @@ static const struct kernel_param_ops download_mode_param_ops = {
+>>   
+>>   module_param_cb(download_mode, &download_mode_param_ops, NULL, 0644);
+>>   MODULE_PARM_DESC(download_mode,
+>> -		 "Download mode: off/full or 0/1 for existing users");
+>> +		 "download mode: off/full/mini/both(full+mini) or 0/1 for existing users");
+>>   
+>>   static int qcom_scm_probe(struct platform_device *pdev)
+>>   {
+>> -- 
+>> 2.7.4
+>>
