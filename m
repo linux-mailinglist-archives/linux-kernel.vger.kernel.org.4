@@ -2,243 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B16C6CB423
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03CD6CB42B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjC1Caq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 22:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
+        id S232202AbjC1CcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 22:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjC1Can (ORCPT
+        with ESMTP id S232349AbjC1CcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 22:30:43 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3AD30ED
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:30:08 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id g9so8286832qvt.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1679970583;
-        h=to:references:message-id:date:cc:in-reply-to:from:mime-version
-         :subject:content-transfer-encoding:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pWz6d1QehWZ2JoCvpbDcTQFIKEH+s3VBG9kI0UG6rOM=;
-        b=Mh2Pg+vnSUCd/9ByY5vk8n7ODXG6gL+h3nDPbFBtMK4pOAoKg5V74LbuB/KmZamkzk
-         pzxNrePZxr1qCVPEi6bzVbSFtUKZihmAIgCzVI1CYiQi5V09x/WAV/4yLnXK95eg/4xi
-         AfG5ttrBmbNG1kFJSX96AFGG9hzDC9FoZ6MAc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679970583;
-        h=to:references:message-id:date:cc:in-reply-to:from:mime-version
-         :subject:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pWz6d1QehWZ2JoCvpbDcTQFIKEH+s3VBG9kI0UG6rOM=;
-        b=D/xJeVBBzkCY2rrKoIMyjdb+QKr+zUg9B2oQHOyZFjBED7LKK5MZm73ajdfJlpIRKe
-         E2FUu/Rv/ZAr6EAi3pnN27xnUx79j4ghUXBybJ8n4hd8XUX0qGiUpJGHeDkNQeGh4j43
-         hnlq1FmNtJja8cgDu9yLMvG8t/ME11nK7q80y0jpbjqF0/Ms48GLYddprmaSx4ihlqnE
-         JKiJJpQDYv7vqTGlgAtrefcDMAy/WCojS5CYS1QgydTNQax8kf4qUkk5fnXMDKpfK0YL
-         VM47taLPTQccMBHUbKMORHkR2OU3uJBE3ksk3gDlnsF/NBRa1eWnAxeuKk2ZqGAdEPBa
-         GNVw==
-X-Gm-Message-State: AAQBX9fhCsCGDwVeujH/v4r3xZB2FqwuJ2WoN0BujZhadjMqSINK4Jhj
-        QUh2f9SMgRiQJg9oo4pJr5ZJVA==
-X-Google-Smtp-Source: AKy350a6S6hlmwesUGVXB/PIFKOPE2Rczk0rpvXfdRbyfkgknQSS2QzRMif8jdc6je8Ks9TZO4b7PQ==
-X-Received: by 2002:a05:6214:20e8:b0:571:13c:6806 with SMTP id 8-20020a05621420e800b00571013c6806mr22424370qvk.33.1679970583479;
-        Mon, 27 Mar 2023 19:29:43 -0700 (PDT)
-Received: from smtpclient.apple ([2600:1003:b130:c6c6:6401:1533:c2de:a27d])
-        by smtp.gmail.com with ESMTPSA id x14-20020a0cfe0e000000b005dd8b9345e3sm3423380qvr.123.2023.03.27.19.29.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 19:29:42 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 1/1] Reduce synchronize_rcu() waiting time
-Mime-Version: 1.0 (1.0)
-X-Apple-Notify-Thread: NO
-X-Universally-Unique-Identifier: F8192FEA-755F-4711-984A-533C5ADE2112
-From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <ca153af5-bd66-4d48-afa5-ace3a13aec3c@paulmck-laptop>
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, RCU <rcu@vger.kernel.org>,
-        quic_neeraju@quicinc.com, Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Frederic Weisbecker <frederic@kernel.org>
-Date:   Mon, 27 Mar 2023 22:29:31 -0400
-X-Apple-Message-Smime-Encrypt: NO
-Message-Id: <FC49F388-0480-4687-8DD3-94049FCBC92B@joelfernandes.org>
-References: <ca153af5-bd66-4d48-afa5-ace3a13aec3c@paulmck-laptop>
-To:     paulmck@kernel.org
-X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Mon, 27 Mar 2023 22:32:10 -0400
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3FC26B7;
+        Mon, 27 Mar 2023 19:32:07 -0700 (PDT)
+X-UUID: 9e4cd9b106cf4a5684c3be19ffc29b47-20230328
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.20,REQID:8978e95c-fe86-4f39-b70c-94e2bf5e2d58,IP:-32
+        768,URL:-32768,TC:-32768,Content:-32768,EDM:-32768,RT:-32768,SF:-32768,FIL
+        E:-32768,BULK:-32768,RULE:Release_Ham,ACTION:release,TS:0
+X-CID-INFO: VERSION:1.1.20,REQID:8978e95c-fe86-4f39-b70c-94e2bf5e2d58,IP:-3276
+        8,URL:-32768,TC:-32768,Content:-32768,EDM:-32768,RT:-32768,SF:-32768,FILE:
+        -32768,BULK:-32768,RULE:Release_Ham,ACTION:release,TS:0
+X-CID-META: VersionHash:25b5999,CLOUDID:nil,BulkID:nil,BulkQuantity:0,Recheck:
+        0,SF:nil,TC:nil,Content:nil,EDM:nil,IP:nil,URL:nil,File:nil,Bulk:nil,QS:ni
+        l,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-UUID: 9e4cd9b106cf4a5684c3be19ffc29b47-20230328
+X-User: zhouzongmin@kylinos.cn
+Received: from thinkpadx13gen2i.. [(116.128.244.169)] by mailgw
+        (envelope-from <zhouzongmin@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 917128933; Tue, 28 Mar 2023 10:31:33 +0800
+From:   Zongmin Zhou <zhouzongmin@kylinos.cn>
+To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch
+Cc:     keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        dmitry.baryshkov@linaro.org, neil.armstrong@linaro.org,
+        laurentiu.palcu@oss.nxp.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Zongmin Zhou <zhouzongmin@kylinos.cn>
+Subject: [PATCH] drm/probe_helper: fix the warning reported when calling drm_kms_helper_poll_disable during suspend
+Date:   Tue, 28 Mar 2023 10:31:29 +0800
+Message-Id: <20230328023129.3596968-1-zhouzongmin@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+When drivers call drm_kms_helper_poll_disable from
+their device suspend implementation without enabled output polling before,
+following warning will be reported,due to work->func not be initialized:
 
-> On Mar 27, 2023, at 9:06 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
->=20
-> =EF=BB=BFOn Mon, Mar 27, 2023 at 11:21:23AM +0000, Zhang, Qiang1 wrote:
->>>> From: Uladzislau Rezki (Sony) <urezki@gmail.com>
->>>> Sent: Tuesday, March 21, 2023 6:28 PM
->>>> [...]
->>>> Subject: [PATCH 1/1] Reduce synchronize_rcu() waiting time
->>>>=20
->>>> A call to a synchronize_rcu() can be expensive from time point of view.=
+[   55.141361] WARNING: CPU: 3 PID: 372 at kernel/workqueue.c:3066 __flush_work+0x22f/0x240
+[   55.141382] Modules linked in: nls_iso8859_1 snd_hda_codec_generic ledtrig_audio snd_hda_intel snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec snd_hda_core snd_hwdep snd_pcm snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq intel_rapl_msr intel_rapl_common bochs drm_vram_helper drm_ttm_helper snd_seq_device nfit ttm crct10dif_pclmul snd_timer ghash_clmulni_intel binfmt_misc sha512_ssse3 aesni_intel drm_kms_helper joydev input_leds syscopyarea crypto_simd snd cryptd sysfillrect sysimgblt mac_hid serio_raw soundcore qemu_fw_cfg sch_fq_codel msr parport_pc ppdev lp parport drm ramoops reed_solomon pstore_blk pstore_zone efi_pstore virtio_rng ip_tables x_tables autofs4 hid_generic usbhid hid ahci virtio_net i2c_i801 crc32_pclmul psmouse virtio_scsi libahci i2c_smbus lpc_ich xhci_pci net_failover virtio_blk xhci_pci_renesas failover
+[   55.141430] CPU: 3 PID: 372 Comm: kworker/u16:9 Not tainted 6.2.0-rc6+ #16
+[   55.141433] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
+[   55.141435] Workqueue: events_unbound async_run_entry_fn
+[   55.141441] RIP: 0010:__flush_work+0x22f/0x240
+[   55.141444] Code: 8b 43 28 48 8b 53 30 89 c1 e9 f9 fe ff ff 4c 89 f7 e8 b5 95 d9 00 e8 00 53 08 00 45 31 ff e9 11 ff ff ff 0f 0b e9 0a ff ff ff <0f> 0b 45 31 ff e9 00 ff ff ff e8 e2 54 d8 00 66 90 90 90 90 90 90
+[   55.141446] RSP: 0018:ff59221940833c18 EFLAGS: 00010246
+[   55.141449] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffff9b72bcbe
+[   55.141450] RDX: 0000000000000001 RSI: 0000000000000001 RDI: ff3ea01e4265e330
+[   55.141451] RBP: ff59221940833c90 R08: 0000000000000000 R09: 8080808080808080
+[   55.141453] R10: ff3ea01e42b3caf4 R11: 000000000000000f R12: ff3ea01e4265e330
+[   55.141454] R13: 0000000000000001 R14: ff3ea01e505e5e80 R15: 0000000000000001
+[   55.141455] FS:  0000000000000000(0000) GS:ff3ea01fb7cc0000(0000) knlGS:0000000000000000
+[   55.141456] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   55.141458] CR2: 0000563543ad1546 CR3: 000000010ee82005 CR4: 0000000000771ee0
+[   55.141464] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   55.141465] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   55.141466] PKRU: 55555554
+[   55.141467] Call Trace:
+[   55.141469]  <TASK>
+[   55.141472]  ? pcie_wait_cmd+0xdf/0x220
+[   55.141478]  ? mptcp_seq_show+0xe0/0x180
+[   55.141484]  __cancel_work_timer+0x124/0x1b0
+[   55.141487]  cancel_delayed_work_sync+0x17/0x20
+[   55.141490]  drm_kms_helper_poll_disable+0x26/0x40 [drm_kms_helper]
+[   55.141516]  drm_mode_config_helper_suspend+0x25/0x90 [drm_kms_helper]
+[   55.141531]  ? __pm_runtime_resume+0x64/0x90
+[   55.141536]  bochs_pm_suspend+0x16/0x20 [bochs]
+[   55.141540]  pci_pm_suspend+0x8b/0x1b0
+[   55.141545]  ? __pfx_pci_pm_suspend+0x10/0x10
+[   55.141547]  dpm_run_callback+0x4c/0x160
+[   55.141550]  __device_suspend+0x14c/0x4c0
+[   55.141553]  async_suspend+0x24/0xa0
+[   55.141555]  async_run_entry_fn+0x34/0x120
+[   55.141557]  process_one_work+0x21a/0x3f0
+[   55.141560]  worker_thread+0x4e/0x3c0
+[   55.141563]  ? __pfx_worker_thread+0x10/0x10
+[   55.141565]  kthread+0xf2/0x120
+[   55.141568]  ? __pfx_kthread+0x10/0x10
+[   55.141570]  ret_from_fork+0x29/0x50
+[   55.141575]  </TASK>
+[   55.141575] ---[ end trace 0000000000000000 ]---
 
->>>> Different workloads can be affected by this especially the ones which u=
-se this
->>>> API in its time critical sections.
->>>>=20
->>>=20
->>> This is interesting and meaningful research. ;-)
->>>=20
->>>> For example in case of NOCB scenario the wakeme_after_rcu() callback
->>>> invocation depends on where in a nocb-list it is located. Below is an e=
-xample
->>>> when it was the last out of ~3600 callbacks:
->>>=20
->>=20
->>=20
->>=20
->> Can it be implemented separately as follows?  it seems that the code is s=
-impler
->> (only personal opinion)  =F0=9F=98=8A.
->>=20
->> But I didn't test whether this reduce synchronize_rcu() waiting time
->>=20
->> +static void rcu_poll_wait_gp(struct rcu_tasks *rtp)
->> +{
->> +       unsigned long gp_snap;
->> +
->> +       gp_snap =3D start_poll_synchronize_rcu();
->> +       while (!poll_state_synchronize_rcu(gp_snap))
->> +               schedule_timeout_idle(1);
->=20
-> I could be wrong, but my guess is that the guys working with
-> battery-powered devices are not going to be very happy with this loop.
->=20
-> All those wakeups by all tasks waiting for a grace period end up
-> consuming a surprisingly large amount of energy.
+Fixes: a4e771729a51 ("drm/probe_helper: sort out poll_running vs poll_enabled")
+Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
+---
+ drivers/gpu/drm/drm_probe_helper.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Is that really the common case? On the general topic of wake-ups:
-Most of the time there should be only one
-task waiting synchronously on a GP to end. If that is
-true, then it feels like waking
-up nocb Kthreads which indirectly wake other threads is doing more work than=
- usual?
+diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
+index 8127be134c39..ac72b18e2257 100644
+--- a/drivers/gpu/drm/drm_probe_helper.c
++++ b/drivers/gpu/drm/drm_probe_helper.c
+@@ -855,7 +855,8 @@ void drm_kms_helper_poll_disable(struct drm_device *dev)
+ 	if (dev->mode_config.poll_running)
+ 		drm_kms_helper_disable_hpd(dev);
+ 
+-	cancel_delayed_work_sync(&dev->mode_config.output_poll_work);
++	if (dev->mode_config.poll_enabled)
++		cancel_delayed_work_sync(&dev->mode_config.output_poll_work);
+ 
+ 	dev->mode_config.poll_running = false;
+ }
+-- 
+2.34.1
 
-I am curious to measure how much does Vlad patch reduce wakeups in the commo=
-n case.
 
-I was also wondering how Vlad patch effects RCU-barrier ordering. I guess
-we want the wake up to happen in the order of
-other callbacks also waiting.
-
-One last note, most battery powered systems are perhaps already using expedi=
-ted RCU ;-)
-
-Thoughts?
-
- - Joel=20
-
->=20
->                            Thanx, Paul
->=20
->> +}
->> +
->> +void call_rcu_poll(struct rcu_head *rhp, rcu_callback_t func);
->> +DEFINE_RCU_TASKS(rcu_poll, rcu_poll_wait_gp, call_rcu_poll,
->> +                 "RCU Poll");
->> +void call_rcu_poll(struct rcu_head *rhp, rcu_callback_t func)
->> +{
->> +       call_rcu_tasks_generic(rhp, func, &rcu_poll);
->> +}
->> +EXPORT_SYMBOL_GPL(call_rcu_poll);
->> +
->> +void synchronize_rcu_poll(void)
->> +{
->> +       synchronize_rcu_tasks_generic(&rcu_poll);
->> +}
->> +EXPORT_SYMBOL_GPL(synchronize_rcu_poll);
->> +
->> +static int __init rcu_spawn_poll_kthread(void)
->> +{
->> +       cblist_init_generic(&rcu_poll);
->> +       rcu_poll.gp_sleep =3D HZ / 10;
->> +       rcu_spawn_tasks_kthread_generic(&rcu_poll);
->> +       return 0;
->> +}
->>=20
->> Thanks
->> Zqiang
->>=20
->>=20
->>>>=20
->>>> <snip>
->>>>  <...>-29      [001] d..1. 21950.145313: rcu_batch_start: rcu_preempt
->>>> CBs=3D3613 bl=3D28
->>>> ...
->>>>  <...>-29      [001] ..... 21950.152578: rcu_invoke_callback: rcu_preem=
-pt
->>>> rhp=3D00000000b2d6dee8 func=3D__free_vm_area_struct.cfi_jt
->>>>  <...>-29      [001] ..... 21950.152579: rcu_invoke_callback: rcu_preem=
-pt
->>>> rhp=3D00000000a446f607 func=3D__free_vm_area_struct.cfi_jt
->>>>  <...>-29      [001] ..... 21950.152580: rcu_invoke_callback: rcu_preem=
-pt
->>>> rhp=3D00000000a5cab03b func=3D__free_vm_area_struct.cfi_jt
->>>>  <...>-29      [001] ..... 21950.152581: rcu_invoke_callback: rcu_preem=
-pt
->>>> rhp=3D0000000013b7e5ee func=3D__free_vm_area_struct.cfi_jt
->>>>  <...>-29      [001] ..... 21950.152582: rcu_invoke_callback: rcu_preem=
-pt
->>>> rhp=3D000000000a8ca6f9 func=3D__free_vm_area_struct.cfi_jt
->>>>  <...>-29      [001] ..... 21950.152583: rcu_invoke_callback: rcu_preem=
-pt
->>>> rhp=3D000000008f162ca8 func=3Dwakeme_after_rcu.cfi_jt
->>>>  <...>-29      [001] d..1. 21950.152625: rcu_batch_end: rcu_preempt CBs=
--
->>>> invoked=3D3612 idle=3D....
->>>> <snip>
->>>>=20
->>>=20
->>> Did the results above tell us that CBs-invoked=3D3612 during the time 21=
-950.145313 ~ 21950.152625?
->>>=20
->>> Yes.
->>>=20
->>>=20
->>> If possible, may I know the steps, commands, and related parameters to p=
-roduce the results above?
->>> Thank you!
->>>=20
->>> Build the kernel with CONFIG_RCU_TRACE configuration. Update your "set_e=
-vent"
->>> file with appropriate traces:
->>>=20
->>> <snip>
->>> XQ-DQ54:/sys/kernel/tracing # echo rcu:rcu_batch_start rcu:rcu_batch_end=
- rcu:rcu_invoke_callback > set_event
->>>=20
->>> XQ-DQ54:/sys/kernel/tracing # cat set_event
->>> rcu:rcu_batch_start
->>> rcu:rcu_invoke_callback
->>> rcu:rcu_batch_end
->>> XQ-DQ54:/sys/kernel/tracing #
->>> <snip>
->>>=20
->>> Collect traces as much as you want: XQ-DQ54:/sys/kernel/tracing # echo 1=
- > tracing_on; sleep 10; echo 0 > tracing_on
->>> Next problem is how to parse it. Of course you will not be able to parse=
-
->>> megabytes of traces. For that purpose i use a special C trace parser.
->>> If you need an example please let me know i can show here.
->>>=20
->>> --
->>> Uladzislau Rezki
+No virus found
+		Checked by Hillstone Network AntiVirus
