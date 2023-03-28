@@ -2,54 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344AC6CC951
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54C66CC955
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjC1Rdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
+        id S229589AbjC1ReX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjC1Rdx (ORCPT
+        with ESMTP id S229452AbjC1ReV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:33:53 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC00BBA8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:33:51 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 50D721EC0666;
-        Tue, 28 Mar 2023 19:33:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680024830;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=KBNRP3e9M5RFCWFO8J+cQyDzijJcv3wHe97SaOz7xzI=;
-        b=Q1rNMo5F+BMlJjt0yeBdU1/pTY2eW77D3hVqC36B9Y1Yn+pEd0X0vr3EXMoZdn/4R8oVWT
-        CbGLuJmyWNcarnFxJKH9LdWLyswfZXJj//0EB9IJTIMr4/93nF3pu49ufJP8NhdcBAN1hZ
-        OutplFuEKr0UPSggl/+KGejy8ualE4I=
-Date:   Tue, 28 Mar 2023 19:33:46 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     David R <david@unsolicited.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: Panic starting 6.2.x and later 6.1.x kernels
-Message-ID: <20230328173346.GFZCMk+pSqXgGJ+Oi7@fat_crate.local>
-References: <943d2445-84df-d939-f578-5d8240d342cc@unsolicited.net>
- <20230327074952.GAZCFKoDOiJUdtse2H@fat_crate.local>
- <e8d15248-e694-79d7-da9c-b4485b471e14@unsolicited.net>
- <4c660f0f-2845-0e02-ccf9-619958e24236@unsolicited.net>
- <20230328142014.GCZCL3nkW5Qx5jhfsB@fat_crate.local>
- <57385475-c289-356f-d696-fc6decce1390@unsolicited.net>
- <20230328171057.GDZCMfobguhGUFiUuh@fat_crate.local>
- <97f68715-0dd3-6037-7945-f1f724e210f4@unsolicited.net>
+        Tue, 28 Mar 2023 13:34:21 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33386BBA8;
+        Tue, 28 Mar 2023 10:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680024860; x=1711560860;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WTNJQqR6j0Fv4yewPZZeEkwpR+jxknlg6+8TkBHSQ54=;
+  b=Y9gvdJXg1IKOTv7EqWiOjWp3U6JuuVIPGxQNuwRvC+2n2VEenfxxrBQ0
+   Rp6M3XJo7wMvIXfSW+eIkuYNVevE9bf88bcd22KleknmVK5de+yTfe7Ip
+   BbrSj49YNDktmp9KKDGGEaUkPszsYSUwjVetbQRRS+N6LcN/lBmLgTMXO
+   c4qGPpV44J9vxnDTh32+OnUQKVttYt4MPTSe2K9ayovHFU81UYXauSQrz
+   j3AdJTwXHdjNvAEmuCsDFaGBs9VYbMDXvoOTfkc24ZGqmh5n6ZuRxC46C
+   fOCy+dTPp3AQFay//2jrndvUJrGZWQh4OBIAIDbMG1ZBi/lpZxVhYqteq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="342228785"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="342228785"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 10:34:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="677452177"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="677452177"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2023 10:34:15 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phDD4-000IlR-1M;
+        Tue, 28 Mar 2023 17:34:14 +0000
+Date:   Wed, 29 Mar 2023 01:33:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        io-uring@vger.kernel.org, linux-block@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Bernd Schubert <bschubert@ddn.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH V5 02/16] io_uring: add IORING_OP_FUSED_CMD
+Message-ID: <202303290112.oiF4LrMI-lkp@intel.com>
+References: <20230328150958.1253547-3-ming.lei@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <97f68715-0dd3-6037-7945-f1f724e210f4@unsolicited.net>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20230328150958.1253547-3-ming.lei@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,16 +73,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 06:32:31PM +0100, David R wrote:
-> I can't reboot now 'till Thursday. Will try then and report back.
+Hi Ming,
 
-Appreciated, thanks!
+I love your patch! Perhaps something to improve:
 
-I'll try to repro here in the meantime but I'm afraid I won't be able to
-- this looks like a BIOS issue. But we'll see.
+[auto build test WARNING on axboe-block/for-next]
+[also build test WARNING on linus/master v6.3-rc4 next-20230328]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Lei/io_uring-increase-io_kiocb-flags-into-64bit/20230328-232554
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20230328150958.1253547-3-ming.lei%40redhat.com
+patch subject: [PATCH V5 02/16] io_uring: add IORING_OP_FUSED_CMD
+config: x86_64-randconfig-a011-20230327 (https://download.01.org/0day-ci/archive/20230329/202303290112.oiF4LrMI-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1cdd7d77287ea8d97834b37825e63a727e860f6c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ming-Lei/io_uring-increase-io_kiocb-flags-into-64bit/20230328-232554
+        git checkout 1cdd7d77287ea8d97834b37825e63a727e860f6c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/host/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303290112.oiF4LrMI-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/nvme/host/ioctl.c:8:
+>> include/linux/io_uring.h:112:74: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void io_fused_cmd_start_secondary_req(struct io_uring_cmd *,
+                                                                            ^
+   include/linux/io_uring.h:113:57: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+                   unsigned issue_flags, const struct io_uring_bvec_buf *,
+                                                                         ^
+   include/linux/io_uring.h:114:15: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+                   unsigned int,
+                               ^
+   3 warnings generated.
+
+
+vim +112 include/linux/io_uring.h
+
+    93	
+    94	static inline void io_uring_files_cancel(void)
+    95	{
+    96		if (current->io_uring) {
+    97			io_uring_unreg_ringfd();
+    98			__io_uring_cancel(false);
+    99		}
+   100	}
+   101	static inline void io_uring_task_cancel(void)
+   102	{
+   103		if (current->io_uring)
+   104			__io_uring_cancel(true);
+   105	}
+   106	static inline void io_uring_free(struct task_struct *tsk)
+   107	{
+   108		if (tsk->io_uring)
+   109			__io_uring_free(tsk);
+   110	}
+   111	#else
+ > 112	static inline void io_fused_cmd_start_secondary_req(struct io_uring_cmd *,
+   113			unsigned issue_flags, const struct io_uring_bvec_buf *,
+   114			unsigned int,
+   115			void (*complete_tw_cb)(struct io_uring_cmd *, unsigned))
+   116	{
+   117	}
+   118	static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+   119				      struct iov_iter *iter, void *ioucmd)
+   120	{
+   121		return -EOPNOTSUPP;
+   122	}
+   123	static inline void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret,
+   124			ssize_t ret2, unsigned issue_flags)
+   125	{
+   126	}
+   127	static inline void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
+   128				void (*task_work_cb)(struct io_uring_cmd *, unsigned))
+   129	{
+   130	}
+   131	static inline struct sock *io_uring_get_socket(struct file *file)
+   132	{
+   133		return NULL;
+   134	}
+   135	static inline void io_uring_task_cancel(void)
+   136	{
+   137	}
+   138	static inline void io_uring_files_cancel(void)
+   139	{
+   140	}
+   141	static inline void io_uring_free(struct task_struct *tsk)
+   142	{
+   143	}
+   144	static inline const char *io_uring_get_opcode(u8 opcode)
+   145	{
+   146		return "";
+   147	}
+   148	#endif
+   149	
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
