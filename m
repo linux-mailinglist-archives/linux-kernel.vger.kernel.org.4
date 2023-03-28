@@ -2,137 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CB56CC0C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2EB6CC0C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjC1N3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
+        id S232842AbjC1N30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjC1N3G (ORCPT
+        with ESMTP id S232730AbjC1N3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:29:06 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431521B6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:29:04 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id y35so10045091ljq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:29:04 -0700 (PDT)
+        Tue, 28 Mar 2023 09:29:20 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67EBAD3F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:29:18 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id y5so15033035ybu.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:29:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680010142;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AYY5Dr1Z1I9hb8CrXHC9U6DlzlFB2ypBISlRnxmPY3I=;
-        b=LSUtWT/AWGybRwLerH/91aATgi4rurZprloou1LoGbGck955eT2qPbsBESu3GGovM1
-         Ef82KFLSrfncXdZPa+HO0VHz6/FWeQDOYPZtXTBvOcftd29V/kbshbm89jeOhdgNv72z
-         tIBltFQthZyxbP6DnlXHUCQvj7zsXrtmWMZmNso1w1Vz49P7zG/ASg7HQ7r4ifogj/ws
-         eRl3o9x5JWVcUPqx5/Wt8dKS6a6guAPmnjP/QFyjmsxcN542w9RqBqdCOFTBbSRGNeMg
-         tJ/FR4tWEHOoOd6iME5heju7i64W4GuYfqI6w2KVY5O6997+lc7nztRn7DyHHjQcYCvg
-         3g2A==
+        d=linaro.org; s=google; t=1680010158;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F69SKgebFV84m8b23l8cJMcbeFPsZV429gPHHrsF92w=;
+        b=tHiKJUDXZjWTg2DUFiPoyD0e+7+Bl327jN3xM18gp7431wDhEHFklKY8sHh9iIe5/2
+         rxXEHYjWdTOoOC0DDnEA+Z58Usi64SaYTRagObJVvefExp10qkFepQO82B0FudG83Ba2
+         J44esto2WDHBS9g7JEqSwoRYKZn3EwaXFI7W+z2cQgAccy8zr7R98kqpeuxC8VjAggjy
+         MSHmTP7/SZmGkph6x1CPntk9ZjsVqu0NMRBiZX19sdTRnFA4T71Og0J+rGkf5Zs704lK
+         Frc87G5TItfjkkKXPgkcsH+Mi+/Hnn/llqkoWKxEVHFB5yLd4ofWEuC7w8VzCP28K5Ek
+         HVLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680010142;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AYY5Dr1Z1I9hb8CrXHC9U6DlzlFB2ypBISlRnxmPY3I=;
-        b=1VvMbNIfaFPxL6hjAH66Acnw2deg/DKUkHDFRI3sw+gtLl7WLYJlbiCIfBOSOUnv5J
-         QKYmO4/eMqeFM8Q2EzjbOcnFCah619SiRpP/OFKRlSLhtYRY5D3H6U5KipBlRZsYaHED
-         kv3qujzcrPaULQvwtXUDAWPrE2He0hgt04wFZtgW8O7tK8vyE0xGaV1swOWoeBKRJvPw
-         dAXXHvMs+a3hPvGlUD5pSm3+oRsAXMSY652dfsDVmvmmuqAqzQI6ao4MFiexm875WXCf
-         gd11dUEzHMJU9vRT3yPembJWxJ1VnIIuQKajOP9nqwUQve3UpHBSCKlXGEx1S6Ge775T
-         nX3g==
-X-Gm-Message-State: AAQBX9cvUZaZcQhVNx9+yINoHaawqlyhvm+ORu+pVQAv//7i58uHsjTb
-        dyx0cM/gGHaSBsPiNY0RTRj65g==
-X-Google-Smtp-Source: AKy350YAExXR6RZ2krFV7pgEcgdlDZBlWD13Eq4CYLuYxlMIcsU/t+DkcS1rzXhKdXibAB8k4462cA==
-X-Received: by 2002:a2e:9a8e:0:b0:2a0:7d07:edba with SMTP id p14-20020a2e9a8e000000b002a07d07edbamr5228469lji.43.1680010142574;
-        Tue, 28 Mar 2023 06:29:02 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id n12-20020a2e904c000000b00299f0194108sm5049811ljg.31.2023.03.28.06.29.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 06:29:02 -0700 (PDT)
-Message-ID: <76c5b46c-82d6-847c-aaca-7380d310d012@linaro.org>
-Date:   Tue, 28 Mar 2023 15:29:00 +0200
+        d=1e100.net; s=20210112; t=1680010158;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F69SKgebFV84m8b23l8cJMcbeFPsZV429gPHHrsF92w=;
+        b=D8na6v8dnrj4Hjs7A1y2JjDMZ7Vs4a78ZrewVMrXolXrXWj7kEOfm7/h7jAxNicPUn
+         U15AoEfantpYhHQmF/pBntTiaRrNC18J5hQODaE9CrziR8AfNbwjzx7jF9aGDGeXlSA1
+         wd1xtQuVhdoVYLcFlRCOoZs5w0//4be9HcHCR74U+Zonivm254U0a+Z06VMa9W51amNl
+         BU36mg/DS+Tk1hU6b2Bt5ewoHJtlUpEWnVCLwmC4I+nhMpx+TZZi3D9dlGVSpZlvwTtU
+         9TA+oGJ2PCRAH/qXTQ1CPk7YDG3w+LLW+i0ar4SowFdgXDVd38skhtM3Veke9m/t4d7D
+         E13g==
+X-Gm-Message-State: AAQBX9c9WbsU9mGJ+9g3f9shUYH6UHXOg6pk2pE6UZ2xxGD8zLZYvjW2
+        ELIEP00+VmqDl3UqpjfaIlQLjGTxYxutwq9Y+44Vaw==
+X-Google-Smtp-Source: AKy350buCWEIi2PkGNpeTUBOh1IR2rSY7S/IC7sNpB1Y7lELd92laB/CFj3jRTSo8OKdOuNP9Xy1qlYJHOIAM9dKlZs=
+X-Received: by 2002:a05:6902:1006:b0:b78:4b00:775f with SMTP id
+ w6-20020a056902100600b00b784b00775fmr6378684ybt.4.1680010157966; Tue, 28 Mar
+ 2023 06:29:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 2/5] ARM: dts: qcom: sdx65: Add support for PCIe PHY
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mani@kernel.org,
-        lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
-        manivannan.sadhasivam@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-References: <1679036039-27157-1-git-send-email-quic_rohiagar@quicinc.com>
- <1679036039-27157-3-git-send-email-quic_rohiagar@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1679036039-27157-3-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230323122910.991148-1-d-gole@ti.com>
+In-Reply-To: <20230323122910.991148-1-d-gole@ti.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 28 Mar 2023 15:29:06 +0200
+Message-ID: <CACRpkdY_rhe69Y4AbEp8iws1fpL0bUkP5iBMN68EB+wxhFyHTw@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] gpio: davinci: Do not clear the bank intr enable
+ bit in save_context
+To:     Dhruva Gole <d-gole@ti.com>
+Cc:     Keerthy <j-keerthy@ti.com>, Vibhore Vardhan <vibhore@ti.com>,
+        Tony Lindgren <tony@atomide.com>, Vignesh <vigneshr@ti.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Devarsh Thakkar <devarsht@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 23, 2023 at 1:29=E2=80=AFPM Dhruva Gole <d-gole@ti.com> wrote:
 
+> The interrupt enable bits might be set if we want to use the GPIO as
+> wakeup source. Clearing this will mean disabling of interrupts in the GPI=
+O
+> banks that we may want to wakeup from.
+> Thus remove the line that was clearing this bit from the driver's save
+> context function.
+>
+> Fixes: 0651a730924b ("gpio: davinci: Add support for system suspend/resum=
+e PM")
+> Cc: Devarsh Thakkar <devarsht@ti.com>
+> Signed-off-by: Dhruva Gole <d-gole@ti.com>
 
-On 17.03.2023 07:53, Rohit Agarwal wrote:
-> Add devicetree support for PCIe PHY used in SDX65 platform. This PHY is
-> used by the PCIe EP controller.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Looks like the right solution to me.
+I'm a bit surprised given how long we have had this driver.
+I suppose people have used out-of-tree patches for suspend/resume. :(
 
-Konrad
->  arch/arm/boot/dts/qcom-sdx65.dtsi | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
-> index 192f9f9..084daf8 100644
-> --- a/arch/arm/boot/dts/qcom-sdx65.dtsi
-> +++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
-> @@ -293,6 +293,37 @@
->  			status = "disabled";
->  		};
->  
-> +		pcie_phy: phy@1c06000 {
-> +			compatible = "qcom,sdx65-qmp-gen4x2-pcie-phy";
-> +			reg = <0x01c06000 0x2000>;
-> +
-> +			clocks = <&gcc GCC_PCIE_AUX_PHY_CLK_SRC>,
-> +				 <&gcc GCC_PCIE_CFG_AHB_CLK>,
-> +				 <&gcc GCC_PCIE_0_CLKREF_EN>,
-> +				 <&gcc GCC_PCIE_RCHNG_PHY_CLK>,
-> +				 <&gcc GCC_PCIE_PIPE_CLK>;
-> +			clock-names = "aux",
-> +				      "cfg_ahb",
-> +				      "ref",
-> +				      "rchng",
-> +				      "pipe";
-> +
-> +			resets = <&gcc GCC_PCIE_PHY_BCR>;
-> +			reset-names = "phy";
-> +
-> +			assigned-clocks = <&gcc GCC_PCIE_RCHNG_PHY_CLK>;
-> +			assigned-clock-rates = <100000000>;
-> +
-> +			power-domains = <&gcc PCIE_GDSC>;
-> +
-> +			#clock-cells = <0>;
-> +			clock-output-names = "pcie_pipe_clk";
-> +
-> +			#phy-cells = <0>;
-> +
-> +			status = "disabled";
-> +		};
-> +
->  		tcsr_mutex: hwlock@1f40000 {
->  			compatible = "qcom,tcsr-mutex";
->  			reg = <0x01f40000 0x40000>;
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
