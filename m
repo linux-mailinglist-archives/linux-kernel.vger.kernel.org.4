@@ -2,126 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0457E6CCDB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 00:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A536CCDBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 00:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjC1Wyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 18:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
+        id S229618AbjC1WzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 18:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjC1Wym (ORCPT
+        with ESMTP id S229708AbjC1WzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 18:54:42 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B642110
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:54:41 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id a11so14207629lji.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1680044079;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qQYGlpoRo1xAwVZPEjjkyX2GN+AkTkrmM4VsIqlC63Q=;
-        b=hEDALw7vFU3va/s2tPcKbQO9CLwqO9q5v5uWuTq2vrfjEek2ZVqY0WYm5we6BTZEIl
-         1agBVKGbeWNEETZHhj05FgIedv7+iusFiVTkHSUHaujrImhB9ViRVSASouqDwy+IsuZR
-         0NPdygmgdleGaozVT4yfMj2G25oqFbxEv8FJohz7LOq8GIwpsYbMHcCiOERaRD3hiRp/
-         VgMUoAqoieYWDxwaU0wzWiWVqNosIqmfgxxZldKhotidSP4I324OqFeByF5viJnKz2ym
-         XGXUmMZoDKzYIwPYqMoNTvgjaoCC5916l5n2N/ZeXdi5S4HSNm+8dnTTfpzhxrSpaOvA
-         7HDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680044079;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qQYGlpoRo1xAwVZPEjjkyX2GN+AkTkrmM4VsIqlC63Q=;
-        b=5qBboKtWEpKqLAceKOujMY/JT0Ue9LnuKiE0/buvg7gJg0GGoafYU7F0idfXovm5fE
-         ErTH3pe2hEksdGLO35N7Wa/ur+kPtdG9ibJy8EsbQiuWR2O/wxLqDW7lSmCcNUU3I4Uq
-         JkoL3kCvmz6WyjcwGuqUoGGdsmBMDtYq90LxuPgJIP3IpS/3obwqqw8qFqOq7PJcBdKp
-         SaJpHJo1/YIyL7MBP7et53ecqYMQOWtYVpdHMQvH4C298Sh8DusZAuASM8nh9WMsams2
-         eMnTMs7ucwwflnTjudo480U8mzFIw4xWixAFYBTuGIqiEX2IPd3q6RkuabKc54Ylfuy/
-         jBVg==
-X-Gm-Message-State: AAQBX9exx44Xz0+15eXbkk67dntFtGqOksGjsIX31h9KqD6gM2vEZp8J
-        gs+ayijLo0lO2QcOMbWCzMHl8za4ufmCEA/AgkKkaQ==
-X-Google-Smtp-Source: AKy350Y5TFzrIJsXARd1vQbyj0sEWRDRlKxH3oCr7ze3JctueqdMfYeUkP6IeAd3Df0QKFBZ10sfWV0EEU6xl+gW+I4=
-X-Received: by 2002:a2e:6a17:0:b0:298:b375:ace9 with SMTP id
- f23-20020a2e6a17000000b00298b375ace9mr5186560ljc.9.1680044079673; Tue, 28 Mar
- 2023 15:54:39 -0700 (PDT)
+        Tue, 28 Mar 2023 18:55:23 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1452100;
+        Tue, 28 Mar 2023 15:55:22 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SMf6hZ028467;
+        Tue, 28 Mar 2023 22:55:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=zD6tIgThhRSFsnYd5P+4y30mqU1VvCsggBrYEeNNsMQ=;
+ b=MSmpX/FmMcqVVOcOIfZm2dQ5LX42PM8NAAG8Vyad1NXrKFvANiEaKplJ2jJShi93e0BA
+ GAHr8QFeQo35zsUyTdHpr6AyecChFaG8LlKtnH0U5odfBS4jzG1iI0bh7d5ZDZpMOOa8
+ hChUMXGlFq+Zpk5V+4E2AJfE4zMrsGyXdkqC+nHyD+jZzvG+k8hCoeOzgoLGsvfkAKF/
+ AHszaIR2qMURp/15f9PvTaJWsWGh5bJB+GMtVFl2biSz7Z12ia/IlzNmCrJMF1pMs2kA
+ jFvvAW8kBb/tqQj18TU56rN87yvycPLyGHYQFm866mpAL0sFedtY0I9R1phL0CeepPpY wQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pkbmyvg5f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 22:55:19 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32SMtIkF020043
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 22:55:18 GMT
+Received: from [192.168.142.6] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Mar
+ 2023 15:55:18 -0700
+Subject: Re: [PATCH 1/2] rpmsg: glink: Propagate TX failures in intentless
+ mode as well
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230327144153.3133425-1-quic_bjorande@quicinc.com>
+ <20230327144153.3133425-2-quic_bjorande@quicinc.com>
+From:   Chris Lew <quic_clew@quicinc.com>
+Message-ID: <026912e3-4479-415e-96db-abbb2f533599@quicinc.com>
+Date:   Tue, 28 Mar 2023 15:55:17 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20230327163203.2918455-1-evan@rivosinc.com> <d47020f9-e5a8-4ef3-94bc-6aa6f6b2465c@spud>
-In-Reply-To: <d47020f9-e5a8-4ef3-94bc-6aa6f6b2465c@spud>
-From:   Evan Green <evan@rivosinc.com>
-Date:   Tue, 28 Mar 2023 15:54:03 -0700
-Message-ID: <CALs-HsvvKSCKzPZ8e9xst=vKOZHuByDHm5WHaE8mz66_WFMKkQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/6] RISC-V Hardware Probing User Interface
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>, slewis@rivosinc.com,
-        vineetg@rivosinc.com, heiko@sntech.de,
-        Conor Dooley <conor@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Atish Patra <atishp@rivosinc.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Dao Lu <daolu@rivosinc.com>, Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Jann Horn <jannh@google.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Xu <peterx@redhat.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230327144153.3133425-2-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: l6vWVoHXxDvFoxA5DIhySnmzoKxsZ2QQ
+X-Proofpoint-GUID: l6vWVoHXxDvFoxA5DIhySnmzoKxsZ2QQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-28_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 impostorscore=0 spamscore=0 adultscore=0 bulkscore=0
+ mlxlogscore=999 mlxscore=0 suspectscore=0 phishscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303280178
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 11:34=E2=80=AFPM Conor Dooley
-<conor.dooley@microchip.com> wrote:
->
-> On Mon, Mar 27, 2023 at 09:31:57AM -0700, Evan Green wrote:
->
-> Hey Evan,
->
-> Patchwork has a rake of complaints about the series unfortunately:
-> https://patchwork.kernel.org/project/linux-riscv/list/?series=3D734234
->
-> Some of the checkpatch whinging may be spurious, but there's some
-> definitely valid stuff in there!
->
-> > Evan Green (6):
-> >   RISC-V: Move struct riscv_cpuinfo to new header
-> >   RISC-V: Add a syscall for HW probing
-> >   RISC-V: hwprobe: Add support for RISCV_HWPROBE_BASE_BEHAVIOR_IMA
-> >   RISC-V: hwprobe: Support probing of misaligned access performance
-> >   selftests: Test the new RISC-V hwprobe interface
->
-> >   RISC-V: Add hwprobe vDSO function and data
->
-> And this one breaks the build for !MMU kernels unfortunately.
 
-Drat! Ok, thanks for the heads up. I'll go track these down.
--Evan
+
+On 3/27/2023 7:41 AM, Bjorn Andersson wrote:
+> As support for splitting transmision over several messages using
+> TX_DATA_CONT was introduced it does not immediately return the return
+> value of qcom_glink_tx().
+> 
+> The result is that in the intentless case (i.e. intent == NULL), the
+> code will continue to send all additional chunks. This is wasteful, and
+> it's possible that the send operation could incorrectly indicate
+> success, if the last chunk fits in the TX fifo.
+> 
+> Fix the condition.
+> 
+> Fixes: 8956927faed3 ("rpmsg: glink: Add TX_DATA_CONT command while sending")
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+
+s/transmision/transmission
+
+Reviewed-by: Chris Lew <quic_clew@quicinc.com>
+
+>   drivers/rpmsg/qcom_glink_native.c | 10 ++++++----
+>   1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+> index 01d2805fe30f..62634d020d13 100644
+> --- a/drivers/rpmsg/qcom_glink_native.c
+> +++ b/drivers/rpmsg/qcom_glink_native.c
+> @@ -1356,8 +1356,9 @@ static int __qcom_glink_send(struct glink_channel *channel,
+>   	ret = qcom_glink_tx(glink, &req, sizeof(req), data, chunk_size, wait);
+>   
+>   	/* Mark intent available if we failed */
+> -	if (ret && intent) {
+> -		intent->in_use = false;
+> +	if (ret) {
+> +		if (intent)
+> +			intent->in_use = false;
+>   		return ret;
+>   	}
+>   
+> @@ -1378,8 +1379,9 @@ static int __qcom_glink_send(struct glink_channel *channel,
+>   				    chunk_size, wait);
+>   
+>   		/* Mark intent available if we failed */
+> -		if (ret && intent) {
+> -			intent->in_use = false;
+> +		if (ret) {
+> +			if (intent)
+> +				intent->in_use = false;
+>   			break;
+>   		}
+>   	}
+> 
