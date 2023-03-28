@@ -2,69 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3096CCB8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 22:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D93D6CCB87
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 22:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjC1Uf6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Mar 2023 16:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
+        id S229634AbjC1Uf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 16:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjC1Uf5 (ORCPT
+        with ESMTP id S229485AbjC1Uf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 16:35:57 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF961985;
-        Tue, 28 Mar 2023 13:35:54 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1phG1v-0007Q3-E5; Tue, 28 Mar 2023 22:34:55 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Evan Green <evan@rivosinc.com>
-Cc:     slewis@rivosinc.com, vineetg@rivosinc.com,
-        Conor Dooley <conor@kernel.org>,
-        Evan Green <evan@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Atish Patra <atishp@rivosinc.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Dao Lu <daolu@rivosinc.com>, Guo Ren <guoren@kernel.org>,
-        Jann Horn <jannh@google.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Xu <peterx@redhat.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 0/6] RISC-V Hardware Probing User Interface
-Date:   Tue, 28 Mar 2023 22:34:53 +0200
-Message-ID: <8238271.NyiUUSuA9g@diego>
-In-Reply-To: <20230327163203.2918455-1-evan@rivosinc.com>
-References: <20230327163203.2918455-1-evan@rivosinc.com>
+        Tue, 28 Mar 2023 16:35:26 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8F81985;
+        Tue, 28 Mar 2023 13:35:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680035725; x=1711571725;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=JwzUa3WrFrFqZeBAjs/FmiYkt2mKxkOcX0p1HF8/DO4=;
+  b=AuaUrF5S77u3JuY012QLh0b7uQ/KvGj3GGpPYTQyx8qDduseTdg6SV47
+   rtJs+q+zuNLZXJONNRBJNwARjYXPrNlAk5AYmFgiTzo7NbB+5y9YCzXC0
+   tU+54/ENYtSf7ArbxJ7E8DbjYczGyBT4QUijpRKHIEgknLxwsACahbF/T
+   LNfCfbe688sBrkB2YkPYoIMmzTNIatQEM4wspgC7Nt60GoDTOhN5Gazzg
+   h26QCTsS7RdExwtmgMtRogT8hqRUnMPamXi8l0aP0Jkqn/rdIwztt8UB2
+   qOEtCz3KuZPSKcuKqv3QHbr485T2OA3bvWOwgTH0ZwIG0kyRvpLQ2B6mV
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="340706733"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="340706733"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 13:35:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="794953437"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="794953437"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 13:35:24 -0700
+Date:   Tue, 28 Mar 2023 13:39:26 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "David Woodhouse" <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v2 5/8] iommu/vt-d: Make device pasid attachment
+ explicit
+Message-ID: <20230328133926.6f6c2ed2@jacob-builder>
+In-Reply-To: <BN9PR11MB5276BCF726D0B813046479A18C889@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230327232138.1490712-1-jacob.jun.pan@linux.intel.com>
+        <20230327232138.1490712-6-jacob.jun.pan@linux.intel.com>
+        <71b60cc2-4ab0-3777-6bc9-3a6a4174f743@linux.intel.com>
+        <BN9PR11MB5276BCF726D0B813046479A18C889@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,65 +81,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 27. März 2023, 18:31:57 CEST schrieb Evan Green:
-> 
-> There's been a bunch of off-list discussions about this, including at
-> Plumbers.  The original plan was to do something involving providing an
-> ISA string to userspace, but ISA strings just aren't sufficient for a
-> stable ABI any more: in order to parse an ISA string users need the
-> version of the specifications that the string is written to, the version
-> of each extension (sometimes at a finer granularity than the RISC-V
-> releases/versions encode), and the expected use case for the ISA string
-> (ie, is it a U-mode or M-mode string).  That's a lot of complexity to
-> try and keep ABI compatible and it's probably going to continue to grow,
-> as even if there's no more complexity in the specifications we'll have
-> to deal with the various ISA string parsing oddities that end up all
-> over userspace.
-> 
-> Instead this patch set takes a very different approach and provides a set
-> of key/value pairs that encode various bits about the system.  The big
-> advantage here is that we can clearly define what these mean so we can
-> ensure ABI stability, but it also allows us to encode information that's
-> unlikely to ever appear in an ISA string (see the misaligned access
-> performance, for example).  The resulting interface looks a lot like
-> what arm64 and x86 do, and will hopefully fit well into something like
-> ACPI in the future.
-> 
-> The actual user interface is a syscall, with a vDSO function in front of
-> it. The vDSO function can answer some queries without a syscall at all,
-> and falls back to the syscall for cases it doesn't have answers to.
-> Currently we prepopulate it with an array of answers for all keys and
-> a CPU set of "all CPUs". This can be adjusted as necessary to provide
-> fast answers to the most common queries.
-> 
-> An example series in glibc exposing this syscall and using it in an
-> ifunc selector for memcpy can be found at [1]. I'm about to send a v2
-> of that series out that incorporates the vDSO function.
-> 
-> I was asked about the performance delta between this and something like
-> sysfs. I created a small test program [2] and ran it on a Nezha D1
-> Allwinner board. Doing each operation 100000 times and dividing, these
-> operations take the following amount of time:
->  - open()+read()+close() of /sys/kernel/cpu_byteorder: 3.8us
->  - access("/sys/kernel/cpu_byteorder", R_OK): 1.3us
->  - riscv_hwprobe() vDSO and syscall: .0094us
->  - riscv_hwprobe() vDSO with no syscall: 0.0091us
+Hi Kevin,
 
-Looks like this series spawned a thread on one of the riscv-lists [0].
+On Tue, 28 Mar 2023 07:44:52 +0000, "Tian, Kevin" <kevin.tian@intel.com>
+wrote:
 
-As auxvals were mentioned in that thread, I was wondering what's the
-difference between doing a new syscall vs. putting the keys + values as
-architecture auxvec elements [1] ?
+> > From: Baolu Lu <baolu.lu@linux.intel.com>
+> > Sent: Tuesday, March 28, 2023 1:49 PM
+> >=20
+> > On 3/28/23 7:21 AM, Jacob Pan wrote: =20
+> > > diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+> > > index 65b15be72878..b6c26f25d1ba 100644
+> > > --- a/drivers/iommu/intel/iommu.h
+> > > +++ b/drivers/iommu/intel/iommu.h
+> > > @@ -595,6 +595,7 @@ struct dmar_domain {
+> > >
+> > >   	spinlock_t lock;		/* Protect device tracking
+> > > lists */ struct list_head devices;	/* all devices' list */
+> > > +	struct list_head dev_pasids;	/* all attached pasids */
+> > >
+> > >   	struct dma_pte	*pgd;		/* virtual
+> > > address */ int		gaw;		/* max guest
+> > > address width */ @@ -708,6 +709,7 @@ struct device_domain_info {
+> > >   	u8 ats_supported:1;
+> > >   	u8 ats_enabled:1;
+> > >   	u8 dtlb_extra_inval:1;	/* Quirk for devices need
+> > > extra flush */
+> > > +	u8 dev_attached:1;	/* Device context activated */
+> > >   	u8 ats_qdep;
+> > >   	struct device *dev; /* it's NULL for PCIe-to-PCI bridge */
+> > >   	struct intel_iommu *iommu; /* IOMMU used by this device */
+> > > @@ -715,6 +717,12 @@ struct device_domain_info {
+> > >   	struct pasid_table *pasid_table; /* pasid table */
+> > >   };
+> > >
+> > > +struct device_pasid_info {
+> > > +	struct list_head link_domain;	/* link to domain
+> > > siblings */
+> > > +	struct device *dev;		/* physical device
+> > > derived from */
+> > > +	ioasid_t pasid;			/* PASID on physical
+> > > device */ +}; =20
+> >=20
+> > The dev_pasids list seems to be duplicate with iommu_group::pasid_array.
+> >=20
+> > The pasid_array is de facto per-device as the PCI subsystem requires ACS
+> > to be enabled on the upstream path to the root port.
+> >=20
+> > pci_enable_pasid():
+> > 385         if (!pci_acs_path_enabled(pdev, NULL, PCI_ACS_RR |
+> > PCI_ACS_UF)) 386                 return -EINVAL;
+> >=20
+> > For such PCI topology, pci_device_group() always assigns an exclusive
+> > iommu group (a.k.a. singleton group).
+> >=20
+> > So, how about moving the pasid_array from struct iommu_group to struct
+> > dev_iommu? With this refactoring, the individual iommu driver has no
+> > need to create their own pasid array or list.
+> >=20
+> > Instead of using iommu_group::mutex, perhaps the pasid_array needs its
+> > own lock in struct dev_iommu after moving.
+> >  =20
+>=20
+> What you suggested is a right thing and more friendly to pasid attach
+> in iommufd [1].
+>=20
+> but dev_pasids list here is a different thing. It tracks which [device,
+> pasid] is attached to the domain. w/o this information you'll have to
+> walk the pasid_array of every attached device under the domain and search
+> for every pasid entry pointing to the said domain. It's very inefficient.=
+=20
+>=20
+> of course if this can be done more generally it'd be nice.=F0=9F=98=8A
+>=20
+> [1] https://lore.kernel.org/linux-iommu/ZAjbDxSzxYPqSCjo@nvidia.com/
+Yes, it would be nice as the next step. But so far only ENQCMDS usages may
+not justify.
 
-I'm probably missing some simple issue but from looking at that stuff
-I fathom RISCV_HWPROBE_KEY_BASE_BEHAVIOR could also just be
-AT_RISCV_BASE_BEHAVIOR ?
+Thanks,
 
-
-Heiko
-
-
-[0] https://lists.riscv.org/g/sig-toolchains/topic/97886491
-[1] https://elixir.bootlin.com/linux/latest/source/arch/riscv/include/uapi/asm/auxvec.h
-
-
+Jacob
