@@ -2,57 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA9A6CC67C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BFB06CC682
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbjC1Pfh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Mar 2023 11:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S233322AbjC1Pfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232991AbjC1Pff (ORCPT
+        with ESMTP id S233160AbjC1Pfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:35:35 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7259C;
-        Tue, 28 Mar 2023 08:35:34 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id h8so51410578ede.8;
-        Tue, 28 Mar 2023 08:35:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680017732;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S03XGyw3tSneSt4wS8/md52lGSHJdyFmoRVLM1Uorzo=;
-        b=FFl1hCrR4IPqPxcyFVUrUn9Z4V8OLPVrwxglKQ0DA05itj1q/87Um9Z5MdQTztp1OG
-         FxYa2zM85Lm1eWlaKqF1TrKqMnJWuu2XlTOjI1zHlwhEjxaqqcjEW8QiS31vSVydfJi6
-         EQ/G9sOtTTXrlIU/gcc8aZBp5nP+ZR6IcYaIV2ovcCUtV6b5egaoVcDI0q5wTxv/4bfk
-         KU3HT/6K0GdbLYIKV1+g0yvG98KyPoAc75v1F+3VaRcNvlk1RPi1qqVUWOlDrEXlOaRC
-         Z6y9ySuZ1hcY0WTMG9g1MkoR5nVdrpKGhPajgdMJVe/Nd+nD9HWyC4ik+6DnjLNYahw+
-         QBrQ==
-X-Gm-Message-State: AAQBX9clY0Yaai1I/rQpaaFBJUnshlZmsJaWomELpAHzNsMqtxRYXxXF
-        NgprDp9GSkaNN4A41Fd9y81Ib49E3Pii+IvHPp90Ckcm8jA=
-X-Google-Smtp-Source: AKy350Ycdnkt0zM+ZjM612jMXQa+FSmfgRrY8JDpwsCJ5kSu/cdrdhPLqh+KB3+ZxDLWkKd3fcN6PsiIUXpbjFVzapI=
-X-Received: by 2002:a17:906:fe49:b0:8b1:3298:c587 with SMTP id
- wz9-20020a170906fe4900b008b13298c587mr8617564ejb.2.1680017732662; Tue, 28 Mar
- 2023 08:35:32 -0700 (PDT)
+        Tue, 28 Mar 2023 11:35:45 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2A49759;
+        Tue, 28 Mar 2023 08:35:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680017744; x=1711553744;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OLK2cOOoVP2O7K/vaQTdeAk4sbT8ZRqjuM/tnMqTBqs=;
+  b=n57wyRQpl4IGJM1GuygFon5itwK9AIsE7g+K5yG/LThdQ8iWBV3uJIpP
+   8hn7gisMdt7/GVFZPYKu00OKBo8p4Lq1jAN5CMjGkubBqQXGDZ4s+6N+e
+   SHlbortR++pBrASEoseXlQMYAi2EyHNPdmB70qX9HdCglUMKfyOLQLhl3
+   IqQ4jj235ZQ4W0BnV+w7osEk+nxqVdMr3NDUgXsa9gF5LecnqNiV1sQju
+   0KPJkuuSHekqRdBY/EADZn6rDg2VRgkT8rDNtlUKTAImUhVjsvn/IH06z
+   P81oi4fk9nTuzphtH8SDbqoLV9p4EHhAYUITa52w2nkzHuZrORQmYvggw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="342192013"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="342192013"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 08:35:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="683948264"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="683948264"
+Received: from sdwarak1-mobl.amr.corp.intel.com (HELO tzanussi-mobl1.intel.com) ([10.212.127.200])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 08:35:41 -0700
+From:   Tom Zanussi <tom.zanussi@linux.intel.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        fenghua.yu@intel.com, vkoul@kernel.org
+Cc:     dave.jiang@intel.com, tony.luck@intel.com,
+        wajdi.k.feghali@intel.com, james.guilford@intel.com,
+        kanchana.p.sridhar@intel.com, giovanni.cabiddu@intel.com,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Subject: [PATCH v2 01/15] dmaengine: idxd: add wq driver name support for accel-config user tool
+Date:   Tue, 28 Mar 2023 10:35:21 -0500
+Message-Id: <20230328153535.126223-2-tom.zanussi@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230328153535.126223-1-tom.zanussi@linux.intel.com>
+References: <20230328153535.126223-1-tom.zanussi@linux.intel.com>
 MIME-Version: 1.0
-References: <10247847.nUPlyArG6x@kreacher> <ZCIDTLFt27Ei7+V6@ideak-desk.fi.intel.com>
-In-Reply-To: <ZCIDTLFt27Ei7+V6@ideak-desk.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 28 Mar 2023 17:35:21 +0200
-Message-ID: <CAJZ5v0iguCBqJCkMTMWzkfak5cBryvuA0+9QyurO308n0pJA6g@mail.gmail.com>
-Subject: Re: [PATCH v1 3/4] thermal: core: Introduce thermal_cooling_device_update()
-To:     imre.deak@intel.com
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,90 +65,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 10:58 PM Imre Deak <imre.deak@intel.com> wrote:
->
-> Hi,
->
-> this leads to the stacktrace below triggered by
-> lockdep_assert_held(&cdev->lock) in cooling_device_stats_setup(),
+From: Dave Jiang <dave.jiang@intel.com>
 
-Thanks for the report!
+With the possibility of multiple wq drivers that can be bound to the wq,
+the user config tool accel-config needs a way to know which wq driver to
+bind to the wq. Introduce per wq driver_name sysfs attribute where the user
+can indicate the driver to be bound to the wq. This allows accel-config to
+just bind to the driver using wq->driver_name.
 
-> and
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 566df4522b885..132175b14814f 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -918,7 +918,9 @@ __thermal_cooling_device_register(struct device_node *np,
->         if (ret)
->                 goto out_cdev_type;
->
-> +       mutex_lock(&cdev->lock);
->         thermal_cooling_device_setup_sysfs(cdev);
-> +       mutex_unlock(&cdev->lock);
->
->         ret = dev_set_name(&cdev->device, "cooling_device%d", cdev->id);
->         if (ret)
->
-> fixed it up for me, but not sure if it's the correct fix.
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+Signed-off-by: Tom Zanussi <tom.zanussi@linux.intel.com>
+---
+ .../ABI/stable/sysfs-driver-dma-idxd          |  6 ++++
+ drivers/dma/idxd/cdev.c                       |  8 ++++++
+ drivers/dma/idxd/dma.c                        |  6 ++++
+ drivers/dma/idxd/idxd.h                       |  7 +++++
+ drivers/dma/idxd/sysfs.c                      | 28 +++++++++++++++++++
+ include/uapi/linux/idxd.h                     |  1 +
+ 6 files changed, 56 insertions(+)
 
-There are other cases when the lockdep_assert_held() annotations may
-trigger, so it is better to remove them from
-cooling_device_stats_setup() and cooling_device_stats_destroy() and to
-put one into thermal_cooling_device_stats_reinit().
+diff --git a/Documentation/ABI/stable/sysfs-driver-dma-idxd b/Documentation/ABI/stable/sysfs-driver-dma-idxd
+index 3becc9a82bdf..d5daae442fe7 100644
+--- a/Documentation/ABI/stable/sysfs-driver-dma-idxd
++++ b/Documentation/ABI/stable/sysfs-driver-dma-idxd
+@@ -244,6 +244,12 @@ Description:	Shows the operation capability bits displayed in bitmap format
+ 		correlates to the operations allowed. It's visible only
+ 		on platforms that support the capability.
+ 
++What:		/sys/bus/dsa/devices/wq<m>.<n>/driver_name
++Date:		Mar 27, 2023
++KernelVersion:	6.4.0
++Contact:	dmaengine@vger.kernel.org
++Description:	Name of driver to be bounded to the wq.
++
+ What:           /sys/bus/dsa/devices/engine<m>.<n>/group_id
+ Date:           Oct 25, 2019
+ KernelVersion:  5.6.0
+diff --git a/drivers/dma/idxd/cdev.c b/drivers/dma/idxd/cdev.c
+index 674bfefca088..f3d1604e753d 100644
+--- a/drivers/dma/idxd/cdev.c
++++ b/drivers/dma/idxd/cdev.c
+@@ -304,6 +304,7 @@ void idxd_wq_del_cdev(struct idxd_wq *wq)
+ 
+ static int idxd_user_drv_probe(struct idxd_dev *idxd_dev)
+ {
++	struct device *dev = &idxd_dev->conf_dev;
+ 	struct idxd_wq *wq = idxd_dev_to_wq(idxd_dev);
+ 	struct idxd_device *idxd = wq->idxd;
+ 	int rc;
+@@ -330,6 +331,13 @@ static int idxd_user_drv_probe(struct idxd_dev *idxd_dev)
+ 	}
+ 
+ 	mutex_lock(&wq->wq_lock);
++
++	if (!idxd_wq_driver_name_match(wq, dev)) {
++		idxd->cmd_status = IDXD_SCMD_WQ_NO_DRV_NAME;
++		rc = -ENODEV;
++		goto err;
++	}
++
+ 	wq->type = IDXD_WQT_USER;
+ 	rc = drv_enable_wq(wq);
+ 	if (rc < 0)
+diff --git a/drivers/dma/idxd/dma.c b/drivers/dma/idxd/dma.c
+index eb35ca313684..8bb7e7ff8d6a 100644
+--- a/drivers/dma/idxd/dma.c
++++ b/drivers/dma/idxd/dma.c
+@@ -305,6 +305,12 @@ static int idxd_dmaengine_drv_probe(struct idxd_dev *idxd_dev)
+ 		return -ENXIO;
+ 
+ 	mutex_lock(&wq->wq_lock);
++	if (!idxd_wq_driver_name_match(wq, dev)) {
++		idxd->cmd_status = IDXD_SCMD_WQ_NO_DRV_NAME;
++		rc = -ENODEV;
++		goto err;
++	}
++
+ 	wq->type = IDXD_WQT_KERNEL;
+ 
+ 	rc = drv_enable_wq(wq);
+diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
+index 7ced8d283d98..505118fc19de 100644
+--- a/drivers/dma/idxd/idxd.h
++++ b/drivers/dma/idxd/idxd.h
+@@ -214,6 +214,8 @@ struct idxd_wq {
+ 	char name[WQ_NAME_SIZE + 1];
+ 	u64 max_xfer_bytes;
+ 	u32 max_batch_size;
++
++	char driver_name[WQ_NAME_SIZE + 1];
+ };
+ 
+ struct idxd_engine {
+@@ -580,6 +582,11 @@ static inline void idxd_wqcfg_set_max_batch_shift(int idxd_type, union wqcfg *wq
+ 		wqcfg->max_batch_shift = max_batch_shift;
+ }
+ 
++static inline int idxd_wq_driver_name_match(struct idxd_wq *wq, struct device *dev)
++{
++	return (strncmp(wq->driver_name, dev->driver->name, strlen(dev->driver->name)) == 0);
++}
++
+ int __must_check __idxd_driver_register(struct idxd_device_driver *idxd_drv,
+ 					struct module *module, const char *mod_name);
+ #define idxd_driver_register(driver) \
+diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
+index 18cd8151dee0..cb5864c98d5a 100644
+--- a/drivers/dma/idxd/sysfs.c
++++ b/drivers/dma/idxd/sysfs.c
+@@ -1224,6 +1224,33 @@ static ssize_t wq_op_config_store(struct device *dev, struct device_attribute *a
+ static struct device_attribute dev_attr_wq_op_config =
+ 		__ATTR(op_config, 0644, wq_op_config_show, wq_op_config_store);
+ 
++static ssize_t wq_driver_name_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct idxd_wq *wq = confdev_to_wq(dev);
++
++	return sysfs_emit(buf, "%s\n", wq->driver_name);
++}
++
++static ssize_t wq_driver_name_store(struct device *dev, struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	struct idxd_wq *wq = confdev_to_wq(dev);
++
++	if (wq->state != IDXD_WQ_DISABLED)
++		return -EPERM;
++
++	if (strlen(buf) > WQ_NAME_SIZE || strlen(buf) == 0)
++		return -EINVAL;
++
++	memset(wq->driver_name, 0, WQ_NAME_SIZE + 1);
++	strncpy(wq->driver_name, buf, WQ_NAME_SIZE);
++	strreplace(wq->name, '\n', '\0');
++	return count;
++}
++
++static struct device_attribute dev_attr_wq_driver_name =
++		__ATTR(driver_name, 0644, wq_driver_name_show, wq_driver_name_store);
++
+ static struct attribute *idxd_wq_attributes[] = {
+ 	&dev_attr_wq_clients.attr,
+ 	&dev_attr_wq_state.attr,
+@@ -1242,6 +1269,7 @@ static struct attribute *idxd_wq_attributes[] = {
+ 	&dev_attr_wq_occupancy.attr,
+ 	&dev_attr_wq_enqcmds_retries.attr,
+ 	&dev_attr_wq_op_config.attr,
++	&dev_attr_wq_driver_name.attr,
+ 	NULL,
+ };
+ 
+diff --git a/include/uapi/linux/idxd.h b/include/uapi/linux/idxd.h
+index 1d553bedbdb5..2f85c8f59eb5 100644
+--- a/include/uapi/linux/idxd.h
++++ b/include/uapi/linux/idxd.h
+@@ -30,6 +30,7 @@ enum idxd_scmd_stat {
+ 	IDXD_SCMD_WQ_NO_PRIV = 0x800f0000,
+ 	IDXD_SCMD_WQ_IRQ_ERR = 0x80100000,
+ 	IDXD_SCMD_WQ_USER_NO_IOMMU = 0x80110000,
++	IDXD_SCMD_WQ_NO_DRV_NAME = 0x80200000,
+ };
+ 
+ #define IDXD_SCMD_SOFTERR_MASK	0x80000000
+-- 
+2.34.1
 
-I'll send a patch to do that later today.
-
-> [    4.662358] ------------[ cut here ]------------
-> [    4.662361] WARNING: CPU: 3 PID: 1 at drivers/thermal/thermal_sysfs.c:879 cooling_device_stats_setup+0xb4/0xc0
-> [    4.662370] Modules linked in:
-> [    4.662375] CPU: 3 PID: 1 Comm: swapper/0 Tainted: G          I        6.3.0-rc4-imre+ #771
-> [    4.662379] Hardware name: Intel Corporation Shark Bay Client platform/Flathead Creek Crb, BIOS HSWLPTU1.86C.0109.R03.1301282055 01/28/2013
-> [    4.662382] RIP: 0010:cooling_device_stats_setup+0xb4/0xc0
-> [    4.662387] Code: 89 1d 58 52 36 01 5b 41 5c 41 5d 5d c3 cc cc cc cc 48 8d bf 18 05 00 00 be ff ff ff ff e8 f4 d2 3e 00 85 c0 0f 85 6f ff ff ff <0f> 0b e9 68 ff ff ff 0f 1f 44 00 00 90 90 90 90 90 90 90 90 90 90
-> [    4.662390] RSP: 0000:ffff9f48c0057b30 EFLAGS: 00010246
-> [    4.662395] RAX: 0000000000000000 RBX: ffff8fc381ca9800 RCX: 0000000000000000
-> [    4.662398] RDX: 0000000000000000 RSI: ffffffff94ad1d28 RDI: ffffffff94b58cc6
-> [    4.662401] RBP: ffff9f48c0057b48 R08: 0000000000000004 R09: 0000000000000000
-> [    4.662404] R10: ffff8fc381c77cd0 R11: 0000000000000000 R12: 0000000000000002
-> [    4.662406] R13: ffff8fc381ca9800 R14: ffff8fc381b0a000 R15: 0000000000000000
-> [    4.662409] FS:  0000000000000000(0000) GS:ffff8fc6b5580000(0000) knlGS:0000000000000000
-> [    4.662412] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    4.662415] CR2: 0000000000000000 CR3: 0000000283856001 CR4: 00000000001706e0
-> [    4.662418] Call Trace:
-> [    4.662421]  <TASK>
-> [    4.662427]  thermal_cooling_device_setup_sysfs+0x12/0x30
-> [    4.662433]  __thermal_cooling_device_register+0x195/0x410
-> [    4.662442]  thermal_cooling_device_register+0x19/0x20
-> [    4.662446]  acpi_fan_probe+0xd7/0x5a0
-> [    4.662458]  ? acpi_match_device_ids+0x12/0x20
-> [    4.662464]  ? acpi_dev_pm_attach+0x41/0x110
-> [    4.662473]  platform_probe+0x48/0xc0
-> [    4.662481]  really_probe+0x1be/0x420
-> [    4.662487]  __driver_probe_device+0x8c/0x190
-> [    4.662493]  driver_probe_device+0x24/0x90
-> [    4.662498]  __driver_attach+0xf7/0x200
-> [    4.662503]  ? __pfx___driver_attach+0x10/0x10
-> [    4.662507]  bus_for_each_dev+0x80/0xd0
-> [    4.662516]  driver_attach+0x1e/0x30
-> [    4.662522]  bus_add_driver+0x11f/0x230
-> [    4.662530]  driver_register+0x5e/0x120
-> [    4.662534]  ? __pfx_acpi_fan_driver_init+0x10/0x10
-> [    4.662540]  __platform_driver_register+0x1e/0x30
-> [    4.662545]  acpi_fan_driver_init+0x17/0x20
-> [    4.662549]  do_one_initcall+0x61/0x280
-> [    4.662559]  ? debug_smp_processor_id+0x17/0x20
-> [    4.662568]  kernel_init_freeable+0x411/0x640
-> [    4.662582]  ? __pfx_kernel_init+0x10/0x10
-> [    4.662589]  kernel_init+0x1b/0x1f0
-> [    4.662594]  ? __pfx_kernel_init+0x10/0x10
-> [    4.662599]  ret_from_fork+0x2c/0x50
-> [    4.662615]  </TASK>
-> [    4.662618] irq event stamp: 506869
-> [    4.662620] hardirqs last  enabled at (506875): [<ffffffff9338e2d8>] __up_console_sem+0x68/0x80
-> [    4.662625] hardirqs last disabled at (506880): [<ffffffff9338e2bd>] __up_console_sem+0x4d/0x80
-> [    4.662628] softirqs last  enabled at (504698): [<ffffffff932de49f>] __irq_exit_rcu+0xbf/0x140
-> [    4.662633] softirqs last disabled at (504689): [<ffffffff932de49f>] __irq_exit_rcu+0xbf/0x140
-> [    4.662636] ---[ end trace 0000000000000000 ]---
-> [    4.662779] ------------[ cut here ]------------
