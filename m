@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B6D6CB948
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04B76CB94B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbjC1IXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
+        id S230526AbjC1IYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjC1IXg (ORCPT
+        with ESMTP id S229459AbjC1IYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:23:36 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E858B1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:23:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VesLht8_1679991810;
-Received: from 30.221.134.40(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VesLht8_1679991810)
+        Tue, 28 Mar 2023 04:24:10 -0400
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB0E4EC1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:24:02 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VesNAiw_1679991838;
+Received: from 30.221.134.40(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VesNAiw_1679991838)
           by smtp.aliyun-inc.com;
-          Tue, 28 Mar 2023 16:23:31 +0800
-Message-ID: <75330f12-1652-a4b2-8c15-c059f73fd669@linux.alibaba.com>
-Date:   Tue, 28 Mar 2023 16:23:29 +0800
+          Tue, 28 Mar 2023 16:23:59 +0800
+Message-ID: <ae65829a-b2a6-281d-8d46-2c93d32f506a@linux.alibaba.com>
+Date:   Tue, 28 Mar 2023 16:23:58 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH 1/8] erofs: move several xattr helpers into xattr.c
+Subject: Re: [PATCH 2/8] erofs: rename init_inode_xattrs with erofs_ prefix
 To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
         chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
 Cc:     linux-kernel@vger.kernel.org
 References: <20230323000949.57608-1-jefflexu@linux.alibaba.com>
- <20230323000949.57608-2-jefflexu@linux.alibaba.com>
+ <20230323000949.57608-3-jefflexu@linux.alibaba.com>
 From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230323000949.57608-2-jefflexu@linux.alibaba.com>
+In-Reply-To: <20230323000949.57608-3-jefflexu@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,232 +47,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 2023/3/23 08:09, Jingbo Xu wrote:
-> There are several xattr helpers not used outside xattr.c, thus move them
-> into xattr.c as a cleanup.
-> 
-> inlinexattr_header_size() has only one caller, and thus make it inlined
-> into the caller directly.
+> Rename init_inode_xattrs() to erofs_init_inode_xattrs() without logic
+> change.
 > 
 > Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
-> ---
->   fs/erofs/xattr.c | 73 +++++++++++++++++++++++++++++++++---------------
->   fs/erofs/xattr.h | 56 -------------------------------------
->   2 files changed, 51 insertions(+), 78 deletions(-)
-> 
-> diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
-> index 459caa3cd65d..760ec864a39c 100644
-> --- a/fs/erofs/xattr.c
-> +++ b/fs/erofs/xattr.c
-> @@ -7,6 +7,19 @@
->   #include <linux/security.h>
->   #include "xattr.h"
->   
-> +static inline erofs_blk_t erofs_xattr_blkaddr(struct super_block *sb,
-> +					      unsigned int xattr_id)
-> +{
-> +	return EROFS_SB(sb)->xattr_blkaddr +
-> +	       erofs_blknr(sb, xattr_id * sizeof(__u32));
-> +}
-> +
-> +static inline unsigned int erofs_xattr_blkoff(struct super_block *sb,
-> +					      unsigned int xattr_id)
-> +{
-> +	return erofs_blkoff(sb, xattr_id * sizeof(__u32));
-> +}
-> +
->   struct xattr_iter {
->   	struct super_block *sb;
->   	struct erofs_buf buf;
-> @@ -157,7 +170,8 @@ static int inline_xattr_iter_begin(struct xattr_iter *it,
->   	struct erofs_inode *const vi = EROFS_I(inode);
->   	unsigned int xattr_header_sz, inline_xattr_ofs;
->   
-> -	xattr_header_sz = inlinexattr_header_size(inode);
-> +	xattr_header_sz = sizeof(struct erofs_xattr_ibody_header) +
-> +			  sizeof(u32) * vi->xattr_shared_count;
->   	if (xattr_header_sz >= vi->xattr_isize) {
->   		DBG_BUGON(xattr_header_sz > vi->xattr_isize);
->   		return -ENOATTR;
-> @@ -351,20 +365,18 @@ static int inline_getxattr(struct inode *inode, struct getxattr_iter *it)
->   static int shared_getxattr(struct inode *inode, struct getxattr_iter *it)
->   {
->   	struct erofs_inode *const vi = EROFS_I(inode);
-> -	struct super_block *const sb = inode->i_sb;
-> -	unsigned int i;
-> +	struct super_block *const sb = it->it.sb;
-> +	unsigned int i, xsid;
->   	int ret = -ENOATTR;
->   
->   	for (i = 0; i < vi->xattr_shared_count; ++i) {
-> -		erofs_blk_t blkaddr =
-> -			xattrblock_addr(sb, vi->xattr_shared_xattrs[i]);
-> -
-> -		it->it.ofs = xattrblock_offset(sb, vi->xattr_shared_xattrs[i]);
-> -		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
-> -						  EROFS_KMAP);
-> +		xsid = vi->xattr_shared_xattrs[i];
-> +		it->it.blkaddr = erofs_xattr_blkaddr(sb, xsid);
-> +		it->it.ofs = erofs_xattr_blkoff(sb, xsid);
-> +		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb,
-> +						  it->it.blkaddr, EROFS_KMAP);
->   		if (IS_ERR(it->it.kaddr))
->   			return PTR_ERR(it->it.kaddr);
-> -		it->it.blkaddr = blkaddr;
->   
->   		ret = xattr_foreach(&it->it, &find_xattr_handlers, NULL);
->   		if (ret != -ENOATTR)
-> @@ -383,9 +395,8 @@ static bool erofs_xattr_trusted_list(struct dentry *dentry)
->   	return capable(CAP_SYS_ADMIN);
->   }
->   
-> -int erofs_getxattr(struct inode *inode, int index,
-> -		   const char *name,
-> -		   void *buffer, size_t buffer_size)
-> +static int erofs_getxattr(struct inode *inode, int index, const char *name,
-> +			  void *buffer, size_t buffer_size)
->   {
->   	int ret;
->   	struct getxattr_iter it;
-> @@ -473,6 +484,26 @@ const struct xattr_handler *erofs_xattr_handlers[] = {
->   	NULL,
->   };
->   
-> +static inline const struct xattr_handler *erofs_xattr_handler(unsigned int idx)
-> +{
-> +	static const struct xattr_handler *xattr_handler_map[] = {
-> +		[EROFS_XATTR_INDEX_USER] = &erofs_xattr_user_handler,
-> +#ifdef CONFIG_EROFS_FS_POSIX_ACL
-> +		[EROFS_XATTR_INDEX_POSIX_ACL_ACCESS] =
-> +			&posix_acl_access_xattr_handler,
-> +		[EROFS_XATTR_INDEX_POSIX_ACL_DEFAULT] =
-> +			&posix_acl_default_xattr_handler,
-> +#endif
-> +		[EROFS_XATTR_INDEX_TRUSTED] = &erofs_xattr_trusted_handler,
-> +#ifdef CONFIG_EROFS_FS_SECURITY
-> +		[EROFS_XATTR_INDEX_SECURITY] = &erofs_xattr_security_handler,
-> +#endif
-> +	};
-> +
-> +	return idx && idx < ARRAY_SIZE(xattr_handler_map) ?
-> +		xattr_handler_map[idx] : NULL;
-> +}
-> +
->   struct listxattr_iter {
->   	struct xattr_iter it;
->   
-> @@ -562,20 +593,18 @@ static int shared_listxattr(struct listxattr_iter *it)
->   {
->   	struct inode *const inode = d_inode(it->dentry);
->   	struct erofs_inode *const vi = EROFS_I(inode);
-> -	struct super_block *const sb = inode->i_sb;
-> -	unsigned int i;
-> +	struct super_block *const sb = it->it.sb;
-> +	unsigned int i, xsid;
->   	int ret = 0;
->   
->   	for (i = 0; i < vi->xattr_shared_count; ++i) {
-> -		erofs_blk_t blkaddr =
-> -			xattrblock_addr(sb, vi->xattr_shared_xattrs[i]);
-> -
-> -		it->it.ofs = xattrblock_offset(sb, vi->xattr_shared_xattrs[i]);
-> -		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
-> -						  EROFS_KMAP);
-> +		xsid = vi->xattr_shared_xattrs[i];
-> +		it->it.blkaddr = erofs_xattr_blkaddr(sb, xsid);
-> +		it->it.ofs = erofs_xattr_blkoff(sb, xsid);
-> +		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb,
-> +						  it->it.blkaddr, EROFS_KMAP);
->   		if (IS_ERR(it->it.kaddr))
->   			return PTR_ERR(it->it.kaddr);
-> -		it->it.blkaddr = blkaddr;
->   
->   		ret = xattr_foreach(&it->it, &list_xattr_handlers, NULL);
->   		if (ret)
-> diff --git a/fs/erofs/xattr.h b/fs/erofs/xattr.h
-> index f7a21aaa9755..cc9ef97dbf8e 100644
-> --- a/fs/erofs/xattr.h
-> +++ b/fs/erofs/xattr.h
-> @@ -13,66 +13,10 @@
->   /* Attribute not found */
->   #define ENOATTR         ENODATA
->   
-> -static inline unsigned int inlinexattr_header_size(struct inode *inode)
-> -{
-> -	return sizeof(struct erofs_xattr_ibody_header) +
-> -		sizeof(u32) * EROFS_I(inode)->xattr_shared_count;
-> -}
-> -
-> -static inline erofs_blk_t xattrblock_addr(struct super_block *sb,
-> -					  unsigned int xattr_id)
-> -{
->   #ifdef CONFIG_EROFS_FS_XATTR
-> -	return EROFS_SB(sb)->xattr_blkaddr +
-> -		xattr_id * sizeof(__u32) / sb->s_blocksize;
-> -#else
-> -	return 0;
-> -#endif
-> -}
-> -
-> -static inline unsigned int xattrblock_offset(struct super_block *sb,
-> -					     unsigned int xattr_id)
-> -{
-> -	return (xattr_id * sizeof(__u32)) % sb->s_blocksize;
-> -}
-> -
-> -#ifdef CONFIG_EROFS_FS_XATTR
-> -extern const struct xattr_handler erofs_xattr_user_handler;
-> -extern const struct xattr_handler erofs_xattr_trusted_handler;
-> -extern const struct xattr_handler erofs_xattr_security_handler;
-> -
-> -static inline const struct xattr_handler *erofs_xattr_handler(unsigned int idx)
-> -{
-> -	static const struct xattr_handler *xattr_handler_map[] = {
-> -		[EROFS_XATTR_INDEX_USER] = &erofs_xattr_user_handler,
-> -#ifdef CONFIG_EROFS_FS_POSIX_ACL
-> -		[EROFS_XATTR_INDEX_POSIX_ACL_ACCESS] =
-> -			&posix_acl_access_xattr_handler,
-> -		[EROFS_XATTR_INDEX_POSIX_ACL_DEFAULT] =
-> -			&posix_acl_default_xattr_handler,
-> -#endif
-> -		[EROFS_XATTR_INDEX_TRUSTED] = &erofs_xattr_trusted_handler,
-> -#ifdef CONFIG_EROFS_FS_SECURITY
-> -		[EROFS_XATTR_INDEX_SECURITY] = &erofs_xattr_security_handler,
-> -#endif
-> -	};
-> -
-> -	return idx && idx < ARRAY_SIZE(xattr_handler_map) ?
-> -		xattr_handler_map[idx] : NULL;
-> -}
 
-Could we drop this? since Christian Brauner also touchs this stuff for
-the next cycle, see:
-https://lore.kernel.org/r/20230125-fs-acl-remove-generic-xattr-handlers-v3-7-f760cc58967d@kernel.org/
-
-I'd like to wait it for the following cycle after the next cycle to
-avoid such cross-tree conflicts since it's just a cleanup.
-
-> -
->   extern const struct xattr_handler *erofs_xattr_handlers[];
-> -
-> -int erofs_getxattr(struct inode *, int, const char *, void *, size_t);
-
-Could we leave it for now?  I'm not sure laterly if erofs will
-read xattrs itself.
-
-Otherwise it looks good to me.
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
 Thanks,
 Gao Xiang
 
->   ssize_t erofs_listxattr(struct dentry *, char *, size_t);
->   #else
-> -static inline int erofs_getxattr(struct inode *inode, int index,
-> -				 const char *name, void *buffer,
-> -				 size_t buffer_size)
-> -{
-> -	return -EOPNOTSUPP;
-> -}
-> -
->   #define erofs_listxattr (NULL)
->   #define erofs_xattr_handlers (NULL)
->   #endif	/* !CONFIG_EROFS_FS_XATTR */
+> ---
+>   fs/erofs/xattr.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
+> index 760ec864a39c..ab4517e5ec84 100644
+> --- a/fs/erofs/xattr.c
+> +++ b/fs/erofs/xattr.c
+> @@ -29,7 +29,7 @@ struct xattr_iter {
+>   	unsigned int ofs;
+>   };
+>   
+> -static int init_inode_xattrs(struct inode *inode)
+> +static int erofs_init_inode_xattrs(struct inode *inode)
+>   {
+>   	struct erofs_inode *const vi = EROFS_I(inode);
+>   	struct xattr_iter it;
+> @@ -404,7 +404,7 @@ static int erofs_getxattr(struct inode *inode, int index, const char *name,
+>   	if (!name)
+>   		return -EINVAL;
+>   
+> -	ret = init_inode_xattrs(inode);
+> +	ret = erofs_init_inode_xattrs(inode);
+>   	if (ret)
+>   		return ret;
+>   
+> @@ -619,7 +619,7 @@ ssize_t erofs_listxattr(struct dentry *dentry,
+>   	int ret;
+>   	struct listxattr_iter it;
+>   
+> -	ret = init_inode_xattrs(d_inode(dentry));
+> +	ret = erofs_init_inode_xattrs(d_inode(dentry));
+>   	if (ret == -ENOATTR)
+>   		return 0;
+>   	if (ret)
