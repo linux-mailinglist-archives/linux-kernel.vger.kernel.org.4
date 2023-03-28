@@ -2,256 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D086CBF6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B2776CBF3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232502AbjC1Mm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
+        id S232134AbjC1MgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbjC1MmZ (ORCPT
+        with ESMTP id S230328AbjC1MgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:42:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2C0BA5C1;
-        Tue, 28 Mar 2023 05:41:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 45B75C14;
-        Tue, 28 Mar 2023 05:34:09 -0700 (PDT)
-Received: from [10.57.54.240] (unknown [10.57.54.240])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 986B73F6C4;
-        Tue, 28 Mar 2023 05:33:21 -0700 (PDT)
-Message-ID: <c3f5af31-b6ef-dc45-25f0-4e52d93fcaa7@arm.com>
-Date:   Tue, 28 Mar 2023 13:33:20 +0100
+        Tue, 28 Mar 2023 08:36:02 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5443A243
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:35:36 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id z42so12340965ljq.13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:35:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680006858;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gvgN3DG+Vt2c71BXTWQsXRITKpPi7yyeQJ22Vh4BLvk=;
+        b=UHjN4FGLf/NbvtVQ0GVXdo9eU/u1kFfW+B2fgTeJvWoFJaqA+6bRLY+YzILmv9bFRb
+         c+C1u5SRZ5BUaNLyVtHiz3oGddTeYZiIVBJKRag1xvmZEYswRcjyRnQKVtOu34CZQelh
+         QKK3oKkjh8Eup9tz1kiqPsRXdWc6PyXfBI3HN0x4hEFQcLFetlsdODkaW6nU/Qx17c5B
+         EjjuwSJyn054SevEkv/hhQGBKmvRTgUuKA0dHtI4MXWQvMkx+CifEHfcY7aK2A7xLSFE
+         xZgziLyaK8SUJxJMX0AlVQRHOj1qU/3TZdPR5IKL2BGrCi5SdCrtoKQcsD61pvuYKvYj
+         nfNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680006858;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gvgN3DG+Vt2c71BXTWQsXRITKpPi7yyeQJ22Vh4BLvk=;
+        b=l41f51w65ZzBrTzioLfINse82VfWnqci4VA+yqHOakTRU/S/UggLV98bbv+WvgPtK8
+         TR90iHuru5FvR1B8zuJbwvSTP79aJ9DX5G5mDx5I/mGNhB4Gy63SFbsbcBoSPXh3VtRn
+         YYaXG8lpNY+XZ/6rHUezVDr06f/khxqe8Fk9dAmyNi/b24tE+7rSq5Xs0Alhs1uykB1K
+         jfbaX/M7qK3gWr62NuBsnRQjjz75Ya5TezHXeu81WBldPQjcR/oMjm/OAu02C+tExiHN
+         OaT8/0SXb/JzDwm/8B3q4JB+DBZu623G6FGY0xJr+lyD/JEgcwWLLaF1v91lO7UYByOo
+         23lA==
+X-Gm-Message-State: AAQBX9erUXbx4UB1iVnrajW+fZ6FtwZbjezXcb0H50bDlYLcIsWpS60L
+        sj5K4u4reuo3iAYF+6EANprxMKrjaY1RwQ==
+X-Google-Smtp-Source: AKy350YH5LZkZudztmXURkXj9UQNwobEz57ljDoz1TGEBrGdnbpJiPkBajP68MeDDBE6mcL6ljrqaw==
+X-Received: by 2002:a05:651c:224:b0:295:c3cf:e81e with SMTP id z4-20020a05651c022400b00295c3cfe81emr4994443ljn.19.1680006858177;
+        Tue, 28 Mar 2023 05:34:18 -0700 (PDT)
+Received: from pc636 (host-90-233-209-50.mobileonline.telia.com. [90.233.209.50])
+        by smtp.gmail.com with ESMTPSA id s13-20020a2e2c0d000000b0029a63256410sm4947064ljs.52.2023.03.28.05.34.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 05:34:17 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Tue, 28 Mar 2023 14:34:15 +0200
+To:     Baoquan He <bhe@redhat.com>
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH v3 1/2] mm: vmalloc: Remove a global vmap_blocks xarray
+Message-ID: <ZCLex4BPPtosouvd@pc636>
+References: <20230327170126.406044-1-urezki@gmail.com>
+ <ZCJd//IM6FGkbVTJ@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v3 02/11] coresight-tpda: Add DSB dataset support
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        James Clark <james.clark@arm.com>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
- <1679551448-19160-3-git-send-email-quic_taozha@quicinc.com>
- <e578790c-4794-5609-16e8-15d63082760e@arm.com>
- <51ad3cb3-bd83-51c9-52bc-f700cd17103c@quicinc.com>
- <48f31b84-573f-fe1d-bcd7-e55ec7f47831@arm.com>
- <595568c3-d2bc-e37e-83b3-2adfd3fa4193@quicinc.com>
- <6f8b087d-77a7-512e-6504-e4841447eda9@arm.com>
- <edbd1f10-70e5-1fd4-44de-da59b387e9dd@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <edbd1f10-70e5-1fd4-44de-da59b387e9dd@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCJd//IM6FGkbVTJ@MiWiFi-R3L-srv>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 12:31, Tao Zhang wrote:
-> Hi Suzuki,
+On Tue, Mar 28, 2023 at 11:25:54AM +0800, Baoquan He wrote:
+> On 03/27/23 at 07:01pm, Uladzislau Rezki (Sony) wrote:
+> > A global vmap_blocks-xarray array can be contented under
+> > heavy usage of the vm_map_ram()/vm_unmap_ram() APIs. The
+> > lock_stat shows that a "vmap_blocks.xa_lock" lock is a
+> > second in a top-list when it comes to contentions:
+> > 
+> > <snip>
+> > ----------------------------------------
+> > class name con-bounces contentions ...
+> > ----------------------------------------
+> > vmap_area_lock:         2554079 2554276 ...
+> >   --------------
+> >   vmap_area_lock        1297948  [<00000000dd41cbaa>] alloc_vmap_area+0x1c7/0x910
+> >   vmap_area_lock        1256330  [<000000009d927bf3>] free_vmap_block+0x4a/0xe0
+> >   vmap_area_lock              1  [<00000000c95c05a7>] find_vm_area+0x16/0x70
+> >   --------------
+> >   vmap_area_lock        1738590  [<00000000dd41cbaa>] alloc_vmap_area+0x1c7/0x910
+> >   vmap_area_lock         815688  [<000000009d927bf3>] free_vmap_block+0x4a/0xe0
+> >   vmap_area_lock              1  [<00000000c1d619d7>] __get_vm_area_node+0xd2/0x170
+> > 
+> > vmap_blocks.xa_lock:    862689  862698 ...
+> >   -------------------
+> >   vmap_blocks.xa_lock   378418    [<00000000625a5626>] vm_map_ram+0x359/0x4a0
+> >   vmap_blocks.xa_lock   484280    [<00000000caa2ef03>] xa_erase+0xe/0x30
+> >   -------------------
+> >   vmap_blocks.xa_lock   576226    [<00000000caa2ef03>] xa_erase+0xe/0x30
+> >   vmap_blocks.xa_lock   286472    [<00000000625a5626>] vm_map_ram+0x359/0x4a0
+> > ...
+> > <snip>
+> > 
+> > that is a result of running vm_map_ram()/vm_unmap_ram() in
+> > a loop. The test creates 64(on 64 CPUs system) threads and
+> > each one maps/unmaps 1 page.
 > 
-> On 3/27/2023 5:43 PM, Suzuki K Poulose wrote:
->> On 27/03/2023 04:31, Tao Zhang wrote:
->>>
->>> On 3/26/2023 3:31 AM, Suzuki K Poulose wrote:
->>>> On 24/03/2023 14:58, Tao Zhang wrote:
->>>>> Hi Suzuki,
->>>>>
->>>>> 在 3/23/2023 7:51 PM, Suzuki K Poulose 写道:
->>>>>> On 23/03/2023 06:03, Tao Zhang wrote:
->>>>>>> Read the DSB element size from the device tree. Set the register
->>>>>>> bit that controls the DSB element size of the corresponding port.
->>>>>>>
->>>>>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->>>>>>> ---
->>>>>>>   drivers/hwtracing/coresight/coresight-tpda.c | 58 
->>>>>>> ++++++++++++++++++++++++++++
->>>>>>>   drivers/hwtracing/coresight/coresight-tpda.h |  4 ++
->>>>>>>   2 files changed, 62 insertions(+)
->>>>>>>
->>>>>>> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c 
->>>>>>> b/drivers/hwtracing/coresight/coresight-tpda.c
->>>>>>> index f712e11..8dcfc4a 100644
->>>>>>> --- a/drivers/hwtracing/coresight/coresight-tpda.c
->>>>>>> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
->>>>>>> @@ -21,6 +21,47 @@
->>>>>>>     DEFINE_CORESIGHT_DEVLIST(tpda_devs, "tpda");
->>>>>>>   +/* Search and read element data size from the TPDM node in
->>>>>>> + * the devicetree. Each input port of TPDA is connected to
->>>>>>> + * a TPDM. Different TPDM supports different types of dataset,
->>>>>>> + * and some may support more than one type of dataset.
->>>>>>> + * Parameter "inport" is used to pass in the input port number
->>>>>>> + * of TPDA, and it is set to 0 in the recursize call.
->>>>>>> + * Parameter "parent" is used to pass in the original call.
->>>>>>> + */
->>>>>>
->>>>>> I am still not clear why we need to do this recursively ?
->>>>>
->>>>> Some TPDMs are not directly output connected to the TPDAs. So here I
->>>>>
->>>>> use a recursive method to check from the TPDA input port until I find
->>>>>
->>>>> the connected TPDM.
->>>>>
->>>>> Do you have a better suggestion besides a recursive method?
->>>>>
->>>>>>
->>>>>>> +static int tpda_set_element_size(struct tpda_drvdata *drvdata,
->>>>>>> +               struct coresight_device *csdev, int inport, bool 
->>>>>>> parent)
->>>>>>
->>>>>> Please could we renamse csdev => tpda_dev
->>>>>
->>>>> Since this is a recursively called function, this Coresight device 
->>>>> is not
->>>>>
->>>>> necessarily TPDA, it can be other Coresight device.
->>>>>
->>>>>>
->>>>>>> +{
->>>>>>> +    static int nr_inport;
->>>>>>> +    int i;
->>>>>>> +    struct coresight_device *in_csdev;
->>>>>>
->>>>>> similarly tpdm_dev ?
->>>>> Same as above, this variable may not necessarily be a TPDM.
->>>>>>
->>>>>> Could we not add a check here to see if the dsb_esize[inport] is 
->>>>>> already
->>>>>> set and then bail out, reading this over and over ?
->>>>>>
->>>>> I will update this in the next patch series.
->>>>>>> +
->>>>>>> +    if (inport > (TPDA_MAX_INPORTS - 1))
->>>>>>> +        return -EINVAL;
->>>>>>> +
->>>>>>> +    if (parent)
->>>>>>> +        nr_inport = inport;
->>>>>>> +
->>>>>>> +    for (i = 0; i < csdev->pdata->nr_inconns; i++) {
->>>>>>> +        in_csdev = csdev->pdata->in_conns[i].remote_dev;
->>>>>>
->>>>>> Please note, the names of the structure field might change in the
->>>>>> next version of James' series
->>>>> Got it. I will keep an eye out for the James' patch series.
->>>>>>
->>>>>>> +        if (!in_csdev)
->>>>>>> +            break;
->>>>>>> +
->>>>>>> +        if (parent)
->>>>>>> +            if (csdev->pdata->in_conns[i].port != inport)
->>>>>>> +                continue;
->>>>>>> +
->>>>>>> +        if (in_csdev && strstr(dev_name(&in_csdev->dev), "tpdm")) {
->>>>>>
->>>>>> Isn't there a better way to distinguish a device to be TPDM ? May 
->>>>>> be we
->>>>>> could even add a source_sub_type - SOURCE_TPDM instead of using
->>>>>> SOURCE_OTHERS ? Do you expect other sources to be connected to TPDA?
->>>>>> e.g., STMs ?
->>>>>
->>>>> I can add "SOURCE_TPDM" as a source_sub_type, but SOURCE_OTHERS needs
->>>>>
->>>>> to be kept since the other Coresight component we will upstream 
->>>>> later may
->>>>>
->>>>> need it.
->>>>>
->>>>>>
->>>>>>> + of_property_read_u32(in_csdev->dev.parent->of_node,
->>>>>>> +                    "qcom,dsb-element-size", 
->>>>>>> &drvdata->dsb_esize[nr_inport]);
->>>>>>> +            break;
->>>>>>> +        }
->>>>>>> +        tpda_set_element_size(drvdata, in_csdev, 0, false);
->>>>>>
->>>>>> What is the point of this ? Is this for covering the a TPDA 
->>>>>> connected to
->>>>>> another TPDA ?
->>>>>>
->>>>>> e.g., { TPDM0, TPDM1 } -> TPDA0 -> TPDA1 ?
->>>>>
->>>>> A TPDM may not connect to the TPDA directly, for example,
->>>>>
->>>>> TPDM0 ->FUNNEL0->FUNNEL1->TPDA0
->>>>>
->>>>> And many TPDMs can connect to one TPDA, one input port on TPDA only 
->>>>> has
->>>>>
->>>>> one TPDM connected. Therefore, we use a recursive method to find 
->>>>> the TPDM
->>>>>
->>>>> corresponding to the input port of TPDA.
->>>>
->>>> How do you find out decide what to choose, if there are multiple TPDMs
->>>> connected to FUNNEL0 or even FUNNEL1 ?
->>>>
->>>> e.g
->>>>
->>>> TPDM0->FUNNEL0->FUNNEL1->TPDA0
->>>>                 /
->>>>           TPDM1
->>>
->>> We can find out the corresponding TPDM by the input port number of TPDA.
->>>
->>> Each input port is connected to a TPDM. So we have an input port 
->>> number in
->>>
->>> the input parameter of the recursive lookup function 
->>> "tpda_set_element_size".
->>
->> I don't understand, how you would figure out, in the above situation.
->> i.e., FUNNEL1 is connected to TPDA0, but there are two TPDMs that could
->> be pumping the trace. They both arrive via FUNNEL1. So, how does that
->> solve your problem ?
+> With my understanding, the xarray will take more time when calling
+> xa_insert() or xa_erase() because these two will cause xa_expand() and
+> xa_shrink() if the index is sparse. xa_load() should be low cost to
+> finish. Wondering if in your testing code, the mapping address is close
+> or too far.
 > 
-> In our HW design, the input ports of TPDA and TPDM are one-one-one 
-> corresponding.  Only one
+> 1 mm/vmalloc.c <<new_vmap_block>>
+>   err = xa_insert(&vmap_blocks, vb_idx, vb, gfp_mask);
+> 2 mm/vmalloc.c <<free_vmap_block>>
+>   tmp = xa_erase(&vmap_blocks, addr_to_vb_idx(vb->va->va_start));
+> 3 mm/vmalloc.c <<vb_free>>
+>   vb = xa_load(&vmap_blocks, addr_to_vb_idx(addr));
+> 4 mm/vmalloc.c <<vmap_ram_vread_iter>>
+>   vb = xa_load(&vmap_blocks, addr_to_vb_idx((unsigned long )addr));
 > 
-> TPDM can be found connected from one TPDA's input port. The path to a 
-> TPDA input port doesn't
+> > 
+> > After this change the "xa_lock" can be considered as a noise
+> > in the same test condition:
+> > 
+> > <snip>
+> > ...
+> > &xa->xa_lock#1:         10333 10394 ...
+> >   --------------
+> >   &xa->xa_lock#1        5349      [<00000000bbbc9751>] xa_erase+0xe/0x30
+> >   &xa->xa_lock#1        5045      [<0000000018def45d>] vm_map_ram+0x3a4/0x4f0
+> >   --------------
+> >   &xa->xa_lock#1        7326      [<0000000018def45d>] vm_map_ram+0x3a4/0x4f0
+> >   &xa->xa_lock#1        3068      [<00000000bbbc9751>] xa_erase+0xe/0x30
+> > ...
+> > <snip>
+> > 
+> > This patch does not fix vmap_area_lock/free_vmap_area_lock and
+> > purge_vmap_area_lock bottle-necks, it is rather a separate rework.
+> > 
+> > v1 - v2:
+> >    - Add more comments(Andrew Morton req.)
+> >    - Switch to WARN_ON_ONCE(Lorenzo Stoakes req.)
+> > 
+> > v2 -> v3:
+> >    - Fix a kernel-doc complain(Matthew Wilcox)
+> > 
+> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > ---
+> >  mm/vmalloc.c | 85 +++++++++++++++++++++++++++++++++++++++-------------
+> >  1 file changed, 64 insertions(+), 21 deletions(-)
+> > 
+> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> > index 978194dc2bb8..821256ecf81c 100644
+> > --- a/mm/vmalloc.c
+> > +++ b/mm/vmalloc.c
+> > @@ -1908,9 +1908,22 @@ static struct vmap_area *find_unlink_vmap_area(unsigned long addr)
+> >  #define VMAP_BLOCK		0x2 /* mark out the vmap_block sub-type*/
+> >  #define VMAP_FLAGS_MASK		0x3
+> >  
+> > +/*
+> > + * We should probably have a fallback mechanism to allocate virtual memory
+> > + * out of partially filled vmap blocks. However vmap block sizing should be
+> > + * fairly reasonable according to the vmalloc size, so it shouldn't be a
+> > + * big problem.
+> > + */
+> >  struct vmap_block_queue {
+> >  	spinlock_t lock;
+> >  	struct list_head free;
+> > +
+> > +	/*
+> > +	 * An xarray requires an extra memory dynamically to
+> > +	 * be allocated. If it is an issue, we can use rb-tree
+> > +	 * instead.
+> > +	 */
+> > +	struct xarray vmap_blocks;
+> >  };
+> >  
+> >  struct vmap_block {
+> > @@ -1928,24 +1941,46 @@ struct vmap_block {
+> >  static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
+> >  
+> >  /*
+> > - * XArray of vmap blocks, indexed by address, to quickly find a vmap block
+> > - * in the free path. Could get rid of this if we change the API to return a
+> > - * "cookie" from alloc, to be passed to free. But no big deal yet.
+> > + * In order to fast access to any "vmap_block" associated with a
+> > + * specific address, we store them into a per-cpu xarray. A hash
+> > + * function is addr_to_vbq() whereas a key is a vb->va->va_start
+> > + * value.
+> > + *
+> > + * Please note, a vmap_block_queue, which is a per-cpu, is not
+> > + * serialized by a raw_smp_processor_id() current CPU, instead
+> > + * it is chosen based on a CPU-index it belongs to, i.e. it is
+> > + * a hash-table.
+> > + *
+> > + * An example:
+> > + *
+> > + *  CPU_1  CPU_2  CPU_0
+> > + *    |      |      |
+> > + *    V      V      V
+> > + * 0     10     20     30     40     50     60
+> > + * |------|------|------|------|------|------|...<vmap address space>
+> > + *   CPU0   CPU1   CPU2   CPU0   CPU1   CPU2
+> > + *
+> > + * - CPU_1 invokes vm_unmap_ram(6), 6 belongs to CPU0 zone, thus
+> > + *   it access: CPU0/INDEX0 -> vmap_blocks -> xa_lock;
+> > + *
+> > + * - CPU_2 invokes vm_unmap_ram(11), 11 belongs to CPU1 zone, thus
+> > + *   it access: CPU1/INDEX1 -> vmap_blocks -> xa_lock;
+> > + *
+> > + * - CPU_0 invokes vm_unmap_ram(20), 20 belongs to CPU2 zone, thus
+> > + *   it access: CPU2/INDEX2 -> vmap_blocks -> xa_lock.
+> >   */
+> > -static DEFINE_XARRAY(vmap_blocks);
+> > +static struct vmap_block_queue *
+> > +addr_to_vbq(unsigned long addr)
+> > +{
+> > +	int index = (addr / VMAP_BLOCK_SIZE) % num_possible_cpus();
+> >  
+> > -/*
+> > - * We should probably have a fallback mechanism to allocate virtual memory
+> > - * out of partially filled vmap blocks. However vmap block sizing should be
+> > - * fairly reasonable according to the vmalloc size, so it shouldn't be a
+> > - * big problem.
+> > - */
+> > +	return &per_cpu(vmap_block_queue, index);
+> > +}
+> >  
+> > -static unsigned long addr_to_vb_idx(unsigned long addr)
+> > +static unsigned long
+> > +addr_to_vb_va_start(unsigned long addr)
+> >  {
+> > -	addr -= VMALLOC_START & ~(VMAP_BLOCK_SIZE-1);
+> > -	addr /= VMAP_BLOCK_SIZE;
+> > -	return addr;
+> > +	return rounddown(addr, VMAP_BLOCK_SIZE);
+> >  }
+> >  
+> >  static void *vmap_block_vaddr(unsigned long va_start, unsigned long pages_off)
+> > @@ -1953,7 +1988,7 @@ static void *vmap_block_vaddr(unsigned long va_start, unsigned long pages_off)
+> >  	unsigned long addr;
+> >  
+> >  	addr = va_start + (pages_off << PAGE_SHIFT);
+> > -	BUG_ON(addr_to_vb_idx(addr) != addr_to_vb_idx(va_start));
+> > +	WARN_ON_ONCE(addr_to_vb_va_start(addr) != va_start);
+> >  	return (void *)addr;
+> >  }
+> >  
+> > @@ -1970,7 +2005,6 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+> >  	struct vmap_block_queue *vbq;
+> >  	struct vmap_block *vb;
+> >  	struct vmap_area *va;
+> > -	unsigned long vb_idx;
+> >  	int node, err;
+> >  	void *vaddr;
+> >  
+> > @@ -2003,8 +2037,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+> >  	bitmap_set(vb->used_map, 0, (1UL << order));
+> >  	INIT_LIST_HEAD(&vb->free_list);
+> >  
+> > -	vb_idx = addr_to_vb_idx(va->va_start);
+> > -	err = xa_insert(&vmap_blocks, vb_idx, vb, gfp_mask);
+> > +	vbq = addr_to_vbq(va->va_start);
+> > +	err = xa_insert(&vbq->vmap_blocks, va->va_start, vb, gfp_mask);
 > 
-> connect more than one TPDM. It's by HW design.
+> Using va->va_start as index to access xarray may cost extra memory.
+> Imagine we got a virtual address at VMALLOC_START, its region is
+> [VMALLOC_START, VMALLOC_START+4095]. In the xarray, its sequence order
+> is 0. While with va->va_start, it's 0xffffc90000000000UL on x86_64 with
+> level4 paging mode. That means for the first page size vmalloc area,
+> storing it into xarray need about 10 levels of xa_node, just for the one
+> page size. With the old addr_to_vb_idx(), its index is 0. Only one level
+> height is needed. One xa_node is about 72bytes, it could take more time
+> and memory to access va->va_start. Not sure if my understanding is correct.
+> 
+> static unsigned long addr_to_vb_idx(unsigned long addr)
+> {
+>         addr -= VMALLOC_START & ~(VMAP_BLOCK_SIZE-1);
+>         addr /= VMAP_BLOCK_SIZE;
+>         return addr;
+> }
+> 
+If the size of array depends on index "length", then, indeed it will require
+more memory. From the other hand we can keep the old addr_to_vb_idx() function 
+in order to "cut" a va->va_start index.
 
-Your current designs may be like that. But as far as the driver is
-concerned, I would like to add in extra measures to ensure that it
-encounters a variation from the above on a future platform. So, please
-could you add a check to detect this case and add a WARNING ?
-
-Suzuki
-
-
-> 
-> 
-> Tao
-> 
->>
->> Suzuki
->>
->>
->>>
->>>> Suzuki
->>>>
->>>>
->>
-
+--
+Uladzislau Rezki
