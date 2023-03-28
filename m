@@ -2,95 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287DA6CB466
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC3E6CB468
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbjC1C6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 22:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
+        id S232237AbjC1C6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 22:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjC1C6H (ORCPT
+        with ESMTP id S230073AbjC1C6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 22:58:07 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9362681
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:58:07 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id df34so9241413vsb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:58:07 -0700 (PDT)
+        Mon, 27 Mar 2023 22:58:14 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637CE2715
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:58:13 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id j13so9578509pjd.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:58:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679972286;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4pP9BpVMTE+iluP8oKlc8/OklZFONZeaXv/pNYUX8zA=;
-        b=BkQPlX9r8ylc77QnOkqlsqx8+pZJMwwnvN5ByqVe2wM6/j/UQEArrknQRvOmA/Ead+
-         Y0cERkfvLmYJLoq6CH3w1Gsl+0nzY9SNQMrUehaZTLquiINERhk9UZSTDd9deYh2JsRm
-         pvxqtXjn9vgWzus9km/Vx43VqhPponR8+lFUMFzWVquTVRMgvS49G6xgw1Qf9lsZD/FG
-         GjcLJoHfJpE08ips/PkaDW4Dipg2IE0lSZoMI774Sh6ZKJPwTJTUZQjGIsLtNTi3my5S
-         qyPMGrf1MSKNG/VT4sdmJe00ugfoz/9OiNCNs+0iTl0oZh0o5HgiDZKdSu327TH//qMg
-         3tDA==
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1679972293;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bLyr4+am2V6lTxnJ8lU/XXtylgWPWBoWpTubGjemSVQ=;
+        b=kmDKU3gH92RhdilP0wGx1LLk9gbqJfyl3gqvqUqlbrmn20ntkJNvBrQGFm6f4lBZYg
+         cM9JO2XR2Geh7dy2LXv0AAuie7zc9tegJ1y9sDZf69TvmRqw6z3b2xLcgf1yZ1WdoWmT
+         nYTNQVjIiSwPQCDP+UOj/Rl33mUVo9VJFIvXl1DnWt5WZdjDcecayQrnpdkWDTB98EHw
+         7ReeVUrj0Ih2stNsmEU0h9e5LslOc2jCuCRCVA1mnBuSk4XHigKIOBsqyxcgNGrff4U2
+         UCSoTt5fr1i74hcrVfjvVCww8u6KQGYrueDnomWZhk+jwy5TqbQ0ifKTahln9k0gjfrg
+         ssAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679972286;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4pP9BpVMTE+iluP8oKlc8/OklZFONZeaXv/pNYUX8zA=;
-        b=Uo2Ym1V9mAtpjxYtvpubdJ74PETMbpJ8NY3crolmPyeM3WZvKwFZk5YX2v5LwMk5vI
-         t9SQ70EqW9PkpYIVUjiU1fb1Xcwvwv5QZH+WhmMKau5oB2dgxI7rKAdi0OfcmEjdnQsC
-         CfoyNMMKPEyFJVwVamNobX95uxnyS9d+ZmkGTJyDN4iWwtgH8FQ+5Vw/QkQNS3rGOUaf
-         Kx7GzUnb1emv5PEe1YgbRh6Pdt999wlWv9WymD75wgIqHdWDY59l4zN9q8LNDZHhozAY
-         k6zMDoO6R224/PYeyET04yM/7Uz836n53r0BVbjiAyXS+Ljegn8rIKkv7gwrucPBGMWW
-         ooTg==
-X-Gm-Message-State: AAQBX9c51pwASVNf2FJa34492S45zzXfRFBpxOQ1aa6OsdNaLfCTU9Hn
-        wHxBXzKb9K96y1JtqwbKbIzUj2MziLwDuS/hqcI=
-X-Google-Smtp-Source: AKy350b+79ROympiGDP2VeTXwWhOmhIy5p1SEf5pzH4mGd5x+B301GAggWlZRpqYyenxpiHDz+6ygGd24hGgW6ZkjOY=
-X-Received: by 2002:a67:cb82:0:b0:426:40e7:9148 with SMTP id
- h2-20020a67cb82000000b0042640e79148mr7343807vsl.6.1679972286136; Mon, 27 Mar
- 2023 19:58:06 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679972293;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bLyr4+am2V6lTxnJ8lU/XXtylgWPWBoWpTubGjemSVQ=;
+        b=kIj2hjbZLaWnBnUDK3jPVF/hVKaZTTE+/QU0+ES0az+8QdcXS6GQENxF/F7kC5LS44
+         1shHHkm5dmGkhZv/GguwQ4dckhbfr76IO6ONEpf0xIR5WDkuw7VZc0AdLPPJoZhlwYHE
+         X7KAZJ2CnyyeIeuvoDYr1vf33X/Ky8nwJZ2kp2elv1kcd8Ubrhnw5NJwyaA5VBem2IMU
+         KrUPjNdNRf/Qa19xYr00uc9Z1Vs3tiXwU1LpoM52BcT3NM4CLgkeV/X/iExJBYzgx5+l
+         8W2BvezNNhIfT6u5xffl74lxrG9p4hyNI5YY1mY4d1IMm72xmN6NKLjDVvvsutFQa5NY
+         LsrQ==
+X-Gm-Message-State: AAQBX9e4mDuoro3wnLKdZEW64eihml7ye5/GRRbs7T8x2/ifsXP1YoPD
+        jCLkiNQZsuDGYeWkh7mdNjARyA==
+X-Google-Smtp-Source: AKy350boePZL/k+e/5zgAUJHntZnkIfcpGxyEqAU4SoJTANNN1+CWs53DamuoB1Xse9ssD99/kivLA==
+X-Received: by 2002:a17:902:d2ce:b0:19c:e664:5e64 with SMTP id n14-20020a170902d2ce00b0019ce6645e64mr18220668plc.2.1679972292889;
+        Mon, 27 Mar 2023 19:58:12 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-91-157.pa.nsw.optusnet.com.au. [49.181.91.157])
+        by smtp.gmail.com with ESMTPSA id p23-20020a1709027ed700b0019ee0ad15b4sm19719243plb.191.2023.03.27.19.58.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 19:58:12 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pgzXF-00E0yH-R0; Tue, 28 Mar 2023 13:58:09 +1100
+Date:   Tue, 28 Mar 2023 13:58:09 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "yebin (H)" <yebin10@huawei.com>, Ye Bin <yebin@huaweicloud.com>,
+        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] xfs: fix BUG_ON in xfs_getbmap()
+Message-ID: <20230328025809.GC3223426@dread.disaster.area>
+References: <20230327140218.4154709-1-yebin@huaweicloud.com>
+ <20230327151524.GC16180@frogsfrogsfrogs>
+ <64224406.5090106@huawei.com>
+ <20230328014328.GG16180@frogsfrogsfrogs>
+ <ZCJHSsqk4SJEDOTC@infradead.org>
+ <20230328020341.GH16180@frogsfrogsfrogs>
 MIME-Version: 1.0
-References: <20230313075017.668204-1-chunyan.zhang@unisoc.com>
- <CAAfSe-tg7JwakdCcoLn3Ws_164HcsT21pWHkjjw0Qqwy8PWkhQ@mail.gmail.com> <ZCFNRfpUHbaGBvJb@8bytes.org>
-In-Reply-To: <ZCFNRfpUHbaGBvJb@8bytes.org>
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-Date:   Tue, 28 Mar 2023 10:57:30 +0800
-Message-ID: <CAAfSe-stDTabua1EMQBF-xp_=zyn6yzrRR9VFmzyQ6jwzufMfA@mail.gmail.com>
-Subject: Re: [PATCH V3 0/2] Add reattaching support and fix memory leak issue
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux.dev, Baolu Lu <baolu.lu@linux.intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328020341.GH16180@frogsfrogsfrogs>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023 at 16:01, Joerg Roedel <joro@8bytes.org> wrote:
->
->
-> Hi Chunyan,
->
-> On Mon, Mar 27, 2023 at 10:47:18AM +0800, Chunyan Zhang wrote:
-> > Not sure if you received this patchset, since I received a rejection
-> > letter from mail.8bytes.org.
-> >
-> > If you didn't receive it, I can resend it with another email address.
-> >
-> > Otherwise, would you please pick up this series if there are no more comments.
->
-> I didn't receive it, can you please send me the error message you got
-> from my mail server?
+On Mon, Mar 27, 2023 at 07:03:41PM -0700, Darrick J. Wong wrote:
+> On Mon, Mar 27, 2023 at 06:47:54PM -0700, Christoph Hellwig wrote:
+> > On Mon, Mar 27, 2023 at 06:43:28PM -0700, Darrick J. Wong wrote:
+> > > <shrug> Seeing as the data fork mappings can change the instant the
+> > > ILOCK drops, I'm not /that/ worried about users seeing a delalloc
+> > > mapping even if the user requested a flush.  The results are already
+> > > obsolete when they get to userspace, unless the application software has
+> > > found another means to lock out access to the file.
+> > 
+> > That is true, but then again the users asked to not see delalloc
+> > mappings, so we really shouldn't report one, right?
+> 
+> Yeah, I suppose so.  I wonder how many programs there are out there that
+> don't pass in BMV_IF_DELALLOC /and/ can't handle that?  But I suppose
+> taking MMAP_EXCL is good enough to shut up the obvious assertion vector.
 
-Have sent it to you.
+Why not just skip it? Take the flush completion as being a
+point-in-time snapshot where there are no delalloc extents, and if
+any new ones have been created racily, just skip them as being
+"after" the flush and so don't get reported...
 
->
-> Regards,
->
->         Joerg
+> The COW implementation probably ought to be doing the flush too.
+
+Yup, and then just skip any delalloc extents found after that, too.
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
