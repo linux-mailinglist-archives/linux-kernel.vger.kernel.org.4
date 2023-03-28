@@ -2,81 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074576CBCD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C356CBCD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbjC1KsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
+        id S232429AbjC1Ksc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbjC1KsO (ORCPT
+        with ESMTP id S231151AbjC1Ks2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:48:14 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8151BC0;
-        Tue, 28 Mar 2023 03:48:12 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id b20so47831354edd.1;
-        Tue, 28 Mar 2023 03:48:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680000491;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uz8Pl8WK2K/AxyiPlw/QBeRKltTTW7plDyOjg6UNN7A=;
-        b=hTKG3N9oSG9lNz3XYhJXArrzvHRZBPVgp7kMJNOkepNhqNThr9px8JDpLjTuAfhjhi
-         UeCeFrVwrQTDtbnLQ9bDb9my4m9JQQnvWnZ7KucFQs9WL3H5pVo+Tgwek+SoTqhXtEaH
-         sfFvEMQg9KUu4rMx7qiLXmeotkx4rSHkt7Glvm2jANNh1J85/fKnUqFwtWb9LESAk9Fm
-         JS2xnINRueIV9+gvtkSSr2T1HHYKHBnGHhTVaXmcC204ZnTNAsslX5owg8aHLCM9/Nlh
-         GPeraieZSv4qiqto1peGe9ufZp1DKVOuG1NdOt4NAq/HLOTLrDk/eSHLqcEjBC9Ct4Iv
-         gO7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680000491;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uz8Pl8WK2K/AxyiPlw/QBeRKltTTW7plDyOjg6UNN7A=;
-        b=xM/vHx2dFxnyG5m26so2O0rL37oLXF2lS6Jj8Inqjk94mG62C5MJlxetwLTiOMnYGs
-         5sqjBUwhe4vTqKr85/Sigb4bvl7mvKKdSpZGGsDaXND6BCTb21pm1bQqnDL8Jejt1lgR
-         Wx0NvIaitYh9gl05+V/1nEPUB0V/KY683jt8jRdmeRvK0+xt/6dv7+ZZ4u8LrFBve07a
-         Qmzy87Py+81vvPpi/l87BdKzYsjPi6k448ujMCHKTyBapM14+eWWqxpLImSie2JLIi7m
-         sNJhW78skgXWhMuEC5sS2hhdX24f0NcrfIXwhxuJyfX+Q2uYVk2DV7jXvv/BS/3COtuv
-         jlTg==
-X-Gm-Message-State: AAQBX9cJL5AM179uk8HRRJgJn4uhl/bimNbq6dtYQjt65m7z78QyiUS7
-        Cqg7LwuQmry7phCGefhkQcw=
-X-Google-Smtp-Source: AKy350ajJ+7AtREN27j25f/lTyWUssyru0oV3QPRLPWfSQHRbol/vW3kiuHHbkdP/nuHcbn3YuSXyA==
-X-Received: by 2002:a17:906:5850:b0:935:3028:ff58 with SMTP id h16-20020a170906585000b009353028ff58mr15239656ejs.55.1680000491234;
-        Tue, 28 Mar 2023 03:48:11 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ce20-20020a170906b25400b00929fc8d264dsm15297997ejb.17.2023.03.28.03.48.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 03:48:10 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 12:48:09 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
-        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
-        ishah@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v4 01/10] dt-bindings: memory: tegra: add bpmp ref in
- tegra234-mc node
-Message-ID: <ZCLF6ZRH528pu/r3@orome>
-References: <20230327161426.32639-1-sumitg@nvidia.com>
- <20230327161426.32639-2-sumitg@nvidia.com>
- <787f656a-223d-5eed-e311-9cc7a6c46452@linaro.org>
+        Tue, 28 Mar 2023 06:48:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72B0B76B6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:48:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 731CBC14;
+        Tue, 28 Mar 2023 03:49:10 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E1ACC3F663;
+        Tue, 28 Mar 2023 03:48:24 -0700 (PDT)
+Date:   Tue, 28 Mar 2023 11:48:22 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     Pierre Gondois <pierre.gondois@arm.com>, yangyicong@hisilicon.com,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        gregkh@linuxfoundation.org, rafael@kernel.org, palmer@rivosinc.com,
+        linux-kernel@vger.kernel.org, prime.zeng@hisilicon.com,
+        linuxarm@huawei.com
+Subject: Re: [PATCH] cacheinfo: Fix LLC is not exported through sysfs
+Message-ID: <20230328104822.t2p4vxtcwz4j37ec@bogus>
+References: <20230323122528.16691-1-yangyicong@huawei.com>
+ <7cca5e74-6626-1c8b-9309-47b9f5d4395f@arm.com>
+ <20230324113508.x2rt52aakruwelk3@bogus>
+ <dd475eb6-7a0b-fbb4-316b-1af94c238699@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="unaT5uGr1XXNjnaA"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <787f656a-223d-5eed-e311-9cc7a6c46452@linaro.org>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+In-Reply-To: <dd475eb6-7a0b-fbb4-316b-1af94c238699@huawei.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,77 +48,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 27, 2023 at 02:57:07PM +0800, Yicong Yang wrote:
+> Hi Pierre and Sudeep,
+> 
+> On 2023/3/24 19:35, Sudeep Holla wrote:
+> > On Thu, Mar 23, 2023 at 06:58:53PM +0100, Pierre Gondois wrote:
+> >> Hello Yicong,
+> >>
+> >> FWIW, I think the patch is correct and I could reproduce the issue.
+> >>
+> >> On 3/23/23 13:25, Yicong Yang wrote:
+> >>> From: Yicong Yang <yangyicong@hisilicon.com>
+> >>>
+> >>> After entering 6.3-rc1 the LLC cacheinfo is not exported on our ACPI
+> >>> based arm64 server. This is because the LLC cacheinfo is partly reset
+> >>> when secondary CPUs boot up. On arm64 the primary cpu will allocate
+> >>> and setup cacheinfo:
+> >>> init_cpu_topology()
+> >>>    for_each_possible_cpu()
+> >>>      fetch_cache_info() // Allocate cacheinfo and init levels
+> >>> detect_cache_attributes()
+> >>>    cache_shared_cpu_map_setup()
+> >>>      if (!last_level_cache_is_valid()) // not valid, setup LLC
+> >>>        cache_setup_properties() // setup LLC
+> >>>
+> >>> On secondary CPU boot up:
+> >>> detect_cache_attributes()
+> >>>    populate_cache_leaves()
+> >>>      get_cache_type() // Get cache type from clidr_el1,
+> >>>                       // for LLC type=CACHE_TYPE_NOCACHE
+> >>>    cache_shared_cpu_map_setup()
+> >>>      if (!last_level_cache_is_valid()) // Valid and won't go to this branch,
+> >>>                                        // leave LLC's type=CACHE_TYPE_NOCACHE
+> >>>
+> >>> The last_level_cache_is_valid() use cacheinfo->{attributes, fw_token} to
+> >>> test it's valid or not, but populate_cache_leaves() will only reset
+> >>> LLC's type, so we won't try to re-setup LLC's type and leave it
+> >>> CACHE_TYPE_NOCACHE and won't export it through sysfs.
+> >>>
+> > 
+> > IIUC this is for the case where arch register doesn't report the system level
+> > cache. I wonder if it makes sense to fix the arch callback to deal with that
+> > instead of here. I am fine either way, just checking as ideally it is
+> > something populate_cache_leaves() is messing up.
+> > 
+> 
+> yes it's right, the LLC information is not provided by the CPU register and can
+> only be retrieved from PPTT on my machine. Maybe fix the issue first, I don't
+> know how to make arch callback handle this since arch_topology is also used
+> other than arm64 which I'm not familiar with.
+> 
+> > [...]
+> > 
+> >>> @@ -481,6 +488,7 @@ int detect_cache_attributes(unsigned int cpu)
+> >>>   	if (ret)
+> >>>   		goto free_ci;
+> >>> +update_cpu_map:
+> >>
+> >> Maybe just a suggestion about the code itself,
+> >> it should be possible to replace the 'goto' by an 'if' condition.
+> >> (Similarly, the 'populate_leaves:' label could have been avoided.)
+> >>
+> > 
+> > Agreed, I prefer that as well.
+> > 
+> 
+> ok, will modify as below with a little refactor to get rid of the
+> 'populate_leaves:' label as suggested.
+> 
+> Thanks,
+> Yicong
+> 
+> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
+> index f6573c335f4c..e34e6b77e81a 100644
+> --- a/drivers/base/cacheinfo.c
+> +++ b/drivers/base/cacheinfo.c
+> @@ -462,24 +462,28 @@ int detect_cache_attributes(unsigned int cpu)
+>          * as it will happen only once (the cacheinfo memory is never freed).
+>          * Just populate the cacheinfo.
+>          */
+> -       if (per_cpu_cacheinfo(cpu))
+> -               goto populate_leaves;
+> -
+> -       if (init_cache_level(cpu) || !cache_leaves(cpu))
+> -               return -ENOENT;
+> +       if (!per_cpu_cacheinfo(cpu)) {
+> +               if (init_cache_level(cpu) || !cache_leaves(cpu))
+> +                       return -ENOENT;
+> 
+> -       ret = allocate_cache_info(cpu);
+> -       if (ret)
+> -               return ret;
+> +               ret = allocate_cache_info(cpu);
+> +               if (ret)
+> +                       return ret;
+> +       }
+> 
+> -populate_leaves:
+>         /*
+> -        * populate_cache_leaves() may completely setup the cache leaves and
+> -        * shared_cpu_map or it may leave it partially setup.
+> +        * If LLC is valid the cache leaves were already populated so just go to
+> +        * update the cpu map.
+>          */
+> -       ret = populate_cache_leaves(cpu);
+> -       if (ret)
+> -               goto free_ci;
+> +       if (!last_level_cache_is_valid(cpu)) {
+> +               /*
+> +                * populate_cache_leaves() may completely setup the cache leaves and
+> +                * shared_cpu_map or it may leave it partially setup.
+> +                */
+> +               ret = populate_cache_leaves(cpu);
+> +               if (ret)
+> +                       goto free_ci;
+> +       }
+> 
+>         /*
+>          * For systems using DT for cache hierarchy, fw_token
 
---unaT5uGr1XXNjnaA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The above looks OK but I would prefer to keep it simple as a fix by just not
+adding update_cpu_map label, but I don't have strong opinion about that. So
+I am fine either way.
 
-On Tue, Mar 28, 2023 at 09:23:04AM +0200, Krzysztof Kozlowski wrote:
-> On 27/03/2023 18:14, Sumit Gupta wrote:
-> > For Tegra234, add the "nvidia,bpmp" property within the Memory
-> > Controller (MC) node to reference BPMP node. This is needed in
-> > the MC driver to pass the client info to the BPMP-FW when memory
-> > interconnect support is available.
-> >=20
-> > Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> > ---
-> >  .../bindings/memory-controllers/nvidia,tegra186-mc.yaml    | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidi=
-a,tegra186-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/n=
-vidia,tegra186-mc.yaml
-> > index 935d63d181d9..398d27bb2373 100644
-> > --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra=
-186-mc.yaml
-> > +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra=
-186-mc.yaml
-> > @@ -58,6 +58,10 @@ properties:
-> >    "#interconnect-cells":
-> >      const: 1
-> > =20
-> > +  nvidia,bpmp:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description: phandle of the node representing the BPMP
->=20
-> Why do you need this multiple times? Both in parent and all external-mc
-> children?
-
-We've had nvidia,bpmp in the external memory controller node since
-basically the beginning because we've always needed it there. For newer
-chips we now also need it for the memory controller.
-
-Ideally I think we would only have this in the MC and have the EMC
-driver reference it via the EMC's parent (i.e. MC), but that would break
-backwards-compatibility. Reaching into the EMC's DT node from the MC was
-another option that we discussed internally, but it didn't look right
-given how this is also needed by the MC.
-
-One thing we could potentially do is deprecate the nvidia,bpmp phandle
-in the EMC and only keep it as a fallback in the drivers in case the
-parent MC doesn't find it's own in the DT.
-
-Thierry
-
---unaT5uGr1XXNjnaA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQixegACgkQ3SOs138+
-s6E+6A/+LQ807xpRoYSk/O3Els2KulVl39Ed9W6futtmBD/gwAEfsEH6/uoHriVq
-rlliNDA64PntpqyTfhMdwMt6WeT/XZkrbp6Gbl5ichCVeSu0V7MsMTedkQqKdhfM
-qnruufTe5Vg9pNi7mfp9520gq0Bj6kLPQlBMPiIh3VuzjC0xczw/MREQs1hHfop8
-K6U/agFxZ6Od+9u/gxs5PsfncHQ5pBDdBSe+QbfK95VOpWVOG3kRdGO0WwhPo3cx
-X9DKKm9YXh/JGzc460OHbnv1a9cRCYFUdAvE/pfheO9uhSEelRR6Me6R2YcnVlRP
-SOV6/B0b6i0ax0fijJgsCF96MucF284Dtj9DUD7SLrxTH7Oon4T941eEOx63bz4h
-whmS9ayKDJ7ykfuQfzLp0/0fhP4M4R7xXyryKFqFuBO5jnz+96T9QDVhGj2YzYgU
-7eI/buACia3BN5BIy/hJQaJxU7aFjrgwAkR/XNvtc2Ub8RUJnbWl3IamrQ4A5Uiw
-38lW1xG0MvrhXHdR/kWcmi9fNIos2k9HCPgsItRXHj2qZX0DXLjRcLqhWl0rxCq9
-FuvXEc60jca7OeFXt8p3HBzwZIXNRzAXfWD4q9eUCygEiPJbP/hKuW00FSSicIFC
-q79aM7CBVjgkazCsNVbJ/hMg3DobMTJ73w4tFYPD6f1sDsEr8s4=
-=fGu3
------END PGP SIGNATURE-----
-
---unaT5uGr1XXNjnaA--
+-- 
+Regards,
+Sudeep
