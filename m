@@ -2,197 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BAF6CBDEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59CDF6CBDD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232701AbjC1Lge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
+        id S231871AbjC1Lda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjC1Lgc (ORCPT
+        with ESMTP id S230210AbjC1Ld2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:36:32 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A7959E9;
-        Tue, 28 Mar 2023 04:36:30 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id C87825FD14;
-        Tue, 28 Mar 2023 14:36:28 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1680003388;
-        bh=Y8nntKCoo+n61PM/8lM1Pimdv3DPve4+/I2dLAhzNuU=;
-        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-        b=TVHnStf6myFchlia37InfF8F2J5RP/rNzHTcFe/Hm+P2DLzW2SPzvbOfgmHjpARAS
-         yWzhn+Uj65RvkMRZZutEJF+EzNxIulyVE6pfhxMBGwpvkLgzj9jBPnH9EDPTi+actR
-         XaXADzxkzemEIIAnohlv6MKEQ9UY8F/A2ISOn88iIXZw3RRMSej0k4G3DKfNc4/gP6
-         qDbR28D4vT3kmAWOvCN1hPsBIzu/qeM1k+ayigGSElBDEVTzuMIFdO1hDZgLLKpfe0
-         pShhRs1NomyV6KQJKCtxvsuJPbMFYit/scWawvD+IulzUyojjBOLZ/350644jcAFGg
-         AQon4g+3PuQLg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 28 Mar 2023 14:36:28 +0300 (MSK)
-Message-ID: <1e85f2b9-b958-0252-041d-6c48e04d9a19@sberdevices.ru>
-Date:   Tue, 28 Mar 2023 14:33:07 +0300
+        Tue, 28 Mar 2023 07:33:28 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F72159E0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:33:27 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Pm6vB5t0xzKsMr;
+        Tue, 28 Mar 2023 19:31:02 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 28 Mar 2023 19:33:24 +0800
+CC:     <yangyicong@hisilicon.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+        <palmer@rivosinc.com>, <linux-kernel@vger.kernel.org>,
+        <prime.zeng@hisilicon.com>, <linuxarm@huawei.com>
+Subject: Re: [PATCH] cacheinfo: Fix LLC is not exported through sysfs
+To:     Sudeep Holla <sudeep.holla@arm.com>
+References: <20230323122528.16691-1-yangyicong@huawei.com>
+ <7cca5e74-6626-1c8b-9309-47b9f5d4395f@arm.com>
+ <20230324113508.x2rt52aakruwelk3@bogus>
+ <dd475eb6-7a0b-fbb4-316b-1af94c238699@huawei.com>
+ <20230328104822.t2p4vxtcwz4j37ec@bogus>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <205c2b08-9f75-ddfc-806b-93c1933be2fe@huawei.com>
+Date:   Tue, 28 Mar 2023 19:33:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-In-Reply-To: <0683cc6e-5130-484c-1105-ef2eb792d355@sberdevices.ru>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <avkrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Subject: [PATCH net v2 3/3] test/vsock: new skbuff appending test
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20230328104822.t2p4vxtcwz4j37ec@bogus>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/28 06:38:00 #21021220
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds test which checks case when data of newly received skbuff is
-appended to the last skbuff in the socket's queue. It looks like simple
-test with 'send()' and 'recv()', but internally it triggers logic which
-appends one received skbuff to another. Test checks that this feature
-works correctly.
+On 2023/3/28 18:48, Sudeep Holla wrote:
+> On Mon, Mar 27, 2023 at 02:57:07PM +0800, Yicong Yang wrote:
+>> Hi Pierre and Sudeep,
+>>
+>> On 2023/3/24 19:35, Sudeep Holla wrote:
+>>> On Thu, Mar 23, 2023 at 06:58:53PM +0100, Pierre Gondois wrote:
+>>>> Hello Yicong,
+>>>>
+>>>> FWIW, I think the patch is correct and I could reproduce the issue.
+>>>>
+>>>> On 3/23/23 13:25, Yicong Yang wrote:
+>>>>> From: Yicong Yang <yangyicong@hisilicon.com>
+>>>>>
+>>>>> After entering 6.3-rc1 the LLC cacheinfo is not exported on our ACPI
+>>>>> based arm64 server. This is because the LLC cacheinfo is partly reset
+>>>>> when secondary CPUs boot up. On arm64 the primary cpu will allocate
+>>>>> and setup cacheinfo:
+>>>>> init_cpu_topology()
+>>>>>    for_each_possible_cpu()
+>>>>>      fetch_cache_info() // Allocate cacheinfo and init levels
+>>>>> detect_cache_attributes()
+>>>>>    cache_shared_cpu_map_setup()
+>>>>>      if (!last_level_cache_is_valid()) // not valid, setup LLC
+>>>>>        cache_setup_properties() // setup LLC
+>>>>>
+>>>>> On secondary CPU boot up:
+>>>>> detect_cache_attributes()
+>>>>>    populate_cache_leaves()
+>>>>>      get_cache_type() // Get cache type from clidr_el1,
+>>>>>                       // for LLC type=CACHE_TYPE_NOCACHE
+>>>>>    cache_shared_cpu_map_setup()
+>>>>>      if (!last_level_cache_is_valid()) // Valid and won't go to this branch,
+>>>>>                                        // leave LLC's type=CACHE_TYPE_NOCACHE
+>>>>>
+>>>>> The last_level_cache_is_valid() use cacheinfo->{attributes, fw_token} to
+>>>>> test it's valid or not, but populate_cache_leaves() will only reset
+>>>>> LLC's type, so we won't try to re-setup LLC's type and leave it
+>>>>> CACHE_TYPE_NOCACHE and won't export it through sysfs.
+>>>>>
+>>>
+>>> IIUC this is for the case where arch register doesn't report the system level
+>>> cache. I wonder if it makes sense to fix the arch callback to deal with that
+>>> instead of here. I am fine either way, just checking as ideally it is
+>>> something populate_cache_leaves() is messing up.
+>>>
+>>
+>> yes it's right, the LLC information is not provided by the CPU register and can
+>> only be retrieved from PPTT on my machine. Maybe fix the issue first, I don't
+>> know how to make arch callback handle this since arch_topology is also used
+>> other than arm64 which I'm not familiar with.
+>>
+>>> [...]
+>>>
+>>>>> @@ -481,6 +488,7 @@ int detect_cache_attributes(unsigned int cpu)
+>>>>>   	if (ret)
+>>>>>   		goto free_ci;
+>>>>> +update_cpu_map:
+>>>>
+>>>> Maybe just a suggestion about the code itself,
+>>>> it should be possible to replace the 'goto' by an 'if' condition.
+>>>> (Similarly, the 'populate_leaves:' label could have been avoided.)
+>>>>
+>>>
+>>> Agreed, I prefer that as well.
+>>>
+>>
+>> ok, will modify as below with a little refactor to get rid of the
+>> 'populate_leaves:' label as suggested.
+>>
+>> Thanks,
+>> Yicong
+>>
+>> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
+>> index f6573c335f4c..e34e6b77e81a 100644
+>> --- a/drivers/base/cacheinfo.c
+>> +++ b/drivers/base/cacheinfo.c
+>> @@ -462,24 +462,28 @@ int detect_cache_attributes(unsigned int cpu)
+>>          * as it will happen only once (the cacheinfo memory is never freed).
+>>          * Just populate the cacheinfo.
+>>          */
+>> -       if (per_cpu_cacheinfo(cpu))
+>> -               goto populate_leaves;
+>> -
+>> -       if (init_cache_level(cpu) || !cache_leaves(cpu))
+>> -               return -ENOENT;
+>> +       if (!per_cpu_cacheinfo(cpu)) {
+>> +               if (init_cache_level(cpu) || !cache_leaves(cpu))
+>> +                       return -ENOENT;
+>>
+>> -       ret = allocate_cache_info(cpu);
+>> -       if (ret)
+>> -               return ret;
+>> +               ret = allocate_cache_info(cpu);
+>> +               if (ret)
+>> +                       return ret;
+>> +       }
+>>
+>> -populate_leaves:
+>>         /*
+>> -        * populate_cache_leaves() may completely setup the cache leaves and
+>> -        * shared_cpu_map or it may leave it partially setup.
+>> +        * If LLC is valid the cache leaves were already populated so just go to
+>> +        * update the cpu map.
+>>          */
+>> -       ret = populate_cache_leaves(cpu);
+>> -       if (ret)
+>> -               goto free_ci;
+>> +       if (!last_level_cache_is_valid(cpu)) {
+>> +               /*
+>> +                * populate_cache_leaves() may completely setup the cache leaves and
+>> +                * shared_cpu_map or it may leave it partially setup.
+>> +                */
+>> +               ret = populate_cache_leaves(cpu);
+>> +               if (ret)
+>> +                       goto free_ci;
+>> +       }
+>>
+>>         /*
+>>          * For systems using DT for cache hierarchy, fw_token
+> 
+> The above looks OK but I would prefer to keep it simple as a fix by just not
+> adding update_cpu_map label, but I don't have strong opinion about that. So
+> I am fine either way.
+> 
 
-This test is actual only for virtio transport.
+ok got it. I'll respin a v2 patch only involves the fix.
 
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
----
- tools/testing/vsock/vsock_test.c | 90 ++++++++++++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
+Thanks.
 
-diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
-index 3de10dbb50f5..12b97c92fbb2 100644
---- a/tools/testing/vsock/vsock_test.c
-+++ b/tools/testing/vsock/vsock_test.c
-@@ -968,6 +968,91 @@ static void test_seqpacket_inv_buf_server(const struct test_opts *opts)
- 	test_inv_buf_server(opts, false);
- }
- 
-+#define HELLO_STR "HELLO"
-+#define WORLD_STR "WORLD"
-+
-+static void test_stream_virtio_skb_merge_client(const struct test_opts *opts)
-+{
-+	ssize_t res;
-+	int fd;
-+
-+	fd = vsock_stream_connect(opts->peer_cid, 1234);
-+	if (fd < 0) {
-+		perror("connect");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* Send first skbuff. */
-+	res = send(fd, HELLO_STR, strlen(HELLO_STR), 0);
-+	if (res != strlen(HELLO_STR)) {
-+		fprintf(stderr, "unexpected send(2) result %zi\n", res);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	control_writeln("SEND0");
-+	/* Peer reads part of first skbuff. */
-+	control_expectln("REPLY0");
-+
-+	/* Send second skbuff, it will be appended to the first. */
-+	res = send(fd, WORLD_STR, strlen(WORLD_STR), 0);
-+	if (res != strlen(WORLD_STR)) {
-+		fprintf(stderr, "unexpected send(2) result %zi\n", res);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	control_writeln("SEND1");
-+	/* Peer reads merged skbuff packet. */
-+	control_expectln("REPLY1");
-+
-+	close(fd);
-+}
-+
-+static void test_stream_virtio_skb_merge_server(const struct test_opts *opts)
-+{
-+	unsigned char buf[64];
-+	ssize_t res;
-+	int fd;
-+
-+	fd = vsock_stream_accept(VMADDR_CID_ANY, 1234, NULL);
-+	if (fd < 0) {
-+		perror("accept");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	control_expectln("SEND0");
-+
-+	/* Read skbuff partially. */
-+	res = recv(fd, buf, 2, 0);
-+	if (res != 2) {
-+		fprintf(stderr, "expected recv(2) returns 2 bytes, got %zi\n", res);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	control_writeln("REPLY0");
-+	control_expectln("SEND1");
-+
-+	res = recv(fd, buf + 2, sizeof(buf) - 2, 0);
-+	if (res != 8) {
-+		fprintf(stderr, "expected recv(2) returns 8 bytes, got %zi\n", res);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	res = recv(fd, buf, sizeof(buf) - 8 - 2, MSG_DONTWAIT);
-+	if (res != -1) {
-+		fprintf(stderr, "expected recv(2) failure, got %zi\n", res);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (memcmp(buf, HELLO_STR WORLD_STR, strlen(HELLO_STR WORLD_STR))) {
-+		fprintf(stderr, "pattern mismatch\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	control_writeln("REPLY1");
-+
-+	close(fd);
-+}
-+
- static struct test_case test_cases[] = {
- 	{
- 		.name = "SOCK_STREAM connection reset",
-@@ -1038,6 +1123,11 @@ static struct test_case test_cases[] = {
- 		.run_client = test_seqpacket_inv_buf_client,
- 		.run_server = test_seqpacket_inv_buf_server,
- 	},
-+	{
-+		.name = "SOCK_STREAM virtio skb merge",
-+		.run_client = test_stream_virtio_skb_merge_client,
-+		.run_server = test_stream_virtio_skb_merge_server,
-+	},
- 	{},
- };
- 
--- 
-2.25.1
