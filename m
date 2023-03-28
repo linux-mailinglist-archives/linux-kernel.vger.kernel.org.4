@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11AD96CBE1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 341516CBE24
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbjC1Lv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
+        id S232440AbjC1LxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbjC1Lv0 (ORCPT
+        with ESMTP id S229985AbjC1LxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:51:26 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B13C83D2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:51:23 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id r11so48507611edd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:51:23 -0700 (PDT)
+        Tue, 28 Mar 2023 07:53:00 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C69B6A7F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:52:58 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id i5so48728089eda.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:52:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680004282;
+        d=linaro.org; s=google; t=1680004377;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SroYEWWsu7eZpWI/xX9YYbpvlBKlIjSyYMo3wuZnCCo=;
-        b=IPYIScgR8tz/qOQarAmW9/eOp1N7Cyw0eDGXZZ/Yn57F2cz0lkh6OJNBQ2xH9zBLdx
-         m3lnPhT4LbkWsQi9rXvtpQXSANfljQovXxN8NBMPqWrktkpeuVw+9agpAswq44SRekoV
-         kSJjSZFk4naIP1qrhicOFkyqL1pWf0ihs+x4yRKo5DjghDRK68bHxem16cnlik8e9zAZ
-         F+bAQH3hLGo0p2VTEkCrVaK0OyX0mdP6WOCKP6TtQ03FmEzUdVUG/0zpcSLws9YNbv+K
-         +f8tvd/+RWMPXxMxs8sAZdPUkuwnuUPQtC9btY2Z6iAx3hWrZ+b7jIr7Lyt605fhnJXP
-         4vyg==
+        bh=tecTi4iB36so+NwD+znfDWnEir5uByUR6yq3Wl4ynCU=;
+        b=i2X70BLI85AMiXA+bGNXIXGuB/CvgJIRw5tX1ee0WVJHYwKS+K/h1g/o/2rO9x3MD1
+         D8yIw9MzzojLSz9p72w/IuZpiHO+gv/8KHcsjJDjVsk5T73HmDk9ryDiK0s/TEwp6rz4
+         26cySS+tttcogWnxDsewcrvdmPKjzvCwdxGP9+tqlE6btlJErut6Sk+3pZey451J1ImZ
+         yKDLCdHM0EECEluPpvbkJ4lQoYJsTKfo1nQ/c0gPe/Yy/EPk3SEskrVY1/Ey7EFcNeu6
+         6anIHyjv1VA/mpgROafwgnRyIljAwsrPLvBIhh6f7OWWz18jsTnu07a0GvmFDyf3ysXM
+         zwDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680004282;
+        d=1e100.net; s=20210112; t=1680004377;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SroYEWWsu7eZpWI/xX9YYbpvlBKlIjSyYMo3wuZnCCo=;
-        b=UW+C3exIl5lX7ZC+yV0ADjzZ0FTQb7d3+Ho5do5gpP2FFfkh72jENckmI8rzpbbS7E
-         KI4wcvDisAunA9HQOAV3BYLrHwD8zpXwv/v+jdXO/9TC/tho8E0y4WkhcCWg505TX1/e
-         Q/Qy1jOsDc8MnFx6I3WESvKLKQixUVyWlGTnU3DUVa8AZ8Y7pyjQOIb91m1Na/kY+4cd
-         Y30ZDKZhGZdHroHCLapIzGclI2o5xhdOujfvp3UiYMhR9bHJX6sSLurQ58QWTRmGgGF8
-         TZETYmFMo1WdDpU63UFdM+cIpIHRduIUo/7dFz+kiCbHZGqref+gfWkuR77P9vsFBqCY
-         WGmA==
-X-Gm-Message-State: AAQBX9fM31dHu5IPDRAguX+8DtUW7Anaeb023ELg6QZ2vmLTs6MUXNN2
-        Bfc7qyQFZW7c2DowrnvLDYnTsOke86M1/vmEDUs=
-X-Google-Smtp-Source: AKy350YJGama/E7rVfgouf4YqzNzTkkzVQFL1mmSBUutIoXlhC54kDnezNyqSd2W0XGMjvtVVqvFSg==
-X-Received: by 2002:a05:6402:6c1:b0:4fb:4354:ab2e with SMTP id n1-20020a05640206c100b004fb4354ab2emr15279051edy.28.1680004282416;
-        Tue, 28 Mar 2023 04:51:22 -0700 (PDT)
+        bh=tecTi4iB36so+NwD+znfDWnEir5uByUR6yq3Wl4ynCU=;
+        b=vcHBVEHha/nIiF8Oz2/v9dNL5iS4TSwdVvKY+XY30Sbv9pmdhs2neEo2SZF8KYxkb+
+         AGER3w/yX3o4wY5ymBMUhEhgUui5SXpijWuWrW/0GcAmS3vYt2LfVuMgAGeHX2vSC1Ar
+         cM+j5XKI/oGtxisfQtLGs9LBMqUHT7OkfHN3QIHksJ9S8WpA0twtKlG+TTpb6Sj1eIso
+         0DE13apH0107fNt1up7XS773q6HjVDNbcu1BTKbgZ4T+ZfTrwp+b5J3mYou5TLnhvONV
+         RHW3FaP9piGS2EmHZ5/xUrqv+n7Yq5PJdVsq5OzytQX7Fpi0Xjel63HHtTSbgksOHou8
+         Zq7w==
+X-Gm-Message-State: AO0yUKWIGqa4zyDwxY0wKR7i5IeHd8x9PRt4RThZRary0Paq+pEyDWPQ
+        Q3lC/eKI4r7MY4c1yqVR9n6VfA==
+X-Google-Smtp-Source: AK7set9vn8o61Ws1RoyyPqOxKld/IbsKS8craVotdUiSS7KOmXNEY21v+QtU4GXt7AxzOPqjvooNzA==
+X-Received: by 2002:a17:906:3710:b0:923:812c:a5d3 with SMTP id d16-20020a170906371000b00923812ca5d3mr20751730ejc.25.1680004377051;
+        Tue, 28 Mar 2023 04:52:57 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
-        by smtp.gmail.com with ESMTPSA id s12-20020a50d48c000000b005023aaf52desm4068364edi.95.2023.03.28.04.51.21
+        by smtp.gmail.com with ESMTPSA id cd11-20020a170906b34b00b0093009bc5825sm15231709ejb.2.2023.03.28.04.52.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 04:51:22 -0700 (PDT)
-Message-ID: <9c46103e-c033-73e7-a45a-6278a95e2fc5@linaro.org>
-Date:   Tue, 28 Mar 2023 13:51:21 +0200
+        Tue, 28 Mar 2023 04:52:56 -0700 (PDT)
+Message-ID: <25422211-a26a-889a-afcd-12b561669c14@linaro.org>
+Date:   Tue, 28 Mar 2023 13:52:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: regulator: Add Richtek RT4803
+Subject: Re: [PATCH v2 1/2] dt-bindings: spi: add Amlogic Meson A1 SPI
+ controller
 Content-Language: en-US
-To:     cy_huang@richtek.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     lgirdwood@gmail.com, jeff_chang@richtek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <1679899572-16182-1-git-send-email-cy_huang@richtek.com>
+To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru
+References: <20230327211351.686831-1-mmkurbanov@sberdevices.ru>
+ <20230327211351.686831-2-mmkurbanov@sberdevices.ru>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1679899572-16182-1-git-send-email-cy_huang@richtek.com>
+In-Reply-To: <20230327211351.686831-2-mmkurbanov@sberdevices.ru>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -76,23 +86,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2023 08:46, cy_huang@richtek.com wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> Add the binding document for Richtek RT4803.
+On 27/03/2023 23:13, Martin Kurbanov wrote:
+> Add YAML devicetree Amlogic Meson A113L (A1 family) SPIFC Driver.
 
-Subject prefixes instead:
-regulator: dt-bindings: ......
+Don't add drivers to DT bindings.
 
 > 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> This patch has dependencies on the A1 clock series which is still under
+> review - https://lore.kernel.org/all/20230321193014.26349-1-ddrokosov@sberdevices.ru/
+
+This is not part of commit msg.
+
+> 
+> Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
 > ---
->  .../bindings/regulator/richtek,rt4803.yaml         | 68 ++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt4803.yaml
+>  .../bindings/spi/amlogic,meson-a1-spifc.yaml  | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml
+> 
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
