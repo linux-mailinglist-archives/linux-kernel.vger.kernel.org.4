@@ -2,189 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5027B6CBE28
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E86B6CBE29
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbjC1Lxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
+        id S232701AbjC1LyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjC1Lxn (ORCPT
+        with ESMTP id S230526AbjC1LyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:53:43 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7B546E8B;
-        Tue, 28 Mar 2023 04:53:40 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8AxJDRD1SJkjBMTAA--.29795S3;
-        Tue, 28 Mar 2023 19:53:39 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxWb0+1SJkJ18PAA--.9312S3;
-        Tue, 28 Mar 2023 19:53:37 +0800 (CST)
-Subject: Re: [PATCH v4 0/2] spi: loongson: add bus driver for the loongson spi
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
- <20230328113536.ldxpvx3hibezcqtb@intel.intel>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <253f3bf2-a193-69da-79ef-c3771d677478@loongson.cn>
-Date:   Tue, 28 Mar 2023 19:53:34 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 28 Mar 2023 07:54:03 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D9E6A7F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=BrwzSYm4qlu0nTuyTngTlfOl4RIB2UxL2RuI4CuMcZE=; b=kwH2NwmceG+zgIGou0R+M5KHeu
+        KLYVZhG/+nbnPaOqSj3FDNNQchoJuthsHBPLQGJb/XHus3/KJXzhQQ9BFb8wGzwcg5UsxnfJfUMxD
+        rfXVm//evWq2CC82XPADMyKtJ+pPpiufrUe9w6hBHdpULrxUhQqXEsGz9+fvg5M9tix6rr/9dzDuj
+        NDY6rrBacOcmOSXYVskEbVcy3WmSr6FzF/bb7nyXFZgPnuAAJvE7SVzSVjxsWUsGEb4hIc/YiKSQx
+        Y3bxlv+TJfK57oF4dMFQAgxdL+39SxXbsaxqX9FMpJjhqJlroQvB2dhEd4wf40XKwsbdlq6X+HseB
+        gwj4RpG3K91d5Tf0Gxkegt/WT9s13hvp94n2p++1ZEllU9W5I8MYMyDWQQv2WhH/e4Hk3FXSidtVQ
+        ktal5gQqYpOhgwcQov1dkheb+4avQFm3Ah25AXXduHDbnuxLbnJY31U8y8kERasuXU9SQepF/IJxi
+        g4jYZ1T/tyBhM6fGIKgCIseJTdMKarTNUJqQfu8SEx90vGv7Ves32vRChg8PQOfNUu7iv7xMaaahb
+        nUWC8pSNU3q0uvA/6OEuJkEUwmzO8dmCAOqq8Pf/4djs79jvej2ZszIM/s8xVyttI123sXEUr+hN5
+        4nshqzOYk4mtZTEdh3bNHXWNXMZ585VfxWHxfh1vE=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jeff Layton <jlayton@kernel.org>, lucho@ionkov.net,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Amir Goldstein <amir73il@gmail.com>,
+        Pankaj Raghav <p.raghav@samsung.com>
+Subject: Re: 9p caching with cache=loose and cache=fscache
+Date:   Tue, 28 Mar 2023 13:53:49 +0200
+Message-ID: <2391219.DQnbcWml7j@silver>
+In-Reply-To: <ZCJRlqc/epbRhm93@codewreck.org>
+References: <ZA0FEyOtRBvpIXbi@bombadil.infradead.org>
+ <ZCHU6k56nF5849xj@bombadil.infradead.org> <ZCJRlqc/epbRhm93@codewreck.org>
 MIME-Version: 1.0
-In-Reply-To: <20230328113536.ldxpvx3hibezcqtb@intel.intel>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxWb0+1SJkJ18PAA--.9312S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXFWxJry5Cw1kGw1fGrWrAFb_yoW7JFWxpF
-        sxC3ZxtF43JF4kArs3JryUJr1UXryrJr93JFW3t3409ryDZw1UCr1jyF1rurWUAFyag3Wx
-        WF18ur4rGFy8JFUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l
-        57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-        vE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-        r2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF04k20xvE74
-        AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF
-        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87
-        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2oGQDUUUU
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-ÔÚ 2023/3/28 ÏÂÎç7:35, Andi Shyti Ð´µÀ:
-> Hi Yinbo,
+On Tuesday, March 28, 2023 4:31:50 AM CEST Dominique Martinet wrote:
+> Luis Chamberlain wrote on Mon, Mar 27, 2023 at 10:39:54AM -0700:
+> > > I have fixed what
+> > > I hope to be my last bug with the new patch series so it should be
+> > > going into linux-next today.
+> > 
+> > Nice, thanks, since kdevops relies on a host kernel though and we strive
+> > to have stability for that, I personally like to recommend distro
+> > kernels and so they're a few kernel releases out of date. So debian-testing
+> > is on 6.1 as of today for example.
+> > [...]
+> > -    opts: "ro,trans=virtio,version=9p2000.L,posixacl,cache=loose"
+> > +    opts: "ro,trans=virtio,version=9p2000.L,posixacl,cache=none"
 > 
-> before submitting the patches for review... can you please run
-> checkpatch.pl on them?
-yes, I had used checkpatch.pl to check and no any errors and warnings.
-
-user@user-pc:~/workspace/test/code/www.kernel.org/linux$ 
-./scripts/checkpatch.pl *.patch
------------------------
-0000-cover-letter.patch
------------------------
-total: 0 errors, 0 warnings, 0 lines checked
-
-0000-cover-letter.patch has no obvious style problems and is ready for 
-submission.
--------------------------------------------
-0001-dt-bindings-spi-add-loongson-spi.patch
--------------------------------------------
-Traceback (most recent call last):
-   File "scripts/spdxcheck.py", line 6, in <module>
-     from ply import lex, yacc
-ModuleNotFoundError: No module named 'ply'
-total: 0 errors, 0 warnings, 55 lines checked
-
-0001-dt-bindings-spi-add-loongson-spi.patch has no obvious style 
-problems and is ready for submission.
----------------------------------------------------------------
-0002-spi-loongson-add-bus-driver-for-the-loongson-spi-con.patch
----------------------------------------------------------------
-Traceback (most recent call last):
-   File "scripts/spdxcheck.py", line 6, in <module>
-     from ply import lex, yacc
-ModuleNotFoundError: No module named 'ply'
-Traceback (most recent call last):
-   File "scripts/spdxcheck.py", line 6, in <module>
-     from ply import lex, yacc
-ModuleNotFoundError: No module named 'ply'
-Traceback (most recent call last):
-   File "scripts/spdxcheck.py", line 6, in <module>
-     from ply import lex, yacc
-ModuleNotFoundError: No module named 'ply'
-Traceback (most recent call last):
-   File "scripts/spdxcheck.py", line 6, in <module>
-     from ply import lex, yacc
-ModuleNotFoundError: No module named 'ply'
-total: 0 errors, 0 warnings, 556 lines checked
-
-0002-spi-loongson-add-bus-driver-for-the-loongson-spi-con.patch has no 
-obvious style problems and is ready for submission.
-user@user-pc:~/workspace/test/code/www.kernel.org/linux$
+> Yes, if you want something mostly coherent with the host, cache=none (or
+> cache=mmap if you need mmap, iirc linux build does for linking? if you
+> want to do that on guest...) is what you'll want to use on current
+> kernels.
 > 
-> Thanks,
-> Andi
+> > BTW the qemu wiki seems to suggest cache=loose and its why I used it on
+> > kdevops as a default. What about the following so to avoid folks running
+> > into similar issues? I can go and update the wiki too.
 > 
-> On Tue, Mar 28, 2023 at 07:22:08PM +0800, Yinbo Zhu wrote:
->> Loongson platform support spi hardware controller and this series patch
->> was to add spi driver and binding support.
->>
->> Change in v2:
->> 		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
->> 	 	   https://
->> 		   lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
->> 		2. Remove the clock-names in spi yaml file.
->> 		3. Add "loongson,ls7a-spi" compatible in spi yaml file.
->> 		4. Add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI
->> 		   macro to limit some pci code.
->> 		5. Make the spi driver top code comment block that use C++ style.
->> 		6. Drop spi->max_speed_hz.
->> 		7. Add a spin_lock for loongson_spi_setup.
->> 		8. Add a timeout and cpu_relax() in loongson_spi_write_read_8bit.
->> 		9. Add spi_transfer_one and drop transfer and rework entire spi
->> 		   driver that include some necessary changes.
->> 		10. Use module_init replace subsys_initcall.
->> 		11. About PM interface that I don't find any issue so I don't add
->> 		    any changes.
->> Change in v3:
->> 		1. This [PATCH v3 1/2] dt-bindings patch need depend on clk patch:
->> 		   https://
->> 		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
->> 		2. Drop the unused blank line in loongson,ls-spi.yaml file.
->> 		3. Replace clock minItems with clock maxItems in yaml file.
->> 		4. Separate spi driver into platform module, pci module and core
->> 		   module.
->> 		5. Replace DIV_ROUND_UP with DIV_ROUND_UP_ULL to fix compile error
->> 		   "undefined reference to `__aeabi_uldivmod'" and  "__udivdi3 undefined"
->> 		   that reported by test robot.
->> 		6. Remove the spin lock.
->> 		7. Clear the loongson_spi->hz and loongson_spi->mode in setup to fixup
->> 		   the issue that multiple spi device transfer that maybe cause spi was
->> 		   be misconfigured.
->> Change in v4:
->> 		1. This [PATCH v4 1/2] dt-bindings patch need depend on clk patch:
->> 		   https://
->> 		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
->> 		2. Add "#include <linux/io.h>" in spi-loongson-core.c for fix the compile
->> 		   issue which devm_ioremap no declaration.
->> 		3. Add "EXPORT_SYMBOL_GPL(loongson_spi_dev_pm_ops)" in
->> 		   spi-loongson-core.c for fix the compile issue which
->> 		   loongson_spi_dev_pm_ops undefined.
->>
->> Yinbo Zhu (2):
->>    dt-bindings: spi: add loongson spi
->>    spi: loongson: add bus driver for the loongson spi controller
->>
->>   .../bindings/spi/loongson,ls-spi.yaml         |  43 +++
->>   MAINTAINERS                                   |  10 +
->>   drivers/spi/Kconfig                           |  31 ++
->>   drivers/spi/Makefile                          |   3 +
->>   drivers/spi/spi-loongson-core.c               | 304 ++++++++++++++++++
->>   drivers/spi/spi-loongson-pci.c                |  89 +++++
->>   drivers/spi/spi-loongson-plat.c               |  66 ++++
->>   drivers/spi/spi-loongson.h                    |  41 +++
->>   8 files changed, 587 insertions(+)
->>
->> -- 
->> 2.20.1
->>
+> I've added Christian in Cc for this point, he's more active on the qemu
+> side
+> (thread started here:
+> https://lkml.kernel.org/r/ZA0FEyOtRBvpIXbi@bombadil.infradead.org
+> )
+> 
+> I have no opinion on the current wording, the default is there for a
+> reason and it's a safe default (none), and cache=loose is clearly
+> described with "no attempts are made at consistency, intended for
+> exclusive, read-only mounts" which I think ought to be clear enough
+> (exclusive means not shared with the host), but if you think it's not
+> clear enough it probably isn't.
+> 
+> A word on the qemu wiki "if you want to share with host..." would
+> probably be good though.
+
+Hi Luis,
+
+not sure which QEMU wiki page you are referring to. AFAIK we currently have 3
+QEMU wiki pages concerning 9p:
+
+1. 9p documentation for users:
+https://wiki.qemu.org/Documentation/9psetup
+
+2. 9p documentation for developers only:
+https://wiki.qemu.org/Documentation/9p
+
+3. How to setup an entire guest on top of a 9p root filesystem:
+https://wiki.qemu.org/Documentation/9p_root_fs
+
+Only the latter wiki page mentions cache=loose at all:
+
+  "To speedup things you can also consider to use e.g. cache=loose instead. 
+   That will deploy a filesystem cache on guest side and reduces the amount
+   of 9p requests to hosts. As a consequence however guest might not 
+   immediately see file changes performed on host side. So choose wisely upon
+   intended use case scenario. You can change between cache=mmap or e.g.
+   cache=loose at any time."
+
+Which I now changed to:
+
+  "To speedup things you can also consider to use e.g. cache=loose instead.
+   That will deploy a filesystem cache on guest side and reduces the amount of
+   9p requests to hosts. As a consequence however guest might not see file
+   changes performed on host side *at* *all* (as Linux kernel's 9p client 
+   currently does not revalidate for fs changes on host side at all, which is
+   planned to be changed on Linux kernel side soon though). So choose wisely
+   upon intended use case scenario. You can change between cache=mmap or e.g.
+   cache=loose at any time."
+
+On the user page it was already clearly mentioned though:
+
+  "Mount the shared folder on guest using
+
+      mount -t 9p -o trans=virtio test_mount /tmp/shared/ -oversion=9p2000.L,posixacl,msize=104857600,cache=none
+
+  In the above example the folder /home/guest/9p_setup/ shared of the host
+  is shared with the folder /tmp/shared on the guest. We use no cache because
+  current caching mechanisms need more work and the results are not what you
+  would expect."
+
+Best regards,
+Christian Schoenebeck
+
 
