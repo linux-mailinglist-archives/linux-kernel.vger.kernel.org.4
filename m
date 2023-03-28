@@ -2,240 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2326CC9FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 20:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61AEF6CC9FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 20:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjC1SXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 14:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
+        id S229564AbjC1S0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 14:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjC1SXu (ORCPT
+        with ESMTP id S229451AbjC1S0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 14:23:50 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7590E1736
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:23:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1680027808; bh=Zhkb52UN4pGmOgfIInyrCcAMDrh46P0XG+aPDtokb5Q=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=hk0/8TUt4RGEGszjChE1b9tACwVvqxkdd36F4bUKVl1koivoH7ZAAyIjf0OBusLbg
-         3nvR/roBtlqWE5lfoJTUyQdemwqNEEeyN5TK4qkuAlSisTQXvT5HNNb5AusyWdVVPR
-         IUifgGmd/az6/ehDslyyM2ssFNRM4KpC2Jcim9O0=
-Received: by b221-6.in.mailobj.net [192.168.90.26] with ESMTP
-        via ip-20.mailobj.net [213.182.54.20]
-        Tue, 28 Mar 2023 20:23:28 +0200 (CEST)
-X-EA-Auth: vSezUHgXhoJQdfC2bzp9VLgj31jApqprS7Ch5L3kM4I+hH1Tg7vk9I1bi02/R+4ieIExgTRHteZIq4j9f9YMsNOxiVV5kKZV
-Date:   Tue, 28 Mar 2023 23:53:22 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Kloudifold <cloudifold.3125@gmail.com>
-Cc:     outreachy@lists.linux.dev, teddy.wang@siliconmotion.com,
-        sudipm.mukherjee@gmail.com, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        alison.schofield@intel.com
-Subject: Re: [PATCH v5] staging: sm750: Rename sm750_hw_cursor_* functions to
- snake_case
-Message-ID: <ZCMwmpEoe4qCuxMz@ubun2204.myguest.virtualbox.org>
-References: <ZCLMAJ5APrFRMCWu@CloudiRingWorld>
+        Tue, 28 Mar 2023 14:26:17 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE8A1987
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:26:17 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-545cb3c9898so171385087b3.7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680027976;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2AGWQH5bNreKYweyVy17yy5EiRLAFTbclRLyhJW+HkY=;
+        b=TWVo5kbMLITL44SiH7QYY6gA56iFqydbBz9LpsNG5pQX0UxGhBqRfyS0OE/RXAmH5j
+         Hwk8TtVX+HakFvAzvGW2g0GXaRdZROgwBGtPu7L7/Q3yY3zms8BPJnqkR0QPIKdTncLp
+         HZtgOmOWFaHKXnXy2TYecgnS9H4iKxZE5eCIauQnrCsTRwf2nOLmt4yNhORFLzzy3jjh
+         aaA7V5Ds1dG8Z5ot6VgV6/pJkt4N7faikn90E80JBJpg3oILIC/Y13TJ1Yx8mN109R6+
+         morxv3RFkhojp+HqzJWacObN6b57bqtOIszmjrqM1PEBcmL1idawXM4ArUq+A9QJPJwr
+         gUUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680027976;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2AGWQH5bNreKYweyVy17yy5EiRLAFTbclRLyhJW+HkY=;
+        b=JZGrACPcAWQh1e6P+udNYZ+0je09SHKXG/S1Jr15cW9KYwJgUrNcuhYn6KTbTk6PaH
+         M6vjNU2QRyppd1Hc7hWMurm+ZRWbLvJcs9XbJRQM8jrGD5C4PqaJK/A1KL8AF2jzLY6L
+         CtzDtJ8goWvITKpbW64dFTHFX9lZ5Vn5UKOTiji4UaUbcjmoHRoCz5498R932WX25Ray
+         gAorVDU8dwC+/So44+fyqwgEEfP025O83WDGw+jQtzTwm3DhilNx34/0HwhV9Fy/2I7c
+         pBXXezG89OIiBGpgsUJarur+Gp+YL4oYQEiqMLg/T6H4fOrNiXrg6WH/Xr8yfhVktKnA
+         f1rA==
+X-Gm-Message-State: AAQBX9cv17oPsTCuEIli2reDvQdHjf6wT9jk1HOGLmEZIiJdN9SmHU15
+        /43dllpg/odjICLZatBg+qheJZ7Ze3bv9P/yIV8CuuO6AvIJr5oX05Ar2wU=
+X-Google-Smtp-Source: AKy350ZyAqttORMKJqMeGkcjgyqFvxCtrRDSSph/mceXQCWZauj3OekieipEEg3Sxxt2ulFFbJjJEdmb7AnYqhB9DCQ=
+X-Received: by 2002:a81:a908:0:b0:545:7164:49ac with SMTP id
+ g8-20020a81a908000000b00545716449acmr7679518ywh.5.1680027976159; Tue, 28 Mar
+ 2023 11:26:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCLMAJ5APrFRMCWu@CloudiRingWorld>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CGME20230328125807epcas1p1606c068a9043d6581a1fbdd30e7c53a2@epcas1p1.samsung.com>
+ <20230328125818.5574-1-jaewon31.kim@samsung.com>
+In-Reply-To: <20230328125818.5574-1-jaewon31.kim@samsung.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 28 Mar 2023 11:26:05 -0700
+Message-ID: <CANDhNCpNDvK3uKvamNwrxpsaqFZH24BBLrdFUo0Uucu1ic0WdA@mail.gmail.com>
+Subject: Re: [PATCH] dma-buf/heaps: c9e8440eca61 staging: ion: Fix overflow
+ and list bugs in system heap:
+To:     Jaewon Kim <jaewon31.kim@samsung.com>
+Cc:     tjmercier@google.com, sumit.semwal@linaro.org,
+        daniel.vetter@ffwll.ch, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, mhocko@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, jaewon31.kim@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 07:16:54PM +0800, Kloudifold wrote:
+On Tue, Mar 28, 2023 at 5:58=E2=80=AFAM Jaewon Kim <jaewon31.kim@samsung.co=
+m> wrote:
+>
+> Normal free:212600kB min:7664kB low:57100kB high:106536kB
+>   reserved_highatomic:4096KB active_anon:276kB inactive_anon:180kB
+>   active_file:1200kB inactive_file:0kB unevictable:2932kB
+>   writepending:0kB present:4109312kB managed:3689488kB mlocked:2932kB
+>   pagetables:13600kB bounce:0kB free_pcp:0kB local_pcp:0kB
+>   free_cma:200844kB
+> Out of memory and no killable processes...
+> Kernel panic - not syncing: System is deadlocked on memory
+>
+> An OoM panic was reported, there were only native processes which are
+> non-killable as OOM_SCORE_ADJ_MIN.
+>
+> After looking into the dump, I've found the dma-buf system heap was
+> trying to allocate a huge size. It seems to be a signed negative value.
+>
+> dma_heap_ioctl_allocate(inline)
+>     |  heap_allocation =3D 0xFFFFFFC02247BD38 -> (
+>     |    len =3D 0xFFFFFFFFE7225100,
+>
+> Actually the old ion system heap had policy which does not allow that
+> huge size with commit c9e8440eca61 ("staging: ion: Fix overflow and list
+> bugs in system heap"). We need this change again. Single allocation
+> should not be bigger than half of all memory.
+>
+> Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
 
-Hi Kloudifold,
+Hey,
+  Thanks so much for sending this out! Looks reasonable to me, the
+only issue is the commit subject line could be a bit better.
 
-> sm750 driver has sm750_hw_cursor_* functions, which are named in
+Maybe instead:
+  "dma-buf/heaps: system_heap: Avoid DoS by limiting single
+allocations to half of all memory"
 
-As mentioned earlier, the driver name "sm750" is not required here. You can
-simply start the line with "The driver ...".
+Otherwise,
+Acked-by: John Stultz <jstultz@google.com>
 
-> camelcase. Rename them to snake case to follow the function naming
-> convention.
-> 
-> - sm750_hw_cursor_setSize  => sm750_hw_cursor_set_size
-> - sm750_hw_cursor_setPos   => sm750_hw_cursor_set_pos
-> - sm750_hw_cursor_setColor => sm750_hw_cursor_set_color
-> - sm750_hw_cursor_setData  => sm750_hw_cursor_set_data
-> - sm750_hw_cursor_setData2 => sm750_hw_cursor_set_data2
-> 
-> Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
-> 
-> ---
-> Changes in v5:
-> - Include missed recipients in v4, no functional change to the code
-
-I still do not see the full maintainer list on this patch. If I do the
-following:
-	$ perl scripts/get_maintainer.pl --separator , --nokeywords --nogit --nogit-fallback --norolestats drivers/staging/sm750fb/sm750.c
-
-I get the following list:
-Sudip Mukherjee <sudipm.mukherjee@gmail.com>,Teddy Wang <teddy.wang@siliconmotion.com>,Greg Kroah-Hartman <gregkh@linuxfoundation.org>,linux-fbdev@vger.kernel.org,devel@driverdev.osuosl.org,linux-kernel@vger.kernel.org
-
-You are still missing these mailing list in your to list: linux-fbdev@vger.kernel.org,devel@driverdev.osuosl.org
-
-Are you doing anything different to get the maintainer list? What?
-
-Thank you,
-Deepak.
-
-> 
-> Changes in v4:
-> - Update the commit msg (Deepak)
-> - Use tabs replace 8 spaces
-> 
-> This v4 patch was prompted by 2 errors, 2 warnings and 1 checks reported
-> by the scripts/checkpatch.pl, which detected the style problem.
-> 
-> Changes in v3:
-> - Add this changelog (Philipp)
-> - Move lkp tags and link to the correct location in commit log (Alison)
-> - Update the commit msg (Philip)
-> - Update the commit log (Bagas, Julia)
-> 
-> Changes in v2:
-> - Use new function names in call sites (LKP)
-> 
-> This v2 patch was prompted by an error reported by the Linux test
-> robot, which detected the compile error.
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@intel.com/
-> ---
->  drivers/staging/sm750fb/sm750.c        | 22 +++++++++++-----------
->  drivers/staging/sm750fb/sm750_cursor.c | 14 +++++++-------
->  drivers/staging/sm750fb/sm750_cursor.h | 12 ++++++------
->  3 files changed, 24 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-> index effc7fcc3..5d7249e82 100644
-> --- a/drivers/staging/sm750fb/sm750.c
-> +++ b/drivers/staging/sm750fb/sm750.c
-> @@ -121,14 +121,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
->  
->  	sm750_hw_cursor_disable(cursor);
->  	if (fbcursor->set & FB_CUR_SETSIZE)
-> -		sm750_hw_cursor_setSize(cursor,
-> -					fbcursor->image.width,
-> -					fbcursor->image.height);
-> +		sm750_hw_cursor_set_size(cursor,
-> +					 fbcursor->image.width,
-> +					 fbcursor->image.height);
->  
->  	if (fbcursor->set & FB_CUR_SETPOS)
-> -		sm750_hw_cursor_setPos(cursor,
-> -				       fbcursor->image.dx - info->var.xoffset,
-> -				       fbcursor->image.dy - info->var.yoffset);
-> +		sm750_hw_cursor_set_pos(cursor,
-> +					fbcursor->image.dx - info->var.xoffset,
-> +					fbcursor->image.dy - info->var.yoffset);
->  
->  	if (fbcursor->set & FB_CUR_SETCMAP) {
->  		/* get the 16bit color of kernel means */
-> @@ -142,14 +142,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
->  		     ((info->cmap.green[fbcursor->image.bg_color] & 0xfc00) >> 5) |
->  		     ((info->cmap.blue[fbcursor->image.bg_color] & 0xf800) >> 11);
->  
-> -		sm750_hw_cursor_setColor(cursor, fg, bg);
-> +		sm750_hw_cursor_set_color(cursor, fg, bg);
->  	}
->  
->  	if (fbcursor->set & (FB_CUR_SETSHAPE | FB_CUR_SETIMAGE)) {
-> -		sm750_hw_cursor_setData(cursor,
-> -					fbcursor->rop,
-> -					fbcursor->image.data,
-> -					fbcursor->mask);
-> +		sm750_hw_cursor_set_data(cursor,
-> +					 fbcursor->rop,
-> +					 fbcursor->image.data,
-> +					 fbcursor->mask);
->  	}
->  
->  	if (fbcursor->enable)
-> diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
-> index 43e6f52c2..ff643e33f 100644
-> --- a/drivers/staging/sm750fb/sm750_cursor.c
-> +++ b/drivers/staging/sm750fb/sm750_cursor.c
-> @@ -58,13 +58,13 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
->  	poke32(HWC_ADDRESS, 0);
->  }
->  
-> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
-> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
->  {
->  	cursor->w = w;
->  	cursor->h = h;
->  }
->  
-> -void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
-> +void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y)
->  {
->  	u32 reg;
->  
-> @@ -73,7 +73,7 @@ void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
->  	poke32(HWC_LOCATION, reg);
->  }
->  
-> -void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
-> +void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg)
->  {
->  	u32 reg = (fg << HWC_COLOR_12_2_RGB565_SHIFT) &
->  		HWC_COLOR_12_2_RGB565_MASK;
-> @@ -82,8 +82,8 @@ void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
->  	poke32(HWC_COLOR_3, 0xffe0);
->  }
->  
-> -void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
-> -			     const u8 *pcol, const u8 *pmsk)
-> +void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
-> +			      const u8 *pcol, const u8 *pmsk)
->  {
->  	int i, j, count, pitch, offset;
->  	u8 color, mask, opr;
-> @@ -132,8 +132,8 @@ void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
->  	}
->  }
->  
-> -void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
-> -			      const u8 *pcol, const u8 *pmsk)
-> +void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-> +			       const u8 *pcol, const u8 *pmsk)
->  {
->  	int i, j, count, pitch, offset;
->  	u8 color, mask;
-> diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
-> index b59643dd6..88fa02f63 100644
-> --- a/drivers/staging/sm750fb/sm750_cursor.h
-> +++ b/drivers/staging/sm750fb/sm750_cursor.h
-> @@ -5,11 +5,11 @@
->  /* hw_cursor_xxx works for voyager,718 and 750 */
->  void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
->  void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
-> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
-> -void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
-> -void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
-> -void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
-> -			     const u8 *data, const u8 *mask);
-> -void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
-> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
-> +void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y);
-> +void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg);
-> +void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
->  			      const u8 *data, const u8 *mask);
-> +void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-> +			       const u8 *data, const u8 *mask);
->  #endif
-> -- 
-> 2.40.0
-> 
-> 
-
-
+thanks
+-john
