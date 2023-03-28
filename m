@@ -2,163 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C84D6CCE00
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 874686CCE02
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbjC1XZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 19:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
+        id S229670AbjC1X0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 19:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjC1XZF (ORCPT
+        with ESMTP id S229493AbjC1X0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 19:25:05 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963883589
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:25:03 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id g17so11801306vst.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:25:03 -0700 (PDT)
+        Tue, 28 Mar 2023 19:26:12 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EC2E0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:26:11 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id y4so56348029edo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:26:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680045902;
+        d=futuring-girl-com.20210112.gappssmtp.com; s=20210112; t=1680045969;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=q1VR/BF0jQL+n/+bN9STmwrPdLJFsdBP342GdIuhsbw=;
-        b=fsj3sD/1F95ToKmA30qh7ab3wBx6i4tUYzzz6HuBg7ELZhQ66vpLuYM10XGoHsPSIL
-         h5UXh19q5u/XUurK/aMbI5C9kNny5sVosjeADh+av8W/djSf1B1X7goJKo38Ru9A6XVU
-         w0nSIBVhOGu0P2Z2Jj5pS0LCO1dVJBnAZb9eZDA7EOPnJWU9iKXIlBU0dUtX35a22bfE
-         bau7lgXpplftx76WVx9j32zqiCdgqSxJxnocB3g6G3vb1j1Yiik9CQzjvBuIVHsh3RFe
-         tJrz8MmeOBNvdo7JfOuYiHB13zjxm3U0psI+spIKGmimN9fyj73O+A8D94/8LQ5BOWHn
-         /8yw==
+        bh=JqJjGxekriimV9ccPGWfHqw8XlwO9y93gHUtXAwGvHU=;
+        b=nYCwAj4W7zUziLOb6Zi0KzhrnwaLIW1MgtHawRrNX52hiCKS81ir7BICobZMfMamJh
+         q859LHoVnCi2Ih722KHvSx+qeIDxkmS2T6okixg8OjPI6VW6Rv957bCItLJd+0gkxGBK
+         tt0MNiSqTpgvcOPf0FxQwQHPqnRrvMQsV8OFS1bVMQkWs7mvQ8rSmHdleCCn9BkmC8EG
+         TClrzff1H8Jny1Pn1P8jhzfrP6Ku00MlRRCGRkjK0eJS4E2cqJO49niumfJk6+F10Eqn
+         Bx9UNkj52EFMFh4D18kLIi/Eo2b6SxDU+ZunnSQw6GZmAYqndJnx6a10s93//jZjPQav
+         puDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680045902;
+        d=1e100.net; s=20210112; t=1680045969;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=q1VR/BF0jQL+n/+bN9STmwrPdLJFsdBP342GdIuhsbw=;
-        b=ByoG4aoPnhVLxbEkuxGmtz9Kyy4xKdvWV+oZQFepXTZ7/4xaLHVKiuHe1CHkyK+IoB
-         PL4adS0JIkN3XfafxUXcf0FJpjooMGmjAzfH1BWt8q8WR6up9xnBpX5O+cx3/mJxIBgv
-         UW491CdUqnsMs/ezZ3D35Qd92e/YPJRk48rCRI2TxpAPf7BbkBsL13BQfJetgOyh7/r/
-         3gxZ+rlTz0sqslfpYVIzom2jYMUmkcv7ptcs3q6OmUKHuN6vfO4hKqdce/8ss3+edudJ
-         GBjGdRF4tF7IsZ3thUaNCWaz8+vNd8AH1PF/fw0doAKY/lo0SqOudQQ1BJ2Mzbq1k4/E
-         ufCw==
-X-Gm-Message-State: AAQBX9eWsc/IacJDwnq4BjmVNdsCLIgf1HAlKidaEvblwNgX2JaIXgyO
-        dTiAMNLWyeEgzapN6+/FyOD9ib+yj01t1qa7zJH8og==
-X-Google-Smtp-Source: AKy350b8nx51K1KTTclF52Rl6315MXjfFUIHs0S966i6F6S7B/cY/G0pcFLqO3A7VNlnZQurd/3QGxa4CHW/3WWlqpQ=
-X-Received: by 2002:a67:c215:0:b0:425:eb13:b07d with SMTP id
- i21-20020a67c215000000b00425eb13b07dmr9173692vsj.4.1680045902618; Tue, 28 Mar
- 2023 16:25:02 -0700 (PDT)
+        bh=JqJjGxekriimV9ccPGWfHqw8XlwO9y93gHUtXAwGvHU=;
+        b=GiVPQOrP9ekeUiTD0fytT0/+ZBbEhsUNceUwUUFBZPtgxgm+A3aPBSCSoKtG1ZQW18
+         cTtitbhc5zGzle773ifiIARlExDiGAskseGjXC7t0VkW3v5yPUeugqUUs391v7Y4HP2R
+         sDclMNjprlpBPOSmjB1W9wSTsxda8yvrJZ/+GxPlQB6vsHKxwtuGfk1vPB7MLyEsoDiy
+         gen9rRA/6CnWp3waQco2gc5zhcD7RPO6pzEp6PCZfovKILB1FCMJKPzk1NU98GZgFO2s
+         gNiBU76Dsa0hfYXkpBsOr4nykR2kBH5lp15bX1WVXFCCRSa1WllATs7jgIcw+IyRsue6
+         gr5A==
+X-Gm-Message-State: AAQBX9eQiDeTb06JfmPa5AtCw6+qicL2D6qtali+QptMQrbMHesBWU0T
+        lp4fpP/o4+K3Dbi8P+/XBXT5jnSL7lnCqzmQG99zgg==
+X-Google-Smtp-Source: AKy350Y/XwgdIF0TqePlNgKFLudXFBOEt6S7AOADn9TlZPl1X9r+dMLlrQVvznif+aA6/FL8QqqAkWz6iuS3LYHTXfI=
+X-Received: by 2002:a05:6402:4306:b0:4af:6e95:85e9 with SMTP id
+ m6-20020a056402430600b004af6e9585e9mr209005edc.4.1680045969456; Tue, 28 Mar
+ 2023 16:26:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-16-vipinsh@google.com>
- <ZBzS9WnZu9VtSVAt@google.com> <CAHVum0dOP6kR83Uuha=Ka7=enfEdrTTX7ZtR0nhXrkJDCo9dKQ@mail.gmail.com>
-In-Reply-To: <CAHVum0dOP6kR83Uuha=Ka7=enfEdrTTX7ZtR0nhXrkJDCo9dKQ@mail.gmail.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Tue, 28 Mar 2023 16:24:36 -0700
-Message-ID: <CALzav=fgek=jgtaytz6ZEUgBzoHBKAgLk53n9w0LGZrJkMBg-A@mail.gmail.com>
-Subject: Re: [Patch v4 15/18] KVM: mmu: Add NUMA node support in struct kvm_mmu_memory_cache{}
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230328142617.205414124@linuxfoundation.org>
+In-Reply-To: <20230328142617.205414124@linuxfoundation.org>
+From:   ogasawara takeshi <takeshi.ogasawara@futuring-girl.com>
+Date:   Wed, 29 Mar 2023 08:25:56 +0900
+Message-ID: <CAKL4bV5YVTD8H2vKeqTEzUksffBuaKusmUeLw9kTKSr9hHUK_A@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/224] 6.1.22-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 10:51=E2=80=AFAM Vipin Sharma <vipinsh@google.com> =
-wrote:
->
-> On Thu, Mar 23, 2023 at 3:30=E2=80=AFPM David Matlack <dmatlack@google.co=
-m> wrote:
-> >
-> > On Mon, Mar 06, 2023 at 02:41:24PM -0800, Vipin Sharma wrote:
-> > > Add NUMA node id variable in struct kvm_mmu_memory_cache{}. This
-> > > variable denotes preferable NUMA node from which memory will be
-> > > allocated under this memory cache.
-> > >
-> > > Set this variable to NUMA_NO_NODE if there is no preferred node.
-> > >
-> > > MIPS doesn't do any sort of initializatino of struct
-> > > kvm_mmu_memory_cache{}. Keep things similar in MIPS by setting gfp_ze=
-ro
-> > > to 0 as INIT_KVM_MMU_MEMORY_CACHE() will initialize it to __GFP_ZERO.
-> > >
-> > > "node" cannot be left as 0, as 0 is a valid NUMA node value.
-> > >
-> > > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > > ---
-> > >  arch/mips/kvm/mips.c      | 3 +++
-> > >  include/linux/kvm_types.h | 3 +++
-> > >  2 files changed, 6 insertions(+)
-> > >
-> > > diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> > > index 36c8991b5d39..5ec5ce919918 100644
-> > > --- a/arch/mips/kvm/mips.c
-> > > +++ b/arch/mips/kvm/mips.c
-> > > @@ -294,6 +294,9 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
-> > >                    HRTIMER_MODE_REL);
-> > >       vcpu->arch.comparecount_timer.function =3D kvm_mips_comparecoun=
-t_wakeup;
-> > >
-> > > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_cache);
-> > > +     vcpu->arch.mmu_page_cache.gfp_zero =3D 0;
-> >
-> > Oh MIPS is here. Why isn't MIPS covered in the previous commits?
->
-> Because this is the patch where MIPS get impacted. MIPS doesn't
-> initialize gfp_zero, so there was no need to change the code in MIPS.
-> However, with the addition of "node" in kvm_mmu_memory_cache{} in this
-> patch, we need initialization in MIPS to (1) Set  node to NUMA_NO_NODE
-> as 0 is now a valid value, and (2) INIT_KVM_MMU_MEMORY_CACHE() will
-> set gfp_zero to __GFP_ZERO which is different than existing code in
-> MIPS to keep it 0.
->
-> I asked MIPS maintainers in the previous version to see if GFP_ZERO
-> can be added but didn't get any response.
-> https://lore.kernel.org/lkml/CAHVum0c+17Z-RbGAFdU-xmRejDjDQ+MKOfN4XaObh2S=
-wgWAjLg@mail.gmail.com/
+Hi Greg
 
-I see. IMO it's more logical to convert the MIPS cache to
-INIT_KVM_MMU_MEMORY_CACHE() in patch 13, along with all the other
-users of struct kvm_mmu_memory_cache. Then in patch 14, add the line
-to set gfp_zero to 0 for MIPS to preserve the existing behavior. That
-produces a very simple chain of changes:
-
-Patch 13: Convert all users of struct kvm_mmu_memory_cache to INIT()
-Patch 14: Invert the default value of kvm_mmu_memory_cache.gfp_zero
-Patch 15: Add node to kvm_mmu_memory_cache
-
-
+On Tue, Mar 28, 2023 at 11:56=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> > > +
-> > >       /*
-> > >        * Allocate space for host mode exception handlers that handle
-> > >        * guest mode exits
-> > > diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-> > > index 5da7953532ce..b2a405c8e629 100644
-> > > --- a/include/linux/kvm_types.h
-> > > +++ b/include/linux/kvm_types.h
-> > > @@ -97,10 +97,13 @@ struct kvm_mmu_memory_cache {
-> > >       struct kmem_cache *kmem_cache;
-> > >       int capacity;
-> > >       void **objects;
-> > > +     /* Preferred NUMA node of memory allocation. */
-> > > +     int node;
-> > >  };
-> > >
-> > >  #define KVM_MMU_MEMORY_CACHE_INIT() {        \
-> > >       .gfp_zero =3D __GFP_ZERO,         \
-> > > +     .node =3D NUMA_NO_NODE,           \
-> > >  }
-> > >
-> > >  #define KVM_MMU_MEMORY_CACHE(_name) \
-> > > --
-> > > 2.40.0.rc0.216.gc4246ad0f0-goog
-> > >
+> This is the start of the stable review cycle for the 6.1.22 release.
+> There are 224 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 30 Mar 2023 14:25:33 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.22-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
+
+6.1.22-rc1 tested.
+
+x86_64
+
+Build successfully completed.
+Boot successfully completed.
+No dmesg regressions.
+Video output normal.
+Sound output normal.
+
+Lenovo ThinkPad X1 Carbon Gen10(Intel i7-1260P, arch linux)
+
+Thanks
+
+Tested-by: Takeshi Ogasawara <takeshi.ogasawara@futuring-girl.com>
