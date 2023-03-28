@@ -2,95 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5B46CB37D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9086CB37E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjC1B6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 21:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S232428AbjC1B7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 21:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbjC1B6t (ORCPT
+        with ESMTP id S229935AbjC1B7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 21:58:49 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8CD2123
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:58:47 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 0F8AEC009; Tue, 28 Mar 2023 03:58:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1679968725; bh=MNbvf38tFwUshpZ3ZUagdvlwgRRXXt+hc1JGT6cCqBE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kGJ3npjE890XdkZSASYkPnnFXL7jprIU8aMQCfXxOXMoXPZ54I207bI5DPEaz9BPs
-         LqKWlKaHuJjmc/tnK6Sh4rpdQ5GF3RLCkJIQbWdKra04F/qcOi5r63hOtTMy+COre5
-         dLji/j1UTOBhLsYcB6L45OT4HqTfmB1C9KIKHdCM4ceAylbbSxaKwtK3W1N1cv2IsN
-         i/xkKlAHfV9RqZhnI6aJ1xcBQA2zDY9y1AO/SPQnl1f1xGBW4mL4qYTFN2FNALHl2V
-         TUyxOzI6FQGreqJ7Omy4unWOssnEGRgAyBh9ZiSThcdATa15QeQUoZwdGQCajLid1r
-         5FkgO5blt1NMg==
+        Mon, 27 Mar 2023 21:59:12 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8816B2689;
+        Mon, 27 Mar 2023 18:59:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=NKs+8fXhqTJfjVIS1poqWe1vyBspCLp4bXvIsT+t6sM=; b=fMsxPumtXZHfua+/Z+RkRLNzW0
+        6xLg9V86MTvXecaFQ0IEt6v/BvqFZYom640FJAe+u8sY7h6yIzKGWrI6MC/IocDkmxT90kuxoZs45
+        5v0AWd4oR0dsiIW3LOe6D63nbyvPPmh/Susd70Mc+PYHA/jNvCaMzgWGs+dlH6mqOkiw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pgybq-008aTz-AI; Tue, 28 Mar 2023 03:58:50 +0200
+Date:   Tue, 28 Mar 2023 03:58:50 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: Re: [RFC PATCH net-next 2/2] net: dsa: mt7530: introduce MMIO driver
+ for MT7988 SoC
+Message-ID: <a3458e6d-9a30-4ece-9586-18799f532580@lunn.ch>
+References: <ZCIML310vc8/uoM4@makrotopia.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCIML310vc8/uoM4@makrotopia.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id B4F4DC009;
-        Tue, 28 Mar 2023 03:58:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1679968724; bh=MNbvf38tFwUshpZ3ZUagdvlwgRRXXt+hc1JGT6cCqBE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D9xD+rOQ4ASi6jQMVilPWEuBnVKy3lTQM2id/c99zYa3QJf0dBXhesQ0mbMZWOEks
-         fEM/riJezIOUZ/hF+r5RMuPlBozFCH/bEeTG4GVcedWF0LEzHicxVqAYQgvkUxSAJF
-         1VHLMFWvrH7963zlmaBY1I22tGtW0geP74/xOsYWKqyA7IRmSuLT8QaT9JEa1iYDgV
-         m86ppWuACRj7f5n/bqJyjxOW7GxXjZkji0eXKm/IjfvCF/MwK9GQQSkY2+vBuyjxmS
-         eq53FQ3O0iHlZ4vSDy3ajgvx7emEo3U10b56fYmsD45aokgVrbI9XgFVPABBtrOcV4
-         5/Tsc0E6F+Fcw==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 5fab2ea1;
-        Tue, 28 Mar 2023 01:58:39 +0000 (UTC)
-Date:   Tue, 28 Mar 2023 10:58:24 +0900
-From:   asmadeus@codewreck.org
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     lucho@ionkov.net, Pankaj Raghav <p.raghav@samsung.com>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net
-Subject: Re: [V9fs-developer] 9p regression linux-next next-20230327
-Message-ID: <ZCJJwDij0mLB0gwb@codewreck.org>
-References: <ZCI+7Wg5OclSlE8c@bombadil.infradead.org>
- <ZCJGjuOYR6nGXiAw@codewreck.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZCJGjuOYR6nGXiAw@codewreck.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-asmadeus@codewreck.org wrote on Tue, Mar 28, 2023 at 10:44:46AM +0900:
-> I've just built Eric's for-next branch and I'm not seeing any issue
-> there, I'll be checking the next tag you pointed at next.
+> --- a/drivers/net/dsa/mt7530.c
+> +++ b/drivers/net/dsa/mt7530.c
+> @@ -118,6 +118,9 @@ core_write_mmd_indirect(struct mt7530_priv *priv, int prtad,
+>  	struct mii_bus *bus = priv->bus;
+>  	int ret;
+>  
+> +	if (!bus)
+> +		return 0;
+> +
+>  	/* Write the desired MMD Devad */
+>  	ret = bus->write(bus, 0, MII_MMD_CTRL, devad);
+>  	if (ret < 0)
+> @@ -147,11 +150,13 @@ core_write(struct mt7530_priv *priv, u32 reg, u32 val)
+>  {
+>  	struct mii_bus *bus = priv->bus;
+>  
+> -	mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
+> +	if (bus)
+> +		mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
+>  
+>  	core_write_mmd_indirect(priv, reg, MDIO_MMD_VEND2, val);
+>  
+> -	mutex_unlock(&bus->mdio_lock);
+> +	if (bus)
+> +		mutex_unlock(&bus->mdio_lock);
+>  }
+>  
+>  static void
+> @@ -160,6 +165,9 @@ core_rmw(struct mt7530_priv *priv, u32 reg, u32 mask, u32 set)
+>  	struct mii_bus *bus = priv->bus;
+>  	u32 val;
+>  
+> +	if (!bus)
+> +		return;
+> +
+>  	mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
+>  
+>  	val = core_read_mmd_indirect(priv, reg, MDIO_MMD_VEND2);
+> @@ -189,6 +197,11 @@ mt7530_mii_write(struct mt7530_priv *priv, u32 reg, u32 val)
+>  	u16 page, r, lo, hi;
+>  	int ret;
+>  
+> +	if (priv->base_addr) {
+> +		iowrite32(val, priv->base_addr + reg);
+> +		return 0;
+> +	}
+> +
+>  	page = (reg >> 6) & 0x3ff;
+>  	r  = (reg >> 2) & 0xf;
+>  	lo = val & 0xffff;
+> @@ -218,6 +231,9 @@ mt7530_mii_read(struct mt7530_priv *priv, u32 reg)
+>  	u16 page, r, lo, hi;
+>  	int ret;
+>  
+> +	if (priv->base_addr)
+> +		return ioread32(priv->base_addr + reg);
+> +
+>  	page = (reg >> 6) & 0x3ff;
+>  	r = (reg >> 2) & 0xf;
+>  
 
-Well, at the very least I can confirm mount hangs there :)
+This looks pretty ugly.
 
-[<0>] p9_client_rpc+0xf1/0x380 [9pnet]
-[<0>] p9_client_attach+0x8d/0x1d0 [9pnet]
-[<0>] v9fs_session_init+0x4ad/0x810 [9p]
-[<0>] v9fs_mount+0x6a/0x420 [9p]
-[<0>] legacy_get_tree+0x28/0x50
-[<0>] vfs_get_tree+0x1a/0x90
-[<0>] path_mount+0x746/0x9b0
-[<0>] __x64_sys_mount+0x153/0x1b0
-[<0>] do_syscall_64+0x3c/0x80
-[<0>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+A much better way to do this is to use regmap. Take a look at xrs700x
+and how it has both an i2c and an mdio version.
 
-
-And my async flush hasn't gotten fixed yet, so that mount cannot be
-killed either.
-
-
-I can mount over tcp so it's a virtio change, I'll dig a bit more and
-report back with you and cc
--- 
-Dominique
+    Andrew
