@@ -2,76 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B666CB6EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C2D6CB70C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbjC1GSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 02:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
+        id S232642AbjC1GX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 02:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232640AbjC1GRj (ORCPT
+        with ESMTP id S232604AbjC1GXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 02:17:39 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3C53ABF
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:16:58 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id q1-20020a656841000000b0050be5e5bb24so2927769pgt.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:16:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679984218;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vy8wz9BoJKucmcMBXvIGPOuITeThi///HtllaZbgtCo=;
-        b=G3C3U8FV5xO4vsplclhU9+4PkBH686vIIIrQFFquICu8//oGn5xL/Tmt4VNVE1HnMt
-         hORJK4mB81itHhGs1+plTWPpHn6PXb4UvAXp2In5M38sRtIYXUydb86gW9UCcwU8NUMK
-         AKSJULzbSmJ/Zh8xR8z20CA4EuuFhupmK6yUb7XM0dWX+orGZyC4roBLz+bFSVl/SrGz
-         jDFcau8INkey+e5jkuXnym7vXagjhy1slym0NeO+iUEtBeJGIjBlnt29eYQhaZCdCsb9
-         TItPIolnMlslNIl39r9v4yrb91hLywelng+1GUeMlXmGbk+u0V1YHrp34uG87/cMCuf4
-         DKLw==
+        Tue, 28 Mar 2023 02:23:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F2E2D5B
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679984466;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xsc7UO9YYazLYGSDUS0EJUCS68PHCQOhVmqaJ1ZEnhU=;
+        b=LFnz14n5ErPqoil3Kx6wIoxs93EA/lcNyKnQw2tddarMj5uZ9MqikYi0ZrQXmpU+Kewwff
+        kWtkQlnBHepUuvJwTSwdLDO0gaBVIvSFx3xYmdbFN5Dh2yFY2uxij4DMmrwyvHHYJlvllu
+        CvA5J/7XUsgZ5pXAWx5+wGBffACeh5A=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-483-qurot-bXPa6PYUGUUBmLIg-1; Tue, 28 Mar 2023 02:17:56 -0400
+X-MC-Unique: qurot-bXPa6PYUGUUBmLIg-1
+Received: by mail-pl1-f200.google.com with SMTP id x4-20020a170902ec8400b001a1a5f6f272so7069335plg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:17:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679984218;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vy8wz9BoJKucmcMBXvIGPOuITeThi///HtllaZbgtCo=;
-        b=f7YKdNJK+YRWbccPTYakD+plaVJW9U5hZNqzTwzXNUMy9E4A/8oQnSiw0QX2yx5IfO
-         9P1Y7VhNBTinivdyVh34FcPLdLj8hoYDDVZgh6K0PCE8/4la5b6X1jKzqHuVCKxEkTAY
-         mijmbAxQdqCPHKCubQmppEnxiOBB936ThxeaDn5Cl2+6gXYhPHn2nqpg74F6CU9cOuhD
-         Xlgyb2UaUYod6wn+ncGf+9UJzFsvTkGbDBo5Gxaf36JHpoceBZAIl7vltH7ERx/+tFi8
-         1SWRkaWSKZ8/6CdILzQnZcGR6ccBWt6OWWMuRHfsK6gWd7tUhZo4sj/OyXHvgS1jH0CL
-         Kpyw==
-X-Gm-Message-State: AAQBX9c+eJCKx3k4JGEQiZRBZfbVJODep410pQ53qpAtC24l7UlggXj3
-        XhVMcXo0uW82dANDO1iUL5dTKEwBYux2BFwi
-X-Google-Smtp-Source: AKy350aVn7i51pwbUpBHdDCfopSzB0y7+YNrEoZI1+8jV5mnjDSATrQRcelVSU3ikfIyno7DP54WO5q/0DmrmRgv
-X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a05:6a00:1781:b0:593:fcfb:208b with
- SMTP id s1-20020a056a00178100b00593fcfb208bmr7364360pfg.3.1679984218020; Mon,
- 27 Mar 2023 23:16:58 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 06:16:38 +0000
-In-Reply-To: <20230328061638.203420-1-yosryahmed@google.com>
-Mime-Version: 1.0
-References: <20230328061638.203420-1-yosryahmed@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230328061638.203420-10-yosryahmed@google.com>
-Subject: [PATCH v1 9/9] memcg: do not modify rstat tree for zero updates
-From:   Yosry Ahmed <yosryahmed@google.com>
-To:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>
-Cc:     Vasily Averin <vasily.averin@linux.dev>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, bpf@vger.kernel.org,
-        Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        d=1e100.net; s=20210112; t=1679984275;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xsc7UO9YYazLYGSDUS0EJUCS68PHCQOhVmqaJ1ZEnhU=;
+        b=AeZKvmlbF2kW6S3ek7y3QruCAFl7G98SbHxOWXBV3q3bCgEBx/9WnopgHXdwBq8pGk
+         9wwTQ00vArOMsmxpSvvWUrCK2rXrLpUb73RurLeg8mxKwiBCkFjCfUu/IJaKuYTreEw2
+         AsKIBMjtOhglVwLZgP5B3QniMBYWSpXMxjuJhRChsaVPxkna86u+0NWzEOkKpGysWUGv
+         6uMt7uAgG44EKJROXM+Q8XKPbP09YwzNaCC3RmxKDyW4wWrolR0iq7UZSWaubk6gBkTc
+         q9JDrOSD0QLKylLguicVfedqeE9YBp+mWduk3Wsk8XzNzmamJa946MPedYp2SurivSOY
+         icwg==
+X-Gm-Message-State: AAQBX9dhZI1yCXrun+j/nCWNMGDHcth9nU+oBN4VbkKZHMhGtZGVZq6S
+        i0C8IJbAghSaxlZYcJLz9ye/91/9oDtzKKf7wG47AjVHO+EpL9+2+R8dD+lAiu3Q++BS55aLTdU
+        2hcqPVgHaurZ9+LTQ+c9fx15ajwCuRUbNHeg=
+X-Received: by 2002:a17:90b:1b49:b0:23f:9439:9a27 with SMTP id nv9-20020a17090b1b4900b0023f94399a27mr15305329pjb.20.1679984275133;
+        Mon, 27 Mar 2023 23:17:55 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YN1lfzRNqgj4QyndNByT6/a3apGRBTI3BMeCeEFa0Kwbx0ENst/W1oW8eI9H1IVDkkr9sSqg==
+X-Received: by 2002:a17:90b:1b49:b0:23f:9439:9a27 with SMTP id nv9-20020a17090b1b4900b0023f94399a27mr15305316pjb.20.1679984274824;
+        Mon, 27 Mar 2023 23:17:54 -0700 (PDT)
+Received: from [10.72.13.204] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id s10-20020a17090aba0a00b0023f355a0bb5sm8478897pjr.14.2023.03.27.23.17.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 23:17:54 -0700 (PDT)
+Message-ID: <e928b283-709d-c632-a294-c95b60d813ce@redhat.com>
+Date:   Tue, 28 Mar 2023 14:17:50 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v4 08/11] vdpa: Add eventfd for the vdpa callback
+Content-Language: en-US
+To:     Xie Yongji <xieyongji@bytedance.com>, mst@redhat.com,
+        tglx@linutronix.de, hch@lst.de
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20230323053043.35-1-xieyongji@bytedance.com>
+ <20230323053043.35-9-xieyongji@bytedance.com>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20230323053043.35-9-xieyongji@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,32 +83,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some situations, we may end up calling memcg_rstat_updated() with a
-value of 0, which means the stat was not actually updated. An example is
-if we fail to reclaim any pages in shrink_folio_list().
 
-Do not add the cgroup to the rstat updated tree in this case, to avoid
-unnecessarily flushing it.
+在 2023/3/23 13:30, Xie Yongji 写道:
+> Add eventfd for the vdpa callback so that user
+> can signal it directly instead of triggering the
+> callback. It will be used for vhost-vdpa case.
+>
+> Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
 
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
----
- mm/memcontrol.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 0c0e74188e90..828e670e721a 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -618,6 +618,9 @@ static inline void memcg_rstat_updated(struct mem_cgroup *memcg, int val)
- {
- 	unsigned int x;
- 
-+	if (!val)
-+		return;
-+
- 	cgroup_rstat_updated(memcg->css.cgroup, smp_processor_id());
- 
- 	x = __this_cpu_add_return(stats_updates, abs(val));
--- 
-2.40.0.348.gf938b09366-goog
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+Thanks
+
+
+> ---
+>   drivers/vhost/vdpa.c         | 2 ++
+>   drivers/virtio/virtio_vdpa.c | 1 +
+>   include/linux/vdpa.h         | 6 ++++++
+>   3 files changed, 9 insertions(+)
+>
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index 7be9d9d8f01c..9cd878e25cff 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -599,9 +599,11 @@ static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned int cmd,
+>   		if (vq->call_ctx.ctx) {
+>   			cb.callback = vhost_vdpa_virtqueue_cb;
+>   			cb.private = vq;
+> +			cb.trigger = vq->call_ctx.ctx;
+>   		} else {
+>   			cb.callback = NULL;
+>   			cb.private = NULL;
+> +			cb.trigger = NULL;
+>   		}
+>   		ops->set_vq_cb(vdpa, idx, &cb);
+>   		vhost_vdpa_setup_vq_irq(v, idx);
+> diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
+> index f3826f42b704..2a095f37f26b 100644
+> --- a/drivers/virtio/virtio_vdpa.c
+> +++ b/drivers/virtio/virtio_vdpa.c
+> @@ -196,6 +196,7 @@ virtio_vdpa_setup_vq(struct virtio_device *vdev, unsigned int index,
+>   	/* Setup virtqueue callback */
+>   	cb.callback = callback ? virtio_vdpa_virtqueue_cb : NULL;
+>   	cb.private = info;
+> +	cb.trigger = NULL;
+>   	ops->set_vq_cb(vdpa, index, &cb);
+>   	ops->set_vq_num(vdpa, index, virtqueue_get_vring_size(vq));
+>   
+> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+> index e52c9a37999c..0372b2e3d38a 100644
+> --- a/include/linux/vdpa.h
+> +++ b/include/linux/vdpa.h
+> @@ -13,10 +13,16 @@
+>    * struct vdpa_calllback - vDPA callback definition.
+>    * @callback: interrupt callback function
+>    * @private: the data passed to the callback function
+> + * @trigger: the eventfd for the callback (Optional).
+> + *           When it is set, the vDPA driver must guarantee that
+> + *           signaling it is functional equivalent to triggering
+> + *           the callback. Then vDPA parent can signal it directly
+> + *           instead of triggering the callback.
+>    */
+>   struct vdpa_callback {
+>   	irqreturn_t (*callback)(void *data);
+>   	void *private;
+> +	struct eventfd_ctx *trigger;
+>   };
+>   
+>   /**
 
