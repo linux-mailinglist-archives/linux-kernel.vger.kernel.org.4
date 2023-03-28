@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD45D6CC121
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D2F6CC122
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbjC1Nig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
+        id S232394AbjC1Nix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233242AbjC1Ni3 (ORCPT
+        with ESMTP id S232719AbjC1Nit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:38:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB1F122
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:37:43 -0700 (PDT)
+        Tue, 28 Mar 2023 09:38:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27897A267
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:38:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680010663;
+        s=mimecast20190719; t=1680010685;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=8mx91f8t126xRraGAFvIuB3h+JIDesTPA0Tn6kITRj0=;
-        b=PmsbqordYKyIpxmHMscMLwIwL7CJOY/zWGYQtlfqnJpc7mTa/Nzf1cRO1l5j0K0DiYVamR
-        RHlSXS1xPs8p24mJ8jQeBC37K42b3NM2Blb0sv8dZ8qA6DjGCqwS/0+91SpwNIsJBwPSmZ
-        oAbqGoly0ygXL9bB1xRsgu/4+napGO4=
-Received: from mail-vs1-f69.google.com (mail-vs1-f69.google.com
- [209.85.217.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=0ELZOPdZ9ahXmREqv/BhJUnUwXaKs9loNrBEDp7bMYI=;
+        b=OestE+2TGetQZyR7Jlo7XYf6FQADQo6qFszn4HQWt5j43dSR5NinEnCLGrGa9WPtD/usry
+        Puk7oDoQ383dy4hRRApsYi9h+8ATvby5YHpee7o/mHTfFZMXnoRl5RUFR/EzJvIAB7RSWj
+        CTmZ3+RWH5uPqjOe2GXAZ6GF9g4ereE=
+Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com
+ [209.85.217.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-596-FUR6zQZAOmCBQCJlpEXDgw-1; Tue, 28 Mar 2023 09:37:41 -0400
-X-MC-Unique: FUR6zQZAOmCBQCJlpEXDgw-1
-Received: by mail-vs1-f69.google.com with SMTP id z23-20020a67ca17000000b004262b09b60aso3665844vsk.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:37:41 -0700 (PDT)
+ us-mta-599-vbzgAAeFOymMt1_4f9soFg-1; Tue, 28 Mar 2023 09:37:56 -0400
+X-MC-Unique: vbzgAAeFOymMt1_4f9soFg-1
+Received: by mail-vs1-f72.google.com with SMTP id v3-20020a67c003000000b00426a55c5f90so2107065vsi.15
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:37:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680010661;
+        d=1e100.net; s=20210112; t=1680010676;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8mx91f8t126xRraGAFvIuB3h+JIDesTPA0Tn6kITRj0=;
-        b=j6sp/LShFCrad9w9w2uuR2ReK1VtgC3IINyMPTHQL8xCcrc/P+XGsH3qdjubZR4woT
-         bq9Rv6Z9eSEUjn5Ha4xAcTNe9O/W2Lq3yQXO/KUF1hjJvOnpW4oFiHSCj1zEa0VtUGKq
-         Yp3ABLhEKN54WVBP9h/dr9/R+AIbECTaBeSEJk65VXAz3OZx/FfqGi6RHGSszJse/5Qb
-         b9Sha1g483KbTY0wnXNUMh+YwWW7uwOJ7JKbZDbkVN4KFmKRc6694Dp3Y17ZfJ8pXBxz
-         Co7d5Dl4XKm4/H+4Lh6vlaJkP5siq2dNmjerq5+Jn3C1isxjmq1V07jgIuSTj62J41ci
-         XgEw==
-X-Gm-Message-State: AAQBX9dOpLkuknZ6VBS+cHGzxrlxxrSr2eH10SF2wCeSt5qFAhGz7J7Z
-        FKTsgN6NOBBZx7Zfeucq8rp7Jyy3vmh8aVnyZOimwARenWws6/t049yNlilZ9M3F6NMlu66O3GT
-        BZPAy6gWN01VR7UZA1OgmjySR66zExP/w83IomSyi
-X-Received: by 2002:a1f:ab8b:0:b0:43b:ec02:c2e8 with SMTP id u133-20020a1fab8b000000b0043bec02c2e8mr2445233vke.3.1680010661219;
-        Tue, 28 Mar 2023 06:37:41 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Yko7tZ8Gv5ilC1vg4NdbfNgUh7EXCu5O2eqwl++YaDbFuhpB/sbudFcbm7n/xd6HAuPQh5mEhsnY482Xn5YOI=
-X-Received: by 2002:a1f:ab8b:0:b0:43b:ec02:c2e8 with SMTP id
- u133-20020a1fab8b000000b0043bec02c2e8mr2445206vke.3.1680010660715; Tue, 28
- Mar 2023 06:37:40 -0700 (PDT)
+        bh=0ELZOPdZ9ahXmREqv/BhJUnUwXaKs9loNrBEDp7bMYI=;
+        b=46YdACN+nCRiCj96eqiq2mmUUfdOKENr9nWeSHXvApvxsvBCAyGVP1KCSidv5+jNCh
+         9Rl703BMY2m/7qGKOUYJSYmtAyes5cvqPnJhZnFIwwjxteyi/kYWphEaXp8ZGJM2dkGa
+         O5ZYVeK0xP5OuW75xAYiv9AvE3sBfu2IbPivFWpkCBkFjPQ6eB5PKrQIWBF8MWL/M1ND
+         pcMNmLTG0pYHqGPyGy5ql/n7b6aNBoqL6B36uX2tpFy5JQRBZTgnso0RPY+CGBf4QjmE
+         wVXAaZmWm92g5flRmniTqohc441p3f+Hmx7dTVWwzEDbMn/G6jbbTUSbzodCWp4sO8Ld
+         JqLw==
+X-Gm-Message-State: AAQBX9czzO44lEi8NUL03diGSIjHJNIBfsxH8c/jB9wG3MlXGkg+Xdy/
+        c3atIqKZhEU9IxQH5oB24DZ/o4q5mXmypyRp1MQNGg+pHe1VXBiYJBRnE0tJvyyjngrHPJSZ1o6
+        B2mtqMfX9FrFb/+aqQXkb7/5EnN0SVNJbgzz7BDD4
+X-Received: by 2002:a67:e019:0:b0:414:4ef3:839 with SMTP id c25-20020a67e019000000b004144ef30839mr8886922vsl.7.1680010676038;
+        Tue, 28 Mar 2023 06:37:56 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bzHkjamopCB/emRy4NpYC/2MwLux+aQLEq3yqt9nVX8wJmaY8K25Ik9PrNlj0PPs8GQigV6hE6mUYphSPV40A=
+X-Received: by 2002:a67:e019:0:b0:414:4ef3:839 with SMTP id
+ c25-20020a67e019000000b004144ef30839mr8886911vsl.7.1680010675788; Tue, 28 Mar
+ 2023 06:37:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230328-soc-mailbox-v1-0-3953814532fd@marcan.st> <20230328-soc-mailbox-v1-3-3953814532fd@marcan.st>
-In-Reply-To: <20230328-soc-mailbox-v1-3-3953814532fd@marcan.st>
+References: <20230328-soc-mailbox-v1-0-3953814532fd@marcan.st> <20230328-soc-mailbox-v1-5-3953814532fd@marcan.st>
+In-Reply-To: <20230328-soc-mailbox-v1-5-3953814532fd@marcan.st>
 From:   Eric Curtin <ecurtin@redhat.com>
-Date:   Tue, 28 Mar 2023 14:37:24 +0100
-Message-ID: <CAOgh=Fx5gAEFKnmsrgfOQWP13ZTKmwkhvUj0jSbyxhWisCumFA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] soc: apple: rtkit: Port to the internal mailbox driver
+Date:   Tue, 28 Mar 2023 14:37:39 +0100
+Message-ID: <CAOgh=FxjuMnpiyjsEebsnf8rEoZFkRQfnRLAiu3zAGttw8Y3iw@mail.gmail.com>
+Subject: Re: [PATCH 5/5] soc: apple: mailbox: Rename config symbol to APPLE_MAILBOX
 To:     Hector Martin <marcan@marcan.st>
 Cc:     Sven Peter <sven@svenpeter.dev>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
@@ -78,9 +78,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Tue, 28 Mar 2023 at 14:21, Hector Martin <marcan@marcan.st> wrote:
 >
-> Now that we have a mailbox driver in drivers/soc/apple, port the RTKit
-> code to it. This mostly just entails replacing calls through the mailbox
-> subsystem with direct calls into the driver.
+> With the original owner of APPLE_MAILBOX removed, let's rename the new
+> APPLE_MBOX to the old name. This avoids .config churn for downstream
+> users, and leaves us with an identical config symbol and module name as
+> before.
 >
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 
@@ -93,263 +94,49 @@ Is mise le meas/Regards,
 Eric Curtin
 
 > ---
->  drivers/soc/apple/Kconfig          |   2 +-
->  drivers/soc/apple/rtkit-internal.h |   8 +--
->  drivers/soc/apple/rtkit.c          | 101 ++++++++++---------------------------
->  3 files changed, 31 insertions(+), 80 deletions(-)
+>  drivers/soc/apple/Kconfig  | 5 ++---
+>  drivers/soc/apple/Makefile | 2 +-
+>  2 files changed, 3 insertions(+), 4 deletions(-)
 >
 > diff --git a/drivers/soc/apple/Kconfig b/drivers/soc/apple/Kconfig
-> index caa2cf09ff7a..d0e29bbd8c6f 100644
+> index d0e29bbd8c6f..c5203c388bf4 100644
 > --- a/drivers/soc/apple/Kconfig
 > +++ b/drivers/soc/apple/Kconfig
-> @@ -33,7 +33,7 @@ config APPLE_MBOX
+> @@ -17,11 +17,10 @@ config APPLE_PMGR_PWRSTATE
+>           controls for SoC devices. This driver manages them through the
+>           generic power domain framework, and also provides reset support.
+>
+> -config APPLE_MBOX
+> +config APPLE_MAILBOX
+>         tristate "Apple SoC mailboxes"
+>         depends on PM
+>         depends on ARCH_APPLE || (64BIT && COMPILE_TEST)
+> -       depends on !APPLE_MAILBOX
+>         default ARCH_APPLE
+>         help
+>           Apple SoCs have various co-processors required for certain
+> @@ -33,7 +32,7 @@ config APPLE_MBOX
 >
 >  config APPLE_RTKIT
 >         tristate "Apple RTKit co-processor IPC protocol"
-> -       depends on MAILBOX
-> +       depends on APPLE_MBOX
+> -       depends on APPLE_MBOX
+> +       depends on APPLE_MAILBOX
 >         depends on ARCH_APPLE || COMPILE_TEST
 >         default ARCH_APPLE
 >         help
-> diff --git a/drivers/soc/apple/rtkit-internal.h b/drivers/soc/apple/rtkit-internal.h
-> index 24bd619ec5e4..27c9fa745fd5 100644
-> --- a/drivers/soc/apple/rtkit-internal.h
-> +++ b/drivers/soc/apple/rtkit-internal.h
-> @@ -7,18 +7,17 @@
->  #ifndef _APPLE_RTKIT_INTERAL_H
->  #define _APPLE_RTKIT_INTERAL_H
+> diff --git a/drivers/soc/apple/Makefile b/drivers/soc/apple/Makefile
+> index e52edf6a73da..20feee6f3943 100644
+> --- a/drivers/soc/apple/Makefile
+> +++ b/drivers/soc/apple/Makefile
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  obj-$(CONFIG_APPLE_PMGR_PWRSTATE)      += apple-pmgr-pwrstate.o
 >
-> -#include <linux/apple-mailbox.h>
->  #include <linux/bitfield.h>
->  #include <linux/bitmap.h>
->  #include <linux/completion.h>
->  #include <linux/dma-mapping.h>
->  #include <linux/io.h>
->  #include <linux/kernel.h>
-> -#include <linux/mailbox_client.h>
->  #include <linux/module.h>
->  #include <linux/slab.h>
->  #include <linux/soc/apple/rtkit.h>
->  #include <linux/workqueue.h>
-> +#include "mailbox.h"
+> -obj-$(CONFIG_APPLE_MBOX) += apple-mailbox.o
+> +obj-$(CONFIG_APPLE_MAILBOX) += apple-mailbox.o
+>  apple-mailbox-y = mailbox.o
 >
->  #define APPLE_RTKIT_APP_ENDPOINT_START 0x20
->  #define APPLE_RTKIT_MAX_ENDPOINTS 0x100
-> @@ -28,10 +27,7 @@ struct apple_rtkit {
->         const struct apple_rtkit_ops *ops;
->         struct device *dev;
->
-> -       const char *mbox_name;
-> -       int mbox_idx;
-> -       struct mbox_client mbox_cl;
-> -       struct mbox_chan *mbox_chan;
-> +       struct apple_mbox *mbox;
->
->         struct completion epmap_completion;
->         struct completion iop_pwr_ack_completion;
-> diff --git a/drivers/soc/apple/rtkit.c b/drivers/soc/apple/rtkit.c
-> index 7c9b9f25bbc1..e6d940292c9f 100644
-> --- a/drivers/soc/apple/rtkit.c
-> +++ b/drivers/soc/apple/rtkit.c
-> @@ -72,11 +72,6 @@ enum {
->  #define APPLE_RTKIT_MIN_SUPPORTED_VERSION 11
->  #define APPLE_RTKIT_MAX_SUPPORTED_VERSION 12
->
-> -struct apple_rtkit_msg {
-> -       struct completion *completion;
-> -       struct apple_mbox_msg mbox_msg;
-> -};
-> -
->  struct apple_rtkit_rx_work {
->         struct apple_rtkit *rtk;
->         u8 ep;
-> @@ -550,12 +545,12 @@ static void apple_rtkit_rx_work(struct work_struct *work)
->         kfree(rtk_work);
->  }
->
-> -static void apple_rtkit_rx(struct mbox_client *cl, void *mssg)
-> +static void apple_rtkit_rx(struct apple_mbox *mbox, struct apple_mbox_msg msg,
-> +                          void *cookie)
->  {
-> -       struct apple_rtkit *rtk = container_of(cl, struct apple_rtkit, mbox_cl);
-> -       struct apple_mbox_msg *msg = mssg;
-> +       struct apple_rtkit *rtk = cookie;
->         struct apple_rtkit_rx_work *work;
-> -       u8 ep = msg->msg1;
-> +       u8 ep = msg.msg1;
->
->         /*
->          * The message was read from a MMIO FIFO and we have to make
-> @@ -571,7 +566,7 @@ static void apple_rtkit_rx(struct mbox_client *cl, void *mssg)
->
->         if (ep >= APPLE_RTKIT_APP_ENDPOINT_START &&
->             rtk->ops->recv_message_early &&
-> -           rtk->ops->recv_message_early(rtk->cookie, ep, msg->msg0))
-> +           rtk->ops->recv_message_early(rtk->cookie, ep, msg.msg0))
->                 return;
->
->         work = kzalloc(sizeof(*work), GFP_ATOMIC);
-> @@ -580,30 +575,18 @@ static void apple_rtkit_rx(struct mbox_client *cl, void *mssg)
->
->         work->rtk = rtk;
->         work->ep = ep;
-> -       work->msg = msg->msg0;
-> +       work->msg = msg.msg0;
->         INIT_WORK(&work->work, apple_rtkit_rx_work);
->         queue_work(rtk->wq, &work->work);
->  }
->
-> -static void apple_rtkit_tx_done(struct mbox_client *cl, void *mssg, int r)
-> -{
-> -       struct apple_rtkit_msg *msg =
-> -               container_of(mssg, struct apple_rtkit_msg, mbox_msg);
-> -
-> -       if (r == -ETIME)
-> -               return;
-> -
-> -       if (msg->completion)
-> -               complete(msg->completion);
-> -       kfree(msg);
-> -}
-> -
->  int apple_rtkit_send_message(struct apple_rtkit *rtk, u8 ep, u64 message,
->                              struct completion *completion, bool atomic)
->  {
-> -       struct apple_rtkit_msg *msg;
-> -       int ret;
-> -       gfp_t flags;
-> +       struct apple_mbox_msg msg = {
-> +               .msg0 = message,
-> +               .msg1 = ep,
-> +       };
->
->         if (rtk->crashed)
->                 return -EINVAL;
-> @@ -611,19 +594,6 @@ int apple_rtkit_send_message(struct apple_rtkit *rtk, u8 ep, u64 message,
->             !apple_rtkit_is_running(rtk))
->                 return -EINVAL;
->
-> -       if (atomic)
-> -               flags = GFP_ATOMIC;
-> -       else
-> -               flags = GFP_KERNEL;
-> -
-> -       msg = kzalloc(sizeof(*msg), flags);
-> -       if (!msg)
-> -               return -ENOMEM;
-> -
-> -       msg->mbox_msg.msg0 = message;
-> -       msg->mbox_msg.msg1 = ep;
-> -       msg->completion = completion;
-> -
->         /*
->          * The message will be sent with a MMIO write. We need the barrier
->          * here to ensure any previous writes to buffers are visible to the
-> @@ -631,19 +601,13 @@ int apple_rtkit_send_message(struct apple_rtkit *rtk, u8 ep, u64 message,
->          */
->         dma_wmb();
->
-> -       ret = mbox_send_message(rtk->mbox_chan, &msg->mbox_msg);
-> -       if (ret < 0) {
-> -               kfree(msg);
-> -               return ret;
-> -       }
-> -
-> -       return 0;
-> +       return apple_mbox_send(rtk->mbox, msg, atomic);
->  }
->  EXPORT_SYMBOL_GPL(apple_rtkit_send_message);
->
->  int apple_rtkit_poll(struct apple_rtkit *rtk)
->  {
-> -       return mbox_client_peek_data(rtk->mbox_chan);
-> +       return apple_mbox_poll(rtk->mbox);
->  }
->  EXPORT_SYMBOL_GPL(apple_rtkit_poll);
->
-> @@ -665,20 +629,6 @@ int apple_rtkit_start_ep(struct apple_rtkit *rtk, u8 endpoint)
->  }
->  EXPORT_SYMBOL_GPL(apple_rtkit_start_ep);
->
-> -static int apple_rtkit_request_mbox_chan(struct apple_rtkit *rtk)
-> -{
-> -       if (rtk->mbox_name)
-> -               rtk->mbox_chan = mbox_request_channel_byname(&rtk->mbox_cl,
-> -                                                            rtk->mbox_name);
-> -       else
-> -               rtk->mbox_chan =
-> -                       mbox_request_channel(&rtk->mbox_cl, rtk->mbox_idx);
-> -
-> -       if (IS_ERR(rtk->mbox_chan))
-> -               return PTR_ERR(rtk->mbox_chan);
-> -       return 0;
-> -}
-> -
->  struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
->                                             const char *mbox_name, int mbox_idx,
->                                             const struct apple_rtkit_ops *ops)
-> @@ -704,13 +654,18 @@ struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
->         bitmap_zero(rtk->endpoints, APPLE_RTKIT_MAX_ENDPOINTS);
->         set_bit(APPLE_RTKIT_EP_MGMT, rtk->endpoints);
->
-> -       rtk->mbox_name = mbox_name;
-> -       rtk->mbox_idx = mbox_idx;
-> -       rtk->mbox_cl.dev = dev;
-> -       rtk->mbox_cl.tx_block = false;
-> -       rtk->mbox_cl.knows_txdone = false;
-> -       rtk->mbox_cl.rx_callback = &apple_rtkit_rx;
-> -       rtk->mbox_cl.tx_done = &apple_rtkit_tx_done;
-> +       if (mbox_name)
-> +               rtk->mbox = apple_mbox_get_byname(dev, mbox_name);
-> +       else
-> +               rtk->mbox = apple_mbox_get(dev, mbox_idx);
-> +
-> +       if (IS_ERR(rtk->mbox)) {
-> +               ret = PTR_ERR(rtk->mbox);
-> +               goto free_rtk;
-> +       }
-> +
-> +       rtk->mbox->rx = apple_rtkit_rx;
-> +       rtk->mbox->cookie = rtk;
->
->         rtk->wq = alloc_ordered_workqueue("rtkit-%s", WQ_MEM_RECLAIM,
->                                           dev_name(rtk->dev));
-> @@ -719,7 +674,7 @@ struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
->                 goto free_rtk;
->         }
->
-> -       ret = apple_rtkit_request_mbox_chan(rtk);
-> +       ret = apple_mbox_start(rtk->mbox);
->         if (ret)
->                 goto destroy_wq;
->
-> @@ -750,7 +705,7 @@ static int apple_rtkit_wait_for_completion(struct completion *c)
->  int apple_rtkit_reinit(struct apple_rtkit *rtk)
->  {
->         /* make sure we don't handle any messages while reinitializing */
-> -       mbox_free_channel(rtk->mbox_chan);
-> +       apple_mbox_stop(rtk->mbox);
->         flush_workqueue(rtk->wq);
->
->         apple_rtkit_free_buffer(rtk, &rtk->ioreport_buffer);
-> @@ -774,7 +729,7 @@ int apple_rtkit_reinit(struct apple_rtkit *rtk)
->         rtk->iop_power_state = APPLE_RTKIT_PWR_STATE_OFF;
->         rtk->ap_power_state = APPLE_RTKIT_PWR_STATE_OFF;
->
-> -       return apple_rtkit_request_mbox_chan(rtk);
-> +       return apple_mbox_start(rtk->mbox);
->  }
->  EXPORT_SYMBOL_GPL(apple_rtkit_reinit);
->
-> @@ -930,7 +885,7 @@ EXPORT_SYMBOL_GPL(apple_rtkit_wake);
->
->  void apple_rtkit_free(struct apple_rtkit *rtk)
->  {
-> -       mbox_free_channel(rtk->mbox_chan);
-> +       apple_mbox_stop(rtk->mbox);
->         destroy_workqueue(rtk->wq);
->
->         apple_rtkit_free_buffer(rtk, &rtk->ioreport_buffer);
+>  obj-$(CONFIG_APPLE_RTKIT) += apple-rtkit.o
 >
 > --
 > 2.40.0
