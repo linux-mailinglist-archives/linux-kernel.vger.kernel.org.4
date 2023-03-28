@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA886CC0D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFA36CC0D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232867AbjC1N36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
+        id S233145AbjC1NaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233092AbjC1N3p (ORCPT
+        with ESMTP id S233121AbjC1N3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:29:45 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0A9BDFE;
-        Tue, 28 Mar 2023 06:29:41 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32SDTVHB088142;
-        Tue, 28 Mar 2023 08:29:31 -0500
+        Tue, 28 Mar 2023 09:29:48 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A815BDC8;
+        Tue, 28 Mar 2023 06:29:44 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32SDTWO7039861;
+        Tue, 28 Mar 2023 08:29:32 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680010171;
-        bh=wPFEHvMoRk1iQxWnoSLx5fYVpt8cuqTHjmfDRQ67MEg=;
-        h=From:Subject:Date:To:CC;
-        b=tLIeOr7AJ5UzO8CzHRhtC1X2UabUBYRc5t494+ocr9WxewHTyUnHVobwjKbCgOvdf
-         tZG+DtUT+G5cIy1OQMelXhAC/hKTTL/QDf7EtjNYvRg1DHxKNacdQRaRSjMCR8dqsM
-         f5bPSoSIy2OsUCyzxA1tXA7UGTvll2PqfZWaUEas=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32SDTVoS113888
+        s=ti-com-17Q1; t=1680010172;
+        bh=1GtChf5uKiuwn7OvNybLChaTrFxr5FfqKFgP6cHU+XU=;
+        h=From:Date:Subject:References:In-Reply-To:To:CC;
+        b=RaPe6qr/eUSvgdq7gdaINnE89PcLw8rXJh8J9n4lNS8tCuN6ebgQPKrlClSap3x9d
+         D0yrmOB1f7LlNbHVjh3dOxIsSTcHI6y4TMQArgDyYjJX5jlkJapbIqcCTv722GAUQj
+         /V/Cs3q6Vv3RYV/esgxEqUr6dNpgjMGjo4oXCL3U=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32SDTWBV125950
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 28 Mar 2023 08:29:31 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 28 Mar 2023 08:29:32 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 28
- Mar 2023 08:29:31 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 08:29:32 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 28 Mar 2023 08:29:30 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32SDTUti031386;
-        Tue, 28 Mar 2023 08:29:30 -0500
+ Frontend Transport; Tue, 28 Mar 2023 08:29:32 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32SDTVRG007386;
+        Tue, 28 Mar 2023 08:29:32 -0500
 From:   Jai Luthra <j-luthra@ti.com>
-Subject: [PATCH v8 0/6] arm64: ti: Enable audio on AM62 and AM62A
-Date:   Tue, 28 Mar 2023 18:59:18 +0530
-Message-ID: <20230313-mcasp_upstream-v8-0-4408134eb2f3@ti.com>
+Date:   Tue, 28 Mar 2023 18:59:19 +0530
+Subject: [PATCH v8 1/6] arm64: defconfig: Enable audio drivers for TI K3
+ SoCs
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAK7rImQC/33NzQ6CMBAE4FchPVtTKGWLJ9/DGLMtizThLy0Sj
- eHdLRxMPMhxJvlm3iyQdxTYKXkzT7MLbuhj0IeE2Qb7O3FXxcwykUkhU8k7i2G8PcYwecKOC0o
- liFQKVRoWkcFA3HjsbRNZ/2jbWI6eavfcXi7XmBsXpsG/ttNZre3f/VlxwatC5zkIQNR4ntzRD
- h1bd+Zi3xbRAhRaVWANGf1jYd9CtHmNtrSgVVaWX7ssywfnzvr6NgEAAA==
+Message-ID: <20230313-mcasp_upstream-v8-1-4408134eb2f3@ti.com>
+References: <20230313-mcasp_upstream-v8-0-4408134eb2f3@ti.com>
+In-Reply-To: <20230313-mcasp_upstream-v8-0-4408134eb2f3@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         Tero Kristo <kristo@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -64,20 +63,20 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         Jayesh Choudhary <j-choudhary@ti.com>,
         Andrew Davis <afd@ti.com>, Jai Luthra <j-luthra@ti.com>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2207; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=hqhtZaABsuLkdxGbaQQZwQfzGeZ9OECjFCO8UHvrkmM=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkIuu04zva18HDAXC8qJfPerPxrNmyUmD4rssrB
- LfoZNvhh6OJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZCLrtAAKCRBD3pH5JJpx
- RWBqD/0aqLwP4RqhSP+7/RBkK+3HxQANG7OMP7fN380XoU0vZWs9o1sil1m+lJhC8/ssQSyNpvR
- VyD1aeQKOieZ7qKQmZ+jt4LLZXY6Cfi1R/eVAcQhjrLF9SzSs0T6CpwjaTjwQAIt/dw9D85E+oh
- F41noSKGbeYNFMUzvtdYC0JWo2sTE0I9E44aI72yhrbfU4t3s1tGKU8qhzp5oNrcbaHXbFBT4sE
- 9d0MgJklzi7c8GGdAjTGewyu6SWtcdpmTGY2HZbrSZtDLZycEZj4CMSYxgBeOgmBTaFUpe6yriu
- jqTqv3U1f6BumgLj6r/vOZPxA5bKJDafpkuzZ811wQ4vWzVwRRGIVu4K0ZlGQf6WloQSNanT48I
- wj3Id6KPENH82hIWXUrxVA2yNeFXg8xv/6XHIvmY9AoDA7T9N4L3xtVgK9FQGbUavrmLaId78Ow
- 2hDiNUDNgiyhGGpooTlRf7QGjT9FeWzrev3eY8rO/A7f3/orvhgMR92w19pjg3gCr06wU4G91Vg
- jHt+ef8/TxLDSlA8ayXt/Hw7twjliRDrY410Jp5oekSlWSy5REAGqnYbO8TUgtyfnM2o2VZmOtz
- o5fHU4uXe947Y9H+ZG7xPw8eWaujPEZyHBjTO7NrtgvfDZm8ze1Lp/BI2mDHH5bxskpY57kTAEt
- Cl87PoaTOwP6K4A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=888; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=wZfBiEbhTUv8dcdW1NR4C+wvCaboQpeHbYEligjEsOw=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkIuu1Y3gBEMt3pQZinkVQlD679Ouwg8mvAq9SG
+ 4uaam78UuOJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZCLrtQAKCRBD3pH5JJpx
+ RSnCEACqiRCaXfxy9vr4bhwJd70MUgE8Uw1vn8X4Xp3Uxj6MrjYCzzmBdEkTrV8hphRGHZclGNl
+ MlR9240I2sqK+fNHgboZY2fKNNWmBzhifxaSzvWbsKMJdMJ7/tp1LioYJAxSj5HyWSV7enWGExM
+ Vbxpl2ZX5jpABKqjtK4JD/7OPzdlfVVIDFcVAUCu/aDnLPNKVMkcts9KGM9FatIcMAumSBNbvhK
+ NEGYGll5O42Yw4SPnjNWhEXulVrZtZE6EA6J3fd/AhvaRUN3ffok1ne1kkOF/Q3faPzCr1W9Po+
+ tDrwvhxkg0tDz+i2rWZIB0oqMOjjnHWUOLAesCNoGjxATI+fBok4X6tCxkuZ4erHHMAz2uMFkzo
+ mQFBNMcDbuCpdBDruigcM2kMKaj1Z/1YUEPlcxakmj+dnTkLzxdGQaDta5ZcJZUNHIDLaD4dmh8
+ Y21WtBs7LCQoEZ1fahv/FfxdnEXvRXSbpv7IC10nJipId7AUKxFGqZuaXcZQByARbdyqiM1Ecwc
+ emqpAZWuY2zN38Fg3sHhIYmGwb/ktBM5k4h6r8dcArzKb77JukE+sbosHYxDZjKjunrAqRH4uCl
+ 77iXGE3+M6Rad0s58GRETaCN0xmzECiZ5MhW7siRpkQ9OMp89klHg2I5mmqAGTmzO7uMyoytkg8
+ yWrnRN6ywonRMzQ==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp;
  fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -90,57 +89,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds support for audio via headphone jack on SK-AM62
-(E2+) and SK-AM62A boards. The jack is wired to TLV320AIC3106 (codec),
-which is connected to McASP1 (serializer) on the SoC.
-
-The TRRS 3.5mm jack can be used for simultaneous playback and recording.
+TI's K3 platform uses McASP as the digital audio interface on the SoCs.
+AM62x and AM62A based starter kits also use the TLV320AIC3106 codec with
+a 3.5mm jack for analog audio input and output.
 
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
+Reviewed-by: Devarsh Thakkar <devarsht@ti.com>
 ---
-Changes in v8:
-- Rebase on top of
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git/log/?h=ti-k3-dts-next
-  keeping audio nodes in the common dtsi
-- Link to v7: https://lore.kernel.org/r/20230313-mcasp_upstream-v7-1-88168d0df9b8@ti.com
+ arch/arm64/configs/defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Changes in v7:
-- Add links to schematics in commit messages
-- Link to v6: https://lore.kernel.org/r/20230313-mcasp_upstream-v6-0-77685d7cbeb8@ti.com
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 7790ee42c68a..7e0ce1833904 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -898,6 +898,8 @@ CONFIG_SND_SOC_LPASS_WSA_MACRO=m
+ CONFIG_SND_SOC_LPASS_VA_MACRO=m
+ CONFIG_SND_SOC_LPASS_RX_MACRO=m
+ CONFIG_SND_SOC_LPASS_TX_MACRO=m
++CONFIG_SND_SOC_DAVINCI_MCASP=m
++CONFIG_SND_SOC_TLV320AIC3X_I2C=m
+ CONFIG_SND_SIMPLE_CARD=m
+ CONFIG_SND_AUDIO_GRAPH_CARD=m
+ CONFIG_SND_AUDIO_GRAPH_CARD2=m
 
-Changes in v6:
-- Use generic node names (audio-controller@) for McASP
-- Fix labels, indentation and spacing issues
-- For SK-AM62A:
-	- Remove redundant status property from codec
-	- Add a note in commit message about missing DVDD regulator
-	- Supply OCMV level manually to the codec
-- Link to v5: https://lore.kernel.org/r/20230313-mcasp_upstream-v5-0-d6844707aa8a@ti.com
-
----
-Jai Luthra (5):
-      arm64: defconfig: Enable audio drivers for TI K3 SoCs
-      arm64: dts: ti: k3-am625-sk: Enable audio on AM62 SK
-      arm64: dts: ti: k3-am62a-main: Add nodes for McASP
-      arm64: dts: ti: k3-am62a7-sk: Split vcc_3v3 regulators
-      arm64: dts: ti: k3-am62a7-sk: Enable audio on AM62A
-
-Jayesh Choudhary (1):
-      arm64: dts: ti: k3-am62-main: Add McASP nodes
-
- arch/arm64/boot/dts/ti/k3-am62-lp-sk.dts       | 11 +++
- arch/arm64/boot/dts/ti/k3-am62-main.dtsi       | 60 +++++++++++++++++
- arch/arm64/boot/dts/ti/k3-am625-sk.dts         | 11 +++
- arch/arm64/boot/dts/ti/k3-am62a-main.dtsi      | 60 +++++++++++++++++
- arch/arm64/boot/dts/ti/k3-am62a7-sk.dts        | 92 +++++++++++++++++++++++++-
- arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi | 77 +++++++++++++++++++++
- arch/arm64/configs/defconfig                   |  2 +
- 7 files changed, 311 insertions(+), 2 deletions(-)
----
-base-commit: e1ecd17c0d1e2219c58e5152243e4702bae4f0a4
-change-id: 20230313-mcasp_upstream-0e137013059b
-
-Best regards,
 -- 
-Jai Luthra <j-luthra@ti.com>
+2.40.0
 
