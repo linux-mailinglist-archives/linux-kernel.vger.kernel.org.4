@@ -2,235 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AA76CBD42
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3105A6CBD4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjC1LRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
+        id S232636AbjC1LRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjC1LRB (ORCPT
+        with ESMTP id S230226AbjC1LRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:17:01 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6976E3AB8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:16:58 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so12113019pjt.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:16:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680002218;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=InxFLatEqRcEzuJM4ZUoYOwLaBSxMoRwmUMsvneXWo0=;
-        b=RVbsHkk4KiXAXciWng702tzBSbQlB3D5RaKwuqWtTZGzJmic1fBVktXlOtGjQ8tenC
-         l52fI56Y6XqVxuu/npnzdoTEqJW+S9D4yEJmuU1sDl/KmoTb3wdOqaX0RyEsOD5VW2ks
-         7vl7GpOHCwA9Ni41/LJSRUK70H6vCapDnwi/R1UT8jk6VAyat2ymaQR1CUC716NBN+lF
-         0J501tCryIUKhbE9HBr7bTK7y4UoKn1XWO1qvJPVtOvDzidphYVHQWlnOJAR20sKJUX/
-         bXVgXpYN0q4JCUH2/ppAU9SvSF9di3oy1eQz7ntHJK6fFNvZfc2u+cmWvn+TmBN25TGG
-         2tHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680002218;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=InxFLatEqRcEzuJM4ZUoYOwLaBSxMoRwmUMsvneXWo0=;
-        b=OgcFTjQrv9RV6yBcMA9QgYn7O9F1/ybDNYgKZUZ8aMKhYByK5tFjOYqbtticfxQdhp
-         1lXvsn5hsArLEy9Sx5N49LxKFI+rUan8iLu+CA4tlwWWMFlp8EK6ptCGoVD+qCQ6msBw
-         3h9shK0o5O0GT/Jh5JJOzj48rVahXgTdWSnPhQe3YV0qFZGfT88eDjphus08iXGgzvos
-         k0kZmVTfkY3LxN87dPT3WJhoDMGLGNxSmMUxP3c1qsOXBhQcnkC7YOlQKqFLqY1AD89l
-         /bL/zoErzhxBWw0QCvrWT6YzHL1Dkz/RzNwG8+fnbUizp5VKwBxoWsXu1gL+tNU/htzv
-         sdZA==
-X-Gm-Message-State: AO0yUKWc+YQZoeSoUS0sRqUAVBfoHeC5OHVCGKEwcQghQtOOAvuR6Qhd
-        Lh3iJ3FvN03wIQL4mQMpZBc=
-X-Google-Smtp-Source: AK7set+89/QqTrp5C2rUFZQAgr9cbO5Tm4U1jxZrYS99x5jno8l6J0vCFPg5xqm/tyJRH6oDkSWPlQ==
-X-Received: by 2002:a05:6a20:1221:b0:db:443b:58d0 with SMTP id v33-20020a056a20122100b000db443b58d0mr12493214pzf.12.1680002217745;
-        Tue, 28 Mar 2023 04:16:57 -0700 (PDT)
-Received: from CloudiRingWorld ([60.186.165.89])
-        by smtp.gmail.com with ESMTPSA id e17-20020a62ee11000000b0062ce765b7afsm6065299pfi.162.2023.03.28.04.16.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 04:16:57 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 19:16:54 +0800
-From:   Kloudifold <cloudifold.3125@gmail.com>
-To:     outreachy@lists.linux.dev, teddy.wang@siliconmotion.com,
-        sudipm.mukherjee@gmail.com, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        alison.schofield@intel.com
-Subject: [PATCH v5] staging: sm750: Rename sm750_hw_cursor_* functions to
- snake_case
-Message-ID: <ZCLMAJ5APrFRMCWu@CloudiRingWorld>
+        Tue, 28 Mar 2023 07:17:32 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE163C20;
+        Tue, 28 Mar 2023 04:17:30 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32SBH9xG108436;
+        Tue, 28 Mar 2023 06:17:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680002229;
+        bh=+eoEEe1pmtcdoeNbEZvPGDZU834mlTMCt5fDZ1sH9SQ=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=oGGoOHR38rHg1qUDXzXDofSvKLb4TCXoaDSwBXKvJqcFbaP2AZ6akfsbz4hZS1jMX
+         gRZ2Lj6Q7nNSA5gYVyHRgID/tmEGDY3kWCwgqo00dzrluSkMJ5DiWymlEqvP6zgs/w
+         kH1Zrq6uXL86JfNBFkHgQECIpJRLoclkvPnEX+iU=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32SBH9M6037561
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 28 Mar 2023 06:17:09 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 28
+ Mar 2023 06:17:09 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 28 Mar 2023 06:17:09 -0500
+Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32SBH4Wp095866;
+        Tue, 28 Mar 2023 06:17:04 -0500
+Message-ID: <f5b84da7-313a-179b-5f35-aefffaa206a7@ti.com>
+Date:   Tue, 28 Mar 2023 16:47:03 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=4.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [EXTERNAL] Re: [PATCH v5 3/5] soc: ti: pruss: Add
+ pruss_cfg_read()/update() API
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        MD Danish Anwar <danishanwar@ti.com>
+CC:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>, <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20230323062451.2925996-1-danishanwar@ti.com>
+ <20230323062451.2925996-4-danishanwar@ti.com> <20230327210126.GC3158115@p14s>
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <20230327210126.GC3158115@p14s>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sm750 driver has sm750_hw_cursor_* functions, which are named in
-camelcase. Rename them to snake case to follow the function naming
-convention.
 
-- sm750_hw_cursor_setSize  => sm750_hw_cursor_set_size
-- sm750_hw_cursor_setPos   => sm750_hw_cursor_set_pos
-- sm750_hw_cursor_setColor => sm750_hw_cursor_set_color
-- sm750_hw_cursor_setData  => sm750_hw_cursor_set_data
-- sm750_hw_cursor_setData2 => sm750_hw_cursor_set_data2
 
-Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
+On 28/03/23 02:31, Mathieu Poirier wrote:
+> On Thu, Mar 23, 2023 at 11:54:49AM +0530, MD Danish Anwar wrote:
+>> From: Suman Anna <s-anna@ti.com>
+>>
+>> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
+>> the PRUSS platform driver to read and program respectively a register
+>> within the PRUSS CFG sub-module represented by a syscon driver.
+>>
+>> These APIs are internal to PRUSS driver. Various useful registers
+>> and macros for certain register bit-fields and their values have also
+>> been added.
+>>
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+>> ---
+>>  drivers/soc/ti/pruss.c |   1 +
+>>  drivers/soc/ti/pruss.h | 112 +++++++++++++++++++++++++++++++++++++++++
+>>  2 files changed, 113 insertions(+)
+>>  create mode 100644 drivers/soc/ti/pruss.h
+>>
+> 
+> This patch doesn't compile without warnings.
+> 
 
----
-Changes in v5:
-- Include missed recipients in v4, no functional change to the code
+Sure, Mathieu. I'll check the warnings.
 
-Changes in v4:
-- Update the commit msg (Deepak)
-- Use tabs replace 8 spaces
+>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+>> index 126b672b9b30..2fa7df667592 100644
+>> --- a/drivers/soc/ti/pruss.c
+>> +++ b/drivers/soc/ti/pruss.c
+>> @@ -21,6 +21,7 @@
+>>  #include <linux/regmap.h>
+>>  #include <linux/remoteproc.h>
+>>  #include <linux/slab.h>
+>> +#include "pruss.h"
+>>  
+>>  /**
+>>   * struct pruss_private_data - PRUSS driver private data
+>> diff --git a/drivers/soc/ti/pruss.h b/drivers/soc/ti/pruss.h
+>> new file mode 100644
+>> index 000000000000..4626d5f6b874
+>> --- /dev/null
+>> +++ b/drivers/soc/ti/pruss.h
+>> @@ -0,0 +1,112 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * PRU-ICSS Subsystem user interfaces
+>> + *
+>> + * Copyright (C) 2015-2023 Texas Instruments Incorporated - http://www.ti.com
+>> + *	MD Danish Anwar <danishanwar@ti.com>
+>> + */
+>> +
+>> +#ifndef _SOC_TI_PRUSS_H_
+>> +#define _SOC_TI_PRUSS_H_
+>> +
+>> +#include <linux/bits.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +/*
+>> + * PRU_ICSS_CFG registers
+>> + * SYSCFG, ISRP, ISP, IESP, IECP, SCRP applicable on AMxxxx devices only
+>> + */
+>> +#define PRUSS_CFG_REVID         0x00
+>> +#define PRUSS_CFG_SYSCFG        0x04
+>> +#define PRUSS_CFG_GPCFG(x)      (0x08 + (x) * 4)
+>> +#define PRUSS_CFG_CGR           0x10
+>> +#define PRUSS_CFG_ISRP          0x14
+>> +#define PRUSS_CFG_ISP           0x18
+>> +#define PRUSS_CFG_IESP          0x1C
+>> +#define PRUSS_CFG_IECP          0x20
+>> +#define PRUSS_CFG_SCRP          0x24
+>> +#define PRUSS_CFG_PMAO          0x28
+>> +#define PRUSS_CFG_MII_RT        0x2C
+>> +#define PRUSS_CFG_IEPCLK        0x30
+>> +#define PRUSS_CFG_SPP           0x34
+>> +#define PRUSS_CFG_PIN_MX        0x40
+>> +
+>> +/* PRUSS_GPCFG register bits */
+>> +#define PRUSS_GPCFG_PRU_GPO_SH_SEL              BIT(25)
+>> +
+>> +#define PRUSS_GPCFG_PRU_DIV1_SHIFT              20
+>> +#define PRUSS_GPCFG_PRU_DIV1_MASK               GENMASK(24, 20)
+>> +
+>> +#define PRUSS_GPCFG_PRU_DIV0_SHIFT              15
+>> +#define PRUSS_GPCFG_PRU_DIV0_MASK               GENMASK(15, 19)
+>> +
+>> +#define PRUSS_GPCFG_PRU_GPO_MODE                BIT(14)
+>> +#define PRUSS_GPCFG_PRU_GPO_MODE_DIRECT         0
+>> +#define PRUSS_GPCFG_PRU_GPO_MODE_SERIAL         BIT(14)
+>> +
+>> +#define PRUSS_GPCFG_PRU_GPI_SB                  BIT(13)
+>> +
+>> +#define PRUSS_GPCFG_PRU_GPI_DIV1_SHIFT          8
+>> +#define PRUSS_GPCFG_PRU_GPI_DIV1_MASK           GENMASK(12, 8)
+>> +
+>> +#define PRUSS_GPCFG_PRU_GPI_DIV0_SHIFT          3
+>> +#define PRUSS_GPCFG_PRU_GPI_DIV0_MASK           GENMASK(7, 3)
+>> +
+>> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE_POSITIVE   0
+>> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE_NEGATIVE   BIT(2)
+>> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE            BIT(2)
+>> +
+>> +#define PRUSS_GPCFG_PRU_GPI_MODE_MASK           GENMASK(1, 0)
+>> +#define PRUSS_GPCFG_PRU_GPI_MODE_SHIFT          0
+>> +
+>> +#define PRUSS_GPCFG_PRU_MUX_SEL_SHIFT           26
+>> +#define PRUSS_GPCFG_PRU_MUX_SEL_MASK            GENMASK(29, 26)
+>> +
+>> +/* PRUSS_MII_RT register bits */
+>> +#define PRUSS_MII_RT_EVENT_EN                   BIT(0)
+>> +
+>> +/* PRUSS_SPP register bits */
+>> +#define PRUSS_SPP_XFER_SHIFT_EN                 BIT(1)
+>> +#define PRUSS_SPP_PRU1_PAD_HP_EN                BIT(0)
+>> +#define PRUSS_SPP_RTU_XFR_SHIFT_EN              BIT(3)
+>> +
+>> +/**
+>> + * pruss_cfg_read() - read a PRUSS CFG sub-module register
+>> + * @pruss: the pruss instance handle
+>> + * @reg: register offset within the CFG sub-module
+>> + * @val: pointer to return the value in
+>> + *
+>> + * Reads a given register within the PRUSS CFG sub-module and
+>> + * returns it through the passed-in @val pointer
+>> + *
+>> + * Return: 0 on success, or an error code otherwise
+>> + */
+>> +static int pruss_cfg_read(struct pruss *pruss, unsigned int reg, unsigned int *val)
+>> +{
+>> +	if (IS_ERR_OR_NULL(pruss))
+>> +		return -EINVAL;
+>> +
+>> +	return regmap_read(pruss->cfg_regmap, reg, val);
+>> +}
+>> +
+>> +/**
+>> + * pruss_cfg_update() - configure a PRUSS CFG sub-module register
+>> + * @pruss: the pruss instance handle
+>> + * @reg: register offset within the CFG sub-module
+>> + * @mask: bit mask to use for programming the @val
+>> + * @val: value to write
+>> + *
+>> + * Programs a given register within the PRUSS CFG sub-module
+>> + *
+>> + * Return: 0 on success, or an error code otherwise
+>> + */
+>> +static int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+>> +			    unsigned int mask, unsigned int val)
+>> +{
+>> +	if (IS_ERR_OR_NULL(pruss))
+>> +		return -EINVAL;
+>> +
+>> +	return regmap_update_bits(pruss->cfg_regmap, reg, mask, val);
+>> +}
+>> +
+>> +#endif  /* _SOC_TI_PRUSS_H_ */
+>> -- 
+>> 2.25.1
+>>
 
-This v4 patch was prompted by 2 errors, 2 warnings and 1 checks reported
-by the scripts/checkpatch.pl, which detected the style problem.
-
-Changes in v3:
-- Add this changelog (Philipp)
-- Move lkp tags and link to the correct location in commit log (Alison)
-- Update the commit msg (Philip)
-- Update the commit log (Bagas, Julia)
-
-Changes in v2:
-- Use new function names in call sites (LKP)
-
-This v2 patch was prompted by an error reported by the Linux test
-robot, which detected the compile error.
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@intel.com/
----
- drivers/staging/sm750fb/sm750.c        | 22 +++++++++++-----------
- drivers/staging/sm750fb/sm750_cursor.c | 14 +++++++-------
- drivers/staging/sm750fb/sm750_cursor.h | 12 ++++++------
- 3 files changed, 24 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-index effc7fcc3..5d7249e82 100644
---- a/drivers/staging/sm750fb/sm750.c
-+++ b/drivers/staging/sm750fb/sm750.c
-@@ -121,14 +121,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
- 
- 	sm750_hw_cursor_disable(cursor);
- 	if (fbcursor->set & FB_CUR_SETSIZE)
--		sm750_hw_cursor_setSize(cursor,
--					fbcursor->image.width,
--					fbcursor->image.height);
-+		sm750_hw_cursor_set_size(cursor,
-+					 fbcursor->image.width,
-+					 fbcursor->image.height);
- 
- 	if (fbcursor->set & FB_CUR_SETPOS)
--		sm750_hw_cursor_setPos(cursor,
--				       fbcursor->image.dx - info->var.xoffset,
--				       fbcursor->image.dy - info->var.yoffset);
-+		sm750_hw_cursor_set_pos(cursor,
-+					fbcursor->image.dx - info->var.xoffset,
-+					fbcursor->image.dy - info->var.yoffset);
- 
- 	if (fbcursor->set & FB_CUR_SETCMAP) {
- 		/* get the 16bit color of kernel means */
-@@ -142,14 +142,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
- 		     ((info->cmap.green[fbcursor->image.bg_color] & 0xfc00) >> 5) |
- 		     ((info->cmap.blue[fbcursor->image.bg_color] & 0xf800) >> 11);
- 
--		sm750_hw_cursor_setColor(cursor, fg, bg);
-+		sm750_hw_cursor_set_color(cursor, fg, bg);
- 	}
- 
- 	if (fbcursor->set & (FB_CUR_SETSHAPE | FB_CUR_SETIMAGE)) {
--		sm750_hw_cursor_setData(cursor,
--					fbcursor->rop,
--					fbcursor->image.data,
--					fbcursor->mask);
-+		sm750_hw_cursor_set_data(cursor,
-+					 fbcursor->rop,
-+					 fbcursor->image.data,
-+					 fbcursor->mask);
- 	}
- 
- 	if (fbcursor->enable)
-diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
-index 43e6f52c2..ff643e33f 100644
---- a/drivers/staging/sm750fb/sm750_cursor.c
-+++ b/drivers/staging/sm750fb/sm750_cursor.c
-@@ -58,13 +58,13 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
- 	poke32(HWC_ADDRESS, 0);
- }
- 
--void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
-+void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
- {
- 	cursor->w = w;
- 	cursor->h = h;
- }
- 
--void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
-+void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y)
- {
- 	u32 reg;
- 
-@@ -73,7 +73,7 @@ void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
- 	poke32(HWC_LOCATION, reg);
- }
- 
--void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
-+void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg)
- {
- 	u32 reg = (fg << HWC_COLOR_12_2_RGB565_SHIFT) &
- 		HWC_COLOR_12_2_RGB565_MASK;
-@@ -82,8 +82,8 @@ void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
- 	poke32(HWC_COLOR_3, 0xffe0);
- }
- 
--void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
--			     const u8 *pcol, const u8 *pmsk)
-+void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
-+			      const u8 *pcol, const u8 *pmsk)
- {
- 	int i, j, count, pitch, offset;
- 	u8 color, mask, opr;
-@@ -132,8 +132,8 @@ void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
- 	}
- }
- 
--void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
--			      const u8 *pcol, const u8 *pmsk)
-+void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-+			       const u8 *pcol, const u8 *pmsk)
- {
- 	int i, j, count, pitch, offset;
- 	u8 color, mask;
-diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
-index b59643dd6..88fa02f63 100644
---- a/drivers/staging/sm750fb/sm750_cursor.h
-+++ b/drivers/staging/sm750fb/sm750_cursor.h
-@@ -5,11 +5,11 @@
- /* hw_cursor_xxx works for voyager,718 and 750 */
- void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
- void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
--void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
--void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
--void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
--void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
--			     const u8 *data, const u8 *mask);
--void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
-+void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
-+void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y);
-+void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg);
-+void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
- 			      const u8 *data, const u8 *mask);
-+void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-+			       const u8 *data, const u8 *mask);
- #endif
 -- 
-2.40.0
-
+Thanks and Regards,
+Danish.
