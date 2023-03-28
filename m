@@ -2,125 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3E66CB6B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8376CB6CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbjC1GQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 02:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
+        id S232439AbjC1GRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 02:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbjC1GQJ (ORCPT
+        with ESMTP id S232429AbjC1GRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 02:16:09 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B4930F0;
-        Mon, 27 Mar 2023 23:16:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jWHxcHGl2RwP2n+s+NBN1zECkQwgjOLaxOC18f4eWog=; b=UyqocMwwogZUsIzbdm8m7Lbf+D
-        sCq20hgJ2jdtRJ9jRy7Z0ZVKQbXQnB9pvkdLe+6CiEemTmNenKXIAQLOLgbSiSYPcbylHAzdDOA7z
-        WKRmsJrRZlRueJT00mB2YqAvcwnZszcPnm551TU2nnK8Z5Vgx3H70A6ceIFO9MTTGmukyf3fQXcpm
-        Scvb2cBjqaJm8MlRld4eYSWGo5d1kn5hzjQDrVYTbVcGq8bHlJqBYJxZemEDi7xUimAShNynlfDoK
-        pfb0bs6cB/d9tWo8lXmqQywRvqbvf9LqoNfZKgw44ycUu+zpSEhcvhTEAenhxEn4fc3HXwA05UBKX
-        ZEI0TNAA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ph2cl-00DH7i-0a;
-        Tue, 28 Mar 2023 06:16:03 +0000
-Date:   Mon, 27 Mar 2023 23:16:03 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Kees Cook <keescook@chromium.org>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        christophe.leroy@csgroup.eu, song@kernel.org,
-        torvalds@linux-foundation.org, dave@stgolabs.net,
-        fan.ni@samsung.com, vincent.fu@samsung.com,
-        a.manzanares@samsung.com, colin.i.king@gmail.com
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
- allocations
-Message-ID: <ZCKGI1LxktS7pKS9@bombadil.infradead.org>
-References: <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
- <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
- <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
- <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
- <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
- <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
- <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com>
- <582aa586-e69c-99bb-caf8-eda468c332b6@redhat.com>
- <ZB3j3x4F2ozYX8UI@bombadil.infradead.org>
- <e5c2183a-f62a-6ca9-eec6-a7fab7ce4c91@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e5c2183a-f62a-6ca9-eec6-a7fab7ce4c91@redhat.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 28 Mar 2023 02:17:00 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA86930FC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:16:42 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id j11-20020a25230b000000b00b6871c296bdso10959061ybj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679984202;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=sp9O7DL9obBb0muMtifinlg/m6vcys5sIiJC9lNDWi4=;
+        b=NeuDT5i+IX7EsYuGxrlQHGfM/O44K/q8azh0N01/JWHajTpr/8bCoJ2QTmweAtvhfe
+         gYoeDE3hEA/7en26XdMklOvz+naw4YK/G+YhpbjekM9lK1gn62mOub1rqZqAuOD3Va4S
+         1QIsws0AsakJv6xmZVg2tR6CGN3YqUveLDQmgizdGWo93cuUB1v+gh6AulTa+cAtsQ1E
+         KKArWRQY0GrdStBwfUXdbR6yPsdQlbb61EZd9PCwqGtcxA7k1j294s/M/nt3EKFywNtt
+         l3OyHVKVYr6ScGHLswWLNtnzcPUbA+BqIwaG4p3phWhy3WEkn1PyyK7m1rhPq1yMmAEF
+         q2mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679984202;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sp9O7DL9obBb0muMtifinlg/m6vcys5sIiJC9lNDWi4=;
+        b=BdRNzUkqloI21cYDa+Knrqg8t8QRh0/DA6aO0LbOmyy7SSpdRxq2jbeFG117kunRTM
+         NVNV94E40g7gChv12hVl5vAbyAWURn6pDNl3xGkwUrpQus5656a1n38MnZXAneUSXuN7
+         gbwoCc8YHF6qeNQjEx6SRzKbCuljJVWpD0uiIasU8/8t5S6LmbC1OEODDp0/hslI6iQT
+         qlKM4j6c3ENdPISRE+C9jeb+jZCV8tlrlylwy6/jY+KAsGyH3lBhEXap1tuDHHFpHDbd
+         Ueyjn/FKtNPnpGAUWnRFJBzG+17Izmcb4areAplfJRxVhu4kr4vdlWxQIGwzLNG75gJQ
+         5qIg==
+X-Gm-Message-State: AAQBX9cypvjval9O3jSvrxfv30G9G2K+fWjqafKgM0RvTfJ5O9oiBOVj
+        1kNzVlHAl33sJAiBefxVBTwmN0MoYmnvlRfR
+X-Google-Smtp-Source: AKy350bZY7FA4NsJ0fqBTDQ1vhS8yI9N8IskrUxgaH2uFCVGGGkuCT76RaKDFHndt2HqiHyVKmyLU1Kd/HHTyvK/
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a25:2749:0:b0:b4a:e062:3576 with SMTP
+ id n70-20020a252749000000b00b4ae0623576mr6830636ybn.13.1679984201935; Mon, 27
+ Mar 2023 23:16:41 -0700 (PDT)
+Date:   Tue, 28 Mar 2023 06:16:29 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Message-ID: <20230328061638.203420-1-yosryahmed@google.com>
+Subject: [PATCH v1 0/9] memcg: make rstat flushing irq and sleep friendly
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>
+Cc:     Vasily Averin <vasily.averin@linux.dev>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, bpf@vger.kernel.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 05:44:40AM +0200, David Hildenbrand wrote:
-> ... do you have an updated patch/branch that includes the feedback from
-> Linus so I can give it a churn tomorrow?
+Currently, all calls to flush memcg stats use the atomic variant for
+rstat flushing, cgroup_rstat_flush_irqsafe(), which keeps interrupts
+disabled throughout flushing and does not sleep. Flushing stats is an
+expensive operation, and we should avoid doing it atomically where
+possible. Otherwise, we may end up doing a lot of work without
+rescheduling and with interrupts disabled unnecessarily.
 
-Yeah sure:
+Patches 1 and 2 are cleanups requested during reviews of prior versions
+of this series.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230327-module-alloc-opts
+Patch 3 makes sure we never try to flush from within an irq context, and
+patch 4 adds a WARN_ON_ONCE() to make sure we catch any violations.
 
-The commit log needs updateing to reflect the results I just collected:
+Patches 5 to 8 introduce separate variants of mem_cgroup_flush_stats()
+for atomic and non-atomic flushing, and make sure we only flush the
+stats atomically when necessary.
 
-With the alloc patch ("module: avoid allocation if module is already
-present and ready") I see 145 MiB in memory difference in comparison
-to its last patch, "module: extract patient module check into helper".
-So I think that's a clear keeper and should help large CPU count boots.
+Patch 9 is a slightly tangential optimization that limits the work done
+by rstat flushing in some scenarios.
 
-The patch "module: add concurrency limiter" which puts the concurency
-delimiter on the kread only saves about 2 MiB with 100 stress-ng ops,
-which seems to be what I needed to reproduce your 400 CPU count original
-issue.
+RFC -> v1:
+- Dropped patch 1 that attempted to make the global rstat lock a non-irq
+  lock, will follow up on that separetly (Shakeel).
+- Dropped stats_flush_lock entirely, replaced by an atomic (Johannes).
+- Renamed cgroup_rstat_flush_irqsafe() to cgroup_rstat_flush_atomic()
+  instead of removing it (Johannes).
+- Added a patch to rename mem_cgroup_flush_stats_delayed() to
+  mem_cgroup_flush_stats_ratelimited() (Johannes).
+- Separate APIs for flushing memcg stats in atomic and non-atomic
+  contexts instead of a boolean argument (Johannes).
+- Added patches 3 & 4 to make sure we never flush from irq context
+  (Shakeel & Johannes).
 
-The program used to reproduce is stress-ng with the new module option:
+Yosry Ahmed (9):
+  cgroup: rename cgroup_rstat_flush_"irqsafe" to "atomic"
+  memcg: rename mem_cgroup_flush_stats_"delayed" to "ratelimited"
+  memcg: do not flush stats in irq context
+  cgroup: rstat: add WARN_ON_ONCE() if flushing outside task context
+  memcg: replace stats_flush_lock with an atomic
+  memcg: sleep during flushing stats in safe contexts
+  workingset: memcg: sleep when flushing stats in workingset_refault()
+  vmscan: memcg: sleep when flushing stats during reclaim
+  memcg: do not modify rstat tree for zero updates
 
-echo 0 > /proc/sys/vm/oom_dump_tasks
-./stress-ng --module 100 --module-name xfs
+ include/linux/cgroup.h     |  2 +-
+ include/linux/memcontrol.h |  9 +++-
+ kernel/cgroup/rstat.c      |  6 ++-
+ mm/memcontrol.c            | 86 ++++++++++++++++++++++++++++++++------
+ mm/workingset.c            |  4 +-
+ 5 files changed, 87 insertions(+), 20 deletions(-)
 
-To see how much max memory I use, I just use:
+-- 
+2.40.0.348.gf938b09366-goog
 
-free -k -s 1 -c 40 | grep Mem | awk '{print $3}' > foo.log
-
-Run the test in another window, CTRL-C the test when above
-finishes after 40 seconds and then:
-
-sort -n -r foo.log  | head -1
-
-If you have xfs loaded already you probably wanna pick module just as big
-that you don't have loaded. You must have dependencies loaded already as
-it doesn't call modprobe, it just finit_module's the module.
-
-The last patch "modules/kmod: replace implementation with a sempahore"
-just takes Linus' simplification suggestion to replace kmod's solution.
-I tested it with:
-
-tools/testing/selftests/kmod/kmod.sh -t 0008
-
-This stress tests the kmod autoloading. Using time, the timing is
-similar, perhaps mildly slower, but I like the simplification. I'm still
-not happy with the "module: add concurrency limiter", specially it
-doesn't seem to really buy us much, 2 MiB seems like within noise. 
-But stress-ng clearly shows it is a possible source of issue as we
-grow the ops. So it may make sense to just use the idea to replace the
-delimiter for kmod for now, unless you see different results.
-
-The stress-ng module test can at least be used now to replicate insane setups
-at bootup.
-
-Let me know if you get other useful results.
-
-  Luis
