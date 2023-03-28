@@ -2,110 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684BF6CC69F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7BE6CC6EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233322AbjC1Phd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
+        id S232787AbjC1PoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232921AbjC1Pgz (ORCPT
+        with ESMTP id S233169AbjC1Pns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:36:55 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708BE1BCE;
-        Tue, 28 Mar 2023 08:36:18 -0700 (PDT)
+        Tue, 28 Mar 2023 11:43:48 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D174BEFA7;
+        Tue, 28 Mar 2023 08:42:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680017778; x=1711553778;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xbE93YN0zae2+8ft70/75Up7UaulvpFbU76HZ3jAYPY=;
-  b=du7pmDsw2tm3z8OyQCseW0DBw3DCjgpZAc39F8T2qUB14Qn+8UEY98cc
-   qs7EP8k+iAiKx3AwIGHvcWq1aoEKXF75zsEdeOwyHP6rPkfN1pzdXk7RW
-   bBnC97Nk/oDARYFa/HO6TUzYdx8j2rfDHuoQxbV31LvJyRMANO7gmmL2f
-   fTECkOVo7fRTmlX8mKgjydZm8GnUIdAVUwjg8ycLu8vXyll+OK1Ks8zA8
-   W1RBZ9ZkQHCULZ/pWvFpfLJ6xPwZ55LIPmDiSJfp1P+ZqZThUJ+0jXiqe
-   R0rPBtmqrITyq0q69Nq2jfFYZIuPOxe4uZc8xwCKy5nrAkQddSuScpu9Q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="324499059"
+  t=1680018170; x=1711554170;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J7Dc257NEOJMhAqfms5At2NFhQkyHhktedAZR/Cilfk=;
+  b=Z0svZOSUfaQkj0xmeMG7KmN2DoDGPkem03yzsqcOvytR+Hk2ibERLxuH
+   Fy8pQRupX4NSBSKdS/6s3U5V0ROwYqW8gpSDD2pVTBeZ6zjtSgziN1b9Q
+   qGr1KYKvLuvBfvCLApT1XDwWNXK1WwtO5hdqdlQzxY1YRpBu5Ee+dnFtW
+   w6UiPEHzGFqtCpaBGbqI8J9MLBAsHgN/3CY2YpSXji83Lq2BnNLi0Q7zu
+   NR15U0sAOFq08QRNDte/LarPJYKPz0/a/0uQ6dO68TxwTtE0nPSFGCIJK
+   Z0i3KmVI9OgoMxpOW0o7TXwrlTeFOFYkaejw5qFbjzUesY1ziK+dNGMeG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="339326987"
 X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="324499059"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 08:36:14 -0700
+   d="scan'208";a="339326987"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 08:42:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="827504413"
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="858139636"
 X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="827504413"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 08:36:13 -0700
-Date:   Tue, 28 Mar 2023 08:40:15 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "David Woodhouse" <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v2 6/8] iommu/vt-d: Implement set_dev_pasid domain op
-Message-ID: <20230328084015.5c8c08ca@jacob-builder>
-In-Reply-To: <BN9PR11MB5276B3FF6D21608BB17E32A18C889@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230327232138.1490712-1-jacob.jun.pan@linux.intel.com>
-        <20230327232138.1490712-7-jacob.jun.pan@linux.intel.com>
-        <BN9PR11MB5276B3FF6D21608BB17E32A18C889@BN9PR11MB5276.namprd11.prod.outlook.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+   d="scan'208";a="858139636"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 28 Mar 2023 08:42:10 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phBSc-000IfH-0O;
+        Tue, 28 Mar 2023 15:42:10 +0000
+Date:   Tue, 28 Mar 2023 23:41:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
+        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v6 06/12] dt-bindings: arm: Add initial bindings for
+ Nuvoton platform
+Message-ID: <202303282310.bOWEkwv1-lkp@intel.com>
+References: <20230328021912.177301-7-ychuang570808@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328021912.177301-7-ychuang570808@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
+Hi Jacky,
 
-On Tue, 28 Mar 2023 07:47:45 +0000, "Tian, Kevin" <kevin.tian@intel.com>
-wrote:
+Thank you for the patch! Perhaps something to improve:
 
-> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > Sent: Tuesday, March 28, 2023 7:22 AM
-> > 
-> > Devices that use ENQCMDS to submit work on buffers mapped by DMA API
-> > must attach a PASID to the default domain of the device. In preparation
-> > for this use case, this patch implements set_dev_pasid() for the
-> > default_domain_ops. Besides PASID attachment, device will also be
-> > attached to the domain as the result of this call if the device has not
-> > been attached before.
-> >   
-> 
-> I didn't get the last point. PASID attach should only have the scope
-> for the pasid. RID of the device might be attached to another domain
-> which shouldn't be changed by this call.
-I meant if the RID context has not been set up before attaching this PASID,
-this call will also set up the context, PASID dir etc. In the end, we
-eliminated ordering requirement of attaching device, RID_PASID first, then
-other PASIDs.
-How about:
-"If the device context has not been set up prior to this call, this will
-set up the device context in addition to PASID attachment."
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on clk/clk-next linus/master pza/reset/next v6.3-rc4 next-20230328]
+[cannot apply to pza/imx-drm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
+url:    https://github.com/intel-lab-lkp/linux/commits/Jacky-Huang/arm64-Kconfig-platforms-Add-config-for-Nuvoton-MA35-platform/20230328-102245
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230328021912.177301-7-ychuang570808%40gmail.com
+patch subject: [PATCH v6 06/12] dt-bindings: arm: Add initial bindings for Nuvoton platform
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/d023e63cdc203398c5db3c81ca76d34d22e23fe5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jacky-Huang/arm64-Kconfig-platforms-Add-config-for-Nuvoton-MA35-platform/20230328-102245
+        git checkout d023e63cdc203398c5db3c81ca76d34d22e23fe5
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
 
-Jacob
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303282310.bOWEkwv1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/arm/npcm/*
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
