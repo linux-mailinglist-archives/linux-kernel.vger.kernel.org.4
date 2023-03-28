@@ -2,83 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDB76CC95F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F536CC972
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjC1Rg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
+        id S229521AbjC1RiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjC1RgZ (ORCPT
+        with ESMTP id S229495AbjC1Rhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:36:25 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F391D510;
-        Tue, 28 Mar 2023 10:36:24 -0700 (PDT)
+        Tue, 28 Mar 2023 13:37:53 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7B0D50B;
+        Tue, 28 Mar 2023 10:37:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=UPxRSwVrPyIK71gfH3NckS35CBxZJ2s/oLf4mXb2RAA=; b=ie8m3VB0GH0i7rRKeh5SoWWHoY
-        gXr145ASpB5e3vjTGrcJKofeJAJsZIOHhuKKzLG+v3uIHpzDNumVFtEd/0DtcZVUICPyeoh90MbMB
-        7E5bN/zB8c31XQelLwYTUgClEQj1+BvbUdpl+DmlLElYnNv5ngzacUW5z7M4nirVpTB58yWM5P6ij
-        mVuXFCeuJFjoyXFq0xlHPhpcWH+c4ddC8j4sUs5DUWZ5mux6Y70WuttuVMYzjkZqV2K84DTS4+1uS
-        pUIWDmY3lAeRlxcAf/LR/A257QEkHsQownrYWZ11xqxj+8C7OMZVDnH/F81vE/ep9ZgnmYAMQHxSs
-        ztKpvClw==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1phDF1-00BzJv-Px; Tue, 28 Mar 2023 11:36:16 -0600
-Message-ID: <5017f565-1047-6f0c-e578-e8ed9d31802f@deltatee.com>
-Date:   Tue, 28 Mar 2023 11:36:14 -0600
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=c7ay3PzfLUlKczzYKFS0hIWxG5cR/FUCy4TCuFGv3qg=; b=PeenjWv1jMr3I+rMLnHAOXi8Ov
+        LpHwi74bFLig9FY8+yCpUh5rs4nDlcpMFFb/PK6vIz7iga4gtSTxpW+2RAZXIIML3GWHgZ0cE0Glv
+        2BjSFL7OS7hk0QmHUjjRT+u62r95HSe3G31uOvz6fv0UgkQ+EJcPtrY+TvqRS0J52ciZl8nC7eR8V
+        iXYAsHhqjmj6IH4hVi6V1WIs4zyrbh2weILUMkDfuUU0/yb0K6ySz7HzDlyYCmvK8LHuLbsW3GRyw
+        0RPJvWB8LsA1xKCLyzMLB621XHfks0lbQa69mKbudJShGX860rTEOWYlgtAGoe3QD4EcCxpz58HHC
+        6SXRMklQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1phDFx-008d3L-CI; Tue, 28 Mar 2023 17:37:13 +0000
+Date:   Tue, 28 Mar 2023 18:37:13 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Song Liu <song@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-modules@vger.kernel.org,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        Daniel Gomez <da.gomez@samsung.com>,
+        "kbus >> Keith Busch" <kbusch@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
+Message-ID: <ZCMlyUewrAjTBb5i@casper.infradead.org>
+References: <20230308094106.227365-1-rppt@kernel.org>
+ <20230308094106.227365-2-rppt@kernel.org>
+ <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
+ <ZB6W1C88TU6CcjJH@kernel.org>
+ <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
+ <ZCKIX3de5AZfGggK@kernel.org>
+ <ZCKZuXxq38obmYpn@dhcp22.suse.cz>
+ <ZCMDmHSqOeCj1EIo@kernel.org>
+ <CAB=NE6UTC4VkNM57GGJ3XkG_PWLkMfXv2e2=yQJhtM6Fc-uMsQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-CA
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230328173448.GA2952425@bhelgaas>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20230328173448.GA2952425@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: helgaas@kernel.org, cai.huoqing@linux.dev, bhelgaas@google.com, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: logang@deltatee.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAB=NE6UTC4VkNM57GGJ3XkG_PWLkMfXv2e2=yQJhtM6Fc-uMsQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v2] PCI/P2PDMA: Fix the comments on pci_p2pmem_find_many()
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-03-28 11:34, Bjorn Helgaas wrote:
-> On Tue, Mar 28, 2023 at 07:06:10PM +0800, Cai Huoqing wrote:
->> Remove pci_p2pmem_dma() reference,
->> because pci_p2pmem_dma() method is already removed.
+On Tue, Mar 28, 2023 at 10:18:50AM -0700, Luis Chamberlain wrote:
+> differences with eBPF programs is that modules *can* be rather large
+> in size. What is the average size of modules? Well let's take a look:
 > 
-> AFAICT, pci_p2pmem_dma() *never* existed.  I suppose it was a typo,
-> and pci_p2pdma_distance_many() was intended?
-> 
-> I'm happy to either merge this patch (with an updated commit log) to
-> remove the comment text or merge a patch correct the comment text.
-> 
-> I just don't want to merge this with a commit log that says we removed
-> the pci_p2pmem_dma() method when it never actually existed.
+> mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+> -name \*.ko| wc -l
+> 9173
 
-Ah, yes that's fair. I thought pci_p2pmem_dma() was an odd function
-name. Good to confirm it never existed.
+ummm ... wc -c, surely?
 
-Thanks,
+> mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+> -name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
+> -$((9173-5)) | awk 'BEGIN {sum=0} {sum+=$1} END {print sum/NR/1024}'
+> 160.54
 
-Logan
+... which invalidates all of these.
