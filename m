@@ -2,183 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950216CB851
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674876CB856
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbjC1HiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 03:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S229924AbjC1Hjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 03:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbjC1HiI (ORCPT
+        with ESMTP id S229912AbjC1Hjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 03:38:08 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4942F26A3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:37:58 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id b20so45888595edd.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:37:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679989076;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X9cVbOj2hTelYElgGTzqGVtpL3knBAwPGkwPEQbuDv8=;
-        b=G/qGnUlLPAVRx3hZ8ER0OdGVl5WX+lwJmVbL7h0KgQ9Bs25+SIFKTaDvv11v5e/nqN
-         P1XHWSnc0MPYBZegu+r3AkzbfyyIbo9bJKZYGOSKI5qpL6tGKwCNqPpMtnyFsRIki/5L
-         eOh0qpJilgtqd5Oxlezz3+ceJGef2UDiqFefjCR+/mBfxVw4ff1vyDcP7unMp9MmFqw1
-         8xHPedV4rgsuu9GqbF6fHcG2wsI4K/wggiwbb0xx8b22y4e//D/0y+9HBuv7CEwTaECn
-         oo5Gt65coTSTlmsDitMGPKhgDzBpOCIXI543TzeGSXUEKimaB6I1+KWXuMUQPjUGyXC/
-         6FhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679989076;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X9cVbOj2hTelYElgGTzqGVtpL3knBAwPGkwPEQbuDv8=;
-        b=UqCJPvjnzT92+51BG+oB+pDtw2h1Eyo8bW6j5rRV3Uyf2Xlri2HnzeV8dl5oBkNS0c
-         2VKZIcqUmOjWsqjP72a8tYD0aJjwKnmfxpy4/ffyaCCQifr0TBztkUGVKVP6OPSE3H14
-         QUoStznhHqFPMaxEdm2viqjgh4EK9BLeRuFmOJ04xj7T2G1XKqI48vLUAGJK3e7vPDPy
-         dhVK0+RA7twO3Sp2+OcxtxFcDROo9WMTM/m+59vYitiUavREPAqMQn1Q6Af7W+rEHffk
-         a1VgDZKY8zpfHvgBeJEBnCDrl6/3oYtwiZ6fg0IMysU8p4PZyl+Ap43XijQvN2XjGAKL
-         mH5A==
-X-Gm-Message-State: AAQBX9dQVRQxeRg9ssN7CKCOFgNYN9nj6Q6yfsIeN6YVWSmO1w2wRt0o
-        NlFFySKl8GtDoKmukEWenns+vg==
-X-Google-Smtp-Source: AKy350YhSF13sxJjRSritYNctWoIhjA9llZmiG4TT3T8s7wmQMO9euMgGym/RxdMJW0QiCszqoXonA==
-X-Received: by 2002:a17:907:c25:b0:8b2:d30:e722 with SMTP id ga37-20020a1709070c2500b008b20d30e722mr21666345ejc.3.1679989076678;
-        Tue, 28 Mar 2023 00:37:56 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
-        by smtp.gmail.com with ESMTPSA id k8-20020a17090627c800b008d1693c212csm14877174ejc.8.2023.03.28.00.37.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 00:37:56 -0700 (PDT)
-Message-ID: <74d62ddf-8257-3f67-c33d-b6e76314bc3b@linaro.org>
-Date:   Tue, 28 Mar 2023 09:37:55 +0200
+        Tue, 28 Mar 2023 03:39:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B63196
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:39:39 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E37D81FD6A;
+        Tue, 28 Mar 2023 07:39:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679989177; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6LsNQFW9qDJbRtDT8d0v52+HSjljoW5023G5IXOpgfw=;
+        b=jHH+FS9qODj00E1eRKg6/VYtJn7vkmlf4B0mnpK86VQ+9DisQyhb6dJ6bfYSvAlpJYrjUR
+        meLggKv3uhru4lKroWou8mhhpT1a0SMGu0JCgDYpfHVoLiK8krIR5uCKcvCPpOf0+kAh2J
+        E8xoamhubbBxrSisYFF0Yg1EcE3rYo4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C555B1390B;
+        Tue, 28 Mar 2023 07:39:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2VNgLLmZImR8CAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 28 Mar 2023 07:39:37 +0000
+Date:   Tue, 28 Mar 2023 09:39:37 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Song Liu <song@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
+Message-ID: <ZCKZuXxq38obmYpn@dhcp22.suse.cz>
+References: <20230308094106.227365-1-rppt@kernel.org>
+ <20230308094106.227365-2-rppt@kernel.org>
+ <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
+ <ZB6W1C88TU6CcjJH@kernel.org>
+ <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
+ <ZCKIX3de5AZfGggK@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: mmc: arasan,sdci: Add Xilinx Versal Net
- compatible
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>,
-        "Potthuri, Sai Krishna" <sai.krishna.potthuri@amd.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "saikrishna12468@gmail.com" <saikrishna12468@gmail.com>
-References: <20230324073630.3194724-1-sai.krishna.potthuri@amd.com>
- <20230324073630.3194724-2-sai.krishna.potthuri@amd.com>
- <d646d109-d0a6-aedb-a8b2-ac954336e628@linaro.org>
- <BY5PR12MB425806889EE700C1FCC8A465DB8B9@BY5PR12MB4258.namprd12.prod.outlook.com>
- <1f97dec8-d30c-ccc7-3026-713bf9a15850@linaro.org>
- <84d34a5a-c29b-f38d-2a71-6cf39447b03d@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <84d34a5a-c29b-f38d-2a71-6cf39447b03d@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCKIX3de5AZfGggK@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 09:31, Michal Simek wrote:
-> 
-> 
-> On 3/28/23 09:14, Krzysztof Kozlowski wrote:
->> On 27/03/2023 11:58, Potthuri, Sai Krishna wrote:
->>> Hi Krzysztof,
->>>
->>>> -----Original Message-----
->>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> Sent: Friday, March 24, 2023 5:14 PM
->>>> To: Potthuri, Sai Krishna <sai.krishna.potthuri@amd.com>; Ulf Hansson
->>>> <ulf.hansson@linaro.org>; Rob Herring <robh+dt@kernel.org>; Krzysztof
->>>> Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Michal Simek
->>>> <michal.simek@xilinx.com>; Adrian Hunter <adrian.hunter@intel.com>
->>>> Cc: linux-mmc@vger.kernel.org; linux-kernel@vger.kernel.org;
->>>> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; git (AMD-
->>>> Xilinx) <git@amd.com>; saikrishna12468@gmail.com
->>>> Subject: Re: [PATCH 1/2] dt-bindings: mmc: arasan,sdci: Add Xilinx Versal Net
->>>> compatible
->>>>
->>>> On 24/03/2023 08:36, Sai Krishna Potthuri wrote:
->>>>> Add Xilinx Versal Net compatible to support eMMC 5.1 PHY.
->>>>>
->>>>> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
->>>>> ---
->>>>>   Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml | 6 ++++++
->>>>>   1 file changed, 6 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->>>>> b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->>>>> index 8296c34cfa00..cf44a4b988a7 100644
->>>>> --- a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->>>>> +++ b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
->>>>> @@ -27,6 +27,7 @@ allOf:
->>>>>               enum:
->>>>>                 - xlnx,zynqmp-8.9a
->>>>>                 - xlnx,versal-8.9a
->>>>> +              - xlnx,versal-net-5.1-emmc
->>>>
->>>> v5.1 is eMMC standard or Versal block version? If the first, it's not suitable for
->>>> compatibles.
->>>>
->>>> Also, what's the difference from xlnx,versal-8.9a?
->>> V5.1 is an eMMC standard and this compatible is defined based on sdhci arasan
->>> eMMC5.1 Host Controller(arasan,sdhci-5.1), where as in Versal, it’s a different
->>> controller and it is based on 4.51 Host Controller(arasan,sdhci-8.9a).
->>
->> Mixing IP block versions and eMMC spec versions in one binding is a
->> great way to confuse.
-> 
-> What do you suggest then?
+On Tue 28-03-23 09:25:35, Mike Rapoport wrote:
+> On Mon, Mar 27, 2023 at 03:43:27PM +0200, Michal Hocko wrote:
+> > On Sat 25-03-23 09:38:12, Mike Rapoport wrote:
+> > > On Fri, Mar 24, 2023 at 09:37:31AM +0100, Michal Hocko wrote:
+> > > > On Wed 08-03-23 11:41:02, Mike Rapoport wrote:
+> > > > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > > > > 
+> > > > > When set_memory or set_direct_map APIs used to change attribute or
+> > > > > permissions for chunks of several pages, the large PMD that maps these
+> > > > > pages in the direct map must be split. Fragmenting the direct map in such
+> > > > > manner causes TLB pressure and, eventually, performance degradation.
+> > > > > 
+> > > > > To avoid excessive direct map fragmentation, add ability to allocate
+> > > > > "unmapped" pages with __GFP_UNMAPPED flag that will cause removal of the
+> > > > > allocated pages from the direct map and use a cache of the unmapped pages.
+> > > > > 
+> > > > > This cache is replenished with higher order pages with preference for
+> > > > > PMD_SIZE pages when possible so that there will be fewer splits of large
+> > > > > pages in the direct map.
+> > > > > 
+> > > > > The cache is implemented as a buddy allocator, so it can serve high order
+> > > > > allocations of unmapped pages.
+> > > > 
+> > > > Why do we need a dedicated gfp flag for all this when a dedicated
+> > > > allocator is used anyway. What prevents users to call unmapped_pages_{alloc,free}?
+> > > 
+> > > Using unmapped_pages_{alloc,free} adds complexity to the users which IMO
+> > > outweighs the cost of a dedicated gfp flag.
+> > 
+> > Aren't those users rare and very special anyway?
+> > 
+> > > For modules we'd have to make x86::module_{alloc,free}() take care of
+> > > mapping and unmapping the allocated pages in the modules virtual address
+> > > range. This also might become relevant for another architectures in future
+> > > and than we'll have several complex module_alloc()s. 
+> > 
+> > The module_alloc use is lacking any justification. More context would be
+> > more than useful. Also vmalloc support for the proposed __GFP_UNMAPPED
+> > likely needs more explanation as well.
+>  
+> Right now module_alloc() boils down to vmalloc() with the virtual range
+> limited to the modules area. The allocated chunk contains both code and
+> data. When CONFIG_STRICT_MODULE_RWX is set, parts of the memory allocated
+> with module_alloc() remapped with different permissions both in vmalloc
+> address space and in the direct map. The change of permissions for small
+> ranges causes splits of large pages in the direct map.
 
-Stick to IP block versions or code names. The eMMC spec version would
-only make sense if you had such possibility:
+OK, so you want to reduce that direct map fragmentation? Is that a real
+problem? My impression is that modules are mostly static thing. BPF
+might be a different thing though. I have a recollection that BPF guys
+were dealing with direct map fragmention as well.
 
-xlnx,versal-net-emmc-5.0
-xlnx,versal-net-emmc-5.1
-xlnx,versal-net-emmc-x.y
+> If we were to use unmapped_pages_alloc() in modules_alloc(), we would have
+> to implement the part of vmalloc() that reserves the virtual addresses and
+> maps the allocated memory there in module_alloc().
 
-So exactly one device with different blocks inside. This is very
-uncommon, but there such SoC (SunPlus IIRC).
-
-> 
->>
->>> Versal Net Compatible is defined it this way to make it inline with the other
->>> existing SoC compatibles like "intel,keembay-sdhci-5.1-emmc".
->>> Please suggest if the compatible need to be renamed to "xlnx,versal-net-emmc"?
->>
->> Is Versal Net uniquely identifying your SoC or IP block?
-> 
-> Yes. versal-net is unique identifier for specific silicon with fixed set if IPs.
-
-Then I suggest xlnx,versal-net-emmc.
-
-> Can you please refresh my mind if we can introduce specific compatible strings 
-> for this SOC or should we used existing one if functionality is the same with 
-> previous SOC family?
-
-It's regular case and recommendation is always (for every SoC) the same:
-https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
-
-You should add new SoC specific compatible followed by existing one
-(fallback).
-
-> There could be currently unknown issues related to SOC wiring out of specific IP 
-> version.
-
-Best regards,
-Krzysztof
-
+Another option would be to provide an allocator for the backing pages to
+vmalloc. But I do agree that a gfp flag is a less laborous way to
+achieve the same. So the primary question really is whether we really
+need vmalloc support for unmapped memory.
+-- 
+Michal Hocko
+SUSE Labs
