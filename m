@@ -2,148 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8823A6CC8F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA216CC8F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjC1RPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
+        id S229720AbjC1RQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjC1RPU (ORCPT
+        with ESMTP id S229606AbjC1RP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:15:20 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDA58E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:15:19 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id o14-20020a62f90e000000b0062d87d997eeso2870501pfh.18
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:15:19 -0700 (PDT)
+        Tue, 28 Mar 2023 13:15:59 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8DA9750;
+        Tue, 28 Mar 2023 10:15:58 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id m16so9607471qvi.12;
+        Tue, 28 Mar 2023 10:15:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680023719;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+pBQEV4YUH7Haj6IRDt7ZXQzFb/Lwzc+HNbZTIhASOk=;
-        b=RcYuUcC6lut4RRlIzo3rrGz/yJqD4FUFCr4JZDX7ZzMLzNs99zljDyOtY6Fo/E4nOB
-         cGNLmHnbnV33/umimB+XRTpYkgxQ/u03JsNpkGH4d9II/EtUjo6166MMY+owRzD4qF8e
-         TySR5P4G2NCew7SXkPOkxSSt7MeAk+HKTYdI9XMoW8q4ylW0kl2/SLJdSSsxeAJxn4D6
-         IW8kHHKaH4bT9ev3PBxAt/pOkSyUbnM0oqpws8PdbcFuA0xeB1zahn4XMlYHVr3Q3ZY9
-         N+LHaKUMOKhCetuFVSvbxhYDJpOgSMnNf29dtYY2Hqym5c6dqndn5858GS8spLsBCoBO
-         1NJQ==
+        d=gmail.com; s=20210112; t=1680023757;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SgQ1uDWJ12zSyFLa1KL/uO5pZA8CWTbblaTqGRUiRdo=;
+        b=kMK0ic7Qlbdr8IiQGvB14KNwUzwnLDcN3k5kZYiVrk866xZWXej5yNhbPmlwS8pUFT
+         qDQ0KvDTlJzkVHZdYJZrjh6rLIbvg55Ur9P4jzY3UiwOCsiJj9MZRRmBRxNq56TCsAa8
+         GC12vX8Lu7XVDOTxGNCyyTh3VhxsPFLGJFINGm5Gox3apZWsrHKWfpKNiZeIGBqtiQwD
+         7UQlL7vVwYGHzJD1gGQFjC52QMT/Ow6Mm1QwNLW8pCEpGl4c7BGxiAptB9WiqbmAKdQQ
+         2jh0tASRTnTpnjcz49IBZtriyiqEZLlAxLVZfGxYV+IoRCAP3iD78SHJ2C9EHlVK7GjW
+         IzUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680023719;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+pBQEV4YUH7Haj6IRDt7ZXQzFb/Lwzc+HNbZTIhASOk=;
-        b=IEGDI28ueS6SJwC7sQcYVMSZHaYNU7qMBfU+9JXaxZYn+dtzILw1hDQAjT270HTO0O
-         eBMGvSZ+6fTMTuW8tADHB0D610v29MIS4D85rt+vA5TrsVMD6DWVYcDoTHNVc2ObOAvO
-         1zTaOGPKIeA2dreG4EUgxUrbbpMneQMjZXtBJiRNkeyIkjR5MzjwLQrA25pyOf/Gun86
-         X2Oq0IL69rsPsPKzrRPmHBEghoH+nKZXDVxFJdcXHgxnIvBCE1RMLgrBLOJ/2nv2fLKA
-         oYcShk8Ojpl0XjXqeQNk/+5tbvntAbaexAKjFY+jV0LQCozgwH5MkY3o0HSL0kHFCDcI
-         oSFQ==
-X-Gm-Message-State: AAQBX9fYtlO97Gnn+mtsCNr9r4HdGBZNVmmfhEuJsxD+teRujt9JiPf9
-        2efCkKPF0WkrasS6f2e4UFT7ebE=
-X-Google-Smtp-Source: AKy350bsqZyZ/Y3M0YYrPdaZCB2hLdoq2PVv5WxgY3qaWkTzVah1qrIHjC5M20WVfRtDq8vEE6+/UHM=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:90a:bb8e:b0:23b:3d0b:f165 with SMTP id
- v14-20020a17090abb8e00b0023b3d0bf165mr5156482pjr.5.1680023719200; Tue, 28 Mar
- 2023 10:15:19 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 10:15:17 -0700
-In-Reply-To: <CALOAHbBJEXdR4Myk1zrgFDf9UJYu2-3tbjz0ETNvK3WamD5sFg@mail.gmail.com>
-Mime-Version: 1.0
-References: <20230326092208.13613-1-laoar.shao@gmail.com> <ZCHSOxto9DlEzVy9@google.com>
- <CALOAHbBJEXdR4Myk1zrgFDf9UJYu2-3tbjz0ETNvK3WamD5sFg@mail.gmail.com>
-Message-ID: <ZCMgpRtT6ywmtALi@google.com>
-Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
-From:   Stanislav Fomichev <sdf@google.com>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
-        jolsa@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1680023757;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SgQ1uDWJ12zSyFLa1KL/uO5pZA8CWTbblaTqGRUiRdo=;
+        b=GZXayN/UMzAYNx8O4DyQ2tnBFB85bjXwCeTaVA9x8DyQQvNhYg3XVxuJu4Gwl8UiRg
+         lQ/oyGRJrKsqyUTDwo19259Cyu4Hqof51QcJ/pfIzhGHixDY9Cja8JJa/CvW0lfkoEOq
+         vZkc3EviSpOxCWnxzaYe/ORMQ2gsw7wfRYTaQuVGLBNSXaRwQw7wuyYOzUmbeEBiNxCE
+         HJUvGIp2JMwkPlmln++Xrn8OvZBEQrYv6NOv175rNM38n64+w2gNxsNSwzaVMqhD+mrx
+         7XRANl7D3qRuCrygLbfxxHlCNzvnJTB1eOEwKEBsUvfHPZGkw8JjsprSCzw3hsUkWz48
+         hhcA==
+X-Gm-Message-State: AAQBX9foY73wNBigAqDGWzBpxI9eE2CfEOMuBclOElvVn6ZRQ8UJciGg
+        Bhu/kxszD8wIEgmDqyLZ9iRzGmkIpUBLFp0mjrXWxMvtCyo=
+X-Google-Smtp-Source: AKy350Yybe1XfMVymzn0L1frzoB2YLldHl07lvc360cxEIjLyu4hhU6Szpt8mwrXe8EYLZA7nkl3R289Xr/YU0DVGJ8=
+X-Received: by 2002:ad4:4a6d:0:b0:56f:6925:eb2c with SMTP id
+ cn13-20020ad44a6d000000b0056f6925eb2cmr2803163qvb.10.1680023757607; Tue, 28
+ Mar 2023 10:15:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230328161541.599463-1-jjhiblot@traphandler.com> <20230328161541.599463-5-jjhiblot@traphandler.com>
+In-Reply-To: <20230328161541.599463-5-jjhiblot@traphandler.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 28 Mar 2023 20:15:21 +0300
+Message-ID: <CAHp75Ve_=Gzpg9GO=2dqTKWuyU-Podezv_YSwHLqFPHXk1DUxg@mail.gmail.com>
+Subject: Re: [PATCH v8 4/6] leds: class: store the color index in struct led_classdev
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     lee.jones@linaro.org, pavel@ucw.cz, robh+dt@kernel.org,
+        sven.schwermer@disruptive-technologies.com,
+        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
+        marijn.suijten@somainline.org, jacek.anaszewski@gmail.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDMvMjgsIFlhZmFuZyBTaGFvIHdyb3RlOg0KPiBPbiBUdWUsIE1hciAyOCwgMjAyMyBhdCAx
-OjI44oCvQU0gU3RhbmlzbGF2IEZvbWljaGV2IDxzZGZAZ29vZ2xlLmNvbT4gd3JvdGU6DQo+ID4N
-Cj4gPiBPbiAwMy8yNiwgWWFmYW5nIFNoYW8gd3JvdGU6DQo+ID4gPiBDdXJyZW50bHkgb25seSBD
-QVBfU1lTX0FETUlOIGNhbiBpdGVyYXRlIEJQRiBvYmplY3QgSURzIGFuZCBjb252ZXJ0ICANCj4g
-SURzDQo+ID4gPiB0byBGRHMsIHRoYXQncyBpbnRlbmRlZCBmb3IgQlBGJ3Mgc2VjdXJpdHkgbW9k
-ZWxbMV0uIE5vdCBvbmx5IGRvZXMgaXQNCj4gPiA+IHByZXZlbnQgbm9uLXByaXZpbGlkZ2VkIHVz
-ZXJzIGZyb20gZ2V0dGluZyBvdGhlciB1c2VycycgYnBmIHByb2dyYW0sICANCj4gYnV0DQo+ID4g
-PiBhbHNvIGl0IHByZXZlbnRzIHRoZSB1c2VyIGZyb20gaXRlcmF0aW5nIGhpcyBvd24gYnBmIG9i
-amVjdHMuDQo+ID4NCj4gPiA+IEluIGNvbnRhaW5lciBlbnZpcm9ubWVudCwgc29tZSB1c2VycyB3
-YW50IHRvIHJ1biBicGYgcHJvZ3JhbXMgaW4gdGhlaXINCj4gPiA+IGNvbnRhaW5lcnMuIFRoZXNl
-IHVzZXJzIGNhbiBydW4gdGhlaXIgYnBmIHByb2dyYW1zIHVuZGVyIENBUF9CUEYgYW5kDQo+ID4g
-PiBzb21lIG90aGVyIHNwZWNpZmljIENBUHMsIGJ1dCB0aGV5IGNhbid0IGluc3BlY3QgdGhlaXIg
-YnBmIHByb2dyYW1zICANCj4gaW4gYQ0KPiA+ID4gZ2VuZXJpYyB3YXkuIEZvciBleGFtcGxlLCB0
-aGUgYnBmdG9vbCBjYW4ndCBiZSB1c2VkIGFzIGl0IHJlcXVpcmVzDQo+ID4gPiBDQVBfU1lTX0FE
-TUlOLiBUaGF0IGlzIHZlcnkgaW5jb252ZW5pZW50Lg0KPiA+DQo+ID4gPiBXaXRob3V0IENBUF9T
-WVNfQURNSU4sIHRoZSBvbmx5IHdheSB0byBnZXQgdGhlIGluZm9ybWF0aW9uIG9mIGEgYnBmICAN
-Cj4gb2JqZWN0DQo+ID4gPiB3aGljaCBpcyBub3QgY3JlYXRlZCBieSB0aGUgcHJvY2VzcyBpdHNl
-bGYgaXMgd2l0aCBTQ01fUklHSFRTLCB0aGF0DQo+ID4gPiByZXF1aXJlcyBlYWNoIHByb2Nlc3Nl
-cyB3aGljaCBjcmVhdGVkIGJwZiBvYmplY3QgaGFzIHRvIGltcGxlbWVudCBhICANCj4gdW5peA0K
-PiA+ID4gZG9tYWluIHNvY2tldCB0byBzaGFyZSB0aGUgZmQgb2YgYSBicGYgb2JqZWN0IGJldHdl
-ZW4gZGlmZmVyZW50DQo+ID4gPiBwcm9jZXNzZXMsIHRoYXQgaXMgcmVhbGx5IHRyaXZpYWwgYW5k
-IHRyb3VibGVzb21lLg0KPiA+DQo+ID4gPiBIZW5jZSB3ZSBuZWVkIGEgYmV0dGVyIG1lY2hhbmlz
-bSB0byBnZXQgYnBmIG9iamVjdCBpbmZvIHdpdGhvdXQNCj4gPiA+IENBUF9TWVNfQURNSU4uDQo+
-ID4NCj4gPiBbLi5dDQo+ID4NCj4gPiA+IEJQRiBuYW1lc3BhY2UgaXMgaW50cm9kdWNlZCBpbiB0
-aGlzIHBhdGNoc2V0IHdpdGggYW4gYXR0ZW1wdCB0byByZW1vdmUNCj4gPiA+IHRoZSBDQVBfU1lT
-X0FETUlOIHJlcXVpcmVtZW50LiBUaGUgdXNlciBjYW4gY3JlYXRlIGJwZiBtYXAsIHByb2cgYW5k
-DQo+ID4gPiBsaW5rIGluIGEgc3BlY2lmaWMgYnBmIG5hbWVzcGFjZSwgdGhlbiB0aGVzZSBicGYg
-b2JqZWN0cyB3aWxsIG5vdCBiZQ0KPiA+ID4gdmlzaWJsZSB0byB0aGUgdXNlcnMgaW4gYSBkaWZm
-ZXJlbnQgYnBmIG5hbWVzcGFjZS4gQnV0IHRoZXNlIGJwZg0KPiA+ID4gb2JqZWN0cyBhcmUgdmlz
-aWJsZSB0byBpdHMgcGFyZW50IGJwZiBuYW1lc3BhY2UsIHNvIHRoZSBzeXMgYWRtaW4gY2FuDQo+
-ID4gPiBzdGlsbCBpdGVyYXRlIGFuZCBpbnNwZWN0IHRoZW0uDQo+ID4NCj4gPiBEb2VzIGl0IGVz
-c2VudGlhbGx5IG1lYW4gdW5wcml2IGJwZj8NCg0KPiBSaWdodC4gV2l0aCBDQVBfQlBGIGFuZCBz
-b21lIG90aGVyIENBUHMgZW5hYmxlZC4NCg0KPiA+IENhbiBJLCBhcyBhIG5vbi1yb290LCBjcmVh
-dGUNCj4gPiBhIG5ldyBicGYgbmFtZXNwYWNlIGFuZCBzdGFydCBsb2FkaW5nL2F0dGFjaGluZyBw
-cm9ncz8NCg0KPiBObywgeW91IGNhbid0IGNyZWF0ZSBhIG5ldyBicGYgbmFtZXNwYWNlIGFzIGEg
-bm9uLXJvb3QsIHNlZSBhbHNvDQo+IGNvcHlfbmFtZXNwYWNlcygpLg0KPiBJbiB0aGUgY29udGFp
-bmVyIGVudmlyb25tZW50LCBuZXcgbmFtZXNwYWNlcyBhcmUgYWx3YXlzIGNyZWF0ZWQgYnkNCj4g
-Y29udGFpbmVyZWQsIHdoaWNoIGlzIHN0YXJ0ZWQgYnkgcm9vdC4NCg0KQXJlIHlvdSB0YWxraW5n
-IGFib3V0ICJpZiAoIW5zX2NhcGFibGUodXNlcl9ucywgQ0FQX1NZU19BRE1JTikpIiBwYXJ0DQpm
-cm9tIGNvcHlfbmFtZXNwYWNlcz8gSXNuJ3QgaXQgdHJpdmlhbGx5IGJ5cGFzc2VkIHdpdGggYSBu
-ZXcgdXNlcg0KbmFtZXNwYWNlPw0KDQpJSVVDLCBJIGNhbiBjcmVhdGUgYSBuZXcgdXNlciBuYW1l
-c3BhY2Ugd2hpY2ggZ2l2ZXMgbWUgQ0FQX1NZU19BRE1JTg0KaW4gdGhpcyBwYXJ0aWN1bGFyIHVz
-ZXItbnMuIFRoZW4gSSBjYW4gZ28gb24gYW5kIGNyZWF0ZSBhIG5ldyBicGYNCm5hbWVzcGFjZSAo
-d2l0aCBDQVBfQlBGKSBhbmQgZ28gd2lsZD8gSSB3b24ndCBzZWUgYW55dGhpbmcgZnJvbSB0aGUN
-Cm90aGVyIG5hbWVzcGFjZXMsIGJ1dCBJJ2xsIGJlIGFibGUgdG8gbG9hZC9hdHRhY2ggYnBmIHBy
-b2dyYW1zPw0KDQo+ID4gTWF5YmUgYWRkIGEgcGFyYWdyYXBoIGFib3V0IG5vdyB2cyB3aGF0ZXZl
-ciB5b3UncmUgcHJvcG9zaW5nLg0KDQo+IFdoYXQgSSdtIHByb3Bvc2luZyBpbiB0aGlzIHBhdGNo
-c2V0IGlzIHRvIHB1dCBicGYgb2JqZWN0cyAobWFwLCBwcm9nLA0KPiBsaW5rLCBhbmQgYnRmKSBp
-bnRvIHRoZSBicGYgbmFtZXNwYWNlLiBOZXh0IHN0ZXAgSSB3aWxsIHB1dCBicGZmcyBpbnRvDQo+
-IHRoZSBicGYgbmFtZXNwYWNlIGFzIHdlbGwuDQo+IFRoYXQgc2FpZCwgSSdtIHRyeWluZyB0byBw
-dXQgIGFsbCB0aGUgb2JqZWN0cyBjcmVhdGVkIGluIGJwZiBpbnRvIHRoZQ0KPiBicGYgbmFtZXNw
-YWNlLiBCZWxvdyBpcyBhIHNpbXBsZSBwYXJhZ3JhcGggdG8gaWxsdXN0cmF0ZSBpdC4NCg0KPiBS
-ZWdhcmRpbmcgdGhlIHVucHJpdiB1c2VyIHdpdGggQ0FQX0JQRiBlbmFibGVkLA0KPiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE5v
-dyB8IEZ1dHVyZQ0KPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gSXRlcmF0ZSBoaXMgQlBGIElEcyAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgfCBOICAgfCAgWSAgfA0KPiBJdGVyYXRlIG90aGVy
-cycgQlBGIElEcyAgICAgICAgICAgICAgICAgICAgICAgICAgfCBOICAgfCAgTiAgfA0KPiBDb252
-ZXJ0IGhpcyBCUEYgSURzIHRvIEZEcyAgICAgICAgICAgICAgICAgIHwgTiAgIHwgIFkgIHwNCj4g
-Q29udmVydCBvdGhlcnMnIEJQRiBJRHMgdG8gRkRzICAgICAgICAgICAgfCBOICAgfCAgTiAgfA0K
-PiBHZXQgb3RoZXJzJyBvYmplY3QgaW5mbyBmcm9tIHBpbm5lZCBmaWxlICB8IFkoKikgfCBOICB8
-DQo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLQ0KDQo+ICgqKSBJdCBjYW4gYmUgaW1wcm92ZWQgYnksDQo+ICAg
-ICAgIDEpLiBEaWZmZXJlbnQgY29udGFpbmVycyBoYXMgZGlmZmVyZW50IGJwZmZzDQo+ICAgICAg
-IDIpLiBTZXR0aW5nIGZpbGUgcGVybWlzc2lvbg0KPiAgICAgICBUaGF0J3Mgbm90IHBlcmZlY3Qs
-IGZvciBleGFtcGxlLCBpZiBvbmUgc2luZ2xlIHVzZXIgaGFzIHR3byBicGYNCj4gaW5zdGFuY2Vz
-LCBidXQgd2UgZG9uJ3Qgd2FudCB0aGVtIHRvIGluc3BlY3QgZWFjaCBvdGhlci4NCg0KSSB0aGlu
-ayB0aGUgcXVlc3Rpb24gaGVyZSBpcyB3aGF0IGhhcHBlbnMgdG8gdGhlIGV4aXN0aW5nDQpjYXBh
-YmxlKENBUF9CUEYpIGNoZWNrcz8gRG8gdGhleSBiZWNvbWUgbnNfY2FwYWJsZShDQVBfQlBGKSBl
-dmVudHVhbGx5Pw0KDQpBbmQgaWYgbm90LCBJIGRvbid0IHRoaW5rIGl0IGludGVncmF0ZXMgd2Vs
-bCB3aXRoIHRoZSB1c2VyIG5hbWVzcGFjZXM/DQoNCj4gPiBPdGhlcndpc2UgaXQncyBub3QgdmVy
-eSBjbGVhciB3aGF0J3MgdGhlIHNlY3VyaXR5IHN0b3J5Lg0KPiA+IChoYXZlbid0IGxvb2tlZCBh
-dCB0aGUgd2hvbGUgc2VyaWVzLCBzbyBtYXliZSBpdCdzIGFuc3dlcmVkIHNvbWV3aGVyZSAgDQo+
-IGVsc2U/KQ0KPiA+DQoNCg0KPiAtLQ0KPiBSZWdhcmRzDQo+IFlhZmFuZw0K
+On Tue, Mar 28, 2023 at 7:15=E2=80=AFPM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
+>
+> This information might be useful for more than only deriving the led's
+> name. And since we have this information, we can expose it in the sysfs.
+
+...
+
+> +Date:          March 2023
+> +KernelVersion: 6.3
+
+Outdated version.
+
+...
+
+> +               Color of the led.
+> +
+> +               This is a read-only file. Reading this file returns the c=
+olor
+> +               of the led as a string (ex: "red", "green").
+
+There are no strict rules about colour and I don't think it's a good
+idea. Why in such a case is it different to label? My proposal here at
+least documenting that the colour must follow one of the existing
+naming standards (like RGB in hex, HTML, or name in accordance with
+chosen standard).
+
+Yet, it won't technically prevent abusing that, but at least will show
+the intention and allow pointing out to the bugs or develop user space
+tooling based on existing parsers (if any).
+
+--=20
+With Best Regards,
+Andy Shevchenko
