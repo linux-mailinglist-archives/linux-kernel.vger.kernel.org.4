@@ -2,258 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49A36CC8FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75FF26CC904
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjC1RRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57862 "EHLO
+        id S229670AbjC1RTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjC1RRS (ORCPT
+        with ESMTP id S229532AbjC1RTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:17:18 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A25AD3C
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:17:17 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id i6so16037834ybu.8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680023836;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dQnHU1M/MPboqyRKv1gTRYT/ZtZXQpcppYft9PMstwU=;
-        b=humGhO7LERdMZlcUrHW8NTZcBX3+1mOSPyZahqWh+rFkHIvm/HPQXiX7KJiXUDIlh3
-         gfZCfDW7E7wHUB4lqAJAhmQ5bYrMdFG3rD4AacVBv1L6Kan0KhIKuOgQ7FYcuHThUK8j
-         iERdJa2qgc9UapONyWfdVzQfA8Q52B5ky/o1sA2gZeBX9Mu81tFd6z7P6He0fvdr+MHV
-         d6s7rpXaGeBoEPbnfj9S/awZ3qYvtyXsmeQs2nfUBWgAVeXGH18zo/EJ9PjhsrD/fRVU
-         i1odoyFYu2HThc76oPSGUvkeDk82LmXexJh66vS7XuR5oXzkHGpDB1FoaHOx9UcxCx7m
-         4ziA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680023836;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dQnHU1M/MPboqyRKv1gTRYT/ZtZXQpcppYft9PMstwU=;
-        b=2EQuyx/to76zpt8a4f0ZtKI8hG9EBRz9xJHACwPBIpBrmfMROF6aFfC4xTQC1vGm6K
-         rLfUUbGO8kYVBuRPN5Ggob4q7gOIZllrZ+ZAgtLUMkqi054OdF3pIMLuIfkhQYjgi0ok
-         LaAlUR6TmnZkPh4Qlh7wJXBq6ygEkXmkEmsrY7/VD1sntjGJAMD5KL5GaX6WuDFV+4S9
-         W+S8YrqGza3qdXEM5qKhr0BtDt84T5FfNEoPZFG8xg+tzoPkIdXE7iXLv+lzVva4pfQd
-         cGu0X6cDni70p5WDYEbtTP4pZcqg75JDCxphmZE7Sg/miZWJegrap2oigmtcZPf1msET
-         wCKw==
-X-Gm-Message-State: AAQBX9eGDrDffTETypx1aa4IrVH2apVCGuzVoNk96+KRgE+A9VSdRDu8
-        CEfHeYsPjTcZfsS2qvqQOPuORX/GEmVnPDwE5ha03w==
-X-Google-Smtp-Source: AKy350YTzRLa29aH7q9brLMmTyorYZNQRmkiMJPcWBgHbxwacVxOEg+NP1P2diLGGLrCZIprxNz2cE9YVVP/CpzaDLk=
-X-Received: by 2002:a05:6902:100a:b0:b76:3e1:c42d with SMTP id
- w10-20020a056902100a00b00b7603e1c42dmr10629624ybt.13.1680023836016; Tue, 28
- Mar 2023 10:17:16 -0700 (PDT)
+        Tue, 28 Mar 2023 13:19:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB01EB46A;
+        Tue, 28 Mar 2023 10:19:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F85161888;
+        Tue, 28 Mar 2023 17:19:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A10AC433A8;
+        Tue, 28 Mar 2023 17:19:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680023942;
+        bh=MTHqJiTmds1G9uf2/qzpku7XNdtoFTX7QHjbbVmJhXw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iwpGrev1ibRl1dXAsJEadL7zC+ALyIoNwF26eKsb9zLY04PhWyoaNsvhEBhNFXO6j
+         n0eGxaKAnKiBndtza8c9PucnSvNZhukPQTXYReFQcNh1SOLPMoQOovPnOsnW5ALYy0
+         ejQ6u1k1X001PcR9vjqbo4swlXn7zjFFn7wa4h2ibc2xQqIFY5FJz0BwFTogJZdkfG
+         14/VvXTY1JR3AcZiViJac7BCqT/LSMDsf3LgEMbb0Jnt8EaBpQQU5B4OYmzgfQRLt9
+         /H6lWLpJge6OXRjPi18q3j3nz+eJ95O5AkgQupbUdVQUF6GBQlPOIO3z/UUsUI82DZ
+         lh5OnXa0EMAow==
+Received: by mail-vs1-f41.google.com with SMTP id z17so4376709vsf.4;
+        Tue, 28 Mar 2023 10:19:02 -0700 (PDT)
+X-Gm-Message-State: AAQBX9d7ENPbCeAr56lk4ScmrgAATTcaj9fbDLaNRjZm027/E5A1Se7E
+        ONIRvajFJJ8oSScEza8gxTKKph0tEi7VN7cL33s=
+X-Google-Smtp-Source: AKy350YAjBcIjw0gNJYv3x5fk8l/xNgxIbF6ywykp9t6eB0H+emyrVy6JBpfJ+yPh36PvoUpgQsSkg39kLwJqqbwdc0=
+X-Received: by 2002:a67:e1c5:0:b0:402:999f:51dd with SMTP id
+ p5-20020a67e1c5000000b00402999f51ddmr8709601vsl.3.1680023941287; Tue, 28 Mar
+ 2023 10:19:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-14-vipinsh@google.com>
- <ZBzRYgC0IWiZy7PI@google.com>
-In-Reply-To: <ZBzRYgC0IWiZy7PI@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Tue, 28 Mar 2023 10:16:40 -0700
-Message-ID: <CAHVum0duECXZQuk52FqckSY4yLxntSyRXLVMShH+UDtw0SfrZw@mail.gmail.com>
-Subject: Re: [Patch v4 13/18] KVM: mmu: Add common initialization logic for
- struct kvm_mmu_memory_cache{}
-To:     David Matlack <dmatlack@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230308094106.227365-1-rppt@kernel.org> <20230308094106.227365-2-rppt@kernel.org>
+ <ZB1hS9lBabp1K7XN@dhcp22.suse.cz> <ZB6W1C88TU6CcjJH@kernel.org>
+ <ZCGdf95RvXB1RivU@dhcp22.suse.cz> <ZCKIX3de5AZfGggK@kernel.org>
+ <ZCKZuXxq38obmYpn@dhcp22.suse.cz> <ZCMDmHSqOeCj1EIo@kernel.org>
+In-Reply-To: <ZCMDmHSqOeCj1EIo@kernel.org>
+From:   Luis Chamberlain <mcgrof@kernel.org>
+Date:   Tue, 28 Mar 2023 10:18:50 -0700
+X-Gmail-Original-Message-ID: <CAB=NE6UTC4VkNM57GGJ3XkG_PWLkMfXv2e2=yQJhtM6Fc-uMsQ@mail.gmail.com>
+Message-ID: <CAB=NE6UTC4VkNM57GGJ3XkG_PWLkMfXv2e2=yQJhtM6Fc-uMsQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Song Liu <song@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-modules@vger.kernel.org,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        Daniel Gomez <da.gomez@samsung.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "kbus >> Keith Busch" <kbusch@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 3:23=E2=80=AFPM David Matlack <dmatlack@google.com>=
- wrote:
->
-> On Mon, Mar 06, 2023 at 02:41:22PM -0800, Vipin Sharma wrote:
-> > Add macros and function to make common logic for struct
-> > kvm_mmu_memory_cache{} declaration and initialization.
-> >
-> > Any user which wants different values in struct kvm_mmu_memory_cache{}
-> > will overwrite the default values explicitly after the initialization.
-> >
-> > Suggested-by: David Matlack <dmatlack@google.com>
-> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > ---
-> >  arch/arm64/kvm/arm.c      |  1 +
-> >  arch/arm64/kvm/mmu.c      |  3 ++-
-> >  arch/riscv/kvm/mmu.c      |  9 +++++----
-> >  arch/riscv/kvm/vcpu.c     |  1 +
->
-> MIPS also has cache (git grep "struct kvm_mmu_memory_cache").
->
+Mike, please Cc linux-modules if you want modules folks' input as well ;)
 
-I will respond in Patch 15 where I added stuff for MIPS.
-
-> >  arch/x86/kvm/mmu/mmu.c    |  8 ++++++++
-> >  include/linux/kvm_types.h | 10 ++++++++++
-> >  6 files changed, 27 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > index 3bd732eaf087..2b3d88e4ace8 100644
-> > --- a/arch/arm64/kvm/arm.c
-> > +++ b/arch/arm64/kvm/arm.c
-> > @@ -330,6 +330,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
-> >       vcpu->arch.target =3D -1;
-> >       bitmap_zero(vcpu->arch.features, KVM_VCPU_MAX_FEATURES);
-> >
-> > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_cache);
-> >       vcpu->arch.mmu_page_cache.gfp_zero =3D __GFP_ZERO;
-> >
-> >       /*
-> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> > index 7113587222ff..8a56f071ca66 100644
-> > --- a/arch/arm64/kvm/mmu.c
-> > +++ b/arch/arm64/kvm/mmu.c
-> > @@ -895,7 +895,7 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_add=
-r_t guest_ipa,
-> >  {
-> >       phys_addr_t addr;
-> >       int ret =3D 0;
-> > -     struct kvm_mmu_memory_cache cache =3D { .gfp_zero =3D __GFP_ZERO =
-};
-> > +     KVM_MMU_MEMORY_CACHE(cache);
+On Tue, Mar 28, 2023 at 8:11=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
+te:
+> On Tue, Mar 28, 2023 at 09:39:37AM +0200, Michal Hocko wrote:
+> > OK, so you want to reduce that direct map fragmentation?
 >
-> nit: DEFINE_KVM_MMU_MEMORY_CACHE()
+> Yes.
 >
-> (Based on similar existing macros in the kernel, e.g. DEFINE_MUTEX(),
-> DEFINE_TIMER().)
+> > Is that a real problem?
 >
-
-I will update in v5.
-
-> >       struct kvm_pgtable *pgt =3D kvm->arch.mmu.pgt;
-> >       enum kvm_pgtable_prot prot =3D KVM_PGTABLE_PROT_DEVICE |
-> >                                    KVM_PGTABLE_PROT_R |
-> > @@ -904,6 +904,7 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_add=
-r_t guest_ipa,
-> >       if (is_protected_kvm_enabled())
-> >               return -EPERM;
-> >
-> > +     cache.gfp_zero =3D __GFP_ZERO;
-> >       size +=3D offset_in_page(guest_ipa);
-> >       guest_ipa &=3D PAGE_MASK;
-> >
-> > diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> > index 78211aed36fa..bdd8c17958dd 100644
-> > --- a/arch/riscv/kvm/mmu.c
-> > +++ b/arch/riscv/kvm/mmu.c
-> > @@ -351,10 +351,11 @@ int kvm_riscv_gstage_ioremap(struct kvm *kvm, gpa=
-_t gpa,
-> >       int ret =3D 0;
-> >       unsigned long pfn;
-> >       phys_addr_t addr, end;
-> > -     struct kvm_mmu_memory_cache pcache =3D {
-> > -             .gfp_custom =3D (in_atomic) ? GFP_ATOMIC | __GFP_ACCOUNT =
-: 0,
-> > -             .gfp_zero =3D __GFP_ZERO,
-> > -     };
-> > +     KVM_MMU_MEMORY_CACHE(pcache);
-> > +
-> > +     pcache.gfp_zero =3D __GFP_ZERO;
-> > +     if (in_atomic)
-> > +             pcache.gfp_custom =3D GFP_ATOMIC | __GFP_ACCOUNT;
-> >
-> >       end =3D (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
-> >       pfn =3D __phys_to_pfn(hpa);
-> > diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> > index 7d010b0be54e..bc743e9122d1 100644
-> > --- a/arch/riscv/kvm/vcpu.c
-> > +++ b/arch/riscv/kvm/vcpu.c
-> > @@ -163,6 +163,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
-> >
-> >       /* Mark this VCPU never ran */
-> >       vcpu->arch.ran_atleast_once =3D false;
-> > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_cache);
-> >       vcpu->arch.mmu_page_cache.gfp_zero =3D __GFP_ZERO;
-> >       bitmap_zero(vcpu->arch.isa, RISCV_ISA_EXT_MAX);
-> >
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index a4bf2e433030..b706087ef74e 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -5961,15 +5961,20 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
-> >  {
-> >       int ret;
-> >
-> > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_pte_list_desc_cache);
-> >       vcpu->arch.mmu_pte_list_desc_cache.kmem_cache =3D pte_list_desc_c=
-ache;
-> >       vcpu->arch.mmu_pte_list_desc_cache.gfp_zero =3D __GFP_ZERO;
-> >
-> > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_header_cache);
-> >       vcpu->arch.mmu_page_header_cache.kmem_cache =3D mmu_page_header_c=
-ache;
-> >       vcpu->arch.mmu_page_header_cache.gfp_zero =3D __GFP_ZERO;
-> >
-> > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_shadow_page_cache);
-> >       vcpu->arch.mmu_shadow_page_cache.gfp_zero =3D __GFP_ZERO;
-> >       mutex_init(&vcpu->arch.mmu_shadow_page_cache_lock);
-> >
-> > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_shadowed_info_cache);
-> > +
-> >       vcpu->arch.mmu =3D &vcpu->arch.root_mmu;
-> >       vcpu->arch.walk_mmu =3D &vcpu->arch.root_mmu;
-> >
-> > @@ -6131,11 +6136,14 @@ int kvm_mmu_init_vm(struct kvm *kvm)
-> >       node->track_flush_slot =3D kvm_mmu_invalidate_zap_pages_in_memslo=
-t;
-> >       kvm_page_track_register_notifier(kvm, node);
-> >
-> > +     INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_page_header_cache);
-> >       kvm->arch.split_page_header_cache.kmem_cache =3D mmu_page_header_=
-cache;
-> >       kvm->arch.split_page_header_cache.gfp_zero =3D __GFP_ZERO;
-> >
-> > +     INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache);
-> >       kvm->arch.split_shadow_page_cache.gfp_zero =3D __GFP_ZERO;
-> >
-> > +     INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_desc_cache);
-> >       kvm->arch.split_desc_cache.kmem_cache =3D pte_list_desc_cache;
-> >       kvm->arch.split_desc_cache.gfp_zero =3D __GFP_ZERO;
-> >
-> > diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-> > index 2728d49bbdf6..192516eeccac 100644
-> > --- a/include/linux/kvm_types.h
-> > +++ b/include/linux/kvm_types.h
-> > @@ -98,6 +98,16 @@ struct kvm_mmu_memory_cache {
-> >       int capacity;
-> >       void **objects;
-> >  };
-> > +
-> > +#define KVM_MMU_MEMORY_CACHE_INIT() { }
-> > +
-> > +#define KVM_MMU_MEMORY_CACHE(_name) \
-> > +             struct kvm_mmu_memory_cache _name =3D KVM_MMU_MEMORY_CACH=
-E_INIT()
+> A while ago Intel folks published report [1] that showed better performan=
+ce
+> with large pages in the direct map for majority of benchmarks.
 >
-> nit: There's an extra tab here.
+> > My impression is that modules are mostly static thing. BPF
+> > might be a different thing though. I have a recollection that BPF guys
+> > were dealing with direct map fragmention as well.
 >
+> Modules are indeed static, but module_alloc() used by anything that
+> allocates code pages, e.g. kprobes, ftrace and BPF. Besides, Thomas
+> mentioned that having code in 2M pages reduces iTLB pressure [2], but
+> that's not only about avoiding the splits in the direct map but also abou=
+t
+> using large mappings in the modules address space.
 
-Auto formatting is happy with two tabs only. I will update in the next
-version. Thanks for catching it.
+It is easily overlooked why such things create direct fragmentation --
+it's because of the special permission stuff done, module_alloc()
+targets memory which can be executed somehow.
 
-> > +
-> > +static inline void INIT_KVM_MMU_MEMORY_CACHE(struct kvm_mmu_memory_cac=
-he *cache)
-> > +{
-> > +     *cache =3D (struct kvm_mmu_memory_cache)KVM_MMU_MEMORY_CACHE_INIT=
-();
-> > +}
-> >  #endif
+> BPF guys suggested an allocator for executable memory [3] mainly because
+> they've seen performance improvement of 0.6% - 0.9% in their setups [4].
+
+The performance metrics were completely opaque to some synthetic
+environment and our goal is to showcase real value with reproducible
+performance benchmarks. Since now Song is convinced that modules need
+to be a first class citizen in order to generalize a special allocator
+we may sooner rather than later real reproducible performance data to
+show the benefit of such a special allocator. One of the big
+differences with eBPF programs is that modules *can* be rather large
+in size. What is the average size of modules? Well let's take a look:
+
+mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+-name \*.ko| wc -l
+9173
+mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+-name \*.ko|  xargs stat -c "%s - %n" | awk 'BEGIN {sum=3D0} {sum+=3D$1}
+END {print sum/NR/1024}'
+175.1
+
+175 MiB is pretty large.
+
+Ignoring the top 5 piggies:
+
+mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+-name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r |head -5
+58315248 - ./drivers/gpu/drm/amd/amdgpu/amdgpu.ko
+29605592 - ./drivers/gpu/drm/i915/i915.ko
+18591256 - ./drivers/gpu/drm/nouveau/nouveau.ko
+16867048 - ./fs/xfs/xfs.ko
+14209440 - ./fs/btrfs/btrfs.ko
+
+mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+-name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
+-$((9173-5)) | awk 'BEGIN {sum=3D0} {sum+=3D$1} END {print sum/NR/1024}'
+160.54
+
+Ignoring the top 10 largest modules:
+
+mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+-name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
+-$((9173-10)) | awk 'BEGIN {sum=3D0} {sum+=3D$1} END {print sum/NR/1024}'
+154.656
+
+Ignoring the top 20 piggies:
+mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+-name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
+-$((9173-20)) | awk 'BEGIN {sum=3D0} {sum+=3D$1} END {print sum/NR/1024}'
+146.384
+
+Ignoring the top 100 bloated modules:
+mcgrof@bigtwin mirror/code/mcgrof/linux-next (git::master)$ find ./
+-name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
+-$((9173-100)) | awk 'BEGIN {sum=3D0} {sum+=3D$1} END {print sum/NR/1024}'
+117.97
+
+Ignoring the top 1000 bloated modules:
+mcgrof@bigtwin mirror/code/mcgrof/linux-next (git::master)$ find ./
+-name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
+-$((9173-1000)) | awk 'BEGIN {sum=3D0} {sum+=3D$1} END {print
+sum/NR/1024}'
+64.4686
+
+Ignoring the top 2000 bloated modules:
+mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+-name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
+-$((9173-2000)) | awk 'BEGIN {sum=3D0} {sum+=3D$1} END {print
+sum/NR/1024}'
+48.7869
+
+Ignoring top 3000
+mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+-name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
+-$((9173-3000)) | awk 'BEGIN {sum=3D0} {sum+=3D$1} END {print
+sum/NR/1024}'
+39.6037
+
+Ignoring top 4000
+mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+-name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
+-$((9173-4000)) | awk 'BEGIN {sum=3D0} {sum+=3D$1} END {print
+sum/NR/1024}'
+33.106
+
+Ignoring top 5000
+mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+-name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
+-$((9173-5000)) | awk 'BEGIN {sum=3D0} {sum+=3D$1} END {print
+sum/NR/1024}'
+28.0925
+
+But at least on the driver front we know we won't always have loaded
+*all* GPU drivers, but *one*. So the math needs to consider what
+module sizes are for modules actually used.
+
+Let's see what the average module size is on on a big system:
+
+mcgrof@bigtwin ~ $ lsmod | grep -v Module| awk '{print $1}' | xargs
+sudo modinfo --field filename |  xargs stat -c "%s - %n" | awk 'BEGIN
+{sum=3D0} {sum+=3D$1} END {print sum/NR/1024}'
+313.432
+
+On a small desktop:
+mcgrof@desktop ~ $ lsmod | grep -v Module| awk '{print $1}' | xargs
+sudo modinfo --field filename |  xargs stat -c "%s - %n" | awk 'BEGIN
+{sum=3D0} {sum+=3D$1} END {print sum/NR/1024}'
+292.786
+
+For each finit_module we also do a vmalloc twice actually, one for the
+kernel_read_*() which lets us read the file from userspace, and then a
+second set of allocations where we copy data over, each step either
+using vzalloc() or module_alloc() (vmalloc() with special
+permissions), this is more easily reflected and visible now on
+linux-next with Song's new module_memory_alloc().
+
+However -- for the context of *this* effort, we're only talking about
+the executable sections, the areas we'd use module_alloc() for.
+
+On a big system:
+
+mcgrof@bigtwin ~ $ lsmod | grep -v Module| awk '{print $1}' | xargs
+sudo modinfo --field filename | xargs size --radix=3D10 | awk '{print
+$1}'| grep -v text| awk 'BEGIN {sum=3D0} {sum+=3D$1} END {print
+sum/NR/1024}'
+88.7964
+
+On a small desktop:
+mcgrof@desktop ~ $ lsmod | grep -v Module| awk '{print $1}' | xargs
+sudo modinfo --field filename | xargs size --radix=3D10 | awk '{print
+$1}'| grep -v text| awk 'BEGIN {sum=3D0} {sum+=3D$1} END {print
+sum/NR/1024}'
+92.1473
+
+Regardless, the amount of memory allocated is pretty significant, to
+the point a 400 CPU system easily run out of vmap space (yes the
+kernel does some stupid stuff, which we're correcting over time):
+
+https://lkml.kernel.org/r/20221013180518.217405-1-david@redhat.com
+
+To help with this we have some recent efforts to help with this
+pressure on vmap space:
+
+https://lkml.kernel.org/r/20230311051712.4095040-1-mcgrof@kernel.org
+
+> > > If we were to use unmapped_pages_alloc() in modules_alloc(), we would=
+ have
+> > > to implement the part of vmalloc() that reserves the virtual addresse=
+s and
+> > > maps the allocated memory there in module_alloc().
 > >
-> >  #define HALT_POLL_HIST_COUNT                 32
-> > --
-> > 2.40.0.rc0.216.gc4246ad0f0-goog
-> >
+> > Another option would be to provide an allocator for the backing pages t=
+o
+> > vmalloc. But I do agree that a gfp flag is a less laborous way to
+> > achieve the same. So the primary question really is whether we really
+> > need vmalloc support for unmapped memory.
+>
+> I'm not sure I follow here. module_alloc() is essentially an alias to
+> vmalloc(), so to reduce direct map fragmentation caused by code allocatio=
+ns
+> the most sensible way IMO is to support unmapped memory in vmalloc().
+
+The big win also would be to use huge pages from a performance point
+of view, specially reducing iTLB pressure, however that is *slightly*
+orthogonal to your goal of reducing direct map fragmentation. However,
+we should not ignore that strategy as it is a special use case which
+*could* be leveraged in other ways too. And so I'd prefer to see that
+over just a flag to hide those allocations. It would not only reduce
+that fragmentation, but reduce iTLB pressure which I think *is* what
+experimentation revealed to show more gains.
+
+> I also think vmalloc with unmmapped pages can provide backing pages for
+> execmem_alloc() Song proposed.
+
+Only if you consider huge pages. I don't see that here.
+
+  Luis
