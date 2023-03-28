@@ -2,207 +2,349 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD346CB442
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B006CB446
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbjC1Cqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 22:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
+        id S230431AbjC1CtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 22:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjC1Cqk (ORCPT
+        with ESMTP id S230239AbjC1CtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 22:46:40 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA26819B2;
-        Mon, 27 Mar 2023 19:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679971599; x=1711507599;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=omdSkVXlZ2/keu6QMskELpSLGHvhp8XFJc8UzBVr0kA=;
-  b=V59BRnB+8XlBCnaT1xYVUsaFnobVq3Xgq6+AyTKLwcgl0MvXHCSVb70w
-   G/vcyh0n81Chq3VdzE0qAcP4PwXFeqK4KzSwoMcljY0zicRPwtLrAsJQg
-   xAqZi6k/GmVEA1znEGI4ncKlH6EW2nD07k/IBHXPe7a0o2QKsAwq2e2bj
-   LR75iLU2tajMKa1W+GzFUA/Wrr8fI9d17Ox6ecs/dAZI8e7ZByzS/nAvj
-   ZpiWieSY9tAoihzoou2tbjk1871WAuZ1HcTFDI8RneLUMTjyI/Nd/Xu3m
-   HmepkwUIQufTWNIOtFEOFflVSnCOwslcvVY6RxoIDjD/ssqNclr2IVSR0
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="320853099"
-X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
-   d="scan'208";a="320853099"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 19:46:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="1013364693"
-X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
-   d="scan'208";a="1013364693"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Mar 2023 19:46:37 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Mar 2023 19:46:37 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Mar 2023 19:46:37 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 27 Mar 2023 19:46:37 -0700
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.42) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 27 Mar 2023 19:46:37 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H6GTNBkZkctfAT7dT1dAKxwFSLfxuOLzw0iBOB+pvyn4pc2EkeI75YjAmFe0aNmjoloiO+aPKYmD6qFq1ssVIxR9hDGRMM9fllh7uEid0IAuXWo1thF9p9EwOfAtQu/58ndsPbz3M50A/tZu6KKOHS8pru9a9hj/04Hbk37XfbtJptyp/JZWvb1YWohkdXuownVTsOFZ3dicSE8wqr1c9Fr9/WcQbhf9qGZSfdKkyMseqlwHEiFCzvk+zpjwr6spcDD+iaonrL7XW/TDDkO3izN3bKrrJpXcvMGJD0g5Esyzp5aSCESEiuFQ9zJakEk5DeeWobF+CjpmH/HNGnP++Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eJvDew3xIC7c2HSmHYmoP9yR/z2qn7dh3f4Mtr3Gc1U=;
- b=jlIGGQtVFJluhqk/JbtMg9j9JB37mm47ZnhvnayE/L0Tw/Y5MSt0nedfx0OfrGHxzPnNh3bX8esFziQwI1Z7n56JQEr2hOPSGPeGy/IoXWol5S59RiRMv2qvsq9MLfdUblHj24lwLOnEcN8iAvxsclwyfOZ85hEx93imsVWh3m5lMLl+QAOcPPpr1GzOoqM9CJ5Xc0ETi0Czhx7CZvxsgymu7vtUr67Nm/IXQg7O19SaoIHLOYmU/DIg5SFDUXhJEtMVaWC3+NJC+GKXBqdca8v4zl14SiQbRudqqZKCKjUZdS5JndYaA4xIzGOAIn+AfEfZOuScGf6avYdxrVbE+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4839.namprd11.prod.outlook.com (2603:10b6:510:42::18)
- by BL1PR11MB5368.namprd11.prod.outlook.com (2603:10b6:208:311::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Tue, 28 Mar
- 2023 02:46:34 +0000
-Received: from PH0PR11MB4839.namprd11.prod.outlook.com
- ([fe80::7369:ca71:6d2e:b239]) by PH0PR11MB4839.namprd11.prod.outlook.com
- ([fe80::7369:ca71:6d2e:b239%6]) with mapi id 15.20.6222.030; Tue, 28 Mar 2023
- 02:46:34 +0000
-Date:   Tue, 28 Mar 2023 10:48:06 +0800
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     Jens Axboe <axboe@kernel.dk>
-CC:     <stable@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <heng.su@intel.com>, <lkp@intel.com>
-Subject: Re: [Syzkaller & bisect] There is "io_poll_remove_entries" NULL
- pointer BUG in v6.3-rc4 kernel
-Message-ID: <ZCJVZk4nfosZzA1k@xpf.sh.intel.com>
-References: <ZCEy5jA2nT/vaO56@xpf.sh.intel.com>
- <d6818b66-e1c8-e2bf-e54f-73d1f83db020@kernel.dk>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <d6818b66-e1c8-e2bf-e54f-73d1f83db020@kernel.dk>
-X-ClientProxiedBy: SG2PR06CA0195.apcprd06.prod.outlook.com (2603:1096:4:1::27)
- To PH0PR11MB4839.namprd11.prod.outlook.com (2603:10b6:510:42::18)
+        Mon, 27 Mar 2023 22:49:04 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB851FC1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:48:37 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id u38so6997508pfg.10
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1679971717;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=P1LTltbENpYsxSmvZ7pet3y5MXV4TTxagfiA0dyuCW0=;
+        b=ZE5xUc/7IodL5MuXevDgShrP02OEOSfTlBhuHF2OYufWVblx2fTFD9+qmpA6Z++UqK
+         b9e9D3/76c61YjLFOsSGnTFaSZlKZ1EW95xwmFPgCrJCm3G+rkdsBR59vmn29m5O3q2Z
+         VD6OFjswIyITOX5b477D2je6pbLZpv8huPOZMd8g2qyeBGS3PaRrsrO5JCPHRu5x3dPi
+         6hxL8vPrOvhCUbGiUxpCAN80pmIHHb7McWN7o0ABWNHCw24KyuqFTbEelqHy/YvUm70J
+         eYD4EAjg5EbNxlq3pYJajTpwuyiN47BHLmACqpgmDKZoLZboY5DZvW4s4FpNbxNUF5j0
+         xO2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679971717;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P1LTltbENpYsxSmvZ7pet3y5MXV4TTxagfiA0dyuCW0=;
+        b=fLEHK754wvjtfYDiYnYbIlF/8v8gkRdHBj3ky4z9DLHSzeIIMK7vRUdY6hjcJIhuuL
+         EQjg3q4+Ez1MBpOkfAWV2N9sBpFSJKUpGyyGPTvIeSjHI31gforuwUnjNEP/pBMxAuWS
+         vaDinmMcw73dlJala/vCw26qiRftZLeqoZcCbxjTVn+iCDXaulhU8yiijUybMQNsM9yq
+         BM+EDP3Hj3mqCl72sZExvAJY77H5cYe6TOBTwFns36UZAxbk7NZ+npjp4RPlnf+Wo4P3
+         ZouyVejYuACjHia55ne7jXcCJgdJBxFQxjubg1rh2peE92PL8CqSWOaL2ynOpI1kZSeK
+         ZB3Q==
+X-Gm-Message-State: AO0yUKUjWagSz7hRLoX23WYggUueXP8QRmL6tA9HFJWzZI3T70pR+9AZ
+        M94DtezcfWx1a9ovScpK706AHg==
+X-Google-Smtp-Source: AK7set/XyBBWrnVOnZP1FBEekHi/QRYPml6mnwLPudI+7zoOkHiTA8R1UGIQeRgUBolJBBd1Yl12Yg==
+X-Received: by 2002:a05:6a00:c8d:b0:62a:43e2:ab99 with SMTP id a13-20020a056a000c8d00b0062a43e2ab99mr22126561pfv.5.1679971716897;
+        Mon, 27 Mar 2023 19:48:36 -0700 (PDT)
+Received: from V2264L26XN.bytedance.net ([139.177.225.226])
+        by smtp.gmail.com with ESMTPSA id b2-20020aa78702000000b00592543d7363sm19760805pfo.1.2023.03.27.19.48.31
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 27 Mar 2023 19:48:35 -0700 (PDT)
+From:   Ma Xing <maxing.lan@bytedance.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.co
+Cc:     linux-kernel@vger.kernel.org, yuanzhu@bytedance.com,
+        Ma Xing <maxing.lan@bytedance.com>
+Subject: [PATCH] sched/cputime: Make cputime_adjust() more accurate
+Date:   Tue, 28 Mar 2023 10:48:27 +0800
+Message-Id: <20230328024827.12187-1-maxing.lan@bytedance.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4839:EE_|BL1PR11MB5368:EE_
-X-MS-Office365-Filtering-Correlation-Id: d3f7cbb0-da13-4f29-e40c-08db2f36a4d4
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tR8o6PUD3EresCYs30NDxZCESHc7p3dYZAK5NV/8ic0dPj+LO/q4FpgtX2xzyDo/bNXgvL8WYpkkMhHKWK0CYuVhh3qbQkDB2RVaHs5pt5vTqMgHrS4bQJfGCRl67OikJqyMwHaCqfwEvG8Uv6Pj0nDZA/bvF+tBawN2g/dB4vra+JmIRWkmgj45SCF0tkWWtwqxXr5pqlWHYASgM+i6NvzLk4a+69XawTRsHVwmwVS1KuTJ88mmzAWlYNPW5n38lkIx9Z/oBiJIX4Z/fRzpcep3D8z6VbDTPcamPXSiIIY7V9dDtGChMFXe7GDObuby3534R5nLrZeKlzR2gWVKXJMEXO3rqseXGG7fAstfYK8xN2pC709WZ8mppDCZHhBLbGPoD/yXLRVm2Bap2ElB4fRhwXIWyIVSEAc0M6SgcfgzqcVSEtMCLud6s8iAQEjzSMG6ah2FRbrkrwTMzKs4yWv1zOR7c6fehxHIYdhNW62BXMSwnFchzV7L1oiwtcWUA7NeqYka1y046yd6752WiScluguhpS6D/zpz9E9UMGcfRkYVLGoH5c/NbfUMidtnY4QQKR5CrkSjhYyHdPWf0w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4839.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(396003)(39860400002)(136003)(366004)(376002)(451199021)(83380400001)(38100700002)(186003)(2906002)(26005)(6506007)(6512007)(53546011)(44832011)(66946007)(66556008)(66476007)(82960400001)(6916009)(4326008)(8676002)(5660300002)(8936002)(86362001)(107886003)(41300700001)(6666004)(6486002)(966005)(316002)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4HB4Y/GZXnqoiv4tQEw/tl7Hx6eh5fIZbdV7GBL0SpGIE559eFHl6/0sQVpB?=
- =?us-ascii?Q?SymqGMwXAyNVdzCyDjT7T5466YUFuvygYPzHwiEEk0mTGUgxKMXpZtD/qDQF?=
- =?us-ascii?Q?Oe3CukfV/Lx1QW2Lm73hPr+wesD332oUhK2QrK2iyVfxvVgZhdx1VwbxLTvt?=
- =?us-ascii?Q?pgceRNrLeG7SNpWJCDviw2T3b2/57IVZqk//bRdUcsUqwlKGEGAxIje+Mi2w?=
- =?us-ascii?Q?nzs8nooPUDaF+ywAaqEjulcbY5WoI3M80R0ZlLYL6O8xrWdbZhow1d6Ne8jX?=
- =?us-ascii?Q?7lGUpKy0ybbEBqPCLw5lOWhDQ5ACPIVv5RRRbvtK/sT81Qvd83dbvwWlB9KH?=
- =?us-ascii?Q?1kD2j/InFJ3+pVZ5IUELH014HiPFZYLFY3gzP59OXzN/K8aWlKKlWZLmo3Yt?=
- =?us-ascii?Q?FA1uMp4Hvg8fsmYsFXV4kMsH1I59xFOLRkFiULLkBuFJHnEdZGJWbZS6riX4?=
- =?us-ascii?Q?9G4pog1pNlFSX1OF/BG/MFTW/PYcGnctVurx2YwwKkADOEd9WeIMAlK7abVd?=
- =?us-ascii?Q?uXbZFRu84ZZz1LIqvw+wxNnjgROZDKEzc7EpQ8E0UAg1tP6hxNsOpESltjRO?=
- =?us-ascii?Q?V2dOZt/FOSVTJtHqD7ccZxdaz4X77V6bJHlK0lv0yXV+/dbVnQ2yHmomVJxm?=
- =?us-ascii?Q?F2JyCExmu9Y9utIDqJMVQ6GsO1uejxJgNQv3Ds81xHbQJyTOySTbRIbOCTxQ?=
- =?us-ascii?Q?hy5vmhdQjAOuIKZ7aPDuLyEtBpFbOp/tsRcJjL0SuE3sUjXavkG0T/o1CozB?=
- =?us-ascii?Q?tuwEq7vAC2fyuSY1HiVlXayh8rrixZBX3MokkNyhMxlpSrVJXNl8A1hlW10Q?=
- =?us-ascii?Q?3r/NGTUiyKF13zI4FTnTvQxmK/X7yx8YC/r5/TYzTgOxHVTIkKGjXeAe1k5Y?=
- =?us-ascii?Q?j7K2RAWB7MKWVGDLfwotxPByl6qnUD3EG+jl6gcSi7d6mx2fflV0NmANkGi6?=
- =?us-ascii?Q?+OY5ylBlp7cXKRFOaByJjkFMRssdJt8BiwNh02tjiyVxfDJFo3l6lE5yDrd3?=
- =?us-ascii?Q?qfQywlDbZ5bFs5OFBoxCu/vkkWaiALSAgaRdCveUlvGVaN9rTLXRR2IjcDBn?=
- =?us-ascii?Q?YLF/ZF+tgwUfRV1aobgHfuNqAWVk4Gz+Pe/DlOvJGX6bAoPcEukvbwr7NUfB?=
- =?us-ascii?Q?An3jhzejjN4mLeP0DfrOVDNi1PvKu7yq21bIn/rWns8pIn660fvfp+9wS/Ek?=
- =?us-ascii?Q?B/1ls2Kb+WBqgRTgUhWKlqbmn9g6r2ifGvC+HDuOq0CYPWa2qra8GooezhR1?=
- =?us-ascii?Q?01Qda6kmAelU8T+65xpdrXa5IbKZ9nZF5h7ngYNsYo7BO8LUzcxSzkOsZXFv?=
- =?us-ascii?Q?2WqvmUpQnj1AtDjZd5NHLpIHzDRtMHuipmdmGYAn68ydJu/hhpS0NHjj/rjd?=
- =?us-ascii?Q?ITXM1aZllxeuU8SEDmbdpnckq3+bEh+jnrzHF/YrH6w+XgkC1PYWHVVlfQdm?=
- =?us-ascii?Q?UWeHz3jVDqFxQ5TCV6sudJi/3pgdBaa8s/vCAvuQYsMirlAwfpBW/ulGZbKI?=
- =?us-ascii?Q?j/BTYNSHq10g8snjsfHTYAFdDm+u00Id6CDuwDTGNCMnz5s68D+fXZW8WK1Y?=
- =?us-ascii?Q?4Qpmrd+PWdqZSJTzRi9j5bsqSkQJUZc7s/Ztwnsr?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3f7cbb0-da13-4f29-e40c-08db2f36a4d4
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4839.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 02:46:34.4508
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NabBJ2jsl+LFdXDWijnNWhP6VZG+WSaLkmBbGlx0NjmOFLVFv+ma0FuxMv+urLxnbuVpRsGeGfjcqEk5c1a5ZQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5368
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jens Axboe,
+In the current algorithm of cputime_adjust(), the accumulated stime and
+utime are used to divide the accumulated rtime. When the value is very
+large, it is easy for the stime or utime not to be updated. It can cause
+sys or user utilization to be zero for long time.
 
-On 2023-03-27 at 07:35:59 -0600, Jens Axboe wrote:
-> On 3/27/23 12:08?AM, Pengfei Xu wrote:
-> > Hi Jens Axboe and kernel experts,
-> > 
-> > Platform: x86 platforms
-> > There is "io_poll_remove_entries" NULL pointer BUG in v6.3-rc4 kernel.
-> > 
-> > All detailed log: https://github.com/xupengfe/syzkaller_logs/tree/main/230327_041425_io_poll_remove_entries
-> > Syzkaller reproduced code: https://github.com/xupengfe/syzkaller_logs/blob/main/230327_041425_io_poll_remove_entries/repro.c
-> > Syzkaller analysis report0: https://github.com/xupengfe/syzkaller_logs/blob/main/230327_041425_io_poll_remove_entries/report0
-> > Syzkaller analysis status: https://github.com/xupengfe/syzkaller_logs/blob/main/230327_041425_io_poll_remove_entries/repro.stats
-> > v6.3-rc4 issue dmesg: https://github.com/xupengfe/syzkaller_logs/blob/main/230327_041425_io_poll_remove_entries/v63rc4_reproduce_dmesg.log
-> > Kconfig: https://github.com/xupengfe/syzkaller_logs/blob/main/230327_041425_io_poll_remove_entries/kconfig_origin
-> > Bisect info: https://github.com/xupengfe/syzkaller_logs/blob/main/230327_041425_io_poll_remove_entries/bisect_info.log
-> > 
-> > It could be reproduced in v6.3-rc3 and v6.3-rc4 kernel, and bisected between
-> > v6.3-rc3 and v5.11 kernel, bad commit was:
-> > "
-> > c16bda37594f83147b167d381d54c010024efecf
-> > io_uring/poll: allow some retries for poll triggering spuriously
-> > "
-> > After reverted above commit on top of v6.3-rc3 kernel, this issue was gone.
-> 
-> This should probably fix it, though I do wonder why this can only
-> trigger after that patch. Seems like it would've been possible before
-> too.
-> 
-> 
-> diff --git a/io_uring/poll.c b/io_uring/poll.c
-> index 795facbd0e9f..90555a22a900 100644
-> --- a/io_uring/poll.c
-> +++ b/io_uring/poll.c
-> @@ -600,7 +600,8 @@ static int __io_arm_poll_handler(struct io_kiocb *req,
->  	mask = vfs_poll(req->file, &ipt->pt) & poll->events;
->  
->  	if (unlikely(ipt->error || !ipt->nr_entries)) {
-> -		io_poll_remove_entries(req);
-> +		if (ipt->nr_entries)
-> +			io_poll_remove_entries(req);
->  
->  		if (!io_poll_can_finish_inline(req, ipt)) {
->  			io_poll_mark_cancelled(req);
-> 
-  Thanks for your fixed patch in short time!
+A better and intuitive way is to save the last stime and utime, and
+divide the rtime increment proportionally according to the tick
+increment.
 
-  After receiving this email, I saw one of your newly improved fixed patch.
-  I will verify the new one soon.
+I wrote the test-case: refer to
+https://lore.kernel.org/lkml/20190718131834.GA22211@redhat.com/
 
-  Thanks!
-  BR.
-  -Pengfei
+	int main(int argc, char ** argv) {
+		struct task_cputime c;
+		struct prev_cputime p;
+		u64 st, pst, cst;
+		u64 ut, put, cut;
+		u64 x, y;
+		int i = -1; // one step not printed
 
-> -- 
-> Jens Axboe
-> 
+		if (argc != 2) {
+			printf("usage: %s <start_in_seconds>\n", argv[0]);
+			return 1;
+		}
+		x = strtoull(argv[1], NULL, 0) * SEC;
+		printf("start=%lld\n", x);
+
+		p.stime = p.stick = x;
+		p.utime = p.utick = x;
+
+		c.stime = p.stime;
+		c.utime = p.utime;
+		c.sum_exec_runtime = p.stime + p.utime;
+
+		while (i++ < NSTEPS) {
+			y = STEP;
+			c.stime += 4*y;
+			c.utime += y;
+			c.sum_exec_runtime += y;
+			pst = nsec_to_clock_t(p.stime);
+			put = nsec_to_clock_t(p.utime);
+			cputime_adjust( & c, & p, & ut, & st);
+			cst = nsec_to_clock_t(st);
+			cut = nsec_to_clock_t(ut);
+			if (i)
+				printf("ut(diff)/st(diff): %20lld (%4lld)  %20lld (%4lld)\n",
+						cut, cut - put, cst, cst - pst);
+		}
+		printf("\n\n");
+
+		while (i++ < 2*NSTEPS) {
+			y = STEP;
+			c.stime += y;
+			c.utime += 4*y;
+			c.sum_exec_runtime += y;
+			pst = nsec_to_clock_t(p.stime);
+			put = nsec_to_clock_t(p.utime);
+			cputime_adjust( & c, & p, & ut, & st);
+			cst = nsec_to_clock_t(st);
+			cut = nsec_to_clock_t(ut);
+			if (i)
+				printf("ut(diff)/st(diff): %20lld (%4lld)  %20lld (%4lld)\n",
+						cut, cut - put, cst, cst - pst);
+		}
+	}
+
+For example, the new patch works well when cfs based rtime disagrees
+with tick based stime/utime, the root reason is it converges fast:
+
+	# ./a.out 300000
+	start=300000000000000
+	ut(diff)/st(diff):            300000400 ( 200)             300001600 ( 800)
+	ut(diff)/st(diff):            300000600 ( 200)             300002400 ( 800)
+	ut(diff)/st(diff):            300000800 ( 200)             300003200 ( 800)
+	ut(diff)/st(diff):            300001000 ( 200)             300004000 ( 800)
+	ut(diff)/st(diff):            300001200 ( 200)             300004800 ( 800)
+	ut(diff)/st(diff):            300001400 ( 200)             300005600 ( 800)
+	ut(diff)/st(diff):            300001600 ( 200)             300006400 ( 800)
+	ut(diff)/st(diff):            300001800 ( 200)             300007200 ( 800)
+	ut(diff)/st(diff):            300002000 ( 200)             300008000 ( 800)
+	ut(diff)/st(diff):            300002200 ( 200)             300008800 ( 800)
+	ut(diff)/st(diff):            300002400 ( 200)             300009600 ( 800)
+	ut(diff)/st(diff):            300002600 ( 200)             300010400 ( 800)
+	ut(diff)/st(diff):            300002800 ( 200)             300011200 ( 800)
+	ut(diff)/st(diff):            300003000 ( 200)             300012000 ( 800)
+	ut(diff)/st(diff):            300003200 ( 200)             300012800 ( 800)
+	ut(diff)/st(diff):            300003400 ( 200)             300013600 ( 800)
+	ut(diff)/st(diff):            300003600 ( 200)             300014400 ( 800)
+	ut(diff)/st(diff):            300003800 ( 200)             300015200 ( 800)
+	ut(diff)/st(diff):            300004000 ( 200)             300016000 ( 800)
+	ut(diff)/st(diff):            300004200 ( 200)             300016800 ( 800)
+
+	ut(diff)/st(diff):            300005000 ( 800)             300017000 ( 200)
+	ut(diff)/st(diff):            300005800 ( 800)             300017200 ( 200)
+	ut(diff)/st(diff):            300006600 ( 800)             300017400 ( 200)
+	ut(diff)/st(diff):            300007400 ( 800)             300017600 ( 200)
+	ut(diff)/st(diff):            300008200 ( 800)             300017800 ( 200)
+	ut(diff)/st(diff):            300009000 ( 800)             300018000 ( 200)
+	ut(diff)/st(diff):            300009800 ( 800)             300018200 ( 200)
+	ut(diff)/st(diff):            300010600 ( 800)             300018400 ( 200)
+	ut(diff)/st(diff):            300011400 ( 800)             300018600 ( 200)
+	ut(diff)/st(diff):            300012200 ( 800)             300018800 ( 200)
+	ut(diff)/st(diff):            300013000 ( 800)             300019000 ( 200)
+	ut(diff)/st(diff):            300013800 ( 800)             300019200 ( 200)
+	ut(diff)/st(diff):            300014600 ( 800)             300019400 ( 200)
+	ut(diff)/st(diff):            300015400 ( 800)             300019600 ( 200)
+	ut(diff)/st(diff):            300016200 ( 800)             300019800 ( 200)
+	ut(diff)/st(diff):            300017000 ( 800)             300020000 ( 200)
+	ut(diff)/st(diff):            300017800 ( 800)             300020200 ( 200)
+	ut(diff)/st(diff):            300018600 ( 800)             300020400 ( 200)
+	ut(diff)/st(diff):            300019400 ( 800)             300020600 ( 200)
+
+while the old cputime_adjust has the following problem, when sum_exec_runtime is 300000 secs.
+
+	# ./a.out 300000
+	start=300000000000000
+	ut(diff)/st(diff):            300000000 (   0)             300002000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300003000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300004000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300005000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300006000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300007000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300008000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300009000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300010000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300011000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300012000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300013000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300014000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300015000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300016000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300017000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300018000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300019000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300020000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300021000 (1000)
+
+	ut(diff)/st(diff):            300000000 (   0)             300022000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300023000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300024000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300025000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300026000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300027000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300028000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300029000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300030000 (1000)
+	ut(diff)/st(diff):            300000000 (   0)             300031000 (1000)
+	ut(diff)/st(diff):            300001000 (1000)             300031000 (   0)
+	ut(diff)/st(diff):            300002000 (1000)             300031000 (   0)
+	ut(diff)/st(diff):            300003000 (1000)             300031000 (   0)
+	ut(diff)/st(diff):            300004000 (1000)             300031000 (   0)
+	ut(diff)/st(diff):            300005000 (1000)             300031000 (   0)
+	ut(diff)/st(diff):            300006000 (1000)             300031000 (   0)
+	ut(diff)/st(diff):            300007000 (1000)             300031000 (   0)
+	ut(diff)/st(diff):            300008000 (1000)             300031000 (   0)
+	ut(diff)/st(diff):            300009000 (1000)             300031000 (   0)
+
+In addition, this patch has been running stably for 2 months and no problems have been found.
+
+Signed-off-by: Ma Xing <maxing.lan@bytedance.com>
+---
+ include/linux/sched.h         |  2 ++
+ include/linux/sched/cputime.h |  1 +
+ kernel/sched/cputime.c        | 38 +++++++++++++++++++++++++----------
+ 3 files changed, 30 insertions(+), 11 deletions(-)
+
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 6d654eb4cabd..e1bac4ee48ba 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -326,6 +326,8 @@ struct prev_cputime {
+ #ifndef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
+ 	u64				utime;
+ 	u64				stime;
++	u64				utick;
++	u64				stick;
+ 	raw_spinlock_t			lock;
+ #endif
+ };
+diff --git a/include/linux/sched/cputime.h b/include/linux/sched/cputime.h
+index 5f8fd5b24a2e..855503bbd067 100644
+--- a/include/linux/sched/cputime.h
++++ b/include/linux/sched/cputime.h
+@@ -173,6 +173,7 @@ static inline void prev_cputime_init(struct prev_cputime *prev)
+ {
+ #ifndef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
+ 	prev->utime = prev->stime = 0;
++	prev->utick = prev->stick = 0;
+ 	raw_spin_lock_init(&prev->lock);
+ #endif
+ }
+diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+index af7952f12e6c..ee8084957578 100644
+--- a/kernel/sched/cputime.c
++++ b/kernel/sched/cputime.c
+@@ -559,6 +559,7 @@ void cputime_adjust(struct task_cputime *curr, struct prev_cputime *prev,
+ 		    u64 *ut, u64 *st)
+ {
+ 	u64 rtime, stime, utime;
++	s64 delta_rtime, delta_stime, delta_utime;
+ 	unsigned long flags;
+ 
+ 	/* Serialize concurrent callers such that we can honour our guarantees */
+@@ -579,22 +580,36 @@ void cputime_adjust(struct task_cputime *curr, struct prev_cputime *prev,
+ 	stime = curr->stime;
+ 	utime = curr->utime;
+ 
++
++	delta_rtime = rtime - prev->stime - prev->utime;
++	delta_stime = stime - prev->stick;
++	delta_utime = utime - prev->utick;
++
++	prev->stick = stime;
++	prev->utick = utime;
++
+ 	/*
+ 	 * If either stime or utime are 0, assume all runtime is userspace.
+ 	 * Once a task gets some ticks, the monotonicity code at 'update:'
+ 	 * will ensure things converge to the observed ratio.
+ 	 */
+ 	if (stime == 0) {
+-		utime = rtime;
++		delta_utime = delta_rtime;
+ 		goto update;
+ 	}
+ 
+ 	if (utime == 0) {
+-		stime = rtime;
++		delta_stime = delta_rtime;
+ 		goto update;
+ 	}
+ 
+-	stime = mul_u64_u64_div_u64(stime, rtime, stime + utime);
++	if (delta_stime <= 0)
++		goto update;
++
++	if (delta_utime <= 0)
++		goto update;
++
++	delta_stime = mul_u64_u64_div_u64(delta_stime, delta_rtime, delta_stime + delta_utime);
+ 
+ update:
+ 	/*
+@@ -606,21 +621,22 @@ void cputime_adjust(struct task_cputime *curr, struct prev_cputime *prev,
+ 	 *            = (rtime_i+1 - rtime_i) + utime_i
+ 	 *            >= utime_i
+ 	 */
+-	if (stime < prev->stime)
+-		stime = prev->stime;
+-	utime = rtime - stime;
++	if (delta_stime <= 0)
++		delta_stime = 0;
++	delta_utime = delta_rtime - delta_stime;
++
+ 
+ 	/*
+ 	 * Make sure utime doesn't go backwards; this still preserves
+ 	 * monotonicity for stime, analogous argument to above.
+ 	 */
+-	if (utime < prev->utime) {
+-		utime = prev->utime;
+-		stime = rtime - utime;
++	if (delta_utime <= 0) {
++		delta_utime = 0;
++		delta_stime = delta_rtime;
+ 	}
+ 
+-	prev->stime = stime;
+-	prev->utime = utime;
++	prev->stime += delta_stime;
++	prev->utime += delta_utime;
+ out:
+ 	*ut = prev->utime;
+ 	*st = prev->stime;
+-- 
+2.20.1
+
