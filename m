@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823526CB3D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CE86CB3D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232575AbjC1CUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 22:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        id S232394AbjC1CUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 22:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjC1CUD (ORCPT
+        with ESMTP id S232663AbjC1CUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 22:20:03 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AE030E7;
-        Mon, 27 Mar 2023 19:19:41 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id kq3so10248613plb.13;
-        Mon, 27 Mar 2023 19:19:41 -0700 (PDT)
+        Mon, 27 Mar 2023 22:20:10 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D662D43;
+        Mon, 27 Mar 2023 19:19:51 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id u10so10270754plz.7;
+        Mon, 27 Mar 2023 19:19:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679969980;
+        d=gmail.com; s=20210112; t=1679969983;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kx93At5pvdseQUWEuzHR4lKtVzLOoH38UjA3vGGOuXY=;
-        b=RERLN9XPDJ4CkeXmJjO758Lf3jkYm4FC9uTPpJz2j/5ZvCmU9mdLeyL3YVn0BdVvtB
-         CTcDE2BTfjSAm2bUsLEWVV9XkhZq8/xT3GlzQlpd/wrsmggAwRmXrKX3LrjFm9hURnBl
-         2rSMge0tEgqv6ToTXiT8G74Mjr3k5n2ejQJIa3+LaUmDXkb6FmW6IkO0xZnvrxnHCtVb
-         eM6B15snhzYxhnrUoh2GRhQhcaMQ0tHQWI8jDopF69AFZemcwFRA0UJYntDZ8qk3I88h
-         YzWuwySYmYgTFJY/lvI53vj/JGXPui1V1YrOvZXrxRoiuJRhFPVfpErzzvT+1W1yxbsb
-         OG5g==
+        bh=qFrXoxem3Mk2t/wbJ6T/hevh5Qt8IdNNYKI1lE0XPKU=;
+        b=Bs9r7JnKERuV2Ig6U2ZCTF/U4Z9WYOU8M6NImpM6GNVA60RB0689wTWM2+9qAAL+ds
+         ZK6ch6th0eCStZS4R5m1ttzfB/3BQ37T5jGPrRSsiliZQYCeyt7V2EscNi4W4R4/+lHX
+         hDuIxpMP3v3x8XUlFV9slZUE/mYgtQZs7CkvSIpigszMfkRNNTKjxT4HpGvz2b28mPzF
+         IutJB2mr/sPNpbU5K6cUdsTOtcd4zT7fbRh9TT4UK0B6smWHHNrByAOrVP+FHupqMpi8
+         Id9tG3I7fJG5sOTmNO79NcYhlqOgeSHPJS3b06jos99XxETzgJP1LuuovvJM3lFYD6/2
+         SrdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679969980;
+        d=1e100.net; s=20210112; t=1679969983;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kx93At5pvdseQUWEuzHR4lKtVzLOoH38UjA3vGGOuXY=;
-        b=opNiwTXwcYiM8I/R83yO1FwWO5MmnGe6Cb/LwoBKRqCaykD9FclA59EDuqN/PG9iT2
-         TEGM+8CHkkYYQ7fZ7HERRmJ7mg9ZC7t/p6RhGVmze2Hypv8f2fh5/Q1HfB2D9z5EbWvi
-         W2SiC/JHp9ohkUmRaUytfWlIXHcQpqy9iMOMF8fbPAvKTrwINLJCsoEKo8LSrrC2FCX+
-         GC1Ehgc9wYXDvmwGDvwUPit0xrknzE4s3wb+QRgyDJ3X+UzsLBCa9Oq5Jg34Yyk5feHq
-         fVy3RoXDWWYgRAeot+FlTKGkxQnxNd1aQjJ33K6yhpfcDPaZuW3ERg4PbQp4TnbSc+Yt
-         fceQ==
-X-Gm-Message-State: AAQBX9cl6RLJQ4FvAhQQP+g2MqfjDkdF9CVnTyyJY39D0O0nE4bq3Z/L
-        XnRFFLzVXJsOot5WuNfbGa4=
-X-Google-Smtp-Source: AKy350Z7JqAP8MxDaCpM4QXfN8rcCDOwmOIay21gL5ttsyR+u9y5UXgReq4OcAsHJAhp9ip6QJy23A==
-X-Received: by 2002:a17:90b:1d8e:b0:23f:37b6:48f4 with SMTP id pf14-20020a17090b1d8e00b0023f37b648f4mr14969229pjb.43.1679969980041;
-        Mon, 27 Mar 2023 19:19:40 -0700 (PDT)
+        bh=qFrXoxem3Mk2t/wbJ6T/hevh5Qt8IdNNYKI1lE0XPKU=;
+        b=wlM+ziIFFAuVKPzJ6CQNHHQ8YdW0PeQ25Of+KCMuFATDRa2CaiFXB26bXRysMeWRfC
+         jdZz6m9lzI4o7mh+TP2wDoxRKWZMICLjQCbJtsQiUMCKLt3zPj+Z7XE54gygh+IdznB3
+         R5Mf1k4tOol5RYc6H4x5wx7QaSiYl9i58IqtOJQ1rpySgzCDdthxR16wVN8hes7AzgqV
+         fpArAj0OV9nnIiFKnCNRoAIwyKazP5K1NzrR36aJBtoKXHCCBpDfLegFJBt5aAdZD89u
+         7f3GPooRQuaTKBiCCb48+fK8yYzbv6bkmWeQxuQa+rckgFDysSskJngJT4g+LcCNfQAh
+         whew==
+X-Gm-Message-State: AAQBX9ejLB3u3mI9H/M3W3oToUtWRxFy6tCd16xPoAZVgDbvbzoPSpaX
+        MamuUnCzkTqG1Cmk3qUM23Q=
+X-Google-Smtp-Source: AKy350Z03lsXrQXud7zaAFrauVw00FwT5D6MCr5DcJvWGLGxot2qTSNQ78RW43A+bbqGc/NvGAlX3g==
+X-Received: by 2002:a17:90b:1b46:b0:237:5834:294b with SMTP id nv6-20020a17090b1b4600b002375834294bmr14528023pjb.41.1679969982896;
+        Mon, 27 Mar 2023 19:19:42 -0700 (PDT)
 Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id f17-20020a17090ac29100b00232cc61e16bsm5029301pjt.35.2023.03.27.19.19.37
+        by smtp.gmail.com with ESMTPSA id f17-20020a17090ac29100b00232cc61e16bsm5029301pjt.35.2023.03.27.19.19.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 19:19:39 -0700 (PDT)
+        Mon, 27 Mar 2023 19:19:42 -0700 (PDT)
 From:   Jacky Huang <ychuang570808@gmail.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
@@ -59,9 +59,9 @@ Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
         arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
         Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH v6 07/12] dt-bindings: serial: Document ma35d1 uart controller
-Date:   Tue, 28 Mar 2023 02:19:07 +0000
-Message-Id: <20230328021912.177301-8-ychuang570808@gmail.com>
+Subject: [PATCH v6 08/12] arm64: dts: nuvoton: Add initial ma35d1 device tree
+Date:   Tue, 28 Mar 2023 02:19:08 +0000
+Message-Id: <20230328021912.177301-9-ychuang570808@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230328021912.177301-1-ychuang570808@gmail.com>
 References: <20230328021912.177301-1-ychuang570808@gmail.com>
@@ -79,68 +79,391 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jacky Huang <ychuang3@nuvoton.com>
 
-Add documentation to describe nuvoton ma35d1 uart driver bindings.
+Add initial device tree support for Nuvoton ma35d1 SoC, including
+cpu, clock, reset, and serial controllers.
+Add reference boards som-256m and iot-512m.
 
 Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 ---
- .../serial/nuvoton,ma35d1-serial.yaml         | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/serial/nuvoton,ma35d1-serial.yaml
+ arch/arm64/boot/dts/nuvoton/Makefile          |   2 +
+ .../boot/dts/nuvoton/ma35d1-iot-512m.dts      |  56 +++++
+ .../boot/dts/nuvoton/ma35d1-som-256m.dts      |  56 +++++
+ arch/arm64/boot/dts/nuvoton/ma35d1.dtsi       | 231 ++++++++++++++++++
+ 4 files changed, 345 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-iot-512m.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-som-256m.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
 
-diff --git a/Documentation/devicetree/bindings/serial/nuvoton,ma35d1-serial.yaml b/Documentation/devicetree/bindings/serial/nuvoton,ma35d1-serial.yaml
+diff --git a/arch/arm64/boot/dts/nuvoton/Makefile b/arch/arm64/boot/dts/nuvoton/Makefile
+index a99dab90472a..c11ab4eac9c7 100644
+--- a/arch/arm64/boot/dts/nuvoton/Makefile
++++ b/arch/arm64/boot/dts/nuvoton/Makefile
+@@ -1,2 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0
+ dtb-$(CONFIG_ARCH_NPCM) += nuvoton-npcm845-evb.dtb
++dtb-$(CONFIG_ARCH_NUVOTON) += ma35d1-iot-512m.dtb
++dtb-$(CONFIG_ARCH_NUVOTON) += ma35d1-som-256m.dtb
+diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1-iot-512m.dts b/arch/arm64/boot/dts/nuvoton/ma35d1-iot-512m.dts
 new file mode 100644
-index 000000000000..a76af0f6009b
+index 000000000000..b89e2be6abae
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/serial/nuvoton,ma35d1-serial.yaml
-@@ -0,0 +1,48 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/serial/nuvoton,ma35d1-serial.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/arch/arm64/boot/dts/nuvoton/ma35d1-iot-512m.dts
+@@ -0,0 +1,56 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2023 Nuvoton Technology Corp.
++ * Author: Shan-Chun Hung <schung@nuvoton.com>
++ *         Jacky huang <ychuang3@nuvoton.com>
++ */
 +
-+title: Nuvoton MA35D1 Universal Asynchronous Receiver/Transmitter (UART)
++/dts-v1/;
++#include "ma35d1.dtsi"
 +
-+maintainers:
-+  - Min-Jen Chen <mjchen@nuvoton.com>
-+  - Jacky Huang <ychuang3@nuvoton.com>
++/ {
++	model = "Nuvoton MA35D1-IoT";
++	compatible = "nuvoton,ma35d1-iot", "nuvoton,ma35d1";
 +
-+allOf:
-+  - $ref: serial.yaml
++	aliases {
++		serial0 = &uart0;
++	};
 +
-+properties:
-+  compatible:
-+    const: nuvoton,ma35d1-uart
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
 +
-+  reg:
-+    maxItems: 1
++	mem: memory@80000000 {
++		device_type = "memory";
++		reg = <0x00000000 0x80000000 0 0x20000000>; /* 512M DRAM */
++	};
 +
-+  interrupts:
-+    maxItems: 1
++	clk_hxt: clock-hxt {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <24000000>;
++		clock-output-names = "clk_hxt";
++	};
++};
 +
-+  clocks:
-+    maxItems: 1
++&uart0 {
++	status = "okay";
++};
 +
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
++&clk {
++	assigned-clocks = <&clk CAPLL>,
++			  <&clk DDRPLL>,
++			  <&clk APLL>,
++			  <&clk EPLL>,
++			  <&clk VPLL>;
++	assigned-clock-rates = <800000000>,
++			       <266000000>,
++			       <180000000>,
++			       <500000000>,
++			       <102000000>;
++	nuvoton,pll-mode = "integer",
++			   "fractional",
++			   "integer",
++			   "integer",
++			   "integer";
++};
+diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1-som-256m.dts b/arch/arm64/boot/dts/nuvoton/ma35d1-som-256m.dts
+new file mode 100644
+index 000000000000..a1ebddecb7f8
+--- /dev/null
++++ b/arch/arm64/boot/dts/nuvoton/ma35d1-som-256m.dts
+@@ -0,0 +1,56 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2023 Nuvoton Technology Corp.
++ * Author: Shan-Chun Hung <schung@nuvoton.com>
++ *         Jacky huang <ychuang3@nuvoton.com>
++ */
 +
-+unevaluatedProperties: false
++/dts-v1/;
++#include "ma35d1.dtsi"
 +
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
++/ {
++	model = "Nuvoton MA35D1-SOM";
++	compatible = "nuvoton,ma35d1-som", "nuvoton,ma35d1";
 +
-+    serial@40700000 {
-+        compatible = "nuvoton,ma35d1-uart";
-+        reg = <0x40700000 0x100>;
-+        interrupts = <GIC_SPI 59 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&clk UART0_GATE>;
-+    };
-+...
++	aliases {
++		serial0 = &uart0;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	mem: memory@80000000 {
++		device_type = "memory";
++		reg = <0x00000000 0x80000000 0 0x10000000>; /* 256M DRAM */
++	};
++
++	clk_hxt: clock-hxt {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <24000000>;
++		clock-output-names = "clk_hxt";
++	};
++};
++
++&uart0 {
++	status = "okay";
++};
++
++&clk {
++	assigned-clocks = <&clk CAPLL>,
++			  <&clk DDRPLL>,
++			  <&clk APLL>,
++			  <&clk EPLL>,
++			  <&clk VPLL>;
++	assigned-clock-rates = <800000000>,
++			       <266000000>,
++			       <180000000>,
++			       <500000000>,
++			       <102000000>;
++	nuvoton,pll-mode = "integer",
++			   "fractional",
++			   "integer",
++			   "integer",
++			   "integer";
++};
+diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
+new file mode 100644
+index 000000000000..0740b0b218a7
+--- /dev/null
++++ b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
+@@ -0,0 +1,231 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2023 Nuvoton Technology Corp.
++ * Author: Shan-Chun Hung <schung@nuvoton.com>
++ *         Jacky huang <ychuang3@nuvoton.com>
++ */
++
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
++#include <dt-bindings/reset/nuvoton,ma35d1-reset.h>
++
++/ {
++	compatible = "nuvoton,ma35d1";
++	interrupt-parent = <&gic>;
++	#address-cells = <2>;
++	#size-cells = <2>;
++
++	cpus {
++		#address-cells = <2>;
++		#size-cells = <0>;
++
++		cpu0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a35";
++			reg = <0x0 0x0>;
++			enable-method = "psci";
++			next-level-cache = <&L2_0>;
++		};
++
++		cpu1: cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a35";
++			reg = <0x0 0x1>;
++			enable-method = "psci";
++			next-level-cache = <&L2_0>;
++		};
++
++		L2_0: l2-cache0 {
++			compatible = "cache";
++			cache-level = <2>;
++		};
++	};
++
++	psci {
++		compatible = "arm,psci-0.2";
++		method = "smc";
++	};
++
++	timer {
++		compatible = "arm,armv8-timer";
++		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) |
++			      IRQ_TYPE_LEVEL_LOW)>, /* Physical Secure */
++			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) |
++			      IRQ_TYPE_LEVEL_LOW)>, /* Physical Non-Secure */
++			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) |
++			      IRQ_TYPE_LEVEL_LOW)>, /* Virtual */
++			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) |
++			      IRQ_TYPE_LEVEL_LOW)>; /* Hypervisor */
++		clock-frequency = <12000000>;
++		interrupt-parent = <&gic>;
++	};
++
++	sys: system-management@40460000 {
++		compatible = "nuvoton,ma35d1-sys", "syscon", "simple-mfd";
++		reg = <0x0 0x40460000 0x0 0x200>;
++
++		reset: reset-controller {
++			compatible = "nuvoton,ma35d1-reset";
++			#reset-cells = <1>;
++		};
++	};
++
++	clk: clock-controller@40460200 {
++		compatible = "nuvoton,ma35d1-clk", "syscon";
++		reg = <0x00000000 0x40460200 0x0 0x100>;
++		#clock-cells = <1>;
++		clocks = <&clk_hxt>;
++		nuvoton,sys = <&sys>;
++	};
++
++	gic: interrupt-controller@50801000 {
++		compatible = "arm,gic-400";
++		reg =   <0x0 0x50801000 0 0x1000>, /* GICD */
++			<0x0 0x50802000 0 0x2000>, /* GICC */
++			<0x0 0x50804000 0 0x2000>, /* GICH */
++			<0x0 0x50806000 0 0x2000>; /* GICV */
++		#interrupt-cells = <3>;
++		interrupt-parent = <&gic>;
++		interrupt-controller;
++		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_RAW(0x13) |
++			      IRQ_TYPE_LEVEL_HIGH)>;
++	};
++
++	uart0:serial@40700000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x40700000 0x0 0x100>;
++		interrupts = <GIC_SPI 59 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART0_GATE>;
++		status = "disabled";
++	};
++
++	uart1:serial@40710000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x40710000 0x0 0x100>;
++		interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART1_GATE>;
++		status = "disabled";
++	};
++
++	uart2:serial@40720000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x40720000 0x0 0x100>;
++		interrupts = <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART2_GATE>;
++		status = "disabled";
++	};
++
++	uart3:serial@40730000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x40730000 0x0 0x100>;
++		interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART3_GATE>;
++		status = "disabled";
++	};
++
++	uart4:serial@40740000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x40740000 0x0 0x100>;
++		interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART4_GATE>;
++		status = "disabled";
++	};
++
++	uart5:serial@40750000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x40750000 0x0 0x100>;
++		interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART5_GATE>;
++		status = "disabled";
++	};
++
++	uart6:serial@40760000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x40760000 0x0 0x100>;
++		interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART6_GATE>;
++		status = "disabled";
++	};
++
++	uart7:serial@40770000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x40770000 0x0 0x100>;
++		interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART7_GATE>;
++		status = "disabled";
++	};
++
++	uart8:serial@40780000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x40780000 0x0 0x100>;
++		interrupts = <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART8_GATE>;
++		status = "disabled";
++	};
++
++	uart9:serial@40790000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x40790000 0x0 0x100>;
++		interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART9_GATE>;
++		status = "disabled";
++	};
++
++	uart10:serial@407a0000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x407a0000 0x0 0x100>;
++		interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART10_GATE>;
++		status = "disabled";
++	};
++
++	uart11:serial@407b0000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x407b0000 0x0 0x100>;
++		interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART11_GATE>;
++		status = "disabled";
++	};
++
++	uart12:serial@407c0000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x407c0000 0x0 0x100>;
++		interrupts = <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART12_GATE>;
++		status = "disabled";
++	};
++
++	uart13:serial@407d0000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x407d0000 0x0 0x100>;
++		interrupts = <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART13_GATE>;
++		status = "disabled";
++	};
++
++	uart14:serial@407e0000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x407e0000 0x0 0x100>;
++		interrupts = <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART14_GATE>;
++		status = "disabled";
++	};
++
++	uart15:serial@407f0000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x407f0000 0x0 0x100>;
++		interrupts = <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART15_GATE>;
++		status = "disabled";
++	};
++
++	uart16:serial@40880000 {
++		compatible = "nuvoton,ma35d1-uart";
++		reg = <0x0 0x40880000 0x0 0x100>;
++		interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clk UART16_GATE>;
++		status = "disabled";
++	};
++};
 -- 
 2.34.1
 
