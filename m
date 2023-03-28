@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8CC6CBB9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F19D6CBBAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbjC1J66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
+        id S232875AbjC1KA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbjC1J6x (ORCPT
+        with ESMTP id S232832AbjC1KAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:58:53 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179C06A58;
-        Tue, 28 Mar 2023 02:58:51 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32S9shk6000530;
-        Tue, 28 Mar 2023 11:58:37 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=WgobufBoN42IEs5ZSFVLsVL/P0UO9CKmIaFyDWY7oXg=;
- b=MQ81+Hk16ObyxQLguF2YIAmUZGFebM8Y/yfQSIKptWESFOrzK0jRQ4cuXeWNK/2zauil
- MEyIEY09orvrN4ffckmH0CQuf9Y9hJzdot2q7W36lGCYzHEdh7fnNJUwwK38C1PmQIDH
- mllTyAVPxcpIU61E/xOOJdjZYr8dN8zhK4cwDD97VWIHWV0CGeJE+G6eIW4mrXmtDTUo
- Cv0YDODhnr7MVPUYuBMuNfz5Z9r+JzyA9zg0sFfadFlzSU9oB1PRjHHW241jZCObxAKf
- kp8M2UWpcAM92bJN9TkyXf8Av6i9Aunhtm2ZggVqLjtnd3FU7S15PmIU4I4sOxugmw8I RQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pkvs4rnts-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Mar 2023 11:58:37 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6C79A10002A;
-        Tue, 28 Mar 2023 11:58:36 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 65723211F1E;
-        Tue, 28 Mar 2023 11:58:36 +0200 (CEST)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Tue, 28 Mar
- 2023 11:58:35 +0200
-Message-ID: <1a2d16c8-8c16-5fcc-7906-7b454a81922f@foss.st.com>
-Date:   Tue, 28 Mar 2023 11:58:34 +0200
+        Tue, 28 Mar 2023 06:00:51 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926136180;
+        Tue, 28 Mar 2023 03:00:39 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4211F1F8BA;
+        Tue, 28 Mar 2023 10:00:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679997638; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L3swI2nzmHgC/eyRcwS8QwJ3kMOr2pact6o7Wl+DUFU=;
+        b=pAmMUoqFK6W/dtk0yrj0704FOtnNRbilsg+V34xos4fSRAF923B/9lqaXvVa6vi70PYU1/
+        7N6BFRYpKkNet/2krMA4c9G3nL3zDGNdyz3G9WQrD9MDRuSwb/owlcsgJrpusDcfJT/Hfg
+        kiG8v9x4tIHblCcOVpQ1+JyIvY3aqRs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679997638;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L3swI2nzmHgC/eyRcwS8QwJ3kMOr2pact6o7Wl+DUFU=;
+        b=BU5nnRu84251gMYEIyM8zbXt/bYEcwx0MtQfieoUTy2uLITmlTbWYbfCgGJuImIjPwbHRC
+        A569vx2qGJyR+xAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 24D421390B;
+        Tue, 28 Mar 2023 10:00:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kIz1CMa6ImRnWwAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 28 Mar 2023 10:00:38 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 69618A071C; Tue, 28 Mar 2023 12:00:37 +0200 (CEST)
+Date:   Tue, 28 Mar 2023 12:00:37 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, yukuai3@huawei.com
+Subject: Re: [PATCH] ext4: only update i_reserved_data_blocks on successful
+ block allocation
+Message-ID: <20230328100037.vy23wsnl437ujdoh@quack3>
+References: <20230325063443.1839558-1-libaokun1@huawei.com>
+ <20230327124700.mnldh4sosp3ptbls@quack3>
+ <a4ee8f3e-9428-ebb1-c0b4-9348075902b6@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1] ARM: dts: stm32: prtt1c: Add PoDL PSE regulator nodes
-Content-Language: en-US
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>
-CC:     <kernel@pengutronix.de>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>
-References: <20230323123242.3763673-1-o.rempel@pengutronix.de>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230323123242.3763673-1-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a4ee8f3e-9428-ebb1-c0b4-9348075902b6@huawei.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,121 +78,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oleksij
-
-On 3/23/23 13:32, Oleksij Rempel wrote:
-> This commit introduces Power over Data Line (PoDL) Power Source
-> Equipment (PSE) regulator nodes to the PRTT1C devicetree. The addition
-> of these nodes enables support for PoDL in PRTT1C devices, allowing
-> power delivery and data transmission over a single twisted pair.
+On Mon 27-03-23 21:09:42, Baokun Li wrote:
+> On 2023/3/27 20:47, Jan Kara wrote:
+> > On Sat 25-03-23 14:34:43, Baokun Li wrote:
+> > > In our fault injection test, we create an ext4 file, migrate it to
+> > > non-extent based file, then punch a hole and finally trigger a WARN_ON
+> > > in the ext4_da_update_reserve_space():
+> > > 
+> > > EXT4-fs warning (device sda): ext4_da_update_reserve_space:369:
+> > > ino 14, used 11 with only 10 reserved data blocks
+> > > 
+> > > When writing back a non-extent based file, if we enable delalloc, the
+> > > number of reserved blocks will be subtracted from the number of blocks
+> > > mapped by ext4_ind_map_blocks(), and the extent status tree will be
+> > > updated. We update the extent status tree by first removing the old
+> > > extent_status and then inserting the new extent_status. If the block range
+> > > we remove happens to be in an extent, then we need to allocate another
+> > > extent_status with ext4_es_alloc_extent().
+> > > 
+> > >         use old    to remove   to add new
+> > >      |----------|------------|------------|
+> > >                old extent_status
+> > > 
+> > > The problem is that the allocation of a new extent_status failed due to a
+> > > fault injection, and __es_shrink() did not get free memory, resulting in
+> > > a return of -ENOMEM. Then do_writepages() retries after receiving -ENOMEM,
+> > > we map to the same extent again, and the number of reserved blocks is again
+> > > subtracted from the number of blocks in that extent. Since the blocks in
+> > > the same extent are subtracted twice, we end up triggering WARN_ON at
+> > > ext4_da_update_reserve_space() because used > ei->i_reserved_data_blocks.
+> > Hum, but this second call to ext4_map_blocks() should find already allocated
+> > blocks in the indirect block and thus should not be subtracting
+> > ei->i_reserved_data_blocks for the second time. What am I missing?
+> > 
+> > 								Honza
+> > 
+> ext4_map_blocks
+>   1. Lookup extent status tree firstly
+>        goto found;
+>   2. get the block without requesting a new file system block.
+> found:
+>   3. ceate and map the block
 > 
-> The new PoDL PSE regulator nodes provide voltage capability information
-> of the current board design, which can be used as a hint for system
-> administrators when configuring and managing power settings. This
-> update enhances the versatility and simplifies the power management of
-> PRTT1C devices while ensuring compatibility with connected Powered
-> Devices (PDs).
-> 
-> After applying this patch, the power delivery can be controlled from
-> user space with a patched [1] ethtool version using the following commands:
->    ethtool --set-pse t1l2 podl-pse-admin-control enable
-> to enable power delivery, and
->    ethtool --show-pse t1l2
-> to display the PoDL PSE settings.
-> 
-> By integrating PoDL PSE support into the PRTT1C devicetree, users can
-> benefit from streamlined power and data connections in their
-> deployments, improving overall system efficiency and reducing cabling
-> complexity.
-> 
-> [1] https://lore.kernel.org/all/20230317093024.1051999-1-o.rempel@pengutronix.de/
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
+> When we call ext4_map_blocks() for the second time, we directly find the
+> corresponding blocks in the extent status tree, and then go directly to step
+> 3,
+> because our flag is brand new and therefore does not contain EXT4_MAP_MAPPED
+> but contains EXT4_GET_BLOCKS_CREATE, thus subtracting
+> ei->i_reserved_data_blocks
+> for the second time.
 
-Please, fix the introduction of those new yaml validation errors:
+Ah, I see. Thanks for explanation. But then the problem is deeper than just
+a mismatch in number of reserved delalloc block. The problem really is that
+if extent status tree update fails, we have inconsistency between what is
+stored in the extent status tree and what is stored on disk. And that can
+cause even data corruption issues in some cases.
 
-arch/arm/boot/dts/stm32mp151a-prtt1c.dtb: ethernet-pse-1: $nodename:0: 
-'ethernet-pse-1' does not match '^ethernet-pse(@.*)?$'
-         From schema: 
-/Documentation/devicetree/bindings/net/pse-pd/podl-pse-regulator.yaml
-arch/arm/boot/dts/stm32mp151a-prtt1c.dtb: ethernet-pse-2: $nodename:0: 
-'ethernet-pse-2' does not match '^ethernet-pse(@.*)?$'
-         From schema: 
-/local/home/frq08678/STLINUX/kernel/my-kernel/stm32/Documentation/devicetree/bindings/net/pse-pd/podl-pse-regulator.yaml
+So I think we rather need to work on handling of errors in extent status
+tree operations. In the extent status tree, we have extents which we can
+just drop without issues and extents we must not drop - this depends on the
+extent's status - currently ext4_es_is_delayed() extents must stay, others
+may be dropped but I'd wrap the decision in a helper function.
 
+I'm currently inclined towards the following:
 
-Thanks
-Alex
+1) Removal must never fail. If we need to split extent, we use GFP_NOFAIL
+if we cannot just drop the second part of the split extent in case of
+allocation failure.
 
+2) Similarly if inserting extent that cannot be dropped, we use GFP_NOFAIL.
 
+3) We do not try to "undo" failed operations like we currently do - with
+the above rules we never loose information that cannot be restored.
 
+And this should also fix the problem you've hit because in case of
+allocation failure we may just end up with removed extent from the extent
+status tree and thus we refetch info from the disk and find out blocks are
+already allocated.
 
->   arch/arm/boot/dts/stm32mp151a-prtt1c.dts | 32 ++++++++++++++++++++++++
->   1 file changed, 32 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/stm32mp151a-prtt1c.dts b/arch/arm/boot/dts/stm32mp151a-prtt1c.dts
-> index 58bb05a8c685..ca0d3329cfd7 100644
-> --- a/arch/arm/boot/dts/stm32mp151a-prtt1c.dts
-> +++ b/arch/arm/boot/dts/stm32mp151a-prtt1c.dts
-> @@ -23,6 +23,18 @@ clock_sja1105: clock-sja1105 {
->   		clock-frequency = <25000000>;
->   	};
->   
-> +	pse_t1l1: ethernet-pse-1 {
-> +		compatible = "podl-pse-regulator";
-> +		pse-supply = <&reg_t1l1>;
-> +		#pse-cells = <0>;
-> +	};
-> +
-> +	pse_t1l2: ethernet-pse-2 {
-> +		compatible = "podl-pse-regulator";
-> +		pse-supply = <&reg_t1l2>;
-> +		#pse-cells = <0>;
-> +	};
-> +
->   	mdio0: mdio {
->   		compatible = "virtual,mdio-gpio";
->   		#address-cells = <1>;
-> @@ -32,6 +44,24 @@ mdio0: mdio {
->   
->   	};
->   
-> +	reg_t1l1: regulator-pse-t1l1 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "pse-t1l1";
-> +		regulator-min-microvolt = <12000000>;
-> +		regulator-max-microvolt = <12000000>;
-> +		gpio = <&gpiog 13 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +	};
-> +
-> +	reg_t1l2: regulator-pse-t1l2 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "pse-t1l2";
-> +		regulator-min-microvolt = <12000000>;
-> +		regulator-max-microvolt = <12000000>;
-> +		gpio = <&gpiog 14 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +	};
-> +
->   	wifi_pwrseq: wifi-pwrseq {
->   		compatible = "mmc-pwrseq-simple";
->   		reset-gpios = <&gpiod 8 GPIO_ACTIVE_LOW>;
-> @@ -92,6 +122,7 @@ t1l1_phy: ethernet-phy@7 {
->   		reset-gpios = <&gpiog 12 GPIO_ACTIVE_LOW>;
->   		reset-assert-us = <10>;
->   		reset-deassert-us = <35>;
-> +		pses = <&pse_t1l1>;
->   	};
->   
->   	/* TI DP83TD510E */
-> @@ -102,6 +133,7 @@ t1l2_phy: ethernet-phy@10 {
->   		reset-gpios = <&gpiog 11 GPIO_ACTIVE_LOW>;
->   		reset-assert-us = <10>;
->   		reset-deassert-us = <35>;
-> +		pses = <&pse_t1l2>;
->   	};
->   
->   	/* Micrel KSZ9031 */
-
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
