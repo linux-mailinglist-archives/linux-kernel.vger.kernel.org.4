@@ -2,128 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE856CB470
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 05:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261606CB488
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 05:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbjC1DDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 23:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
+        id S232208AbjC1DJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 23:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjC1DDu (ORCPT
+        with ESMTP id S229539AbjC1DJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 23:03:50 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FDD1FE7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:03:22 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id w4so10329026plg.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679972602;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jneq/GANdehmIvLuc1I+eb/hvcf7UfuDEQEk+5ugBPU=;
-        b=SZG72enAMBCiLEDZ3jl9/O8wx28e7unRCWE3qCxokC7VQq/VOswoEH7bHSErzlTihd
-         eS3epPH4e51orvV4ZJ+bxt9mM+M5Oe5tjRIN+Kkzjzd5yTmdji3IQll/hSSRHUaFaWFN
-         Cb29BWfFD3f1JFNFW8YP65utlOZFrJLe+gETp7sjBPxQoZdEmjEl4kwbPI5HFf4QLKCq
-         4TUdvPnzAkKyvVIY3+Jcl2wGOpPJ80+987YlYPQWRqx6HSeI7XD02RNsgFFHGXEJPAVI
-         tudYzxTxh2ex+x5M3UkWxOoy8neNIts8hNDN5M3UtDMi2v2KTh/sQxc3e4wHsyk8ovvm
-         YIcg==
+        Mon, 27 Mar 2023 23:09:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759C62129
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:08:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679972908;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DF8xiGEDG2aydgSMMjZ0jG6716l6RkLPMVKpPTgA1LU=;
+        b=DcqN28mJz68llqd8XZbgbb6+qX1IjOgg5VaYOC+h/EMg6pNDDToxRZQ86nDLvLH01MnoQ2
+        UMg+5P79n3X302TRJ/F0uRQv93J4Gv9xGkZkvVt5Iv965njHZNNcXjXb9wvu4lU55DXXqm
+        jaHIqbVCeyLOf0dDF1l9OkfUN/mnCzM=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-206-oK-R1aiKMEuZQJUt4Hs61Q-1; Mon, 27 Mar 2023 23:08:24 -0400
+X-MC-Unique: oK-R1aiKMEuZQJUt4Hs61Q-1
+Received: by mail-wm1-f69.google.com with SMTP id l16-20020a05600c4f1000b003ef6ed5f645so2289156wmq.9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:08:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679972602;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679972903;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Jneq/GANdehmIvLuc1I+eb/hvcf7UfuDEQEk+5ugBPU=;
-        b=yll/ViskDO8WmHtNViveqqsyoSG4utVSxKKJeuFfJz748bUgLe9LWyC7Zj1j3RyTIq
-         LyNvzi1Jdu/f6PoZcxI046DJpS4Pu+1rdFX6OZ5RO4EifQGilyWlB/KOcqiZYj7CU30s
-         LJKk3yS9mx1WJ2QKqaPyQ2hhVbbDjXrc8+hVLWNKdMbdKYnuNvt2lzmOxlqtZPXZDL/c
-         0WoXekhEzm7xAMFuozaj1rCYpPK0TNZ2TX9+9RXSukR9QPejA78B6sAJHezy1e2ljTMr
-         Qatb5Il21rbqM2nzBfT2QWTUQLxz5v0uYINpd+PkgjJmTjimFZxfYGv7YWH52NI908j3
-         e+7w==
-X-Gm-Message-State: AAQBX9dUujyu/WIDIAM7m25yUu2li9rl4+KZSw1se+K9edR+kheJobCm
-        Uhab4dOlqEmFrm572D4/tsDDAMDJzfoiGs/DOOzv
-X-Google-Smtp-Source: AKy350aV2K7TZmTSLnKfayvKhRJIfgahi334+sDgdvli/gvrMFQTnZmelzH1kHLYkw0buI+gxcs0u2NgguvDIjzM+Uk=
-X-Received: by 2002:a17:90a:bf0b:b0:23d:54c1:27b0 with SMTP id
- c11-20020a17090abf0b00b0023d54c127b0mr4195804pjs.6.1679972602134; Mon, 27 Mar
- 2023 20:03:22 -0700 (PDT)
+        bh=DF8xiGEDG2aydgSMMjZ0jG6716l6RkLPMVKpPTgA1LU=;
+        b=eRUltcJI0BH3rf74BcYB9zccBvojZN6/suHhpgnCnhxHnVHl+53JAVnBkX3b+a9JFV
+         fud3qTnCJTzO181KdRM5Ls8fjLm2CQSK/5fvuhArT3LUNw9IP1+ifV4XH9m3Z8taAIXr
+         YjfJ6VrD9j4juedcwcLetjEM3oYGbbNGnEm2cyHMv53ZKmRtEiVYiA6tc9itZxzIsNbE
+         UuvfV6GHhDAZXIuqKcTz237T/r0RzK4Jc5CQFayF2rERiZWz2ESvDFotGuYENuddPNl7
+         bA/mU/jzYwxE1978y1R+U6SYpGQRItOblW9nOxeTSyCA48T/kSA0mjB4n8AdkvT8Zsvx
+         mPfA==
+X-Gm-Message-State: AAQBX9cmev+oYzACzawzj8ZS4NzzexiuFqWMrmFB/v1YmSPiSsk4ANA0
+        nR7P/CBVsIqwrYB1iTWAb+iVteB5UhMrbQI9fJ/Ym8bc+P8wdvyuw0HVzUzikqGFu67B5CXZ+mV
+        JaLaY3ecRwncCNPS2nv+QDq69
+X-Received: by 2002:adf:f1c3:0:b0:2ce:adbf:cb14 with SMTP id z3-20020adff1c3000000b002ceadbfcb14mr11653877wro.28.1679972903648;
+        Mon, 27 Mar 2023 20:08:23 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZKIAjbXHGpog35RyWxzgmMXVcD6mNpoeRHryb054olGh4cgVbvxNpHT37A2iqHNRx4L23JiQ==
+X-Received: by 2002:adf:f1c3:0:b0:2ce:adbf:cb14 with SMTP id z3-20020adff1c3000000b002ceadbfcb14mr11653856wro.28.1679972903250;
+        Mon, 27 Mar 2023 20:08:23 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id d10-20020adfe88a000000b002c70e60abd4sm26534411wrm.2.2023.03.27.20.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 20:08:22 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+Cc:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
+        linux-kernel@vger.kernel.org,
+        Robert Mader <robert.mader@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Martijn Braam <martijn@brixit.nl>,
+        Kamil =?utf-8?Q?Trzci=C5=84ski?= <ayufan@ayufan.eu>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Jarrah Gosbell <kernel@undef.tools>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v2] arm64: dts: rk3399-pinephone-pro: Add internal
+ display support
+In-Reply-To: <20230327194518.qkm5qgap6vkivpeg@core>
+References: <20230327074136.1459212-1-javierm@redhat.com>
+ <20230327130147.wgxl2qayhzsi2xak@core>
+ <87wn32rynm.fsf@minerva.mail-host-address-is-not-set>
+ <1924921.PYKUYFuaPT@diego>
+ <87mt3yrwzo.fsf@minerva.mail-host-address-is-not-set>
+ <20230327174855.xpxrdfldqcxk463r@core>
+ <87jzz2rrfr.fsf@minerva.mail-host-address-is-not-set>
+ <20230327194518.qkm5qgap6vkivpeg@core>
+Date:   Tue, 28 Mar 2023 05:08:21 +0200
+Message-ID: <87a5zxshcq.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-References: <20230323053043.35-1-xieyongji@bytedance.com> <20230323053043.35-4-xieyongji@bytedance.com>
- <CACGkMEtH0=vr6JQrqWFZqf4p8bcgeKCr4ipqdBc9nv-st3Pfiw@mail.gmail.com>
-In-Reply-To: <CACGkMEtH0=vr6JQrqWFZqf4p8bcgeKCr4ipqdBc9nv-st3Pfiw@mail.gmail.com>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Tue, 28 Mar 2023 11:03:11 +0800
-Message-ID: <CACycT3sm1P2qDQTNKp+RLmyd84+v8xwErf_g1SXqiaJDQO8LNg@mail.gmail.com>
-Subject: Re: [PATCH v4 03/11] virtio-vdpa: Support interrupt affinity
- spreading mechanism
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@lst.de>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 2:28=E2=80=AFPM Jason Wang <jasowang@redhat.com> wr=
-ote:
+Ond=C5=99ej Jirman <megi@xff.cz> writes:
+
+> On Mon, Mar 27, 2023 at 08:15:52PM +0200, Javier Martinez Canillas wrote:
+>> Ond=C5=99ej Jirman <megi@xff.cz> writes:
+
+[...]
+
+>> > Just because something is in my tree doesn't mean it's mine, or that I=
+ reviewed
+>> > it in detail and prepared it for upstreaming, or that I'm interested in
+>>=20
+>> Thanks for the clarification. Because the patch had your authorship I
+>> wrongly assumed that came from you. Sorry about the confusion.
 >
-> On Thu, Mar 23, 2023 at 1:31=E2=80=AFPM Xie Yongji <xieyongji@bytedance.c=
-om> wrote:
-> >
-> > To support interrupt affinity spreading mechanism,
-> > this makes use of group_cpus_evenly() to create
-> > an irq callback affinity mask for each virtqueue
-> > of vdpa device. Then we will unify set_vq_affinity
-> > callback to pass the affinity to the vdpa device driver.
-> >
-> > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> Ever since base DT support for Pinephone Pro was merged, none of the DT p=
+atches
+> in my tree are in the original form as prepared by the authors + fixes I'=
+ve
+> added. That's simply impossible anymore.
 >
-> Thinking hard of all the logics, I think I've found something interesting=
-.
+> To look up who did what, you'd have to look at older branches, pre-merge.
 >
-> Commit ad71473d9c437 ("virtio_blk: use virtio IRQ affinity") tries to
-> pass irq_affinity to transport specific find_vqs().  This seems a
-> layer violation since driver has no knowledge of
->
-> 1) whether or not the callback is based on an IRQ
-> 2) whether or not the device is a PCI or not (the details are hided by
-> the transport driver)
-> 3) how many vectors could be used by a device
->
-> This means the driver can't actually pass a real affinity masks so the
-> commit passes a zero irq affinity structure as a hint in fact, so the
-> PCI layer can build a default affinity based that groups cpus evenly
-> based on the number of MSI-X vectors (the core logic is the
-> group_cpus_evenly). I think we should fix this by replacing the
-> irq_affinity structure with
->
-> 1) a boolean like auto_cb_spreading
->
-> or
->
-> 2) queue to cpu mapping
+> Patches after the merge just came from squashing everything into one patc=
+h,
+> cleaning it up, and re-splitting along some vague functionality boundarie=
+s,
+> while trying to keep best-effort original SoBs as faithfully as possible,=
+ so
+> that I can keep maintaining the PPP support in a sane manner.
 >
 
-But only the driver knows which queues are used in the control path
-which don't need the automatic irq affinity assignment. So I think the
-irq_affinity structure can only be created by device drivers and
-passed to the virtio-pci/virtio-vdpa driver.
+Go it.
 
-> So each transport can do its own logic based on that. Then virtio-vDPA
-> can pass that policy to VDUSE where we only need a group_cpus_evenly()
-> and avoid duplicating irq_create_affinity_masks()?
+> Anyway, SoB's are added in chronological order. So:
+>
+> https://github.com/megous/linux/commit/471c5f33ba74c3d498ccc1eb69c098623b=
+193926
+>
+> Means the author of the changes is Martijn + Kamil (roughly) and I may ha=
+ve
+> a line of code in there too, since my SoB is last. For some reason, the o=
+rder is
+> inverted in the patch you posted, making it seem I developed these changes
+> originally.
 >
 
-I don't get why we would have duplicated irq_create_affinity_masks().
+Since the patch had your authorship I changed the order so that your S-o-B
+was first but I'll then change the author in v3 and make it match the
+first S-o-B entry in your tree (Martijn) then.
 
-Thanks,
-Yongji
+>> > upstreaming it. I'm just trying to help you with your upstreaming effo=
+rt by
+>> > testing and review since I got to know the hardware quite well over th=
+e last
+>> > years and can check the schematics and datasheets quickly, and I like =
+to think
+>> > upstream code is held to higher standard. That's all.
+>> >
+>>=20
+>> Appreciate your help and I agree that upstream code should be held to a
+>> high standard. But since the DTS in mainline is pretty basic anyways (you
+>> can only boot to serial right now), is not really usable for other thing
+>> than development and keep adding the missing support.
+>
+> Having wrong frequency used is not a missing support for something. Sorry=
+ it's
+> too bothersome to get the review piecemeal, but sometimes people have mor=
+e time to
+> look at patches in-depth, and at other times they don't and you just get =
+surface
+> level or no review.
+>
+
+Ok.
+
+> One point of posting patches to the mailing list is to get review. And it=
+'s not
+> that great to do in-depth review for you, up to going through schematics =
+and
+> datasheets, testing, and even proposing and testing solutions for found i=
+ssues,
+> just to be dismissed without technical reason.
+>
+> The thing is this review will most likely happen just once, and noone wil=
+l go
+> back, read through the entire huge DT along with a schematic, to look at =
+whether
+> this or that pullup is really necessary, whether some parameter is out of=
+ spec
+> from the datasheet for each part, or things like that. That's just not
+> pragmatic.
+>
+
+That's fair.
+
+> Instead, people will happily attribute non-obvious issues caused by these
+> omissions of manual review to shoddy or slow or power-inefficient HW. "1k=
+Hz
+> + harmonics interference in codec because high power backlight DC-DC regu=
+lator
+> basically spews off 1kHz of 1-2W load + harmonics because it's driven
+> incorrectly? Ah, the phone just has a shitty audio codec!"
+>
+> So, don't take it as some perfectionism. Upstreaming just seems like the =
+best
+> time to look at things that were overlooked in the past in more detail an=
+d get
+> these little things right, because the DT additions are done piecemal and
+> slowly/gradually, so it's more manageable to review and fix right away. T=
+his
+> will just not happen later on for these obscure devices like Pinephone Pr=
+o,
+> where the whole effort that goes into it is like one half of a fulltime
+> developer time split over 4 mildly interested real persons, slowly taperi=
+ng off
+> over time as the device ages.
+>
+
+Makes sense. I'll address your comments in v3 then and also include a
+separate patch (again with Martijn as author and the S-o-B as ordered in
+your tree), that includes the touchscreen DT nodes as well. Since Jarrah
+pointed out that there's already the correct compatible string in the
+driver's OF device ID table.
+
+> regards,
+> 	o.
+>
+
+--=20
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
