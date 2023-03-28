@@ -2,197 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284126CC145
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124C96CC151
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbjC1Nnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S230518AbjC1Noq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233267AbjC1Nna (ORCPT
+        with ESMTP id S233312AbjC1NoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:43:30 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5D686AC;
-        Tue, 28 Mar 2023 06:43:12 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 79FDB1EC0338;
-        Tue, 28 Mar 2023 15:43:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680010990;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=3XNLULs5F+FAVGIo2HpX+YyLGYGVF4c35mHywkE1ikQ=;
-        b=DP5jAVvkHgPdKxNr++aP6OJJ3NimIfAXYaohqE84iAByv6WD1Pc03PikLct5wlkTGElF2E
-        WbpfJK7EjdFljaMVdxatewhmJYqplbuaWgFBHPgS/u15swUeNpyiOg5mqAXYMaqpt7liUw
-        YSPuihQAXOMoYR7XtplaRhTiYhWAq7I=
-From:   Borislav Petkov <bp@alien8.de>
-To:     linux-edac <linux-edac@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] EDAC: Sanitize MODULE_AUTHOR strings
-Date:   Tue, 28 Mar 2023 15:43:09 +0200
-Message-Id: <20230328134309.23159-1-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
+        Tue, 28 Mar 2023 09:44:17 -0400
+Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ACEC656;
+        Tue, 28 Mar 2023 06:44:01 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [117.133.56.22])
+        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 96D2158042C;
+        Tue, 28 Mar 2023 21:43:21 +0800 (CST)
+From:   Donglin Peng <pengdonglin@sangfor.com.cn>
+To:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
+        mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        chenhuacai@kernel.org, zhangqing@loongson.cn, kernel@xen0n.name,
+        mingo@redhat.com, peterz@infradead.org, xiehuan09@gmail.com,
+        dinghui@sangfor.com.cn, huangcun@sangfor.com.cn,
+        dolinux.peng@gmail.com
+Cc:     linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Donglin Peng <pengdonglin@sangfor.com.cn>
+Subject: [PATCH v8 0/8] function_graph: Support recording and printing the return value of function
+Date:   Tue, 28 Mar 2023 06:43:11 -0700
+Message-Id: <20230328134319.2185812-1-pengdonglin@sangfor.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZQkhMVkofTBhKTU4aHk0eGVUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpISkJIT1VKS0tVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PzI6Dxw5Iz0cA1Y8EQoXDzEY
+        SRwwCgNVSlVKTUNLS0pKS0tIS0hLVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
+        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFDQkJMNwY+
+X-HM-Tid: 0a87287582a52eb7kusn96d2158042c
+X-HM-MType: 1
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
+When using the function_graph tracer to analyze system call failures,
+it can be time-consuming to analyze the trace logs and locate the kernel
+function that first returns an error. This change aims to simplify the
+process by recording the function return value to the 'retval' member of
+'ftrace_graph_ent' and printing it when outputing the trace log.
 
-Fixup the remaining MODULE_AUTHOR strings to not contain newlines.
-Shorten and unbreak others.
+Note that even if a function's return type is void, a return value will
+still be printed, so it should be ignored. If you care about this, the
+BTF file can be used to obtain the details of function return type. We
+can implement a tool to process the trace log and display the return
+value based on its actual type.
 
-No functional changes.
+Here is an example:
 
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+...
+
+ 1)               |  cgroup_attach_task() {
+ 1)               |    cgroup_migrate_add_src() {
+ 1)   1.403 us    |      cset_cgroup_from_root(); /* = 0xffff93fc86f58010 */
+ 1)   2.154 us    |    } /* cgroup_migrate_add_src = 0xffffb286c1297d00 */
+ 1) ! 386.538 us  |    cgroup_migrate_prepare_dst(); /* = 0x0 */
+ 1)               |    cgroup_migrate() {
+ 1)   0.651 us    |      cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
+ 1)               |      cgroup_migrate_execute() {
+ 1)               |        cpu_cgroup_can_attach() {
+ 1)               |          cgroup_taskset_first() {
+ 1)   0.732 us    |            cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
+ 1)   1.232 us    |          } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
+ 1)   0.380 us    |          sched_rt_can_attach(); /* = 0x0 */
+ 1)   2.335 us    |        } /* cpu_cgroup_can_attach = -22 */
+ 1)   4.369 us    |      } /* cgroup_migrate_execute = -22 */
+ 1)   7.143 us    |    } /* cgroup_migrate = -22 */
+ 1)               |    cgroup_migrate_finish() {
+ 1)   0.411 us    |      put_css_set_locked(); /* = 0x8 */
+ 1) + 62.397 us   |      put_css_set_locked(); /* = 0x80000001 */
+ 1) + 64.742 us   |    } /* cgroup_migrate_finish = 0x80000000 */
+ 1) ! 465.605 us  |  } /* cgroup_attach_task = -22 */
+
+...
+
+After processing the above trace logs using BTF information:
+
+...
+
+ 1)               |  cgroup_attach_task() {
+ 1)               |    cgroup_migrate_add_src() {
+ 1)   1.403 us    |      cset_cgroup_from_root(); /* = 0xffff93fc86f58010 */
+ 1)   2.154 us    |    } /* cgroup_migrate_add_src */
+ 1) ! 386.538 us  |    cgroup_migrate_prepare_dst(); /* = 0 */
+ 1)               |    cgroup_migrate() {
+ 1)   0.651 us    |      cgroup_migrate_add_task();
+ 1)               |      cgroup_migrate_execute() {
+ 1)               |        cpu_cgroup_can_attach() {
+ 1)               |          cgroup_taskset_first() {
+ 1)   0.732 us    |            cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
+ 1)   1.232 us    |          } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
+ 1)   0.380 us    |          sched_rt_can_attach(); /* = 0 */
+ 1)   2.335 us    |        } /* cpu_cgroup_can_attach = -22 */
+ 1)   4.369 us    |      } /* cgroup_migrate_execute = -22 */
+ 1)   7.143 us    |    } /* cgroup_migrate = -22 */
+ 1)               |    cgroup_migrate_finish() {
+ 1)   0.411 us    |      put_css_set_locked();
+ 1) + 62.397 us   |      put_css_set_locked();
+ 1) + 64.742 us   |    } /* cgroup_migrate_finish */
+ 1) ! 465.605 us  |  } /* cgroup_attach_task = -22 */
+
+...
+
 ---
- drivers/edac/amd64_edac.c      | 6 ++----
- drivers/edac/e752x_edac.c      | 2 +-
- drivers/edac/e7xxx_edac.c      | 3 +--
- drivers/edac/i5000_edac.c      | 7 ++-----
- drivers/edac/i5100_edac.c      | 3 +--
- drivers/edac/i82860_edac.c     | 3 +--
- drivers/edac/layerscape_edac.c | 3 +--
- drivers/edac/mpc85xx_edac.c    | 3 +--
- drivers/edac/r82600_edac.c     | 3 +--
- 9 files changed, 11 insertions(+), 22 deletions(-)
+v8:
+ - Fix issues in ARM64 asm code
+ - Fix issues in selftest
+ - Add some comments on CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
+ - Make CONFIG_FUNCTION_GRAPH_RETVAL switable
+ - Modify the control range of CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 5b42533f306a..8b16ebf5fe12 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -4244,10 +4244,8 @@ module_init(amd64_edac_init);
- module_exit(amd64_edac_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR("SoftwareBitMaker: Doug Thompson, "
--		"Dave Peterson, Thayne Harbaugh");
--MODULE_DESCRIPTION("MC support for AMD64 memory controllers - "
--		EDAC_AMD64_VERSION);
-+MODULE_AUTHOR("SoftwareBitMaker: Doug Thompson, Dave Peterson, Thayne Harbaugh; AMD");
-+MODULE_DESCRIPTION("MC support for AMD64 memory controllers - " EDAC_AMD64_VERSION);
- 
- module_param(edac_op_state, int, 0444);
- MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll,1=NMI");
-diff --git a/drivers/edac/e752x_edac.c b/drivers/edac/e752x_edac.c
-index ac7c9b42d4c7..7221b4bb6df2 100644
---- a/drivers/edac/e752x_edac.c
-+++ b/drivers/edac/e752x_edac.c
-@@ -1462,7 +1462,7 @@ module_init(e752x_init);
- module_exit(e752x_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Linux Networx (http://lnxi.com) Tom Zimmerman\n");
-+MODULE_AUTHOR("Linux Networx (http://lnxi.com) Tom Zimmerman");
- MODULE_DESCRIPTION("MC support for Intel e752x/3100 memory controllers");
- 
- module_param(force_function_unhide, int, 0444);
-diff --git a/drivers/edac/e7xxx_edac.c b/drivers/edac/e7xxx_edac.c
-index 497e710fca3d..5852b95fa470 100644
---- a/drivers/edac/e7xxx_edac.c
-+++ b/drivers/edac/e7xxx_edac.c
-@@ -596,8 +596,7 @@ module_init(e7xxx_init);
- module_exit(e7xxx_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Linux Networx (http://lnxi.com) Thayne Harbaugh et al\n"
--		"Based on.work by Dan Hollis et al");
-+MODULE_AUTHOR("Linux Networx (http://lnxi.com) Thayne Harbaugh et al");
- MODULE_DESCRIPTION("MC support for Intel e7xxx memory controllers");
- module_param(edac_op_state, int, 0444);
- MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll,1=NMI");
-diff --git a/drivers/edac/i5000_edac.c b/drivers/edac/i5000_edac.c
-index ba46057d4220..4b5a71f8739d 100644
---- a/drivers/edac/i5000_edac.c
-+++ b/drivers/edac/i5000_edac.c
-@@ -1573,13 +1573,10 @@ module_init(i5000_init);
- module_exit(i5000_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR
--    ("Linux Networx (http://lnxi.com) Doug Thompson <norsk5@xmission.com>");
--MODULE_DESCRIPTION("MC Driver for Intel I5000 memory controllers - "
--		I5000_REVISION);
-+MODULE_AUTHOR("Linux Networx (http://lnxi.com) Doug Thompson <norsk5@xmission.com>");
-+MODULE_DESCRIPTION("MC Driver for Intel I5000 memory controllers - " I5000_REVISION);
- 
- module_param(edac_op_state, int, 0444);
- MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll,1=NMI");
- module_param(misc_messages, int, 0444);
- MODULE_PARM_DESC(misc_messages, "Log miscellaneous non fatal messages");
--
-diff --git a/drivers/edac/i5100_edac.c b/drivers/edac/i5100_edac.c
-index 8db680b6ae9b..d470afe65001 100644
---- a/drivers/edac/i5100_edac.c
-+++ b/drivers/edac/i5100_edac.c
-@@ -1220,6 +1220,5 @@ module_init(i5100_init);
- module_exit(i5100_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR
--    ("Arthur Jones <ajones@riverbed.com>");
-+MODULE_AUTHOR("Arthur Jones <ajones@riverbed.com>");
- MODULE_DESCRIPTION("MC Driver for Intel I5100 memory controllers");
-diff --git a/drivers/edac/i82860_edac.c b/drivers/edac/i82860_edac.c
-index fbec90d00f1e..b8a497f0de28 100644
---- a/drivers/edac/i82860_edac.c
-+++ b/drivers/edac/i82860_edac.c
-@@ -355,8 +355,7 @@ module_init(i82860_init);
- module_exit(i82860_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Red Hat Inc. (http://www.redhat.com) "
--		"Ben Woodard <woodard@redhat.com>");
-+MODULE_AUTHOR("Red Hat Inc. (http://www.redhat.com) Ben Woodard <woodard@redhat.com>");
- MODULE_DESCRIPTION("ECC support for Intel 82860 memory hub controllers");
- 
- module_param(edac_op_state, int, 0444);
-diff --git a/drivers/edac/layerscape_edac.c b/drivers/edac/layerscape_edac.c
-index 35ceaca578e1..7c5e2b3c0daa 100644
---- a/drivers/edac/layerscape_edac.c
-+++ b/drivers/edac/layerscape_edac.c
-@@ -72,5 +72,4 @@ module_exit(fsl_ddr_mc_exit);
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("NXP Semiconductor");
- module_param(edac_op_state, int, 0444);
--MODULE_PARM_DESC(edac_op_state,
--		 "EDAC Error Reporting state: 0=Poll, 2=Interrupt");
-+MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll, 2=Interrupt");
-diff --git a/drivers/edac/mpc85xx_edac.c b/drivers/edac/mpc85xx_edac.c
-index e50d7928bf8f..55320546c174 100644
---- a/drivers/edac/mpc85xx_edac.c
-+++ b/drivers/edac/mpc85xx_edac.c
-@@ -711,5 +711,4 @@ module_exit(mpc85xx_mc_exit);
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Montavista Software, Inc.");
- module_param(edac_op_state, int, 0444);
--MODULE_PARM_DESC(edac_op_state,
--		 "EDAC Error Reporting state: 0=Poll, 2=Interrupt");
-+MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll, 2=Interrupt");
-diff --git a/drivers/edac/r82600_edac.c b/drivers/edac/r82600_edac.c
-index d0aef83dca2a..61e979d5437a 100644
---- a/drivers/edac/r82600_edac.c
-+++ b/drivers/edac/r82600_edac.c
-@@ -415,8 +415,7 @@ module_init(r82600_init);
- module_exit(r82600_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Tim Small <tim@buttersideup.com> - WPAD Ltd. "
--		"on behalf of EADS Astrium");
-+MODULE_AUTHOR("Tim Small <tim@buttersideup.com> - WPAD Ltd. on behalf of EADS Astrium");
- MODULE_DESCRIPTION("MC support for Radisys 82600 memory controllers");
- 
- module_param(disable_hardware_scrub, bool, 0644);
+v7:
+ - Rename trace option 'graph_retval_hex' to 'funcgraph-retval-hex'
+ - Introduce a new structure fgraph_ret_regs for each architecture to
+   hold return registers
+ - Separate each architecture modification info individual patches
+ - Add a test case for funcgraph-retval
+ - Update documentation description
+ - Support LoongArch
+
+v6:
+ - Remove the conversion code for short and char types, because these
+   two types are rarely used to store an error code.
+ - Modify the limitations for funcgraph-retval
+ - Optimize the English expression
+
+v5:
+ - Pass both the return values to ftrace_return_to_handler
+ - Modify the parameter sequence of ftrace_return_to_handler to
+   decrease the modification of assembly code, thanks to Russell King
+ - Wrap __ftrace_return_to_handler with ftrace_return_to_handler
+   for compatible
+ - Describe the limitations of funcgraph-retval
+
+v4:
+ - Modify commit message
+ - Introduce new option graph_retval_hex to control display format
+ - Introduce macro CONFIG_FUNCTION_GRAPH_RETVAL and
+   CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
+ - Add related arch maintainers to review
+
+v3:
+ - Modify the commit message: add trace logs processed with the btf tool
+
+v2:
+ - Modify the commit message: use BTF to get the return type of function
+
+*** BLURB HERE ***
+
+Donglin Peng (8):
+  function_graph: Support recording and printing the return value of
+    function
+  tracing: Add documentation for funcgraph-retval and
+    funcgraph-retval-hex
+  ARM: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+  arm64: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+  riscv: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+  x86/ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+  LoongArch: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+  selftests/ftrace: Add funcgraph-retval test case
+
+ Documentation/trace/ftrace.rst                | 74 +++++++++++++++
+ arch/arm/Kconfig                              |  1 +
+ arch/arm/include/asm/ftrace.h                 | 18 ++++
+ arch/arm/kernel/entry-ftrace.S                |  6 +-
+ arch/arm64/Kconfig                            |  1 +
+ arch/arm64/include/asm/ftrace.h               | 20 ++++
+ arch/arm64/kernel/asm-offsets.c               | 12 +++
+ arch/arm64/kernel/entry-ftrace.S              | 27 +++---
+ arch/loongarch/Kconfig                        |  1 +
+ arch/loongarch/include/asm/ftrace.h           | 18 ++++
+ arch/loongarch/kernel/mcount.S                |  6 +-
+ arch/loongarch/kernel/mcount_dyn.S            |  7 +-
+ arch/riscv/Kconfig                            |  1 +
+ arch/riscv/include/asm/ftrace.h               | 19 ++++
+ arch/riscv/kernel/mcount.S                    |  7 +-
+ arch/x86/Kconfig                              |  1 +
+ arch/x86/include/asm/ftrace.h                 | 18 ++++
+ arch/x86/kernel/ftrace_32.S                   |  8 +-
+ arch/x86/kernel/ftrace_64.S                   |  7 +-
+ include/linux/ftrace.h                        |  3 +
+ kernel/trace/Kconfig                          | 15 +++
+ kernel/trace/fgraph.c                         | 23 ++++-
+ kernel/trace/trace.h                          |  2 +
+ kernel/trace/trace_entries.h                  | 26 ++++++
+ kernel/trace/trace_functions_graph.c          | 93 +++++++++++++++++--
+ .../ftrace/test.d/ftrace/fgraph-retval.tc     | 39 ++++++++
+ 26 files changed, 411 insertions(+), 42 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc
+
 -- 
-2.35.1
+2.25.1
 
