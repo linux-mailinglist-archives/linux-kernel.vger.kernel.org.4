@@ -2,107 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714A16CB772
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064D16CB73F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232263AbjC1GpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 02:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39786 "EHLO
+        id S232530AbjC1Gee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 02:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbjC1Go5 (ORCPT
+        with ESMTP id S232336AbjC1Gea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 02:44:57 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3295A1706
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:44:56 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id eg48so45258283edb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:44:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679985894;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nmTvziNt2VFrSmXaXHn7cfTQldiBzclyda4PoCjJxWE=;
-        b=KDvjJ+sJSVFfF+ax9cNRTuZm3PPD4QOVnSoLIozYu62wHnN0LvthEFWDLtXVvroHmO
-         UG9miq8QhrSuSD27nq641NkuPALs5ipEHnV2igK6U9zVyewBXLMQOl9i+yOXyBoC7lO5
-         +RWiBPkGLmNJk6NBYnc5sgw9mquFl1aSyyfIb0YeNCzFf7oPSekfsQhhlM7O4frh3zA2
-         mbjauxBgowvPV19/w2zFI47p57F/g/8S6qlIcTdtJ7NDO09LanXxtC3z2GTab4qNsumB
-         F9bLEszOEd2ps5tmD3bCfc0BI90KsOK12rR+l5AvfV/oKzqwipnPXF382hkkXduQ1Hu6
-         LtMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679985894;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nmTvziNt2VFrSmXaXHn7cfTQldiBzclyda4PoCjJxWE=;
-        b=zADilGKL7m++aTHrdpoRUY8L0ew/2+JKtDv17/cVKmY/Qt6Uv6V/twvlt6LG2yzj06
-         dBv37+9aJabaRljiuOacH94sDpTNYePQ0cZDTGQYpbIxxV29QwQd4kIAP4jMKys8zwFE
-         fEHMQQTMV6dwngOkK1KPLfEdhfC2Vf5RI96tblTa/4X45Q1pptA1FPNe6sonHLeXaiF2
-         cTdHI5W6sHWU7SPA1q/QKTipbhifBnoWoghC2giUkogAX8p0+FAWBoU/CpzYwvFLXsYI
-         2lN4F8UTJ3wlAC/caYCb6CoWPNHibeS/jyxZCxHHUALz7wn98SO4uajfV+vITxaQ5pe+
-         7LiA==
-X-Gm-Message-State: AAQBX9f0iRYMBhvCSlenLf/OpeMta8zBNnrPFZBRLcSMZAlNZcQyhd7s
-        gf4Tc8mgPeVnpQSAUfGNqw3rSg==
-X-Google-Smtp-Source: AKy350Yo2Rt1rOFhXVKxwzhnMFISblPFU1CUUdS7F8h8GwafujSMEOGbp0rS44wexna8I2I5SC9t/w==
-X-Received: by 2002:a17:906:9f04:b0:944:8c30:830d with SMTP id fy4-20020a1709069f0400b009448c30830dmr7483214ejc.42.1679985894744;
-        Mon, 27 Mar 2023 23:44:54 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
-        by smtp.gmail.com with ESMTPSA id k2-20020a50c082000000b005002daeb27asm15465414edf.37.2023.03.27.23.44.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 23:44:54 -0700 (PDT)
-Message-ID: <06919af5-a518-2da8-5cd0-ac657948b6c3@linaro.org>
-Date:   Tue, 28 Mar 2023 08:44:53 +0200
+        Tue, 28 Mar 2023 02:34:30 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5ABAB;
+        Mon, 27 Mar 2023 23:34:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1679985258; x=1711521258;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tiG1v6NfOzPmruzIudxgHxX7Fr23+NkzRWHlkxxT8xc=;
+  b=xPl8pOeWj3aTQ06zEc02NONzxbcDns0wE7I8PePYlf1o/8hLjV/7fVQ3
+   s0sl+/Ly2VuJTz5EJenofOpd4RL6JOewzLLnIGrnwDOAmWIGMDQnXxfuy
+   V4rphg+ZB/CvG1vZyYf6EjO5BytOUs9T/eBHKUPXnolDjN0QbzgKZnak2
+   YoyNqOQDO+4QmXsZN5dRx09al0qgFn2VrhYh9xVl0XIt2hJPRQTZRigot
+   dFAWwHmfTzYIX6yu2zZYdatewufNX2wFtcElyLhOsaAxAcXNWHzWbuJmL
+   uKUCQ1JyVjOZ9XQKLLRx7Pa+vhYa40QFcMn4ZUbsTf9zlpMvUurGQ5wKv
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,296,1673938800"; 
+   d="asc'?scan'208";a="206622339"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Mar 2023 23:34:17 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 27 Mar 2023 23:34:16 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 27 Mar 2023 23:34:11 -0700
+Date:   Tue, 28 Mar 2023 07:45:28 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Evan Green <evan@rivosinc.com>
+CC:     Palmer Dabbelt <palmer@rivosinc.com>, <slewis@rivosinc.com>,
+        <vineetg@rivosinc.com>, <heiko@sntech.de>,
+        Conor Dooley <conor@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Dao Lu <daolu@rivosinc.com>, Guo Ren <guoren@kernel.org>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Jann Horn <jannh@google.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Xu <peterx@redhat.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v5 0/6] RISC-V Hardware Probing User Interface
+Message-ID: <d47020f9-e5a8-4ef3-94bc-6aa6f6b2465c@spud>
+References: <20230327163203.2918455-1-evan@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] dt-bindings: remoteproc: Drop unneeded quotes
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20230327170114.4102315-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230327170114.4102315-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="PnlzjXfdKEpPFvxa"
+Content-Disposition: inline
+In-Reply-To: <20230327163203.2918455-1-evan@rivosinc.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2023 19:01, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+--PnlzjXfdKEpPFvxa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Mon, Mar 27, 2023 at 09:31:57AM -0700, Evan Green wrote:
 
-Best regards,
-Krzysztof
+Hey Evan,
 
+Patchwork has a rake of complaints about the series unfortunately:
+https://patchwork.kernel.org/project/linux-riscv/list/?series=734234
+
+Some of the checkpatch whinging may be spurious, but there's some
+definitely valid stuff in there!
+
+> Evan Green (6):
+>   RISC-V: Move struct riscv_cpuinfo to new header
+>   RISC-V: Add a syscall for HW probing
+>   RISC-V: hwprobe: Add support for RISCV_HWPROBE_BASE_BEHAVIOR_IMA
+>   RISC-V: hwprobe: Support probing of misaligned access performance
+>   selftests: Test the new RISC-V hwprobe interface
+
+>   RISC-V: Add hwprobe vDSO function and data
+
+And this one breaks the build for !MMU kernels unfortunately.
+
+Thanks,
+Conor.
+
+--PnlzjXfdKEpPFvxa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCKNAwAKCRB4tDGHoIJi
+0oy+AQCM8sPGm+KSyYCi9ckhnMclSSVU3IvS2XeSU1qNcJO+VQD/ZyBX5554srKJ
+1RmCuSKrnOwGjERvEz0BeAl13ls1+gk=
+=3HNq
+-----END PGP SIGNATURE-----
+
+--PnlzjXfdKEpPFvxa--
