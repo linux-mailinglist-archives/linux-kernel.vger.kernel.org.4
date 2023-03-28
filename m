@@ -2,58 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7676CCAE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14776CCAF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjC1Trb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 15:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
+        id S229579AbjC1Twx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 15:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjC1Tr3 (ORCPT
+        with ESMTP id S229456AbjC1Twu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 15:47:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED0C137;
-        Tue, 28 Mar 2023 12:47:27 -0700 (PDT)
+        Tue, 28 Mar 2023 15:52:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0E81BEF;
+        Tue, 28 Mar 2023 12:52:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D42D6162D;
-        Tue, 28 Mar 2023 19:47:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82EAAC433EF;
-        Tue, 28 Mar 2023 19:47:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F12A1B81DF4;
+        Tue, 28 Mar 2023 19:52:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E59DC433EF;
+        Tue, 28 Mar 2023 19:52:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680032846;
-        bh=BTkbTujUaAkGuowKQ5synqATSZ292CG9RGh0K8omwsM=;
+        s=k20201202; t=1680033166;
+        bh=3tCsQlZNxjpj6kRrRVaA2+D40G/G8omyRmcPC6eNHcs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GFshm0hYAX3X+wUqaw75pI+7Wzk5JBtS4wuG2+/VWfeAI2rXxSssKcMUcP7DTJkzo
-         ahvUtZAiZOENFni64DDw0l5p5iSQohD+px6YqTW1wUrb28zV4W8PHOJvjp+VAkqT4k
-         7CcvcFK5jrUJbYFdTKg26UGIBbGoe9pyzcIH2YmcZAn3YLEYWj/D0S/au3NCwIZj6x
-         X5PpT8hMnpBPjiP+8EumbAlD8CjaCTBxqdEbdYLQZp5K97x0YqooxrzAhgq5jT2GLg
-         l1Y8GiKAbTOiOq0vDNCnlx/cjGhKtsXQikkD1zRHKEnZkQ73V1ofN/OgLXJfXnhU/D
-         4SsZaDVUQCshQ==
+        b=S8c83d6zKDAseuUsmPwdWmhujxfPqFtrEXrW653rlLKUrkNLZqsnZfSf2rOmri2lF
+         eblSB48mq0XMv5XNxHk/TSur5NY0H94GtwFqxAhZ6B6xyq1OXzxumv5C57bm/PmnUr
+         LGRSRFfPPY+g8EPNJLtDGbY3jQipSeiMah3zR0CxiBcHrfFH/IaWe3ezeGGsKGsqVL
+         HhFiGKP/Y3OixbpkKK47mEFSa82RCJrr2ju3/yTReI8G6JPU/aJSZhLacNNDrOUcVP
+         nJtW4msn5ahphR3iPD5l/7lxjqeME9MNH7aqUZAfUpdDk4aJTni2/afC89IWzIX0WV
+         aJGQepl2T6dUQ==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E07444052D; Tue, 28 Mar 2023 16:47:23 -0300 (-03)
-Date:   Tue, 28 Mar 2023 16:47:23 -0300
+        id C8F6F4052D; Tue, 28 Mar 2023 16:52:43 -0300 (-03)
+Date:   Tue, 28 Mar 2023 16:52:43 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        namhyung@kernel.org
-Subject: Re: linux-next: build failure after merge of the perf tree
-Message-ID: <ZCNES6N7AkskjD0o@kernel.org>
-References: <20230317095025.49aa34f9@canb.auug.org.au>
- <20230322083956.5c051777@canb.auug.org.au>
- <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
- <20230323095437.1ecccec1@canb.auug.org.au>
- <ZBxTyLqkIaoVhIXU@kernel.org>
- <20230328123332.0a3e2b6d@canb.auug.org.au>
+To:     Eduard Zingerman <eddyz87@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <bpf@vger.kernel.org>
+Subject: Re: [PATCH] arm64: remove special treatment for the link order of
+ head.o
+Message-ID: <ZCNFi65T4anhk6hH@kernel.org>
+References: <20221012233500.156764-1-masahiroy@kernel.org>
+ <ZBovCrMXJk7NPISp@aurel32.net>
+ <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
+ <ZBzAp457rrO52FPy@aurel32.net>
+ <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
+ <CAK7LNASdsWMP2jud4niOkrR5+a2jG-Vfo0XEa63bh3L3W6_t0Q@mail.gmail.com>
+ <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
+ <2d8f0889da0e3dfa9c1c8fe9da301d54636a2e6d.camel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328123332.0a3e2b6d@canb.auug.org.au>
+In-Reply-To: <2d8f0889da0e3dfa9c1c8fe9da301d54636a2e6d.camel@gmail.com>
 X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
@@ -64,102 +72,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Mar 28, 2023 at 12:33:32PM +1100, Stephen Rothwell escreveu:
-> Hi Arnaldo,
-> 
-> Just a few datapoints:
-> 
-> My build machine (Debian Testing PowerpcLE, not quite the latest
-> kernel):
- 
-> On Thu, 23 Mar 2023 10:27:36 -0300 Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> >  Which improves a bit the situation.
+Em Tue, Mar 28, 2023 at 01:33:29PM +0300, Eduard Zingerman escreveu:
+> On Sat, 2023-03-25 at 20:42 +0900, Masahiro Yamada wrote:
+> [...]
+> > > Strange.
+> > > 
+> > > I used the .config file Aurelien provided, but
+> > > I still cannot reproduce this issue.
+> > > 
+> > > The vmlinux size is small as-is in the current mainline.
+> > > 
+> > > [mainline]
+> > > 
+> > > masahiro@zoe:~/ref/linux(master)$ git log --oneline -1
+> > > 65aca32efdcb (HEAD -> master, origin/master, origin/HEAD) Merge tag
+> > > 'mm-hotfixes-stable-2023-03-24-17-09' of
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-size  vmlinux
+> > >    text    data     bss     dec     hex filename
+> > > 24561282 8186912 622032 33370226 1fd3072 vmlinux
+> > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-readelf -S
+> > > vmlinux | grep -A1 BTF
+> > >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
+> > >        000000000048209c  0000000000000000   A       0     0     1
+> > >   [16] .BTF_ids          PROGBITS         ffff8000096427a4  016527a4
+> > >        0000000000000a1c  0000000000000000   A       0     0     1
+> > > 
+> > > [mainline + revert 994b7ac]
+> > > 
+> > > masahiro@zoe:~/ref/linux2(testing)$ git log --oneline -2
+> > > 856c80dd789c (HEAD -> testing) Revert "arm64: remove special treatment
+> > > for the link order of head.o"
+> > > 65aca32efdcb (origin/master, origin/HEAD, master) Merge tag
+> > > 'mm-hotfixes-stable-2023-03-24-17-09' of
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> > > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-size  vmlinux
+> > >    text    data     bss     dec     hex filename
+> > > 24561329 8186912 622032 33370273 1fd30a1 vmlinux
+> > > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-readelf -S
+> > > vmlinux | grep -A1 BTF
+> > >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
+> > >        00000000004820cb  0000000000000000   A       0     0     1
+> > >   [16] .BTF_ids          PROGBITS         ffff8000096427d4  016527d4
+> > >        0000000000000a1c  0000000000000000   A       0     0     1
+> > > 
+> > > 
+> > > 
+> > > I still do not know what affects reproducibility.
+> > > (compiler version, pahole version, etc. ?)
+> > > 
+> > > 
+> > > 
+> > > 
+> > > Aurelien used GCC 12 + binutils 2.40, but
+> > > my toolchain is a bit older.
+> > > 
+> > > FWIW, I tested this on Ubuntu 22.04LTS.
+> > > 
+> > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-gcc --version
+> > > aarch64-linux-gnu-gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+> > > Copyright (C) 2021 Free Software Foundation, Inc.
+> > > This is free software; see the source for copying conditions.  There is NO
+> > > warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+> > > 
+> > > masahiro@zoe:~/ref/linux(master)$ pahole --version
+> > > v1.22
+> > > 
+> > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-as --version
+> > > GNU assembler (GNU Binutils for Ubuntu) 2.38
+> > > Copyright (C) 2022 Free Software Foundation, Inc.
+> > > This program is free software; you may redistribute it under the terms of
+> > > the GNU General Public License version 3 or later.
+> > > This program has absolutely no warranty.
+> > > This assembler was configured for a target of `aarch64-linux-gnu'.
 > > 
-> > We could check if bpftool is available and if not, suggest installing
-> > it.
+> > I did the same things in Deiban sid
+> > in order to use newer versions of tools.
 > 
-> $ ls -l /usr/sbin/bpftool
-> -rwxr-xr-x 1 root root 790504 Mar  6 02:33 /usr/sbin/bpftool
 > 
-> > If it is available, we could check if /sys/kernel/bpf/ is available, if
-> > not suggest using a kernel with CONFIG_DEBUG_INFO_BTF=y, as most distros
-> > have by now.
-
-The config files you used don't match the running kernels
- 
-> $ uname -a
-> Linux zz1 6.0.0-5-powerpc64le #1 SMP Debian 6.0.10-2 (2022-12-01) ppc64le GNU/Linux
-> $ ls -l /sys/kernel/bpf/
-> ls: cannot access '/sys/kernel/bpf/': No such file or directory
-> $ grep CONFIG_DEBUG_INFO_BTF /boot/config-6.0.0-5-powerpc64le
-> # CONFIG_DEBUG_INFO_BTF is not set
+> Hi Masahiro,
 > 
-> And in the latest powerpc64le kernel:
+> An upgrade from gcc 11 to gcc 12, BTF section increase and a number of
+> duplicate IDs reported by resolve_btfids matches the description of
+> the following thread:
 > 
-> $ grep CONFIG_DEBUG_INFO_BTF /boot/config-6.1.0-5-powerpc64le
-> # CONFIG_DEBUG_INFO_BTF is not set
+> https://lore.kernel.org/bpf/Y%2FP1yxAuV6Wj3A0K@google.com/
 > 
-> Debian Testing arm64, not quite the latest kernel:
+> The issue is caused by change in GNU assembler DWARF generation.
+> I've sent a patch to fix it a few weeks ago and it is merged in
+> dwarves master:
 > 
-> $ uname -a
-> Linux oak 6.1.0-5-arm64 #1 SMP Debian 6.1.12-1 (2023-02-15) aarch64 GNU/Linux
-> $ ls -l /sys/kernel/bpf/
-> ls: cannot access '/sys/kernel/bpf/': No such file or directory
-> $ grep CONFIG_DEBUG_INFO_BTF /boot/config-6.1.0-5-arm64
-> CONFIG_DEBUG_INFO_BTF=y
-> CONFIG_DEBUG_INFO_BTF_MODULES=y
-
-The running kernel is 6.1.12-1, the .config is 6.1.0-5
-
-> Debian Testing amd64, the latest kernel:
+> a9498899109d ("dwarf_loader: Fix for BTF id drift caused by adding unspecified types")
 > 
-> $ uname -a
-> Linux pine 6.1.0-6-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.15-1 (2023-03-05) x86_64 GNU/Linux
-> $ ls -l /sys/kernel/bpf/
-> ls: cannot access '/sys/kernel/bpf/': No such file or directory
-> $ grep CONFIG_DEBUG_INFO_BTF /boot/config-6.1.0-6-amd64
-> CONFIG_DEBUG_INFO_BTF=y
-> CONFIG_DEBUG_INFO_BTF_MODULES=y
-
-
-Ditto, 6.1.15-1 != 6.1.0-6
-
+> Could you please grab a fresh version of dwarves from:
 > 
-> Debian Stable amd64, the latest kernel:
+> git@github.com:acmel/dwarves.git
 > 
-> $ uname -a
-> Linux gimli 5.10.0-21-cloud-amd64 #1 SMP Debian 5.10.162-1 (2023-01-21) x86_64 GNU/Linux
-> $ ls -l /sys/kernel/bpf/
-> ls: cannot access '/sys/kernel/bpf/': No such file or directory
-> $ grep CONFIG_DEBUG_INFO_BTF /boot/config-5.10.0-21-cloud-amd64
-> CONFIG_DEBUG_INFO_BTF=y
+> compile 'pahole' and try with?
 
-Ditto, 5.10.162-1  != 5.10.0-21-cloud
+pahole 1.25 is long overdue, so let see if this got fixed with what is
+in master, please take a look, you can as well get it from:
 
-Here:
+git://git.kernel.org/pub/scm/devel/pahole/pahole.git
 
-[acme@quaco pahole]$ grep CONFIG_DEBUG_INFO_BTF /boot/config-`uname -r`
-CONFIG_DEBUG_INFO_BTF=y
-CONFIG_DEBUG_INFO_BTF_MODULES=y
-[acme@quaco pahole]$ uname -r
-6.1.18-100.fc36.x86_64
-[acme@quaco pahole]$
-
-[acme@quaco pahole]$ ls -la /sys/kernel/btf/vmlinux
--r--r--r--. 1 root root 5499812 Mar 20 17:45 /sys/kernel/btf/vmlinux
-[acme@quaco pahole]$ ls -la /sys/kernel/btf/nfsv4
--r--r--r--. 1 root root 319948 Mar 28 16:46 /sys/kernel/btf/nfsv4
-[acme@quaco pahole]$ lsmod | grep -w nfsv4
-nfsv4                1085440  1
-dns_resolver           16384  1 nfsv4
-nfs                   532480  2 nfsv4
-sunrpc                704512  26 nfsd,rpcrdma,nfsv4,auth_rpcgss,lockd,rpcsec_gss_krb5,nfs_acl,nfs
-[acme@quaco pahole]$ ls -la /sys/kernel/btf/nfsd
--r--r--r--. 1 root root 596066 Mar 28 16:46 /sys/kernel/btf/nfsd
-[acme@quaco pahole]$ ls -la /sys/kernel/btf/lockd
--r--r--r--. 1 root root 180234 Mar 28 16:46 /sys/kernel/btf/lockd
-[acme@quaco pahole]$
- 
-> -- 
-> Cheers,
-> Stephen Rothwell
+- Arnald o
