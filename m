@@ -2,238 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F95F6CC639
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771676CC651
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233370AbjC1P2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
+        id S233387AbjC1P3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbjC1P2A (ORCPT
+        with ESMTP id S233464AbjC1P3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:28:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D117A11151;
-        Tue, 28 Mar 2023 08:26:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 28 Mar 2023 11:29:24 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD15A3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:28:11 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4CDCB81D63;
-        Tue, 28 Mar 2023 15:26:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 790AFC433D2;
-        Tue, 28 Mar 2023 15:26:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680017173;
-        bh=c9pKkQdbYczrPk/ZhXPcO6rkUETAl2Vzl8XLGqpUIIM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=P9LXSP1fmevehR/xg4Bn/89VjrdMBEAL69CrbDnfjHGw/qAH6z2VxM7BSAqG9uFgk
-         5vtzew0cTXkNOM5j0QrEOXVJpLcVcUQu5rCj0QD3WXLswPZYvITtkT2AoM6d7irXzG
-         NqGj3s8XCDBnjT0PHoku1DYikDsGVOmx9h1jBXZUcgfsO/YX2WB15adPODXy3yxOn9
-         UmhInvCe3/5t5ApJjfUqNr/cEAu14ePm9yL3IEP3gSrsrrrBgr7AiyGzGimP8uhveY
-         BuCNB9DGjnlY7Pj8BiCX0CVGL8EnVyXDrvVwgAABzEmtlwAnoIkg15dunAmCvKPIqT
-         snjygPDWDriWQ==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 1426C154039B; Tue, 28 Mar 2023 08:26:13 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 08:26:13 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, RCU <rcu@vger.kernel.org>,
-        quic_neeraju@quicinc.com, Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH 1/1] Reduce synchronize_rcu() waiting time
-Message-ID: <2cd8f407-2b77-48b1-9f17-9aa8e4ce9c64@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <ca153af5-bd66-4d48-afa5-ace3a13aec3c@paulmck-laptop>
- <FC49F388-0480-4687-8DD3-94049FCBC92B@joelfernandes.org>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BABD66603150;
+        Tue, 28 Mar 2023 16:28:08 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680017289;
+        bh=LmvUlEh5ksKEzZpgWt6GAloNsrYbh3aS1Uuprqn7NrQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OxmJNUxnR44yQjrlJub8pgQJ3zvKv/f1CAfrfoWmoakCxVDJPvYH4FZ180Ga1hUcR
+         eDIQ2KeX/G1t0RTjMFLIPS2JLqRS2LCwOshmH78KBTpR0QXsscOPkZQWAs8ok6UW9f
+         dlddXKT4RQDFsXqzqTdhg3YnbxCYzZF83cyQStM0g5GSgCTE29pC4laMP1NVuWdwFN
+         MAHxodsupYCT/aeAcaV4fw7/H09VP4lBrlFdBPlUMB9cbsSwG6DwqmjYrVUq0WZgbT
+         e9VVwip0kksvvBDf2xq3hGwxycmw4ypj31cThe6YFFKK0+g+b1z6rqXbzHya6gp2kU
+         J8oXU6DFEpOFg==
+Message-ID: <fa638276-81d0-734d-92c1-3b72cd70c1ef@collabora.com>
+Date:   Tue, 28 Mar 2023 17:28:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <FC49F388-0480-4687-8DD3-94049FCBC92B@joelfernandes.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/mediatek: Add ovl_adaptor get format function
+Content-Language: en-US
+To:     "Nancy.Lin" <nancy.lin@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        singo.chang@mediatek.com, shawn.sung@mediatek.com
+References: <20230328025126.30341-1-nancy.lin@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230328025126.30341-1-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 10:29:31PM -0400, Joel Fernandes wrote:
-> Hello,
+Il 28/03/23 04:51, Nancy.Lin ha scritto:
+> Add ovl_adaptor get_format and get_num_formats component function.
+> The two functions are need for getting the supported format in
+> mtk_plane_init().
 > 
-> > On Mar 27, 2023, at 9:06 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > 
-> > ﻿On Mon, Mar 27, 2023 at 11:21:23AM +0000, Zhang, Qiang1 wrote:
-> >>>> From: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> >>>> Sent: Tuesday, March 21, 2023 6:28 PM
-> >>>> [...]
-> >>>> Subject: [PATCH 1/1] Reduce synchronize_rcu() waiting time
-> >>>> 
-> >>>> A call to a synchronize_rcu() can be expensive from time point of view.
-> >>>> Different workloads can be affected by this especially the ones which use this
-> >>>> API in its time critical sections.
-> >>>> 
-> >>> 
-> >>> This is interesting and meaningful research. ;-)
-> >>> 
-> >>>> For example in case of NOCB scenario the wakeme_after_rcu() callback
-> >>>> invocation depends on where in a nocb-list it is located. Below is an example
-> >>>> when it was the last out of ~3600 callbacks:
-> >>> 
-> >> 
-> >> 
-> >> 
-> >> Can it be implemented separately as follows?  it seems that the code is simpler
-> >> (only personal opinion)  😊.
-> >> 
-> >> But I didn't test whether this reduce synchronize_rcu() waiting time
-> >> 
-> >> +static void rcu_poll_wait_gp(struct rcu_tasks *rtp)
-> >> +{
-> >> +       unsigned long gp_snap;
-> >> +
-> >> +       gp_snap = start_poll_synchronize_rcu();
-> >> +       while (!poll_state_synchronize_rcu(gp_snap))
-> >> +               schedule_timeout_idle(1);
-> > 
-> > I could be wrong, but my guess is that the guys working with
-> > battery-powered devices are not going to be very happy with this loop.
-> > 
-> > All those wakeups by all tasks waiting for a grace period end up
-> > consuming a surprisingly large amount of energy.
-> 
-> Is that really the common case? On the general topic of wake-ups:
-> Most of the time there should be only one
-> task waiting synchronously on a GP to end. If that is
-> true, then it feels like waking
-> up nocb Kthreads which indirectly wake other threads is doing more work than usual?
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Change-Id: Ia8e9f6cabcc71b262155a022b103ae81d1616b8f
 
-A good question, and the number of outstanding synchronize_rcu()
-calls will of course be limited by the number of tasks in the system.
-But I myself have raised the ire of battery-powered embedded folks with
-a rather small number of wakeups, so...
+The code looks good to me, but please drop that Change-Id tag (which has no
+meaning upstream) and resend.
 
-And on larger systems there can be a tradeoff between contention on
-the one hand and number of wakeups on the other.
+Thanks,
+Angelo
 
-The original nocb implementation in fact had the grace-period kthead
-waking up all of what are now called rcuoc kthreads.  The indirect scheme
-reduced the total number of wakeups by up to 50% and also reduced the
-CPU consumption of the grace-period kthread, which otherwise would have
-become a bottleneck on large systems.
-
-And also, a scheme that directly wakes tasks waiting in synchronize_rcu()
-might well use the same ->nocb_gp_wq[] waitqueues that are used by the
-rcuog kthreads, if that is what you were getting at.
-
-> I am curious to measure how much does Vlad patch reduce wakeups in the common case.
-
-Sounds like a good thing to measure!
-
-> I was also wondering how Vlad patch effects RCU-barrier ordering. I guess
-> we want the wake up to happen in the order of
-> other callbacks also waiting.
-
-OK, I will bite.  Why would rcu_barrier() need to care about the
-synchronize_rcu() invocations if they no longer used call_rcu()?
-
-> One last note, most battery powered systems are perhaps already using expedited RCU ;-)
-
-Good point.  And that does raise the question of exactly what workloads
-and systems want faster wakeups from synchronize_rcu() and cannot get
-this effect from expedited grace periods.
-
-							Thanx, Paul
-
-> Thoughts?
-> 
->  - Joel 
-> 
-> > 
-> >                            Thanx, Paul
-> > 
-> >> +}
-> >> +
-> >> +void call_rcu_poll(struct rcu_head *rhp, rcu_callback_t func);
-> >> +DEFINE_RCU_TASKS(rcu_poll, rcu_poll_wait_gp, call_rcu_poll,
-> >> +                 "RCU Poll");
-> >> +void call_rcu_poll(struct rcu_head *rhp, rcu_callback_t func)
-> >> +{
-> >> +       call_rcu_tasks_generic(rhp, func, &rcu_poll);
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(call_rcu_poll);
-> >> +
-> >> +void synchronize_rcu_poll(void)
-> >> +{
-> >> +       synchronize_rcu_tasks_generic(&rcu_poll);
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(synchronize_rcu_poll);
-> >> +
-> >> +static int __init rcu_spawn_poll_kthread(void)
-> >> +{
-> >> +       cblist_init_generic(&rcu_poll);
-> >> +       rcu_poll.gp_sleep = HZ / 10;
-> >> +       rcu_spawn_tasks_kthread_generic(&rcu_poll);
-> >> +       return 0;
-> >> +}
-> >> 
-> >> Thanks
-> >> Zqiang
-> >> 
-> >> 
-> >>>> 
-> >>>> <snip>
-> >>>>  <...>-29      [001] d..1. 21950.145313: rcu_batch_start: rcu_preempt
-> >>>> CBs=3613 bl=28
-> >>>> ...
-> >>>>  <...>-29      [001] ..... 21950.152578: rcu_invoke_callback: rcu_preempt
-> >>>> rhp=00000000b2d6dee8 func=__free_vm_area_struct.cfi_jt
-> >>>>  <...>-29      [001] ..... 21950.152579: rcu_invoke_callback: rcu_preempt
-> >>>> rhp=00000000a446f607 func=__free_vm_area_struct.cfi_jt
-> >>>>  <...>-29      [001] ..... 21950.152580: rcu_invoke_callback: rcu_preempt
-> >>>> rhp=00000000a5cab03b func=__free_vm_area_struct.cfi_jt
-> >>>>  <...>-29      [001] ..... 21950.152581: rcu_invoke_callback: rcu_preempt
-> >>>> rhp=0000000013b7e5ee func=__free_vm_area_struct.cfi_jt
-> >>>>  <...>-29      [001] ..... 21950.152582: rcu_invoke_callback: rcu_preempt
-> >>>> rhp=000000000a8ca6f9 func=__free_vm_area_struct.cfi_jt
-> >>>>  <...>-29      [001] ..... 21950.152583: rcu_invoke_callback: rcu_preempt
-> >>>> rhp=000000008f162ca8 func=wakeme_after_rcu.cfi_jt
-> >>>>  <...>-29      [001] d..1. 21950.152625: rcu_batch_end: rcu_preempt CBs-
-> >>>> invoked=3612 idle=....
-> >>>> <snip>
-> >>>> 
-> >>> 
-> >>> Did the results above tell us that CBs-invoked=3612 during the time 21950.145313 ~ 21950.152625?
-> >>> 
-> >>> Yes.
-> >>> 
-> >>> 
-> >>> If possible, may I know the steps, commands, and related parameters to produce the results above?
-> >>> Thank you!
-> >>> 
-> >>> Build the kernel with CONFIG_RCU_TRACE configuration. Update your "set_event"
-> >>> file with appropriate traces:
-> >>> 
-> >>> <snip>
-> >>> XQ-DQ54:/sys/kernel/tracing # echo rcu:rcu_batch_start rcu:rcu_batch_end rcu:rcu_invoke_callback > set_event
-> >>> 
-> >>> XQ-DQ54:/sys/kernel/tracing # cat set_event
-> >>> rcu:rcu_batch_start
-> >>> rcu:rcu_invoke_callback
-> >>> rcu:rcu_batch_end
-> >>> XQ-DQ54:/sys/kernel/tracing #
-> >>> <snip>
-> >>> 
-> >>> Collect traces as much as you want: XQ-DQ54:/sys/kernel/tracing # echo 1 > tracing_on; sleep 10; echo 0 > tracing_on
-> >>> Next problem is how to parse it. Of course you will not be able to parse
-> >>> megabytes of traces. For that purpose i use a special C trace parser.
-> >>> If you need an example please let me know i can show here.
-> >>> 
-> >>> --
-> >>> Uladzislau Rezki
