@@ -2,298 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2776CBF3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:36:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC226CC104
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbjC1MgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
+        id S233084AbjC1Ndg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbjC1MgC (ORCPT
+        with ESMTP id S233018AbjC1Nd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:36:02 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5443A243
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:35:36 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id z42so12340965ljq.13
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 05:35:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680006858;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gvgN3DG+Vt2c71BXTWQsXRITKpPi7yyeQJ22Vh4BLvk=;
-        b=UHjN4FGLf/NbvtVQ0GVXdo9eU/u1kFfW+B2fgTeJvWoFJaqA+6bRLY+YzILmv9bFRb
-         c+C1u5SRZ5BUaNLyVtHiz3oGddTeYZiIVBJKRag1xvmZEYswRcjyRnQKVtOu34CZQelh
-         QKK3oKkjh8Eup9tz1kiqPsRXdWc6PyXfBI3HN0x4hEFQcLFetlsdODkaW6nU/Qx17c5B
-         EjjuwSJyn054SevEkv/hhQGBKmvRTgUuKA0dHtI4MXWQvMkx+CifEHfcY7aK2A7xLSFE
-         xZgziLyaK8SUJxJMX0AlVQRHOj1qU/3TZdPR5IKL2BGrCi5SdCrtoKQcsD61pvuYKvYj
-         nfNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680006858;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gvgN3DG+Vt2c71BXTWQsXRITKpPi7yyeQJ22Vh4BLvk=;
-        b=l41f51w65ZzBrTzioLfINse82VfWnqci4VA+yqHOakTRU/S/UggLV98bbv+WvgPtK8
-         TR90iHuru5FvR1B8zuJbwvSTP79aJ9DX5G5mDx5I/mGNhB4Gy63SFbsbcBoSPXh3VtRn
-         YYaXG8lpNY+XZ/6rHUezVDr06f/khxqe8Fk9dAmyNi/b24tE+7rSq5Xs0Alhs1uykB1K
-         jfbaX/M7qK3gWr62NuBsnRQjjz75Ya5TezHXeu81WBldPQjcR/oMjm/OAu02C+tExiHN
-         OaT8/0SXb/JzDwm/8B3q4JB+DBZu623G6FGY0xJr+lyD/JEgcwWLLaF1v91lO7UYByOo
-         23lA==
-X-Gm-Message-State: AAQBX9erUXbx4UB1iVnrajW+fZ6FtwZbjezXcb0H50bDlYLcIsWpS60L
-        sj5K4u4reuo3iAYF+6EANprxMKrjaY1RwQ==
-X-Google-Smtp-Source: AKy350YH5LZkZudztmXURkXj9UQNwobEz57ljDoz1TGEBrGdnbpJiPkBajP68MeDDBE6mcL6ljrqaw==
-X-Received: by 2002:a05:651c:224:b0:295:c3cf:e81e with SMTP id z4-20020a05651c022400b00295c3cfe81emr4994443ljn.19.1680006858177;
-        Tue, 28 Mar 2023 05:34:18 -0700 (PDT)
-Received: from pc636 (host-90-233-209-50.mobileonline.telia.com. [90.233.209.50])
-        by smtp.gmail.com with ESMTPSA id s13-20020a2e2c0d000000b0029a63256410sm4947064ljs.52.2023.03.28.05.34.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 05:34:17 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Tue, 28 Mar 2023 14:34:15 +0200
-To:     Baoquan He <bhe@redhat.com>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH v3 1/2] mm: vmalloc: Remove a global vmap_blocks xarray
-Message-ID: <ZCLex4BPPtosouvd@pc636>
-References: <20230327170126.406044-1-urezki@gmail.com>
- <ZCJd//IM6FGkbVTJ@MiWiFi-R3L-srv>
+        Tue, 28 Mar 2023 09:33:28 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FC1CA17
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:33:06 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SBtjoi034531;
+        Tue, 28 Mar 2023 12:34:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=ptrMgdbQXSvBhMRQTtIdeTo823uJitfr4NbX+3nTZUs=;
+ b=SPZTHfB5BjjKrn/iI/c0sAghsgpJgq9wN0rNzyY8YuNaWDW0J/IYSQRF/IH+6vXBRPei
+ ZhQvcCzfAPmpzPXRPA4RQfQrUGpLE4JrPZGjEgg+nAUTMopevSAsc5i+fcJheDKIZjI7
+ F5HJdatS7BbJb/L1eMC0gg4PkeDNEWy3Y3Z8elVO4pP5m/Q0kdvqJsz/8csDC3qE0HPB
+ NTwa6t6pRiHcLvhQfX1lq5KmGRqVVhUzfI+cizhrGloh3cFdaBiZuS1x5k6cZsnsTI4M
+ iriYSsWiRvfySdUyXyywl2DQYB90wBSoakvghe8gTMOFuKDr94rRTmBRuYI6mz9vwPj4 LA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pkysyh189-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 12:34:43 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32SC0KHB011094;
+        Tue, 28 Mar 2023 12:34:42 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pkysyh173-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 12:34:42 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32S4aLk7028880;
+        Tue, 28 Mar 2023 12:34:40 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3phr7fkyg7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 12:34:40 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32SCYcf646531042
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Mar 2023 12:34:38 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 463432005A;
+        Tue, 28 Mar 2023 12:34:38 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9C4812004B;
+        Tue, 28 Mar 2023 12:34:35 +0000 (GMT)
+Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.75.27])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 28 Mar 2023 12:34:35 +0000 (GMT)
+Date:   Tue, 28 Mar 2023 18:04:32 +0530
+From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arch/powerpc/kvm: kvmppc_core_vcpu_create_hv: check for
+ kzalloc failure
+Message-ID: <ZCLe2Jf0n6GR9Qhw@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+References: <20230323074718.2810914-1-kconsul@linux.vnet.ibm.com>
+ <87pm8tcir3.fsf@mpe.ellerman.id.au>
+ <ZCK96ohvWRY12zZ3@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+ <ZCLHFw1U4Mq/QK2A@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+ <87fs9pcce6.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZCJd//IM6FGkbVTJ@MiWiFi-R3L-srv>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <87fs9pcce6.fsf@mpe.ellerman.id.au>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: t9Wx0sulOkQ6-G24PekGAA78tuIhDZfX
+X-Proofpoint-ORIG-GUID: UhKF6mdPPRkSUFZ7iopmH-7mHoELxdO_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-28_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ lowpriorityscore=0 priorityscore=1501 clxscore=1015 bulkscore=0
+ adultscore=0 impostorscore=0 mlxscore=0 mlxlogscore=999 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303280100
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 11:25:54AM +0800, Baoquan He wrote:
-> On 03/27/23 at 07:01pm, Uladzislau Rezki (Sony) wrote:
-> > A global vmap_blocks-xarray array can be contented under
-> > heavy usage of the vm_map_ram()/vm_unmap_ram() APIs. The
-> > lock_stat shows that a "vmap_blocks.xa_lock" lock is a
-> > second in a top-list when it comes to contentions:
-> > 
-> > <snip>
-> > ----------------------------------------
-> > class name con-bounces contentions ...
-> > ----------------------------------------
-> > vmap_area_lock:         2554079 2554276 ...
-> >   --------------
-> >   vmap_area_lock        1297948  [<00000000dd41cbaa>] alloc_vmap_area+0x1c7/0x910
-> >   vmap_area_lock        1256330  [<000000009d927bf3>] free_vmap_block+0x4a/0xe0
-> >   vmap_area_lock              1  [<00000000c95c05a7>] find_vm_area+0x16/0x70
-> >   --------------
-> >   vmap_area_lock        1738590  [<00000000dd41cbaa>] alloc_vmap_area+0x1c7/0x910
-> >   vmap_area_lock         815688  [<000000009d927bf3>] free_vmap_block+0x4a/0xe0
-> >   vmap_area_lock              1  [<00000000c1d619d7>] __get_vm_area_node+0xd2/0x170
-> > 
-> > vmap_blocks.xa_lock:    862689  862698 ...
-> >   -------------------
-> >   vmap_blocks.xa_lock   378418    [<00000000625a5626>] vm_map_ram+0x359/0x4a0
-> >   vmap_blocks.xa_lock   484280    [<00000000caa2ef03>] xa_erase+0xe/0x30
-> >   -------------------
-> >   vmap_blocks.xa_lock   576226    [<00000000caa2ef03>] xa_erase+0xe/0x30
-> >   vmap_blocks.xa_lock   286472    [<00000000625a5626>] vm_map_ram+0x359/0x4a0
-> > ...
-> > <snip>
-> > 
-> > that is a result of running vm_map_ram()/vm_unmap_ram() in
-> > a loop. The test creates 64(on 64 CPUs system) threads and
-> > each one maps/unmaps 1 page.
+On 2023-03-28 23:02:09, Michael Ellerman wrote:
+> Kautuk Consul <kconsul@linux.vnet.ibm.com> writes:
+> > On 2023-03-28 15:44:02, Kautuk Consul wrote:
+> >> On 2023-03-28 20:44:48, Michael Ellerman wrote:
+> >> > Kautuk Consul <kconsul@linux.vnet.ibm.com> writes:
+> >> > > kvmppc_vcore_create() might not be able to allocate memory through
+> >> > > kzalloc. In that case the kvm->arch.online_vcores shouldn't be
+> >> > > incremented.
+> >> > 
+> >> > I agree that looks wrong.
+> >> > 
+> >> > Have you tried to test what goes wrong if it fails? It looks like it
+> >> > will break the LPCR update, which likely will cause the guest to crash
+> >> > horribly.
+> > Also, are you referring to the code in kvmppc_update_lpcr()?
+> > That code will not crash as it checks for the vc before trying to
+> > dereference it.
 > 
-> With my understanding, the xarray will take more time when calling
-> xa_insert() or xa_erase() because these two will cause xa_expand() and
-> xa_shrink() if the index is sparse. xa_load() should be low cost to
-> finish. Wondering if in your testing code, the mapping address is close
-> or too far.
+> Yeah that's what I was looking at. I didn't mean it would crash, but
+> that it would bail out early when it sees a NULL vcore, leaving other
+> vcores with the wrong LPCR value.
 > 
-> 1 mm/vmalloc.c <<new_vmap_block>>
->   err = xa_insert(&vmap_blocks, vb_idx, vb, gfp_mask);
-> 2 mm/vmalloc.c <<free_vmap_block>>
->   tmp = xa_erase(&vmap_blocks, addr_to_vb_idx(vb->va->va_start));
-> 3 mm/vmalloc.c <<vb_free>>
->   vb = xa_load(&vmap_blocks, addr_to_vb_idx(addr));
-> 4 mm/vmalloc.c <<vmap_ram_vread_iter>>
->   vb = xa_load(&vmap_blocks, addr_to_vb_idx((unsigned long )addr));
+> But as you say it doesn't happen because qemu quits on the first ENOMEM.
 > 
-> > 
-> > After this change the "xa_lock" can be considered as a noise
-> > in the same test condition:
-> > 
-> > <snip>
-> > ...
-> > &xa->xa_lock#1:         10333 10394 ...
-> >   --------------
-> >   &xa->xa_lock#1        5349      [<00000000bbbc9751>] xa_erase+0xe/0x30
-> >   &xa->xa_lock#1        5045      [<0000000018def45d>] vm_map_ram+0x3a4/0x4f0
-> >   --------------
-> >   &xa->xa_lock#1        7326      [<0000000018def45d>] vm_map_ram+0x3a4/0x4f0
-> >   &xa->xa_lock#1        3068      [<00000000bbbc9751>] xa_erase+0xe/0x30
-> > ...
-> > <snip>
-> > 
-> > This patch does not fix vmap_area_lock/free_vmap_area_lock and
-> > purge_vmap_area_lock bottle-necks, it is rather a separate rework.
-> > 
-> > v1 - v2:
-> >    - Add more comments(Andrew Morton req.)
-> >    - Switch to WARN_ON_ONCE(Lorenzo Stoakes req.)
-> > 
-> > v2 -> v3:
-> >    - Fix a kernel-doc complain(Matthew Wilcox)
-> > 
-> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > ---
-> >  mm/vmalloc.c | 85 +++++++++++++++++++++++++++++++++++++++-------------
-> >  1 file changed, 64 insertions(+), 21 deletions(-)
-> > 
-> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > index 978194dc2bb8..821256ecf81c 100644
-> > --- a/mm/vmalloc.c
-> > +++ b/mm/vmalloc.c
-> > @@ -1908,9 +1908,22 @@ static struct vmap_area *find_unlink_vmap_area(unsigned long addr)
-> >  #define VMAP_BLOCK		0x2 /* mark out the vmap_block sub-type*/
-> >  #define VMAP_FLAGS_MASK		0x3
-> >  
-> > +/*
-> > + * We should probably have a fallback mechanism to allocate virtual memory
-> > + * out of partially filled vmap blocks. However vmap block sizing should be
-> > + * fairly reasonable according to the vmalloc size, so it shouldn't be a
-> > + * big problem.
-> > + */
-> >  struct vmap_block_queue {
-> >  	spinlock_t lock;
-> >  	struct list_head free;
-> > +
-> > +	/*
-> > +	 * An xarray requires an extra memory dynamically to
-> > +	 * be allocated. If it is an issue, we can use rb-tree
-> > +	 * instead.
-> > +	 */
-> > +	struct xarray vmap_blocks;
-> >  };
-> >  
-> >  struct vmap_block {
-> > @@ -1928,24 +1941,46 @@ struct vmap_block {
-> >  static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
-> >  
-> >  /*
-> > - * XArray of vmap blocks, indexed by address, to quickly find a vmap block
-> > - * in the free path. Could get rid of this if we change the API to return a
-> > - * "cookie" from alloc, to be passed to free. But no big deal yet.
-> > + * In order to fast access to any "vmap_block" associated with a
-> > + * specific address, we store them into a per-cpu xarray. A hash
-> > + * function is addr_to_vbq() whereas a key is a vb->va->va_start
-> > + * value.
-> > + *
-> > + * Please note, a vmap_block_queue, which is a per-cpu, is not
-> > + * serialized by a raw_smp_processor_id() current CPU, instead
-> > + * it is chosen based on a CPU-index it belongs to, i.e. it is
-> > + * a hash-table.
-> > + *
-> > + * An example:
-> > + *
-> > + *  CPU_1  CPU_2  CPU_0
-> > + *    |      |      |
-> > + *    V      V      V
-> > + * 0     10     20     30     40     50     60
-> > + * |------|------|------|------|------|------|...<vmap address space>
-> > + *   CPU0   CPU1   CPU2   CPU0   CPU1   CPU2
-> > + *
-> > + * - CPU_1 invokes vm_unmap_ram(6), 6 belongs to CPU0 zone, thus
-> > + *   it access: CPU0/INDEX0 -> vmap_blocks -> xa_lock;
-> > + *
-> > + * - CPU_2 invokes vm_unmap_ram(11), 11 belongs to CPU1 zone, thus
-> > + *   it access: CPU1/INDEX1 -> vmap_blocks -> xa_lock;
-> > + *
-> > + * - CPU_0 invokes vm_unmap_ram(20), 20 belongs to CPU2 zone, thus
-> > + *   it access: CPU2/INDEX2 -> vmap_blocks -> xa_lock.
-> >   */
-> > -static DEFINE_XARRAY(vmap_blocks);
-> > +static struct vmap_block_queue *
-> > +addr_to_vbq(unsigned long addr)
-> > +{
-> > +	int index = (addr / VMAP_BLOCK_SIZE) % num_possible_cpus();
-> >  
-> > -/*
-> > - * We should probably have a fallback mechanism to allocate virtual memory
-> > - * out of partially filled vmap blocks. However vmap block sizing should be
-> > - * fairly reasonable according to the vmalloc size, so it shouldn't be a
-> > - * big problem.
-> > - */
-> > +	return &per_cpu(vmap_block_queue, index);
-> > +}
-> >  
-> > -static unsigned long addr_to_vb_idx(unsigned long addr)
-> > +static unsigned long
-> > +addr_to_vb_va_start(unsigned long addr)
-> >  {
-> > -	addr -= VMALLOC_START & ~(VMAP_BLOCK_SIZE-1);
-> > -	addr /= VMAP_BLOCK_SIZE;
-> > -	return addr;
-> > +	return rounddown(addr, VMAP_BLOCK_SIZE);
-> >  }
-> >  
-> >  static void *vmap_block_vaddr(unsigned long va_start, unsigned long pages_off)
-> > @@ -1953,7 +1988,7 @@ static void *vmap_block_vaddr(unsigned long va_start, unsigned long pages_off)
-> >  	unsigned long addr;
-> >  
-> >  	addr = va_start + (pages_off << PAGE_SHIFT);
-> > -	BUG_ON(addr_to_vb_idx(addr) != addr_to_vb_idx(va_start));
-> > +	WARN_ON_ONCE(addr_to_vb_va_start(addr) != va_start);
-> >  	return (void *)addr;
-> >  }
-> >  
-> > @@ -1970,7 +2005,6 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
-> >  	struct vmap_block_queue *vbq;
-> >  	struct vmap_block *vb;
-> >  	struct vmap_area *va;
-> > -	unsigned long vb_idx;
-> >  	int node, err;
-> >  	void *vaddr;
-> >  
-> > @@ -2003,8 +2037,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
-> >  	bitmap_set(vb->used_map, 0, (1UL << order));
-> >  	INIT_LIST_HEAD(&vb->free_list);
-> >  
-> > -	vb_idx = addr_to_vb_idx(va->va_start);
-> > -	err = xa_insert(&vmap_blocks, vb_idx, vb, gfp_mask);
-> > +	vbq = addr_to_vbq(va->va_start);
-> > +	err = xa_insert(&vbq->vmap_blocks, va->va_start, vb, gfp_mask);
+> And regardless if qemu does something that means the guest is broken
+> that's just a qemu bug, no big deal as far as the kernel is concerned.
+But there could be another user-mode application other than qemu that
+actually tries to create a vcpu after it gets a -ENOMEM for another
+vcpu. Shouldn't the kernel be independent of qemu?
 > 
-> Using va->va_start as index to access xarray may cost extra memory.
-> Imagine we got a virtual address at VMALLOC_START, its region is
-> [VMALLOC_START, VMALLOC_START+4095]. In the xarray, its sequence order
-> is 0. While with va->va_start, it's 0xffffc90000000000UL on x86_64 with
-> level4 paging mode. That means for the first page size vmalloc area,
-> storing it into xarray need about 10 levels of xa_node, just for the one
-> page size. With the old addr_to_vb_idx(), its index is 0. Only one level
-> height is needed. One xa_node is about 72bytes, it could take more time
-> and memory to access va->va_start. Not sure if my understanding is correct.
+> > But the following 2 places that utilize the arch.online_vcores will have
+> > problems in logic if the usermode test-case doesn't pull down the
+> > kvm context after the -ENOMEM vcpu allocation failure:
+> > book3s_hv.c:3030:       if (!kvm->arch.online_vcores) {
+> > book3s_hv_rm_mmu.c:44:  if (kvm->arch.online_vcores == 1 && local_paca->kvm_hstate.kvm_vcpu)
 > 
-> static unsigned long addr_to_vb_idx(unsigned long addr)
-> {
->         addr -= VMALLOC_START & ~(VMAP_BLOCK_SIZE-1);
->         addr /= VMAP_BLOCK_SIZE;
->         return addr;
-> }
+> OK. Both of those look harmless to the host.
+Harmless to the host in terms of a crash, not in terms of behavior.
+For example in the case of kvmhv_set_smt_mode:
+If we got a kzalloc failure once (and online_vcores was wrongly incremented), 
+then if kvmhv_set_smt_mode() is called after that then it would be
+not be setting the arch.smt_mode and arch.emul_smt_mode correctly and it
+would be wrongly returning with -EBUSY instead of 0.
+Isn't that incorrect with respect to the intent of the code ?
+I agree that applications like qemu might not do that but don't we need
+to have some integrity with respect to the intent and value of variable
+use ? What about good code and logic quality ?
 > 
-If the size of array depends on index "length", then, indeed it will require
-more memory. From the other hand we can keep the old addr_to_vb_idx() function 
-in order to "cut" a va->va_start index.
-
---
-Uladzislau Rezki
+> If we find a case where a misbehaving qemu can crash the host then we
+> need to be a bit more careful and treat it at least as a
+> denial-of-service bug. But looks like this is not one of those.
+> 
+> cheers
+beers
