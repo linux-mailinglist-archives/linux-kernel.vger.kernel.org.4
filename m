@@ -2,321 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B67A6CBC30
+	by mail.lfdr.de (Postfix) with ESMTP id A5F306CBC31
 	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbjC1KNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S230346AbjC1KNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjC1KNP (ORCPT
+        with ESMTP id S229608AbjC1KNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:13:15 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1B46E97
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:12:54 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id h14so6859580pgj.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:12:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679998374;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ur6uKN85TYQWLvCxVJ2c6x3zzJWUhaZqRctpfFiWUIw=;
-        b=jMVlny30ljZY/tcBflSVwe7xsuCk1ZeRa8ALY7gPYkfVb1fk3X/qS20c7qeNCwedo8
-         9fiMHOM1EmovhkAcm1B90c9lq3ijj7SE+2HntzSi8o7fNqelTbWHeSaKXhx8a3SbC23L
-         B3nr5bKH0OlufphI3VzSGZqK/YQJuw504YuT0K4IneZbcXkUocTqRJciPmfe8ARDEzTR
-         8j2aN8JQNZd3qBNZlpSfeJeD3j+hgUIhSUk1UDjMHEyCLLCT64sYQZn2QzOayHSQfzYi
-         vgzAQifxhoSr5QRskxbasBfNmluk69H7SVvuPqVVfDysWz66UMivERFjTNbT2pGqBSTg
-         dqLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679998374;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ur6uKN85TYQWLvCxVJ2c6x3zzJWUhaZqRctpfFiWUIw=;
-        b=jK4ggKMUsssSL+ar4ygndDg9S+t1UEbfkJP3A/ksK/QjYSRrbYZMWYN6cZpM8JjSD2
-         EdiCsFFlyKbhW7tJCcBRI2jZ9QailkrreH449WegFWU0JUK9NWndGJNxsdSbF+JQsR0b
-         P+8a+cOnX1BwOVM99l8y7K+1j9UBk/JONY4m1HyrIohjkHGkXjxXChSj1/aHdyFpWu1L
-         d2Rat8xCxDZnZnzqGwoy5+haV+kzA0nUs8SXUtpMhHfIFbf5iGLyVjp88WpGYZQ92cYd
-         QgG/2frxuezvbFaWF3L74ySb6XuPqBlizATjwoHiF2P9gElXmrd8gkFt9tLSjNpD+nuv
-         bV5A==
-X-Gm-Message-State: AAQBX9c68ZE39MGsAhmBiC8EMzJPyMqtEEZGL6CazyaH5n1rUjVF3jDb
-        Dnbg+LnJr4vTWKfLbZSXu0hOiVC24b0fnY2hQKXiCw==
-X-Google-Smtp-Source: AKy350bA0E0pgZejxVtJ222F9kw3bBsx4EpT493ao0TPM6h4l4h3va196sNgYjfU3tFvV53zdC5WKFAvD4wLwA7gH9k=
-X-Received: by 2002:a05:6a00:1827:b0:622:c6ad:b373 with SMTP id
- y39-20020a056a00182700b00622c6adb373mr8123366pfa.3.1679998373864; Tue, 28 Mar
- 2023 03:12:53 -0700 (PDT)
+        Tue, 28 Mar 2023 06:13:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B13C1FEC
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:12:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75ACEC14;
+        Tue, 28 Mar 2023 03:13:40 -0700 (PDT)
+Received: from [10.1.33.143] (C02CF1NRLVDN.cambridge.arm.com [10.1.33.143])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8A6813F663;
+        Tue, 28 Mar 2023 03:12:55 -0700 (PDT)
+Message-ID: <7981dd12-4e56-a449-980b-52f27279df81@arm.com>
+Date:   Tue, 28 Mar 2023 11:12:54 +0100
 MIME-Version: 1.0
-References: <20230324061608.33609-1-quic_hazha@quicinc.com>
- <20230324061608.33609-3-quic_hazha@quicinc.com> <e51c200e-6de0-d516-3f32-28367b2f5a95@linaro.org>
- <e6b0a542-17d9-290e-7c84-8356a38d6802@quicinc.com>
-In-Reply-To: <e6b0a542-17d9-290e-7c84-8356a38d6802@quicinc.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Tue, 28 Mar 2023 11:12:42 +0100
-Message-ID: <CAJ9a7VjC+1m8odyotBoG3EPAL=Cn90fCCY1xPGFyg8uKEar7nQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] dt-bindings: arm: Add Coresight Dummy Trace YAML schema
-To:     Hao Zhang <quic_hazha@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonathan Corbet <corbet@lwn.net>, Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: What size anonymous folios should we allocate?
+Content-Language: en-US
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <Y/U8bQd15aUO97vS@casper.infradead.org>
+ <CAHbLzkrkZmbVMkh-Y-bDxgy0T0ZRRd+T+o5y5-wKmjKmhN0NmA@mail.gmail.com>
+ <Y/WRlX+MkmxelNbg@casper.infradead.org>
+ <022e1c15-7988-9975-acbc-e661e989ca4a@suse.cz>
+ <d347c5b0-0c0f-ae50-9613-2cf962d8676e@arm.com>
+ <babd6fcb-0062-0450-99b3-df5a74c2f683@suse.cz>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <babd6fcb-0062-0450-99b3-df5a74c2f683@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 27/03/2023 16:48, Vlastimil Babka wrote:
+> On 3/27/23 17:30, Ryan Roberts wrote:
+>> On 27/03/2023 13:41, Vlastimil Babka wrote:
+>>> On 2/22/23 04:52, Matthew Wilcox wrote:
+>>>> On Tue, Feb 21, 2023 at 03:05:33PM -0800, Yang Shi wrote:
+>>>>
+>>>>>> C. We add a new wrinkle to the LRU handling code.  When our scan of the
+>>>>>>    active list examines a folio, we look to see how many of the PTEs
+>>>>>>    mapping the folio have been accessed.  If it is fewer than half, and
+>>>>>>    those half are all in either the first or last half of the folio, we
+>>>>>>    split it.  The active half stays on the active list and the inactive
+>>>>>>    half is moved to the inactive list.
+>>>>>
+>>>>> With contiguous PTE, every PTE still maintains its own access bit (but
+>>>>> it is implementation defined, some implementations may just set access
+>>>>> bit once for one PTE in the contiguous region per arm arm IIUC). But
+>>>>> anyway this is definitely feasible.
+>>>>
+>>>> If a CPU doesn't have separate access bits for PTEs, then we should just
+>>>> not use the contiguous bits.  Knowing which parts of the folio are
+>>>> unused is more important than using the larger TLB entries.
+>>>
+>>> Hm but AFAIK the AMD aggregation is transparent, there are no bits. And IIUC
+>>> the "Hardware Page Aggregation (HPA)" Ryan was talking about elsewhere in
+>>> the thread, that sounds similar. So I IIUC there will be a larger TLB entry
+>>> transparently, and then I don't expect the CPU to update individual bits as
+>>> that would defeat the purpose. So I'd expect it will either set them all to
+>>> active when forming the larger TLB entry, or set them on a single subpage
+>>> and leave the rest at whatever state they were. Hm I wonder if the exact
+>>> behavior is defined anywhere.
+>>
+>> For arm64, at least, there are 2 separate mechanisms:
+>>
+>> "The Contiguous Bit" (D8.6.1 in the Arm ARM) is a bit in the translation table
+>> descriptor that SW can set to indicate that a set of adjacent entries are
+>> contiguous and have same attributes and permissions etc. It is architectural.
+>> The order of the contiguous range is fixed and depends on the base page size
+>> that is in use. When in use, HW access and dirty reporting is only done at the
+>> granularity of the contiguous block.
+>>
+>> "HPA" is a micro-architectural feature on some Arm CPUs, which aims to do a
+>> similar thing, but is transparent to SW. In this case, the dirty and access bits
+>> remain per-page. But when they differ, this affects the performance of the feature.
+>>
+>> Typically HPA can coalesce up to 4 adjacent entries, whereas for a 4KB base page
+>> at least, the contiguous bit applies to 16 adjacent entries.
+> 
+> Hm if it's 4 entries on arm64 and presumably 8 on AMD, maybe we can only
+> care about how actively accessed are the individual "subpages" above that
+> size, to avoid dealing with this uncertainty whether HW tracks them. At such
+> smallish sizes we shouldn't induce massive overhead?
 
-As per my comments in the previous patch in this set....
+I'm not sure I've fully understood this point. For arm64's HPA, there is no
+"uncertainty [about] whether HW tracks them"; HW will always track access/dirty
+individually for each base page. The problem is the inverse; if SW (or HW) sets
+those bits differently in each page, then TLB coalescing performance may
+decrease. Or are you actually suggesting that SW should always set the bits the
+same for a 4 or 8 page run, and forgo the extra granularity?
 
-On Mon, 27 Mar 2023 at 08:38, Hao Zhang <quic_hazha@quicinc.com> wrote:
->
-> Hi Krzysztof,
->
-> On 3/25/2023 7:49 PM, Krzysztof Kozlowski wrote:
-> > On 24/03/2023 07:16, Hao Zhang wrote:
-> >> Add new coresight-dummy.yaml file describing the bindings required
-> >> to define coresight dummy trace in the device trees.
-> >>
-> >
-> > Subject: drop second/last, redundant "YAML schema". The "dt-bindings"
-> > prefix is already stating that these are bindings and all new must be DT
-> > schema. You cannot add anything else, so this is redundant.
-> >
-> I will take your advice to drop redundant part of title in the next
-> version of patch.
-> >
-> >> Signed-off-by: Hao Zhang <quic_hazha@quicinc.com>
-> >> ---
-> >>   .../bindings/arm/qcom,coresight-dummy.yaml    | 118 ++++++++++++++++++
-> >>   1 file changed, 118 insertions(+)
-> >>   create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-dummy.yaml
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/arm/qcom,coresight-dummy.yaml b/Documentation/devicetree/bindings/arm/qcom,coresight-dummy.yaml
-> >> new file mode 100644
-> >> index 000000000000..7b719b084d72
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/arm/qcom,coresight-dummy.yaml
-> >> @@ -0,0 +1,118 @@
-> >> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> >> +# Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/arm/qcom,coresight-dummy.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: QCOM Coresight Dummy component
-> >> +
-> >> +description: |
-> >> +  The Coresight Dummy component is for the specific devices that HLOS don't have
-> >> +  permission to access or configure. Such as Coresight sink EUD, some TPDMs etc.
-> >> +  So there need driver to register dummy devices as Coresight devices. Provide
-> >> +  Coresight API for dummy device operations, such as enabling and disabling
-> >> +  dummy devices. Build the Coresight path for dummy sink or dummy source for
-> >> +  debugging.
-> >> +
-> >> +  The primary use case of the coresight dummy is to build path for dummy sink or
-> >> +  dummy source.
-> >> +
-> >> +maintainers:
-> >> +  - Mao Jinlong <quic_jinlmao@quicinc.com>
-> >> +  - Tao Zhang <quic_taozha@quicinc.com>
-> >> +  - Hao Zhang <quic_hazha@quicinc.com>
-> >> +
-> >> +select:
-> >> +  properties:
-> >> +    compatible:
-> >> +      contains:
-> >> +        enum:
-> >> +          - qcom,coresight-dummy
+> 
+>> I'm hearing that there are workloads where being able to use the contiguous bit
+>> really does make a difference, so I would like to explore solutions that can
+>> work when we only have access/dirty at the folio level.
+> 
+> And on the higher orders where we have explicit control via bits, we could
+> split the explicitly contiguous mappings once in a while to determine if the
+> sub-folios are still accessed? Although maybe with 16x4kB pages limit it may
+> still be not worth the trouble?
 
-Can we have coresight-dummy-source and coresight-dummy-sink?
+I have a bigger-picture question; why is it useful to split these large folios?
+I think there are 2 potential reasons (but would like to be educated):
 
-> >> +  required:
-> >> +    - compatible
-> >
-> > Why do you need the select?
-> >
-> This is a mistake, will remove it in the next version of patch.
-> >> +
-> >> +properties:
-> >> +  $nodename:
-> >> +    pattern: "^dummy_.*(sink|source)_[0-9]+.*$"
-> >
-> > We do not enforce node names in individual bindings. Why do you need it?
-> > Plus underscore is not even proper character...
-> >
-> I will remove this node.
->
-> >> +  compatible:
-> >> +    items:
-> >
-> > Drop items. You have only one item, so no need for list.
->
-> I will take your advice and update it in the next version of patch.
->
-> >> +      - const: qcom,coresight-dummy
-> >> +
-> >> +  qcom,dummy-sink:
-> >> +    type: boolean
-> >> +    description:
-> >> +      Indicates that the type of this coresight node is dummy sink.
-> >
-> > You just duplicated property name. Write something useful.
-> >
-> >> +
-> >> +  qcom,dummy-source:
-> >> +    type: boolean
-> >> +    description:
-> >> +      Indicates that the type of this coresight node is dummy source.
-> >
-> > You just duplicated property name. Write something useful.
-> >
->
+1. If a set of sub-pages that were pre-faulted as part of a large folio have
+_never_ been accessed and we are under memory pressure, I guess we would like to
+split the folio and free those pages?
 
-These properties not required if the compatible name is more specific
+2. If a set of subpages within a folio are cold (but were written in the past)
+and a separate set of subpages within the same folio are hot and we are under
+memory pressure, we would like to swap out the cold pages?
 
-> Sure, I will add more details for it.
->
-> >> +
-> >> +  out-ports:
-> >> +    description: |
-> >
-> > No need for |
-> >
-> >> +      Output connections from the dummy source to Coresight Trace bus.
-> >> +    $ref: /schemas/graph.yaml#/properties/ports
-> >> +
-> >> +    properties:
-> >> +      port:
-> >> +        description: Output connection from the dummy source to Coresight
-> >> +            Trace bus.
-> >> +        $ref: /schemas/graph.yaml#/properties/port
-> >> +
-> >> +  in-ports:
-> >> +    description: |
-> >
-> > Ditto
-> >
-> I will remove it in the next version of patch.
->
-> >> +      Input connections from the CoreSight Trace bus to dummy sink.
-> >> +    $ref: /schemas/graph.yaml#/properties/ports
-> >> +
-> >> +    properties:
-> >> +      port:
-> >> +        description: Input connection from the Coresight Trace bus to
-> >> +            dummy sink.
-> >> +        $ref: /schemas/graph.yaml#/properties/port
-> >> +
-> >> +required:
-> >> +  - compatible
-> >> +
+If the first reason is important, I guess we would want to initially map
+non-contig, then only remap as contig once every subpage has been touched at
+least once.
 
-The binding should constrain out ports to dummy-source only, and in
-ports to dummy sink only.
+For the second reason, my intuition says that a conceptual single access and
+dirty bit per folio should be sufficient, and folios could be split from
+time-to-time to see if one half is cold?
 
-Regards
-
-Mike
-
-> >> +additionalProperties: false
-> >> +
-> >> +oneOf:
-> >> +  - required:
-> >> +      - qcom,dummy-sink
-> >> +  - required:
-> >> +      - qcom,dummy-source
-> >> +
-> >> +examples:
-> >> +  # minimum dummy sink definition. dummy sink connect to coresight replicator.
-> >> +  - |
-> >> +    dummy_sink_1 {
-> >
-> > Node names should be generic, so "sink"
-> > https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-> >
-> >> +      compatible = "qcom,coresight-dummy";
-> >> +      qcom,dummy-sink;
-> >> +
-> >> +      in-ports {
-> >> +        port {
-> >> +          eud_in_replicator_swao: endpoint {
-> >> +            remote-endpoint =
-> >> +              <&replicator_swao_out_eud>;
-> >
-> > Why line break after =?
-> >
->
-> >> +          };
-> >> +        };
-> >> +      };
-> >> +    };
-> >> +
-> >> +  # minimum dummy source definition. dummy source connect to coresight funnel.
-> >
-> > If you use sentences, then start with capital letter.
-> >
->
-> I will update it according to your advice in the next version of patch.
->
-> >> +  - |
-> >> +    dummy_source_1 {
-> >> +      compatible = "qcom,coresight-dummy";
-> >> +      qcom,dummy-source;
-> >> +
-> >> +      out-ports {
-> >> +        port {
-> >> +          dummy_riscv_out_funnel_swao: endpoint {
-> >> +            remote-endpoint =
-> >> +              <&funnel_swao_in_dummy_riscv>;
-> >
-> > Why line break?
->
-> I copy it from device tree and keep the original format, will correct
-> the format in the next version of patch.
->
-> Thanks,
-> Hao
->
-> >> +          };
-> >> +        };
-> >> +      };
-> >> +    };
-> >> +
-> >> +...
-> >
-> > Best regards,
-> > Krzysztof
-> >
+Thanks,
+Ryan
 
 
 
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+> 
+>> Thanks,
+>> Ryan
+> 
+
