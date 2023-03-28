@@ -2,175 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3C36CB923
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D986CB924
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjC1IPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
+        id S230284AbjC1IQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjC1IPU (ORCPT
+        with ESMTP id S229632AbjC1IP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:15:20 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B70DA2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:15:19 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Pm2TZ3syQzgZhV;
-        Tue, 28 Mar 2023 16:12:02 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 28 Mar 2023 16:15:17 +0800
-CC:     <yangyicong@hisilicon.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
-        <palmer@rivosinc.com>, <linux-kernel@vger.kernel.org>,
-        <prime.zeng@hisilicon.com>, <linuxarm@huawei.com>
-Subject: Re: [PATCH] cacheinfo: Fix LLC is not exported through sysfs
-To:     Sudeep Holla <sudeep.holla@arm.com>
-References: <20230323122528.16691-1-yangyicong@huawei.com>
- <7cca5e74-6626-1c8b-9309-47b9f5d4395f@arm.com>
- <20230324113508.x2rt52aakruwelk3@bogus>
- <dd475eb6-7a0b-fbb4-316b-1af94c238699@huawei.com>
- <20230327111527.h46wdd3jva4npksy@bogus>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <6fc284e0-70bb-9bcf-a35c-2701018c85e2@huawei.com>
-Date:   Tue, 28 Mar 2023 16:15:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 28 Mar 2023 04:15:58 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F23CD
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:15:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679991357; x=1711527357;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=su2RAg42HKQ/QqC6G3QAA2ri67/sMLf015KnVUs3GGI=;
+  b=VctpGfBuQt/Sij1oNxDrP2o7fdhGiWKVsnS9jSU2qTgmBG/FpaDJP+Mo
+   yansjYBJ82klL/FjZpm8hUj5FeUDshdVRZbx6TSXqFi0/boTHLee2vzVg
+   1jkvxt0CCW/pHHwMKTC1atiYtb/raLzNX42fb+EuUgZWT1/2Bc0+Hmy5T
+   e0npEZZmDEsPohpkTDzqqXoPvYKPGLAtSWmCc/Vq+eoe5C3rR7qy9cR1z
+   W54jrFUmpj3F5AxLvgolCJE1klnEZENUk4Hq2cfWuEtE7MYGTaMDV4wKn
+   0ziXyu2dTD//be4XjeujbgH8o7E+Jt1U8nUwVt0+eSJK+mpfun0+KHeZ2
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="320903451"
+X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
+   d="scan'208";a="320903451"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 01:15:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="1013459599"
+X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
+   d="scan'208";a="1013459599"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Mar 2023 01:15:56 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ph4Ul-000IO1-2B;
+        Tue, 28 Mar 2023 08:15:55 +0000
+Date:   Tue, 28 Mar 2023 16:15:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/sev] BUILD SUCCESS
+ 812b0597fb4043240724e4c7bed7ba1fe15c0e3f
+Message-ID: <6422a21b.f63C/Epl6twvq8nf%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20230327111527.h46wdd3jva4npksy@bogus>
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/27 19:15, Sudeep Holla wrote:
-> On Mon, Mar 27, 2023 at 02:57:07PM +0800, Yicong Yang wrote:
->> Hi Pierre and Sudeep,
->>
->> On 2023/3/24 19:35, Sudeep Holla wrote:
->>> On Thu, Mar 23, 2023 at 06:58:53PM +0100, Pierre Gondois wrote:
->>>> Hello Yicong,
->>>>
->>>> FWIW, I think the patch is correct and I could reproduce the issue.
->>>>
->>>> On 3/23/23 13:25, Yicong Yang wrote:
->>>>> From: Yicong Yang <yangyicong@hisilicon.com>
->>>>>
->>>>> After entering 6.3-rc1 the LLC cacheinfo is not exported on our ACPI
->>>>> based arm64 server. This is because the LLC cacheinfo is partly reset
->>>>> when secondary CPUs boot up. On arm64 the primary cpu will allocate
->>>>> and setup cacheinfo:
->>>>> init_cpu_topology()
->>>>>    for_each_possible_cpu()
->>>>>      fetch_cache_info() // Allocate cacheinfo and init levels
->>>>> detect_cache_attributes()
->>>>>    cache_shared_cpu_map_setup()
->>>>>      if (!last_level_cache_is_valid()) // not valid, setup LLC
->>>>>        cache_setup_properties() // setup LLC
->>>>>
->>>>> On secondary CPU boot up:
->>>>> detect_cache_attributes()
->>>>>    populate_cache_leaves()
->>>>>      get_cache_type() // Get cache type from clidr_el1,
->>>>>                       // for LLC type=CACHE_TYPE_NOCACHE
->>>>>    cache_shared_cpu_map_setup()
->>>>>      if (!last_level_cache_is_valid()) // Valid and won't go to this branch,
->>>>>                                        // leave LLC's type=CACHE_TYPE_NOCACHE
->>>>>
->>>>> The last_level_cache_is_valid() use cacheinfo->{attributes, fw_token} to
->>>>> test it's valid or not, but populate_cache_leaves() will only reset
->>>>> LLC's type, so we won't try to re-setup LLC's type and leave it
->>>>> CACHE_TYPE_NOCACHE and won't export it through sysfs.
->>>>>
->>>
->>> IIUC this is for the case where arch register doesn't report the system level
->>> cache. I wonder if it makes sense to fix the arch callback to deal with that
->>> instead of here. I am fine either way, just checking as ideally it is
->>> something populate_cache_leaves() is messing up.
->>>
->>
->> yes it's right, the LLC information is not provided by the CPU register and can
->> only be retrieved from PPTT on my machine. Maybe fix the issue first, I don't
->> know how to make arch callback handle this since arch_topology is also used
->> other than arm64 which I'm not familiar with.
->>
-> 
-> I was thinking of something like below.
-> 
-> --
-> Regards,
-> Sudeep
-> 
-> diff --git i/arch/arm64/kernel/cacheinfo.c w/arch/arm64/kernel/cacheinfo.c
-> index c307f69e9b55..4ef1033fe47e 100644
-> --- i/arch/arm64/kernel/cacheinfo.c
-> +++ w/arch/arm64/kernel/cacheinfo.c
-> @@ -79,12 +79,16 @@ int init_cache_level(unsigned int cpu)
-> 
->  int populate_cache_leaves(unsigned int cpu)
->  {
-> -       unsigned int level, idx;
-> +       unsigned int hw_lvl, level, idx;
->         enum cache_type type;
->         struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
->         struct cacheinfo *this_leaf = this_cpu_ci->info_list;
-> 
-> -       for (idx = 0, level = 1; level <= this_cpu_ci->num_levels &&
-> +       for (hw_lvl = 0; hw_lvl <= MAX_CACHE_LEVEL; hw_lvl++)
-> +               if (CACHE_TYPE_NOCACHE == get_cache_type(hw_lvl + 1))
-> +                       break;
-> +
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sev
+branch HEAD: 812b0597fb4043240724e4c7bed7ba1fe15c0e3f  x86/hyperv: Change vTOM handling to use standard coco mechanisms
 
-We totally skip the system level caches and leaving their ->level initialized
-as 0, then we still cannot get the correct infomation by the PPTT side since
-it uses the ->level to find the cache info:
-drivers/acpi/pptt.c:
-cache_setup_acpi_cpu()
-		[...]
-		found_cache = acpi_find_cache_node(table, acpi_cpu_id,
-						   this_leaf->type,
-						   this_leaf->level, <---- we cannot find it with level 0
-						   &cpu_node);
+elapsed time: 721m
 
-So I'd prefer the original fixes of mine or by the arch side (if no other
-archs suffer this issue) what about below for arm64 only:
+configs tested: 129
+configs skipped: 4
 
-diff --git a/arch/arm64/kernel/cacheinfo.c b/arch/arm64/kernel/cacheinfo.c
-index c307f69e9b55..4801d0ff4ffb 100644
---- a/arch/arm64/kernel/cacheinfo.c
-+++ b/arch/arm64/kernel/cacheinfo.c
-@@ -86,6 +86,13 @@ int populate_cache_leaves(unsigned int cpu)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-        for (idx = 0, level = 1; level <= this_cpu_ci->num_levels &&
-             idx < this_cpu_ci->num_leaves; idx++, level++) {
-+               /*
-+                * This leaf has already been populated, do not reset it since
-+                * this could be a system level cache.
-+                */
-+               if (this_leaf->type != CACHE_TYPE_NOCACHE)
-+                       continue;
-+
-                type = get_cache_type(level);
-                if (type == CACHE_TYPE_SEPARATE) {
-                        ci_leaf_init(this_leaf++, CACHE_TYPE_DATA, level);
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r004-20230326   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r032-20230326   gcc  
+alpha                randconfig-r035-20230327   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r002-20230327   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r034-20230326   gcc  
+arc                  randconfig-r043-20230326   gcc  
+arc                  randconfig-r043-20230327   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm          buildonly-randconfig-r006-20230327   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r006-20230327   clang
+arm                  randconfig-r046-20230326   clang
+arm                  randconfig-r046-20230327   gcc  
+arm                        vexpress_defconfig   clang
+arm                    vt8500_v6_v7_defconfig   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r001-20230327   gcc  
+arm64                randconfig-r002-20230327   gcc  
+csky         buildonly-randconfig-r005-20230327   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r012-20230326   gcc  
+csky                 randconfig-r013-20230326   gcc  
+csky                 randconfig-r016-20230326   gcc  
+hexagon      buildonly-randconfig-r002-20230326   clang
+hexagon      buildonly-randconfig-r006-20230326   clang
+hexagon              randconfig-r041-20230326   clang
+hexagon              randconfig-r041-20230327   clang
+hexagon              randconfig-r045-20230326   clang
+hexagon              randconfig-r045-20230327   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230327   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230327   gcc  
+i386                 randconfig-a002-20230327   gcc  
+i386                 randconfig-a003-20230327   gcc  
+i386                 randconfig-a004-20230327   gcc  
+i386                 randconfig-a005-20230327   gcc  
+i386                 randconfig-a006-20230327   gcc  
+i386                 randconfig-a011-20230327   clang
+i386                 randconfig-a012-20230327   clang
+i386                 randconfig-a013-20230327   clang
+i386                 randconfig-a014-20230327   clang
+i386                 randconfig-a015-20230327   clang
+i386                 randconfig-a016-20230327   clang
+i386                          randconfig-c001   gcc  
+i386                 randconfig-r004-20230327   gcc  
+i386                 randconfig-r031-20230327   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r001-20230327   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r015-20230326   gcc  
+loongarch            randconfig-r033-20230327   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r001-20230326   gcc  
+m68k         buildonly-randconfig-r003-20230326   gcc  
+m68k         buildonly-randconfig-r003-20230327   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r012-20230327   gcc  
+m68k                 randconfig-r014-20230326   gcc  
+m68k                 randconfig-r031-20230326   gcc  
+microblaze           randconfig-r036-20230326   gcc  
+microblaze           randconfig-r036-20230327   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r011-20230327   gcc  
+nios2                randconfig-r016-20230327   gcc  
+nios2                randconfig-r034-20230327   gcc  
+openrisc             randconfig-r011-20230326   gcc  
+openrisc             randconfig-r014-20230327   gcc  
+openrisc             randconfig-r016-20230326   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-c003-20230326   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r013-20230326   gcc  
+riscv                randconfig-r042-20230326   gcc  
+riscv                randconfig-r042-20230327   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r032-20230327   gcc  
+s390                 randconfig-r044-20230326   gcc  
+s390                 randconfig-r044-20230327   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r011-20230326   gcc  
+sparc        buildonly-randconfig-r005-20230326   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r015-20230326   gcc  
+sparc                randconfig-r033-20230326   gcc  
+sparc64              randconfig-r012-20230326   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230327   gcc  
+x86_64               randconfig-a002-20230327   gcc  
+x86_64               randconfig-a003-20230327   gcc  
+x86_64               randconfig-a004-20230327   gcc  
+x86_64               randconfig-a005-20230327   gcc  
+x86_64               randconfig-a006-20230327   gcc  
+x86_64               randconfig-a011-20230327   clang
+x86_64               randconfig-a012-20230327   clang
+x86_64               randconfig-a013-20230327   clang
+x86_64               randconfig-a014-20230327   clang
+x86_64               randconfig-a015-20230327   clang
+x86_64               randconfig-a016-20230327   clang
+x86_64                        randconfig-k001   clang
+x86_64               randconfig-r003-20230327   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r005-20230327   gcc  
+xtensa               randconfig-r035-20230326   gcc  
 
-> +       for (idx = 0, level = 1; level <= hw_lvl &&
->              idx < this_cpu_ci->num_leaves; idx++, level++) {
->                 type = get_cache_type(level);
->                 if (type == CACHE_TYPE_SEPARATE) {
-> 
-> .
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
