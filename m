@@ -2,71 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF396CBB3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508FC6CBB42
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232590AbjC1JkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S232132AbjC1Jjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbjC1Jjo (ORCPT
+        with ESMTP id S230434AbjC1Jjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Mar 2023 05:39:44 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536C05FF9;
-        Tue, 28 Mar 2023 02:39:33 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32S8TEUR024888;
-        Tue, 28 Mar 2023 11:39:21 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=0RJ1bAOEsbrbBUbktgDCARu+ofitrNwEQZP29DHw0Xc=;
- b=FclllhCUSri2Sw8fWEu0rOCbbZELP+Wy/xR6/0eWvq4Q/agWyfx2GZEh5kMzDX3xvo/W
- /V/OA2zJQYmJvEiCVTuza6/33lH4ND65i75ZWVj36rHJvP15PLOM+2Vj4uOfmoE9RP2f
- zxNkgrXmSVRCcf4skHXVmRofVhDg0Qn1wHhFHAf3JhBBWgEw3B9RC56LgO398QXP8cSD
- oG0LCCT5jWKnk/hJoxi1ZVPbVWwg4xRu3g77ZkQihSuI/dC8sEAx9MxrH1XlON2RwADG
- r8GSuebN4fW5SKtpY2ZpILEAsXULJ20g7c3rzSl3evTOoP2hV/wqU0mzm1NdJvHFCbq2 bw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pkvs4rhjk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Mar 2023 11:39:21 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DCE9C10002A;
-        Tue, 28 Mar 2023 11:39:20 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D2B1521160B;
-        Tue, 28 Mar 2023 11:39:20 +0200 (CEST)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Tue, 28 Mar
- 2023 11:39:20 +0200
-Message-ID: <30a9f919-ff6b-57cf-de34-e145a4474643@foss.st.com>
-Date:   Tue, 28 Mar 2023 11:39:19 +0200
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3750155A4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:39:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E8C561F8BA;
+        Tue, 28 Mar 2023 09:39:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679996368; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=UgfE83B87JnzYkBplYgpUKueaTqClGbainLz0Z27234=;
+        b=gfW4yDUUcpChSDwKbNwRwXDijsOrfTAYRLllKADw1zl14hMfdZIMuXN3TbT4u6uaSFrDqT
+        Q2vFJQRYFbG8AjjFNyNEcn651PsaOqFI97MLfmMww8FlBy070mZdJ/W+m/I5+RASiIcqQa
+        vOUS4k4u/p/h3gEUPsirmtaOOyp2Jec=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B4D771390B;
+        Tue, 28 Mar 2023 09:39:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7X7MKtC1ImS8TgAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 28 Mar 2023 09:39:28 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        xen-devel@lists.xenproject.org, Dan Carpenter <error27@gmail.com>
+Subject: [PATCH] xen/pvcalls: don't call bind_evtchn_to_irqhandler() under lock
+Date:   Tue, 28 Mar 2023 11:39:24 +0200
+Message-Id: <20230328093924.12260-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] ARM: dts: stm32: fix spi1 pin assignment on stm32mp15
-Content-Language: en-US
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux@rempel-privat.de>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230320171123.6263-1-alexandre.torgue@foss.st.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230320171123.6263-1-alexandre.torgue@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,62 +59,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 18:11, Alexandre Torgue wrote:
-> Bank A and B IOs can't be handled by the pin controller 'Z'. This patch
-> assign spi1 pin definition to the correct controller.
-> 
-> Fixes: 9ad65d245b7b ("ARM: dts: stm32: stm32mp15-pinctrl: add spi1-1 pinmux group")
-> 
-> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> 
-> diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-> index a9d2bec99014..e15a3b2a9b39 100644
-> --- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-> +++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-> @@ -1880,6 +1880,21 @@
->   		};
->   	};
->   
-> +	spi1_pins_b: spi1-1 {
-> +		pins1 {
-> +			pinmux = <STM32_PINMUX('A', 5, AF5)>, /* SPI1_SCK */
-> +				 <STM32_PINMUX('B', 5, AF5)>; /* SPI1_MOSI */
-> +			bias-disable;
-> +			drive-push-pull;
-> +			slew-rate = <1>;
-> +		};
-> +
-> +		pins2 {
-> +			pinmux = <STM32_PINMUX('A', 6, AF5)>; /* SPI1_MISO */
-> +			bias-disable;
-> +		};
-> +	};
-> +
->   	spi2_pins_a: spi2-0 {
->   		pins1 {
->   			pinmux = <STM32_PINMUX('B', 10, AF5)>, /* SPI2_SCK */
-> @@ -2448,19 +2463,4 @@
->   			bias-disable;
->   		};
->   	};
-> -
-> -	spi1_pins_b: spi1-1 {
-> -		pins1 {
-> -			pinmux = <STM32_PINMUX('A', 5, AF5)>, /* SPI1_SCK */
-> -				 <STM32_PINMUX('B', 5, AF5)>; /* SPI1_MOSI */
-> -			bias-disable;
-> -			drive-push-pull;
-> -			slew-rate = <1>;
-> -		};
-> -
-> -		pins2 {
-> -			pinmux = <STM32_PINMUX('A', 6, AF5)>; /* SPI1_MISO */
-> -			bias-disable;
-> -		};
-> -	};
->   };
+bind_evtchn_to_irqhandler() shouldn't be called under spinlock, as it
+can sleep.
 
-Applied on stm32-next.
+This requires to move the calls of create_active() out of the locked
+regions. This is no problem, as the worst which could happen would be
+a spurious call of the interrupt handler, causing a spurious wake_up().
 
-Thanks.
-Alex
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/lkml/Y+JUIl64UDmdkboh@kadam/
+Signed-off-by: Juergen Gross <jgross@suse.com>
+---
+ drivers/xen/pvcalls-front.c | 46 ++++++++++++++++++++++---------------
+ 1 file changed, 27 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/xen/pvcalls-front.c b/drivers/xen/pvcalls-front.c
+index d5d589bda243..6e5d712e3115 100644
+--- a/drivers/xen/pvcalls-front.c
++++ b/drivers/xen/pvcalls-front.c
+@@ -227,22 +227,31 @@ static irqreturn_t pvcalls_front_event_handler(int irq, void *dev_id)
+ 
+ static void free_active_ring(struct sock_mapping *map);
+ 
+-static void pvcalls_front_free_map(struct pvcalls_bedata *bedata,
+-				   struct sock_mapping *map)
++static void pvcalls_front_destroy_active(struct pvcalls_bedata *bedata,
++					 struct sock_mapping *map)
+ {
+ 	int i;
+ 
+ 	unbind_from_irqhandler(map->active.irq, map);
+ 
+-	spin_lock(&bedata->socket_lock);
+-	if (!list_empty(&map->list))
+-		list_del_init(&map->list);
+-	spin_unlock(&bedata->socket_lock);
++	if (bedata) {
++		spin_lock(&bedata->socket_lock);
++		if (!list_empty(&map->list))
++			list_del_init(&map->list);
++		spin_unlock(&bedata->socket_lock);
++	}
+ 
+ 	for (i = 0; i < (1 << PVCALLS_RING_ORDER); i++)
+ 		gnttab_end_foreign_access(map->active.ring->ref[i], NULL);
+ 	gnttab_end_foreign_access(map->active.ref, NULL);
++
+ 	free_active_ring(map);
++}
++
++static void pvcalls_front_free_map(struct pvcalls_bedata *bedata,
++				   struct sock_mapping *map)
++{
++	pvcalls_front_destroy_active(bedata, map);
+ 
+ 	kfree(map);
+ }
+@@ -433,19 +442,18 @@ int pvcalls_front_connect(struct socket *sock, struct sockaddr *addr,
+ 		pvcalls_exit_sock(sock);
+ 		return ret;
+ 	}
+-
+-	spin_lock(&bedata->socket_lock);
+-	ret = get_request(bedata, &req_id);
++	ret = create_active(map, &evtchn);
+ 	if (ret < 0) {
+-		spin_unlock(&bedata->socket_lock);
+ 		free_active_ring(map);
+ 		pvcalls_exit_sock(sock);
+ 		return ret;
+ 	}
+-	ret = create_active(map, &evtchn);
++
++	spin_lock(&bedata->socket_lock);
++	ret = get_request(bedata, &req_id);
+ 	if (ret < 0) {
+ 		spin_unlock(&bedata->socket_lock);
+-		free_active_ring(map);
++		pvcalls_front_destroy_active(NULL, map);
+ 		pvcalls_exit_sock(sock);
+ 		return ret;
+ 	}
+@@ -821,28 +829,28 @@ int pvcalls_front_accept(struct socket *sock, struct socket *newsock, int flags)
+ 		pvcalls_exit_sock(sock);
+ 		return ret;
+ 	}
+-	spin_lock(&bedata->socket_lock);
+-	ret = get_request(bedata, &req_id);
++	ret = create_active(map2, &evtchn);
+ 	if (ret < 0) {
++		free_active_ring(map2);
++		kfree(map2);
+ 		clear_bit(PVCALLS_FLAG_ACCEPT_INFLIGHT,
+ 			  (void *)&map->passive.flags);
+ 		spin_unlock(&bedata->socket_lock);
+-		free_active_ring(map2);
+-		kfree(map2);
+ 		pvcalls_exit_sock(sock);
+ 		return ret;
+ 	}
+ 
+-	ret = create_active(map2, &evtchn);
++	spin_lock(&bedata->socket_lock);
++	ret = get_request(bedata, &req_id);
+ 	if (ret < 0) {
+-		free_active_ring(map2);
+-		kfree(map2);
+ 		clear_bit(PVCALLS_FLAG_ACCEPT_INFLIGHT,
+ 			  (void *)&map->passive.flags);
+ 		spin_unlock(&bedata->socket_lock);
++		pvcalls_front_free_map(bedata, map2);
+ 		pvcalls_exit_sock(sock);
+ 		return ret;
+ 	}
++
+ 	list_add_tail(&map2->list, &bedata->socket_mappings);
+ 
+ 	req = RING_GET_REQUEST(&bedata->ring, req_id);
+-- 
+2.35.3
+
