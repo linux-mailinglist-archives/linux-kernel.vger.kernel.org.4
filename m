@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDC36CC79E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0217D6CC7A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232558AbjC1QN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 12:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
+        id S232769AbjC1QOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 12:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbjC1QNZ (ORCPT
+        with ESMTP id S232776AbjC1QOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 12:13:25 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1934EC58;
-        Tue, 28 Mar 2023 09:13:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680020002; x=1711556002;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=h6IQc+GPCCBWGmCQX33CbJ7q86RgoAzJwDi0xEr2IyE=;
-  b=IerDd9fJbIiNjpIXe2pN0tm1nafp1o885pLemZF4Q5CfnPtB/G4LZe6H
-   vTI722h8zfJOCe82yB2ogIoqtPHDT5CbRyjlPsmabiLjyQqq2Q8JwkGSo
-   5VkVyqcOl7PYqkWwrC7FM1sZoCzMdld5eNhXkKucNwySUGcTWsAPxVgTg
-   Q+42mf4Y6UPXpKVI36qhnwYa5Exlf/xp+mcfmIka5D1cgAgDBoSLS6ymP
-   pP1zQLC7FN6jk2oWmc/KEAjFRQVb+FbVk0Bvz8T03d7LLRF8iYriWqB85
-   2/K46fJaRgwR8DRMXxrPZNoPn221JnlcV6J6xrDnmZF1ZX5UOpLWet46H
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="321015262"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="321015262"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 09:13:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="753212765"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="753212765"
-Received: from sdwarak1-mobl.amr.corp.intel.com ([10.212.127.200])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 09:13:19 -0700
-Message-ID: <556c167de09dd3c7bb470cde53660ae326126ad3.camel@linux.intel.com>
-Subject: Re: [PATCH v2 06/15] dmaengine: idxd: Add private_data to struct
- idxd_wq
-From:   Tom Zanussi <tom.zanussi@linux.intel.com>
-To:     Dave Jiang <dave.jiang@intel.com>, herbert@gondor.apana.org.au,
-        davem@davemloft.net, fenghua.yu@intel.com, vkoul@kernel.org
-Cc:     tony.luck@intel.com, wajdi.k.feghali@intel.com,
-        james.guilford@intel.com, kanchana.p.sridhar@intel.com,
-        giovanni.cabiddu@intel.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org
-Date:   Tue, 28 Mar 2023 11:13:18 -0500
-In-Reply-To: <c90984be-a426-7658-b128-67f90e4262da@intel.com>
-References: <20230328153535.126223-1-tom.zanussi@linux.intel.com>
-         <20230328153535.126223-7-tom.zanussi@linux.intel.com>
-         <c90984be-a426-7658-b128-67f90e4262da@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Tue, 28 Mar 2023 12:14:02 -0400
+Received: from proxima.lasnet.de (proxima.lasnet.de [IPv6:2a01:4f8:121:31eb:3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E811E054;
+        Tue, 28 Mar 2023 09:14:00 -0700 (PDT)
+Received: from [IPV6:2003:e9:d70f:381f:5e2f:3bee:d4cb:b76b] (p200300e9d70f381f5e2f3beed4cbb76b.dip0.t-ipconnect.de [IPv6:2003:e9:d70f:381f:5e2f:3bee:d4cb:b76b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id 21852C006B;
+        Tue, 28 Mar 2023 18:13:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1680020036;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HFMN6mUuYlhsG7aylfMw3Vp+mnIu1G529c1t4N/Sfdw=;
+        b=GBK2ylDWhqNsIqksc0TxLHbl7294mSsrGhnxMD2iapNkDZuKX4RghYrDeZgR8bk6pjzUX4
+        LCx+KoHHn2MxF3AOFc5SQ/HyiqRK0JFlqZpXsCzIBuM5L60JmFgy64zcBhLUWVS4KQk9mE
+        zN+qskrudw8lvfSqsgW0AlP8M2wL8LaqrH0dt3JdLGADN/8LAyQiHisLioXHjSR6gl/qhi
+        U3eqk2Kw9ky/a/qqzlyuCgjQGWeQ/7ezGdunoHwWiRbA/02m34mkgAdtZJfUthhd7CtZP1
+        XmlV/adOLu57efxO2Qj81lFyhy0agMIBwKRPJQjko3n8k6G1NZlM0MI7rfpmAg==
+Message-ID: <0538598d-9821-91d7-d327-68e025084b3c@datenfreihafen.org>
+Date:   Tue, 28 Mar 2023 18:13:55 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 07/12] net: ieee802154: adf7242: drop of_match_ptr for ID
+ table
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-wpan@vger.kernel.org
+References: <20230311173303.262618-1-krzysztof.kozlowski@linaro.org>
+ <20230311173303.262618-7-krzysztof.kozlowski@linaro.org>
+ <20230328124859.12f3c329@xps-13>
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <20230328124859.12f3c329@xps-13>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-03-28 at 09:06 -0700, Dave Jiang wrote:
->=20
->=20
-> On 3/28/23 8:35 AM, Tom Zanussi wrote:
-> > Add a void * to idxd_wqs for user-defined context data.
->=20
-> I wonder if we should add accessor functions like get and set private
-> data for the wq.
-> >=20
+Hello.
 
-Yeah, makes sense, will do that in v3.
+On 28.03.23 12:48, Miquel Raynal wrote:
+> Hi Krzysztof,
+> 
+> krzysztof.kozlowski@linaro.org wrote on Sat, 11 Mar 2023 18:32:58 +0100:
+> 
+>> The driver will match mostly by DT table (even thought there is regular
+>> ID table) so there is little benefit in of_match_ptr (this also allows
+>> ACPI matching via PRP0001, even though it might not be relevant here).
+>>
+>>    drivers/net/ieee802154/adf7242.c:1322:34: error: ‘adf7242_of_match’ defined but not used [-Werror=unused-const-variable=]
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> I see Stefan already acked most of the ieee802154 patches, but I didn't
+> got notified for this one, so in case:
 
-Tom
+The reason I did not ack the two patches for adf7242 is that Michael as 
+driver maintainer ack'ed them already.
 
-> > Signed-off-by: Tom Zanussi <tom.zanussi@linux.intel.com>
-> > ---
-> > =C2=A0 drivers/dma/idxd/idxd.h | 2 ++
-> > =C2=A0 1 file changed, 2 insertions(+)
-> >=20
-> > diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
-> > index 719f9f1662ad..e55213b5153e 100644
-> > --- a/drivers/dma/idxd/idxd.h
-> > +++ b/drivers/dma/idxd/idxd.h
-> > @@ -216,6 +216,8 @@ struct idxd_wq {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 max_batch_size;
-> > =C2=A0=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0char driver_name[WQ_NAM=
-E_SIZE + 1];
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0void *private_data;
-> > =C2=A0 };
-> > =C2=A0=20
-> > =C2=A0 struct idxd_engine {
+I only handled the ones where we have no active maintainer, as a fallback.
 
+regards
+Stefan Schmidt
