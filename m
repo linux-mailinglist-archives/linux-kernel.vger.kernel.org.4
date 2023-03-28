@@ -2,159 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6726CB7CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC2E6CB7CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjC1HOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 03:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
+        id S230296AbjC1HOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 03:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjC1HOC (ORCPT
+        with ESMTP id S230140AbjC1HOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 03:14:02 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C8130DE
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:13:59 -0700 (PDT)
+        Tue, 28 Mar 2023 03:14:42 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B503AB1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:14:40 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id g19so1427278lfr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:14:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1679987639; x=1711523639;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:mime-version:
-   content-transfer-encoding;
-  bh=cs515H+pAY5a8BjNWqt1o2h2IfKbYZ5CffOpLSxnAZU=;
-  b=LgFrmR6E+lck5soCo2CpA0FdWgr3oY5g0bb0JC/o9F8cxcmZqAbYXsIf
-   s6WpXBD3YxUvdox/FTwi6IxLf45gKQXkqb8bLpR3cGf+WDi3W2Rcl0Rdr
-   97NUMCOJbsaW+ErDtCzdubZOXeVwBX4/rt4zOuThLSIzjgLnEJvhHlkk/
-   s=;
-X-IronPort-AV: E=Sophos;i="5.98,296,1673913600"; 
-   d="scan'208";a="198148107"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-3e1fab07.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 07:13:56 +0000
-Received: from EX19D012EUA002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-m6i4x-3e1fab07.us-east-1.amazon.com (Postfix) with ESMTPS id 8D44780C82;
-        Tue, 28 Mar 2023 07:13:53 +0000 (UTC)
-Received: from EX19D030EUC003.ant.amazon.com (10.252.61.173) by
- EX19D012EUA002.ant.amazon.com (10.252.50.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 28 Mar 2023 07:13:53 +0000
-Received: from EX19D030EUC004.ant.amazon.com (10.252.61.164) by
- EX19D030EUC003.ant.amazon.com (10.252.61.173) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.26;
- Tue, 28 Mar 2023 07:13:52 +0000
-Received: from EX19D030EUC004.ant.amazon.com ([fe80::f98a:db18:b0eb:477]) by
- EX19D030EUC004.ant.amazon.com ([fe80::f98a:db18:b0eb:477%3]) with mapi id
- 15.02.1118.026; Tue, 28 Mar 2023 07:13:52 +0000
-From:   "Krcka, Tomas" <krckatom@amazon.de>
-To:     Will Deacon <will@kernel.org>
-CC:     "Krcka, Tomas" <krckatom@amazon.de>,
+        d=linaro.org; s=google; t=1679987678;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FWBhH9ILBM2tk6yi5ctxIjsW4GlgCAF1zIgHGzXnjFs=;
+        b=T7yC8gSlUBnvB2LJYKAGKjRzLehQRSY8vW/FYMogmCQSVh3JSOadJqtI8IXxhCL4Ya
+         tNdQRCoCUHf9P2Zz9SL+x47SzeLIMGZ+Z27nMfnDjl+ngCGipnaJVD0pkRz9LxKehRs/
+         o7NPPLvXzcNe6IMkEVmXdpUlPYG8RPbEA/m3vqSi0hFZ4zuIOaM7Nw5SKRzC8UZnTuGQ
+         nvl5z0wBQblq5kX4xwjzADjd2A7yZnVWMJbHB1Eal1VCOOsuOQGLcgKfoYzMkciCI39A
+         HR3cHN0PPb+C4VS5WpMCsbx5XVpFho6sGO6Eq5PrRYHB55zJzvX0JGVCQyoHYiSQzpP8
+         FtNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679987678;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FWBhH9ILBM2tk6yi5ctxIjsW4GlgCAF1zIgHGzXnjFs=;
+        b=GEEqIIgQyTLP+pHDo3k5DSyV67k+NbMME0bmob8gO2pXgURtlr4XftSIdGMTlw+m+8
+         9mODZbMvxp20l/vXSE1M0riLbZMXWM+2V0Ia4yQTLAOSUaAtYJFHYzVM/jszUBycgPnW
+         RRQPuoHT5KKMp2GVJDWIU08zka5EEuwOK8uZ+MwWm7SKG55VnDYMSYjsRXP+tHVZmCD8
+         w8qT0wXMK3iMIrVkoEq4Psr2ADVaS2dpLOGFrP26l8ZnrwLzGn83jPAckryYP7Xb5m1K
+         BGfdukRibXZFogvjzAGN2CZYUSeh4O6GFlCNlX2y6l8OUqQEhlxF4l0KZTvZGLL0NLAA
+         XxBg==
+X-Gm-Message-State: AAQBX9eq5NOo0h+RrjEUYIT1wBKFPssfDzi6oeM5sGbPMEh1UEVx2mIv
+        j+iUle67a4RWM/ReIZr1/MCiwg==
+X-Google-Smtp-Source: AKy350Z77Fh+XOqxjbOgg3kmbKAPaExvIk4LSK4qoTm//2gkfvRWguD3omxMa9GSvXBRQ6PX37x0fw==
+X-Received: by 2002:ac2:4c17:0:b0:4ea:f227:c1d6 with SMTP id t23-20020ac24c17000000b004eaf227c1d6mr4258365lfq.67.1679987678426;
+        Tue, 28 Mar 2023 00:14:38 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
+        by smtp.gmail.com with ESMTPSA id q27-20020ac25a1b000000b004dc4d26c30dsm4946301lfn.63.2023.03.28.00.14.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 00:14:38 -0700 (PDT)
+Message-ID: <1f97dec8-d30c-ccc7-3026-713bf9a15850@linaro.org>
+Date:   Tue, 28 Mar 2023 09:14:36 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: mmc: arasan,sdci: Add Xilinx Versal Net
+ compatible
+Content-Language: en-US
+To:     "Potthuri, Sai Krishna" <sai.krishna.potthuri@amd.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        "Shameer Kolothum" <shameerali.kolothum.thodi@huawei.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] iommu/arm-smmu-v3: Fix event queue overflow
- acknowledgment
-Thread-Topic: [PATCH] iommu/arm-smmu-v3: Fix event queue overflow
- acknowledgment
-Thread-Index: AQHZYUTaFwYdqW+H5UaPJVsYwN0JvQ==
-Date:   Tue, 28 Mar 2023 07:13:52 +0000
-Message-ID: <8845FA6A-45F1-4090-B4A2-C0C28F709095@amazon.com>
-References: <20230308092048.71390-1-krckatom@amazon.de>
- <20230327121234.GA31342@willie-the-truck>
-In-Reply-To: <20230327121234.GA31342@willie-the-truck>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.1.212.24]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <DC8E623EC41C2C43AD633B3F532E78AE@amazon.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        "git (AMD-Xilinx)" <git@amd.com>,
+        "saikrishna12468@gmail.com" <saikrishna12468@gmail.com>
+References: <20230324073630.3194724-1-sai.krishna.potthuri@amd.com>
+ <20230324073630.3194724-2-sai.krishna.potthuri@amd.com>
+ <d646d109-d0a6-aedb-a8b2-ac954336e628@linaro.org>
+ <BY5PR12MB425806889EE700C1FCC8A465DB8B9@BY5PR12MB4258.namprd12.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <BY5PR12MB425806889EE700C1FCC8A465DB8B9@BY5PR12MB4258.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 27/03/2023 11:58, Potthuri, Sai Krishna wrote:
+> Hi Krzysztof,
+> 
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Sent: Friday, March 24, 2023 5:14 PM
+>> To: Potthuri, Sai Krishna <sai.krishna.potthuri@amd.com>; Ulf Hansson
+>> <ulf.hansson@linaro.org>; Rob Herring <robh+dt@kernel.org>; Krzysztof
+>> Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Michal Simek
+>> <michal.simek@xilinx.com>; Adrian Hunter <adrian.hunter@intel.com>
+>> Cc: linux-mmc@vger.kernel.org; linux-kernel@vger.kernel.org;
+>> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; git (AMD-
+>> Xilinx) <git@amd.com>; saikrishna12468@gmail.com
+>> Subject: Re: [PATCH 1/2] dt-bindings: mmc: arasan,sdci: Add Xilinx Versal Net
+>> compatible
+>>
+>> On 24/03/2023 08:36, Sai Krishna Potthuri wrote:
+>>> Add Xilinx Versal Net compatible to support eMMC 5.1 PHY.
+>>>
+>>> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml | 6 ++++++
+>>>  1 file changed, 6 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+>>> b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+>>> index 8296c34cfa00..cf44a4b988a7 100644
+>>> --- a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+>>> +++ b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+>>> @@ -27,6 +27,7 @@ allOf:
+>>>              enum:
+>>>                - xlnx,zynqmp-8.9a
+>>>                - xlnx,versal-8.9a
+>>> +              - xlnx,versal-net-5.1-emmc
+>>
+>> v5.1 is eMMC standard or Versal block version? If the first, it's not suitable for
+>> compatibles.
+>>
+>> Also, what's the difference from xlnx,versal-8.9a?
+> V5.1 is an eMMC standard and this compatible is defined based on sdhci arasan
+> eMMC5.1 Host Controller(arasan,sdhci-5.1), where as in Versal, it’s a different
+> controller and it is based on 4.51 Host Controller(arasan,sdhci-8.9a).
 
-> On 27. Mar 2023, at 14:12, Will Deacon <will@kernel.org> wrote:
-> =
+Mixing IP block versions and eMMC spec versions in one binding is a
+great way to confuse.
 
-> =
+> Versal Net Compatible is defined it this way to make it inline with the other
+> existing SoC compatibles like "intel,keembay-sdhci-5.1-emmc".
+> Please suggest if the compatible need to be renamed to "xlnx,versal-net-emmc"?
 
-> On Wed, Mar 08, 2023 at 09:20:47AM +0000, Tomas Krcka wrote:
->> When an overflow occurs in the event queue, the SMMU toggles overflow
->> flag OVFLG in the PROD register.
->> The evtq thread is supposed to acknowledge the overflow flag by toggling
->> flag OVACKFLG in the CONS register, otherwise the overflow condition is
->> still active (OVFLG !=3D OVACKFLG).
->> =
+Is Versal Net uniquely identifying your SoC or IP block?
 
->> Currently the acknowledge register is toggled after clearing the event
->> queue but is never propagated to the hardware. It would be done next
->> time when executing evtq thread.
->> =
+> 
+> Regards
+> Sai Krishna
+> 
+>>
+>>>      then:
+>>>        properties:
+>>>          clock-output-names:
+>>> @@ -62,6 +63,11 @@ properties:
+>>>          description:
+>>>            For this device it is strongly suggested to include
+>>>            clock-output-names and '#clock-cells'.
+>>> +      - items:
+>>> +          - const: xlnx,versal-net-5.1-emmc     # Versal Net eMMC PHY
 
->> The SMMU still adds elements to the queue when the overflow condition is
->> active but any subsequent overflow information after clearing the event
->> queue will be lost.
->> =
-
->> This change keeps the SMMU in sync as it's expected by design.
->> =
-
->> Signed-off-by: Tomas Krcka <krckatom@amazon.de>
->> Suggested-by: KarimAllah Ahmed <karahmed@amazon.de>
->> ---
->> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 1 +
->> 1 file changed, 1 insertion(+)
->> =
-
->> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu=
-/arm/arm-smmu-v3/arm-smmu-v3.c
->> index f2425b0f0cd6..acc1ff5ff69b 100644
->> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->> @@ -1579,6 +1579,7 @@ static irqreturn_t arm_smmu_evtq_thread(int irq, v=
-oid *dev)
->>      /* Sync our overflow flag, as we believe we're up to speed */
->>      llq->cons =3D Q_OVF(llq->prod) | Q_WRP(llq, llq->cons) |
->>                  Q_IDX(llq, llq->cons);
->> +     queue_sync_cons_out(q);
->>      return IRQ_HANDLED;
->> }
-> =
-
-> I think I probably did mean to have something like this, but can we
-> only do the actual h/w update if overflow has occurred? Otherwise I think
-> we're pointlessly writing back the same value most of the time.
-> =
-
-> Will
-
-Yes, we can, but then same applies for the priq as well, there we also writ=
-e back
-every time.
-
-Tomas
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
+You do not have items here, so move it to respective place at beginning,
+just like others are defined.
 
 
+Best regards,
+Krzysztof
 
