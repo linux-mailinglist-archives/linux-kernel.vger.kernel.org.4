@@ -2,162 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 778206CB4EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 05:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEFFB6CB4F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 05:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232689AbjC1Deg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 23:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
+        id S232748AbjC1Dfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 23:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232777AbjC1DeI (ORCPT
+        with ESMTP id S232733AbjC1DfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 23:34:08 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EEF198D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:33:12 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id cu12so7035016pfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:33:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679974391;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ir5V99A0zsoCPWi1/drgb88gCMu5kFYUe4/CApNWsb4=;
-        b=XxiHgCaoFSAe4B3bizN+ChgnY7ZwVOlPR49xr4wvd+fJxiVH9mnF3uGMZreQzk61cq
-         OxlxgfsoDcqlDGqOwjOZ4FAyedoUw+llfBhOXIhLTKXIicVGX//KC01hRAtkAaf4czn4
-         2E8tMksWE9JA7L1BTnwFf/tLdtvXK7D0PXTEp3n5ASXcegpbA8YYzKBA1jn6RhhU2gto
-         s8SwgDAbAgrnaFJ8dMcsq6oDpOZp0Om9Ft1/ifMMmQyVIgaWOezW8P1ojwCxMuGDQ1nt
-         LOI/OPVKMD2oJTcpyDwGjHxzf4oNKK74KCh+/gGkV03AA4krAKn+zj0n1Il6jn40Ocje
-         4tOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679974391;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ir5V99A0zsoCPWi1/drgb88gCMu5kFYUe4/CApNWsb4=;
-        b=SdqIr9tjczzlY/4lqgRDU3CBwEdZfWlCY2VeA/neDPD7WZ95rfk83eNsLzhV8G8nLQ
-         NyJvbZ1AIgXFypAN4nk1KBv5W2UlocYhAGKAnAcT1EisjcpEgm2pWD47TQiP4MY/vwQY
-         JIMXSLpA8PFtU3zeRyDLZx7xt6USMdPprjbggzyx/J5V9Rk9NmXimXVG7yuzxm6txPWN
-         p0yz+TiHABsh6AMDZDwGQRd4wCimUYyehiIDSMC9b2bIzEfFDbGbe0Q5f8Qfc9apmwjl
-         iQeJ0Wzit0g49fGtEWgLSa4c10r5yQzJ5zTNtxGdfulvfiOa8jHwXMwFusUI0BqN4TVS
-         lOHw==
-X-Gm-Message-State: AAQBX9dfMcsatM4tu/CYixtKBSPlhzWP9dH87J1vfY9MA7qKp+OdBoSy
-        tcoDawBQgxxARP7PCSUYT4+CzjQvCe14b0Z2+sQ5
-X-Google-Smtp-Source: AKy350bn7ijoZFAjoqvuKlFfISkywXvdbbqt2f7GLfAU6t2tg/VAOo0P1PT/MZM3CF/iMQltGoeVogRNojJjbTEIS9A=
-X-Received: by 2002:a63:6784:0:b0:4f1:cd3a:3e83 with SMTP id
- b126-20020a636784000000b004f1cd3a3e83mr3821811pgc.3.1679974391319; Mon, 27
- Mar 2023 20:33:11 -0700 (PDT)
+        Mon, 27 Mar 2023 23:35:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538172D48
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679974406;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IDB49ICYWD/YUSsaG0KaSotFwGpKhbHc2Zqptwol97E=;
+        b=Q/tDjT8OOdNrfJCcjbjQHcX/xzIZwP9F1HVcrVDyaLXMDn+zxGr1WSDpJI4wvLTLS16h+v
+        u8Qw/lNwR4+G7s2UIjnGfEnuSdFGRphcQlYDK0qIFxZQ2X8pV3pwcqvtmuaXomdwjhDJlp
+        64Qu4D2UK46ZotPxNBdK6mZ5ms5c8Ig=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-354-JdgrbxQVOfuverKFEa5ZqA-1; Mon, 27 Mar 2023 23:33:24 -0400
+X-MC-Unique: JdgrbxQVOfuverKFEa5ZqA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3027F38123B8;
+        Tue, 28 Mar 2023 03:33:24 +0000 (UTC)
+Received: from ovpn-8-20.pek2.redhat.com (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 71E3E2166B26;
+        Tue, 28 Mar 2023 03:33:15 +0000 (UTC)
+Date:   Tue, 28 Mar 2023 11:33:10 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Bernd Schubert <bschubert@ddn.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>, ming.lei@redhat.com
+Subject: Re: [PATCH V4 00/17] io_uring/ublk: add IORING_OP_FUSED_CMD
+Message-ID: <ZCJf9npDAEhbLsDN@ovpn-8-20.pek2.redhat.com>
+References: <20230324135808.855245-1-ming.lei@redhat.com>
+ <642236912a229_29cc2942c@dwillia2-xfh.jf.intel.com.notmuch>
+ <ZCJABlFshb0UmTMv@ovpn-8-20.pek2.redhat.com>
+ <a786568e-50fb-6f93-352a-1328d0f98a7b@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20230323053043.35-1-xieyongji@bytedance.com> <20230323053043.35-4-xieyongji@bytedance.com>
- <CACGkMEtH0=vr6JQrqWFZqf4p8bcgeKCr4ipqdBc9nv-st3Pfiw@mail.gmail.com>
- <CACycT3sm1P2qDQTNKp+RLmyd84+v8xwErf_g1SXqiaJDQO8LNg@mail.gmail.com> <CACGkMEvhXQ9ve4DQnmVu4hRRbCWM3oesR-=KaLisuyJ4-tyQxg@mail.gmail.com>
-In-Reply-To: <CACGkMEvhXQ9ve4DQnmVu4hRRbCWM3oesR-=KaLisuyJ4-tyQxg@mail.gmail.com>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Tue, 28 Mar 2023 11:33:00 +0800
-Message-ID: <CACycT3uYbnrQDDbFmwdww8ukMU1t9RsAuutHsFT-UzK9_Mc=Kg@mail.gmail.com>
-Subject: Re: [PATCH v4 03/11] virtio-vdpa: Support interrupt affinity
- spreading mechanism
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@lst.de>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a786568e-50fb-6f93-352a-1328d0f98a7b@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 11:14=E2=80=AFAM Jason Wang <jasowang@redhat.com> w=
-rote:
->
-> On Tue, Mar 28, 2023 at 11:03=E2=80=AFAM Yongji Xie <xieyongji@bytedance.=
-com> wrote:
-> >
-> > On Fri, Mar 24, 2023 at 2:28=E2=80=AFPM Jason Wang <jasowang@redhat.com=
-> wrote:
-> > >
-> > > On Thu, Mar 23, 2023 at 1:31=E2=80=AFPM Xie Yongji <xieyongji@bytedan=
-ce.com> wrote:
-> > > >
-> > > > To support interrupt affinity spreading mechanism,
-> > > > this makes use of group_cpus_evenly() to create
-> > > > an irq callback affinity mask for each virtqueue
-> > > > of vdpa device. Then we will unify set_vq_affinity
-> > > > callback to pass the affinity to the vdpa device driver.
-> > > >
-> > > > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-> > >
-> > > Thinking hard of all the logics, I think I've found something interes=
-ting.
-> > >
-> > > Commit ad71473d9c437 ("virtio_blk: use virtio IRQ affinity") tries to
-> > > pass irq_affinity to transport specific find_vqs().  This seems a
-> > > layer violation since driver has no knowledge of
-> > >
-> > > 1) whether or not the callback is based on an IRQ
-> > > 2) whether or not the device is a PCI or not (the details are hided b=
-y
-> > > the transport driver)
-> > > 3) how many vectors could be used by a device
-> > >
-> > > This means the driver can't actually pass a real affinity masks so th=
-e
-> > > commit passes a zero irq affinity structure as a hint in fact, so the
-> > > PCI layer can build a default affinity based that groups cpus evenly
-> > > based on the number of MSI-X vectors (the core logic is the
-> > > group_cpus_evenly). I think we should fix this by replacing the
-> > > irq_affinity structure with
-> > >
-> > > 1) a boolean like auto_cb_spreading
-> > >
-> > > or
-> > >
-> > > 2) queue to cpu mapping
-> > >
-> >
-> > But only the driver knows which queues are used in the control path
-> > which don't need the automatic irq affinity assignment.
->
-> Is this knowledge awarded by the transport driver now?
->
+On Tue, Mar 28, 2023 at 11:13:53AM +0800, Gao Xiang wrote:
+> 
+> 
+> On 2023/3/28 09:16, Ming Lei wrote:
+> > Hi Dan,
+> > 
+> > On Mon, Mar 27, 2023 at 05:36:33PM -0700, Dan Williams wrote:
+> > > Ming Lei wrote:
+> > > > Hello Jens,
+> > > > 
+> > > > Add IORING_OP_FUSED_CMD, it is one special URING_CMD, which has to
+> > > > be SQE128. The 1st SQE(master) is one 64byte URING_CMD, and the 2nd
+> > > > 64byte SQE(slave) is another normal 64byte OP. For any OP which needs
+> > > > to support slave OP, io_issue_defs[op].fused_slave needs to be set as 1,
+> > > > and its ->issue() can retrieve/import buffer from master request's
+> > > > fused_cmd_kbuf. The slave OP is actually submitted from kernel, part of
+> > > > this idea is from Xiaoguang's ublk ebpf patchset, but this patchset
+> > > > submits slave OP just like normal OP issued from userspace, that said,
+> > > > SQE order is kept, and batching handling is done too.
+> > > 
+> > > Hi Ming,
+> > > 
+> > > io_uring and ublk are starting to be more on my radar these days. I
+> > > wanted to take a look at this series, but could not get past the
+> > > distracting "master"/"slave" terminology in this lead-in paragraph let
+> > > alone start looking at patches.
+> > > 
+> > > Frankly, the description sounds more like "head"/"tail", or even
+> > > "fuse0"/"fuse1" because, for example, who is to say you might not have
+> > 
+> > The term "master/slave" is from patches.
+> > 
+> > The master command not only provides buffer for slave request, but also requires
+> > slave request for serving master command, and master command is always completed
+> > after all slave request are done.
+> > 
+> > That is why it is named as master/slave. Actually Jens raised the similar concern
+> > and I hate the name too, but it is always hard to figure out perfect name, or
+> > any other name for reflecting the relation? (head/tail, fuse0/1 can't
+> > do that, IMO)
+> > 
+> > > larger fused ops in the future and need terminology to address
+> > > "fuse{0,1,2,3}"?
+> > 
+> > Yeah, definitely, the interface can be extended in future to support
+> > multiple "slave" requests.
+> 
+> I guess master/slave (especially now) have bad meaning to
+> English-language guys so it's better to avoid it.
 
-This knowledge is awarded by the device driver rather than the transport dr=
-iver.
+Absolutely no offense given English isn't my native language, so
+let's move on with V5.
 
-E.g. virtio-scsi uses:
-
-    struct irq_affinity desc =3D { .pre_vectors =3D 2 }; // vq0 is control
-queue, vq1 is event queue
-
-> E.g virtio-blk uses:
->
->         struct irq_affinity desc =3D { 0, };
->
-> Atleast we can tell the transport driver which vq requires automatic
-> irq affinity.
->
-
-I think that is what the current implementation does.
-
-> > So I think the
-> > irq_affinity structure can only be created by device drivers and
-> > passed to the virtio-pci/virtio-vdpa driver.
->
-> This could be not easy since the driver doesn't even know how many
-> interrupts will be used by the transport driver, so it can't built the
-> actual affinity structure.
->
-
-The actual affinity mask is built by the transport driver, device
-driver only passes a hint on which queues don't need the automatic irq
-affinity assignment.
 
 Thanks,
-Yongji
+Ming
+
