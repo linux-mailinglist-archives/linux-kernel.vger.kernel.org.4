@@ -2,280 +2,648 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C24D16CC11F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F9F6CC125
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233220AbjC1NiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
+        id S232812AbjC1Nji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232841AbjC1NiU (ORCPT
+        with ESMTP id S232318AbjC1Njc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:38:20 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FE8AD0E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:38:17 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id l27so12264450wrb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:38:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680010696;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LIezWcC42h0ES1RJtRzU0ZPy+jlW694/tWWre3nr04o=;
-        b=PeN4PVlILs3/e87yebQgkoi0lUwsO4Q9UILT9CvI0j2iWrV4UyC0RYvhJBmZQ/jtF6
-         OO7ULx4R3rxBuPVhmbof/XRYGNWpjFBXvAm/dhGyh34u+Gy+GWqyDGot1zMrMQaMxw1h
-         jiX8qVdJ8R0qEuCby7sto8oIH7bBS99Cr7pmXgBqt+ffJnW/eIgrBTUMTqaegEghtvXB
-         Mh/+VofjeK6dtSuR6F1IuCG9Zi1vAzUzcCXAi/s4Cv+EZyRsGmrTEC/NoZ6GYrIr9IKz
-         Zykd/KuoB8B/JwGXRfcB/gvtWqq0BKUr9F9vRWP5UbGd+gcM9FQAGsMybu8Tt1CCG4MS
-         1/dA==
+        Tue, 28 Mar 2023 09:39:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E065BBB3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:38:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680010711;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g90pz48Kx7RGbPy//HaUA4HNcsTt1lBnS5HOOjFdtAs=;
+        b=BZGs1ZYH50Neo+JYB0WDuUsObDLgp1H+0kiANBxWksxQw+naBqNxITR+2wNoHjeBeaWftl
+        0c4W9BOKjUOUyYZSmEOCsIq54MnKVF9I/0lpMr4wwTJll0gNhJBTu2IVhgqNKXvb1mqQqf
+        T9CuwgLSQ1oPoyrhMLy2jwLNMeCoOkI=
+Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com
+ [209.85.222.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-357-t18H3M7zMPqVWaRyqEPlgQ-1; Tue, 28 Mar 2023 09:38:30 -0400
+X-MC-Unique: t18H3M7zMPqVWaRyqEPlgQ-1
+Received: by mail-ua1-f69.google.com with SMTP id d42-20020ab014ad000000b0075c9df2d66bso5724165uae.14
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:38:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680010696;
+        d=1e100.net; s=20210112; t=1680010710;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LIezWcC42h0ES1RJtRzU0ZPy+jlW694/tWWre3nr04o=;
-        b=VzEY/h3HrXB7XcVbUYGwXBQ16UXRn7Z4dkoeHE2AUWI46pb03R7pVbXXZoV4LZxVB4
-         yeHeDWAO35eR+cmVrcJrI5EIE1B9wxi0uLtXoPwhkaslLBk6gXvE9Q8UxlgzDZIp+pjF
-         M3ML0tQkk+H93dBwlQGeksCnlKE1XDX3wXIITe6Xwv/o2lizz+4IQeirF3BMl/bZb13c
-         +IJyEJYAADiO9d8l1bMn6jae91pwA8CfAswYmO3pgs4OsrNFjQsKGrsBtrzaD4qVMtPg
-         Xq6Z+/IVgEvv4QCao0IxLSVtjoOc8d/mWmFs06NLSbIroyDO5W3MwzLwSITjVgveI0BZ
-         /06A==
-X-Gm-Message-State: AAQBX9fwCNN6FkZeARXV88aAQOrKayrhMFiI0yFwb37ZO+0xPLnEhwFy
-        nHdYis7bQj6szBfqYtoAAeJU/P/Ax4vWhUa0iAPHuA==
-X-Google-Smtp-Source: AKy350aH9TyXEhCcLK6qS9ZANGOn8WPoVK6WHzfEv9Z7Msh2J+Zbtswi//6EdgBdPJVi0LwekHbKSfPvM+mg7gENlGM=
-X-Received: by 2002:adf:fb90:0:b0:2d6:9044:d836 with SMTP id
- a16-20020adffb90000000b002d69044d836mr2650840wrr.2.1680010695655; Tue, 28 Mar
- 2023 06:38:15 -0700 (PDT)
+        bh=g90pz48Kx7RGbPy//HaUA4HNcsTt1lBnS5HOOjFdtAs=;
+        b=6Dy+zXBxMz7E+l7lu+6hDJmGLn1pgh1y/Q5p5yigTEzIzwbcy9jFBs3GWGgSyzwQ6Z
+         9et9j3OUfJ/xSF06iKRgqoM1v63MSS77M+bZorwIAdog6czeWPrQngZe2Y4ZVzD3UtVh
+         L60HXMDUDA6TvbrTewPHja0GNUZVlB3eEXve96wvWQSgxhlgPqohgKunKBGZOLVgzgzj
+         wwhoMOqvw9m84BoOyYpIecl5kxKpfTEz2vzW7E/B45t/j0GluzBWBGNKqwVlrQCi13WX
+         r+nn8dFxFS4XZLLrUU+7+GEwZiT6hIHNRNAsbf4sRqBN7XLMmRb1yR5FKJOlEVLC3ukn
+         Ptdw==
+X-Gm-Message-State: AAQBX9eyDDyIZbbBCIGP53sqSJF0HX6lX7LeEl1CHVXbd1O8U3XFpoG7
+        JZe4nAoMFkKX0Vo0HlebqEv9AfTZFHf3je8uUUqAX2jwtFGZAWOpR81XTl3aBCc7dQiBNTG/klM
+        naIWWiZGiLdHWC673GKHvDdeXoYTJAvm3Xgzolbb9
+X-Received: by 2002:a1f:1d15:0:b0:435:56e:154e with SMTP id d21-20020a1f1d15000000b00435056e154emr8305805vkd.1.1680010709597;
+        Tue, 28 Mar 2023 06:38:29 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZtHLcJTXTJSQdQiRxqGfYvQ0q6CQiNt7I/lWQiEALL8iVM9rSc275o14cscuvLpUBDrnDxyCOAnXnll2F9LYk=
+X-Received: by 2002:a1f:1d15:0:b0:435:56e:154e with SMTP id
+ d21-20020a1f1d15000000b00435056e154emr8305790vkd.1.1680010709181; Tue, 28 Mar
+ 2023 06:38:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1679915278.git.mazziesaccount@gmail.com>
- <f2c7f7b04f7e4ee7b9cef73ecba672f5fa40eb73.1679915278.git.mazziesaccount@gmail.com>
- <ZCGFgypeuJXqNwQt@kroah.com> <e027fc0c-83e0-be6f-d62b-dac00ce9b761@gmail.com>
- <ZCGONl0mC8oyBj-0@kroah.com> <CABVgOSnUCsxPf1mAL03GQzaw_kFtgf5J7aTPodo=j6O+wYZ2iQ@mail.gmail.com>
- <e9619a2a-b6c8-e7f9-6018-45541608d0c5@gmail.com>
-In-Reply-To: <e9619a2a-b6c8-e7f9-6018-45541608d0c5@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 28 Mar 2023 21:38:03 +0800
-Message-ID: <CABVgOS=Tb_VsfiQZ6hE62e0LqbpKczjLxitXrzBvmcuDPxfAZw@mail.gmail.com>
-Subject: Re: [PATCH v6 3/7] kunit: Add kunit wrappers for (root) device creation
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        Maxime Ripard <maxime@cerno.tech>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000c174b905f7f5f8e7"
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230328-soc-mailbox-v1-0-3953814532fd@marcan.st> <20230328-soc-mailbox-v1-2-3953814532fd@marcan.st>
+In-Reply-To: <20230328-soc-mailbox-v1-2-3953814532fd@marcan.st>
+From:   Eric Curtin <ecurtin@redhat.com>
+Date:   Tue, 28 Mar 2023 14:38:13 +0100
+Message-ID: <CAOgh=Fzyw_V1ZZOiFbbtFowmZZxEs3+jRJNomT1nufEJZNn90A@mail.gmail.com>
+Subject: Re: [PATCH 2/5] soc: apple: mailbox: Add ASC/M3 mailbox driver
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Janne Grunau <j@jannau.net>, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000c174b905f7f5f8e7
-Content-Type: text/plain; charset="UTF-8"
-
-On Tue, 28 Mar 2023 at 21:22, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+On Tue, 28 Mar 2023 at 14:20, Hector Martin <marcan@marcan.st> wrote:
 >
-> Hi David & Greg and thanks for working with this!
+> This new driver is based on the existing apple-mailbox driver, but
+> replaces the usage of the mailbox subsystem with directly exported
+> symbols.
 >
-> On 3/28/23 15:45, David Gow wrote:
-> > Thanks, Gred and Matti.
-> >
-> > On Mon, 27 Mar 2023 at 20:38, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> >>
-> >> On Mon, Mar 27, 2023 at 03:20:06PM +0300, Matti Vaittinen wrote:
-> >>> On 3/27/23 15:01, Greg Kroah-Hartman wrote:
-> >>>> On Mon, Mar 27, 2023 at 02:34:02PM +0300, Matti Vaittinen wrote:
-> >
-> > I'm happy to keep working on this, but would definitely appreciate
-> > your feedback.
-> >
-> > I've put my work-in-progress code here:
-> > https://kunit.googlesource.com/linux/+/refs/heads/kunit/device-helpers%5E%21/#F0
-> >
-> > It creates a "kunit" bus, and adds a few helpers to create both
-> > devices and drivers on that bus, and clean them up when the test
-> > exits. It seems to work on all of the tests which used
-> > root_device_register so far (except those -- only
-> > test_iio_find_closest_gain_low so far -- which create multiple devices
-> > with the same name, as the driver name won't be unique),
+> As part of this refactor, this adds support for using the hardware FIFOs
+> (not supported in mailbox) and implicitly fixes a bunch of bugs caused
+> by bad interactions with the mailbox subsystem. It also adds runtime-PM
+> support.
 >
-> I wouldn't worry about it for as long as it's just because an iio-gts
-> test does something silly. Those tests are currently only in my personal
-> playground and changing those tests should be pretty trivial.
+> The new config symbol is APPLE_MBOX, while the module name remains
+> identical ("apple-mailbox"). The configs are mutually exclusive in
+> Kconfig, to avoid conflicts.
+>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+
+Watched the stream
+
+Acked-by: Eric Curtin <ecurtin@redhat.com>
+
+Is mise le meas/Regards,
+
+Eric Curtin
+
+> ---
+>  drivers/soc/apple/Kconfig   |  14 ++
+>  drivers/soc/apple/Makefile  |   3 +
+>  drivers/soc/apple/mailbox.c | 434 ++++++++++++++++++++++++++++++++++++++++++++
+>  drivers/soc/apple/mailbox.h |  48 +++++
+>  4 files changed, 499 insertions(+)
+>
+> diff --git a/drivers/soc/apple/Kconfig b/drivers/soc/apple/Kconfig
+> index a1596fefacff..caa2cf09ff7a 100644
+> --- a/drivers/soc/apple/Kconfig
+> +++ b/drivers/soc/apple/Kconfig
+> @@ -17,6 +17,20 @@ config APPLE_PMGR_PWRSTATE
+>           controls for SoC devices. This driver manages them through the
+>           generic power domain framework, and also provides reset support.
+>
+> +config APPLE_MBOX
+> +       tristate "Apple SoC mailboxes"
+> +       depends on PM
+> +       depends on ARCH_APPLE || (64BIT && COMPILE_TEST)
+> +       depends on !APPLE_MAILBOX
+> +       default ARCH_APPLE
+> +       help
+> +         Apple SoCs have various co-processors required for certain
+> +         peripherals to work (NVMe, display controller, etc.). This
+> +         driver adds support for the mailbox controller used to
+> +         communicate with those.
+> +
+> +         Say Y here if you have an Apple SoC.
+> +
+>  config APPLE_RTKIT
+>         tristate "Apple RTKit co-processor IPC protocol"
+>         depends on MAILBOX
+> diff --git a/drivers/soc/apple/Makefile b/drivers/soc/apple/Makefile
+> index e293770cf66d..e52edf6a73da 100644
+> --- a/drivers/soc/apple/Makefile
+> +++ b/drivers/soc/apple/Makefile
+> @@ -1,6 +1,9 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  obj-$(CONFIG_APPLE_PMGR_PWRSTATE)      += apple-pmgr-pwrstate.o
+>
+> +obj-$(CONFIG_APPLE_MBOX) += apple-mailbox.o
+> +apple-mailbox-y = mailbox.o
+> +
+>  obj-$(CONFIG_APPLE_RTKIT) += apple-rtkit.o
+>  apple-rtkit-y = rtkit.o rtkit-crashlog.o
+>
+> diff --git a/drivers/soc/apple/mailbox.c b/drivers/soc/apple/mailbox.c
+> new file mode 100644
+> index 000000000000..7bdebafa6e83
+> --- /dev/null
+> +++ b/drivers/soc/apple/mailbox.c
+> @@ -0,0 +1,434 @@
+> +// SPDX-License-Identifier: GPL-2.0-only OR MIT
+> +/*
+> + * Apple mailbox driver
+> + *
+> + * Copyright The Asahi Linux Contributors
+> + *
+> + * This driver adds support for two mailbox variants (called ASC and M3 by
+> + * Apple) found in Apple SoCs such as the M1. It consists of two FIFOs used to
+> + * exchange 64+32 bit messages between the main CPU and a co-processor.
+> + * Various coprocessors implement different IPC protocols based on these simple
+> + * messages and shared memory buffers.
+> + *
+> + * Both the main CPU and the co-processor see the same set of registers but
+> + * the first FIFO (A2I) is always used to transfer messages from the application
+> + * processor (us) to the I/O processor and the second one (I2A) for the
+> + * other direction.
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/device.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/types.h>
+> +#include "mailbox.h"
+> +
+> +#define APPLE_ASC_MBOX_CONTROL_FULL BIT(16)
+> +#define APPLE_ASC_MBOX_CONTROL_EMPTY BIT(17)
+> +
+> +#define APPLE_ASC_MBOX_A2I_CONTROL 0x110
+> +#define APPLE_ASC_MBOX_A2I_SEND0 0x800
+> +#define APPLE_ASC_MBOX_A2I_SEND1 0x808
+> +#define APPLE_ASC_MBOX_A2I_RECV0 0x810
+> +#define APPLE_ASC_MBOX_A2I_RECV1 0x818
+> +
+> +#define APPLE_ASC_MBOX_I2A_CONTROL 0x114
+> +#define APPLE_ASC_MBOX_I2A_SEND0 0x820
+> +#define APPLE_ASC_MBOX_I2A_SEND1 0x828
+> +#define APPLE_ASC_MBOX_I2A_RECV0 0x830
+> +#define APPLE_ASC_MBOX_I2A_RECV1 0x838
+> +
+> +#define APPLE_M3_MBOX_CONTROL_FULL BIT(16)
+> +#define APPLE_M3_MBOX_CONTROL_EMPTY BIT(17)
+> +
+> +#define APPLE_M3_MBOX_A2I_CONTROL 0x50
+> +#define APPLE_M3_MBOX_A2I_SEND0 0x60
+> +#define APPLE_M3_MBOX_A2I_SEND1 0x68
+> +#define APPLE_M3_MBOX_A2I_RECV0 0x70
+> +#define APPLE_M3_MBOX_A2I_RECV1 0x78
+> +
+> +#define APPLE_M3_MBOX_I2A_CONTROL 0x80
+> +#define APPLE_M3_MBOX_I2A_SEND0 0x90
+> +#define APPLE_M3_MBOX_I2A_SEND1 0x98
+> +#define APPLE_M3_MBOX_I2A_RECV0 0xa0
+> +#define APPLE_M3_MBOX_I2A_RECV1 0xa8
+> +
+> +#define APPLE_M3_MBOX_IRQ_ENABLE 0x48
+> +#define APPLE_M3_MBOX_IRQ_ACK 0x4c
+> +#define APPLE_M3_MBOX_IRQ_A2I_EMPTY BIT(0)
+> +#define APPLE_M3_MBOX_IRQ_A2I_NOT_EMPTY BIT(1)
+> +#define APPLE_M3_MBOX_IRQ_I2A_EMPTY BIT(2)
+> +#define APPLE_M3_MBOX_IRQ_I2A_NOT_EMPTY BIT(3)
+> +
+> +#define APPLE_MBOX_MSG1_OUTCNT GENMASK(56, 52)
+> +#define APPLE_MBOX_MSG1_INCNT GENMASK(51, 48)
+> +#define APPLE_MBOX_MSG1_OUTPTR GENMASK(47, 44)
+> +#define APPLE_MBOX_MSG1_INPTR GENMASK(43, 40)
+> +#define APPLE_MBOX_MSG1_MSG GENMASK(31, 0)
+> +
+> +#define APPLE_MBOX_TX_TIMEOUT 500
+> +
+> +struct apple_mbox_hw {
+> +       unsigned int control_full;
+> +       unsigned int control_empty;
+> +
+> +       unsigned int a2i_control;
+> +       unsigned int a2i_send0;
+> +       unsigned int a2i_send1;
+> +
+> +       unsigned int i2a_control;
+> +       unsigned int i2a_recv0;
+> +       unsigned int i2a_recv1;
+> +
+> +       bool has_irq_controls;
+> +       unsigned int irq_enable;
+> +       unsigned int irq_ack;
+> +       unsigned int irq_bit_recv_not_empty;
+> +       unsigned int irq_bit_send_empty;
+> +};
+> +
+> +int apple_mbox_send(struct apple_mbox *mbox, const struct apple_mbox_msg msg,
+> +                   bool atomic)
+> +{
+> +       unsigned long flags;
+> +       int ret;
+> +       u32 mbox_ctrl;
+> +       long t;
+> +
+> +       spin_lock_irqsave(&mbox->tx_lock, flags);
+> +       mbox_ctrl = readl_relaxed(mbox->regs + mbox->hw->a2i_control);
+> +
+> +       while (mbox_ctrl & mbox->hw->control_full) {
+> +               if (atomic) {
+> +                       ret = readl_poll_timeout_atomic(
+> +                               mbox->regs + mbox->hw->a2i_control, mbox_ctrl,
+> +                               !(mbox_ctrl & mbox->hw->control_full), 100,
+> +                               APPLE_MBOX_TX_TIMEOUT * 1000);
+> +
+> +                       if (ret) {
+> +                               spin_unlock_irqrestore(&mbox->tx_lock, flags);
+> +                               return ret;
+> +                       }
+> +
+> +                       break;
+> +               }
+> +               /*
+> +                * The interrupt is level triggered and will keep firing as long as the
+> +                * FIFO is empty. It will also keep firing if the FIFO was empty
+> +                * at any point in the past until it has been acknowledged at the
+> +                * mailbox level. By acknowledging it here we can ensure that we will
+> +                * only get the interrupt once the FIFO has been cleared again.
+> +                * If the FIFO is already empty before the ack it will fire again
+> +                * immediately after the ack.
+> +                */
+> +               if (mbox->hw->has_irq_controls) {
+> +                       writel_relaxed(mbox->hw->irq_bit_send_empty,
+> +                                      mbox->regs + mbox->hw->irq_ack);
+> +               }
+> +               enable_irq(mbox->irq_send_empty);
+> +               reinit_completion(&mbox->tx_empty);
+> +               spin_unlock_irqrestore(&mbox->tx_lock, flags);
+> +
+> +               t = wait_for_completion_interruptible_timeout(
+> +                       &mbox->tx_empty,
+> +                       msecs_to_jiffies(APPLE_MBOX_TX_TIMEOUT));
+> +               if (t < 0)
+> +                       return t;
+> +               else if (t == 0)
+> +                       return -ETIMEDOUT;
+> +
+> +               spin_lock_irqsave(&mbox->tx_lock, flags);
+> +               mbox_ctrl = readl_relaxed(mbox->regs + mbox->hw->a2i_control);
+> +       }
+> +
+> +       writeq_relaxed(msg.msg0, mbox->regs + mbox->hw->a2i_send0);
+> +       writeq_relaxed(FIELD_PREP(APPLE_MBOX_MSG1_MSG, msg.msg1),
+> +                      mbox->regs + mbox->hw->a2i_send1);
+> +
+> +       spin_unlock_irqrestore(&mbox->tx_lock, flags);
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL(apple_mbox_send);
+> +
+> +static irqreturn_t apple_mbox_send_empty_irq(int irq, void *data)
+> +{
+> +       struct apple_mbox *mbox = data;
+> +
+> +       /*
+> +        * We don't need to acknowledge the interrupt at the mailbox level
+> +        * here even if supported by the hardware. It will keep firing but that
+> +        * doesn't matter since it's disabled at the main interrupt controller.
+> +        * apple_mbox_send will acknowledge it before enabling
+> +        * it at the main controller again.
+> +        */
+> +       spin_lock(&mbox->tx_lock);
+> +       disable_irq_nosync(mbox->irq_send_empty);
+> +       complete(&mbox->tx_empty);
+> +       spin_unlock(&mbox->tx_lock);
+> +
+> +       return IRQ_HANDLED;
+> +}
+> +
+> +static int apple_mbox_poll_locked(struct apple_mbox *mbox)
+> +{
+> +       struct apple_mbox_msg msg;
+> +       int ret = 0;
+> +
+> +       u32 mbox_ctrl = readl_relaxed(mbox->regs + mbox->hw->i2a_control);
+> +
+> +       while (!(mbox_ctrl & mbox->hw->control_empty)) {
+> +               msg.msg0 = readq_relaxed(mbox->regs + mbox->hw->i2a_recv0);
+> +               msg.msg1 = FIELD_GET(
+> +                       APPLE_MBOX_MSG1_MSG,
+> +                       readq_relaxed(mbox->regs + mbox->hw->i2a_recv1));
+> +
+> +               mbox->rx(mbox, msg, mbox->cookie);
+> +               ret++;
+> +               mbox_ctrl = readl_relaxed(mbox->regs + mbox->hw->i2a_control);
+> +       }
+> +
+> +       /*
+> +        * The interrupt will keep firing even if there are no more messages
+> +        * unless we also acknowledge it at the mailbox level here.
+> +        * There's no race if a message comes in between the check in the while
+> +        * loop above and the ack below: If a new messages arrives inbetween
+> +        * those two the interrupt will just fire again immediately after the
+> +        * ack since it's level triggered.
+> +        */
+> +       if (mbox->hw->has_irq_controls) {
+> +               writel_relaxed(mbox->hw->irq_bit_recv_not_empty,
+> +                              mbox->regs + mbox->hw->irq_ack);
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +static irqreturn_t apple_mbox_recv_irq(int irq, void *data)
+> +{
+> +       struct apple_mbox *mbox = data;
+> +
+> +       spin_lock(&mbox->rx_lock);
+> +       apple_mbox_poll_locked(mbox);
+> +       spin_unlock(&mbox->rx_lock);
+> +
+> +       return IRQ_HANDLED;
+> +}
+> +
+> +int apple_mbox_poll(struct apple_mbox *mbox)
+> +{
+> +       unsigned long flags;
+> +       int ret;
+> +
+> +       spin_lock_irqsave(&mbox->rx_lock, flags);
+> +       ret = apple_mbox_poll_locked(mbox);
+> +       spin_unlock_irqrestore(&mbox->rx_lock, flags);
+> +
+> +       return ret;
+> +}
+> +EXPORT_SYMBOL(apple_mbox_poll);
+> +
+> +int apple_mbox_start(struct apple_mbox *mbox)
+> +{
+> +       int ret;
+> +
+> +       if (mbox->active)
+> +               return 0;
+> +
+> +       ret = pm_runtime_resume_and_get(mbox->dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       /*
+> +        * Only some variants of this mailbox HW provide interrupt control
+> +        * at the mailbox level. We therefore need to handle enabling/disabling
+> +        * interrupts at the main interrupt controller anyway for hardware that
+> +        * doesn't. Just always keep the interrupts we care about enabled at
+> +        * the mailbox level so that both hardware revisions behave almost
+> +        * the same.
+> +        */
+> +       if (mbox->hw->has_irq_controls) {
+> +               writel_relaxed(mbox->hw->irq_bit_recv_not_empty |
+> +                                      mbox->hw->irq_bit_send_empty,
+> +                              mbox->regs + mbox->hw->irq_enable);
+> +       }
+> +
+> +       enable_irq(mbox->irq_recv_not_empty);
+> +       mbox->active = true;
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL(apple_mbox_start);
+> +
+> +void apple_mbox_stop(struct apple_mbox *mbox)
+> +{
+> +       if (!mbox->active)
+> +               return;
+> +
+> +       mbox->active = false;
+> +       disable_irq(mbox->irq_recv_not_empty);
+> +       pm_runtime_mark_last_busy(mbox->dev);
+> +       pm_runtime_put_autosuspend(mbox->dev);
+> +}
+> +EXPORT_SYMBOL(apple_mbox_stop);
+> +
+> +struct apple_mbox *apple_mbox_get(struct device *dev, int index)
+> +{
+> +       struct of_phandle_args args;
+> +       struct platform_device *pdev;
+> +       struct apple_mbox *mbox;
+> +       int ret;
+> +
+> +       ret = of_parse_phandle_with_args(dev->of_node, "mboxes", "#mbox-cells",
+> +                                        index, &args);
+> +       if (ret || !args.np)
+> +               return ERR_PTR(ret);
+> +
+> +       pdev = of_find_device_by_node(args.np);
+> +       of_node_put(args.np);
+> +
+> +       if (!pdev)
+> +               return ERR_PTR(EPROBE_DEFER);
+> +
+> +       mbox = platform_get_drvdata(pdev);
+> +       if (!mbox)
+> +               return ERR_PTR(EPROBE_DEFER);
+> +
+> +       if (!device_link_add(dev, &pdev->dev, DL_FLAG_AUTOREMOVE_CONSUMER))
+> +               return ERR_PTR(ENODEV);
+> +
+> +       return mbox;
+> +}
+> +EXPORT_SYMBOL(apple_mbox_get);
+> +
+> +struct apple_mbox *apple_mbox_get_byname(struct device *dev, const char *name)
+> +{
+> +       int index;
+> +
+> +       index = of_property_match_string(dev->of_node, "mbox-names", name);
+> +       if (index < 0)
+> +               return ERR_PTR(index);
+> +
+> +       return apple_mbox_get(dev, index);
+> +}
+> +EXPORT_SYMBOL(apple_mbox_get_byname);
+> +
+> +static int apple_mbox_probe(struct platform_device *pdev)
+> +{
+> +       int ret;
+> +       char *irqname;
+> +       struct apple_mbox *mbox;
+> +       struct device *dev = &pdev->dev;
+> +
+> +       mbox = devm_kzalloc(dev, sizeof(*mbox), GFP_KERNEL);
+> +       if (!mbox)
+> +               return -ENOMEM;
+> +
+> +       mbox->dev = &pdev->dev;
+> +       mbox->hw = of_device_get_match_data(dev);
+> +       if (!mbox->hw)
+> +               return -EINVAL;
+> +
+> +       mbox->regs = devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(mbox->regs))
+> +               return PTR_ERR(mbox->regs);
+> +
+> +       mbox->irq_recv_not_empty =
+> +               platform_get_irq_byname(pdev, "recv-not-empty");
+> +       if (mbox->irq_recv_not_empty < 0)
+> +               return -ENODEV;
+> +
+> +       mbox->irq_send_empty = platform_get_irq_byname(pdev, "send-empty");
+> +       if (mbox->irq_send_empty < 0)
+> +               return -ENODEV;
+> +
+> +       spin_lock_init(&mbox->rx_lock);
+> +       spin_lock_init(&mbox->tx_lock);
+> +       init_completion(&mbox->tx_empty);
+> +
+> +       irqname = devm_kasprintf(dev, GFP_KERNEL, "%s-recv", dev_name(dev));
+> +       if (!irqname)
+> +               return -ENOMEM;
+> +
+> +       ret = devm_request_irq(dev, mbox->irq_recv_not_empty,
+> +                              apple_mbox_recv_irq,
+> +                              IRQF_NO_AUTOEN | IRQF_NO_SUSPEND, irqname, mbox);
+> +       if (ret)
+> +               return ret;
+> +
+> +       irqname = devm_kasprintf(dev, GFP_KERNEL, "%s-send", dev_name(dev));
+> +       if (!irqname)
+> +               return -ENOMEM;
+> +
+> +       ret = devm_request_irq(dev, mbox->irq_send_empty,
+> +                              apple_mbox_send_empty_irq,
+> +                              IRQF_NO_AUTOEN | IRQF_NO_SUSPEND, irqname, mbox);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = devm_pm_runtime_enable(dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       platform_set_drvdata(pdev, mbox);
+> +       return 0;
+> +}
+> +
+> +static const struct apple_mbox_hw apple_mbox_asc_hw = {
+> +       .control_full = APPLE_ASC_MBOX_CONTROL_FULL,
+> +       .control_empty = APPLE_ASC_MBOX_CONTROL_EMPTY,
+> +
+> +       .a2i_control = APPLE_ASC_MBOX_A2I_CONTROL,
+> +       .a2i_send0 = APPLE_ASC_MBOX_A2I_SEND0,
+> +       .a2i_send1 = APPLE_ASC_MBOX_A2I_SEND1,
+> +
+> +       .i2a_control = APPLE_ASC_MBOX_I2A_CONTROL,
+> +       .i2a_recv0 = APPLE_ASC_MBOX_I2A_RECV0,
+> +       .i2a_recv1 = APPLE_ASC_MBOX_I2A_RECV1,
+> +
+> +       .has_irq_controls = false,
+> +};
+> +
+> +static const struct apple_mbox_hw apple_mbox_m3_hw = {
+> +       .control_full = APPLE_M3_MBOX_CONTROL_FULL,
+> +       .control_empty = APPLE_M3_MBOX_CONTROL_EMPTY,
+> +
+> +       .a2i_control = APPLE_M3_MBOX_A2I_CONTROL,
+> +       .a2i_send0 = APPLE_M3_MBOX_A2I_SEND0,
+> +       .a2i_send1 = APPLE_M3_MBOX_A2I_SEND1,
+> +
+> +       .i2a_control = APPLE_M3_MBOX_I2A_CONTROL,
+> +       .i2a_recv0 = APPLE_M3_MBOX_I2A_RECV0,
+> +       .i2a_recv1 = APPLE_M3_MBOX_I2A_RECV1,
+> +
+> +       .has_irq_controls = true,
+> +       .irq_enable = APPLE_M3_MBOX_IRQ_ENABLE,
+> +       .irq_ack = APPLE_M3_MBOX_IRQ_ACK,
+> +       .irq_bit_recv_not_empty = APPLE_M3_MBOX_IRQ_I2A_NOT_EMPTY,
+> +       .irq_bit_send_empty = APPLE_M3_MBOX_IRQ_A2I_EMPTY,
+> +};
+> +
+> +static const struct of_device_id apple_mbox_of_match[] = {
+> +       { .compatible = "apple,asc-mailbox-v4", .data = &apple_mbox_asc_hw },
+> +       { .compatible = "apple,m3-mailbox-v2", .data = &apple_mbox_m3_hw },
+> +       {}
+> +};
+> +MODULE_DEVICE_TABLE(of, apple_mbox_of_match);
+> +
+> +static struct platform_driver apple_mbox_driver = {
+> +       .driver = {
+> +               .name = "apple-mailbox",
+> +               .of_match_table = apple_mbox_of_match,
+> +       },
+> +       .probe = apple_mbox_probe,
+> +};
+> +module_platform_driver(apple_mbox_driver);
+> +
+> +MODULE_LICENSE("Dual MIT/GPL");
+> +MODULE_AUTHOR("Sven Peter <sven@svenpeter.dev>");
+> +MODULE_DESCRIPTION("Apple Mailbox driver");
+> diff --git a/drivers/soc/apple/mailbox.h b/drivers/soc/apple/mailbox.h
+> new file mode 100644
+> index 000000000000..f73a8913da95
+> --- /dev/null
+> +++ b/drivers/soc/apple/mailbox.h
+> @@ -0,0 +1,48 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only OR MIT */
+> +/*
+> + * Apple mailbox message format
+> + *
+> + * Copyright The Asahi Linux Contributors
+> + */
+> +
+> +#ifndef _APPLE_MAILBOX_H_
+> +#define _APPLE_MAILBOX_H_
+> +
+> +#include <linux/device.h>
+> +#include <linux/types.h>
+> +
+> +/* encodes a single 96bit message sent over the single channel */
+> +struct apple_mbox_msg {
+> +       u64 msg0;
+> +       u32 msg1;
+> +};
+> +
+> +struct apple_mbox {
+> +       struct device *dev;
+> +       void __iomem *regs;
+> +       const struct apple_mbox_hw *hw;
+> +       bool active;
+> +
+> +       int irq_recv_not_empty;
+> +       int irq_send_empty;
+> +
+> +       spinlock_t rx_lock;
+> +       spinlock_t tx_lock;
+> +
+> +       struct completion tx_empty;
+> +
+> +       /** Receive callback for incoming messages */
+> +       void (*rx)(struct apple_mbox *mbox, struct apple_mbox_msg msg, void *cookie);
+> +       void *cookie;
+> +};
+> +
+> +struct apple_mbox *apple_mbox_get(struct device *dev, int index);
+> +struct apple_mbox *apple_mbox_get_byname(struct device *dev, const char *name);
+> +
+> +int apple_mbox_start(struct apple_mbox *mbox);
+> +void apple_mbox_stop(struct apple_mbox *mbox);
+> +int apple_mbox_poll(struct apple_mbox *mbox);
+> +int apple_mbox_send(struct apple_mbox *mbox, struct apple_mbox_msg msg,
+> +                   bool atomic);
+> +
+> +#endif
+>
+> --
+> 2.40.0
+>
 >
 
-Yeah: this isn't anything to worry about. It's as much my note as to
-"what works with this code as-is", rather than indicative of a more
-fundamental flaw.
-
-> And right after saying that - the test_iio_find_closest_gain_low test does
->
-> a) register a 'test' device
-> b) perform test on devm_ API
-> c) unregister the 'test' device
->
-> d) register a 'test' device (same name as at step a)
-> e) perform test on devm_ API
-> f) unregister the 'test' device
->
-> My assumption is that the test device would be gone after step c)
-> because there should be no references to it anywhere. Hence, I wonder
-> why registering at step d) fails? (Or did I misunderstand something?)
->
-
-This is because I'm now creating a struct device_driver as well as a
-device, and it's not being cleaned up until the end of the test.
-
-The two solutions here would be to either:
-- Add a way to clean up the driver earlier. (Shouldn't be too hard, I
-just haven't got around to it yet), or:
-- Use the same struct device_driver for both tests (there's a new
-kunit_device_register_with_driver which allows you to pass a custom
-driver in, rather than creating your own)
-
-I think the latter's probably better, but I'll probably implement both
-as I clean up the API further.
-
-> > and the drm
-> > tests work fine when ported to it as well.
-> >
-> > There's still a lot of cleanup to do and questions which need
-> > answering, including:
-> > - Working out how best to provide an owning module (it's currently
-> > just kunit, but probably should be the module which contains the
-> > actual tests)
->
-> Maybe there is something I am not seeing but how about wrapping the
-> kunit_device_register() in a macro and getting the THIS_MODULE in
-> caller's context?
->
-
-Yeah: that's probably what I'll do. The other possibility is to store
-the module pointer in the struct kunit context.
-
-> > In any case, does this seem like the right way forward?
->
-> I am by no means an expert on this but this does look good to me. I
-> would keep this as clean, lean and simple as possible in order to keep
-> understanding / debugging the problems exposed by the tests as simple as
-> possible. At some point someone is wondering why a test fails, and ends
-> up looking through these helpers to ensure problem is no lurking
-> there... Hence, I'd kept the code there in minimum - meaning, I might
-> not add kunit class or even a driver until tests require that. (Even if
-> it would not look as good in the sysfs - as far as I understand the
-> kunit sysfs entries are a 'test feature' which should not be present in
-> 'production systems'. This is not an excuse to make things bad - but (in
-> my opinion) this is a good reason to prioritize simplicity.
-
-I agree with you that it's best to avoid complexity for as long as we
-reasonably can. I think that there are enough things which would
-benefit from having the driver stuff to make it worth having
-_something_ there, particularly since it makes this a more "normal"
-device, so hopefully will be less surprising.
-
-For sysfs, it's one of those things which shows up pretty rarely in
-day-to-day KUnit use, as most people are using the kunit.py script
-which has all of the tests built-in, and no userspace to look at sysfs
-from. That being said, that doesn't cover all use cases, and I
-definitely would rather not make sysfs unusably ugly for everyone
-else, so I'm happy to tidy it up. (I'm not planning to do a kunit
-class at the moment, though.)
-
-I _think_ this approach (once the details of the API and
-implementation are tidied up a bit) should sit in about the sweet spot
-for complexity, assuming there's nothing horribly wrong with it I
-haven't noticed. I suspect we're better off leaving some of the more
-advanced use-cases to implement their own way of instantiating
-devices, at least for now, and focus on getting these common cases
-right.
-
-Cheers,
--- David
-
---000000000000c174b905f7f5f8e7
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD3
-EFFRWrGwi0bJwxfUewt97EeUGLdC20UZ27plKAUFpjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMjgxMzM4MTZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAg2JZ4hgHrepDLqlVvs7M
-OBcWCHWKJ7F044BH5oami78ttZdt1NSFvocvaF8+0PYPGexdJ4Z+LAeFLNNqXIgvG2qN8ediYYXY
-G14Pzyk98wT3S6dmvUtGVhOfTaedm8e49rSAAJ1hqvQ3G3DYX4RdPyxG6wPqaTJTdNZu6KVFRNG4
-gvc9W61jquMrFilzhvv/RmAjvXt4rNdjDrz95VH/XfDDQjQVXoTq5/Gf6JsOjeCE6hDKejgCyTAg
-y1qTUhDWKG7cMCdWVu/s0xwllfKdnajUcWrrSRa6WsXag98Z5szDiBbbS2QXOBN/Zm1NpFEVu9Zg
-XZG4fyR5KOiLQgBgJA==
---000000000000c174b905f7f5f8e7--
