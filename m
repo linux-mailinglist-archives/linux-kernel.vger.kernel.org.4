@@ -2,128 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E326CB585
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 06:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9856CB581
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 06:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjC1Etz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 00:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
+        id S229786AbjC1EtT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Mar 2023 00:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbjC1Etv (ORCPT
+        with ESMTP id S229452AbjC1EtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 00:49:51 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4276A210D;
-        Mon, 27 Mar 2023 21:49:40 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id s20so11223621ljp.1;
-        Mon, 27 Mar 2023 21:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679978978;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Pe8W/RK+hOyOkq9FFLRy1d0qcCv204a0d5Y+9iBByJM=;
-        b=koBzlt9RwyHbY0OVDn07ocQF7z6Bht4ov6UxZYuxX7FdNlS9/tW6Go9GvM3WKN3PBW
-         NaT0xbsxhV9XrrTcDPk7BQ+DrJDK+Sr4IFhLCLLyRkWK4U7ECBBpgC+01F0NXagInzAk
-         rHLOUpihTefdiVEMvx/SdC+PdsO1bGbPXXAxcq4xPRiSHcrW1AXLnj8YJY4iFbsjpcbx
-         eIkRAKuzJ9ydYLpZ3UypRzVIgiutx29maPuLogxfEBUjofigwYEf8PH3wgffRBruTRTU
-         TdL4CMQ4h1+drLLDwZl4qDqkqSMmcrCIMSL+ztPrC8nst34aKNLVGb534EENCIEHSHLl
-         pJaQ==
+        Tue, 28 Mar 2023 00:49:18 -0400
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450A310FB;
+        Mon, 27 Mar 2023 21:49:17 -0700 (PDT)
+Received: by mail-pf1-f179.google.com with SMTP id u38so7110452pfg.10;
+        Mon, 27 Mar 2023 21:49:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679978978;
+        d=1e100.net; s=20210112; t=1679978957;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Pe8W/RK+hOyOkq9FFLRy1d0qcCv204a0d5Y+9iBByJM=;
-        b=qPFY1Wsdc8XryP4pjZJxJDq7CLspyvkudhnn1HLrVqGouHJSxv0gbQL4efZBAXhLmJ
-         GwCCqhPehvSaxUTINTi0uzS7q7THiiikYQJEEqZUNmyyD2Pb4gVmYZxgxhnpqPcimUUP
-         YYeW2EMJzikCIHBNGcwgu+vi6+F5jVAOz11INKUuMkWBUsqjGWTE7ZbcgOnlUFdwT4ja
-         eBW9iI3jHc5s0kvm6cCuN8wItGn7EGfiNOi9UgyBUmRv7Z7V0O52PdiXRdaHgJGjukdM
-         0ilfZgBTn7HzFHy3EoorwuOgtj3NPfe5AOIYiBCP6T8hXax4MpOh10sCcvEIo6vuNyB9
-         7mVQ==
-X-Gm-Message-State: AAQBX9fU3zibB2Pq8ayqyfTPVQ4vxiaT9yVGeoTKn41Dm5QEgqrQQWQ4
-        M+cpuqLCICfcyk2m6d50LFqbWiSHSWKmVjaDQRuX6W4TMHpZbg==
-X-Google-Smtp-Source: AKy350YQln6FRBHlZfiMVjcqK3xmShm08tV8rciTcVkcJ0o1S4Xu3ckIZiMn1ZpIb7pg1jvz1dhdi+sKmZz4jp8/f+g=
-X-Received: by 2002:a05:651c:104d:b0:298:b32c:e4f0 with SMTP id
- x13-20020a05651c104d00b00298b32ce4f0mr4347140ljm.8.1679978977938; Mon, 27 Mar
- 2023 21:49:37 -0700 (PDT)
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eeysXSBzNTunyxSLsLf6PZdL/mFzWkWNNBxhRDgo0c0=;
+        b=sOT/hJfYGv2ejCMoZdzlnDkUFF2+vjLZ7kX2YHYip8z0NMKQNzaF/pvn2RD+0E8Z6o
+         kR3lOW8TVZqP9krDF+eNXJyCyYlsHOa1aFsUuvmAAE7Wic/SFXpGeA6f/jJndXRepj4W
+         W8/vtwaR2gyatnda21dInwxcEdXyWKyLIwJgzJr7zR01pH/Btex5KkD47jkc1K3WsOT8
+         CV6wrtTPVos9NPa2V4fTyUS+Ds4TNqRCOKq6B/kqFaOR+9SC6HpteS0wjWUhqV/QZ/7D
+         zwA6S/PWYMhXhl23EVOJFwGoRP39RrxBQzVeiXktvw7qW4OoupEDWE3Jcwscu57sDwrS
+         y0NQ==
+X-Gm-Message-State: AAQBX9fMUk/OZ1aUI6fBZ7In8oBKZCKFc/88kus4HRjF/2JJcDrQ8LUp
+        j3MMxf2+gcrM2PSGRHgTp8Bkr+0sE/z7HKY2dSg=
+X-Google-Smtp-Source: AKy350aKCni2mn2m2LUsiHsUqDTbJwB8esZTT/Ly4hHJ156kktIhkVqLpPy7U7QY6Wb4YzxDrart1KXMGtX32uIRj2g=
+X-Received: by 2002:a05:6a00:1a15:b0:62a:56ce:f90b with SMTP id
+ g21-20020a056a001a1500b0062a56cef90bmr7455059pfv.2.1679978956567; Mon, 27 Mar
+ 2023 21:49:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <54a519ec-bfe5-60f3-fc43-707a11d38d2a@w6rz.net>
- <642d6944-4488-4dc6-99e9-209849b9771c@infradead.org> <5946f189-c564-e196-a375-cb03edcacaa0@infradead.org>
-In-Reply-To: <5946f189-c564-e196-a375-cb03edcacaa0@infradead.org>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Tue, 28 Mar 2023 06:49:00 +0200
-Message-ID: <CA+icZUXt2Q6k6b6tHVA_F6rjeUTPmMb9uCCz+rbDJ9UW2kq3=A@mail.gmail.com>
-Subject: Re: Bug in recent changes to builddeb
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Ron Economos <re@w6rz.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
+References: <20230327051048.11589-1-peter_hong@fintek.com.tw>
+ <CAMZ6Rq+ps1tLii1VfYyAqfD4ck_TGWBUo_ouK_vLfhoNEg-BPg@mail.gmail.com> <5bdee736-7868-81c3-e63f-a28787bd0007@fintek.com.tw>
+In-Reply-To: <5bdee736-7868-81c3-e63f-a28787bd0007@fintek.com.tw>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 28 Mar 2023 13:49:05 +0900
+Message-ID: <CAMZ6Rq++N9ui5srP2uBYz0FPXttBYd2m982K8X-ESCC=qu1dAQ@mail.gmail.com>
+Subject: Re: [PATCH V3] can: usb: f81604: add Fintek F81604 support
+To:     Peter Hong <peter_hong@fintek.com.tw>
+Cc:     wg@grandegger.com, mkl@pengutronix.de,
+        michal.swiatkowski@linux.intel.com, Steen.Hegelund@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, frank.jungclaus@esd.eu,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 12:52=E2=80=AFAM Randy Dunlap <rdunlap@infradead.or=
-g> wrote:
+On Tue 28 Mar 2023 at 12:32, Peter Hong <peter_hong@fintek.com.tw> wrote:
+> Hi Vincent,
 >
+> Vincent MAILHOL 於 2023/3/27 下午 06:27 寫道:
+> > eff->id is a 32 bit value. It is not aligned. So, you must always use
+> > {get|set}_unaligned_be32() to manipulate this value.
+> > N.B. on x86 architecture, unaligned access is fine, but some other
+> > architecture may throw a fault. Read this for more details:
+> >
+> >    https://docs.kernel.org/arm/mem_alignment.html
 >
+> for the consistency of the code, could I also add get/put_unaligned_be16
+> in SFF
+> sections ?
+
+It is not needed. OK to mix.
+
+> >> +static int f81604_set_reset_mode(struct net_device *netdev)
+> >> +{
+> >> +       struct f81604_port_priv *priv = netdev_priv(netdev);
+> >> +       int status, i;
+> >> +       u8 tmp;
+> >> +
+> >> +       /* disable interrupts */
+> >> +       status = f81604_set_sja1000_register(priv->dev, netdev->dev_id,
+> >> +                                            SJA1000_IER, IRQ_OFF);
+> >> +       if (status)
+> >> +               return status;
+> >> +
+> >> +       for (i = 0; i < F81604_SET_DEVICE_RETRY; i++) {
+> > Thanks for removing F81604_USB_MAX_RETRY.
+> >
+> > Yet, I still would like to understand why you need one hundred tries?
+> > Is this some paranoiac safenet? Or does the device really need so many
+> > attempts to operate reliably? If those are needed, I would like to
+> > understand the root cause.
 >
-> On 3/27/23 15:41, Randy Dunlap wrote:
-> > at least Cc linux-kbuild.
+> This section is copy from sja1000.c. In my test, the operation/reset may
+> retry 1 times.
+> I'll reduce it from 100 to 10 times.
+
+Is it because the device is not ready? Does this only appear at
+startup or at random?
+
+>
+> >> +       int status, len;
+> >> +
+> >> +       if (can_dropped_invalid_skb(netdev, skb))
+> >> +               return NETDEV_TX_OK;
+> >> +
+> >> +       netif_stop_queue(netdev);
+> > In your driver, you send the CAN frames one at a time and wait for the
+> > rx_handler to restart the queue. This approach dramatically degrades
+> > the throughput. Is this a device limitation? Is the device not able to
+> > manage more than one frame at a time?
 > >
 >
-> or just see https://patchwork.kernel.org/project/linux-kbuild/patch/3351f=
-907cfd0b5d8372e858a8ec9065cc2bd91df.1679434718.git.kevin@kevinlocke.name/
+> This device will not NAK on TX frame not complete, it only NAK on TX
+> endpoint
+> memory not processed, so we'll send next frame unitl TX complete(TI)
+> interrupt
+> received.
 >
-> and use a later git tree.
->
-> I.e., it's fixed now.
->
-> > On 3/27/23 13:55, Ron Economos wrote:
-> >> Looks like there's a bug in /scripts/package/builddeb. On lines 188, 1=
-97 and 198, the variable $version is used. However, it's not defined (remov=
-ed with recent changes).
-> >>
-> >> This causes the headers to be put into /usr/src/linux-headers-. When t=
-he next version is attempted to be installed, the following error occurs.
-> >>
-> >> $ sudo dpkg -i linux-headers-6.3.0-rc4_6.3.0-rc4-2_riscv64.deb
-> >> Selecting previously unselected package linux-headers-6.3.0-rc4.
-> >> (Reading database ... 376925 files and directories currently installed=
-.)
-> >> Preparing to unpack linux-headers-6.3.0-rc4_6.3.0-rc4-2_riscv64.deb ..=
-.
-> >> Unpacking linux-headers-6.3.0-rc4 (6.3.0-rc4-2) ...
-> >> dpkg: error processing archive linux-headers-6.3.0-rc4_6.3.0-rc4-2_ris=
-cv64.deb (--install):
-> >>  trying to overwrite '/usr/src/linux-headers-/.config', which is also =
-in package linux-headers-6.3.0-rc3 6.3.0-rc3-4
-> >> dpkg-deb: error: paste subprocess was killed by signal (Broken pipe)
-> >> Errors were encountered while processing:
-> >>  linux-headers-6.3.0-rc4_6.3.0-rc4-2_riscv64.deb
-> >>
+> The device can polling status register via TX/RX endpoint, but it's more
+> complex.
+> We'll plan to do it when first driver landing in mainstream.
+
+OK for me to have this as a next step. Marc, what do you think?
+
+> >> +static int f81604_set_termination(struct net_device *netdev, u16 term)
+> >> +{
+> >> +       struct f81604_port_priv *port_priv = netdev_priv(netdev);
+> >> +       struct f81604_priv *priv;
+> >> +       u8 mask, data = 0;
+> >> +       int r;
+> >> +
+> >> +       priv = usb_get_intfdata(port_priv->intf);
+> >> +
+> >> +       if (netdev->dev_id == 0)
+> >> +               mask = F81604_CAN0_TERM;
+> >> +       else
+> >> +               mask = F81604_CAN1_TERM;
+> >> +
+> >> +       if (term == F81604_TERMINATION_ENABLED)
+> >> +               data = mask;
+> >> +
+> >> +       mutex_lock(&priv->mutex);
+> > Did you witness a race condition?
 > >
+> > As far as I know, this call back is only called while the network
+> > stack big kernel lock (a.k.a. rtnl_lock) is being hold.
+> > If you have doubt, try adding a:
+> >
+> >    ASSERT_RTNL()
+> >
+> > If this assert works, then another mutex is not needed.
+>
+> It had added ASSERT_RTNL() into f81604_set_termination(). It only assert
+> in f81604_probe() -> f81604_set_termination(), not called via ip command:
+>      ip link set dev can0 type can termination 120
+>      ip link set dev can0 type can termination 0
+>
+> so I'll still use mutex on here.
 
-Hi Masahiro,
+Sorry, do you mean that the assert throws warnings for f81604_probe()
+-> f81604_set_termination() but that it is OK (no warning) for ip
+command?
 
-when do you plan the next git-pull request to Linus?
+I did not see that you called f81604_set_termination() internally.
+Indeed, rtnl_lock is not held in probe(). But I think it is still OK.
+In f81604_probe() you call f81604_set_termination() before
+register_candev(). If the device is not yet registered,
+f81604_set_termination() can not yet be called via ip command. Can you
+describe more precisely where you think there is a concurrency issue?
+I still do not see it.
 
-For people using Debian and builddeb this is really annoying.
+> >> +               port_priv->can.do_get_berr_counter = f81604_get_berr_counter;
+> >> +               port_priv->can.ctrlmode_supported =
+> >> +                       CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_3_SAMPLES |
+> >> +                       CAN_CTRLMODE_ONE_SHOT | CAN_CTRLMODE_BERR_REPORTING |
+> >> +                       CAN_CTRLMODE_CC_LEN8_DLC | CAN_CTRLMODE_PRESUME_ACK;
+> > Did you test the CAN_CTRLMODE_CC_LEN8_DLC feature? Did you confirm
+> > that you can send and receive DLC greater than 8?
+>
+> Sorry, I had misunderstand the define. This device is only support 0~8
+> data length,
+  ^^^^^^^^^^^
 
-Thanks.
+Data length or Data Length Code (DLC)? Classical CAN maximum data
+length is 8 but maximum DLC is 15 (and DLC 8 to 15 mean a data length
+of 8).
 
-Regards,
--Sedat-
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.=
-git/log/?h=3Dfixes
+> so I'll remove CAN_CTRLMODE_CC_LEN8_DLC in future patch.
