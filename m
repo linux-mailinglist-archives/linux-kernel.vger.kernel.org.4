@@ -2,113 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11796CB7C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17C16CB7C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjC1HNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 03:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53646 "EHLO
+        id S230073AbjC1HNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 03:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjC1HNJ (ORCPT
+        with ESMTP id S229527AbjC1HNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 03:13:09 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2119.outbound.protection.outlook.com [40.107.12.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EFC2118;
-        Tue, 28 Mar 2023 00:13:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oV22Tth7vG3zKfITh8KFdlxF980/wiDi3PYq2IFdLXOkF64in5TEkuAE1dFEzhm0gv0lKcuuYWQLaPEbXj9cmGTvew/ubvfPa5EUq5m3UGZns7j6PZBhm6LTw1cIRSAki7Ohz6vLRA7mF3PAA+CtbKdTl9WvHmnZE05l9hvB70XvLLJnuEwEnU9JW1Ot1CG3nTJIBW6ZwvBsFChNzpiruOBI8S0yj8v4OZiolzoaRQvZ5tVhmrQBdpC4v/goRgZ2Yar0N1ipCtb4WRhzAAgLeQvr0v4W7GDkx6xZdfQRxPOYB77vW9XPUwqQyY7UzMF9yv+0q6lJpzBfEEddY2LcTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x9FfItd+DLXFZSqGiR2UnfW+z/bzFoKQnLUVKojVyRo=;
- b=QCV5eSwxytZ1+Rua/QEsN7BgcOUhDbplqPSNBMBYs+zOQ8Sfm2lcT1DIfBzffsMOOpa65igo6wKW4G6TotR5ctTQlaf2AKTQYmZdnAzXIL+FYvDmv+PewGdIbSP0e5LMI4omvk/q4XC4XbG2+8fsO/D10gsH8UCQaV0PnC0q0vwlpv1LD9b2ZVfkL1JJ15AwoziraMXA33YbpnbOb2DknZHAXTnV4jPTRdNrolTqTT6h/g9pZ1X8uVqBBhZ5P5vXoJP3Gf6bmyvFW8lhB+rDxoxA4ojgy4he80aqjJ0wQmdlcJ0CXgf2qeSXxATMeUdS+v0Lv2vX4v/r53Tex3BCrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ekinops.com; dmarc=pass action=none header.from=ekinops.com;
- dkim=pass header.d=ekinops.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ekinops.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x9FfItd+DLXFZSqGiR2UnfW+z/bzFoKQnLUVKojVyRo=;
- b=csJMv48x5jd7VSz6bkplKe9iXds0/AfYUHobjuuZHfcyMY8kixsbO3HefqQuXTfev5sWNr1F8UbsSVa1VKRGaMebx7ykqr2hEVJrnoaCt+dKco91tG/8xX5y12reCyQ2P1YDhllP+R+01wXSEr5on/fl7FpOfnNUVOizlWVq32Y=
-Received: from PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:141::6)
- by PAZP264MB3288.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:128::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Tue, 28 Mar
- 2023 07:13:05 +0000
-Received: from PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM
- ([fe80::e04e:6ad:dfd3:3bd7]) by PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM
- ([fe80::e04e:6ad:dfd3:3bd7%6]) with mapi id 15.20.6222.033; Tue, 28 Mar 2023
- 07:13:03 +0000
-From:   Ganesh Babu <ganesh.babu@ekinops.com>
-To:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Ganesh Babu <ganesh.babu@ekinops.com>
-Subject: [PATCH] net: mroute6.h: change type of mif6c_pifi to __u32
-Thread-Topic: [PATCH] net: mroute6.h: change type of mif6c_pifi to __u32
-Thread-Index: AQHZYUP13XlrMpW17Ue8ZSjM0wOOKw==
-Date:   Tue, 28 Mar 2023 07:13:03 +0000
-Message-ID: <PAZP264MB4064279CBAB0D7672726F4A1FC889@PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM>
-Accept-Language: en-IN, en-US
-Content-Language: en-IN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=ekinops.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAZP264MB4064:EE_|PAZP264MB3288:EE_
-x-ms-office365-filtering-correlation-id: a47166bd-f6c9-424f-b9ff-08db2f5bdee0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: U13CFu2+Y4d3niwTAjzJKsz+D3tfk53A1LJWkg6i9s1pqALnrbkIg5lFr2OSIembMMvlrU+dHtoHw4+ZmzlqBQVHNr96chv6V9aozuQXJ5Yl6GdEhkAVL+ZAc8yBj16hn/FxYyvdvZlRZGTRBoAUFIMfTxYZhBfVDMlPbGWZTeoYKbQ5/Q2z6OlKiqnceN6cd33fseNJ0aljvW7eOECHXExV6LeWFbK+8/CGNN2NakQRj95y0a3O0A8OOs45UCek9t/NUtsqicpSMRt9KPAtwbJKH2nhKCrQpYZrGPQTAWaPlcJKISMm/h6q/R+sdlHJaFOCjjqI6klpE1sG1t5LAgfxe9/KmcegqytUmrkqZpCSKaW7cvX1l6FjGeAo+LEO0efgzwhYzUQZAZtTP/v6mvCIBAEq8dLUu594FxS1LvtDncAdAWl177G7OTh7YKp6elr/Q9CAAeJGWmezM5xnXzSc5OoQm1Zj2ba7gyBwpgoBgpGr2cXJaIwJp0lNCYAtscW2NhgrzTaeX+dKZDaH5HtgI34Y+LmCm38kWCtJEKGqKZ2IVD3H7nJ9xF3+kDAaHzVcWREqumDSVCzzSuPEkfoweEQltU4rRZ76z6pSNh0hPByvcSOv9oU8TkD9RYsH
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(136003)(396003)(39850400004)(366004)(451199021)(2906002)(71200400001)(7696005)(44832011)(38100700002)(478600001)(86362001)(107886003)(38070700005)(450100002)(316002)(110136005)(122000001)(5660300002)(66556008)(41300700001)(66446008)(64756008)(8676002)(4326008)(52536014)(76116006)(66476007)(91956017)(66946007)(8936002)(55016003)(186003)(33656002)(55236004)(6506007)(53546011)(9686003)(26005)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Yipj2eRJGFBJPGksw8AaLiWqvIJ50PJypR8hUQtrAtIHNuPmFaidTiYugz?=
- =?iso-8859-1?Q?GT8jVk67UG0dIKQejNweXZebPAFVk2s4VzkT3eE9yjBn7YDwJUGXZJO5Be?=
- =?iso-8859-1?Q?wNnoTyaeFZKj3B4c0f5jOa/u0pxQ2bQpDri8n2sqj1iVX5L/kzgCajp8ZV?=
- =?iso-8859-1?Q?+7zKEsYC9ybU7FTHrPaJGB4NTuL+6IGresXIwyMI1UjBvN9xLxA3BqC9+v?=
- =?iso-8859-1?Q?P2WWoI3lIxoI/zEL2QRrwg+WAS9Y0oWSeNwWjrXYe99FbRf8fJaiSMPRuI?=
- =?iso-8859-1?Q?lh3ZkhuuR7SxRm46yP8R/e+rOUeRkDnB3YGLpeyq6di9cx4t6ApafBbigI?=
- =?iso-8859-1?Q?991itgwQcem6OdO2nWhOB8QLlyAEsIqs7vkCebrXYIrrXtrF8IJoOaYvGD?=
- =?iso-8859-1?Q?Nb8f311Gc725ChOv+APTPSsOcEXrrb2kCKG6IqxEB/0mDh35f++TABZo6o?=
- =?iso-8859-1?Q?wSuVKXGrLoNvRQ4z3XKHupB3KxJck2l7+ACp+snFm9IQi2fc0Hna8eKRqG?=
- =?iso-8859-1?Q?G6OuluwZZ4pDaAmLK1SEzizqn13pmJSyLfT8yPGkfi52FbOVGTaooH6Mbl?=
- =?iso-8859-1?Q?FkpS+c70YVnbCx9mxSFGf157WdajDjOD4PBfyMYs8rjT87RkvNjTzHTFzE?=
- =?iso-8859-1?Q?88SJWLg4bSZ2EIgTyjfYB49CTacqlrn/JaFsPnfUK7R/aSThOw69Cwz33C?=
- =?iso-8859-1?Q?iXnHLRF2AnG0bmksyOrKTBvAqOcSLxxGljSzNQc6G9DomUB1Om7OqlZ5xl?=
- =?iso-8859-1?Q?xNYMiSMhSa3A0nk9BkR/KCS6bKCBmwgdm48nJbs+6ASc1j4kshRds02DEI?=
- =?iso-8859-1?Q?N71RfygljeMU5uYUIUnAxgR9x23twnFtuyq7jZRKZIgWjHGlQcJp5LdUgv?=
- =?iso-8859-1?Q?qzv89e/Vpt7AOrzVSrzPPw0uOCMAz9tZP6+Z6cXF8sDz4ozpo6UZMdLToI?=
- =?iso-8859-1?Q?GBW9p6SKwr8M7wN9QfEWIHLQ6gPbZIvAkWhKEO8DPsDmJzcFGiT4rD5uPj?=
- =?iso-8859-1?Q?IAS7sd03cSYpMfwrvIp7eH5YwBwDzu42iWdkaDLV96yJ6L7MFFvVFfV044?=
- =?iso-8859-1?Q?b1u4YdcDZ0KTyk6fce8qtfixMBjmyvS44kuA8k2eHdvroP0VT95tyfGYea?=
- =?iso-8859-1?Q?BQYsrK9s78Jgqz9xb8IcJb7wf49w2RiAVEsKuKTk3+FGZcgdlwpDMfCQ0D?=
- =?iso-8859-1?Q?OIyEmoFS8t6zqGznzWfPgXQ+ZE5BZA/Wm20by8Jn1px1VIEtBrsOiOPO6P?=
- =?iso-8859-1?Q?B7c2TlkSuZkXi0NnGO4XFxu1trRgrWlNRDR/bqj3l4LnVT35Bc3sLDAGTs?=
- =?iso-8859-1?Q?BaQgD2l3UXncw2Vhhb8nBtuHEPVWtiw/UZchEQdJZZ82Wq46LRz6zOxvke?=
- =?iso-8859-1?Q?Pn2rQ3/L8kn5mRuHWKRcz+pWki1a97blmiVaGdqIE/M+sNw3WyWflAQhpk?=
- =?iso-8859-1?Q?lMLIcep7L+mwDdDr7eEQY5NrjGLehuqMqvypdlSlXDJPJU/40lvN1e17Wc?=
- =?iso-8859-1?Q?7pwjxFlBGbXL0qEjnaY1O86gHdn9Syegl6qG5XL2WKK63v8b0lvwKjAyQb?=
- =?iso-8859-1?Q?or+Oj2pW5qxbdE+WpojB9jcDCa1YSS7zDkf6SEg8L6QHJIzOY4nAMT20Aw?=
- =?iso-8859-1?Q?5f4EtpsRk9OaTMMJkN58IdLgBvbICqbyNH?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 28 Mar 2023 03:13:44 -0400
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6192D48;
+        Tue, 28 Mar 2023 00:13:41 -0700 (PDT)
+X-UUID: 0fdb51c7ccf84897a8c346005d2bc822-20230328
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.20,REQID:530e9fa5-b352-4298-a12d-a821b6d44155,IP:20,
+        URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:11
+X-CID-INFO: VERSION:1.1.20,REQID:530e9fa5-b352-4298-a12d-a821b6d44155,IP:20,UR
+        L:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:11
+X-CID-META: VersionHash:25b5999,CLOUDID:d07ab529-564d-42d9-9875-7c868ee415ec,B
+        ulkID:230328151339VN7RZSUH,BulkQuantity:0,Recheck:0,SF:24|17|19|42|102,TC:
+        nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-UUID: 0fdb51c7ccf84897a8c346005d2bc822-20230328
+X-User: guodongtai@kylinos.cn
+Received: from localhost.localdomain [(210.12.40.82)] by mailgw
+        (envelope-from <guodongtai@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 910755339; Tue, 28 Mar 2023 15:13:38 +0800
+From:   George Guo <guodongtai@kylinos.cn>
+To:     daniel@iogearbox.net
+Cc:     ast@kernel.org, bpf@vger.kernel.org, chenhuacai@kernel.org,
+        guodongtai@kylinos.cn, kernel@xen0n.name,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, masahiroy@kernel.org,
+        michal.lkml@markovi.net, ndesaulniers@google.com
+Subject: [PATCH v2] loongarch/bpf: Skip speculation barrier opcode, which caused ltp testcase bpf_prog02 to fail
+Date:   Tue, 28 Mar 2023 15:13:35 +0800
+Message-Id: <20230328071335.2664966-1-guodongtai@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <c1932d0d-cf3f-5005-958d-7e08dddf42c9@iogearbox.net>
+References: <c1932d0d-cf3f-5005-958d-7e08dddf42c9@iogearbox.net>
 MIME-Version: 1.0
-X-OriginatorOrg: ekinops.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: a47166bd-f6c9-424f-b9ff-08db2f5bdee0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Mar 2023 07:13:03.0241
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f57b78a6-c654-4771-a72f-837275f46179
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Brk1haTMeJtpxUKoz0doilpyhgQ2XRTI0HP96xfdXPV09RCipdf8Cf1G0BHoI/foRTpdxnNeA9ufD/cwq4QmGA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB3288
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,42 +58,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From a91f11fe060729d0009a3271e3a92cead88e2656 Mon Sep 17 00:00:00 2001=0A=
-From: "Ganesh Babu" <ganesh.babu@ekinops.com>=0A=
-Date: Wed, 15 Mar 2023 15:01:39 +0530=0A=
-Subject: [PATCH] net: mroute6.h: change type of mif6c_pifi to __u32=0A=
-=0A=
-Increase mif6c_pifi field in mif6ctl struct=0A=
-from 16 to 32 bits to support 32-bit ifindices.=0A=
-The field stores the physical interface (ifindex) for a multicast group.=0A=
-Passing a 32-bit ifindex via MRT6_ADD_MIF socket option=0A=
-from user space can cause unpredictable behavior in PIM6.=0A=
-Changing mif6c_pifi to __u32 allows kernel to handle=0A=
-32-bit ifindex values without issues.=0A=
-=0A=
----=0A=
-=A0include/uapi/linux/mroute6.h | 2 +-=0A=
-=A01 file changed, 1 insertion(+), 1 deletion(-)=0A=
-=0A=
-diff --git a/include/uapi/linux/mroute6.h b/include/uapi/linux/mroute6.h=0A=
-index 1d90c21a6251..90e6e771beab 100644=0A=
---- a/include/uapi/linux/mroute6.h=0A=
-+++ b/include/uapi/linux/mroute6.h=0A=
-@@ -75,7 +75,7 @@ struct mif6ctl {=0A=
-=A0 =A0 =A0 =A0 mifi_t =A0mif6c_mifi; =A0 =A0 =A0 =A0 =A0 =A0 /* Index of M=
-IF */=0A=
-=A0 =A0 =A0 =A0 unsigned char mif6c_flags; =A0 =A0 =A0/* MIFF_ flags */=0A=
-=A0 =A0 =A0 =A0 unsigned char vifc_threshold; =A0 /* ttl limit */=0A=
-- =A0 =A0 =A0 __u16 =A0 =A0mif6c_pifi; =A0 =A0 =A0 =A0 =A0 =A0/* the index =
-of the physical IF */=0A=
-+ =A0 =A0 =A0 __u32 =A0 =A0mif6c_pifi; =A0 =A0 =A0 =A0 =A0 =A0/* the index =
-of the physical IF */=0A=
-=A0 =A0 =A0 =A0 unsigned int vifc_rate_limit; =A0 /* Rate limiter values (N=
-I) */=0A=
-=A0};=0A=
-=0A=
---=0A=
-2.11.0=0A=
-=0A=
-Signed-off-by: Ganesh Babu <ganesh.babu@ekinops.com>=0A=
----=0A=
+Here just skip the opcode(BPF_ST | BPF_NOSPEC) that has no couterpart to the loongarch.
+
+To verify, use ltp testcase:
+
+Without this patch:
+$ ./bpf_prog02
+... ...
+bpf_common.c:123: TBROK: Failed verification: ??? (524)
+
+Summary:
+passed   0
+failed   0
+broken   1
+skipped  0
+warnings 0
+
+With this patch:
+$ ./bpf_prog02
+... ...
+Summary:
+passed   0
+failed   0
+broken   0
+skipped  0
+warnings 0
+
+Signed-off-by: George Guo <guodongtai@kylinos.cn>
+
+---
+Changelog:
+v2:
+	- place it to build_insn
+	- add printing for skipping bpf_jit the opcode
+---
+ arch/loongarch/net/bpf_jit.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 288003a9f0ca..d3c6b1c4ccbb 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -1022,6 +1022,11 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 		emit_atomic(insn, ctx);
+ 		break;
+ 
++	/* Speculation barrier */
++	case BPF_ST | BPF_NOSPEC:
++		pr_info_once("bpf_jit: skip speculation barrier opcode %0x2x\n", code);
++		break;
++
+ 	default:
+ 		pr_err("bpf_jit: unknown opcode %02x\n", code);
+ 		return -EINVAL;
+-- 
+2.34.1
+
