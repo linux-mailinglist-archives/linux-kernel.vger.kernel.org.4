@@ -2,140 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495246CBC92
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100426CBC94
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbjC1Kdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S232725AbjC1Kdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbjC1Kdh (ORCPT
+        with ESMTP id S232689AbjC1Kds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:33:37 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA1E95;
-        Tue, 28 Mar 2023 03:33:35 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 696CE604FF;
-        Tue, 28 Mar 2023 12:33:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679999613; bh=ISc5UrYNIsjj3V2cg/yKaSxQ/8CIikplimUZX2Ben+o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=m7voJDS6iam9caCvklnd9K1SUP988Pk7i3pxARY6zB/+Qv3qw0J88eOD1mLJGW5Ox
-         LhUJ6c5X0tpDZ7MYOWl9TeBZRm1ZAq6wj38T2PzP2GaCssEI2hjD75/LpoXNUyvRfB
-         bJ6NKHHqoCUDZfTfOiKP0ViCSsiG3EiPS4Ytx2K6Ho/zMHM/b4KCK9sx84ViJ3gZP/
-         NiPIR1IdKFKNMjeWbyiO9Zdsvs+jH5PN7nYvGxL5VNq3y0ceyD200mjX2e4Ex/gXZi
-         du2Q6a0q5jUfyBHC81rUdKOgi/HA+ZS+ssW14UEo583DfXnfMrY7JIidx4Xe23+PLh
-         KG+8coxns30Tg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EHf0-TFIbBiz; Tue, 28 Mar 2023 12:33:31 +0200 (CEST)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id 81D7E604FE;
-        Tue, 28 Mar 2023 12:33:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679999611; bh=ISc5UrYNIsjj3V2cg/yKaSxQ/8CIikplimUZX2Ben+o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BAa1zR6wEWABATrrYbVdZ1KyyZhdf9Wryiq86CH/TlgEKjBAI/16zkefCsLdLIJ03
-         YhsMTZ8/dPY9cV/EPVaC8TAdHLOyfPIP0978G6mMPRVvMZw0Di/iJIlySZJ7HJPlBu
-         8usGFGSIcKC4PO9JKfSQ+4HgzwW6YHrN2Ff5iEkFAKbgAnsa6CaLsIGkAv+RzFyUTB
-         azy8yh7kMhTORmav3TK9wNMfF3mH+7GMKkCC0JRh/QT8SWJDZ2wtmcHbfdjCYxPnkF
-         WCM7+P1T+n+47SI7mur/E6/n1Z91tXKp5kj/HLQMONY0SoWvKJ4wNEgif0qULoibjH
-         PUbYM+unWi9yw==
-Message-ID: <fa82b641-365c-c1ca-1fec-1826df63db64@alu.unizg.hr>
-Date:   Tue, 28 Mar 2023 12:33:30 +0200
+        Tue, 28 Mar 2023 06:33:48 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D1B768F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:33:44 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ph6e6-00021E-4m; Tue, 28 Mar 2023 12:33:42 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ph6e5-007Hgj-57; Tue, 28 Mar 2023 12:33:41 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ph6e4-008f0h-Dr; Tue, 28 Mar 2023 12:33:40 +0200
+Date:   Tue, 28 Mar 2023 12:33:39 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Fabio Estevam <festevam@denx.de>
+Cc:     daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, kernel@pengutronix.de, shawnguo@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] clocksource/drivers/timer-imx-gpt: Remove non-DT function
+Message-ID: <20230328103339.ycew6joobfgbcocb@pengutronix.de>
+References: <20230307124313.708255-1-festevam@denx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [BUG] selftests/firmware: copious kernel memory leaks in
- test_fw_run_batch_request()
-Content-Language: en-US, hr
-To:     Dan Carpenter <error27@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <97e284be-5018-9d18-feb2-7ec4b08c06fd@alu.unizg.hr>
- <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="j6tbprrgiwdb4ik6"
+Content-Disposition: inline
+In-Reply-To: <20230307124313.708255-1-festevam@denx.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Dan,
 
-On 3/28/23 12:06, Dan Carpenter wrote:
-> On Tue, Mar 28, 2023 at 11:23:00AM +0200, Mirsad Todorovac wrote:
->> The leaks are in chunks of 1024 bytes (+ overhead), but so far I could not
->> reproduce w/o root privileges, as tests refuse to run as unprivileged user.
->> (This is not the proof of non-existence of an unprivileged automated exploit
->> that would exhaust the kernel memory at approx. rate 4 MB/hour on our setup.
->>
->> This would mean about 96 MB / day or 3 GB / month (of kernel memory).
-> 
-> This is firmware testing stuff.  In the real world people aren't going
-> to run their test scripts in a loop for days.
+--j6tbprrgiwdb4ik6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for making that clear.
+On Tue, Mar 07, 2023 at 09:43:13AM -0300, Fabio Estevam wrote:
+> mxc_timer_init() was originally only used by non-DT i.MX platforms.
+>=20
+> i.MX has already been converted to be a DT-only platform.
+>=20
+> Remove the unused mxc_timer_init() function.
+>=20
+> Signed-off-by: Fabio Estevam <festevam@denx.de>
 
-> There is no security implications.  This is root only.  Also if the
-> user could load firmware then that would be the headline.  Once someone
-> is can already load firmware then who cares if they leak 100MB per day?
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-Yes, this is correct, but I just don't like leaks even in the userland programs.
-But that might be just me ...
+Actually I created the same patch and have another patch that depends on
+this one. See
+https://lore.kernel.org/linux-arm-kernel/20230328100531.879485-1-u.kleine-k=
+oenig@pengutronix.de/#t
+=2E
 
-IMHO the purpose of the tests is to find and fix bugs. There are probably
-more critical issues, but pick seemed manageable.
+Best regards
+Uwe
 
-> It looks like if you call trigger_batched_requests_store() twice in a
-> row then it will leak memory.  Definitely test_fw_config->reqs is leaked.
-> That's different from what the bug report is complaining about, but the
-> point is that there are some obvious leaks.  It looks like you're
-> supposed to call trigger_batched_requests_store() in between runs?
-> 
-> There are other races like config_num_requests_store() should hold the
-> mutex over the call to test_dev_config_update_u8() instead of dropping
-> and retaking it.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-Please consider the scope of the void *test_buf in lines 836-859 and whether the
-fact that test_buf is not kfree()-ed on (req->fw != NULL) and its going out of the
-scope affects this issue.
+--j6tbprrgiwdb4ik6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I saw there is an additional race condition involved since the exact count of leaks
-is not always the same (not deterministic), but I could not figure that out by myself.
+-----BEGIN PGP SIGNATURE-----
 
-Thank you again very much for your quick reply.
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQiwoIACgkQj4D7WH0S
+/k6rHwgAnT5GkoCbf6nlkti4LNrAwPTTAIQQh/oDhpRHrdkEHUpjZ05Vz5kvz5OA
+XMd6SsD4rrtRx0RA2lgW3VqHvJpUfjiwAFs4OPEeF61RBlHH8Md6OEHSCsmhrxw1
+aD8L3FnYFxIIIm+OslCPrx08Y1KKBrMDsbzbWNF3xvSz8efdOa+iFaZTXoxd9IyS
+vYXiMTBvXcdHEZij/CcClHdh4tFLQipyljEb/PsgZ7QqUE715EwOPJwDtsziNtRe
+SpACXdQY9sJs8vTter4fMMvSIwm7pcgKEoK0AdN49nauFL5ThWwaJzFeZVkccXXi
+vSaUBxwKv64xjtRgsbPiatNwaRjOeg==
+=1BeK
+-----END PGP SIGNATURE-----
 
-BTW, I can confirm that the leak still exists in 6.3.0-rc4-00025-g3a93e40326c8
-build.
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-
-"Something is quickly approaching ... Will it be friends with me?"
+--j6tbprrgiwdb4ik6--
