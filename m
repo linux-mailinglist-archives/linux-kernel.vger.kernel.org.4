@@ -2,95 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F31606CC616
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1366CC625
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjC1PWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
+        id S233549AbjC1PYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233373AbjC1PW3 (ORCPT
+        with ESMTP id S233258AbjC1PX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:22:29 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF46FF1B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:20:52 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id r187so15528702ybr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:20:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680016826;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ONZYLiGDk21RMFgMpaXH7s4UWxHkNsJ+wUGHRFEkuCc=;
-        b=c8ynwXPsqcK1BZ6E1vrYfDJcqWTKC225pVcmZQQIcGa+4WzKkC/FwoXCPTIZP0uqNW
-         jalQxGai5+TUgtreV4lGVmixYr6hAEF97bJP6udFm1yicUDr3KPFXDmLE2aJHchJhqAj
-         7J4XebvBwK691HXXFYm5J21xAY8msOd5k/OOZSjNYpGC2QnLfu+09Jc4Pbhux+Hpz5l/
-         35fyjYPGGFQ/WwDLWWO9LuBpYSShrGA9j+zLmlaXc44UkvAaGsRQX8zqrH4aOojgeFnH
-         DBkes4tXkEWXNeFd/n9ARofjF5njrlz0PZjoz9j8BGF67LqPGhfa7EH16H69NZfFsNx5
-         Xcaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680016826;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ONZYLiGDk21RMFgMpaXH7s4UWxHkNsJ+wUGHRFEkuCc=;
-        b=Z04gITWSKym/WFPRlK3aTb2kx4pOBMbV7jD4H+AP/0cabuKKD1yUgWbLiMGOJhd6/o
-         ualkmtz7pVrFANI7p4GTJM1FnZhNjFp0NRVhmZyXCNSlroV9Tt0tJ6jz2VUeXRjJcv8x
-         0UaCvGvpxVRmgyjqxYmjZKcltKr/sCDTZhVAqI1wBe1Yx2KVj47atBnqD6vt4Ihxf8UX
-         KrUAI7mRFZRzT6JyQqZzyyMEE/0P7nR9STWI6b7ey0N+hpfSHDV5hbbxHqpg22sE5uRq
-         HwqqyJUwpv9GkRiga0Ndezh1cXBS0dFzrCdCCSc6By1IdmDbW9sRZPRdev+vlvqL/K7+
-         3GJg==
-X-Gm-Message-State: AAQBX9enkBRok2xy8h+DvEpZXzHqk2HQr6BVFgglGuGUJthFd6o3jPmL
-        nohsXWULjNiIRVgBo9VcEcVaWpCIu9kTAVMqeXtWmQ==
-X-Google-Smtp-Source: AKy350Z1lvsH1c3O1jHKo+DM2HBpLRhmt4Hwp7gRiZRJb5+27sNfylAL7/FK3qaRf4mMZ9UmJB/3uw0wBUSKxNqtrno=
-X-Received: by 2002:a05:6902:154e:b0:b77:d2db:5f8f with SMTP id
- r14-20020a056902154e00b00b77d2db5f8fmr9838517ybu.12.1680016826025; Tue, 28
- Mar 2023 08:20:26 -0700 (PDT)
+        Tue, 28 Mar 2023 11:23:59 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C698EF745;
+        Tue, 28 Mar 2023 08:22:31 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SEBd7o005936;
+        Tue, 28 Mar 2023 17:21:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=3sl3gaodW7BicjGmVlR6sK/D2fcnxp6E1ErIi0k9bhc=;
+ b=IgjZwH/52DBT+sjCMLfoF+gi2dHoas0bL/boWHnDG1mnLKJ1Nluxd0FmEpbDEiObgsAB
+ q3ZhS60MZil9FfQGpL0g/Y9RsCEJAfhmXDtHtBvnNqTfAKWQ4S3PAdVOhHBEeaplTMUP
+ WUHBL9eweB2bontmSdbnNTdnm5OJDTpJe0lS8U/Znx7HdhsPcFqSyGIiUMnUzhB/sAj+
+ 7/Z5OEuYYkotU+mLsWxa+lBviRYPCMo6V0xISmymDx2DlCuPb6SzgUEkGrqlTeCxP5nx
+ tQXLgRIfHW2BQAtvlIhQDTFiT1+5BM/AxfuDdiJ0re0cLPjaMyjlAhHt6ERFtWKrJ+r3 8g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pk5xkjq9q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 17:21:10 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C77A310002A;
+        Tue, 28 Mar 2023 17:21:09 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C1C252194CB;
+        Tue, 28 Mar 2023 17:21:09 +0200 (CEST)
+Received: from [10.201.20.168] (10.201.20.168) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Tue, 28 Mar
+ 2023 17:21:09 +0200
+Message-ID: <50e8d0ee-fe6f-7e31-98f0-ea4eceb597d6@foss.st.com>
+Date:   Tue, 28 Mar 2023 17:21:01 +0200
 MIME-Version: 1.0
-References: <20230328061638.203420-1-yosryahmed@google.com> <20230328061638.203420-10-yosryahmed@google.com>
-In-Reply-To: <20230328061638.203420-10-yosryahmed@google.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Tue, 28 Mar 2023 08:20:15 -0700
-Message-ID: <CALvZod4boccrKxrCm9aDBCupror1zC0J3spHeidSiAZgei_r9Q@mail.gmail.com>
-Subject: Re: [PATCH v1 9/9] memcg: do not modify rstat tree for zero updates
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/7] ARM: dts: stm32: change USART1 clock to an SCMI clock
+ on stm32mp15 boards
+To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230327152948.274743-1-valentin.caron@foss.st.com>
+ <20230327152948.274743-2-valentin.caron@foss.st.com>
+ <5c67d003-c893-8540-a971-6954a57399e5@foss.st.com>
+Content-Language: en-US
+From:   Valentin CARON <valentin.caron@foss.st.com>
+In-Reply-To: <5c67d003-c893-8540-a971-6954a57399e5@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.201.20.168]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-28_02,2023-02-09_01
+X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 11:17=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com=
-> wrote:
->
-> In some situations, we may end up calling memcg_rstat_updated() with a
-> value of 0, which means the stat was not actually updated. An example is
-> if we fail to reclaim any pages in shrink_folio_list().
->
-> Do not add the cgroup to the rstat updated tree in this case, to avoid
-> unnecessarily flushing it.
->
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+Hi Alex,
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+I think this patch is useless.
+I will send you a V2 without.
+
+Thank you,
+Valentin
+
+On 3/28/23 14:02, Alexandre TORGUE wrote:
+> Hi Valentin
+>
+> On 3/27/23 17:29, Valentin Caron wrote:
+>> On ST stm32mp15 boards, change clock of USART1 node to SCMI clock
+>> "CK_SCMI_USART1"
+>
+> I'll change commit title and message as your patch doesn't target 
+> STM43MP15 boards but STM32MP15 SCMI boards.
+>
+> Cheers
+> Alex
+>
+>
+>
+>> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+>> ---
+>>   arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts | 4 ++++
+>>   arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts | 4 ++++
+>>   arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts | 4 ++++
+>>   arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts | 4 ++++
+>>   4 files changed, 16 insertions(+)
+>>
+>> diff --git a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts 
+>> b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
+>> index e539cc80bef8..5c8164c10e46 100644
+>> --- a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
+>> +++ b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
+>> @@ -77,3 +77,7 @@ &rng1 {
+>>   &rtc {
+>>       clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+>>   };
+>> +
+>> +&usart1 {
+>> +    clocks = <&scmi_clk CK_SCMI_USART1>;
+>> +};
+>> diff --git a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts 
+>> b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
+>> index 97e4f94b0a24..2c9a207a9d49 100644
+>> --- a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
+>> +++ b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
+>> @@ -83,3 +83,7 @@ &rng1 {
+>>   &rtc {
+>>       clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+>>   };
+>> +
+>> +&usart1 {
+>> +    clocks = <&scmi_clk CK_SCMI_USART1>;
+>> +};
+>> diff --git a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts 
+>> b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
+>> index 9cf0a44d2f47..21c8169f0e82 100644
+>> --- a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
+>> +++ b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
+>> @@ -82,3 +82,7 @@ &rng1 {
+>>   &rtc {
+>>       clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+>>   };
+>> +
+>> +&usart1 {
+>> +    clocks = <&scmi_clk CK_SCMI_USART1>;
+>> +};
+>> diff --git a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts 
+>> b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
+>> index 3b9dd6f4ccc9..0084abbeb60e 100644
+>> --- a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
+>> +++ b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
+>> @@ -88,3 +88,7 @@ &rng1 {
+>>   &rtc {
+>>       clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+>>   };
+>> +
+>> +&usart1 {
+>> +    clocks = <&scmi_clk CK_SCMI_USART1>;
+>> +};
+>
