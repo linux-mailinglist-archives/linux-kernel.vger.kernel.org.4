@@ -2,201 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B876CB37F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE28E6CB383
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbjC1B7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 21:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
+        id S230073AbjC1CBP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 22:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjC1B7M (ORCPT
+        with ESMTP id S229631AbjC1CBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 21:59:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679D4270E;
-        Mon, 27 Mar 2023 18:59:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 870E66156B;
-        Tue, 28 Mar 2023 01:59:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B3BC433A1;
-        Tue, 28 Mar 2023 01:59:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679968740;
-        bh=S2GZf5umB3Gdek943iBAx1XM/lIuCIv3A+bzppKYyLw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=GNFgv2Sq0B5D2udODX3sDkDWhO183xCqgBflCi8Ma68hlA880WMs5JlOcC1ZBfrHr
-         7H66mzsBjhWFEyOqBvPmCNfuxJjn2J7dTGDI5jQ5P81Q9dnGzZ26RVFvNyS0vgunwi
-         2CO0AjBhLPmHzv2nsIeKIeXY5kK2ptIfkWsAwixhc7cjuvnfciCzmQQ7vbkrXw+8TU
-         cqtdpn+HLjJBhoHVzh2R2OvcOiYqYEHz5IhoxDMg9O40HbQlgU8w7Wgaz+csj30iJd
-         jPybY4NBjdniUKo6LJtD4zF6gV+aFWk0KUnE8glo3/Eql06ZL9ywAXdaoT1F9w9B4i
-         j+ETR0myc9fYQ==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 8CBEA154039B; Mon, 27 Mar 2023 18:59:00 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 18:59:00 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, RCU <rcu@vger.kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH 1/1] Reduce synchronize_rcu() waiting time
-Message-ID: <5ec03d4f-9ed6-4207-879a-526869cbdc57@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230321102748.127923-1-urezki@gmail.com>
- <IA1PR11MB617169A10E6DDE3C1168605D89819@IA1PR11MB6171.namprd11.prod.outlook.com>
- <ZBnKKZsSpI8aAk9W@pc636>
- <PH0PR11MB58805561777B77DC69E87711DA8B9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <ca153af5-bd66-4d48-afa5-ace3a13aec3c@paulmck-laptop>
- <PH0PR11MB58801CAE9B282B399B918852DA889@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Mon, 27 Mar 2023 22:01:13 -0400
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132EE213B;
+        Mon, 27 Mar 2023 19:01:10 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id d11-20020a05600c3acb00b003ef6e6754c5so2994764wms.5;
+        Mon, 27 Mar 2023 19:01:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679968868; x=1682560868;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NtdoywSg0sqxDkZWwUZLe9PwThZK6+X1Vn5yjVkPniA=;
+        b=q840BmdOmNMtI8DqpqCz6zSm4aiIWVNTdobEqXSp13Qcxqex1QLm6NmKvN5t50Pdrv
+         Va1bkkSzf4enrmdWC/2VLULvJDL+XOZrLe/pDmITsjvZhLPzQSssc7oTHUofs6jKmUVl
+         w0Q2zVqILSaPaG9rngP/651ZFCGd2JGoe+1uSUcwvwk51f8BsSLIidVDQwiJjrrZni6B
+         m7N0WWwMqW0/QbmVLyU5UqHXCCTdLlwfHwOoABw5gRbv68QHYLoF60DreDqaUaR8HkLe
+         PLzgWH7m0S6vIZS/dde0yenn5maE4lLEYGQnQnSXPP1oo11OG1N5mhK45rSnFkBTr6HE
+         Fd/w==
+X-Gm-Message-State: AO0yUKWPqN+KfW9I/M3hc29qvRepNM9gx8TN10KtH1AybgSP/hMnrsnZ
+        MKpraDqurtsdPhI9k4Q23RdWqBaYjiLglutTv30=
+X-Google-Smtp-Source: AK7set8Dgf5IkOqr80Zrge2p5LfFf7474+KGgg1W4Is5eNDeeskXjNFRpTG1P0L8KMpXGbz4l1NUUCouMbv6LNCatZA=
+X-Received: by 2002:a05:600c:2043:b0:3ee:4678:dde with SMTP id
+ p3-20020a05600c204300b003ee46780ddemr10994112wmg.27.1679968868269; Mon, 27
+ Mar 2023 19:01:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <PH0PR11MB58801CAE9B282B399B918852DA889@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CAP-5=fWxF6in4vQyGuh=0kpAYEXAYZN_KobXCY=TX2oxssZ+HQ@mail.gmail.com>
+ <Y7w2qshoCEjKKVlz@kernel.org> <CAP-5=fUeC2nhUhFN69+sL687csSsoi5=ZEkRH70vUy+kTiF52g@mail.gmail.com>
+ <CAP-5=fVaH0p4NkKiQSxaxZnT5zR=hbwSArO2n0L7tCNZwBumKQ@mail.gmail.com>
+ <CAP-5=fXWDPzuFrrY+uKnfoa5gO9eEfGUsbCyXB8AS7Tz0ZX=jw@mail.gmail.com>
+ <CAP-5=fVHK9VqMs=px3ZzKjinFG4t+oOZ8x2=65_jjds4DiSXLg@mail.gmail.com> <CAP-5=fUTAABzK2e_S3kFYV8jWCrHKfj10wPpTnthQjCLy7d2Gg@mail.gmail.com>
+In-Reply-To: <CAP-5=fUTAABzK2e_S3kFYV8jWCrHKfj10wPpTnthQjCLy7d2Gg@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 27 Mar 2023 19:00:56 -0700
+Message-ID: <CAM9d7cgdkzbzR+TjJo-gv1mNqCCxhyvWrXCFsVrpPHs19RNZYQ@mail.gmail.com>
+Subject: Re: Google Summer-of-Code 2023
+To:     Ian Rogers <irogers@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        paranlee <p4ranlee@gmail.com>,
+        Madhu patel <patelmadhu06@gmail.com>,
+        Anup Sharma <anupnewsmail@gmail.com>,
+        Lukas Molleman <lukas.molleman@gmail.com>,
+        n2 h9 <n2h9z4@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 01:32:56AM +0000, Zhang, Qiang1 wrote:
-> > > > From: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > > > Sent: Tuesday, March 21, 2023 6:28 PM
-> > > > [...]
-> > > > Subject: [PATCH 1/1] Reduce synchronize_rcu() waiting time
-> > > > 
-> > > > A call to a synchronize_rcu() can be expensive from time point of view.
-> > > > Different workloads can be affected by this especially the ones which use this
-> > > > API in its time critical sections.
-> > > > 
-> > > 
-> > > This is interesting and meaningful research. ;-)
-> > > 
-> > > > For example in case of NOCB scenario the wakeme_after_rcu() callback
-> > > > invocation depends on where in a nocb-list it is located. Below is an example
-> > > > when it was the last out of ~3600 callbacks:
+Hello,
+
+On Mon, Mar 27, 2023 at 3:01 PM Ian Rogers <irogers@google.com> wrote:
+>
+> On Mon, Mar 27, 2023 at 2:22 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > On Mon, Mar 13, 2023 at 9:38 AM Ian Rogers <irogers@google.com> wrote:
 > > >
-> > 
-> > 
-> > 
-> > Can it be implemented separately as follows?  it seems that the code is simpler
-> > (only personal opinion)  😊.
-> > 
-> > But I didn't test whether this reduce synchronize_rcu() waiting time
-> > 
-> > +static void rcu_poll_wait_gp(struct rcu_tasks *rtp)
-> > +{
-> > +       unsigned long gp_snap;
-> > +
-> > +       gp_snap = start_poll_synchronize_rcu();
-> > +       while (!poll_state_synchronize_rcu(gp_snap))
-> > +               schedule_timeout_idle(1);
-> >
-> >I could be wrong, but my guess is that the guys working with
-> >battery-powered devices are not going to be very happy with this loop.
-> >
-> >All those wakeups by all tasks waiting for a grace period end up
-> >consuming a surprisingly large amount of energy.
-> 
-> Agree,  maybe Uladzislau 's patch will have similar problems.
-
-We will soon find out.  ;-)
-
-							Thanx, Paul
-
-> Thanks
-> Zqiang
-> 
-> 
-> >
-> >							Thanx, Paul
-> >
-> > +}
-> > +
-> > +void call_rcu_poll(struct rcu_head *rhp, rcu_callback_t func);
-> > +DEFINE_RCU_TASKS(rcu_poll, rcu_poll_wait_gp, call_rcu_poll,
-> > +                 "RCU Poll");
-> > +void call_rcu_poll(struct rcu_head *rhp, rcu_callback_t func)
-> > +{
-> > +       call_rcu_tasks_generic(rhp, func, &rcu_poll);
-> > +}
-> > +EXPORT_SYMBOL_GPL(call_rcu_poll);
-> > +
-> > +void synchronize_rcu_poll(void)
-> > +{
-> > +       synchronize_rcu_tasks_generic(&rcu_poll);
-> > +}
-> > +EXPORT_SYMBOL_GPL(synchronize_rcu_poll);
-> > +
-> > +static int __init rcu_spawn_poll_kthread(void)
-> > +{
-> > +       cblist_init_generic(&rcu_poll);
-> > +       rcu_poll.gp_sleep = HZ / 10;
-> > +       rcu_spawn_tasks_kthread_generic(&rcu_poll);
-> > +       return 0;
-> > +}
-> > 
-> > Thanks
-> > Zqiang
-> > 
-> > 
-> > > > 
-> > > > <snip>
-> > > >   <...>-29      [001] d..1. 21950.145313: rcu_batch_start: rcu_preempt
-> > > > CBs=3613 bl=28
-> > > > ...
-> > > >   <...>-29      [001] ..... 21950.152578: rcu_invoke_callback: rcu_preempt
-> > > > rhp=00000000b2d6dee8 func=__free_vm_area_struct.cfi_jt
-> > > >   <...>-29      [001] ..... 21950.152579: rcu_invoke_callback: rcu_preempt
-> > > > rhp=00000000a446f607 func=__free_vm_area_struct.cfi_jt
-> > > >   <...>-29      [001] ..... 21950.152580: rcu_invoke_callback: rcu_preempt
-> > > > rhp=00000000a5cab03b func=__free_vm_area_struct.cfi_jt
-> > > >   <...>-29      [001] ..... 21950.152581: rcu_invoke_callback: rcu_preempt
-> > > > rhp=0000000013b7e5ee func=__free_vm_area_struct.cfi_jt
-> > > >   <...>-29      [001] ..... 21950.152582: rcu_invoke_callback: rcu_preempt
-> > > > rhp=000000000a8ca6f9 func=__free_vm_area_struct.cfi_jt
-> > > >   <...>-29      [001] ..... 21950.152583: rcu_invoke_callback: rcu_preempt
-> > > > rhp=000000008f162ca8 func=wakeme_after_rcu.cfi_jt
-> > > >   <...>-29      [001] d..1. 21950.152625: rcu_batch_end: rcu_preempt CBs-
-> > > > invoked=3612 idle=....
-> > > > <snip>
+> > > On Wed, Feb 22, 2023 at 7:58 PM Ian Rogers <irogers@google.com> wrote:
 > > > >
-> > > 
-> > > Did the results above tell us that CBs-invoked=3612 during the time 21950.145313 ~ 21950.152625?
-> > > 
-> > >Yes.
+> > > > The Linux Foundation was selected as a GSoC organization for 2023!
+> > > > https://summerofcode.withgoogle.com/programs/2023/organizations/the-linux-foundation
+> > > >
+> > > > This means we're looking for contributors until March 19th:
+> > > > https://developers.google.com/open-source/gsoc/timeline
 > > >
+> > > A reminder of the GSoC timeline. Applications open in a week;
 > > >
-> > > If possible, may I know the steps, commands, and related parameters to produce the results above?
-> > > Thank you!
-> > > 
-> > >Build the kernel with CONFIG_RCU_TRACE configuration. Update your "set_event"
-> > >file with appropriate traces:
+> > > * February 22 - March 19
+> > > Potential GSoC contributors discuss application ideas with mentoring
+> > > organizations
 > > >
-> > ><snip>
-> > >XQ-DQ54:/sys/kernel/tracing # echo rcu:rcu_batch_start rcu:rcu_batch_end rcu:rcu_invoke_callback > set_event
+> > > * March 20 - 18:00 UTC
+> > > GSoC contributor application period begins
 > > >
-> > >XQ-DQ54:/sys/kernel/tracing # cat set_event
-> > >rcu:rcu_batch_start
-> > >rcu:rcu_invoke_callback
-> > >rcu:rcu_batch_end
-> > >XQ-DQ54:/sys/kernel/tracing #
-> > ><snip>
+> > > * April 4 - 18:00 UTC
+> > > GSoC contributor application deadline
 > > >
-> > >Collect traces as much as you want: XQ-DQ54:/sys/kernel/tracing # echo 1 > tracing_on; sleep 10; echo 0 > tracing_on
-> > >Next problem is how to parse it. Of course you will not be able to parse
-> > >megabytes of traces. For that purpose i use a special C trace parser.
-> > >If you need an example please let me know i can show here.
-> > >
-> > >--
-> > >Uladzislau Rezki
+> > > Thanks,
+> > > Ian
+> >
+> > A reminder that the application period closes in just over a week:
+> > https://developers.google.com/open-source/gsoc/timeline
+> > April 4 - 18:00 UTC
+> > GSoC contributor application deadline
+> >
+> > Thanks,
+> > Ian
+>
+> If you are looking for ideas on how to write a good proposal, PSF has
+> a collection of previously accepted proposals:
+> https://blogs.python-gsoc.org/en/
+>
+> You can also see the final report of Riccardo Mancini:
+> https://lore.kernel.org/lkml/3c4f8dd64d07373d876990ceb16e469b4029363f.camel@gmail.com/
+
+I have a proposal about the build without libtraceevent.
+Now it disables many perf commands if it doesn't have the
+library.  But part of sub-commands would work without it.
+
+For example, perf lock contention has two different modes
+one is to use tracepoints (using the libtraceevent) and
+the other is just use BPF.  The latter should work require
+anything from the libtraceevent so we can enable such
+usecase.
+
+Others like perf sched, kmem and so on might want to run
+only record part like in a small embedded machine (without
+libtraceevent).  Then we can copy the saved data to a host
+and run the report or other sub-commands to analyze the
+data (again, using libtraceevent).
+
+Thanks,
+Namhyung
