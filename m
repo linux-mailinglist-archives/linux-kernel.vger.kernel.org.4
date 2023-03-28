@@ -2,81 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001476CBCB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4CC6CBCC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjC1KmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S232545AbjC1Kpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjC1KmF (ORCPT
+        with ESMTP id S232479AbjC1Kpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:42:05 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B806184;
-        Tue, 28 Mar 2023 03:42:04 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id r11so47705973edd.5;
-        Tue, 28 Mar 2023 03:42:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680000123;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ynr5Gc8TJTXozi1CcIVdlcGkAdeP7juyzEqKu/8mAM4=;
-        b=Z/O97aA9J13eQcteDS6l+Zx+PUiE41PX+ochkiIVu0R137xgDh58BTExIGr1MKeiPz
-         MQ1vDamf0bl1to0uFk0MzNXul/DJXgVqsZmHgHAesJfn9PxxpWr9yXs6m3g0mMFg1/z3
-         +wfxx18AsJOP6d7D+MuVy5+zKMIK8kAyQqCVXDHrV0f8PlBtxUh2mF5fWnh5LgA66bSi
-         dqR6DOzqtQDb8SvJ+BzW9VxzXLHdbpT3j9oe/VCTZqTPzXVAk3LaptM63lfdYDW48orj
-         Mg0TLhE+f5td+DRKI3voT+c171kSNpG9/lHbchrZBoO/ikMD13XmBQwYVaDqH7eZhAFX
-         1HcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680000123;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ynr5Gc8TJTXozi1CcIVdlcGkAdeP7juyzEqKu/8mAM4=;
-        b=Km/fFSaHumjYzCMQWNHsfv3FMRMnz7zIfc1cL+TMa1sw0//tLHwXqaDDt5JOdDCCSg
-         jtblpMLj83pYIqLxk5dKsTD+RMcYoQn9/Be2Z8omOlqCIOq1hVV42byndI8VlBaBhjSx
-         cy80fB85Tkf1WqUtWMbgCoEodadrLO/uteHrhAcREnjBNFRkuZvZpJS7essZKegxppaP
-         6rqtHIjcmcLn33AyAJ7Wk9/74xMUdJ4fBSzlOnh9RZC2D1zX2Ferl646a2+powN+KVT4
-         PoaCQpoUmxISl1/jSAv3pKOEMHHVSGBDt5Hjrd0TiuFaZSbJp7teYIMNHNMF6ro3MnEj
-         ddkA==
-X-Gm-Message-State: AAQBX9dQvlzEVohzfGaP9BQq0oceMFXivXZ2P6PpwY8uymVxPnqvkzvu
-        F+owb5qvlqWZoHInEqkvBa5ThBZTlsc=
-X-Google-Smtp-Source: AKy350bruWB9oU9V6zbqhojVKn2vtnkt+mYjtaIieKDNScKJHUzl51pxAzvw9zKCyDZRsjY0KzCEcw==
-X-Received: by 2002:a17:906:3a45:b0:932:8dc:5bf4 with SMTP id a5-20020a1709063a4500b0093208dc5bf4mr15898961ejf.61.1680000122687;
-        Tue, 28 Mar 2023 03:42:02 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id sd24-20020a170906ce3800b00931024e96c5sm15350868ejb.99.2023.03.28.03.42.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 03:42:02 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 12:42:00 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
-        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
-        ishah@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v4 01/10] dt-bindings: memory: tegra: add bpmp ref in
- tegra234-mc node
-Message-ID: <ZCLEeABPtzXqpZdY@orome>
-References: <20230327161426.32639-1-sumitg@nvidia.com>
- <20230327161426.32639-2-sumitg@nvidia.com>
+        Tue, 28 Mar 2023 06:45:52 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8ADA618A;
+        Tue, 28 Mar 2023 03:45:48 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 931785FD0E;
+        Tue, 28 Mar 2023 13:45:45 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1680000345;
+        bh=NOp8u9X32RM0zpODrfERJaF8FGjQ60rLL3xGd0/0O24=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=SQ3aqtO5iBBEDf77OVZEn6ncK4ysjWNeuDmP4PQOsqm0KAEOBGKOw5nzTXGV3+SM1
+         FSjPopWFLrn3eu2BPpunLsThx+rnWXJkSYVbio89J5BaD0HOAVUesWYdOEXcMH97Y3
+         Ej4S+weC5xkJVYHEYmaE1k3Xl7pVntlIPRQWCmvrY/gPTs8KeQU1J3ee0LgevrT9YJ
+         g0u6wQifc17OTob4P2DLiLQQNufdsGxYpLvxsV0IbQJJhGumPskSlVWXgLNGWmZbIM
+         LHrehH7hOiixBNRWZVJ8TvwsHdyyz2cVivOh2/613aWqGDFZVbtgGAVudTAhhZg8Lw
+         GbKVyPpn+Tqjw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 28 Mar 2023 13:45:39 +0300 (MSK)
+Message-ID: <0f0a8603-e8a1-5fb2-23d9-5773c808ef85@sberdevices.ru>
+Date:   Tue, 28 Mar 2023 13:42:19 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wf4WgXMFCZE62Nbf"
-Content-Disposition: inline
-In-Reply-To: <20230327161426.32639-2-sumitg@nvidia.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v1 1/2] vsock: return errors other than -ENOMEM to
+ socket
+Content-Language: en-US
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
+CC:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
+References: <97f19214-ba04-c47e-7486-72e8aa16c690@sberdevices.ru>
+ <99da938b-3e67-150c-2f74-41d917a95950@sberdevices.ru>
+ <itjmw7vh3a7ggbodsu4mksu2hqbpdpxmu6cpexbra66nfhsw4x@hzpuzwldkfx5>
+ <CAGxU2F648TyvAJN+Zk6YCnGUhn=0W_MZTox7RxQ45zHmHHO0SA@mail.gmail.com>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <CAGxU2F648TyvAJN+Zk6YCnGUhn=0W_MZTox7RxQ45zHmHHO0SA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/28 06:38:00 #21021220
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,72 +80,75 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---wf4WgXMFCZE62Nbf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 27, 2023 at 09:44:17PM +0530, Sumit Gupta wrote:
-> For Tegra234, add the "nvidia,bpmp" property within the Memory
-> Controller (MC) node to reference BPMP node. This is needed in
-> the MC driver to pass the client info to the BPMP-FW when memory
-> interconnect support is available.
->=20
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  .../bindings/memory-controllers/nvidia,tegra186-mc.yaml    | 7 +++++++
->  1 file changed, 7 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,=
-tegra186-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvi=
-dia,tegra186-mc.yaml
-> index 935d63d181d9..398d27bb2373 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra18=
-6-mc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra18=
-6-mc.yaml
-> @@ -58,6 +58,10 @@ properties:
->    "#interconnect-cells":
->      const: 1
-> =20
-> +  nvidia,bpmp:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: phandle of the node representing the BPMP
-> +
->  patternProperties:
->    "^external-memory-controller@[0-9a-f]+$":
->      description:
-> @@ -220,6 +224,9 @@ allOf:
->              - const: ch14
->              - const: ch15
-> =20
-> +        nvidia,bpmp:
-> +          description: phandle of the node representing the BPMP
-> +
+On 28.03.2023 12:42, Stefano Garzarella wrote:
+> I pressed send too early...
+> 
+> CCing Bryan, Vishnu, and pv-drivers@vmware.com
+> 
+> On Tue, Mar 28, 2023 at 11:39 AM Stefano Garzarella <sgarzare@redhat.com> wrote:
+>>
+>> On Sun, Mar 26, 2023 at 01:13:11AM +0300, Arseniy Krasnov wrote:
+>>> This removes behaviour, where error code returned from any transport
+>>> was always switched to ENOMEM. This works in the same way as:
+>>> commit
+>>> c43170b7e157 ("vsock: return errors other than -ENOMEM to socket"),
+>>> but for receive calls.
+>>>
+>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>> ---
+>>> net/vmw_vsock/af_vsock.c | 4 ++--
+>>> 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>>> index 19aea7cba26e..9262e0b77d47 100644
+>>> --- a/net/vmw_vsock/af_vsock.c
+>>> +++ b/net/vmw_vsock/af_vsock.c
+>>> @@ -2007,7 +2007,7 @@ static int __vsock_stream_recvmsg(struct sock *sk, struct msghdr *msg,
+>>>
+>>>               read = transport->stream_dequeue(vsk, msg, len - copied, flags);
+>>
+>> In vmci_transport_stream_dequeue() vmci_qpair_peekv() and
+>> vmci_qpair_dequev() return VMCI_ERROR_* in case of errors.
+>>
+>> Maybe we should return -ENOMEM in vmci_transport_stream_dequeue() if
+>> those functions fail to keep the same behavior.
 
-Why do we need this one? There's already an nvidia,bpmp phandle defined
-in the patternProperties section for external memory controllers.
+Yes, seems i missed it, because several months ago we had similar question for send
+logic:
+https://www.spinics.net/lists/kernel/msg4611091.html
+And it was ok to not handle VMCI send path in this way. So i think current implementation
+for tx is a little bit buggy, because VMCI specific error from 'vmci_qpair_enquev()' is
+returned to af_vsock.c. I think error conversion must be added to VMCI transport for tx
+also.
 
-Thierry
+Good thing is that Hyper-V uses general error codes.
 
---wf4WgXMFCZE62Nbf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQixHgACgkQ3SOs138+
-s6FPyhAAnZhwTSvoZp45DLHq9a51QzbNzm2ftllz08w6ApGhG4loPBoceTxA5SN/
-02806+yYIHfJNlu5G0x8x6U6W9rXg0/QLeTITWx0XbpU6FuiEashzDJD+Kg7eSpe
-4+yJSRjSYilYNatKfPiXpil1pvLXtmQ2YAPJ2SFFRiVYBcqvBUS6xXyOpXa6eJCr
-1hh9QqMTsnxTxx1D+FGKAZYT8M+E2kBowkQ/vIpAg1UMlXD3lWa2crfEJQq744R+
-K3rDfOkLaeVzFrN8XMUCTX5ZcTR1FHwqCpLFjaSY9qytJYyimEhyARb0jr43iVKF
-yRuNqLfDEUDyYvCxDjFCGYgQca1jRhGyzrWAXF9yfz5EuEBWoIIRooeru5VRscsB
-OD3I+iD5V8DNGwDnD94WQXgcTBSD8aGCPrCzIxGCAyOqBO1pSfGsu1LiMElBQ+aF
-2gs4gVUMvAOytfVpNZpJ4PpikMSsxLSu27XDJM+GCEL7pQwiW5oUHs1nSoIDUGt2
-K9CoJeVKKsikMz1LzzrAsL53rH8/blh7ozoHDXTUKH7xAZVtQzHd9yIRF5RINyOY
-8neVsEo7nTSn1naWJt5pHnWKgmcKkZI0CZnxLPII/x3v6LySyOHtF+oY0J0TqFdz
-LqZCsEaDfElewKibVzJM2jxrd5A2Rh3ybti7Me5xj5m13n8WzKI=
-=xsrS
------END PGP SIGNATURE-----
-
---wf4WgXMFCZE62Nbf--
+Thanks, Arseniy
+>>
+>> CCing Bryan, Vishnu, and pv-drivers@vmware.com
+>>
+>> The other transports seem okay to me.
+>>
+>> Thanks,
+>> Stefano
+>>
+>>>               if (read < 0) {
+>>> -                      err = -ENOMEM;
+>>> +                      err = read;
+>>>                       break;
+>>>               }
+>>>
+>>> @@ -2058,7 +2058,7 @@ static int __vsock_seqpacket_recvmsg(struct sock *sk, struct msghdr *msg,
+>>>       msg_len = transport->seqpacket_dequeue(vsk, msg, flags);
+>>>
+>>>       if (msg_len < 0) {
+>>> -              err = -ENOMEM;
+>>> +              err = msg_len;
+>>>               goto out;
+>>>       }
+>>>
+>>> --
+>>> 2.25.1
+>>>
+> 
