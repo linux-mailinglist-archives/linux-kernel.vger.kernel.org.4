@@ -2,121 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6DCD6CBC79
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDCE6CBC80
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbjC1KXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S231927AbjC1K1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjC1KXW (ORCPT
+        with ESMTP id S229620AbjC1K1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:23:22 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6A9618B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:23:21 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id s13so6597391wmr.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:23:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679998999;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JDzRFYi3RNic/LekPtwT66dQgjxUn0+xUq4SVUW3hGI=;
-        b=qXrZqxXvk8TTChUZvPxCud+eZ30VRquAfpJfwKULgIKukYnNsDRVWrskBs/yGah/3i
-         83B3/EjSGl4dG+VgHadyDwYoaC1hi4MbOvy1Qc2Oc/+DqWQeR6+s8D9LmVi0xWDmAs8H
-         LMZutayy8YOQjc8VKeUcs0yO0SsYc03T+45tfadMHO7MRoueM/QsyW0yovgBLvdvelyo
-         Qwiz7IJJJbiRlBCKJUuCd/ag5c5rgNiYpFUfixZnpvZhNmtRM49t0A2pQLYaRAzjvwh6
-         lRTG3xl22rAxnQ0SIPzcP5Zrc+6LVD6klcI3ntmHYlyR/vxfVCA6z+9fLOxL5LFDZLEt
-         Lc1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679998999;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JDzRFYi3RNic/LekPtwT66dQgjxUn0+xUq4SVUW3hGI=;
-        b=oPktajPTbEyTgdkF44wyvzwcArHEfbiwEfunycp6V38H/6QyhnYTgCG7JFJk/MkGxT
-         7m8j+NYbASEyHRq4+rtWs3MowpQFM6aaXM9ht+eVdc22NbSLbmefdfRfTF1xyP+Y+BCL
-         xdVx3CBlO2arA6/oGaj8XhcjgDKsnTtkwKT17hcL51BYJlbsCK9494aN02zQhGnfchX3
-         oebAAa5H1hy7aG4lX5jeoI5e+hVEKbchCr6Djgz4HIw8fut+7QjpcIUdoZfVzwCRz6Q+
-         mAIGwlEDtjX53CrLQLlw+26c1HjTxwFj9t6WUsa6CuzZK5g0XdihKtw3tYAvCBT5rOyZ
-         GIFA==
-X-Gm-Message-State: AO0yUKXTluaPgDeP5oEg6kkP440CUwtUw/hGVPRF7SIKG43ayKPuLUvu
-        C5y90xxpwO3GRgideJ00Lgogfg==
-X-Google-Smtp-Source: AK7set8+rVt9uMI2B65S9+dtPSt7AljkPiJbA/L6F0xN8a1/8VPJfc6C35dLQrNoKrs8jVWLcThGVQ==
-X-Received: by 2002:a05:600c:291:b0:3ee:5147:3acd with SMTP id 17-20020a05600c029100b003ee51473acdmr11510334wmk.40.1679998999667;
-        Tue, 28 Mar 2023 03:23:19 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.91])
-        by smtp.gmail.com with ESMTPSA id u17-20020a05600c19d100b003ef5e5f93f5sm11981393wmq.19.2023.03.28.03.23.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 03:23:19 -0700 (PDT)
-Message-ID: <026b9d7d-86db-45cd-9e86-066fa826a77e@linaro.org>
-Date:   Tue, 28 Mar 2023 11:23:18 +0100
+        Tue, 28 Mar 2023 06:27:15 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC767618B;
+        Tue, 28 Mar 2023 03:27:13 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id B85844248B;
+        Tue, 28 Mar 2023 10:27:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1679999231; bh=zT2koom/7W4xUS4Q4Sf76XmaDUMDIN5TnyETV511rOM=;
+        h=Date:Subject:To:Cc:From;
+        b=fDoF7aexA/9AcvnCA66GAgO+W9WNbjW5AWw4xVFwRwX9SZRxm/JPZSkZkNOrLK+c+
+         egHT+pqKAUs0KaLPXW5Tz7oQiNFzxR3gg2KH3rHVq4GJqPIgJ4e2QZcP9v+xl3PYlf
+         Ba09NK6CXwdD0KmVF3zHVZQlCdPYimKf327UbEI5io6hyajxtf/PxTwOk9+0hvnOuj
+         jhudG2tMYp6U/rOZ9iOh2gonmOvIx+5FS6rHEjvAXr4RlOKxQrx8S9uxtxQBithol3
+         l9ursIrP/XS41teW5MAscmRFYEUAeVJ7fiIeAiQ8q+Bpuu+wWcIZvaed1JbJ2CUk2k
+         ZhobpJ87npbHQ==
+Message-ID: <871beead-1cc8-bb94-7c15-0173dfb11e71@marcan.st>
+Date:   Tue, 28 Mar 2023 19:27:02 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 1/4] ARM: dts: at91-sama5d27_wlsom1: Set sst26vf064b
- SPI NOR flash at its maximum frequency
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] dt-bindings: i2c: Drop unneeded quotes
 Content-Language: en-US
-To:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com
-Cc:     alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-References: <20230328101517.1595738-1-tudor.ambarus@linaro.org>
- <20230328101517.1595738-2-tudor.ambarus@linaro.org>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20230328101517.1595738-2-tudor.ambarus@linaro.org>
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Peter Rosin <peda@axentia.se>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+From:   Hector Martin <marcan@marcan.st>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/28/23 11:15, Tudor Ambarus wrote:
-> From: Tudor Ambarus <tudor.ambarus@microchip.com>
+On 23/03/2023 02.35, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
 > 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml | 4 ++--
+>  Documentation/devicetree/bindings/i2c/apple,i2c.yaml          | 4 ++--
+>  Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml  | 2 +-
+>  Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml     | 4 ++--
+>  Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml       | 4 ++--
+>  Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml | 4 ++--
+>  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml       | 2 +-
+>  .../devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml          | 4 ++--
+>  8 files changed, 14 insertions(+), 14 deletions(-)
 
-cut
+For apple:
 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+Reviewed-by: Hector Martin <marcan@marcan.st>
 
-I don't understand why these differ. On my local machine I see them match:
+- Hector
 
-commit e208a7b04cbde950588c561889d2f8eb8a10485f
-Author: Tudor Ambarus <tudor.ambarus@linaro.org>
-Date:   Thu Nov 17 12:52:46 2022 +0200
-
-    ARM: dts: at91-sama5d27_wlsom1: Set sst26vf064b SPI NOR flash at its
-maximum frequency
-
-    sama5d27-wlsom1 populates an sst26vf064b SPI NOR flash. Its maximum
-    operating frequency for 2.7-3.6V is 104 MHz. As the flash is operated
-    at 3.3V, increase its maximum supported frequency to 104MHz. The
-    increasing of the spi-max-frequency value requires the setting of the
-    "CE# Not Active Hold Time", thus set the spi-cs-setup-ns to a value
-of 7.
-
-    The sst26vf064b datasheet specifies just a minimum value for the
-    "CE# Not Active Hold Time" and it advertises it to 5 ns. There's no
-    maximum time specified. I determined experimentally that 5 ns for the
-    spi-cs-setup-ns is not enough when the flash is operated close to its
-    maximum frequency and tests showed that 7 ns is just fine, so set the
-    spi-cs-setup-ns dt property to 7.
-
-    With the increase of frequency the reads are now faster with ~37%.
-
-    Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-
-Anyway, you can keep v2 then, looks like v2 has the same email on both
-the author line and the S-o-b line. It's fine by me even if it is with
-@microchip.com:
-https://lore.kernel.org/all/20230328100723.1593864-2-tudor.ambarus@linaro.org/
