@@ -2,252 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B955E6CBC93
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AB06CBC91
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbjC1Kdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
+        id S231279AbjC1Kdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232582AbjC1Kdj (ORCPT
+        with ESMTP id S229670AbjC1Kdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:33:39 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1D76E9B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:33:37 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id e65so14340417ybh.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:33:37 -0700 (PDT)
+        Tue, 28 Mar 2023 06:33:33 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F466184;
+        Tue, 28 Mar 2023 03:33:32 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id eh3so47501559edb.11;
+        Tue, 28 Mar 2023 03:33:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679999617;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZDR+svhMJqmi1JNTt9QQspjwqS4wpTbac+Zzy4tDFxI=;
-        b=q6BWSq3V1F6Rm0Eo4lGZIghczqg4WrLQmzkgqoeTIie1EmepHBt+OGKT/YC9Sd/nbR
-         G1096B3bRLGA/WTZ4Ecjlqx0xzZZxnmnfHCP8QENg8WQyMipQJC2ReJmm0NBcvW1/7Ua
-         1cqVCArEkX9PJ/ZqW03tKV/8gPtwlNztlXeCQmCv4i73gXMIrxqRaVI3nSxIg/zA/ag6
-         ZcmzlpkS6Z6FJmSaiYsFT3qr4IdX3g4UhuvM+6nrYFcKGQwgQ7Np4wEelT4ftwKcL/yl
-         qGiOZfbOTEEMioisfApxceMOPvut1f7vLjczyXXBHm/dKW7FAP0kk3bjEH9MgBxO0zLC
-         Y0zQ==
+        d=gmail.com; s=20210112; t=1679999611;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xIQtKmY6yWS8CDXvo4BZswBARmIubt6ewMMSD2EbBJg=;
+        b=o4qT9SLghP4XbsHKw9QxW2+RPXLZrIgtQgby5gUwPo/7cOw/RNnLSvEY0bU2OeFUTu
+         ojRw+U4yltSYLTyibFiWX8Xby2z2WnzJz2tS56S7IY5c/BhlGj8M/HX63wOhrSkOPbLo
+         f1V3e9JjUvv77z2hsH2MHZVU3ztkIh0DkoZ07zjQ9VNOwoQet7VJmTG5eezvsK5DZvzN
+         nk8RS7WEHuFmGXseieuMoizjue2HDbHr8jrE3L6jggeZexP4h1/KQ2W8TQcf+FV148ZH
+         gr5xQrLDAjpeoQERSU+c9UxinojfuawU/jH+zHDCi1aF9TdJrkbvkZjXo+jTHm3HxleH
+         0/IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679999617;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZDR+svhMJqmi1JNTt9QQspjwqS4wpTbac+Zzy4tDFxI=;
-        b=lLkqd+BSIzr5LbphutOGgAdHR24sotLfEzSQMG6xba02VeFSJep4SZhaDaFp04DowP
-         8YtOdzefKTDFY30g7MmZ+/0vlruZbISlLegq5SjhDHgnC51Wi4a9cMD/QGAJUQcd3+wo
-         J4gvuTQa6hSEdhRmFqYcHVlauGteXIEaDUaKNMjZ2kQzWwxkm+q3tIxwyN4gZSmgIbRy
-         EKJNv8TESfUPjxTEqwAyDY2gEiEGOfb30asXkdS5cbh46/l0b8z+BK6iqSPXBHqJLjQS
-         ecZHGcFtZcTB40at/f/vo85zZtOQ+aToVwYi4lYz89Xx5HAE3ZSHLbKWBqDvo0zg9QMx
-         qEHg==
-X-Gm-Message-State: AAQBX9csougT1mbkNe1Edf5wjzQSL9oYiVl8AA3QT5IM7enIqxBhR4Dd
-        XauzNT9m0HYwucQzNpsmiBYlD3lML89yzivjWxemJ4hq7cYczWuRtxjTOA==
-X-Google-Smtp-Source: AKy350YZZt4/ks3j8DNXjnapUa3ZNTgqyy7bbzy1kfqGqIfQn0BYtMYGjz/iUjziVkMI4qqHKqweRe0dTSyARO819Fs=
-X-Received: by 2002:a25:2d20:0:b0:b75:afb9:a257 with SMTP id
- t32-20020a252d20000000b00b75afb9a257mr14063323ybt.65.1679999616628; Tue, 28
- Mar 2023 03:33:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230328095807.7014-1-songmuchun@bytedance.com> <20230328095807.7014-4-songmuchun@bytedance.com>
-In-Reply-To: <20230328095807.7014-4-songmuchun@bytedance.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 28 Mar 2023 12:32:59 +0200
-Message-ID: <CANpmjNNry_OxZJFAKSFf9Cpb2SCWM-__AF25BpGwOXpa+DJBUQ@mail.gmail.com>
-Subject: Re: [PATCH 3/6] mm: kfence: make kfence_protect_page() void
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     glider@google.com, dvyukov@google.com, akpm@linux-foundation.org,
-        jannh@google.com, sjpark@amazon.de, muchun.song@linux.dev,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+        d=1e100.net; s=20210112; t=1679999611;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xIQtKmY6yWS8CDXvo4BZswBARmIubt6ewMMSD2EbBJg=;
+        b=LZlHeUMxOiWkq2pH2hAPxQE5SXw8GWJ0SU4LF7z9WvSyZqxt+IZHqfwdTsWQKkj2Vg
+         o+Zo28WIgxtnFcm4nYnpsxvacQcez1JfxY9KjPLNtiNT2AxVGj81KFkN3wDt00kUJ+9Q
+         +nIoWtId8qPtEsI8muaEAl1yzt+4V2NaOKnqfbjAgkBTdNAoa94vZTJBodCQUqZcGOyN
+         4cVonrR3zzEL7TGamulibP/gLazyGcDCT7hhUh4m83V9hvnfL23XDsBmXZtBOEYh/v5R
+         gpvLPx/WEIM5BAODYGvAUqcaNSUj+kNskoMGiOtd1kV5PekRuswakUAZujXZsmce5GGO
+         W9ow==
+X-Gm-Message-State: AAQBX9dNIZRP3jN+yK+oqtBH8FyfpAOOK17VnKbTamnVmmFRxalJOspx
+        i8CeRJ+Ur5pMRtfA5XMWdL4=
+X-Google-Smtp-Source: AKy350YvW5QQ8F3pllLvIf5HJCqeL8GzHWuERe1VUWtWMxMrHM8FBwDUAVkg16gdmX1/2PUX6IRVhQ==
+X-Received: by 2002:a17:907:8a8e:b0:944:49ee:aea2 with SMTP id sf14-20020a1709078a8e00b0094449eeaea2mr9148171ejc.71.1679999610846;
+        Tue, 28 Mar 2023 03:33:30 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id hy16-20020a1709068a7000b00931d3509af1sm15025292ejc.222.2023.03.28.03.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 03:33:30 -0700 (PDT)
+Message-ID: <2d8f0889da0e3dfa9c1c8fe9da301d54636a2e6d.camel@gmail.com>
+Subject: Re: [PATCH] arm64: remove special treatment for the link order of
+ head.o
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <bpf@vger.kernel.org>
+Date:   Tue, 28 Mar 2023 13:33:29 +0300
+In-Reply-To: <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
+References: <20221012233500.156764-1-masahiroy@kernel.org>
+         <ZBovCrMXJk7NPISp@aurel32.net>
+         <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
+         <ZBzAp457rrO52FPy@aurel32.net>
+         <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
+         <CAK7LNASdsWMP2jud4niOkrR5+a2jG-Vfo0XEa63bh3L3W6_t0Q@mail.gmail.com>
+         <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023 at 11:58, Muchun Song <songmuchun@bytedance.com> wrote:
->
-> The arch_kfence_init_pool() make sure kfence pool is mapped with base page
-> size (e.g. 4KB), so the following PTE lookup in kfence_protect_page() will
-> always succeed. Then there is no way to stop kfence_protect_page() always
-> returning true, so make it void to simplify the code.
->
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> ---
->  arch/arm/include/asm/kfence.h     |   4 +-
->  arch/arm64/include/asm/kfence.h   |   4 +-
->  arch/parisc/include/asm/kfence.h  |   7 +-
->  arch/powerpc/include/asm/kfence.h |   8 +--
->  arch/riscv/include/asm/kfence.h   |   4 +-
->  arch/s390/include/asm/kfence.h    |   3 +-
->  arch/x86/include/asm/kfence.h     |   9 +--
->  mm/kfence/core.c                  | 142 +++++++++++++++++---------------------
->  8 files changed, 73 insertions(+), 108 deletions(-)
->
-> diff --git a/arch/arm/include/asm/kfence.h b/arch/arm/include/asm/kfence.h
-> index 7980d0f2271f..c30a5f8125e8 100644
-> --- a/arch/arm/include/asm/kfence.h
-> +++ b/arch/arm/include/asm/kfence.h
-> @@ -43,11 +43,9 @@ static inline bool arch_kfence_init_pool(void)
->         return true;
->  }
->
-> -static inline bool kfence_protect_page(unsigned long addr, bool protect)
-> +static inline void kfence_protect_page(unsigned long addr, bool protect)
->  {
->         set_memory_valid(addr, 1, !protect);
-> -
-> -       return true;
->  }
->
->  #endif /* __ASM_ARM_KFENCE_H */
-> diff --git a/arch/arm64/include/asm/kfence.h b/arch/arm64/include/asm/kfence.h
-> index a81937fae9f6..7717c6d98b6f 100644
-> --- a/arch/arm64/include/asm/kfence.h
-> +++ b/arch/arm64/include/asm/kfence.h
-> @@ -12,11 +12,9 @@
->
->  static inline bool arch_kfence_init_pool(void) { return true; }
->
-> -static inline bool kfence_protect_page(unsigned long addr, bool protect)
-> +static inline void kfence_protect_page(unsigned long addr, bool protect)
->  {
->         set_memory_valid(addr, 1, !protect);
-> -
-> -       return true;
->  }
->
->  #ifdef CONFIG_KFENCE
-> diff --git a/arch/parisc/include/asm/kfence.h b/arch/parisc/include/asm/kfence.h
-> index 6259e5ac1fea..290792009315 100644
-> --- a/arch/parisc/include/asm/kfence.h
-> +++ b/arch/parisc/include/asm/kfence.h
-> @@ -19,13 +19,10 @@ static inline bool arch_kfence_init_pool(void)
->  }
->
->  /* Protect the given page and flush TLB. */
-> -static inline bool kfence_protect_page(unsigned long addr, bool protect)
-> +static inline void kfence_protect_page(unsigned long addr, bool protect)
->  {
->         pte_t *pte = virt_to_kpte(addr);
->
-> -       if (WARN_ON(!pte))
-> -               return false;
-> -
->         /*
->          * We need to avoid IPIs, as we may get KFENCE allocations or faults
->          * with interrupts disabled.
-> @@ -37,8 +34,6 @@ static inline bool kfence_protect_page(unsigned long addr, bool protect)
->                 set_pte(pte, __pte(pte_val(*pte) | _PAGE_PRESENT));
->
->         flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
-> -
-> -       return true;
->  }
->
->  #endif /* _ASM_PARISC_KFENCE_H */
-> diff --git a/arch/powerpc/include/asm/kfence.h b/arch/powerpc/include/asm/kfence.h
-> index 6fd2b4d486c5..9d8502a7d0a4 100644
-> --- a/arch/powerpc/include/asm/kfence.h
-> +++ b/arch/powerpc/include/asm/kfence.h
-> @@ -21,16 +21,14 @@ static inline bool arch_kfence_init_pool(void)
->  }
->
->  #ifdef CONFIG_PPC64
-> -static inline bool kfence_protect_page(unsigned long addr, bool protect)
-> +static inline void kfence_protect_page(unsigned long addr, bool protect)
->  {
->         struct page *page = virt_to_page(addr);
->
->         __kernel_map_pages(page, 1, !protect);
-> -
-> -       return true;
->  }
->  #else
-> -static inline bool kfence_protect_page(unsigned long addr, bool protect)
-> +static inline void kfence_protect_page(unsigned long addr, bool protect)
->  {
->         pte_t *kpte = virt_to_kpte(addr);
->
-> @@ -40,8 +38,6 @@ static inline bool kfence_protect_page(unsigned long addr, bool protect)
->         } else {
->                 pte_update(&init_mm, addr, kpte, 0, _PAGE_PRESENT, 0);
->         }
-> -
-> -       return true;
->  }
->  #endif
->
-> diff --git a/arch/riscv/include/asm/kfence.h b/arch/riscv/include/asm/kfence.h
-> index d887a54042aa..1299f47170b5 100644
-> --- a/arch/riscv/include/asm/kfence.h
-> +++ b/arch/riscv/include/asm/kfence.h
-> @@ -46,7 +46,7 @@ static inline bool arch_kfence_init_pool(void)
->         return true;
->  }
->
-> -static inline bool kfence_protect_page(unsigned long addr, bool protect)
-> +static inline void kfence_protect_page(unsigned long addr, bool protect)
->  {
->         pte_t *pte = virt_to_kpte(addr);
->
-> @@ -56,8 +56,6 @@ static inline bool kfence_protect_page(unsigned long addr, bool protect)
->                 set_pte(pte, __pte(pte_val(*pte) | _PAGE_PRESENT));
->
->         flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
-> -
-> -       return true;
->  }
->
->  #endif /* _ASM_RISCV_KFENCE_H */
-> diff --git a/arch/s390/include/asm/kfence.h b/arch/s390/include/asm/kfence.h
-> index d55ba878378b..6d7b3632d79c 100644
-> --- a/arch/s390/include/asm/kfence.h
-> +++ b/arch/s390/include/asm/kfence.h
-> @@ -33,10 +33,9 @@ static __always_inline void kfence_split_mapping(void)
->  #endif
->  }
->
-> -static inline bool kfence_protect_page(unsigned long addr, bool protect)
-> +static inline void kfence_protect_page(unsigned long addr, bool protect)
->  {
->         __kernel_map_pages(virt_to_page(addr), 1, !protect);
-> -       return true;
->  }
->
->  #endif /* _ASM_S390_KFENCE_H */
-> diff --git a/arch/x86/include/asm/kfence.h b/arch/x86/include/asm/kfence.h
-> index ff5c7134a37a..6ffd4a078a71 100644
-> --- a/arch/x86/include/asm/kfence.h
-> +++ b/arch/x86/include/asm/kfence.h
-> @@ -38,13 +38,9 @@ static inline bool arch_kfence_init_pool(void)
->  }
->
->  /* Protect the given page and flush TLB. */
-> -static inline bool kfence_protect_page(unsigned long addr, bool protect)
-> +static inline void kfence_protect_page(unsigned long addr, bool protect)
->  {
-> -       unsigned int level;
-> -       pte_t *pte = lookup_address(addr, &level);
-> -
-> -       if (WARN_ON(!pte || level != PG_LEVEL_4K))
-> -               return false;
-> +       pte_t *pte = virt_to_kpte(addr);
+On Sat, 2023-03-25 at 20:42 +0900, Masahiro Yamada wrote:
+[...]
+> > Strange.
+> >=20
+> > I used the .config file Aurelien provided, but
+> > I still cannot reproduce this issue.
+> >=20
+> >=20
+> > The vmlinux size is small
+> > as-is in the current mainline.
+> >=20
+> >=20
+> >=20
+> > [mainline]
+> >=20
+> >=20
+> > masahiro@zoe:~/ref/linux(master)$ git log --oneline -1
+> > 65aca32efdcb (HEAD -> master, origin/master, origin/HEAD) Merge tag
+> > 'mm-hotfixes-stable-2023-03-24-17-09' of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-size  vmlinux
+> >    text    data     bss     dec     hex filename
+> > 24561282 8186912 622032 33370226 1fd3072 vmlinux
+> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-readelf -S
+> > vmlinux | grep -A1 BTF
+> >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
+> >        000000000048209c  0000000000000000   A       0     0     1
+> >   [16] .BTF_ids          PROGBITS         ffff8000096427a4  016527a4
+> >        0000000000000a1c  0000000000000000   A       0     0     1
+> >=20
+> >=20
+> >=20
+> >=20
+> > [mainline + revert 994b7ac]
+> >=20
+> > masahiro@zoe:~/ref/linux2(testing)$ git log --oneline -2
+> > 856c80dd789c (HEAD -> testing) Revert "arm64: remove special treatment
+> > for the link order of head.o"
+> > 65aca32efdcb (origin/master, origin/HEAD, master) Merge tag
+> > 'mm-hotfixes-stable-2023-03-24-17-09' of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-size  vmlinux
+> >    text    data     bss     dec     hex filename
+> > 24561329 8186912 622032 33370273 1fd30a1 vmlinux
+> > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-readelf -S
+> > vmlinux | grep -A1 BTF
+> >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
+> >        00000000004820cb  0000000000000000   A       0     0     1
+> >   [16] .BTF_ids          PROGBITS         ffff8000096427d4  016527d4
+> >        0000000000000a1c  0000000000000000   A       0     0     1
+> >=20
+> >=20
+> >=20
+> > I still do not know what affects reproducibility.
+> > (compiler version, pahole version, etc. ?)
+> >=20
+> >=20
+> >=20
+> >=20
+> > Aurelien used GCC 12 + binutils 2.40, but
+> > my toolchain is a bit older.
+> >=20
+> >=20
+> >=20
+> > FWIW, I tested this on Ubuntu 22.04LTS.
+> >=20
+> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-gcc --version
+> > aarch64-linux-gnu-gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+> > Copyright (C) 2021 Free Software Foundation, Inc.
+> > This is free software; see the source for copying conditions.  There is=
+ NO
+> > warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURP=
+OSE.
+> >=20
+> > masahiro@zoe:~/ref/linux(master)$ pahole --version
+> > v1.22
+> >=20
+> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-as --version
+> > GNU assembler (GNU Binutils for Ubuntu) 2.38
+> > Copyright (C) 2022 Free Software Foundation, Inc.
+> > This program is free software; you may redistribute it under the terms =
+of
+> > the GNU General Public License version 3 or later.
+> > This program has absolutely no warranty.
+> > This assembler was configured for a target of `aarch64-linux-gnu'.
+>=20
+>=20
+>=20
+>=20
+>=20
+> I did the same things in Deiban sid
+> in order to use newer versions of tools.
 
-This WARN and bailing here has helped us catch an issue early before
-[1] - and because KFENCE ought to be enabled as a debugging tool, the
-philosophy is to be failure tolerant and not crash the system here,
-hence the "return false".
 
-[1] https://lore.kernel.org/lkml/Y3bCV6VckVUEF7Pq@elver.google.com/
+Hi Masahiro,
 
-We're relying on the architecture doing the "right thing", but it's
-not entirely unlikely that the arch ends up doing the wrong thing due
-to some bug like above (i.e. arch_kfence_init_pool() is faulty).
+An upgrade from gcc 11 to gcc 12, BTF section increase and a number of
+duplicate IDs reported by resolve_btfids matches the description of
+the following thread:
 
-Nack.
+https://lore.kernel.org/bpf/Y%2FP1yxAuV6Wj3A0K@google.com/
+
+The issue is caused by change in GNU assembler DWARF generation.
+I've sent a patch to fix it a few weeks ago and it is merged in
+dwarves master:
+
+a9498899109d ("dwarf_loader: Fix for BTF id drift caused by adding unspecif=
+ied types")
+
+Could you please grab a fresh version of dwarves from:
+
+git@github.com:acmel/dwarves.git
+
+compile 'pahole' and try with?
+
+Thanks,
+Eduard
+
+>=20
+>=20
+>=20
+> Yup, I saw a huge increase in the .BTF section,
+> and observed the difference w/wo 994b7ac.
+>=20
+> masahiro@3e9802d667e3:~/ref/linux2$ aarch64-linux-gnu-readelf -S
+> vmlinux | grep -A1 BTF
+>   [15] .BTF              PROGBITS         ffff8000091d26c4  011e26c4
+>        000000000093e626  0000000000000000   A       0     0     1
+>   [16] .BTF_ids          PROGBITS         ffff800009b10cec  01b20cec
+>        0000000000000a1c  0000000000000000   A       0     0     1
+>=20
+>=20
+> I guess some tool might be affecting this.
+> Even with 994b7ac reverted, the .BTF section
+> is much bigger.
+>=20
+>=20
+> At the same time, I saw a ton of warnings
+> while building BTF.
+>=20
+>=20
+> masahiro@3e9802d667e3:~/ref/linux2$ cat /etc/os-release
+> PRETTY_NAME=3D"Debian GNU/Linux bookworm/sid"
+> NAME=3D"Debian GNU/Linux"
+> VERSION_CODENAME=3Dbookworm
+> ID=3Ddebian
+> HOME_URL=3D"https://www.debian.org/"
+> SUPPORT_URL=3D"https://www.debian.org/support"
+> BUG_REPORT_URL=3D"https://bugs.debian.org/"
+>=20
+>=20
+>=20
+>   LD      vmlinux
+>   BTFIDS  vmlinux
+> WARN: multiple IDs found for 'task_struct': 177, 16690 - using 177
+> WARN: multiple IDs found for 'file': 517, 16712 - using 517
+> WARN: multiple IDs found for 'vm_area_struct': 524, 16714 - using 524
+> WARN: multiple IDs found for 'inode': 586, 16773 - using 586
+> WARN: multiple IDs found for 'path': 618, 16802 - using 618
+> WARN: multiple IDs found for 'task_struct': 177, 17267 - using 177
+> WARN: multiple IDs found for 'file': 517, 17312 - using 517
+> WARN: multiple IDs found for 'vm_area_struct': 524, 17315 - using 524
+> WARN: multiple IDs found for 'seq_file': 1029, 17376 - using 1029
+> WARN: multiple IDs found for 'inode': 586, 17494 - using 586
+> WARN: multiple IDs found for 'path': 618, 17523 - using 618
+> WARN: multiple IDs found for 'cgroup': 704, 17532 - using 704
+> WARN: multiple IDs found for 'task_struct': 177, 18652 - using 177
+> WARN: multiple IDs found for 'file': 517, 18704 - using 517
+> WARN: multiple IDs found for 'vm_area_struct': 524, 18707 - using 524
+> WARN: multiple IDs found for 'seq_file': 1029, 18781 - using 1029
+> WARN: multiple IDs found for 'inode': 586, 18911 - using 586
+> WARN: multiple IDs found for 'path': 618, 18940 - using 618
+> WARN: multiple IDs found for 'cgroup': 704, 18949 - using 704
+> WARN: multiple IDs found for 'task_struct': 177, 20514 - using 177
+> WARN: multiple IDs found for 'file': 517, 20515 - using 517
+> WARN: multiple IDs found for 'vm_area_struct': 524, 20541 - using 524
+> WARN: multiple IDs found for 'inode': 586, 20595 - using 586
+> WARN: multiple IDs found for 'path': 618, 20624 - using 618
+> WARN: multiple IDs found for 'cgroup': 704, 20639 - using 704
+> WARN: multiple IDs found for 'seq_file': 1029, 20801 - using 1029
+>    ...
+>=20
+>=20
+>=20
+>=20
+> I am not sure whether these warnings are related to
+> the current issue or not.
+>=20
+>=20
+> I did not look into it any further.
+> I may not be seeing a sane build result.
+>=20
+>=20
+
