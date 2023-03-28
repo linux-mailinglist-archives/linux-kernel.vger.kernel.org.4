@@ -2,67 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329266CB35F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78FFE6CB367
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjC1Bt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 21:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
+        id S230432AbjC1BwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 21:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjC1Bt1 (ORCPT
+        with ESMTP id S232269AbjC1BwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 21:49:27 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8907310CC;
-        Mon, 27 Mar 2023 18:49:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=drkQ92cPVg9tVgMwwt3QwYKwER+tkvuJkif72VmCj2c=; b=LZB2Hi2EmrzTVwEHj57Y7lNAT1
-        hI/h3cOZ6/ShUNWqImkrN3UPZsuzSYXe/xLo15Up6wRtx6G6ksD176dIHjC1eGXzgrD8NSUIAkQaL
-        DapaTBrlH7+sYkHRC1qtVVvQkTh/ShsQAkhMlCg2ZLkn71KzFUqAyZi4mcj4YWgdeKNbNFcZZtJex
-        HHhVYlkrGV8T1e3SIwLEASTwsyC21Nj2d22RbRF6++gu+yTmRJKjF8BAEsaHKGH23xpdhXr7iL0Wr
-        AXgJeJ7R+b/I0JMG+PHs8c2IRL2C+M6DDGzIbu+UhJKaqDutb1YuF6dwTjSV45YlonsMqEMbqT2P8
-        FAb6SxiA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pgySg-00CpFT-1e;
-        Tue, 28 Mar 2023 01:49:22 +0000
-Date:   Mon, 27 Mar 2023 18:49:22 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Ye Bin <yebin@huaweicloud.com>, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH] xfs: fix BUG_ON in xfs_getbmap()
-Message-ID: <ZCJHotVOmvK+/P/k@infradead.org>
-References: <20230327140218.4154709-1-yebin@huaweicloud.com>
- <20230327151524.GC16180@frogsfrogsfrogs>
+        Mon, 27 Mar 2023 21:52:12 -0400
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4F21FDE;
+        Mon, 27 Mar 2023 18:52:11 -0700 (PDT)
+X-UUID: 08321cc7251f4a488c4909c7af261d8a-20230328
+X-CID-UNFAMILIAR: 1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.20,REQID:fcfc3164-7bc9-4ae3-bb3a-67c55f0bc93b,IP:20,
+        URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:14,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:29
+X-CID-INFO: VERSION:1.1.20,REQID:fcfc3164-7bc9-4ae3-bb3a-67c55f0bc93b,IP:20,UR
+        L:0,TC:0,Content:-5,EDM:0,RT:0,SF:14,FILE:0,BULK:0,RULE:Release_HamU,ACTIO
+        N:release,TS:29
+X-CID-META: VersionHash:25b5999,CLOUDID:31748cb4-beed-4dfc-bd9c-e1b22fa6ccc4,B
+        ulkID:2303280952064848OZ6D,BulkQuantity:0,Recheck:0,SF:24|16|19|43|102,TC:
+        nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-UUID: 08321cc7251f4a488c4909c7af261d8a-20230328
+Received: from mail.kylinos.cn [(39.156.73.10)] by mailgw
+        (envelope-from <yijiangshan@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 484537904; Tue, 28 Mar 2023 09:52:05 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+        by mail.kylinos.cn (NSMail) with SMTP id 3DAABE0084A1;
+        Tue, 28 Mar 2023 09:52:05 +0800 (CST)
+X-ns-mid: postfix-64224844-71411298
+Received: from localhost.localdomain (unknown [172.20.125.154])
+        by mail.kylinos.cn (NSMail) with ESMTPA id D4907E0084A1;
+        Tue, 28 Mar 2023 09:52:03 +0800 (CST)
+From:   Jiangshan Yi <yijiangshan@kylinos.cn>
+To:     robert.moore@intel.com, rafael.j.wysocki@intel.com
+Cc:     lenb@kernel.org, linux-acpi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, 13667453960@163.com,
+        Jiangshan Yi <yijiangshan@kylinos.cn>
+Subject: [PATCH] drivers/acpi/acpica/exserial.c: replace ternary operator with min()
+Date:   Tue, 28 Mar 2023 09:51:20 +0800
+Message-Id: <20230328015120.111168-1-yijiangshan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327151524.GC16180@frogsfrogsfrogs>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 08:15:24AM -0700, Darrick J. Wong wrote:
-> > There's issue as follows:
-> > XFS: Assertion failed: (bmv->bmv_iflags & BMV_IF_DELALLOC) != 0, file: fs/xfs/xfs_bmap_util.c, line: 329
-> 
-> Why not get rid of the assertion?  It's not like it changes the course
-> of the code flow -- userspace still gets told there's a delalloc extent.
-> 
-> Or, if the assert does serve some purpose, then do we need to take
-> the mmaplock for cow fork reporting too?
+Fix the following coccicheck warning:
 
-Looking at the COW fork reporting I think it's actually even more
-broken as it never tried to flush data to start with.  But COW
-report is a DEBUG only feature, so maybe forcing or requiring
-BMV_IF_DELALLOC there would make a whole lot of sense.
+drivers/acpi/acpica/exserial.c:346: WARNING opportunity for min().
+
+min() macro is defined in include/linux/minmax.h. It avoids
+multiple evaluations of the arguments when non-constant and performs
+strict type-checking.
+
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+---
+ drivers/acpi/acpica/exserial.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/acpi/acpica/exserial.c b/drivers/acpi/acpica/exseria=
+l.c
+index fd63f2042514..dfe507e0a09a 100644
+--- a/drivers/acpi/acpica/exserial.c
++++ b/drivers/acpi/acpica/exserial.c
+@@ -343,8 +343,7 @@ acpi_ex_write_serial_bus(union acpi_operand_object *s=
+ource_desc,
+ 	/* Copy the input buffer data to the transfer buffer */
+=20
+ 	buffer =3D buffer_desc->buffer.pointer;
+-	data_length =3D (buffer_length < source_desc->buffer.length ?
+-		       buffer_length : source_desc->buffer.length);
++	data_length =3D min(buffer_length, source_desc->buffer.length);
+ 	memcpy(buffer, source_desc->buffer.pointer, data_length);
+=20
+ 	/* Lock entire transaction if requested */
+--=20
+2.27.0
+
