@@ -2,117 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066C06CC14F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72DE86CC14D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233298AbjC1Nol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        id S231238AbjC1Nof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233302AbjC1NoQ (ORCPT
+        with ESMTP id S232546AbjC1NoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:44:16 -0400
-Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5E1BDF5;
-        Tue, 28 Mar 2023 06:44:01 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [117.133.56.22])
-        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id BFAA9580979;
-        Tue, 28 Mar 2023 21:43:33 +0800 (CST)
-From:   Donglin Peng <pengdonglin@sangfor.com.cn>
-To:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
-        mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        chenhuacai@kernel.org, zhangqing@loongson.cn, kernel@xen0n.name,
-        mingo@redhat.com, peterz@infradead.org, xiehuan09@gmail.com,
-        dinghui@sangfor.com.cn, huangcun@sangfor.com.cn,
-        dolinux.peng@gmail.com
-Cc:     linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Donglin Peng <pengdonglin@sangfor.com.cn>
-Subject: [PATCH v8 8/8] selftests/ftrace: Add funcgraph-retval test case
-Date:   Tue, 28 Mar 2023 06:43:19 -0700
-Message-Id: <20230328134319.2185812-9-pengdonglin@sangfor.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230328134319.2185812-1-pengdonglin@sangfor.com.cn>
-References: <20230328134319.2185812-1-pengdonglin@sangfor.com.cn>
+        Tue, 28 Mar 2023 09:44:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CC6C168;
+        Tue, 28 Mar 2023 06:43:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D9E8B81CF9;
+        Tue, 28 Mar 2023 13:43:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87C1BC433D2;
+        Tue, 28 Mar 2023 13:43:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680011035;
+        bh=KzYDwfsH+YX81gSdDwsXHqP3ZoSOdKrPj4OVMe0JLWY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WxvlcsctzYdjsBHlZsV0eGLBm1jk/H/OwlR9XgvA/XAjNg3cC+7Ug0lLHSmdxCraH
+         r3q0XBUsepMwwl21+wlvotubYqthAfADE7y9Qb/6HqhXZvQW9qiLda32SUfYZRC7Zb
+         gJlCOOd66RnzajgNRCbm86XRIlBzMZ0qQ+9g2gQOoLIKP4Xc4X6FaD6RAMr0BwHqDr
+         Qaw5V5Gi94S0RAQ8UlI4V0QZRGtKsBNEdoLNwG37Ylaa8NWA0KWouaKRXgl+FH2GY+
+         2rd/6B1SQAhukf1ZLOdwBFj2+f9yoD2cSxZvuqW/sO2cz1NtbX7hjatmJXzNFctK81
+         9CYigjPxYadNg==
+Date:   Tue, 28 Mar 2023 14:43:50 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH SPI for-next] spi: microchip: pci1xxxx: Fix minor bugs in
+ spi-pci1xxxx driver
+Message-ID: <97c57e1b-9779-4e36-9eac-754fdcb9c504@sirena.org.uk>
+References: <20230328054212.139312-1-tharunkumar.pasumarthi@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaSB8eVh5OSR5LQx8ZHk0ZHVUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpKS0hKTFVKS0tVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Mz46Aio6NT0WA1YJAQo6DzoZ
-        Hi0wFDpVSlVKTUNLS0pKS0pOSkpCVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
-        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFIQk9INwY+
-X-HM-Tid: 0a872875b2232eb7kusnbfaa9580979
-X-HM-MType: 1
-X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2PS2/CgMOCO2Hp2O"
+Content-Disposition: inline
+In-Reply-To: <20230328054212.139312-1-tharunkumar.pasumarthi@microchip.com>
+X-Cookie: Oh, wow!  Look at the moon!
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a test case for the funcgraph-retval and funcgraph-retval-hex
-trace options.
 
-Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
----
-v8:
- - Fix issues in selftest
----
- .../ftrace/test.d/ftrace/fgraph-retval.tc     | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc
+--2PS2/CgMOCO2Hp2O
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc
-new file mode 100644
-index 000000000000..ac6d0183e4d9
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc
-@@ -0,0 +1,39 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: ftrace - function graph print function return value
-+# requires: set_graph_function options/funcgraph-retval options/funcgraph-retval-hex function_graph:tracer
-+
-+# Make sure that funcgraph-retval works
-+
-+fail() { # msg
-+    echo $1
-+    exit_fail
-+}
-+
-+echo proc_reg_write > set_graph_function
-+echo function_graph > current_tracer
-+echo funcgraph-retval > trace_options
-+
-+enable_tracing
-+
-+set +e
-+echo > /proc/interrupts
-+set -e
-+
-+disable_tracing
-+
-+: "Test printing the error code in signed decimal format"
-+echo nofuncgraph-retval-hex > trace_options
-+count=`cat trace | grep 'proc_reg_write' | grep '= -5' | wc -l`
-+if [ $count -eq 0 ]; then
-+    fail "Return value can not be printed in signed decimal format"
-+fi
-+
-+: "Test printing the error code in hexadecimal format"
-+echo funcgraph-retval-hex > trace_options
-+count=`cat trace | grep 'proc_reg_write' | grep 'fffffffb' | wc -l`
-+if [ $count -eq 0 ]; then
-+    fail "Return value can not be printed in hexadecimal format"
-+fi
-+
-+exit 0
--- 
-2.25.1
+On Tue, Mar 28, 2023 at 11:12:12AM +0530, Tharun Kumar P wrote:
+> Following bugs are fixed in this patch:
+> 1. pci1xxxx_spi_resume API masks SPI interrupt bit which prohibits
+> firing of interrupt to the host at the end of the transaction after
+> suspend-resume. This patch unmasks this bit at resume.
+> 2. In=A0pci1xxxx_spi_transfer_one API, length of SPI transaction gets
+> cleared by unmasking length field. Set length of transaction after
+> unmasking length field.
+> 3. Remove support for disabling chip select as hardware does not support
+> the same.
 
+As covered in submitting-patches.rst you should send one patch per
+change, this makes things much easier to review.
+
+>  drivers/spi/spi-pci1xxxx.c | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
+
+The subject says this is a patch for the microchip driver...
+
+>  	/* Set the DEV_SEL bits of the SPI_MST_CTL_REG */
+>  	regval =3D readl(par->reg_base + SPI_MST_CTL_REG_OFFSET(p->hw_inst));
+> -	if (enable) {
+> +	if (!enable) {
+>  		regval &=3D ~SPI_MST_CTL_DEVSEL_MASK;
+>  		regval |=3D (spi_get_chipselect(spi, 0) << 25);
+>  		writel(regval,
+>  		       par->reg_base + SPI_MST_CTL_REG_OFFSET(p->hw_inst));
+> -	} else {
+> -		regval &=3D ~(spi_get_chipselect(spi, 0) << 25);
+> -		writel(regval,
+> -		       par->reg_base + SPI_MST_CTL_REG_OFFSET(p->hw_inst));
+> -
+
+I am unclear how chip select will ever be asserted with this change?
+Now the value is only written if we are disabling.
+
+--2PS2/CgMOCO2Hp2O
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQi7xIACgkQJNaLcl1U
+h9Ch8gf+O/MluZL0YuDTHhZLLMwc6B5ISaKg7aLC6AxuIXjQ/I04oR+OhSexo/p7
+KvgYa4WouYJxeZim7h98p2qWUjMrTTfUltXnbifLd6L1N3g/l/S1jr6DPGaa2SwV
+KiFB5DO7cNuc6GVun1Sv2Q/15w39UbMwRUfqioeHluDn2Na1dCjab8t8G2AokU0B
+gzWGZ7mSU+aSf+kmNlDHImh6rsQJqDIkD39CxLppbcyTSIB3WBI2kyCY5LbUhxUE
+wdGKDtuVwyfHZHBY/EY+ejyb0mccWoxdshAlcyCN6gj5WVo8Y45B5eoZliBEc60b
+6epymPQxByl5AL6IX+XyDTxHg12TLA==
+=eYBI
+-----END PGP SIGNATURE-----
+
+--2PS2/CgMOCO2Hp2O--
