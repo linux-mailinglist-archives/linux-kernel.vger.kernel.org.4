@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFA36CC0D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C1A6CC0DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233145AbjC1NaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
+        id S233183AbjC1NaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233121AbjC1N3s (ORCPT
+        with ESMTP id S233125AbjC1N3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Mar 2023 09:29:48 -0400
 Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A815BDC8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A788BDE6;
         Tue, 28 Mar 2023 06:29:44 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32SDTWO7039861;
-        Tue, 28 Mar 2023 08:29:32 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32SDTYaS039874;
+        Tue, 28 Mar 2023 08:29:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680010172;
-        bh=1GtChf5uKiuwn7OvNybLChaTrFxr5FfqKFgP6cHU+XU=;
+        s=ti-com-17Q1; t=1680010174;
+        bh=rWvpNNJ+up2PcEOCe8VmeF+rx0Zow6iaE7KoOS+Bk1g=;
         h=From:Date:Subject:References:In-Reply-To:To:CC;
-        b=RaPe6qr/eUSvgdq7gdaINnE89PcLw8rXJh8J9n4lNS8tCuN6ebgQPKrlClSap3x9d
-         D0yrmOB1f7LlNbHVjh3dOxIsSTcHI6y4TMQArgDyYjJX5jlkJapbIqcCTv722GAUQj
-         /V/Cs3q6Vv3RYV/esgxEqUr6dNpgjMGjo4oXCL3U=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32SDTWBV125950
+        b=o40KxPQoZMJ7l8BhPysSbHna5TNykYuH0QlvU5ktgqPyJo2pW/UPwkFOMUW3vLpty
+         8ITH+2q16W35gij7HzDH6P/CoG0euqolwNIGbODIsgMFraW3d3Co0G4y8cf3f3vyGU
+         4U7pCGKJFH+0JqOqlUVpKM346fQqa7aP/Z2Yh9+4=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32SDTYa6007668
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 28 Mar 2023 08:29:32 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 28 Mar 2023 08:29:34 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 28
- Mar 2023 08:29:32 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 08:29:33 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 28 Mar 2023 08:29:32 -0500
+ Frontend Transport; Tue, 28 Mar 2023 08:29:33 -0500
 Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32SDTVRG007386;
-        Tue, 28 Mar 2023 08:29:32 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32SDTX49031399;
+        Tue, 28 Mar 2023 08:29:33 -0500
 From:   Jai Luthra <j-luthra@ti.com>
-Date:   Tue, 28 Mar 2023 18:59:19 +0530
-Subject: [PATCH v8 1/6] arm64: defconfig: Enable audio drivers for TI K3
- SoCs
+Date:   Tue, 28 Mar 2023 18:59:20 +0530
+Subject: [PATCH v8 2/6] arm64: dts: ti: k3-am62-main: Add McASP nodes
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20230313-mcasp_upstream-v8-1-4408134eb2f3@ti.com>
+Message-ID: <20230313-mcasp_upstream-v8-2-4408134eb2f3@ti.com>
 References: <20230313-mcasp_upstream-v8-0-4408134eb2f3@ti.com>
 In-Reply-To: <20230313-mcasp_upstream-v8-0-4408134eb2f3@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
@@ -63,20 +62,20 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         Jayesh Choudhary <j-choudhary@ti.com>,
         Andrew Davis <afd@ti.com>, Jai Luthra <j-luthra@ti.com>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=888; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=wZfBiEbhTUv8dcdW1NR4C+wvCaboQpeHbYEligjEsOw=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkIuu1Y3gBEMt3pQZinkVQlD679Ouwg8mvAq9SG
- 4uaam78UuOJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZCLrtQAKCRBD3pH5JJpx
- RSnCEACqiRCaXfxy9vr4bhwJd70MUgE8Uw1vn8X4Xp3Uxj6MrjYCzzmBdEkTrV8hphRGHZclGNl
- MlR9240I2sqK+fNHgboZY2fKNNWmBzhifxaSzvWbsKMJdMJ7/tp1LioYJAxSj5HyWSV7enWGExM
- Vbxpl2ZX5jpABKqjtK4JD/7OPzdlfVVIDFcVAUCu/aDnLPNKVMkcts9KGM9FatIcMAumSBNbvhK
- NEGYGll5O42Yw4SPnjNWhEXulVrZtZE6EA6J3fd/AhvaRUN3ffok1ne1kkOF/Q3faPzCr1W9Po+
- tDrwvhxkg0tDz+i2rWZIB0oqMOjjnHWUOLAesCNoGjxATI+fBok4X6tCxkuZ4erHHMAz2uMFkzo
- mQFBNMcDbuCpdBDruigcM2kMKaj1Z/1YUEPlcxakmj+dnTkLzxdGQaDta5ZcJZUNHIDLaD4dmh8
- Y21WtBs7LCQoEZ1fahv/FfxdnEXvRXSbpv7IC10nJipId7AUKxFGqZuaXcZQByARbdyqiM1Ecwc
- emqpAZWuY2zN38Fg3sHhIYmGwb/ktBM5k4h6r8dcArzKb77JukE+sbosHYxDZjKjunrAqRH4uCl
- 77iXGE3+M6Rad0s58GRETaCN0xmzECiZ5MhW7siRpkQ9OMp89klHg2I5mmqAGTmzO7uMyoytkg8
- yWrnRN6ywonRMzQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2740; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=3YQ8iDFX2K1gkT2KWC73dpEyDkmFbkpNff4cJhstfZY=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkIuu2sUumGGllyRYCduia9i8fP+YZoVTAWWfSo
+ fudc40jPxyJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZCLrtgAKCRBD3pH5JJpx
+ RSDSEACZZ+5iIekhm5klw6NeU4H5AHv1T8TVpmZMrRuFZIV6JT0AxDUemL5i3y+EJ0taEutJEf0
+ kBoGX4HprkU00yx9pbNt4SN1ftH8j8NzYcjjS/GfELf4K80FySBRbo3NzgAJ6OXJgYyE0Dhr/TT
+ CVnXLJ3UWl41p7c0Bdd5RLBTdgLsE4nX2UcpANI83nQT64HN+5axfcbaCYOCBncHpTyJX5Y9mfW
+ rAfCi+lYqjEPB/C3HTiizTDV0w5N2g7s5ecKnEH5bHgTDDIih2h35+rDN1j52xD/HZGUOMPM/yR
+ LPxPwec0hYo2kms0kCejJa3t67UN2fraujj8eRFg5Ph2p5f7heGA9h/XboQ6NDpIuPp/bxfH4k7
+ Kn+0KyCdWdFzvYmlG/5/8z8mal22uOcJ3qvXQjEw7ugvVcnEZYs++A1rot1NdM208By2QfeQlm5
+ kJHlfbmOIM6kKvjWzhC0Yjs4V6eKJj5EGOM7VWeZbS0HRc4LF3964Ls+6rCKWYrDQYwjhMs0yjn
+ ep3KrdmO/wRjs6NReNEx3l/exriKwQgFjPM5J3zpeqOul44csY01elH4mhF1S/zZUm2MZUA3SWw
+ N8UBLFrL3dVByeMucpftU53juRPMB38jr+WLIN4QgDwtCGfyrC9ZCJPO70EWaW5d7C/aKk4+BvQ
+ VVVEgjqtaReHpag==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp;
  fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -89,29 +88,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TI's K3 platform uses McASP as the digital audio interface on the SoCs.
-AM62x and AM62A based starter kits also use the TLV320AIC3106 codec with
-a 3.5mm jack for analog audio input and output.
+From: Jayesh Choudhary <j-choudhary@ti.com>
 
+Add the nodes for McASP 0-2.
+
+Use the audio-friendly 96MHz main_1_hsdivout6_clk as clock parent
+instead of the default 100Mhz main_2_hsdivout8_clk source.
+
+Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
-Reviewed-by: Devarsh Thakkar <devarsht@ti.com>
+Reviewed-by: Andrew Davis <afd@ti.com>
 ---
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 60 ++++++++++++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7790ee42c68a..7e0ce1833904 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -898,6 +898,8 @@ CONFIG_SND_SOC_LPASS_WSA_MACRO=m
- CONFIG_SND_SOC_LPASS_VA_MACRO=m
- CONFIG_SND_SOC_LPASS_RX_MACRO=m
- CONFIG_SND_SOC_LPASS_TX_MACRO=m
-+CONFIG_SND_SOC_DAVINCI_MCASP=m
-+CONFIG_SND_SOC_TLV320AIC3X_I2C=m
- CONFIG_SND_SIMPLE_CARD=m
- CONFIG_SND_AUDIO_GRAPH_CARD=m
- CONFIG_SND_AUDIO_GRAPH_CARD2=m
+diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+index 16e14863d7df..b3e4857bbbe4 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+@@ -832,4 +832,64 @@ epwm2: pwm@23020000 {
+ 		clock-names = "tbclk", "fck";
+ 		status = "disabled";
+ 	};
++
++	mcasp0: audio-controller@2b00000 {
++		compatible = "ti,am33xx-mcasp-audio";
++		reg = <0x00 0x02b00000 0x00 0x2000>,
++		      <0x00 0x02b08000 0x00 0x400>;
++		reg-names = "mpu", "dat";
++		interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 235 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "tx", "rx";
++
++		dmas = <&main_bcdma 0 0xc500 0>, <&main_bcdma 0 0x4500 0>;
++		dma-names = "tx", "rx";
++
++		clocks = <&k3_clks 190 0>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 190 0>;
++		assigned-clock-parents = <&k3_clks 190 2>;
++		power-domains = <&k3_pds 190 TI_SCI_PD_EXCLUSIVE>;
++		status = "disabled";
++	};
++
++	mcasp1: audio-controller@2b10000 {
++		compatible = "ti,am33xx-mcasp-audio";
++		reg = <0x00 0x02b10000 0x00 0x2000>,
++		      <0x00 0x02b18000 0x00 0x400>;
++		reg-names = "mpu", "dat";
++		interrupts = <GIC_SPI 238 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 237 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "tx", "rx";
++
++		dmas = <&main_bcdma 0 0xc501 0>, <&main_bcdma 0 0x4501 0>;
++		dma-names = "tx", "rx";
++
++		clocks = <&k3_clks 191 0>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 191 0>;
++		assigned-clock-parents = <&k3_clks 191 2>;
++		power-domains = <&k3_pds 191 TI_SCI_PD_EXCLUSIVE>;
++		status = "disabled";
++	};
++
++	mcasp2: audio-controller@2b20000 {
++		compatible = "ti,am33xx-mcasp-audio";
++		reg = <0x00 0x02b20000 0x00 0x2000>,
++		      <0x00 0x02b28000 0x00 0x400>;
++		reg-names = "mpu", "dat";
++		interrupts = <GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 239 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "tx", "rx";
++
++		dmas = <&main_bcdma 0 0xc502 0>, <&main_bcdma 0 0x4502 0>;
++		dma-names = "tx", "rx";
++
++		clocks = <&k3_clks 192 0>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 192 0>;
++		assigned-clock-parents = <&k3_clks 192 2>;
++		power-domains = <&k3_pds 192 TI_SCI_PD_EXCLUSIVE>;
++		status = "disabled";
++	};
+ };
 
 -- 
 2.40.0
