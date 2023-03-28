@@ -2,127 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D0A6CCDB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 00:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E216CCDB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 00:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjC1Wvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 18:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S229767AbjC1Wxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 18:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjC1Wvm (ORCPT
+        with ESMTP id S229535AbjC1Wxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 18:51:42 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D9D10E9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:51:41 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id e21so14208547ljn.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:51:41 -0700 (PDT)
+        Tue, 28 Mar 2023 18:53:40 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EF52110
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:53:39 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id k37so17869876lfv.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:53:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680043899;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z8tukPuzbITFwXQ+VQmbw/TCmsc9V0UeeBpsR6Rb3oI=;
-        b=OtF1JlgkKDz8NjUSR/BK3P6QXzAl+hBGkksGiF1fVNIbn3onWJOz4wHxUB/YFK+xVx
-         lJk++yEFXkis/CipcmZZ5Rfll/i8E38H1zjQUycYIdxSHxO0JcjVcSPQqpX51Y3BOkaD
-         9+1l0+XDoTF2I0KmdKKAWVjyv+Ram8EE/iz83s3MA82lW86CdJTgzf3xvXigi8TIelfY
-         NhNBSSxf3Lk9yBM76u7+IUuBkwpqI89wDJDqFfoN+i4Zl30iiowz75W7Ti/4Aja2osXK
-         iRsfXrBadKQGzBV3siFONw5SmMQpqf3Of511Vr/u5EQ+ksD5R/jkkJ6pt0G2Ue/A6LzM
-         Kvpw==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1680044017;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qskuMbf/TQUlVl/XQCSzEK2+S7ntNlCiLvuefA3pamM=;
+        b=25yk2ORrLanITla28soBs7miCE+xev3gOhMYTjHwrGodhppl5zmyb5CRsbvTjr70JU
+         ZjO+zCf+xQiNqZfKuR24kdK5V7BHB3Ozhqly3ZCk5gzoQziG5phV7SNdx2yXqFRmLp5U
+         xSrfT+qhWfUOQmnGNm7lNwu3qPo52oIxL+h+lPjgqhZyuvD3bLjWqqVyTTNwU311KZVs
+         y5KgGCVVgnW7N/CBLQay0BwL8p/ZoN7GMg71rJngVtTq5ha1EC2v+ateu0Kmn7g/m2Zt
+         MUMcWrip+u5PEbh/eXSeRl/+NO0lDCzY732wMzRFlJD4+79AHGQQbWm7jTXeby5erbho
+         Gt7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680043899;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z8tukPuzbITFwXQ+VQmbw/TCmsc9V0UeeBpsR6Rb3oI=;
-        b=rat+UbA3MFcTsEXiyrAnxwiVb7yWOo5eFarZ/rYDBN1fP2O688rUeMvvGfkUDSnBZv
-         0WLjdBrIHEDBU7ot+BujGxNnIeRwTpRXB8Kml1IETYVa2Z8J9FreQpGhi6fCQxqVeGOq
-         3ccDawrRvq2DTT0SY4KlBqiMngTKat9xL2L/OxqKKocklm9fKo5RJ0p7VW+PamzOBAlB
-         me1YMz/1RhSXtesBOcLLeq5Uu437GNwzvLsVkR/jnMWbldNcDP5GoJHypRIM4dx7WWLN
-         avqrYLS/m4aziswIlo2K31Uzvxmn4yOPzfquOYgWk7LrYOnS17KDWiuMykBxTbjiKuQ4
-         wW2w==
-X-Gm-Message-State: AAQBX9chssfK15zfiTUJGHFOy46IdmqFhW9xqk4kkyiZ2XT60+3V86TU
-        VvW0hRc6tXlIEfRYAyb+VriGgg==
-X-Google-Smtp-Source: AKy350YNJYE5GTFBKI8Z5WeXPAyu+utX3qFWTssdO/6m8d6sSYKpsMMIP1XF5VZYmXFfF3vDzDClfw==
-X-Received: by 2002:a05:651c:22d:b0:29b:6521:8869 with SMTP id z13-20020a05651c022d00b0029b65218869mr5218365ljn.20.1680043899545;
-        Tue, 28 Mar 2023 15:51:39 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id v18-20020a2e9252000000b002934abfb109sm5267873ljg.45.2023.03.28.15.51.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 15:51:39 -0700 (PDT)
-Message-ID: <880c0932-117f-61cd-dd97-c36076869c3b@linaro.org>
-Date:   Wed, 29 Mar 2023 01:51:38 +0300
+        d=1e100.net; s=20210112; t=1680044017;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qskuMbf/TQUlVl/XQCSzEK2+S7ntNlCiLvuefA3pamM=;
+        b=B3n7PLBiCOWEL1CbHyGBXOtqHk6jB/k2GMV7GOrPYO0M2KWEP0XuNYFZknblvDbaYo
+         vQg6Ud5XYeHs16mpOb3lyfr8XvtigsVhhXyJyLToWXFBateBR1aVOL/NinZLsihdtNRc
+         59iK/PyIGWLt9KYuEhm6vL5cC00PrzwDw5hq/ePcbof81RaQsmogLGEKVwy8LDyu06w+
+         1nx1aloLIInLmOUuCOrYKisQmEp6U0uB+nP/rLzhtsBP+ND2KJSTwmhbpfbneHNUwY/X
+         Rc64dZx2VOwnJErvjmMrpIj4eKHAxItFXejqfnCms4Mb8GNygzO5o5kUkrnZ9mFmM4Qs
+         +irg==
+X-Gm-Message-State: AAQBX9dM2nhhz0Y48XsH2XxObXm2OGwh/+W8eiM+DvuokP0V3f7z/u1y
+        vgqdblYiWXseTH26gWuoln4/BLTFM8mpTy6sMJvjyw==
+X-Google-Smtp-Source: AKy350Yx95yz3SiP8gB4VeUZ8/yo/xmapgiAWvd2H9O92Pk195cpVNYCvypmY6+6pn/77BmE4p+eUJhYJ8k+JbbEMqM=
+X-Received: by 2002:a19:a401:0:b0:4d8:1c0e:bfc7 with SMTP id
+ q1-20020a19a401000000b004d81c0ebfc7mr4984994lfc.13.1680044017285; Tue, 28 Mar
+ 2023 15:53:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/6] arm64: dts: qcom: sm8250: drop incorrect domain idle
- states properties
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20230324073813.22158-1-krzysztof.kozlowski@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230324073813.22158-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230327163203.2918455-1-evan@rivosinc.com> <8238271.NyiUUSuA9g@diego>
+In-Reply-To: <8238271.NyiUUSuA9g@diego>
+From:   Evan Green <evan@rivosinc.com>
+Date:   Tue, 28 Mar 2023 15:53:01 -0700
+Message-ID: <CALs-Hsu58iOrxKKKu-rQBszz3F--657G-zipBu5zZCxzPWRPWw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/6] RISC-V Hardware Probing User Interface
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>, slewis@rivosinc.com,
+        vineetg@rivosinc.com, Conor Dooley <conor@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Dao Lu <daolu@rivosinc.com>, Guo Ren <guoren@kernel.org>,
+        Jann Horn <jannh@google.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Xu <peterx@redhat.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/03/2023 09:38, Krzysztof Kozlowski wrote:
-> Domain idle states do not use 'idle-state-name' and 'local-timer-stop':
-> 
->    sm8250-hdk.dtb: domain-idle-states: cluster-sleep-0: 'idle-state-name', 'local-timer-stop' do not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> Reported-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Link: https://lore.kernel.org/all/20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-4-3ead1e418fe4@linaro.org/
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8250.dtsi | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> index 79d67b466856..9cf2de87c632 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> @@ -354,12 +354,10 @@ BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
->   		domain-idle-states {
->   			CLUSTER_SLEEP_0: cluster-sleep-0 {
->   				compatible = "domain-idle-state";
-> -				idle-state-name = "cluster-llcc-off";
->   				arm,psci-suspend-param = <0x4100c244>;
->   				entry-latency-us = <3264>;
->   				exit-latency-us = <6562>;
->   				min-residency-us = <9987>;
-> -				local-timer-stop;
+On Tue, Mar 28, 2023 at 1:35=E2=80=AFPM Heiko St=C3=BCbner <heiko@sntech.de=
+> wrote:
+>
+> Am Montag, 27. M=C3=A4rz 2023, 18:31:57 CEST schrieb Evan Green:
+> >
+> > There's been a bunch of off-list discussions about this, including at
+> > Plumbers.  The original plan was to do something involving providing an
+> > ISA string to userspace, but ISA strings just aren't sufficient for a
+> > stable ABI any more: in order to parse an ISA string users need the
+> > version of the specifications that the string is written to, the versio=
+n
+> > of each extension (sometimes at a finer granularity than the RISC-V
+> > releases/versions encode), and the expected use case for the ISA string
+> > (ie, is it a U-mode or M-mode string).  That's a lot of complexity to
+> > try and keep ABI compatible and it's probably going to continue to grow=
+,
+> > as even if there's no more complexity in the specifications we'll have
+> > to deal with the various ISA string parsing oddities that end up all
+> > over userspace.
+> >
+> > Instead this patch set takes a very different approach and provides a s=
+et
+> > of key/value pairs that encode various bits about the system.  The big
+> > advantage here is that we can clearly define what these mean so we can
+> > ensure ABI stability, but it also allows us to encode information that'=
+s
+> > unlikely to ever appear in an ISA string (see the misaligned access
+> > performance, for example).  The resulting interface looks a lot like
+> > what arm64 and x86 do, and will hopefully fit well into something like
+> > ACPI in the future.
+> >
+> > The actual user interface is a syscall, with a vDSO function in front o=
+f
+> > it. The vDSO function can answer some queries without a syscall at all,
+> > and falls back to the syscall for cases it doesn't have answers to.
+> > Currently we prepopulate it with an array of answers for all keys and
+> > a CPU set of "all CPUs". This can be adjusted as necessary to provide
+> > fast answers to the most common queries.
+> >
+> > An example series in glibc exposing this syscall and using it in an
+> > ifunc selector for memcpy can be found at [1]. I'm about to send a v2
+> > of that series out that incorporates the vDSO function.
+> >
+> > I was asked about the performance delta between this and something like
+> > sysfs. I created a small test program [2] and ran it on a Nezha D1
+> > Allwinner board. Doing each operation 100000 times and dividing, these
+> > operations take the following amount of time:
+> >  - open()+read()+close() of /sys/kernel/cpu_byteorder: 3.8us
+> >  - access("/sys/kernel/cpu_byteorder", R_OK): 1.3us
+> >  - riscv_hwprobe() vDSO and syscall: .0094us
+> >  - riscv_hwprobe() vDSO with no syscall: 0.0091us
+>
+> Looks like this series spawned a thread on one of the riscv-lists [0].
+>
+> As auxvals were mentioned in that thread, I was wondering what's the
+> difference between doing a new syscall vs. putting the keys + values as
+> architecture auxvec elements [1] ?
 
-Hmm, so we support setting the broadcast timer when using plain PSCI 
-idle states, but not when using the domain-based idle states.
+The auxvec approach would also work. The primary difference is that
+auxvec bits are actively copied into every new process, forever. If
+you predict a slow pace of new bits coming in, the auxvec approach
+probably makes more sense. This series was born out of a prediction
+that this set of "stuff" was going to be larger than traditional
+x86/ARM architectures, fiddly (ie bits possibly representing specific
+versions of various extensions), evolving regularly over time, and
+heterogeneous between cores. With that sort of rubber band ball in
+mind, a key/value interface seemed to make more sense.
 
-Ulf, Rafael, Daniel, is that an omission for the domain-based idle 
-support? Or is it handled in some other way?
-
->   			};
->   		};
->   	};
-
--- 
-With best wishes
-Dmitry
-
+-Evan
