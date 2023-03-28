@@ -2,63 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA6C6CCA9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B99D6CCAA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjC1T3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 15:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
+        id S229631AbjC1T3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 15:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjC1T3i (ORCPT
+        with ESMTP id S229638AbjC1T3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 15:29:38 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31D52690
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:29:37 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id c9so6795950lfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:29:37 -0700 (PDT)
+        Tue, 28 Mar 2023 15:29:52 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104CF3A8E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:29:50 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id p15so16527874ybl.9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:29:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680031776;
+        d=google.com; s=20210112; t=1680031789;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Sze0hZQs4AzNTu34VgpoyYMvtZyrr4yHRgV/mYMoCA0=;
-        b=TucsBd+N/AQxtwaL0+o5NkcY9MSe4BBeB7YoVEYpkQV8wnCSGXj8+ipQbmuXWEzW2A
-         GM8O3lhwnn4JcP6ON75Pevuhje9cNtUFHOjcmISo50lT1G41d+14fgUUHDcPconVy0fS
-         5PyjuLBTZNnd8kgM55m7WRtrqA2p/Dke0lm/uMTLsExLNM2SVAfj8g2kHorU2izEeIs7
-         JT0edO0vY6WohLcj+qnliJeULIVv2uKBg3zZMuw3hiFBAvgOPLrcRvcvRUfnSQrjuCqm
-         8SMJTfWqtJaEUmUpAZoIkvXoKJ2nWCFOyhRwp9XoL7vyAyRpajv034xLjjtBT8WlcCJn
-         nKUg==
+        bh=wVYgMmmcsm1731n1mzQ0oLQHz+Whcq4PF5zJ4lB7lmw=;
+        b=ItnSGLh1jpQN3JVppS9sVCITPiYQS/CkhnmA16xHvlicXGfnhKU7y6aVo7pYYSOzC1
+         smXX3KHtLdxbsldbWCfIAKlgsZDKQ2ir20UPA1ml5S4/HUI1dBEpV+3dUWTCPRPsvm57
+         2b7WuH9ClXFJuQLxTKeFBMDEezY55J0GItJuePZmJ4R3w8LEoS3fNdYzGhbDtRiGPIKz
+         sAoyax2niXufDDgUigY3psKXsSXX+cYX05u7XmhcWLyyqXaP3eTmqcVkLvT6ydpZ/wmp
+         nI4N3rbZ+3g/+ulQD9uBM222QzdjqIhU3lkZqCuQs5xDRK1vS1Bs/4f8vpZzqtccTube
+         ZWOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680031776;
+        d=1e100.net; s=20210112; t=1680031789;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Sze0hZQs4AzNTu34VgpoyYMvtZyrr4yHRgV/mYMoCA0=;
-        b=RsY39On+10e8JxwxtzhIY95r7WlnmW+rrjdXdBS+8eYLibbe2j1R/xU3yNEvnzdTkc
-         IO/u3KYBxZT5TJdV+XZ263lLbfGb0SIbsO34JkkEbi/V7WNbdUdZTuqgiyMMVSBLBXKx
-         j3GWzPbrD7TA9lMGjotYol6vXr4JuS0K9dh+xYCuVPXwobEyaiZFQ6rkcAe4gGqXXKv5
-         BVOblU8ZBX4qMnnKRtiCwTrpvxsfaZ9LQvHQGAGumZg0q5H7eZsAQ64AdjP9ISI6iA40
-         XsvOm9TRjK8b+HgNPprLDhs+ueC/pR0NFU0CT/zmPL8rH4dsXQj/7G8IsZCdjLBG9ZOi
-         jIZg==
-X-Gm-Message-State: AAQBX9cAU/EhIpOaadCMYiF4QtKLGpNt5rh2DJJgtNgz2BtJ+RapVY/c
-        gviZgSyKmxKkp5eOeKozPGA8aCv7Kjz8y+Woy38GNhWULB6p2f0sJLk=
-X-Google-Smtp-Source: AKy350YFSKMXJnqTblo/+gcV15ljJSRH6Afdq3y71v4w821k/pohARkBmE7hu6p9kVh0UhqyN06tpfTIQVNOXx2mkYI=
-X-Received: by 2002:a05:6512:4ca:b0:4d5:ca32:6ed5 with SMTP id
- w10-20020a05651204ca00b004d5ca326ed5mr5233121lfq.3.1680031775704; Tue, 28 Mar
- 2023 12:29:35 -0700 (PDT)
+        bh=wVYgMmmcsm1731n1mzQ0oLQHz+Whcq4PF5zJ4lB7lmw=;
+        b=E2abmUrXiXvWb/zP/zC+Vtu/T9pP8OoXWlrQiGuY48fExg1V8g74A6VX7IanECytzI
+         C4bzWp3FH11pxpglHtNjOADT/UW5Pv4usmMbbYaiNOhU45GY1dbRdUC7G58MgZercrkR
+         liKtLyah2mUDoIMtmuRCAecniIaUqEbPHvLVwT9a+Xnz1Pma1dqe9FafBgQBYYtqAc/8
+         FFEbDBTOwmC0Rc7gtz2YY9BEHGo1YCDWKT+imkc/bxNKext7HaeobhIkA08StawxJ5Er
+         ZmYABemNPZe2Ovk9ymPIGAyC0Y2kOjzYnT0u8BdLH4rVdSVWRqdhREm7W1EU5kWe95ey
+         0Uqw==
+X-Gm-Message-State: AAQBX9drgmYzFb1bdH5HwF8kGwBSsDrqp2bFqRno1KXwqArLYRJ71OGt
+        nCvdZ0s7xBHkOdrE9fxEC0viYVWlCEiOqz+xoah2oA==
+X-Google-Smtp-Source: AKy350YU0gY54wvMoHew+J42IOIyRrMc9szJehhhtmBSQris0Dj2bJw+BAstdzChU6VQNK6YKTd1shm29zDJZe+UDxU=
+X-Received: by 2002:a05:6902:154e:b0:b77:d2db:5f8f with SMTP id
+ r14-20020a056902154e00b00b77d2db5f8fmr10431743ybu.12.1680031789049; Tue, 28
+ Mar 2023 12:29:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220722201513.1624158-1-axelrasmussen@google.com> <ZCIEGblnsWHKF8RD@x1n>
-In-Reply-To: <ZCIEGblnsWHKF8RD@x1n>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Tue, 28 Mar 2023 12:28:59 -0700
-Message-ID: <CAJHvVcj5ysY-xqKLL8f48-vFhpAB+qf4cN0AesQEd7Kvsi9r_A@mail.gmail.com>
-Subject: Re: [PATCH] userfaultfd: don't fail on unrecognized features
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+References: <20230328061638.203420-1-yosryahmed@google.com>
+ <20230328061638.203420-9-yosryahmed@google.com> <CALvZod7wJ-e-dHEhMynquiqQWFU2j+05wUyUe_yv_rBqJLu2rw@mail.gmail.com>
+ <CAJD7tkaKh4w3roqau4V93Q022BG280yzdsh1YSVenZCLm0qVow@mail.gmail.com>
+In-Reply-To: <CAJD7tkaKh4w3roqau4V93Q022BG280yzdsh1YSVenZCLm0qVow@mail.gmail.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Tue, 28 Mar 2023 12:29:38 -0700
+Message-ID: <CALvZod7jhZCHXc1ShxHwhepAbhrdordFw4Wci8cSqtOxyQE6Gw@mail.gmail.com>
+Subject: Re: [PATCH v1 8/9] vmscan: memcg: sleep when flushing stats during reclaim
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
@@ -72,157 +83,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 2:01=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+On Tue, Mar 28, 2023 at 12:02=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com=
+> wrote:
 >
-> I think I overlooked this patch..
->
-> Axel, could you explain why this patch is correct?  Comments inline.
->
-> On Fri, Jul 22, 2022 at 01:15:13PM -0700, Axel Rasmussen wrote:
-> > The basic interaction for setting up a userfaultfd is, userspace issues
-> > a UFFDIO_API ioctl, and passes in a set of zero or more feature flags,
-> > indicating the features they would prefer to use.
+> On Tue, Mar 28, 2023 at 8:19=E2=80=AFAM Shakeel Butt <shakeelb@google.com=
+> wrote:
 > >
-> > Of course, different kernels may support different sets of features
-> > (depending on kernel version, kconfig options, architecture, etc).
-> > Userspace's expectations may also not match: perhaps it was built
-> > against newer kernel headers, which defined some features the kernel
-> > it's running on doesn't support.
+> > On Mon, Mar 27, 2023 at 11:16=E2=80=AFPM Yosry Ahmed <yosryahmed@google=
+.com> wrote:
+> > >
+> > > Memory reclaim is a sleepable context. Allow sleeping when flushing
+> > > memcg stats to avoid unnecessarily performing a lot of work without
+> > > sleeping. This can slow down reclaim code if flushing stats is taking
+> > > too long, but there is already multiple cond_resched()'s in reclaim
+> > > code.
+> > >
+> > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 > >
-> > Currently, if userspace passes in a flag we don't recognize, the
-> > initialization fails and we return -EINVAL. This isn't great, though.
->
-> Why?  IIUC that's the major way for user app to detect any misconfig of
-> feature list so it can bail out early.
->
-> Quoting from man page (ioctl_userfaultfd(2)):
->
-> UFFDIO_API
->        (Since Linux 4.3.)  Enable operation of the userfaultfd and perfor=
-m API handshake.
->
->        ...
->
->            struct uffdio_api {
->                __u64 api;        /* Requested API version (input) */
->                __u64 features;   /* Requested features (input/output) */
->                __u64 ioctls;     /* Available ioctl() operations (output)=
- */
->            };
->
->        ...
->
->        For Linux kernel versions before 4.11, the features field must be
->        initialized to zero before the call to UFFDIO_API, and zero (i.e.,
->        no feature bits) is placed in the features field by the kernel upo=
-n
->        return from ioctl(2).
->
->        ...
->
->        To enable userfaultfd features the application should set a bit
->        corresponding to each feature it wants to enable in the features
->        field.  If the kernel supports all the requested features it will
->        enable them.  Otherwise it will zero out the returned uffdio_api
->        structure and return EINVAL.
->
-> IIUC the right way to use this API is first probe with features=3D=3D0, t=
-hen
-> the kernel will return all the supported features, then the user app shou=
-ld
-> enable only a subset (or all, but not a superset) of supported ones in th=
-e
-> next UFFDIO_API with a new uffd.
-
-Hmm, I think doing a two-step handshake just overcomplicates things.
-
-Isn't it simpler to just have userspace ask for the features it wants
-up front, and then the kernel responds with the subset of features it
-actually supports? In the common case (all features were supported),
-there is nothing more to do. Userspace is free to detect the uncommon
-case where some features it asked for are missing, and handle that
-however it likes.
-
-I think this patch is backwards compatible with the two-step approach, too.
-
-I do agree the man page could use some work. I don't think it
-describes the two-step handshake process correctly, either. It just
-says, "ask for the features you want, and the kernel will either give
-them to you or fail". If we really did want to keep the two-step
-process, it should describe it (set features =3D=3D 0 first, then ask only
-for the ones you want which are supported), and the example program
-should demonstrate it.
-
-But, I think it's simpler to just have the kernel do what the man page
-describes. Userspace asks for the features up front, kernel responds
-with the subset that are actually supported. No need to return EINVAL
-if unsupported features were requested.
-
->
-> > Userspace doesn't have an obvious way to react to this; sure, one of th=
-e
-> > features I asked for was unavailable, but which one? The only option it
-> > has is to turn off things "at random" and hope something works.
+> > Acked-by: Shakeel Butt <shakeelb@google.com>
 > >
-> > Instead, modify UFFDIO_API to just ignore any unrecognized feature
-> > flags. The interaction is now that the initialization will succeed, and
-> > as always we return the *subset* of feature flags that can actually be
-> > used back to userspace.
+> > > ---
+> > >  mm/vmscan.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > > index a9511ccb936f..9c1c5e8b24b8 100644
+> > > --- a/mm/vmscan.c
+> > > +++ b/mm/vmscan.c
+> > > @@ -2845,7 +2845,7 @@ static void prepare_scan_count(pg_data_t *pgdat=
+, struct scan_control *sc)
+> > >          * Flush the memory cgroup stats, so that we read accurate pe=
+r-memcg
+> > >          * lruvec stats for heuristics.
+> > >          */
+> > > -       mem_cgroup_flush_stats_atomic();
+> > > +       mem_cgroup_flush_stats();
 > >
-> > Now userspace has an obvious way to react: it checks if any flags it
-> > asked for are missing. If so, it can conclude this kernel doesn't
-> > support those, and it can either resign itself to not using them, or
-> > fail with an error on its own, or whatever else.
-> >
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> > ---
-> >  fs/userfaultfd.c | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> > index e943370107d0..4974da1f620c 100644
-> > --- a/fs/userfaultfd.c
-> > +++ b/fs/userfaultfd.c
-> > @@ -1923,10 +1923,8 @@ static int userfaultfd_api(struct userfaultfd_ct=
-x *ctx,
-> >       ret =3D -EFAULT;
-> >       if (copy_from_user(&uffdio_api, buf, sizeof(uffdio_api)))
-> >               goto out;
-> > -     features =3D uffdio_api.features;
-> > -     ret =3D -EINVAL;
-> > -     if (uffdio_api.api !=3D UFFD_API || (features & ~UFFD_API_FEATURE=
-S))
-> > -             goto err_out;
+> > I wonder if we should just replace this with
+> > mem_cgroup_flush_stats_ratelimited().
 >
-> What's worse is that I think you removed the only UFFD_API check.  Althou=
-gh
-> I'm not sure whether it'll be extended in the future or not at all (very
-> possible we keep using 0xaa forever..), but removing this means we won't =
-be
-> able to extend it to a new api version in the future, and misconfig of
-> uffdio_api will wrongly succeed I think:
+> Thanks for taking a look!
 >
->         /* Test wrong UFFD_API */
->         uffdio_api.api =3D 0xab;
->         uffdio_api.features =3D 0;
->         if (ioctl(uffd, UFFDIO_API, &uffdio_api) =3D=3D 0)
->                 err("UFFDIO_API should fail but didn't");
+> I was hesitant about doing this because the flush call is inside the
+> retry loop, and it seems like we want to get fresh stats on each
+> retry. It seems very likely that we end up not flushing between
+> retries with mem_cgroup_flush_stats_ratelimited().
+>
+> Maybe change it if we observe problems with non-atomic flushing?
 
-Agreed, we should add back the UFFD_API check - I am happy to send a
-patch for this.
-
->
-> > +     /* Ignore unsupported features (userspace built against newer ker=
-nel) */
-> > +     features =3D uffdio_api.features & UFFD_API_FEATURES;
-> >       ret =3D -EPERM;
-> >       if ((features & UFFD_FEATURE_EVENT_FORK) && !capable(CAP_SYS_PTRA=
-CE))
-> >               goto err_out;
-> > --
-> > 2.37.1.359.gd136c6c3e2-goog
-> >
->
-> --
-> Peter Xu
->
+Yeah, let's leave it for the future if we see the issue.
