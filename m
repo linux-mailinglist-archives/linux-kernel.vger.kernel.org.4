@@ -2,149 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD3D6CBF68
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F177C6CBF74
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232509AbjC1MlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S232774AbjC1Mmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232322AbjC1Mkz (ORCPT
+        with ESMTP id S232494AbjC1Mmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:40:55 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719BDAD1D;
-        Tue, 28 Mar 2023 05:40:39 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id s20so12399691ljp.1;
-        Tue, 28 Mar 2023 05:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680007236;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JQvGHzQ+Wj6h0GZci6E4OJ3p7YN4IspLtSyoRGDx948=;
-        b=XeB/xdjfocDtQOXVJOQ1qYz1GTmks1YyJw2oeNFVZaprZvJZ5r9OiTyw/3OmU4+l8J
-         SvgKkL7/42lZhZYAV2j6Kex/+LbwuslmmYVT1bGzXMf5VT0v8EV4PKppYvpxThTssrfG
-         0LDZjkhq88y0yIzdHqkTzgJbWVXxKZrGxpqN/w9Swr5+R9dpT1OVrjAPNOD5ri4bz9cZ
-         qtE6BEIJl7G3BgHWQN6TXJLVidQWU+JdS6hMpTkuAGMdXCQACO0KZiLphDYfBp5+FUCi
-         kqRwDbBE+LD9KWN/6Q0hOwByp2P25HUAo1GotTfS/mOK44zK3dfYxYGfpJ4nCP1P4Hjy
-         poZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680007236;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JQvGHzQ+Wj6h0GZci6E4OJ3p7YN4IspLtSyoRGDx948=;
-        b=srwh9fuoxezixLNF5XAAjDICrd0X2ZxeuXMdsiVVQYE/r22axZ/WPPJgq5I7KaSbHl
-         /CpCcvYs+JrmhxMrOcv+5X3NvDc4+hcYLuUGaY2qD0vKgdsSd6AyfVLbxTdp7o+6oPb9
-         zv7b+ZV8Pdw5aT9bolxqPNbC5W85GVoWT4cYnGSZILBa9kAuHRXLOrM41qcZ+pgFrPJ8
-         TZhWZcr+8CXOZwTvi+YTcTfn7i7IqJrTAjqFAnG8vKX/C3/MYRK5KS4JyiMQvkJ8cUlX
-         2sk0Vq8nlgLG5CpNJwp4Ik+Sas6QU+MmHZTWf18EM78eaH8x32HoN0GCYSXFNEUudUvV
-         C7CQ==
-X-Gm-Message-State: AAQBX9exU8rfftzVJbZLCLeVaoUAencfI8YhQgKVlRiEj06GyNWNDri0
-        kRr+QyFFJPQSuL+q75bxUGFYYfMaEPpKYg==
-X-Google-Smtp-Source: AKy350Z1a8irWZjaLN9fUZq6p+NEYF5IRs+Vqh6pkF+dTZfIO4NprtYcjMWtQw3iKObYVa37gX6fJA==
-X-Received: by 2002:a2e:9455:0:b0:29c:8a05:1a38 with SMTP id o21-20020a2e9455000000b0029c8a051a38mr4539691ljh.30.1680007236070;
-        Tue, 28 Mar 2023 05:40:36 -0700 (PDT)
-Received: from pc636 (host-90-233-209-50.mobileonline.telia.com. [90.233.209.50])
-        by smtp.gmail.com with ESMTPSA id r9-20020a2e80c9000000b0029573844d03sm4896655ljg.109.2023.03.28.05.40.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 05:40:35 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Tue, 28 Mar 2023 14:40:33 +0200
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
- and vmap_block->lock
-Message-ID: <ZCLgQXpIi7A7hYrT@pc636>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
- <ZBkDuLKLhsOHNUeG@destitution>
- <ZBsAG5cpOFhFZZG6@pc636>
- <ZB00U2S4g+VqzDPL@destitution>
- <ZCHQ5Pdr203+2LMI@pc636>
- <20230328025327.GB3222767@dread.disaster.area>
+        Tue, 28 Mar 2023 08:42:39 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2088.outbound.protection.outlook.com [40.107.223.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E025283F6;
+        Tue, 28 Mar 2023 05:42:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N7VvDVJa4KwRG/ZJDI4wWcfJgygOr/A8dG7Q/BM8SU0CSRmaMUMqSPjRZ56fXFeG+AWldmN3/SJnNnWS2NgL23Q4LpeFkUArE41+dzLr2xdj0ap0kGEk/XNUP6zOSAsmfDxWkjmfrNafc5b+BNuXQrDnIF6X5SID9AXOUlWHcIqbeFuhFhJiplm+NDtpKqxJnUkexrS9O9B1IeZb+VVOpaHfVT2so2xgjhTddQTLl1oDyxT7fKqpydV5okPknbpIQMTbTLUFrodATqN/LwDQfn2omuJ/aC3nUkv9ebizmdX+6mM3Sux9qqqxboXaRPVMcRiLZT9FscmhBeZjO/QK1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RCNWDk1jVtPNZxpVXdlzF4nocbA7v7f8PjQq1mHeOHA=;
+ b=IdJkpbGwiUb9LxUaj6VtVbiPs1WN5G7TiJP3P9c7qP/4YZzNXwN0I6pHvIdbfEjUgRzfjWUfpqvzJM2PpyORjMNNqPNh0Igv/DzXmeTASqLAVZqzqzojPnLZQqpiR0Y5YFuP8bhV0GyrbZyJzSZVAbQgWAB2U5j2YXdRHEPTmqkbKZJw84H481hemYJyyBv2ZWxUZB6CqGf+tOQeAmQydhQjb1VVYaz23ioZMGPf3v4sxJ7Wbo54QCRpmiuTn4EiItBQoXu43WHabagw/Ylgdwc6PsA/phsUWbCfds3WYgM0XsprgLtahSuGGeM7rpNtVJAlReYfv0jkFDAWl61TVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RCNWDk1jVtPNZxpVXdlzF4nocbA7v7f8PjQq1mHeOHA=;
+ b=mwkYexB6B/4TiHW7QFhWTQ51Xkaahay0UuZduCLUDsA+bhvLmCiOCQpPvX0GqJqam/U4mzplz6baCryG9A+D0qr7F4sB+uArxjNvtkU5uMYLJK3hJp2cjnwd9KDZQMBvrCg8DaCTXFOb8RZpoCZGt9rvX6X+p8HmfT9OGLBtZiBpuQWS3eYJGYUOEtlLL6fttxcifQeI0T2sbF7TCHaIlUzhM48AgrZGF9czcEYQy7MeykivxPyVrA71l9dgn3lZ60dzKmnFXOxHPo4mqNEm2OBvW4sVR9PgfbpHxOYhbvUMDx4e5dUJ9ElV8Iswf5rIb8938raezEnpB0vuOVt7BA==
+Received: from BN9PR03CA0045.namprd03.prod.outlook.com (2603:10b6:408:fb::20)
+ by IA1PR12MB6019.namprd12.prod.outlook.com (2603:10b6:208:3d5::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Tue, 28 Mar
+ 2023 12:42:14 +0000
+Received: from BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fb:cafe::8e) by BN9PR03CA0045.outlook.office365.com
+ (2603:10b6:408:fb::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.43 via Frontend
+ Transport; Tue, 28 Mar 2023 12:42:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT059.mail.protection.outlook.com (10.13.177.120) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.22 via Frontend Transport; Tue, 28 Mar 2023 12:42:14 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 28 Mar 2023
+ 05:42:04 -0700
+Received: from [10.41.21.79] (10.126.230.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 28 Mar
+ 2023 05:41:58 -0700
+Message-ID: <db682990-573f-e827-7342-ca8cda0b4067@nvidia.com>
+Date:   Tue, 28 Mar 2023 18:11:56 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328025327.GB3222767@dread.disaster.area>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [Patch v4 02/10] arm64: tegra: add bpmp ref in tegra234-mc node
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <treding@nvidia.com>, <dmitry.osipenko@collabora.com>,
+        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
+        <lpieralisi@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <mmaddireddy@nvidia.com>,
+        <kw@linux.com>, <bhelgaas@google.com>, <vidyas@nvidia.com>,
+        <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>, <ishah@nvidia.com>,
+        <bbasu@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
+References: <20230327161426.32639-1-sumitg@nvidia.com>
+ <20230327161426.32639-3-sumitg@nvidia.com>
+ <af455119-7178-bed8-4099-ee50c7b6134b@linaro.org>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <af455119-7178-bed8-4099-ee50c7b6134b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.230.37]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT059:EE_|IA1PR12MB6019:EE_
+X-MS-Office365-Filtering-Correlation-Id: 78d0f487-76db-435a-e95a-08db2f89db99
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1tAHrFmrmFxxzDEMAy9twXiDJtMp638uARarkaes7lglUE1xassMz+qOCUFtQ6J+kbAza8/XCmO/Fy7dSLLVXEDKnRWbYRJcNoauZYDY+QsPYF6kZy0ygbRTSg5wrOR79gACHygCYa7VKvXnxHdYLimmdBtWHpkg2grFiFPOQ1HG+2qpC8/FBQTFoKWitz6n6SQf1swK4/a35SKH7Y6HH0tdp92mB3GqiYU9HAqVqUmo0qIjRumtmfcDwkgvPebEhKVduzpDIn/xnT03Ir6Y51uc8/04AaHwgs0TNiVXSu0I12oypaF5G5eTT00lL+FB/WOKCONLcBIR/cy7TYB/jY+twxJHEu33SThE8Q1aVq+Dk7QCRJ8D9E8dyQhuEMYiWWsYYrrkiTsAGhLoWO2XkVXbVlQdY3ZdtjHc+IDJDZBTWml189S5uNw16dafLfDfB+zXQFmyM2La7E5aB3Y6jeU6eVdUsEFQHdP3fy74FlFvtk1Qq3YcuGBhJjMdKuNyDM4xrKyuVd4+uDrX/cC7u71U6XjNQddsGlhYfPbCSbkj8kXBMtw9zUtSn2x4yn5d8u7AXY1gC+vWQsZJV3ffKyKe3VnPsrI6NBM9yoYmoPlII6+PMvUVi20TB6na3oYl2WOZmZJ6/FSh1+NTWFyEQDjL6WRxaPOIJvLllPFyftpT4WxVL9g0tKu3g46IDfO2iwbPi5tscSSFygsDZnrtqtxNPhMELajw67aIcaUWtKyTp7Ne1MIvtLSWJizSaTT5VV3+c/c0JWPCG3bbJoVkwvkQPfyZS95dmJB+By7k2nrVup2A9qpISRD1qL4AfEvc
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(346002)(136003)(376002)(451199021)(46966006)(40470700004)(36840700001)(4326008)(40480700001)(41300700001)(36860700001)(40460700003)(70586007)(70206006)(16576012)(316002)(34020700004)(110136005)(478600001)(8676002)(54906003)(2906002)(53546011)(16526019)(186003)(7416002)(5660300002)(4744005)(2616005)(82310400005)(336012)(426003)(31696002)(31686004)(86362001)(47076005)(36756003)(82740400003)(107886003)(26005)(8936002)(7636003)(356005)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 12:42:14.2348
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78d0f487-76db-435a-e95a-08db2f89db99
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6019
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 01:53:27PM +1100, Dave Chinner wrote:
-> On Mon, Mar 27, 2023 at 07:22:44PM +0200, Uladzislau Rezki wrote:
-> > >     So, this patch open codes the kvmalloc() in the commit path to have
-> > >     the above described behaviour. The result is we more than halve the
-> > >     CPU time spend doing kvmalloc() in this path and transaction commits
-> > >     with 64kB objects in them more than doubles. i.e. we get ~5x
-> > >     reduction in CPU usage per costly-sized kvmalloc() invocation and
-> > >     the profile looks like this:
-> > >     
-> > >       - 37.60% xlog_cil_commit
-> > >             16.01% memcpy_erms
-> > >           - 8.45% __kmalloc
-> > >              - 8.04% kmalloc_order_trace
-> > >                 - 8.03% kmalloc_order
-> > >                    - 7.93% alloc_pages
-> > >                       - 7.90% __alloc_pages
-> > >                          - 4.05% __alloc_pages_slowpath.constprop.0
-> > >                             - 2.18% get_page_from_freelist
-> > >                             - 1.77% wake_all_kswapds
-> > >     ....
-> > >                                         - __wake_up_common_lock
-> > >                                            - 0.94% _raw_spin_lock_irqsave
-> > >                          - 3.72% get_page_from_freelist
-> > >                             - 2.43% _raw_spin_lock_irqsave
-> > >           - 5.72% vmalloc
-> > >              - 5.72% __vmalloc_node_range
-> > >                 - 4.81% __get_vm_area_node.constprop.0
-> > >                    - 3.26% alloc_vmap_area
-> > >                       - 2.52% _raw_spin_lock
-> > >                    - 1.46% _raw_spin_lock
-> > >                   0.56% __alloc_pages_bulk
-> > >           - 4.66% kvfree
-> > >              - 3.25% vfree
-> > OK, i see. I tried to use the fs_mark in different configurations. For
-> > example:
-> > 
-> > <snip>
-> > time fs_mark -D 10000 -S0 -n 100000 -s 0 -L 32 -d ./scratch/0 -d ./scratch/1 -d ./scratch/2  \
-> > -d ./scratch/3 -d ./scratch/4 -d ./scratch/5 -d ./scratch/6 -d ./scratch/7 -d ./scratch/8 \
-> > -d ./scratch/9 -d ./scratch/10 -d ./scratch/11 -d ./scratch/12 -d ./scratch/13 \
-> > -d ./scratch/14 -d ./scratch/15 -t 64 -F
-> > <snip>
-> > 
-> > But i did not manage to trigger xlog_cil_commit() to fallback to vmalloc
-> > code. I think i should reduce an amount of memory on my kvm-pc and
-> > repeat the tests!
-> 
-> Simple way of doing is to use directory blocks that are larger than
-> page size:
-> 
-> mkfs.xfs -n size=64k ....
-> 
-> We can hit that path in other ways - large attributes will hit it in
-> the attr buffer allocation path, enabling the new attribute
-> intent-based logging mode will hit it in the xlog_cil_commit path as
-> well. IIRC, the above profile comes from the latter case, creating
-> lots of zero length files with 64kB xattrs attached via fsmark.
-> 
-Good. Thank you that is useful.
 
---
-Uladzislau Rezki
+
+On 28/03/23 12:51, Krzysztof Kozlowski wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On 27/03/2023 18:14, Sumit Gupta wrote:
+>> Add the "nvidia,bpmp" property within the "memory-controller" node
+>> to reference BPMP node. This is needed by the MC driver to pass
+>> the client info to the BPMP-FW when memory interconnect support is
+>> available.
+>>
+>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> 
+> DTS goes to the end of patchset. If you put it here to fix
+> bisectability, then your patchset is already broken.
+> 
+> Best regards,
+> Krzysztof
+> 
+
+Ok, will move the 'Patch 2 & 7' to the end of patch set (i.e. Patch 9 & 10)
+   [Patch v4 02/10] arm64: tegra: add bpmp ref in tegra234-mc node
+   [Patch v4 07/10] arm64: tegra: Add cpu OPP tables and interconnects 
+property
+
+Thank you,
+Sumit Gupta
+
