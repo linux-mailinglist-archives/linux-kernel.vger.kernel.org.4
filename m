@@ -2,177 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FC36CC5A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE9F6CC5B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233976AbjC1PQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S233141AbjC1PQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233948AbjC1PPo (ORCPT
+        with ESMTP id S232995AbjC1PQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:15:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653E310413
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680016405;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3DsgcTYFWxhX9PLfaIyKWk2AVWDq7BUElXbxQWwuPGo=;
-        b=cfV+3DAxWSPaNOmjFFKvq9xKmFFejX+5WCXI1gyOD3Cjh+NYhBw3hT2jZL+t4yJR8HrkW1
-        CTZLNakqatLcZ1mx7KrCCnIBLPdjKzwRHDyt7fFcoCoDewGWWICkp6m1iwW7k15Xl2eGBi
-        WrMQKrmQMljYCsxOKB85H5ra3uKd+Qg=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-196-FY8aIITLPQaOu3SH4fGihg-1; Tue, 28 Mar 2023 11:13:24 -0400
-X-MC-Unique: FY8aIITLPQaOu3SH4fGihg-1
-Received: by mail-qt1-f198.google.com with SMTP id b11-20020ac87fcb000000b003e37d72d532so8337354qtk.18
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:13:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680016403; x=1682608403;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        Tue, 28 Mar 2023 11:16:15 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98F0113E0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:15:19 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id l15-20020a05600c4f0f00b003ef6d684102so4354919wmq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680016493;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=3DsgcTYFWxhX9PLfaIyKWk2AVWDq7BUElXbxQWwuPGo=;
-        b=4Ve8npn84YKhjsjaTixpKjVslboJYiPe+ZBioy0hoXAcqnNTXsOOK2bafRHf0AErks
-         olBV1QhYXevuGTWuSsPpY+uXYbvJBj4mng9Q/m465JI+fipn77olDUfUTe0L8+K14YVd
-         PasR5txxKwIRE886cHeVNumrfNzAywZRd3226f3L+ebfGEs5IGZ+zRXlBa6y4hFz2oja
-         hxb6pVK3IAr0UpeYU+uXadZDlDXGlhDmZ/rC5jYwN9Uli2hKhvYMHywx+fLJH8YFnKfh
-         KYw598BhqbdWtDJHW/Mivu8Rcv0KSUl8fvZj/6GJfsv+w/BNdE7Ns0Na7YLzuW1Wwc6R
-         f8hQ==
-X-Gm-Message-State: AO0yUKX0xa9AnT2IrR1jmjxaqBKmXvLGzjRUqztkrSVvAWvMs1UJJuw5
-        +wgxM8d8GoJjBOBQJ3zI+HNl3cpDGC1HiwOPIF+/EJoeoM+Q7VeHr4buLHHvxC8OAzbzv89cj5D
-        YcHjgbvepZN9sjBHtMW1ciPVq
-X-Received: by 2002:ac8:5905:0:b0:3d9:56ce:a8cd with SMTP id 5-20020ac85905000000b003d956cea8cdmr27300511qty.6.1680016403648;
-        Tue, 28 Mar 2023 08:13:23 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YwwGHDreK24ccOM1fRksnfMcjyV+HDpQvkvYlDeAaCKhWxUqK0D0aDc17Jr9LYaSTFZIprTg==
-X-Received: by 2002:ac8:5905:0:b0:3d9:56ce:a8cd with SMTP id 5-20020ac85905000000b003d956cea8cdmr27300446qty.6.1680016403274;
-        Tue, 28 Mar 2023 08:13:23 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-232-148.dyn.eolo.it. [146.241.232.148])
-        by smtp.gmail.com with ESMTPSA id y16-20020a376410000000b00746aa4465b4sm8103982qkb.43.2023.03.28.08.13.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 08:13:22 -0700 (PDT)
-Message-ID: <9331f1358cf7c24442d705d840812e9cd490e018.camel@redhat.com>
-Subject: Re: [PATCH net-next] net/core: add optional threading for backlog
- processing
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Felix Fietkau <nbd@nbd.name>, Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 28 Mar 2023 17:13:20 +0200
-In-Reply-To: <b001c8ed-214f-94e6-2d4f-0ee13e3d8760@nbd.name>
-References: <20230324171314.73537-1-nbd@nbd.name>
-         <20230324102038.7d91355c@kernel.org>
-         <2d251879-1cf4-237d-8e62-c42bb4feb047@nbd.name>
-         <20230324104733.571466bc@kernel.org>
-         <f59ee83f-7267-04df-7286-f7ea147b5b49@nbd.name>
-         <751fd5bb13a49583b1593fa209bfabc4917290ae.camel@redhat.com>
-         <b001c8ed-214f-94e6-2d4f-0ee13e3d8760@nbd.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        bh=PiMcWrRifwEUskuyIQFulIGS7kWqc1dpRYsMeE3Bnt8=;
+        b=lkLswlCp30qWwFIoG0VhbwpbY4a6zCPS1qSMwqwqeiFFRzUZmaUPXzqNBgLn9KbnZA
+         EjRMoSidmm0G1ZqXLco7qoaIeAGtEqy9CzCmGT113ZV9pZlOZXo3Q4EQCvl5QeTp1+07
+         kEIka5g6iNZos2U6DbuOOzeSxbQ/cJ+Ymvhn4t6dwcq9C/hnxbYylLgrMYJp0a4BoA9y
+         E8vCYfeNd7p3wsnJmXtnAPbXhT/qlhRza6jRb6elaW6Yp0GEpqkFB2A/bwALWysQ5g6S
+         Q6c0Hr9njtIXFUbe4cyCN9r+vmJFm9YuhFp7Q/rjIsMdNApQtZJ3QRPehh/ts8+0ft+2
+         zzOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680016493;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PiMcWrRifwEUskuyIQFulIGS7kWqc1dpRYsMeE3Bnt8=;
+        b=qxr3UZ7MkJyq/VIEghYauBs+zbzGbEY7bi4+96jXmF3xlSfExC0RUIkr++VwNDNGyh
+         WMvWf3oCGqfjWIbV8hOute09tHFcUuR+dyr+1x7eN3UWYIoXKLQRGy7xEsbCzM3zj7W3
+         e2mlMIqM8Zp+Dfb7H/eSqnaEYjh1vEUmCh/TVJi/khbhULlW+Goq8Btoka/00SbW118z
+         WYGyovbN6TCcRHgqA8VQQvRSH0FwDYQ2Kca3VdCrhVUpqOesc8LgGD5cblpOzsWJssoB
+         A/qkZuylZLSXS9b2No1iC7RkLaxdSJCLiShs//x3exdw/DgQakGk4BIfB5qnyX12sZxp
+         y2mw==
+X-Gm-Message-State: AO0yUKWla6a5tnobWwU2HKreiDQVFcioAcUT7bHQIioRslJ9ES7T8WvL
+        OrCueuTfKejpnJmquhoSkefgPg==
+X-Google-Smtp-Source: AK7set95wY5EE0YNtfyvHTheORBSmDzHYguznEV+XEbkUnM0uVPMSwFMBcmsjKdakudAhAOmOYBvCQ==
+X-Received: by 2002:a7b:ce08:0:b0:3da:1f6a:7b36 with SMTP id m8-20020a7bce08000000b003da1f6a7b36mr12456491wmc.0.1680016493494;
+        Tue, 28 Mar 2023 08:14:53 -0700 (PDT)
+Received: from [192.168.2.107] ([79.115.63.91])
+        by smtp.gmail.com with ESMTPSA id v4-20020a05600c214400b003ef62deb830sm11354391wml.25.2023.03.28.08.14.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 08:14:53 -0700 (PDT)
+Message-ID: <48f1ee32-a030-8188-3a9d-612888b9678f@linaro.org>
+Date:   Tue, 28 Mar 2023 16:14:51 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH -next] spi: rockchip-sfc: Use
+ devm_platform_get_and_ioremap_resource()
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, broonie@kernel.org
+Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230328062118.86336-1-yang.lee@linux.alibaba.com>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <20230328062118.86336-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-03-28 at 11:45 +0200, Felix Fietkau wrote:
-> On 28.03.23 11:29, Paolo Abeni wrote:
-> > On Fri, 2023-03-24 at 18:57 +0100, Felix Fietkau wrote:
-> > > On 24.03.23 18:47, Jakub Kicinski wrote:
-> > > > On Fri, 24 Mar 2023 18:35:00 +0100 Felix Fietkau wrote:
-> > > > > I'm primarily testing this on routers with 2 or 4 CPUs and limite=
-d=20
-> > > > > processing power, handling routing/NAT. RPS is typically needed t=
-o=20
-> > > > > properly distribute the load across all available CPUs. When ther=
-e is=20
-> > > > > only a small number of flows that are pushing a lot of traffic, a=
- static=20
-> > > > > RPS assignment often leaves some CPUs idle, whereas others become=
- a=20
-> > > > > bottleneck by being fully loaded. Threaded NAPI reduces this a bi=
-t, but=20
-> > > > > CPUs can become bottlenecked and fully loaded by a NAPI thread al=
-one.
-> > > >=20
-> > > > The NAPI thread becomes a bottleneck with RPS enabled?
-> > >=20
-> > > The devices that I work with often only have a single rx queue. That =
-can
-> > > easily become a bottleneck.
-> > >=20
-> > > > > Making backlog processing threaded helps split up the processing =
-work=20
-> > > > > even more and distribute it onto remaining idle CPUs.
-> > > >=20
-> > > > You'd want to have both threaded NAPI and threaded backlog enabled?
-> > >=20
-> > > Yes
-> > >=20
-> > > > > It can basically be used to make RPS a bit more dynamic and=20
-> > > > > configurable, because you can assign multiple backlog threads to =
-a set=20
-> > > > > of CPUs and selectively steer packets from specific devices / rx =
-queues=20
-> > > >=20
-> > > > Can you give an example?
-> > > >=20
-> > > > With the 4 CPU example, in case 2 queues are very busy - you're try=
-ing
-> > > > to make sure that the RPS does not end up landing on the same CPU a=
-s
-> > > > the other busy queue?
-> > >=20
-> > > In this part I'm thinking about bigger systems where you want to have=
- a
-> > > group of CPUs dedicated to dealing with network traffic without
-> > > assigning a fixed function (e.g. NAPI processing or RPS target) to ea=
-ch
-> > > one, allowing for more dynamic processing.
-> > >=20
-> > > > > to them and allow the scheduler to take care of the rest.
-> > > >=20
-> > > > You trust the scheduler much more than I do, I think :)
-> > >=20
-> > > In my tests it brings down latency (both avg and p99) considerably in
-> > > some cases. I posted some numbers here:
-> > > https://lore.kernel.org/netdev/e317d5bc-cc26-8b1b-ca4b-66b5328683c4@n=
-bd.name/
-> >=20
-> > It's still not 110% clear to me why/how this additional thread could
-> > reduce latency. What/which threads are competing for the busy CPU[s]? I
-> > suspect it could be easier/cleaner move away the others (non RPS)
-> > threads.
-> In the tests that I'm doing, network processing load from routing/NAT is=
-=20
-> enough to occupy all available CPUs.
-> If I dedicate the NAPI thread to one core and use RPS to steer packet=20
-> processing to the other cores, the core taking care of NAPI has some=20
-> idle cycles that go to waste, while the other cores are busy.
-> If I include the core in the RPS mask, it can take too much away from=20
-> the NAPI thread.
 
-I feel like I'm missing some relevant points.
 
-If RPS keeps the target CPU fully busy, moving RPS processing in a
-separate thread still will not allow using more CPU time.
+On 3/28/23 07:21, Yang Li wrote:
+> According to commit 890cc39a8799 ("drivers: provide
+> devm_platform_get_and_ioremap_resource()"), convert
+> platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+> 
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/spi/spi-rockchip-sfc.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 
-Which NIC driver are you using?
+If I were you I would make a single patch addressing all the drivers
+from SPI as this is a single logical change. You get extra points as you
+avoid polluting the log.
 
-thanks!
+> 
+> diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
+> index 4fabd2e0439f..6830ecaa270b 100644
+> --- a/drivers/spi/spi-rockchip-sfc.c
+> +++ b/drivers/spi/spi-rockchip-sfc.c
+> @@ -576,8 +576,7 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
+>  	sfc = spi_master_get_devdata(master);
+>  	sfc->dev = dev;
+>  
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	sfc->regbase = devm_ioremap_resource(dev, res);
+> +	sfc->regbase = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
 
-Paolo
+No, you better use devm_platform_ioremap_resource() as res is not used
+afterwards. You'll get rid of the local variable too.
 
+>  	if (IS_ERR(sfc->regbase))
+>  		return PTR_ERR(sfc->regbase);
+>  
