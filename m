@@ -2,108 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484296CC662
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5006B6CC642
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234040AbjC1PcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
+        id S232676AbjC1P2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233549AbjC1Pbo (ORCPT
+        with ESMTP id S232590AbjC1P2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:31:44 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABD71115C
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:30:56 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id o20so10063160ljp.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:30:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680017454;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f6Z3hi5xZpY0A+xzxH10t/g2IJeJJpC83ZgAnnPr4r8=;
-        b=ClmAdxKaO+IvbX7WxxMeckWeSwBLmWZS6VF3VOIhXlPLy0T3H1VzIEW1bVGMtqWN1Y
-         I1QUxWfEat758nykrdkLKr5HXj2Vh60Jpk8eas0vs7lW+SQlvmD3Ylnl6BcTIMS/+wnU
-         3ryReA+B9YJgzEe7h/UjssBX8pdqHpB6Jp7goWYlUwqJq/KoHqWQUK14+AflgKT+qWYH
-         sfzh4BuAORKzWYhu/WVwMS4AgNOytzjEq+PqMGpCrRi04T5mJ1RS5gnGK3oEcIx3lZg4
-         IYgN4JfgezD6s461Z8eNyykS1b8LUDQbZt4I853YvlcCoa97VskKGOXlaCimCKYXe2LK
-         r8ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680017454;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f6Z3hi5xZpY0A+xzxH10t/g2IJeJJpC83ZgAnnPr4r8=;
-        b=1dUkJXowfubmdMI1z9mwhYO8YAZvGc9XRwv9+e029+VNE1GIosBvJhIqk5QRknICRH
-         ZChUny3IXuvw5u2NXTkLEWVHpg/iA9oM9Qz/aa0zCkJ3GtY9JxkjH/VQ6dD22jhHlC/4
-         OvGAIGOwAfPS1AtnNulfp1OYo0Qce3AZttifTNfZX48M9R5eA4evRT1wtiif1ITSMh4N
-         /vwBHPGii76JpdH1868gKxdLxW8F8ygL89ltPRXe5qjfTgpRviuRyEAWvrxpVpu5gDl9
-         DsqiciyeDQJlTQ+gh6IjHMEC57BrSYxL9Ni7ghnvMXm4BL9XcVYY9t+6gv346LJanwy7
-         /jYA==
-X-Gm-Message-State: AAQBX9eucqJVpEZlVZY3hhYz0+B+NBXWA1KBqd46YNIR8EwdbjOau31k
-        0fLtcFxx9qFwXEHqXNIrCeM7DQ==
-X-Google-Smtp-Source: AKy350bklgIv21W5yZ/4G5UcuAmEvWzN5s4DIXCp2M2RonQn4ByuJaeNtvsiX9cC+vQau4gr3ZNyUw==
-X-Received: by 2002:a2e:7212:0:b0:2a0:4de2:db88 with SMTP id n18-20020a2e7212000000b002a04de2db88mr5008585ljc.44.1680017454043;
-        Tue, 28 Mar 2023 08:30:54 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id c14-20020a05651c014e00b0029913364649sm5123502ljd.11.2023.03.28.08.30.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 08:30:53 -0700 (PDT)
-Message-ID: <bf424375-6306-35b4-4560-1946695f8fee@linaro.org>
-Date:   Tue, 28 Mar 2023 18:30:52 +0300
+        Tue, 28 Mar 2023 11:28:16 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C1110401;
+        Tue, 28 Mar 2023 08:27:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680017231; x=1711553231;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9pUw4qfwnuIM9w2+fwl4/XvGsd+TBbX0140QHxhWmfQ=;
+  b=Gjil830HTLb4r61sOEWD6eeXX+aU+oQFwgLKNRuuwc6PZEh56tkx/fDJ
+   6FXyRpLSmhwBBvlN8rep5UEk9XmzmxO+EB2nLo8oo9oYzQV5CAbAW4Cmt
+   ZPNqPm32F0cdCUMeRd1SpnPwgVG/DBgdQGXXs09+JdXEDUqm2//tkEwEU
+   1Kwk/KhfSWOW4tTBL7EM96pLn2z8FgZ4dxieIMxVK4f0SqKpn9iCBg0Zl
+   lktS2DtDPgk8POK2Pqc1ZRvicc8GUHcKj/eep3uVfqImQvCxXwvjMUVu9
+   g4WgnRL87PFBB0/mD79wFUqVZV1DUUQ8P4f93w6Ldmj50U9ZOQ6ehbcWm
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="426869774"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="426869774"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 08:27:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="683944706"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="683944706"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 08:27:07 -0700
+Date:   Tue, 28 Mar 2023 08:31:10 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "David Woodhouse" <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v2 3/8] iommu/sva: Support reservation of global SVA
+ PASIDs
+Message-ID: <20230328083110.294a327c@jacob-builder>
+In-Reply-To: <BN9PR11MB527652D88D15437F52FCE8268C889@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230327232138.1490712-1-jacob.jun.pan@linux.intel.com>
+        <20230327232138.1490712-4-jacob.jun.pan@linux.intel.com>
+        <BN9PR11MB527652D88D15437F52FCE8268C889@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 12/14] drm/msm/a6xx: Use adreno_is_aXYZ macros in
- speedbin matching
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-References: <20230223-topic-gmuwrapper-v4-0-e987eb79d03f@linaro.org>
- <20230223-topic-gmuwrapper-v4-12-e987eb79d03f@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230223-topic-gmuwrapper-v4-12-e987eb79d03f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2023 17:28, Konrad Dybcio wrote:
-> Before transitioning to using per-SoC and not per-Adreno speedbin
-> fuse values (need another patchset to land elsewhere), a good
-> improvement/stopgap solution is to use adreno_is_aXYZ macros in
-> place of explicit revision matching. Do so to allow differentiating
-> between A619 and A619_holi.
+Hi Kevin,
+
+On Tue, 28 Mar 2023 07:35:43 +0000, "Tian, Kevin" <kevin.tian@intel.com>
+wrote:
+
+> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > Sent: Tuesday, March 28, 2023 7:22 AM
+> > 
+> > +/**
+> > + * @brief
+> > + *	Reserve a PASID from the SVA global number space.
+> > + *
+> > + * @param min starting range, inclusive
+> > + * @param max ending range, inclusive
+> > + * @return The reserved PASID on success or IOMMU_PASID_INVALID on
+> > failure.
+> > + */
+> > +ioasid_t iommu_sva_reserve_pasid(ioasid_t min, ioasid_t max)
+> > +{
+> > +	int ret;
+> > +
+> > +	if (!pasid_valid(min) || !pasid_valid(max) ||
+> > +	    min == 0 || max < min)
+> > +		return IOMMU_PASID_INVALID;
+> > +
+> > +	ret = ida_alloc_range(&iommu_global_pasid_ida, min, max,
+> > GFP_KERNEL);
+> > +	if (ret < 0)
+> > +		return IOMMU_PASID_INVALID;
+> > +
+> > +	return ret;
+> > +}
+> > +EXPORT_SYMBOL_GPL(iommu_sva_reserve_pasid);
+> > +  
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/gpu/drm/msm/adreno/a6xx_gpu.c   | 18 +++++++++---------
->   drivers/gpu/drm/msm/adreno/adreno_gpu.h | 14 ++++++++++++--
->   2 files changed, 21 insertions(+), 11 deletions(-)
+> Look at this function. There is no single word about sva except
+> in the function name.
+> 
+> sva is just one user of global pasids.
+> 
+> when a driver supports sva it has to always use global pasids even
+> for non-sva usages like dma pasid.
+> 
+> but this doesn't mean that we should build the API around sva.
+> 
+> it's really about global pasids.
+> 
+> let's just call it clearly as iommu_alloc_global_pasid(min, max).
+> 
+> Then we can define a wrapper iommu_reserve_global_pasid(pasid)
+> as iommu_alloc_global_pasid(pasid, pasid).
+> 
+> for PASID#0 driver calls iommu_reserve_global_pasid(0).
+> 
+> for dma pasid driver calls iommu_alloc_global_pasid() to get a random
+> one instead of reserving pasid#1.
+> 
+> this would be future proof when the same driver starts to allocate
+> more pasids for other usages e..g siov.
+I don't have strong preference here. Jason and others?
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+For the DMA vs. SVA use cases, these APIs are used to carve out PASIDs from
+the SVA space. Let it be the entire global space or a subset, we don't care.
+We just don't want conflicts with SVA. e.g. if the SVA space shrank in the
+future, this still works.
 
--- 
-With best wishes
-Dmitry
+Thanks,
 
+Jacob
