@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB396CC626
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B6A6CC645
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbjC1PYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
+        id S234034AbjC1P2n convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Mar 2023 11:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbjC1PYC (ORCPT
+        with ESMTP id S233435AbjC1P2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:24:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DADEFA2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:22:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D4046182C
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:21:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61CD0C4339C;
-        Tue, 28 Mar 2023 15:21:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680016902;
-        bh=i3OkFYn+CvmNVhVlFuKMt5831golXkFfwanYc2N5usY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UTRUTtheg3ul7TFIUZ2bUACT6mMO4m2jNNA8dJNsFdEOYw3guRTO9SMsVWYvsAY3h
-         EhoYVun4Z7KOwxgYLpVZ2guqVBHuO3HOmujEehnh8rNAT0npfoh0Sav0Vr5z+tyr/M
-         39mQciKni4eiIwKhS7OUB9A/BrRmRmGU73J7eYMkWPSDFMwDWNNHzDKaFglqo9rVkH
-         mgl9O65iX1QyJ8ivozahD4YKlnfUmQrz8A7NELtC9nJtteF0T/Qa1oLTI3SebGQhoa
-         q3wGgKqG4koRsPL++lYpA19H7Jzd+4rApL2oihpzZoPXsXTumvaFg6MCI2LWW7mAOr
-         15AVt+voYRK5w==
-Date:   Tue, 28 Mar 2023 16:21:37 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Zaid Al-Bassam <zalbassam@google.com>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: mach-virt: fix PMUv3 dependendency
-Message-ID: <20230328152136.GA1844@willie-the-truck>
-References: <20230328144405.1527555-1-arnd@kernel.org>
+        Tue, 28 Mar 2023 11:28:21 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE54ABDE0;
+        Tue, 28 Mar 2023 08:27:11 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id eg48so51127740edb.13;
+        Tue, 28 Mar 2023 08:27:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680016927;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ALVybUnAV54ozvibHmKaFENlN7wm2q95bQqB2mKer5Q=;
+        b=rD1ojgT2pNLbxr8IEnuaS3NLqOu57SUE6CSxB/rG/Sf9VxMYI4AXlpHODoyv/17CEz
+         R6fQqTAK16xbuA5AK5PP7sYCD1v2pyQ66wXlDCDCcJOS1CDR3c3Tk2m82bzY33R+M6k9
+         NMya29YoK+cDJjTnBjhz8VhpG9lBkndYobf94WEujufU5aNbxLrcNqrYDQ4IDNC7ez48
+         rFsV6/toZCyXfPlsuz4BJfczCp7aoPAvHWP5rBMaXNb/wUHdU1oBx38M0/tx5+AcE/QT
+         NQoxhLWXZbXE4F97vcRQAB+GgINbzgOA/sDhpaKrDH55zCDG0YlJgkLTsRQpettHsIhA
+         +ADw==
+X-Gm-Message-State: AAQBX9ciFysp26SGQvrCyi5LL0wL6jK3tqpfuFVwbOJuYVlKoO8UcnqW
+        n36QOIpJYNKEkEwsChv/AnmipWxYMMB6q4jjTCg=
+X-Google-Smtp-Source: AKy350a5DWG8ejDtuGwU0IUxCtgKGBKbB6HM7fJqI2byfWZHnQyiIrytaI7S62mVYzC0O1Mhxg2hGaIuXjdXamF6wYY=
+X-Received: by 2002:a17:906:fe49:b0:8b1:3298:c587 with SMTP id
+ wz9-20020a170906fe4900b008b13298c587mr8592629ejb.2.1680016926814; Tue, 28 Mar
+ 2023 08:22:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328144405.1527555-1-arnd@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230328015120.111168-1-yijiangshan@kylinos.cn>
+In-Reply-To: <20230328015120.111168-1-yijiangshan@kylinos.cn>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 28 Mar 2023 17:21:55 +0200
+Message-ID: <CAJZ5v0i3Ew=LPPzVw5Vtttpq+H=YuCrU_LN1b7W9Kj0v5JQ5gA@mail.gmail.com>
+Subject: Re: [PATCH] drivers/acpi/acpica/exserial.c: replace ternary operator
+ with min()
+To:     Jiangshan Yi <yijiangshan@kylinos.cn>
+Cc:     robert.moore@intel.com, rafael.j.wysocki@intel.com,
+        lenb@kernel.org, linux-acpi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, 13667453960@163.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Tue, Mar 28, 2023 at 3:52 AM Jiangshan Yi <yijiangshan@kylinos.cn> wrote:
+>
+> Fix the following coccicheck warning:
+>
+> drivers/acpi/acpica/exserial.c:346: WARNING opportunity for min().
+>
+> min() macro is defined in include/linux/minmax.h. It avoids
+> multiple evaluations of the arguments when non-constant and performs
+> strict type-checking.
+>
+> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-On Tue, Mar 28, 2023 at 04:43:44PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Selecting a ARM_PMUV3 from a platform option breaks the build
-> when CONFIG_ARM_PMU is not already set:
-> 
-> WARNING: unmet direct dependencies detected for ARM_PMUV3
->   Depends on [n]: PERF_EVENTS [=y] && HW_PERF_EVENTS [=n] && (ARM [=y] && CPU_V7 [=y] || ARM64)
->   Selected by [y]:
->   - ARCH_VIRT [=y] && ARCH_MULTI_V7 [=y] && PERF_EVENTS [=y]
-> 
-> drivers/perf/arm_pmuv3.c:48:9: error: 'PERF_MAP_ALL_UNSUPPORTED' undeclared here (not in a function)
->    48 |         PERF_MAP_ALL_UNSUPPORTED,
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/perf/arm_pmuv3.c:63:9: error: 'PERF_CACHE_MAP_ALL_UNSUPPORTED' undeclared here (not in a function)
->    63 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/perf/arm_pmuv3.c:65:10: error: implicit declaration of function 'C' [-Werror=implicit-function-declaration]
->    65 |         [C(L1D)][C(OP_READ)][C(RESULT_ACCESS)]  = ARMV8_PMUV3_PERFCTR_L1D_CACHE,
-> 
-> Fixes: 3b16f6268e66 ("ARM: mach-virt: Select PMUv3 driver by default")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+ACPICA changes need to be submitted as pull requests to the upstream
+project on GitHub.  When that happens, a Linux patch based on an
+upstream ACPICA PR can be submitted with a Link: tag pointing to that
+PR.
+
+Thanks!
+
 > ---
->  arch/arm/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index e8ccacb3653b..700458c7cace 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -397,7 +397,7 @@ config ARCH_VIRT
->  	select ARM_GIC_V3
->  	select ARM_GIC_V3_ITS if PCI
->  	select ARM_PSCI
-> -	select ARM_PMUV3 if PERF_EVENTS
-> +	select ARM_PMUV3 if PERF_EVENTS && ARM_PMU
->  	select HAVE_ARM_ARCH_TIMER
-
-We're discussing this one over at:
-
-https://lore.kernel.org/r/202303281539.zzI4vpw1-lkp@intel.com
-
-I'm leaning towards dropping the 'select' altogether.
-
-Will
+>  drivers/acpi/acpica/exserial.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/acpi/acpica/exserial.c b/drivers/acpi/acpica/exserial.c
+> index fd63f2042514..dfe507e0a09a 100644
+> --- a/drivers/acpi/acpica/exserial.c
+> +++ b/drivers/acpi/acpica/exserial.c
+> @@ -343,8 +343,7 @@ acpi_ex_write_serial_bus(union acpi_operand_object *source_desc,
+>         /* Copy the input buffer data to the transfer buffer */
+>
+>         buffer = buffer_desc->buffer.pointer;
+> -       data_length = (buffer_length < source_desc->buffer.length ?
+> -                      buffer_length : source_desc->buffer.length);
+> +       data_length = min(buffer_length, source_desc->buffer.length);
+>         memcpy(buffer, source_desc->buffer.pointer, data_length);
+>
+>         /* Lock entire transaction if requested */
+> --
+> 2.27.0
+>
