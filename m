@@ -2,164 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56076CB456
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC386CB45F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbjC1Cuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 22:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
+        id S229767AbjC1Cxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 22:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232609AbjC1Cug (ORCPT
+        with ESMTP id S229645AbjC1Cxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 22:50:36 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFE72717;
-        Mon, 27 Mar 2023 19:50:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679971833; x=1711507833;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=n2VgJtM3YVLe97n6BZzoF1luNuCvu30L97QOFMLacDY=;
-  b=flkTSjEIMCkAELkoxNu4Fr9Ib3n2TPg6r7PYemwLFSNmg/6E4vCicolH
-   Y5RQFm3M7G+uoh3LSk0HTHvypwYib6wkTuUZVcIClfKwko1E7i0aD6DB5
-   KLC8Qo+ctOft5OIqYvBFmhF4kjd6D5OaNO9c5ySL3ngwEkilh8WA0uCD7
-   GGh9qIdDPoRWVupGSgASvEgUZR3gsnAraSQ3EOEIsyDEcsDyiQvWgFdiS
-   iEzzRUHmSnA7KVq1q20PtdIkXLaTMV/AXhHMJMTSjyK/5Wq4dS8LCrYz7
-   zsRQn4/T4qXc+VesJu0rrmtqyVY50CDfgxu3J2R2zVYqbrI0OdfJto8DC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="337955448"
-X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
-   d="scan'208";a="337955448"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 19:50:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="772963850"
-X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
-   d="scan'208";a="772963850"
-Received: from arshowal-mobl1.amr.corp.intel.com (HELO [10.212.227.9]) ([10.212.227.9])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 19:50:31 -0700
-Message-ID: <c49727dc-1fe8-2214-07c7-e3be269030af@linux.intel.com>
-Date:   Mon, 27 Mar 2023 19:50:30 -0700
+        Mon, 27 Mar 2023 22:53:32 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDCF1FF5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:53:31 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so11097629pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:53:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1679972011;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lWYTBx2VZ6h71XcB6iH3aK5E1JWkHx/k2gKbXvik2bo=;
+        b=N0B1misASakytjT3U6HWfwjK7TnGyvBOU1hSRBFekqJBvXuuYgEgZr3oywZehRUqSY
+         r6xJkpQnhBXpoiIERUOnR17ot0i6ekYp7QKoU5b+ny//OXTf/u3IjjLcc3AVUM6IiHnu
+         yGpo+pIqcyIV84FL57vU3VmbM4zWQEA93ts7zeVf7tNsIx9g+w8uVmRrcsOUL3BWHO0T
+         C3IDOlZ5YYsUx6RRBRbF8qpZ0suvkx+r13FGHA9FHG7SU/Hzil4SxmqAgg/6Hxcudyqw
+         awqnfY4yXMNAnzDVermXFJyWwEhGy2bh3B5WNUaKSHGo/nL/va41TlAWwL09K70fwBME
+         t1VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679972011;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lWYTBx2VZ6h71XcB6iH3aK5E1JWkHx/k2gKbXvik2bo=;
+        b=16t3lR83LRXPRsG/KlXuaeoWdDv0Sq4GTg41RPyI7CDrOpd1299Zba3pstSlNWGA33
+         FahScnhWDO6cMHs8HwiZf5CIs+9dD/ujLd1xFJs657aIQuUx2X9GQOvMgQFm06cFjhd1
+         zjBOIEjjVY6qMV6DZakb04cYuoGtnT+Q7FGlxVBnY9di4HXQsxs7yny8GMm2RJXeV21z
+         j2nwgePUfeVelaTzHaH67BxyR0wORbHc7qMLEJ4o2r5bay8pO4ySkVitFHAhF71uSAV/
+         lzTsOVIC490mP2mSHI0VABRhlqTvb+10QOK+O8IVfwg6d/G7w1rK19tp7/dYAfnKNY+d
+         lUwg==
+X-Gm-Message-State: AAQBX9eawDXHsA4cBDtVCbDTkUNFNDyVSarqGG75bwZ+SyLj/tW55+v0
+        v2RqnbEkvUHDHIfRnIVQiN+2tw==
+X-Google-Smtp-Source: AKy350byEc3xPciw99yzx3LG7BZcgX8rx3fuloOHYBrG7cPj7FynObI6wypzA54S/DK4tOoVGIQszA==
+X-Received: by 2002:a17:90b:1d11:b0:23d:1bf6:5c74 with SMTP id on17-20020a17090b1d1100b0023d1bf65c74mr15002378pjb.41.1679972010979;
+        Mon, 27 Mar 2023 19:53:30 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-91-157.pa.nsw.optusnet.com.au. [49.181.91.157])
+        by smtp.gmail.com with ESMTPSA id s19-20020a170902989300b00186cf82717fsm19877007plp.165.2023.03.27.19.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 19:53:30 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pgzSh-00E0io-6O; Tue, 28 Mar 2023 13:53:27 +1100
+Date:   Tue, 28 Mar 2023 13:53:27 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baoquan He <bhe@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
+ and vmap_block->lock
+Message-ID: <20230328025327.GB3222767@dread.disaster.area>
+References: <cover.1679209395.git.lstoakes@gmail.com>
+ <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
+ <ZBkDuLKLhsOHNUeG@destitution>
+ <ZBsAG5cpOFhFZZG6@pc636>
+ <ZB00U2S4g+VqzDPL@destitution>
+ <ZCHQ5Pdr203+2LMI@pc636>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [PATCH v1 1/3] x86/tdx: Add TDX Guest event notify interrupt
- support
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>
-Cc:     "Yu, Guorui" <guorui.yu@linux.alibaba.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "wander@redhat.com" <wander@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>, "Du, Fan" <fan.du@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-References: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20230326062039.341479-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <3c88945515eba868056906f4a269e6ffcf49e1ec.camel@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <3c88945515eba868056906f4a269e6ffcf49e1ec.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCHQ5Pdr203+2LMI@pc636>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kai,
+On Mon, Mar 27, 2023 at 07:22:44PM +0200, Uladzislau Rezki wrote:
+> >     So, this patch open codes the kvmalloc() in the commit path to have
+> >     the above described behaviour. The result is we more than halve the
+> >     CPU time spend doing kvmalloc() in this path and transaction commits
+> >     with 64kB objects in them more than doubles. i.e. we get ~5x
+> >     reduction in CPU usage per costly-sized kvmalloc() invocation and
+> >     the profile looks like this:
+> >     
+> >       - 37.60% xlog_cil_commit
+> >             16.01% memcpy_erms
+> >           - 8.45% __kmalloc
+> >              - 8.04% kmalloc_order_trace
+> >                 - 8.03% kmalloc_order
+> >                    - 7.93% alloc_pages
+> >                       - 7.90% __alloc_pages
+> >                          - 4.05% __alloc_pages_slowpath.constprop.0
+> >                             - 2.18% get_page_from_freelist
+> >                             - 1.77% wake_all_kswapds
+> >     ....
+> >                                         - __wake_up_common_lock
+> >                                            - 0.94% _raw_spin_lock_irqsave
+> >                          - 3.72% get_page_from_freelist
+> >                             - 2.43% _raw_spin_lock_irqsave
+> >           - 5.72% vmalloc
+> >              - 5.72% __vmalloc_node_range
+> >                 - 4.81% __get_vm_area_node.constprop.0
+> >                    - 3.26% alloc_vmap_area
+> >                       - 2.52% _raw_spin_lock
+> >                    - 1.46% _raw_spin_lock
+> >                   0.56% __alloc_pages_bulk
+> >           - 4.66% kvfree
+> >              - 3.25% vfree
+> OK, i see. I tried to use the fs_mark in different configurations. For
+> example:
+> 
+> <snip>
+> time fs_mark -D 10000 -S0 -n 100000 -s 0 -L 32 -d ./scratch/0 -d ./scratch/1 -d ./scratch/2  \
+> -d ./scratch/3 -d ./scratch/4 -d ./scratch/5 -d ./scratch/6 -d ./scratch/7 -d ./scratch/8 \
+> -d ./scratch/9 -d ./scratch/10 -d ./scratch/11 -d ./scratch/12 -d ./scratch/13 \
+> -d ./scratch/14 -d ./scratch/15 -t 64 -F
+> <snip>
+> 
+> But i did not manage to trigger xlog_cil_commit() to fallback to vmalloc
+> code. I think i should reduce an amount of memory on my kvm-pc and
+> repeat the tests!
 
-On 3/27/23 7:38 PM, Huang, Kai wrote:
->> +/* Reserve an IRQ from x86_vector_domain for TD event notification */
->> +static int __init tdx_event_irq_init(void)
->> +{
->> +	struct irq_alloc_info info;
->> +	cpumask_t saved_cpumask;
->> +	struct irq_cfg *cfg;
->> +	int cpu, irq;
->> +
->> +	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
->> +		return 0;
->> +
->> +	init_irq_alloc_info(&info, NULL);
->> +
->> +	/*
->> +	 * Event notification vector will be delivered to the CPU
->> +	 * in which TDVMCALL_SETUP_NOTIFY_INTR hypercall is requested.
->> +	 * So set the IRQ affinity to the current CPU.
->> +	 */
->> +	cpu = get_cpu();
->> +	cpumask_copy(&saved_cpumask, current->cpus_ptr);
->> +	info.mask = cpumask_of(cpu);
->> +	put_cpu();
-> The 'saved_cpumask' related code is ugly.  If you move put_cpu() to the end of
-> this function, I think you can remove all related code:
-> 
-> 	cpu = get_cpu();
-> 
-> 	/*
-> 	 * Set @info->mask to local cpu to make sure a valid vector is
-> 	 * pre-allocated when TDX event notification IRQ is allocated
-> 	 * from x86_vector_domain.
-> 	 */
-> 	init_irq_alloc_info(&info, cpumask_of(cpu));
-> 
-> 	// rest staff: request_irq(), hypercall ...
-> 
-> 	put_cpu();
-> 	
+Simple way of doing is to use directory blocks that are larger than
+page size:
 
-init_irq_alloc_info() is a sleeping function. Since get_cpu() disables
-preemption, we cannot call sleeping function after it. Initially, I
-have implemented it like you have mentioned. However, I discovered the
-following error.
+mkfs.xfs -n size=64k ....
 
-[    2.400755] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:580
-[    2.404664] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
-[    2.408671] preempt_count: 1, expected: 0
-[    2.412650] RCU nest depth: 0, expected: 0
-[    2.412666] no locks held by swapper/0/1.
-[    2.416650] Preemption disabled at:
-[    2.416650] [<ffffffff83b8089f>] tdx_arch_init+0x38/0x117
-[    2.420670] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc4-00117-g672ca073d9f9-dirty #2527
-[    2.424650] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
-[    2.424650] Call Trace:
-[    2.424650]  <TASK>
-[    2.424650]  dump_stack_lvl+0x6a/0x86
-[    2.424650]  __might_resched.cold+0xf4/0x12f
-[    2.424650]  __mutex_lock+0x50/0x810
-[    2.424650]  ? lock_is_held_type+0xd8/0x130
-[    2.424650]  ? __irq_alloc_descs+0xcf/0x310
-[    2.424650]  ? find_held_lock+0x2b/0x80
-[    2.424650]  ? __irq_alloc_descs+0xcf/0x310
-[    2.424650]  __irq_alloc_descs+0xcf/0x310
-[    2.424650]  irq_domain_alloc_descs.part.0+0x49/0xa0
-[    2.424650]  __irq_domain_alloc_irqs+0x2a0/0x4f0
-[    2.424650]  ? next_arg+0x129/0x1f0
-[    2.424650]  ? tdx_guest_init+0x5b/0x5b
-[    2.424650]  tdx_arch_init+0x8e/0x117
-[    2.424650]  do_one_initcall+0x137/0x2ec
-[    2.424650]  ? rcu_read_lock_sched_held+0x36/0x60
-[    2.424650]  kernel_init_freeable+0x1e3/0x241
-[    2.424650]  ? rest_init+0x1a0/0x1a0
-[    2.424650]  kernel_init+0x17/0x170
-[    2.424650]  ? rest_init+0x1a0/0x1a0
-[    2.424650]  ret_from_fork+0x1f/0x30
-[    2.424650]  </TASK>
+We can hit that path in other ways - large attributes will hit it in
+the attr buffer allocation path, enabling the new attribute
+intent-based logging mode will hit it in the xlog_cil_commit path as
+well. IIRC, the above profile comes from the latter case, creating
+lots of zero length files with 64kB xattrs attached via fsmark.
+
+-Dave.
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Dave Chinner
+david@fromorbit.com
