@@ -2,308 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298DF6CC202
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1026CC20C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbjC1OY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S232875AbjC1O22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232877AbjC1OYt (ORCPT
+        with ESMTP id S230093AbjC1O21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:24:49 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D636E8A4C
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:24:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680013487; x=1711549487;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=G5WMzWIE0ojBdHoFJAsh9KYOhyFRY/F1VB3tEmTC0Yo=;
-  b=TJE1q6NvRkBofPFloCW44ONNlgvJ5hzEzplFfeVb14f/xkh7U0nORCGh
-   5kS0WmOBAI2OxN3FR1YoP7Y875jDeeAANDIwmJvTfCLWGeZM0iCV0ykLe
-   +YmzKgsmrQ2oGBvFHseUcQXO7+9pjBk9J+btOmyG+DXHpC8xZKQ8aSymX
-   7mPLukFeMMOgXb2WojdgmItHaIFNRTdomdFuZIxGtZKLlnSghFyZXQioC
-   DFbgIknZbdxCQd2ycyJ3T29UMdufWTH6tAIQpG2W2np4VSeD2pu07uJuT
-   SWvHFjBFPgA9/nsCBaSi1o9n4dM/61WPnvBOtR4s453mcUtZmp+He2VWB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="339299585"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="339299585"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 07:24:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="683918096"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="683918096"
-Received: from wheelerj-mobl.ger.corp.intel.com (HELO [10.213.213.242]) ([10.213.213.242])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 07:24:44 -0700
-Message-ID: <3fd504bf-0415-3466-78c5-918a295dcf93@linux.intel.com>
-Date:   Tue, 28 Mar 2023 15:24:42 +0100
+        Tue, 28 Mar 2023 10:28:27 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEEE61AF
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:28:26 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id k17so15252621ybm.11
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680013705;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lNC4U2pxIqw7OfhmEWv4yVLXtgeYnb8fzcDWECWbK5U=;
+        b=e9nOGlYe55ZGkGujdZS/lndA9CplzKkHCawpR0sMsfis72wuB33MDJS52AsbeRcxmF
+         8pw84rI/Bt5ZfUOqcmw3ZSaPGBBf3YBWKrF4FoSibVlViabbvDJagFmNi7xms0Jee8AE
+         LjRA65l2Qn33umlVU2Wkscdx6I0EyUvKdN5Ot5xMxwXWfXwfggb+EW6ZYPiCXlFSnoZe
+         brEPEqGrvrFtVTb73gG/zAU+YVxsSm9xWpyIMvIuXMEl7G/7bVEWC2+2SrBcSBCXG0rT
+         xjAFlJFcrX4eUcxZREx3elUxqQutuQoDe7MYh7LCIQmYOdqXLBfxm2DzDGqXREf27k0C
+         cHow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680013705;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lNC4U2pxIqw7OfhmEWv4yVLXtgeYnb8fzcDWECWbK5U=;
+        b=KgZLsuLVHcUa0agq69qFUnF0VA+HecShgkEP0c6nRfWa3IFTwNh4S83To8Hiz/FWyF
+         mTv+7BAmhK+6SS9OWUs9hQXrN7gvpNf9NAVn3x8dk/5qJ79CSfqSNZXj0nhrykBI6MMT
+         djHjB1hft3la6gbEDv9J/3cVyOWMXxVaos9Md+1enT4zEsYRTtdfGXRJ/6bz2Th51rBP
+         AFmWWzzsdGcC0fTtT+SyeplBoqpFen1fBoFC0C/mTQYB058FW23Z5WgAEIrlBJ4CgVYS
+         pxdLcDiGNTsvTu4iKBBApLtfUYobg0PGCqPMBYEp0UAkducm0yRPOeEPRjTc4tFjkZTI
+         UgNA==
+X-Gm-Message-State: AAQBX9ewlIL3U+ZQO5C5OXAg6gAf9zxs0UDT66DSUPyPAmqgASJY5Xc3
+        Eid1xaGFOOtX6r5iFj9Hlh+uFW25rmtQaXODJ3LCcXCQmuCDNQ==
+X-Google-Smtp-Source: AKy350Zwn8ANrGTAWtdBWtqKWGyBIlkvisE3ufoDT2x2/2BvAiiKHlEk0RL7cbzvvSymfdZb/jJXcBn+NeN+n8FKNls=
+X-Received: by 2002:a05:6902:1501:b0:b6d:80ab:8bb6 with SMTP id
+ q1-20020a056902150100b00b6d80ab8bb6mr10240285ybu.1.1680013705070; Tue, 28 Mar
+ 2023 07:28:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v10 09/15] drm/syncobj: Add deadline support for syncobj
- waits
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        intel-gfx@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Matt Turner <mattst88@gmail.com>,
-        freedreno@lists.freedesktop.org
-References: <20230308155322.344664-1-robdclark@gmail.com>
- <20230308155322.344664-10-robdclark@gmail.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20230308155322.344664-10-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <ZCI+7Wg5OclSlE8c@bombadil.infradead.org> <ZCJGjuOYR6nGXiAw@codewreck.org>
+ <ZCJxOgV92yPc3zu1@bombadil.infradead.org>
+In-Reply-To: <ZCJxOgV92yPc3zu1@bombadil.infradead.org>
+From:   Eric Van Hensbergen <ericvh@gmail.com>
+Date:   Tue, 28 Mar 2023 09:28:14 -0500
+Message-ID: <CAFkjPTmM_hTstagB8sx6jEpz0fzh3AXfYT06FAoOjSF7bPTV-A@mail.gmail.com>
+Subject: Re: 9p regression linux-next next-20230327
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     asmadeus@codewreck.org, v9fs-developer@lists.sourceforge.net,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jeff Layton <jlayton@kernel.org>, lucho@ionkov.net,
+        linux-kernel@vger.kernel.org, Pankaj Raghav <p.raghav@samsung.com>,
+        Amir Goldstein <amir73il@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+So, I'm still mucking about - but I actually have a threadripper and
+an Asahi-M1 here that I'm dedicating to regression testing but haven't
+quite finished setting it up.  If you look in
+https://github.com/v9fs/test you can see the simple tests I'm running
+(dbench, fsx, postmark basically) with different configs specified by
+fstabs -- I'm using cpu in my automation (the docker container which
+it is supposed to run in is in https://github.com/v9fs/docker).  I
+started playing with github actions, but quickly realized it was going
+to be an nightmare to manage the .github/workflow embedded in linux
+trees so am rethinking that strategy.
 
-On 08/03/2023 15:53, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> Add a new flag to let userspace provide a deadline as a hint for syncobj
-> and timeline waits.  This gives a hint to the driver signaling the
-> backing fences about how soon userspace needs it to compete work, so it
-> can addjust GPU frequency accordingly.  An immediate deadline can be
+But, in order to move past the simple virtio tests and incorporate the
+network servers, I'm going to probably rework the performance
+framework I have in https://github.com/v9fs/notebook to be able to
+cover all the different configs and options in the tests and then have
+some shortcuts for smoke test, short tests, and long regression tests.
+Then I can look at broadening the test programs and also look at
+automating nightly regressions (including performance tracking)
+against linux-next and mainline.
 
-adjust
+It has taken me longer than I would have liked, but I'm getting closer
+-- and i have to look at kdevops as well!
 
-> given to provide something equivalent to i915 "wait boost".
-> 
-> v2: Use absolute u64 ns value for deadline hint, drop cap and driver
->      feature flag in favor of allowing count_handles==0 as a way for
->      userspace to probe kernel for support of new flag
-> v3: More verbose comments about UAPI
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->   drivers/gpu/drm/drm_syncobj.c | 64 ++++++++++++++++++++++++++++-------
->   include/uapi/drm/drm.h        | 17 ++++++++++
->   2 files changed, 68 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
-> index 0c2be8360525..a85e9464f07b 100644
-> --- a/drivers/gpu/drm/drm_syncobj.c
-> +++ b/drivers/gpu/drm/drm_syncobj.c
-> @@ -126,6 +126,11 @@
->    * synchronize between the two.
->    * This requirement is inherited from the Vulkan fence API.
->    *
-> + * If &DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE is set, the ioctl will also set
-> + * a fence deadline hint on the backing fences before waiting, to provide the
-> + * fence signaler with an appropriate sense of urgency.  The deadline is
-> + * specified as an absolute &CLOCK_MONOTONIC value in units of ns.
-> + *
->    * Similarly, &DRM_IOCTL_SYNCOBJ_TIMELINE_WAIT takes an array of syncobj
->    * handles as well as an array of u64 points and does a host-side wait on all
->    * of syncobj fences at the given points simultaneously.
-> @@ -973,7 +978,8 @@ static signed long drm_syncobj_array_wait_timeout(struct drm_syncobj **syncobjs,
->   						  uint32_t count,
->   						  uint32_t flags,
->   						  signed long timeout,
-> -						  uint32_t *idx)
-> +						  uint32_t *idx,
-> +						  ktime_t *deadline)
->   {
->   	struct syncobj_wait_entry *entries;
->   	struct dma_fence *fence;
-> @@ -1053,6 +1059,15 @@ static signed long drm_syncobj_array_wait_timeout(struct drm_syncobj **syncobjs,
->   			drm_syncobj_fence_add_wait(syncobjs[i], &entries[i]);
->   	}
->   
-> +	if (deadline) {
-> +		for (i = 0; i < count; ++i) {
-> +			fence = entries[i].fence;
-> +			if (!fence)
-> +				continue;
-> +			dma_fence_set_deadline(fence, *deadline);
-> +		}
-> +	}
-> +
->   	do {
->   		set_current_state(TASK_INTERRUPTIBLE);
->   
-> @@ -1151,7 +1166,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
->   				  struct drm_file *file_private,
->   				  struct drm_syncobj_wait *wait,
->   				  struct drm_syncobj_timeline_wait *timeline_wait,
-> -				  struct drm_syncobj **syncobjs, bool timeline)
-> +				  struct drm_syncobj **syncobjs, bool timeline,
-> +				  ktime_t *deadline)
->   {
->   	signed long timeout = 0;
->   	uint32_t first = ~0;
-> @@ -1162,7 +1178,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
->   							 NULL,
->   							 wait->count_handles,
->   							 wait->flags,
-> -							 timeout, &first);
-> +							 timeout, &first,
-> +							 deadline);
->   		if (timeout < 0)
->   			return timeout;
->   		wait->first_signaled = first;
-> @@ -1172,7 +1189,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
->   							 u64_to_user_ptr(timeline_wait->points),
->   							 timeline_wait->count_handles,
->   							 timeline_wait->flags,
-> -							 timeout, &first);
-> +							 timeout, &first,
-> +							 deadline);
->   		if (timeout < 0)
->   			return timeout;
->   		timeline_wait->first_signaled = first;
-> @@ -1243,17 +1261,22 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, void *data,
->   {
->   	struct drm_syncobj_wait *args = data;
->   	struct drm_syncobj **syncobjs;
-> +	unsigned possible_flags;
-> +	ktime_t t, *tp = NULL;
->   	int ret = 0;
->   
->   	if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ))
->   		return -EOPNOTSUPP;
->   
-> -	if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-> -			    DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT))
-> +	possible_flags = DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-> +			 DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
-> +			 DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
-> +
-> +	if (args->flags & ~possible_flags)
->   		return -EINVAL;
->   
->   	if (args->count_handles == 0)
-> -		return -EINVAL;
-> +		return 0;
->   
->   	ret = drm_syncobj_array_find(file_private,
->   				     u64_to_user_ptr(args->handles),
-> @@ -1262,8 +1285,13 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, void *data,
->   	if (ret < 0)
->   		return ret;
->   
-> +	if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
-> +		t = ns_to_ktime(args->deadline_ns);
-> +		tp = &t;
-> +	}
-> +
->   	ret = drm_syncobj_array_wait(dev, file_private,
-> -				     args, NULL, syncobjs, false);
-> +				     args, NULL, syncobjs, false, tp);
->   
->   	drm_syncobj_array_free(syncobjs, args->count_handles);
->   
-> @@ -1276,18 +1304,23 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device *dev, void *data,
->   {
->   	struct drm_syncobj_timeline_wait *args = data;
->   	struct drm_syncobj **syncobjs;
-> +	unsigned possible_flags;
-> +	ktime_t t, *tp = NULL;
->   	int ret = 0;
->   
->   	if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE))
->   		return -EOPNOTSUPP;
->   
-> -	if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-> -			    DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
-> -			    DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE))
-> +	possible_flags = DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-> +			 DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
-> +			 DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE |
-> +			 DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
-> +
-> +	if (args->flags & ~possible_flags)
->   		return -EINVAL;
->   
->   	if (args->count_handles == 0)
-> -		return -EINVAL;
-> +		return -0;
->   
->   	ret = drm_syncobj_array_find(file_private,
->   				     u64_to_user_ptr(args->handles),
-> @@ -1296,8 +1329,13 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device *dev, void *data,
->   	if (ret < 0)
->   		return ret;
->   
-> +	if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
-> +		t = ns_to_ktime(args->deadline_ns);
-> +		tp = &t;
-> +	}
-> +
->   	ret = drm_syncobj_array_wait(dev, file_private,
-> -				     NULL, args, syncobjs, true);
-> +				     NULL, args, syncobjs, true, tp);
->   
->   	drm_syncobj_array_free(syncobjs, args->count_handles);
->   
-> diff --git a/include/uapi/drm/drm.h b/include/uapi/drm/drm.h
-> index 642808520d92..bff0509ac8b6 100644
-> --- a/include/uapi/drm/drm.h
-> +++ b/include/uapi/drm/drm.h
-> @@ -887,6 +887,7 @@ struct drm_syncobj_transfer {
->   #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL (1 << 0)
->   #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT (1 << 1)
->   #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE (1 << 2) /* wait for time point to become available */
-> +#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE (1 << 3) /* set fence deadline based to deadline_ns */
+        -eric
 
-s/based// ?
-
->   struct drm_syncobj_wait {
->   	__u64 handles;
->   	/* absolute timeout */
-> @@ -895,6 +896,14 @@ struct drm_syncobj_wait {
->   	__u32 flags;
->   	__u32 first_signaled; /* only valid when not waiting all */
->   	__u32 pad;
-> +	/**
-> +	 * @deadline_ns - fence deadline hint
-> +	 *
-> +	 * Deadline hint, in absolute CLOCK_MONOTONIC, to set on backing
-> +	 * fence(s) if the DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE flag is
-> +	 * set.
-> +	 */
-> +	__u64 deadline_ns;
->   };
->   
->   struct drm_syncobj_timeline_wait {
-> @@ -907,6 +916,14 @@ struct drm_syncobj_timeline_wait {
->   	__u32 flags;
->   	__u32 first_signaled; /* only valid when not waiting all */
->   	__u32 pad;
-> +	/**
-> +	 * @deadline_ns - fence deadline hint
-> +	 *
-> +	 * Deadline hint, in absolute CLOCK_MONOTONIC, to set on backing
-> +	 * fence(s) if the DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE flag is
-> +	 * set.
-> +	 */
-> +	__u64 deadline_ns;
->   };
->   
->   
-
-FWIW,
-
-Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-
-Regards,
-
-Tvrtko
+On Mon, Mar 27, 2023 at 11:46=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.or=
+g> wrote:
+>
+> On Tue, Mar 28, 2023 at 10:44:46AM +0900, asmadeus@codewreck.org wrote:
+> > I'm going to rant a bit here, but my main problem with testing is that
+> > there are plenty of tools, but I have very little compute available for
+> > this (just a small machine at home that's getting close to 10 years
+> > old...), as this is really a free time activity which isn't getting any
+> > funding.
+> > [read: happy to spend a bit more time on 9p if it's getting paid :P]
+>
+> I think we can likely help with at least hardware access to help test 9p =
+well.
+> If you're interested let me know!
+>
+>   Luis
