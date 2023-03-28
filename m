@@ -2,356 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814606CCA46
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 20:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D416CCA4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 20:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjC1SwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 14:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
+        id S229728AbjC1Swp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 14:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjC1SwE (ORCPT
+        with ESMTP id S229933AbjC1Swm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 14:52:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64AE26A5;
-        Tue, 28 Mar 2023 11:52:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5291AB81E46;
-        Tue, 28 Mar 2023 18:52:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DCE4C433EF;
-        Tue, 28 Mar 2023 18:51:58 +0000 (UTC)
-Date:   Tue, 28 Mar 2023 14:51:56 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Beau Belgrave <beaub@linux.microsoft.com>
-Subject: [PATCH] tracing: Add "fields" option to show raw trace event fields
-Message-ID: <20230328145156.497651be@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 28 Mar 2023 14:52:42 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2A9212F;
+        Tue, 28 Mar 2023 11:52:36 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-17e140619fdso13739287fac.11;
+        Tue, 28 Mar 2023 11:52:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680029555;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MVacYwtIgbggoek+dBPxXXdcI8rj+hjbnNGphnrVryw=;
+        b=PHYnUl/us+vIvcYUJJSCsYidhHG65JC54WH05LgJ4hXp/UYYifAk1XYVeHnjOVL97Z
+         VI0h3xM0By3tN73kRWj66geNXMvqvW1OWqf1c91yRqpSMXD5UUKSN9SMpefJXmNYT9Qx
+         XwvxArldLsy/bPZKyJbbC4riUTqttza2y1XXZhAG/lt6pMzh5tqyzS5BgdBhLUWdZ/9K
+         +64TCQ265VkiSmNQNzu6A6Pv6oAE2rwrX8rfVsDfeMZtfwzeH5SIJ5J+0Gd7ShBMdUaq
+         mVLxO8sJaTtUAxZgfQCBySGNBaHXit/nWczbdNHXSHu8vOgz7j5/8tdvTG1ExciwoqGh
+         XC4Q==
+X-Gm-Message-State: AAQBX9c2JCW8myyc1ZXT8VaqtxCenxCwi/KCFhYX9kVF6DRO3u95WjGW
+        nl200h+anB/0bj4mi/KgiFXpMLAOgg==
+X-Google-Smtp-Source: AK7set9V4wMT/dvNBxiMGYy/dpIfIa134L1J5NBLbOKdIZ8kqPNG6hURwnrb1wYJ4sLR17gmRVvpyQ==
+X-Received: by 2002:a05:6870:524f:b0:177:9b62:6b7c with SMTP id o15-20020a056870524f00b001779b626b7cmr11183813oai.19.1680029555319;
+        Tue, 28 Mar 2023 11:52:35 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ug21-20020a0568714d1500b0017af6149e61sm11121279oab.21.2023.03.28.11.52.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 11:52:35 -0700 (PDT)
+Received: (nullmailer pid 3766572 invoked by uid 1000);
+        Tue, 28 Mar 2023 18:52:34 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+In-Reply-To: <20230328120506.375864-3-keguang.zhang@gmail.com>
+References: <20230328120506.375864-1-keguang.zhang@gmail.com>
+ <20230328120506.375864-3-keguang.zhang@gmail.com>
+Message-Id: <168002881746.3753096.11245437677389006840.robh@kernel.org>
+Subject: Re: [PATCH 2/3] dt-bindings: timer: Add Loongson-1 clocksource
+Date:   Tue, 28 Mar 2023 13:52:34 -0500
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-The hex, raw and bin formats come from the old PREEMPT_RT patch set
-latency tracer. That actually gave real alternatives to reading the ascii
-buffer. But they have started to bit rot and they do not give a good
-representation of the tracing data.
+On Tue, 28 Mar 2023 20:05:05 +0800, Keguang Zhang wrote:
+> Add devicetree binding document for Loongson-1 clocksource.
+> 
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+>  .../timer/loongson,ls1x-pwmtimer.yaml         | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.yaml
+> 
 
-Add "fields" option that will read the trace event fields and parse the
-data from how the fields are defined:
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-With "fields" = 0 (default)
+yamllint warnings/errors:
 
- echo 1 > events/sched/sched_switch/enable
- cat trace
-         <idle>-0       [003] d..2.   540.078653: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=kworker/3:1 next_pid=83 next_prio=120
-     kworker/3:1-83      [003] d..2.   540.078860: sched_switch: prev_comm=kworker/3:1 prev_pid=83 prev_prio=120 prev_state=I ==> next_comm=swapper/3 next_pid=0 next_prio=120
-          <idle>-0       [003] d..2.   540.206423: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=sshd next_pid=807 next_prio=120
-            sshd-807     [003] d..2.   540.206531: sched_switch: prev_comm=sshd prev_pid=807 prev_prio=120 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
-          <idle>-0       [001] d..2.   540.206597: sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=kworker/u16:4 next_pid=58 next_prio=120
-   kworker/u16:4-58      [001] d..2.   540.206617: sched_switch: prev_comm=kworker/u16:4 prev_pid=58 prev_prio=120 prev_state=I ==> next_comm=bash next_pid=830 next_prio=120
-            bash-830     [001] d..2.   540.206678: sched_switch: prev_comm=bash prev_pid=830 prev_prio=120 prev_state=R ==> next_comm=kworker/u16:4 next_pid=58 next_prio=120
-   kworker/u16:4-58      [001] d..2.   540.206696: sched_switch: prev_comm=kworker/u16:4 prev_pid=58 prev_prio=120 prev_state=I ==> next_comm=bash next_pid=830 next_prio=120
-            bash-830     [001] d..2.   540.206713: sched_switch: prev_comm=bash prev_pid=830 prev_prio=120 prev_state=R ==> next_comm=kworker/u16:4 next_pid=58 next_prio=120
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.example.dts:21:18: fatal error: dt-bindings/clock/loongson,ls1x-clk.h: No such file or directory
+   21 |         #include <dt-bindings/clock/loongson,ls1x-clk.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
 
- echo 1 > options/fields
-           <...>-998     [002] d..2.   538.643732: sched_switch: next_prio=0x78 (120) next_pid=0x0 (0) next_comm=swapper/2 prev_state=0x20 (32) prev_prio=0x78 (120) prev_pid=0x3e6 (998) prev_comm=trace-cmd
-          <idle>-0       [001] d..2.   538.643806: sched_switch: next_prio=0x78 (120) next_pid=0x33e (830) next_comm=bash prev_state=0x0 (0) prev_prio=0x78 (120) prev_pid=0x0 (0) prev_comm=swapper/1
-            bash-830     [001] d..2.   538.644106: sched_switch: next_prio=0x78 (120) next_pid=0x3a (58) next_comm=kworker/u16:4 prev_state=0x0 (0) prev_prio=0x78 (120) prev_pid=0x33e (830) prev_comm=bash
-   kworker/u16:4-58      [001] d..2.   538.644130: sched_switch: next_prio=0x78 (120) next_pid=0x33e (830) next_comm=bash prev_state=0x80 (128) prev_prio=0x78 (120) prev_pid=0x3a (58) prev_comm=kworker/u16:4
-            bash-830     [001] d..2.   538.644180: sched_switch: next_prio=0x78 (120) next_pid=0x3a (58) next_comm=kworker/u16:4 prev_state=0x0 (0) prev_prio=0x78 (120) prev_pid=0x33e (830) prev_comm=bash
-   kworker/u16:4-58      [001] d..2.   538.644185: sched_switch: next_prio=0x78 (120) next_pid=0x33e (830) next_comm=bash prev_state=0x80 (128) prev_prio=0x78 (120) prev_pid=0x3a (58) prev_comm=kworker/u16:4
-            bash-830     [001] d..2.   538.644204: sched_switch: next_prio=0x78 (120) next_pid=0x0 (0) next_comm=swapper/1 prev_state=0x1 (1) prev_prio=0x78 (120) prev_pid=0x33e (830) prev_comm=bash
-          <idle>-0       [003] d..2.   538.644211: sched_switch: next_prio=0x78 (120) next_pid=0x327 (807) next_comm=sshd prev_state=0x0 (0) prev_prio=0x78 (120) prev_pid=0x0 (0) prev_comm=swapper/3
-            sshd-807     [003] d..2.   538.644340: sched_switch: next_prio=0x78 (120) next_pid=0x0 (0) next_comm=swapper/3 prev_state=0x1 (1) prev_prio=0x78 (120) prev_pid=0x327 (807) prev_comm=sshd
+doc reference errors (make refcheckdocs):
 
-It traces the data safely without using the trace print formatting.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230328120506.375864-3-keguang.zhang@gmail.com
 
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- Documentation/trace/ftrace.rst |   6 ++
- kernel/trace/trace.c           |   7 +-
- kernel/trace/trace.h           |   2 +
- kernel/trace/trace_output.c    | 168 +++++++++++++++++++++++++++++++++
- kernel/trace/trace_output.h    |   2 +
- 5 files changed, 183 insertions(+), 2 deletions(-)
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
-index b927fb2b94dc..aaebb821912e 100644
---- a/Documentation/trace/ftrace.rst
-+++ b/Documentation/trace/ftrace.rst
-@@ -1027,6 +1027,7 @@ To see what is available, simply cat the file::
- 	nohex
- 	nobin
- 	noblock
-+	nofields
- 	trace_printk
- 	annotate
- 	nouserstacktrace
-@@ -1110,6 +1111,11 @@ Here are the available options:
-   block
- 	When set, reading trace_pipe will not block when polled.
- 
-+  fields
-+	Print the fields as described by their types. This is a better
-+	option than using hex, bin or raw, as it gives a better parsing
-+	of the content of the event.
-+
-   trace_printk
- 	Can disable trace_printk() from writing into the buffer.
- 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 937e9676dfd4..076d893d2965 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -3726,7 +3726,7 @@ __find_next_entry(struct trace_iterator *iter, int *ent_cpu,
- #define STATIC_FMT_BUF_SIZE	128
- static char static_fmt_buf[STATIC_FMT_BUF_SIZE];
- 
--static char *trace_iter_expand_format(struct trace_iterator *iter)
-+char *trace_iter_expand_format(struct trace_iterator *iter)
- {
- 	char *tmp;
- 
-@@ -4446,8 +4446,11 @@ static enum print_line_t print_trace_fmt(struct trace_iterator *iter)
- 	if (trace_seq_has_overflowed(s))
- 		return TRACE_TYPE_PARTIAL_LINE;
- 
--	if (event)
-+	if (event) {
-+		if (tr->trace_flags & TRACE_ITER_FIELDS)
-+			return print_event_fields(iter, event);
- 		return event->funcs->trace(iter, sym_flags, event);
-+	}
- 
- 	trace_seq_printf(s, "Unknown type %d\n", entry->type);
- 
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 616e1aa1c4da..79bdefe9261b 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -619,6 +619,7 @@ bool trace_is_tracepoint_string(const char *str);
- const char *trace_event_format(struct trace_iterator *iter, const char *fmt);
- void trace_check_vprintf(struct trace_iterator *iter, const char *fmt,
- 			 va_list ap) __printf(2, 0);
-+char *trace_iter_expand_format(struct trace_iterator *iter);
- 
- int trace_empty(struct trace_iterator *iter);
- 
-@@ -1199,6 +1200,7 @@ extern int trace_get_user(struct trace_parser *parser, const char __user *ubuf,
- 		C(HEX,			"hex"),			\
- 		C(BIN,			"bin"),			\
- 		C(BLOCK,		"block"),		\
-+		C(FIELDS,		"fields"),		\
- 		C(PRINTK,		"trace_printk"),	\
- 		C(ANNOTATE,		"annotate"),		\
- 		C(USERSTACKTRACE,	"userstacktrace"),	\
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index bd475a00f96d..780c6971c944 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -808,6 +808,174 @@ EXPORT_SYMBOL_GPL(unregister_trace_event);
-  * Standard events
-  */
- 
-+static void print_array(struct trace_iterator *iter, void *pos,
-+			struct ftrace_event_field *field)
-+{
-+	int offset;
-+	int len;
-+	int i;
-+
-+	offset = *(int *)pos & 0xffff;
-+	len = *(int *)pos >> 16;
-+
-+	if (field)
-+		offset += field->offset;
-+
-+	if (offset + len >= iter->ent_size) {
-+		trace_seq_puts(&iter->seq, "<OVERFLOW>");
-+		return;
-+	}
-+
-+	for (i = 0; i < len; i++, pos++) {
-+		if (i)
-+			trace_seq_putc(&iter->seq, ',');
-+		trace_seq_printf(&iter->seq, "%02x", *(unsigned char *)pos);
-+	}
-+}
-+
-+static void print_fields(struct trace_iterator *iter, struct trace_event_call *call,
-+			 struct list_head *head)
-+{
-+	struct ftrace_event_field *field;
-+	int offset;
-+	int len;
-+	int ret;
-+	void *pos;
-+
-+	list_for_each_entry(field, head, link) {
-+		trace_seq_printf(&iter->seq, " %s=", field->name);
-+		if (field->offset + field->size > iter->ent_size) {
-+			trace_seq_puts(&iter->seq, "<OVERFLOW>");
-+			continue;
-+		}
-+		pos = (void *)iter->ent + field->offset;
-+
-+		switch (field->filter_type) {
-+		case FILTER_COMM:
-+		case FILTER_STATIC_STRING:
-+			trace_seq_printf(&iter->seq, "%.*s", field->size, (char *)pos);
-+			break;
-+		case FILTER_RDYN_STRING:
-+		case FILTER_DYN_STRING:
-+			offset = *(int *)pos & 0xffff;
-+			len = *(int *)pos >> 16;
-+
-+			if (field->filter_type == FILTER_RDYN_STRING)
-+				offset += field->offset;
-+
-+			if (offset + len >= iter->ent_size) {
-+				trace_seq_puts(&iter->seq, "<OVERFLOW>");
-+				break;
-+			}
-+			pos = (void *)iter->ent + offset;
-+			trace_seq_printf(&iter->seq, "%.*s", len, (char *)pos);
-+			break;
-+		case FILTER_PTR_STRING:
-+			if (!iter->fmt_size)
-+				trace_iter_expand_format(iter);
-+			pos = *(void **)pos;
-+			ret = strncpy_from_kernel_nofault(iter->fmt, pos,
-+							  iter->fmt_size);
-+			if (ret < 0)
-+				trace_seq_printf(&iter->seq, "(0x%px)", pos);
-+			else
-+				trace_seq_printf(&iter->seq, "(0x%px:%s)",
-+						 pos, iter->fmt);
-+			break;
-+		case FILTER_TRACE_FN:
-+			pos = *(void **)pos;
-+			trace_seq_printf(&iter->seq, "%pS", pos);
-+			break;
-+		case FILTER_CPU:
-+		case FILTER_OTHER:
-+			switch (field->size) {
-+			case 1:
-+				if (isprint(*(char *)pos)) {
-+					trace_seq_printf(&iter->seq, "'%c'",
-+						 *(unsigned char *)pos);
-+				}
-+				trace_seq_printf(&iter->seq, "(%d)",
-+						 *(unsigned char *)pos);
-+				break;
-+			case 2:
-+				trace_seq_printf(&iter->seq, "0x%x (%d)",
-+						 *(unsigned short *)pos,
-+						 *(unsigned short *)pos);
-+				break;
-+			case 4:
-+				/* dynamic array info is 4 bytes */
-+				if (strstr(field->type, "__data_loc")) {
-+					print_array(iter, pos, NULL);
-+					break;
-+				}
-+
-+				if (strstr(field->type, "__rel_loc")) {
-+					print_array(iter, pos, field);
-+					break;
-+				}
-+
-+				trace_seq_printf(&iter->seq, "0x%x (%d)",
-+						 *(unsigned int *)pos,
-+						 *(unsigned int *)pos);
-+				break;
-+			case 8:
-+				trace_seq_printf(&iter->seq, "0x%llx (%lld)",
-+						 *(unsigned long long *)pos,
-+						 *(unsigned long long *)pos);
-+				break;
-+			default:
-+				trace_seq_puts(&iter->seq, "<INVALID-SIZE>");
-+				break;
-+			}
-+			break;
-+		default:
-+			trace_seq_puts(&iter->seq, "<INVALID-TYPE>");
-+		}
-+	}
-+	trace_seq_putc(&iter->seq, '\n');
-+}
-+
-+enum print_line_t print_event_fields(struct trace_iterator *iter,
-+				     struct trace_event *event)
-+{
-+	struct trace_event_call *call;
-+	struct list_head *head;
-+
-+	/* ftrace defined events have separate call structures */
-+	if (event->type <= __TRACE_LAST_TYPE) {
-+		bool found = false;
-+
-+		down_read(&trace_event_sem);
-+		list_for_each_entry(call, &ftrace_events, list) {
-+			if (call->event.type == event->type) {
-+				found = true;
-+				break;
-+			}
-+			/* No need to search all events */
-+			if (call->event.type > __TRACE_LAST_TYPE)
-+				break;
-+		}
-+		up_read(&trace_event_sem);
-+		if (!found) {
-+			trace_seq_printf(&iter->seq, "UNKNOWN TYPE %d\n", event->type);
-+			goto out;
-+		}
-+	} else {
-+		call = container_of(event, struct trace_event_call, event);
-+	}
-+	head = trace_get_fields(call);
-+
-+	trace_seq_printf(&iter->seq, "%s:", trace_event_name(call));
-+
-+	if (head && !list_empty(head))
-+		print_fields(iter, call, head);
-+	else
-+		trace_seq_puts(&iter->seq, "No fields found\n");
-+
-+ out:
-+	return trace_handle_return(&iter->seq);
-+}
-+
- enum print_line_t trace_nop_print(struct trace_iterator *iter, int flags,
- 				  struct trace_event *event)
- {
-diff --git a/kernel/trace/trace_output.h b/kernel/trace/trace_output.h
-index 4c954636caf0..dca40f1f1da4 100644
---- a/kernel/trace/trace_output.h
-+++ b/kernel/trace/trace_output.h
-@@ -19,6 +19,8 @@ seq_print_ip_sym(struct trace_seq *s, unsigned long ip,
- extern void trace_seq_print_sym(struct trace_seq *s, unsigned long address, bool offset);
- extern int trace_print_context(struct trace_iterator *iter);
- extern int trace_print_lat_context(struct trace_iterator *iter);
-+extern enum print_line_t print_event_fields(struct trace_iterator *iter,
-+					    struct trace_event *event);
- 
- extern void trace_event_read_lock(void);
- extern void trace_event_read_unlock(void);
--- 
-2.39.1
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
