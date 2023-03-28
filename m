@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05C16CB979
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D236CB980
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbjC1Ie4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
+        id S232521AbjC1Ie7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232134AbjC1Iet (ORCPT
+        with ESMTP id S232220AbjC1Iet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Mar 2023 04:34:49 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0213C34;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A32944A2;
         Tue, 28 Mar 2023 01:34:47 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 08:34:43 -0000
+Date:   Tue, 28 Mar 2023 08:34:44 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1679992484;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=D3B7nzKMMWsjwR9QP71tCe6es3LnbxXXLiF4JlgphQM=;
-        b=rDKeCg88RKsL0itI1NnTllrRubu805sHe3NENZZzmNmUbuwocQ03q/S8M4qQG0Zld4j8Eo
-        b2jphTgBozvQRXSsD0h+s2Ab4bS3nV5Te73ePVMn0Iv45Dp9PfiTFBaIzw7lcEtKMDpmn9
-        2xKintXeip+436Hp7b5HcHL4pfJ4ow9kUmSJ3X+Fzckk1zm/qe6GOhIuHT1dv0mL1o3t2x
-        t9B6qk1wPcAIOEyb0/XvaSN5niV8FcdPCer/unmCaiHUSDQtU1AVrpK12r2mqjV2pLV/BY
-        CemNBCYqSnWAGKtu0jDII+I9vV8xgM8RwCspJiBC7Eh3PICsmP+Uosc7hJrAhw==
+        bh=XpLjRFRiEVC9/oYrVNBJfIL8dz/BQSgaQjKmk/OnM7E=;
+        b=aXWEWHLS3Aw9XnGdosUPHOV9eVIpnbKiqEwdsm6W1AiLtj+xTNHrAyeLkeVIvOTFyApliB
+        VoE4XzjMbnyAeMHPsWyoDX55dgRAkXY/JMpd+8DjMbANO3OHLF3fPgNro8iQa5PUTFyV5E
+        o9EzQpLv+H/SdbSbGyezxhGyiyzNHoSLBJj/GruKy3cjEeswQY34XUfUnoiyO6RTqS+Ndt
+        j6LCuFMycNUoRFQd/AS6zf7LXnD3MXOIpv6Np4xuF9MBQmdruExz3HaCM4NBIedAMWKsCy
+        IUMZHQAWwE6hLxetNo+T5GuO1NfvT/d5IGCBwvbuisG3010GZuZdAoZQKZv5LA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1679992484;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=D3B7nzKMMWsjwR9QP71tCe6es3LnbxXXLiF4JlgphQM=;
-        b=g2cLdc5Rw2tZvOYS17smbn6ZhNaK3Dx3WCvJyUBusLEVOHvS33d0BaGAoR7my1fkWuozFp
-        9AyRLF2AprOv9aCw==
+        bh=XpLjRFRiEVC9/oYrVNBJfIL8dz/BQSgaQjKmk/OnM7E=;
+        b=48tew/NiVka8f3nUXl+FAw+xiwTzXy7EZodP/z7qgbKXQDnBqULhExClWOEChB55hYEFst
+        Gr8/f4StuAeZUlCw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/core] trace,smp: Trace all smp_function_call*() invocations
+Subject: [tip: smp/core] trace: Add trace_ipi_send_cpu()
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <167999248367.5837.16129137669331435205.tip-bot2@tip-bot2>
+Message-ID: <167999248419.5837.9236956776813815592.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,157 +59,127 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the smp/core branch of tip:
 
-Commit-ID:     5c3124975e15c1fadd5af1c61e4d627cf6d97ba2
-Gitweb:        https://git.kernel.org/tip/5c3124975e15c1fadd5af1c61e4d627cf6d97ba2
+Commit-ID:     68e2d17c9eb311ab59aeb6d0c38aad8985fa2596
+Gitweb:        https://git.kernel.org/tip/68e2d17c9eb311ab59aeb6d0c38aad8985fa2596
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Wed, 22 Mar 2023 14:58:36 +01:00
+AuthorDate:    Wed, 22 Mar 2023 11:28:36 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 24 Mar 2023 11:01:30 +01:00
+CommitterDate: Fri, 24 Mar 2023 11:01:29 +01:00
 
-trace,smp: Trace all smp_function_call*() invocations
+trace: Add trace_ipi_send_cpu()
 
-(Ab)use the trace_ipi_send_cpu*() family to trace all
-smp_function_call*() invocations, not only those that result in an
-actual IPI.
+Because copying cpumasks around when targeting a single CPU is a bit
+daft...
 
-The queued entries log their callback function while the actual IPIs
-are traced on generic_smp_call_function_single_interrupt().
-
+Tested-and-reviewed-by: Valentin Schneider <vschneid@redhat.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20230322103004.GA571242%40hirez.programming.kicks-ass.net
 ---
- kernel/smp.c | 66 +++++++++++++++++++++++++++------------------------
- 1 file changed, 36 insertions(+), 30 deletions(-)
+ include/linux/smp.h        |  6 +++---
+ include/trace/events/ipi.h | 22 ++++++++++++++++++++++
+ kernel/irq_work.c          |  6 ++----
+ kernel/sched/core.c        |  1 +
+ kernel/smp.c               |  4 ++--
+ 5 files changed, 30 insertions(+), 9 deletions(-)
 
+diff --git a/include/linux/smp.h b/include/linux/smp.h
+index c036a22..ed8f344 100644
+--- a/include/linux/smp.h
++++ b/include/linux/smp.h
+@@ -130,9 +130,9 @@ extern void arch_smp_send_reschedule(int cpu);
+  * scheduler_ipi() is inline so can't be passed as callback reason, but the
+  * callsite IP should be sufficient for root-causing IPIs sent from here.
+  */
+-#define smp_send_reschedule(cpu) ({				  \
+-	trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, NULL);  \
+-	arch_smp_send_reschedule(cpu);				  \
++#define smp_send_reschedule(cpu) ({		  \
++	trace_ipi_send_cpu(cpu, _RET_IP_, NULL);  \
++	arch_smp_send_reschedule(cpu);		  \
+ })
+ 
+ /*
+diff --git a/include/trace/events/ipi.h b/include/trace/events/ipi.h
+index b1125dc..3de9bfc 100644
+--- a/include/trace/events/ipi.h
++++ b/include/trace/events/ipi.h
+@@ -35,6 +35,28 @@ TRACE_EVENT(ipi_raise,
+ 	TP_printk("target_mask=%s (%s)", __get_bitmask(target_cpus), __entry->reason)
+ );
+ 
++TRACE_EVENT(ipi_send_cpu,
++
++	TP_PROTO(const unsigned int cpu, unsigned long callsite, void *callback),
++
++	TP_ARGS(cpu, callsite, callback),
++
++	TP_STRUCT__entry(
++		__field(unsigned int, cpu)
++		__field(void *, callsite)
++		__field(void *, callback)
++	),
++
++	TP_fast_assign(
++		__entry->cpu = cpu;
++		__entry->callsite = (void *)callsite;
++		__entry->callback = callback;
++	),
++
++	TP_printk("cpu=%u callsite=%pS callback=%pS",
++		  __entry->cpu, __entry->callsite, __entry->callback)
++);
++
+ TRACE_EVENT(ipi_send_cpumask,
+ 
+ 	TP_PROTO(const struct cpumask *cpumask, unsigned long callsite, void *callback),
+diff --git a/kernel/irq_work.c b/kernel/irq_work.c
+index c33e88e..2f4fb33 100644
+--- a/kernel/irq_work.c
++++ b/kernel/irq_work.c
+@@ -78,10 +78,8 @@ void __weak arch_irq_work_raise(void)
+ 
+ static __always_inline void irq_work_raise(struct irq_work *work)
+ {
+-	if (trace_ipi_send_cpumask_enabled() && arch_irq_work_has_interrupt())
+-		trace_ipi_send_cpumask(cpumask_of(smp_processor_id()),
+-				       _RET_IP_,
+-				       work->func);
++	if (trace_ipi_send_cpu_enabled() && arch_irq_work_has_interrupt())
++		trace_ipi_send_cpu(smp_processor_id(), _RET_IP_, work->func);
+ 
+ 	arch_irq_work_raise();
+ }
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index b0a48cf..ad40755 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -96,6 +96,7 @@
+ #include "../../io_uring/io-wq.h"
+ #include "../smpboot.h"
+ 
++EXPORT_TRACEPOINT_SYMBOL_GPL(ipi_send_cpu);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(ipi_send_cpumask);
+ 
+ /*
 diff --git a/kernel/smp.c b/kernel/smp.c
-index 43f0796..ab3e5da 100644
+index 37e9613..43f0796 100644
 --- a/kernel/smp.c
 +++ b/kernel/smp.c
-@@ -104,18 +104,20 @@ void __init call_function_init(void)
- }
- 
- static __always_inline void
--send_call_function_single_ipi(int cpu, smp_call_func_t func)
-+send_call_function_single_ipi(int cpu)
+@@ -107,7 +107,7 @@ static __always_inline void
+ send_call_function_single_ipi(int cpu, smp_call_func_t func)
  {
  	if (call_function_single_prep_ipi(cpu)) {
--		trace_ipi_send_cpu(cpu, _RET_IP_, func);
-+		trace_ipi_send_cpu(cpu, _RET_IP_,
-+				   generic_smp_call_function_single_interrupt);
+-		trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, func);
++		trace_ipi_send_cpu(cpu, _RET_IP_, func);
  		arch_send_call_function_single_ipi(cpu);
  	}
  }
+@@ -346,7 +346,7 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
+ 	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
+ 	 * executes migration_cpu_stop() on the remote CPU).
+ 	 */
+-	if (trace_ipi_send_cpumask_enabled()) {
++	if (trace_ipi_send_cpu_enabled()) {
+ 		call_single_data_t *csd;
+ 		smp_call_func_t func;
  
- static __always_inline void
--send_call_function_ipi_mask(struct cpumask *mask, smp_call_func_t func)
-+send_call_function_ipi_mask(struct cpumask *mask)
- {
--	trace_ipi_send_cpumask(mask, _RET_IP_, func);
-+	trace_ipi_send_cpumask(mask, _RET_IP_,
-+			       generic_smp_call_function_single_interrupt);
- 	arch_send_call_function_ipi_mask(mask);
- }
- 
-@@ -316,25 +318,6 @@ static __always_inline void csd_unlock(struct __call_single_data *csd)
- 	smp_store_release(&csd->node.u_flags, 0);
- }
- 
--static __always_inline void
--raw_smp_call_single_queue(int cpu, struct llist_node *node, smp_call_func_t func)
--{
--	/*
--	 * The list addition should be visible to the target CPU when it pops
--	 * the head of the list to pull the entry off it in the IPI handler
--	 * because of normal cache coherency rules implied by the underlying
--	 * llist ops.
--	 *
--	 * If IPIs can go out of order to the cache coherency protocol
--	 * in an architecture, sufficient synchronisation should be added
--	 * to arch code to make it appear to obey cache coherency WRT
--	 * locking and barrier primitives. Generic code isn't really
--	 * equipped to do the right thing...
--	 */
--	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
--		send_call_function_single_ipi(cpu, func);
--}
--
- static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
- 
- void __smp_call_single_queue(int cpu, struct llist_node *node)
-@@ -354,10 +337,23 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
- 		func = CSD_TYPE(csd) == CSD_TYPE_TTWU ?
- 			sched_ttwu_pending : csd->func;
- 
--		raw_smp_call_single_queue(cpu, node, func);
--	} else {
--		raw_smp_call_single_queue(cpu, node, NULL);
-+		trace_ipi_send_cpu(cpu, _RET_IP_, func);
- 	}
-+
-+	/*
-+	 * The list addition should be visible to the target CPU when it pops
-+	 * the head of the list to pull the entry off it in the IPI handler
-+	 * because of normal cache coherency rules implied by the underlying
-+	 * llist ops.
-+	 *
-+	 * If IPIs can go out of order to the cache coherency protocol
-+	 * in an architecture, sufficient synchronisation should be added
-+	 * to arch code to make it appear to obey cache coherency WRT
-+	 * locking and barrier primitives. Generic code isn't really
-+	 * equipped to do the right thing...
-+	 */
-+	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
-+		send_call_function_single_ipi(cpu);
- }
- 
- /*
-@@ -732,9 +728,9 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- 	int cpu, last_cpu, this_cpu = smp_processor_id();
- 	struct call_function_data *cfd;
- 	bool wait = scf_flags & SCF_WAIT;
-+	int nr_cpus = 0, nr_queued = 0;
- 	bool run_remote = false;
- 	bool run_local = false;
--	int nr_cpus = 0;
- 
- 	lockdep_assert_preemption_disabled();
- 
-@@ -776,8 +772,10 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- 		for_each_cpu(cpu, cfd->cpumask) {
- 			call_single_data_t *csd = per_cpu_ptr(cfd->csd, cpu);
- 
--			if (cond_func && !cond_func(cpu, info))
-+			if (cond_func && !cond_func(cpu, info)) {
-+				__cpumask_clear_cpu(cpu, cfd->cpumask);
- 				continue;
-+			}
- 
- 			csd_lock(csd);
- 			if (wait)
-@@ -793,17 +791,25 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- 				nr_cpus++;
- 				last_cpu = cpu;
- 			}
-+			nr_queued++;
- 		}
- 
- 		/*
-+		 * Trace each smp_function_call_*() as an IPI, actual IPIs
-+		 * will be traced with func==generic_smp_call_function_single_ipi().
-+		 */
-+		if (nr_queued)
-+			trace_ipi_send_cpumask(cfd->cpumask, _RET_IP_, func);
-+
-+		/*
- 		 * Choose the most efficient way to send an IPI. Note that the
- 		 * number of CPUs might be zero due to concurrent changes to the
- 		 * provided mask.
- 		 */
- 		if (nr_cpus == 1)
--			send_call_function_single_ipi(last_cpu, func);
-+			send_call_function_single_ipi(last_cpu);
- 		else if (likely(nr_cpus > 1))
--			send_call_function_ipi_mask(cfd->cpumask_ipi, func);
-+			send_call_function_ipi_mask(cfd->cpumask_ipi);
- 	}
- 
- 	if (run_local && (!cond_func || cond_func(this_cpu, info))) {
