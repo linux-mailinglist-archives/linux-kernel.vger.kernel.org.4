@@ -2,279 +2,580 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D07B6CCAF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DF46CCAF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbjC1TxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 15:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
+        id S229678AbjC1Tzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 15:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjC1TxP (ORCPT
+        with ESMTP id S229493AbjC1Tzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 15:53:15 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C18CC3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:53:09 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id 187-20020a6b15c4000000b007590817bcfbso8469170iov.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:53:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680033188;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e4IIIa2l/718HpTartHrDgnaysXLL10buxkJxJadiB0=;
-        b=GULNCWbdv2obpnjslyGOhEEyfP1vPIfnAexXXSi7g1EZlEwCycUGMYyGi6/cIp/PLV
-         i9bjrBacMu7h5n4m0qVG03Y9ieJUti9p/UFwA1hS33tyq7Zts8ZlhEZX7/o56nL5QGyQ
-         HpBTzag3fF4O0wU+6YlnTlwVCrgbTSywtO1sMxGPt6WkBCDa7LpJPQZgZAygd/0EzHXz
-         3KvzzejhoPVkTZBV+FmRrzEfYOaXX+WP6oduV8Fi4wIlnPz/XO4jzcbtUAI12nvbyP3n
-         h4lVMyKVBnmGtNZjJweZIJmgclFbXfdI2fMV4QuQltvRaezF8NDsXGHZ3OfMJu5SmrJ7
-         +pfw==
-X-Gm-Message-State: AAQBX9ejYUfc2ocOYwz2/t6jYBMu2qcXTCOLcre+bamwVLK0us2eC4lZ
-        AHXnhAqrDnZxBRgqdCNg6WZWkSvN8K6fosen0ZRwtrIL8R+B
-X-Google-Smtp-Source: AKy350ayo+QM0+HyzHTRjgJQhxKQVHeD3NBIJKzol9C66FD512No5njWO7QW/B7Y1iPUzG1OGotWTcpPPhGOxrRSHUqpIDIfq93c
+        Tue, 28 Mar 2023 15:55:31 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E0E1FC3;
+        Tue, 28 Mar 2023 12:55:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1680033316; i=w_armin@gmx.de;
+        bh=MWVlgfwGB7Yby/dbVpdeQVquEKcNLzb2BPOOjKIjWfw=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=CNog0E48vW4SG9cgfubf3+dHVjlQVfBWvI5EvSljObyNKv7Sx8KKd7xOAA02AxPCI
+         Yz/5/mQn7C22Il1FbU4iko9ltu/6AJNmQ7WM5eabG7pt1n3BJhezOod8AS/Ddj3ZS0
+         WabI4J9ZgYI1xrN5u45+XrE5RwTeq/Xs81KNb2BkL+Cgt/KsUe4wnV/BrbHlP4Uy4O
+         h35BdDSjVkpXNHlc58+VcZDbJAFVCoqj1BXk7jpaLs/m/rDTwT9jew8MVOfDNaADjr
+         XLdHP3GvHpgLPKvZeb8naUnJarPZpowTAphv/xqsT4djsEln1WQ02CPDJv61FXDjtb
+         LSCi5xmlmLjQw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWASe-1pw5Ow0F10-00XbUK; Tue, 28
+ Mar 2023 21:55:16 +0200
+Subject: Re: [BUG] systemd-devd triggers kernel memleak apparently in
+ drivers/core/dd.c: driver_register()
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org
+References: <5059b11b-8b6e-394b-338f-49e1339067fa@alu.unizg.hr>
+ <ZCLPaYGKHlFQGKYQ@kroah.com>
+ <542c13f5-4cdd-7750-f10a-ef64bb7e8faa@alu.unizg.hr>
+ <d011a1d7-34ab-5f54-fcc7-d727abc7ec9b@alu.unizg.hr>
+ <ZCLa3_HnLQA0GQKS@kroah.com>
+ <b50f9460-ac54-e997-f9b9-3c47a9b87aae@alu.unizg.hr>
+ <df26ff45-8933-f2b3-25f4-6ee51ccda7d8@gmx.de>
+ <16862c45-2ffd-a2f2-6719-020c5d515800@alu.unizg.hr>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <4f65a23f-4e04-f04f-e56b-230a38ac5ec4@gmx.de>
+Date:   Tue, 28 Mar 2023 21:55:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-Received: by 2002:a02:29c5:0:b0:3c5:14ca:58c6 with SMTP id
- p188-20020a0229c5000000b003c514ca58c6mr680716jap.4.1680033188515; Tue, 28 Mar
- 2023 12:53:08 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 12:53:08 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000069948205f7fb357f@google.com>
-Subject: [syzbot] [fat?] possible deadlock in do_user_addr_fault
-From:   syzbot <syzbot+278098b0faaf0595072b@syzkaller.appspotmail.com>
-To:     linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sj1557.seo@samsung.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <16862c45-2ffd-a2f2-6719-020c5d515800@alu.unizg.hr>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Provags-ID: V03:K1:APq1JikTrfCZ94d0nCsljU2IMtuSsBsV/K/xaNIzzRXMXKe+VQv
+ LuoXrTsAanpH34GOmq1454TfoP3vysDqPBRwy86kFszaO9AAyRp2oaYkJIAE+Xv2OVbm4k5
+ W38Napx3rsIv5fXdkRT5444XhqJfR61ApvgsxonMlUyIC8SLs7vszkFQkNh4pmm9Mj0RG2m
+ N5LHQoIs2CQoKSK76mW4w==
+UI-OutboundReport: notjunk:1;M01:P0:bkgGkoW6+cQ=;5fI2bQo+jGZqPAieWJjpMmg0fkb
+ N5tOEHVze2RBx5eUopEXoSeksyrTdA0/X+R4lf9g3mCjRM1anUUa5UHS/k9TCfhu9BfK/rbY2
+ 5LUQSaNSL5YoDMIANWCD+mGAwrewQHVgElTGFWah58gnYeTtmbPVvRwwf95EwlKMkfhksRLfK
+ xarUW0FD0T4yCcy0PfqGFQgJ26fOliPIk95ZH/7t8NgAdmUPq/lKjcvp8OsohIp1dHOR1Gfgr
+ QfbX0z7qQUmF0Q+lvbsJwIMmejeTYl5brZwZkjC851TTOaARw8W9LFDy6dkDTawR4fxgkg71s
+ F4dr+THu8ORiQKssXv81mB/jQf9GPiDfwwulL8IpspsfdJG7SEojY/8UYLkX/wsiFMfGGdxpZ
+ OZ/Ez/jAfn+FmhFw+7x1Z0RGDvXEfEWv1FpWB+EwKlKih1x4fBoM4gGFHS25hAcFKhQsCTLGC
+ JlE6H4N1hg7vF5ykN3OtqSLudHj3i87FsrPzFajlJM0wTMCiIWJC9PWPMkg7UcMf+eAXt/cze
+ HCUhjM/cm9W+had2YVWDYSYiS6TU/QG9vlCTiXP5zJdZITb7O0tZjdZP74ov7qNz9Qj4NXuT6
+ HDhHFA9L0knjo2cPKHtY5w9MVqxffmPR0fQ2R6+v83pZKWQvdNAUwwoGjNjp6E84/3kl55SIN
+ ZfvfeE7dW3uaUvXiR+z42o6GmUe6rv4kY/f+cNCe+4F8HMcxDdfIVrp56CV4Z5+TGltu3gn1d
+ pztFwbGIi3bEjjI/od6kgzTd96RKBjdi9Opbj99n8puueXeTuyxCSniBcZO7EiN9wDNUUULRH
+ G5w42RtT7Y3bQdAMStliWqmdjTUHQO82iZvwzZqBx2HdVc2DoOrwh4RkBaJIYuraCDaZylptf
+ cwXHge0NelrX61IiSyTqSkB8iMIHsmUJaH1gGS3Nyx0vT4vCY7KBw4FwGppk3UT/+1LM5b07g
+ YpLDrbP92qFP8DijNQdvNzNgib0=
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Am 28.03.23 um 21:06 schrieb Mirsad Goran Todorovac:
 
-syzbot found the following issue on:
+> On 3/28/2023 6:53 PM, Armin Wolf wrote:
+>> Am 28.03.23 um 14:44 schrieb Mirsad Todorovac:
+>>
+>>> On 3/28/23 14:17, Greg Kroah-Hartman wrote:
+>>>> On Tue, Mar 28, 2023 at 02:08:06PM +0200, Mirsad Todorovac wrote:
+>>>>> On 3/28/23 13:59, Mirsad Todorovac wrote:
+>>>>>
+>>>>>> On 3/28/23 13:28, Greg Kroah-Hartman wrote:
+>>>>>>> On Tue, Mar 28, 2023 at 01:13:33PM +0200, Mirsad Todorovac wrote:
+>>>>>>>> Hi all,
+>>>>>>>>
+>>>>>>>> Here is another kernel memory leak report, just as I thought we
+>>>>>>>> have done with
+>>>>>>>> them by the xhci patch by Mathias.
+>>>>>>>>
+>>>>>>>> The memory leaks were caught on an AlmaLinux 8.7 (CentOS) fork
+>>>>>>>> system, running
+>>>>>>>> on a Lenovo desktop box (see lshw.txt) and the newest Linux
+>>>>>>>> kernel 6.3-rc4 commit
+>>>>>>>> g3a93e40326c8 with Mathias' patch for a xhci systemd-devd
+>>>>>>>> triggered leak.
+>>>>>>>>
+>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 See:
+>>>>>>>> <20230327095019.1017159-1-mathias.nyman@linux.intel.com> on LKML.
+>>>>>>>>
+>>>>>>>> This leak is also systemd-devd triggered, except for the
+>>>>>>>> memstick_check() leaks
+>>>>>>>> which I was unable to bisect due to the box not booting older
+>>>>>>>> kernels (work in
+>>>>>>>> progress).
+>>>>>>>>
+>>>>>>>> unreferenced object 0xffff88ad12392710 (size 96):
+>>>>>>>> =C2=A0=C2=A0=C2=A0 comm "systemd-udevd", pid 735, jiffies 4294896=
+759 (age
+>>>>>>>> 2257.568s)
+>>>>>>>> =C2=A0=C2=A0=C2=A0 hex dump (first 32 bytes):
+>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 53 65 72 69 61 6c 50 6f 72 74 31 4=
+1 64 64 72 65
+>>>>>>>> SerialPort1Addre
+>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 73 73 2c 33 46 38 2f 49 52 51 34 3=
+b 5b 4f 70 74
+>>>>>>>> ss,3F8/IRQ4;[Opt
+>>>>>>>> =C2=A0=C2=A0=C2=A0 backtrace:
+>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffae8fb26c>] slab_post_all=
+oc_hook+0x8c/0x3e0
+>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffae902b49>] __kmem_cache_=
+alloc_node+0x1d9/0x2a0
+>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffae8773c9>] __kmalloc_nod=
+e_track_caller+0x59/0x180
+>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffae866a1a>] kstrdup+0x3a/=
+0x70
+>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffc0d839aa>]
+>>>>>>>> tlmi_extract_output_string.isra.0+0x2a/0x60 [think_lmi]
+>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffc0d83b64>] tlmi_setting.=
+constprop.4+0x54/0x90
+>>>>>>>> [think_lmi]
+>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffc0d842b1>] tlmi_probe+0x=
+591/0xba0 [think_lmi]
+>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffc051dc53>] wmi_dev_probe=
++0x163/0x230 [wmi]
+>>>>>>>
+>> Hi,
+>>
+>> this "SerialPort1Address" string looks like a BIOS setup option, and
+>> indeed think_lmi allows for
+>> changing BIOS setup options over sysfs. While looking at
+>> current_value_show() in think-lmi.c, i noticed
+>> that "item" holds a string which is allocated with kstrdup(), so it
+>> has to be freed using kfree().
+>> This however does not happen if strbrk() fails, so maybe the memory
+>> leak is caused by this?
+>>
+>> Armin Wolf
+>
+> Hi Armin,
+>
+> I tried your suggestion, and though it is an obvious improvement and a
+> leak fix, this
+> was not the one we were searching for.
+>
+> I tested the following patch:
+>
+> diff --git a/drivers/platform/x86/think-lmi.c
+> b/drivers/platform/x86/think-lmi.c
+> index c816646eb661..1e77ecb0cba8 100644
+> --- a/drivers/platform/x86/think-lmi.c
+> +++ b/drivers/platform/x86/think-lmi.c
+> @@ -929,8 +929,10 @@ static ssize_t current_value_show(struct kobject
+> *kobj, struct kobj_attribute *a
+>
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* validate and split from `i=
+tem,value` -> `value` */
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 value =3D strpbrk(item, ",");
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!value || value =3D=3D item ||=
+ !strlen(value + 1))
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!value || value =3D=3D item ||=
+ !strlen(value + 1)) {
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 kfree(item);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 return -EINVAL;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D sysfs_emit(buf, "%s\n=
+", value + 1);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(item);
+>
+> (I would also object to the use of strlen() here, for it is inherently
+> insecure
+> against SEGFAULT in kernel space.)
+>
+> I still get:
+> [root@pc-mtodorov marvin]# uname -rms
+> Linux 6.3.0-rc4-armin-patch-00025-g3a93e40326c8-dirty x86_64
+> [root@pc-mtodorov marvin]# cat /sys/kernel/debug/kmemleak [edited]
+> unreferenced object 0xffff8eb008ef9260 (size 96):
+> =C2=A0 comm "systemd-udevd", pid 771, jiffies 4294896499 (age 74.880s)
+> =C2=A0 hex dump (first 32 bytes):
+> =C2=A0=C2=A0=C2=A0 53 65 72 69 61 6c 50 6f 72 74 31 41 64 64 72 65 Seria=
+lPort1Addre
+> =C2=A0=C2=A0=C2=A0 73 73 2c 33 46 38 2f 49 52 51 34 3b 5b 4f 70 74 ss,3F=
+8/IRQ4;[Opt
+> =C2=A0 backtrace:
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9eafb26c>] slab_post_alloc_hook+0x8c/0x3e0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9eb02b49>] __kmem_cache_alloc_node+0x1d9/0x=
+2a0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9ea773c9>] __kmalloc_node_track_caller+0x59=
+/0x180
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9ea66a1a>] kstrdup+0x3a/0x70
+> =C2=A0=C2=A0=C2=A0 [<ffffffffc0eef9aa>] tlmi_extract_output_string.isra.=
+0+0x2a/0x60
+> [think_lmi]
+> =C2=A0=C2=A0=C2=A0 [<ffffffffc0eefb64>] tlmi_setting.constprop.4+0x54/0x=
+90 [think_lmi]
+> =C2=A0=C2=A0=C2=A0 [<ffffffffc0ef02c1>] tlmi_probe+0x591/0xba0 [think_lm=
+i]
+> =C2=A0=C2=A0=C2=A0 [<ffffffffc0629c53>] wmi_dev_probe+0x163/0x230 [wmi]
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f1987eb>] really_probe+0x17b/0x3d0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198ad4>] __driver_probe_device+0x84/0x190
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198c14>] driver_probe_device+0x24/0xc0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198ed2>] __driver_attach+0xc2/0x190
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f195ab1>] bus_for_each_dev+0x81/0xd0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f197c62>] driver_attach+0x22/0x30
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f197354>] bus_add_driver+0x1b4/0x240
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f19a0a2>] driver_register+0x62/0x120
+> unreferenced object 0xffff8eb018ddbb40 (size 64):
+> =C2=A0 comm "systemd-udevd", pid 771, jiffies 4294896528 (age 74.780s)
+> =C2=A0 hex dump (first 32 bytes):
+> =C2=A0=C2=A0=C2=A0 55 53 42 50 6f 72 74 41 63 63 65 73 73 2c 45 6e USBPo=
+rtAccess,En
+> =C2=A0=C2=A0=C2=A0 61 62 6c 65 64 3b 5b 4f 70 74 69 6f 6e 61 6c 3a abled=
+;[Optional:
+> =C2=A0 backtrace:
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9eafb26c>] slab_post_alloc_hook+0x8c/0x3e0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9eb02b49>] __kmem_cache_alloc_node+0x1d9/0x=
+2a0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9ea773c9>] __kmalloc_node_track_caller+0x59=
+/0x180
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9ea66a1a>] kstrdup+0x3a/0x70
+> =C2=A0=C2=A0=C2=A0 [<ffffffffc0eef9aa>] tlmi_extract_output_string.isra.=
+0+0x2a/0x60
+> [think_lmi]
+> =C2=A0=C2=A0=C2=A0 [<ffffffffc0eefb64>] tlmi_setting.constprop.4+0x54/0x=
+90 [think_lmi]
+> =C2=A0=C2=A0=C2=A0 [<ffffffffc0ef02c1>] tlmi_probe+0x591/0xba0 [think_lm=
+i]
+> =C2=A0=C2=A0=C2=A0 [<ffffffffc0629c53>] wmi_dev_probe+0x163/0x230 [wmi]
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f1987eb>] really_probe+0x17b/0x3d0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198ad4>] __driver_probe_device+0x84/0x190
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198c14>] driver_probe_device+0x24/0xc0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198ed2>] __driver_attach+0xc2/0x190
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f195ab1>] bus_for_each_dev+0x81/0xd0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f197c62>] driver_attach+0x22/0x30
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f197354>] bus_add_driver+0x1b4/0x240
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f19a0a2>] driver_register+0x62/0x120
+> unreferenced object 0xffff8eb006fe2b40 (size 64):
+> =C2=A0 comm "systemd-udevd", pid 771, jiffies 4294896542 (age 74.724s)
+> =C2=A0 hex dump (first 32 bytes):
+> =C2=A0=C2=A0=C2=A0 55 53 42 42 49 4f 53 53 75 70 70 6f 72 74 2c 45 USBBI=
+OSSupport,E
+> =C2=A0=C2=A0=C2=A0 6e 61 62 6c 65 64 3b 5b 4f 70 74 69 6f 6e 61 6c nable=
+d;[Optional
+> =C2=A0 backtrace:
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9eafb26c>] slab_post_alloc_hook+0x8c/0x3e0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9eb02b49>] __kmem_cache_alloc_node+0x1d9/0x=
+2a0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9ea773c9>] __kmalloc_node_track_caller+0x59=
+/0x180
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9ea66a1a>] kstrdup+0x3a/0x70
+> =C2=A0=C2=A0=C2=A0 [<ffffffffc0eef9aa>] tlmi_extract_output_string.isra.=
+0+0x2a/0x60
+> [think_lmi]
+> =C2=A0=C2=A0=C2=A0 [<ffffffffc0eefb64>] tlmi_setting.constprop.4+0x54/0x=
+90 [think_lmi]
+> =C2=A0=C2=A0=C2=A0 [<ffffffffc0ef02c1>] tlmi_probe+0x591/0xba0 [think_lm=
+i]
+> =C2=A0=C2=A0=C2=A0 [<ffffffffc0629c53>] wmi_dev_probe+0x163/0x230 [wmi]
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f1987eb>] really_probe+0x17b/0x3d0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198ad4>] __driver_probe_device+0x84/0x190
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198c14>] driver_probe_device+0x24/0xc0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198ed2>] __driver_attach+0xc2/0x190
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f195ab1>] bus_for_each_dev+0x81/0xd0
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f197c62>] driver_attach+0x22/0x30
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f197354>] bus_add_driver+0x1b4/0x240
+> =C2=A0=C2=A0=C2=A0 [<ffffffff9f19a0a2>] driver_register+0x62/0x120
+>
+> There are currently 84 wmi_dev_probe leaks, sized mostly 64 bytes, and
+> one 96 and two 192 bytes.
+>
+> I also cannot figure out the mechanism by which current_value_show()
+> is called, when it is static?
+>
+> Any idea?
+>
+> Thanks.
+>
+> Best regards,
+> Mirsad
+>
+Can you tell me how many BIOS settings think-lmi provides on your machine?=
+ Because according to the stacktrace,
+the other place where the leak could have occurred is inside tlmi_analyze(=
+), which calls tlmi_setting().
 
-HEAD commit:    3a93e40326c8 Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=126b5661c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d40b592130bb7abb
-dashboard link: https://syzkaller.appspot.com/bug?extid=278098b0faaf0595072b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+However, i have no idea on how *info is somehow leaked, it has to happen i=
+nside the for-loop between the call
+to tlmi_setting() and strreplace(), because otherwise the strings would no=
+t contain the "/" character.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Can you check if the problem is somehow solved by applying the following c=
+ommit from the platform-drivers-x86
+for-next branch:
+da62908efe80 ("platform/x86: think-lmi: Properly interpret return value of=
+ tlmi_setting")
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1e4e99f83edc/disk-3a93e403.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/dd7a2ef894d8/vmlinux-3a93e403.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8054ad68a13e/bzImage-3a93e403.xz
+Also current_value_show() is used by attr_current_val, the __ATTR_RW_MODE(=
+) macro arranges for that.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+278098b0faaf0595072b@syzkaller.appspotmail.com
+Armin Wolf
 
-exFAT-fs (loop5): failed to load upcase table (idx : 0x00010000, chksum : 0xac19d315, utbl_chksum : 0xe619d30d)
-======================================================
-WARNING: possible circular locking dependency detected
-6.3.0-rc4-syzkaller-00025-g3a93e40326c8 #0 Not tainted
-------------------------------------------------------
-syz-executor.5/29002 is trying to acquire lock:
-ffff88807c924b98 (&mm->mmap_lock){++++}-{3:3}, at: mmap_read_lock include/linux/mmap_lock.h:117 [inline]
-ffff88807c924b98 (&mm->mmap_lock){++++}-{3:3}, at: do_user_addr_fault+0xa51/0x1230 arch/x86/mm/fault.c:1358
-
-but task is already holding lock:
-ffff88807b0f20e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_iterate+0x111/0xb40 fs/exfat/dir.c:232
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (&sbi->s_lock){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
-       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
-       exfat_get_block+0x18d/0x16e0 fs/exfat/inode.c:280
-       do_mpage_readpage+0x768/0x1960 fs/mpage.c:208
-       mpage_readahead+0x344/0x580 fs/mpage.c:356
-       read_pages+0x1a2/0xd40 mm/readahead.c:161
-       page_cache_ra_unbounded+0x477/0x5e0 mm/readahead.c:270
-       do_page_cache_ra mm/readahead.c:300 [inline]
-       page_cache_ra_order+0x6ec/0xa00 mm/readahead.c:560
-       ondemand_readahead+0x6b3/0x1080 mm/readahead.c:682
-       page_cache_sync_ra+0x1c9/0x200 mm/readahead.c:709
-       page_cache_sync_readahead include/linux/pagemap.h:1214 [inline]
-       filemap_get_pages+0x28d/0x1620 mm/filemap.c:2598
-       filemap_read+0x35e/0xc70 mm/filemap.c:2693
-       generic_file_read_iter+0x3ad/0x5b0 mm/filemap.c:2840
-       __kernel_read+0x2ca/0x830 fs/read_write.c:428
-       integrity_kernel_read+0x7f/0xb0 security/integrity/iint.c:199
-       ima_calc_file_hash_tfm+0x2aa/0x3b0 security/integrity/ima/ima_crypto.c:485
-       ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
-       ima_calc_file_hash+0x195/0x4a0 security/integrity/ima/ima_crypto.c:573
-       ima_collect_measurement+0x55b/0x670 security/integrity/ima/ima_api.c:293
-       process_measurement+0xd2f/0x1930 security/integrity/ima/ima_main.c:341
-       ima_file_check+0xba/0x100 security/integrity/ima/ima_main.c:539
-       do_open fs/namei.c:3562 [inline]
-       path_openat+0x15d3/0x2750 fs/namei.c:3715
-       do_filp_open+0x1ba/0x410 fs/namei.c:3742
-       do_sys_openat2+0x16d/0x4c0 fs/open.c:1348
-       do_sys_open fs/open.c:1364 [inline]
-       __do_sys_openat fs/open.c:1380 [inline]
-       __se_sys_openat fs/open.c:1375 [inline]
-       __x64_sys_openat+0x143/0x1f0 fs/open.c:1375
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #1 (mapping.invalidate_lock#9){.+.+}-{3:3}:
-       down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
-       filemap_invalidate_lock_shared include/linux/fs.h:813 [inline]
-       filemap_fault+0xb99/0x2450 mm/filemap.c:3274
-       __do_fault+0x107/0x600 mm/memory.c:4141
-       do_read_fault mm/memory.c:4492 [inline]
-       do_fault mm/memory.c:4621 [inline]
-       handle_pte_fault mm/memory.c:4909 [inline]
-       __handle_mm_fault+0x24f3/0x3e60 mm/memory.c:5051
-       handle_mm_fault+0x2ba/0x9c0 mm/memory.c:5197
-       do_user_addr_fault+0x475/0x1230 arch/x86/mm/fault.c:1407
-       handle_page_fault arch/x86/mm/fault.c:1498 [inline]
-       exc_page_fault+0x98/0x170 arch/x86/mm/fault.c:1554
-       asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
-       do_strncpy_from_user lib/strncpy_from_user.c:41 [inline]
-       strncpy_from_user+0x1c1/0x3c0 lib/strncpy_from_user.c:139
-       getname_flags.part.0+0x95/0x4f0 fs/namei.c:151
-       getname_flags include/linux/audit.h:321 [inline]
-       getname+0x92/0xd0 fs/namei.c:219
-       do_sys_openat2+0xf5/0x4c0 fs/open.c:1342
-       do_sys_open fs/open.c:1364 [inline]
-       __do_sys_openat fs/open.c:1380 [inline]
-       __se_sys_openat fs/open.c:1375 [inline]
-       __x64_sys_openat+0x143/0x1f0 fs/open.c:1375
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&mm->mmap_lock){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3098 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3217 [inline]
-       validate_chain kernel/locking/lockdep.c:3832 [inline]
-       __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
-       lock_acquire kernel/locking/lockdep.c:5669 [inline]
-       lock_acquire+0x1af/0x520 kernel/locking/lockdep.c:5634
-       down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
-       mmap_read_lock include/linux/mmap_lock.h:117 [inline]
-       do_user_addr_fault+0xa51/0x1230 arch/x86/mm/fault.c:1358
-       handle_page_fault arch/x86/mm/fault.c:1498 [inline]
-       exc_page_fault+0x98/0x170 arch/x86/mm/fault.c:1554
-       asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
-       filldir+0x1ec/0x680 fs/readdir.c:253
-       dir_emit_dot include/linux/fs.h:3144 [inline]
-       dir_emit_dots include/linux/fs.h:3155 [inline]
-       exfat_iterate+0x56b/0xb40 fs/exfat/dir.c:235
-       iterate_dir+0x1fd/0x6f0 fs/readdir.c:67
-       __do_sys_getdents fs/readdir.c:286 [inline]
-       __se_sys_getdents fs/readdir.c:271 [inline]
-       __x64_sys_getdents+0x13e/0x2c0 fs/readdir.c:271
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
-Chain exists of:
-  &mm->mmap_lock --> mapping.invalidate_lock#9 --> &sbi->s_lock
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&sbi->s_lock);
-                               lock(mapping.invalidate_lock#9);
-                               lock(&sbi->s_lock);
-  lock(&mm->mmap_lock);
-
- *** DEADLOCK ***
-
-3 locks held by syz-executor.5/29002:
- #0: ffff88801e0019e8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe7/0x100 fs/file.c:1047
- #1: ffff88803cc2d0b0 (&sb->s_type->i_mutex_key#21){++++}-{3:3}, at: iterate_dir+0x504/0x6f0 fs/readdir.c:57
- #2: ffff88807b0f20e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_iterate+0x111/0xb40 fs/exfat/dir.c:232
-
-stack backtrace:
-CPU: 0 PID: 29002 Comm: syz-executor.5 Not tainted 6.3.0-rc4-syzkaller-00025-g3a93e40326c8 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2178
- check_prev_add kernel/locking/lockdep.c:3098 [inline]
- check_prevs_add kernel/locking/lockdep.c:3217 [inline]
- validate_chain kernel/locking/lockdep.c:3832 [inline]
- __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
- lock_acquire kernel/locking/lockdep.c:5669 [inline]
- lock_acquire+0x1af/0x520 kernel/locking/lockdep.c:5634
- down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
- mmap_read_lock include/linux/mmap_lock.h:117 [inline]
- do_user_addr_fault+0xa51/0x1230 arch/x86/mm/fault.c:1358
- handle_page_fault arch/x86/mm/fault.c:1498 [inline]
- exc_page_fault+0x98/0x170 arch/x86/mm/fault.c:1554
- asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
-RIP: 0010:filldir+0x1ec/0x680 fs/readdir.c:253
-Code: 48 89 c6 48 89 44 24 20 e8 e1 c3 9a ff 48 8b 44 24 20 49 39 c6 0f 87 44 02 00 00 e8 de c7 9a ff 0f 01 cb 0f ae e8 48 8b 04 24 <49> 89 46 08 e8 cb c7 9a ff 4c 8b 74 24 38 48 8b 7c 24 10 49 89 3e
-RSP: 0018:ffffc9000b04fc00 EFLAGS: 00050202
-RAX: 0000000000000000 RBX: ffffc9000b04fe98 RCX: ffffc90014ab2000
-RDX: 0000000000040000 RSI: ffffffff81e81072 RDI: 0000000000000006
-RBP: 0000000000000001 R08: 0000000000000006 R09: 0000000020001fc0
-R10: 00007fffffffefe8 R11: 0000000000000002 R12: 0000000000000018
-R13: ffffffff8a65d5c0 R14: 0000000020001fc0 R15: 0000000000000018
- dir_emit_dot include/linux/fs.h:3144 [inline]
- dir_emit_dots include/linux/fs.h:3155 [inline]
- exfat_iterate+0x56b/0xb40 fs/exfat/dir.c:235
- iterate_dir+0x1fd/0x6f0 fs/readdir.c:67
- __do_sys_getdents fs/readdir.c:286 [inline]
- __se_sys_getdents fs/readdir.c:271 [inline]
- __x64_sys_getdents+0x13e/0x2c0 fs/readdir.c:271
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fead2a8c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fead388c168 EFLAGS: 00000246 ORIG_RAX: 000000000000004e
-RAX: ffffffffffffffda RBX: 00007fead2babf80 RCX: 00007fead2a8c0f9
-RDX: 00000000000000b8 RSI: 0000000020001fc0 RDI: 0000000000000006
-RBP: 00007fead2ae7b39 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc3d6931df R14: 00007fead388c300 R15: 0000000000022000
- </TASK>
-exFAT-fs (loop5): error, invalid access to FAT (entry 0x00000005) bogus content (0x91852372)
-exFAT-fs (loop5): Filesystem has been set read-only
-exFAT-fs (loop5): error, invalid access to FAT (entry 0x00000005) bogus content (0x91852372)
-----------------
-Code disassembly (best guess):
-   0:	48 89 c6             	mov    %rax,%rsi
-   3:	48 89 44 24 20       	mov    %rax,0x20(%rsp)
-   8:	e8 e1 c3 9a ff       	callq  0xff9ac3ee
-   d:	48 8b 44 24 20       	mov    0x20(%rsp),%rax
-  12:	49 39 c6             	cmp    %rax,%r14
-  15:	0f 87 44 02 00 00    	ja     0x25f
-  1b:	e8 de c7 9a ff       	callq  0xff9ac7fe
-  20:	0f 01 cb             	stac
-  23:	0f ae e8             	lfence
-  26:	48 8b 04 24          	mov    (%rsp),%rax
-* 2a:	49 89 46 08          	mov    %rax,0x8(%r14) <-- trapping instruction
-  2e:	e8 cb c7 9a ff       	callq  0xff9ac7fe
-  33:	4c 8b 74 24 38       	mov    0x38(%rsp),%r14
-  38:	48 8b 7c 24 10       	mov    0x10(%rsp),%rdi
-  3d:	49 89 3e             	mov    %rdi,(%r14)
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>>>>>>> Why aren't you looking at the wmi.c driver?=C2=A0 That should be
+>>>>>>> where the
+>>>>>>> issue is, not the driver core, right?
+>>>>>>>
+>>>>>>> thanks,
+>>>>>>>
+>>>>>>> greg k-h
+>>>>>>
+>>>>>> Hi, Mr. Greg,
+>>>>>>
+>>>>>> Thanks for the quick reply.
+>>>>>>
+>>>>>> I have added CC: for additional developers per
+>>>>>> drivers/platform/x86/wmi.c,
+>>>>>> however, this seems to me like hieroglyphs. There is nothing
+>>>>>> obvious, but
+>>>>>> I had not noticed it with v6.3-rc3?
+>>>>>>
+>>>>>> Maybe, there seems to be something off:
+>>>>>>
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 949 static int wmi_dev_probe(struct devic=
+e *dev)
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 950 {
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 951=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 struct wmi_block *wblock =3D dev_to_wblock(dev);
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 952=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 struct wmi_driver *wdriver =3D
+>>>>>> drv_to_wdrv(dev->driver);
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 953=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 int ret =3D 0;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 954=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 char *buf;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 955
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 956=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 if (ACPI_FAILURE(wmi_method_enable(wblock, true)))
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 957=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_warn(dev,=
+ "failed to enable device
+>>>>>> -- probing anyway\n");
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 958
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 959=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 if (wdriver->probe) {
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 960=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D wdriv=
+er->probe(dev_to_wdev(dev),
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 961 find_guid_context(wblock, wdriver));
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 962=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret !=3D =
+0)
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 963=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto probe_failure;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 964=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 }
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 965
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 966=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 /* driver wants a character device made */
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 967=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 if (wdriver->filter_callback) {
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 968=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* check that=
+ required buffer size
+>>>>>> declared by driver or MOF */
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 969=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!wblock->=
+req_buf_size) {
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 970 dev_err(&wblock->dev.dev,
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 971=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 "Required buffer size
+>>>>>> not set\n");
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 972=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D -EINVAL;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 973=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto probe_failure;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 974=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 975
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 976=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wblock->handl=
+er_data =3D
+>>>>>> kmalloc(wblock->req_buf_size,
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 977 GFP_KERNEL);
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 978=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!wblock->=
+handler_data) {
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 979=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D -ENOMEM;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 980=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto probe_failure;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 981=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 982
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 983=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf =3D kaspr=
+intf(GFP_KERNEL, "wmi/%s",
+>>>>>> wdriver->driver.name);
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 984=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!buf) {
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 985=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D -ENOMEM;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 986=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto probe_string_failure;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 987=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 988=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wblock->char_=
+dev.minor =3D
+>>>>>> MISC_DYNAMIC_MINOR;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 989=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wblock->char_=
+dev.name =3D buf;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 990=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wblock->char_=
+dev.fops =3D &wmi_fops;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 991=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wblock->char_=
+dev.mode =3D 0444;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 992=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D misc_=
+register(&wblock->char_dev);
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 993=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret) {
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 994=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_warn(dev, "failed to
+>>>>>> register char dev: %d\n", ret);
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 995=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D -ENOMEM;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 996=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto probe_misc_failure;
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 997=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 998=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 }
+>>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0 999
+>>>>>> =C2=A0 =C2=A0=C2=A0 1000=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 set_bit(WMI_PROBED, &wblock->flags);
+>>>>>> =C2=A0 =C2=A0=C2=A0 1001=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 return 0;
+>>>>>> =C2=A0 =C2=A0=C2=A0 1002
+>>>>>> =C2=A0 =C2=A0=C2=A0 1003 probe_misc_failure:
+>>>>>> =C2=A0 =C2=A0=C2=A0 1004=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 kfree(buf);
+>>>>>> =C2=A0 =C2=A0=C2=A0 1005 probe_string_failure:
+>>>>>> =C2=A0 =C2=A0=C2=A0 1006=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 kfree(wblock->handler_data);
+>>>>>> =C2=A0 =C2=A0=C2=A0 1007 probe_failure:
+>>>>>> =C2=A0 =C2=A0=C2=A0 1008=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 if (ACPI_FAILURE(wmi_method_enable(wblock,
+>>>>>> false)))
+>>>>>> =C2=A0 =C2=A0=C2=A0 1009=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_warn(dev, "fail=
+ed to disable
+>>>>>> device\n");
+>>>>>>
+>>>>>>
+>>>>>> char *buf is passed to kfree(buf) uninitialised if
+>>>>>> wdriver->filter_callback
+>>>>>> is not set.
+>>>>>>
+>>>>>> It seems like a logical error per se, but I don't believe this is
+>>>>>> the cause
+>>>>>> of the leak?
+>>>>>
+>>>>> CORRECTION:
+>>>>>
+>>>>> I overlooked the "return 0" in line 1001.
+>>>>
+>>>> Yeah, and the memory looks to be freed properly in the
+>>>> wmi_dev_remove()
+>>>> callback, right?
+>>>
+>>> It would appear so. To verify that:
+>>>
+>>> Alloc:
+>>> 976=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wblock->handler_data =3D=
+ kmalloc(wblock->req_buf_size,
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 GFP_KERNEL);
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 <check>
+>>>
+>>> 983=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf =3D kasprintf(GFP_KE=
+RNEL, "wmi/%s", wdriver->driver.name);
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 <check>
+>>> 989=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wblock->char_dev.name =
+=3D buf;
+>>>
+>>> In lines 1022-1023:
+>>>
+>>> 1022=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(wblock->char_dev.=
+name);
+>>> 1023=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(wblock->handler_d=
+ata);
+>>>
+>>>>> This is why I don't think things should be rushed, but analysed
+>>>>> with clear and
+>>>>> cold head. And with as many eyes as possible :)
+>>>>>
+>>>>> The driver stuff is my long-term research interest. To state the
+>>>>> obvious,
+>>>>> the printing and multimedia education and industry in general
+>>>>> would benefit from
+>>>>> the open-source drivers for many instruments that still work, but
+>>>>> are obsoleted
+>>>>> by the producer and require unsupported versions of the OS.
+>>>>>
+>>>>> Thank you again for reviewing the bug report, however, ATM I do
+>>>>> not think I have
+>>>>> what it takes to hunt down the memleak. :-/
+>>>>
+>>>> Do you have a reproducer that you can use to show the problem better?
+>>>
+>>> Unfortunately, the problem doesn't seem to appear during the run of
+>>> a particular
+>>> test, but immediately on startup of the OS. This makes it awkward to
+>>> pinpoint the
+>>> exact service that triggered memory leaks. But they would appear to
+>>> have to do
+>>> with the initialisation of the USB devices, wouldn't they?
+>>>
+>>> There seem to be strings:
+>>>
+>>> "USBPortAccess,Enabled;[Optional:"
+>>> "USBBIOSSupport,Enabled;[Optional"
+>>> "USBEnumerationDelay,Disabled;[Op"
+>>>
+>>> This seems to be happening during USB initialisation and before any
+>>> services.
+>>> But I might as well be wrong.
+>>>
+>>>> Or can you test kernel patches to verify the problem is fixed or
+>>>> not if
+>>>> we send you patches to test?
+>>>
+>>> Certainly, Lord willing, I can test the patches in the same
+>>> environment that
+>>> mainfeted the bug (or memleak).
+>>>
+>>> Best regards,
+>>> Mirsad
+>>>
+>
