@@ -2,93 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1616CBDAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76EBA6CBDBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbjC1L3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S231238AbjC1LbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbjC1L3L (ORCPT
+        with ESMTP id S229632AbjC1LbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:29:11 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32FC1997
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:28:45 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id ek18so48223381edb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680002924;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/K6STWaIy6e9OcvNUsE7Tp59SAyabDOw3Eioo3vEpd8=;
-        b=MJ6suSzJkIE5lVSpdd5PYU9nw590FqVu/bRl9O2HgkCUK13jwfAEQH+DtbGLGiFTr7
-         CL5mMOgARauu9o5txDQeZZieTj9yBbHXIpjffZjiYtraTJEIMol+3QzmvcWCZo0W3Fju
-         sPW/N5HdAyZw+Lyi1N4RZH/j45NyYq76EyculrB5ScL6V3ySYG2ZqGpvlnkDtgslgEAg
-         Q1B3GpRyhUT3bPgg+L6Q/VTNeV7+pfXavInSfXwzze7wo5+5FMyDtiCOSFcy+lcUvNNV
-         LjZ21bhhMcTdIpDSqCXFeJ2KNOVGhV3SOMcpRl5i5ga3L1v6xLpsfdodDSdbhau+Yzsq
-         eZuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680002924;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/K6STWaIy6e9OcvNUsE7Tp59SAyabDOw3Eioo3vEpd8=;
-        b=1kNjJmu/9z8llWsU3tLQKxyzCuRJb8HQwoudU2RI2UHDC+uTEq4BlxGwoP/0JFDdxe
-         5AZwTrdxahiC/A1DmtaOAi91g07xY3iY9n9yYuC91wtzyz/t4GBzX1fpHqteu4P92VQM
-         lLH7kF/Xm1dW3CoUjkiRQfL57i8IR3M7pXMU7lJLr53iMTXOcCC2ZiQh8pxXY0kTunNv
-         w/DRdv2ozRIU3PstzbGhJ8wJgjvu78h2M0BEgl6LUcgYL5CtQbWcHYdO6tczXaLXPwcv
-         eOEdedmoT/LhAKCrZnYUMIDmmHIlzeJUAfggIcWqWISgaBj1gMIwsP6JE7aDnHv53hnF
-         X40g==
-X-Gm-Message-State: AAQBX9el98HCDJMfmvOj5Czzvwb5q36GMb12EbRagEl9nZxwM1OYgCgQ
-        B7dzX7g2YMr8QU7wawtD6QrfcMseyqJL9XvE51A=
-X-Google-Smtp-Source: AKy350aF1uD63+KyoOOABrSL5pAVC5SEKbBo+DgMgt0bGMg5O+uHWfR69bAIpA3bzfvfv7FZxs8EMw==
-X-Received: by 2002:a17:907:6d27:b0:932:cfbc:7613 with SMTP id sa39-20020a1709076d2700b00932cfbc7613mr18504573ejc.24.1680002924141;
-        Tue, 28 Mar 2023 04:28:44 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
-        by smtp.gmail.com with ESMTPSA id x16-20020a170906b09000b00938041aef83sm11039329ejy.169.2023.03.28.04.28.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 04:28:43 -0700 (PDT)
-Message-ID: <3b51cb0e-4e6e-d458-a393-15067948b0db@linaro.org>
-Date:   Tue, 28 Mar 2023 13:28:42 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] ASoC: dt-bindings: maxim,max9867: fix example
-Content-Language: en-US
-To:     Richard Leitner <richard.leitner@linux.dev>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ladislav Michl <ladis@linux-mips.org>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230328-max9867_dt_example_fix-v1-1-cdf31c3fdfc8@linux.dev>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230328-max9867_dt_example_fix-v1-1-cdf31c3fdfc8@linux.dev>
+        Tue, 28 Mar 2023 07:31:04 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92BB19A3;
+        Tue, 28 Mar 2023 04:30:43 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SA9niV032356;
+        Tue, 28 Mar 2023 11:30:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=xg+YHkHsXs8AGiJdTQbMYjOZVaBsjGkAIQA4bEe0A6I=;
+ b=O82Pp87JAook/vwJBVPqkNI781KCwMa2mBHS0JOXUBkCEpLRwFN+cHHQScU5apUCsbm2
+ K8ogNYtRRuNB7p8/mK4UD6YTPS7h7P4CchdMSPeg6to6nL46BP3KGhnODtffaSKjSzTj
+ jP82EpzOnm4P+9LfPSSdHt7lETdtI6qOIZjQ8aMGarZHC/qKw0kack1FavBnge03Rz24
+ c7l5HM6uoIeXjUI9GPceklNzwob7G4FOTcRuQgMFu7l4YvM7A4jY8tXhAiGnlDZXI3AX
+ cluRJnrM+IBjFzDH5whlaecPESjEkzw0KmGQUNJ9TO1ZWuuf9McPLFodB53GFE3+v4k0 Og== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pkwy1244k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 11:30:19 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32SB0h0J004434;
+        Tue, 28 Mar 2023 11:30:18 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pkwy123v2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 11:30:18 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32S3TmHL003455;
+        Tue, 28 Mar 2023 11:30:01 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3phrk6ub3n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 11:30:01 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32SBTvXH31064782
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Mar 2023 11:29:57 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C48DF20040;
+        Tue, 28 Mar 2023 11:29:57 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4203420043;
+        Tue, 28 Mar 2023 11:29:47 +0000 (GMT)
+Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com.com (unknown [9.43.76.14])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 28 Mar 2023 11:29:47 +0000 (GMT)
+From:   Kajol Jain <kjain@linux.ibm.com>
+To:     acme@kernel.org
+Cc:     sukadev@linux.vnet.ibm.com, irogers@google.com,
+        linux-kernel@vger.kernel.org, jolsa@kernel.org,
+        linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
+        atrajeev@linux.vnet.ibm.com, disgoel@linux.ibm.com,
+        kjain@linux.ibm.com, linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.com>
+Subject: [PATCH] perf vendor events power9: Remove UTF-8 characters from json files
+Date:   Tue, 28 Mar 2023 16:59:08 +0530
+Message-Id: <20230328112908.113158-1-kjain@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6Alt45yqNPqB4Hrequa2KkD-STTXbzNn
+X-Proofpoint-ORIG-GUID: CvoFLTqPOpcFawLY0NzQQjuuwGBPYQMY
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-28_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ mlxlogscore=999 clxscore=1011 suspectscore=0 spamscore=0 mlxscore=0
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303280091
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 13:25, Richard Leitner wrote:
-> Remove the common clock node from the example as suggested by
-> Krzysztof Kozlowski in [1].
+Commit 3c22ba524304 ("perf vendor events powerpc: Update POWER9 events")
+added and updated power9 pmu json events. However some of the json
+events which are part of other.json and pipeline.json files,
+contains UTF-8 characters in their brief description.
+Having UTF-8 character could brakes the perf build on some distros.
+Fix this issue by removing the UTF-8 characters from other.json and
+pipeline.json files.
 
-... because it is redundant in s codec binding example.
+Result without the fix patch:
+[command]# file -i pmu-events/arch/powerpc/power9/*
+pmu-events/arch/powerpc/power9/cache.json:          application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/floating-point.json: application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/frontend.json:       application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/marked.json:         application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/memory.json:         application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/metrics.json:        application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/nest_metrics.json:   application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/other.json:          application/json; charset=utf-8
+pmu-events/arch/powerpc/power9/pipeline.json:       application/json; charset=utf-8
+pmu-events/arch/powerpc/power9/pmc.json:            application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/translation.json:    application/json; charset=us-ascii
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Result with the fix patch:
 
+[command]# file -i pmu-events/arch/powerpc/power9/*
+pmu-events/arch/powerpc/power9/cache.json:          application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/floating-point.json: application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/frontend.json:       application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/marked.json:         application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/memory.json:         application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/metrics.json:        application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/nest_metrics.json:   application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/other.json:          application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/pipeline.json:       application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/pmc.json:            application/json; charset=us-ascii
+pmu-events/arch/powerpc/power9/translation.json:    application/json; charset=us-ascii
 
-Best regards,
-Krzysztof
+Fixes: 3c22ba524304 ("perf vendor events powerpc: Update POWER9 events")
+Reported-by: Arnaldo Carvalho de Melo <acme@kernel.com>
+Link: https://lore.kernel.org/lkml/ZBxP77deq7ikTxwG@kernel.org/
+Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+---
+ tools/perf/pmu-events/arch/powerpc/power9/other.json    | 4 ++--
+ tools/perf/pmu-events/arch/powerpc/power9/pipeline.json | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tools/perf/pmu-events/arch/powerpc/power9/other.json b/tools/perf/pmu-events/arch/powerpc/power9/other.json
+index 3f69422c21f9..f10bd554521a 100644
+--- a/tools/perf/pmu-events/arch/powerpc/power9/other.json
++++ b/tools/perf/pmu-events/arch/powerpc/power9/other.json
+@@ -1417,7 +1417,7 @@
+   {
+     "EventCode": "0x45054",
+     "EventName": "PM_FMA_CMPL",
+-    "BriefDescription": "two flops operation completed (fmadd, fnmadd, fmsub, fnmsub) Scalar instructions only. "
++    "BriefDescription": "two flops operation completed (fmadd, fnmadd, fmsub, fnmsub) Scalar instructions only."
+   },
+   {
+     "EventCode": "0x201E8",
+@@ -2017,7 +2017,7 @@
+   {
+     "EventCode": "0xC0BC",
+     "EventName": "PM_LSU_FLUSH_OTHER",
+-    "BriefDescription": "Other LSU flushes including: Sync (sync ack from L2 caused search of LRQ for oldest snooped load, This will either signal a Precise Flush of the oldest snooped loa or a Flush Next PPC); Data Valid Flush Next (several cases of this, one example is store and reload are lined up such that a store-hit-reload scenario exists and the CDF has already launched and has gotten bad/stale data); Bad Data Valid Flush Next (might be a few cases of this, one example is a larxa (D$ hit) return data and dval but can't allocate to LMQ (LMQ full or other reason). Already gave dval but can't watch it for snoop_hit_larx. Need to take the “bad dval” back and flush all younger ops)"
++    "BriefDescription": "Other LSU flushes including: Sync (sync ack from L2 caused search of LRQ for oldest snooped load, This will either signal a Precise Flush of the oldest snooped loa or a Flush Next PPC); Data Valid Flush Next (several cases of this, one example is store and reload are lined up such that a store-hit-reload scenario exists and the CDF has already launched and has gotten bad/stale data); Bad Data Valid Flush Next (might be a few cases of this, one example is a larxa (D$ hit) return data and dval but can't allocate to LMQ (LMQ full or other reason). Already gave dval but can't watch it for snoop_hit_larx. Need to take the 'bad dval' back and flush all younger ops)"
+   },
+   {
+     "EventCode": "0x5094",
+diff --git a/tools/perf/pmu-events/arch/powerpc/power9/pipeline.json b/tools/perf/pmu-events/arch/powerpc/power9/pipeline.json
+index d0265f255de2..723bffa41c44 100644
+--- a/tools/perf/pmu-events/arch/powerpc/power9/pipeline.json
++++ b/tools/perf/pmu-events/arch/powerpc/power9/pipeline.json
+@@ -442,7 +442,7 @@
+   {
+     "EventCode": "0x4D052",
+     "EventName": "PM_2FLOP_CMPL",
+-    "BriefDescription": "DP vector version of fmul, fsub, fcmp, fsel, fabs, fnabs, fres ,fsqrte, fneg "
++    "BriefDescription": "DP vector version of fmul, fsub, fcmp, fsel, fabs, fnabs, fres ,fsqrte, fneg"
+   },
+   {
+     "EventCode": "0x1F142",
+-- 
+2.39.1
 
