@@ -2,202 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0396CC712
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C626CC66B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233363AbjC1PuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
+        id S234057AbjC1Pck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234036AbjC1Pt4 (ORCPT
+        with ESMTP id S234042AbjC1PcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:49:56 -0400
-X-Greylist: delayed 575 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Mar 2023 08:49:51 PDT
-Received: from 10.mo562.mail-out.ovh.net (10.mo562.mail-out.ovh.net [46.105.72.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4203198B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:49:51 -0700 (PDT)
-Received: from director4.derp.mail-out.ovh.net (director4.derp.mail-out.ovh.net [79.137.60.37])
-        by mo562.mail-out.ovh.net (Postfix) with ESMTPS id A031F23F86;
-        Tue, 28 Mar 2023 15:31:37 +0000 (UTC)
-Received: from director4.derp.mail-out.ovh.net (director4.derp.mail-out.ovh.net. [127.0.0.1])
-        by director4.derp.mail-out.ovh.net (inspect_sender_mail_agent) with SMTP
-        for <lee@kernel.org>; Tue, 28 Mar 2023 15:31:37 +0000 (UTC)
-Received: from pro2.mail.ovh.net (unknown [10.108.1.191])
-        by director4.derp.mail-out.ovh.net (Postfix) with ESMTPS id 714D61FE70;
-        Tue, 28 Mar 2023 15:31:37 +0000 (UTC)
-Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
- (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 28 Mar
- 2023 17:31:37 +0200
-Message-ID: <d1771420-b45e-3ce1-f469-bc5fd9ab6dfa@traphandler.com>
-Date:   Tue, 28 Mar 2023 17:31:36 +0200
+        Tue, 28 Mar 2023 11:32:23 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FFD7EF6;
+        Tue, 28 Mar 2023 08:32:00 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id q8so1458884uas.7;
+        Tue, 28 Mar 2023 08:32:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680017519;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=P0x6xCbQygbPliInrwR1gxPOLOCdBAfNL8QxTNV7eMw=;
+        b=MgiMmkHPRroH78cr4TdXWrye5heIP/oIy4WprQVvLx3vWlMsoSHEsaclC5USJnsHwy
+         DiN4d861al5DNOao8aa3F7hV0EyKBT0PXzAtleQ4Tynx8Ad9zyq3TSu48/4Dhtv+ubLa
+         K86Y7ZTkgBD8XX2QgTHYxTFyog/7/gODAN4bHT9jXfAJ3hlvsat184HcWNJHrZvGwmV4
+         kJfYVxGh1jqjevTPq+GXU2ZEF8AmpwdVb3IYpVwOEc+yq22o2o3+bdKBdXYHmFGsdamL
+         PmpufY7iVAfFbUoBzPHXBDLG4KQXeWpBvjQSAE7xV9WRMNzymStbnn2pLTt50vir9oas
+         1j4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680017519;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P0x6xCbQygbPliInrwR1gxPOLOCdBAfNL8QxTNV7eMw=;
+        b=dn4fsfWS610kNjw5bs6Sf/7S7AJbRusHLHnscm4Pa5U7FSrplhCz5vbJbrIC0wMvAg
+         QD8XVnad0VI8q6AAGfV/hXfiqyUJjUIViEarj4tuknT64xouTvf13sdUUGBav//GtJu4
+         pxOSXO/PYwPe8LZ6jAoQmhNRfdRGif/5fIXP88Xtg95vhBhGw/QIEv7qRXN8ZEQ9tJFn
+         eC3YajOOY9vk48eH8/mc2wk+nXQTgQ8XiTJrwDzhNo9zxjmZzNlXRUL+eWJMFCC1d1/v
+         xK5mQuitlqjRjsJ0lKO/qDpFqmXBghYKldMIW6KCtxI+8ETS/j3EaI1cVBqdX1pItCdx
+         cvbA==
+X-Gm-Message-State: AAQBX9fOj3i/lbO4BRKivx9vJP1bZmxan2IOc/QgFjL7PGqS8jYrRFwt
+        m35ID7zU3YVMsk4EYWMWB7Ka/2a7HUAgNA==
+X-Google-Smtp-Source: AKy350Z2lTaqsVuaBOeMQMJNcTNOXSzZ5D2n+BMpIhHCtDfC1+rbRxuXEeCsPRvzuKgbMzIz/9lGIw==
+X-Received: by 2002:a1f:aad0:0:b0:40e:eec8:6d64 with SMTP id t199-20020a1faad0000000b0040eeec86d64mr5933171vke.9.1680017519320;
+        Tue, 28 Mar 2023 08:31:59 -0700 (PDT)
+Received: from [127.0.1.1] ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id b2-20020a1fb202000000b00432796a9c36sm4396874vkf.5.2023.03.28.08.31.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 08:31:59 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+Date:   Tue, 28 Mar 2023 17:31:49 +0200
+Subject: [PATCH v3] Input: tsc2007 - enable GPIO chips that can sleep
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 6/6] leds: Add a multicolor LED driver to group
- monochromatic LEDs
-To:     Lee Jones <lee@kernel.org>
-CC:     <lee.jones@linaro.org>, <pavel@ucw.cz>,
-        <linux-leds@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230102081021.138648-1-jjhiblot@traphandler.com>
- <20230102081021.138648-7-jjhiblot@traphandler.com>
- <20230315155241.GA9667@google.com>
-Content-Language: en-US
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-In-Reply-To: <20230315155241.GA9667@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [88.161.25.233]
-X-ClientProxiedBy: CAS2.emp2.local (172.16.1.2) To DAG1EX1.emp2.local
- (172.16.2.1)
-X-Ovh-Tracer-Id: 601512026505099739
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehgedgkeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpedvfeekudegkeeuuedvueeuveejffdtvdethfelkefhfefftdetteffiefgvddtieenucfkpheptddrtddrtddrtddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepughirhgvtghtohhrgedruggvrhhprdhmrghilhdqohhuthdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqlhgvughssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedv
-X-Spam-Status: No, score=0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230328-tsc2007-sleep-v3-1-5941e8dc0411@skidata.com>
+X-B4-Tracking: v=1; b=H4sIAGQII2QC/zWNQQqDMBBFryJZNxIzxmhXvUfpYhJHDRiViZSCe
+ PfGQpePz3v/EIk4UBL34hBM75DCumSAWyH8hMtIMvSZhVYaFOhW7slrpaxMM9Emh8Z0BpBA90p
+ kx2Ei6RgXP11WxLQTX8PGNITP7+j5yjzwGuU+MeE/r5WtjLK1gbqEqmoa28pKOoeMHTzGiGEu/
+ RrFeX4BlE09F7UAAAA=
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     richard.leitner@linux.dev, christophe.jaillet@wanadoo.fr,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        Richard Leitner <richard.leitner@linux.dev>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Benjamin Bara <benjamin.bara@skidata.com>
 
+This enables the usage of "can_sleep" GPIO chips as "pin up" GPIO.
+This might be the case if the GPIO chip is an expander behind i2c.
 
-On 15/03/2023 16:52, Lee Jones wrote:
->> +	for (;;) {
->> +		struct led_classdev *led_cdev;
->> +
->> +		led_cdev = devm_of_led_get_optional(dev, count);
->> +		if (IS_ERR(led_cdev))
-> 
-> Doesn't devm_of_led_get_optional() return NULL on failure?
+As the pendown value is read during a hard IRQ, the read process is not
+allowed to sleep. Therefore, find out if the read process can sleep and
+if so, just return true. During the following soft IRQ, the read process
+is allowed to sleep and therefore the actual value can be read.
 
-Hi Lee,
+Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
+---
+This is basically a resend of v2 with extended commit message.
 
-Thanks for you review. I'll send an updated version shortly.
+v2: https://lore.kernel.org/lkml/20220715074534.3116678-1-bbara93@gmail.com/
 
+----
+v3:
+- extend commit message
 
-devm_of_led_get_optional() return an error-pointer when it cannot get 
-the LED (like EPROBE_DEFER or ENOMEM). When the LED is not defined, it 
-returns NULL.
+v2:
+- fix style mentioned by Christophe
+---
+ drivers/input/touchscreen/tsc2007.h      |  1 +
+ drivers/input/touchscreen/tsc2007_core.c | 34 +++++++++++++++++++++++++++-----
+ 2 files changed, 30 insertions(+), 5 deletions(-)
 
-> 
->> +			return dev_err_probe(dev, PTR_ERR(led_cdev),
->> +					     "Unable to get led #%d", count);
->> +		/* Reached the end of the list ?*/
-> 
-> Besides the incorrect formatting, that '?' isn't filling me with
-> confidence.
-The comment just meant that NULL indicates the end of the list of the LEDs.
+diff --git a/drivers/input/touchscreen/tsc2007.h b/drivers/input/touchscreen/tsc2007.h
+index 69b08dd6c8df..cdd90d727160 100644
+--- a/drivers/input/touchscreen/tsc2007.h
++++ b/drivers/input/touchscreen/tsc2007.h
+@@ -78,6 +78,7 @@ struct tsc2007 {
+ 	bool			stopped;
+ 
+ 	int			(*get_pendown_state)(struct device *);
++	int			(*get_pendown_state_cansleep)(struct device *dev);
+ 	void			(*clear_penirq)(void);
+ 
+ 	struct mutex		mlock;
+diff --git a/drivers/input/touchscreen/tsc2007_core.c b/drivers/input/touchscreen/tsc2007_core.c
+index 3c793fb70a0e..764cec1036e1 100644
+--- a/drivers/input/touchscreen/tsc2007_core.c
++++ b/drivers/input/touchscreen/tsc2007_core.c
+@@ -20,6 +20,7 @@
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/gpio/consumer.h>
++#include <linux/gpio/driver.h>
+ #include <linux/input.h>
+ #include <linux/interrupt.h>
+ #include <linux/i2c.h>
+@@ -108,6 +109,14 @@ bool tsc2007_is_pen_down(struct tsc2007 *ts)
+ 	return ts->get_pendown_state(&ts->client->dev);
+ }
+ 
++static bool tsc2007_is_pen_down_cansleep(struct tsc2007 *ts)
++{
++	if (!ts->get_pendown_state_cansleep)
++		return true;
++
++	return ts->get_pendown_state_cansleep(&ts->client->dev);
++}
++
+ static irqreturn_t tsc2007_soft_irq(int irq, void *handle)
+ {
+ 	struct tsc2007 *ts = handle;
+@@ -115,7 +124,7 @@ static irqreturn_t tsc2007_soft_irq(int irq, void *handle)
+ 	struct ts_event tc;
+ 	u32 rt;
+ 
+-	while (!ts->stopped && tsc2007_is_pen_down(ts)) {
++	while (!ts->stopped && tsc2007_is_pen_down_cansleep(ts)) {
+ 
+ 		/* pen is down, continue with the measurement */
+ 
+@@ -125,7 +134,7 @@ static irqreturn_t tsc2007_soft_irq(int irq, void *handle)
+ 
+ 		rt = tsc2007_calculate_resistance(ts, &tc);
+ 
+-		if (!rt && !ts->get_pendown_state) {
++		if (!rt && !ts->get_pendown_state_cansleep) {
+ 			/*
+ 			 * If pressure reported is 0 and we don't have
+ 			 * callback to check pendown state, we have to
+@@ -229,6 +238,14 @@ static int tsc2007_get_pendown_state_gpio(struct device *dev)
+ 	return gpiod_get_value(ts->gpiod);
+ }
+ 
++static int tsc2007_get_pendown_state_gpio_cansleep(struct device *dev)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	struct tsc2007 *ts = i2c_get_clientdata(client);
++
++	return gpiod_get_value_cansleep(ts->gpiod);
++}
++
+ static int tsc2007_probe_properties(struct device *dev, struct tsc2007 *ts)
+ {
+ 	u32 val32;
+@@ -264,10 +281,17 @@ static int tsc2007_probe_properties(struct device *dev, struct tsc2007 *ts)
+ 	if (IS_ERR(ts->gpiod))
+ 		return PTR_ERR(ts->gpiod);
+ 
+-	if (ts->gpiod)
+-		ts->get_pendown_state = tsc2007_get_pendown_state_gpio;
+-	else
++	if (ts->gpiod) {
++		ts->get_pendown_state_cansleep = tsc2007_get_pendown_state_gpio_cansleep;
++
++		/* pendown pin is read during hard irq -> gpio chip is not allowed to sleep */
++		if (gpiod_to_chip(ts->gpiod) && !gpiod_to_chip(ts->gpiod)->can_sleep)
++			ts->get_pendown_state = tsc2007_get_pendown_state_gpio;
++		else
++			dev_dbg(dev, "Pen down GPIO chip can sleep\n");
++	} else {
+ 		dev_warn(dev, "Pen down GPIO is not specified in properties\n");
++	}
+ 
+ 	return 0;
+ }
 
-JJ
-> 
->> +		if (!led_cdev)
->> +			break;
->> +
->> +		priv->monochromatics = devm_krealloc_array(dev, priv->monochromatics,
->> +					count + 1, sizeof(*priv->monochromatics),
->> +					GFP_KERNEL);
->> +		if (!priv->monochromatics)
->> +			return -ENOMEM;
->> +
->> +		priv->monochromatics[count] = led_cdev;
->> +
->> +		max_brightness = max(max_brightness, led_cdev->max_brightness);
->> +		count++;
->> +	}
->> +
->> +	subled = devm_kcalloc(dev, count, sizeof(*subled), GFP_KERNEL);
->> +	if (!subled)
->> +		return -ENOMEM;
->> +	priv->mc_cdev.subled_info = subled;
->> +
->> +	for (i = 0; i < count; i++) {
->> +		struct led_classdev *led_cdev = priv->monochromatics[i];
->> +
->> +		subled[i].color_index = led_cdev->color;
-> 
-> '\n'
-> 
->> +		/* configure the LED intensity to its maximum */
-> 
-> Use correct grammar in comments please.
-> 
-> Start with an uppercase char.
-> 
->> +		subled[i].intensity = max_brightness;
->> +	}
->> +
->> +	/* init the multicolor's LED class device */
-> 
-> As above and please be fully forthcoming in comments: "Initialise".
-> 
->> +	cdev = &priv->mc_cdev.led_cdev;
->> +	cdev->flags = LED_CORE_SUSPENDRESUME;
->> +	cdev->brightness_set_blocking = led_mcg_set;
->> +	cdev->max_brightness = max_brightness;
->> +	cdev->color = LED_COLOR_ID_MULTI;
->> +	priv->mc_cdev.num_colors = count;
->> +
->> +	init_data.fwnode = dev_fwnode(dev);
->> +	ret = devm_led_classdev_multicolor_register_ext(dev, &priv->mc_cdev,
->> +							&init_data);
-> 
-> Use the full 100-char limit everywhere please.
-> 
->> +	if (ret)
->> +		return dev_err_probe(dev, ret,
->> +			"failed to register multicolor led for %s.\n",
-> 
-> "LED"
-> 
->> +			cdev->name);
->> +
->> +	ret = led_mcg_set(cdev, cdev->brightness);
->> +	if (ret)
->> +		return dev_err_probe(dev, ret,
->> +				     "failed to set led value for %s.",
->> +				     cdev->name);
->> +
->> +	for (i = 0; i < count; i++) {
->> +		struct led_classdev *led_cdev = priv->monochromatics[i];
->> +
->> +		/* Make the sysfs of the monochromatic LED read-only */
->> +		mutex_lock(&led_cdev->led_access);
->> +		led_sysfs_disable(led_cdev);
->> +		mutex_unlock(&led_cdev->led_access);
->> +
->> +		/* Restore sysfs access when the multicolor LED is released */
->> +		devm_add_action_or_reset(dev, restore_sysfs_access, led_cdev);
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct of_device_id of_led_mcg_match[] = {
->> +	{ .compatible = "leds-group-multicolor" },
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(of, of_led_mcg_match);
->> +
->> +static struct platform_driver led_mcg_driver = {
->> +	.probe		= led_mcg_probe,
->> +	.driver		= {
->> +		.name	= "leds_group_multicolor",
->> +		.of_match_table = of_led_mcg_match,
->> +	}
->> +};
->> +module_platform_driver(led_mcg_driver);
->> +
->> +MODULE_AUTHOR("Jean-Jacques Hiblot <jjhiblot@traphandler.com>");
->> +MODULE_DESCRIPTION("multi-color LED group driver");
->> +MODULE_LICENSE("GPL");
->> +MODULE_ALIAS("platform:leds-group-multicolor");
->> --
->> 2.25.1
->>
-> 
-> --
-> Lee Jones [李琼斯]
+---
+base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
+change-id: 20230328-tsc2007-sleep-f65953ae32d0
+
+Best regards,
+-- 
+Benjamin Bara <benjamin.bara@skidata.com>
+
