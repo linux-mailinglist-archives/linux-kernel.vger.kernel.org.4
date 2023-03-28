@@ -2,110 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418586CC1D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CD46CC1DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbjC1OP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
+        id S233256AbjC1OQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233027AbjC1OPP (ORCPT
+        with ESMTP id S233003AbjC1OPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:15:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20CED301
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680012838;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ffLH5bZRJ6YtgLRSBMwzxg/+hZRSIpwmfi4hS4N8Nuc=;
-        b=RULGPuGGKpCFSgovsfPbSOtpEtCZ00paxTCXB03PBs99ymjSUDYUCq5YXDKlnfe1/5NE5m
-        ZzWK2sSc5k4QyWs42TtZLjjL9OdbN57sXocP0omFlp+EMAYJFqKVzTgrlts1Lt9hBJ18s8
-        7vqsbaTO+h7ipScJsS6Ps56kkeQM5hA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-354-wKz8F6xYOX-6E9eLevCrSQ-1; Tue, 28 Mar 2023 10:13:57 -0400
-X-MC-Unique: wKz8F6xYOX-6E9eLevCrSQ-1
-Received: by mail-ed1-f70.google.com with SMTP id c1-20020a0564021f8100b004acbe232c03so17470436edc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:13:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680012836;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ffLH5bZRJ6YtgLRSBMwzxg/+hZRSIpwmfi4hS4N8Nuc=;
-        b=xubdFXsA3zhyXFl0X/T+TUM3626s1sqHgGYND/n4E1wia8hbnWCMxMYW3Heh+3AvtU
-         2lRnEe2vls0veeUSteIkLZeN/RA7xiFEKQt6/2O19oSaTJpcqA+c/2La091jAi1sWiba
-         W2g9apMFO82xDghd1bY0kt5L+pFc9AltMGKvH0FTUZWp81uKPbkk0VV3Omxz2jy1Kqvu
-         PTmiZmbvHrWrtz0/Xi7S0bxGIK2zYvz2jrAPphD+PEpeLtsyJnE0QuZIz86ylnV6P9zu
-         2h2ZIGLGsPq6cwlEW9wsn12mhBpgZPpQ2FYfL6LlKqmKk//F4ckM+3E3p+DiLr101LE+
-         kB8w==
-X-Gm-Message-State: AAQBX9fbqdNdbnc7s98p1VF2bTfEPy9c1k25iQQlRVAtmwWAyW8bD6ul
-        ONUuxUcIL1OJHMinipXMyziZqWyLmNrZoiri57Wqu7fcdTL2qua0AtlIjGxCsRbqFSe8lNFCLWh
-        XQQHatJXSs/2f/LibDMTW3Vlh
-X-Received: by 2002:a17:906:4c91:b0:946:be05:ed7a with SMTP id q17-20020a1709064c9100b00946be05ed7amr2887633eju.70.1680012835984;
-        Tue, 28 Mar 2023 07:13:55 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZDesR/WhBhPl2B8jond6w5UYfHY//O0l7vDZqE7Ay9Y8tX64ayaBkW6XL6HcuBZ2hIUUWFwA==
-X-Received: by 2002:a17:906:4c91:b0:946:be05:ed7a with SMTP id q17-20020a1709064c9100b00946be05ed7amr2887614eju.70.1680012835739;
-        Tue, 28 Mar 2023 07:13:55 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id gv27-20020a1709072bdb00b008b9b4ab6ad1sm15335005ejc.102.2023.03.28.07.13.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 07:13:55 -0700 (PDT)
-Message-ID: <7463da3b-1d52-40a4-97a3-4f912f4f9fdb@redhat.com>
-Date:   Tue, 28 Mar 2023 16:13:54 +0200
+        Tue, 28 Mar 2023 10:15:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9622173E;
+        Tue, 28 Mar 2023 07:15:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73794B81D6B;
+        Tue, 28 Mar 2023 14:15:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE66C4339C;
+        Tue, 28 Mar 2023 14:15:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680012933;
+        bh=KTQ5pqCwMxjCLp76U2Ck6TsKhM8aPCCJcsNQkFmamtQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NjwxT+f/vKnR4L6Jji+0GXiJYbs3EytFhBJu6zjfnJlKNjoJfNbWafw5LbezNcfCL
+         cB5BVrYIvGqgLPm8zf4MFSkEcBaMzER02mm7yB4tE/NdOSWFa++lmRQ2OpyEpwv+o1
+         S1jeLSdaTtOIktyXA9Jkbj/m+Ba8Nge9aNb2ckgkMe3YB59VyFgcBQdkUkMzwohfNP
+         ubiwVWkkp1MwoBwIj4IVRf9SUodlO3Ll4e6qqgPi1wtV2z7j0za1tfxg1ZDxTy3ZgT
+         gDefivX83lskrgK0iS1yAkFfGIGstJa77tyqE2guTtAzlfwYCb4l/SQvnAyw9Tj36w
+         tCOkzOIQHkqBg==
+Received: by mail-yb1-f176.google.com with SMTP id i6so15239874ybu.8;
+        Tue, 28 Mar 2023 07:15:33 -0700 (PDT)
+X-Gm-Message-State: AAQBX9eWm4X+eFkJRUFfDF3A1KsRSmJKVxFQg+aRDNRPelMNYupmcobC
+        95I5+G4tiDuhTv4NZ0m8F6haz+WBMtu/Vuve6Q==
+X-Google-Smtp-Source: AKy350ZeXniVT2W0ktHF46dUuFUd+2aQjm+2XyAkxeqa0Slnktr+HmXjjIzlRv8cYTFNbgA1dPwAYhkFOMccqFv+ZgM=
+X-Received: by 2002:a05:6902:1586:b0:b68:7b14:186b with SMTP id
+ k6-20020a056902158600b00b687b14186bmr7386177ybu.1.1680012932155; Tue, 28 Mar
+ 2023 07:15:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>
-References: <20230328123119.3649361-1-zhaotianrui@loongson.cn>
- <20230328123119.3649361-24-zhaotianrui@loongson.cn>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PING PATCH v4 23/29] LoongArch: KVM: Implement handle gspr
- exception
-In-Reply-To: <20230328123119.3649361-24-zhaotianrui@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230321110813.26808-1-jiaxun.yang@flygoat.com> <20230321110813.26808-2-jiaxun.yang@flygoat.com>
+In-Reply-To: <20230321110813.26808-2-jiaxun.yang@flygoat.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 28 Mar 2023 09:15:20 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKxJ-u4owKhY1tSiDyBo0=92iQoJM0G6TAZ7BSNpJAZAw@mail.gmail.com>
+Message-ID: <CAL_JsqKxJ-u4owKhY1tSiDyBo0=92iQoJM0G6TAZ7BSNpJAZAw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] of: address: Fix default coherency for MIPS
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, tsbogend@alpha.franken.de,
+        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/23 14:31, Tianrui Zhao wrote:
-> +			case 0xc91:
-> +				/* idle GSPR */
-> +				er = _kvm_emu_idle(vcpu);
-> +				break;
+On Tue, Mar 21, 2023 at 6:08=E2=80=AFAM Jiaxun Yang <jiaxun.yang@flygoat.co=
+m> wrote:
+>
+> DT-based MIPS doesn't use OF_DMA_DEFAULT_COHERENT, but
+> might override the system-wide default at runtime.
+>
+> Use dma_default_coherent to override default coherence for
+> MIPS.
+>
 
-So this is my last remark.  What some other architectures do is change 
-vcpu->arch.mp_state when entering an idle state, and at this point all 
-calls to KVM_RUN would call the equivalent of _kvm_emu_idle().  This 
-requires implementing the KVM_GET_MPSTATE and KVM_SET_MPSTATE ioctls.
+I assume you want this tagged for stable? Otherwise, I don't
+understand why you add this here and then remove in patch 4.
 
-This might also be useful if later you want to implement a mechanism 
-where vCPUs can pause or resume, for example for multi-vCPU VMs.
-
-You can implement this on top of what you have, but I highly recommend 
-that you do it in the first version of what is committed to Linux.
-
-Paolo
-
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  drivers/of/address.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/drivers/of/address.c b/drivers/of/address.c
+> index 4c0b169ef9bf..c105d66a1fa4 100644
+> --- a/drivers/of/address.c
+> +++ b/drivers/of/address.c
+> @@ -1105,6 +1105,14 @@ bool of_dma_is_coherent(struct device_node *np)
+>         struct device_node *node;
+>         bool is_coherent =3D IS_ENABLED(CONFIG_OF_DMA_DEFAULT_COHERENT);
+>
+> +       /*
+> +        * DT-based MIPS doesn't use OF_DMA_DEFAULT_COHERENT, but
+> +        * might override the system-wide default at runtime.
+> +        */
+> +#if defined(CONFIG_MIPS) && defined(CONFIG_DMA_NONCOHERENT)
+> +       is_coherent =3D dma_default_coherent;
+> +#endif
+> +
+>         node =3D of_node_get(np);
+>
+>         while (node) {
+> --
+> 2.37.1 (Apple Git-137.1)
+>
