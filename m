@@ -2,93 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B04B76CB94B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6316CB94D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbjC1IYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S231929AbjC1IYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjC1IYK (ORCPT
+        with ESMTP id S229452AbjC1IYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:24:10 -0400
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB0E4EC1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:24:02 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VesNAiw_1679991838;
-Received: from 30.221.134.40(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VesNAiw_1679991838)
-          by smtp.aliyun-inc.com;
-          Tue, 28 Mar 2023 16:23:59 +0800
-Message-ID: <ae65829a-b2a6-281d-8d46-2c93d32f506a@linux.alibaba.com>
-Date:   Tue, 28 Mar 2023 16:23:58 +0800
+        Tue, 28 Mar 2023 04:24:11 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA04649D7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:24:04 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id eg48so46119774edb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679991843;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ywfDEh4j3TIad7B4v5GyW5cEwUOW1bLBQ19ZKpGmXtQ=;
+        b=lIe36//we0gyKnYLvwkSXARqX6I5K/VdhR/nFiiQBaNRlzn67lPotVDQIdLxAmT7+x
+         xZgE0zThDvODSfroz/rsBcTkls5kY5cxdfEHEJ69cNZW8g8nI8YkwZFyl11H/K8DR427
+         whs5mIXjWQ+PO2oV1vmmu9HF8GMp5wyTBmz+QGUpk8k2IjvpvCgJgVOLmH0hxAz+Tx3S
+         ksG8jepCM76ZZoXTe9i0033BosNhQxbYXUOn/kecUyiu6c0UZo//YeTFDjgwI2x4kpik
+         Ove0VK+/zhXZYNLffbAWHLUZiDrOQZkqh7Plhpc0sT/3ert6WxSaz0HoVvjd1pje5EXB
+         4RDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679991843;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ywfDEh4j3TIad7B4v5GyW5cEwUOW1bLBQ19ZKpGmXtQ=;
+        b=uF1a3+sOz3r0894tW5U9JPN28dPl1wEUyEzYnh6LFSSddXiZQuDPg5RsfCi403fVkF
+         F2bz2QyR6xgpj4UZdSfwMxbPvP9gyO6/be8vWF2pBP94fZIfyx+EAsyENm1lPKyvW07m
+         8FdAOf5zN4k07hjvY33AnUcaGcUTH8AC4nkVolOcQ9NRUQ2ImxQj/v0mdkFmMJBazOz5
+         A4qNNVZBCQNoyzOFo1OGfkStJnj+HHOsZLqOdrramm75lpSFaNsxTqVr91r8pS7ToSI3
+         MOJb5J0vt+xZhecIsICubMONstg2VKY48RjOUFs09opZkUzrWYL/n5tDpsPlWIHUNdYg
+         grbw==
+X-Gm-Message-State: AAQBX9foqbT97GXcsdu1g7d7ZBSBmlLSdTtqxQIQU3v9G6KS62RYqH0q
+        3vHBLDCj0Kw2q8tS1oVoCg48IQ==
+X-Google-Smtp-Source: AKy350YPZFDeXBQ1t0a9hoZeT7QNScxDyGG1LAp0JRVDNEdIQKa/fTHx35lWl5jX5FSZFuH7mh5Eqw==
+X-Received: by 2002:a17:906:fcc9:b0:92c:138e:ff1f with SMTP id qx9-20020a170906fcc900b0092c138eff1fmr14321837ejb.18.1679991843377;
+        Tue, 28 Mar 2023 01:24:03 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
+        by smtp.gmail.com with ESMTPSA id n22-20020a17090695d600b009222a7192b4sm14964442ejy.30.2023.03.28.01.24.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 01:24:03 -0700 (PDT)
+Message-ID: <9490b5ef-3068-fcbb-0105-baf3839c21df@linaro.org>
+Date:   Tue, 28 Mar 2023 10:24:02 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH 2/8] erofs: rename init_inode_xattrs with erofs_ prefix
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
-        chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20230323000949.57608-1-jefflexu@linux.alibaba.com>
- <20230323000949.57608-3-jefflexu@linux.alibaba.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230323000949.57608-3-jefflexu@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4] ASoC: dt-bindings: alc5632: Convert to dtschema
+Content-Language: en-US
+To:     Saalim Quadri <danascape@gmail.com>, daniel.baluta@nxp.com,
+        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
+        robh+dt@kernel.org
+Cc:     alsa-devel@alsa-project.org, broonie@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230327211629.28643-1-danascape@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230327211629.28643-1-danascape@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/3/23 08:09, Jingbo Xu wrote:
-> Rename init_inode_xattrs() to erofs_init_inode_xattrs() without logic
-> change.
+On 27/03/2023 23:16, Saalim Quadri wrote:
+> Convert the ALC5632 audio codec bindings to DT schema.
 > 
-> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
-
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-
-Thanks,
-Gao Xiang
-
+> Signed-off-by: Saalim Quadri <danascape@gmail.com>
 > ---
->   fs/erofs/xattr.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
-> index 760ec864a39c..ab4517e5ec84 100644
-> --- a/fs/erofs/xattr.c
-> +++ b/fs/erofs/xattr.c
-> @@ -29,7 +29,7 @@ struct xattr_iter {
->   	unsigned int ofs;
->   };
->   
-> -static int init_inode_xattrs(struct inode *inode)
-> +static int erofs_init_inode_xattrs(struct inode *inode)
->   {
->   	struct erofs_inode *const vi = EROFS_I(inode);
->   	struct xattr_iter it;
-> @@ -404,7 +404,7 @@ static int erofs_getxattr(struct inode *inode, int index, const char *name,
->   	if (!name)
->   		return -EINVAL;
->   
-> -	ret = init_inode_xattrs(inode);
-> +	ret = erofs_init_inode_xattrs(inode);
->   	if (ret)
->   		return ret;
->   
-> @@ -619,7 +619,7 @@ ssize_t erofs_listxattr(struct dentry *dentry,
->   	int ret;
->   	struct listxattr_iter it;
->   
-> -	ret = init_inode_xattrs(d_inode(dentry));
-> +	ret = erofs_init_inode_xattrs(d_inode(dentry));
->   	if (ret == -ENOATTR)
->   		return 0;
->   	if (ret)
+
+
+I wanted to review it but for some reason you keep ignoring my comment.
+So one more time:
+
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
+
+Is there something not clear about my request above?
+
+Best regards,
+Krzysztof
+
