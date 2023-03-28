@@ -2,206 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08B56CC563
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB92D6CC61A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbjC1PNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S233152AbjC1PW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233919AbjC1PNb (ORCPT
+        with ESMTP id S232750AbjC1PWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:13:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A264EFF23
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:12:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680016257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EO1Gc+65gs0ahiLFrwFbt1R8FOKbz4SZ+dA6YGYHpZ8=;
-        b=dVrUb62lIcpq1uINB9EhgYQZuoi/BhNW+PYPDJokiystEFy7dx+oS8TeVN/83HH78gqm1D
-        PQaRjOBVCQWU99gtQtoUpbeTMQJFua1WNwxmLabiMqpQtsQXKPAO68rt3E3cAyyonupk7h
-        odg0MpLFjMTLxQVgZqCg9myI5PFgavM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-37-r3840IcWO6iGys5QDdW3vA-1; Tue, 28 Mar 2023 11:10:53 -0400
-X-MC-Unique: r3840IcWO6iGys5QDdW3vA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B37AC38149B1;
-        Tue, 28 Mar 2023 15:10:50 +0000 (UTC)
-Received: from localhost (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B1FC7140EBF4;
-        Tue, 28 Mar 2023 15:10:49 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Bernd Schubert <bschubert@ddn.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V5 01/16] io_uring: increase io_kiocb->flags into 64bit
-Date:   Tue, 28 Mar 2023 23:09:43 +0800
-Message-Id: <20230328150958.1253547-2-ming.lei@redhat.com>
-In-Reply-To: <20230328150958.1253547-1-ming.lei@redhat.com>
-References: <20230328150958.1253547-1-ming.lei@redhat.com>
+        Tue, 28 Mar 2023 11:22:39 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2B6FF2D;
+        Tue, 28 Mar 2023 08:21:04 -0700 (PDT)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SFF66K031661;
+        Tue, 28 Mar 2023 15:20:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=0hDMyw6DMO4+2z/GljFptutzAZ4fWWf18afYQ/K/g+k=;
+ b=JJM4Lioq+Z7sFJyIlyD/DiTXA+3BYKdD4Nn85+863un5yOAiHy3uGCI3UW4mX8csHJ5U
+ iyAS71FtQWvc+rstMuZWkSXIELTYe5RguQkyt+8o6pqHexdzX1ssh3T3V8xve+Vi3+NK
+ hNpJPhsImWAye8W6jSuI68lBf7KRTpnyPbTtxZTivd2r4NTA01RJvZPPjHpPsjIs94Ra
+ H+0Y0PU/zg3UmYgaaq1TyTUMhmzFfbhWKyjmQAsIif8CWWUyA0kSPadO31C0bdX9Tndg
+ 30SEcbbS76kVau2ZTG6Y4LQHiIpYjeCUczMhK49twIVzrRQwdYJcWfn05D9WKmvDWKSF Uw== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pm2q100t2-36
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Mar 2023 15:20:02 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32SErkjP009204;
+        Tue, 28 Mar 2023 15:09:46 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2173.outbound.protection.outlook.com [104.47.57.173])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3phqdd2050-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Mar 2023 15:09:46 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Aa9Tm53ZtO7DW1ySeH8udkg27k4Ir7sdCdFkwlh8qfFIVO3UgiZnBd/v0x+9bfkfmG9IGDkb7v5qATZCjZ6d2LJ8AiTZgfI3jdeo5BIvisE8HgNHTcMsV3krDg7EIskAvWzjk8P2gFloU0W1pQ6gUQtOZXn19ZVe5OjrwYIckGwb5lyChJQyM+dCAo0du4A8MAae+DaxMvQZY0yTtpkHK735lSgfwuemPBvDLpn7FlQk2aK3m0+Fcq9Y0ih4OpFjDmdkVe+La385OnwYWh0EH4UBOMpYFj7T2tEYpsTCwdqYWJqir+aveduqkY4t7vxM8KAnLi3TTIQmPfuS1RNFaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0hDMyw6DMO4+2z/GljFptutzAZ4fWWf18afYQ/K/g+k=;
+ b=acAfDrvNKA898yM9aeapKk3Ii1oNq7wjE7BpusuZv68uJhEx2PBHsHUlStFflFlB4WFSMdgtXTq9T+qmjKUW25frg7OPb6TdOQTYdwhHCjLAeJeXh42RPNkHscZc2QZbRojneI8W/3OpawHiFZ1f/3PfmneSu8F6T/73qIRvOTLMoqRmyqmSs78X7NFwzYVXzk7rCl0G5c9wkgEwzt6iEz0S3kK6Tv1QqAnmeBa5iU7gj+8aFvnsH6iEk5+STAOiesOhPDYgkQMmkfmy6TIZtFVo4R5e/MJ7m9G1dH8Zfh7eKhTCp9rWq8nO9HihYjia0Pi4zhz7RG5Y5GqZEca+Eg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0hDMyw6DMO4+2z/GljFptutzAZ4fWWf18afYQ/K/g+k=;
+ b=Vkl9n3gWM/v7oIV4F2S+YqvOlYJ0TFvaXfa8pA7sjNwhtkU/yAk3BPBya0If7Cy+H8QA9QA8XluPGOWsKXUy3p6Orq2JvClKvz2rGncTb2uklMRTEjbZAmaFXt0g+f6VL5thBI9uOuAfraEV24GwbF1lZ7cy4MbRKBAhVjtDoek=
+Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
+ by DS7PR10MB5005.namprd10.prod.outlook.com (2603:10b6:5:3ac::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Tue, 28 Mar
+ 2023 15:09:43 +0000
+Received: from BN0PR10MB5128.namprd10.prod.outlook.com
+ ([fe80::ecbd:fc46:2528:36db]) by BN0PR10MB5128.namprd10.prod.outlook.com
+ ([fe80::ecbd:fc46:2528:36db%6]) with mapi id 15.20.6222.033; Tue, 28 Mar 2023
+ 15:09:43 +0000
+From:   Chuck Lever III <chuck.lever@oracle.com>
+To:     Trond Myklebust <trondmy@hammerspace.com>
+CC:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Anna Schumaker <anna@kernel.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        =?utf-8?B?TmlrbGFzIFPDtmRlcmx1bmQ=?= 
+        <niklas.soderlund@ragnatech.se>
+Subject: Re: [PATCH] NFSv4: Fix NFS_V4 select RPCSEC_GSS_KRB5
+Thread-Topic: [PATCH] NFSv4: Fix NFS_V4 select RPCSEC_GSS_KRB5
+Thread-Index: AQHZYUaWBGM1a5WuKk+I2VS9GPp9K68QMzwAgAAWxICAAAIZgA==
+Date:   Tue, 28 Mar 2023 15:09:43 +0000
+Message-ID: <2ED142CE-6E37-42B8-AB2D-602772AAEE2D@oracle.com>
+References: <42751e1fef65485a5441618bc39735f8b62b3a46.1679988298.git.geert+renesas@glider.be>
+ <2968C736-0150-4AFC-94BE-F9F8C2859F3E@oracle.com>
+ <FF31002F-003E-4C43-8FC7-E2250788F516@hammerspace.com>
+In-Reply-To: <FF31002F-003E-4C43-8FC7-E2250788F516@hammerspace.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.2)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN0PR10MB5128:EE_|DS7PR10MB5005:EE_
+x-ms-office365-filtering-correlation-id: c07e2c1c-afc0-48e9-f3ea-08db2f9e7638
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RO7zcF6dEqD/KSOa2aI684AhpvWBxfiBeZ8PBkg05NjLjwfUIgKDnoeOqbETQM3TlrJPg4nCgF/0Gdp8qdIZSAOwK/FKluqM7DuWZVlULGZalkWTihUGGQiqtD2XtiJRjJsc/HUiAWb8+7KrsfsYIrMGlXqUgNReKa6XhHrggSC6m9pkRforNbFxW/DvvrDgYvAWlNoqgMFofc1k3O1o7gGB0G0RXcn1UHDf6LnGVqTfVJyWlyX7MkiLYdxjfj69FnuiYb4oMAoY8uVj+p46BKlmuSaqeRo/I9Wfz4E2SjUWzIN1xEk/dxSwLxzsAyuz+A9B5dqS3qy6IAl3LJ8hqiH+bh59/PN9pACB3QPRqum1Cp9fqlYuZDA5l6RLyU1YucwA7BJPRyI83d1ZF6BeMnDZhGErK7Js4l5b0J/9Tzpi6OvzpaCvrAIONiqzN6mEPevJXjs6hdKBYBABbCmyunKkNbcPDe1G9IHxyu9xJs7deqbOGtUvR8Lf8ONG5qv7tOgZaax6vY26PiVdNcxD7Z5KZthhNExLmQ35BqGHAKU3jykmN78+tR5E6tArCJ6iZHc2YceqbTCGYzbiROF1UjMLIkFweS2wKD88BZATUo9LONQLbzn5/pxL/wHMfVTIPHo11KNLSfRvTsgR1Sn2Fso+0vVPhkZJZRy4NbQ73Ck=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(396003)(366004)(346002)(39860400002)(451199021)(66899021)(2906002)(66574015)(83380400001)(8936002)(5660300002)(26005)(6506007)(6512007)(91956017)(6486002)(316002)(36756003)(966005)(71200400001)(478600001)(54906003)(38070700005)(122000001)(33656002)(53546011)(186003)(2616005)(64756008)(66446008)(66476007)(66946007)(76116006)(66556008)(4326008)(38100700002)(8676002)(41300700001)(6916009)(86362001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eWIvdVRra1NJbEpQbHA3cFdhSVVVbEVCRFFmRG80UXQydUVHanE1VVNTd01x?=
+ =?utf-8?B?NnNBRndTa2JlREhBdVRMZkJra3QycWdjL1ZOTURXcWcvbzIrNUhydGlySmtB?=
+ =?utf-8?B?dHZOZkxKQk9YR2NqY3FrRTdjaEE0aTdPUEhORU1sVVdodk1nblAyNG4wZnVE?=
+ =?utf-8?B?bHVlVERlaHA4MGtQaGlWdTVIVmtQckRNU3h5cW1NVVc4QUtzYTcvQ1dFN0V5?=
+ =?utf-8?B?Vi9WbFUrbUkzUkszR2VEc2NCcXhjdVUzcHFuUmJjNVNyenpUVUYyTmZVM29J?=
+ =?utf-8?B?Z05zZ25LOGxxZXE1TDRrZGdZVWZKUTc3MUExT2wwaWZYWmN0SXkwUmo1R0hi?=
+ =?utf-8?B?RURMcmJkNndMZ0RhdytRelNGV3RRSjNQOHd3dFpOMlVPZCtEVE8wYk8zWmVG?=
+ =?utf-8?B?aFdjNTZUY2ZhVEsvQUxsVTZ5R21kbC9hamljb1YwM01PbTl0WTZXc2czQUJj?=
+ =?utf-8?B?ZkhzVXBqVTJGbFlQeW5IcjFJbFQ4cHdOakVEcVNjZ2ZUcDBYVTgxdGVZNkFJ?=
+ =?utf-8?B?VkZFVHZMOVM2by9UeW9RdlQ5RFhDY2h6dlNpamw0aHZ6bzJyV2VGdTJRNVNj?=
+ =?utf-8?B?TU9jeHJ5ZVlqYlpodzlXS2F2WDhZQnlpdXVueU9kVVV0eElidnppNklFcklY?=
+ =?utf-8?B?eENkYjZOc2l6MmJpS2Fmc1FINzA5Vi9nb3BYUEoxMldiYVZ6ZVhCZHNIUHZk?=
+ =?utf-8?B?Q3VuQm43dkx1bStYSUFWbVFsaGxuTFVOSDdkcUlzVEgyZG9NazJCNTNBVWc3?=
+ =?utf-8?B?ZVNxK2lZbmo3VnkwV1pGcExPS3VRUWRnUE5mQWxwQ24yYVYyS1Z4cXB5NVpY?=
+ =?utf-8?B?bVB4ZGw2aXg5dldwNjlJNzV3YkVSVjBRUE9YNDJBTTY4bTNsYkhrRFdiVmVC?=
+ =?utf-8?B?blIzUkRvVWNjOHkxS0J6RnQveS9jN3FBRTZ2UlZEdEk3WW9qWEdKaUNlbEZG?=
+ =?utf-8?B?VGx2Y2V0NFVNVVJJeUE0ZjZEQXVzY09FUWt0V2oyUTh2TXYwSDVXck5URlpF?=
+ =?utf-8?B?WGgycDlIS1FZZEVJUzRCbUpHajhvMGtKVnJxYTd4ZkxjamUyR3VxS2xWSFZi?=
+ =?utf-8?B?cGFXRHl5ZGFtQllJa3J0ZlJuYjdDNTVHaEpxR252WUV6NWQwMGZlUy9jeHV6?=
+ =?utf-8?B?b001Nk1meVF1ZXN4UGNTeWx2L1VXNVFCdE01a3NJc05hT3lwRGkvZUR2cXRl?=
+ =?utf-8?B?bkREWEFLYnJub1JReXlPTXh5b0RXNkNZNHFsRVVUTVN6bHBPNldMMkloL0Q1?=
+ =?utf-8?B?K2IwZVB3eXhYS3VUK2lFM1hWaEdUbEttc1BYV1RRM1ZrYnlubjZBOFMyMzR2?=
+ =?utf-8?B?UGF3MkFWd0ovRGFvWUdPRHByQS9HR05ZL25aSjlvcTA0S0thTXhieG4xdy82?=
+ =?utf-8?B?d00vUXBFQVdNbkxWbVJCTlBJOHFTMGdPVHFBMXF5QUxDSkptdStNOTdkNlov?=
+ =?utf-8?B?VUYrRWFJSzFjMUZNMkU1WjNDWlhrUmluOE1aeXQ1b1U3L0MzYjBGU09CVzF3?=
+ =?utf-8?B?ekVJY1IzM3hobUlXK0NkWGFaSVJla0M4TmxxbUNXYXRpUW13b3JVQjkyUEI1?=
+ =?utf-8?B?SjRTbCtYQ0JWT3gzdDg0dGtDdnN2YVhwcmpnd2djWm4zNE9WOHVqaThVNEow?=
+ =?utf-8?B?ZE4vUjBFNmxMQm9tUll2cGFUNWUza0E2d3MyMWh4Y251dlFlUzJoUCsxL2d5?=
+ =?utf-8?B?VVB0R0ZNbk1wNzFPM2tkcWs3a3U0dEZBRmR0bFQyUW5GUHdhaGk5Ymc4WHJV?=
+ =?utf-8?B?bFdXdGI1RFNYSjdOK1hQdXFVNUVMamF4MTcwdEg0cjJBK2FsV3gzZlNWYmJU?=
+ =?utf-8?B?cUx6cERhb3VWSC9VVUdZQ3NrK1dycThhZld6RHpGTU8vV1U2c00vZWFvQkRT?=
+ =?utf-8?B?U1VXYUtCaGRZOHZybVU4S1J5L0VsWXJKdHkyUkRHcmEvRHl4U0Z3em9XZGpD?=
+ =?utf-8?B?Q0MzSHJ4UXNNNElsMjA1VUlHVTI5L2U5dXFuTmhsNG1YUWdabXdYNUVneHhZ?=
+ =?utf-8?B?VmxuUzhqZEVmSWFuSTlJUjRiMVVBU0lON2kyVm5pMWRwamQxaUZqcTNQSlJ5?=
+ =?utf-8?B?Ry9DZ2NGYmlITjRkUVR6OHQ2YzB1cnBLVXF1N1E0R0grTmdYb0d6REcxRUFI?=
+ =?utf-8?B?Wmk4TFZEQlBYZ2JLTzc2d3RwdlIxbldsd0dZbHQ4aXQ0RFYyRHZOdFVDVjlM?=
+ =?utf-8?B?SkE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <17A6B90D38B83D459EBFB36B4B26DFF3@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=0.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75 autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: mO7P93t0cwvkjLGyhRTzeBGaeRPiwcy1hiXx2myuO2sXdJQU3mLMeWkrhQiBEP+HZrWc9V3CptS9q7GU7jUYBsOVcZBntKuF3+n1jpSB93WC2YGooMhw/XCMO8R3DayEh7o5Is0B+qNRaZTvwqkWHjWZ5U1cjFaNrsm0pGi5Dg1X+6R1Yiw+HH1AQvbszw2zJuZ8Q30WyzkofgRr1Y+px9wavxTLQKAg1I5K8mWplvABXPOcueRkCRnFGIZqNhrME7lhgx9A+HwQN6pSnIPHne11jShy5agoASucWSy6AhpmHpGXljTDdkd7wThfn2B3ySBLns4bpiQSQRMbHEhA3IvmxgWi/fg7cvxzOAjwZQCw8tz1Xa0wgZSx9srfKoFgcpvDVax1VXcyDgwYAysFwF/3mS0Bth2lxeFUnqba3B7feNkwlvXAYTbwatg+Ha8vhaIgHR84VFE5uOcPcgfV5ivYBfBozbG8WQK4/43ImbHL6Ns0JvMWAG8m1J7Pld8DR0AsjdvyWtgwOgZ3HfZK8MVgS6WxNniYlkTZiek9nz8DYyKe+b7HcuTSFl8Www+P2jARLRntOGiGhD/MAqYxTlnvb8et6TOzVtxitjUH/6GLRLyE8eS8khzrmfObAWTau93g2ATrPrY2P+bHIKtHpagH7p9MvRL36ZXvWsetHIa+4FiJQzGf4zQ2QG2dLvMTioknJKp0ER3hwPBpzChTq4oxnwBu13UWoZtx+d++hauqx3clArHSMKMSNKGpE5TUlm/hvoe6XVJFfQAO40KzaaSy9WPt9cSLgd9/KX0wFdHvkmaD4JHvH2zTE2tZ2vHyjl5BJZKDDEtmTViOTs/Kp22GOgLQ+UVvG4gQKT1LL+O2dl5T899SvVQPPBn0XBeE7n7ESr5lf+iRsr/hGn5pyIhyja9IEZ1A6X6G0ZyFMVk=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c07e2c1c-afc0-48e9-f3ea-08db2f9e7638
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Mar 2023 15:09:43.7783
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vQA8Syh1Olxsnmy6wK2b4QaWLDfgYmEeaqn6y1K2B8Kf7MVY+eEMnMxMddpAsjwXxhb1LaTJwOm5ZBEKkxItFg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5005
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-28_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 malwarescore=0
+ mlxlogscore=999 phishscore=0 bulkscore=0 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303280119
+X-Proofpoint-GUID: AEzMu-ERHDw7e0x2KQnmPjbfPjgkfFmQ
+X-Proofpoint-ORIG-GUID: AEzMu-ERHDw7e0x2KQnmPjbfPjgkfFmQ
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 32bit io_kiocb->flags has been used up, so extend it to 64bit.
-
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
----
- include/linux/io_uring_types.h | 65 +++++++++++++++++-----------------
- io_uring/io_uring.c            |  2 +-
- 2 files changed, 34 insertions(+), 33 deletions(-)
-
-diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index 561fa421c453..dd8ef886730b 100644
---- a/include/linux/io_uring_types.h
-+++ b/include/linux/io_uring_types.h
-@@ -414,68 +414,68 @@ enum {
- 
- enum {
- 	/* ctx owns file */
--	REQ_F_FIXED_FILE	= BIT(REQ_F_FIXED_FILE_BIT),
-+	REQ_F_FIXED_FILE	= BIT_ULL(REQ_F_FIXED_FILE_BIT),
- 	/* drain existing IO first */
--	REQ_F_IO_DRAIN		= BIT(REQ_F_IO_DRAIN_BIT),
-+	REQ_F_IO_DRAIN		= BIT_ULL(REQ_F_IO_DRAIN_BIT),
- 	/* linked sqes */
--	REQ_F_LINK		= BIT(REQ_F_LINK_BIT),
-+	REQ_F_LINK		= BIT_ULL(REQ_F_LINK_BIT),
- 	/* doesn't sever on completion < 0 */
--	REQ_F_HARDLINK		= BIT(REQ_F_HARDLINK_BIT),
-+	REQ_F_HARDLINK		= BIT_ULL(REQ_F_HARDLINK_BIT),
- 	/* IOSQE_ASYNC */
--	REQ_F_FORCE_ASYNC	= BIT(REQ_F_FORCE_ASYNC_BIT),
-+	REQ_F_FORCE_ASYNC	= BIT_ULL(REQ_F_FORCE_ASYNC_BIT),
- 	/* IOSQE_BUFFER_SELECT */
--	REQ_F_BUFFER_SELECT	= BIT(REQ_F_BUFFER_SELECT_BIT),
-+	REQ_F_BUFFER_SELECT	= BIT_ULL(REQ_F_BUFFER_SELECT_BIT),
- 	/* IOSQE_CQE_SKIP_SUCCESS */
--	REQ_F_CQE_SKIP		= BIT(REQ_F_CQE_SKIP_BIT),
-+	REQ_F_CQE_SKIP		= BIT_ULL(REQ_F_CQE_SKIP_BIT),
- 
- 	/* fail rest of links */
--	REQ_F_FAIL		= BIT(REQ_F_FAIL_BIT),
-+	REQ_F_FAIL		= BIT_ULL(REQ_F_FAIL_BIT),
- 	/* on inflight list, should be cancelled and waited on exit reliably */
--	REQ_F_INFLIGHT		= BIT(REQ_F_INFLIGHT_BIT),
-+	REQ_F_INFLIGHT		= BIT_ULL(REQ_F_INFLIGHT_BIT),
- 	/* read/write uses file position */
--	REQ_F_CUR_POS		= BIT(REQ_F_CUR_POS_BIT),
-+	REQ_F_CUR_POS		= BIT_ULL(REQ_F_CUR_POS_BIT),
- 	/* must not punt to workers */
--	REQ_F_NOWAIT		= BIT(REQ_F_NOWAIT_BIT),
-+	REQ_F_NOWAIT		= BIT_ULL(REQ_F_NOWAIT_BIT),
- 	/* has or had linked timeout */
--	REQ_F_LINK_TIMEOUT	= BIT(REQ_F_LINK_TIMEOUT_BIT),
-+	REQ_F_LINK_TIMEOUT	= BIT_ULL(REQ_F_LINK_TIMEOUT_BIT),
- 	/* needs cleanup */
--	REQ_F_NEED_CLEANUP	= BIT(REQ_F_NEED_CLEANUP_BIT),
-+	REQ_F_NEED_CLEANUP	= BIT_ULL(REQ_F_NEED_CLEANUP_BIT),
- 	/* already went through poll handler */
--	REQ_F_POLLED		= BIT(REQ_F_POLLED_BIT),
-+	REQ_F_POLLED		= BIT_ULL(REQ_F_POLLED_BIT),
- 	/* buffer already selected */
--	REQ_F_BUFFER_SELECTED	= BIT(REQ_F_BUFFER_SELECTED_BIT),
-+	REQ_F_BUFFER_SELECTED	= BIT_ULL(REQ_F_BUFFER_SELECTED_BIT),
- 	/* buffer selected from ring, needs commit */
--	REQ_F_BUFFER_RING	= BIT(REQ_F_BUFFER_RING_BIT),
-+	REQ_F_BUFFER_RING	= BIT_ULL(REQ_F_BUFFER_RING_BIT),
- 	/* caller should reissue async */
--	REQ_F_REISSUE		= BIT(REQ_F_REISSUE_BIT),
-+	REQ_F_REISSUE		= BIT_ULL(REQ_F_REISSUE_BIT),
- 	/* supports async reads/writes */
--	REQ_F_SUPPORT_NOWAIT	= BIT(REQ_F_SUPPORT_NOWAIT_BIT),
-+	REQ_F_SUPPORT_NOWAIT	= BIT_ULL(REQ_F_SUPPORT_NOWAIT_BIT),
- 	/* regular file */
--	REQ_F_ISREG		= BIT(REQ_F_ISREG_BIT),
-+	REQ_F_ISREG		= BIT_ULL(REQ_F_ISREG_BIT),
- 	/* has creds assigned */
--	REQ_F_CREDS		= BIT(REQ_F_CREDS_BIT),
-+	REQ_F_CREDS		= BIT_ULL(REQ_F_CREDS_BIT),
- 	/* skip refcounting if not set */
--	REQ_F_REFCOUNT		= BIT(REQ_F_REFCOUNT_BIT),
-+	REQ_F_REFCOUNT		= BIT_ULL(REQ_F_REFCOUNT_BIT),
- 	/* there is a linked timeout that has to be armed */
--	REQ_F_ARM_LTIMEOUT	= BIT(REQ_F_ARM_LTIMEOUT_BIT),
-+	REQ_F_ARM_LTIMEOUT	= BIT_ULL(REQ_F_ARM_LTIMEOUT_BIT),
- 	/* ->async_data allocated */
--	REQ_F_ASYNC_DATA	= BIT(REQ_F_ASYNC_DATA_BIT),
-+	REQ_F_ASYNC_DATA	= BIT_ULL(REQ_F_ASYNC_DATA_BIT),
- 	/* don't post CQEs while failing linked requests */
--	REQ_F_SKIP_LINK_CQES	= BIT(REQ_F_SKIP_LINK_CQES_BIT),
-+	REQ_F_SKIP_LINK_CQES	= BIT_ULL(REQ_F_SKIP_LINK_CQES_BIT),
- 	/* single poll may be active */
--	REQ_F_SINGLE_POLL	= BIT(REQ_F_SINGLE_POLL_BIT),
-+	REQ_F_SINGLE_POLL	= BIT_ULL(REQ_F_SINGLE_POLL_BIT),
- 	/* double poll may active */
--	REQ_F_DOUBLE_POLL	= BIT(REQ_F_DOUBLE_POLL_BIT),
-+	REQ_F_DOUBLE_POLL	= BIT_ULL(REQ_F_DOUBLE_POLL_BIT),
- 	/* request has already done partial IO */
--	REQ_F_PARTIAL_IO	= BIT(REQ_F_PARTIAL_IO_BIT),
-+	REQ_F_PARTIAL_IO	= BIT_ULL(REQ_F_PARTIAL_IO_BIT),
- 	/* fast poll multishot mode */
--	REQ_F_APOLL_MULTISHOT	= BIT(REQ_F_APOLL_MULTISHOT_BIT),
-+	REQ_F_APOLL_MULTISHOT	= BIT_ULL(REQ_F_APOLL_MULTISHOT_BIT),
- 	/* ->extra1 and ->extra2 are initialised */
--	REQ_F_CQE32_INIT	= BIT(REQ_F_CQE32_INIT_BIT),
-+	REQ_F_CQE32_INIT	= BIT_ULL(REQ_F_CQE32_INIT_BIT),
- 	/* recvmsg special flag, clear EPOLLIN */
--	REQ_F_CLEAR_POLLIN	= BIT(REQ_F_CLEAR_POLLIN_BIT),
-+	REQ_F_CLEAR_POLLIN	= BIT_ULL(REQ_F_CLEAR_POLLIN_BIT),
- 	/* hashed into ->cancel_hash_locked, protected by ->uring_lock */
--	REQ_F_HASH_LOCKED	= BIT(REQ_F_HASH_LOCKED_BIT),
-+	REQ_F_HASH_LOCKED	= BIT_ULL(REQ_F_HASH_LOCKED_BIT),
- };
- 
- typedef void (*io_req_tw_func_t)(struct io_kiocb *req, struct io_tw_state *ts);
-@@ -536,7 +536,8 @@ struct io_kiocb {
- 	 * and after selection it points to the buffer ID itself.
- 	 */
- 	u16				buf_index;
--	unsigned int			flags;
-+	u32				__pad;
-+	u64				flags;
- 
- 	struct io_cqe			cqe;
- 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 536940675c67..693558c4b10b 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -4486,7 +4486,7 @@ static int __init io_uring_init(void)
- 	BUILD_BUG_ON(SQE_COMMON_FLAGS >= (1 << 8));
- 	BUILD_BUG_ON((SQE_VALID_FLAGS | SQE_COMMON_FLAGS) != SQE_VALID_FLAGS);
- 
--	BUILD_BUG_ON(__REQ_F_LAST_BIT > 8 * sizeof(int));
-+	BUILD_BUG_ON(__REQ_F_LAST_BIT > 8 * sizeof(u64));
- 
- 	BUILD_BUG_ON(sizeof(atomic_t) != sizeof(u32));
- 
--- 
-2.39.2
-
+DQoNCj4gT24gTWFyIDI4LCAyMDIzLCBhdCAxMTowMiBBTSwgVHJvbmQgTXlrbGVidXN0IDx0cm9u
+ZG15QGhhbW1lcnNwYWNlLmNvbT4gd3JvdGU6DQo+IA0KPiANCj4gDQo+PiBPbiBNYXIgMjgsIDIw
+MjMsIGF0IDA5OjQwLCBDaHVjayBMZXZlciBJSUkgPGNodWNrLmxldmVyQG9yYWNsZS5jb20+IHdy
+b3RlOg0KPj4gDQo+PiANCj4+IA0KPj4+IE9uIE1hciAyOCwgMjAyMywgYXQgMzoyNSBBTSwgR2Vl
+cnQgVXl0dGVyaG9ldmVuIDxnZWVydCtyZW5lc2FzQGdsaWRlci5iZT4gd3JvdGU6DQo+Pj4gDQo+
+Pj4gSWYgQ09ORklHX0NSWVBUTz1uIChlLmcuIGFybS9zaG1vYmlsZV9kZWZjb25maWcpOg0KPj4+
+IA0KPj4+ICBXQVJOSU5HOiB1bm1ldCBkaXJlY3QgZGVwZW5kZW5jaWVzIGRldGVjdGVkIGZvciBS
+UENTRUNfR1NTX0tSQjUNCj4+PiAgICBEZXBlbmRzIG9uIFtuXTogTkVUV09SS19GSUxFU1lTVEVN
+UyBbPXldICYmIFNVTlJQQyBbPXldICYmIENSWVBUTyBbPW5dDQo+Pj4gICAgU2VsZWN0ZWQgYnkg
+W3ldOg0KPj4+ICAgIC0gTkZTX1Y0IFs9eV0gJiYgTkVUV09SS19GSUxFU1lTVEVNUyBbPXldICYm
+IE5GU19GUyBbPXldDQo+Pj4gDQo+Pj4gQXMgTkZTdjQgY2FuIHdvcmsgd2l0aG91dCBjcnlwdG8g
+ZW5hYmxlZCwgZml4IHRoaXMgYnkgbWFraW5nIHRoZQ0KPj4+IHNlbGVjdGlvbiBvZiBSUENTRUNf
+R1NTX0tSQjUgY29uZGl0aW9uYWwgb24gQ1JZUFRPLg0KPj4+IA0KPj4+IEZpeGVzOiBlNTdkMDY1
+Mjc3Mzg3OTgwICgiTkZTICYgTkZTRDogVXBkYXRlIEdTUyBkZXBlbmRlbmNpZXMiKQ0KPj4+IFJl
+cG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4NCj4+PiBMaW5rOiBo
+dHRwczovL2xvcmUua2VybmVsLm9yZy9vZS1rYnVpbGQtYWxsLzIwMjMwMzI0MTMwNy5mNk5lVzln
+Wi1sa3BAaW50ZWwuY29tLw0KPj4+IFJlcG9ydGVkLWJ5OiBOaWtsYXMgU8O2ZGVybHVuZCA8bmlr
+bGFzLnNvZGVybHVuZEByYWduYXRlY2guc2U+DQo+Pj4gTGluazogaHR0cHM6Ly9sb3JlLmtlcm5l
+bC5vcmcvci9aQ0c2dElvejBWTjZkK295QHNsZWlwbmVyLmR5bi5iZXJ0by5zZQ0KPj4+IFNpZ25l
+ZC1vZmYtYnk6IEdlZXJ0IFV5dHRlcmhvZXZlbiA8Z2VlcnQrcmVuZXNhc0BnbGlkZXIuYmU+DQo+
+Pj4gLS0tDQo+Pj4gTmZzcm9vdCAoInJvb3Q9L2Rldi9uZnMgcncgbmZzcm9vdD1hYWEuYmJiLmNj
+Yy5kZGQ6L3BhdGgvdG8vZnMsdGNwLHY0IikNCj4+PiB3b3JrcyBmaW5lIHdpdGhvdXQgQ1JZUFRP
+IGFuZCBSUENTRUNfR1NTX0tSQjUuDQo+Pj4gQ09ORklHX05GU0RfVjQgc2VsZWN0cyBDUllQVE8s
+IHNvIHdhcyBub3QgYWZmZWN0ZWQgYnkgdGhlIHNpbWlsYXIgY2hhbmdlLg0KPj4gDQo+PiBNYWtl
+cyBzZW5zZSB0byBtZS4NCj4+IA0KPj4gSSBjYW4gcXVpY2tseSB0YWtlIHRoaXMgdGhyb3VnaCBu
+ZnNkLWZpeGVzIGlmIHRoZSBORlMgbWFpbnRhaW5lcnMNCj4+IGNhbiBzZW5kIG1lIGFuIEFja2Vk
+LWJ5Lg0KPj4gDQo+PiANCj4+PiAtLS0NCj4+PiBmcy9uZnMvS2NvbmZpZyB8IDIgKy0NCj4+PiAx
+IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4+PiANCj4+PiBk
+aWZmIC0tZ2l0IGEvZnMvbmZzL0tjb25maWcgYi9mcy9uZnMvS2NvbmZpZw0KPj4+IGluZGV4IDQ1
+MGQ2YzNiYzA1ZTI3ZGQuLmYwNWMxM2NlMDE1NWJkNjkgMTAwNjQ0DQo+Pj4gLS0tIGEvZnMvbmZz
+L0tjb25maWcNCj4+PiArKysgYi9mcy9uZnMvS2NvbmZpZw0KPj4+IEBAIC03NSw3ICs3NSw3IEBA
+IGNvbmZpZyBORlNfVjNfQUNMDQo+Pj4gY29uZmlnIE5GU19WNA0KPj4+IHRyaXN0YXRlICJORlMg
+Y2xpZW50IHN1cHBvcnQgZm9yIE5GUyB2ZXJzaW9uIDQiDQo+Pj4gZGVwZW5kcyBvbiBORlNfRlMN
+Cj4+PiAtIHNlbGVjdCBSUENTRUNfR1NTX0tSQjUNCj4+PiArIHNlbGVjdCBSUENTRUNfR1NTX0tS
+QjUgaWYgQ1JZUFRPDQo+Pj4gc2VsZWN0IEtFWVMNCj4+PiBoZWxwDQo+Pj4gIFRoaXMgb3B0aW9u
+IGVuYWJsZXMgc3VwcG9ydCBmb3IgdmVyc2lvbiA0IG9mIHRoZSBORlMgcHJvdG9jb2wNCj4+PiAt
+LSANCj4+PiAyLjM0LjENCj4+PiANCj4gDQo+IEhtbeKApiBQZXJoYXBzIGl0IGlzIHRpbWUgdG8g
+anVzdCByZW1vdmUgdGhlIGFib3ZlIFJQQ1NFQ19HU1NfS1JCNSBkZXBlbmRlbmN5IGFsdG9nZXRo
+ZXI/DQoNClRoaXMgaXMgdGhlIG90aGVyIHJlYXNvbiBJIHdhcyBoZXNpdGF0aW5nIHRvIGFkZHJl
+c3MgdGhpcw0KaXNzdWUgaW1tZWRpYXRlbHk6IHdlIG1pZ2h0IHdhbnQgdG8gdGFrZSBhIGRpZmZl
+cmVudA0KYXBwcm9hY2ggdG8gZGVhbGluZyB3aXRoIHRoZXNlIGRlcGVuZGVuY2llcywgYW5kIHRo
+YXQNCm5ldyBhcHByb2FjaCBtaWdodCB0YWtlIHNvbWUgdGltZSB0byBkZXZlbG9wIGFuZCB0ZXN0
+Lg0KDQpJIGFncmVlIHRoYXQgcmVtb3ZpbmcgdGhlICJzZWxlY3QiIGNsYXVzZSBpcyBhIGdvb2QN
+CnRoaW5nIHRvIHRyeS4NCg0KDQo+IEl0IGlzIHBvc3NpYmxlIHRvIHVzZSB0aGUgTkZTdjQuMSBj
+bGllbnQgd2l0aCBqdXN0IEFVVEhfU1lTLCBhbmQgaW4gZmFjdCB0aGVyZSBhcmUgcGxlbnR5IG9m
+IHBlb3BsZSBvdXQgdGhlcmUgdXNpbmcgb25seSB0aGF0LiBUaGUgZmFjdCB0aGF0IFJGQzU2NjEg
+Z2V0cyBpdHMga25pY2tlcnMgaW4gYSB0d2lzdCBhYm91dCBSUENTRUNfR1NTIHN1cHBvcnQgaXMg
+bGFyZ2VseSBpcnJlbGV2YW50IHRvIHRob3NlIHBlb3BsZS4NCj4gDQo+IFRoZSBvdGhlciBpc3N1
+ZSBpcyB0aGF0IOKAmXNlbGVjdOKAmSBlbmZvcmNlcyB0aGUgc3RyaWN0IGRlcGVuZGVuY3kgdGhh
+dCBpZiB0aGUgTkZTIGNsaWVudCBpcyBjb21waWxlZCBpbnRvIHRoZSBrZXJuZWwsIHRoZW4gdGhl
+IFJQQ1NFQ19HU1MgYW5kIGtlcmJlcm9zIGNvZGUgbmVlZHMgdG8gYmUgY29tcGlsZWQgaW4gYXMg
+d2VsbDogdGhleSBjYW5ub3QgZXhpc3QgYXMgbW9kdWxlcy4NCg0KDQoNCi0tDQpDaHVjayBMZXZl
+cg0KDQoNCg==
