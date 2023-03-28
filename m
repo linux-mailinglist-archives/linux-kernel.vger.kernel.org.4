@@ -2,197 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB626CCAAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA6C6CCA9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjC1TgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 15:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
+        id S229585AbjC1T3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 15:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjC1TgM (ORCPT
+        with ESMTP id S229468AbjC1T3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 15:36:12 -0400
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BBA9F
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:36:09 -0700 (PDT)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4PmKft0KQbz9sbg;
-        Tue, 28 Mar 2023 21:36:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1680032166;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UctDcSLnkPivkt/lZEarG/yH4/UnvtCzaIKp7oU4z5Q=;
-        b=oxD0cpNIO7C5J5hVIgVd6Iyoq+y/5F561v/J+JXWEEPjL3r9fSzW0ylGbbfgo+IfTY8lfs
-        js7zuhBtZ8Zv+WDFXGwe5gWv9HHt91x7yE2ZhX+semyXoenaCOppvTdmrH630d4A+qZef0
-        eOyhPiASVPpLRu+aH+zlbV7k4bNPNoHYysMv3Mu+Od6PbTXxfG7uYyx0t49uluri/ZBl5x
-        mbZpJb3td4X2cIq2ErlUAwJEOItYB6N6Yr/6X1JyFCCTWwhgMF9MiWapEdz+mMfIj/qvxL
-        Y3oN80duQKuPxnJpjcQqedONgt6SIl/eZPnumD1bnR15ucrC9kteN29tvWKgvQ==
-References: <20230320161636.24411-1-romanberanek@icloud.com>
- <87wn356ni4.fsf@oltmanns.dev> <20230327202045.ceeqqwjug4ktxtsf@penduick>
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Roman Beranek <romanberanek@icloud.com>,
-        Chen-Yu Tsai <wens@csie.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
- TCON0_DCLK_REG
-Date:   Tue, 28 Mar 2023 21:28:19 +0200
-In-reply-to: <20230327202045.ceeqqwjug4ktxtsf@penduick>
-Message-ID: <87bkkc3bzc.fsf@oltmanns.dev>
+        Tue, 28 Mar 2023 15:29:38 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31D52690
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:29:37 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id c9so6795950lfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:29:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680031776;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sze0hZQs4AzNTu34VgpoyYMvtZyrr4yHRgV/mYMoCA0=;
+        b=TucsBd+N/AQxtwaL0+o5NkcY9MSe4BBeB7YoVEYpkQV8wnCSGXj8+ipQbmuXWEzW2A
+         GM8O3lhwnn4JcP6ON75Pevuhje9cNtUFHOjcmISo50lT1G41d+14fgUUHDcPconVy0fS
+         5PyjuLBTZNnd8kgM55m7WRtrqA2p/Dke0lm/uMTLsExLNM2SVAfj8g2kHorU2izEeIs7
+         JT0edO0vY6WohLcj+qnliJeULIVv2uKBg3zZMuw3hiFBAvgOPLrcRvcvRUfnSQrjuCqm
+         8SMJTfWqtJaEUmUpAZoIkvXoKJ2nWCFOyhRwp9XoL7vyAyRpajv034xLjjtBT8WlcCJn
+         nKUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680031776;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sze0hZQs4AzNTu34VgpoyYMvtZyrr4yHRgV/mYMoCA0=;
+        b=RsY39On+10e8JxwxtzhIY95r7WlnmW+rrjdXdBS+8eYLibbe2j1R/xU3yNEvnzdTkc
+         IO/u3KYBxZT5TJdV+XZ263lLbfGb0SIbsO34JkkEbi/V7WNbdUdZTuqgiyMMVSBLBXKx
+         j3GWzPbrD7TA9lMGjotYol6vXr4JuS0K9dh+xYCuVPXwobEyaiZFQ6rkcAe4gGqXXKv5
+         BVOblU8ZBX4qMnnKRtiCwTrpvxsfaZ9LQvHQGAGumZg0q5H7eZsAQ64AdjP9ISI6iA40
+         XsvOm9TRjK8b+HgNPprLDhs+ueC/pR0NFU0CT/zmPL8rH4dsXQj/7G8IsZCdjLBG9ZOi
+         jIZg==
+X-Gm-Message-State: AAQBX9cAU/EhIpOaadCMYiF4QtKLGpNt5rh2DJJgtNgz2BtJ+RapVY/c
+        gviZgSyKmxKkp5eOeKozPGA8aCv7Kjz8y+Woy38GNhWULB6p2f0sJLk=
+X-Google-Smtp-Source: AKy350YFSKMXJnqTblo/+gcV15ljJSRH6Afdq3y71v4w821k/pohARkBmE7hu6p9kVh0UhqyN06tpfTIQVNOXx2mkYI=
+X-Received: by 2002:a05:6512:4ca:b0:4d5:ca32:6ed5 with SMTP id
+ w10-20020a05651204ca00b004d5ca326ed5mr5233121lfq.3.1680031775704; Tue, 28 Mar
+ 2023 12:29:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20220722201513.1624158-1-axelrasmussen@google.com> <ZCIEGblnsWHKF8RD@x1n>
+In-Reply-To: <ZCIEGblnsWHKF8RD@x1n>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Tue, 28 Mar 2023 12:28:59 -0700
+Message-ID: <CAJHvVcj5ysY-xqKLL8f48-vFhpAB+qf4cN0AesQEd7Kvsi9r_A@mail.gmail.com>
+Subject: Re: [PATCH] userfaultfd: don't fail on unrecognized features
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 4PmKft0KQbz9sbg
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi,
-
-On 2023-03-27 at 22:20:45 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
-> Hi,
+On Mon, Mar 27, 2023 at 2:01=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
 >
-> On Sat, Mar 25, 2023 at 12:40:04PM +0100, Frank Oltmanns wrote:
-[...]
->> Actually, I had the following third patch prepared that adjusted the dot=
-clock rate so that the
->> required PLL rate is set. But again, this seems very indirect, so that=
-=E2=80=99s why I refrained from
->> submitting it and I submitted the linked patch above instead.
->>
->> Anyway, here is the third proposal:
->>
->> =E2=80=94 a/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
->> +++ b/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
->> @@ -819,6 +819,34 @@ static void sun6i_dsi_encoder_disable(struct drm_en=
-coder *encoder)
->>  	regulator_disable(dsi->regulator);
->>  }
->>
->> +static bool sun6i_dsi_encoder_mode_fixup(
->> =E2=81=83 struct drm_encoder *encoder,
->> =E2=81=83 const struct drm_display_mode *mode,
->> =E2=81=83 struct drm_display_mode *adjusted_mode)
->> +{
->> =E2=81=83 if (encoder->encoder_type =3D=3D DRM_MODE_ENCODER_DSI) {
->> =E2=81=83 /*
->> =E2=81=83 * For DSI the PLL rate has to respect the bits per pixel and
->> =E2=81=83 * number of lanes.
->> =E2=81=83 *
->> =E2=81=83 * According to the BSP code:
->> =E2=81=83 * PLL rate =3D DOTCLOCK * bpp / lanes
->> =E2=81=83 *
->> =E2=81=83 * Therefore, the clock has to be adjusted in order to set the
->> =E2=81=83 * correct PLL rate when actually setting the clock.
->> =E2=81=83 */
->> =E2=81=83 struct sun6i_dsi *dsi =3D encoder_to_sun6i_dsi(encoder);
->> =E2=81=83 struct mipi_dsi_device *device =3D dsi->device;
->> =E2=81=83 u8 bpp =3D mipi_dsi_pixel_format_to_bpp(device->format);
->> =E2=81=83 u8 lanes =3D device->lanes;
->> =E2=81=83
->>
->> =E2=81=83 adjusted_mode->crtc_clock =3D mode->crtc_clock
->> =E2=81=83 * bpp / (lanes * SUN6I_DSI_TCON_DIV);
->> =E2=81=83 }
->> =E2=81=83
->>
->> =E2=81=83 return true;
->> +}
->> =E2=81=83 static int sun6i_dsi_get_modes(struct drm_connector *connector)
->>   {
->>       struct sun6i_dsi *dsi =3D connector_to_sun6i_dsi(connector);
->> @@ -851,6 +879,7 @@ static const struct drm_connector_funcs sun6i_dsi_co=
-nnector_funcs =3D {
->>  static const struct drm_encoder_helper_funcs sun6i_dsi_enc_helper_funcs=
- =3D {
->>  	.disable	=3D sun6i_dsi_encoder_disable,
->>  	.enable		=3D sun6i_dsi_encoder_enable,
->> =E2=81=83 .mode_fixup =3D sun6i_dsi_encoder_mode_fixup,
->>   };
+> I think I overlooked this patch..
 >
-> It's not clear to me what this patch is supposed to be doing, there's no =
-mode_fixup implementation
-> upstream?
+> Axel, could you explain why this patch is correct?  Comments inline.
 >
-
-Sorry, my mail client tried some fancy formatting. :(
-
-This is the patch again.
-
---- a/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
-+++ b/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
-@@ -819,6 +819,34 @@ static void sun6i_dsi_encoder_disable(struct drm_encod=
-er *encoder)
- 	regulator_disable(dsi->regulator);
- }
-
-+static bool sun6i_dsi_encoder_mode_fixup(
-+				   struct drm_encoder *encoder,
-+				   const struct drm_display_mode *mode,
-+				   struct drm_display_mode *adjusted_mode)
-+{
-+	if (encoder->encoder_type =3D=3D DRM_MODE_ENCODER_DSI) {
-+		/*
-+		 * For DSI the PLL rate has to respect the bits per pixel and
-+		 * number of lanes.
-+		 *
-+		 * According to the BSP code:
-+		 * PLL rate =3D DOTCLOCK * bpp / lanes
-+		 *
-+		 * Therefore, the clock has to be adjusted in order to set the
-+		 * correct PLL rate when actually setting the clock.
-+		 */
-+		struct sun6i_dsi *dsi =3D encoder_to_sun6i_dsi(encoder);
-+		struct mipi_dsi_device *device =3D dsi->device;
-+		u8 bpp =3D mipi_dsi_pixel_format_to_bpp(device->format);
-+		u8 lanes =3D device->lanes;
-+
-+		adjusted_mode->crtc_clock =3D mode->crtc_clock
-+				 * bpp / (lanes * SUN6I_DSI_TCON_DIV);
-+	}
-+
-+	return true;
-+}
-+
- static int sun6i_dsi_get_modes(struct drm_connector *connector)
- {
- 	struct sun6i_dsi *dsi =3D connector_to_sun6i_dsi(connector);
-@@ -851,6 +879,7 @@ static const struct drm_connector_funcs sun6i_dsi_conne=
-ctor_funcs =3D {
- static const struct drm_encoder_helper_funcs sun6i_dsi_enc_helper_funcs =
-=3D {
- 	.disable	=3D sun6i_dsi_encoder_disable,
- 	.enable		=3D sun6i_dsi_encoder_enable,
-+	.mode_fixup	=3D sun6i_dsi_encoder_mode_fixup,
- };
-
- static u32 sun6i_dsi_dcs_build_pkt_hdr(struct sun6i_dsi *dsi,
-
-
-I still like the original patch better, but I'd be happy to submit this
-as a proper patch, if this is more to your liking.
-
-Thanks,
-  Frank
-
-
-> Maxime
+> On Fri, Jul 22, 2022 at 01:15:13PM -0700, Axel Rasmussen wrote:
+> > The basic interaction for setting up a userfaultfd is, userspace issues
+> > a UFFDIO_API ioctl, and passes in a set of zero or more feature flags,
+> > indicating the features they would prefer to use.
+> >
+> > Of course, different kernels may support different sets of features
+> > (depending on kernel version, kconfig options, architecture, etc).
+> > Userspace's expectations may also not match: perhaps it was built
+> > against newer kernel headers, which defined some features the kernel
+> > it's running on doesn't support.
+> >
+> > Currently, if userspace passes in a flag we don't recognize, the
+> > initialization fails and we return -EINVAL. This isn't great, though.
 >
---
+> Why?  IIUC that's the major way for user app to detect any misconfig of
+> feature list so it can bail out early.
+>
+> Quoting from man page (ioctl_userfaultfd(2)):
+>
+> UFFDIO_API
+>        (Since Linux 4.3.)  Enable operation of the userfaultfd and perfor=
+m API handshake.
+>
+>        ...
+>
+>            struct uffdio_api {
+>                __u64 api;        /* Requested API version (input) */
+>                __u64 features;   /* Requested features (input/output) */
+>                __u64 ioctls;     /* Available ioctl() operations (output)=
+ */
+>            };
+>
+>        ...
+>
+>        For Linux kernel versions before 4.11, the features field must be
+>        initialized to zero before the call to UFFDIO_API, and zero (i.e.,
+>        no feature bits) is placed in the features field by the kernel upo=
+n
+>        return from ioctl(2).
+>
+>        ...
+>
+>        To enable userfaultfd features the application should set a bit
+>        corresponding to each feature it wants to enable in the features
+>        field.  If the kernel supports all the requested features it will
+>        enable them.  Otherwise it will zero out the returned uffdio_api
+>        structure and return EINVAL.
+>
+> IIUC the right way to use this API is first probe with features=3D=3D0, t=
+hen
+> the kernel will return all the supported features, then the user app shou=
+ld
+> enable only a subset (or all, but not a superset) of supported ones in th=
+e
+> next UFFDIO_API with a new uffd.
+
+Hmm, I think doing a two-step handshake just overcomplicates things.
+
+Isn't it simpler to just have userspace ask for the features it wants
+up front, and then the kernel responds with the subset of features it
+actually supports? In the common case (all features were supported),
+there is nothing more to do. Userspace is free to detect the uncommon
+case where some features it asked for are missing, and handle that
+however it likes.
+
+I think this patch is backwards compatible with the two-step approach, too.
+
+I do agree the man page could use some work. I don't think it
+describes the two-step handshake process correctly, either. It just
+says, "ask for the features you want, and the kernel will either give
+them to you or fail". If we really did want to keep the two-step
+process, it should describe it (set features =3D=3D 0 first, then ask only
+for the ones you want which are supported), and the example program
+should demonstrate it.
+
+But, I think it's simpler to just have the kernel do what the man page
+describes. Userspace asks for the features up front, kernel responds
+with the subset that are actually supported. No need to return EINVAL
+if unsupported features were requested.
+
+>
+> > Userspace doesn't have an obvious way to react to this; sure, one of th=
+e
+> > features I asked for was unavailable, but which one? The only option it
+> > has is to turn off things "at random" and hope something works.
+> >
+> > Instead, modify UFFDIO_API to just ignore any unrecognized feature
+> > flags. The interaction is now that the initialization will succeed, and
+> > as always we return the *subset* of feature flags that can actually be
+> > used back to userspace.
+> >
+> > Now userspace has an obvious way to react: it checks if any flags it
+> > asked for are missing. If so, it can conclude this kernel doesn't
+> > support those, and it can either resign itself to not using them, or
+> > fail with an error on its own, or whatever else.
+> >
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> > ---
+> >  fs/userfaultfd.c | 6 ++----
+> >  1 file changed, 2 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> > index e943370107d0..4974da1f620c 100644
+> > --- a/fs/userfaultfd.c
+> > +++ b/fs/userfaultfd.c
+> > @@ -1923,10 +1923,8 @@ static int userfaultfd_api(struct userfaultfd_ct=
+x *ctx,
+> >       ret =3D -EFAULT;
+> >       if (copy_from_user(&uffdio_api, buf, sizeof(uffdio_api)))
+> >               goto out;
+> > -     features =3D uffdio_api.features;
+> > -     ret =3D -EINVAL;
+> > -     if (uffdio_api.api !=3D UFFD_API || (features & ~UFFD_API_FEATURE=
+S))
+> > -             goto err_out;
+>
+> What's worse is that I think you removed the only UFFD_API check.  Althou=
+gh
+> I'm not sure whether it'll be extended in the future or not at all (very
+> possible we keep using 0xaa forever..), but removing this means we won't =
+be
+> able to extend it to a new api version in the future, and misconfig of
+> uffdio_api will wrongly succeed I think:
+>
+>         /* Test wrong UFFD_API */
+>         uffdio_api.api =3D 0xab;
+>         uffdio_api.features =3D 0;
+>         if (ioctl(uffd, UFFDIO_API, &uffdio_api) =3D=3D 0)
+>                 err("UFFDIO_API should fail but didn't");
+
+Agreed, we should add back the UFFD_API check - I am happy to send a
+patch for this.
+
+>
+> > +     /* Ignore unsupported features (userspace built against newer ker=
+nel) */
+> > +     features =3D uffdio_api.features & UFFD_API_FEATURES;
+> >       ret =3D -EPERM;
+> >       if ((features & UFFD_FEATURE_EVENT_FORK) && !capable(CAP_SYS_PTRA=
+CE))
+> >               goto err_out;
+> > --
+> > 2.37.1.359.gd136c6c3e2-goog
+> >
+>
+> --
+> Peter Xu
+>
