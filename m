@@ -2,146 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDBE6CBC5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D006CBC59
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbjC1KQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
+        id S229812AbjC1KPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbjC1KQH (ORCPT
+        with ESMTP id S230363AbjC1KP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:16:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D79644A7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:15:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679998506;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yVTl6Zqhno+wxlfGSCgUpjuBfnVHjRtvpGdjuseKXvQ=;
-        b=SRpCRuRSjXgfYtIqToZU/8owbMpY5ASv/QdkJBsA+6aOvuo4zpj0OO1d+eiy0bqDv3gAS2
-        AAph/GgIZ96xVmm0lyyaFIIM1t3gTpOMU2/DGOaBfRoE1kVl/IwyyHbRBBlBZkkBXeeHVR
-        OVUp8S+o1ytrwL6KdGPDdofsrQsTcWo=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-655-tTbnLsE7NVy8HBQCb373sg-1; Tue, 28 Mar 2023 06:15:05 -0400
-X-MC-Unique: tTbnLsE7NVy8HBQCb373sg-1
-Received: by mail-ed1-f69.google.com with SMTP id h11-20020a0564020e8b00b004e59d4722a3so16747942eda.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:15:05 -0700 (PDT)
+        Tue, 28 Mar 2023 06:15:29 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188F96A58
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:15:22 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id x17so15105602lfu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:15:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679998520;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=234Hi7RPwwGJcBwZrz6n+zvvJYe2QAil9tHn/ZofszU=;
+        b=eActs3ao0gU+Y4i4jKrSlbPjUHxvkxacebVr41wTlJCloZvD8fTW80If1lmwD/a+IH
+         baJIiDgIzH5G7eB1uBgaFZyN5Kw05e1hGGrMuFcXkLRhYdHej5FTZwPvriqwFcPbDxnj
+         zg2PXRfusffhq1QGralqwzuXYjtR/KP4yZK5p7HL4wo+v7bgf4MGRdSoYySYMCt3Y/qo
+         Bm8OtW6Pv3YG5P93oYBPBEPON1EC9sZbLMvXrCNADWXdVA3UXGME/UTzfqd2hNdLiWxB
+         aS6P+2skdmaDM6hGOuhHMktD49ki4Y50fMu5J/4/o5wCJhMG/cKkZ9p5+2bQXQzx9wZN
+         9yjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679998504;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yVTl6Zqhno+wxlfGSCgUpjuBfnVHjRtvpGdjuseKXvQ=;
-        b=uJkA4zICxY83huiVjgGPNJ0fb2Yqf1r2o3YV5LpviHZPAGwieYxcPKhaawfcCydU21
-         rcSEU8KBWrwx7FkKYZvU2RG4grk4S0YR6ffzVfWMZd2twq3opbFSHxM6/jlZfw6IudEc
-         6dZmiCOX7DJzZ2QyrYGpI7qffbTGv90bff1+6sp+FZyVk/B3VM5CBZXAAmyLDCcZQyg3
-         NjdM870TSwQe9YfHYMdjVNeLH6nB+qy7gH3YIMaITsnZyJVT700WDw/LTi2qmUmYBl5B
-         9LuH6pN67BEfxcRjUVhX2CvGJchVwbxweMJ536yja4LVnwqAmUYxJ6vg1/O0KsFPzzS9
-         hrCg==
-X-Gm-Message-State: AAQBX9fscIGWJdtVQulgSFTLhg80Ufc40BMIpT1Z1b2j6WEROmN3FhpM
-        qKwV6QYs1LyXPBvcExgGYpd3zUuKGSXG+9ixts7uXXLdeNhlguGFt5rKRrF/88AJZtiZhxzVYgJ
-        XfLLey3tWT2gSviY1HUzVZLtuUj2gX5uF
-X-Received: by 2002:a05:6402:31e2:b0:4fc:c6fe:1d3a with SMTP id dy2-20020a05640231e200b004fcc6fe1d3amr15738426edb.22.1679998504512;
-        Tue, 28 Mar 2023 03:15:04 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YAjL4A52eBRX9X9NGG7KuyR3mYs6dt88IHCIOn5pHRYMcQvxffUNRTHX2vlt4kPN8bsRrd/w==
-X-Received: by 2002:a05:6402:31e2:b0:4fc:c6fe:1d3a with SMTP id dy2-20020a05640231e200b004fcc6fe1d3amr15738413edb.22.1679998504260;
-        Tue, 28 Mar 2023 03:15:04 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id i22-20020a17090671d600b0093348be32cfsm13232182ejk.90.2023.03.28.03.15.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 03:15:03 -0700 (PDT)
-Message-ID: <ae65a407-9c39-c48a-0cb9-44b3eacda410@redhat.com>
-Date:   Tue, 28 Mar 2023 12:15:02 +0200
+        d=1e100.net; s=20210112; t=1679998520;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=234Hi7RPwwGJcBwZrz6n+zvvJYe2QAil9tHn/ZofszU=;
+        b=WlwsXgpIVtjXqIV4FvdrQei+U0K/QOFD1dZrf0EtU6cKHEibGX+mximARhv/b7cukK
+         oaWdh176mOpxjWK2JHe4X9QaZqy5xhZV5MIJbCuI3wUXn1IPORcwB1197fQ5dZu22dKj
+         d6L/sDdxeimfQACV7Exd4DccN1yNKX/Fw9AoAAhevlbxsA8VW/HbYccqXgrFYycPm9yV
+         WCB9gUKbpdOWcrVlmcIU4wX+vLjqRHfx4Q4mbmxITP4go4R2cdpmu1bXYATK2Gvwvepv
+         zVO+gBA9lsomn5jnFjl+DxTEaLyXYprEK/NjtQNgWQH/Msm7txts6kvqWBJ7Agjfl/Re
+         fkUg==
+X-Gm-Message-State: AAQBX9dXhwwwgy5d5X6AS7YJBUeT6LooLYqFJ6EgijDez8Y0dX50y1bs
+        ++eoUdoOaDznMovkBdPC+LpGrA==
+X-Google-Smtp-Source: AKy350bBqxAHsxe1eFJxcFf6vv3BAg51K7HxcgRPi38gAEhuTO0PZ2NpGz/Y+Lu5tPxWOyOpxIET8A==
+X-Received: by 2002:a19:7512:0:b0:4eb:c85:60eb with SMTP id y18-20020a197512000000b004eb0c8560ebmr2513274lfe.36.1679998520295;
+        Tue, 28 Mar 2023 03:15:20 -0700 (PDT)
+Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
+        by smtp.gmail.com with ESMTPSA id o25-20020ac24959000000b004e84d64ab51sm5061405lfi.58.2023.03.28.03.15.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 03:15:19 -0700 (PDT)
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com
+Cc:     alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tudor.ambarus@linaro.org
+Subject: [PATCH v3 0/4] ARM: dts: at91: Set sst26vf064b SPI NOR flash at its maxumum frequency
+Date:   Tue, 28 Mar 2023 10:15:13 +0000
+Message-Id: <20230328101517.1595738-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] ASoC: es8316: Handle optional IRQ assignment
-Content-Language: en-US, nl
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230328094901.50763-1-cristian.ciocaltea@collabora.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230328094901.50763-1-cristian.ciocaltea@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Changes in v3: Update S-o-b tag to match author's email.
+Changes in v2: update value of spi-cs-setup-ns as it was changed to u32
+since the first proposal.
+v1 at: https://lore.kernel.org/linux-mtd/20221117105249.115649-1-tudor.ambarus@microchip.com/
 
-On 3/28/23 11:49, Cristian Ciocaltea wrote:
-> The driver is able to work fine without relying on a mandatory interrupt
-> being assigned to the I2C device. This is only needed when making use of
-> the jack-detect support.
-> 
-> However, the following warning message is always emitted when there is
-> no such interrupt available:
-> 
->   es8316 0-0011: Failed to get IRQ 0: -22
-> 
-> Do not attempt to request an IRQ if it is not available/valid. This also
-> ensures the rather misleading message is not displayed anymore.
-> 
-> Also note the IRQ validation relies on commit dab472eb931bc291 ("i2c /
-> ACPI: Use 0 to indicate that device does not have interrupt assigned").
-> 
-> Fixes: 822257661031 ("ASoC: es8316: Add jack-detect support")
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
+---
+SPI NOR flashes have specific cs-setup time requirements without which
+they can't work at frequencies close to their maximum supported frequency,
+as they miss the first bits of the instruction command. Unrecognized
+commands are ignored, thus the flash will be unresponsive. Introduce the
+spi-cs-setup-ns property to allow spi devices to specify their cs setup
+time.
 
 
+Tudor Ambarus (4):
+  ARM: dts: at91-sama5d27_wlsom1: Set sst26vf064b SPI NOR flash at its
+    maximum frequency
+  ARM: dts: at91-sama5d27_som1: Set sst26vf064b SPI NOR flash at its
+    maximum frequency
+  ARM: dts: at91: sama5d2_icp: Set sst26vf064b SPI NOR flash at its
+    maximum frequency
+  ARM: dts: at91: sam9x60ek: Set sst26vf064b SPI NOR flash at its
+    maximum frequency
 
-> ---
->  sound/soc/codecs/es8316.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/sound/soc/codecs/es8316.c b/sound/soc/codecs/es8316.c
-> index 056c3082fe02..f7d7a9c91e04 100644
-> --- a/sound/soc/codecs/es8316.c
-> +++ b/sound/soc/codecs/es8316.c
-> @@ -842,12 +842,14 @@ static int es8316_i2c_probe(struct i2c_client *i2c_client)
->  	es8316->irq = i2c_client->irq;
->  	mutex_init(&es8316->lock);
->  
-> -	ret = devm_request_threaded_irq(dev, es8316->irq, NULL, es8316_irq,
-> -					IRQF_TRIGGER_HIGH | IRQF_ONESHOT | IRQF_NO_AUTOEN,
-> -					"es8316", es8316);
-> -	if (ret) {
-> -		dev_warn(dev, "Failed to get IRQ %d: %d\n", es8316->irq, ret);
-> -		es8316->irq = -ENXIO;
-> +	if (es8316->irq > 0) {
-> +		ret = devm_request_threaded_irq(dev, es8316->irq, NULL, es8316_irq,
-> +						IRQF_TRIGGER_HIGH | IRQF_ONESHOT | IRQF_NO_AUTOEN,
-> +						"es8316", es8316);
-> +		if (ret) {
-> +			dev_warn(dev, "Failed to get IRQ %d: %d\n", es8316->irq, ret);
-> +			es8316->irq = -ENXIO;
-> +		}
->  	}
->  
->  	return devm_snd_soc_register_component(&i2c_client->dev,
+ arch/arm/boot/dts/at91-sam9x60ek.dts        | 3 ++-
+ arch/arm/boot/dts/at91-sama5d27_som1.dtsi   | 3 ++-
+ arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi | 3 ++-
+ arch/arm/boot/dts/at91-sama5d2_icp.dts      | 3 ++-
+ 4 files changed, 8 insertions(+), 4 deletions(-)
+
+-- 
+2.40.0.348.gf938b09366-goog
 
