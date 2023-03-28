@@ -2,153 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3286CC794
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C36086CC79A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbjC1QLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 12:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S230199AbjC1QMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 12:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjC1QLd (ORCPT
+        with ESMTP id S230226AbjC1QM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 12:11:33 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5113CA22
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 09:11:32 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso15608541pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 09:11:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680019892;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lmvQbMnquHCs8y3TjlpGBkeBDRpreYiVTLtx4N4ZOyA=;
-        b=SklTkt7XAlGaEiYlr3xZ6mZJZStfEYfCsBgZ38u0erR7RTofrxgEGwqFzusUYJa2S8
-         K7Cr/pmLlNkqyTimm7SyThSvcsaETTO898sR8JNIDD1uGsVwTMbsDo1xYaE5KItPAfTK
-         vV0ut56y40wHhiZ4vhjSYzimq8eaMiIePGaKU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680019892;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lmvQbMnquHCs8y3TjlpGBkeBDRpreYiVTLtx4N4ZOyA=;
-        b=CdzkiiyZ3iJfQRrgMk8FrFwFLaIs/4Lb7xGjmZ4LvBScWt5IBCy/i5JDgS2yBHkt4I
-         154HNHaUCP1iwyMHd4uDGvdaClwFWcGt0/ABjL8evkuJlL8gJPMDpESx90KLgBYNURRZ
-         0Y/XEA+VkqTkU6E64H2l4cTm8dbBUQCpWfEm2nOFust7GKgUYdfiua6ltHZR7SWwjNFP
-         Rbfop3vzgkYsZTnWOWHsLwa0mY/CNnBn6Qgpu/7DXMiHLLhLNqXhOqBeI3+fzx3XLb7B
-         IWzietMmVZaBUjzocmgw2BGXE4B3Kpkom9D+KKOw53R2Nu6Ar4Huy65oXtpg0+cd9mCW
-         xFkA==
-X-Gm-Message-State: AAQBX9dLjsEtq3LJ8s4ZcUQ68btrwlAp8qCMGyMQSXv1pmVgnliXuI4/
-        kghC34JkpILDplGap1g+Owoi9A==
-X-Google-Smtp-Source: AKy350bAutE4/131jvJcnXx7/MbiMcMc1xssMkpPAPX4tTQMeLm2dW7fSD/Nbd68x8GDIY2V2wtpVg==
-X-Received: by 2002:a17:90b:4a02:b0:234:ba34:71bf with SMTP id kk2-20020a17090b4a0200b00234ba3471bfmr16897442pjb.1.1680019892454;
-        Tue, 28 Mar 2023 09:11:32 -0700 (PDT)
-Received: from torsha.c.googlers.com.com (209.148.168.34.bc.googleusercontent.com. [34.168.148.209])
-        by smtp.gmail.com with ESMTPSA id kq3-20020a17090aed0300b0023d0d50edf2sm6264348pjb.42.2023.03.28.09.11.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 09:11:32 -0700 (PDT)
-From:   Torsha Banerjee <torsha@chromium.org>
-X-Google-Original-From: Torsha Banerjee <torsha@google.com>
-To:     u-boot@lists.denx.de
-Cc:     Jora Jacobi <jora@google.com>, Torsha Banerjee <torsha@google.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Series-to: Fred Bloggs <f.blogs@napier.co.nz> Series-cc: Sean O'Brien <seobrien@chromium.org> HID: input:  Restore missing cursor for digitizer devices
-Date:   Tue, 28 Mar 2023 16:11:22 +0000
-Message-Id: <20230328161119.1.I40a8881b83b0e440ed5368d98b42a2d9a0c105aa@changeid>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+        Tue, 28 Mar 2023 12:12:28 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E580BA;
+        Tue, 28 Mar 2023 09:12:27 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SEAsrt016228;
+        Tue, 28 Mar 2023 18:12:17 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=5mP6//w6LL/2ItX1lfQc9H2g3uovyhjnSXOXDMDTlZY=;
+ b=pOj/u2G8yJCIK6OOY/55cu9eM5k2TXTmzji0xad199sJ70RBSFS6hIRxfRBwuQ9YC34V
+ ZxZaXsqrNX9FudPeEcyBwtkpO1g3deylycxp3Cl8RGR9gFkZrg5O4hG0QUqEUzESBDEA
+ e9v/o+SVPsoX1lkI61KECO0z/EjQ2ffXMZG5CIh1gpYMtiP9tQFpp6THXL3gD9dYWIJz
+ w7W7PFSfFOoFRwLO4BJWpL3lfNgQuijEPX3YZLkEAqCJhe8XFtHOxMdQNlyB+BEkCHwS
+ UEldNG5W+AMc9Q1B/GwCYPcGVFZhYl+qrFcBvxWvazgzPgGb/uGC38r6a/coV2vBz7wD 7A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pkwvsah6n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 18:12:17 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 41F6F10002A;
+        Tue, 28 Mar 2023 18:12:16 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3749921A21E;
+        Tue, 28 Mar 2023 18:12:16 +0200 (CEST)
+Received: from [10.48.0.175] (10.48.0.175) by SHFDAG1NODE3.st.com
+ (10.75.129.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Tue, 28 Mar
+ 2023 18:12:15 +0200
+Message-ID: <0f0879bf-2634-09e9-4618-d80c7badc0ce@foss.st.com>
+Date:   Tue, 28 Mar 2023 18:12:15 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] ARM: dts: stm32: add FMC support on STM32MP13x SoC family
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <alexandre.torgue@foss.st.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20230328122606.191211-1-christophe.kerello@foss.st.com>
+ <fc0738f5-0494-6142-56a4-ae3d0182a903@linaro.org>
+From:   Christophe Kerello <christophe.kerello@foss.st.com>
+In-Reply-To: <fc0738f5-0494-6142-56a4-ae3d0182a903@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.0.175]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE3.st.com
+ (10.75.129.71)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-28_02,2023-02-09_01
+X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jora Jacobi <jora@google.com>
+Hello Krzysztof,
 
-A previously committed patch to remove cursors for HID Digitizer-Pen
-devices also removed the cursors for some tablets which have incorrect HID
-descriptors. These devices should enumerate with Usage ID "Digitizer"
-instead of Usage ID "Pen".
+On 3/28/23 16:53, Krzysztof Kozlowski wrote:
+> On 28/03/2023 14:26, Christophe Kerello wrote:
+>> This patch adds the FMC support on STM32MP13x SoC family.
+> 
+> Do not use "This commit/patch", but imperative mood. See:
+> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+> 
+>>
+>> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+>> ---
+>>   arch/arm/boot/dts/stm32mp131.dtsi | 34 +++++++++++++++++++++++++++++++
+>>   1 file changed, 34 insertions(+)
+>>
+>> diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
+>> index 5949473cbbfd..7af3eb15c204 100644
+>> --- a/arch/arm/boot/dts/stm32mp131.dtsi
+>> +++ b/arch/arm/boot/dts/stm32mp131.dtsi
+>> @@ -1137,6 +1137,40 @@ mdma: dma-controller@58000000 {
+>>   			dma-requests = <48>;
+>>   		};
+>>   
+>> +		fmc: memory-controller@58002000 {
+>> +			#address-cells = <2>;
+>> +			#size-cells = <1>;
+>> +			compatible = "st,stm32mp1-fmc2-ebi";
+>> +			reg = <0x58002000 0x1000>;
+> 
+> 
+> compatible is first, reg is second. ranges if present should be third.
+> 
 
-Patch which introduced the issue: commit 8473a93d1ba5
-("HID: input: Set INPUT_PROP_-property for HID_UP_DIGITIZERS")
+Ok, it will be done in V2.
 
-Changes-
-Add HID quirk HID_QUIRK_DEVICE_IS_DIGITIZER
-Quirk will force INPUT_PROP_POINTER for HID Digitizers
-Apply quirk to Huion tablets
-Apply quirk to UGEE/XP-Pen tablets based on device ID
+Regards,
+Christophe Kerello.
 
-Signed-off-by: Torsha Banerjee <torsha@google.com>
----
-
- drivers/hid/hid-input.c  | 3 ++-
- drivers/hid/hid-quirks.c | 9 +++++++++
- include/linux/hid.h      | 2 ++
- 3 files changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-index 7fc967964dd8..f0c67baddc8d 100644
---- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -927,7 +927,8 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
- 		break;
- 
- 	case HID_UP_DIGITIZER:
--		if ((field->application & 0xff) == 0x01) /* Digitizer */
-+		if (((field->application & 0xff) == 0x01) ||
-+			(device->quirks & HID_QUIRK_DEVICE_IS_DIGITIZER)) /* Digitizer */
- 			__set_bit(INPUT_PROP_POINTER, input->propbit);
- 		else if ((field->application & 0xff) == 0x02) /* Pen */
- 			__set_bit(INPUT_PROP_DIRECT, input->propbit);
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index 66e64350f138..094fe4c4f3b3 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -102,6 +102,8 @@ static const struct hid_device_id hid_quirks[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_HP, USB_PRODUCT_ID_HP_PIXART_OEM_USB_OPTICAL_MOUSE_0941), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_HP, USB_PRODUCT_ID_HP_PIXART_OEM_USB_OPTICAL_MOUSE_0641), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_HP, USB_PRODUCT_ID_HP_PIXART_OEM_USB_OPTICAL_MOUSE_1f4a), HID_QUIRK_ALWAYS_POLL },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_HUION, USB_DEVICE_ID_HUION_HS64), HID_QUIRK_DEVICE_IS_DIGITIZER },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_HUION, USB_DEVICE_ID_HUION_TABLET), HID_QUIRK_DEVICE_IS_DIGITIZER },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_IDEACOM, USB_DEVICE_ID_IDEACOM_IDC6680), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_INNOMEDIA, USB_DEVICE_ID_INNEX_GENESIS_ATARI), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_KYE_EASYPEN_M610X), HID_QUIRK_MULTI_INPUT },
-@@ -1298,6 +1300,13 @@ unsigned long hid_lookup_quirk(const struct hid_device *hdev)
- 		quirks = hid_gets_squirk(hdev);
- 	mutex_unlock(&dquirks_lock);
- 
-+	/*
-+	 * UGEE/XP-Pen HID Pen devices which have 0x0-0x9 as the low nibble
-+	 * of the device ID are actually digitizers, not HID Pen devices
-+	 */
-+	if (hdev->vendor == USB_VENDOR_ID_UGEE && (hdev->product & 0x0F) <= 0x09)
-+		quirks |= HID_QUIRK_DEVICE_IS_DIGITIZER;
-+
- 	return quirks;
- }
- EXPORT_SYMBOL_GPL(hid_lookup_quirk);
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index 1ea8c7a3570b..c9cc81e85a33 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -352,8 +352,10 @@ struct hid_item {
- /* BIT(9) reserved for backward compatibility, was NO_INIT_INPUT_REPORTS */
- #define HID_QUIRK_ALWAYS_POLL			BIT(10)
- #define HID_QUIRK_INPUT_PER_APP			BIT(11)
-+
- #define HID_QUIRK_X_INVERT			BIT(12)
- #define HID_QUIRK_Y_INVERT			BIT(13)
-+#define HID_QUIRK_DEVICE_IS_DIGITIZER		BIT(14)
- #define HID_QUIRK_SKIP_OUTPUT_REPORTS		BIT(16)
- #define HID_QUIRK_SKIP_OUTPUT_REPORT_ID		BIT(17)
- #define HID_QUIRK_NO_OUTPUT_REPORTS_ON_INTR_EP	BIT(18)
--- 
-2.40.0.348.gf938b09366-goog
-
+>> +			clocks = <&rcc FMC_K>;
+>> +			resets = <&rcc FMC_R>;
+>> +			status = "disabled";
+>> +
+>> +			ranges = <0 0 0x60000000 0x04000000>, /* EBI CS 1 */
+> 
+> Best regards,
+> Krzysztof
+> 
