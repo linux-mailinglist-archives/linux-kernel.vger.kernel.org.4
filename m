@@ -2,200 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F756CCD43
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 00:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD616CCD3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 00:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjC1Wd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 18:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
+        id S229770AbjC1Wap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 18:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjC1Wdo (ORCPT
+        with ESMTP id S229510AbjC1Wal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 18:33:44 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABA8107
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680042823; x=1711578823;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dff8bfa4xFxrDAv4QO3C6nfds+XDea5PueZbQSlEq0Q=;
-  b=ReGVh010QeWvXu3czNBIBxPaRmeFXazVfwipkTW67FKyNJqaNb+vIbWA
-   kEod+MzuzE+PMfw5z+LGuWDsj8/yystvM5kQz97v5nyzVFDzosKvFAU8e
-   Moq/bUJkaa2rhS1hnMVxRWueb4tXTayJyKFt+pEDhXwI0YmNyWZZaeeNk
-   RORGhqryC3KPWVydePweysz33VJN0Hx+N+7UPn420nvJEh7gm9CRXZGq3
-   bq7rBk7M/mTZDo6ALu+jmeiE9edBGZpsJlSbsBzmBZBcKwIuIi4XaNbSt
-   kl9hJjxf2KuOlDAK4WbFIDBFqjM0o9p9+tICVBmTtlgRzzWHjEGwyWC0l
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="340735721"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="340735721"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 15:32:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="634236283"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="634236283"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga003.jf.intel.com with ESMTP; 28 Mar 2023 15:27:37 -0700
-From:   kan.liang@linux.intel.com
-To:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org
-Cc:     ak@linux.intel.com, eranian@google.com,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 2/2] perf/x86/intel/ds: Use the size from each PEBS record
-Date:   Tue, 28 Mar 2023 15:27:35 -0700
-Message-Id: <20230328222735.1367829-2-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230328222735.1367829-1-kan.liang@linux.intel.com>
-References: <20230328222735.1367829-1-kan.liang@linux.intel.com>
+        Tue, 28 Mar 2023 18:30:41 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3A91BD8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:30:39 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id x6so7160788ile.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:30:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680042639;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XfrOsOpnqxrdbXw8cTpOjnxBsJ1WSvwEhP/QCOfZvvM=;
+        b=AYZZ+7FN2S0eFfWorKzduUULM2BMIh3SqbYaWQX6KuhcT1YbPyif2xYDrAJ1QT3d2q
+         ISh9i0FHBIN3JXd484BwYdfRQclk8eULgKRL3aXULq3P6MSBckvdnb9HJWzP6EWA2FDH
+         rozer6sKkrIq6+tJurfUip3LB/c3NiS6GffJCbi9kR5ec2aO+CEOqAMi9YMaD4xdJWMJ
+         jiH6G+aUtgNtjTdJQG3eT+o3E5ppNeRe6JWvSGZ+IpaymYbEe6Nf6FbSnzlmhomgGr1c
+         Zc/ulJ/lVkXN3IeCaUfuac3otZVMEnECqaEcpor3aRAlQN6NI2tGOpPy9h6mU2F8/awQ
+         BxqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680042639;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XfrOsOpnqxrdbXw8cTpOjnxBsJ1WSvwEhP/QCOfZvvM=;
+        b=fUmx3KcLsNEYYzieABB7zFSFoyaxKgaRPmNexKG3DsfFHYxCfmjDtEuZ/sVd8i34Cv
+         8DoPjAWJYeb/XYjBR0emOcKrwnk0+JAVvP33D5yAJdvpOsRHg1MP8eENrF7R0uCqO2dW
+         nCjMVR6xQ9mpoY0Vq7hJInSfdVnzrNzD80+eBIZZk4rq+Q6YyiMNSb3c4XQdVEaLeYVA
+         wN6x+EEZoAxpLMkgYZVETDUneYpD99jC+udw9gS2Ryt+hsv7p7cP/PAUo2s/93hNWEBP
+         E6m57wxuZM6yL3ReuQGj0Svb9iefZTxEs1UhMFdxTbKi4pgkveVCu00Ufu1Qoi6FXpx/
+         85Tw==
+X-Gm-Message-State: AAQBX9fIQXPelWvAPbI65e/FJdPj070nUHqxdD1LL1wMUHB3PhZM1RVo
+        hBQRgdN7cd/fVqOV5nWk+yFrah6Qw3rpEE/N+si0zSKPFZ77ez/yFyuyF/95
+X-Google-Smtp-Source: AKy350ZK5IyYA9Wk4KwHRYcFlwgupqb8zlGkiiXMerP6RT7ZRB3sqFXY2PYSe7FENYWQkdqCH95ry1OfFmMXvph6qq4=
+X-Received: by 2002:a05:6e02:218d:b0:322:fd25:872c with SMTP id
+ j13-20020a056e02218d00b00322fd25872cmr9145652ila.2.1680042638741; Tue, 28 Mar
+ 2023 15:30:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230328195925.94495-1-nbd@nbd.name>
+In-Reply-To: <20230328195925.94495-1-nbd@nbd.name>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 29 Mar 2023 00:30:27 +0200
+Message-ID: <CANn89iJ1-xSmTXbfhhiBxFE5cH=o4QWQdguWZUuSs8fehbOC=A@mail.gmail.com>
+Subject: Re: [PATCH net-next v2] net/core: add optional threading for backlog processing
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     netdev@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On Tue, Mar 28, 2023 at 9:59=E2=80=AFPM Felix Fietkau <nbd@nbd.name> wrote:
+>
+> When dealing with few flows or an imbalance on CPU utilization, static RP=
+S
+> CPU assignment can be too inflexible. Add support for enabling threaded N=
+API
+> for backlog processing in order to allow the scheduler to better balance
+> processing. This helps better spread the load across idle CPUs.
+>
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+> ---
+> v2:
+>  - initialize sd->backlog.poll_list in order fix switching backlogs to th=
+readed
+>    that have not been scheduled before
+> PATCH:
+>  - add missing process_queue_empty initialization
+>  - fix kthread leak
+>  - add documentation
+> RFC v3:
+>  - make patch more generic, applies to backlog processing in general
+>  - fix process queue access on flush
+> RFC v2:
+>  - fix rebase error in rps locking
+>  Documentation/admin-guide/sysctl/net.rst |  9 +++
+>  Documentation/networking/scaling.rst     | 20 ++++++
+>  include/linux/netdevice.h                |  2 +
+>  net/core/dev.c                           | 83 ++++++++++++++++++++++--
+>  net/core/sysctl_net_core.c               | 27 ++++++++
+>  5 files changed, 136 insertions(+), 5 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/sysctl/net.rst b/Documentation/adm=
+in-guide/sysctl/net.rst
+> index 466c560b0c30..6d037633a52f 100644
+> --- a/Documentation/admin-guide/sysctl/net.rst
+> +++ b/Documentation/admin-guide/sysctl/net.rst
+> @@ -47,6 +47,15 @@ Table : Subdirectories in /proc/sys/net
+>  1. /proc/sys/net/core - Network core options
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> +backlog_threaded
+> +----------------
+> +
+> +This offloads processing of backlog (input packets steered by RPS, or
+> +queued because the kernel is receiving more than it can handle on the
+> +incoming CPU) to threads (one for each CPU) instead of processing them
+> +in softirq context. This can improve load balancing by allowing the
+> +scheduler to better spread the load across idle CPUs.
+> +
+>  bpf_jit_enable
+>  --------------
+>
+> diff --git a/Documentation/networking/scaling.rst b/Documentation/network=
+ing/scaling.rst
+> index 3d435caa3ef2..ded6fc713304 100644
+> --- a/Documentation/networking/scaling.rst
+> +++ b/Documentation/networking/scaling.rst
+> @@ -244,6 +244,26 @@ Setting net.core.netdev_max_backlog to either 1000 o=
+r 10000
+>  performed well in experiments.
+>
+>
+> +Threaded Backlog
+> +~~~~~~~~~~~~~~~~
+> +
+> +When dealing with few flows or an imbalance on CPU utilization, static
+> +RPS CPU assignment can be too inflexible. Making backlog processing
+> +threaded can improve load balancing by allowing the scheduler to spread
+> +the load across idle CPUs.
+> +
+> +
+> +Suggested Configuration
+> +~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +If you have CPUs fully utilized with network processing, you can enable
+> +threaded backlog processing by setting /proc/sys/net/core/backlog_thread=
+ed
+> +to 1. Afterwards, RPS CPU configuration bits no longer refer to CPU
+> +numbers, but to backlog threads named napi/backlog-<n>.
+> +If necessary, you can change the CPU affinity of these threads to limit
+> +them to specific CPU cores.
+> +
+> +
+>  RFS: Receive Flow Steering
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+>
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 18a5be6ddd0f..953876cb0e92 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -527,6 +527,7 @@ static inline bool napi_complete(struct napi_struct *=
+n)
+>  }
+>
+>  int dev_set_threaded(struct net_device *dev, bool threaded);
+> +int backlog_set_threaded(bool threaded);
+>
+>  /**
+>   *     napi_disable - prevent NAPI from scheduling
+> @@ -3217,6 +3218,7 @@ struct softnet_data {
+>         unsigned int            cpu;
+>         unsigned int            input_queue_tail;
+>  #endif
+> +       unsigned int            process_queue_empty;
 
-The kernel warning for the unexpected PEBS record can also be observed
-during a context switch, when the below commands are running in parallel
-for a while on SPR.
+Hmmm... probably better close to input_queue_head, to share a
+dedicated cache line already dirtied
+with input_queue_head_incr()
 
-  while true; do perf record --no-buildid -a --intr-regs=AX -e
-  cpu/event=0xd0,umask=0x81/pp -c 10003 -o /dev/null ./triad; done &
+I also think we could avoid adding this new field.
 
-  while true; do perf record -o /tmp/out -W -d -e
-  '{ld_blocks.store_forward:period=1000000,
-  MEM_TRANS_RETIRED.LOAD_LATENCY:u:precise=2:ldlat=4}'
-  -c 1037 ./triad; done
-  *The triad program is just the generation of loads/stores.
+Use instead input_queue_head, latching its value in void
+flush_backlog() and adding sd->process_queue length ?
 
-The current PEBS code assumes that all the PEBS records in the DS buffer
-have the same size, aka cpuc->pebs_record_size. It's true for the most
-cases, since the DS buffer is always flushed in every context switch.
+Then waiting for (s32)(input_queue_head - latch) >=3D 0 ?
 
-However, there is a corner case that breaks the assumption.
-A system-wide PEBS event with the large PEBS config may be enabled
-during a context switch. Some PEBS records for the system-wide PEBS may
-be generated while the old task is sched out but the new one hasn't been
-sched in yet. When the new task is sched in, the cpuc->pebs_record_size
-may be updated for the per-task PEBS events. So the existing system-wide
-PEBS records have a different size from the later PEBS records.
 
-Two methods were considered to fix the issue.
-One is to flush the DS buffer for the system-wide PEBS right before the
-new task sched in. It has to be done in the generic code via the
-sched_task() call back. However, the sched_task() is shared among
-different ARCHs. The movement may impact other ARCHs, e.g., AMD BRS
-requires the sched_task() is called after the PMU has started on a
-ctxswin. The method is dropped.
-
-The other method is implemented here. It doesn't assume that all the
-PEBS records have the same size any more. The size from each PEBS record
-is used to parse the record. For the previous platform (PEBS format < 4),
-which doesn't support adaptive PEBS, there is nothing changed.
-
-Reported-by: Stephane Eranian <eranian@google.com>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- arch/x86/events/intel/ds.c        | 31 ++++++++++++++++++++++++++-----
- arch/x86/include/asm/perf_event.h |  6 ++++++
- 2 files changed, 32 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-index a2e566e53076..905135a8b99f 100644
---- a/arch/x86/events/intel/ds.c
-+++ b/arch/x86/events/intel/ds.c
-@@ -1546,6 +1546,15 @@ static inline u64 get_pebs_status(void *n)
- 	return ((struct pebs_basic *)n)->applicable_counters;
- }
- 
-+static inline u64 get_pebs_size(void *n)
-+{
-+	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-+
-+	if (x86_pmu.intel_cap.pebs_format < 4)
-+		return cpuc->pebs_record_size;
-+	return intel_adaptive_pebs_size(((struct pebs_basic *)n)->format_size);
-+}
-+
- #define PERF_X86_EVENT_PEBS_HSW_PREC \
- 		(PERF_X86_EVENT_PEBS_ST_HSW | \
- 		 PERF_X86_EVENT_PEBS_LD_HSW | \
-@@ -1903,9 +1912,9 @@ static void setup_pebs_adaptive_sample_data(struct perf_event *event,
- 		}
- 	}
- 
--	WARN_ONCE(next_record != __pebs + (format_size >> 48),
-+	WARN_ONCE(next_record != __pebs + intel_adaptive_pebs_size(format_size),
- 			"PEBS record size %llu, expected %llu, config %llx\n",
--			format_size >> 48,
-+			intel_adaptive_pebs_size(format_size),
- 			(u64)(next_record - __pebs),
- 			basic->format_size);
- }
-@@ -1927,7 +1936,7 @@ get_next_pebs_record_by_bit(void *base, void *top, int bit)
- 	if (base == NULL)
- 		return NULL;
- 
--	for (at = base; at < top; at += cpuc->pebs_record_size) {
-+	for (at = base; at < top; at += get_pebs_size(at)) {
- 		unsigned long status = get_pebs_status(at);
- 
- 		if (test_bit(bit, (unsigned long *)&status)) {
-@@ -2054,7 +2063,7 @@ __intel_pmu_pebs_event(struct perf_event *event,
- 	while (count > 1) {
- 		setup_sample(event, iregs, at, data, regs);
- 		perf_event_output(event, data, regs);
--		at += cpuc->pebs_record_size;
-+		at += get_pebs_size(at);
- 		at = get_next_pebs_record_by_bit(at, top, bit);
- 		count--;
- 	}
-@@ -2278,7 +2287,19 @@ static void intel_pmu_drain_pebs_icl(struct pt_regs *iregs, struct perf_sample_d
- 		return;
- 	}
- 
--	for (at = base; at < top; at += cpuc->pebs_record_size) {
-+	/*
-+	 * The cpuc->pebs_record_size may be different from the
-+	 * size of each PEBS record. For example, a system-wide
-+	 * PEBS event with the large PEBS config may be enabled
-+	 * during a context switch. Some PEBS records for the
-+	 * system-wide PEBS may be generated while the old task
-+	 * is sched out but the new one isn't sched in. When the
-+	 * new task is sched in, the cpuc->pebs_record_size may
-+	 * be updated for the per-task PEBS events. So the
-+	 * existing system-wide PEBS records have a different
-+	 * size from the later PEBS records.
-+	 */
-+	for (at = base; at < top; at += get_pebs_size(at)) {
- 		u64 pebs_status;
- 
- 		pebs_status = get_pebs_status(at) & cpuc->pebs_enabled;
-diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
-index 8fc15ed5e60b..ad5655bb90f6 100644
---- a/arch/x86/include/asm/perf_event.h
-+++ b/arch/x86/include/asm/perf_event.h
-@@ -386,6 +386,12 @@ static inline bool is_topdown_idx(int idx)
- /*
-  * Adaptive PEBS v4
-  */
-+#define INTEL_ADAPTIVE_PEBS_SIZE_OFF		48
-+
-+static inline u64 intel_adaptive_pebs_size(u64 format_size)
-+{
-+	return (format_size >> INTEL_ADAPTIVE_PEBS_SIZE_OFF);
-+}
- 
- struct pebs_basic {
- 	u64 format_size;
--- 
-2.35.1
-
+>                         /*
+>                          * Inline a custom version of __napi_complete().
+> -                        * only current cpu owns and manipulates this nap=
+i,
+> -                        * and NAPI_STATE_SCHED is the only possible flag=
+ set
+> -                        * on backlog.
+> +                        * only current cpu owns and manipulates this nap=
+i.
+>                          * We can use a plain write instead of clear_bit(=
+),
+>                          * and we dont need an smp_mb() memory barrier.
+>                          */
+> -                       napi->state =3D 0;
+> +                       napi->state &=3D ~(NAPIF_STATE_SCHED |
+> +                                        NAPIF_STATE_SCHED_THREADED);
+>                         again =3D false;
+>                 } else {
+>                         skb_queue_splice_tail_init(&sd->input_pkt_queue,
+> @@ -6350,6 +6370,55 @@ int dev_set_threaded(struct net_device *dev, bool =
+threaded)
+>  }
+>  EXPORT_SYMBOL(dev_set_threaded);
+>
+> +int backlog_set_threaded(bool threaded)
+> +{
+> +       static bool backlog_threaded;
+> +       int err =3D 0;
+> +       int i;
+> +
+> +       if (backlog_threaded =3D=3D threaded)
+> +               return 0;
+> +
+> +       for_each_possible_cpu(i) {
+> +               struct softnet_data *sd =3D &per_cpu(softnet_data, i);
+> +               struct napi_struct *n =3D &sd->backlog;
+> +
+> +               if (n->thread)
+> +                       continue;
+> +               n->thread =3D kthread_run(napi_threaded_poll, n, "napi/ba=
+cklog-%d", i);
+> +               if (IS_ERR(n->thread)) {
+> +                       err =3D PTR_ERR(n->thread);
+> +                       pr_err("kthread_run failed with err %d\n", err);
+> +                       n->thread =3D NULL;
+> +                       threaded =3D false;
+> +                       break;
+> +               }
+> +
+> +       }
+> +
+> +       backlog_threaded =3D threaded;
+> +
+> +       /* Make sure kthread is created before THREADED bit
+> +        * is set.
+> +        */
+> +       smp_mb__before_atomic();
+> +
+> +       for_each_possible_cpu(i) {
+> +               struct softnet_data *sd =3D &per_cpu(softnet_data, i);
+> +               struct napi_struct *n =3D &sd->backlog;
+> +               unsigned long flags;
+> +
+> +               rps_lock_irqsave(sd, &flags);
+> +               if (threaded)
+> +                       n->state |=3D NAPIF_STATE_THREADED;
+> +               else
+> +                       n->state &=3D ~NAPIF_STATE_THREADED;
+> +               rps_unlock_irq_restore(sd, &flags);
+> +       }
+> +
+> +       return err;
+> +}
+> +
+>  void netif_napi_add_weight(struct net_device *dev, struct napi_struct *n=
+api,
+>                            int (*poll)(struct napi_struct *, int), int we=
+ight)
+>  {
+> @@ -11108,6 +11177,9 @@ static int dev_cpu_dead(unsigned int oldcpu)
+>         raise_softirq_irqoff(NET_TX_SOFTIRQ);
+>         local_irq_enable();
+>
+> +       if (test_bit(NAPI_STATE_THREADED, &oldsd->backlog.state))
+> +               return 0;
+> +
+>  #ifdef CONFIG_RPS
+>         remsd =3D oldsd->rps_ipi_list;
+>         oldsd->rps_ipi_list =3D NULL;
+> @@ -11411,6 +11483,7 @@ static int __init net_dev_init(void)
+>                 INIT_CSD(&sd->defer_csd, trigger_rx_softirq, sd);
+>                 spin_lock_init(&sd->defer_lock);
+>
+> +               INIT_LIST_HEAD(&sd->backlog.poll_list);
+>                 init_gro_hash(&sd->backlog);
+>                 sd->backlog.poll =3D process_backlog;
+>                 sd->backlog.weight =3D weight_p;
+> diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
+> index 74842b453407..77114cd0b021 100644
+> --- a/net/core/sysctl_net_core.c
+> +++ b/net/core/sysctl_net_core.c
+> @@ -30,6 +30,7 @@ static int int_3600 =3D 3600;
+>  static int min_sndbuf =3D SOCK_MIN_SNDBUF;
+>  static int min_rcvbuf =3D SOCK_MIN_RCVBUF;
+>  static int max_skb_frags =3D MAX_SKB_FRAGS;
+> +static int backlog_threaded;
+>
+>  static int net_msg_warn;       /* Unused, but still a sysctl */
+>
+> @@ -188,6 +189,23 @@ static int rps_sock_flow_sysctl(struct ctl_table *ta=
+ble, int write,
+>  }
+>  #endif /* CONFIG_RPS */
+>
+> +static int backlog_threaded_sysctl(struct ctl_table *table, int write,
+> +                              void *buffer, size_t *lenp, loff_t *ppos)
+> +{
+> +       static DEFINE_MUTEX(backlog_threaded_mutex);
+> +       int ret;
+> +
+> +       mutex_lock(&backlog_threaded_mutex);
+> +
+> +       ret =3D proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+> +       if (write && !ret)
+> +               ret =3D backlog_set_threaded(backlog_threaded);
+> +
+> +       mutex_unlock(&backlog_threaded_mutex);
+> +
+> +       return ret;
+> +}
+> +
+>  #ifdef CONFIG_NET_FLOW_LIMIT
+>  static DEFINE_MUTEX(flow_limit_update_mutex);
+>
+> @@ -532,6 +550,15 @@ static struct ctl_table net_core_table[] =3D {
+>                 .proc_handler   =3D rps_sock_flow_sysctl
+>         },
+>  #endif
+> +       {
+> +               .procname       =3D "backlog_threaded",
+> +               .data           =3D &backlog_threaded,
+> +               .maxlen         =3D sizeof(unsigned int),
+> +               .mode           =3D 0644,
+> +               .proc_handler   =3D backlog_threaded_sysctl,
+> +               .extra1         =3D SYSCTL_ZERO,
+> +               .extra2         =3D SYSCTL_ONE
+> +       },
+>  #ifdef CONFIG_NET_FLOW_LIMIT
+>         {
+>                 .procname       =3D "flow_limit_cpu_bitmap",
+> --
+> 2.39.0
+>
