@@ -2,87 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63ED46CC995
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B55E6CC99A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjC1Rqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
+        id S229732AbjC1RsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjC1Rqs (ORCPT
+        with ESMTP id S229479AbjC1RsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:46:48 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C45D1;
-        Tue, 28 Mar 2023 10:46:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Y9+w3S5J3Vw2FuGbI9EqpsTol39UocOltTUjYy56Ws4=; b=H4RJjAuNFBRkz6dH6ykqU0ih3r
-        NQsUFwJozFJ1SE0+eYgfPSdIWrRdNZSw1w0jQ2D6YSBSQ5lB6BibYdrSonVIO6sBOU7vAZhZ2+JxZ
-        Yqv2GfSj3MsuHi3kIyJOq1jOQeG1codlZUTC4wTbkof/pbBDsyKy5bdpS+Rbsppv/KlnlsblBCETg
-        d3by0muu5JlA5BgXtSKEMJDu7XJgmkrFcCxr3Y2DI9A9IlYjrNNuO9RDLx+V9Tz6DA0mlRJiTx/HT
-        D/yx0NZlaPGnISqiFVnl2qQunqS4WXNHEbGDzq6UUtZlMrHkSIAFbW5fjemrbafOppGey6U1fPLFZ
-        Mf/VpBBA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1phDP6-00FMVR-1L;
-        Tue, 28 Mar 2023 17:46:40 +0000
-Date:   Tue, 28 Mar 2023 10:46:40 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     ye.xingchen@zte.com.cn, keescook@chromium.org, yzaikin@google.com,
-        akpm@linux-foundation.org, chi.minghao@zte.com.cn,
-        linmiaohe@huawei.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH V8 1/2] mm: compaction: move compaction sysctl to its own
- file
-Message-ID: <ZCMoAKgGj3PnOtMw@bombadil.infradead.org>
-References: <202303281446280457758@zte.com.cn>
- <a231f05c-b157-f495-bf06-8aca903c7e17@suse.cz>
+        Tue, 28 Mar 2023 13:48:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16727CDF6;
+        Tue, 28 Mar 2023 10:48:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1B3C618DF;
+        Tue, 28 Mar 2023 17:48:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13FBAC433D2;
+        Tue, 28 Mar 2023 17:48:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680025695;
+        bh=32/NC1qj5pzM4VmWjHIt+6Z5bu6FnwdwjV4jQTvBriQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=DtyziAyrMXV80hjYX1tJikjNn8VSeb88kiLbovAz36YoLsdfOk3rbhwrgF9pu+kFB
+         q9nmm7L6hU3+64Zm7ihDMZYWj7b3yKomtFPeLVUjZF9dnM9n1Xr1dBRkbRNQFUOMAN
+         rxtI6G/iJ/xa5cQsN4TOFzqd7vQ32cOIwprP3dbaQkOb7qpj2ba+V4T4NqYV/XEFg9
+         9A5gSOxRADGwKAN6ZlPP3XHVCOWI6pVmHQ19GIWHfvKTj0nSyFZgDz1xApWFQVUn6Y
+         bnX2W0mp3lQKmmHshywsoNx903DthlZW30zaiO9HkovjzhKZk//8Ihn/05iB2mOi0F
+         fgBBUkPfswuag==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 9AB661540479; Tue, 28 Mar 2023 10:48:14 -0700 (PDT)
+Date:   Tue, 28 Mar 2023 10:48:14 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org,
+        douglas.raillard@arm.com, tglx@linutronix.de, rcu@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org
+Subject: [GIT PULL] Fix rcu_torture_read ftrace event
+Message-ID: <9f32a8e2-7fc3-427b-b1e2-238fe81ce97e@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a231f05c-b157-f495-bf06-8aca903c7e17@suse.cz>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URG_BIZ autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 10:56:52AM +0200, Vlastimil Babka wrote:
-> On 3/28/23 08:46, ye.xingchen@zte.com.cn wrote:
-> > From: Minghao Chi <chi.minghao@zte.com.cn>
-> > 
-> > This moves all compaction sysctls to its own file.
-> > 
-> > Move sysctl to where the functionality truly belongs to improve
-> > readability, reduce merge conflicts, and facilitate maintenance.
-> > 
-> > I use x86_defconfig and linux-next-20230327 branch
-> > $ make defconfig;make all -jn
-> > CONFIG_COMPACTION=y
-> > 
-> > add/remove: 1/0 grow/shrink: 1/1 up/down: 350/-256 (94)
-> > Function                                     old     new   delta
-> > vm_compaction                                  -     320    +320
-> > kcompactd_init                               180     210     +30
-> > vm_table                                    2112    1856    -256
-> > Total: Before=21119987, After=21120081, chg +0.00%
-> > 
-> > Despite the addition of 94 bytes the patch still seems a worthwile
-> > cleanup.
-> > 
-> > Link: https://lore.kernel.org/lkml/067f7347-ba10-5405-920c-0f5f985c84f4@suse.cz/
-> > Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Hello, Linus,
 
-Thanks, queued up on sysctl-next.
+This post-merge-window urgent pull request brings the rcu_torture_read
+event trace into line with the new trace tools.  Without this commit,
+users of those tools perceive a regression.
 
-  Luis
+Just in case there is confusion, the plan is still for Joel Fernandes
+and Boqun Feng to send the RCU pull request into the v6.4 merge window.
+I will be doing my other pull requests for v6.4, and I will also be
+handling the RCU pull request for the v6.5 merge window.
+
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/urgent-rcu.2023.03.28a
+
+for you to fetch changes up to d18a04157fc171fd48075e3dc96471bd3b87f0dd:
+
+  rcu: Fix rcu_torture_read ftrace event (2023-03-22 14:05:24 -0700)
+
+----------------------------------------------------------------
+Urgent RCU pull request for v6.3
+
+This commit brings the rcu_torture_read event trace into line with
+the new trace tools by replacing this event trace's __field() with the
+corresponding __array().  Without this commit, the new trace tools will
+fail when presented wtih an rcu_torture_read event trace, which is a
+regression from the viewpoint of trace tools users.
+
+https://lore.kernel.org/all/20230320133650.5388a05e@gandalf.local.home/
+
+----------------------------------------------------------------
+Douglas Raillard (1):
+      rcu: Fix rcu_torture_read ftrace event
+
+ include/trace/events/rcu.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
