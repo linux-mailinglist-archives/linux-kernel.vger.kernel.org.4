@@ -2,173 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1C66CB3AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4816CB39B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbjC1CQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 22:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
+        id S232071AbjC1CN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 22:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjC1CQQ (ORCPT
+        with ESMTP id S229501AbjC1CN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 22:16:16 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86D026BD;
-        Mon, 27 Mar 2023 19:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679969766; x=1711505766;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=1JnkT/J2ob6NJiRM4N2X4DLYXwxI5i35YBKpyJKP3Oo=;
-  b=LivyNJLLnUi6EgwC5hN1bqVdzQMqNuNA4Eue4Z9eBXU7zTrykzYr9JWG
-   eTP7nA0uGfv2tm85DyjMWNwbEDsFWI2KPixObbsgtlLOvwknh+BQPatJa
-   /YuWRitk5FKnqZ12ItZLZonkUUZmmhvSPovzqzyBwCGYbAMEk1nLwrfaQ
-   6aJetODiqR+FYUeJFexFxkHyacYCSb/qdn8pXTn+qjEUV1Wmulii83qm4
-   pY1ebgxT6k7YC/dwPtxzlSXGl5SUw9lIh2Mj0TA3HJ0Pzsk6ANh/kHpDS
-   42m0axtnH53HDSYOBp2frnsYtHJwUpRyfpYBhhWk7DvM6/V1gGvFtCQ6t
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="405384041"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="405384041"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 19:11:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="827280821"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="827280821"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Mar 2023 19:11:48 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Mar 2023 19:11:48 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Mar 2023 19:11:48 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 27 Mar 2023 19:11:48 -0700
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.48) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 27 Mar 2023 19:11:47 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UKJxyKYSbNuQ74KN+fF3ZQH8aR+ZRYhrAYeas8OJJ1s4DpZ7YE+VfsBTCX0RFcY26RL09F1iE+xZ8+f1Ri4Q8uLKnAwT/ouX4upMH+Swfe20K/+YLiTLdEQxLXa9oi24exn1M61w1g73Z/v8bvAWhMeuZLei/mXHyLceGLz0BTVYGdtAqEzvXu63s4ntzlwRz0+t0j+Us4fBSXhQJa0oewIuT6hBCviDDUUroVfdIsD1f/QJm5/eLsw3OLpDjge484Ivt2/WGuSUYtEK2ZjrngW1607/nuKs2Zm5vhP6hgmH8GAeb5OWdPStAXts1xkNMikokgeobcE54m4dtgJONg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1JnkT/J2ob6NJiRM4N2X4DLYXwxI5i35YBKpyJKP3Oo=;
- b=moWjO9xupFiXkIBSaYJGBzgeQFnd0+FrTVEM6OitEvm4X2bBU/DTQR75T05wC+VhUB4Vw1lWzQ8evl57Uj3EwohhSofjZRqRIZQDJ3OaFIdGpz5d7i3J6hvYaeXfAqWHdz7eEC1UJqqvKHxbpVsjiAJ2OVK0O/c3QitLLWSh4XtQUaw9Kr9of0ERJk8oSx3ji0mWbxX6gjPkanXKNXbeTFlxRRPrGp5yYr9TbJqrfJqH6vc7uridx8Cx0tfV102Ro6BP1cvI6qfYvvZFi7T9da2tIMSKSNRPzgw1pKJgiZ3lblZXPqBYDSS32wIVy/tv4fKq2i37yn75BOTzxFBf0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by CH0PR11MB5460.namprd11.prod.outlook.com (2603:10b6:610:d3::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Tue, 28 Mar
- 2023 02:11:46 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::73e9:b405:2cae:9174]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::73e9:b405:2cae:9174%8]) with mapi id 15.20.6222.032; Tue, 28 Mar 2023
- 02:11:46 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>
-CC:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3 6/6] iommu/vt-d: Remove unnecessary checks in iopf
- disabling path
-Thread-Topic: [PATCH v3 6/6] iommu/vt-d: Remove unnecessary checks in iopf
- disabling path
-Thread-Index: AQHZXkiN6RW9RnA21UqhUY/nYgdm668PeJcQ
-Date:   Tue, 28 Mar 2023 02:11:46 +0000
-Message-ID: <BN9PR11MB52765ACD4408975FBB7EC4A78C889@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230324120234.313643-1-baolu.lu@linux.intel.com>
- <20230324120234.313643-7-baolu.lu@linux.intel.com>
-In-Reply-To: <20230324120234.313643-7-baolu.lu@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|CH0PR11MB5460:EE_
-x-ms-office365-filtering-correlation-id: 6c903d89-ff81-4514-1f0c-08db2f31c83d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XTiHdx/meO8JO7es5bm+ktpjelRUSIXw4iRZqJCwedpT1n/FVtUJkXep7NGuC/TOIQ0shhb1es9DRvZLjKFzVgKquEE7LOyNXH6yqIlVrWoAXSiU2CLp9wL0tLkaFL7nETyrt1rbbvzoWftv6FD/NY973nlEqwwvSYXWHeovIJX+qbWQQo6uzrGoxIouhEAHGQ3CAWfe8BhjTE34mS+Jn60InM/wfSjaDWg/qWR1LI3Zi/U366tHP5y1m443wykIOYM48joEF/Hm602o0D/fIoMVkwa+YmDaF52N/WPhiEnkimsELwAFJuVNidCOqihhmJ4kuNLusshQzVA6pN9XB1jEKPVF7l6L3fi3ohB/69qtuszS3qKKvvD5/ICkemMlAXL69hSKnVKnyl33aFaDSUGo/tkOJI9V7QdvVHd0efBvqi8W3EUoeRamn0H5btqRvSEWePHCyinIVmL+fO2ywOOuLrgtgPTeWqlEEI/3nsYqfx5QbrC4cpGMJJ9vLNcICxfAmTKcNE3+dazq/pR8oMDVyhwWNw8cANbg8N/Q2RhJEkPt1rTiqCw10P2yW5b6yB8/ORrTa9QCvn6+qhQpQJMLFUqYKdpvRw6fDQFPa1EytvkMgvNltkTVbR0Vz/XQ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(376002)(396003)(136003)(366004)(39860400002)(451199021)(478600001)(86362001)(38070700005)(33656002)(2906002)(71200400001)(7696005)(55016003)(9686003)(38100700002)(110136005)(4326008)(66946007)(76116006)(8936002)(316002)(8676002)(66556008)(64756008)(66446008)(66476007)(83380400001)(5660300002)(26005)(82960400001)(122000001)(186003)(6506007)(41300700001)(54906003)(52536014)(4744005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3rWgQJdwQSdN7zzgpKASOnma3oPpeh/RVZoyVIcTUJIPQTUEREDNKiA11Hp+?=
- =?us-ascii?Q?SyGSFofzUHuw8ef2RJTFqQ+LHSIXTdJUdUS+IYdjGbtgLnFEM/jGfE2Q6XOo?=
- =?us-ascii?Q?E605TdKUMdHYLuhHdb4E0HpPwF+JUfL3M70p6OxZxlkOjgYXBm/0yKTX/ql1?=
- =?us-ascii?Q?NHt2Stp7CgqNcK6KJPcBBQvIea5uroQev4qHA6V3V7L6NTZYfaqaQ63WLt99?=
- =?us-ascii?Q?eJhrPCUYi889Re0hSVR0oGyIh4sA94lAZE/CzGQgJKfpZMyLSxiI99Q2xuFu?=
- =?us-ascii?Q?0jJst/TAWLzDPTTjtZiMDrNP6mVCCiZ6rZQfq0+j89IQwG4FWmleuKPM6f5Z?=
- =?us-ascii?Q?o32uEgQD7Hihczn3awBHIDJoCC7xDEHTMbE8oLcOxYfII/IBzkfJ8kOYkWoZ?=
- =?us-ascii?Q?gLh574j7TJ8zmefK3Dj13TrpIc2upQ/nR+g6PsokYzvuuQGuKWqxzkpIpCFa?=
- =?us-ascii?Q?XTd2dKgC/oFKK8C2oBvSvtGofhnW5gVuDY8wDFlwl4Mx8FFjfD7jvH+S2mOF?=
- =?us-ascii?Q?hr3YkUZuChsovRd1x0q7h95QIPFrzZLzjAN/Xa+uCnzq7efuvTowKhJyGz7v?=
- =?us-ascii?Q?QlTaR0wPW4Vgi8YmOLuYRCZiasZ3yFXmu85trnqwPBOV46MCPykyzgvWSWQL?=
- =?us-ascii?Q?ihz6ZsUE3B2/MsnRMmPK5IUdDf5XGoH76k+oZchJrkML7M8uloqGOHtCVqtS?=
- =?us-ascii?Q?I8F97YPavcbiIjTjgrktcE95Ri+W6qPuSx0F25e5vDvm3b9HtN2ljKBOlxBq?=
- =?us-ascii?Q?xFRDSV5Yn22lLHtUu2B7n3TqAvm58AH+IH56KPc0kpuRMXj7Vm+HTuk7p5GI?=
- =?us-ascii?Q?1bv3UNv8NkKXKMSkL6DQeTf8mts0dPmDLeOGgzxiy61EZAiXcjTUn4tKqDin?=
- =?us-ascii?Q?JxyeDStVXRyZAn9otS7XfRVmoOggOKHzW0rr1rUon8nqBgeb17Bv9krOvGN0?=
- =?us-ascii?Q?UxfBCQgkKClDH74k4lQrTXVnJWF53nJUleaOQDnRWmi71BABVPBt3QLPhfde?=
- =?us-ascii?Q?Y/Qy4GFWWICc6UkeMfjeRQbee0oT03+PeZd7/zdY3yyfyAaGUbIfSQYSLANO?=
- =?us-ascii?Q?mivMe+IdcYj9IBfKIgQnJRq+pyVQOCqQojahelf4sWTIq2g/S9eouKGH1rrz?=
- =?us-ascii?Q?A96mp7JRxfuglSrPy3+hknRWV4lcwNSS2YG3Lm9s/iZuzkCiTwbBYW3riSpO?=
- =?us-ascii?Q?5qk8Fz6qSa14uNX8q97DPiL+hGTt++yxkj72ao4DNxQdcu2Nwe675VHgUTZo?=
- =?us-ascii?Q?i9CF9b29B67hy/JW9tE+xtqIiTBm2NRtjTc6y87lhCOF7Z8K/WoqdjVEdUnr?=
- =?us-ascii?Q?HBpiPpaPOKn2WeliuF0nmOjXbJXq2EwxeOfEkl9hs0NTVKR0V5qvNaZmYJC+?=
- =?us-ascii?Q?CWtO/PxMEbpHobgCeL5RKWD7ocHrbajIxcxx2wp83h++DFNMQUnn7Hzbras7?=
- =?us-ascii?Q?2GlErb2oea1SkMyIUrJ9GOGKeF3rYO/BKHMorjFf/sBX75AZbv6eKsYSxy3X?=
- =?us-ascii?Q?RhajApF4vR7riDBAdcwcjvsrAP6rWNJHCloy0FwFi/UFG8TdnPqzgiWJ9z0a?=
- =?us-ascii?Q?yiPwKJWKfVmsZaS9PPWq8aXkPn0ffLRSOClWiGyF?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c903d89-ff81-4514-1f0c-08db2f31c83d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Mar 2023 02:11:46.2226
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Tve0Fdv0/Jak5V2QqWLn79NK6luWQ+4YUpa6BUJI/fyQPY/jzVGdYjvb0N7efeqz3/ykKM2xJkslvDx4/Q8U7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5460
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 27 Mar 2023 22:13:56 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A50B170B
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:13:55 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 40641C009; Tue, 28 Mar 2023 04:13:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1679969634; bh=wqMNk37v7ep6rr1jhz7sYBORs1dIt3NXHYcIbaQ7jIg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JaJ9nxJiUyIPy8ueCwiEx/oeUQU9Le68MAl7WiYoUySqzr/SBKQ9DFwCvyQ0cK4wJ
+         vm/Q/DJhKOMMTElGC6JWubgHWfHf4NqIolq6uhzwmxd6lz9J6R4HABcEY9msuO4Uim
+         pAkTecob9/2RSDwpOzp+LfNvzQO4eJsSC2QXVR6VfxgjoOl0+tJTwueKCDCHbX2d7Z
+         WCEkGgdx8g9olpLET/6ZMPqvqwKYA++G0dHeVn3CI95QUFx/WV23tAlS3baZFOavp0
+         YDUib7Y2blGbb6rWhbebdS6l97tr6xeY+qX/YoRziQYqeRGIZTc2e91XLu7B6dP5V6
+         DKFWSJgIruyxg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 7569FC009;
+        Tue, 28 Mar 2023 04:13:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1679969633; bh=wqMNk37v7ep6rr1jhz7sYBORs1dIt3NXHYcIbaQ7jIg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xPW62TJvFSHPl3Gv9JQ8HAfCEesqn8fdPlrV/CljUx8VPMf1mGBfubqVsMbbBLDP1
+         k/nyIvbgcrXG1s6YDRs3CA0dcn2CAUE1rBN2WGUpmWHfJ2yUYVKV3K7GDV0camJXxY
+         uJTGxrpr4i6TbwJtSv/zBV8oLhJWFv9ShJwHjSKFOHAe376n/xtBtayDrsxdKYOgv1
+         RDxRmc5C8zR2V6Fj69hCPWk1hi+UFbd/7EzKdE923DKvf5XqwU0J5t40q/ie2PQR+x
+         GbwSmpsScKd8D44OkV+Vo3YLetFhBfoxgMG197N335V0aiPlAWRN8JCmlS8YG97Q/d
+         GvX97CEcOLOog==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id c6bb0979;
+        Tue, 28 Mar 2023 02:13:48 +0000 (UTC)
+Date:   Tue, 28 Mar 2023 11:13:32 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Albert Huang <huangjie.albert@bytedance.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        v9fs-developer@lists.sourceforge.net,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>
+Subject: 9p regression (Was: [PATCH v2] virtio_ring: don't update event idx
+ on get_buf)
+Message-ID: <ZCJNTBQLZeyLBKKB@codewreck.org>
+References: <20230325105633.58592-1-huangjie.albert@bytedance.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230325105633.58592-1-huangjie.albert@bytedance.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Lu Baolu <baolu.lu@linux.intel.com>
-> Sent: Friday, March 24, 2023 8:03 PM
->=20
-> iommu_unregister_device_fault_handler() and iopf_queue_remove_device()
-> are called after device has stopped issuing new page falut requests and
-> all outstanding page requests have been drained. They should never fail.
-> Trigger a warning if it happens unfortunately.
->=20
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Hi Michael, Albert,
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Albert Huang wrote on Sat, Mar 25, 2023 at 06:56:33PM +0800:
+> in virtio_net, if we disable the napi_tx, when we triger a tx interrupt,
+> the vq->event_triggered will be set to true. It will no longer be set to
+> false. Unless we explicitly call virtqueue_enable_cb_delayed or
+> virtqueue_enable_cb_prepare.
+
+This patch (commited as 35395770f803 ("virtio_ring: don't update event
+idx on get_buf") in next-20230327 apparently breaks 9p, as reported by
+Luis in https://lkml.kernel.org/r/ZCI+7Wg5OclSlE8c@bombadil.infradead.org
+
+I've just hit had a look at recent patches[1] and reverted this to test
+and I can mount again, so I'm pretty sure this is the culprit, but I
+didn't look at the content at all yet so cannot advise further.
+It might very well be that we need some extra handling for 9p
+specifically that can be added separately if required.
+
+[1] git log 0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35..HEAD drivers/virtio/
+
+
+This can be reproduced with a simple mount, run qemu with some -virtfs
+argument and `mount -t 9p -o debug=65535 tag mountpoint` will hang after
+these messages:
+9pnet: -- p9_virtio_request (83): 9p debug: virtio request
+9pnet: -- p9_virtio_request (83): virtio request kicked
+
+So I suspect we're just not getting a callback.
+
+
+I'll have a closer look after work, but any advice meanwhile will be
+appreciated!
+(I'm sure Luis would also like a temporary drop from -next until
+this is figured out, but I'll leave this up to you)
+
+
+> 
+> If we disable the napi_tx, it will only be called when the tx ring
+> buffer is relatively small.
+> 
+> Because event_triggered is true. Therefore, VRING_AVAIL_F_NO_INTERRUPT or
+> VRING_PACKED_EVENT_FLAG_DISABLE will not be set. So we update
+> vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
+> every time we call virtqueue_get_buf_ctx. This will bring more interruptions.
+> 
+> To summarize:
+> 1) event_triggered was set to true in vring_interrupt()
+> 2) after this nothing will happen for virtqueue_disable_cb() so
+>    VRING_AVAIL_F_NO_INTERRUPT is not set in avail_flags_shadow
+> 3) virtqueue_get_buf_ctx_split() will still think the cb is enabled
+>    then it tries to publish new event
+> 
+> To fix, if event_triggered is set to true, do not update
+> vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
+> 
+> Tested with iperf:
+> iperf3 tcp stream:
+> vm1 -----------------> vm2
+> vm2 just receives tcp data stream from vm1, and sends the ack to vm1,
+> there are many tx interrupts in vm2.
+> but without event_triggered there are just a few tx interrupts.
+> 
+> Fixes: 8d622d21d248 ("virtio: fix up virtio_disable_cb")
+> Signed-off-by: Albert Huang <huangjie.albert@bytedance.com>
+> Message-Id: <20230321085953.24949-1-huangjie.albert@bytedance.com>
+> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> ---
+>  drivers/virtio/virtio_ring.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index cbeeea1b0439..1c36fa477966 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -914,7 +914,8 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
+>  	/* If we expect an interrupt for the next entry, tell host
+>  	 * by writing event index and flush out the write before
+>  	 * the read in the next get_buf call. */
+> -	if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT))
+> +	if (unlikely(!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT) &&
+> +		     !vq->event_triggered))
+>  		virtio_store_mb(vq->weak_barriers,
+>  				&vring_used_event(&vq->split.vring),
+>  				cpu_to_virtio16(_vq->vdev, vq->last_used_idx));
+> @@ -1744,7 +1745,8 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+>  	 * by writing event index and flush out the write before
+>  	 * the read in the next get_buf call.
+>  	 */
+> -	if (vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC)
+> +	if (unlikely(vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC &&
+> +		     !vq->event_triggered))
+>  		virtio_store_mb(vq->weak_barriers,
+>  				&vq->packed.vring.driver->off_wrap,
+>  				cpu_to_le16(vq->last_used_idx));
