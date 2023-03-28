@@ -2,132 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE28E6CB383
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 151FE6CB385
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjC1CBP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Mar 2023 22:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        id S231834AbjC1CCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 22:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjC1CBN (ORCPT
+        with ESMTP id S229631AbjC1CC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 22:01:13 -0400
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132EE213B;
-        Mon, 27 Mar 2023 19:01:10 -0700 (PDT)
-Received: by mail-wm1-f51.google.com with SMTP id d11-20020a05600c3acb00b003ef6e6754c5so2994764wms.5;
-        Mon, 27 Mar 2023 19:01:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679968868; x=1682560868;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NtdoywSg0sqxDkZWwUZLe9PwThZK6+X1Vn5yjVkPniA=;
-        b=q840BmdOmNMtI8DqpqCz6zSm4aiIWVNTdobEqXSp13Qcxqex1QLm6NmKvN5t50Pdrv
-         Va1bkkSzf4enrmdWC/2VLULvJDL+XOZrLe/pDmITsjvZhLPzQSssc7oTHUofs6jKmUVl
-         w0Q2zVqILSaPaG9rngP/651ZFCGd2JGoe+1uSUcwvwk51f8BsSLIidVDQwiJjrrZni6B
-         m7N0WWwMqW0/QbmVLyU5UqHXCCTdLlwfHwOoABw5gRbv68QHYLoF60DreDqaUaR8HkLe
-         PLzgWH7m0S6vIZS/dde0yenn5maE4lLEYGQnQnSXPP1oo11OG1N5mhK45rSnFkBTr6HE
-         Fd/w==
-X-Gm-Message-State: AO0yUKWPqN+KfW9I/M3hc29qvRepNM9gx8TN10KtH1AybgSP/hMnrsnZ
-        MKpraDqurtsdPhI9k4Q23RdWqBaYjiLglutTv30=
-X-Google-Smtp-Source: AK7set8Dgf5IkOqr80Zrge2p5LfFf7474+KGgg1W4Is5eNDeeskXjNFRpTG1P0L8KMpXGbz4l1NUUCouMbv6LNCatZA=
-X-Received: by 2002:a05:600c:2043:b0:3ee:4678:dde with SMTP id
- p3-20020a05600c204300b003ee46780ddemr10994112wmg.27.1679968868269; Mon, 27
- Mar 2023 19:01:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAP-5=fWxF6in4vQyGuh=0kpAYEXAYZN_KobXCY=TX2oxssZ+HQ@mail.gmail.com>
- <Y7w2qshoCEjKKVlz@kernel.org> <CAP-5=fUeC2nhUhFN69+sL687csSsoi5=ZEkRH70vUy+kTiF52g@mail.gmail.com>
- <CAP-5=fVaH0p4NkKiQSxaxZnT5zR=hbwSArO2n0L7tCNZwBumKQ@mail.gmail.com>
- <CAP-5=fXWDPzuFrrY+uKnfoa5gO9eEfGUsbCyXB8AS7Tz0ZX=jw@mail.gmail.com>
- <CAP-5=fVHK9VqMs=px3ZzKjinFG4t+oOZ8x2=65_jjds4DiSXLg@mail.gmail.com> <CAP-5=fUTAABzK2e_S3kFYV8jWCrHKfj10wPpTnthQjCLy7d2Gg@mail.gmail.com>
-In-Reply-To: <CAP-5=fUTAABzK2e_S3kFYV8jWCrHKfj10wPpTnthQjCLy7d2Gg@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 27 Mar 2023 19:00:56 -0700
-Message-ID: <CAM9d7cgdkzbzR+TjJo-gv1mNqCCxhyvWrXCFsVrpPHs19RNZYQ@mail.gmail.com>
-Subject: Re: Google Summer-of-Code 2023
-To:     Ian Rogers <irogers@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        paranlee <p4ranlee@gmail.com>,
-        Madhu patel <patelmadhu06@gmail.com>,
-        Anup Sharma <anupnewsmail@gmail.com>,
-        Lukas Molleman <lukas.molleman@gmail.com>,
-        n2 h9 <n2h9z4@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 27 Mar 2023 22:02:28 -0400
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B765213B;
+        Mon, 27 Mar 2023 19:02:25 -0700 (PDT)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PltH32qj7z6FK2R;
+        Tue, 28 Mar 2023 10:02:23 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.97.17])
+        by mse-fl1.zte.com.cn with SMTP id 32S223RI070586;
+        Tue, 28 Mar 2023 10:02:03 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Tue, 28 Mar 2023 10:02:04 +0800 (CST)
+Date:   Tue, 28 Mar 2023 10:02:04 +0800 (CST)
+X-Zmail-TransId: 2afa64224a9cffffffff949-5d18a
+X-Mailer: Zmail v1.0
+Message-ID: <202303281002046981494@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <mcgrof@kernel.org>
+Cc:     <keescook@chromium.org>, <yzaikin@google.com>,
+        <akpm@linux-foundation.org>, <chi.minghao@zte.com.cn>,
+        <linmiaohe@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>
+Subject: =?UTF-8?B?W1BBVENIIFY3IDEvMl0gbW06IGNvbXBhY3Rpb246IG1vdmUgY29tcGFjdGlvbiBzeXNjdGwgdG8gaXRzIG93biBmaWxl?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 32S223RI070586
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 64224AAF.000/4PltH32qj7z6FK2R
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-On Mon, Mar 27, 2023 at 3:01 PM Ian Rogers <irogers@google.com> wrote:
->
-> On Mon, Mar 27, 2023 at 2:22 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > On Mon, Mar 13, 2023 at 9:38 AM Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > On Wed, Feb 22, 2023 at 7:58 PM Ian Rogers <irogers@google.com> wrote:
-> > > >
-> > > > The Linux Foundation was selected as a GSoC organization for 2023!
-> > > > https://summerofcode.withgoogle.com/programs/2023/organizations/the-linux-foundation
-> > > >
-> > > > This means we're looking for contributors until March 19th:
-> > > > https://developers.google.com/open-source/gsoc/timeline
-> > >
-> > > A reminder of the GSoC timeline. Applications open in a week;
-> > >
-> > > * February 22 - March 19
-> > > Potential GSoC contributors discuss application ideas with mentoring
-> > > organizations
-> > >
-> > > * March 20 - 18:00 UTC
-> > > GSoC contributor application period begins
-> > >
-> > > * April 4 - 18:00 UTC
-> > > GSoC contributor application deadline
-> > >
-> > > Thanks,
-> > > Ian
-> >
-> > A reminder that the application period closes in just over a week:
-> > https://developers.google.com/open-source/gsoc/timeline
-> > April 4 - 18:00 UTC
-> > GSoC contributor application deadline
-> >
-> > Thanks,
-> > Ian
->
-> If you are looking for ideas on how to write a good proposal, PSF has
-> a collection of previously accepted proposals:
-> https://blogs.python-gsoc.org/en/
->
-> You can also see the final report of Riccardo Mancini:
-> https://lore.kernel.org/lkml/3c4f8dd64d07373d876990ceb16e469b4029363f.camel@gmail.com/
+This moves all compaction sysctls to its own file.
 
-I have a proposal about the build without libtraceevent.
-Now it disables many perf commands if it doesn't have the
-library.  But part of sub-commands would work without it.
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ include/linux/compaction.h |  7 ----
+ kernel/sysctl.c            | 59 --------------------------
+ mm/compaction.c            | 84 ++++++++++++++++++++++++++++++++------
+ 3 files changed, 72 insertions(+), 78 deletions(-)
 
-For example, perf lock contention has two different modes
-one is to use tracepoints (using the libtraceevent) and
-the other is just use BPF.  The latter should work require
-anything from the libtraceevent so we can enable such
-usecase.
+diff --git a/include/linux/compaction.h b/include/linux/compaction.h
+index 52a9ff65faee..a6e512cfb670 100644
+--- a/include/linux/compaction.h
++++ b/include/linux/compaction.h
+@@ -81,13 +81,6 @@ static inline unsigned long compact_gap(unsigned int order)
+ }
 
-Others like perf sched, kmem and so on might want to run
-only record part like in a small embedded machine (without
-libtraceevent).  Then we can copy the saved data to a host
-and run the report or other sub-commands to analyze the
-data (again, using libtraceevent).
+ #ifdef CONFIG_COMPACTION
+-extern unsigned int sysctl_compaction_proactiveness;
+-extern int sysctl_compaction_handler(struct ctl_table *table, int write,
+-			void *buffer, size_t *length, loff_t *ppos);
+-extern int compaction_proactiveness_sysctl_handler(struct ctl_table *table,
+-		int write, void *buffer, size_t *length, loff_t *ppos);
+-extern int sysctl_extfrag_threshold;
+-extern int sysctl_compact_unevictable_allowed;
 
-Thanks,
-Namhyung
+ extern unsigned int extfrag_for_order(struct zone *zone, unsigned int order);
+ extern int fragmentation_index(struct zone *zone, unsigned int order);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index ce0297acf97c..e23061f33237 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -42,7 +42,6 @@
+ #include <linux/highuid.h>
+ #include <linux/writeback.h>
+ #include <linux/ratelimit.h>
+-#include <linux/compaction.h>
+ #include <linux/hugetlb.h>
+ #include <linux/initrd.h>
+ #include <linux/key.h>
+@@ -746,27 +745,6 @@ int proc_dointvec(struct ctl_table *table, int write, void *buffer,
+ 	return do_proc_dointvec(table, write, buffer, lenp, ppos, NULL, NULL);
+ }
+
+-#ifdef CONFIG_COMPACTION
+-static int proc_dointvec_minmax_warn_RT_change(struct ctl_table *table,
+-		int write, void *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	int ret, old;
+-
+-	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || !write)
+-		return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+-
+-	old = *(int *)table->data;
+-	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+-	if (ret)
+-		return ret;
+-	if (old != *(int *)table->data)
+-		pr_warn_once("sysctl attribute %s changed by %s[%d]\n",
+-			     table->procname, current->comm,
+-			     task_pid_nr(current));
+-	return ret;
+-}
+-#endif
+-
+ /**
+  * proc_douintvec - read a vector of unsigned integers
+  * @table: the sysctl table
+@@ -2157,43 +2135,6 @@ static struct ctl_table vm_table[] = {
+ 		.extra1		= SYSCTL_ONE,
+ 		.extra2		= SYSCTL_FOUR,
+ 	},
+-#ifdef CONFIG_COMPACTION
+-	{
+-		.procname	= "compact_memory",
+-		.data		= NULL,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0200,
+-		.proc_handler	= sysctl_compaction_handler,
+-	},
+-	{
+-		.procname	= "compaction_proactiveness",
+-		.data		= &sysctl_compaction_proactiveness,
+-		.maxlen		= sizeof(sysctl_compaction_proactiveness),
+-		.mode		= 0644,
+-		.proc_handler	= compaction_proactiveness_sysctl_handler,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE_HUNDRED,
+-	},
+-	{
+-		.procname	= "extfrag_threshold",
+-		.data		= &sysctl_extfrag_threshold,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE_THOUSAND,
+-	},
+-	{
+-		.procname	= "compact_unevictable_allowed",
+-		.data		= &sysctl_compact_unevictable_allowed,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax_warn_RT_change,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE,
+-	},
+-
+-#endif /* CONFIG_COMPACTION */
+ 	{
+ 		.procname	= "min_free_kbytes",
+ 		.data		= &min_free_kbytes,
+diff --git a/mm/compaction.c b/mm/compaction.c
+index e689d66cedf4..3dfdb84b9c98 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -1728,7 +1728,14 @@ typedef enum {
+  * Allow userspace to control policy on scanning the unevictable LRU for
+  * compactable pages.
+  */
+-int sysctl_compact_unevictable_allowed __read_mostly = CONFIG_COMPACT_UNEVICTABLE_DEFAULT;
++static int sysctl_compact_unevictable_allowed __read_mostly = CONFIG_COMPACT_UNEVICTABLE_DEFAULT;
++/*
++ * Tunable for proactive compaction. It determines how
++ * aggressively the kernel should compact memory in the
++ * background. It takes values in the range [0, 100].
++ */
++static unsigned int __read_mostly sysctl_compaction_proactiveness = 20;
++static int sysctl_extfrag_threshold = 500;
+
+ static inline void
+ update_fast_start_pfn(struct compact_control *cc, unsigned long pfn)
+@@ -2584,8 +2591,6 @@ static enum compact_result compact_zone_order(struct zone *zone, int order,
+ 	return ret;
+ }
+
+-int sysctl_extfrag_threshold = 500;
+-
+ /**
+  * try_to_compact_pages - Direct compact to satisfy a high-order allocation
+  * @gfp_mask: The GFP mask of the current allocation
+@@ -2742,14 +2747,7 @@ static void compact_nodes(void)
+ 		compact_node(nid);
+ }
+
+-/*
+- * Tunable for proactive compaction. It determines how
+- * aggressively the kernel should compact memory in the
+- * background. It takes values in the range [0, 100].
+- */
+-unsigned int __read_mostly sysctl_compaction_proactiveness = 20;
+-
+-int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
++static int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
+ 		void *buffer, size_t *length, loff_t *ppos)
+ {
+ 	int rc, nid;
+@@ -2779,7 +2777,7 @@ int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
+  * This is the entry point for compacting all nodes via
+  * /proc/sys/vm/compact_memory
+  */
+-int sysctl_compaction_handler(struct ctl_table *table, int write,
++static int sysctl_compaction_handler(struct ctl_table *table, int write,
+ 			void *buffer, size_t *length, loff_t *ppos)
+ {
+ 	if (write)
+@@ -3075,6 +3073,65 @@ static int kcompactd_cpu_online(unsigned int cpu)
+ 	return 0;
+ }
+
++static int proc_dointvec_minmax_warn_RT_change(struct ctl_table *table,
++		int write, void *buffer, size_t *lenp, loff_t *ppos)
++{
++	int ret, old;
++
++	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || !write)
++		return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
++
++	old = *(int *)table->data;
++	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
++	if (ret)
++		return ret;
++	if (old != *(int *)table->data)
++		pr_warn_once("sysctl attribute %s changed by %s[%d]\n",
++			     table->procname, current->comm,
++			     task_pid_nr(current));
++	return ret;
++}
++
++#ifdef CONFIG_SYSCTL
++static struct ctl_table vm_compaction[] = {
++	{
++		.procname	= "compact_memory",
++		.data		= NULL,
++		.maxlen		= sizeof(int),
++		.mode		= 0200,
++		.proc_handler	= sysctl_compaction_handler,
++	},
++	{
++		.procname	= "compaction_proactiveness",
++		.data		= &sysctl_compaction_proactiveness,
++		.maxlen		= sizeof(sysctl_compaction_proactiveness),
++		.mode		= 0644,
++		.proc_handler	= compaction_proactiveness_sysctl_handler,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE_HUNDRED,
++	},
++	{
++		.procname	= "extfrag_threshold",
++		.data		= &sysctl_extfrag_threshold,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE_THOUSAND,
++	},
++	{
++		.procname	= "compact_unevictable_allowed",
++		.data		= &sysctl_compact_unevictable_allowed,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax_warn_RT_change,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE,
++	},
++	{ }
++};
++#endif
++
+ static int __init kcompactd_init(void)
+ {
+ 	int nid;
+@@ -3090,6 +3147,9 @@ static int __init kcompactd_init(void)
+
+ 	for_each_node_state(nid, N_MEMORY)
+ 		kcompactd_run(nid);
++#ifdef CONFIG_SYSCTL
++	register_sysctl_init("vm", vm_compaction);
++#endif
+ 	return 0;
+ }
+ subsys_initcall(kcompactd_init)
+-- 
+2.25.1
