@@ -2,126 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120756CC636
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E966CC631
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233913AbjC1P1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
+        id S232908AbjC1P0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233258AbjC1P0r (ORCPT
+        with ESMTP id S233117AbjC1P0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:26:47 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5731040A;
-        Tue, 28 Mar 2023 08:25:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 28 Mar 2023 11:26:22 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B70113FC
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:25:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4AE63CE1D9E;
-        Tue, 28 Mar 2023 15:24:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3287DC433EF;
-        Tue, 28 Mar 2023 15:24:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680017092;
-        bh=qGf+OC44axRVj+XT/Z4tuG6YvUk8bQLbHyJdumlNYFU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ATpCBChtUg6pUL3KFBojFCXqzNljH3Fn4vl4Q2jOPQYEVtHOWOCiboqBBQXjGyR4v
-         xcWzFZ1/IzZ9GiAW80DEDvpIj304SUmm09iKmBKB+HPYMKT4ZhSC1xo/VCVvnj+E7m
-         CyjnE1SwPOBJQdABuBrgOMXU1Qfc7WqwfykRZsjhIl/RFThLN6pi3vjulQZIQxiIip
-         C6rGDRMAFxVV6S1mTJGgR9aKNxkumCUbE5+Ie6tG37TCkshzzrGGTfVdDT4YDQzGVX
-         Vyzmg8Kh2NAMSX//QJ5eLaI3xW6uBZNiWHYpV4zqHUYUHRXvjgtpQwIPtuV1qFJf1s
-         1z4x4WL9W445A==
-Date:   Tue, 28 Mar 2023 16:24:44 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Sahin, Okan" <Okan.Sahin@analog.com>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v6 5/5]  mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
- Support
-Message-ID: <163f2c26-2cf7-4109-bf1f-efddc95da0d5@sirena.org.uk>
-References: <20230307112835.81886-1-okan.sahin@analog.com>
- <20230307112835.81886-6-okan.sahin@analog.com>
- <20230315175223.GI9667@google.com>
- <20230315175257.GJ9667@google.com>
- <MN2PR03MB5168249900206433A082875EE7889@MN2PR03MB5168.namprd03.prod.outlook.com>
- <ZCLi6MB/aHIf4lMr@smile.fi.intel.com>
- <cdd53e29ca3d8dbfdfa1a2520935e2bf9418313d.camel@gmail.com>
- <d2bed74b-9eb9-45af-8f45-ad2c2889024a@sirena.org.uk>
- <fc07de9af0b691fbd3a5915c8293f0c7ad4c4e06.camel@gmail.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D0283219DA;
+        Tue, 28 Mar 2023 15:24:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680017089; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jboALtBYOng+vAI1cXsw10gaHCTV6EGfJuMtn5T9qYU=;
+        b=d/ox4Hsy51Ysq4Z8utOZ85kAr07ayerlZVJleL9GXKEGNpyGiI+K9D1AQnhyp1oPpiC6eq
+        m8ycCh5pFCECGHJaL4ixLL7RrLW4D1oM9byutuS7V1UWrNfxyzxbP8MbtuPPVVqcdIo8MD
+        VBG3mbJ61PWiEZNxANCT/hHgzFz01Ek=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B53951390D;
+        Tue, 28 Mar 2023 15:24:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 5pJ4KcEGI2SjGQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 28 Mar 2023 15:24:49 +0000
+Date:   Tue, 28 Mar 2023 17:24:49 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Song Liu <song@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
+Message-ID: <ZCMGwWmF9MGObSlt@dhcp22.suse.cz>
+References: <20230308094106.227365-1-rppt@kernel.org>
+ <20230308094106.227365-2-rppt@kernel.org>
+ <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
+ <ZB6W1C88TU6CcjJH@kernel.org>
+ <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
+ <ZCKIX3de5AZfGggK@kernel.org>
+ <ZCKZuXxq38obmYpn@dhcp22.suse.cz>
+ <ZCMDmHSqOeCj1EIo@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cU/jzET003kbiyJi"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fc07de9af0b691fbd3a5915c8293f0c7ad4c4e06.camel@gmail.com>
-X-Cookie: Oh, wow!  Look at the moon!
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZCMDmHSqOeCj1EIo@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue 28-03-23 18:11:20, Mike Rapoport wrote:
+> On Tue, Mar 28, 2023 at 09:39:37AM +0200, Michal Hocko wrote:
+[...]
+> > OK, so you want to reduce that direct map fragmentation?
+> 
+> Yes.
+> 
+> > Is that a real problem?
+> 
+> A while ago Intel folks published report [1] that showed better performance
+> with large pages in the direct map for majority of benchmarks.
+> 
+> > My impression is that modules are mostly static thing. BPF
+> > might be a different thing though. I have a recollection that BPF guys
+> > were dealing with direct map fragmention as well.
+> 
+> Modules are indeed static, but module_alloc() used by anything that
+> allocates code pages, e.g. kprobes, ftrace and BPF. Besides, Thomas
+> mentioned that having code in 2M pages reduces iTLB pressure [2], but
+> that's not only about avoiding the splits in the direct map but also about
+> using large mappings in the modules address space.
+> 
+> BPF guys suggested an allocator for executable memory [3] mainly because
+> they've seen performance improvement of 0.6% - 0.9% in their setups [4].
 
---cU/jzET003kbiyJi
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+These are fair arguments and it would have been better to have them in
+the RFC. Also it is not really clear to me what is the actual benefit of
+the unmapping for those usecases. I do get they want to benefit from
+caching on the same permission setup but do they need unmapping as well?
 
-On Tue, Mar 28, 2023 at 04:18:30PM +0200, Nuno S=E1 wrote:
-> On Tue, 2023-03-28 at 14:46 +0100, Mark Brown wrote:
-> > On Tue, Mar 28, 2023 at 03:26:44PM +0200, Nuno S=E1 wrote:
+> > > If we were to use unmapped_pages_alloc() in modules_alloc(), we would have
+> > > to implement the part of vmalloc() that reserves the virtual addresses and
+> > > maps the allocated memory there in module_alloc().
+> > 
+> > Another option would be to provide an allocator for the backing pages to
+> > vmalloc. But I do agree that a gfp flag is a less laborous way to
+> > achieve the same. So the primary question really is whether we really
+> > need vmalloc support for unmapped memory.
+> 
+> I'm not sure I follow here. module_alloc() is essentially an alias to
+> vmalloc(), so to reduce direct map fragmentation caused by code allocations
+> the most sensible way IMO is to support unmapped memory in vmalloc().
 
-> > > IIRC, regmap_read() is not really reentrant and it is used in the
-> > > IIO
-> > > driver on the sysfs interface. So, yeah, I think you need the
-> > > regmap
-> > > lock and better just leave the config as is. Yes, the lock is opt-
-> > > out
-> > > so let's not disable it :)
+What I meant to say is that vmalloc is currently using the page
+allocator (resp bulk allocator) for the backing storage. I can imagine
+an extension to replace this default allocator by something else (e.g. a
+given allocation function). This would be more generic and it would
+allow different usecases (e.g. benefit from caching withtout doing the
+actual unmapping).
+ 
+> I also think vmalloc with unmmapped pages can provide backing pages for
+> execmem_alloc() Song proposed.
 
-> > All the regmap operations are fully thread safe.
+Why would you need to have execmem_alloc have its memory virtually
+mapped into vmalloc space?
 
-> Even if 'config->disable_locking' is set? I think that is what's being
-> discussed in here...
+> [1] https://lore.kernel.org/linux-mm/213b4567-46ce-f116-9cdf-bbd0c884eb3c@linux.intel.com/
+> [2] https://lore.kernel.org/all/87mt86rbvy.ffs@tglx/
+> [3] https://lore.kernel.org/all/20221107223921.3451913-1-song@kernel.org/
+> [4] https://lore.kernel.org/bpf/20220707223546.4124919-1-song@kernel.org/
+> 
+> -- 
+> Sincerely yours,
+> Mike.
 
-In that case the caller has to ensure that the regmap is only used in a
-thread safe fashion.
-
---cU/jzET003kbiyJi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQjBrsACgkQJNaLcl1U
-h9B/MQf9GFZs2jkpCdNWV9YHg6lazF76/rn3D4icdGkiIzG3k1r5HoAq0JJGNFmA
-0j3maqTeoW+d+v6YX/i6gM6OQ9pY7RDikaRnqeKbKVccDUwYKbbHpPRY7ctWf+uO
-JcVFzACHf8fPGGBK9Qrp1L1llGqXKBU7TVxfI0r9X8QPoh0NmtKqG+/0+P7Sso9Z
-NSZOIlpQ9OStMphPT+5cG4TCa12GVqsNdFHb90eIowzp+mhn1BxGwLx/xi0wXegs
-Gzt7pG8s0om0V1enRMfSWNZQCo/sbKnxGYldP+w5Y17OPGEdaCkk0qUbZk8bAOze
-DH09i76sXgSR4PQ6lGdHGT4gqdZSBw==
-=cY75
------END PGP SIGNATURE-----
-
---cU/jzET003kbiyJi--
+-- 
+Michal Hocko
+SUSE Labs
