@@ -2,133 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05F46CBC73
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DCD6CBC79
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbjC1KVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S231203AbjC1KXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjC1KU5 (ORCPT
+        with ESMTP id S230128AbjC1KXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:20:57 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95E16EBF;
-        Tue, 28 Mar 2023 03:20:53 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32S6dYV0028826;
-        Tue, 28 Mar 2023 10:20:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=dunxGkyVWnRgXa2caWreYb69qL3j/qi7JGyEYcOBAUY=;
- b=ah5M7t5gxxyJ9YnZRDMEzL4sSpiSS+0yQjqg6jvdjc6Q7Tk4sRA2MTjquiAUN6eq6fDF
- n8+EUn3fCjkJhA6Dg6ksETbyHce/tCbAyA6NDnZ3bR8f3g7rH2+voZ2uXuLvxNvBa8En
- a3VVMBkkSWx4NpUtoIBuzp05fNgGr0lsKU1VmMlOl1+nc+PU2TThmZMLGujKYm+Dc5Nu
- mv/hsTIXwhFndg7XaJo1/+rRk5iKxIFVB0K8ai7XDfDBW+oXE5XOw2n1wx4jJhBscAvp
- K5ZIpM70bOnDksdwqVdcQC6/DJWQBZAJvAOPkxKTD6dvYwRFdujaNyHSxt8NFunYyyI5 wA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pkk7b9djb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Mar 2023 10:20:49 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32SAKnFr029009
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Mar 2023 10:20:49 GMT
-Received: from poovendh-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Tue, 28 Mar 2023 03:20:43 -0700
-From:   Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <lee@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_devipriy@quicinc.com>
-Subject: [PATCH V6 2/2] arm64: dts: qcom: ipq9574: Add SMEM support
-Date:   Tue, 28 Mar 2023 15:50:13 +0530
-Message-ID: <20230328102013.21361-3-quic_poovendh@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230328102013.21361-1-quic_poovendh@quicinc.com>
-References: <20230328102013.21361-1-quic_poovendh@quicinc.com>
+        Tue, 28 Mar 2023 06:23:22 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6A9618B
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:23:21 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id s13so6597391wmr.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:23:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679998999;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JDzRFYi3RNic/LekPtwT66dQgjxUn0+xUq4SVUW3hGI=;
+        b=qXrZqxXvk8TTChUZvPxCud+eZ30VRquAfpJfwKULgIKukYnNsDRVWrskBs/yGah/3i
+         83B3/EjSGl4dG+VgHadyDwYoaC1hi4MbOvy1Qc2Oc/+DqWQeR6+s8D9LmVi0xWDmAs8H
+         LMZutayy8YOQjc8VKeUcs0yO0SsYc03T+45tfadMHO7MRoueM/QsyW0yovgBLvdvelyo
+         Qwiz7IJJJbiRlBCKJUuCd/ag5c5rgNiYpFUfixZnpvZhNmtRM49t0A2pQLYaRAzjvwh6
+         lRTG3xl22rAxnQ0SIPzcP5Zrc+6LVD6klcI3ntmHYlyR/vxfVCA6z+9fLOxL5LFDZLEt
+         Lc1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679998999;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JDzRFYi3RNic/LekPtwT66dQgjxUn0+xUq4SVUW3hGI=;
+        b=oPktajPTbEyTgdkF44wyvzwcArHEfbiwEfunycp6V38H/6QyhnYTgCG7JFJk/MkGxT
+         7m8j+NYbASEyHRq4+rtWs3MowpQFM6aaXM9ht+eVdc22NbSLbmefdfRfTF1xyP+Y+BCL
+         xdVx3CBlO2arA6/oGaj8XhcjgDKsnTtkwKT17hcL51BYJlbsCK9494aN02zQhGnfchX3
+         oebAAa5H1hy7aG4lX5jeoI5e+hVEKbchCr6Djgz4HIw8fut+7QjpcIUdoZfVzwCRz6Q+
+         mAIGwlEDtjX53CrLQLlw+26c1HjTxwFj9t6WUsa6CuzZK5g0XdihKtw3tYAvCBT5rOyZ
+         GIFA==
+X-Gm-Message-State: AO0yUKXTluaPgDeP5oEg6kkP440CUwtUw/hGVPRF7SIKG43ayKPuLUvu
+        C5y90xxpwO3GRgideJ00Lgogfg==
+X-Google-Smtp-Source: AK7set8+rVt9uMI2B65S9+dtPSt7AljkPiJbA/L6F0xN8a1/8VPJfc6C35dLQrNoKrs8jVWLcThGVQ==
+X-Received: by 2002:a05:600c:291:b0:3ee:5147:3acd with SMTP id 17-20020a05600c029100b003ee51473acdmr11510334wmk.40.1679998999667;
+        Tue, 28 Mar 2023 03:23:19 -0700 (PDT)
+Received: from [192.168.2.107] ([79.115.63.91])
+        by smtp.gmail.com with ESMTPSA id u17-20020a05600c19d100b003ef5e5f93f5sm11981393wmq.19.2023.03.28.03.23.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 03:23:19 -0700 (PDT)
+Message-ID: <026b9d7d-86db-45cd-9e86-066fa826a77e@linaro.org>
+Date:   Tue, 28 Mar 2023 11:23:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: hLulyRWqvM-xxccQQjIlhhPJDr6F0umQ
-X-Proofpoint-GUID: hLulyRWqvM-xxccQQjIlhhPJDr6F0umQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-28_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 suspectscore=0 phishscore=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 mlxlogscore=732 clxscore=1015 malwarescore=0
- spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303280086
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 1/4] ARM: dts: at91-sama5d27_wlsom1: Set sst26vf064b
+ SPI NOR flash at its maximum frequency
+Content-Language: en-US
+To:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com
+Cc:     alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+References: <20230328101517.1595738-1-tudor.ambarus@linaro.org>
+ <20230328101517.1595738-2-tudor.ambarus@linaro.org>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <20230328101517.1595738-2-tudor.ambarus@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the required nodes to support SMEM
 
-Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
----
- Changes in V6:
-	- No changes
 
- Changes in V5:
-	- Dropped unrelated changes
+On 3/28/23 11:15, Tudor Ambarus wrote:
+> From: Tudor Ambarus <tudor.ambarus@microchip.com>
+> 
 
- Changes in V4:
-	- Added required nodes for smem support
+cut
 
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index 099948f36efc..14a3396b0381 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -107,6 +107,13 @@
- 			reg = <0x0 0x4a600000 0x0 0x400000>;
- 			no-map;
- 		};
-+
-+		smem@4aa00000 {
-+			compatible = "qcom,smem";
-+			reg = <0x0 0x4aa00000 0x0 0x00100000>;
-+			hwlocks = <&tcsr_mutex 0>;
-+			no-map;
-+		};
- 	};
- 
- 	soc: soc@0 {
-@@ -149,6 +156,12 @@
- 			#power-domain-cells = <1>;
- 		};
- 
-+		tcsr_mutex: hwlock@1905000 {
-+			compatible = "qcom,tcsr-mutex";
-+			reg = <0x01905000 0x20000>;
-+			#hwlock-cells = <1>;
-+		};
-+
- 		tcsr: syscon@1937000 {
- 			compatible = "qcom,tcsr-ipq9574", "syscon";
- 			reg = <0x01937000 0x21000>;
--- 
-2.17.1
+I don't understand why these differ. On my local machine I see them match:
 
+commit e208a7b04cbde950588c561889d2f8eb8a10485f
+Author: Tudor Ambarus <tudor.ambarus@linaro.org>
+Date:   Thu Nov 17 12:52:46 2022 +0200
+
+    ARM: dts: at91-sama5d27_wlsom1: Set sst26vf064b SPI NOR flash at its
+maximum frequency
+
+    sama5d27-wlsom1 populates an sst26vf064b SPI NOR flash. Its maximum
+    operating frequency for 2.7-3.6V is 104 MHz. As the flash is operated
+    at 3.3V, increase its maximum supported frequency to 104MHz. The
+    increasing of the spi-max-frequency value requires the setting of the
+    "CE# Not Active Hold Time", thus set the spi-cs-setup-ns to a value
+of 7.
+
+    The sst26vf064b datasheet specifies just a minimum value for the
+    "CE# Not Active Hold Time" and it advertises it to 5 ns. There's no
+    maximum time specified. I determined experimentally that 5 ns for the
+    spi-cs-setup-ns is not enough when the flash is operated close to its
+    maximum frequency and tests showed that 7 ns is just fine, so set the
+    spi-cs-setup-ns dt property to 7.
+
+    With the increase of frequency the reads are now faster with ~37%.
+
+    Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+
+Anyway, you can keep v2 then, looks like v2 has the same email on both
+the author line and the S-o-b line. It's fine by me even if it is with
+@microchip.com:
+https://lore.kernel.org/all/20230328100723.1593864-2-tudor.ambarus@linaro.org/
