@@ -2,97 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2F56CBC61
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A94F6CBC66
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjC1KRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
+        id S230128AbjC1KSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjC1KRF (ORCPT
+        with ESMTP id S229611AbjC1KSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:17:05 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD42619A3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:16:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679998605; x=1711534605;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=YNcmTAzIivIIG1nw9WZggF/K2IYvfLlzFc8+1akrKgM=;
-  b=Pundf8vfZkjIf755tBEPpvBd2JCiacgGhLKPduQ4PFre2K6k/Z6EkRR/
-   zfJEXNnPMl867TFjEKb8wkfd5r2hx/NxRNVgBvLMO8O97SeOwDQuZJJbE
-   ovgPxUbLVTfucVCk1kcPfCKRYusv+tJIWWHsNYB5LNI2ITgXXyowPIPty
-   2IC/rxT3oZKyQx0ngh1X/LM4nfdlEYjYfXWEOhcsO8NnqU7woihQeLC/h
-   0m1tY9ZahPSFI6o1Ry1ro0PEEqm/SoscHrz3IncKyWsgOOdJv5WIN+ehp
-   KmxkxaA0bJ/9kdgNB3HyS1YXurqB9Oks2RocCxiP0xvnVDg8jvtSmpui8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="339252097"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="339252097"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 03:16:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="929817003"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="929817003"
-Received: from gprivite-mobl.ger.corp.intel.com (HELO localhost) ([10.252.50.147])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 03:16:31 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Caio Novais <caionovais@usp.br>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     Felipe Clark <felipe.clark@amd.com>,
-        Wenjing Liu <wenjing.liu@amd.com>,
-        =?utf-8?Q?Ma=C3=ADra?= Canal <mairacanal@riseup.net>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jun Lei <Jun.Lei@amd.com>, Charlene Liu <Charlene.Liu@amd.com>,
-        Gabe Teeger <gabe.teeger@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Taimur Hassan <Syed.Hassan@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Alvin Lee <alvin.lee2@amd.com>,
-        George Shen <George.Shen@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Chaitanya Dhere <chaitanya.dhere@amd.com>,
-        Alan Liu <HaoPing.Liu@amd.com>,
-        Mukul Joshi <mukul.joshi@amd.com>,
-        =?utf-8?Q?A?= =?utf-8?Q?ndr=C3=A9?= Almeida 
-        <andrealmeid@igalia.com>, Jingwen Zhu <Jingwen.Zhu@amd.com>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Leo Li <sunpeng.li@amd.com>, Melissa Wen <mwen@igalia.com>,
-        Le Ma <le.ma@amd.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Caio Novais <caionovais@usp.br>,
-        Martin Leung <Martin.Leung@amd.com>,
-        Ryan Lin <tsung-hua.lin@amd.com>,
-        Brian Chang <Brian.Chang@amd.com>,
-        Sung Joon Kim <sungjoon.kim@amd.com>,
-        Yifan Zhang <yifan1.zhang@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>,
-        Dillon Varone <Dillon.Varone@amd.com>,
-        Tom Chung <chiahsuan.chung@amd.com>,
-        Wesley Chalmers <Wesley.Chalmers@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, Zhan Liu <zhan.liu@amd.com>,
-        Roman Li <Roman.Li@amd.com>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        Wayne Lin <wayne.lin@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Ethan Wellenreiter <Ethan.Wellenreiter@amd.com>,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
-        Joshua Ashton <joshua@froggi.es>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Subject: Re: [PATCH 00/12] drm/amd: Remove unused variables
-In-Reply-To: <20230327233353.64081-1-caionovais@usp.br>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230327233353.64081-1-caionovais@usp.br>
-Date:   Tue, 28 Mar 2023 13:16:28 +0300
-Message-ID: <878rfh5gg3.fsf@intel.com>
+        Tue, 28 Mar 2023 06:18:41 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6D04EE8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:18:40 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id r11so47422809edd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:18:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1679998719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vvzr4baxa/x4j/Rm5Ei8bsFwFUzNXSwUCnoszmxMI9k=;
+        b=Rq1Hw1Ehk1O95uaNy++X6HO/rBi6Zafxu3iitPBKBzR834+M3wpZjGyR3lLpUmZfRt
+         qIuBcga9mebLocWaRkFu8JE9g18UokzmcArwKtOfVT1XnZqL0xFf++23+gWxvhUrClTS
+         vCjGAFXHAcPpPNo6kGVolwB1yYriMu67CBL8Lw6e42zZVaQ5Jz43GlRTavwzdYYuthNS
+         idJx8oJawEqD8TS3QUjejMV4K9yf1lRaCQpmibLEvop+YzOQgbF2o6iDDDqKWsIpFzq2
+         /JFu+14sv+GAHQ/YMHsWzXSibztpR9estlfblfodn5ZcJmAfOgddhyMHvBWxw9LSV0UH
+         LmZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679998719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vvzr4baxa/x4j/Rm5Ei8bsFwFUzNXSwUCnoszmxMI9k=;
+        b=sJ6ac+x/CWt2C6uKOlZcNkC+sI9L+2AWw5oWSEiaqx6b4kn6ZhDd5C2SGNfUFMoevA
+         gODJN3WNHdH2KuRWkQBQRL6kDYL0Yhb4rYtx0RZLLEbM+cXD5Gb2S+Q173wVDxCDD087
+         BRVXUoN/P88E9CNCIPXPi4a3AMkaATUWFRAnvv0ODUmgDcBb+JRPiE3MUY12d69nuRQl
+         omzomDOeBM8RoVFMdgDs8WiNdbt4jKkf8s7F5kdevnG5VC1LMDSzws6Ad0nqt2p10zne
+         ZgFo8AjdcqsYEOcGUtHv5wQkmtYVpY9u7ULLYXNr25piZ28VGVL/3mj1fE1vNxSuhAPb
+         3DIQ==
+X-Gm-Message-State: AAQBX9ehFt1hOVqH9NVb3brGHahRC5Rbm10TsatlHmSvzK95ak1L8ueP
+        3YTVF0lWjAmBc6/N+rt6VcpkunG2s/GQGvCt9RDuq6bFRxfL3KNH2lY=
+X-Google-Smtp-Source: AKy350bAjIfo1VzLBA/Mcp50eIeAbVuTMaMRgrXY3RuRJhFAjT6lyIbTBOTL+fcMK3N51HPw2QDYWKyPgxTouva1LS4=
+X-Received: by 2002:a17:906:b884:b0:932:a33a:3754 with SMTP id
+ hb4-20020a170906b88400b00932a33a3754mr7455435ejb.14.1679998718779; Tue, 28
+ Mar 2023 03:18:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+References: <20230320005258.1428043-1-sashal@kernel.org> <20230320005258.1428043-8-sashal@kernel.org>
+ <CAN+4W8g6AcQQWe7rrBVOFYoqeQA-1VbUP_W7DPS3q0k-czOLfg@mail.gmail.com> <ZBiAPngOtzSwDhFz@kroah.com>
+In-Reply-To: <ZBiAPngOtzSwDhFz@kroah.com>
+From:   Lorenz Bauer <lmb@isovalent.com>
+Date:   Tue, 28 Mar 2023 11:18:27 +0100
+Message-ID: <CAN+4W8jAyJTdFL=tgp3wCpYAjGOs5ggo6vyOg8PbaW+tJP8TKA@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 6.2 08/30] selftests/bpf: check that modifier
+ resolves after pointer
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Martin KaFai Lau <martin.lau@kernel.org>,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        shuah@kernel.org, yhs@fb.com, eddyz87@gmail.com, sdf@google.com,
+        error27@gmail.com, iii@linux.ibm.com, memxor@gmail.com,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,45 +74,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023, Caio Novais <caionovais@usp.br> wrote:
-> This patchset cleans the code removing unused variables and one unused
-> function.
+On Mon, Mar 20, 2023 at 3:48=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
 >
-> Caio Novais (12):
->   Remove unused variable 'r'
->   Remove unused variable 'value0'
->   Remove unused variable 'pixel_width'
->   Remove unused variable 'hubp'
->   Remove unused variable 'speakers'
->   Remove unused variable 'mc_vm_apt_default'
->   Remove unused variable 'optc'
->   Remove two unused variables 'speakers' and 'channels' and remove
->     unused function 'speakers_to_channels'
->   Remove two unused variables 'is_pipe_split_expected' and 'state'
->   Remove unused variable 'cursor_bpp'
->   Remove unused variable 'scl_enable'
->   Remove two unused variables 'result_write_min_hblank' and
->     'hblank_size'
+> Why would it break?  Is that because the test is buggy, or the kernel is
+> buggy?
 
-Curious, how did you create this? It does not match the patches.
+This test will be fine, but there have been several times when
+selftests/bpf for stable kernel releases didn't actually compile due
+to backported tests. This is because macros we're redefined, etc.
+Unless those also get picked (seems like a sisyphean task) we'll keep
+seeing broken selftests/bpf on stable.
 
-BR,
-Jani.
-
->
->  drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c       |  8 ----
->  .../amd/display/dc/dcn10/dcn10_link_encoder.c |  3 --
->  .../drm/amd/display/dc/dcn201/dcn201_dpp.c    |  6 ---
->  .../drm/amd/display/dc/dcn201/dcn201_hwseq.c  |  2 -
->  .../gpu/drm/amd/display/dc/dcn30/dcn30_afmt.c |  2 -
->  .../gpu/drm/amd/display/dc/dcn30/dcn30_hubp.c |  4 --
->  .../drm/amd/display/dc/dcn30/dcn30_hwseq.c    |  3 --
->  .../gpu/drm/amd/display/dc/dcn31/dcn31_apg.c  | 39 -------------------
->  .../drm/amd/display/dc/dcn32/dcn32_resource.c |  4 --
->  .../display/dc/dcn32/dcn32_resource_helpers.c |  4 --
->  .../dc/dml/dcn31/display_rq_dlg_calc_31.c     |  2 -
->  .../dc/link/protocols/link_dp_capability.c    |  7 ----
->  12 files changed, 84 deletions(-)
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Best
+Lorenz
