@@ -2,79 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6806CB36F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA7C6CB36E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbjC1Bxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 21:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
+        id S232502AbjC1Bxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 21:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjC1Bxd (ORCPT
+        with ESMTP id S229539AbjC1Bxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Mar 2023 21:53:33 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5321FEF;
-        Mon, 27 Mar 2023 18:53:31 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id cm7-20020a056830650700b006a11f365d13so4306928otb.0;
-        Mon, 27 Mar 2023 18:53:31 -0700 (PDT)
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756AB2101;
+        Mon, 27 Mar 2023 18:53:32 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id r14so2209929oiw.12;
+        Mon, 27 Mar 2023 18:53:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679968410;
+        d=1e100.net; s=20210112; t=1679968412;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=NyEuKekF3ixV/ghMaaLEPqxVbnElSx+vXvln8EpC1Ds=;
-        b=isef8aMUVBmV5qCgCYmD0UJsh5UHkZ5GA5e435jrpkRn2nzSuGp+HqLpivwC9F7bT/
-         R0X25/WEtn6Bn3RADj2ybq5GE3+4isqcNnM5gzLkAJF06a+CKtai8ldGggNYjXG+eFPq
-         89vKvS/41qNvphEkteTmm804kI7Ls4Cp+x53WPb67p7F5T4UX+39FkKWNvH6HaV1GtG5
-         oN6rDOzMdYuamAxpfLeH5EmJBw76ahLNVJujwJcCCU3fNqgqKc901Kdt2qYXI/DmFY9M
-         rg5cvO/gtae9z9+p+Q4gJ1OUvx0sbQh4slDx45BEyz5KdtDBS9+bPQe97/NMprmEGSpk
-         fwEg==
-X-Gm-Message-State: AO0yUKUppPFDuc1fknYJOX/aF9EAq8QjM22/Cg/Oc4iMe+TLDiScO/sP
-        F1+AQOptaBfnWy8iBsZ7+A==
-X-Google-Smtp-Source: AK7set+Ie7ktWPg++zt8jVvHXo1cAdbhkTlL7d3DAQDJwRSvs1eNXGTNVwfZwfNY7AhS2272o09lOA==
-X-Received: by 2002:a9d:7441:0:b0:69c:639b:330e with SMTP id p1-20020a9d7441000000b0069c639b330emr6956689otk.3.1679968410464;
-        Mon, 27 Mar 2023 18:53:30 -0700 (PDT)
+        bh=MYTrnhZDgTTeegxUWGeV8K3c6cyl+HkrWWPDkDux9pU=;
+        b=K6abqVO3pc63TZeJay23pCJaJMI44qISEj/hs0nUEGQ+9Dx6Z8CtbHMJlzFfYLzZrJ
+         qDoaxU8E5NKwl+AEAQ+w0KlqL9hoxcWY12p/dpVKOyGmNpWsK1C3wAZXeLItSeJ3FSOy
+         gKS0yfm9WqIAC3JyLgGCQBj5DMhsXeJzI6SXxIuQQzEwsY5fLAUBN6v4dX5Pdj1henQ7
+         yk51U3C/fz78vwurWrKrXmaEJ/hoX9HQyA0hu0+Mbf9nRDIxUXYDciu2/Rsvt1tiPIog
+         IPta6w6RQsX84UWlOvdUtOUSm0y/XpGDTJKr1URMMRDzraLVZlGLZUIV0G1n8YLi2LgV
+         TeTw==
+X-Gm-Message-State: AAQBX9eSMNp8AvYGiveej2lAf1McE+uNQN7xrchiadC8LcloK7HrvA4b
+        Ojm86o/KSmZocU+gYy7aug==
+X-Google-Smtp-Source: AKy350bkl4fqTt6QpZi7WIWnPrZc4ldPQfRH8qICoYIokHV33sGARNUQ+fGNzFRukXVsK+zOdQwpgA==
+X-Received: by 2002:aca:d9d4:0:b0:389:14bd:8246 with SMTP id q203-20020acad9d4000000b0038914bd8246mr3887280oig.13.1679968411696;
+        Mon, 27 Mar 2023 18:53:31 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i18-20020a056830011200b0069fa6ca584bsm6331858otp.40.2023.03.27.18.53.29
+        by smtp.gmail.com with ESMTPSA id l20-20020a544114000000b0038413a012dasm7270451oic.4.2023.03.27.18.53.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 18:53:29 -0700 (PDT)
-Received: (nullmailer pid 1306389 invoked by uid 1000);
+        Mon, 27 Mar 2023 18:53:31 -0700 (PDT)
+Received: (nullmailer pid 1306392 invoked by uid 1000);
         Tue, 28 Mar 2023 01:53:28 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Eric Dumazet <edumazet@google.com>,
-        michael@amarulasolutions.com, Rob Herring <robh+dt@kernel.org>,
-        linux-can@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        netdev@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        devicetree@vger.kernel.org
-In-Reply-To: <20230327201630.3874028-3-dario.binacchi@amarulasolutions.com>
-References: <20230327201630.3874028-1-dario.binacchi@amarulasolutions.com>
- <20230327201630.3874028-3-dario.binacchi@amarulasolutions.com>
-Message-Id: <167996718762.1276051.14765835681406438651.robh@kernel.org>
-Subject: Re: [PATCH v9 2/5] dt-bindings: net: can: add STM32 bxcan DT
- bindings
+To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        devicetree@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20230327211351.686831-2-mmkurbanov@sberdevices.ru>
+References: <20230327211351.686831-1-mmkurbanov@sberdevices.ru>
+ <20230327211351.686831-2-mmkurbanov@sberdevices.ru>
+Message-Id: <167996718827.1276101.10705861652259578341.robh@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: spi: add Amlogic Meson A1 SPI
+ controller
 Date:   Mon, 27 Mar 2023 20:53:28 -0500
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,67 +73,36 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 27 Mar 2023 22:16:27 +0200, Dario Binacchi wrote:
-> Add documentation of device tree bindings for the STM32 basic extended
-> CAN (bxcan) controller.
+On Tue, 28 Mar 2023 00:13:50 +0300, Martin Kurbanov wrote:
+> Add YAML devicetree Amlogic Meson A113L (A1 family) SPIFC Driver.
 > 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> This patch has dependencies on the A1 clock series which is still under
+> review - https://lore.kernel.org/all/20230321193014.26349-1-ddrokosov@sberdevices.ru/
 > 
+> Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
 > ---
-> 
-> Changes in v9:
-> - Replace master/slave terms with primary/secondary.
-> 
-> Changes in v5:
-> - Add Rob Herring's Reviewed-by tag.
-> 
-> Changes in v4:
-> - Remove "st,stm32f4-bxcan-core" compatible. In this way the can nodes
->  (compatible "st,stm32f4-bxcan") are no longer children of a parent
->   node with compatible "st,stm32f4-bxcan-core".
-> - Add the "st,gcan" property (global can memory) to can nodes which
->   references a "syscon" node containing the shared clock and memory
->   addresses.
-> 
-> Changes in v3:
-> - Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
-> - Add description to the parent of the two child nodes.
-> - Move "patterProperties:" after "properties: in top level before "required".
-> - Add "clocks" to the "required:" list of the child nodes.
-> 
-> Changes in v2:
-> - Change the file name into 'st,stm32-bxcan-core.yaml'.
-> - Rename compatibles:
->   - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
->   - st,stm32-bxcan -> st,stm32f4-bxcan
-> - Rename master property to st,can-master.
-> - Remove the status property from the example.
-> - Put the node child properties as required.
-> 
->  .../bindings/net/can/st,stm32-bxcan.yaml      | 85 +++++++++++++++++++
->  1 file changed, 85 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+>  .../bindings/spi/amlogic,meson-a1-spifc.yaml  | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml:27:11: [error] syntax error: mapping values are not allowed here (syntax)
 
 dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/net/can/st,stm32-bxcan.example.dts'
-Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml:27:11: mapping values are not allowed here
-make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/net/can/st,stm32-bxcan.example.dts] Error 1
+Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.example.dts:18:18: fatal error: dt-bindings/clock/amlogic,a1-clkc.h: No such file or directory
+   18 |         #include <dt-bindings/clock/amlogic,a1-clkc.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.example.dtb] Error 1
 make[1]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml:27:11: mapping values are not allowed here
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml: ignoring, error parsing file
 make: *** [Makefile:1512: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230327201630.3874028-3-dario.binacchi@amarulasolutions.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230327211351.686831-2-mmkurbanov@sberdevices.ru
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
