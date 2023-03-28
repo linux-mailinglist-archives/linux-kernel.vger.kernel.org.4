@@ -2,218 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB8E6CC71A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C8A6CC71E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233363AbjC1PwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
+        id S233372AbjC1Pwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjC1PwF (ORCPT
+        with ESMTP id S233364AbjC1Pw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:52:05 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9666F1B3;
-        Tue, 28 Mar 2023 08:52:03 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id n125so15639377ybg.7;
-        Tue, 28 Mar 2023 08:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680018723;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e3G5lMN0QEUYC4Qox2hs9k7l4ZdTOZOuw9tIXiq/0Fg=;
-        b=DPPJhfzTip0i0zk2bPuZuLckRa2iJVTpAHAnPvYVJp5dAFt4JERB8z7Mho/gcph0IV
-         lgIgOW0VTQdrHNgQ0+OkoFcVDywTJku3c31KHPVHctSzJLWqZzRXPMuYf9piRBhlIlt0
-         tLrTRlZHaz7CjEKgvjFyCdZu0MAfONMKRhxonCo5ST8w/OEU9LArkGtF4YKUh9W5MOYR
-         e9jhZEKpa+WMihQMl9hi1kvgfgJRPhEcDvqmrtP/3/OJ3GUbtQ/SSbEtc5vYfeugulIv
-         E1UxrQ/NmhGrUoJAnNU56HUoRU7xZ7WPiKXJcw1WqGZiIK3D+2VtIKsD1MhNPSvqs38B
-         cKXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680018723;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e3G5lMN0QEUYC4Qox2hs9k7l4ZdTOZOuw9tIXiq/0Fg=;
-        b=NdDwiYOlx0GdzHD9yjWoJum6hFhn9MiOtaU4HhkVM/PeuU1/rMBTjMMomxs5fJcWNR
-         tztDi8fzGY2TKpym/AC5n5HRi/7bo0z/eL3H0SDWP2UnM6adtOFp0babedkbSN/K+TyM
-         CYyHHZExJwMbk/HgHKiynupplActzhqRGWs4PVN4y6IhYjA0EfYgIPd1wJPutShqMAXe
-         xgFzEWAG+BWA89fimo8KdC+/t2PFWTaEng08YLpmUv+b1mp36HA8XlTbRVor30y34+PI
-         euEgg0l8sE4nPBRmyocRQyxWy/3mc2dXf3ApU2vksJzSRlCZLhUF9LoU5/Gk/wdyMxeX
-         5YYQ==
-X-Gm-Message-State: AAQBX9cn5ZRzNJMJDiUvAQDgqE/iEIEDqz0XipDY4f7aJQB6II9B4dWX
-        W9nDw+yWevgEOA6V4icJjhxqDCKy4B9spdzvNt3de6UQHTfL/CEb
-X-Google-Smtp-Source: AKy350ZfTgUeEwFQTG2UMGEsb0KpsteEhATGz400mc3KzrBJRXixMW1G6R2KRNzU29dD9BMfwWo93zONg0vVXS+TKD4=
-X-Received: by 2002:a05:6902:18d5:b0:b75:3fd4:1b31 with SMTP id
- ck21-20020a05690218d500b00b753fd41b31mr10707743ybb.1.1680018722397; Tue, 28
- Mar 2023 08:52:02 -0700 (PDT)
+        Tue, 28 Mar 2023 11:52:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB66198B
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 08:52:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5139CB81D79
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:52:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E64EC433D2;
+        Tue, 28 Mar 2023 15:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680018744;
+        bh=N/0Q2ofWL1px+rKg7cbc8KWr7TkYVLJkqMMOXNaxdNQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=rzwSHNXzPA7AMhJbSZffuulKOqXtRg4P5Qyv+373duLbJh8qP1hJ1h1akNsErxJ1C
+         drti1Y7AAZAaX91u9xzal5l5yY+2loWagf9IHl60dL2YmF0ubzagpC7Xf2Q+P8Q4OX
+         9bCvOF9D6kLl8VHGGrYlwp7vaahN04AAOwumn32ch9Xqtig3p3T3ZDy9CRTLgHDJBm
+         i6ymSJhMZmWFIVjR91InD6a1Q333mHhPVAtOYUIQR3BptFUeOrtMUwdUFIqKVdxeqd
+         wEA/+TLwDD9ovvWUIRTSL/cf516im5w6illGgjCToc55JBXE6BTRzcb61Sq0ep6Dmu
+         IXaN7fZY1I9Jw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+In-Reply-To: <20230328094901.50763-1-cristian.ciocaltea@collabora.com>
+References: <20230328094901.50763-1-cristian.ciocaltea@collabora.com>
+Subject: Re: [PATCH] ASoC: es8316: Handle optional IRQ assignment
+Message-Id: <168001874221.43606.9872298334839661286.b4-ty@kernel.org>
+Date:   Tue, 28 Mar 2023 16:52:22 +0100
 MIME-Version: 1.0
-References: <ZCEIEKC0s/MFReT0@7e9e31583646> <3443961.DhAEVoPbTG@silver>
-In-Reply-To: <3443961.DhAEVoPbTG@silver>
-From:   Eric Van Hensbergen <ericvh@gmail.com>
-Date:   Tue, 28 Mar 2023 10:51:51 -0500
-Message-ID: <CAFkjPT=j1esw=q-w5KTyHKDZ42BEKCERy-56TiP+Z7tdC=y05w@mail.gmail.com>
-Subject: Re: [PATCH] fs/9p: Add new options to Documentation
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     v9fs-developer@lists.sourceforge.net,
-        Eric Van Hensbergen <ericvh@kernel.org>,
-        asmadeus@codewreck.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bd1bf
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As I work through the documentation rework and to some extent the
-testing matrix -- I am reconsidering some choices and wanted to open
-up the discussion here.
+On Tue, 28 Mar 2023 12:49:01 +0300, Cristian Ciocaltea wrote:
+> The driver is able to work fine without relying on a mandatory interrupt
+> being assigned to the I2C device. This is only needed when making use of
+> the jack-detect support.
+> 
+> However, the following warning message is always emitted when there is
+> no such interrupt available:
+> 
+> [...]
 
-TLDR; I'm thinking of reworking the cache options before the merge
-window to keep things simple while setting up for some of the future
-options.
+Applied to
 
-While we have a bunch of new options, in practice I expect users to
-probably consolidate around three models: no caching, tight caches,
-and expiring caches with fscache being an orthogonal add-on to the
-last two.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-The ultimate goal is to simplify the options based on expected use models:
+Thanks!
 
-- cache=3D[ none, file, all ] (none is currently default)
-- write_policy =3D [ *writethrough, writeback ] (writethrough would be defa=
-ult)
-- cache_validate =3D [ never, *open, x (seconds) ]  (cache_validate
-would default to open)
-- fscache
+[1/1] ASoC: es8316: Handle optional IRQ assignment
+      commit: 39db65a0a17b54915b269d3685f253a4731f344c
 
-So, mapping of existing (deprecated) legacy modes:
-- none (obvious) write_policy=3Dwritethrough
-- *readahead -> cache=3Dfile cache_validate_open write_policy=3Dwritethroug=
-h
-- mmap -> cache=3Dfile cache_validate=3Dopen write_policy=3Dwriteback
-- loose -> cache=3Dall cache_validate=3Dnever write_policy=3Dwriteback
-- fscache -> cache=3Dall cache_validate=3Dnever write_policy=3Dwriteback &
-fscache enabled
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Some things I'm less certain of: cache_validation is probably an
-imperfect term as is using 'open' as one of the options, in this case
-I'm envisioning 'open' to mean open-to-close coherency for file
-caching (cache is only validated on open) and validation on lookup for
-dir-cache coherency (using qid.version). Specifying a number here
-expires existing caches and requires validation after a certain number
-of seconds (is that the right granularity)?
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-So, I think this is more clear from a documentation standpoint, but
-unfortuantely I haven't reduced the test matrix much - in fact I've
-probably made it worse. I expect the common cases to basically be:
-- cache=3Dnone
-- new default? (cache=3Dall, write_policy=3Dwriteback, cache_validate=3Dope=
-n)
-- fscache w/(cache=3Dall, write_policy=3Dwriteback, cache_validate=3D5)
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Which would give us 3 configurations to test against versus 25
-(assuming testing for one time value for cache-validate=3Dx). Important
-to remember that this is just cache mode tests, the other mount
-options act as multipliers.
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-Thoughts?  Alternatives?
+Thanks,
+Mark
 
-        -eric
-
-On Mon, Mar 27, 2023 at 10:38=E2=80=AFAM Christian Schoenebeck
-<linux_oss@crudebyte.com> wrote:
->
-> On Monday, March 27, 2023 5:05:52 AM CEST Eric Van Hensbergen wrote:
-> > Need to update the documentation for new mount flags
-> > and cache modes.
-> >
-> > Signed-off-by: Eric Van Hensbergen <ericvh@kernel.org>
-> > ---
-> >  Documentation/filesystems/9p.rst | 29 ++++++++++++++++-------------
-> >  1 file changed, 16 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/Documentation/filesystems/9p.rst b/Documentation/filesyste=
-ms/9p.rst
-> > index 0e800b8f73cc..6d257854a02a 100644
-> > --- a/Documentation/filesystems/9p.rst
-> > +++ b/Documentation/filesystems/9p.rst
-> > @@ -78,19 +78,18 @@ Options
-> >               offering several exported file systems.
-> >
-> >    cache=3Dmode specifies a caching policy.  By default, no caches are =
-used.
-> > -
-> > -                        none
-> > -                             default no cache policy, metadata and dat=
-a
-> > -                                alike are synchronous.
-> > -                     loose
-> > -                             no attempts are made at consistency,
-> > -                                intended for exclusive, read-only moun=
-ts
-> > -                        fscache
-> > -                             use FS-Cache for a persistent, read-only
-> > -                             cache backend.
-> > -                        mmap
-> > -                             minimal cache that is only used for read-=
-write
-> > -                                mmap.  Northing else is cached, like c=
-ache=3Dnone
-> > +             Modes are progressive and inclusive.  For example, specif=
-ying fscache
-> > +             will use loose caches, writeback, and readahead.  Due to =
-their
-> > +             inclusive nature, only one cache mode can be specified pe=
-r mount.
->
-> I would highly recommend to rather specify below for each option "this op=
-tion
-> implies writeback, readahead ..." etc., as it is not obvious otherwise wh=
-ich
-> option would exactly imply what. It is worth those extra few lines IMO to
-> avoid confusion.
->
-> > +
-> > +                     =3D=3D=3D=3D=3D=3D=3D=3D=3D       =3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +                     none            no cache of file or metadata
-> > +                     readahead       readahead caching of files
-> > +                     writeback       delayed writeback of files
-> > +                     mmap            support mmap operations read/writ=
-e with cache
-> > +                     loose           meta-data and file cache with no =
-coherency
-> > +                     fscache         use FS-Cache for a persistent cac=
-he backend
-> > +                     =3D=3D=3D=3D=3D=3D=3D=3D=3D       =3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> >    debug=3Dn    specifies debug level.  The debug level is a bitmask.
-> >
-> > @@ -137,6 +136,10 @@ Options
-> >               This can be used to share devices/named pipes/sockets bet=
-ween
-> >               hosts.  This functionality will be expanded in later vers=
-ions.
-> >
-> > +  directio   bypass page cache on all read/write operations
-> > +
-> > +  ignoreqv   ignore qid.version=3D=3D0 as a marker to ignore cache
-> > +
-> >    noxattr    do not offer xattr functions on this mount.
-> >
-> >    access     there are four access modes.
-> >
->
->
->
->
