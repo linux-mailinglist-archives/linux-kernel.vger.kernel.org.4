@@ -2,96 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0886CBE7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775CA6CBE85
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 14:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjC1MFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 08:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
+        id S230526AbjC1MFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 08:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbjC1MFM (ORCPT
+        with ESMTP id S230280AbjC1MFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:05:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0997B86B9;
-        Tue, 28 Mar 2023 05:04:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E319616E9;
-        Tue, 28 Mar 2023 12:04:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35557C433EF;
-        Tue, 28 Mar 2023 12:04:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680005088;
-        bh=QPl8Cb9bKZSsJRqleYqzItXhifD9N0gM81emEwdCt+k=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=PUNcXkN2mrIZ5D2bV+M6jxZPPKO4uR7TgSQfdaKj3kh7P0xO6h3z5nmWPe3B2nP1S
-         hxDGT2bv+c40rFJItA8277pubTZf9o+W9uzSivCiu1KSFs5GAp7mNZJNwS66By2gaV
-         53T+fUVxwsP+K8V3gE47O8Hnv+U7tCaWg2yeQV7jBq6bFEhVP6A12Ue42tIKyIGGN1
-         GL04zhY7E3WVZIJ6jl6Q7xNWM0ZAaKz35FANYgTM8GscfLYPQsim3fPJXLHnS6lsSP
-         PeQytv47cQ88dKHS6RJJPYqsCYNUKbd272xZt4SSnYktP9w4fIG+h+b9AkOGhin3bA
-         3oQ2hFOweaOYw==
-Date:   Tue, 28 Mar 2023 14:04:44 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Tanu Malhotra <tanu.malhotra@intel.com>
-cc:     srinivas.pandruvada@linux.intel.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, even.xu@intel.com,
-        stable@vger.kernel.org, Shaunak Saha <shaunak.saha@intel.com>
-Subject: Re: [PATCH v2] HID: intel-ish-hid: Fix kernel panic during warm
- reset
-In-Reply-To: <20230327185838.2527560-1-tanu.malhotra@intel.com>
-Message-ID: <nycvar.YFH.7.76.2303281404360.1142@cbobk.fhfr.pm>
-References: <20230327185838.2527560-1-tanu.malhotra@intel.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Tue, 28 Mar 2023 08:05:43 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D277DB1;
+        Tue, 28 Mar 2023 05:05:17 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id o2so11413515plg.4;
+        Tue, 28 Mar 2023 05:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680005117;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nPmXX1hgKpt/BYBMC6yN1gahjjJEjANZpQyVziEPpes=;
+        b=ST4nocriMAAXBAacSI1ZwetD0Femj7VgBRIjRFPGLYGn7klPoTVq3Sfn5CvaIZQjgR
+         nWUk/l6PWtl9uezfCCSC5EDPyIT4FOsd31j2VeOfesy9AeHwGGga3qvN87/nQo4Eoto5
+         cx38g5oZb49oh/pHnf5FyYb06fQadrLr0l7Chnw7MHQhlSs3CPYBNGkwSE00R45iTjg/
+         AL6Ss8uumL7ynJL6RVW1hsQTA4naoVjpQ3DzP2DMnKWkahwEtrxG/vJ9ea1HVBpXa0M1
+         YSRWodEpr/rttG3N4dw2yHiHzb1KgFV8YyHADn88pTwwsFwZtAkD1SBRWbWSMHaDiWl3
+         dbKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680005117;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nPmXX1hgKpt/BYBMC6yN1gahjjJEjANZpQyVziEPpes=;
+        b=eakc3HVnDXxkQgkvvpT6k7Cq9V8udxn0eb4bHcR0Et2RhFkfXmFhXJWFt7DrSnM7MX
+         K6kXfZv7ov761t6xLi/0xummq7Qdp5HnQknkH3ZmGgMFSf5sD+Zy95r3h2s0dXN0HCp/
+         CXoI4oTM2l49f7/tsyu9i3ehN2pN27twSVzXGGEcnRyJuwLyK1Qyl0YhVW67Xce0FJZq
+         bAv1vSZyImyVgfjp4zZ7CmJUMq36G8l0n+6h3Pccnk/8DO3HGU1u6CDlwta46wOTNlO5
+         dA4VVvAk4oGA0ceFCepGQOHyjRnCzMZyKWhxMVbCyUSA3SjWcBTAtHGmZFjLtKnFb+Ij
+         eBAw==
+X-Gm-Message-State: AAQBX9cEq92J/GF42PE1VF/Djtg6TM1B0RZ76z/NrzxJxePytB9vAPa5
+        y1rJ0qxNTdD6xTpIjPtDG+3jIZ/Pf+/qVA==
+X-Google-Smtp-Source: AKy350ZgxWbNC6s6F1wnOqlzm1o/JQ1Ze0KdehbawRAn6htMsNtoi2+0+LeJiPJMiAByZ/zbgilhcg==
+X-Received: by 2002:a17:902:f2ca:b0:1a1:c54c:1a36 with SMTP id h10-20020a170902f2ca00b001a1c54c1a36mr12338427plc.63.1680005116895;
+        Tue, 28 Mar 2023 05:05:16 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
+        by smtp.gmail.com with ESMTPSA id ju10-20020a170903428a00b0019a83f2c99bsm21013956plb.28.2023.03.28.05.05.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 05:05:16 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH 0/3] Move Loongson1 PWM timer to clocksource framework
+Date:   Tue, 28 Mar 2023 20:05:03 +0800
+Message-Id: <20230328120506.375864-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023, Tanu Malhotra wrote:
+Move Loongson1 PWM timer to clocksource framework
+and update the Kconfig/Makefile options accordingly.
 
-> During warm reset device->fw_client is set to NULL. If a bus driver is
-> registered after this NULL setting and before new firmware clients are
-> enumerated by ISHTP, kernel panic will result in the function
-> ishtp_cl_bus_match(). This is because of reference to
-> device->fw_client->props.protocol_name.
-> 
-> ISH firmware after getting successfully loaded, sends a warm reset
-> notification to remove all clients from the bus and sets
-> device->fw_client to NULL. Until kernel v5.15, all enabled ISHTP kernel
-> module drivers were loaded right after any of the first ISHTP device was
-> registered, regardless of whether it was a matched or an unmatched
-> device. This resulted in all drivers getting registered much before the
-> warm reset notification from ISH.
-> 
-> Starting kernel v5.16, this issue got exposed after the change was
-> introduced to load only bus drivers for the respective matching devices.
-> In this scenario, cros_ec_ishtp device and cros_ec_ishtp driver are
-> registered after the warm reset device fw_client NULL setting.
-> cros_ec_ishtp driver_register() triggers the callback to
-> ishtp_cl_bus_match() to match ISHTP driver to the device and causes kernel
-> panic in guid_equal() when dereferencing fw_client NULL pointer to get
-> protocol_name.
-> 
-> Fixes: f155dfeaa4ee ("platform/x86: isthp_eclite: only load for matching devices")
-> Fixes: facfe0a4fdce ("platform/chrome: chros_ec_ishtp: only load for matching devices")
-> Fixes: 0d0cccc0fd83 ("HID: intel-ish-hid: hid-client: only load for matching devices")
-> Fixes: 44e2a58cb880 ("HID: intel-ish-hid: fw-loader: only load for matching devices")
-> Cc: <stable@vger.kernel.org> # 5.16+
-> Signed-off-by: Tanu Malhotra <tanu.malhotra@intel.com>
-> Tested-by: Shaunak Saha <shaunak.saha@intel.com>
-> Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Keguang Zhang (3):
+  MIPS: Loongson32: Remove deprecated PWM timer clocksource
+  dt-bindings: timer: Add Loongson-1 clocksource
+  clocksource: loongson1: Move PWM timer to clocksource framework
 
-Applied, thank you.
+ .../timer/loongson,ls1x-pwmtimer.yaml         |  48 ++++
+ arch/mips/loongson32/Kconfig                  |  37 ---
+ arch/mips/loongson32/common/time.c            | 210 ----------------
+ drivers/clocksource/Kconfig                   |   9 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/timer-loongson1-pwm.c     | 236 ++++++++++++++++++
+ 6 files changed, 294 insertions(+), 247 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.yaml
+ create mode 100644 drivers/clocksource/timer-loongson1-pwm.c
 
+
+base-commit: f7b5a248213f0976c7944925f3f3ab7ff199e581
 -- 
-Jiri Kosina
-SUSE Labs
+2.34.1
 
