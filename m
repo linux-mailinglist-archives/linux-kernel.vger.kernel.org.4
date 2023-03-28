@@ -2,117 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9006CB2B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 02:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAE56CB2BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 02:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbjC1AHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 20:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
+        id S231833AbjC1AI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 20:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjC1AHN (ORCPT
+        with ESMTP id S231258AbjC1AI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 20:07:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0436F1BC8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 17:06:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679961986;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oVSllWMtZWdtDUnZueS3ZITI6/5YaR00xl6fOWFPgxw=;
-        b=XnhdH8wwJKXFa2Kv6XMYVXTxhtjPrb4SOcz2AUjRDOqVP1qcDEB2F7yGo1qFl4kr3JtuqQ
-        XvjP/qu2NKXYtAk+wy/9S62zH3iUNoSSDAgy1Gc1RaHb0CyLSxLDqv6ETDk2YikS0JaDhQ
-        wLDGHHv7HT4ZR7sMnNfe66JMX1hacT4=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-16-KSeopUydNTuPObXxxmy_8g-1; Mon, 27 Mar 2023 20:06:24 -0400
-X-MC-Unique: KSeopUydNTuPObXxxmy_8g-1
-Received: by mail-qv1-f70.google.com with SMTP id l18-20020ad44bd2000000b005a9cf5f609eso4327074qvw.15
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 17:06:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679961984;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oVSllWMtZWdtDUnZueS3ZITI6/5YaR00xl6fOWFPgxw=;
-        b=S4OWcYJEKGuM8N7iBzpUYoI8glKWzoDDOvigVr7vbZBz3jPEFdADJX06x7WjYGvGvw
-         H8AU4Rb0wNQj67GxU+T9PIvDKW8Bri2t5JwvH+cEdhIc8VNPmBZ6HWe7mxw+A56U95XC
-         S9OhIajp9DBG/4qL7OWRuvOI10ulB4iyLGfKwip4LSlyoe+EbMdh+KmYZ/i3yyXNQ258
-         ehjqIjQSESZ2JxIZ1FXe+8diCNrc+bbUB+TA0mWZNiL2owUYTBYNq3O/zJvN6D6zQHyT
-         PswsKDYSTolP4kGiq3kUijIttOx0bdJ0xnqSzkajIAAD4hSyjxz9CY/cImXPYr73QVJh
-         arMQ==
-X-Gm-Message-State: AAQBX9e2PrlT6lJGFyZ67mWN09ZUXpdUB23qzW1Fns821XaKO8+YIjol
-        WZM8jZck5OrXX45SYWYhthwN/1AW4AHZ6W8FQvnhL48He95zM/qihnPBrFr5NYKeoZqOcYu1qqi
-        mDtQTqQQM9pfb9J6huS+aM7ns
-X-Received: by 2002:a05:6214:27cc:b0:5af:3a13:201f with SMTP id ge12-20020a05621427cc00b005af3a13201fmr20749281qvb.37.1679961984162;
-        Mon, 27 Mar 2023 17:06:24 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bosbW29PT8iFMSLN0sbn5umQV3b5UqmtN5qZQaOtgas+0CV3b7wBzisKLHjUrsN/FUDALfvg==
-X-Received: by 2002:a05:6214:27cc:b0:5af:3a13:201f with SMTP id ge12-20020a05621427cc00b005af3a13201fmr20749256qvb.37.1679961983880;
-        Mon, 27 Mar 2023 17:06:23 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id q21-20020ac87355000000b003e387a2fbdfsm7130695qtp.0.2023.03.27.17.06.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 17:06:23 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        nathan@kernel.org, ndesaulniers@google.com
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] mtd: lpddr_cmds: remove unused words variable
-Date:   Mon, 27 Mar 2023 20:06:20 -0400
-Message-Id: <20230328000620.1778033-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 27 Mar 2023 20:08:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49F41BDC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 17:08:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53DCF6155A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5F46C433A0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:08:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679962134;
+        bh=a31qX3NPls8wS2xJkkUjJbLbCkTAHR0yJQrhzHN95uQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ELOsIYVzr3dlf8MLwTWo+T+RusazaiiuHRDol9TXBh4fbDBJK+GNKWSE1LC+/9VrM
+         LcCcltI4oWxtVPZJ+HtgeZC1BIPt6LaYnTOJ7R1PuRJ3wDbEoB6LBpC63d+Y+EXcdE
+         U5TX5gYCtIYzDN7fyYckFePfFs8o+MmVxwC2G/wh/ZQmOZmYCPhhFjdg4l3DH6dEqB
+         POOznS6kg0BqdLl4BzSP7W2+B1DrlMUMF9ChcjpLb1BAqYIixadQNsuhPMT7+fa1PH
+         IcuP/muA+NfGtQ1ilYvQBo5sgZnlQyzEgSoz2sbcOGophPfAcDHifHLhLuOfgUPluP
+         AhRwFbWsGOKEg==
+Received: by mail-lf1-f52.google.com with SMTP id q16so13623959lfe.10
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 17:08:54 -0700 (PDT)
+X-Gm-Message-State: AAQBX9fY6+3zAKQmIQfp7CAVgjucQslzDWKTzjBhnbZLGFKlkdgNLkIb
+        OLXuMEt9x8mTwh8/UumUs0zOfesp9oyNYEOyDw==
+X-Google-Smtp-Source: AKy350av9yZ1UX2KgeS/t4F1MQbA9AYH8XTj7NFPLZQKNqahnuiPNmwDXnSuMi0m/W4u7+bF7CY8qSEaKUT25OBRpTA=
+X-Received: by 2002:ac2:596a:0:b0:4e8:6261:58c2 with SMTP id
+ h10-20020ac2596a000000b004e8626158c2mr3860399lfp.7.1679962132705; Mon, 27 Mar
+ 2023 17:08:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230324100553.13719-1-jason-jh.lin@mediatek.com>
+In-Reply-To: <20230324100553.13719-1-jason-jh.lin@mediatek.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Tue, 28 Mar 2023 08:08:40 +0800
+X-Gmail-Original-Message-ID: <CAAOTY__tPtvdf+CEdnzY09Cu2PT0tmfdH_a9MD8UWnxZEu-v_A@mail.gmail.com>
+Message-ID: <CAAOTY__tPtvdf+CEdnzY09Cu2PT0tmfdH_a9MD8UWnxZEu-v_A@mail.gmail.com>
+Subject: Re: [PATCH v6] drm/mediatek: add mediatek-drm of vdosys0 support for mt8188
+To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Nathan Lu <nathan.lu@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        amy zhang <Amy.Zhang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/mtd/lpddr/lpddr_cmds.c:409:31: error: variable
-  'words' set but not used [-Werror,-Wunused-but-set-variable]
-        int ret, wbufsize, word_gap, words;
-                                     ^
-This variable is not used so remove it.
+Hi, Jason:
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/mtd/lpddr/lpddr_cmds.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Jason-JH.Lin <jason-jh.lin@mediatek.com> =E6=96=BC 2023=E5=B9=B43=E6=9C=882=
+4=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=886:06=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> From: Nathan Lu <nathan.lu@mediatek.com>
+>
+> add driver data of mt8188 vdosys0 to mediatek-drm and the sub driver.
 
-diff --git a/drivers/mtd/lpddr/lpddr_cmds.c b/drivers/mtd/lpddr/lpddr_cmds.c
-index ee063baed136..3c3939bc2dad 100644
---- a/drivers/mtd/lpddr/lpddr_cmds.c
-+++ b/drivers/mtd/lpddr/lpddr_cmds.c
-@@ -406,7 +406,7 @@ static int do_write_buffer(struct map_info *map, struct flchip *chip,
+Applied to mediatek-drm-next [1], thanks.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
+log/?h=3Dmediatek-drm-next
+
+>
+> Signed-off-by: amy zhang <Amy.Zhang@mediatek.com>
+> Signed-off-by: Nathan Lu <nathan.lu@mediatek.com>
+> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> ---
+> Rebase on maintainer's tree[1]
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.gi=
+t/log/?h=3Dmediatek-drm-next
+> ---
+>  drivers/gpu/drm/mediatek/mtk_drm_drv.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/med=
+iatek/mtk_drm_drv.c
+> index dce2d86df6d9..6dcb4ba2466c 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> @@ -176,6 +176,18 @@ static const unsigned int mt8186_mtk_ddp_ext[] =3D {
+>         DDP_COMPONENT_DPI0,
+>  };
+>
+> +static const unsigned int mt8188_mtk_ddp_main[] =3D {
+> +       DDP_COMPONENT_OVL0,
+> +       DDP_COMPONENT_RDMA0,
+> +       DDP_COMPONENT_COLOR0,
+> +       DDP_COMPONENT_CCORR,
+> +       DDP_COMPONENT_AAL0,
+> +       DDP_COMPONENT_GAMMA,
+> +       DDP_COMPONENT_POSTMASK0,
+> +       DDP_COMPONENT_DITHER0,
+> +       DDP_COMPONENT_DP_INTF0,
+> +};
+> +
+>  static const unsigned int mt8192_mtk_ddp_main[] =3D {
+>         DDP_COMPONENT_OVL0,
+>         DDP_COMPONENT_OVL_2L0,
+> @@ -272,6 +284,11 @@ static const struct mtk_mmsys_driver_data mt8186_mms=
+ys_driver_data =3D {
+>         .mmsys_dev_num =3D 1,
+>  };
+>
+> +static const struct mtk_mmsys_driver_data mt8188_vdosys0_driver_data =3D=
  {
- 	struct lpddr_private *lpddr = map->fldrv_priv;
- 	map_word datum;
--	int ret, wbufsize, word_gap, words;
-+	int ret, wbufsize, word_gap;
- 	const struct kvec *vec;
- 	unsigned long vec_seek;
- 	unsigned long prog_buf_ofs;
-@@ -421,10 +421,7 @@ static int do_write_buffer(struct map_info *map, struct flchip *chip,
- 	}
- 	/* Figure out the number of words to write */
- 	word_gap = (-adr & (map_bankwidth(map)-1));
--	words = (len - word_gap + map_bankwidth(map) - 1) / map_bankwidth(map);
--	if (!word_gap) {
--		words--;
--	} else {
-+	if (word_gap) {
- 		word_gap = map_bankwidth(map) - word_gap;
- 		adr -= word_gap;
- 		datum = map_word_ff(map);
--- 
-2.27.0
-
+> +       .main_path =3D mt8188_mtk_ddp_main,
+> +       .main_len =3D ARRAY_SIZE(mt8188_mtk_ddp_main),
+> +};
+> +
+>  static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data =3D {
+>         .main_path =3D mt8192_mtk_ddp_main,
+>         .main_len =3D ARRAY_SIZE(mt8192_mtk_ddp_main),
+> @@ -308,6 +325,8 @@ static const struct of_device_id mtk_drm_of_ids[] =3D=
+ {
+>           .data =3D &mt8183_mmsys_driver_data},
+>         { .compatible =3D "mediatek,mt8186-mmsys",
+>           .data =3D &mt8186_mmsys_driver_data},
+> +       { .compatible =3D "mediatek,mt8188-vdosys0",
+> +         .data =3D &mt8188_vdosys0_driver_data},
+>         { .compatible =3D "mediatek,mt8192-mmsys",
+>           .data =3D &mt8192_mmsys_driver_data},
+>         { .compatible =3D "mediatek,mt8195-mmsys",
+> @@ -677,6 +696,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[=
+] =3D {
+>           .data =3D (void *)MTK_DISP_MUTEX },
+>         { .compatible =3D "mediatek,mt8186-disp-mutex",
+>           .data =3D (void *)MTK_DISP_MUTEX },
+> +       { .compatible =3D "mediatek,mt8188-disp-mutex",
+> +         .data =3D (void *)MTK_DISP_MUTEX },
+>         { .compatible =3D "mediatek,mt8192-disp-mutex",
+>           .data =3D (void *)MTK_DISP_MUTEX },
+>         { .compatible =3D "mediatek,mt8195-disp-mutex",
+> --
+> 2.18.0
+>
