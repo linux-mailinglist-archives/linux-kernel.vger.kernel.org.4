@@ -2,69 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491426CBCEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D785B6CBCED
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjC1Kzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
+        id S231293AbjC1K46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjC1Kzm (ORCPT
+        with ESMTP id S229924AbjC1K44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:55:42 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C276594
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:55:40 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id x37so6933381pga.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mechatrax-com.20210112.gappssmtp.com; s=20210112; t=1680000940;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+41omAo7mrv9HdvTIOTewb/FQOWfrqtOekDOFTV4tcM=;
-        b=4u4GAkpbFOZ/YLXAUn9dolc+H7EAPN4kk66wgfpL6RUlLUySVHlYVXxDwzhIsRzpLR
-         sQ4HptGSBB1HSKCejxXifULA2LGv4JQC0Dz9K9Ea7mEzXDAmWWy7fpg/VzVe/l/oeL7f
-         muW/yio/ifJxEq34YtLqiSFv24yJmuvp1axJm7QF3lx7/NyL5QAayiHosCdiZoMOg2tS
-         vPZxMTSXvzV16TX5MMfpTzsd7lMuwrye8NtmMtU9ReHgzPGDe4S+rY7UKkAfmQsEi8UC
-         phy6uko/Z4Z/QRTFCSV48Kh+/pJCrjDVnFYDidFEk6pdrNZ1P/exCVGuY6fQjvwzqwpj
-         6SxA==
+        Tue, 28 Mar 2023 06:56:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6985572AB
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:56:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680000975;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tx6w/NoxDwZy1sJXzEpKewVTB38oj2z0f8QKEmor2kM=;
+        b=D47Jro1zActPrE+a2ZjgXoP89jynZTmjaJRXkbSC8ALinUBqZMJPa1Ilc9KMwpTOwWsFde
+        kpUbfcVvPw3jCMplZDx7u0f9GvSshMOYAsEvnCIVX+wdo0vSLg2Lqk7u3LnhPw28FrZhHI
+        FZuGvhPCL5eeqHHesw8ko+zzv4RbWW0=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-640-AO2iqbjbPoCEh2Lmnh31uQ-1; Tue, 28 Mar 2023 06:56:14 -0400
+X-MC-Unique: AO2iqbjbPoCEh2Lmnh31uQ-1
+Received: by mail-qk1-f198.google.com with SMTP id c186-20020a379ac3000000b007484744a472so5144943qke.22
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:56:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680000940;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+41omAo7mrv9HdvTIOTewb/FQOWfrqtOekDOFTV4tcM=;
-        b=YD4U5fDPYQSsBRbbGT3En4i3yQzs1laKZFnOuGSGkzeUxfQfVZbT2/wrNM0MQ5fuXW
-         8IL1DYtiMATw5hkMGydMkXi0Xl96ms40EYnrtfXnWH65/vX9OuKUgYR65EzLh6LQ4/Ar
-         jhdodLj+Nb+KPvogJm+owKf/sjzTV2R2auS8qtFq0AZmnDnH7UVE6agNcmE8XM1Gub+5
-         NBwomlkSooyfiGf3iQklFRtjv9JU5UhyEw4MLqz5JKwLjpsS8hL6l04i8Td3SqL+SZIp
-         hUHgl0382xyv6N614eihED3Yilz2INOiqhCdxkbos69tKheSc8N6yxKR+AcWgEbVCHJJ
-         HuEw==
-X-Gm-Message-State: AAQBX9cyoG8W5UN3sJlZwtdJ+jPvNq/1dO0E951Ji2Jax3bVjnMIiVDk
-        EGTm/uLph2jpicsD1sl3/9fr4E/FOs4+l+ijcYJIdFPvQBY4OFmhoi4=
-X-Google-Smtp-Source: AKy350Y88U0UftP1ihbjyf3FFPjYFJgxLmhbJQr7qam1nnAx3JGqLJNrZXB2Swa1MiBY3EePSSH510UO2qcbHbTiGd0=
-X-Received: by 2002:a63:5f12:0:b0:503:3747:cea3 with SMTP id
- t18-20020a635f12000000b005033747cea3mr4198382pgb.10.1680000940006; Tue, 28
- Mar 2023 03:55:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230306044737.862-1-honda@mechatrax.com> <6e1fe1015235ae7d7eb9ef2526fd64b6d6d628d7.camel@gmail.com>
- <CA+Tz-SHQxNzx=eS8ex=3Hps0th5bTY+K1qSWrZqWC8ryv+d0RA@mail.gmail.com>
- <CA+Tz-SFbt2RAz3POMRoTHqz+tNyQOn3UsssZV9EvHUhhR+XJbQ@mail.gmail.com> <2a108acdd79682f47e3ac923fe005b943a4a00c0.camel@gmail.com>
-In-Reply-To: <2a108acdd79682f47e3ac923fe005b943a4a00c0.camel@gmail.com>
-From:   Masahiro Honda <honda@mechatrax.com>
-Date:   Tue, 28 Mar 2023 19:55:02 +0900
-Message-ID: <CA+Tz-SHL1ybx37vM_uon+XxYC4FXD_Ci1HTcZyb+5e0iD6t=uA@mail.gmail.com>
-Subject: Re: [PATCH] Fix IRQ issue by setting IRQ_DISABLE_UNLAZY flag
-To:     =?UTF-8?B?TnVubyBTw6E=?= <noname.nuno@gmail.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        d=1e100.net; s=20210112; t=1680000974;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Tx6w/NoxDwZy1sJXzEpKewVTB38oj2z0f8QKEmor2kM=;
+        b=JuPJONg+7Yb0wvlplINQhs97US8KQdc1RSmlxRw7UI8/6f2Kpw5anzbf1r3f51V+M2
+         /fGMmKPjFTS3LTmNyyrs+F+ZaYjnIpAoFjY9b8mJUGByUDznigIyY6dJAYiXdI0GXBfD
+         rK/dCMewMlo9oOiqB/abRXzpixb0cHSf7chGKEZ0Qea8qYeTpfaDofL0J3sFpkW9tqce
+         gxusJPrWVXA3dx8DKijBo/rzKY1myzNoHDc/87ydjt3OREkcKKHbYAOI9/YcF+XQ3+/h
+         MG5WszgspnVAe79k2rUtyjzK+37kXhBtbn74JtvwTkmEOQfmgvDJAKZp65SM5sBMDn52
+         KUOw==
+X-Gm-Message-State: AAQBX9eLiixiMCESHmkxW3lcp/D3aNlSmkBrD29d1XT5uMOkNNl8PWnp
+        iBzHww+ZrjDJ/ZUKaZCZQuTzMW2psOtDNJUOBBtFoWhNJyK1ApCoKrhcBIlywfGQeEtxDYiVRl7
+        g00lZcjnwPcAs9f8wjFjP1LDo
+X-Received: by 2002:a05:6214:27c6:b0:5ac:463b:a992 with SMTP id ge6-20020a05621427c600b005ac463ba992mr23570858qvb.0.1680000973765;
+        Tue, 28 Mar 2023 03:56:13 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YoJ1hu+cmlWRCRMngdhv9I0pHFod7SIKCQg1c/gYLu9JE0o2UCKpqfgcuCH709qp40s94LAw==
+X-Received: by 2002:a05:6214:27c6:b0:5ac:463b:a992 with SMTP id ge6-20020a05621427c600b005ac463ba992mr23570827qvb.0.1680000973448;
+        Tue, 28 Mar 2023 03:56:13 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-232-148.dyn.eolo.it. [146.241.232.148])
+        by smtp.gmail.com with ESMTPSA id u13-20020a0cee8d000000b005dd8b9345f2sm3684704qvr.138.2023.03.28.03.56.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 03:56:12 -0700 (PDT)
+Message-ID: <e6b7c24026e3750ea3e10a5ebf26bf2dd903e2a1.camel@redhat.com>
+Subject: Re: [net-next Patch v5 5/6] octeontx2-pf: Add support for HTB
+ offload
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Hariprasad Kelam <hkelam@marvell.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
+Cc:     kuba@kernel.org, davem@davemloft.net,
+        willemdebruijn.kernel@gmail.com, andrew@lunn.ch,
+        sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
+        jerinj@marvell.com, sbhatta@marvell.com, naveenm@marvel.com,
+        edumazet@google.com, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
+        jiri@resnulli.us, maxtram95@gmail.com
+Date:   Tue, 28 Mar 2023 12:56:08 +0200
+In-Reply-To: <20230326181245.29149-6-hkelam@marvell.com>
+References: <20230326181245.29149-1-hkelam@marvell.com>
+         <20230326181245.29149-6-hkelam@marvell.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,44 +86,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 9:26=E2=80=AFPM Nuno S=C3=A1 <noname.nuno@gmail.com=
-> wrote:
->
-> So, my suspicion was right... We are getting stalled data (which is
-> obviously not good). AFAIU, when disabling the IRQ, we don't
-> immediately mask the IRQ and we only do it in the next time an
-> interrupt (sample) comes which means (I think) we'll process (right
-> away) that outstanding interrupt next time we enable the IRQ.
->
+On Sun, 2023-03-26 at 23:42 +0530, Hariprasad Kelam wrote:
+[...]
+> +static int otx2_qos_root_add(struct otx2_nic *pfvf, u16 htb_maj_id, u16 =
+htb_defcls,
+> +			     struct netlink_ext_ack *extack)
+> +{
+> +	struct otx2_qos_cfg *new_cfg;
+> +	struct otx2_qos_node *root;
+> +	int err;
+> +
+> +	netdev_dbg(pfvf->netdev,
+> +		   "TC_HTB_CREATE: handle=3D0x%x defcls=3D0x%x\n",
+> +		   htb_maj_id, htb_defcls);
+> +
+> +	INIT_LIST_HEAD(&pfvf->qos.qos_tree);
+> +	mutex_init(&pfvf->qos.qos_lock);
 
-Thank you. I understand.
+It's quite strange and error prone dynamically init this mutex and the
+list here. Why don't you do such init ad device creation time?
 
-> > > > Some research on this also seems to point that we should (need?)
-> > > > call
-> > > > irq_clear_status_flags(irq, IRQ_DISABLE_UNLAZY) when freeing the
-> > > > IRQ.
-> >
-> > I have understood that I need to call irq_clear_status_flags.
-> > However,
-> > I cannot find a code to free the IRQ in ad_sigma_delta.c and other
-> > Sigma-Delta ADC driver source files. So, I would like to implement
-> > only irq_set_status_flags.
->
-> Well, that's because we are using devm_request_irq() which is a device
-> managed API. So, I can see two options in here...
->
-> 1) You do not use devm_request_irq() and use request_irq() +
-> devm_add_action_or_reset() and in your release() function you would
-> call irq_clear_status_flags() + free_irq().
->
-> 2) You add a devm_add_action_or_reset() after devm_request_irq() and
-> your release() function would only clear the flag. But in here we would
-> likely also have to be careful in the case where devm_request_irq()
-> fails. So option 2) seems a bit more "ugly".
->
-> I would likely go to option 1) but maybe Jonathan or others have better
-> ideas.
->
+> +
+> +	root =3D otx2_qos_alloc_root(pfvf);
+> +	if (IS_ERR(root)) {
+> +		mutex_destroy(&pfvf->qos.qos_lock);
+> +		err =3D PTR_ERR(root);
+> +		return err;
+> +	}
+> +
+> +	/* allocate txschq queue */
+> +	new_cfg =3D kzalloc(sizeof(*new_cfg), GFP_KERNEL);
+> +	if (!new_cfg) {
+> +		NL_SET_ERR_MSG_MOD(extack, "Memory allocation error");
 
-Thank you very much for letting me know about the API and ideas.
-I'll try to implement 1).
+Here the root node is leaked.
+
+> +		mutex_destroy(&pfvf->qos.qos_lock);
+> +		return -ENOMEM;
+> +	}
+
+
+[...]
+
+Cheers,
+
+Paolo
+
