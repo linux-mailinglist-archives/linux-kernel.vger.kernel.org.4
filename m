@@ -2,81 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780FF6CBD6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51066CBD7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232715AbjC1LWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+        id S232706AbjC1LYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232640AbjC1LWl (ORCPT
+        with ESMTP id S229620AbjC1LYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:22:41 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023077EC8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:22:30 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id b20so48222930edd.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680002548;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dzwHQ2Duk/kqF5BJ0fG5L6Cu8NMF103H5aRIBgcczb4=;
-        b=htrzrsE7hmfkJgnGa64UdAmCTFbDjwVjX1/ZK7rzlfJ4rum1twPXjx2IcPP12VND9T
-         0DKpttfDZeCJAjZF9hf9sirzt1D7GiaNIvC2Ms0GGq/MedlyTFbot/1vxF4CxC0kFUot
-         lJYlci1bOkm1cjOAaW76KTfxGYDZpTUwaWI6CqiqlLyD64vI1f8N1ETCWOZvAh6jSSal
-         1PbzRamEOc4x30/OWIqrzOivLgt4Uzhb1hguorghfB6U/5sNzMn2YAbgBBqg+Tdtf4hr
-         dXV/1WfiU6mwe/scWd/TkMX5uL4+EeTzYs24kk9cDqFNzkUiCS1rn8BmpwTCA4wE1eLy
-         wDUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680002548;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dzwHQ2Duk/kqF5BJ0fG5L6Cu8NMF103H5aRIBgcczb4=;
-        b=CsEam3hclc40mzy0V8KjOdXsGL7yNZsM954x7po3MmmlIoDpB5zM+Krm7Z5GR9UdIF
-         gZmfsZUDuqLzKrWpsk+8WX1cYsGHQlajOS+R+bi868NdKertUNRrn6+HvN4QIcYSVpHx
-         wQeLP55PVjrROXH5NWxwkCVBdhgGp2B034lwdtIuGHU2HhfOZCe6+MQZYvuQR4aXzsdd
-         SzkUuEHfMqWpy6Cv0mt/wFbl/9UJcTe//sSk0uoU4lmH6e88UH40AFeNIpkOdeq5uggc
-         LWfaZmgg0z0tqChefIIVldQCXWl/eL2w2YSsM/mXN34PQYB+10tkAFkHu5MYPjE8OPbx
-         tu1A==
-X-Gm-Message-State: AAQBX9eaDL1v/uxcGpAjnfgrTTFR1pBBuS2uyioXBQgupDL3fgGTL3ES
-        1T5XD1xaS9pV8vjF22EhOxrUVA==
-X-Google-Smtp-Source: AKy350aGvcc3WcYuz9u6zfbZBRO4GkfWN+fYq58at9mlFg8RR/uitQlgp2yla6cyxnFnFhXLJw2AWw==
-X-Received: by 2002:a17:907:86ac:b0:92b:eefb:b966 with SMTP id qa44-20020a17090786ac00b0092beefbb966mr21203353ejc.0.1680002548506;
-        Tue, 28 Mar 2023 04:22:28 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
-        by smtp.gmail.com with ESMTPSA id l22-20020a170906079600b009333288d0ffsm13778637ejc.194.2023.03.28.04.22.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 04:22:28 -0700 (PDT)
-Message-ID: <79d8044f-ce68-463e-66f7-8755e253bc99@linaro.org>
-Date:   Tue, 28 Mar 2023 13:22:26 +0200
+        Tue, 28 Mar 2023 07:24:47 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020A57D8A;
+        Tue, 28 Mar 2023 04:24:37 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SAnGJj002538;
+        Tue, 28 Mar 2023 11:24:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=oN96+ARe1j8aRdsYtJdfn8/Aj1fKjFx7+fhMQDxXoUs=;
+ b=j4H+sRVXl8p63vCyDxlGGz/x61yg6VeLHpxMyqZkxGM+LB9ol7/kVV7zpBBEUsgAxHtG
+ qbYJzwuc1uTjCEeqsN3jXukGwefEVomG63J0DMRGQU+LF+s5bsDeoWBHzsoZK/Ii132q
+ 8TQTm/MgJvFK+qD6L+kCb9R2FNvuzUWaW21NdcorCYmGVHoiBi86om5yecy1C3AEuI3Z
+ JaobL3F2zLDa7O3OjoPLQg6jT8BOV1HKAv8SB55wNMgVq/U0eqB0b8jGE/2FXiXrHORQ
+ cDLWu/DjeIqq+knNf74WR/vcLuGP+gN5oGt3Pq4cYY2VmaQTjiugq9JWb05nREmL5YrL 7g== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pk79bbcty-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 11:24:26 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32SBNkfF010858
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 11:23:46 GMT
+Received: from [10.239.133.211] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Mar
+ 2023 04:23:42 -0700
+Message-ID: <c9974f19-7c0a-dfae-1747-a3c73f41d4dd@quicinc.com>
+Date:   Tue, 28 Mar 2023 19:23:40 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [Patch v4 01/10] dt-bindings: memory: tegra: add bpmp ref in
- tegra234-mc node
+Subject: Re: [PATCH v3 01/11] dt-bindings: arm: Add support for DSB element
+ size
 Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
-        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
-        ishah@nvidia.com, bbasu@nvidia.com
-References: <20230327161426.32639-1-sumitg@nvidia.com>
- <20230327161426.32639-2-sumitg@nvidia.com>
- <787f656a-223d-5eed-e311-9cc7a6c46452@linaro.org> <ZCLF6ZRH528pu/r3@orome>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZCLF6ZRH528pu/r3@orome>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
+ <1679551448-19160-2-git-send-email-quic_taozha@quicinc.com>
+ <e6ad7301-09ea-93e0-929e-86e0eb0a02e7@arm.com>
+ <d4c133c1-38c7-93e3-deaf-b55161057409@quicinc.com>
+ <fb5d55ba-8f7b-292e-e676-9423c36f4085@quicinc.com>
+ <6da91d8c-6694-9041-2f2f-72a8e95c7df2@linaro.org>
+From:   Tao Zhang <quic_taozha@quicinc.com>
+In-Reply-To: <6da91d8c-6694-9041-2f2f-72a8e95c7df2@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -IFHFVYTSHoJPYVAnVn14_SSP4Uc_-pm
+X-Proofpoint-GUID: -IFHFVYTSHoJPYVAnVn14_SSP4Uc_-pm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-28_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 mlxscore=0 priorityscore=1501 clxscore=1011 suspectscore=0
+ mlxlogscore=582 spamscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303280094
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,50 +101,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 12:48, Thierry Reding wrote:
-> On Tue, Mar 28, 2023 at 09:23:04AM +0200, Krzysztof Kozlowski wrote:
->> On 27/03/2023 18:14, Sumit Gupta wrote:
->>> For Tegra234, add the "nvidia,bpmp" property within the Memory
->>> Controller (MC) node to reference BPMP node. This is needed in
->>> the MC driver to pass the client info to the BPMP-FW when memory
->>> interconnect support is available.
+Hi Krzysztof,
+
+On 3/25/2023 7:35 PM, Krzysztof Kozlowski wrote:
+> On 24/03/2023 10:15, Tao Zhang wrote:
+>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>>> +    minimum: 32
+>>>>> +    maximum: 64
+>>>> Shouldn't this be something like oneOf ? It is not a range, but one of
+>>>> those two specific values ?
+>>> Yes, "qcom,dsb-element-size" should be an optional option required in
+>>> TPDM
 >>>
->>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
->>> ---
->>>  .../bindings/memory-controllers/nvidia,tegra186-mc.yaml    | 7 +++++++
->>>  1 file changed, 7 insertions(+)
+>>> devicetree. Other properties like "qcom,cmb-element-size",
+>>> "qcom,tc-element-size"
 >>>
->>> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
->>> index 935d63d181d9..398d27bb2373 100644
->>> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
->>> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
->>> @@ -58,6 +58,10 @@ properties:
->>>    "#interconnect-cells":
->>>      const: 1
->>>  
->>> +  nvidia,bpmp:
->>> +    $ref: /schemas/types.yaml#/definitions/phandle
->>> +    description: phandle of the node representing the BPMP
+>>> and etc. will be added in a later patch series.
+>>>
+>>> I will update this doc according to your advice in the next version of
+>>> the patch.
+>>>
+>>> Tao
+>>>
+>> Correct my misunderstanding in the mail above.
 >>
->> Why do you need this multiple times? Both in parent and all external-mc
->> children?
-> 
-> We've had nvidia,bpmp in the external memory controller node since
-> basically the beginning because we've always needed it there. For newer
-> chips we now also need it for the memory controller.
-> 
-> Ideally I think we would only have this in the MC and have the EMC
-> driver reference it via the EMC's parent (i.e. MC), but that would break
-> backwards-compatibility. Reaching into the EMC's DT node from the MC was
-> another option that we discussed internally, but it didn't look right
-> given how this is also needed by the MC.
-> 
-> One thing we could potentially do is deprecate the nvidia,bpmp phandle
-> in the EMC and only keep it as a fallback in the drivers in case the
-> parent MC doesn't find it's own in the DT.
+>> You are right, DSB element size should be 32-bit or 64-bit. I will
+>> update this in the next
+> Then 'enum', not 'oneOf'.
 
-Yes, deprecation would answer to my question.
+Got it.
 
-Best regards,
-Krzysztof
 
+Tao
+
+>
+> Best regards,
+> Krzysztof
+>
