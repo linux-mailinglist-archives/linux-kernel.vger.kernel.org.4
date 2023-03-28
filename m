@@ -2,110 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C8D6CC9B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707BB6CC9B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 19:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjC1RxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 13:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
+        id S229693AbjC1Rxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 13:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjC1Rwv (ORCPT
+        with ESMTP id S229634AbjC1Rxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:52:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C9D10ABE;
-        Tue, 28 Mar 2023 10:52:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Wb/aIRtlfC2C3jG+RF0MsyFF/Fo2UynqeVSoO8JS/Z0=; b=BDH7Jj9zHHGqSkhzkUwbaaJTaW
-        zZy0Vq0AElAfWug2nRqiMnGVybq1k70DD/aaH6okrYWFkTIv58te1zfU4gbF8VBfWiWOxlQXLEQM8
-        tX8GW/0V0/YTCadI4GWiZ3y3NH59ZkeHPwCIEp5wYvVpI84TYiueVZZcCclEJ+Qevtd5/PZBxwNmN
-        MKI68BLlJBNkZxDJiWdTMuy/+QSHYMnHJm8vnEe3gQFrrwkhrxAjmrrLIBvicGUDRJk3uYNor1zJT
-        /jscjKxMdGcJzWdEOi68Vi+mwxb9uli63bpK9iF2Ygt/i08hqTWhLnn8LqDyU1MbfhdqFztuKM3yP
-        HQBq/oSQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1phDUO-00FNLk-0Q;
-        Tue, 28 Mar 2023 17:52:08 +0000
-Date:   Tue, 28 Mar 2023 10:52:08 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Song Liu <song@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-modules@vger.kernel.org,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        Daniel Gomez <da.gomez@samsung.com>,
-        "kbus >> Keith Busch" <kbusch@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
-Message-ID: <ZCMpSJzXg/+JSHNY@bombadil.infradead.org>
-References: <20230308094106.227365-1-rppt@kernel.org>
- <20230308094106.227365-2-rppt@kernel.org>
- <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
- <ZB6W1C88TU6CcjJH@kernel.org>
- <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
- <ZCKIX3de5AZfGggK@kernel.org>
- <ZCKZuXxq38obmYpn@dhcp22.suse.cz>
- <ZCMDmHSqOeCj1EIo@kernel.org>
- <CAB=NE6UTC4VkNM57GGJ3XkG_PWLkMfXv2e2=yQJhtM6Fc-uMsQ@mail.gmail.com>
- <ZCMlyUewrAjTBb5i@casper.infradead.org>
+        Tue, 28 Mar 2023 13:53:36 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616E6EC5A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:53:25 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id y4so53144712edo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 10:53:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1680026004;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GBBAU6hZLECWp0UudInEHiiA2FkG0Dhl57EhHD71/2w=;
+        b=WyJBv5Pqllid3pNI6/ikTPvxnNXwwYvm5BeSsZHlodYCQOrWeIKez1PCCxvY3x1D8c
+         3+AZOlaWzwu1aKR+OAeUfaGWTxiIfflV7gGlohUIYiEqEskdjBV9QYa+PD/HDQeJZU3Y
+         pFQhYKU+arSbJemfnq9SR0DQ6bDuZPsw4fp/k2p3LlpGJi35X785hbTi0EoGjexbJdKT
+         /zo4sSXmA7NblVWxBBey8ZK0PCmLNdDA177py1CZsWHspE6EGmptD4//mQHui9cQkTEc
+         kPDtXGZPdalt51dVpXNabobGHyskSSeC52qpMMTruKTKj6Vgxy77Pb7DYdWEsqx2UcyW
+         ZVrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680026004;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GBBAU6hZLECWp0UudInEHiiA2FkG0Dhl57EhHD71/2w=;
+        b=n/YCxWqz1p5WHK0tcTJF2N4RURWQwGQrDT9Ofsjs3Q5U+qBrUZvvzzyLxD42qgqGHh
+         UYxugXFJgTyXRPn+B7JF+l2WV5ofVL/OBZ0DAKTehPbKlb7SwAgO/0YnGH9EiDeCKKIh
+         Vfpjw061HFisKvBl6Pmrpa7QF/jsp8cxHOpw46VCQ9G9zN45jpV4lia9qmBQw9DDwQIt
+         9O0xswHkBvU+pvEQa/O5+3n0IcAKQPgBKWOoP52QXfxifYph49z2/Gv61ts5gspC+lTe
+         NkERrw5MLnSx2B0ACh9IIviDh4emMG0oiZWc/2lmj6HIqW2uy7AUopJP3K8s3CuDgV0O
+         pQAw==
+X-Gm-Message-State: AAQBX9dD1jPhv3fgR4Kq/XPfHV8NCgQs76Ejq/y6QaSuyFDxNRC9wCaa
+        moX9ITLKBevRY5V6YKI376zqaA==
+X-Google-Smtp-Source: AKy350ZpnwLB5iKCMGCbwwvWk9Vdlstn38oUzOZza2h97UWxvDmZVbQkVawtzBlghbIBM/+YOMAKfg==
+X-Received: by 2002:a05:6402:716:b0:502:2494:b8fc with SMTP id w22-20020a056402071600b005022494b8fcmr15014577edx.7.1680026003884;
+        Tue, 28 Mar 2023 10:53:23 -0700 (PDT)
+Received: from localhost ([2a02:8070:6387:ab20:5139:4abd:1194:8f0e])
+        by smtp.gmail.com with ESMTPSA id t27-20020a50ab5b000000b004c0c5864cc5sm16157912edc.25.2023.03.28.10.53.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 10:53:23 -0700 (PDT)
+Date:   Tue, 28 Mar 2023 13:53:22 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v1 5/9] memcg: replace stats_flush_lock with an atomic
+Message-ID: <ZCMpklJZqwWHro0u@cmpxchg.org>
+References: <20230328061638.203420-1-yosryahmed@google.com>
+ <20230328061638.203420-6-yosryahmed@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZCMlyUewrAjTBb5i@casper.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230328061638.203420-6-yosryahmed@google.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 06:37:13PM +0100, Matthew Wilcox wrote:
-> On Tue, Mar 28, 2023 at 10:18:50AM -0700, Luis Chamberlain wrote:
-> > differences with eBPF programs is that modules *can* be rather large
-> > in size. What is the average size of modules? Well let's take a look:
-> > 
-> > mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
-> > -name \*.ko| wc -l
-> > 9173
+On Tue, Mar 28, 2023 at 06:16:34AM +0000, Yosry Ahmed wrote:
+> As Johannes notes in [1], stats_flush_lock is currently used to:
+> (a) Protect updated to stats_flush_threshold.
+> (b) Protect updates to flush_next_time.
+> (c) Serializes calls to cgroup_rstat_flush() based on those ratelimits.
 > 
-> ummm ... wc -c, surely?
-
-That's the number of allmodconfig modules found.
-
-mcgrof@fulton ~/linux (git::sysctl-next)$ find ./ -name \*.ko| head -2
-./arch/x86/crypto/twofish-x86_64.ko
-./arch/x86/crypto/serpent-avx2.ko
-mcgrof@fulton ~/linux (git::sysctl-next)$ find ./ -name \*.ko| head -2 |
-wc -l
-2
-mcgrof@fulton ~/linux (git::sysctl-next)$ find ./ -name \*.ko| head -2 |
-wc -c
-70
-
-wc -c would give a lot more. wc -l gives me the module count.
-
-> > mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
-> > -name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
-> > -$((9173-5)) | awk 'BEGIN {sum=0} {sum+=$1} END {print sum/NR/1024}'
-> > 160.54
+> However:
 > 
-> ... which invalidates all of these.
+> 1. stats_flush_threshold is already an atomic
+> 
+> 2. flush_next_time is not atomic. The writer is locked, but the reader
+>    is lockless. If the reader races with a flush, you could see this:
+> 
+>                                         if (time_after(jiffies, flush_next_time))
+>         spin_trylock()
+>         flush_next_time = now + delay
+>         flush()
+>         spin_unlock()
+>                                         spin_trylock()
+>                                         flush_next_time = now + delay
+>                                         flush()
+>                                         spin_unlock()
+> 
+>    which means we already can get flushes at a higher frequency than
+>    FLUSH_TIME during races. But it isn't really a problem.
+> 
+>    The reader could also see garbled partial updates, so it needs at
+>    least READ_ONCE and WRITE_ONCE protection.
+> 
+> 3. Serializing cgroup_rstat_flush() calls against the ratelimit
+>    factors is currently broken because of the race in 2. But the race
+>    is actually harmless, all we might get is the occasional earlier
+>    flush. If there is no delta, the flush won't do much. And if there
+>    is, the flush is justified.
+> 
+> So the lock can be removed all together. However, the lock also served
+> the purpose of preventing a thundering herd problem for concurrent
+> flushers, see [2]. Use an atomic instead to serve the purpose of
+> unifying concurrent flushers.
+> 
+> [1]https://lore.kernel.org/lkml/20230323172732.GE739026@cmpxchg.org/
+> [2]https://lore.kernel.org/lkml/20210716212137.1391164-2-shakeelb@google.com/
+> 
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 
-Not sure ? But regardless the *.text* lookup is what we care for though
-which was later.
+With Shakeel's suggestion:
 
-  Luis
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
