@@ -2,63 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1CD6CC13F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284126CC145
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233213AbjC1NnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
+        id S232658AbjC1Nnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbjC1Nmx (ORCPT
+        with ESMTP id S233267AbjC1Nna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:42:53 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3825FBDDC;
-        Tue, 28 Mar 2023 06:42:49 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 28 Mar 2023 09:43:30 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5D686AC;
+        Tue, 28 Mar 2023 06:43:12 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 755956603152;
-        Tue, 28 Mar 2023 14:42:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680010968;
-        bh=qsVPM3z/5gvfqY0OJHUnJjWl2dyu6dw5XnunJEzfZJU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gJRtMbN8bhOpMo9aGLczdnRGpiM9202XYqLjcbrrxp9dntyv/7Mn45lQpYNtyHWcM
-         O/sUv4uKMTb9xLveJADK6yFkUcUfnPSsuuKHxpxVAlDUhGPnPMGPra0kfXUjUyoAUS
-         OqqPNamE1+8wujXki+tMjPXUjr2s6R8ww1fq57vWZdKOhD0ybk6GGZ0IQAKEoTSMFp
-         iBci9Gb49fW4be44BOH1eG7IxJNM6Ti8XC2+cxwjo44Esg1mJP63/w8swMgZo0idA5
-         TU1aGsa8KEbTEIU6tznM2zaGj60NZZdf4xka/a8juo22DrNQFVMoGtlw+a3hlNEYKu
-         dxLNdhMvzAmhQ==
-Message-ID: <9a9837ce-f800-f960-a82a-55ef6e71e95d@collabora.com>
-Date:   Tue, 28 Mar 2023 15:42:44 +0200
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 79FDB1EC0338;
+        Tue, 28 Mar 2023 15:43:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1680010990;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=3XNLULs5F+FAVGIo2HpX+YyLGYGVF4c35mHywkE1ikQ=;
+        b=DP5jAVvkHgPdKxNr++aP6OJJ3NimIfAXYaohqE84iAByv6WD1Pc03PikLct5wlkTGElF2E
+        WbpfJK7EjdFljaMVdxatewhmJYqplbuaWgFBHPgS/u15swUeNpyiOg5mqAXYMaqpt7liUw
+        YSPuihQAXOMoYR7XtplaRhTiYhWAq7I=
+From:   Borislav Petkov <bp@alien8.de>
+To:     linux-edac <linux-edac@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] EDAC: Sanitize MODULE_AUTHOR strings
+Date:   Tue, 28 Mar 2023 15:43:09 +0200
+Message-Id: <20230328134309.23159-1-bp@alien8.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] dt-bindings: pinctrl: mediatek: deprecate custom bias
- pull properties for mt8365
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230327-cleanup-pinctrl-binding-v1-0-b695e32e4f2e@baylibre.com>
- <20230327-cleanup-pinctrl-binding-v1-2-b695e32e4f2e@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230327-cleanup-pinctrl-binding-v1-2-b695e32e4f2e@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,64 +47,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/03/23 15:06, Alexandre Mergnat ha scritto:
-> In order to be more generic, "mediatek,pull-up-adv" and
-> "mediatek,pull-down-adv" should be deprecated. Use "bias-pull-up" and
-> "bias-pull-down" instead.
-> 
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
->   .../bindings/pinctrl/mediatek,mt8365-pinctrl.yaml  | 32 +++++++++++++++++++---
->   1 file changed, 28 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
-> index 347f533776ba..4ebc7f1caf55 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
-> @@ -72,12 +72,32 @@ patternProperties:
->             bias-disable: true
->   
->             bias-pull-up:
-> +            oneOf:
-> +              - type: boolean
-> +              - enum: [0, 1, 2, 3]
-> +                description: Pull up R1/R0 type define value.
->               description: |
-> -              Besides generic pinconfig options, it can be used as the pull up
-> -              settings for 2 pull resistors, R0 and R1. User can configure those
-> -              special pins.
-> +              For pull up type is normal, it don't need add R1/R0 define.
-> +              For pull up type is R1/R0 type, it can add value to set different
-> +              resistance. Valid arguments are described as below:
-> +              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-> +              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-> +              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-> +              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
->   
-> -          bias-pull-down: true
-> +          bias-pull-down:
-> +            oneOf:
-> +              - type: boolean
-> +              - enum: [0, 1, 2, 3]
-> +                description: Pull down R1/R0 type define value.
-> +            description: |
-> +              For pull down type is normal, it don't need add R1/R0 define.
-> +              For pull down type is R1/R0 type, it can add value to set
-> +              different resistance. Valid arguments are described as below:
-> +              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-> +              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-> +              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-> +              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
->   
->             input-enable: true
->   
-> @@ -123,7 +143,9 @@ patternProperties:
->               enum: [0, 1, 2, 3, 4, 5, 6, 7]
->   
->             mediatek,pull-up-adv:
-> +            deprecated: true
+From: "Borislav Petkov (AMD)" <bp@alien8.de>
 
-Same for this one, removing it shouldn't be a ABI breakage.... but please wait
-for Krzysztof or Rob to confirm that before pushing a v2.
+Fixup the remaining MODULE_AUTHOR strings to not contain newlines.
+Shorten and unbreak others.
 
+No functional changes.
+
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+---
+ drivers/edac/amd64_edac.c      | 6 ++----
+ drivers/edac/e752x_edac.c      | 2 +-
+ drivers/edac/e7xxx_edac.c      | 3 +--
+ drivers/edac/i5000_edac.c      | 7 ++-----
+ drivers/edac/i5100_edac.c      | 3 +--
+ drivers/edac/i82860_edac.c     | 3 +--
+ drivers/edac/layerscape_edac.c | 3 +--
+ drivers/edac/mpc85xx_edac.c    | 3 +--
+ drivers/edac/r82600_edac.c     | 3 +--
+ 9 files changed, 11 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index 5b42533f306a..8b16ebf5fe12 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -4244,10 +4244,8 @@ module_init(amd64_edac_init);
+ module_exit(amd64_edac_exit);
+ 
+ MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("SoftwareBitMaker: Doug Thompson, "
+-		"Dave Peterson, Thayne Harbaugh");
+-MODULE_DESCRIPTION("MC support for AMD64 memory controllers - "
+-		EDAC_AMD64_VERSION);
++MODULE_AUTHOR("SoftwareBitMaker: Doug Thompson, Dave Peterson, Thayne Harbaugh; AMD");
++MODULE_DESCRIPTION("MC support for AMD64 memory controllers - " EDAC_AMD64_VERSION);
+ 
+ module_param(edac_op_state, int, 0444);
+ MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll,1=NMI");
+diff --git a/drivers/edac/e752x_edac.c b/drivers/edac/e752x_edac.c
+index ac7c9b42d4c7..7221b4bb6df2 100644
+--- a/drivers/edac/e752x_edac.c
++++ b/drivers/edac/e752x_edac.c
+@@ -1462,7 +1462,7 @@ module_init(e752x_init);
+ module_exit(e752x_exit);
+ 
+ MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Linux Networx (http://lnxi.com) Tom Zimmerman\n");
++MODULE_AUTHOR("Linux Networx (http://lnxi.com) Tom Zimmerman");
+ MODULE_DESCRIPTION("MC support for Intel e752x/3100 memory controllers");
+ 
+ module_param(force_function_unhide, int, 0444);
+diff --git a/drivers/edac/e7xxx_edac.c b/drivers/edac/e7xxx_edac.c
+index 497e710fca3d..5852b95fa470 100644
+--- a/drivers/edac/e7xxx_edac.c
++++ b/drivers/edac/e7xxx_edac.c
+@@ -596,8 +596,7 @@ module_init(e7xxx_init);
+ module_exit(e7xxx_exit);
+ 
+ MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Linux Networx (http://lnxi.com) Thayne Harbaugh et al\n"
+-		"Based on.work by Dan Hollis et al");
++MODULE_AUTHOR("Linux Networx (http://lnxi.com) Thayne Harbaugh et al");
+ MODULE_DESCRIPTION("MC support for Intel e7xxx memory controllers");
+ module_param(edac_op_state, int, 0444);
+ MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll,1=NMI");
+diff --git a/drivers/edac/i5000_edac.c b/drivers/edac/i5000_edac.c
+index ba46057d4220..4b5a71f8739d 100644
+--- a/drivers/edac/i5000_edac.c
++++ b/drivers/edac/i5000_edac.c
+@@ -1573,13 +1573,10 @@ module_init(i5000_init);
+ module_exit(i5000_exit);
+ 
+ MODULE_LICENSE("GPL");
+-MODULE_AUTHOR
+-    ("Linux Networx (http://lnxi.com) Doug Thompson <norsk5@xmission.com>");
+-MODULE_DESCRIPTION("MC Driver for Intel I5000 memory controllers - "
+-		I5000_REVISION);
++MODULE_AUTHOR("Linux Networx (http://lnxi.com) Doug Thompson <norsk5@xmission.com>");
++MODULE_DESCRIPTION("MC Driver for Intel I5000 memory controllers - " I5000_REVISION);
+ 
+ module_param(edac_op_state, int, 0444);
+ MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll,1=NMI");
+ module_param(misc_messages, int, 0444);
+ MODULE_PARM_DESC(misc_messages, "Log miscellaneous non fatal messages");
+-
+diff --git a/drivers/edac/i5100_edac.c b/drivers/edac/i5100_edac.c
+index 8db680b6ae9b..d470afe65001 100644
+--- a/drivers/edac/i5100_edac.c
++++ b/drivers/edac/i5100_edac.c
+@@ -1220,6 +1220,5 @@ module_init(i5100_init);
+ module_exit(i5100_exit);
+ 
+ MODULE_LICENSE("GPL");
+-MODULE_AUTHOR
+-    ("Arthur Jones <ajones@riverbed.com>");
++MODULE_AUTHOR("Arthur Jones <ajones@riverbed.com>");
+ MODULE_DESCRIPTION("MC Driver for Intel I5100 memory controllers");
+diff --git a/drivers/edac/i82860_edac.c b/drivers/edac/i82860_edac.c
+index fbec90d00f1e..b8a497f0de28 100644
+--- a/drivers/edac/i82860_edac.c
++++ b/drivers/edac/i82860_edac.c
+@@ -355,8 +355,7 @@ module_init(i82860_init);
+ module_exit(i82860_exit);
+ 
+ MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Red Hat Inc. (http://www.redhat.com) "
+-		"Ben Woodard <woodard@redhat.com>");
++MODULE_AUTHOR("Red Hat Inc. (http://www.redhat.com) Ben Woodard <woodard@redhat.com>");
+ MODULE_DESCRIPTION("ECC support for Intel 82860 memory hub controllers");
+ 
+ module_param(edac_op_state, int, 0444);
+diff --git a/drivers/edac/layerscape_edac.c b/drivers/edac/layerscape_edac.c
+index 35ceaca578e1..7c5e2b3c0daa 100644
+--- a/drivers/edac/layerscape_edac.c
++++ b/drivers/edac/layerscape_edac.c
+@@ -72,5 +72,4 @@ module_exit(fsl_ddr_mc_exit);
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("NXP Semiconductor");
+ module_param(edac_op_state, int, 0444);
+-MODULE_PARM_DESC(edac_op_state,
+-		 "EDAC Error Reporting state: 0=Poll, 2=Interrupt");
++MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll, 2=Interrupt");
+diff --git a/drivers/edac/mpc85xx_edac.c b/drivers/edac/mpc85xx_edac.c
+index e50d7928bf8f..55320546c174 100644
+--- a/drivers/edac/mpc85xx_edac.c
++++ b/drivers/edac/mpc85xx_edac.c
+@@ -711,5 +711,4 @@ module_exit(mpc85xx_mc_exit);
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Montavista Software, Inc.");
+ module_param(edac_op_state, int, 0444);
+-MODULE_PARM_DESC(edac_op_state,
+-		 "EDAC Error Reporting state: 0=Poll, 2=Interrupt");
++MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll, 2=Interrupt");
+diff --git a/drivers/edac/r82600_edac.c b/drivers/edac/r82600_edac.c
+index d0aef83dca2a..61e979d5437a 100644
+--- a/drivers/edac/r82600_edac.c
++++ b/drivers/edac/r82600_edac.c
+@@ -415,8 +415,7 @@ module_init(r82600_init);
+ module_exit(r82600_exit);
+ 
+ MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Tim Small <tim@buttersideup.com> - WPAD Ltd. "
+-		"on behalf of EADS Astrium");
++MODULE_AUTHOR("Tim Small <tim@buttersideup.com> - WPAD Ltd. on behalf of EADS Astrium");
+ MODULE_DESCRIPTION("MC support for Radisys 82600 memory controllers");
+ 
+ module_param(disable_hardware_scrub, bool, 0644);
+-- 
+2.35.1
 
