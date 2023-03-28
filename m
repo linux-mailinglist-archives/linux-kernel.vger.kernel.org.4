@@ -2,188 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D486CC7B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5920C6CC7B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbjC1QQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 12:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
+        id S229612AbjC1QRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 12:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232782AbjC1QQe (ORCPT
+        with ESMTP id S232720AbjC1QRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 12:16:34 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2112.outbound.protection.outlook.com [40.107.93.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ACCE054;
-        Tue, 28 Mar 2023 09:16:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UK1bPSnqscx/xlHS5rzZA9uvxyoGK4qOXUOHvLdbRYkkYWCiQ4JEV7UjE/sc9gbfvPQjOBpoLUgx/YdHuQQmQ4FqP/l5u1IRfQbWl5P7AEhKs5U7GLyxvwF2cA5NJ3f3O7KAEKa+x7UInno94W7WwA5D7YLLOYhfDtQYWOQ0A2TwM/lJHS+m2YnGIGNB7f8zDCMd5DrHuv3AU1UQjSjZTJDlJpPjQDWpT1ODBCVttjoB2PSRqxiCPfKJ+sD4bbjyd+bkHvwvs7p1RTP9ONtgvjpEQmFHa4AaVMHQmHSRpPEl9Gj+tJBre7CTgdFSZ1Wk/OI08z0bBV4E28EyDdLegg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UEIDXiUOnYnvcchFb4TfKcW2SLBtwi46oN+ScGHw/0k=;
- b=kMmvS8M/2yzghxvZR6OnU4s+ck9mulv0Kk57C5ciUYzw7n/OZCp/Gcz0/19bUw2+/JXLvpQr5r2grtrdctb96FPSGSDo3nMut6R6Gnj8OMgg0y3huZM66r5a/vfh/cCdXbQYZWO2ampdKrk2H146FMueP70pD51Rx21mDO2ouxpkcM56cXgyUc5gQ1p5BODuGFqHE+Fp0LRQ1dhwX/Jx4mJiKRYNUdk/4cxuPjVTAEevd54nRJ7KAes9UyBGhFhJqO4Eq0Yrl9ZCFJRPQ4m5UO11o4sH3JjvjvBJRULK718s8ef4LyWQlYrVXCm5AIepcn3EcnHmC1CPcTs3lJJFSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UEIDXiUOnYnvcchFb4TfKcW2SLBtwi46oN+ScGHw/0k=;
- b=ZCfcUo/2VZ6MUd9lgmlnbh6rRizj9wclEMJcn3CYY878jQpRiDL2hlnwA18X1nhmmiBXv8SzraOkxaLccb/NLMoWR8WqNLobpxzWrLciSkGsGDTrrv1TECZtSyK3rhoXmWRI2nHara6LTxSEl5WnIU35FBwbardPH6bASMuE8mg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from BL3PR01MB7027.prod.exchangelabs.com (2603:10b6:208:35a::9) by
- BN0PR01MB6974.prod.exchangelabs.com (2603:10b6:408:16d::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.15; Tue, 28 Mar 2023 16:16:29 +0000
-Received: from BL3PR01MB7027.prod.exchangelabs.com
- ([fe80::ef17:958:5c42:3d26]) by BL3PR01MB7027.prod.exchangelabs.com
- ([fe80::ef17:958:5c42:3d26%3]) with mapi id 15.20.6254.018; Tue, 28 Mar 2023
- 16:16:28 +0000
-Message-ID: <fd5a6b16-9297-5b11-53d1-4ff3d5be1ddd@os.amperecomputing.com>
-Date:   Tue, 28 Mar 2023 09:16:23 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [BUG] perf: No samples found when using kcore + coresight
-Content-Language: en-US
-To:     James Clark <james.clark@arm.com>, Yang Shi <shy828301@gmail.com>,
-        Leo Yan <leo.yan@linaro.org>
-Cc:     linux-perf-users@vger.kernel.org,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        coresight@lists.linaro.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mathieu.poirier@linaro.org, adrian.hunter@intel.com,
-        Jiri Olsa <jolsa@kernel.org>, acme@redhat.com,
-        mike.leach@linaro.org, Will Deacon <will@kernel.org>,
-        suzuki.poulose@arm.com
-References: <CAHbLzkrJQTrYBtPkf=jf3OpQ-yBcJe7XkvQstX9j2frz4WF-SQ@mail.gmail.com>
- <8ca2b07e-674e-afb6-ff12-87504f51f252@arm.com>
- <CAHbLzkpf4RUZugKdn-uXC5m3RpAQH5aDmRXdsxPZi0Cbf-yiyw@mail.gmail.com>
- <CAHbLzkq_7aXcys1cpgGFsfMDDDKMsT3e7zdNW=0jAkw7kBtJ0Q@mail.gmail.com>
- <20230309113851.GF19253@leoy-yangtze.lan>
- <CAHbLzkpvLHnyL5J5kB_ke3CWVq2=MOEdEQsGex56+Esfgqh1=g@mail.gmail.com>
- <20230313121420.GB2426758@leoy-yangtze.lan>
- <CAHbLzkpZjrd401DEKnnCNMdra0f6kGRe1Nh_rTovNTmyD8aBpg@mail.gmail.com>
- <20230314003610.GD2426758@leoy-yangtze.lan>
- <CAHbLzkqMZMB7sGLbJk82CpE9cssEU+WZYaXhVTVC-B40bY52jw@mail.gmail.com>
- <5a120a90-0b95-cfd0-beff-e9228a9d394b@arm.com>
-From:   Yang Shi <yang@os.amperecomputing.com>
-In-Reply-To: <5a120a90-0b95-cfd0-beff-e9228a9d394b@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH2PR14CA0052.namprd14.prod.outlook.com
- (2603:10b6:610:56::32) To BL3PR01MB7027.prod.exchangelabs.com
- (2603:10b6:208:35a::9)
+        Tue, 28 Mar 2023 12:17:18 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDCED51B
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 09:17:16 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230328161715euoutp027558a7e8bfd2016f387c267e576d5d4b~QoYC6jd9D2351323513euoutp02T
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:17:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230328161715euoutp027558a7e8bfd2016f387c267e576d5d4b~QoYC6jd9D2351323513euoutp02T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1680020235;
+        bh=mqLdRjs5YCQMtwNo6iN1eWz3Bgl+agNA8ISno6XaIPg=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=WYxOq+kwk7VUFdcCKV9Yen8Bm5utlrcKFTrH7FgZE1ZS8ez7qAN4QOVyaKYpXI8+b
+         Yvd9QgMFijBu/sxxRSDnx75/hMhBWOIWDKX2xhjMwa4a/bvi52/XM93rlcO1fwPN4D
+         xHvTiWz/AzJGdzoK2om5MZn82pSyqDoh2SV5tRB4=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230328161714eucas1p24ad41a96092cf0b451efd29aa33f047b~QoYCAI75o2141921419eucas1p2B;
+        Tue, 28 Mar 2023 16:17:14 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id E3.72.09503.A0313246; Tue, 28
+        Mar 2023 17:17:14 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230328161713eucas1p263e3a9167f956e10e522c91ae316b244~QoYBmJhZk1672516725eucas1p2N;
+        Tue, 28 Mar 2023 16:17:13 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230328161713eusmtrp2aefa500222b07e9fb50fbfd5a23e1f5c~QoYBlbmRk1088210882eusmtrp26;
+        Tue, 28 Mar 2023 16:17:13 +0000 (GMT)
+X-AuditID: cbfec7f2-e8fff7000000251f-78-6423130a41e6
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 81.97.08862.90313246; Tue, 28
+        Mar 2023 17:17:13 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230328161713eusmtip11c9b253d7b3c5c5f3a304baaefc01afc~QoYBZuuzm1480014800eusmtip1a;
+        Tue, 28 Mar 2023 16:17:13 +0000 (GMT)
+Received: from [192.168.8.209] (106.210.248.108) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Tue, 28 Mar 2023 17:17:12 +0100
+Message-ID: <5865a840-cb5e-ead1-f168-100869081f84@samsung.com>
+Date:   Tue, 28 Mar 2023 18:17:11 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL3PR01MB7027:EE_|BN0PR01MB6974:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0e107756-a76b-4fc1-1ead-08db2fa7c926
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1WJaOUPixyEhHvoMZG/fwEhepnI4eoHOESWMTmsVdVieFW03RN20bFn9QpKgIPCMLynAKJBdd5MgwZfPuknegRrMwzsmWtxIO4pxnNTDI81sBPKSHvflmZYnD6rsjCFmLJbzeo/NKG45O2FIatbW6+FjJghhM+qw+3FQ0ME+hTpuu6T7r2YqmiJatj3lM2uQUIDonq7kJ87mIzMcKW9vmHs4f/fCc3ph5grT3zAwKqbUodXHvpJYubBNZZOo1PVO60EjfiZHl0GJBtwAM17eOVQYNEbozShobA3+7RLrOURA1CuSrHpKGf5OAtTG/D5Mmnvqn5jvjkF0fp89fbTNzkifaOcc4tliqnGY6/bS/it2ShsQjCZ69u1QYEmBEvpwrrBLLQrpNtZaJPrvAeybNcZucHA/5iEehoNo4TcECI+WFSfFfS4bPqeKasFY/on2Ih6QScoldWmlk/vZ3TG4H/5WJ+pNUiIfekpyite9iaSv96/7lmnt32Mk8q+9ogsP6nFB1QRSHlrzMqE6Cz9RcH9RcB7EGMfb7l5bJ6diMiifbabDT49ya97lrbB+NVlUf8a6ZTyJdewyfO2FV7U4IbKY/Sy+aDdtfaOm2/5XkDsnsJoGYQhpG18WWaA/Ue0ywxmdBMBdC2/zcX47JPb7cA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR01MB7027.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(366004)(396003)(39850400004)(451199021)(38350700002)(38100700002)(31696002)(7416002)(86362001)(8936002)(53546011)(5660300002)(6666004)(6506007)(186003)(26005)(41300700001)(52116002)(66946007)(478600001)(316002)(31686004)(110136005)(8676002)(6512007)(4326008)(6486002)(66556008)(66476007)(54906003)(83380400001)(2906002)(2616005)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eFdvODN0UTNwQ3kzbXlwSXF4TGlKcHNhMzA0ZGFkM1I3UE85NlhFTk9PNWVI?=
- =?utf-8?B?MGc1NmpURDI0SGxvaG85TTNkejcxR0hsbEFXdFV1Mml2Y0Z3aFYzcUpaTGNW?=
- =?utf-8?B?SS9MZnZnamJsVXhaaEhTcXpQY1ZHV0x0THZadktTZ2NHYXdFV0U1czhDMGYv?=
- =?utf-8?B?bVRHNWl1M2YvMVdvQjFTdHo0SzM5SEJpM3JnZWxtbU9ENExoL2ZhZzR0QWpK?=
- =?utf-8?B?UjdNYk5jcitFNnh5WHFNaWhlRWRWanJKVFRsaGxxc1NGdVVsMUhJSmFmbmlY?=
- =?utf-8?B?dTk2S2RKaVNtUmJuQytBc2k2RG1VR3IrdGt6U1pwMHNKRXlzZHNQTldaMlZu?=
- =?utf-8?B?MkpHcEV3SUZzRks3NGhkcVpSMU82eW52YzZBbjNPU2ZBcWk1dnhoVzM1TlA5?=
- =?utf-8?B?ZjQ5V2t0L1NMaVFSaEhvYllpajRwaCtGdEZvYStOR09SdUhGazNDYjMzNDdB?=
- =?utf-8?B?VCsrcUI4WFdLMzRIQ1ZLVHB5VklaWVdmcXNsMEhyb3VwTFpBdnNNUVh1MHhS?=
- =?utf-8?B?SURjVVZ2Q3NYZjBQMXFjYXNmVWFRNlNiY1NMdUZIN2p4NSt3VXJHZnR5MVlP?=
- =?utf-8?B?YTl1ai9neHpOdnNqRS9sQzQ1Y1NoZERTT1lqbFFWSGRCQ3lxS1VMU3ZESkMx?=
- =?utf-8?B?c3JTMGc3QW1WdHBPMVZ2RnRHM0xkZWJTWUFtSk1YT09ySHlhT01jU2xleElJ?=
- =?utf-8?B?ZVg0Zk80Wm5HM1pveWhxT1NqY0w2LzVybjloaTUrTk9Qb2VSL1QyVHZRRWY2?=
- =?utf-8?B?Z2Y2MjNRMUFJRVorZDRBa0NzUjhmazlUTHNqdUNyc29aaElGUHVFenA1K1lw?=
- =?utf-8?B?ZXlJaDl3aHM2S2lpUFZKc3Q5QzdQSU9DSHhOOWhNTU5rUGEyKzdGci9TWlZN?=
- =?utf-8?B?NzJlN2ZZSGsrVXV6YXBueW5SRGx3Q2VGMmVTVkIvbmd5ODJkOC9Jc0FDTDJB?=
- =?utf-8?B?VHJpTTRva3cwcjNXYTVhUE4wOTFteDl1M2ZFWGZTZGpkbHVaaHZHOXUwSXd4?=
- =?utf-8?B?NkI5UEU0eTBaZ0RUWXVuR3M5UE9PRkpGUmViUWJHSDVKTWtLQ016YkVJaWx4?=
- =?utf-8?B?TUVxeWVZV2ZNUkwyRmJvRWNUYUMwbjBiaGlZUlBCOFRFQ0ZMMXNqKzBxUjcx?=
- =?utf-8?B?TFNDWTlJeHNPU3ZMU3BmN2ZmMG4zYlpqdk9UMTJZRkhoV2ZBK01TbTVzaEo5?=
- =?utf-8?B?MEtBazZDd1A1bzdSQkR6STIyVlVTK1dlU29NZ3BLNDdvRXRWR2N1TGZTOGdh?=
- =?utf-8?B?RHRoYzQrUHFCaTNwejRtUWVNWTVudmw0T2RLNHYxUUh6dHRLZk9ZQjlGTUlr?=
- =?utf-8?B?TmthQ0NTajBFVjYzNWUvNGs2SXJ5TDJuOVhKcXJubzY4ck5BSW1KNzBFRFBG?=
- =?utf-8?B?OWc3QVRmckw4NTZiTm1GalFIRTltd3c0VEdZcExEMlZDVUF4R1BmL0FlNXpI?=
- =?utf-8?B?a0puOWo1OTh5K1dvOEF6cWd3cHFBVThwVVV3YUZCMk1BdzhMaUlTNm9KdnRj?=
- =?utf-8?B?K0M3bWt2OGNrc3NHZ1UveStsa09NSXR6eWVDM0g4aTNRUS83bzJQL1hUQmYw?=
- =?utf-8?B?MjdFRnozS0pJSGpVVVU2N1BHZ2pZeVlxSkxIMnRJODZWYkJrY0VITmNsK2Vp?=
- =?utf-8?B?M0s1TS8raFBhSU9sUUFTMlIyRGorYVRic3JCVjBkY2JJV012TmJENU9zN01s?=
- =?utf-8?B?dk4yTkpzOWl4WThoSk9zUFpXeFJhdDFoa09FenZGZXpWZ0JmMEc4c1JVYnky?=
- =?utf-8?B?eTJyd3ZyVHI0M3BsdVJjUEJSTDlvQ0k5eFIvMjFOUUEvdVRYTEtZMlF4NTAz?=
- =?utf-8?B?S1lIck1IODlMVGc5c2NQQ2Jhejh0ai9GemdLV2FRRGRjdmt4TjFMVW5xSWR6?=
- =?utf-8?B?YUxaUzNVcEw5RWtXaGtKTlhSenZUUm5PTnlseUFPMk02ZmZDMjVaOTVxbEtQ?=
- =?utf-8?B?YzJoQVhuYjJKcjE2M3VtUmM5YWdiSUhCY0NWLzVWYU5kaXViRUoreWdQZ25O?=
- =?utf-8?B?c2l3aUVFdXlsUEZlRW1ZRkREU0tPalVwdHN6OThycWlkY3F3WHpGWlZqTHR0?=
- =?utf-8?B?RUVVNEFMY2pkOVFKRFlEZ1B4WmMyNVE1Wk02SDFiUTVZd0xsMGFqY2k0K1Mw?=
- =?utf-8?B?a0VNc2FrYzJpOFlxd1ZsOEVCNndiaEFLSDB2RWZXbGtJenFXVTFuMzNFWmV1?=
- =?utf-8?Q?nFMXv/byvqiGdxlZEDDvqpE=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e107756-a76b-4fc1-1ead-08db2fa7c926
-X-MS-Exchange-CrossTenant-AuthSource: BL3PR01MB7027.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 16:16:28.5879
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JKg33GcZ0rZ6EWU2vaUMGlXth9a6UXhn5OSzZxfR9Sgh+u2zoEPa6Qpw1BKAbG807y6UYyL20+1KB6HUnvjNLmwINmkaQhuD0CjM+uvnfqE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR01MB6974
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Thunderbird/102.9.0
+Subject: Re: [PATCH 1/5] zram: remove the call to page_endio in the bio
+ end_io handler
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>,
+        Christoph Hellwig <hch@lst.de>
+CC:     <martin@omnibond.com>, <axboe@kernel.dk>, <minchan@kernel.org>,
+        <akpm@linux-foundation.org>, <hubcap@omnibond.com>,
+        <viro@zeniv.linux.org.uk>, <senozhatsky@chromium.org>,
+        <brauner@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <mcgrof@kernel.org>,
+        <linux-block@vger.kernel.org>, <gost.dev@samsung.com>,
+        <linux-mm@kvack.org>, <devel@lists.orangefs.org>
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <ZCMFcTHkTe/1WapL@casper.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [106.210.248.108]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOKsWRmVeSWpSXmKPExsWy7djP87pcwsopBl/ucVrMWb+GzWL13X42
+        i9eHPzFa7N88hcli5eqjTBbtd/uYLPbe0rbYs/cki8XlXXPYLO6t+c9qcXL9f2aLGxOeMlos
+        +/qe3WL3xkVsFuf/Hme1+P1jDpuDgMfshossHptXaHlcPlvqsWlVJ5vHpk+T2D1OzPjN4tEw
+        9Rabx+6bDWwev27fYfX4vEnOY9OTt0wB3FFcNimpOZllqUX6dglcGZs2n2Ep+MJW0XPoNnMD
+        4z7WLkZODgkBE4ldi36ydTFycQgJrGCUmLLlASuE84VRYsn2dkYI5zOjxJoXfXAtX+b2sEMk
+        ljNKfNs9gRmuasrRr1DDdjNKHDq4gQmkhVfATuLF9NXMIDaLgKrEzcZJbBBxQYmTM5+wgNii
+        AlESfbc3ga0QFoiQOPR2OyOIzSwgLnHryXywOSICHhL//+wC28Ys0MMs8W3KVqAEBwebgJZE
+        Yyc7iMkJdN6sE7kQrZoSrdt/s0PY8hLb385hBimREFCW+H3eH+KZWolTW24xgUyUEHjHKXFu
+        0yV2iISLxL3f51ggbGGJV8e3QMVlJP7vhDhHQqBa4umN38wQzS2MEv0717NBLLCW6DuTA1Hj
+        KPF4+05WiDCfxI23ghDn8ElM2jadeQKj6iykgJiF5OFZSD6YheSDBYwsqxjFU0uLc9NTiw3z
+        Usv1ihNzi0vz0vWS83M3MQLT4ul/xz/tYJz76qPeIUYmDsZDjBIczEoivL+vKaUI8aYkVlal
+        FuXHF5XmpBYfYpTmYFES59W2PZksJJCeWJKanZpakFoEk2Xi4JRqYNKu8Z3VdVhr0ZXqSv9q
+        j/n6S6L8rrK+1GU852PwroW7RmR6MMc1e2YBv9YzOtF78/OLrQ7tUMuU8lNOLlnxsM1xloHi
+        CXuxC3tZlF+uzZiZNGlX8nyBU9NfHeXjXBdct+p9zZrvTX/a+jTlTWbd0Q84u9VF8b2uyrNr
+        h4trEwt2nDmmdMRm4vI7vB9EJ/Uddm5/9fn0tlnBU3bf0Y90KbDa6CL1wHf6rrDtkq3X1QNC
+        vj9OW/RdZ9eZbwV2ekvrJ4n801xb8fLOD56NRy3PScyUmaC/3M770FuxZT/m6xbOnxEeqd5w
+        WO6GMvvDTye2lsga/M7YcqR228Xc1+rJWqmPJ8d9X5HYb/FbqLm0qVeJpTgj0VCLuag4EQB0
+        Dd9x+gMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDKsWRmVeSWpSXmKPExsVy+t/xu7qcwsopBq33dC3mrF/DZrH6bj+b
+        xevDnxgt9m+ewmSxcvVRJov2u31MFntvaVvs2XuSxeLyrjlsFvfW/Ge1OLn+P7PFjQlPGS2W
+        fX3PbrF74yI2i/N/j7Na/P4xh81BwGN2w0UWj80rtDwuny312LSqk81j06dJ7B4nZvxm8WiY
+        eovNY/fNBjaPX7fvsHp83iTnsenJW6YA7ig9m6L80pJUhYz84hJbpWhDCyM9Q0sLPSMTSz1D
+        Y/NYKyNTJX07m5TUnMyy1CJ9uwS9jE2bz7AUfGGr6Dl0m7mBcR9rFyMnh4SAicSXuT3sXYxc
+        HEICSxkldlxbwwaRkJH4dOUjO4QtLPHnWhcbRNFHRokL3w+yQji7GSWm7F0M1sErYCfxYvpq
+        ZhCbRUBV4mbjJKi4oMTJmU9YQGxRgSiJzwdawKYKC0RILJ0wFayeWUBc4taT+UwgtoiAh8T/
+        P7uYQRYwC/QwS3ybspUJYttzRomGPVeBVnNwsAloSTR2soOYnEA/zDqRCzFHU6J1+292CFte
+        YvvbOcwgJRICyhK/z/tDPFMr8fnvM8YJjKKzkFw3C8kVs5BMmoVk0gJGllWMIqmlxbnpucWG
+        esWJucWleel6yfm5mxiByWTbsZ+bdzDOe/VR7xAjEwfjIUYJDmYlEd7f15RShHhTEiurUovy
+        44tKc1KLDzGaAoNoIrOUaHI+MJ3llcQbmhmYGpqYWRqYWpoZK4nzehZ0JAoJpCeWpGanphak
+        FsH0MXFwSjUwcYQlLegyS4trW/1dx+j8tFe8n058DIzYMGPv922t++f53mJNNL+RVJzQqKPF
+        pr9wL/uzpbvtfjIdkLTMcFq4v9XyjdXG0/YL1L+EhKh5ZB9Lkjv0Jffj/AOVvA4OMSy+5lzs
+        N5Yr3oub/6Hj8l31RZomek9vrZDmUi/bdo5zw9SC/dqFkXeMDvC6T33pwbUsZfe7D9MmRtzO
+        XJ5fkuxZ9rZZurF26+QOk0VTKyZ+N110yF979gSzuvn1XSbzr17wblVh3sbyMjTLZFbzRYsf
+        IjpBKulcP9odPJTbg0WVOx81nbvVZ6FllaMsdGPil+OtEz5s6PZUV7vkwbTqfuTyK/+DEiY7
+        MOc33hD3+D1RiaU4I9FQi7moOBEA8MWRRq8DAAA=
+X-CMS-MailID: 20230328161713eucas1p263e3a9167f956e10e522c91ae316b244
+X-Msg-Generator: CA
+X-RootMTR: 20230328112718eucas1p214a859cfb3d7b45523356bcc16c373b1
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230328112718eucas1p214a859cfb3d7b45523356bcc16c373b1
+References: <20230328112716.50120-1-p.raghav@samsung.com>
+        <CGME20230328112718eucas1p214a859cfb3d7b45523356bcc16c373b1@eucas1p2.samsung.com>
+        <20230328112716.50120-2-p.raghav@samsung.com>
+        <ZCMFcTHkTe/1WapL@casper.infradead.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-03-28 17:19, Matthew Wilcox wrote:
+> On Tue, Mar 28, 2023 at 01:27:12PM +0200, Pankaj Raghav wrote:
+>> -static void zram_page_end_io(struct bio *bio)
+>> +static void zram_read_end_io(struct bio *bio)
+>>  {
+>> -	struct page *page = bio_first_page_all(bio);
+>> -
+>> -	page_endio(page, op_is_write(bio_op(bio)),
+>> -			blk_status_to_errno(bio->bi_status));
+>>  	bio_put(bio);
+>>  }
+>>  
+>> @@ -635,7 +631,7 @@ static int read_from_bdev_async(struct zram *zram, struct bio_vec *bvec,
+>>  	}
+>>  
+>>  	if (!parent)
+>> -		bio->bi_end_io = zram_page_end_io;
+>> +		bio->bi_end_io = zram_read_end_io;
+> 
+> Can we just do:
+> 
+> 	if (!parent)
+> 		bio->bi_end_io = bio_put;
+> 
 
+Looks neat. I will wait for Christoph to comment whether just a bio_put() call
+is enough in this case for non-chained bios before making this change for the
+next version.
 
-On 3/28/23 1:59 AM, James Clark wrote:
->
-> On 28/03/2023 01:53, Yang Shi wrote:
->> Hi Leo,
->>
->> Just follow up on this one. Any update?
->>
-> Hi Yang,
->
-> Sorry no update on this yet from me. I was just finishing off
-> "coresight: Fix CTI module refcount leak by making it a helper device"
-> which I hope to post in the next day or two and then I will start on this.
-
-Hi James,
-
-Thank you for the update.
-
->
-> James
->
->> Thanks,
->> Yang
->>
->> On Mon, Mar 13, 2023 at 5:36 PM Leo Yan <leo.yan@linaro.org> wrote:
->>> On Mon, Mar 13, 2023 at 11:15:44AM -0700, Yang Shi wrote:
->>>
->>> [...]
->>>
->>>>> Just a quick summary, here we have two issues:
->>>>>
->>>>> - With command:
->>>>>    perf record -e cs_etm/@tmc_etf63/k --kcore --per-thread \
->>>>>    -- taskset --cpu-list 1 uname",
->>>>>
->>>>>    perf doesn't enable "text poke" attribution.
->>>> No, it enables "text poke" and perf fails to decode coresight trace
->>>> data too. It doesn't matter whether "--kcore" is after or before "-e
->>>> cs/etm/@tmc_etf63/k".
->>> Understand now.  Thanks for correction, if so we can ignore this one.
->>>
->>> Leo
-
+Thanks.
