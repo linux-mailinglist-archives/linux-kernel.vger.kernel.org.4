@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC3E6CB468
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F4E6CB46D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 04:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbjC1C6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 22:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
+        id S230104AbjC1C7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 22:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjC1C6O (ORCPT
+        with ESMTP id S231976AbjC1C7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 22:58:14 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637CE2715
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:58:13 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id j13so9578509pjd.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:58:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1679972293;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bLyr4+am2V6lTxnJ8lU/XXtylgWPWBoWpTubGjemSVQ=;
-        b=kmDKU3gH92RhdilP0wGx1LLk9gbqJfyl3gqvqUqlbrmn20ntkJNvBrQGFm6f4lBZYg
-         cM9JO2XR2Geh7dy2LXv0AAuie7zc9tegJ1y9sDZf69TvmRqw6z3b2xLcgf1yZ1WdoWmT
-         nYTNQVjIiSwPQCDP+UOj/Rl33mUVo9VJFIvXl1DnWt5WZdjDcecayQrnpdkWDTB98EHw
-         7ReeVUrj0Ih2stNsmEU0h9e5LslOc2jCuCRCVA1mnBuSk4XHigKIOBsqyxcgNGrff4U2
-         UCSoTt5fr1i74hcrVfjvVCww8u6KQGYrueDnomWZhk+jwy5TqbQ0ifKTahln9k0gjfrg
-         ssAA==
+        Mon, 27 Mar 2023 22:59:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6DA268A
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:59:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679972342;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JVMGCykpINusC1X2o35RkpO4Jksn/8McHykOJK2uUY8=;
+        b=PQ1IlJAGqrqiXhphVcw303FOFJjTA6sGlt8vMviI94qroqPDM7w8UWZHVKlgBiul+eYAxa
+        /nReb5MkfEm1bRGqe8DREELLHA1qo+Eq0MF9S+CcJA5VXESakt83f0Ge67Pw4uR4VEBkS2
+        EisPhMg57opuyx1yw2wdgWa6ppc8T7c=
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
+ [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-394-c0PQAr2qPyy61Fhw1fuxbg-1; Mon, 27 Mar 2023 22:59:00 -0400
+X-MC-Unique: c0PQAr2qPyy61Fhw1fuxbg-1
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-17a03f26ff8so6066494fac.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 19:59:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679972293;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bLyr4+am2V6lTxnJ8lU/XXtylgWPWBoWpTubGjemSVQ=;
-        b=kIj2hjbZLaWnBnUDK3jPVF/hVKaZTTE+/QU0+ES0az+8QdcXS6GQENxF/F7kC5LS44
-         1shHHkm5dmGkhZv/GguwQ4dckhbfr76IO6ONEpf0xIR5WDkuw7VZc0AdLPPJoZhlwYHE
-         X7KAZJ2CnyyeIeuvoDYr1vf33X/Ky8nwJZ2kp2elv1kcd8Ubrhnw5NJwyaA5VBem2IMU
-         KrUPjNdNRf/Qa19xYr00uc9Z1Vs3tiXwU1LpoM52BcT3NM4CLgkeV/X/iExJBYzgx5+l
-         8W2BvezNNhIfT6u5xffl74lxrG9p4hyNI5YY1mY4d1IMm72xmN6NKLjDVvvsutFQa5NY
-         LsrQ==
-X-Gm-Message-State: AAQBX9e4mDuoro3wnLKdZEW64eihml7ye5/GRRbs7T8x2/ifsXP1YoPD
-        jCLkiNQZsuDGYeWkh7mdNjARyA==
-X-Google-Smtp-Source: AKy350boePZL/k+e/5zgAUJHntZnkIfcpGxyEqAU4SoJTANNN1+CWs53DamuoB1Xse9ssD99/kivLA==
-X-Received: by 2002:a17:902:d2ce:b0:19c:e664:5e64 with SMTP id n14-20020a170902d2ce00b0019ce6645e64mr18220668plc.2.1679972292889;
-        Mon, 27 Mar 2023 19:58:12 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-91-157.pa.nsw.optusnet.com.au. [49.181.91.157])
-        by smtp.gmail.com with ESMTPSA id p23-20020a1709027ed700b0019ee0ad15b4sm19719243plb.191.2023.03.27.19.58.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 19:58:12 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pgzXF-00E0yH-R0; Tue, 28 Mar 2023 13:58:09 +1100
-Date:   Tue, 28 Mar 2023 13:58:09 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        "yebin (H)" <yebin10@huawei.com>, Ye Bin <yebin@huaweicloud.com>,
-        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xfs: fix BUG_ON in xfs_getbmap()
-Message-ID: <20230328025809.GC3223426@dread.disaster.area>
-References: <20230327140218.4154709-1-yebin@huaweicloud.com>
- <20230327151524.GC16180@frogsfrogsfrogs>
- <64224406.5090106@huawei.com>
- <20230328014328.GG16180@frogsfrogsfrogs>
- <ZCJHSsqk4SJEDOTC@infradead.org>
- <20230328020341.GH16180@frogsfrogsfrogs>
+        d=1e100.net; s=20210112; t=1679972340;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JVMGCykpINusC1X2o35RkpO4Jksn/8McHykOJK2uUY8=;
+        b=v+stw9GXza1iZqjM3n5iyMyOpc0pmlmaAXVX9aSVRA4Qk0760UQgj6hIHhZvzCAVpB
+         9claJUshidY9fx/RKfCjVx4QFepNB+cW1yiuJBQYlHGSbA1+WvMYp3a67s+D+54gQPtB
+         9zKYCcHVxjvLa84wJ6K1o8KbfF8HNHDHAcFCJMevN6qQceLWtXNKcpph/8z/yCd/6Lo+
+         EkYN1pCtH0UTPOU7fRA7bXxxUW0k/A/i7ybvHv0Pi2sdyj8a4tj8iDbR5QZmpGomztbV
+         6yuoDdNnSdg5HCsMv1e1rRQSdQ567frBTFF1jEIt+2InUqmIgpsmvIY967gU9KpHGsMz
+         dH1g==
+X-Gm-Message-State: AAQBX9cAHZ9I/SiiCUgzI7fksZiQH7gCnqrDb5jVDuGLBEMmxcoc70nH
+        ZNrJkFd2N+EtM6fUHy5ApoOUxzeaQAXMrPPw0CqGsLy9yzr48DnGWXoznPPaIfBLJmJBrhcr6ak
+        MFHL1IwF1zbBXS4nEFrLpH0pZFg2SKJLV2JAz0Sel
+X-Received: by 2002:a05:6870:8310:b0:177:c2fb:8cec with SMTP id p16-20020a056870831000b00177c2fb8cecmr5393487oae.9.1679972340033;
+        Mon, 27 Mar 2023 19:59:00 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9bmnFjMgjYohCBeL1d99Eg+sVv0sUJNJIXbQ4MkNune4yxD1oxJROTbptIQytupPC8Wk6CuoIKAAtkQZX3NQ4=
+X-Received: by 2002:a05:6870:8310:b0:177:c2fb:8cec with SMTP id
+ p16-20020a056870831000b00177c2fb8cecmr5393483oae.9.1679972339793; Mon, 27 Mar
+ 2023 19:58:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328020341.GH16180@frogsfrogsfrogs>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+References: <20230325105633.58592-1-huangjie.albert@bytedance.com> <ZCJNTBQLZeyLBKKB@codewreck.org>
+In-Reply-To: <ZCJNTBQLZeyLBKKB@codewreck.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 28 Mar 2023 10:58:48 +0800
+Message-ID: <CACGkMEt29t9CK2Muiuyb1s6p2AzgcMiD_z0NVFn1d+KEqBydug@mail.gmail.com>
+Subject: Re: 9p regression (Was: [PATCH v2] virtio_ring: don't update event
+ idx on get_buf)
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Albert Huang <huangjie.albert@bytedance.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        v9fs-developer@lists.sourceforge.net,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,34 +81,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 07:03:41PM -0700, Darrick J. Wong wrote:
-> On Mon, Mar 27, 2023 at 06:47:54PM -0700, Christoph Hellwig wrote:
-> > On Mon, Mar 27, 2023 at 06:43:28PM -0700, Darrick J. Wong wrote:
-> > > <shrug> Seeing as the data fork mappings can change the instant the
-> > > ILOCK drops, I'm not /that/ worried about users seeing a delalloc
-> > > mapping even if the user requested a flush.  The results are already
-> > > obsolete when they get to userspace, unless the application software has
-> > > found another means to lock out access to the file.
-> > 
-> > That is true, but then again the users asked to not see delalloc
-> > mappings, so we really shouldn't report one, right?
-> 
-> Yeah, I suppose so.  I wonder how many programs there are out there that
-> don't pass in BMV_IF_DELALLOC /and/ can't handle that?  But I suppose
-> taking MMAP_EXCL is good enough to shut up the obvious assertion vector.
+On Tue, Mar 28, 2023 at 10:13=E2=80=AFAM Dominique Martinet
+<asmadeus@codewreck.org> wrote:
+>
+> Hi Michael, Albert,
+>
+> Albert Huang wrote on Sat, Mar 25, 2023 at 06:56:33PM +0800:
+> > in virtio_net, if we disable the napi_tx, when we triger a tx interrupt=
+,
+> > the vq->event_triggered will be set to true. It will no longer be set t=
+o
+> > false. Unless we explicitly call virtqueue_enable_cb_delayed or
+> > virtqueue_enable_cb_prepare.
+>
+> This patch (commited as 35395770f803 ("virtio_ring: don't update event
+> idx on get_buf") in next-20230327 apparently breaks 9p, as reported by
+> Luis in https://lkml.kernel.org/r/ZCI+7Wg5OclSlE8c@bombadil.infradead.org
+>
+> I've just hit had a look at recent patches[1] and reverted this to test
+> and I can mount again, so I'm pretty sure this is the culprit, but I
+> didn't look at the content at all yet so cannot advise further.
+> It might very well be that we need some extra handling for 9p
+> specifically that can be added separately if required.
+>
+> [1] git log 0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35..HEAD drivers/virtio=
+/
+>
+>
+> This can be reproduced with a simple mount, run qemu with some -virtfs
+> argument and `mount -t 9p -o debug=3D65535 tag mountpoint` will hang afte=
+r
+> these messages:
+> 9pnet: -- p9_virtio_request (83): 9p debug: virtio request
+> 9pnet: -- p9_virtio_request (83): virtio request kicked
+>
+> So I suspect we're just not getting a callback.
 
-Why not just skip it? Take the flush completion as being a
-point-in-time snapshot where there are no delalloc extents, and if
-any new ones have been created racily, just skip them as being
-"after" the flush and so don't get reported...
+I think so. The patch assumes the driver will call
+virtqueue_disable/enable_cb() which is not the case of the 9p driver.
 
-> The COW implementation probably ought to be doing the flush too.
+So after the first interrupt, event_triggered will be set to true forever.
 
-Yup, and then just skip any delalloc extents found after that, too.
+Thanks
 
-Cheers,
+>
+>
+> I'll have a closer look after work, but any advice meanwhile will be
+> appreciated!
+> (I'm sure Luis would also like a temporary drop from -next until
+> this is figured out, but I'll leave this up to you)
+>
+>
+> >
+> > If we disable the napi_tx, it will only be called when the tx ring
+> > buffer is relatively small.
+> >
+> > Because event_triggered is true. Therefore, VRING_AVAIL_F_NO_INTERRUPT =
+or
+> > VRING_PACKED_EVENT_FLAG_DISABLE will not be set. So we update
+> > vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
+> > every time we call virtqueue_get_buf_ctx. This will bring more interrup=
+tions.
+> >
+> > To summarize:
+> > 1) event_triggered was set to true in vring_interrupt()
+> > 2) after this nothing will happen for virtqueue_disable_cb() so
+> >    VRING_AVAIL_F_NO_INTERRUPT is not set in avail_flags_shadow
+> > 3) virtqueue_get_buf_ctx_split() will still think the cb is enabled
+> >    then it tries to publish new event
+> >
+> > To fix, if event_triggered is set to true, do not update
+> > vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
+> >
+> > Tested with iperf:
+> > iperf3 tcp stream:
+> > vm1 -----------------> vm2
+> > vm2 just receives tcp data stream from vm1, and sends the ack to vm1,
+> > there are many tx interrupts in vm2.
+> > but without event_triggered there are just a few tx interrupts.
+> >
+> > Fixes: 8d622d21d248 ("virtio: fix up virtio_disable_cb")
+> > Signed-off-by: Albert Huang <huangjie.albert@bytedance.com>
+> > Message-Id: <20230321085953.24949-1-huangjie.albert@bytedance.com>
+> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> > ---
+> >  drivers/virtio/virtio_ring.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.=
+c
+> > index cbeeea1b0439..1c36fa477966 100644
+> > --- a/drivers/virtio/virtio_ring.c
+> > +++ b/drivers/virtio/virtio_ring.c
+> > @@ -914,7 +914,8 @@ static void *virtqueue_get_buf_ctx_split(struct vir=
+tqueue *_vq,
+> >       /* If we expect an interrupt for the next entry, tell host
+> >        * by writing event index and flush out the write before
+> >        * the read in the next get_buf call. */
+> > -     if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT))
+> > +     if (unlikely(!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_IN=
+TERRUPT) &&
+> > +                  !vq->event_triggered))
+> >               virtio_store_mb(vq->weak_barriers,
+> >                               &vring_used_event(&vq->split.vring),
+> >                               cpu_to_virtio16(_vq->vdev, vq->last_used_=
+idx));
+> > @@ -1744,7 +1745,8 @@ static void *virtqueue_get_buf_ctx_packed(struct =
+virtqueue *_vq,
+> >        * by writing event index and flush out the write before
+> >        * the read in the next get_buf call.
+> >        */
+> > -     if (vq->packed.event_flags_shadow =3D=3D VRING_PACKED_EVENT_FLAG_=
+DESC)
+> > +     if (unlikely(vq->packed.event_flags_shadow =3D=3D VRING_PACKED_EV=
+ENT_FLAG_DESC &&
+> > +                  !vq->event_triggered))
+> >               virtio_store_mb(vq->weak_barriers,
+> >                               &vq->packed.vring.driver->off_wrap,
+> >                               cpu_to_le16(vq->last_used_idx));
+>
 
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
