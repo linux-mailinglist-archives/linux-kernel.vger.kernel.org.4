@@ -2,123 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93ABC6CC232
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:36:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5336CC23B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233034AbjC1OgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S230423AbjC1Ohk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233204AbjC1Ofw (ORCPT
+        with ESMTP id S231819AbjC1Ohh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:35:52 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7EDCDED;
-        Tue, 28 Mar 2023 07:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680014129; x=1711550129;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=PwPPDuu5LzPD0qVFdDs/5snLEgHkaAUrZcOrnpL6Ij4=;
-  b=VKEtnEyDsHtl3JrEYTWyZNIMiThqndMOUWO0U0VcdFe/mhCwUZ6q6XIa
-   pb37om0y+nsqpo4or3poIPgHHwefJRze1LZiZGxO7cCfC1+EZ4b0NJqVW
-   ZCYUkOmcWlLdlwddBmcv0kAWCfsgN6uGjj2eKEyTAkPdS99QNcaMIOxMP
-   Ukcf6zwJAe26n6z19jkYzIUW53SGf06d0TXcmIoeqoK6Jn/3gNKQD//VD
-   D/S6KmLdFXmkrYqIVsxIx31+Y8ibCwdlcNtlHlJd8f+4IfJcymhw9Igvn
-   EP+oCawT385aAl0EbSqh0yLUULLo1bQGPMfT1+PWNEVGSyuIkGxm/KrLl
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="405517670"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="405517670"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 07:35:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="683923841"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="683923841"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 28 Mar 2023 07:35:22 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1phAPv-009f4E-1f;
-        Tue, 28 Mar 2023 17:35:19 +0300
-Date:   Tue, 28 Mar 2023 17:35:19 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        "Sahin, Okan" <Okan.Sahin@analog.com>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v6 5/5]  mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
- Support
-Message-ID: <ZCL7J5a7UZVayQVS@smile.fi.intel.com>
-References: <20230307112835.81886-1-okan.sahin@analog.com>
- <20230307112835.81886-6-okan.sahin@analog.com>
- <20230315175223.GI9667@google.com>
- <20230315175257.GJ9667@google.com>
- <MN2PR03MB5168249900206433A082875EE7889@MN2PR03MB5168.namprd03.prod.outlook.com>
- <ZCLi6MB/aHIf4lMr@smile.fi.intel.com>
- <cdd53e29ca3d8dbfdfa1a2520935e2bf9418313d.camel@gmail.com>
- <d2bed74b-9eb9-45af-8f45-ad2c2889024a@sirena.org.uk>
- <fc07de9af0b691fbd3a5915c8293f0c7ad4c4e06.camel@gmail.com>
+        Tue, 28 Mar 2023 10:37:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D74D323
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:36:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680014142;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=++lw8AhOSlCjxQC0cIZCWQldQXkIhwF6BVMb2DgfYxw=;
+        b=XcnZhZ3eUFQNYlJWi6Q7JPIyC7+XkKLf0n3NyIfUn1pYaZlX/858EqqXC0/eehXiSblvZi
+        1KHjug30Oxv0uRliiv1p3+/ylPZS3sN5jDmPCuHNoZycRtfSZ3nzGgEgkuoFcxXtCKmjZh
+        gIh0KCmF0qutDysDgTQkGBskChGnvkg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-658-m0Bj02uhOtqOtjdzEAggWQ-1; Tue, 28 Mar 2023 10:35:41 -0400
+X-MC-Unique: m0Bj02uhOtqOtjdzEAggWQ-1
+Received: by mail-wm1-f72.google.com with SMTP id d11-20020a05600c34cb00b003ee89ce8cc3so6413145wmq.7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:35:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680014140;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=++lw8AhOSlCjxQC0cIZCWQldQXkIhwF6BVMb2DgfYxw=;
+        b=I4Cn0/3Y2JxoLba9kKvFQlotc4vgAJMZc70z5NSD0EsNkuKSEsT2p+Tx3P0H5hhXLp
+         AhDapdh3bPG52rsIDu5tJkxAhM2Os2iGBa83+lO3E7k4KaCFGFHLzhT471Z04r0SPWIV
+         cIYrjaFhoCq7Ql3vKUESFulVCVUEm/I1gscuKSbPKvnSTjFzMlG4P8ujKeMRwft6fxWT
+         f+63jiWLGzQ5yjjLy2ljot24qsjWJtMWutXvhAERZt+0oAPmDz+S5wqEYizY6th1ZVZ2
+         k45ZLi5tcC3UraO+TCFSst/e4Klr3UGGKgVmfVdGZ/sKT6KOJgn/898ywyBHGMdlHY/B
+         0z5Q==
+X-Gm-Message-State: AAQBX9eVTV3pcE5K6MJDzrZlRjykpHcMRcswTZaNuQ+sSr18I9YMfldU
+        AX5tzDuvdlThPzoZtk2mhyvIVP85AxmDb+Ogz5AHbMXvL16UQ7LbU0TNUwGoLmy1JrcipbjkIi7
+        tlyW7lPjfNzuaxpHHYbeaFVzW
+X-Received: by 2002:a5d:67cc:0:b0:2cf:f3da:5b7f with SMTP id n12-20020a5d67cc000000b002cff3da5b7fmr11347113wrw.2.1680014140147;
+        Tue, 28 Mar 2023 07:35:40 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZOXbe74WsWZHMDwkfF/OmO5nhaQsRsPqpEgpytY8vfUVcAnlRl3XmOHB372TEWKk8mGavq2w==
+X-Received: by 2002:a5d:67cc:0:b0:2cf:f3da:5b7f with SMTP id n12-20020a5d67cc000000b002cff3da5b7fmr11347100wrw.2.1680014139821;
+        Tue, 28 Mar 2023 07:35:39 -0700 (PDT)
+Received: from redhat.com ([2.52.18.165])
+        by smtp.gmail.com with ESMTPSA id x8-20020a5d6508000000b002cea299a575sm27883720wru.101.2023.03.28.07.35.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 07:35:39 -0700 (PDT)
+Date:   Tue, 28 Mar 2023 10:35:35 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     =?utf-8?B?6buE5p2w?= <huangjie.albert@bytedance.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        v9fs-developer@lists.sourceforge.net,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>
+Subject: Re: [External] Re: 9p regression (Was: [PATCH v2] virtio_ring: don't
+ update event idx on get_buf)
+Message-ID: <20230328103322-mutt-send-email-mst@kernel.org>
+References: <20230325105633.58592-1-huangjie.albert@bytedance.com>
+ <ZCJNTBQLZeyLBKKB@codewreck.org>
+ <CACGkMEt29t9CK2Muiuyb1s6p2AzgcMiD_z0NVFn1d+KEqBydug@mail.gmail.com>
+ <CABKxMyPwuRb6p-oHxcQDhRtJv04=NDWvosNAp=epgvdrfCeveg@mail.gmail.com>
+ <CACGkMEuukvjXBTDX2K9YLYmpHsqK96AiMK39gbm3+f_+kUydMQ@mail.gmail.com>
+ <CABKxMyN0598wA6wHv5GkZC14znwp=OPo7u71_BizJfR+gUx4_w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fc07de9af0b691fbd3a5915c8293f0c7ad4c4e06.camel@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CABKxMyN0598wA6wHv5GkZC14znwp=OPo7u71_BizJfR+gUx4_w@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 04:18:30PM +0200, Nuno S� wrote:
-> On Tue, 2023-03-28 at 14:46 +0100, Mark Brown wrote:
-> > On Tue, Mar 28, 2023 at 03:26:44PM +0200, Nuno S� wrote:
-> > 
-> > > IIRC, regmap_read() is not really reentrant and it is used in the
-> > > IIO
-> > > driver on the sysfs interface. So, yeah, I think you need the
-> > > regmap
-> > > lock and better just leave the config as is. Yes, the lock is opt-
-> > > out
-> > > so let's not disable it :)
-> > 
-> > All the regmap operations are fully thread safe.
+On Tue, Mar 28, 2023 at 05:09:19PM +0800, 黄杰 wrote:
+> Jason Wang <jasowang@redhat.com> 于2023年3月28日周二 11:40写道：
+> >
+> > On Tue, Mar 28, 2023 at 11:09 AM 黄杰 <huangjie.albert@bytedance.com> wrote:
+> > >
+> > > Jason Wang <jasowang@redhat.com> 于2023年3月28日周二 10:59写道：
+> > > >
+> > > > On Tue, Mar 28, 2023 at 10:13 AM Dominique Martinet
+> > > > <asmadeus@codewreck.org> wrote:
+> > > > >
+> > > > > Hi Michael, Albert,
+> > > > >
+> > > > > Albert Huang wrote on Sat, Mar 25, 2023 at 06:56:33PM +0800:
+> > > > > > in virtio_net, if we disable the napi_tx, when we triger a tx interrupt,
+> > > > > > the vq->event_triggered will be set to true. It will no longer be set to
+> > > > > > false. Unless we explicitly call virtqueue_enable_cb_delayed or
+> > > > > > virtqueue_enable_cb_prepare.
+> > > > >
+> > > > > This patch (commited as 35395770f803 ("virtio_ring: don't update event
+> > > > > idx on get_buf") in next-20230327 apparently breaks 9p, as reported by
+> > > > > Luis in https://lkml.kernel.org/r/ZCI+7Wg5OclSlE8c@bombadil.infradead.org
+> > > > >
+> > > > > I've just hit had a look at recent patches[1] and reverted this to test
+> > > > > and I can mount again, so I'm pretty sure this is the culprit, but I
+> > > > > didn't look at the content at all yet so cannot advise further.
+> > > > > It might very well be that we need some extra handling for 9p
+> > > > > specifically that can be added separately if required.
+> > > > >
+> > > > > [1] git log 0ec57cfa721fbd36b4c4c0d9ccc5d78a78f7fa35..HEAD drivers/virtio/
+> > > > >
+> > > > >
+> > > > > This can be reproduced with a simple mount, run qemu with some -virtfs
+> > > > > argument and `mount -t 9p -o debug=65535 tag mountpoint` will hang after
+> > > > > these messages:
+> > > > > 9pnet: -- p9_virtio_request (83): 9p debug: virtio request
+> > > > > 9pnet: -- p9_virtio_request (83): virtio request kicked
+> > > > >
+> > > > > So I suspect we're just not getting a callback.
+> > > >
+> > > > I think so. The patch assumes the driver will call
+> > > > virtqueue_disable/enable_cb() which is not the case of the 9p driver.
+> > > >
+> > > > So after the first interrupt, event_triggered will be set to true forever.
+> > > >
+> > > > Thanks
+> > > >
+> > >
+> > > Hi: Wang
+> > >
+> > > Yes,  This patch assumes that all virtio-related drivers will call
+> > > virtqueue_disable/enable_cb().
+> > > Thank you for raising this issue.
+> > >
+> > > It seems that napi_tx is only related to virtue_net. I'm thinking if
+> > > we need to refactor
+> > > napi_tx instead of implementing it inside virtio_ring.
+> >
+> > We can hear from others.
+> >
+> > I think it's better not to workaround virtio_ring issues in a specific
+> > driver. It might just add more hacks. We should correctly set
+> > VRING_AVAIL_F_NO_INTERRUPT,
+> >
+> > Do you think the following might work (not even a compile test)?
+> >
+> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > index 41144b5246a8..12f4efb6dc54 100644
+> > --- a/drivers/virtio/virtio_ring.c
+> > +++ b/drivers/virtio/virtio_ring.c
+> > @@ -852,16 +852,16 @@ static void virtqueue_disable_cb_split(struct
+> > virtqueue *_vq)
+> >  {
+> >         struct vring_virtqueue *vq = to_vvq(_vq);
+> >
+> > -       if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT)) {
+> > -               vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
+> > -               if (vq->event)
+> > -                       /* TODO: this is a hack. Figure out a cleaner
+> > value to write. */
+> > -                       vring_used_event(&vq->split.vring) = 0x0;
+> > -               else
+> > -                       vq->split.vring.avail->flags =
+> > -                               cpu_to_virtio16(_vq->vdev,
+> > -                                               vq->split.avail_flags_shadow);
+> > -       }
+> > +       if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT))
+> > +               vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
+> > +
+> > +       if (vq->event && !vq->event_triggered)
+> > +               /* TODO: this is a hack. Figure out a cleaner value to write. */
+> > +               vring_used_event(&vq->split.vring) = 0x0;
+> > +       else
+> > +               vq->split.vring.avail->flags =
+> > +                       cpu_to_virtio16(_vq->vdev,
+> > +                                       vq->split.avail_flags_shadow);
+> >  }
+> >
+> >  static unsigned int virtqueue_enable_cb_prepare_split(struct virtqueue *_vq)
+> > @@ -1697,8 +1697,10 @@ static void virtqueue_disable_cb_packed(struct
+> > virtqueue *_vq)
+> >  {
+> >         struct vring_virtqueue *vq = to_vvq(_vq);
+> >
+> > -       if (vq->packed.event_flags_shadow != VRING_PACKED_EVENT_FLAG_DISABLE) {
+> > +       if (!(vq->packed.event_flags_shadow & VRING_PACKED_EVENT_FLAG_DISABLE))
+> >                 vq->packed.event_flags_shadow = VRING_PACKED_EVENT_FLAG_DISABLE;
+> > +
+> > +       if (vq->event_triggered)
+> >                 vq->packed.vring.driver->flags =
+> >                         cpu_to_le16(vq->packed.event_flags_shadow);
+> >         }
+> > @@ -2330,12 +2332,6 @@ void virtqueue_disable_cb(struct virtqueue *_vq)
+> >  {
+> >         struct vring_virtqueue *vq = to_vvq(_vq);
+> >
+> > -       /* If device triggered an event already it won't trigger one again:
+> > -        * no need to disable.
+> > -        */
+> > -       if (vq->event_triggered)
+> > -               return;
+> > -
+> >         if (vq->packed_ring)
+> >                 virtqueue_disable_cb_packed(_vq);
+> >         else
+> >
+> > Thanks
+> >
 > 
-> Even if 'config->disable_locking' is set? I think that is what's being
-> discussed in here...
+> Hi, This patch seems to address the issue I initially raised and also
+> avoids the problem with virtio-9P.
+> 
+> but maybe this is a better choice:
+> 
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 307e139cb11d..6784d155c781 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -812,6 +812,10 @@ static void virtqueue_disable_cb_split(struct
+> virtqueue *_vq)
+> 
+>         if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT)) {
+>                 vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
+> +
+> +               if (vq->event_triggered)
+> +                       return;
+> +
+>                 if (vq->event)
+>                         /* TODO: this is a hack. Figure out a cleaner
+> value to write. */
+>                         vring_used_event(&vq->split.vring) = 0x0;
+> @@ -1546,6 +1550,10 @@ static void virtqueue_disable_cb_packed(struct
+> virtqueue *_vq)
+> 
+>         if (vq->packed.event_flags_shadow != VRING_PACKED_EVENT_FLAG_DISABLE) {
+>                 vq->packed.event_flags_shadow = VRING_PACKED_EVENT_FLAG_DISABLE;
+> +
+> +               if (vq->event_triggered)
+> +                       return;
+> +
+>                 vq->packed.vring.driver->flags =
+>                         cpu_to_le16(vq->packed.event_flags_shadow);
+>         }
+> @@ -2063,12 +2071,6 @@ void virtqueue_disable_cb(struct virtqueue *_vq)
+>  {
+>         struct vring_virtqueue *vq = to_vvq(_vq);
+> 
+> -       /* If device triggered an event already it won't trigger one again:
+> -        * no need to disable.
+> -        */
+> -       if (vq->event_triggered)
+> -               return;
+> -
+>         if (vq->packed_ring)
+>                 virtqueue_disable_cb_packed(_vq);
+>         else
+> 
+> Does Michael have any other suggestions?
+> 
+> Thanks.
 
-In case the driver has its own lock to serialize IO how on earth the regmap
-lock is needed. That's what I asked the author of the driver. He told the code
-doesn't require the regmap lock, and I tend to believe the author. So, why to
-keep it?
+Hmm what bothers me is this breaks the underlying assumption that
+shadow is an exact match of the shared memory. Need to check this does
+not cascade. But  I am still trying to get my head around what
+the issue is.
 
--- 
-With Best Regards,
-Andy Shevchenko
 
+
+
+> > >
+> > > Thanks
+> > >
+> > > > >
+> > > > >
+> > > > > I'll have a closer look after work, but any advice meanwhile will be
+> > > > > appreciated!
+> > > > > (I'm sure Luis would also like a temporary drop from -next until
+> > > > > this is figured out, but I'll leave this up to you)
+> > > > >
+> > > > >
+> > > > > >
+> > > > > > If we disable the napi_tx, it will only be called when the tx ring
+> > > > > > buffer is relatively small.
+> > > > > >
+> > > > > > Because event_triggered is true. Therefore, VRING_AVAIL_F_NO_INTERRUPT or
+> > > > > > VRING_PACKED_EVENT_FLAG_DISABLE will not be set. So we update
+> > > > > > vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
+> > > > > > every time we call virtqueue_get_buf_ctx. This will bring more interruptions.
+> > > > > >
+> > > > > > To summarize:
+> > > > > > 1) event_triggered was set to true in vring_interrupt()
+> > > > > > 2) after this nothing will happen for virtqueue_disable_cb() so
+> > > > > >    VRING_AVAIL_F_NO_INTERRUPT is not set in avail_flags_shadow
+> > > > > > 3) virtqueue_get_buf_ctx_split() will still think the cb is enabled
+> > > > > >    then it tries to publish new event
+> > > > > >
+> > > > > > To fix, if event_triggered is set to true, do not update
+> > > > > > vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
+> > > > > >
+> > > > > > Tested with iperf:
+> > > > > > iperf3 tcp stream:
+> > > > > > vm1 -----------------> vm2
+> > > > > > vm2 just receives tcp data stream from vm1, and sends the ack to vm1,
+> > > > > > there are many tx interrupts in vm2.
+> > > > > > but without event_triggered there are just a few tx interrupts.
+> > > > > >
+> > > > > > Fixes: 8d622d21d248 ("virtio: fix up virtio_disable_cb")
+> > > > > > Signed-off-by: Albert Huang <huangjie.albert@bytedance.com>
+> > > > > > Message-Id: <20230321085953.24949-1-huangjie.albert@bytedance.com>
+> > > > > > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> > > > > > ---
+> > > > > >  drivers/virtio/virtio_ring.c | 6 ++++--
+> > > > > >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > > > > > index cbeeea1b0439..1c36fa477966 100644
+> > > > > > --- a/drivers/virtio/virtio_ring.c
+> > > > > > +++ b/drivers/virtio/virtio_ring.c
+> > > > > > @@ -914,7 +914,8 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
+> > > > > >       /* If we expect an interrupt for the next entry, tell host
+> > > > > >        * by writing event index and flush out the write before
+> > > > > >        * the read in the next get_buf call. */
+> > > > > > -     if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT))
+> > > > > > +     if (unlikely(!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT) &&
+> > > > > > +                  !vq->event_triggered))
+> > > > > >               virtio_store_mb(vq->weak_barriers,
+> > > > > >                               &vring_used_event(&vq->split.vring),
+> > > > > >                               cpu_to_virtio16(_vq->vdev, vq->last_used_idx));
+> > > > > > @@ -1744,7 +1745,8 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+> > > > > >        * by writing event index and flush out the write before
+> > > > > >        * the read in the next get_buf call.
+> > > > > >        */
+> > > > > > -     if (vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC)
+> > > > > > +     if (unlikely(vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC &&
+> > > > > > +                  !vq->event_triggered))
+> > > > > >               virtio_store_mb(vq->weak_barriers,
+> > > > > >                               &vq->packed.vring.driver->off_wrap,
+> > > > > >                               cpu_to_le16(vq->last_used_idx));
+> > > > >
+> > > >
+> > >
+> >
 
