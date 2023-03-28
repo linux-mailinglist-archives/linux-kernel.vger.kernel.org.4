@@ -2,205 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E4F6CB9C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DECF6CB9CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231934AbjC1IsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
+        id S230363AbjC1Isy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbjC1IsI (ORCPT
+        with ESMTP id S230330AbjC1Isq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:48:08 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDE449E2;
-        Tue, 28 Mar 2023 01:48:00 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id y19so6753181pgk.5;
-        Tue, 28 Mar 2023 01:48:00 -0700 (PDT)
+        Tue, 28 Mar 2023 04:48:46 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C34C1FD0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:48:46 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id ix20so10993003plb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:48:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679993279;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VNI6lV401OYe10HsNLcwnXIFZPlsfUPtF81FXRtAZ3E=;
-        b=j/cEpRRM19UVVeWZS9niuGCxErtarIdoC5kbPGQwNCHySTyUcwjwkGkeQ5z+J6kfzR
-         pYKJm8Dg19Q6o+B3Eo1N1xNf/tfLq46xtFWvSAoMA/yWP+VPQ5IIZPzyg/LPvDHIODtv
-         uFsBwVQpryiNlQuSQksTImQOAvcdT1DhL/WeWgUtCt5GlhKY6bmqB+uO5yD0P7VDZgwG
-         KtJieIxpzUlm3dNPc3a1P6FMu2OdWXIVEMTBGdg6bzMRqfIijzNUOVLOS/VOm5j7jQsr
-         gVwwuLLr/M52JlOmbLFwAqHVVeSlt9PTBkEtjUH3WyrDkomBFsFqqOoCxQ/eFCkQydUp
-         9Blg==
+        d=gmail.com; s=20210112; t=1679993325;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2EU0PyNq3O8MZWQ5fwe8D0KcNrdW4uSY2h1xR6nDBTY=;
+        b=O1fseohERVPEn6YJLD9y3VUPQsGzrgbrkJIfTSl9xCaOo75kgq43d8pjF3GzYx1/6U
+         yrsneVKGZgNYNlkK8W3ssCUSLyiL06l/cv/406aMcxLZcUb/wZW1p4UrpEVGjQN68eIh
+         gazN69EOPahWQzBm/EqOqHY+EQqq5hotUOMbDXwQaCoz/cV1/J0mCA0N2XH//2bf75Ki
+         aKmelLIj0QBq9QgbMH29g5T0vXYAeDbp302OKg3AoanOIZNnCSldqtBtsB8SU3mljY+k
+         I8na3S2TETg/RGb+lMridKvA+cxRuS/VApvOMVuEHhS1DrWG3Z/4HaRU5p6wl/p8zuQ1
+         XOAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679993279;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VNI6lV401OYe10HsNLcwnXIFZPlsfUPtF81FXRtAZ3E=;
-        b=74WVm9SElZttT2PSF3JdkF4CptVv/Q4cp1fm5UUxdTkjzXK+YATWjIZBn/ze9UyMLa
-         r6oU5b4UI6ZQv5hRq7n4CyWubywxexnPzbCmfvXY5T4mwiKeVGCGzZ0MfLnkNdnKfOr4
-         WKJ6OIVtStEc+G3NfSY3vI20tPhBSgoOIptQ32BEkUNnw+5mYhX9VlGAm1XjF7p0yZiR
-         jQmEdbROtQa7aGw+GrKr7BrOWR20cJFjZWmTtoE0ojjSVgYes893XisH3rrtlzm/ihEP
-         3CY8zKvUGwGQaLk+Uq+4/ZDlIxrPmsCSi5tjCcocL2ziVbeI7TkDDcUBtvnh6PTws1zM
-         o2Ng==
-X-Gm-Message-State: AAQBX9eS7nJIDYGeU42YZ/yPc5oNNfUc1GfNjqUU2VRjymsgJZq0gKs8
-        a31S7dzV7YKF6DKHihRrMnk=
-X-Google-Smtp-Source: AKy350Y270PTe8vasybxuEgWv07q7aaaBzY21O1foTzqSD2vg28QsUxiKBuKth5huZcm4YiEF70L5w==
-X-Received: by 2002:a62:8496:0:b0:627:f659:a771 with SMTP id k144-20020a628496000000b00627f659a771mr16150885pfd.12.1679993279393;
-        Tue, 28 Mar 2023 01:47:59 -0700 (PDT)
-Received: from pavilion.. ([2402:e280:2146:a9a:db37:2c9f:dcb8:89a9])
-        by smtp.gmail.com with ESMTPSA id e27-20020a63545b000000b00513092bdca1sm9119548pgm.73.2023.03.28.01.47.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 01:47:59 -0700 (PDT)
-From:   Saalim Quadri <danascape@gmail.com>
-To:     krzysztof.kozlowski@linaro.org, broonie@kernel.org,
-        daniel.baluta@nxp.com, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, shengjiu.wang@nxp.com
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Saalim Quadri <danascape@gmail.com>
-Subject: [PATCH v4] ASoC: dt-bindings: ak4458: Convert to dtschema
-Date:   Tue, 28 Mar 2023 14:17:53 +0530
-Message-Id: <20230328084753.55200-1-danascape@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20210112; t=1679993325;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2EU0PyNq3O8MZWQ5fwe8D0KcNrdW4uSY2h1xR6nDBTY=;
+        b=WwcPpbgXvEchACWNE3bFNnDgkKP2NjZvEIkk00cpq6PXPCAAEAf5xVTgEvqRsQELEb
+         43H+cQA8VTI6LGfxsV/C2G/Txefhzd5ZIBOLzXBk2LCzwU0k2g9kDz1wtHL7rtw2efBK
+         AodUTMv+xHKT76RJAlXWJR/EwBOjEfo/giddp2DTp0++VuQ5RJlXt5WZEWi3FmnEtLWI
+         XsVIOXjSPZZGktOhbsIB1MVdrqpX3jaZOaDlVxNowLlLOJd7YRLyqin+Hf+vY1NdJd0p
+         n9j8P93D9On3tsZ1SH7zElndP1moEBIYMBWDyR9kyDI/QpKRaSMn9JYjparJx79pOdY/
+         Ik9Q==
+X-Gm-Message-State: AAQBX9fA/11aZMroBdpLXZB4EynUaAD5S8Ixqg8pdjrYK/x4kFKar0Gj
+        WmDrpRKcCbPqEDknjPK+uhM=
+X-Google-Smtp-Source: AKy350bDFGo2uIQNJg8uJdqaz7Tcc+lLE2OM3k8eagzfuLp08YrhaAwCSltX2PHBSqX3FPQ+08YONA==
+X-Received: by 2002:a17:90b:4f89:b0:23c:fb54:95d5 with SMTP id qe9-20020a17090b4f8900b0023cfb5495d5mr16211336pjb.41.1679993325434;
+        Tue, 28 Mar 2023 01:48:45 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-54.three.co.id. [116.206.28.54])
+        by smtp.gmail.com with ESMTPSA id n8-20020a6563c8000000b0050f9b7e64fasm13366907pgv.77.2023.03.28.01.48.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 01:48:45 -0700 (PDT)
+Message-ID: <fb1352ba-69a8-c1cc-7d72-43836f412e3d@gmail.com>
+Date:   Tue, 28 Mar 2023 15:48:42 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 4/4] staging: rtl8192u: add '*/' on separate line in
+ block comments
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Khadija Kamran <kamrankhadijadj@gmail.com>,
+        outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jerry Chuang <jerry-chuang@realtek.com>
+References: <cover.1679945728.git.kamrankhadijadj@gmail.com>
+ <140e0928531e61dc7396271a5b16a6be17514c76.1679945728.git.kamrankhadijadj@gmail.com>
+ <ZCJepCj9JcOQqp0Z@debian.me> <ZCJ2_PuvCUBvlwaL@kroah.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <ZCJ2_PuvCUBvlwaL@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the AK4458 audio DAC bindings to DT schema.
+On 3/28/23 12:11, Greg KH wrote:
+>> While at above can you please turn these comments above into kernel-doc
+>> comments (see Documentation/doc-guide/kernel-doc.rst for how to write
+>> one)? This requires a placeholder doc where you can write e.g. overview
+>> of the driver and how it is used. The doc should be in
+>> Documentation/driver-api/staging/ (since this is staging driver).
+> 
+> No, these are static functions, or just normal internal-to-the-driver
+> functions, they do not need kerneldoc or any Documentation/* entries,
+> sorry.
+> 
 
-Signed-off-by: Saalim Quadri <danascape@gmail.com>
----
-Changes:
-V1 -> V2: Use the correct way for dsd-path property
-          Drop ak4458 label form example
-V2 -> V3: ak4458 is the only one that does not support dsd-path, so we
-          do not require to define an array
-V3 -> V4: Add back dsd-path property description
+Ah! I don't see the context behind the comments, thanks anyway!
 
- .../devicetree/bindings/sound/ak4458.txt      | 28 -------
- .../bindings/sound/asahi-kasei,ak4458.yaml    | 73 +++++++++++++++++++
- 2 files changed, 73 insertions(+), 28 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/sound/ak4458.txt
- create mode 100644 Documentation/devicetree/bindings/sound/asahi-kasei,ak4458.yaml
-
-diff --git a/Documentation/devicetree/bindings/sound/ak4458.txt b/Documentation/devicetree/bindings/sound/ak4458.txt
-deleted file mode 100644
-index 0416c14895d6..000000000000
---- a/Documentation/devicetree/bindings/sound/ak4458.txt
-+++ /dev/null
-@@ -1,28 +0,0 @@
--AK4458 audio DAC
--
--This device supports I2C mode.
--
--Required properties:
--
--- compatible : "asahi-kasei,ak4458" or "asahi-kasei,ak4497"
--- reg : The I2C address of the device for I2C
--
--Optional properties:
--- reset-gpios: A GPIO specifier for the power down & reset pin
--- mute-gpios: A GPIO specifier for the soft mute pin
--- AVDD-supply: Analog power supply
--- DVDD-supply: Digital power supply
--- dsd-path: Select DSD input pins for ak4497
--            0: select #16, #17, #19 pins
--            1: select #3, #4, #5 pins
--
--Example:
--
--&i2c {
--	ak4458: dac@10 {
--		compatible = "asahi-kasei,ak4458";
--		reg = <0x10>;
--		reset-gpios = <&gpio1 10 GPIO_ACTIVE_LOW>
--		mute-gpios = <&gpio1 11 GPIO_ACTIVE_HIGH>
--	};
--};
-diff --git a/Documentation/devicetree/bindings/sound/asahi-kasei,ak4458.yaml b/Documentation/devicetree/bindings/sound/asahi-kasei,ak4458.yaml
-new file mode 100644
-index 000000000000..608dce956be0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/asahi-kasei,ak4458.yaml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/asahi-kasei,ak4458.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: AK4458 audio DAC
-+
-+maintainers:
-+  - Shengjiu Wang <shengjiu.wang@nxp.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - asahi-kasei,ak4458
-+      - asahi-kasei,ak4497
-+
-+  reg:
-+    maxItems: 1
-+
-+  avdd-supply:
-+    description: Analog power supply
-+
-+  dvdd-supply:
-+    description: Digital power supply
-+
-+  reset-gpios:
-+    maxItems: 1
-+
-+  mute-gpios:
-+    maxItems: 1
-+    description:
-+      GPIO used to mute all the outputs
-+
-+  dsd-path:
-+    description: Select DSD input pins for ak4497
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    oneOf:
-+      - const: 0
-+        description: select #16, #17, #19 pins
-+      - const: 1
-+        description: select #3, #4, #5 pins
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: asahi-kasei,ak4458
-+
-+    then:
-+      properties:
-+        dsd-path: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        codec@10 {
-+            compatible = "asahi-kasei,ak4458";
-+            reg = <0x10>;
-+            reset-gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;
-+            mute-gpios = <&gpio1 11 GPIO_ACTIVE_HIGH>;
-+        };
-+    };
 -- 
-2.34.1
+An old man doll... just what I always wanted! - Clara
 
