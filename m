@@ -2,72 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5174F6CCE2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 134856CCE07
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbjC1XmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 19:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
+        id S229727AbjC1XbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 19:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjC1XmB (ORCPT
+        with ESMTP id S229611AbjC1XbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 19:42:01 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A5A1FE2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:41:56 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5416d3a321eso136992567b3.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680046916;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/SOJzwszuK4oXlHtoTT/8rLoX+FLi6BZsrzcBCEAsAI=;
-        b=XsmKZlCFkNQsFlUwJu6hXd5IS6qS1B/ZMp6kn/1IDeJ7CZVUm1LwibD6gkVVl2F9fe
-         Gc7Gdih33kyxSxvuw1SdMHS8knhZVJ6jx2rAS5qloJkHRa70HYTQ8yDACXj7J4mSE+B3
-         WPFBSnNT2t8t3fY6QmIzYNQY6NjjXF4RZZa3WGoBQNAnL07e727AsjE3KVd8Q16SMXLq
-         G+h80/Es90S+Wen7zqYABysuKe5A3uUpWyuOjeTX+M1RaTb1r4kmgHKjLK2Umv5Fycgi
-         PD5KNVbfvkFejqGPxA832UlTr4zbDyRGPJn/Fukwsds52dl8XPvf/3w/I1GbTQkg5a+Q
-         ztFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680046916;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/SOJzwszuK4oXlHtoTT/8rLoX+FLi6BZsrzcBCEAsAI=;
-        b=kDQ9nutJn4eVnLYeZ+HM1k1lsbR4AaAHz86Lms1+dQoMld/QEyOOVKujOs/qrckDp2
-         g4pgYZhTWKMLC38ia2nU2Qrek8yv7Mcs19W8VxquL6qkaWIqJBZ0l9vTCiBQYyiL4lK9
-         VOsqEHtR/p6VNL3dQ5wpPQfgE74VM2VCt55q38UyjKPYe5jw4NIhp2It/HhjHHjf2Cvo
-         DeKIdRLqLWzBS58PLOFkUwa0nh1+/x/2iKVobkLCir8R6cOU5mzcBNZgHbTbApe8ip3G
-         gXtTovC0agYaUTh2ZzR6CDDw4XcytZ2k92iNbgq8hXXyAGIf406k9IkQu+Sw73PkAKFV
-         us7A==
-X-Gm-Message-State: AAQBX9cV7OfLbe/aAHcFMgY054BoZHMRXP5Ti8d2UZ3vMJOEldplCX8S
-        HVognhuLYhBY0o9FpdJygJ7+wXSZnHfN
-X-Google-Smtp-Source: AKy350Y6rfpfUk90+x61rAFYwxjj4dzqwGEWuwh63ONPFHCeJrWJH8BFOkPPu5uiEBUywjbzS3P1aMBiH6FG
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:6519:f0d3:9540:5c31])
- (user=irogers job=sendgmr) by 2002:a05:6902:18cd:b0:b78:45fd:5f01 with SMTP
- id ck13-20020a05690218cd00b00b7845fd5f01mr10193380ybb.7.1680046915938; Tue,
- 28 Mar 2023 16:41:55 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 16:41:42 -0700
-Message-Id: <20230328234142.1080045-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v1] perf vendor events intel: Update ivybridge and ivytown
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Edward Baker <edward.baker@intel.com>
-Cc:     Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        Tue, 28 Mar 2023 19:31:11 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A977E2724;
+        Tue, 28 Mar 2023 16:31:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680046270; x=1711582270;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ShQnQsU4HqcL+cMDe/r+rEh/z2o1deONB/DjjhJXFgk=;
+  b=YUAdSOqC498SuIdh3v4n4NbbdOZNNkYEiQmfNbEr6czci2c3xjtvxxKV
+   zYh5FkOCvFRSH1xpec/KeLK5yEcVZA6I9rzae3utuPrs3P+CGjumuME04
+   esSpDBrerSZFehNBBmki49Skkz+qWLTBG1Ac5rhVyG//Jztd+pbEe6ZJx
+   BkiNt1VgGXleiifBITUfUVU/756cQReK3Jce9P5OwspBzSTPN3SchS0er
+   Bb9Xs2MgSrGJBu8VN8yEvzEFzsXN4JtLZ+Lnc5y9yWkL7T/BJZkXTC+Vf
+   87Ea3FEa5juj3LXlCgSwzk+yNT3Ih774CyS7V4h+/uA6B1CrYfRQ1XNB6
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="329185510"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="329185510"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 16:31:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="661375650"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="661375650"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga006.jf.intel.com with ESMTP; 28 Mar 2023 16:31:08 -0700
+Date:   Tue, 28 Mar 2023 16:41:49 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v3 14/24] thermal: intel: hfi: Update the IPC class of
+ the current task
+Message-ID: <20230328234149.GB8958@ranerica-svr.sc.intel.com>
+References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
+ <20230207051105.11575-15-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0hGKKPiK86Z5PcG-EEHU7a=3d-4S2miRqNPuwjS1tF0BQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0hGKKPiK86Z5PcG-EEHU7a=3d-4S2miRqNPuwjS1tF0BQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,69 +83,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update to versions 24 and 23 respectively. Adds the event
-BR_MISP_EXEC.INDIRECT.
+On Mon, Mar 27, 2023 at 06:42:28PM +0200, Rafael J. Wysocki wrote:
+> On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
+> <ricardo.neri-calderon@linux.intel.com> wrote:
+> >
+> > Use Intel Thread Director classification to update the IPC class of a
+> > task. Implement the arch_update_ipcc() interface of the scheduler.
+> >
+> > Cc: Ben Segall <bsegall@google.com>
+> > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > Cc: Len Brown <len.brown@intel.com>
+> > Cc: Lukasz Luba <lukasz.luba@arm.com>
+> > Cc: Mel Gorman <mgorman@suse.de>
+> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Tim C. Chen <tim.c.chen@intel.com>
+> > Cc: Valentin Schneider <vschneid@redhat.com>
+> > Cc: x86@kernel.org
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > ---
+> > Changes since v2:
+> >  * Removed the implementation of arch_has_ipc_classes().
+> >
+> > Changes since v1:
+> >  * Adjusted the result the classification of Intel Thread Director to start
+> >    at class 1. Class 0 for the scheduler means that the task is
+> >    unclassified.
+> >  * Redefined union hfi_thread_feedback_char_msr to ensure all
+> >    bit-fields are packed. (PeterZ)
+> >  * Removed CONFIG_INTEL_THREAD_DIRECTOR. (PeterZ)
+> >  * Shortened the names of the functions that implement IPC classes.
+> >  * Removed argument smt_siblings_idle from intel_hfi_update_ipcc().
+> >    (PeterZ)
+> > ---
+> >  arch/x86/include/asm/topology.h   |  6 ++++++
+> >  drivers/thermal/intel/intel_hfi.c | 32 +++++++++++++++++++++++++++++++
+> >  2 files changed, 38 insertions(+)
+> >
+> > diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
+> > index 458c891a8273..ffcdac3f398f 100644
+> > --- a/arch/x86/include/asm/topology.h
+> > +++ b/arch/x86/include/asm/topology.h
+> > @@ -227,4 +227,10 @@ void init_freq_invariance_cppc(void);
+> >  #define arch_init_invariance_cppc init_freq_invariance_cppc
+> >  #endif
+> >
+> > +#if defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL)
+> > +void intel_hfi_update_ipcc(struct task_struct *curr);
+> > +
+> > +#define arch_update_ipcc intel_hfi_update_ipcc
+> > +#endif /* defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL) */
+> > +
+> >  #endif /* _ASM_X86_TOPOLOGY_H */
+> > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> > index b06021828892..530dcf57e06e 100644
+> > --- a/drivers/thermal/intel/intel_hfi.c
+> > +++ b/drivers/thermal/intel/intel_hfi.c
+> > @@ -72,6 +72,17 @@ union cpuid6_edx {
+> >         u32 full;
+> >  };
+> >
+> > +#ifdef CONFIG_IPC_CLASSES
+> > +union hfi_thread_feedback_char_msr {
+> > +       struct {
+> > +               u64     classid : 8;
+> > +               u64     __reserved : 55;
+> > +               u64     valid : 1;
+> > +       } split;
+> > +       u64 full;
+> > +};
+> > +#endif
+> > +
+> >  /**
+> >   * struct hfi_cpu_data - HFI capabilities per CPU
+> >   * @perf_cap:          Performance capability
+> > @@ -174,6 +185,27 @@ static struct workqueue_struct *hfi_updates_wq;
+> >  #ifdef CONFIG_IPC_CLASSES
+> >  static int __percpu *hfi_ipcc_scores;
+> >
+> > +void intel_hfi_update_ipcc(struct task_struct *curr)
+> > +{
+> > +       union hfi_thread_feedback_char_msr msr;
+> > +
+> > +       /* We should not be here if ITD is not supported. */
+> > +       if (!cpu_feature_enabled(X86_FEATURE_ITD)) {
+> > +               pr_warn_once("task classification requested but not supported!");
+> > +               return;
+> > +       }
+> > +
+> > +       rdmsrl(MSR_IA32_HW_FEEDBACK_CHAR, msr.full);
+> > +       if (!msr.split.valid)
+> > +               return;
+> > +
+> > +       /*
+> > +        * 0 is a valid classification for Intel Thread Director. A scheduler
+> > +        * IPCC class of 0 means that the task is unclassified. Adjust.
+> > +        */
+> > +       curr->ipcc = msr.split.classid + 1;
+> > +}
+> 
+> Wouldn't it be better to return the adjusted value from this function
+> and let the caller store it where appropriate?
+> 
+> It doesn't look like it is necessary to pass the task_struct pointer to it.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/pmu-events/arch/x86/ivybridge/pipeline.json | 8 ++++++++
- tools/perf/pmu-events/arch/x86/ivytown/pipeline.json   | 8 ++++++++
- tools/perf/pmu-events/arch/x86/mapfile.csv             | 4 ++--
- 3 files changed, 18 insertions(+), 2 deletions(-)
+Judging from this patch alone, yes, it does not make much sense to pass a
+task_struct as argument. In patch 21, however, this function uses various
+members of task_struct and makes it more convenient to have it as argument,
+no?
 
-diff --git a/tools/perf/pmu-events/arch/x86/ivybridge/pipeline.json b/tools/perf/pmu-events/arch/x86/ivybridge/pipeline.json
-index d1e64e0d683e..30a3da9cd22b 100644
---- a/tools/perf/pmu-events/arch/x86/ivybridge/pipeline.json
-+++ b/tools/perf/pmu-events/arch/x86/ivybridge/pipeline.json
-@@ -215,6 +215,14 @@
-         "SampleAfterValue": "200003",
-         "UMask": "0xc4"
-     },
-+    {
-+        "BriefDescription": "Speculative mispredicted indirect branches",
-+        "EventCode": "0x89",
-+        "EventName": "BR_MISP_EXEC.INDIRECT",
-+        "PublicDescription": "Counts speculatively miss-predicted indirect branches at execution time. Counts for indirect near CALL or JMP instructions (RET excluded).",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xe4"
-+    },
-     {
-         "BriefDescription": "Not taken speculative and retired mispredicted macro conditional branches",
-         "EventCode": "0x89",
-diff --git a/tools/perf/pmu-events/arch/x86/ivytown/pipeline.json b/tools/perf/pmu-events/arch/x86/ivytown/pipeline.json
-index d1e64e0d683e..30a3da9cd22b 100644
---- a/tools/perf/pmu-events/arch/x86/ivytown/pipeline.json
-+++ b/tools/perf/pmu-events/arch/x86/ivytown/pipeline.json
-@@ -215,6 +215,14 @@
-         "SampleAfterValue": "200003",
-         "UMask": "0xc4"
-     },
-+    {
-+        "BriefDescription": "Speculative mispredicted indirect branches",
-+        "EventCode": "0x89",
-+        "EventName": "BR_MISP_EXEC.INDIRECT",
-+        "PublicDescription": "Counts speculatively miss-predicted indirect branches at execution time. Counts for indirect near CALL or JMP instructions (RET excluded).",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xe4"
-+    },
-     {
-         "BriefDescription": "Not taken speculative and retired mispredicted macro conditional branches",
-         "EventCode": "0x89",
-diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
-index 41d755d570e6..97b3ffc284a6 100644
---- a/tools/perf/pmu-events/arch/x86/mapfile.csv
-+++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-@@ -14,8 +14,8 @@ GenuineIntel-6-(3C|45|46),v33,haswell,core
- GenuineIntel-6-3F,v27,haswellx,core
- GenuineIntel-6-(7D|7E|A7),v1.17,icelake,core
- GenuineIntel-6-6[AC],v1.19,icelakex,core
--GenuineIntel-6-3A,v23,ivybridge,core
--GenuineIntel-6-3E,v22,ivytown,core
-+GenuineIntel-6-3A,v24,ivybridge,core
-+GenuineIntel-6-3E,v23,ivytown,core
- GenuineIntel-6-2D,v23,jaketown,core
- GenuineIntel-6-(57|85),v10,knightslanding,core
- GenuineIntel-6-A[AC],v1.01,meteorlake,core
--- 
-2.40.0.348.gf938b09366-goog
-
+> 
+> > +
+> >  static int alloc_hfi_ipcc_scores(void)
+> >  {
+> >         if (!cpu_feature_enabled(X86_FEATURE_ITD))
+> > --
