@@ -2,249 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBED6CBBD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0540B6CBBD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbjC1KEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
+        id S232801AbjC1KFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233004AbjC1KEc (ORCPT
+        with ESMTP id S232745AbjC1KE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:04:32 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CCB210D;
-        Tue, 28 Mar 2023 03:04:31 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 35DC0604FC;
-        Tue, 28 Mar 2023 12:04:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679997869; bh=nNjj4eFTnRdcNvlbuD+nUzVzXcCxtvyyONYAI5iFXDc=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=VB0rl8JVtNFYF+3kBX+8ggM2yu61QHQD2IGaNMGQLa+1RqlbqM9QkeabTlPBJQHX2
-         Sixkmn97/iiOSeMuhuSCQAWcWHRGpRXb3fmOCK+F+I9sUQcRWtLMzg3dTWNy42sI0k
-         ZqnebybUKpoREmIMV1pz02fspmghqd2JCGiw4ZYbOxaimBFqcvg1Pjuf1JgSX3J+Dy
-         1H9/RtdZdgQQtmQmyCA8h6JPq63+EN6lg4IkrfC23Rc2gBQolPkIRyHZf4En7vW3Hx
-         rVdhfHzpAiDT9xztbeEJI08VqZpc3A2QR8ZsgbLxB3lnqeKfngq86fbnXLbod7xgnu
-         AVEu3ftYjmsRg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id qGf-pZ_xmGhp; Tue, 28 Mar 2023 12:04:25 +0200 (CEST)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id 47D7C604F9;
-        Tue, 28 Mar 2023 12:04:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679997865; bh=nNjj4eFTnRdcNvlbuD+nUzVzXcCxtvyyONYAI5iFXDc=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=AVks5sz+WrYowF4TEA/9ZTlsRMSt3fo8jy5dWRmwZsXUOAOvI1Z4tQoPEKDNsUPko
-         9OzUc6wh7DevGq4NBdgs+CePpzCgY6+qF5Sxklnz43IXPO+pj8uVxpqV8GjD/mCjJi
-         t9ssQ2XE0MZFLjqrslFEcR0b/mHFB6G/W63RUbkh5nGgv80yTOuqJXZm+yhlbsx0VM
-         nKQxe9y1JqpHaePM9EbU9xemLo1kqaAizzgrXswO73cfSEOeru4w1t1m3K/TxR8Gc1
-         cXPNAYF6n7FU9DHEHj0tm23+7xkP328KBmFvdjQMNKYB/6+BgyT4LGTC+mz44F7yyt
-         CPnN08rPwEDjA==
-Message-ID: <71451bd9-b6e0-de00-a637-bc5a0da7966e@alu.unizg.hr>
-Date:   Tue, 28 Mar 2023 12:04:20 +0200
+        Tue, 28 Mar 2023 06:04:58 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948FE6180;
+        Tue, 28 Mar 2023 03:04:56 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso11957658pjb.2;
+        Tue, 28 Mar 2023 03:04:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679997896;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tj+JNRYSlmpI8qc8/QJIucmB+4IxZS7FjZc7hG2oNPs=;
+        b=fOegfL1/FdAwtPzd5RlErl3s4iL5bstKSKXsJsFpn4CnC4hUSmhZ9Bha5u/NsV5mY4
+         j7onHQb3tTJfvlm534eoE0xqQGi4V1sfvYcpIHtcLKKdUl7WCflUDMDZ3oRRIkUU5xpt
+         j18SZ3+t7Bova2API9Du695XzAX7pnxdr0O2F2wlZGKLgROmDNxDBt853Oec3+zdFlMX
+         vhbtq7G4CIL3tY+Z+csTxEKgOmVuHKvT5oLinfk+S+w5m4ksHJ0uZLOzGTu4Vr65ctex
+         J6c6nQ4rJoQO5dFfeayl8E6eygCm1ZQRG8LKGi2pOSucLuRlJU355mZkZfCfnbigzd20
+         ftDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679997896;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tj+JNRYSlmpI8qc8/QJIucmB+4IxZS7FjZc7hG2oNPs=;
+        b=a/gO/AmhEkbLqiLi8ngMvDip23IaCHaxqeR8pwjdI5OBQ/uMWIs/ZA8d3VjHNugrCQ
+         CrJq/Q+SbvrRMWEm3szy56JJzMARFjZBciXLwVjPLcP5OcLgAc8/LOtln4gx1/dd8P9/
+         RGnYXTu1RNKv1ioTQ5AMsCo1sgV0kYvFI6ySnqCga+gdpuGjIO98aBPmTsQIC2sYGdiK
+         P4WI5xPV7P0A2g9RtPcIUznpCunI7YBSKnRgdNo/DRvKBaFnN+Hf8dElRLY/bB5zdrsS
+         BHz8mJ/RvuA2ae6Gcj/+xEFvKHTEnSDhbJXNjThOS93ZbqdzZbRlbhmoxVT5hRMYykXg
+         CvbA==
+X-Gm-Message-State: AO0yUKUjheTOor7JpMWUUVuQWTDXAJQIYnzf29srZ9g92Dxn2jeWO0Vk
+        iqQTFORL61AY83TQB9pR7Ug=
+X-Google-Smtp-Source: AK7set/WDWKYpU+87FgYc0gxbbhEXX09YA9uvLztEHtpn+0SbnVY/NVFP2yh0jpDuEYXF49nqxRAXg==
+X-Received: by 2002:a05:6a20:47e2:b0:da:adbf:7b96 with SMTP id ey34-20020a056a2047e200b000daadbf7b96mr12428939pzb.21.1679997895936;
+        Tue, 28 Mar 2023 03:04:55 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id j11-20020a62e90b000000b005825b8e0540sm3031187pfh.204.2023.03.28.03.04.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 03:04:55 -0700 (PDT)
+Message-ID: <7e84bfb4-b052-4c31-a319-1ea2dd52ae54@gmail.com>
+Date:   Tue, 28 Mar 2023 18:04:45 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [BUG] selftests/firmware: copious kernel memory leaks in
- test_fw_run_batch_request()
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     linux-kselftest@vger.kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <97e284be-5018-9d18-feb2-7ec4b08c06fd@alu.unizg.hr>
-Content-Language: en-US, hr
-In-Reply-To: <97e284be-5018-9d18-feb2-7ec4b08c06fd@alu.unizg.hr>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v2] KVM: x86/pmu: Fix emulation on Intel counters' bit
+ width
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230322093117.48335-1-likexu@tencent.com>
+ <CABgObfYfiUDf4zY=izcg_32yGCbUxxVc+JAkHGHwiQ0VmGdOgA@mail.gmail.com>
+ <871434fe-ae80-bec6-9920-a6411f5842c0@gmail.com>
+ <fce5c1ad-24a3-febf-127e-e97238492143@redhat.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <fce5c1ad-24a3-febf-127e-e97238492143@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/23 11:23, Mirsad Todorovac wrote:
-> Hi all,
+On 28/3/2023 5:20 pm, Paolo Bonzini wrote:
+> On 3/28/23 11:16, Like Xu wrote:
+>>
+>>
+>> If IA32_PERF_CAPABILITIES.FW_WRITE[bit 13] =1, each IA32_PMCi is accompanied by a
+>> corresponding alias address starting at 4C1H for IA32_A_PMC0.
+>>
+>> The bit width of the performance monitoring counters is specified in 
+>> CPUID.0AH:EAX[23:16].
+>> If IA32_A_PMCi is present, the 64-bit input value (EDX:EAX) of WRMSR to 
+>> IA32_A_PMCi will cause
+>> IA32_PMCi to be updated by:
+>>
+>>      COUNTERWIDTH =
+>>          CPUID.0AH:EAX[23:16] bit width of the performance monitoring counter
+>>      IA32_PMCi[COUNTERWIDTH-1:32] := EDX[COUNTERWIDTH-33:0]);
+>>      IA32_PMCi[31:0] := EAX[31:0];
+>>      EDX[63:COUNTERWIDTH] are reserved
+>>
+>> ---
+>>
+>> Some might argue that this is all talking about GP counters, not
+>> fixed counters. In fact, the full-width write hw behaviour is
+>> presumed to do the same thing for all counters.
+> But the above behavior, and the #GP, is only true for IA32_A_PMCi (the 
+> full-witdh MSR).  Did I understand correctly that the behavior for fixed 
+> counters is changed without introducing an alias MSR?
 > 
-> Platform is AlmaLinux 8.7 (CentOS fork), Lenovo desktop
-> LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB with the BIOS M22KT49A dated
-> 11/10/2022.
+> Paolo
 > 
-> Running Torvalds vanilla kernel 6.3-rc3 commit 6981739a967c with
-> CONFIG_DEBUG_KMEMLEAK and CONFIG_DEBUG_{KOBJECT,KOBJECT_RELEASE} enabled.
-> 
-> The leak is cummulative, it can be reproduced with
-> tools/testing/selftests/firmware/*.sh scripts.
-> 
-> The leaks are in chunks of 1024 bytes (+ overhead), but so far I could not
-> reproduce w/o root privileges, as tests refuse to run as unprivileged user.
-> (This is not the proof of non-existence of an unprivileged automated exploit
-> that would exhaust the kernel memory at approx. rate 4 MB/hour on our setup.
-> 
-> This would mean about 96 MB / day or 3 GB / month (of kernel memory).
-> 
-> TEST RESULTS (showing the number of kmemleaks per test):
-> 
-> root@pc-mtodorov marvin]# grep -c 'comm "test_' linux/kernel_bugs/memleaks-6.3-rc3/kmemleak-fw*.log
-> linux/kernel_bugs/memleaks-6.3-rc3/kmemleak-fw_fallback.sh.log:0
-> linux/kernel_bugs/memleaks-6.3-rc3/kmemleak-fw_filesystem.sh.log:60
-> linux/kernel_bugs/memleaks-6.3-rc3/kmemleak-fw_lib.sh.log:9
-> linux/kernel_bugs/memleaks-6.3-rc3/kmemleak-fw_run_tests.sh.log:196
-> linux/kernel_bugs/memleaks-6.3-rc3/kmemleak-fw_upload.sh.log:0
-> [root@pc-mtodorov marvin]#
-> 
-> Leaks look like this:
-> 
-> unreferenced object 0xffff943c390f8400 (size 1024):
->    comm "test_firmware-0", pid 449178, jiffies 4381453603 (age 824.844s)
->    hex dump (first 32 bytes):
->      45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->    backtrace:
->      [<ffffffff90aed68c>] slab_post_alloc_hook+0x8c/0x3e0
->      [<ffffffff90af4f69>] __kmem_cache_alloc_node+0x1d9/0x2a0
->      [<ffffffff90a6a6ae>] kmalloc_trace+0x2e/0xc0
->      [<ffffffff90eb2350>] test_fw_run_batch_request+0x90/0x170
->      [<ffffffff907d6dcf>] kthread+0x10f/0x140
->      [<ffffffff90602fa9>] ret_from_fork+0x29/0x50
-> unreferenced object 0xffff943a902f6400 (size 1024):
->    comm "test_firmware-1", pid 449179, jiffies 4381453603 (age 824.844s)
->    hex dump (first 32 bytes):
->      45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->    backtrace:
->      [<ffffffff90aed68c>] slab_post_alloc_hook+0x8c/0x3e0
->      [<ffffffff90af4f69>] __kmem_cache_alloc_node+0x1d9/0x2a0
->      [<ffffffff90a6a6ae>] kmalloc_trace+0x2e/0xc0
->      [<ffffffff90eb2350>] test_fw_run_batch_request+0x90/0x170
->      [<ffffffff907d6dcf>] kthread+0x10f/0x140
->      [<ffffffff90602fa9>] ret_from_fork+0x29/0x50
-> unreferenced object 0xffff943a902f0400 (size 1024):
->    comm "test_firmware-2", pid 449180, jiffies 4381453603 (age 824.844s)
->    hex dump (first 32 bytes):
->      45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->    backtrace:
->      [<ffffffff90aed68c>] slab_post_alloc_hook+0x8c/0x3e0
->      [<ffffffff90af4f69>] __kmem_cache_alloc_node+0x1d9/0x2a0
->      [<ffffffff90a6a6ae>] kmalloc_trace+0x2e/0xc0
->      [<ffffffff90eb2350>] test_fw_run_batch_request+0x90/0x170
->      [<ffffffff907d6dcf>] kthread+0x10f/0x140
->      [<ffffffff90602fa9>] ret_from_fork+0x29/0x50
-> unreferenced object 0xffff943a902f4000 (size 1024):
->    comm "test_firmware-3", pid 449181, jiffies 4381453603 (age 824.844s)
->    hex dump (first 32 bytes):
->      45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->    backtrace:
->      [<ffffffff90aed68c>] slab_post_alloc_hook+0x8c/0x3e0
->      [<ffffffff90af4f69>] __kmem_cache_alloc_node+0x1d9/0x2a0
->      [<ffffffff90a6a6ae>] kmalloc_trace+0x2e/0xc0
->      [<ffffffff90eb2350>] test_fw_run_batch_request+0x90/0x170
->      [<ffffffff907d6dcf>] kthread+0x10f/0x140
->      [<ffffffff90602fa9>] ret_from_fork+0x29/0x50
-> 
-> Please find the build config, lshw output and the output of
-> /sys/kernel/debug/kmemleak in the following directory:
-> 
-> https://domac.alu.hr/~mtodorov/linux/bugreports/kmemleak-firmware/
-> 
-> NOTE: sent to the maintainers listed for selftest/firmware and those
-> listed for lib/test_firmware.c .
 
-Hi, again!
+If true, why introducing those alias MSRs ? My archaeological findings are:
 
-The problem seems to be here:
+a platform w/o full-witdh like Westmere (has 3-fixed counters already) is 
+declared to
+have a counter width (R:48, W:32) and its successor Sandy Bridge has (R:48 , W: 
+32/48).
 
-lib/test_firmware.c:
------------------------------------------------------------------------------------
-  826 static int test_fw_run_batch_request(void *data)
-  827 {
-  828         struct test_batched_req *req = data;
-  829
-  830         if (!req) {
-  831                 test_fw_config->test_result = -EINVAL;
-  832                 return -EINVAL;
-  833         }
-  834
-  835         if (test_fw_config->into_buf) {
-  836                 void *test_buf;
-  837
-  838                 test_buf = kzalloc(TEST_FIRMWARE_BUF_SIZE, GFP_KERNEL);
-  839                 if (!test_buf)
-  840                         return -ENOSPC;
-  841
-  842                 if (test_fw_config->partial)
-  843                         req->rc = request_partial_firmware_into_buf
-  844                                                 (&req->fw,
-  845                                                  req->name,
-  846                                                  req->dev,
-  847                                                  test_buf,
-  848                                                  test_fw_config->buf_size,
-  849                                                  test_fw_config->file_offset);
-  850                 else
-  851                         req->rc = request_firmware_into_buf
-  852                                                 (&req->fw,
-  853                                                  req->name,
-  854                                                  req->dev,
-  855                                                  test_buf,
-  856                                                  test_fw_config->buf_size);
-  857                 if (!req->fw)
-  858                         kfree(test_buf);
-  859         } else {
-  860                 req->rc = test_fw_config->req_firmware(&req->fw,
-  861                                                        req->name,
-  862                                                        req->dev);
-  863         }
-  864
-  865         if (req->rc) {
-  866                 pr_info("#%u: batched sync load failed: %d\n",
-  867                         req->idx, req->rc);
-  868                 if (!test_fw_config->test_result)
-  869                         test_fw_config->test_result = req->rc;
-  870         } else if (req->fw) {
-  871                 req->sent = true;
-  872                 pr_info("#%u: batched sync loaded %zu\n",
-  873                         req->idx, req->fw->size);
-  874         }
-  875         complete(&req->completion);
-  876
-  877         req->task = NULL;
-  878
-  879         return 0;
-  880 }
+Thus I think the behaviour of the fixed counter has changed from there, and the 
+alias GP MSRs
+were introduced to keep the support on 32-bit writes on #GP counters (via 
+original address).
 
-The scope of test_buf is from its definition in line 836 to its end in line 859,
-so in case req->fw != NULL the execution line loses track of the memory
-kzalloc()'d in line 838.
-
-Unless it is somewhere non-transparently referenced, it appears that the kernel
-loses track of this allocated block.
-
-Hope this helps.
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
+[*] Intel® 64 and IA-32 Architectures Software Developer’s Manual Documentation 
+Changes
+(252046-030, January 2011) Table 30-18 Core PMU Comparison.
