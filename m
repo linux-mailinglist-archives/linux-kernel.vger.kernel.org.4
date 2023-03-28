@@ -2,203 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E21A6CB8BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 885176CB8BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbjC1HxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 03:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
+        id S232499AbjC1HxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 03:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232456AbjC1HxC (ORCPT
+        with ESMTP id S231717AbjC1Hw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 03:53:02 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55EE4480;
-        Tue, 28 Mar 2023 00:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679989981; x=1711525981;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=MMLJ55nzbDuYefjagbKEQ5r4d7wFCEcRJ+uhTX5nBh4=;
-  b=WVJNj1E7HQYT82h1jDaXsGvgHR1K86v64G65ywk+0N8wWjpd1Nw9RMXQ
-   KSOZfUuSoDkoLYagctGeIWLfNGIQhp49wnD8h09pcGFE4IfbbDFvLvIna
-   yP63+Yp/GNAvL1JJjUYM12DyYFD0/zvxXW6slx9hmgmhHaJw0MDiaX9gt
-   sr+F9GSde5+A8LB+D72EPvcoQ8129R3tGLvN4odwRM2PHVemHT53pBgVY
-   NbXek3Psz3oE0dEp0oTbbhOCH65XA31u7jmqygEhkF6Qjxw1tsxIB12mb
-   fKDGRNPZHtUzSqLAciM0Jw8QVkZ5jP+2aHXcah/3jQN4/LDQMxQeX7PR2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="320898932"
-X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
-   d="scan'208";a="320898932"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 00:52:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="807771906"
-X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
-   d="scan'208";a="807771906"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga004.jf.intel.com with ESMTP; 28 Mar 2023 00:52:36 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 28 Mar 2023 00:52:31 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 28 Mar 2023 00:52:31 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Tue, 28 Mar 2023 00:52:31 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Tue, 28 Mar 2023 00:52:30 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GcqMcyqDI4SXFZbZz7+WVcBS9Vt7j4xWjHHaSFnipPnN5V/IM5ovE4QoHKsHudhidrXSycBEfq7J7I/IO/aEIdCu6DNfU8AzGSXkH6F/eUXS1qODifEEXuXfgLyOtOqgwjic/XZXXcX6IjYKHRUXl9VwYuFmfGcIDD03SxhaIqcbBSt8r6Z6GHJlkNRtOriacu3QfsXDv5FSilrReXhqSaDOGQ7GnL1y5iwGMXYc/EQmpOie4Y6zIFv9abhdM1l4p1clHqbh+jhDubt2qBZenERmG5g5t845h4W0gBmwviyOzb+v/+fA5at0tDjDaea8KyPFefsKm2SEYvwXnJ8ldA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MMLJ55nzbDuYefjagbKEQ5r4d7wFCEcRJ+uhTX5nBh4=;
- b=WDKu5bXMgW+xc87YBjSJ/KF8wtQK7Miif2Y4Tq6Y7JU7QXGHwX0FWVknobOO/sH4bu3OZtoh6lYi1i7WKuYKkYXshIFuEEW/0qcn1vLvQ7IPuX6sorGBOzhvf6vUGgBQDow1nfCpqw2SHt7WyEpQmQjy2WHXVIj9RyZFRK+EZFMmfrL81/12cY/gkQOmrU1gwrvuP9jDIZOoQyuASY51DygCpkuM3OGPq/LH1yclJRROjSyqLH3ueiwNcQIHnciGoYJq2ZGUwPxQLt9w9yhZWh5Yf5Pz1RTVFSqmv7j+J76DO37oWWT+Kt7jXtzyTtFJ/eDdr2YfG//jhXbh31PTfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by IA1PR11MB8197.namprd11.prod.outlook.com (2603:10b6:208:446::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 28 Mar
- 2023 07:52:24 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::73e9:b405:2cae:9174]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::73e9:b405:2cae:9174%7]) with mapi id 15.20.6222.033; Tue, 28 Mar 2023
- 07:52:24 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>
-CC:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>,
-        "David Woodhouse" <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Subject: RE: [PATCH v2 7/8] iommu: Export iommu_get_dma_domain
-Thread-Topic: [PATCH v2 7/8] iommu: Export iommu_get_dma_domain
-Thread-Index: AQHZYQJZ/uTBrv6VnUyqe8oLESWJ1K8PtDuAgAAdlnA=
-Date:   Tue, 28 Mar 2023 07:52:23 +0000
-Message-ID: <BN9PR11MB527623AC2CE25EDA10FF81548C889@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230327232138.1490712-1-jacob.jun.pan@linux.intel.com>
- <20230327232138.1490712-8-jacob.jun.pan@linux.intel.com>
- <e7d53d04-6b7f-05a4-3077-42470c6d2823@linux.intel.com>
-In-Reply-To: <e7d53d04-6b7f-05a4-3077-42470c6d2823@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|IA1PR11MB8197:EE_
-x-ms-office365-filtering-correlation-id: 08096a5f-b408-4717-5388-08db2f615e06
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0YO0lSSvNbYvInfTFxiQWDDuNCZ2EKLddXFgVKfdmUC8meev75QuROAITLnQtTH4jPMjc36sVMD7YanlucJwDF5IVT+MOk+DD4XUIYLawf10ESYGBK3xIm0XCdDuaEdF55pSi//ugcXaSwbyW0yv+G+8eILhN5hvfrr1qfTpmGfXlSTRtTlNxnJX0vygOlJiHFcRh59p315O66f9QVEYQQ9Cy6Uoi4IjKcl5YuBBngEIuxrRaBfj081P2D/Me2gX5XGpCFgOSe+ug3YpbB4cOvRMAy6GwLlVwpKzUHEzhoi3jh7K5CkHlXsDXv+adT/qiqsm0uUyEcJDSPEnQ5rz5diB4oVsmr94Vzg6VZ3JdOTaJXsuJ1a2Xazt/5i6UPavq3EMCDs/PA5db7kXcx08ARWUan0GHCl3Hp+G6UF5IRm5g5mXa7XtHHfQv3zRxzTos3ujEeOpQ1wcR3WexJ0KFwzz3zdL5dyA5aOUBWu13rcjokZfcaloPLGD1TGKyE8JAA15CFFy342/u2/5rke6hKCb9Hk8X54imhGGTgTA5iNziI+EpkOZdkr/6mADY3XnRVwXkdP+7At7638VMxmE35U0sX2eM6q4w/b6Zz6Cmi+peGqWVHgB4JWly5wjyDcz
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(376002)(346002)(366004)(136003)(451199021)(8676002)(55016003)(316002)(38100700002)(66446008)(38070700005)(41300700001)(82960400001)(66946007)(54906003)(122000001)(2906002)(7416002)(5660300002)(76116006)(6506007)(7696005)(71200400001)(52536014)(4326008)(53546011)(33656002)(64756008)(66556008)(86362001)(110136005)(26005)(8936002)(9686003)(66476007)(186003)(478600001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZndSYlJmODlXdTVkeGRvN1JRYVlXeHdibDY0czliaTFxbE5Vald0dm9aTGVU?=
- =?utf-8?B?bFFiNzg0V0lseVk3MmZJWjhmU290d2FMV3VvTEN4S04vWEFBd09lQnRwd2tN?=
- =?utf-8?B?SEdCZjRBemJvSUdSNkt0Z2orZEJmL1JOSlhNY24rdUpDTVpnRVQ1SVBrQmR6?=
- =?utf-8?B?VzlNUFNuL2hUNlREVTZDbFUxR0JGWTdZZXJkdWVCNDRob01qSkxMS0d0c0dM?=
- =?utf-8?B?YkUzbXlLaUc5WVVjd2llTzFwVkFFODFCaDdDZmlwbm15cTdXc2d4UnREWUxl?=
- =?utf-8?B?czVLNmtNczY4Ty9xK05zUjdXdnhMTWNscUlnZloyMzVoM0t2L1czeUdxMmxp?=
- =?utf-8?B?WmdiZUlhNW1WQmlWcEIzbk1Ia2FwYzZlVnAzNS8xTjNOQjJXVFVUbTZRVk9K?=
- =?utf-8?B?aTlYK28xOWk1T1V1Zkh6OWp6K3NuS0pwZVJEUVdBK0d4M2pNdElsVk9nR2FZ?=
- =?utf-8?B?S0haNDhmOWN0NXdLTVFiNGpnVjdveWxPeUJGSU10MGRVbWpJWktpL01DT0JF?=
- =?utf-8?B?alhZdWJtZ0svMUQvbWVacFpjNWJ2YlpUWHlNU0tmWkVlNXNtQXE5OGN2TFZq?=
- =?utf-8?B?MVg4L1lCbkRVUmJaOWFXSGh0QUhTUGM5MFlIKzNuZHBWakxuU2xFb28xYzk3?=
- =?utf-8?B?VmZWakd3UDFmNEVSY0JmTVJEc0ptYWZWaWZMdURaY2pXMWNqdXhzdjhWL3Qx?=
- =?utf-8?B?ZVk5UzRrMUdTYWc1ZEY3cjB3WTNXdFU0bDNmeldLWU4vWmV3Rm15bXJSOEhY?=
- =?utf-8?B?eVBWT3RWajhOTFprTmZUbjN3b0hKN2NQaVBWY1Y4ZUlQTmJ4NU1CbytyVWh6?=
- =?utf-8?B?MUp4Mzl4bUhLNXdGdy8rclAraFo1ZC84UEthOE1lN2xoZUk3M0hMYndJVUQx?=
- =?utf-8?B?T0IrRmU1elNYOTI5TzZlbVh0NTc3Nk5NVTl4ckVKSTZKeE9XTTFQSEJ3OFdp?=
- =?utf-8?B?cmdhbXcrc0ZtQmdCREptR3RoblBZYzNrL1hWQzJoK0lqZlhuWFd3S05YZVZV?=
- =?utf-8?B?Y3BoZ2FnL2MvamRjR1FQSG5UUVA5dy94RnplVWZyYlNVM08ySmZqT1lFelFI?=
- =?utf-8?B?Nlo0ZzJYMHJpWUFuY2c4Q2JBZmZvMFJBMmJoYXIyWi9VanJNcWhIWko1ekJj?=
- =?utf-8?B?cVcxYW1ITmhGeUFjbEkwMEVFUEJOYTczU3lLWUlyck4wK09mQjdhL3BkNGJS?=
- =?utf-8?B?TUg4MmdabkIwMXpmTDNpWkV6cWhrTWdQTGhxeDhQaXYvWDhMTXMvWW0xbGd3?=
- =?utf-8?B?YXJsa3FvR0pGRzdGMHhmUFlsVytYOUtGWlY4YkdrRm94eExMRzFYU1c1NFdn?=
- =?utf-8?B?MnJETFBwRUszWHZQVnc1S1hLNjVmNGo3cVpMMk5FYTQyZFZVbTZNdTFJejVF?=
- =?utf-8?B?bmZsYkRMZFFQQ2xZa1l1eTZFRTZuWkFSajdteDhxNTVXTkgyRzBoYUk3WUFu?=
- =?utf-8?B?NFRYNHQxVkRSUy9LV2tqZktSaUpGdXZuQXZJQ0Vtb1M0VUlYbytqc0tCc1Nj?=
- =?utf-8?B?WWVIa3ZFNjZHQlE2WFl6TDRLcG9nYk4zV2pQMTN1SisxUEVVbnhhZ0pxUEgy?=
- =?utf-8?B?Q3liWFJPZTVieG8wZnhmK1hheHVHSjF6bzk0RUpTeGNCQWRGdFJQY3AyejUv?=
- =?utf-8?B?UGJ2d285Wit3Nis1N0RsZENYVW5iRDF2UjNwNUxJTnBpSjBiUlQxYTlneisv?=
- =?utf-8?B?ekZFQlVoYjhUUnBsVDQ3MzdrK1N3WG5PaHJKWE5DZGo5c2oweDFxdzRKQVpE?=
- =?utf-8?B?RjdkQVlSZjFyV0l5SkJ1Q3FMRlgxamQyVWJweXFqYTB1L21BbDJVaVByS2w0?=
- =?utf-8?B?TmpKWTNPTS9tRE1jNldYdEkwQVJHV1I4QWhWMW1EVzRWR0JSRnMxSlAyZ1Zi?=
- =?utf-8?B?dHN0Y3k1RkJTTmhwcVFBb0VJWlZiOFZZN0luUU5md2pXSVhiYTVzMzdYeDBS?=
- =?utf-8?B?cDBJaUlpWnJRRVNrZWNGMXB3U0srQTQ3K2granFuM1ZxZ1RkMnY0VkM5KzlJ?=
- =?utf-8?B?QkdXM0U0NVRVU0Zhc0lVWjRyUEtrSnZsVURKRUtiMlpUZGF1QVByL1FQTzJx?=
- =?utf-8?B?RGNGMlRtVVBpenhhcUFvbGZIcE5jZXU5N1gzSlhzWUxUTHhuM2JTaEF2YU4v?=
- =?utf-8?Q?YbDOScRCrBNTbRqtvrjKez+n5?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 28 Mar 2023 03:52:57 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2314398
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:52:55 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id iw3so10867145plb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:52:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1679989974;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oh6ioMhNsMKgrbyT0Opg2xxclp3zb+Yju+WYnfl1IaU=;
+        b=eo+qFwvaQwLGV/Qk3bRBadzkZ9j64zJatwJT+hcs/zhv50rKSj7Mh/AvIEpjVEPaFH
+         U1AbiJhk6toN6YNwc0lag140WN2m29SXSfD6Z6R8Z55/eQscKXzqbauk5EWqdZr1amjz
+         D4MeO00CAgMyc1nZYobNVhNs8CSpp+9urOZ7I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679989974;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Oh6ioMhNsMKgrbyT0Opg2xxclp3zb+Yju+WYnfl1IaU=;
+        b=w2I5UaPdSxGFTvclWXkAkNj3Wnj6sCoarf5xggWK7jbZ/eIKEM43O3a7Ewyaj9Mqxf
+         UEVzj2hv9S8pRh5LEt/a34hlysWH02u+bpLG8lw1RnR7RK3649HlRnM8vnDQvZ03BHCY
+         Ar1/eLn+LZE1wQT+LtpqvKXjA574Du5vA0jyPjjIekS+oh5ditMBVGACajGvTGLKdFvK
+         P4AREkFaJPSQUx8E0isAfPUZh8IFT96Qiip3JmjDz/rjwWXuvbkSMAlkEv8fkcBss4Ww
+         mGH8BFD4Pr7qtGaklY8KOQ20+zR5nQ2S+KeFz10FRxeEZzrcHrlSpqwGNj6ZtHIrAAHn
+         Yrbg==
+X-Gm-Message-State: AO0yUKVMi7Wk8yksXtiYN6vk3ZqNlbUyVra4S+HYbQfi+L5iuQveejWi
+        4qVl+WI/jCOgxxoH/OE9h5AlKdYpVZryZSucji+HYw==
+X-Google-Smtp-Source: AKy350afYQX3lI4q0v2y7WXZnhr77B2NMpzkRt6ceuHl442SPbfaS4zytuSvHsryZeJ6SLxcF2ZisQ==
+X-Received: by 2002:a17:90b:2243:b0:23f:7176:df32 with SMTP id hk3-20020a17090b224300b0023f7176df32mr15396936pjb.40.1679989974217;
+        Tue, 28 Mar 2023 00:52:54 -0700 (PDT)
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com. [209.85.216.53])
+        by smtp.gmail.com with ESMTPSA id s10-20020a17090a13ca00b0023f5c867f82sm5493775pjf.41.2023.03.28.00.52.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 00:52:53 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so11681139pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:52:53 -0700 (PDT)
+X-Received: by 2002:a17:90b:350c:b0:23b:349d:a159 with SMTP id
+ ls12-20020a17090b350c00b0023b349da159mr8172673pjb.3.1679989972919; Tue, 28
+ Mar 2023 00:52:52 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 08096a5f-b408-4717-5388-08db2f615e06
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Mar 2023 07:52:23.8756
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AV5coM7Mvzo8cq11ldtWFWvEqYyMbAMy3k/vrPsU93cOvWNwhWgYayxmACARGc4woIt1RNah2TZSPs1i7qwswQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB8197
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230309-guenter-mini-v2-0-e6410d590d43@chromium.org>
+ <20230309-guenter-mini-v2-1-e6410d590d43@chromium.org> <20230309145757.GB1088@pendragon.ideasonboard.com>
+In-Reply-To: <20230309145757.GB1088@pendragon.ideasonboard.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 28 Mar 2023 09:52:41 +0200
+X-Gmail-Original-Message-ID: <CANiDSCvCxk4m4MDPTL4DDot-PCkyuRQX7N6xAUvhOju16Hft4w@mail.gmail.com>
+Message-ID: <CANiDSCvCxk4m4MDPTL4DDot-PCkyuRQX7N6xAUvhOju16Hft4w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] media: uvcvideo: Cancel async worker earlier
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Max Staudt <mstaudt@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sean Paul <seanpaul@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBCYW9sdSBMdSA8YmFvbHUubHVAbGludXguaW50ZWwuY29tPg0KPiBTZW50OiBUdWVz
-ZGF5LCBNYXJjaCAyOCwgMjAyMyAyOjA0IFBNDQo+IA0KPiBPbiAzLzI4LzIzIDc6MjEgQU0sIEph
-Y29iIFBhbiB3cm90ZToNCj4gPiBEZXZpY2VzIHRoYXQgdXNlIEVOUUNNRFMgdG8gc3VibWl0IHdv
-cmsgbmVlZHMgdG8gcmV0cmlldmUgaXRzIERNQQ0KPiA+IGRvbWFpbi4gSXQgY2FuIHRoZW4gYXR0
-YWNoIFBBU0lEIHRvIHRoZSBETUEgZG9tYWluIGZvciBzaGFyZWQgbWFwcGluZw0KPiA+ICh3aXRo
-IFJJRCkgZXN0YWJsaXNoZWQgYnkgRE1BIEFQSS4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEph
-Y29iIFBhbjxqYWNvYi5qdW4ucGFuQGxpbnV4LmludGVsLmNvbT4NCj4gPiAtLS0NCj4gPiAgIGRy
-aXZlcnMvaW9tbXUvaW9tbXUuYyB8IDEgKw0KPiA+ICAgaW5jbHVkZS9saW51eC9pb21tdS5oIHwg
-NSArKysrKw0KPiA+ICAgMiBmaWxlcyBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKykNCj4gPg0KPiA+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL2lvbW11L2lvbW11LmMgYi9kcml2ZXJzL2lvbW11L2lvbW11
-LmMNCj4gPiBpbmRleCAxMGRiNjgwYWNhZWQuLmM1MWQzNDNhNzVkMiAxMDA2NDQNCj4gPiAtLS0g
-YS9kcml2ZXJzL2lvbW11L2lvbW11LmMNCj4gPiArKysgYi9kcml2ZXJzL2lvbW11L2lvbW11LmMN
-Cj4gPiBAQCAtMjExOCw2ICsyMTE4LDcgQEAgc3RydWN0IGlvbW11X2RvbWFpbg0KPiAqaW9tbXVf
-Z2V0X2RtYV9kb21haW4oc3RydWN0IGRldmljZSAqZGV2KQ0KPiA+ICAgew0KPiA+ICAgCXJldHVy
-biBkZXYtPmlvbW11X2dyb3VwLT5kZWZhdWx0X2RvbWFpbjsNCj4gPiAgIH0NCj4gPiArRVhQT1JU
-X1NZTUJPTF9HUEwoaW9tbXVfZ2V0X2RtYV9kb21haW4pOw0KPiANCj4gRGlyZWN0bHkgZXhwb3J0
-aW5nIHRoaXMgZnVuY3Rpb24gZm9yIGV4dGVybmFsIHVzZSBzZWVtcyB1bnNhZmUuIElmIHRoZQ0K
-PiBjYWxsZXIgaXMgdGhlIGtlcm5lbCBkcml2ZXIgZm9yIHRoaXMgZGV2aWNlLCBpdCdzIGZpbmUg
-YmVjYXVzZSBkZWZhdWx0DQo+IGRvbWFpbiByZW1haW5zIHVuY2hhbmdlZCBkdXJpbmcgdGhlIGxp
-ZmUgY3ljbGUgb2YgdGhlIGRyaXZlci4gT3RoZXJ3aXNlLA0KPiB1c2luZyB0aGlzIGZ1bmN0aW9u
-IG1heSBjYXVzZSBVQUYuIEtlZXAgaW4gbWluZCB0aGF0IGdyb3VwJ3MgZGVmYXVsdA0KPiBkb21h
-aW4gY291bGQgYmUgY2hhbmdlZCB0aHJvdWdoIHN5c2ZzLg0KPiANCj4gSG93ZXZlciwgaW9tbXVf
-Z2V0X2RvbWFpbl9mb3JfZGV2KCkgaGFzIGFscmVhZHkgZG9uZSBzbyBhbmQgaGFzIGJlZW4NCj4g
-ZXhwb3J0ZWQuIE1heWJlIEknbSB3b3JyaWVkIHRvbyBtdWNoLiA6LSkNCj4gDQoNCkFncmVlLiBU
-aGUga2VybmVsIGRyaXZlciBtYW5hZ2luZyB0aGUgZGV2aWNlIHdhbnRzIHRvIGdldCB0aGUgY3Vy
-cmVudCANCmRvbWFpbiBvZiB0aGUgZGV2aWNlIHRoZW4gaW9tbXVfZ2V0X2RvbWFpbl9mb3JfZGV2
-KCkgaXMgdGhlIHJpZ2h0DQppbnRlcmZhY2UuIEl0IGtub3dzIHRoZSBkb21haW4gaXMgdGhlIGRt
-YSBkb21haW4uDQo=
+Hi Laurent
+
+I have not tested it yet... but maybe something like this might be
+slightly better?
+
+
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index 5e9d3da862dd..3944404b2de2 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -2762,10 +2762,6 @@ void uvc_ctrl_cleanup_device(struct uvc_device *dev)
+        struct uvc_entity *entity;
+        unsigned int i;
+
+-       /* Can be uninitialized if we are aborting on probe error. */
+-       if (dev->async_ctrl.work.func)
+-               cancel_work_sync(&dev->async_ctrl.work);
+-
+        /* Free controls and control mappings for all entities. */
+        list_for_each_entry(entity, &dev->entities, list) {
+                for (i = 0; i < entity->ncontrols; ++i) {
+diff --git a/drivers/media/usb/uvc/uvc_status.c
+b/drivers/media/usb/uvc/uvc_status.c
+index a78a88c710e2..0208612a9f12 100644
+--- a/drivers/media/usb/uvc/uvc_status.c
++++ b/drivers/media/usb/uvc/uvc_status.c
+@@ -292,7 +292,7 @@ int uvc_status_init(struct uvc_device *dev)
+
+ void uvc_status_unregister(struct uvc_device *dev)
+ {
+-       usb_kill_urb(dev->int_urb);
++       uvc_status_stop(dev);
+        uvc_input_unregister(dev);
+ }
+
+
+The benefit from Guenter patch is that it has been tested for years...
+
+What do you think? Shall we try this approach instead?
+
+Regards!
+
+On Thu, 9 Mar 2023 at 15:57, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Ricardo and Guenter,
+>
+> Thank you for the patch.
+>
+> On Thu, Mar 09, 2023 at 03:44:05PM +0100, Ricardo Ribalda wrote:
+> > From: Guenter Roeck <linux@roeck-us.net>
+> >
+> > So far the asynchronous control worker was canceled only in
+> > uvc_ctrl_cleanup_device. This is much later than the call to
+> > uvc_disconnect. However, after the call to uvc_disconnect returns,
+> > there must be no more USB activity. This can result in all kinds
+> > of problems in the USB code. One observed example:
+> >
+> > URB ffff993e83d0bc00 submitted while active
+> > WARNING: CPU: 0 PID: 4046 at drivers/usb/core/urb.c:364 usb_submit_urb+0x4ba/0x55e
+> > Modules linked in: <...>
+> > CPU: 0 PID: 4046 Comm: kworker/0:35 Not tainted 4.19.139 #18
+> > Hardware name: Google Phaser/Phaser, BIOS Google_Phaser.10952.0.0 08/09/2018
+> > Workqueue: events uvc_ctrl_status_event_work [uvcvideo]
+> > RIP: 0010:usb_submit_urb+0x4ba/0x55e
+> > Code: <...>
+> > RSP: 0018:ffffb08d471ebde8 EFLAGS: 00010246
+> > RAX: a6da85d923ea5d00 RBX: ffff993e71985928 RCX: 0000000000000000
+> > RDX: ffff993f37a1de90 RSI: ffff993f37a153d0 RDI: ffff993f37a153d0
+> > RBP: ffffb08d471ebe28 R08: 000000000000003b R09: 001424bf85822e96
+> > R10: 0000001000000000 R11: ffffffff975a4398 R12: ffff993e83d0b000
+> > R13: ffff993e83d0bc00 R14: 0000000000000000 R15: 00000000fffffff0
+> > FS:  0000000000000000(0000) GS:ffff993f37a00000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00000000ec9c0000 CR3: 000000025b160000 CR4: 0000000000340ef0
+> > Call Trace:
+> >  uvc_ctrl_status_event_work+0xd6/0x107 [uvcvideo]
+> >  process_one_work+0x19b/0x4c5
+> >  worker_thread+0x10d/0x286
+> >  kthread+0x138/0x140
+> >  ? process_one_work+0x4c5/0x4c5
+> >  ? kthread_associate_blkcg+0xc1/0xc1
+> >  ret_from_fork+0x1f/0x40
+> >
+> > Introduce new function uvc_ctrl_stop_device() to cancel the worker
+> > and call it from uvc_unregister_video() to solve the problem.
+> >
+> > Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> > Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+> > Reviewed-by: Sean Paul <seanpaul@chromium.org>
+> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > ---
+> >  drivers/media/usb/uvc/uvc_ctrl.c   | 11 +++++++----
+> >  drivers/media/usb/uvc/uvc_driver.c |  1 +
+> >  drivers/media/usb/uvc/uvcvideo.h   |  1 +
+> >  3 files changed, 9 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> > index 5e9d3da862dd..769c1d2a2f45 100644
+> > --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> > @@ -2757,14 +2757,17 @@ static void uvc_ctrl_cleanup_mappings(struct uvc_device *dev,
+> >       }
+> >  }
+> >
+> > -void uvc_ctrl_cleanup_device(struct uvc_device *dev)
+> > +void uvc_ctrl_stop_device(struct uvc_device *dev)
+> >  {
+> > -     struct uvc_entity *entity;
+> > -     unsigned int i;
+> > -
+> >       /* Can be uninitialized if we are aborting on probe error. */
+> >       if (dev->async_ctrl.work.func)
+> >               cancel_work_sync(&dev->async_ctrl.work);
+> > +}
+>
+> There may be an opportunity for refactoring, as we have
+> uvc_status_stop() that stops the work queue, but I think this is good
+> enough for now. I'm wondering, though, if there could be a race
+> condition here similar to the one that the recent changes to
+> uvc_status_stop() have fixed ? As uvc_ctrl_stop_device() is called at
+> release time I assume that URBs have been cancelled, so there should be
+> no race, but a second pair of eyeballs to confirm this would be
+> appreciated.
+>
+> Other than that, the patch looks good to me, and fixes an issue
+> independent from the rest of the series, so
+>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>
+> I will wait for a reply regarding the race condition before queuing this
+> up though.
+>
+> > +
+> > +void uvc_ctrl_cleanup_device(struct uvc_device *dev)
+> > +{
+> > +     struct uvc_entity *entity;
+> > +     unsigned int i;
+> >
+> >       /* Free controls and control mappings for all entities. */
+> >       list_for_each_entry(entity, &dev->entities, list) {
+> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> > index 7aefa76a42b3..4be6dfeaa295 100644
+> > --- a/drivers/media/usb/uvc/uvc_driver.c
+> > +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > @@ -1893,6 +1893,7 @@ static void uvc_unregister_video(struct uvc_device *dev)
+> >       }
+> >
+> >       uvc_status_unregister(dev);
+> > +     uvc_ctrl_stop_device(dev);
+> >
+> >       if (dev->vdev.dev)
+> >               v4l2_device_unregister(&dev->vdev);
+> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> > index 9a596c8d894a..50f171e7381b 100644
+> > --- a/drivers/media/usb/uvc/uvcvideo.h
+> > +++ b/drivers/media/usb/uvc/uvcvideo.h
+> > @@ -760,6 +760,7 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
+> >  int uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
+> >                        const struct uvc_control_mapping *mapping);
+> >  int uvc_ctrl_init_device(struct uvc_device *dev);
+> > +void uvc_ctrl_stop_device(struct uvc_device *dev);
+> >  void uvc_ctrl_cleanup_device(struct uvc_device *dev);
+> >  int uvc_ctrl_restore_values(struct uvc_device *dev);
+> >  bool uvc_ctrl_status_event_async(struct urb *urb, struct uvc_video_chain *chain,
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
+
+
+
+-- 
+Ricardo Ribalda
