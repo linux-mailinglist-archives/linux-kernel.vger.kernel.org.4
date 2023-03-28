@@ -2,148 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3325F6CB4ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 05:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778206CB4EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 05:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbjC1DeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 23:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
+        id S232689AbjC1Deg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 23:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232546AbjC1Ddy (ORCPT
+        with ESMTP id S232777AbjC1DeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 23:33:54 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFEE3AA3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:33:20 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id eh3so44089036edb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:33:20 -0700 (PDT)
+        Mon, 27 Mar 2023 23:34:08 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EEF198D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:33:12 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id cu12so7035016pfb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:33:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1679974398;
+        d=bytedance.com; s=google; t=1679974391;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5oiHpee5kHvwy0kkwyghj/MrpTgzhWpQdX2GfZvSDVQ=;
-        b=EHLXr98Ho4n7r+p8iRHxQsHE19FD6K4p+UA77Z6Fu6dypOk1hBNelRP9iWct4iMuTN
-         4mSwsFjvLS9868eS3JoEG6UUwaN8L1oqlFrc1y/p40Rp4IaWW+iO0IbE9QjHux1fOk2k
-         AB1fePiet+VlsLcFQj8fKMif9OFrFMaanZ05s=
+        bh=ir5V99A0zsoCPWi1/drgb88gCMu5kFYUe4/CApNWsb4=;
+        b=XxiHgCaoFSAe4B3bizN+ChgnY7ZwVOlPR49xr4wvd+fJxiVH9mnF3uGMZreQzk61cq
+         OxlxgfsoDcqlDGqOwjOZ4FAyedoUw+llfBhOXIhLTKXIicVGX//KC01hRAtkAaf4czn4
+         2E8tMksWE9JA7L1BTnwFf/tLdtvXK7D0PXTEp3n5ASXcegpbA8YYzKBA1jn6RhhU2gto
+         s8SwgDAbAgrnaFJ8dMcsq6oDpOZp0Om9Ft1/ifMMmQyVIgaWOezW8P1ojwCxMuGDQ1nt
+         LOI/OPVKMD2oJTcpyDwGjHxzf4oNKK74KCh+/gGkV03AA4krAKn+zj0n1Il6jn40Ocje
+         4tOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679974398;
+        d=1e100.net; s=20210112; t=1679974391;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5oiHpee5kHvwy0kkwyghj/MrpTgzhWpQdX2GfZvSDVQ=;
-        b=inBCnr5cFGWQwhiqh3gSNP4pV37//YZftawnYIkHlwK+bIvQ7njek2hyhtjuokfjJE
-         mEmIioyux9/hBUjQhHLlEwYvdCn0zAfVwFyYkJNsEx282YZ7jJTnsZSWuhcWbBnzfV6h
-         UTyJ+RbymTMvxiodB9jR6ObqY4K8E0+mmDMMk11B07FV2im7oIQU8tDXjZpvZ2lQJtB6
-         wrY1Zkha1PacL1qpEqht9Lb2VMwuszNgvOW3Cap67Clq589DYtDbRoyWfeopUor3eMa0
-         YRmCtIGhAULkHQI767qhzbEuIBMDmwcgfnRMG8rXJclUFbZ6SBV5FzYi1HkhDCBYD+Xv
-         dgRg==
-X-Gm-Message-State: AAQBX9fAkj0AXvgn3X/CVi7hJ1qXDU9x01UhdRJLqY28Y8X+olKuehAC
-        OxiTACdG0IMiYi2JpYBm6w1Sq4pNxIQP8K9PtTEvVw==
-X-Google-Smtp-Source: AKy350btL0JQPghkkFpjUURQcX1thWJ3NgpqWKLHYa0Yo2bl5EOSUfmPQFcs2XTFQDwVJ/mB6/TYZQ==
-X-Received: by 2002:a17:906:74c5:b0:944:a4a3:486a with SMTP id z5-20020a17090674c500b00944a4a3486amr7269488ejl.24.1679974397743;
-        Mon, 27 Mar 2023 20:33:17 -0700 (PDT)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id v19-20020a17090651d300b0092b86d41dbasm14819661ejk.114.2023.03.27.20.33.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 20:33:17 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id x3so44093167edb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 20:33:17 -0700 (PDT)
-X-Received: by 2002:a17:906:a86:b0:933:f6e8:26d9 with SMTP id
- y6-20020a1709060a8600b00933f6e826d9mr7176916ejf.15.1679974396517; Mon, 27 Mar
- 2023 20:33:16 -0700 (PDT)
+        bh=ir5V99A0zsoCPWi1/drgb88gCMu5kFYUe4/CApNWsb4=;
+        b=SdqIr9tjczzlY/4lqgRDU3CBwEdZfWlCY2VeA/neDPD7WZ95rfk83eNsLzhV8G8nLQ
+         NyJvbZ1AIgXFypAN4nk1KBv5W2UlocYhAGKAnAcT1EisjcpEgm2pWD47TQiP4MY/vwQY
+         JIMXSLpA8PFtU3zeRyDLZx7xt6USMdPprjbggzyx/J5V9Rk9NmXimXVG7yuzxm6txPWN
+         p0yz+TiHABsh6AMDZDwGQRd4wCimUYyehiIDSMC9b2bIzEfFDbGbe0Q5f8Qfc9apmwjl
+         iQeJ0Wzit0g49fGtEWgLSa4c10r5yQzJ5zTNtxGdfulvfiOa8jHwXMwFusUI0BqN4TVS
+         lOHw==
+X-Gm-Message-State: AAQBX9dfMcsatM4tu/CYixtKBSPlhzWP9dH87J1vfY9MA7qKp+OdBoSy
+        tcoDawBQgxxARP7PCSUYT4+CzjQvCe14b0Z2+sQ5
+X-Google-Smtp-Source: AKy350bn7ijoZFAjoqvuKlFfISkywXvdbbqt2f7GLfAU6t2tg/VAOo0P1PT/MZM3CF/iMQltGoeVogRNojJjbTEIS9A=
+X-Received: by 2002:a63:6784:0:b0:4f1:cd3a:3e83 with SMTP id
+ b126-20020a636784000000b004f1cd3a3e83mr3821811pgc.3.1679974391319; Mon, 27
+ Mar 2023 20:33:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230320071442.172228-1-pedro.falcato@gmail.com>
- <20230320115153.7n5cq4wl2hmcbndf@wittgenstein> <CAHk-=wjifBVf3ub0WWBXYg7JAao6V8coCdouseaButR0gi5xmg@mail.gmail.com>
- <ZCJN0aaVPFouMkxp@localhost>
-In-Reply-To: <ZCJN0aaVPFouMkxp@localhost>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 27 Mar 2023 20:32:59 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgLimhZ8px+BxTvkonBGHr9oFcjrk4tmE2-_mmd3vBGdg@mail.gmail.com>
-Message-ID: <CAHk-=wgLimhZ8px+BxTvkonBGHr9oFcjrk4tmE2-_mmd3vBGdg@mail.gmail.com>
-Subject: Re: [PATCH] do_open(): Fix O_DIRECTORY | O_CREAT behavior
-To:     Josh Triplett <josh@joshtriplett.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Pedro Falcato <pedro.falcato@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230323053043.35-1-xieyongji@bytedance.com> <20230323053043.35-4-xieyongji@bytedance.com>
+ <CACGkMEtH0=vr6JQrqWFZqf4p8bcgeKCr4ipqdBc9nv-st3Pfiw@mail.gmail.com>
+ <CACycT3sm1P2qDQTNKp+RLmyd84+v8xwErf_g1SXqiaJDQO8LNg@mail.gmail.com> <CACGkMEvhXQ9ve4DQnmVu4hRRbCWM3oesR-=KaLisuyJ4-tyQxg@mail.gmail.com>
+In-Reply-To: <CACGkMEvhXQ9ve4DQnmVu4hRRbCWM3oesR-=KaLisuyJ4-tyQxg@mail.gmail.com>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Tue, 28 Mar 2023 11:33:00 +0800
+Message-ID: <CACycT3uYbnrQDDbFmwdww8ukMU1t9RsAuutHsFT-UzK9_Mc=Kg@mail.gmail.com>
+Subject: Re: [PATCH v4 03/11] virtio-vdpa: Support interrupt affinity
+ spreading mechanism
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoph Hellwig <hch@lst.de>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 7:15=E2=80=AFPM Josh Triplett <josh@joshtriplett.or=
-g> wrote:
+On Tue, Mar 28, 2023 at 11:14=E2=80=AFAM Jason Wang <jasowang@redhat.com> w=
+rote:
 >
-> If there are no users of this and we can clean up the semantics, is
-> there a strong reason *not* to make `O_DIRECTORY | O_CREATE` actually
-> create a directory and atomically return a file descriptor for that
-> directory? That seems like genuinely useful behavior that we don't
-> currently have a syscall for. I didn't see any suggestion in the thread
-> for reasons why we can't or shouldn't do that.
+> On Tue, Mar 28, 2023 at 11:03=E2=80=AFAM Yongji Xie <xieyongji@bytedance.=
+com> wrote:
+> >
+> > On Fri, Mar 24, 2023 at 2:28=E2=80=AFPM Jason Wang <jasowang@redhat.com=
+> wrote:
+> > >
+> > > On Thu, Mar 23, 2023 at 1:31=E2=80=AFPM Xie Yongji <xieyongji@bytedan=
+ce.com> wrote:
+> > > >
+> > > > To support interrupt affinity spreading mechanism,
+> > > > this makes use of group_cpus_evenly() to create
+> > > > an irq callback affinity mask for each virtqueue
+> > > > of vdpa device. Then we will unify set_vq_affinity
+> > > > callback to pass the affinity to the vdpa device driver.
+> > > >
+> > > > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> > >
+> > > Thinking hard of all the logics, I think I've found something interes=
+ting.
+> > >
+> > > Commit ad71473d9c437 ("virtio_blk: use virtio IRQ affinity") tries to
+> > > pass irq_affinity to transport specific find_vqs().  This seems a
+> > > layer violation since driver has no knowledge of
+> > >
+> > > 1) whether or not the callback is based on an IRQ
+> > > 2) whether or not the device is a PCI or not (the details are hided b=
+y
+> > > the transport driver)
+> > > 3) how many vectors could be used by a device
+> > >
+> > > This means the driver can't actually pass a real affinity masks so th=
+e
+> > > commit passes a zero irq affinity structure as a hint in fact, so the
+> > > PCI layer can build a default affinity based that groups cpus evenly
+> > > based on the number of MSI-X vectors (the core logic is the
+> > > group_cpus_evenly). I think we should fix this by replacing the
+> > > irq_affinity structure with
+> > >
+> > > 1) a boolean like auto_cb_spreading
+> > >
+> > > or
+> > >
+> > > 2) queue to cpu mapping
+> > >
+> >
+> > But only the driver knows which queues are used in the control path
+> > which don't need the automatic irq affinity assignment.
+>
+> Is this knowledge awarded by the transport driver now?
+>
 
-Absolutely not.
+This knowledge is awarded by the device driver rather than the transport dr=
+iver.
 
-For one thing, it is clearly not "genuinely useful behavior". It's just stu=
-pid.
+E.g. virtio-scsi uses:
 
-Name a *single* real situation where that would be a big improvement?
-Point to code, and point to a reason, and point to why it would make a
-difference. No made-up hypotheticals.
+    struct irq_affinity desc =3D { .pre_vectors =3D 2 }; // vq0 is control
+queue, vq1 is event queue
 
-If you want to open a directory, just do that
+> E.g virtio-blk uses:
+>
+>         struct irq_affinity desc =3D { 0, };
+>
+> Atleast we can tell the transport driver which vq requires automatic
+> irq affinity.
+>
 
-    fd =3D open(.., O_DIRECTORY);
+I think that is what the current implementation does.
 
-and if that directory doesn't exist, and you still want to create it,
-then just do
+> > So I think the
+> > irq_affinity structure can only be created by device drivers and
+> > passed to the virtio-pci/virtio-vdpa driver.
+>
+> This could be not easy since the driver doesn't even know how many
+> interrupts will be used by the transport driver, so it can't built the
+> actual affinity structure.
+>
 
-   mkdir(...);
+The actual affinity mask is built by the transport driver, device
+driver only passes a hint on which queues don't need the automatic irq
+affinity assignment.
 
-on it. Done. And mkdir() is atomic, so there's no race there with
-somebody else doing something else to that path.
-
-And no, there is no race with a subsequent open of that mkdir case,
-because you already know the result empty, so what would you do with
-the fd you just got? Absolutely nothing. It's useless. Edwin Starr
-sang a song all about it.
-
-So there is *zero* real reasons for that "open a directory and create
-it atomically". It's a nonsensical operation.
-
-Ok, just to play along - maybe you can make it slightly less
-nonsensical by throwing O_PATH into the mix, and now an empty
-directory file descriptor at least has *some* use.
-
-But even *if* you can point to such a thing being useful (and I'm
-really doubtful), it would *still* be stupid.
-
-Now your code would not only be specific to Linux, it would be
-specific to some very new version of Linux, and do something
-completely different on older versions.
-
-Because those older versions will do random things, ranging from
-"always return an error" to "create a regular file - not a directory -
-and then return an error anyway" and finally "create a regular file -
-not a directory - and return that resulting fd".
-
-So no. We're not adding a *fourth* set of semantics to something that
-is silly and useless to do in the first place, and that has already
-had three existing semantics.
-
-The reason it has had three different behaviors over the years is
-*literally* that nobody has ever wanted to do it, and so the fact that
-it has been broken for years hasn't even mattered.
-
-Don't try to make that situation worse by then making up new pointless
-meanings for it and try to come up with excuses why somebody would
-want to do that operation.
-
-                Linus
+Thanks,
+Yongji
