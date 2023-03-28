@@ -2,98 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38E86CB326
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E196C6CB32A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 03:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjC1B27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Mar 2023 21:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
+        id S232071AbjC1B3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Mar 2023 21:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjC1B25 (ORCPT
+        with ESMTP id S229610AbjC1B3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Mar 2023 21:28:57 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDC119A7;
-        Mon, 27 Mar 2023 18:28:53 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 565F824E28D;
-        Tue, 28 Mar 2023 09:28:50 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Mar
- 2023 09:28:50 +0800
-Received: from [192.168.120.42] (171.223.208.138) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Mar
- 2023 09:28:49 +0800
-Message-ID: <19c7497a-d98f-d46f-2912-8ff69276d7d6@starfivetech.com>
-Date:   Tue, 28 Mar 2023 09:28:47 +0800
+        Mon, 27 Mar 2023 21:29:41 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB7E1BC6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:29:39 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so13648447pjt.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 18:29:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679966978; x=1682558978;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1Jdx37rOwHmakcXY70yxAvz0QRyJnQXhL1Wo5n+Z6Sk=;
+        b=TLE59pC+XhSBCygxb2SEQVsD7yIPsQut3uSvtlKEheWJ2tzkUgAlKH9frRhvIaUuqf
+         u5axdpbePlvEb5ATpAWhaGdNXbos48R6uC7ZbAzSfW8ih3A8GEldU1f1eowIC4Ws8IMo
+         EPbbQFIlfrfrtOFpOQhheik/jRGwLZ9rpklmVa0fphD2Z9HZhm5FdEuXVVGsLqdAmDtY
+         SIGWFw98Cu4PMyLREaSt7A8S1wFXdxRq9Nl8PtYX/CRUniY72xdzXRyIqL3NBFX2YE05
+         X7Fr31TeC9wsGIOz8kcnXi2Dmz2K7Y7mMR+xfLM1Dsg5LC9t1R19fhB2CqXrWUzQFQ9i
+         kTSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679966978; x=1682558978;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Jdx37rOwHmakcXY70yxAvz0QRyJnQXhL1Wo5n+Z6Sk=;
+        b=Kges7PPiKSWP2DlHg/CHQAzMZd6gK+pxl4Z9qT4tQXkB5oN3ev8iLpPvj56vi4Ki6l
+         nzDJ/R/90bH6fYUvtnixJ2XkqhFSi174U5cSrbMad4cN6SUfTLRNsdBb7irOXOMOXf7m
+         tbn5zMg0jQQ6XzkaYDhCENHq/k06/qkVHqVBWBIAAQx2P9V8Du8RZK1CeiADF6H7z6jP
+         UJ+JGG9bKcbhc6KVgbe/ojRA+AcmMon0Bs6Jpo83tSPiwGy0Oc6WFTQY0ZMrwUBWIcm7
+         xGGqTyFlJb40Wpu++NJZkzRhaKDWwPs3dZY80jwdukDlwYmFVttpMsKQAyUBFN3n64GC
+         WFDA==
+X-Gm-Message-State: AAQBX9eZnzBk8qRUUH+m3hcaPDS5JI5di9kfUKupVIRZSJN9yPoMlC7T
+        MEc6YTISgL7f5ckRPhNUiUy5Dw==
+X-Google-Smtp-Source: AKy350YIXADcYKeGIQ+BYmeFKH3PssLjNKUaV/pDjDUzERdme6BuU5QYKfJDUlR2HCie59O54ufOqw==
+X-Received: by 2002:a17:903:788:b0:1a1:bf37:7c2e with SMTP id kn8-20020a170903078800b001a1bf377c2emr11609653plb.4.1679966978475;
+        Mon, 27 Mar 2023 18:29:38 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id h20-20020a170902f7d400b001a0763fa8d6sm19820117plw.98.2023.03.27.18.29.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 18:29:38 -0700 (PDT)
+Message-ID: <11651593-79d3-b21a-6441-63e1de5b39aa@kernel.dk>
+Date:   Mon, 27 Mar 2023 19:29:36 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v8 4/6] dt-bindings: net: Add support StarFive dwmac
+Subject: Re: [PATCH V4 00/17] io_uring/ublk: add IORING_OP_FUSED_CMD
 Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        Tommaso Merciai <tomm.merciai@gmail.com>
-References: <20230324022819.2324-1-samin.guo@starfivetech.com>
- <20230324022819.2324-5-samin.guo@starfivetech.com>
- <20230324192419.758388e4@kernel.org>
- <b20de6ba-3087-2214-eea2-bdd111d9dcbc@starfivetech.com>
- <20230327173802.0ceb89df@kernel.org>
-From:   Guo Samin <samin.guo@starfivetech.com>
-In-Reply-To: <20230327173802.0ceb89df@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Ming Lei <ming.lei@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     io-uring@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Bernd Schubert <bschubert@ddn.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>
+References: <20230324135808.855245-1-ming.lei@redhat.com>
+ <642236912a229_29cc2942c@dwillia2-xfh.jf.intel.com.notmuch>
+ <ZCJABlFshb0UmTMv@ovpn-8-20.pek2.redhat.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ZCJABlFshb0UmTMv@ovpn-8-20.pek2.redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Re: [PATCH v8 4/6] dt-bindings: net: Add support StarFive dwmac
-From: Jakub Kicinski <kuba@kernel.org>
-to: Guo Samin <samin.guo@starfivetech.com>
-data: 2023/3/28
-
-> On Mon, 27 Mar 2023 09:53:22 +0800 Guo Samin wrote:
->> Thanks,  I will resent with [PATCH net-next v9].
->> My series of patches will depend on Hal's minimal system[1] and william's syscon patch[2], and this context comes from their patch.
->>
->> [1]: https://patchwork.kernel.org/project/linux-riscv/cover/20230320103750.60295-1-hal.feng@starfivetech.com
->> [2]: https://patchwork.kernel.org/project/linux-riscv/cover/20230315055813.94740-1-william.qiu@starfivetech.com
->>
->> Do I need to remove their context?
+On 3/27/23 7:16 PM, Ming Lei wrote:
+> Hi Dan,
 > 
-> If the conflict is just on MAINTAINERS it should be safe to ignore.
-> Resend your patches on top of net-next as if their patches didn't
-> exist. Stephen/Linus will have not trouble resolving the conflict.
+> On Mon, Mar 27, 2023 at 05:36:33PM -0700, Dan Williams wrote:
+>> Ming Lei wrote:
+>>> Hello Jens,
+>>>
+>>> Add IORING_OP_FUSED_CMD, it is one special URING_CMD, which has to
+>>> be SQE128. The 1st SQE(master) is one 64byte URING_CMD, and the 2nd
+>>> 64byte SQE(slave) is another normal 64byte OP. For any OP which needs
+>>> to support slave OP, io_issue_defs[op].fused_slave needs to be set as 1,
+>>> and its ->issue() can retrieve/import buffer from master request's
+>>> fused_cmd_kbuf. The slave OP is actually submitted from kernel, part of
+>>> this idea is from Xiaoguang's ublk ebpf patchset, but this patchset
+>>> submits slave OP just like normal OP issued from userspace, that said,
+>>> SQE order is kept, and batching handling is done too.
+>>
+>> Hi Ming,
+>>
+>> io_uring and ublk are starting to be more on my radar these days. I
+>> wanted to take a look at this series, but could not get past the
+>> distracting "master"/"slave" terminology in this lead-in paragraph let
+>> alone start looking at patches.
+>>
+>> Frankly, the description sounds more like "head"/"tail", or even
+>> "fuse0"/"fuse1" because, for example, who is to say you might not have
+> 
+> The term "master/slave" is from patches.
+> 
+> The master command not only provides buffer for slave request, but also requires
+> slave request for serving master command, and master command is always completed
+> after all slave request are done.
+> 
+> That is why it is named as master/slave. Actually Jens raised the similar concern
+> and I hate the name too, but it is always hard to figure out perfect name, or
+> any other name for reflecting the relation? (head/tail, fuse0/1 can't
+> do that, IMO)
 
-I see, I'll send net-next as you suggest.
+Indeed. What about primary/secondary? And it'd be quite possible to have
+multiple secondaries too.
 
-Best regards,
-Samin
+-- 
+Jens Axboe
+
+
