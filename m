@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB18B6CC3F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0246CC3E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233709AbjC1O6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S233653AbjC1O6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233702AbjC1O6Y (ORCPT
+        with ESMTP id S233632AbjC1O6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:58:24 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC4B6A54
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:57:57 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so15375404pjp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:57:57 -0700 (PDT)
+        Tue, 28 Mar 2023 10:58:02 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A015E1A1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:58:00 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso15358963pjb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:58:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680015477;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JKgdRUirgIZoU7+JyVOh+FcbHYUvKjPRVe7MS66oIFw=;
-        b=U64rvy0fPv5B3bl2GVSa2WjftX+lfIuzgkjwaxrNFtIrB+XsboRO7PFXTQbk1mwVsV
-         FN6Pzz6qfjLHk9sbxl5SSLhjBVRJeg409SHrQXfxHdvwEiPn/EEBtMtQSkTVhJrXX42v
-         zjU4KHit5sr8z2482ceOgCcDuI79Gupf681GcQ14KPG4ueLDcRAusKZ97ntmP8YS2uA4
-         JvUfvKJk3+5iZsFxJVlL2WY/wtvmN4Q4LYfc3qAyAGDTViRjQgOtVSLAwaHGgty/KUQO
-         Zi+ohbIa49gVpGmlp7KYceNekMRIH31UNYsivdlNODxViXDeplMjIoqMXtx8YEK+2WYA
-         WIEQ==
+        d=bytedance.com; s=google; t=1680015480;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vOMekqn6pAwuBjuJCTIwhDMskHoRMJ6M6licWqxl8ps=;
+        b=kVjgs28u6ZNksz2pEQtkpS4P2iL7oyh1qLcvOVf/Afxc4nu07gCLFqhc30KY+nG0Z2
+         O46T4piDfw0CifTJue9YTlQLKMkQPF9usnesOs1qpsRQkuyoztQiHfYhgA6YjfrAIoNJ
+         A9HH1J5+lxm9cbIJYTjFFl2Zu0LjM1IHn9J5kM2wiBJNaSdbfHTOrrOopcCEw1aPkdDV
+         XzHzQ0B5XCYJHHatR9RvMWDSSElzbFCBbmjhNKXBv5KT6O9jaY4AbWq/AoELevMfujBc
+         vmMKlzPkWPZ6hH8Pss0I5aZ6ZrrreQwqQqbzyOq7P7bHfUXilV1Oj42VyzOXWTL8mJfC
+         c0Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680015477;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JKgdRUirgIZoU7+JyVOh+FcbHYUvKjPRVe7MS66oIFw=;
-        b=k1L7G8p2mYnq59VivdJQ6n4+StXVu6n4FEmE7yxMTg1FvbCQTJtowtKXCi83p901z2
-         ZgXGLJhhf+GyhvVoQ/TngFtpug+WKuY3IGwiCA+4hc43MMDdb696ogfJFzTkp5UnnQbP
-         SvXxKDOIShHYqTYzH2Z7Nj9YUN0VpoBFFxKLkO1EfAkEZM6AxCr1/rk8FolUYvE1zioG
-         Eg6RLKRaU81qEkFx0Qdemk1r1uIQXY8CPcLXNa+h1GpvTb/LCO+rtlnwsmd/boyabl1F
-         vZajfOh437SJFvT4rF0ZDm1oQWRFOqYY9vf/gY48hbd83YL86FZzL572DiuDIfrc6oMh
-         ilUg==
-X-Gm-Message-State: AAQBX9cdGLk+Ntd0yAYb9Am1RanijgzCHt2Mud0J6CIGmPkl/QdZz98r
-        pFfbU0nbIOEtj4YbN9GEoF4iu/untD5Jkw0zBrLHFw==
-X-Google-Smtp-Source: AKy350Z0gk1JmhHV2YqkSNfo28WpGsA4+RBZHbcWp07wiKZE7+TZEdXt7UeGnkNFOSnlhbvip4WaPw==
-X-Received: by 2002:a17:90b:1e4f:b0:23f:4dfd:4fc1 with SMTP id pi15-20020a17090b1e4f00b0023f4dfd4fc1mr18014809pjb.43.1680015476833;
-        Tue, 28 Mar 2023 07:57:56 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680015480;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vOMekqn6pAwuBjuJCTIwhDMskHoRMJ6M6licWqxl8ps=;
+        b=A3hI7S0lbSnbV7utwufRmmjL8AZzXW5JXxvb4glBIRHbP2NYJmEe+iVbMzrgEkURId
+         C5ZyyP1EuzAOQWGZS6teZodHgXK08UxGZ/e0MIp+1enXAqfLFICUk4VvVDhY5Jskisoh
+         0Kl4i9NKobbUMszfcu53slUN7Gggez2sgVWacp06iQ9ZWVi19FEXNqlMzDP6RzV7tbeB
+         V92PG/09vPmKT3EaHuoHXNciskT4hc09kofpeOGKa5TC3UbFhO9NZ0kI4o7UPDqF19Ai
+         JK9l+T0i29X9+HRBF/Kt7mWxXX6GgUOrvexihkLq0qC+4PC8M+wWqxzHS5LifbmjeLpt
+         m+Eg==
+X-Gm-Message-State: AAQBX9cW2wbuyIdpMEf+2UDCg/952ySbhP2oGusyaFoIaQG1i4qJ2fA2
+        u5BHZhFfezQxkERpJkIj2aX5Qw==
+X-Google-Smtp-Source: AKy350ZkoMnc9lFgTx7UZ27yK8n/Nd0HjOMYPn5BatohM629+pWzLZKRUwbsjHb5c4tl/O2Fui1yRQ==
+X-Received: by 2002:a17:90b:2247:b0:234:384f:79c with SMTP id hk7-20020a17090b224700b00234384f079cmr17592692pjb.33.1680015479854;
+        Tue, 28 Mar 2023 07:57:59 -0700 (PDT)
 Received: from localhost.localdomain ([2409:8a28:e6d:5da0:f469:aa9c:494f:b32f])
-        by smtp.gmail.com with ESMTPSA id nk13-20020a17090b194d00b0023b3179f0fcsm6382250pjb.6.2023.03.28.07.57.54
+        by smtp.gmail.com with ESMTPSA id nk13-20020a17090b194d00b0023b3179f0fcsm6382250pjb.6.2023.03.28.07.57.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 07:57:56 -0700 (PDT)
+        Tue, 28 Mar 2023 07:57:59 -0700 (PDT)
 From:   Chengming Zhou <zhouchengming@bytedance.com>
 To:     paolo.valente@linaro.org, axboe@kernel.dk, tj@kernel.org,
         josef@toxicpanda.com
 Cc:     linux-block@vger.kernel.org, cgroups@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH 1/4] block, bfq: remove BFQ_WEIGHT_LEGACY_DFL
-Date:   Tue, 28 Mar 2023 22:56:58 +0800
-Message-Id: <20230328145701.33699-1-zhouchengming@bytedance.com>
+Subject: [PATCH 2/4] blk-cgroup: delete cpd_bind_fn of blkcg_policy
+Date:   Tue, 28 Mar 2023 22:56:59 +0800
+Message-Id: <20230328145701.33699-2-zhouchengming@bytedance.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20230328145701.33699-1-zhouchengming@bytedance.com>
+References: <20230328145701.33699-1-zhouchengming@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -70,52 +73,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BFQ_WEIGHT_LEGACY_DFL is the same as CGROUP_WEIGHT_DFL, which means
-we don't need cpd_bind_fn() callback to update default weight when
-attached to a hierarchy.
-
-This patch remove BFQ_WEIGHT_LEGACY_DFL and cpd_bind_fn().
+cpd_bind_fn is just used for update default weight when block
+subsys attached to a hierarchy. No any policy need it anymore.
 
 Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 ---
- block/bfq-cgroup.c  | 4 +---
- block/bfq-iosched.h | 1 -
- 2 files changed, 1 insertion(+), 4 deletions(-)
+ block/blk-cgroup.c | 21 ---------------------
+ block/blk-cgroup.h |  1 -
+ 2 files changed, 22 deletions(-)
 
-diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-index 89ffb3aa992c..a2ab5dd58068 100644
---- a/block/bfq-cgroup.c
-+++ b/block/bfq-cgroup.c
-@@ -504,8 +504,7 @@ static void bfq_cpd_init(struct blkcg_policy_data *cpd)
- {
- 	struct bfq_group_data *d = cpd_to_bfqgd(cpd);
- 
--	d->weight = cgroup_subsys_on_dfl(io_cgrp_subsys) ?
--		CGROUP_WEIGHT_DFL : BFQ_WEIGHT_LEGACY_DFL;
-+	d->weight = CGROUP_WEIGHT_DFL;
+diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+index bd50b55bdb61..68b797b3f114 100644
+--- a/block/blk-cgroup.c
++++ b/block/blk-cgroup.c
+@@ -1355,26 +1355,6 @@ void blkcg_exit_disk(struct gendisk *disk)
+ 	blk_throtl_exit(disk);
  }
  
- static void bfq_cpd_free(struct blkcg_policy_data *cpd)
-@@ -1302,7 +1301,6 @@ struct blkcg_policy blkcg_policy_bfq = {
+-static void blkcg_bind(struct cgroup_subsys_state *root_css)
+-{
+-	int i;
+-
+-	mutex_lock(&blkcg_pol_mutex);
+-
+-	for (i = 0; i < BLKCG_MAX_POLS; i++) {
+-		struct blkcg_policy *pol = blkcg_policy[i];
+-		struct blkcg *blkcg;
+-
+-		if (!pol || !pol->cpd_bind_fn)
+-			continue;
+-
+-		list_for_each_entry(blkcg, &all_blkcgs, all_blkcgs_node)
+-			if (blkcg->cpd[pol->plid])
+-				pol->cpd_bind_fn(blkcg->cpd[pol->plid]);
+-	}
+-	mutex_unlock(&blkcg_pol_mutex);
+-}
+-
+ static void blkcg_exit(struct task_struct *tsk)
+ {
+ 	if (tsk->throttle_disk)
+@@ -1388,7 +1368,6 @@ struct cgroup_subsys io_cgrp_subsys = {
+ 	.css_offline = blkcg_css_offline,
+ 	.css_free = blkcg_css_free,
+ 	.css_rstat_flush = blkcg_rstat_flush,
+-	.bind = blkcg_bind,
+ 	.dfl_cftypes = blkcg_files,
+ 	.legacy_cftypes = blkcg_legacy_files,
+ 	.legacy_name = "blkio",
+diff --git a/block/blk-cgroup.h b/block/blk-cgroup.h
+index 9c5078755e5e..26ce62663e27 100644
+--- a/block/blk-cgroup.h
++++ b/block/blk-cgroup.h
+@@ -175,7 +175,6 @@ struct blkcg_policy {
+ 	blkcg_pol_alloc_cpd_fn		*cpd_alloc_fn;
+ 	blkcg_pol_init_cpd_fn		*cpd_init_fn;
+ 	blkcg_pol_free_cpd_fn		*cpd_free_fn;
+-	blkcg_pol_bind_cpd_fn		*cpd_bind_fn;
  
- 	.cpd_alloc_fn		= bfq_cpd_alloc,
- 	.cpd_init_fn		= bfq_cpd_init,
--	.cpd_bind_fn	        = bfq_cpd_init,
- 	.cpd_free_fn		= bfq_cpd_free,
- 
- 	.pd_alloc_fn		= bfq_pd_alloc,
-diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-index 69aaee52285a..467e8cfc41a2 100644
---- a/block/bfq-iosched.h
-+++ b/block/bfq-iosched.h
-@@ -20,7 +20,6 @@
- 
- #define BFQ_DEFAULT_QUEUE_IOPRIO	4
- 
--#define BFQ_WEIGHT_LEGACY_DFL	100
- #define BFQ_DEFAULT_GRP_IOPRIO	0
- #define BFQ_DEFAULT_GRP_CLASS	IOPRIO_CLASS_BE
- 
+ 	blkcg_pol_alloc_pd_fn		*pd_alloc_fn;
+ 	blkcg_pol_init_pd_fn		*pd_init_fn;
 -- 
 2.39.2
 
