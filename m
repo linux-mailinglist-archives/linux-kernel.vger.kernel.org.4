@@ -2,106 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307A86CC111
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF046CC117
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbjC1NfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
+        id S233183AbjC1NgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232867AbjC1NfV (ORCPT
+        with ESMTP id S232776AbjC1NgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:35:21 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D938CA19;
-        Tue, 28 Mar 2023 06:34:41 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 032DA1BF20A;
-        Tue, 28 Mar 2023 13:34:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680010471;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bixo3EguG8ry3BhHfrwgjJLk/bpjG+PfEZUK6cyM/PQ=;
-        b=K0PnbLtSisL5Nl2aFIXgSep1EByLG/r1ECQrxS6lrEkLyiB6b3Bh6OheucZ4dowZy56w9e
-        njCF9/6NJ5Jwd/n95AFBmAjMTCtH3uGy7WJnEucanXEvQQLWQsqOGRm7jMWiPUhOFM1B90
-        QlZ5LKsKaiIuT6KYktriqV7MN9kio4/qVWnbfEOH0eFJ70Nuv9eMCKdPPyCplLINI+6vy3
-        xpi5erUfIjaoRcpYa/qak1mmgDW9CWQRQsQZQT7NUWyUP8l5sxf39akSTuuwVyeImtSG9F
-        Kl4IRLDQkY0/uou7XqMUUS3AbxSeTNJystmt39nr6H9rVIPK/DslL96dTHU4LA==
-Date:   Tue, 28 Mar 2023 15:34:29 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        jpanis@baylibre.com, jneanne@baylibre.com, sterzik@ti.com,
-        u-kumar1@ti.com
-Subject: Re: [PATCH v2 1/3] rtc: tps6594: add driver for TPS6594 PMIC RTC
-Message-ID: <20230328133429ff45c492@mail.local>
-References: <20230328091448.648452-1-eblanc@baylibre.com>
- <20230328091448.648452-2-eblanc@baylibre.com>
- <202303280929448e41808d@mail.local>
- <CRI1AQ7OIF6F.2G26C7VQKL5P0@burritosblues>
+        Tue, 28 Mar 2023 09:36:10 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB072713;
+        Tue, 28 Mar 2023 06:35:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A4483CE1D0B;
+        Tue, 28 Mar 2023 13:35:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC6ACC4339C;
+        Tue, 28 Mar 2023 13:35:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680010516;
+        bh=k7B50eOUaIqO0y0tx+624NKxyiYI62MTUuFy5J3oNR4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oFgEPrvuCVNG1w1Ymg3p8HqRstdy/Y66hPoy0MHI/dmhNuf2RvaqVn+3NrixP7Ho5
+         wanGMkr3pqtcjBSM0BbqOGPz7UrGCyraevUnYbCTOsx3V/w7KZrYvJ1GMM+b8A3LSM
+         giAdwHthr2jMeZ8WwdDR3JV4li1FrgHrk8ig8mPlJGYOyYpOnTMOBJln+te1FDqKia
+         OnlvRm4a8cCH3t6rOEFlgTdAGn4gayvZFaeQlf1A+Bt/QelvyxQR2ms0hJ6fExA9O3
+         32OZRgsO0wsTW4qDa0zoBj4guHe3cS+JVod+csfJMeWlAFFAj83bvmaujfjoCY+sRl
+         APO0yNfRO82yA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ph9U1-0008Se-5W; Tue, 28 Mar 2023 15:35:29 +0200
+Date:   Tue, 28 Mar 2023 15:35:29 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
+        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 5/5] usb: dwc3: qcom: Allow runtime PM
+Message-ID: <ZCLtITAsPiCnmndQ@hovoldconsulting.com>
+References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
+ <20230325165217.31069-6-manivannan.sadhasivam@linaro.org>
+ <ZCK3fGkgowvAd6Dw@hovoldconsulting.com>
+ <20230328100501.GD5695@thinkpad>
+ <ZCLbCJi80AKyVgnq@hovoldconsulting.com>
+ <20230328125705.GG5695@thinkpad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CRI1AQ7OIF6F.2G26C7VQKL5P0@burritosblues>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230328125705.GG5695@thinkpad>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 15:01:05+0200, Esteban Blanc wrote:
-> On Tue Mar 28, 2023 at 11:29 AM CEST, Alexandre Belloni wrote:
-> > Hello,
-> >
-> > On 28/03/2023 11:14:46+0200, Esteban Blanc wrote:
-> > > +	/* Start rtc */
-> > > +	ret = regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> > > +			      TPS6594_BIT_STOP_RTC);
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +
-> > > +	mdelay(100);
-> > > +
-> > > +	/*
-> > > +	 * RTC should be running now. Check if this is the case.
-> > > +	 * If not it might be a missing oscillator.
-> > > +	 */
-> > > +	ret = regmap_test_bits(tps->regmap, TPS6594_REG_RTC_STATUS,
-> > > +			       TPS6594_BIT_RUN);
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +	if (ret == 0)
-> > > +		return -ENODEV;
-> > > +
-> > > +	/* Stop RTC until first call to `tps6594_rtc_set_time */
-> > > +	ret = regmap_clear_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> > > +				TPS6594_BIT_STOP_RTC);
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +
-> >
-> > This whole block must not be executed when the RTC is already running,
-> > else, you are stopping a perfectly running RTC.
+On Tue, Mar 28, 2023 at 06:27:05PM +0530, Manivannan Sadhasivam wrote:
+> On Tue, Mar 28, 2023 at 02:18:16PM +0200, Johan Hovold wrote:
+
+> > > > > @@ -948,6 +948,8 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
+> > > > >  	struct device *dev = &pdev->dev;
+> > > > >  	int i;
+> > > > >  
+> > > > > +	pm_runtime_get_sync(dev);
+> > > > 
+> > > > This call needs to be balanced. But this is a fix for a bug in the
+> > > > current implementation that should go in a separate patch.
+> > > 
+> > > Ok. For balancing I could add pm_runtime_put_noidle() before pm_runtime_disable.
+> > 
+> > You should do it after disabling runtime pm.
 > 
-> I'm not sure to get your point. You mean that during probe, the driver
-> might encounter an RTC device that is already running with a correct
-> timestamp? How would this be possible? A previous bootstage or the
-> driver was removed then re-inserted again?
-> 
+> May I know why?
 
-The whole point of having an RTC is that the time tracking survives a
-reboot so yes, I would expect the RTC to have a valid timestamp at probe
-time.
+The usage counter should be balanced after disabling runtime PM so that
+there is no window where you could get a racing suspend request.
 
+> > > > > +
+> > > > >  	device_remove_software_node(&qcom->dwc3->dev);
+> > > > >  	of_platform_depopulate(dev);
+> > > > >  
+> > > > > @@ -960,7 +962,6 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
+> > > > >  	dwc3_qcom_interconnect_exit(qcom);
+> > > > >  	reset_control_assert(qcom->resets);
+> > > > >  
+> > > > > -	pm_runtime_allow(dev);
+> > > > >  	pm_runtime_disable(dev);
+> > > > >  
+> > > > >  	return 0;
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Johan
