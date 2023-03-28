@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FED6CB888
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FE36CB879
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 09:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbjC1HsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 03:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
+        id S232132AbjC1HqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 03:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbjC1Hr7 (ORCPT
+        with ESMTP id S230365AbjC1HqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 03:47:59 -0400
-Received: from smtpbg153.qq.com (smtpbg153.qq.com [13.245.218.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E15422A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 00:47:47 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1679989626tk9po50m
-Received: from localhost.localdomain ( [113.57.152.160])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 28 Mar 2023 15:47:05 +0800 (CST)
-X-QQ-SSF: 01400000002000C0U000B00A0000000
-X-QQ-FEAT: TLc+rbMvNaE+nE3SnZ+3+7es3kKdIQBtKVQX21T6pNfaatXG4vTua8qg1dTZX
-        K/P7NUDGKVVASzpQJ5/HcjUuyJ1VOI+1xI+wbND0fARl0Q2DbYVCWxGc9F6Au+rffDiZ0h/
-        6imfCFSjCGpRqXhd9z7XZJ3Ov+WtTG6vq0O2W7z6MwAz/R3gGhHk3ocVgC0uiAOZPzhZOq9
-        JWgZ1ZAI9Nt8Fq2TGwHh8xv/l4X8BCkzo06zJOoKBP2p3BV9uiR1m1wYc0FNd4ysNAn+j46
-        +GgPEbfqYZ6IJLusGSLOsHzQ9Ml0TalleSE930rHywEVYQ8rg+B00rtQXHkvTpkj4sn5sY5
-        5oC7tVxu1lb54tquG4fjqHQ/G8WX+uDCj60ewNWWnGZlrBhBzEiegWj3JsDUQ==
-X-QQ-GoodBg: 2
-X-BIZMAIL-ID: 6170109501948158026
-From:   huangwenhui <huangwenhuia@uniontech.com>
-To:     tiwai@suse.com, perex@perex.cz
-Cc:     jeremy.szu@canonical.com, hui.wang@canonical.com,
-        wse@tuxedocomputers.com, cam@neo-zeon.de, kailang@realtek.com,
-        tanureal@opensource.cirrus.com, sami@loone.fi,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        huangwenhui <huangwenhuia@uniontech.com>
-Subject: [PATCH] ALSA: hda/realtek: Add quirk for Lenovo ZhaoYang CF4620Z
-Date:   Tue, 28 Mar 2023 15:46:44 +0800
-Message-Id: <20230328074644.30142-1-huangwenhuia@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Tue, 28 Mar 2023 03:46:14 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91064183;
+        Tue, 28 Mar 2023 00:46:12 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6BAB31C000A;
+        Tue, 28 Mar 2023 07:46:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1679989571;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gnINcze37S33vHMBmE2XZI97D/oQO140BrPywcEV24k=;
+        b=BkCbJ6RjXwa+a5i7lfZaMQmFRtc8bs+T98Pf/4Q+M8gjSSQbFjDiVoqLswSPfLqAUyUT0T
+        KHlwzE49zoniebxXsGLDqnOQaSfZG/RKvRkmZvMJ5s7/3RcWpMXVLiHI/kMawrA9SL4wCF
+        K+SiY95jWsEWf7CFRp2bWfGNema90M5Aq3/dX2EqokDIuIiRrF2UkjcLxDFcy43fh9BJvI
+        /ia4+IhA7wmw03NxI+rl5P/SaBZ2NV1ddNv3RHoSf3PAnVkKVQo4ZRZhfFYpSEmw6kr4EZ
+        LNTkVBBjLUSYtQvj2CRc/z9PFM9Fs3lhywdIPALKRnUQZvfnbLWzry7caINNoQ==
+Date:   Tue, 28 Mar 2023 09:46:48 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] clk: add missing of_node_put() in "assigned-clocks"
+ property parsing
+Message-ID: <20230328094648.51928f2f@fixe.home>
+In-Reply-To: <9832bfd49eb83257a6a62620023773c1.sboyd@kernel.org>
+References: <20230131083227.10990-1-clement.leger@bootlin.com>
+        <9832bfd49eb83257a6a62620023773c1.sboyd@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix headset microphone detection on Lenovo ZhaoYang CF4620Z.
+Le Tue, 14 Mar 2023 17:44:35 -0700,
+Stephen Boyd <sboyd@kernel.org> a =C3=A9crit :
 
-Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
-Change-Id: I89d3f4d1d18193418f74d0095b0e4daaf24c839f
----
- sound/pci/hda/patch_realtek.c | 1 +
- 1 file changed, 1 insertion(+)
+> Quoting Cl=C3=A9ment L=C3=A9ger (2023-01-31 00:32:27)
+> > When returning from of_parse_phandle_with_args(), the np member of the
+> > of_phandle_args structure should be put after usage. Add missing
+> > of_node_put() calls in both __set_clk_parents() and __set_clk_rates().
+> >=20
+> > Fixes: 86be408bfbd8 ("clk: Support for clock parents and rates assigned=
+ from device tree")
+> > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
+> > --- =20
+>=20
+> Does this series from a year ago help[1]?
+>=20
+> [1] https://lore.kernel.org/all/20220623121857.886-1-nuno.sa@analog.com/
+>=20
+> Nobody reviewed it, but if you can then I can probably apply it.
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index e8b7f6bbfc59..a8810231a5b5 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -7137,6 +7137,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x17aa, 0x511f, "Thinkpad", ALC298_FIXUP_TPT470_DOCK),
- 	SND_PCI_QUIRK(0x17aa, 0x3bf8, "Quanta FL1", ALC269_FIXUP_PCM_44K),
- 	SND_PCI_QUIRK(0x17aa, 0x9e54, "LENOVO NB", ALC269_FIXUP_LENOVO_EAPD),
-+	SND_PCI_QUIRK(0x17aa, 0x9e56, "Lenovo ZhaoYang CF4620Z", ALC286_FIXUP_SONY_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x19e5, 0x3204, "Huawei MBXP", ALC256_FIXUP_HUAWEI_MBXP_PINS),
- 	SND_PCI_QUIRK(0x19e5, 0x320f, "Huawei WRT-WX9 ", ALC256_FIXUP_ASUS_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1b7d, 0xa831, "Ordissimo EVE2 ", ALC269VB_FIXUP_ORDISSIMO_EVE2), /* Also known as Malata PC-B1303 */
--- 
-2.20.1
+I'm only be able to review the first patch of the serie which
+is equivalent to what I did but it mixes refactoring and fixes.
 
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com
