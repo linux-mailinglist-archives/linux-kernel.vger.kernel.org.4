@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2ED36CCE4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 468FB6CCE4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjC1X4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 19:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
+        id S229692AbjC1X4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 19:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjC1X42 (ORCPT
+        with ESMTP id S229738AbjC1X4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 19:56:28 -0400
+        Tue, 28 Mar 2023 19:56:46 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A15B30D8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:56:11 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id j11-20020a25230b000000b00b6871c296bdso13510406ybj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:56:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91723C33
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:56:24 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id g5-20020a25a485000000b009419f64f6afso13624633ybi.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 16:56:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680047769;
+        d=google.com; s=20210112; t=1680047780;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QwhWDPXvx6cfkb5reLksh9jCAury04O7LzcSvRbB8Zs=;
-        b=Ltgu8Ff4auNliuT5UliaEkAuq9i2Tzu+5U2BQzip1AZokzyNRdwHBLrr0A1q1TCteh
-         6HA8rQWn2amyDpZCOcWkijg0aV3wa7oBLO7ki4rM6Xzr9cqFtUVrftkblee0rzPjMb+L
-         wJ4eW8t3SAEsbCXRcXZGpnQH05BULFCsjjs0PkcoeeHAo5P4f+L0tmwiyGtOxdqtUqwk
-         lRhAg5051knYmNhbu0rixPc04ElVILRM6fmL1sequabHkJhfYFow2m9eE4OC/NNGI7D5
-         M1zB/Iu+BE5dCWofkvweIXTenU0zYzPftguEROrDBdX8QE4rvu1TaHyUsk4TFKeXBN50
-         OHyg==
+        bh=csE2VZEcuZtBLgmcXXy647e0uSJ8df6i+003V2C0jUw=;
+        b=Yib8I2uNI+WOJsCh1Q4n8uRnhC1tAuAB8JbPeIlcB5nVB46fTnrkZzX4bjrI7UcS16
+         VfeA/8cQUrhsK7bK0usQaCWRJSdq9N9a6c3rcix8RFrv70wWXoK3EUVPDzyU6IvQIMmB
+         kBTGnjt9VijE3efrsi0D/w/HohhQmU1FbnNKlGXND9/+92cwfNbKh9irTfujj/1fJLoJ
+         xjdEZaRcd9mX1MdQRDRM6WEQZj4tF8vGNcBxmsNyWeg0uzmuvmVFgEUxdjRP8xJaEnl5
+         In8K528yb79Cz7HetuZlunZq+rSQcDcPTxHJ9GpRt+WSRtGDjvlhVlwbDju0A9up2zjT
+         Z/Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680047769;
+        d=1e100.net; s=20210112; t=1680047780;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QwhWDPXvx6cfkb5reLksh9jCAury04O7LzcSvRbB8Zs=;
-        b=amebcJLe8EpVD0kjwtN8NU00psWmBuJSztsC9kRDMFK3hyrtydifbsU9HcaXMmCDkS
-         eg2U6vP+CDDgwLYSTShKmRohxz0TZLq0f0YvX8562/p8eEDt6M6ELBE475+3M+/eldUY
-         bv34ebymglSAGVooVejEFaWXxalbBD9NQykn5v86pXl167/5s/Hwwuo+kh4JgjMDlWHj
-         KzQ7iPRZDcrDADRpOgJ5r+IvC9qGif9H2D7dbZonG8MawvNCsh6AGfjKwtUA9KH+g4+z
-         9mJvZZDuVPVNCcQdGUs0XwyeiPkJKP/Ff38LX6DaCyfeWnyZwm+DjwOy1wCE6khcYjlK
-         mTvw==
-X-Gm-Message-State: AAQBX9ebCnOQrYCdnx5+AXY+PgileqyUaxJCYNnhu5TeG1SLL2iEPbgs
-        w54hm0mgdA5gAYqN9/ggfIb5PgHe//i0
-X-Google-Smtp-Source: AKy350bPHWqR7CBnjrbpMPu6sWr+4djUlu6CbJ9r9CJVXCNAz4PB6GrJeq1BsxI9gq7g43uy2Tw/VjdqKiJY
+        bh=csE2VZEcuZtBLgmcXXy647e0uSJ8df6i+003V2C0jUw=;
+        b=pkfM53GoPQlGNl/SrSPLM+vR8SrG0s/NPu1esrJDkd4QyWVr6vIlLwqFFirAPuyVp8
+         wiFrqV9qPSLuqvUTXbP6WF9AA+Abfg21a1I/6jnrSrQzg3rVTZBiS2H3pB0N3BeJmLYN
+         swfqVW4ybzvCB3S8P38FDMa+WgAQ3KuLHf6ZkzPQnqzZz8aocI3cb8AOU1dral1sTZvr
+         uxxsqcIAdcXdNoHZeVsgfypwtJKVH8RXVaxE2lvDEy4OjjajYmSUEJHAYNWFlDa/iFMe
+         r8IvRvJW3P5t8tYd+B/Ht9MhU5dGoSiN2LiPb7KqioPE5vFTjy7Lm9rlH3Fo40CAwCa2
+         7Lcw==
+X-Gm-Message-State: AAQBX9cSyGdoPIDlQdvBQzWE5I955BIa8clE5M238snLt/AEZl+oH5Ci
+        jxJtebuiCSHZL+NPdxNMg8HF1GU5OaT3
+X-Google-Smtp-Source: AKy350aL9CY1E8m1J8TjEURID2oBqh5mz3wMQUM24lLONZ4M9DkOnMmP+IHYNgSHJ0dcKtyi2L23qYzmmiUX
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:6519:f0d3:9540:5c31])
- (user=irogers job=sendgmr) by 2002:a05:6902:1003:b0:b1d:5061:98e3 with SMTP
- id w3-20020a056902100300b00b1d506198e3mr11705976ybt.6.1680047769358; Tue, 28
- Mar 2023 16:56:09 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 16:55:38 -0700
+ (user=irogers job=sendgmr) by 2002:a25:db91:0:b0:b75:8ac3:d5d9 with SMTP id
+ g139-20020a25db91000000b00b758ac3d5d9mr10989074ybf.3.1680047779895; Tue, 28
+ Mar 2023 16:56:19 -0700 (PDT)
+Date:   Tue, 28 Mar 2023 16:55:39 -0700
 In-Reply-To: <20230328235543.1082207-1-irogers@google.com>
-Message-Id: <20230328235543.1082207-2-irogers@google.com>
+Message-Id: <20230328235543.1082207-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20230328235543.1082207-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v1 1/6] perf annotate: Delete session for debug builds
+Subject: [PATCH v1 2/6] perf report: Additional config warnings
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -84,42 +84,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the debug build indicator as the guide to free the session. This
-implements a behavior described in a comment, which is consequentially
-removed.
+If the default_sort_order isn't correctly strdup-ed warn and return an
+error. Debug warn if no option is matched.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-annotate.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ tools/perf/builtin-report.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-index 4750fac7bf93..98d1b6379230 100644
---- a/tools/perf/builtin-annotate.c
-+++ b/tools/perf/builtin-annotate.c
-@@ -692,16 +692,12 @@ int cmd_annotate(int argc, const char **argv)
+diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+index 6400615b5e98..500f9d8902e7 100644
+--- a/tools/perf/builtin-report.c
++++ b/tools/perf/builtin-report.c
+@@ -143,6 +143,10 @@ static int report__config(const char *var, const char *value, void *cb)
  
- out_delete:
- 	/*
--	 * Speed up the exit process, for large files this can
--	 * take quite a while.
--	 *
--	 * XXX Enable this when using valgrind or if we ever
--	 * librarize this command.
--	 *
--	 * Also experiment with obstacks to see how much speed
--	 * up we'll get here.
--	 *
--	 * perf_session__delete(session);
-+	 * Speed up the exit process by only deleting for debug builds. For
-+	 * large files this can save time.
- 	 */
-+#ifndef NDEBUG
-+	perf_session__delete(annotate.session);
-+#endif
-+
- 	return ret;
+ 	if (!strcmp(var, "report.sort_order")) {
+ 		default_sort_order = strdup(value);
++		if (!default_sort_order) {
++			pr_err("Not enough memory for report.sort_order\n");
++			return -1;
++		}
+ 		return 0;
+ 	}
+ 
+@@ -151,6 +155,7 @@ static int report__config(const char *var, const char *value, void *cb)
+ 		return 0;
+ 	}
+ 
++	pr_debug("%s variable unknown, ignoring...", var);
+ 	return 0;
  }
+ 
 -- 
 2.40.0.348.gf938b09366-goog
 
