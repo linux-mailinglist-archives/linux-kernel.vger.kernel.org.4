@@ -2,193 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610F06CC64E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 120756CC636
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 17:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbjC1P3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 11:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
+        id S233913AbjC1P1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 11:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233163AbjC1P3V (ORCPT
+        with ESMTP id S233258AbjC1P0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 11:29:21 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82201AD01;
-        Tue, 28 Mar 2023 08:28:06 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:33662.1507456959
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id ED66E10019C;
-        Tue, 28 Mar 2023 23:22:50 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-ljp89 with ESMTP id a7f154ba0091421fba88d50f9f096b13 for lkp@intel.com;
-        Tue, 28 Mar 2023 23:22:52 CST
-X-Transaction-ID: a7f154ba0091421fba88d50f9f096b13
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <027cf6d5-6de2-3424-7a81-a43ab689c3d4@189.cn>
-Date:   Tue, 28 Mar 2023 23:22:50 +0800
+        Tue, 28 Mar 2023 11:26:47 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5731040A;
+        Tue, 28 Mar 2023 08:25:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4AE63CE1D9E;
+        Tue, 28 Mar 2023 15:24:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3287DC433EF;
+        Tue, 28 Mar 2023 15:24:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680017092;
+        bh=qGf+OC44axRVj+XT/Z4tuG6YvUk8bQLbHyJdumlNYFU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ATpCBChtUg6pUL3KFBojFCXqzNljH3Fn4vl4Q2jOPQYEVtHOWOCiboqBBQXjGyR4v
+         xcWzFZ1/IzZ9GiAW80DEDvpIj304SUmm09iKmBKB+HPYMKT4ZhSC1xo/VCVvnj+E7m
+         CyjnE1SwPOBJQdABuBrgOMXU1Qfc7WqwfykRZsjhIl/RFThLN6pi3vjulQZIQxiIip
+         C6rGDRMAFxVV6S1mTJGgR9aKNxkumCUbE5+Ie6tG37TCkshzzrGGTfVdDT4YDQzGVX
+         Vyzmg8Kh2NAMSX//QJ5eLaI3xW6uBZNiWHYpV4zqHUYUHRXvjgtpQwIPtuV1qFJf1s
+         1z4x4WL9W445A==
+Date:   Tue, 28 Mar 2023 16:24:44 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Sahin, Okan" <Okan.Sahin@analog.com>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v6 5/5]  mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
+ Support
+Message-ID: <163f2c26-2cf7-4109-bf1f-efddc95da0d5@sirena.org.uk>
+References: <20230307112835.81886-1-okan.sahin@analog.com>
+ <20230307112835.81886-6-okan.sahin@analog.com>
+ <20230315175223.GI9667@google.com>
+ <20230315175257.GJ9667@google.com>
+ <MN2PR03MB5168249900206433A082875EE7889@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <ZCLi6MB/aHIf4lMr@smile.fi.intel.com>
+ <cdd53e29ca3d8dbfdfa1a2520935e2bf9418313d.camel@gmail.com>
+ <d2bed74b-9eb9-45af-8f45-ad2c2889024a@sirena.org.uk>
+ <fc07de9af0b691fbd3a5915c8293f0c7ad4c4e06.camel@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v8 2/2] drm: add kms driver for loongson display
- controller
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Sui Jingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Li Yi <liyi@loongson.cn>
-References: <20230320100131.1277034-3-15330273260@189.cn>
- <202303281754.jWI20j2C-lkp@intel.com>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <202303281754.jWI20j2C-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cU/jzET003kbiyJi"
+Content-Disposition: inline
+In-Reply-To: <fc07de9af0b691fbd3a5915c8293f0c7ad4c4e06.camel@gmail.com>
+X-Cookie: Oh, wow!  Look at the moon!
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI,
 
-On 2023/3/28 17:27, kernel test robot wrote:
-> Hi Sui,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on drm-misc/drm-misc-next]
-> [also build test WARNING on linus/master v6.3-rc4 next-20230328]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230320-180408
-> base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-> patch link:    https://lore.kernel.org/r/20230320100131.1277034-3-15330273260%40189.cn
-> patch subject: [PATCH v8 2/2] drm: add kms driver for loongson display controller
-> config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230328/202303281754.jWI20j2C-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/80b4115f44993f4ebf47b1cb9e8f02953575b977
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230320-180408
->          git checkout 80b4115f44993f4ebf47b1cb9e8f02953575b977
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/accel/ drivers/gpu/drm/loongson/ drivers/iio/light/ drivers/media/pci/intel/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303281754.jWI20j2C-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->>> drivers/gpu/drm/loongson/lsdc_drv.c:232:11: warning: variable 'gpu' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
->             else if (descp->chip == CHIP_LS7A2000)
->                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     drivers/gpu/drm/loongson/lsdc_drv.c:235:7: note: uninitialized use occurs here
->             if (!gpu) {
->                  ^~~
->     drivers/gpu/drm/loongson/lsdc_drv.c:232:7: note: remove the 'if' if its condition is always true
->             else if (descp->chip == CHIP_LS7A2000)
->                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     drivers/gpu/drm/loongson/lsdc_drv.c:217:21: note: initialize the variable 'gpu' to silence this warning
->             struct pci_dev *gpu;
->                                ^
->                                 = NULL
->     1 warning generated.
-> --
+--cU/jzET003kbiyJi
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In practice,  either  descp->chip == CHIP_LS7A2000 or descp->chip == 
-CHIP_LS7A1000 will be happened at runtime.
+On Tue, Mar 28, 2023 at 04:18:30PM +0200, Nuno S=E1 wrote:
+> On Tue, 2023-03-28 at 14:46 +0100, Mark Brown wrote:
+> > On Tue, Mar 28, 2023 at 03:26:44PM +0200, Nuno S=E1 wrote:
 
-the variable 'gpu' is guaranteed to be initialized when code run at  
-drivers/gpu/drm/loongson/lsdc_drv.c:235
+> > > IIRC, regmap_read() is not really reentrant and it is used in the
+> > > IIO
+> > > driver on the sysfs interface. So, yeah, I think you need the
+> > > regmap
+> > > lock and better just leave the config as is. Yes, the lock is opt-
+> > > out
+> > > so let's not disable it :)
 
-This warnning is almost wrong here.
+> > All the regmap operations are fully thread safe.
 
->>> drivers/gpu/drm/loongson/lsdc_pll.c:188:14: warning: variable 'diff' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
->                                     else if (clock_khz < computed)
->                                              ^~~~~~~~~~~~~~~~~~~~
->     drivers/gpu/drm/loongson/lsdc_pll.c:191:9: note: uninitialized use occurs here
->                                     if (diff < min) {
->                                         ^~~~
->     drivers/gpu/drm/loongson/lsdc_pll.c:188:10: note: remove the 'if' if its condition is always true
->                                     else if (clock_khz < computed)
->                                          ^~~~~~~~~~~~~~~~~~~~~~~~~
->     drivers/gpu/drm/loongson/lsdc_pll.c:177:22: note: initialize the variable 'diff' to silence this warning
->                                     unsigned int diff;
->                                                      ^
->                                                       = 0
->     1 warning generated.
+> Even if 'config->disable_locking' is set? I think that is what's being
+> discussed in here...
 
-Here the robot is also wrong here in practice,
+In that case the caller has to ensure that the regmap is only used in a
+thread safe fashion.
 
-because either  if (clock_khz >= computed) or else if (clock_khz < 
-computed) will be happen.
+--cU/jzET003kbiyJi
+Content-Type: application/pgp-signature; name="signature.asc"
 
-'diff' variable is guaranteed to be initialized.
+-----BEGIN PGP SIGNATURE-----
 
->
-> vim +232 drivers/gpu/drm/loongson/lsdc_drv.c
->
->     212	
->     213	static int lsdc_get_dedicated_vram(struct lsdc_device *ldev,
->     214					   const struct lsdc_desc *descp)
->     215	{
->     216		struct drm_device *ddev = &ldev->base;
->     217		struct pci_dev *gpu;
->     218		resource_size_t base, size;
->     219	
->     220		/*
->     221		 * The GPU and display controller in LS7A1000/LS7A2000 are separated
->     222		 * PCIE devices, they are two devices not one. The DC does not has a
->     223		 * dedicate VRAM bar, because the BIOS engineer choose to assign the
->     224		 * VRAM to the GPU device. Sadly, after years application, this form
->     225		 * as a convention for loongson integrated graphics. Bar 2 of the GPU
->     226		 * device contain the base address and size of the VRAM, both the GPU
->     227		 * and the DC can access the on-board VRAM as long as the DMA address
->     228		 * emitted fall in [base, base + size).
->     229		 */
->     230		if (descp->chip == CHIP_LS7A1000)
->     231			gpu = pci_get_device(PCI_VENDOR_ID_LOONGSON, 0x7A15, NULL);
->   > 232		else if (descp->chip == CHIP_LS7A2000)
->     233			gpu = pci_get_device(PCI_VENDOR_ID_LOONGSON, 0x7A25, NULL);
->     234	
->     235		if (!gpu) {
->     236			drm_warn(ddev, "No GPU device found\n");
->     237			return -ENODEV;
->     238		}
->     239	
->     240		base = pci_resource_start(gpu, 2);
->     241		size = pci_resource_len(gpu, 2);
->     242	
->     243		ldev->vram_base = base;
->     244		ldev->vram_size = size;
->     245	
->     246		drm_info(ddev, "dedicated vram start: 0x%llx, size: %uMB\n",
->     247			 (u64)base, (u32)(size >> 20));
->     248	
->     249		return 0;
->     250	}
->     251	
->
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQjBrsACgkQJNaLcl1U
+h9B/MQf9GFZs2jkpCdNWV9YHg6lazF76/rn3D4icdGkiIzG3k1r5HoAq0JJGNFmA
+0j3maqTeoW+d+v6YX/i6gM6OQ9pY7RDikaRnqeKbKVccDUwYKbbHpPRY7ctWf+uO
+JcVFzACHf8fPGGBK9Qrp1L1llGqXKBU7TVxfI0r9X8QPoh0NmtKqG+/0+P7Sso9Z
+NSZOIlpQ9OStMphPT+5cG4TCa12GVqsNdFHb90eIowzp+mhn1BxGwLx/xi0wXegs
+Gzt7pG8s0om0V1enRMfSWNZQCo/sbKnxGYldP+w5Y17OPGEdaCkk0qUbZk8bAOze
+DH09i76sXgSR4PQ6lGdHGT4gqdZSBw==
+=cY75
+-----END PGP SIGNATURE-----
+
+--cU/jzET003kbiyJi--
