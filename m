@@ -2,52 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8F26CB552
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 06:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A150F6CB568
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 06:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbjC1EJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 00:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
+        id S230095AbjC1E0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 00:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232183AbjC1EJf (ORCPT
+        with ESMTP id S229452AbjC1E0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 00:09:35 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061E4118
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 21:09:33 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32S49HG1005337
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Mar 2023 00:09:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1679976559; bh=xEUgyi4FtJcJgG0kTZg0LTpdeLCMPOiAauE4Hxtwv9s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=cZQq84ou90UYxoi1qbSYS1CWz3QrV9hEXYFHU/F8mhs6PSPbQxfVjTD/sMeqgzmF0
-         Myax1ED508R4PdvFhmCDV6ihOErvFw5OxpJkMU9goXskTJkTFY19zwyFm1rPKjV1Zl
-         ZnLC9sL1Qvjj5BK/c610Q/XU7zJ/V/C+6B+jM6MdCiDWZlaRuJEUZx21YlpVAwzDPj
-         crsm2js7j31HzkIvFTv94KT2SvDYihugP2E1MpLC9r8SjMYchMylh5AX9BZbxT3a8f
-         XgP/oH0TbnIumCT4RtNZOJ0dj/YaiYlEaAz0lzpsWa5oajRg3nOQocrdgHWgmhOHlR
-         zqZhhzza06fog==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 5A14E15C4930; Tue, 28 Mar 2023 00:09:17 -0400 (EDT)
-Date:   Tue, 28 Mar 2023 00:09:17 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: Change in kernel debian packages between -rc2 and -rc3
-Message-ID: <20230328040917.GC108653@mit.edu>
-References: <20230325143122.GA409315@mit.edu>
- <CAK7LNARndpbtzRAW1kEiqyNBmAxdqJKiTquvY9bW08LYTTMiOg@mail.gmail.com>
- <20230326121118.GB323408@mit.edu>
- <CAK7LNARcUSsjzi7UV+rHHaQU1X-XJ0jN0sLAw2m=SypTQTCHKA@mail.gmail.com>
+        Tue, 28 Mar 2023 00:26:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C3A1BF9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 21:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679977526;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mMNSejxnX4U/6qwiydV9BBtn3L7BUvZOYY/Mz3nRvSM=;
+        b=HNi3bbSM49UeVNr5qPhFXRiGH6fanQjOGC/mIvSugREkTzYei0g1jkolACe9P22cv+newc
+        yZwN1e5y7PgmZlbbVSAszA8C7fuGi/aDUWZ0antULQNTMnGCOABosexWOnYU2eYv8oImvi
+        dHf/R7FEF/fjW9irF60BxbQiyKcHwE4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-458-jcZ_8fIZNiqa9W6m_kYecQ-1; Tue, 28 Mar 2023 00:25:20 -0400
+X-MC-Unique: jcZ_8fIZNiqa9W6m_kYecQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 142373C02B7A;
+        Tue, 28 Mar 2023 04:25:20 +0000 (UTC)
+Received: from localhost (ovpn-12-210.pek2.redhat.com [10.72.12.210])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9BF9D1415139;
+        Tue, 28 Mar 2023 04:25:18 +0000 (UTC)
+Date:   Tue, 28 Mar 2023 12:25:14 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86: Disable kexec for TDX guests
+Message-ID: <ZCJsKoKESK+FCQ0a@MiWiFi-R3L-srv>
+References: <20230325160128.21857-1-kirill.shutemov@linux.intel.com>
+ <ebead33b-0594-73df-56ae-f40473ac0ffc@intel.com>
+ <20230325192524.wetlbycbcsxc4plk@box>
+ <b16bcda0-f190-7849-cbbb-412d328c8806@intel.com>
+ <ZCDy+nsjPsi/Lllh@MiWiFi-R3L-srv>
+ <20230327110932.z3wjdgfuay5dd2or@box.shutemov.name>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK7LNARcUSsjzi7UV+rHHaQU1X-XJ0jN0sLAw2m=SypTQTCHKA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <20230327110932.z3wjdgfuay5dd2or@box.shutemov.name>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,110 +71,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 10:35:09PM +0900, Masahiro Yamada wrote:
+On 03/27/23 at 02:09pm, Kirill A. Shutemov wrote:
+> On Mon, Mar 27, 2023 at 09:35:54AM +0800, Baoquan He wrote:
+> > On 03/26/23 at 10:01am, Dave Hansen wrote:
+> > > On 3/25/23 12:25, Kirill A. Shutemov wrote:
+> > > > On Sat, Mar 25, 2023 at 09:25:36AM -0700, Dave Hansen wrote:
+> > > >> On 3/25/23 09:01, Kirill A. Shutemov wrote:
+> > > >>> The last item is tricky. TDX guests use ACPI MADT MPWK to bring up
+> > > >>> secondary CPUs. The mechanism doesn't allow to put a CPU back offline if
+> > > >>> it has woken up.
+> > > >> ...
+> > > >>> +int arch_kexec_load(void)
+> > > >>> +{
+> > > >>> +	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
+> > > >>> +		pr_warn_once("Disable kexec: not yet supported in TDX guest\n");
+> > > >>> +		return -EOPNOTSUPP;
+> > > >>> +	}
+> > > >>> +
+> > > >>> +	return 0;
+> > > >>> +}
+> > > >>
+> > > >> So, let's put all this together:
+> > > >>
+> > > >> 1. TDX implementations use MADT for wakeup exclusively right now (but
+> > > >>    are not necessarily _required_ to do so forever)
+> > > >> 2. MADT doesn't support CPU offlining
+> > > >> 3. kexec() requires offlining
+> > > >>
+> > > >> Thus, current TDX implementations can't support TDX guests.  This
+> > > >> *doesn't* say that TDX will always use the MADT for wakeups.
+> > > >>
+> > > >> Yet, the check you have here is for TDX and *not* for the MADT.
+> > > > 
+> > > > As I described in the commit message there are more than MADT that is
+> > > > required to get kexec in TDX guest.
+> > > 
+> > > I kinda think we should do both.
+> > > 
+> > > Let's make sure that all systems that depend on MADT wakeups can't
+> > > kexec() until the ACPI folks work out what to do there.
+> > > 
+> > > Separately, let's either fix or *mark* the kexec()-incompatible pieces
+> > > that *ARE* specific to TDX.
+> > > 
+> > > >> That seems wrong.
+> > > >>
+> > > >> Let's say SEV or arm64 comes along and uses the MADT for their guests.
+> > > >> They'll add another arch_kexec_load(), with a check for *their* feature.
+> > > >>
+> > > >> This all seems like you should be disabling kexec() the moment the MADT
+> > > >> CPU wakeup is used instead of making it based on TDX.
+> > > > 
+> > > > I guess we can go this path if you are fine with taking CR4.MCE and shared
+> > > > memory reverting patches (they require some rework, but I can get them
+> > > > into shape quickly). After that we can forbid kexec on machines with MADT
+> > > > if nr_cpus > 1.
+> > > 
+> > > This goes back to what I asked before: is anyone actually going to *use*
+> > > a single-processor system that wants to kexec()?  If not, let's not
+> > > waste the time to introduce code that is just going to bitrot.  Just
+> > > mark it broken and move on with life.
+> > 
+> > Now we have two API for kexec: kexec_load and kexec_file_load. They can
+> > be used to do kexec reboot, or crash dumping. For crash dumping, we
+> > usually only use one cpu to do the vmcore dumping. At least on our
+> > Fedora/centos-stream/RHEL, we do like this with kernel parameter
+> > 'nr_cpus=1' added by default. Unless people explicitly remove the
+> > 'nr_cpus=1' restriction or set nr_cpus= to other number to persue
+> > multithread dumping in kdump kernel.
 > 
-> The actual effect is whether you can install
-> multiple kernel packages at the same time or not
-> because the ABI version is a part of the package name.
-> The ABI is nothing more than that for upstream kernel packages.
+> Hm. I'm not sure how to determine if the target kernel wants to use >1
+> CPU. Scanning cmdline looks fragile. And who said the target kernel is
+> Linux.
 
-Well, for me, technically speaking CONFIG_LOCAVERSION *does* specify
-an module ABI.  I have a install-kconfig[1] which is **different**
-from what I might use in other contexts (for example, when building a
-custom kernel for my laptop and desktop).  And in fact, there are two
-flavors, with different kernel configs --- and hence, different and
-incompatible module ABI's.  "xfstests"[2] and "xfstests-perf"[3]
+Ah, I forgot the checking and disabling is done in 1st kernel, it's truly
+not convinent to get 2nd kernel's cmdline. Then disabling kexec on TDX
+guest for the time being looks resonable to me.
 
-[1] https://github.com/tytso/xfstests-bld/blob/master/kernel-build/install-kconfig
-[2] https://github.com/tytso/xfstests-bld/blob/master/kernel-build/kernel-configs/config-6.1
-[3] https://github.com/tytso/xfstests-bld/blob/master/kernel-build/kernel-configs/perf-config-6.1
-
-And since they are different ABI's, and I want to distinguish between
-them in the package name, so I can keep them straight --- and in
-theory, there would be nothing wrong with wanting to have both an
-"xfstests" and "xfstests-perf" installed at the same time, and being
-able to select between the two of them using a bootloader.
-
-Ergo, in my case CONFIG_LOCAVERSION is *part* of the version, and it
-is a **feature*** that package names should include the
-CONFIG_LOCALVERSIONS --- because they are different kernels, with
-different properties!
-
-
-> > In any case, it's an incompatible regression made during rc2 and rc3,
-> > which I think is at the very least, unfortunate.
 > 
-> Your tool was working on a wrong assumption, which nobody promised.
-
-It's still a backwards incompatible change.  And Linus doesn't like
-backwards compatible changes which is noticeable, even if it's
-something which isn't promised in, say, the POSIX spec.  If we change
-kernel behavior, and it's noticeable, it's BAD BAD BAD.  I would claim
-the same is true for kbuild infrastructure, unless there's a really
-good reason.
-
-
-> Kbuild already provides various hooks.
-> You can use CONFIG options and KERNELRELEASE to override uname,
-> and use KDEB_PKGVERSION to override the package version.
-
-KDEB_PKGVERSION is not documented anywhere.  Thank you for telling me
-about it, though.
-
-I'd suggest that perhaps KDEB_PKGVERSION is documented, so there is an
-explicit promise that this interface will be preserved?  I would hate
-for you to later change, and break me, and claim "nobody promised",
-since it's not documented.
-
-And if you really want users to be able to replicate a Debian kernel's
-"module ABI", then I'd **strongly** suggest that you document how they
-are supposed to do that.  After all, Debian and Ubuntu doesn't use the
-kbuild infrastructure; they have their own hugely complicated way of
-generating files.
-
-And oh by the way, I've just looked up Debian's documentation on that,
-and the "ABI name" is not just the kernel version.  So it's not just
-(for example) "2.6.18", but "2.6.18-1-686".   See [2].
-
-[2] https://wiki.debian.org/DebianKernelABIChanges
-
-And if you are going to be including the full git commit id in the
-version, e.g., "6.3.0-rc3-00043-g463f2e46bf7c", it's not going to be
-compatible with the Debian kernel ABI name ***anyway***.  So it's also
-equally broken in terms of hwo Debian does things.
-
-
-> They are enough to continue your broken workflow.
-
-Well, for upstream developers, it's very useful to be able to
-distinguish between kernel configs and this very *much* implicates the
-"module ABI".  So IMHO think my particular use case is not "broken",
-but in fact essential.
-
-There are Very Good Reasons for doing things in this particular way.
-
-      	       	    	    	      - Ted
-
-P.S.  I actually simplified the story a little bit; there are actually
-quite a lot more possible "module ABI's", or "kernel configs" than
-just the two "xfstests" and "xfstests-perf".  These are all valid
-install-kconfig commands:
-
-# This will produce a CONFIG_LOCALVERSION of "xfstests-blktests"
-% install-kconfig --blktests
-
-# This will produce a CONFIG_LOCALVERSION of "xfstests-perf-kasan"
-% install-kconfig --perf --kasan
-
-# This will produce a CONFIG_LOCALVERSION of "xfstests-dept"
-% install-kconfig --dept
-
-# This will produce a CONFIG_LOCALVERSION of "xfstests-debug-lockdep"
-% install-kconfig --debug --lockdep
-
-etc.
-
-These are all different kernel configs, producing different "module
-ABI"'s, and I want to be able to distinguish between them in the
-generated package files!
+> I guess we can park all CPUs, but CPU0 and target kernel will just fail to
+> bring them up which is non-fatal issue (at least for Linux).
+> 
+> I admit that all looks hackish.
+> 
+> -- 
+>   Kiryl Shutsemau / Kirill A. Shutemov
+> 
 
