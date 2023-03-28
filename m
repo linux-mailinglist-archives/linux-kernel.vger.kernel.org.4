@@ -2,214 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0DA6CBA10
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15376CBA17
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbjC1JGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
+        id S232657AbjC1JGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbjC1JF7 (ORCPT
+        with ESMTP id S229611AbjC1JGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:05:59 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49E75FFD;
-        Tue, 28 Mar 2023 02:05:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7D062219C2;
-        Tue, 28 Mar 2023 09:05:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679994335; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=W19ZNXTUmBCwNQocRmCqq2y9UHESHO1aWNxN/I1GB78=;
-        b=MlNlKlZYLM6ewuuC9uBNJIkHk1M+5gQngFAbugPMPRTm9QCRWtc4OVM0SMHAK7GNwu0a6C
-        zkpp+RPGpiC3ITaAkd3F3SdgdTVVGPMJWrLN0FYyAiWy1ZszjOuyLHoTekqc/B+Gjvlucd
-        Oqg+8+LhV9fO6Y6WtQqh3YmG2bsvnBc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679994335;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=W19ZNXTUmBCwNQocRmCqq2y9UHESHO1aWNxN/I1GB78=;
-        b=AAEjZZRXNTN9hk42r0YqoUFTEyGQtUPPHAT3DCF8uz4X12KivRjzE19ULV0g2/BYkvIlf8
-        KglenEAJcPJWsUDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 688311390B;
-        Tue, 28 Mar 2023 09:05:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id uNR2Gd+tImT7OgAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 28 Mar 2023 09:05:35 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id D556BA071C; Tue, 28 Mar 2023 11:05:34 +0200 (CEST)
-Date:   Tue, 28 Mar 2023 11:05:34 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, yukuai3@huawei.com, stable@vger.kernel.org
-Subject: Re: [PATCH v2] ext4: fix race between writepages and remount
-Message-ID: <20230328090534.662l7yxj2e425j7w@quack3>
-References: <20230328034853.2900007-1-libaokun1@huawei.com>
+        Tue, 28 Mar 2023 05:06:13 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0965D618A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:05:48 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id h25so14861722lfv.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:05:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679994346;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=actq2WeTvZHRPO+xuu69UpBHWTSZaC33gGdS9BhQnbU=;
+        b=IE6s1bjdunUtEyXnwUhhDsPmmO976NnrXA1824eDJOu01pEbuVlUxL0p5EZVtp18UM
+         hHcVOpAoC2UfnipTPBNvxtWFeX8Q1gXIRPQGIZ2I0hgQ2s2PhbncBWkHFEFxeOlnL7Un
+         eCGLx1GX1NaCTfHXsSrsroI0zzk93ZlxtoXFJimEJeKSzAZCBkcwAvsWbjO+NIiCkSL5
+         ntV7Doj5wdZnZa83XHyCEm/9oMd79t4LOQAAOsOsMKypwKIP426Hxs2Jr7Cb7AmWd2FZ
+         Z9tN8chUlkUcm3rt5y0MmZ+STHru1JVlxlX4lFM5CCBmaksvYRrk96TltF7HADXH1Che
+         /gwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679994346;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=actq2WeTvZHRPO+xuu69UpBHWTSZaC33gGdS9BhQnbU=;
+        b=LsmloTB0DAOGnL5vgMEcpky2Tfry91vBNdJPDiHnb/QrwC0wcmfBdAqh/HEw//3V/k
+         12WHPbmTXFIsDob8JQt1oIXnK7LjNDhiaxfAppBSX+6hT43dHP0f9uzglLwkW0cegocF
+         gOkLrIPDTfWoHm13wmJDWit+xY1rggPJxvYYZYq1JysAl2gi5Fj4Z8kytCjYZCzyGsSQ
+         UsydHuHiLvJz7pEQOAp9Ri4iWBeNU/BFhRUx+3UX9tTD9A57bfEaxDhE+zkpiAsiMUS5
+         t9poa0qU3Dp7aj51uReJTsDig940IIcFJ/UmgzO1hFpKiCEfBOxKGKr0N2NoggYwPrbg
+         MixA==
+X-Gm-Message-State: AAQBX9dEv9vabiuUgBtFUcMH1gDo6BEKwn23a6c8dyvHEQU2cxGOFt5b
+        +0XKLwf4nJAkrzVu9b8Dhry8Kg==
+X-Google-Smtp-Source: AKy350b3lX7iuODJWlwdYjclhCEAQY5YFrfRRug1ArMpanScrGKDHLzRrDsWL8N5e78e1ygGsd/egg==
+X-Received: by 2002:ac2:568f:0:b0:4cc:73ff:579a with SMTP id 15-20020ac2568f000000b004cc73ff579amr4127778lfr.38.1679994346157;
+        Tue, 28 Mar 2023 02:05:46 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id b28-20020a056512025c00b004cb0dd2367fsm4976465lfo.308.2023.03.28.02.05.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 02:05:45 -0700 (PDT)
+Message-ID: <dac2de51-285d-ecb7-f56f-84d139d0a787@linaro.org>
+Date:   Tue, 28 Mar 2023 11:05:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328034853.2900007-1-libaokun1@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 11/18] arm64: dts: qcom: sa8775p: pmic: add thermal
+ zones
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230327125316.210812-1-brgl@bgdev.pl>
+ <20230327125316.210812-12-brgl@bgdev.pl>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230327125316.210812-12-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 28-03-23 11:48:53, Baokun Li wrote:
-> We got a WARNING in ext4_add_complete_io:
-> ==================================================================
->  WARNING: at fs/ext4/page-io.c:231 ext4_put_io_end_defer+0x182/0x250
->  CPU: 10 PID: 77 Comm: ksoftirqd/10 Tainted: 6.3.0-rc2 #85
->  RIP: 0010:ext4_put_io_end_defer+0x182/0x250 [ext4]
->  [...]
->  Call Trace:
->   <TASK>
->   ext4_end_bio+0xa8/0x240 [ext4]
->   bio_endio+0x195/0x310
->   blk_update_request+0x184/0x770
->   scsi_end_request+0x2f/0x240
->   scsi_io_completion+0x75/0x450
->   scsi_finish_command+0xef/0x160
->   scsi_complete+0xa3/0x180
->   blk_complete_reqs+0x60/0x80
->   blk_done_softirq+0x25/0x40
->   __do_softirq+0x119/0x4c8
->   run_ksoftirqd+0x42/0x70
->   smpboot_thread_fn+0x136/0x3c0
->   kthread+0x140/0x1a0
->   ret_from_fork+0x2c/0x50
-> ==================================================================
-> 
-> Above issue may happen as follows:
-> 
->             cpu1                        cpu2
-> ----------------------------|----------------------------
-> mount -o dioread_lock
-> ext4_writepages
->  ext4_do_writepages
->   *if (ext4_should_dioread_nolock(inode))*
->     // rsv_blocks is not assigned here
->                                  mount -o remount,dioread_nolock
->   ext4_journal_start_with_reserve
->    __ext4_journal_start
->     __ext4_journal_start_sb
->      jbd2__journal_start
->       *if (rsv_blocks)*
->         // h_rsv_handle is not initialized here
->   mpage_map_and_submit_extent
->     mpage_map_one_extent
->       dioread_nolock = ext4_should_dioread_nolock(inode)
->       if (dioread_nolock && (map->m_flags & EXT4_MAP_UNWRITTEN))
->         mpd->io_submit.io_end->handle = handle->h_rsv_handle
->         ext4_set_io_unwritten_flag
->           io_end->flag |= EXT4_IO_END_UNWRITTEN
->       // now io_end->handle is NULL but has EXT4_IO_END_UNWRITTEN flag
-> 
-> scsi_finish_command
->  scsi_io_completion
->   scsi_io_completion_action
->    scsi_end_request
->     blk_update_request
->      req_bio_endio
->       bio_endio
->        bio->bi_end_io  > ext4_end_bio
->         ext4_put_io_end_defer
-> 	 ext4_add_complete_io
-> 	  // trigger WARN_ON(!io_end->handle && sbi->s_journal);
-> 
-> The immediate cause of this problem is that ext4_should_dioread_nolock()
-> function returns inconsistent values in the ext4_do_writepages() and
-> mpage_map_one_extent(). There are four conditions in this function that
-> can be changed at mount time to cause this problem. These four conditions
-> can be divided into two categories:
-> 
->     (1) journal_data and EXT4_EXTENTS_FL, which can be changed by ioctl
->     (2) DELALLOC and DIOREAD_NOLOCK, which can be changed by remount
-> 
-> The two in the first category have been fixed by commit c8585c6fcaf2
-> ("ext4: fix races between changing inode journal mode and ext4_writepages")
-> and commit cb85f4d23f79 ("ext4: fix race between writepages and enabling
-> EXT4_EXTENTS_FL") respectively.
-> 
-> Two cases in the other category have not yet been fixed, and the above
-> issue is caused by this situation. We refer to the fix for the first
-> category, when applying options during remount, we grab s_writepages_rwsem
-> to avoid racing with writepages ops to trigger this problem.
-> 
-> Fixes: 6b523df4fb5a ("ext4: use transaction reservation for extent conversion in ext4_end_io")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-Looks good to me. Feel free to add:
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+On 27.03.2023 14:53, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> Add the thermal zones and associated alarm nodes for the PMICs that have
+> them hooked up on sa8775p-ride.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > ---
-> V1->V2:
-> 	Grab s_writepages_rwsem unconditionally during remount.
-> 	Remove patches 1,2 that are no longer needed.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 112 ++++++++++++++++++++
+>  1 file changed, 112 insertions(+)
 > 
->  fs/ext4/ext4.h  | 3 ++-
->  fs/ext4/super.c | 9 +++++++++
->  2 files changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> index 9b2cfc32cf78..5f5ee0c20673 100644
-> --- a/fs/ext4/ext4.h
-> +++ b/fs/ext4/ext4.h
-> @@ -1703,7 +1703,8 @@ struct ext4_sb_info {
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> index 8616ead3daf5..be12997a080c 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> @@ -6,6 +6,90 @@
+>  #include <dt-bindings/input/input.h>
+>  #include <dt-bindings/spmi/spmi.h>
 >  
->  	/*
->  	 * Barrier between writepages ops and changing any inode's JOURNAL_DATA
-> -	 * or EXTENTS flag.
-> +	 * or EXTENTS flag or between writepages ops and changing DELALLOC or
-> +	 * DIOREAD_NOLOCK mount options on remount.
->  	 */
->  	struct percpu_rw_semaphore s_writepages_rwsem;
->  	struct dax_device *s_daxdev;
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index e6d84c1e34a4..607ebf2a008b 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -6403,7 +6403,16 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
+> +/ {
+> +	thermal-zones {
+> +		pmm8654au_0_thermal: pm8775-0-thermal {
+> +			polling-delay-passive = <100>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&pmm8654au_0_temp_alarm>;
+> +
+> +			trips {
+> +				trip0 {
+> +					temperature = <105000>;
+> +					hysteresis = <0>;
+> +					type = "passive";
+> +				};
+> +
+> +				trip1 {
+> +					temperature = <125000>;
+> +					hysteresis = <0>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +
+> +		pmm8654au_1_thermal: pm8775-1-thermal {
+> +			polling-delay-passive = <100>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&pmm8654au_1_temp_alarm>;
+> +
+> +			trips {
+> +				trip0 {
+> +					temperature = <105000>;
+> +					hysteresis = <0>;
+> +					type = "passive";
+> +				};
+> +
+> +				trip1 {
+> +					temperature = <125000>;
+> +					hysteresis = <0>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +
+> +		pmm8654au_2_thermal: pm8775-2-thermal {
+> +			polling-delay-passive = <100>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&pmm8654au_2_temp_alarm>;
+> +
+> +			trips {
+> +				trip0 {
+> +					temperature = <105000>;
+> +					hysteresis = <0>;
+> +					type = "passive";
+> +				};
+> +
+> +				trip1 {
+> +					temperature = <125000>;
+> +					hysteresis = <0>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +
+> +		pmm8654au_3_thermal: pm8775-3-thermal {
+> +			polling-delay-passive = <100>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&pmm8654au_3_temp_alarm>;
+> +
+> +			trips {
+> +				trip0 {
+> +					temperature = <105000>;
+> +					hysteresis = <0>;
+> +					type = "passive";
+> +				};
+> +
+> +				trip1 {
+> +					temperature = <125000>;
+> +					hysteresis = <0>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +	};
+> +};
+> +
+>  &spmi_bus {
+>  	pmm8654au_0: pmic@0 {
+>  		compatible = "qcom,pmm8654au", "qcom,spmi-pmic";
+> @@ -13,6 +97,13 @@ pmm8654au_0: pmic@0 {
+>  		#address-cells = <1>;
+>  		#size-cells = <0>;
 >  
->  	}
+> +		pmm8654au_0_temp_alarm: temp-alarm@a00 {
+> +			compatible = "qcom,spmi-temp-alarm";
+> +			reg = <0xa00>;
+> +			interrupts-extended = <&spmi_bus 0x0 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
+> +			#thermal-sensor-cells = <0>;
+> +		};
+> +
+>  		pmm8654au_0_pon: pon@1200 {
+>  			compatible = "qcom,pmk8350-pon";
+>  			reg = <0x1200>, <0x800>;
+> @@ -41,6 +132,13 @@ pmm8654au_1: pmic@2 {
+>  		reg = <0x2 SPMI_USID>;
+>  		#address-cells = <1>;
+>  		#size-cells = <0>;
+> +
+> +		pmm8654au_1_temp_alarm: temp-alarm@a00 {
+> +			compatible = "qcom,spmi-temp-alarm";
+> +			reg = <0xa00>;
+> +			interrupts-extended = <&spmi_bus 0x2 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
+> +			#thermal-sensor-cells = <0>;
+> +		};
+>  	};
 >  
-> +	/*
-> +	 * Changing the DIOREAD_NOLOCK or DELALLOC mount options may cause
-> +	 * two calls to ext4_should_dioread_nolock() to return inconsistent
-> +	 * values, triggering WARN_ON in ext4_add_complete_io(). we grab
-> +	 * here s_writepages_rwsem to avoid race between writepages ops and
-> +	 * remount.
-> +	 */
-> +	percpu_down_write(&sbi->s_writepages_rwsem);
->  	ext4_apply_options(fc, sb);
-> +	percpu_up_write(&sbi->s_writepages_rwsem);
+>  	pmm8654au_2: pmic@4 {
+> @@ -48,6 +146,13 @@ pmm8654au_2: pmic@4 {
+>  		reg = <0x4 SPMI_USID>;
+>  		#address-cells = <1>;
+>  		#size-cells = <0>;
+> +
+> +		pmm8654au_2_temp_alarm: temp-alarm@a00 {
+> +			compatible = "qcom,spmi-temp-alarm";
+> +			reg = <0xa00>;
+> +			interrupts-extended = <&spmi_bus 0x4 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
+> +			#thermal-sensor-cells = <0>;
+> +		};
+>  	};
 >  
->  	if ((old_opts.s_mount_opt & EXT4_MOUNT_JOURNAL_CHECKSUM) ^
->  	    test_opt(sb, JOURNAL_CHECKSUM)) {
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+>  	pmm8654au_3: pmic@6 {
+> @@ -55,5 +160,12 @@ pmm8654au_3: pmic@6 {
+>  		reg = <0x6 SPMI_USID>;
+>  		#address-cells = <1>;
+>  		#size-cells = <0>;
+> +
+> +		pmm8654au_3_temp_alarm: temp-alarm@a00 {
+> +			compatible = "qcom,spmi-temp-alarm";
+> +			reg = <0xa00>;
+> +			interrupts-extended = <&spmi_bus 0x6 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
+> +			#thermal-sensor-cells = <0>;
+> +		};
+>  	};
+>  };
