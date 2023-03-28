@@ -2,237 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 448846CCAE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D756CCAEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjC1TqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 15:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
+        id S229720AbjC1TsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 15:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjC1TqC (ORCPT
+        with ESMTP id S229461AbjC1TsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 15:46:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3B7137
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680032714;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x/M8VEGYnR5Pgi89UAPg3ENEgkiPUXtwVF7r6qIaHxg=;
-        b=A68zQewc5sjNWxBovs4jvQ5vFNL8jxEvU9zc6ltDcAgkPFr3sbHiH2ZNhjybKFRllnp6xR
-        YeDbPBHCYypfKlKUWcU16ymucXqbW/qmr3Qg8tojF9HzTqoOeZwvLIZSgDvnsqX4VpiCyr
-        63y+IXDQ2RXTvv6nV3J9y1edPdwjIg4=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-54-y0flEkdNP8KazTOIHBsDCw-1; Tue, 28 Mar 2023 15:45:13 -0400
-X-MC-Unique: y0flEkdNP8KazTOIHBsDCw-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-5aae34d87f7so8834266d6.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:45:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680032713;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x/M8VEGYnR5Pgi89UAPg3ENEgkiPUXtwVF7r6qIaHxg=;
-        b=LdTJRA0boh9Qz2KW+3ZOd4kIuJjOE67Bl+iqZakVJ1Dc2v5u7IE9Dvt9+y2GZjcN8L
-         w7tbAhp24WI0qi+HVNc4P0vcuehtc2xnctWaW8ITmnPS7I26/j6boTok6Spe9SRZsY0j
-         mJkY4uIeSIES5kD6iMDGCdeWW9zzfaJ6BVxF178kIJCBQeSuTXPEEj/nnAn0knJ/x4hF
-         UfIHXmDDZF8/V/EXruRjjZI0Mf0KXxr7rhvqMxnAAHJlz9L8MuUyZnyZULVUzlun5GLX
-         1ADcXdalKYGBOLPkZDdrtqmLlMP4j41BsrBQ0bHTzaM+CGp1zPZ43eGk5wZ2D0jWEe8N
-         IpWQ==
-X-Gm-Message-State: AAQBX9dQhIqv7NxcjZ1Jlxollu5W2+km/IoazqrveHWNObl7rAum6STp
-        OB1Hwg5yRd+kBHySUn63YyLuYON5+ghYopAsmPSQwA1w9jXaupze4ggVUMMYL2DD7C/C28prsec
-        IbjB2NzMfhHBJVRiTSmKlPZ2p
-X-Received: by 2002:a05:6214:5084:b0:57d:747b:1f7 with SMTP id kk4-20020a056214508400b0057d747b01f7mr24823241qvb.1.1680032712918;
-        Tue, 28 Mar 2023 12:45:12 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b1OWPbZJ0hJOYx4hhf7hI7qh8x9QzpB/N6/g/Ylx7piog3xM++xdIbSSpwnoO35Yfc5FwUIg==
-X-Received: by 2002:a05:6214:5084:b0:57d:747b:1f7 with SMTP id kk4-20020a056214508400b0057d747b01f7mr24823210qvb.1.1680032712621;
-        Tue, 28 Mar 2023 12:45:12 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id x16-20020ad440d0000000b005dd8b9345b2sm4043309qvp.74.2023.03.28.12.45.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 12:45:11 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 15:45:10 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] userfaultfd: don't fail on unrecognized features
-Message-ID: <ZCNDxhANoQmgcufM@x1n>
-References: <20220722201513.1624158-1-axelrasmussen@google.com>
- <ZCIEGblnsWHKF8RD@x1n>
- <CAJHvVcj5ysY-xqKLL8f48-vFhpAB+qf4cN0AesQEd7Kvsi9r_A@mail.gmail.com>
+        Tue, 28 Mar 2023 15:48:06 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DF2172C;
+        Tue, 28 Mar 2023 12:48:04 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 3DEC318839E9;
+        Tue, 28 Mar 2023 19:48:03 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 369182500389;
+        Tue, 28 Mar 2023 19:48:03 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 2E8489B403E2; Tue, 28 Mar 2023 19:48:03 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 7BA9491201E3;
+        Tue, 28 Mar 2023 19:48:02 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
+ drivers
+In-Reply-To: <20230328114943.4mibmn2icutcio4m@skbuf>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-3-netdev@kapio-technology.com>
+ <20230327115206.jk5q5l753aoelwus@skbuf>
+ <87355qb48h.fsf@kapio-technology.com>
+ <20230327160009.bdswnalizdv2u77z@skbuf>
+ <87pm8tooe1.fsf@kapio-technology.com>
+ <20230327225933.plm5raegywbe7g2a@skbuf>
+ <87ileljfwo.fsf@kapio-technology.com>
+ <20230328114943.4mibmn2icutcio4m@skbuf>
+Date:   Tue, 28 Mar 2023 21:45:26 +0200
+Message-ID: <87cz4slkx5.fsf@kapio-technology.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJHvVcj5ysY-xqKLL8f48-vFhpAB+qf4cN0AesQEd7Kvsi9r_A@mail.gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 12:28:59PM -0700, Axel Rasmussen wrote:
-> On Mon, Mar 27, 2023 at 2:01 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > I think I overlooked this patch..
-> >
-> > Axel, could you explain why this patch is correct?  Comments inline.
-> >
-> > On Fri, Jul 22, 2022 at 01:15:13PM -0700, Axel Rasmussen wrote:
-> > > The basic interaction for setting up a userfaultfd is, userspace issues
-> > > a UFFDIO_API ioctl, and passes in a set of zero or more feature flags,
-> > > indicating the features they would prefer to use.
-> > >
-> > > Of course, different kernels may support different sets of features
-> > > (depending on kernel version, kconfig options, architecture, etc).
-> > > Userspace's expectations may also not match: perhaps it was built
-> > > against newer kernel headers, which defined some features the kernel
-> > > it's running on doesn't support.
-> > >
-> > > Currently, if userspace passes in a flag we don't recognize, the
-> > > initialization fails and we return -EINVAL. This isn't great, though.
-> >
-> > Why?  IIUC that's the major way for user app to detect any misconfig of
-> > feature list so it can bail out early.
-> >
-> > Quoting from man page (ioctl_userfaultfd(2)):
-> >
-> > UFFDIO_API
-> >        (Since Linux 4.3.)  Enable operation of the userfaultfd and perform API handshake.
-> >
-> >        ...
-> >
-> >            struct uffdio_api {
-> >                __u64 api;        /* Requested API version (input) */
-> >                __u64 features;   /* Requested features (input/output) */
-> >                __u64 ioctls;     /* Available ioctl() operations (output) */
-> >            };
-> >
-> >        ...
-> >
-> >        For Linux kernel versions before 4.11, the features field must be
-> >        initialized to zero before the call to UFFDIO_API, and zero (i.e.,
-> >        no feature bits) is placed in the features field by the kernel upon
-> >        return from ioctl(2).
-> >
-> >        ...
-> >
-> >        To enable userfaultfd features the application should set a bit
-> >        corresponding to each feature it wants to enable in the features
-> >        field.  If the kernel supports all the requested features it will
-> >        enable them.  Otherwise it will zero out the returned uffdio_api
-> >        structure and return EINVAL.
-> >
-> > IIUC the right way to use this API is first probe with features==0, then
-> > the kernel will return all the supported features, then the user app should
-> > enable only a subset (or all, but not a superset) of supported ones in the
-> > next UFFDIO_API with a new uffd.
-> 
-> Hmm, I think doing a two-step handshake just overcomplicates things.
-> 
-> Isn't it simpler to just have userspace ask for the features it wants
-> up front, and then the kernel responds with the subset of features it
-> actually supports? In the common case (all features were supported),
-> there is nothing more to do. Userspace is free to detect the uncommon
-> case where some features it asked for are missing, and handle that
-> however it likes.
-> 
-> I think this patch is backwards compatible with the two-step approach, too.
-> 
-> I do agree the man page could use some work. I don't think it
-> describes the two-step handshake process correctly, either. It just
-> says, "ask for the features you want, and the kernel will either give
-> them to you or fail". If we really did want to keep the two-step
-> process, it should describe it (set features == 0 first, then ask only
-> for the ones you want which are supported), and the example program
-> should demonstrate it.
-> 
-> But, I think it's simpler to just have the kernel do what the man page
-> describes. Userspace asks for the features up front, kernel responds
-> with the subset that are actually supported. No need to return EINVAL
-> if unsupported features were requested.
+On Tue, Mar 28, 2023 at 14:49, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Tue, Mar 28, 2023 at 01:04:23PM +0200, Hans Schultz wrote:
+>> On Tue, Mar 28, 2023 at 01:59, Vladimir Oltean <olteanv@gmail.com> wrote:
+>> >
+>> > which idea is that, again?
+>> 
+>> So I cannot us the offloaded flag as it is added by DSA in the common
+>> case when using 'bridge fdb replace ... dynamic'.
+>
+> Why not? I find it reasonable that the software bridge does not age out
+> a dynamic FDB entry that is offloaded to hardware... the hardware should
+> do that ("dynamic" being the key).
 
-The uffdio_api.features passed into the ioctl(UFFDIO_API) should be such
-request to enable features specified in the kernel.  If the kernel doesn't
-support any of the features in the list, IMHO it's very natural to fail it
-as described in the man page.  That's also most of the kernel apis do
-afaik, by failing any enablement of features if not supported.
+So the solution would be to not let the DSA layer send the
+SWITCHDEV_FDB_OFFLOADED event in the case when the new dynamic flag is
+set?
+Thus other drivers that don't support the flag yet will install a
+static entry in HW and the bridge will age it out as there is no offloaded
+flag on. For the mv88e6xxx it will set the offloaded flag and HW will
+age it.
 
-> 
-> >
-> > > Userspace doesn't have an obvious way to react to this; sure, one of the
-> > > features I asked for was unavailable, but which one? The only option it
-> > > has is to turn off things "at random" and hope something works.
-> > >
-> > > Instead, modify UFFDIO_API to just ignore any unrecognized feature
-> > > flags. The interaction is now that the initialization will succeed, and
-> > > as always we return the *subset* of feature flags that can actually be
-> > > used back to userspace.
-> > >
-> > > Now userspace has an obvious way to react: it checks if any flags it
-> > > asked for are missing. If so, it can conclude this kernel doesn't
-> > > support those, and it can either resign itself to not using them, or
-> > > fail with an error on its own, or whatever else.
-> > >
-> > > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> > > ---
-> > >  fs/userfaultfd.c | 6 ++----
-> > >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> > > index e943370107d0..4974da1f620c 100644
-> > > --- a/fs/userfaultfd.c
-> > > +++ b/fs/userfaultfd.c
-> > > @@ -1923,10 +1923,8 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
-> > >       ret = -EFAULT;
-> > >       if (copy_from_user(&uffdio_api, buf, sizeof(uffdio_api)))
-> > >               goto out;
-> > > -     features = uffdio_api.features;
-> > > -     ret = -EINVAL;
-> > > -     if (uffdio_api.api != UFFD_API || (features & ~UFFD_API_FEATURES))
-> > > -             goto err_out;
-> >
-> > What's worse is that I think you removed the only UFFD_API check.  Although
-> > I'm not sure whether it'll be extended in the future or not at all (very
-> > possible we keep using 0xaa forever..), but removing this means we won't be
-> > able to extend it to a new api version in the future, and misconfig of
-> > uffdio_api will wrongly succeed I think:
-> >
-> >         /* Test wrong UFFD_API */
-> >         uffdio_api.api = 0xab;
-> >         uffdio_api.features = 0;
-> >         if (ioctl(uffd, UFFDIO_API, &uffdio_api) == 0)
-> >                 err("UFFDIO_API should fail but didn't");
-> 
-> Agreed, we should add back the UFFD_API check - I am happy to send a
-> patch for this.
-
-Do you plan to just revert the patch?  If so, please go ahead.  IMHO we
-should just follow the man page.
-
-What I agree here is the api isn't that perfect, in that we need to create
-a separate userfault file descriptor just to probe.  Currently the features
-will be returned in the initial test with features=0 passed in, but it also
-initializes the uffd handle even if it'll never be used but for probe only.
-
-However since that existed in the 1st day I guess we'd better keep it
-as-is.  And it's not so bad either: user app does open/close one more time,
-but only once for each app's lifecycle.
-
-Thanks,
-
--- 
-Peter Xu
-
+> At least, I find it more reasonable
+> than the current behavior, where the bridge notifies dynamic FDB entries
+> to switchdev, but doesn't say they're dynamic, and switchdev treats them
+> as static, so they don't roam from one bridge port to another until
+> software sees a packet with that MAC DA, and they have the potential of
+> blocking traffic because of that.
+>
